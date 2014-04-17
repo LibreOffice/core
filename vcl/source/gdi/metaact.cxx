@@ -2404,7 +2404,16 @@ void MetaISectRegionClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadRegion( rIStm, maRegion );
 }
 
-IMPL_META_ACTION( MoveClipRegion, META_MOVECLIPREGION_ACTION )
+MetaMoveClipRegionAction::MetaMoveClipRegionAction() :
+    MetaAction  ( META_MOVECLIPREGION_ACTION ),
+    mnHorzMove  ( 0 ),
+    mnVertMove  ( 0 )
+{
+}
+
+MetaMoveClipRegionAction::~MetaMoveClipRegionAction()
+{
+}
 
 MetaMoveClipRegionAction::MetaMoveClipRegionAction( long nHorzMove, long nVertMove ) :
     MetaAction  ( META_MOVECLIPREGION_ACTION ),
@@ -2454,7 +2463,15 @@ void MetaMoveClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
     mnVertMove = nTmpVM;
 }
 
-IMPL_META_ACTION( LineColor, META_LINECOLOR_ACTION )
+MetaLineColorAction::MetaLineColorAction() :
+    MetaAction  ( META_LINECOLOR_ACTION ),
+    mbSet       ( false )
+{
+}
+
+MetaLineColorAction::~MetaLineColorAction()
+{
+}
 
 MetaLineColorAction::MetaLineColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( META_LINECOLOR_ACTION ),
@@ -2743,7 +2760,15 @@ void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbSet );
 }
 
-IMPL_META_ACTION( TextAlign, META_TEXTALIGN_ACTION )
+MetaTextAlignAction::MetaTextAlignAction() :
+    MetaAction  ( META_TEXTALIGN_ACTION ),
+    maAlign     ( ALIGN_TOP )
+{
+}
+
+MetaTextAlignAction::~MetaTextAlignAction()
+{
+}
 
 MetaTextAlignAction::MetaTextAlignAction( TextAlign aAlign ) :
     MetaAction  ( META_TEXTALIGN_ACTION ),
