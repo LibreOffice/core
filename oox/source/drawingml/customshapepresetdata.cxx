@@ -689,12 +689,15 @@ void CustomShapeProperties::initializePresetDataMap()
             else if (aLine == "Handles")
             {
                 aStream.ReadLine(aLine);
-                OString aExpectedPrefix("([][]com.sun.star.beans.PropertyValue) { ");
-                assert(aLine.startsWith(aExpectedPrefix));
-
                 comphelper::SequenceAsVector< uno::Sequence<beans::PropertyValue> > aHandles;
-                OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
-                lcl_parseHandles(aHandles, aValue);
+                if (aLine != "([][]com.sun.star.beans.PropertyValue) {}")
+                {
+                    OString aExpectedPrefix("([][]com.sun.star.beans.PropertyValue) { ");
+                    assert(aLine.startsWith(aExpectedPrefix));
+
+                    OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
+                    lcl_parseHandles(aHandles, aValue);
+                }
                 aPropertyMap.setProperty(PROP_Handles, aHandles.getAsConstList());
             }
             else if (aLine == "MirroredX")
