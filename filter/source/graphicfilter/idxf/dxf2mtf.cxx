@@ -146,13 +146,13 @@ DXFLineInfo DXF2GDIMetaFile::GetEntityDXFLineInfo(const DXFBasicEntity & rE)
 }
 
 
-sal_Bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE, sal_uLong /*nWidth*/)
+bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE, sal_uLong /*nWidth*/)
 {
     long nColor;
     Color aColor;
 
     nColor=GetEntityColor(rE);
-    if (nColor<0) return sal_False;
+    if (nColor<0) return false;
     aColor=ConvertColor((sal_uInt8)nColor);
 
     if (aActLineColor!=aColor) {
@@ -162,17 +162,17 @@ sal_Bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE, sal_uLong 
     if (aActFillColor!=Color( COL_TRANSPARENT )) {
         pVirDev->SetFillColor(aActFillColor = Color( COL_TRANSPARENT ));
     }
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
+bool DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
 {
     long nColor;
     Color aColor;
 
     nColor=GetEntityColor(rE);
-    if (nColor<0) return sal_False;
+    if (nColor<0) return false;
     aColor=ConvertColor((sal_uInt8)nColor);
 
     if (aActLineColor!=aColor) {
@@ -182,11 +182,11 @@ sal_Bool DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
     if ( aActFillColor == Color( COL_TRANSPARENT ) || aActFillColor != aColor) {
         pVirDev->SetFillColor( aActFillColor = aColor );
     }
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, sal_uInt16 nHeight, double /*fWidthScale*/)
+bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, sal_uInt16 nHeight, double /*fWidthScale*/)
 {
     long nColor;
     Color aColor;
@@ -197,7 +197,7 @@ sal_Bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAng
     while (nAngle<0) nAngle+=3600;
 
     nColor=GetEntityColor(rE);
-    if (nColor<0) return sal_False;
+    if (nColor<0) return false;
     aColor=ConvertColor((sal_uInt8)nColor);
 
     aFont.SetColor(aColor);
@@ -211,7 +211,7 @@ sal_Bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAng
         pVirDev->SetFont(aActFont);
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -262,9 +262,9 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
     sal_uInt16 nPoints,i;
     DXFVector aC;
 
-    if (SetLineAttribute(rE)==sal_False) return;
+    if (SetLineAttribute(rE)==false) return;
     rTransform.Transform(rE.aP0,aC);
-    if (rE.fThickness==0 && rTransform.TransCircleToEllipse(rE.fRadius,frx,fry)==sal_True) {
+    if (rE.fThickness==0 && rTransform.TransCircleToEllipse(rE.fRadius,frx,fry)) {
         pVirDev->DrawEllipse(
             Rectangle((long)(aC.fx-frx+0.5),(long)(aC.fy-fry+0.5),
                       (long)(aC.fx+frx+0.5),(long)(aC.fy+fry+0.5)));
@@ -305,20 +305,20 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
     DXFVector aC;
     Point aPS,aPE;
 
-    if (SetLineAttribute(rE)==sal_False) return;
+    if (SetLineAttribute(rE)==false) return;
     fA1=rE.fStart;
     fdA=rE.fEnd-fA1;
     while (fdA>=360.0) fdA-=360.0;
     while (fdA<=0) fdA+=360.0;
     rTransform.Transform(rE.aP0,aC);
-    if (rE.fThickness==0 && fdA>5.0 && rTransform.TransCircleToEllipse(rE.fRadius,frx,fry)==sal_True) {
+    if (rE.fThickness==0 && fdA>5.0 && rTransform.TransCircleToEllipse(rE.fRadius,frx,fry)) {
         DXFVector aVS(cos(fA1/180.0*3.14159265359),sin(fA1/180.0*3.14159265359),0.0);
         aVS*=rE.fRadius;
         aVS+=rE.aP0;
         DXFVector aVE(cos((fA1+fdA)/180.0*3.14159265359),sin((fA1+fdA)/180.0*3.14159265359),0.0);
         aVE*=rE.fRadius;
         aVE+=rE.aP0;
-        if (rTransform.Mirror()==sal_True) {
+        if (rTransform.Mirror()) {
             rTransform.Transform(aVS,aPS);
             rTransform.Transform(aVE,aPE);
         }
@@ -689,7 +689,7 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
 
     const DXFBasicEntity * pE=rEntities.pFirst;
 
-    while (pE!=NULL && bStatus==sal_True) {
+    while (pE!=NULL && bStatus) {
         if (pE->nSpace==0) {
             if (pE->aExtrusion.fz==1.0) {
                 pT=&rTransform;
@@ -771,7 +771,7 @@ DXF2GDIMetaFile::~DXF2GDIMetaFile()
 }
 
 
-sal_Bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF, sal_uInt16 nminpercent, sal_uInt16 nmaxpercent)
+bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF, sal_uInt16 nminpercent, sal_uInt16 nmaxpercent)
 {
     double fWidth,fHeight,fScale;
     DXFTransform aTransform;
@@ -781,7 +781,7 @@ sal_Bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & 
 
     pVirDev = new VirtualDevice;
     pDXF    = &rDXF;
-    bStatus = sal_True;
+    bStatus = true;
 
     OptPointsPerCircle=50;
 
@@ -829,13 +829,13 @@ sal_Bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & 
     }
 
     if (pVPort==NULL) {
-        if (pDXF->aBoundingBox.bEmpty==sal_True)
-            bStatus=sal_False;
+        if (pDXF->aBoundingBox.bEmpty)
+            bStatus=false;
         else {
             fWidth=pDXF->aBoundingBox.fMaxX-pDXF->aBoundingBox.fMinX;
             fHeight=pDXF->aBoundingBox.fMaxY-pDXF->aBoundingBox.fMinY;
             if (fWidth<=0 || fHeight<=0) {
-                bStatus=sal_False;
+                bStatus=false;
                 fScale = 0;  // -Wall added this...
             }
             else {
@@ -870,12 +870,12 @@ sal_Bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & 
         aPrefSize.Height()=(long)(fHeight*fScale+1.5);
     }
 
-    if (bStatus==sal_True)
+    if (bStatus)
         DrawEntities(pDXF->aEntities,aTransform);
 
     rMTF.Stop();
 
-    if ( bStatus==sal_True )
+    if ( bStatus )
     {
         rMTF.SetPrefSize( aPrefSize );
         // simply set map mode to 1/100-mm (1/10-mm) if the graphic

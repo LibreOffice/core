@@ -93,8 +93,8 @@ public:
     DXFVector Unit() const;
 
     // equivalence or net:
-    sal_Bool operator == (const DXFVector & rV) const;
-    sal_Bool operator != (const DXFVector & rV) const;
+    bool operator == (const DXFVector & rV) const;
+    bool operator != (const DXFVector & rV) const;
 };
 
 
@@ -142,7 +142,7 @@ public:
     void TransDir(const DXFVector & rSrc, DXFVector & rTgt) const;
         // Transformation of a relative vector (so no translation)
 
-    sal_Bool TransCircleToEllipse(double fRadius, double & rEx, double & rEy) const;
+    bool TransCircleToEllipse(double fRadius, double & rEx, double & rEy) const;
         // Attemp to transform a circle (in xy plane) so that it results
         // in an aligned ellipse. If the does not work because a ellipse of
         // arbitrary position would be created, sal_False is returned.
@@ -154,7 +154,7 @@ public:
     double CalcRotAngle() const;
         // Calculates the rotation angle around z-axis (in degrees)
 
-    sal_Bool Mirror() const;
+    bool Mirror() const;
         // Returns sal_True, if the matrice represents a left-handed coordinate system
 
     LineInfo Transform(const DXFLineInfo& aDXFLineInfo) const;
@@ -239,17 +239,17 @@ inline DXFVector DXFVector::operator * (double fs) const
 }
 
 
-inline sal_Bool DXFVector::operator == (const DXFVector & rV) const
+inline bool DXFVector::operator == (const DXFVector & rV) const
 {
-    if (fx==rV.fx && fy==rV.fy && fz==rV.fz) return sal_True;
-    else return sal_False;
+    if (fx==rV.fx && fy==rV.fy && fz==rV.fz) return true;
+    else return false;
 }
 
 
-inline sal_Bool DXFVector::operator != (const DXFVector & rV) const
+inline bool DXFVector::operator != (const DXFVector & rV) const
 {
-    if (fx!=rV.fx || fy!=rV.fy || fz!=rV.fz) return sal_True;
-    else return sal_False;
+    if (fx!=rV.fx || fy!=rV.fy || fz!=rV.fz) return true;
+    else return false;
 }
 
 #endif

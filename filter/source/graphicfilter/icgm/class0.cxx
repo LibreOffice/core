@@ -29,7 +29,7 @@ void CGM::ImplDoClass0()
         case 0x01 : /*Begin Metafile*/
         {
             ImplSetMapMode();
-            mbMetaFile = sal_True;
+            mbMetaFile = true;
         }
         break;
         case 0x02 : /*End MetaFile*/
@@ -42,9 +42,9 @@ void CGM::ImplDoClass0()
                 delete mpBitmapInUse;
                 mpBitmapInUse = NULL;
             }
-            mbIsFinished = sal_True;
-            mbPictureBody = sal_False;
-            mbMetaFile = sal_False;
+            mbIsFinished = true;
+            mbPictureBody = false;
+            mbMetaFile = false;
         }
         break;
         case 0x03 : /*Begin Picture*/
@@ -52,12 +52,12 @@ void CGM::ImplDoClass0()
             ImplDefaultReplacement();
             ImplSetMapMode();
             if ( mbPicture )
-                mbStatus = sal_False;
+                mbStatus = false;
             else
             {
                 *pCopyOfE = *pElement;
-                mbPicture = mbFirstOutPut = sal_True;
-                mbFigure = sal_False;
+                mbPicture = mbFirstOutPut = true;
+                mbFigure = false;
                 mnAct4PostReset = 0;
                 if ( mpChart == NULL )      // normal CGM Files determines "BeginPic"
                     mpOutAct->InsertPage();     // as the next slide
@@ -65,7 +65,7 @@ void CGM::ImplDoClass0()
         }
         break;
         case 0x04 : /*Begin Picture Body*/
-            mbPictureBody = sal_True;
+            mbPictureBody = true;
         break;
         case 0x05 : /*  End Picture*/
         {
@@ -82,25 +82,25 @@ void CGM::ImplDoClass0()
                 mpOutAct->EndFigure();                          // close potential figures
                 mpOutAct->EndGrouping();                        // finish potential groups
                 *pElement = *pCopyOfE;
-                mbFigure = mbFirstOutPut = mbPicture = mbPictureBody = sal_False;
+                mbFigure = mbFirstOutPut = mbPicture = mbPictureBody = false;
             }
             else
-                mbStatus = sal_False;
+                mbStatus = false;
         }
         break;
         case 0x06 : /*Begin Segment*/
-            pElement->bSegmentCount = sal_True;
+            pElement->bSegmentCount = true;
         break;
         case 0x07 : /*End Segment*/
-            pElement->bSegmentCount = sal_True;
+            pElement->bSegmentCount = true;
         break;
         case 0x08 : /*Begin Figure*/
-            mbFigure = sal_True;
+            mbFigure = true;
             mpOutAct->BeginFigure();
         break;
         case 0x09 : /*End Figure*/
             mpOutAct->EndFigure();
-            mbFigure = sal_False;
+            mbFigure = false;
         break;
         case 0x0d : /*Begin Protection Region */break;
         case 0x0e : /*End Protection Region */break;

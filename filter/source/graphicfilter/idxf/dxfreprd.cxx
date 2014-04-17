@@ -27,14 +27,14 @@
 
 void DXFBoundingBox::Union(const DXFVector & rVector)
 {
-    if (bEmpty==sal_True) {
+    if (bEmpty) {
         fMinX=rVector.fx;
         fMinY=rVector.fy;
         fMinZ=rVector.fz;
         fMaxX=rVector.fx;
         fMaxY=rVector.fy;
         fMaxZ=rVector.fz;
-        bEmpty=sal_False;
+        bEmpty=false;
     }
     else {
         if (fMinX>rVector.fx) fMinX=rVector.fx;
@@ -139,9 +139,9 @@ DXFRepresentation::~DXFRepresentation()
 }
 
 
-sal_Bool DXFRepresentation::Read( SvStream & rIStream, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent)
+bool DXFRepresentation::Read( SvStream & rIStream, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent)
 {
-    sal_Bool bRes;
+    bool bRes;
 
     aTables.Clear();
     aBlocks.Clear();
@@ -169,7 +169,7 @@ sal_Bool DXFRepresentation::Read( SvStream & rIStream, sal_uInt16 nMinPercent, s
 
     pDGR.reset();
 
-    if (bRes==sal_True && aBoundingBox.bEmpty==sal_True)
+    if (bRes && aBoundingBox.bEmpty)
         CalcBoundingBox(aEntities,aBoundingBox);
 
     return bRes;
@@ -301,7 +301,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 pB=aBlocks.Search(pE->m_sName);
                 if (pB==NULL) break;
                 CalcBoundingBox(*pB,aBox);
-                if (aBox.bEmpty==sal_True) break;
+                if (aBox.bEmpty) break;
                 aP.fx=(aBox.fMinX-pB->aBasePoint.fx)*pE->fXScale+pE->aP0.fx;
                 aP.fy=(aBox.fMinY-pB->aBasePoint.fy)*pE->fYScale+pE->aP0.fy;
                 aP.fz=(aBox.fMinZ-pB->aBasePoint.fz)*pE->fZScale+pE->aP0.fz;
@@ -343,7 +343,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 pB = aBlocks.Search(pE->m_sPseudoBlock);
                 if (pB==NULL) break;
                 CalcBoundingBox(*pB,aBox);
-                if (aBox.bEmpty==sal_True) break;
+                if (aBox.bEmpty) break;
                 aP.fx=aBox.fMinX-pB->aBasePoint.fx;
                 aP.fy=aBox.fMinY-pB->aBasePoint.fy;
                 aP.fz=aBox.fMinZ-pB->aBasePoint.fz;

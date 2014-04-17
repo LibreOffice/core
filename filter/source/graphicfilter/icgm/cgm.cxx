@@ -143,7 +143,7 @@ long CGM::ImplGetI( sal_uInt32 nPrecision )
             return (sal_Int32)( ( pSource[ 0 ] << 24 ) | ( pSource[ 1 ] << 16 ) | ( pSource[ 2 ] << 8 ) | ( pSource[ 3 ] ) );
         }
         default:
-            mbStatus = sal_False;
+            mbStatus = false;
             return 0;
     }
 }
@@ -169,7 +169,7 @@ sal_uInt32 CGM::ImplGetUI( sal_uInt32 nPrecision )
             return (sal_uInt32)( ( pSource[ 0 ] << 24 ) | ( pSource[ 1 ] << 16 ) | ( pSource[ 2 ] << 8 ) | ( pSource[ 3 ] ) );
         }
         default:
-            mbStatus = sal_False;
+            mbStatus = false;
             return 0;
     }
 }
@@ -194,7 +194,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
 {
     void*   pPtr;
     sal_uInt8   aBuf[8];
-    sal_Bool    bCompatible;
+    bool    bCompatible;
     double  nRetValue;
     double  fDoubleBuf;
     float   fFloatBuf;
@@ -202,7 +202,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
 #ifdef OSL_BIGENDIAN
         bCompatible = sal_True;
 #else
-        bCompatible = sal_False;
+        bCompatible = false;
 #endif
     if ( bCompatible )
         pPtr = mpSource + mnParaSize;
@@ -287,7 +287,7 @@ inline double CGM::ImplGetFY()
     return ( ( ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize ) + mnVDCYadd ) * mnVDCYmul );
 }
 
-void CGM::ImplGetPoint( FloatPoint& rFloatPoint, sal_Bool bMap )
+void CGM::ImplGetPoint( FloatPoint& rFloatPoint, bool bMap )
 {
     if ( pElement->eVDCType == VDC_INTEGER )
     {
@@ -303,7 +303,7 @@ void CGM::ImplGetPoint( FloatPoint& rFloatPoint, sal_Bool bMap )
         ImplMapPoint( rFloatPoint );
 }
 
-void CGM::ImplGetRectangle( FloatRect& rFloatRect, sal_Bool bMap )
+void CGM::ImplGetRectangle( FloatRect& rFloatRect, bool bMap )
 {
     if ( pElement->eVDCType == VDC_INTEGER )
     {
@@ -347,7 +347,7 @@ void CGM::ImplGetRectangleNS( FloatRect& rFloatRect )
     }
 }
 
-sal_uInt32 CGM::ImplGetBitmapColor( sal_Bool bDirect )
+sal_uInt32 CGM::ImplGetBitmapColor( bool bDirect )
 {
     // the background color is always a direct color
 
@@ -409,9 +409,9 @@ void CGM::ImplSetMapMode()
         mnVDCYmul = -1;
     }
     if ( nAngReverse )
-        mbAngReverse = sal_True;
+        mbAngReverse = true;
     else
-        mbAngReverse = sal_False;
+        mbAngReverse = false;
 
     double fQuo1 = mnVDCdx / mnVDCdy;
     double fQuo2 = mnOutdx / mnOutdy;
@@ -669,7 +669,7 @@ void CGM::ImplDefaultReplacement()
     }
 }
 
-sal_Bool CGM::Write( SvStream& rIStm )
+bool CGM::Write( SvStream& rIStm )
 {
     if ( !mpBuf )
         mpBuf = new sal_uInt8[ 0xffff ];
@@ -713,7 +713,7 @@ ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_u
 
     sal_uInt32  nStatus = 0;            // retvalue == 0 -> ERROR
                                         //          == 0xffrrggbb -> background color in the lower 24 bits
-    sal_Bool    bProgressBar = sal_False;
+    bool    bProgressBar = false;
 
     if( rXModel.is() )
     {
@@ -759,7 +759,7 @@ ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_u
                             }
 #endif
 
-                            if ( pCGM->Write( *pIn ) == sal_False )
+                            if ( pCGM->Write( *pIn ) == false )
                                 break;
                         }
                         if ( pCGM->IsValid() )

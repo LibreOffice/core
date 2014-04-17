@@ -43,7 +43,7 @@ class PCDReader {
 
 private:
 
-    sal_Bool bStatus;
+    bool bStatus;
 
     sal_uLong               nLastPercent;
 
@@ -84,16 +84,16 @@ public:
     }
     ~PCDReader() {}
 
-    sal_Bool ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem );
+    bool ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem );
 };
 
 //=================== Methods of PCDReader ==============================
 
-sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
+bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
 {
     Bitmap       aBmp;
 
-    bStatus      = sal_True;
+    bStatus      = true;
     nLastPercent = 0;
 
     MayCallback( 0 );
@@ -136,7 +136,7 @@ sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
             break;
 
         default:
-            bStatus = sal_False;
+            bStatus = false;
     }
     if ( bStatus )
     {
@@ -152,7 +152,7 @@ sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
         }
         aBmp = Bitmap( Size( nBMPWidth, nBMPHeight ), 24 );
         if ( ( mpAcc = aBmp.AcquireWriteAccess() ) == 0 )
-            return sal_False;
+            return false;
 
         ReadImage( 5 ,65 );
 
@@ -178,14 +178,14 @@ void PCDReader::CheckPCDImagePacFile()
     m_rPCD.Read( Buf, 7 );
     Buf[ 7 ] = 0;
     if (OString(Buf) != "PCD_IPI")
-        bStatus = sal_False;
+        bStatus = false;
 }
 
 
 
 void PCDReader::ReadOrientation()
 {
-    if ( bStatus == sal_False )
+    if ( bStatus == false )
         return;
     m_rPCD.Seek( 194635 );
     m_rPCD.ReadUChar( nOrientation );
@@ -205,7 +205,7 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
     sal_uInt8 * pCr; // red chrominance fuer je 2x2 pixel of the current pair of rows
     sal_uInt8 * pL0N, * pL1N, * pCbN, * pCrN; // like above, but for the next pair of rows
 
-    if ( bStatus == sal_False )
+    if ( bStatus == false )
         return;
 
     nW2=nWidth>>1;
@@ -231,7 +231,7 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
         rtl_freeMemory((void*)pL1N);
         rtl_freeMemory((void*)pCbN);
         rtl_freeMemory((void*)pCrN);
-        bStatus = sal_False;
+        bStatus = false;
         return;
     }
 
@@ -350,9 +350,9 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
         }
 
         if ( m_rPCD.GetError() )
-            bStatus = sal_False;
+            bStatus = false;
         MayCallback( nMinPercent + ( nMaxPercent - nMinPercent ) * nYPair / nH2 );
-        if ( bStatus == sal_False )
+        if ( bStatus == false )
             break;
     }
     rtl_freeMemory((void*)pL0 );

@@ -28,7 +28,7 @@ namespace filter{
 
 
 QueryTokenizer::QueryTokenizer(const OUString& sQuery)
-    : m_bValid(sal_True)
+    : m_bValid(true)
 {
     sal_Int32 token = 0;
     while(token != -1)
@@ -39,7 +39,7 @@ QueryTokenizer::QueryTokenizer(const OUString& sQuery)
             sal_Int32 equal = sToken.indexOf('=');
 
             if (equal == 0)
-                m_bValid = sal_False;
+                m_bValid = false;
             OSL_ENSURE(m_bValid, "QueryTokenizer::QueryTokenizer()\nFound non boolean query parameter ... but its key is empty. Will be ignored!\n");
 
             OUString sKey;
@@ -53,7 +53,7 @@ QueryTokenizer::QueryTokenizer(const OUString& sQuery)
             }
 
             if (find(sKey) != end())
-                m_bValid = sal_False;
+                m_bValid = false;
             OSL_ENSURE(m_bValid, "QueryTokenizer::QueryTokenizer()\nQuery contains same param more then once. Last one wins :-)\n");
 
             (*this)[sKey] = sVal;
@@ -70,7 +70,7 @@ QueryTokenizer::~QueryTokenizer()
 
 
 
-sal_Bool QueryTokenizer::valid() const
+bool QueryTokenizer::valid() const
 {
     return m_bValid;
 }

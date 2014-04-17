@@ -428,7 +428,7 @@ void OWriteStream_Impl::SetDecrypted()
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
         if ( m_aProps[nInd].Name == "Encrypted" )
-            m_aProps[nInd].Value <<= sal_False;
+            m_aProps[nInd].Value <<= false;
     }
 }
 
@@ -451,7 +451,7 @@ void OWriteStream_Impl::SetEncrypted( const ::comphelper::SequenceAsHashMap& aEn
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
         if ( m_aProps[nInd].Name == "Encrypted" )
-            m_aProps[nInd].Value <<= sal_True;
+            m_aProps[nInd].Value <<= true;
     }
 
     m_bUseCommonEncryption = false; // very important to set it to false
@@ -773,7 +773,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
         // set to be encrypted but do not use encryption key
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
                                         uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
-        xPropertySet->setPropertyValue( "Encrypted", uno::makeAny( sal_True ) );
+        xPropertySet->setPropertyValue( "Encrypted", uno::makeAny( true ) );
     }
 
     // the stream should be free soon, after package is stored
@@ -871,7 +871,7 @@ void OWriteStream_Impl::Commit()
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
                                         uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
         xPropertySet->setPropertyValue( "Encrypted",
-                                        uno::makeAny( sal_True ) );
+                                        uno::makeAny( true ) );
     }
     else if ( m_bHasCachedEncryptionData )
     {

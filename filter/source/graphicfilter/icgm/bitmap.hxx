@@ -31,9 +31,9 @@ class CGMBitmapDescriptor
         sal_uInt8*              mpBuf;
         Bitmap*                 mpBitmap;
         BitmapWriteAccess*      mpAcc;
-        sal_Bool                mbStatus;
-        sal_Bool                mbVMirror;
-        sal_Bool                mbHMirror;
+        bool                mbStatus;
+        bool                mbVMirror;
+        bool                mbHMirror;
         sal_uInt32              mnDstBitsPerPixel;
         sal_uInt32              mnScanSize;         // bytes per line
         FloatPoint              mnP, mnQ, mnR;
@@ -50,9 +50,9 @@ class CGMBitmapDescriptor
             : mpBuf(NULL)
             , mpBitmap(NULL)
             , mpAcc(NULL)
-            , mbStatus(sal_False)
-            , mbVMirror(sal_False)
-            , mbHMirror(sal_False)
+            , mbStatus(false)
+            , mbVMirror(false)
+            , mbHMirror(false)
             , mnDstBitsPerPixel(0)
             , mnScanSize(0)
             , mndx(0.0)
@@ -76,7 +76,7 @@ class CGMBitmap
 {
         CGM*                    mpCGM;
         CGMBitmapDescriptor*    pCGMBitmapDescriptor;
-        sal_Bool                ImplGetDimensions( CGMBitmapDescriptor& );
+        bool                ImplGetDimensions( CGMBitmapDescriptor& );
         void                    ImplSetCurrentPalette( CGMBitmapDescriptor& );
         void                    ImplGetBitmap( CGMBitmapDescriptor& );
         void                    ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& rDest );

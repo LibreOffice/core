@@ -382,7 +382,7 @@ struct DXFEdgeType
     sal_Int32 nEdgeType;
 
     virtual ~DXFEdgeType(){};
-    virtual sal_Bool EvaluateGroup( DXFGroupReader & /*rDGR*/ ){ return sal_True; };
+    virtual bool EvaluateGroup( DXFGroupReader & /*rDGR*/ ){ return true; };
 
     protected :
 
@@ -394,7 +394,7 @@ struct DXFEdgeTypeLine : public DXFEdgeType
     DXFVector aEndPoint;                // 11,21
     DXFEdgeTypeLine();
     virtual ~DXFEdgeTypeLine();
-    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
+    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 };
 struct DXFEdgeTypeCircularArc : public DXFEdgeType
 {
@@ -405,7 +405,7 @@ struct DXFEdgeTypeCircularArc : public DXFEdgeType
     sal_Int32 nIsCounterClockwiseFlag;  // 73
     DXFEdgeTypeCircularArc();
     virtual ~DXFEdgeTypeCircularArc();
-    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
+    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 };
 struct DXFEdgeTypeEllipticalArc : public DXFEdgeType
 {
@@ -418,7 +418,7 @@ struct DXFEdgeTypeEllipticalArc : public DXFEdgeType
 
     DXFEdgeTypeEllipticalArc();
     virtual ~DXFEdgeTypeEllipticalArc();
-    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
+    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 };
 struct DXFEdgeTypeSpline : public DXFEdgeType
 {
@@ -430,7 +430,7 @@ struct DXFEdgeTypeSpline : public DXFEdgeType
 
     DXFEdgeTypeSpline();
     virtual ~DXFEdgeTypeSpline();
-    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
+    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 };
 
 typedef std::deque< DXFEdgeType* > DXFEdgeTypeArray;
@@ -445,7 +445,7 @@ struct DXFBoundaryPathData
     sal_Int32           nSourceBoundaryObjects; // 97
     sal_Int32           nEdgeCount;             // 93
 
-    sal_Bool            bIsPolyLine;
+    bool            bIsPolyLine;
     sal_Int32           nPointIndex;
 
     DXFVector*          pP;
@@ -454,12 +454,12 @@ struct DXFBoundaryPathData
     DXFBoundaryPathData();
     ~DXFBoundaryPathData();
 
-    sal_Bool EvaluateGroup( DXFGroupReader & rDGR );
+    bool EvaluateGroup( DXFGroupReader & rDGR );
 };
 
 class DXFHatchEntity : public DXFBasicEntity
 {
-        sal_Bool    bIsInBoundaryPathContext;
+        bool    bIsInBoundaryPathContext;
         sal_Int32   nCurrentBoundaryPathIndex;
 
     public :

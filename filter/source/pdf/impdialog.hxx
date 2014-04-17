@@ -90,64 +90,64 @@ private:
 
 protected:
 //the following data are the configuration used throughout the dialog and pages
-    sal_Bool                    mbIsPresentation;
-    sal_Bool                    mbIsWriter;
-    sal_Bool                    mbSelectionPresent;
-    sal_Bool                    mbUseCTLFont;
-    sal_Bool                    mbUseLosslessCompression;
+    bool                    mbIsPresentation;
+    bool                    mbIsWriter;
+    bool                    mbSelectionPresent;
+    bool                    mbUseCTLFont;
+    bool                    mbUseLosslessCompression;
     sal_Int32                   mnQuality;
-    sal_Bool                    mbReduceImageResolution;
+    bool                    mbReduceImageResolution;
     sal_Int32                   mnMaxImageResolution;
-    sal_Bool                    mbUseTaggedPDF;
+    bool                    mbUseTaggedPDF;
     sal_Int32                   mnPDFTypeSelection;
-    sal_Bool                    mbExportNotes;
-    sal_Bool                    mbViewPDF;
-    sal_Bool                    mbExportNotesPages;
-    sal_Bool                    mbUseTransitionEffects;
-    sal_Bool                    mbIsSkipEmptyPages;
-    sal_Bool                    mbAddStream;
+    bool                    mbExportNotes;
+    bool                    mbViewPDF;
+    bool                    mbExportNotesPages;
+    bool                    mbUseTransitionEffects;
+    bool                    mbIsSkipEmptyPages;
+    bool                    mbAddStream;
     sal_Int32                   mnFormsType;
-    sal_Bool                    mbExportFormFields;
-    sal_Bool                    mbAllowDuplicateFieldNames;
-    sal_Bool                    mbExportBookmarks;
-    sal_Bool                    mbExportHiddenSlides;
+    bool                    mbExportFormFields;
+    bool                    mbAllowDuplicateFieldNames;
+    bool                    mbExportBookmarks;
+    bool                    mbExportHiddenSlides;
     sal_Int32                   mnOpenBookmarkLevels;
 
-    sal_Bool                    mbHideViewerToolbar;
-    sal_Bool                    mbHideViewerMenubar;
-    sal_Bool                    mbHideViewerWindowControls;
-    sal_Bool                    mbResizeWinToInit;
-    sal_Bool                    mbCenterWindow;
-    sal_Bool                    mbOpenInFullScreenMode;
-    sal_Bool                    mbDisplayPDFDocumentTitle;
+    bool                    mbHideViewerToolbar;
+    bool                    mbHideViewerMenubar;
+    bool                    mbHideViewerWindowControls;
+    bool                    mbResizeWinToInit;
+    bool                    mbCenterWindow;
+    bool                    mbOpenInFullScreenMode;
+    bool                    mbDisplayPDFDocumentTitle;
     sal_Int32                   mnMagnification;
     sal_Int32                   mnInitialView;
     sal_Int32                   mnZoom;
     sal_Int32                   mnInitialPage;
 
     sal_Int32                   mnPageLayout;
-    sal_Bool                    mbFirstPageLeft;
+    bool                    mbFirstPageLeft;
 
-    sal_Bool                    mbEncrypt;
+    bool                    mbEncrypt;
 
-    sal_Bool                    mbRestrictPermissions;
+    bool                    mbRestrictPermissions;
     com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > maPreparedOwnerPassword;
     sal_Int32                   mnPrint;
     sal_Int32                   mnChangesAllowed;
-    sal_Bool                    mbCanCopyOrExtract;
-    sal_Bool                    mbCanExtractForAccessibility;
+    bool                    mbCanCopyOrExtract;
+    bool                    mbCanExtractForAccessibility;
     com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > mxPreparedPasswords;
 
-    sal_Bool                    mbIsRangeChecked;
+    bool                    mbIsRangeChecked;
     OUString               msPageRange;
-    sal_Bool                    mbSelectionIsChecked;
+    bool                    mbSelectionIsChecked;
 
-    sal_Bool                    mbExportRelativeFsysLinks;
+    bool                    mbExportRelativeFsysLinks;
     sal_Int32                   mnViewPDFMode;
-    sal_Bool                    mbConvertOOoTargets;
-    sal_Bool                    mbExportBmkToPDFDestination;
+    bool                    mbConvertOOoTargets;
+    bool                    mbExportBmkToPDFDestination;
 
-    sal_Bool                    mbSignPDF;
+    bool                    mbSignPDF;
     OUString             msSignPassword;
     OUString             msSignLocation;
     OUString             msSignContact;
@@ -271,7 +271,7 @@ class ImpPDFTabOpnFtrPage : public SfxTabPage
     RadioButton*                mpRbPgLyContinueFacing;
     CheckBox*                   mpCbPgLyFirstOnLeft;
 
-    sal_Bool                    mbUseCTLFont;
+    bool                    mbUseCTLFont;
 
     DECL_LINK( ToggleRbPgLyContinueFacingHdl, void* );
     DECL_LINK( ToggleRbMagnHdl, void* );
@@ -302,7 +302,7 @@ class ImpPDFTabViewerPage : public SfxTabPage
     CheckBox*                   m_pCbHideViewerWindowControls;
 
     CheckBox*                   m_pCbTransitionEffects;
-    sal_Bool                    mbIsPresentation;
+    bool                    mbIsPresentation;
 
     RadioButton*                m_pRbAllBookmarkLevels;
     RadioButton*                m_pRbVisibleBookmarkLevels;
@@ -374,7 +374,7 @@ public:
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void    SetFilterConfigItem( const ImpPDFTabDialog* paParent );
-    void    ImplPDFASecurityControl( sal_Bool bEnableSecurity );
+    void    ImplPDFASecurityControl( bool bEnableSecurity );
     bool    hasPassword() const { return mbHaveOwnerPassword || mbHaveUserPassword; }
 };
 
@@ -386,11 +386,11 @@ class ImpPDFTabLinksPage : public SfxTabPage
     CheckBox*                   m_pCbExportRelativeFsysLinks;
 
     RadioButton*                m_pRbOpnLnksDefault;
-    sal_Bool                    mbOpnLnksDefaultUserState;
+    bool                    mbOpnLnksDefaultUserState;
     RadioButton*                m_pRbOpnLnksLaunch;
-    sal_Bool                    mbOpnLnksLaunchUserState;
+    bool                    mbOpnLnksLaunchUserState;
     RadioButton*                m_pRbOpnLnksBrowser;
-    sal_Bool                    mbOpnLnksBrowserUserState;
+    bool                    mbOpnLnksBrowserUserState;
 
     DECL_LINK( ClickRbOpnLnksDefaultHdl, void* );
     DECL_LINK( ClickRbOpnLnksBrowserHdl, void* );
@@ -406,7 +406,7 @@ public:
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void    SetFilterConfigItem( const ImpPDFTabDialog* paParent );
 
-    void    ImplPDFALinkControl( sal_Bool bEnableLaunch );
+    void    ImplPDFALinkControl( bool bEnableLaunch );
 };
 
 //class to implement the digital signing

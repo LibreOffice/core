@@ -125,7 +125,7 @@ class CGMElements
 
         // Delimiter Counts -> which will be increased by each 'begin' operation
         //                     and decreased by each 'end' operation
-        sal_Bool            bSegmentCount;
+        bool            bSegmentCount;
                             CGMElements( CGM& rCGM );
                             ~CGMElements();
         CGMElements&        operator=( CGMElements& );

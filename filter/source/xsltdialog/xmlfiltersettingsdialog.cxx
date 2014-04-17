@@ -189,7 +189,7 @@ void XMLFilterSettingsDialog::updateStates()
     if(pSelectedEntry)
     {
         filter_info_impl* pInfo = (filter_info_impl*)pSelectedEntry->GetUserData();
-        bIsReadonly = 0 != pInfo->mbReadonly;
+        bIsReadonly = pInfo->mbReadonly;
 
         sal_Int32 nFact = SvtModuleOptions::E_WRITER;
         while(nFact <= SvtModuleOptions::E_BASIC)
@@ -1013,7 +1013,7 @@ bool XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
             KeyCode         aKeyCode = pKEvt->GetKeyCode();
             sal_uInt16          nKeyCode = aKeyCode.GetCode();
-            sal_Bool        bMod1 =   pKEvt->GetKeyCode().IsMod1();
+            bool        bMod1 =   pKEvt->GetKeyCode().IsMod1();
 
             if( nKeyCode == KEY_ESCAPE || (bMod1 && (nKeyCode == KEY_W)))
             {
@@ -1187,7 +1187,7 @@ void XMLFilterSettingsDialog::initFilterList()
                                 else if ( pValues2->Name == "Finalized" )
                                 {
                                     // both the filter and the type may be finalized
-                                    sal_Bool bTemp = sal_False;
+                                    bool bTemp = false;
                                     pValues2->Value >>= bTemp;
                                     pTempFilter->mbReadonly |= bTemp;
                                 }
@@ -1543,8 +1543,8 @@ filter_info_impl::filter_info_impl()
 :   maFlags(0x00080040),
     maFileFormatVersion(0),
     mnDocumentIconID(0),
-    mbReadonly(sal_False),
-    mbNeedsXSLT2(sal_False)
+    mbReadonly(false),
+    mbNeedsXSLT2(false)
 {
 }
 

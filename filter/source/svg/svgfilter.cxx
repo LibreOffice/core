@@ -65,8 +65,8 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mpSVGWriter( NULL ),
     mpDefaultSdrPage( NULL ),
     mpSdrModel( NULL ),
-    mbPresentation( sal_False ),
-    mbSinglePage( sal_False ),
+    mbPresentation( false ),
+    mbSinglePage( false ),
     mnVisiblePage( -1 ),
     mpObjects( NULL ),
     mxSrcDoc(),
@@ -93,7 +93,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 {
     SolarMutexGuard aGuard;
     Window*     pFocusWindow = Application::GetFocusWindow();
-    sal_Bool    bRet;
+    bool    bRet;
 
     if( pFocusWindow )
         pFocusWindow->EnterWait();
@@ -104,7 +104,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     else if( mxSrcDoc.is() )
     {
         // #i124608# detext selection
-        sal_Bool bSelectionOnly = sal_False;
+        bool bSelectionOnly = false;
         bool bGotSelection(false);
 
         // #i124608# extract Single selection wanted from dialog return values
@@ -253,7 +253,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             // #i124608# export selection, got maShapeSelection but no shape selected -> nothing
             // to export, we are done (maybe return true, but a hint that nothing was done
             // may be useful; it may have happened by error)
-            bRet = sal_False;
+            bRet = false;
         }
         else {
         /*
@@ -283,7 +283,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     }
 #endif
     else
-        bRet = sal_False;
+        bRet = false;
 
     if( pFocusWindow )
         pFocusWindow->LeaveWait();

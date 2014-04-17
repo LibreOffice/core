@@ -75,13 +75,13 @@ void CGM::ImplGetVector( double* pVector )
 }
 
 
-sal_Bool CGM::ImplGetEllipse( FloatPoint& rCenter, FloatPoint& rRadius, double& rAngle )
+bool CGM::ImplGetEllipse( FloatPoint& rCenter, FloatPoint& rRadius, double& rAngle )
 {
     FloatPoint  aPoint1, aPoint2;
     double      fRot1, fRot2;
-    ImplGetPoint( rCenter, sal_True );
-    ImplGetPoint( aPoint1, sal_True );
-    ImplGetPoint( aPoint2, sal_True );
+    ImplGetPoint( rCenter, true );
+    ImplGetPoint( aPoint1, true );
+    ImplGetPoint( aPoint2, true );
     fRot1 = ImplGetOrientation( rCenter, aPoint1 );
     fRot2 = ImplGetOrientation( rCenter, aPoint2 );
     rAngle = ImplGetOrientation( rCenter, aPoint1 );
@@ -95,14 +95,14 @@ sal_Bool CGM::ImplGetEllipse( FloatPoint& rCenter, FloatPoint& rRadius, double& 
     if ( fRot1 > fRot2 )
     {
         if ( ( fRot1 - fRot2 ) < 180 )
-            return sal_False;
+            return false;
     }
     else
     {
         if ( ( fRot2 - fRot1 ) > 180 )
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 void CGM::ImplDoClass4()
@@ -130,7 +130,7 @@ void CGM::ImplDoClass4()
                 for ( sal_uInt16 i = 0; i < nPoints; i++)
                 {
                     FloatPoint  aFloatPoint;
-                    ImplGetPoint( aFloatPoint, sal_True );
+                    ImplGetPoint( aFloatPoint, true );
                     aPolygon.SetPoint( Point( (long)aFloatPoint.X, (long)aFloatPoint.Y ), i );
                 }
                 if ( mbFigure )
@@ -153,7 +153,7 @@ void CGM::ImplDoClass4()
                         Polygon aPolygon( nPoints );
                         for ( sal_uInt16 i = 0; i < nPoints; i++ )
                         {
-                            ImplGetPoint( aFloatPoint, sal_True );
+                            ImplGetPoint( aFloatPoint, true );
                             aPolygon.SetPoint( Point( (long)aFloatPoint.X, (long)aFloatPoint.Y ), 0 );
                         }
                         mpOutAct->RegPolyLine( aPolygon );
@@ -164,9 +164,9 @@ void CGM::ImplDoClass4()
                         Polygon aPolygon( (sal_uInt16)2 );
                         for ( sal_uInt16 i = 0; i < nPoints; i++ )
                         {
-                            ImplGetPoint( aFloatPoint, sal_True );
+                            ImplGetPoint( aFloatPoint, true );
                             aPolygon.SetPoint( Point( (long)aFloatPoint.X, (long)aFloatPoint.Y ), 0 );
-                            ImplGetPoint( aFloatPoint, sal_True );
+                            ImplGetPoint( aFloatPoint, true );
                             aPolygon.SetPoint( Point( (long)aFloatPoint.X, (long)aFloatPoint.Y ), 1);
                             mpOutAct->DrawPolyLine( aPolygon );
                         }
@@ -185,7 +185,7 @@ void CGM::ImplDoClass4()
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
 
-                ImplGetPoint ( aFloatPoint, sal_True );
+                ImplGetPoint ( aFloatPoint, true );
                 nType = ImplGetUI16( 4 );
                 nSize = ImplGetUI( 1 );
                 mpSource[ mnParaSize + nSize ] = 0;
@@ -220,7 +220,7 @@ void CGM::ImplDoClass4()
                 ImplMapDouble( dx );
                 ImplMapDouble( dy );
 
-                ImplGetPoint ( aFloatPoint, sal_True );
+                ImplGetPoint ( aFloatPoint, true );
                 nType = ImplGetUI16( 4 );
                 nSize = ImplGetUI( 1 );
 
@@ -258,7 +258,7 @@ void CGM::ImplDoClass4()
                 for ( sal_uInt16 i = 0; i < nPoints; i++)
                 {
                     FloatPoint  aFloatPoint;
-                    ImplGetPoint( aFloatPoint, sal_True );
+                    ImplGetPoint( aFloatPoint, true );
                     aPolygon.SetPoint( Point ( (long)( aFloatPoint.X ), (long)( aFloatPoint.Y ) ), i );
                 }
                 mpOutAct->DrawPolygon( aPolygon );
@@ -278,7 +278,7 @@ void CGM::ImplDoClass4()
                 sal_uInt32      nEdgeFlag;
                 while ( mnParaSize < mnElementSize )
                 {
-                    ImplGetPoint( aFloatPoint, sal_True );
+                    ImplGetPoint( aFloatPoint, true );
                     nEdgeFlag = ImplGetUI16();
                     pPoints[ nPoints++ ] = Point( (long)aFloatPoint.X, (long)aFloatPoint.Y );
                     if ( ( nEdgeFlag & 2 ) || ( mnParaSize == mnElementSize ) )
@@ -332,7 +332,7 @@ void CGM::ImplDoClass4()
                     mpOutAct->CloseRegion();
 
                 FloatRect   aFloatRect;
-                ImplGetRectangle( aFloatRect, sal_True );
+                ImplGetRectangle( aFloatRect, true );
                 mpOutAct->DrawRectangle( aFloatRect );
             }
             break;
@@ -344,7 +344,7 @@ void CGM::ImplDoClass4()
 
                 double fRotation = 0;
                 FloatPoint aCenter, aRadius;
-                ImplGetPoint( aCenter, sal_True );
+                ImplGetPoint( aCenter, true );
                 if ( pElement->eVDCType == VDC_REAL )
                     aRadius.X = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
                 else
@@ -358,9 +358,9 @@ void CGM::ImplDoClass4()
             case 0x0d : /*Circular Arc 3 Point*/
             {
                 FloatPoint aStartingPoint, aIntermediatePoint, aEndingPoint, aCenterPoint;
-                ImplGetPoint( aStartingPoint, sal_True );
-                ImplGetPoint( aIntermediatePoint, sal_True );
-                ImplGetPoint( aEndingPoint, sal_True );
+                ImplGetPoint( aStartingPoint, true );
+                ImplGetPoint( aIntermediatePoint, true );
+                ImplGetPoint( aEndingPoint, true );
 
                 double fA = aIntermediatePoint.X - aStartingPoint.X;
                 double fB = aIntermediatePoint.Y - aStartingPoint.Y;
@@ -410,7 +410,7 @@ void CGM::ImplDoClass4()
                             Size( ( static_cast< long >( 2 * fRadius ) ), (long)( 2 * fRadius) ) );
                         Polygon aPolygon( aBoundingBox, Point( (long)aStartingPoint.X, (long)aStartingPoint.Y ) ,Point( (long)aEndingPoint.X, (long)aEndingPoint.Y ), POLY_ARC );
                         if ( nSwitch )
-                            mpOutAct->RegPolyLine( aPolygon, sal_True );
+                            mpOutAct->RegPolyLine( aPolygon, true );
                         else
                             mpOutAct->RegPolyLine( aPolygon );
                     }
@@ -494,7 +494,7 @@ void CGM::ImplDoClass4()
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
 
-                ImplGetPoint( aCenter, sal_True );
+                ImplGetPoint( aCenter, true );
                 ImplGetVector( &vector[ 0 ] );
 
                 if ( pElement->eVDCType == VDC_REAL )
@@ -548,7 +548,7 @@ void CGM::ImplDoClass4()
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
 
-                ImplGetPoint( aCenter, sal_True );
+                ImplGetPoint( aCenter, true );
                 ImplGetVector( &vector[ 0 ] );
                 if ( pElement->eVDCType == VDC_REAL )
                 {
@@ -609,7 +609,7 @@ void CGM::ImplDoClass4()
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
 
-                sal_Bool bDirection = ImplGetEllipse( aCenter, aRadius, fOrientation );
+                bool bDirection = ImplGetEllipse( aCenter, aRadius, fOrientation );
                 ImplGetVector( &vector[ 0 ] );
 
                 fStartAngle = acos( vector[ 0 ] / sqrt( vector[ 0 ] * vector[ 0 ] + vector[ 1 ] * vector[ 1 ] ) ) * 57.29577951308;
@@ -637,7 +637,7 @@ void CGM::ImplDoClass4()
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
 
-                sal_Bool bDirection = ImplGetEllipse( aCenter, aRadius, fOrientation );
+                bool bDirection = ImplGetEllipse( aCenter, aRadius, fOrientation );
                 ImplGetVector( &vector[ 0 ] );
 
                 fStartAngle = acos( vector[ 0 ] / sqrt( vector[ 0 ] * vector[ 0 ] + vector[ 1 ] * vector[ 1 ] ) ) * 57.29577951308;
@@ -709,7 +709,7 @@ void CGM::ImplDoClass4()
                 for ( sal_uInt16 i = 0; i < nNumberOfPoints; i++)
                 {
                     FloatPoint  aFloatPoint;
-                    ImplGetPoint( aFloatPoint, sal_True );
+                    ImplGetPoint( aFloatPoint, true );
                     aPolygon.SetPoint( Point ( (long)( aFloatPoint.X ), (long)( aFloatPoint.Y ) ), i );
                 }
                 if ( nOrder & 4 )

@@ -75,11 +75,11 @@ public:
     OUString maBookmark;
 
     sal_Int32       mnDimColor;
-    sal_Bool        mbDimHide;
-    sal_Bool        mbDimPrev;
+    bool        mbDimHide;
+    bool        mbDimPrev;
 
-    sal_Bool        mbSoundOn;
-    sal_Bool        mbPlayFull;
+    bool        mbSoundOn;
+    bool        mbPlayFull;
     OUString maSoundURL;
 
     sal_Int32       mnBlueScreenColor;
@@ -127,8 +127,8 @@ struct PageInfo
     sal_uInt16      mnObjectsID;
     sal_uInt16      mnForegroundID;
 
-    sal_Bool mbBackgroundVisible;
-    sal_Bool mbBackgroundObjectsVisible;
+    bool mbBackgroundVisible;
+    bool mbBackgroundObjectsVisible;
 
     ShapeInfoVector maShapesVector;
 
@@ -154,15 +154,15 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxSelectedDrawPage,
 
         sal_Int32 nJPEGCompressMode = -1,
-        sal_Bool bExportOLEAsJPEG = false);
+        bool bExportOLEAsJPEG = false);
     ~FlashExporter();
 
     void Flush();
 
-    sal_Bool exportAll( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDoc, com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream,    ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator> &xStatusIndicator );
-    sal_Bool exportSlides( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage, com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream, sal_uInt16 nPage);
-    sal_uInt16 exportBackgrounds( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage, com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream, sal_uInt16 nPage, sal_Bool bExportObjects );
-    sal_uInt16 exportBackgrounds( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage, sal_uInt16 nPage, sal_Bool bExportObjects );
+    bool exportAll( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDoc, com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream,    ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator> &xStatusIndicator );
+    bool exportSlides( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage, com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream, sal_uInt16 nPage);
+    sal_uInt16 exportBackgrounds( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage, com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream, sal_uInt16 nPage, bool bExportObjects );
+    sal_uInt16 exportBackgrounds( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage, sal_uInt16 nPage, bool bExportObjects );
 
     ChecksumCache gMasterCache;
     ChecksumCache gPrivateCache;
@@ -203,9 +203,9 @@ private:
 
     sal_Int32 mnJPEGcompressMode;
 
-    sal_Bool mbExportOLEAsJPEG;
+    bool mbExportOLEAsJPEG;
 
-    sal_Bool mbPresentation;
+    bool mbPresentation;
 
     sal_Int32 mnPageNumber;
 };

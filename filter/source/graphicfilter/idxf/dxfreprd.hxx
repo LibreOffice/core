@@ -32,7 +32,7 @@
 
 class DXFBoundingBox {
 public:
-    sal_Bool bEmpty;
+    bool bEmpty;
     double fMinX;
     double fMinY;
     double fMinZ;
@@ -40,7 +40,7 @@ public:
     double fMaxY;
     double fMaxZ;
 
-    DXFBoundingBox():bEmpty(sal_True), fMinX(0.0), fMinY(0.0), fMinZ(0.0), fMaxX(0.0), fMaxY(0.0), fMaxZ(0.0) {}
+    DXFBoundingBox():bEmpty(true), fMinX(0.0), fMinY(0.0), fMinZ(0.0), fMaxX(0.0), fMaxY(0.0), fMaxZ(0.0) {}
     void Union(const DXFVector & rVector);
 };
 
@@ -103,7 +103,7 @@ public:
         double getGlobalLineTypeScale() const;
         void setGlobalLineTypeScale(double fGlobalLineTypeScale);
 
-    sal_Bool Read( SvStream & rIStream, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent);
+    bool Read( SvStream & rIStream, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent);
         // Reads complete DXF file.
 
 private:

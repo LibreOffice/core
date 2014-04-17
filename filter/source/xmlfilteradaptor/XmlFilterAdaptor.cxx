@@ -64,7 +64,7 @@ using namespace com::sun::star::xml::sax;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
 
-sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
 {
     OUString udConvertClass=msUserData[0];
@@ -110,7 +110,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     Reference < XDocumentHandler > xHandler( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext( sXMLImportService, aAnys, mxContext ), UNO_QUERY );
     if(! xHandler.is()) {
         OSL_FAIL("XMLReader::Read: %s Unable to create service instance xHandler\n" );
-        return sal_False;
+        return false;
     }
     Reference < XImporter > xImporter( xHandler, UNO_QUERY );
     xImporter->setTargetDocument ( mxDoc );
@@ -125,7 +125,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     Reference< XInterface > xConvBridge(mxContext->getServiceManager()->createInstanceWithContext(udConvertClass, mxContext), UNO_QUERY);
     if(! xConvBridge.is()){
         OSL_FAIL( "XMLReader::Read: %s service missing\n" );
-        return sal_False;
+        return false;
     }
     if (xStatusIndicator.is())
         xStatusIndicator->setValue(nSteps++);
@@ -166,7 +166,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
         if (!xConverter->importer(aDescriptor,xHandler,msUserData)) {
             if (xStatusIndicator.is())
                    xStatusIndicator->end();
-            return sal_False;
+            return false;
         }
     }
 #if OSL_DEBUG_LEVEL > 0
@@ -179,16 +179,16 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
                xStatusIndicator->end();
 
         OSL_FAIL( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
-        return sal_False;
+        return false;
     }
     if (xStatusIndicator.is()) {
         xStatusIndicator->setValue(nSteps++);
         xStatusIndicator->end();
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
 {
 
@@ -209,7 +209,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     Reference< com::sun::star::xml::XExportFilter > xConverter(mxContext->getServiceManager()->createInstanceWithContext( udConvertClass, mxContext ), UNO_QUERY);
     if(! xConverter.is()){
       OSL_FAIL( "xml export sub service missing" );
-      return sal_False;
+      return false;
     }
 
     if (xStatusIndicator.is())
@@ -219,7 +219,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     if (!xConverter->exporter(aDescriptor, msUserData)) {
         if (xStatusIndicator.is())
             xStatusIndicator->end();
-        return sal_False;
+        return false;
     }
     if (xStatusIndicator.is())
         xStatusIndicator->setValue(nSteps++);
@@ -232,12 +232,12 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
 
 
         // pretty printing is confusing for some filters so it is disabled by default
-        sal_Bool bPrettyPrint =
+        bool bPrettyPrint =
             (msUserData.getLength() > 6 && msUserData[6].equalsIgnoreAsciiCase("true"));
 
         // export of <text:number> element for <text:list-item> elements are
         // needed for certain filters.
-        sal_Bool bExportTextNumberElementForListItems =
+        bool bExportTextNumberElementForListItems =
                             ( msUserData.getLength() > 7 &&
                               msUserData[7].equalsIgnoreAsciiCase("true") );
 
@@ -288,7 +288,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
         {
             if (xStatusIndicator.is())
                    xStatusIndicator->end();
-            return sal_False;
+            return false;
         }
     }
 #if OSL_DEBUG_LEVEL > 0
@@ -300,13 +300,13 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
         OSL_FAIL( OUStringToOString( exE.Message, RTL_TEXTENCODING_ASCII_US).getStr());
         if (xStatusIndicator.is())
             xStatusIndicator->end();
-        return sal_False;
+        return false;
     }
 
     // done
     if (xStatusIndicator.is())
         xStatusIndicator->end();
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL XmlFilterAdaptor::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )

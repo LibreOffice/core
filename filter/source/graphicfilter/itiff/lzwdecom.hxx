@@ -52,7 +52,7 @@ private:
     LZWTableEntry * pTable;
     sal_uInt16 nTableSize;
 
-    sal_Bool bEOIFound, bInvert, bFirst;
+    bool bEOIFound, bInvert, bFirst;
 
     sal_uInt16 nOldCode;
 

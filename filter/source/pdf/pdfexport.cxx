@@ -97,54 +97,54 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mxContext                   ( xContext ),
     mxStatusIndicator           ( rxStatusIndicator ),
     mxIH                        ( rxIH ),
-    mbUseTaggedPDF              ( sal_False ),
+    mbUseTaggedPDF              ( false ),
     mnPDFTypeSelection          ( 0 ),
-    mbExportNotes               ( sal_True ),
-    mbViewPDF                   ( sal_True ),
-    mbExportNotesPages          ( sal_False ),
-    mbUseTransitionEffects      ( sal_True ),
-    mbExportBookmarks           ( sal_True ),
-    mbExportHiddenSlides        ( sal_False ),
+    mbExportNotes               ( true ),
+    mbViewPDF                   ( true ),
+    mbExportNotesPages          ( false ),
+    mbUseTransitionEffects      ( true ),
+    mbExportBookmarks           ( true ),
+    mbExportHiddenSlides        ( false ),
     mnOpenBookmarkLevels        ( -1 ),
-    mbUseLosslessCompression    ( sal_False ),
-    mbReduceImageResolution     ( sal_True ),
-    mbSkipEmptyPages            ( sal_True ),
-    mbAddStream                 ( sal_False ),
+    mbUseLosslessCompression    ( false ),
+    mbReduceImageResolution     ( true ),
+    mbSkipEmptyPages            ( true ),
+    mbAddStream                 ( false ),
     mnMaxImageResolution        ( 300 ),
     mnQuality                   ( 90 ),
     mnFormsFormat               ( 0 ),
-    mbExportFormFields          ( sal_True ),
-    mbAllowDuplicateFieldNames  ( sal_False ),
+    mbExportFormFields          ( true ),
+    mbAllowDuplicateFieldNames  ( false ),
     mnProgressValue             ( 0 ),
-    mbRemoveTransparencies      ( sal_False ),
-    mbWatermark                 ( sal_False ),
+    mbRemoveTransparencies      ( false ),
+    mbWatermark                 ( false ),
 
-    mbHideViewerToolbar         ( sal_False ),
-    mbHideViewerMenubar         ( sal_False ),
-    mbHideViewerWindowControls  ( sal_False ),
-    mbFitWindow                 ( sal_False ),
-    mbCenterWindow              ( sal_False ),
-    mbOpenInFullScreenMode      ( sal_False ),
-    mbDisplayPDFDocumentTitle   ( sal_True ),
+    mbHideViewerToolbar         ( false ),
+    mbHideViewerMenubar         ( false ),
+    mbHideViewerWindowControls  ( false ),
+    mbFitWindow                 ( false ),
+    mbCenterWindow              ( false ),
+    mbOpenInFullScreenMode      ( false ),
+    mbDisplayPDFDocumentTitle   ( true ),
     mnPDFDocumentMode           ( 0 ),
     mnPDFDocumentAction         ( 0 ),
     mnZoom                      ( 100 ),
     mnInitialPage               ( 1 ),
     mnPDFPageLayout             ( 0 ),
-    mbFirstPageLeft             ( sal_False ),
+    mbFirstPageLeft             ( false ),
 
-    mbEncrypt                   ( sal_False ),
-    mbRestrictPermissions       ( sal_False ),
+    mbEncrypt                   ( false ),
+    mbRestrictPermissions       ( false ),
     mnPrintAllowed              ( 2 ),
     mnChangesAllowed            ( 4 ),
-    mbCanCopyOrExtract          ( sal_True ),
-    mbCanExtractForAccessibility( sal_True ),
+    mbCanCopyOrExtract          ( true ),
+    mbCanExtractForAccessibility( true ),
 
 //--->i56629
-    mbExportRelativeFsysLinks       ( sal_False ),
+    mbExportRelativeFsysLinks       ( false ),
     mnDefaultLinkAction         ( 0 ),
-    mbConvertOOoTargetToPDFTarget( sal_False ),
-    mbExportBmkToDest           ( sal_False ),
+    mbConvertOOoTargetToPDFTarget( false ),
+    mbExportBmkToDest           ( false ),
     mbSignPDF                   ( false )
 {
 }
@@ -157,20 +157,20 @@ PDFExport::~PDFExport()
 
 
 
-sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
+bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
     Reference< com::sun::star::view::XRenderable >& rRenderable,
     const Any& rSelection,
     const StringRangeEnumerator& rRangeEnum,
     Sequence< PropertyValue >& rRenderOptions,
     sal_Int32 nPageCount )
 {
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
     try
     {
         Any* pFirstPage = NULL;
         Any* pLastPage = NULL;
 
-        sal_Bool bExportNotesPages = sal_False;
+        bool bExportNotesPages = false;
 
         for( sal_Int32 nData = 0, nDataCount = rRenderOptions.getLength(); nData < nDataCount; ++nData )
         {
@@ -248,7 +248,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
             }
             else
             {
-                bRet = sal_True;                        // #i18334# SJ: nPageCount == 0,
+                bRet = true;                        // #i18334# SJ: nPageCount == 0,
                 rPDFWriter.NewPage( 10000, 10000 );     // creating dummy page
                 rPDFWriter.SetMapMode( MAP_100TH_MM );
             }
@@ -375,10 +375,10 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
     return aDocMimetype;
 }
 
-sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& rFilterData )
+bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& rFilterData )
 {
     INetURLObject   aURL( rFile );
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     std::set< PDFWriter::ErrorCode > aErrors;
 
@@ -507,7 +507,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 else if ( rFilterData[ nData ].Name == "Watermark" )
                 {
                     maWatermark = rFilterData[ nData ].Value;
-                    mbWatermark = sal_True;
+                    mbWatermark = true;
                 }
 //now all the security related properties...
                 else if ( rFilterData[ nData ].Name == "EncryptFile" )
@@ -570,13 +570,13 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             case 1:
                 aContext.Version    = PDFWriter::PDF_A_1;
                 //force the tagged PDF as well
-                mbUseTaggedPDF = sal_True;
+                mbUseTaggedPDF = true;
                 //force disabling of form conversion
-                mbExportFormFields = sal_False;
+                mbExportFormFields = false;
                 // PDF/A does not allow transparencies
-                mbRemoveTransparencies = sal_True;
+                mbRemoveTransparencies = true;
                 // no encryption
-                mbEncrypt = sal_False;
+                mbEncrypt = false;
                 xEnc.clear();
                 break;
             }
@@ -662,7 +662,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 // if not enabled and no permission password, force permissions to default as if PDF where without encryption
                 if( mbRestrictPermissions && (xEnc.is() || !aPermissionPassword.isEmpty()) )
                 {
-                    mbEncrypt = sal_True;
+                    mbEncrypt = true;
 //permission set as desired, done after
                 }
                 else
@@ -670,8 +670,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 //force permission to default
                     mnPrintAllowed                  = 2 ;
                     mnChangesAllowed                = 4 ;
-                    mbCanCopyOrExtract              = sal_True;
-                    mbCanExtractForAccessibility    = sal_True ;
+                    mbCanCopyOrExtract              = true;
+                    mbCanExtractForAccessibility    = true ;
                 }
 
                 switch( mnPrintAllowed )
@@ -843,7 +843,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aSelection = Any();
                     aSelection <<= mxSrcDoc;
                 }
-                sal_Bool        bSecondPassForImpressNotes = sal_False;
+                bool        bSecondPassForImpressNotes = false;
                 bool bReChangeToNormalView = false;
                   OUString sShowOnlineLayout( "ShowOnlineLayout" );
                   uno::Reference< beans::XPropertySet > xViewProperties;
@@ -873,7 +873,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 {
                     uno::Reference< drawing::XShapes > xShapes;     // sj: do not allow to export notes when
                     if ( ! ( aSelection >>= xShapes ) )             // exporting a selection -> todo: in the dialog
-                        bSecondPassForImpressNotes = sal_True;      // the export notes checkbox needs to be disabled
+                        bSecondPassForImpressNotes = true;      // the export notes checkbox needs to be disabled
                 }
 
                 if( aPageRange.isEmpty() )
@@ -897,7 +897,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 if( nPageCount > 0 )
                     bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aRangeEnum, aRenderOptions, nPageCount );
                 else
-                    bRet = sal_False;
+                    bRet = false;
 
                 if ( bRet && bSecondPassForImpressNotes )
                 {
@@ -997,12 +997,12 @@ void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
 
 
 
-sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFExtOutDevData, const GDIMetaFile& rMtf )
+bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFExtOutDevData, const GDIMetaFile& rMtf )
 {
     const Size      aSizePDF( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_POINT ) );
     Point           aOrigin;
     Rectangle       aPageRect( aOrigin, rMtf.GetPrefSize() );
-    sal_Bool        bRet = sal_True;
+    bool        bRet = true;
 
     rWriter.NewPage( aSizePDF.Width(), aSizePDF.Height() );
     rWriter.SetMapMode( rMtf.GetPrefMapMode() );

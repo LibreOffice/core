@@ -63,7 +63,7 @@ public:
 
 OUString PlainTextFilterDetect_getImplementationName();
 
-sal_Bool PlainTextFilterDetect_supportsService(const OUString& ServiceName);
+bool PlainTextFilterDetect_supportsService(const OUString& ServiceName);
 
 com::sun::star::uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames();
 

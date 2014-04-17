@@ -40,7 +40,7 @@ CGMBitmap::~CGMBitmap()
 
 void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 {
-    rDesc.mbStatus = sal_True;
+    rDesc.mbStatus = true;
 
     if ( ImplGetDimensions( rDesc ) && rDesc.mpBuf )
     {
@@ -190,27 +190,27 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                 }
                 else
                 {
-                    rDesc.mbVMirror = sal_True;
+                    rDesc.mbVMirror = true;
                     rDesc.mnOrigin = rDesc.mnP;
                     rDesc.mnOrigin.X += rDesc.mnQ.X - rDesc.mnR.X;
                     rDesc.mnOrigin.Y += rDesc.mnQ.Y - rDesc.mnR.Y;
                 }
             }
             else
-                rDesc.mbStatus = sal_False;
+                rDesc.mbStatus = false;
         }
         else
-            rDesc.mbStatus = sal_False;
+            rDesc.mbStatus = false;
     }
     else
-        rDesc.mbStatus = sal_False;
+        rDesc.mbStatus = false;
 
     if ( rDesc.mpAcc )
     {
         rDesc.mpBitmap->ReleaseAccess( rDesc.mpAcc );
         rDesc.mpAcc = NULL;
     }
-    if ( rDesc.mbStatus == sal_False )
+    if ( rDesc.mbStatus == false )
     {
         if ( rDesc.mpBitmap )
         {
@@ -235,7 +235,7 @@ void CGMBitmap::ImplSetCurrentPalette( CGMBitmapDescriptor& rDesc )
 
 
 
-sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
+bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
 {
     mpCGM->ImplGetPoint( rDesc.mnP );           // parallelogram    p < - > r
     mpCGM->ImplGetPoint( rDesc.mnQ );           //                          |
@@ -270,7 +270,7 @@ sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
             break;
         case 16 :                               // NS
         case -16 :
-            rDesc.mbStatus = sal_False;
+            rDesc.mbStatus = false;
             break;
         case 24 :                               // 24 bit directColor ( 8 bits each component )
         case -24 :
@@ -278,17 +278,17 @@ sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
             break;
         case 32 :                               // NS
         case -32 :
-            rDesc.mbStatus = sal_False;
+            rDesc.mbStatus = false;
             break;
 
     }
     // mnCompressionMode == 0 : CCOMP_RUNLENGTH
     //                   == 1 : CCOMP_PACKED ( no compression. each row starts on a 4 byte boundary )
     if ( ( rDesc.mnCompressionMode = mpCGM->ImplGetUI16() ) != 1 )
-        rDesc.mbStatus = sal_False;
+        rDesc.mbStatus = false;
 
     if ( !( rDesc.mnX || rDesc.mnY ) )
-        rDesc.mbStatus = sal_False;
+        rDesc.mbStatus = false;
 
     sal_uInt32 nHeaderSize = 2 + 3 * nPrecision + 3 * mpCGM->ImplGetPointSize();
     rDesc.mnScanSize = ( ( rDesc.mnX * rDesc.mnDstBitsPerPixel + 7 ) >> 3 );
@@ -310,7 +310,7 @@ sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
                     if ( ( nScanSize * ( rDesc.mnY - 1 ) + rDesc.mnScanSize + nHeaderSize ) != mpCGM->mnElementSize )
                     {
                         mpCGM->mnParaSize = 0;                              // this format is corrupt
-                        rDesc.mbStatus = sal_False;
+                        rDesc.mbStatus = false;
                     }
                 }
             }

@@ -128,7 +128,7 @@ private:
      */
     OUString impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& rDescriptor   ,
                                                const FlatDetection&                 lFlatTypes    ,
-                                                     sal_Bool                       bAllowDeep    ,
+                                                     bool                       bAllowDeep    ,
                                                      OUStringList&                  rUsedDetectors,
                                                      OUString&               rLastChance   );
 
@@ -243,7 +243,7 @@ private:
         @return     TRUE the specified type and its registrations was valid(!) and
                     could be set on the descriptor.
      */
-    sal_Bool impl_validateAndSetTypeOnDescriptor(      utl::MediaDescriptor& rDescriptor,
+    bool impl_validateAndSetTypeOnDescriptor(      utl::MediaDescriptor& rDescriptor,
                                                  const OUString&               sType      );
 
 
@@ -265,7 +265,7 @@ private:
         @return     TRUE the specified type and its registrations was valid(!) and
                     could be set on the descriptor.
      */
-    sal_Bool impl_validateAndSetFilterOnDescriptor(      utl::MediaDescriptor& rDescriptor,
+    bool impl_validateAndSetFilterOnDescriptor(      utl::MediaDescriptor& rDescriptor,
                                                    const OUString&               sFilter    );
 
 

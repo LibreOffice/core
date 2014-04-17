@@ -72,8 +72,8 @@ static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLo
 // SecurityCount is the buffersize of the buffer in which we will parse for a number
 static long ImplGetNumber( sal_uInt8 **pBuf, int& nSecurityCount )
 {
-    sal_Bool    bValid = sal_True;
-    sal_Bool    bNegative = sal_False;
+    bool    bValid = true;
+    bool    bNegative = false;
     long    nRetValue = 0;
     while ( ( --nSecurityCount ) && ( ( **pBuf == ' ' ) || ( **pBuf == 0x9 ) ) )
         (*pBuf)++;
@@ -84,10 +84,10 @@ static long ImplGetNumber( sal_uInt8 **pBuf, int& nSecurityCount )
         {
             case '.' :
                 // we'll only use the integer format
-                bValid = sal_False;
+                bValid = false;
                 break;
             case '-' :
-                bNegative = sal_True;
+                bNegative = true;
                 break;
             default :
                 if ( ( nByte < '0' ) || ( nByte > '9' ) )
@@ -486,9 +486,9 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
         return false;
 
     Graphic     aGraphic;
-    sal_Bool    bRetValue = sal_False;
-    sal_Bool    bHasPreview = sal_False;
-    sal_Bool    bGraphicLinkCreated = sal_False;
+    bool    bRetValue = false;
+    bool    bHasPreview = false;
+    bool    bGraphicLinkCreated = false;
     sal_uInt32  nSignature, nPSStreamPos, nPSSize;
     sal_uInt32  nSizeWMF = 0;
     sal_uInt32  nPosWMF = 0;
@@ -510,7 +510,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
             {
                 rStream.Seek( nOrigPos + nPosWMF );
                 if ( GraphicConverter::Import( rStream, aGraphic, CVT_WMF ) == ERRCODE_NONE )
-                    bHasPreview = bRetValue = sal_True;
+                    bHasPreview = bRetValue = true;
             }
         }
         else
@@ -526,7 +526,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                 {
                     MakeAsMeta(aGraphic);
                     rStream.Seek( nOrigPos + nPosTIFF );
-                    bHasPreview = bRetValue = sal_True;
+                    bHasPreview = bRetValue = true;
                 }
             }
         }
@@ -571,7 +571,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                             if ( pAcc )
                             {
                                 int  nBitsLeft;
-                                sal_Bool bIsValid = sal_True;
+                                bool bIsValid = true;
                                 sal_uInt8 nDat = 0;
                                 char nByte;
                                 for ( long y = 0; bIsValid && ( y < nHeight ); y++ )
@@ -588,7 +588,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                                                 {
                                                     case 0x0a :
                                                         if ( --nScanLines < 0 )
-                                                            bIsValid = sal_False;
+                                                            bIsValid = false;
                                                     case 0x09 :
                                                     case 0x0d :
                                                     case 0x20 :
@@ -603,7 +603,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                                                                 nByte &=~0x20;  // case none sensitive for hexadecimal values
                                                                 nByte -= ( 'A' - 10 );
                                                                 if ( nByte > 15 )
-                                                                    bIsValid = sal_False;
+                                                                    bIsValid = false;
                                                             }
                                                             else
                                                                 nByte -= '0';
@@ -612,7 +612,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                                                             nDat |= ( nByte ^ 0xf ); // in epsi a zero bit represents white color
                                                         }
                                                         else
-                                                            bIsValid = sal_False;
+                                                            bIsValid = false;
                                                     }
                                                     break;
                                                 }
@@ -645,7 +645,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                                     aMtf.SetPrefMapMode( MAP_100TH_MM );
                                     aMtf.SetPrefSize( aSize );
                                     aGraphic = aMtf;
-                                    bHasPreview = bRetValue = sal_True;
+                                    bHasPreview = bRetValue = true;
                                 }
                                 aBitmap.ReleaseAccess( pAcc );
                             }
@@ -666,7 +666,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                     }
                     if ( nSecurityCount)
                     {
-                        bGraphicLinkCreated = sal_True;
+                        bGraphicLinkCreated = true;
                         GfxLink     aGfxLink( pBuf, nPSSize, GFX_LINK_TYPE_EPS_BUFFER, true ) ;
                         GDIMetaFile aMtf;
 
@@ -695,7 +695,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                         aMtf.SetPrefMapMode( MAP_POINT );
                         aMtf.SetPrefSize( Size( nWidth, nHeight ) );
                         rGraphic = aMtf;
-                        bRetValue = sal_True;
+                        bRetValue = true;
                     }
                 }
             }

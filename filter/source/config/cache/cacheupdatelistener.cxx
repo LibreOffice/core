@@ -148,7 +148,7 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
             lChangedItems.push_back(sNode);
     }
 
-    sal_Bool                     bNotifyRefresh = sal_False;
+    bool                     bNotifyRefresh = false;
     OUStringList::const_iterator pIt;
     for (  pIt  = lChangedItems.begin();
            pIt != lChangedItems.end()  ;
@@ -166,7 +166,7 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
                 // But we know, that the cache is up-to-date know and has thrown this exception afterwards .-)
             }
         // NO FLUSH! Otherwise we start a never ending story here .-)
-        bNotifyRefresh = sal_True;
+        bNotifyRefresh = true;
     }
 
     // notify sfx cache about the changed filter cache .-)

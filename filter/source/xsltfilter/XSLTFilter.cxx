@@ -114,8 +114,8 @@ namespace XSLT
         css::uno::Reference<xslt::XXSLTTransformer> m_tcontrol;
 
         oslCondition m_cTransformed;
-        sal_Bool m_bTerminated;
-        sal_Bool m_bError;
+        bool m_bTerminated;
+        bool m_bError;
 
         OUString m_aExportBaseUrl;
 
@@ -164,7 +164,7 @@ namespace XSLT
     };
 
     XSLTFilter::XSLTFilter(const css::uno::Reference<XComponentContext> &r):
-        m_xContext(r), m_bTerminated(sal_False), m_bError(sal_False)
+        m_xContext(r), m_bTerminated(false), m_bError(false)
     {
         m_cTransformed = osl_createCondition();
     }
@@ -246,7 +246,7 @@ namespace XSLT
         {
             SAL_WARN("filter.xslt", "XSLTFilter::error was called: " << e.Message);
         }
-        m_bError = sal_True;
+        m_bError = true;
         osl_setCondition(m_cTransformed);
     }
     void
@@ -257,7 +257,7 @@ namespace XSLT
     void
     XSLTFilter::terminated() throw (RuntimeException, std::exception)
     {
-        m_bTerminated = sal_True;
+        m_bTerminated = true;
         osl_setCondition(m_cTransformed);
     }
 
@@ -389,7 +389,7 @@ namespace XSLT
                                         pRequest->addContinuation(pAbort);
                                         xInterActionHandler->handle(xRequest);
                                         if (pAbort->wasSelected()) {
-                                                m_bError = sal_True;
+                                                m_bError = true;
                                                 osl_setCondition(m_cTransformed);
                                         }
                                 }
@@ -433,7 +433,7 @@ namespace XSLT
         // since that is where our xml-writer will push the data
         // from it's data-source interface
         OUString aName, sURL;
-        sal_Bool bIndent = sal_False;
+        bool bIndent = false;
         OUString aDoctypePublic;
         // css::uno::Reference<XOutputStream> rOutputStream;
         sal_Int32 nLength = aSourceData.getLength();

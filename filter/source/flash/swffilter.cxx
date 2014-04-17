@@ -164,8 +164,8 @@ public:
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
-    sal_Bool ExportAsMultipleFiles( const Sequence< PropertyValue >& aDescriptor );
-    sal_Bool ExportAsSingleFile( const Sequence< PropertyValue >& aDescriptor );
+    bool ExportAsMultipleFiles( const Sequence< PropertyValue >& aDescriptor );
+    bool ExportAsSingleFile( const Sequence< PropertyValue >& aDescriptor );
 
     virtual void SAL_CALL cancel( ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -316,21 +316,21 @@ sal_Bool SAL_CALL FlashExportFilter::filter( const ::com::sun::star::uno::Sequen
 // AS: HACK!  Right now, I create a directory as a sibling to the swf file selected in the Export
 //  dialog.  This directory is called presentation.sxi-swf-files.  The name of the swf file selected
 //  in the Export dialog has no impact on this.  All files created are placed in this directory.
-sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& aDescriptor)
+bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& aDescriptor)
 {
     Reference< XDrawPagesSupplier > xDrawPagesSupplier(mxDoc, UNO_QUERY);
     if(!xDrawPagesSupplier.is())
-        return sal_False;
+        return false;
 
     Reference< XIndexAccess > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY );
     if(!xDrawPages.is())
-        return sal_False;
+        return false;
 
     Reference< XDesktop2 > rDesktop = Desktop::create( mxContext );
 
     Reference< XStorable > xStorable(rDesktop->getCurrentComponent(), UNO_QUERY);
     if (!xStorable.is())
-        return sal_False;
+        return false;
 
     Reference< XDrawPage > xDrawPage;
 
@@ -377,7 +377,7 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
 
     // AS: Only export the background config if we're exporting all of the pages, otherwise we'll
     //  screw it up.
-    sal_Bool bExportAll = findPropertyValue<sal_Bool>(aFilterData, "ExportAll", true);
+    bool bExportAll = findPropertyValue<sal_Bool>(aFilterData, "ExportAll", true);
     if (bExportAll)
     {
         osl_removeFile(fullpath.pData);
@@ -427,7 +427,7 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
             fullpath = swfdirpath + STR("/slide") + VAL(nPage+1) + STR("p.swf");
 
             Reference<XOutputStream> xOutputStreamWrap(*(new OslOutputStreamWrapper(fullpath)), UNO_QUERY);
-            sal_Bool ret = aFlashExporter.exportSlides( xDrawPage, xOutputStreamWrap, sal::static_int_cast<sal_uInt16>( nPage ) );
+            bool ret = aFlashExporter.exportSlides( xDrawPage, xOutputStreamWrap, sal::static_int_cast<sal_uInt16>( nPage ) );
             aFlashExporter.Flush();
             xOutputStreamWrap.clear();
 
@@ -453,10 +453,10 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
     if (bExportAll)
         osl_closeFile(xBackgroundConfig);
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& aDescriptor)
+bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& aDescriptor)
 {
     Reference < XOutputStream > xOutputStream = findPropertyValue<Reference<XOutputStream> >(aDescriptor, "OutputStream", 0);
     Sequence< PropertyValue > aFilterData;
@@ -464,7 +464,7 @@ sal_Bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& 
     if (!xOutputStream.is() )
     {
         OSL_ASSERT ( false );
-        return sal_False;
+        return false;
     }
 
     FlashExporter aFlashExporter(

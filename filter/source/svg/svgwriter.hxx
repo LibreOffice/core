@@ -190,7 +190,7 @@ class SVGTextWriter
     SVGExport&                                  mrExport;
     SVGAttributeWriter*                         mpContext;
     VirtualDevice*                              mpVDev;
-    sal_Bool                                    mbIsTextShapeStarted;
+    bool                                    mbIsTextShapeStarted;
     Reference<XText>                            mrTextShape;
     OUString                             msShapeId;
     Reference<XEnumeration>                     mrParagraphEnumeration;
@@ -205,18 +205,18 @@ class SVGTextWriter
     sal_Int32                                   mnLeftTextPortionLength;
     Point                                       maTextPos;
     long int                                    mnTextWidth;
-    sal_Bool                                    mbPositioningNeeded;
-    sal_Bool                                    mbIsNewListItem;
+    bool                                    mbPositioningNeeded;
+    bool                                    mbIsNewListItem;
     sal_Int16                                   meNumberingType;
     sal_Unicode                                 mcBulletChar;
     BulletListItemInfoMap                       maBulletListItemMap;
-    sal_Bool                                    mbIsListLevelStyleImage;
-    sal_Bool                                    mbLineBreak;
-    sal_Bool                                    mbIsURLField;
+    bool                                    mbIsListLevelStyleImage;
+    bool                                    mbLineBreak;
+    bool                                    mbIsURLField;
     OUString                             msUrl;
     OUString                             msHyperlinkIdList;
-    sal_Bool                                    mbIsPlacehlolderShape;
-    sal_Bool                                    mbIWS;
+    bool                                    mbIsPlacehlolderShape;
+    bool                                    mbIWS;
     Font                                        maCurrentFont;
     Font                                        maParentFont;
 
@@ -226,18 +226,18 @@ class SVGTextWriter
 
     sal_Int32 setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nCurAction );
     void setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAction );
-    void addFontAttributes( sal_Bool bIsTextContainer );
+    void addFontAttributes( bool bIsTextContainer );
 
-    sal_Bool createParagraphEnumeration();
-    sal_Bool nextParagraph();
-    sal_Bool nextTextPortion();
+    bool createParagraphEnumeration();
+    bool nextParagraph();
+    bool nextTextPortion();
 
-    sal_Bool isTextShapeStarted() { return mbIsTextShapeStarted; }
+    bool isTextShapeStarted() { return mbIsTextShapeStarted; }
     void startTextShape();
     void endTextShape();
     void startTextParagraph();
     void endTextParagraph();
-    void startTextPosition( sal_Bool bExportX = sal_True, sal_Bool bExportY = sal_True);
+    void startTextPosition( bool bExportX = true, bool bExportY = true);
     void endTextPosition();
     void implExportHyperlinkIds();
     void implWriteBulletChars();
@@ -245,9 +245,9 @@ class SVGTextWriter
     void writeBitmapPlaceholder( const MetaBitmapActionType* pAction );
     void implWriteEmbeddedBitmaps();
     void writeTextPortion( const Point& rPos, const OUString& rText,
-                           sal_Bool bApplyMapping = sal_True );
+                           bool bApplyMapping = true );
     void implWriteTextPortion( const Point& rPos, const OUString& rText,
-                               Color aTextColor, sal_Bool bApplyMapping );
+                               Color aTextColor, bool bApplyMapping );
 
     void setVirtualDevice( VirtualDevice* pVDev, MapMode& rTargetMapMode )
     {
@@ -275,7 +275,7 @@ class SVGTextWriter
     }
 
 
-    void setPlaceholderShapeFlag( sal_Bool bState )
+    void setPlaceholderShapeFlag( bool bState )
     {
         mbIsPlacehlolderShape = bState;
     }
@@ -287,9 +287,9 @@ class SVGTextWriter
     void implSetFontFamily();
 
     template< typename SubType >
-    sal_Bool implGetTextPosition( const MetaAction* pAction, Point& raPos, sal_Bool& bEmpty );
+    bool implGetTextPosition( const MetaAction* pAction, Point& raPos, bool& bEmpty );
     template< typename SubType >
-    sal_Bool implGetTextPositionFromBitmap( const MetaAction* pAction, Point& raPos, sal_Bool& rbEmpty );
+    bool implGetTextPositionFromBitmap( const MetaAction* pAction, Point& raPos, bool& rbEmpty );
 
     void implRegisterInterface( const Reference< XInterface >& rxIf );
     const OUString & implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
@@ -317,11 +317,11 @@ private:
     VirtualDevice*                              mpVDev;
     MapMode                                     maTargetMapMode;
     sal_uInt32                                  mnInnerMtfCount;
-    sal_Bool                                    mbDestroyVDev;
-    sal_Bool                                    mbPaintAttrChanged;
-    sal_Bool                                    mbFontAttrChanged;
-    sal_Bool                                    mbClipAttrChanged;
-    sal_Bool                                    mbIsPlacehlolderShape;
+    bool                                    mbDestroyVDev;
+    bool                                    mbPaintAttrChanged;
+    bool                                    mbFontAttrChanged;
+    bool                                    mbClipAttrChanged;
+    bool                                    mbIsPlacehlolderShape;
 
 
     SVGAttributeWriter*     ImplAcquireContext()
@@ -349,27 +349,27 @@ private:
     PolyPolygon&            ImplMap( const PolyPolygon& rPolyPoly, PolyPolygon& rDstPolyPoly ) const;
 
     void                    ImplWriteLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = NULL,
-                                           sal_Bool bApplyMapping = sal_True );
+                                           bool bApplyMapping = true );
     void                    ImplWriteRect( const Rectangle& rRect, long nRadX = 0, long nRadY = 0,
-                                           sal_Bool bApplyMapping = sal_True );
+                                           bool bApplyMapping = true );
     void                    ImplWriteEllipse( const Point& rCenter, long nRadX, long nRadY,
-                                              sal_Bool bApplyMapping = sal_True );
+                                              bool bApplyMapping = true );
     void                    ImplWritePattern( const PolyPolygon& rPolyPoly, const Hatch* pHatch, const Gradient* pGradient, sal_uInt32 nWriteFlags );
     void                    ImplAddLineAttr( const LineInfo &rAttrs,
-                                             sal_Bool bApplyMapping = sal_True );
-    void                    ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bLineOnly,
-                                                  sal_Bool bApplyMapping = sal_True );
-    void                    ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool bApplyMapping = sal_True );
+                                             bool bApplyMapping = true );
+    void                    ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, bool bLineOnly,
+                                                  bool bApplyMapping = true );
+    void                    ImplWriteShape( const SVGShapeDescriptor& rShape, bool bApplyMapping = true );
     void                    ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient, sal_uInt32 nWriteFlags);
     void                    ImplWriteGradientLinear( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
     void                    ImplWriteGradientStop( const Color& rColor, double fOffset );
     Color                   ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
     Color                   ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
     void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags );
-    void                    ImplWriteText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth, sal_Bool bApplyMapping = sal_True );
-    void                    ImplWriteText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor, sal_Bool bApplyMapping );
+    void                    ImplWriteText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth, bool bApplyMapping = true );
+    void                    ImplWriteText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor, bool bApplyMapping );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz,
-                                          sal_Bool bApplyMapping = sal_True );
+                                          bool bApplyMapping = true );
 
     void                    ImplCheckFontAttributes();
     void                    ImplCheckPaintAttributes();
@@ -384,7 +384,7 @@ private:
 
 public:
 
-    static OUString  GetPathString( const PolyPolygon& rPolyPoly, sal_Bool bLine );
+    static OUString  GetPathString( const PolyPolygon& rPolyPoly, bool bLine );
     static sal_uLong        GetChecksum( const MetaAction* pAction );
 
 public:

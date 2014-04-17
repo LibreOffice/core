@@ -36,7 +36,7 @@ private:
 
     VirtualDevice * pVirDev;
     const DXFRepresentation * pDXF;
-    sal_Bool bStatus;
+    bool bStatus;
 
     sal_uInt16 OptPointsPerCircle;
 
@@ -63,11 +63,11 @@ private:
 
     DXFLineInfo GetEntityDXFLineInfo(const DXFBasicEntity & rE);
 
-    sal_Bool SetLineAttribute(const DXFBasicEntity & rE, sal_uLong nWidth=0);
+    bool SetLineAttribute(const DXFBasicEntity & rE, sal_uLong nWidth=0);
 
-    sal_Bool SetAreaAttribute(const DXFBasicEntity & rE);
+    bool SetAreaAttribute(const DXFBasicEntity & rE);
 
-    sal_Bool SetFontAttribute(const DXFBasicEntity & rE, short nAngle,
+    bool SetFontAttribute(const DXFBasicEntity & rE, short nAngle,
                           sal_uInt16 nHeight, double fWidthScale);
 
     void DrawLineEntity(const DXFLineEntity & rE, const DXFTransform & rTransform);
@@ -106,7 +106,7 @@ public:
     DXF2GDIMetaFile();
     ~DXF2GDIMetaFile();
 
-    sal_Bool Convert( const DXFRepresentation & rDXF, GDIMetaFile & rMTF, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent);
+    bool Convert( const DXFRepresentation & rDXF, GDIMetaFile & rMTF, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent);
 
 };
 

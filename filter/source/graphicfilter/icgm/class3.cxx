@@ -35,7 +35,7 @@ void CGM::ImplDoClass3()
             {
                 case 16 : pElement->nVDCIntegerPrecision = 2; break;
                 case 32 : pElement->nVDCIntegerPrecision = 4; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
         }
         break;
@@ -52,32 +52,32 @@ void CGM::ImplDoClass3()
                     {
                         case 9 :
                             if ( nI1 != 23 )
-                                mbStatus = sal_False;
+                                mbStatus = false;
                             pElement->nVDCRealSize = 4;
                             break;
                         case 12 :
                             if ( nI1 != 52 )
-                                mbStatus =sal_False;
+                                mbStatus =false;
                             pElement->nVDCRealSize = 8;
                             break;
                         default:
-                            mbStatus = sal_False;
+                            mbStatus = false;
                             break;
                     }
                     break;
                 case 1 :
                     pElement->eVDCRealPrecision = RP_FIXED;
                     if ( nI0 != nI1 )
-                        mbStatus = sal_False;
+                        mbStatus = false;
                     if ( nI0 == 16 )
                         pElement->nVDCRealSize = 4;
                     else if ( nI0 == 32 )
                         pElement->nVDCRealSize = 8;
                     else
-                        mbStatus = sal_False;
+                        mbStatus = false;
                     break;
                 default :
-                    mbStatus = sal_False; break;
+                    mbStatus = false; break;
             }
         }
         break;
@@ -92,7 +92,7 @@ void CGM::ImplDoClass3()
             {
                 case 0 : pElement->eTransparency = T_OFF; break;
                 case 1 : pElement->eTransparency = T_ON; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
         }
         break;
@@ -105,7 +105,7 @@ void CGM::ImplDoClass3()
             {
                 case 0 : pElement->eClipIndicator = CI_OFF; break;
                 case 1 : pElement->eClipIndicator = CI_ON; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
         }
         break;

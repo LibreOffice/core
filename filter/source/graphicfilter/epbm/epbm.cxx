@@ -35,12 +35,12 @@ private:
     SvStream&           m_rOStm;            // the output PBM file
     sal_uInt16          mpOStmOldModus;
 
-    sal_Bool            mbStatus;
+    bool            mbStatus;
     sal_Int32           mnMode;             // 0 -> raw, 1-> ascii
     BitmapReadAccess*   mpAcc;
     sal_uLong           mnWidth, mnHeight;  // size in pixel
 
-    sal_Bool            ImplWriteHeader();
+    bool            ImplWriteHeader();
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
 
@@ -50,7 +50,7 @@ public:
     PBMWriter(SvStream &rPBM);
     ~PBMWriter();
 
-    sal_Bool WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
+    bool WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methods of PBMWriter ==============================
@@ -58,7 +58,7 @@ public:
 PBMWriter::PBMWriter(SvStream &rPBM)
     : m_rOStm(rPBM)
     , mpOStmOldModus(0)
-    , mbStatus(sal_True)
+    , mbStatus(true)
     , mnMode(0)
     , mpAcc(NULL)
     , mnWidth(0)
@@ -74,7 +74,7 @@ PBMWriter::~PBMWriter()
 
 
 
-sal_Bool PBMWriter::WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
+bool PBMWriter::WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
     if ( pFilterConfigItem )
     {
@@ -104,7 +104,7 @@ sal_Bool PBMWriter::WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilter
         aBmp.ReleaseAccess( mpAcc );
     }
     else
-        mbStatus = sal_False;
+        mbStatus = false;
 
     m_rOStm.SetNumberFormatInt( mpOStmOldModus );
 
@@ -116,7 +116,7 @@ sal_Bool PBMWriter::WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilter
 
 
 
-sal_Bool PBMWriter::ImplWriteHeader()
+bool PBMWriter::ImplWriteHeader()
 {
     mnWidth = mpAcc->Width();
     mnHeight = mpAcc->Height();
@@ -132,7 +132,7 @@ sal_Bool PBMWriter::ImplWriteHeader()
         ImplWriteNumber( mnHeight );
         m_rOStm.WriteUChar( (sal_uInt8)10 );
     }
-    else mbStatus = sal_False;
+    else mbStatus = false;
     return mbStatus;
 }
 

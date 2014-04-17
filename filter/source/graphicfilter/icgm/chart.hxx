@@ -233,7 +233,7 @@ class CGMChart
         void                    InsertTextEntry( TextEntry* );
 
         void                    ResetAnnotation();
-        sal_Bool                    IsAnnotation();
+        bool                    IsAnnotation();
 };
 
 #endif

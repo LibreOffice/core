@@ -226,7 +226,7 @@ void FilterCache::load(EFillState eRequired,
 
 
 
-sal_Bool FilterCache::isFillState(FilterCache::EFillState eState) const
+bool FilterCache::isFillState(FilterCache::EFillState eState) const
     throw(css::uno::Exception)
 {
     // SAFE ->
@@ -275,7 +275,7 @@ OUStringList FilterCache::getMatchingItemsByProps(      EItemType  eType  ,
 
 
 
-sal_Bool FilterCache::hasItems(EItemType eType) const
+bool FilterCache::hasItems(EItemType eType) const
     throw(css::uno::Exception)
 {
     // SAFE ->
@@ -316,7 +316,7 @@ OUStringList FilterCache::getItemNames(EItemType eType) const
 
 
 
-sal_Bool FilterCache::hasItem(      EItemType        eType,
+bool FilterCache::hasItem(      EItemType        eType,
                               const OUString& sItem)
     throw(css::uno::Exception)
 {
@@ -333,18 +333,18 @@ sal_Bool FilterCache::hasItem(      EItemType        eType,
     // loaded into this FilterCache object before.
     CacheItemList::const_iterator pIt = rList.find(sItem);
     if (pIt != rList.end())
-        return sal_True;
+        return true;
 
     try
     {
         impl_loadItemOnDemand(eType, sItem);
         // no exception => item could be loaded!
-        return sal_True;
+        return true;
     }
     catch(const css::container::NoSuchElementException&)
     {}
 
-    return sal_False;
+    return false;
     // <- SAFE
 }
 
@@ -535,8 +535,8 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
         xSet->getByName(sItem) >>= xItem;
         css::beans::Property aDescription = xItem->getAsProperty();
 
-        sal_Bool bFinalized = ((aDescription.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
-        sal_Bool bMandatory = ((aDescription.Attributes & css::beans::PropertyAttribute::REMOVABLE) != css::beans::PropertyAttribute::REMOVABLE);
+        bool bFinalized = ((aDescription.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
+        bool bMandatory = ((aDescription.Attributes & css::beans::PropertyAttribute::REMOVABLE) != css::beans::PropertyAttribute::REMOVABLE);
 
         rItem[PROPNAME_FINALIZED] <<= bFinalized;
         rItem[PROPNAME_MANDATORY] <<= bMandatory;
@@ -838,8 +838,8 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
     {
         SAL_INFO( "filter.config", "" << sRtlLog.getStr());
         *pConfig = impl_createConfigAccess(sPath    ,
-                                           sal_False,   // bReadOnly
-                                           sal_True );  // bLocalesMode
+                                           false,   // bReadOnly
+                                           true );  // bLocalesMode
     }
 
 
@@ -880,8 +880,8 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(const OUString& sDirectKey)
         return css::uno::Any();
 
     css::uno::Reference< css::uno::XInterface > xCfg = impl_createConfigAccess(sRoot    ,
-                                                                               sal_True ,  // bReadOnly
-                                                                               sal_False); // bLocalesMode
+                                                                               true ,  // bReadOnly
+                                                                               false); // bLocalesMode
     if (!xCfg.is())
         return css::uno::Any();
 
@@ -914,8 +914,8 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(const OUString& sDirectKey)
 
 
 css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess(const OUString& sRoot       ,
-                                                                                       sal_Bool         bReadOnly   ,
-                                                                                       sal_Bool         bLocalesMode)
+                                                                                       bool         bReadOnly   ,
+                                                                                       bool         bLocalesMode)
 {
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -981,16 +981,16 @@ void FilterCache::impl_validateAndOptimize()
 
     // First check if any filter or type could be readed
     // from the underlying configuration!
-    sal_Bool bSomeTypesShouldExist   = ((m_eFillState & E_CONTAINS_STANDARD       ) == E_CONTAINS_STANDARD       );
-    sal_Bool bAllFiltersShouldExist  = ((m_eFillState & E_CONTAINS_FILTERS        ) == E_CONTAINS_FILTERS        );
+    bool bSomeTypesShouldExist   = ((m_eFillState & E_CONTAINS_STANDARD       ) == E_CONTAINS_STANDARD       );
+    bool bAllFiltersShouldExist  = ((m_eFillState & E_CONTAINS_FILTERS        ) == E_CONTAINS_FILTERS        );
 
 #if OSL_DEBUG_LEVEL > 0
 
     sal_Int32             nWarnings = 0;
 
 //  sal_Bool bAllTypesShouldExist    = ((m_eFillState & E_CONTAINS_TYPES          ) == E_CONTAINS_TYPES          );
-    sal_Bool bAllLoadersShouldExist  = ((m_eFillState & E_CONTAINS_FRAMELOADERS   ) == E_CONTAINS_FRAMELOADERS   );
-    sal_Bool bAllHandlersShouldExist = ((m_eFillState & E_CONTAINS_CONTENTHANDLERS) == E_CONTAINS_CONTENTHANDLERS);
+    bool bAllLoadersShouldExist  = ((m_eFillState & E_CONTAINS_FRAMELOADERS   ) == E_CONTAINS_FRAMELOADERS   );
+    bool bAllHandlersShouldExist = ((m_eFillState & E_CONTAINS_CONTENTHANDLERS) == E_CONTAINS_CONTENTHANDLERS);
 #endif
 
     if (
@@ -1069,7 +1069,7 @@ void FilterCache::impl_validateAndOptimize()
         // (they shouldn't - but they can!) ... Ignore it. The last
         // preferred type is useable in the same manner then every
         // other type!
-        sal_Bool bPreferred = sal_False;
+        bool bPreferred = false;
         aType[PROPNAME_PREFERRED] >>= bPreferred;
 
         const OUString* pExtensions = lExtensions.getConstArray();
@@ -1119,8 +1119,8 @@ void FilterCache::impl_validateAndOptimize()
             // May be it can be handled by a ContentHandler ...
             // But at this time its not guaranteed that there is any ContentHandler
             // or FrameLoader inside this cache ... but on disk ...
-            sal_Bool bReferencedByLoader  = sal_True;
-            sal_Bool bReferencedByHandler = sal_True;
+            bool bReferencedByLoader  = true;
+            bool bReferencedByHandler = true;
             if (bAllLoadersShouldExist)
                 bReferencedByLoader = !impl_searchFrameLoaderForType(sType).isEmpty();
 
@@ -1296,8 +1296,8 @@ FilterCache::EItemFlushState FilterCache::impl_specifyFlushOperation(const css::
                                                                      const OUString&                                    sItem)
     throw(css::uno::Exception)
 {
-    sal_Bool bExistsInConfigLayer = xSet->hasByName(sItem);
-    sal_Bool bExistsInMemory      = (rList.find(sItem) != rList.end());
+    bool bExistsInConfigLayer = xSet->hasByName(sItem);
+    bool bExistsInMemory      = (rList.find(sItem) != rList.end());
 
     EItemFlushState eState( E_ITEM_UNCHANGED );
 
@@ -1821,7 +1821,7 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
     xRoot->getByName(sSet) >>= xSet;
 
     CacheItemList::iterator pItemInCache  = pList->find(sItem);
-    sal_Bool                bItemInConfig = xSet->hasByName(sItem);
+    bool                bItemInConfig = xSet->hasByName(sItem);
 
     if (bItemInConfig)
     {
@@ -2360,7 +2360,7 @@ OUString FilterCache::impl_searchContentHandlerForType(const OUString& sType) co
 
 
 
-sal_Bool FilterCache::impl_isModuleInstalled(const OUString& sModule)
+bool FilterCache::impl_isModuleInstalled(const OUString& sModule)
 {
     css::uno::Reference< css::container::XNameAccess > xCfg;
 
@@ -2378,7 +2378,7 @@ sal_Bool FilterCache::impl_isModuleInstalled(const OUString& sModule)
     if (xCfg.is())
         return xCfg->hasByName(sModule);
 
-    return sal_False;
+    return false;
 }
 
     } // namespace config

@@ -35,12 +35,12 @@ private:
     SvStream& m_rOStm;          // Die auszugebende PPM-Datei
     sal_uInt16              mpOStmOldModus;
 
-    sal_Bool                mbStatus;
+    bool                mbStatus;
     sal_Int32           mnMode;
     BitmapReadAccess*   mpAcc;
     sal_uLong               mnWidth, mnHeight;  // Bildausmass in Pixeln
 
-    sal_Bool                ImplWriteHeader();
+    bool                ImplWriteHeader();
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
 
@@ -50,7 +50,7 @@ public:
                         PPMWriter(SvStream &rStrm);
                         ~PPMWriter();
 
-    sal_Bool                WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
+    bool                WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methods of PPMWriter ==============================
@@ -71,7 +71,7 @@ PPMWriter::~PPMWriter()
 
 
 
-sal_Bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
+bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
     if ( pFilterConfigItem )
     {
@@ -102,7 +102,7 @@ sal_Bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilter
         aBmp.ReleaseAccess( mpAcc );
     }
     else
-        mbStatus = sal_False;
+        mbStatus = false;
 
     m_rOStm.SetNumberFormatInt( mpOStmOldModus );
 
@@ -114,7 +114,7 @@ sal_Bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilter
 
 
 
-sal_Bool PPMWriter::ImplWriteHeader()
+bool PPMWriter::ImplWriteHeader()
 {
     mnWidth = mpAcc->Width();
     mnHeight = mpAcc->Height();
@@ -133,7 +133,7 @@ sal_Bool PPMWriter::ImplWriteHeader()
         m_rOStm.WriteUChar( (sal_uInt8)10 );
     }
     else
-        mbStatus = sal_False;
+        mbStatus = false;
 
     return mbStatus;
 }

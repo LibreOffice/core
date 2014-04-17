@@ -284,20 +284,20 @@ static void createSlideFile( Reference< XComponent > xDoc, PlacewareZipFile& rZi
 
 //#define PLACEWARE_DEBUG 1
 
-sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < XOutputStream > xOutputStream,
+bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < XOutputStream > xOutputStream,
                                         const OUString& rURL, Reference < XInterface > /* xHandler */, Reference < XStatusIndicator >& xStatusIndicator )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     mxGraphicExporter = GraphicExportFilter::create( mxContext );
 
     Reference< XDrawPagesSupplier > xDrawPagesSupplier(xDoc, UNO_QUERY);
     if(!xDrawPagesSupplier.is())
-        return sal_False;
+        return false;
 
     Reference< XIndexAccess > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY );
     if(!xDrawPages.is())
-        return sal_False;
+        return false;
 
     if(xStatusIndicator.is())
     {
@@ -319,7 +319,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
 #endif
 
     if( osl::File::E_None != nRC )
-        return sal_False;
+        return false;
 
     vector< PageEntry* > aPageEntries;
 
@@ -377,7 +377,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
 
         encodeFile( aTempFile, xOutputStream );
 
-        bRet = sal_True;
+        bRet = true;
     }
     catch ( RuntimeException const & )
     {
@@ -428,7 +428,7 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
             Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
             if( xPropSet.is() )
             {
-                sal_Bool bIsEmpty = true;
+                bool bIsEmpty = true;
                 xPropSet->getPropertyValue( szIsEmptyPresObj ) >>= bIsEmpty;
 
                 if( !bIsEmpty )
@@ -463,7 +463,7 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
                 Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
                 if( xPropSet.is() )
                 {
-                    sal_Bool bIsEmpty = true;
+                    bool bIsEmpty = true;
                     xPropSet->getPropertyValue( szIsEmptyPresObj ) >>= bIsEmpty;
 
                     if( !bIsEmpty )
@@ -486,7 +486,7 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
     aFilterData[0].Name = "Width";
     aFilterData[0].Value <<= (sal_Int32)704;
     aFilterData[1].Name = "Translucent";
-    aFilterData[1].Value <<= (sal_Bool)sal_False;
+    aFilterData[1].Value <<= false;
 
     Sequence< PropertyValue > aDescriptor( 3 );
     aDescriptor[0].Name = "FilterName";

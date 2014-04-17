@@ -339,10 +339,10 @@ private:
     void Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pCompressed, sal_uInt32 compressed_size );
     void Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void Impl_writeActions( const GDIMetaFile& rMtf );
-    void Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled );
-    void Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled, const Color& rFillColor, const Color& rLineColor );
-    void Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bFilled, sal_uInt8 nTransparence = 0);
-    void Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bFilled, const Color& rFillColor, const Color& rLineColor );
+    void Impl_writePolygon( const Polygon& rPoly, bool bFilled );
+    void Impl_writePolygon( const Polygon& rPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor );
+    void Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, bool bFilled, sal_uInt8 nTransparence = 0);
+    void Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor );
     void Impl_writeText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth );
     void Impl_writeText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor );
     void Impl_writeGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
@@ -354,9 +354,9 @@ private:
 
     FlashFont& Impl_getFont( const Font& rFont );
 
-    static void Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, sal_Bool bFilled );
+    static void Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, bool bFilled );
 
-    static void Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int16 dy, sal_Bool bFilled );
+    static void Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int16 dy, bool bFilled );
     static void Impl_addStraightEdgeRecord( BitStream& rBits, sal_Int16 dx, sal_Int16 dy );
     static void Impl_addCurvedEdgeRecord( BitStream& rBits, sal_Int16 control_dx, sal_Int16 control_dy, sal_Int16 anchor_dx, sal_Int16 anchor_dy );
     static void Impl_addEndShapeRecord( BitStream& rBits );

@@ -873,7 +873,7 @@ void TypeDetection::impl_getAllFormatTypes(
 
 OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& rDescriptor   ,
                                                           const FlatDetection&                 lFlatTypes    ,
-                                                                sal_Bool                       bAllowDeep    ,
+                                                                bool                       bAllowDeep    ,
                                                                 OUStringList&                  rUsedDetectors,
                                                                 OUString&               rLastChance   )
 {
@@ -1060,7 +1060,7 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
 
     // this special helper checks for a valid type
     // and set right values on the descriptor!
-    sal_Bool bValidType = impl_validateAndSetTypeOnDescriptor(rDescriptor, sDeepType);
+    bool bValidType = impl_validateAndSetTypeOnDescriptor(rDescriptor, sDeepType);
     if (bValidType)
         return sDeepType;
 
@@ -1133,9 +1133,9 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
 void TypeDetection::impl_openStream(utl::MediaDescriptor& rDescriptor)
     throw (css::uno::Exception)
 {
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     OUString sURL = rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );
-    sal_Bool bRequestedReadOnly = rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_READONLY(), sal_False );
+    bool bRequestedReadOnly = rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_READONLY(), sal_False );
     if ( !sURL.isEmpty() && ::utl::LocalFileHelper::IsLocalFile( INetURLObject( sURL ).GetMainURL( INetURLObject::NO_DECODE ) ) )
     {
         // OOo uses own file locking mechanics in case of local file
@@ -1173,7 +1173,7 @@ void TypeDetection::impl_removeTypeFilterFromDescriptor(utl::MediaDescriptor& rD
 
 
 
-sal_Bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      utl::MediaDescriptor& rDescriptor,
+bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      utl::MediaDescriptor& rDescriptor,
                                                             const OUString&               sType      )
 {
     // SAFE ->
@@ -1181,19 +1181,19 @@ sal_Bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      utl::MediaDesc
     if (m_rCache->hasItem(FilterCache::E_TYPE, sType))
     {
         rDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sType;
-        return sal_True;
+        return true;
     }
     aLock.clear();
     // <- SAFE
 
     // remove all related information from the descriptor
     impl_removeTypeFilterFromDescriptor(rDescriptor);
-    return sal_False;
+    return false;
 }
 
 
 
-sal_Bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      utl::MediaDescriptor& rDescriptor,
+bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      utl::MediaDescriptor& rDescriptor,
                                                               const OUString&               sFilter    )
 {
     try
@@ -1212,13 +1212,13 @@ sal_Bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      utl::MediaDe
         // found valid type and filter => set it on the given descriptor
         rDescriptor[utl::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
         rDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
-        return sal_True;
+        return true;
     }
     catch(const css::container::NoSuchElementException&){}
 
     // remove all related information from the descriptor
     impl_removeTypeFilterFromDescriptor(rDescriptor);
-    return sal_False;
+    return false;
 }
 
 

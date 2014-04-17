@@ -40,9 +40,9 @@ class ImplEESdrObject
     sal_uInt32              mnShapeId;
     sal_uInt32              mnTextSize;
     sal_Int32               mnAngle;
-    sal_Bool                mbValid : 1;
-    sal_Bool                mbPresObj : 1;
-    sal_Bool                mbEmptyPresObj : 1;
+    bool                mbValid : 1;
+    bool                mbPresObj : 1;
+    bool                mbEmptyPresObj : 1;
     bool mbOOXML;
 
     void Init( ImplEESdrWriter& rEx );
@@ -53,8 +53,8 @@ public:
     ImplEESdrObject( ImplEESdrWriter& rEx, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rShape );
     ~ImplEESdrObject();
 
-    sal_Bool ImplGetPropertyValue( const sal_Unicode* pString );
-    sal_Bool ImplGetPropertyValue( const OUString& rString ) { return ImplGetPropertyValue(rString.getStr()); }
+    bool ImplGetPropertyValue( const sal_Unicode* pString );
+    bool ImplGetPropertyValue( const OUString& rString ) { return ImplGetPropertyValue(rString.getStr()); }
 
     sal_Int32 ImplGetInt32PropertyValue( const sal_Unicode* pStr, sal_uInt32 nDef = 0 )
     { return ImplGetPropertyValue( pStr ) ? *(sal_Int32*)mAny.getValue() : nDef; }
@@ -76,16 +76,16 @@ public:
 
     sal_uInt32              GetTextSize() const     { return mnTextSize; }
 
-    sal_Bool                IsValid() const         { return mbValid; }
-    sal_Bool                IsPresObj() const       { return mbPresObj; }
-    sal_Bool                IsEmptyPresObj() const  { return mbEmptyPresObj; }
+    bool                IsValid() const         { return mbValid; }
+    bool                IsPresObj() const       { return mbPresObj; }
+    bool                IsEmptyPresObj() const  { return mbEmptyPresObj; }
     sal_uInt32              GetShapeId() const      { return mnShapeId; }
     void                SetShapeId( sal_uInt32 nVal ) { mnShapeId = nVal; }
 
     const SdrObject*    GetSdrObject() const;
 
     sal_uInt32              ImplGetText();
-    sal_Bool                ImplHasText() const;
+    bool                ImplHasText() const;
     bool GetOOXML() const;
     void SetOOXML(bool bOOXML);
 };
@@ -137,30 +137,30 @@ protected:
 
         sal_uInt16              mnEffectCount;
 
-        sal_Bool                mbIsTitlePossible;
-        sal_Bool                mbStatusIndicator;
-        sal_Bool                mbStatus;
+        bool                mbIsTitlePossible;
+        bool                mbStatusIndicator;
+        bool                mbStatus;
 
 
                                 ImplEESdrWriter( EscherEx& rEx );
 
-            sal_Bool                ImplInitPageValues();
+            bool                ImplInitPageValues();
 
             void                ImplWritePage(
                                     EscherSolverContainer& rSolver,
                                     ImplEESdrPageType ePageType,
-                                    sal_Bool bBackGround = sal_False );
+                                    bool bBackGround = false );
 
-            sal_uInt32              ImplWriteShape( ImplEESdrObject& rObj,
+            sal_uInt32          ImplWriteShape( ImplEESdrObject& rObj,
                                     EscherSolverContainer& rSolver,
-                                    ImplEESdrPageType ePageType, const sal_Bool bOOxmlExport = false );  // returns ShapeID
+                                    ImplEESdrPageType ePageType, const bool bOOxmlExport = false );  // returns ShapeID
 
             void                ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt );
-            sal_Bool                ImplGetText( ImplEESdrObject& rObj );
+            bool                ImplGetText( ImplEESdrObject& rObj );
             void                ImplWriteAdditionalText(
                                                 ImplEESdrObject& rObj,
                                                 const Point& rTextRefPoint );
-            sal_uInt32              ImplEnterAdditionalTextGroup(
+            sal_uInt32          ImplEnterAdditionalTextGroup(
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rShape,
                                         const Rectangle* pBoundRect = NULL );
 

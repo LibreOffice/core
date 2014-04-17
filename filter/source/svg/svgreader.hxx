@@ -30,7 +30,7 @@ public:
                const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >&               xInputStream,
                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler );
 
-    FILTER_DLLPUBLIC sal_Bool parseAndConvert();
+    FILTER_DLLPUBLIC bool parseAndConvert();
 };
 
 } // namespace svgi

@@ -214,12 +214,12 @@ struct OSArea {
     OSArea    * pSucc;
     sal_uInt8   nFlags;
     PolyPolygon aPPoly;
-    sal_Bool    bClosed;
+    bool    bClosed;
     Color       aCol;
     Color       aBgCol;
     RasterOp    eMix;
     RasterOp    eBgMix;
-    sal_Bool    bFill;
+    bool    bFill;
 };
 
 struct OSPath
@@ -227,8 +227,8 @@ struct OSPath
     OSPath*     pSucc;
     sal_uInt32  nID;
     PolyPolygon aPPoly;
-    sal_Bool    bClosed;
-    sal_Bool    bStroke;
+    bool    bClosed;
+    bool    bStroke;
 };
 
 struct OSFont {
@@ -296,7 +296,7 @@ struct OSAttr {
 //  //...    aModTransform;
 //  Point    aPatRef;
 //  sal_uInt8     nPatSet;
-    sal_Bool     bFill;
+    bool     bFill;
 //  sal_uLong    nPickId;
 //  //...    aSegBound;
     sal_uInt16   nStrLinWidth;
@@ -320,7 +320,7 @@ private:
     Rectangle       aBoundingRect;       // bounding rectangle as stored in the file
     Rectangle       aCalcBndRect;        // bounding rectangle calculated on our own
     MapMode         aGlobMapMode;        // resolution of the picture
-    sal_Bool        bCoord32;
+    bool        bCoord32;
 
     OSPalette  * pPaletteStack;
 
@@ -341,7 +341,7 @@ private:
 
     SvStream * pOrdFile;
 
-    sal_Bool Callback(sal_uInt16 nPercent);
+    bool Callback(sal_uInt16 nPercent);
 
     void AddPointsToPath(const Polygon & rPoly);
     void AddPointsToArea(const Polygon & rPoly);
@@ -349,7 +349,7 @@ private:
     void PushAttr(sal_uInt16 nPushOrder);
     void PopAttr();
 
-    void ChangeBrush( const Color& rPatColor, const Color& rBGColor, sal_Bool bFill );
+    void ChangeBrush( const Color& rPatColor, const Color& rBGColor, bool bFill );
     void SetPen( const Color& rColor, sal_uInt16 nStrLinWidth = 0, PenStyle ePenStyle = PEN_SOLID );
     void SetRasterOp(RasterOp eROP);
 
@@ -360,29 +360,29 @@ private:
     Color GetPaletteColor(sal_uInt32 nIndex);
 
 
-    sal_Bool    IsLineInfo();
+    bool    IsLineInfo();
     void        DrawPolyLine( const Polygon& rPolygon );
     void        DrawPolygon( const Polygon& rPolygon );
     void        DrawPolyPolygon( const PolyPolygon& rPolygon );
     sal_uInt16  ReadBigEndianWord();
     sal_uLong   ReadBigEndian3BytesLong();
     sal_uLong   ReadLittleEndian3BytesLong();
-    long        ReadCoord(sal_Bool b32);
-    Point       ReadPoint( const sal_Bool bAdjustBoundRect = sal_True );
+    long        ReadCoord(bool b32);
+    Point       ReadPoint( const bool bAdjustBoundRect = true );
     RasterOp    OS2MixToRasterOp(sal_uInt8 nMix);
-    void        ReadLine(sal_Bool bGivenPos, sal_uInt16 nOrderLen);
-    void        ReadRelLine(sal_Bool bGivenPos, sal_uInt16 nOrderLen);
-    void        ReadBox(sal_Bool bGivenPos);
+    void        ReadLine(bool bGivenPos, sal_uInt16 nOrderLen);
+    void        ReadRelLine(bool bGivenPos, sal_uInt16 nOrderLen);
+    void        ReadBox(bool bGivenPos);
     void        ReadBitBlt();
-    void        ReadChrStr(sal_Bool bGivenPos, sal_Bool bMove, sal_Bool bExtra, sal_uInt16 nOrderLen);
-    void        ReadArc(sal_Bool bGivenPos);
-    void        ReadFullArc(sal_Bool bGivenPos, sal_uInt16 nOrderSize);
-    void        ReadPartialArc(sal_Bool bGivenPos, sal_uInt16 nOrderSize);
+    void        ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt16 nOrderLen);
+    void        ReadArc(bool bGivenPos);
+    void        ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize);
+    void        ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize);
     void        ReadPolygons();
-    void        ReadBezier(sal_Bool bGivenPos, sal_uInt16 nOrderLen);
-    void        ReadFillet(sal_Bool bGivenPos, sal_uInt16 nOrderLen);
-    void        ReadFilletSharp(sal_Bool bGivenPos, sal_uInt16 nOrderLen);
-    void        ReadMarker(sal_Bool bGivenPos, sal_uInt16 nOrderLen);
+    void        ReadBezier(bool bGivenPos, sal_uInt16 nOrderLen);
+    void        ReadFillet(bool bGivenPos, sal_uInt16 nOrderLen);
+    void        ReadFilletSharp(bool bGivenPos, sal_uInt16 nOrderLen);
+    void        ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen);
     void        ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen);
     void        ReadDsc(sal_uInt16 nDscID, sal_uInt16 nDscLen);
     void        ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen);
@@ -401,9 +401,9 @@ public:
 
 //=================== Methods of OS2METReader ==============================
 
-sal_Bool OS2METReader::Callback(sal_uInt16 /*nPercent*/)
+bool OS2METReader::Callback(sal_uInt16 /*nPercent*/)
 {
-    return sal_False;
+    return false;
 }
 
 OS2METReader::OS2METReader()
@@ -415,7 +415,7 @@ OS2METReader::OS2METReader()
     , aBoundingRect()
     , aCalcBndRect()
     , aGlobMapMode()
-    , bCoord32(sal_False)
+    , bCoord32(false)
     , pPaletteStack(NULL)
     , aLineInfo()
     , pAreaStack(NULL)
@@ -434,7 +434,7 @@ OS2METReader::~OS2METReader()
 {
 }
 
-sal_Bool OS2METReader::IsLineInfo()
+bool OS2METReader::IsLineInfo()
 {
     return ( ! ( aLineInfo.IsDefault() || ( aLineInfo.GetStyle() == LINE_NONE ) || ( pVirDev->GetLineColor() == COL_TRANSPARENT ) ) );
 }
@@ -482,7 +482,7 @@ void OS2METReader::AddPointsToArea(const Polygon & rPoly)
 
     if (pAreaStack==NULL || rPoly.GetSize()==0) return;
     PolyPolygon * pPP=&(pAreaStack->aPPoly);
-    if (pPP->Count()==0 || pAreaStack->bClosed==sal_True) pPP->Insert(rPoly);
+    if (pPP->Count()==0 || pAreaStack->bClosed) pPP->Insert(rPoly);
     else {
         Polygon aLastPoly(pPP->GetObject(pPP->Count()-1));
         nOldSize=aLastPoly.GetSize();
@@ -494,7 +494,7 @@ void OS2METReader::AddPointsToArea(const Polygon & rPoly)
         }
         pPP->Replace(aLastPoly,pPP->Count()-1);
     }
-    pAreaStack->bClosed=sal_False;
+    pAreaStack->bClosed=false;
 }
 
 void OS2METReader::AddPointsToPath(const Polygon & rPoly)
@@ -518,13 +518,13 @@ void OS2METReader::AddPointsToPath(const Polygon & rPoly)
             pPP->Replace(aLastPoly,pPP->Count()-1);
         }
     }
-    pPathStack->bClosed=sal_False;
+    pPathStack->bClosed=false;
 }
 
 void OS2METReader::CloseFigure()
 {
-    if (pAreaStack!=NULL) pAreaStack->bClosed=sal_True;
-    else if (pPathStack!=NULL) pPathStack->bClosed=sal_True;
+    if (pAreaStack!=NULL) pAreaStack->bClosed=true;
+    else if (pPathStack!=NULL) pPathStack->bClosed=true;
 }
 
 void OS2METReader::PushAttr(sal_uInt16 nPushOrder)
@@ -644,7 +644,7 @@ void OS2METReader::PopAttr()
     delete p;
 }
 
-void OS2METReader::ChangeBrush(const Color& rPatColor, const Color& /*rBGColor*/, sal_Bool bFill )
+void OS2METReader::ChangeBrush(const Color& rPatColor, const Color& /*rBGColor*/, bool bFill )
 {
     Color aColor;
 
@@ -763,7 +763,7 @@ sal_uLong OS2METReader::ReadLittleEndian3BytesLong()
     return ((((sal_uLong)nHi)&0xff)<<16)|((((sal_uLong)nMed)&0xff)<<8)|(((sal_uLong)nLo)&0xff);
 }
 
-long OS2METReader::ReadCoord(sal_Bool b32)
+long OS2METReader::ReadCoord(bool b32)
 {
     sal_Int32 l;
 
@@ -772,7 +772,7 @@ long OS2METReader::ReadCoord(sal_Bool b32)
     return l;
 }
 
-Point OS2METReader::ReadPoint( const sal_Bool bAdjustBoundRect )
+Point OS2METReader::ReadPoint( const bool bAdjustBoundRect )
 {
     long x,y;
 
@@ -797,7 +797,7 @@ RasterOp OS2METReader::OS2MixToRasterOp(sal_uInt8 nMix)
     }
 }
 
-void OS2METReader::ReadLine(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
+void OS2METReader::ReadLine(bool bGivenPos, sal_uInt16 nOrderLen)
 {
     sal_uInt16 i,nPolySize;
 
@@ -820,7 +820,7 @@ void OS2METReader::ReadLine(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
     }
 }
 
-void OS2METReader::ReadRelLine(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
+void OS2METReader::ReadRelLine(bool bGivenPos, sal_uInt16 nOrderLen)
 {
     sal_uInt16 i,nPolySize;
     Point aP0;
@@ -858,7 +858,7 @@ void OS2METReader::ReadRelLine(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
     }
 }
 
-void OS2METReader::ReadBox(sal_Bool bGivenPos)
+void OS2METReader::ReadBox(bool bGivenPos)
 {
     sal_uInt8       nFlags;
     Point       P0;
@@ -896,7 +896,7 @@ void OS2METReader::ReadBox(sal_Bool bGivenPos)
         }
         else
         {
-            ChangeBrush( Color( COL_TRANSPARENT ), Color( COL_TRANSPARENT ), sal_False );
+            ChangeBrush( Color( COL_TRANSPARENT ), Color( COL_TRANSPARENT ), false );
             SetRasterOp(aAttr.eLinMix);
         }
 
@@ -941,7 +941,7 @@ void OS2METReader::ReadBitBlt()
     }
 }
 
-void OS2METReader::ReadChrStr(sal_Bool bGivenPos, sal_Bool bMove, sal_Bool bExtra, sal_uInt16 nOrderLen)
+void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt16 nOrderLen)
 {
     Point aP0;
     sal_uInt16 i, nLen;
@@ -965,8 +965,8 @@ void OS2METReader::ReadChrStr(sal_Bool bGivenPos, sal_Bool bMove, sal_Bool bExtr
     if (bExtra)
     {
         pOS2MET->SeekRel(2);
-        ReadPoint( sal_False );
-        ReadPoint( sal_False );
+        ReadPoint( false );
+        ReadPoint( false );
         pOS2MET->ReadUInt16( nLen );
     }
     else
@@ -1012,7 +1012,7 @@ void OS2METReader::ReadChrStr(sal_Bool bGivenPos, sal_Bool bMove, sal_Bool bExtr
     }
 }
 
-void OS2METReader::ReadArc(sal_Bool bGivenPos)
+void OS2METReader::ReadArc(bool bGivenPos)
 {
     Point aP1, aP2, aP3;
     double x1,y1,x2,y2,x3,y3,p,q,cx,cy,ncx,ncy,r,rx,ry,w1,w3;
@@ -1056,7 +1056,7 @@ void OS2METReader::ReadArc(sal_Bool bGivenPos)
     }
 }
 
-void OS2METReader::ReadFullArc(sal_Bool bGivenPos, sal_uInt16 nOrderSize)
+void OS2METReader::ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize)
 {
     Point aCenter;
     long nP,nQ,nR,nS;
@@ -1098,13 +1098,13 @@ void OS2METReader::ReadFullArc(sal_Bool bGivenPos, sal_uInt16 nOrderSize)
     else
     {
         SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
-        ChangeBrush(Color( COL_TRANSPARENT ),Color( COL_TRANSPARENT ),sal_False);
+        ChangeBrush(Color( COL_TRANSPARENT ),Color( COL_TRANSPARENT ),false);
         SetRasterOp(aAttr.eLinMix);
     }
     pVirDev->DrawEllipse(aRect);
 }
 
-void OS2METReader::ReadPartialArc(sal_Bool bGivenPos, sal_uInt16 nOrderSize)
+void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
 {
     Point aP0, aCenter,aPStart,aPEnd;
     sal_Int32 nP,nQ,nR,nS,nStart, nSweep;
@@ -1184,7 +1184,7 @@ void OS2METReader::ReadPolygons()
     DrawPolyPolygon( aPolyPoly );
 }
 
-void OS2METReader::ReadBezier(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
+void OS2METReader::ReadBezier(bool bGivenPos, sal_uInt16 nOrderLen)
 {
     sal_uInt16 i, nNumPoints = nOrderLen / ( bCoord32 ? 8 : 4 );
 
@@ -1244,7 +1244,7 @@ void OS2METReader::ReadBezier(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
     }
 }
 
-void OS2METReader::ReadFillet(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
+void OS2METReader::ReadFillet(bool bGivenPos, sal_uInt16 nOrderLen)
 {
     sal_uInt16 i,nNumPoints;
 
@@ -1266,7 +1266,7 @@ void OS2METReader::ReadFillet(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
     }
 }
 
-void OS2METReader::ReadFilletSharp(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
+void OS2METReader::ReadFilletSharp(bool bGivenPos, sal_uInt16 nOrderLen)
 {
     sal_uInt16 i,nNumPoints;
 
@@ -1290,7 +1290,7 @@ void OS2METReader::ReadFilletSharp(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
     }
 }
 
-void OS2METReader::ReadMarker(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
+void OS2METReader::ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen)
 {
     sal_uInt16 i,nNumPoints;
     long x,y;
@@ -1299,11 +1299,11 @@ void OS2METReader::ReadMarker(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
     SetRasterOp(aAttr.eMrkMix);
     if (aAttr.nMrkSymbol>=5 && aAttr.nMrkSymbol<=9)
     {
-        ChangeBrush(aAttr.aMrkCol,aAttr.aMrkCol,sal_True);
+        ChangeBrush(aAttr.aMrkCol,aAttr.aMrkCol,true);
     }
     else
     {
-        ChangeBrush(Color(COL_TRANSPARENT),Color(COL_TRANSPARENT),sal_False);
+        ChangeBrush(Color(COL_TRANSPARENT),Color(COL_TRANSPARENT),false);
     }
     if (bCoord32) nNumPoints=nOrderLen/8; else nNumPoints=nOrderLen/4;
     if (!bGivenPos) nNumPoints++;
@@ -1394,42 +1394,42 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
 {
     switch (nOrderID) {
 
-        case GOrdGivArc: ReadArc(sal_True); break;
-        case GOrdCurArc: ReadArc(sal_False); break;
+        case GOrdGivArc: ReadArc(true); break;
+        case GOrdCurArc: ReadArc(false); break;
 
-        case GOrdGivBzr: ReadBezier(sal_True,nOrderLen); break;
-        case GOrdCurBzr: ReadBezier(sal_False,nOrderLen); break;
+        case GOrdGivBzr: ReadBezier(true,nOrderLen); break;
+        case GOrdCurBzr: ReadBezier(false,nOrderLen); break;
 
-        case GOrdGivBox: ReadBox(sal_True); break;
-        case GOrdCurBox: ReadBox(sal_False); break;
+        case GOrdGivBox: ReadBox(true); break;
+        case GOrdCurBox: ReadBox(false); break;
 
-        case GOrdGivFil: ReadFillet(sal_True,nOrderLen); break;
-        case GOrdCurFil: ReadFillet(sal_False,nOrderLen); break;
+        case GOrdGivFil: ReadFillet(true,nOrderLen); break;
+        case GOrdCurFil: ReadFillet(false,nOrderLen); break;
 
-        case GOrdGivCrc: ReadFullArc(sal_True,nOrderLen); break;
-        case GOrdCurCrc: ReadFullArc(sal_False,nOrderLen); break;
+        case GOrdGivCrc: ReadFullArc(true,nOrderLen); break;
+        case GOrdCurCrc: ReadFullArc(false,nOrderLen); break;
 
-        case GOrdGivLin: ReadLine(sal_True, nOrderLen); break;
-        case GOrdCurLin: ReadLine(sal_False, nOrderLen); break;
+        case GOrdGivLin: ReadLine(true, nOrderLen); break;
+        case GOrdCurLin: ReadLine(false, nOrderLen); break;
 
-        case GOrdGivMrk: ReadMarker(sal_True, nOrderLen); break;
-        case GOrdCurMrk: ReadMarker(sal_False, nOrderLen); break;
+        case GOrdGivMrk: ReadMarker(true, nOrderLen); break;
+        case GOrdCurMrk: ReadMarker(false, nOrderLen); break;
 
-        case GOrdGivArP: ReadPartialArc(sal_True,nOrderLen); break;
-        case GOrdCurArP: ReadPartialArc(sal_False,nOrderLen); break;
+        case GOrdGivArP: ReadPartialArc(true,nOrderLen); break;
+        case GOrdCurArP: ReadPartialArc(false,nOrderLen); break;
 
-        case GOrdGivRLn: ReadRelLine(sal_True,nOrderLen); break;
-        case GOrdCurRLn: ReadRelLine(sal_False,nOrderLen); break;
+        case GOrdGivRLn: ReadRelLine(true,nOrderLen); break;
+        case GOrdCurRLn: ReadRelLine(false,nOrderLen); break;
 
-        case GOrdGivSFl: ReadFilletSharp(sal_True,nOrderLen); break;
-        case GOrdCurSFl: ReadFilletSharp(sal_False,nOrderLen); break;
+        case GOrdGivSFl: ReadFilletSharp(true,nOrderLen); break;
+        case GOrdCurSFl: ReadFilletSharp(false,nOrderLen); break;
 
-        case GOrdGivStM: ReadChrStr(sal_True , sal_True , sal_False, nOrderLen); break;
-        case GOrdCurStM: ReadChrStr(sal_False, sal_True , sal_False, nOrderLen); break;
-        case GOrdGivStr: ReadChrStr(sal_True , sal_False, sal_False, nOrderLen); break;
-        case GOrdCurStr: ReadChrStr(sal_False, sal_False, sal_False, nOrderLen); break;
-        case GOrdGivStx: ReadChrStr(sal_True , sal_False, sal_True , nOrderLen); break;
-        case GOrdCurStx: ReadChrStr(sal_False, sal_False, sal_True , nOrderLen); break;
+        case GOrdGivStM: ReadChrStr(true , true , false, nOrderLen); break;
+        case GOrdCurStM: ReadChrStr(false, true , false, nOrderLen); break;
+        case GOrdGivStr: ReadChrStr(true , false, false, nOrderLen); break;
+        case GOrdCurStr: ReadChrStr(false, false, false, nOrderLen); break;
+        case GOrdGivStx: ReadChrStr(true , false, true , nOrderLen); break;
+        case GOrdCurStx: ReadChrStr(false, false, true , nOrderLen); break;
 
         case GOrdGivImg: SAL_INFO("filter.os2met","GOrdGivImg");
             break;
@@ -1442,7 +1442,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
 
         case GOrdBegAra: {
             OSArea * p=new OSArea;
-            p->bClosed=sal_False;
+            p->bClosed=false;
             p->pSucc=pAreaStack; pAreaStack=p;
             pOS2MET->ReadUChar( p->nFlags );
             p->aCol=aAttr.aPatCol;
@@ -1492,8 +1492,8 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             p->pSucc=pPathStack; pPathStack=p;
             pOS2MET->SeekRel(2);
             pOS2MET->ReadUInt32( p->nID );
-            p->bClosed=sal_False;
-            p->bStroke=sal_False;
+            p->bClosed=false;
+            p->bStroke=false;
             break;
         }
         case GOrdEndPth: {
@@ -1533,7 +1533,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                     if( p->bStroke )
                     {
                         SetPen( aAttr.aPatCol, aAttr.nStrLinWidth, PEN_SOLID );
-                        ChangeBrush(Color(COL_TRANSPARENT),Color(COL_TRANSPARENT),sal_False);
+                        ChangeBrush(Color(COL_TRANSPARENT),Color(COL_TRANSPARENT),false);
                         SetRasterOp( aAttr.ePatMix );
                         if ( IsLineInfo() )
                         {
@@ -1563,7 +1563,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 p = p->pSucc;
 
             if( p )
-                p->bStroke = sal_True;
+                p->bStroke = true;
         }
         break;
 
@@ -1581,11 +1581,11 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             {
                 SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
                 SetRasterOp(aAttr.eLinMix);
-                ChangeBrush(Color(COL_TRANSPARENT),Color(COL_TRANSPARENT),sal_False);
+                ChangeBrush(Color(COL_TRANSPARENT),Color(COL_TRANSPARENT),false);
                 nC=p->aPPoly.Count();
                 for (i=0; i<nC; i++)
                 {
-                    if (i+1<nC || p->bClosed==sal_True)
+                    if (i+1<nC || p->bClosed)
                         DrawPolygon( p->aPPoly.GetObject( i ) );
                     else
                         DrawPolyLine( p->aPPoly.GetObject( i ) );
@@ -2054,8 +2054,8 @@ void OS2METReader::ReadDsc(sal_uInt16 nDscID, sal_uInt16 /*nDscLen*/)
             sal_uInt8 nbyte;
             pOS2MET->SeekRel(6);
             pOS2MET->ReadUChar( nbyte );
-            if      (nbyte==0x05) bCoord32=sal_True;
-            else if (nbyte==0x04) bCoord32=sal_False;
+            if      (nbyte==0x05) bCoord32=true;
+            else if (nbyte==0x04) bCoord32=false;
             else {
                 pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
                 ErrorCode=1;
@@ -2065,7 +2065,7 @@ void OS2METReader::ReadDsc(sal_uInt16 nDscID, sal_uInt16 /*nDscLen*/)
         case 0x00f6:
         {
             // 'Set Picture Descriptor'
-            sal_Bool b32;
+            bool b32;
             sal_uInt8 nbyte,nUnitType;
             long x1,y1,x2,y2,nt,xr,yr;
 
@@ -2073,12 +2073,12 @@ void OS2METReader::ReadDsc(sal_uInt16 nDscID, sal_uInt16 /*nDscLen*/)
             pOS2MET->ReadUChar( nbyte );
 
             if (nbyte==0x05)
-                b32=sal_True;
+                b32=true;
             else if(nbyte==0x04)
-                b32=sal_False;
+                b32=false;
             else
             {
-                b32 = sal_False;   // -Wall added the case.
+                b32 = false;   // -Wall added the case.
                 pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
                 ErrorCode=2;
             }
@@ -2530,7 +2530,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     nOrigPos            = pOS2MET->Tell();
     nOrigNumberFormat   = pOS2MET->GetNumberFormatInt();
 
-    bCoord32 = sal_True;
+    bCoord32 = true;
     pPaletteStack=NULL;
     pAreaStack=NULL;
     pPathStack=NULL;
@@ -2573,7 +2573,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     aDefAttr.nMrkPrec    =0x01;
     aDefAttr.nMrkSet     =0xff;
     aDefAttr.nMrkSymbol  =0x01;
-    aDefAttr.bFill       =sal_True;
+    aDefAttr.bFill       =true;
     aDefAttr.nStrLinWidth=0;
 
     aAttr=aDefAttr;
@@ -2596,7 +2596,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
         nPercent = (nPos-nStartPos)*100 / nRemaining;
         if (nLastPercent+4<=nPercent) {
-            if (Callback((sal_uInt16)nPercent)==sal_True) break;
+            if (Callback((sal_uInt16)nPercent)) break;
             nLastPercent=nPercent;
         }
 
@@ -2716,14 +2716,14 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     OS2METReader    aOS2METReader;
     GDIMetaFile     aMTF;
-    sal_Bool            bRet = sal_False;
+    bool            bRet = false;
 
     aOS2METReader.ReadOS2MET( rStream, aMTF );
 
     if ( !rStream.GetError() )
     {
         rGraphic=Graphic( aMTF );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

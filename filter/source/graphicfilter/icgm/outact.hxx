@@ -63,7 +63,7 @@ class CGMOutAct
     public:
                                 CGMOutAct( CGM& rCGM );
     virtual                     ~CGMOutAct();
-    virtual void                FirstOutPut() { mpCGM->mbFirstOutPut = sal_False; } ;
+    virtual void                FirstOutPut() { mpCGM->mbFirstOutPut = false; } ;
     virtual void                InsertPage() { mnCurrentPage++; } ;
     virtual void                BeginGroup() {} ;
     virtual void                EndGroup() {};
@@ -72,7 +72,7 @@ class CGMOutAct
     void                        CloseRegion() ;
     void                        NewRegion() ;
     void                        EndFigure() ;
-    void                        RegPolyLine( Polygon&, sal_Bool bReverse = sal_False ) ;
+    void                        RegPolyLine( Polygon&, bool bReverse = false ) ;
     void                        SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 nType );
     void                        SetGradientAngle( long nAngle );
     void                        SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorTo );
@@ -99,14 +99,14 @@ class CGMImpressOutAct : public CGMOutAct
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >        maXMultiServiceFactory;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >                   maXShape;
-    sal_Bool                        ImplCreateShape( const OUString& rType );
+    bool                        ImplCreateShape( const OUString& rType );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           maXPropSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >                  maXShapes;
 
     sal_uInt32                      nFinalTextCount;
 
-    sal_Bool                        ImplInitPage();
+    bool                        ImplInitPage();
     void                        ImplSetOrientation( FloatPoint& RefPoint, double& Orientation ) ;
     void                        ImplSetLineBundle() ;
     void                        ImplSetFillBundle() ;

@@ -45,7 +45,7 @@ ImpSVGDialog::ImpSVGDialog( Window* pParent, Sequence< PropertyValue >& rFilterD
     maBTCancel( this ),
     maBTHelp( this ),
     maConfigItem( SVG_EXPORTFILTER_CONFIGPATH, &rFilterData ),
-    mbOldNativeDecoration( sal_False )
+    mbOldNativeDecoration( false )
 {
     SetText( "SVG Export Options" );
     SetOutputSizePixel( Size( implMap( *this, 177 ), implMap( *this, 77 ) ) );

@@ -40,7 +40,7 @@ void CGM::ImplDoClass1()
             {
                 case 0 : pElement->eVDCType = VDC_INTEGER; break;
                 case 1 : pElement->eVDCType = VDC_REAL; break;
-                default: mbStatus = sal_False; break;
+                default: mbStatus = false; break;
             }
         }
         break;
@@ -53,7 +53,7 @@ void CGM::ImplDoClass1()
                 case 24 :
                 case 16 :
                 case 8 : pElement->nIntegerPrecision = nInteger >> 3; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
         }
         break;
@@ -70,32 +70,32 @@ void CGM::ImplDoClass1()
                     {
                         case 9 :
                             if ( nI1 != 23 )
-                                mbStatus = sal_False;
+                                mbStatus = false;
                             pElement->nRealSize = 4;
                             break;
                         case 12 :
                             if ( nI1 != 52 )
-                                mbStatus =sal_False;
+                                mbStatus =false;
                             pElement->nRealSize = 8;
                             break;
                         default:
-                            mbStatus = sal_False;
+                            mbStatus = false;
                             break;
                     }
                     break;
                 case 1 :
                     pElement->eRealPrecision = RP_FIXED;
                     if ( nI0 != nI1 )
-                        mbStatus = sal_False;
+                        mbStatus = false;
                     if ( nI0 == 16 )
                         pElement->nRealSize = 4;
                     else if ( nI0 == 32 )
                         pElement->nRealSize = 8;
                     else
-                        mbStatus = sal_False;
+                        mbStatus = false;
                     break;
                 default :
-                    mbStatus = sal_False; break;
+                    mbStatus = false; break;
             }
         }
         break;
@@ -108,7 +108,7 @@ void CGM::ImplDoClass1()
                 case 24 :
                 case 16 :
                 case 8 : pElement->nIndexPrecision = nInteger >> 3; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
         }
         break;
@@ -121,7 +121,7 @@ void CGM::ImplDoClass1()
                 case 24 :
                 case 16 :
                 case 8 : pElement->nColorPrecision = nInteger >> 3; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
         }
         break;
@@ -134,7 +134,7 @@ void CGM::ImplDoClass1()
                 case 24 :
                 case 16 :
                 case 8 : pElement->nColorIndexPrecision = nInteger >> 3; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
         }
         break;
@@ -142,7 +142,7 @@ void CGM::ImplDoClass1()
         {
             pElement->nColorMaximumIndex = ImplGetUI( pElement->nColorIndexPrecision );
             if ( ( pElement->nColorMaximumIndex > 256 /*255*/ ) || ( pElement->nColorMaximumIndex == 0 ) )
-                mbStatus = sal_False;
+                mbStatus = false;
         }
         break;
         case 0x0a : /*Color Value Extent*/
@@ -152,7 +152,7 @@ void CGM::ImplDoClass1()
             else
             {
                 nI1 = 8;
-                mbStatus = sal_False;                               // CMYK is not supported
+                mbStatus = false;                               // CMYK is not supported
             }
             for ( nI0 = 0; nI0 < nI1; nI0++ )
             {

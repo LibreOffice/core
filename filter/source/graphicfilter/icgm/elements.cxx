@@ -280,7 +280,7 @@ void CGMElements::Init()
 
     nBackGroundColor = nAuxiliaryColor = 0;
 
-    bSegmentCount = sal_False;
+    bSegmentCount = false;
 
     nScalingFactor = 1.0;
     nTextAlignmentVCont = nTextAlignmentHCont = 0.0;

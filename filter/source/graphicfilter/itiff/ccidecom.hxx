@@ -53,7 +53,7 @@ public:
 
     void StartDecompression( SvStream & rIStream );
 
-    sal_Bool DecompressScanline(sal_uInt8 * pTarget, sal_uLong nTargetBits, bool bLastLine );
+    bool DecompressScanline(sal_uInt8 * pTarget, sal_uLong nTargetBits, bool bLastLine );
 
 private:
 
@@ -63,9 +63,9 @@ private:
                     sal_uInt16 nHuffmanTableSize,
                     sal_uInt16 nMaxCodeBits);
 
-    sal_Bool ReadEOL( sal_uInt32 nMaxFillBits );
+    bool ReadEOL( sal_uInt32 nMaxFillBits );
 
-    sal_Bool Read2DTag();
+    bool Read2DTag();
 
     sal_uInt8 ReadBlackOrWhite();
 
@@ -83,9 +83,9 @@ private:
 
     void Read2DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTargetBits);
 
-    sal_Bool bTableBad;
+    bool bTableBad;
 
-    sal_Bool bStatus;
+    bool bStatus;
 
     sal_uInt8* pByteSwap;
 
@@ -97,7 +97,7 @@ private:
 
     sal_uLong nOptions;
 
-    sal_Bool bFirstEOL;
+    bool bFirstEOL;
 
     CCILookUpTableEntry * pWhiteLookUp;
     CCILookUpTableEntry * pBlackLookUp;

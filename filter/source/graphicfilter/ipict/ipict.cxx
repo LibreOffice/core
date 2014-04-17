@@ -149,7 +149,7 @@ private:
 
     sal_uLong     nOrigPos;          // Initial position in pPict.
     sal_uInt16    nOrigNumberFormat; // Initial number format von pPict.
-    sal_Bool      IsVersion2;        // If it is a version 2 Pictfile.
+    bool      IsVersion2;        // If it is a version 2 Pictfile.
     Rectangle     aBoundingRect;     // Min/Max-Rectangle for the whole drawing.
 
     Point         aPenPosition;
@@ -169,7 +169,7 @@ private:
     Fraction        aHRes;
     Fraction        aVRes;
 
-    sal_Bool Callback(sal_uInt16 nPercent);
+    bool Callback(sal_uInt16 nPercent);
 
     Point ReadPoint();
 
@@ -224,9 +224,9 @@ private:
 
     sal_uLong ReadAndDrawText();
 
-    sal_uLong ReadPixMapEtc(Bitmap & rBitmap, sal_Bool bBaseAddr, sal_Bool bColorTable,
+    sal_uLong ReadPixMapEtc(Bitmap & rBitmap, bool bBaseAddr, bool bColorTable,
                         Rectangle * pSrcRect, Rectangle * pDestRect,
-                        sal_Bool bMode, sal_Bool bMaskRgn);
+                        bool bMode, bool bMaskRgn);
 
     void ReadHeader();
         // Reads the header of the Pict file, set IsVersion and aBoundingRect
@@ -360,9 +360,9 @@ void PictReader::SetFillColor( const Color& rColor )
     pVirDev->SetFillColor( rColor );
 }
 
-sal_Bool PictReader::Callback(sal_uInt16 /*nPercent*/)
+bool PictReader::Callback(sal_uInt16 /*nPercent*/)
 {
-    return sal_False;
+    return false;
 }
 
 Point PictReader::ReadPoint()
@@ -489,7 +489,7 @@ sal_uLong PictReader::ReadPixPattern(PictReader::Pattern &pattern)
     pPict->ReadUInt16( nPatType );
     if (nPatType==1) {
             pattern.read(*pPict);
-        nDataSize=ReadPixMapEtc(aBMP,sal_False,sal_True,NULL,NULL,sal_False,sal_False);
+        nDataSize=ReadPixMapEtc(aBMP,false,true,NULL,NULL,false,false);
         // CHANGEME: use average pixmap colors to update the pattern, ...
         if (nDataSize!=0xffffffff) nDataSize+=10;
     }
@@ -702,8 +702,8 @@ sal_uLong PictReader::ReadAndDrawText()
     return nDataLen;
 }
 
-sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, sal_Bool bBaseAddr, sal_Bool bColorTable, Rectangle* pSrcRect,
-                                    Rectangle* pDestRect, sal_Bool bMode, sal_Bool bMaskRgn )
+sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColorTable, Rectangle* pSrcRect,
+                                    Rectangle* pDestRect, bool bMode, bool bMaskRgn )
 {
     Bitmap              aBitmap;
     BitmapWriteAccess*  pAcc = NULL;
@@ -1141,7 +1141,7 @@ void PictReader::ReadHeader()
         if ( sBuf[ 0 ] == 0x11 && sBuf[ 1 ] == 0x01 ) {
           // pict v1 must be rare and we do only few tests
           if (st < 2) { confidence[st] = --actualConfid; continue; }
-          IsVersion2 = sal_False; return;
+          IsVersion2 = false; return;
         }
         if (sBuf[0] != 0x00) continue; // unrecovable error
         int numZero = 0;
@@ -1159,11 +1159,11 @@ void PictReader::ReadHeader()
         if (sBuf[1] == 0x01 ) {
           // pict v1 must be rare and we do only few tests
           if (st < 2) { confidence[st] = --actualConfid; continue; }
-          IsVersion2 = sal_False; return;
+          IsVersion2 = false; return;
         }
         if (sBuf[1] != 0x02 ) continue; // not a version 2 file
 
-        IsVersion2=sal_True;
+        IsVersion2=true;
         short   nExtVer, nReserved;
         // 3 Bytes ignored : end of version arg 0x02FF (ie: 0xFF), HeaderOp : 0x0C00
         pPict->SeekRel( 3 );
@@ -1683,7 +1683,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x0090: { // BitsRect
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
-        nDataSize=ReadPixMapEtc(aBmp, sal_False, sal_True, &aSrcRect, &aDestRect, sal_True, sal_False);
+        nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, false);
         DrawingMethod(PDM_PAINT);
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
@@ -1691,7 +1691,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x0091: { // BitsRgn
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
-        nDataSize=ReadPixMapEtc(aBmp, sal_False, sal_True, &aSrcRect, &aDestRect, sal_True, sal_True);
+        nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, true);
         DrawingMethod(PDM_PAINT);
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
@@ -1708,7 +1708,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x0098: { // PackBitsRect
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
-        nDataSize=ReadPixMapEtc(aBmp, sal_False, sal_True, &aSrcRect, &aDestRect, sal_True, sal_False);
+        nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, false);
         DrawingMethod(PDM_PAINT);
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
@@ -1716,7 +1716,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x0099: { // PackBitsRgn
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
-        nDataSize=ReadPixMapEtc(aBmp, sal_False, sal_True, &aSrcRect, &aDestRect, sal_True, sal_True);
+        nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, true);
         DrawingMethod(PDM_PAINT);
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
@@ -1724,7 +1724,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x009a: { // DirectBitsRect
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
-        nDataSize=ReadPixMapEtc(aBmp, sal_True, sal_False, &aSrcRect, &aDestRect, sal_True, sal_False);
+        nDataSize=ReadPixMapEtc(aBmp, true, false, &aSrcRect, &aDestRect, true, false);
         DrawingMethod(PDM_PAINT);
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
@@ -1732,7 +1732,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x009b: { // DirectBitsRgn
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
-        nDataSize=ReadPixMapEtc(aBmp, sal_True, sal_False, &aSrcRect, &aDestRect, sal_True, sal_True);
+        nDataSize=ReadPixMapEtc(aBmp, true, false, &aSrcRect, &aDestRect, true, true);
         DrawingMethod(PDM_PAINT);
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
@@ -1821,7 +1821,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
         nPercent = (nPos-nStartPos) * 100 / nRemaining;
         if (nLastPercent+4<=nPercent) {
-            if (Callback((sal_uInt16)nPercent)==sal_True) break;
+            if (Callback((sal_uInt16)nPercent)) break;
             nLastPercent=nPercent;
         }
 
@@ -1885,14 +1885,14 @@ GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem* )
 {
     GDIMetaFile aMTF;
     PictReader  aPictReader;
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     aPictReader.ReadPict( rIStm, aMTF );
 
     if ( !rIStm.GetError() )
     {
         rGraphic = Graphic( aMTF );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

@@ -44,65 +44,65 @@ private:
     Reference< task::XStatusIndicator > mxStatusIndicator;
     Reference< task::XInteractionHandler > mxIH;
 
-    sal_Bool                mbUseTaggedPDF;
+    bool                mbUseTaggedPDF;
     sal_Int32               mnPDFTypeSelection;
-    sal_Bool                mbExportNotes;
-    sal_Bool                mbViewPDF;
-    sal_Bool                mbExportNotesPages;
-    sal_Bool                mbUseTransitionEffects;
-    sal_Bool                mbExportBookmarks;
-    sal_Bool                mbExportHiddenSlides;
+    bool                mbExportNotes;
+    bool                mbViewPDF;
+    bool                mbExportNotesPages;
+    bool                mbUseTransitionEffects;
+    bool                mbExportBookmarks;
+    bool                mbExportHiddenSlides;
     sal_Int32               mnOpenBookmarkLevels;
 
-    sal_Bool                mbUseLosslessCompression;
-    sal_Bool                mbReduceImageResolution;
-    sal_Bool                mbSkipEmptyPages;
-    sal_Bool                mbAddStream;
+    bool                mbUseLosslessCompression;
+    bool                mbReduceImageResolution;
+    bool                mbSkipEmptyPages;
+    bool                mbAddStream;
     sal_Int32               mnMaxImageResolution;
     sal_Int32               mnQuality;
     sal_Int32               mnFormsFormat;
-    sal_Bool                mbExportFormFields;
-    sal_Bool                mbAllowDuplicateFieldNames;
+    bool                mbExportFormFields;
+    bool                mbAllowDuplicateFieldNames;
     sal_Int32               mnProgressValue;
-    sal_Bool                mbRemoveTransparencies;
+    bool                mbRemoveTransparencies;
 
-    sal_Bool                mbWatermark;
+    bool                mbWatermark;
     uno::Any                maWatermark;
 
 //these variable are here only to have a location in filter/pdf to set the default
 //to be used by the macro (when the FilterData are set by the macro itself)
-    sal_Bool                mbHideViewerToolbar;
-    sal_Bool                mbHideViewerMenubar;
-    sal_Bool                mbHideViewerWindowControls;
-    sal_Bool                mbFitWindow;
-    sal_Bool                mbCenterWindow;
-    sal_Bool                mbOpenInFullScreenMode;
-    sal_Bool                mbDisplayPDFDocumentTitle;
+    bool                mbHideViewerToolbar;
+    bool                mbHideViewerMenubar;
+    bool                mbHideViewerWindowControls;
+    bool                mbFitWindow;
+    bool                mbCenterWindow;
+    bool                mbOpenInFullScreenMode;
+    bool                mbDisplayPDFDocumentTitle;
     sal_Int32               mnPDFDocumentMode;
     sal_Int32               mnPDFDocumentAction;
     sal_Int32               mnZoom;
     sal_Int32               mnInitialPage;
     sal_Int32               mnPDFPageLayout;
-    sal_Bool                mbFirstPageLeft;
+    bool                mbFirstPageLeft;
 
-    sal_Bool                mbEncrypt;
-    sal_Bool                mbRestrictPermissions;
+    bool                mbEncrypt;
+    bool                mbRestrictPermissions;
     sal_Int32               mnPrintAllowed;
     sal_Int32               mnChangesAllowed;
-    sal_Bool                mbCanCopyOrExtract;
-    sal_Bool                mbCanExtractForAccessibility;
+    bool                mbCanCopyOrExtract;
+    bool                mbCanExtractForAccessibility;
 
     SvtGraphicFill          maCacheFill;
 
 //--->i56629
-    sal_Bool                mbExportRelativeFsysLinks;
+    bool                mbExportRelativeFsysLinks;
     sal_Int32               mnDefaultLinkAction;
-    sal_Bool                mbConvertOOoTargetToPDFTarget;
-    sal_Bool                mbExportBmkToDest;
-    sal_Bool                ImplExportPage( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData& rPDFExtOutDevData,
+    bool                mbConvertOOoTargetToPDFTarget;
+    bool                mbExportBmkToDest;
+    bool                ImplExportPage( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                                 const GDIMetaFile& rMtf );
 
-    sal_Bool                mbSignPDF;
+    bool                mbSignPDF;
     OUString                msSignLocation;
     OUString                msSignContact;
     OUString                msSignReason;
@@ -118,14 +118,14 @@ public:
                                        const Reference< uno::XComponentContext >& xFact );
                             ~PDFExport();
 
-    sal_Bool                ExportSelection( vcl::PDFWriter& rPDFWriter,
+    bool                ExportSelection( vcl::PDFWriter& rPDFWriter,
                                 Reference< com::sun::star::view::XRenderable >& rRenderable,
                                 const Any& rSelection,
                                 const StringRangeEnumerator& rRangeEnum,
                                 Sequence< PropertyValue >& rRenderOptions,
                                 sal_Int32 nPageCount );
 
-    sal_Bool                Export( const OUString& rFile, const Sequence< PropertyValue >& rFilterData );
+    bool                Export( const OUString& rFile, const Sequence< PropertyValue >& rFilterData );
 
     void                    showErrors( const std::set<vcl::PDFWriter::ErrorCode>& );
 };

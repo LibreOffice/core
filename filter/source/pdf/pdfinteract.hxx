@@ -61,7 +61,7 @@ OUString PDFInteractionHandler_getImplementationName ()
 
 
 
-sal_Bool SAL_CALL PDFInteractionHandler_supportsService( const OUString& ServiceName )
+bool SAL_CALL PDFInteractionHandler_supportsService( const OUString& ServiceName )
     throw ( RuntimeException );
 
 

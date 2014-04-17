@@ -105,11 +105,11 @@ class SVGExport : public SvXMLExport
 {
     typedef ::std::list< ::basegfx::B2DPolyPolygon > B2DPolyPolygonList;
 
-    sal_Bool    mbIsUseTinyProfile;
-    sal_Bool    mbIsEmbedFonts;
-    sal_Bool    mbIsUseOpacity;
-    sal_Bool    mbIsUseNativeTextDecoration;
-    sal_Bool    mbIsUsePositionedCharacters;
+    bool    mbIsUseTinyProfile;
+    bool    mbIsEmbedFonts;
+    bool    mbIsUseOpacity;
+    bool    mbIsUseNativeTextDecoration;
+    bool    mbIsUsePositionedCharacters;
 
 public:
 
@@ -119,11 +119,11 @@ public:
 
     virtual ~SVGExport();
 
-    sal_Bool IsUseTinyProfile() const { return mbIsUseTinyProfile; };
-    sal_Bool IsEmbedFonts() const { return mbIsEmbedFonts; };
-    sal_Bool IsUseOpacity() const { return mbIsUseOpacity; };
-    sal_Bool IsUseNativeTextDecoration() const { return mbIsUseNativeTextDecoration; };
-    sal_Bool IsUsePositionedCharacters() const { return mbIsUsePositionedCharacters; };
+    bool IsUseTinyProfile() const { return mbIsUseTinyProfile; };
+    bool IsEmbedFonts() const { return mbIsEmbedFonts; };
+    bool IsUseOpacity() const { return mbIsUseOpacity; };
+    bool IsUseNativeTextDecoration() const { return mbIsUseNativeTextDecoration; };
+    bool IsUsePositionedCharacters() const { return mbIsUsePositionedCharacters; };
 
     void writeMtf( const GDIMetaFile& rMtf );
 
@@ -156,23 +156,23 @@ public:
                                       ~ObjectRepresentation();
 
     ObjectRepresentation&             operator=( const ObjectRepresentation& rPresentation );
-    sal_Bool                          operator==( const ObjectRepresentation& rPresentation ) const;
+    bool                          operator==( const ObjectRepresentation& rPresentation ) const;
 
     const Reference< XInterface >&    GetObject() const { return mxObject; }
-    sal_Bool                          HasRepresentation() const { return mpMtf != NULL; }
+    bool                          HasRepresentation() const { return mpMtf != NULL; }
     const GDIMetaFile&                GetRepresentation() const { return *mpMtf; }
 };
 
 struct PagePropertySet
 {
-    sal_Bool               bIsBackgroundVisible;
-    sal_Bool               bAreBackgroundObjectsVisible;
-    sal_Bool               bIsPageNumberFieldVisible;
-    sal_Bool               bIsDateTimeFieldVisible;
-    sal_Bool               bIsFooterFieldVisible;
-    sal_Bool               bIsHeaderFieldVisible;
+    bool               bIsBackgroundVisible;
+    bool               bAreBackgroundObjectsVisible;
+    bool               bIsPageNumberFieldVisible;
+    bool               bIsDateTimeFieldVisible;
+    bool               bIsFooterFieldVisible;
+    bool               bIsHeaderFieldVisible;
     sal_Int32              nPageNumberingType;
-    sal_Bool               bIsDateTimeFieldFixed;
+    bool               bIsDateTimeFieldFixed;
     sal_Int16              nPageNumber;
     sal_Int32              nDateTimeFormat;
     OUString        sDateTimeText;
@@ -241,8 +241,8 @@ private:
     SVGActionWriter*                    mpSVGWriter;
     SdrPage*                            mpDefaultSdrPage;
     SdrModel*                           mpSdrModel;
-    sal_Bool                            mbPresentation;
-    sal_Bool                            mbSinglePage;
+    bool                            mbPresentation;
+    bool                            mbSinglePage;
     sal_Int32                           mnVisiblePage;
     PagePropertySet                     mVisiblePagePropSet;
     OUString                     msClipPathId;
@@ -266,46 +266,46 @@ private:
 
     Link                                maOldFieldHdl;
 
-    sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
+    bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
 
-    sal_Bool                            implExport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
+    bool                            implExport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
     Reference< XWriter >                implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
 
-    sal_Bool                            implGetPagePropSet( const Reference< XDrawPage > & rxPage );
-    sal_Bool                            implGenerateMetaData();
+    bool                            implGetPagePropSet( const Reference< XDrawPage > & rxPage );
+    bool                            implGenerateMetaData();
     void                                implExportTextShapeIndex();
     void                                implEmbedBulletGlyphs();
     void                                implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPathData );
-    sal_Bool                            implExportTextEmbeddedBitmaps();
-    sal_Bool                            implGenerateScript();
+    bool                            implExportTextEmbeddedBitmaps();
+    bool                            implGenerateScript();
 
-    sal_Bool                            implExportDocument();
-    sal_Bool                            implExportAnimations();
+    bool                            implExportDocument();
+    bool                            implExportAnimations();
 
-    sal_Bool                            implExportMasterPages( const XDrawPageSequence& rxPages,
+    bool                            implExportMasterPages( const XDrawPageSequence& rxPages,
                                                                sal_Int32 nFirstPage, sal_Int32 nLastPage );
-    sal_Bool                            implExportDrawPages( const XDrawPageSequence& rxPages,
+    bool                            implExportDrawPages( const XDrawPageSequence& rxPages,
                                                              sal_Int32 nFirstPage, sal_Int32 nLastPage );
-    sal_Bool                            implExportPage( const OUString & sPageId,
+    bool                            implExportPage( const OUString & sPageId,
                                                         const Reference< XDrawPage > & rxPage,
                                                         const Reference< XShapes > & xShapes,
-                                                        sal_Bool bMaster );
+                                                        bool bMaster );
 
-    sal_Bool                            implExportShapes( const Reference< XShapes >& rxShapes,
-                                                          sal_Bool bMaster );
-    sal_Bool                            implExportShape( const Reference< XShape >& rxShape,
-                                                         sal_Bool bMaster );
+    bool                            implExportShapes( const Reference< XShapes >& rxShapes,
+                                                          bool bMaster );
+    bool                            implExportShape( const Reference< XShape >& rxShape,
+                                                         bool bMaster );
 
-    sal_Bool                            implCreateObjects();
-    sal_Bool                            implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPage, const Reference< XShapes >& rxShapes );
-    sal_Bool                            implCreateObjectsFromShape( const Reference< XDrawPage > & rxPage, const Reference< XShape >& rxShape );
-    sal_Bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
+    bool                            implCreateObjects();
+    bool                            implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPage, const Reference< XShapes >& rxShapes );
+    bool                            implCreateObjectsFromShape( const Reference< XDrawPage > & rxPage, const Reference< XShape >& rxShape );
+    bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
 
     OUString                     implGetClassFromShape( const Reference< XShape >& rxShape );
     void                                implRegisterInterface( const Reference< XInterface >& rxIf );
     const OUString &             implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
     OUString                     implGetInterfaceName( const Reference< XInterface >& rxIf );
-    sal_Bool                            implLookForFirstVisiblePage();
+    bool                            implLookForFirstVisiblePage();
     Any                                 implSafeGetPagePropSet( const OUString & sPropertyName,
                                                                 const Reference< XPropertySet > & rxPropSet,
                                                                 const Reference< XPropertySetInfo > & rxPropSetInfo );

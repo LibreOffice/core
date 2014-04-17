@@ -71,42 +71,42 @@ ImpPDFTabDialog::ImpPDFTabDialog(Window* pParent, Sequence< PropertyValue >& rFi
     mnInterfacePageId(0),
     mnViewPageId(0),
     mnGeneralPageId(0),
-    mbIsPresentation( sal_False ),
-    mbIsWriter( sal_False ),
+    mbIsPresentation( false ),
+    mbIsWriter( false ),
 
-    mbSelectionPresent( sal_False ),
-    mbUseCTLFont( sal_False ),
-    mbUseLosslessCompression( sal_True ),
+    mbSelectionPresent( false ),
+    mbUseCTLFont( false ),
+    mbUseLosslessCompression( true ),
     mnQuality( 90 ),
-    mbReduceImageResolution( sal_False ),
+    mbReduceImageResolution( false ),
     mnMaxImageResolution( 300 ),
-    mbUseTaggedPDF( sal_False ),
-    mbExportNotes( sal_True ),
-    mbViewPDF( sal_False ),
-    mbExportNotesPages( sal_False ),
-    mbUseTransitionEffects( sal_False ),
-    mbIsSkipEmptyPages( sal_True ),
-    mbAddStream( sal_False ),
+    mbUseTaggedPDF( false ),
+    mbExportNotes( true ),
+    mbViewPDF( false ),
+    mbExportNotesPages( false ),
+    mbUseTransitionEffects( false ),
+    mbIsSkipEmptyPages( true ),
+    mbAddStream( false ),
     mnFormsType( 0 ),
-    mbExportFormFields( sal_True ),
-    mbAllowDuplicateFieldNames( sal_False ),
-    mbExportBookmarks( sal_True ),
-    mbExportHiddenSlides ( sal_False),
+    mbExportFormFields( true ),
+    mbAllowDuplicateFieldNames( false ),
+    mbExportBookmarks( true ),
+    mbExportHiddenSlides ( false),
     mnOpenBookmarkLevels( -1 ),
 
-    mbHideViewerToolbar( sal_False ),
-    mbHideViewerMenubar( sal_False ),
-    mbHideViewerWindowControls( sal_False ),
-    mbResizeWinToInit( sal_False ),
-    mbCenterWindow( sal_False ),
-    mbOpenInFullScreenMode( sal_False ),
-    mbDisplayPDFDocumentTitle( sal_False ),
+    mbHideViewerToolbar( false ),
+    mbHideViewerMenubar( false ),
+    mbHideViewerWindowControls( false ),
+    mbResizeWinToInit( false ),
+    mbCenterWindow( false ),
+    mbOpenInFullScreenMode( false ),
+    mbDisplayPDFDocumentTitle( false ),
     mnMagnification( 0 ),
     mnInitialView( 0 ),
     mnZoom( 0 ),
     mnInitialPage( 1 ),
     mnPageLayout( 0 ),
-    mbFirstPageLeft( sal_False ),
+    mbFirstPageLeft( false ),
 
     mbEncrypt( false ),
     mbRestrictPermissions( false ),
@@ -115,16 +115,16 @@ ImpPDFTabDialog::ImpPDFTabDialog(Window* pParent, Sequence< PropertyValue >& rFi
     mbCanCopyOrExtract( false ),
     mbCanExtractForAccessibility( true ),
 
-    mbIsRangeChecked( sal_False ),
+    mbIsRangeChecked( false ),
     msPageRange( ' ' ),
 
-    mbSelectionIsChecked( sal_False ),
-    mbExportRelativeFsysLinks( sal_False ),
+    mbSelectionIsChecked( false ),
+    mbExportRelativeFsysLinks( false ),
     mnViewPDFMode( 0 ),
-    mbConvertOOoTargets( sal_False ),
-    mbExportBmkToPDFDestination( sal_False ),
+    mbConvertOOoTargets( false ),
+    mbExportBmkToPDFDestination( false ),
 
-    mbSignPDF( sal_False )
+    mbSignPDF( false )
 
 {
 // check for selection
@@ -153,12 +153,12 @@ ImpPDFTabDialog::ImpPDFTabDialog(Window* pParent, Sequence< PropertyValue >& rFi
             {
                 sal_Int32 nLen = xIndexAccess->getCount();
                 if ( !nLen )
-                    mbSelectionPresent = sal_False;
+                    mbSelectionPresent = false;
                 else if ( nLen == 1 )
                 {
                     Reference< text::XTextRange > xTextRange( xIndexAccess->getByIndex( 0 ), UNO_QUERY );
                     if ( xTextRange.is() && ( xTextRange->getString().isEmpty() ) )
-                        mbSelectionPresent = sal_False;
+                        mbSelectionPresent = false;
                 }
             }
         }
@@ -171,9 +171,9 @@ ImpPDFTabDialog::ImpPDFTabDialog(Window* pParent, Sequence< PropertyValue >& rFi
         if ( xInfo.is() )
         {
             if ( xInfo->supportsService( "com.sun.star.presentation.PresentationDocument" ) )
-                mbIsPresentation = sal_True;
+                mbIsPresentation = true;
             if ( xInfo->supportsService( "com.sun.star.text.GenericTextDocument" ) )
-                mbIsWriter = sal_True;
+                mbIsWriter = true;
         }
     }
     catch(const RuntimeException &)
@@ -574,7 +574,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     mpCbExportEmptyPages->Enable( mbIsWriter );
 
     mpRbLosslessCompression->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleCompressionHdl ) );
-    const sal_Bool bUseLosslessCompression = paParent->mbUseLosslessCompression;
+    const bool bUseLosslessCompression = paParent->mbUseLosslessCompression;
     if ( bUseLosslessCompression )
         mpRbLosslessCompression->Check();
     else
@@ -584,7 +584,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     mpQualityFrame->Enable(!bUseLosslessCompression);
 
     mpCbReduceImageResolution->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl ) );
-    const sal_Bool  bReduceImageResolution = paParent->mbReduceImageResolution;
+    const bool  bReduceImageResolution = paParent->mbReduceImageResolution;
     mpCbReduceImageResolution->Check( bReduceImageResolution );
     OUString aStrRes = OUString::number( paParent->mnMaxImageResolution ) + " DPI";
     mpCoReduceImageResolution->SetText( aStrRes );
@@ -669,10 +669,10 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     paParent->mbIsSkipEmptyPages = !mpCbExportEmptyPages->IsChecked();
     paParent->mbAddStream = mpCbAddStream->IsVisible() && mpCbAddStream->IsChecked();
 
-    paParent->mbIsRangeChecked = sal_False;
+    paParent->mbIsRangeChecked = false;
     if( mpRbRange->IsChecked() )
     {
-        paParent->mbIsRangeChecked = sal_True;
+        paParent->mbIsRangeChecked = true;
         paParent->msPageRange = mpEdPages->GetText(); //FIXME all right on other languages ?
     }
     else if( mpRbSelection->IsChecked() )
@@ -1292,7 +1292,7 @@ void ImpPDFTabSecurityPage::enablePermissionControls()
 // This tab page is under control of the PDF/A-1a checkbox:
 // implement a method to do it.
 
-void    ImpPDFTabSecurityPage::ImplPDFASecurityControl( sal_Bool bEnableSecurity )
+void    ImpPDFTabSecurityPage::ImplPDFASecurityControl( bool bEnableSecurity )
 {
     if( bEnableSecurity )
     {
@@ -1312,9 +1312,9 @@ ImpPDFTabLinksPage::ImpPDFTabLinksPage( Window* pParent,
                                               const SfxItemSet& rCoreSet ) :
     SfxTabPage( pParent, "PdfLinksPage","filter/ui/pdflinkspage.ui",rCoreSet ),
 
-    mbOpnLnksDefaultUserState( sal_False ),
-    mbOpnLnksLaunchUserState( sal_False ),
-    mbOpnLnksBrowserUserState( sal_False )
+    mbOpnLnksDefaultUserState( false ),
+    mbOpnLnksLaunchUserState( false ),
+    mbOpnLnksBrowserUserState( false )
 {
     get(m_pCbExprtBmkrToNmDst,"export");
     get(m_pCbOOoToPDFTargets ,"convert");
@@ -1380,15 +1380,15 @@ void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
     default:
     case 0:
         m_pRbOpnLnksDefault->Check();
-        mbOpnLnksDefaultUserState = sal_True;
+        mbOpnLnksDefaultUserState = true;
         break;
     case 1:
         m_pRbOpnLnksLaunch->Check();
-        mbOpnLnksLaunchUserState = sal_True;
+        mbOpnLnksLaunchUserState = true;
         break;
     case 2:
         m_pRbOpnLnksBrowser->Check();
-        mbOpnLnksBrowserUserState = sal_True;
+        mbOpnLnksBrowserUserState = true;
         break;
     }
     // now check the status of PDF/A selection
@@ -1403,7 +1403,7 @@ void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
 
 // called from general tab, with PDFA/1 selection status
 // retrieves/store the status of Launch action selection
-void ImpPDFTabLinksPage::ImplPDFALinkControl( sal_Bool bEnableLaunch )
+void ImpPDFTabLinksPage::ImplPDFALinkControl( bool bEnableLaunch )
 {
 // set the value and position of link type selection
     if( bEnableLaunch )

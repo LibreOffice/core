@@ -362,7 +362,7 @@ class FilterCache : public BaseLock
             @return     sal_True if the required fill state exists for this cache; FALSE
                         otherwise.
          */
-        virtual sal_Bool isFillState(EFillState eRequired) const
+        virtual bool isFillState(EFillState eRequired) const
             throw(css::uno::Exception);
 
 
@@ -426,7 +426,7 @@ class FilterCache : public BaseLock
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
-        virtual sal_Bool hasItems(EItemType eType) const
+        virtual bool hasItems(EItemType eType) const
             throw(css::uno::Exception);
 
 
@@ -475,7 +475,7 @@ class FilterCache : public BaseLock
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
-        virtual sal_Bool hasItem(      EItemType        eType,
+        virtual bool hasItem(      EItemType        eType,
                                  const OUString& sItem)
             throw(css::uno::Exception);
 
@@ -696,8 +696,8 @@ class FilterCache : public BaseLock
                         a NULL reference otherwise.
          */
         css::uno::Reference< css::uno::XInterface > impl_createConfigAccess(const OUString& sRoot       ,
-                                                                                  sal_Bool         bReadOnly   ,
-                                                                                  sal_Bool         bLocalesMode);
+                                                                                  bool         bReadOnly   ,
+                                                                                  bool         bLocalesMode);
 
 
 
@@ -1011,7 +1011,7 @@ class FilterCache : public BaseLock
 
             @return sal_True if the requested module is installed; sal_False otherwise.
          */
-        sal_Bool impl_isModuleInstalled(const OUString& sModule);
+        bool impl_isModuleInstalled(const OUString& sModule);
 
 
 

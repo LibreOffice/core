@@ -59,17 +59,17 @@ class CGM
         double              mnVDCdy;
         double              mnXFraction;
         double              mnYFraction;
-        sal_Bool                mbAngReverse;           // AngularDirection
+        bool                mbAngReverse;           // AngularDirection
 
         Graphic*            mpGraphic;              // ifdef CGM_EXPORT_META
 
-        sal_Bool                mbStatus;
-        sal_Bool                mbMetaFile;
-        sal_Bool                mbIsFinished;
-        sal_Bool                mbPicture;
-        sal_Bool                mbPictureBody;
-        sal_Bool                mbFigure;
-        sal_Bool                mbFirstOutPut;
+        bool                mbStatus;
+        bool                mbMetaFile;
+        bool                mbIsFinished;
+        bool                mbPicture;
+        bool                mbPictureBody;
+        bool                mbFigure;
+        bool                mbFirstOutPut;
         sal_uInt32              mnAct4PostReset;
         CGMBitmap*          mpBitmapInUse;
         CGMChart*           mpChart;                // if sal_True->"SHWSLIDEREC"
@@ -101,7 +101,7 @@ class CGM
         void                ImplGetSwitch4( sal_uInt8* pSource, sal_uInt8* pDest );
         void                ImplGetSwitch8( sal_uInt8* pSource, sal_uInt8* pDest );
         double              ImplGetFloat( RealPrecision, sal_uInt32 nRealSize );
-        sal_uInt32          ImplGetBitmapColor( sal_Bool bDirectColor = sal_False );
+        sal_uInt32          ImplGetBitmapColor( bool bDirectColor = false );
         void                ImplSetMapMode();
         void                ImplMapDouble( double& );
         void                ImplMapX( double& );
@@ -112,13 +112,13 @@ class CGM
         inline double       ImplGetIX();
         inline double       ImplGetFX();
         sal_uInt32              ImplGetPointSize();
-        void                ImplGetPoint( FloatPoint& rFloatPoint, sal_Bool bMap = sal_False );
-        void                ImplGetRectangle( FloatRect&, sal_Bool bMap = sal_False );
+        void                ImplGetPoint( FloatPoint& rFloatPoint, bool bMap = false );
+        void                ImplGetRectangle( FloatRect&, bool bMap = false );
         void                ImplGetRectangleNS( FloatRect& );
         void                ImplGetVector( double* );
         double              ImplGetOrientation( FloatPoint& rCenter, FloatPoint& rPoint );
         void                ImplSwitchStartEndAngle( double& rStartAngle, double& rEndAngle );
-        sal_Bool                ImplGetEllipse( FloatPoint& rCenter, FloatPoint& rRadius, double& rOrientation );
+        bool                ImplGetEllipse( FloatPoint& rCenter, FloatPoint& rRadius, double& rOrientation );
 
         void                ImplDefaultReplacement();
         void                ImplDoClass();
@@ -144,9 +144,9 @@ class CGM
         GDIMetaFile*        mpGDIMetaFile;
 #endif
         sal_uInt32              GetBackGroundColor();
-        sal_Bool                IsValid() const { return mbStatus; };
-        sal_Bool                IsFinished() const { return mbIsFinished; };
-        sal_Bool                Write( SvStream& rIStm );
+        bool                IsValid() const { return mbStatus; };
+        bool                IsFinished() const { return mbIsFinished; };
+        bool                Write( SvStream& rIStm );
 
         friend SvStream& ReadCGM( SvStream& rOStm, CGM& rCGM );
 

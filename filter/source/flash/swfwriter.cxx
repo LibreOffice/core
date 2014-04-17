@@ -316,7 +316,7 @@ sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf, sal_Int16 x, sal_Int16 
         CharacterIdVector::iterator aIter( maShapeIds.begin() );
         const CharacterIdVector::iterator aEnd( maShapeIds.end() );
 
-        sal_Bool bHaveShapes = aIter != aEnd;
+        bool bHaveShapes = aIter != aEnd;
 
         if (bHaveShapes)
         {

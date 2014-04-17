@@ -86,7 +86,7 @@ static Reference< XInterface > addFolder( Reference< XInterface >& xRootFolder, 
         throw lang::IllegalArgumentException();
 
     Sequence< Any > aArgs(1);
-    aArgs[0] <<= (sal_Bool)sal_True;
+    aArgs[0] <<= true;
 
     Reference< XInterface > xFolder( xFactory->createInstanceWithArguments(aArgs) );
     Reference< XNamed > xNamed( xFolder, UNO_QUERY );

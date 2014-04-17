@@ -192,7 +192,7 @@ void CGM::ImplDoClass5()
                 case 1 : pElement->eTextPath = TPR_LEFT; break;
                 case 2 : pElement->eTextPath = TPR_UP; break;
                 case 3 : pElement->eTextPath = TPR_DOWN; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
         }
         break;
@@ -289,7 +289,7 @@ void CGM::ImplDoClass5()
             {
                 case 0 : pElement->eEdgeVisibility = EV_OFF; break;
                 case 1 : pElement->eEdgeVisibility = EV_ON; break;
-                default : mbStatus = sal_False;
+                default : mbStatus = false;
             }
         }
         break;
@@ -304,7 +304,7 @@ void CGM::ImplDoClass5()
             if ( ( nColorStartIndex > 255 ) ||
                 ( ( ( mnElementSize - pElement->nColorIndexPrecision ) % ( pElement->nColorPrecision * 3 ) ) != 0 ) )
             {
-                mbStatus = sal_False;
+                mbStatus = false;
             }
             else
             {
@@ -315,7 +315,7 @@ void CGM::ImplDoClass5()
                     sal_uInt32 nIndex;
                     if ( nMaxColorIndex > 255 )
                     {
-                        mbStatus = sal_False;
+                        mbStatus = false;
                         break;
                     }
                     if ( pElement->nLatestColorMaximumIndex < nMaxColorIndex )
@@ -323,7 +323,7 @@ void CGM::ImplDoClass5()
 
                     for (  nIndex = nColorStartIndex; nIndex <= nMaxColorIndex; nIndex++ )
                     {
-                        pElement->aLatestColorTable[ nIndex ] = ImplGetBitmapColor( sal_True );
+                        pElement->aLatestColorTable[ nIndex ] = ImplGetBitmapColor( true );
                     }
 
                     pElement->nColorMaximumIndex = pElement->nLatestColorMaximumIndex;
@@ -366,14 +366,14 @@ void CGM::ImplDoClass5()
                     case 16 : nFlag = ASF_CHARACTEREXPANSION; break;
                     case 17 : nFlag = ASF_CHARACTERSPACING; break;
                     case 18 : nFlag = ASF_TEXTCOLOR; break;
-                    default : mbStatus = sal_False; break;
+                    default : mbStatus = false; break;
                 }
                 sal_uInt32  nASF = ImplGetUI16();
                 switch ( nASF )
                 {
                     case 0 : pElement->nAspectSourceFlags &= ~nFlag; break; // INDIVIDUAL
                     case 1 : pElement->nAspectSourceFlags |= nFlag; break;  // BUNDLED
-                    default : mbStatus = sal_False; break;
+                    default : mbStatus = false; break;
                 }
             }
         }

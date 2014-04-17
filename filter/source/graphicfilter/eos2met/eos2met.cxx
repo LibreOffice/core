@@ -124,7 +124,7 @@ class METWriter
 {
 private:
 
-    sal_Bool            bStatus;
+    bool                bStatus;
     sal_uInt32          nLastPercent; // with which number pCallback has been called the last time
     SvStream*           pMET;
     Rectangle           aPictureRect;
@@ -198,7 +198,7 @@ private:
     void METSetAndPushLineInfo( const LineInfo& rLineInfo );
     void METPopLineInfo( const LineInfo& rLineInfo );
     void METBitBlt(Point aPt, Size aSize, const Size& rSizePixel);
-    void METBeginArea(sal_Bool bBoundaryLine);
+    void METBeginArea(bool bBoundaryLine);
     void METEndArea();
     void METBeginPath(sal_uInt32 nPathId);
     void METEndPath();
@@ -210,7 +210,7 @@ private:
     void METLine(const Polygon & rPolygon);
     void METLine(const PolyPolygon & rPolyPolygon);
     void METLineAtCurPos(Point aPt);
-    void METBox(sal_Bool bFill, sal_Bool bBoundary,
+    void METBox(bool bFill, bool bBoundary,
                 Rectangle aRect, sal_uInt32 nHAxis, sal_uInt32 nVAxis);
     void METFullArc(Point aCenter, double fMultiplier);
     void METPartialArcAtCurPos(Point aCenter, double fMultiplier,
@@ -237,7 +237,7 @@ private:
 public:
 
     METWriter()
-        : bStatus(sal_False)
+        : bStatus(false)
         , nLastPercent( 0 )
         , pMET(NULL)
         , nActualFieldStartPos( 0 )
@@ -266,7 +266,7 @@ public:
         }
     }
 
-    sal_Bool WriteMET( const GDIMetaFile & rMTF, SvStream & rTargetStream,
+    bool WriteMET( const GDIMetaFile & rMTF, SvStream & rTargetStream,
                         FilterConfigItem* pConfigItem );
 };
 
@@ -400,7 +400,7 @@ void METWriter::CreateChrSets(const GDIMetaFile * pMTF)
     size_t nAction, nActionCount;
     const MetaAction * pMA;
 
-    if (bStatus==sal_False)
+    if (bStatus==false)
         return;
 
     nActionCount = pMTF->GetActionSize();
@@ -512,7 +512,7 @@ void METWriter::WriteColorAttributeTable(sal_uInt32 nFieldId, BitmapPalette* pPa
 {
     sal_uInt16 nIndex,nNumI,i;
 
-    if (bStatus==sal_False) return;
+    if (bStatus==false) return;
 
     //--- The Field 'Begin Color Attribute Table':
     WriteFieldIntroducer(16,BegColAtrMagic,0,0);
@@ -557,7 +557,7 @@ void METWriter::WriteColorAttributeTable(sal_uInt32 nFieldId, BitmapPalette* pPa
     WriteFieldId(nFieldId);
 
     if (pMET->GetError())
-        bStatus=sal_False;
+        bStatus=false;
 }
 
 
@@ -570,7 +570,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     sal_uInt16 nBitsPerPixel;
     sal_uInt8 nbyte;
 
-    if (bStatus==sal_False)
+    if (bStatus==false)
         return;
 
     nActColMapId=((nActBitmapId>>24)&0x000000ff) | ((nActBitmapId>> 8)&0x0000ff00) |
@@ -701,10 +701,10 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
             pMET->Write(pBuf.get(),nBytesPerLine);
             ny++;
         }
-        if (aTemp.GetError() || pMET->GetError()) bStatus=sal_False;
+        if (aTemp.GetError() || pMET->GetError()) bStatus=false;
         nActBitmapPercent=(ny+1)*100/nHeight;
         MayCallback();
-        if (bStatus==sal_False) return;
+        if (bStatus==false) return;
     }
     pBuf.reset();
 
@@ -728,7 +728,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     nWrittenBitmaps++;
     nActBitmapPercent=0;
 
-    if (pMET->GetError()) bStatus=sal_False;
+    if (pMET->GetError()) bStatus=false;
 }
 
 
@@ -736,7 +736,7 @@ void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
 {
     const MetaAction*   pMA;
 
-    if (bStatus==sal_False)
+    if (bStatus==false)
         return;
 
     for ( size_t nAction = 0, nActionCount = pMTF->GetActionSize(); nAction < nActionCount; nAction++)
@@ -808,17 +808,17 @@ void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
             break;
         }
 
-        if (bStatus==sal_False)
+        if (bStatus==false)
             break;
     }
 
     if (pMET->GetError())
-        bStatus=sal_False;
+        bStatus=false;
 }
 
 void METWriter::WriteDataDescriptor(const GDIMetaFile *)
 {
-    if (bStatus==sal_False)
+    if (bStatus==false)
         return;
 
     WriteFieldIntroducer(0,DscGrfObjMagic,0,0);
@@ -1128,7 +1128,7 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
 
     UpdateFieldSize();
 
-    if (pMET->GetError()) bStatus=sal_False;
+    if (pMET->GetError()) bStatus=false;
 }
 
 
@@ -1221,7 +1221,7 @@ void METWriter::METPopLineInfo( const LineInfo& rLineInfo )
     }
 }
 
-void METWriter::METBeginArea(sal_Bool bBoundaryLine)
+void METWriter::METBeginArea(bool bBoundaryLine)
 {
     WillWriteOrder(2);
     pMET->WriteUChar( (sal_uInt8)0x68 );
@@ -1293,17 +1293,17 @@ void METWriter::METLine(Point aPt1, Point aPt2)
 void METWriter::METLine(const Polygon & rPolygon)
 {
     sal_uInt16 nNumPoints,i,j,nOrderPoints;
-    sal_Bool bFirstOrder;
+    bool bFirstOrder;
 
-    bFirstOrder=sal_True;
+    bFirstOrder=true;
     i=0; nNumPoints=rPolygon.GetSize();
     while (i<nNumPoints) {
         nOrderPoints=nNumPoints-i;
         if (nOrderPoints>30) nOrderPoints=30;
         WillWriteOrder(nOrderPoints*8+2);
-        if (bFirstOrder==sal_True) {
+        if (bFirstOrder) {
             pMET->WriteUChar( (sal_uInt8)0xc1 ); // Line at given pos
-            bFirstOrder=sal_False;
+            bFirstOrder=false;
         }
         else {
             pMET->WriteUChar( (sal_uInt8)0x81 ); // Line at current pos
@@ -1333,7 +1333,7 @@ void METWriter::METLineAtCurPos(Point aPt)
 }
 
 
-void METWriter::METBox(sal_Bool bFill, sal_Bool bBoundary,
+void METWriter::METBox(bool bFill, bool bBoundary,
                        Rectangle aRect, sal_uInt32 nHAxis, sal_uInt32 nVAxis)
 {
     sal_uInt8 nFlags=0;
@@ -1491,7 +1491,7 @@ void METWriter::METSetChrSet(sal_uInt8 nSet)
 
 void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 {
-    if(bStatus==sal_False)
+    if(bStatus==false)
         return;
 
     for( size_t nA = 0, nACount = pMTF->GetActionSize(); nA < nACount; nA++ )
@@ -1516,7 +1516,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 METSetArcParams(1,1,0,0);
                 METSetMix(eGDIRasterOp);
                 METSetColor(aGDILineColor);
-                METBeginArea(sal_False);
+                METBeginArea(false);
                 METFullArc(pA->GetPoint(),0.5);
                 METEndArea();
             }
@@ -1554,14 +1554,14 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     METSetMix( eGDIRasterOp );
                     METSetColor( aGDIFillColor );
                     METSetBackgroundColor( aGDIFillColor );
-                    METBox( sal_True, sal_False, pA->GetRect(), 0, 0 );
+                    METBox( true, false, pA->GetRect(), 0, 0 );
                 }
 
                 if( aGDILineColor != Color( COL_TRANSPARENT ) )
                 {
                     METSetMix( eGDIRasterOp );
                     METSetColor( aGDILineColor );
-                    METBox( sal_False, sal_True, pA->GetRect(), 0, 0 );
+                    METBox( false, true, pA->GetRect(), 0, 0 );
                 }
             }
             break;
@@ -1575,14 +1575,14 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     METSetMix( eGDIRasterOp );
                     METSetColor( aGDIFillColor );
                     METSetBackgroundColor( aGDIFillColor );
-                    METBox( sal_True, sal_False, pA->GetRect(), pA->GetHorzRound(), pA->GetVertRound() );
+                    METBox( true, false, pA->GetRect(), pA->GetHorzRound(), pA->GetVertRound() );
                 }
 
                 if( aGDILineColor != Color( COL_TRANSPARENT ) )
                 {
                     METSetMix( eGDIRasterOp );
                     METSetColor( aGDILineColor );
-                    METBox( sal_False, sal_True, pA->GetRect(), pA->GetHorzRound(), pA->GetVertRound() );
+                    METBox( false, true, pA->GetRect(), pA->GetHorzRound(), pA->GetVertRound() );
                 }
             }
             break;
@@ -1602,7 +1602,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     METSetMix( eGDIRasterOp );
                     METSetColor( aGDIFillColor );
                     METSetBackgroundColor( aGDIFillColor );
-                    METBeginArea(sal_False);
+                    METBeginArea(false);
                     METFullArc(aCenter,0.5);
                     METEndArea();
                 }
@@ -2330,9 +2330,9 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
       MayCallback();
 
       if( pMET->GetError() )
-        bStatus=sal_False;
+        bStatus=false;
 
-      if( bStatus == sal_False )
+      if( bStatus == false )
         break;
     }
 }
@@ -2388,7 +2388,7 @@ void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
 {
     sal_uInt32 nSegmentSize,nPos,nDataFieldsStartPos;
 
-    if( bStatus==sal_False )
+    if( bStatus==false )
         return;
 
     //--- Das Feld 'Begin Graphics Object':
@@ -2442,13 +2442,13 @@ void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
     WriteFieldId(7);
 
     if( pMET->GetError() )
-        bStatus=sal_False;
+        bStatus=false;
 }
 
 
 void METWriter::WriteResourceGroup(const GDIMetaFile * pMTF)
 {
-    if( bStatus==sal_False )
+    if( bStatus==false )
         return;
 
     //--- The Field 'Begin Resource Group':
@@ -2467,13 +2467,13 @@ void METWriter::WriteResourceGroup(const GDIMetaFile * pMTF)
     WriteFieldId(2);
 
     if( pMET->GetError() )
-        bStatus=sal_False;
+        bStatus=false;
 }
 
 
 void METWriter::WriteDocument(const GDIMetaFile * pMTF)
 {
-    if( bStatus==sal_False )
+    if( bStatus==false )
         return;
 
     //--- The Field 'Begin Document':
@@ -2493,10 +2493,10 @@ void METWriter::WriteDocument(const GDIMetaFile * pMTF)
     WriteFieldId(1);
 
     if( pMET->GetError() )
-        bStatus=sal_False;
+        bStatus=false;
 }
 
-sal_Bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, FilterConfigItem* pFilterConfigItem )
+bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, FilterConfigItem* pFilterConfigItem )
 {
     if ( pFilterConfigItem )
     {
@@ -2511,7 +2511,7 @@ sal_Bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, 
     METChrSet*          pCS;
     METGDIStackMember*  pGS;
 
-    bStatus=sal_True;
+    bStatus=true;
     nLastPercent=0;
 
     pMET=&rTargetStream;

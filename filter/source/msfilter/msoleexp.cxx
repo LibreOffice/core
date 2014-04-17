@@ -81,7 +81,7 @@ OUString GetStorageType( const SvGlobalName& aEmbName )
     return OUString();
 }
 
-sal_Bool UseOldMSExport()
+bool UseOldMSExport()
 {
     uno::Reference< lang::XMultiServiceFactory > xProvider(
         configuration::theDefaultProvider::get(
@@ -98,7 +98,7 @@ sal_Bool UseOldMSExport()
         {
             uno::Any aResult = xNameAccess->getByName( "UseOldExport" );
 
-            sal_Bool bResult = sal_Bool();
+            bool bResult;
             if ( aResult >>= bResult )
                 return bResult;
         }
@@ -108,7 +108,7 @@ sal_Bool UseOldMSExport()
     }
 
     OSL_FAIL( "Could not get access to configuration entry!\n" );
-    return sal_False;
+    return false;
 }
 
 void SvxMSExportOLEObjects::ExportOLEObject( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg )
@@ -228,7 +228,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                                             OUString( "properties_stream" ),
                                             STREAM_STD_READWRITE);
 
-            sal_Bool bExtentSuccess = sal_False;
+            bool bExtentSuccess = false;
             if( !xExtStm->GetError() )
             {
                 // write extent

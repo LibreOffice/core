@@ -69,8 +69,8 @@ PageInfo::PageInfo()
         , mnBackgroundID( 0 )
         , mnObjectsID( 0)
         , mnForegroundID( 0)
-        , mbBackgroundVisible( sal_False )
-        , mbBackgroundObjectsVisible( sal_False )
+        , mbBackgroundVisible( false )
+        , mbBackgroundObjectsVisible( false )
 {
 }
 
@@ -95,7 +95,7 @@ FlashExporter::FlashExporter(
     const Reference< XDrawPage >& rxSelectedDrawPage,
 
     sal_Int32 nJPEGCompressMode,
-    sal_Bool bExportOLEAsJPEG)
+    bool bExportOLEAsJPEG)
     : mxContext(rxContext)
     // #i56084# variables for selection export
     , mxSelectedShapes(rxSelectedShapes)
@@ -139,7 +139,7 @@ const sal_uInt16 cBackgroundObjectsDepth = 3;
 const sal_uInt16 cPageObjectsDepth = 4;
 const sal_uInt16 cWaitButtonDepth = 10;
 
-sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOutputStream > &xOutputStream, Reference< XStatusIndicator> &xStatusIndicator )
+bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOutputStream > &xOutputStream, Reference< XStatusIndicator> &xStatusIndicator )
 {
     Reference< XServiceInfo > xDocServInfo( xDoc, UNO_QUERY );
     if( xDocServInfo.is() )
@@ -147,11 +147,11 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
 
     Reference< XDrawPagesSupplier > xDrawPagesSupplier(xDoc, UNO_QUERY);
     if(!xDrawPagesSupplier.is())
-        return sal_False;
+        return false;
 
     Reference< XIndexAccess > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY );
     if(!xDrawPages.is())
-        return sal_False;
+        return false;
 
     Reference< XDrawPage > xDrawPage;
 
@@ -212,7 +212,7 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
         Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
         if( mbPresentation )
         {
-            sal_Bool bVisible = sal_False;
+            bool bVisible = false;
             xPropSet->getPropertyValue( "Visible" ) >>= bVisible;
             if( !bVisible )
                 continue;
@@ -278,15 +278,15 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
 
     mpWriter->storeTo( xOutputStream );
 
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool FlashExporter::exportSlides( Reference< XDrawPage > xDrawPage, Reference< XOutputStream > &xOutputStream, sal_uInt16 /* nPage */ )
+bool FlashExporter::exportSlides( Reference< XDrawPage > xDrawPage, Reference< XOutputStream > &xOutputStream, sal_uInt16 /* nPage */ )
 {
     Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
     if( !xDrawPage.is() || !xPropSet.is() )
-        return sal_False;
+        return false;
 
     try
     {
@@ -300,10 +300,10 @@ sal_Bool FlashExporter::exportSlides( Reference< XDrawPage > xDrawPage, Referenc
 
         if( mbPresentation )
         {
-            sal_Bool bVisible = sal_False;
+            bool bVisible = false;
             xPropSet->getPropertyValue( "Visible" ) >>= bVisible;
             if( !bVisible )
-                return sal_False;
+                return false;
         }
     }
     catch( const Exception& )
@@ -315,10 +315,10 @@ sal_Bool FlashExporter::exportSlides( Reference< XDrawPage > xDrawPage, Referenc
 
     mpWriter->storeTo( xOutputStream );
 
-    return sal_True;
+    return true;
 }
 
-sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, Reference< XOutputStream > &xOutputStream, sal_uInt16 nPage, sal_Bool bExportObjects )
+sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, Reference< XOutputStream > &xOutputStream, sal_uInt16 nPage, bool bExportObjects )
 {
     Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
     if( !xDrawPage.is() || !xPropSet.is() )
@@ -347,14 +347,14 @@ sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, R
     return nPage;
 }
 
-sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, sal_uInt16 nPage, sal_Bool bExportObjects )
+sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, sal_uInt16 nPage, bool bExportObjects )
 {
     Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
     if( !xDrawPage.is() || !xPropSet.is() )
         return sal_False;
 
-    sal_Bool bBackgroundVisible = true;
-    sal_Bool bBackgroundObjectsVisible = true;
+    bool bBackgroundVisible = true;
+    bool bBackgroundObjectsVisible = true;
 
     if( mbPresentation )
     {
@@ -564,7 +564,7 @@ void FlashExporter::exportShape( const Reference< XShape >& xShape, bool bMaster
         try
         {
             // skip empty presentation objects
-            sal_Bool bEmpty = sal_False;
+            bool bEmpty = false;
             xPropSet->getPropertyValue( "IsEmptyPresentationObject" ) >>= bEmpty;
             if( bEmpty )
                 return;
@@ -677,7 +677,7 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
     if(bExportAsJPEG)
     {
         aFilterData[2].Name = "Translucent";
-        aFilterData[2].Value <<= (sal_Bool)sal_True;
+        aFilterData[2].Value <<= true;
     }
 
     Sequence< PropertyValue > aDescriptor( bOnlyBackground ? 4 : 3 );
@@ -695,7 +695,7 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
     if( bOnlyBackground )
     {
         aDescriptor[3].Name = "ExportOnlyBackground";
-        aDescriptor[3].Value <<= (sal_Bool)bOnlyBackground;
+        aDescriptor[3].Value <<= bOnlyBackground;
     }
     mxGraphicExporter->setSourceDocument( xComponent );
     mxGraphicExporter->filter( aDescriptor );

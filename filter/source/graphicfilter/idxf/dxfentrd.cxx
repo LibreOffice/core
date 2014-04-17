@@ -462,16 +462,16 @@ DXFEdgeTypeLine::~DXFEdgeTypeLine()
 {
 
 }
-sal_Bool DXFEdgeTypeLine::EvaluateGroup( DXFGroupReader & rDGR )
+bool DXFEdgeTypeLine::EvaluateGroup( DXFGroupReader & rDGR )
 {
-    sal_Bool bExecutingGroupCode = sal_True;
+    bool bExecutingGroupCode = true;
     switch ( rDGR.GetG() )
     {
         case 10 : aStartPoint.fx = rDGR.GetF(); break;
         case 20 : aStartPoint.fy = rDGR.GetF(); break;
         case 11 : aEndPoint.fx = rDGR.GetF(); break;
         case 21 : aEndPoint.fy = rDGR.GetF(); break;
-        default : bExecutingGroupCode = sal_False; break;
+        default : bExecutingGroupCode = false; break;
     }
     return  bExecutingGroupCode;
 }
@@ -487,9 +487,9 @@ DXFEdgeTypeCircularArc::DXFEdgeTypeCircularArc() :
 DXFEdgeTypeCircularArc::~DXFEdgeTypeCircularArc()
 {
 }
-sal_Bool DXFEdgeTypeCircularArc::EvaluateGroup( DXFGroupReader & rDGR )
+bool DXFEdgeTypeCircularArc::EvaluateGroup( DXFGroupReader & rDGR )
 {
-    sal_Bool bExecutingGroupCode = sal_True;
+    bool bExecutingGroupCode = true;
     switch ( rDGR.GetG() )
     {
         case 10 : aCenter.fx = rDGR.GetF(); break;
@@ -498,7 +498,7 @@ sal_Bool DXFEdgeTypeCircularArc::EvaluateGroup( DXFGroupReader & rDGR )
         case 50 : fStartAngle = rDGR.GetF(); break;
         case 51 : fEndAngle = rDGR.GetF(); break;
         case 73 : nIsCounterClockwiseFlag = rDGR.GetI(); break;
-        default : bExecutingGroupCode = sal_False; break;
+        default : bExecutingGroupCode = false; break;
     }
     return  bExecutingGroupCode;
 }
@@ -515,9 +515,9 @@ DXFEdgeTypeEllipticalArc::~DXFEdgeTypeEllipticalArc()
 {
 
 }
-sal_Bool DXFEdgeTypeEllipticalArc::EvaluateGroup( DXFGroupReader & rDGR )
+bool DXFEdgeTypeEllipticalArc::EvaluateGroup( DXFGroupReader & rDGR )
 {
-    sal_Bool bExecutingGroupCode = sal_True;
+    bool bExecutingGroupCode = true;
     switch( rDGR.GetG() )
     {
         case 10 : aCenter.fx = rDGR.GetF(); break;
@@ -528,7 +528,7 @@ sal_Bool DXFEdgeTypeEllipticalArc::EvaluateGroup( DXFGroupReader & rDGR )
         case 50 : fStartAngle = rDGR.GetF(); break;
         case 51 : fEndAngle = rDGR.GetF(); break;
         case 73 : nIsCounterClockwiseFlag = rDGR.GetI(); break;
-        default : bExecutingGroupCode = sal_False; break;
+        default : bExecutingGroupCode = false; break;
     }
     return  bExecutingGroupCode;
 }
@@ -546,9 +546,9 @@ DXFEdgeTypeSpline::~DXFEdgeTypeSpline()
 {
 
 }
-sal_Bool DXFEdgeTypeSpline::EvaluateGroup( DXFGroupReader & rDGR )
+bool DXFEdgeTypeSpline::EvaluateGroup( DXFGroupReader & rDGR )
 {
-    sal_Bool bExecutingGroupCode = sal_True;
+    bool bExecutingGroupCode = true;
     switch ( rDGR.GetG() )
     {
         case 94 : nDegree = rDGR.GetI(); break;
@@ -556,7 +556,7 @@ sal_Bool DXFEdgeTypeSpline::EvaluateGroup( DXFGroupReader & rDGR )
         case 74 : nPeriodic = rDGR.GetI(); break;
         case 95 : nKnotCount = rDGR.GetI(); break;
         case 96 : nControlCount = rDGR.GetI(); break;
-        default : bExecutingGroupCode = sal_False; break;
+        default : bExecutingGroupCode = false; break;
     }
     return  bExecutingGroupCode;
 }
@@ -569,7 +569,7 @@ DXFBoundaryPathData::DXFBoundaryPathData() :
     fBulge( 0.0 ),
     nSourceBoundaryObjects( 0 ),
     nEdgeCount( 0 ),
-    bIsPolyLine( sal_True ),
+    bIsPolyLine( true ),
     nPointIndex( 0 ),
     pP( NULL )
 {
@@ -583,9 +583,9 @@ DXFBoundaryPathData::~DXFBoundaryPathData()
     delete[] pP;
 }
 
-sal_Bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
+bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
 {
-    sal_Bool bExecutingGroupCode = sal_True;
+    bool bExecutingGroupCode = true;
     if ( bIsPolyLine )
     {
         switch( rDGR.GetG() )
@@ -594,7 +594,7 @@ sal_Bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
             {
                 nFlags = rDGR.GetI();
                 if ( ( nFlags & 2 ) == 0 )
-                    bIsPolyLine = sal_False;
+                    bIsPolyLine = false;
             }
             break;
             case 93 :
@@ -621,7 +621,7 @@ sal_Bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
             }
             break;
 
-            default : bExecutingGroupCode = sal_False; break;
+            default : bExecutingGroupCode = false; break;
         }
     }
     else
@@ -642,14 +642,14 @@ sal_Bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
         else if ( aEdges.size() )
             aEdges[ aEdges.size() - 1 ]->EvaluateGroup( rDGR );
         else
-            bExecutingGroupCode = sal_False;
+            bExecutingGroupCode = false;
     }
     return bExecutingGroupCode;
 }
 
 DXFHatchEntity::DXFHatchEntity() :
     DXFBasicEntity( DXF_HATCH ),
-    bIsInBoundaryPathContext( sal_False ),
+    bIsInBoundaryPathContext( false ),
     nCurrentBoundaryPathIndex( -1 ),
     nFlags( 0 ),
     nAssociativityFlag( 0 ),
@@ -677,7 +677,7 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
         case 71 : nAssociativityFlag = rDGR.GetI(); break;
         case 91 :
         {
-            bIsInBoundaryPathContext = sal_True;
+            bIsInBoundaryPathContext = true;
             nBoundaryPathCount = rDGR.GetI();
             if ( nBoundaryPathCount )
                 pBoundaryPathData = new DXFBoundaryPathData[ nBoundaryPathCount ];
@@ -686,7 +686,7 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
         case 75 :
         {
             nHatchStyle = rDGR.GetI();
-            bIsInBoundaryPathContext = sal_False;
+            bIsInBoundaryPathContext = false;
         }
         break;
         case 76 : nHatchPatternType = rDGR.GetI(); break;
@@ -702,14 +702,14 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
             //fallthrough
         default:
         {
-            sal_Bool bExecutingGroupCode = sal_False;
+            bool bExecutingGroupCode = false;
             if ( bIsInBoundaryPathContext )
             {
                 if ( ( nCurrentBoundaryPathIndex >= 0 ) &&
                     ( nCurrentBoundaryPathIndex < nBoundaryPathCount ) )
                     bExecutingGroupCode = pBoundaryPathData[ nCurrentBoundaryPathIndex ].EvaluateGroup( rDGR );
             }
-            if ( bExecutingGroupCode == sal_False )
+            if ( bExecutingGroupCode == false )
                 DXFBasicEntity::EvaluateGroup(rDGR);
         }
         break;

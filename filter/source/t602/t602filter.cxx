@@ -238,7 +238,7 @@ void T602ImportFilter::inschr(unsigned char ch)
     inschrdef(ch);
 }
 
-sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
 {
     Reset602();
@@ -254,7 +254,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     if ( !mxInputStream.is() )
     {
         OSL_ASSERT( false );
-        return sal_False;
+        return false;
     }
 
     // An XML import service: what we push sax messages to..
@@ -445,7 +445,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
 
     mxHandler->endDocument();
 
-    return sal_True;
+    return true;
 }
 
 void T602ImportFilter::Reset602()
@@ -906,7 +906,7 @@ Locale SAL_CALL T602ImportFilterDialog::getLocale()
     return meLocale;
 }
 
-sal_Bool T602ImportFilterDialog::OptionsDlg()
+bool T602ImportFilterDialog::OptionsDlg()
 {
     Any any;
 #define _propInt(_prop,_nam,_val) \
@@ -916,7 +916,7 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
     any <<= (sal_Int16)_val;\
     _prop->setPropertyValue(OUString::createFromAscii(_nam), any);
 #define _propBool(_prop,_nam,_val) \
-    any <<= (sal_Bool)_val;\
+    any <<= _val;\
     _prop->setPropertyValue(OUString::createFromAscii(_nam), any);
 #define _propString(_prop,_nam,_val) \
     any <<= OUString::createFromAscii(_val);\
@@ -1066,7 +1066,7 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
     dialog->setVisible( false );
     dialog->createPeer( xToolkit, NULL );
 
-    sal_Bool ret = ( dialog->execute() != 0 );
+    bool ret = ( dialog->execute() != 0 );
     if ( ret ) {
 
         sal_Int16 tt = 0;

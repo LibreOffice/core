@@ -100,7 +100,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
             @return sal_True if all given properties exists
                     at this item; sal_False otherwise.
          */
-        sal_Bool haveProps(const CacheItem& lProps) const;
+        bool haveProps(const CacheItem& lProps) const;
 
 
 
@@ -117,7 +117,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
             @return sal_False if at least on property exists at this item(!);
                     sal_True otherwise.
          */
-        sal_Bool dontHaveProps(const CacheItem& lProps) const;
+        bool dontHaveProps(const CacheItem& lProps) const;
 
 
 
@@ -134,7 +134,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
             @return sal_True if all given properties dont exists
                     at this item; sal_False otherwise.
          */
-        sal_Bool excludeProps(const CacheItem& lProps) const;
+        bool excludeProps(const CacheItem& lProps) const;
 
 
 

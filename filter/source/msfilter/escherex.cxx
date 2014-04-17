@@ -668,11 +668,11 @@ void EscherPropertyContainer::CreateTextProperties(
     sal_Int32 nBottom           ( 0 );
 
     // used with normal shapes:
-    sal_Bool bAutoGrowWidth     ( sal_False );
-    sal_Bool bAutoGrowHeight    ( sal_False );
+    bool bAutoGrowWidth     ( false );
+    bool bAutoGrowHeight    ( false );
     // used with ashapes:
-    sal_Bool bWordWrap          ( sal_False );
-    sal_Bool bAutoGrowSize      ( sal_False );
+    bool bWordWrap          ( false );
+    bool bAutoGrowSize      ( false );
 
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "TextWritingMode" ), true ) )
         aAny >>= eWM;
@@ -855,7 +855,7 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
     const OUString sLine      ( bLineStart ? sLineStart : sLineEnd );
     const OUString sLineName  ( bLineStart ? sLineStartName : sLineEndName );
 
-    sal_Bool bIsArrow = sal_False;
+    bool bIsArrow = false;
 
     ::com::sun::star::uno::Any aAny;
     if ( EscherPropertyValueHelper::GetPropertyValue(
@@ -864,7 +864,7 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
         PolyPolygon aPolyPoly( EscherPropertyContainer::GetPolyPolygon( aAny ) );
         if ( aPolyPoly.Count() && aPolyPoly[ 0 ].GetSize() )
         {
-            bIsArrow = sal_True;
+            bIsArrow = true;
 
             reLineEnd     = ESCHER_LineArrowEnd;
             rnArrowLength = 1;
@@ -877,7 +877,7 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
                 sal_Int16       nWhich = bLineStart ? XATTR_LINESTART : XATTR_LINEEND;
 
                 OUString aApiName = SvxUnogetApiNameForItem(nWhich, aArrowStartName);
-                sal_Bool bIsMapped = sal_True;
+                bool bIsMapped = true;
                 if ( !aApiName.isEmpty() )
                 {
 
@@ -911,12 +911,12 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
                     else if ( aApiName == "Arrow" )
                         reLineEnd = ESCHER_LineArrowEnd;
                     else
-                        bIsMapped = sal_False;
+                        bIsMapped = false;
 
                 }
                 if ( !bIsMapped && comphelper::string::getTokenCount(aArrowStartName, ' ') == 2 )
                 {
-                    sal_Bool b = sal_True;
+                    bool b = true;
                     OUString aArrowName( aArrowStartName.getToken( 0, ' ' ) );
                     if (  aArrowName == "msArrowEnd" )
                         reLineEnd = ESCHER_LineArrowEnd;
@@ -929,7 +929,7 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
                     else if ( aArrowName == "msArrowOvalEnd" )
                         reLineEnd = ESCHER_LineArrowOvalEnd;
                     else
-                        b = sal_False;
+                        b = false;
 
                     // now we have the arrow, and try to determine the arrow size;
                     if ( b )
@@ -957,14 +957,14 @@ void EscherPropertyContainer::CreateLineProperties(
     sal_Int32 nArrowLength;
     sal_Int32 nArrowWidth;
 
-    sal_Bool bSwapLineEnds = sal_False;
+    bool bSwapLineEnds = false;
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "CircleKind" ), true ) )
     {
         ::com::sun::star::drawing::CircleKind  eCircleKind;
         if ( aAny >>= eCircleKind )
         {
             if ( eCircleKind == ::com::sun::star::drawing::CircleKind_ARC )
-                bSwapLineEnds = sal_True;
+                bSwapLineEnds = true;
         }
     }
     if ( GetLineArrow( bSwapLineEnds ? sal_False : sal_True, rXPropSet, eLineEnd, nArrowLength, nArrowWidth ) )
@@ -1245,7 +1245,7 @@ bool EscherPropertyContainer::CreateShapeProperties( const ::com::sun::star::uno
     uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
     if ( aXPropSet.is() )
     {
-        sal_Bool bVal = false;
+        bool bVal = false;
         ::com::sun::star::uno::Any aAny;
         sal_uInt32 nShapeAttr = 0;
         EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, OUString( "Visible" ), true );
@@ -1430,10 +1430,10 @@ bool EscherPropertyContainer::CreateGraphicProperties(
             const bool bFillBitmapModeAllowed, const bool bOOxmlExport )
 {
     bool        bRetValue = false;
-    sal_Bool        bCreateFillStyles = sal_False;
+    bool        bCreateFillStyles = false;
 
-    sal_Bool        bMirrored = sal_False;
-    sal_Bool        bRotate   = sal_True;
+    bool        bMirrored = false;
+    bool        bRotate   = true;
     boost::scoped_ptr<GraphicAttr> pGraphicAttr;
     GraphicObject   aGraphicObject;
     OUString        aGraphicUrl;
@@ -1459,7 +1459,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
             sal_uInt32          nAryLen = aSeq.getLength();
 
             // the metafile is already rotated
-            bRotate = sal_False;
+            bRotate = false;
 
             if ( pAry && nAryLen )
             {
@@ -1498,7 +1498,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
         else if ( rSource == "GraphicURL" )
         {
             aGraphicUrl = *(OUString*)aAny.getValue();
-            bCreateFillStyles = sal_True;
+            bCreateFillStyles = true;
         }
         else if ( rSource == "FillHatch" )
         {
@@ -1787,7 +1787,7 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
 
     if ( aAny >>= aXPropSet )
     {
-        sal_Bool bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sPolyPolygonBezier, true );
+        bool bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sPolyPolygonBezier, true );
         if ( !bHasProperty )
             bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sPolyPolygon, true );
         if ( !bHasProperty )
@@ -1802,7 +1802,7 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
 
 PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno::Any& rAny )
 {
-    sal_Bool bNoError = sal_True;
+    bool bNoError = true;
 
     Polygon aPolygon;
     PolyPolygon aPolyPolygon;
@@ -2021,7 +2021,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
     static OUString sPolyPolygon        ( "PolyPolygon" );
 
     bool    bRetValue = true;
-    sal_Bool    bLine = ( nFlags & ESCHER_CREATEPOLYGON_LINE ) != 0;
+    bool    bLine = ( nFlags & ESCHER_CREATEPOLYGON_LINE ) != 0;
 
     PolyPolygon aPolyPolygon;
 
@@ -2208,7 +2208,7 @@ sal_Int32 lcl_GetConnectorAdjustValue ( const XPolygon& rPoly, sal_uInt16 nIndex
     if ( aEnd.X() == aStart.X() )
         aEnd.X() = aStart.X() +4;
 
-    sal_Bool bVertical = ( rPoly[1].X()-aStart.X() ) == 0 ;
+    bool bVertical = ( rPoly[1].X()-aStart.X() ) == 0 ;
     // vertical and horizon alternate
     if ( nIndex%2 == 1 ) bVertical = !bVertical;
     aPt = rPoly[ nIndex + 1];
@@ -2433,7 +2433,7 @@ bool EscherPropertyContainer::CreateShadowProperties(
 {
     ::com::sun::star::uno::Any aAny;
 
-    sal_Bool    bHasShadow = sal_False; // shadow is possible only if at least a fillcolor, linecolor or graphic is set
+    bool    bHasShadow = false; // shadow is possible only if at least a fillcolor, linecolor or graphic is set
     sal_uInt32  nLineFlags = 0;         // default : shape has no line
     sal_uInt32  nFillFlags = 0x10;      //           shape is filled
 
@@ -2441,7 +2441,7 @@ bool EscherPropertyContainer::CreateShadowProperties(
     GetOpt( ESCHER_Prop_fNoFillHitTest, nFillFlags );
 
     sal_uInt32 nDummy;
-    sal_Bool bGraphic = GetOpt( DFF_Prop_pib, nDummy ) || GetOpt( DFF_Prop_pibName, nDummy ) || GetOpt( DFF_Prop_pibFlags, nDummy );
+    bool bGraphic = GetOpt( DFF_Prop_pib, nDummy ) || GetOpt( DFF_Prop_pibName, nDummy ) || GetOpt( DFF_Prop_pibFlags, nDummy );
 
     sal_uInt32 nShadowFlags = 0x20000;
     if ( ( nLineFlags & 8 ) || ( nFillFlags & 0x10 ) || bGraphic )
@@ -2500,7 +2500,7 @@ sal_Int32 EscherPropertyContainer::GetValueForEnhancedCustomShapeParameter( cons
             if(bAdjustTrans)
             {
                 sal_uInt32 nAdjustValue = 0;
-                sal_Bool bGot = GetOpt((sal_uInt16)( DFF_Prop_adjustValue + nValue ), nAdjustValue);
+                bool bGot = GetOpt((sal_uInt16)( DFF_Prop_adjustValue + nValue ), nAdjustValue);
                 if(bGot) nValue = (sal_Int32)nAdjustValue;
             }
         }
@@ -2521,7 +2521,7 @@ sal_Int32 EscherPropertyContainer::GetValueForEnhancedCustomShapeParameter( cons
 
 bool GetValueForEnhancedCustomShapeHandleParameter( sal_Int32& nRetValue, const com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter )
 {
-    sal_Bool bSpecial = sal_False;
+    bool bSpecial = false;
     nRetValue = 0;
     if ( rParameter.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
     {
@@ -2537,27 +2537,27 @@ bool GetValueForEnhancedCustomShapeHandleParameter( sal_Int32& nRetValue, const 
         case com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION :
         {
             nRetValue += 3;
-            bSpecial = sal_True;
+            bSpecial = true;
         }
         break;
         case com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT :
         {
             nRetValue += 0x100;
-            bSpecial = sal_True;
+            bSpecial = true;
         }
         break;
         case com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP :
         case com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT :
         {
             nRetValue = 0;
-            bSpecial = sal_True;
+            bSpecial = true;
         }
         break;
         case com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT :
         case com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM :
         {
             nRetValue = 1;
-            bSpecial = sal_True;
+            bSpecial = true;
         }
         break;
         case com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL :
@@ -2651,7 +2651,7 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
 
 bool EscherPropertyContainer::IsDefaultObject( SdrObjCustomShape* pCustoShape , const MSO_SPT eShapeType )
 {
-    sal_Bool bIsDefaultObject = sal_False;
+    bool bIsDefaultObject = false;
     switch(eShapeType)
     {
         // if the custom shape is not default shape of ppt, return sal_Fasle;
@@ -2672,7 +2672,7 @@ bool EscherPropertyContainer::IsDefaultObject( SdrObjCustomShape* pCustoShape , 
            && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_STRETCHX )
            && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_STRETCHY )
            && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_TEXTFRAMES ) )
-        bIsDefaultObject = sal_True;
+        bIsDefaultObject = true;
     }
 
     return bIsDefaultObject;
@@ -2701,7 +2701,7 @@ bool EscherPropertyContainer::GetAdjustmentValue( const com::sun::star::drawing:
     if ( rkProp.State != beans::PropertyState_DIRECT_VALUE )
         return false;
 
-    sal_Bool bUseFixedFloat = ( nAdjustmentsWhichNeedsToBeConverted & ( 1 << nIndex ) ) != 0;
+    bool bUseFixedFloat = ( nAdjustmentsWhichNeedsToBeConverted & ( 1 << nIndex ) ) != 0;
     if ( rkProp.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
     {
         double fValue(0.0);
@@ -2748,8 +2748,8 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
 
             sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
             uno::Sequence< beans::PropertyValues > aHandlesPropSeq;
-            sal_Bool bPredefinedHandlesUsed = sal_True;
-            sal_Bool bIsDefaultObject = IsDefaultObject( pCustoShape , eShapeType);
+            bool bPredefinedHandlesUsed = true;
+            bool bIsDefaultObject = IsDefaultObject( pCustoShape , eShapeType);
 
             // convert property "Equations" into std::vector< EnhancedCustomShapeEquationEquation >
             std::vector< EnhancedCustomShapeEquation >  aEquations;
@@ -2833,7 +2833,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
 
                             if ( rrProp.Name.equals( sExtrusion ) )
                             {
-                                sal_Bool bExtrusionOn = sal_Bool();
+                                bool bExtrusionOn;
                                 if ( rrProp.Value >>= bExtrusionOn )
                                 {
                                     nLightFaceFlags |= 0x80000;
@@ -2883,7 +2883,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionLightFace ) )
                             {
-                                sal_Bool bExtrusionLightFace = sal_Bool();
+                                bool bExtrusionLightFace;
                                 if ( rrProp.Value >>= bExtrusionLightFace )
                                 {
                                     nLightFaceFlags |= 0x10000;
@@ -2895,7 +2895,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionFirstLightHarsh ) )
                             {
-                                sal_Bool bExtrusionFirstLightHarsh = sal_Bool();
+                                bool bExtrusionFirstLightHarsh;
                                 if ( rrProp.Value >>= bExtrusionFirstLightHarsh )
                                 {
                                     nFillHarshFlags |= 0x20000;
@@ -2907,7 +2907,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionSecondLightHarsh ) )
                             {
-                                sal_Bool bExtrusionSecondLightHarsh = sal_Bool();
+                                bool bExtrusionSecondLightHarsh;
                                 if ( rrProp.Value >>= bExtrusionSecondLightHarsh )
                                 {
                                     nFillHarshFlags |= 0x10000;
@@ -2951,7 +2951,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionMetal ) )
                             {
-                                sal_Bool bExtrusionMetal = sal_Bool();
+                                bool bExtrusionMetal;
                                 if ( rrProp.Value >>= bExtrusionMetal )
                                 {
                                     nLightFaceFlags |= 0x40000;
@@ -3069,7 +3069,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionColor ) )
                             {
-                                sal_Bool bExtrusionColor = sal_Bool();
+                                bool bExtrusionColor;
                                 if ( rrProp.Value >>= bExtrusionColor )
                                 {
                                     nLightFaceFlags |= 0x20000;
@@ -3156,7 +3156,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
 
                             if ( rrProp.Name.equals( sPathExtrusionAllowed ) )
                             {
-                                sal_Bool bExtrusionAllowed = sal_Bool();
+                                bool bExtrusionAllowed;
                                 if ( rrProp.Value >>= bExtrusionAllowed )
                                 {
                                     nPathFlags |= 0x100000;
@@ -3168,7 +3168,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sPathConcentricGradientFillAllowed ) )
                             {
-                                sal_Bool bConcentricGradientFillAllowed = sal_Bool();
+                                bool bConcentricGradientFillAllowed;
                                 if ( rrProp.Value >>= bConcentricGradientFillAllowed )
                                 {
                                     nPathFlags |= 0x20000;
@@ -3180,7 +3180,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sPathTextPathAllowed ) )
                             {
-                                sal_Bool bTextPathAllowed = sal_Bool();
+                                bool bTextPathAllowed;
                                 if ( rrProp.Value >>= bTextPathAllowed )
                                 {
                                     nPathFlags |= 0x40000;
@@ -3438,7 +3438,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
 
                             if ( rrProp.Name.equals( sTextPath ) )
                             {
-                                sal_Bool bTextPathOn = sal_Bool();
+                                bool bTextPathOn;
                                 if ( rrProp.Value >>= bTextPathOn )
                                 {
                                     nTextPathFlags |= 0x40000000;
@@ -3470,7 +3470,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sTextPathScaleX ) )
                             {
-                                sal_Bool bTextPathScaleX = sal_Bool();
+                                bool bTextPathScaleX;
                                 if ( rrProp.Value >>= bTextPathScaleX )
                                 {
                                     nTextPathFlags |= 0x00400000;
@@ -3482,7 +3482,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sSameLetterHeights ) )
                             {
-                                sal_Bool bSameLetterHeights = sal_Bool();
+                                bool bSameLetterHeights;
                                 if ( rrProp.Value >>= bSameLetterHeights )
                                 {
                                     nTextPathFlags |= 0x00800000;
@@ -3620,7 +3620,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                 {
                     if ( !bIsDefaultObject )
                     {
-                        bPredefinedHandlesUsed = sal_False;
+                        bPredefinedHandlesUsed = false;
                         if ( rProp.Value >>= aHandlesPropSeq )
                         {
                             sal_uInt16 nElements = (sal_uInt16)aHandlesPropSeq.getLength();
@@ -3673,7 +3673,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         }
                                         else if ( rPropVal.Name.equals( sMirroredX ) )
                                         {
-                                            sal_Bool bMirroredX = sal_Bool();
+                                            bool bMirroredX;
                                             if ( rPropVal.Value >>= bMirroredX )
                                             {
                                                 if ( bMirroredX )
@@ -3682,7 +3682,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         }
                                         else if ( rPropVal.Name.equals( sMirroredY ) )
                                         {
-                                            sal_Bool bMirroredY = sal_Bool();
+                                            bool bMirroredY;
                                             if ( rPropVal.Value >>= bMirroredY )
                                             {
                                                 if ( bMirroredY )
@@ -3691,7 +3691,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         }
                                         else if ( rPropVal.Name.equals( sSwitched ) )
                                         {
-                                            sal_Bool bSwitched = sal_Bool();
+                                            bool bSwitched;
                                             if ( rPropVal.Value >>= bSwitched )
                                             {
                                                 if ( bSwitched )
@@ -3899,13 +3899,13 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
                     }
                     else if ( rProp.Name == "MirroredX" )
                     {
-                        sal_Bool bMirroredX = sal_Bool();
+                        bool bMirroredX;
                         if ( ( rProp.Value >>= bMirroredX ) && bMirroredX )
                             nMirrorFlags  |= SHAPEFLAG_FLIPH;
                     }
                     else if ( rProp.Name == "MirroredY" )
                     {
-                        sal_Bool bMirroredY = sal_Bool();
+                        bool bMirroredY;
                         if ( ( rProp.Value >>= bMirroredY ) && bMirroredY )
                             nMirrorFlags  |= SHAPEFLAG_FLIPV;
                     }
@@ -4348,7 +4348,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
             }
         }
 
-        sal_Bool            bUseNativeGraphic( sal_False );
+        bool            bUseNativeGraphic( false );
 
         Graphic             aGraphic( aGraphicObject.GetTransformedGraphic( pGraphicAttr ) );
         GfxLink             aGraphicLink;
@@ -4403,7 +4403,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                     default: break;
                 }
                 if ( p_EscherBlibEntry->meBlibType != UNKNOWN )
-                    bUseNativeGraphic = sal_True;
+                    bUseNativeGraphic = true;
             }
         }
         if ( !bUseNativeGraphic )

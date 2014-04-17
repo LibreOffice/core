@@ -357,7 +357,7 @@ css::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
 sal_Bool SAL_CALL BaseContainer::hasByName(const OUString& sItem)
     throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool bHasOne = sal_False;
+    bool bHasOne = false;
 
     impl_loadOnDemand();
 
@@ -372,7 +372,7 @@ sal_Bool SAL_CALL BaseContainer::hasByName(const OUString& sItem)
     catch(const css::uno::Exception&)
     {
         // invalid cache!?
-        bHasOne = sal_False;
+        bHasOne = false;
     }
 
     // <- SAFE
@@ -395,7 +395,7 @@ css::uno::Type SAL_CALL BaseContainer::getElementType()
 sal_Bool SAL_CALL BaseContainer::hasElements()
     throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool bHasSome = sal_False;
+    bool bHasSome = false;
 
     impl_loadOnDemand();
 
@@ -410,7 +410,7 @@ sal_Bool SAL_CALL BaseContainer::hasElements()
     catch(const css::uno::Exception&)
     {
         // invalid cache?!
-        bHasSome = sal_False;
+        bHasSome = false;
     }
 
     // <- SAFE

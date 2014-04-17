@@ -42,11 +42,11 @@ class GIFWriter
     long                nActX;
     long                nActY;
     sal_Int32           nInterlaced;
-    sal_Bool                bStatus;
-    sal_Bool                bTransparent;
+    bool                bStatus;
+    bool                bTransparent;
 
     void                MayCallback( sal_uLong nPercent );
-    void                WriteSignature( sal_Bool bGIF89a );
+    void                WriteSignature( bool bGIF89a );
     void                WriteGlobalHeader( const Size& rSize );
     void                WriteLoopExtension( const Animation& rAnimation );
     void                WriteLogSizeExtension( const Size& rSize100 );
@@ -56,11 +56,11 @@ class GIFWriter
     void                WriteAccess();
     void                WriteTerminator();
 
-    sal_Bool                CreateAccess( const BitmapEx& rBmpEx );
+    bool                CreateAccess( const BitmapEx& rBmpEx );
     void                DestroyAccess();
 
     void                WriteAnimation( const Animation& rAnimation );
-    void                WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint, sal_Bool bExtended,
+    void                WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint, bool bExtended,
                                        long nTimer = 0, Disposal eDisposal = DISPOSE_NOT );
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
@@ -70,7 +70,7 @@ public:
     GIFWriter(SvStream &rStream);
     ~GIFWriter() {}
 
-    sal_Bool WriteGIF( const Graphic& rGraphic, FilterConfigItem* pConfigItem );
+    bool WriteGIF( const Graphic& rGraphic, FilterConfigItem* pConfigItem );
 };
 
 GIFWriter::GIFWriter(SvStream &rStream)
@@ -89,7 +89,7 @@ GIFWriter::GIFWriter(SvStream &rStream)
 
 
 
-sal_Bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
+bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     if ( pFilterConfigItem )
     {
@@ -103,12 +103,12 @@ sal_Bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterC
 
     Size            aSize100;
     const MapMode   aMap( rGraphic.GetPrefMapMode() );
-    sal_Bool            bLogSize = ( aMap.GetMapUnit() != MAP_PIXEL );
+    bool            bLogSize = ( aMap.GetMapUnit() != MAP_PIXEL );
 
     if( bLogSize )
         aSize100 = Application::GetDefaultDevice()->LogicToLogic( rGraphic.GetPrefSize(), aMap, MAP_100TH_MM );
 
-    bStatus = sal_True;
+    bStatus = true;
     nLastPercent = 0;
     nInterlaced = 0;
     m_pAcc = NULL;
@@ -122,7 +122,7 @@ sal_Bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterC
     {
         const Animation& rAnimation = rGraphic.GetAnimation();
 
-        WriteSignature( sal_True );
+        WriteSignature( true );
 
         if ( bStatus )
         {
@@ -139,7 +139,7 @@ sal_Bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterC
     }
     else
     {
-        const sal_Bool bGrafTrans = rGraphic.IsTransparent();
+        const bool bGrafTrans = rGraphic.IsTransparent();
 
         BitmapEx aBmpEx;
 
@@ -179,7 +179,7 @@ sal_Bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterC
 
 
 void GIFWriter::WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint,
-                               sal_Bool bExtended, long nTimer, Disposal eDisposal )
+                               bool bExtended, long nTimer, Disposal eDisposal )
 {
     if( CreateAccess( rBmpEx ) )
     {
@@ -223,7 +223,7 @@ void GIFWriter::WriteAnimation( const Animation& rAnimation )
         {
             const AnimationBitmap& rAnimBmp = rAnimation.Get( i );
 
-            WriteBitmapEx( rAnimBmp.aBmpEx, rAnimBmp.aPosPix, sal_True,
+            WriteBitmapEx( rAnimBmp.aBmpEx, rAnimBmp.aPosPix, true,
                            rAnimBmp.nWait, rAnimBmp.eDisposal );
             nMinPercent = nMaxPercent;
             nMaxPercent = (sal_uLong) ( nMaxPercent + fStep );
@@ -248,14 +248,14 @@ void GIFWriter::MayCallback( sal_uLong nPercent )
 
 
 
-sal_Bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
+bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
 {
     if( bStatus )
     {
         Bitmap aMask( rBmpEx.GetMask() );
 
         aAccBmp = rBmpEx.GetBitmap();
-        bTransparent = sal_False;
+        bTransparent = false;
 
         if( !!aMask )
         {
@@ -263,7 +263,7 @@ sal_Bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
             {
                 aMask.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
                 aAccBmp.Replace( aMask, BMP_COL_TRANS );
-                bTransparent = sal_True;
+                bTransparent = true;
             }
             else
                 aAccBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
@@ -274,7 +274,7 @@ sal_Bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
         m_pAcc = aAccBmp.AcquireReadAccess();
 
         if( !m_pAcc )
-            bStatus = sal_False;
+            bStatus = false;
     }
 
     return bStatus;
@@ -290,14 +290,14 @@ void GIFWriter::DestroyAccess()
 
 
 
-void GIFWriter::WriteSignature( sal_Bool bGIF89a )
+void GIFWriter::WriteSignature( bool bGIF89a )
 {
     if( bStatus )
     {
         m_rGIF.Write( bGIF89a ? "GIF89a" : "GIF87a" , 6 );
 
         if( m_rGIF.GetError() )
-            bStatus = sal_False;
+            bStatus = false;
     }
 }
 
@@ -327,7 +327,7 @@ void GIFWriter::WriteGlobalHeader( const Size& rSize )
         m_rGIF.WriteUInt16( (sal_uInt16) 65535 );
 
         if( m_rGIF.GetError() )
-            bStatus = sal_False;
+            bStatus = false;
     }
 }
 
@@ -411,7 +411,7 @@ void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
         m_rGIF.WriteUChar( (sal_uInt8) 0x00 );
 
         if( m_rGIF.GetError() )
-            bStatus = sal_False;
+            bStatus = false;
     }
 }
 
@@ -443,7 +443,7 @@ void GIFWriter::WriteLocalHeader()
         m_rGIF.WriteUChar( cFlags );
 
         if( m_rGIF.GetError() )
-            bStatus = sal_False;
+            bStatus = false;
     }
 }
 
@@ -470,7 +470,7 @@ void GIFWriter::WritePalette()
             m_rGIF.SeekRel( ( nMaxCount - nCount ) * 3 );
 
         if( m_rGIF.GetError() )
-            bStatus = sal_False;
+            bStatus = false;
     }
 }
 
@@ -483,7 +483,7 @@ void GIFWriter::WriteAccess()
     const long          nHeight = m_pAcc->Height();
     boost::scoped_array<sal_uInt8> pBuffer;
     const sal_uLong         nFormat = m_pAcc->GetScanlineFormat();
-    sal_Bool                bNative = ( BMP_FORMAT_8BIT_PAL == nFormat );
+    bool                bNative = ( BMP_FORMAT_8BIT_PAL == nFormat );
 
     if( !bNative )
         pBuffer.reset(new sal_uInt8[ nWidth ]);
@@ -532,7 +532,7 @@ void GIFWriter::WriteAccess()
             }
 
             if ( m_rGIF.GetError() )
-                bStatus = sal_False;
+                bStatus = false;
 
             MayCallback( nMinPercent + ( nMaxPercent - nMinPercent ) * i / nHeight );
 
@@ -543,7 +543,7 @@ void GIFWriter::WriteAccess()
         aCompressor.EndCompression();
 
         if ( m_rGIF.GetError() )
-            bStatus = sal_False;
+            bStatus = false;
     }
 }
 
@@ -556,7 +556,7 @@ void GIFWriter::WriteTerminator()
         m_rGIF.WriteUChar( (sal_uInt8) 0x3b );
 
         if( m_rGIF.GetError() )
-            bStatus = sal_False;
+            bStatus = false;
     }
 }
 

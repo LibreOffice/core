@@ -1877,7 +1877,7 @@ SVGReader::SVGReader(const uno::Reference<uno::XComponentContext>&     xContext,
 {
 }
 
-sal_Bool SVGReader::parseAndConvert()
+bool SVGReader::parseAndConvert()
 {
     uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder = xml::dom::DocumentBuilder::create(m_xContext);
 
@@ -2080,7 +2080,7 @@ sal_Bool SVGReader::parseAndConvert()
     m_xDocumentHandler->endElement( "office:document" );
     m_xDocumentHandler->endDocument();
 
-    return sal_True;
+    return true;
 }
 
 } // namespace svgi

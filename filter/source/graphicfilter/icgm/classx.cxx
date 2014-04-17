@@ -135,12 +135,12 @@ void CGM::ImplDoClass6()
                 case -32761 : /*end figure*/
                 {
                     mpOutAct->EndFigure();
-                    mbFigure = sal_False;
+                    mbFigure = false;
                 }
                 break;
                 case -32762 : /*begin figure*/
                 {
-                    mbFigure = sal_True;
+                    mbFigure = true;
                     mpOutAct->BeginFigure();
                 }
                 break;

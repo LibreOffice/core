@@ -45,7 +45,7 @@
 using namespace ::com::sun::star;
 using namespace ::svgi;
 
-sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
+bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
     utl::MediaDescriptor aMediaDescriptor(rDescriptor);
@@ -59,12 +59,12 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     {
         uno::Reference<io::XSeekable> xSeek(xInputStream, uno::UNO_QUERY);
         if (!xSeek.is())
-            return sal_False;
+            return false;
         xSeek->seek(0);
 
         boost::scoped_ptr<SvStream> aStream(utl::UcbStreamHelper::CreateStream(xInputStream, true ));
         if(!aStream.get())
-            return sal_False;
+            return false;
 
         SvStream* pMemoryStream = new SvMemoryStream;
         GZCodec aCodec;
@@ -74,7 +74,7 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         pMemoryStream->Seek(STREAM_SEEK_TO_BEGIN);
         uno::Reference<io::XInputStream> xDecompressedInput(new utl::OSeekableInputStreamWrapper(pMemoryStream, true));
         if (!xDecompressedInput.is())
-            return sal_False;
+            return false;
         xInputStream = xDecompressedInput;
     }
     else
@@ -86,7 +86,7 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
     OSL_ASSERT(xInputStream.is());
     if(!xInputStream.is())
-        return sal_False;
+        return false;
 
     OUString sXMLImportService ( "com.sun.star.comp.Draw.XMLOasisImporter" );
     Reference < XDocumentHandler > xInternalHandler( mxContext->getServiceManager()->createInstanceWithContext( sXMLImportService, mxContext ), UNO_QUERY );

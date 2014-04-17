@@ -43,7 +43,7 @@ void SAL_CALL PDFInteractionHandler::handle( const Reference< task::XInteraction
 sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Reference< task::XInteractionRequest >& i_xRequest )
     throw (RuntimeException, std::exception)
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
 
     Any aRequest( i_xRequest->getRequest() );
     task::PDFExportException aExc;
@@ -55,7 +55,7 @@ sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Referen
             aCodes.insert( (vcl::PDFWriter::ErrorCode)aExc.ErrorCodes.getConstArray()[i] );
         ImplErrorDialog aDlg( aCodes );
         aDlg.Execute();
-        bHandled = sal_True;
+        bHandled = true;
     }
     return bHandled;
 }

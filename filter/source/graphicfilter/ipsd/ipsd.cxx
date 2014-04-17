@@ -60,8 +60,8 @@ private:
     sal_uInt32          mnXResFixed;
     sal_uInt32          mnYResFixed;
 
-    sal_Bool            mbStatus;
-    sal_Bool            mbTransparent;
+    bool            mbStatus;
+    bool            mbTransparent;
 
     Bitmap              maBmp;
     Bitmap              maMaskBmp;
@@ -69,16 +69,16 @@ private:
     BitmapWriteAccess*  mpWriteAcc;
     BitmapWriteAccess*  mpMaskWriteAcc;
     sal_uInt16              mnDestBitDepth;
-    sal_Bool                mbCompression;  // RLE decoding
+    bool                mbCompression;  // RLE decoding
     sal_uInt8*              mpPalette;
 
-    sal_Bool                ImplReadBody();
-    sal_Bool                ImplReadHeader();
+    bool                ImplReadBody();
+    bool                ImplReadHeader();
 
 public:
     PSDReader(SvStream &rStream);
     ~PSDReader();
-    sal_Bool ReadPSD(Graphic & rGraphic);
+    bool ReadPSD(Graphic & rGraphic);
 };
 
 //=================== Methods of PSDReader ==============================
@@ -88,8 +88,8 @@ PSDReader::PSDReader(SvStream &rStream)
     , mpFileHeader(NULL)
     , mnXResFixed(0)
     , mnYResFixed(0)
-    , mbStatus(sal_True)
-    , mbTransparent(sal_False)
+    , mbStatus(true)
+    , mbTransparent(false)
     , mpReadAcc(NULL)
     , mpWriteAcc(NULL)
     , mpMaskWriteAcc(NULL)
@@ -105,29 +105,29 @@ PSDReader::~PSDReader()
     delete mpFileHeader;
 }
 
-sal_Bool PSDReader::ReadPSD(Graphic & rGraphic )
+bool PSDReader::ReadPSD(Graphic & rGraphic )
 {
     if (m_rPSD.GetError())
-        return sal_False;
+        return false;
 
     m_rPSD.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
     // read header:
 
-    if ( ImplReadHeader() == sal_False )
-        return sal_False;
+    if ( ImplReadHeader() == false )
+        return false;
 
     Size aBitmapSize( mpFileHeader->nColumns, mpFileHeader->nRows );
     maBmp = Bitmap( aBitmapSize, mnDestBitDepth );
     if ( ( mpWriteAcc = maBmp.AcquireWriteAccess() ) == NULL )
-        mbStatus = sal_False;
+        mbStatus = false;
     if ( ( mpReadAcc = maBmp.AcquireReadAccess() ) == NULL )
-        mbStatus = sal_False;
+        mbStatus = false;
     if ( mbTransparent && mbStatus )
     {
         maMaskBmp = Bitmap( aBitmapSize, 1 );
         if ( ( mpMaskWriteAcc = maMaskBmp.AcquireWriteAccess() ) == NULL )
-            mbStatus = sal_False;
+            mbStatus = false;
     }
     if ( mpPalette && mbStatus )
     {
@@ -157,7 +157,7 @@ sal_Bool PSDReader::ReadPSD(Graphic & rGraphic )
         }
     }
     else
-        mbStatus = sal_False;
+        mbStatus = false;
     if ( mpWriteAcc )
         maBmp.ReleaseAccess( mpWriteAcc );
     if ( mpReadAcc )
@@ -169,7 +169,7 @@ sal_Bool PSDReader::ReadPSD(Graphic & rGraphic )
 
 
 
-sal_Bool PSDReader::ImplReadHeader()
+bool PSDReader::ImplReadHeader()
 {
     sal_uInt16  nCompression;
     sal_uInt32  nColorLength, nResourceLength, nLayerMaskLength;
@@ -177,22 +177,22 @@ sal_Bool PSDReader::ImplReadHeader()
     mpFileHeader = new PSDFileHeader;
 
     if ( !mpFileHeader )
-        return sal_False;
+        return false;
 
     m_rPSD.ReadUInt32( mpFileHeader->nSignature ).ReadUInt16( mpFileHeader->nVersion ).ReadUInt32( mpFileHeader->nPad1 ).        ReadUInt16( mpFileHeader->nPad2 ).ReadUInt16( mpFileHeader->nChannels ).ReadUInt32( mpFileHeader->nRows ).            ReadUInt32( mpFileHeader->nColumns ).ReadUInt16( mpFileHeader->nDepth ).ReadUInt16( mpFileHeader->nMode );
 
     if ( ( mpFileHeader->nSignature != 0x38425053 ) || ( mpFileHeader->nVersion != 1 ) )
-        return sal_False;
+        return false;
 
     if ( mpFileHeader->nRows == 0 || mpFileHeader->nColumns == 0 )
-        return sal_False;
+        return false;
 
     if ( ( mpFileHeader->nRows > 30000 ) || ( mpFileHeader->nColumns > 30000 ) )
-        return sal_False;
+        return false;
 
     sal_uInt16 nDepth = mpFileHeader->nDepth;
     if (!( ( nDepth == 1 ) || ( nDepth == 8 ) || ( nDepth == 16 ) ) )
-        return sal_False;
+        return false;
 
     mnDestBitDepth = ( nDepth == 16 ) ? 8 : nDepth;
 
@@ -202,27 +202,27 @@ sal_Bool PSDReader::ImplReadHeader()
         switch ( mpFileHeader->nChannels )
         {
             case 5 :
-                mbTransparent = sal_True;
+                mbTransparent = true;
             case 4 :
                 mnDestBitDepth = 24;
             break;
             default :
-                return sal_False;
+                return false;
         }
     }
     else switch ( mpFileHeader->nChannels )
     {
         case 2 :
-            mbTransparent = sal_True;
+            mbTransparent = true;
         case 1 :
             break;
         case 4 :
-            mbTransparent = sal_True;
+            mbTransparent = true;
         case 3 :
             mnDestBitDepth = 24;
             break;
         default:
-            return sal_False;
+            return false;
     }
 
     switch ( mpFileHeader->nMode )
@@ -230,17 +230,17 @@ sal_Bool PSDReader::ImplReadHeader()
         case PSD_BITMAP :
         {
             if ( nColorLength || ( nDepth != 1 ) )
-                return sal_False;
+                return false;
         }
         break;
 
         case PSD_INDEXED :
         {
             if ( nColorLength != 768 )      // we need the color map
-                return sal_False;
+                return false;
             mpPalette = new sal_uInt8[ 768 ];
             if ( mpPalette == NULL )
-                return sal_False;
+                return false;
             m_rPSD.Read( mpPalette, 768 );
         }
         break;
@@ -252,10 +252,10 @@ sal_Bool PSDReader::ImplReadHeader()
         case PSD_GRAYSCALE :
         {
             if ( nColorLength )
-                return sal_False;
+                return false;
             mpPalette = new sal_uInt8[ 768 ];
             if ( mpPalette == NULL )
-                return sal_False;
+                return false;
             for ( sal_uInt16 i = 0; i < 256; i++ )
             {
                 mpPalette[ i ] = mpPalette[ i + 256 ] = mpPalette[ i + 512 ] = (sal_uInt8)i;
@@ -269,12 +269,12 @@ sal_Bool PSDReader::ImplReadHeader()
         case PSD_LAB :
         {
             if ( nColorLength )     // color table is not supported by the other graphic modes
-                return sal_False;
+                return false;
         }
         break;
 
         default:
-            return sal_False;
+            return false;
     }
     m_rPSD.ReadUInt32( nResourceLength );
     sal_uInt32 nLayerPos = m_rPSD.Tell() + nResourceLength;
@@ -319,22 +319,22 @@ sal_Bool PSDReader::ImplReadHeader()
     m_rPSD.ReadUInt16( nCompression );
     if ( nCompression == 0 )
     {
-        mbCompression = sal_False;
+        mbCompression = false;
     }
     else if ( nCompression == 1 )
     {
         m_rPSD.SeekRel( ( mpFileHeader->nRows * mpFileHeader->nChannels ) << 1 );
-        mbCompression = sal_True;
+        mbCompression = true;
     }
     else
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 
 
-sal_Bool PSDReader::ImplReadBody()
+bool PSDReader::ImplReadBody()
 {
     sal_uLong       nX, nY;
     char        nRunCount = 0;
@@ -714,7 +714,7 @@ sal_Bool PSDReader::ImplReadBody()
             }
         }
     }
-    return sal_True;
+    return true;
 }
 
 //================== GraphicImport - the exported function ================

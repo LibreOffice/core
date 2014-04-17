@@ -35,7 +35,7 @@ void CGM::ImplDoClass2()
                 {
                     case 0 : pElement->eScalingMode = SM_ABSTRACT; break;
                     case 1 : pElement->eScalingMode = SM_METRIC; break;
-                    default : mbStatus = sal_False; break;
+                    default : mbStatus = false; break;
                 }
                 pElement->nScalingFactor = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
                 ImplSetMapMode();
@@ -49,7 +49,7 @@ void CGM::ImplDoClass2()
             {
                 case 0 : pElement->eColorSelectionMode = CSM_INDEXED; break;
                 case 1 : pElement->eColorSelectionMode = CSM_DIRECT; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
         }
         break;
@@ -60,7 +60,7 @@ void CGM::ImplDoClass2()
             {
                 case 0 : pElement->eLineWidthSpecMode = SM_ABSOLUTE; break;
                 case 1 : pElement->eLineWidthSpecMode = SM_SCALED; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
         }
         break;
@@ -71,7 +71,7 @@ void CGM::ImplDoClass2()
             {
                 case 0 : pElement->eMarkerSizeSpecMode = SM_ABSOLUTE; break;
                 case 1 : pElement->eMarkerSizeSpecMode = SM_SCALED; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
         }
         break;
@@ -82,7 +82,7 @@ void CGM::ImplDoClass2()
             {
                 case 0 : pElement->eEdgeWidthSpecMode = SM_ABSOLUTE; break;
                 case 1 : pElement->eEdgeWidthSpecMode = SM_SCALED; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
         }
         break;
@@ -93,7 +93,7 @@ void CGM::ImplDoClass2()
         }
         break;
         case 0x07 : /*Background Color*/
-            pElement->nBackGroundColor = ImplGetBitmapColor( sal_True );
+            pElement->nBackGroundColor = ImplGetBitmapColor( true );
         break;
         case 0x08 : /*Device Viewport*/
         {
@@ -110,7 +110,7 @@ void CGM::ImplDoClass2()
                 case 0 : pElement->eDeviceViewPortMode = DVPM_FRACTION; break;
                 case 1 : pElement->eDeviceViewPortMode = DVPM_METRIC; break;
                 case 2 : pElement->eDeviceViewPortMode = DVPM_DEVICE; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
             pElement->nDeviceViewPortScale = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             ImplSetMapMode();
@@ -122,21 +122,21 @@ void CGM::ImplDoClass2()
             {
                 case 0 : pElement->eDeviceViewPortMap = DVPM_NOT_FORCED; break;
                 case 1 : pElement->eDeviceViewPortMap = DVPM_FORCED; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
             switch( ImplGetUI16() )
             {
                 case 0 : pElement->eDeviceViewPortMapH = DVPMH_LEFT; break;
                 case 1 : pElement->eDeviceViewPortMapH = DVPMH_CENTER; break;
                 case 2 : pElement->eDeviceViewPortMapH = CVPMH_RIGHT; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
             switch( ImplGetUI16() )
             {
                 case 0 : pElement->eDeviceViewPortMapV = DVPMV_BOTTOM; break;
                 case 1 : pElement->eDeviceViewPortMapV = DVPMV_CENTER; break;
                 case 2 : pElement->eDeviceViewPortMapV = DVPMV_TOP; break;
-                default : mbStatus = sal_False; break;
+                default : mbStatus = false; break;
             }
             ImplSetMapMode();
         }

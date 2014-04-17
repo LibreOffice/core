@@ -120,7 +120,7 @@ sal_Int32 Writer::mapRelative( sal_Int32 n100thMM ) const
 
 /**
 */
-void Writer::Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, sal_Bool bFilled )
+void Writer::Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, bool bFilled )
 {
     Point aLastPoint( rPoly[0] );
 
@@ -177,13 +177,13 @@ void Writer::Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, sal_Bool b
 
 /** exports a style change record with a move to (x,y) and depending on bFilled a line style 1 or fill style 1
 */
-void Writer::Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int16 dy, sal_Bool bFilled )
+void Writer::Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int16 dy, bool bFilled )
 {
     rBits.writeUB( 0, 1 );          // TypeFlag
     rBits.writeUB( 0, 1 );          // StateNewStyles
     rBits.writeUB( sal_uInt32(!bFilled), 1 ); // StateLineStyle
     rBits.writeUB( 0, 1 );          // StateFillStyle0
-    rBits.writeUB( bFilled, 1 );        // StateFillStyle1
+    rBits.writeUB( bFilled ? 0 : 1, 1 );        // StateFillStyle1
     rBits.writeUB( 1, 1 );          // StateMoveTo
 
     sal_uInt16 nMoveBits = max( getMaxBitsSigned( dx ), getMaxBitsSigned( dy ) );
@@ -264,7 +264,7 @@ void Writer::Impl_addEndShapeRecord( BitStream& rBits )
 
 
 
-void Writer::Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled )
+void Writer::Impl_writePolygon( const Polygon& rPoly, bool bFilled )
 {
     PolyPolygon aPolyPoly( rPoly );
     Impl_writePolyPolygon( aPolyPoly, bFilled );
@@ -272,7 +272,7 @@ void Writer::Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled )
 
 
 
-void Writer::Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled, const Color& rFillColor, const Color& rLineColor )
+void Writer::Impl_writePolygon( const Polygon& rPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor )
 {
     PolyPolygon aPolyPoly( rPoly );
     Impl_writePolyPolygon( aPolyPoly, bFilled, rFillColor, rLineColor );
@@ -280,7 +280,7 @@ void Writer::Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled, const Co
 
 
 
-void Writer::Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bFilled, sal_uInt8 nTransparence /* = 0 */ )
+void Writer::Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, bool bFilled, sal_uInt8 nTransparence /* = 0 */ )
 {
     Color aLineColor( mpVDev->GetLineColor() );
     if( 0 == aLineColor.GetTransparency() )
@@ -293,7 +293,7 @@ void Writer::Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bFill
 
 
 
-void Writer::Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bFilled, const Color& rFillColor, const Color& rLineColor )
+void Writer::Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor )
 {
     PolyPolygon aPolyPoly( rPolyPoly );
 
@@ -523,7 +523,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const sal
         PolyPolygon aPolyPoygon;
         mpVDev->GetTextOutline( aPolyPoygon, rText, 0, 0, (sal_uInt16)nLen, true, nWidth, pDXArray );
         aPolyPoygon.Translate( rPos );
-        Impl_writePolyPolygon( aPolyPoygon, sal_True, aTextColor, aTextColor );
+        Impl_writePolyPolygon( aPolyPoygon, true, aTextColor, aTextColor );
     }
     else
     {
@@ -698,7 +698,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const sal
                 aPoly[ 3 ].X() = aPoly[ 0 ].X();
                 aPoly[ 3 ].Y() = aPoly[ 2 ].Y();
 
-                Impl_writePolygon( aPoly, sal_True, aTextColor, aTextColor );
+                Impl_writePolygon( aPoly, true, aTextColor, aTextColor );
             }
 
             // AS: The factor of 1.5 on the nLineHeight is a magic number.  I'm not sure why it works,
@@ -714,7 +714,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const sal
                 aPoly[ 3 ].X() = aPoly[ 0 ].X();
                 aPoly[ 3 ].Y() = aPoly[ 2 ].Y();
 
-                Impl_writePolygon( aPoly, sal_True, aTextColor, aTextColor );
+                Impl_writePolygon( aPoly, true, aTextColor, aTextColor );
             }
         }
 
@@ -1355,7 +1355,7 @@ void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegf
             for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
             {
                 const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
-                Impl_writePolygon(Polygon(aCandidate), sal_False );
+                Impl_writePolygon(Polygon(aCandidate), false );
             }
         }
 
@@ -1370,7 +1370,7 @@ void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegf
             for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
             {
                 const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
-                Impl_writePolyPolygon(PolyPolygon(Polygon(aPolygon)), sal_True );
+                Impl_writePolyPolygon(PolyPolygon(Polygon(aPolygon)), true );
             }
 
             mpVDev->SetLineColor(aOldLineColor);
@@ -1487,7 +1487,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
                 if( aPoly.GetSize() )
                 {
-                    Impl_writePolygon( aPoly, sal_True );
+                    Impl_writePolygon( aPoly, true );
                 }
             }
             break;
@@ -1501,7 +1501,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 {
                     if(pA->GetLineInfo().IsDefault())
                     {
-                        Impl_writePolygon( rPoly, sal_False );
+                        Impl_writePolygon( rPoly, false );
                     }
                     else
                     {
@@ -1518,7 +1518,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 const PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
 
                 if( rPolyPoly.Count() )
-                    Impl_writePolyPolygon( rPolyPoly, sal_True );
+                    Impl_writePolyPolygon( rPolyPoly, true );
             }
             break;
 
@@ -1557,7 +1557,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 {
                     // convert transparence from percent into 0x00 - 0xff
                     sal_uInt8 nTransparence = (sal_uInt8) MinMax( FRound( pA->GetTransparence() * 2.55 ), 0, 255 );
-                    Impl_writePolyPolygon( rPolyPoly, sal_True, nTransparence );
+                    Impl_writePolyPolygon( rPolyPoly, true, nTransparence );
                 }
             }
             break;
@@ -1604,7 +1604,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             {
                 const MetaEPSAction*    pA = (const MetaEPSAction*) pAction;
                 const GDIMetaFile       aGDIMetaFile( pA->GetSubstitute() );
-                sal_Bool                bFound = sal_False;
+                bool                bFound = false;
 
                 for( size_t j = 0, nC = aGDIMetaFile.GetActionSize(); ( j < nC ) && !bFound; j++ )
                 {
@@ -1612,7 +1612,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
                     if( pSubstAct->GetType() == META_BMPSCALE_ACTION )
                     {
-                        bFound = sal_True;
+                        bFound = true;
                         const MetaBmpScaleAction* pBmpScaleAction = (const MetaBmpScaleAction*) pSubstAct;
                         Impl_writeImage( pBmpScaleAction->GetBitmap(),
                                       pA->GetPoint(), pA->GetSize(),
@@ -1630,7 +1630,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 if( pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN") )
                 {
                     const MetaGradientExAction* pGradAction = NULL;
-                    sal_Bool                    bDone = sal_False;
+                    bool                    bDone = false;
 
                     while( !bDone && ( ++i < nCount ) )
                     {
@@ -1641,7 +1641,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                         else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
                                  ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END") ) )
                         {
-                            bDone = sal_True;
+                            bDone = true;
                         }
                     }
 

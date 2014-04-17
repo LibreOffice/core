@@ -165,7 +165,7 @@ void DXFTransform::TransDir(const DXFVector & rSrc, DXFVector & rTgt) const
 }
 
 
-sal_Bool DXFTransform::TransCircleToEllipse(double fRadius, double & rEx, double & rEy) const
+bool DXFTransform::TransCircleToEllipse(double fRadius, double & rEx, double & rEy) const
 {
     double fMXAbs=aMX.Abs();
     double fMYAbs=aMY.Abs();
@@ -176,22 +176,22 @@ sal_Bool DXFTransform::TransCircleToEllipse(double fRadius, double & rEx, double
     {
         rEx=fabs(aMX.fx*fRadius);
         rEy=fabs(aMY.fy*fRadius);
-        return sal_True;
+        return true;
     }
     else if (fabs(aMX.fx)<=fNearNull && fabs(aMX.fz)<=fNearNull &&
              fabs(aMY.fy)<=fNearNull && fabs(aMY.fz)<=fNearNull)
     {
         rEx=fabs(aMY.fx*fRadius);
         rEy=fabs(aMX.fy*fRadius);
-        return sal_True;
+        return true;
     }
     else if (fabs(fMXAbs-fMYAbs)<=fNearNull &&
              fabs(aMX.fz)<=fNearNull && fabs(aMY.fz)<=fNearNull)
     {
         rEx=rEy=fabs(((fMXAbs+fMYAbs)/2)*fRadius);
-        return sal_True;
+        return true;
     }
-    else return sal_False;
+    else return false;
 }
 
 LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
@@ -238,9 +238,9 @@ double DXFTransform::CalcRotAngle() const
     return atan2(aMX.fy,aMX.fx)/3.14159265359*180.0;
 }
 
-sal_Bool DXFTransform::Mirror() const
+bool DXFTransform::Mirror() const
 {
-    if (aMZ.SProd(aMX*aMY)<0) return sal_True; else return sal_False;
+    if (aMZ.SProd(aMX*aMY)<0) return true; else return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

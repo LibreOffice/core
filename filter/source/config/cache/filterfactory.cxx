@@ -380,12 +380,12 @@ class stlcomp_removeIfMatchFlags
     private:
         FilterCache* m_pCache ;
         sal_Int32    m_nFlags ;
-        sal_Bool     m_bIFlags;
+        bool     m_bIFlags;
 
     public:
         stlcomp_removeIfMatchFlags(FilterCache* pCache ,
                                    sal_Int32    nFlags ,
-                                   sal_Bool     bIFlags)
+                                   bool     bIFlags)
             : m_pCache (pCache )
             , m_nFlags (nFlags )
             , m_bIFlags(bIFlags)
@@ -521,12 +521,12 @@ OUStringList FilterFactory::impl_getSortedFilterListForModule(const OUString& sM
     // remove all filters from this merged list, which does not fit the flag specification
     if (nIFlags != -1)
     {
-        pItToErase = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nIFlags, sal_True));
+        pItToErase = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nIFlags, true));
         lMergedFilters.erase(pItToErase, lMergedFilters.end());
     }
     if (nEFlags != -1)
     {
-        pItToErase = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nEFlags, sal_False));
+        pItToErase = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nEFlags, false));
         lMergedFilters.erase(pItToErase, lMergedFilters.end());
     }
 

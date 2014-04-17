@@ -43,7 +43,7 @@ class TIFFReader
 
 private:
 
-    sal_Bool                bStatus;                    // Whether until now no error occurred
+    bool                bStatus;                    // Whether until now no error occurred
     Animation               aAnimation;
     sal_uLong               nLastPercent;
 
@@ -60,7 +60,7 @@ private:
 
     sal_uInt16              nDataType;
     // Data taken from the TIFF tags:
-    sal_Bool                bByteSwap;                  // sal_True if bits 0..7 -> 7..0 should get converted ( FILLORDER = 2 );
+    bool                bByteSwap;                  // sal_True if bits 0..7 -> 7..0 should get converted ( FILLORDER = 2 );
 
     sal_uLong               nNewSubFile;
     sal_uLong               nSubFile;
@@ -107,7 +107,7 @@ private:
     void    ReadHeader();
     void    ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen );
 
-    sal_Bool    ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent );
+    bool    ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent );
         // reads/decompresses the bitmap data and fills pMap
 
     sal_uLong   GetBits( const sal_uInt8 * pSrc, sal_uLong nBitsPos, sal_uLong nBitsCount );
@@ -117,7 +117,7 @@ private:
         // Create the bitmap from the temporary bitmap pMap
         // and partly deletes pMap while doing this.
 
-    sal_Bool    ConvertScanline( sal_uLong nY );
+    bool    ConvertScanline( sal_uLong nY );
         // converts a Scanline to the Windows-BMP format
 
     bool HasAlphaChannel() const;
@@ -301,7 +301,7 @@ double TIFFReader::ReadDoubleData()
 
 void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
 {
-    if ( bStatus == sal_False )
+    if ( bStatus == false )
         return;
 
     switch ( nTagType )
@@ -330,7 +330,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             nBitsPerSample = ReadIntData();
             SAL_INFO("filter.tiff","BitsPerSample: " << nBitsPerSample);
             if ( nBitsPerSample >= 32 ) // 32 bit and larger samples are not supported
-                bStatus = sal_False;
+                bStatus = false;
             break;
 
         case 0x0103:   // Compression
@@ -506,7 +506,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
                 }
             }
             else
-                bStatus = sal_False;
+                bStatus = false;
             SAL_INFO("filter.tiff","ColorMap (number of colors): " << nNumColors);
             break;
         }
@@ -514,18 +514,18 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
         case 0x0153: { // SampleFormat
             sal_uLong nSampleFormat = ReadIntData();
             if ( nSampleFormat == 3 ) // IEEE floating point samples are not supported yet
-                bStatus = sal_False;
+                bStatus = false;
             break;
         }
     }
 
     if ( pTIFF->GetError() )
-        bStatus = sal_False;
+        bStatus = false;
 }
 
 
 
-sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
+bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
 {
     if ( nCompression == 1 || nCompression == 32771 )
     {
@@ -541,15 +541,15 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
             {
                 nStrip = ny / nRowsPerStrip + np * nStripsPerPlane;
                 if ( nStrip >= nNumStripOffsets )
-                    return sal_False;
+                    return false;
                 pTIFF->Seek( pStripOffsets[ nStrip ] + ( ny % nRowsPerStrip ) * nStripBytesPerRow );
                 pTIFF->Read( pMap[ np ], nBytesPerRow );
                 if ( pTIFF->GetError() )
-                    return sal_False;
+                    return false;
                 MayCallback( nMinPercent + ( nMaxPercent - nMinPercent ) * ( np * nImageLength + ny) / ( nImageLength * nPlanes ) );
             }
             if ( !ConvertScanline( ny ) )
-                return sal_False;
+                return false;
         }
     }
     else if ( nCompression == 2 || nCompression == 3 || nCompression == 4 )
@@ -567,22 +567,22 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
             if ( nGroup3Options & 0x00000004 )
                 nOptions |= CCI_OPTION_BYTEALIGNEOL;
             if ( nGroup3Options & 0xfffffffa )
-                return sal_False;
+                return false;
         }
         else
         {   // nCompression==4
             nOptions = CCI_OPTION_2D;
             if ( nGroup4Options & 0xffffffff )
-                return sal_False;
+                return false;
         }
         if ( nFillOrder == 2 )
         {
             nOptions |= CCI_OPTION_INVERSEBITORDER;
-            bByteSwap = sal_False;
+            bByteSwap = false;
         }
         nStrip = 0;
         if ( nStrip >= nNumStripOffsets )
-            return sal_False;
+            return false;
         pTIFF->Seek(pStripOffsets[nStrip]);
 
         CCIDecompressor aCCIDecom( nOptions, nImageWidth );
@@ -597,18 +597,18 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                 {
                     nStrip=ny/nRowsPerStrip+np*nStripsPerPlane;
                     if ( nStrip >= nNumStripOffsets )
-                        return sal_False;
+                        return false;
                     pTIFF->Seek( pStripOffsets[ nStrip ] );
                     aCCIDecom.StartDecompression( *pTIFF );
                 }
-                if ( aCCIDecom.DecompressScanline( pMap[ np ], nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes, np + 1 == nPlanes ) == sal_False )
-                    return sal_False;
+                if ( aCCIDecom.DecompressScanline( pMap[ np ], nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes, np + 1 == nPlanes ) == false )
+                    return false;
                 if ( pTIFF->GetError() )
-                    return sal_False;
+                    return false;
                 MayCallback(nMinPercent+(nMaxPercent-nMinPercent)*(np*nImageLength+ny)/(nImageLength*nPlanes));
             }
             if ( !ConvertScanline( ny ) )
-                return sal_False;
+                return false;
         }
     }
     else if ( nCompression == 5 )
@@ -617,7 +617,7 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
         sal_uLong ny, np, nStrip;
         nStrip=0;
         if ( nStrip >= nNumStripOffsets )
-            return sal_False;
+            return false;
         pTIFF->Seek(pStripOffsets[nStrip]);
         aLZWDecom.StartDecompression(*pTIFF);
         for ( ny = 0; ny < nImageLength; ny++ )
@@ -628,16 +628,16 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                 {
                     nStrip = ny / nRowsPerStrip + np * nStripsPerPlane;
                     if ( nStrip >= nNumStripOffsets )
-                        return sal_False;
+                        return false;
                     pTIFF->Seek(pStripOffsets[nStrip]);
                     aLZWDecom.StartDecompression(*pTIFF);
                 }
                 if ( ( aLZWDecom.Decompress( pMap[ np ], nBytesPerRow ) != nBytesPerRow ) || pTIFF->GetError() )
-                    return sal_False;
+                    return false;
                 MayCallback(nMinPercent+(nMaxPercent-nMinPercent)*(np*nImageLength+ny)/(nImageLength*nPlanes));
             }
             if ( !ConvertScanline( ny ) )
-                return sal_False;
+                return false;
         }
     }
     else if ( nCompression == 32773 )
@@ -646,7 +646,7 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
         sal_uInt8 * pdst;
         nStrip = 0;
         if ( nStrip >= nNumStripOffsets )
-            return sal_False;
+            return false;
         pTIFF->Seek(pStripOffsets[nStrip]);
         for ( ny = 0; ny < nImageLength; ny++ )
         {
@@ -656,7 +656,7 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                 {
                     nStrip=ny/nRowsPerStrip+np*nStripsPerPlane;
                     if ( nStrip >= nNumStripOffsets )
-                        return sal_False;
+                        return false;
                     pTIFF->Seek(pStripOffsets[nStrip]);
                 }
                 nRowBytesLeft = nBytesPerRow;
@@ -669,7 +669,7 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                     {
                         nRecCount=0x00000001+((sal_uLong)nRecHeader);
                         if ( nRecCount > nRowBytesLeft )
-                            return sal_False;
+                            return false;
                         pTIFF->Read(pdst,nRecCount);
                         pdst+=nRecCount;
                         nRowBytesLeft-=nRecCount;
@@ -693,16 +693,16 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                     }
                 } while ( nRowBytesLeft != 0 );
                 if ( pTIFF->GetError() )
-                    return sal_False;
+                    return false;
                 MayCallback(nMinPercent+(nMaxPercent-nMinPercent)*(np*nImageLength+ny)/(nImageLength*nPlanes));
             }
             if ( !ConvertScanline( ny ) )
-                return sal_False;
+                return false;
         }
     }
     else
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
 sal_uLong TIFFReader::GetBits( const sal_uInt8 * pSrc, sal_uLong nBitsPos, sal_uLong nBitsCount )
@@ -763,7 +763,7 @@ sal_uLong TIFFReader::GetBits( const sal_uInt8 * pSrc, sal_uLong nBitsPos, sal_u
 
 
 
-sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
+bool TIFFReader::ConvertScanline( sal_uLong nY )
 {
     sal_uInt32  nRed, nGreen, nBlue, ns, nx, nVal, nByteCount;
     sal_uInt8   nByteVal;
@@ -1046,7 +1046,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                 break;
 
                 default :
-                    return sal_False;
+                    return false;
             }
         }
     }
@@ -1064,8 +1064,8 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
         }
     }
     else
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
 
@@ -1134,7 +1134,7 @@ void TIFFReader::ReadHeader()
 
     pTIFF->ReadUChar( nbyte2 ).ReadUInt16( nushort );
     if ( nbyte1 != nbyte2 || ( nbyte1 != 'I' && nbyte1 != 'M' ) || nushort != 0x002a )
-        bStatus = sal_False;
+        bStatus = false;
 }
 
 bool TIFFReader::HasAlphaChannel() const
@@ -1158,7 +1158,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
     sal_uLong   nPos;
     sal_uInt32 nFirstIfd(0), nDataLen;
 
-    bStatus = sal_True;
+    bStatus = true;
     nLastPercent = 0;
 
     pTIFF = &rTIFF;
@@ -1174,7 +1174,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
     pTIFF->ReadUInt32( nFirstIfd );
 
     if( !nFirstIfd || pTIFF->GetError() )
-        bStatus = sal_False;
+        bStatus = false;
 
     if ( bStatus )
     {
@@ -1216,7 +1216,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
         {
             pTIFF->Seek( nOrigPos + nNextIfd );
             {
-                bByteSwap = sal_False;
+                bByteSwap = false;
 
                 nNewSubFile = 0;
                 nSubFile = 0;
@@ -1268,9 +1268,9 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     nPos += 12; pTIFF->Seek( nPos );
 
                     if ( pTIFF->GetError() )
-                        bStatus = sal_False;
+                        bStatus = false;
 
-                    if ( bStatus == sal_False )
+                    if ( bStatus == false )
                         break;
                 }
                 pTIFF->ReadUInt32( nNextIfd );
@@ -1278,7 +1278,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     nNextIfd = 0;
             }
             if ( !nBitsPerSample || ( nBitsPerSample > 32 ) )
-                bStatus = sal_False;
+                bStatus = false;
             if ( bStatus )
             {
                 if ( nMaxSampleValue == 0 )
@@ -1308,7 +1308,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                         nPlanes = nSamplesPerPixel;
 
                     if ( ( nFillOrder == 2 ) && ( nCompression != 5 ) )     // in the LZW mode bits are already being inverted
-                        bByteSwap = sal_True;
+                        bByteSwap = true;
 
                     nStripsPerPlane = ( nImageLength - 1 ) / nRowsPerStrip + 1;
                     nBytesPerRow = ( nImageWidth * nSamplesPerPixel / nPlanes * nBitsPerSample + 7 ) >> 3;
@@ -1322,7 +1322,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                         catch (const std::bad_alloc &)
                         {
                             pMap[ j ] = NULL;
-                            bStatus = sal_False;
+                            bStatus = false;
                             break;
                         }
                     }
@@ -1340,7 +1340,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                         nMaxPos = std::max( pTIFF->Tell(), nMaxPos );
                     }
                     else
-                        bStatus = sal_False;
+                        bStatus = false;
 
                     if( pAcc )
                     {

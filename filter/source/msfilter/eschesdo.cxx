@@ -177,12 +177,12 @@ void ImplEESdrWriter::MapRect(ImplEESdrObject& /* rObj */ )
 
 sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                                 EscherSolverContainer& rSolverContainer,
-                                ImplEESdrPageType ePageType, const sal_Bool bOOxmlExport )
+                                ImplEESdrPageType ePageType, const bool bOOxmlExport )
 {
     sal_uInt32 nShapeID = 0;
     sal_uInt16 nShapeType = 0;
-    sal_Bool bDontWriteText = sal_False;        // if a metafile is written as shape replacement, then the text is already part of the metafile
-    sal_Bool bAdditionalText = sal_False;
+    bool bDontWriteText = false;        // if a metafile is written as shape replacement, then the text is already part of the metafile
+    bool bAdditionalText = false;
     sal_uInt32 nGrpShapeID = 0;
 
     do {
@@ -304,7 +304,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                         Size aSize( ImplMapSize( aBound.GetSize() ) );
                         rObj.SetRect( Rectangle( aPosition, aSize ) );
                         rObj.SetAngle( 0 );
-                        bDontWriteText = sal_True;
+                        bDontWriteText = true;
                     }
                 }
             }
@@ -494,7 +494,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             if( rObj.ImplHasText() )
             {
                 nGrpShapeID = ImplEnterAdditionalTextGroup( rObj.GetShapeRef(), &rObj.GetRect() );
-                bAdditionalText = sal_True;
+                bAdditionalText = true;
             }
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
@@ -533,7 +533,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             if ( rObj.ImplHasText() )
             {
                 nGrpShapeID = ImplEnterAdditionalTextGroup( rObj.GetShapeRef(), &rObj.GetRect() );
-                bAdditionalText = sal_True;
+                bAdditionalText = true;
             }
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
@@ -621,7 +621,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             else
             {
                 //2do: could be made an option in HostAppData whether OLE object should be written or not
-                sal_Bool bAppOLE = sal_True;
+                bool bAppOLE = true;
                 ADD_SHAPE( ESCHER_ShpInst_PictureFrame,
                     0xa00 | (bAppOLE ? SHAPEFLAG_OLESHAPE : 0) );
                 if ( aPropOpt.CreateOLEGraphicProperties( rObj.GetShapeRef() ) )
@@ -834,19 +834,19 @@ sal_uInt32 ImplEESdrWriter::ImplEnterAdditionalTextGroup( const Reference< XShap
 }
 
 
-sal_Bool ImplEESdrWriter::ImplInitPageValues()
+bool ImplEESdrWriter::ImplInitPageValues()
 {
     mnIndices = 0;
     mnOutlinerCount = 0;                // die outline objects must be in accordance with the layout.
     mnEffectCount = 0;
-    mbIsTitlePossible = sal_True;       // With more than one title PowerPoint will fail.
+    mbIsTitlePossible = true;       // With more than one title PowerPoint will fail.
 
-    return sal_True;
+    return true;
 }
 
 void ImplEESdrWriter::ImplWritePage(
             EscherSolverContainer& rSolverContainer,
-            ImplEESdrPageType ePageType, sal_Bool /* bBackGround */ )
+            ImplEESdrPageType ePageType, bool /* bBackGround */ )
 {
     ImplInitPageValues();
 
@@ -1047,9 +1047,9 @@ ImplEESdrObject::ImplEESdrObject( ImplEscherExSdr& rEx,
     mnShapeId( 0 ),
     mnTextSize( 0 ),
     mnAngle( 0 ),
-    mbValid( sal_False ),
-    mbPresObj( sal_False ),
-    mbEmptyPresObj( sal_False ),
+    mbValid( false ),
+    mbPresObj( false ),
+    mbEmptyPresObj( false ),
     mbOOXML(bOOXML)
 {
     SdrPage* pPage = rObj.GetPage();
@@ -1069,9 +1069,9 @@ ImplEESdrObject::ImplEESdrObject( ImplEESdrWriter& rEx,
     mnShapeId( 0 ),
     mnTextSize( 0 ),
     mnAngle( 0 ),
-    mbValid( sal_False ),
-    mbPresObj( sal_False ),
-    mbEmptyPresObj( sal_False ),
+    mbValid( false ),
+    mbPresObj( false ),
+    mbEmptyPresObj( false ),
     mbOOXML(false)
 {
     Init( rEx );
@@ -1219,24 +1219,24 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
         if( mbPresObj && ImplGetPropertyValue( OUString("IsEmptyPresentationObject") ) )
             mbEmptyPresObj = ::cppu::any2bool( mAny );
 
-        mbValid = sal_True;
+        mbValid = true;
     }
 }
 
-sal_Bool ImplEESdrObject::ImplGetPropertyValue( const sal_Unicode* rString )
+bool ImplEESdrObject::ImplGetPropertyValue( const sal_Unicode* rString )
 {
-    sal_Bool bRetValue = sal_False;
+    bool bRetValue = false;
     if( mbValid )
     {
         try
         {
             mAny = mXPropSet->getPropertyValue( rString );
             if( mAny.hasValue() )
-                bRetValue = sal_True;
+                bRetValue = true;
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
-            bRetValue = sal_False;
+            bRetValue = false;
         }
     }
     return bRetValue;
@@ -1262,7 +1262,7 @@ sal_uInt32 ImplEESdrObject::ImplGetText()
     return mnTextSize;
 }
 
-sal_Bool ImplEESdrObject::ImplHasText() const
+bool ImplEESdrObject::ImplHasText() const
 {
     Reference< XText > xXText( mXShape, UNO_QUERY );
     return xXText.is() && !xXText->getString().isEmpty();

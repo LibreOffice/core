@@ -83,7 +83,7 @@ OUString SVGDialog_getImplementationName ()
 
 
 
-sal_Bool SAL_CALL SVGDialog_supportsService( const OUString& ServiceName )
+bool SAL_CALL SVGDialog_supportsService( const OUString& ServiceName )
     throw ( ::com::sun::star::uno::RuntimeException );
 
 

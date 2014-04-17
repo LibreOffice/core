@@ -36,13 +36,13 @@ PDFFilter::~PDFFilter()
 {
 }
 
-sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
+bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 {
     Reference< XOutputStream >  xOStm;
     Sequence< PropertyValue >   aFilterData;
     sal_Int32                   nLength = rDescriptor.getLength();
     const PropertyValue*        pValue = rDescriptor.getConstArray();
-    sal_Bool                    bRet = sal_False;
+    bool                    bRet = false;
     Reference< task::XStatusIndicator > xStatusIndicator;
     Reference< task::XInteractionHandler > xIH;
 
@@ -166,7 +166,7 @@ sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescripto
 {
     FocusWindowWaitCursor aCur;
 
-    const sal_Bool bRet = implExport( rDescriptor );
+    const bool bRet = implExport( rDescriptor );
 
     return bRet;
 }

@@ -35,12 +35,12 @@ private:
     SvStream&           m_rOStm;            // the output PGM file
     sal_uInt16          mpOStmOldModus;
 
-    sal_Bool            mbStatus;
+    bool            mbStatus;
     sal_uInt32          mnMode;
     BitmapReadAccess*   mpAcc;
     sal_uLong           mnWidth, mnHeight;  // image size in pixeln
 
-    sal_Bool            ImplWriteHeader();
+    bool            ImplWriteHeader();
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
 
@@ -50,13 +50,13 @@ public:
     PGMWriter(SvStream &rStream);
     ~PGMWriter();
 
-    sal_Bool WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
+    bool WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von PGMWriter ==============================
 PGMWriter::PGMWriter(SvStream &rStream)
     : m_rOStm(rStream)
-    , mbStatus(sal_True)
+    , mbStatus(true)
     , mnMode(0)
     , mpAcc(NULL)
     , mnWidth(0)
@@ -70,7 +70,7 @@ PGMWriter::~PGMWriter()
 
 
 
-sal_Bool PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
+bool PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
     if ( pFilterConfigItem )
     {
@@ -101,7 +101,7 @@ sal_Bool PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilter
         aBmp.ReleaseAccess( mpAcc );
     }
     else
-        mbStatus = sal_False;
+        mbStatus = false;
 
     m_rOStm.SetNumberFormatInt( mpOStmOldModus );
 
@@ -113,7 +113,7 @@ sal_Bool PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilter
 
 
 
-sal_Bool PGMWriter::ImplWriteHeader()
+bool PGMWriter::ImplWriteHeader()
 {
     mnWidth = mpAcc->Width();
     mnHeight = mpAcc->Height();
@@ -132,7 +132,7 @@ sal_Bool PGMWriter::ImplWriteHeader()
         m_rOStm.WriteUChar( (sal_uInt8)10 );
     }
     else
-        mbStatus = sal_False;
+        mbStatus = false;
 
     return mbStatus;
 }

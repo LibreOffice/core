@@ -90,7 +90,7 @@ void CGMChart::ResetAnnotation()
 
 
 
-sal_Bool CGMChart::IsAnnotation()
+bool CGMChart::IsAnnotation()
 {
     return ( mDataNode[ 0 ].nZoneEnum == 0 );
 };

@@ -35,7 +35,7 @@ public:
     PlaceWareExporter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     ~PlaceWareExporter();
 
-    sal_Bool doExport( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDoc,
+    bool doExport( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDoc,
                         ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOutputStream,
                             const OUString& rURL,
                                 ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > xHandler,

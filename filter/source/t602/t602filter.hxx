@@ -99,7 +99,7 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper4 <
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
     com::sun::star::lang::Locale meLocale;
     ResMgr *mpResMgr;
-    sal_Bool OptionsDlg();
+    bool OptionsDlg();
     ResMgr* getResMgr();
     OUString getResStr( sal_Int16 resid );
     void initLocale();
@@ -250,7 +250,7 @@ private:
     void setfnt(fonts fnt,bool mustwrite);
     void wrtfnt();
 
-    sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+    bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
         throw (::com::sun::star::uno::RuntimeException);
 
     public:
@@ -288,7 +288,7 @@ private:
 OUString T602ImportFilter_getImplementationName()
     throw ( ::com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL T602ImportFilter_supportsService( const OUString& ServiceName )
+bool SAL_CALL T602ImportFilter_supportsService( const OUString& ServiceName )
     throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL T602ImportFilter_getSupportedServiceNames(  )
@@ -301,7 +301,7 @@ SAL_CALL T602ImportFilter_createInstance( const ::com::sun::star::uno::Reference
 OUString T602ImportFilterDialog_getImplementationName()
     throw ( ::com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL T602ImportFilterDialog_supportsService( const OUString& ServiceName )
+bool SAL_CALL T602ImportFilterDialog_supportsService( const OUString& ServiceName )
     throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL T602ImportFilterDialog_getSupportedServiceNames(  )

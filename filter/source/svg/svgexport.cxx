@@ -112,7 +112,7 @@ public:
     {
         return OUString( "TextField" );
     }
-    virtual sal_Bool equalTo( const TextField & aTextField ) const = 0;
+    virtual bool equalTo( const TextField & aTextField ) const = 0;
     virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const = 0;
     virtual void elementExport( SVGExport* pSVGExport ) const
     {
@@ -149,7 +149,7 @@ public:
     {
         return OUString( "FixedTextField" );
     }
-    virtual sal_Bool equalTo( const TextField & aTextField ) const SAL_OVERRIDE
+    virtual bool equalTo( const TextField & aTextField ) const SAL_OVERRIDE
     {
         if( const FixedTextField* aFixedTextField = dynamic_cast< const FixedTextField* >( &aTextField ) )
         {
@@ -220,7 +220,7 @@ public:
     {
         return OUString( "VariableDateTimeField" );
     }
-    virtual sal_Bool equalTo( const TextField & aTextField ) const SAL_OVERRIDE
+    virtual bool equalTo( const TextField & aTextField ) const SAL_OVERRIDE
     {
         if( const VariableDateTimeField* aField = dynamic_cast< const VariableDateTimeField* >( &aTextField ) )
         {
@@ -305,7 +305,7 @@ public:
     virtual ~VariableDateTimeField() {}
 };
 
-sal_Bool operator==( const TextField & aLhsTextField, const TextField & aRhsTextField )
+bool operator==( const TextField & aLhsTextField, const TextField & aRhsTextField )
 {
     return aLhsTextField.equalTo( aRhsTextField );
 }
@@ -347,7 +347,7 @@ SVGExport::SVGExport(
     else
     {
         if(!(iter->second >>= mbIsEmbedFonts))
-            mbIsEmbedFonts = sal_False;
+            mbIsEmbedFonts = false;
     }
 
     // Native Decoration
@@ -417,7 +417,7 @@ ObjectRepresentation& ObjectRepresentation::operator=( const ObjectRepresentatio
 
 
 
-sal_Bool ObjectRepresentation::operator==( const ObjectRepresentation& rPresentation ) const
+bool ObjectRepresentation::operator==( const ObjectRepresentation& rPresentation ) const
 {
     return( ( mxObject == rPresentation.mxObject ) &&
             ( *mpMtf == *rPresentation.mpMtf ) );
@@ -523,7 +523,7 @@ bool EqualityBitmap::operator()( const ObjectRepresentation& rObjRep1,
 // - SVGFilter -
 
 
-sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
+bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
     Reference< XComponentContext >      xContext( ::comphelper::getProcessComponentContext() ) ;
@@ -531,7 +531,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     boost::scoped_ptr<SvStream>         pOStm;
     sal_Int32                            nLength = rDescriptor.getLength();
     const PropertyValue*                pValue = rDescriptor.getConstArray();
-    sal_Bool                            bRet = sal_False;
+    bool                            bRet = false;
 
     maFilterData.realloc( 0 );
 
@@ -621,7 +621,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                     mpSVGExport = NULL; // pointed object is released by xSVGExport dtor at the end of this scope
                     delete mpSVGFontExport, mpSVGFontExport = NULL;
                     delete mpObjects, mpObjects = NULL;
-                    mbPresentation = sal_False;
+                    mbPresentation = false;
                 }
             }
         }
@@ -647,7 +647,7 @@ Reference< XWriter > SVGFilter::implCreateExportDocumentHandler( const Reference
 
 
 
-sal_Bool SVGFilter::implLookForFirstVisiblePage()
+bool SVGFilter::implLookForFirstVisiblePage()
 {
     sal_Int32 nCurPage = 0, nLastPage = mSelectedPages.getLength() - 1;
 
@@ -661,7 +661,7 @@ sal_Bool SVGFilter::implLookForFirstVisiblePage()
 
             if( xPropSet.is() )
             {
-                sal_Bool bVisible = sal_False;
+                bool bVisible = false;
 
                 if( !mbPresentation || mbSinglePage ||
                     ( ( xPropSet->getPropertyValue( "Visible" ) >>= bVisible ) && bVisible ) )
@@ -677,12 +677,12 @@ sal_Bool SVGFilter::implLookForFirstVisiblePage()
 }
 
 
-sal_Bool SVGFilter::implExportDocument()
+bool SVGFilter::implExportDocument()
 {
     OUString         aAttr;
     sal_Int32        nDocX = 0, nDocY = 0; // #i124608#
     sal_Int32        nDocWidth = 0, nDocHeight = 0;
-    sal_Bool         bRet = sal_False;
+    bool         bRet = false;
     sal_Int32        nLastPage = mSelectedPages.getLength() - 1;
 
     SvtMiscOptions aMiscOptions;
@@ -872,7 +872,7 @@ sal_Bool SVGFilter::implExportDocument()
             }
 
             delete mpSVGDoc, mpSVGDoc = NULL;
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -891,14 +891,14 @@ OUString implGenerateFieldId( std::vector< TextField* > & aFieldSet,
                               const OUString & sOOOElemField,
                               Reference< XDrawPage > xMasterPage )
 {
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     sal_Int32 i;
     sal_Int32 nSize = aFieldSet.size();
     for( i = 0; i < nSize; ++i )
     {
         if( *(aFieldSet[i]) == aField )
         {
-            bFound = sal_True;
+            bFound = true;
             break;
         }
     }
@@ -915,9 +915,9 @@ OUString implGenerateFieldId( std::vector< TextField* > & aFieldSet,
 
 
 
-sal_Bool SVGFilter::implGenerateMetaData()
+bool SVGFilter::implGenerateMetaData()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int32 nCount = mSelectedPages.getLength();
     if( nCount != 0 )
     {
@@ -999,12 +999,12 @@ sal_Bool SVGFilter::implGenerateMetaData()
 
                     if( xPropSet.is() )
                     {
-                        sal_Bool bBackgroundVisibility                = sal_True;     // default: visible
-                        sal_Bool bBackgroundObjectsVisibility         = sal_True;     // default: visible
-                        sal_Bool bPageNumberVisibility                = sal_False;    // default: hidden
-                        sal_Bool bDateTimeVisibility                  = sal_True;     // default: visible
-                        sal_Bool bFooterVisibility                    = sal_True;     // default: visible
-                        sal_Bool bDateTimeFixed                       = sal_True;     // default: fixed
+                        bool bBackgroundVisibility                = true;     // default: visible
+                        bool bBackgroundObjectsVisibility         = true;     // default: visible
+                        bool bPageNumberVisibility                = false;    // default: hidden
+                        bool bDateTimeVisibility                  = true;     // default: visible
+                        bool bFooterVisibility                    = true;     // default: visible
+                        bool bDateTimeFixed                       = true;     // default: fixed
 
                         FixedDateTimeField            aFixedDateTimeField;
                         VariableDateTimeField         aVariableDateTimeField;
@@ -1126,7 +1126,7 @@ sal_Bool SVGFilter::implGenerateMetaData()
                 }
             }
         }
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -1134,9 +1134,9 @@ sal_Bool SVGFilter::implGenerateMetaData()
 
 
 
-sal_Bool SVGFilter::implExportAnimations()
+bool SVGFilter::implExportAnimations()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "presentation-animations" );
     SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
@@ -1150,7 +1150,7 @@ sal_Bool SVGFilter::implExportAnimations()
             sal_Int16 nTransition = 0;
             xProps->getPropertyValue( "TransitionType" )  >>= nTransition;
             // we have a slide transition ?
-            sal_Bool bHasEffects = ( nTransition != 0 );
+            bool bHasEffects = ( nTransition != 0 );
 
             Reference< XAnimationNodeSupplier > xAnimNodeSupplier( mSelectedPages[i], UNO_QUERY );
             if( xAnimNodeSupplier.is() )
@@ -1194,7 +1194,7 @@ sal_Bool SVGFilter::implExportAnimations()
         }
     }
 
-    bRet = sal_True;
+    bRet = true;
     return bRet;
 }
 
@@ -1276,7 +1276,7 @@ void SVGFilter::implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPat
  *  We export bitmaps embedded into text shapes, such as those used by list
  *  items with image style, only once in a specic <defs> element.
  */
-sal_Bool SVGFilter::implExportTextEmbeddedBitmaps()
+bool SVGFilter::implExportTextEmbeddedBitmaps()
 {
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "TextEmbeddedBitmaps" );
     SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
@@ -1322,23 +1322,23 @@ sal_Bool SVGFilter::implExportTextEmbeddedBitmaps()
                 else
                 {
                     OSL_FAIL( "implExportTextEmbeddedBitmaps: no shape bounding box." );
-                    return sal_False;
+                    return false;
                 }
             }
             else
             {
                 OSL_FAIL( "implExportTextEmbeddedBitmaps: metafile should have MetaBmpExScaleAction only." );
-                return sal_False;
+                return false;
             }
         }
         else
         {
             OSL_FAIL( "implExportTextEmbeddedBitmaps: metafile should have a single action." );
-            return sal_False;
+            return false;
         }
 
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -1346,7 +1346,7 @@ sal_Bool SVGFilter::implExportTextEmbeddedBitmaps()
 #define SVGFILTER_EXPORT_SVGSCRIPT( z, n, aFragment ) \
         xExtDocHandler->unknown( OUString::createFromAscii( aFragment ## n ) );
 
-sal_Bool SVGFilter::implGenerateScript()
+bool SVGFilter::implGenerateScript()
 {
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "type", "text/ecmascript" );
 
@@ -1360,7 +1360,7 @@ sal_Bool SVGFilter::implGenerateScript()
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -1386,9 +1386,9 @@ Any SVGFilter::implSafeGetPagePropSet( const OUString & sPropertyName,
  *  This method is used when exporting a single page
  *  as implGenerateMetaData is not invoked.
  */
-sal_Bool SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
+bool SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     mVisiblePagePropSet.bIsBackgroundVisible                = true;
     mVisiblePagePropSet.bAreBackgroundObjectsVisible        = true;
@@ -1434,7 +1434,7 @@ sal_Bool SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
                 }
             }
 
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -1444,7 +1444,7 @@ sal_Bool SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
 
 
 
-sal_Bool SVGFilter::implExportMasterPages( const SVGFilter::XDrawPageSequence & rxPages,
+bool SVGFilter::implExportMasterPages( const SVGFilter::XDrawPageSequence & rxPages,
                                            sal_Int32 nFirstPage, sal_Int32 nLastPage )
 {
     DBG_ASSERT( nFirstPage <= nLastPage,
@@ -1455,7 +1455,7 @@ sal_Bool SVGFilter::implExportMasterPages( const SVGFilter::XDrawPageSequence & 
     OUString aContainerTag = (mbSinglePage) ? OUString( "g" ) : OUString( "defs" );
     SvXMLElementExport aContainerElement( *mpSVGExport, XML_NAMESPACE_NONE, aContainerTag, true, true );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     for( sal_Int32 i = nFirstPage; i <= nLastPage; ++i )
     {
         if( rxPages[i].is() )
@@ -1468,7 +1468,7 @@ sal_Bool SVGFilter::implExportMasterPages( const SVGFilter::XDrawPageSequence & 
                 const OUString & sPageId = implGetValidIDFromInterface( rxPages[i] );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sPageId );
 
-                bRet = implExportPage( sPageId, rxPages[i], xShapes, sal_True /* is a master page */ ) || bRet;
+                bRet = implExportPage( sPageId, rxPages[i], xShapes, true /* is a master page */ ) || bRet;
             }
         }
     }
@@ -1477,7 +1477,7 @@ sal_Bool SVGFilter::implExportMasterPages( const SVGFilter::XDrawPageSequence & 
 
 
 
-sal_Bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rxPages,
+bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rxPages,
                                            sal_Int32 nFirstPage, sal_Int32 nLastPage )
 {
     DBG_ASSERT( nFirstPage <= nLastPage,
@@ -1487,7 +1487,7 @@ sal_Bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rx
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "SlideGroup" );
     SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     for( sal_Int32 i = nFirstPage; i <= nLastPage; ++i )
     {
         Reference< XShapes > xShapes;
@@ -1529,7 +1529,7 @@ sal_Bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rx
 
                 SvXMLElementExport aSlideElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
 
-                bRet = implExportPage( sPageId, rxPages[i], xShapes, sal_False /* is not a master page */ ) || bRet;
+                bRet = implExportPage( sPageId, rxPages[i], xShapes, false /* is not a master page */ ) || bRet;
             }
         } // append the </g> closing tag related to the svg element handling the slide visibility
     }
@@ -1538,12 +1538,12 @@ sal_Bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rx
 }
 
 
-sal_Bool SVGFilter::implExportPage( const OUString & sPageId,
+bool SVGFilter::implExportPage( const OUString & sPageId,
                                     const Reference< XDrawPage > & rxPage,
                                     const Reference< XShapes > & xShapes,
-                                    sal_Bool bMaster )
+                                    bool bMaster )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     {
         OUString sPageName = implGetInterfaceName( rxPage );
@@ -1642,11 +1642,11 @@ sal_Bool SVGFilter::implExportPage( const OUString & sPageId,
 
 
 
-sal_Bool SVGFilter::implExportShapes( const Reference< XShapes >& rxShapes,
-                                      sal_Bool bMaster )
+bool SVGFilter::implExportShapes( const Reference< XShapes >& rxShapes,
+                                      bool bMaster )
 {
     Reference< XShape > xShape;
-    sal_Bool            bRet = sal_False;
+    bool            bRet = false;
 
     for( sal_Int32 i = 0, nCount = rxShapes->getCount(); i < nCount; ++i )
     {
@@ -1661,16 +1661,16 @@ sal_Bool SVGFilter::implExportShapes( const Reference< XShapes >& rxShapes,
 
 
 
-sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
-                                     sal_Bool bMaster )
+bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
+                                     bool bMaster )
 {
     Reference< XPropertySet >   xShapePropSet( rxShape, UNO_QUERY );
-    sal_Bool                    bRet = sal_False;
+    bool                    bRet = false;
 
     if( xShapePropSet.is() )
     {
         const OUString   aShapeType( rxShape->getShapeType() );
-        sal_Bool                    bHideObj = sal_False;
+        bool                    bHideObj = false;
 
         if( mbPresentation )
         {
@@ -1716,9 +1716,9 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
                     // and set visibility to hidden
                     if( mbPresentation )
                     {
-                        sal_Bool bIsPageNumber  = ( aShapeClass == "Slide_Number" );
-                        sal_Bool bIsFooter      = ( aShapeClass == "Footer" );
-                        sal_Bool bIsDateTime    = ( aShapeClass == "Date/Time" );
+                        bool bIsPageNumber  = ( aShapeClass == "Slide_Number" );
+                        bool bIsFooter      = ( aShapeClass == "Footer" );
+                        bool bIsDateTime    = ( aShapeClass == "Date/Time" );
                         if( bIsPageNumber || bIsDateTime || bIsFooter )
                         {
                             if( !mbSinglePage )
@@ -1825,7 +1825,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
                     }
                 }
 
-                bRet = sal_True;
+                bRet = true;
             }
         }
     }
@@ -1835,7 +1835,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
 
 
 
-sal_Bool SVGFilter::implCreateObjects()
+bool SVGFilter::implCreateObjects()
 {
     if (mbExportSelection)
     {
@@ -1843,9 +1843,9 @@ sal_Bool SVGFilter::implCreateObjects()
         if (mSelectedPages.getLength() && mSelectedPages[0].is())
         {
             implCreateObjectsFromShapes(mSelectedPages[0], maShapeSelection);
-            return sal_True;
+            return true;
         }
-        return sal_False;
+        return false;
     }
 
     sal_Int32 i, nCount;
@@ -1897,15 +1897,15 @@ sal_Bool SVGFilter::implCreateObjects()
                 implCreateObjectsFromShapes( xDrawPage, xDrawPage );
         }
     }
-    return sal_True;
+    return true;
 }
 
 
 
-sal_Bool SVGFilter::implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPage, const Reference< XShapes >& rxShapes )
+bool SVGFilter::implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPage, const Reference< XShapes >& rxShapes )
 {
     Reference< XShape > xShape;
-    sal_Bool            bRet = sal_False;
+    bool            bRet = false;
 
     for( sal_Int32 i = 0, nCount = rxShapes->getCount(); i < nCount; ++i )
     {
@@ -1920,9 +1920,9 @@ sal_Bool SVGFilter::implCreateObjectsFromShapes( const Reference< XDrawPage > & 
 
 
 
-sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPage, const Reference< XShape >& rxShape )
+bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPage, const Reference< XShape >& rxShape )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( rxShape->getShapeType().lastIndexOf( "drawing.GroupShape" ) != -1 )
     {
         Reference< XShapes > xShapes( rxShape, UNO_QUERY );
@@ -1957,7 +1957,7 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
                     if( aGraphic.GetGDIMetaFile().GetActionSize() )
                     {
                         Reference< XText > xText( rxShape, UNO_QUERY );
-                        sal_Bool bIsTextShape = xText.is();
+                        bool bIsTextShape = xText.is();
 
                         if( !mpSVGExport->IsUsePositionedCharacters() && bIsTextShape )
                         {
@@ -1965,7 +1965,7 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
 
                             if( xShapePropSet.is() )
                             {
-                                sal_Bool bHideObj = sal_False;
+                                bool bHideObj = false;
 
                                 if( mbPresentation )
                                 {
@@ -1987,7 +1987,7 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
                                     GDIMetaFile   aMtf;
                                     const Size    aSize( pObj->GetCurrentBoundRect().GetSize() );
                                     MetaAction*   pAction;
-                                    sal_Bool bIsTextShapeStarted = sal_False;
+                                    bool bIsTextShapeStarted = false;
                                     const GDIMetaFile& rMtf = aGraphic.GetGDIMetaFile();
                                     sal_uLong nCount = rMtf.GetActionSize();
                                     for( sal_uLong nCurAction = 0; nCurAction < nCount; ++nCurAction )
@@ -2000,11 +2000,11 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
                                             const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
                                             if( ( pA->GetComment().equalsIgnoreAsciiCase("XTEXT_PAINTSHAPE_BEGIN") ) )
                                             {
-                                                bIsTextShapeStarted = sal_True;
+                                                bIsTextShapeStarted = true;
                                             }
                                             else if( ( pA->GetComment().equalsIgnoreAsciiCase( "XTEXT_PAINTSHAPE_END" ) ) )
                                             {
-                                                bIsTextShapeStarted = sal_False;
+                                                bIsTextShapeStarted = false;
                                             }
                                         }
                                         if( bIsTextShapeStarted && ( nType == META_BMPSCALE_ACTION  || nType == META_BMPEXSCALE_ACTION ) )
@@ -2028,7 +2028,7 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
                     }
                     (*mpObjects)[ rxShape ] = ObjectRepresentation( rxShape, aGraphic.GetGDIMetaFile() );
                 }
-                bRet = sal_True;
+                bRet = true;
             }
         }
     }
@@ -2038,7 +2038,7 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
 
 
 
-sal_Bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage >& rxDrawPage )
+bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage >& rxDrawPage )
 {
     Reference< XGraphicExportFilter >  xExporter = drawing::GraphicExportFilter::create( mxContext );
 
@@ -2053,7 +2053,7 @@ sal_Bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage 
     aDescriptor[1].Name = "URL";
     aDescriptor[1].Value <<= OUString( aFile.GetURL() );
     aDescriptor[2].Name = "ExportOnlyBackground";
-    aDescriptor[2].Value <<= (sal_Bool) sal_True;
+    aDescriptor[2].Value <<= true;
 
     xExporter->setSourceDocument( Reference< XComponent >( rxDrawPage, UNO_QUERY ) );
     xExporter->filter( aDescriptor );
@@ -2061,7 +2061,7 @@ sal_Bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage 
 
     (*mpObjects)[ rxDrawPage ] = ObjectRepresentation( rxDrawPage, aMtf );
 
-    return sal_True;
+    return true;
 }
 
 
@@ -2127,7 +2127,7 @@ OUString SVGFilter::implGetInterfaceName( const Reference< XInterface >& rxIf )
 
 IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
 {
-    sal_Bool bFieldProcessed = sal_False;
+    bool bFieldProcessed = false;
     if( pInfo && mbPresentation )
     {
         bFieldProcessed = true;
@@ -2145,7 +2145,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                     OSL_FAIL( "error: !mCreateOjectsCurrentMasterPage.is()" );
                     return 0;
                 }
-                sal_Bool bHasCharSetMap = !( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() );
+                bool bHasCharSetMap = !( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() );
 
                 static const OUString aHeaderId( aOOOAttrHeaderField );
                 static const OUString aFooterId( aOOOAttrFooterField );
@@ -2285,7 +2285,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                 }
                 else
                 {
-                    bFieldProcessed = sal_False;
+                    bFieldProcessed = false;
                 }
                 if( bFieldProcessed )
                 {
@@ -2302,7 +2302,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
             }
             else
             {
-                bFieldProcessed = sal_False;
+                bFieldProcessed = false;
             }
         }
         else  // single page case
@@ -2350,7 +2350,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                 }
                 else
                 {
-                    bFieldProcessed = sal_False;
+                    bFieldProcessed = false;
                 }
                 if( bFieldProcessed )
                 {

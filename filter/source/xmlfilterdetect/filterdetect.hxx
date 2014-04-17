@@ -58,10 +58,10 @@ protected:
 
     css::uno::Sequence< OUString > msUserData;
 
-    sal_Bool SAL_CALL exportImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
+    bool SAL_CALL exportImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
         throw (css::uno::RuntimeException);
 
-    sal_Bool SAL_CALL importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
+    bool SAL_CALL importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
         throw (css::uno::RuntimeException);
 
 public:

@@ -44,10 +44,10 @@ private:
     sal_uInt16          nResX, nResY;       // resolution in pixel per inch oder 0,0
     sal_uInt16          nDestBitsPerPixel;  // bits per pixel in destination bitmap 1,4,8 or 24
     sal_uInt8*          pPalette;
-    sal_Bool            nStatus;            // from now on do not read status from stream ( SJ )
+    bool            nStatus;            // from now on do not read status from stream ( SJ )
 
 
-    sal_Bool            Callback( sal_uInt16 nPercent );
+    bool            Callback( sal_uInt16 nPercent );
     void                ImplReadBody();
     void                ImplReadPalette( sal_uLong nCol );
     void                ImplReadHeader();
@@ -55,7 +55,7 @@ private:
 public:
                         PCXReader(SvStream &rStream);
                         ~PCXReader();
-    sal_Bool                ReadPCX(Graphic & rGraphic );
+    bool                ReadPCX(Graphic & rGraphic );
                         // Reads a PCX file from the stream and fills the GDIMetaFile
 };
 
@@ -85,15 +85,15 @@ PCXReader::~PCXReader()
     delete[] pPalette;
 }
 
-sal_Bool PCXReader::Callback( sal_uInt16 /*nPercent*/ )
+bool PCXReader::Callback( sal_uInt16 /*nPercent*/ )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool PCXReader::ReadPCX(Graphic & rGraphic)
+bool PCXReader::ReadPCX(Graphic & rGraphic)
 {
     if ( m_rPCX.GetError() )
-        return sal_False;
+        return false;
 
     sal_uLong*  pDummy = new sal_uLong; delete pDummy; // to achive that under OS/2
                                                // the right (Tools-) new is used
@@ -104,7 +104,7 @@ sal_Bool PCXReader::ReadPCX(Graphic & rGraphic)
 
     // read header:
 
-    nStatus = sal_True;
+    nStatus = true;
 
     ImplReadHeader();
 
@@ -113,7 +113,7 @@ sal_Bool PCXReader::ReadPCX(Graphic & rGraphic)
     {
         aBmp = Bitmap( Size( nWidth, nHeight ), nDestBitsPerPixel );
         if ( ( pAcc = aBmp.AcquireWriteAccess() ) == 0 )
-            return sal_False;
+            return false;
 
         if ( nDestBitsPerPixel <= 8 )
         {
@@ -152,10 +152,10 @@ sal_Bool PCXReader::ReadPCX(Graphic & rGraphic)
         {
             aBmp.ReleaseAccess( pAcc ), pAcc = NULL;
             rGraphic = aBmp;
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 void PCXReader::ImplReadHeader()
@@ -164,7 +164,7 @@ void PCXReader::ImplReadHeader()
     m_rPCX.ReadUChar( nbyte ).ReadUChar( nVersion ).ReadUChar( nEncoding );
     if ( nbyte!=0x0a || (nVersion != 0 && nVersion != 2 && nVersion != 3 && nVersion != 5) || nEncoding > 1 )
     {
-        nStatus = sal_False;
+        nStatus = false;
         return;
     }
 
@@ -175,7 +175,7 @@ void PCXReader::ImplReadHeader()
 
     if ((nMinX > nMaxX) || (nMinY > nMaxY))
     {
-        nStatus = sal_False;
+        nStatus = false;
         return;
     }
 
@@ -204,7 +204,7 @@ void PCXReader::ImplReadHeader()
     if ( ( nDestBitsPerPixel != 1 && nDestBitsPerPixel != 4 && nDestBitsPerPixel != 8 && nDestBitsPerPixel != 24 )
         || nPlanes > 4 || nBytesPerPlaneLin < ( ( nWidth * nBitsPerPlanePix+7 ) >> 3 ) )
     {
-        nStatus = sal_False;
+        nStatus = false;
         return;
     }
 
@@ -232,14 +232,14 @@ void PCXReader::ImplReadBody()
     {
         if (m_rPCX.GetError() || m_rPCX.IsEof())
         {
-            nStatus = sal_False;
+            nStatus = false;
             break;
         }
         nPercent = ny * 60 / nHeight + 10;
         if ( ny == 0 || nLastPercent + 4 <= nPercent )
         {
             nLastPercent = nPercent;
-            if ( Callback( (sal_uInt16)nPercent ) == sal_True )
+            if ( Callback( (sal_uInt16)nPercent ) )
                 break;
         }
         for ( np = 0; np < nPlanes; np++)
@@ -386,7 +386,7 @@ void PCXReader::ImplReadBody()
                 }
                 break;
             default :
-                nStatus = sal_False;
+                nStatus = false;
                 break;
         }
     }
@@ -420,8 +420,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
 GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     PCXReader aPCXReader(rStream);
-    sal_Bool nRetValue = aPCXReader.ReadPCX(rGraphic);
-    if ( nRetValue == sal_False )
+    bool nRetValue = aPCXReader.ReadPCX(rGraphic);
+    if ( nRetValue == false )
         rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
     return nRetValue;
 }

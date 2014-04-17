@@ -62,7 +62,7 @@ private:
     SvStream& m_rOStm;
     sal_uInt32              mnStreamOfs;
 
-    sal_Bool                mbStatus;
+    bool                mbStatus;
     BitmapReadAccess*       mpAcc;
 
     sal_uInt32              mnWidth, mnHeight, mnColors;
@@ -95,9 +95,9 @@ private:
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     void                ImplCallback( sal_uInt32 nPercent );
-    sal_Bool            ImplWriteHeader( sal_Bool bMultiPage );
+    bool            ImplWriteHeader( bool bMultiPage );
     void                ImplWritePalette();
-    sal_Bool            ImplWriteBody();
+    bool            ImplWriteBody();
     void                ImplWriteTag( sal_uInt16 TagID, sal_uInt16 DataType, sal_uInt32 NumberOfItems, sal_uInt32 Value);
     void                ImplWriteResolution( sal_uLong nStreamPos, sal_uInt32 nResolutionUnit );
     void                StartCompression();
@@ -110,14 +110,14 @@ public:
     TIFFWriter(SvStream &rStream);
     ~TIFFWriter();
 
-    sal_Bool WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
+    bool WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 
 
 TIFFWriter::TIFFWriter(SvStream &rStream)
     : m_rOStm(rStream)
-    , mbStatus(sal_True)
+    , mbStatus(true)
     , mpAcc(NULL)
     , mnCurAllPictHeight(0)
     , mnSumOfAllPictHeight(0)
@@ -137,7 +137,7 @@ TIFFWriter::~TIFFWriter()
 
 
 
-sal_Bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
+bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     sal_uLong*  pDummy = new sal_uLong; delete pDummy; // So that under OS/2
                                                // the right (tools-)new
@@ -217,7 +217,7 @@ sal_Bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilt
                 aBmp.ReleaseAccess( mpAcc );
             }
             else
-                mbStatus = sal_False;
+                mbStatus = false;
         }
     }
     m_rOStm.SetNumberFormatInt( nOldFormat );
@@ -246,7 +246,7 @@ void TIFFWriter::ImplCallback( sal_uInt32 nPercent )
 
 
 
-sal_Bool TIFFWriter::ImplWriteHeader( sal_Bool bMultiPage )
+bool TIFFWriter::ImplWriteHeader( bool bMultiPage )
 {
     mnTagCount = 0;
     mnWidth = mpAcc->Width();
@@ -314,7 +314,7 @@ sal_Bool TIFFWriter::ImplWriteHeader( sal_Bool bMultiPage )
         m_rOStm.WriteUInt32( (sal_uInt32)0 );               // there are no more IFD
     }
     else
-        mbStatus = sal_False;
+        mbStatus = false;
 
     return mbStatus;
 }
@@ -348,7 +348,7 @@ void TIFFWriter::ImplWritePalette()
 
 
 
-sal_Bool TIFFWriter::ImplWriteBody()
+bool TIFFWriter::ImplWriteBody()
 {
     sal_uInt8   nTemp = 0;
     sal_uInt8    nShift;
@@ -437,7 +437,7 @@ sal_Bool TIFFWriter::ImplWriteBody()
 
         default:
         {
-            mbStatus = sal_False;
+            mbStatus = false;
         }
         break;
     }

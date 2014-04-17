@@ -42,7 +42,7 @@ private:
 
     SvStream&           m_rRAS;                 // Die einzulesende RAS-Datei
 
-    sal_Bool                mbStatus;
+    bool                mbStatus;
     Bitmap              maBmp;
     BitmapWriteAccess*  mpAcc;
     sal_uInt32          mnWidth, mnHeight;      // Bildausmass in Pixeln
@@ -51,23 +51,23 @@ private:
     sal_uInt32          mnDepth, mnImageDatSize, mnType;
     sal_uInt32          mnColorMapType, mnColorMapSize;
     sal_uInt8               mnRepCount, mnRepVal;   // RLE Decoding
-    sal_Bool                mbPalette;
+    bool                mbPalette;
 
-    sal_Bool                ImplReadBody();
-    sal_Bool                ImplReadHeader();
+    bool                ImplReadBody();
+    bool                ImplReadHeader();
     sal_uInt8               ImplGetByte();
 
 public:
                         RASReader(SvStream &rRAS);
                         ~RASReader();
-    sal_Bool                ReadRAS(Graphic & rGraphic);
+    bool                ReadRAS(Graphic & rGraphic);
 };
 
 //=================== Methoden von RASReader ==============================
 
 RASReader::RASReader(SvStream &rRAS)
     : m_rRAS(rRAS)
-    , mbStatus(sal_True)
+    , mbStatus(true)
     , mpAcc(NULL)
     , mnWidth(0)
     , mnHeight(0)
@@ -80,7 +80,7 @@ RASReader::RASReader(SvStream &rRAS)
     , mnColorMapSize(0)
     , mnRepCount(0)
     , mnRepVal(0)
-    , mbPalette(sal_False)
+    , mbPalette(false)
 {
 }
 
@@ -90,26 +90,26 @@ RASReader::~RASReader()
 
 
 
-sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
+bool RASReader::ReadRAS(Graphic & rGraphic)
 {
     sal_uInt32 nMagicNumber;
 
     if ( m_rRAS.GetError() )
-        return sal_False;
+        return false;
 
     m_rRAS.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
     m_rRAS.ReadUInt32( nMagicNumber );
     if ( nMagicNumber != SUNRASTER_MAGICNUMBER )
-        return sal_False;
+        return false;
 
     // Kopf einlesen:
 
-    if ( ( mbStatus = ImplReadHeader() ) == sal_False )
-        return sal_False;
+    if ( ( mbStatus = ImplReadHeader() ) == false )
+        return false;
 
     maBmp = Bitmap( Size( mnWidth, mnHeight ), mnDstBitsPerPix );
     if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == 0 )
-        return sal_False;
+        return false;
 
     if ( mnDstBitsPerPix <= 8 )     // paletten bildchen
     {
@@ -123,7 +123,7 @@ sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
             mnDstColors = (sal_uInt16)( mnColorMapSize / 3 );
 
             if ( ( 1 << mnDstBitsPerPix ) < mnDstColors )
-                return sal_False;
+                return false;
 
             if ( ( mnDstColors >= 2 ) && ( ( mnColorMapSize % 3 ) == 0 ) )
             {
@@ -137,14 +137,14 @@ sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
                 {
                     mpAcc->SetPaletteColor( i, BitmapColor( nRed[ i ], nGreen[ i ], nBlue[ i ] ) );
                 }
-                mbPalette = sal_True;
+                mbPalette = true;
             }
             else
-                return sal_False;
+                return false;
 
         }
         else if ( mnColorMapType != RAS_COLOR_NO_MAP )  // alles andere ist kein standard
-            return sal_False;
+            return false;
 
         if ( !mbPalette )
         {
@@ -181,12 +181,12 @@ sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
 
 
 
-sal_Bool RASReader::ImplReadHeader()
+bool RASReader::ImplReadHeader()
 {
     m_rRAS.ReadUInt32( mnWidth ).ReadUInt32( mnHeight ).ReadUInt32( mnDepth ).ReadUInt32( mnImageDatSize ).        ReadUInt32( mnType ).ReadUInt32( mnColorMapType ).ReadUInt32( mnColorMapSize );
 
     if ( mnWidth == 0 || mnHeight == 0 )
-        mbStatus = sal_False;
+        mbStatus = false;
 
     switch ( mnDepth )
     {
@@ -200,7 +200,7 @@ sal_Bool RASReader::ImplReadHeader()
             break;
 
         default :
-            mbStatus = sal_False;
+            mbStatus = false;
     }
 
     switch ( mnType )
@@ -212,14 +212,14 @@ sal_Bool RASReader::ImplReadHeader()
             break;
 
         default:
-            mbStatus = sal_False;
+            mbStatus = false;
     }
     return mbStatus;
 }
 
 
 
-sal_Bool RASReader::ImplReadBody()
+bool RASReader::ImplReadBody()
 {
     sal_uLong   x, y;
     sal_uInt8   nDat = 0;
@@ -306,7 +306,7 @@ sal_Bool RASReader::ImplReadBody()
             break;
 
         default:
-            mbStatus = sal_False;
+            mbStatus = false;
             break;
     }
     return mbStatus;

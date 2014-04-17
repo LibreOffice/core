@@ -98,7 +98,7 @@ void CGMOutAct::EndFigure()
 
 
 
-void CGMOutAct::RegPolyLine( Polygon& rPolygon, sal_Bool bReverse )
+void CGMOutAct::RegPolyLine( Polygon& rPolygon, bool bReverse )
 {
     sal_uInt16 nPoints = rPolygon.GetSize();
     if ( nPoints )

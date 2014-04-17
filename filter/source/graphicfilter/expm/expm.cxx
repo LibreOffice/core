@@ -30,8 +30,8 @@ private:
 
     SvStream&           m_rOStm;            // the output XPM file
 
-    sal_Bool            mbStatus;
-    sal_Bool            mbTrans;
+    bool            mbStatus;
+    bool            mbTrans;
     BitmapReadAccess*   mpAcc;
     sal_uLong           mnWidth, mnHeight;  // size in Pixel
     sal_uInt16          mnColors;
@@ -39,7 +39,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     void                ImplCallback( sal_uInt16 nPercent );
-    sal_Bool            ImplWriteHeader();
+    bool            ImplWriteHeader();
     void                ImplWritePalette();
     void                ImplWriteColor( sal_uInt16 );
     void                ImplWriteBody();
@@ -50,15 +50,15 @@ public:
     XPMWriter(SvStream& rOStm);
     ~XPMWriter();
 
-    sal_Bool            WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
+    bool            WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von XPMWriter ==============================
 
 XPMWriter::XPMWriter(SvStream& rOStm)
     : m_rOStm(rOStm)
-    , mbStatus(sal_True)
-    , mbTrans(sal_False)
+    , mbStatus(true)
+    , mbTrans(false)
     , mpAcc(NULL)
     , mnWidth(0)
     , mnHeight(0)
@@ -85,7 +85,7 @@ void XPMWriter::ImplCallback( sal_uInt16 nPercent )
 
 
 
-sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
+bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     Bitmap  aBmp;
 
@@ -104,7 +104,7 @@ sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilter
 
     if ( rGraphic.IsTransparent() )                 // possibly create transparent color
     {
-        mbTrans = sal_True;
+        mbTrans = true;
         if ( aBmp.GetBitCount() >= 8 )              // if necessary convert image to 8 bit
             aBmp.Convert( BMP_CONVERSION_8BIT_TRANS );
         else
@@ -135,7 +135,7 @@ sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilter
         aBmp.ReleaseAccess( mpAcc );
     }
     else
-        mbStatus = sal_False;
+        mbStatus = false;
 
 
     if ( xStatusIndicator.is() )
@@ -146,7 +146,7 @@ sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilter
 
 
 
-sal_Bool XPMWriter::ImplWriteHeader()
+bool XPMWriter::ImplWriteHeader()
 {
     mnWidth = mpAcc->Width();
     mnHeight = mpAcc->Height();
@@ -162,7 +162,7 @@ sal_Bool XPMWriter::ImplWriteHeader()
         ImplWriteNumber( ( mnColors > 26 ) ? 2 : 1 );
         m_rOStm.WriteCharPtr( "\x22,\x0a" );
     }
-    else mbStatus = sal_False;
+    else mbStatus = false;
     return mbStatus;
 }
 

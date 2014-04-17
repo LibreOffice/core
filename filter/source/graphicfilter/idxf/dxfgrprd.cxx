@@ -33,7 +33,7 @@
 OString DXFReadLine(SvStream& rIStm)
 {
     char  buf[256 + 1];
-    sal_Bool  bEnd = sal_False;
+    bool  bEnd = false;
     sal_uLong nOldFilePos = rIStm.Tell();
     char  c = 0;
 
@@ -62,14 +62,14 @@ OString DXFReadLine(SvStream& rIStm)
             }
             else
             {
-                bEnd = sal_True;
+                bEnd = true;
                 break;
             }
         }
     }
 
     if( !bEnd && !rIStm.GetError() && !aBuf.isEmpty() )
-        bEnd = sal_True;
+        bEnd = true;
 
     nOldFilePos += aBuf.getLength();
     if( rIStm.Tell() > nOldFilePos )
@@ -96,7 +96,7 @@ DXFGroupReader::DXFGroupReader(SvStream & rIStream, sal_uInt16 nminpercent, sal_
 
     nIBuffPos=0;
     nIBuffSize=0;
-    bStatus=sal_True;
+    bStatus=true;
     nLastG=0;
     nGCount=0;
 
@@ -154,7 +154,7 @@ sal_uInt16 DXFGroupReader::Read()
             else if (nG<1010) ReadS(S999_1009[nG-999]);
             else if (nG<1060) F1010_1059[nG-1010]=ReadF();
             else if (nG<1080) I1060_1079[nG-1060]=ReadI();
-            else bStatus = sal_False;
+            else bStatus = false;
         }
     }
     if ( bStatus )
@@ -273,7 +273,7 @@ long DXFGroupReader::ReadI()
     while(*p==0x20) p++;
 
     if ((*p<'0' || *p>'9') && *p!='-') {
-        bStatus=sal_False;
+        bStatus=false;
         return 0;
     }
 
@@ -291,7 +291,7 @@ long DXFGroupReader::ReadI()
 
     while (*p==0x20) p++;
     if (*p!=0) {
-        bStatus=sal_False;
+        bStatus=false;
         return 0;
     }
 
@@ -307,7 +307,7 @@ double DXFGroupReader::ReadF()
     p=sl;
     while(*p==0x20) p++;
     if ((*p<'0' || *p>'9') && *p!='.' && *p!='-') {
-        bStatus=sal_False;
+        bStatus=false;
         return 0.0;
     }
     return atof(p);

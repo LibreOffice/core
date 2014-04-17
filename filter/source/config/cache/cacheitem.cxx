@@ -116,7 +116,7 @@ css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyVa
 
 
 
-sal_Bool isSubSet(const css::uno::Any& aSubSet,
+bool isSubSet(const css::uno::Any& aSubSet,
                   const css::uno::Any& aSet   )
 {
     css::uno::Type aT1 = aSubSet.getValueType();
@@ -125,7 +125,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
     if (!aT1.equals(aT2))
     {
         _FILTER_CONFIG_LOG_("isSubSet() ... types of any values are different => return FALSE\n")
-        return sal_False;
+        return false;
     }
 
     css::uno::TypeClass aTypeClass = aT1.getTypeClass();
@@ -143,7 +143,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
         case css::uno::TypeClass_FLOAT :
         case css::uno::TypeClass_DOUBLE :
         {
-            sal_Bool bIs = (aSubSet == aSet);
+            bool bIs = (aSubSet == aSet);
             _FILTER_CONFIG_LOG_1_("isSubSet() ... check for atomic types => return %s\n", bIs ? "TRUE" : "FALSE")
             return bIs;
         }
@@ -159,7 +159,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
                 (aSet    >>= v2)
                )
             {
-                sal_Bool bIs = (v1.equals(v2));
+                bool bIs = (v1.equals(v2));
                 _FILTER_CONFIG_LOG_1_("isSubSet() ... check for string types => return %s\n", bIs ? "TRUE" : "FALSE")
                 return bIs;
             }
@@ -177,7 +177,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
                 (aSet    >>= v2)
                )
             {
-                sal_Bool bIs = (isSubSet(v1, v2));
+                bool bIs = (isSubSet(v1, v2));
                 _FILTER_CONFIG_LOG_1_("isSubSet() ... check for packed any types => return %s\n", bIs ? "TRUE" : "FALSE")
                 return bIs;
             }
@@ -195,7 +195,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
                 (aSet    >>= p2)
                )
             {
-                sal_Bool bIs = (
+                bool bIs = (
                                 (p1.Name.equals(p2.Name)     ) &&
                                 (isSubSet(p1.Value, p2.Value))
                                );
@@ -211,7 +211,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
                 (aSet    >>= n2)
                )
             {
-                sal_Bool bIs = (
+                bool bIs = (
                                 (n1.Name.equals(n2.Name)     ) &&
                                 (isSubSet(n1.Value, n2.Value))
                                );
@@ -242,12 +242,12 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
                     if (::std::find(stl_s2.begin(), stl_s2.end(), *it1) == stl_s2.end())
                     {
                         _FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [OUString] ... dont found \"%s\" => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(*it1))
-                        return sal_False;
+                        return false;
                     }
                     _FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [OUString] ... found \"%s\" => continue loop\n", _FILTER_CONFIG_TO_ASCII_(*it1))
                 }
                 _FILTER_CONFIG_LOG_("isSubSet() ... check for list types [OUString] => return TRUE\n")
-                return sal_True;
+                return true;
             }
 
             css::uno::Sequence< css::beans::PropertyValue > uno_p1;
@@ -269,17 +269,17 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
                     if (it2 == stl_p2.end())
                     {
                         _FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [PropertyValue] ... dont found \"%s\" => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(it1->first))
-                        return sal_False;
+                        return false;
                     }
                     if (!isSubSet(it1->second, it2->second))
                     {
                         _FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [PropertyValue] ... found \"%s\" but has different value => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(it1->first))
-                        return sal_False;
+                        return false;
                     }
                     _FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [PropertyValue] ... found \"%s\" with right value => continue loop\n", _FILTER_CONFIG_TO_ASCII_(it1->first))
                 }
                 _FILTER_CONFIG_LOG_("isSubSet() ... check for list types [PropertyValue] => return TRUE\n")
-                return sal_True;
+                return true;
             }
 
             css::uno::Sequence< css::beans::NamedValue > uno_n1;
@@ -301,17 +301,17 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
                     if (it2 == stl_n2.end())
                     {
                         _FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [NamedValue] ... dont found \"%s\" => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(it1->first))
-                        return sal_False;
+                        return false;
                     }
                     if (!isSubSet(it1->second, it2->second))
                     {
                         _FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [NamedValue] ... found \"%s\" but has different value => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(it1->first))
-                        return sal_False;
+                        return false;
                     }
                     _FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [NamedValue] ... found \"%s\" with right value => continue loop\n", _FILTER_CONFIG_TO_ASCII_(it1->first))
                 }
                 _FILTER_CONFIG_LOG_("isSubSet() ... check for list types [NamedValue] => return TRUE\n")
-                return sal_True;
+                return true;
             }
         }
         break;
@@ -319,12 +319,12 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
     }
 
     OSL_FAIL("isSubSet() ... this point should not be reached!");
-    return sal_False;
+    return false;
 }
 
 
 
-sal_Bool CacheItem::haveProps(const CacheItem& lProps) const
+bool CacheItem::haveProps(const CacheItem& lProps) const
 {
     for (const_iterator pIt  = lProps.begin();
                         pIt != lProps.end()  ;
@@ -335,14 +335,14 @@ sal_Bool CacheItem::haveProps(const CacheItem& lProps) const
         if (pItThis == this->end())
         {
             _FILTER_CONFIG_LOG_1_("CacheItem::haveProps() ... dont found \"%s\" => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(pIt->first))
-            return sal_False;
+            return false;
         }
 
         // ii) one item does not have the right value => return false
         if (!isSubSet(pIt->second, pItThis->second))
         {
             _FILTER_CONFIG_LOG_1_("CacheItem::haveProps() ... item \"%s\" has different value => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(pIt->first))
-            return sal_False;
+            return false;
         }
     }
 
@@ -350,12 +350,12 @@ sal_Bool CacheItem::haveProps(const CacheItem& lProps) const
     // the given property set seems to match with our
     // own properties in its minimum => return TRUE
     _FILTER_CONFIG_LOG_("CacheItem::haveProps() ... => return TRUE\n")
-    return sal_True;
+    return true;
 }
 
 
 
-sal_Bool CacheItem::dontHaveProps(const CacheItem& lProps) const
+bool CacheItem::dontHaveProps(const CacheItem& lProps) const
 {
     for (const_iterator pIt  = lProps.begin();
                         pIt != lProps.end()  ;
@@ -378,7 +378,7 @@ sal_Bool CacheItem::dontHaveProps(const CacheItem& lProps) const
         if (isSubSet(pIt->second, pItThis->second))
         {
             _FILTER_CONFIG_LOG_1_("CacheItem::dontHaveProps() ... item \"%s\" has same value => return FALSE!\n", _FILTER_CONFIG_TO_ASCII_(pIt->first))
-            return sal_False;
+            return false;
         }
     }
 
@@ -386,7 +386,7 @@ sal_Bool CacheItem::dontHaveProps(const CacheItem& lProps) const
     // That means: this item has no matching property
     // of the given set. It "dont have" it ... => return true.
     _FILTER_CONFIG_LOG_("CacheItem::dontHaveProps() ... => return TRUE\n")
-    return sal_True;
+    return true;
 }
 
 FlatDetectionInfo::FlatDetectionInfo() :

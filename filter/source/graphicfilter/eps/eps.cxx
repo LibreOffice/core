@@ -71,12 +71,12 @@ struct StackMember
 {
     struct      StackMember * pSucc;
     Color       aGlobalCol;
-    sal_Bool        bLineCol;
+    bool        bLineCol;
     Color       aLineCol;
-    sal_Bool        bFillCol;
+    bool        bFillCol;
     Color       aFillCol;
     Color       aTextCol;
-    sal_Bool        bTextFillCol;
+    bool        bTextFillCol;
     Color       aTextFillCol;
     Color       aBackgroundCol;
     Font        aFont;
@@ -101,14 +101,14 @@ struct PSLZWCTreeNode
 class PSWriter
 {
 private:
-    sal_Bool            mbStatus;
+    bool            mbStatus;
     sal_uLong           mnLevelWarning;     // number of embedded eps files which was not exported
     sal_uLong           mnLastPercent;      // the number with which pCallback was called the last time
     sal_uInt32          mnLatestPush;       // offset to streamposition, where last push was done
 
     long                mnLevel;            // dialog options
-    sal_Bool            mbGrayScale;
-    sal_Bool            mbCompression;
+    bool            mbGrayScale;
+    bool            mbCompression;
     sal_Int32           mnPreview;
     sal_Int32           mnTextMode;
 
@@ -125,15 +125,15 @@ private:
     StackMember*        pGDIStack;
     sal_uLong           mnCursorPos;        // current cursor position in output
     Color               aColor;             // current color which is used for output
-    sal_Bool            bLineColor;
+    bool            bLineColor;
     Color               aLineColor;         // current GDIMetafile color settings
-    sal_Bool            bFillColor;
+    bool            bFillColor;
     Color               aFillColor;
     Color               aTextColor;
-    sal_Bool            bTextFillColor;
+    bool            bTextFillColor;
     Color               aTextFillColor;
     Color               aBackgroundColor;
-    sal_Bool            bRegionChanged;
+    bool            bRegionChanged;
     TextAlign           eTextAlign;
 
     double                      fLineWidth;
@@ -204,7 +204,7 @@ private:
     void                ImplRectFill ( const Rectangle & rRectangle );
     void                ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev );
     void                ImplIntersect( const PolyPolygon& rPolyPoly );
-    void                ImplPolyPoly( const PolyPolygon & rPolyPolygon, sal_Bool bTextOutline = sal_False );
+    void                ImplPolyPoly( const PolyPolygon & rPolyPolygon, bool bTextOutline = false );
     void                ImplPolyLine( const Polygon & rPolygon );
 
     void                ImplSetClipRegion( Region& rRegion );
@@ -212,7 +212,7 @@ private:
     void                ImplText( const OUString& rUniString, const Point& rPos, const sal_Int32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( sal_Char );
-    void                ImplWriteString( const OString&, VirtualDevice& rVDev, const sal_Int32* pDXArry = NULL, sal_Bool bStretch = sal_False );
+    void                ImplWriteString( const OString&, VirtualDevice& rVDev, const sal_Int32* pDXArry = NULL, bool bStretch = false );
     void                ImplDefineFont( const char*, const char* );
 
     void                ImplClosePathDraw( sal_uLong nMode = PS_RET );
@@ -225,7 +225,7 @@ private:
 
     double              ImplGetScaling( const MapMode& );
     void                ImplGetMapMode( const MapMode& );
-    sal_Bool            ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize );
+    bool            ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize );
     sal_uInt8*          ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize );
                         // LZW methods
     void                StartCompression();
@@ -234,7 +234,7 @@ private:
     inline void         WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen );
 
 public:
-    sal_Bool            WritePS( const Graphic& rGraphic, SvStream& rTargetStream, FilterConfigItem* );
+    bool            WritePS( const Graphic& rGraphic, SvStream& rTargetStream, FilterConfigItem* );
     PSWriter();
     ~PSWriter();
 };
@@ -244,13 +244,13 @@ public:
 
 
 PSWriter::PSWriter()
-    : mbStatus(sal_False)
+    : mbStatus(false)
     , mnLevelWarning(0)
     , mnLastPercent(0)
     , mnLatestPush(0)
     , mnLevel(0)
-    , mbGrayScale(sal_False)
-    , mbCompression(sal_False)
+    , mbGrayScale(false)
+    , mbCompression(false)
     , mnPreview(0)
     , mnTextMode(0)
     , mpPS(NULL)
@@ -264,15 +264,15 @@ PSWriter::PSWriter()
     , pGDIStack(NULL)
     , mnCursorPos(0)
     , aColor()
-    , bLineColor(sal_False)
+    , bLineColor(false)
     , aLineColor()
-    , bFillColor(sal_False)
+    , bFillColor(false)
     , aFillColor()
     , aTextColor()
-    , bTextFillColor(sal_False)
+    , bTextFillColor(false)
     , aTextFillColor()
     , aBackgroundColor()
-    , bRegionChanged(sal_False)
+    , bRegionChanged(false)
     , eTextAlign()
     , fLineWidth(0)
     , fMiterLimit(0)
@@ -306,11 +306,11 @@ PSWriter::~PSWriter()
 
 
 
-sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, FilterConfigItem* pFilterConfigItem )
+bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, FilterConfigItem* pFilterConfigItem )
 {
     sal_uInt32 nStreamPosition = 0, nPSPosition = 0; // -Wall warning, unset, check
 
-    mbStatus = sal_True;
+    mbStatus = true;
     mnPreview = 0;
     mnLevelWarning = 0;
     mnLastPercent = 0;
@@ -331,9 +331,9 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
 
     // default values for the dialog options
     mnLevel = 2;
-    mbGrayScale = sal_False;
+    mbGrayScale = false;
 #ifdef UNX // don't compress by default on unix as ghostscript is unable to read LZW compressed eps
-    mbCompression = sal_False;
+    mbCompression = false;
 #else
     mbCompression = sal_True;
 #endif
@@ -369,8 +369,8 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     // compression is not available for Level 1
     if ( mnLevel == 1 )
     {
-        mbGrayScale = sal_True;
-        mbCompression = sal_False;
+        mbGrayScale = true;
+        mbCompression = false;
     }
 
     if ( mnPreview & EPS_PREVIEW_TIFF )
@@ -431,11 +431,11 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
 
     pGDIStack = NULL;
     aColor = Color( COL_TRANSPARENT );
-    bLineColor = sal_True;
+    bLineColor = true;
     aLineColor = Color( COL_BLACK );
-    bFillColor = sal_True;
+    bFillColor = true;
     aFillColor = Color( COL_WHITE );
-    bTextFillColor = sal_True;
+    bTextFillColor = true;
     aTextFillColor = Color( COL_BLACK );
     fLineWidth = 1;
     fMiterLimit = 15; // use same limit as most graphic systems and basegfx
@@ -443,7 +443,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     eJoinType = SvtGraphicStroke::joinMiter;
     aBackgroundColor = Color( COL_WHITE );
     eTextAlign = ALIGN_BASELINE;
-    bRegionChanged = sal_False;
+    bRegionChanged = false;
 
     nChrSet = 0x00;
     pChrSetList = NULL;
@@ -477,7 +477,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
         }
     }
     else
-        mbStatus = sal_False;
+        mbStatus = false;
 
     if ( mbStatus && mnLevelWarning && pFilterConfigItem )
     {
@@ -1032,11 +1032,11 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             {
                 if ( ( (const MetaLineColorAction*) pMA)->IsSetting() )
                 {
-                    bLineColor = sal_True;
+                    bLineColor = true;
                     aLineColor = ( (const MetaLineColorAction*) pMA )->GetColor();
                 }
                 else
-                    bLineColor = sal_False;
+                    bLineColor = false;
             }
             break;
 
@@ -1044,11 +1044,11 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             {
                 if ( ( (const MetaFillColorAction*) pMA )->IsSetting() )
                 {
-                    bFillColor = sal_True;
+                    bFillColor = true;
                     aFillColor =  ( (const MetaFillColorAction*) pMA )->GetColor();
                 }
                 else
-                    bFillColor = sal_False;
+                    bFillColor = false;
             }
             break;
 
@@ -1062,11 +1062,11 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             {
                 if ( ( (const MetaTextFillColorAction*) pMA )->IsSetting() )
                 {
-                    bTextFillColor = sal_True;
+                    bTextFillColor = true;
                     aTextFillColor = ( (const MetaTextFillColorAction*) pMA )->GetColor();
                 }
                 else
-                    bTextFillColor = sal_False;
+                    bTextFillColor = false;
             }
             break;
 
@@ -1111,7 +1111,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 pGS->bTextFillCol = bTextFillColor;
                 pGS->aTextFillCol = aTextFillColor;
                 pGS->aBackgroundCol = aBackgroundColor;
-                bRegionChanged = sal_False;
+                bRegionChanged = false;
                 pGS->aFont = maFont;
                 mnLatestPush = mpPS->Tell();
                 ImplWriteLine( "gs" );
@@ -1162,7 +1162,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 GfxLink aGfxLink = ( (const MetaEPSAction*) pMA )->GetLink();
                 const GDIMetaFile aSubstitute( ( ( const MetaEPSAction*) pMA )->GetSubstitute() );
 
-                sal_Bool    bLevelConflict = sal_False;
+                bool    bLevelConflict = false;
                 sal_uInt8*  pSource = (sal_uInt8*) aGfxLink.GetData();
                 sal_uLong   nSize = aGfxLink.GetDataSize();
                 sal_uLong   nParseThis = POSTSCRIPT_BOUNDINGSEARCH;
@@ -1185,7 +1185,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                             {
                                 if ( k != '1' )
                                 {
-                                    bLevelConflict = sal_True;
+                                    bLevelConflict = true;
                                     mnLevelWarning++;
                                 }
                                 break;
@@ -1292,7 +1292,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     if ( pData )
                     {
                         SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
-                        sal_Bool        bSkipSequence = sal_False;
+                        bool        bSkipSequence = false;
                         OString sSeqEnd;
 
                         if( pA->GetComment().equals( "XPATHSTROKE_SEQ_BEGIN" ) )
@@ -1315,15 +1315,15 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                             aStroke.getEndArrow( aEndArrow );
                             aStroke.getDashArray( l_aDashArray );
 
-                            bSkipSequence = sal_True;
+                            bSkipSequence = true;
                             if ( l_aDashArray.size() > 11 ) // ps dasharray limit is 11
-                                bSkipSequence = sal_False;
+                                bSkipSequence = false;
                             if ( aStartArrow.Count() || aEndArrow.Count() )
-                                bSkipSequence = sal_False;
+                                bSkipSequence = false;
                             if ( (sal_uInt32)eJT > 2 )
-                                bSkipSequence = sal_False;
+                                bSkipSequence = false;
                             if ( l_aDashArray.size() && ( fStrokeWidth != 0.0 ) )
-                                bSkipSequence = sal_False;
+                                bSkipSequence = false;
                             if ( bSkipSequence )
                             {
                                 ImplWriteLineInfo( fStrokeWidth, aStroke.getMiterLimit(),
@@ -1340,7 +1340,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                             {
                                 case SvtGraphicFill::fillSolid :
                                 {
-                                    bSkipSequence = sal_True;
+                                    bSkipSequence = true;
                                     PolyPolygon aPolyPoly;
                                     aFill.getPath( aPolyPoly );
                                     sal_uInt16 i, nPolyCount = aPolyPoly.Count();
@@ -1385,7 +1385,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                     sal_uInt32 nBitmapCount = 0;
                                     sal_uInt32 nBitmapAction = 0;
 
-                                    sal_Bool bOk = sal_True;
+                                    bool bOk = true;
                                     while( bOk && ( ++nCurAction < nCount ) )
                                     {
                                         MetaAction* pAction = rMtf.GetAction( nCurAction );
@@ -1403,7 +1403,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                             case META_COMMENT_ACTION :
                                             {
                                                 if (((const MetaCommentAction*)pAction)->GetComment().equals("XPATHFILL_SEQ_END"))
-                                                    bOk = sal_False;
+                                                    bOk = false;
                                             }
                                             break;
                                         }
@@ -1617,7 +1617,7 @@ void PSWriter::ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& 
 
 
 
-void PSWriter::ImplPolyPoly( const PolyPolygon & rPolyPoly, sal_Bool bTextOutline )
+void PSWriter::ImplPolyPoly( const PolyPolygon & rPolyPoly, bool bTextOutline )
 {
     sal_uInt16 i, nPolyCount = rPolyPoly.Count();
     if ( nPolyCount )
@@ -1779,14 +1779,14 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
         long    nHeight = nHeightLeft;
         double  nYHeight = nYHeightOrg;
 
-        sal_Bool    bDoTrans = sal_False;
+        bool    bDoTrans = false;
 
         Rectangle   aRect;
         Region      aRegion;
 
         if ( pMaskBitmap )
         {
-            bDoTrans = sal_True;
+            bDoTrans = true;
             while (true)
             {
                 if ( mnLevel == 1 )
@@ -2100,7 +2100,7 @@ void PSWriter::ImplWriteCharacter( sal_Char nChar )
 
 
 
-void PSWriter::ImplWriteString( const OString& rString, VirtualDevice& rVDev, const sal_Int32* pDXArry, sal_Bool bStretch )
+void PSWriter::ImplWriteString( const OString& rString, VirtualDevice& rVDev, const sal_Int32* pDXArry, bool bStretch )
 {
     sal_Int32 nLen = rString.getLength();
     if ( nLen )
@@ -2156,8 +2156,8 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const sa
             aPolyDummy.Rotate( rPos, nRotation );
             aPos = aPolyDummy.GetPoint( 0 );
         }
-        sal_Bool bOldLineColor = bLineColor;
-        bLineColor = sal_False;
+        bool bOldLineColor = bLineColor;
+        bLineColor = false;
         std::vector<PolyPolygon> aPolyPolyVec;
         if ( aVirDev.GetTextOutlines( aPolyPolyVec, rUniString, 0, 0, -1, true, nWidth, pDXArry ) )
         {
@@ -2173,7 +2173,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const sa
             }
             std::vector<PolyPolygon>::iterator aIter( aPolyPolyVec.begin() );
             while ( aIter != aPolyPolyVec.end() )
-                ImplPolyPoly( *aIter++, sal_True );
+                ImplPolyPoly( *aIter++, true );
             ImplWriteLine( "pom" );
         }
         bLineColor = bOldLineColor;
@@ -2775,13 +2775,13 @@ sal_uInt8* PSWriter::ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_
 
 
 
-sal_Bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize )
+bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize )
 {
-    sal_Bool    bRetValue = sal_False;
+    bool    bRetValue = false;
     sal_uLong   nBytesRead;
 
     if ( nSize < 256 )      // we assume that the file is greater than 256 bytes
-        return sal_False;
+        return false;
 
     if ( nSize < POSTSCRIPT_BOUNDINGSEARCH )
         nBytesRead = nSize;
@@ -2797,9 +2797,9 @@ sal_Bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uL
         for ( int i = 0; ( i < 4 ) && nSecurityCount; i++ )
         {
             int     nDivision = 1;
-            sal_Bool    bDivision = sal_False;
-            sal_Bool    bNegative = sal_False;
-            sal_Bool    bValid = sal_True;
+            bool    bDivision = false;
+            bool    bNegative = false;
+            bool    bValid = true;
 
             while ( ( --nSecurityCount ) && ( ( *pDest == ' ' ) || ( *pDest == 0x9 ) ) )
                 pDest++;
@@ -2810,12 +2810,12 @@ sal_Bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uL
                 {
                     case '.' :
                         if ( bDivision )
-                            bValid = sal_False;
+                            bValid = false;
                         else
-                            bDivision = sal_True;
+                            bDivision = true;
                         break;
                     case '-' :
-                        bNegative = sal_True;
+                        bNegative = true;
                         break;
                     default :
                         if ( ( nByte < '0' ) || ( nByte > '9' ) )
@@ -2838,7 +2838,7 @@ sal_Bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uL
                 nNumb[i] /= nDivision;
         }
         if ( nSecurityCount)
-            bRetValue = sal_True;
+            bRetValue = true;
     }
     return bRetValue;
 }

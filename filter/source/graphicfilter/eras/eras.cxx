@@ -31,7 +31,7 @@ private:
 
     SvStream & m_rOStm;
 
-    sal_Bool                mbStatus;
+    bool                mbStatus;
     BitmapReadAccess*   mpAcc;
 
     sal_uLong               mnWidth, mnHeight;
@@ -43,7 +43,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     void                ImplCallback( sal_uLong nCurrentYPos );
-    sal_Bool                ImplWriteHeader();
+    bool                ImplWriteHeader();
     void                ImplWritePalette();
     void                ImplWriteBody();
     void                ImplPutByte( sal_uInt8 );   // RLE decoding
@@ -52,13 +52,13 @@ public:
     RASWriter(SvStream &rStream);
     ~RASWriter();
 
-    sal_Bool WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
+    bool WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von RASWriter ==============================
 RASWriter::RASWriter(SvStream &rStream)
     : m_rOStm(rStream)
-    , mbStatus(sal_True)
+    , mbStatus(true)
     , mpAcc(NULL)
     , mnWidth(0)
     , mnHeight(0)
@@ -83,7 +83,7 @@ void RASWriter::ImplCallback( sal_uLong nYPos )
 
 
 
-sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
+bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     Bitmap  aBmp;
 
@@ -126,7 +126,7 @@ sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilter
         aBmp.ReleaseAccess( mpAcc );
     }
     else
-        mbStatus = sal_False;
+        mbStatus = false;
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -136,7 +136,7 @@ sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilter
 
 
 
-sal_Bool RASWriter::ImplWriteHeader()
+bool RASWriter::ImplWriteHeader()
 {
     mnWidth = mpAcc->Width();
     mnHeight = mpAcc->Height();
@@ -144,7 +144,7 @@ sal_Bool RASWriter::ImplWriteHeader()
     {
         mnColors = mpAcc->GetPaletteEntryCount();
         if (mnColors == 0)
-            mbStatus = sal_False;
+            mbStatus = false;
     }
         if ( mbStatus && mnWidth && mnHeight && mnDepth )
     {
@@ -161,7 +161,7 @@ sal_Bool RASWriter::ImplWriteHeader()
             m_rOStm.WriteUInt32( (sal_uInt32)1 ).WriteUInt32( (sal_uInt32)( mnColors * 3 ) );
         }
     }
-    else mbStatus = sal_False;
+    else mbStatus = false;
 
     return mbStatus;
 }

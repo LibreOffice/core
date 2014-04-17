@@ -53,7 +53,7 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
         CGMOutAct       ( rCGM ),
         nFinalTextCount ( 0 )
 {
-    sal_Bool bStatRet = sal_False;
+    bool bStatRet = false;
 
     if ( mpCGM->mbStatus )
     {
@@ -68,7 +68,7 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
                 {
                     maXDrawPage = *(uno::Reference< drawing::XDrawPage > *)maXDrawPages->getByIndex( 0 ).getValue();
                     if ( ImplInitPage() )
-                        bStatRet = sal_True;
+                        bStatRet = true;
                 }
             }
         }
@@ -78,15 +78,15 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
 
 
 
-sal_Bool CGMImpressOutAct::ImplInitPage()
+bool CGMImpressOutAct::ImplInitPage()
 {
-    sal_Bool    bStatRet = sal_False;
+    bool    bStatRet = false;
     if( maXDrawPage.is() )
     {
         maXShapes = uno::Reference< drawing::XShapes >( maXDrawPage, uno::UNO_QUERY );
         if ( maXShapes.is() )
         {
-            bStatRet = sal_True;
+            bStatRet = true;
         }
     }
     return bStatRet;
@@ -94,7 +94,7 @@ sal_Bool CGMImpressOutAct::ImplInitPage()
 
 
 
-sal_Bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
+bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
 {
     uno::Reference< uno::XInterface > xNewShape( maXMultiServiceFactory->createInstance( rType ) );
     maXShape = uno::Reference< drawing::XShape >( xNewShape, uno::UNO_QUERY );
@@ -102,9 +102,9 @@ sal_Bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
     if ( maXShape.is() && maXPropSet.is() )
     {
         maXShapes->add( maXShape );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -397,8 +397,8 @@ void CGMImpressOutAct::InsertPage()
     {
         uno::Reference< drawing::XDrawPage > xPage( maXDrawPages->insertNewByIndex( 0xffff ), uno::UNO_QUERY );
         maXDrawPage = xPage;
-        if ( ImplInitPage() == sal_False )
-            mpCGM->mbStatus = sal_False;
+        if ( ImplInitPage() == false )
+            mpCGM->mbStatus = false;
     }
     mnCurrentPage++;
 };

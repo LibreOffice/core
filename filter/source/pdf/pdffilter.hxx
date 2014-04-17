@@ -66,7 +66,7 @@ private:
     Reference< XComponentContext >      mxContext;
     Reference< XComponent >             mxSrcDoc;
 
-    sal_Bool                            implExport( const Sequence< PropertyValue >& rDescriptor );
+    bool                            implExport( const Sequence< PropertyValue >& rDescriptor );
 
 protected:
 
@@ -98,7 +98,7 @@ OUString PDFFilter_getImplementationName ()
 
 
 
-sal_Bool SAL_CALL PDFFilter_supportsService( const OUString& ServiceName )
+bool SAL_CALL PDFFilter_supportsService( const OUString& ServiceName )
     throw ( RuntimeException );
 
 

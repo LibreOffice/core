@@ -450,7 +450,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                 aSourceData[i++].Value <<= xIS;
 
                 aSourceData[i].Name = "Indent";
-                aSourceData[i++].Value <<= (sal_Bool)sal_True;
+                aSourceData[i++].Value <<= true;
 
                 if( bUseDocType )
                     {
@@ -614,7 +614,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
                 aSourceData[i++].Value <<= rURL;
 
                 aSourceData[i  ].Name = "Indent";
-                aSourceData[i++].Value <<= (sal_Bool)sal_True;
+                aSourceData[i++].Value <<= true;
 
                 Reference< XWriter > xWriter = Writer::create( mxContext );
 

@@ -64,7 +64,7 @@ class PictWriter {
 
 private:
 
-    sal_Bool bStatus;
+    bool bStatus;
     sal_uLong nLastPercent; // with which number pCallback has been called the last time
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
@@ -81,19 +81,19 @@ private:
     PictWriterAttrStackMember * pAttrStack;
 
     // current attributes in the target-metafile and whether they are valid
-    sal_Bool bDstBkPatValid;
-    sal_uInt8        nDstTxFace;            sal_Bool bDstTxFaceValid;
-    RasterOp    eDstTxMode;         sal_Bool bDstTxModeValid;
-    sal_uInt16      nDstPnSize;         sal_Bool bDstPnSizeValid;
-    RasterOp    eDstPnMode;         sal_Bool bDstPnModeValid;
-    PictPattern aDstPnPat;          sal_Bool bDstPnPatValid;
-    sal_Bool bDstFillPatValid;
-    sal_uInt16      nDstTxSize;         sal_Bool bDstTxSizeValid;
-    Color       aDstFgCol;          sal_Bool bDstFgColValid;
-    Color       aDstBkCol;          sal_Bool bDstBkColValid;
-    Point       aDstPenPosition;    sal_Bool bDstPenPositionValid;
-    Point       aDstTextPosition;   sal_Bool bDstTextPositionValid;
-    OUString    aDstFontName; sal_uInt16 nDstFontNameId; sal_Bool bDstFontNameValid;
+    bool bDstBkPatValid;
+    sal_uInt8        nDstTxFace;            bool bDstTxFaceValid;
+    RasterOp    eDstTxMode;         bool bDstTxModeValid;
+    sal_uInt16      nDstPnSize;         bool bDstPnSizeValid;
+    RasterOp    eDstPnMode;         bool bDstPnModeValid;
+    PictPattern aDstPnPat;          bool bDstPnPatValid;
+    bool bDstFillPatValid;
+    sal_uInt16      nDstTxSize;         bool bDstTxSizeValid;
+    Color       aDstFgCol;          bool bDstFgColValid;
+    Color       aDstBkCol;          bool bDstBkColValid;
+    Point       aDstPenPosition;    bool bDstPenPositionValid;
+    Point       aDstTextPosition;   bool bDstTextPositionValid;
+    OUString    aDstFontName; sal_uInt16 nDstFontNameId; bool bDstFontNameValid;
 
     sal_uLong nNumberOfActions;  // number of actions in the GDIMetafile
     sal_uLong nNumberOfBitmaps;  // number of bitmaps
@@ -122,22 +122,22 @@ private:
     void WritePolygon(const Polygon & rPoly);
     void WriteArcAngles(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
 
-    void ConvertLinePattern(PictPattern & rPat, sal_Bool bVisible) const;
-    void ConvertFillPattern(PictPattern & rPat, sal_Bool bVisible) const;
+    void ConvertLinePattern(PictPattern & rPat, bool bVisible) const;
+    void ConvertFillPattern(PictPattern & rPat, bool bVisible) const;
 
     void WriteOpcode_TxFace(const Font & rFont);
     void WriteOpcode_TxMode(RasterOp eMode);
     void WriteOpcode_PnSize(sal_uInt16 nSize);
     void WriteOpcode_PnMode(RasterOp eMode);
-    void WriteOpcode_PnLinePat(sal_Bool bVisible);
-    void WriteOpcode_PnFillPat(sal_Bool bVisible);
+    void WriteOpcode_PnLinePat(bool bVisible);
+    void WriteOpcode_PnFillPat(bool bVisible);
     void WriteOpcode_OvSize(const Size & rSize);
     void WriteOpcode_TxSize(sal_uInt16 nSize);
     void WriteOpcode_RGBFgCol(const Color & rColor);
     void WriteOpcode_RGBBkCol(const Color & rColor);
     void WriteOpcode_Line(const Point & rLocPt, const Point & rNewPt);
     void WriteOpcode_LineFrom(const Point & rNewPt);
-    void WriteOpcode_Text(const Point & rPoint, const OUString& rString, sal_Bool bDelta);
+    void WriteOpcode_Text(const Point & rPoint, const OUString& rString, bool bDelta);
     void WriteOpcode_FontName(const Font & rFont);
     void WriteOpcode_ClipRect( const Rectangle& rRect );
     void WriteOpcode_Rect(PictDrawingMethod eMethod, const Rectangle & rRect);
@@ -168,7 +168,7 @@ private:
 
 public:
 
-    sal_Bool WritePict( const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pFilterConfigItem );
+    bool WritePict( const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pFilterConfigItem );
 };
 
 
@@ -416,7 +416,7 @@ void PictWriter::WriteArcAngles(const Rectangle & rRect, const Point & rStartPt,
 }
 
 
-void PictWriter::ConvertLinePattern(PictPattern & rPat, sal_Bool bVisible) const
+void PictWriter::ConvertLinePattern(PictPattern & rPat, bool bVisible) const
 {
     if( bVisible )
     {
@@ -430,7 +430,7 @@ void PictWriter::ConvertLinePattern(PictPattern & rPat, sal_Bool bVisible) const
     }
 }
 
-void PictWriter::ConvertFillPattern(PictPattern & rPat, sal_Bool bVisible) const
+void PictWriter::ConvertFillPattern(PictPattern & rPat, bool bVisible) const
 {
     if( bVisible )
     {
@@ -461,10 +461,10 @@ void PictWriter::WriteOpcode_TxFace(const Font & rFont)
     if (rFont.IsOutline())              nFace|=0x08;
     if (rFont.IsShadow())               nFace|=0x10;
 
-    if (bDstTxFaceValid==sal_False || nDstTxFace!=nFace) {
+    if (bDstTxFaceValid==false || nDstTxFace!=nFace) {
         pPict->WriteUInt16( (sal_uInt16)0x0004 ).WriteUChar( nFace ).WriteUChar( (sal_uInt8)0 );
         nDstTxFace=nFace;
-        bDstTxFaceValid=sal_True;
+        bDstTxFaceValid=true;
     }
 }
 
@@ -473,7 +473,7 @@ void PictWriter::WriteOpcode_TxMode(RasterOp eMode)
 {
     sal_uInt16 nVal;
 
-    if (bDstTxModeValid==sal_False || eDstTxMode!=eMode) {
+    if (bDstTxModeValid==false || eDstTxMode!=eMode) {
         switch (eMode) {
             case ROP_INVERT: nVal=0x000c; break;
             case ROP_XOR:    nVal=0x000a; break;
@@ -481,7 +481,7 @@ void PictWriter::WriteOpcode_TxMode(RasterOp eMode)
         }
         pPict->WriteUInt16( (sal_uInt16)0x0005 ).WriteUInt16( nVal );
         eDstTxMode=eMode;
-        bDstTxModeValid=sal_True;
+        bDstTxModeValid=true;
     }
 }
 
@@ -489,10 +489,10 @@ void PictWriter::WriteOpcode_TxMode(RasterOp eMode)
 void PictWriter::WriteOpcode_PnSize(sal_uInt16 nSize)
 {
     if (nSize==0) nSize=1;
-    if (bDstPnSizeValid==sal_False || nDstPnSize!=nSize) {
+    if (bDstPnSizeValid==false || nDstPnSize!=nSize) {
         pPict->WriteUInt16( (sal_uInt16)0x0007 ).WriteUInt16( nSize ).WriteUInt16( nSize );
         nDstPnSize=nSize;
-        bDstPnSizeValid=sal_True;
+        bDstPnSizeValid=true;
     }
 }
 
@@ -501,7 +501,7 @@ void PictWriter::WriteOpcode_PnMode(RasterOp eMode)
 {
     sal_uInt16 nVal;
 
-    if (bDstPnModeValid==sal_False || eDstPnMode!=eMode) {
+    if (bDstPnModeValid==false || eDstPnMode!=eMode) {
         switch (eMode)
         {
             case ROP_INVERT: nVal=0x000c; break;
@@ -510,33 +510,33 @@ void PictWriter::WriteOpcode_PnMode(RasterOp eMode)
         }
         pPict->WriteUInt16( (sal_uInt16)0x0008 ).WriteUInt16( nVal );
         eDstPnMode=eMode;
-        bDstPnModeValid=sal_True;
+        bDstPnModeValid=true;
     }
 }
 
 
-void PictWriter::WriteOpcode_PnLinePat(sal_Bool bVisible)
+void PictWriter::WriteOpcode_PnLinePat(bool bVisible)
 {
     PictPattern aPat;
 
     ConvertLinePattern(aPat,bVisible);
-    if (bDstPnPatValid==sal_False || aDstPnPat.nHi!=aPat.nHi || aDstPnPat.nLo!=aPat.nLo) {
+    if (bDstPnPatValid==false || aDstPnPat.nHi!=aPat.nHi || aDstPnPat.nLo!=aPat.nLo) {
         pPict->WriteUInt16( (sal_uInt16)0x0009 ).WriteUInt32( aPat.nHi ).WriteUInt32( aPat.nLo );
         aDstPnPat=aPat;
-        bDstPnPatValid=sal_True;
+        bDstPnPatValid=true;
     }
 }
 
 
-void PictWriter::WriteOpcode_PnFillPat(sal_Bool bVisible)
+void PictWriter::WriteOpcode_PnFillPat(bool bVisible)
 {
     PictPattern aPat;
 
     ConvertFillPattern(aPat,bVisible);
-    if (bDstPnPatValid==sal_False || aDstPnPat.nHi!=aPat.nHi || aDstPnPat.nLo!=aPat.nLo) {
+    if (bDstPnPatValid==false || aDstPnPat.nHi!=aPat.nHi || aDstPnPat.nLo!=aPat.nLo) {
         pPict->WriteUInt16( (sal_uInt16)0x0009 ).WriteUInt32( aPat.nHi ).WriteUInt32( aPat.nLo );
         aDstPnPat=aPat;
-        bDstPnPatValid=sal_True;
+        bDstPnPatValid=true;
     }
 }
 
@@ -550,35 +550,35 @@ void PictWriter::WriteOpcode_OvSize(const Size & rSize)
 
 void PictWriter::WriteOpcode_TxSize(sal_uInt16 nSize)
 {
-    if (bDstTxSizeValid==sal_False || nDstTxSize!=nSize) {
+    if (bDstTxSizeValid==false || nDstTxSize!=nSize) {
 
         nDstTxSize = (sal_uInt16) OutputDevice::LogicToLogic( Size( 0, nSize ),
                                                           aSrcMapMode, aTargetMapMode ).Height();
 
         pPict->WriteUInt16( (sal_uInt16)0x000d ).WriteUInt16( nDstTxSize );
-        bDstTxSizeValid=sal_True;
+        bDstTxSizeValid=true;
     }
 }
 
 
 void PictWriter::WriteOpcode_RGBFgCol(const Color & rColor)
 {
-    if (bDstFgColValid==sal_False || aDstFgCol!=rColor) {
+    if (bDstFgColValid==false || aDstFgCol!=rColor) {
         pPict->WriteUInt16( (sal_uInt16)0x001a );
         WriteRGBColor(rColor);
         aDstFgCol=rColor;
-        bDstFgColValid=sal_True;
+        bDstFgColValid=true;
     }
 }
 
 
 void PictWriter::WriteOpcode_RGBBkCol(const Color & rColor)
 {
-    if (bDstBkColValid==sal_False || aDstBkCol!=rColor) {
+    if (bDstBkColValid==false || aDstBkCol!=rColor) {
         pPict->WriteUInt16( (sal_uInt16)0x001b );
         WriteRGBColor(rColor);
         aDstBkCol=rColor;
-        bDstBkColValid=sal_True;
+        bDstBkColValid=true;
     }
 }
 
@@ -608,7 +608,7 @@ void PictWriter::WriteOpcode_Line(const Point & rLocPt, const Point & rNewPt)
         WritePoint(rNewPt);
     }
     aDstPenPosition=rNewPt;
-    bDstPenPositionValid=sal_True;
+    bDstPenPositionValid=true;
 }
 
 
@@ -633,11 +633,11 @@ void PictWriter::WriteOpcode_LineFrom(const Point & rNewPt)
         WritePoint(rNewPt);
     }
     aDstPenPosition=rNewPt;
-    bDstPenPositionValid=sal_True;
+    bDstPenPositionValid=true;
 }
 
 
-void PictWriter::WriteOpcode_Text(const Point & rPoint, const OUString& rString, sal_Bool bDelta)
+void PictWriter::WriteOpcode_Text(const Point & rPoint, const OUString& rString, bool bDelta)
 {
     Point aPoint = OutputDevice::LogicToLogic( rPoint,
                                                aSrcMapMode,
@@ -649,7 +649,7 @@ void PictWriter::WriteOpcode_Text(const Point & rPoint, const OUString& rString,
     dh = aPoint.X()-aDstTextPosition.X();
     dv = aPoint.Y()-aDstTextPosition.Y();
 
-    if (bDstTextPositionValid==sal_False || dh<0 || dh>255 || dv<0 || dv>255 || bDelta==sal_False)
+    if (bDstTextPositionValid==false || dh<0 || dh>255 || dv<0 || dv>255 || bDelta==false)
     {
         pPict->WriteUInt16( (sal_uInt16)0x0028 );
         WritePoint(rPoint);
@@ -672,7 +672,7 @@ void PictWriter::WriteOpcode_Text(const Point & rPoint, const OUString& rString,
         pPict->WriteUChar( (sal_uInt8)0 );
 
     aDstTextPosition = aPoint;
-    bDstTextPositionValid=sal_True;
+    bDstTextPositionValid=true;
 }
 
 
@@ -687,7 +687,7 @@ void PictWriter::WriteOpcode_FontName(const Font & rFont)
         default:                nFontId=1;
     }
 
-    if (bDstFontNameValid==sal_False || nDstFontNameId!=nFontId || aDstFontName!=rFont.GetName())
+    if (bDstFontNameValid==false || nDstFontNameId!=nFontId || aDstFontName!=rFont.GetName())
     {
         OString aString(OUStringToOString(rFont.GetName(), osl_getThreadTextEncoding()));
         sal_uInt16 nFontNameLen = aString.getLength();
@@ -702,7 +702,7 @@ void PictWriter::WriteOpcode_FontName(const Font & rFont)
         pPict->WriteUInt16( (sal_uInt16)0x0003 ).WriteUInt16( nFontId );
         aDstFontName=rFont.GetName();
         nDstFontNameId=nFontId;
-        bDstFontNameValid=sal_True;
+        bDstFontNameValid=true;
     }
 }
 
@@ -882,7 +882,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
     nActBitmapPercent=30;
     MayCallback();
 
-    if ( bStatus == sal_False )
+    if ( bStatus == false )
         return;
     if ( ( pAcc = aBitmap.AcquireReadAccess() ) == NULL )
         return;
@@ -1255,7 +1255,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
             nActBitmapPercent =( ny * 70 / nHeight ) + 30; // (30% already added up to the writing of the Win-BMP file)
             MayCallback();
             if ( pPict->GetError() )
-                bStatus = sal_False;
+                bStatus = false;
         }
     }
 
@@ -1298,7 +1298,7 @@ void PictWriter::SetAttrForText()
 {
     WriteOpcode_RGBFgCol(aSrcFont.GetColor());
     WriteOpcode_RGBBkCol(aSrcFont.GetFillColor());
-    WriteOpcode_PnLinePat(sal_True);
+    WriteOpcode_PnLinePat(true);
     WriteOpcode_FontName(aSrcFont);
     WriteOpcode_TxSize((sal_uInt16)(aSrcFont.GetSize().Height()));
     WriteOpcode_TxMode(eSrcRasterOp);
@@ -1308,14 +1308,14 @@ void PictWriter::SetAttrForText()
 
 void PictWriter::WriteTextArray(Point & rPoint, const OUString& rString, const sal_Int32 * pDXAry)
 {
-    sal_Bool bDelta;
+    bool bDelta;
     Point aPt;
 
     if ( pDXAry == NULL )
-        WriteOpcode_Text( rPoint, rString, sal_False );
+        WriteOpcode_Text( rPoint, rString, false );
     else
     {
-        bDelta = sal_False;
+        bDelta = false;
         sal_Int32 nLen = rString.getLength();
         for ( sal_Int32 i = 0; i < nLen; i++ )
         {
@@ -1327,7 +1327,7 @@ void PictWriter::WriteTextArray(Point & rPoint, const OUString& rString, const s
                     aPt.X() += pDXAry[ i - 1 ];
 
                 WriteOpcode_Text( aPt, OUString( c ), bDelta );
-                bDelta = sal_True;
+                bDelta = true;
             }
         }
     }
@@ -1415,7 +1415,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 WriteOpcode_PnMode(eSrcRasterOp);
                 WriteOpcode_PnSize(1);
                 WriteOpcode_RGBFgCol(pA->GetColor());
-                WriteOpcode_PnLinePat(sal_True);
+                WriteOpcode_PnLinePat(true);
                 WriteOpcode_Line(pA->GetPoint(),pA->GetPoint());
             }
             break;
@@ -1713,7 +1713,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
                 SetAttrForText();
                 OUString aStr = pA->GetText().copy( pA->GetIndex(),pA->GetLen() );
-                WriteOpcode_Text( aPt, aStr, sal_False );
+                WriteOpcode_Text( aPt, aStr, false );
             }
             break;
 
@@ -2124,9 +2124,9 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
         MayCallback();
 
         if (pPict->GetError())
-            bStatus=sal_False;
+            bStatus=false;
 
-        if (bStatus==sal_False)
+        if (bStatus==false)
             break;
     }
 }
@@ -2179,13 +2179,13 @@ void PictWriter::UpdateHeader()
 }
 
 
-sal_Bool PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pFilterConfigItem )
+bool PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pFilterConfigItem )
 {
     PictWriterAttrStackMember*  pAt;
     MapMode                     aMap72( MAP_INCH );
     Fraction                    aDPIFrac( 1, 72 );
 
-    bStatus=sal_True;
+    bStatus=true;
     nLastPercent=0;
 
     if ( pFilterConfigItem )
@@ -2213,19 +2213,19 @@ sal_Bool PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStrea
 
     pAttrStack=NULL;
 
-    bDstBkPatValid=sal_False;
-    bDstTxFaceValid=sal_False;
-    bDstTxModeValid=sal_False;
-    bDstPnSizeValid=sal_False;
-    bDstPnModeValid=sal_False;
-    bDstPnPatValid=sal_False;
-    bDstFillPatValid=sal_False;
-    bDstTxSizeValid=sal_False;
-    bDstFgColValid=sal_False;
-    bDstBkColValid=sal_False;
-    bDstPenPositionValid=sal_False;
-    bDstTextPositionValid=sal_False;
-    bDstFontNameValid=sal_False;
+    bDstBkPatValid=false;
+    bDstTxFaceValid=false;
+    bDstTxModeValid=false;
+    bDstPnSizeValid=false;
+    bDstPnModeValid=false;
+    bDstPnPatValid=false;
+    bDstFillPatValid=false;
+    bDstTxSizeValid=false;
+    bDstFgColValid=false;
+    bDstBkColValid=false;
+    bDstPenPositionValid=false;
+    bDstTextPositionValid=false;
+    bDstFontNameValid=false;
 
     nNumberOfActions=0;
     nNumberOfBitmaps=0;

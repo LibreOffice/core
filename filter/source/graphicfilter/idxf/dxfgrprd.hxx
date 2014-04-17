@@ -37,7 +37,7 @@ public:
 
     DXFGroupReader( SvStream & rIStream, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent );
 
-    sal_Bool GetStatus() const;
+    bool GetStatus() const;
 
     void SetError();
 
@@ -88,7 +88,7 @@ private:
 
     SvStream & rIS;
     sal_uInt16 nIBuffSize,nIBuffPos;
-    sal_Bool bStatus;
+    bool bStatus;
     sal_uInt16 nLastG;
     sal_uLong nGCount;
 
@@ -113,7 +113,7 @@ private:
 };
 
 
-inline sal_Bool DXFGroupReader::GetStatus() const
+inline bool DXFGroupReader::GetStatus() const
 {
     return bStatus;
 }
@@ -121,7 +121,7 @@ inline sal_Bool DXFGroupReader::GetStatus() const
 
 inline void DXFGroupReader::SetError()
 {
-    bStatus=sal_False;
+    bStatus=false;
 }
 
 inline sal_uInt16 DXFGroupReader::GetG() const

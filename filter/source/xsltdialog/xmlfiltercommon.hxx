@@ -65,9 +65,9 @@ public:
     sal_Int32       maFileFormatVersion;
     sal_Int32       mnDocumentIconID;
 
-    sal_Bool        mbReadonly;
+    bool        mbReadonly;
 
-    sal_Bool        mbNeedsXSLT2;
+    bool        mbNeedsXSLT2;
 
     filter_info_impl();
     filter_info_impl( const filter_info_impl& rInfo );

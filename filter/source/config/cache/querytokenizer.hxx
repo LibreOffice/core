@@ -61,7 +61,7 @@ class QueryTokenizer : public ::boost::unordered_map< OUString                  
             TODO    May it's a good idea to describe the real problem
                     more detailed ...
          */
-        sal_Bool m_bValid;
+        bool m_bValid;
 
 
     // interface
@@ -91,7 +91,7 @@ class QueryTokenizer : public ::boost::unordered_map< OUString                  
         /** @short  can be used to check if analyzing of given query
                     was successfully or not.
          */
-        virtual sal_Bool valid() const;
+        virtual bool valid() const;
 };
 
     } // namespace config

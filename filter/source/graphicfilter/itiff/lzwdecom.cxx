@@ -60,7 +60,7 @@ void LZWDecompressor::StartDecompression(SvStream & rIStream)
 
     nTableSize=258;
 
-    bEOIFound=sal_False;
+    bEOIFound=false;
 
     nOutBufDataLen=0;
 
@@ -71,7 +71,7 @@ void LZWDecompressor::StartDecompression(SvStream & rIStream)
     if ( bFirst )
     {
         bInvert = nInputBitsBuf == 1;
-        bFirst = sal_False;
+        bFirst = false;
     }
 
     if ( bInvert )
@@ -107,7 +107,7 @@ sal_uLong LZWDecompressor::Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount)
             nOutBufDataLen--;
         }
 
-        if (bEOIFound==sal_True) break;
+        if (bEOIFound) break;
 
         DecompressSome();
 
@@ -157,7 +157,7 @@ void LZWDecompressor::AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData
         //It might be possible to force emit a 256 to flush the buffer and try
         //to continue later?
         SAL_WARN("filter.tiff", "Too much data at scanline");
-        bEOIFound = sal_True;
+        bEOIFound = true;
         return;
     }
 
@@ -183,7 +183,7 @@ void LZWDecompressor::DecompressSome()
         nCode=GetNextCode();
         if (nCode==257)
         {
-            bEOIFound=sal_True;
+            bEOIFound=true;
         }
     }
     else if (nCode<nTableSize)
@@ -192,7 +192,7 @@ void LZWDecompressor::DecompressSome()
         AddToTable(nOldCode,nOldCode);
     else
     {
-        bEOIFound=sal_True;
+        bEOIFound=true;
     }
 
     if (bEOIFound)
