@@ -433,11 +433,9 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     SID_HTML_MODE,          SID_HTML_MODE,                          // [10414
                     FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,                      // [21032
                     FN_SURROUND,            FN_HORI_ORIENT,                         // [21303
-                    FN_SET_FRM_NAME,        FN_SET_FRM_NAME,                        // [21306
-                    FN_KEEP_ASPECT_RATIO,   FN_KEEP_ASPECT_RATIO,                   // [21307
+                    FN_SET_FRM_NAME,        FN_KEEP_ASPECT_RATIO,                   // [21306
                     FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,                    // [21318
-                    FN_OLE_IS_MATH,         FN_OLE_IS_MATH,                         // [22314
-                    FN_MATH_BASELINE_ALIGNMENT, FN_MATH_BASELINE_ALIGNMENT,         // [22315
+                    FN_OLE_IS_MATH,         FN_MATH_BASELINE_ALIGNMENT,             // [22314
                     FN_PARAM_CHAIN_PREVIOUS, FN_PARAM_CHAIN_NEXT,                   // [22420
 
                     0);

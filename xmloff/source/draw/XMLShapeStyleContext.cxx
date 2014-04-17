@@ -24,6 +24,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -36,6 +37,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::drawing;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_TEXT_PROPERTIES;
 using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
@@ -51,7 +53,8 @@ XMLShapeStyleContext::XMLShapeStyleContext(
     SvXMLStylesContext& rStyles,
     sal_uInt16 nFamily)
 :   XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
-    m_bIsNumRuleAlreadyConverted( false )
+    m_bIsNumRuleAlreadyConverted( false ),
+    m_bIsFillStyleAlreadyConverted( false ) //UUUU
 {
 }
 
@@ -181,6 +184,82 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
                 property->mnIndex = -1;
             }
         }
+    }
+
+    if(!m_bIsFillStyleAlreadyConverted && GetProperties().size())
+    {
+        const UniReference< XMLPropertySetMapper >&rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
+        ::std::vector< XMLPropertyState >& rProperties = GetProperties();
+        ::std::vector< XMLPropertyState >::iterator a;
+        FillStyle eFS(FillStyle_NONE);
+        static ::rtl::OUString s_FillStyle(RTL_CONSTASCII_USTRINGPARAM("FillStyle"));
+
+        // try to find a FillStyle entry and a value from it
+        for(a = rProperties.begin(); a != rProperties.end(); a++)
+        {
+            if(a->mnIndex != -1)
+            {
+                const OUString& rPropName = rMapper->GetEntryAPIName(a->mnIndex);
+
+                if(rPropName == s_FillStyle)
+                {
+                    if(a->maValue >>= eFS)
+                    {
+                        // okay, type was good, eFS is set
+                    }
+                    else
+                    {
+                        // also try an int (see XFillStyleItem::PutValue)
+                        sal_Int32 nFS = 0;
+
+                        if(a->maValue >>= nFS)
+                        {
+                            eFS = (FillStyle)nFS;
+                        }
+                    }
+
+                    // exit loop, we found out what we needed to know
+                    break;
+                }
+            }
+        }
+
+        if(FillStyle_NONE != eFS)
+        {
+            //UUUU a FillStyle was found, thus the new [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
+            // description for the Fill definitions is used. All formally used props based
+            // on RES_BACKGROUND need to be deleted to get no conflicts between the two
+            // sets of properties; old files will keep these and adapt accordingly
+            static ::rtl::OUString s_BackColorRGB(RTL_CONSTASCII_USTRINGPARAM("BackColorRGB"));
+            static ::rtl::OUString s_BackTransparent(RTL_CONSTASCII_USTRINGPARAM("BackTransparent"));
+            static ::rtl::OUString s_BackColorTransparency(RTL_CONSTASCII_USTRINGPARAM("BackColorTransparency"));
+            static ::rtl::OUString s_BackGraphicURL(RTL_CONSTASCII_USTRINGPARAM("BackGraphicURL"));
+            static ::rtl::OUString s_BackGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("BackGraphicFilter"));
+            static ::rtl::OUString s_BackGraphicLocation(RTL_CONSTASCII_USTRINGPARAM("BackGraphicLocation"));
+            static ::rtl::OUString s_BackGraphicTransparency(RTL_CONSTASCII_USTRINGPARAM("BackGraphicTransparency"));
+
+            for(a = rProperties.begin(); a != rProperties.end(); a++)
+            {
+                if(a->mnIndex != -1)
+                {
+                    const OUString& rPropName = rMapper->GetEntryAPIName(a->mnIndex);
+
+                    if(s_BackColorRGB == rPropName
+                        || s_BackTransparent == rPropName
+                        || s_BackColorTransparency == rPropName
+                        || s_BackGraphicURL == rPropName
+                        || s_BackGraphicFilter == rPropName
+                        || s_BackGraphicLocation == rPropName
+                        || s_BackGraphicTransparency== rPropName)
+                    {
+                        // mark entry as inactive
+                        a->mnIndex = -1;
+                    }
+                }
+            }
+        }
+
+        m_bIsFillStyleAlreadyConverted = sal_True;
     }
 
     struct _ContextID_Index_Pair aContextIDs[] =

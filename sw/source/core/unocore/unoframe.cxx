@@ -1770,6 +1770,64 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 bDone = true;
             }
 
+            switch(nMemberId)
+            {
+                case MID_NAME:
+                {
+                    //UUUU when named items get set, replace these with the NameOrIndex items
+                    // which exist already in the pool
+                    switch(pEntry->nWID)
+                    {
+                        case XATTR_FILLGRADIENT:
+                        case XATTR_FILLHATCH:
+                        case XATTR_FILLBITMAP:
+                        case XATTR_FILLFLOATTRANSPARENCE:
+                        {
+                            OUString aTempName;
+
+                            if(!(aValue >>= aTempName ))
+                            {
+                                throw lang::IllegalArgumentException();
+                            }
+
+                            bDone = SvxShape::SetFillAttribute(pEntry->nWID, aTempName, aSet);
+                            break;
+                        }
+                        default:
+                        {
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case MID_GRAFURL:
+                {
+                    //UUUU Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
+                    switch(pEntry->nWID)
+                    {
+                        case XATTR_FILLBITMAP:
+                        {
+                            const Graphic aNullGraphic;
+                            XFillBitmapItem aXFillBitmapItem(aSet.GetPool(), aNullGraphic);
+
+                            aXFillBitmapItem.PutValue(aValue, nMemberId);
+                            aSet.Put(aXFillBitmapItem);
+                            bDone = true;
+                            break;
+                        }
+                        default:
+                        {
+                            break;
+                        }
+                    }
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+
             if(!bDone)
             {
                 m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
@@ -1836,7 +1894,9 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 throw lang::IllegalArgumentException();
             }
             else
+            {
                 pFmt->SetFmtAttr(aSet);
+            }
         }
     }
     else if(IsDescriptor())
