@@ -1929,6 +1929,8 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         }
         case RES_PAGEDESC :
         {
+            if (MID_PAGEDESC_PAGEDESCNAME != nMemberId)
+                break;
             // Sonderbehandlung RES_PAGEDESC
             if(aValue.getValueType() != ::getCppuType((const OUString*)0))
                 throw lang::IllegalArgumentException();
@@ -1970,10 +1972,9 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 else
                     rStyleSet.Put(*pNewDesc);
 
-                delete pNewDesc;
-                bDone = true;
             }
-
+            delete pNewDesc;
+            bDone = true;
             break;
         }
         case FN_UNO_IS_AUTO_UPDATE:
@@ -2388,7 +2389,8 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             {
                 // Sonderbehandlung RES_PAGEDESC
                 const SfxPoolItem* pItem;
-                if(SFX_ITEM_SET == rBase.GetItemSet().GetItemState( RES_PAGEDESC, true, &pItem ) )
+                if (MID_PAGEDESC_PAGEDESCNAME == nMemberId &&
+                    SFX_ITEM_SET == rBase.GetItemSet().GetItemState(RES_PAGEDESC, true, &pItem))
                 {
                     const SwPageDesc* pDesc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
                     if(pDesc)
