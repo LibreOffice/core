@@ -1558,6 +1558,8 @@ public:
 
     SC_DLLPUBLIC bool IsManualRowHeight(SCROW nRow, SCTAB nTab) const;
 
+    bool HasUniformRowHeight( SCTAB nTab, SCROW nRow1, SCROW nRow2 ) const;
+
     /**
      * Write all column row flags to table's flag data, because not all column
      * row attributes are stored in the flag data members.  This is necessary
@@ -2044,6 +2046,7 @@ public:
 
     sal_uInt8 GetScriptType( const ScAddress& rPos ) const;
     void SetScriptType( const ScAddress& rPos, sal_uInt8 nType );
+    void UpdateScriptTypes( const ScAddress& rPos, SCCOL nColSize, SCROW nRowSize );
 
     size_t GetFormulaHash( const ScAddress& rPos ) const;
 

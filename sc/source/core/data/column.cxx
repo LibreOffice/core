@@ -770,6 +770,16 @@ ScRefCellValue ScColumn::GetCellValue( SCROW nRow ) const
     return GetCellValue(aPos.first, aPos.second);
 }
 
+ScRefCellValue ScColumn::GetCellValue( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const
+{
+    std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(rBlockPos.miCellPos, nRow);
+    if (aPos.first == maCells.end())
+        return ScRefCellValue();
+
+    rBlockPos.miCellPos = aPos.first; // Store this for next call.
+    return GetCellValue(aPos.first, aPos.second);
+}
+
 ScRefCellValue ScColumn::GetCellValue( const sc::CellStoreType::const_iterator& itPos, size_t nOffset ) const
 {
     ScRefCellValue aVal; // Defaults to empty cell.
@@ -802,329 +812,30 @@ ScRefCellValue ScColumn::GetCellValue( const sc::CellStoreType::const_iterator& 
     return aVal;
 }
 
-namespace {
-
-ScFormulaCell* cloneFormulaCell(ScDocument* pDoc, const ScAddress& rNewPos, ScFormulaCell& rOldCell)
+const sc::CellTextAttr* ScColumn::GetCellTextAttr( SCROW nRow ) const
 {
-    ScFormulaCell* pNew = new ScFormulaCell(rOldCell, *pDoc, rNewPos, SC_CLONECELL_ADJUST3DREL);
-    rOldCell.EndListeningTo(pDoc);
-    pNew->StartListeningTo(pDoc);
-    pNew->SetDirty();
-    return pNew;
+    sc::CellTextAttrStoreType::const_position_type aPos = maCellTextAttrs.position(nRow);
+    if (aPos.first == maCellTextAttrs.end())
+        return NULL;
+
+    if (aPos.first->type != sc::element_type_celltextattr)
+        return NULL;
+
+    return &sc::celltextattr_block::at(*aPos.first->data, aPos.second);
 }
 
-}
-
-void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
+const sc::CellTextAttr* ScColumn::GetCellTextAttr( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const
 {
-    if (nRow1 == nRow2)
-        // Nothing to swap.
-        return;
+    sc::CellTextAttrStoreType::const_position_type aPos = maCellTextAttrs.position(rBlockPos.miCellTextAttrPos, nRow);
+    if (aPos.first == maCellTextAttrs.end())
+        return NULL;
 
-    // Ensure that nRow1 < nRow2.
-    if (nRow2 < nRow1)
-        std::swap(nRow1, nRow2);
+    rBlockPos.miCellTextAttrPos = aPos.first;
 
-    // Broadcasters (if exist) should NOT be swapped.
+    if (aPos.first->type != sc::element_type_celltextattr)
+        return NULL;
 
-    sc::CellStoreType::position_type aPos1 = maCells.position(nRow1);
-    if (aPos1.first == maCells.end())
-        return;
-
-    sc::CellStoreType::position_type aPos2 = maCells.position(aPos1.first, nRow2);
-    if (aPos2.first == maCells.end())
-        return;
-
-    std::vector<SCROW> aRows;
-    aRows.reserve(2);
-    aRows.push_back(nRow1);
-    aRows.push_back(nRow2);
-
-    sc::CellStoreType::iterator it1 = aPos1.first, it2 = aPos2.first;
-
-    if (it1->type == it2->type)
-    {
-        // Both positions are of the same type. Do a simple value swap.
-        switch (it1->type)
-        {
-            case sc::element_type_empty:
-                // Both are empty. Nothing to swap.
-                return;
-            case sc::element_type_numeric:
-                std::swap(
-                    sc::numeric_block::at(*it1->data, aPos1.second),
-                    sc::numeric_block::at(*it2->data, aPos2.second));
-            break;
-            case sc::element_type_string:
-                std::swap(
-                    sc::string_block::at(*it1->data, aPos1.second),
-                    sc::string_block::at(*it2->data, aPos2.second));
-            break;
-            case sc::element_type_edittext:
-                std::swap(
-                    sc::edittext_block::at(*it1->data, aPos1.second),
-                    sc::edittext_block::at(*it2->data, aPos2.second));
-            break;
-            case sc::element_type_formula:
-            {
-                // Swapping of formula cells involve adjustment of references wrt their positions.
-                sc::formula_block::iterator itf1 = sc::formula_block::begin(*it1->data);
-                sc::formula_block::iterator itf2 = sc::formula_block::begin(*it2->data);
-                std::advance(itf1, aPos1.second);
-                std::advance(itf2, aPos2.second);
-
-                // TODO: Find out a way to adjust references without cloning new instances.
-                boost::scoped_ptr<ScFormulaCell> pOld1(*itf1);
-                boost::scoped_ptr<ScFormulaCell> pOld2(*itf2);
-                DetachFormulaCell(aPos1, **itf1);
-                DetachFormulaCell(aPos2, **itf2);
-                ScFormulaCell* pNew1 = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *pOld2);
-                ScFormulaCell* pNew2 = cloneFormulaCell(pDocument, ScAddress(nCol, nRow2, nTab), *pOld1);
-                *itf1 = pNew1;
-                *itf2 = pNew2;
-
-                ActivateNewFormulaCell(aPos1, *pNew1);
-                ActivateNewFormulaCell(aPos2, *pNew2);
-            }
-            break;
-            default:
-                ;
-        }
-
-        SwapCellTextAttrs(nRow1, nRow2);
-        SwapCellNotes(nRow1, nRow2);
-        CellStorageModified();
-        BroadcastCells(aRows, SC_HINT_DATACHANGED);
-        return;
-    }
-
-    // The two cells are of different types.
-
-    ScRefCellValue aCell1 = GetCellValue(aPos1.first, aPos1.second);
-    ScRefCellValue aCell2 = GetCellValue(aPos2.first, aPos2.second);
-
-    // Make sure to put cells in row 1 first then row 2!
-
-    if (aCell1.meType == CELLTYPE_NONE)
-    {
-        // cell 1 is empty and cell 2 is not.
-        switch (aCell2.meType)
-        {
-            case CELLTYPE_VALUE:
-                it1 = maCells.set(it1, nRow1, aCell2.mfValue); // it2 becomes invalid.
-                maCells.set_empty(it1, nRow2, nRow2);
-            break;
-            case CELLTYPE_STRING:
-                it1 = maCells.set(it1, nRow1, *aCell2.mpString);
-                maCells.set_empty(it1, nRow2, nRow2);
-            break;
-            case CELLTYPE_EDIT:
-            {
-                it1 = maCells.set(
-                    it1, nRow1, const_cast<EditTextObject*>(aCell2.mpEditText));
-                EditTextObject* p;
-                maCells.release(it1, nRow2, p);
-            }
-            break;
-            case CELLTYPE_FORMULA:
-            {
-                // cell 1 is empty and cell 2 is a formula cell.
-                ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *aCell2.mpFormula);
-                DetachFormulaCell(aPos2, *aCell2.mpFormula);
-                it1 = maCells.set(it1, nRow1, pNew);
-                maCells.set_empty(it1, nRow2, nRow2); // original formula cell gets deleted.
-                ActivateNewFormulaCell(it1, nRow1, *pNew);
-            }
-            break;
-            default:
-                ;
-        }
-
-        SwapCellTextAttrs(nRow1, nRow2);
-        SwapCellNotes(nRow1, nRow2);
-        CellStorageModified();
-        BroadcastCells(aRows, SC_HINT_DATACHANGED);
-        return;
-    }
-
-    if (aCell2.meType == CELLTYPE_NONE)
-    {
-        // cell 1 is not empty and cell 2 is empty.
-        switch (aCell1.meType)
-        {
-            case CELLTYPE_VALUE:
-                // Value is copied in Cell1.
-                it1 = maCells.set_empty(it1, nRow1, nRow1);
-                maCells.set(it1, nRow2, aCell1.mfValue);
-            break;
-            case CELLTYPE_STRING:
-            {
-                svl::SharedString aStr = *aCell1.mpString; // make a copy.
-                it1 = maCells.set_empty(it1, nRow1, nRow1); // original string is gone.
-                maCells.set(it1, nRow2, aStr);
-            }
-            break;
-            case CELLTYPE_EDIT:
-            {
-                EditTextObject* p;
-                it1 = maCells.release(it1, nRow1, p);
-                maCells.set(it1, nRow2, p);
-            }
-            break;
-            case CELLTYPE_FORMULA:
-            {
-                // cell 1 is a formula cell and cell 2 is empty.
-                ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow2, nTab), *aCell1.mpFormula);
-                DetachFormulaCell(aPos1, *aCell1.mpFormula);
-                it1 = maCells.set_empty(it1, nRow1, nRow1); // original formula cell is gone.
-                it1 = maCells.set(it1, nRow2, pNew);
-                ActivateNewFormulaCell(it1, nRow2, *pNew);
-            }
-            break;
-            default:
-                ;
-        }
-
-        SwapCellTextAttrs(nRow1, nRow2);
-        SwapCellNotes(nRow1, nRow2);
-        CellStorageModified();
-        BroadcastCells(aRows, SC_HINT_DATACHANGED);
-        return;
-    }
-
-    // Neither cells are empty, and they are of different types.
-    switch (aCell1.meType)
-    {
-        case CELLTYPE_VALUE:
-        {
-            switch (aCell2.meType)
-            {
-                case CELLTYPE_STRING:
-                    it1 = maCells.set(it1, nRow1, *aCell2.mpString);
-                break;
-                case CELLTYPE_EDIT:
-                {
-                    it1 = maCells.set(
-                        it1, nRow1, const_cast<EditTextObject*>(aCell2.mpEditText));
-                    EditTextObject* p;
-                    it1 = maCells.release(it1, nRow2, p);
-                }
-                break;
-                case CELLTYPE_FORMULA:
-                {
-                    DetachFormulaCell(aPos2, *aCell2.mpFormula);
-                    ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *aCell2.mpFormula);
-                    it1 = maCells.set(it1, nRow1, pNew);
-                    ActivateNewFormulaCell(it1, nRow1, *pNew);
-                    // The old formula cell will get overwritten below.
-                }
-                break;
-                default:
-                    ;
-            }
-
-            maCells.set(it1, nRow2, aCell1.mfValue);
-
-        }
-        break;
-        case CELLTYPE_STRING:
-        {
-            svl::SharedString aStr = *aCell1.mpString; // make a copy.
-            switch (aCell2.meType)
-            {
-                case CELLTYPE_VALUE:
-                    it1 = maCells.set(it1, nRow1, aCell2.mfValue);
-                break;
-                case CELLTYPE_EDIT:
-                {
-                    it1 = maCells.set(
-                        it1, nRow1, const_cast<EditTextObject*>(aCell2.mpEditText));
-                    EditTextObject* p;
-                    it1 = maCells.release(it1, nRow2, p); // prevent it being overwritten.
-                }
-                break;
-                case CELLTYPE_FORMULA:
-                {
-                    // cell 1 - string, cell 2 - formula
-                    DetachFormulaCell(aPos2, *aCell2.mpFormula);
-                    ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *aCell2.mpFormula);
-                    it1 = maCells.set(it1, nRow1, pNew);
-                    ActivateNewFormulaCell(it1, nRow1, *pNew);
-                    // Old formula cell will get overwritten below.
-                }
-                break;
-                default:
-                    ;
-            }
-
-            maCells.set(it1, nRow2, aStr);
-        }
-        break;
-        case CELLTYPE_EDIT:
-        {
-            EditTextObject* p;
-            it1 = maCells.release(it1, nRow1, p);
-
-            switch (aCell2.meType)
-            {
-                case CELLTYPE_VALUE:
-                    it1 = maCells.set(it1, nRow1, aCell2.mfValue);
-                break;
-                case CELLTYPE_STRING:
-                    it1 = maCells.set(it1, nRow1, *aCell2.mpString);
-                break;
-                case CELLTYPE_FORMULA:
-                {
-                    DetachFormulaCell(aPos2, *aCell2.mpFormula);
-                    ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *aCell2.mpFormula);
-                    it1 = maCells.set(it1, nRow1, pNew);
-                    ActivateNewFormulaCell(it1, nRow1, *pNew);
-                    // Old formula cell will get overwritten below.
-                }
-                break;
-                default:
-                    ;
-            }
-
-            maCells.set(it1, nRow2, const_cast<EditTextObject*>(aCell1.mpEditText));
-        }
-        break;
-        case CELLTYPE_FORMULA:
-        {
-            // cell 1 is a formula cell and cell 2 is not.
-            DetachFormulaCell(aPos1, *aCell1.mpFormula);
-            ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow2, nTab), *aCell1.mpFormula);
-            switch (aCell2.meType)
-            {
-                case CELLTYPE_VALUE:
-                    it1 = maCells.set(it1, nRow1, aCell2.mfValue);
-                break;
-                case CELLTYPE_STRING:
-                    it1 = maCells.set(it1, nRow1, *aCell2.mpString);
-                break;
-                case CELLTYPE_EDIT:
-                {
-                    it1 = maCells.set(it1, nRow1, aCell2.mpEditText);
-                    EditTextObject* p;
-                    it1 = maCells.release(it1, nRow2, p);
-                }
-                break;
-                default:
-                    ;
-            }
-
-            it1 = maCells.set(it1, nRow2, pNew);
-            ActivateNewFormulaCell(it1, nRow2, *pNew);
-        }
-        break;
-        default:
-            ;
-    }
-
-    SwapCellTextAttrs(nRow1, nRow2);
-    SwapCellNotes(nRow1, nRow2);
-    CellStorageModified();
-    BroadcastCells(aRows, SC_HINT_DATACHANGED);
+    return &sc::celltextattr_block::at(*aPos.first->data, aPos.second);
 }
 
 namespace {
@@ -2190,34 +1901,25 @@ void resetColumnPosition(sc::CellStoreType& rCells, SCCOL nCol)
     }
 }
 
+class NoteCaptionUpdater
+{
+    SCCOL mnCol;
+    SCTAB mnTab;
+public:
+    NoteCaptionUpdater( SCCOL nCol, SCTAB nTab ) : mnCol(nCol), mnTab(nTab) {}
+
+    void operator() ( size_t nRow, ScPostIt* p )
+    {
+        p->UpdateCaptionPos(ScAddress(mnCol,nRow,mnTab));
+    }
+};
+
 }
 
-void ScColumn::UpdateNoteCaptions()
+void ScColumn::UpdateNoteCaptions( SCROW nRow1, SCROW nRow2 )
 {
-    sc::CellNoteStoreType::const_iterator itBlk = maCellNotes.begin(), itBlkEnd = maCellNotes.end();
-    sc::cellnote_block::const_iterator itData, itDataEnd;
-
-    SCROW curRow = 0;
-    for (;itBlk!=itBlkEnd;++itBlk)
-    {
-        if (itBlk->data)
-        {
-            // non empty block
-            itData = sc::cellnote_block::begin(*itBlk->data);
-            itDataEnd = sc::cellnote_block::end(*itBlk->data);
-            for(;itData!=itDataEnd; ++itData)
-            {
-                ScPostIt* pNote = *itData;
-                pNote->UpdateCaptionPos(ScAddress(nCol, curRow, nTab));
-                curRow +=1;
-            }
-        }
-        else
-        {
-            // empty block
-            curRow += itBlk->size;
-        }
-    }
+    NoteCaptionUpdater aFunc(nCol, nTab);
+    sc::ProcessNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
 }
 
 void ScColumn::SwapCol(ScColumn& rCol)
@@ -2228,8 +1930,8 @@ void ScColumn::SwapCol(ScColumn& rCol)
     maCellNotes.swap(rCol.maCellNotes);
 
     // notes update caption
-    UpdateNoteCaptions();
-    rCol.UpdateNoteCaptions();
+    UpdateNoteCaptions(0, MAXROW);
+    rCol.UpdateNoteCaptions(0, MAXROW);
 
     ScAttrArray* pTempAttr = rCol.pAttrArray;
     rCol.pAttrArray = pAttrArray;
@@ -2278,7 +1980,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 
     // move the notes to the destination column
     maCellNotes.transfer(nStartRow, nEndRow, rCol.maCellNotes, nStartRow);
-    UpdateNoteCaptions();
+    UpdateNoteCaptions(0, MAXROW);
 
     // Re-group transferred formula cells.
     aPos = rCol.maCells.position(nStartRow);
