@@ -677,13 +677,6 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_rhino, \
 ))
 endif
 
-$(eval $(call gb_Helper_register_jars,OOO, \
-	agenda \
-	fax \
-	letter \
-	web \
-))
-
 $(eval $(call gb_Helper_register_jars,OXT, \
 	EvolutionarySolver \
 	active_java \
