@@ -340,15 +340,35 @@ void ScColumn::DetachFormulaCell(
 
 namespace {
 
-class DetachFormulaCellsHandler
+class AttachFormulaCellsHandler
 {
-    ScDocument* mpDoc;
+    sc::StartListeningContext& mrCxt;
+
 public:
-    DetachFormulaCellsHandler(ScDocument* pDoc) : mpDoc(pDoc) {}
+    AttachFormulaCellsHandler( sc::StartListeningContext& rCxt ) :
+        mrCxt(rCxt) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
-        pCell->EndListeningTo(mpDoc);
+        pCell->StartListeningTo(mrCxt);
+    }
+};
+
+class DetachFormulaCellsHandler
+{
+    ScDocument* mpDoc;
+    sc::EndListeningContext* mpCxt;
+
+public:
+    DetachFormulaCellsHandler( ScDocument* pDoc, sc::EndListeningContext* pCxt ) :
+        mpDoc(pDoc), mpCxt(pCxt) {}
+
+    void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
+    {
+        if (mpCxt)
+            pCell->EndListeningTo(*mpCxt);
+        else
+            pCell->EndListeningTo(mpDoc);
     }
 };
 
@@ -370,8 +390,47 @@ void ScColumn::DetachFormulaCells(
     if (pDocument->IsClipOrUndo())
         return;
 
-    DetachFormulaCellsHandler aFunc(pDocument);
+    DetachFormulaCellsHandler aFunc(pDocument, NULL);
     sc::ProcessFormula(aPos.first, maCells, nRow, nNextTopRow-1, aFunc);
+}
+
+void ScColumn::AttachFormulaCells( sc::StartListeningContext& rCxt, SCROW nRow1, SCROW nRow2 )
+{
+    sc::CellStoreType::position_type aPos = maCells.position(nRow1);
+    sc::CellStoreType::iterator it = aPos.first;
+
+    sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
+    if (ValidRow(nRow2+1))
+    {
+        aPos = maCells.position(it, nRow2+1);
+        sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
+    }
+
+    if (pDocument->IsClipOrUndo())
+        return;
+
+    AttachFormulaCellsHandler aFunc(rCxt);
+    sc::ProcessFormula(it, maCells, nRow1, nRow2, aFunc);
+}
+
+void ScColumn::DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2 )
+{
+    sc::CellStoreType::position_type aPos = maCells.position(nRow1);
+    sc::CellStoreType::iterator it = aPos.first;
+
+    // Split formula grouping at the top and bottom boundaries.
+    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
+    if (ValidRow(nRow2+1))
+    {
+        aPos = maCells.position(it, nRow2+1);
+        sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
+    }
+
+    if (pDocument->IsClipOrUndo())
+        return;
+
+    DetachFormulaCellsHandler aFunc(pDocument, &rCxt);
+    sc::ProcessFormula(it, maCells, nRow1, nRow2, aFunc);
 }
 
 sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow )

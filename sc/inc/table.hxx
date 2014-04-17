@@ -380,6 +380,8 @@ public:
     CellType    GetCellType( SCCOL nCol, SCROW nRow ) const;
     ScRefCellValue GetCellValue( SCCOL nCol, SCROW nRow ) const;
 
+    const sc::CellTextAttr* GetCellTextAttr( SCCOL nCol, SCROW nRow ) const;
+
     void        GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const;
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
 
@@ -815,6 +817,8 @@ public:
 
     bool IsManualRowHeight(SCROW nRow) const;
 
+    bool HasUniformRowHeight( SCROW nRow1, SCROW nRow2 ) const;
+
     void        SyncColRowFlags();
 
     void        StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
@@ -864,6 +868,7 @@ public:
 
     sal_uInt8 GetScriptType( SCCOL nCol, SCROW nRow ) const;
     void SetScriptType( SCCOL nCol, SCROW nRow, sal_uInt8 nType );
+    void UpdateScriptTypes( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     sal_uInt8 GetRangeScriptType( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow1, SCROW nRow2 );
 
@@ -983,16 +988,16 @@ private:
     bool        IsSorted(SCCOLROW nStart, SCCOLROW nEnd) const;
     void        DecoladeRow( ScSortInfoArray*, SCROW nRow1, SCROW nRow2 );
     void        SwapCol(SCCOL nCol1, SCCOL nCol2);
-    void        SwapRow(SCROW nRow1, SCROW nRow2);
     short CompareCell(
         sal_uInt16 nSort,
         ScRefCellValue& rCell1, SCCOL nCell1Col, SCROW nCell1Row,
         ScRefCellValue& rCell2, SCCOL nCell2Col, SCROW nCell2Row ) const;
     short       Compare(SCCOLROW nIndex1, SCCOLROW nIndex2) const;
     short       Compare( ScSortInfoArray*, SCCOLROW nIndex1, SCCOLROW nIndex2) const;
-    ScSortInfoArray*    CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 );
+    ScSortInfoArray* CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2, bool bKeepQuery );
     void        QuickSort( ScSortInfoArray*, SCsCOLROW nLo, SCsCOLROW nHi);
-    void        SortReorder( ScSortInfoArray*, ScProgress* );
+    void SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress );
+    void SortReorderByRow( ScSortInfoArray* pArray, ScProgress* pProgress );
 
     bool        CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
     bool        CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
@@ -1020,6 +1025,9 @@ private:
     void StartListening( sc::StartListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener );
     void EndListening( sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener );
     void        StartAllListeners();
+
+    void AttachFormulaCells( sc::StartListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
+    void DetachFormulaCells( sc::EndListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     void        SetLoadingMedium(bool bLoading);
 

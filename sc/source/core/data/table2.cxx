@@ -1029,6 +1029,19 @@ void ScTable::StartAllListeners()
         aCol[i].StartAllListeners();
 }
 
+void ScTable::AttachFormulaCells(
+    sc::StartListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        aCol[nCol].AttachFormulaCells(rCxt, nRow1, nRow2);
+}
+
+void ScTable::DetachFormulaCells(
+    sc::EndListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        aCol[nCol].DetachFormulaCells(rCxt, nRow1, nRow2);
+}
 
 void ScTable::StartNeededListeners()
 {
@@ -1585,6 +1598,14 @@ ScRefCellValue ScTable::GetCellValue( SCCOL nCol, SCROW nRow ) const
         return ScRefCellValue();
 
     return aCol[nCol].GetCellValue(nRow);
+}
+
+const sc::CellTextAttr* ScTable::GetCellTextAttr( SCCOL nCol, SCROW nRow ) const
+{
+    if (!ValidColRow(nCol, nRow))
+        return NULL;
+
+    return aCol[nCol].GetCellTextAttr(nRow);
 }
 
 void ScTable::GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const

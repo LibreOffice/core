@@ -174,11 +174,14 @@ public:
     const sc::CellNoteStoreType& GetCellNoteStore() const { return maCellNotes; }
 
     ScRefCellValue GetCellValue( SCROW nRow ) const;
+    ScRefCellValue GetCellValue( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
     ScRefCellValue GetCellValue( const sc::CellStoreType::const_iterator& itPos, size_t nOffset ) const;
+
+    const sc::CellTextAttr* GetCellTextAttr( SCROW nRow ) const;
+    const sc::CellTextAttr* GetCellTextAttr( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
 
     void        Delete( SCROW nRow );
     void        FreeAll();
-    void        SwapRow( SCROW nRow1, SCROW nRow2 );
     void        SwapCell( SCROW nRow, ScColumn& rCol);
 
     bool        HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const;
@@ -488,6 +491,7 @@ public:
             sc::CellStoreType::iterator itr);
 
     void SetScriptType( SCROW nRow, sal_uInt8 nType );
+    void UpdateScriptTypes( SCROW nRow1, SCROW nRow2 );
 
     size_t GetFormulaHash( SCROW nRow ) const;
 
@@ -503,6 +507,8 @@ public:
 
     SvtBroadcaster* GetBroadcaster( SCROW nRow );
     const SvtBroadcaster* GetBroadcaster( SCROW nRow ) const;
+    const SvtBroadcaster* GetBroadcaster( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
+
     void DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 );
     bool HasBroadcaster() const;
 
@@ -512,6 +518,7 @@ public:
     // cell notes
     ScPostIt* GetCellNote( SCROW nRow );
     const ScPostIt* GetCellNote( SCROW nRow ) const;
+    const ScPostIt* GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
     void DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 );
     void DeleteCellNote( SCROW nRow );
     bool HasCellNotes() const;
@@ -533,7 +540,8 @@ public:
                                      SCROW nRowOffsetDest=0) const;
     void DuplicateNotes(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol,
                             sc::ColumnBlockPosition& maDestBlockPos, bool bCloneCaption = true, SCROW nRowOffsetDest=0 ) const;
-    void UpdateNoteCaptions();
+
+    void UpdateNoteCaptions( SCROW nRow1, SCROW nRow2 );
 
     void InterpretDirtyCells( SCROW nRow1, SCROW nRow2 );
 
@@ -547,6 +555,9 @@ public:
 
     void DetachFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength );
 
+    void AttachFormulaCells( sc::StartListeningContext& rCxt, SCROW nRow1, SCROW nRow2 );
+    void DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2 );
+
     /**
      * Regroup formula cells for the entire column.
      */
@@ -555,6 +566,8 @@ public:
 #if DEBUG_COLUMN_STORAGE
     void DumpFormulaGroups() const;
 #endif
+
+    SCSIZE GetPatternCount( SCROW nRow1, SCROW nRow2 ) const;
 
 private:
 

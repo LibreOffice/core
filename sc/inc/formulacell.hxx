@@ -160,6 +160,7 @@ public:
                     ~ScFormulaCell();
 
     ScFormulaCell* Clone() const;
+    ScFormulaCell* Clone( const ScAddress& rPos ) const;
 
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos );
 

@@ -1726,6 +1726,11 @@ void ScColumn::DumpFormulaGroups() const
 }
 #endif
 
+SCSIZE ScColumn::GetPatternCount( SCROW nRow1, SCROW nRow2 ) const
+{
+    return pAttrArray ? pAttrArray->Count(nRow1, nRow2) : 0;
+}
+
 void ScColumn::CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const
 {
     rDestCol.maCellTextAttrs.set_empty(nRow1, nRow2); // Empty the destination range first.
@@ -1956,6 +1961,17 @@ const SvtBroadcaster* ScColumn::GetBroadcaster(SCROW nRow) const
     return maBroadcasters.get<SvtBroadcaster*>(nRow);
 }
 
+const SvtBroadcaster* ScColumn::GetBroadcaster( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const
+{
+    sc::BroadcasterStoreType::const_position_type aPos = maBroadcasters.position(rBlockPos.miBroadcasterPos, nRow);
+    rBlockPos.miBroadcasterPos = aPos.first;
+
+    if (aPos.first->type != sc::element_type_broadcaster)
+        return NULL;
+
+    return sc::broadcaster_block::at(*aPos.first->data, aPos.second);
+}
+
 void ScColumn::DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 )
 {
     rBlockPos.miBroadcasterPos =
@@ -1982,6 +1998,17 @@ ScPostIt* ScColumn::GetCellNote(SCROW nRow)
 const ScPostIt* ScColumn::GetCellNote(SCROW nRow) const
 {
     return maCellNotes.get<ScPostIt*>(nRow);
+}
+
+const ScPostIt* ScColumn::GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const
+{
+    sc::CellNoteStoreType::const_position_type aPos = maCellNotes.position(rBlockPos.miCellNotePos, nRow);
+    rBlockPos.miCellNotePos = aPos.first;
+
+    if (aPos.first->type != sc::element_type_cellnote)
+        return NULL;
+
+    return sc::cellnote_block::at(*aPos.first->data, aPos.second);
 }
 
 void ScColumn::SetCellNote(SCROW nRow, ScPostIt* pNote)

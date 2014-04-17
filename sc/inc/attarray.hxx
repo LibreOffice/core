@@ -187,6 +187,8 @@ public:
         SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray, sal_Int16 nStripFlags = 0) const;
 
     void    DeleteHardAttr( SCROW nStartRow, SCROW nEndRow );
+
+    SCSIZE Count( SCROW nRow1, SCROW nRow2 ) const;
 };
 
 //                              Iterator for attributes

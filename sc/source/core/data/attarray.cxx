@@ -2203,6 +2203,18 @@ void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
     }
 }
 
+SCSIZE ScAttrArray::Count( SCROW nStartRow, SCROW nEndRow ) const
+{
+    SCSIZE  nIndex1, nIndex2;
+
+    if( !Search( nStartRow, nIndex1 ) )
+        return 0;
+
+    if( !Search( nEndRow, nIndex2 ) )
+        nIndex2 = nCount - 1;
+
+    return nIndex2 - nIndex1 + 1;
+}
 
 // move within a document
 

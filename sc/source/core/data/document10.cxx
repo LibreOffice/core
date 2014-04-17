@@ -74,4 +74,22 @@ void ScDocument::SharePooledResources( ScDocument* pSrcDoc )
     mpCellStringPool = pSrcDoc->mpCellStringPool;
 }
 
+void ScDocument::UpdateScriptTypes( const ScAddress& rPos, SCCOL nColSize, SCROW nRowSize )
+{
+    ScTable* pTab = FetchTable(rPos.Tab());
+    if (!pTab)
+        return;
+
+    pTab->UpdateScriptTypes(rPos.Col(), rPos.Row(), rPos.Col()+nColSize-1, rPos.Row()+nRowSize-1);
+}
+
+bool ScDocument::HasUniformRowHeight( SCTAB nTab, SCROW nRow1, SCROW nRow2 ) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return false;
+
+    return pTab->HasUniformRowHeight(nRow1, nRow2);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,6 +24,9 @@
 #include <conditio.hxx>
 #include <formulagroup.hxx>
 #include <tokenarray.hxx>
+#include <globalnames.hxx>
+#include <scitems.hxx>
+#include <cellform.hxx>
 
 #include <svl/sharedstringpool.hxx>
 
@@ -276,6 +279,107 @@ void ScColumn::PostprocessRangeNameUpdate( sc::CompileFormulaContext& rCompileCx
 
     PostRangeNameUpdateHandler aFunc(pDocument, rCompileCxt);
     std::for_each(aGroups.begin(), aGroups.end(), aFunc);
+}
+
+namespace {
+
+class ScriptTypeUpdater
+{
+    ScColumn& mrCol;
+    sc::CellTextAttrStoreType& mrTextAttrs;
+    sc::CellTextAttrStoreType::iterator miPosAttr;
+    ScConditionalFormatList* mpCFList;
+    SvNumberFormatter* mpFormatter;
+    ScAddress maPos;
+    bool mbUpdated;
+
+private:
+    void updateScriptType( size_t nRow, ScRefCellValue& rCell )
+    {
+        sc::CellTextAttrStoreType::position_type aAttrPos = mrTextAttrs.position(miPosAttr, nRow);
+        miPosAttr = aAttrPos.first;
+
+        if (aAttrPos.first->type != sc::element_type_celltextattr)
+            return;
+
+        sc::CellTextAttr& rAttr = sc::celltextattr_block::at(*aAttrPos.first->data, aAttrPos.second);
+        if (rAttr.mnScriptType != SC_SCRIPTTYPE_UNKNOWN)
+            // Script type already deteremined.  Skip it.
+            return;
+
+        const ScPatternAttr* pPat = mrCol.GetPattern(nRow);
+        if (!pPat)
+            // In theory this should never return NULL. But let's be safe.
+            return;
+
+        const SfxItemSet* pCondSet = NULL;
+        if (mpCFList)
+        {
+            maPos.SetRow(nRow);
+            const ScCondFormatItem& rItem =
+                static_cast<const ScCondFormatItem&>(pPat->GetItem(ATTR_CONDITIONAL));
+            const std::vector<sal_uInt32>& rData = rItem.GetCondFormatData();
+            pCondSet = mrCol.GetDoc().GetCondResult(rCell, maPos, *mpCFList, rData);
+        }
+
+        OUString aStr;
+        Color* pColor;
+        sal_uLong nFormat = pPat->GetNumberFormat(mpFormatter, pCondSet);
+        ScCellFormat::GetString(rCell, nFormat, aStr, &pColor, *mpFormatter, &mrCol.GetDoc());
+
+        rAttr.mnScriptType = mrCol.GetDoc().GetStringScriptType(aStr);
+        mbUpdated = true;
+    }
+
+public:
+    ScriptTypeUpdater( ScColumn& rCol ) :
+        mrCol(rCol),
+        mrTextAttrs(rCol.GetCellAttrStore()),
+        miPosAttr(mrTextAttrs.begin()),
+        mpCFList(rCol.GetDoc().GetCondFormList(rCol.GetTab())),
+        mpFormatter(rCol.GetDoc().GetFormatTable()),
+        maPos(rCol.GetCol(), 0, rCol.GetTab()),
+        mbUpdated(false)
+    {}
+
+    void operator() ( size_t nRow, double fVal )
+    {
+        ScRefCellValue aCell(fVal);
+        updateScriptType(nRow, aCell);
+    }
+
+    void operator() ( size_t nRow, const svl::SharedString& rStr )
+    {
+        ScRefCellValue aCell(&rStr);
+        updateScriptType(nRow, aCell);
+    }
+
+    void operator() ( size_t nRow, const EditTextObject* pText )
+    {
+        ScRefCellValue aCell(pText);
+        updateScriptType(nRow, aCell);
+    }
+
+    void operator() ( size_t nRow, const ScFormulaCell* pCell )
+    {
+        ScRefCellValue aCell(const_cast<ScFormulaCell*>(pCell));
+        updateScriptType(nRow, aCell);
+    }
+
+    bool isUpdated() const { return mbUpdated; }
+};
+
+}
+
+void ScColumn::UpdateScriptTypes( SCROW nRow1, SCROW nRow2 )
+{
+    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
+        return;
+
+    ScriptTypeUpdater aFunc(*this);
+    sc::ParseAllNonEmpty(maCells.begin(), maCells, nRow1, nRow2, aFunc);
+    if (aFunc.isUpdated())
+        CellStorageModified();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

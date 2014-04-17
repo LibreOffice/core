@@ -493,7 +493,21 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
     WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
-    sal_Bool bRepeatQuery = false;                          // bestehenden Filter wiederholen?
+    SCROW nStartRow = aLocalParam.nRow1 + (aLocalParam.bHasHeader ? 1 : 0);
+
+    // Calculate the script types for all cells in the sort range beforehand.
+    // This will speed up the row height adjustment that takes place after the
+    // sort.
+    pDoc->UpdateScriptTypes(
+        ScAddress(aLocalParam.nCol1,nStartRow,nTab),
+        aLocalParam.nCol2-aLocalParam.nCol1+1,
+        aLocalParam.nRow2-nStartRow+1);
+
+    // No point adjusting row heights after the sort when all rows have the same height.
+    bool bUniformRowHeight =
+        pDoc->HasUniformRowHeight(nTab, nStartRow, aLocalParam.nRow2);
+
+    bool bRepeatQuery = false;                          // bestehenden Filter wiederholen?
     ScQueryParam aQueryParam;
     pDBData->GetQueryParam( aQueryParam );
     if ( aQueryParam.GetEntry(0).bDoQuery )
@@ -627,8 +641,9 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         }
     }
 
-    ScRange aDirtyRange( aLocalParam.nCol1, aLocalParam.nRow1, nTab,
-        aLocalParam.nCol2, aLocalParam.nRow2, nTab );
+    ScRange aDirtyRange(
+        aLocalParam.nCol1, nStartRow, nTab,
+        aLocalParam.nCol2, aLocalParam.nRow2, nTab);
     pDoc->SetDirty( aDirtyRange );
 
     if (bPaint)
@@ -654,8 +669,8 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         rDocShell.PostPaint(ScRange(nStartX, nStartY, nTab, nEndX, nEndY, nTab), nPaint);
     }
 
-    //  AdjustRowHeight( aLocalParam.nRow1, aLocalParam.nRow2, bPaint );
-    rDocShell.AdjustRowHeight( aLocalParam.nRow1, aLocalParam.nRow2, nTab );
+    if (!bUniformRowHeight)
+        rDocShell.AdjustRowHeight(nStartRow, aLocalParam.nRow2, nTab);
 
     // #i59745# set collected drawing undo actions at sorting undo action
     if( pUndoAction && pDrawLayer )
