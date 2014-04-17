@@ -2492,6 +2492,7 @@ void Test::testFunctionLists()
         "ACOSH",
         "ACOT",
         "ACOTH",
+//        "AGGREGATE",  // fdo73148 function not yet visble in UI
         "ASIN",
         "ASINH",
         "ATAN",

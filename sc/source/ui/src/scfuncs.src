@@ -4211,6 +4211,54 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The cells of the range which are to be taken into account." ;
         };
     };
+     // -=*# Resource for function AGGREGATE #*=-
+    Resource SC_OPCODE_AGGREGATE
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Calculates an aggregate in a spreadsheet." ;
+        };
+        ExtraData =
+        {
+            1;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_AGGREGATE );
+            VAR_ARGS+3;  0;  0;  0; 1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Function" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Function index. Is an index of the possible functions Total, Max, ..." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Options" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Option index. Is an index of the possible ignore options." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "Ref1 or array " ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The cell(s) of the range which are to be taken into account." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "Ref2..n or k " ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "The cells of the range which are to be taken into account or mandatory 2nd argument for certain functions." ;
+        };
+    };
      // -=*# Resource for function GANZZAHL #*=-
     Resource SC_OPCODE_INT
     {

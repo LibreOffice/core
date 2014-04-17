@@ -210,6 +210,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocZTest_MS,        {{ Reference, Value, Value                              }, 0 }},
     { ocNetWorkdays_MS,  {{ Value, Value, Value, Reference                       }, 0 }},
     { ocWorkday_MS,      {{ Value, Value, Value, Reference                       }, 0 }},
+    { ocAggregate,       {{ Value, Value, Reference                              }, 1 }},
     // Excel doubts:
     // ocN, ocT: Excel says (and handles) Reference, error? This means no
     // position dependent SingleRef if DoubleRef, and no array calculation,
