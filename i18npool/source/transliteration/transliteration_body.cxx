@@ -32,6 +32,7 @@
 
 #define TRANSLITERATION_ALL
 #include "transliteration_body.hxx"
+#include <boost/scoped_array.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -154,9 +155,12 @@ Transliteration_body::transliterate(
         // Allocate the max possible buffer. Try to use stack instead of heap,
         // which would have to be reallocated most times anyways.
         const sal_Int32 nLocalBuf = 2048;
-        sal_Unicode aLocalBuf[ nLocalBuf * NMAPPINGMAX ], *out = aLocalBuf, *pHeapBuf = NULL;
-        if ( nCount > nLocalBuf )
-            out = pHeapBuf = new sal_Unicode[ nCount * NMAPPINGMAX ];
+        sal_Unicode aLocalBuf[ nLocalBuf * NMAPPINGMAX ], *out = aLocalBuf;
+        boost::scoped_array<sal_Unicode> pHeapBuf;
+        if ( nCount > nLocalBuf ) {
+            pHeapBuf.reset(new sal_Unicode[ nCount * NMAPPINGMAX ]);
+            out = pHeapBuf.get();
+        }
 
         sal_Int32 j = 0;
         for ( sal_Int32 i = 0; i < nCount; i++)
@@ -174,8 +178,6 @@ Transliteration_body::transliterate(
         }
 
         OUString aRet( out, j );
-        if ( pHeapBuf )
-            delete [] pHeapBuf;
         return aRet;
     }
 }

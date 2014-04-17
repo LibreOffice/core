@@ -36,6 +36,8 @@
 #include <rtl/bootstrap.hxx>
 
 #include <expat.h>
+#include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 
 IndexerPreProcessor::IndexerPreProcessor
     ( const std::string& aModuleName, const fs::path& fsIndexBaseDir,
@@ -946,9 +948,8 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     xmlSetStructuredErrorFunc( NULL, (xmlStructuredErrorFunc)StructuredXMLErrorFunction );
     try
     {
-        HelpLinker* pHelpLinker = new HelpLinker();
+        boost::scoped_ptr<HelpLinker> pHelpLinker(new HelpLinker());
         pHelpLinker->main( args, &aStdStrExtensionPath, &aStdStrDestination, &aOfficeHelpPath );
-        delete pHelpLinker;
     }
     catch( const HelpProcessingException& e )
     {
@@ -980,14 +981,14 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
         aFileStatus.isValid( osl_FileStatus_Mask_FileSize ) )
     {
         sal_uInt64 ret, len = aFileStatus.getFileSize();
-        char* s = new char[ int(len) ];  // the buffer to hold the installed files
+        boost::scoped_array<char> s(new char[ int(len) ]);  // the buffer to hold the installed files
         osl::File aFile( aTreeFileURL );
         aFile.open( osl_File_OpenFlag_Read );
-        aFile.read( s, len, ret );
+        aFile.read( s.get(), len, ret );
         aFile.close();
 
         XML_Parser parser = XML_ParserCreate( 0 );
-        XML_Status parsed = XML_Parse( parser, s, int( len ), true );
+        XML_Status parsed = XML_Parse( parser, s.get(), int( len ), true );
 
         if (XML_STATUS_ERROR == parsed)
         {
@@ -1000,7 +1001,6 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
         }
 
         XML_ParserFree( parser );
-        delete[] s;
     }
 
     return bSuccess;

@@ -25,6 +25,7 @@
 #include <data/numberchar.h>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <boost/scoped_array.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -172,8 +173,8 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
     if (nCount > 0)
     {
         const sal_Unicode *str = inStr.getStr() + startPos;
-        sal_Unicode *newStr = new sal_Unicode[nCount * 2 + 1];
-        sal_Unicode *srcStr = new sal_Unicode[nCount + 1]; // for keeping number without comma
+        boost::scoped_array<sal_Unicode> newStr(new sal_Unicode[nCount * 2 + 1]);
+        boost::scoped_array<sal_Unicode> srcStr(new sal_Unicode[nCount + 1]); // for keeping number without comma
         sal_Int32 i, len = 0, count = 0;
 
         if (useOffset)
@@ -200,7 +201,7 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                             end <= len; begin = end, end += number->multiplierExponent[0]) {
                         if (end == 0) continue;
                         sal_Int32 _count = count;
-                        notZero |= AsciiToNative_numberMaker(srcStr, begin, end - begin, newStr, count,
+                        notZero |= AsciiToNative_numberMaker(srcStr.get(), begin, end - begin, newStr.get(), count,
                                 end == len ? -1 : 0, offset, useOffset, i - len + startPos, number, numberChar);
                         if (count > 0 && number->multiplierExponent[number->exponentCount-1] == 1 &&
                                 newStr[count-1] == numberChar[0])
@@ -238,12 +239,9 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
             }
         }
 
-        delete[] srcStr;
-
         if (useOffset)
             offset.realloc(count);
-        aRet = OUString(newStr, count);
-        delete[] newStr;
+        aRet = OUString(newStr.get(), count);
     }
     return aRet;
 }
@@ -308,7 +306,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
 
     if (nCount > 0) {
         const sal_Unicode *str = inStr.getStr() + startPos;
-        sal_Unicode *newStr = new sal_Unicode[nCount * MultiplierExponent_7_CJK[0] + 2];
+        boost::scoped_array<sal_Unicode> newStr(new sal_Unicode[nCount * MultiplierExponent_7_CJK[0] + 2]);
         if (useOffset)
             offset.realloc( nCount * MultiplierExponent_7_CJK[0] + 1 );
         sal_Int32 count = 0, index;
@@ -332,7 +330,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
                 index = MultiplierExponent_7_CJK[index % ExponentCount_7_CJK];
                 NativeToAscii_numberMaker(
                         sal::static_int_cast<sal_Int16>( index ), sal::static_int_cast<sal_Int16>( index ),
-                        str, i, nCount, newStr, count, offset, useOffset,
+                        str, i, nCount, newStr.get(), count, offset, useOffset,
                         numberChar, multiplierChar);
             } else {
                 if ((index = numberChar.indexOf(str[i])) >= 0)
@@ -366,8 +364,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
             for (i = 0; i < count; i++)
                 offset[i] += startPos;
         }
-        aRet = OUString(newStr, count);
-        delete[] newStr;
+        aRet = OUString(newStr.get(), count);
     }
     return aRet;
 }
