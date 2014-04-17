@@ -122,8 +122,6 @@ void SwSpellPopup::fillLangPopupMenu(
     if (!pPopupMenu)
         return;
 
-    SvtLanguageTable    aLanguageTable;
-
     // set of languages to be displayed in the sub menus
     std::set< OUString > aLangItems;
 
@@ -133,7 +131,7 @@ void SwSpellPopup::fillLangPopupMenu(
     OUString    aGuessedTextLang( aSeq[3] );
 
     if (!aCurLang.isEmpty() &&
-        LANGUAGE_DONTKNOW != aLanguageTable.GetType( aCurLang ))
+        LANGUAGE_DONTKNOW != SvtLanguageTable::GetLanguageType( aCurLang ))
         aLangItems.insert( aCurLang );
 
     //2--System
@@ -142,7 +140,7 @@ void SwSpellPopup::fillLangPopupMenu(
     if (rSystemLanguage != LANGUAGE_DONTKNOW)
     {
         if (lcl_checkScriptType( nScriptType, rSystemLanguage ))
-            aLangItems.insert( aLanguageTable.GetString(rSystemLanguage) );
+            aLangItems.insert( SvtLanguageTable::GetLanguageString(rSystemLanguage) );
     }
 
     //3--UI
@@ -150,20 +148,20 @@ void SwSpellPopup::fillLangPopupMenu(
     if (rUILanguage != LANGUAGE_DONTKNOW)
     {
         if (lcl_checkScriptType(nScriptType, rUILanguage ))
-            aLangItems.insert( aLanguageTable.GetString(rUILanguage) );
+            aLangItems.insert( SvtLanguageTable::GetLanguageString(rUILanguage) );
     }
 
     //4--guessed language
     if (!aGuessedTextLang.isEmpty())
     {
-        if (lcl_checkScriptType(nScriptType, aLanguageTable.GetType(aGuessedTextLang)))
+        if (lcl_checkScriptType(nScriptType, SvtLanguageTable::GetLanguageType(aGuessedTextLang)))
             aLangItems.insert( aGuessedTextLang );
     }
 
     //5--keyboard language
     if (!aKeyboardLang.isEmpty())
     {
-        if (lcl_checkScriptType(nScriptType, aLanguageTable.GetType(aKeyboardLang)))
+        if (lcl_checkScriptType(nScriptType, SvtLanguageTable::GetLanguageType(aKeyboardLang)))
             aLangItems.insert( aKeyboardLang );
     }
 
@@ -189,7 +187,7 @@ void SwSpellPopup::fillLangPopupMenu(
                 if (aLangItems.size() == (size_t)nMaxCount)
                     break;
                 const lang::Locale& rLocale = rLocales[i];
-                if (lcl_checkScriptType( nScriptType, aLanguageTable.GetType( rLocale.Language )))
+                if (lcl_checkScriptType( nScriptType, SvtLanguageTable::GetLanguageType( rLocale.Language )))
                     aLangItems.insert( rLocale.Language );
             }
         }
@@ -200,7 +198,7 @@ void SwSpellPopup::fillLangPopupMenu(
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
         OUString aEntryTxt( *it );
-        if (aEntryTxt != OUString( aLanguageTable.GetString( LANGUAGE_NONE ) )&&
+        if (aEntryTxt != OUString( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) )&&
             aEntryTxt != "*" && // multiple languages in current selection
             !aEntryTxt.isEmpty()) // 'no language found' from language guessing
         {
@@ -218,7 +216,7 @@ void SwSpellPopup::fillLangPopupMenu(
     }
 
     pPopupMenu->InsertItem( nLangItemIdStart + MN_NONE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_NONE )), MIB_RADIOCHECK );
-    if ( aLanguageTable.GetString( LANGUAGE_NONE ) == aCurLang )
+    if ( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) == aCurLang )
         pPopupMenu->CheckItem( nLangItemIdStart + MN_NONE_OFFSET, true );
 
     pPopupMenu->InsertItem( nLangItemIdStart + MN_RESET_OFFSET, OUString(SW_RES( STR_RESET_TO_DEFAULT_LANGUAGE )), 0 );
