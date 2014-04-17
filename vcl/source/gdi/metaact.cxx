@@ -3467,7 +3467,15 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
         mpData = NULL;
 }
 
-IMPL_META_ACTION( LayoutMode, META_LAYOUTMODE_ACTION )
+MetaLayoutModeAction::MetaLayoutModeAction() :
+    MetaAction  ( META_LAYOUTMODE_ACTION ),
+    mnLayoutMode( 0 )
+{
+}
+
+MetaLayoutModeAction::~MetaLayoutModeAction()
+{
+}
 
 MetaLayoutModeAction::MetaLayoutModeAction( sal_uInt32 nLayoutMode ) :
     MetaAction  ( META_LAYOUTMODE_ACTION ),
