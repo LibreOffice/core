@@ -305,21 +305,21 @@ void lcl_parseHandleRange(comphelper::SequenceAsVector<beans::PropertyValue>& rH
 }
 
 // Parses a string like: Name = "RefY", Handle = (long) 0, Value = (any) { (long) 0 }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE
-void lcl_parseHandleRefY(comphelper::SequenceAsVector<beans::PropertyValue>& rHandle, const OString& rValue)
+void lcl_parseHandleRef(comphelper::SequenceAsVector<beans::PropertyValue>& rHandle, const OString& rValue, const OUString& rName)
 {
-    static const OString aExpectedPrefix("Name = \"RefY\", Handle = (long) 0, Value = (any) { (long) ");
-    if (rValue.startsWith(aExpectedPrefix))
+    static const OString aExpectedXPrefix("Name = \"RefX\", Handle = (long) 0, Value = (any) { (long) ");
+    static const OString aExpectedYPrefix("Name = \"RefY\", Handle = (long) 0, Value = (any) { (long) ");
+    if (rValue.startsWith(aExpectedXPrefix) || rValue.startsWith(aExpectedYPrefix))
     {
-        sal_Int32 nIndex = aExpectedPrefix.getLength();
+        sal_Int32 nIndex = aExpectedXPrefix.getLength();
         beans::PropertyValue aPropertyValue;
-        aPropertyValue.Name = "RefY";
+        aPropertyValue.Name = rName;
         // We only expect a Value here
         aPropertyValue.Value = uno::makeAny(rValue.getToken(0, '}', nIndex).toInt32());
         rHandle.push_back(aPropertyValue);
-
     }
     else
-        SAL_WARN("oox", "lcl_parseHandleRefY: unexpected value: " << rValue);
+        SAL_WARN("oox", "lcl_parseHandleRef: unexpected value: " << rValue);
 }
 
 uno::Sequence<beans::PropertyValue> lcl_parseHandle(const OString& rValue)
@@ -343,14 +343,20 @@ uno::Sequence<beans::PropertyValue> lcl_parseHandle(const OString& rValue)
                 OString aToken = rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"));
                 if (aToken.startsWith("Name = \"Position\""))
                     lcl_parseHandlePosition(aRet, aToken);
+                else if (aToken.startsWith("Name = \"RangeXMaximum\""))
+                    lcl_parseHandleRange(aRet, aToken, "RangeXMaximum");
+                else if (aToken.startsWith("Name = \"RangeXMinimum\""))
+                    lcl_parseHandleRange(aRet, aToken, "RangeXMinimum");
                 else if (aToken.startsWith("Name = \"RangeYMaximum\""))
                     lcl_parseHandleRange(aRet, aToken, "RangeYMaximum");
                 else if (aToken.startsWith("Name = \"RangeYMinimum\""))
                     lcl_parseHandleRange(aRet, aToken, "RangeYMinimum");
+                else if (aToken.startsWith("Name = \"RefX\""))
+                    lcl_parseHandleRef(aRet, aToken, "RefX");
                 else if (aToken.startsWith("Name = \"RefY\""))
-                    lcl_parseHandleRefY(aRet, aToken);
+                    lcl_parseHandleRef(aRet, aToken, "RefY");
                 else
-                    SAL_WARN("oox", "lcl_parseHandle: unexpected value: " << rValue);
+                    SAL_WARN("oox", "lcl_parseHandle: unexpected token: " << aToken);
             }
         }
     }
