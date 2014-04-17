@@ -71,7 +71,6 @@ struct SprmInfoHash
 };
 
 typedef ww::WrappedHash<SprmInfo, SprmInfoHash> wwSprmSearcher;
-typedef ww::WrappedHash<sal_uInt16> wwSprmSequence;
 
 /**
     wwSprmParser knows how to take a sequence of bytes and split it up into
