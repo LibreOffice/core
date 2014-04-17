@@ -10,6 +10,8 @@
 #ifndef SC_SCOPETOOLS_HXX
 #define SC_SCOPETOOLS_HXX
 
+#include "scdllapi.h"
+
 class ScDocument;
 
 namespace sc {
