@@ -1202,7 +1202,17 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     }
 }
 
-IMPL_META_ACTION( StretchText, META_STRETCHTEXT_ACTION )
+MetaStretchTextAction::MetaStretchTextAction() :
+    MetaAction  ( META_STRETCHTEXT_ACTION ),
+    mnWidth     ( 0 ),
+    mnIndex     ( 0 ),
+    mnLen       ( 0 )
+{
+}
+
+MetaStretchTextAction::~MetaStretchTextAction()
+{
+}
 
 MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
                                               const OUString& rStr,
