@@ -3307,7 +3307,6 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     if (nMaxCount > 0)
     {
         sal_Int32 nCount = 0;
-        const SvtLanguageTable aLangTab;
         for (std::set< LanguageType >::const_iterator it = aAllLangs.begin(); it != aAllLangs.end(); ++it)
         {
             if (nCount >= nMaxCount)
@@ -3315,7 +3314,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
             if (LANGUAGE_NONE != *it)
             {
                 pLanguage[nCount] = LanguageTag::convertToLocale( *it );
-                pLanguage[nCount].Language = aLangTab.GetString( *it );
+                pLanguage[nCount].Language = SvtLanguageTable::GetLanguageString( *it );
                 nCount += 1;
             }
         }
