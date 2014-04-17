@@ -412,12 +412,21 @@ private:
 };
 
 CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
-:   mpBasePtr( pBasePtr)
-,   mpBaseEnd( pBasePtr+nBaseLen)
-,   mnStackIdx(0)
-,   mnHintSize(0)
-,   mnHorzHintSize(0)
-,   maCharWidth(-1)
+    : mpBasePtr( pBasePtr)
+    , mpBaseEnd( pBasePtr+nBaseLen)
+    , mpReadPtr(NULL)
+    , mpReadEnd(NULL)
+    , mpWritePtr(NULL)
+    , mbSawError(false)
+    , mbNeedClose(false)
+    , mbIgnoreHints(false)
+    , mnCntrMask(0)
+    , mpCharStringOps(NULL)
+    , mpCharStringEscs(NULL)
+    , mnStackIdx(0)
+    , mnHintSize(0)
+    , mnHorzHintSize(0)
+    , maCharWidth(-1)
 {
 //  setCharStringType( 1);
     // TODO: new CffLocal[ mnFDAryCount];
