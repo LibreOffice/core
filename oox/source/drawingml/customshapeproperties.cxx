@@ -117,8 +117,8 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
     {
         OSL_TRACE("preset: %d", mnShapePresetType);
 
-        if (maPresetsMap.empty())
-            initializePresetsMap();
+        if (maPresetDataMap.empty())
+            initializePresetDataMap();
 
         PropertyMap aPropertyMap;
         PropertySet aPropSet( xPropSet );
@@ -135,13 +135,11 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                 aPropertyMap.setProperty( PROP_Type, sConnectorShapeType );
             }
         }
-        else if (maPresetsMap.find(mnShapePresetType) != maPresetsMap.end())
+        else if (maPresetDataMap.find(mnShapePresetType) != maPresetDataMap.end())
         {
             OSL_TRACE("found property map for preset: %s (%d)", USS(getShapePresetTypeName()), mnShapePresetType);
 
-            CustomShapeProvider *pProvider = maPresetsMap[ mnShapePresetType ];
-            if (pProvider)
-                aPropertyMap = pProvider->getProperties();
+            aPropertyMap = maPresetDataMap[mnShapePresetType];
 #ifdef DEBUG
             aPropertyMap.dumpCode();
 #endif
