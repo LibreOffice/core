@@ -60,7 +60,7 @@ const char OPEN_URL[] =           ".uno:Open";
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
 const int nButtonsFontSize = 15;
-const Color aButtonsBackground(114, 168, 84); // TDF green
+const Color aButtonsBackground(92, 61, 204); // Collabora purple
 const Color aButtonsText(COL_WHITE);
 
 BackingWindow::BackingWindow( Window* i_pParent ) :
