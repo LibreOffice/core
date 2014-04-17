@@ -238,6 +238,33 @@ Reference< chart2::data::XDataSequence > getLabelDataSequenceFromDoc(
     return Reference< chart2::data::XDataSequence > ();
 }
 
+Reference< chart2::data::XDataSequence > getDataSequenceFromDocByRole(
+        Reference< chart2::XChartDocument > xChartDoc, const OUString& rRole,
+        sal_Int32 nDataSeries = 0, sal_Int32 nChartType = 0, sal_Int32 nCooSys = 0 )
+{
+    Reference< chart2::XDataSeries > xDataSeries =
+        getDataSeriesFromDoc( xChartDoc, nDataSeries, nChartType, nCooSys );
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference< chart2::data::XDataSource > xDataSource( xDataSeries, uno::UNO_QUERY_THROW );
+    Sequence< Reference< chart2::data::XLabeledDataSequence > > xDataSequences =
+        xDataSource->getDataSequences();
+    for(sal_Int32 i = 0; i < xDataSequences.getLength(); ++i)
+    {
+        Reference< chart2::data::XDataSequence> xLabelSeq = xDataSequences[i]->getValues();
+        uno::Reference< beans::XPropertySet > xProps(xLabelSeq, uno::UNO_QUERY);
+        if(!xProps.is())
+            continue;
+
+        OUString aRoleName = xProps->getPropertyValue("Role").get<OUString>();
+
+        if(aRoleName == rRole)
+            return xLabelSeq;
+    }
+
+    CPPUNIT_FAIL("no Label sequence found");
+    return Reference< chart2::data::XDataSequence > ();
+}
+
 uno::Sequence < OUString > getWriterChartColumnDescriptions( Reference< lang::XComponent > mxComponent )
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);

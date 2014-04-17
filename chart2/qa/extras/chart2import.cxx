@@ -35,6 +35,7 @@ public:
     void testODPChartSeries();
     void testBnc864396();
     void testSimpleStrictXLSX();
+    void testDelayedCellImport(); // chart range referencing content on later sheets
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -57,6 +58,7 @@ public:
     CPPUNIT_TEST(testODPChartSeries);
     CPPUNIT_TEST(testBnc864396);
     CPPUNIT_TEST(testSimpleStrictXLSX);
+    CPPUNIT_TEST(testDelayedCellImport);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -309,6 +311,17 @@ void Chart2ImportTest::testSimpleStrictXLSX()
     Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );
     CPPUNIT_ASSERT(xDataSeries.is());
 
+}
+
+void Chart2ImportTest::testDelayedCellImport()
+{
+    load("/chart2/qa/extras/data/xlsx/", "fdo70609.xlsx");
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    Reference< chart2::data::XDataSequence > xDataSeq =
+        getDataSequenceFromDocByRole(xChartDoc, "values-x");
+
+    OUString aRange = xDataSeq->getSourceRangeRepresentation();
+    CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$C$5:$C$9"), aRange);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
