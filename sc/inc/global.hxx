@@ -234,6 +234,10 @@ const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 #define SC_SCENARIO_VALUE       32
 #define SC_SCENARIO_PROTECT     64
 
+#define AGGR_IGN_NESTED_ST_AG  0x04
+#define AGGR_IGN_ERR_VAL       0x02
+#define AGGR_IGN_HID_ROW       0x01
+
 /** Default cell clone flags: do not start listening, do not adjust 3D refs to
     old position, clone note captions of cell notes. */
 const int SC_CLONECELL_DEFAULT          = 0x0000;
@@ -724,6 +728,18 @@ enum ScSubTotalFunc
         SUBTOTAL_FUNC_VAR   = 10,
         SUBTOTAL_FUNC_VARP  = 11,
         SUBTOTAL_FUNC_SELECTION_COUNT = 12
+    };
+
+enum ScAggregateFunc
+    {
+        AGGREGATE_FUNC_MEDIAN  = 12,
+        AGGREGATE_FUNC_MODSNGL = 13,
+        AGGREGATE_FUNC_LARGE   = 14,
+        AGGREGATE_FUNC_SMALL   = 15,
+        AGGREGATE_FUNC_PERCINC = 16,
+        AGGREGATE_FUNC_QRTINC  = 17,
+        AGGREGATE_FUNC_PERCEXC = 18,
+        AGGREGATE_FUNC_QRTEXC  = 19
     };
 
 class ScArea;

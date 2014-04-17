@@ -706,5 +706,6 @@
 #define HID_FUNC_WORKDAY_MS                                     "SC_HID_FUNC_WORKDAY_MS"
 #define HID_FUNC_ERF_MS                                         "SC_HID_FUNC_EFR_MS"
 #define HID_FUNC_ERFC_MS                                        "SC_HID_FUNC_ERFC_MS"
+#define HID_FUNC_AGGREGATE                                      "SC_HID_FUNC_AGGREGATE"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
