@@ -340,7 +340,7 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
     :   ::utl::ConfigItem( ROOTNODE_FACTORIES )
     ,   m_bReadOnlyStatesWellKnown( false )
 {
-    // First initialize list of factory infos! Otherwise we couldnt gurantee right working of these class.
+    // First initialize list of factory infos! Otherwise we couldnt guarantee right working of these class.
     for( sal_Int32 nFactory=0; nFactory<FACTORYCOUNT; ++nFactory )
         m_lFactories[nFactory].free();
 

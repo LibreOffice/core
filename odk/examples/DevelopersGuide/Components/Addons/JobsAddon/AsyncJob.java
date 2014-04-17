@@ -92,7 +92,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
                                           com.sun.star.task.XJobListener  xListener)
         throws com.sun.star.lang.IllegalArgumentException
     {
-        // For asynchronous jobs a valid listener reference is guranteed normaly ...
+        // For asynchronous jobs a valid listener reference is guaranteed normaly ...
         if (xListener == null)
             throw new com.sun.star.lang.IllegalArgumentException("invalid listener");
 

@@ -288,7 +288,7 @@ public:
                 a frame with a controller/model inside can be possible. For loading
                 of a "non visible component" only an information about a successfully start
                 can be provided.
-                Further it can't be guranteed, that the internal process runs synchronous.
+                Further it can't be guaranteed, that the internal process runs synchronous.
                 Thats why we preferr using of specialized methods afterwards e.g. to:
                     - wait till the internal job will be finished
                       and get the results
