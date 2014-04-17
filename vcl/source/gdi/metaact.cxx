@@ -3486,7 +3486,15 @@ void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadUInt32( mnLayoutMode );
 }
 
-IMPL_META_ACTION( TextLanguage, META_TEXTLANGUAGE_ACTION )
+MetaTextLanguageAction::MetaTextLanguageAction() :
+    MetaAction  ( META_TEXTLANGUAGE_ACTION ),
+    meTextLanguage( LANGUAGE_DONTKNOW )
+{
+}
+
+MetaTextLanguageAction::~MetaTextLanguageAction()
+{
+}
 
 MetaTextLanguageAction::MetaTextLanguageAction( LanguageType eTextLanguage ) :
     MetaAction  ( META_TEXTLANGUAGE_ACTION ),
