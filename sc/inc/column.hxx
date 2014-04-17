@@ -178,7 +178,11 @@ public:
     const sc::CellNoteStoreType& GetCellNoteStore() const { return maCellNotes; }
 
     ScRefCellValue GetCellValue( SCROW nRow ) const;
+    ScRefCellValue GetCellValue( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
     ScRefCellValue GetCellValue( const sc::CellStoreType::const_iterator& itPos, size_t nOffset ) const;
+
+    const sc::CellTextAttr* GetCellTextAttr( SCROW nRow ) const;
+    const sc::CellTextAttr* GetCellTextAttr( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
 
     void        Delete( SCROW nRow );
     void        FreeAll();

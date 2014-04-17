@@ -1596,6 +1596,14 @@ ScRefCellValue ScTable::GetCellValue( SCCOL nCol, SCROW nRow ) const
     return aCol[nCol].GetCellValue(nRow);
 }
 
+const sc::CellTextAttr* ScTable::GetCellTextAttr( SCCOL nCol, SCROW nRow ) const
+{
+    if (!ValidColRow(nCol, nRow))
+        return NULL;
+
+    return aCol[nCol].GetCellTextAttr(nRow);
+}
+
 void ScTable::GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const
 {
     rCol = 0;

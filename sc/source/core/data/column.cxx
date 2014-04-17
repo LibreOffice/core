@@ -771,6 +771,16 @@ ScRefCellValue ScColumn::GetCellValue( SCROW nRow ) const
     return GetCellValue(aPos.first, aPos.second);
 }
 
+ScRefCellValue ScColumn::GetCellValue( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const
+{
+    std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(rBlockPos.miCellPos, nRow);
+    if (aPos.first == maCells.end())
+        return ScRefCellValue();
+
+    rBlockPos.miCellPos = aPos.first; // Store this for next call.
+    return GetCellValue(aPos.first, aPos.second);
+}
+
 ScRefCellValue ScColumn::GetCellValue( const sc::CellStoreType::const_iterator& itPos, size_t nOffset ) const
 {
     ScRefCellValue aVal; // Defaults to empty cell.
@@ -801,6 +811,32 @@ ScRefCellValue ScColumn::GetCellValue( const sc::CellStoreType::const_iterator& 
     }
 
     return aVal;
+}
+
+const sc::CellTextAttr* ScColumn::GetCellTextAttr( SCROW nRow ) const
+{
+    sc::CellTextAttrStoreType::const_position_type aPos = maCellTextAttrs.position(nRow);
+    if (aPos.first == maCellTextAttrs.end())
+        return NULL;
+
+    if (aPos.first->type != sc::element_type_celltextattr)
+        return NULL;
+
+    return &sc::celltextattr_block::at(*aPos.first->data, aPos.second);
+}
+
+const sc::CellTextAttr* ScColumn::GetCellTextAttr( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const
+{
+    sc::CellTextAttrStoreType::const_position_type aPos = maCellTextAttrs.position(rBlockPos.miCellTextAttrPos, nRow);
+    if (aPos.first == maCellTextAttrs.end())
+        return NULL;
+
+    rBlockPos.miCellTextAttrPos = aPos.first;
+
+    if (aPos.first->type != sc::element_type_celltextattr)
+        return NULL;
+
+    return &sc::celltextattr_block::at(*aPos.first->data, aPos.second);
 }
 
 namespace {

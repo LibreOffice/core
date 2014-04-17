@@ -206,6 +206,7 @@ short Compare( const OUString &sInput1, const OUString &sInput2,
 struct ScSortInfo
 {
     ScRefCellValue maCell;
+    const sc::CellTextAttr* mpTextAttr;
     SCCOLROW        nOrg;
     DECL_FIXEDMEMPOOL_NEWDEL( ScSortInfo );
 };
@@ -279,10 +280,13 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
         {
             SCCOL nCol = static_cast<SCCOL>(aSortParam.maKeyState[nSort].nField);
             ScColumn* pCol = &aCol[nCol];
+            sc::ColumnBlockConstPosition aBlockPos;
+            pCol->InitBlockPosition(aBlockPos);
             for ( SCROW nRow = nInd1; nRow <= nInd2; nRow++ )
             {
                 ScSortInfo* pInfo = pArray->Get( nSort, nRow );
-                pInfo->maCell = pCol->GetCellValue(nRow);
+                pInfo->maCell = pCol->GetCellValue(aBlockPos, nRow);
+                pInfo->mpTextAttr = pCol->GetCellTextAttr(aBlockPos, nRow);
                 pInfo->nOrg = nRow;
             }
         }
@@ -297,6 +301,7 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
             {
                 ScSortInfo* pInfo = pArray->Get( nSort, nCol );
                 pInfo->maCell = GetCellValue(nCol, nRow);
+                pInfo->mpTextAttr = GetCellTextAttr(nCol, nRow);
                 pInfo->nOrg = nCol;
             }
         }

@@ -384,6 +384,8 @@ public:
     CellType    GetCellType( SCCOL nCol, SCROW nRow ) const;
     ScRefCellValue GetCellValue( SCCOL nCol, SCROW nRow ) const;
 
+    const sc::CellTextAttr* GetCellTextAttr( SCCOL nCol, SCROW nRow ) const;
+
     void        GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const;
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
 
