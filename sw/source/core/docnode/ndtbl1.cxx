@@ -1373,6 +1373,8 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
         sal_Bool bRTL = pTab->IsRightToLeft();
 
         const SwLayoutFrm *pCell = pTab->FirstCell();
+        if (!pCell)
+            continue;
         do
         {
             if ( pCell->IsCellFrm() && pCell->FindTabFrm() == pTab && ::IsFrmInTblSel( rUnion, pCell ) )
