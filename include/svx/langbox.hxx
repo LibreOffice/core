@@ -24,7 +24,6 @@
 #include <vcl/image.hxx>
 #include <vcl/lstbox.hxx>
 
-class SvtLanguageTable;
 
 #define LANG_LIST_EMPTY             0x0000
 #define LANG_LIST_ALL               0x0001
