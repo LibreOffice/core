@@ -488,7 +488,6 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     m_pLeftBtn->Enable( false );
 
     // fill language menu button list
-    SvtLanguageTable aLangTab;
     uno::Sequence< lang::Locale > aLocales;
     if (xThesaurus.is())
         aLocales = xThesaurus->getLocales();
@@ -500,13 +499,14 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     {
         const LanguageType nLang = LanguageTag::convertToLanguageType( pLocales[i] );
         DBG_ASSERT( nLang != LANGUAGE_NONE && nLang != LANGUAGE_DONTKNOW, "failed to get language" );
-        aLangVec.push_back( aLangTab.GetString( nLang ) );
+        aLangVec.push_back( SvtLanguageTable::GetLanguageString( nLang ) );
     }
     std::sort( aLangVec.begin(), aLangVec.end() );
     for (size_t i = 0;  i < aLangVec.size();  ++i)
         m_pLangLB->InsertEntry( aLangVec[i] );
 
-    std::vector< OUString >::iterator aI = std::find(aLangVec.begin(), aLangVec.end(), aLangTab.GetString(nLanguage));
+    std::vector< OUString >::iterator aI = std::find(aLangVec.begin(), aLangVec.end(),
+            SvtLanguageTable::GetLanguageString(nLanguage));
     if (aI != aLangVec.end())
     {
         m_pLangLB->SelectEntry(*aI);
