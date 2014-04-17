@@ -2256,9 +2256,12 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
         else if( RES_DRAWFRMFMT == pFndFmt->Which() )
         {
             const SdrObject* pSObj = pFndFmt->FindSdrObject();
-            ((SwFEShell*)this)->SelectObj( pSObj->GetCurrentBoundRect().Center() );
-            MakeSelVisible();
-            bRet = true;
+            if (pSObj)
+            {
+                ((SwFEShell*)this)->SelectObj( pSObj->GetCurrentBoundRect().Center() );
+                MakeSelVisible();
+                bRet = true;
+            }
         }
         else // then is it a fly
         {
