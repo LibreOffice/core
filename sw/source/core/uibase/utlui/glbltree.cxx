@@ -1207,8 +1207,10 @@ IMPL_LINK_NOARG( SwGlobalTree, DoubleClickHdl)
 
 IMPL_STATIC_LINK_NOINSTANCE(SwGlobalTree, ShowFrameHdl, SwGlobalTree*, EMPTYARG)
 {
-    if(SwGlobalTree::GetShowShell())
-        SfxViewFrame::GetFirst(SwGlobalTree::GetShowShell())->ToTop();
+    const SfxObjectShell* pShell = SwGlobalTree::GetShowShell();
+    SfxViewFrame* pFirst = pShell ? SfxViewFrame::GetFirst(pShell) : NULL;
+    if (pFirst)
+        pFirst->ToTop();
     SwGlobalTree::SetShowShell(0);
     return 0;
 }
