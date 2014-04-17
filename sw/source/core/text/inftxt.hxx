@@ -775,9 +775,9 @@ protected:
     SwTxtSizeInfo *pInf;
 public:
     // The replacement string originates either from the portion via GetExpText()
-    // or from the char * pCh, if it is not NULL
+    // or from the rCh, if it is not empty.
     SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor, bool bTxtLen,
-               bool bExgLists, OUString const & pCh = OUString() );
+               bool bExgLists, OUString const & rCh = OUString() );
     ~SwTxtSlot();
     bool IsOn() const { return bOn; }
 };

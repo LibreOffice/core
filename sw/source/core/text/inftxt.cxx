@@ -1659,7 +1659,7 @@ SwTxtSlot::SwTxtSlot(
     const SwLinePortion *pPor,
     bool bTxtLen,
     bool bExgLists,
-    OUString const & pCh )
+    OUString const & rCh )
     : pOldTxt(0)
     , pOldSmartTagList(0)
     , pOldGrammarCheckList(0)
@@ -1668,13 +1668,13 @@ SwTxtSlot::SwTxtSlot(
     , nLen(0)
     , pInf(NULL)
 {
-    if( pCh.isEmpty() )
+    if( rCh.isEmpty() )
     {
         bOn = pPor->GetExpTxt( *pNew, aTxt );
     }
     else
     {
-        aTxt = pCh;
+        aTxt = rCh;
         bOn = true;
     }
 
