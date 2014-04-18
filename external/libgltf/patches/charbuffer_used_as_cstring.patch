@@ -1,0 +1,12 @@
+diff -ur libgltf.org/src/RenderScene.cpp libgltf/src/RenderScene.cpp
+--- libgltf.org/src/RenderScene.cpp	2014-04-18 13:52:31.148772285 +0200
++++ libgltf/src/RenderScene.cpp	2014-04-18 15:08:15.001604707 +0200
+@@ -211,7 +211,7 @@
+ {
+     if(0 == jsonfile)
+         return 0;
+-    string tmpStr(jsonfile->buffer);
++    string tmpStr(jsonfile->buffer,jsonfile->size);
+     loadJson.setJsonInfo(tmpStr);
+     if (!loadJson.parseJsonFile())
+         return 0;
