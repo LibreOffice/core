@@ -10,6 +10,7 @@
 #include <cellvalues.hxx>
 #include <column.hxx>
 #include <cellvalue.hxx>
+#include <sharedformula.hxx>
 
 #include <cassert>
 #include <boost/noncopyable.hpp>
@@ -95,9 +96,13 @@ void CellValues::append( ScRefCellValue& rVal, const CellTextAttr* pAttr )
         case CELLTYPE_FORMULA:
         {
             mpImpl->maCells.resize(n+1);
+            CellStoreType::iterator itBlk = mpImpl->maCells.set(n, rVal.mpFormula->Clone());
 
-            // TODO : Handle this.
+            size_t nOffset = n - itBlk->position;
+            CellStoreType::position_type aPos(itBlk, nOffset);
+            SharedFormulaUtil::joinFormulaCellAbove(aPos);
         }
+        break;
         default:
             bAppendAttr = false;
     }

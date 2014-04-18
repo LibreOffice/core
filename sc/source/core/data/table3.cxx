@@ -425,7 +425,7 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
         // a copy before updating the document.
 
         size_t nColCount = aSortParam.nCol2 - aSortParam.nCol1 + 1;
-        boost::ptr_vector<sc::CellValues> aSortedCols;
+        boost::ptr_vector<sc::CellValues> aSortedCols; // storage for copied cells.
         aSortedCols.reserve(nColCount);
         for (size_t i = 0; i < nColCount; ++i)
             aSortedCols.push_back(new sc::CellValues);
