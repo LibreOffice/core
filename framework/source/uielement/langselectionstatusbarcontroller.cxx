@@ -170,12 +170,13 @@ throw (css::uno::RuntimeException)
     sal_Int16 nItemId = static_cast< sal_Int16 >(MID_LANG_SEL_1);
     const OUString sAsterisk("*");  // multiple languages in current selection
     const OUString sEmpty;  // 'no language found' from language guessing
+    const OUString sNone( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ));
     std::map< sal_Int16, OUString > aLangMap;
     std::set< OUString >::const_iterator it;
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
         const OUString & rStr( *it );
-        if ( rStr != OUString( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) ) &&
+        if ( rStr != sNone &&
              rStr != sAsterisk &&
              rStr != sEmpty)
         {
