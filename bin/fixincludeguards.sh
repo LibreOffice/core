@@ -9,7 +9,7 @@
 
 # Usage:
 # a) fixincludeguards.sh header.hxx
-# b) find . -name *.hxx -or -name *.h | xargs sh fixincludeguards.sh
+# b) find . -name *.hxx -or -name *.h | xargs bash ./bin/fixincludeguards.sh
 
 # TODO: This doesn't fix wrong #endif comments, like:
 # #ifndef FOO_BAR_HXX
@@ -38,7 +38,7 @@ for fn in "$@"; do
 
         # pattern which identifies guards, common one look like
         # _MODULE_FILE_HXX, FILE_H, FILE_INC
-        pattern=".*\(_HXX\|_H\|_INC\)"
+        pattern=".*\(_HXX\|_H\|_INC\|_hxx\|_h\|_inc\)"
 
         ### extract guard definition
         # head to take only the first match
