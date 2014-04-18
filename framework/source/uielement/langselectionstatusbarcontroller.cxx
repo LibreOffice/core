@@ -194,7 +194,7 @@ throw (css::uno::RuntimeException)
     }
 
     xPopupMenu->insertItem( MID_LANG_SEL_NONE,  FWK_RESSTR(STR_LANGSTATUS_NONE), 0, MID_LANG_SEL_NONE );
-    if ( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) == m_aCurLang )
+    if ( sNone == m_aCurLang )
         xPopupMenu->checkItem( MID_LANG_SEL_NONE, sal_True );
     xPopupMenu->insertItem( MID_LANG_SEL_RESET, FWK_RESSTR(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_SEL_RESET );
     xPopupMenu->insertItem( MID_LANG_SEL_MORE,  FWK_RESSTR(STR_LANGSTATUS_MORE), 0, MID_LANG_SEL_MORE );
