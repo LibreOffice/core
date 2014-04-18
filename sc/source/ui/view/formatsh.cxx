@@ -122,12 +122,9 @@ TYPEINIT1( ScFormatShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScFormatShell, SfxShell, ScResId(SCSTR_FORMATSHELL) )
 {
-    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD |
-                                SFX_VISIBILITY_SERVER,
-                                ScResId(RID_OBJECTBAR_FORMAT));
-
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_SERVER,
+                                            ScResId(RID_OBJECTBAR_FORMAT));
 }
-
 
 ScFormatShell::ScFormatShell(ScViewData* pData) :
     SfxShell(pData->GetViewShell()),

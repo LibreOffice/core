@@ -65,9 +65,9 @@ TYPEINIT1( ScCellShell, ScFormatShell );
 
 SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell , ScResId(SCSTR_CELLSHELL) )
 {
-    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD |
-                                SFX_VISIBILITY_SERVER,
-                                ScResId(RID_OBJECTBAR_FORMAT));
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_SERVER,
+                                            ScResId(RID_OBJECTBAR_FORMAT));
+
     SFX_POPUPMENU_REGISTRATION(ScResId(RID_POPUP_CELLS));
 }
 

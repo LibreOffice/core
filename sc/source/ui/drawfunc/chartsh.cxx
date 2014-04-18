@@ -47,8 +47,9 @@ namespace drawing = com::sun::star::drawing;
 
 SFX_IMPL_INTERFACE(ScChartShell, ScDrawShell, ScResId(SCSTR_CHARTSHELL) )
 {
-    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_SERVER,
-                                ScResId(RID_DRAW_OBJECTBAR) );
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_SERVER,
+                                            ScResId(RID_DRAW_OBJECTBAR));
+
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_CHART) );
 }
 

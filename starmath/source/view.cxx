@@ -931,9 +931,8 @@ TYPEINIT1( SmViewShell, SfxViewShell );
 
 SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
 {
-    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD |
-                                SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
-                                SmResId(RID_MATH_TOOLBOX ));
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
+                                            SmResId(RID_MATH_TOOLBOX ));
     //Dummy-Objectbar, to avoid quiver while activating
 
     SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
