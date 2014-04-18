@@ -13,11 +13,11 @@ ifeq ($(SYSTEM_PYTHON),)
 gb_PythonTest_EXECUTABLE := $(gb_Python_INSTALLED_EXECUTABLE)
 gb_PythonTest_EXECUTABLE_GDB := $(gb_Python_INSTALLED_EXECUTABLE_GDB)
 ifeq ($(OS),MACOSX)
-gb_PythonTest_DEPS := $(call gb_GeneratedPackage_get_target_for_build,python3)
+gb_PythonTest_DEPS := $(call gb_GeneratedPackage_get_target,python3)
 else
-gb_PythonTest_DEPS := $(call gb_Package_get_target_for_build,python3)
+gb_PythonTest_DEPS := $(call gb_Package_get_target,python3)
 endif
-gb_PythonTest_DEPS += $(if $(filter-out WNT,$(OS)),$(call gb_Package_get_target_for_build,python_shell))
+gb_PythonTest_DEPS += $(if $(filter-out WNT,$(OS)),$(call gb_Package_get_target,python_shell))
 else
 gb_PythonTest_EXECUTABLE := $(PYTHON_FOR_BUILD)
 gb_PythonTest_EXECUTABLE_GDB := $(PYTHON_FOR_BUILD)
