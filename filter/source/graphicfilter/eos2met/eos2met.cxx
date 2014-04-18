@@ -124,14 +124,14 @@ class METWriter
 {
 private:
 
-    sal_Bool                bStatus;
-    sal_uLong               nLastPercent; // with which number pCallback has been called the last time
+    sal_Bool            bStatus;
+    sal_uInt32          nLastPercent; // with which number pCallback has been called the last time
     SvStream*           pMET;
     Rectangle           aPictureRect;
     MapMode             aPictureMapMode;
     MapMode             aTargetMapMode;
-    sal_uLong               nActualFieldStartPos;     // start position of the current 'Field'
-    sal_uLong               nNumberOfDataFields;  // number of commenced 'Graphcis Data Fields'
+    sal_uInt32          nActualFieldStartPos;     // start position of the current 'Field'
+    sal_uInt32          nNumberOfDataFields;  // number of commenced 'Graphcis Data Fields'
     Color               aGDILineColor;
     Color               aGDIFillColor;
     RasterOp            eGDIRasterOp;
@@ -146,15 +146,15 @@ private:
     long                nMETStrokeLineWidth;
     Size                aMETChrCellSize;
     short               nMETChrAngle;
-    sal_uInt8               nMETChrSet;
+    sal_uInt8           nMETChrSet;
     METChrSet*          pChrSetList; // list of Character-Sets
-    sal_uInt8               nNextChrSetId; // the first unused ChrSet-Id
-    sal_uLong               nActBitmapId; // Field-Id of the next Bitmap
-    sal_uLong               nNumberOfActions; // number of Actions in the GDIMetafile
-    sal_uLong               nNumberOfBitmaps; // number of Bitmaps
-    sal_uLong               nWrittenActions;  // number of already processed actions during the writing of the orders
-    sal_uLong               nWrittenBitmaps;  // number of already written Bitmaps
-    sal_uLong               nActBitmapPercent; // percentage of the next bitmap that's already written
+    sal_uInt8           nNextChrSetId; // the first unused ChrSet-Id
+    sal_uInt32          nActBitmapId; // Field-Id of the next Bitmap
+    sal_uInt32          nNumberOfActions; // number of Actions in the GDIMetafile
+    sal_uInt32               nNumberOfBitmaps; // number of Bitmaps
+    sal_uInt32               nWrittenActions;  // number of already processed actions during the writing of the orders
+    sal_uInt32               nWrittenBitmaps;  // number of already written Bitmaps
+    sal_uInt32               nActBitmapPercent; // percentage of the next bitmap that's already written
 
     ::std::auto_ptr< VirtualDevice >    apDummyVDev;
     OutputDevice*                       pCompDev;
@@ -170,7 +170,7 @@ private:
         // be set to 0 at the beginning, since this method is recursive)
 
     void WriteBigEndianShort(sal_uInt16 nWord);
-    void WriteBigEndianLong(sal_uLong nLong);
+    void WriteBigEndianLong(sal_uInt32 nLong);
 
     void WritePoint(Point aPt);
     void WriteClipRect( const Rectangle& rRect );
@@ -178,14 +178,14 @@ private:
                               sal_uInt8 nFlags, sal_uInt16 nSegSeqNum);
     void UpdateFieldSize();
 
-    void WriteFieldId(sal_uLong nId);
+    void WriteFieldId(sal_uInt32 nId);
 
     void CreateChrSets(const GDIMetaFile * pMTF);
     void CreateChrSet(const Font & rFont);
     void WriteChrSets();
     sal_uInt8 FindChrSet(const Font & rFont);
 
-    void WriteColorAttributeTable(sal_uLong nFieldId=4, BitmapPalette* pPalette=NULL,
+    void WriteColorAttributeTable(sal_uInt32 nFieldId=4, BitmapPalette* pPalette=NULL,
                                   sal_uInt8 nBasePartFlags=0x40, sal_uInt8 nBasePartLCTID=0);
 
     void WriteImageObject(const Bitmap & rBitmap);
@@ -193,7 +193,7 @@ private:
 
     void WriteDataDescriptor(const GDIMetaFile * pMTF);
 
-    void WillWriteOrder(sal_uLong nNextOrderMaximumLength);
+    void WillWriteOrder(sal_uInt32 nNextOrderMaximumLength);
 
     void METSetAndPushLineInfo( const LineInfo& rLineInfo );
     void METPopLineInfo( const LineInfo& rLineInfo );
@@ -277,7 +277,7 @@ void METWriter::MayCallback()
 {
     if ( xStatusIndicator.is() )
     {
-        sal_uLong nPercent;
+        sal_uInt32 nPercent;
         nPercent=((nWrittenBitmaps<<14)+(nActBitmapPercent<<14)/100+nWrittenActions)
                 *100/((nNumberOfBitmaps<<14)+nNumberOfActions);
 
@@ -347,7 +347,7 @@ void METWriter::WriteBigEndianShort(sal_uInt16 nWord)
 }
 
 
-void METWriter::WriteBigEndianLong(sal_uLong nLong)
+void METWriter::WriteBigEndianLong(sal_uInt32 nLong)
 {
     WriteBigEndianShort((sal_uInt16)(nLong>>16));
     WriteBigEndianShort((sal_uInt16)(nLong&0x0000ffff));
@@ -374,7 +374,7 @@ void METWriter::WriteFieldIntroducer(sal_uInt16 nFieldSize, sal_uInt16 nFieldTyp
 
 void METWriter::UpdateFieldSize()
 {
-    sal_uLong nPos;
+    sal_uInt32 nPos;
 
     nPos=pMET->Tell();
     pMET->Seek(nActualFieldStartPos);
@@ -383,7 +383,7 @@ void METWriter::UpdateFieldSize()
 }
 
 
-void METWriter::WriteFieldId(sal_uLong nId)
+void METWriter::WriteFieldId(sal_uInt32 nId)
 {
     sal_uInt8 nbyte;
     short i;
@@ -508,7 +508,7 @@ void METWriter::WriteChrSets()
 }
 
 
-void METWriter::WriteColorAttributeTable(sal_uLong nFieldId, BitmapPalette* pPalette, sal_uInt8 nBasePartFlags, sal_uInt8 nBasePartLCTID)
+void METWriter::WriteColorAttributeTable(sal_uInt32 nFieldId, BitmapPalette* pPalette, sal_uInt8 nBasePartFlags, sal_uInt8 nBasePartLCTID)
 {
     sal_uInt16 nIndex,nNumI,i;
 
@@ -565,8 +565,8 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
 {
     SvMemoryStream aTemp(0x00010000,0x00010000);
     sal_uInt32 nWidth,nHeight,nResX,nResY;
-    sal_uLong nBytesPerLine,i,j,nNumColors,ny,nLines;
-    sal_uLong nActColMapId;
+    sal_uInt32 nBytesPerLine,i,j,nNumColors,ny,nLines;
+    sal_uInt32 nActColMapId;
     sal_uInt16 nBitsPerPixel;
     sal_uInt8 nbyte;
 
@@ -1132,7 +1132,7 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
 }
 
 
-void METWriter::WillWriteOrder(sal_uLong nNextOrderMaximumLength)
+void METWriter::WillWriteOrder(sal_uInt32 nNextOrderMaximumLength)
 {
     // The parameters of a 'Graphics Data Fields' can be (according to OS2
     // documentation) at most 32759 bytes long. Meant by this is the size
@@ -2339,7 +2339,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
 void METWriter::WriteObjectEnvironmentGroup(const GDIMetaFile * pMTF)
 {
-    sal_uLong i, nId;
+    sal_uInt32 i, nId;
 
     //--- The Field 'Begin Object Environment Group':
     WriteFieldIntroducer(16,BegObjEnvMagic,0,0);
@@ -2386,7 +2386,7 @@ void METWriter::WriteObjectEnvironmentGroup(const GDIMetaFile * pMTF)
 
 void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
 {
-    sal_uLong nSegmentSize,nPos,nDataFieldsStartPos;
+    sal_uInt32 nSegmentSize,nPos,nDataFieldsStartPos;
 
     if( bStatus==sal_False )
         return;
