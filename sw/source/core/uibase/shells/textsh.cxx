@@ -115,6 +115,8 @@ using namespace ::com::sun::star;
 #include <unomid.h>
 
 SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_TEXT))
+
+void SwTextShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_TEXT_POPUPMENU));
 

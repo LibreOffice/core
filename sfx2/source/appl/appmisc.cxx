@@ -91,6 +91,8 @@ using namespace ::com::sun::star::container;
 #define SFX_ITEMTYPE_STATBAR             4
 
 SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
+
+void SfxApplication::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterStatusBar(SfxResId(SFX_ITEMTYPE_STATBAR));
 
@@ -106,11 +108,7 @@ SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
     GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_9);
 }
 
-SfxProgress* SfxApplication::GetProgress() const
-
-/*  [Description]
-
-    Returns the running SfxProgress for the entire application or 0 if
+/** Returns the running SfxProgress for the entire application or 0 if
     none is running for the entire application.
 
     [Cross-reference]
@@ -118,7 +116,7 @@ SfxProgress* SfxApplication::GetProgress() const
     <SfxProgress::GetActiveProgress(SfxViewFrame*)>
     <SfxViewFrame::GetProgress()const>
 */
-
+SfxProgress* SfxApplication::GetProgress() const
 {
     return pAppData_Impl->pProgress;
 }

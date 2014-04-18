@@ -113,15 +113,11 @@ using namespace ::com::sun::star::task;
 #define SfxObjectShell
 #include "sfxslots.hxx"
 
+SFX_IMPL_INTERFACE(SfxObjectShell, SfxShell, SfxResId(0))
 
-
-
-
-SFX_IMPL_INTERFACE(SfxObjectShell,SfxShell,SfxResId(0))
+void SfxObjectShell::InitInterface_Impl()
 {
 }
-
-
 
 class SfxClosePreventer_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
 {

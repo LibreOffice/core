@@ -137,6 +137,8 @@ using namespace ::com::sun::star::i18n;
 #include <swslots.hxx>
 
 SFX_IMPL_INTERFACE(SwAnnotationShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
+
+void SwAnnotationShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TEXT_TOOLBOX));
 

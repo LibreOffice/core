@@ -289,17 +289,16 @@ SfxViewShell_Impl::SfxViewShell_Impl(sal_uInt16 const nFlags)
 ,   m_pAccExec(0)
 {}
 
-
 SFX_IMPL_INTERFACE(SfxViewShell,SfxShell,SfxResId(0))
+
+void SfxViewShell::InitInterface_Impl()
 {
 }
 
 TYPEINIT2(SfxViewShell,SfxShell,SfxListener);
 
-
 /** search for a filter name dependent on type and module
  */
-
 static OUString impl_retrieveFilterNameFromTypeAndModule(
     const css::uno::Reference< css::container::XContainerQuery >& rContainerQuery,
     const OUString& rType,

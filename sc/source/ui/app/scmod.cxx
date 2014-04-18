@@ -119,7 +119,9 @@
 
 static sal_uInt16 nIdleCount = 0;
 
-SFX_IMPL_INTERFACE( ScModule, SfxShell, ScResId(RID_APPTITLE) )
+SFX_IMPL_INTERFACE(ScModule, SfxShell, ScResId(RID_APPTITLE))
+
+void ScModule::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_APPLICATION | SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_VIEWER,
                                             ScResId(RID_OBJECTBAR_APP));

@@ -75,6 +75,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 SFX_IMPL_INTERFACE(SwDrawShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAW))
+
+void SwDrawShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_DRAW_POPUPMENU));
 

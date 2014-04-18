@@ -59,8 +59,9 @@ TYPEINIT1( SdModule, SfxModule );
 #define SdModule
 #include "sdslots.hxx"
 
-
 SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(STR_APPLICATIONOBJECTBAR))
+
+void SdModule::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterStatusBar(SdResId(RID_DRAW_STATUSBAR));
 }

@@ -37,6 +37,8 @@ SFX_SLOTMAP(LeftImpressPaneShell)
 };
 
 SFX_IMPL_INTERFACE(LeftImpressPaneShell, SfxShell, SdResId(STR_LEFT_IMPRESS_PANE_SHELL))
+
+void LeftImpressPaneShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterChildWindow(::sd::LeftPaneImpressChildWindow::GetChildWindowId());
 }
@@ -61,6 +63,8 @@ SFX_SLOTMAP(LeftDrawPaneShell)
 };
 
 SFX_IMPL_INTERFACE(LeftDrawPaneShell, SfxShell, SdResId(STR_LEFT_DRAW_PANE_SHELL))
+
+void LeftDrawPaneShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterChildWindow(::sd::LeftPaneDrawChildWindow::GetChildWindowId());
 }

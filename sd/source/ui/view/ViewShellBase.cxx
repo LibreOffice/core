@@ -214,7 +214,6 @@ private:
 };
 } // end of anonymous namespace
 
-
 //===== ViewShellBase =========================================================
 
 TYPEINIT1(ViewShellBase, SfxViewShell);
@@ -225,6 +224,8 @@ TYPEINIT1(ViewShellBase, SfxViewShell);
 SfxViewFactory* ViewShellBase::pFactory;
 
 SFX_IMPL_INTERFACE(ViewShellBase, SfxViewShell, SdResId(0))
+
+void ViewShellBase::InitInterface_Impl()
 {
 }
 

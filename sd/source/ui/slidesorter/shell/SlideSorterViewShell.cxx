@@ -82,17 +82,14 @@ using ::sfx2::sidebar::EnumContext;
 
 namespace sd { namespace slidesorter {
 
-
 SFX_IMPL_INTERFACE(SlideSorterViewShell, SfxShell, SdResId(STR_SLIDESORTERVIEWSHELL))
+
+void SlideSorterViewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 }
 
-
-
 TYPEINIT1(SlideSorterViewShell, ViewShell);
-
-
 
 ::boost::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
     SfxViewFrame* pFrame,

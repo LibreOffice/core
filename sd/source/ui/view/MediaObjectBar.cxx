@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "MediaObjectBar.hxx"
 #include <avmedia/mediaitem.hxx>
 #include <sfx2/msg.hxx>
@@ -48,19 +47,15 @@ using namespace sd;
 
 namespace sd {
 
-
 // - MediaObjectBar -
-
 
 TYPEINIT1( MediaObjectBar, SfxShell );
 
+SFX_IMPL_INTERFACE(MediaObjectBar, SfxShell, SdResId(STR_MEDIAOBJECTBARSHELL))
 
-
-SFX_IMPL_INTERFACE( MediaObjectBar, SfxShell, SdResId( STR_MEDIAOBJECTBARSHELL ) )
+void MediaObjectBar::InitInterface_Impl()
 {
 }
-
-
 
 MediaObjectBar::MediaObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView ) :
     SfxShell( pSdViewShell->GetViewShell() ),

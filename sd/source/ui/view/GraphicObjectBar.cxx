@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "GraphicObjectBar.hxx"
 
 #include <limits.h>
@@ -33,7 +32,6 @@
 #include <svx/grfflt.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/grafctrl.hxx>
-
 
 #include <sfx2/objface.hxx>
 
@@ -54,13 +52,11 @@ using namespace sd;
 
 namespace sd {
 
-
-
-
 // - GraphicObjectBar -
 
+SFX_IMPL_INTERFACE(GraphicObjectBar, SfxShell, SdResId(STR_GRAFOBJECTBARSHELL))
 
-SFX_IMPL_INTERFACE( GraphicObjectBar, SfxShell, SdResId( STR_GRAFOBJECTBARSHELL ) )
+void GraphicObjectBar::InitInterface_Impl()
 {
 }
 

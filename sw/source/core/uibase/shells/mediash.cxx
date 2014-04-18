@@ -69,6 +69,8 @@
 #include "swabstdlg.hxx"
 
 SFX_IMPL_INTERFACE(SwMediaShell, SwBaseShell, SW_RES(STR_SHELLNAME_MEDIA))
+
+void SwMediaShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_MEDIA_POPUPMENU));
 

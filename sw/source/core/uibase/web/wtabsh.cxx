@@ -39,6 +39,8 @@
 #include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwWebTableShell, SwTableShell, SW_RES(STR_SHELLNAME_TABLE))
+
+void SwWebTableShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_TAB_POPUPMENU));
 

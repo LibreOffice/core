@@ -37,6 +37,8 @@
 #include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwWebDrawFormShell, SwDrawFormShell, SW_RES(0))
+
+void SwWebDrawFormShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_DRAWFORM_POPUPMENU));
 

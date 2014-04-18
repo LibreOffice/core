@@ -46,7 +46,9 @@
 
 TYPEINIT2(ScTabViewShell,SfxViewShell,SfxListener);
 
-SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
+SFX_IMPL_INTERFACE(ScTabViewShell, SfxViewShell, ScResId(SCSTR_TABVIEWSHELL))
+
+void ScTabViewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
                                             ScResId(RID_OBJECTBAR_TOOLS));

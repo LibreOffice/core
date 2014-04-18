@@ -45,6 +45,8 @@ namespace sd
 TYPEINIT1(GraphicDocShell, DrawDocShell);
 
 SFX_IMPL_INTERFACE(GraphicDocShell, SfxObjectShell, SdResId(0))
+
+void GraphicDocShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterChildWindow(SID_SEARCH_DLG);
 }

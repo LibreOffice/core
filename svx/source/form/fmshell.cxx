@@ -161,7 +161,6 @@ FmDesignModeChangedHint::~FmDesignModeChangedHint()
 {
 }
 
-
 const sal_uInt32 FM_UI_FEATURE_SHOW_DATABASEBAR         = 0x00000001;
 const sal_uInt32 FM_UI_FEATURE_SHOW_FIELD               = 0x00000002;
 const sal_uInt32 FM_UI_FEATURE_SHOW_PROPERTIES          = 0x00000004;
@@ -175,6 +174,8 @@ const sal_uInt32 FM_UI_FEATURE_TB_FORMDESIGN            = 0x00000200;
 const sal_uInt32 FM_UI_FEATURE_SHOW_DATANAVIGATOR       = 0x00000400;
 
 SFX_IMPL_INTERFACE(FmFormShell, SfxShell, SVX_RES(RID_STR_FORMSHELL))
+
+void FmFormShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_NAVIGATION|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_READONLYDOC,
                                             SVX_RES(RID_SVXTBX_FORM_NAVIGATION),

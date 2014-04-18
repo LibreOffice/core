@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "TextObjectBar.hxx"
 
 #include <svx/svxids.hrc>
@@ -48,7 +47,6 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/fhgtitem.hxx>
 
-
 #include <sfx2/objface.hxx>
 
 #include "app.hrc"
@@ -65,7 +63,6 @@
 #include "Window.hxx"
 #include "OutlineView.hxx"
 
-
 using namespace sd;
 using namespace ::com::sun::star;
 
@@ -79,12 +76,13 @@ namespace sd {
  * something that (hopefully) never occurs.
  */
 
-SFX_IMPL_INTERFACE( TextObjectBar, SfxShell, SdResId(STR_TEXTOBJECTBARSHELL) )
+SFX_IMPL_INTERFACE(TextObjectBar, SfxShell, SdResId(STR_TEXTOBJECTBARSHELL))
+
+void TextObjectBar::InitInterface_Impl()
 {
 }
 
 TYPEINIT1( TextObjectBar, SfxShell );
-
 
 TextObjectBar::TextObjectBar (
     ViewShell* pSdViewSh,

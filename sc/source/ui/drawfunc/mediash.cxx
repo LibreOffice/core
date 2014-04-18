@@ -36,7 +36,9 @@
 #define ScMediaShell
 #include "scslots.hxx"
 
-SFX_IMPL_INTERFACE(ScMediaShell, ScDrawShell, ScResId(SCSTR_GRAPHICSHELL) )
+SFX_IMPL_INTERFACE(ScMediaShell, ScDrawShell, ScResId(SCSTR_GRAPHICSHELL))
+
+void ScMediaShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, ScResId(RID_MEDIA_OBJECTBAR));
 

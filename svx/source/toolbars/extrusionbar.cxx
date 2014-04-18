@@ -41,7 +41,6 @@
 #include <svx/extrusionbar.hxx>
 #include "extrusiondepthdialog.hxx"
 
-
 using namespace ::svx;
 using namespace ::rtl;
 using namespace ::cppu;
@@ -49,31 +48,21 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 
-/*************************************************************************
-|*
-|* Standardinterface deklarieren (Die Slotmap darf nicht leer sein, also
-|* tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
-|*
-\************************************************************************/
-
+// Standardinterface deklarieren (Die Slotmap darf nicht leer sein, also
+// tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
 SFX_SLOTMAP(ExtrusionBar)
 {
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
 SFX_IMPL_INTERFACE(ExtrusionBar, SfxShell, SVX_RES(RID_SVX_EXTRUSION_BAR))
+
+void ExtrusionBar::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SVX_RES(RID_SVX_EXTRUSION_BAR) );
 }
 
 TYPEINIT1( ExtrusionBar, SfxShell );
-
-
-/*************************************************************************
-|*
-|* Standard-Konstruktor
-|*
-\************************************************************************/
 
 ExtrusionBar::ExtrusionBar(SfxViewShell* pViewShell )
 : SfxShell(pViewShell)
@@ -85,13 +74,6 @@ ExtrusionBar::ExtrusionBar(SfxViewShell* pViewShell )
     SetHelpId( SVX_INTERFACE_EXTRUSION_BAR );
     SetName(SVX_RESSTR(RID_SVX_EXTRUSION_BAR));
 }
-
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 ExtrusionBar::~ExtrusionBar()
 {

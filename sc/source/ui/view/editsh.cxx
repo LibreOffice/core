@@ -82,10 +82,11 @@ using namespace ::com::sun::star;
 TYPEINIT1( ScEditShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScEditShell, SfxShell, ScResId(SCSTR_EDITSHELL))
+
+void ScEditShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_EDIT));
 }
-
 
 ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
     pEditView       (pView),

@@ -112,7 +112,9 @@ SFX_IMPL_NAMED_VIEWFACTORY(SwSrcView, "SourceView")
     SFX_VIEW_REGISTRATION(SwWebDocShell);
 }
 
-SFX_IMPL_INTERFACE( SwSrcView, SfxViewShell, SW_RES(0) )
+SFX_IMPL_INTERFACE(SwSrcView, SfxViewShell, SW_RES(0) )
+
+void SwSrcView::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_SRCVIEW_POPUPMENU));
 

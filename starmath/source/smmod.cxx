@@ -156,13 +156,12 @@ const OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rU
     return aRes;
 }
 
-
-
 SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
+
+void SmModule::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterStatusBar(SmResId(RID_STATUSBAR));
 }
-
 
 SmModule::SmModule(SfxObjectFactory* pObjFact) :
     SfxModule(SfxApplication::CreateResManager("sm"), false, pObjFact, NULL),
@@ -176,7 +175,6 @@ SmModule::SmModule(SfxObjectFactory* pObjFact) :
 
     SvxModifyControl::RegisterControl(SID_DOC_MODIFIED, this);
 }
-
 
 SmModule::~SmModule()
 {

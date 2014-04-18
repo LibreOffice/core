@@ -68,6 +68,8 @@
 using namespace ::com::sun::star;
 
 SFX_IMPL_INTERFACE(SwDrawBaseShell, SwBaseShell, SW_RES(0))
+
+void SwDrawBaseShell::InitInterface_Impl()
 {
 }
 

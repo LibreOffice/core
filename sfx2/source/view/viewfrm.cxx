@@ -143,9 +143,9 @@ using ::com::sun::star::container::XIndexContainer;
 #include "sfxslots.hxx"
 #undef SfxViewFrame
 
-
-
 SFX_IMPL_INTERFACE(SfxViewFrame,SfxShell,SfxResId(0))
+
+void SfxViewFrame::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterChildWindow(SID_BROWSER);
     GetStaticInterface()->RegisterChildWindow(SID_RECORDING_FLOATWINDOW);
@@ -157,7 +157,6 @@ SFX_IMPL_INTERFACE(SfxViewFrame,SfxShell,SfxResId(0))
 
 TYPEINIT2(SfxViewFrame,SfxShell,SfxListener);
 TYPEINIT1(SfxViewFrameItem, SfxPoolItem);
-
 
 namespace
 {

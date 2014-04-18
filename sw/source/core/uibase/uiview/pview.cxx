@@ -89,6 +89,8 @@ SFX_IMPL_NAMED_VIEWFACTORY(SwPagePreview, "PrintPreview")
 }
 
 SFX_IMPL_INTERFACE(SwPagePreview, SfxViewShell, SW_RES(RID_PVIEW_TOOLBOX))
+
+void SwPagePreview::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_PPREVIEW_POPUPMENU));
 

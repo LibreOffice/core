@@ -57,11 +57,12 @@ namespace sd {
  */
 
 SFX_IMPL_INTERFACE(BezierObjectBar, ::SfxShell, SdResId(STR_BEZIEROBJECTBARSHELL))
+
+void BezierObjectBar::InitInterface_Impl()
 {
 }
 
 TYPEINIT1(BezierObjectBar, ::SfxShell);
-
 
 BezierObjectBar::BezierObjectBar(
     ViewShell* pSdViewShell,

@@ -36,6 +36,8 @@
 #include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwWebFrameShell, SwFrameShell, SW_RES(STR_SHELLNAME_WEBFRAME))
+
+void SwWebFrameShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_FRM_POPUPMENU));
 

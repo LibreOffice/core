@@ -75,19 +75,15 @@ void RegisterInterfaces(SfxModule* pMod)
     TableObjectBar::RegisterInterface(pMod);
 }
 
-
 // - TableObjectBar -
-
 
 TYPEINIT1( TableObjectBar, SfxShell );
 
+SFX_IMPL_INTERFACE(TableObjectBar, SfxShell, SdResId(STR_TABLEOBJECTBARSHELL))
 
-
-SFX_IMPL_INTERFACE( TableObjectBar, SfxShell, SdResId( STR_TABLEOBJECTBARSHELL ) )
+void TableObjectBar::InitInterface_Impl()
 {
 }
-
-
 
 TableObjectBar::TableObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView )
 :   SfxShell( pSdViewShell->GetViewShell() )

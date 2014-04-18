@@ -53,11 +53,15 @@
 
 using namespace ::com::sun::star;
 
-SFX_IMPL_INTERFACE( SwGlosDocShell, SwDocShell, SW_RES(0) )
+SFX_IMPL_INTERFACE(SwGlosDocShell, SwDocShell, SW_RES(0) )
+
+void SwGlosDocShell::InitInterface_Impl()
 {
 }
 
-SFX_IMPL_INTERFACE( SwWebGlosDocShell, SwWebDocShell, SW_RES(0) )
+SFX_IMPL_INTERFACE(SwWebGlosDocShell, SwWebDocShell, SW_RES(0) )
+
+void SwWebGlosDocShell::InitInterface_Impl()
 {
 }
 

@@ -336,9 +336,7 @@ inline void SfxShell::SetPool
     void Class::RegisterInterface(SfxModule* pMod)                          \
     {                                                                       \
         GetStaticInterface()->Register(pMod);                               \
-    }                                                                       \
-                                                                            \
-    void Class::InitInterface_Impl()
+    }
 
 #define SFX_POSITION_MASK               0x000F
 #define SFX_VISIBILITY_MASK             0xFFF0

@@ -74,10 +74,11 @@ using namespace sd;
 #include "sdslots.hxx"
 
 SFX_IMPL_INTERFACE(DrawDocShell, SfxObjectShell, SdResId(0))
+
+void DrawDocShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
 }
-
 
 namespace sd {
 

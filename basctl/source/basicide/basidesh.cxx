@@ -135,8 +135,9 @@ SFX_IMPL_NAMED_VIEWFACTORY( Shell, "Default" )
     SFX_VIEW_REGISTRATION( DocShell );
 }
 
+SFX_IMPL_INTERFACE(basctl_Shell, SfxViewShell, IDEResId(RID_STR_IDENAME))
 
-SFX_IMPL_INTERFACE( basctl_Shell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
+void basctl_Shell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterChildWindow(SID_SEARCH_DLG);
 
@@ -151,7 +152,6 @@ namespace
 unsigned const ShellFlags = SFX_VIEW_CAN_PRINT | SFX_VIEW_NO_NEWWINDOW;
 
 }
-
 
 unsigned Shell::nShellCount = 0;
 

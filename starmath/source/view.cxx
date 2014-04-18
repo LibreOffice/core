@@ -930,6 +930,8 @@ struct SmViewShell_Impl
 TYPEINIT1( SmViewShell, SfxViewShell );
 
 SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
+
+void SmViewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
                                             SmResId(RID_MATH_TOOLBOX ));
@@ -941,12 +943,10 @@ SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
     GetStaticInterface()->RegisterChildWindow(SmElementsDockingWindowWrapper::GetChildWindowId());
 }
 
-
 SFX_IMPL_NAMED_VIEWFACTORY(SmViewShell, "Default")
 {
     SFX_VIEW_REGISTRATION(SmDocShell);
 }
-
 
 void SmViewShell::AdjustPosSizePixel(const Point &rPos, const Size &rSize)
 {

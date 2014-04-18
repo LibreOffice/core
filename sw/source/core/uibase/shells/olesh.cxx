@@ -38,6 +38,8 @@
 #include <swslots.hxx>
 
 SFX_IMPL_INTERFACE(SwOleShell, SwFrameShell, SW_RES(STR_SHELLNAME_OBJECT))
+
+void SwOleShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_OLE_POPUPMENU));
 

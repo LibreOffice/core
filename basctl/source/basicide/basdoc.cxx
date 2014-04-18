@@ -39,7 +39,9 @@ TYPEINIT1(DocShell, SfxObjectShell);
 
 SFX_IMPL_OBJECTFACTORY( DocShell, SvGlobalName(), SFXOBJECTSHELL_STD_NORMAL, "sbasic" )
 
-SFX_IMPL_INTERFACE( basctl_DocShell, SfxObjectShell, IDEResId( 0 ) )
+SFX_IMPL_INTERFACE(basctl_DocShell, SfxObjectShell, IDEResId(0))
+
+void basctl_DocShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterStatusBar(IDEResId(SID_BASICIDE_STATUSBAR));
 }

@@ -105,6 +105,8 @@ static const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const OUString& rNam
 #include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell, SW_RES(STR_SHELLNAME_FRAME))
+
+void SwFrameShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_FRM_POPUPMENU));
 

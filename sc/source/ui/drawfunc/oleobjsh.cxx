@@ -41,7 +41,9 @@
 #include "scslots.hxx"
 
 
-SFX_IMPL_INTERFACE(ScOleObjectShell, ScDrawShell, ScResId(SCSTR_OLEOBJECTSHELL) )
+SFX_IMPL_INTERFACE(ScOleObjectShell, ScDrawShell, ScResId(SCSTR_OLEOBJECTSHELL))
+
+void ScOleObjectShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                             ScResId(RID_DRAW_OBJECTBAR));

@@ -104,12 +104,11 @@ using namespace ::com::sun::star::uno;
 #define SmDocShell
 #include "smslots.hxx"
 
-
-
-
 TYPEINIT1( SmDocShell, SfxObjectShell );
 
 SFX_IMPL_INTERFACE(SmDocShell, SfxObjectShell, SmResId(0))
+
+void SmDocShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SmResId(RID_VIEWMENU));
     GetStaticInterface()->RegisterPopupMenu(SmResId(RID_COMMANDMENU));

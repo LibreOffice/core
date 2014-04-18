@@ -120,7 +120,9 @@ SvxCellVerJustify lclConvertSlotToVAlign( sal_uInt16 nSlot )
 
 TYPEINIT1( ScFormatShell, SfxShell );
 
-SFX_IMPL_INTERFACE(ScFormatShell, SfxShell, ScResId(SCSTR_FORMATSHELL) )
+SFX_IMPL_INTERFACE(ScFormatShell, SfxShell, ScResId(SCSTR_FORMATSHELL))
+
+void ScFormatShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_SERVER,
                                             ScResId(RID_OBJECTBAR_FORMAT));

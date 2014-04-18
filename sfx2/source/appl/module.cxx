@@ -99,20 +99,16 @@ ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, bool bBig )
 
 TYPEINIT1(SfxModule, SfxShell);
 
+SFX_IMPL_INTERFACE(SfxModule, SfxShell, SfxResId(0))
 
-
-SFX_IMPL_INTERFACE(SfxModule,SfxShell,SfxResId(0))
+void SfxModule::InitInterface_Impl()
 {
 }
-
-
 
 ResMgr* SfxModule::GetResMgr()
 {
     return pResMgr;
 }
-
-
 
 SfxModule::SfxModule( ResMgr* pMgrP, bool bDummyP,
                       SfxObjectFactory* pFactoryP, ... )

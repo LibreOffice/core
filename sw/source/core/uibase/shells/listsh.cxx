@@ -53,6 +53,8 @@
 #include <IDocumentOutlineNodes.hxx>
 
 SFX_IMPL_INTERFACE(SwListShell, SwBaseShell, SW_RES(STR_SHELLNAME_LIST))
+
+void SwListShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_NUM_TOOLBOX));
 }

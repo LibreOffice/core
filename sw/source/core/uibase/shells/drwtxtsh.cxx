@@ -80,6 +80,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::i18n;
 
 SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
+
+void SwDrawTextShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_DRWTXT_POPUPMENU));
 

@@ -36,6 +36,8 @@
 #include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwWebOleShell, SwOleShell, SW_RES(STR_SHELLNAME_OBJECT))
+
+void SwWebOleShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_OLE_POPUPMENU));
 

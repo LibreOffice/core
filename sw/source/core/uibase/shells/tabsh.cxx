@@ -90,6 +90,8 @@ using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 SFX_IMPL_INTERFACE(SwTableShell, SwBaseShell, SW_RES(STR_SHELLNAME_TABLE))
+
+void SwTableShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_TAB_POPUPMENU));
 

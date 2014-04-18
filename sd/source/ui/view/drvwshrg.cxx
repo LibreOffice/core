@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawViewShell.hxx"
 #include <sfx2/templdlg.hxx>
 #include <sfx2/infobar.hxx>
@@ -35,7 +34,6 @@
 #include <svx/svxids.hrc>
 #include <svx/hyperdlg.hxx>
 #include <avmedia/mediaplayer.hxx>
-
 
 #include "app.hrc"
 #include "strings.hrc"
@@ -63,6 +61,8 @@ namespace sd {
  */
 
 SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
+
+void DrawViewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP));
 
@@ -89,6 +89,8 @@ TYPEINIT1( DrawViewShell, ViewShell );
 // SdGraphicViewShell
 
 SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL)) //SOH...
+
+void GraphicViewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP));
 

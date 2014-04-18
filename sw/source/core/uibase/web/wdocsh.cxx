@@ -30,7 +30,6 @@
 #include "swtypes.hxx"
 
 #include "shellio.hxx"
-// just because of the itemtypes
 #include "wdocsh.hxx"
 #include "web.hrc"
 
@@ -39,7 +38,9 @@
 
 #include <unomid.h>
 
-SFX_IMPL_INTERFACE( SwWebDocShell, SfxObjectShell, SW_RES(0) )
+SFX_IMPL_INTERFACE(SwWebDocShell, SfxObjectShell, SW_RES(0) )
+
+void SwWebDocShell::InitInterface_Impl()
 {
 }
 

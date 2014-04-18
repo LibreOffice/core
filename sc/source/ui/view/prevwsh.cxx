@@ -83,7 +83,9 @@ using namespace com::sun::star;
 
 TYPEINIT1( ScPreviewShell, SfxViewShell );
 
-SFX_IMPL_INTERFACE( ScPreviewShell, SfxViewShell, ScResId(SCSTR_PREVIEWSHELL) )
+SFX_IMPL_INTERFACE(ScPreviewShell, SfxViewShell, ScResId(SCSTR_PREVIEWSHELL))
+
+void ScPreviewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER|SFX_VISIBILITY_READONLYDOC,
                                             ScResId(RID_OBJECTBAR_PREVIEW));

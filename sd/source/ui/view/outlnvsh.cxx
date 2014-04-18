@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "OutlineViewShell.hxx"
 
 #include "ViewShellImplementation.hxx"
@@ -95,6 +94,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
 using namespace sd;
+
 #define OutlineViewShell
 #include "sdslots.hxx"
 
@@ -103,13 +103,12 @@ namespace sd {
 #define MIN_ZOOM           10      // minimum zoom factor
 #define MAX_ZOOM         1000      // maximum zoom factor
 
-/************************************************************************/
-
-
 /**
  * Declare SFX-Slotmap and standard interface
  */
 SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell, SdResId(STR_OUTLINEVIEWSHELL))
+
+void OutlineViewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SdResId(RID_OUTLINE_POPUP));
 
@@ -126,9 +125,7 @@ SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell, SdResId(STR_OUTLINEVIEWSHELL))
     GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 }
 
-
 TYPEINIT1( OutlineViewShell, ViewShell );
-
 
 /**
  * common initialization part of both constructors

@@ -165,31 +165,21 @@ void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
     rSet.Put( SfxStringItem( SID_FONTWORK_SHAPE_TYPE, aFontWorkShapeType ) );
 }
 
-/*************************************************************************
-|*
-|* Standardinterface deklarieren (Die Slotmap darf nicht leer sein, also
-|* tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
-|*
-\************************************************************************/
-
+// Standardinterface deklarieren (Die Slotmap darf nicht leer sein, also
+// tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
 SFX_SLOTMAP(FontworkBar)
 {
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
 SFX_IMPL_INTERFACE(FontworkBar, SfxShell, SVX_RES(RID_SVX_FONTWORK_BAR))
+
+void FontworkBar::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SVX_RES(RID_SVX_FONTWORK_BAR));
 }
 
 TYPEINIT1( FontworkBar, SfxShell );
-
-
-/*************************************************************************
-|*
-|* Standard-Konstruktor
-|*
-\************************************************************************/
 
 FontworkBar::FontworkBar(SfxViewShell* pViewShell )
 : SfxShell(pViewShell)
@@ -201,13 +191,6 @@ FontworkBar::FontworkBar(SfxViewShell* pViewShell )
     SetHelpId( SVX_INTERFACE_FONTWORK_BAR );
     SetName( SVX_RESSTR( RID_SVX_FONTWORK_BAR ));
 }
-
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 FontworkBar::~FontworkBar()
 {
