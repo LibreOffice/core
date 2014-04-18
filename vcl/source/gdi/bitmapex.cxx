@@ -633,11 +633,11 @@ sal_Bool BitmapEx::Replace( const Color* pSearchColors, const Color* pReplaceCol
 
 sal_Bool BitmapEx::Adjust( short nLuminancePercent, short nContrastPercent,
                        short nChannelRPercent, short nChannelGPercent, short nChannelBPercent,
-                       double fGamma, sal_Bool bInvert )
+                       double fGamma, bool bInvert, bool msoBrightness )
 {
     return( !!aBitmap ? aBitmap.Adjust( nLuminancePercent, nContrastPercent,
                                         nChannelRPercent, nChannelGPercent, nChannelBPercent,
-                                        fGamma, bInvert ) : sal_False );
+                                        fGamma, bInvert, msoBrightness ) : false );
 }
 
 sal_Bool BitmapEx::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )

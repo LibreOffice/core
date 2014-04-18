@@ -2175,7 +2175,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
 
 void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
                           short nChannelRPercent, short nChannelGPercent,
-                          short nChannelBPercent, double fGamma, sal_Bool bInvert )
+                          short nChannelBPercent, double fGamma, bool bInvert, bool msoBrightness )
 {
     // nothing to do? => return quickly
     if( nLuminancePercent || nContrastPercent ||
@@ -2196,8 +2196,11 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
         else
             fM = ( 128.0 + 1.27 * MinMax( nContrastPercent, -100L, 0L ) ) / 128.0;
 
-        // total offset = luminance offset + contrast offset
-        fOff = MinMax( nLuminancePercent, -100L, 100L ) * 2.55 + 128.0 - fM * 128.0;
+        if(!msoBrightness)
+            // total offset = luminance offset + contrast offset
+            fOff = MinMax( nLuminancePercent, -100L, 100L ) * 2.55 + 128.0 - fM * 128.0;
+        else
+            fOff = MinMax( nLuminancePercent, -100L, 100L ) * 2.55;
 
         // channel offset = channel offset  + total offset
         fROff = nChannelRPercent * 2.55 + fOff;
@@ -2211,10 +2214,18 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
         // create mapping table
         for( long nX = 0L; nX < 256L; nX++ )
         {
-            aColParam.pMapR[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fROff ), 0L, 255L );
-            aColParam.pMapG[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fGOff ), 0L, 255L );
-            aColParam.pMapB[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fBOff ), 0L, 255L );
-
+            if(!msoBrightness)
+            {
+                aColParam.pMapR[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fROff ), 0L, 255L );
+                aColParam.pMapG[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fGOff ), 0L, 255L );
+                aColParam.pMapB[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fBOff ), 0L, 255L );
+            }
+            else
+            {
+                aColParam.pMapR[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0L, 255L );
+                aColParam.pMapG[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0L, 255L );
+                aColParam.pMapB[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0L, 255L );
+            }
             if( bGamma )
             {
                 aColParam.pMapR[ nX ] = GAMMA( aColParam.pMapR[ nX ], fGamma );
