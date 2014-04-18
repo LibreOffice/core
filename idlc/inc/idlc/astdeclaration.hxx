@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _IDLC_ASTDECLARATION_HXX_
-#define _IDLC_ASTDECLARATION_HXX_
+#ifndef INCLUDED_IDLC_INC_IDLC_ASTDECLARATION_HXX
+#define INCLUDED_IDLC_INC_IDLC_ASTDECLARATION_HXX
 
 #include <idlc/idlc.hxx>
 #include <registry/registry.hxx>
@@ -132,6 +132,6 @@ protected:
     OUString     m_documentation;    // fileName defined in
 };
 
-#endif // _IDLC_ASTDECLARATION_HXX_
+#endif // INCLUDED_IDLC_INC_IDLC_ASTDECLARATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

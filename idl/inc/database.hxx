@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DATABASE_HXX
-#define _DATABASE_HXX
+#ifndef INCLUDED_IDL_INC_DATABASE_HXX
+#define INCLUDED_IDL_INC_DATABASE_HXX
 
 #include <module.hxx>
 #include <hash.hxx>
@@ -162,6 +162,6 @@ public:
     sal_Bool        WriteDocumentation( SvStream& );
 };
 
-#endif // _DATABASE_HXX
+#endif // INCLUDED_IDL_INC_DATABASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

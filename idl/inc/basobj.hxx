@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASOBJ_HXX
-#define _BASOBJ_HXX
+#ifndef INCLUDED_IDL_INC_BASOBJ_HXX
+#define INCLUDED_IDL_INC_BASOBJ_HXX
 
 #include <tools/ref.hxx>
 #include <bastype.hxx>
@@ -228,7 +228,7 @@ typedef tools::SvRef<SvMetaExtern> SvMetaExternRef;
 
 class SvMetaExternMemberList : public SvDeclPersistList<SvMetaExtern *> {};
 
-#endif // _BASOBJ_HXX
+#endif // INCLUDED_IDL_INC_BASOBJ_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

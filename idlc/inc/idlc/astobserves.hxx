@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _IDLC_ASTOBSERVES_HXX_
-#define _IDLC_ASTOBSERVES_HXX_
+#ifndef INCLUDED_IDLC_INC_IDLC_ASTOBSERVES_HXX
+#define INCLUDED_IDLC_INC_IDLC_ASTOBSERVES_HXX
 
 #include <idlc/astinterface.hxx>
 
@@ -36,6 +36,6 @@ private:
     AstInterface*   m_pRealInterface;
 };
 
-#endif // _IDLC_ASTOBSERVES_HXX_
+#endif // INCLUDED_IDLC_INC_IDLC_ASTOBSERVES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

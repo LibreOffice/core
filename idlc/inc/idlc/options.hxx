@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _IDLC_OPTIONS_HXX_
-#define _IDLC_OPTIONS_HXX_
+#ifndef INCLUDED_IDLC_INC_IDLC_OPTIONS_HXX
+#define INCLUDED_IDLC_INC_IDLC_OPTIONS_HXX
 
 #include <idlc/idlctypes.hxx>
 
@@ -79,6 +79,6 @@ protected:
     OptionMap       m_options;
 };
 
-#endif // _IDLC_OPTIONS_HXX_
+#endif // INCLUDED_IDLC_INC_IDLC_OPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

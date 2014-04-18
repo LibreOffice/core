@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LEX_HXX
-#define _LEX_HXX
+#ifndef INCLUDED_IDL_INC_LEX_HXX
+#define INCLUDED_IDL_INC_LEX_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -262,6 +262,6 @@ public:
 
 
 
-#endif // _LEX_HXX
+#endif // INCLUDED_IDL_INC_LEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

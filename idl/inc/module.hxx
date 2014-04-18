@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MODULE_HXX
-#define _MODULE_HXX
+#ifndef INCLUDED_IDL_INC_MODULE_HXX
+#define INCLUDED_IDL_INC_MODULE_HXX
 
 #include <slot.hxx>
 #include <object.hxx>
@@ -94,6 +94,6 @@ typedef tools::SvRef<SvMetaModule> SvMetaModuleRef;
 class SvMetaModuleMemberList : public SvDeclPersistList<SvMetaModule *> {};
 
 
-#endif // _MODULE_HXX
+#endif // INCLUDED_IDL_INC_MODULE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

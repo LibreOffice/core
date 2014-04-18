@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _IDLC_ASTATTRIBUTE_HXX_
-#define _IDLC_ASTATTRIBUTE_HXX_
+#ifndef INCLUDED_IDLC_INC_IDLC_ASTATTRIBUTE_HXX
+#define INCLUDED_IDLC_INC_IDLC_ASTATTRIBUTE_HXX
 
 #include <idlc/astdeclaration.hxx>
 #include "idlc/astscope.hxx"
@@ -109,6 +109,6 @@ private:
     DeclList m_setExceptions;
 };
 
-#endif // _IDLC_ASTATTRIBUTE_HXX_
+#endif // INCLUDED_IDLC_INC_IDLC_ASTATTRIBUTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

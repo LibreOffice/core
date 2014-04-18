@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GLOBALS_HXX
-#define _GLOBALS_HXX
+#ifndef INCLUDED_IDL_INC_GLOBALS_HXX
+#define INCLUDED_IDL_INC_GLOBALS_HXX
 
 #include <hash.hxx>
 
@@ -224,6 +224,6 @@ HASH_INLINE(Description)
 HASH_INLINE(UnoName)
 
 
-#endif // _GLOBALS_HXX
+#endif // INCLUDED_IDL_INC_GLOBALS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

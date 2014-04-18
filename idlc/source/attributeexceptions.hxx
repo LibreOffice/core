@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_idlc_source_attributeexceptions_hxx
-#define INCLUDED_idlc_source_attributeexceptions_hxx
+#ifndef INCLUDED_IDLC_SOURCE_ATTRIBUTEEXCEPTIONS_HXX
+#define INCLUDED_IDLC_SOURCE_ATTRIBUTEEXCEPTIONS_HXX
 
 #include "rtl/ustring.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TYPES_HXX
-#define _TYPES_HXX
+#ifndef INCLUDED_IDL_INC_TYPES_HXX
+#define INCLUDED_IDL_INC_TYPES_HXX
 
 #include <rtl/strbuf.hxx>
 #include <tools/ref.hxx>
@@ -306,6 +306,6 @@ typedef tools::SvRef<SvMetaTypevoid> SvMetaTypevoidRef;
 class SvMetaTypevoidMemberList : public SvDeclPersistList<SvMetaTypevoid *> {};
 
 
-#endif // _TYPES_HXX
+#endif // INCLUDED_IDL_INC_TYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

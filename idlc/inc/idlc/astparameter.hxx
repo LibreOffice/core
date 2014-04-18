@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _IDLC_ASTPARAMETER_HXX_
-#define _IDLC_ASTPARAMETER_HXX_
+#ifndef INCLUDED_IDLC_INC_IDLC_ASTPARAMETER_HXX
+#define INCLUDED_IDLC_INC_IDLC_ASTPARAMETER_HXX
 
 #include <idlc/astmember.hxx>
 

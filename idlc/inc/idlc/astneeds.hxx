@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _IDLC_ASTNEEDS_HXX_
-#define _IDLC_ASTNEEDS_HXX_
+#ifndef INCLUDED_IDLC_INC_IDLC_ASTNEEDS_HXX
+#define INCLUDED_IDLC_INC_IDLC_ASTNEEDS_HXX
 
 #include <idlc/astservice.hxx>
 
@@ -36,6 +36,6 @@ private:
     AstService* m_pRealService;
 };
 
-#endif // _IDLC_ASTNEEDS_HXX_
+#endif // INCLUDED_IDLC_INC_IDLC_ASTNEEDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

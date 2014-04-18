@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASTYPE_HXX
-#define _BASTYPE_HXX
+#ifndef INCLUDED_IDL_INC_BASTYPE_HXX
+#define INCLUDED_IDL_INC_BASTYPE_HXX
 
 
 #include <sal/types.h>
@@ -222,6 +222,6 @@ public:
 };
 
 
-#endif // _BASTYPE_HXX
+#endif // INCLUDED_IDL_INC_BASTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

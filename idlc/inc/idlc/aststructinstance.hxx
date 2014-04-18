@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_idlc_inc_idlc_aststructinstance_hxx
-#define INCLUDED_idlc_inc_idlc_aststructinstance_hxx
+#ifndef INCLUDED_IDLC_INC_IDLC_ASTSTRUCTINSTANCE_HXX
+#define INCLUDED_IDLC_INC_IDLC_ASTSTRUCTINSTANCE_HXX
 
 #include "idlc/asttype.hxx"
 #include "idlc/idlctypes.hxx"

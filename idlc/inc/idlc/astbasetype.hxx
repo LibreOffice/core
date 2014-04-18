@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _IDLC_ASTBASETYPE_HXX_
-#define _IDLC_ASTBASETYPE_HXX_
+#ifndef INCLUDED_IDLC_INC_IDLC_ASTBASETYPE_HXX
+#define INCLUDED_IDLC_INC_IDLC_ASTBASETYPE_HXX
 
 #include <idlc/asttype.hxx>
 #include <idlc/astexpression.hxx>
@@ -50,6 +50,6 @@ private:
     const ExprType m_exprType;
 };
 
-#endif // _IDLC_ASTBASETYPE_HXX_
+#endif // INCLUDED_IDLC_INC_IDLC_ASTBASETYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

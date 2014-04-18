@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SLOT_HXX
-#define _SLOT_HXX
+#ifndef INCLUDED_IDL_INC_SLOT_HXX
+#define INCLUDED_IDL_INC_SLOT_HXX
 
 #include <types.hxx>
 #include <command.hxx>
@@ -257,6 +257,6 @@ typedef tools::SvRef<SvMetaSlot> SvMetaSlotRef;
 
 class SvMetaSlotMemberList : public SvDeclPersistList<SvMetaSlot *> {};
 
-#endif // _SLOT_HXX
+#endif // INCLUDED_IDL_INC_SLOT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

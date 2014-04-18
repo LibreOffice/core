@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_idlc_inc_idlc_inheritedinterface_hxx
-#define INCLUDED_idlc_inc_idlc_inheritedinterface_hxx
+#ifndef INCLUDED_IDLC_INC_IDLC_INHERITEDINTERFACE_HXX
+#define INCLUDED_IDLC_INC_IDLC_INHERITEDINTERFACE_HXX
 
 #include "idlc/idlc.hxx"
 

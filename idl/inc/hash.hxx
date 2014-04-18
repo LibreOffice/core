@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HASH_HXX
-#define _HASH_HXX
+#ifndef INCLUDED_IDL_INC_HASH_HXX
+#define INCLUDED_IDL_INC_HASH_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/ref.hxx>
