@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WRAPSTREAMFORSHARE_HXX_
-#define _WRAPSTREAMFORSHARE_HXX_
+#ifndef INCLUDED_PACKAGE_SOURCE_ZIPPACKAGE_WRAPSTREAMFORSHARE_HXX
+#define INCLUDED_PACKAGE_SOURCE_ZIPPACKAGE_WRAPSTREAMFORSHARE_HXX
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>

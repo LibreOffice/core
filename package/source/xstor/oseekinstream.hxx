@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _INPUTSEEKSTREAM_HXX_
-#define _INPUTSEEKSTREAM_HXX_
+#ifndef INCLUDED_PACKAGE_SOURCE_XSTOR_OSEEKINSTREAM_HXX
+#define INCLUDED_PACKAGE_SOURCE_XSTOR_OSEEKINSTREAM_HXX
 
 #include <com/sun/star/io/XSeekable.hpp>
 

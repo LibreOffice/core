@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OHIERARCHYHOLDER_HXX_
-#define _OHIERARCHYHOLDER_HXX_
+#ifndef INCLUDED_PACKAGE_SOURCE_XSTOR_OHIERARCHYHOLDER_HXX
+#define INCLUDED_PACKAGE_SOURCE_XSTOR_OHIERARCHYHOLDER_HXX
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactionListener.hpp>

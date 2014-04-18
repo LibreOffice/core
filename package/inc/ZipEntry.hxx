@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ZIP_ENTRY_HXX_
-#define _ZIP_ENTRY_HXX_
+#ifndef INCLUDED_PACKAGE_INC_ZIPENTRY_HXX
+#define INCLUDED_PACKAGE_INC_ZIPENTRY_HXX
 
 #include <rtl/ustring.hxx>
 

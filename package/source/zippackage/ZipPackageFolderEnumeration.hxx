@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ZIP_PACKAGE_FOLDER_ENUMERATION_HXX
-#define _ZIP_PACKAGE_FOLDER_ENUMERATION_HXX
+#ifndef INCLUDED_PACKAGE_SOURCE_ZIPPACKAGE_ZIPPACKAGEFOLDERENUMERATION_HXX
+#define INCLUDED_PACKAGE_SOURCE_ZIPPACKAGE_ZIPPACKAGEFOLDERENUMERATION_HXX
 
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/container/XEnumeration.hpp>

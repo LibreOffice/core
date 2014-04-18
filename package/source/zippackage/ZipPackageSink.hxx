@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ZIP_PACKAGE_SINK_HXX
-#define _ZIP_PACKAGE_SINK_HXX
+#ifndef INCLUDED_PACKAGE_SOURCE_ZIPPACKAGE_ZIPPACKAGESINK_HXX
+#define INCLUDED_PACKAGE_SOURCE_ZIPPACKAGE_ZIPPACKAGESINK_HXX
 
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <cppuhelper/implbase1.hxx>

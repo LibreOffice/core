@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MANIFEST_WRITER_HXX
-#define _MANIFEST_WRITER_HXX
+#ifndef INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTWRITER_HXX
+#define INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTWRITER_HXX
 
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/packages/manifest/XManifestWriter.hpp>

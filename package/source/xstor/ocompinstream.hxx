@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _INPUTCOMPSTREAM_HXX_
-#define _INPUTCOMPSTREAM_HXX_
+#ifndef INCLUDED_PACKAGE_SOURCE_XSTOR_OCOMPINSTREAM_HXX
+#define INCLUDED_PACKAGE_SOURCE_XSTOR_OCOMPINSTREAM_HXX
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>

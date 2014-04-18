@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __MUTEXHOLDER_HXX_
-#define __MUTEXHOLDER_HXX_
+#ifndef INCLUDED_PACKAGE_INC_MUTEXHOLDER_HXX
+#define INCLUDED_PACKAGE_INC_MUTEXHOLDER_HXX
 
 #include <osl/mutex.hxx>
 

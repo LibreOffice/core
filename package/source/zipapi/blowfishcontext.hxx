@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _BLOWFISHCONTEXT_HXX
-#define _BLOWFISHCONTEXT_HXX
+#ifndef INCLUDED_PACKAGE_SOURCE_ZIPAPI_BLOWFISHCONTEXT_HXX
+#define INCLUDED_PACKAGE_SOURCE_ZIPAPI_BLOWFISHCONTEXT_HXX
 
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 
@@ -46,6 +46,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeCipherContextAndDispose(  ) throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-#endif // _BLOWFISHCONTEXT_HXX
+#endif // INCLUDED_PACKAGE_SOURCE_ZIPAPI_BLOWFISHCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ZIP_ENUMERATION_HXX
-#define _ZIP_ENUMERATION_HXX
+#ifndef INCLUDED_PACKAGE_INC_ZIPENUMERATION_HXX
+#define INCLUDED_PACKAGE_INC_ZIPENUMERATION_HXX
 
 #include <HashMaps.hxx>
 

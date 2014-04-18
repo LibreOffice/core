@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __DISPOSELISTENER_HXX_
-#define __DISPOSELISTENER_HXX_
+#ifndef INCLUDED_PACKAGE_SOURCE_XSTOR_DISPOSELISTENER_HXX
+#define INCLUDED_PACKAGE_SOURCE_XSTOR_DISPOSELISTENER_HXX
 
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <cppuhelper/implbase1.hxx>

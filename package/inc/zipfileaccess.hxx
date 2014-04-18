@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ZIPFILEACCESS_HXX_
-#define _ZIPFILEACCESS_HXX_
+#ifndef INCLUDED_PACKAGE_INC_ZIPFILEACCESS_HXX
+#define INCLUDED_PACKAGE_INC_ZIPFILEACCESS_HXX
 
 #include <com/sun/star/packages/zip/XZipFileAccess2.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

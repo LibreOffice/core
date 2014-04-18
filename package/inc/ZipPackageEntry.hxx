@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ZIP_PACKAGE_ENTRY_HXX
-#define _ZIP_PACKAGE_ENTRY_HXX
+#ifndef INCLUDED_PACKAGE_INC_ZIPPACKAGEENTRY_HXX
+#define INCLUDED_PACKAGE_INC_ZIPPACKAGEENTRY_HXX
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNamed.hpp>

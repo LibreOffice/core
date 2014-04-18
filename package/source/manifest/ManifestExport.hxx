@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MANIFEST_EXPORT_HXX
-#define _MANIFEST_EXPORT_HXX
+#ifndef INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTEXPORT_HXX
+#define INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTEXPORT_HXX
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
