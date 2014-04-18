@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LOTUSWORDPROIMPORTFILTER_HXX
-#define _LOTUSWORDPROIMPORTFILTER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LOTUSWORDPROIMPORTFILTER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LOTUSWORDPROIMPORTFILTER_HXX
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>

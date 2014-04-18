@@ -61,8 +61,8 @@
  * Change History
  Mar 2005           Created
  ************************************************************************/
-#ifndef _LWPCELLLAYOUT_HXX
-#define _LWPCELLLAYOUT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCELLLAYOUT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCELLLAYOUT_HXX
 #include <vector>
 #include <map>
 #include "lwplayout.hxx"

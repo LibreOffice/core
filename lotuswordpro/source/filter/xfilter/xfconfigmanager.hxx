@@ -57,8 +57,8 @@
  * @file
  * Manager for all config object,include line number config.
  ************************************************************************/
-#ifndef     _XFCONFIGMANAGER_HXX
-#define     _XFCONFIGMANAGER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCONFIGMANAGER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCONFIGMANAGER_HXX
 
 #include "xfstylecont.hxx"
 #include "xflinenumberconfig.hxx"

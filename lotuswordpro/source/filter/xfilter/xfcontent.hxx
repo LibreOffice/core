@@ -57,8 +57,8 @@
  * @file
  * Base class for the all content object,ie. text,paragraph,picture,and so on.
  ************************************************************************/
-#ifndef     _XFCONTENT_HXX
-#define     _XFCONTENT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCONTENT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCONTENT_HXX
 
 #include "ixfcontent.hxx"
 

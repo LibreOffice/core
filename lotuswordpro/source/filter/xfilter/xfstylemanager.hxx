@@ -57,8 +57,8 @@
  * @file
  * Style manager for the filter.
  ************************************************************************/
-#ifndef     _XFSTYLEMANAGER_HXX
-#define     _XFSTYLEMANAGER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSTYLEMANAGER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSTYLEMANAGER_HXX
 
 #include "xfglobal.hxx"
 #include "xffontdecl.hxx"

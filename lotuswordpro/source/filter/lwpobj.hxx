@@ -62,8 +62,8 @@
  *  Base class of all Lwp VO objects
  */
 
-#ifndef _LWPOBJ_HXX_
-#define _LWPOBJ_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJ_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJ_HXX
 
 #include "lwpheader.hxx"
 

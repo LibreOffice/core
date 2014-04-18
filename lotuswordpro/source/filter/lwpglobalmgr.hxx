@@ -61,8 +61,8 @@
  * Change History
  Nov 2005           Created
  ************************************************************************/
-#ifndef _LWPGLOBALMGR_HXX_
-#define _LWPGLOBALMGR_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPGLOBALMGR_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPGLOBALMGR_HXX
 
 #include <map>
 #include "lwpheader.hxx"

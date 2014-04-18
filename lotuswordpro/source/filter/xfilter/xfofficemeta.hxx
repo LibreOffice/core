@@ -58,8 +58,8 @@
  * Meta info for the full document.
  * You can see this by click: File->Properties.
  ************************************************************************/
-#ifndef     _XFOFFICEMETA_HXX
-#define     _XFOFFICEMETA_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFOFFICEMETA_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFOFFICEMETA_HXX
 
 #include "xfglobal.hxx"
 

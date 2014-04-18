@@ -58,8 +58,8 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef _LWPUSEWHEN_HXX
-#define _LWPUSEWHEN_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUSEWHEN_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUSEWHEN_HXX
 
 #include "lwpheader.hxx"
 

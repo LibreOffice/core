@@ -57,8 +57,8 @@
  * @file
  * Number style for table cell.
  ************************************************************************/
-#ifndef     _XFNUMBERSTYLE_HXX
-#define     _XFNUMBERSTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFNUMBERSTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFNUMBERSTYLE_HXX
 
 #include "xfstyle.hxx"
 #include "xfstylemanager.hxx"

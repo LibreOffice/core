@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPDLLIST_HXX_
-#define _LWPDLLIST_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDLLIST_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDLLIST_HXX
 #include "lwpheader.hxx"
 class LwpDLList
 {

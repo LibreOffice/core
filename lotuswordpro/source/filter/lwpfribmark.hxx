@@ -62,8 +62,8 @@
  May 2005           Created
  ************************************************************************/
 
-#ifndef _LWPFRIBMARKER_HXX_
-#define _LWPFRIBMARKER_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBMARK_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBMARK_HXX
 
 #include "lwpfrib.hxx"
 #include "lwpstory.hxx"

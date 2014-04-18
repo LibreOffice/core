@@ -57,8 +57,8 @@
  * @file
  * Rect object.
  ************************************************************************/
-#ifndef     _XFDRAWRECT_HXX
-#define     _XFDRAWRECT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWRECT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWRECT_HXX
 
 #include "xfdrawobj.hxx"
 

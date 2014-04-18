@@ -57,8 +57,8 @@
  * @file
  * Section object.
  ************************************************************************/
-#ifndef     _XFSECTION_HXX
-#define     _XFSECTION_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSECTION_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSECTION_HXX
 
 #include "xfcontentcontainer.hxx"
 #include "xfcontent.hxx"

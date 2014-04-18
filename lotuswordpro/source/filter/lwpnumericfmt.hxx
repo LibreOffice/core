@@ -58,8 +58,8 @@
  *  For LWP filter architecture prototype - table object
  */
 
-#ifndef _LWPNUMBERICFMT_HXX
-#define _LWPNUMBERICFMT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNUMERICFMT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNUMERICFMT_HXX
 
 #include "lwpatomholder.hxx"
 #include "lwptblcell.hxx"

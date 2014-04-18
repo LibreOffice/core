@@ -57,8 +57,8 @@
 * @file
 * Border stuff of Wordpro.
 ************************************************************************/
-#ifndef     _LWPBORDERSTUFF_HXX
-#define     _LWPBORDERSTUFF_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBORDERSTUFF_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBORDERSTUFF_HXX
 
 #include "lwpcolor.hxx"
 

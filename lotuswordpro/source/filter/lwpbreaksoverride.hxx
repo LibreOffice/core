@@ -57,8 +57,8 @@
 * @file
 * Breaks override of Wordpro.
 ************************************************************************/
-#ifndef     _LWPBREAKSOVERRIDE_HXX
-#define     _LWPBREAKSOVERRIDE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBREAKSOVERRIDE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBREAKSOVERRIDE_HXX
 
 #include "lwpoverride.hxx"
 

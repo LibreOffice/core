@@ -57,8 +57,8 @@
  * @file
  * Base style object .
  ************************************************************************/
-#ifndef     _XFSTYLE_HXX
-#define     _XFSTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSTYLE_HXX
 
 #include "ixfstyle.hxx"
 

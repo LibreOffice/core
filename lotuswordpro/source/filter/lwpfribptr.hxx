@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPFRIBPTR_HXX_
-#define _LWPFRIBPTR_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBPTR_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBPTR_HXX
 
 #include "lwpobjstrm.hxx"
 #include "lwpfrib.hxx"

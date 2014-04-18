@@ -58,8 +58,8 @@
  * Table cell.
  ************************************************************************/
 
-#ifndef     _XFCell_HXX
-#define     _XFCell_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCELL_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCELL_HXX
 
 #include "xfcontent.hxx"
 #include "xfcontentcontainer.hxx"

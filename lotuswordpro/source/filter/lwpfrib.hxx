@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPFRIB_HXX_
-#define _LWPFRIB_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIB_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIB_HXX
 #include "lwpobjid.hxx"
 #include "lwpobjstrm.hxx"
 #include "lwpbasetype.hxx"

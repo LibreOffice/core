@@ -61,8 +61,8 @@
  * Change History
  April 2005         Created
  ************************************************************************/
-#ifndef _LWPROWLAYOUT_HXX
-#define _LWPROWLAYOUT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPROWLAYOUT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPROWLAYOUT_HXX
 
 #include "lwplayout.hxx"
 #include "lwptablelayout.hxx"

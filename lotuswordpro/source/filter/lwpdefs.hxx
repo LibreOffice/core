@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPDEFS_HXX
-#define _LWPDEFS_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDEFS_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDEFS_HXX
 
 #define BAD_OFFSET 0xFFFFFFFFUL
 #define BAD_ATOM ((sal_Int32)(-1))              // Invalid Atom ID

@@ -57,8 +57,8 @@
  * @file
  * Master page object which was used to apply a layout to the pages.
  ************************************************************************/
-#ifndef     _XFMASTERPAGE_HXX
-#define     _XFMASTERPAGE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFMASTERPAGE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFMASTERPAGE_HXX
 
 #include "xfstyle.hxx"
 #include "xfcontentcontainer.hxx"

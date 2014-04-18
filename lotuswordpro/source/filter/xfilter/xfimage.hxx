@@ -57,8 +57,8 @@
  * @file
  * Image object.
  ************************************************************************/
-#ifndef     _XFIMAGE_HXX
-#define     _XFIMAGE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFIMAGE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFIMAGE_HXX
 
 #include "xfframe.hxx"
 

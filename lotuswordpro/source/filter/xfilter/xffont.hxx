@@ -57,8 +57,8 @@
  * @file
  * Font object to serial to xml filter.
  ************************************************************************/
-#ifndef     _XFFONT_HXX
-#define     _XFFONT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONT_HXX
 
 #include "xfglobal.hxx"
 #include "xfcolor.hxx"

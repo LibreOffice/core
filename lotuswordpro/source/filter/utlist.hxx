@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef UTLIST_H
-#define UTLIST_H
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_UTLIST_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_UTLIST_HXX
 
 #include "ut.hxx"
 

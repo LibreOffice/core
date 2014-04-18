@@ -62,8 +62,8 @@
 Mar 2005            Created
  ************************************************************************/
 
-#ifndef _LWPFRAMELAYOUT_HXX
-#define _LWPFRAMELAYOUT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRAMELAYOUT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRAMELAYOUT_HXX
 
 #include "lwplayout.hxx"
 #include "lwpstory.hxx"

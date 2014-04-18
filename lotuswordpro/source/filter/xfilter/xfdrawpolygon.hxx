@@ -57,8 +57,8 @@
  * @file
  * Polygon object.
  ************************************************************************/
-#ifndef     _XFPOLYGON_HXX
-#define     _XFPOLYGON_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWPOLYGON_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWPOLYGON_HXX
 
 #include "xfdrawpolyline.hxx"
 #include <vector>

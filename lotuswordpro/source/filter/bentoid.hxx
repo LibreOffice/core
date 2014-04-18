@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef BENTOID_H
-#define BENTOID_H
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_BENTOID_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_BENTOID_HXX
 
 namespace OpenStormBento
 {

@@ -57,8 +57,8 @@
  * @file
  * Number format. a),A),i),1),(1)
  ************************************************************************/
-#ifndef     _XFNUMFMT_HXX
-#define     _XFNUMFMT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFNUMFMT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFNUMFMT_HXX
 
 #include "xfglobal.hxx"
 #include "ixfproperty.hxx"

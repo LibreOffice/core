@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPPARAPROPERTY_HXX_
-#define _LWPPARAPROPERTY_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARAPROPERTY_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARAPROPERTY_HXX
 
 #include "lwpobj.hxx"
 #include "lwpobjstrm.hxx"

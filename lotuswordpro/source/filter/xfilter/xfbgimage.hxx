@@ -57,8 +57,8 @@
  * @file
  * Background image.
  ************************************************************************/
-#ifndef     _XFBGIMAGE_HXX
-#define     _XFBGIMAGE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBGIMAGE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBGIMAGE_HXX
 
 #include "xfstyle.hxx"
 

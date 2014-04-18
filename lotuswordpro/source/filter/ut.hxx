@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef UT_HXX
-#define UT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_UT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_UT_HXX
 # include <sal/types.h>
 
 namespace OpenStormBento

@@ -57,8 +57,8 @@
  * @file
  * Polyline.
  ************************************************************************/
-#ifndef     _XFPOLYLINE_HXX
-#define     _XFPOLYLINE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWPOLYLINE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWPOLYLINE_HXX
 
 #include "xfdrawobj.hxx"
 #include <vector>

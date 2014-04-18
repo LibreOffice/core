@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPPRINTERINFO_HXX
-#define _LWPPRINTERINFO_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPRTINFO_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPRTINFO_HXX
 
 #include "lwpatomholder.hxx"
 #include "lwpobjstrm.hxx"

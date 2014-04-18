@@ -61,8 +61,8 @@
  * Change History
  Jan 28 2005            Created
  ************************************************************************/
-#ifndef _LWPLAYOUTPIECE_HXX
-#define _LWPLAYOUTPIECE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYPIECE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYPIECE_HXX
 
 #include "lwppiece.hxx"
 #include "lwpbasetype.hxx"

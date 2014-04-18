@@ -57,8 +57,8 @@
  * @file
  * Reperesent a point.
  ************************************************************************/
-#ifndef     _XFPOINT_HXX
-#define     _XFPOINT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPOINT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPOINT_HXX
 
 class XFPoint
 {

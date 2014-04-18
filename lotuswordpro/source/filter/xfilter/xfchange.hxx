@@ -61,8 +61,8 @@
  * Change History
  Jun 2005           Created
  ************************************************************************/
-#ifndef _XFCHANGE_HXX_
-#define _XFCHANGE_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCHANGE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCHANGE_HXX
 
 #include "xfglobal.hxx"
 #include "ixfstream.hxx"

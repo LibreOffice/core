@@ -59,8 +59,8 @@
  *  and so on.
  */
 
-#ifndef _LWPDRAWOBJ_HXX
-#define _LWPDRAWOBJ_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDRAWOBJ_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDRAWOBJ_HXX
 
 #include "lwpsdwdrawheader.hxx"
 

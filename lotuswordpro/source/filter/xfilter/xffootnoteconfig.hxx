@@ -57,8 +57,8 @@
  * @file
  * Footnote config.
  ************************************************************************/
-#ifndef     _XFFOOTNOTECONFIG_HXX
-#define     _XFFOOTNOTECONFIG_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFOOTNOTECONFIG_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFOOTNOTECONFIG_HXX
 
 #include "xfstyle.hxx"
 

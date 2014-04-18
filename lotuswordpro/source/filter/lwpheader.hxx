@@ -58,8 +58,8 @@
  *  For LWP filter architecture prototype
  */
 
-#ifndef _LWPHEADERS_HXX
-#define _LWPHEADERS_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHEADER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHEADER_HXX
 
 #include <config_lgpl.h>
 #include <math.h>

@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPFRIBBREAKS_HXX_
-#define _LWPFRIBBREAKS_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBBREAKS_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBBREAKS_HXX
 
 #include "lwpfrib.hxx"
 #include "xfilter/xfparastyle.hxx"

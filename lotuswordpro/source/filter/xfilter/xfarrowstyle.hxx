@@ -57,8 +57,8 @@
  * @file
  * Line Arrow.
  ************************************************************************/
-#ifndef     _XFARROWSTYLE_HXX
-#define     _XFARROWSTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFARROWSTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFARROWSTYLE_HXX
 
 #include "xfstyle.hxx"
 

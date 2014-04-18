@@ -57,8 +57,8 @@
  * @file
  * cross reference object.
  ************************************************************************/
-#ifndef     _XFCROSSREF_HXX
-#define     _XFCROSSREF_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCROSSREF_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCROSSREF_HXX
 
 #include "xfcontent.hxx"
 

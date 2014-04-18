@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPCHARBORDEROVERRIDE_HXX
-#define _LWPCHARBORDEROVERRIDE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCHARBORDEROVERRIDE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCHARBORDEROVERRIDE_HXX
 
 #include "lwpoverride.hxx"
 

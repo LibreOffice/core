@@ -58,8 +58,8 @@
  * Frame object for OOo.This is the basic object for all Shape Layer.
  * You can reference to the XFFrame object.
  ************************************************************************/
-#ifndef     _XFFRAME_HXX
-#define     _XFFRAME_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFRAME_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFRAME_HXX
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

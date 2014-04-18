@@ -61,8 +61,8 @@
  * Change History
  Mar 2005           Created
  ************************************************************************/
-#ifndef _LWPHYPERLINKMGR_HXX_
-#define _LWPHYPERLINKMGR_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHYPERLINKMGR_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHYPERLINKMGR_HXX
 
 #include "lwpfilehdr.hxx"
 

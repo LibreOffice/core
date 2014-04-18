@@ -57,8 +57,8 @@
  * @file
  * Wrapper the attibute list of a xml element.
  ************************************************************************/
-#ifndef     _XFSAXATTRLIST_HXX
-#define     _XFSAXATTRLIST_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSAXATTRLIST_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSAXATTRLIST_HXX
 
 #include "ixfattrlist.hxx"
 #include "xmloff/attrlist.hxx"

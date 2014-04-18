@@ -57,8 +57,8 @@
  * @file
  * Foot note object.
  ************************************************************************/
-#ifndef     _XFFOOTNOTE_HXX
-#define     _XFFOOTNOTE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFOOTNOTE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFOOTNOTE_HXX
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

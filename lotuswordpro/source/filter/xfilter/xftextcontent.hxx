@@ -57,8 +57,8 @@
  * @file
  * Text content, it's an adapter for string to IXFObject.
  ************************************************************************/
-#ifndef     _XFTEXTCONTENT_HXX
-#define     _XFTEXTCONTENT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTEXTCONTENT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTEXTCONTENT_HXX
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPCHARSETMGR_HXX
-#define _LWPCHARSETMGR_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCHARSETMGR_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCHARSETMGR_HXX
 
 #include "lwpfilehdr.hxx"
 #include <map>

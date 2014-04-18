@@ -54,8 +54,8 @@
  *
  ************************************************************************/
 
-#ifndef _LWPSTYLEDEF_H_
-#define _LWPSTYLEDEF_H_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSTYLEDEF_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSTYLEDEF_HXX
 
 #define INVALID_ATTR_ID 0
 #define EXTERNAL_ID         0x8000

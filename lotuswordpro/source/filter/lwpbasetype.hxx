@@ -63,8 +63,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPBASETYPE_HXX
-#define _LWPBASETYPE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBASETYPE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBASETYPE_HXX
 
 #include "lwpobjstrm.hxx"
 #include "lwpheader.hxx"

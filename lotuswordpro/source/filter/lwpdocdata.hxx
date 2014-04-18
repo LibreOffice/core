@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef LWPDOCDATA_HXX_
-#define LWPDOCDATA_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDOCDATA_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDOCDATA_HXX
 #include "lwpobj.hxx"
 #include "lwpatomholder.hxx"
 #include "localtime.hxx"

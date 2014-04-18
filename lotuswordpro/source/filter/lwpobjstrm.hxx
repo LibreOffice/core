@@ -63,8 +63,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPOBJECTSTREAM_HXX
-#define _LWPOBJECTSTREAM_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJSTRM_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJSTRM_HXX
 
 #include "lwpheader.hxx"
 #include "lwpsvstream.hxx"

@@ -57,8 +57,8 @@
  * @file
  * Line height for paragraph.
  ************************************************************************/
-#ifndef     _XFLINEHEIGHT_HXX
-#define     _XFLINEHEIGHT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFLINEHEIGHT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFLINEHEIGHT_HXX
 
 #include <string.h>
 

@@ -57,8 +57,8 @@
  * @file
  * Date field with date style.
  ************************************************************************/
-#ifndef     _XFDATE_HXX
-#define     _XFDATE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDATE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDATE_HXX
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

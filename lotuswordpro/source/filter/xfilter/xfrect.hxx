@@ -57,8 +57,8 @@
  * @file
  * Rect object
  ************************************************************************/
-#ifndef     _XFRECT_HXX
-#define     _XFRECT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFRECT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFRECT_HXX
 
 #include "xfpoint.hxx"
 

@@ -57,8 +57,8 @@
  * @file
  * Tab style for paragraph.include tab offset and tab char properties.
  ************************************************************************/
-#ifndef     _XFTABSSTYLE_HXX
-#define     _XFTABSSTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTABSTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTABSTYLE_HXX
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

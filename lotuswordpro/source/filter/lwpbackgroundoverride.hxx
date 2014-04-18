@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef     _LWPBACKGROUNDOVERRIDE_HXX
-#define     _LWPBACKGROUNDOVERRIDE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBACKGROUNDOVERRIDE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBACKGROUNDOVERRIDE_HXX
 
 #include "lwpoverride.hxx"
 #include "lwpbackgroundstuff.hxx"

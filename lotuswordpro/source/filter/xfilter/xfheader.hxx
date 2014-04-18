@@ -57,8 +57,8 @@
  * @file
  * Header object. Sub object of master page.
  ************************************************************************/
-#ifndef     _XFHEADER_HXX
-#define     _XFHEADER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFHEADER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFHEADER_HXX
 
 #include "xfcontentcontainer.hxx"
 #include "xfparagraph.hxx"

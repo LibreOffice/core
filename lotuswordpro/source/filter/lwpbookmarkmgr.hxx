@@ -61,8 +61,8 @@
  * Change History
  May 2005           Created
  ************************************************************************/
-#ifndef _LWPBOOKMARKMGR_HXX_
-#define _LWPBOOKMARKMGR_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBOOKMARKMGR_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBOOKMARKMGR_HXX
 
 #include "lwpfilehdr.hxx"
 #include <map>

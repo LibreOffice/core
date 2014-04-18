@@ -57,8 +57,8 @@
  * @file
  * Tab stop object,<text:tab-stop/>
  *************************************************************************/
-#ifndef     _XFTABSTOP_HXX
-#define     _XFTABSTOP_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTABSTOP_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTABSTOP_HXX
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPINDEXMANAGER_HXX
-#define _LWPINDEXMANAGER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPIDXMGR_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPIDXMGR_HXX
 
 #include <rtl/ustring.hxx>
 #include "lwpobjhdr.hxx"

@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWPOBJTAGS_HXX_
-#define _LWPOBJTAGS_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJTAGS_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJTAGS_HXX
 
 // file header object
 #define TAG_AMI             0x3750574CUL        // "LWP7"

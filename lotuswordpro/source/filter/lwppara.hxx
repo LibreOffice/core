@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPPARAGRAPH_HXX_
-#define _LWPPARAGRAPH_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARA_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARA_HXX
 
 #include <boost/scoped_ptr.hpp>
 

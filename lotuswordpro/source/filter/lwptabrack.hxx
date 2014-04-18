@@ -57,8 +57,8 @@
  * @file
  * Tabrack for LwpTabPiece object.
  ************************************************************************/
-#ifndef     _LWPTABRACK_HXX
-#define     _LWPTABRACK_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABRACK_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABRACK_HXX
 
 #include "lwpobj.hxx"
 

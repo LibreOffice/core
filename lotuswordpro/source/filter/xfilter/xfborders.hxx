@@ -57,8 +57,8 @@
  * @file
  * Border object,now only used by paragraph object.
  ************************************************************************/
-#ifndef     _XFBORDERS_HXX
-#define     _XFBORDERS_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBORDERS_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBORDERS_HXX
 
 #include "xfglobal.hxx"
 #include "xfcolor.hxx"

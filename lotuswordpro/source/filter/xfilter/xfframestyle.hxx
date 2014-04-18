@@ -58,8 +58,8 @@
  * Frame object style for OOo.
  * You can reference to the XFFrame object.
  ************************************************************************/
-#ifndef     _XFFRAMESTYLE_HXX
-#define     _XFFRAMESTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFRAMESTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFRAMESTYLE_HXX
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

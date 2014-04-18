@@ -57,8 +57,8 @@
  * @file
  * Image style object.
  ************************************************************************/
-#ifndef     _XFIMAGESTYLE_HXX
-#define     _XFIMAGESTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFIMAGESTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFIMAGESTYLE_HXX
 
 #include "xfframestyle.hxx"
 #include "xfrect.hxx"

@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPDIVISIONOPTIONS_HXX
-#define _LWPDIVISIONOPTIONS_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDIVOPTS_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDIVOPTS_HXX
 
 #include "lwpobj.hxx"
 #include "lwpobjid.hxx"

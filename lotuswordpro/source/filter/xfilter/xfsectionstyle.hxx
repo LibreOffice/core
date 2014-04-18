@@ -57,8 +57,8 @@
  * @file
  * Section style,whose family is "section"
  ************************************************************************/
-#ifndef     _XFSECTIONSTYLE_HXX
-#define     _XFSECTIONSTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSECTIONSTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSECTIONSTYLE_HXX
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

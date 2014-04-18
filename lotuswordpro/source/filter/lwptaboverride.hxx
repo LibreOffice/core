@@ -57,8 +57,8 @@
  * @file
  * Tab override for VO_PARASTYLE.
  ************************************************************************/
-#ifndef     _LWPTABOVERRIDE_HXX
-#define     _LWPTABOVERRIDE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABOVERRIDE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABOVERRIDE_HXX
 
 #include "lwpoverride.hxx"
 #include "lwpobjid.hxx"

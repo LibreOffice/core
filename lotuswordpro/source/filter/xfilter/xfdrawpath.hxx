@@ -57,8 +57,8 @@
  * @file
  * Draw path object.
  ************************************************************************/
-#ifndef     _XFDRAWPATH_HXX
-#define     _XFDRAWPATH_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWPATH_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWPATH_HXX
 
 #include "xfdrawobj.hxx"
 #include <vector>

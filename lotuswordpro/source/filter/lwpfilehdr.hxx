@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWPFILEHEADER_HXX
-#define _LWPFILEHEADER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFILEHDR_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFILEHDR_HXX
 
 #include "lwpobjid.hxx"
 /**

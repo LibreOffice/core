@@ -59,8 +59,8 @@
  * Styles for paragraph may include many style,include font,indent,margin,
  * shadow,line height,and so on.
  ************************************************************************/
-#ifndef     _XFPARASTYLE_HXX
-#define     _XFPARASTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPARASTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPARASTYLE_HXX
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

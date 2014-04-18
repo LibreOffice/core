@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef     _XFTEXTBOXSTYLE_HXX
-#define     _XFTEXTBOXSTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTEXTBOXSTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTEXTBOXSTYLE_HXX
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

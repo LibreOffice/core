@@ -61,8 +61,8 @@
  * Change History
  May 2005       Created
  ************************************************************************/
-#ifndef _LWPNOTES_HXX_
-#define _LWPNOTES_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNOTES_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNOTES_HXX
 
 #include "lwpfrib.hxx"
 #include "lwpframelayout.hxx"

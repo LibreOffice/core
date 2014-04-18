@@ -57,8 +57,8 @@
  * @file
  * input list field.
  ************************************************************************/
-#ifndef     _XFINPUTLIST_HXX
-#define     _XFINPUTLIST_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFINPUTLIST_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFINPUTLIST_HXX
 
 #include "xfcontent.hxx"
 

@@ -57,8 +57,8 @@
  * @file
  * Style for all draw object.
  ************************************************************************/
-#ifndef     _XFDRAWSTYLE_HXX
-#define     _XFDRAWSTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWSTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWSTYLE_HXX
 
 #include "xfstyle.hxx"
 #include "xfcolor.hxx"

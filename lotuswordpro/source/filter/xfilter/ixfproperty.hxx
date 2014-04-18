@@ -57,8 +57,8 @@
  * @file
  * Property for styles. ie. Margins,shadow,columns and so on.
  ************************************************************************/
-#ifndef     _IXFPROPERTY_HXX
-#define     _IXFPROPERTY_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFPROPERTY_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFPROPERTY_HXX
 
 #include "ixfobject.hxx"
 

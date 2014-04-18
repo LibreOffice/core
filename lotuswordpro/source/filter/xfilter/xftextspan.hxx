@@ -57,8 +57,8 @@
  * @file
  * An span of text with style.
  ************************************************************************/
-#ifndef     _XFTEXTSPAN_HXX
-#define     _XFTEXTSPAN_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTEXTSPAN_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTEXTSPAN_HXX
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

@@ -64,8 +64,8 @@
 Jun 2005        Created
  ************************************************************************/
 
-#ifndef _LWPVERDOCUMENT_HXX_
-#define _LWPVERDOCUMENT_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPVERDOCUMENT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPVERDOCUMENT_HXX
 
 #include "lwpobj.hxx"
 

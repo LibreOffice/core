@@ -57,8 +57,8 @@
  * @file
  * Drop cap of a paragraph.
  ************************************************************************/
-#ifndef     _XFDROPCAP_HXX
-#define     _XFDROPCAP_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDROPCAP_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDROPCAP_HXX
 
 #include "xfglobal.hxx"
 #include "ixfproperty.hxx"

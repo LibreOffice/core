@@ -57,8 +57,8 @@
  * @file
  * Base list object.
  ************************************************************************/
-#ifndef     _XFLIST_HXX
-#define     _XFLIST_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFLIST_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFLIST_HXX
 
 #include "xflistitem.hxx"
 #include "xfcontentcontainer.hxx"

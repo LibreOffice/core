@@ -57,8 +57,8 @@
  * @file
  * Interfer for all Drawing object.
  ************************************************************************/
-#ifndef     _XFDRAWOBJ_HXX
-#define     _XFDRAWOBJ_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWOBJ_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWOBJ_HXX
 
 #include "xfframe.hxx"
 #include "xfrect.hxx"

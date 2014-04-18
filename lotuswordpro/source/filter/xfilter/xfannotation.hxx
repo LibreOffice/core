@@ -57,8 +57,8 @@
  * @file
  * Annotation object.
  ************************************************************************/
-#ifndef     _XFANNOTATION_HXX
-#define     _XFANNOTATION_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFANNOTATION_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFANNOTATION_HXX
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

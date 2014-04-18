@@ -57,8 +57,8 @@
  * @file
  * Interfer face for all object that will responsible for xml element output
  ************************************************************************/
-#ifndef     IXFOBJECT_INC
-#define     IXFOBJECT_INC
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFOBJECT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFOBJECT_HXX
 
 class IXFStream;
 /*************************************************************************
@@ -85,6 +85,6 @@ public:
     virtual void    ToXml(IXFStream     *pSaxStream) = 0;
 };
 
-#endif //IXFOBJECT_INC
+#endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFOBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

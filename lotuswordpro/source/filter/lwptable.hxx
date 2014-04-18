@@ -61,8 +61,8 @@
  * Change History
  Mar 2005           Created
  ************************************************************************/
-#ifndef _LWPTABLE_HXX_
-#define _LWPTABLE_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABLE_HXX
 
 #include "lwpobj.hxx"
 #include "lwpobjhdr.hxx"

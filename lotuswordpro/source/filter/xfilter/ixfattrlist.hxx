@@ -57,8 +57,8 @@
  * @file
  * Interface for the attibute list of a xml element.
  ************************************************************************/
-#ifndef     _IXFATTRLIST_HXX
-#define     _IXFATTRLIST_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFATTRLIST_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFATTRLIST_HXX
 
 #include <rtl/ustring.hxx>
 
@@ -83,6 +83,6 @@ public:
     virtual void    Clear() = 0;
 };
 
-#endif  //_IXFATTRLIST_HXX
+#endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFATTRLIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

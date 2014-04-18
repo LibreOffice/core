@@ -57,8 +57,8 @@
  * @file
  * Page number field.
  ************************************************************************/
-#ifndef     _XFPAGECOUNT_HXX
-#define     _XFPAGECOUNT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPAGECOUNT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPAGECOUNT_HXX
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

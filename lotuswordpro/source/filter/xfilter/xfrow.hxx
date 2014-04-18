@@ -57,8 +57,8 @@
  * @file
  * Table row object. A table is consist by rows.
  ************************************************************************/
-#ifndef     _XFROW_HXX
-#define     _XFROW_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFROW_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFROW_HXX
 
 #include "xfcontent.hxx"
 #include <map>

@@ -54,8 +54,8 @@
  *
  ************************************************************************/
 
-#ifndef     _LWPMARGINS_HXX
-#define     _LWPMARGINS_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPMARGINS_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPMARGINS_HXX
 
 #include "lwpobjstrm.hxx"
 #include "lwptools.hxx"

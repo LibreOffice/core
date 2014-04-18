@@ -57,8 +57,8 @@
  * @file
  * Line break object,<text:line-break/>
  *************************************************************************/
-#ifndef     _XFLINEBREAK_HXX
-#define     _XFLINEBREAK_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFLINEBREAK_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFLINEBREAK_HXX
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

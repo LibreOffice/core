@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _SVSTREAM_HXX
-#define _SVSTREAM_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSVSTREAM_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSVSTREAM_HXX
 
 #include "lwpheader.hxx"
 #include "lwpunoheader.hxx"

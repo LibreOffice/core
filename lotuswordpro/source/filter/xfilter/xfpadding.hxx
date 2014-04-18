@@ -57,8 +57,8 @@
  * @file
  * Padding for paragraph.
  ************************************************************************/
-#ifndef     _XFPADDING_HXX
-#define     _XFPADDING_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPADDING_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPADDING_HXX
 
 #include "xfglobal.hxx"
 #include "ixfproperty.hxx"

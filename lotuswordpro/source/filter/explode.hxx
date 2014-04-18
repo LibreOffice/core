@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _EXPLODE_HXX_
-#define _EXPLODE_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_EXPLODE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_EXPLODE_HXX
 
 #include <tools/stream.hxx>
 

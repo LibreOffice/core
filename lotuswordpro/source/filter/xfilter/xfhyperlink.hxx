@@ -57,8 +57,8 @@
  * @file
  * Hyperlink object for OOo xml filter.
  ************************************************************************/
-#ifndef     _XFHYPERLINK_HXX
-#define     _XFHYPERLINK_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFHYPERLINK_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFHYPERLINK_HXX
 
 class XFHyperlink : public XFContent
 {

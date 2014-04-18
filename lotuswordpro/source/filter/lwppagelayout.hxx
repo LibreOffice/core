@@ -58,8 +58,8 @@
 Mar 2005            Created
  ************************************************************************/
 
-#ifndef _LWPPAGELAYOUT_HXX
-#define _LWPPAGELAYOUT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPAGELAYOUT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPAGELAYOUT_HXX
 
 #include "lwplayout.hxx"
 

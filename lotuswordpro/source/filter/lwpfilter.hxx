@@ -57,8 +57,8 @@
  * @file
  * Circle object.
  ************************************************************************/
-#ifndef _LWPFILTER_HXX
-#define _LWPFILTER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFILTER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFILTER_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>

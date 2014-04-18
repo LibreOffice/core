@@ -57,8 +57,8 @@
  * @file
  * place holder object.
  ************************************************************************/
-#ifndef     _XFPLACEHOLDER_HXX
-#define     _XFPLACEHOLDER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPLACEHOLDER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPLACEHOLDER_HXX
 
 #include "xfcontent.hxx"
 

@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPPARASTYLE_HXX
-#define _LWPPARASTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARASTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARASTYLE_HXX
 
 #include "lwpcharacterstyle.hxx"
 #include "lwppiece.hxx"

@@ -61,8 +61,8 @@
  * Change History
  Mar 2005           Created
  ************************************************************************/
-#ifndef _LWPLAYOUTNUMERICSOVERRIDE_HXX_
-#define _LWPLAYOUTNUMERICSOVERRIDE_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTBLCELL_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTBLCELL_HXX
 
 #include "lwpobj.hxx"
 #include "lwpatomholder.hxx"

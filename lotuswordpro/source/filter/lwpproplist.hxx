@@ -62,8 +62,8 @@
  Mar 2005           Created
  ************************************************************************/
 
-#ifndef _LWPPROPLIST_HXX_
-#define _LWPPROPLIST_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPROPLIST_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPROPLIST_HXX
 
 #include "lwpobj.hxx"
 #include "lwpdlvlist.hxx"

@@ -57,8 +57,8 @@
 * @file
 * Numbering override of Wordpro.
 ************************************************************************/
-#ifndef     _LWPNUMBERINGOVERRIDE_HXX
-#define     _LWPNUMBERINGOVERRIDE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNUMBERINGOVERRIDE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNUMBERINGOVERRIDE_HXX
 
 #include "lwpoverride.hxx"
 

@@ -57,8 +57,8 @@
  * @file
  * Interfer for all style object.
  ************************************************************************/
-#ifndef     _IXFSTYLE_HXX
-#define     _IXFSTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFSTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFSTYLE_HXX
 
 #include "xfglobal.hxx"
 /**

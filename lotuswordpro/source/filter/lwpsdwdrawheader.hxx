@@ -59,8 +59,8 @@
  * The file declares structures and enums used by Lwp-Drawing-Module
  */
 
-#ifndef _LWPSDWRAWHEADER_HXX
-#define _LWPSDWRAWHEADER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWDRAWHEADER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWDRAWHEADER_HXX
 
 #include "lwpheader.hxx"
 #include "lwptools.hxx"

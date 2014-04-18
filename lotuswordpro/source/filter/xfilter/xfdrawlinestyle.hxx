@@ -57,8 +57,8 @@
  * @file
  * Line style of Drawing object.
  ************************************************************************/
-#ifndef     _XFDRAWLINESTYLE_HXX
-#define     _XFDRAWLINESTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWLINESTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWLINESTYLE_HXX
 
 #include "xfstyle.hxx"
 #include "xfcolor.hxx"

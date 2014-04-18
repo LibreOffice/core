@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef     _LWPARROWSTYLES_HXX
-#define     _LWPARROWSTYLES_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPARROWSTYLES_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPARROWSTYLES_HXX
 
 #include "xfilter/xfarrowstyle.hxx"
 #include "xfilter/xfstylemanager.hxx"

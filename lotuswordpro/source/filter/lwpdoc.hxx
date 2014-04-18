@@ -63,8 +63,8 @@
  Jun 2005           Code cleaning by change some members to local variables in Read()
  ************************************************************************/
 
-#ifndef _LWPDOCUMENT_HXX
-#define _LWPDOCUMENT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDOC_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDOC_HXX
 
 #include "lwpobj.hxx"
 #include "lwpsortopt.hxx"

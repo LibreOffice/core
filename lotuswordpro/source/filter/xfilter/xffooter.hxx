@@ -57,8 +57,8 @@
  * @file
  * Footer object.
  ************************************************************************/
-#ifndef     _XFFOOTER_HXX
-#define     _XFFOOTER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFOOTER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFOOTER_HXX
 
 #include "xfcontentcontainer.hxx"
 #include <vector>

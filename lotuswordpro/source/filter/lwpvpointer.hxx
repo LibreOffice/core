@@ -64,8 +64,8 @@
 March 2005          Created
  ************************************************************************/
 
-#ifndef _LWPVERSIONEDPOINTER_HXX_
-#define _LWPVERSIONEDPOINTER_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPVPOINTER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPVPOINTER_HXX
 
 #include "lwpobj.hxx"
 class LwpVersionedPointer : public LwpObject

@@ -57,8 +57,8 @@
  * @file
  * single list.
  ************************************************************************/
-#ifndef     _LWPSLVLIST_HXX
-#define     _LWPSLVLIST_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSLVLIST_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSLVLIST_HXX
 
 #include "lwpobjstrm.hxx"
 #include "lwpfilehdr.hxx"

@@ -57,8 +57,8 @@
  * @file
  * Bookmark ref.
  ************************************************************************/
-#ifndef     _XFBOOKMARK_HXX
-#define     _XFBOOKMARK_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBOOKMARK_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBOOKMARK_HXX
 
 #include "xfcontent.hxx"
 

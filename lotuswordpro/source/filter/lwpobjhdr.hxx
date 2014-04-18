@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPOBJECTHEADER_HXX
-#define _LWPOBJECTHEADER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJHDR_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJHDR_HXX
 
 #include "lwpobjid.hxx"
 #include "lwpobjtags.hxx"

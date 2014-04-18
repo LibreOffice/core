@@ -58,8 +58,8 @@
  * Global functions or include files that are needed.
  * It's all for the full filter.
  ************************************************************************/
-#ifndef     _GLOBAL_HXX
-#define     _GLOBAL_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFGLOBAL_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFGLOBAL_HXX
 
 #include <cassert>
 

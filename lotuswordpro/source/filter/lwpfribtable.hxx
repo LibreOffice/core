@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWPFRIBTABLE_HXX_
-#define _LWPFRIBTABLE_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBTABLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBTABLE_HXX
 
 #include "lwpfrib.hxx"
 

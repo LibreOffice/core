@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef     _RESOURCE_HXX
-#define     _RESOURCE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPRESOURCE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPRESOURCE_HXX
 
 #define     IMPLEMENTATION_NAME         "com.ibm.ILWPImportFilter"
 

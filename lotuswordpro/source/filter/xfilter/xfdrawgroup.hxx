@@ -57,8 +57,8 @@
  * @file
  * Group of drawing objects.
  ************************************************************************/
-#ifndef     _XFDRAWGROUP_HXX
-#define     _XFDRAWGROUP_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWGROUP_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWGROUP_HXX
 
 #include "xfdrawobj.hxx"
 #include "xfframe.hxx"

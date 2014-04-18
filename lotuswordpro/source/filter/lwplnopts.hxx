@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPLINENUMBEROPTIONS_HXX
-#define _LWPLINENUMBEROPTIONS_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLNOPTS_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLNOPTS_HXX
 
 #include "lwpobjstrm.hxx"
 #include "lwptools.hxx"

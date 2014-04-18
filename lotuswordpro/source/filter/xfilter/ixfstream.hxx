@@ -57,8 +57,8 @@
  * @file
  * Sax stream to export xml to SODC.
  ************************************************************************/
-#ifndef     _IXFSTREAM_INC
-#define     _IXFSTREAM_INC
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFSTREAM_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFSTREAM_HXX
 
 #include <rtl/ustring.hxx>
 
@@ -107,5 +107,5 @@ public:
     virtual IXFAttrList*    GetAttrList() = 0;
 };
 
-#endif //_IXFSTREAM_INC
+#endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFSTREAM_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

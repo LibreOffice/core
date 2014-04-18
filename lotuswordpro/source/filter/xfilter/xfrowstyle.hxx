@@ -57,8 +57,8 @@
  * @file
  * Table row style, ie. table row height.
  ************************************************************************/
-#ifndef     _XFROWSTYLE_HXX
-#define     _XFROWSTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFROWSTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFROWSTYLE_HXX
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

@@ -57,8 +57,8 @@
  * @file
  * Tool for sax writer.
  ************************************************************************/
-#ifndef     _XFSAXSTREAM_HXX
-#define     _XFSAXSTREAM_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSAXSTREAM_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSAXSTREAM_HXX
 
 #include "ixfstream.hxx"
 

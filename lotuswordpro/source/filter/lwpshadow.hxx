@@ -57,8 +57,8 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-#ifndef     _LWPSHADOW_HXX
-#define     _LWPSHADOW_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSHADOW_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSHADOW_HXX
 
 #include "lwpcolor.hxx"
 #include "lwptools.hxx"

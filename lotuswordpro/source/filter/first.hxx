@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef FIRST_HXX
-#define FIRST_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_FIRST_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_FIRST_HXX
 
 #include "bento.hxx"
 

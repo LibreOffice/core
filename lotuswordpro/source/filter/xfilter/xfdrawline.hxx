@@ -57,8 +57,8 @@
  * @file
  * Line object.
  ************************************************************************/
-#ifndef     _XFDRAWLINE_HXX
-#define     _XFDRAWLINE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWLINE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWLINE_HXX
 
 #include "xfdrawobj.hxx"
 #include "xfpoint.hxx"

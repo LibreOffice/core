@@ -57,8 +57,8 @@
  * @file
  * Shadow object,now only used by paragraph object.
  ************************************************************************/
-#ifndef     _XFSHADOW_HXX
-#define     _XFSHADOW_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSHADOW_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSHADOW_HXX
 
 #include "xfglobal.hxx"
 #include "ixfproperty.hxx"

@@ -57,8 +57,8 @@
  * @file
  * Endnote config.
  ************************************************************************/
-#ifndef     _XFENDNOTECONFIG_HXX
-#define     _XFENDNOTECONFIG_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFENDNOTECONFIG_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFENDNOTECONFIG_HXX
 
 #include "xfendnoteconfig.hxx"
 

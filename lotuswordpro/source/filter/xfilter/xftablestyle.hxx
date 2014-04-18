@@ -57,8 +57,8 @@
  * @file
  * Table style.
  ************************************************************************/
-#ifndef     _XFTABLESTYLE_HXX
-#define     _XFTABLESTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTABLESTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTABLESTYLE_HXX
 
 #include "xfstyle.hxx"
 #include "xfmargins.hxx"

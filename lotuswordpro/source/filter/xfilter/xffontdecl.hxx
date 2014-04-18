@@ -58,8 +58,8 @@
  * Font declaration for OOo xml file.This is needed for every font that was
  * used.
  ************************************************************************/
-#ifndef     _XFFONTDECL_HXX
-#define     _XFFONTDECL_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTDECL_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTDECL_HXX
 
 #include "xfglobal.hxx"
 

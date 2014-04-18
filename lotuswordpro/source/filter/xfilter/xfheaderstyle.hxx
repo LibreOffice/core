@@ -57,8 +57,8 @@
  * @file
  * Header style,exist in page-master object.
  ************************************************************************/
-#ifndef     _XFHEADERSTYLE_HXX
-#define     _XFHEADERSTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFHEADERSTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFHEADERSTYLE_HXX
 
 #include "xfstyle.hxx"
 #include "xfmargins.hxx"

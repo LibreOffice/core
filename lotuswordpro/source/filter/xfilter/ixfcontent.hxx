@@ -57,8 +57,8 @@
  * @file
  * Interface for the all content object,ie. text,paragraph,picture,and so on.
  ************************************************************************/
-#ifndef     _IXFCONTENT_HXX
-#define     _IXFCONTENT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFCONTENT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFCONTENT_HXX
 
 #include "xfglobal.hxx"
 

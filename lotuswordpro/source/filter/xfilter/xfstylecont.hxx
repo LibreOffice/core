@@ -57,8 +57,8 @@
  * @file
  * Style container,which response for special style,ie. text style.
  ************************************************************************/
-#ifndef     _XFSTYLECONTAINER_HXX
-#define     _XFSTYLECONTAINER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSTYLECONT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSTYLECONT_HXX
 
 #include "xfglobal.hxx"
 #include <vector>

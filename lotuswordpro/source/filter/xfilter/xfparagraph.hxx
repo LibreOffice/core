@@ -57,8 +57,8 @@
  * @file
  * Paragraph object of OOo, it will output <text:p >...</text:p> element.
  ************************************************************************/
-#ifndef     _XFPARAGRAPH_HXX
-#define     _XFPARAGRAPH_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPARAGRAPH_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPARAGRAPH_HXX
 
 #include "xfglobal.hxx"
 #include "xfcontentcontainer.hxx"

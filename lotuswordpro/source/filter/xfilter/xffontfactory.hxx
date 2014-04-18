@@ -57,8 +57,8 @@
  * @file
  * Factory object for XFFont.It also manages all font life cycle.
  ************************************************************************/
-#ifndef     _XFFONTFACTORY_HXX
-#define     _XFFONTFACTORY_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTFACTORY_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTFACTORY_HXX
 
 #include "xfglobal.hxx"
 #include "xffont.hxx"

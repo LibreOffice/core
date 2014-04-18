@@ -57,8 +57,8 @@
  * @file
  * index entry object.
  ************************************************************************/
-#ifndef     _XFENTRY_HXX
-#define     _XFENTRY_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFENTRY_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFENTRY_HXX
 
 #include "xfcontent.hxx"
 

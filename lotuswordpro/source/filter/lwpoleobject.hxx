@@ -61,8 +61,8 @@
  * Change History
  Feb 2005           Created
  ************************************************************************/
-#ifndef _LWPOLEOBJECT_HXX_
-#define _LWPOLEOBJECT_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOLEOBJECT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOLEOBJECT_HXX
 
 #include "lwpobj.hxx"
 #include "lwpobjhdr.hxx"

@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPFRIBTEXT_HXX_
-#define _LWPFRIBTEXT_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBTEXT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBTEXT_HXX
 
 #include "lwpfrib.hxx"
 #include "lwpstory.hxx"

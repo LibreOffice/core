@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWPFRIBHEADER_HXX
-#define _LWPFRIBHEADER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBHEADER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBHEADER_HXX
 
 #define FRIB_TAG_NOUNICODE 0x40 // Don't xlate text to/from Unicode
 #define FRIB_TAG_MODIFIER 0x80  // This frib has a modifier on it

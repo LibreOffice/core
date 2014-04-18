@@ -57,8 +57,8 @@
  * @file
  * Float frame whose anchor is page.
  ************************************************************************/
-#ifndef     _XFFLOATFRAME_HXX
-#define     _XFFLOATFRAME_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFLOATFRAME_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFLOATFRAME_HXX
 
 #include "xfframe.hxx"
 #include <vector>

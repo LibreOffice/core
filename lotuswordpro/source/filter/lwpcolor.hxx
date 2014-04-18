@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPCOLOR_HXX
-#define _LWPCOLOR_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCOLOR_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCOLOR_HXX
 
 #include "lwpobjstrm.hxx"
 #include "lwpheader.hxx"

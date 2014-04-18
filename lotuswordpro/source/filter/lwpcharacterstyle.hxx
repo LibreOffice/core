@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPCHARACTERSTYLE_HXX
-#define _LWPCHARACTERSTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCHARACTERSTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCHARACTERSTYLE_HXX
 
 #include "lwpobj.hxx"
 #include "lwpdlvlist.hxx"

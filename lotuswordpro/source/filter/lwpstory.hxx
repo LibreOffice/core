@@ -64,8 +64,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPSTORY_HXX
-#define _LWPSTORY_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSTORY_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSTORY_HXX
 #include "lwpcontent.hxx"
 
 class LwpPageLayout;

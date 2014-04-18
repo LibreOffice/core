@@ -57,8 +57,8 @@
  * @file
  * ruby text.
  ************************************************************************/
-#ifndef     _XFRUBY_HXX
-#define     _XFRUBY_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFRUBY_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFRUBY_HXX
 
 #include "xfcontent.hxx"
 

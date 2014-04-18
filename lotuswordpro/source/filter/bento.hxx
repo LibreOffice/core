@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef BENTO_H
-#define BENTO_H
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_BENTO_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_BENTO_HXX
 
 #include <string>
 #include <vector>

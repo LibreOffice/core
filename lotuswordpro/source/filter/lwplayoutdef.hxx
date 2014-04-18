@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWPLAYOUTDEF_HXX
-#define _LWPLAYOUTDEF_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYOUTDEF_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYOUTDEF_HXX
 
 #define STYLE_AUTOLINK      0x01UL  /* content span's to next container */
 #define STYLE_SELECTABLE    0x02UL  /* selectable container */

@@ -57,8 +57,8 @@
  * @file
  * Column style object.
  ************************************************************************/
-#ifndef     _XFCOLSTYLE_HXX
-#define     _XFCOLSTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCOLSTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCOLSTYLE_HXX
 
 #include "xfstyle.hxx"
 

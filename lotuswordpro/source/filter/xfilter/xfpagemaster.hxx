@@ -58,8 +58,8 @@
  * Page master used bye XFMasterPage.
  * It is the real object to define header and footer of pages.
  ************************************************************************/
-#ifndef     _XFPAGEMASTER_HXX
-#define     _XFPAGEMASTER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPAGEMASTER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPAGEMASTER_HXX
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

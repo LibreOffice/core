@@ -57,8 +57,8 @@
  * @file
  * End note object.
  ************************************************************************/
-#ifndef     _XFENDNOTE_HXX
-#define     _XFENDNOTE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFENDNOTE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFENDNOTE_HXX
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

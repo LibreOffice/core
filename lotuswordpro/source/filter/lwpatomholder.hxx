@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWPATOMHOLDER_HXX
-#define _LWPATOMHOLDER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPATOMHOLDER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPATOMHOLDER_HXX
 
 #include "lwpheader.hxx"
 #include "lwpdefs.hxx"

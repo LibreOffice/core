@@ -61,8 +61,8 @@
  * Change History
  Jun 2005           Created
  ************************************************************************/
-#ifndef _LWPCHANGEMGR_HXX_
-#define _LWPCHANGEMGR_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCHANGEMGR_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCHANGEMGR_HXX
 
 #include <map>
 #include <vector>

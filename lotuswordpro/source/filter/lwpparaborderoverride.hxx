@@ -57,8 +57,8 @@
 * @file
 * Border override of Wordpro.
 ************************************************************************/
-#ifndef     _LWPPARABORDEROVERRIDE_HXX
-#define     _LWPPARABORDEROVERRIDE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARABORDEROVERRIDE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARABORDEROVERRIDE_HXX
 
 #include "lwpoverride.hxx"
 

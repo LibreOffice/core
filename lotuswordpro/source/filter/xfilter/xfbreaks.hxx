@@ -57,8 +57,8 @@
  * @file
  * Breaks of paragraph.
  ************************************************************************/
-#ifndef     _XFBREAKS_HXX
-#define     _XFBREAKS_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBREAKS_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBREAKS_HXX
 
 #include "xfglobal.hxx"
 #include "ixfproperty.hxx"

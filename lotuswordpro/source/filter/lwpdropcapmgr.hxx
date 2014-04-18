@@ -62,8 +62,8 @@
  Mar 2005           created
  ************************************************************************/
 
-#ifndef _LWPDROPCAPMGR_HXX
-#define _LWPDROPCAPMGR_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDROPCAPMGR_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDROPCAPMGR_HXX
 
 #include "xfilter/xfparagraph.hxx"
 

@@ -62,8 +62,8 @@
  Jan 2005       Created
  ************************************************************************/
 
-#ifndef     _LWPPIECE_HXX
-#define     _LWPPIECE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPIECE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPIECE_HXX
 
 #include "lwpobj.hxx"
 #include "lwpoverride.hxx"

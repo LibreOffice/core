@@ -58,8 +58,8 @@
  * Tool funtions for xml filter.
  * Don't use any template for the ***TOOUString function list for easy.
  ************************************************************************/
-#ifndef     _XFUTIL_HXX
-#define     _XFUTIL_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFUTIL_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFUTIL_HXX
 
 #include "xfdefs.hxx"
 #include <rtl/ustring.hxx>

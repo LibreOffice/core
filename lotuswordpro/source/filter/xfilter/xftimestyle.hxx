@@ -57,8 +57,8 @@
  * @file
  * Time style. The TIme format for time field.
  ************************************************************************/
-#ifndef     _XFTIMESTYLE_HXX
-#define     _XFTIMESTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTIMESTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTIMESTYLE_HXX
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

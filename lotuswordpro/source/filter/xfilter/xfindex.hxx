@@ -57,8 +57,8 @@
  * @file
  * Represente index source,index body and index index entry.
  ************************************************************************/
-#ifndef     _XFINDEX_HXX
-#define     _XFINDEX_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFINDEX_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFINDEX_HXX
 #include <map>
 #include <vector>
 

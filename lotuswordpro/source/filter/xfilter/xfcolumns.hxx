@@ -57,8 +57,8 @@
  * @file
  * Columns styles for section, or paragraph.
  ************************************************************************/
-#ifndef     _XFCOLUMNS_HXX
-#define     _XFCOLUMNS_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCOLUMNS_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCOLUMNS_HXX
 
 #include "xfglobal.hxx"
 #include "xfcolor.hxx"

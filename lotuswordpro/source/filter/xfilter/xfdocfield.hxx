@@ -57,8 +57,8 @@
  * @file
  * doc field.
  ************************************************************************/
-#ifndef     _XFDOCFIELD_HXX
-#define     _XFDOCFIELD_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDOCFIELD_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDOCFIELD_HXX
 
 #include "xfcontent.hxx"
 #include "xfpagecount.hxx"

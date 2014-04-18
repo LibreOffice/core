@@ -57,8 +57,8 @@
  * @file
  * Margins object, include left margin,right margin,top margin and bottom margin.
  ************************************************************************/
-#ifndef     _XFMARGINS_HXX
-#define     _XFMARGINS_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFMARGINS_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFMARGINS_HXX
 
 #include "xfglobal.hxx"
 #include "ixfproperty.hxx"

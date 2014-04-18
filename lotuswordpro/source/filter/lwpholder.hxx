@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPDLVLISTHEADHOLDER_HXX_
-#define _LWPDLVLISTHEADHOLDER_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHOLDER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHOLDER_HXX
 
 #include "lwpobj.hxx"
 #include "lwpdlvlist.hxx"

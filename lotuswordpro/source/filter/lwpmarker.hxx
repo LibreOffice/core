@@ -62,8 +62,8 @@
  Mar 2005           Created
  ************************************************************************/
 
-#ifndef _LWPMARKER_HXX_
-#define _LWPMARKER_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPMARKER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPMARKER_HXX
 
 #include "lwpobj.hxx"
 #include "lwpobjid.hxx"

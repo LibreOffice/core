@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWPTIME_HXX_
-#define _LWPTIME_HXX_
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LOCALTIME_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LOCALTIME_HXX
 
 struct LtTm
 {

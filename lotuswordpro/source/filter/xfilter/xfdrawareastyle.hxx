@@ -58,8 +58,8 @@
  * Area style of Drawing object.
  * Only support fill color and fill pattern now.
  ************************************************************************/
-#ifndef     _XFDRAWAREASTYLE_HXX
-#define     _XFDRAWAREASTYLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWAREASTYLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWAREASTYLE_HXX
 
 #include "xfstyle.hxx"
 #include "xfcolor.hxx"

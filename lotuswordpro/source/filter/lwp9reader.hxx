@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWP9READER_HXX
-#define _LWP9READER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWP9READER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWP9READER_HXX
 
 #include "lwpheader.hxx"
 #include "lwpunoheader.hxx"

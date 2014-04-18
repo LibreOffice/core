@@ -57,8 +57,8 @@
  * @file
  * Table object.
  ************************************************************************/
-#ifndef     _XFTABLE_HXX
-#define     _XFTABLE_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTABLE_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTABLE_HXX
 
 #include "xfcontent.hxx"
 #include "xfrow.hxx"

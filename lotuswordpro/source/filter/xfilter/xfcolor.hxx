@@ -57,8 +57,8 @@
  * @file
  * Color object to serial to xml filter.
  ************************************************************************/
-#ifndef     _XFCOLOR_HXX
-#define     _XFCOLOR_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCOLOR_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCOLOR_HXX
 
 #include "xfglobal.hxx"
 

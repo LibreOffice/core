@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPUIDOCUMENT_HXX
-#define _LWPUIDOCUMENT_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUIDOC_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUIDOC_HXX
 
 #include "lwpheader.hxx"
 #include "lwpdefs.hxx"

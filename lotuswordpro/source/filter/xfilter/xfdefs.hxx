@@ -57,8 +57,8 @@
  * @file
  * enum const defines.
  ************************************************************************/
-#ifndef     _XFDEFS_HXX
-#define     _XFDEFS_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDEFS_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDEFS_HXX
 
 #include "sal/types.h"
 

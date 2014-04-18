@@ -57,8 +57,8 @@
  * @file
  * Container for content.It will destroy all children when destroy.
  ************************************************************************/
-#ifndef     _XFCONTENTCONTAINER_HXX
-#define     _XFCONTENTCONTAINER_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCONTENTCONTAINER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCONTENTCONTAINER_HXX
 
 #include "xfcontent.hxx"
 #include <vector>

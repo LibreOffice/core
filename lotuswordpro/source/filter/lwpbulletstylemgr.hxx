@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPBULLETSTYLEMGR_HXX
-#define _LWPBULLETSTYLEMGR_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBULLETSTYLEMGR_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBULLETSTYLEMGR_HXX
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>

@@ -57,8 +57,8 @@
  * @file
  * List item.
  ************************************************************************/
-#ifndef     _XFLISTITEM_HXX
-#define     _XFLISTITEM_HXX
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFLISTITEM_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFLISTITEM_HXX
 
 #include "xfcontent.hxx"
 #include "xfcontentcontainer.hxx"
