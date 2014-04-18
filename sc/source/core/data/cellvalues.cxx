@@ -10,7 +10,6 @@
 #include <cellvalues.hxx>
 #include <column.hxx>
 #include <cellvalue.hxx>
-#include <sharedformula.hxx>
 
 #include <cassert>
 #include <boost/noncopyable.hpp>
@@ -63,59 +62,6 @@ void CellValues::assign( const std::vector<double>& rVals )
     std::vector<CellTextAttr> aDefaults(rVals.size(), CellTextAttr());
     mpImpl->maCellTextAttrs.resize(rVals.size());
     mpImpl->maCellTextAttrs.set(0, aDefaults.begin(), aDefaults.end());
-}
-
-void CellValues::append( ScRefCellValue& rVal, const CellTextAttr* pAttr, const ScAddress& rPos )
-{
-    assert(mpImpl->maCells.size() == mpImpl->maCellTextAttrs.size());
-
-    size_t n = mpImpl->maCells.size();
-
-    bool bAppendAttr = true;
-
-    switch (rVal.meType)
-    {
-        case CELLTYPE_STRING:
-        {
-            mpImpl->maCells.resize(n+1);
-            mpImpl->maCells.set(n, *rVal.mpString);
-        }
-        break;
-        case CELLTYPE_VALUE:
-        {
-            mpImpl->maCells.resize(n+1);
-            mpImpl->maCells.set(n, rVal.mfValue);
-        }
-        break;
-        case CELLTYPE_EDIT:
-        {
-            mpImpl->maCells.resize(n+1);
-            mpImpl->maCells.set(n, rVal.mpEditText->Clone());
-        }
-        break;
-        case CELLTYPE_FORMULA:
-        {
-            mpImpl->maCells.resize(n+1);
-            CellStoreType::iterator itBlk = mpImpl->maCells.set(n, rVal.mpFormula->Clone(rPos));
-
-            size_t nOffset = n - itBlk->position;
-            CellStoreType::position_type aPos(itBlk, nOffset);
-            SharedFormulaUtil::joinFormulaCellAbove(aPos);
-        }
-        break;
-        default:
-            bAppendAttr = false;
-    }
-
-    if (bAppendAttr)
-    {
-        mpImpl->maCellTextAttrs.resize(n+1);
-
-        if (pAttr)
-            mpImpl->maCellTextAttrs.set(n, *pAttr);
-        else
-            mpImpl->maCellTextAttrs.set(n, CellTextAttr());
-    }
 }
 
 size_t CellValues::size() const

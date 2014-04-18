@@ -300,7 +300,7 @@ void ScColumn::TransferCellValuesFrom( SCROW nRow, sc::CellValues& rSrc )
         return;
 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
-//  DetachFormulaCells(aPos, rSrc.size());
+    DetachFormulaCells(aPos, rSrc.size());
 
     rSrc.transferTo(*this, nRow);
 
@@ -311,7 +311,7 @@ void ScColumn::TransferCellValuesFrom( SCROW nRow, sc::CellValues& rSrc )
     for (SCROW i = nRow; i <= nLastRow; ++i)
         aRows.push_back(i);
 
-//  BroadcastCells(aRows, SC_HINT_DATACHANGED);
+    BroadcastCells(aRows, SC_HINT_DATACHANGED);
 }
 
 void ScColumn::CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc )

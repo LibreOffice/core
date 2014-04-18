@@ -57,8 +57,8 @@
 #include "mtvcellfunc.hxx"
 #include "columnspanset.hxx"
 #include <stlalgorithm.hxx>
-#include <cellvalues.hxx>
 #include <listenercontext.hxx>
+#include <sharedformula.hxx>
 
 #include "svl/sharedstringpool.hxx"
 
@@ -380,7 +380,8 @@ namespace {
 
 struct SortedColumn : boost::noncopyable
 {
-    sc::CellValues maCells; /// Stores cells and cell text attributes.
+    sc::CellStoreType maCells;
+    sc::CellTextAttrStoreType maCellTextAttrs;
     sc::BroadcasterStoreType maBroadcasters;
 };
 
@@ -453,15 +454,47 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
             {
                 ScSortInfoArray::Cell& rCell = (*pRow)[nCol];
 
-                sc::CellValues& rStore = aSortedCols.at(nCol).maCells;
-                ScAddress aCellPos(aSortParam.nCol1 + nCol, aSortParam.nRow1 + i, nTab);
-                rStore.append(rCell.maCell, rCell.mpAttr, aCellPos);
+                sc::CellStoreType& rCellStore = aSortedCols.at(nCol).maCells;
+                size_t n = rCellStore.size();
+                rCellStore.resize(n+1);
+                switch (rCell.maCell.meType)
+                {
+                    case CELLTYPE_STRING:
+                        assert(rCell.mpAttr);
+                        rCellStore.set(n, *rCell.maCell.mpString);
+                    break;
+                    case CELLTYPE_VALUE:
+                        assert(rCell.mpAttr);
+                        rCellStore.set(n, rCell.maCell.mfValue);
+                    break;
+                    case CELLTYPE_EDIT:
+                        assert(rCell.mpAttr);
+                        rCellStore.set(n, rCell.maCell.mpEditText->Clone());
+                    break;
+                    case CELLTYPE_FORMULA:
+                    {
+                        assert(rCell.mpAttr);
+                        ScAddress aCellPos(aSortParam.nCol1 + nCol, aSortParam.nRow1 + i, nTab);
+                        sc::CellStoreType::iterator itBlk = rCellStore.set(n, rCell.maCell.mpFormula->Clone(aCellPos));
+
+                        size_t nOffset = n - itBlk->position;
+                        sc::CellStoreType::position_type aPos(itBlk, nOffset);
+                        sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
+                    }
+                    break;
+                    default:
+                        assert(!rCell.mpAttr);
+                }
+
+                sc::CellTextAttrStoreType& rAttrStore = aSortedCols.at(nCol).maCellTextAttrs;
+                rAttrStore.resize(n+1);
+                if (rCell.mpAttr)
+                    rAttrStore.set(n, *rCell.mpAttr);
 
                 // At this point each broadcaster instance is managed by 2
                 // containers. We will release those in the original storage
                 // below before transferring them to the document.
                 sc::BroadcasterStoreType& rBCStore = aSortedCols.at(nCol).maBroadcasters;
-                size_t n = rBCStore.size();
                 rBCStore.resize(n+1);
                 if (rCell.mpBroadcaster)
                     // A const pointer would be implicitly converted to a bool type.
@@ -475,18 +508,33 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
         for (size_t i = 0, n = aSortedCols.size(); i < n; ++i)
         {
             SCCOL nThisCol = i + aSortParam.nCol1;
-            TransferCellValuesFrom(nThisCol, aSortParam.nRow1, aSortedCols[i].maCells);
 
-            sc::BroadcasterStoreType& rBCDest = aCol[nThisCol].maBroadcasters;
+            {
+                sc::CellStoreType& rDest = aCol[nThisCol].maCells;
+                sc::CellStoreType& rSrc = aSortedCols[i].maCells;
+                rSrc.transfer(0, rSrc.size()-1, rDest, aSortParam.nRow1);
+            }
 
-            // Release current broadcasters first, to prevent them from getting deleted.
-            SvtBroadcaster* pBC = NULL;
-            for (SCROW nRow = aSortParam.nRow1; nRow <= aSortParam.nRow2; ++nRow)
-                rBCDest.release(nRow, pBC);
+            {
+                sc::CellTextAttrStoreType& rDest = aCol[nThisCol].maCellTextAttrs;
+                sc::CellTextAttrStoreType& rSrc = aSortedCols[i].maCellTextAttrs;
+                rSrc.transfer(0, rSrc.size()-1, rDest, aSortParam.nRow1);
+            }
 
-            // Transfer sorted broadcaster segment to the document.
-            sc::BroadcasterStoreType& rBCSrc = aSortedCols[i].maBroadcasters;
-            rBCSrc.transfer(0, rBCSrc.size()-1, rBCDest, aSortParam.nRow1);
+            {
+                sc::BroadcasterStoreType& rBCDest = aCol[nThisCol].maBroadcasters;
+
+                // Release current broadcasters first, to prevent them from getting deleted.
+                SvtBroadcaster* pBC = NULL;
+                for (SCROW nRow = aSortParam.nRow1; nRow <= aSortParam.nRow2; ++nRow)
+                    rBCDest.release(nRow, pBC);
+
+                // Transfer sorted broadcaster segment to the document.
+                sc::BroadcasterStoreType& rBCSrc = aSortedCols[i].maBroadcasters;
+                rBCSrc.transfer(0, rBCSrc.size()-1, rBCDest, aSortParam.nRow1);
+            }
+
+            aCol[nThisCol].CellStorageModified();
         }
 
         // Attach all formula cells within sorted range, to have them start listening again.
