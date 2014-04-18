@@ -1736,8 +1736,8 @@ Rectangle ValueSet::ImplGetItemRect( size_t nPos ) const
 
     nPos -= nVisibleBegin;
 
-    const size_t row = nPos/mnCols;
-    const size_t col = nPos%mnCols;
+    const size_t row = mnCols ? nPos/mnCols : 0;
+    const size_t col = mnCols ? nPos%mnCols : 0;
     const long x = maItemListRect.Left()+col*(mnItemWidth+mnSpacing);
     const long y = maItemListRect.Top()+row*(mnItemHeight+mnSpacing);
 
