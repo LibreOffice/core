@@ -1259,10 +1259,10 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 {
     sal_Bool bRet = sal_True;
 
-    rPlaceableBound.Left()   = (sal_Int32)0x7fffffff;
-    rPlaceableBound.Top()    = (sal_Int32)0x7fffffff;
-    rPlaceableBound.Right()  = (sal_Int32)0x80000000;
-    rPlaceableBound.Bottom() = (sal_Int32)0x80000000;
+    rPlaceableBound.Left()   = RECT_MAX;
+    rPlaceableBound.Top()    = RECT_MAX;
+    rPlaceableBound.Right()  = RECT_MIN;
+    rPlaceableBound.Bottom() = RECT_MIN;
 
     sal_uInt32 nPos = pStm->Tell();
     sal_uInt32 nEnd = pStm->Seek( STREAM_SEEK_TO_END );
