@@ -162,6 +162,14 @@ public:
     bool MakeUnion( const SwRect &rRect );
 };
 
+#ifdef IOS
+static void dummy_function()
+{
+    pid_t pid = getpid();
+    (void) pid;
+}
+#endif
+
 class SwLineRects
 {
 public:
@@ -171,7 +179,17 @@ public:
     typedef std::vector< SwLineRect >::reverse_iterator reverse_iterator;
     typedef std::vector< SwLineRect >::size_type size_type;
     size_t nLastCount;  //avoid unnecessary cycles in PaintLines
-    SwLineRects() : nLastCount( 0 ) {}
+    SwLineRects() : nLastCount( 0 )
+    {
+#ifdef IOS
+        // Work around what is either a compiler bug in Xcode 5.1.1,
+        // or some unknown problem in this file. If I ifdef out this
+        // call, I get a crash in SwSubsRects::PaintSubsidiary: the
+        // address of the rLi reference variable is claimed to be
+        // 0x4000000!
+        dummy_function();
+#endif
+    }
     void AddLineRect( const SwRect& rRect,  const Color *pColor, const SvxBorderStyle nStyle,
                       const SwTabFrm *pTab, const sal_uInt8 nSCol );
     void ConnectEdges( OutputDevice *pOut );
