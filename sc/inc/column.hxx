@@ -562,6 +562,9 @@ public:
 
     void DetachFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength );
 
+    void AttachFormulaCells( sc::StartListeningContext& rCxt, SCROW nRow1, SCROW nRow2 );
+    void DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2 );
+
     /**
      * Regroup formula cells for the entire column.
      */

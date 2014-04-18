@@ -58,6 +58,7 @@
 #include "columnspanset.hxx"
 #include <stlalgorithm.hxx>
 #include <cellvalues.hxx>
+#include <listenercontext.hxx>
 
 #include "svl/sharedstringpool.hxx"
 
@@ -375,6 +376,15 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
     return pArray;
 }
 
+namespace {
+
+struct SortedColumn : boost::noncopyable
+{
+    sc::CellValues maCells; /// Stores cells and cell text attributes.
+    sc::BroadcasterStoreType maBroadcasters;
+};
+
+}
 
 bool ScTable::IsSortCollatorGlobal() const
 {
@@ -423,14 +433,18 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
         ScSortInfoArray::RowsType* pRows = pArray->GetDataRows();
         assert(pRows); // In sort-by-row mode we must have data rows already populated.
 
+        // Detach all formula cells within the sorted range first.
+        sc::EndListeningContext aCxt(*pDocument);
+        DetachFormulaCells(aCxt, aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2);
+
         // Cells in the data rows only reference values in the document. Make
         // a copy before updating the document.
 
         size_t nColCount = aSortParam.nCol2 - aSortParam.nCol1 + 1;
-        boost::ptr_vector<sc::CellValues> aSortedCols; // storage for copied cells.
+        boost::ptr_vector<SortedColumn> aSortedCols; // storage for copied cells.
         aSortedCols.reserve(nColCount);
         for (size_t i = 0; i < nColCount; ++i)
-            aSortedCols.push_back(new sc::CellValues);
+            aSortedCols.push_back(new SortedColumn);
 
         for (size_t i = 0; i < pRows->size(); ++i)
         {
@@ -438,9 +452,20 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
             for (size_t nCol = 0; nCol < pRow->size(); ++nCol)
             {
                 ScSortInfoArray::Cell& rCell = (*pRow)[nCol];
-                sc::CellValues& rStore = aSortedCols.at(nCol);
+
+                sc::CellValues& rStore = aSortedCols.at(nCol).maCells;
                 ScAddress aCellPos(aSortParam.nCol1 + nCol, aSortParam.nRow1 + i, nTab);
                 rStore.append(rCell.maCell, rCell.mpAttr, aCellPos);
+
+                // At this point each broadcaster instance is managed by 2
+                // containers. We will release those in the original storage
+                // below before transferring them to the document.
+                sc::BroadcasterStoreType& rBCStore = aSortedCols.at(nCol).maBroadcasters;
+                size_t n = rBCStore.size();
+                rBCStore.resize(n+1);
+                if (rCell.mpBroadcaster)
+                    // A const pointer would be implicitly converted to a bool type.
+                    rBCStore.set(n, const_cast<SvtBroadcaster*>(rCell.mpBroadcaster));
             }
 
             if (pProgress)
@@ -449,9 +474,25 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
 
         for (size_t i = 0, n = aSortedCols.size(); i < n; ++i)
         {
-            sc::CellValues& rSortedCol = aSortedCols[i];
-            TransferCellValuesFrom(i+aSortParam.nCol1, aSortParam.nRow1, rSortedCol);
+            SCCOL nThisCol = i + aSortParam.nCol1;
+            TransferCellValuesFrom(nThisCol, aSortParam.nRow1, aSortedCols[i].maCells);
+
+            sc::BroadcasterStoreType& rBCDest = aCol[nThisCol].maBroadcasters;
+
+            // Release current broadcasters first, to prevent them from getting deleted.
+            SvtBroadcaster* pBC = NULL;
+            for (SCROW nRow = aSortParam.nRow1; nRow <= aSortParam.nRow2; ++nRow)
+                rBCDest.release(nRow, pBC);
+
+            // Transfer sorted broadcaster segment to the document.
+            sc::BroadcasterStoreType& rBCSrc = aSortedCols[i].maBroadcasters;
+            rBCSrc.transfer(0, rBCSrc.size()-1, rBCDest, aSortParam.nRow1);
         }
+
+        // Attach all formula cells within sorted range, to have them start listening again.
+        sc::StartListeningContext aStartListenCxt(*pDocument);
+        AttachFormulaCells(
+            aStartListenCxt, aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2);
     }
     else
     {
