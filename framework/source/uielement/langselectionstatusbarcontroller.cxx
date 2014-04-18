@@ -204,7 +204,7 @@ throw (css::uno::RuntimeException)
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
         const OUString & rStr( *it );
-        if( rStr != OUString( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) )&&
+        if( rStr != sNone &&
             rStr != sAsterisk &&
             rStr != sEmpty)
         {
