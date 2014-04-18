@@ -972,7 +972,7 @@ void DbGridControl::StateChanged( StateChangedType nType )
 
         case STATE_CHANGE_ZOOM:
         {
-            ImplInitWindow( InitFont );
+            ImplInitWindow( InitFontFacet );
 
             // and give it a chance to rearrange
             Point aPoint = GetControlArea().TopLeft();
@@ -982,7 +982,7 @@ void DbGridControl::StateChanged( StateChangedType nType )
         }
         break;
         case STATE_CHANGE_CONTROLFONT:
-            ImplInitWindow( InitFont );
+            ImplInitWindow( InitFontFacet );
             Invalidate();
             break;
         case STATE_CHANGE_CONTROLFOREGROUND:
@@ -1035,7 +1035,7 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
         }
     }
 
-    if ( ( _eInitWhat & InitFont ) != 0 )
+    if ( ( _eInitWhat & InitFontFacet ) != 0 )
     {
         if ( m_bNavigationBar )
         {

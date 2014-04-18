@@ -116,7 +116,7 @@ protected:
 
 enum InitWindowFacet
 {
-    InitFont        = 0x01,
+    InitFontFacet   = 0x01,
     InitForeground  = 0x02,
     InitBackground  = 0x04,
     InitWritingMode = 0x08,

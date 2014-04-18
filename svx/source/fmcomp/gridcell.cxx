@@ -736,7 +736,7 @@ void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eIni
         }
     }
 
-    if ( ( _eInitWhat & InitFont ) != 0 )
+    if ( ( _eInitWhat & InitFontFacet ) != 0 )
     {
         for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
         {
@@ -761,7 +761,7 @@ void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eIni
         }
     }
 
-    if  (   ( ( _eInitWhat & InitFont ) != 0 )
+    if  (   ( ( _eInitWhat & InitFontFacet ) != 0 )
         ||  ( ( _eInitWhat & InitForeground ) != 0 )
         )
     {
