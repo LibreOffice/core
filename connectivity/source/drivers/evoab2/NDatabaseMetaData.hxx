@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_EVOAB_DATABASEMETADATA_HXX_
-#define _CONNECTIVITY_EVOAB_DATABASEMETADATA_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NDATABASEMETADATA_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NDATABASEMETADATA_HXX
 
 #include "NConnection.hxx"
 #include "TDatabaseMetaDataBase.hxx"
@@ -218,6 +218,6 @@ namespace connectivity
     }
 }
 
-#endif // _CONNECTIVITY_EVOAB_DATABASEMETADATA_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NDATABASEMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

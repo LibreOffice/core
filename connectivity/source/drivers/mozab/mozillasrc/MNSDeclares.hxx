@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_MAB_NS_DECLARES_HXX_
-#define _CONNECTIVITY_MAB_NS_DECLARES_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MNSDECLARES_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MNSDECLARES_HXX
 
 #include <sal/types.h>
 
@@ -41,6 +41,6 @@ class nsIAbDirectory;
 sal_Int32 getDirectoryType(const nsIAbDirectory*  directory);
 
 
-#endif // _CONNECTIVITY_MAB_NS_DECLARES_HXX_ 1
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MNSDECLARES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

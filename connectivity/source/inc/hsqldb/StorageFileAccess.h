@@ -21,8 +21,8 @@
 #include <jni.h>
 /* Header for class com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess */
 
-#ifndef _Included_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess
-#define _Included_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_STORAGEFILEACCESS_H
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_STORAGEFILEACCESS_H
 #ifdef __cplusplus
 extern "C" {
 #endif

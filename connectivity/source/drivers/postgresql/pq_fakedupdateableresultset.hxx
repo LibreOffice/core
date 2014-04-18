@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef PG_UPDATEABLERESULTSET_HXX_
-#define PG_UPDATEABLERESULTSET_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_FAKEDUPDATEABLERESULTSET_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_FAKEDUPDATEABLERESULTSET_HXX
 
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>

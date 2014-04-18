@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_ADO_USER_HXX_
-#define _CONNECTIVITY_ADO_USER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AUSER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AUSER_HXX
 
 #include "connectivity/sdbcx/VUser.hxx"
 #include "ado/Awrapadox.hxx"
@@ -90,6 +90,6 @@ namespace connectivity
         };
     }
 }
-#endif // _CONNECTIVITY_ADO_USER_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AUSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

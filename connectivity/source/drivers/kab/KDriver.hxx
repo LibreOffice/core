@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_KAB_DRIVER_HXX_
-#define _CONNECTIVITY_KAB_DRIVER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KDRIVER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KDRIVER_HXX
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -211,6 +211,6 @@ namespace connectivity
 
 }
 
-#endif // _CONNECTIVITY_KAB_DRIVER_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KDRIVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

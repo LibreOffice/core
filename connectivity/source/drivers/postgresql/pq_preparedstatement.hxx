@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_PREPARED_STATEMENT_HXX_
-#define _PQ_PREPARED_STATEMENT_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_PREPAREDSTATEMENT_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_PREPAREDSTATEMENT_HXX
 #include <vector>
 
 #include <libpq-fe.h>

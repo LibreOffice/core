@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONNECTIVITY_FILE_OCONNECTION_HXX_
-#define _CONNECTIVITY_FILE_OCONNECTION_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCONNECTION_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCONNECTION_HXX
 
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
@@ -149,6 +149,6 @@ namespace connectivity
         };
     }
 }
-#endif // _CONNECTIVITY_FILE_OCONNECTION_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCONNECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

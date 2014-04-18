@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_DRIVERMANAGER_HXX_
-#define _CONNECTIVITY_DRIVERMANAGER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_MANAGER_MDRIVERMANAGER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_MANAGER_MDRIVERMANAGER_HXX
 
 #include <sal/config.h>
 
@@ -132,7 +132,7 @@ namespace drivermanager
 
 }   // namespace drivermanager
 
-#endif // _CONNECTIVITY_DRIVERMANAGER_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_MANAGER_MDRIVERMANAGER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

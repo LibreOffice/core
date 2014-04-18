@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_ADO_ACALLABLESTATEMENT_HXX_
-#define _CONNECTIVITY_ADO_ACALLABLESTATEMENT_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACALLABLESTATEMENT_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACALLABLESTATEMENT_HXX
 
 #include "ado/APreparedStatement.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_ODATABASEMETADATABASE_HXX_
-#define _CONNECTIVITY_ODATABASEMETADATABASE_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_TDATABASEMETADATABASE_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_TDATABASEMETADATABASE_HXX
 
 #include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
 #include <cppuhelper/implbase2.hxx>
@@ -131,6 +131,6 @@ namespace connectivity
             virtual sal_Bool SAL_CALL storesMixedCaseQuotedIdentifiers(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         };
 }
-#endif // _CONNECTIVITY_ODATABASEMETADATABASE_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_TDATABASEMETADATABASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

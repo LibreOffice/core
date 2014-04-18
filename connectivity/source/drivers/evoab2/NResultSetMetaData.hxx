@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_EVOAB_RESULTSETMETADATA_HXX_
-#define _CONNECTIVITY_EVOAB_RESULTSETMETADATA_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NRESULTSETMETADATA_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NRESULTSETMETADATA_HXX
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>

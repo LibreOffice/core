@@ -8,8 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _MORK_DLLAPI_H
-#define _MORK_DLLAPI_H
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_DLLAPI_H
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_DLLAPI_H
 
 #include "sal/config.h"
 #include "sal/types.h"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_EVOAB_CONNECTION_HXX_
-#define _CONNECTIVITY_EVOAB_CONNECTION_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NCONNECTION_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NCONNECTION_HXX
 
 #include "NDriver.hxx"
 #include <com/sun/star/sdbc/SQLWarning.hpp>
@@ -112,6 +112,6 @@ namespace connectivity
         };
     }
 }
-#endif // _CONNECTIVITY_EVOAB_CONNECTION_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NCONNECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

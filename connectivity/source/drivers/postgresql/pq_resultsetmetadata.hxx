@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_RESULTSETMETADATA_HXX_
-#define _PQ_RESULTSETMETADATA_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_RESULTSETMETADATA_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_RESULTSETMETADATA_HXX
 #include <vector>
 
 #include "pq_connection.hxx"

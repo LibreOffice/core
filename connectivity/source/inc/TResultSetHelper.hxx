@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_TRESULTSETHELPER_HXX
-#define CONNECTIVITY_TRESULTSETHELPER_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_TRESULTSETHELPER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_TRESULTSETHELPER_HXX
 
 #include <sal/types.h>
 #include "connectivity/dbtoolsdllapi.hxx"
@@ -49,6 +49,6 @@ namespace connectivity
     };
 }
 
-#endif // CONNECTIVITY_TRESULTSETHELPER_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_TRESULTSETHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

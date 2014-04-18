@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_LOCALREF_HXX
-#define CONNECTIVITY_LOCALREF_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_LOCALREF_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_LOCALREF_HXX
 
 #include <jvmaccess/virtualmachine.hxx>
 
@@ -92,6 +92,6 @@ namespace connectivity { namespace jdbc
 } } // namespace connectivity::jdbc
 
 
-#endif // CONNECTIVITY_LOCALREF_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_LOCALREF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

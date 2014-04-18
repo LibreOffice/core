@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_MAB_MOZAB_RUNNABLE_HXX_
-#define _CONNECTIVITY_MAB_MOZAB_RUNNABLE_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSRUNNABLE_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSRUNNABLE_HXX
 #include "mozillasrc/MNSDeclares.hxx"
 #include <osl/thread.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_EVOAB_TABLE_HXX_
-#define _CONNECTIVITY_EVOAB_TABLE_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NTABLE_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NTABLE_HXX
 
 #include "NConnection.hxx"
 #include "connectivity/sdbcx/VTable.hxx"
@@ -56,6 +56,6 @@ namespace connectivity
     }
 }
 
-#endif // _CONNECTIVITY_EVOAB_TABLE_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

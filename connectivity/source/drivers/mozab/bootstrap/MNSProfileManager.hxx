@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __MNSProfileManager_h___
-#define __MNSProfileManager_h___
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILEMANAGER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILEMANAGER_HXX
 
 #include "mozilla_profilemanager.h"
 
@@ -60,6 +60,6 @@ namespace connectivity
     }
 }
 
-#endif // __MNSProfileManager_h___
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILEMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

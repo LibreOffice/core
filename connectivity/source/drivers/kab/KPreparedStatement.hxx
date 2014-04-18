@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_KAB_PREPAREDSTATEMENT_HXX_
-#define _CONNECTIVITY_KAB_PREPAREDSTATEMENT_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KPREPAREDSTATEMENT_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KPREPAREDSTATEMENT_HXX
 
 #include "KStatement.hxx"
 #include "KResultSetMetaData.hxx"
@@ -109,6 +109,6 @@ namespace connectivity
     }
 }
 
-#endif // _CONNECTIVITY_KAB_PREPAREDSTATEMENT_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KPREPAREDSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

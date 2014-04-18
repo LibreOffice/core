@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_HSQLDB_ACCESSLOG_HXX
-#define CONNECTIVITY_HSQLDB_ACCESSLOG_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_HSQLDB_ACCESSLOG_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_HSQLDB_ACCESSLOG_HXX
 
 #ifdef HSQLDB_DBG
 
@@ -134,6 +134,6 @@ namespace connectivity { namespace hsqldb
 } }
 #endif
 
-#endif // CONNECTIVITY_HSQLDB_ACCESSLOG_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_HSQLDB_ACCESSLOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

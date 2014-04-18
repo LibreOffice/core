@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_MACAB_ADDRESSBOOK_HXX_
-#define _CONNECTIVITY_MACAB_ADDRESSBOOK_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABADDRESSBOOK_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABADDRESSBOOK_HXX
 
 #include "MacabRecords.hxx"
 #include "MacabGroup.hxx"
@@ -61,6 +61,6 @@ namespace connectivity
     }
 }
 
-#endif // _CONNECTIVITY_MACAB_ADDRESSBOOK_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABADDRESSBOOK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

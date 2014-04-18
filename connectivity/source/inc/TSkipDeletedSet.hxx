@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_SKIPDELETEDSSET_HXX
-#define CONNECTIVITY_SKIPDELETEDSSET_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_TSKIPDELETEDSET_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_TSKIPDELETEDSET_HXX
 
 #include "TResultSetHelper.hxx"
 #include <rtl/alloc.h>
@@ -93,6 +93,6 @@ namespace connectivity
         inline void SetDeletedVisible(bool _bDeletedVisible) { m_bDeletedVisible = _bDeletedVisible; }
     };
 }
-#endif // CONNECTIVITY_SKIPDELETEDSSET_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_TSKIPDELETEDSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

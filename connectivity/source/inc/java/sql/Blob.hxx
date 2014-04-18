@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_JAVA_SQL_BLOB_HXX_
-#define _CONNECTIVITY_JAVA_SQL_BLOB_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_BLOB_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_BLOB_HXX
 
 #include "java/lang/Object.hxx"
 #include <com/sun/star/sdbc/XBlob.hpp>
@@ -51,6 +51,6 @@ namespace connectivity
         virtual sal_Int64 SAL_CALL positionOfBlob( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& pattern, sal_Int64 start ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
-#endif // _CONNECTIVITY_JAVA_SQL_BLOB_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_BLOB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

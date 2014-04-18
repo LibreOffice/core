@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_ZCONNECTIONWEAKWRAPPER_HXX_
-#define _CONNECTIVITY_ZCONNECTIONWEAKWRAPPER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZCONNECTIONWRAPPER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZCONNECTIONWRAPPER_HXX
 
 #include <cppuhelper/compbase1.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -75,6 +75,6 @@ namespace connectivity
         virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
-#endif // _CONNECTIVITY_ZCONNECTIONWEAKWRAPPER_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZCONNECTIONWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

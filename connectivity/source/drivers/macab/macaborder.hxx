@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_MACAB_ORDER_HXX_
-#define _CONNECTIVITY_MACAB_ORDER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABORDER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABORDER_HXX
 
 #include "rtl/ustring.hxx"
 #include "MacabHeader.hxx"

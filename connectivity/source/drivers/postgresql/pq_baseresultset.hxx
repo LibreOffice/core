@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef _PG_BASERESULTSET_HXX_
-#define _PG_BASERESULTSET_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_BASERESULTSET_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_BASERESULTSET_HXX
 
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/component.hxx>

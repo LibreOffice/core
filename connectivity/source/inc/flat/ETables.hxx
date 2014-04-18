@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_FLAT_TABLES_HXX_
-#define _CONNECTIVITY_FLAT_TABLES_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ETABLES_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ETABLES_HXX
 
 #include "file/FTables.hxx"
 
@@ -40,6 +40,6 @@ namespace connectivity
         };
     }
 }
-#endif // _CONNECTIVITY_FLAT_TABLES_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ETABLES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

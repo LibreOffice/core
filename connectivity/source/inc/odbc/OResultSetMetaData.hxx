@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_ODBC_ORESULTSETMETADATA_HXX_
-#define _CONNECTIVITY_ODBC_ORESULTSETMETADATA_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ORESULTSETMETADATA_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ORESULTSETMETADATA_HXX
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -112,6 +112,6 @@ namespace connectivity
         };
     }
 }
-#endif // _CONNECTIVITY_ODBC_ORESULTSETMETADATA_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ORESULTSETMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

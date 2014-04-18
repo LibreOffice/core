@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONNECTIVITY_MAB_NS_INCLUDE_HXX_
-#define _CONNECTIVITY_MAB_NS_INCLUDE_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MNSINCLUDE_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MNSINCLUDE_HXX
 
 
 // Only include Mozilla include files once and using this file...
@@ -62,6 +62,6 @@
 
 #include "post_include_mozilla.h"
 
-#endif // _CONNECTIVITY_MAB_NS_INCLUDE_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MNSINCLUDE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

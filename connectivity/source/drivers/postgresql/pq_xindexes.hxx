@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef HEADER_PQ_INDEXES_HXX_
-#define HEADER_PQ_INDEXES_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XINDEXES_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XINDEXES_HXX
 
 #include "pq_xcontainer.hxx"
 

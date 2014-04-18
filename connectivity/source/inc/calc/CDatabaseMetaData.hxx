@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_CALC_DATABASEMETADATA_HXX_
-#define _CONNECTIVITY_CALC_DATABASEMETADATA_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CDATABASEMETADATA_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CDATABASEMETADATA_HXX
 
 #include "file/FDatabaseMetaData.hxx"
 
@@ -49,6 +49,6 @@ namespace connectivity
     }
 }
 
-#endif // _CONNECTIVITY_CALC_DATABASEMETADATA_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CDATABASEMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

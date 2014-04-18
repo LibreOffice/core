@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_KAB_TABLES_HXX_
-#define _CONNECTIVITY_KAB_TABLES_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KTABLES_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KTABLES_HXX
 
 #include "connectivity/sdbcx/VCollection.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -50,6 +50,6 @@ namespace connectivity
     }
 }
 
-#endif // _CONNECTIVITY_KAB_TABLES_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KTABLES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

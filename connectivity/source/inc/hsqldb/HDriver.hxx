@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_HSQLDB_DRIVER_HXX
-#define CONNECTIVITY_HSQLDB_DRIVER_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HDRIVER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HDRIVER_HXX
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
@@ -131,6 +131,6 @@ namespace connectivity
 
 }   // namespace connectivity
 
-#endif // CONNECTIVITY_HSQLDB_DRIVER_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HDRIVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_KAB_KDEINIT_H
-#define CONNECTIVITY_KAB_KDEINIT_H
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KDEINIT_H
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KDEINIT_H
 
 // the address book driver's version
 #define KAB_DRIVER_VERSION      "0.2"
@@ -48,6 +48,6 @@
 #endif // ENABLE_TDE
 
 
-#endif // CONNECTIVITY_KAB_KDEINIT_H
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KDEINIT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

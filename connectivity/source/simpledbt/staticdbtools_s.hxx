@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_STATIC_DBTOOLS_SIMPLE_HXX
-#define CONNECTIVITY_STATIC_DBTOOLS_SIMPLE_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_SIMPLEDBT_STATICDBTOOLS_S_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_SIMPLEDBT_STATICDBTOOLS_S_HXX
 
 #include <connectivity/virtualdbtools.hxx>
 #include "refbase.hxx"
@@ -194,6 +194,6 @@ namespace connectivity
 }   // namespace connectivity
 
 
-#endif // CONNECTIVITY_STATIC_DBTOOLS_SIMPLE_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_SIMPLEDBT_STATICDBTOOLS_S_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_CPOOL_ZDRIVERWRAPPER_HXX_
-#define _CONNECTIVITY_CPOOL_ZDRIVERWRAPPER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZDRIVERWRAPPER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZDRIVERWRAPPER_HXX
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -76,7 +76,7 @@ namespace connectivity
 }   // namespace connectivity
 
 
-#endif // _CONNECTIVITY_CPOOL_ZDRIVERWRAPPER_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZDRIVERWRAPPER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

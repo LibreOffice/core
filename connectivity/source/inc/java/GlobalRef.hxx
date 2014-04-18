@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_GLOBALREF_HXX
-#define CONNECTIVITY_GLOBALREF_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_GLOBALREF_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_GLOBALREF_HXX
 
 #include "java/LocalRef.hxx"
 #include "java/lang/Object.hxx"
@@ -108,6 +108,6 @@ namespace connectivity { namespace jdbc
 } } // namespace connectivity::jdbc
 
 
-#endif // CONNECTIVITY_GLOBALREF_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_GLOBALREF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

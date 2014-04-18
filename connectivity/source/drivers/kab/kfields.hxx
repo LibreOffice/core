@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_KAB_FIELDS_HXX_
-#define _CONNECTIVITY_KAB_FIELDS_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KFIELDS_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KFIELDS_HXX
 
 #include <shell/kde_headers.h>
 #include <connectivity/dbexception.hxx>

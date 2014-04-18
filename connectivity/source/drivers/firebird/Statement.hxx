@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_FIREBIRD_STATEMENT_HXX
-#define CONNECTIVITY_FIREBIRD_STATEMENT_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_STATEMENT_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_STATEMENT_HXX
 
 #include "StatementCommonBase.hxx"
 
@@ -94,6 +94,6 @@ namespace connectivity
         };
     }
 }
-#endif // CONNECTIVITY_FIREBIRD_STATEMENT_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_STATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

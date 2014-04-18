@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECITIVITY_MORK_ERROR_RESOURCE_HXX
-#define CONNECITIVITY_MORK_ERROR_RESOURCE_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MERRORRESOURCE_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MERRORRESOURCE_HXX
 
 #include <rtl/ustring.hxx>
 
@@ -66,6 +66,6 @@ namespace connectivity
     }
 }
 
-#endif // CONNECITIVITY_MORK_ERROR_RESOURCE_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MERRORRESOURCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

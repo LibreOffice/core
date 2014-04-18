@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_MYSQL_TABLE_HXX
-#define CONNECTIVITY_MYSQL_TABLE_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YTABLE_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YTABLE_HXX
 
 #include "connectivity/TTableHelper.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -116,6 +116,6 @@ namespace connectivity
         };
     }
 }
-#endif // CONNECTIVITY_MYSQL_TABLE_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

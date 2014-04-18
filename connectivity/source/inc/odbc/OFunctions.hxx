@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_ODBC_OFUNCTIONS_HXX_
-#define _CONNECTIVITY_ODBC_OFUNCTIONS_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONS_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONS_HXX
 
 #include "odbc/OFunctiondefs.hxx"
 #include <rtl/ustring.hxx>
@@ -543,7 +543,7 @@ bool LoadLibrary_ODBC3(OUString &_rPath);
     #define N3SQLNativeSql(a,b,c,d,e,f) (*(T3SQLNativeSql)getOdbcFunction(ODBC3SQLNativeSql))(a,b,c,d,e,f)
 }
 
-#endif // _CONNECTIVITY_ODBC_OFUNCTIONS_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONS_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

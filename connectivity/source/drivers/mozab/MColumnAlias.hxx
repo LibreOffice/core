@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _CONNECTIVITY_MAB_COLUMNALIAS_HXX_
-#define _CONNECTIVITY_MAB_COLUMNALIAS_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MCOLUMNALIAS_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MCOLUMNALIAS_HXX
 
 #include <unotools/confignode.hxx>
 
@@ -74,6 +74,6 @@ namespace connectivity
         };
     }
 }
-#endif // _CONNECTIVITY_MAB_COLUMNALIAS_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MCOLUMNALIAS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

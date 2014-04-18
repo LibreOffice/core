@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_DBTOOLS_REFBASE_HXX
-#define CONNECTIVITY_DBTOOLS_REFBASE_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_SIMPLEDBT_REFBASE_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_SIMPLEDBT_REFBASE_HXX
 
 #include <rtl/ref.hxx>
 
@@ -48,7 +48,7 @@ namespace connectivity
 }   // namespace connectivity
 
 
-#endif // CONNECTIVITY_DBTOOLS_REFBASE_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_SIMPLEDBT_REFBASE_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef HEADER_PQ_USER_HXX_
-#define HEADER_PQ_USER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XUSER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XUSER_HXX
 
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/propshlp.hxx>

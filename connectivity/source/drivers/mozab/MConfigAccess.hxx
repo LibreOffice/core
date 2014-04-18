@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_MOZAB_MCONFIGACCESS_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MCONFIGACCESS_HXX
 
 #include <sal/types.h>
 
@@ -27,6 +27,6 @@ extern "C" const sal_Char* SAL_CALL getPabDescription( void );
 
 extern "C" const sal_Char* SAL_CALL getHisDescription( void );
 
-#endif  // CONNECTIVITY_MOZAB_MCONFIGACCESS_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MCONFIGACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

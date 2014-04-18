@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_PARAMETERSUBSTITUTION_HXX
-#define CONNECTIVITY_PARAMETERSUBSTITUTION_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_PARAMETERSUBSTITUTION_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_PARAMETERSUBSTITUTION_HXX
 
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_DBASE_DPREPAREDSTATEMENT_HXX_
-#define _CONNECTIVITY_DBASE_DPREPAREDSTATEMENT_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DPREPAREDSTATEMENT_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DPREPAREDSTATEMENT_HXX
 
 #include "file/FPreparedStatement.hxx"
 
@@ -38,6 +38,6 @@ namespace connectivity
     }
 }
 
-#endif //_CONNECTIVITY_DBASE_DPREPAREDSTATEMENT_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DPREPAREDSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

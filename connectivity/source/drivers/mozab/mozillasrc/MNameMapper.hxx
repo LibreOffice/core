@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_MAB_NAMEMAPPER_HXX_
-#define _CONNECTIVITY_MAB_NAMEMAPPER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MNAMEMAPPER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MNAMEMAPPER_HXX
 
 #include <map>
 
@@ -72,6 +72,6 @@ namespace connectivity
     }
 }
 
-#endif //_CONNECTIVITY_MAB_NAMEMAPPER_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MNAMEMAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

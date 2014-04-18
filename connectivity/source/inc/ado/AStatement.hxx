@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_ADO_ASTATEMENT_HXX_
-#define _CONNECTIVITY_ADO_ASTATEMENT_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ASTATEMENT_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ASTATEMENT_HXX
 
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
@@ -187,6 +187,6 @@ namespace connectivity
         };
     }
 }
-#endif // _CONNECTIVITY_ADO_ASTATEMENT_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ASTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

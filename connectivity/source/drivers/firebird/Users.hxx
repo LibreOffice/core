@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef CONNECTIVITY_FIREBIRD_USERS_HXX
-#define CONNECTIVITY_FIREBIRD_USERS_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_USERS_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_USERS_HXX
 
 #include "DatabaseMetaData.hxx"
 
@@ -57,6 +57,6 @@ namespace connectivity
 } // namespace connectivity
 
 
-#endif // CONNECTIVITY_FIREBIRD_USERS_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_USERS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

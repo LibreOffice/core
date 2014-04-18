@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_ODBC_ODRIVER_HXX_
-#define _CONNECTIVITY_ODBC_ODRIVER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODRIVER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODRIVER_HXX
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -77,7 +77,7 @@ namespace connectivity
     }
 
 }
-#endif //_CONNECTIVITY_ODBC_ODRIVER_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODRIVER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

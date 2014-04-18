@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_CONNECTION_HXX_
-#define _PQ_CONNECTION_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_CONNECTION_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_CONNECTION_HXX
 
 #include <config_lgpl.h>
 #include <boost/unordered_map.hpp>

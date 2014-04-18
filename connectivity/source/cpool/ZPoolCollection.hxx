@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_POOLCOLLECTION_HXX
-#define CONNECTIVITY_POOLCOLLECTION_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZPOOLCOLLECTION_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZPOOLCOLLECTION_HXX
 
 #include <sal/config.h>
 
@@ -139,6 +139,6 @@ namespace connectivity
         virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
-#endif // CONNECTIVITY_POOLCOLLECTION_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZPOOLCOLLECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_JAVA_UTIL_DATE_HXX_
-#define _CONNECTIVITY_JAVA_UTIL_DATE_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_UTIL_DATE_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_UTIL_DATE_HXX
 
 #include "java/lang/Object.hxx"
 #include <com/sun/star/util/Date.hpp>
@@ -42,6 +42,6 @@ namespace connectivity
         java_util_Date( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
     };
 }
-#endif // _CONNECTIVITY_JAVA_UTIL_DATE_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_UTIL_DATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

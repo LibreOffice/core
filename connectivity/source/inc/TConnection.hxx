@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_CONNECTION_HXX
-#define CONNECTIVITY_CONNECTION_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_TCONNECTION_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_TCONNECTION_HXX
 
 #include <rtl/textenc.h>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -79,7 +79,7 @@ namespace connectivity
         static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };
 }
-#endif // CONNECTIVITY_CONNECTION_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_TCONNECTION_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

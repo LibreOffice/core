@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_HTOOLS_HXX
-#define CONNECTIVITY_HTOOLS_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HTOOLS_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HTOOLS_HXX
 
 #include <rtl/ustrbuf.hxx>
 
@@ -51,6 +51,6 @@ namespace connectivity { namespace hsqldb
 } } // namespace connectivity::hsqldb
 
 
-#endif // CONNECTIVITY_HTOOLS_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

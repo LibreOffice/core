@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_CALC_TABLES_HXX_
-#define _CONNECTIVITY_CALC_TABLES_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CTABLES_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CTABLES_HXX
 
 #include "file/FTables.hxx"
 
@@ -40,6 +40,6 @@ namespace connectivity
     }
 }
 
-#endif // _CONNECTIVITY_CALC_TABLES_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CTABLES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

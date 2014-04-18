@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_TABLES_HXX_
-#define _PQ_TABLES_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XTABLES_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XTABLES_HXX
 
 #include "pq_xcontainer.hxx"
 

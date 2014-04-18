@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_CONNECTIONLOG_HXX
-#define CONNECTIVITY_CONNECTIONLOG_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CONNECTIONLOG_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CONNECTIONLOG_HXX
 
 #include <com/sun/star/logging/LogLevel.hpp>
 
@@ -129,6 +129,6 @@ namespace connectivity { namespace java { namespace sql {
 } } } // namespace connectivity::java::sql
 
 
-#endif // CONNECTIVITY_CONNECTIONLOG_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CONNECTIONLOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

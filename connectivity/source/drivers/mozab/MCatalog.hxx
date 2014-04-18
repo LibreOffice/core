@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONNECTIVITY_MOZAB_CATALOG_HXX_
-#define _CONNECTIVITY_MOZAB_CATALOG_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MCATALOG_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MCATALOG_HXX
 
 #include "connectivity/sdbcx/VCatalog.hxx"
 
@@ -50,6 +50,6 @@ namespace connectivity
         };
     }
 }
-#endif // _CONNECTIVITY_MOZAB_CATALOG_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MCATALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

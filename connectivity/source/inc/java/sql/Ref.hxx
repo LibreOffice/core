@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_JAVA_SQL_REF_HXX_
-#define _CONNECTIVITY_JAVA_SQL_REF_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_REF_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_REF_HXX
 
 #include "java/lang/Object.hxx"
 #include <com/sun/star/sdbc/XRef.hpp>
@@ -46,6 +46,6 @@ namespace connectivity
         virtual OUString SAL_CALL getBaseTypeName(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
-#endif // _CONNECTIVITY_JAVA_SQL_REF_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_REF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

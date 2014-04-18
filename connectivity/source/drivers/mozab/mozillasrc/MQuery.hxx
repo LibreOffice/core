@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _CONNECTIVITY_MAB_QUERY_HXX_
-#define _CONNECTIVITY_MAB_QUERY_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MQUERY_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MQUERY_HXX
 
 #include "MColumnAlias.hxx"
 #include "MErrorResource.hxx"
@@ -263,6 +263,6 @@ namespace connectivity
     }
 }
 
-#endif // _CONNECTIVITY_MAB_QUERY_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MQUERY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

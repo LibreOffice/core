@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_STATICS_HXX_
-#define _PQ_STATICS_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_STATICS_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_STATICS_HXX
 
 #include <boost/unordered_map.hpp>
 #include <vector>

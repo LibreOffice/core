@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_VIEWS_HXX_
-#define _PQ_VIEWS_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XVIEWS_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XVIEWS_HXX
 
 #include "pq_xcontainer.hxx"
 

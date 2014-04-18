@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_DBASE_DCODE_HXX
-#define CONNECTIVITY_DBASE_DCODE_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DCODE_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DCODE_HXX
 
 #include "file/fanalyzer.hxx"
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -57,6 +57,6 @@ namespace connectivity
     }
 }
 
-#endif // CONNECTIVITY_DBASE_DCODE_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DCODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_HSQLDB_CONNECTION_HXX
-#define CONNECTIVITY_HSQLDB_CONNECTION_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCONNECTION_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCONNECTION_HXX
 
 #include "connectivity/ConnectionWrapper.hxx"
 #include <com/sun/star/util/XFlushable.hpp>
@@ -144,6 +144,6 @@ namespace connectivity
         };
     }
 }
-#endif // CONNECTIVITY_HSQLDB_CONNECTION_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCONNECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

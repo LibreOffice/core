@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_HSQLDB_USER_HXX_
-#define _CONNECTIVITY_HSQLDB_USER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HUSER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HUSER_HXX
 
 #include "connectivity/sdbcx/VUser.hxx"
 #include "com/sun/star/sdbc/XConnection.hpp"
@@ -70,6 +70,6 @@ namespace connectivity
         };
     }
 }
-#endif // _CONNECTIVITY_HSQLDB_USER_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HUSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

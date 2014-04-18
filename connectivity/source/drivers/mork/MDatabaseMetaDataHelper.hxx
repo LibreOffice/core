@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef CONNECTIVITY_MORK_DBMETADATAHELPER_HXX
-#define CONNECTIVITY_MORK_DBMETADATAHELPER_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDATABASEMETADATAHELPER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDATABASEMETADATAHELPER_HXX
 
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
@@ -41,6 +41,6 @@ namespace connectivity
     }
 }
 
-#endif // CONNECTIVITY_MORK_DBMETADATAHELPER_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDATABASEMETADATAHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

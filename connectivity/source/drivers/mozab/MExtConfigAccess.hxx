@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_MOZAB_MEXTCONFIGACCESS_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MEXTCONFIGACCESS_HXX
 
 // This is the extended version (for use on the SO side of the driver) of MConfigAccess
 // (which is for use on the mozilla side only)
@@ -34,6 +34,6 @@ namespace connectivity
     }
 }
 
-#endif // CONNECTIVITY_MOZAB_MEXTCONFIGACCESS_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MEXTCONFIGACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

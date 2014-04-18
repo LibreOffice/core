@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_MLDAPATTRIBUTEMAP_HXX
-#define CONNECTIVITY_MLDAPATTRIBUTEMAP_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MLDAPATTRIBUTEMAP_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MLDAPATTRIBUTEMAP_HXX
 
 #include <MNSInclude.hxx>
 
@@ -65,6 +65,6 @@ namespace connectivity { namespace mozab {
 } } // namespace connectivity::mozab
 
 
-#endif // CONNECTIVITY_MLDAPATTRIBUTEMAP_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MLDAPATTRIBUTEMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

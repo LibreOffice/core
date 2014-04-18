@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_SHAREDRESOURCES_HXX
-#define CONNECTIVITY_SHAREDRESOURCES_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_RESOURCE_SHAREDRESOURCES_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_RESOURCE_SHAREDRESOURCES_HXX
 
 #include <rtl/ustring.hxx>
 #include <list>
@@ -149,6 +149,6 @@ namespace connectivity
 } // namespace connectivity
 
 
-#endif // CONNECTIVITY_SHAREDRESOURCES_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_RESOURCE_SHAREDRESOURCES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

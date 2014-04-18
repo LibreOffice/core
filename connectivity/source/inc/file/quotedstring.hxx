@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_QUOTED_STRING_HXX
-#define CONNECTIVITY_QUOTED_STRING_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_QUOTEDSTRING_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_QUOTEDSTRING_HXX
 
 #include <rtl/ustring.hxx>
 #include "file/filedllapi.hxx"
@@ -45,6 +45,6 @@ namespace connectivity
     };
 }
 
-#endif // CONNECTIVITY_QUOTED_STRING_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_QUOTEDSTRING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

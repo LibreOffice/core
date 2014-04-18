@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef HEADER_PQ_ARRAY_HXX
-#define HEADER_PQ_ARRAY_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_ARRAY_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_ARRAY_HXX
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/sdbc/XArray.hpp>
 

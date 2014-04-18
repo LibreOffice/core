@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_MAB_NS_INIT_HXX_
-#define _CONNECTIVITY_MAB_NS_INIT_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSINIT_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSINIT_HXX
 #include "mozillasrc/MNSDeclares.hxx"
 
 #include <sal/types.h>
@@ -35,6 +35,6 @@ typedef struct UI_Thread_ARGS
 
 void MNS_XPCOM_EventLoop();
 
-#endif // _CONNECTIVITY_MAB_NS_INIT_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSINIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

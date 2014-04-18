@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_TSORTINDEX_HXX
-#define CONNECTIVITY_TSORTINDEX_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_TSORTINDEX_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_TSORTINDEX_HXX
 
 #include "connectivity/dbtoolsdllapi.hxx"
 #include "TKeyValue.hxx"
@@ -123,6 +123,6 @@ namespace connectivity
         void        setFrozen(bool _bFrozen=true)   { m_bFrozen = _bFrozen; }
     };
 }
-#endif // CONNECTIVITY_TSORTINDEX_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_TSORTINDEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

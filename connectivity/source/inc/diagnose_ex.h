@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_DIAGNOSE_EX_H
-#define CONNECTIVITY_DIAGNOSE_EX_H
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_DIAGNOSE_EX_H
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_DIAGNOSE_EX_H
 
 #if OSL_DEBUG_LEVEL > 0
     #define OSL_VERIFY_RES( expression, fail_message ) \
@@ -35,6 +35,6 @@
 #define OSL_UNUSED( expression ) \
     (void)(expression)
 
-#endif // CONNECTIVITY_DIAGNOSE_EX_H
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DIAGNOSE_EX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

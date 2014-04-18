@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef HEADER_PQ_KEYCOLUMNS_HXX
-#define HEADER_PQ_KEYCOLUMNS_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XKEYCOLUMNS_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XKEYCOLUMNS_HXX
 
 #include "pq_xcontainer.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_ROWFUNCTIONPARSER_HXX_INCLUDED
-#define CONNECTIVITY_ROWFUNCTIONPARSER_HXX_INCLUDED
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ROWFUNCTIONPARSER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_ROWFUNCTIONPARSER_HXX
 
 #include <sal/config.h>
 #include <boost/shared_ptr.hpp>
@@ -139,6 +139,6 @@ private:
 
 } // namespace connectivity
 
-#endif /* CONNECTIVITY_ROWFUNCTIONPARSER_HXX_INCLUDED */
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ROWFUNCTIONPARSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

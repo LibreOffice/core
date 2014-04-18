@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef _PG_DRIVER_HXX_
-#define _PG_DRIVER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_DRIVER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_DRIVER_HXX
 
 #include <osl/mutex.hxx>
 

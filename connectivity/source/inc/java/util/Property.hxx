@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_java_util_Properties
-#define CONNECTIVITY_java_util_Properties
+#ifndef CONNECTIVITY_java_util_Properties_HXX
+#define CONNECTIVITY_java_util_Properties_HXX
 
 #include "java/lang/Object.hxx"
 
@@ -38,6 +38,6 @@ namespace connectivity
     };
 }
 
-#endif // CONNECTIVITY_java_util_Properties
+#endif // CONNECTIVITY_java_util_Properties_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

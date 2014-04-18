@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_DATABASEMETADATA_HXX_
-#define _PQ_DATABASEMETADATA_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_DATABASEMETADATA_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_DATABASEMETADATA_HXX
 
 #include "pq_connection.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>

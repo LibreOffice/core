@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef PQ_XVIEW_HXX
-#define PQ_XVIEW_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XVIEW_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XVIEW_HXX
 
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/propshlp.hxx>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_ADO_WRAP_COLUMN_HXX
-#define CONNECTIVITY_ADO_WRAP_COLUMN_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPCOLUMN_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPCOLUMN_HXX
 
 #include "ado/Aolewrap.hxx"
 
@@ -61,6 +61,6 @@ namespace connectivity
     }
 }
 
-#endif //CONNECTIVITY_ADO_WRAP_COLUMN_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPCOLUMN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

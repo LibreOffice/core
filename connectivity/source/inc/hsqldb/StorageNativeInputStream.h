@@ -21,8 +21,8 @@
 #include <jni.h>
 /* Header for class com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream */
 
-#ifndef _Included_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream
-#define _Included_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_STORAGENATIVEINPUTSTREAM_H
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_STORAGENATIVEINPUTSTREAM_H
 #ifdef __cplusplus
 extern "C" {
 #endif

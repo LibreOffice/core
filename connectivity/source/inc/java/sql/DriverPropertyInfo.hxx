@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_JAVA_SQL_DRIVERPOPERTYINFO_HXX_
-#define _CONNECTIVITY_JAVA_SQL_DRIVERPOPERTYINFO_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_DRIVERPROPERTYINFO_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_DRIVERPROPERTYINFO_HXX
 
 #include "java/lang/Object.hxx"
 #include <com/sun/star/sdbc/DriverPropertyInfo.hpp>
@@ -49,6 +49,6 @@ namespace connectivity
     };
 }
 
-#endif // _CONNECTIVITY_JAVA_SQL_DRIVERPOPERTYINFO_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_DRIVERPROPERTYINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

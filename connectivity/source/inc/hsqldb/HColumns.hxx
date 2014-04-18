@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_HSQLDB_COLUMN_HXX
-#define CONNECTIVITY_HSQLDB_COLUMN_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCOLUMNS_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCOLUMNS_HXX
 #include "connectivity/TColumnsHelper.hxx"
 #include "connectivity/sdbcx/VColumn.hxx"
 
@@ -58,6 +58,6 @@ namespace connectivity
         };
     }
 }
-#endif // CONNECTIVITY_HSQLDB_COLUMN_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCOLUMNS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

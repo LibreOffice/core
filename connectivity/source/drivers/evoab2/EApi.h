@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_EVOAB_EVOLUTION_API_HXX_
-#define _CONNECTIVITY_EVOAB_EVOLUTION_API_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_EAPI_H
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_EAPI_H
 #include <glib-object.h>
 
 // Initializes the API below, returns false if not available

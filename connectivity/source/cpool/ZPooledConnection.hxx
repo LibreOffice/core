@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_POOLEDCONNECTION_HXX
-#define CONNECTIVITY_POOLEDCONNECTION_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZPOOLEDCONNECTION_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZPOOLEDCONNECTION_HXX
 
 #include <cppuhelper/compbase2.hxx>
 #include <com/sun/star/sdbc/XPooledConnection.hpp>
@@ -56,6 +56,6 @@ namespace connectivity
     };
 
 }
-#endif // CONNECTIVITY_POOLEDCONNECTION_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZPOOLEDCONNECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_FLAT_EDRIVER_HXX_
-#define _CONNECTIVITY_FLAT_EDRIVER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_EDRIVER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_EDRIVER_HXX
 
 #include <cppuhelper/compbase2.hxx>
 #include "connectivity/CommonTools.hxx"
