@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/accessiblefactory.hxx>
 #include <svtools/accessiblefactory.hxx>
@@ -495,6 +497,7 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleToolPanelTabB
 
 } // anonymous namespace
 
+#if HAVE_FEATURE_DESKTOP
 /* this is the entry point to retrieve a factory for the toolkit-level Accessible/Contexts supplied
     by this library
 
@@ -511,7 +514,6 @@ extern "C"
     }
 }
 
-
 /** this is the entry point to retrieve a factory for the svtools-level Accessible/Contexts supplied
     by this library
 
@@ -527,5 +529,6 @@ extern "C"
         return pFactory;
     }
 }
+#endif // HAVE_FEATURE_DESKTOP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

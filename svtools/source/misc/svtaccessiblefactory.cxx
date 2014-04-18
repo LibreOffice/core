@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "svtaccessiblefactory.hxx"
 
 #include <boost/noncopyable.hpp>
@@ -37,11 +39,8 @@
     // implemented therein would affect a static ref count, the acc lib could care
     // for unloading itself.
 
-
 namespace svt
 {
-
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::accessibility;
@@ -257,12 +256,13 @@ namespace svt
     {
     }
 
-
+#if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
     extern "C" { static void SAL_CALL thisModule() {} }
 #else
     extern "C" void* getSvtAccessibilityComponentFactory();
 #endif
+#endif // HAVE_FEATURE_DESKTOP
 
     void AccessibleFactoryAccess::ensureInitialized()
     {
@@ -275,6 +275,8 @@ namespace svt
         if ( 1 == osl_atomic_increment( &s_nAccessibleFactoryAccesss ) )
         {   // the first client
 #endif // UNLOAD_ON_LAST_CLIENT_DYING
+
+#if HAVE_FEATURE_DESKTOP
             // load the library implementing the factory
             if ( !s_pFactory.get() )
             {
@@ -291,7 +293,8 @@ namespace svt
                 OSL_ENSURE( s_pAccessibleFactoryFunc, "ac_registerClient: could not load the library, or not retrieve the needed symbol!" );
 #else
                 s_pAccessibleFactoryFunc = getSvtAccessibilityComponentFactory;
-#endif
+#endif // DISABLE_DYNLOADING
+
                 // get a factory instance
                 if ( s_pAccessibleFactoryFunc )
                 {
@@ -303,6 +306,7 @@ namespace svt
                     }
                 }
             }
+#endif // HAVE_FEATURE_DESKTOP
 
             if ( !s_pFactory.get() )
                 // the attempt to load the lib, or to create the factory, failed

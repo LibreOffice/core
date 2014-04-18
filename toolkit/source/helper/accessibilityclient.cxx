@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
@@ -182,12 +184,13 @@ namespace toolkit
     {
     }
 
-
+#if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
     extern "C" { static void SAL_CALL thisModule() {} }
 #else
     extern "C" void *getStandardAccessibleFactory();
 #endif
+#endif // HAVE_FEATURE_DESKTOP
 
     void AccessibilityClient::ensureInitialized()
     {
@@ -200,6 +203,8 @@ namespace toolkit
         if ( 1 == osl_atomic_increment( &s_nAccessibilityClients ) )
         {   // the first client
 #endif // UNLOAD_ON_LAST_CLIENT_DYING
+
+#if HAVE_FEATURE_DESKTOP
             // load the library implementing the factory
             if ( !s_pFactory.get() )
             {
@@ -217,7 +222,7 @@ namespace toolkit
                 OSL_ENSURE( s_pAccessibleFactoryFunc, "AccessibilityClient::ensureInitialized: could not load the library, or not retrieve the needed symbol!" );
 #else
                 s_pAccessibleFactoryFunc = getStandardAccessibleFactory;
-#endif
+#endif // DISABLE_DYNLOADING
 
                 // get a factory instance
                 if ( s_pAccessibleFactoryFunc )
@@ -231,6 +236,7 @@ namespace toolkit
                     }
                 }
             }
+#endif // HAVE_FEATURE_DESKTOP
 
             if ( !s_pFactory.get() )
                 // the attempt to load the lib, or to create the factory, failed
@@ -275,6 +281,5 @@ namespace toolkit
 
 
 }   // namespace toolkit
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
