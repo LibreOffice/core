@@ -723,7 +723,7 @@ void ThumbnailView::MakeItemVisible( sal_uInt16 nItemId )
             bFound = true;
         }
     }
-    sal_uInt16 nRow = nPos / mnCols;
+    sal_uInt16 nRow = mnCols ? nPos / mnCols : 0;
 
     // Move the visible rows as little as possible to include that one
     if ( nRow < mnFirstLine )
