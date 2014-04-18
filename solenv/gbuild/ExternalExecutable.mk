@@ -115,7 +115,7 @@ define gb_ExternalExecutable__set_internal
 $(if $(3),,$(if $(filter $(WORKDIR_FOR_BUILD)/UnpackedTarball,$(2)),\
 	$(call gb_Output_error,depending directly on executable $(2) from UnpackedTarball is not allowed. Use the UnpackedTarball target as dependency.)))
 gb_ExternalExecutable_$(1)_EXECUTABLE := $(2)
-gb_ExternalExecutable_$(1)_DEPENDENCIES := $(if $(3),$(3),$(2))
+gb_ExternalExecutable_$(1)_DEPENDENCIES := $(if $(3),$(call gb_Executable_get_target_for_build,$(3)),$(2))
 gb_ExternalExecutable_$(1)_PRECOMMAND := $(subst $$,$$$$,$(gb_Helper_set_ld_path)) $(BUILDTOOLTRACE)
 
 endef
@@ -131,7 +131,7 @@ endef
 #
 # gb_ExternalExecutable_set_internal executable call? external?
 define gb_ExternalExecutable_set_internal
-$(call gb_ExternalExecutable__set_internal,$(1),$(if $(strip $(2)),$(2),$(gb_Executable_BINDIR_FOR_BUILD)/$(1)$(gb_Executable_EXT_for_build)),$(call gb_ExternalProject_get_target_for_build,$(strip $(3))))
+$(call gb_ExternalExecutable__set_internal,$(1),$(if $(strip $(2)),$(2),$(gb_Executable_BINDIR_FOR_BUILD)/$(1)$(gb_Executable_EXT_for_build)),$(strip $(3)))
 
 endef
 
