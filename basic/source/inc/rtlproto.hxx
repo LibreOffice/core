@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_RUNTIME_RTLPROTO_HXX
-#define INCLUDED_BASIC_SOURCE_RUNTIME_RTLPROTO_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_RTLPROTO_HXX
+#define INCLUDED_BASIC_SOURCE_INC_RTLPROTO_HXX
 
 #include <basic/sbstar.hxx>
 #include "sbtrace.hxx"

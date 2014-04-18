@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SB_UNO_OBJ
-#define SB_UNO_OBJ
+#ifndef INCLUDED_BASIC_SOURCE_INC_SBUNOOBJ_HXX
+#define INCLUDED_BASIC_SOURCE_INC_SBUNOOBJ_HXX
 
 #include <basic/sbxobj.hxx>
 #include <basic/sbxmeth.hxx>
