@@ -295,10 +295,6 @@ inline void SfxShell::SetPool
     pPool = pNewPool;
 }
 
-
-
-#define SFX_ARGUMENTMAP(ShellClass) static SfxFormalArgument a##ShellClass##Args_Impl[] =
-
 #define SFX_SLOTMAP(ShellClass) static SfxFormalArgument a##ShellClass##Args_Impl[1]; \
                                 static SfxSlot a##ShellClass##Slots_Impl[] =
 

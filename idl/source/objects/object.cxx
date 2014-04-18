@@ -573,8 +573,8 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
         return;
     }
     // write parameter array
-    rOutStm.WriteCharPtr( "SFX_ARGUMENTMAP(" ).WriteCharPtr( GetName().getString().getStr() ).WriteChar( ')' ) << endl;
-    rOutStm.WriteChar( '{' ) << endl;
+    rOutStm.WriteCharPtr("static SfxFormalArgument a").WriteCharPtr(GetName().getString().getStr()).WriteCharPtr("Args_Impl[] =") << endl;
+    rOutStm.WriteChar('{') << endl;
 
     std::vector<sal_uLong> aSuperList;
     SvMetaClassList classList;
