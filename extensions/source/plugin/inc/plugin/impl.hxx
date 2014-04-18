@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef PLUGIN_SOURCE_MGR_IMPL_HXX
-#define PLUGIN_SOURCE_MGR_IMPL_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_IMPL_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_IMPL_HXX
 
 #include <config_lgpl.h>
 

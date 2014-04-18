@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef PLUGIN_INC_MACPLUG_HXX
-#define PLUGIN_INC_MACPLUG_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_AQUA_SYSPLUG_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_AQUA_SYSPLUG_HXX
 
 #include <unistd.h>
 

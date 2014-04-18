@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BIB_FRAMECTR_HXX
-#define _BIB_FRAMECTR_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_FRAMECTR_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_FRAMECTR_HXX
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XController.hpp>

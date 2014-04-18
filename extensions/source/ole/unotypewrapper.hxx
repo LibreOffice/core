@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef UNO_TYPE_WRAPPER_HXX
-#define UNO_TYPE_WRAPPER_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_UNOTYPEWRAPPER_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_OLE_UNOTYPEWRAPPER_HXX
 
 #include <wincrap.hxx>
 

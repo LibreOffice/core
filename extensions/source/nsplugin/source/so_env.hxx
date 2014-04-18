@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __SO_ENVIRON_HXX__
-#define __SO_ENVIRON_HXX__
+#ifndef INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_SO_ENV_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_SO_ENV_HXX
 
 
 

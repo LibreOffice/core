@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __PLCTRL_HXX
-#define __PLCTRL_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_PLCTRL_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_PLCTRL_HXX
 
 #include <cppuhelper/weak.hxx>
 #include <plugin/multiplx.hxx>

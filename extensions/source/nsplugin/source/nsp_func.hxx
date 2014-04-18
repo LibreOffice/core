@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __NSP_FUNC_HXX
-#define __NSP_FUNC_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_NSP_FUNC_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_NSP_FUNC_HXX
 
 
 // Some function different from UNIX and Window.
@@ -98,6 +98,6 @@ typedef HANDLE NSP_PIPE_FD;
 #endif //end of WNT
 
 
-#endif //end of  __NSP_FUNC_HXX
+#endif //end of INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_NSP_FUNC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

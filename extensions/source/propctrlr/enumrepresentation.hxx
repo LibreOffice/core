@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_ENUMREPRESENTATION_HXX
-#define EXTENSIONS_SOURCE_PROPCTRLR_ENUMREPRESENTATION_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_ENUMREPRESENTATION_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_ENUMREPRESENTATION_HXX
 
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ref.hxx>
@@ -62,6 +62,6 @@ namespace pcr
 } // namespace pcr
 
 
-#endif // EXTENSIONS_SOURCE_PROPCTRLR_ENUMREPRESENTATION_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_ENUMREPRESENTATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

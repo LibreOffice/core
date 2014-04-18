@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UPDATE_INFO_INCLUDED_
-#define _UPDATE_INFO_INCLUDED_
+#ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEINFO_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEINFO_HXX
 
 #include <rtl/ustring.hxx>
 #include <vector>

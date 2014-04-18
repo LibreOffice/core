@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _MRC_MULTIPLX_HXX
-#define _MRC_MULTIPLX_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_MULTIPLX_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_MULTIPLX_HXX
 
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XKeyListener.hpp>
@@ -162,7 +162,7 @@ private:
     MRCListenerMultiplexerHelper & operator = ( const MRCListenerMultiplexerHelper & );
 };
 
-#endif  // _MRC_MULTIPLX_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_MULTIPLX_HXX
 
 
 

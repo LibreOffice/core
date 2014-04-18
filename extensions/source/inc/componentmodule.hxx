@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_COMPONENT_MODULE_HXX_
-#define _EXTENSIONS_COMPONENT_MODULE_HXX_
+#ifndef INCLUDED_EXTENSIONS_SOURCE_INC_COMPONENTMODULE_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_INC_COMPONENTMODULE_HXX
 
 /** you may find this file helpful if you implement a component (in it's own library) which can't use
     the usual infrastructure.<br/>
@@ -251,6 +251,6 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
 }   // namespace COMPMOD_NAMESPACE
 
 
-#endif // _EXTENSIONS_COMPONENT_MODULE_HXX_
+#endif // INCLUDED_EXTENSIONS_SOURCE_INC_COMPONENTMODULE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

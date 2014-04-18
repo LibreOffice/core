@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_PCRCOMMONTYPES_HXX
-#define EXTENSIONS_SOURCE_PROPCTRLR_PCRCOMMONTYPES_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PCRCOMMONTYPES_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PCRCOMMONTYPES_HXX
 
 #include <com/sun/star/beans/Property.hpp>
 #include <rtl/ustring.hxx>
@@ -37,6 +37,6 @@ namespace pcr
 } // namespace pcr
 
 
-#endif // EXTENSIONS_SOURCE_PROPCTRLR_PCRCOMMONTYPES_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PCRCOMMONTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

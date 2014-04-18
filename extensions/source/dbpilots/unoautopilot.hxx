@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_DBP_UNOAUTOPILOT_HXX_
-#define _EXTENSIONS_DBP_UNOAUTOPILOT_HXX_
+#ifndef INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_UNOAUTOPILOT_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_UNOAUTOPILOT_HXX
 
 #include <svtools/genericunodialog.hxx>
 #include <comphelper/processfactory.hxx>
@@ -95,6 +95,6 @@ namespace dbp
 }   // namespace dbp
 
 
-#endif // _EXTENSIONS_DBP_UNOAUTOPILOT_HXX_
+#endif // INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_UNOAUTOPILOT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

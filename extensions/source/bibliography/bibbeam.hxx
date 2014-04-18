@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ADRBEAM_HXX
-#define ADRBEAM_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBBEAM_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBBEAM_HXX
 
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XControl.hpp>

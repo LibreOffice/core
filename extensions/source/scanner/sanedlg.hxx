@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVT_SANEDLG_HXX
-#define _SVT_SANEDLG_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_SCANNER_SANEDLG_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_SCANNER_SANEDLG_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/lstbox.hxx>

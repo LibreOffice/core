@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_ABP_UNODIALOG_HXX
-#define EXTENSIONS_ABP_UNODIALOG_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_ABPILOT_UNODIALOGABP_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_ABPILOT_UNODIALOGABP_HXX
 
 #include <svtools/genericunodialog.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -93,6 +93,6 @@ namespace abp
 
 extern "C" void SAL_CALL createRegistryInfo_OABSPilotUno();
 
-#endif // EXTENSIONS_ABP_UNODIALOG_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_ABPILOT_UNODIALOGABP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

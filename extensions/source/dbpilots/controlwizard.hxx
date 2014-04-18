@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_DBP_CONTROLWIZARD_HXX
-#define _EXTENSIONS_DBP_CONTROLWIZARD_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_CONTROLWIZARD_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_CONTROLWIZARD_HXX
 
 #include <svtools/wizardmachine.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -169,6 +169,6 @@ namespace dbp
 }   // namespace dbp
 
 
-#endif // _EXTENSIONS_DBP_CONTROLWIZARD_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_CONTROLWIZARD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

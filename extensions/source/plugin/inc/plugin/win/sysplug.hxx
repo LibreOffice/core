@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __PLUGIN_INC_WINPLUG_HXX
-#define __PLUGIN_INC_WINPLUG_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_WIN_SYSPLUG_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_WIN_SYSPLUG_HXX
 
 #if defined _MSC_VER
 #pragma warning (push,1)

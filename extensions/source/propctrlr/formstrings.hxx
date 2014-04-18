@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
-#define _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMSTRINGS_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMSTRINGS_HXX
 
 
 namespace pcr
@@ -295,6 +295,6 @@ namespace pcr
 } // namespace pcr
 
 
-#endif // _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
+#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMSTRINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

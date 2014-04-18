@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BIBCONFIG_HXX
-#define _BIBCONFIG_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBCONFIG_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBCONFIG_HXX
 
 #include <unotools/configitem.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>

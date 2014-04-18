@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_ABP_DATASOURCEHANDLING_HXX
-#define EXTENSIONS_ABP_DATASOURCEHANDLING_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_ABPILOT_DATASOURCEHANDLING_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_ABPILOT_DATASOURCEHANDLING_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -203,6 +203,6 @@ namespace abp
 }   // namespace abp
 
 
-#endif // EXTENSIONS_ABP_DATASOURCEHANDLING_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_ABPILOT_DATASOURCEHANDLING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

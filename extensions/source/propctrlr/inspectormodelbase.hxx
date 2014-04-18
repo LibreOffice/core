@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INSPECTORMODELBASE_HXX
-#define INSPECTORMODELBASE_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_INSPECTORMODELBASE_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_INSPECTORMODELBASE_HXX
 
 #include <com/sun/star/inspection/XObjectInspectorModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -93,6 +93,6 @@ namespace pcr
 } // namespace pcr
 
 
-#endif // INSPECTORMODELBASE_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_INSPECTORMODELBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

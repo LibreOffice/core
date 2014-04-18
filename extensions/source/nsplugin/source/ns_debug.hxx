@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __NSDEBUG_HXX_
-#define __NSDEBUG_HXX_
+#ifndef INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_NS_DEBUG_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_NS_DEBUG_HXX
 
 #define NPP_PATH_MAX    1024
 #define NPP_BUFFER_SIZE 1024

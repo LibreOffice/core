@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef LOGHANDLER_HXX
-#define LOGHANDLER_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_LOGGING_LOGHANDLER_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_LOGGING_LOGHANDLER_HXX
 
 #include <com/sun/star/logging/XLogFormatter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -141,6 +141,6 @@ namespace logging
 } // namespace logging
 
 
-#endif // LOGHANDLER_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_LOGGING_LOGHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

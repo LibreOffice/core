@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_ABP_ABPTYPES_HXX
-#define EXTENSIONS_ABP_ABPTYPES_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ABPTYPES_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ABPTYPES_HXX
 
 #include <sal/config.h>
 
@@ -40,6 +40,6 @@ namespace abp
 }   // namespace abp
 
 
-#endif // EXTENSIONS_ABP_ABPTYPES_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ABPTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_RESOURCE_OOORESOURCELOADER_HXX
-#define EXTENSIONS_RESOURCE_OOORESOURCELOADER_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_RESOURCE_OOORESOURCELOADER_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_RESOURCE_OOORESOURCELOADER_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/resource/XResourceBundleLoader.hpp>
@@ -72,6 +72,6 @@ namespace extensions { namespace resource
     };
 }}
 
-#endif // EXTENSIONS_RESOURCE_OOORESOURCELOADER_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_RESOURCE_OOORESOURCELOADER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

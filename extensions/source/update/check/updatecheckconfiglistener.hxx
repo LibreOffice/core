@@ -19,8 +19,8 @@
 
 #include <rtl/ref.hxx>
 
-#ifndef _UPDATECHECKCONFIGLISTENER_HXX_
-#define _UPDATECHECKCONFIGLISTENER_HXX_
+#ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECKCONFIGLISTENER_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECKCONFIGLISTENER_HXX
 
 /* This interface should be implemented by classes acting
  * as controller (as in the MVC pattern).

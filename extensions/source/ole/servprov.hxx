@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SERVPROV_HXX
-#define _SERVPROV_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_SERVPROV_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_OLE_SERVPROV_HXX
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase2.hxx>

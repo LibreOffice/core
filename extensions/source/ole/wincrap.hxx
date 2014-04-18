@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OLE_WIN_HXX
-#define OLE_WIN_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_WINCRAP_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_OLE_WINCRAP_HXX
 
 /* wrap all includes that need to be wrapped by presys.h/postsys.h here */
 
@@ -53,6 +53,6 @@ extern CComModule _Module;
 
 #pragma warning (pop)
 
-#endif // OLE_WIN_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_OLE_WINCRAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

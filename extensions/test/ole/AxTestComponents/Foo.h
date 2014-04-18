@@ -18,8 +18,8 @@
  */
 // Basic.h : Declaration of the CBasic
 
-#ifndef __Foo_H_
-#define __Foo_H_
+#ifndef INCLUDED_EXTENSIONS_TEST_OLE_AXTESTCOMPONENTS_FOO_H
+#define INCLUDED_EXTENSIONS_TEST_OLE_AXTESTCOMPONENTS_FOO_H
 
 #include "resource.h"
 #import  "AxTestComponents.tlb" no_namespace no_implementation raw_interfaces_only named_guids

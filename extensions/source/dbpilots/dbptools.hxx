@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_DBP_DBPTOOLS_HXX_
-#define _EXTENSIONS_DBP_DBPTOOLS_HXX_
+#ifndef INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_DBPTOOLS_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_DBPTOOLS_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
 
@@ -36,6 +36,6 @@ namespace dbp
 
 
 
-#endif // _EXTENSIONS_DBP_DBPTOOLS_HXX_
+#endif // INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_DBPTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

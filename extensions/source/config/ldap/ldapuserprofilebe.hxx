@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_CONFIG_LDAP_LDAPUSERPROFILEBE_HXX_
-#define EXTENSIONS_CONFIG_LDAP_LDAPUSERPROFILEBE_HXX_
+#ifndef INCLUDED_EXTENSIONS_SOURCE_CONFIG_LDAP_LDAPUSERPROFILEBE_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_CONFIG_LDAP_LDAPUSERPROFILEBE_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_LOG_MODULE_HXX
-#define EXTENSIONS_LOG_MODULE_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_LOGGING_LOG_MODULE_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_LOGGING_LOG_MODULE_HXX
 
 #include <comphelper/componentmodule.hxx>
 
@@ -81,6 +81,6 @@ namespace logging
 } // namespace logging
 
 
-#endif // EXTENSIONS_LOG_MODULE_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_LOGGING_LOG_MODULE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

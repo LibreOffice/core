@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __PLUGIN_MODEL_HXX
-#define __PLUGIN_MODEL_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_MODEL_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_MODEL_HXX
 
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
@@ -134,6 +134,6 @@ class PluginModel : public BroadcasterHelperHolder,
 };
 Reference< XInterface >  SAL_CALL PluginModel_CreateInstance( const Reference< com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception );
 
-#endif // __PLUGIN_MODEL_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_MODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

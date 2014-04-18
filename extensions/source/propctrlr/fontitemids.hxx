@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_PROPCTRLR_FONTITEMIDS_HXX_
-#define _EXTENSIONS_PROPCTRLR_FONTITEMIDS_HXX_
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FONTITEMIDS_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FONTITEMIDS_HXX
 
 #define CFID_FONT               1
 #define CFID_HEIGHT             2
@@ -54,6 +54,6 @@ namespace pcr
 }   // namespace pcr
 
 
-#endif // _EXTENSIONS_PROPCTRLR_FONTITEMIDS_HXX_
+#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FONTITEMIDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

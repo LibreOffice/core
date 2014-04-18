@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_ABP_ADMININVOKATIONIMPL_HXX
-#define EXTENSIONS_ABP_ADMININVOKATIONIMPL_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ADMININVOKATIONIMPL_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ADMININVOKATIONIMPL_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

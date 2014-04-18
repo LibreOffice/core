@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_PROPCTRLR_USERCONTROL_HXX_
-#define _EXTENSIONS_PROPCTRLR_USERCONTROL_HXX_
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_USERCONTROL_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_USERCONTROL_HXX
 
 #include "commoncontrol.hxx"
 #include <svtools/fmtfield.hxx>
@@ -159,6 +159,6 @@ namespace pcr
 } // namespace pcr
 
 
-#endif // _EXTENSIONS_PROPCTRLR_USERCONTROL_HXX_
+#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_USERCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __SO_CLOSELISTENER_HXX_
-#define __SO_CLOSELISTENER_HXX_
+#ifndef INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_SO_CLOSELISTENER_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_SO_CLOSELISTENER_HXX
 
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <cppuhelper/implbase1.hxx>

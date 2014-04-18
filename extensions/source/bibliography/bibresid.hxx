@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ADRRESID_HXX
-#define ADRRESID_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBRESID_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBRESID_HXX
 
 #include <tools/resid.hxx>
 
@@ -32,6 +32,6 @@ class BibResId : public ResId
 
 #define BIB_RESSTR(i)   BibResId(i).toString()
 
-#endif // ADRRESID_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBRESID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

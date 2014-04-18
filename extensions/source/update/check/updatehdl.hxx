@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UPDATE_HDL_HXX
-#define INCLUDED_UPDATE_HDL_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
 
 #include "boost/utility.hpp"
 #include <osl/mutex.hxx>
@@ -207,6 +207,6 @@ public:
     virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-#endif /* INCLUDED_UPDATE_HDL_HXX */
+#endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

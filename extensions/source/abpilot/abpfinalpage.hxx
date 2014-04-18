@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_ABP_ABPFINALPAGE_HXX
-#define EXTENSIONS_ABP_ABPFINALPAGE_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ABPFINALPAGE_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ABPFINALPAGE_HXX
 
 #include "abspage.hxx"
 #include "abptypes.hxx"
@@ -80,6 +80,6 @@ namespace abp
 }   // namespace abp
 
 
-#endif // EXTENSIONS_ABP_ABPFINALPAGE_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ABPFINALPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

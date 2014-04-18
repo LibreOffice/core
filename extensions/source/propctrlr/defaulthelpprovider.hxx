@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_DEFAULTHELPPROVIDER_HXX
-#define EXTENSIONS_DEFAULTHELPPROVIDER_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_DEFAULTHELPPROVIDER_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_DEFAULTHELPPROVIDER_HXX
 
 #include <com/sun/star/inspection/XPropertyControlObserver.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -79,6 +79,6 @@ namespace pcr
 } // namespace pcr
 
 
-#endif // EXTENSIONS_DEFAULTHELPPROVIDER_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_DEFAULTHELPPROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

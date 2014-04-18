@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_BIB_FORMCONTROLCONTAINER_HXX
-#define EXTENSIONS_BIB_FORMCONTROLCONTAINER_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_FORMCONTROLCONTAINER_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_FORMCONTROLCONTAINER_HXX
 
 #include <comphelper/broadcasthelper.hxx>
 #include "loadlisteneradapter.hxx"
@@ -70,6 +70,6 @@ namespace bib
 }   // namespace bib
 
 
-#endif // EXTENSIONS_BIB_FORMCONTROLCONTAINER_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_FORMCONTROLCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

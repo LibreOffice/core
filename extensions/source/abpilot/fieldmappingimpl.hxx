@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_ABP_FIELDMAPPINGIMPL_HXX
-#define EXTENSIONS_ABP_FIELDMAPPINGIMPL_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_ABPILOT_FIELDMAPPINGIMPL_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_ABPILOT_FIELDMAPPINGIMPL_HXX
 
 #include <rtl/ustring.hxx>
 #include "abptypes.hxx"
@@ -117,6 +117,6 @@ namespace abp
 }   // namespace abp
 
 
-#endif // EXTENSIONS_ABP_FIELDMAPPINGIMPL_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_ABPILOT_FIELDMAPPINGIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

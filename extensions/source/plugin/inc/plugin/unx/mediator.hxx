@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _MEDIATOR_HXX
-#define _MEDIATOR_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_UNX_MEDIATOR_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_UNX_MEDIATOR_HXX
 
 #include <string.h>
 #include <tools/link.hxx>
@@ -160,6 +160,6 @@ class MediatorListener : public osl::Thread
     virtual void onTerminated() SAL_OVERRIDE;
 };
 
-#endif // _MEDIATOR_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_UNX_MEDIATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

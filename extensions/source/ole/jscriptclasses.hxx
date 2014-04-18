@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef JSCRIPTCLASSES_HXX
-#define JSCRIPTCLASSES_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_JSCRIPTCLASSES_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_OLE_JSCRIPTCLASSES_HXX
 
 #include <wincrap.hxx>
 

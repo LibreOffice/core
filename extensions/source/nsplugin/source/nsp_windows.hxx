@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __NSP_WINDOWS_HXX__
-#define __NSP_WINDOWS_HXX__
+#ifndef INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_NSP_WINDOWS_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_NSP_WINDOWS_HXX
 #ifdef WNT
 #ifdef _MSC_VER
     #pragma warning (push,1)

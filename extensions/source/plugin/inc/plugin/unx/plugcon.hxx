@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _PLUGCON_HXX
-#define _PLUGCON_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_UNX_PLUGCON_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_UNX_PLUGCON_HXX
 
 #include <stdarg.h>
 #include <string.h>
@@ -224,6 +224,6 @@ const char* GetCommandName( CommandAtoms );
 
 #define POST_STRING( x ) x ? x : const_cast<char*>(""), x ? strlen(x) : 1
 
-#endif // _PLUGCON_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_UNX_PLUGCON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SMARTARRAY_H
-#define _SMARTARRAY_H
+#ifndef INCLUDED_EXTENSIONS_TEST_OLE_OLECONVERTERVAR1_SMARTARRAY_H
+#define INCLUDED_EXTENSIONS_TEST_OLE_OLECONVERTERVAR1_SMARTARRAY_H
 
 
 template< class sourceType>

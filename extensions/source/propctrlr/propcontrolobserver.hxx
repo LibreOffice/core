@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef PROPCONTROLOBSERVER_HXX
-#define PROPCONTROLOBSERVER_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PROPCONTROLOBSERVER_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PROPCONTROLOBSERVER_HXX
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 
@@ -45,6 +45,6 @@ namespace pcr
 } // namespace pcr
 
 
-#endif // PROPCONTROLOBSERVER_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PROPCONTROLOBSERVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

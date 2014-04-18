@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __PLUGIN_MSG_HXX
-#define __PLUGIN_MSG_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_SO_MSG_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_SO_MSG_HXX
 enum msg_type
 {
     SO_EMPTY,        // 0

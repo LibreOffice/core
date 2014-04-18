@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_PROPCTRLR_PUSHBUTTONNAVIGATION_HXX
-#define EXTENSIONS_PROPCTRLR_PUSHBUTTONNAVIGATION_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PUSHBUTTONNAVIGATION_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PUSHBUTTONNAVIGATION_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -97,6 +97,6 @@ namespace pcr
 }   // namespace pcr
 
 
-#endif // EXTENSIONS_PROPCTRLR_PUSHBUTTONNAVIGATION_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PUSHBUTTONNAVIGATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

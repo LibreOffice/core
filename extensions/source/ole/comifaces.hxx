@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __COMIFACES_HXX
-#define __COMIFACES_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_COMIFACES_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_OLE_COMIFACES_HXX
 
 #include <com/sun/star/uno/XInterface.hpp>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OLE2UNO_HXX
-#define _OLE2UNO_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_OLE2UNO_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_OLE_OLE2UNO_HXX
 
 
 #ifdef _MSC_VER
@@ -104,6 +104,6 @@ Mutex* getBridgeMutex();
 
 
 
-#endif // _OLE2UNO_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_OLE_OLE2UNO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

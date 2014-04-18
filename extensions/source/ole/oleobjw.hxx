@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OLEOBJW_HXX
-#define OLEOBJW_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_OLEOBJW_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_OLE_OLEOBJW_HXX
 
 #include "ole2uno.hxx"
 #include "wincrap.hxx"

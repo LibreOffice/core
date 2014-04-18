@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_FORMCONTROLLER_HXX
-#define EXTENSIONS_SOURCE_PROPCTRLR_FORMCONTROLLER_HXX
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMCONTROLLER_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMCONTROLLER_HXX
 
 #include "propcontroller.hxx"
 
@@ -125,6 +125,6 @@ namespace pcr
 } // namespace pcr
 
 
-#endif // EXTENSIONS_SOURCE_PROPCTRLR_FORMCONTROLLER_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __SO_INSTANCE_HXX__
-#define __SO_INSTANCE_HXX__
+#ifndef INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_SO_INSTANCE_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_SO_INSTANCE_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <osl/diagnose.h>
