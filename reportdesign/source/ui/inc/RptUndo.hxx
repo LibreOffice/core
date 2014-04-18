@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef RPTUI_UNDO_HXX
-#define RPTUI_UNDO_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_RPTUNDO_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_RPTUNDO_HXX
 
 #include "UndoActions.hxx"
 #include <functional>
@@ -138,6 +138,6 @@ namespace rptui
         virtual void        Redo() SAL_OVERRIDE;
     };
 }
-#endif // RPTUI_UNDO_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_RPTUNDO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_REPORTHELPERDEFINES_HXX
-#define INCLUDED_REPORTHELPERDEFINES_HXX
+#ifndef INCLUDED_REPORTDESIGN_INC_REPORTHELPERDEFINES_HXX
+#define INCLUDED_REPORTDESIGN_INC_REPORTHELPERDEFINES_HXX
 
 #define REPORTCONTROLMODEL_HEADER()  \
     virtual OUString SAL_CALL getDataField() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
@@ -183,6 +183,6 @@
 
 
 
-#endif // INCLUDED_REPORTHELPERDEFINES_HXX
+#endif // INCLUDED_REPORTDESIGN_INC_REPORTHELPERDEFINES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

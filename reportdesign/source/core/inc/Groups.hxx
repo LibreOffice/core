@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef REPORTDESIGN_API_GROUPS_HXX
-#define REPORTDESIGN_API_GROUPS_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_GROUPS_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_GROUPS_HXX
 
 #include <com/sun/star/report/XGroups.hpp>
 #include <cppuhelper/compbase1.hxx>
@@ -96,6 +96,6 @@ namespace reportdesign
         }
     };
 }
-#endif // REPORTDESIGN_API_GROUPS_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_GROUPS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

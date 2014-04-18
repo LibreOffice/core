@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REPORT_RPTUILIST_HXX
-#define _REPORT_RPTUILIST_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_RPTOBJECTLISTENER_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_RPTOBJECTLISTENER_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -52,6 +52,6 @@ public:
     virtual void SAL_CALL propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 }
-#endif // _REPORT_RPTUILIST_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_RPTOBJECTLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

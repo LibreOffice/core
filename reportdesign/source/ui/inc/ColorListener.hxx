@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef RPTUI_COLORLISTENER_HXX
-#define RPTUI_COLORLISTENER_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_COLORLISTENER_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_COLORLISTENER_HXX
 
 #include <vcl/window.hxx>
 #include <svtools/colorcfg.hxx>
@@ -72,6 +72,6 @@ namespace rptui
         virtual void    setCollapsed(sal_Bool _bCollapsed);
     };
 }
-#endif // RPTUI_COLORLISTENER_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_COLORLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

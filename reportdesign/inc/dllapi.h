@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REPORTDESIGNDLLAPI_H
-#define INCLUDED_REPORTDESIGNDLLAPI_H
+#ifndef INCLUDED_REPORTDESIGN_INC_DLLAPI_H
+#define INCLUDED_REPORTDESIGN_INC_DLLAPI_H
 
 #include "sal/types.h"
 
@@ -28,6 +28,6 @@
 #define REPORTDESIGN_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 
-#endif /* INCLUDED_REPORTDESIGNDLLAPI_H */
+#endif // INCLUDED_REPORTDESIGN_INC_DLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

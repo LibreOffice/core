@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REPORT_RPTUIDEF_HXX
-#define _REPORT_RPTUIDEF_HXX
+#ifndef INCLUDED_REPORTDESIGN_INC_RPTDEF_HXX
+#define INCLUDED_REPORTDESIGN_INC_RPTDEF_HXX
 
 #include <sal/config.h>
 
@@ -117,6 +117,6 @@ template<typename T> void setStyleProperty(const ::com::sun::star::uno::Referenc
 }
 }
 
-#endif // _REPORT_RPTUIDEF_HXX
+#endif // INCLUDED_REPORTDESIGN_INC_RPTDEF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

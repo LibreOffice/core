@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNDOENV_HXX
-#define INCLUDED_UNDOENV_HXX
+#ifndef INCLUDED_REPORTDESIGN_INC_UNDOENV_HXX
+#define INCLUDED_REPORTDESIGN_INC_UNDOENV_HXX
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>

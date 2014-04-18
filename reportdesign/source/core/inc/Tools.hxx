@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef REPORTDESIGN_TOOLS_HXX
-#define REPORTDESIGN_TOOLS_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_TOOLS_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_TOOLS_HXX
 
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XSection.hpp>
@@ -169,6 +169,6 @@ namespace reportdesign
 
 } // namespace reportdesign
 
-#endif // REPORTDESIGN_TOOLS_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_TOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

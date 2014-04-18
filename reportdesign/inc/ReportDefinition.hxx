@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef REPORTDESIGN_API_REPORTDEFINITION_HXX
-#define REPORTDESIGN_API_REPORTDEFINITION_HXX
+#ifndef INCLUDED_REPORTDESIGN_INC_REPORTDEFINITION_HXX
+#define INCLUDED_REPORTDESIGN_INC_REPORTDEFINITION_HXX
 
 #include "dllapi.h"
 
@@ -402,6 +402,6 @@ namespace reportdesign
 
 } // namespace reportdesign
 
-#endif // REPORTDESIGN_API_REPORTDEFINITION_HXX
+#endif // INCLUDED_REPORTDESIGN_INC_REPORTDEFINITION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

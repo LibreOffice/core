@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef RPTUI_STATUSBARCONTROLLER_HXX
-#define RPTUI_STATUSBARCONTROLLER_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_STATUSBARCONTROLLER_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_STATUSBARCONTROLLER_HXX
 
 #include <svtools/statusbarcontroller.hxx>
 #include <comphelper/uno3.hxx>

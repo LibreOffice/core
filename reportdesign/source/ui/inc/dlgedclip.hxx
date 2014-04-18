@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REPORT_RPTUICLIP_HXX
-#define _REPORT_RPTUICLIP_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDCLIP_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDCLIP_HXX
 
 #include <svtools/transfer.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -75,6 +75,6 @@ private:
     TSectionElements    m_aCopyElements;
 };
 }
-#endif // _REPORT_RPTUICLIP_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDCLIP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

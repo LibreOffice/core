@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_REPORTCONTROLLEROBSERVER_HXX
-#define INCLUDED_REPORTCONTROLLEROBSERVER_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTCONTROLLEROBSERVER_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTCONTROLLEROBSERVER_HXX
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
@@ -112,7 +112,7 @@ namespace rptui
 
 } // namespace rptui
 
-#endif /* INCLUDED_REPORTCONTROLLEROBSERVER_HXX */
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTCONTROLLEROBSERVER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

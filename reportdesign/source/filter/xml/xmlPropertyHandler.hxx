@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef RPT_XMLPROPHANDLER_HXX
-#define RPT_XMLPROPHANDLER_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLPROPERTYHANDLER_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLPROPERTYHANDLER_HXX
 
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/contextid.hxx>
@@ -37,6 +37,6 @@ namespace rptxml
 
 }// rptxml
 
-#endif //RPT_XMLPROPHANDLER_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLPROPERTYHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

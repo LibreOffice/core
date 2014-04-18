@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef REPORTFORMULA_HXX
-#define REPORTFORMULA_HXX
+#ifndef INCLUDED_REPORTDESIGN_INC_REPORTFORMULA_HXX
+#define INCLUDED_REPORTDESIGN_INC_REPORTFORMULA_HXX
 
 #include "dllapi.h"
 
@@ -121,6 +121,6 @@ namespace rptui
 } // namespace rptui
 
 
-#endif // REPORTFORMULA_HXX
+#endif // INCLUDED_REPORTDESIGN_INC_REPORTFORMULA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

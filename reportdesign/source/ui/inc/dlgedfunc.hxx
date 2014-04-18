@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _REPORT_RPTUIFUNC_HXX
-#define _REPORT_RPTUIFUNC_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFUNC_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFUNC_HXX
 
 #include <vcl/timer.hxx>
 
@@ -149,6 +149,6 @@ public:
 };
 
 }
-#endif //_REPORT_RPTUIFUNC_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFUNC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

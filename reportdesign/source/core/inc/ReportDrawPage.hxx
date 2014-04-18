@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef REPORTDRAWPAGE_HXX_INCLUDED
-#define REPORTDRAWPAGE_HXX_INCLUDED
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTDRAWPAGE_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTDRAWPAGE_HXX
 
 #include <svx/unopage.hxx>
 #include <com/sun/star/report/XSection.hpp>
@@ -38,6 +38,6 @@ namespace reportdesign
         virtual ~OReportDrawPage() throw(){}
     };
 }
-#endif //REPORTDRAWPAGE_HXX_INCLUDED
+#endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTDRAWPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

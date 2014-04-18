@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REPORT_PROPBRW_HXX
-#define _REPORT_PROPBRW_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_PROPBRW_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_PROPBRW_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -106,6 +106,6 @@ private:
 
 } // rptui
 
-#endif // _REPORT_PROPBRW_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_PROPBRW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

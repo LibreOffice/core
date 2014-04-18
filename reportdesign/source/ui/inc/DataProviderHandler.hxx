@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RPT_DATAPROVIDERHANDLER_HXX
-#define RPT_DATAPROVIDERHANDLER_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DATAPROVIDERHANDLER_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DATAPROVIDERHANDLER_HXX
 
 #include "sal/config.h"
 
@@ -120,6 +120,6 @@ namespace rptui
 } // namespace rptui
 
 
-#endif // RPT_DATAPROVIDERHANDLER_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DATAPROVIDERHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

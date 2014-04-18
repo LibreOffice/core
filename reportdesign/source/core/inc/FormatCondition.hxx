@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef RPT_FORMATCONDITION_HXX
-#define RPT_FORMATCONDITION_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_FORMATCONDITION_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_FORMATCONDITION_HXX
 
 #include <cppuhelper/propertysetmixin.hxx>
 #include <com/sun/star/report/XFormatCondition.hpp>
@@ -105,6 +105,6 @@ namespace reportdesign
         }
     };
 }
-#endif //RPT_FORMATCONDITION_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_FORMATCONDITION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

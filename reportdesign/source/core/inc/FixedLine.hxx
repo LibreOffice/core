@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef RPT_FIXEDLINE_HXX
-#define RPT_FIXEDLINE_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_FIXEDLINE_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_FIXEDLINE_HXX
 
 #include <cppuhelper/propertysetmixin.hxx>
 #include <com/sun/star/report/XFixedLine.hpp>
@@ -163,6 +163,6 @@ namespace reportdesign
         virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
-#endif //RPT_FIXEDLINE_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_FIXEDLINE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

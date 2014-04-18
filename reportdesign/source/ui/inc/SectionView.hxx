@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REPORT_SECTIONVIEW_HXX
-#define _REPORT_SECTIONVIEW_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_SECTIONVIEW_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_SECTIONVIEW_HXX
 
 
 #include <svx/svdview.hxx>
@@ -66,6 +66,6 @@ public:
     bool IsDragResize() const;
 };
 }
-#endif //_REPORT_SECTIONVIEW_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_SECTIONVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

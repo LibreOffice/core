@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RPT_REPORTCOMPONENTHANDLER_HXX
-#define RPT_REPORTCOMPONENTHANDLER_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTCOMPONENTHANDLER_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTCOMPONENTHANDLER_HXX
 
 #include "sal/config.h"
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -106,6 +106,6 @@ namespace rptui
 } // namespace rptui
 
 
-#endif // RPT_REPORTCOMPONENTHANDLER_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTCOMPONENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

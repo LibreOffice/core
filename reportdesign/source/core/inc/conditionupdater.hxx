@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONDITIONUPDATER_HXX
-#define CONDITIONUPDATER_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_CONDITIONUPDATER_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_CONDITIONUPDATER_HXX
 
 #include "conditionalexpression.hxx"
 
@@ -62,6 +62,6 @@ namespace rptui
 } // namespace rptui
 
 
-#endif // CONDITIONUPDATER_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_CONDITIONUPDATER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

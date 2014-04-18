@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RPTUI_MARKEDSECTION_HXX
-#define RPTUI_MARKEDSECTION_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_MARKEDSECTION_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_MARKEDSECTION_HXX
 
 #include <boost/shared_ptr.hpp>
 
@@ -52,6 +52,6 @@ namespace rptui
 
 } // rptui
 
-#endif /* RPTUI_MARKEDSECTION_HXX */
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_MARKEDSECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RPTXML_DBLOADER2_HXX
-#define RPTXML_DBLOADER2_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_DBLOADER2_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_DBLOADER2_HXX
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxwindow.hxx>

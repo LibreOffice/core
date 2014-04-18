@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef RPTUI_REPORT_DEFINES_HXX
-#define RPTUI_REPORT_DEFINES_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTDEFINES_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTDEFINES_HXX
 
 namespace rptui
 {
@@ -28,6 +28,6 @@ namespace rptui
 #define REPORT_EXTRA_SPACE           10
 
 }
-#endif //RPTUI_REPORT_DEFINES_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTDEFINES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

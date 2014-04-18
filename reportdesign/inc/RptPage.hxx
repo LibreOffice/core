@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _REPORT_RPTUIPAGE_HXX
-#define _REPORT_RPTUIPAGE_HXX
+#ifndef INCLUDED_REPORTDESIGN_INC_RPTPAGE_HXX
+#define INCLUDED_REPORTDESIGN_INC_RPTPAGE_HXX
 
 #include "dllapi.h"
 #include "svx/svdpage.hxx"
@@ -86,6 +86,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getSection() const;
 };
 }
-#endif //_REPORT_RPTUIPAGE_HXX
+#endif // INCLUDED_REPORTDESIGN_INC_RPTPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

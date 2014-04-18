@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _REPORT_RPTUIOBJ_HXX
-#define _REPORT_RPTUIOBJ_HXX
+#ifndef INCLUDED_REPORTDESIGN_INC_RPTOBJECT_HXX
+#define INCLUDED_REPORTDESIGN_INC_RPTOBJECT_HXX
 
 #include "dllapi.h"
 #include <svx/svdoole2.hxx>
@@ -283,6 +283,6 @@ private:
 
 } // rptui
 
-#endif // _REPORT_RPTUIOBJ_HXX
+#endif // INCLUDED_REPORTDESIGN_INC_RPTOBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RPTUI_FUNCTIONHELPER_HXX
-#define RPTUI_FUNCTIONHELPER_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_FUNCTIONHELPER_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_FUNCTIONHELPER_HXX
 
 #include <formula/IFunctionDescription.hxx>
 #include <com/sun/star/report/meta/XFunctionManager.hpp>
@@ -99,6 +99,6 @@ public:
 } // rptui
 
 
-#endif //RPTUI_FUNCTIONHELPER_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_FUNCTIONHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

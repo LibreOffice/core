@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef REPORTDESIGN_API_REPORTENGINEJFREE_HXX
-#define REPORTDESIGN_API_REPORTENGINEJFREE_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTENGINEJFREE_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTENGINEJFREE_HXX
 
 #include <sal/config.h>
 
@@ -131,6 +131,6 @@ namespace reportdesign
         }
     };
 }
-#endif //REPORTDESIGN_API_REPORTENGINEJFREE_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTENGINEJFREE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

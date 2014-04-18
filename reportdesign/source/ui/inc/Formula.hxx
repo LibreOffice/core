@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RPTUI_FORMULA_HXX
-#define RPTUI_FORMULA_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_FORMULA_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_FORMULA_HXX
 
 #include <formula/formula.hxx>
 #include <formula/IControlReferenceHandler.hxx>
@@ -109,6 +109,6 @@ protected:
 } // rptui
 
 
-#endif // RPTUI_FORMULA_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_FORMULA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

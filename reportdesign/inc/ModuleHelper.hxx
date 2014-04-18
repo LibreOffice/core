@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RPTUI_MODULE_HELPER_RPT_HXX_
-#define _RPTUI_MODULE_HELPER_RPT_HXX_
+#ifndef INCLUDED_REPORTDESIGN_INC_MODULEHELPER_HXX
+#define INCLUDED_REPORTDESIGN_INC_MODULEHELPER_HXX
 
 #include "dllapi.h"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -86,7 +86,7 @@ namespace rptui
 }   // namespace rptui
 
 
-#endif // _RPTUI_MODULE_HELPER_RPT_HXX_
+#endif // INCLUDED_REPORTDESIGN_INC_MODULEHELPER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

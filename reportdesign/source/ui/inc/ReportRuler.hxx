@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef RPTUI_RULER_HXX
-#define RPTUI_RULER_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTRULER_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTRULER_HXX
 
 #include <vcl/window.hxx>
 #include <com/sun/star/report/XSection.hpp>
@@ -52,6 +52,6 @@ namespace rptui
 
 } // rptui
 
-#endif // RPTUI_RULER_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTRULER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

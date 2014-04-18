@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef REPORT_RPTMODEL_HXX
-#define REPORT_RPTMODEL_HXX
+#ifndef INCLUDED_REPORTDESIGN_INC_RPTMODEL_HXX
+#define INCLUDED_REPORTDESIGN_INC_RPTMODEL_HXX
 
 #include "dllapi.h"
 #include <svx/svdmodel.hxx>

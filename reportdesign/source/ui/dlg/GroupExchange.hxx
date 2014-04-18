@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef RPTUI_GROUP_EXCHANGE_HXX
-#define RPTUI_GROUP_EXCHANGE_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_DLG_GROUPEXCHANGE_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_DLG_GROUPEXCHANGE_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/implbase2.hxx>
@@ -41,6 +41,6 @@ namespace rptui
         virtual void        ObjectReleased() SAL_OVERRIDE;
     };
 }
-#endif // RPTUI_GROUP_EXCHANGE_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_DLG_GROUPEXCHANGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

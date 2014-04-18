@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RPTUI_CONDFORMAT_HXX
-#define RPTUI_CONDFORMAT_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_CONDFORMAT_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_CONDFORMAT_HXX
 
 #include "ModuleHelper.hxx"
 
@@ -178,6 +178,6 @@ namespace rptui
 } // namespace rptui
 
 
-#endif // RPTUI_CONDFORMAT_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_CONDFORMAT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

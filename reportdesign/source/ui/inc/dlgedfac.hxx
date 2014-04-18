@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REPORT_RPTUIFAC_HXX
-#define _REPORT_RPTUIFAC_HXX
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFAC_HXX
+#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFAC_HXX
 
 
 #include <svx/svdobj.hxx>
@@ -37,6 +37,6 @@ public:
     DECL_LINK( MakeObject, SdrObjFactory * );
 };
 }
-#endif // _REPORT_RPTUIFAC_HXX
+#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFAC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
