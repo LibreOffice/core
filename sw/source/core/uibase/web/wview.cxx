@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sfx2/msg.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
@@ -93,6 +95,7 @@ SwWebView::~SwWebView()
 
 void SwWebView::SelectShell()
 {
+#if HAVE_FEATURE_DESKTOP
     // Decision whether UpdateTable must be called
     bool bUpdateTable = false;
     const SwFrmFmt* pCurTableFmt = GetWrtShell().GetTableFmt();
@@ -283,6 +286,7 @@ void SwWebView::SelectShell()
     //now the table update
     if(bUpdateTable)
         GetWrtShell().UpdateTable();
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
