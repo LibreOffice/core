@@ -63,8 +63,14 @@
 
 #include "floatingwindowaccessible.hxx"
 
-namespace accessibility
-{
+using namespace ::accessibility;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::accessibility;
+using namespace ::svt;
+using namespace ::svt::table;
+
+namespace {
 
 inline bool hasFloatingChild(Window *pWindow)
 {
@@ -75,426 +81,419 @@ inline bool hasFloatingChild(Window *pWindow)
     return false;
 }
 
+// IAccessibleFactory
+class AccessibleFactory :public ::toolkit::IAccessibleFactory
+                        ,public ::svt::IAccessibleFactory
+{
+private:
+    oslInterlockedCount m_refCount;
 
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::awt;
-    using namespace ::com::sun::star::accessibility;
-    using namespace ::svt;
-    using namespace ::svt::table;
+public:
+    AccessibleFactory();
 
-    // IAccessibleFactory
-    class AccessibleFactory :public ::toolkit::IAccessibleFactory
-                            ,public ::svt::IAccessibleFactory
+    // IReference
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
+
+    // ::toolkit::IAccessibleFactory
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        createAccessibleContext( VCLXButton* _pXWindow ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        createAccessibleContext( VCLXCheckBox* _pXWindow ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        createAccessibleContext( VCLXRadioButton* _pXWindow ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        createAccessibleContext( VCLXListBox* _pXWindow ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        createAccessibleContext( VCLXFixedText* _pXWindow ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        createAccessibleContext( VCLXFixedHyperlink* _pXWindow ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        createAccessibleContext( VCLXScrollBar* _pXWindow ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        createAccessibleContext( VCLXEdit* _pXWindow ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        createAccessibleContext( VCLXComboBox* _pXWindow ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        createAccessibleContext( VCLXToolBox* _pXWindow ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        createAccessibleContext( VCLXWindow* _pXWindow ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        createAccessible( Menu* _pMenu, sal_Bool _bIsMenuBar ) SAL_OVERRIDE;
+
+    // ::svt::IAccessibleFactory
+    virtual IAccessibleTabListBox*
+        createAccessibleTabListBox(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent,
+            SvHeaderTabListBox& rBox
+        ) const SAL_OVERRIDE;
+
+    virtual IAccessibleBrowseBox*
+        createAccessibleBrowseBox(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+            IAccessibleTableProvider& _rBrowseBox
+        ) const SAL_OVERRIDE;
+
+    virtual IAccessibleTableControl*
+        createAccessibleTableControl(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+            IAccessibleTable& _rTable
+        ) const SAL_OVERRIDE;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        createAccessibleIconChoiceCtrl(
+            SvtIconChoiceCtrl& _rIconCtrl,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xParent
+        ) const SAL_OVERRIDE;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        createAccessibleTabBar(
+            TabBar& _rTabBar
+        ) const SAL_OVERRIDE;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        createAccessibleTextWindowContext(
+            VCLXWindow* pVclXWindow, TextEngine& rEngine, TextView& rView
+        ) const SAL_OVERRIDE;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        createAccessibleTreeListBox(
+            SvTreeListBox& _rListBox,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xParent
+        ) const SAL_OVERRIDE;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        createAccessibleBrowseBoxHeaderBar(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent,
+            IAccessibleTableProvider& _rOwningTable,
+            AccessibleBrowseBoxObjType _eObjType
+        ) const SAL_OVERRIDE;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        createAccessibleBrowseBoxTableCell(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+            IAccessibleTableProvider& _rBrowseBox,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+            sal_Int32 _nRowId,
+            sal_uInt16 _nColId,
+            sal_Int32 _nOffset
+        ) const SAL_OVERRIDE;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        createAccessibleBrowseBoxHeaderCell(
+            sal_Int32 _nColumnRowId,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent,
+            IAccessibleTableProvider& _rBrowseBox,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+            AccessibleBrowseBoxObjType  _eObjType
+        ) const SAL_OVERRIDE;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        createAccessibleCheckBoxCell(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+            IAccessibleTableProvider& _rBrowseBox,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+            sal_Int32 _nRowPos,
+            sal_uInt16 _nColPos,
+            const TriState& _eState,
+            bool _bIsTriState
+        ) const SAL_OVERRIDE;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        createEditBrowseBoxTableCellAccess(
+            const ::com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible >& _rxParent,
+            const ::com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible >& _rxControlAccessible,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _rxFocusWindow,
+            IAccessibleTableProvider& _rBrowseBox,
+            sal_Int32 _nRowPos,
+            sal_uInt16 _nColPos
+        ) const SAL_OVERRIDE;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        createAccessibleToolPanelDeck(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
+            ::svt::ToolPanelDeck& i_rPanelDeck
+        ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        createAccessibleToolPanelTabBar(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
+            ::svt::IToolPanelDeck& i_rPanelDeck,
+            ::svt::PanelTabBar& i_rTabBar
+        ) SAL_OVERRIDE;
+
+protected:
+    virtual ~AccessibleFactory();
+};
+
+AccessibleFactory::AccessibleFactory()
+    :m_refCount( 0 )
+{
+}
+
+AccessibleFactory::~AccessibleFactory()
+{
+}
+
+oslInterlockedCount SAL_CALL AccessibleFactory::acquire()
+{
+    return osl_atomic_increment( &m_refCount );
+}
+
+oslInterlockedCount SAL_CALL AccessibleFactory::release()
+{
+    if ( 0 == osl_atomic_decrement( &m_refCount ) )
     {
-    private:
-        oslInterlockedCount m_refCount;
-
-    public:
-        AccessibleFactory();
-
-        // IReference
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
-
-        // ::toolkit::IAccessibleFactory
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            createAccessibleContext( VCLXButton* _pXWindow ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            createAccessibleContext( VCLXCheckBox* _pXWindow ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            createAccessibleContext( VCLXRadioButton* _pXWindow ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            createAccessibleContext( VCLXListBox* _pXWindow ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            createAccessibleContext( VCLXFixedText* _pXWindow ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            createAccessibleContext( VCLXFixedHyperlink* _pXWindow ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            createAccessibleContext( VCLXScrollBar* _pXWindow ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            createAccessibleContext( VCLXEdit* _pXWindow ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            createAccessibleContext( VCLXComboBox* _pXWindow ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            createAccessibleContext( VCLXToolBox* _pXWindow ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            createAccessibleContext( VCLXWindow* _pXWindow ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            createAccessible( Menu* _pMenu, sal_Bool _bIsMenuBar ) SAL_OVERRIDE;
-
-        // ::svt::IAccessibleFactory
-        virtual IAccessibleTabListBox*
-            createAccessibleTabListBox(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent,
-                SvHeaderTabListBox& rBox
-            ) const SAL_OVERRIDE;
-
-        virtual IAccessibleBrowseBox*
-            createAccessibleBrowseBox(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
-                IAccessibleTableProvider& _rBrowseBox
-            ) const SAL_OVERRIDE;
-
-        virtual IAccessibleTableControl*
-            createAccessibleTableControl(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
-                IAccessibleTable& _rTable
-            ) const SAL_OVERRIDE;
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            createAccessibleIconChoiceCtrl(
-                SvtIconChoiceCtrl& _rIconCtrl,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xParent
-            ) const SAL_OVERRIDE;
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            createAccessibleTabBar(
-                TabBar& _rTabBar
-            ) const SAL_OVERRIDE;
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            createAccessibleTextWindowContext(
-                VCLXWindow* pVclXWindow, TextEngine& rEngine, TextView& rView
-            ) const SAL_OVERRIDE;
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            createAccessibleTreeListBox(
-                SvTreeListBox& _rListBox,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xParent
-            ) const SAL_OVERRIDE;
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            createAccessibleBrowseBoxHeaderBar(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent,
-                IAccessibleTableProvider& _rOwningTable,
-                AccessibleBrowseBoxObjType _eObjType
-            ) const SAL_OVERRIDE;
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            createAccessibleBrowseBoxTableCell(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
-                IAccessibleTableProvider& _rBrowseBox,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
-                sal_Int32 _nRowId,
-                sal_uInt16 _nColId,
-                sal_Int32 _nOffset
-            ) const SAL_OVERRIDE;
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            createAccessibleBrowseBoxHeaderCell(
-                sal_Int32 _nColumnRowId,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent,
-                IAccessibleTableProvider& _rBrowseBox,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
-                AccessibleBrowseBoxObjType  _eObjType
-            ) const SAL_OVERRIDE;
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            createAccessibleCheckBoxCell(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
-                IAccessibleTableProvider& _rBrowseBox,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
-                sal_Int32 _nRowPos,
-                sal_uInt16 _nColPos,
-                const TriState& _eState,
-                bool _bIsTriState
-            ) const SAL_OVERRIDE;
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            createEditBrowseBoxTableCellAccess(
-                const ::com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible >& _rxParent,
-                const ::com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible >& _rxControlAccessible,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _rxFocusWindow,
-                IAccessibleTableProvider& _rBrowseBox,
-                sal_Int32 _nRowPos,
-                sal_uInt16 _nColPos
-            ) const SAL_OVERRIDE;
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            createAccessibleToolPanelDeck(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
-                ::svt::ToolPanelDeck& i_rPanelDeck
-            ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            createAccessibleToolPanelTabBar(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
-                ::svt::IToolPanelDeck& i_rPanelDeck,
-                ::svt::PanelTabBar& i_rTabBar
-            ) SAL_OVERRIDE;
-
-    protected:
-        virtual ~AccessibleFactory();
-    };
-
-    AccessibleFactory::AccessibleFactory()
-        :m_refCount( 0 )
-    {
+        delete this;
+        return 0;
     }
 
-    AccessibleFactory::~AccessibleFactory()
-    {
-    }
+    return m_refCount;
+}
 
-    oslInterlockedCount SAL_CALL AccessibleFactory::acquire()
-    {
-        return osl_atomic_increment( &m_refCount );
-    }
+Reference< XAccessible > AccessibleFactory::createAccessible( Menu* _pMenu, sal_Bool _bIsMenuBar )
+{
+    OAccessibleMenuBaseComponent* pAccessible;
+    if ( _bIsMenuBar )
+        pAccessible = new VCLXAccessibleMenuBar( _pMenu );
+    else
+        pAccessible = new VCLXAccessiblePopupMenu( _pMenu );
+    pAccessible->SetStates();
+    return pAccessible;
+}
 
-    oslInterlockedCount SAL_CALL AccessibleFactory::release()
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXButton* _pXWindow )
+{
+    return new VCLXAccessibleButton( _pXWindow );
+}
+
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXCheckBox* _pXWindow )
+{
+    return new VCLXAccessibleCheckBox( _pXWindow );
+}
+
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXRadioButton* _pXWindow )
+{
+    return new VCLXAccessibleRadioButton( _pXWindow );
+}
+
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXListBox* _pXWindow )
+{
+    bool bIsDropDownBox = false;
+    ListBox* pBox = static_cast< ListBox* >( _pXWindow->GetWindow() );
+    if ( pBox )
+        bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
+
+    if ( bIsDropDownBox )
+        return new VCLXAccessibleDropDownListBox( _pXWindow );
+    else
+        return new VCLXAccessibleListBox( _pXWindow );
+}
+
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXFixedText* _pXWindow )
+{
+    return new VCLXAccessibleFixedText( _pXWindow );
+}
+
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXFixedHyperlink* _pXWindow )
+{
+    return new VCLXAccessibleFixedHyperlink( _pXWindow );
+}
+
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXScrollBar* _pXWindow )
+{
+    return new VCLXAccessibleScrollBar( _pXWindow );
+}
+
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXEdit* _pXWindow )
+{
+    return new VCLXAccessibleEdit( _pXWindow );
+}
+
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXComboBox* _pXWindow )
+{
+    bool bIsDropDownBox = false;
+    ComboBox* pBox = static_cast< ComboBox* >( _pXWindow->GetWindow() );
+    if ( pBox )
+        bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
+
+    if ( bIsDropDownBox )
+        return new VCLXAccessibleDropDownComboBox( _pXWindow );
+    else
+        return new VCLXAccessibleComboBox( _pXWindow );
+}
+
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXWindow* _pXWindow )
+{
+    Reference< XAccessibleContext > xContext;
+
+    Window* pWindow = _pXWindow->GetWindow();
+    if ( pWindow )
     {
-        if ( 0 == osl_atomic_decrement( &m_refCount ) )
+        WindowType nType = pWindow->GetType();
+
+        if ( nType == WINDOW_MENUBARWINDOW || pWindow->IsMenuFloatingWindow() || pWindow->IsToolbarFloatingWindow() )
         {
-            delete this;
-            return 0;
+            Reference< XAccessible > xAcc( pWindow->GetAccessible() );
+            if ( xAcc.is() )
+            {
+                Reference< XAccessibleContext > xCont( xAcc->getAccessibleContext() );
+                if ( pWindow->GetType() == WINDOW_MENUBARWINDOW ||
+                    ( xCont.is() && xCont->getAccessibleRole() == AccessibleRole::POPUP_MENU ) )
+                {
+                    xContext = xCont;
+                }
+            }
         }
 
-        return m_refCount;
-    }
-
-    Reference< XAccessible > AccessibleFactory::createAccessible( Menu* _pMenu, sal_Bool _bIsMenuBar )
-    {
-        OAccessibleMenuBaseComponent* pAccessible;
-        if ( _bIsMenuBar )
-            pAccessible = new VCLXAccessibleMenuBar( _pMenu );
-        else
-            pAccessible = new VCLXAccessiblePopupMenu( _pMenu );
-        pAccessible->SetStates();
-        return pAccessible;
-    }
-
-    Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXButton* _pXWindow )
-    {
-        return new VCLXAccessibleButton( _pXWindow );
-    }
-
-    Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXCheckBox* _pXWindow )
-    {
-        return new VCLXAccessibleCheckBox( _pXWindow );
-    }
-
-    Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXRadioButton* _pXWindow )
-    {
-        return new VCLXAccessibleRadioButton( _pXWindow );
-    }
-
-    Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXListBox* _pXWindow )
-    {
-        bool bIsDropDownBox = false;
-        ListBox* pBox = static_cast< ListBox* >( _pXWindow->GetWindow() );
-        if ( pBox )
-            bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
-
-        if ( bIsDropDownBox )
-            return new VCLXAccessibleDropDownListBox( _pXWindow );
-        else
-            return new VCLXAccessibleListBox( _pXWindow );
-    }
-
-    Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXFixedText* _pXWindow )
-    {
-        return new VCLXAccessibleFixedText( _pXWindow );
-    }
-
-    Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXFixedHyperlink* _pXWindow )
-    {
-        return new VCLXAccessibleFixedHyperlink( _pXWindow );
-    }
-
-    Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXScrollBar* _pXWindow )
-    {
-        return new VCLXAccessibleScrollBar( _pXWindow );
-    }
-
-    Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXEdit* _pXWindow )
-    {
-        return new VCLXAccessibleEdit( _pXWindow );
-    }
-
-    Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXComboBox* _pXWindow )
-    {
-        bool bIsDropDownBox = false;
-        ComboBox* pBox = static_cast< ComboBox* >( _pXWindow->GetWindow() );
-        if ( pBox )
-            bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
-
-        if ( bIsDropDownBox )
-            return new VCLXAccessibleDropDownComboBox( _pXWindow );
-        else
-            return new VCLXAccessibleComboBox( _pXWindow );
-    }
-
-    Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXWindow* _pXWindow )
-    {
-        Reference< XAccessibleContext > xContext;
-
-        Window* pWindow = _pXWindow->GetWindow();
-        if ( pWindow )
+        else if ( nType == WINDOW_STATUSBAR )
         {
-            WindowType nType = pWindow->GetType();
+            xContext = (XAccessibleContext*) new VCLXAccessibleStatusBar( _pXWindow );
+        }
 
-            if ( nType == WINDOW_MENUBARWINDOW || pWindow->IsMenuFloatingWindow() || pWindow->IsToolbarFloatingWindow() )
-            {
-                Reference< XAccessible > xAcc( pWindow->GetAccessible() );
-                if ( xAcc.is() )
-                {
-                    Reference< XAccessibleContext > xCont( xAcc->getAccessibleContext() );
-                    if ( pWindow->GetType() == WINDOW_MENUBARWINDOW ||
-                        ( xCont.is() && xCont->getAccessibleRole() == AccessibleRole::POPUP_MENU ) )
-                    {
-                        xContext = xCont;
-                    }
-                }
-            }
+        else if ( nType == WINDOW_TABCONTROL )
+        {
+            xContext = (XAccessibleContext*) new VCLXAccessibleTabControl( _pXWindow );
+        }
 
-            else if ( nType == WINDOW_STATUSBAR )
-            {
-                xContext = (XAccessibleContext*) new VCLXAccessibleStatusBar( _pXWindow );
-            }
+        else if ( nType == WINDOW_TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WINDOW_TABCONTROL )
+        {
+            xContext = new VCLXAccessibleTabPageWindow( _pXWindow );
+        }
 
-            else if ( nType == WINDOW_TABCONTROL )
-            {
-                xContext = (XAccessibleContext*) new VCLXAccessibleTabControl( _pXWindow );
-            }
+        else if ( nType == WINDOW_FLOATINGWINDOW )
+        {
+            xContext = new FloatingWindowAccessible( _pXWindow );
+        }
 
-            else if ( nType == WINDOW_TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WINDOW_TABCONTROL )
+        else if ( nType == WINDOW_BORDERWINDOW && hasFloatingChild( pWindow ) )
+        {
+            // The logic here has to match that of Window::GetAccessibleParentWindow in
+            // vcl/source/window/window.cxx to avoid PopupMenuFloatingWindow
+            // becoming a11y parents of themselves
+            Window* pChild = pWindow->GetAccessibleChildWindow(0);
+            if (PopupMenuFloatingWindow::isPopupMenu(pChild))
             {
-                xContext = new VCLXAccessibleTabPageWindow( _pXWindow );
-            }
-
-            else if ( nType == WINDOW_FLOATINGWINDOW )
-            {
-                xContext = new FloatingWindowAccessible( _pXWindow );
-            }
-
-            else if ( nType == WINDOW_BORDERWINDOW && hasFloatingChild( pWindow ) )
-            {
-                // The logic here has to match that of Window::GetAccessibleParentWindow in
-                // vcl/source/window/window.cxx to avoid PopupMenuFloatingWindow
-                // becoming a11y parents of themselves
-                Window* pChild = pWindow->GetAccessibleChildWindow(0);
-                if (PopupMenuFloatingWindow::isPopupMenu(pChild))
-                {
-                    // Get the accessible context from the child window.
-                    Reference<XAccessible> xAccessible = pChild->CreateAccessible();
-                    if (xAccessible.is())
-                        xContext = xAccessible->getAccessibleContext();
-                }
-                else
-                    xContext = new FloatingWindowAccessible( _pXWindow );
-            }
-
-            else if ( ( nType == WINDOW_HELPTEXTWINDOW ) || ( nType == WINDOW_FIXEDLINE ) )
-            {
-               xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleFixedText( _pXWindow );
+                // Get the accessible context from the child window.
+                Reference<XAccessible> xAccessible = pChild->CreateAccessible();
+                if (xAccessible.is())
+                    xContext = xAccessible->getAccessibleContext();
             }
             else
-            {
-               xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleComponent( _pXWindow );
-            }
+                xContext = new FloatingWindowAccessible( _pXWindow );
         }
-        return xContext;
-    }
 
-    Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXToolBox* _pXWindow )
-    {
-        return new VCLXAccessibleToolBox( _pXWindow );
+        else if ( ( nType == WINDOW_HELPTEXTWINDOW ) || ( nType == WINDOW_FIXEDLINE ) )
+        {
+           xContext = (XAccessibleContext*) new VCLXAccessibleFixedText( _pXWindow );
+        }
+        else
+        {
+           xContext = (XAccessibleContext*) new VCLXAccessibleComponent( _pXWindow );
+        }
     }
+    return xContext;
+}
 
-    IAccessibleTabListBox* AccessibleFactory::createAccessibleTabListBox(
-        const Reference< XAccessible >& rxParent, SvHeaderTabListBox& rBox ) const
-    {
-        return new AccessibleTabListBox( rxParent, rBox );
-    }
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXToolBox* _pXWindow )
+{
+    return new VCLXAccessibleToolBox( _pXWindow );
+}
 
-    IAccessibleBrowseBox* AccessibleFactory::createAccessibleBrowseBox(
-        const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox ) const
-    {
-        return new AccessibleBrowseBoxAccess( _rxParent, _rBrowseBox );
-    }
+IAccessibleTabListBox* AccessibleFactory::createAccessibleTabListBox(
+    const Reference< XAccessible >& rxParent, SvHeaderTabListBox& rBox ) const
+{
+    return new AccessibleTabListBox( rxParent, rBox );
+}
 
-    IAccessibleTableControl* AccessibleFactory::createAccessibleTableControl(
-        const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable ) const
-    {
-        return new AccessibleGridControlAccess( _rxParent, _rTable );
-    }
+IAccessibleBrowseBox* AccessibleFactory::createAccessibleBrowseBox(
+    const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox ) const
+{
+    return new AccessibleBrowseBoxAccess( _rxParent, _rBrowseBox );
+}
 
-    Reference< XAccessible > AccessibleFactory::createAccessibleIconChoiceCtrl(
-        SvtIconChoiceCtrl& _rIconCtrl, const Reference< XAccessible >& _xParent ) const
-    {
-        return new AccessibleIconChoiceCtrl( _rIconCtrl, _xParent );
-    }
+IAccessibleTableControl* AccessibleFactory::createAccessibleTableControl(
+    const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable ) const
+{
+    return new AccessibleGridControlAccess( _rxParent, _rTable );
+}
 
-    Reference< XAccessible > AccessibleFactory::createAccessibleTabBar( TabBar& _rTabBar ) const
-    {
-        return new AccessibleTabBar( &_rTabBar );
-    }
+Reference< XAccessible > AccessibleFactory::createAccessibleIconChoiceCtrl(
+    SvtIconChoiceCtrl& _rIconCtrl, const Reference< XAccessible >& _xParent ) const
+{
+    return new AccessibleIconChoiceCtrl( _rIconCtrl, _xParent );
+}
 
-    Reference< XAccessibleContext > AccessibleFactory::createAccessibleTextWindowContext(
-        VCLXWindow* pVclXWindow, TextEngine& rEngine, TextView& rView ) const
-    {
-        return new Document( pVclXWindow, rEngine, rView );
-    }
+Reference< XAccessible > AccessibleFactory::createAccessibleTabBar( TabBar& _rTabBar ) const
+{
+    return new AccessibleTabBar( &_rTabBar );
+}
 
-    Reference< XAccessible > AccessibleFactory::createAccessibleTreeListBox(
-        SvTreeListBox& _rListBox, const Reference< XAccessible >& _xParent ) const
-    {
-        return new AccessibleListBox( _rListBox, _xParent );
-    }
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleTextWindowContext(
+    VCLXWindow* pVclXWindow, TextEngine& rEngine, TextView& rView ) const
+{
+    return new Document( pVclXWindow, rEngine, rView );
+}
 
-    Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderBar(
-        const Reference< XAccessible >& rxParent, IAccessibleTableProvider& _rOwningTable,
-        AccessibleBrowseBoxObjType _eObjType ) const
-    {
-        return new AccessibleBrowseBoxHeaderBar( rxParent, _rOwningTable, _eObjType );
-    }
+Reference< XAccessible > AccessibleFactory::createAccessibleTreeListBox(
+    SvTreeListBox& _rListBox, const Reference< XAccessible >& _xParent ) const
+{
+    return new AccessibleListBox( _rListBox, _xParent );
+}
 
-    Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxTableCell(
-        const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox,
-        const Reference< XWindow >& _xFocusWindow, sal_Int32 _nRowId, sal_uInt16 _nColId, sal_Int32 _nOffset ) const
-    {
-        return new AccessibleBrowseBoxTableCell( _rxParent, _rBrowseBox, _xFocusWindow,
-            _nRowId, _nColId, _nOffset );
-    }
+Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderBar(
+    const Reference< XAccessible >& rxParent, IAccessibleTableProvider& _rOwningTable,
+    AccessibleBrowseBoxObjType _eObjType ) const
+{
+    return new AccessibleBrowseBoxHeaderBar( rxParent, _rOwningTable, _eObjType );
+}
 
-    Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderCell(
-        sal_Int32 _nColumnRowId, const Reference< XAccessible >& rxParent, IAccessibleTableProvider& _rBrowseBox,
-        const Reference< XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  _eObjType ) const
-    {
-        return new AccessibleBrowseBoxHeaderCell( _nColumnRowId, rxParent, _rBrowseBox,
-            _xFocusWindow, _eObjType );
-    }
+Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxTableCell(
+    const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox,
+    const Reference< XWindow >& _xFocusWindow, sal_Int32 _nRowId, sal_uInt16 _nColId, sal_Int32 _nOffset ) const
+{
+    return new AccessibleBrowseBoxTableCell( _rxParent, _rBrowseBox, _xFocusWindow,
+        _nRowId, _nColId, _nOffset );
+}
 
-    Reference< XAccessible > AccessibleFactory::createAccessibleCheckBoxCell(
-        const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox,
-        const Reference< XWindow >& _xFocusWindow, sal_Int32 _nRowPos, sal_uInt16 _nColPos,
-        const TriState& _eState, bool _bIsTriState ) const
-    {
-        return new AccessibleCheckBoxCell( _rxParent, _rBrowseBox, _xFocusWindow,
-            _nRowPos, _nColPos, _eState, _bIsTriState );
-    }
+Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderCell(
+    sal_Int32 _nColumnRowId, const Reference< XAccessible >& rxParent, IAccessibleTableProvider& _rBrowseBox,
+    const Reference< XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  _eObjType ) const
+{
+    return new AccessibleBrowseBoxHeaderCell( _nColumnRowId, rxParent, _rBrowseBox,
+        _xFocusWindow, _eObjType );
+}
 
-    Reference< XAccessible > AccessibleFactory::createEditBrowseBoxTableCellAccess(
-        const Reference< XAccessible >& _rxParent, const Reference< XAccessible >& _rxControlAccessible,
-        const Reference< XWindow >& _rxFocusWindow, IAccessibleTableProvider& _rBrowseBox,
-        sal_Int32 _nRowPos, sal_uInt16 _nColPos ) const
-    {
-        return new EditBrowseBoxTableCellAccess( _rxParent, _rxControlAccessible,
-            _rxFocusWindow, _rBrowseBox, _nRowPos, _nColPos );
-    }
+Reference< XAccessible > AccessibleFactory::createAccessibleCheckBoxCell(
+    const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox,
+    const Reference< XWindow >& _xFocusWindow, sal_Int32 _nRowPos, sal_uInt16 _nColPos,
+    const TriState& _eState, bool _bIsTriState ) const
+{
+    return new AccessibleCheckBoxCell( _rxParent, _rBrowseBox, _xFocusWindow,
+        _nRowPos, _nColPos, _eState, _bIsTriState );
+}
 
-    Reference< XAccessibleContext > AccessibleFactory::createAccessibleToolPanelDeck(
-            const Reference< XAccessible >& i_rAccessibleParent, ::svt::ToolPanelDeck& i_rPanelDeck )
-    {
-        return new AccessibleToolPanelDeck( i_rAccessibleParent, i_rPanelDeck );
-    }
+Reference< XAccessible > AccessibleFactory::createEditBrowseBoxTableCellAccess(
+    const Reference< XAccessible >& _rxParent, const Reference< XAccessible >& _rxControlAccessible,
+    const Reference< XWindow >& _rxFocusWindow, IAccessibleTableProvider& _rBrowseBox,
+    sal_Int32 _nRowPos, sal_uInt16 _nColPos ) const
+{
+    return new EditBrowseBoxTableCellAccess( _rxParent, _rxControlAccessible,
+        _rxFocusWindow, _rBrowseBox, _nRowPos, _nColPos );
+}
 
-    Reference< XAccessibleContext > AccessibleFactory::createAccessibleToolPanelTabBar(
-        const Reference< XAccessible >& i_rAccessibleParent, ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar )
-    {
-        return new AccessibleToolPanelTabBar( i_rAccessibleParent, i_rPanelDeck, i_rTabBar );
-    }
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleToolPanelDeck(
+        const Reference< XAccessible >& i_rAccessibleParent, ::svt::ToolPanelDeck& i_rPanelDeck )
+{
+    return new AccessibleToolPanelDeck( i_rAccessibleParent, i_rPanelDeck );
+}
 
-}   // namespace accessibility
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleToolPanelTabBar(
+    const Reference< XAccessible >& i_rAccessibleParent, ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar )
+{
+    return new AccessibleToolPanelTabBar( i_rAccessibleParent, i_rPanelDeck, i_rTabBar );
+}
+
+} // anonymous namespace
 
 /* this is the entry point to retrieve a factory for the toolkit-level Accessible/Contexts supplied
     by this library
@@ -506,7 +505,7 @@ extern "C"
 {
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL getStandardAccessibleFactory()
     {
-        ::toolkit::IAccessibleFactory* pFactory = new ::accessibility::AccessibleFactory;
+        ::toolkit::IAccessibleFactory* pFactory = new AccessibleFactory;
         pFactory->acquire();
         return pFactory;
     }
@@ -523,7 +522,7 @@ extern "C"
 {
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL getSvtAccessibilityComponentFactory()
     {
-        ::svt::IAccessibleFactory* pFactory = new ::accessibility::AccessibleFactory;
+        ::svt::IAccessibleFactory* pFactory = new AccessibleFactory;
         pFactory->acquire();
         return pFactory;
     }
