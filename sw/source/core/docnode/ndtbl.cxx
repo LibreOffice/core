@@ -977,7 +977,8 @@ lcl_SetTableBoxWidths(SwTable & rTable, size_t const nMaxBoxes,
     }
     else
     {
-        rBoxFmt.SetFmtAttr(SwFmtFrmSize(ATT_VAR_SIZE, USHRT_MAX / nMaxBoxes));
+        size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
+        rBoxFmt.SetFmtAttr(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
     }
 }
 
@@ -1310,8 +1311,9 @@ lcl_SetTableBoxWidths2(SwTable & rTable, size_t const nMaxBoxes,
             pNewFmt->Add(rBoxes.back());
         }
     }
+    size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
     // default width for all boxes not at the end of an incomplete line
-    rBoxFmt.SetFmtAttr(SwFmtFrmSize(ATT_VAR_SIZE, USHRT_MAX / nMaxBoxes));
+    rBoxFmt.SetFmtAttr(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
 }
 
 SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
