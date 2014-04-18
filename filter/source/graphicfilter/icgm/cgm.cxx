@@ -32,32 +32,47 @@
 
 using namespace ::com::sun::star;
 
-void CGM::ImplCGMInit()
-{
-    mbIsFinished = mbPicture = mbMetaFile = mbPictureBody = sal_False;
-
-    mnActCount = 0;
-    mnOutdx = 28000;
-    mnOutdy = 21000;
-
-    mpBuf = NULL;
-    mpChart = NULL;
-    mpBitmapInUse = NULL;
-
-    pCopyOfE = new CGMElements( *this );
-    pElement = new CGMElements( *this );
-}
-
 #ifdef CGM_EXPORT_IMPRESS
 
-CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )  :
-    mpGraphic               ( NULL ),
-    mbStatus                ( sal_True ),
-    mpOutAct                ( new CGMImpressOutAct( *this, rModel ) ),
-    mnMode                  ( nMode )
+CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )
+    : mnOutdx(28000)
+    , mnOutdy(21000)
+    , mnVDCXadd(0)
+    , mnVDCXmul(0)
+    , mnVDCYmul(0)
+    , mnVDCdx(0)
+    , mnVDCdy(0)
+    , mnXFraction(0)
+    , mnYFraction(0)
+    , mbAngReverse(false)
+    , mpGraphic(NULL)
+    , mbStatus(true)
+    , mbMetaFile(false)
+    , mbIsFinished(false)
+    , mbPicture(false)
+    , mbPictureBody(false)
+    , mbFigure(false)
+    , mbFirstOutPut(false)
+    , mnAct4PostReset(0)
+    , mpBitmapInUse(NULL)
+    , mpChart(NULL)
+    , mpOutAct(new CGMImpressOutAct(*this, rModel))
+    , mpSource(NULL)
+    , mnParaSize(0)
+    , mnActCount(0)
+    , mpBuf(NULL)
+    , mnMode(nMode | CGM_EXPORT_IMPRESS)
+    , mnEscape(0)
+    , mnElementClass(0)
+    , mnElementID(0)
+    , mnElementSize(0)
+#ifdef CGM_EXPORT_META
+    , mpVirDev(NULL)
+    , mpGDIMetaFile(NULL)
+#endif
 {
-    mnMode |= CGM_EXPORT_IMPRESS;
-    ImplCGMInit();
+    pElement = new CGMElements( *this );
+    pCopyOfE = new CGMElements( *this );
 }
 #endif
 
