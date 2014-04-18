@@ -611,7 +611,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm << endl;
 
     // write slotmap
-    rOutStm.WriteCharPtr( "SFX_SLOTMAP_ARG(" ).WriteCharPtr( GetName().getString().getStr() ).WriteChar( ')' ) << endl;
+    rOutStm.WriteCharPtr("static SfxSlot a").WriteCharPtr(GetName().getString().getStr()).WriteCharPtr("Slots_Impl[] =") << endl;
     rOutStm.WriteChar( '{' ) << endl;
 
     // write all attributes
