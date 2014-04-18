@@ -17,14 +17,19 @@ using namespace com::sun::star;
 
 namespace avmedia { namespace ogl {
 
-OGLPlayer::OGLPlayer( const OUString& rUrl)
+OGLPlayer::OGLPlayer()
     : Player_BASE(m_aMutex)
-    , m_sUrl(rUrl)
 {
 }
 
 OGLPlayer::~OGLPlayer()
 {
+}
+
+bool OGLPlayer::create( const OUString& rURL )
+{
+    m_sURL = rURL;
+    return true;
 }
 
 void SAL_CALL OGLPlayer::start() throw ( uno::RuntimeException, std::exception )
@@ -129,7 +134,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
      throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    OGLFrameGrabber *pFrameGrabber = new OGLFrameGrabber( m_sUrl );
+    OGLFrameGrabber *pFrameGrabber = new OGLFrameGrabber( m_sURL );
     return uno::Reference< media::XFrameGrabber >( pFrameGrabber );;
 }
 

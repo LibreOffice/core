@@ -30,10 +30,11 @@ OGLManager::~OGLManager()
 uno::Reference< media::XPlayer > SAL_CALL OGLManager::createPlayer( const OUString& rURL )
     throw (uno::RuntimeException, std::exception)
 {
-    // TODO: Here we need to construct our OpenGL player.
-    // See com::sun::star::media::XManager
-    OGLPlayer* pPlayer( new OGLPlayer( rURL ) );
-    return uno::Reference< media::XPlayer >(pPlayer);
+    OGLPlayer* pPlayer( new OGLPlayer() );
+    if( pPlayer->create(rURL) )
+        return uno::Reference< media::XPlayer >(pPlayer);
+    else
+        return uno::Reference< media::XPlayer >();
 }
 
 OUString SAL_CALL OGLManager::getImplementationName() throw ( uno::RuntimeException, std::exception )

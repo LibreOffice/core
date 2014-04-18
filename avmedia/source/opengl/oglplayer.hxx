@@ -25,8 +25,10 @@ class OGLPlayer : public cppu::BaseMutex,
 {
 public:
 
-    OGLPlayer( const OUString& rURL );
+    OGLPlayer();
     virtual ~OGLPlayer();
+
+    bool create( const OUString& rURL );
 
     // XPlayer
     virtual void SAL_CALL start() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -51,7 +53,7 @@ public:
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    OUString m_sUrl;
+    OUString m_sURL;
 };
 
 } // namespace ogl
