@@ -29,7 +29,7 @@ ifneq ($(DISABLE_PYTHON),TRUE)
 # pass a hard-coded 139 to the gdb postprocess script to match soffice.bin
 # signal exit values (assumption: non-0 exit value here means it crashed)
 .PHONY : $(call gb_PythonTest_get_target,%)
-$(call gb_PythonTest_get_target,%) :
+$(call gb_PythonTest_get_target,%) : $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$*,$(true),PYT,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(dir $(call gb_PythonTest_get_target,$*)) && \
