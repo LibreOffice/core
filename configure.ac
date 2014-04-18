@@ -10359,6 +10359,23 @@ fi
 
 AC_SUBST(ENABLE_OPENCL)
 
+dnl ===================================================================
+dnl Check whether to enable glTF support
+dnl ===================================================================
+
+ENABLE_GLTF=
+AC_MSG_CHECKING([whether to enable glTF support])
+if test "$enable_opengl" = "yes"; then
+    ENABLE_GLTF=TRUE
+    AC_MSG_RESULT([yes])
+    if test "$test_freetype" = "no"; then
+        BUILD_TYPE="$BUILD_TYPE FREETYPE"
+    fi
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_GLTF)
+
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import feature])
 ENABLE_PDFIMPORT=

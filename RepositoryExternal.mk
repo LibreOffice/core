@@ -1254,7 +1254,7 @@ endef
 
 gb_ExternalProject__use_freetype :=
 
-else ifeq ($(OS),ANDROID)
+else ifneq (,$(or $(filter-out ANDROID,$(OS)),$(ENABLE_GLTF)))
 
 define gb_LinkTarget__use_freetype_headers
 $(call gb_LinkTarget_use_external_project,$(1),freetype)

@@ -14,16 +14,16 @@ $(eval $(call gb_ExternalProject_register_targets,freetype,\
 ))
 
 $(call gb_ExternalProject_get_state_target,freetype,build) :
-	cd $(EXTERNAL_WORKDIR) \
-	&& CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS)" \
+	$(call gb_ExternalProject_run,build,\
 		./configure \
-		--disable-shared \
-		--without-zlib \
-		--without-bzip2 \
-		--prefix=$(call gb_UnpackedTarball_get_dir,freetype/instdir) \
-		--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
-	&& chmod +x builds/unix/freetype-config \
-	&& $(MAKE) install \
-	&& touch $@
+			--disable-shared \
+			--without-zlib \
+			--without-bzip2 \
+			--prefix=$(call gb_UnpackedTarball_get_dir,freetype/instdir) \
+			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
+			CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS)" \
+		&& chmod +x builds/unix/freetype-config \
+		&& $(MAKE) install \
+		&& touch $@	)
 
 # vim: set noet sw=4 ts=4:

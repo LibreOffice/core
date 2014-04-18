@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,freetype))
 
-ifeq ($(OS),ANDROID)
+ifneq (,$(or $(filter-out ANDROID,$(OS)),$(ENABLE_GLTF)))
 
 $(eval $(call gb_Module_add_targets,freetype,\
 	ExternalProject_freetype \
