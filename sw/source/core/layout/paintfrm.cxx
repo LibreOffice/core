@@ -162,10 +162,15 @@ public:
     bool MakeUnion( const SwRect &rRect );
 };
 
-class SwLineRects : public std::vector< SwLineRect >
+class SwLineRects
 {
-    size_t nLastCount;  //avoid unnecessary cycles in PaintLines
 public:
+    std::vector< SwLineRect > aLineRects;
+    typedef std::vector< SwLineRect >::const_iterator const_iterator;
+    typedef std::vector< SwLineRect >::iterator iterator;
+    typedef std::vector< SwLineRect >::reverse_iterator reverse_iterator;
+    typedef std::vector< SwLineRect >::size_type size_type;
+    size_t nLastCount;  //avoid unnecessary cycles in PaintLines
     SwLineRects() : nLastCount( 0 ) {}
     void AddLineRect( const SwRect& rRect,  const Color *pColor, const SvxBorderStyle nStyle,
                       const SwTabFrm *pTab, const sal_uInt8 nSCol );
@@ -174,7 +179,7 @@ public:
     void LockLines( sal_Bool bLock );
 
     //Limit lines to 100
-    bool isFull() const { return this->size()>100 ? true : false; }
+    bool isFull() const { return aLineRects.size()>100 ? true : false; }
 };
 
 class SwSubsRects : public SwLineRects
@@ -632,7 +637,7 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const Svx
     //Loop backwards because lines which can be combined, can usually be painted
     //in the same context.
 
-    for (SwLineRects::reverse_iterator it = this->rbegin(); it != this->rend();
+    for (reverse_iterator it = aLineRects.rbegin(); it != aLineRects.rend();
          ++it)
     {
         SwLineRect &rLRect = (*it);
@@ -647,7 +652,7 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const Svx
                 return;
         }
     }
-    this->push_back( SwLineRect( rRect, pCol, nStyle, pTab, nSCol ) );
+    aLineRects.push_back( SwLineRect( rRect, pCol, nStyle, pTab, nSCol ) );
 }
 
 void SwLineRects::ConnectEdges( OutputDevice *pOut )
@@ -663,9 +668,9 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
 
     std::vector<SwLineRect*> aCheck;
 
-    for (size_t i = 0; i < this->size(); ++i)
+    for (size_t i = 0; i < aLineRects.size(); ++i)
     {
-        SwLineRect &rL1 = (*this)[i];
+        SwLineRect &rL1 = aLineRects[i];
         if ( !rL1.GetTab() || rL1.IsPainted() || rL1.IsLocked() )
             continue;
 
@@ -686,7 +691,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
         }
 
         // Collect all lines to possibly link with i1
-        for (SwLineRects::iterator it2 = this->begin(); it2 != this->end(); ++it2)
+        for (iterator it2 = aLineRects.begin(); it2 != aLineRects.end(); ++it2)
         {
             SwLineRect &rL2 = (*it2);
             if ( rL2.GetTab() != rL1.GetTab() ||
@@ -752,7 +757,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                             aIns.Bottom( pLA->Bottom() );
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
-                            this->push_back( SwLineRect( aIns, rL1.GetColor(),
+                            aLineRects.push_back( SwLineRect( aIns, rL1.GetColor(),
                                         table::BorderLineStyle::SOLID,
                                         rL1.GetTab(), SUBCOL_TAB ) );
                             if ( isFull() )
@@ -793,7 +798,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                             aIns.Right( pLA->Right() );
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
-                            this->push_back( SwLineRect( aIns, rL1.GetColor(),
+                            aLineRects.push_back( SwLineRect( aIns, rL1.GetColor(),
                                         table::BorderLineStyle::SOLID,
                                         rL1.GetTab(), SUBCOL_TAB ) );
                             if ( isFull() )
@@ -813,7 +818,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
         }
         if ( bRemove )
         {
-            this->erase(this->begin() + i);
+            aLineRects.erase(aLineRects.begin() + i);
             --i;
         }
     }
@@ -823,11 +828,11 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
 {
     // All help lines that are covered by any border will be removed or split
 
-    for (size_t i = 0; i < this->size(); ++i)
+    for (size_t i = 0; i < aLineRects.size(); ++i)
     {
         // get a copy instead of a reference, because an <insert> may destroy
         // the object due to a necessary array resize.
-        const SwLineRect aSubsLineRect = SwLineRect((*this)[i]);
+        const SwLineRect aSubsLineRect = SwLineRect(aLineRects[i]);
 
         // add condition <aSubsLineRect.IsLocked()> in order to consider only
         // border lines, which are *not* locked.
@@ -847,7 +852,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
             aSubsRect.Top   ( aSubsRect.Top()    - (nPixelSzH+nHalfPixelSzH) );
             aSubsRect.Bottom( aSubsRect.Bottom() + (nPixelSzH+nHalfPixelSzH) );
         }
-        for (SwLineRects::const_iterator itK = rRects.begin(); itK != rRects.end(); ++itK)
+        for (const_iterator itK = rRects.aLineRects.begin(); itK != rRects.aLineRects.end(); ++itK)
         {
             const SwLineRect &rLine = *itK;
 
@@ -871,7 +876,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Bottom( nTmp );
-                            this->push_back( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
+                            aLineRects.push_back( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
                                                 aSubsLineRect.GetSubColor() ) );
                         }
                         nTmp = rLine.Bottom()+nPixelSzH+1;
@@ -879,10 +884,10 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Top( nTmp );
-                            this->push_back( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
+                            aLineRects.push_back( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
                                                 aSubsLineRect.GetSubColor() ) );
                         }
-                        this->erase(this->begin() + i);
+                        aLineRects.erase(aLineRects.begin() + i);
                         --i;
                         break;
                     }
@@ -897,7 +902,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Right( nTmp );
-                            this->push_back( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
+                            aLineRects.push_back( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
                                                 aSubsLineRect.GetSubColor() ) );
                         }
                         nTmp = rLine.Right()+nPixelSzW+1;
@@ -905,10 +910,10 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Left( nTmp );
-                            this->push_back(  SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
+                            aLineRects.push_back(  SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
                                                 aSubsLineRect.GetSubColor() ) );
                         }
-                        this->erase(this->begin() + i);
+                        aLineRects.erase(aLineRects.begin() + i);
                         --i;
                         break;
                     }
@@ -920,7 +925,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
 
 void SwLineRects::LockLines( sal_Bool bLock )
 {
-    for (SwLineRects::iterator it = this->begin(); it != this->end(); ++it)
+    for (iterator it = aLineRects.begin(); it != aLineRects.end(); ++it)
        (*it).Lock( bLock );
 }
 
@@ -966,7 +971,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
 {
     // Paint the borders. Sadly two passes are needed.
     // Once for the inside and once for the outside edges of tables
-    if ( this->size() != nLastCount )
+    if ( aLineRects.size() != nLastCount )
     {
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
@@ -978,11 +983,11 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
         const Color *pLast = 0;
 
         bool bPaint2nd = false;
-        size_t nMinCount = this->size();
+        size_t nMinCount = aLineRects.size();
 
-        for ( size_t i = 0; i < size(); ++i )
+        for ( size_t i = 0; i < aLineRects.size(); ++i )
         {
-            SwLineRect &rLRect = operator[](i);
+            SwLineRect &rLRect = aLineRects[i];
 
             if ( rLRect.IsPainted() )
                 continue;
@@ -1045,9 +1050,9 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
         }
         if ( bPaint2nd )
         {
-            for ( size_t i = 0; i < size(); ++i )
+            for ( size_t i = 0; i < aLineRects.size(); ++i )
             {
-                SwLineRect &rLRect = operator[](i);
+                SwLineRect &rLRect = aLineRects[i];
                 if ( rLRect.IsPainted() )
                     continue;
 
@@ -1084,20 +1089,20 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
 void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                    const SwLineRects *pRects )
 {
-    if ( !this->empty() )
+    if ( !aLineRects.empty() )
     {
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
 
         // Remove all help line that are almost covered (tables)
-        for (SwSubsRects::size_type i = 0; i != this->size(); ++i)
+        for (size_type i = 0; i != aLineRects.size(); ++i)
         {
-            SwLineRect &rLi = (*this)[i];
+            SwLineRect &rLi = aLineRects[i];
             const bool bVerticalSubs = rLi.Height() > rLi.Width();
 
-            for (SwSubsRects::size_type k = i + 1; k != this->size(); ++k)
+            for (size_type k = i + 1; k != aLineRects.size(); ++k)
             {
-                SwLineRect &rLk = (*this)[k];
+                SwLineRect &rLk = aLineRects[k];
                 if ( rLi.SSize() == rLk.SSize() )
                 {
                     if ( bVerticalSubs == ( rLk.Height() > rLk.Width() ) )
@@ -1110,7 +1115,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                  ((nLi < rLk.Left() && nLi+21 > rLk.Left()) ||
                                   (nLk < rLi.Left() && nLk+21 > rLi.Left())))
                             {
-                                this->erase(this->begin() + k);
+                                aLineRects.erase(aLineRects.begin() + k);
                                 // don't continue with inner loop any more:
                                 // the array may shrink!
                                 --i;
@@ -1125,7 +1130,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                  ((nLi < rLk.Top() && nLi+21 > rLk.Top()) ||
                                   (nLk < rLi.Top() && nLk+21 > rLi.Top())))
                             {
-                                this->erase(this->begin() + k);
+                                aLineRects.erase(aLineRects.begin() + k);
                                 // don't continue with inner loop any more:
                                 // the array may shrink!
                                 --i;
@@ -1137,10 +1142,10 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
             }
         }
 
-        if ( pRects && (!pRects->empty()) )
+        if ( pRects && (!pRects->aLineRects.empty()) )
             RemoveSuperfluousSubsidiaryLines( *pRects );
 
-        if ( !this->empty() )
+        if ( !aLineRects.empty() )
         {
             pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
             pOut->SetLineColor();
@@ -1155,7 +1160,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                 pOut->SetDrawMode( 0 );
             }
 
-            for (SwSubsRects::iterator it = this->begin(); it != this->end();
+            for (SwSubsRects::iterator it = aLineRects.begin(); it != aLineRects.end();
                  ++it)
             {
                 SwLineRect &rLRect = (*it);
