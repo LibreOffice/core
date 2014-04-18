@@ -133,6 +133,8 @@ namespace pdfi
         sal_Int32 GCId;
         bool      MirrorVertical;
         bool      IsForText;
+        double    FontSize;
+        sal_Int32 TextStyleId;
     };
 
     struct DrawElement : public GraphicalElement

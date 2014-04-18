@@ -198,6 +198,9 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
     rProps[ "svg:width" ]   = convertPixelToUnitString( rElem.w );
     rProps[ "svg:height" ]  = convertPixelToUnitString( rElem.h );
 
+    if (rElem.IsForText)
+        rProps["draw:text-style-name"] = rEmitContext.rStyles.getStyleName(rElem.TextStyleId);
+
     const GraphicsContext& rGC =
         rEmitContext.rProcessor.getGraphicsContext( rElem.GCId );
     if( rGC.Transformation.isIdentity() || bWasTransformed )
@@ -862,6 +865,17 @@ void DrawXmlFinalizer::visit( HyperlinkElement&, const std::list< Element* >::co
 {
 }
 
+void SetFontsizeProperties(PropertyMap& props, double fontSize)
+{
+    OUStringBuffer aBuf(32);
+    aBuf.append(fontSize * 72 / PDFI_OUTDEV_RESOLUTION);
+    aBuf.appendAscii("pt");
+    OUString aFSize = aBuf.makeStringAndClear();
+    props["fo:font-size"] = aFSize;
+    props["style:font-size-asian"] = aFSize;
+    props["style:font-size-complex"] = aFSize;
+}
+
 void DrawXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::const_iterator& )
 {
     const FontAttributes& rFont = m_rProcessor.getFont( elem.FontId );
@@ -900,14 +914,9 @@ void DrawXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::co
     {
         aFontProps[ "style:text-outline" ]  = "true";
     }
+
     // size
-    OUStringBuffer aBuf( 32 );
-    aBuf.append( rFont.size*72/PDFI_OUTDEV_RESOLUTION );
-    aBuf.appendAscii( "pt" );
-    OUString aFSize = aBuf.makeStringAndClear();
-    aFontProps[ "fo:font-size" ]            = aFSize;
-    aFontProps[ "style:font-size-asian" ]   = aFSize;
-    aFontProps[ "style:font-size-complex" ] = aFSize;
+    SetFontsizeProperties(aFontProps, rFont.size);
 
     // color
     const GraphicsContext& rGC = m_rProcessor.getGraphicsContext( elem.GCId );
@@ -921,6 +930,7 @@ void DrawXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::co
     if (((textScale >= 1) && (textScale <= 99)) ||
         ((textScale >= 101) && (textScale <= 999)))
     {
+        OUStringBuffer aBuf(32);
         aBuf.append(textScale);
         aBuf.appendAscii("%");
         aFontProps[ "style:text-scale" ] = aBuf.makeStringAndClear();
@@ -959,9 +969,9 @@ void DrawXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element* 
 
 void DrawXmlFinalizer::visit( FrameElement& elem, const std::list< Element* >::const_iterator&)
 {
-    PropertyMap aProps;
-    aProps[ "style:family" ] = "graphic";
-    aProps[ "style:parent-style-name" ] = "standard";
+    PropertyMap props1;
+    props1[ "style:family" ] = "graphic";
+    props1[ "style:parent-style-name" ] = "standard";
     // generate standard graphic style if necessary
     m_rStyleContainer.getStandardStyleId( "graphic" );
 
@@ -987,11 +997,24 @@ void DrawXmlFinalizer::visit( FrameElement& elem, const std::list< Element* >::c
     if( elem.MirrorVertical )
         aGCProps[ "style:mirror" ] = "horizontal";
 
-    StyleContainer::Style aStyle( "style:style", aProps );
-    StyleContainer::Style aSubStyle( "style:graphic-properties", aGCProps );
-    aStyle.SubStyles.push_back( &aSubStyle );
+    StyleContainer::Style style1( "style:style", props1 );
+    StyleContainer::Style subStyle1( "style:graphic-properties", aGCProps );
+    style1.SubStyles.push_back(&subStyle1);
 
-    elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
+    elem.StyleId = m_rStyleContainer.getStyleId(style1);
+
+
+    PropertyMap props2;
+    props2["style:family"] = "paragraph";
+
+    PropertyMap textProps;
+    SetFontsizeProperties(textProps, elem.FontSize);
+
+    StyleContainer::Style style2("style:style", props2);
+    StyleContainer::Style subStyle2("style:text-properties", textProps);
+    style2.SubStyles.push_back(&subStyle2);
+    elem.TextStyleId = m_rStyleContainer.getStyleId(style2);
+
     elem.applyToChildren(*this);
 }
 

@@ -243,6 +243,7 @@ void PDFIProcessor::processGlyphLine()
         getGCId(m_GlyphsList[0].getGC()));
     frame->ZOrder = m_nNextZOrder++;
     frame->IsForText = true;
+    frame->FontSize = getFont(m_GlyphsList[0].getGC().FontId).size;
     ParagraphElement* para = m_pElFactory->createParagraphElement(frame);
 
     for (size_t i = 0; i < m_GlyphsList.size(); i++)

@@ -26,9 +26,12 @@
 #include "writertreevisiting.hxx"
 #include "genericelements.hxx"
 
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/range/b2drange.hxx>
+#include "basegfx/polygon/b2dpolypolygontools.hxx"
+#include "basegfx/range/b2drange.hxx"
+#include "com/sun/star/rendering/PathCapType.hpp"
+#include "com/sun/star/rendering/PathJoinType.hpp"
 
+using namespace ::com::sun::star;
 
 namespace pdfi
 {
@@ -858,6 +861,36 @@ void WriterXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element*
 
             aGCProps[ "svg:stroke-width" ] = OUString::number( aVec.getLength() );
         }
+        OUString strokeLinejoinValue;
+        OUString strokeLinecapValue;
+        switch (rGC.LineJoin)
+        {
+        default:
+        case rendering::PathJoinType::MITER:
+            strokeLinejoinValue = "miter";
+            break;
+        case rendering::PathJoinType::ROUND:
+            strokeLinejoinValue = "round";
+            break;
+        case rendering::PathJoinType::BEVEL:
+            strokeLinejoinValue = "bevel";
+            break;
+        }
+        switch (rGC.LineCap)
+        {
+        default:
+        case rendering::PathCapType::BUTT:
+            strokeLinecapValue = "butt";
+            break;
+        case rendering::PathCapType::ROUND:
+            strokeLinecapValue = "round";
+            break;
+        case rendering::PathCapType::SQUARE:
+            strokeLinecapValue = "square";
+            break;
+        }
+        aGCProps[ "draw:stroke-linejoin" ] = strokeLinejoinValue;
+        aGCProps[ "svg:stroke-linecap" ] = strokeLinecapValue;
     }
     else
     {
@@ -1019,8 +1052,18 @@ void WriterXmlFinalizer::visit( FrameElement& elem, const std::list< Element* >:
 
     PropertyMap aGCProps;
 
-    aGCProps[ "draw:stroke" ] = "none";
-    aGCProps[ "draw:fill" ] = "none";
+    aGCProps[ "draw:stroke" ]                    = "none";
+    aGCProps[ "draw:fill" ]                      = "none";
+    aGCProps[ "draw:auto-grow-height" ]          = "true";
+    aGCProps[ "draw:auto-grow-width" ]           = "true";
+    aGCProps[ "draw:textarea-horizontal-align" ] = "left";
+    aGCProps[ "draw:textarea-vertical-align" ]   = "top";
+    aGCProps[ "fo:min-height"]                   = "0cm";
+    aGCProps[ "fo:min-width"]                    = "0cm";
+    aGCProps[ "fo:padding-top" ]                 = "0cm";
+    aGCProps[ "fo:padding-left" ]                = "0cm";
+    aGCProps[ "fo:padding-right" ]               = "0cm";
+    aGCProps[ "fo:padding-bottom" ]              = "0cm";
 
     StyleContainer::Style aStyle( "style:style", aProps );
     StyleContainer::Style aSubStyle( "style:graphic-properties", aGCProps );
