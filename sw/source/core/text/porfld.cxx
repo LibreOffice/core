@@ -44,8 +44,6 @@
 
 using namespace ::com::sun::star;
 
-// class SwFldPortion
-
 SwLinePortion *SwFldPortion::Compress()
 { return (GetLen() || !aExpand.isEmpty() || SwLinePortion::Compress()) ? this : 0; }
 
@@ -133,8 +131,6 @@ KSHORT SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 }
 
 // 8653: in keinem Fall nur SetLen(0);
-
-// Helper class SwFldSlot
 
 class SwFldSlot
 {
@@ -467,8 +463,6 @@ SwPosSize SwFldPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
     return aSize;
 }
 
-// class SwHiddenPortion
-
 SwFldPortion *SwHiddenPortion::Clone(const OUString &rExpand ) const
 {
     SwFont *pNewFnt;
@@ -492,8 +486,6 @@ bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) con
     // Nicht auf IsHidden() abfragen !
     return SwFldPortion::GetExpTxt( rInf, rTxt );
 }
-
-// class SwNumberPortion
 
 SwNumberPortion::SwNumberPortion( const OUString &rExpand,
                                   SwFont *pFont,
@@ -733,8 +725,6 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-// class SwBulletPortion
-
 SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
                                   const OUString& rBulletFollowedBy,
                                   SwFont *pFont,
@@ -748,8 +738,6 @@ SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
 {
     SetWhichPor( POR_BULLET );
 }
-
-// class SwGrfNumPortion
 
 #define GRFNUM_SECURE 10
 

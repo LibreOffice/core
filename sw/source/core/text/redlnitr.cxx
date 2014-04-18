@@ -153,22 +153,18 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
     }
 }
 
-/*************************************************************************
- * SwRedlineItr - The Redline-Iterator
- *
- * The foolowing information/states exist in RedlineIterator:
- *
- * nFirst is the first index of RedlineTbl, which overlaps with the paragraph.
- *
- * nAct is the currently active (if bOn is set) or the next possible index.
- * nStart and nEnd give you the borders of the object within the paragraph.
- *
- * If bOn is set, the font has been manipulated according to it.
- *
- * If nAct is set to COMPLETE_STRING (via Reset()), then currently no
- * Redline is active, nStart and nEnd are invalid.
- *************************************************************************/
-
+// The Redline-Iterator
+// The following information/states exist in RedlineIterator:
+//
+// nFirst is the first index of RedlineTbl, which overlaps with the paragraph.
+//
+// nAct is the currently active (if bOn is set) or the next possible index.
+// nStart and nEnd give you the borders of the object within the paragraph.
+//
+// If bOn is set, the font has been manipulated according to it.
+//
+// If nAct is set to COMPLETE_STRING (via Reset()), then currently no
+// Redline is active, nStart and nEnd are invalid.
 SwRedlineItr::SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt,
                             SwAttrHandler& rAH, sal_Int32 nRed, bool bShw,
                             const std::vector<sal_uInt16> *pArr,

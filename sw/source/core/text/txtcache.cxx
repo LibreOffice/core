@@ -21,12 +21,6 @@
 #include "txtfrm.hxx"
 #include "porlay.hxx"
 
-/*************************************************************************
-|*
-|*  SwTxtLine::SwTxtLine(), ~SwTxtLine()
-|*
-|*************************************************************************/
-
 SwTxtLine::SwTxtLine( SwTxtFrm *pFrm, SwParaPortion *pNew ) :
     SwCacheObj( (void*)pFrm ),
     pLine( pNew )
@@ -38,22 +32,10 @@ SwTxtLine::~SwTxtLine()
     delete pLine;
 }
 
-/*************************************************************************
-|*
-|*  SwTxtLineAccess::NewObj()
-|*
-|*************************************************************************/
-
 SwCacheObj *SwTxtLineAccess::NewObj()
 {
     return new SwTxtLine( (SwTxtFrm*)pOwner );
 }
-
-/*************************************************************************
-|*
-|*  SwTxtLineAccess::GetPara()
-|*
-|*************************************************************************/
 
 SwParaPortion *SwTxtLineAccess::GetPara()
 {
@@ -70,33 +52,15 @@ SwParaPortion *SwTxtLineAccess::GetPara()
     return pRet->GetPara();
 }
 
-/*************************************************************************
-|*
-|*  SwTxtLineAccess::SwTxtLineAccess()
-|*
-|*************************************************************************/
-
 SwTxtLineAccess::SwTxtLineAccess( const SwTxtFrm *pOwn ) :
     SwCacheAccess( *SwTxtFrm::GetTxtCache(), pOwn, pOwn->GetCacheIdx() )
 {
 }
 
-/*************************************************************************
-|*
-|*  SwTxtLineAccess::IsAvailable
-|*
-|*************************************************************************/
-
 bool SwTxtLineAccess::IsAvailable() const
 {
     return pObj && ((SwTxtLine*)pObj)->GetPara();
 }
-
-/*************************************************************************
-|*
-|*  SwTxtFrm::HasPara()
-|*
-|*************************************************************************/
 
 bool SwTxtFrm::_HasPara() const
 {
@@ -113,12 +77,6 @@ bool SwTxtFrm::_HasPara() const
     return false;
 }
 
-/*************************************************************************
-|*
-|*  SwTxtFrm::GetPara()
-|*
-|*************************************************************************/
-
 SwParaPortion *SwTxtFrm::GetPara()
 {
     if ( GetCacheIdx() != MSHRT_MAX )
@@ -131,12 +89,6 @@ SwParaPortion *SwTxtFrm::GetPara()
     }
     return 0;
 }
-
-/*************************************************************************
-|*
-|*  SwTxtFrm::ClearPara()
-|*
-|*************************************************************************/
 
 void SwTxtFrm::ClearPara()
 {
@@ -154,12 +106,6 @@ void SwTxtFrm::ClearPara()
             nCacheIdx = MSHRT_MAX;
     }
 }
-
-/*************************************************************************
-|*
-|*  SwTxtFrm::SetPara()
-|*
-|*************************************************************************/
 
 void SwTxtFrm::SetPara( SwParaPortion *pNew, bool bDelete )
 {

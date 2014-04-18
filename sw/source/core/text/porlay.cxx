@@ -84,24 +84,14 @@ bool isTransparentChar ( sal_Unicode cCh )
     return u_getIntPropertyValue( cCh, UCHAR_JOINING_TYPE ) == U_JT_TRANSPARENT;
 }
 
-/*************************************************************************
- * lcl_IsLigature
- *
- * Checks if cCh + cNectCh builds a ligature (used for Kashidas)
- *************************************************************************/
-
+// Checks if cCh + cNectCh builds a ligature (used for Kashidas)
 static bool lcl_IsLigature( sal_Unicode cCh, sal_Unicode cNextCh )
 {
             // Lam + Alef
     return ( isLamChar ( cCh ) && isAlefChar ( cNextCh ));
 }
 
-/*************************************************************************
- * lcl_ConnectToPrev
- *
- * Checks if cCh is connectable to cPrevCh (used for Kashidas)
- *************************************************************************/
-
+// Checks if cCh is connectable to cPrevCh (used for Kashidas)
 static bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )
 {
     const int32_t nJoiningType = u_getIntPropertyValue( cPrevCh, UCHAR_JOINING_TYPE );
@@ -114,9 +104,6 @@ static bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )
     return bRet;
 }
 
-/*************************************************************************
- * lcl_HasStrongLTR
- *************************************************************************/
 static  bool lcl_HasStrongLTR ( const OUString& rTxt, sal_Int32 nStart, sal_Int32 nEnd )
  {
      for( sal_Int32 nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
@@ -130,16 +117,10 @@ static  bool lcl_HasStrongLTR ( const OUString& rTxt, sal_Int32 nStart, sal_Int3
      return false;
  }
 
-/*************************************************************************
- * SwLineLayout::~SwLineLayout()
- *
- * class SwLineLayout: This is the layout of a single line, which is made
- * up of it's dimension, the character count and the word spacing in the
- * line.
- * Line objects are managed in an own pool, in order to store them continuously
- * in memory so that they are paged out together and don't fragment memory.
- *************************************************************************/
-
+// class SwLineLayout: This is the layout of a single line, which is made
+// up of it's dimension, the character count and the word spacing in the line.
+// Line objects are managed in an own pool, in order to store them continuously
+// in memory so that they are paged out together and don't fragment memory.
 SwLineLayout::~SwLineLayout()
 {
     Truncate();
@@ -196,13 +177,8 @@ bool SwLineLayout::Format( SwTxtFormatInfo &rInf )
     return true;
 }
 
-/*************************************************************************
- * SwLineLayout::CalcLeftMargin()
- *
- * We collect all FlyPortions at the beginning of the line and make that a
- * MarginPortion.
- *************************************************************************/
-
+// We collect all FlyPortions at the beginning of the line and make that a
+// MarginPortion.
 SwMarginPortion *SwLineLayout::CalcLeftMargin()
 {
     SwMarginPortion *pLeft = (GetPortion() && GetPortion()->IsMarginPortion()) ?
@@ -256,11 +232,7 @@ void SwLineLayout::CreateSpaceAdd( const long nInit )
     SetLLSpaceAdd( nInit, 0 );
 }
 
-/*************************************************************************
- * Local helper function. Returns true if there are only blanks
- * in [nStt, nEnd[
- *************************************************************************/
-
+// Returns true if there are only blanks in [nStt, nEnd[
 static bool lcl_HasOnlyBlanks( const OUString& rTxt, sal_Int32 nStt, sal_Int32 nEnd )
 {
     bool bBlankOnly = true;
@@ -276,12 +248,7 @@ static bool lcl_HasOnlyBlanks( const OUString& rTxt, sal_Int32 nStt, sal_Int32 n
     return bBlankOnly;
 }
 
-/*************************************************************************
- * SwLineLayout::CalcLine()
- *
- * Swapped out from FormatLine()
- *************************************************************************/
-
+// Swapped out from FormatLine()
 void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 {
     const KSHORT nLineWidth = rInf.RealWidth();
@@ -630,13 +597,8 @@ SwScriptInfo::~SwScriptInfo()
 {
 }
 
-/*************************************************************************
- * SwScriptInfo::WhichFont()
- *
- * Converts i18n Script Type (LATIN, ASIAN, COMPLEX, WEAK) to
- * Sw Script Types (SW_LATIN, SW_CJK, SW_CTL), used to identify the font
-*************************************************************************/
-
+// Converts i18n Script Type (LATIN, ASIAN, COMPLEX, WEAK) to
+// Sw Script Types (SW_LATIN, SW_CJK, SW_CTL), used to identify the font
 sal_uInt8 SwScriptInfo::WhichFont( sal_Int32 nIdx, const OUString* pTxt, const SwScriptInfo* pSI )
 {
     SAL_WARN_IF( !pTxt && !pSI, "sw.core", "How should I determine the script type?" );
@@ -659,12 +621,7 @@ sal_uInt8 SwScriptInfo::WhichFont( sal_Int32 nIdx, const OUString* pTxt, const S
     return SW_LATIN;
 }
 
-/*************************************************************************
- * SwScriptInfo::InitScriptInfo()
- *
- * searches for script changes in rTxt and stores them
- *************************************************************************/
-
+// searches for script changes in rTxt and stores them
 void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
 {
     InitScriptInfo( rNode, nDefaultDir == UBIDI_RTL );
@@ -1271,17 +1228,13 @@ void SwScriptInfo::UpdateBidiInfo( const OUString& rTxt )
     ubidi_close( pBidi );
 }
 
-/*************************************************************************
- * SwScriptInfo::NextScriptChg(..)
- * returns the position of the next character which belongs to another script
- * than the character of the actual (input) position.
- * If there's no script change until the end of the paragraph, it will return
- * COMPLETE_STRING.
- * Scripts are Asian (Chinese, Japanese, Korean),
- *             Latin ( English etc.)
- *         and Complex ( Hebrew, Arabian )
- *************************************************************************/
-
+// returns the position of the next character which belongs to another script
+// than the character of the actual (input) position.
+// If there's no script change until the end of the paragraph, it will return
+// COMPLETE_STRING.
+// Scripts are Asian (Chinese, Japanese, Korean),
+//             Latin ( English etc.)
+//         and Complex ( Hebrew, Arabian )
 sal_Int32 SwScriptInfo::NextScriptChg(const sal_Int32 nPos)  const
 {
     sal_uInt16 nEnd = CountScriptChg();
@@ -1294,11 +1247,7 @@ sal_Int32 SwScriptInfo::NextScriptChg(const sal_Int32 nPos)  const
     return COMPLETE_STRING;
 }
 
-/*************************************************************************
- * SwScriptInfo::ScriptType(..)
- * returns the script of the character at the input position
- *************************************************************************/
-
+// returns the script of the character at the input position
 sal_uInt8 SwScriptInfo::ScriptType(const sal_Int32 nPos) const
 {
     sal_uInt16 nEnd = CountScriptChg();
@@ -1339,11 +1288,7 @@ sal_uInt8 SwScriptInfo::DirType(const sal_Int32 nPos) const
     return 0;
 }
 
-/*************************************************************************
- * SwScriptInfo::MaskHiddenRanges(..)
- * Takes a string and replaced the hidden ranges with cChar.
- **************************************************************************/
-
+// Takes a string and replaced the hidden ranges with cChar.
 sal_Int32 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, OUStringBuffer & rText,
                                        const sal_Int32 nStt, const sal_Int32 nEnd,
                                        const sal_Unicode cChar )
@@ -1379,11 +1324,7 @@ sal_Int32 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, OUStringBuffer
     return nNumOfHiddenChars;
 }
 
-/*************************************************************************
- * SwScriptInfo::DeleteHiddenRanges(..)
- * Takes a SwTxtNode and deletes the hidden ranges from the node.
- **************************************************************************/
-
+// Takes a SwTxtNode and deletes the hidden ranges from the node.
 void SwScriptInfo::DeleteHiddenRanges( SwTxtNode& rNode )
 {
     PositionList aList;
@@ -1401,11 +1342,6 @@ void SwScriptInfo::DeleteHiddenRanges( SwTxtNode& rNode )
         rNode.getIDocumentContentOperations()->DeleteRange( aPam );
     }
 }
-
-/*************************************************************************
- * SwScriptInfo::GetBoundsOfHiddenRange(..)
- * static version
- **************************************************************************/
 
 bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPos,
                                            sal_Int32& rnStartPos, sal_Int32& rnEndPos,
@@ -1493,11 +1429,6 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPo
     return bNewContainsHiddenChars;
 }
 
-/*************************************************************************
- * SwScriptInfo::GetBoundsOfHiddenRange(..)
- * non-static version
- **************************************************************************/
-
 bool SwScriptInfo::GetBoundsOfHiddenRange( sal_Int32 nPos, sal_Int32& rnStartPos,
                                            sal_Int32& rnEndPos, PositionList* pList ) const
 {
@@ -1541,11 +1472,7 @@ bool SwScriptInfo::IsInHiddenRange( const SwTxtNode& rNode, sal_Int32 nPos )
 }
 
 #ifdef DBG_UTIL
-/*************************************************************************
- * SwScriptInfo::CompType(..)
- * returns the type of the compressed character
- *************************************************************************/
-
+// returns the type of the compressed character
 sal_uInt8 SwScriptInfo::CompType( const sal_Int32 nPos ) const
 {
     sal_uInt16 nEnd = CountCompChg();
@@ -1563,12 +1490,8 @@ sal_uInt8 SwScriptInfo::CompType( const sal_Int32 nPos ) const
 }
 #endif
 
-/*************************************************************************
- * SwScriptInfo::HasKana()
- * returns, if there are compressable kanas or specials
- * between nStart and nEnd
- *************************************************************************/
-
+// returns, if there are compressable kanas or specials
+// between nStart and nEnd
 sal_uInt16 SwScriptInfo::HasKana( sal_Int32 nStart, const sal_Int32 nLen ) const
 {
     sal_uInt16 nCnt = CountCompChg();
@@ -1698,10 +1621,6 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, sal_Int32 nIdx, sal_Int32 nL
     return nSub;
 }
 
-/*************************************************************************
- * SwScriptInfo::KashidaJustify()
- *************************************************************************/
-
 // Note on calling KashidaJustify():
 // Kashida positions may be marked as invalid. Therefore KashidaJustify may return the clean
 // total number of kashida positions, or the number of kashida positions after some positions
@@ -1788,13 +1707,9 @@ sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
     return 0;
 }
 
-/*************************************************************************
- * SwScriptInfo::IsArabicText()
- *
- * Checks if the current text is 'Arabic' text. Note that only the first
- * character has to be checked because a ctl portion only contains one
- * script, see NewTxtPortion
- *************************************************************************/
+// Checks if the current text is 'Arabic' text. Note that only the first
+// character has to be checked because a ctl portion only contains one
+// script, see NewTxtPortion
 bool SwScriptInfo::IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32 nLen )
 {
     using namespace ::com::sun::star::i18n;
@@ -1853,16 +1768,10 @@ void SwScriptInfo::ClearKashidaInvalid(sal_Int32 nKashPos)
     }
 }
 
-/*************************************************************************
- * SwScriptInfo::MarkOrClearKashidaInvalid()
- *
- * bMark == true:
- * marks the first valid kashida in the given text range as invalid
- *
- * bMark == false:
- * clears all kashida invalid flags in the given text range
-*************************************************************************/
-
+// bMark == true:
+// marks the first valid kashida in the given text range as invalid
+// bMark == false:
+// clears all kashida invalid flags in the given text range
 bool SwScriptInfo::MarkOrClearKashidaInvalid(sal_Int32 nStt, sal_Int32 nLen,
     bool bMark, sal_Int32 nMarkCount)
 {
@@ -1904,11 +1813,7 @@ void SwScriptInfo::MarkKashidaInvalid(sal_Int32 nKashPos)
     aKashidaInvalid.push_back(nKashPos);
 }
 
-/*************************************************************************
- * SwScriptInfo::GetKashidaPositions()
- * retrieve the kashida positions in the given text range
-*************************************************************************/
-
+// retrieve the kashida positions in the given text range
 sal_Int32 SwScriptInfo::GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
     sal_Int32* pKashidaPosition)
 {
@@ -1939,11 +1844,7 @@ void SwScriptInfo::SetNoKashidaLine(sal_Int32 nStt, sal_Int32 nLen)
     aNoKashidaLineEnd.push_back( nStt+nLen );
 }
 
-/*************************************************************************
- * SwScriptInfo::IsKashidaLine()
- * determines if the line uses kashida justification
-*************************************************************************/
-
+// determines if the line uses kashida justification
 bool SwScriptInfo::IsKashidaLine(sal_Int32 nCharIdx) const
 {
     for (size_t i = 0; i < aNoKashidaLine.size(); ++i)
@@ -1969,12 +1870,7 @@ void SwScriptInfo::ClearNoKashidaLine(sal_Int32 nStt, sal_Int32 nLen)
     }
 }
 
-/*************************************************************************
- * SwScriptInfo::MarkKashidasInvalid()
- *
- * mark the given character indices as invalid kashida positions
-************************************************************************/
-
+// mark the given character indices as invalid kashida positions
 bool SwScriptInfo::MarkKashidasInvalid(sal_Int32 nCnt, sal_Int32* pKashidaPositions)
 {
     SAL_WARN_IF( !pKashidaPositions || nCnt == 0, "sw.core", "Where are kashidas?" );
@@ -2114,13 +2010,9 @@ void SwLineLayout::Init( SwLinePortion* pNextPortion )
     SetPortion( pNextPortion );
 }
 
-/*--------------------------------------------------
- * HangingMargin()
- * looks for hanging punctuation portions in the paragraph
- * and return the maximum right offset of them.
- * If no such portion is found, the Margin/Hanging-flags will be updated.
- * --------------------------------------------------*/
-
+// looks for hanging punctuation portions in the paragraph
+// and return the maximum right offset of them.
+// If no such portion is found, the Margin/Hanging-flags will be updated.
 SwTwips SwLineLayout::_GetHangingMargin() const
 {
     SwLinePortion* pPor = GetPortion();
@@ -2232,12 +2124,7 @@ void SwScriptInfo::selectRedLineDeleted(const SwTxtNode& rNode, MultiSelection &
     }
 }
 
-/*************************************************************************
- * SwScriptInfo::CalcHiddenRanges()
- *
- * Returns a MultiSection indicating the hidden ranges.
- *************************************************************************/
-
+// Returns a MultiSection indicating the hidden ranges.
 void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHiddenMulti )
 {
     selectHiddenTextProperty(rNode, rHiddenMulti);

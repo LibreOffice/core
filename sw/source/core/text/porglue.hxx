@@ -24,10 +24,6 @@
 class SwRect;
 class SwLineLayout;
 
-/*************************************************************************
- *                      class SwGluePortion
- *************************************************************************/
-
 class SwGluePortion : public SwLinePortion
 {
 private:
@@ -52,10 +48,6 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-/*************************************************************************
- *                      class SwFixPortion
- *************************************************************************/
-
 class SwFixPortion : public SwGluePortion
 {
     KSHORT nFix;        // The width offset in the line
@@ -67,10 +59,6 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-/*************************************************************************
- *                class SwMarginPortion
- *************************************************************************/
-
 class SwMarginPortion : public SwGluePortion
 {
 public:
@@ -79,36 +67,20 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-/*************************************************************************
- *                inline SwGluePortion::GetPrtGlue()
- *************************************************************************/
-
 inline short SwGluePortion::GetPrtGlue() const
 { return Width() - nFixWidth; }
 
-/*************************************************************************
- *              inline SwGluePortion::AdjFixWidth()
- * The FixWidth MUST NEVER be larger than the accumulated width!
- *************************************************************************/
-
+// The FixWidth MUST NEVER be larger than the accumulated width!
 inline void SwGluePortion::AdjFixWidth()
 {
     if( nFixWidth > PrtWidth() )
         nFixWidth = PrtWidth();
 }
 
-/*************************************************************************
- *                 inline SwGluePortion::MoveGlue()
- *************************************************************************/
-
 inline void SwGluePortion::MoveAllGlue( SwGluePortion *pTarget )
 {
     MoveGlue( pTarget, GetPrtGlue() );
 }
-
-/*************************************************************************
- *                inline SwGluePortion::MoveHalfGlue()
- *************************************************************************/
 
 inline void SwGluePortion::MoveHalfGlue( SwGluePortion *pTarget )
 {

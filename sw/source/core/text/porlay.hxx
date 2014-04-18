@@ -345,10 +345,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwParaPortion)
 };
 
-/*************************************************************************
- * Inline implementations
- *************************************************************************/
-
 inline void SwLineLayout::ResetFlags()
 {
     bFormatAdj = bDummy = bFntChg = bTab = bEndHyph = bMidHyph = bFly

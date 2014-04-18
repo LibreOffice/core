@@ -28,10 +28,6 @@ class SvxBrushItem;
 class SwFmtVertOrient;
 class SwFrm;
 
-/*************************************************************************
- *                      class SwFldPortion
- *************************************************************************/
-
 class SwFldPortion : public SwExpandPortion
 {
     friend class SwTxtFormatter;
@@ -111,9 +107,6 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-/*************************************************************************
- *                      class SwHiddenPortion
- *************************************************************************/
 // Distinguish only for painting/hide
 
 class SwHiddenPortion : public SwFldPortion
@@ -129,10 +122,6 @@ public:
     virtual SwFldPortion *Clone( const OUString &rExpand ) const SAL_OVERRIDE;
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                      class SwNumberPortion
- *************************************************************************/
 
 class SwNumberPortion : public SwFldPortion
 {
@@ -159,10 +148,6 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-/*************************************************************************
- *                      class SwBulletPortion
- *************************************************************************/
-
 class SwBulletPortion : public SwNumberPortion
 {
 public:
@@ -175,10 +160,6 @@ public:
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                      class SwBmpBulletPortion
- *************************************************************************/
 
 class SwGrfNumPortion : public SwNumberPortion
 {
@@ -221,16 +202,12 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-/*************************************************************************
- *                      class SwCombinedPortion
- * Used in for asian layout specialities to display up to six characters
- * in 2 rows and 2-3 columns.
- * e.g.
- *
- *       A..  A..  A.B  A.B   A.B.C   A.B.C
- *       ...  ..B  .C.  C.D   .D.E.   D.E.F
- *************************************************************************/
-
+// Used in for asian layout specialities to display up to six characters
+// in 2 rows and 2-3 columns.
+// e.g.
+//
+//       A..  A..  A.B  A.B   A.B.C   A.B.C
+//       ...  ..B  .C.  C.D   .D.E.   D.E.F
 class SwCombinedPortion : public SwFldPortion
 {
     sal_uInt16 aPos[6];     // up to six X positions

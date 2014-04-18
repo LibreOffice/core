@@ -84,21 +84,16 @@ SwAttrIter::~SwAttrIter()
     delete pFnt;
 }
 
-/*************************************************************************
- *                      SwAttrIter::GetAttr()
- *
- * Liefert fuer eine Position das Attribut, wenn das Attribut genau auf
- * der Position nPos liegt und kein EndIndex besitzt.
- * GetAttr() wird fuer Attribute benoetigt, die die Formatierung beeinflussen
- * sollen, ohne dabei den Inhalt des Strings zu veraendern. Solche "entarteten"
- * Attribute sind z.B. Felder (die expandierten Text bereit halten) und
- * zeilengebundene Frames. Um Mehrdeutigkeiten zwischen verschiedenen
- * solcher Attribute zu vermeiden, werden beim Anlegen eines Attributs
- * an der Startposition ein Sonderzeichen in den String einfuegt.
- * Der Formatierer stoesst auf das Sonderzeichen und holt sich per
- * GetAttr() das entartete Attribut.
- *************************************************************************/
-
+// Liefert fuer eine Position das Attribut, wenn das Attribut genau auf
+// der Position nPos liegt und kein EndIndex besitzt.
+// GetAttr() wird fuer Attribute benoetigt, die die Formatierung beeinflussen
+// sollen, ohne dabei den Inhalt des Strings zu veraendern. Solche "entarteten"
+// Attribute sind z.B. Felder (die expandierten Text bereit halten) und
+// zeilengebundene Frames. Um Mehrdeutigkeiten zwischen verschiedenen
+// solcher Attribute zu vermeiden, werden beim Anlegen eines Attributs
+// an der Startposition ein Sonderzeichen in den String einfuegt.
+// Der Formatierer stoesst auf das Sonderzeichen und holt sich per
+// GetAttr() das entartete Attribut.
 SwTxtAttr *SwAttrIter::GetAttr( const sal_Int32 nPosition ) const
 {
     return (m_pTxtNode) ? m_pTxtNode->GetTxtAttrForCharAt(nPosition) : 0;
@@ -698,13 +693,11 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
                             if( RES_FLYFRMFMT == pFrmFmt->Which()
                                 && rTmpSize.GetWidthPercent() )
                             {
-/*-----------------------------------------------------------------------------
- * This is a hack for the wollowing situation: In the paragraph there's a
- * text frame with relative size. Then let's take 0.5 cm as minimum width
- * and KSHRT_MAX as maximum width
- * It were cleaner and maybe neccessary later on to iterate over the content
- * of the text frame and call GetMinMaxSize recursively
- * --------------------------------------------------------------------------*/
+                                // This is a hack for the wollowing situation: In the paragraph there's a
+                                // text frame with relative size. Then let's take 0.5 cm as minimum width
+                                // and KSHRT_MAX as maximum width
+                                // It were cleaner and maybe neccessary later on to iterate over the content
+                                // of the text frame and call GetMinMaxSize recursively
                                 nAktWidth = FLYINCNT_MIN_WIDTH; // 0.5 cm
                                 if( (long)rMax < KSHRT_MAX )
                                     rMax = KSHRT_MAX;
@@ -771,18 +764,13 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
     pOut->SetMapMode( aOldMap );
 }
 
-/*************************************************************************
- *                      SwTxtNode::GetScalingOfSelectedText()
- *
- * Calculates the width of the text part specified by nStt and nEnd,
- * the height of the line containing nStt is devided by this width,
- * indicating the scaling factor, if the text part is rotated.
- * Having CH_BREAKs in the text part, this method returns the scaling
- * factor for the longest of the text parts separated by the CH_BREAKs.
- *
- * changing this method very likely requires changing of "GetMinMaxSize"
- *************************************************************************/
-
+// Calculates the width of the text part specified by nStt and nEnd,
+// the height of the line containing nStt is devided by this width,
+// indicating the scaling factor, if the text part is rotated.
+// Having CH_BREAKs in the text part, this method returns the scaling
+// factor for the longest of the text parts separated by the CH_BREAKs.
+//
+// changing this method very likely requires changing of "GetMinMaxSize"
 sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
     const
 {

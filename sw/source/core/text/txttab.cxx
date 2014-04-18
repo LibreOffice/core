@@ -36,10 +36,6 @@
 #include <porfld.hxx>
 #include <boost/scoped_ptr.hpp>
 
-/*************************************************************************
- *                    SwLineInfo::GetTabStop()
- *************************************************************************/
-
 //#i24363# tab stops relative to indent
 /* Return the first tab stop that is > nSearchPos.
  * If the tab stop is outside the print area, we
@@ -59,18 +55,11 @@ const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nSearchPos,
     return 0;
 }
 
-/*************************************************************************
- *                    SwLineInfo::NumberOfTabStops()
- *************************************************************************/
-
 sal_uInt16 SwLineInfo::NumberOfTabStops() const
 {
     return pRuler->Count();
 }
 
-/*************************************************************************
- *                      SwTxtFormatter::NewTabPortion()
- *************************************************************************/
 SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto ) const
 {
     sal_Unicode cFill = 0;
@@ -304,12 +293,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
     return pTabPor;
 }
 
-/*************************************************************************
- *                SwTabPortion::SwTabPortion()
- *************************************************************************/
-
 // Die Basisklasse wird erstmal ohne alles initialisiert.
-
 SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const sal_Unicode cFillChar, const bool bAutoTab )
     : SwFixPortion( 0, 0 ), nTabPos(nTabPosition), cFill(cFillChar), bAutoTabStop( bAutoTab )
 {
@@ -317,10 +301,6 @@ SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const sal_Unicode cFillCh
     OSL_ENSURE(!IsFilled() || ' ' != cFill, "SwTabPortion::CTOR: blanks ?!");
     SetWhichPor( POR_TAB );
 }
-
-/*************************************************************************
- *                 virtual SwTabPortion::Format()
- *************************************************************************/
 
 bool SwTabPortion::Format( SwTxtFormatInfo &rInf )
 {
@@ -332,19 +312,11 @@ bool SwTabPortion::Format( SwTxtFormatInfo &rInf )
     return PreFormat( rInf );
 }
 
-/*************************************************************************
- *                 virtual SwTabPortion::FormatEOL()
- *************************************************************************/
-
 void SwTabPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
     if( rInf.GetLastTab() == this && !IsTabLeftPortion() )
         PostFormat( rInf );
 }
-
-/*************************************************************************
- *                    SwTabPortion::PreFormat()
- *************************************************************************/
 
 bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
 {
@@ -458,10 +430,6 @@ bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     }
 }
 
-/*************************************************************************
- *                      SwTabPortion::PostFormat()
- *************************************************************************/
-
 bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
 {
     const bool bTabOverMargin = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_OVER_MARGIN);
@@ -530,12 +498,7 @@ bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
     return rInf.Width() <= rInf.X();
 }
 
-/*************************************************************************
- *                virtual SwTabPortion::Paint()
- *
- * Ex: LineIter::DrawTab()
- *************************************************************************/
-
+// Ex: LineIter::DrawTab()
 void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -625,17 +588,9 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-/*************************************************************************
- *                virtual SwAutoTabDecimalPortion::Paint()
- *************************************************************************/
-
 void SwAutoTabDecimalPortion::Paint( const SwTxtPaintInfo & ) const
 {
 }
-
-/*************************************************************************
- *              virtual SwTabPortion::HandlePortion()
- *************************************************************************/
 
 void SwTabPortion::HandlePortion( SwPortionHandler& rPH ) const
 {

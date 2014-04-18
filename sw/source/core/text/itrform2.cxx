@@ -85,10 +85,6 @@ inline void ClearFly( SwTxtFormatInfo &rInf )
     rInf.SetFly(0);
 }
 
-/*************************************************************************
- *                  SwTxtFormatter::CtorInitTxtFormatter()
- *************************************************************************/
-
 void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *pNewInf )
 {
     CtorInitTxtPainter( pNewFrm, pNewInf );
@@ -115,10 +111,6 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
 
 }
 
-/*************************************************************************
- *                      SwTxtFormatter::DTOR
- *************************************************************************/
-
 SwTxtFormatter::~SwTxtFormatter()
 {
     // Extremly unlikely, but still possible
@@ -129,10 +121,6 @@ SwTxtFormatter::~SwTxtFormatter()
         GetInfo().SetRest(0);
     }
 }
-
-/*************************************************************************
- *                      SwTxtFormatter::Insert()
- *************************************************************************/
 
 void SwTxtFormatter::Insert( SwLineLayout *pLay )
 {
@@ -145,10 +133,6 @@ void SwTxtFormatter::Insert( SwLineLayout *pLay )
     else
         pCurr = pLay;
 }
-
-/*************************************************************************
- *                  SwTxtFormatter::GetFrmRstHeight()
- *************************************************************************/
 
 KSHORT SwTxtFormatter::GetFrmRstHeight() const
 {
@@ -166,10 +150,6 @@ KSHORT SwTxtFormatter::GetFrmRstHeight() const
     else
         return KSHORT( nHeight );
 }
-
-/*************************************************************************
- *                  SwTxtFormatter::Underflow()
- *************************************************************************/
 
 SwLinePortion *SwTxtFormatter::Underflow( SwTxtFormatInfo &rInf )
 {
@@ -322,10 +302,6 @@ SwLinePortion *SwTxtFormatter::Underflow( SwTxtFormatInfo &rInf )
     return pPor;
 }
 
-/*************************************************************************
- *                      SwTxtFormatter::InsertPortion()
- *************************************************************************/
-
 void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
                                     SwLinePortion *pPor ) const
 {
@@ -370,10 +346,6 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
         pPor = pPor->GetPortion();
     }
 }
-
-/*************************************************************************
- *                      SwTxtFormatter::BuildPortion()
- *************************************************************************/
 
 void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 {
@@ -742,10 +714,6 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
     rInf.SetTabOverflow( false );
 }
 
-/*************************************************************************
- *                 SwTxtFormatter::CalcAdjustLine()
- *************************************************************************/
-
 void SwTxtFormatter::CalcAdjustLine( SwLineLayout *pCurrent )
 {
     if( SVX_ADJUST_LEFT != GetAdjust() && !pMulti)
@@ -760,10 +728,6 @@ void SwTxtFormatter::CalcAdjustLine( SwLineLayout *pCurrent )
         }
     }
 }
-
-/*************************************************************************
- *                      SwTxtFormatter::CalcAscent()
- *************************************************************************/
 
 void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
 {
@@ -848,10 +812,6 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
     }
 }
 
-/*************************************************************************
- *                      class SwMetaPortion
- *************************************************************************/
-
 class SwMetaPortion : public SwTxtPortion
 {
 public:
@@ -859,10 +819,6 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
 //    OUTPUT_OPERATOR
 };
-
-/*************************************************************************
- *               virtual SwMetaPortion::Paint()
- *************************************************************************/
 
 void SwMetaPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -894,9 +850,6 @@ namespace sw { namespace mark {
     }
 } }
 
-/*************************************************************************
- *                      SwTxtFormatter::WhichTxtPor()
- *************************************************************************/
 SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
 {
     SwTxtPortion *pPor = 0;
@@ -970,9 +923,6 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
     return pPor;
 }
 
-/*************************************************************************
- *                      SwTxtFormatter::NewTxtPortion()
- *************************************************************************/
 // We calculate the length, the following portion limits are defined:
 // 1) Tabs
 // 2) Linebreaks
@@ -1044,9 +994,6 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     return pPor;
 }
 
-/*************************************************************************
- *                 SwTxtFormatter::WhichFirstPortion()
- *************************************************************************/
 SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
 {
     SwLinePortion *pPor = 0;
@@ -1198,10 +1145,6 @@ static bool lcl_OldFieldRest( const SwLineLayout* pCurr )
     }
     return bRet;
 }
-
-/*************************************************************************
- *                      SwTxtFormatter::NewPortion()
- *************************************************************************/
 
 /* NewPortion sets rInf.nLen
  * A SwTxtPortion is limited by a tab, break, txtatr or attr change
@@ -1530,10 +1473,6 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
     return pPor;
 }
 
-/*************************************************************************
- *                      SwTxtFormatter::FormatLine()
- *************************************************************************/
-
 sal_Int32 SwTxtFormatter::FormatLine(const sal_Int32 nStartPos)
 {
     OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
@@ -1739,10 +1678,6 @@ sal_Int32 SwTxtFormatter::FormatLine(const sal_Int32 nStartPos)
     return nNewStart;
 }
 
-/*************************************************************************
- *                      SwTxtFormatter::RecalcRealHeight()
- *************************************************************************/
-
 void SwTxtFormatter::RecalcRealHeight()
 {
     do
@@ -1750,10 +1685,6 @@ void SwTxtFormatter::RecalcRealHeight()
         CalcRealHeight();
     } while (Next());
 }
-
-/*************************************************************************
- *                    SwTxtFormatter::CalcRealHeight()
- *************************************************************************/
 
 void SwTxtFormatter::CalcRealHeight( bool bNewLine )
 {
@@ -1821,16 +1752,16 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
                             if( !nTmp )
                                 ++nTmp;
                             nLineHeight = (KSHORT)nTmp;
-/*
+                            /*
                             //@TODO figure out how WW maps ascent and descent
                             //in case of prop  line spacing <100%
                             KSHORT nAsc = ( 4 * nLineHeight ) / 5;  // 80%
                             if( nAsc < pCurr->GetAscent() ||
                                 nLineHeight - nAsc < pCurr->Height() -
-pCurr->GetAscent() )
+                                pCurr->GetAscent() )
                                 pCurr->SetClipping( true );
                             pCurr->SetAscent( nAsc );
-*/
+                            */
                             pCurr->Height( nLineHeight );
                             pInf->GetParaPortion()->SetFixLineHeight();
                         }
@@ -1904,10 +1835,6 @@ pCurr->GetAscent() )
     pCurr->SetRealHeight( nLineHeight );
 }
 
-/*************************************************************************
- *                      SwTxtFormatter::FeedInf()
- *************************************************************************/
-
 void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
 {
     // 3260, 3860: Fly auf jeden Fall loeschen!
@@ -1948,10 +1875,6 @@ void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
     }
 }
 
-/*************************************************************************
- *                      SwTxtFormatter::FormatReset()
- *************************************************************************/
-
 void SwTxtFormatter::FormatReset( SwTxtFormatInfo &rInf )
 {
     pCurr->Truncate();
@@ -1966,10 +1889,6 @@ void SwTxtFormatter::FormatReset( SwTxtFormatInfo &rInf )
     FeedInf( rInf );
 }
 
-/*************************************************************************
- *                SwTxtFormatter::CalcOnceMore()
- *************************************************************************/
-
 bool SwTxtFormatter::CalcOnceMore()
 {
     if( pDropFmt )
@@ -1982,10 +1901,6 @@ bool SwTxtFormatter::CalcOnceMore()
         bOnceMore = false;
     return bOnceMore;
 }
-
-/*************************************************************************
- *                SwTxtFormatter::CalcBottomLine()
- *************************************************************************/
 
 SwTwips SwTxtFormatter::CalcBottomLine() const
 {
@@ -2011,12 +1926,7 @@ SwTwips SwTxtFormatter::CalcBottomLine() const
     return nRet;
 }
 
-/*************************************************************************
- *                SwTxtFormatter::_CalcFitToContent()
- *
- * FME/OD: This routine does a limited text formatting.
- *************************************************************************/
-
+// FME/OD: This routine does a limited text formatting.
 SwTwips SwTxtFormatter::_CalcFitToContent()
 {
     FormatReset( GetInfo() );
@@ -2025,13 +1935,9 @@ SwTwips SwTxtFormatter::_CalcFitToContent()
     return pCurr->Width();
 }
 
-/*************************************************************************
- *                      SwTxtFormatter::AllowRepaintOpt()
- *
- * determines if the calculation of a repaint offset is allowed
- * otherwise each line is painted from 0 (this is a copy of the beginning
- * of the former SwTxtFormatter::Recycle() function
- *************************************************************************/
+// determines if the calculation of a repaint offset is allowed
+// otherwise each line is painted from 0 (this is a copy of the beginning
+// of the former SwTxtFormatter::Recycle() function
 bool SwTxtFormatter::AllowRepaintOpt() const
 {
     // reformat position in front of current line? Only in this case
@@ -2765,11 +2671,7 @@ void SwTxtFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwTxtFormatI
 }
 
 namespace {
-    /*************************************************************************
-    *                      ::CalcOptRepaint()
-    *
-    * calculates and sets optimal repaint offset for the current line
-    *************************************************************************/
+    // calculates and sets optimal repaint offset for the current line
     long lcl_CalcOptRepaint( SwTxtFormatter &rThis,
                          SwLineLayout &rCurr,
                          const sal_Int32 nOldLineEnd,

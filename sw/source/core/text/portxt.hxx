@@ -25,10 +25,6 @@
 
 class SwTxtGuess;
 
-/*************************************************************************
- *                      class SwTxtPortion
- *************************************************************************/
-
 /// This portion represents a part of the paragraph string.
 class SwTxtPortion : public SwLinePortion
 {
@@ -75,10 +71,6 @@ private:
     bool mbContainsInputFieldEnd;
     bool ContainsOnlyDummyChars() const;
 };
-
-/*************************************************************************
- *                      class SwHolePortion
- *************************************************************************/
 
 class SwHolePortion : public SwLinePortion
 {

@@ -21,10 +21,6 @@
 
 #include "porglue.hxx"
 
-/*************************************************************************
- *                      class SwTabPortion
- *************************************************************************/
-
 class SwTabPortion : public SwFixPortion
 {
     const KSHORT nTabPos;
@@ -49,10 +45,6 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-/*************************************************************************
- *                  class SwTabLeftPortion
- *************************************************************************/
-
 class SwTabLeftPortion : public SwTabPortion
 {
 public:
@@ -61,10 +53,6 @@ public:
     { SetWhichPor( POR_TABLEFT ); }
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                  class SwTabRightPortion
- *************************************************************************/
 
 class SwTabRightPortion : public SwTabPortion
 {
@@ -75,10 +63,6 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-/*************************************************************************
- *                  class SwTabCenterPortion
- *************************************************************************/
-
 class SwTabCenterPortion : public SwTabPortion
 {
 public:
@@ -87,10 +71,6 @@ public:
     { SetWhichPor( POR_TABCENTER ); }
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                  class SwTabDecimalPortion
- *************************************************************************/
 
 class SwTabDecimalPortion : public SwTabPortion
 {
@@ -124,10 +104,6 @@ public:
 
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                  class SwAutoTabDecimalPortion
- *************************************************************************/
 
 class SwAutoTabDecimalPortion : public SwTabDecimalPortion
 {

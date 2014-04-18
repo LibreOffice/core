@@ -41,14 +41,9 @@
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
 
-/*************************************************************************
- *                lcl_IsDropFlyInter
- *
- *  Calculates if a drop caps portion intersects with a fly
- *  The width and height of the drop caps portion are passed as arguments,
- *  the position is calculated from the values in rInf
- *************************************************************************/
-
+//  Calculates if a drop caps portion intersects with a fly
+//  The width and height of the drop caps portion are passed as arguments,
+//  the position is calculated from the values in rInf
 static bool lcl_IsDropFlyInter( const SwTxtFormatInfo &rInf,
                              sal_uInt16 nWidth, sal_uInt16 nHeight )
 {
@@ -171,13 +166,9 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
     return i;
 }
 
-/*************************************************************************
- *                    SwTxtNode::GetDropSize()
- *
- *  If a dropcap is found the return value is true otherwise false. The
- *  drop cap sizes passed back by reference are font height, drop height
- *  and drop descent.
- *************************************************************************/
+//  If a dropcap is found the return value is true otherwise false. The
+//  drop cap sizes passed back by reference are font height, drop height
+//  and drop descent.
 bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescent) const
 {
     rFontHeight = 0;
@@ -490,13 +481,8 @@ void SwTxtFormatter::CalcDropHeight( const MSHORT nLines )
     }
 }
 
-/*************************************************************************
- *                SwTxtFormatter::GuessDropHeight()
- *
- *  We assume hat the font height doesn't change and that at first there
- *  are at least as many lines, as the DropCap-setting claims
- *
- *************************************************************************/
+//  We assume hat the font height doesn't change and that at first there
+//  are at least as many lines, as the DropCap-setting claims
 void SwTxtFormatter::GuessDropHeight( const MSHORT nLines )
 {
     OSL_ENSURE( nLines, "GuessDropHeight: Give me more Lines!" );
@@ -541,7 +527,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
         pDropPor = new SwDropPortion( GetDropLines(), GetDropHeight(),
                                       GetDropDescent(), pDropFmt->GetDistance() );
     else
-        pDropPor = new SwDropPortion( 0,0,0,pDropFmt->GetDistance() );
+       pDropPor = new SwDropPortion( 0,0,0,pDropFmt->GetDistance() );
 
     pDropPor->SetLen( nPorLen );
 
@@ -644,13 +630,8 @@ void SwTxtPainter::PaintDropPortion()
     GetInfo().Y( nOldY );
 }
 
-/*************************************************************************
- *                      class SwDropCapCache
- *
- * Since the calculation of the font size is expensive, this is being
- * channeled through a DropCapCache
- *************************************************************************/
-
+// Since the calculation of the font size is expensive, this is being
+// channeled through a DropCapCache
 #define DROP_CACHE_SIZE 10
 
 class SwDropCapCache
