@@ -30,7 +30,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <svx/checklbx.hxx>
 #include <swlbox.hxx>
-#include <caption.hxx>
 
 class SwFldMgr;
 class SvTreeListEntry;
