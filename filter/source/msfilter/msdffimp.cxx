@@ -3816,7 +3816,12 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
 
             if ( nContrast || nBrightness || ( nGamma != 0x10000 ) || ( eDrawMode != GRAPHICDRAWMODE_STANDARD ) )
             {
-                if ( ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0 )
+                // MSO uses a different algorithm for contrast+brightness, LO applies contrast before brightness,
+                // while MSO apparently applies half of brightness before contrast and half after. So if only
+                // contrast or brightness need to be altered, the result is the same, but if both are involved,
+                // there's no way to map that, so just force a conversion of the image.
+                bool needsConversion = nContrast != 0 && nBrightness != 0;
+                if ( ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0 && !needsConversion )
                 {
                     if ( nBrightness )
                         rSet.Put( SdrGrafLuminanceItem( nBrightness ) );
@@ -3841,7 +3846,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                         {
                             BitmapEx    aBitmapEx( aGraf.GetBitmapEx() );
                             if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
-                                aBitmapEx.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, sal_False );
+                                aBitmapEx.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, false, true );
                             if ( eDrawMode == GRAPHICDRAWMODE_GREYS )
                                 aBitmapEx.Convert( BMP_CONVERSION_8BIT_GREYS );
                             else if ( eDrawMode == GRAPHICDRAWMODE_MONO )
@@ -3855,7 +3860,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                         {
                             GDIMetaFile aGdiMetaFile( aGraf.GetGDIMetaFile() );
                             if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
-                                aGdiMetaFile.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, sal_False );
+                                aGdiMetaFile.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, false, true );
                             if ( eDrawMode == GRAPHICDRAWMODE_GREYS )
                                 aGdiMetaFile.Convert( MTF_CONVERSION_8BIT_GREYS );
                             else if ( eDrawMode == GRAPHICDRAWMODE_MONO )
