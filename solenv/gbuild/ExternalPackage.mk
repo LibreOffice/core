@@ -184,6 +184,14 @@ $(call gb_ExternalPackage__add_files,$(1),$(3))
 
 endef
 
+# Package files from unpacked tarball of an external project
+#
+# gb_ExternalPackage_use_unpacked package unpacked
+define gb_ExternalPackage_use_unpacked
+$(call gb_Package_use_unpacked,$(1),$(2))
+
+endef
+
 # Package files from build of an external project
 #
 # gb_ExternalPackage_use_external_project package external
