@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_COMPHELPER_MODULE_HXX
-#define COMPHELPER_COMPHELPER_MODULE_HXX
+#ifndef INCLUDED_COMPHELPER_SOURCE_INC_COMPHELPER_MODULE_HXX
+#define INCLUDED_COMPHELPER_SOURCE_INC_COMPHELPER_MODULE_HXX
 
 #include "comphelper/componentmodule.hxx"
 
@@ -81,6 +81,6 @@ namespace comphelper { namespace module
 } } // namespace comphelper::module
 
 
-#endif // COMPHELPER_COMPHELPER_MODULE_HXX
+#endif // INCLUDED_COMPHELPER_SOURCE_INC_COMPHELPER_MODULE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

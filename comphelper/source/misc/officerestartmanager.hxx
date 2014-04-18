@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __OFFICESTARTMANAGER_HXX_
-#define __OFFICESTARTMANAGER_HXX_
+#ifndef INCLUDED_COMPHELPER_SOURCE_MISC_OFFICERESTARTMANAGER_HXX
+#define INCLUDED_COMPHELPER_SOURCE_MISC_OFFICERESTARTMANAGER_HXX
 
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_OPROPERTYBAG_HXX
-#define COMPHELPER_OPROPERTYBAG_HXX
+#ifndef INCLUDED_COMPHELPER_SOURCE_PROPERTY_OPROPERTYBAG_HXX
+#define INCLUDED_COMPHELPER_SOURCE_PROPERTY_OPROPERTYBAG_HXX
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -231,6 +231,6 @@ namespace comphelper
 } // namespace comphelper
 
 
-#endif // COMPHELPER_OPROPERTYBAG_HXX
+#endif // INCLUDED_COMPHELPER_SOURCE_PROPERTY_OPROPERTYBAG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __INSTANCELOCKER_HXX_
-#define __INSTANCELOCKER_HXX_
+#ifndef INCLUDED_COMPHELPER_SOURCE_MISC_INSTANCELOCKER_HXX
+#define INCLUDED_COMPHELPER_SOURCE_MISC_INSTANCELOCKER_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
