@@ -123,51 +123,6 @@ private:
     uno::Reference< XDocumentHandler > m_DocumentHandler;
 };
 
-/**
- * @brief
- * Main entry for the xml filter framework.
- * It's called by SfxObjectShell::ImportFrom.
- */
-class LWPFilterImportFilter : public WeakImplHelper4< XFilter, XImporter, XServiceInfo, XExtendedFilterDetection >
-{
-public:
-    LWPFilterImportFilter( const uno::Reference< XMultiServiceFactory >& xFact );
-    virtual ~LWPFilterImportFilter();
-
-public:
-    /**
-     * @descr   see LWPFilterReader::filter.
-     */
-    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor )
-        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-
-    /**
-     * @descr   see LWPFilterReader::cancel.
-     */
-    virtual void SAL_CALL cancel() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // XImporter
-    virtual void SAL_CALL setTargetDocument( const uno::Reference< XComponent >& xDoc)
-        throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
-
-    // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw (std::exception) SAL_OVERRIDE;
-
-    Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw (std::exception) SAL_OVERRIDE;
-
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (std::exception) SAL_OVERRIDE;
-
-    /**
-     * @descr   function of interface XExtendedFilterDetection. If this interface is registered, it will be called whenever
-     *          a file is to be loaded.
-     */
-    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-public:
-    uno::Reference< XFilter > rFilter;
-    uno::Reference< XImporter > rImporter;
-};
-
 //test code
 int ReadWordproFile(SvStream &rStream, uno::Reference<XDocumentHandler>& XDoc);
 

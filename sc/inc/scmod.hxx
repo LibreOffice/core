@@ -250,7 +250,6 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
 
     SC_DLLPUBLIC bool   RegisterRefWindow( sal_uInt16 nSlotId, Window *pWnd );
     SC_DLLPUBLIC bool   UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd );
-    SC_DLLPUBLIC bool   IsAliveRefDlg( sal_uInt16 nSlotId, Window *pWnd );
     SC_DLLPUBLIC Window * Find1RefWindow( sal_uInt16 nSlotId, Window *pWndAncestor );
 
     ScAnyRefModalDlg* GetCurrentAnyRefDlg();

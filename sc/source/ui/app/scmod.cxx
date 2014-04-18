@@ -2301,18 +2301,6 @@ bool  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd )
     return true;
 }
 
-bool  ScModule::IsAliveRefDlg( sal_uInt16 nSlotId, Window *pWnd )
-{
-    std::map<sal_uInt16, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
-
-    if( iSlot == m_mapRefWindow.end() )
-        return false;
-
-    std::list<Window*> & rlRefWindow = iSlot->second;
-
-    return rlRefWindow.end() != std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd );
-}
-
 Window *  ScModule::Find1RefWindow( sal_uInt16 nSlotId, Window *pWndAncestor )
 {
     if (!pWndAncestor)
