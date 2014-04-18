@@ -292,7 +292,7 @@ public:
         {
             // Swap rows in data table.
             RowsType& rRows = *mpRows;
-            std::swap(rRows[nInd1], rRows[nInd2]);
+            std::swap(rRows[n1], rRows[n2]);
         }
     }
 
@@ -341,16 +341,16 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
 
         // Filll row-wise data table.
         ScSortInfoArray::RowsType& rRows = pArray->InitDataRows(
-            aSortParam.nRow2 - aSortParam.nRow1 + 1, aSortParam.nCol2 - aSortParam.nCol1 + 1);
+            nInd2 - nInd1 + 1, aSortParam.nCol2 - aSortParam.nCol1 + 1);
 
         for (SCCOL nCol = aSortParam.nCol1; nCol <= aSortParam.nCol2; ++nCol)
         {
             ScColumn& rCol = aCol[nCol];
             sc::ColumnBlockConstPosition aBlockPos;
             rCol.InitBlockPosition(aBlockPos);
-            for (SCROW nRow = aSortParam.nRow1; nRow <= aSortParam.nRow2; ++nRow)
+            for (SCROW nRow = nInd1; nRow <= nInd2; ++nRow)
             {
-                ScSortInfoArray::RowType& rRow = *rRows[nRow-aSortParam.nRow1];
+                ScSortInfoArray::RowType& rRow = *rRows[nRow-nInd1];
                 ScSortInfoArray::Cell& rCell = rRow[nCol-aSortParam.nCol1];
 
                 rCell.maCell = rCol.GetCellValue(aBlockPos, nRow);
@@ -431,12 +431,13 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
 
     if (aSortParam.bByRow)
     {
+        SCROW nRow1 = aSortParam.nRow1 + (aSortParam.bHasHeader ? 1 : 0);
         ScSortInfoArray::RowsType* pRows = pArray->GetDataRows();
         assert(pRows); // In sort-by-row mode we must have data rows already populated.
 
         // Detach all formula cells within the sorted range first.
         sc::EndListeningContext aCxt(*pDocument);
-        DetachFormulaCells(aCxt, aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2);
+        DetachFormulaCells(aCxt, aSortParam.nCol1, nRow1, aSortParam.nCol2, aSortParam.nRow2);
 
         // Cells in the data rows only reference values in the document. Make
         // a copy before updating the document.
@@ -450,11 +451,11 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
         for (size_t i = 0; i < pRows->size(); ++i)
         {
             ScSortInfoArray::RowType* pRow = (*pRows)[i];
-            for (size_t nCol = 0; nCol < pRow->size(); ++nCol)
+            for (size_t j = 0; j < pRow->size(); ++j)
             {
-                ScSortInfoArray::Cell& rCell = (*pRow)[nCol];
+                ScSortInfoArray::Cell& rCell = (*pRow)[j];
 
-                sc::CellStoreType& rCellStore = aSortedCols.at(nCol).maCells;
+                sc::CellStoreType& rCellStore = aSortedCols.at(j).maCells;
                 size_t n = rCellStore.size();
                 rCellStore.resize(n+1);
                 switch (rCell.maCell.meType)
@@ -474,7 +475,7 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                     case CELLTYPE_FORMULA:
                     {
                         assert(rCell.mpAttr);
-                        ScAddress aCellPos(aSortParam.nCol1 + nCol, aSortParam.nRow1 + i, nTab);
+                        ScAddress aCellPos(aSortParam.nCol1 + j, nRow1 + i, nTab);
                         sc::CellStoreType::iterator itBlk = rCellStore.set(n, rCell.maCell.mpFormula->Clone(aCellPos));
 
                         size_t nOffset = n - itBlk->position;
@@ -486,7 +487,7 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                         assert(!rCell.mpAttr);
                 }
 
-                sc::CellTextAttrStoreType& rAttrStore = aSortedCols.at(nCol).maCellTextAttrs;
+                sc::CellTextAttrStoreType& rAttrStore = aSortedCols.at(j).maCellTextAttrs;
                 rAttrStore.resize(n+1);
                 if (rCell.mpAttr)
                     rAttrStore.set(n, *rCell.mpAttr);
@@ -494,7 +495,7 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                 // At this point each broadcaster instance is managed by 2
                 // containers. We will release those in the original storage
                 // below before transferring them to the document.
-                sc::BroadcasterStoreType& rBCStore = aSortedCols.at(nCol).maBroadcasters;
+                sc::BroadcasterStoreType& rBCStore = aSortedCols.at(j).maBroadcasters;
                 rBCStore.resize(n+1);
                 if (rCell.mpBroadcaster)
                     // A const pointer would be implicitly converted to a bool type.
@@ -512,13 +513,13 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
             {
                 sc::CellStoreType& rDest = aCol[nThisCol].maCells;
                 sc::CellStoreType& rSrc = aSortedCols[i].maCells;
-                rSrc.transfer(0, rSrc.size()-1, rDest, aSortParam.nRow1);
+                rSrc.transfer(0, rSrc.size()-1, rDest, nRow1);
             }
 
             {
                 sc::CellTextAttrStoreType& rDest = aCol[nThisCol].maCellTextAttrs;
                 sc::CellTextAttrStoreType& rSrc = aSortedCols[i].maCellTextAttrs;
-                rSrc.transfer(0, rSrc.size()-1, rDest, aSortParam.nRow1);
+                rSrc.transfer(0, rSrc.size()-1, rDest, nRow1);
             }
 
             {
@@ -526,12 +527,12 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
 
                 // Release current broadcasters first, to prevent them from getting deleted.
                 SvtBroadcaster* pBC = NULL;
-                for (SCROW nRow = aSortParam.nRow1; nRow <= aSortParam.nRow2; ++nRow)
+                for (SCROW nRow = nRow1; nRow <= aSortParam.nRow2; ++nRow)
                     rBCDest.release(nRow, pBC);
 
                 // Transfer sorted broadcaster segment to the document.
                 sc::BroadcasterStoreType& rBCSrc = aSortedCols[i].maBroadcasters;
-                rBCSrc.transfer(0, rBCSrc.size()-1, rBCDest, aSortParam.nRow1);
+                rBCSrc.transfer(0, rBCSrc.size()-1, rBCDest, nRow1);
             }
 
             aCol[nThisCol].CellStorageModified();
@@ -540,7 +541,7 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
         // Attach all formula cells within sorted range, to have them start listening again.
         sc::StartListeningContext aStartListenCxt(*pDocument);
         AttachFormulaCells(
-            aStartListenCxt, aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2);
+            aStartListenCxt, aSortParam.nCol1, nRow1, aSortParam.nCol2, aSortParam.nRow2);
     }
     else
     {
