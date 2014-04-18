@@ -258,9 +258,6 @@ bool lcl_HasPreviousParaSameNumRule( const SwTxtNode& rNode )
 
 } // end namespace
 
-/*
- * SwTaggedPDFHelper::SwTaggedPDFHelper()
- */
 SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
                                       const Frm_Info* pFrmInfo,
                                       const Por_Info* pPorInfo,
@@ -297,9 +294,6 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
     }
 }
 
-/*
- * SwTaggedPDFHelper::~SwTaggedPDFHelper()
- */
 SwTaggedPDFHelper::~SwTaggedPDFHelper()
 {
     if ( mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF() )
@@ -319,9 +313,6 @@ SwTaggedPDFHelper::~SwTaggedPDFHelper()
     }
 }
 
-/*
- * SwTaggedPDFHelper::CheckReopenTag()
- */
 bool SwTaggedPDFHelper::CheckReopenTag()
 {
     bool bRet = false;
@@ -391,9 +382,6 @@ bool SwTaggedPDFHelper::CheckReopenTag()
     return bRet && !bContinue;
 }
 
-/*
- * SwTaggedPDFHelper::CheckRestoreTag()
- */
 bool SwTaggedPDFHelper::CheckRestoreTag() const
 {
     bool bRet = false;
@@ -413,9 +401,6 @@ bool SwTaggedPDFHelper::CheckRestoreTag() const
     return bRet;
 }
 
-/*
- * SwTaggedPDFHelper::BeginTag()
- */
 void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUString& rString )
 {
     // write new tag
@@ -474,9 +459,6 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
     SetAttributes( eType );
 }
 
-/*
- * SwTaggedPDFHelper::EndTag()
- */
 void SwTaggedPDFHelper::EndTag()
 {
     mpPDFExtOutDevData->EndStructureElement();
@@ -486,11 +468,7 @@ void SwTaggedPDFHelper::EndTag()
 #endif
 }
 
-/*
- * SwTaggedPDFHelper::SetAttributes()
- *
- * Sets the attributes according to the structure type.
- */
+// Sets the attributes according to the structure type.
 void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 {
     vcl::PDFWriter::StructAttributeValue eVal;
@@ -845,9 +823,6 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
     }
 }
 
-/*
- * SwTaggedPDFHelper::BeginNumberedListStructureElements()
- */
 void SwTaggedPDFHelper::BeginNumberedListStructureElements()
 {
     OSL_ENSURE( mpNumInfo, "List without mpNumInfo?" );
@@ -985,9 +960,6 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
     }
 }
 
-/*
- * SwTaggedPDFHelper::BeginBlockStructureElements()
- */
 void SwTaggedPDFHelper::BeginBlockStructureElements()
 {
     const SwFrm* pFrm = &mpFrmInfo->mrFrm;
@@ -1323,9 +1295,6 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
     }
 }
 
-/*
- * SwTaggedPDFHelper::EndStructureElements()
- */
 void SwTaggedPDFHelper::EndStructureElements()
 {
     while ( nEndStructureElement > 0 )
@@ -1337,9 +1306,6 @@ void SwTaggedPDFHelper::EndStructureElements()
     CheckRestoreTag();
 }
 
-/*
- * SwTaggedPDFHelper::BeginInlineStructureElements()
- */
 void SwTaggedPDFHelper::BeginInlineStructureElements()
 {
     const SwLinePortion* pPor = &mpPorInfo->mrPor;
@@ -1471,18 +1437,12 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
     }
 }
 
-/*
- * static SwTaggedPDFHelper::IsExportTaggedPDF
- */
- bool SwTaggedPDFHelper::IsExportTaggedPDF( const OutputDevice& rOut )
- {
+bool SwTaggedPDFHelper::IsExportTaggedPDF( const OutputDevice& rOut )
+{
     vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, rOut.GetExtOutDevData() );
     return pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportTaggedPDF();
- }
+}
 
-/*
- * SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper()
- */
 SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
                                                       OutputDevice& rOut,
                                                       const OUString& rPageRange,
@@ -1542,9 +1502,6 @@ SwEnhancedPDFExportHelper::~SwEnhancedPDFExportHelper()
     delete mpRangeEnum;
 }
 
-/*
- * SwEnhancedPDFExportHelper::EnhancedPDFExport()
- */
 void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 {
     vcl::PDFExtOutDevData* pPDFExtOutDevData =
@@ -2106,12 +2063,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
     mrOut.Pop();
 }
 
-/*
- * SwEnhancedPDFExportHelper::CalcOutputPageNum()
- *
- * Returns the page number in the output pdf on which the given rect is located.
- * If this page is duplicated, method will return first occurrence of it.
- */
+// Returns the page number in the output pdf on which the given rect is located.
+// If this page is duplicated, method will return first occurrence of it.
 sal_Int32 SwEnhancedPDFExportHelper::CalcOutputPageNum( const SwRect& rRect ) const
 {
     std::vector< sal_Int32 > aPageNums = CalcOutputPageNums( rRect );
@@ -2120,13 +2073,9 @@ sal_Int32 SwEnhancedPDFExportHelper::CalcOutputPageNum( const SwRect& rRect ) co
     return -1;
 }
 
-/*
- * SwEnhancedPDFExportHelper::CalcOutputPageNums()
- *
- * Returns a vector of the page numbers in the output pdf on which the given
- * rect is located. There can be many such pages since StringRangeEnumerator
- * allows duplication of its entries.
- */
+// Returns a vector of the page numbers in the output pdf on which the given
+// rect is located. There can be many such pages since StringRangeEnumerator
+// allows duplication of its entries.
 std::vector< sal_Int32 > SwEnhancedPDFExportHelper::CalcOutputPageNums(
     const SwRect& rRect ) const
 {

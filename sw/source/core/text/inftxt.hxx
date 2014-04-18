@@ -70,11 +70,7 @@ class SwWrongList;
 #define OPTDBG( rInf )   false
 #endif
 
-/*************************************************************************
- * class SwLineInfo
- * Respects the attribute LineSpace when calculating the Height/Ascent
- *************************************************************************/
-
+// Respects the attribute LineSpace when calculating the Height/Ascent
 class SwLineInfo
 {
     friend class SwTxtIter;
@@ -122,10 +118,6 @@ public:
     friend SvStream & WriteSwLineInfo( SvStream &rOS, const SwLineInfo &rInf );
 };
 
-/*************************************************************************
- * class SwTxtInfo
- *************************************************************************/
-
 class SwTxtInfo
 {
     // Implementation in txthyph.cxx
@@ -148,10 +140,6 @@ public:
 
     friend SvStream & WriteSwTxtInfo( SvStream &rOS, const SwTxtInfo &rInf );
 };
-
-/*************************************************************************
- * class SwTxtSizeInfo
- *************************************************************************/
 
 typedef ::std::map< sal_uLong, sal_IntPtr > SwTxtPortionMap;
 
@@ -302,8 +290,6 @@ public:
 
     KSHORT      GetTxtHeight() const;
 
-    // GetTxtSize
-
     SwPosSize GetTxtSize( OutputDevice* pOut, const SwScriptInfo* pSI,
                           const OUString& rTxt, const sal_Int32 nIdx,
                           const sal_Int32 nLen, const sal_uInt16 nComp ) const;
@@ -314,8 +300,6 @@ public:
     inline SwPosSize GetTxtSize( const SwScriptInfo* pSI, const sal_Int32 nIdx,
                                  const sal_Int32 nLen, const sal_uInt16 nComp ) const;
     inline SwPosSize GetTxtSize( const OUString &rTxt ) const;
-
-    // GetTxtBreak
 
     sal_Int32 GetTxtBreak( const long nLineWidth,
                                            const sal_Int32 nMaxLen,
@@ -392,10 +376,6 @@ public:
     bool IsOptDbg() const;
 #endif
 };
-
-/*************************************************************************
- * class SwTxtPaintInfo
- *************************************************************************/
 
 class SwTxtPaintInfo : public SwTxtSizeInfo
 {
@@ -534,10 +514,6 @@ public:
     inline void SetSmartTags( const SwWrongList *pNew ){ pSmartTags = pNew; }
     inline const SwWrongList* GetSmartTags() const { return pSmartTags; }
 };
-
-/*************************************************************************
- * class SwTxtFormatInfo
- *************************************************************************/
 
 class SwTxtFormatInfo : public SwTxtPaintInfo
 {
@@ -753,14 +729,11 @@ public:
     inline bool IsTabOverflow() { return bTabOverflow; }
 };
 
-/*************************************************************************
- * class SwTxtSlot
- * For the text replacement and restoration of SwTxtSizeInfo.
- * The way this is done is a bit of a hack: Although rInf is const we change it
- * anyway.
- * Because rInf is restorated again in the DTOR, we can do this.
- * You could call it a "logical const", if you wish.
-*************************************************************************/
+// For the text replacement and restoration of SwTxtSizeInfo.
+// The way this is done is a bit of a hack: Although rInf is const we change it
+// anyway.
+// Because rInf is restorated again in the DTOR, we can do this.
+// You could call it a "logical const", if you wish.
 class SwTxtSlot
 {
     OUString aTxt;
@@ -782,10 +755,6 @@ public:
     bool IsOn() const { return bOn; }
 };
 
-/*************************************************************************
- * class SwFontSave
- *************************************************************************/
-
 class SwFontSave
 {
     SwTxtSizeInfo *pInf;
@@ -797,9 +766,6 @@ public:
    ~SwFontSave();
 };
 
-/*************************************************************************
- * Inline implementations of SwTxtSizeInfo
- *************************************************************************/
 inline KSHORT SwTxtSizeInfo::GetAscent() const
 {
     SAL_WARN_IF( !GetOut(), "sw.core", "SwTxtSizeInfo::GetAscent() without m_pOut" );
@@ -826,10 +792,6 @@ inline SwPosSize SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI,
 {
     return GetTxtSize( m_pOut, pSI, *m_pTxt, nNewIdx, nNewLen, nCompress );
 }
-
-/*************************************************************************
- * Inline implementations of SwTxtPaintInfo
- *************************************************************************/
 
 inline SwTwips SwTxtPaintInfo::GetPaintOfst() const
 {
@@ -864,10 +826,6 @@ inline void SwTxtPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
 {
     ((SwTxtPaintInfo*)this)->_DrawText( *m_pTxt, rPor, m_nIdx, nLength, bKern, bWrong, bSmartTags, bGrammarCheck );
 }
-
-/*************************************************************************
- * Inline implementations of SwTxtFormatInfo
- *************************************************************************/
 
 inline sal_Int32 SwTxtFormatInfo::GetReformatStart() const
 {

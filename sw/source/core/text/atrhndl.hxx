@@ -32,23 +32,13 @@ class SwViewShell;
 class SfxPoolItem;
 extern const sal_uInt8 StackPos[];
 
-/*************************************************************************
- *                      class SwAttrHandler
- *
- * Used by Attribute Iterators to organize attributes on stacks to
- * find the valid attribute in each category
- *************************************************************************/
-
+// Used by Attribute Iterators to organize attributes on stacks to
+// find the valid attribute in each category
 class SwAttrHandler
 {
 private:
 
-    /*************************************************************************
-     *                      class SwAttrStack
-     *
-     * Container for SwTxtAttr Objects
-     *************************************************************************/
-
+    // Container for SwTxtAttr Objects
     class SwAttrStack
     {
     private:
