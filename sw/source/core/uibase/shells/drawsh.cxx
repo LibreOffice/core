@@ -47,7 +47,6 @@
 #include <svx/svdoashp.hxx>
 #include <svx/xtable.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
-#include <svx/svdoashp.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/opengrf.hxx>
 #include <svx/svdograf.hxx>
