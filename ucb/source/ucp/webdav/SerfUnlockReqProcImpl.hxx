@@ -32,7 +32,7 @@ public:
                            const DAVRequestHeaders& inRequestHeaders,
                            const OUString& sToken);
 
-    virtual ~SerfUnlockReqProcImpl() SAL_OVERRIDE;
+    virtual ~SerfUnlockReqProcImpl();
 
     virtual serf_bucket_t *createSerfRequestBucket(
             serf_request_t * inSerfRequest ) SAL_OVERRIDE;

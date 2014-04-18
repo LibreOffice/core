@@ -40,7 +40,7 @@ public:
                          const css::ucb::Lock& rLock,
                          sal_Int32* plastChanceToSendRefreshRequest = 0 );
 
-    virtual ~SerfLockReqProcImpl() SAL_OVERRIDE;
+    virtual ~SerfLockReqProcImpl();
 
     virtual
     serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest ) SAL_OVERRIDE;
