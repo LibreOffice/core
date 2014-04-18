@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FUCONARC_HXX
-#define SC_FUCONARC_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_FUCONARC_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_FUCONARC_HXX
 
 #include "fuconstr.hxx"
 

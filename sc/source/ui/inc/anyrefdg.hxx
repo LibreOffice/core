@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_ANYREFDG_HXX
-#define SC_ANYREFDG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_ANYREFDG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_ANYREFDG_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
@@ -323,6 +323,6 @@ inline  bool ScRefHandler::CanInputDone( bool bForced )
     return m_aHelper.CanInputDone( bForced );
 }
 
-#endif // SC_ANYREFDG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_ANYREFDG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

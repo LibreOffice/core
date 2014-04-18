@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_EEIMPORT_HXX
-#define SC_EEIMPORT_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EEIMPORT_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_EEIMPORT_HXX
 
 #include "global.hxx"
 #include "address.hxx"

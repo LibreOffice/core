@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_CONDFORMATHELPER_HXX
-#define SC_CONDFORMATHELPER_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_CONDFORMATHELPER_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATHELPER_HXX
 
 #include <rtl/ustring.hxx>
 #include "conditio.hxx"

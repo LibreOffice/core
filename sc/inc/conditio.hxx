@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_CONDITIO_HXX
-#define SC_CONDITIO_HXX
+#ifndef INCLUDED_SC_INC_CONDITIO_HXX
+#define INCLUDED_SC_INC_CONDITIO_HXX
 
 #include "global.hxx"
 #include "address.hxx"

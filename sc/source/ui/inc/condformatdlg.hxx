@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_CONDFORMATDLG_HXX
-#define SC_CONDFORMATDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_CONDFORMATDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATDLG_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>

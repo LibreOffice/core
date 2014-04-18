@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DEFLTUNO_HXX
-#define SC_DEFLTUNO_HXX
+#ifndef INCLUDED_SC_INC_DEFLTUNO_HXX
+#define INCLUDED_SC_INC_DEFLTUNO_HXX
 
 #include <svl/lstner.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>

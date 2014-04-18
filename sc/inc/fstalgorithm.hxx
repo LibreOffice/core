@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_FSTALGORITHM_HXX
-#define SC_FSTALGORITHM_HXX
+#ifndef INCLUDED_SC_INC_FSTALGORITHM_HXX
+#define INCLUDED_SC_INC_FSTALGORITHM_HXX
 
 #include <mdds/flat_segment_tree.hpp>
 #include <vector>

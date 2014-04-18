@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DPOUTPUT_HXX
-#define SC_DPOUTPUT_HXX
+#ifndef INCLUDED_SC_INC_DPOUTPUT_HXX
+#define INCLUDED_SC_INC_DPOUTPUT_HXX
 
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/DataResult.hpp>

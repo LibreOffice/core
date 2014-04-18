@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_UNITCONV_HXX
-#define SC_UNITCONV_HXX
+#ifndef INCLUDED_SC_INC_UNITCONV_HXX
+#define INCLUDED_SC_INC_UNITCONV_HXX
 
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_map.hpp>

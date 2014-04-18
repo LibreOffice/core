@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_EXPBASE_HXX
-#define SC_EXPBASE_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXPBASE_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_EXPBASE_HXX
 
 #include "global.hxx"
 #include "address.hxx"
@@ -59,6 +59,6 @@ public:
     ScFieldEditEngine&  GetEditEngine() const;
 };
 
-#endif  // SC_EXPBASE_HXX
+#endif // INCLUDED_SC_SOURCE_FILTER_INC_EXPBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

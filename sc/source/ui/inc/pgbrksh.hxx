@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_PGBRKSH_HXX
-#define SC_PGBRKSH_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_PGBRKSH_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_PGBRKSH_HXX
 
 #include <sfx2/module.hxx>
 #include <sfx2/shell.hxx>

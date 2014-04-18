@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_VBA_HYPERLINK_HXX
-#define SC_VBA_HYPERLINK_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAHYPERLINK_HXX
+#define INCLUDED_SC_SOURCE_UI_VBA_VBAHYPERLINK_HXX
 
 #include <ooo/vba/excel/XHyperlink.hpp>
 #include <com/sun/star/table/XCell.hpp>
@@ -76,6 +76,6 @@ private:
     long mnType;
 };
 
-#endif /* SC_VBA_HYPERLINK_HXX */
+#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAHYPERLINK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

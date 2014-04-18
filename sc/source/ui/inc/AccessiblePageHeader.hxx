@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SC_ACCESSIBLEPAGEHEADER_HXX
-#define _SC_ACCESSIBLEPAGEHEADER_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEPAGEHEADER_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEPAGEHEADER_HXX
 
 #include "AccessibleContextBase.hxx"
 #include <editeng/svxenum.hxx>

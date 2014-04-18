@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TARGUNO_HXX
-#define SC_TARGUNO_HXX
+#ifndef INCLUDED_SC_INC_TARGUNO_HXX
+#define INCLUDED_SC_INC_TARGUNO_HXX
 
 #include <svl/lstner.hxx>
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>

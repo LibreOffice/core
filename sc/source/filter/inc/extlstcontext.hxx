@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_EXTLSTCONTEXT_HXX
-#define SC_EXTLSTCONTEXT_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXTLSTCONTEXT_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_EXTLSTCONTEXT_HXX
 
 #include "excelhandlers.hxx"
 #include "worksheetfragment.hxx"

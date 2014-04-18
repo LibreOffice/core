@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SCUI_AUTOFMT_HXX
-#define SCUI_AUTOFMT_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_SCUIAUTOFMT_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_SCUIAUTOFMT_HXX
 #include "autofmt.hxx"
 
 class ScAutoFormatDlg : public ModalDialog

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_UNOWIDS_HXX
-#define SC_UNOWIDS_HXX
+#ifndef INCLUDED_SC_INC_UNOWIDS_HXX
+#define INCLUDED_SC_INC_UNOWIDS_HXX
 
 #include "scitems.hxx"
 

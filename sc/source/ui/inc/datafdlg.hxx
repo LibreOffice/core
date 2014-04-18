@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_DATAFDLG_HXX
-#define SC_DATAFDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_DATAFDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_DATAFDLG_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -82,6 +82,6 @@ private:
     DECL_LINK(Impl_ScrollHdl, void *);
     DECL_LINK( Impl_DataModifyHdl,  Edit*    );
 };
-#endif // SC_DATAFDLG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_DATAFDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

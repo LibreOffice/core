@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TABBGCOLORDLG_HXX
-#define SC_TABBGCOLORDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_TABBGCOLORDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_TABBGCOLORDLG_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
@@ -63,6 +63,6 @@ private:
     DECL_LINK(TabBgColorOKHdl_Impl, void *);
 };
 
-#endif // SC_TABBGCOLORDLG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_TABBGCOLORDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

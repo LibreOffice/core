@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_DPTYPES_HXX__
-#define __SC_DPTYPES_HXX__
+#ifndef INCLUDED_SC_INC_DPTYPES_HXX
+#define INCLUDED_SC_INC_DPTYPES_HXX
 
 #include "rtl/ustring.hxx"
 

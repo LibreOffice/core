@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_NAVSETT_HXX
-#define SC_NAVSETT_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_NAVSETT_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_NAVSETT_HXX
 
 #include <tools/solar.h>
 
@@ -47,6 +47,6 @@ public:
 };
 
 
-#endif // SC_NAVSETT_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_NAVSETT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_COLLABORATION_HXX
-#define INCLUDED_SC_COLLABORATION_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_SCCOLLABORATION_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_SCCOLLABORATION_HXX
 
 #include <sal/config.h>
 
@@ -32,6 +32,6 @@ private:
     ScDocFuncSend* GetScDocFuncSend() const;
 };
 
-#endif // INCLUDED_SC_COLLABORATION_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_SCCOLLABORATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

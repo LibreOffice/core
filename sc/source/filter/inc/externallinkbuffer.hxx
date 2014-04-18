@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_XLS_EXTERNALLINKBUFFER_HXX
-#define OOX_XLS_EXTERNALLINKBUFFER_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXTERNALLINKBUFFER_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_EXTERNALLINKBUFFER_HXX
 
 #include <com/sun/star/sheet/ExternalLinkInfo.hpp>
 #include "oox/helper/containerhelper.hxx"

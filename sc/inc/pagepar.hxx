@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_PAGEPAR_HXX
-#define SC_PAGEPAR_HXX
+#ifndef INCLUDED_SC_INC_PAGEPAR_HXX
+#define INCLUDED_SC_INC_PAGEPAR_HXX
 
 #include "global.hxx"
 #include "address.hxx"

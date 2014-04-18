@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_EXCDEFS_HXX
-#define SC_EXCDEFS_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXCDEFS_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_EXCDEFS_HXX
 
 #include <sal/types.h>
 

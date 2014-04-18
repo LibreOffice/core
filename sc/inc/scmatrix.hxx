@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_MATRIX_HXX
-#define SC_MATRIX_HXX
+#ifndef INCLUDED_SC_INC_SCMATRIX_HXX
+#define INCLUDED_SC_INC_SCMATRIX_HXX
 
 #include "global.hxx"
 #include "types.hxx"
@@ -396,6 +396,6 @@ inline void intrusive_ptr_release(const ScMatrix* p)
     p->DecRef();
 }
 
-#endif  // SC_MATRIX_HXX
+#endif // INCLUDED_SC_INC_SCMATRIX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

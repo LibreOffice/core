@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FORMULACELL_HXX
-#define SC_FORMULACELL_HXX
+#ifndef INCLUDED_SC_INC_FORMULACELL_HXX
+#define INCLUDED_SC_INC_FORMULACELL_HXX
 
 #include <set>
 

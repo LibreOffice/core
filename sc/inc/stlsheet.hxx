@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_STLSHEET_HXX
-#define SC_STLSHEET_HXX
+#ifndef INCLUDED_SC_INC_STLSHEET_HXX
+#define INCLUDED_SC_INC_STLSHEET_HXX
 
 #include <svl/style.hxx>
 
@@ -75,6 +75,6 @@ protected:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
-#endif     // SC_STLSHEET_HXX
+#endif // INCLUDED_SC_INC_STLSHEET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

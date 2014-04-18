@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_EXP_OP_HXX
-#define SC_EXP_OP_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXP_OP_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_EXP_OP_HXX
 
 #include "filter.hxx"
 #include "root.hxx"

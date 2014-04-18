@@ -33,8 +33,8 @@
     Make sure that either ColArr or RowArr contains a PivotDataField entry.
 */
 
-#ifndef SC_PIVOT_HXX
-#define SC_PIVOT_HXX
+#ifndef INCLUDED_SC_INC_PIVOT_HXX
+#define INCLUDED_SC_INC_PIVOT_HXX
 
 #include "global.hxx"
 #include "address.hxx"

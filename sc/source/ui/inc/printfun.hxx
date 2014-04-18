@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_PRINTFUN_HXX
-#define SC_PRINTFUN_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_PRINTFUN_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_PRINTFUN_HXX
 
 
 #include "pagepar.hxx"

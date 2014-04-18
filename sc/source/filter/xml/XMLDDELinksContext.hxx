@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLDDELINKSCONTEXT_HXX
-#define SC_XMLDDELINKSCONTEXT_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLDDELINKSCONTEXT_HXX
+#define INCLUDED_SC_SOURCE_FILTER_XML_XMLDDELINKSCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
 

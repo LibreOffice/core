@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_STRINGUTIL_HXX
-#define SC_STRINGUTIL_HXX
+#ifndef INCLUDED_SC_INC_STRINGUTIL_HXX
+#define INCLUDED_SC_INC_STRINGUTIL_HXX
 
 #include <rtl/ustring.hxx>
 #include "scdllapi.h"

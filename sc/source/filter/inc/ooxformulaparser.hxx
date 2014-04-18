@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_XLS_OOXFORMULAPARSER_HXX
-#define OOX_XLS_OOXFORMULAPARSER_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_OOXFORMULAPARSER_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_OOXFORMULAPARSER_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

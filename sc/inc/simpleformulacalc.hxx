@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_SIMPLE_FORMULA_CALC_HXX
-#define SC_SIMPLE_FORMULA_CALC_HXX
+#ifndef INCLUDED_SC_INC_SIMPLEFORMULACALC_HXX
+#define INCLUDED_SC_INC_SIMPLEFORMULACALC_HXX
 
 #include <boost/scoped_ptr.hpp>
 #include <formula/grammar.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SCDLL_HXX
-#define SC_SCDLL_HXX
+#ifndef INCLUDED_SC_INC_SCDLL_HXX
+#define INCLUDED_SC_INC_SCDLL_HXX
 
 class SfxMedium;
 class SfxFilter;

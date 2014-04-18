@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SHELLIDS_HXX
-#define SC_SHELLIDS_HXX
+#ifndef INCLUDED_SC_INC_SHELLIDS_HXX
+#define INCLUDED_SC_INC_SHELLIDS_HXX
 
 // Sfx Interface-IDs
 #define SCID_APP                (SFX_INTERFACE_SC_START+0)

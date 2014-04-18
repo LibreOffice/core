@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FUSEL_HXX
-#define SC_FUSEL_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_FUSEL_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_FUSEL_HXX
 
 #include "fudraw.hxx"
 

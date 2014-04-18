@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_NAMEDLG_HXX
-#define SC_NAMEDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_NAMEDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_NAMEDLG_HXX
 
 #include <vcl/morebtn.hxx>
 #include <vcl/combobox.hxx>
@@ -137,6 +137,6 @@ public:
     void SetEntry(const OUString& rName, const OUString& rScope);
 };
 
-#endif // SC_NAMEDLG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_NAMEDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_FONT_HXX
-#define SC_VBA_FONT_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAFONT_HXX
+#define INCLUDED_SC_SOURCE_UI_VBA_VBAFONT_HXX
 
 #include <cppuhelper/implbase1.hxx>
 
@@ -75,6 +75,6 @@ public:
 
 };
 
-#endif /* SC_VBA_FONT_HXX */
+#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAFONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RECURSIONHELPER_HXX
-#define INCLUDED_RECURSIONHELPER_HXX
+#ifndef INCLUDED_SC_INC_RECURSIONHELPER_HXX
+#define INCLUDED_SC_INC_RECURSIONHELPER_HXX
 
 #include "formularesult.hxx"
 
@@ -96,6 +96,6 @@ public:
     void Clear();
 };
 
-#endif // INCLUDED_RECURSIONHELPER_HXX
+#endif // INCLUDED_SC_INC_RECURSIONHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

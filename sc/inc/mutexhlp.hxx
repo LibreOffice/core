@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_MUTEXHLP_HXX
-#define SC_MUTEXHLP_HXX
+#ifndef INCLUDED_SC_INC_MUTEXHLP_HXX
+#define INCLUDED_SC_INC_MUTEXHLP_HXX
 
 #include <osl/mutex.hxx>
 

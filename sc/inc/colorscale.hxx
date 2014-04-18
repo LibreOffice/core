@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_COLORSCALE_HXX
-#define SC_COLORSCALE_HXX
+#ifndef INCLUDED_SC_INC_COLORSCALE_HXX
+#define INCLUDED_SC_INC_COLORSCALE_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_NAMEUNO_HXX
-#define SC_NAMEUNO_HXX
+#ifndef INCLUDED_SC_INC_NAMEUNO_HXX
+#define INCLUDED_SC_INC_NAMEUNO_HXX
 
 #include <svl/lstner.hxx>
 #include "address.hxx"

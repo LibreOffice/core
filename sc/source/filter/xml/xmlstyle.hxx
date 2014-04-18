@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLSTYLE_HXX
-#define SC_XMLSTYLE_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLE_HXX
+#define INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLE_HXX
 
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlaustp.hxx>

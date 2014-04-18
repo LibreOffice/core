@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DPSDBTAB_HXX
-#define SC_DPSDBTAB_HXX
+#ifndef INCLUDED_SC_INC_DPSDBTAB_HXX
+#define INCLUDED_SC_INC_DPSDBTAB_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 

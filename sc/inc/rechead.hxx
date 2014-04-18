@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_RECHEAD_HXX
-#define SC_RECHEAD_HXX
+#ifndef INCLUDED_SC_INC_RECHEAD_HXX
+#define INCLUDED_SC_INC_RECHEAD_HXX
 
 #include <tools/stream.hxx>
 

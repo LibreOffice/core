@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_HFEDTDLG_HXX
-#define SC_HFEDTDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_HFEDTDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_HFEDTDLG_HXX
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/pageitem.hxx>
@@ -108,6 +108,6 @@ public:
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
-#endif // SC_HFEDTDLG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_HFEDTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

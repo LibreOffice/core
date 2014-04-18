@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_CLIPPARAM_HXX
-#define SC_CLIPPARAM_HXX
+#ifndef INCLUDED_SC_INC_CLIPPARAM_HXX
+#define INCLUDED_SC_INC_CLIPPARAM_HXX
 
 #include "rangelst.hxx"
 #include "rangenam.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_NOTESUNO_HXX
-#define SC_NOTESUNO_HXX
+#ifndef INCLUDED_SC_INC_NOTESUNO_HXX
+#define INCLUDED_SC_INC_NOTESUNO_HXX
 
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>

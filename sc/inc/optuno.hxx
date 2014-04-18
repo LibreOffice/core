@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_OPTUNO_HXX
-#define SC_OPTUNO_HXX
+#ifndef INCLUDED_SC_INC_OPTUNO_HXX
+#define INCLUDED_SC_INC_OPTUNO_HXX
 
 #include "docuno.hxx"
 #include "docoptio.hxx"

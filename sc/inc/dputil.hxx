@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_DPUTIL_HXX
-#define SC_DPUTIL_HXX
+#ifndef INCLUDED_SC_INC_DPUTIL_HXX
+#define INCLUDED_SC_INC_DPUTIL_HXX
 
 #include "rtl/ustring.hxx"
 #include "scdllapi.h"

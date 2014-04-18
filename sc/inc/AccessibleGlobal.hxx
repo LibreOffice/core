@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_ACCESSIBLEGLOBAL_HXX
-#define SC_ACCESSIBLEGLOBAL_HXX
+#ifndef INCLUDED_SC_INC_ACCESSIBLEGLOBAL_HXX
+#define INCLUDED_SC_INC_ACCESSIBLEGLOBAL_HXX
 
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include "cppuhelper/implbase1.hxx"

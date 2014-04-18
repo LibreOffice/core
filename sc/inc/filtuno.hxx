@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FILTUNO_HXX
-#define SC_FILTUNO_HXX
+#ifndef INCLUDED_SC_INC_FILTUNO_HXX
+#define INCLUDED_SC_INC_FILTUNO_HXX
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>

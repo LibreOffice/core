@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OLEOBJSH_HXX
-#define OLEOBJSH_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_OLEOBJSH_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_OLEOBJSH_HXX
 
 #include <sfx2/shell.hxx>
 #include "shellids.hxx"

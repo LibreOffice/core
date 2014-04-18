@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_DRAGDATA_HXX__
-#define __SC_DRAGDATA_HXX__
+#ifndef INCLUDED_SC_INC_DRAGDATA_HXX
+#define INCLUDED_SC_INC_DRAGDATA_HXX
 
 #include "rtl/ustring.hxx"
 

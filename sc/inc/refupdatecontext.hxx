@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_REFUPDATECONTEXT_HXX
-#define SC_REFUPDATECONTEXT_HXX
+#ifndef INCLUDED_SC_INC_REFUPDATECONTEXT_HXX
+#define INCLUDED_SC_INC_REFUPDATECONTEXT_HXX
 
 #include "global.hxx"
 #include "address.hxx"

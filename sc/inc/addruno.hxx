@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_ADDRUNO_HXX
-#define SC_ADDRUNO_HXX
+#ifndef INCLUDED_SC_INC_ADDRUNO_HXX
+#define INCLUDED_SC_INC_ADDRUNO_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

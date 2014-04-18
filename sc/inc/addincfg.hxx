@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_ADDINCFG_HXX
-#define SC_ADDINCFG_HXX
+#ifndef INCLUDED_SC_INC_ADDINCFG_HXX
+#define INCLUDED_SC_INC_ADDINCFG_HXX
 
 #include <unotools/configitem.hxx>
 

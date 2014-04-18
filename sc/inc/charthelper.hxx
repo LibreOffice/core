@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_CHARTHELPER_HXX
-#define SC_CHARTHELPER_HXX
+#ifndef INCLUDED_SC_INC_CHARTHELPER_HXX
+#define INCLUDED_SC_INC_CHARTHELPER_HXX
 
 #include "address.hxx"
 #include "global.hxx"

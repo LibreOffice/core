@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SC_FUINSERT_HXX
-#define SC_FUINSERT_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_FUINSERT_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_FUINSERT_HXX
 
 #include "fupoor.hxx"
 

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_UCALC_HXX
-#define SC_UCALC_HXX
+#ifndef INCLUDED_SC_QA_UNIT_UCALC_HXX
+#define INCLUDED_SC_QA_UNIT_UCALC_HXX
 
 #include "helper/qahelper.hxx"
 #include "document.hxx"

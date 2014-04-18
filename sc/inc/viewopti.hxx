@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_VIEWOPTI_HXX
-#define SC_VIEWOPTI_HXX
+#ifndef INCLUDED_SC_INC_VIEWOPTI_HXX
+#define INCLUDED_SC_INC_VIEWOPTI_HXX
 
 #include <svx/optgrid.hxx>
 

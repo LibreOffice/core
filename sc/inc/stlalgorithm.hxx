@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_STLALGORITHM_HXX__
-#define __SC_STLALGORITHM_HXX__
+#ifndef INCLUDED_SC_INC_STLALGORITHM_HXX
+#define INCLUDED_SC_INC_STLALGORITHM_HXX
 
 #include <functional>
 #include <limits>

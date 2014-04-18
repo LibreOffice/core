@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SC_QPROFORM_HXX
-#define SC_QPROFORM_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_QPROFORM_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_QPROFORM_HXX
 
 #include <sal/config.h>
 #include "formel.hxx"

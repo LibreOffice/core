@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_RANGEUTL_HXX
-#define SC_RANGEUTL_HXX
+#ifndef INCLUDED_SC_INC_RANGEUTL_HXX
+#define INCLUDED_SC_INC_RANGEUTL_HXX
 
 #include "address.hxx"
 #include "rangenam.hxx"
@@ -296,6 +296,6 @@ public:
     bool WasDBName() const { return !bFirstPass; }
 };
 
-#endif // SC_RANGEUTL_HXX
+#endif // INCLUDED_SC_INC_RANGEUTL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

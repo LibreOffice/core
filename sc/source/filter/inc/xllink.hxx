@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XLLINK_HXX
-#define SC_XLLINK_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLLINK_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_XLLINK_HXX
 
 #include <sal/types.h>
 

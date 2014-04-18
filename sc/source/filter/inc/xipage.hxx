@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XIPAGE_HXX
-#define SC_XIPAGE_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XIPAGE_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_XIPAGE_HXX
 
 #include "xlpage.hxx"
 #include "xiroot.hxx"

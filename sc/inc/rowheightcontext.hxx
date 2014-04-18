@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_ROWHEIGHTCONTEXT_HXX
-#define SC_ROWHEIGHTCONTEXT_HXX
+#ifndef INCLUDED_SC_INC_ROWHEIGHTCONTEXT_HXX
+#define INCLUDED_SC_INC_ROWHEIGHTCONTEXT_HXX
 
 #include <scdllapi.h>
 

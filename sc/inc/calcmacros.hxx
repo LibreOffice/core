@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_CALCMACROS_HXX
-#define SC_CALCMACROS_HXX
+#ifndef INCLUDED_SC_INC_CALCMACROS_HXX
+#define INCLUDED_SC_INC_CALCMACROS_HXX
 
 #define DEBUG_COLUMN_STORAGE 0
 #define DEBUG_PIVOT_TABLE 0

@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_FORMATCONDITIONS_HXX
-#define SC_VBA_FORMATCONDITIONS_HXX
+
+#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAFORMATCONDITIONS_HXX
+#define INCLUDED_SC_SOURCE_UI_VBA_VBAFORMATCONDITIONS_HXX
+
 #include <ooo/vba/excel/XFormatConditions.hpp>
 #include <ooo/vba/excel/XStyles.hpp>
 #include <ooo/vba/excel/XRange.hpp>
@@ -70,6 +72,6 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif //SC_VBA_AXES_HXX
+#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAFORMATCONDITIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

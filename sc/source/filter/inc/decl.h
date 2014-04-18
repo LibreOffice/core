@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SC_DECL_H
-#define SC_DECL_H
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_DECL_H
+#define INCLUDED_SC_SOURCE_FILTER_INC_DECL_H
 
 enum WKTYP { eWK_UNKNOWN = -2, eWK_1 = 0, eWK_2, eWK3, eWK4, eWK_Error, eWK123 };
 

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_CONDFORMATDLGENTRY_HXX
-#define SC_CONDFORMATDLGENTRY_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_CONDFORMATDLGENTRY_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATDLGENTRY_HXX
 
 #include "colorscale.hxx"
 #include "conditio.hxx"

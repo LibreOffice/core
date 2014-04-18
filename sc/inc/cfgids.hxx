@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CFGID_HXX
-#define _CFGID_HXX
+#ifndef INCLUDED_SC_INC_CFGIDS_HXX
+#define INCLUDED_SC_INC_CFGIDS_HXX
 
 #define SCCFG_DOC               SFX_ITEMTYPE_SC_BEGIN
 #define SCCFG_VIEW              (SFX_ITEMTYPE_SC_BEGIN + 1)

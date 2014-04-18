@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SCGLOB_HXX
-#define SC_SCGLOB_HXX
+#ifndef INCLUDED_SC_INC_GLOBAL_HXX
+#define INCLUDED_SC_INC_GLOBAL_HXX
 
 #include "address.hxx"
 #include <i18nlangtag/lang.h>

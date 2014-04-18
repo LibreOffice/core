@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_QA_HELPER_HXX
-#define SC_QA_HELPER_HXX
+#ifndef INCLUDED_SC_QA_UNIT_HELPER_QAHELPER_HXX
+#define INCLUDED_SC_QA_UNIT_HELPER_QAHELPER_HXX
 
 #include "scdllapi.h"
 #include "debughelper.hxx"

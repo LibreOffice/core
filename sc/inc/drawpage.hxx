@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DRAWPAGE_HXX
-#define SC_DRAWPAGE_HXX
+#ifndef INCLUDED_SC_INC_DRAWPAGE_HXX
+#define INCLUDED_SC_INC_DRAWPAGE_HXX
 
 #include <svx/fmpage.hxx>
 

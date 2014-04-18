@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_SHARED_TEST_IMPL_HXX
-#define SC_SHARED_TEST_IMPL_HXX
+#ifndef INCLUDED_SC_QA_UNIT_HELPER_SHARED_TEST_IMPL_HXX
+#define INCLUDED_SC_QA_UNIT_HELPER_SHARED_TEST_IMPL_HXX
 
 #include "colorscale.hxx"
 #include "conditio.hxx"

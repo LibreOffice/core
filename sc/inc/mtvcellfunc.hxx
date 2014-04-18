@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_MTVCELLFUNC_HXX
-#define SC_MTVCELLFUNC_HXX
+#ifndef INCLUDED_SC_INC_MTVCELLFUNC_HXX
+#define INCLUDED_SC_INC_MTVCELLFUNC_HXX
 
 #include "mtvelements.hxx"
 #include "mtvfunctions.hxx"

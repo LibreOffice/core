@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DPTABDAT_HXX
-#define SC_DPTABDAT_HXX
+#ifndef INCLUDED_SC_INC_DPTABDAT_HXX
+#define INCLUDED_SC_INC_DPTABDAT_HXX
 
 #include "address.hxx"
 #include "dpoutput.hxx"

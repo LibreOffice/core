@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_WAITOFF_HXX
-#define SC_WAITOFF_HXX
+#ifndef INCLUDED_SC_INC_WAITOFF_HXX
+#define INCLUDED_SC_INC_WAITOFF_HXX
 
 #include <sal/types.h>
 

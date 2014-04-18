@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FORMULARESULT_HXX
-#define SC_FORMULARESULT_HXX
+#ifndef INCLUDED_SC_INC_FORMULARESULT_HXX
+#define INCLUDED_SC_INC_FORMULARESULT_HXX
 
 #include "token.hxx"
 #include "scdllapi.h"
@@ -213,6 +213,6 @@ public:
     ScMatrixFormulaCellToken* GetMatrixFormulaCellTokenNonConst();
 };
 
-#endif // SC_FORMULARESULT_HXX
+#endif // INCLUDED_SC_INC_FORMULARESULT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

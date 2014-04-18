@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XCL97ESC_HXX
-#define SC_XCL97ESC_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XCL97ESC_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_XCL97ESC_HXX
 
 #include <memory>
 #include <stack>

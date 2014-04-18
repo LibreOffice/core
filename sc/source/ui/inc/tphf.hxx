@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TPHF_HXX
-#define SC_TPHF_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_TPHF_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_TPHF_HXX
 
 #include <svx/hdft.hxx>
 
@@ -81,6 +81,6 @@ private:
 };
 
 
-#endif // SC_TPHF_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_TPHF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

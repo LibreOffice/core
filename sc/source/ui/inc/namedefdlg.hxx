@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_NAMEDEFDLG_HXX
-#define SC_NAMEDEFDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_NAMEDEFDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_NAMEDEFDLG_HXX
 
 #include "anyrefdg.hxx"
 #include <vcl/button.hxx>

@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef RANDOM_NUMBER_GENERATION_HXX
-#define RANDOM_NUMBER_GENERATION_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_RANDOMNUMBERGENERATORDIALOG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_RANDOMNUMBERGENERATORDIALOG_HXX
 
 #include "global.hxx"
 #include "address.hxx"
@@ -78,7 +78,7 @@ private:
 
 };
 
-#endif // SC_SOLVRDLG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_RANDOMNUMBERGENERATORDIALOG_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

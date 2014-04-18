@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SC_ACCESSIBLEDOCUMENT_HXX
-#define _SC_ACCESSIBLEDOCUMENT_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEDOCUMENT_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEDOCUMENT_HXX
 
 #include "AccessibleDocumentBase.hxx"
 #include "viewdata.hxx"

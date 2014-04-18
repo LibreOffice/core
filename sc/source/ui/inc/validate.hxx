@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_VALIDATE_HXX
-#define SC_VALIDATE_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_VALIDATE_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_VALIDATE_HXX
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/edit.hxx>
@@ -305,6 +305,6 @@ public:
     virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 };
 
-#endif // SC_VALIDATE_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_VALIDATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

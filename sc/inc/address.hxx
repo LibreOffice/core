@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_ADDRESS_HXX
-#define SC_ADDRESS_HXX
+#ifndef INCLUDED_SC_INC_ADDRESS_HXX
+#define INCLUDED_SC_INC_ADDRESS_HXX
 
 #include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -913,6 +913,6 @@ inline OUString ScColToAlpha( SCCOL nCol )
 /// get column number of A..IV... string
 bool AlphaToCol( SCCOL& rCol, const OUString& rStr);
 
-#endif // SC_ADDRESS_HXX
+#endif // INCLUDED_SC_INC_ADDRESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SC_ACCESSIBLECONTEXTBASE_HXX
-#define _SC_ACCESSIBLECONTEXTBASE_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLECONTEXTBASE_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLECONTEXTBASE_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>

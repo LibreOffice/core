@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SCFILT_ORCUSFILTERSIMPL_HXX__
-#define __SCFILT_ORCUSFILTERSIMPL_HXX__
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_ORCUSFILTERSIMPL_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_ORCUSFILTERSIMPL_HXX
 
 #include "orcusfilters.hxx"
 

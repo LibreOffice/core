@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_SIDEBAR_CELL_BORDER_UPDATER_HXX
-#define SC_SIDEBAR_CELL_BORDER_UPDATER_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLBORDERUPDATER_HXX
+#define INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLBORDERUPDATER_HXX
 
 #include <vcl/toolbox.hxx>
 
@@ -38,7 +38,7 @@ public:
 
 } } // end of namespace svx::sidebar
 
-#endif // SC_SIDEBAR_CELL_BORDER_UPDATER_HXX
+#endif // INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLBORDERUPDATER_HXX
 
 // eof
 

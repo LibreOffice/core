@@ -1,5 +1,5 @@
-#ifndef CLCC_CLEW_HPP_INCLUDED
-#define CLCC_CLEW_HPP_INCLUDED
+#ifndef INCLUDED_SC_SOURCE_CORE_OPENCL_CLCC_CLEW_H
+#define INCLUDED_SC_SOURCE_CORE_OPENCL_CLCC_CLEW_H
 
 //////////////////////////////////////////////////////////////////////////
 //  Copyright (c) 2009-2011 Organic Vectory B.V.
@@ -1313,4 +1313,4 @@ const char* clewErrorString (cl_int error);
 }
 #endif
 
-#endif  //  CLCC_CLEW_HPP_INCLUDED
+#endif // INCLUDED_SC_SOURCE_CORE_OPENCL_CLCC_CLEW_H

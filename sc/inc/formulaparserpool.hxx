@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FORMULAPARSERPOOL_HXX
-#define SC_FORMULAPARSERPOOL_HXX
+#ifndef INCLUDED_SC_INC_FORMULAPARSERPOOL_HXX
+#define INCLUDED_SC_INC_FORMULAPARSERPOOL_HXX
 
 #include <boost/unordered_map.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_SIMPLEHINTIDS_HXX
-#define SC_SIMPLEHINTIDS_HXX
+#ifndef INCLUDED_SC_INC_SIMPLEHINTIDS_HXX
+#define INCLUDED_SC_INC_SIMPLEHINTIDS_HXX
 
 #include <svl/smplhint.hxx>
 

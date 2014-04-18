@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_WARNPASSWORD_HXX
-#define SC_WARNPASSWORD_HXX
+#ifndef INCLUDED_SC_INC_WARNPASSWORD_HXX
+#define INCLUDED_SC_INC_WARNPASSWORD_HXX
 
 class SfxMedium;
 /** Static API helper functions. */

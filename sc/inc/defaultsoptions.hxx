@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_DEFAULTSOPT_HXX
-#define SC_DEFAULTSOPT_HXX
+#ifndef INCLUDED_SC_INC_DEFAULTSOPTIONS_HXX
+#define INCLUDED_SC_INC_DEFAULTSOPTIONS_HXX
 
 #include <svl/poolitem.hxx>
 #include <unotools/configitem.hxx>

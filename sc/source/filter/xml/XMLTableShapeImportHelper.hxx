@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLTABLESHAPEIMPORTHELPER_HXX
-#define SC_XMLTABLESHAPEIMPORTHELPER_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESHAPEIMPORTHELPER_HXX
+#define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESHAPEIMPORTHELPER_HXX
 
 #include <xmloff/shapeimport.hxx>
 #include <com/sun/star/table/CellAddress.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLSTYLESIMPORTHELPER_HXX
-#define SC_XMLSTYLESIMPORTHELPER_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLESIMPORTHELPER_HXX
+#define INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLESIMPORTHELPER_HXX
 
 #include "rangelst.hxx"
 #include "simplerangelist.hxx"

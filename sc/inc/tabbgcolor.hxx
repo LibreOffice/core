@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TABBGCOLOR_HXX
-#define SC_TABBGCOLOR_HXX
+#ifndef INCLUDED_SC_INC_TABBGCOLOR_HXX
+#define INCLUDED_SC_INC_TABBGCOLOR_HXX
 
 #include "tools/color.hxx"
 #include "address.hxx"

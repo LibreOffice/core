@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLEXPORTDDELINKS_HXX
-#define SC_XMLEXPORTDDELINKS_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTDDELINKS_HXX
+#define INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTDDELINKS_HXX
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 

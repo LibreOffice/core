@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_FORMULAGROUP_HXX
-#define SC_FORMULAGROUP_HXX
+#ifndef INCLUDED_SC_INC_FORMULAGROUP_HXX
+#define INCLUDED_SC_INC_FORMULAGROUP_HXX
 
 #include "address.hxx"
 #include "types.hxx"

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_TITLE_HXX
-#define SC_VBA_TITLE_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBATITLE_HXX
+#define INCLUDED_SC_SOURCE_UI_VBA_VBATITLE_HXX
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include "excelvbahelper.hxx"

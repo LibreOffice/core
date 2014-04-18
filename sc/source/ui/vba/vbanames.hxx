@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_NAMES_HXX
-#define SC_VBA_NAMES_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBANAMES_HXX
+#define INCLUDED_SC_SOURCE_UI_VBA_VBANAMES_HXX
 
 #include <ooo/vba/excel/XNames.hpp>
 #include <ooo/vba/XCollection.hpp>
@@ -72,6 +72,6 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 
 };
-#endif /* SC_VBA_NAMES_HXX */
+#endif // INCLUDED_SC_SOURCE_UI_VBA_VBANAMES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

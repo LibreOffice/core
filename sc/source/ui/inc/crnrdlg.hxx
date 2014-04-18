@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_CRNRDLG_HXX
-#define SC_CRNRDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_CRNRDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_CRNRDLG_HXX
 
 #include "anyrefdg.hxx"
 #include "rangelst.hxx"
@@ -93,6 +93,6 @@ private:
 #endif
 };
 
-#endif // SC_CRNRDLG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_CRNRDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

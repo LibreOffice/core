@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_CONVUNO_HXX
-#define SC_CONVUNO_HXX
+#ifndef INCLUDED_SC_INC_CONVUNO_HXX
+#define INCLUDED_SC_INC_CONVUNO_HXX
 
 #include <algorithm>
 #include <i18nlangtag/lang.h>

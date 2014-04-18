@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ZFORAUTO_HXX_
-#define _ZFORAUTO_HXX_
+#ifndef INCLUDED_SC_INC_ZFORAUTO_HXX
+#define INCLUDED_SC_INC_ZFORAUTO_HXX
 
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/lang.h>

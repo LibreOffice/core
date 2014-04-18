@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_PRNSAVE_HXX
-#define SC_PRNSAVE_HXX
+#ifndef INCLUDED_SC_INC_PRNSAVE_HXX
+#define INCLUDED_SC_INC_PRNSAVE_HXX
 
 #include "address.hxx"
 #include <vector>

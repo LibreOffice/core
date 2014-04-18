@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SC_CSVCONTROL_HXX
-#define _SC_CSVCONTROL_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_CSVCONTROL_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_CSVCONTROL_HXX
 
 #include <vcl/ctrl.hxx>
 #include "scdllapi.h"

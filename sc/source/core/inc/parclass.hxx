@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_PARCLASS_HXX
-#define SC_PARCLASS_HXX
+#ifndef INCLUDED_SC_SOURCE_CORE_INC_PARCLASS_HXX
+#define INCLUDED_SC_SOURCE_CORE_INC_PARCLASS_HXX
 
 #include "formula/opcode.hxx"
 #include <sys/types.h>
@@ -168,6 +168,6 @@ private:
 #endif // OSL_DEBUG_LEVEL
 };
 
-#endif // SC_PARCLASS_HXX
+#endif // INCLUDED_SC_SOURCE_CORE_INC_PARCLASS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

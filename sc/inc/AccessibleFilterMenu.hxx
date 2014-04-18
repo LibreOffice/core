@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_ACCESSIBLEFILTERMENU_HXX
-#define SC_ACCESSIBLEFILTERMENU_HXX
+#ifndef INCLUDED_SC_INC_ACCESSIBLEFILTERMENU_HXX
+#define INCLUDED_SC_INC_ACCESSIBLEFILTERMENU_HXX
 
 #include "AccessibleContextBase.hxx"
 #include "cppuhelper/implbase1.hxx"

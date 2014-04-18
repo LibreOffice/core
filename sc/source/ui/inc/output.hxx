@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_OUTPUT_HXX
-#define SC_OUTPUT_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_OUTPUT_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_OUTPUT_HXX
 
 #include "address.hxx"
 #include "cellvalue.hxx"

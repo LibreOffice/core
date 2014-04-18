@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_EDITDATAARRAY_HXX
-#define SC_EDITDATAARRAY_HXX
+#ifndef INCLUDED_SC_INC_EDITDATAARRAY_HXX
+#define INCLUDED_SC_INC_EDITDATAARRAY_HXX
 
 #include "address.hxx"
 #include "editeng/editobj.hxx"

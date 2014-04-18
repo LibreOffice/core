@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_XLS_EXCELCHARTCONVERTER_HXX
-#define OOX_XLS_EXCELCHARTCONVERTER_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXCELCHARTCONVERTER_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_EXCELCHARTCONVERTER_HXX
 
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "workbookhelper.hxx"

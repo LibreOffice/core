@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DOCUNO_HXX
-#define SC_DOCUNO_HXX
+#ifndef INCLUDED_SC_INC_DOCUNO_HXX
+#define INCLUDED_SC_INC_DOCUNO_HXX
 
 #include "address.hxx"
 #include <sfx2/sfxbasemodel.hxx>

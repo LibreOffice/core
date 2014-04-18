@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SIMPREF_HXX
-#define SC_SIMPREF_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_SIMPREF_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_SIMPREF_HXX
 
 #include <vcl/group.hxx>
 
@@ -93,6 +93,6 @@ public:
     void            SetAutoReOpen(bool bFlag) {bAutoReOpen=bFlag;}
 };
 
-#endif // SC_DBNAMDLG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_SIMPREF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_SHAREDFORMULA_HXX
-#define SC_SHAREDFORMULA_HXX
+#ifndef INCLUDED_SC_INC_SHAREDFORMULA_HXX
+#define INCLUDED_SC_INC_SHAREDFORMULA_HXX
 
 #include "formulacell.hxx"
 #include "mtvelements.hxx"

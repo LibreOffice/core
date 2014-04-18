@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_TOKENSTRINGCONTEXT_HXX
-#define SC_TOKENSTRINGCONTEXT_HXX
+#ifndef INCLUDED_SC_INC_TOKENSTRINGCONTEXT_HXX
+#define INCLUDED_SC_INC_TOKENSTRINGCONTEXT_HXX
 
 #include "compiler.hxx"
 

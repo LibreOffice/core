@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_COLUMN_HXX
-#define SC_COLUMN_HXX
+#ifndef INCLUDED_SC_INC_COLUMN_HXX
+#define INCLUDED_SC_INC_COLUMN_HXX
 
 #include "markarr.hxx"
 #include "global.hxx"

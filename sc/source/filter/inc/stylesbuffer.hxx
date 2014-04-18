@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_XLS_STYLESBUFFER_HXX
-#define OOX_XLS_STYLESBUFFER_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_STYLESBUFFER_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_STYLESBUFFER_HXX
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/table/CellHoriJustify.hpp>

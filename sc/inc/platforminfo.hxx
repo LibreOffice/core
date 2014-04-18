@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_PLATFORM_INFO_HXX
-#define SC_PLATFORM_INFO_HXX
+#ifndef INCLUDED_SC_INC_PLATFORMINFO_HXX
+#define INCLUDED_SC_INC_PLATFORMINFO_HXX
 
 #include <vector>
 

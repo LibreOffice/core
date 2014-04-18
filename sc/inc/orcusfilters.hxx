@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_ORCUSFILTERS_HXX__
-#define __SC_ORCUSFILTERS_HXX__
+#ifndef INCLUDED_SC_INC_ORCUSFILTERS_HXX
+#define INCLUDED_SC_INC_ORCUSFILTERS_HXX
 
 #include "rtl/ustring.hxx"
 

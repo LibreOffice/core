@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_XML_DATASTREAMIMPORT_HXX
-#define SC_XML_DATASTREAMIMPORT_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_XML_DATASTREAMIMPORT_HXX
+#define INCLUDED_SC_SOURCE_FILTER_XML_DATASTREAMIMPORT_HXX
 
 #include "importcontext.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_MARKARR_HXX
-#define SC_MARKARR_HXX
+#ifndef INCLUDED_SC_INC_MARKARR_HXX
+#define INCLUDED_SC_INC_MARKARR_HXX
 
 #include "address.hxx"
 

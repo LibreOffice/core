@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SOLVRDLG_HXX
-#define SC_SOLVRDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_SOLVRDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_SOLVRDLG_HXX
 
 #include "global.hxx"
 #include "address.hxx"
@@ -89,7 +89,7 @@ private:
 #endif  // _SOLVERDLG_CXX
 };
 
-#endif // SC_SOLVRDLG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_SOLVRDLG_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef PIVOTLAYOUTTREELIST_HXX
-#define PIVOTLAYOUTTREELIST_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELIST_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELIST_HXX
 
 #include "PivotLayoutTreeListBase.hxx"
 #include <boost/ptr_container/ptr_vector.hpp>

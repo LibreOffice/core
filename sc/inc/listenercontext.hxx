@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_LISTENERCONTEXT_HXX
-#define SC_LISTENERCONTEXT_HXX
+#ifndef INCLUDED_SC_INC_LISTENERCONTEXT_HXX
+#define INCLUDED_SC_INC_LISTENERCONTEXT_HXX
 
 #include "address.hxx"
 #include "columnspanset.hxx"

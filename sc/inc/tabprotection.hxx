@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TAB_PROTECTION_HXX
-#define SC_TAB_PROTECTION_HXX
+#ifndef INCLUDED_SC_INC_TABPROTECTION_HXX
+#define INCLUDED_SC_INC_TABPROTECTION_HXX
 
 #include "sal/types.h"
 #include <com/sun/star/uno/Sequence.hxx>

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_CELLVALUE_HXX
-#define SC_CELLVALUE_HXX
+#ifndef INCLUDED_SC_INC_CELLVALUE_HXX
+#define INCLUDED_SC_INC_CELLVALUE_HXX
 
 #include "global.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_COMPARE_HXX
-#define SC_COMPARE_HXX
+#ifndef INCLUDED_SC_INC_COMPARE_HXX
+#define INCLUDED_SC_INC_COMPARE_HXX
 
 #include "queryentry.hxx"
 

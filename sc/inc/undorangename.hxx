@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_UNDORANGENAME_HXX__
-#define __SC_UNDORANGENAME_HXX__
+#ifndef INCLUDED_SC_INC_UNDORANGENAME_HXX
+#define INCLUDED_SC_INC_UNDORANGENAME_HXX
 
 #include "undobase.hxx"
 #include "rangenam.hxx"

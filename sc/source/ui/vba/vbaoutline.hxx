@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_OUTLINE_HXX
-#define SC_VBA_OUTLINE_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAOUTLINE_HXX
+#define INCLUDED_SC_SOURCE_UI_VBA_VBAOUTLINE_HXX
 
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <cppuhelper/implbase1.hxx>

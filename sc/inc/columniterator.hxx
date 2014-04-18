@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_COLUMNITERATOR_HXX__
-#define __SC_COLUMNITERATOR_HXX__
+#ifndef INCLUDED_SC_INC_COLUMNITERATOR_HXX
+#define INCLUDED_SC_INC_COLUMNITERATOR_HXX
 
 #include <boost/noncopyable.hpp>
 

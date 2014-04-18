@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef SAMPLING_DIALOG_HXX
-#define SAMPLING_DIALOG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_SAMPLINGDIALOG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_SAMPLINGDIALOG_HXX
 
 #include "global.hxx"
 #include "address.hxx"

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_WORKBOOK_HXX
-#define SC_VBA_WORKBOOK_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAWORKBOOK_HXX
+#define INCLUDED_SC_SOURCE_UI_VBA_VBAWORKBOOK_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <ooo/vba/excel/XWorkbook.hpp>
@@ -71,6 +71,6 @@ public:
     virtual ::sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8 >& rId ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-#endif /* SC_VBA_WORKBOOK_HXX */
+#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAWORKBOOK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_XLS_BIFFINPUTSTREAM_HXX
-#define OOX_XLS_BIFFINPUTSTREAM_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_BIFFINPUTSTREAM_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_BIFFINPUTSTREAM_HXX
 
 #include <vector>
 #include "oox/helper/binaryinputstream.hxx"

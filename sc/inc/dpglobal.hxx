@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SC_DPGLOBAL_HXX
-#define _SC_DPGLOBAL_HXX
+#ifndef INCLUDED_SC_INC_DPGLOBAL_HXX
+#define INCLUDED_SC_INC_DPGLOBAL_HXX
 
 #define     PIVOT_MAXFUNC           11
 #define     PIVOT_FUNC_NONE         0x0000

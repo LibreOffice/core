@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_CHGVISET_HXX
-#define SC_CHGVISET_HXX
+#ifndef INCLUDED_SC_INC_CHGVISET_HXX
+#define INCLUDED_SC_INC_CHGVISET_HXX
 
 #include <tools/datetime.hxx>
 #include "rangelst.hxx"

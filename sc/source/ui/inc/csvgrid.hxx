@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SC_CSVGRID_HXX
-#define _SC_CSVGRID_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_CSVGRID_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_CSVGRID_HXX
 
 #include <vcl/virdev.hxx>
 #include <vcl/menu.hxx>

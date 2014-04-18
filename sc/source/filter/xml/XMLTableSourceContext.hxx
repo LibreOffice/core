@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLTABLESOURCECONTEXT_HXX
-#define SC_XMLTABLESOURCECONTEXT_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESOURCECONTEXT_HXX
+#define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESOURCECONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/sheet/SheetLinkMode.hpp>

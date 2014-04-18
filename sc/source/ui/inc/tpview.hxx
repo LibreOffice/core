@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TPVIEW_HXX
-#define SC_TPVIEW_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_TPVIEW_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_TPVIEW_HXX
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/field.hxx>
@@ -131,6 +131,6 @@ public:
 };
 
 
-#endif // SC_TPUSRLST_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_TPVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

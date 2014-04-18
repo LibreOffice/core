@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XCLEXPCHANGETRACK_HXX
-#define SC_XCLEXPCHANGETRACK_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XCLEXPCHANGETRACK_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_XCLEXPCHANGETRACK_HXX
 
 #include <stack>
 #include <tools/datetime.hxx>

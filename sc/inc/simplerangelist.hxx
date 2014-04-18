@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SC_SIMPLERANGELIST_HXX__
-#define __SC_SIMPLERANGELIST_HXX__
+#ifndef INCLUDED_SC_INC_SIMPLERANGELIST_HXX
+#define INCLUDED_SC_INC_SIMPLERANGELIST_HXX
 
 #include <boost/shared_ptr.hpp>
 

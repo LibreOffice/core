@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_SCOPETOOLS_HXX
-#define SC_SCOPETOOLS_HXX
+#ifndef INCLUDED_SC_INC_SCOPETOOLS_HXX
+#define INCLUDED_SC_INC_SCOPETOOLS_HXX
 
 #include <scdllapi.h>
 

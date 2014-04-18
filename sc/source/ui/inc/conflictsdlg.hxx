@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_CONFLICTSDLG_HXX
-#define SC_CONFLICTSDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_CONFLICTSDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_CONFLICTSDLG_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>

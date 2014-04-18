@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FORMULA_HXX
-#define SC_FORMULA_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_FORMULA_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_FORMULA_HXX
 
 #include "anyrefdg.hxx"
 #include "global.hxx"
@@ -109,6 +109,6 @@ protected:
     ScInputHandler* GetNextInputHandler(ScDocShell* pDocShell,PtrTabViewShell* ppViewSh);
 };
 
-#endif // SC_CRNRDLG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_FORMULA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

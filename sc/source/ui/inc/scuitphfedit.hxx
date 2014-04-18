@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SCUI_TPHFEDIT_HXX
-#define SCUI_TPHFEDIT_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_SCUITPHFEDIT_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_SCUITPHFEDIT_HXX
 
 #include "tphfedit.hxx"
 //#include <boost/graph/graph_concepts.hpp>

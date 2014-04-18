@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_VBA_HELPERDECL_HXX
-#define SC_VBA_HELPERDECL_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_VBA_HELPERDECL_HXX
+#define INCLUDED_SC_SOURCE_UI_VBA_HELPERDECL_HXX
 
 #include <comphelper/servicedecl.hxx>
 #include <ooo/vba/XHelperInterface.hpp>

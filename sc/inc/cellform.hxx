@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_CELLFORM_HXX
-#define SC_CELLFORM_HXX
+#ifndef INCLUDED_SC_INC_CELLFORM_HXX
+#define INCLUDED_SC_INC_CELLFORM_HXX
 
 #include <tools/solar.h>
 #include "scdllapi.h"

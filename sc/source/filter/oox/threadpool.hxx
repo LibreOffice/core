@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_THREADPOOL_HXX
-#define SC_THREADPOOL_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_OOX_THREADPOOL_HXX
+#define INCLUDED_SC_SOURCE_FILTER_OOX_THREADPOOL_HXX
 
 #include <sal/config.h>
 #include <salhelper/thread.hxx>
@@ -48,6 +48,6 @@ private:
     std::vector< ThreadTask * >   maTasks;
 };
 
-#endif // SC_THREADPOOL_HXX
+#endif // INCLUDED_SC_SOURCE_FILTER_OOX_THREADPOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

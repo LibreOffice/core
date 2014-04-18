@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_CALCCONFIG_HXX__
-#define __SC_CALCCONFIG_HXX__
+#ifndef INCLUDED_SC_INC_CALCCONFIG_HXX
+#define INCLUDED_SC_INC_CALCCONFIG_HXX
 
 #include "scdllapi.h"
 #include "formula/grammar.hxx"

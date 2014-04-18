@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef SC_VBA_MENUBARS_HXX
-#define SC_VBA_MENUBARS_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAMENUBARS_HXX
+#define INCLUDED_SC_SOURCE_UI_VBA_VBAMENUBARS_HXX
 
 #include <ooo/vba/excel/XMenuBars.hpp>
 #include <ooo/vba/excel/XMenuBar.hpp>
@@ -40,6 +40,6 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 
-#endif//SC_VBA_MENUBARS_HXX
+#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAMENUBARS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

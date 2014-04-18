@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SCUI_IMOPTDLG_HXX
-#define SCUI_IMOPTDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_SCUIIMOPTDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_SCUIIMOPTDLG_HXX
 
 #include <vcl/layout.hxx>
 #include "imoptdlg.hxx"

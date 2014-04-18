@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TPSTAT_HXX
-#define SC_TPSTAT_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_TPSTAT_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_TPSTAT_HXX
 
 
 #include <sfx2/tabdlg.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_XLS_PIVOTTABLEFRAGMENT_HXX
-#define OOX_XLS_PIVOTTABLEFRAGMENT_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_PIVOTTABLEFRAGMENT_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_PIVOTTABLEFRAGMENT_HXX
 
 #include "excelhandlers.hxx"
 #include "worksheethelper.hxx"

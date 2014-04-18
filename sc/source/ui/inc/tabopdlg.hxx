@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TABOPDLG_HXX
-#define SC_TABOPDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_TABOPDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_TABOPDLG_HXX
 
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
@@ -92,6 +92,6 @@ private:
     DECL_LINK( LoseFocusHdl, void* );
 };
 
-#endif // SC_TABOPDLG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_TABOPDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

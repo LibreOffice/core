@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_REFFACT_HXX
-#define SC_REFFACT_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_REFFACT_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_REFFACT_HXX
 
 #include <sfx2/childwin.hxx>
 #include "ChildWindowWrapper.hxx"
@@ -164,6 +164,6 @@ public:
 };
 
 
-#endif // SC_REFFACT_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_REFFACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_CELLKEY_TRANSLATOR_HXX
-#define SC_CELLKEY_TRANSLATOR_HXX
+#ifndef INCLUDED_SC_SOURCE_CORE_INC_CELLKEYTRANSLATOR_HXX
+#define INCLUDED_SC_SOURCE_CORE_INC_CELLKEYTRANSLATOR_HXX
 
 #include "global.hxx"
 #include "formula/opcode.hxx"

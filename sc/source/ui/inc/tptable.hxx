@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TPTABLE_HXX
-#define SC_TPTABLE_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_TPTABLE_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_TPTABLE_HXX
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
@@ -76,6 +76,6 @@ private:
     DECL_LINK(ScaleHdl, void *);
 };
 
-#endif // SC_TPTABLE_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_TPTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

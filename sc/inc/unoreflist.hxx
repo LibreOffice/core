@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_UNOREFLIST_HXX
-#define SC_UNOREFLIST_HXX
+#ifndef INCLUDED_SC_INC_UNOREFLIST_HXX
+#define INCLUDED_SC_INC_UNOREFLIST_HXX
 
 #include <list>
 #include <svl/hint.hxx>

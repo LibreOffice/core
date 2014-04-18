@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DAPIUNO_HXX
-#define SC_DAPIUNO_HXX
+#ifndef INCLUDED_SC_INC_DAPIUNO_HXX
+#define INCLUDED_SC_INC_DAPIUNO_HXX
 
 #include "global.hxx"
 #include "dpobject.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_OP_H
-#define SC_OP_H
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_OP_H
+#define INCLUDED_SC_SOURCE_FILTER_INC_OP_H
 
 #include <patattr.hxx>
 

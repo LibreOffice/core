@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_TEXTBOX_HXX
-#define SC_VBA_TEXTBOX_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBATEXTBOXSHAPE_HXX
+#define INCLUDED_SC_SOURCE_UI_VBA_VBATEXTBOXSHAPE_HXX
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <ooo/vba/msforms/XTextBoxShape.hpp>
@@ -39,6 +39,6 @@ public:
     virtual void SAL_CALL setText( const OUString& _text ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Reference< ov::excel::XCharacters > SAL_CALL characters( const css::uno::Any& Start, const css::uno::Any& Length ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-#endif //SC_VBA_TEXTBOX_HXX
+#endif // INCLUDED_SC_SOURCE_UI_VBA_VBATEXTBOXSHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

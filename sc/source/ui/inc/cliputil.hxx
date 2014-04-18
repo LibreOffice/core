@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_CLIPUTIL_HXX__
-#define __SC_CLIPUTIL_HXX__
+#ifndef INCLUDED_SC_SOURCE_UI_INC_CLIPUTIL_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_CLIPUTIL_HXX
 
 #include "address.hxx"
 

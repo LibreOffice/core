@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_DEBUG_HELPER_HXX
-#define SC_DEBUG_HELPER_HXX
+#ifndef INCLUDED_SC_QA_UNIT_HELPER_DEBUGHELPER_HXX
+#define INCLUDED_SC_QA_UNIT_HELPER_DEBUGHELPER_HXX
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_OPTDLG_CALCOPTIONSDLG_HXX__
-#define __SC_OPTDLG_CALCOPTIONSDLG_HXX__
+#ifndef INCLUDED_SC_SOURCE_UI_OPTDLG_CALCOPTIONSDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_OPTDLG_CALCOPTIONSDLG_HXX
 
 #include <config_features.h>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XLROOT_HXX
-#define SC_XLROOT_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLROOT_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_XLROOT_HXX
 
 #include <com/sun/star/beans/NamedValue.hpp>
 

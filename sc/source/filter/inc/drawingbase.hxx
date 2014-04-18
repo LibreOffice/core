@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_XLS_DRAWINGBASE_HXX
-#define OOX_XLS_DRAWINGBASE_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_DRAWINGBASE_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_DRAWINGBASE_HXX
 
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "worksheethelper.hxx"

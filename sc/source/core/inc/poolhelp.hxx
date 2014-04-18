@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_POOLHELP_HXX
-#define SC_POOLHELP_HXX
+#ifndef INCLUDED_SC_SOURCE_CORE_INC_POOLHELP_HXX
+#define INCLUDED_SC_SOURCE_CORE_INC_POOLHELP_HXX
 
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DBDOCUTL_HXX
-#define SC_DBDOCUTL_HXX
+#ifndef INCLUDED_SC_INC_DBDOCUTL_HXX
+#define INCLUDED_SC_INC_DBDOCUTL_HXX
 
 #include "address.hxx"
 #include <com/sun/star/uno/Reference.hxx>

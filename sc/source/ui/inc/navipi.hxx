@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_NAVIPI_HXX
-#define SC_NAVIPI_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_NAVIPI_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_NAVIPI_HXX
 
 #include <vector>
 #include <vcl/toolbox.hxx>
@@ -342,6 +342,6 @@ private:
     ScNavigatorDlg* pNavigator;
 };
 
-#endif // SC_NAVIPI_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_NAVIPI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

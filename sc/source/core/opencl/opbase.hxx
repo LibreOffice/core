@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_OPENCL_OPBASE_HXX
-#define SC_OPENCL_OPBASE_HXX
+#ifndef INCLUDED_SC_SOURCE_CORE_OPENCL_OPBASE_HXX
+#define INCLUDED_SC_SOURCE_CORE_OPENCL_OPBASE_HXX
 
 #include <sal/log.hxx>
 

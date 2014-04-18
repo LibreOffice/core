@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SC_SIDEBAR_CELL_LINE_STYLE_POPUP_HXX_
-#define _SC_SIDEBAR_CELL_LINE_STYLE_POPUP_HXX_
+#ifndef INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLLINESTYLEPOPUP_HXX
+#define INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLLINESTYLEPOPUP_HXX
 
 #include <svx/sidebar/Popup.hxx>
 #include <boost/function.hpp>
@@ -37,7 +37,7 @@ public :
 
 } } // end of namespace sc::sidebar
 
-#endif // _SC_SIDEBAR_CELL_LINE_STYLE_POPUP_HXX_
+#endif // INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLLINESTYLEPOPUP_HXX
 
 // eof
 

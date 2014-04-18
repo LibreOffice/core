@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_OLINEFUN_HXX
-#define SC_OLINEFUN_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_OLINEFUN_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_OLINEFUN_HXX
 
 #include "global.hxx"
 

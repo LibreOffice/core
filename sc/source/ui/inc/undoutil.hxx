@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_UNDOUTIL_HXX
-#define SC_UNDOUTIL_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_UNDOUTIL_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_UNDOUTIL_HXX
 
 #include "address.hxx"
 

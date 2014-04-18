@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_REFRESHTIMER_HXX
-#define SC_REFRESHTIMER_HXX
+#ifndef INCLUDED_SC_INC_REFRESHTIMER_HXX
+#define INCLUDED_SC_INC_REFRESHTIMER_HXX
 
 #include <vcl/timer.hxx>
 #include <osl/mutex.hxx>
@@ -62,6 +62,6 @@ private:
     void Start();
 };
 
-#endif // SC_REFRESHTIMER_HXX
+#endif // INCLUDED_SC_INC_REFRESHTIMER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

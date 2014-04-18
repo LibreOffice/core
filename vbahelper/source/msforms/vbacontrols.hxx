@@ -59,6 +59,6 @@ private:
     double mfOffsetY;
 };
 
-#endif //SC_VBA_OLEOBJECTS_HXX
+#endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

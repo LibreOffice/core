@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DPSHTTAB_HXX
-#define SC_DPSHTTAB_HXX
+#ifndef INCLUDED_SC_INC_DPSHTTAB_HXX
+#define INCLUDED_SC_INC_DPSHTTAB_HXX
 
 #include "dptabdat.hxx"
 #include "global.hxx"

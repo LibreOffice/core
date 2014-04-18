@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_VBA_SHEETOBJECT_HXX
-#define SC_VBA_SHEETOBJECT_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBASHEETOBJECT_HXX
+#define INCLUDED_SC_SOURCE_UI_VBA_VBASHEETOBJECT_HXX
 
 #include <ooo/vba/excel/XButton.hpp>
 #include <ooo/vba/excel/XControlObject.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_VBAPALETTE_HXX
-#define SC_VBAPALETTE_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAPALETTE_HXX
+#define INCLUDED_SC_SOURCE_UI_VBA_VBAPALETTE_HXX
 
 #include <vbahelper/vbahelper.hxx>
 
@@ -42,6 +42,6 @@ public:
     static css::uno::Reference< css::container::XIndexAccess > getDefaultPalette();
 };
 
-#endif //SC_VBAPALETTE_HXX
+#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAPALETTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

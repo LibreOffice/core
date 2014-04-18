@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SC_BRDCST_HXX
-#define _SC_BRDCST_HXX
+#ifndef INCLUDED_SC_INC_BRDCST_HXX
+#define INCLUDED_SC_INC_BRDCST_HXX
 
 #include "global.hxx"
 #include "address.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SEGMENTTREE_HXX
-#define SC_SEGMENTTREE_HXX
+#ifndef INCLUDED_SC_INC_SEGMENTTREE_HXX
+#define INCLUDED_SC_INC_SEGMENTTREE_HXX
 
 #include "address.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_REFUPDAT_HXX
-#define SC_REFUPDAT_HXX
+#ifndef INCLUDED_SC_SOURCE_CORE_INC_REFUPDAT_HXX
+#define INCLUDED_SC_SOURCE_CORE_INC_REFUPDAT_HXX
 
 #include "global.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_STYLEHELPER_HXX
-#define SC_STYLEHELPER_HXX
+#ifndef INCLUDED_SC_INC_STYLEHELPER_HXX
+#define INCLUDED_SC_INC_STYLEHELPER_HXX
 
 #include <rtl/ustring.hxx>
 

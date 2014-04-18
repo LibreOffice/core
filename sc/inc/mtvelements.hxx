@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_MTVELEMENTS_HXX
-#define SC_MTVELEMENTS_HXX
+#ifndef INCLUDED_SC_INC_MTVELEMENTS_HXX
+#define INCLUDED_SC_INC_MTVELEMENTS_HXX
 
 #include "address.hxx"
 #include "formulacell.hxx"

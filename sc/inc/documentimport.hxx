@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_DOCUMENTIMPORT_HXX
-#define SC_DOCUMENTIMPORT_HXX
+#ifndef INCLUDED_SC_INC_DOCUMENTIMPORT_HXX
+#define INCLUDED_SC_INC_DOCUMENTIMPORT_HXX
 
 #include "scdllapi.h"
 #include "address.hxx"

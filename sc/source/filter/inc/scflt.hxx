@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SCFLT_HXX
-#define SC_SCFLT_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_SCFLT_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_SCFLT_HXX
 
 #include "viewopti.hxx"
 #include "collect.hxx"

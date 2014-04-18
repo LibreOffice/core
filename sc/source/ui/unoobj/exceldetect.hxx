@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_EXCELDETECT_HXX__
-#define __SC_EXCELDETECT_HXX__
+#ifndef INCLUDED_SC_SOURCE_UI_UNOOBJ_EXCELDETECT_HXX
+#define INCLUDED_SC_SOURCE_UI_UNOOBJ_EXCELDETECT_HXX
 
 #include <cppuhelper/implbase2.hxx>
 

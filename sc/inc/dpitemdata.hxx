@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_DPITEMDATA_HXX__
-#define __SC_DPITEMDATA_HXX__
+#ifndef INCLUDED_SC_INC_DPITEMDATA_HXX
+#define INCLUDED_SC_INC_DPITEMDATA_HXX
 
 #include "scdllapi.h"
 #include "address.hxx"

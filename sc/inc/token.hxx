@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TOKEN_HXX
-#define SC_TOKEN_HXX
+#ifndef INCLUDED_SC_INC_TOKEN_HXX
+#define INCLUDED_SC_INC_TOKEN_HXX
 
 #include <vector>
 #include <boost/intrusive_ptr.hpp>

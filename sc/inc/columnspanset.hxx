@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_COLUMNSPANSET_HXX
-#define SC_COLUMNSPANSET_HXX
+#ifndef INCLUDED_SC_INC_COLUMNSPANSET_HXX
+#define INCLUDED_SC_INC_COLUMNSPANSET_HXX
 
 #include "address.hxx"
 

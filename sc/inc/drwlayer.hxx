@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DRWLAYER_HXX
-#define SC_DRWLAYER_HXX
+#ifndef INCLUDED_SC_INC_DRWLAYER_HXX
+#define INCLUDED_SC_INC_DRWLAYER_HXX
 
 #include <vcl/graph.hxx>
 #include <svx/fmmodel.hxx>

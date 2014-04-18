@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_AXES_HXX
-#define SC_VBA_AXES_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAAXES_HXX
+#define INCLUDED_SC_SOURCE_UI_VBA_VBAAXES_HXX
 #include <ooo/vba/excel/XAxes.hpp>
 #include <ooo/vba/excel/XAxis.hpp>
 #include <ooo/vba/excel/XChart.hpp>
@@ -40,6 +40,6 @@ public:
     static css::uno::Reference< ov::excel::XAxis > createAxis( const css::uno::Reference< ov::excel::XChart >& xChart, const css::uno::Reference< css::uno::XComponentContext >& xContext,  sal_Int32 nType, sal_Int32 nAxisGroup ) throw ( css::uno::RuntimeException );
 };
 
-#endif //SC_VBA_AXES_HXX
+#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAAXES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

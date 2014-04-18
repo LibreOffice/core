@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SELTRANS_HXX
-#define SC_SELTRANS_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_SELTRANS_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_SELTRANS_HXX
 
 #include <svtools/transfer.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FLTTYPES_HXX
-#define SC_FLTTYPES_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_FLTTYPES_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_FLTTYPES_HXX
 
 enum BiffTyp
 {

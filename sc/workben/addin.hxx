@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_ADDIN_HXX
-#define SC_ADDIN_HXX
+#ifndef INCLUDED_SC_WORKBEN_ADDIN_HXX
+#define INCLUDED_SC_WORKBEN_ADDIN_HXX
 
 #include <com/sun/star/sheet/XAddIn.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>

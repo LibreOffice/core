@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_LOTFORM_HXX
-#define SC_LOTFORM_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_LOTFORM_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_LOTFORM_HXX
 
 #include "formel.hxx"
 #include <rtl/ustring.hxx>

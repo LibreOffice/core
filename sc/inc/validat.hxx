@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_VALIDAT_HXX
-#define SC_VALIDAT_HXX
+#ifndef INCLUDED_SC_INC_VALIDAT_HXX
+#define INCLUDED_SC_INC_VALIDAT_HXX
 
 #include "conditio.hxx"
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>

@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef T_TEST_DIALOG_HXX
-#define T_TEST_DIALOG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_TTESTDIALOG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_TTESTDIALOG_HXX
 
 #include "StatisticsTwoVariableDialog.hxx"
 

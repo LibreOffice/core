@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SC_BASE_HXX
-#define SC_BASE_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_BIFF_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_BIFF_HXX
 
 #include <sal/config.h>
 #include "filter.hxx"

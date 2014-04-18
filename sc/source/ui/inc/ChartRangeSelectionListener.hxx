@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_CHARTRANGESELECTIONLISTENER_HXX
-#define SC_CHARTRANGESELECTIONLISTENER_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_CHARTRANGESELECTIONLISTENER_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_CHARTRANGESELECTIONLISTENER_HXX
 
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -67,7 +67,7 @@ private:
     ScTabViewShell * m_pViewShell;
 };
 
-// SC_CHARTRANGESELECTIONLISTENER_HXX
+// INCLUDED_SC_SOURCE_UI_INC_CHARTRANGESELECTIONLISTENER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

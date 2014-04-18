@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_DOCUMENTLINKMGR_HXX
-#define SC_DOCUMENTLINKMGR_HXX
+#ifndef INCLUDED_SC_INC_DOCUMENTLINKMGR_HXX
+#define INCLUDED_SC_INC_DOCUMENTLINKMGR_HXX
 
 #include <boost/noncopyable.hpp>
 #include <rtl/ustring.hxx>

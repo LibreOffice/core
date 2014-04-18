@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_INVMERGE_HXX
-#define SC_INVMERGE_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_INVMERGE_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_INVMERGE_HXX
 
 #include <tools/gen.hxx>
 

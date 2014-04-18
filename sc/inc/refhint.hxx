@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_REFHINT_HXX
-#define SC_REFHINT_HXX
+#ifndef INCLUDED_SC_INC_REFHINT_HXX
+#define INCLUDED_SC_INC_REFHINT_HXX
 
 #include <address.hxx>
 #include <simplehintids.hxx>

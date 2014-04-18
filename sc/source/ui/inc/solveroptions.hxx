@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SOLVEROPTIONS_HXX
-#define SC_SOLVEROPTIONS_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_SOLVEROPTIONS_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_SOLVEROPTIONS_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>

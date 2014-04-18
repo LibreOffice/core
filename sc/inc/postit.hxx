@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_POSTIT_HXX
-#define SC_POSTIT_HXX
+#ifndef INCLUDED_SC_INC_POSTIT_HXX
+#define INCLUDED_SC_INC_POSTIT_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <rtl/ustring.hxx>

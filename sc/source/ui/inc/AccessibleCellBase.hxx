@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SC_ACCESSIBLECELLBASE_HXX
-#define _SC_ACCESSIBLECELLBASE_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLECELLBASE_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLECELLBASE_HXX
 
 #include "AccessibleContextBase.hxx"
 #include "global.hxx"

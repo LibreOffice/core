@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_XMLCONDFORMAT_HXX
-#define SC_XMLCONDFORMAT_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCONDFORMAT_HXX
+#define INCLUDED_SC_SOURCE_FILTER_XML_XMLCONDFORMAT_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include "xmlimprt.hxx"

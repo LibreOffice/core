@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SC_ABSTDLG_HXX
-#define _SC_ABSTDLG_HXX
+#ifndef INCLUDED_SC_INC_SCABSTDLG_HXX
+#define INCLUDED_SC_INC_SCABSTDLG_HXX
 
 #include <tools/solar.h>
 #include <sfx2/sfxdlg.hxx>

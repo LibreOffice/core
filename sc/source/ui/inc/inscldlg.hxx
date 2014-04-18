@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_INSCLDLG_HXX
-#define SC_INSCLDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_INSCLDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_INSCLDLG_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -43,7 +43,7 @@ public:
 };
 
 
-#endif // SC_INSCLDLG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_INSCLDLG_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

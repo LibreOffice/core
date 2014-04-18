@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_OPENCLWRAPPER_HXX
-#define SC_OPENCLWRAPPER_HXX
+#ifndef INCLUDED_SC_SOURCE_CORE_OPENCL_OPENCLWRAPPER_HXX
+#define INCLUDED_SC_SOURCE_CORE_OPENCL_OPENCLWRAPPER_HXX
 
 #include <config_features.h>
 #include <formula/opcode.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_RESULT_HXX
-#define SC_RESULT_HXX
+#ifndef INCLUDED_SC_WORKBEN_RESULT_HXX
+#define INCLUDED_SC_WORKBEN_RESULT_HXX
 
 #include <vcl/timer.hxx>
 #include <rtl/ustring.hxx>

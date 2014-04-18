@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_LOOKUPCACHE_HXX
-#define INCLUDED_SC_LOOKUPCACHE_HXX
+#ifndef INCLUDED_SC_INC_LOOKUPCACHE_HXX
+#define INCLUDED_SC_INC_LOOKUPCACHE_HXX
 
 #include "address.hxx"
 #include "global.hxx"

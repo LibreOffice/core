@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_BCASLOT_HXX
-#define SC_BCASLOT_HXX
+#ifndef INCLUDED_SC_SOURCE_CORE_INC_BCASLOT_HXX
+#define INCLUDED_SC_SOURCE_CORE_INC_BCASLOT_HXX
 
 #include <set>
 #include <boost/unordered_set.hpp>

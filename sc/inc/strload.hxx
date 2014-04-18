@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_STRLOAD_HXX
-#define SC_STRLOAD_HXX
+#ifndef INCLUDED_SC_INC_STRLOAD_HXX
+#define INCLUDED_SC_INC_STRLOAD_HXX
 
 #include "scresid.hxx"
 #include <tools/rc.hxx>
@@ -40,6 +40,6 @@ private:
 
 #define SC_STRLOAD(resource,strid) ScRscStrLoader( resource, strid).GetString()
 
-#endif // SC_STRLOAD_HXX
+#endif // INCLUDED_SC_INC_STRLOAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

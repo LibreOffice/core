@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_PFILTDLG_HXX
-#define SC_PFILTDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_PFILTDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_PFILTDLG_HXX
 
 #include <vcl/morebtn.hxx>
 #include <svtools/stdctrl.hxx>
@@ -98,6 +98,6 @@ private:
 };
 
 
-#endif // SC_PFILTDLG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_PFILTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

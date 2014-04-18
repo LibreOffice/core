@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_XLS_QUERYTABLEBUFFER_HXX
-#define OOX_XLS_QUERYTABLEBUFFER_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_QUERYTABLEBUFFER_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_QUERYTABLEBUFFER_HXX
 
 #include "stylesbuffer.hxx"
 #include "worksheethelper.hxx"

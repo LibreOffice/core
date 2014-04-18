@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SC_TYPEDETECT_HXX
-#define _SC_TYPEDETECT_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_UNOOBJ_SCDETECT_HXX
+#define INCLUDED_SC_SOURCE_UI_UNOOBJ_SCDETECT_HXX
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/uno/Exception.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SC_ACCESSIBLECSVCONTROL_HXX
-#define _SC_ACCESSIBLECSVCONTROL_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLECSVCONTROL_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLECSVCONTROL_HXX
 
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>

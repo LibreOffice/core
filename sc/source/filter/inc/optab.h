@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_OPTAB_H
-#define SC_OPTAB_H
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_OPTAB_H
+#define INCLUDED_SC_SOURCE_FILTER_INC_OPTAB_H
 
 typedef void ( *OPCODE_FKT )( SvStream &aStream, sal_uInt16 nLaenge );
 

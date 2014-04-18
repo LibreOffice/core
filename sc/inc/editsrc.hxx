@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_EDITSRC_HXX
-#define SC_EDITSRC_HXX
+#ifndef INCLUDED_SC_INC_EDITSRC_HXX
+#define INCLUDED_SC_INC_EDITSRC_HXX
 
 #include "address.hxx"
 #include <editeng/unoedsrc.hxx>

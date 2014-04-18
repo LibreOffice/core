@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_EDITUTIL_HXX
-#define SC_EDITUTIL_HXX
+#ifndef INCLUDED_SC_INC_EDITUTIL_HXX
+#define INCLUDED_SC_INC_EDITUTIL_HXX
 
 #include "scdllapi.h"
 #include "address.hxx"

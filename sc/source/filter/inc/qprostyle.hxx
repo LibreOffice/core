@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SC_QPROSTYLE_HXX
-#define SC_QPROSTYLE_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_QPROSTYLE_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_QPROSTYLE_HXX
 
 #include <rtl/ustring.hxx>
 #include <sal/config.h>

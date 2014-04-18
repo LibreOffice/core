@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_INPUTOPT_HXX
-#define SC_INPUTOPT_HXX
+#ifndef INCLUDED_SC_INC_INPUTOPT_HXX
+#define INCLUDED_SC_INC_INPUTOPT_HXX
 
 #include <unotools/configitem.hxx>
 

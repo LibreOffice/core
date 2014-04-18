@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_XLS_PIVOTTABLEBUFFER_HXX
-#define OOX_XLS_PIVOTTABLEBUFFER_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_PIVOTTABLEBUFFER_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_PIVOTTABLEBUFFER_HXX
 
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include "pivotcachebuffer.hxx"

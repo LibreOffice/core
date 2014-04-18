@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DRFORMSH_HXX
-#define DRFORMSH_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_DRFORMSH_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_DRFORMSH_HXX
 
 #include <sfx2/shell.hxx>
 #include "shellids.hxx"

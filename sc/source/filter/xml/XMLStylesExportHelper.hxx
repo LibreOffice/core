@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLSTYLESEXPORTHELPER_HXX
-#define SC_XMLSTYLESEXPORTHELPER_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLESEXPORTHELPER_HXX
+#define INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLESEXPORTHELPER_HXX
 
 #include <vector>
 #include <list>

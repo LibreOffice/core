@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_CHECKLISTMENU_HXX__
-#define __SC_CHECKLISTMENU_HXX__
+#ifndef INCLUDED_SC_SOURCE_UI_INC_CHECKLISTMENU_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_CHECKLISTMENU_HXX
 
 #include "vcl/popupmenuwindow.hxx"
 #include "vcl/button.hxx"

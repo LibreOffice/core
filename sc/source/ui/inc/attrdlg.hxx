@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_ATTRDLG_HXX
-#define SC_ATTRDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_ATTRDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_ATTRDLG_HXX
 
 #include <sfx2/tabdlg.hxx>
 
@@ -43,7 +43,7 @@ private:
     sal_uInt16 m_nFontPageId;
 };
 
-#endif // SC_ATTRDLG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_ATTRDLG_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

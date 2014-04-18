@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_XMLSOURCEDLG_HXX__
-#define __SC_XMLSOURCEDLG_HXX__
+#ifndef INCLUDED_SC_SOURCE_UI_INC_XMLSOURCEDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_XMLSOURCEDLG_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

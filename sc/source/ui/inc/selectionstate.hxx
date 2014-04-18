@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SELECTIONSTATE_HXX
-#define SC_SELECTIONSTATE_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_SELECTIONSTATE_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_SELECTIONSTATE_HXX
 
 #include <editeng/editdata.hxx>
 #include "rangelst.hxx"

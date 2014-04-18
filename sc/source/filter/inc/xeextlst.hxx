@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_EXCEL_EXTLST_HXX
-#define SC_EXCEL_EXTLST_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XEEXTLST_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_XEEXTLST_HXX
 
 #include "xerecord.hxx"
 #include "xeroot.hxx"

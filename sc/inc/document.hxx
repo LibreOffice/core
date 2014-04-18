@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DOCUMENT_HXX
-#define SC_DOCUMENT_HXX
+#ifndef INCLUDED_SC_INC_DOCUMENT_HXX
+#define INCLUDED_SC_INC_DOCUMENT_HXX
 
 #include <vcl/prntypes.hxx>
 #include <vcl/timer.hxx>

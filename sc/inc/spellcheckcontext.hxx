@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_SPELLCHECKCONTEXT_HXX
-#define SC_SPELLCHECKCONTEXT_HXX
+#ifndef INCLUDED_SC_INC_SPELLCHECKCONTEXT_HXX
+#define INCLUDED_SC_INC_SPELLCHECKCONTEXT_HXX
 
 #include "address.hxx"
 #include "editeng/misspellrange.hxx"

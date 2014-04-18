@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_MSGPOOL_HXX
-#define SC_MSGPOOL_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_MSGPOOL_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_MSGPOOL_HXX
 
 #include "scitems.hxx"
 #include <svl/srchitem.hxx>

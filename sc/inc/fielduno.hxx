@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FIELDUNO_HXX
-#define SC_FIELDUNO_HXX
+#ifndef INCLUDED_SC_INC_FIELDUNO_HXX
+#define INCLUDED_SC_INC_FIELDUNO_HXX
 
 #include "address.hxx"
 #include "mutexhlp.hxx"

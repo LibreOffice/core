@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLWRAP_HXX
-#define SC_XMLWRAP_HXX
+#ifndef INCLUDED_SC_INC_XMLWRAP_HXX
+#define INCLUDED_SC_INC_XMLWRAP_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

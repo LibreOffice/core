@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TPHFEDIT_HXX
-#define SC_TPHFEDIT_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_TPHFEDIT_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_TPHFEDIT_HXX
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/pageitem.hxx>
@@ -132,6 +132,6 @@ public:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
 
-#endif // SC_TPHFEDIT_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_TPHFEDIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

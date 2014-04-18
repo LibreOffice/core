@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_SIDEBAR_CELL_LINE_STYLE_CONTROL_HXX
-#define SC_SIDEBAR_CELL_LINE_STYLE_CONTROL_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLLINESTYLECONTROL_HXX
+#define INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLLINESTYLECONTROL_HXX
 
 #include <svx/sidebar/PopupControl.hxx>
 #include <vcl/button.hxx>
@@ -63,7 +63,7 @@ public:
 
 } } // end of namespace svx::sidebar
 
-#endif // SC_SIDEBAR_CELL_LINE_STYLE_CONTROL_HXX
+#endif // INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLLINESTYLECONTROL_HXX
 
 // eof
 

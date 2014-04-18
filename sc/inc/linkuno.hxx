@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_LINKUNO_HXX
-#define SC_LINKUNO_HXX
+#ifndef INCLUDED_SC_INC_LINKUNO_HXX
+#define INCLUDED_SC_INC_LINKUNO_HXX
 
 #include <svl/lstner.hxx>
 #include <svl/itemprop.hxx>

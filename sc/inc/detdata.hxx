@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DETDATA_HXX
-#define SC_DETDATA_HXX
+#ifndef INCLUDED_SC_INC_DETDATA_HXX
+#define INCLUDED_SC_INC_DETDATA_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "global.hxx"

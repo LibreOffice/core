@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_OPTUTIL_HXX
-#define SC_OPTUTIL_HXX
+#ifndef INCLUDED_SC_INC_OPTUTIL_HXX
+#define INCLUDED_SC_INC_OPTUTIL_HXX
 
 #include <unotools/configitem.hxx>
 #include <tools/link.hxx>

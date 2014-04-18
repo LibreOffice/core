@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_STLPOOL_HXX
-#define SC_STLPOOL_HXX
+#ifndef INCLUDED_SC_INC_STLPOOL_HXX
+#define INCLUDED_SC_INC_STLPOOL_HXX
 
 #include <svl/style.hxx>
 
@@ -72,6 +72,6 @@ private:
     const OUString*       pForceStdName;
 };
 
-#endif     // SC_STLPOOL_HXX
+#endif // INCLUDED_SC_INC_STLPOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

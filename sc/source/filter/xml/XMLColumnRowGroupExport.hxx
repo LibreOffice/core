@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLCOLUMNROWGROUPEXPORT_HXX
-#define SC_XMLCOLUMNROWGROUPEXPORT_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCOLUMNROWGROUPEXPORT_HXX
+#define INCLUDED_SC_SOURCE_FILTER_XML_XMLCOLUMNROWGROUPEXPORT_HXX
 
 #include <list>
 #include <rtl/ustring.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_EXTERNALREFMGR_HXX
-#define SC_EXTERNALREFMGR_HXX
+#ifndef INCLUDED_SC_INC_EXTERNALREFMGR_HXX
+#define INCLUDED_SC_INC_EXTERNALREFMGR_HXX
 
 #include "global.hxx"
 #include "address.hxx"

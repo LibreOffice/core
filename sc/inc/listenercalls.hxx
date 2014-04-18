@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_LISTENERCALLS_HXX
-#define SC_LISTENERCALLS_HXX
+#ifndef INCLUDED_SC_INC_LISTENERCALLS_HXX
+#define INCLUDED_SC_INC_LISTENERCALLS_HXX
 
 #include <list>
 #include <com/sun/star/uno/Reference.hxx>

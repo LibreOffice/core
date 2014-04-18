@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_GLOBALNAMES_HXX__
-#define __SC_GLOBALNAMES_HXX__
+#ifndef INCLUDED_SC_INC_GLOBALNAMES_HXX
+#define INCLUDED_SC_INC_GLOBALNAMES_HXX
 
 #define STR_DB_LOCAL_NONAME  "__Anonymous_Sheet_DB__"
 #define STR_DB_GLOBAL_NONAME "__Anonymous_DB__"

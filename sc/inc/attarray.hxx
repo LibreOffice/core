@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_ATRARR_HXX
-#define SC_ATRARR_HXX
+#ifndef INCLUDED_SC_INC_ATTARRAY_HXX
+#define INCLUDED_SC_INC_ATTARRAY_HXX
 
 #include "global.hxx"
 #include "attrib.hxx"

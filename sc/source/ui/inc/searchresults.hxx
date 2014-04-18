@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_UI_SEARCHRESULTS_HXX
-#define SC_UI_SEARCHRESULTS_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_SEARCHRESULTS_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_SEARCHRESULTS_HXX
 
 #include <vcl/dialog.hxx>
 class ScDocument;

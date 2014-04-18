@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XISTREAM_HXX
-#define SC_XISTREAM_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XISTREAM_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_XISTREAM_HXX
 
 #include <comphelper/docpasswordhelper.hxx>
 #include <filter/msfilter/mscodec.hxx>

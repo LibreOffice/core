@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DPCACHETABLE_HXX
-#define SC_DPCACHETABLE_HXX
+#ifndef INCLUDED_SC_INC_DPFILTEREDCACHE_HXX
+#define INCLUDED_SC_INC_DPFILTEREDCACHE_HXX
 
 #include "sal/types.h"
 #include "osl/mutex.hxx"

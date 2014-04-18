@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XESTRING_HXX
-#define SC_XESTRING_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XESTRING_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_XESTRING_HXX
 
 #include "xlstring.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_ADDINLIS_HXX
-#define SC_ADDINLIS_HXX
+#ifndef INCLUDED_SC_SOURCE_CORE_INC_ADDINLIS_HXX
+#define INCLUDED_SC_SOURCE_CORE_INC_ADDINLIS_HXX
 
 #include "adiasync.hxx"
 #include <com/sun/star/sheet/XResultListener.hpp>
@@ -85,6 +85,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-#endif // SC_ADDINLIS_HXX
+#endif // INCLUDED_SC_SOURCE_CORE_INC_ADDINLIS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

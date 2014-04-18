@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_JUMPMATRIX_HXX
-#define SC_JUMPMATRIX_HXX
+#ifndef INCLUDED_SC_SOURCE_CORE_INC_JUMPMATRIX_HXX
+#define INCLUDED_SC_SOURCE_CORE_INC_JUMPMATRIX_HXX
 
 #include "formula/token.hxx"
 #include "formula/errorcodes.hxx"
@@ -115,6 +115,6 @@ public:
     void PutResultEmptyPath( SCSIZE nC, SCSIZE nR );
 };
 
-#endif // SC_JUMPMATRIX_HXX
+#endif // INCLUDED_SC_SOURCE_CORE_INC_JUMPMATRIX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DDELINK_HXX
-#define SC_DDELINK_HXX
+#ifndef INCLUDED_SC_SOURCE_CORE_INC_DDELINK_HXX
+#define INCLUDED_SC_SOURCE_CORE_INC_DDELINK_HXX
 
 #include "address.hxx"
 #include <sfx2/lnkbase.hxx>

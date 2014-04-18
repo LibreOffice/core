@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_TYPES_HXX
-#define SC_TYPES_HXX
+#ifndef INCLUDED_SC_INC_TYPES_HXX
+#define INCLUDED_SC_INC_TYPES_HXX
 
 #include "sal/types.h"
 

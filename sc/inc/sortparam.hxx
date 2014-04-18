@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SORTPARAM_HXX
-#define SC_SORTPARAM_HXX
+#ifndef INCLUDED_SC_INC_SORTPARAM_HXX
+#define INCLUDED_SC_INC_SORTPARAM_HXX
 
 #define DEFSORT 3
 
@@ -80,6 +80,6 @@ struct SC_DLLPUBLIC ScSortParam
 };
 
 
-#endif // SC_SORTPARAM_HXX
+#endif // INCLUDED_SC_INC_SORTPARAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

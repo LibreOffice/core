@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FILTOPT_HXX
-#define SC_FILTOPT_HXX
+#ifndef INCLUDED_SC_INC_FILTOPT_HXX
+#define INCLUDED_SC_INC_FILTOPT_HXX
 
 #include <unotools/configitem.hxx>
 #include "scdllapi.h"

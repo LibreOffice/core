@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_XLS_THEMEBUFFER_HXX
-#define OOX_XLS_THEMEBUFFER_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_THEMEBUFFER_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_THEMEBUFFER_HXX
 
 #include "oox/drawingml/theme.hxx"
 #include "workbookhelper.hxx"

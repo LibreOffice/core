@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_PARAMISC_HXX
-#define SC_PARAMISC_HXX
+#ifndef INCLUDED_SC_INC_PARAMISC_HXX
+#define INCLUDED_SC_INC_PARAMISC_HXX
 
 #include "address.hxx"
 #include <sal/types.h>
@@ -63,6 +63,6 @@ struct SC_DLLPUBLIC ScTabOpParam
     bool operator== ( const ScTabOpParam& r ) const;
 };
 
-#endif // SC_PARAMISC_HXX
+#endif // INCLUDED_SC_INC_PARAMISC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

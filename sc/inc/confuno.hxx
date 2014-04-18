@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_CONFUNO_HXX
-#define SC_CONFUNO_HXX
+#ifndef INCLUDED_SC_INC_CONFUNO_HXX
+#define INCLUDED_SC_INC_CONFUNO_HXX
 
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>

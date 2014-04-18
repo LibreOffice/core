@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_PROGRESS_HXX
-#define SC_PROGRESS_HXX
+#ifndef INCLUDED_SC_INC_PROGRESS_HXX
+#define INCLUDED_SC_INC_PROGRESS_HXX
 
 #include <rtl/ustring.hxx>
 #include <sfx2/progress.hxx>

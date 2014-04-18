@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_MTVFUNCTIONS_HXX
-#define SC_MTVFUNCTIONS_HXX
+#ifndef INCLUDED_SC_INC_MTVFUNCTIONS_HXX
+#define INCLUDED_SC_INC_MTVFUNCTIONS_HXX
 
 #include <cstdlib>
 #include <mdds/multi_type_vector_types.hpp>

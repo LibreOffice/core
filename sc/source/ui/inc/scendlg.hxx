@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SCENDLG_HXX
-#define SC_SCENDLG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_SCENDLG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_SCENDLG_HXX
 
 
 #include <vcl/dialog.hxx>
@@ -56,7 +56,7 @@ private:
 };
 
 
-#endif // SC_SCENDLG_HXX
+#endif // INCLUDED_SC_SOURCE_UI_INC_SCENDLG_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

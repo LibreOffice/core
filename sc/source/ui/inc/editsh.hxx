@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_EDITSH_HXX
-#define SC_EDITSH_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_EDITSH_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_EDITSH_HXX
 
 #include <sfx2/shell.hxx>
 #include <sfx2/module.hxx>

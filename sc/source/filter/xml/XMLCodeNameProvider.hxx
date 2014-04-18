@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLCODENAMEPROVIDER_HXX
-#define SC_XMLCODENAMEPROVIDER_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCODENAMEPROVIDER_HXX
+#define INCLUDED_SC_SOURCE_FILTER_XML_XMLCODENAMEPROVIDER_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <cppuhelper/implbase1.hxx>

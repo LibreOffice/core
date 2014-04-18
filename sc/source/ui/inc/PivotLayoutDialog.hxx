@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef PIVOTLAYOUTDIALOG_HXX
-#define PIVOTLAYOUTDIALOG_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTDIALOG_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTDIALOG_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

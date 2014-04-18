@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XLPIVOT_HXX
-#define SC_XLPIVOT_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLPIVOT_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_XLPIVOT_HXX
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>

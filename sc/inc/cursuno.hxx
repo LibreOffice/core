@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_CURSUNO_HXX
-#define SC_CURSUNO_HXX
+#ifndef INCLUDED_SC_INC_CURSUNO_HXX
+#define INCLUDED_SC_INC_CURSUNO_HXX
 
 #include "cellsuno.hxx"
 #include <com/sun/star/table/XCellCursor.hpp>

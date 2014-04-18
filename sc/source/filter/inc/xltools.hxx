@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XLTOOLS_HXX
-#define SC_XLTOOLS_HXX
+#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLTOOLS_HXX
+#define INCLUDED_SC_SOURCE_FILTER_INC_XLTOOLS_HXX
 
 #include "address.hxx"
 #include "ftools.hxx"

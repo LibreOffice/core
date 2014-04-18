@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_EDITTEXTITERATOR_HXX
-#define SC_EDITTEXTITERATOR_HXX
+#ifndef INCLUDED_SC_INC_EDITTEXTITERATOR_HXX
+#define INCLUDED_SC_INC_EDITTEXTITERATOR_HXX
 
 #include "address.hxx"
 #include "mtvelements.hxx"

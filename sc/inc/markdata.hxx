@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_MARKDATA_HXX
-#define SC_MARKDATA_HXX
+#ifndef INCLUDED_SC_INC_MARKDATA_HXX
+#define INCLUDED_SC_INC_MARKDATA_HXX
 
 #include "address.hxx"
 #include "scdllapi.h"

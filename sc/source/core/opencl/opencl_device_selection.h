@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_DEVICE_SELECTION_H
-#define SC_DEVICE_SELECTION_H
+#ifndef INCLUDED_SC_SOURCE_CORE_OPENCL_OPENCL_DEVICE_SELECTION_H
+#define INCLUDED_SC_SOURCE_CORE_OPENCL_OPENCL_DEVICE_SELECTION_H
 
 
 #ifdef _MSC_VER

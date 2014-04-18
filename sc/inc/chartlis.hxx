@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_CHARTLIS_HXX
-#define SC_CHARTLIS_HXX
+#ifndef INCLUDED_SC_INC_CHARTLIS_HXX
+#define INCLUDED_SC_INC_CHARTLIS_HXX
 
 #include <vcl/timer.hxx>
 #include <svl/listener.hxx>
