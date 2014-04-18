@@ -289,6 +289,31 @@ void ScColumn::TransferCellValuesTo( SCROW nRow, size_t nLen, sc::CellValues& rD
     BroadcastCells(aRows, SC_HINT_DATACHANGED);
 }
 
+void ScColumn::TransferCellValuesFrom( SCROW nRow, sc::CellValues& rSrc )
+{
+    if (!ValidRow(nRow))
+        return;
+
+    SCROW nLastRow = nRow + rSrc.size() - 1;
+    if (nLastRow > MAXROW)
+        // Out of bound. Do nothing
+        return;
+
+    sc::CellStoreType::position_type aPos = maCells.position(nRow);
+    DetachFormulaCells(aPos, rSrc.size());
+
+    rSrc.transferTo(*this, nRow);
+
+    CellStorageModified();
+
+    std::vector<SCROW> aRows;
+    aRows.reserve(rSrc.size());
+    for (SCROW i = nRow; i <= nLastRow; ++i)
+        aRows.push_back(i);
+
+    BroadcastCells(aRows, SC_HINT_DATACHANGED);
+}
+
 void ScColumn::CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc )
 {
     if (!ValidRow(nRow))

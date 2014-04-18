@@ -56,6 +56,8 @@
 #include "tokenarray.hxx"
 #include "mtvcellfunc.hxx"
 #include "columnspanset.hxx"
+#include <stlalgorithm.hxx>
+#include <cellvalues.hxx>
 
 #include "svl/sharedstringpool.hxx"
 
@@ -63,6 +65,8 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/unordered_set.hpp>
+#include <boost/noncopyable.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 using namespace ::com::sun::star;
 
@@ -215,9 +219,24 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo )
 // END OF STATIC DATA -----------------------------------------------------
 
 
-class ScSortInfoArray
+class ScSortInfoArray : boost::noncopyable
 {
+public:
+
+    struct Cell
+    {
+        ScRefCellValue maCell;
+        const sc::CellTextAttr* mpAttr;
+
+        Cell() : mpAttr(NULL) {}
+    };
+
+    typedef std::vector<Cell> RowType;
+    typedef std::vector<RowType*> RowsType;
+
 private:
+    boost::scoped_ptr<RowsType> mpRows; /// row-wise data table for sort by row operation.
+
     ScSortInfo***   pppInfo;
     SCSIZE          nCount;
     SCCOLROW        nStart;
@@ -237,35 +256,64 @@ public:
                             pppInfo[nSort] = ppInfo;
                         }
                     }
-                ~ScSortInfoArray()
-                    {
-                        for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
-                        {
-                            ScSortInfo** ppInfo = pppInfo[nSort];
-                            for ( SCSIZE j = 0; j < nCount; j++ )
-                                delete ppInfo[j];
-                            delete [] ppInfo;
-                        }
-                        delete[] pppInfo;
-                    }
+
+    ~ScSortInfoArray()
+    {
+        for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
+        {
+            ScSortInfo** ppInfo = pppInfo[nSort];
+            for ( SCSIZE j = 0; j < nCount; j++ )
+                delete ppInfo[j];
+            delete [] ppInfo;
+        }
+        delete[] pppInfo;
+
+        if (mpRows)
+            std::for_each(mpRows->begin(), mpRows->end(), ScDeleteObjectByPtr<RowType>());
+    }
+
     ScSortInfo* Get( sal_uInt16 nSort, SCCOLROW nInd )
                     { return (pppInfo[nSort])[ nInd - nStart ]; }
-    void        Swap( SCCOLROW nInd1, SCCOLROW nInd2 )
-                    {
-                        SCSIZE n1 = static_cast<SCSIZE>(nInd1 - nStart);
-                        SCSIZE n2 = static_cast<SCSIZE>(nInd2 - nStart);
-                        for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
-                        {
-                            ScSortInfo** ppInfo = pppInfo[nSort];
-                            ScSortInfo* pTmp = ppInfo[n1];
-                            ppInfo[n1] = ppInfo[n2];
-                            ppInfo[n2] = pTmp;
-                        }
-                    }
+
+    void Swap( SCCOLROW nInd1, SCCOLROW nInd2 )
+    {
+        SCSIZE n1 = static_cast<SCSIZE>(nInd1 - nStart);
+        SCSIZE n2 = static_cast<SCSIZE>(nInd2 - nStart);
+        for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
+        {
+            ScSortInfo** ppInfo = pppInfo[nSort];
+            ScSortInfo* pTmp = ppInfo[n1];
+            ppInfo[n1] = ppInfo[n2];
+            ppInfo[n2] = pTmp;
+        }
+
+        if (mpRows)
+        {
+            // Swap rows in data table.
+            RowsType& rRows = *mpRows;
+            std::swap(rRows[nInd1], rRows[nInd2]);
+        }
+    }
+
     sal_uInt16      GetUsedSorts() const { return nUsedSorts; }
     ScSortInfo**    GetFirstArray() const { return pppInfo[0]; }
     SCCOLROW    GetStart() const { return nStart; }
     SCSIZE      GetCount() const { return nCount; }
+
+    RowsType& InitDataRows( size_t nRowSize, size_t nColSize )
+    {
+        mpRows.reset(new RowsType);
+        mpRows->reserve(nRowSize);
+        for (size_t i = 0; i < nRowSize; ++i)
+            mpRows->push_back(new RowType(nColSize, Cell()));
+
+        return *mpRows;
+    }
+
+    RowsType* GetDataRows()
+    {
+        return mpRows.get();
+    }
 };
 
 ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
@@ -288,6 +336,25 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
                 pInfo->maCell = pCol->GetCellValue(aBlockPos, nRow);
                 pInfo->mpTextAttr = pCol->GetCellTextAttr(aBlockPos, nRow);
                 pInfo->nOrg = nRow;
+            }
+        }
+
+        // Filll row-wise data table.
+        ScSortInfoArray::RowsType& rRows = pArray->InitDataRows(
+            aSortParam.nRow2 - aSortParam.nRow1 + 1, aSortParam.nCol2 - aSortParam.nCol1 + 1);
+
+        for (SCCOL nCol = aSortParam.nCol1; nCol <= aSortParam.nCol2; ++nCol)
+        {
+            ScColumn& rCol = aCol[nCol];
+            sc::ColumnBlockConstPosition aBlockPos;
+            rCol.InitBlockPosition(aBlockPos);
+            for (SCROW nRow = aSortParam.nRow1; nRow <= aSortParam.nRow2; ++nRow)
+            {
+                ScSortInfoArray::RowType& rRow = *rRows[nRow-aSortParam.nRow1];
+                ScSortInfoArray::Cell& rCell = rRow[nCol-aSortParam.nCol1];
+
+                rCell.maCell = rCol.GetCellValue(aBlockPos, nRow);
+                rCell.mpAttr = rCol.GetCellTextAttr(aBlockPos, nRow);
             }
         }
     }
@@ -348,35 +415,69 @@ void ScTable::DestroySortCollator()
 
 void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
 {
-    bool bByRow = aSortParam.bByRow;
-    SCSIZE nCount = pArray->GetCount();
+    size_t nCount = pArray->GetCount();
     SCCOLROW nStart = pArray->GetStart();
     ScSortInfo** ppInfo = pArray->GetFirstArray();
-    ::std::vector<ScSortInfo*> aTable(nCount);
-    SCSIZE nPos;
-    for ( nPos = 0; nPos < nCount; nPos++ )
-        aTable[ppInfo[nPos]->nOrg - nStart] = ppInfo[nPos];
 
-    SCCOLROW nDest = nStart;
-    for ( nPos = 0; nPos < nCount; nPos++, nDest++ )
+    if (aSortParam.bByRow)
     {
-        SCCOLROW nOrg = ppInfo[nPos]->nOrg;
-        if ( nDest != nOrg )
+        ScSortInfoArray::RowsType* pRows = pArray->GetDataRows();
+        assert(pRows); // In sort-by-row mode we must have data rows already populated.
+
+        // Cells in the data rows only reference values in the document. Make
+        // a copy before updating the document.
+
+        size_t nColCount = aSortParam.nCol2 - aSortParam.nCol1 + 1;
+        boost::ptr_vector<sc::CellValues> aSortedCols;
+        aSortedCols.reserve(nColCount);
+        for (size_t i = 0; i < nColCount; ++i)
+            aSortedCols.push_back(new sc::CellValues);
+
+        for (size_t i = 0; i < pRows->size(); ++i)
         {
-            if ( bByRow )
-                SwapRow( nDest, nOrg );
-            else
-                SwapCol( static_cast<SCCOL>(nDest), static_cast<SCCOL>(nOrg) );
-            // neue Position des weggeswapten eintragen
-            ScSortInfo* p = ppInfo[nPos];
-            p->nOrg = nDest;
-            ::std::swap(p, aTable[nDest-nStart]);
-            p->nOrg = nOrg;
-            ::std::swap(p, aTable[nOrg-nStart]);
-            OSL_ENSURE( p == ppInfo[nPos], "SortReorder: nOrg MisMatch" );
+            ScSortInfoArray::RowType* pRow = (*pRows)[i];
+            for (size_t nCol = 0; nCol < pRow->size(); ++nCol)
+            {
+                ScSortInfoArray::Cell& rCell = (*pRow)[nCol];
+                sc::CellValues& rStore = aSortedCols.at(nCol);
+                rStore.append(rCell.maCell, rCell.mpAttr);
+            }
+
+            if (pProgress)
+                pProgress->SetStateOnPercent(i);
         }
-        if(pProgress)
-            pProgress->SetStateOnPercent( nPos );
+
+        for (size_t i = 0, n = aSortedCols.size(); i < n; ++i)
+        {
+            sc::CellValues& rSortedCol = aSortedCols[i];
+            TransferCellValuesFrom(i+aSortParam.nCol1, aSortParam.nRow1, rSortedCol);
+        }
+    }
+    else
+    {
+        std::vector<ScSortInfo*> aTable(nCount);
+        SCSIZE nPos;
+        for ( nPos = 0; nPos < nCount; nPos++ )
+            aTable[ppInfo[nPos]->nOrg - nStart] = ppInfo[nPos];
+
+        SCCOLROW nDest = nStart;
+        for ( nPos = 0; nPos < nCount; nPos++, nDest++ )
+        {
+            SCCOLROW nOrg = ppInfo[nPos]->nOrg;
+            if ( nDest != nOrg )
+            {
+                SwapCol( static_cast<SCCOL>(nDest), static_cast<SCCOL>(nOrg) );
+                // neue Position des weggeswapten eintragen
+                ScSortInfo* p = ppInfo[nPos];
+                p->nOrg = nDest;
+                ::std::swap(p, aTable[nDest-nStart]);
+                p->nOrg = nOrg;
+                ::std::swap(p, aTable[nOrg-nStart]);
+                OSL_ENSURE( p == ppInfo[nPos], "SortReorder: nOrg MisMatch" );
+            }
+            if(pProgress)
+                pProgress->SetStateOnPercent( nPos );
+        }
     }
 }
 

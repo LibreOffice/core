@@ -566,6 +566,7 @@ public:
     void RegroupFormulaCells();
 
     void TransferCellValuesTo( SCROW nRow, size_t nLen, sc::CellValues& rDest );
+    void TransferCellValuesFrom( SCROW nRow, sc::CellValues& rSrc );
     void CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc );
 
 #if DEBUG_COLUMN_STORAGE

@@ -72,6 +72,14 @@ void ScTable::TransferCellValuesTo( SCCOL nCol, SCROW nRow, size_t nLen, sc::Cel
     aCol[nCol].TransferCellValuesTo(nRow, nLen, rDest);
 }
 
+void ScTable::TransferCellValuesFrom( SCCOL nCol, SCROW nRow, sc::CellValues& rSrc )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].TransferCellValuesFrom(nRow, rSrc);
+}
+
 void ScTable::CopyCellValuesFrom( SCCOL nCol, SCROW nRow, const sc::CellValues& rSrc )
 {
     if (!ValidCol(nCol))

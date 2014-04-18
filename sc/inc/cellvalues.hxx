@@ -13,10 +13,12 @@
 #include <address.hxx>
 
 class ScColumn;
+struct ScRefCellValue;
 
 namespace sc {
 
 struct CellValuesImpl;
+struct CellTextAttr;
 
 /**
  * Think of this as a mini-ScColumn like storage that only stores cell
@@ -33,10 +35,21 @@ public:
     CellValues();
     ~CellValues();
 
+    /**
+     * Transfer values from specified column.  The transferred segment in the
+     * source column becomes empty after this call.
+     *
+     * @param rCol source column to transfer values from.
+     * @param nRow top row position in the source column.
+     * @param nLen length of the segment to transfer.
+     */
     void transferFrom( ScColumn& rCol, SCROW nRow, size_t nLen );
+
+    void transferTo( ScColumn& rCol, SCROW nRow );
     void copyTo( ScColumn& rCol, SCROW nRow ) const;
 
     void assign( const std::vector<double>& rVals );
+    void append( ScRefCellValue& rVal, const CellTextAttr* pAttr );
 
     size_t size() const;
 

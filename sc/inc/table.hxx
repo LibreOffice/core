@@ -916,6 +916,7 @@ public:
         SCCOL nColDelta, SCROW nRowDelta );
 
     void TransferCellValuesTo( SCCOL nCol, SCROW nRow, size_t nLen, sc::CellValues& rDest );
+    void TransferCellValuesFrom( SCCOL nCol, SCROW nRow, sc::CellValues& rSrc );
     void CopyCellValuesFrom( SCCOL nCol, SCROW nRow, const sc::CellValues& rSrc );
 
 #if DEBUG_COLUMN_STORAGE
