@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_DRAWINGLAYER_XSHAPEDUMPER_HXX
+#define INCLUDED_DRAWINGLAYER_XSHAPEDUMPER_HXX
+
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -38,9 +41,6 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#ifndef INCLUDED_DRAWINGLAYER_XSHAPEDUMPER_HXX
-#define INCLUDED_DRAWINGLAYER_XSHAPEDUMPER_HXX
-
 class DRAWINGLAYER_DLLPUBLIC XShapeDumper
 {
 
@@ -49,4 +49,7 @@ public:
     OUString dump(com::sun::star::uno::Reference<com::sun::star::drawing::XShapes> xPageShapes, bool bDumpInteropProperties=false);
 
 };
+
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
