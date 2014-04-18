@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FRACTION_HXX
-#define INCLUDED_FRACTION_HXX
+#ifndef INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_FRACTION_HXX
+#define INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_FRACTION_HXX
 
 #include <sal/types.h>
 
@@ -49,6 +49,6 @@ private:
     sal_Int32 mnDenominator;
 };
 }}
-#endif // INCLUDED_FRACTION_HXX
+#endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_FRACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

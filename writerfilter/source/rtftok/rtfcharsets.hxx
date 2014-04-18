@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _RTFCHARSETS_HXX_
-#define _RTFCHARSETS_HXX_
+#ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFCHARSETS_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFCHARSETS_HXX
 
 namespace writerfilter {
     namespace rtftok {
@@ -23,6 +23,6 @@ namespace writerfilter {
     } // namespace rtftok
 } // namespace writerfilter
 
-#endif // _RTFCHARSETS_HXX_
+#endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFCHARSETS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

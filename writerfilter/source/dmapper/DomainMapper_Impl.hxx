@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DMAPPER_DOMAINMAPPER_IMPL_HXX
-#define INCLUDED_DMAPPER_DOMAINMAPPER_IMPL_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DOMAINMAPPER_IMPL_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DOMAINMAPPER_IMPL_HXX
 
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>

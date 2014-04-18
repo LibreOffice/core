@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _RTFTOKENIZER_HXX_
-#define _RTFTOKENIZER_HXX_
+#ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFTOKENIZER_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFTOKENIZER_HXX
 
 #include <rtflistener.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -59,6 +59,6 @@ namespace writerfilter {
     } // namespace rtftok
 } // namespace writerfilter
 
-#endif // _RTFTOKENIZER_HXX_
+#endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFTOKENIZER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

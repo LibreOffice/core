@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XPATH_LOGGER_HXX
-#define INCLUDED_XPATH_LOGGER_HXX
+#ifndef INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_XPATHLOGGER_HXX
+#define INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_XPATHLOGGER_HXX
 
 #ifdef DEBUG_CONTEXT_HANDLER
 
@@ -56,4 +56,4 @@ public:
 }
 
 #endif
-#endif // INCLUDED_XPATH_LOGGER_HXX
+#endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_XPATHLOGGER_HXX

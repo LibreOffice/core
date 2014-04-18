@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_THEMETABLE_HXX
-#define INCLUDED_THEMETABLE_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_THEMETABLE_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_THEMETABLE_HXX
 
 #include <resourcemodel/LoggedResources.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

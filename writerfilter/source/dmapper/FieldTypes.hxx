@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FIELD_TYPES_HXX
-#define INCLUDED_FIELD_TYPES_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FIELDTYPES_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FIELDTYPES_HXX
 
 namespace writerfilter {
 namespace dmapper {
@@ -303,6 +303,6 @@ enum FieldId
 };
 
 }}
-#endif // INCLUDED_FIELD_TYPES_HXX
+#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FIELDTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOXML_FAST_DOCUMENT_HANDLER_HXX
-#define INCLUDED_OOXML_FAST_DOCUMENT_HANDLER_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTDOCUMENTHANDLER_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTDOCUMENTHANDLER_HXX
 
 #include <sal/config.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -105,6 +105,6 @@ private:
 };
 }}
 
-#endif // INCLUDED_OOXML_FAST_DOCUMENT_HANDLER_HXX
+#endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTDOCUMENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

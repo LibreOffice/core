@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOXML_FACTORY_HXX
-#define INCLUDED_OOXML_FACTORY_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFACTORY_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFACTORY_HXX
 
 #include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
@@ -165,6 +165,6 @@ private:
 }
 }
 
-#endif // INCLUDED_OOXML_FACTORY_HXX
+#endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

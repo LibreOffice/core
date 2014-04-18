@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_TRACKCHANGESHANDLER_HXX
-#define INCLUDED_TRACKCHANGESHANDLER_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TRACKCHANGESHANDLER_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TRACKCHANGESHANDLER_HXX
 
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _RTFREFERENCEPROPERTIES_HXX_
-#define _RTFREFERENCEPROPERTIES_HXX_
+#ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFREFERENCEPROPERTIES_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFREFERENCEPROPERTIES_HXX
 
 #include <rtfsprm.hxx>
 
@@ -33,6 +33,6 @@ namespace writerfilter {
     } // namespace rtftok
 } // namespace writerfilter
 
-#endif // _RTFREFERENCEPROPERTIES_HXX_
+#endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFREFERENCEPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

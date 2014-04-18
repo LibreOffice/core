@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _RTFLISTENER_HXX_
-#define _RTFLISTENER_HXX_
+#ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLISTENER_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLISTENER_HXX
 
 #include <rtfcontrolwords.hxx>
 
@@ -67,6 +67,6 @@ namespace writerfilter {
     } // namespace rtftok
 } // namespace writerfilter
 
-#endif // _RTFLISTENER_HXX_
+#endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

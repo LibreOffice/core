@@ -6,8 +6,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _RTFDOCUMENT_HXX_
-#define _RTFDOCUMENT_HXX_
+#ifndef INCLUDED_WRITERFILTER_INC_RTFTOK_RTFDOCUMENT_HXX
+#define INCLUDED_WRITERFILTER_INC_RTFTOK_RTFDOCUMENT_HXX
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -51,6 +51,6 @@ public:
 } // namespace rtftok
 } // namespace writerfilter
 
-#endif // _RTFDOCUMENT_HXX_
+#endif // INCLUDED_WRITERFILTER_INC_RTFTOK_RTFDOCUMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

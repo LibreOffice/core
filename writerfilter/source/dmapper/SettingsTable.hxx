@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SETTINGSTABLE_HXX
-#define INCLUDED_SETTINGSTABLE_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SETTINGSTABLE_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SETTINGSTABLE_HXX
 
 #include <resourcemodel/LoggedResources.hxx>
 #include <com/sun/star/lang/XComponent.hpp>

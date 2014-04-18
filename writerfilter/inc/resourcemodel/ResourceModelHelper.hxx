@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_RESOURCE_MODEL_HELPER_HXX
-#define INCLUDED_RESOURCE_MODEL_HELPER_HXX
+#ifndef INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_RESOURCEMODELHELPER_HXX
+#define INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_RESOURCEMODELHELPER_HXX
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 
@@ -28,6 +28,6 @@ void resolveSprmProps(Properties & rHandler, Sprm & rSprm);
 
 }}
 
-#endif // INCLUDED_RESOURCE_MODEL_HELPER_HXX
+#endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_RESOURCEMODELHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_OOXML_DOCUMENT_HXX
-#define INCLUDED_OOXML_DOCUMENT_HXX
+#ifndef INCLUDED_WRITERFILTER_INC_OOXML_OOXMLDOCUMENT_HXX
+#define INCLUDED_WRITERFILTER_INC_OOXML_OOXMLDOCUMENT_HXX
 
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -277,6 +277,6 @@ public:
 void ooxmlidsToXML(::std::iostream & out);
 
 }}
-#endif // INCLUDED_OOXML_DOCUMENT_HXX
+#endif // INCLUDED_WRITERFILTER_INC_OOXML_OOXMLDOCUMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

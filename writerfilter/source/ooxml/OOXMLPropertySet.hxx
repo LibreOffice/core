@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_OOXML_PROPERTY_SET_HXX
-#define INCLUDED_OOXML_PROPERTY_SET_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPROPERTYSET_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPROPERTYSET_HXX
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 
@@ -71,6 +71,6 @@ public:
 };
 }}
 
-#endif // INCLUDED_OOXML_PROPERTY_SET_HXX
+#endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPROPERTYSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

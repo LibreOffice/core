@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_QNAME_TO_STRING_HXX
-#define INCLUDED_QNAME_TO_STRING_HXX
+#ifndef INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_QNAMETOSTRING_HXX
+#define INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_QNAMETOSTRING_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <map>
@@ -78,6 +78,6 @@ public:
 
 }
 
-#endif // INCLUDED_QNAME_TO_STRING_HXX
+#endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_QNAMETOSTRING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

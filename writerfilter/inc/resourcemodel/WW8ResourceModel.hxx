@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WW8RESOURCEMODEL_HXX
-#define INCLUDED_WW8RESOURCEMODEL_HXX
+#ifndef INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_WW8RESOURCEMODEL_HXX
+#define INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_WW8RESOURCEMODEL_HXX
 
 #include <string>
 #include <memory>
@@ -397,6 +397,6 @@ protected:
 
 }
 
-#endif // INCLUDED_WW8RESOURCEMODEL_HXX
+#endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_WW8RESOURCEMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

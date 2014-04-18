@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _RTFVALUE_HXX_
-#define _RTFVALUE_HXX_
+#ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFVALUE_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFVALUE_HXX
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -65,6 +65,6 @@ namespace writerfilter {
     } // namespace rtftok
 } // namespace writerfilter
 
-#endif // _RTFVALUE_HXX_
+#endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFVALUE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

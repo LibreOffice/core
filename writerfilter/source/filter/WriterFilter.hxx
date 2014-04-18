@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WRITERFILTER_HXX
-#define _WRITERFILTER_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_FILTER_WRITERFILTER_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_FILTER_WRITERFILTER_HXX
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>

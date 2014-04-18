@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TABLE_DATA
-#define INCLUDED_TABLE_DATA
+#ifndef INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_TABLEDATA_HXX
+#define INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_TABLEDATA_HXX
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 
@@ -418,6 +418,6 @@ public:
 
 }
 
-#endif // INCLUDED_TABLE_DATA
+#endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_TABLEDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

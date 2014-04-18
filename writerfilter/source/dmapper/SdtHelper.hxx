@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SDTHELPER_HXX
-#define INCLUDED_SDTHELPER_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SDTHELPER_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SDTHELPER_HXX
 
 #include <boost/optional.hpp>
 

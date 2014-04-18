@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_GRAPHICIMPORT_HXX
-#define INCLUDED_GRAPHICIMPORT_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_GRAPHICIMPORT_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_GRAPHICIMPORT_HXX
 
 #include <queue>
 #include <boost/scoped_ptr.hpp>

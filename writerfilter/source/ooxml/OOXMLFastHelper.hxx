@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FAST_HELPER_HXX
-#define INCLUDED_FAST_HELPER_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTHELPER_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTHELPER_HXX
 
 #include <iostream>
 #include <resourcemodel/QNameToString.hxx>
@@ -213,6 +213,6 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
 }
 
 }}
-#endif // INCLUDED_FAST_HELPER_HXX
+#endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

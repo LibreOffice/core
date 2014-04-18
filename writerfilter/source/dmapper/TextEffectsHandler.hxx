@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef INCLUDED_TEXTEFFECTSHANDLER_HXX
-#define INCLUDED_TEXTEFFECTSHANDLER_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TEXTEFFECTSHANDLER_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TEXTEFFECTSHANDLER_HXX
 
 #include <resourcemodel/LoggedResources.hxx>
 
@@ -73,6 +73,6 @@ typedef boost::shared_ptr<TextEffectsHandler> TextEffectsHandlerPtr;
 
 }}
 
-#endif // INCLUDED_TEXTEFFECTSHANDLER_HXX
+#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TEXTEFFECTSHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

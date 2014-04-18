@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RESOURCEMODEL_UTIL_HXX
-#define INCLUDED_RESOURCEMODEL_UTIL_HXX
+#ifndef INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_UTIL_HXX
+#define INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_UTIL_HXX
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <string>
@@ -34,6 +34,6 @@ namespace writerfilter
     string toString(uno::Reference< text::XTextRange > textRange);
 #endif
 }
-#endif // INCLUDED_RESOURCEMODEL_UTIL_HXX
+#endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_UTIL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

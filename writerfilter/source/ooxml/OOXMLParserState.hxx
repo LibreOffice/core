@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDE_OOXML_PARSER_STATE_HXX
-#define INCLUDE_OOXML_PARSER_STATE_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPARSERSTATE_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPARSERSTATE_HXX
 
 #include <stack>
 #include "OOXMLDocumentImpl.hxx"
@@ -117,6 +117,6 @@ public:
 
 }}
 
-#endif // INCLUDE_OOXML_PARSER_STATE_HXX
+#endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPARSERSTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

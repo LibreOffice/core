@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOXML_FAST_CONTEXT_HANDLER_HXX
-#define INCLUDED_OOXML_FAST_CONTEXT_HANDLER_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTCONTEXTHANDLER_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTCONTEXTHANDLER_HXX
 
 #include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
 
@@ -717,6 +717,6 @@ protected:
 };
 
 }}
-#endif // INCLUDED_OOXML_FAST_CONTEXT_HANDLER_HXX
+#endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTCONTEXTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

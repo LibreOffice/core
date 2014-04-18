@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _RTFSDRIMPORT_HXX_
-#define _RTFSDRIMPORT_HXX_
+#ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSDRIMPORT_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSDRIMPORT_HXX
 
 #include <stack>
 

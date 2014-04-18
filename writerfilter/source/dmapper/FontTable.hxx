@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FONTTABLE_HXX
-#define INCLUDED_FONTTABLE_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FONTTABLE_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FONTTABLE_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <resourcemodel/LoggedResources.hxx>

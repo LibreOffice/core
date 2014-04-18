@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DOMAIN_MAPPER_TABLE_MANAGER_HXX
-#define INCLUDED_DOMAIN_MAPPER_TABLE_MANAGER_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DOMAINMAPPERTABLEMANAGER_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DOMAINMAPPERTABLEMANAGER_HXX
 
 #include "TablePropertiesHandler.hxx"
 #include <TablePositionHandler.hxx>
@@ -151,6 +151,6 @@ public:
 
 }}
 
-#endif // INCLUDED_DOMAIN_MAPPER_TABLE_MANAGER_HXX
+#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DOMAINMAPPERTABLEMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
