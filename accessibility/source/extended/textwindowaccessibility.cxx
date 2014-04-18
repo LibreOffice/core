@@ -1001,87 +1001,79 @@ Document::retrieveCharacterAttributes(
     const sal_Int32 AttributeCount = 9;
     sal_Int32 i = 0;
     ::css::uno::Sequence< ::css::beans::PropertyValue > aAttribs( AttributeCount );
+
     //character background color
-    {
-        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharBackColor"));
-        aAttribs[i].Handle = -1;
-        aAttribs[i].Value = mapFontColor( aFont.GetFillColor() );
-        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
-        i++;
-    }
+    aAttribs[i].Name = "CharBackColor";
+    aAttribs[i].Handle = -1;
+    aAttribs[i].Value = mapFontColor( aFont.GetFillColor() );
+    aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+    i++;
+
     //character color
-    {
-        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharColor"));
-        aAttribs[i].Handle = -1;
-        //aAttribs[i].Value = mapFontColor( aFont.GetColor() );
-        aAttribs[i].Value = mapFontColor( m_rEngine.GetTextColor() );
-        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
-        i++;
-    }
+    aAttribs[i].Name = "CharColor";
+    aAttribs[i].Handle = -1;
+    //aAttribs[i].Value = mapFontColor( aFont.GetColor() );
+    aAttribs[i].Value = mapFontColor( m_rEngine.GetTextColor() );
+    aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+    i++;
+
     //character font name
-    {
-        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontName"));
-        aAttribs[i].Handle = -1;
-        aAttribs[i].Value = ::css::uno::makeAny( (::rtl::OUString)aFont.GetName() );
-        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
-        i++;
-    }
+    aAttribs[i].Name = "CharFontName";
+    aAttribs[i].Handle = -1;
+    aAttribs[i].Value = ::css::uno::makeAny( (::rtl::OUString)aFont.GetName() );
+    aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+    i++;
+
     //character height
-    {
-        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharHeight"));
-        aAttribs[i].Handle = -1;
-        aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetHeight() );
-        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
-        i++;
-    }
+    aAttribs[i].Name = "CharHeight";
+    aAttribs[i].Handle = -1;
+    aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetHeight() );
+    aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+    i++;
+
     //character posture
-    {
-        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharPosture"));
-        aAttribs[i].Handle = -1;
-        aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetItalic() );
-        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
-        i++;
-    }
+    aAttribs[i].Name = "CharPosture";
+    aAttribs[i].Handle = -1;
+    aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetItalic() );
+    aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+    i++;
+
     //character relief
-    /*{
-        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharRelief"));
-        aAttribs[i].Handle = -1;
-        aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetRelief() );
-        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
-        i++;
-    }*/
+    /*
+    aAttribs[i].Name = "CharRelief";
+    aAttribs[i].Handle = -1;
+    aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetRelief() );
+    aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+    i++;
+    */
+
     //character strikeout
-    {
-        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharStrikeout"));
-        aAttribs[i].Handle = -1;
-        aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetStrikeout() );
-        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
-        i++;
-    }
+    aAttribs[i].Name = "CharStrikeout";
+    aAttribs[i].Handle = -1;
+    aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetStrikeout() );
+    aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+    i++;
+
     //character underline
-    {
-        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharUnderline"));
-        aAttribs[i].Handle = -1;
-        aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetUnderline() );
-        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
-        i++;
-    }
+    aAttribs[i].Name = "CharUnderline";
+    aAttribs[i].Handle = -1;
+    aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetUnderline() );
+    aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+    i++;
+
     //character weight
-    {
-        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharWeight"));
-        aAttribs[i].Handle = -1;
-        aAttribs[i].Value = ::css::uno::makeAny( (float)aFont.GetWeight() );
-        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
-        i++;
-    }
+    aAttribs[i].Name = "CharWeight";
+    aAttribs[i].Handle = -1;
+    aAttribs[i].Value = ::css::uno::makeAny( (float)aFont.GetWeight() );
+    aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+    i++;
+
     //character alignment
-    {
-        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaAdjust"));
-        aAttribs[i].Handle = -1;
-        aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)m_rEngine.GetTextAlign() );
-        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
-        i++;
-    }
+    aAttribs[i].Name = "ParaAdjust";
+    aAttribs[i].Handle = -1;
+    aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)m_rEngine.GetTextAlign() );
+    aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+    i++;
 
     ::osl::MutexGuard aInternalGuard(GetMutex());
     ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
