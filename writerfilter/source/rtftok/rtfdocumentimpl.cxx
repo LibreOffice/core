@@ -83,7 +83,7 @@ static Id lcl_getParagraphBorder(sal_uInt32 nIndex)
 static void lcl_putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue,
         bool bOverwrite = true, bool bAttribute = true)
 {
-    RTFValue::Pointer_t pParent = rSprms.find(nParent);
+    RTFValue::Pointer_t pParent = rSprms.find(nParent, /*bFirst=*/true, /*bForWrite=*/true);
     if (!pParent.get())
     {
         RTFSprms aAttributes;
