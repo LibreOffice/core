@@ -1153,7 +1153,7 @@ void OutputDevice::ImplInitFontList() const
     }
 }
 
-void OutputDevice::ImplInitFont() const
+void OutputDevice::InitFont() const
 {
     DBG_TESTSOLARMUTEX();
 
@@ -1162,16 +1162,6 @@ void OutputDevice::ImplInitFont() const
 
     if ( mbInitFont )
     {
-        if ( meOutDevType != OUTDEV_PRINTER )
-        {
-            // decide if antialiasing is appropriate
-            bool bNonAntialiased = (GetAntialiasing() & ANTIALIASING_DISABLE_TEXT) != 0;
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            bNonAntialiased |= ((rStyleSettings.GetDisplayOptions() & DISPLAY_OPTION_AA_DISABLE) != 0);
-            bNonAntialiased |= (int(rStyleSettings.GetAntialiasingMinPixelHeight()) > mpFontEntry->maFontSelData.mnHeight);
-            mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
-        }
-
         // select font in the device layers
         mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(mpFontEntry->maFontSelData), 0 );
         mbInitFont = false;
@@ -1237,7 +1227,7 @@ bool OutputDevice::ImplNewFont() const
     // select font when it has not been initialized yet
     if ( !pFontEntry->mbInit )
     {
-        ImplInitFont();
+        InitFont();
 
         // get metric data from device layers
         if ( pGraphics )
@@ -2303,7 +2293,7 @@ bool OutputDevice::GetFontCapabilities( FontCapabilities& rFontCapabilities ) co
     if( mbNewFont )
         ImplNewFont();
     if( mbInitFont )
-        ImplInitFont();
+        InitFont();
     if( !mpFontEntry )
         return false;
 
@@ -2321,7 +2311,7 @@ bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     if( mbNewFont )
         ImplNewFont();
     if( mbInitFont )
-        ImplInitFont();
+        InitFont();
     if( !mpFontEntry )
         return false;
 

@@ -1047,7 +1047,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     pVDev->SetTextColor( Color( COL_BLACK ) );
     pVDev->SetTextFillColor();
     pVDev->ImplNewFont();
-    pVDev->ImplInitFont();
+    pVDev->InitFont();
     pVDev->ImplInitTextColor();
 
     // draw text into upper left corner
@@ -1791,7 +1791,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
         if( !ImplNewFont() )
             return;
     if( mbInitFont )
-        ImplInitFont();
+        InitFont();
 
     Point aPos = ImplLogicToDevicePixel( rPos );
     nWidth = ImplLogicWidthToDevicePixel( nWidth );
@@ -2302,7 +2302,7 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
         if( !ImplNewFont() )
             return NULL;
     if( mbInitFont )
-        ImplInitFont();
+        InitFont();
 
     // check string index and length
     if( -1 == nLen || nMinIndex + nLen > rOrigStr.getLength() )
@@ -3559,7 +3559,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     if( mbNewFont )
         ImplNewFont();
     if( mbInitFont )
-        ImplInitFont();
+        InitFont();
     if( !mpFontEntry )
         return false;
 

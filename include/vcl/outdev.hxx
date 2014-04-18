@@ -653,9 +653,12 @@ public:
      */
     ///@{
     SAL_DLLPRIVATE bool         ImplNewFont() const;
-    SAL_DLLPRIVATE void         ImplInitFont() const;
     SAL_DLLPRIVATE void         ImplInitTextColor();
 
+protected:
+    virtual void                InitFont() const;
+
+public:
     static
     SAL_DLLPRIVATE void         ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
                                               const OUString& rOrigStr, sal_uInt16 nStyle,
