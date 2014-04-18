@@ -97,9 +97,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 
-sal_Bool IsWordproFile( uno::Reference<XInputStream>& rInputStream);
-sal_Bool IsWordproFile(const OUString& file);
-
 LWPFilterReader::LWPFilterReader()
 {
 }
@@ -253,69 +250,6 @@ int ReadWordproFile(SvStream &rStream, uno::Reference<XDocumentHandler>& xHandle
     {
         return 1;
     }
-}
-
-/**
- * @descr       Compare if pBuf equals with the first 16 bytes
- * @param   pBuf that contains the file data
- * @return      if equals with the Word Pro characteristic strings
- */
-sal_Bool IsWordProStr(const sal_Int8 *pBuf)
-{
-    sal_Bool bRet = sal_True;
-    const sal_Int8 pLotusLwp[] =
-    {
-        0x57, 0x6F, 0x72, 0x64,
-        0x50, 0x72, 0x6F
-    };
-    for(size_t i=0; i<sizeof(pLotusLwp); ++i)
-    {
-        if( pBuf[i] != pLotusLwp[i] )
-        {
-            bRet = sal_False;
-        }
-    }
-    return bRet;
-}
-
-sal_Bool IsWordproFile(const OUString& file)
-{
-    sal_Bool bRet = sal_False;
-    SfxMedium aMedium( file, STREAM_STD_READ);
-    SvStream* pStm = aMedium.GetInStream();
-
-    if(pStm)
-    {
-        sal_Int8 buf[16];
-        bRet = sal_True;
-
-        pStm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-        pStm->Seek(STREAM_SEEK_TO_BEGIN);
-        sal_Size nRead = pStm->Read(buf, sizeof(buf));
-        if( nRead< sizeof(buf) )
-            bRet = sal_False;
-        else
-            bRet = IsWordProStr(buf);
-    }
-    return bRet;
-}
-
-sal_Bool IsWordproFile( uno::Reference<XInputStream>& rInputStream)
-{
-    Sequence<sal_Int8> aData;
-    sal_Bool bRet = sal_False;
-
-    sal_Int32 nRead = rInputStream->readBytes(aData, 16);
-    if( nRead != 16 )
-    {
-        bRet = sal_False;
-    }
-    else
-    {
-        const sal_Int8 *data = aData.getConstArray();
-        bRet = IsWordProStr(data);
-    }
-    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
