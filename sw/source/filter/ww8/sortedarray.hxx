@@ -67,7 +67,7 @@ namespace ww
             const C *pBeforeEnd = mpWwSprmTab + mnNoElems - 1;
             while (pIter < pBeforeEnd)
             {
-                if (*pIter == *(pIter+1))
+                if (pIter->nId == (pIter+1)->nId)
                 {
                     if (!bBroken)
                     {
@@ -90,7 +90,7 @@ namespace ww
                         sError += OUString(' ');
                     }
                     sError += OUString('\n');
-                    while (*pIter == *(pIter+1) && pIter < pBeforeEnd)
+                    while (pIter->nId == (pIter+1)->nId && pIter < pBeforeEnd)
                         ++pIter;
                 }
                 else
