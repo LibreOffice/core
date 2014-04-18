@@ -355,6 +355,8 @@ inline std::basic_ostream<charT, traits> & operator <<(
 // Rectangle
 
 #define RECT_EMPTY  ((short)-32767)
+#define RECT_MAX    LONG_MAX
+#define RECT_MIN    LONG_MIN
 
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Rectangle
 {
