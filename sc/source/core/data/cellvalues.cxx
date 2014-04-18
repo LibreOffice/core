@@ -18,6 +18,7 @@ namespace sc {
 struct CellValuesImpl : boost::noncopyable
 {
     CellStoreType maCells;
+    CellTextAttrStoreType maCellTextAttrs;
 };
 
 CellValues::CellValues() :
@@ -31,10 +32,35 @@ CellValues::~CellValues()
 void CellValues::transferFrom( ScColumn& rCol, SCROW nRow, size_t nLen )
 {
     mpImpl->maCells.resize(nLen);
+    mpImpl->maCellTextAttrs.resize(nLen);
     rCol.maCells.transfer(nRow, nRow+nLen-1, mpImpl->maCells, 0);
+    rCol.maCellTextAttrs.transfer(nRow, nRow+nLen-1, mpImpl->maCellTextAttrs, 0);
 }
 
 void CellValues::copyTo( ScColumn& rCol, SCROW nRow ) const
+{
+    copyCellsTo(rCol, nRow);
+    copyCellTextAttrsTo(rCol, nRow);
+}
+
+void CellValues::assign( const std::vector<double>& rVals )
+{
+    mpImpl->maCells.resize(rVals.size());
+    mpImpl->maCells.set(0, rVals.begin(), rVals.end());
+
+    // Set default text attributes.
+    std::vector<CellTextAttr> aDefaults(rVals.size(), CellTextAttr());
+    mpImpl->maCellTextAttrs.resize(rVals.size());
+    mpImpl->maCellTextAttrs.set(0, aDefaults.begin(), aDefaults.end());
+}
+
+size_t CellValues::size() const
+{
+    assert(mpImpl->maCells.size() == mpImpl->maCellTextAttrs.size());
+    return mpImpl->maCells.size();
+}
+
+void CellValues::copyCellsTo( ScColumn& rCol, SCROW nRow ) const
 {
     CellStoreType& rDest = rCol.maCells;
     const CellStoreType& rSrc = mpImpl->maCells;
@@ -100,15 +126,35 @@ void CellValues::copyTo( ScColumn& rCol, SCROW nRow ) const
     }
 }
 
-void CellValues::assign( const std::vector<double>& rVals )
+void CellValues::copyCellTextAttrsTo( ScColumn& rCol, SCROW nRow ) const
 {
-    mpImpl->maCells.resize(rVals.size());
-    mpImpl->maCells.set(0, rVals.begin(), rVals.end());
-}
+    CellTextAttrStoreType& rDest = rCol.maCellTextAttrs;
+    const CellTextAttrStoreType& rSrc = mpImpl->maCellTextAttrs;
 
-size_t CellValues::size() const
-{
-    return mpImpl->maCells.size();
+    // Caller must ensure the destination is long enough.
+    assert(rSrc.size() + static_cast<size_t>(nRow) < rDest.size());
+
+    SCROW nCurRow = nRow;
+    CellTextAttrStoreType::iterator itPos = rDest.begin();
+
+    CellTextAttrStoreType::const_iterator itBlk = rSrc.begin(), itBlkEnd = rSrc.end();
+    for (; itBlk != itBlkEnd; ++itBlk)
+    {
+        switch (itBlk->type)
+        {
+            case element_type_celltextattr:
+            {
+                celltextattr_block::const_iterator it = celltextattr_block::begin(*itBlk->data);
+                celltextattr_block::const_iterator itEnd = celltextattr_block::end(*itBlk->data);
+                itPos = rDest.set(itPos, nCurRow, it, itEnd);
+            }
+            break;
+            default:
+                itPos = rDest.set_empty(itPos, nCurRow, nCurRow+itBlk->size-1);
+        }
+
+        nCurRow += itBlk->size;
+    }
 }
 
 }

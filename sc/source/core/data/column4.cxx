@@ -279,9 +279,6 @@ void ScColumn::TransferCellValuesTo( SCROW nRow, size_t nLen, sc::CellValues& rD
 
     rDest.transferFrom(*this, nRow, nLen);
 
-    std::vector<sc::CellTextAttr> aDefaults(nLen);
-    maCellTextAttrs.set(nRow, aDefaults.begin(), aDefaults.end());
-
     CellStorageModified();
 
     std::vector<SCROW> aRows;
@@ -306,9 +303,6 @@ void ScColumn::CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc )
     DetachFormulaCells(aPos, rSrc.size());
 
     rSrc.copyTo(*this, nRow);
-
-    std::vector<sc::CellTextAttr> aDefaults(rSrc.size());
-    maCellTextAttrs.set(nRow, aDefaults.begin(), aDefaults.end());
 
     CellStorageModified();
 

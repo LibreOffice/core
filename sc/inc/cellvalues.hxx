@@ -18,6 +18,10 @@ namespace sc {
 
 struct CellValuesImpl;
 
+/**
+ * Think of this as a mini-ScColumn like storage that only stores cell
+ * values in a column.
+ */
 class CellValues
 {
     CellValuesImpl* mpImpl;
@@ -35,6 +39,10 @@ public:
     void assign( const std::vector<double>& rVals );
 
     size_t size() const;
+
+private:
+    void copyCellsTo( ScColumn& rCol, SCROW nRow ) const;
+    void copyCellTextAttrsTo( ScColumn& rCol, SCROW nRow ) const;
 };
 
 }
