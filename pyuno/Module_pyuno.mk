@@ -61,7 +61,11 @@ endif
 endif # SYSTEM_PYTHON
 
 ifneq ($(DISABLE_PYTHON),TRUE)
-$(eval $(call gb_Module_add_slowcheck_targets,pyuno, \
+# TODO: add dependencies to the PythonTest stuff to
+# depend on internal python getting installed
+# into instdir becore running python tests,
+# for now bodge this into a damn subsequentcheck
+$(eval $(call gb_Module_add_subsequentcheck_targets,pyuno, \
     PythonTest_pyuno_pytests_ssl \
 ))
 endif
