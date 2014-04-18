@@ -96,8 +96,6 @@ private:
     ScHeaderSelectionEngine* pHdrSelEng;
     ScHeaderFunctionSet      aHdrFunc;
 
-    SfxInPlaceClient*   pIPClient;
-
     ScDrawView*         pDrawView;
 
     Size                aFrameSize;             // passed on as for DoResize
