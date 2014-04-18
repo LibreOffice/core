@@ -17,6 +17,7 @@ gb_PythonTest_DEPS := $(call gb_GeneratedPackage_get_target_for_build,python3)
 else
 gb_PythonTest_DEPS := $(call gb_Package_get_target_for_build,python3)
 endif
+gb_PythonTest_DEPS += $(if $(filter-out WNT,$(OS)),$(call gb_Package_get_target_for_build,python_shell))
 else
 gb_PythonTest_EXECUTABLE := $(PYTHON_FOR_BUILD)
 gb_PythonTest_EXECUTABLE_GDB := $(PYTHON_FOR_BUILD)
