@@ -798,12 +798,25 @@ void SwEditShell::SetNumberingRestart()
                             SwTxtNode* pTxtNd( static_cast<SwTxtNode*>(pNd) );
                             SwNumRule* pNumRule( pTxtNd->GetNumRule() );
 
-                            if ( pNumRule && pTxtNd->GetNum() &&
+                            bool bIsNodeNum =
+                               ( pNumRule && pTxtNd->GetNum() &&
                                  ( pTxtNd->HasNumber() || pTxtNd->HasBullet() ) &&
                                  pTxtNd->IsCountedInList() &&
-                                 !pTxtNd->IsListRestart() &&
-                                 pTxtNd->GetNum()->GetNumber() ==
-                                    pNumRule->Get( static_cast<sal_uInt16>(pTxtNd->GetActualListLevel()) ).GetStart() )
+                                 !pTxtNd->IsListRestart() );
+                            if (bIsNodeNum)
+                            {
+                                int nListLevel = pTxtNd->GetActualListLevel();
+
+                                if (nListLevel < 0)
+                                    nListLevel = 0;
+
+                                if (nListLevel >= MAXLEVEL)
+                                    nListLevel = MAXLEVEL - 1;
+
+                                 bIsNodeNum = pTxtNd->GetNum()->GetNumber() ==
+                                    pNumRule->Get( static_cast<sal_uInt16>(nListLevel) ).GetStart();
+                            }
+                            if (bIsNodeNum)
                             {
                                 // now set a the start value as attribute
                                 SwPosition aCurrentNode(*pNd);
