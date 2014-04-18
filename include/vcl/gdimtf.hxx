@@ -150,7 +150,7 @@ public:
     void            Adjust( short nLuminancePercent = 0, short nContrastPercent = 0,
                             short nChannelRPercent = 0,  short nChannelGPercent = 0,
                             short nChannelBPercent = 0,  double fGamma = 1.0,
-                            bool bInvert = false
+                            bool bInvert = false, bool msoBrightness = false
                     );
 
     void            Convert( MtfConversion eConversion );

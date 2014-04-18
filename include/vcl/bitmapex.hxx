@@ -348,6 +348,9 @@ public:
         @param bInvert
         If true, invert the channel values with the logical 'not' operator
 
+        @param msoFormula
+        Use the same formula for brightness as used by MSOffice.
+
         @return true, if the operation was completed successfully.
      */
     bool                Adjust( short nLuminancePercent = 0,
@@ -356,7 +359,8 @@ public:
                                 short nChannelGPercent = 0,
                                 short nChannelBPercent = 0,
                                 double fGamma = 1.0,
-                                bool bInvert = false );
+                                bool bInvert = false,
+                                bool msoBrightness = false );
 
     /** Apply specified filter to the bitmap
 

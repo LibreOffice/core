@@ -629,11 +629,11 @@ bool BitmapEx::Replace( const Color* pSearchColors, const Color* pReplaceColors,
 
 bool BitmapEx::Adjust( short nLuminancePercent, short nContrastPercent,
                        short nChannelRPercent, short nChannelGPercent, short nChannelBPercent,
-                       double fGamma, bool bInvert )
+                       double fGamma, bool bInvert, bool msoBrightness )
 {
     return( !!aBitmap ? aBitmap.Adjust( nLuminancePercent, nContrastPercent,
                                         nChannelRPercent, nChannelGPercent, nChannelBPercent,
-                                        fGamma, bInvert ) : false );
+                                        fGamma, bInvert, msoBrightness ) : false );
 }
 
 bool BitmapEx::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )

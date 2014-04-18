@@ -3215,7 +3215,7 @@ bool Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, sal_uLong nFlags, 
 
 bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
                      short nChannelRPercent, short nChannelGPercent, short nChannelBPercent,
-                     double fGamma, bool bInvert )
+                     double fGamma, bool bInvert, bool msoBrightness )
 {
     bool bRet = false;
 
@@ -3246,8 +3246,11 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
             else
                 fM = ( 128.0 + 1.27 * MinMax( nContrastPercent, -100L, 0L ) ) / 128.0;
 
-            // total offset = luminance offset + contrast offset
-            fOff = MinMax( nLuminancePercent, -100L, 100L ) * 2.55 + 128.0 - fM * 128.0;
+            if(!msoBrightness)
+                // total offset = luminance offset + contrast offset
+                fOff = MinMax( nLuminancePercent, -100L, 100L ) * 2.55 + 128.0 - fM * 128.0;
+            else
+                fOff = MinMax( nLuminancePercent, -100L, 100L ) * 2.55;
 
             // channel offset = channel offset + total offset
             fROff = nChannelRPercent * 2.55 + fOff;
@@ -3261,10 +3264,21 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
             // create mapping table
             for( long nX = 0L; nX < 256L; nX++ )
             {
-                cMapR[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fROff ), 0L, 255L );
-                cMapG[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fGOff ), 0L, 255L );
-                cMapB[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fBOff ), 0L, 255L );
-
+                if(!msoBrightness)
+                {
+                    cMapR[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fROff ), 0L, 255L );
+                    cMapG[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fGOff ), 0L, 255L );
+                    cMapB[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fBOff ), 0L, 255L );
+                }
+                else
+                {
+                    // LO simply uses (in a somewhat optimized form) "newcolor = (oldcolor-128)*contrast+brightness+128"
+                    // as the formula, i.e. contrast first, brightness afterwards. MSOffice, for whatever weird reason,
+                    // use neither first, but apparently it applies half of brightness before contrast and half afterwards.
+                    cMapR[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0L, 255L );
+                    cMapG[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0L, 255L );
+                    cMapB[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0L, 255L );
+                }
                 if( bGamma )
                 {
                     cMapR[ nX ] = GAMMA( cMapR[ nX ], fGamma );
