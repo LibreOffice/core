@@ -62,6 +62,12 @@ TiledLibreOffice_setup:
 	# Japanese and Chinese dict files
 	cp $(WORKDIR)/CustomTarget/i18npool/breakiterator/dict_*.data $(TiledLibreOffice_resource)/share
 
+	# Drawing ML custom shape data files
+	mkdir -p $(TiledLibreOffice_resource)/share/filter
+	cp $(INSTDIR)/share/filter/oox-drawingml-adj-names $(TiledLibreOffice_resource)/share/filter
+	cp $(INSTDIR)/share/filter/oox-drawingml-cs-presets $(TiledLibreOffice_resource)/share/filter
+	cp $(INSTDIR)/share/filter/vml-shape-types $(TiledLibreOffice_resource)/share/filter
+
 	# "registry"
 	cp -R $(INSTDIR)/share/registry $(TiledLibreOffice_resource)/share
 
