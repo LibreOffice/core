@@ -2098,6 +2098,18 @@ DECLARE_OOXMLEXPORT_TEST(testTestTitlePage, "testTitlePage.docx")
 //    assertXPathChildren(pXmlDoc, "/w:document/w:body/w:sectPr/w:titlePg", 0);
 }
 
+
+DECLARE_OOXMLEXPORT_TEST(testFDO75431, "fdo75431.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "//w:tbl", 2);
+    assertXPath(pXmlDoc, "//w:p/w:pPr/w:sectPr/w:type", "val", "nextPage");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

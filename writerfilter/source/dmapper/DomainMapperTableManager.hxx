@@ -147,6 +147,11 @@ public:
         m_nLayoutType = nLayoutType;
     }
 
+    bool isInCell()
+    {
+        return TableManager::isInCell();
+    }
+
 };
 
 }}
