@@ -93,7 +93,10 @@ ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, c
         return new ShapeGroupContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) ) );
     case XML_sp:            // shape
     case XML_wsp:
-        return new ShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.CustomShape" ) ) );
+        // Don't set default character height for WPS shapes, Writer has its
+        // own way to set the default, and if we don't set it here, editing
+        // properly inherits it.
+        return new ShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.CustomShape", getBaseToken(aElementToken) == XML_sp ) ) );
     case XML_pic:           // CT_Picture
         return new GraphicShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ) );
     case XML_graphicFrame:  // CT_GraphicalObjectFrame

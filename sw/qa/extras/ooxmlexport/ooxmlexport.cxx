@@ -3174,6 +3174,13 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeTIF, "fdo77476.docx")
     assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[@ContentType='image/tif']", "PartName", "/word/media/image1.tif");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO77117, "fdo77117.docx")
+{
+    uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    // This checks textbox textrun size of font which is in group shape.
+    CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xShape, "CharHeight"));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
