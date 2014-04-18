@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_STYLESETTINGS_HXX
-#define TOOLKIT_STYLESETTINGS_HXX
+#ifndef INCLUDED_TOOLKIT_SOURCE_AWT_STYLESETTINGS_HXX
+#define INCLUDED_TOOLKIT_SOURCE_AWT_STYLESETTINGS_HXX
 
 #include <com/sun/star/awt/XStyleSettings.hpp>
 
@@ -172,6 +172,6 @@ namespace toolkit
 } // namespace toolkit
 
 
-#endif // TOOLKIT_STYLESETTINGS_HXX
+#endif // INCLUDED_TOOLKIT_SOURCE_AWT_STYLESETTINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

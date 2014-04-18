@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _NEWERVERSIONWARNING_HXX
-#define _NEWERVERSIONWARNING_HXX
+#ifndef INCLUDED_UUI_SOURCE_NEWERVERWARN_HXX
+#define INCLUDED_UUI_SOURCE_NEWERVERWARN_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
@@ -49,6 +49,6 @@ namespace uui
     };
 } // namespace uui
 
-#endif // #ifndef _NEWERVERSIONWARNING_HXX
+#endif // INCLUDED_UUI_SOURCE_NEWERVERWARN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

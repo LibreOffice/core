@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UUI_REQUESTSTRINGRESOLVER_HXX
-#define UUI_REQUESTSTRINGRESOLVER_HXX
+#ifndef INCLUDED_UUI_SOURCE_REQUESTSTRINGRESOLVER_HXX
+#define INCLUDED_UUI_SOURCE_REQUESTSTRINGRESOLVER_HXX
 
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/task/XInteractionRequestStringResolver.hpp"
@@ -78,6 +78,6 @@ private:
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-#endif // UUI_REQUESTSTRINGRESOLVER_HXX
+#endif // INCLUDED_UUI_SOURCE_REQUESTSTRINGRESOLVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

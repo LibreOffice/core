@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _CONFIGMGR_MISC_ATTRIBUTES_HXX_
-#define _CONFIGMGR_MISC_ATTRIBUTES_HXX_
+#ifndef INCLUDED_HWPFILTER_SOURCE_ATTRIBUTES_HXX
+#define INCLUDED_HWPFILTER_SOURCE_ATTRIBUTES_HXX
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -61,7 +61,7 @@ private:
     struct AttributeListImpl_impl *m_pImpl;
 };
 
-#endif // _CONFIGMGR_MISC_ATTRIBUTES_HXX_
+#endif // INCLUDED_HWPFILTER_SOURCE_ATTRIBUTES_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

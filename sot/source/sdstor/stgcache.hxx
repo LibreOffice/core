@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STGCACHE_HXX
-#define _STGCACHE_HXX
+#ifndef INCLUDED_SOT_SOURCE_SDSTOR_STGCACHE_HXX
+#define INCLUDED_SOT_SOURCE_SDSTOR_STGCACHE_HXX
 
 #include <osl/endian.h>
 #include <rtl/ref.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOCONTROLS_MULTIPLEXER_HXX
-#define _UNOCONTROLS_MULTIPLEXER_HXX
+#ifndef INCLUDED_UNOCONTROLS_INC_MULTIPLEXER_HXX
+#define INCLUDED_UNOCONTROLS_INC_MULTIPLEXER_HXX
 
 #include <com/sun/star/awt/XKeyListener.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
@@ -358,6 +358,6 @@ private:
 
 }   // namespace unocontrols
 
-#endif  // ifndef _UNOCONTROLS_MULTIPLEXER_HXX
+#endif // INCLUDED_UNOCONTROLS_INC_MULTIPLEXER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGU2_THESIMP_HXX_
-#define _LINGU2_THESIMP_HXX_
+#ifndef INCLUDED_LINGUCOMPONENT_SOURCE_THESAURUS_LIBNTH_NTHESIMP_HXX
+#define INCLUDED_LINGUCOMPONENT_SOURCE_THESAURUS_LIBNTH_NTHESIMP_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase5.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef m_LOGINERR_HXX
-#define m_LOGINERR_HXX
+#ifndef INCLUDED_UUI_SOURCE_LOGINERR_HXX
+#define INCLUDED_UUI_SOURCE_LOGINERR_HXX
 
 #include <rtl/ustring.hxx>
 

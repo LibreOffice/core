@@ -20,8 +20,8 @@
 // This file reflects the structure of MS file elements.
 // It is very sensitive to alignment!
 
-#ifndef _STGELEM_HXX
-#define _STGELEM_HXX
+#ifndef INCLUDED_SOT_SOURCE_SDSTOR_STGELEM_HXX
+#define INCLUDED_SOT_SOURCE_SDSTOR_STGELEM_HXX
 
 #include <sot/stg.hxx>
 

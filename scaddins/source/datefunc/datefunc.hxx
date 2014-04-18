@@ -19,8 +19,8 @@
 
 // date functions add in
 
-#ifndef _SCA_DATEFUNC_HXX
-#define _SCA_DATEFUNC_HXX
+#ifndef INCLUDED_SCADDINS_SOURCE_DATEFUNC_DATEFUNC_HXX
+#define INCLUDED_SCADDINS_SOURCE_DATEFUNC_DATEFUNC_HXX
 
 #include <string.h>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -387,6 +387,6 @@ public:
                                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
 };
 
-#endif  // _SCA_DATEFUNC_HXX
+#endif // INCLUDED_SCADDINS_SOURCE_DATEFUNC_DATEFUNC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

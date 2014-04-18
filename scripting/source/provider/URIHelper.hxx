@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRAMEWORK_SCRIPT_PROVIDER_XSCRIPTURIHELPER_HXX_
-#define _FRAMEWORK_SCRIPT_PROVIDER_XSCRIPTURIHELPER_HXX_
+#ifndef INCLUDED_SCRIPTING_SOURCE_PROVIDER_URIHELPER_HXX
+#define INCLUDED_SCRIPTING_SOURCE_PROVIDER_URIHELPER_HXX
 
 #include <com/sun/star/script/provider/XScriptURIHelper.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -95,6 +95,6 @@ public:
 };
 
 } // namespace func_provider
-#endif //_FRAMEWORK_SCRIPT_PROVIDER_XSCRIPTURIHELPER_HXX_
+#endif // INCLUDED_SCRIPTING_SOURCE_PROVIDER_URIHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

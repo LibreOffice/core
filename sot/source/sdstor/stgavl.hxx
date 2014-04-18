@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STGAVL_HXX
-#define _STGAVL_HXX
+#ifndef INCLUDED_SOT_SOURCE_SDSTOR_STGAVL_HXX
+#define INCLUDED_SOT_SOURCE_SDSTOR_STGAVL_HXX
 
 // This class must be overloaded to define real, living nodes.
 // Especially, the compare function must be implemented.

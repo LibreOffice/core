@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SCRIPTING_DLGEVTATT_HXX
-#define SCRIPTING_DLGEVTATT_HXX
+#ifndef INCLUDED_SCRIPTING_SOURCE_DLGPROV_DLGEVTATT_HXX
+#define INCLUDED_SCRIPTING_SOURCE_DLGPROV_DLGEVTATT_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/script/XAllListener.hpp>

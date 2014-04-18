@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_SDATABASEMETADATA_HXX
-#define CONNECTIVITY_SDATABASEMETADATA_HXX
+#ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_DATABASEMETADATA_HXX
+#define INCLUDED_MYSQLC_SOURCE_MYSQLC_DATABASEMETADATA_HXX
 
 #include "mysqlc_connection.hxx"
 
@@ -225,6 +225,6 @@ namespace connectivity
     }
 }
 
-#endif // CONNECTIVITY_SDATABASEMETADATA_HXX
+#endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_DATABASEMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

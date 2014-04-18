@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGUISTIC_THESDTA_HXX_
-#define _LINGUISTIC_THESDTA_HXX_
+#ifndef INCLUDED_LINGUCOMPONENT_SOURCE_THESAURUS_LIBNTH_NTHESDTA_HXX
+#define INCLUDED_LINGUCOMPONENT_SOURCE_THESAURUS_LIBNTH_NTHESDTA_HXX
 
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 #include <cppuhelper/implbase1.hxx>

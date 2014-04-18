@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SCRIPTING_DLGPROV_HXX
-#define SCRIPTING_DLGPROV_HXX
+#ifndef INCLUDED_SCRIPTING_SOURCE_STRINGRESOURCE_STRINGRESOURCE_HXX
+#define INCLUDED_SCRIPTING_SOURCE_STRINGRESOURCE_STRINGRESOURCE_HXX
 
 #include <com/sun/star/resource/XStringResourceWithStorage.hpp>
 #include <com/sun/star/resource/XStringResourceWithLocation.hpp>
@@ -675,6 +675,6 @@ public:
 }   // namespace stringtable
 
 
-#endif // SCRIPTING_DLGPROV_HXX
+#endif // INCLUDED_SCRIPTING_SOURCE_STRINGRESOURCE_STRINGRESOURCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

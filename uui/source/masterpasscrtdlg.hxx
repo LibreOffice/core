@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UUI_MASTERPASSCRTDLG_HXX
-#define UUI_MASTERPASSCRTDLG_HXX
+#ifndef INCLUDED_UUI_SOURCE_MASTERPASSCRTDLG_HXX
+#define INCLUDED_UUI_SOURCE_MASTERPASSCRTDLG_HXX
 
 #include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <svtools/stdctrl.hxx>
@@ -50,6 +50,6 @@ private:
     sal_uInt16                                      nMinLen;
 };
 
-#endif // UUI_MASTERPASSCRTDLG_HXX
+#endif // INCLUDED_UUI_SOURCE_MASTERPASSCRTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

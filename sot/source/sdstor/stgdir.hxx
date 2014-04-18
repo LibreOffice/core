@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STGDIR_HXX
-#define _STGDIR_HXX
+#ifndef INCLUDED_SOT_SOURCE_SDSTOR_STGDIR_HXX
+#define INCLUDED_SOT_SOURCE_SDSTOR_STGDIR_HXX
 
 #include "stgavl.hxx"
 #include "stgelem.hxx"

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef BASCODETAGGER_HXX
-#define BASCODETAGGER_HXX
+#ifndef INCLUDED_HELPCOMPILER_INC_BASCODETAGGER_HXX
+#define INCLUDED_HELPCOMPILER_INC_BASCODETAGGER_HXX
 
 #include <iostream>
 #include <cstdlib>

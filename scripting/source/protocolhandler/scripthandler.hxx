@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRAMEWORK_SCRIPT_SCRIPTHANDLER_HXX
-#define _FRAMEWORK_SCRIPT_SCRIPTHANDLER_HXX
+#ifndef INCLUDED_SCRIPTING_SOURCE_PROTOCOLHANDLER_SCRIPTHANDLER_HXX
+#define INCLUDED_SCRIPTING_SOURCE_PROTOCOLHANDLER_SCRIPTHANDLER_HXX
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

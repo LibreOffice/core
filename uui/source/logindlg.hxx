@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UUI_LOGINDLG_HXX
-#define UUI_LOGINDLG_HXX
+#ifndef INCLUDED_UUI_SOURCE_LOGINDLG_HXX
+#define INCLUDED_UUI_SOURCE_LOGINDLG_HXX
 
 #include <svtools/stdctrl.hxx>
 #include <vcl/button.hxx>
@@ -95,6 +95,6 @@ public:
 
 
 
-#endif // UUI_LOGINDLG_HXX
+#endif // INCLUDED_UUI_SOURCE_LOGINDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

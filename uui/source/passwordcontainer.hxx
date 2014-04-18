@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UUI_PASSWORDCONTAINER_HXX
-#define INCLUDED_UUI_PASSWORDCONTAINER_HXX
+#ifndef INCLUDED_UUI_SOURCE_PASSWORDCONTAINER_HXX
+#define INCLUDED_UUI_SOURCE_PASSWORDCONTAINER_HXX
 
 #include "cppuhelper/implbase2.hxx"
 

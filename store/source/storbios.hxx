@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STORE_STORBIOS_HXX_
-#define _STORE_STORBIOS_HXX_
+#ifndef INCLUDED_STORE_SOURCE_STORBIOS_HXX
+#define INCLUDED_STORE_SOURCE_STORBIOS_HXX
 
 #include "sal/types.h"
 #include "rtl/ref.hxx"
@@ -255,6 +255,6 @@ inline bool OStorePageBIOS::ScanContext::isValid (void) const
 
 } // namespace store
 
-#endif /* !_STORE_STORBIOS_HXX_ */
+#endif // INCLUDED_STORE_SOURCE_STORBIOS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

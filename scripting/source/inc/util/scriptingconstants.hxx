@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _COM_SUN_STAR_SCRIPTING_UTIL_SCRIPTINGCONSTANTS_HXX_
-#define _COM_SUN_STAR_SCRIPTING_UTIL_SCRIPTINGCONSTANTS_HXX_
+#ifndef INCLUDED_SCRIPTING_SOURCE_INC_UTIL_SCRIPTINGCONSTANTS_HXX
+#define INCLUDED_SCRIPTING_SOURCE_INC_UTIL_SCRIPTINGCONSTANTS_HXX
 
 namespace scripting_constants
 {

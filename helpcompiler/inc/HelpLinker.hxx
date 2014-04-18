@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef HELPLINKER_HXX
-#define HELPLINKER_HXX
+#ifndef INCLUDED_HELPCOMPILER_INC_HELPLINKER_HXX
+#define INCLUDED_HELPCOMPILER_INC_HELPLINKER_HXX
 
 #include <helpcompiler/dllapi.h>
 #include <libxslt/transform.h>

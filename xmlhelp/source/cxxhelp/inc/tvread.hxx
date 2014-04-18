@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TREEVIEW_TVREAD_HXX_
-#define _TREEVIEW_TVREAD_HXX_
+#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_TVREAD_HXX
+#define INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_TVREAD_HXX
 
 #include <vector>
 #include <rtl/ref.hxx>

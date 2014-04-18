@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ANALYSISDEFS_HXX
-#define ANALYSISDEFS_HXX
+#ifndef INCLUDED_SCADDINS_SOURCE_ANALYSIS_ANALYSISDEFS_HXX
+#define INCLUDED_SCADDINS_SOURCE_ANALYSIS_ANALYSISDEFS_HXX
 
 #define CHK_Freq            ( nFreq != 1 && nFreq != 2 && nFreq != 4 )
 #define CHK_FINITE(d)       if( !::rtl::math::isFinite( d ) ) throw css::lang::IllegalArgumentException()

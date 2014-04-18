@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGUTIL_HXX_
-#define _LINGUTIL_HXX_
+#ifndef INCLUDED_LINGUCOMPONENT_SOURCE_LINGUTIL_LINGUTIL_HXX
+#define INCLUDED_LINGUCOMPONENT_SOURCE_LINGUTIL_LINGUTIL_HXX
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/string.hxx>

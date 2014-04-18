@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLEARCH_UTIL_RANDOMACCESSSTREAM_HXX_
-#define _XMLEARCH_UTIL_RANDOMACCESSSTREAM_HXX_
+#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_UTIL_RANDOMACCESSSTREAM_HXX
+#define INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_UTIL_RANDOMACCESSSTREAM_HXX
 
 #include <osl/file.hxx>
 

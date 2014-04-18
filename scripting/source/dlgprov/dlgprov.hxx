@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SCRIPTING_DLGPROV_HXX
-#define SCRIPTING_DLGPROV_HXX
+#ifndef INCLUDED_SCRIPTING_SOURCE_DLGPROV_DLGPROV_HXX
+#define INCLUDED_SCRIPTING_SOURCE_DLGPROV_DLGPROV_HXX
 
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
@@ -154,6 +154,6 @@ namespace dlgprov
 }   // namespace dlgprov
 
 
-#endif // SCRIPTING_DLGPROV_HXX
+#endif // INCLUDED_SCRIPTING_SOURCE_DLGPROV_DLGPROV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

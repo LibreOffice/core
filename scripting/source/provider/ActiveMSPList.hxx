@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FRAMEWORK_SCRIPT_PROVIDER_OPENDOCUMENTLIST_HXX_
-#define _FRAMEWORK_SCRIPT_PROVIDER_OPENDOCUMENTLIST_HXX_
+#ifndef INCLUDED_SCRIPTING_SOURCE_PROVIDER_ACTIVEMSPLIST_HXX
+#define INCLUDED_SCRIPTING_SOURCE_PROVIDER_ACTIVEMSPLIST_HXX
 
 #include <boost/unordered_map.hpp>
 #include <map>

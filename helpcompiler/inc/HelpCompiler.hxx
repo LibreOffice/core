@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef HELPCOMPILER_HXX
-#define HELPCOMPILER_HXX
+#ifndef INCLUDED_HELPCOMPILER_INC_HELPCOMPILER_HXX
+#define INCLUDED_HELPCOMPILER_INC_HELPCOMPILER_HXX
 
 #include <config_global.h>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef list_hxx
-#define list_hxx
+#ifndef INCLUDED_HWPFILTER_SOURCE_LIST_HXX
+#define INCLUDED_HWPFILTER_SOURCE_LIST_HXX
 
 /**
  * Re-implement a simple container: LinkedList + LinkedListIterator

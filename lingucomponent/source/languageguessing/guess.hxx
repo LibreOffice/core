@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef GUESS_H
-#define GUESS_H
+#ifndef INCLUDED_LINGUCOMPONENT_SOURCE_LANGUAGEGUESSING_GUESS_HXX
+#define INCLUDED_LINGUCOMPONENT_SOURCE_LANGUAGEGUESSING_GUESS_HXX
 
 #define GUESS_SEPARATOR_OPEN     '['
 #define GUESS_SEPARATOR_CLOSE    ']'

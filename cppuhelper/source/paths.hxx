@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CPPUHELPER_SOURCE_PATHS_HXX
-#define CPPUHELPER_SOURCE_PATHS_HXX
+#ifndef INCLUDED_CPPUHELPER_SOURCE_PATHS_HXX
+#define INCLUDED_CPPUHELPER_SOURCE_PATHS_HXX
 
 #include "sal/config.h"
 

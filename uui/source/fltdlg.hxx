@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UUI_FLTDLG_HXX
-#define UUI_FLTDLG_HXX
+#ifndef INCLUDED_UUI_SOURCE_FLTDLG_HXX
+#define INCLUDED_UUI_SOURCE_FLTDLG_HXX
 
 #include <vcl/dialog.hxx>
 
@@ -70,6 +70,6 @@ class FilterDialog : public ModalDialog
 
 }   // namespace uui
 
-#endif // UUI_FLTDLG_HXX
+#endif // INCLUDED_UUI_SOURCE_FLTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

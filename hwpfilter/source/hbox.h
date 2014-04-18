@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HBOX_H_
-#define _HBOX_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HBOX_H
+#define INCLUDED_HWPFILTER_SOURCE_HBOX_H
 
 #include <sal/config.h>
 
@@ -1035,6 +1035,6 @@ struct FixedSpace: public HBox
 
     virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
 };
-#endif                                            /* _HBOX_H_ */
+#endif // INCLUDED_HWPFILTER_SOURCE_HBOX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

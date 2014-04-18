@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRAMEWORK_SCRIPT_PROVIDER_XFUNCTIONPROVIDER_HXX_
-#define _FRAMEWORK_SCRIPT_PROVIDER_XFUNCTIONPROVIDER_HXX_
+#ifndef INCLUDED_SCRIPTING_SOURCE_PROVIDER_MASTERSCRIPTPROVIDER_HXX
+#define INCLUDED_SCRIPTING_SOURCE_PROVIDER_MASTERSCRIPTPROVIDER_HXX
 
 #include <rtl/ustring.hxx>
 
@@ -157,6 +157,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL bnf_create( css::uno::Refer
 css::uno::Sequence< OUString > SAL_CALL bnf_getSupportedServiceNames();
 }
 
-#endif //_FRAMEWORK_SCRIPT_PROVIDER_XFUNCTIONPROVIDER_HXX_
+#endif // INCLUDED_SCRIPTING_SOURCE_PROVIDER_MASTERSCRIPTPROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

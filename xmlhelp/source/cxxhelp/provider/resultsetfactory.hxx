@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RESULTSETFACTORY_HXX
-#define _RESULTSETFACTORY_HXX
+#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_RESULTSETFACTORY_HXX
+#define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_RESULTSETFACTORY_HXX
 
 #include "resultsetbase.hxx"
 

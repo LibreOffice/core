@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STGIO_HXX
-#define _STGIO_HXX
+#ifndef INCLUDED_SOT_SOURCE_SDSTOR_STGIO_HXX
+#define INCLUDED_SOT_SOURCE_SDSTOR_STGIO_HXX
 
 #include <stgcache.hxx>
 #include <stgelem.hxx>

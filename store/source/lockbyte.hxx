@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STORE_LOCKBYTE_HXX_
-#define _STORE_LOCKBYTE_HXX_
+#ifndef INCLUDED_STORE_SOURCE_LOCKBYTE_HXX
+#define INCLUDED_STORE_SOURCE_LOCKBYTE_HXX
 
 #include "sal/types.h"
 
@@ -165,6 +165,6 @@ MemoryLockBytes_createInstance (
 
 } // namespace store
 
-#endif /* !_STORE_LOCKBYTE_HXX_ */
+#endif // INCLUDED_STORE_SOURCE_LOCKBYTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

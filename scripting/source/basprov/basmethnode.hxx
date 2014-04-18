@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SCRIPTING_BASMETHNODE_HXX
-#define SCRIPTING_BASMETHNODE_HXX
+#ifndef INCLUDED_SCRIPTING_SOURCE_BASPROV_BASMETHNODE_HXX
+#define INCLUDED_SCRIPTING_SOURCE_BASPROV_BASMETHNODE_HXX
 
 #include "bcholder.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -121,6 +121,6 @@ namespace basprov
 }   // namespace basprov
 
 
-#endif // SCRIPTING_BASMETHNODE_HXX
+#endif // INCLUDED_SCRIPTING_SOURCE_BASPROV_BASMETHNODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

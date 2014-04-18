@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef LUCENEHELPER_HXX
-#define LUCENEHELPER_HXX
+#ifndef INCLUDED_HELPCOMPILER_SOURCE_LUCENEHELPER_HXX
+#define INCLUDED_HELPCOMPILER_SOURCE_LUCENEHELPER_HXX
 
 #if defined _MSC_VER
 #pragma warning(push)

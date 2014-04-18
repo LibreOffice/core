@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRAMEWORK_SCRIPT_PROVIDER_FUNCTIONIMPL_HXX_
-#define  _FRAMEWORK_SCRIPT_PROVIDER_FUNCTIONIMPL_HXX_
+#ifndef INCLUDED_SCRIPTING_SOURCE_PROVIDER_SCRIPTIMPL_HXX
+#define INCLUDED_SCRIPTING_SOURCE_PROVIDER_SCRIPTIMPL_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <osl/mutex.hxx>
@@ -98,6 +98,6 @@ private:
     ScriptImpl& operator = ( const ScriptImpl& );
 };
 } // namespace func_provider
-#endif //_FRAMEWORK_SCRIPT_PROVIDER_FUNCTIONIMPL_HXX_
+#endif // INCLUDED_SCRIPTING_SOURCE_PROVIDER_SCRIPTIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

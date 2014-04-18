@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef MYSQLC_TYPES_HXX
-#define MYSQLC_TYPES_HXX
+#ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_TYPES_HXX
+#define INCLUDED_MYSQLC_SOURCE_MYSQLC_TYPES_HXX
 
 struct TypeInfoDef {
     const char *typeName;
@@ -43,6 +43,6 @@ struct TypeInfoDef {
 
 extern TypeInfoDef mysqlc_types[];
 
-#endif /* MYSQLC_TYPES_HXX */
+#endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_TYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

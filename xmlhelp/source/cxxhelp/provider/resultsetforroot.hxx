@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RESULTSETFORROOT_HXX
-#define _RESULTSETFORROOT_HXX
+#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_RESULTSETFORROOT_HXX
+#define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_RESULTSETFORROOT_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>

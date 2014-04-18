@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HCODE_H_
-#define _HCODE_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HCODE_H
+#define INCLUDED_HWPFILTER_SOURCE_HCODE_H
 
 #include "hwplib.h"
 
@@ -71,6 +71,6 @@ DLLEXPORT char *base64_encode_string( const uchar *buf, unsigned int len );
 DLLEXPORT double calcAngle(int x1, int y1, int x2, int y2);
 
 
-#endif                                            /* _HCODE_H_ */
+#endif // INCLUDED_HWPFILTER_SOURCE_HCODE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

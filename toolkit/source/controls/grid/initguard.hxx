@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_INITGUARD_HXX
-#define SVTOOLS_INITGUARD_HXX
+#ifndef INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_INITGUARD_HXX
+#define INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_INITGUARD_HXX
 
 #include <com/sun/star/lang/NotInitializedException.hpp>
 
@@ -52,6 +52,6 @@ namespace toolkit
 } // namespace toolkit
 
 
-#endif // SVTOOLS_INITGUARD_HXX
+#endif // INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_INITGUARD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

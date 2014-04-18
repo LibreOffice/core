@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HWPREADER_HXX_
-#define _HWPREADER_HXX_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HWPREADER_HXX
+#define INCLUDED_HWPFILTER_SOURCE_HWPREADER_HXX
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>

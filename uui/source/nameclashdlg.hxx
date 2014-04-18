@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UUI_NAMECLASHDLG_HXX
-#define UUI_NAMECLASHDLG_HXX
+#ifndef INCLUDED_UUI_SOURCE_NAMECLASHDLG_HXX
+#define INCLUDED_UUI_SOURCE_NAMECLASHDLG_HXX
 
 #include "vcl/button.hxx"
 #include "vcl/dialog.hxx"

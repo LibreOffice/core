@@ -24,8 +24,8 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef MYSQLC_SDRIVER_HXX
-#define MYSQLC_SDRIVER_HXX
+#ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_DRIVER_HXX
+#define INCLUDED_MYSQLC_SOURCE_MYSQLC_DRIVER_HXX
 
 #include <config_lgpl.h>
 
@@ -109,7 +109,7 @@ namespace connectivity
     } /* mysqlc */
 } /* connectivity */
 
-#endif // MYSQLC_SDRIVER_HXX
+#endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_DRIVER_HXX
 /*
  * Local variables:
  * tab-width: 4

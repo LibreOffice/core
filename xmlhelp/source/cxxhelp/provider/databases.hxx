@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DATABASES_HXX_
-#define _DATABASES_HXX_
+#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_DATABASES_HXX
+#define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_DATABASES_HXX
 
 #include <config_global.h>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HWPPARA_H_
-#define _HWPPARA_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HPARA_H
+#define INCLUDED_HWPFILTER_SOURCE_HPARA_H
 
 #include <hwplib.h>
 #include <hwpfile.h>
@@ -169,6 +169,6 @@ inline int HWPPara::LineLen(int line) const
 {
     return EndPos(line) - HomePos(line);
 }
-#endif                                            /* _HWPPARA_H_ */
+#endif // INCLUDED_HWPFILTER_SOURCE_HPARA_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

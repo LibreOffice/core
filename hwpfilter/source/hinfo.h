@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HWPINFO_H_
-#define _HWPINFO_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HINFO_H
+#define INCLUDED_HWPFILTER_SOURCE_HINFO_H
 
 #include "hwplib.h"
 
@@ -251,6 +251,6 @@ struct ParaShape
     bool  Read(HWPFile &);
 //  virtual ~ParaShape();
 };
-#endif                                            /* _HWPINFO_H_ */
+#endif // INCLUDED_HWPFILTER_SOURCE_HINFO_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SCRIPTING_BCHOLDER_HXX
-#define SCRIPTING_BCHOLDER_HXX
+#ifndef INCLUDED_SCRIPTING_SOURCE_INC_BCHOLDER_HXX
+#define INCLUDED_SCRIPTING_SOURCE_INC_BCHOLDER_HXX
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
@@ -59,6 +59,6 @@ namespace scripting_helper
 }   // namespace scripting_helper
 
 
-#endif // SCRIPTING_BCHOLDER_HXX
+#endif // INCLUDED_SCRIPTING_SOURCE_INC_BCHOLDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

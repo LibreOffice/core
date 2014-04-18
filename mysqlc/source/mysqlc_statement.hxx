@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef MYSQLC_STATEMENT_HXX
-#define MYSQLC_STATEMENT_HXX
+#ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_STATEMENT_HXX
+#define INCLUDED_MYSQLC_SOURCE_MYSQLC_STATEMENT_HXX
 
 #include "mysqlc_connection.hxx"
 #include "mysqlc_subcomponent.hxx"
@@ -203,7 +203,7 @@ namespace connectivity
         };
     }
 }
-#endif // MYSQLC_STATEMENT_HXX
+#endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_STATEMENT_HXX
 
 /*
  * Local variables:

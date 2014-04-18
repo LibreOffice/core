@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MYSQLC_GENERAL_
-#define _MYSQLC_GENERAL_
+#ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_GENERAL_HXX
+#define INCLUDED_MYSQLC_SOURCE_MYSQLC_GENERAL_HXX
 
 #include <config_lgpl.h>
 

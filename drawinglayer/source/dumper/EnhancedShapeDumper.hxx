@@ -28,8 +28,8 @@
 
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 
-#ifndef EnhancedShapeDumper_hxx
-#define EnhancedShapeDumper_hxx
+#ifndef INCLUDED_DRAWINGLAYER_SOURCE_DUMPER_ENHANCEDSHAPEDUMPER_HXX
+#define INCLUDED_DRAWINGLAYER_SOURCE_DUMPER_ENHANCEDSHAPEDUMPER_HXX
 
 class EnhancedShapeDumper
 {

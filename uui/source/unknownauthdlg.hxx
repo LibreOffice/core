@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef UUI_UNKNOWNAUTH_HXX
-#define UUI_UNKNOWNAUTH_HXX
+#ifndef INCLUDED_UUI_SOURCE_UNKNOWNAUTHDLG_HXX
+#define INCLUDED_UUI_SOURCE_UNKNOWNAUTHDLG_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
@@ -58,6 +58,6 @@ public:
     }
 };
 
-#endif // UUI_UNKNOWNAUTH_HXX
+#endif // INCLUDED_UUI_SOURCE_UNKNOWNAUTHDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

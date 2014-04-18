@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRAMEWORK_SCRIPT_PROVIDER_PROVIDERCACHE_HXX_
-#define _FRAMEWORK_SCRIPT_PROVIDER_PROVIDERCACHE_HXX_
+#ifndef INCLUDED_SCRIPTING_SOURCE_PROVIDER_PROVIDERCACHE_HXX
+#define INCLUDED_SCRIPTING_SOURCE_PROVIDER_PROVIDERCACHE_HXX
 
 #include <boost/unordered_map.hpp>
 #include <osl/mutex.hxx>

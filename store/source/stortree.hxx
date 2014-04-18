@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STORE_STORTREE_HXX
-#define _STORE_STORTREE_HXX
+#ifndef INCLUDED_STORE_SOURCE_STORTREE_HXX
+#define INCLUDED_STORE_SOURCE_STORTREE_HXX
 
 #include "sal/config.h"
 
@@ -331,6 +331,6 @@ private:
 
 } // namespace store
 
-#endif /* !_STORE_STORTREE_HXX */
+#endif // INCLUDED_STORE_SOURCE_STORTREE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

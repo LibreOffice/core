@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOCONTROLS_PROGRESSMONITOR_CTRL_HXX
-#define _UNOCONTROLS_PROGRESSMONITOR_CTRL_HXX
+#ifndef INCLUDED_UNOCONTROLS_SOURCE_INC_PROGRESSMONITOR_HXX
+#define INCLUDED_UNOCONTROLS_SOURCE_INC_PROGRESSMONITOR_HXX
 
 #include <com/sun/star/awt/XFileDialog.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
@@ -428,6 +428,6 @@ private:
 
 }   // namespace unocontrols
 
-#endif  // #ifndef _UNOCONTROLS_PROGRESSMONITOR_CTRL_HXX
+#endif // INCLUDED_UNOCONTROLS_SOURCE_INC_PROGRESSMONITOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

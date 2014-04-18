@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_cppuhelper_test_testcmp_TestComponent_hxx
-#define INCLUDED_cppuhelper_test_testcmp_TestComponent_hxx
+#ifndef INCLUDED_CPPUHELPER_TEST_TESTCMP_TESTCOMPONENT_HXX
+#define INCLUDED_CPPUHELPER_TEST_TESTCMP_TESTCOMPONENT_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

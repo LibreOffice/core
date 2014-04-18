@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SOLVER_H_
-#define _SOLVER_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_SOLVER_H
+#define INCLUDED_HWPFILTER_SOURCE_SOLVER_H
 
 class mgcLinearSystemD
 {

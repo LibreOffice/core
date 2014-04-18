@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FORMULA_H__
-#define __FORMULA_H__
+#ifndef INCLUDED_HWPFILTER_SOURCE_FORMULA_H
+#define INCLUDED_HWPFILTER_SOURCE_FORMULA_H
 
 // DVO: remove DEBUG dependency
 // #ifndef DEBUG

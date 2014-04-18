@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __MAPPING_H__
-#define __MAPPING_H__
+#ifndef INCLUDED_HWPFILTER_SOURCE_MAPPING_H
+#define INCLUDED_HWPFILTER_SOURCE_MAPPING_H
 
 #include <string.h>
 #include <stdio.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HTAGS_H_
-#define _HTAGS_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HTAGS_H
+#define INCLUDED_HWPFILTER_SOURCE_HTAGS_H
 
 class HWPFile;
 /**
@@ -65,6 +65,6 @@ struct OlePicture
 
     bool Read(HWPFile& hwpf);
 };
-#endif                                            /* _HTAGS_H_ */
+#endif // INCLUDED_HWPFILTER_SOURCE_HTAGS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

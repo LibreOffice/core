@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OCONNECTIONPOINTCONTAINERHELPER_HXX
-#define _OCONNECTIONPOINTCONTAINERHELPER_HXX
+#ifndef INCLUDED_UNOCONTROLS_SOURCE_INC_OCONNECTIONPOINTCONTAINERHELPER_HXX
+#define INCLUDED_UNOCONTROLS_SOURCE_INC_OCONNECTIONPOINTCONTAINERHELPER_HXX
 
 #include <com/sun/star/lang/XConnectionPointContainer.hpp>
 #include <com/sun/star/lang/XConnectionPoint.hpp>
@@ -204,6 +204,6 @@ private:
 
 }   // namespace unocontrols
 
-#endif  // #ifndef _OCONNECTIONPOINTCONTAINERHELPER_HXX
+#endif // INCLUDED_UNOCONTROLS_SOURCE_INC_OCONNECTIONPOINTCONTAINERHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

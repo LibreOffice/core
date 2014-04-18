@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGU2_HYPHENIMP_HXX_
-#define _LINGU2_HYPHENIMP_HXX_
+#ifndef INCLUDED_LINGUCOMPONENT_SOURCE_HYPHENATOR_HYPHEN_HYPHENIMP_HXX
+#define INCLUDED_LINGUCOMPONENT_SOURCE_HYPHENATOR_HYPHEN_HYPHENIMP_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase6.hxx>

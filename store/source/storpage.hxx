@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STORE_STORPAGE_HXX_
-#define _STORE_STORPAGE_HXX_
+#ifndef INCLUDED_STORE_SOURCE_STORPAGE_HXX
+#define INCLUDED_STORE_SOURCE_STORPAGE_HXX
 
 #include "sal/types.h"
 
@@ -214,6 +214,6 @@ SAL_CALL query (IStoreHandle *pHandle, SAL_UNUSED_PARAMETER OStorePageManager*)
 
 } // namespace store
 
-#endif /* !_STORE_STORPAGE_HXX_ */
+#endif // INCLUDED_STORE_SOURCE_STORPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

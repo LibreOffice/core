@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HWPLIB_H_
-#define _HWPLIB_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HWPLIB_H
+#define INCLUDED_HWPFILTER_SOURCE_HWPLIB_H
 #include "precompile.h"
 
 #include <string>
@@ -236,6 +236,6 @@ enum DebugMask
 #  include <unistd.h>
 #  define DIRSEP '/'
 #endif
-#endif                                            /* _HWPLIB_H_*/
+#endif // INCLUDED_HWPFILTER_SOURCE_HWPLIB_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

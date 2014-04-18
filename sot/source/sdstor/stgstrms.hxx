@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STGSTRMS_HXX
-#define _STGSTRMS_HXX
+#ifndef INCLUDED_SOT_SOURCE_SDSTOR_STGSTRMS_HXX
+#define INCLUDED_SOT_SOURCE_SDSTOR_STGSTRMS_HXX
 
 #include <tools/stream.hxx>
 #include <rtl/ref.hxx>

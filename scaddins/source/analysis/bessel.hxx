@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SCA_BESSEL_HXX
-#define SCA_BESSEL_HXX
+#ifndef INCLUDED_SCADDINS_SOURCE_ANALYSIS_BESSEL_HXX
+#define INCLUDED_SCADDINS_SOURCE_ANALYSIS_BESSEL_HXX
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/sheet/NoConvergenceException.hpp>

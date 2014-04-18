@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MACSPELLIMP_H_
-#define _MACSPELLIMP_H_
+#ifndef INCLUDED_LINGUCOMPONENT_SOURCE_SPELLCHECK_MACOSXSPELL_MACSPELLIMP_HXX
+#define INCLUDED_LINGUCOMPONENT_SOURCE_SPELLCHECK_MACOSXSPELL_MACSPELLIMP_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase6.hxx>

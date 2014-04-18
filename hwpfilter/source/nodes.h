@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __NODES_H__
-#define __NODES_H__
+#ifndef INCLUDED_HWPFILTER_SOURCE_NODES_H
+#define INCLUDED_HWPFILTER_SOURCE_NODES_H
 
 #include <stdio.h>
 #include <stdlib.h>

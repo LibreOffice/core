@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UUI_IAHNDL_HXX
-#define UUI_IAHNDL_HXX
+#ifndef INCLUDED_UUI_SOURCE_IAHNDL_HXX
+#define INCLUDED_UUI_SOURCE_IAHNDL_HXX
 
 #include <vector>
 
@@ -342,6 +342,6 @@ public:
         SAL_THROW(());
 };
 
-#endif // UUI_IAHNDL_HXX
+#endif // INCLUDED_UUI_SOURCE_IAHNDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

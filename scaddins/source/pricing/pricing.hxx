@@ -24,8 +24,8 @@
 // to avoid having to rename all classes to do with UNO
 // technicalities we use our own namespace
 
-#ifndef _SCA_PRICING_HXX
-#define _SCA_PRICING_HXX
+#ifndef INCLUDED_SCADDINS_SOURCE_PRICING_PRICING_HXX
+#define INCLUDED_SCADDINS_SOURCE_PRICING_PRICING_HXX
 
 
 #include <string.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _INPUSTREAM_HXX_
-#define _INPUSTREAM_HXX_
+#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_INPUTSTREAM_HXX
+#define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_INPUTSTREAM_HXX
 
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>

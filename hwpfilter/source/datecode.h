@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __DATECODE_H__
-#define __DATECODE_H__
+#ifndef INCLUDED_HWPFILTER_SOURCE_DATECODE_H
+#define INCLUDED_HWPFILTER_SOURCE_DATECODE_H
 
 static const hchar defaultform[] =
 {

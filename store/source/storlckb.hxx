@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STORE_STORLCKB_HXX_
-#define _STORE_STORLCKB_HXX_
+#ifndef INCLUDED_STORE_SOURCE_STORLCKB_HXX
+#define INCLUDED_STORE_SOURCE_STORLCKB_HXX
 
 #include "sal/types.h"
 
@@ -159,6 +159,6 @@ SAL_CALL query (IStoreHandle *pHandle, SAL_UNUSED_PARAMETER OStoreLockBytes*)
 
 } // namespace store
 
-#endif /* !_STORE_STORLCKB_HXX_ */
+#endif // INCLUDED_STORE_SOURCE_STORLCKB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

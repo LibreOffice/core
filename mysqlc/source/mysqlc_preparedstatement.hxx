@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_SPREPAREDSTATEMENT_HXX
-#define CONNECTIVITY_SPREPAREDSTATEMENT_HXX
+#ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_PREPAREDSTATEMENT_HXX
+#define INCLUDED_MYSQLC_SOURCE_MYSQLC_PREPAREDSTATEMENT_HXX
 #include "mysqlc_statement.hxx"
 #include "mysqlc_resultset.hxx"
 
@@ -170,7 +170,7 @@ namespace connectivity
         };
     } /* mysqlc */
 } /* connectivity */
-#endif // CONNECTIVITY_SPREPAREDSTATEMENT_HXX
+#endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_PREPAREDSTATEMENT_HXX
 
 /*
  * Local variables:

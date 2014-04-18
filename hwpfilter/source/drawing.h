@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DRAWING_H_
-#define _DRAWING_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_DRAWING_H
+#define INCLUDED_HWPFILTER_SOURCE_DRAWING_H
 
 #include "precompile.h"
 

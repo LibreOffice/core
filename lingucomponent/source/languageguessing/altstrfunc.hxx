@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ALT_STRFUNC_HXX_
-#define _ALT_STRFUNC_HXX_
+#ifndef INCLUDED_LINGUCOMPONENT_SOURCE_LANGUAGEGUESSING_ALTSTRFUNC_HXX
+#define INCLUDED_LINGUCOMPONENT_SOURCE_LANGUAGEGUESSING_ALTSTRFUNC_HXX
 
 #include <string>
 #include <guess.hxx>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLSEARCH_EXCEP_XMLSEARCHEXCEPTIONS_HXX_
-#define _XMLSEARCH_EXCEP_XMLSEARCHEXCEPTIONS_HXX_
+#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_EXCEP_XMLSEARCHEXCEPTIONS_HXX
+#define INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_EXCEP_XMLSEARCHEXCEPTIONS_HXX
 
 #include <rtl/ustring.hxx>
 

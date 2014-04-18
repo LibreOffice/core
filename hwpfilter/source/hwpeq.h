@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HWPEQ_H_
-#define _HWPEQ_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HWPEQ_H
+#define INCLUDED_HWPFILTER_SOURCE_HWPEQ_H
 
 #include "mzstring.h"
 
 void eq2latex(MzString &mstr, char *str);
 
-#endif /* _HWPEQ_H_ */
+#endif // INCLUDED_HWPFILTER_SOURCE_HWPEQ_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

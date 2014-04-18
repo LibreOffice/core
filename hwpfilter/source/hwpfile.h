@@ -22,8 +22,8 @@
 // (C) 1998 Mizi Research, All rights are reserved
 
 
-#ifndef _HWPFILE_H_
-#define _HWPFILE_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
+#define INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
 
 #include <list>
 #include <stdio.h>
@@ -299,6 +299,6 @@ class DLLEXPORT HWPFile
 
 HWPFile *GetCurrentDoc(void);
 HWPFile *SetCurrentDoc(HWPFile *hwpfp);
-#endif                                            /* _HWPFILE_H_ */
+#endif // INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

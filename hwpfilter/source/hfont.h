@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HWPFONTS_H_
-#define _HWPFONTS_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HFONT_H
+#define INCLUDED_HWPFILTER_SOURCE_HFONT_H
 
 #include <stdlib.h>
 #include <string.h>

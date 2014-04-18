@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef MYSQLC_CONNECTION_HXX
-#define MYSQLC_CONNECTION_HXX
+#ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_CONNECTION_HXX
+#define INCLUDED_MYSQLC_SOURCE_MYSQLC_CONNECTION_HXX
 
 #include "mysqlc_subcomponent.hxx"
 #include "mysqlc_types.hxx"
@@ -237,7 +237,7 @@ namespace connectivity
         //inline OUString getPattern(OUString p) { return (p.getLength()) ? p : ASC2OU("%"); }
     } /* mysqlc */
 } /* connectivity */
-#endif // MYSQLC_CONNECTION_HXX
+#endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_CONNECTION_HXX
 
 /*
  * Local variables:

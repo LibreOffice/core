@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SECMACROWARNINGS_HXX
-#define _SECMACROWARNINGS_HXX
+#ifndef INCLUDED_UUI_SOURCE_SECMACROWARNINGS_HXX
+#define INCLUDED_UUI_SOURCE_SECMACROWARNINGS_HXX
 
 #include <vcl/dialog.hxx>
 #include <svtools/stdctrl.hxx>

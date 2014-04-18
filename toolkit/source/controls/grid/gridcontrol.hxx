@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_GRID_CONTROL_HXX
-#define TOOLKIT_GRID_CONTROL_HXX
+#ifndef INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_GRIDCONTROL_HXX
+#define INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_GRIDCONTROL_HXX
 
 #include <com/sun/star/awt/grid/XGridControl.hpp>
 #include <com/sun/star/awt/grid/XGridRowSelection.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DRAWDEF_H_
-#define _DRAWDEF_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_DRAWDEF_H
+#define INCLUDED_HWPFILTER_SOURCE_DRAWDEF_H
 
 #include "hwplib.h"
 
@@ -245,6 +245,6 @@ struct HWPDrawingObject
     HWPDrawingObject();
     ~HWPDrawingObject();
 };
-#endif                                            /* _DRAWDEF_H_ */
+#endif // INCLUDED_HWPFILTER_SOURCE_DRAWDEF_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

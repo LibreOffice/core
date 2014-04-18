@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLSEARCH_UTIL_COMPRESSORITERATOR_HXX_
-#define _XMLSEARCH_UTIL_COMPRESSORITERATOR_HXX_
+#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_UTIL_COMPRESSORITERATOR_HXX
+#define INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_UTIL_COMPRESSORITERATOR_HXX
 
 
 namespace xmlsearch {

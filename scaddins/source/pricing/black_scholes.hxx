@@ -11,8 +11,8 @@
  */
 
 
-#ifndef BLACK_SCHOLES_HXX
-#define BLACK_SCHOLES_HXX
+#ifndef INCLUDED_SCADDINS_SOURCE_PRICING_BLACK_SCHOLES_HXX
+#define INCLUDED_SCADDINS_SOURCE_PRICING_BLACK_SCHOLES_HXX
 
 // options prices and greeks in the Black-Scholes model
 // also known as TV (theoretical value)

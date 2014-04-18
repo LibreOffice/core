@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef UUI_SSLWARN_HXX
-#define UUI_SSLWARN_HXX
+#ifndef INCLUDED_UUI_SOURCE_SSLWARNDLG_HXX
+#define INCLUDED_UUI_SOURCE_SSLWARNDLG_HXX
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
@@ -49,6 +49,6 @@ public:
     void setDescription1Text(const OUString &aText) { set_primary_text(aText); }
 };
 
-#endif // UUI_SSLWARN_HXX
+#endif // INCLUDED_UUI_SOURCE_SSLWARNDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PROVIDER_HXX
-#define _PROVIDER_HXX
+#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_PROVIDER_HXX
+#define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_PROVIDER_HXX
 
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
