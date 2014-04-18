@@ -1425,6 +1425,19 @@ File gid_License_Txt
     Styles = (PACKED);
 End
 
+File gid_Eula_Odt
+    BIN_FILE_BODY;
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    Dir = gid_Dir_Bundle_Contents_Resources;
+#elif defined MACOSX
+    Dir = gid_Dir_Bundle_Contents;
+#else
+    Dir = gid_Dir_Brand_Root;
+#endif
+    Name = "EULA.odt";
+    Styles = (PACKED);
+End
+
 File gid_License_Odt
     BIN_FILE_BODY;
 #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
