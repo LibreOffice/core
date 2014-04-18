@@ -943,7 +943,7 @@ WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(ww::WordVersion eVersion,
 {
 }
 
-sal_uLong WW8PLCFx_PCDAttrs::GetIdx() const
+sal_uInt32 WW8PLCFx_PCDAttrs::GetIdx() const
 {
     return 0;
 }
@@ -1141,7 +1141,7 @@ sal_uLong WW8PLCFx_PCD::GetIMax() const
     return pPcdI ? pPcdI->GetIMax() : 0;
 }
 
-sal_uLong WW8PLCFx_PCD::GetIdx() const
+sal_uInt32 WW8PLCFx_PCD::GetIdx() const
 {
     return pPcdI ? pPcdI->GetIdx() : 0;
 }
@@ -2913,9 +2913,9 @@ WW8PLCFx_Fc_FKP::~WW8PLCFx_Fc_FKP()
     delete pPCDAttrs;
 }
 
-sal_uLong WW8PLCFx_Fc_FKP::GetIdx() const
+sal_uInt32 WW8PLCFx_Fc_FKP::GetIdx() const
 {
-    sal_uLong u = pPLCF->GetIdx() << 8;
+    sal_uInt32 u = pPLCF->GetIdx() << 8;
     if (pFkp)
         u |= pFkp->GetIdx();
     return u;
@@ -3398,7 +3398,7 @@ WW8PLCFx_SEPX::~WW8PLCFx_SEPX()
     delete[] pSprms;
 }
 
-sal_uLong WW8PLCFx_SEPX::GetIdx() const
+sal_uInt32 WW8PLCFx_SEPX::GetIdx() const
 {
     return pPLCF ? pPLCF->GetIdx() : 0;
 }
@@ -3574,7 +3574,7 @@ WW8PLCFx_SubDoc::~WW8PLCFx_SubDoc()
     delete pTxt;
 }
 
-sal_uLong WW8PLCFx_SubDoc::GetIdx() const
+sal_uInt32 WW8PLCFx_SubDoc::GetIdx() const
 {
     // Probably pTxt ... no need for it
     if( pRef )
@@ -3695,7 +3695,7 @@ WW8PLCFx_FLD::~WW8PLCFx_FLD()
     delete pPLCF;
 }
 
-sal_uLong WW8PLCFx_FLD::GetIdx() const
+sal_uInt32 WW8PLCFx_FLD::GetIdx() const
 {
     return pPLCF ? pPLCF->GetIdx() : 0;
 }
@@ -3972,7 +3972,7 @@ WW8PLCFx_Book::~WW8PLCFx_Book()
     delete pBook[0];
 }
 
-sal_uLong WW8PLCFx_Book::GetIdx() const
+sal_uInt32 WW8PLCFx_Book::GetIdx() const
 {
     return nIMax ? pBook[0]->GetIdx() : 0;
 }
