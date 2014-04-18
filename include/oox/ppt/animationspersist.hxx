@@ -18,8 +18,8 @@
  */
 
 
-#ifndef OOX_PPT_ANIMATIONPERSIST
-#define OOX_PPT_ANIMATIONPERSIST
+#ifndef INCLUDED_OOX_PPT_ANIMATIONSPERSIST_HXX
+#define INCLUDED_OOX_PPT_ANIMATIONSPERSIST_HXX
 
 #include <list>
 #include <boost/shared_ptr.hpp>

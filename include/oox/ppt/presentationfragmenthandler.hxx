@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_PPT_PRESENTATION_FRAGMENTHANDLER
-#define OOX_PPT_PRESENTATION_FRAGMENTHANDLER
+#ifndef INCLUDED_OOX_PPT_PRESENTATIONFRAGMENTHANDLER_HXX
+#define INCLUDED_OOX_PPT_PRESENTATIONFRAGMENTHANDLER_HXX
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -67,6 +67,6 @@ private:
 
 } }
 
-#endif // OOX_PPT_PRESENTATION_FRAGMENTHANDLER
+#endif // INCLUDED_OOX_PPT_PRESENTATIONFRAGMENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

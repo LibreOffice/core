@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_PPT_SLIDETIMINGCONTEXT
-#define OOX_PPT_SLIDETIMINGCONTEXT
+#ifndef INCLUDED_OOX_PPT_SLIDETIMINGCONTEXT_HXX
+#define INCLUDED_OOX_PPT_SLIDETIMINGCONTEXT_HXX
 
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <oox/ppt/timenode.hxx>
@@ -43,6 +43,6 @@ private:
 
 } }
 
-#endif // OOX_PPT_SLIDETIMINGCONTEXT
+#endif // INCLUDED_OOX_PPT_SLIDETIMINGCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

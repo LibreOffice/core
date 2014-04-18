@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_PPT_LAYOUTFRAGMENTHANDLER
-#define OOX_PPT_LAYOUTFRAGMENTHANDLER
+#ifndef INCLUDED_OOX_PPT_LAYOUTFRAGMENTHANDLER_HXX
+#define INCLUDED_OOX_PPT_LAYOUTFRAGMENTHANDLER_HXX
 
 #include <oox/ppt/slidefragmenthandler.hxx>
 
@@ -37,6 +37,6 @@ public:
 
 } }
 
-#endif // OOX_PPT_LAYOUTFRAGMENTHANDLER
+#endif // INCLUDED_OOX_PPT_LAYOUTFRAGMENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

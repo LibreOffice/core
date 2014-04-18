@@ -18,8 +18,8 @@
  */
 
 
-#ifndef OOX_DRAWINGML_TABLESTYLECONTEXT
-#define OOX_DRAWINGML_TABLESTYLECONTEXT
+#ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLECONTEXT_HXX
+#define INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLECONTEXT_HXX
 
 #include <oox/core/contexthandler2.hxx>
 #include <oox/drawingml/table/tablestyle.hxx>

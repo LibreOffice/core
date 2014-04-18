@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_PPT_SLIDETRANSITIONCONTEXT
-#define OOX_PPT_SLIDETRANSITIONCONTEXT
+#ifndef INCLUDED_OOX_PPT_SLIDETRANSITIONCONTEXT_HXX
+#define INCLUDED_OOX_PPT_SLIDETRANSITIONCONTEXT_HXX
 
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/ppt/slidetransition.hxx>
@@ -47,6 +47,6 @@ namespace oox { namespace ppt {
 
 } }
 
-#endif // OOX_PPT_SLIDEFRAGMENTHANDLER
+#endif // INCLUDED_OOX_PPT_SLIDETRANSITIONCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
