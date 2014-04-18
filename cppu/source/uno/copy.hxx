@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef COPY_HXX
-#define COPY_HXX
+#ifndef INCLUDED_CPPU_SOURCE_UNO_COPY_HXX
+#define INCLUDED_CPPU_SOURCE_UNO_COPY_HXX
 
 #include "prim.hxx"
 #include "constr.hxx"

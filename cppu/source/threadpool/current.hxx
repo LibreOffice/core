@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPU_THREADPOOL_CURRENT_HXX_
-#define _CPPU_THREADPOOL_CURRENT_HXX_
+#ifndef INCLUDED_CPPU_SOURCE_THREADPOOL_CURRENT_HXX
+#define INCLUDED_CPPU_SOURCE_THREADPOOL_CURRENT_HXX
 
 #include "rtl/byteseq.h"
 

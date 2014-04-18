@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_IdentityMapping_hxx
-#define INCLUDED_IdentityMapping_hxx
+#ifndef INCLUDED_CPPU_SOURCE_UNO_IDENTITYMAPPING_HXX
+#define INCLUDED_CPPU_SOURCE_UNO_IDENTITYMAPPING_HXX
 
 #include "uno/mapping.h"
 

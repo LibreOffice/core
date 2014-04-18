@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_cascade_mapping_hxx
-#define INCLUDED_cascade_mapping_hxx
+#ifndef INCLUDED_CPPU_SOURCE_UNO_CASCADE_MAPPING_HXX
+#define INCLUDED_CPPU_SOURCE_UNO_CASCADE_MAPPING_HXX
 
 #include "uno/environment.h"
 #include "uno/mapping.h"

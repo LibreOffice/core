@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef PRIM_HXX
-#define PRIM_HXX
+#ifndef INCLUDED_CPPU_SOURCE_UNO_PRIM_HXX
+#define INCLUDED_CPPU_SOURCE_UNO_PRIM_HXX
 
 #include "typelib/typedescription.h"
 #include "typelib/typeclass.h"

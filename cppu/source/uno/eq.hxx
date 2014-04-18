@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef EQ_HXX
-#define EQ_HXX
+#ifndef INCLUDED_CPPU_SOURCE_UNO_EQ_HXX
+#define INCLUDED_CPPU_SOURCE_UNO_EQ_HXX
 
 #include <math.h>
 

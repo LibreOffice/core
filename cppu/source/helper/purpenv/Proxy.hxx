@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_Proxy_hxx
-#define INCLUDED_Proxy_hxx
+#ifndef INCLUDED_CPPU_SOURCE_HELPER_PURPENV_PROXY_HXX
+#define INCLUDED_CPPU_SOURCE_HELPER_PURPENV_PROXY_HXX
 
 #include "osl/interlck.h"
 
