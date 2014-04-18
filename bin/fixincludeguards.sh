@@ -77,7 +77,7 @@ for fn in "$@"; do
 
 
         ### clean up endif
-        sed -i "s/#endif\s*\(\/\/\|\/\*\)\s*\#\?\(ifndef\)\?\s*\(${guard_prefix}${guard}\).*/#endif \/\/ \3/g" "$fn"
+        sed -i "s/#endif\s*\(\/\/\|\/\*\)\s*\#\?\(ifndef\)\?\s*!\?\s*\(${guard_prefix}${guard}\).*/#endif \/\/ \3/g" "$fn"
 
     fi
 done
