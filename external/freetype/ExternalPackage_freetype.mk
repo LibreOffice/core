@@ -7,16 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,freetype))
+$(eval $(call gb_ExternalPackage_ExternalPackage,freetype,freetype))
 
-ifneq (,$(or $(findstring ANDROID,$(OS)),$(ENABLE_GLTF)))
+$(eval $(call gb_ExternalPackage_use_external_project,freetype,freetype))
 
-$(eval $(call gb_Module_add_targets,freetype,\
-	ExternalProject_freetype \
-	UnpackedTarball_freetype \
-	ExternalPackage_freetype \
+ifeq ($(COM),MSC)
+$(eval $(call gb_ExternalPackage_add_files,freetype,$(call gb_UnpackedTarball_get_dir,freetype/instdir), \
+	objs/win32/vc2010/freetype248.lib \
 ))
-
 endif
 
 # vim: set noet sw=4 ts=4:

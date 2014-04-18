@@ -13,6 +13,14 @@ $(eval $(call gb_ExternalProject_register_targets,freetype,\
 	build \
 ))
 
+ifeq ($(OS)$(COM),WNTMSC)
+$(call gb_ExternalProject_get_state_target,freetype,build) :
+	$(call gb_ExternalProject_run,build,\
+		cd ../builds/win32/vc2010/ && \
+		msbuild.exe freetype.vcxproj /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+		$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0) \
+	,objs)
+else
 $(call gb_ExternalProject_get_state_target,freetype,build) :
 	$(call gb_ExternalProject_run,build,\
 		./configure \
@@ -25,5 +33,6 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 		&& chmod +x builds/unix/freetype-config \
 		&& $(MAKE) install \
 		&& touch $@	)
+endif
 
 # vim: set noet sw=4 ts=4:
