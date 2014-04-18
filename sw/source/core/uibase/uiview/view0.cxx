@@ -90,7 +90,7 @@ SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 
 SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
 {
-    SFX_CHILDWINDOW_CONTEXT_REGISTRATION(SID_NAVIGATOR);
+    GetStaticInterface()->RegisterChildWindow(SID_NAVIGATOR, true);
 
     GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());

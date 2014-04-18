@@ -66,7 +66,7 @@ SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
 {
     GetStaticInterface()->RegisterPopupMenu(SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP));
 
-    SFX_CHILDWINDOW_CONTEXT_REGISTRATION( SID_NAVIGATOR );
+    GetStaticInterface()->RegisterChildWindow(SID_NAVIGATOR, true);
 
     GetStaticInterface()->RegisterChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
@@ -92,7 +92,7 @@ SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL)) //SOH
 {
     GetStaticInterface()->RegisterPopupMenu(SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP));
 
-    SFX_CHILDWINDOW_CONTEXT_REGISTRATION( SID_NAVIGATOR );
+    GetStaticInterface()->RegisterChildWindow(SID_NAVIGATOR, true);
 
     GetStaticInterface()->RegisterChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxFontWorkChildWindow::GetChildWindowId());
