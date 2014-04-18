@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_STRUCTPG_HXX
-#define SC_STRUCTPG_HXX
+#ifndef INCLUDED_FORMULA_SOURCE_UI_DLG_STRUCTPG_HXX
+#define INCLUDED_FORMULA_SOURCE_UI_DLG_STRUCTPG_HXX
 
 #include <svtools/stdctrl.hxx>
 #include <vcl/lstbox.hxx>

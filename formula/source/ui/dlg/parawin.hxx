@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_PARAWIN_HXX
-#define FORMULA_PARAWIN_HXX
+#ifndef INCLUDED_FORMULA_SOURCE_UI_DLG_PARAWIN_HXX
+#define INCLUDED_FORMULA_SOURCE_UI_DLG_PARAWIN_HXX
 
 #include <svtools/stdctrl.hxx>
 #include <svtools/svmedit.hxx>
@@ -162,6 +162,6 @@ public:
 
 } // formula
 
-#endif // FORMULA_PARAWIN_HXX
+#endif // INCLUDED_FORMULA_SOURCE_UI_DLG_PARAWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_MODULE_HELPER_RPT_HXX_
-#define FORMULA_MODULE_HELPER_RPT_HXX_
+#ifndef INCLUDED_FORMULA_SOURCE_UI_INC_MODULEHELPER_HXX
+#define INCLUDED_FORMULA_SOURCE_UI_INC_MODULEHELPER_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/resmgr.hxx>
@@ -73,7 +73,7 @@ namespace formula
 }   // namespace formula
 
 
-#endif // FORMULA_MODULE_HELPER_RPT_HXX_
+#endif // INCLUDED_FORMULA_SOURCE_UI_INC_MODULEHELPER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

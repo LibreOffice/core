@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_FUNCPAGE_HXX
-#define FORMULA_FUNCPAGE_HXX
+#ifndef INCLUDED_FORMULA_SOURCE_UI_DLG_FUNCPAGE_HXX
+#define INCLUDED_FORMULA_SOURCE_UI_DLG_FUNCPAGE_HXX
 
 #include <svtools/stdctrl.hxx>
 #include <vcl/lstbox.hxx>

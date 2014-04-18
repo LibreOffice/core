@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef FORMULA_CONTROL_HELPER_HXX_INCLUDED
-#define FORMULA_CONTROL_HELPER_HXX_INCLUDED
+#ifndef INCLUDED_FORMULA_SOURCE_UI_DLG_CONTROLHELPER_HXX
+#define INCLUDED_FORMULA_SOURCE_UI_DLG_CONTROLHELPER_HXX
 
 #include "formula/funcutl.hxx"
 #include <svtools/svmedit.hxx>
