@@ -2323,7 +2323,20 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     }
     break;
     case NS_ooxml::LN_tblStart:
+
+        /*
+         * Hack for Importing Section Properties
+         * LO is not able to import section properties if first element in the
+         * section is a table. So in case first element is a table add a dummy para
+         * and remove it again when lcl_endSectionGroup is called
+         */
+        if(m_pImpl->m_nTableDepth == 0 && m_pImpl->GetIsFirstParagraphInSection()
+                && !m_pImpl->GetIsDummyParaAddedForTableInSection() && !m_pImpl->GetIsTextFrameInserted())
+        {
+            m_pImpl->AddDummyParaForTableInSection();
+        }
         m_pImpl->m_nTableDepth++;
+
     break;
     case NS_ooxml::LN_tblEnd:
         m_pImpl->m_nTableDepth--;
@@ -2450,6 +2463,7 @@ void DomainMapper::lcl_startSectionGroup()
     {
         m_pImpl->PushProperties(CONTEXT_SECTION);
     }
+    m_pImpl->SetIsFirstParagraphInSection(true);
 }
 
 void DomainMapper::lcl_endSectionGroup()
@@ -2462,7 +2476,13 @@ void DomainMapper::lcl_endSectionGroup()
         SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
+        {
             pSectionContext->CloseSectionGroup( *m_pImpl );
+            // Remove the dummy paragraph if added for
+            // handling the section properties if section starts with a table
+            if (m_pImpl->GetIsDummyParaAddedForTableInSection())
+                m_pImpl->RemoveDummyParaForTableInSection();
+        }
         m_pImpl->PopProperties(CONTEXT_SECTION);
     }
 }
@@ -2753,7 +2773,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             bool bRemove = !m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr() && !bSingleParagraph;
             m_pImpl->SetParaSectpr(false);
             m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH));
-            if (bRemove)
+            if (bRemove && !m_pImpl->GetIsDummyParaAddedForTableInSection())
                 m_pImpl->RemoveLastParagraph();
         }
         else
