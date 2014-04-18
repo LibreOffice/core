@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _X509CERTIFICATE_NSSIMPL_HXX_
-#define _X509CERTIFICATE_NSSIMPL_HXX_
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_X509CERTIFICATE_NSSIMPL_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_X509CERTIFICATE_NSSIMPL_HXX
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -90,6 +90,6 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<
         void setRawCert( ::com::sun::star::uno::Sequence< sal_Int8 > rawCert ) throw ( ::com::sun::star::uno::RuntimeException) ;
 } ;
 
-#endif  // _X509CERTIFICATE_NSSIMPL_HXX_
+#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_X509CERTIFICATE_NSSIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

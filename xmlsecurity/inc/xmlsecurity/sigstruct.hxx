@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SIGSTRUCT_HXX
-#define _SIGSTRUCT_HXX
+#ifndef INCLUDED_XMLSECURITY_INC_XMLSECURITY_SIGSTRUCT_HXX
+#define INCLUDED_XMLSECURITY_INC_XMLSECURITY_SIGSTRUCT_HXX
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/util/DateTime.hpp>

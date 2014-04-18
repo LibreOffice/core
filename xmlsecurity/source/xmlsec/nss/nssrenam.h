@@ -32,8 +32,8 @@
  * GPL.
  */
 
-#ifndef __nssrenam_h_
-#define __nssrenam_h_
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_NSSRENAM_H
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_NSSRENAM_H
 
 #define CERT_NewTempCertificate __CERT_NewTempCertificate
 #define PK11_CreateContextByRawKey __PK11_CreateContextByRawKey
@@ -47,6 +47,6 @@
 #define PBE_DestroyContext __PBE_DestroyContext
 #define PBE_GenerateBits __PBE_GenerateBits
 
-#endif /* __nssrenam_h_ */
+#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_NSSRENAM_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

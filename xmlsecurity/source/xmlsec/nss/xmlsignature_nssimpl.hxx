@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLSIGNATURE_NSSIMPL_HXX_
-#define _XMLSIGNATURE_NSSIMPL_HXX_
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_XMLSIGNATURE_NSSIMPL_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_XMLSIGNATURE_NSSIMPL_HXX
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -79,6 +79,6 @@ class XMLSignature_NssImpl : public ::cppu::WeakImplHelper2<
         static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
 } ;
 
-#endif  // _XMLSIGNATURE_NSSIMPL_HXX_
+#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_XMLSIGNATURE_NSSIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLSECURITY_DOCUMENTSIGNATUREHELPER_HXX
-#define _XMLSECURITY_DOCUMENTSIGNATUREHELPER_HXX
+#ifndef INCLUDED_XMLSECURITY_INC_XMLSECURITY_DOCUMENTSIGNATUREHELPER_HXX
+#define INCLUDED_XMLSECURITY_INC_XMLSECURITY_DOCUMENTSIGNATUREHELPER_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
@@ -87,6 +87,6 @@ public:
 
 };
 
-#endif // _XMLSECURITY_XMLSIGNATUREHELPER_HXX
+#endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_DOCUMENTSIGNATUREHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

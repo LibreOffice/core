@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _NSSINITIALIZER_HXX
-#define _NSSINITIALIZER_HXX
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_NSSINITIALIZER_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_NSSINITIALIZER_HXX
 
 #include <com/sun/star/xml/crypto/XNSSInitializer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

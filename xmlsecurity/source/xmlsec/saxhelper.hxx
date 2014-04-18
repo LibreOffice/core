@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAXHELPER_HXX
-#define _SAXHELPER_HXX
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_SAXHELPER_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_SAXHELPER_HXX
 
 #include "libxml/tree.h"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLELEMENTWRAPPER_XMLSECIMPL_HXX
-#define _XMLELEMENTWRAPPER_XMLSECIMPL_HXX
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLELEMENTWRAPPER_XMLSECIMPL_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLELEMENTWRAPPER_XMLSECIMPL_HXX
 
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>

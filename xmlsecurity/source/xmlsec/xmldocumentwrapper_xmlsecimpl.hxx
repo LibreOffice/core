@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX
-#define _XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX
 
 #include <com/sun/star/xml/wrapper/XXMLDocumentWrapper.hpp>
 #include <com/sun/star/xml/csax/XCompressedDocumentHandler.hpp>

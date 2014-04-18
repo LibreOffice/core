@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLSECURITY_WARNINGS_HXX
-#define _XMLSECURITY_WARNINGS_HXX
+#ifndef INCLUDED_XMLSECURITY_INC_XMLSECURITY_WARNINGS_HXX
+#define INCLUDED_XMLSECURITY_INC_XMLSECURITY_WARNINGS_HXX
 
 #include <vcl/dialog.hxx>
 #include <svtools/stdctrl.hxx>

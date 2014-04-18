@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLSECURITY_DIAGNOSE_HXX
-#define XMLSECURITY_DIAGNOSE_HXX
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_DIAGNOSE_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_DIAGNOSE_HXX
 
 
 namespace xmlsecurity
@@ -29,6 +29,6 @@ namespace xmlsecurity
 
 
 
-#endif //XMLSECURITY_DIAGNOSE_HXX
+#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_DIAGNOSE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

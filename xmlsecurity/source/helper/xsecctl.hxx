@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XSEC_CTL_HXX
-#define _XSEC_CTL_HXX
+#ifndef INCLUDED_XMLSECURITY_SOURCE_HELPER_XSECCTL_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_HELPER_XSECCTL_HXX
 
 #include <xmlsecurity/sigstruct.hxx>
 

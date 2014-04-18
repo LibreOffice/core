@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLSECURITY_CERTIFICATECHOOSER_HXX
-#define _XMLSECURITY_CERTIFICATECHOOSER_HXX
+#ifndef INCLUDED_XMLSECURITY_INC_XMLSECURITY_CERTIFICATECHOOSER_HXX
+#define INCLUDED_XMLSECURITY_INC_XMLSECURITY_CERTIFICATECHOOSER_HXX
 
 #include <svtools/simptabl.hxx>
 #include <vcl/dialog.hxx>
@@ -72,6 +72,6 @@ public:
 
 };
 
-#endif // _XMLSECURITY_CERTIFICATECHOOSER_HXX
+#endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_CERTIFICATECHOOSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SIGNATUREVERIFIERIMPL_HXX
-#define _SIGNATUREVERIFIERIMPL_HXX
+#ifndef INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_SIGNATUREVERIFIERIMPL_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_SIGNATUREVERIFIERIMPL_HXX
 
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultBroadcaster.hpp>

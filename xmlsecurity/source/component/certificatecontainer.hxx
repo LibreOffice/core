@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XCERTIFICATECONTAINER_HXX_
-#define _XCERTIFICATECONTAINER_HXX_
+#ifndef INCLUDED_XMLSECURITY_SOURCE_COMPONENT_CERTIFICATECONTAINER_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_COMPONENT_CERTIFICATECONTAINER_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

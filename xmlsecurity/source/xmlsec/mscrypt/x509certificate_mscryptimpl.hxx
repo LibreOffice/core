@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _X509CERTIFICATE_MSCRYPTIMPL_HXX_
-#define _X509CERTIFICATE_MSCRYPTIMPL_HXX_
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_X509CERTIFICATE_MSCRYPTIMPL_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_X509CERTIFICATE_MSCRYPTIMPL_HXX
 
 #ifdef _MSC_VER
 #pragma warning(push,1)
@@ -86,6 +86,6 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper2<
         void setRawCert( ::com::sun::star::uno::Sequence< sal_Int8 > rawCert ) throw ( ::com::sun::star::uno::RuntimeException) ;
 } ;
 
-#endif  // _X509CERTIFICATE_MSCRYPTIMPL_HXX_
+#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_X509CERTIFICATE_MSCRYPTIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

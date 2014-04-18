@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SANEXTENSION_MSCRYPTIMPL_HXX_
-#define _SANEXTENSION_MSCRYPTIMPL_HXX_
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_SANEXTENSION_MSCRYPTIMPL_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_SANEXTENSION_MSCRYPTIMPL_HXX
 
 #ifdef _MSC_VER
 #pragma warning(push,1)
@@ -67,6 +67,6 @@ class SanExtensionImpl : public ::cppu::WeakImplHelper1<
         void setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, sal_Bool critical ) ;
 } ;
 
-#endif  // _CERTIFICATEEXTENSION_XMLSECIMPL_HXX_
+#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_SANEXTENSION_MSCRYPTIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

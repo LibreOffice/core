@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLSIGNATURECONTEXT_NSSIMPL_HXX_
-#define _XMLSIGNATURECONTEXT_NSSIMPL_HXX_
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_XMLSECURITYCONTEXT_NSSIMPL_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_XMLSECURITYCONTEXT_NSSIMPL_HXX
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -111,6 +111,6 @@ class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper2<
         */
 } ;
 
-#endif  // _XMLSIGNATURECONTEXT_NSSIMPL_HXX_
+#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_XMLSECURITYCONTEXT_NSSIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

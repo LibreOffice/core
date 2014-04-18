@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLSECURITY_DOCUMENTDIGITALSIGNATURES_HXX
-#define _XMLSECURITY_DOCUMENTDIGITALSIGNATURES_HXX
+#ifndef INCLUDED_XMLSECURITY_SOURCE_COMPONENT_DOCUMENTDIGITALSIGNATURES_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_COMPONENT_DOCUMENTDIGITALSIGNATURES_HXX
 
 #include <cppuhelper/implbase2.hxx>
 
@@ -91,6 +91,6 @@ public:
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL DocumentDigitalSignatures_CreateInstance(
     const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rCtx) throw ( com::sun::star::uno::Exception );
 
-#endif // _XMLSECURITY_DOCUMENTDIGITALSIGNATURES_HXX
+#endif // INCLUDED_XMLSECURITY_SOURCE_COMPONENT_DOCUMENTDIGITALSIGNATURES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

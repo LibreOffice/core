@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SECURITYENGINE_HXX
-#define _SECURITYENGINE_HXX
+#ifndef INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_SECURITYENGINE_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_SECURITYENGINE_HXX
 
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XSECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
-#define _XSECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_SECURITYENVIRONMENT_MSCRYPTIMPL_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_SECURITYENVIRONMENT_MSCRYPTIMPL_HXX
 
 #ifdef _MSC_VER
 #pragma warning(push,1)
@@ -190,6 +190,6 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper3<
         virtual void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 } ;
 
-#endif  // _XSECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
+#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_SECURITYENVIRONMENT_MSCRYPTIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

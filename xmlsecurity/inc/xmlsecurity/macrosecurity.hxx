@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLSECURITY_MACROSECURITY_HXX
-#define _XMLSECURITY_MACROSECURITY_HXX
+#ifndef INCLUDED_XMLSECURITY_INC_XMLSECURITY_MACROSECURITY_HXX
+#define INCLUDED_XMLSECURITY_INC_XMLSECURITY_MACROSECURITY_HXX
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
@@ -146,6 +146,6 @@ public:
 };
 
 
-#endif // _XMLSECURITY_MACROSECURITY_HXX
+#endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_MACROSECURITY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

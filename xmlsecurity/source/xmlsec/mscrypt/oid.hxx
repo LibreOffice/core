@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OID_HXX_
-#define _OID_HXX_
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_OID_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_OID_HXX
 
 typedef struct OIDItemStr OIDItem;
 

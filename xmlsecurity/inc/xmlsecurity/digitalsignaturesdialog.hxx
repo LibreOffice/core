@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLSECURITY_DIGITALSIGNATURESDIALOG_HXX
-#define _XMLSECURITY_DIGITALSIGNATURESDIALOG_HXX
+#ifndef INCLUDED_XMLSECURITY_INC_XMLSECURITY_DIGITALSIGNATURESDIALOG_HXX
+#define INCLUDED_XMLSECURITY_INC_XMLSECURITY_DIGITALSIGNATURESDIALOG_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
@@ -133,6 +133,6 @@ public:
     sal_Bool    SignaturesChanged() const { return mbSignaturesChanged; }
 };
 
-#endif // _XMLSECURITY_DIGITALSIGNATURESDIALOG_HXX
+#endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_DIGITALSIGNATURESDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

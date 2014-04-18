@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLSECURITY_BIGINTEGER_HXX
-#define _XMLSECURITY_BIGINTEGER_HXX
+#ifndef INCLUDED_XMLSECURITY_INC_XMLSECURITY_BIGINTEGER_HXX
+#define INCLUDED_XMLSECURITY_INC_XMLSECURITY_BIGINTEGER_HXX
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>

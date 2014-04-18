@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DECRYPTORIMPL_HXX
-#define _DECRYPTORIMPL_HXX
+#ifndef INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_DECRYPTORIMPL_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_DECRYPTORIMPL_HXX
 
 #include <com/sun/star/xml/crypto/sax/XDecryptionResultBroadcaster.hpp>
 #include <com/sun/star/xml/crypto/sax/XDecryptionResultListener.hpp>

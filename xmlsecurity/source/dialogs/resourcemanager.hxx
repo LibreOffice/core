@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RESOURCEMANAGER_HXX
-#define _RESOURCEMANAGER_HXX
+#ifndef INCLUDED_XMLSECURITY_SOURCE_DIALOGS_RESOURCEMANAGER_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_DIALOGS_RESOURCEMANAGER_HXX
 
 #include <tools/resmgr.hxx>
 #include <tools/datetime.hxx>
