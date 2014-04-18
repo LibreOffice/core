@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_STANDARD_ACCESSIBLEMENUBASECOMPONENT_HXX
-#define ACCESSIBILITY_STANDARD_ACCESSIBLEMENUBASECOMPONENT_HXX
+#ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_ACCESSIBLEMENUBASECOMPONENT_HXX
+#define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_ACCESSIBLEMENUBASECOMPONENT_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -145,6 +145,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-#endif // ACCESSIBILITY_STANDARD_ACCESSIBLEMENUBASECOMPONENT_HXX
+#endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_ACCESSIBLEMENUBASECOMPONENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

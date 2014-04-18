@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACC_ACCESSIBLETOOLPANELDECK_HXX
-#define ACC_ACCESSIBLETOOLPANELDECK_HXX
+#ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLETOOLPANELDECK_HXX
+#define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLETOOLPANELDECK_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
@@ -78,6 +78,6 @@ namespace accessibility
 } // namespace accessibility
 
 
-#endif // ACC_ACCESSIBLETOOLPANELDECK_HXX
+#endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLETOOLPANELDECK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

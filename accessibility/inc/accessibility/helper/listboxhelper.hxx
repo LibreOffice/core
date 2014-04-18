@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_HELPER_LISTBOXHELPER_HXX
-#define ACCESSIBILITY_HELPER_LISTBOXHELPER_HXX
+#ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_HELPER_LISTBOXHELPER_HXX
+#define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_HELPER_LISTBOXHELPER_HXX
 
 #include <accessibility/helper/IComboListBoxHelper.hxx>
 #include <vcl/lstbox.hxx>
@@ -189,6 +189,6 @@ public:
 
 };
 
-#endif  // ACCESSIBILITY_HELPER_LISTBOXHELPER_HXX
+#endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_HELPER_LISTBOXHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEPOPUPMENU_HXX
-#define ACCESSIBILITY_STANDARD_VCLXACCESSIBLEPOPUPMENU_HXX
+#ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLEPOPUPMENU_HXX
+#define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLEPOPUPMENU_HXX
 
 #include <accessibility/standard/accessiblemenucomponent.hxx>
 
@@ -48,6 +48,6 @@ public:
     virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-#endif // ACCESSIBILITY_STANDARD_VCLXACCESSIBLEPOPUPMENU_HXX
+#endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLEPOPUPMENU_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_ACCESSIBLE_BROWSE_BOX_CELL_HXX
-#define ACCESSIBILITY_ACCESSIBLE_BROWSE_BOX_CELL_HXX
+#ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXCELL_HXX
+#define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXCELL_HXX
 
 #include "accessibility/extended/AccessibleBrowseBoxBase.hxx"
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
@@ -75,6 +75,6 @@ namespace accessibility
 
 
 
-#endif // ACCESSIBILITY_ACCESSIBLE_BROWSE_BOX_CELL_HXX
+#endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXCELL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

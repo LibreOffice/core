@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEFIXEDHYPERLINK_HXX
-#define ACCESSIBILITY_STANDARD_VCLXACCESSIBLEFIXEDHYPERLINK_HXX
+#ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLEFIXEDHYPERLINK_HXX
+#define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLEFIXEDHYPERLINK_HXX
 
 #include <accessibility/standard/vclxaccessibletextcomponent.hxx>
 
@@ -42,6 +42,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-#endif // ACCESSIBILITY_STANDARD_VCLXACCESSIBLEFIXEDHYPERLINK_HXX
+#endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLEFIXEDHYPERLINK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

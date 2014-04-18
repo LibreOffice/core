@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_HELPER_CHARACTERATTRIBUTESHELPER_HXX
-#define ACCESSIBILITY_HELPER_CHARACTERATTRIBUTESHELPER_HXX
+#ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_HELPER_CHARACTERATTRIBUTESHELPER_HXX
+#define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_HELPER_CHARACTERATTRIBUTESHELPER_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -47,6 +47,6 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetCharacterAttributes( const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes );
 };
 
-#endif  // ACCESSIBILITY_HELPER_CHARACTERATTRIBUTESHELPER_HXX
+#endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_HELPER_CHARACTERATTRIBUTESHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

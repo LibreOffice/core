@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLETOOLBOX_HXX
-#define ACCESSIBILITY_STANDARD_VCLXACCESSIBLETOOLBOX_HXX
+#ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLETOOLBOX_HXX
+#define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLETOOLBOX_HXX
 
 #include <map>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
@@ -101,6 +101,6 @@ private:
         );
 };
 
-#endif // ACCESSIBILITY_STANDARD_VCLXACCESSIBLETOOLBOX_HXX
+#endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLETOOLBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

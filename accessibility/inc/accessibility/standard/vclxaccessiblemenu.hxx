@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEMENU_HXX
-#define ACCESSIBILITY_STANDARD_VCLXACCESSIBLEMENU_HXX
+#ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLEMENU_HXX
+#define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLEMENU_HXX
 
 #include <accessibility/standard/vclxaccessiblemenuitem.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
@@ -75,6 +75,6 @@ public:
     virtual ::rtl::OUString SAL_CALL getAccessibleActionDescription ( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-#endif // ACCESSIBILITY_STANDARD_VCLXACCESSIBLEMENU_HXX
+#endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLEMENU_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

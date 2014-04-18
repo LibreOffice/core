@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLEICONCHOICECTRL_HXX_
-#define ACCESSIBILITY_EXT_ACCESSIBLEICONCHOICECTRL_HXX_
+#ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEICONCHOICECTRL_HXX
+#define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEICONCHOICECTRL_HXX
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -107,6 +107,6 @@ namespace accessibility
 }// namespace accessibility
 
 
-#endif // ACCESSIBILITY_EXT_ACCESSIBLEICONCHOICECTRL_HXX_
+#endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEICONCHOICECTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

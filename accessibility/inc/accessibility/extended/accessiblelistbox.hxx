@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLELISTBOX_HXX_
-#define ACCESSIBILITY_EXT_ACCESSIBLELISTBOX_HXX_
+#ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLELISTBOX_HXX
+#define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLELISTBOX_HXX
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -129,6 +129,6 @@ private:
 }// namespace accessibility
 
 
-#endif // ACCESSIBILITY_EXT_ACCESSIBLELISTBOX_HXX_
+#endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLELISTBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

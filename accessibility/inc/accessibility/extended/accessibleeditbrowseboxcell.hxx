@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef ACCESSIBILITY_EXT_ACCESSIBILEEDITBROWSEBOXTABLECELL_HXX
-#define ACCESSIBILITY_EXT_ACCESSIBILEEDITBROWSEBOXTABLECELL_HXX
+#ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEEDITBROWSEBOXCELL_HXX
+#define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEEDITBROWSEBOXCELL_HXX
 
 #include "accessiblebrowseboxcell.hxx"
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
@@ -142,6 +142,6 @@ namespace accessibility
     };
 }
 
-#endif // ACCESSIBILITY_EXT_ACCESSIBILEEDITBROWSEBOXTABLECELL_HXX
+#endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEEDITBROWSEBOXCELL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

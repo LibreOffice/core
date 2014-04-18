@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef ACCESSIBILITY_EXT_ACCESSIBILEGRIDCONTROLTABLECELL_HXX
-#define ACCESSIBILITY_EXT_ACCESSIBILEGRIDCONTROLTABLECELL_HXX
+#ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROLTABLECELL_HXX
+#define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROLTABLECELL_HXX
 
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -153,6 +153,6 @@ namespace accessibility
         virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
-#endif // ACCESSIBILITY_EXT_ACCESSIBILEGRIDCONTROLTABLECELL_HXX
+#endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROLTABLECELL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

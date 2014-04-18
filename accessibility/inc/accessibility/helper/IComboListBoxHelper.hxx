@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef ACCESSIBILITY_HELPER_COMBOLISTBOXHELPER_HXX
-#define ACCESSIBILITY_HELPER_COMBOLISTBOXHELPER_HXX
+#ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_HELPER_ICOMBOLISTBOXHELPER_HXX
+#define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_HELPER_ICOMBOLISTBOXHELPER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -64,7 +64,7 @@ namespace accessibility
                                 GetClipboard() = 0;
     };
 }
-#endif // ACCESSIBILITY_HELPER_COMBOLISTBOXHELPER_HXX
+#endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_HELPER_ICOMBOLISTBOXHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
