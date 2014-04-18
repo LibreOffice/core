@@ -2193,7 +2193,8 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
     // OOXMLFastContextHandlerWrapper::lcl_createFastChildContext(), here we
     // handle the WPS import of shape text, as there the parent context is a
     // Shape one, so a different situation.
-    if (Element == static_cast<sal_Int32>(NS_wps | OOXML_txbx))
+    if (Element == static_cast<sal_Int32>(NS_wps | OOXML_txbx) ||
+        Element == static_cast<sal_Int32>(NS_wps | OOXML_linkedTxbx) )
         sendShape(Element);
 
     return xContextHandler;

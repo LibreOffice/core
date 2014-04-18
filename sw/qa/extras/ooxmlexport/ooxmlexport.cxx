@@ -3087,6 +3087,16 @@ DECLARE_OOXMLEXPORT_TEST(testAuthorPropertySdt, "author-property.docx")
     //            "xmlns:ns0='http://purl.org/dc/elements/1.1/' xmlns:ns1='http://schemas.openxmlformats.org/package/2006/metadata/core-properties'");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO77122, "LinkedTextBoxes.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    //ensure that the text box links are preserved.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]", "id", "1");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:linkedTxbx[1]", "id", "1");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFDO76586, "fdo76586.docx")
 {
     /*

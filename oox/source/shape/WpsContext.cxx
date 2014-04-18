@@ -109,8 +109,41 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
     }
     break;
     case XML_txbx:
+    {
         mpShape->getCustomShapeProperties()->setShapeTypeOverride(true);
         mpShape->setServiceName("com.sun.star.text.TextFrame");
+        //in case if the textbox is linked, save the attributes
+        //for further processing.
+        if (rAttribs.hasAttribute(XML_id))
+        {
+            OptValue<OUString> id = rAttribs.getString(XML_id);
+            if ( id.has())
+            {
+                oox::drawingml::LinkedTxbxAttr linkedTxtBoxAttr ;
+                linkedTxtBoxAttr.id = id.get().toInt32();
+                mpShape->setTxbxHasLinkedTxtBox(true);
+                mpShape->setLinkedTxbxAttributes(linkedTxtBoxAttr);
+            }
+        }
+    }
+        break;
+    case XML_linkedTxbx:
+    {
+        //in case if the textbox is linked, save the attributes
+        //for further processing.
+        mpShape->getCustomShapeProperties()->setShapeTypeOverride(true);
+        mpShape->setServiceName("com.sun.star.text.TextFrame");
+        OptValue<OUString> id  = rAttribs.getString(XML_id);
+        OptValue<OUString> seq = rAttribs.getString(XML_seq);
+        if ( id.has() && seq.has() )
+        {
+            oox::drawingml::LinkedTxbxAttr linkedTxtBoxAttr ;
+            linkedTxtBoxAttr.id  = id.get().toInt32();
+            linkedTxtBoxAttr.seq = seq.get().toInt32();
+            mpShape->setTxbxHasLinkedTxtBox(true);
+            mpShape->setLinkedTxbxAttributes(linkedTxtBoxAttr);
+        }
+    }
         break;
     default:
         SAL_WARN("oox", "WpsContext::createFastChildContext: unhandled element: " << getBaseToken(nElementToken));
