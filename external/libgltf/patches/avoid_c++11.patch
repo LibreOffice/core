@@ -1,0 +1,12 @@
+diff -ur libgltf.org/src/Shaders.cpp libgltf/src/Shaders.cpp
+--- libgltf.org/src/Shaders.cpp	2014-04-18 13:47:18.006783834 +0200
++++ libgltf/src/Shaders.cpp	2014-04-18 13:49:20.175779328 +0200
+@@ -219,7 +219,7 @@
+ 
+ bool ShaderProgram::readShaderFile(const std::string& fileName, std::string& value)
+ {
+-	std::ifstream shaderStream(fileName, std::ios::in);
++	std::ifstream shaderStream(fileName.c_str(), std::ios::in);
+ 	if (!shaderStream.is_open())
+ 	{
+ 		return false;
