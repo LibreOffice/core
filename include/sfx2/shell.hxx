@@ -352,9 +352,6 @@ inline void SfxShell::SetPool
 #define SFX_VISIBILITY_SERVER           0x8000
 #define SFX_VISIBILITY_NOCONTEXT        0xFFFF  // Always visable
 
-#define SFX_FEATURED_OBJECTBAR_REGISTRATION(nPos,rResId,nFeature) \
-        GetStaticInterface()->RegisterObjectBar( nPos, rResId, nFeature )
-
 #define SFX_CHILDWINDOW_REGISTRATION(nId) \
         GetStaticInterface()->RegisterChildWindow( nId, false )
 
