@@ -88,7 +88,7 @@ SFX_IMPL_INTERFACE( ScPreviewShell, SfxViewShell, ScResId(SCSTR_PREVIEWSHELL) )
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER|SFX_VISIBILITY_READONLYDOC,
                                             ScResId(RID_OBJECTBAR_PREVIEW));
 
-    SFX_POPUPMENU_REGISTRATION(ScResId(RID_POPUP_PREVIEW));
+    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_PREVIEW));
 }
 
 SFX_IMPL_NAMED_VIEWFACTORY( ScPreviewShell, "PrintPreview" )

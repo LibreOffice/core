@@ -59,7 +59,7 @@ using namespace ::com::sun::star;
 
 SFX_IMPL_INTERFACE(SwDrawFormShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAWFORM))
 {
-    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_DRAWFORM_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_DRAWFORM_POPUPMENU));
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TEXT_TOOLBOX));
 }

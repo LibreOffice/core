@@ -38,7 +38,8 @@
 
 SFX_IMPL_INTERFACE(SwWebDrawFormShell, SwDrawFormShell, SW_RES(0))
 {
-    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_DRAWFORM_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_DRAWFORM_POPUPMENU));
+
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TEXT_TOOLBOX));
 }
 

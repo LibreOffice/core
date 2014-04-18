@@ -140,7 +140,7 @@ SFX_IMPL_INTERFACE(SwAnnotationShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TEXT_TOOLBOX));
 
-    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_ANNOTATION_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_ANNOTATION_POPUPMENU));
 }
 
 TYPEINIT1(SwAnnotationShell,SfxShell)

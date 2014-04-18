@@ -37,7 +37,8 @@
 
 SFX_IMPL_INTERFACE(SwWebFrameShell, SwFrameShell, SW_RES(STR_SHELLNAME_WEBFRAME))
 {
-    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_FRM_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_FRM_POPUPMENU));
+
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_WEBFRAME_TOOLBOX));
 }
 

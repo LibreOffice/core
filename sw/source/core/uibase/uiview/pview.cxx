@@ -90,11 +90,10 @@ SFX_IMPL_NAMED_VIEWFACTORY(SwPagePreview, "PrintPreview")
 
 SFX_IMPL_INTERFACE(SwPagePreview, SfxViewShell, SW_RES(RID_PVIEW_TOOLBOX))
 {
-    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_PPREVIEW_POPUPMENU));
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|
-                                SFX_VISIBILITY_CLIENT|SFX_VISIBILITY_FULLSCREEN|
-                                SFX_VISIBILITY_READONLYDOC,
-                                SW_RES(RID_PVIEW_TOOLBOX));
+    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_PPREVIEW_POPUPMENU));
+
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_CLIENT|SFX_VISIBILITY_FULLSCREEN|SFX_VISIBILITY_READONLYDOC,
+                                            SW_RES(RID_PVIEW_TOOLBOX));
 }
 
 TYPEINIT1(SwPagePreview,SfxViewShell)
@@ -111,18 +110,22 @@ static sal_uInt16 lcl_GetNextZoomStep(sal_uInt16 nCurrentZoom, sal_Bool bZoomIn)
         25, 50, 75, 100, 150, 200, 400, 600
     };
     const sal_uInt16 nZoomArrSize = sizeof(aZoomArr)/sizeof(sal_uInt16);
-    if(bZoomIn)
+    if (bZoomIn)
+    {
         for(int i = nZoomArrSize - 1; i >= 0; --i)
         {
             if(nCurrentZoom > aZoomArr[i] || !i)
                 return aZoomArr[i];
         }
+    }
     else
+    {
         for(int i = 0; i < nZoomArrSize; ++i)
         {
             if(nCurrentZoom < aZoomArr[i])
                 return aZoomArr[i];
         }
+    }
     return bZoomIn ? MAX_PREVIEW_ZOOM : MIN_PREVIEW_ZOOM;
 };
 

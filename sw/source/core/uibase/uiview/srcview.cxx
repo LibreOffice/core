@@ -114,10 +114,11 @@ SFX_IMPL_NAMED_VIEWFACTORY(SwSrcView, "SourceView")
 
 SFX_IMPL_INTERFACE( SwSrcView, SfxViewShell, SW_RES(0) )
 {
-    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_SRCVIEW_POPUPMENU));
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS|
-                                SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
-                                SW_RES(RID_WEBTOOLS_TOOLBOX) );
+    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_SRCVIEW_POPUPMENU));
+
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
+                                            SW_RES(RID_WEBTOOLS_TOOLBOX) );
+
     SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
 }
 

@@ -46,7 +46,7 @@ SFX_IMPL_INTERFACE(ScDrawFormShell, ScDrawShell, ScResId(SCSTR_DRAWFORMSHELL) )
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                             ScResId(RID_OBJECTBAR_FORMAT));
 
-    SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_DRAWFORM) );
+    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_DRAWFORM));
 }
 
 TYPEINIT1( ScDrawFormShell, ScDrawShell );

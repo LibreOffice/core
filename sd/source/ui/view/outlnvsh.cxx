@@ -111,7 +111,7 @@ namespace sd {
  */
 SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell, SdResId(STR_OUTLINEVIEWSHELL))
 {
-    SFX_POPUPMENU_REGISTRATION( SdResId(RID_OUTLINE_POPUP) );
+    GetStaticInterface()->RegisterPopupMenu(SdResId(RID_OUTLINE_POPUP));
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
                                             SdResId(RID_OUTLINE_TOOLBOX));

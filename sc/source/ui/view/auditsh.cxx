@@ -38,7 +38,7 @@ TYPEINIT1( ScAuditingShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScAuditingShell, SfxShell, ScResId(SCSTR_AUDITSHELL))
 {
-    SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_AUDIT) );
+    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_AUDIT));
 }
 
 

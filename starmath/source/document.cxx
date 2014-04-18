@@ -111,8 +111,8 @@ TYPEINIT1( SmDocShell, SfxObjectShell );
 
 SFX_IMPL_INTERFACE(SmDocShell, SfxObjectShell, SmResId(0))
 {
-    SFX_POPUPMENU_REGISTRATION(SmResId(RID_VIEWMENU));
-    SFX_POPUPMENU_REGISTRATION(SmResId(RID_COMMANDMENU));
+    GetStaticInterface()->RegisterPopupMenu(SmResId(RID_VIEWMENU));
+    GetStaticInterface()->RegisterPopupMenu(SmResId(RID_COMMANDMENU));
 }
 
 SFX_IMPL_OBJECTFACTORY(SmDocShell, SvGlobalName(SO3_SM_CLASSID), SFXOBJECTSHELL_STD_NORMAL, "smath" )

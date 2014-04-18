@@ -81,7 +81,7 @@ using namespace ::com::sun::star::i18n;
 
 SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
 {
-    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_DRWTXT_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_DRWTXT_POPUPMENU));
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_DRAW_TEXT_TOOLBOX));
 

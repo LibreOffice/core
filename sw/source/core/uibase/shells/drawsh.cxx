@@ -76,7 +76,7 @@ using namespace ::com::sun::star::uno;
 
 SFX_IMPL_INTERFACE(SwDrawShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAW))
 {
-    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_DRAW_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_DRAW_POPUPMENU));
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_DRAW_TOOLBOX));
 

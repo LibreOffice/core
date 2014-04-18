@@ -40,7 +40,8 @@
 
 SFX_IMPL_INTERFACE(SwWebTableShell, SwTableShell, SW_RES(STR_SHELLNAME_TABLE))
 {
-    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_TAB_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_TAB_POPUPMENU));
+
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TABLE_TOOLBOX));
 }
 

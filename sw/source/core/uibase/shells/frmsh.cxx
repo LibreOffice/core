@@ -106,7 +106,7 @@ static const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const OUString& rNam
 
 SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell, SW_RES(STR_SHELLNAME_FRAME))
 {
-    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_FRM_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_FRM_POPUPMENU));
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_FRAME_TOOLBOX));
 }

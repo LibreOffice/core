@@ -364,9 +364,6 @@ inline void SfxShell::SetPool
 #define SFX_CHILDWINDOW_CONTEXT_REGISTRATION(nId) \
         GetStaticInterface()->RegisterChildWindow( nId, true )
 
-#define SFX_POPUPMENU_REGISTRATION(rResId) \
-        GetStaticInterface()->RegisterPopupMenu( rResId )
-
 #define SFX_STATUSBAR_REGISTRATION(rResId) \
         GetStaticInterface()->RegisterStatusBar( rResId )
 

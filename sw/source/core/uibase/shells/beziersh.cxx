@@ -45,7 +45,7 @@
 
 SFX_IMPL_INTERFACE(SwBezierShell, SwBaseShell, SW_RES(STR_SHELLNAME_BEZIER))
 {
-    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_DRAW_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_DRAW_POPUPMENU));
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_BEZIER_TOOLBOX));
 }

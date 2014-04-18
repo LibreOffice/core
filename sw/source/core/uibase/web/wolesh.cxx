@@ -37,7 +37,8 @@
 
 SFX_IMPL_INTERFACE(SwWebOleShell, SwOleShell, SW_RES(STR_SHELLNAME_OBJECT))
 {
-    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_OLE_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_OLE_POPUPMENU));
+
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_WEBOLE_TOOLBOX));
 }
 

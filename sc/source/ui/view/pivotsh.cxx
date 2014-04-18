@@ -46,7 +46,7 @@ TYPEINIT1( ScPivotShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScPivotShell, SfxShell, ScResId(SCSTR_PIVOTSHELL))
 {
-    SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_PIVOT) );
+    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_PIVOT));
 }
 
 ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :

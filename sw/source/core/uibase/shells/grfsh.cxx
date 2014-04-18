@@ -97,7 +97,7 @@ namespace
 
 SFX_IMPL_INTERFACE(SwGrfShell, SwBaseShell, SW_RES(STR_SHELLNAME_GRAPHIC))
 {
-    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_GRF_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_GRF_POPUPMENU));
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_GRAFIK_TOOLBOX));
 }

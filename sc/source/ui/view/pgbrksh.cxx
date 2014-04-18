@@ -38,7 +38,7 @@ TYPEINIT1( ScPageBreakShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScPageBreakShell, SfxShell, ScResId(SCSTR_PAGEBREAKSHELL))
 {
-    SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_PAGEBREAK) );
+    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_PAGEBREAK));
 }
 
 ScPageBreakShell::ScPageBreakShell( ScTabViewShell* pViewSh ) :

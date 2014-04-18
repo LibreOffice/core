@@ -85,7 +85,7 @@ SFX_IMPL_INTERFACE( ScDrawTextObjectBar, SfxShell, ScResId(SCSTR_DRAWTEXTSHELL) 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                             ScResId(RID_TEXT_TOOLBOX));
 
-    SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_DRAWTEXT) );
+    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_DRAWTEXT));
 
     SFX_CHILDWINDOW_REGISTRATION( ScGetFontWorkId() );
 }

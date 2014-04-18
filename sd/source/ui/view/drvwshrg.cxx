@@ -65,7 +65,8 @@ namespace sd {
 
 SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
 {
-    SFX_POPUPMENU_REGISTRATION( SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP) );
+    GetStaticInterface()->RegisterPopupMenu(SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP));
+
     SFX_CHILDWINDOW_CONTEXT_REGISTRATION( SID_NAVIGATOR );
     SFX_CHILDWINDOW_REGISTRATION( SfxTemplateDialogWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SfxInfoBarContainerChild::GetChildWindowId() );
@@ -92,7 +93,8 @@ TYPEINIT1( DrawViewShell, ViewShell );
 
 SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL)) //SOH...
 {
-    SFX_POPUPMENU_REGISTRATION( SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP) );
+    GetStaticInterface()->RegisterPopupMenu(SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP));
+
     SFX_CHILDWINDOW_CONTEXT_REGISTRATION( SID_NAVIGATOR );
     SFX_CHILDWINDOW_REGISTRATION( SfxTemplateDialogWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxFontWorkChildWindow::GetChildWindowId() );

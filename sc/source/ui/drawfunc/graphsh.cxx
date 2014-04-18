@@ -69,7 +69,7 @@ SFX_IMPL_INTERFACE(ScGraphicShell, ScDrawShell, ScResId(SCSTR_GRAPHICSHELL) )
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                             ScResId(RID_GRAPHIC_OBJECTBAR));
 
-    SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_GRAPHIC) );
+    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_GRAPHIC));
 }
 
 TYPEINIT1( ScGraphicShell, ScDrawShell );

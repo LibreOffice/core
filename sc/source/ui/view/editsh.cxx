@@ -83,7 +83,7 @@ TYPEINIT1( ScEditShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScEditShell, SfxShell, ScResId(SCSTR_EDITSHELL))
 {
-    SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_EDIT) );
+    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_EDIT));
 }
 
 
