@@ -36,6 +36,10 @@ namespace abp
     {
     }
 
+    AddressBookSourcePage::AddressBookSourcePage(OAddessBookSourcePilot* _pParent, const OString& rID, const OUString& rUIXMLDescription)
+        :AddressBookSourcePage_Base(_pParent, rID, rUIXMLDescription)
+    {
+    }
 
     void AddressBookSourcePage::DeactivatePage()
     {
