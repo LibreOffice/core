@@ -900,26 +900,7 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&
 
     long bmpWidth = rBitmapEx.GetSizePixel().Width();
     long bmpHeight = rBitmapEx.GetSizePixel().Height();
-
-    Bitmap aBitmap (rBitmapEx.GetBitmap());
-    AlphaMask aAlpha (rBitmapEx.GetAlpha());
-    boost::scoped_array<sal_uInt8> bitmapBuf(new sal_uInt8[4* bmpWidth * bmpHeight ]);
-    Bitmap::ScopedReadAccess pReadAccces( aBitmap );
-    AlphaMask::ScopedReadAccess pAlphaReadAccess( aAlpha );
-
-    size_t i = 0;
-    for (long ny = 0; ny < bmpHeight; ny++)
-    {
-        Scanline pAScan = pAlphaReadAccess->GetScanline(ny);
-        for(long nx = 0; nx < bmpWidth; nx++)
-        {
-            BitmapColor aCol = pReadAccces->GetColor( ny, nx );
-            bitmapBuf[i++] = aCol.GetRed();
-            bitmapBuf[i++] = aCol.GetGreen();
-            bitmapBuf[i++] = aCol.GetBlue();
-            bitmapBuf[i++] = 255 - *pAScan++;
-        }
-    }
+    boost::scoped_array<sal_uInt8> bitmapBuf(OpenGLHelper::ConvertBitmapExToRGBABuffer(rBitmapEx));
 
     TextInfo aTextInfo;
     aTextInfo.rotation = -(double)rotation / 360.0 * 2* GL_PI;

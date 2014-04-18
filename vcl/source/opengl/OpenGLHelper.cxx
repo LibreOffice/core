@@ -12,6 +12,8 @@
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <config_folders.h>
+#include <vcl/salbtype.hxx>
+#include <vcl/bmpacc.hxx>
 
 #include <vector>
 
@@ -138,6 +140,32 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
     glDeleteShader(FragmentShaderID);
 
     return ProgramID;
+}
+
+sal_uInt8* OpenGLHelper::ConvertBitmapExToRGBABuffer(const BitmapEx& rBitmapEx)
+{
+    long nBmpWidth = rBitmapEx.GetSizePixel().Width();
+    long nBmpHeight = rBitmapEx.GetSizePixel().Height();
+
+    Bitmap aBitmap (rBitmapEx.GetBitmap());
+    AlphaMask aAlpha (rBitmapEx.GetAlpha());
+    sal_uInt8* pBitmapBuf(new sal_uInt8[4* nBmpWidth * nBmpHeight ]);
+    Bitmap::ScopedReadAccess pReadAccces( aBitmap );
+    AlphaMask::ScopedReadAccess pAlphaReadAccess( aAlpha );
+    size_t i = 0;
+    for (long ny = 0; ny < nBmpHeight; ny++)
+    {
+        Scanline pAScan = pAlphaReadAccess ? pAlphaReadAccess->GetScanline(ny) : 0;
+        for(long nx = 0; nx < nBmpWidth; nx++)
+        {
+            BitmapColor aCol = pReadAccces->GetColor( ny, nx );
+            pBitmapBuf[i++] = aCol.GetRed();
+            pBitmapBuf[i++] = aCol.GetGreen();
+            pBitmapBuf[i++] = aCol.GetBlue();
+            pBitmapBuf[i++] = pAScan ? 255 - *pAScan++ : 255;
+        }
+    }
+    return pBitmapBuf;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

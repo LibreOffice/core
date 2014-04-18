@@ -12,6 +12,7 @@
 
 #include <GL/glew.h>
 #include <vcl/vclopengl_dllapi.hxx>
+#include <vcl/bitmapex.hxx>
 
 #include <rtl/ustring.hxx>
 
@@ -20,6 +21,7 @@ class VCLOPENGL_DLLPUBLIC OpenGLHelper
 public:
     static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
 
+    static sal_uInt8* ConvertBitmapExToRGBABuffer(const BitmapEx& rBitmapEx);
 };
 
 #endif
