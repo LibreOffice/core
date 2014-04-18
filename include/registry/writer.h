@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_registry_writer_h
-#define INCLUDED_registry_writer_h
+#ifndef INCLUDED_REGISTRY_WRITER_H
+#define INCLUDED_REGISTRY_WRITER_H
 
 #include <registry/regdllapi.h>
 #include <registry/types.h>

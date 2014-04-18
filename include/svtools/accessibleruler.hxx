@@ -15,8 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVTRULERACCESSIBLE_HXX
-#define _SVTRULERACCESSIBLE_HXX
+#ifndef INCLUDED_SVTOOLS_ACCESSIBLERULER_HXX
+#define INCLUDED_SVTOOLS_ACCESSIBLERULER_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>

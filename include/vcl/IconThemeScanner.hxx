@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef VCL_ICONTHEMESCANNER_HXX_
-#define VCL_ICONTHEMESCANNER_HXX_
+#ifndef INCLUDED_VCL_ICONTHEMESCANNER_HXX
+#define INCLUDED_VCL_ICONTHEMESCANNER_HXX
 
 #include <vcl/dllapi.h>
 #include <tools/solar.h>
@@ -98,6 +98,6 @@ private:
 
 } // end namespace vcl
 
-#endif /* VCL_ICONTHEMESCANNER_HXX_ */
+#endif // INCLUDED_VCL_ICONTHEMESCANNER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

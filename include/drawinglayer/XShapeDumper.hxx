@@ -38,8 +38,8 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#ifndef XShapeDumper_hxx
-#define XShapeDumper_hxx
+#ifndef INCLUDED_DRAWINGLAYER_XSHAPEDUMPER_HXX
+#define INCLUDED_DRAWINGLAYER_XSHAPEDUMPER_HXX
 
 class DRAWINGLAYER_DLLPUBLIC XShapeDumper
 {

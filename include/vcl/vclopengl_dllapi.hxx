@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_VCLOPENGL_DLLAPI_H
-#define INCLUDED_VCL_INC_VCLOPENGL_DLLAPI_H
+#ifndef INCLUDED_VCL_VCLOPENGL_DLLAPI_HXX
+#define INCLUDED_VCL_VCLOPENGL_DLLAPI_HXX
 
 #include "sal/types.h"
 

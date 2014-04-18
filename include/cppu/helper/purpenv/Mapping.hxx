@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_cppu_helper_purpenv_Mapping_hxx
-#define INCLUDED_cppu_helper_purpenv_Mapping_hxx
+#ifndef INCLUDED_CPPU_HELPER_PURPENV_MAPPING_HXX
+#define INCLUDED_CPPU_HELPER_PURPENV_MAPPING_HXX
 
 #include <com/sun/star/uno/Any.h>
 

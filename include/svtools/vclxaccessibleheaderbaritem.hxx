@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVTOOLS_VCLACCESSIBLEHEADBARITEM_HXX_
-#define _SVTOOLS_VCLACCESSIBLEHEADBARITEM_HXX_
+#ifndef INCLUDED_SVTOOLS_VCLXACCESSIBLEHEADERBARITEM_HXX
+#define INCLUDED_SVTOOLS_VCLXACCESSIBLEHEADERBARITEM_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -109,6 +109,6 @@ public:
     virtual OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-#endif // _SVTOOLS_VCLACCESSIBLEHEADBARITEM_HXX_
+#endif // INCLUDED_SVTOOLS_VCLXACCESSIBLEHEADERBARITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

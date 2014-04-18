@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef VCL_OPENGLHELPERS_HXX
-#define VCL_OPENGLHELPERS_HXX
+#ifndef INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
+#define INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
 
 #include <GL/glew.h>
 #include <vcl/vclopengl_dllapi.hxx>

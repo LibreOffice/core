@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_cppu_Map_hxx
-#define INCLUDED_cppu_Map_hxx
+#ifndef INCLUDED_CPPU_MAP_HXX
+#define INCLUDED_CPPU_MAP_HXX
 
 #include <uno/mapping.hxx>
 

@@ -15,8 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVTOOLS_VCLXACCESSIBLEHEADERBAR_HXX_
-#define _SVTOOLS_VCLXACCESSIBLEHEADERBAR_HXX_
+#ifndef INCLUDED_SVTOOLS_VCLXACCESSIBLEHEADERBAR_HXX
+#define INCLUDED_SVTOOLS_VCLXACCESSIBLEHEADERBAR_HXX
 
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
@@ -78,5 +78,5 @@ public:
 
 };
 
-#endif // _SVTOOLS_VCLXACCESSIBLEHEADERBAR_HXX_
+#endif // INCLUDED_SVTOOLS_VCLXACCESSIBLEHEADERBAR_HXX
 

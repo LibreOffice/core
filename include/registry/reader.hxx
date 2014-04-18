@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_registry_reader_hxx
-#define INCLUDED_registry_reader_hxx
+#ifndef INCLUDED_REGISTRY_READER_HXX
+#define INCLUDED_REGISTRY_READER_HXX
 
 #include <registry/reader.h>
 #include <registry/refltype.hxx>

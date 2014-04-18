@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_registry_writer_hxx
-#define INCLUDED_registry_writer_hxx
+#ifndef INCLUDED_REGISTRY_WRITER_HXX
+#define INCLUDED_REGISTRY_WRITER_HXX
 
 #include <registry/writer.h>
 #include <registry/refltype.hxx>

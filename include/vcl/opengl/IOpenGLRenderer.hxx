@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef VCL_IOPENGLRENDER_HXX
-#define VCL_IOPENGLRENDER_HXX
+#ifndef INCLUDED_VCL_OPENGL_IOPENGLRENDERER_HXX
+#define INCLUDED_VCL_OPENGL_IOPENGLRENDERER_HXX
 
 class IOpenGLInfoProvider
 {

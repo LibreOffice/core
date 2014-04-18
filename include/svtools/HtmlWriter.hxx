@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef INCLUDED_HTML_HXX
-#define INCLUDED_HTML_HXX
+#ifndef INCLUDED_SVTOOLS_HTMLWRITER_HXX
+#define INCLUDED_SVTOOLS_HTMLWRITER_HXX
 
 #include <rtl/string.hxx>
 #include <tools/stream.hxx>

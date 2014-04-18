@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFOPENGL_HXX
-#define INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFOPENGL_HXX
+#ifndef INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFOPENGLOBJ_HXX
+#define INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFOPENGLOBJ_HXX
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 

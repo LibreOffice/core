@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_cppu_Enterable_hxx
-#define INCLUDED_cppu_Enterable_hxx
+#ifndef INCLUDED_CPPU_ENTERABLE_HXX
+#define INCLUDED_CPPU_ENTERABLE_HXX
 
 #include <uno/Enterable.h>
 #include <rtl/ustring.hxx>

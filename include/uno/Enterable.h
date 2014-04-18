@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_uno_Enterable_h
-#define INCLUDED_uno_Enterable_h
+#ifndef INCLUDED_UNO_ENTERABLE_H
+#define INCLUDED_UNO_ENTERABLE_H
 
 #include <uno/environment.h>
 

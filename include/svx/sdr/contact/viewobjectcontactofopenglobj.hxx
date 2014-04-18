@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFOPENGL_HXX
-#define INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFOPENGL_HXX
+#ifndef INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFOPENGLOBJ_HXX
+#define INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFOPENGLOBJ_HXX
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>

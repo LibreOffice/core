@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_cppu_helper_purpenv_Environment_hxx
-#define INCLUDED_cppu_helper_purpenv_Environment_hxx
+#ifndef INCLUDED_CPPU_HELPER_PURPENV_ENVIRONMENT_HXX
+#define INCLUDED_CPPU_HELPER_PURPENV_ENVIRONMENT_HXX
 
 #include <cppu/cppudllapi.h>
 #include <uno/environment.h>

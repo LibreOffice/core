@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef VCL_OPENGL_CONTEXT_HXX
-#define VCL_OPENGL_CONTEXT_HXX
+#ifndef INCLUDED_VCL_OPENGL_OPENGLCONTEXT_HXX
+#define INCLUDED_VCL_OPENGL_OPENGLCONTEXT_HXX
 
 #include <string.h>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_uno_EnvDcp_h
-#define INCLUDED_uno_EnvDcp_h
+#ifndef INCLUDED_UNO_ENVDCP_H
+#define INCLUDED_UNO_ENVDCP_H
 
 #include <cppu/cppudllapi.h>
 #include <rtl/ustring.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_registry_version_h
-#define INCLUDED_registry_version_h
+#ifndef INCLUDED_REGISTRY_VERSION_H
+#define INCLUDED_REGISTRY_VERSION_H
 
 #include <sal/types.h>
 

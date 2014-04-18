@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_cppu_EnvGuards_hxx
-#define INCLUDED_cppu_EnvGuards_hxx
+#ifndef INCLUDED_CPPU_ENVGUARDS_HXX
+#define INCLUDED_CPPU_ENVGUARDS_HXX
 
 #include <uno/environment.hxx>
 #include <uno/mapping.hxx>

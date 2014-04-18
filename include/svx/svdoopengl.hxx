@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_SVDO_OPENGL_HXX
-#define INCLUDED_SVX_SVDO_OPENGL_HXX
+#ifndef INCLUDED_SVX_SVDOOPENGL_HXX
+#define INCLUDED_SVX_SVDOOPENGL_HXX
 
 #include <svx/svdobj.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
