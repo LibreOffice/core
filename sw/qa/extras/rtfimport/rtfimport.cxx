@@ -22,6 +22,7 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -1654,6 +1655,12 @@ DECLARE_RTFIMPORT_TEST(testFdo77267, "fdo77267.rtf")
 {
     // Paragraph was aligned to left, should be center.
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
+}
+
+DECLARE_RTFIMPORT_TEST(testFdo75735, "fdo75735.rtf")
+{
+    // Number of tabstops in the second paragraph should be 3, was 6.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty< uno::Sequence<style::TabStop> >(getParagraph(2), "ParaTabStops").getLength());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

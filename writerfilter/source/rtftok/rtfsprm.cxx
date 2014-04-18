@@ -79,9 +79,13 @@ std::string RTFSprm::toString() const
     return aBuf.makeStringAndClear().getStr();
 }
 
-RTFValue::Pointer_t RTFSprms::find(Id nKeyword, bool bFirst)
+RTFValue::Pointer_t RTFSprms::find(Id nKeyword, bool bFirst, bool bForWrite)
 {
     RTFValue::Pointer_t pValue;
+
+    if (bForWrite)
+        ensureCopyBeforeWrite();
+
     for (RTFSprms::Iterator_t i = m_pSprms->begin(); i != m_pSprms->end(); ++i)
         if (i->first == nKeyword)
         {
