@@ -49,7 +49,7 @@ public:
     void copyTo( ScColumn& rCol, SCROW nRow ) const;
 
     void assign( const std::vector<double>& rVals );
-    void append( ScRefCellValue& rVal, const CellTextAttr* pAttr );
+    void append( ScRefCellValue& rVal, const CellTextAttr* pAttr, const ScAddress& rPos );
 
     size_t size() const;
 

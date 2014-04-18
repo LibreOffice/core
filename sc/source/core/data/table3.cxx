@@ -437,7 +437,8 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
             {
                 ScSortInfoArray::Cell& rCell = (*pRow)[nCol];
                 sc::CellValues& rStore = aSortedCols.at(nCol);
-                rStore.append(rCell.maCell, rCell.mpAttr);
+                ScAddress aCellPos(aSortParam.nCol1 + nCol, aSortParam.nRow1 + i, nTab);
+                rStore.append(rCell.maCell, rCell.mpAttr, aCellPos);
             }
 
             if (pProgress)

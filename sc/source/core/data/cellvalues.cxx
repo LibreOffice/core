@@ -65,7 +65,7 @@ void CellValues::assign( const std::vector<double>& rVals )
     mpImpl->maCellTextAttrs.set(0, aDefaults.begin(), aDefaults.end());
 }
 
-void CellValues::append( ScRefCellValue& rVal, const CellTextAttr* pAttr )
+void CellValues::append( ScRefCellValue& rVal, const CellTextAttr* pAttr, const ScAddress& rPos )
 {
     assert(mpImpl->maCells.size() == mpImpl->maCellTextAttrs.size());
 
@@ -96,7 +96,7 @@ void CellValues::append( ScRefCellValue& rVal, const CellTextAttr* pAttr )
         case CELLTYPE_FORMULA:
         {
             mpImpl->maCells.resize(n+1);
-            CellStoreType::iterator itBlk = mpImpl->maCells.set(n, rVal.mpFormula->Clone());
+            CellStoreType::iterator itBlk = mpImpl->maCells.set(n, rVal.mpFormula->Clone(rPos));
 
             size_t nOffset = n - itBlk->position;
             CellStoreType::position_type aPos(itBlk, nOffset);
