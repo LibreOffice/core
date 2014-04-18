@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_INC_DSELECT_HXX
-#define INCLUDED_SW_SOURCE_UI_INC_DSELECT_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_DSELECT_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_DSELECT_HXX
 
 #include "drawbase.hxx"
 
@@ -38,6 +38,6 @@ class DrawSelection : public SwDrawBase
     virtual void Activate(const sal_uInt16 nSlotId) SAL_OVERRIDE;    // activate function
 };
 
-#endif // INCLUDED_SW_SOURCE_UI_INC_DSELECT_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_UIBASE_INC_DSELECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

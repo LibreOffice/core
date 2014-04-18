@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOBRUSHITEMHELPER_HXX
-#define _UNOBRUSHITEMHELPER_HXX
+#ifndef INCLUDED_SW_INC_UNOBRUSHITEMHELPER_HXX
+#define INCLUDED_SW_INC_UNOBRUSHITEMHELPER_HXX
 
 #include <swdllapi.h>
 #include <editeng/brushitem.hxx>
@@ -31,6 +31,6 @@ SW_DLLPUBLIC SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSource
 
 } // namespace sw
 
-#endif // _UNOBRUSHITEMHELPER_HXX
+#endif // INCLUDED_SW_INC_UNOBRUSHITEMHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

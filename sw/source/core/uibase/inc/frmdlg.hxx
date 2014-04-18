@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UI_INC_FRMDLG_HXX
-#define INCLUDED_SW_SOURCE_UI_INC_FRMDLG_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_FRMDLG_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_FRMDLG_HXX
 
 #include "globals.hrc"
 #include <sfx2/tabdlg.hxx>
@@ -65,6 +65,6 @@ public:
     SwWrtShell*  GetWrtShell()   { return m_pWrtShell; }
 };
 
-#endif // INCLUDED_SW_SOURCE_UI_INC_FRMDLG_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_UIBASE_INC_FRMDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

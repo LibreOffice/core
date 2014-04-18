@@ -16,12 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_INC_CHARTINS_HXX
-#define INCLUDED_SW_SOURCE_UI_INC_CHARTINS_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_CHARTINS_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_CHARTINS_HXX
 
 Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, const Rectangle& rLogicChart );
 void SwInsertChart( Window *pParent, SfxBindings *pBindings );
 
-#endif // INCLUDED_SW_SOURCE_UI_INC_CHARTINS_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_UIBASE_INC_CHARTINS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

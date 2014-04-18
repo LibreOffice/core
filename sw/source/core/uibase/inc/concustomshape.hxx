@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UI_INC_CONCUSTOMSHAPE_HXX
-#define INCLUDED_SW_SOURCE_UI_INC_CONCUSTOMSHAPE_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_CONCUSTOMSHAPE_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_CONCUSTOMSHAPE_HXX
 
 #include <rtl/ustring.hxx>
 #include "drawbase.hxx"
@@ -58,6 +58,6 @@ class ConstCustomShape : public SwDrawBase
     virtual bool doConstructOrthogonal() const SAL_OVERRIDE;
 };
 
-#endif // INCLUDED_SW_SOURCE_UI_INC_CONCUSTOMSHAPE_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_UIBASE_INC_CONCUSTOMSHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

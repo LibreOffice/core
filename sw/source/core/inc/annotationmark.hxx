@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ANNOTATIONMARK_HXX
-#define _ANNOTATIONMARK_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_ANNOTATIONMARK_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_ANNOTATIONMARK_HXX
 
 #include <bookmrk.hxx>
 #include <rtl/ustring.hxx>

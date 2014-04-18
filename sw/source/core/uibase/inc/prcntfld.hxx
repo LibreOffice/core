@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_INC_PRCNTFLD_HXX
-#define INCLUDED_SW_SOURCE_UI_INC_PRCNTFLD_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_PRCNTFLD_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_PRCNTFLD_HXX
 
 #include <vcl/field.hxx>
 #include "swdllapi.h"
@@ -106,6 +106,6 @@ public:
     bool IsAutoCalculationLocked() const {return bLockAutoCalculation;}
 };
 
-#endif // INCLUDED_SW_SOURCE_UI_INC_PRCNTFLD_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_UIBASE_INC_PRCNTFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -11,8 +11,8 @@
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
-#ifndef bordertest_hxx
-#define bordertest_hxx
+#ifndef INCLUDED_SW_QA_EXTRAS_INC_BORDERTEST_HXX
+#define INCLUDED_SW_QA_EXTRAS_INC_BORDERTEST_HXX
 
 typedef std::map<OUString, com::sun::star::table::BorderLine> BorderLineMap;
 typedef std::pair<OUString, com::sun::star::table::BorderLine> StringBorderPair;

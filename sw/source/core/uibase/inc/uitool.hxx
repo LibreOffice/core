@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_INC_UITOOL_HXX
-#define INCLUDED_SW_SOURCE_UI_INC_UITOOL_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_UITOOL_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_UITOOL_HXX
 
 #include <tools/wintypes.hxx>
 #include <vcl/field.hxx>
@@ -104,6 +104,6 @@ OUString GetAppLangDateTimeString( const DateTime& );
 // at the dispatcher if there is one, if executed return true
 bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, sal_uInt16 nId );
 
-#endif // INCLUDED_SW_SOURCE_UI_INC_UITOOL_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_UIBASE_INC_UITOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UI_UNO_SWXDOCUMENTSETTINGS_HXX
-#define INCLUDED_SW_SOURCE_UI_UNO_SWXDOCUMENTSETTINGS_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_UNO_SWXDOCUMENTSETTINGS_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_UNO_SWXDOCUMENTSETTINGS_HXX
 
 #include <comphelper/MasterPropertySet.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>

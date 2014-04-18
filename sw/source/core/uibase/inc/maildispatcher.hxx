@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UI_INC_MAILDISPATCHER_HXX
-#define INCLUDED_SW_SOURCE_UI_INC_MAILDISPATCHER_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_MAILDISPATCHER_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_MAILDISPATCHER_HXX
 
 #include <com/sun/star/mail/XSmtpService.hpp>
 #include <com/sun/star/mail/XMailMessage.hpp>
@@ -149,6 +149,6 @@ private:
     bool shutdown_requested_;
 };
 
-#endif // INCLUDED_SW_SOURCE_UI_INC_MAILDISPATCHER_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_UIBASE_INC_MAILDISPATCHER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

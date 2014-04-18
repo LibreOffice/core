@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_LINGU_SDRHHCWRAP_HXX
-#define INCLUDED_SW_SOURCE_UI_LINGU_SDRHHCWRAP_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_LINGU_SDRHHCWRAP_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_LINGU_SDRHHCWRAP_HXX
 
 #include <svx/svdoutl.hxx>
 

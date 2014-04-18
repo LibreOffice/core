@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UIBORDER_HXX
-#define _UIBORDER_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_UIBORDER_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_UIBORDER_HXX
 
 #include <sfx2/basedlgs.hxx>
 class Window;

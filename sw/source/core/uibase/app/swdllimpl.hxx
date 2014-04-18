@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_UI_APP_SWDLLIMPL_HXX
-#define INCLUDED_SW_SOURCE_UI_APP_SWDLLIMPL_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_APP_SWDLLIMPL_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_APP_SWDLLIMPL_HXX
 
 #include <sal/config.h>
 

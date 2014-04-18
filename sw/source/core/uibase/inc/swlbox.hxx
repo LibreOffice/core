@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_INC_SWLBOX_HXX
-#define INCLUDED_SW_SOURCE_UI_INC_SWLBOX_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_SWLBOX_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_SWLBOX_HXX
 
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
@@ -81,6 +81,6 @@ public:
     const SwBoxEntry&       GetRemovedEntry(sal_Int32 nPos) const;
 };
 
-#endif // INCLUDED_SW_SOURCE_UI_INC_SWLBOX_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_UIBASE_INC_SWLBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

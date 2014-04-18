@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_INC_UIITEMS_HXX
-#define INCLUDED_SW_SOURCE_UI_INC_UIITEMS_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_UIITEMS_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_UIITEMS_HXX
 
 #include <svl/intitem.hxx>
 #include "swdllapi.h"
@@ -114,6 +114,6 @@ public:
     SwPaM*   GetValue() const        { return m_pPaM; }
 };
 
-#endif // INCLUDED_SW_SOURCE_UI_INC_UIITEMS_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_UIBASE_INC_UIITEMS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

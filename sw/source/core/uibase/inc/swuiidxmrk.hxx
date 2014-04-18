@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_INC_SWUIIDXMRK_HXX
-#define INCLUDED_SW_SOURCE_UI_INC_SWUIIDXMRK_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_SWUIIDXMRK_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_SWUIIDXMRK_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <sfx2/basedlgs.hxx>
@@ -248,6 +248,6 @@ public:
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
-#endif // INCLUDED_SW_SOURCE_UI_INC_SWUIIDXMRK_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_UIBASE_INC_SWUIIDXMRK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_INC_ROWHT_HXX
-#define INCLUDED_SW_SOURCE_UI_INC_ROWHT_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_ROWHT_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_ROWHT_HXX
 
 #include <svx/stddlg.hxx>
 #include <vcl/field.hxx>

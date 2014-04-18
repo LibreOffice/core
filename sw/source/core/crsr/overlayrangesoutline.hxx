@@ -15,8 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SW_OVERLAY_OVERLAYRANGESOUTLINE_HXX
-#define _SW_OVERLAY_OVERLAYRANGESOUTLINE_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_CRSR_OVERLAYRANGESOUTLINE_HXX
+#define INCLUDED_SW_SOURCE_CORE_CRSR_OVERLAYRANGESOUTLINE_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -55,6 +55,6 @@ namespace sw
     } // end of namespace overlay
 } // end of namespace sw
 
-#endif //_SW_OVERLAY_OVERLAYRANGESOUTLINE_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_CRSR_OVERLAYRANGESOUTLINE_HXX
 
 // eof

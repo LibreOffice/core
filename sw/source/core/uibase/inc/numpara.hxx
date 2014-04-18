@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_INC_NUMPARA_HXX
-#define INCLUDED_SW_SOURCE_UI_INC_NUMPARA_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_NUMPARA_HXX
+#define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_NUMPARA_HXX
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/lstbox.hxx>
