@@ -3230,6 +3230,7 @@ Any SAL_CALL ScDataPilotItemsObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     Reference<XNameAccess> xMembers = GetMembers();
+    Any aRet;
     if (xMembers.is())
     {
         Reference<XIndexAccess> xMembersIndex(new ScNameToIndexAccess( xMembers ));
@@ -3240,13 +3241,16 @@ Any SAL_CALL ScDataPilotItemsObj::getByName( const OUString& aName )
         {
             Reference<XNamed> xMember(xMembersIndex->getByIndex(nItem), UNO_QUERY);
             if (xMember.is() && (aName == xMember->getName()))
-                return Any( Reference< XPropertySet >( GetObjectByIndex_Impl( nItem ) ) );
+            {
+                aRet = Any( Reference< XPropertySet >( GetObjectByIndex_Impl( nItem ) ) );
+                break;
+            }
             ++nItem;
         }
         if (!bFound)
             throw NoSuchElementException();
     }
-    return Any();
+    return aRet;
 }
 
 Sequence<OUString> SAL_CALL ScDataPilotItemsObj::getElementNames()
