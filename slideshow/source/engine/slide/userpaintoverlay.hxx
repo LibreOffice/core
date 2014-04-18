@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_USERPAINTOVERLAY_HXX
-#define INCLUDED_SLIDESHOW_USERPAINTOVERLAY_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_USERPAINTOVERLAY_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_USERPAINTOVERLAY_HXX
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
@@ -80,6 +80,6 @@ namespace slideshow
     }
 }
 
-#endif /* INCLUDED_SLIDESHOW_USERPAINTOVERLAY_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_USERPAINTOVERLAY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

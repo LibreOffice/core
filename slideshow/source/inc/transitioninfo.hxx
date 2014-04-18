@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_TRANSITIONINFO_HXX
-#define INCLUDED_SLIDESHOW_TRANSITIONINFO_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_TRANSITIONINFO_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_TRANSITIONINFO_HXX
 
 #include <sal/types.h>
 
@@ -149,6 +149,6 @@ struct TransitionInfo
 } // namespace internal
 } // namespace presentation
 
-#endif /* INCLUDED_SLIDESHOW_TRANSITIONINFO_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_INC_TRANSITIONINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

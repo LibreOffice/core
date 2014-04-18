@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_DOCTREENODESUPPLIER_HXX
-#define INCLUDED_SLIDESHOW_DOCTREENODESUPPLIER_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_DOCTREENODESUPPLIER_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_DOCTREENODESUPPLIER_HXX
 
 #include "doctreenode.hxx"
 
@@ -143,6 +143,6 @@ namespace slideshow
     }
 }
 
-#endif /* INCLUDED_SLIDESHOW_DOCTREENODESUPPLIER_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_INC_DOCTREENODESUPPLIER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

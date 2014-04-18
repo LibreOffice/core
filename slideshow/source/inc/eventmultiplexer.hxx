@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SLIDESHOW_EVENTMULTIPLEXER_HXX
-#define INCLUDED_SLIDESHOW_EVENTMULTIPLEXER_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_EVENTMULTIPLEXER_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_EVENTMULTIPLEXER_HXX
 
 #include "eventhandler.hxx"
 #include "mouseeventhandler.hxx"
@@ -737,6 +737,6 @@ private:
 } // namespace internal
 } // namespace Presentation
 
-#endif /* INCLUDED_SLIDESHOW_EVENTMULTIPLEXER_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_INC_EVENTMULTIPLEXER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

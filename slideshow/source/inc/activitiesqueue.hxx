@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_ACTIVITIESQUEUE_HXX
-#define INCLUDED_SLIDESHOW_ACTIVITIESQUEUE_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_ACTIVITIESQUEUE_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_ACTIVITIESQUEUE_HXX
 
 #include <deque>
 
@@ -119,6 +119,6 @@ namespace slideshow
 
     }
 }
-#endif /* INCLUDED_SLIDESHOW_ACTIVITIESQUEUE_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_INC_ACTIVITIESQUEUE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

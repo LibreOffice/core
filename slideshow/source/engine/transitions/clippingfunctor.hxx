@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_CLIPPINGFUNCTOR_HXX
-#define INCLUDED_SLIDESHOW_CLIPPINGFUNCTOR_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_CLIPPINGFUNCTOR_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_CLIPPINGFUNCTOR_HXX
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/vector/b2dsize.hxx>
@@ -84,6 +84,6 @@ namespace slideshow
     }
 }
 
-#endif /* INCLUDED_SLIDESHOW_CLIPPINGFUNCTOR_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_CLIPPINGFUNCTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

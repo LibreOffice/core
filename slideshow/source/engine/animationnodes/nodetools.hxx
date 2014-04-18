@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_NODETOOLS_HXX
-#define INCLUDED_SLIDESHOW_NODETOOLS_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_NODETOOLS_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_NODETOOLS_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -70,6 +70,6 @@ namespace slideshow
     }
 }
 
-#endif /* INCLUDED_SLIDESHOW_NODETOOLS_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_NODETOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

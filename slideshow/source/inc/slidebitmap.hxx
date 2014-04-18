@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SLIDEBITMAP_HXX
-#define INCLUDED_SLIDESHOW_SLIDEBITMAP_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_SLIDEBITMAP_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_SLIDEBITMAP_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppcanvas/canvas.hxx>
@@ -84,6 +84,6 @@ namespace slideshow
     }
 }
 
-#endif /* INCLUDED_SLIDESHOW_SLIDEBITMAP_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_INC_SLIDEBITMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

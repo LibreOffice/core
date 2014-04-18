@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SLIDESHOW_ANIMATIONNODE_HXX
-#define INCLUDED_SLIDESHOW_ANIMATIONNODE_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONNODE_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONNODE_HXX
 
 #include "disposable.hxx"
 
@@ -151,6 +151,6 @@ typedef ::boost::shared_ptr< AnimationNode > AnimationNodeSharedPtr;
 } // namespace internal
 } // namespace presentation
 
-#endif /* INCLUDED_SLIDESHOW_ANIMATIONNODE_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONNODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

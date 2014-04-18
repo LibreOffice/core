@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_DRAWSHAPESUBSETTING_HXX
-#define INCLUDED_SLIDESHOW_DRAWSHAPESUBSETTING_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPESUBSETTING_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPESUBSETTING_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
@@ -244,6 +244,6 @@ namespace slideshow
     }
 }
 
-#endif /* INCLUDED_SLIDESHOW_DRAWSHAPESUBSETTING_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPESUBSETTING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

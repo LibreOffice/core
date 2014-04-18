@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_VIEWSHAPE_HXX
-#define INCLUDED_SLIDESHOW_VIEWSHAPE_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWSHAPE_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWSHAPE_HXX
 
 #include <cppcanvas/renderer.hxx>
 #include <cppcanvas/bitmap.hxx>
@@ -329,6 +329,6 @@ namespace slideshow
     }
 }
 
-#endif /* INCLUDED_SLIDESHOW_VIEWSHAPE_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWSHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

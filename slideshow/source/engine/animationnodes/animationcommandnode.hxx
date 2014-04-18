@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SLIDESHOW_ANIMATIONCOMMANDNODE_HXX
-#define INCLUDED_SLIDESHOW_ANIMATIONCOMMANDNODE_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONCOMMANDNODE_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONCOMMANDNODE_HXX
 
 #include "basecontainernode.hxx"
 #include "iexternalmediashapebase.hxx"

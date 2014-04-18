@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SLIDESHOW_ANIMATIONSETNODE_HXX
-#define INCLUDED_SLIDESHOW_ANIMATIONSETNODE_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONSETNODE_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONSETNODE_HXX
 
 #include "animationbasenode.hxx"
 
@@ -46,6 +46,6 @@ private:
 } // namespace internal
 } // namespace slideshow
 
-#endif /* INCLUDED_SLIDESHOW_ANIMATIONSETNODE_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONSETNODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

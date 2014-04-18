@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SLIDESHOW_ANIMATIONBASENODE_HXX
-#define INCLUDED_SLIDESHOW_ANIMATIONBASENODE_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONBASENODE_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONBASENODE_HXX
 
 #include <com/sun/star/animations/XAnimate.hpp>
 
@@ -99,6 +99,6 @@ private:
 } // namespace internal
 } // namespace presentation
 
-#endif /* INCLUDED_SLIDESHOW_ANIMATIONBASENODE_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONBASENODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef POINTERSYMBOL_HXX_INCLUDED
-#define POINTERSYMBOL_HXX_INCLUDED
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_POINTERSYMBOL_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_POINTERSYMBOL_HXX
 
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <cppcanvas/customsprite.hxx>

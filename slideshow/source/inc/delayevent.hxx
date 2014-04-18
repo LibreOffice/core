@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SLIDESHOW_DELAYEVENT_HXX
-#define INCLUDED_SLIDESHOW_DELAYEVENT_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_DELAYEVENT_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_DELAYEVENT_HXX
 
 #include <boost/function.hpp>
 
@@ -136,6 +136,6 @@ inline EventSharedPtr makeDelay_(
 } // namespace internal
 } // namespace presentation
 
-#endif /* INCLUDED_SLIDESHOW_DELAYEVENT_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_INC_DELAYEVENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

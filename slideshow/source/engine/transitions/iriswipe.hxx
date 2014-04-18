@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_IRISWIPE_HXX
-#define INCLUDED_SLIDESHOW_IRISWIPE_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_IRISWIPE_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_IRISWIPE_HXX
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include "parametricpolypolygon.hxx"
@@ -41,6 +41,6 @@ private:
 }
 }
 
-#endif /* INCLUDED_SLIDESHOW_IRISWIPE_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_IRISWIPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

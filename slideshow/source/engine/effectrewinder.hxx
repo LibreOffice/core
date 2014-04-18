@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_EFFECT_REWINDER_HXX
-#define INCLUDED_SLIDESHOW_EFFECT_REWINDER_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_EFFECTREWINDER_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_EFFECTREWINDER_HXX
 
 #include "animationnode.hxx"
 #include "eventhandler.hxx"

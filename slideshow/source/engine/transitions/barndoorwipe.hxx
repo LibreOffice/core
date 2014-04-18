@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_BARNDOORWIPE_HXX
-#define INCLUDED_SLIDESHOW_BARNDOORWIPE_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_BARNDOORWIPE_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_BARNDOORWIPE_HXX
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 
@@ -44,6 +44,6 @@ private:
 }
 }
 
-#endif /* INCLUDED_SLIDESHOW_BARNDOORWIPE_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_BARNDOORWIPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

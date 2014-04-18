@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TESTS_HXX
-#define INCLUDED_TESTS_HXX
+#ifndef INCLUDED_SLIDESHOW_TEST_TESTS_HXX
+#define INCLUDED_SLIDESHOW_TEST_TESTS_HXX
 
 #include "animatableshape.hxx"
 #include "unoview.hxx"
@@ -61,6 +61,6 @@ typedef boost::shared_ptr<TestShape> TestShapeSharedPtr;
 TestShapeSharedPtr createTestShape(const basegfx::B2DRange& rRect,
                                    double                   nPrio);
 
-#endif /* INCLUDED_TESTS_HXX */
+#endif // INCLUDED_SLIDESHOW_TEST_TESTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

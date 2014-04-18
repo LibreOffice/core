@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SHAPESUBSET_HXX
-#define INCLUDED_SLIDESHOW_SHAPESUBSET_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_SHAPESUBSET_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_SHAPESUBSET_HXX
 
 #include "attributableshape.hxx"
 #include "subsettableshapemanager.hxx"
@@ -139,6 +139,6 @@ namespace slideshow
     }
 }
 
-#endif /* INCLUDED_SLIDESHOW_SHAPESUBSET_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_INC_SHAPESUBSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

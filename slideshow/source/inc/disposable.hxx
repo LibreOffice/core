@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_DISPOSABLE_HXX
-#define INCLUDED_SLIDESHOW_DISPOSABLE_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_DISPOSABLE_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_DISPOSABLE_HXX
 
 #include <sal/types.h>
 #include <boost/shared_ptr.hpp>
@@ -54,6 +54,6 @@ namespace slideshow
     }
 }
 
-#endif /* INCLUDED_SLIDESHOW_DISPOSABLE_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_INC_DISPOSABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

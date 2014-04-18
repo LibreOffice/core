@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_ANIMATIONFACTORY_HXX
-#define INCLUDED_SLIDESHOW_ANIMATIONFACTORY_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONFACTORY_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONFACTORY_HXX
 
 
 #include "numberanimation.hxx"
@@ -142,6 +142,6 @@ namespace slideshow
     }
 }
 
-#endif /* INCLUDED_SLIDESHOW_ANIMATIONFACTORY_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

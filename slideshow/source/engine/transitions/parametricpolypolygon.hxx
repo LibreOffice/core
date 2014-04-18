@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_PARAMETRICPOLYPOLYGON_HXX
-#define INCLUDED_SLIDESHOW_PARAMETRICPOLYPOLYGON_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_PARAMETRICPOLYPOLYGON_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_PARAMETRICPOLYPOLYGON_HXX
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <boost/shared_ptr.hpp>
@@ -87,6 +87,6 @@ namespace slideshow
     }
 }
 
-#endif /* INCLUDED_SLIDESHOW_PARAMETRICPOLYPOLYGON_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_PARAMETRICPOLYPOLYGON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

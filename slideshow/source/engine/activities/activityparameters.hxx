@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_ACTIVITYPARAMETERS_HXX
-#define INCLUDED_SLIDESHOW_ACTIVITYPARAMETERS_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACTIVITYPARAMETERS_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACTIVITYPARAMETERS_HXX
 
 #include "event.hxx"
 #include "eventqueue.hxx"
@@ -131,6 +131,6 @@ struct ActivityParameters
 } // namespace internal
 } // namespace presentation
 
-#endif /* INCLUDED_SLIDESHOW_ACTIVITYPARAMETERS_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACTIVITYPARAMETERS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

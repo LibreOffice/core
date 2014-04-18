@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_ACTIVITIESFACTORY_HXX
-#define INCLUDED_SLIDESHOW_ACTIVITIESFACTORY_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_ACTIVITIESFACTORY_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_ACTIVITIESFACTORY_HXX
 
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/XAnimateColor.hpp>
@@ -322,6 +322,6 @@ private:
 } // namespace internal
 } // namespace presentation
 
-#endif /* INCLUDED_SLIDESHOW_ACTIVITIESFACTORY_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_INC_ACTIVITIESFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

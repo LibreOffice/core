@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SMILFUNCTIONPARSER_HXX
-#define INCLUDED_SLIDESHOW_SMILFUNCTIONPARSER_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_SMILFUNCTIONPARSER_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_SMILFUNCTIONPARSER_HXX
 
 #include "expressionnode.hxx"
 #include "slideshowexceptions.hxx"
@@ -152,6 +152,6 @@ namespace slideshow
     }
 }
 
-#endif /* INCLUDED_SLIDESHOW_SMILFUNCTIONPARSER_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_INC_SMILFUNCTIONPARSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_ACTIVITYBASE_HXX
-#define INCLUDED_SLIDESHOW_ACTIVITYBASE_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACTIVITYBASE_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACTIVITYBASE_HXX
 
 #include "animationactivity.hxx"
 #include "activityparameters.hxx"
@@ -140,6 +140,6 @@ private:
 } // namespace internal
 } // namespace presentation
 
-#endif /* INCLUDED_SLIDESHOW_ACTIVITYBASE_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACTIVITYBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_VIEWEVENTHANDLER_HXX
-#define INCLUDED_SLIDESHOW_VIEWEVENTHANDLER_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_VIEWEVENTHANDLER_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_VIEWEVENTHANDLER_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
@@ -88,6 +88,6 @@ namespace slideshow
     }
 }
 
-#endif /* INCLUDED_SLIDESHOW_VIEWEVENTHANDLER_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_INC_VIEWEVENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
