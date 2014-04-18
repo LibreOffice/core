@@ -457,7 +457,10 @@ void PresenterToolBar::InvalidateArea (
     const awt::Rectangle& rRepaintBox,
     const bool bSynchronous)
 {
-    mpPresenterController->GetPaintManager()->Invalidate(
+    ::boost::shared_ptr<PresenterPaintManager> xManager(mpPresenterController->GetPaintManager());
+    if (!xManager)
+        return;
+    xManager->Invalidate(
         mxWindow,
         rRepaintBox,
         bSynchronous);
@@ -467,7 +470,11 @@ void PresenterToolBar::RequestLayout (void)
 {
     mbIsLayoutPending = true;
 
-    mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
+    ::boost::shared_ptr<PresenterPaintManager> xManager(mpPresenterController->GetPaintManager());
+    if (!xManager)
+        return;
+
+    xManager->Invalidate(mxWindow);
 }
 
 geometry::RealSize2D PresenterToolBar::GetMinimalSize (void)
@@ -822,7 +829,10 @@ void PresenterToolBar::Layout (
     }
 
     // The whole window has to be repainted.
-    mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
+    ::boost::shared_ptr<PresenterPaintManager> xManager(mpPresenterController->GetPaintManager());
+    if (!xManager)
+        return;
+    xManager->Invalidate(mxWindow);
 }
 
 geometry::RealSize2D PresenterToolBar::CalculatePartSize (
