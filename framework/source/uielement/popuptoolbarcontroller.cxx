@@ -156,10 +156,13 @@ PopupMenuToolbarController::createPopupWindow()
         return xRet;
 
     pToolBox->SetItemDown( m_nToolBoxId, sal_True );
+    WindowAlign eAlign( pToolBox->GetAlign() );
     sal_uInt16 nId = m_xPopupMenu->execute(
         css::uno::Reference< css::awt::XWindowPeer >( getParent(), css::uno::UNO_QUERY ),
         VCLUnoHelper::ConvertToAWTRect( pToolBox->GetItemRect( m_nToolBoxId ) ),
-        css::awt::PopupMenuDirection::EXECUTE_DEFAULT );
+        ( eAlign == WINDOWALIGN_TOP || eAlign == WINDOWALIGN_BOTTOM ) ?
+            css::awt::PopupMenuDirection::EXECUTE_DOWN :
+            css::awt::PopupMenuDirection::EXECUTE_RIGHT );
     pToolBox->SetItemDown( m_nToolBoxId, sal_False );
 
     if ( nId )
