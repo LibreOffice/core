@@ -26,10 +26,6 @@
 
 class SwTxtFormatInfo;
 
-/*************************************************************************
- *                      class SwTxtGuess
- *************************************************************************/
-
 class SwTxtGuess
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord >  xHyphWord;

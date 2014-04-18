@@ -29,12 +29,11 @@
 // Nihct sichtbare Zeit:
 #define BLINK_OFF_TIME      800L
 
-/*************************************************************************
- * pBlink points to the instance where blinking portions need to register.
+/* pBlink points to the instance where blinking portions need to register.
  * If necessary, it needs to be created by SwBlink.
  * They are then triggered rhythimcally for a repaint. They can query
  * for being visible or invisible with IsVisible().
- *************************************************************************/
+ */
 SwBlink *pBlink = NULL;
 
 SwBlink::SwBlink()
@@ -50,12 +49,11 @@ SwBlink::~SwBlink( )
     aTimer.Stop();
 }
 
-/*************************************************************************
+/*
  * SwBlink::Blinker (timer):
  * Toggle visibility flag
  * Determine the repaint rectangle and invalidate them in their OleShells.
- *************************************************************************/
-
+ */
 IMPL_LINK_NOARG(SwBlink, Blinker)
 {
     bVisible = !bVisible;

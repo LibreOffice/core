@@ -35,10 +35,6 @@
 
 using namespace ::com::sun::star;
 
-/*************************************************************************
- * SwTxtAdjuster::FormatBlock()
- *************************************************************************/
-
 void SwTxtAdjuster::FormatBlock( )
 {
     // Block format does not apply to the last line.
@@ -113,9 +109,6 @@ void SwTxtAdjuster::FormatBlock( )
     GetInfo().GetParaPortion()->GetRepaint()->SetOfst(0);
 }
 
-/*************************************************************************
- * lcl_CheckKashidaPositions()
- *************************************************************************/
 static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr,
                                 sal_Int32& rKashidas, sal_Int32& nGluePortion )
 {
@@ -195,9 +188,6 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, S
     return (rKashidas > 0);
 }
 
-/*************************************************************************
- * lcl_CheckKashidaWidth()
- *************************************************************************/
 static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr, sal_Int32& rKashidas,
                              sal_Int32& nGluePortion, const long nGluePortionWidth, long& nSpaceAdd )
 {
@@ -255,14 +245,9 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTx
    return true;
 }
 
-/*************************************************************************
- * SwTxtAdjuster::CalcNewBlock()
- *
- * CalcNewBlock() must only be called _after_ CalcLine()!
- * We always span between two RandPortions or FixPortions (Tabs and Flys).
- * We count the Glues and call ExpandBlock.
- *************************************************************************/
-
+// CalcNewBlock() must only be called _after_ CalcLine()!
+// We always span between two RandPortions or FixPortions (Tabs and Flys).
+// We count the Glues and call ExpandBlock.
 void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                                   const SwLinePortion *pStopAt, SwTwips nReal, bool bSkipKashida )
 {
@@ -410,10 +395,6 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
     }
 }
 
-/*************************************************************************
- * SwTxtAdjuster::CalcKanaAdj()
- *************************************************************************/
-
 SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 {
     OSL_ENSURE( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
@@ -556,10 +537,6 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     return nRepaintOfst;
 }
 
-/*************************************************************************
- * SwTxtAdjuster::CalcRightMargin()
- *************************************************************************/
-
 SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     SwTwips nReal )
 {
@@ -610,10 +587,6 @@ SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     pCurrent->PrtWidth( KSHORT( nRealWidth ) );
     return pRight;
 }
-
-/*************************************************************************
- * SwTxtAdjuster::CalcFlyAdjust()
- *************************************************************************/
 
 void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
 {
@@ -690,10 +663,6 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
         pLeft->AdjustRight( pCurrent );
 }
 
-/*************************************************************************
- * SwTxtAdjuster::CalcAdjLine()
- *************************************************************************/
-
 void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
 {
     OSL_ENSURE( pCurrent->IsFormatAdj(), "CalcAdjLine: Why?" );
@@ -720,15 +689,10 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
     }
 }
 
-/*************************************************************************
- * SwTxtAdjuster::CalcFlyPortion()
- *
- * This is a quite complicated calculation: nCurrWidth is the width _before_
- * adding the word, that still fits onto the line! For this reason the FlyPortion's
- * width is still correct if we get a deadlock-situation of:
- * bFirstWord && !WORDFITS
- *************************************************************************/
-
+// This is a quite complicated calculation: nCurrWidth is the width _before_
+// adding the word, that still fits onto the line! For this reason the FlyPortion's
+// width is still correct if we get a deadlock-situation of:
+// bFirstWord && !WORDFITS
 SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
                                              const SwRect &rCurrRect )
 {
@@ -773,12 +737,7 @@ SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
     return pFlyPortion;
 }
 
-/*************************************************************************
- * SwTxtPainter::_CalcDropAdjust()
- * Drops and Adjustment
- * CalcDropAdjust is called at the end by Format() if needed
- *************************************************************************/
-
+// CalcDropAdjust is called at the end by Format() if needed
 void SwTxtAdjuster::CalcDropAdjust()
 {
     OSL_ENSURE( 1<GetDropLines() && SVX_ADJUST_LEFT!=GetAdjust() && SVX_ADJUST_BLOCK!=GetAdjust(),
@@ -861,10 +820,6 @@ void SwTxtAdjuster::CalcDropAdjust()
             ;
     }
 }
-
-/*************************************************************************
- * SwTxtAdjuster::CalcDropRepaint()
- *************************************************************************/
 
 void SwTxtAdjuster::CalcDropRepaint()
 {

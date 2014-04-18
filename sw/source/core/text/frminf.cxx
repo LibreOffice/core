@@ -21,10 +21,6 @@
 #include <frminf.hxx>
 #include <itrtxt.hxx>
 
-/*************************************************************************
- *                   SwTxtMargin::GetTxtStart()
- *************************************************************************/
-
 sal_Int32 SwTxtMargin::GetTxtStart() const
 {
     const OUString &rTxt = GetInfo().GetTxt();
@@ -39,10 +35,6 @@ sal_Int32 SwTxtMargin::GetTxtStart() const
     return nEnd;
 }
 
-/*************************************************************************
- *                   SwTxtMargin::GetTxtEnd()
- *************************************************************************/
-
 sal_Int32 SwTxtMargin::GetTxtEnd() const
 {
     const OUString &rTxt = GetInfo().GetTxt();
@@ -55,10 +47,6 @@ sal_Int32 SwTxtMargin::GetTxtEnd() const
     }
     return nStart;
 }
-
-/*************************************************************************
- *                   SwTxtFrmInfo::IsOneLine()
- *************************************************************************/
 
 // Does the paragraph fit into one line?
 bool SwTxtFrmInfo::IsOneLine() const
@@ -81,10 +69,6 @@ bool SwTxtFrmInfo::IsOneLine() const
     return true;
 }
 
-/*************************************************************************
- *                   SwTxtFrmInfo::IsFilled()
- *************************************************************************/
-
 // Is the line filled for X percent?
 bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
 {
@@ -97,10 +81,6 @@ bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
     nWidth /= 100;
     return KSHORT(nWidth) <= pLay->Width();
 }
-
-/*************************************************************************
- *                   SwTxtFrmInfo::GetLineStart()
- *************************************************************************/
 
 // Where does the text start (without whitespace)? (document global)
 SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine ) const
@@ -115,10 +95,6 @@ SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine ) const
 
     return rLine.GetLineStart();
 }
-
-/*************************************************************************
- *                   SwTxtFrmInfo::GetLineStart()
- *************************************************************************/
 
 // Where does the text start (without whitespace)? (relative in the Frame)
 SwTwips SwTxtFrmInfo::GetLineStart() const
@@ -164,10 +140,6 @@ SwTwips SwTxtFrmInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
 
     return (( nNext + nStt ) / 2 ) - (pFrm->Frm().*fnRect->fnGetLeft)();
 }
-
-/*************************************************************************
- *                   SwTxtFrmInfo::GetSpaces()
- *************************************************************************/
 
 SwPaM *AddPam( SwPaM *pPam, const SwTxtFrm* pTxtFrm,
                 const sal_Int32 nPos, const sal_Int32 nLen )
@@ -233,10 +205,6 @@ void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
     while( aLine.Next() );
 }
 
-/*************************************************************************
- *                   SwTxtFrmInfo::IsBullet()
- *************************************************************************/
-
 // Is there a bullet/symbol etc. at the text position?
 // Fonts: CharSet, SYMBOL und DONTKNOW
 bool SwTxtFrmInfo::IsBullet( sal_Int32 nTxtStart ) const
@@ -247,15 +215,10 @@ bool SwTxtFrmInfo::IsBullet( sal_Int32 nTxtStart ) const
     return aLine.IsSymbol( nTxtStart );
 }
 
-/*************************************************************************
- *                   SwTxtFrmInfo::GetFirstIndent()
- *************************************************************************/
-
 // Get first line indent
 // The precondition for a positive or negative first line indent:
 // All lines (except for the first one) have the same left margin.
 // We do not want to be so picky and work with a tolerance of TOLERANCE twips.
-
 SwTwips SwTxtFrmInfo::GetFirstIndent() const
 {
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
@@ -287,10 +250,6 @@ SwTwips SwTxtFrmInfo::GetFirstIndent() const
 
     return 1;
 }
-
-/*************************************************************************
- *                   SwTxtFrmInfo::GetBigIndent()
- *************************************************************************/
 
 sal_Int32 SwTxtFrmInfo::GetBigIndent( sal_Int32& rFndPos,
                                     const SwTxtFrm *pNextFrm ) const

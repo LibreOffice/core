@@ -130,14 +130,10 @@ const sal_uInt8 StackPos[ static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
     43, // RES_TXTATR_INPUTFIELD                 // 55
 };
 
-/*************************************************************************
- *                      CharFmt::GetItem
- * returns the item set associated with an character/inet/auto style
- *************************************************************************/
-
 namespace CharFmt
 {
 
+// Returns the item set associated with an character/inet/auto style
 const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr )
 {
     const SfxItemSet* pSet = 0;
@@ -161,11 +157,7 @@ const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr )
     return pSet;
 }
 
-/*************************************************************************
- *                      CharFmt::GetItem
- * extracts pool item of type nWhich from rAttr
- *************************************************************************/
-
+// Extracts pool item of type nWhich from rAttr
 const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, sal_uInt16 nWhich )
 {
     if ( RES_TXTATR_INETFMT == rAttr.Which() ||
@@ -185,11 +177,7 @@ const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, sal_uInt16 nWhich )
     return ( nWhich == rAttr.Which() ) ? &rAttr.GetAttr() : 0;
 }
 
-/*************************************************************************
- *                      CharFmt::IsItemIncluded
- * checks if item is included in character/inet/auto style
- *************************************************************************/
-
+// checks if item is included in character/inet/auto style
 bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr )
 {
     bool bRet = false;
@@ -200,7 +188,6 @@ bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr )
 
     return bRet;
 }
-
 }
 
 /*************************************************************************
@@ -281,19 +268,11 @@ static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
     return false;
 }
 
-/*************************************************************************
- *                      SwAttrHandler::SwAttrStack::SwAttrStack()
- *************************************************************************/
-
 inline SwAttrHandler::SwAttrStack::SwAttrStack()
     : nCount( 0 ), nSize( INITIAL_NUM_ATTR )
 {
     pArray = pInitialArray;
 }
-
-/*************************************************************************
- *                      SwAttrHandler::SwAttrStack::Insert()
- *************************************************************************/
 
 void SwAttrHandler::SwAttrStack::Insert( const SwTxtAttr& rAttr, const sal_uInt16 nPos )
 {
@@ -334,10 +313,6 @@ void SwAttrHandler::SwAttrStack::Insert( const SwTxtAttr& rAttr, const sal_uInt1
     nCount++;
 }
 
-/*************************************************************************
- *                      SwAttrHandler::SwAttrStack::Remove()
- *************************************************************************/
-
 void SwAttrHandler::SwAttrStack::Remove( const SwTxtAttr& rAttr )
 {
     sal_uInt16 nPos = Pos( rAttr );
@@ -350,18 +325,10 @@ void SwAttrHandler::SwAttrStack::Remove( const SwTxtAttr& rAttr )
     }
 }
 
-/*************************************************************************
- *                      SwAttrHandler::SwAttrStack::Top()
- *************************************************************************/
-
 const SwTxtAttr* SwAttrHandler::SwAttrStack::Top() const
 {
     return nCount ? pArray[ nCount - 1 ] : 0;
 }
-
-/*************************************************************************
- *                      SwAttrHandler::SwAttrStack::Pos()
- *************************************************************************/
 
 sal_uInt16 SwAttrHandler::SwAttrStack::Pos( const SwTxtAttr& rAttr ) const
 {
@@ -379,10 +346,6 @@ sal_uInt16 SwAttrHandler::SwAttrStack::Pos( const SwTxtAttr& rAttr ) const
     return USHRT_MAX;
 }
 
-/*************************************************************************
- *                      SwAttrHandler::SwAttrHandler()
- *************************************************************************/
-
 SwAttrHandler::SwAttrHandler()
     : mpIDocumentSettingAccess(NULL)
     , mpShell(NULL)
@@ -396,10 +359,6 @@ SwAttrHandler::~SwAttrHandler()
 {
     delete pFnt;
 }
-
-/*************************************************************************
- *                      SwAttrHandler::Init()
- *************************************************************************/
 
 void SwAttrHandler::Init( const SwAttrSet& rAttrSet,
                           const IDocumentSettingAccess& rIDocumentSettingAcces,
@@ -460,10 +419,6 @@ void SwAttrHandler::Reset( )
         aAttrStack[ i ].Reset();
 }
 
-/*************************************************************************
- *                      SwAttrHandler::PushAndChg()
- *************************************************************************/
-
 void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 {
     // these special attributes in fact represent a collection of attributes
@@ -508,10 +463,6 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
     }
 }
 
-/*************************************************************************
- *                      SwAttrHandler::Push()
- *************************************************************************/
-
 bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
 {
     OSL_ENSURE( rItem.Which() < RES_TXTATR_WITHEND_END,
@@ -540,10 +491,6 @@ bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
     aAttrStack[ nStack ].Insert( rAttr, nPos - 1 );
     return false;
 }
-
-/*************************************************************************
- *                      SwAttrHandler::PopAndChg()
- *************************************************************************/
 
 void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 {
@@ -585,12 +532,7 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
     }
 }
 
-/*************************************************************************
- *                      SwAttrHandler::Pop()
- *
- * only used during redlining
- *************************************************************************/
-
+// only used during redlining
 void SwAttrHandler::Pop( const SwTxtAttr& rAttr )
 {
     OSL_ENSURE( rAttr.Which() < RES_TXTATR_WITHEND_END,
@@ -602,9 +544,6 @@ void SwAttrHandler::Pop( const SwTxtAttr& rAttr )
     }
 }
 
-/*************************************************************************
- *                      SwAttrHandler::ActivateTop()
- *************************************************************************/
 void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
 {
     OSL_ENSURE( nAttr < RES_TXTATR_WITHEND_END,

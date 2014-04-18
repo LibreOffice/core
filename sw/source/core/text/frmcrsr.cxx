@@ -137,10 +137,6 @@ bool sw_ChangeOffset( SwTxtFrm* pFrm, sal_Int32 nNew )
     return false;
 }
 
-/*************************************************************************
- *                      GetFrmAtOfst(), GetFrmAtPos()
- *************************************************************************/
-
 SwTxtFrm& SwTxtFrm::GetFrmAtOfst( const sal_Int32 nWhere )
 {
     SwTxtFrm* pRet = this;
@@ -167,10 +163,6 @@ SwTxtFrm *SwTxtFrm::GetFrmAtPos( const SwPosition &rPos )
     }
     return pFoll;
 }
-
-/*************************************************************************
- *                      SwTxtFrm::GetCharRect()
- *************************************************************************/
 
 /*
  * GetCharRect() returns the char's char line described by aPos.
@@ -357,10 +349,6 @@ bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     return bRet;
 }
 
-/*************************************************************************
- *                      SwTxtFrm::GetAutoPos()
- *************************************************************************/
-
 /*
  * GetAutoPos() looks up the char's char line which is described by rPos
  * and is used by the auto-positioned frame.
@@ -516,10 +504,6 @@ bool SwTxtFrm::GetTopOfLine( SwTwips& _onTopOfLine,
     return bRet;
 }
 
-/*************************************************************************
- *                      SwTxtFrm::_GetCrsrOfst()
- *************************************************************************/
-
 // Minimum distance of non-empty lines is a little less than 2 cm
 #define FILL_MIN_DIST 1100
 
@@ -666,10 +650,6 @@ bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
     return true;
 }
 
-/*************************************************************************
- *                 virtual SwTxtFrm::GetCrsrOfst()
- *************************************************************************/
-
 bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
                                SwCrsrMoveState* pCMS, bool ) const
 {
@@ -684,10 +664,6 @@ bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
     }
     return _GetCrsrOfst( pPos, rPoint, nChgFrm != 0, pCMS );
 }
-
-/*************************************************************************
- *                      SwTxtFrm::LeftMargin()
- *************************************************************************/
 
 /*
  * Layout-oriented cursor movement to the line start.
@@ -721,10 +697,6 @@ bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
     SwTxtCursor::SetRightMargin( false );
     return true;
 }
-
-/*************************************************************************
- *                      SwTxtFrm::RightMargin()
- *************************************************************************/
 
 /*
  * To the line end: That's the position before the last char of the line.
@@ -766,10 +738,6 @@ bool SwTxtFrm::RightMargin(SwPaM *pPam, bool bAPI) const
     SwTxtCursor::SetRightMargin( !bAPI );
     return true;
 }
-
-/*************************************************************************
- *                      SwTxtFrm::_UnitUp()
- *************************************************************************/
 
 // The following two methods try to put the Crsr into the next/succsessive
 // line. If we do not have a preceding/successive line we forward the call
@@ -1174,10 +1142,6 @@ void SwTxtFrm::PrepareVisualMove( sal_Int32& nPos, sal_uInt8& nCrsrLevel,
     ubidi_close( pBidi );
 }
 
-/*************************************************************************
- *                      SwTxtFrm::_UnitDown()
- *************************************************************************/
-
 bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                          bool bSetInReadOnly ) const
 {
@@ -1303,10 +1267,6 @@ bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
     return SwCntntFrm::UnitDown( pPam, nOffset, bSetInReadOnly );
 }
 
-/*************************************************************************
- *                   virtual SwTxtFrm::UnitUp()
- *************************************************************************/
-
 bool SwTxtFrm::UnitUp(SwPaM *pPam, const SwTwips nOffset,
                       bool bSetInReadOnly ) const
 {
@@ -1325,10 +1285,6 @@ bool SwTxtFrm::UnitUp(SwPaM *pPam, const SwTwips nOffset,
     // Instead we have a SwSetToRightMargin in _UnitUp
     return bRet;
 }
-
-/*************************************************************************
- *                   virtual SwTxtFrm::UnitDown()
- *************************************************************************/
 
 bool SwTxtFrm::UnitDown(SwPaM *pPam, const SwTwips nOffset,
                         bool bSetInReadOnly ) const

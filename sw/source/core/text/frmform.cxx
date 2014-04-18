@@ -109,13 +109,9 @@ void SwTxtFrm::ValidateFrm()
     UNDO_SWAP( this )
 }
 
-/*************************************************************************
- * ValidateBodyFrm()
- * After a RemoveFtn the BodyFrm and all Frms contained within it, need to be
- * recalculated, so that the DeadLine is right.
- * First we search outwards, on the way back we calculate everything.
-*************************************************************************/
-
+// After a RemoveFtn the BodyFrm and all Frms contained within it, need to be
+// recalculated, so that the DeadLine is right.
+// First we search outwards, on the way back we calculate everything.
 void _ValidateBodyFrm( SwFrm *pFrm )
 {
     if( pFrm && !pFrm->IsCellFrm() )
@@ -462,12 +458,10 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, bool bHasToFit )
             nRstHeight += nAdd;
         }
 
-/* ------------------------------------
- * nRstHeight < 0 means that the TxtFrm is located completely outside of its Upper.
- * This can happen, if it's located within a FlyAtCntFrm, which changed sides by a
- * Grow(). In such a case, it's wrong to execute the following Grow().
- * In the case of a bug, we end up with an infinite loop.
- * -----------------------------------*/
+        // nRstHeight < 0 means that the TxtFrm is located completely outside of its Upper.
+        // This can happen, if it's located within a FlyAtCntFrm, which changed sides by a
+        // Grow(). In such a case, it's wrong to execute the following Grow().
+        // In the case of a bug, we end up with an infinite loop.
         SwTwips nFrmHeight = (Frm().*fnRect->fnGetHeight)();
         SwTwips nPrtHeight = (Prt().*fnRect->fnGetHeight)();
 
@@ -544,16 +538,11 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwTxtFrm::GetT
     return tabs;
 }
 
-/*************************************************************************
- * SwTxtFrm::AdjustFollow()
- * AdjustFollow expects the following situation:
- * The SwTxtIter points to the lower end of the Master, the Offset is set in
- * the Follow.
- * nOffset holds the Offset in the text string, from which the Master closes
- * and the Follow starts.
- * If it's 0, the FollowFrame is deleted.
- *************************************************************************/
-
+// AdjustFollow expects the following situation:
+// The SwTxtIter points to the lower end of the Master, the Offset is set in the Follow.
+// nOffset holds the Offset in the text string, from which the Master closes
+// and the Follow starts.
+// If it's 0, the FollowFrame is deleted.
 void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
                              const sal_Int32 nOffset, const sal_Int32 nEnd,
                              const sal_uInt8 nMode )

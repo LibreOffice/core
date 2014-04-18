@@ -42,14 +42,9 @@ using namespace ::com::sun::star::linguistic2;
 
 #define CH_FULL_BLANK 0x3000
 
-/*************************************************************************
- *                      SwTxtGuess::Guess
- *
- * provides information for line break calculation
- * returns true if no line break has to be performed
- * otherwise possible break or hyphenation position is determined
- *************************************************************************/
-
+// provides information for line break calculation
+// returns true if no line break has to be performed
+// otherwise possible break or hyphenation position is determined
 bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                             const KSHORT nPorHeight )
 {

@@ -496,12 +496,7 @@ SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf )
 
 extern Color aGlobalRetoucheColor;
 
-/*************************************************************************
- * lcl_IsDarkBackground
- *
- * Returns if the current background color is dark.
- *************************************************************************/
-
+// Returns if the current background color is dark.
 static bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
 {
     const Color* pCol = rInf.GetFont()->GetBackColor();
@@ -535,10 +530,6 @@ static bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
 
     return pCol->IsDark();
 }
-
-/*************************************************************************
- * SwTxtPaintInfo::_DrawText()
- *************************************************************************/
 
 void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor,
                                 const sal_Int32 nStart, const sal_Int32 nLength,
@@ -788,17 +779,12 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
     }
 }
 
-/*************************************************************************
- * lcl_DrawSpecial
- *
- * Draws a special portion, e.g., line break portion, tab portion.
- * rPor     - The portion
- * rRect    - The rectangle surrounding the character
- * rCol     - Specify a color for the character
- * bCenter  - Draw the character centered, otherwise left aligned
- * bRotate  - Rotate the character if character rotation is set
- *************************************************************************/
-
+// Draws a special portion, e.g., line break portion, tab portion.
+// rPor     - The portion
+// rRect    - The rectangle surrounding the character
+// rCol     - Specify a color for the character
+// bCenter  - Draw the character centered, otherwise left aligned
+// bRotate  - Rotate the character if character rotation is set
 static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
                       SwRect& rRect, const Color& rCol, sal_Unicode cChar,
                       sal_uInt8 nOptions )
@@ -1377,14 +1363,11 @@ void SwTxtFormatInfo::CtorInitTxtFormatInfo( SwTxtFrm *pNewFrm, const bool bNewI
     Init();
 }
 
-/*************************************************************************
- * SwTxtFormatInfo::IsHyphenate()
- * If the Hyphenator returns ERROR or the language is set to NOLANGUAGE
- * we do not hyphenate.
- * Else, we always hyphenate if we do interactive hyphenation.
- * If we do not do interactive hyphenation, we only hyphenate if ParaFmt is
- * set to automatic hyphenation.
- *************************************************************************/
+// If the Hyphenator returns ERROR or the language is set to NOLANGUAGE
+// we do not hyphenate.
+// Else, we always hyphenate if we do interactive hyphenation.
+// If we do not do interactive hyphenation, we only hyphenate if ParaFmt is
+// set to automatic hyphenation.
 bool SwTxtFormatInfo::IsHyphenate() const
 {
     if( !bInterHyph && !bAutoHyph )
@@ -1403,11 +1386,6 @@ bool SwTxtFormatInfo::IsHyphenate() const
 
     return xHyph->hasLocale( g_pBreakIt->GetLocale(eTmp) );
 }
-
-/*************************************************************************
- * SwTxtFormatInfo::GetDropFmt()
- * Dropcaps called by the SwTxtFormatter::CTOR
-*************************************************************************/
 
 const SwFmtDrop *SwTxtFormatInfo::GetDropFmt() const
 {
@@ -1455,15 +1433,12 @@ void SwTxtFormatInfo::Init()
     SetPaintOfst(0);
 }
 
-/*--------------------------------------------------
- * There are a few differences between a copy constructor
- * and the following constructor for multi-line formatting.
- * The root is the first line inside the multi-portion,
- * the line start is the actual position in the text,
- * the line width is the rest width from the surrounding line
- * and the bMulti and bFirstMulti-flag has to be set correctly.
- * --------------------------------------------------*/
-
+// There are a few differences between a copy constructor
+// and the following constructor for multi-line formatting.
+// The root is the first line inside the multi-portion,
+// the line start is the actual position in the text,
+// the line width is the rest width from the surrounding line
+// and the bMulti and bFirstMulti-flag has to be set correctly.
 SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     SwLineLayout& rLay, SwTwips nActWidth ) : SwTxtPaintInfo( rInf ),
     bTabOverflow( false )
