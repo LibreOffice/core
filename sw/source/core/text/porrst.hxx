@@ -26,10 +26,6 @@
 
 class SwTxtFormatInfo;
 
-/*************************************************************************
- *                      class SwTmpEndPortion
- *************************************************************************/
-
 class SwTmpEndPortion : public SwLinePortion
 {
 public:
@@ -37,10 +33,6 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                      class SwBreakPortion
- *************************************************************************/
 
 class SwBreakPortion : public SwLinePortion
 {
@@ -58,10 +50,6 @@ public:
 
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                      class SwKernPortion
- *************************************************************************/
 
 class SwKernPortion : public SwLinePortion
 {
@@ -89,10 +77,6 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-/*************************************************************************
- *                      class SwArrowPortion
- *************************************************************************/
-
 class SwArrowPortion : public SwLinePortion
 {
     Point aPos;
@@ -107,14 +91,10 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-/*************************************************************************
- *                      class SwHangingPortion
- * The characters which are forbidden at the start of a line like the dot and
- * other punctuation marks are allowed to display in the margin of the page
- * by a user option.
- * The SwHangingPortion is the corresponding textportion to do that.
- *************************************************************************/
-
+// The characters which are forbidden at the start of a line like the dot and
+// other punctuation marks are allowed to display in the margin of the page
+// by a user option.
+// The SwHangingPortion is the corresponding textportion to do that.
 class SwHangingPortion : public SwTxtPortion
 {
     KSHORT nInnerWidth;
@@ -125,11 +105,7 @@ public:
     inline KSHORT GetInnerWidth() const { return nInnerWidth; }
 };
 
-/*************************************************************************
- *                      class SwHiddenTextPortion
- * Is used to hide text
- *************************************************************************/
-
+// Used to hide text
 class SwHiddenTextPortion : public SwLinePortion
 {
 public:
@@ -139,10 +115,6 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
 };
-
-/*************************************************************************
- *                      class SwControlCharPortion
- *************************************************************************/
 
 class SwControlCharPortion : public SwLinePortion
 {

@@ -23,10 +23,6 @@
 #include "portox.hxx"
 #include "inftxt.hxx"
 
-/*************************************************************************
- *               virtual SwToxPortion::Paint()
- *************************************************************************/
-
 void SwToxPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( Width() )
@@ -36,10 +32,6 @@ void SwToxPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-/*************************************************************************
- *                      class SwIsoToxPortion
- *************************************************************************/
-
 SwLinePortion *SwIsoToxPortion::Compress() { return this; }
 
 SwIsoToxPortion::SwIsoToxPortion() : nViewWidth(0)
@@ -47,10 +39,6 @@ SwIsoToxPortion::SwIsoToxPortion() : nViewWidth(0)
     SetLen(1);
     SetWhichPor( POR_ISOTOX );
 }
-
-/*************************************************************************
- *               virtual SwIsoToxPortion::GetViewWidth()
- *************************************************************************/
 
 KSHORT SwIsoToxPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
@@ -70,28 +58,16 @@ KSHORT SwIsoToxPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
     return nViewWidth;
 }
 
-/*************************************************************************
- *                 virtual SwIsoToxPortion::Format()
- *************************************************************************/
-
 bool SwIsoToxPortion::Format( SwTxtFormatInfo &rInf )
 {
     return SwLinePortion::Format( rInf );
 }
-
-/*************************************************************************
- *               virtual SwIsoToxPortion::Paint()
- *************************************************************************/
 
 void SwIsoToxPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( Width() )
         rInf.DrawViewOpt( *this, POR_TOX );
 }
-
-/*************************************************************************
- *              virtual SwIsoToxPortion::HandlePortion()
- *************************************************************************/
 
 void SwIsoToxPortion::HandlePortion( SwPortionHandler& rPH ) const
 {

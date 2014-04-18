@@ -24,10 +24,6 @@
 class SwTxtFrm;
 class SwTxtFtn;
 
-/*************************************************************************
- *                      class SwFtnPortion
- *************************************************************************/
-
 class SwFtnPortion : public SwFldPortion
 {
     SwTxtFtn *pFtn;
@@ -52,10 +48,6 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-/*************************************************************************
- *                      class SwFtnNumPortion
- *************************************************************************/
-
 class SwFtnNumPortion : public SwNumberPortion
 {
 public:
@@ -65,10 +57,6 @@ public:
 
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                      class SwQuoVadisPortion
- *************************************************************************/
 
 class SwQuoVadisPortion : public SwFldPortion
 {
@@ -91,10 +79,6 @@ public:
 
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                      class SwErgoSumPortion
- *************************************************************************/
 
 class SwErgoSumPortion : public SwFldPortion
 {

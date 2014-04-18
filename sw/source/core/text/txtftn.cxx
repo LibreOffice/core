@@ -153,13 +153,8 @@ bool SwTxtFrm::CalcPrepFtnAdjust()
     return true;
 }
 
-/*************************************************************************
- *                      lcl_GetFtnLower()
- *
- * Local helper function. Checks if nLower should be taken as the boundary
- * for the footnote.
- *************************************************************************/
-
+// Local helper function. Checks if nLower should be taken as the boundary
+// for the footnote.
 static SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
 {
     // nLower is an absolute value. It denotes the bottom of the line
@@ -975,9 +970,6 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     return pNewPor;
 }
 
-/*************************************************************************
- *                  SwTxtFormatter::NewErgoSumPortion()
- *************************************************************************/
 OUString lcl_GetPageNumber( const SwPageFrm* pPage )
 {
     OSL_ENSURE( pPage, "GetPageNumber: Homeless TxtFrm" );
@@ -1503,12 +1495,7 @@ void SwParaPortion::SetErgoSumNum( const OUString& rErgo )
         pQuo->SetNumber( rErgo );
 }
 
-/*************************************************************************
- *                      SwParaPortion::UpdateQuoVadis()
- *
- * Wird im SwTxtFrm::Prepare() gerufen
- *************************************************************************/
-
+// Wird im SwTxtFrm::Prepare() gerufen
 bool SwParaPortion::UpdateQuoVadis( const OUString &rQuo )
 {
     SwLineLayout *pLay = this;

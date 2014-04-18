@@ -21,10 +21,6 @@
 #include "swrect.hxx"
 #include "rootfrm.hxx"
 
-/*************************************************************************
- *                      SwSaveClip::Reset()
- *************************************************************************/
-
 void SwSaveClip::Reset()
 {
     // We recover the old state
@@ -42,10 +38,6 @@ void SwSaveClip::Reset()
         bChg = false;
     }
 }
-
-/*************************************************************************
- *                      SwSaveClip::_ChgClip()
- *************************************************************************/
 
 void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
                            bool bEnlargeRect )

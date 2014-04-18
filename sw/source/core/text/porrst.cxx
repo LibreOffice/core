@@ -50,20 +50,12 @@
 
 #include <crsrsh.hxx>
 
-/*************************************************************************
- *                      class SwTmpEndPortion
- *************************************************************************/
-
 SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion )
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
     SetWhichPor( POR_TMPEND );
 }
-
-/*************************************************************************
- *                 virtual SwTmpEndPortion::Paint()
- *************************************************************************/
 
 void SwTmpEndPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -73,9 +65,6 @@ void SwTmpEndPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-/*************************************************************************
- *                      class SwBreakPortion
- *************************************************************************/
 SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
     : SwLinePortion( rPortion )
 {
@@ -98,10 +87,6 @@ void SwBreakPortion::Paint( const SwTxtPaintInfo &rInf ) const
         rInf.DrawLineBreak( *this );
 }
 
-/*************************************************************************
- *                 virtual SwBreakPortion::Format()
- *************************************************************************/
-
 bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
 {
     const SwLinePortion *pRoot = rInf.GetRoot();
@@ -112,10 +97,6 @@ bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
         rInf.SetNewLine( true );
     return true;
 }
-
-/*************************************************************************
- *              virtual SwBreakPortion::HandlePortion()
- *************************************************************************/
 
 void SwBreakPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
@@ -285,10 +266,6 @@ SwTwips SwTxtFrm::EmptyHeight() const
     delete pFnt;
     return nRet;
 }
-
-/*************************************************************************
- *                      SwTxtFrm::FormatEmpty()
- *************************************************************************/
 
 bool SwTxtFrm::FormatEmpty()
 {
@@ -469,10 +446,6 @@ bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
     return ( 0 != rRegDiff );
 }
 
-/*************************************************************************
- *              virtual SwHiddenTextPortion::Paint()
- *************************************************************************/
-
 void SwHiddenTextPortion::Paint( const SwTxtPaintInfo & rInf) const
 {
     (void)rInf;
@@ -490,10 +463,6 @@ void SwHiddenTextPortion::Paint( const SwTxtPaintInfo & rInf) const
 #endif
 }
 
-/*************************************************************************
- *              virtual SwHiddenTextPortion::Format()
- *************************************************************************/
-
 bool SwHiddenTextPortion::Format( SwTxtFormatInfo &rInf )
 {
     Width( 0 );
@@ -501,10 +470,6 @@ bool SwHiddenTextPortion::Format( SwTxtFormatInfo &rInf )
 
     return false;
 };
-
-/*************************************************************************
- *              virtual SwControlCharPortion::Paint()
- *************************************************************************/
 
 void SwControlCharPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -550,10 +515,6 @@ void SwControlCharPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-/*************************************************************************
- *              virtual SwControlCharPortion::Format()
- *************************************************************************/
-
 bool SwControlCharPortion::Format( SwTxtFormatInfo &rInf )
 {
     const SwLinePortion* pRoot = rInf.GetRoot();
@@ -563,10 +524,6 @@ bool SwControlCharPortion::Format( SwTxtFormatInfo &rInf )
 
     return false;
 }
-
-/*************************************************************************
- *              virtual SwControlCharPortion::GetViewWidth()
- *************************************************************************/
 
 KSHORT SwControlCharPortion::GetViewWidth( const SwTxtSizeInfo& rInf ) const
 {

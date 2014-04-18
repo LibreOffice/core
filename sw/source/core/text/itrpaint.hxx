@@ -23,10 +23,6 @@
 class SwSaveClip;          // SwTxtPainter
 class SwMultiPortion;
 
-/*************************************************************************
- *                      class SwTxtPainter
- *************************************************************************/
-
 class SwTxtPainter : public SwTxtCursor
 {
     bool bPaintDrop;

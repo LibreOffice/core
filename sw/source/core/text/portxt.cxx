@@ -45,12 +45,8 @@ using namespace ::sw::mark;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
 
-/*************************************************************************
- *                          lcl_AddSpace
- * Returns for how many characters an extra space has to be added
- * (for justified alignment).
- *************************************************************************/
-
+// Returns for how many characters an extra space has to be added
+// (for justified alignment).
 static sal_Int32 lcl_AddSpace( const SwTxtSizeInfo &rInf, const OUString* pStr,
                                const SwLinePortion& rPor )
 {
@@ -212,19 +208,11 @@ static sal_Int32 lcl_AddSpace( const SwTxtSizeInfo &rInf, const OUString* pStr,
     return nCnt;
 }
 
-/*************************************************************************
- *                      class SwTxtPortion
- *************************************************************************/
-
 SwTxtPortion::SwTxtPortion( const SwLinePortion &rPortion )
   : SwLinePortion( rPortion )
 {
     SetWhichPor( POR_TXT );
 }
-
-/*************************************************************************
- *                      SwTxtPortion::BreakCut()
- *************************************************************************/
 
 void SwTxtPortion::BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess )
 {
@@ -271,10 +259,6 @@ void SwTxtPortion::BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess )
     }
 }
 
-/*************************************************************************
- *                      SwTxtPortion::BreakUnderflow()
- *************************************************************************/
-
 void SwTxtPortion::BreakUnderflow( SwTxtFormatInfo &rInf )
 {
     Truncate();
@@ -284,10 +268,6 @@ void SwTxtPortion::BreakUnderflow( SwTxtFormatInfo &rInf )
     SetAscent( 0 );
     rInf.SetUnderflow( this );
 }
-
- /*************************************************************************
- *                      SwTxtPortion::_Format()
- *************************************************************************/
 
 static bool lcl_HasContent( const SwFldPortion& rFld, SwTxtFormatInfo &rInf )
 {
@@ -453,10 +433,6 @@ bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
-/*************************************************************************
- *                 virtual SwTxtPortion::Format()
- *************************************************************************/
-
 bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
 {
     if( rInf.X() > rInf.Width() || (!GetLen() && !InExpGrp()) )
@@ -476,10 +452,6 @@ bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
     return _Format( rInf );
 }
 
-/*************************************************************************
- *                 virtual SwTxtPortion::FormatEOL()
- *************************************************************************/
-
 // Format end of line
 // 5083: We can have awkward cases e.g.:
 // "from {Santa}"
@@ -488,7 +460,6 @@ bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
 // with the MarginPortion.
 
 // rInf.nIdx points to the next word, nIdx-1 is the portion's last char
-
 void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
     if( ( !GetPortion() || ( GetPortion()->IsKernPortion() &&
@@ -520,20 +491,13 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
     }
 }
 
-/*************************************************************************
- *               virtual SwTxtPortion::GetCrsrOfst()
- *************************************************************************/
 sal_Int32 SwTxtPortion::GetCrsrOfst( const KSHORT nOfst ) const
 {
     OSL_ENSURE( !this, "SwTxtPortion::GetCrsrOfst: don't use this method!" );
     return SwLinePortion::GetCrsrOfst( nOfst );
 }
 
-/*************************************************************************
- *                virtual SwTxtPortion::GetTxtSize()
- *************************************************************************/
 // The GetTxtSize() assumes that the own length is correct
-
 SwPosSize SwTxtPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 {
     SwPosSize aSize = rInf.GetTxtSize();
@@ -549,9 +513,6 @@ SwPosSize SwTxtPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
     return aSize;
 }
 
-/*************************************************************************
- *               virtual SwTxtPortion::Paint()
- *************************************************************************/
 void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetTxt()[rInf.GetIdx()])
@@ -590,22 +551,13 @@ void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-/*************************************************************************
- *              virtual SwTxtPortion::GetExpTxt()
- *************************************************************************/
-
 bool SwTxtPortion::GetExpTxt( const SwTxtSizeInfo &, OUString & ) const
 {
     return false;
 }
 
-/*************************************************************************
- *        sal_Int32 SwTxtPortion::GetSpaceCnt()
- *              long SwTxtPortion::CalcSpacing()
- * Are responsible for the justified paragraph. They calculate the blank
- * count and the resulting added space.
- *************************************************************************/
-
+// Responsible for the justified paragraph. They calculate the blank
+// count and the resulting added space.
 sal_Int32 SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
                                       sal_Int32& rCharCnt ) const
 {
@@ -686,10 +638,6 @@ long SwTxtPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) cons
 
     return nCnt * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
-
-/*************************************************************************
- *              virtual SwTxtPortion::HandlePortion()
- *************************************************************************/
 
 void SwTxtPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
@@ -819,10 +767,6 @@ bool SwTxtInputFldPortion::ContainsOnlyDummyChars() const
            && mbContainsInputFieldEnd;
 }
 
-/*************************************************************************
- *                      class SwHolePortion
- *************************************************************************/
-
 SwHolePortion::SwHolePortion( const SwTxtPortion &rPor )
     : nBlankWidth( 0 )
 {
@@ -833,10 +777,6 @@ SwHolePortion::SwHolePortion( const SwTxtPortion &rPor )
 }
 
 SwLinePortion *SwHolePortion::Compress() { return this; }
-
-/*************************************************************************
- *               virtual SwHolePortion::Paint()
- *************************************************************************/
 
 void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -869,18 +809,10 @@ void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
     delete pHoleFont;
 }
 
-/*************************************************************************
- *                 virtual SwHolePortion::Format()
- *************************************************************************/
-
 bool SwHolePortion::Format( SwTxtFormatInfo &rInf )
 {
     return rInf.IsFull() || rInf.X() >= rInf.Width();
 }
-
-/*************************************************************************
- *              virtual SwHolePortion::HandlePortion()
- *************************************************************************/
 
 void SwHolePortion::HandlePortion( SwPortionHandler& rPH ) const
 {

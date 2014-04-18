@@ -56,13 +56,9 @@
 #include "porrst.hxx"
 #include "pormulti.hxx"
 
-/*************************************************************************
- *                  IsUnderlineBreak
- *
- * Returns, if we have an underline breaking situation
- * Adding some more conditions here means you also have to change them
- * in SwTxtPainter::CheckSpecialUnderline
- *************************************************************************/
+// Returns, if we have an underline breaking situation
+// Adding some more conditions here means you also have to change them
+// in SwTxtPainter::CheckSpecialUnderline
 bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
 {
     return UNDERLINE_NONE == rFnt.GetUnderline() ||
@@ -133,17 +129,13 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
     return pPor;
 }
 
-/*************************************************************************
- *                    SwTxtPainter::DrawTextLine()
- *
- * Es gibt zwei Moeglichkeiten bei transparenten Font auszugeben:
- * 1) DrawRect auf die ganze Zeile und die DrawText hinterher
- *    (objektiv schnell, subjektiv langsam).
- * 2) Fuer jede Portion ein DrawRect mit anschliessendem DrawText
- *    ausgefuehrt (objektiv langsam, subjektiv schnell).
- * Da der User in der Regel subjektiv urteilt, wird die 2. Methode
- * als Default eingestellt.
- *************************************************************************/
+// Es gibt zwei Moeglichkeiten bei transparenten Font auszugeben:
+// 1) DrawRect auf die ganze Zeile und die DrawText hinterher
+//    (objektiv schnell, subjektiv langsam).
+// 2) Fuer jede Portion ein DrawRect mit anschliessendem DrawText
+//    ausgefuehrt (objektiv langsam, subjektiv schnell).
+// Da der User in der Regel subjektiv urteilt, wird die 2. Methode
+// als Default eingestellt.
 void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                                  const bool bUnderSz )
 {

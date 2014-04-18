@@ -601,15 +601,10 @@ void SwTxtFrm::HideAndShowObjects()
     }
 }
 
-/*************************************************************************
- *                      SwTxtFrm::FindBrk()
- *
- * Returns the first possible break point in the current line.
- * This method is used in SwTxtFrm::Format() to decide whether the previous
- * line has to be formatted as well.
- * nFound is <= nEndLine.
- *************************************************************************/
-
+// Returns the first possible break point in the current line.
+// This method is used in SwTxtFrm::Format() to decide whether the previous
+// line has to be formatted as well.
+// nFound is <= nEndLine.
 sal_Int32 SwTxtFrm::FindBrk( const OUString &rTxt,
                               const sal_Int32 nStart,
                               const sal_Int32 nEnd ) const
@@ -1747,15 +1742,12 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         pPara->SetPrep();
 }
 
-/* --------------------------------------------------
- * Small Helper class:
- * Prepares a test format.
- * The frame is changed in size and position, its SwParaPortion is moved aside
- * and a new one is created.
- * To achieve this, run formatting with bTestFormat flag set.
- * In the destructor the TxtFrm is reset to its original state.
- * --------------------------------------------------*/
-
+// Small Helper class:
+// Prepares a test format.
+// The frame is changed in size and position, its SwParaPortion is moved aside
+// and a new one is created.
+// To achieve this, run formatting with bTestFormat flag set.
+// In the destructor the TxtFrm is reset to its original state.
 class SwTestFormat
 {
     SwTxtFrm *pFrm;

@@ -49,10 +49,6 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwLineLayout ) // Lines
 IMPL_FIXEDMEMPOOL_NEWDEL( SwHolePortion ) // e.g. Blanks at the line end
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtPortion ) // Attribute change
 
-/*************************************************************************
- *                  _TextInit(), _TextFinit()
- *************************************************************************/
-
 // Are ONLY used in init.cxx.
 // There we have extern void _TextFinit()
 // and extern void _TextInit(...)

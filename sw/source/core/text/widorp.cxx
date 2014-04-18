@@ -54,10 +54,6 @@ inline bool IsNastyFollow( const SwTxtFrm *pFrm )
 
 }
 
-/*************************************************************************
- *                  SwTxtFrmBreak::SwTxtFrmBreak()
- *************************************************************************/
-
 SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
     : nRstHeight(nRst), pFrm(pNewFrm)
 {
@@ -94,10 +90,6 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
  * there are some lines available.
  *
  */
-
-/*************************************************************************
- *                  SwTxtFrmBreak::IsInside()
- *************************************************************************/
 
 /* BP(22.07.92): Calculation of Widows and Orphans.
  * The method returns true if one of the rules matches.
@@ -171,10 +163,6 @@ bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
     return bFit;
 }
 
-/*************************************************************************
- *                  SwTxtFrmBreak::IsBreakNow()
- *************************************************************************/
-
 bool SwTxtFrmBreak::IsBreakNow( SwTxtMargin &rLine )
 {
     SWAP_IF_SWAPPED( pFrm )
@@ -233,10 +221,6 @@ void SwTxtFrmBreak::SetRstHeight( const SwTxtMargin &rLine )
     else
         nRstHeight += rLine.Y() - nOrigin;
 }
-
-/*************************************************************************
- *                  WidowsAndOrphans::WidowsAndOrphans()
- *************************************************************************/
 
 WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
     bool bChkKeep   )
@@ -314,10 +298,6 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
     UNDO_SWAP( pFrm )
 }
 
-/*************************************************************************
- *                  WidowsAndOrphans::FindBreak()
- *************************************************************************/
-
 /* The Find*-Methodes do not only search, but adjust the SwTxtMargin to the
  * line where the paragraph should have a break and truncate the paragraph there.
  * FindBreak()
@@ -369,10 +349,6 @@ bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
 
     return bRet;
 }
-
-/*************************************************************************
- *                  WidowsAndOrphans::FindWidows()
- *************************************************************************/
 
 /*  FindWidows positions the SwTxtMargin of the Master to the line where to
  *  break by examining and formatting the Follow.
@@ -503,10 +479,6 @@ bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
     pMaster->Prepare( PREP_WIDOWS, (void*)&nNeed );
     return true;
 }
-
-/*************************************************************************
- *                  WidowsAndOrphans::WouldFit()
- *************************************************************************/
 
 bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, bool bTst )
 {

@@ -31,14 +31,11 @@ class SwTxtAttr;
 class SfxPoolItem;
 class SwFont;
 
-/*--------------------------------------------------
- * SwMultiCreator is a small structur to create a multiportion.
- * It contains the kind of multiportion and a textattribute
- * or a poolitem.
- * The GetMultiCreator-function fills this structur and
- * the Ctor of the SwMultiPortion uses it.
- * --------------------------------------------------*/
-
+// SwMultiCreator is a small structur to create a multiportion.
+// It contains the kind of multiportion and a textattribute
+// or a poolitem.
+// The GetMultiCreator-function fills this structur and
+// the Ctor of the SwMultiPortion uses it.
 #define SW_MC_DOUBLE    0
 #define SW_MC_RUBY      1
 #define SW_MC_ROTATE    2
@@ -52,11 +49,8 @@ struct SwMultiCreator
     sal_uInt8 nLevel;
 };
 
-/*--------------------------------------------------
- * A two-line-portion (SwMultiPortion) could have surrounding brackets,
- * in this case the structur SwBracket will be used.
- * --------------------------------------------------*/
-
+// A two-line-portion (SwMultiPortion) could have surrounding brackets,
+// in this case the structur SwBracket will be used.
 struct SwBracket
 {
     sal_Int32 nStart;      // Start of text attribute determins the font
@@ -70,15 +64,12 @@ struct SwBracket
     sal_uInt8 nPostScript;       // Script of the final character
 };
 
-/*--------------------------------------------------
- * The SwMultiPortion is line portion inside a line portion,
- * it's a group of portions,
- * e.g. a double line portion in a line
- * or phonetics (ruby)
- * or combined characters
- * or a rotated portion.
- * --------------------------------------------------*/
-
+// The SwMultiPortion is line portion inside a line portion,
+// it's a group of portions,
+// e.g. a double line portion in a line
+// or phonetics (ruby)
+// or combined characters
+// or a rotated portion.
 class SwMultiPortion : public SwLinePortion
 {
     SwLineLayout aRoot;     // One or more lines
@@ -254,10 +245,6 @@ public:
         SwTwips nY, sal_uInt16& nX, sal_Int32 nCurrStart, long nSpaceAdd );
     ~SwTxtCursorSave();
 };
-
-/*************************************************************************
- *                  inline - Implementations
- *************************************************************************/
 
 inline bool SwMultiPortion::HasBrackets() const
 {

@@ -28,10 +28,6 @@ class SwFlyInCntFrm;
 class SwTxtFrm;
 struct SwCrsrMoveState;
 
-/*************************************************************************
- *                class SwFlyPortion
- *************************************************************************/
-
 class SwFlyPortion : public SwFixPortion
 {
     KSHORT nBlankWidth;
@@ -44,10 +40,6 @@ public:
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                class SwFlyCntPortion
- *************************************************************************/
 
 /// This portion represents an as-character anchored fly (shape, frame, etc.)
 class SwFlyCntPortion : public SwLinePortion
