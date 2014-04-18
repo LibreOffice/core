@@ -67,7 +67,7 @@ $(eval $(call gb_Module_add_targets,pyuno, \
 endif
 
 ifneq (,$(filter PythonTest_pytests,$(MAKECMDGOALS)))
-$(eval $(call gb_Module_add_targets,pyuno, \
+$(eval $(call gb_Module_add_slowcheck_targets,pyuno, \
     PythonTest_pytests \
     PythonTest_pyuno_pytests_insertremovecells \
 ))
