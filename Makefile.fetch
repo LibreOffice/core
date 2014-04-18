@@ -146,6 +146,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,LANGUAGETOOL,$(LANGUAGETOOL_TARBALL)) \
 		$(call fetch_Optional,LCMS2,$(LCMS2_TARBALL)) \
 		$(call fetch_Optional,LIBEXTTEXTCAT,$(LIBEXTTEXTCAT_TARBALL)) \
+		$(call fetch_Optional,LIBGLTF,$(LIBGLTF_TARBALL)) \
 		$(call fetch_Optional,LIBLANGTAG,$(LIBLANGTAG_TARBALL)) \
 		$(call fetch_Optional,LIBXML2,$(LIBXML_TARBALL)) \
 		$(LIBXMLSEC_TARBALL) \

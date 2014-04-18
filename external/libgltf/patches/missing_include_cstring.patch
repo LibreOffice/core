@@ -1,0 +1,11 @@
+diff -ur libgltf.org/src/Common.cpp libgltf/src/Common.cpp
+--- libgltf.org/src/Common.cpp	2014-04-18 12:09:30.459000229 +0200
++++ libgltf/src/Common.cpp	2014-04-18 12:09:51.643999448 +0200
+@@ -6,6 +6,7 @@
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  */
+ #include "Common.h"
++#include <cstring>
+ 
+ namespace glTF
+ {

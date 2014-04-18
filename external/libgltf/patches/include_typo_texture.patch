@@ -1,0 +1,12 @@
+diff -ur libgltf.org/src/Texture.cpp libgltf/src/Texture.cpp
+--- libgltf.org/src/Texture.cpp	2014-04-18 12:19:41.806977683 +0200
++++ libgltf/src/Texture.cpp	2014-04-18 12:20:08.065976714 +0200
+@@ -5,7 +5,7 @@
+  * License, v. 2.0. If a copy of the MPL was not distributed with this
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  */
+-#include "texture.h"
++#include "Texture.h"
+ 
+ Texture::Texture()
+ {

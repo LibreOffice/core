@@ -1,0 +1,13 @@
+diff -ur libgltf.org/src/FPSCounter.cpp libgltf/src/FPSCounter.cpp
+--- libgltf.org/src/FPSCounter.cpp	2014-04-18 12:21:54.655972783 +0200
++++ libgltf/src/FPSCounter.cpp	2014-04-18 12:22:25.280971654 +0200
+@@ -107,7 +107,8 @@
+     glUseProgram(uiFPSProgram);
+     glDisable(GL_DEPTH_TEST);
+     GLuint iLoc = glGetUniformLocation(uiFPSProgram, "matrices.projMatrix");
+-    glUniformMatrix4fv(iLoc, 1,false, (GLfloat*)(&glm::ortho(0.0f, float(pViewport->width), 0.0f, float(pViewport->height))));
++    const glm::mat4 aMat = glm::ortho(0.0f, float(pViewport->width), 0.0f, float(pViewport->height));
++    glUniformMatrix4fv(iLoc, 1,false, glm::value_ptr(aMat));
+     glm::vec4 lightVector = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+     iLoc = glGetUniformLocation(uiFPSProgram, "vColor");
+     glUniform4fv(iLoc, 1, (GLfloat*)&lightVector);

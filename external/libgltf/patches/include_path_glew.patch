@@ -1,0 +1,48 @@
+diff -ur libgltf.org/src/Camera.h libgltf/src/Camera.h
+--- libgltf.org/src/Camera.h	2014-04-18 12:05:38.343008790 +0200
++++ libgltf/src/Camera.h	2014-04-18 12:05:50.331008348 +0200
+@@ -8,7 +8,7 @@
+ #ifndef CAMERA_H
+ #define CAMERA_H
+ 
+-#include <glew/glew.h>
++#include <GL/glew.h>
+ #include <glm/glm.hpp>
+ 
+ class CPhysicalCamera
+diff -ur libgltf.org/src/Common.h libgltf/src/Common.h
+--- libgltf.org/src/Common.h	2014-04-18 12:05:38.343008790 +0200
++++ libgltf/src/Common.h	2014-04-18 12:05:52.245008277 +0200
+@@ -7,7 +7,7 @@
+  */
+ #ifndef COMMON_H
+ #define COMMON_H
+-#include <glew/glew.h>
++#include <GL/glew.h>
+ #include <glm/glm.hpp>
+ #include <string>
+ #include <vector>
+diff -ur libgltf.org/src/Shaders.h libgltf/src/Shaders.h
+--- libgltf.org/src/Shaders.h	2014-04-18 12:05:38.343008790 +0200
++++ libgltf/src/Shaders.h	2014-04-18 12:06:02.907007884 +0200
+@@ -8,7 +8,7 @@
+ #ifndef SHADERS_H
+ #define SHADERS_H
+ 
+-#include <glew/glew.h>
++#include <GL/glew.h>
+ #include <glm/glm.hpp>
+ 
+ #include <string>
+diff -ur libgltf.org/src/Texture.h libgltf/src/Texture.h
+--- libgltf.org/src/Texture.h	2014-04-18 12:05:38.343008790 +0200
++++ libgltf/src/Texture.h	2014-04-18 12:06:06.390007755 +0200
+@@ -10,7 +10,7 @@
+ #include <string>
+ #include <vector>
+ #include <map>
+-#include <glew/glew.h>
++#include <GL/glew.h>
+ #include <glm/glm.hpp>
+ using namespace std;
+ 

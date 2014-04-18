@@ -1,0 +1,12 @@
+diff -ur libgltf.org/Common.h libgltf/Common.h
+--- libgltf.org/Common.h	2014-04-17 14:24:31.978887883 +0200
++++ libgltf/Common.h	2014-04-17 14:24:57.505886942 +0200
+@@ -551,7 +551,7 @@
+         std::map<std::string, class Technique*>& getTechniqueMap();
+ 
+         const std::string getCameraIndex() const;
+-        const float* Scene::getCameraMatrix() const;
++        const float* getCameraMatrix() const;
+ 
+         char* getBuffer(unsigned int length);
+ 		bool  setBuffer(const std::string& binName, unsigned int length);

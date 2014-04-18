@@ -1,0 +1,12 @@
+diff -ur libgltf.org/src/RenderScene.cpp libgltf/src/RenderScene.cpp
+--- libgltf.org/src/RenderScene.cpp	2014-04-18 12:13:26.226991534 +0200
++++ libgltf/src/RenderScene.cpp	2014-04-18 12:13:46.133990800 +0200
+@@ -587,8 +587,6 @@
+ 	}
+     pFPSCounter->timeStampEnd();
+     pFPSCounter->printFPS(pViewport);
+-
+-    SwapBuffers(wglGetCurrentDC());
+ }
+ 
+ void RenderScene::releaseRender(void* lpParam)

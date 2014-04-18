@@ -1,0 +1,12 @@
+diff -ur libgltf.org/src/Font.h libgltf/src/Font.h
+--- libgltf.org/src/Font.h	2014-04-18 12:07:57.573003655 +0200
++++ libgltf/src/Font.h	2014-04-18 12:08:22.202002747 +0200
+@@ -8,7 +8,7 @@
+ #ifndef FONT_H
+ #define FONT_H
+ 
+-#include "freetype/ft2build.h"
++#include "ft2build.h"
+ #include FT_FREETYPE_H
+ #include "Texture.h"
+ 

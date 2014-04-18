@@ -1,0 +1,40 @@
+diff -ur libgltf.org/src/FPSCounter.cpp libgltf/src/FPSCounter.cpp
+--- libgltf.org/src/FPSCounter.cpp	2014-04-18 12:10:37.031997774 +0200
++++ libgltf/src/FPSCounter.cpp	2014-04-18 12:12:00.025994713 +0200
+@@ -115,8 +115,10 @@
+     {
+         mFPS = getFPS();
+         mDurationTime = 0;
++#ifdef _WIN32
+         mTotalTime = getExecutionTime();
+         mGPUTime = mGPUDuration/dqFreq;
++#endif
+     } 
+     else
+     {
+@@ -128,6 +130,8 @@
+     }
+ 
+     pFont->printFormattedString(20, pViewport->height-30, 20, "FPS: %d", mFPS);
++#ifdef _WIN32
+     pFont->printFormattedString(20, pViewport->height-60, 20, "Render Total Time: %.2f ms, Draw Time: %.2f ms", mTotalTime*1000,mGPUTime*1000);
++#endif
+     glEnable(GL_DEPTH_TEST);
+-}
+\ No newline at end of file
++}
+diff -ur libgltf.org/src/FPSCounter.h libgltf/src/FPSCounter.h
+--- libgltf.org/src/FPSCounter.h	2014-04-18 12:10:37.038997774 +0200
++++ libgltf/src/FPSCounter.h	2014-04-18 12:11:32.301995736 +0200
+@@ -51,9 +51,11 @@
+         mFPS=0;
+         mDurationTime =0;
+         mGPUTime =0;
++#ifdef _WIN32
+         mTotalTime = 0;
+         QueryPerformanceFrequency(&f);
+         dqFreq=(double)f.QuadPart;
++#endif
+     }
+     ~FPSCounter()
+     {

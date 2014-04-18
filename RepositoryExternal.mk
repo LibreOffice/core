@@ -21,7 +21,7 @@
 # depending on the configure options these may be taken from the system,
 # or the internal/bundled copy may be built.
 
-# for every external, a function gb_LinkTarget_use__FOO is defined,
+# for every external, a function gb_LinkTarget__use_FOO is defined,
 # once for the system case, once for the internal case.
 
 # in the system case, no libraries should be registered, but the target-local
@@ -3086,6 +3086,22 @@ endef
 endif # SYSTEM_NSS
 
 endif # DESKTOP
+
+
+ifeq ($(ENABLE_GLTF),TRUE)
+
+define gb_LinkTarget__use_libgltf
+$(call gb_LinkTarget_set_include,$(1),\
+    -I$(call gb_UnpackedTarball_get_dir,libgltf)/inc \
+    $$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	libgltf \
+)
+endef
+
+endif
 
 ### Jars ############################################################
 

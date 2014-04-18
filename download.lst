@@ -88,6 +88,7 @@ export JPEG_TARBALL := 52654eb3b2e60c35731ea8fc87f1bd29-jpegsrc.v8d.tar.gz
 export LANGUAGETOOL_TARBALL := b63e6340a02ff1cacfeadb2c42286161-JLanguageTool-1.7.0.tar.bz2
 export LCMS2_TARBALL := 861ef15fa0bc018f9ddc932c4ad8b6dd-lcms2-2.4.tar.gz
 export LIBEXTTEXTCAT_TARBALL := ae330b9493bd4503ac390106ff6060d7-libexttextcat-3.4.3.tar.bz2
+export LIBGLTF_TARBALL := 8ac8ae9829c4fefd1ae9f715f95d4e0b-libgltf.tar.gz
 export LIBLANGTAG_TARBALL := 36271d3fa0d9dec1632029b6d7aac925-liblangtag-0.5.1.tar.bz2
 export LIBXMLSEC_TARBALL := 1f24ab1d39f4a51faf22244c94a6203f-xmlsec1-1.2.14.tar.gz
 export LIBXML_TARBALL := 9c0cfef285d5c4a5c80d00904ddab380-libxml2-2.9.1.tar.gz

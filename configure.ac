@@ -10368,6 +10368,7 @@ AC_MSG_CHECKING([whether to enable glTF support])
 if test "$enable_opengl" = "yes"; then
     ENABLE_GLTF=TRUE
     AC_MSG_RESULT([yes])
+    BUILD_TYPE="$BUILD_TYPE LIBGLTF"
     if test "$test_freetype" = "no"; then
         BUILD_TYPE="$BUILD_TYPE FREETYPE"
     fi
