@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBSTORE_HXX
-#define _UCBSTORE_HXX
+#ifndef INCLUDED_UCB_SOURCE_CORE_UCBSTORE_HXX
+#define INCLUDED_UCB_SOURCE_CORE_UCBSTORE_HXX
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -339,6 +339,6 @@ public:
     const OUString& getFullKey();
 };
 
-#endif /* !_UCBSTORE_HXX */
+#endif // INCLUDED_UCB_SOURCE_CORE_UCBSTORE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

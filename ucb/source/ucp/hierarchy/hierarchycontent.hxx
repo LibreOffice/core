@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HIERARCHYCONTENT_HXX
-#define _HIERARCHYCONTENT_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYCONTENT_HXX
+#define INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYCONTENT_HXX
 
 #include <list>
 #include <rtl/ref.hxx>
@@ -308,6 +308,6 @@ public:
 
 } // namespace hierarchy_ucp
 
-#endif /* !_HIERARCHYCONTENT_HXX */
+#endif // INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYCONTENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

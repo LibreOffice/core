@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SORTDYNRES_HXX
-#define _SORTDYNRES_HXX
+#ifndef INCLUDED_UCB_SOURCE_SORTER_SORTDYNRES_HXX
+#define INCLUDED_UCB_SOURCE_SORTER_SORTDYNRES_HXX
 
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>

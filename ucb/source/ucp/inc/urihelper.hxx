@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_URIHELPER_HXX
-#define INCLUDED_URIHELPER_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_INC_URIHELPER_HXX
+#define INCLUDED_UCB_SOURCE_UCP_INC_URIHELPER_HXX
 
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -112,6 +112,6 @@ namespace ucb_impl { namespace urihelper {
 
 } } // namespace
 
-#endif /* !INCLUDED_URIHELPER_HXX */
+#endif // INCLUDED_UCB_SOURCE_UCP_INC_URIHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

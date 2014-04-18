@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBPROPS_HXX
-#define _UCBPROPS_HXX
+#ifndef INCLUDED_UCB_SOURCE_CORE_UCBPROPS_HXX
+#define INCLUDED_UCB_SOURCE_CORE_UCBPROPS_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -85,6 +85,6 @@ public:
         throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-#endif /* !_UCBPROPS_HXX */
+#endif // INCLUDED_UCB_SOURCE_CORE_UCBPROPS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

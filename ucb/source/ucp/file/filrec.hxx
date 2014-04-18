@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FILREC_HXX_
-#define _FILREC_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILREC_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FILE_FILREC_HXX
 
 #include <osl/file.hxx>
 
@@ -74,6 +74,6 @@ public:
 };
 
 } // namespace fileaccess
-#endif  // _FILREC_HXX_
+#endif // INCLUDED_UCB_SOURCE_UCP_FILE_FILREC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

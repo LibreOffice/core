@@ -23,8 +23,8 @@
 
  *************************************************************************/
 
-#ifndef _FTP_FTPLOADERTHREAD_HXX_
-#define _FTP_FTPLOADERTHREAD_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPLOADERTHREAD_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPLOADERTHREAD_HXX
 
 #include <osl/thread.h>
 #include "curl.hxx"

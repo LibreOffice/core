@@ -22,8 +22,8 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef _FTP_FTPCONTENTIDENTIFIER_HXX_
-#define _FTP_FTPCONTENTIDENTIFIER_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENTIDENTIFIER_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENTIDENTIFIER_HXX
 
 #include <vector>
 #include "curl.hxx"

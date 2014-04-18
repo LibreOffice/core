@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DYNAMICRESULTSET_HXX
-#define _DYNAMICRESULTSET_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_HIERARCHY_DYNAMICRESULTSET_HXX
+#define INCLUDED_UCB_SOURCE_UCP_HIERARCHY_DYNAMICRESULTSET_HXX
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultsethelper.hxx>
@@ -44,6 +44,6 @@ public:
 
 }
 
-#endif /* !_DYNAMICRESULTSET_HXX */
+#endif // INCLUDED_UCB_SOURCE_UCP_HIERARCHY_DYNAMICRESULTSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

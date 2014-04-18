@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SORTRESULT_HXX
-#define _SORTRESULT_HXX
+#ifndef INCLUDED_UCB_SOURCE_SORTER_SORTRESULT_HXX
+#define INCLUDED_UCB_SOURCE_SORTER_SORTRESULT_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UCBDEMO_SRCHARG_HXX
-#define UCBDEMO_SRCHARG_HXX
+#ifndef INCLUDED_UCB_WORKBEN_UCB_SRCHARG_HXX
+#define INCLUDED_UCB_WORKBEN_UCB_SRCHARG_HXX
 
 class String;
 namespace com { namespace sun { namespace star { namespace ucb {
@@ -29,6 +29,6 @@ namespace com { namespace sun { namespace star { namespace ucb {
 bool parseSearchArgument(String const & rInput,
                          com::sun::star::ucb::SearchInfo & rInfo);
 
-#endif // UCBDEMO_SRCHARG_HXX
+#endif // INCLUDED_UCB_WORKBEN_UCB_SRCHARG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HIERARCHYURI_HXX
-#define _HIERARCHYURI_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYURI_HXX
+#define INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYURI_HXX
 
 #include <rtl/ustring.hxx>
 

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FILRSET_HXX_
-#define _FILRSET_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILRSET_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FILE_FILRSET_HXX
 
 #include <vector>
 #include <osl/file.hxx>

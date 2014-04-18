@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _GVFS_UCP_RESULTSET_HXX
-#define _GVFS_UCP_RESULTSET_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_GVFS_GVFS_DIRECTORY_HXX
+#define INCLUDED_UCB_SOURCE_UCP_GVFS_GVFS_DIRECTORY_HXX
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>

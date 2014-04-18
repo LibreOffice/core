@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UCB_UCPEXT_CONTENT_PROVIDER_HXX
-#define UCB_UCPEXT_CONTENT_PROVIDER_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_EXT_UCPEXT_PROVIDER_HXX
+#define INCLUDED_UCB_SOURCE_UCP_EXT_UCPEXT_PROVIDER_HXX
 
 #include <ucbhelper/providerhelper.hxx>
 
@@ -58,6 +58,6 @@ namespace ucb { namespace ucp { namespace ext
 } } }   // namespace ucb::ucp::ext
 
 
-#endif  // UCB_UCPEXT_CONTENT_PROVIDER_HXX
+#endif // INCLUDED_UCB_SOURCE_UCP_EXT_UCPEXT_PROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

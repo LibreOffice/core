@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FTP_FTPCONTENT_HXX
-#define _FTP_FTPCONTENT_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENT_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENT_HXX
 
 #include <ucbhelper/contenthelper.hxx>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>

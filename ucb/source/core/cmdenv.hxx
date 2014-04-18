@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CMDENV_HXX
-#define INCLUDED_CMDENV_HXX
+#ifndef INCLUDED_UCB_SOURCE_CORE_CMDENV_HXX
+#define INCLUDED_UCB_SOURCE_CORE_CMDENV_HXX
 
 #include "cppuhelper/implbase3.hxx"
 
@@ -91,6 +91,6 @@ private:
 
 } // namespace ucb_cmdenv
 
-#endif // INCLUDED_CMDENV_HXX
+#endif // INCLUDED_UCB_SOURCE_CORE_CMDENV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

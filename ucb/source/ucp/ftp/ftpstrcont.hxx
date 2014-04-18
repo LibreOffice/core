@@ -22,8 +22,8 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef _FTP_STRCONT_HXX_
-#define _FTP_STRCONT_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPSTRCONT_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPSTRCONT_HXX
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

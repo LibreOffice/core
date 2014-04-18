@@ -22,8 +22,8 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef _FTP_FTPDIRP_HXX_
-#define _FTP_FTPDIRP_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPDIRP_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPDIRP_HXX
 
 #include <osl/time.h>
 #include <rtl/ustring.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CACHED_CONTENT_RESULTSET_HXX
-#define _CACHED_CONTENT_RESULTSET_HXX
+#ifndef INCLUDED_UCB_SOURCE_CACHER_CACHEDCONTENTRESULTSET_HXX
+#define INCLUDED_UCB_SOURCE_CACHER_CACHEDCONTENTRESULTSET_HXX
 
 #include <contentresultsetwrapper.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>

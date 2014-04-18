@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PKGDATASUPPLIER_HXX
-#define _PKGDATASUPPLIER_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_PACKAGE_PKGDATASUPPLIER_HXX
+#define INCLUDED_UCB_SOURCE_UCP_PACKAGE_PKGDATASUPPLIER_HXX
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>

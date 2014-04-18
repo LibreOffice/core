@@ -9,8 +9,8 @@
  * This file incorporates work covered by the following license notice:
  *
  */
-#ifndef CERTVALIDATION_HANDLER_HXX
-#define CERTVALIDATION_HANDLER_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_CERTVALIDATION_HANDLER_HXX
+#define INCLUDED_UCB_SOURCE_UCP_CMIS_CERTVALIDATION_HANDLER_HXX
 
 #include <libcmis/libcmis.hxx>
 

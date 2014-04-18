@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef GIO_MOUNT_HXX
-#define GIO_MOUNT_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_GIO_GIO_MOUNT_HXX
+#define INCLUDED_UCB_SOURCE_UCP_GIO_GIO_MOUNT_HXX
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <gio/gio.h>

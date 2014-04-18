@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FILROW_HXX_
-#define _FILROW_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILROW_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FILE_FILROW_HXX
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>

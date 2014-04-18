@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _IDENTIFY_HXX
-#define _IDENTIFY_HXX
+#ifndef INCLUDED_UCB_SOURCE_CORE_IDENTIFY_HXX
+#define INCLUDED_UCB_SOURCE_CORE_IDENTIFY_HXX
 
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -43,6 +43,6 @@ private:
     OUString m_aProviderScheme;
 };
 
-#endif /* !_IDENTIFY_HXX */
+#endif // INCLUDED_UCB_SOURCE_CORE_IDENTIFY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

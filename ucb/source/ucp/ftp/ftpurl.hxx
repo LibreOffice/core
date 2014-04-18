@@ -23,8 +23,8 @@
 
  *************************************************************************/
 
-#ifndef _FTP_FTPURL_HXX_
-#define _FTP_FTPURL_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPURL_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPURL_HXX
 
 #include "curl.hxx"
 #include <curl/easy.h>

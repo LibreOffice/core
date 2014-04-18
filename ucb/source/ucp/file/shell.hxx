@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SHELL_HXX_
-#define _SHELL_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_FILE_SHELL_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FILE_SHELL_HXX
 
 
 #include <cppuhelper/weak.hxx>

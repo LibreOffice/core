@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCB_HXX
-#define _UCB_HXX
+#ifndef INCLUDED_UCB_SOURCE_CORE_UCB_HXX
+#define INCLUDED_UCB_SOURCE_CORE_UCB_HXX
 
 
 #include <com/sun/star/ucb/CheckinArgument.hpp>
@@ -231,6 +231,6 @@ private:
     sal_Int32 m_nCommandId;
 };
 
-#endif /* !_UCB_HXX */
+#endif // INCLUDED_UCB_SOURCE_CORE_UCB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

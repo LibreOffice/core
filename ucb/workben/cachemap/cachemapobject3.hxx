@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_CACHEMAPOBJECT3_HXX
-#define INCLUDED_UCB_CACHEMAPOBJECT3_HXX
+#ifndef INCLUDED_UCB_WORKBEN_CACHEMAP_CACHEMAPOBJECT3_HXX
+#define INCLUDED_UCB_WORKBEN_CACHEMAP_CACHEMAPOBJECT3_HXX
 
 #include "osl/interlck.h"
 #include "osl/mutex.hxx"
@@ -86,6 +86,6 @@ private:
 
 } }
 
-#endif // INCLUDED_UCB_CACHEMAPOBJECT3_HXX
+#endif // INCLUDED_UCB_WORKBEN_CACHEMAP_CACHEMAPOBJECT3_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

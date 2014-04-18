@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TDOC_RESULTSET_HXX
-#define INCLUDED_TDOC_RESULTSET_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_RESULTSET_HXX
+#define INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_RESULTSET_HXX
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultsethelper.hxx>
@@ -45,6 +45,6 @@ public:
 
 }
 
-#endif /* !INCLUDED_TDOC_RESULTSET_HXX */
+#endif // INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_RESULTSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

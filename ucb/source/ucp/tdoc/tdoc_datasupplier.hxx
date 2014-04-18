@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TDOC_DATASUPPLIER_HXX
-#define INCLUDED_TDOC_DATASUPPLIER_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_DATASUPPLIER_HXX
+#define INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_DATASUPPLIER_HXX
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/ucb/OpenMode.hpp>
@@ -70,6 +70,6 @@ public:
 
 } // namespace tdoc_ucp
 
-#endif /* !INCLUDED_TDOC_DATASUPPLIER_HXX */
+#endif // INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_DATASUPPLIER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HIERARCHYDATASUPPLIER_HXX
-#define _HIERARCHYDATASUPPLIER_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYDATASUPPLIER_HXX
+#define INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYDATASUPPLIER_HXX
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/ucb/OpenMode.hpp>
@@ -71,6 +71,6 @@ public:
 
 } // namespace hierarchy_ucp
 
-#endif /* !_HIERARCHYDATASUPPLIER_HXX */
+#endif // INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYDATASUPPLIER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

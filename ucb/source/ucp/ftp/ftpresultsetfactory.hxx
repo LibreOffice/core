@@ -22,8 +22,8 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef _FTP_FTPRESULTSETFACTORY_HXX_
-#define _FTP_FTPRESULTSETFACTORY_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPRESULTSETFACTORY_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPRESULTSETFACTORY_HXX
 
 #include "ftpresultsetbase.hxx"
 

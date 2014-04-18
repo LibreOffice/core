@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _GVFSSTREAM_HXX_
-#define _GVFSSTREAM_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_GVFS_GVFS_STREAM_HXX
+#define INCLUDED_UCB_SOURCE_UCP_GVFS_GVFS_STREAM_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -154,6 +154,6 @@ public:
 };
 
 } // namespace gvfs
-#endif // _GVFSSTREAM_HXX_
+#endif // INCLUDED_UCB_SOURCE_UCP_GVFS_GVFS_STREAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

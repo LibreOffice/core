@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _PROVIDER_HXX_
-#define _PROVIDER_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_GVFS_GVFS_PROVIDER_HXX
+#define INCLUDED_UCB_SOURCE_UCP_GVFS_GVFS_PROVIDER_HXX
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/beans/Property.hpp>
@@ -73,6 +73,6 @@ public:
 
 } /* namespace gvfs */
 
-#endif /* _PROVIDER_HXX_ */
+#endif // INCLUDED_UCB_SOURCE_UCP_GVFS_GVFS_PROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

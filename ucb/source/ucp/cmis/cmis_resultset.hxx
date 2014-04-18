@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef CMIS_RESULTSET_HXX
-#define CMIS_RESULTSET_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_RESULTSET_HXX
+#define INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_RESULTSET_HXX
 
 #include <ucbhelper/resultsethelper.hxx>
 

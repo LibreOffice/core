@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_CACHEMAPOBJECT2_HXX
-#define INCLUDED_UCB_CACHEMAPOBJECT2_HXX
+#ifndef INCLUDED_UCB_WORKBEN_CACHEMAP_CACHEMAPOBJECT2_HXX
+#define INCLUDED_UCB_WORKBEN_CACHEMAP_CACHEMAPOBJECT2_HXX
 
 #include "cppuhelper/weak.hxx"
 
@@ -29,6 +29,6 @@ class Object2: public cppu::OWeakObject
 
 } }
 
-#endif // INCLUDED_UCB_CACHEMAPOBJECT2_HXX
+#endif // INCLUDED_UCB_WORKBEN_CACHEMAP_CACHEMAPOBJECT2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

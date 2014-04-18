@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PROV_HXX_
-#define _PROV_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_FILE_PROV_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FILE_PROV_HXX
 
 #include <cppuhelper/weak.hxx>
 

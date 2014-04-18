@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TDOC_CONTENT_HXX
-#define INCLUDED_TDOC_CONTENT_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_CONTENT_HXX
+#define INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_CONTENT_HXX
 
 #include <ucbhelper/contenthelper.hxx>
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
@@ -340,6 +340,6 @@ public:
 
 } // namespace tdoc_ucp
 
-#endif /* !INCLUDED_TDOC_CONTENT_HXX */
+#endif // INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_CONTENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

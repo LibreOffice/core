@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef CMIS_REPO_CONTENT_HXX
-#define CMIS_REPO_CONTENT_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_REPO_CONTENT_HXX
+#define INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_REPO_CONTENT_HXX
 
 #include "cmis_url.hxx"
 #include "children_provider.hxx"

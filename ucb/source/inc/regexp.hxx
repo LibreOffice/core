@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCB_REGEXP_HXX_
-#define _UCB_REGEXP_HXX_
+#ifndef INCLUDED_UCB_SOURCE_INC_REGEXP_HXX
+#define INCLUDED_UCB_SOURCE_INC_REGEXP_HXX
 
 #include <rtl/ustring.hxx>
 
@@ -72,6 +72,6 @@ inline bool Regexp::operator ==(Regexp const & rOther) const
 
 }
 
-#endif // _UCB_REGEXP_HXX_
+#endif // INCLUDED_UCB_SOURCE_INC_REGEXP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

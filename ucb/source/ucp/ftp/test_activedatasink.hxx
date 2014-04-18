@@ -22,8 +22,8 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef _TEST_ACTIVEDATASINK_HXX_
-#define _TEST_ACTIVEDATASINK_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_TEST_ACTIVEDATASINK_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FTP_TEST_ACTIVEDATASINK_HXX
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/queryinterface.hxx>

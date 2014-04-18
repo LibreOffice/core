@@ -22,8 +22,8 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef _FTP_FTPCFUNC_HXX_
-#define _FTP_FTPCFUNC_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPCFUNC_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPCFUNC_HXX
 
 #include <rtl/ustring.hxx>
 

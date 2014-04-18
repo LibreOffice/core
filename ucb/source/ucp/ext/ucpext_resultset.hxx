@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UCB_UCPEXT_RESULT_SET_HXX
-#define UCB_UCPEXT_RESULT_SET_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_EXT_UCPEXT_RESULTSET_HXX
+#define INCLUDED_UCB_SOURCE_UCP_EXT_UCPEXT_RESULTSET_HXX
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultsethelper.hxx>
@@ -56,6 +56,6 @@ namespace ucb { namespace ucp { namespace ext
 } } }   // namespace ucp::ext
 
 
-#endif  // UCB_UCPEXT_RESULT_SET_HXX
+#endif // INCLUDED_UCB_SOURCE_UCP_EXT_UCPEXT_RESULTSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

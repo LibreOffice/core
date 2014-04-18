@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCB_REGEXPMAP_HXX_
-#define _UCB_REGEXPMAP_HXX_
+#ifndef INCLUDED_UCB_SOURCE_INC_REGEXPMAP_HXX
+#define INCLUDED_UCB_SOURCE_INC_REGEXPMAP_HXX
 
 #include "sal/config.h"
 
@@ -660,6 +660,6 @@ inline bool operator !=(ucb_impl::RegexpMapConstIter< Val > const & rIter1,
     return !rIter1.equals(rIter2);
 }
 
-#endif // _UCB_REGEXPMAP_HXX_
+#endif // INCLUDED_UCB_SOURCE_INC_REGEXPMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

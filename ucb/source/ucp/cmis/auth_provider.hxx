@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef AUTH_PROVIDER_HXX
-#define AUTH_PROVIDER_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_AUTH_PROVIDER_HXX
+#define INCLUDED_UCB_SOURCE_UCP_CMIS_AUTH_PROVIDER_HXX
 
 #include <libcmis/libcmis.hxx>
 

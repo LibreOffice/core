@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FILINSREQ_HXX_
-#define _FILINSREQ_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILINSREQ_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FILE_FILINSREQ_HXX
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/XInterface.hpp>

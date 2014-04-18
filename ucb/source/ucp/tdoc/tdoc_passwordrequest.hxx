@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TDOC_PASSWORDREQUEST_HXX
-#define INCLUDED_TDOC_PASSWORDREQUEST_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_PASSWORDREQUEST_HXX
+#define INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_PASSWORDREQUEST_HXX
 
 #include "com/sun/star/task/PasswordRequestMode.hpp"
 #include "com/sun/star/task/XInteractionPassword.hpp"
@@ -88,6 +88,6 @@ namespace tdoc_ucp {
 
 } // namespace tdoc_ucp
 
-#endif /* !INCLUDED_TDOC_PASSWORDREQUEST_HXX */
+#endif // INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_PASSWORDREQUEST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
