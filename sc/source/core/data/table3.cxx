@@ -226,8 +226,9 @@ public:
     {
         ScRefCellValue maCell;
         const sc::CellTextAttr* mpAttr;
+        const SvtBroadcaster* mpBroadcaster;
 
-        Cell() : mpAttr(NULL) {}
+        Cell() : mpAttr(NULL), mpBroadcaster(NULL) {}
     };
 
     typedef std::vector<Cell> RowType;
@@ -353,6 +354,7 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
 
                 rCell.maCell = rCol.GetCellValue(aBlockPos, nRow);
                 rCell.mpAttr = rCol.GetCellTextAttr(aBlockPos, nRow);
+                rCell.mpBroadcaster = rCol.GetBroadcaster(aBlockPos, nRow);
             }
         }
     }

@@ -1794,6 +1794,17 @@ const SvtBroadcaster* ScColumn::GetBroadcaster(SCROW nRow) const
     return maBroadcasters.get<SvtBroadcaster*>(nRow);
 }
 
+const SvtBroadcaster* ScColumn::GetBroadcaster( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const
+{
+    sc::BroadcasterStoreType::const_position_type aPos = maBroadcasters.position(rBlockPos.miBroadcasterPos, nRow);
+    rBlockPos.miBroadcasterPos = aPos.first;
+
+    if (aPos.first->type != sc::element_type_broadcaster)
+        return NULL;
+
+    return sc::broadcaster_block::at(*aPos.first->data, aPos.second);
+}
+
 void ScColumn::DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 )
 {
     rBlockPos.miBroadcasterPos =

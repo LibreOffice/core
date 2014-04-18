@@ -514,6 +514,8 @@ public:
 
     SvtBroadcaster* GetBroadcaster( SCROW nRow );
     const SvtBroadcaster* GetBroadcaster( SCROW nRow ) const;
+    const SvtBroadcaster* GetBroadcaster( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
+
     void DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 );
     void PrepareBroadcastersForDestruction();
     bool HasBroadcaster() const;
