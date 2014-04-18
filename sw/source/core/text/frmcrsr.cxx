@@ -198,7 +198,6 @@ bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     const SwTwips nFrmMaxY = (pFrm->*fnRect->fnGetPrtBottom)();
 
     // nMaxY is an absolute value
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     SwTwips nMaxY = bVert ?
                     ( bVertL2R ? std::min( nFrmMaxY, nUpperMaxY ) : std::max( nFrmMaxY, nUpperMaxY ) ) :
                     std::min( nFrmMaxY, nUpperMaxY );
@@ -217,7 +216,6 @@ bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         {
             if( nFirstOffset > 0 )
                 aPnt1.Y() += nFirstOffset;
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
             if ( aPnt1.X() < nMaxY && !bVertL2R )
                 aPnt1.X() = nMaxY;
             aPnt2.X() = aPnt1.X() + pFrm->Prt().Width();
@@ -369,7 +367,6 @@ bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
     SwTwips nUpperMaxY = (pTmpFrm->*fnRect->fnGetPrtBottom)();
 
     // nMaxY is in absolute value
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     SwTwips nMaxY = bVert ?
                     ( bVertL2R ? std::min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) : std::max( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) ) :
                     std::min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY );

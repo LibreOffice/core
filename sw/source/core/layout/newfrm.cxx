@@ -269,7 +269,7 @@ static SwRectFnCollection aVerticalRightToLeft = {
     &SwRect::SetBottomAndHeight,
     &SwRect::SetLeftAndWidth
 };
-//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
 static SwRectFnCollection aVerticalLeftToRight = {
     /* fnRectGet      */
     &SwRect::_Left,
@@ -324,12 +324,12 @@ static SwRectFnCollection aVerticalLeftToRight = {
     &SwRect::SetTopAndHeight,
     &SwRect::SetLeftAndWidth
 };
-//End of SCMS
+
 SwRectFn fnRectHori = &aHorizontal;
 SwRectFn fnRectVert = &aVertical;
-//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
 SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
-//End of SCMS
+
 SwRectFn fnRectB2T = &aBottomToTop;
 SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 

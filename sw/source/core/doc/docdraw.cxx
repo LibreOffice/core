@@ -109,7 +109,7 @@ static void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
             {
                 case FRMDIR_VERT_TOP_LEFT:
                 {
-                    // vertical from left-to-right - Badaa: supported now!
+                    // vertical from left-to-right
                     bVert = true;
                     bR2L = true;
                     OSL_FAIL( "<lcl_AdjustPositioningAttr(..)> - vertical from left-to-right not supported." );
@@ -164,7 +164,6 @@ static void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
             nHoriRelPos = aObjRect.Left() - aAnchorPos.getX();
             nVertRelPos = aObjRect.Top() - aAnchorPos.getY();
         }
-        //End of SCMS
     }
 
     _pFrmFmt->SetFmtAttr( SwFmtHoriOrient( nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );

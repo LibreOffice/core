@@ -726,7 +726,6 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
     else
     {
         aPoint.A() = X();
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         if ( GetTxtFrm()->IsVertLR() )
             aPoint.B() = Y() - rPor.Height() + rPor.GetAscent();
         else

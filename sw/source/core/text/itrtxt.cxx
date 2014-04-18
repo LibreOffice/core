@@ -334,7 +334,6 @@ sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
             case SvxParaVertAlignItem::AUTOMATIC :
                 if ( bAutoToCentered || GetInfo().GetTxtFrm()->IsVertical() )
                 {
-                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                     if( GetInfo().GetTxtFrm()->IsVertLR() )
                             nOfst += rLine.Height() - ( rLine.Height() - nPorHeight ) / 2 - nPorAscent;
                     else

@@ -97,7 +97,6 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
         mbDerivedR2L = 0;
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir )
         {
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
             mbVertLR = 0;
             mbVertical = 0;
         }
@@ -106,14 +105,13 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
             const SwViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             {
-                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 mbVertLR = 0;
                 mbVertical = 0;
             }
             else
             {
                 mbVertical = 1;
-                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
                 if ( FRMDIR_VERT_TOP_LEFT == nDir )
                     mbVertLR = 1;
                 else

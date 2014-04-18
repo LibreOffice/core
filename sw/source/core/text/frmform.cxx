@@ -428,7 +428,6 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, bool bHasToFit )
         {
             OSL_ENSURE( ! IsSwapped(),"Swapped frame while calculating nRstHeight" );
 
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
             if ( IsVertLR() )
                     nRstHeight = GetUpper()->Frm().Left()
                                + GetUpper()->Prt().Left()
@@ -1095,7 +1094,6 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     // be rotated back after formatting, because we use the upper left point
     // of the frame for rotation. This point changes when growing/shrinking.
 
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     if ( IsVertical() && !IsVertLR() && nChg )
     {
         SwRect &rRepaint = *(pPara->GetRepaint());

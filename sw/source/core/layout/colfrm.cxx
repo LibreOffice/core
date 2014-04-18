@@ -289,7 +289,7 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
     }
 
     const sal_Bool bVert = IsVertical();
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
 
     //If we have a pointer or we have to configure an attribute, we set the

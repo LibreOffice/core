@@ -618,7 +618,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         {
             //lXDiff -= rVert.GetPos();
             //lYDiff += rHori.GetPos();
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
             if ( GetFlyFrm()->GetAnchorFrm()->IsVertLR() )
             {
                 lXDiff += rVert.GetPos();
@@ -737,7 +737,6 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
 
     const sal_Bool bRTL = pTmpFrm->IsRightToLeft();
 
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     const bool bVertL2RX = pTmpFrm->IsVertLR();
     const Point aNewPos( ( bVertX && !bVertL2RX ) || bRTL ?
                          aOutRect.Right() + 1 :
@@ -814,7 +813,6 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
         {
             if( aOutRect.TopRight() != aNewPos )
             {
-                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 SwTwips nDeltaX;
                 if ( bVertL2RX )
                     nDeltaX = aNewPos.X() - aOutRect.Left();

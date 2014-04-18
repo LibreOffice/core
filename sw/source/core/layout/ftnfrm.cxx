@@ -320,7 +320,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
     if ( !bTst )
     {
         (Frm().*fnRect->fnSetHeight)( (Frm().*fnRect->fnGetHeight)() + nDist );
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
         if( IsVertical() && !IsVertLR() && !IsReverse() )
             Frm().Pos().X() -= nDist;
     }
@@ -362,7 +362,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
         {
             nDist -= nReal;
             Frm().SSize().Height() -= nDist;
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
             if( IsVertical() && !IsVertLR() && !IsReverse() )
                 Frm().Pos().X() += nDist;
         }

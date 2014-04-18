@@ -117,7 +117,6 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
                                        nLinePos - nTabPos :
                                        nLinePos + nTabPos;
 
-       //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         SwTwips nMyRight;
         if ( pFrm->IsVertLR() )
            nMyRight = Left();

@@ -104,7 +104,7 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
         if ( nHeight < 0 )
             nHeight = 0;
         Frm().Height( nHeight );
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
         if( IsVertical() && !IsVertLR() && !IsReverse() && nWidth != Frm().Width() )
             Frm().Pos().setX(Frm().Pos().getX() + Frm().Width() - nWidth);
         Frm().Width( nWidth );
@@ -309,7 +309,6 @@ void SwPageFrm::CheckDirection( bool bVert )
     {
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir )
         {
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
             mbVertLR = 0;
             mbVertical = 0;
         }
@@ -318,14 +317,13 @@ void SwPageFrm::CheckDirection( bool bVert )
             const SwViewShell *pSh = getRootFrm()->GetCurrShell();
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             {
-                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 mbVertLR = 0;
                 mbVertical = 0;
             }
             else
             {
                 mbVertical = 1;
-                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
                 if(FRMDIR_VERT_TOP_RIGHT == nDir)
                     mbVertLR = 0;
                     else if(FRMDIR_VERT_TOP_LEFT==nDir)

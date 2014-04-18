@@ -224,7 +224,6 @@ void SwTxtFrmBreak::SetRstHeight( const SwTxtMargin &rLine )
     nRstHeight = (pFrm->*fnRect->fnGetBottomMargin)();
 
     if ( bVert )
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     {
            if ( pFrm->IsVertLR() )
               nRstHeight = (*fnRect->fnYDiff)( pFrm->SwitchHorizontalToVertical( rLine.Y() ) , nOrigin );

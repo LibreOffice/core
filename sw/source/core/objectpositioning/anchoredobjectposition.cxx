@@ -345,7 +345,6 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
         break;
         case text::VertOrientation::TOP:
         {
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
               nRelPosY +=   bVert
                             ? ( bVertL2R
                                 ? _rLRSpacing.GetLeft()
@@ -360,7 +359,6 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
         break;
         case text::VertOrientation::BOTTOM:
         {
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
             nRelPosY += nAlignAreaHeight -
                         ( nObjHeight + ( bVert
                                          ? ( bVertL2R

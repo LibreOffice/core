@@ -182,7 +182,6 @@ struct SwRectFnCollection
 
 typedef SwRectFnCollection* SwRectFn;
 
-// Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
 extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
 #define SWRECTFN( pFrm )    bool bVert = pFrm->IsVertical(); \
                             bool bRev = pFrm->IsReverse(); \
@@ -209,7 +208,7 @@ extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
                             bool bNeighb = pFrm->IsNeighbourFrm(); \
                             SwRectFn fnRect = bVert == bNeighb ? \
                                 fnRectHori : ( bVertL2R ? fnRectVertL2R : fnRectVert );
-//End of SCMS
+
 #define POS_DIFF( aFrm1, aFrm2 ) \
             ( (aFrm1.*fnRect->fnGetTop)() != (aFrm2.*fnRect->fnGetTop)() || \
             (aFrm1.*fnRect->fnGetLeft)() != (aFrm2.*fnRect->fnGetLeft)() )
@@ -350,7 +349,7 @@ protected:
     sal_uInt16 mbInvalidVert : 1;
     sal_uInt16 mbDerivedVert : 1;
     sal_uInt16 mbVertical    : 1;
-    // Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
     sal_uInt16 mbVertLR      : 1;
     sal_uInt16 mnType        : 4;  //Who am I?
 
@@ -549,11 +548,11 @@ public:
     inline bool IsReverse() const { return mbReverse; }
     inline void SetReverse( sal_Bool bNew ){ mbReverse = bNew ? 1 : 0; }
     inline bool IsVertical() const;
-    //Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
     inline sal_Bool IsVertLR() const;
     inline sal_Bool GetVerticalFlag() const;
     inline void SetVertical( sal_Bool bNew ){ mbVertical = bNew ? 1 : 0; }
-    //Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
     inline void SetbVertLR( sal_Bool bNew ) { mbVertLR = bNew ? 1 : 0; }
     inline void SetDerivedVert( sal_Bool bNew ){ mbDerivedVert = bNew ? 1 : 0; }
     inline void SetInvalidVert( sal_Bool bNew) { mbInvalidVert = bNew ? 1 : 0; }
@@ -933,12 +932,10 @@ bool SwFrm::IsVertical() const
         ((SwFrm*)this)->SetDirFlags( sal_True );
     return mbVertical != 0;
 }
-//Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
 inline sal_Bool SwFrm::IsVertLR() const
 {
     return mbVertLR != 0;
 }
-//End of SCMS
 sal_Bool SwFrm::GetVerticalFlag() const
 {
     return mbVertical != 0;

@@ -213,7 +213,6 @@ void SwFrm::CheckDirChange()
     SetInvalidVert( sal_True );
     SetInvalidR2L( sal_True );
     bool bChg = bOldR2L != IsRightToLeft();
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     sal_Bool bOldVertL2R = IsVertLR();
     if( ( IsVertical() != bOldVert ) || bChg || IsReverse() != bOldRev || bOldVertL2R != IsVertLR() )
     {
@@ -305,7 +304,7 @@ void SwFrm::CheckDirChange()
 Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 {
     Point aAnchor = Frm().Pos();
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
     if ( ( IsVertical() && !IsVertLR() ) || IsRightToLeft() )
         aAnchor.X() += Frm().Width();
 
@@ -574,7 +573,6 @@ const SwRect SwFrm::PaintArea() const
     // Cell frames may not leave their upper:
     SwRect aRect = IsRowFrm() ? GetUpper()->Frm() : Frm();
     const sal_Bool bVert = IsVertical();
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
     long nRight = (aRect.*fnRect->fnGetRight)();
     long nLeft  = (aRect.*fnRect->fnGetLeft)();
@@ -666,7 +664,6 @@ const SwRect SwFrm::PaintArea() const
 const SwRect SwFrm::UnionFrm( sal_Bool bBorder ) const
 {
     sal_Bool bVert = IsVertical();
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
     long nLeft = (Frm().*fnRect->fnGetLeft)();
     long nWidth = (Frm().*fnRect->fnGetWidth)();

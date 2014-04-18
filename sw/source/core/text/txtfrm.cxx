@@ -82,7 +82,6 @@ void SwTxtFrm::SwapWidthAndHeight()
     {
         const long nPrtOfstX = Prt().Pos().X();
         Prt().Pos().X() = Prt().Pos().Y();
-        // Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         if( IsVertLR() )
             Prt().Pos().Y() = nPrtOfstX;
         else
@@ -93,7 +92,6 @@ void SwTxtFrm::SwapWidthAndHeight()
     {
         const long nPrtOfstY = Prt().Pos().Y();
         Prt().Pos().Y() = Prt().Pos().X();
-        // Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         if( IsVertLR() )
             Prt().Pos().X() = nPrtOfstY;
         else
@@ -115,7 +113,6 @@ void SwTxtFrm::SwapWidthAndHeight()
 void SwTxtFrm::SwitchHorizontalToVertical( SwRect& rRect ) const
 {
     // calc offset inside frame
-    // Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     long nOfstX, nOfstY;
     if ( IsVertLR() )
     {
@@ -131,7 +128,6 @@ void SwTxtFrm::SwitchHorizontalToVertical( SwRect& rRect ) const
     const long nWidth = rRect.Width();
     const long nHeight = rRect.Height();
 
-    // Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     if ( IsVertLR() )
         rRect.Left(Frm().Left() + nOfstY);
     else
@@ -155,7 +151,6 @@ void SwTxtFrm::SwitchHorizontalToVertical( Point& rPoint ) const
     // calc offset inside frame
     const long nOfstX = rPoint.X() - Frm().Left();
     const long nOfstY = rPoint.Y() - Frm().Top();
-    // Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     if ( IsVertLR() )
         rPoint.X() = Frm().Left() + nOfstY;
     else
@@ -187,7 +182,6 @@ void SwTxtFrm::SwitchVerticalToHorizontal( SwRect& rRect ) const
 
     // calc offset inside frame
 
-    // Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     if ( IsVertLR() )
         nOfstX = rRect.Left() - Frm().Left();
     else
@@ -217,7 +211,6 @@ void SwTxtFrm::SwitchVerticalToHorizontal( Point& rPoint ) const
 
     // calc offset inside frame
 
-    // Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     if ( IsVertLR() )
         nOfstX = rPoint.X() - Frm().Left();
     else

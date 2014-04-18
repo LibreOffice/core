@@ -239,7 +239,6 @@ void SwDrawView::AddCustomHdl()
     }
 
     // add anchor handle:
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     aHdl.AddHdl( new SwSdrHdl( aPos, ( pAnch->IsVertical() && !pAnch->IsVertLR() ) ||
                                      pAnch->IsRightToLeft() ) );
 }
@@ -702,7 +701,6 @@ const SwFrm* SwDrawView::CalcAnchor()
         aMyRect = pObj->GetSnapRect();
     }
 
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     const sal_Bool bTopRight = pAnch && ( ( pAnch->IsVertical() &&
                                             !pAnch->IsVertLR() ) ||
                                              pAnch->IsRightToLeft() );

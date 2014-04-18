@@ -511,7 +511,6 @@ void SwFrm::MakePos()
                 if( mbReverse )
                     maFrm.Pos().setX(maFrm.Pos().getX() + pPrv->Frm().Width());
                 else
-                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 {
                     if ( bVertL2R )
                            maFrm.Pos().setX(maFrm.Pos().getX() + pPrv->Frm().Width());
@@ -588,7 +587,6 @@ void SwFrm::MakePos()
                         maFrm.Pos().setX(maFrm.Pos().getX() + GetUpper()->Prt().Width()
                                           - maFrm.Width());
                 }
-                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 else if( bVert && !bVertL2R && FRM_NOTE_VERT & nMyType && !mbReverse )
                     maFrm.Pos().setX(maFrm.Pos().getX() - maFrm.Width() + GetUpper()->Prt().Width());
             }
@@ -598,7 +596,7 @@ void SwFrm::MakePos()
             maFrm.Pos().setX(0);
             maFrm.Pos().setY(0);
         }
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
         if( IsBodyFrm() && bVert && !bVertL2R && !mbReverse && GetUpper() )
             maFrm.Pos().setX(maFrm.Pos().getX() + GetUpper()->Prt().Width() - maFrm.Width());
         mbValidPos = sal_True;
@@ -786,7 +784,7 @@ void SwLayoutFrm::MakeAll()
     // takes care of the notification in the dtor
     const SwLayNotify aNotify( this );
     bool bVert = IsVertical();
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
     SwRectFn fnRect = ( IsNeighbourFrm() == bVert )? fnRectHori : ( IsVertLR() ? fnRectVertL2R : fnRectVert );
 
     SwBorderAttrAccess *pAccess = 0;

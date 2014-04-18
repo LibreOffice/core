@@ -1401,7 +1401,6 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
         if ( rAttrs.IsLine() || rAttrs.IsBorderDist() ||
              (bShadow && rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE) )
         {
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
             SwRectFn fnRect = pFrm->IsVertical() ? ( pFrm->IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
 
             const SvxBoxItem &rBox = rAttrs.GetBox();
@@ -3478,7 +3477,6 @@ SwShortCut::SwShortCut( const SwFrm& rFrm, const SwRect& rRect )
     }
     else
     {
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         if ( rFrm.IsVertLR() )
         {
                fnCheck = &SwRect::GetLeftDistance;
@@ -5524,7 +5522,7 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
     const SwFrm *pCol = Lower();
     if ( !pCol || !pCol->IsColumnFrm() )
         return;
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
     SwRectFn fnRect = pCol->IsVertical() ? ( pCol->IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
 
     SwRect aLineRect = Prt();

@@ -1303,7 +1303,7 @@ void SwFrm::SetDirFlags( sal_Bool bVert )
                 mbReverse  = pAsk->IsReverse()  ? 1 : 0;
 
                 mbVertLR  = pAsk->IsVertLR() ? 1 : 0;
-                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
                 if ( !pAsk->mbInvalidVert )
                     mbInvalidVert = sal_False;
             }
