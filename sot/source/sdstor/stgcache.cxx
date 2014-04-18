@@ -331,9 +331,9 @@ bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
             SetError( SVSTREAM_READ_ERROR );
         else if ( nPage < nPages )
         {
-            sal_uLong nPos = Page2Pos( nPage );
+            sal_uInt32 nPos = Page2Pos( nPage );
             sal_Int32 nPg2 = ( ( nPage + nPg ) > nPages ) ? nPages - nPage : nPg;
-            sal_uLong nBytes = nPg2 * nPageSize;
+            sal_uInt32 nBytes = nPg2 * nPageSize;
             // fixed address and size for the header
             if( nPage == -1 )
             {
@@ -362,8 +362,8 @@ bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
 {
     if( Good() )
     {
-        sal_uLong nPos = Page2Pos( nPage );
-        sal_uLong nBytes = 0;
+        sal_uInt32 nPos = Page2Pos( nPage );
+        sal_uInt32 nBytes = 0;
         if ( SAL_MAX_INT32 / nPg > nPageSize )
             nBytes = nPg * nPageSize;
 
