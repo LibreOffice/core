@@ -46,7 +46,7 @@ TYPEINIT1(GraphicDocShell, DrawDocShell);
 
 SFX_IMPL_INTERFACE(GraphicDocShell, SfxObjectShell, SdResId(0))
 {
-    SFX_CHILDWINDOW_REGISTRATION(SID_SEARCH_DLG);
+    GetStaticInterface()->RegisterChildWindow(SID_SEARCH_DLG);
 }
 
 SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SvGlobalName(SO3_SDRAW_CLASSID_60), SFXOBJECTSHELL_STD_NORMAL, "sdraw" )

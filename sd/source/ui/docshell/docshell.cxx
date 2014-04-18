@@ -75,7 +75,7 @@ using namespace sd;
 
 SFX_IMPL_INTERFACE(DrawDocShell, SfxObjectShell, SdResId(0))
 {
-    SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
 }
 
 

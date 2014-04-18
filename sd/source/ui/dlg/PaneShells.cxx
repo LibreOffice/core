@@ -38,13 +38,10 @@ SFX_SLOTMAP(LeftImpressPaneShell)
 
 SFX_IMPL_INTERFACE(LeftImpressPaneShell, SfxShell, SdResId(STR_LEFT_IMPRESS_PANE_SHELL))
 {
-    SFX_CHILDWINDOW_REGISTRATION(
-        ::sd::LeftPaneImpressChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(::sd::LeftPaneImpressChildWindow::GetChildWindowId());
 }
 
 TYPEINIT1(LeftImpressPaneShell, SfxShell);
-
-
 
 LeftImpressPaneShell::LeftImpressPaneShell (void)
     : SfxShell()
@@ -52,15 +49,9 @@ LeftImpressPaneShell::LeftImpressPaneShell (void)
     SetName(OUString("LeftImpressPane"));
 }
 
-
-
-
 LeftImpressPaneShell::~LeftImpressPaneShell (void)
 {
 }
-
-
-
 
 //===== LeftDrawPaneShell =====================================================
 
@@ -71,13 +62,10 @@ SFX_SLOTMAP(LeftDrawPaneShell)
 
 SFX_IMPL_INTERFACE(LeftDrawPaneShell, SfxShell, SdResId(STR_LEFT_DRAW_PANE_SHELL))
 {
-    SFX_CHILDWINDOW_REGISTRATION(
-        ::sd::LeftPaneDrawChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(::sd::LeftPaneDrawChildWindow::GetChildWindowId());
 }
 
 TYPEINIT1(LeftDrawPaneShell, SfxShell);
-
-
 
 LeftDrawPaneShell::LeftDrawPaneShell (void)
     : SfxShell()
@@ -85,13 +73,9 @@ LeftDrawPaneShell::LeftDrawPaneShell (void)
     SetName(OUString("LeftDrawPane"));
 }
 
-
-
-
 LeftDrawPaneShell::~LeftDrawPaneShell (void)
 {
 }
-
 
 } // end of namespace ::sd
 

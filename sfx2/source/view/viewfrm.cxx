@@ -147,8 +147,8 @@ using ::com::sun::star::container::XIndexContainer;
 
 SFX_IMPL_INTERFACE(SfxViewFrame,SfxShell,SfxResId(0))
 {
-    SFX_CHILDWINDOW_REGISTRATION( SID_BROWSER );
-    SFX_CHILDWINDOW_REGISTRATION( SID_RECORDING_FLOATWINDOW );
+    GetStaticInterface()->RegisterChildWindow(SID_BROWSER);
+    GetStaticInterface()->RegisterChildWindow(SID_RECORDING_FLOATWINDOW);
 #if HAVE_FEATURE_DESKTOP
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_FULLSCREEN | SFX_VISIBILITY_FULLSCREEN, SfxResId(RID_FULLSCREENTOOLBOX) );
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_APPLICATION | SFX_VISIBILITY_STANDARD, SfxResId(RID_ENVTOOLBOX) );

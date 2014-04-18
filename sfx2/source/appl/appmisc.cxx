@@ -85,30 +85,26 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-
-
 #define SfxApplication
 #include "sfxslots.hxx"
-
-
 
 #define SFX_ITEMTYPE_STATBAR             4
 
 SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
 {
     SFX_STATUSBAR_REGISTRATION(SfxResId(SFX_ITEMTYPE_STATBAR));
-    SFX_CHILDWINDOW_REGISTRATION(SID_DOCKWIN_0);
-    SFX_CHILDWINDOW_REGISTRATION(SID_DOCKWIN_1);
-    SFX_CHILDWINDOW_REGISTRATION(SID_DOCKWIN_2);
-    SFX_CHILDWINDOW_REGISTRATION(SID_DOCKWIN_3);
-    SFX_CHILDWINDOW_REGISTRATION(SID_DOCKWIN_4);
-    SFX_CHILDWINDOW_REGISTRATION(SID_DOCKWIN_5);
-    SFX_CHILDWINDOW_REGISTRATION(SID_DOCKWIN_6);
-    SFX_CHILDWINDOW_REGISTRATION(SID_DOCKWIN_7);
-    SFX_CHILDWINDOW_REGISTRATION(SID_DOCKWIN_8);
-    SFX_CHILDWINDOW_REGISTRATION(SID_DOCKWIN_9);
-}
 
+    GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_0);
+    GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_1);
+    GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_2);
+    GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_3);
+    GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_4);
+    GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_5);
+    GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_6);
+    GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_7);
+    GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_8);
+    GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_9);
+}
 
 SfxProgress* SfxApplication::GetProgress() const
 

@@ -73,7 +73,7 @@ public:
 
     void                    RegisterObjectBar( sal_uInt16, const ResId&, const OUString* pST=0 );
     void                    RegisterObjectBar( sal_uInt16, const ResId&, sal_uInt32 nFeature, const OUString* pST=0 );
-    void                    RegisterChildWindow( sal_uInt16, bool bContext, const OUString* pST=0 );
+    void                    RegisterChildWindow( sal_uInt16, bool bContext = false, const OUString* pST=0 );
     void                    RegisterChildWindow( sal_uInt16, bool bContext, sal_uInt32 nFeature, const OUString* pST=0 );
     void                    RegisterStatusBar( const ResId& );
     const ResId&            GetObjectBarResId( sal_uInt16 nNo ) const;

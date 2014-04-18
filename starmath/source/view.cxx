@@ -935,10 +935,10 @@ SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
                                             SmResId(RID_MATH_TOOLBOX ));
     //Dummy-Objectbar, to avoid quiver while activating
 
-    SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
-    SFX_CHILDWINDOW_REGISTRATION(SmToolBoxWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(SmCmdBoxWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(SmElementsDockingWindowWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SID_TASKPANE);
+    GetStaticInterface()->RegisterChildWindow(SmToolBoxWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SmCmdBoxWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SmElementsDockingWindowWrapper::GetChildWindowId());
 }
 
 

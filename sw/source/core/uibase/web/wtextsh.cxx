@@ -47,8 +47,8 @@ SFX_IMPL_INTERFACE(SwWebTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_WEBTEXT))
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TEXT_TOOLBOX));
 
-    SFX_CHILDWINDOW_REGISTRATION(FN_EDIT_FORMULA);
-    SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_FIELD);
+    GetStaticInterface()->RegisterChildWindow(FN_EDIT_FORMULA);
+    GetStaticInterface()->RegisterChildWindow(FN_INSERT_FIELD);
 }
 
 TYPEINIT1(SwWebTextShell, SwTextShell)

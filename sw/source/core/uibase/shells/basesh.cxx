@@ -144,8 +144,8 @@ using namespace ::com::sun::star::lang;
 
 SFX_IMPL_INTERFACE(SwBaseShell, SfxShell, SW_RES(0))
 {
-    SFX_CHILDWINDOW_REGISTRATION(SvxIMapDlgChildWindow::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(SvxContourDlgChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxContourDlgChildWindow::GetChildWindowId());
 }
 
 TYPEINIT1(SwBaseShell,SfxShell)

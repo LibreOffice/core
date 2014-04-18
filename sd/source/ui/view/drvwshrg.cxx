@@ -62,56 +62,53 @@ namespace sd {
  * Declare SFX-Slotmap and Standardinterface
  */
 
-
 SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
 {
     GetStaticInterface()->RegisterPopupMenu(SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP));
 
     SFX_CHILDWINDOW_CONTEXT_REGISTRATION( SID_NAVIGATOR );
-    SFX_CHILDWINDOW_REGISTRATION( SfxTemplateDialogWrapper::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SfxInfoBarContainerChild::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SvxFontWorkChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SvxColorChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( AnimationChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( Svx3DChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SvxBmpMaskChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( GalleryChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SvxIMapDlgChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SvxHlinkDlgWrapper::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( ::sd::SpellDialogChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
-    SFX_CHILDWINDOW_REGISTRATION( ::avmedia::MediaPlayer::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
-}
 
+    GetStaticInterface()->RegisterChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxFontWorkChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxColorChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(AnimationChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(Svx3DChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxBmpMaskChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(GalleryChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxHlinkDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(::sd::SpellDialogChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SID_SEARCH_DLG);
+    GetStaticInterface()->RegisterChildWindow(::avmedia::MediaPlayer::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
+}
 
 TYPEINIT1( DrawViewShell, ViewShell );
 
-
 // SdGraphicViewShell
-
 
 SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL)) //SOH...
 {
     GetStaticInterface()->RegisterPopupMenu(SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP));
 
     SFX_CHILDWINDOW_CONTEXT_REGISTRATION( SID_NAVIGATOR );
-    SFX_CHILDWINDOW_REGISTRATION( SfxTemplateDialogWrapper::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SvxFontWorkChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SvxColorChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( Svx3DChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SvxBmpMaskChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( GalleryChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SvxIMapDlgChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SvxHlinkDlgWrapper::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( ::sd::SpellDialogChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
-    SFX_CHILDWINDOW_REGISTRATION( ::avmedia::MediaPlayer::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
+
+    GetStaticInterface()->RegisterChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxFontWorkChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxColorChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(Svx3DChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxBmpMaskChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(GalleryChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxHlinkDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(::sd::SpellDialogChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SID_SEARCH_DLG);
+    GetStaticInterface()->RegisterChildWindow(::avmedia::MediaPlayer::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 }
 
 TYPEINIT1( GraphicViewShell, DrawViewShell );
-
 
 } // end of namespace sd
 

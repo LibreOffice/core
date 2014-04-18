@@ -35,7 +35,7 @@ namespace svx {
     <li>Call this class' RegisterChildWindow() method with the module
     as second argument that you want the dialog included in.</li>
     <li>In the SFX_IMPL_INTERFACE implementation of the view shell
-    that wants to use the dialog call SFX_CHILDWINDOW_REGISTRATION()
+    that wants to use the dialog call RegisterChildWindow()
     with the id returned by this class' GetChildWindowId()
     method.</li>
     <li>Include the item associated with this child window to the SDI

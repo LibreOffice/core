@@ -91,24 +91,26 @@ SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
 {
     SFX_CHILDWINDOW_CONTEXT_REGISTRATION(SID_NAVIGATOR);
-    SFX_CHILDWINDOW_REGISTRATION(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(SfxTemplateDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(SfxInfoBarContainerChild::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(SwSpellDialogChildWindow::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(FN_REDLINE_ACCEPT);
-    SFX_CHILDWINDOW_REGISTRATION(SID_HYPERLINK_DIALOG);
-    SFX_CHILDWINDOW_REGISTRATION(FN_WORDCOUNT_DIALOG);
-    SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
+
+    GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SwSpellDialogChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(FN_REDLINE_ACCEPT);
+    GetStaticInterface()->RegisterChildWindow(SID_HYPERLINK_DIALOG);
+    GetStaticInterface()->RegisterChildWindow(FN_WORDCOUNT_DIALOG);
+    GetStaticInterface()->RegisterChildWindow(GalleryChildWindow::GetChildWindowId());
 #if HAVE_FEATURE_AVMEDIA
-    SFX_CHILDWINDOW_REGISTRATION(::avmedia::MediaPlayer::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(::avmedia::MediaPlayer::GetChildWindowId());
 #endif
-    SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_FIELD_DATA_ONLY);
-        SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_SYNC_LABELS,           CHILDWIN_LABEL    );
-        SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_MAILMERGE_CHILDWINDOW, CHILDWIN_MAILMERGE);
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS|
-                                SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
-                                SW_RES(RID_TOOLS_TOOLBOX) );
+    GetStaticInterface()->RegisterChildWindow(FN_INSERT_FIELD_DATA_ONLY);
+
+    SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_SYNC_LABELS,           CHILDWIN_LABEL    );
+    SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_MAILMERGE_CHILDWINDOW, CHILDWIN_MAILMERGE);
+
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
+                                            SW_RES(RID_TOOLS_TOOLBOX));
 }
 
 TYPEINIT1(SwView,SfxViewShell)

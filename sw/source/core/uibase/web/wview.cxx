@@ -74,12 +74,12 @@ SFX_IMPL_NAMED_VIEWFACTORY(SwWebView, "Default")
 
 SFX_IMPL_INTERFACE( SwWebView, SwView, SW_RES(RID_WEBTOOLS_TOOLBOX) )
 {
-    SFX_CHILDWINDOW_REGISTRATION(SfxTemplateDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(SfxInfoBarContainerChild::GetChildWindowId());
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS|
-                                SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
-                                SW_RES(RID_WEBTOOLS_TOOLBOX) );
+    GetStaticInterface()->RegisterChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
+
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
+                                            SW_RES(RID_WEBTOOLS_TOOLBOX) );
 }
 
 TYPEINIT1(SwWebView,SwView)

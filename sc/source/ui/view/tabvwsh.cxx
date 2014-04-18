@@ -51,46 +51,48 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
                                             ScResId(RID_OBJECTBAR_TOOLS));
 
-    SFX_CHILDWINDOW_REGISTRATION(FID_INPUTLINE_STATUS);
-    SFX_CHILDWINDOW_REGISTRATION(SfxTemplateDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(SfxInfoBarContainerChild::GetChildWindowId());
-    SFX_CHILDWINDOW_CONTEXT_REGISTRATION(SID_NAVIGATOR);
-    SFX_CHILDWINDOW_REGISTRATION(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScNameDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScNameDefDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScSolverDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScOptSolverDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScXMLSourceDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScPivotLayoutWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScTabOpDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScFilterDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScSpecialFilterDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScDbNameDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScConsolidateDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScPrintAreasDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScColRowNameRangesDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScFormulaDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(SvxIMapDlgChildWindow::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScFunctionChildWindow::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScFormulaDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScAcceptChgDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScHighlightChgDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScSimpleRefDlgWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(SID_SEARCH_DLG);
-    SFX_CHILDWINDOW_REGISTRATION(SID_HYPERLINK_DIALOG);
-    SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScSpellDialogChildWindow::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScValidityRefChildWin::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(FID_INPUTLINE_STATUS);
+    GetStaticInterface()->RegisterChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
 
-    SFX_CHILDWINDOW_REGISTRATION(ScRandomNumberGeneratorDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScSamplingDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScDescriptiveStatisticsDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScAnalysisOfVarianceDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScCorrelationDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScCovarianceDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScExponentialSmoothingDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScMovingAverageDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScTTestDialogWrapper::GetChildWindowId());
+    SFX_CHILDWINDOW_CONTEXT_REGISTRATION(SID_NAVIGATOR);
+
+    GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScNameDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScNameDefDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScSolverDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScOptSolverDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScXMLSourceDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScPivotLayoutWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScTabOpDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScFilterDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScSpecialFilterDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScDbNameDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScConsolidateDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScPrintAreasDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScColRowNameRangesDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScFormulaDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScFunctionChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScFormulaDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScAcceptChgDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScHighlightChgDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScSimpleRefDlgWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(SID_SEARCH_DLG);
+    GetStaticInterface()->RegisterChildWindow(SID_HYPERLINK_DIALOG);
+    GetStaticInterface()->RegisterChildWindow(GalleryChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScSpellDialogChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScValidityRefChildWin::GetChildWindowId());
+
+    GetStaticInterface()->RegisterChildWindow(ScRandomNumberGeneratorDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScSamplingDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScDescriptiveStatisticsDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScAnalysisOfVarianceDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScCorrelationDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScCovarianceDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScExponentialSmoothingDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScMovingAverageDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScTTestDialogWrapper::GetChildWindowId());
 
 }
 
