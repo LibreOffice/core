@@ -140,7 +140,7 @@ SFX_IMPL_INTERFACE( basctl_Shell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
 {
     GetStaticInterface()->RegisterChildWindow(SID_SEARCH_DLG);
 
-    SFX_FEATURED_CHILDWINDOW_REGISTRATION(SID_SHOW_PROPERTYBROWSER, BASICIDE_UI_FEATURE_SHOW_BROWSER);
+    GetStaticInterface()->RegisterChildWindow(SID_SHOW_PROPERTYBROWSER, false, BASICIDE_UI_FEATURE_SHOW_BROWSER);
 
     GetStaticInterface()->RegisterPopupMenu(IDEResId(RID_POPUP_DLGED));
 }
