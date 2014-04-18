@@ -210,11 +210,6 @@ SFX_DECL_TYPE(18); // for SvxSearchItem
                  0, 0, DisableFlags, UnoName \
                }
 
-#define SFX_ARGUMENT( ArgSlotId, ArgName, ArgTypeId ) \
-            { (const SfxType*) &a##ArgTypeId##_Impl, ArgName, ArgSlotId }
-
-
-
 class SfxPoolItem;
 
 struct SfxFormalArgument

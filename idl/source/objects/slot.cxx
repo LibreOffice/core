@@ -1445,12 +1445,13 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
             SvMetaAttribute * pPar  = rList[n];
             SvMetaType * pPType     = pPar->GetType();
             WriteTab( rOutStm, 1 );
-            rOutStm.WriteCharPtr( "SFX_ARGUMENT(" )
-               .WriteCharPtr( pPar->GetSlotId().getString().getStr() ).WriteChar( ',' ) // SlodId
+            rOutStm.WriteCharPtr("{ (const SfxType*) &a")
+                // item type
+               .WriteCharPtr(pPType->GetName().getString().getStr()).WriteCharPtr("_Impl, ")
                 // parameter name
-               .WriteCharPtr( "\"" ).WriteCharPtr( pPar->GetName().getString().getStr() ).WriteCharPtr( "\"," )
-                // item name
-               .WriteCharPtr( pPType->GetName().getString().getStr() ).WriteCharPtr( ")," ) << endl;
+               .WriteCharPtr("\"").WriteCharPtr(pPar->GetName().getString().getStr()).WriteCharPtr("\", ")
+                // slot id
+               .WriteCharPtr(pPar->GetSlotId().getString().getStr()).WriteCharPtr(" },") << endl;
             if( !rBase.FindType( pPType, rBase.aUsedTypes ) )
                 rBase.aUsedTypes.push_back( pPType );
         }

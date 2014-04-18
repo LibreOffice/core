@@ -597,7 +597,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     {
         // at leaast one dummy
         WriteTab( rOutStm, 1 );
-        rOutStm.WriteCharPtr( "SFX_ARGUMENT( 0, 0, SfxVoidItem )" ) << endl;
+        rOutStm.WriteCharPtr("{ (const SfxType*) &aSfxVoidItem_Impl, 0, 0 }" ) << endl;
     }
     rOutStm << endl;
     rOutStm.WriteCharPtr( "};" ) << endl << endl;
