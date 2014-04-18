@@ -35,19 +35,17 @@ namespace abp
     class TypeSelectionPage : public AddressBookSourcePage
     {
     protected:
-        FixedText       m_aHint;
-        FixedLine       m_aTypeSep;
-        RadioButton     m_aEvolution;
-        RadioButton     m_aEvolutionGroupwise;
-        RadioButton     m_aEvolutionLdap;
-        RadioButton     m_aMORK;
-        RadioButton     m_aThunderbird;
-        RadioButton     m_aKab;
-        RadioButton     m_aMacab;
-        RadioButton     m_aLDAP;
-        RadioButton     m_aOutlook;
-        RadioButton     m_aOE;
-        RadioButton     m_aOther;
+        RadioButton* m_pEvolution;
+        RadioButton* m_pEvolutionGroupwise;
+        RadioButton* m_pEvolutionLdap;
+        RadioButton* m_pMORK;
+        RadioButton* m_pThunderbird;
+        RadioButton* m_pKab;
+        RadioButton* m_pMacab;
+        RadioButton* m_pLDAP;
+        RadioButton* m_pOutlook;
+        RadioButton* m_pOE;
+        RadioButton* m_pOther;
 
         struct ButtonItem {
             RadioButton *m_pItem;

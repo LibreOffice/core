@@ -498,6 +498,7 @@ UI_FILELIST(dbtdata, "UIConfig/modules/dbtdata.filelist")
 #endif
 UI_FILELIST(desktop, "UIConfig/desktop.filelist")
 UI_FILELIST(filter, "UIConfig/filter.filelist")
+UI_FILELIST(sabpilot, "UIConfig/modules/sabpilot.filelist")
 #ifdef DBCONNECTIVITY
 UI_FILELIST(sbibliography, "UIConfig/modules/sbibliography.filelist")
 UI_FILELIST(spropctrlr, "UIConfig/modules/spropctrlr.filelist")

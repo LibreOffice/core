@@ -32,26 +32,20 @@ namespace abp
 
     // TypeSelectionPage
     TypeSelectionPage::TypeSelectionPage( OAddessBookSourcePilot* _pParent )
-        :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_SELECTABTYPE))
-        ,m_aHint                (this,  ModuleRes(FT_TYPE_HINTS))
-        ,m_aTypeSep             (this,  ModuleRes(FL_TYPE))
-        ,m_aEvolution           (this,  ModuleRes(RB_EVOLUTION))
-        ,m_aEvolutionGroupwise  (this,  ModuleRes(RB_EVOLUTION_GROUPWISE))
-        ,m_aEvolutionLdap       (this,  ModuleRes(RB_EVOLUTION_LDAP))
-        ,m_aMORK                (this,  ModuleRes(RB_MORK))
-        ,m_aThunderbird         (this,  ModuleRes(RB_THUNDERBIRD))
-        ,m_aKab                 (this,  ModuleRes(RB_KAB))
-        ,m_aMacab               (this,  ModuleRes(RB_MACAB))
-        ,m_aLDAP                (this,  ModuleRes(RB_LDAP))
-        ,m_aOutlook             (this,  ModuleRes(RB_OUTLOOK))
-        ,m_aOE                  (this,  ModuleRes(RB_OUTLOOKEXPRESS))
-        ,m_aOther               (this,  ModuleRes(RB_OTHER))
+      : AddressBookSourcePage(_pParent, "SelectTypePage",
+          "modules/sabpilot/ui/selecttypepage.ui")
     {
-        FreeResource();
-
-        Point aTopLeft( LogicToPixel( Point( 15, 68 ), MAP_APPFONT ) );
-        Size  aItemSize( LogicToPixel( Size( 0, 8 ), MAP_APPFONT ) );
-        aItemSize.Width() = GetOutputSizePixel().Width() - 30;
+        get(m_pEvolution, "evolution");
+        get(m_pEvolutionGroupwise, "groupwise");
+        get(m_pEvolutionLdap, "evoldap");
+        get(m_pMORK, "firefox");
+        get(m_pThunderbird, "thunderbird");
+        get(m_pKab, "kde");
+        get(m_pMacab, "macosx");
+        get(m_pLDAP, "ldap");
+        get(m_pOutlook, "outlook");
+        get(m_pOE, "windows");
+        get(m_pOther, "other");
 
         //TODO:  For now, try to keep offering the same choices like before the
         // Mozilla/MORK cleanup, even if the status of what driver actually
@@ -127,25 +121,19 @@ namespace abp
 #endif
 
         // Items are displayed in list order
-        m_aAllTypes.push_back( ButtonItem( &m_aEvolution, AST_EVOLUTION, bHaveEvolution ) );
-        m_aAllTypes.push_back( ButtonItem( &m_aEvolutionGroupwise, AST_EVOLUTION_GROUPWISE, bHaveEvolution ) );
-        m_aAllTypes.push_back( ButtonItem( &m_aEvolutionLdap, AST_EVOLUTION_LDAP, bHaveEvolution ) );
-        m_aAllTypes.push_back( ButtonItem( &m_aMORK, AST_MORK, bWithMozilla || bWithMork) );
-        m_aAllTypes.push_back( ButtonItem( &m_aThunderbird, AST_THUNDERBIRD, bWithMozilla || bWithMork) );
-        m_aAllTypes.push_back( ButtonItem( &m_aKab, AST_KAB, bHaveKab ) );
-        m_aAllTypes.push_back( ButtonItem( &m_aMacab, AST_MACAB, bHaveMacab ) );
-        m_aAllTypes.push_back( ButtonItem( &m_aLDAP, AST_LDAP, bWithMozilla ) );
-        m_aAllTypes.push_back( ButtonItem( &m_aOutlook, AST_OUTLOOK, bWithMozilla ) );
-        m_aAllTypes.push_back( ButtonItem( &m_aOE, AST_OE, bWithMozilla ) );
-        m_aAllTypes.push_back( ButtonItem( &m_aOther, AST_OTHER, true ) );
+        m_aAllTypes.push_back( ButtonItem( m_pEvolution, AST_EVOLUTION, bHaveEvolution ) );
+        m_aAllTypes.push_back( ButtonItem( m_pEvolutionGroupwise, AST_EVOLUTION_GROUPWISE, bHaveEvolution ) );
+        m_aAllTypes.push_back( ButtonItem( m_pEvolutionLdap, AST_EVOLUTION_LDAP, bHaveEvolution ) );
+        m_aAllTypes.push_back( ButtonItem( m_pMORK, AST_MORK, bWithMozilla || bWithMork) );
+        m_aAllTypes.push_back( ButtonItem( m_pThunderbird, AST_THUNDERBIRD, bWithMozilla || bWithMork) );
+        m_aAllTypes.push_back( ButtonItem( m_pKab, AST_KAB, bHaveKab ) );
+        m_aAllTypes.push_back( ButtonItem( m_pMacab, AST_MACAB, bHaveMacab ) );
+        m_aAllTypes.push_back( ButtonItem( m_pLDAP, AST_LDAP, bWithMozilla ) );
+        m_aAllTypes.push_back( ButtonItem( m_pOutlook, AST_OUTLOOK, bWithMozilla ) );
+        m_aAllTypes.push_back( ButtonItem( m_pOE, AST_OE, bWithMozilla ) );
+        m_aAllTypes.push_back( ButtonItem( m_pOther, AST_OTHER, true ) );
 
         Link aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
-        const Size aSpacing( LogicToPixel( Size( 0, 3 ), MAP_APPFONT ) );
-        if ( ! m_aAllTypes.empty() )
-        {
-            ButtonItem aItem = m_aAllTypes[0];
-            aItem.m_pItem->SetStyle( aItem.m_pItem->GetStyle() | WB_GROUP );
-        }
         for ( ::std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
               loop != m_aAllTypes.end(); ++loop )
         {
@@ -154,8 +142,6 @@ namespace abp
                 aItem.m_pItem->Hide();
             else
             {
-                aItem.m_pItem->SetPosPixel( aTopLeft );
-                aTopLeft.Y() += aItemSize.Height() + aSpacing.Height();
                 aItem.m_pItem->SetClickHdl( aTypeSelectionHandler );
                 aItem.m_pItem->Show();
             }
