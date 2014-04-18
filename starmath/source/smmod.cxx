@@ -160,7 +160,7 @@ const OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rU
 
 SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
 {
-    SFX_STATUSBAR_REGISTRATION(SmResId(RID_STATUSBAR));
+    GetStaticInterface()->RegisterStatusBar(SmResId(RID_STATUSBAR));
 }
 
 

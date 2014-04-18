@@ -41,7 +41,7 @@ SFX_IMPL_OBJECTFACTORY( DocShell, SvGlobalName(), SFXOBJECTSHELL_STD_NORMAL, "sb
 
 SFX_IMPL_INTERFACE( basctl_DocShell, SfxObjectShell, IDEResId( 0 ) )
 {
-    SFX_STATUSBAR_REGISTRATION( IDEResId( SID_BASICIDE_STATUSBAR ) );
+    GetStaticInterface()->RegisterStatusBar(IDEResId(SID_BASICIDE_STATUSBAR));
 }
 
 DocShell::DocShell()

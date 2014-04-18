@@ -92,7 +92,7 @@ using namespace ::com::sun::star::container;
 
 SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
 {
-    SFX_STATUSBAR_REGISTRATION(SfxResId(SFX_ITEMTYPE_STATBAR));
+    GetStaticInterface()->RegisterStatusBar(SfxResId(SFX_ITEMTYPE_STATBAR));
 
     GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_0);
     GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_1);

@@ -113,7 +113,7 @@ using namespace ::com::sun::star;
 
 SFX_IMPL_INTERFACE( SwModule, SfxModule, SW_RES(RID_SW_NAME) )
 {
-    SFX_STATUSBAR_REGISTRATION(SW_RES(CFG_STATUSBAR));
+    GetStaticInterface()->RegisterStatusBar(SW_RES(CFG_STATUSBAR));
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_APPLICATION | SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_VIEWER,
                                             SW_RES(RID_MODULE_TOOLBOX));

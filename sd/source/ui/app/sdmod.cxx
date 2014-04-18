@@ -62,7 +62,7 @@ TYPEINIT1( SdModule, SfxModule );
 
 SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(STR_APPLICATIONOBJECTBAR))
 {
-    SFX_STATUSBAR_REGISTRATION(SdResId(RID_DRAW_STATUSBAR));
+    GetStaticInterface()->RegisterStatusBar(SdResId(RID_DRAW_STATUSBAR));
 }
 
 // Ctor

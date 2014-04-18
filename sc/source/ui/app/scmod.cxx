@@ -124,7 +124,7 @@ SFX_IMPL_INTERFACE( ScModule, SfxShell, ScResId(RID_APPTITLE) )
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_APPLICATION | SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_VIEWER,
                                             ScResId(RID_OBJECTBAR_APP));
 
-    SFX_STATUSBAR_REGISTRATION( ScResId(SCCFG_STATUSBAR) );     // nur ID wichtig
+    GetStaticInterface()->RegisterStatusBar(ScResId(SCCFG_STATUSBAR));
 }
 
 ScModule::ScModule( SfxObjectFactory* pFact ) :
