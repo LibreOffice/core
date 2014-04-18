@@ -2784,7 +2784,7 @@ void SfxHelpWindow_Impl::InitSizes()
         else
         {
             nCollapseWidth = aRect.Width;
-            nExpandWidth = nCollapseWidth * 100 / nTextSize;
+            nExpandWidth = nTextSize ? nCollapseWidth * 100 / nTextSize : 0;
         }
     }
 }
