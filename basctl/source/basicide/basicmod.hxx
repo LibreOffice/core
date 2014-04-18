@@ -18,8 +18,8 @@
  */
 
 
-#ifndef BASCTL_BASICMOD_HXX
-#define BASCTL_BASICMOD_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BASICMOD_HXX
+#define INCLUDED_BASCTL_SOURCE_BASICIDE_BASICMOD_HXX
 
 #include <sfx2/module.hxx>
 
@@ -39,6 +39,6 @@ public:
 
 } // namespace basctl
 
-#endif // BASCTL_BASICMOD_HXX
+#endif // INCLUDED_BASCTL_SOURCE_BASICIDE_BASICMOD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

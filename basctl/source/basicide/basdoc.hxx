@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_BASDOC_HXX
-#define BASCTL_BASDOC_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BASDOC_HXX
+#define INCLUDED_BASCTL_SOURCE_BASICIDE_BASDOC_HXX
 
 #include <iderid.hxx>
 #include <sfx2/docfac.hxx>
@@ -72,6 +72,6 @@ public:
 // because I don't know how to use nested names in it.
 typedef basctl::DocShell basctl_DocShell;
 
-#endif // BASCTL_BASDOC_HXX
+#endif // INCLUDED_BASCTL_SOURCE_BASICIDE_BASDOC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

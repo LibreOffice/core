@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_DLGEDOBJ_HXX
-#define BASCTL_DLGEDOBJ_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_INC_DLGEDOBJ_HXX
+#define INCLUDED_BASCTL_SOURCE_INC_DLGEDOBJ_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -187,6 +187,6 @@ private:
 
 } // namespace basctl
 
-#endif // BASCTL_DLGEDOBJ_HXX
+#endif // INCLUDED_BASCTL_SOURCE_INC_DLGEDOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

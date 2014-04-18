@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef BASCTL_BASICRENDERABLE_HXX
-#define BASCTL_BASICRENDERABLE_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BASICRENDERABLE_HXX
+#define INCLUDED_BASCTL_SOURCE_BASICIDE_BASICRENDERABLE_HXX
 
 #include <com/sun/star/view/XRenderable.hpp>
 #include <cppuhelper/compbase1.hxx>
@@ -63,6 +63,6 @@ public:
 
 } // namespace basctl
 
-#endif // BASCTL_BASICRENDERABLE_HXX
+#endif // INCLUDED_BASCTL_SOURCE_BASICIDE_BASICRENDERABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

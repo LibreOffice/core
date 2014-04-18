@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_IDERID_HXX
-#define BASCTL_IDERID_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_INC_IDERID_HXX
+#define INCLUDED_BASCTL_SOURCE_INC_IDERID_HXX
 
 #include <tools/resid.hxx>
 
@@ -38,6 +38,6 @@ inline OUString IDE_RESSTR (sal_uInt16 nId)
 
 } // namespace basctl
 
-#endif // BASCTL_IDERID_HXX
+#endif // INCLUDED_BASCTL_SOURCE_INC_IDERID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

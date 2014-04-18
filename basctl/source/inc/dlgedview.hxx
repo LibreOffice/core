@@ -18,8 +18,8 @@
  */
 
 
-#ifndef BASCTL_DLGEDVIEW_HXX
-#define BASCTL_DLGEDVIEW_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_INC_DLGEDVIEW_HXX
+#define INCLUDED_BASCTL_SOURCE_INC_DLGEDVIEW_HXX
 
 #include <svx/svdview.hxx>
 
@@ -54,6 +54,6 @@ protected:
 
 } // namespace basctl
 
-#endif // BASCTL_DLGEDVIEW_HXX
+#endif // INCLUDED_BASCTL_SOURCE_INC_DLGEDVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

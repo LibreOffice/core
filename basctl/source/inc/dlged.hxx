@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_DLGED_HXX
-#define BASCTL_DLGED_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_INC_DLGED_HXX
+#define INCLUDED_BASCTL_SOURCE_INC_DLGED_HXX
 
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -214,6 +214,6 @@ public:
 
 } // namespace basctl
 
-#endif // BASCTL_DLGED_HXX
+#endif // INCLUDED_BASCTL_SOURCE_INC_DLGED_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

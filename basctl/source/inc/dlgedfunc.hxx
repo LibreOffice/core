@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_DLGEDFUNC_HXX
-#define BASCTL_DLGEDFUNC_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_INC_DLGEDFUNC_HXX
+#define INCLUDED_BASCTL_SOURCE_INC_DLGEDFUNC_HXX
 
 namespace basctl
 {
@@ -84,6 +84,6 @@ public:
 
 } // namespace basctl
 
-#endif // BASCTL_DLGEDFUNC_HXX
+#endif // INCLUDED_BASCTL_SOURCE_INC_DLGEDFUNC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

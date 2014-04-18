@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_BRKDLG_HXX
-#define BASCTL_BRKDLG_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BRKDLG_HXX
+#define INCLUDED_BASCTL_SOURCE_BASICIDE_BRKDLG_HXX
 
 #include <svheader.hxx>
 #include <bastypes.hxx>
@@ -62,6 +62,6 @@ public:
 
 } // namespace basctl
 
-#endif // BASCTL_BRKDLG_HXX
+#endif // INCLUDED_BASCTL_SOURCE_BASICIDE_BRKDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

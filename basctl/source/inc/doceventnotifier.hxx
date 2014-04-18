@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_DOCEVENTNOTIFIER_HXX
-#define BASCTL_DOCEVENTNOTIFIER_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_INC_DOCEVENTNOTIFIER_HXX
+#define INCLUDED_BASCTL_SOURCE_INC_DOCEVENTNOTIFIER_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -82,6 +82,6 @@ namespace basctl
 } // namespace basctl
 
 
-#endif // BASCTL_DOCEVENTNOTIFIER_HXX
+#endif // INCLUDED_BASCTL_SOURCE_INC_DOCEVENTNOTIFIER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

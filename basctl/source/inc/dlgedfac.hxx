@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_DLGEDFAC_HXX
-#define BASCTL_DLGEDFAC_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_INC_DLGEDFAC_HXX
+#define INCLUDED_BASCTL_SOURCE_INC_DLGEDFAC_HXX
 
 #include <svx/svdobj.hxx>
 #include <com/sun/star/frame/XModel.hpp>
@@ -42,6 +42,6 @@ public:
 
 } // namespace basctl
 
-#endif // BASCTL_DLGEDFAC_HXX
+#endif // INCLUDED_BASCTL_SOURCE_INC_DLGEDFAC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

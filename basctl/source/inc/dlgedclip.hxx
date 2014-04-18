@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_DLGEDCLIP_HXX
-#define BASCTL_DLGEDCLIP_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_INC_DLGEDCLIP_HXX
+#define INCLUDED_BASCTL_SOURCE_INC_DLGEDCLIP_HXX
 
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <cppuhelper/implbase2.hxx>
@@ -56,6 +56,6 @@ public:
 
 } // namespace basctl
 
-#endif // BASCTL_DLGEDCLIP_HXX
+#endif // INCLUDED_BASCTL_SOURCE_INC_DLGEDCLIP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

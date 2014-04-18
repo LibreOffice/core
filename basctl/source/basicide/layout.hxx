@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_LAYOUT_HXX
-#define BASCTL_LAYOUT_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_LAYOUT_HXX
+#define INCLUDED_BASCTL_SOURCE_BASICIDE_LAYOUT_HXX
 
 #include <vcl/window.hxx>
 #include <vcl/split.hxx>
@@ -131,6 +131,6 @@ private:
 
 } // namespace basctl
 
-#endif // BASCTL_LAYOUT_HXX
+#endif // INCLUDED_BASCTL_SOURCE_BASICIDE_LAYOUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_DOCUMENTENUMERATION_HXX
-#define BASCTL_DOCUMENTENUMERATION_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_DOCUMENTENUMERATION_HXX
+#define INCLUDED_BASCTL_SOURCE_BASICIDE_DOCUMENTENUMERATION_HXX
 
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -99,6 +99,6 @@ namespace basctl { namespace docs {
 } } // namespace basctl::docs
 
 
-#endif // BASCTL_DOCUMENTENUMERATION_HXX
+#endif // INCLUDED_BASCTL_SOURCE_BASICIDE_DOCUMENTENUMERATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

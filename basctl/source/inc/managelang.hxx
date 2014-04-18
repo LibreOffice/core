@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_MANAGELANG_HXX
-#define BASCTL_MANAGELANG_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_INC_MANAGELANG_HXX
+#define INCLUDED_BASCTL_SOURCE_INC_MANAGELANG_HXX
 
 #include <svx/checklbx.hxx>
 #include <vcl/button.hxx>
@@ -99,6 +99,6 @@ public:
 
 } // namespace basctl
 
-#endif // BASCTL_MANAGELANG_HXX
+#endif // INCLUDED_BASCTL_SOURCE_INC_MANAGELANG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

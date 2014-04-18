@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_LOCALIZATIONMGR_HXX
-#define BASCTL_LOCALIZATIONMGR_HXX
+#ifndef INCLUDED_BASCTL_SOURCE_INC_LOCALIZATIONMGR_HXX
+#define INCLUDED_BASCTL_SOURCE_INC_LOCALIZATIONMGR_HXX
 
 #include "scriptdocument.hxx"
 
@@ -148,6 +148,6 @@ public:
 
 } // namespace basctl
 
-#endif // BASCTL_LOCALIZATIONMGR_HXX
+#endif // INCLUDED_BASCTL_SOURCE_INC_LOCALIZATIONMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
