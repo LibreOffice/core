@@ -139,6 +139,8 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mbHiddenMasterShape( pSourceShape->mbHiddenMasterShape )
 , mbLockedCanvas( pSourceShape->mbLockedCanvas )
 , mbWps( pSourceShape->mbWps )
+, maLinkedTxbxAttr()
+, mbHasLinkedTxbx(false)
 , maDiagramDoms( pSourceShape->maDiagramDoms )
 {}
 
@@ -675,6 +677,23 @@ Reference< XShape > Shape::createAndInsert(
                     aGrabBag.realloc( length+1);
                     aGrabBag[length].Name = "mso-orig-shape-type";
                     aGrabBag[length].Value = uno::makeAny(mpCustomShapePropertiesPtr->getShapePresetTypeName());
+                    propertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aGrabBag));
+                }
+                //If the text box has links then save the link information so that
+                //it can be accessed in DomainMapper_Impl.cxx while chaining the text frames.
+                if (this->isLinkedTxbx())
+                {
+                    uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    propertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
+                    sal_Int32 length = aGrabBag.getLength();
+                    aGrabBag.realloc( length + 3 );
+                    aGrabBag[length].Name = "TxbxHasLink";
+                    aGrabBag[length].Value = uno::makeAny(this->isLinkedTxbx());
+                    aGrabBag[length + 1 ].Name = "Txbx-Id";
+                    aGrabBag[length + 1 ].Value = uno::makeAny(this->getLinkedTxbxAttributes().id);
+                    aGrabBag[length + 2 ].Name = "Txbx-Seq";
+                    aGrabBag[length + 2 ].Value = uno::makeAny(this->getLinkedTxbxAttributes().seq);
                     propertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aGrabBag));
                 }
 

@@ -59,7 +59,7 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <oox/mathml/import.hxx>
- #include <GraphicHelpers.hxx>
+#include <GraphicHelpers.hxx>
 
 #ifdef DEBUG_DOMAINMAPPER
 #include <resourcemodel/QNameToString.hxx>
@@ -195,7 +195,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bHasFtnSep(false),
         m_bIgnoreNextPara(false),
         m_bIgnoreNextTab(false),
-        m_bFrameBtLr(false)
+        m_bFrameBtLr(false),
+        m_vTextFramesForChaining()
 
 {
     appendTableManager( );
@@ -221,6 +222,7 @@ DomainMapper_Impl::DomainMapper_Impl(
 
 DomainMapper_Impl::~DomainMapper_Impl()
 {
+    ChainTextFrames();
     RemoveLastParagraph( );
     getTableManager( ).endLevel();
     popTableManager( );
@@ -1775,6 +1777,15 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                     }
                     if(checkBtLrStatus && checkZOredrStatus)
                         break;
+
+                    if ( aGrabBag[i].Name == "TxbxHasLink" )
+                    {
+                        //Chaining of textboxes will happen in ~DomainMapper_Impl
+                        //i.e when all the textboxes are read and all its attributes
+                        //have been set ( basically the Name/LinkedDisplayName )
+                        //which is set in Graphic Import.
+                        m_vTextFramesForChaining.push_back(xShape);
+                    }
                 }
 
                 uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);
@@ -2219,7 +2230,95 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
     }
 }
 
+static uno::Any lcl_getGrabBagValue( const uno::Sequence<beans::PropertyValue>& grabBag, OUString name )
+{
+    for (int i = 0; i < grabBag.getLength(); ++i)
+    {
+        if (grabBag[i].Name == name )
+            return grabBag[i].Value ;
+    }
+    return uno::Any();
+}
 
+//Link the text frames.
+void DomainMapper_Impl::ChainTextFrames()
+{
+    if( 0 == m_vTextFramesForChaining.size() )
+        return ;
+
+    try
+    {
+        bool bIsTxbxChained = false ;
+        sal_Int32 nTxbxId1  = 0 ; //holds id for the shape in outer loop
+        sal_Int32 nTxbxId2  = 0 ; //holds id for the shape in inner loop
+        sal_Int32 nTxbxSeq1 = 0 ; //holds seq number for the shape in outer loop
+        sal_Int32 nTxbxSeq2 = 0 ; //holds seq number for the shape in inner loop
+        OUString sName1 ; //holds the text box Name for the shape in outer loop
+        OUString sName2 ; //holds the text box Name for the shape in outer loop
+        OUString sChainNextName("ChainNextName");
+        OUString sChainPrevName("ChainPrevName");
+
+        for( std::vector<uno::Reference< drawing::XShape > >::iterator outer_itr = m_vTextFramesForChaining.begin();
+             outer_itr != m_vTextFramesForChaining.end(); )
+        {
+            bIsTxbxChained = false ;
+            uno::Reference<text::XTextContent>  xTextContent1(*outer_itr, uno::UNO_QUERY_THROW);
+            uno::Reference<beans::XPropertySet> xPropertySet1(xTextContent1, uno::UNO_QUERY);
+            uno::Sequence<beans::PropertyValue> aGrabBag1;
+            xPropertySet1->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag1;
+            xPropertySet1->getPropertyValue("LinkDisplayName") >>= sName1;
+
+            lcl_getGrabBagValue( aGrabBag1, "Txbx-Id")  >>= nTxbxId1;
+            lcl_getGrabBagValue( aGrabBag1, "Txbx-Seq") >>= nTxbxSeq1;
+
+            //Check which text box in the document links/(is a link) to this one.
+            std::vector<uno::Reference< drawing::XShape > >::iterator inner_itr = ( outer_itr + 1 );
+            for( ; inner_itr != m_vTextFramesForChaining.end(); ++inner_itr )
+            {
+                uno::Reference<text::XTextContent>  xTextContent2(*inner_itr, uno::UNO_QUERY_THROW);
+                uno::Reference<beans::XPropertySet> xPropertySet2(xTextContent2, uno::UNO_QUERY);
+                uno::Sequence<beans::PropertyValue> aGrabBag2;
+                xPropertySet2->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag2;
+                xPropertySet2->getPropertyValue("LinkDisplayName") >>= sName2;
+
+                lcl_getGrabBagValue( aGrabBag2, "Txbx-Id")  >>= nTxbxId2;
+                lcl_getGrabBagValue( aGrabBag2, "Txbx-Seq") >>= nTxbxSeq2;
+
+                if ( nTxbxId1 == nTxbxId2 )
+                {
+                    //who connects whom ??
+                    if ( ( nTxbxSeq1 == ( nTxbxSeq2 + 1 ) ) )
+                    {
+                        xPropertySet2->setPropertyValue(sChainNextName, uno::makeAny(sName1));
+                        xPropertySet1->setPropertyValue(sChainPrevName, uno::makeAny(sName2));
+                        bIsTxbxChained = true ;
+                        break ; //there cannot be more than one previous/next frames
+                    }
+                    else if(  (nTxbxSeq2 == ( nTxbxSeq1 + 1 ) ))
+                    {
+                        xPropertySet1->setPropertyValue(sChainNextName, uno::makeAny(sName2));
+                        xPropertySet2->setPropertyValue(sChainPrevName, uno::makeAny(sName1));
+                        bIsTxbxChained = true ;
+                        break ; //there cannot be more than one previous/next frames
+                    }
+                }
+            }
+            if( bIsTxbxChained )
+            {
+                //This txt box is no longer needed for chaining since
+                //there cannot be more than one previous/next frames
+                outer_itr = m_vTextFramesForChaining.erase(outer_itr);
+            }
+            else
+                ++outer_itr ;
+        }
+        m_vTextFramesForChaining.clear(); //clear the vector
+    }
+    catch (const uno::Exception& rException)
+    {
+        SAL_WARN("writerfilter", "failed. message: " << rException.Message);
+    }
+}
 
 uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster(
         const sal_Char* pFieldMasterService, const OUString& rFieldMasterName )

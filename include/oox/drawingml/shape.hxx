@@ -63,6 +63,15 @@ struct ChartShapeInfo
     explicit     ChartShapeInfo( bool bEmbedShapes ) : mbEmbedShapes( bEmbedShapes ) {}
 };
 
+/// Attributes for a linked textbox.
+struct LinkedTxbxAttr
+{
+    sal_Int32 id;
+    sal_Int32 seq;
+    LinkedTxbxAttr(): id(0),seq(0){};
+    ~LinkedTxbxAttr(){};
+};
+
 class OOX_DLLPUBLIC Shape
     : public boost::enable_shared_from_this< Shape >
 {
@@ -176,6 +185,11 @@ public:
     void                setDiagramDoms(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rDiagramDoms) { maDiagramDoms = rDiagramDoms; }
     com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
                                                                           core::XmlFilterBase& rFilter, const OUString& sFragment, const OUString& sType );
+    void                setLinkedTxbxAttributes(const LinkedTxbxAttr& rhs){ maLinkedTxbxAttr = rhs; };
+    void                setTxbxHasLinkedTxtBox( const bool rhs){ mbHasLinkedTxbx = rhs; };
+    const LinkedTxbxAttr&     getLinkedTxbxAttributes() { return maLinkedTxbxAttr; };
+    bool                isLinkedTxbx() { return mbHasLinkedTxbx; };
+
 protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
@@ -279,6 +293,8 @@ private:
                                                          // to propagate it when applying reference shape
     bool mbLockedCanvas; ///< Is this shape part of a locked canvas?
     bool mbWps; ///< Is this a wps shape?
+    LinkedTxbxAttr                  maLinkedTxbxAttr;
+    bool                            mbHasLinkedTxbx; // this text box has linked text box ?
 
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maDiagramDoms;
 };

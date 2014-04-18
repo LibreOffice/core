@@ -449,6 +449,7 @@ public:
 
     void StartParaMarkerChange( );
     void EndParaMarkerChange( );
+    void ChainTextFrames();
 
     void RemoveLastParagraph( );
     void SetIsLastParagraphInSection( bool bIsLast );
@@ -777,6 +778,7 @@ public:
 
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
+    std::vector<uno::Reference< drawing::XShape > > m_vTextFramesForChaining ;
 };
 } //namespace dmapper
 } //namespace writerfilter

@@ -148,6 +148,8 @@ struct DocxSdrExport::Impl
     sax_fastparser::FastAttributeList* m_pBodyPrAttrList;
     sax_fastparser::FastAttributeList* m_pDashLineStyleAttr;
     bool m_bIsInDMLTextFrame;
+    sal_Int32 m_nId ;
+    sal_Int32 m_nSeq ;
 
     Impl(DocxSdrExport& rSdrExport, DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
         : m_rSdrExport(rSdrExport),
@@ -165,7 +167,9 @@ struct DocxSdrExport::Impl
           m_pFlyWrapAttrList(0),
           m_pBodyPrAttrList(0),
           m_pDashLineStyleAttr(0),
-          m_bIsInDMLTextFrame(false)
+          m_bIsInDMLTextFrame(false),
+          m_nId(0),
+          m_nSeq(0)
     {
     }
 
@@ -1176,17 +1180,68 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
     pFS->endElementNS(XML_wps, XML_spPr);
 
     m_pImpl->m_rExport.mpParentFrame = NULL;
-    pFS->startElementNS(XML_wps, XML_txbx, FSEND);
-    pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
+    bool skipTxBxContent = false ;
+    bool isTxbxLinked = false ;
 
-    m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], 0);
-    m_pImpl->m_bFlyFrameGraphic = true;
-    m_pImpl->m_rExport.WriteText();
-    m_pImpl->m_bFlyFrameGraphic = false;
-    m_pImpl->m_bFrameBtLr = false;
+    /* Check if the text box is linked and then decides whether
+       to write the tag txbx or linkedTxbx
+    */
+    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("ChainPrevName") &&
+            xPropSetInfo->hasPropertyByName("ChainNextName"))
+    {
+        OUString sChainPrevName;
+        OUString sChainNextName;
 
-    pFS->endElementNS(XML_w, XML_txbxContent);
-    pFS->endElementNS(XML_wps, XML_txbx);
+        xPropertySet->getPropertyValue("ChainPrevName") >>= sChainPrevName ;
+        xPropertySet->getPropertyValue("ChainNextName") >>= sChainNextName ;
+
+        if (!sChainPrevName.isEmpty())
+        {
+            /* no text content should be added to this tag,
+               since the textbox is linked, the entire content
+               is written in txbx block
+            */
+            ++m_pImpl->m_nSeq ;
+            pFS->singleElementNS(XML_wps, XML_linkedTxbx,
+                                 XML_id,  I32S(m_pImpl->m_nId),
+                                 XML_seq, I32S(m_pImpl->m_nSeq),
+                                 FSEND);
+            skipTxBxContent = true ;
+
+            //Text box chaining for a group of textboxes ends here,
+            //therefore reset the seq.
+            if (sChainNextName.isEmpty())
+                m_pImpl->m_nSeq = 0 ;
+        }
+        else if (sChainPrevName.isEmpty() && !sChainNextName.isEmpty())
+        {
+            /* this is the first textbox in the chaining, we add the text content
+               to this block*/
+            ++m_pImpl->m_nId ;
+            //since the text box is linked, it needs an id.
+            pFS->startElementNS(XML_wps, XML_txbx,
+                                XML_id, I32S(m_pImpl->m_nId),
+                                FSEND);
+            isTxbxLinked = true ;
+        }
+    }
+
+    if (!skipTxBxContent)
+    {
+        if (!isTxbxLinked)
+            pFS->startElementNS(XML_wps, XML_txbx, FSEND);//text box is not linked, therefore no id.
+
+        pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
+
+        m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], 0);
+        m_pImpl->m_bFlyFrameGraphic = true;
+        m_pImpl->m_rExport.WriteText();
+        m_pImpl->m_bFlyFrameGraphic = false;
+        m_pImpl->m_bFrameBtLr = false;
+
+        pFS->endElementNS(XML_w, XML_txbxContent);
+        pFS->endElementNS(XML_wps, XML_txbx);
+    }
     sax_fastparser::XFastAttributeListRef xBodyPrAttrList(m_pImpl->m_pBodyPrAttrList);
     m_pImpl->m_pBodyPrAttrList = NULL;
     pFS->startElementNS(XML_wps, XML_bodyPr, xBodyPrAttrList);
