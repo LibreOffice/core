@@ -110,7 +110,7 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(Window* pParent, const SfxItemSet
     get(m_pOptionsLB, "options");
     get(m_pDefaultPB, "default");
 
-    for (sal_uInt16 nId = COPT_USE_PRINTERDEVICE; nId <= COPT_EXPAND_WORDSPACE; ++nId)
+    for (sal_Int32 nId = COPT_USE_PRINTERDEVICE; nId <= COPT_EXPAND_WORDSPACE; ++nId)
     {
         OUString sEntry = m_pFormattingLB->GetEntry(nId);
         SvTreeListEntry* pEntry = m_pOptionsLB->SvTreeListBox::InsertEntry( sEntry );
@@ -290,7 +290,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
         if ( sNewEntry.isEmpty() )
             sNewEntry = sName;
 
-        sal_uInt16 nPos = m_pFormattingLB->InsertEntry( sNewEntry );
+        const sal_Int32 nPos = m_pFormattingLB->InsertEntry( sNewEntry );
         sal_uLong nOptions = convertBools2Ulong_Impl(
             bUsePrtMetrics, bAddSpacing, bAddSpacingAtPages,
             bUseOurTabStops, bNoExtLeading, bUseLineSpacing,
@@ -304,7 +304,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
 
 IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl)
 {
-    sal_uInt16 nPos = m_pFormattingLB->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pFormattingLB->GetSelectEntryPos();
     sal_uLong nOptions = (sal_uLong)(void*)m_pFormattingLB->GetEntryData( nPos );
     SetCurrentOptions( nOptions );
 
@@ -322,10 +322,10 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl)
         {
             if ( pItem->m_bIsDefault )
             {
-                sal_uInt16 nCount = static_cast< sal_uInt16 >( m_pOptionsLB->GetEntryCount() );
-                for ( sal_uInt16 i = 0; i < nCount; ++i )
+                const sal_Int32 nCount = m_pOptionsLB->GetEntryCount();
+                for ( sal_Int32 i = 0; i < nCount; ++i )
                 {
-                    bool bChecked = m_pOptionsLB->IsChecked(i);
+                    bool bChecked = m_pOptionsLB->IsChecked(static_cast< sal_uLong >( i ));
                     CompatibilityOptions eOption = static_cast< CompatibilityOptions >(i);
                     switch ( eOption )
                     {
@@ -358,9 +358,9 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl)
 
 void SwCompatibilityOptPage::SetCurrentOptions( sal_uLong nOptions )
 {
-    sal_uLong nCount = m_pOptionsLB->GetEntryCount();
+    const sal_uLong nCount = m_pOptionsLB->GetEntryCount();
     OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    for ( sal_uLong i = 0; i < nCount; ++i )
     {
         sal_Bool bChecked = ( ( nOptions & 0x00000001 ) == 0x00000001 );
         m_pOptionsLB->CheckEntryPos( i, bChecked );
@@ -415,12 +415,12 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
     if ( m_pWrtShell )
     {
         sal_uLong nSavedOptions = m_nSavedOptions;
-        sal_uLong nCount = m_pOptionsLB->GetEntryCount();
+        const sal_uLong nCount = m_pOptionsLB->GetEntryCount();
         OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
 
         bool bSetParaSpaceMax = false;
 
-        for ( sal_uInt16 i = 0; i < nCount; ++i )
+        for ( sal_uLong i = 0; i < nCount; ++i )
         {
             CompatibilityOptions nOption = static_cast< CompatibilityOptions >(i);
             sal_Bool bChecked = m_pOptionsLB->IsChecked(i);
@@ -481,8 +481,8 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
 
         if ( bSetParaSpaceMax )
         {
-            m_pWrtShell->SetParaSpaceMax( m_pOptionsLB->IsChecked( (sal_uInt16)COPT_ADD_SPACING ) );
-            m_pWrtShell->SetParaSpaceMaxAtPages( m_pOptionsLB->IsChecked( (sal_uInt16)COPT_ADD_SPACING_AT_PAGES ) );
+            m_pWrtShell->SetParaSpaceMax( m_pOptionsLB->IsChecked( (sal_uLong)COPT_ADD_SPACING ) );
+            m_pWrtShell->SetParaSpaceMaxAtPages( m_pOptionsLB->IsChecked( (sal_uLong)COPT_ADD_SPACING_AT_PAGES ) );
             bModified = sal_True;
         }
     }
