@@ -22,16 +22,8 @@
 #include <inftxt.hxx>
 #include <porexp.hxx>
 
-/*************************************************************************
- *                      class SwExpandPortion
- *************************************************************************/
-
 sal_Int32 SwExpandPortion::GetCrsrOfst( const MSHORT nOfst ) const
 { return SwLinePortion::GetCrsrOfst( nOfst ); }
-
-/*************************************************************************
- *              virtual SwExpandPortion::GetExpTxt()
- *************************************************************************/
 
 bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
 {
@@ -41,29 +33,17 @@ bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
     return true;
 }
 
-/*************************************************************************
- *              virtual SwExpandPortion::HandlePortion()
- *************************************************************************/
-
 void SwExpandPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     OUString aString;
     rPH.Special( GetLen(), aString, GetWhichPor() );
 }
 
-/*************************************************************************
- *              virtual SwExpandPortion::GetTxtSize()
- *************************************************************************/
-
 SwPosSize SwExpandPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 {
     SwTxtSlot aDiffTxt( &rInf, this, false, false );
     return rInf.GetTxtSize();
 }
-
-/*************************************************************************
- *                 virtual SwExpandPortion::Format()
- *************************************************************************/
 
 // 5010: Exp und Tabs
 
@@ -83,10 +63,6 @@ bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
     }
     return SwTxtPortion::Format( rInf );
 }
-
-/*************************************************************************
- *              virtual SwExpandPortion::Paint()
- *************************************************************************/
 
 void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -121,15 +97,7 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
         *const_cast<SwTxtPaintInfo&>(rInf).GetFont() = aOldFont;
 }
 
-/*************************************************************************
- *                      class SwBlankPortion
- *************************************************************************/
-
 SwLinePortion *SwBlankPortion::Compress() { return this; }
-
-/*************************************************************************
- *                 SwBlankPortion::MayUnderflow()
- *************************************************************************/
 
 // 5497: Es gibt schon Gemeinheiten auf der Welt...
 // Wenn eine Zeile voll mit HardBlanks ist und diese ueberlaeuft,
@@ -182,11 +150,7 @@ MSHORT SwBlankPortion::MayUnderflow( const SwTxtFormatInfo &rInf,
     return 2;
 }
 
-/*************************************************************************
- *                 virtual SwBlankPortion::FormatEOL()
- *************************************************************************/
 // Format end of Line
-
 void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
     MSHORT nMay = MayUnderflow( rInf, rInf.GetIdx() - nLineLength, true );
@@ -206,10 +170,6 @@ void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
     }
 }
 
-/*************************************************************************
- *                 virtual SwBlankPortion::Format()
- *************************************************************************/
-
 // 7771: Underflows weiterreichen und selbst ausloesen!
 bool SwBlankPortion::Format( SwTxtFormatInfo &rInf )
 {
@@ -224,10 +184,6 @@ bool SwBlankPortion::Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
-/*************************************************************************
- *                 virtual SwBlankPortion::Paint()
- *************************************************************************/
-
 void SwBlankPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( !bMulti ) // No gray background for multiportion brackets
@@ -235,29 +191,17 @@ void SwBlankPortion::Paint( const SwTxtPaintInfo &rInf ) const
     SwExpandPortion::Paint( rInf );
 }
 
-/*************************************************************************
- *              virtual SwBlankPortion::GetExpTxt()
- *************************************************************************/
-
 bool SwBlankPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
 {
     rTxt = OUString(cChar);
     return true;
 }
 
-/*************************************************************************
- *              virtual SwBlankPortion::HandlePortion()
- *************************************************************************/
-
 void SwBlankPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     OUString aString( cChar );
     rPH.Special( GetLen(), aString, GetWhichPor() );
 }
-
-/*************************************************************************
- *                      class SwPostItsPortion
- *************************************************************************/
 
 SwPostItsPortion::SwPostItsPortion( bool bScrpt )
     : bScript( bScrpt )
@@ -279,10 +223,6 @@ KSHORT SwPostItsPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
                 (KSHORT)rInf.GetOpt().GetPostItsWidth( rInf.GetOut() ) : 0;
 }
 
-/*************************************************************************
- *                 virtual SwPostItsPortion::Format()
- *************************************************************************/
-
 bool SwPostItsPortion::Format( SwTxtFormatInfo &rInf )
 {
     const bool bRet = SwLinePortion::Format( rInf );
@@ -291,10 +231,6 @@ bool SwPostItsPortion::Format( SwTxtFormatInfo &rInf )
     Height( 1 );
     return bRet;
 }
-
-/*************************************************************************
- *              virtual SwPostItsPortion::GetExpTxt()
- *************************************************************************/
 
 bool SwPostItsPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {

@@ -51,10 +51,6 @@
 #include "reffld.hxx"
 #include "flddat.hxx"
 
-/*************************************************************************
- *                      SwTxtFormatter::NewFldPortion()
- *************************************************************************/
-
 static bool lcl_IsInBody( SwFrm *pFrm )
 {
     if ( pFrm->IsInDocBody() )
@@ -298,10 +294,6 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     return pRet;
 }
 
-/*************************************************************************
- *                      SwTxtFormatter::TryNewNoLengthPortion()
- *************************************************************************/
-
 static SwFldPortion * lcl_NewMetaPortion(SwTxtAttr & rHint, const bool bPrefix)
 {
     ::sw::Meta *const pMeta(
@@ -352,10 +344,6 @@ SwTxtFormatter::TryNewNoLengthPortion(SwTxtFormatInfo & rInfo)
     }
     return 0;
 }
-
-/*************************************************************************
- *                      SwTxtFormatter::NewExtraPortion()
- *************************************************************************/
 
 SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
 {
@@ -412,10 +400,6 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
     }
     return pRet;
 }
-
-/*************************************************************************
- *                      SwTxtFormatter::NewNumberPortion()
- *************************************************************************/
 
 SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
 {

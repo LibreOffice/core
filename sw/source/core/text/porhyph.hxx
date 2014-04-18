@@ -21,10 +21,6 @@
 
 #include "porexp.hxx"
 
-/*************************************************************************
- *                      class SwHyphPortion
- *************************************************************************/
-
 class SwHyphPortion : public SwExpandPortion
 {
 public:
@@ -40,10 +36,6 @@ public:
 
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                      class SwHyphStrPortion
- *************************************************************************/
 
 class SwHyphStrPortion : public SwHyphPortion
 {
@@ -62,10 +54,6 @@ public:
 
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                      class SwSoftHyphPortion
- *************************************************************************/
 
 class SwSoftHyphPortion : public SwHyphPortion
 {
@@ -90,10 +78,6 @@ public:
 
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                      class SwSoftHyphStrPortion
- *************************************************************************/
 
 class SwSoftHyphStrPortion : public SwHyphStrPortion
 {

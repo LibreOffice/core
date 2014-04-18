@@ -27,20 +27,12 @@
 #include "porfly.hxx"
 #include <comphelper/string.hxx>
 
-/*************************************************************************
- *                      class SwGluePortion
- *************************************************************************/
-
 SwGluePortion::SwGluePortion( const KSHORT nInitFixWidth )
     : nFixWidth( nInitFixWidth )
 {
     PrtWidth( nFixWidth );
     SetWhichPor( POR_GLUE );
 }
-
-/*************************************************************************
- *                virtual SwGluePortion::GetCrsrOfst()
- *************************************************************************/
 
 sal_Int32 SwGluePortion::GetCrsrOfst( const KSHORT nOfst ) const
 {
@@ -50,10 +42,6 @@ sal_Int32 SwGluePortion::GetCrsrOfst( const KSHORT nOfst ) const
         return nOfst / (Width() / GetLen());
 }
 
-/*************************************************************************
- *                virtual SwGluePortion::GetTxtSize()
- *************************************************************************/
-
 SwPosSize SwGluePortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 {
     if( 1 >= GetLen() || rInf.GetLen() > GetLen() || !Width() || !GetLen() )
@@ -61,10 +49,6 @@ SwPosSize SwGluePortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
     else
         return SwPosSize( (Width() / GetLen()) * rInf.GetLen(), Height() );
 }
-
-/*************************************************************************
- *              virtual SwGluePortion::GetExpTxt()
- *************************************************************************/
 
 bool SwGluePortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
@@ -78,10 +62,6 @@ bool SwGluePortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
     }
     return false;
 }
-
-/*************************************************************************
- *                virtual SwGluePortion::Paint()
- *************************************************************************/
 
 void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -126,10 +106,6 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-/*************************************************************************
- *                      SwGluePortion::MoveGlue()
- *************************************************************************/
-
 void SwGluePortion::MoveGlue( SwGluePortion *pTarget, const short nPrtGlue )
 {
     short nPrt = std::min( nPrtGlue, GetPrtGlue() );
@@ -139,10 +115,6 @@ void SwGluePortion::MoveGlue( SwGluePortion *pTarget, const short nPrtGlue )
         SubPrtWidth( nPrt );
     }
 }
-
-/*************************************************************************
- *                void SwGluePortion::Join()
- *************************************************************************/
 
 void SwGluePortion::Join( SwGluePortion *pVictim )
 {
@@ -156,10 +128,6 @@ void SwGluePortion::Join( SwGluePortion *pVictim )
     Cut( pVictim );
     delete pVictim;
 }
-
-/*************************************************************************
- *                class SwFixPortion
- *************************************************************************/
 
 // Wir erwarten ein framelokales SwRect !
 SwFixPortion::SwFixPortion( const SwRect &rRect )
@@ -175,29 +143,20 @@ SwFixPortion::SwFixPortion(const KSHORT nFixedWidth, const KSHORT nFixedPos)
     SetWhichPor( POR_FIX );
 }
 
-/*************************************************************************
- *                class SwMarginPortion
- *************************************************************************/
-
 SwMarginPortion::SwMarginPortion( const KSHORT nFixedWidth )
     :SwGluePortion( nFixedWidth )
 {
     SetWhichPor( POR_MARGIN );
 }
 
-/*************************************************************************
- *                SwMarginPortion::AdjustRight()
- *
- * In the outer loop all portions are inspected - the GluePortions
- * at the end are processed first.
- * The end is shifted forwardly till no more GluePortions remain.
- * Always GluePortion-pairs (pLeft and pRight) are treated, where
- * textportions between pLeft and pRight are moved at the back of
- * pRight if pRight has enough Glue. With every move part of the
- * Glue is transferred from pRight to pLeft.
- * The next loop starts with the processed pLeft as pRight.
- *************************************************************************/
-
+// In the outer loop all portions are inspected - the GluePortions
+// at the end are processed first.
+// The end is shifted forwardly till no more GluePortions remain.
+// Always GluePortion-pairs (pLeft and pRight) are treated, where
+// textportions between pLeft and pRight are moved at the back of
+// pRight if pRight has enough Glue. With every move part of the
+// Glue is transferred from pRight to pLeft.
+// The next loop starts with the processed pLeft as pRight.
 void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
 {
     SwGluePortion *pRight = 0;

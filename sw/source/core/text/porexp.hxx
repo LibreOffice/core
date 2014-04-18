@@ -22,10 +22,6 @@
 
 #include "portxt.hxx"
 
-/*************************************************************************
- *                      class SwExpandPortion
- *************************************************************************/
-
 class SwExpandPortion : public SwTxtPortion
 {
 public:
@@ -41,10 +37,6 @@ public:
 
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                      class SwBlankPortion
- *************************************************************************/
 
 class SwBlankPortion : public SwExpandPortion
 {
@@ -71,10 +63,6 @@ public:
 
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                      class SwPostItsPortion
- *************************************************************************/
 
 class SwPostItsPortion : public SwExpandPortion
 {

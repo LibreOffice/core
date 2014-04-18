@@ -28,10 +28,6 @@ struct SwCrsrMoveState;
 class SwMarginPortion;
 class SwFlyPortion;
 
-/*************************************************************************
- *                      class SwTxtIter
- *************************************************************************/
-
 class SwTxtIter : public SwAttrIter
 {
 protected:
@@ -142,10 +138,6 @@ public:
     void CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const;
 };
 
-/*************************************************************************
- *                      class SwTxtMargin
- *************************************************************************/
-
 class SwTxtMargin : public SwTxtIter
 {
 private:
@@ -229,10 +221,6 @@ public:
 
 };
 
-/*************************************************************************
- *                      class SwTxtAdjuster
- *************************************************************************/
-
 class SwTxtAdjuster : public SwTxtMargin
 {
     // Adjusts the portion, if we have adjustment and FlyFrms
@@ -273,10 +261,6 @@ public:
     void CalcDropRepaint();
 };
 
-/*************************************************************************
- *                      class SwTxtCursor
- *************************************************************************/
-
 class SwTxtCursor : public SwTxtAdjuster
 {
     // A small helper-class to save SwTxtCursor member, manipulate them
@@ -314,13 +298,8 @@ public:
     static inline bool IsRightMargin() { return bRightMargin; }
 };
 
-/*************************************************************************
- *                          SwHookOut
- *
- * Change current output device to printer, this has to be done before
- * formatting.
- *************************************************************************/
-
+// Change current output device to printer, this has to be done before
+// formatting.
 class SwHookOut
 {
     SwTxtSizeInfo* pInf;
@@ -330,10 +309,6 @@ public:
     SwHookOut( SwTxtSizeInfo& rInfo );
     ~SwHookOut();
 };
-
-/*************************************************************************
- *                      Inline implementation
- *************************************************************************/
 
 inline bool SwTxtIter::SeekAndChg( SwTxtSizeInfo &rInf )
 {

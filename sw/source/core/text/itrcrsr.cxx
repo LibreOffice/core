@@ -52,13 +52,9 @@
 // is set in GetCharRect and is interpreted in UnitUp/Down.
 bool SwTxtCursor::bRightMargin = false;
 
-/*************************************************************************
- *                    lcl_GetCharRectInsideField
- *
- * After calculating the position of a character during GetCharRect
- * this function allows to find the coordinates of a position (defined
- * in pCMS->pSpecialPos) inside a special portion (e.g., a field)
- *************************************************************************/
+// After calculating the position of a character during GetCharRect
+// this function allows to find the coordinates of a position (defined
+// in pCMS->pSpecialPos) inside a special portion (e.g., a field)
 static void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
                                  const SwCrsrMoveState& rCMS,
                                  const SwLinePortion& rPor )
@@ -162,9 +158,6 @@ namespace {
     }
 } // end of anonymous namespace
 
-/*************************************************************************
- *                SwTxtMargin::CtorInitTxtMargin()
- *************************************************************************/
 void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
 {
     CtorInitTxtIter( pNewFrm, pNewInf );
@@ -200,8 +193,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                 pNode->GetLeftMarginWithNum() -
                 // #i95907#
                 // #i111284#
-//                rSpace.GetLeft() +
-//                rSpace.GetTxtLeft();
+                // rSpace.GetLeft() + rSpace.GetTxtLeft();
                 ( bListLevelIndentsApplicableAndLabelAlignmentActive
                   ? 0
                   : ( rSpace.GetLeft() - rSpace.GetTxtLeft() ) );
@@ -359,9 +351,6 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     DropInit();
 }
 
-/*************************************************************************
- *                SwTxtMargin::DropInit()
- *************************************************************************/
 void SwTxtMargin::DropInit()
 {
     nDropLeft = nDropLines = nDropHeight = nDropDescent = 0;
@@ -378,10 +367,6 @@ void SwTxtMargin::DropInit()
         }
     }
 }
-
-/*************************************************************************
- *                SwTxtMargin::GetLineStart()
- *************************************************************************/
 
 // The function is interpreting / observing / evaluating / keeping / respecting the first line indention and the specified width.
 SwTwips SwTxtMargin::GetLineStart() const
@@ -400,9 +385,6 @@ SwTwips SwTxtMargin::GetLineStart() const
     return nRet;
 }
 
-/*************************************************************************
- *                      SwTxtCursor::CtorInitTxtCursor()
- *************************************************************************/
 void SwTxtCursor::CtorInitTxtCursor( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
 {
     CtorInitTxtMargin( pNewFrm, pNewInf );
@@ -410,12 +392,7 @@ void SwTxtCursor::CtorInitTxtCursor( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     // GetInfo().SetOut( GetInfo().GetWin() );
 }
 
-/*************************************************************************
- *                      SwTxtCursor::GetEndCharRect()
- *************************************************************************/
-
 // 1170: Ancient bug: Shift-End forgets the last character ...
-
 bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                                   SwCrsrMoveState* pCMS, const long nMax )
 {
@@ -484,16 +461,12 @@ bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     return true;
 }
 
-/*************************************************************************
- * void SwTxtCursor::_GetCharRect(..)
- * internal function, called by SwTxtCursor::GetCharRect() to calculate
- * the relative character position in the current line.
- * pOrig referes to x and y coordinates, width and height of the cursor
- * pCMS is used for restricting the cursor, if there are different font
- * heights in one line ( first value = offset to y of pOrig, second
- * value = real height of (shortened) cursor
- *************************************************************************/
-
+// internal function, called by SwTxtCursor::GetCharRect() to calculate
+// the relative character position in the current line.
+// pOrig referes to x and y coordinates, width and height of the cursor
+// pCMS is used for restricting the cursor, if there are different font
+// heights in one line ( first value = offset to y of pOrig, second
+// value = real height of (shortened) cursor
 void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     SwCrsrMoveState* pCMS )
 {
@@ -554,7 +527,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
             if( bNoTxt )
                 nTmpFirst = nX;
             // 8670: EndPortions count once as TxtPortions.
-//            if( pPor->InTxtGrp() || pPor->IsBreakPortion() )
+            // if( pPor->InTxtGrp() || pPor->IsBreakPortion() )
             if( pPor->InTxtGrp() || pPor->IsBreakPortion() || pPor->InTabGrp() )
             {
                 bNoTxt = false;
@@ -1192,10 +1165,6 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     }
 }
 
-/*************************************************************************
- *                      SwTxtCursor::GetCharRect()
- *************************************************************************/
-
 bool SwTxtCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                                SwCrsrMoveState* pCMS, const long nMax )
 {
@@ -1284,11 +1253,7 @@ bool SwTxtCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     return bRet;
 }
 
-/*************************************************************************
- *                      SwTxtCursor::GetCrsrOfst()
- *
- * Return: Offset in String
- *************************************************************************/
+// Return: Offset in String
 sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                                     bool nChgNode, SwCrsrMoveState* pCMS ) const
 {

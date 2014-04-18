@@ -52,15 +52,10 @@
 
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------
- *  class SwMultiPortion
- *
- * A SwMultiPortion is not a simple portion,
- * it's a container, which contains almost a SwLineLayoutPortion.
- * This SwLineLayout could be followed by other textportions via pPortion
- * and by another SwLineLayout via pNext to realize a doubleline portion.
- * --------------------------------------------------*/
-
+// A SwMultiPortion is not a simple portion,
+// it's a container, which contains almost a SwLineLayoutPortion.
+// This SwLineLayout could be followed by other textportions via pPortion
+// and by another SwLineLayout via pNext to realize a doubleline portion.
 SwMultiPortion::~SwMultiPortion()
 {
     delete pFldRest;
@@ -71,11 +66,8 @@ void SwMultiPortion::Paint( const SwTxtPaintInfo & ) const
     OSL_FAIL( "Don't try SwMultiPortion::Paint, try SwTxtPainter::PaintMultiPortion" );
 }
 
-/*--------------------------------------------------
- * Summarize the internal lines to calculate the (external) size.
- * The internal line has to calculate first.
- * --------------------------------------------------*/
-
+// Summarize the internal lines to calculate the (external) size.
+// The internal line has to calculate first.
 void SwMultiPortion::CalcSize( SwTxtFormatter& rLine, SwTxtFormatInfo &rInf )
 {
     Width( 0 );
@@ -132,20 +124,12 @@ bool SwMultiPortion::ChgSpaceAdd( SwLineLayout*, long ) const
     return false;
 }
 
-/*************************************************************************
- *              virtual SwMultiPortion::HandlePortion()
- *************************************************************************/
-
 void SwMultiPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     rPH.Text( GetLen(), GetWhichPor() );
 }
 
-/*--------------------------------------------------
- * SwMultiPortion::ActualizeTabulator()
- * sets the tabulator-flag, if there's any tabulator-portion inside.
- * --------------------------------------------------*/
-
+// sets the tabulator-flag, if there's any tabulator-portion inside.
 void SwMultiPortion::ActualizeTabulator()
 {
     SwLinePortion* pPor = GetRoot().GetFirstPortion();
@@ -165,10 +149,6 @@ void SwMultiPortion::ActualizeTabulator()
         } while ( pPor );
     }
 }
-
-/*--------------------------------------------------
- * SwRotatedPortion::SwRotatedPortion(..)
- * --------------------------------------------------*/
 
 SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
     sal_Int32 nEnd, bool bRTL ) : SwMultiPortion( nEnd )
@@ -195,10 +175,6 @@ SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
         SetDirection( nDir );
     }
 }
-
-/*---------------------------------------------------
- * SwBidiPortion::SwBidiPortion(..)
- * --------------------------------------------------*/
 
 SwBidiPortion::SwBidiPortion( sal_Int32 nEnd, sal_uInt8 nLv )
     : SwMultiPortion( nEnd ), nLevel( nLv )
@@ -250,14 +226,10 @@ sal_Int32 SwBidiPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf ) const
     return nBlanks;
 }
 
-/*--------------------------------------------------
- * SwDoubleLinePortion::SwDoubleLinePortion(..)
- * This constructor is for the continuation of a doubleline portion
- * in the next line.
- * It takes the same brackets and if the original has no content except
- * brackets, these will be deleted.
- * --------------------------------------------------*/
-
+// This constructor is for the continuation of a doubleline portion
+// in the next line.
+// It takes the same brackets and if the original has no content except
+// brackets, these will be deleted.
 SwDoubleLinePortion::SwDoubleLinePortion(SwDoubleLinePortion& rDouble, sal_Int32 nEnd)
     : SwMultiPortion(nEnd)
     , pBracket(0)
@@ -281,13 +253,9 @@ SwDoubleLinePortion::SwDoubleLinePortion(SwDoubleLinePortion& rDouble, sal_Int32
     }
 }
 
-/*--------------------------------------------------
- * SwDoubleLinePortion::SwDoubleLinePortion(..)
- * This constructor uses the textattribute to get the right brackets.
- * The textattribute could be a 2-line-attribute or a character- or
- * internetstyle, which contains the 2-line-attribute.
- * --------------------------------------------------*/
-
+// This constructor uses the textattribute to get the right brackets.
+// The textattribute could be a 2-line-attribute or a character- or
+// internetstyle, which contains the 2-line-attribute.
 SwDoubleLinePortion::SwDoubleLinePortion(const SwMultiCreator& rCreate, sal_Int32 nEnd)
     : SwMultiPortion(nEnd)
     , pBracket(new SwBracket())
@@ -349,14 +317,11 @@ SwDoubleLinePortion::SwDoubleLinePortion(const SwMultiCreator& rCreate, sal_Int3
         SetDirection( DIR_LEFT2RIGHT );
 }
 
-/*--------------------------------------------------
- * SwMultiPortion::PaintBracket paints the wished bracket,
- * if the multiportion has surrounding brackets.
- * The X-position of the SwTxtPaintInfo will be modified:
- * the open bracket sets position behind itself,
- * the close bracket in front of itself.
- * --------------------------------------------------*/
-
+// paints the wished bracket,
+// if the multiportion has surrounding brackets.
+// The X-position of the SwTxtPaintInfo will be modified:
+// the open bracket sets position behind itself,
+// the close bracket in front of itself.
 void SwDoubleLinePortion::PaintBracket( SwTxtPaintInfo &rInf,
                                         long nSpaceAdd,
                                         bool bOpen ) const
@@ -389,11 +354,8 @@ void SwDoubleLinePortion::PaintBracket( SwTxtPaintInfo &rInf,
         rInf.X( rInf.X() + PreWidth() );
 }
 
-/*--------------------------------------------------
- * SwDoubleLinePortion::SetBrackets creates the bracket-structur
- * and fills it, if not both characters are 0x00.
- * --------------------------------------------------*/
-
+// creates the bracket-structur
+// and fills it, if not both characters are 0x00.
 void SwDoubleLinePortion::SetBrackets( const SwDoubleLinePortion& rDouble )
 {
     if( rDouble.pBracket )
@@ -407,13 +369,9 @@ void SwDoubleLinePortion::SetBrackets( const SwDoubleLinePortion& rDouble )
     }
 }
 
-/*--------------------------------------------------
- * SwDoubleLinePortion::FormatBrackets
- * calculates the size of the brackets => pBracket,
- * reduces the nMaxWidth-parameter ( minus bracket-width )
- * and moves the rInf-x-position behind the opening bracket.
- * --------------------------------------------------*/
-
+// calculates the size of the brackets => pBracket,
+// reduces the nMaxWidth-parameter ( minus bracket-width )
+// and moves the rInf-x-position behind the opening bracket.
 void SwDoubleLinePortion::FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWidth )
 {
     nMaxWidth -= rInf.X();
@@ -478,13 +436,9 @@ void SwDoubleLinePortion::FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWi
     delete(pTmpFnt);
 }
 
-/*--------------------------------------------------
- * SwDoubleLinePortion::CalcBlanks
- * calculates the number of blanks in each line and
- * the difference of the width of the two lines.
- * These results are used from the text adjustment.
- * --------------------------------------------------*/
-
+// calculates the number of blanks in each line and
+// the difference of the width of the two lines.
+// These results are used from the text adjustment.
 void SwDoubleLinePortion::CalcBlanks( SwTxtFormatInfo &rInf )
 {
     SwLinePortion* pPor = GetRoot().GetFirstPortion();
@@ -522,16 +476,12 @@ long SwDoubleLinePortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo & ) c
     return HasTabulator() ? 0 : GetSpaceCnt() * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
 
-/*--------------------------------------------------
- * SwDoubleLinePortion::ChangeSpaceAdd(..)
- * merges the spaces for text adjustment from the inner and outer part.
- * Inside the doubleline portion the wider line has no spaceadd-array, the
- * smaller line has such an array to reach width of the wider line.
- * If the surrounding line has text adjustment and the doubleline portion
- * contains no tabulator, it is necessary to create/manipulate the inner
- * space arrays.
- * --------------------------------------------------*/
-
+// Merges the spaces for text adjustment from the inner and outer part.
+// Inside the doubleline portion the wider line has no spaceadd-array, the
+// smaller line has such an array to reach width of the wider line.
+// If the surrounding line has text adjustment and the doubleline portion
+// contains no tabulator, it is necessary to create/manipulate the inner
+// space arrays.
 bool SwDoubleLinePortion::ChgSpaceAdd( SwLineLayout* pCurr,
                                            long nSpaceAdd ) const
 {
@@ -567,11 +517,7 @@ bool SwDoubleLinePortion::ChgSpaceAdd( SwLineLayout* pCurr,
     }
     return bRet;
 }
-/*--------------------------------------------------
- * SwDoubleLinePortion::ResetSpaceAdd(..)
- * cancels the manipulation from SwDoubleLinePortion::ChangeSpaceAdd(..)
- * --------------------------------------------------*/
-
+// cancels the manipulation from SwDoubleLinePortion::ChangeSpaceAdd(..)
 void SwDoubleLinePortion::ResetSpaceAdd( SwLineLayout* pCurr )
 {
     pCurr->RemoveFirstLLSpaceAdd();;
@@ -584,12 +530,8 @@ SwDoubleLinePortion::~SwDoubleLinePortion()
     delete pBracket;
 }
 
-/*--------------------------------------------------
- * SwRubyPortion::SwRubyPortion(..)
- * constructs a ruby portion, i.e. an additional text is displayed
- * beside the main text, e.g. phonetic characters.
- * --------------------------------------------------*/
-
+// constructs a ruby portion, i.e. an additional text is displayed
+// beside the main text, e.g. phonetic characters.
 SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd ) :
     SwMultiPortion( nEnd ),
     nRubyOffset( rRuby.GetRubyOffset() ),
@@ -600,12 +542,8 @@ SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd ) :
     SetRuby();
 }
 
-/*--------------------------------------------------
- * SwRubyPortion::SwRubyPortion(..)
- * constructs a ruby portion, i.e. an additional text is displayed
- * beside the main text, e.g. phonetic characters.
- * --------------------------------------------------*/
-
+// constructs a ruby portion, i.e. an additional text is displayed
+// beside the main text, e.g. phonetic characters.
 SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
                               const IDocumentSettingAccess& rIDocumentSettingAccess,
                               sal_Int32 nEnd, sal_Int32 nOffs,
@@ -667,19 +605,15 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
         SetDirection( DIR_LEFT2RIGHT );
 }
 
-/*--------------------------------------------------
- * SwRubyPortion::_Adjust(..)
- * In ruby portion there are different alignments for
- * the ruby text and the main text.
- * Left, right, centered and two possibilities of block adjustment
- * The block adjustment is realized by spacing between the characteres,
- * either with a half space or no space in front of the first letter and
- * a half space at the end of the last letter.
- * Notice: the smaller line will be manipulated, normally it's the ruby line,
- * but it could be the main text, too.
- * If there is a tabulator in smaller line, no adjustment is possible.
- * --------------------------------------------------*/
-
+// In ruby portion there are different alignments for
+// the ruby text and the main text.
+// Left, right, centered and two possibilities of block adjustment
+// The block adjustment is realized by spacing between the characteres,
+// either with a half space or no space in front of the first letter and
+// a half space at the end of the last letter.
+// Notice: the smaller line will be manipulated, normally it's the ruby line,
+// but it could be the main text, too.
+// If there is a tabulator in smaller line, no adjustment is possible.
 void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
 {
     SwTwips nLineDiff = GetRoot().Width() - GetRoot().GetNext()->Width();
@@ -763,14 +697,10 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
     rInf.SetIdx( nOldIdx );
 }
 
-/*--------------------------------------------------
- * CalcRubyOffset()
- * has to change the nRubyOffset, if there's a fieldportion
- * in the phonetic line.
- * The nRubyOffset is the position in the rubystring, where the
- * next SwRubyPortion has start the displaying of the phonetics.
- * --------------------------------------------------*/
-
+// has to change the nRubyOffset, if there's a fieldportion
+// in the phonetic line.
+// The nRubyOffset is the position in the rubystring, where the
+// next SwRubyPortion has start the displaying of the phonetics.
 void SwRubyPortion::CalcRubyOffset()
 {
     const SwLineLayout *pCurr = &GetRoot();
@@ -797,29 +727,12 @@ void SwRubyPortion::CalcRubyOffset()
     }
 }
 
-/*--------------------------------------------------
- * SwTxtSizeInfo::GetMultiCreator(..)
- * If we (e.g. the position rPos) are inside a two-line-attribute or
- * a ruby-attribute, the attribute will be returned in a SwMultiCreator-struct,
- * otherwise the function returns zero.
- * The rPos parameter is set to the end of the multiportion,
- * normally this is the end of the attribute,
- * but sometimes it is the start of another attribute, which finished or
- * interrupts the first attribute.
- * E.g. a ruby portion interrupts a 2-line-attribute, a 2-line-attribute
- * with different brackets interrupts another 2-line-attribute.
- * --------------------------------------------------*/
-
-/*--------------------------------------------------
- * lcl_Has2Lines(..)
- * is a little help function for GetMultiCreator(..)
- * It extracts the 2-line-format from a 2-line-attribute or a character style.
- * The rValue is set to true, if the 2-line-attribute's value is set and
- * no 2-line-format reference is passed. If there is a 2-line-format reference,
- * then the rValue is set only, if the 2-line-attribute's value is set _and_
- * the 2-line-formats has the same brackets.
- * --------------------------------------------------*/
-
+// A little helper function for GetMultiCreator(..)
+// It extracts the 2-line-format from a 2-line-attribute or a character style.
+// The rValue is set to true, if the 2-line-attribute's value is set and
+// no 2-line-format reference is passed. If there is a 2-line-format reference,
+// then the rValue is set only, if the 2-line-attribute's value is set _and_
+// the 2-line-formats has the same brackets.
 static bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
     bool &rValue )
 {
@@ -839,17 +752,13 @@ static bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef
     return false;
 }
 
-/*--------------------------------------------------
- * lcl_HasRotation(..)
- * is a little help function for GetMultiCreator(..)
- * It extracts the charrotation from a charrotate-attribute or a character style.
- * The rValue is set to true, if the charrotate-attribute's value is set and
- * no charrotate-format reference is passed.
- * If there is a charrotate-format reference, then the rValue is set only,
- * if the charrotate-attribute's value is set _and_ identical
- * to the charrotate-format's value.
- * --------------------------------------------------*/
-
+// is a little help function for GetMultiCreator(..)
+// It extracts the charrotation from a charrotate-attribute or a character style.
+// The rValue is set to true, if the charrotate-attribute's value is set and
+// no charrotate-format reference is passed.
+// If there is a charrotate-format reference, then the rValue is set only,
+// if the charrotate-attribute's value is set _and_ identical
+// to the charrotate-format's value.
 static bool lcl_HasRotation( const SwTxtAttr& rAttr,
     const SvxCharRotateItem* &rpRef, bool &rValue )
 {
@@ -868,6 +777,15 @@ static bool lcl_HasRotation( const SwTxtAttr& rAttr,
     return false;
 }
 
+// If we (e.g. the position rPos) are inside a two-line-attribute or
+// a ruby-attribute, the attribute will be returned in a SwMultiCreator-struct,
+// otherwise the function returns zero.
+// The rPos parameter is set to the end of the multiportion,
+// normally this is the end of the attribute,
+// but sometimes it is the start of another attribute, which finished or
+// interrupts the first attribute.
+// E.g. a ruby portion interrupts a 2-line-attribute, a 2-line-attribute
+// with different brackets interrupts another 2-line-attribute.
 SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
                                                 SwMultiPortion* pMulti ) const
 {
@@ -1242,16 +1160,12 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
     return NULL;
 }
 
-/*--------------------------------------------------
- * SwSpaceManipulator
- * is a little helper class to manage the spaceadd-arrays of the text adjustment
- * during a PaintMultiPortion.
- * The constructor prepares the array for the first line of multiportion,
- * the SecondLine-function restores the values for the first line and prepares
- * the second line.
- * The destructor restores the values of the last manipulation.
- * --------------------------------------------------*/
-
+// A little helper class to manage the spaceadd-arrays of the text adjustment
+// during a PaintMultiPortion.
+// The constructor prepares the array for the first line of multiportion,
+// the SecondLine-function restores the values for the first line and prepares
+// the second line.
+// The destructor restores the values of the last manipulation.
 class SwSpaceManipulator
 {
     SwTxtPaintInfo& rInfo;
@@ -1334,12 +1248,9 @@ SwSpaceManipulator::~SwSpaceManipulator()
     rInfo.SetDirection( nOldDir );
 }
 
-/*--------------------------------------------------
- * SwTxtPainter::PaintMultiPortion manages the paint for a SwMultiPortion.
- * External, for the calling function, it seems to be a normal Paint-function,
- * internal it is like a SwTxtFrm::Paint with multiple DrawTextLines
- * --------------------------------------------------*/
-
+// Manages the paint for a SwMultiPortion.
+// External, for the calling function, it seems to be a normal Paint-function,
+// internal it is like a SwTxtFrm::Paint with multiple DrawTextLines
 void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SwMultiPortion& rMulti, const SwMultiPortion* pEnvPor )
 {
@@ -1689,13 +1600,9 @@ static bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpFld )
     return bRet;
 }
 
-/*----------------------------------------------------
- *              lcl_TruncateMultiPortion
- * If a multi portion completely has to go to the
- * next line, this function is called to trunctate
- * the rest of the remaining multi portion
- * --------------------------------------------------*/
-
+// If a multi portion completely has to go to the
+// next line, this function is called to trunctate
+// the rest of the remaining multi portion
 static void lcl_TruncateMultiPortion( SwMultiPortion& rMulti, SwTxtFormatInfo& rInf,
                                sal_Int32 nStartIdx )
 {
@@ -1714,13 +1621,9 @@ static void lcl_TruncateMultiPortion( SwMultiPortion& rMulti, SwTxtFormatInfo& r
     rInf.SetIdx( nStartIdx );
 }
 
-/*-----------------------------------------------------------------------------
- *              SwTxtFormatter::BuildMultiPortion
- * manages the formatting of a SwMultiPortion. External, for the calling
- * function, it seems to be a normal Format-function, internal it is like a
- * SwTxtFrm::_Format with multiple BuildPortions
- *---------------------------------------------------------------------------*/
-
+// Manages the formatting of a SwMultiPortion. External, for the calling
+// function, it seems to be a normal Format-function, internal it is like a
+// SwTxtFrm::_Format with multiple BuildPortions
 bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     SwMultiPortion& rMulti )
 {
@@ -2165,22 +2068,18 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     return bRet;
 }
 
-/*--------------------------------------------------
- * SwTxtFormatter::MakeRestPortion(..)
- * When a fieldportion at the end of line breaks and needs a following
- * fieldportion in the next line, then the "restportion" of the formatinfo
- * has to be set. Normally this happens during the formatting of the first
- * part of the fieldportion.
- * But sometimes the formatting starts at the line with the following part,
- * especially when the following part is on the next page.
- * In this case the MakeRestPortion-function has to create the following part.
- * The first parameter is the line that contains possibly a first part
- * of a field. When the function finds such field part, it creates the right
- * restportion. This may be a multiportion, e.g. if the field is surrounded by
- * a doubleline- or ruby-portion.
- * The second parameter is the start index of the line.
- * --------------------------------------------------*/
-
+// When a fieldportion at the end of line breaks and needs a following
+// fieldportion in the next line, then the "restportion" of the formatinfo
+// has to be set. Normally this happens during the formatting of the first
+// part of the fieldportion.
+// But sometimes the formatting starts at the line with the following part,
+// especially when the following part is on the next page.
+// In this case the MakeRestPortion-function has to create the following part.
+// The first parameter is the line that contains possibly a first part
+// of a field. When the function finds such field part, it creates the right
+// restportion. This may be a multiportion, e.g. if the field is surrounded by
+// a doubleline- or ruby-portion.
+// The second parameter is the start index of the line.
 SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
     sal_Int32 nPosition )
 {
@@ -2334,12 +2233,9 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
     return pRest;
 }
 
-/*--------------------------------------------------
- * SwTxtCursorSave notes the start and current line of a SwTxtCursor,
- * sets them to the values for GetCrsrOfst inside a multiportion
- * and restores them in the destructor.
- * --------------------------------------------------*/
-
+// SwTxtCursorSave notes the start and current line of a SwTxtCursor,
+// sets them to the values for GetCrsrOfst inside a multiportion
+// and restores them in the destructor.
 SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
                                   SwMultiPortion* pMulti,
                                   SwTwips nY,

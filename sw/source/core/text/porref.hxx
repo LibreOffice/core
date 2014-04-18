@@ -21,10 +21,6 @@
 
 #include "portxt.hxx"
 
-/*************************************************************************
- *                      class SwRefPortion
- *************************************************************************/
-
 class SwRefPortion : public SwTxtPortion
 {
 public:
@@ -32,10 +28,6 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     OUTPUT_OPERATOR_OVERRIDE
 };
-
-/*************************************************************************
- *                      class SwIsoRefPortion
- *************************************************************************/
 
 class SwIsoRefPortion : public SwRefPortion
 {

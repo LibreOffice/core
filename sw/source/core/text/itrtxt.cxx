@@ -33,10 +33,6 @@
 #include "txtfrm.hxx"
 #include "porfly.hxx"
 
-/*************************************************************************
- *                      SwTxtIter::CtorInitTxtIter()
- *************************************************************************/
-
 void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
 {
     SwTxtNode *pNode = pNewFrm->GetTxtNode();
@@ -56,10 +52,6 @@ void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
         && pFrm->FillRegister( nRegStart, nRegDiff );
 }
 
-/*************************************************************************
- *                      SwTxtIter::Init()
- *************************************************************************/
-
 void SwTxtIter::Init()
 {
     pCurr = pInf->GetParaPortion();
@@ -70,19 +62,11 @@ void SwTxtIter::Init()
     nLineNr = 1;
 }
 
-/*************************************************************************
- *                 SwTxtIter::_GetHeightAndAscent()
- *************************************************************************/
-
 void SwTxtIter::CalcAscentAndHeight( KSHORT &rAscent, KSHORT &rHeight ) const
 {
     rHeight = GetLineHeight();
     rAscent = pCurr->GetAscent() + rHeight - pCurr->Height();
 }
-
-/*************************************************************************
- *                    SwTxtIter::_GetPrev()
- *************************************************************************/
 
 SwLineLayout *SwTxtIter::_GetPrev()
 {
@@ -96,20 +80,12 @@ SwLineLayout *SwTxtIter::_GetPrev()
     return pPrev = pLay;
 }
 
-/*************************************************************************
- *                    SwTxtIter::GetPrev()
- *************************************************************************/
-
 const SwLineLayout *SwTxtIter::GetPrev()
 {
     if(! bPrev)
         _GetPrev();
     return pPrev;
 }
-
-/*************************************************************************
- *                    SwTxtIter::Prev()
- *************************************************************************/
 
 const SwLineLayout *SwTxtIter::Prev()
 {
@@ -129,10 +105,6 @@ const SwLineLayout *SwTxtIter::Prev()
         return 0;
 }
 
-/*************************************************************************
- *                      SwTxtIter::Next()
- *************************************************************************/
-
 const SwLineLayout *SwTxtIter::Next()
 {
     if(pCurr->GetNext())
@@ -149,10 +121,6 @@ const SwLineLayout *SwTxtIter::Next()
         return 0;
 }
 
-/*************************************************************************
- *                      SwTxtIter::NextLine()
- *************************************************************************/
-
 const SwLineLayout *SwTxtIter::NextLine()
 {
     const SwLineLayout *pNext = Next();
@@ -163,10 +131,6 @@ const SwLineLayout *SwTxtIter::NextLine()
     return pNext;
 }
 
-/*************************************************************************
- *                      SwTxtIter::GetNextLine()
- *************************************************************************/
-
 const SwLineLayout *SwTxtIter::GetNextLine() const
 {
     const SwLineLayout *pNext = pCurr->GetNext();
@@ -176,10 +140,6 @@ const SwLineLayout *SwTxtIter::GetNextLine() const
     }
     return (SwLineLayout*)pNext;
 }
-
-/*************************************************************************
- *                      SwTxtIter::GetPrevLine()
- *************************************************************************/
 
 const SwLineLayout *SwTxtIter::GetPrevLine()
 {
@@ -207,10 +167,6 @@ const SwLineLayout *SwTxtIter::GetPrevLine()
     return (SwLineLayout*)pLay;
 }
 
-/*************************************************************************
- *                      SwTxtIter::PrevLine()
- *************************************************************************/
-
 const SwLineLayout *SwTxtIter::PrevLine()
 {
     const SwLineLayout *pMyPrev = Prev();
@@ -226,10 +182,6 @@ const SwLineLayout *SwTxtIter::PrevLine()
     return (SwLineLayout*)(pMyPrev ? pMyPrev : pLast);
 }
 
-/*************************************************************************
- *                      SwTxtIter::Bottom()
- *************************************************************************/
-
 void SwTxtIter::Bottom()
 {
     while( Next() )
@@ -238,10 +190,6 @@ void SwTxtIter::Bottom()
     }
 }
 
-/*************************************************************************
- *                      SwTxtIter::CharToLine()
- *************************************************************************/
-
 void SwTxtIter::CharToLine(const sal_Int32 nChar)
 {
     while( nStart + pCurr->GetLen() <= nChar && Next() )
@@ -249,10 +197,6 @@ void SwTxtIter::CharToLine(const sal_Int32 nChar)
     while( nStart > nChar && Prev() )
         ;
 }
-
-/*************************************************************************
- *                      SwTxtIter::CharCrsrToLine()
- *************************************************************************/
 
 // 1170: beruecksichtigt Mehrdeutigkeiten:
 const SwLineLayout *SwTxtCursor::CharCrsrToLine( const sal_Int32 nPosition )
@@ -266,10 +210,6 @@ const SwLineLayout *SwTxtCursor::CharCrsrToLine( const sal_Int32 nPosition )
         bPrevious = false;
     return bPrevious ? PrevLine() : pCurr;
 }
-
-/*************************************************************************
- *                      SwTxtCrsr::AdjustBaseLine()
- *************************************************************************/
 
 sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
                                     const SwLinePortion* pPor,
@@ -350,10 +290,6 @@ sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
     return nOfst;
 }
 
-/*************************************************************************
- *                      SwTxtIter::TwipsToLine()
- *************************************************************************/
-
 const SwLineLayout *SwTxtIter::TwipsToLine( const SwTwips y)
 {
     while( nY + GetLineHeight() <= y && Next() )
@@ -364,7 +300,6 @@ const SwLineLayout *SwTxtIter::TwipsToLine( const SwTwips y)
 }
 
 // Local helper function to check, if pCurr needs a field rest portion:
-
 static bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
 {
     const SwLinePortion *pPor = pCurr->GetPortion();
@@ -378,10 +313,6 @@ static bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
     }
     return bRet;
 }
-
-/*************************************************************************
- *                      SwTxtIter::TruncLines()
- *************************************************************************/
 
 void SwTxtIter::TruncLines( bool bNoteFollow )
 {
@@ -438,10 +369,6 @@ void SwTxtIter::TruncLines( bool bNoteFollow )
         pFrm->RemoveFtn( nEnd );
 }
 
-/*************************************************************************
- *                      SwTxtIter::CntHyphens()
- *************************************************************************/
-
 void SwTxtIter::CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const
 {
     nEndCnt = 0;
@@ -465,13 +392,8 @@ void SwTxtIter::CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const
     }
 }
 
-/*************************************************************************
- *                          SwHookOut
- *
- * Change current output device to formatting device, this has to be done before
- * formatting.
- *************************************************************************/
-
+// Change current output device to formatting device, this has to be done before
+// formatting.
 SwHookOut::SwHookOut( SwTxtSizeInfo& rInfo ) :
      pInf( &rInfo ),
      pOut( rInfo.GetOut() ),

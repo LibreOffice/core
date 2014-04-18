@@ -55,10 +55,6 @@ class SwPortionHandler;
 #define PORGRP_TABNOTLFT 0x0010
 #define PORGRP_TOXREF   0x0008
 
-/*************************************************************************
- *                      class SwLinePortion
- *************************************************************************/
-
 /// Base class for anything that can be part of a line in the Writer layout.
 class SwLinePortion: public SwPosSize
 {
@@ -191,10 +187,6 @@ public:
 
     OUTPUT_OPERATOR
 };
-
-/*************************************************************************
- *                  inline - Implementations
- *************************************************************************/
 
 inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
 {

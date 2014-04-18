@@ -23,10 +23,6 @@
 #include "porref.hxx"
 #include "inftxt.hxx"
 
-/*************************************************************************
- *               virtual SwRefPortion::Paint()
- *************************************************************************/
-
 void SwRefPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( Width() )
@@ -36,10 +32,6 @@ void SwRefPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-/*************************************************************************
- *                      class SwIsoRefPortion
- *************************************************************************/
-
 SwLinePortion *SwIsoRefPortion::Compress() { return this; }
 
 SwIsoRefPortion::SwIsoRefPortion() : nViewWidth(0)
@@ -47,10 +39,6 @@ SwIsoRefPortion::SwIsoRefPortion() : nViewWidth(0)
     SetLen(1);
     SetWhichPor( POR_ISOREF );
 }
-
-/*************************************************************************
- *               virtual SwIsoRefPortion::GetViewWidth()
- *************************************************************************/
 
 KSHORT SwIsoRefPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
@@ -68,28 +56,16 @@ KSHORT SwIsoRefPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
     return nViewWidth;
 }
 
-/*************************************************************************
- *                 virtual SwIsoRefPortion::Format()
- *************************************************************************/
-
 bool SwIsoRefPortion::Format( SwTxtFormatInfo &rInf )
 {
     return SwLinePortion::Format( rInf );
 }
-
-/*************************************************************************
- *               virtual SwIsoRefPortion::Paint()
- *************************************************************************/
 
 void SwIsoRefPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( Width() )
         rInf.DrawViewOpt( *this, POR_REF );
 }
-
-/*************************************************************************
- *              virtual SwIsoRefPortion::HandlePortion()
- *************************************************************************/
 
 void SwIsoRefPortion::HandlePortion( SwPortionHandler& rPH ) const
 {

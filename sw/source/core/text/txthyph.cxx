@@ -35,10 +35,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
 
-/*************************************************************************
- *                      SwTxtFormatInfo::HyphWord()
- *************************************************************************/
-
 Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
                                 const OUString &rTxt, const MSHORT nMinTrail )
 {
@@ -55,12 +51,7 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 
 }
 
-/*************************************************************************
- *                      SwTxtFrm::Hyphenate
- *
- * Wir formatieren eine Zeile fuer die interaktive Trennung
- *************************************************************************/
-
+// Wir formatieren eine Zeile fuer die interaktive Trennung
 bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTxtFrm::Hyphenate" );
@@ -113,11 +104,8 @@ bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
     return bRet;
 }
 
-/*************************************************************************
- *                      SwTxtFormatter::Hyphenate
- *
- * Wir formatieren eine Zeile fuer die interaktive Trennung
- *************************************************************************/
+// Wir formatieren eine Zeile fuer die interaktive Trennung
+//
 // Wir koennen davon ausgehen, dass bereits formatiert wurde.
 // Fuer die CeBIT'93 gehen wir den einfachen, sicheren Weg:
 // Die Zeile wird einfach neu formatiert, der Hyphenator wird dann
@@ -259,10 +247,6 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     return false;
 }
 
-/*************************************************************************
- *                      SwTxtPortion::CreateHyphen()
- *************************************************************************/
-
 bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
 {
     Reference< XHyphenatedWord >  xHyphWord = rGuess.HyphWord();
@@ -360,29 +344,17 @@ bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
     return false;
 }
 
-/*************************************************************************
- *              virtual SwHyphPortion::GetExpTxt()
- *************************************************************************/
-
 bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &/*rInf*/, OUString &rTxt ) const
 {
     rTxt = "-";
     return true;
 }
 
-/*************************************************************************
- *              virtual SwHyphPortion::HandlePortion()
- *************************************************************************/
-
 void SwHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     OUString aString( '-' );
     rPH.Special( GetLen(), aString, GetWhichPor() );
 }
-
-/*************************************************************************
- *                 virtual SwHyphPortion::Format()
- *************************************************************************/
 
 bool SwHyphPortion::Format( SwTxtFormatInfo &rInf )
 {
@@ -404,28 +376,16 @@ bool SwHyphPortion::Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
-/*************************************************************************
- *              virtual SwHyphStrPortion::GetExpTxt()
- *************************************************************************/
-
 bool SwHyphStrPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
 {
     rTxt = aExpand;
     return true;
 }
 
-/*************************************************************************
- *              virtual SwHyphStrPortion::HandlePortion()
- *************************************************************************/
-
 void SwHyphStrPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     rPH.Special( GetLen(), aExpand, GetWhichPor() );
 }
-
-/*************************************************************************
- *                      class SwSoftHyphPortion
- *************************************************************************/
 
 SwLinePortion *SwSoftHyphPortion::Compress() { return this; }
 
@@ -459,7 +419,6 @@ KSHORT SwSoftHyphPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
  *  3) SoftHyph steht am Zeilenende, ViewOpt aus/an.
  *     -> immer sichtbar, Nachbarn unveraendert
  */
-
 void SwSoftHyphPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( Width() )
@@ -468,10 +427,6 @@ void SwSoftHyphPortion::Paint( const SwTxtPaintInfo &rInf ) const
         SwExpandPortion::Paint( rInf );
     }
 }
-
-/*************************************************************************
- *                 virtual SwSoftHyphPortion::Format()
- *************************************************************************/
 
 /* Die endgueltige Breite erhalten wir im FormatEOL().
  * In der Underflow-Phase stellen wir fest, ob ueberhaupt ein
@@ -488,7 +443,6 @@ void SwSoftHyphPortion::Paint( const SwTxtPaintInfo &rInf ) const
  * 3) Underflow() und bFull = true
  * 4) {Zuc} ruft Hyphenate => {Zuk}{-}{ker}
  */
-
 bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
 {
     bool bFull = true;
@@ -544,9 +498,6 @@ bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
-/*************************************************************************
- *                 virtual SwSoftHyphPortion::FormatEOL()
- *************************************************************************/
 // Format end of Line
 
 void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
@@ -576,15 +527,10 @@ void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
     }
 }
 
-/*************************************************************************
- *              virtual SwSoftHyphPortion::GetExpTxt()
- *
- * Wir expandieren:
- * - wenn die Sonderzeichen sichtbar sein sollen
- * - wenn wir am Ende der Zeile stehen.
- * - wenn wir vor einem (echten/emuliertem) Zeilenumbruch stehen
- *************************************************************************/
-
+// Wir expandieren:
+// - wenn die Sonderzeichen sichtbar sein sollen
+// - wenn wir am Ende der Zeile stehen.
+// - wenn wir vor einem (echten/emuliertem) Zeilenumbruch stehen
 bool SwSoftHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     if( IsExpand() || ( rInf.OnWin() && rInf.GetOpt().IsSoftHyph() ) ||
@@ -597,10 +543,6 @@ bool SwSoftHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) c
     return false;
 }
 
-/*************************************************************************
- *              virtual SwSoftHyphPortion::HandlePortion()
- *************************************************************************/
-
 void SwSoftHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     const OUString aString( '-' );
@@ -609,10 +551,6 @@ void SwSoftHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
                           GetWhichPor();
     rPH.Special( GetLen(), aString, nWhich );
 }
-
-/*************************************************************************
- *                      SwSoftHyphStrPortion::Paint
- *************************************************************************/
 
 void SwSoftHyphStrPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {

@@ -29,13 +29,8 @@ class SwFont;
 class SwDropCapCache;
 extern SwDropCapCache *pDropCapCache;
 
-/*************************************************************************
- *                      class SwDropPortionPart
- *
- * A drop portion can consist of one or more parts in order to allow
- * attribute changes inside them.
- *************************************************************************/
-
+// A drop portion can consist of one or more parts in order to allow
+// attribute changes inside them.
 class SwDropPortionPart
 {
     SwDropPortionPart* pFollow;
@@ -62,10 +57,6 @@ public:
     void SetJoinBorderWithPrev( const bool bJoinPrev ) { m_bJoinBorderWithPrev = bJoinPrev; }
     void SetJoinBorderWithNext( const bool bJoinNext ) { m_bJoinBorderWithNext = bJoinNext; }
 };
-
-/*************************************************************************
- *                      class SwDropPortion
- *************************************************************************/
 
 class SwDropPortion : public SwTxtPortion
 {

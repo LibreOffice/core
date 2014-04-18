@@ -23,10 +23,6 @@
 class SwRect;               // SwSaveClip
 #include <txtfrm.hxx>
 
-/*************************************************************************
- *                      class SwSaveClip
- *************************************************************************/
-
 class SwSaveClip
 {
     Region   aClip;
@@ -61,10 +57,6 @@ inline SwSaveClip::~SwSaveClip()
 
 #ifdef DBG_UTIL
 
-/*************************************************************************
- *                          class SwDbgOut
- *************************************************************************/
-
 class SwDbgOut
 {
 protected:
@@ -72,10 +64,6 @@ protected:
 public:
         inline SwDbgOut( OutputDevice* pOutDev, const bool bOn = true );
 };
-
-/*************************************************************************
- *                          class DbgBrush
- *************************************************************************/
 
 class DbgBackColor : public SwDbgOut
 {
@@ -86,10 +74,6 @@ public:
        ~DbgBackColor();
 };
 
-/*************************************************************************
- *                          class DbgRect
- *************************************************************************/
-
 class DbgRect : public SwDbgOut
 {
 public:
@@ -97,10 +81,6 @@ public:
                  const bool bOn = true,
                  ColorData eColor = COL_LIGHTBLUE );
 };
-
-/*************************************************************************
- *                      Inline-Implementierung
- *************************************************************************/
 
 inline SwDbgOut::SwDbgOut( OutputDevice* pOutDev, const bool bOn )
                :pOut( bOn ? pOutDev : 0 )
