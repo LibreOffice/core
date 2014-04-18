@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_INTCONVERSION_HXX
-#define INCLUDED_BASEBMP_INTCONVERSION_HXX
+#ifndef INCLUDED_BASEBMP_SOURCE_INTCONVERSION_HXX
+#define INCLUDED_BASEBMP_SOURCE_INTCONVERSION_HXX
 
 #include <vigra/rgbvalue.hxx>
 #include <functional>
@@ -83,6 +83,6 @@ namespace basebmp
     };
 }
 
-#endif /* INCLUDED_BASEBMP_INTCONVERSION_HXX */
+#endif // INCLUDED_BASEBMP_SOURCE_INTCONVERSION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
