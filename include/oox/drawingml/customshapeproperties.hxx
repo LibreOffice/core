@@ -171,18 +171,9 @@ private:
     bool                            mbMirroredY;
     sal_Int32                       mnTextRotateAngle;
 
-    typedef boost::unordered_map< sal_Int32, CustomShapeProvider * > PresetsMap;
     typedef boost::unordered_map< sal_Int32, PropertyMap > PresetDataMap;
 
-    static PresetsMap maPresetsMap;
     static PresetDataMap maPresetDataMap;
-    static void initializePresetsMap();
-    static void initializePresetsMap1();
-    static void initializePresetsMap2();
-    static void initializePresetsMap3();
-    static void initializePresetsMap4();
-    static void initializePresetsMap5();
-    static void initializePresetsMap6();
     static void initializePresetDataMap();
 
     sal_Int32 mnArcNum;

@@ -90,7 +90,6 @@ sal_Int32 CustomShapeProperties::GetCustomShapeGuideValue( const std::vector< Cu
     return nIndex;
 }
 
-CustomShapeProperties::PresetsMap CustomShapeProperties::maPresetsMap;
 CustomShapeProperties::PresetDataMap CustomShapeProperties::maPresetDataMap;
 
 static OUString GetConnectorShapeType( sal_Int32 nType )
