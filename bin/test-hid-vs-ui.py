@@ -58,7 +58,7 @@ def init_core_files():
     elif not args['git_static']:
         subprocess.call(['git','fetch','origin'])
     allfiles = subprocess.check_output(['git','ls-tree','--name-only','--full-name','-r','master'])
-    return '\n'.join(re.findall('.*\.ui',allfiles))
+    return re.findall('.*\.ui',allfiles)
 
 
 if __name__ == "__main__":
@@ -83,7 +83,31 @@ if __name__ == "__main__":
         hid = rawtext.split('hid="')[1].split('"')[0]
         if hid.startswith('.uno'): continue
         uifileraw, compname = hid.rsplit('/',1)
-        uifile = uifileraw.split('/',1)[1] + ".ui"  # remove modules/ which exist only in install
+        uifile = uifileraw + ".ui"
+        # map modules/ etc, which exist only in install
+        # back to their source location
+        if uifile.startswith("modules/scalc"):
+            uifile = "sc/scalc" + uifile[13:]
+        elif uifile.startswith("modules/swriter"):
+            uifile = "sw/swriter" + uifile[15:]
+        elif uifile.startswith("modules/schart"):
+            uifile = "chart2" + uifile[14:]
+        elif uifile.startswith("modules/smath"):
+            uifile = "starmath/smath" + uifile[13:]
+        elif uifile.startswith("modules/sdraw"):
+            uifile = "sd/sdraw" + uifile[13:]
+        elif uifile.startswith("modules/simpress"):
+            uifile = "sd/simpress" + uifile[16:]
+        elif uifile.startswith("modules/BasicIDE"):
+            uifile = "basctl/basicide" + uifile[16:]
+        elif uifile.startswith("modules/spropctrlr"):
+            uifile = "extensions/spropctrlr" + uifile[18:]
+        elif uifile.startswith("sfx"):
+            uifile = "sfx2" + uifile[3:]
+        elif uifile.startswith("svt"):
+            uifile = "svtools" + uifile[3:]
+        components = uifile.split('/',1);
+        uifile = components[0] + '/uiconfig/' + components[1]
         targets[uifile].add(compname.split(':')[0])
         origin[uifile].add(fname)  # help file(s)
 
@@ -96,10 +120,10 @@ if __name__ == "__main__":
                 errors += '\nFrom ' + origin[uikey].pop()
             else:
                 errors += '\nFrom one of ' + str(origin[uikey]).replace('set(','').replace(')','')
-            errors += ', we did not found file '+ uikey+'.' 
+            errors += ', we did not find file '+ uikey+'.' 
             continue
         
-        full_path = os.path.join(core_repo_dir,re.search('(.*'+uikey+')',uifileslist).group(1))
+        full_path = os.path.join(core_repo_dir,uikey)
         # print full_path
         root = ET.parse(full_path).getroot()
         ids = [element.attrib['id'].split(':')[0] for element in root.findall('.//object[@id]')]
