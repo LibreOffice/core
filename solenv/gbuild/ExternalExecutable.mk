@@ -111,10 +111,11 @@ endef
 
 # FIXME need to subst in some more $$ in gb_Helper_set_ld_path here - ugly
 # but other uses (gb_CppunitTest_CPPTESTPRECOMMAND) require less $$ - ugly
-# FIXME hack to avoid dependency into workdir - those must be added explicitly
 define gb_ExternalExecutable__set_internal
+$(if $(3),,$(if $(filter $(WORKDIR_FOR_BUILD)/UnpackedTarball,$(2)),\
+	$(call gb_Output_error,depending directly on executable $(2) from UnpackedTarball is not allowed. Use the UnpackedTarball target as dependency.)))
 gb_ExternalExecutable_$(1)_EXECUTABLE := $(2)
-gb_ExternalExecutable_$(1)_DEPENDENCIES := $(if $(findstring $(WORKDIR_FOR_BUILD),$(2)),,$(2))
+gb_ExternalExecutable_$(1)_DEPENDENCIES := $(if $(3),$(3),$(2))
 gb_ExternalExecutable_$(1)_PRECOMMAND := $(subst $$,$$$$,$(gb_Helper_set_ld_path)) $(BUILDTOOLTRACE)
 
 endef
@@ -123,11 +124,14 @@ endef
 #
 # Optionally set a specific executable target to use (if the target
 # $(gb_Executable_BINDIR_FOR_BUILD)/$(1)$(gb_Executable_EXT_for_build) is
-# not suitable).
+# not suitable). Also optionally, set the ExternalProject that builds
+# the executable. This is needed to create proper dependency for
+# executables that are not bundled # with libreoffice, so they are used
+# directly from workdir/UnpackedTarball/*.
 #
-# gb_ExternalExecutable_set_internal executable call?
+# gb_ExternalExecutable_set_internal executable call? external?
 define gb_ExternalExecutable_set_internal
-$(call gb_ExternalExecutable__set_internal,$(1),$(if $(strip $(2)),$(2),$(gb_Executable_BINDIR_FOR_BUILD)/$(1)$(gb_Executable_EXT_for_build)))
+$(call gb_ExternalExecutable__set_internal,$(1),$(if $(strip $(2)),$(2),$(gb_Executable_BINDIR_FOR_BUILD)/$(1)$(gb_Executable_EXT_for_build)),$(call gb_ExternalProject_get_target_for_build,$(strip $(3))))
 
 endef
 
