@@ -378,6 +378,8 @@ private:
     /// If the current paragraph has any runs.
     bool                            m_bParaChanged;
     bool                            m_bIsFirstParaInSection;
+    bool                            m_bDummyParaAddedForTableInSection;
+    bool                            m_bTextFrameInserted;
     bool                            m_bIsLastParaInSection;
     bool                            m_bIsInComments;
     /// If the current paragraph contains section property definitions.
@@ -451,11 +453,17 @@ public:
     void EndParaMarkerChange( );
     void ChainTextFrames();
 
+    void RemoveDummyParaForTableInSection();
+    void AddDummyParaForTableInSection();
     void RemoveLastParagraph( );
     void SetIsLastParagraphInSection( bool bIsLast );
     bool GetIsLastParagraphInSection();
     void SetIsFirstParagraphInSection( bool bIsFirst );
     bool GetIsFirstParagraphInSection();
+    void SetIsDummyParaAddedForTableInSection( bool bIsAdded );
+    bool GetIsDummyParaAddedForTableInSection();
+    void SetIsTextFrameInserted( bool bIsInserted );
+    bool GetIsTextFrameInserted();
     void SetParaSectpr(bool bParaSectpr);
     bool GetParaSectpr();
     /// Setter method for m_bSdt.

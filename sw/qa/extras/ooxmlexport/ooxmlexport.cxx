@@ -3181,6 +3181,18 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77117, "fdo77117.docx")
     // This checks textbox textrun size of font which is in group shape.
     CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xShape, "CharHeight"));
 }
+
+DECLARE_OOXMLEXPORT_TEST(testFDO75431, "fdo75431.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "//w:tbl", 2);
+    assertXPath(pXmlDoc, "//w:p/w:pPr/w:sectPr/w:type", "val", "nextPage");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -178,6 +178,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsParaMarkerChange( false ),
         m_bParaChanged( false ),
         m_bIsFirstParaInSection( true ),
+        m_bDummyParaAddedForTableInSection( false ),
+        m_bTextFrameInserted(false),
         m_bIsLastParaInSection( false ),
         m_bIsInComments( false ),
         m_bParaSectpr( false ),
@@ -280,6 +282,36 @@ void DomainMapper_Impl::SetDocumentSettingsProperty( const OUString& rPropName, 
         }
     }
 }
+void DomainMapper_Impl::RemoveDummyParaForTableInSection()
+{
+    SetIsDummyParaAddedForTableInSection(false);
+    PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_SECTION);
+    SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
+    uno::Reference< text::XTextCursor > xCursor = GetTopTextAppend()->createTextCursorByRange(pSectionContext->GetStartingRange());
+
+    uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xCursor, uno::UNO_QUERY);
+    if (xEnumerationAccess.is() && m_aTextAppendStack.size() == 1 )
+    {
+        uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
+        uno::Reference<lang::XComponent> xParagraph(xEnumeration->nextElement(), uno::UNO_QUERY);
+        xParagraph->dispose();
+    }
+}
+void DomainMapper_Impl::AddDummyParaForTableInSection()
+{
+
+    if (!m_aTextAppendStack.empty())
+    {
+        uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+        uno::Reference< text::XTextCursor > xCrsr = xTextAppend->getText()->createTextCursor();
+        uno::Reference< text::XText > xText = xTextAppend->getText();
+        if(xCrsr.is() && xText.is())
+        {
+            xTextAppend->finishParagraph(  uno::Sequence< beans::PropertyValue >() );
+            SetIsDummyParaAddedForTableInSection(true);
+        }
+    }
+}
 
 void DomainMapper_Impl::RemoveLastParagraph( )
 {
@@ -360,6 +392,27 @@ void DomainMapper_Impl::SetIsFirstParagraphInSection( bool bIsFirst )
 bool DomainMapper_Impl::GetIsFirstParagraphInSection()
 {
     return m_bIsFirstParaInSection;
+}
+
+
+void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
+{
+    m_bDummyParaAddedForTableInSection = bIsAdded;
+}
+
+bool DomainMapper_Impl::GetIsDummyParaAddedForTableInSection()
+{
+    return m_bDummyParaAddedForTableInSection;
+}
+
+void DomainMapper_Impl::SetIsTextFrameInserted( bool bIsInserted )
+{
+    m_bTextFrameInserted  = bIsInserted;
+}
+
+bool DomainMapper_Impl::GetIsTextFrameInserted()
+{
+    return m_bTextFrameInserted;
 }
 
 void DomainMapper_Impl::SetParaSectpr(bool bParaSectpr)
@@ -1752,6 +1805,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             bool checkZOredrStatus = false;
             if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
             {
+                SetIsTextFrameInserted(true);
                 // Extract the special "btLr text frame" mode, requested by oox, if needed.
                 // Extract vml ZOrder from FrameInteropGrabBag
                 uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
@@ -4122,6 +4176,18 @@ void DomainMapper_Impl::PopFieldContext()
 
 void DomainMapper_Impl::AddBookmark( const OUString& rBookmarkName, const OUString& rId )
 {
+    /*
+     * Add the dummy paragraph to handle section properties
+     * iff the first element in the section is a table. If the dummy para is not added yet, then add it;
+     * So bookmark is not attched to the wrong paragraph.
+     */
+    if(getTableManager( ).isInCell() && m_nTableDepth == 0 && GetIsFirstParagraphInSection()
+                    && !GetIsDummyParaAddedForTableInSection() &&!GetIsTextFrameInserted())
+    {
+        AddDummyParaForTableInSection();
+    }
+
+    bool bIsAfterDummyPara = GetIsDummyParaAddedForTableInSection() && GetIsFirstParagraphInSection();
     if (m_aTextAppendStack.empty())
         return;
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
@@ -4137,8 +4203,10 @@ void DomainMapper_Impl::AddBookmark( const OUString& rBookmarkName, const OUStri
                 uno::Reference< text::XTextContent > xBookmark( m_xTextFactory->createInstance( sBookmarkService ), uno::UNO_QUERY_THROW );
                 uno::Reference< text::XTextCursor > xCursor;
                 uno::Reference< text::XText > xText = aBookmarkIter->second.m_xTextRange->getText();
-                if( aBookmarkIter->second.m_bIsStartOfText )
+                if( aBookmarkIter->second.m_bIsStartOfText && !bIsAfterDummyPara)
+                {
                     xCursor = xText->createTextCursorByRange( xText->getStart() );
+                }
                 else
                 {
                     xCursor = xText->createTextCursorByRange( aBookmarkIter->second.m_xTextRange );
@@ -4164,7 +4232,9 @@ void DomainMapper_Impl::AddBookmark( const OUString& rBookmarkName, const OUStri
             if (xTextAppend.is())
             {
                 uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursorByRange( xTextAppend->getEnd() );
-                bIsStart = !xCursor->goLeft(1, false);
+
+                if(!bIsAfterDummyPara)
+                    bIsStart = !xCursor->goLeft(1, false);
                 xCurrent = xCursor->getStart();
             }
             m_aBookmarkMap.insert(BookmarkMap_t::value_type( rId, BookmarkInsertPosition( bIsStart, rBookmarkName, xCurrent ) ));

@@ -228,6 +228,8 @@ public:
         m_xStartingRange = xRange;
     }
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetStartingRange() const { return m_xStartingRange; }
+
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GetPageStyle(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xStyles,
             const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xTextFactory,
