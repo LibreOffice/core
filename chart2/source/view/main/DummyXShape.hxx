@@ -404,6 +404,7 @@ public:
 private:
 
     TextCache maTextCache;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > maDrawPage;
 
 public:
     OpenGLRender m_GLRender;

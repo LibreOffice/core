@@ -38,6 +38,9 @@
 
 #include <com/sun/star/beans/Property.hpp>
 
+#include <com/sun/star/awt/XBitmap.hpp>
+
+
 #define ENABLE_DEBUG_PROPERTIES 0
 
 using namespace com::sun::star;
@@ -1143,7 +1146,8 @@ void DummyXShapes::render()
 }
 
 DummyChart::DummyChart(uno::Reference< drawing::XShape > xTarget):
-    m_GLRender(xTarget),
+    m_GLRender(),
+    maDrawPage(xTarget),
     mbNotInit(true)
 {
     SAL_INFO("chart2.opengl", "DummyXShape::DummyChart()-----test: ");
@@ -1186,8 +1190,13 @@ void DummyChart::render()
 #else
     DummyXShapes::render();
 #endif
-    m_GLRender.renderToBitmap();
- }
+    Graphic aGraphic = m_GLRender.renderToBitmap();
+    uno::Reference< awt::XBitmap> xBmp( aGraphic.GetXGraphic(), uno::UNO_QUERY );
+    uno::Reference < beans::XPropertySet > xPropSet ( maDrawPage, uno::UNO_QUERY );
+    xPropSet->setPropertyValue("Graphic", uno::makeAny(aGraphic.GetXGraphic()));
+    maDrawPage->setSize(awt::Size(m_GLRender.m_iWidth*OPENGL_SCALE_VALUE, m_GLRender.m_iHeight*OPENGL_SCALE_VALUE));
+    maDrawPage->setPosition(awt::Point(0,0));
+}
 
 void DummyChart::clear()
 {
