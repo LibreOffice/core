@@ -39,6 +39,12 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE( SD_IF_SDDRAWTABLEOBJECTBAR )
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+
     TableObjectBar( ::sd::ViewShell* pSdViewShell, ::sd::View* pSdView);
     virtual ~TableObjectBar (void);
 

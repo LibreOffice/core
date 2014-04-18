@@ -41,8 +41,10 @@ public:
     SFX_DECL_VIEWFACTORY(OutlineViewShell);
     SFX_DECL_INTERFACE(SD_IF_SDOUTLINEVIEWSHELL)
 
-    // The previous macros change access mode.  To be sure switch back
-    // to public access.
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
 public:
     /** Create a new view shell for the outline mode.
         @param rViewShellBase

@@ -25,10 +25,16 @@ class SwWebListShell: public SwListShell
 {
 public:
     SFX_DECL_INTERFACE(SW_WEBLISTSHELL)
+
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     TYPEINFO_OVERRIDE();
 
-    virtual     ~SwWebListShell();
-                SwWebListShell(SwView &rView);
+    SwWebListShell(SwView &rView);
+    virtual ~SwWebListShell();
 };
 
 #endif

@@ -27,6 +27,11 @@ public:
     SFX_DECL_INTERFACE(SW_BEZIERSHELL)
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
             SwBezierShell(SwView &rView);
 
     void    GetState(SfxItemSet &);

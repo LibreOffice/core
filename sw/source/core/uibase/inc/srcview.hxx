@@ -50,11 +50,15 @@ protected:
                                                         sal_Bool bRecursive = sal_False);
 
 public:
-
     SFX_DECL_VIEWFACTORY(SwSrcView);
     SFX_DECL_INTERFACE(SW_SRC_VIEWSHELL)
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     SwSrcView(SfxViewFrame* pFrame, SfxViewShell*);
 
     virtual ~SwSrcView();

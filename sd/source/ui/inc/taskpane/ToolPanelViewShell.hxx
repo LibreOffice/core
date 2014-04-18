@@ -58,6 +58,11 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDTOOLPANELSHELL)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     ToolPanelViewShell (
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
@@ -134,16 +139,12 @@ private:
     */
     ::std::auto_ptr<PopupMenu> CreatePopupMenu (bool bIsDocking);
 
-
     /** Initialize the task pane view shell if that has not yet been done
         before.  If mbIsInitialized is already set to <TRUE/> then this
         method returns immediately.
     */
     void Initialize (void);
 };
-
-
-
 
 } } // end of namespace ::sd::toolpanel
 

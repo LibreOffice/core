@@ -66,9 +66,13 @@ public:
     static const int SLOTARRAY_COUNT = 24;
 
     TYPEINFO_OVERRIDE();
-
     SFX_DECL_INTERFACE(SD_IF_SDDRAWVIEWSHELL)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     /** Create a new stackable shell that may take some information
         (e.g. the frame view) from the given previous shell.
         @param ePageKind

@@ -33,12 +33,16 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_PAGEBREAK_SHELL)
 
-                    ScPageBreakShell( ScTabViewShell* pView );
-                    virtual ~ScPageBreakShell();
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+    ScPageBreakShell(ScTabViewShell* pView);
+    virtual ~ScPageBreakShell();
 
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

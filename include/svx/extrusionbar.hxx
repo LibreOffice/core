@@ -41,7 +41,12 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SVX_INTERFACE_EXTRUSION_BAR)
 
-     ExtrusionBar(SfxViewShell* pViewShell );
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+    ExtrusionBar(SfxViewShell* pViewShell);
     virtual ~ExtrusionBar();
 
     static void execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBindings );

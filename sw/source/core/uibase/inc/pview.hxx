@@ -220,6 +220,11 @@ public:
     SFX_DECL_INTERFACE(SW_PAGEPREVIEW)
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     inline Window*          GetFrameWindow() const { return &(GetViewFrame())->GetWindow(); }
     inline SwViewShell*       GetViewShell() const { return pViewWin->GetViewShell(); }
     inline const Rectangle& GetVisArea() const { return aVisArea; }

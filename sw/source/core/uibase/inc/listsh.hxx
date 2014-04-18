@@ -27,6 +27,11 @@ public:
     SFX_DECL_INTERFACE(SW_LISTSHELL)
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
             SwListShell(SwView &rView);
 
     void    Execute(SfxRequest &);

@@ -79,10 +79,14 @@ protected:
 
 public:
                     TYPEINFO_VISIBILITY( SC_DLLPUBLIC );
-
                     SFX_DECL_INTERFACE(SCID_PREVIEW_SHELL)
                     SFX_DECL_VIEWFACTORY(ScPreviewShell);
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
                     ScPreviewShell( SfxViewFrame*           pViewFrame,
                                     SfxViewShell*           pOldSh );
 

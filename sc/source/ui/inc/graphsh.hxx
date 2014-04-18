@@ -32,12 +32,16 @@ class ScViewData;
 class ScGraphicShell: public ScDrawShell
 {
 public:
-
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_GRAPHIC_SHELL)
 
-                ScGraphicShell(ScViewData* pData);
-    virtual     ~ScGraphicShell();
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+    ScGraphicShell(ScViewData* pData);
+    virtual ~ScGraphicShell();
 
     void    Execute(SfxRequest& rReq);
     void    GetAttrState(SfxItemSet &rSet);

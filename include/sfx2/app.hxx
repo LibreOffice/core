@@ -140,6 +140,12 @@ public:
                                 TYPEINFO_OVERRIDE();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXAPP)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+
                                 SfxApplication();
                                 virtual ~SfxApplication();
     static SfxApplication*      GetOrCreate();

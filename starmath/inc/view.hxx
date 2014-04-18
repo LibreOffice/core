@@ -298,6 +298,11 @@ public:
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+2)
     SFX_DECL_VIEWFACTORY(SmViewShell);
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     virtual void Execute( SfxRequest& rReq );
     virtual void GetState(SfxItemSet &);
 

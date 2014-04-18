@@ -27,8 +27,13 @@ public:
     SFX_DECL_INTERFACE(SW_WEBTABSHELL)
     TYPEINFO_OVERRIDE();
 
-    virtual     ~SwWebTableShell();
-                SwWebTableShell(SwView &rView);
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+    SwWebTableShell(SwView &rView);
+    virtual ~SwWebTableShell();
 };
 
 #endif

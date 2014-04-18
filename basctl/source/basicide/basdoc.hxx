@@ -53,6 +53,12 @@ public:
                         using SotObject::GetInterface;
                         SFX_DECL_OBJECTFACTORY();
                         SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_DOCSH )
+
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
                         DocShell();
                         virtual ~DocShell();
 

@@ -16,13 +16,19 @@ class SfxItemSet;
 class SwNavigationShell: public SwBaseShell
 {
 public:
-  SFX_DECL_INTERFACE(SW_NAVIGATIONSHELL)
+    SFX_DECL_INTERFACE(SW_NAVIGATIONSHELL)
 
-  SwNavigationShell(SwView &rView);
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
 
-  void  GetState(SfxItemSet &);
-  void  Execute(SfxRequest &);
+public:
+    SwNavigationShell(SwView &rView);
+
+    void GetState(SfxItemSet &);
+    void Execute(SfxRequest &);
 };
 
 #endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

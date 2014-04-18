@@ -36,6 +36,11 @@ public:
     SFX_DECL_INTERFACE(SW_TABSHELL)
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     void    Execute(SfxRequest &);
     void    GetState(SfxItemSet &);
     void    GetFrmBorderState(SfxItemSet &rSet);

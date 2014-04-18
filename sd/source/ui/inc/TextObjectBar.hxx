@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_TEXTOBJECTBAR_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_TEXTOBJECTBAR_HXX
 
-
 #include <sfx2/module.hxx>
 #include <sfx2/shell.hxx>
 #include "glob.hxx"
@@ -39,6 +38,11 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDDRAWTEXTOBJECTBAR)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     TextObjectBar (
         ViewShell* pSdViewShell,
         SfxItemPool& rItemPool,

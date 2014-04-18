@@ -73,11 +73,15 @@ enum SdOptionStreamMode
 class SdModule : public SfxModule, public SfxListener
 {
 public:
-
                             TYPEINFO_OVERRIDE();
                             SFX_DECL_INTERFACE(SD_IF_SDAPP)
                             DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
                             SdModule(SfxObjectFactory* pDrawObjFact, SfxObjectFactory* pGraphicObjFact);
     virtual                 ~SdModule();
 

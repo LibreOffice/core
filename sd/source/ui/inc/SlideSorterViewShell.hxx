@@ -31,7 +31,6 @@ namespace sd { namespace slidesorter { namespace controller {
 class SlotManager;
 } } }
 
-
 namespace sd { namespace slidesorter {
 
 class SlideSorter;
@@ -45,6 +44,11 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDSLIDESORTERVIEWSHELL)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     static ::boost::shared_ptr<SlideSorterViewShell> Create(
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,

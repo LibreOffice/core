@@ -44,7 +44,6 @@ namespace sd {
 class FrameView;
 class ViewShell;
 
-
 // DrawDocShell
 class SD_DLLPUBLIC DrawDocShell : public SfxObjectShell
 {
@@ -53,6 +52,11 @@ public:
     SFX_DECL_INTERFACE(SD_IF_SDDRAWDOCSHELL)
     SFX_DECL_OBJECTFACTORY();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     DrawDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
         sal_Bool bSdDataObj=sal_False,

@@ -52,8 +52,13 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_EDIT_SHELL)
 
-                    ScEditShell(EditView* pView, ScViewData* pData);
-                    virtual ~ScEditShell();
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+    ScEditShell(EditView* pView, ScViewData* pData);
+    virtual ~ScEditShell();
 
     void    SetEditView(EditView* pView);
     EditView* GetEditView() {return pEditView;}

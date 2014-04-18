@@ -69,6 +69,12 @@ public:
                                 TYPEINFO_OVERRIDE();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXMODULE)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+
                                 SfxModule( ResMgr* pMgrP, bool bDummy,
                                     SfxObjectFactory* pFactoryP, ... );
                                 virtual ~SfxModule();

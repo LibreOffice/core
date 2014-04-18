@@ -44,8 +44,13 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_DRAW_TEXT_SHELL)
 
-        ScDrawTextObjectBar(ScViewData* pData);
-        virtual ~ScDrawTextObjectBar();
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+    ScDrawTextObjectBar(ScViewData* pData);
+    virtual ~ScDrawTextObjectBar();
 
     void StateDisableItems( SfxItemSet &rSet );
 

@@ -29,13 +29,18 @@ namespace sd {
 class View;
 class ViewShell;
 
-
 class MediaObjectBar
     : public SfxShell
 {
 public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE( SD_IF_SDDRAWMEDIAOBJECTBAR )
+
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
 
     MediaObjectBar (ViewShell* pSdViewShell, ::sd::View* pSdView);
     virtual ~MediaObjectBar (void);

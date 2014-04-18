@@ -124,6 +124,11 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SW_INTERFACE_MODULE)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     // This Ctor only for SW-Dll.
     SwModule( SfxObjectFactory* pFact,
                 SfxObjectFactory* pWebFact,

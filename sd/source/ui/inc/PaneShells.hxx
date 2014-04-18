@@ -27,7 +27,6 @@
 
 namespace sd {
 
-
 /** Shell that displays the left pane for Impress.  The shell does not do
     anything else and has especially no slots.
 */
@@ -38,12 +37,14 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDLEFTIMPRESSPANESHELL)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     LeftImpressPaneShell (void);
     virtual ~LeftImpressPaneShell (void);
 };
-
-
-
 
 /** Shell that displays the left pane for Draw.  The shell does not do
     anything else and has especially no slots.
@@ -55,12 +56,14 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDLEFTDRAWPANESHELL)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     LeftDrawPaneShell (void);
     virtual ~LeftDrawPaneShell (void);
 };
-
-
-
 
 /** Shell that displays the right pane for both Impress and Draw.  The shell
     does not do anything else and has especially no slots.
@@ -71,6 +74,11 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE( SD_IF_SDTOOLPANELPANESHELL )
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     ToolPanelPaneShell();
     virtual ~ToolPanelPaneShell();
 };

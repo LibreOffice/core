@@ -32,14 +32,18 @@ class ScViewData;
 class ScOleObjectShell: public ScDrawShell
 {
 public:
-
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_OLEOBJECT_SHELL)
 
-                ScOleObjectShell(ScViewData* pData);
-    virtual     ~ScOleObjectShell();
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
 
-    virtual void HandleSelectionChange (void);
+public:
+    ScOleObjectShell(ScViewData* pData);
+    virtual ~ScOleObjectShell();
+
+    virtual void HandleSelectionChange();
 };
 
 #endif

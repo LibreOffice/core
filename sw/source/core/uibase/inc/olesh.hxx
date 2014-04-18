@@ -26,8 +26,12 @@ class SwOleShell: public SwFrameShell
 public:
     SFX_DECL_INTERFACE(SW_OLESHELL)
 
-            SwOleShell(SwView &rView);
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
 
+public:
+    SwOleShell(SwView &rView);
 };
 
 #endif

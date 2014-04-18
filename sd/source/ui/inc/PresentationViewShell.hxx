@@ -35,6 +35,11 @@ public:
     SFX_DECL_VIEWFACTORY(PresViewShell);
     SFX_DECL_INTERFACE( SD_IF_SDPRESVIEWSHELL )
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     PresentationViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow, FrameView* pFrameView = NULL);
     virtual ~PresentationViewShell (void);
 

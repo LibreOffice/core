@@ -84,8 +84,6 @@ public:
     const OUString        GetExportSymbolSetName( const OUString &rUiName ) const;
 };
 
-
-
 class SmModule : public SfxModule, utl::ConfigurationListener
 {
     svtools::ColorConfig        *pColorConfig;
@@ -103,6 +101,11 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START + 0)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     SmModule(SfxObjectFactory* pObjFact);
     virtual ~SmModule();
 

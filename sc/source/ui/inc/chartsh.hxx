@@ -31,17 +31,21 @@ class ScViewData;
 class ScChartShell: public ScDrawShell
 {
 public:
-
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_CHART_SHELL)
 
-                ScChartShell(ScViewData* pData);
-    virtual     ~ScChartShell();
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
 
-    void    ExecuteExportAsGraphic(SfxRequest& rReq);
-    void    GetExportAsGraphicState(SfxItemSet &rSet);
+public:
+    ScChartShell(ScViewData* pData);
+    virtual ~ScChartShell();
 
-    virtual void HandleSelectionChange (void);
+    void ExecuteExportAsGraphic(SfxRequest& rReq);
+    void GetExportAsGraphicState(SfxItemSet &rSet);
+
+    virtual void HandleSelectionChange(void);
 };
 
 #endif

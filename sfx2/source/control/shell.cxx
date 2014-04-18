@@ -46,7 +46,6 @@
 
 #include <map>
 
-
 // Maps the Which() field to a pointer to a SfxPoolItem
 class SfxItemPtrMap : public std::map<sal_uInt16, SfxPoolItem*>
 {
@@ -60,7 +59,6 @@ public:
 
 TYPEINIT0(SfxShell);
 
-
 class SfxVerbSlotArr_Impl : public std::vector<SfxSlot*>
 {
 public:
@@ -72,7 +70,6 @@ public:
 };
 
 using namespace com::sun::star;
-
 
 // SfxShell_Impl
 

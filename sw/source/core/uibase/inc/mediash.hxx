@@ -26,6 +26,11 @@ class SwMediaShell: public SwBaseShell
 public:
     SFX_DECL_INTERFACE(SW_MEDIASHELL)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     void    ExecMedia(SfxRequest &);
     void    GetMediaState(SfxItemSet &);
 

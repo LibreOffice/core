@@ -36,8 +36,13 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDDRAWBEZIEROBJECTBAR)
 
-    BezierObjectBar (ViewShell* pSdViewShell, View* pSdView);
-    virtual ~BezierObjectBar (void);
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+    BezierObjectBar(ViewShell* pSdViewShell, View* pSdView);
+    virtual ~BezierObjectBar();
 
     void GetAttrState(SfxItemSet& rSet);
     void Execute(SfxRequest &rReq);

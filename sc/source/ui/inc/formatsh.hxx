@@ -32,15 +32,18 @@ class ScFormatShell: public SfxShell
     ScViewData* pViewData;
 
 protected:
-
     ScViewData*         GetViewData(){return pViewData;}
     const ScViewData*   GetViewData() const {return pViewData;}
 
 public:
-
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_FORMAT_SHELL)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
                 ScFormatShell(ScViewData* pData);
     virtual     ~ScFormatShell();
 

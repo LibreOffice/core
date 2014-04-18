@@ -29,6 +29,11 @@ public:
     SFX_DECL_INTERFACE(SW_DRAWSHELL)
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
                 SwDrawShell(SwView &rView);
 
     void        Execute(SfxRequest &);

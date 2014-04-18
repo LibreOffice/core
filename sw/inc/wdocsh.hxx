@@ -27,7 +27,6 @@ class SW_DLLPUBLIC SwWebDocShell: public SwDocShell
     sal_uInt16      nSourcePara;    // Active line in source view.
 
 public:
-
     using SotObject::GetInterface;
 
     // But implement yourself.
@@ -35,6 +34,11 @@ public:
     SFX_DECL_OBJECTFACTORY();
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     SwWebDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
     virtual ~SwWebDocShell();
 

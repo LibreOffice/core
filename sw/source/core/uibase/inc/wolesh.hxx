@@ -26,8 +26,13 @@ class SwWebOleShell: public SwOleShell
 public:
     SFX_DECL_INTERFACE(SW_WEBOLESHELL)
 
-    virtual     ~SwWebOleShell();
-                SwWebOleShell(SwView &rView);
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+    SwWebOleShell(SwView &rView);
+    virtual ~SwWebOleShell();
 };
 
 #endif

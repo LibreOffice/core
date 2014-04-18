@@ -18,6 +18,7 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UI_INC_DRWBASSH_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_DRWBASSH_HXX
+
 #include "basesh.hxx"
 
 class SwView;
@@ -30,7 +31,7 @@ class SwDrawBaseShell: public SwBaseShell
 {
     SwDrawBase* pDrawActual;
 
-    sal_uInt16      eDrawMode;
+    sal_uInt16  eDrawMode;
 
     DECL_LINK( CheckGroupShapeNameHdl, AbstractSvxNameDialog* );
     DECL_LINK(ValidatePosition, SvxSwFrameValidation* );
@@ -41,14 +42,18 @@ public:
     SFX_DECL_INTERFACE(SW_DRAWBASESHELL)
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     void        Execute(SfxRequest &);
     void        GetState(SfxItemSet &);
     void        GetDrawAttrStateForIFBX( SfxItemSet& rSet );
     void        DisableState(SfxItemSet &rSet)               { Disable(rSet);}
-    sal_Bool        Disable(SfxItemSet& rSet, sal_uInt16 nWhich = 0);
+    sal_Bool    Disable(SfxItemSet& rSet, sal_uInt16 nWhich = 0);
 
     void        StateStatusline(SfxItemSet &rSet);
-
 };
 
 #endif

@@ -51,6 +51,11 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_DRAW_SHELL)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
                     ScDrawShell(ScViewData* pData);
                     virtual ~ScDrawShell();
 

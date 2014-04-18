@@ -71,6 +71,11 @@ public:
     SFX_DECL_INTERFACE(SW_BASESHELL)
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     void        ExecDelete(SfxRequest &);
 
     void        ExecClpbrd(SfxRequest &);

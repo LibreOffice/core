@@ -151,6 +151,11 @@ public:
     SFX_DECL_OBJECTFACTORY()
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     static SfxInterface *_GetInterface() { return GetStaticInterface(); }
 
     static OUString GetEventName( sal_Int32 nId );

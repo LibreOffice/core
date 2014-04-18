@@ -206,6 +206,11 @@ public:
                                 TYPEINFO_OVERRIDE();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXDOCSH)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     /* Stampit disable/enable cancel button for print jobs
        default = true = enable! */

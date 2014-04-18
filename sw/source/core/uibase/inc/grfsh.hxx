@@ -26,6 +26,11 @@ class SwGrfShell: public SwBaseShell
 public:
     SFX_DECL_INTERFACE(SW_GRFSHELL)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     void Execute(SfxRequest& rRequest);
     void ExecAttr(SfxRequest& rRequest);
     void GetAttrState(SfxItemSet& rRequest);

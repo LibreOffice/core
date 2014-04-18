@@ -34,11 +34,16 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_PIVOT_SHELL)
 
-                    ScPivotShell( ScTabViewShell* pView );
-                    virtual ~ScPivotShell();
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
 
-    void    Execute ( SfxRequest& rReq );
-    void    GetState( SfxItemSet& rSet );
+public:
+    ScPivotShell(ScTabViewShell* pView);
+    virtual ~ScPivotShell();
+
+    void Execute(SfxRequest& rReq);
+    void GetState(SfxItemSet& rSet);
 
 private:
     ScTabViewShell* pViewShell;

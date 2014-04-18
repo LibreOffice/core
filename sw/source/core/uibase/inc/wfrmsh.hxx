@@ -24,11 +24,15 @@
 
 class SwWebFrameShell: public SwFrameShell
 {
-
 public:
     SFX_DECL_INTERFACE(SW_WEBFRAMESHELL)
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
              SwWebFrameShell(SwView &rView);
     virtual ~SwWebFrameShell();
 };

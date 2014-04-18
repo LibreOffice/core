@@ -103,6 +103,11 @@ public:
     SFX_DECL_INTERFACE(SVX_INTERFACE_FORM_SH)
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     FmFormShell(SfxViewShell* pParent, FmFormView* pView = NULL);
     virtual ~FmFormShell();
 

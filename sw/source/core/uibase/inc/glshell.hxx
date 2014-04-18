@@ -32,10 +32,14 @@ protected:
     virtual bool Save() SAL_OVERRIDE;
 
 public:
-
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SW_GLOSDOCSHELL)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     SwGlosDocShell( sal_Bool bNewShow = sal_True);
     virtual ~SwGlosDocShell();
 
@@ -62,10 +66,14 @@ protected:
     virtual bool Save() SAL_OVERRIDE;
 
 public:
-
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SW_WEBGLOSDOCSHELL)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     SwWebGlosDocShell();
     virtual ~SwWebGlosDocShell();
 

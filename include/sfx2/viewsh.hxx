@@ -165,6 +165,12 @@ public:
                                 TYPEINFO_OVERRIDE();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWSH)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+
                                 SfxViewShell( SfxViewFrame *pFrame, sal_uInt16 nFlags = 0 );
     virtual                     ~SfxViewShell();
 

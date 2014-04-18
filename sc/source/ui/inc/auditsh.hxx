@@ -31,17 +31,22 @@ class ScAuditingShell : public SfxShell
 {
 private:
     ScViewData* pViewData;
-    sal_uInt16      nFunction;
+    sal_uInt16  nFunction;
 
 public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_AUDITING_SHELL)
 
-                    ScAuditingShell(ScViewData* pData);
-                    virtual ~ScAuditingShell();
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
 
-    void    Execute(SfxRequest& rReq);
-    void    GetState(SfxItemSet& rSet);
+public:
+    ScAuditingShell(ScViewData* pData);
+    virtual ~ScAuditingShell();
+
+    void Execute(SfxRequest& rReq);
+    void GetState(SfxItemSet& rSet);
 };
 
 #endif

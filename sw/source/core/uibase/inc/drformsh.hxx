@@ -29,6 +29,11 @@ public:
     SFX_DECL_INTERFACE(SW_DRAWFORMSHELL)
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
                 SwDrawFormShell(SwView &rView);
     virtual     ~SwDrawFormShell();
 

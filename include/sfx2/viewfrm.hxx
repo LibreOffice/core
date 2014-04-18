@@ -91,6 +91,12 @@ public:
                             TYPEINFO_OVERRIDE();
                             SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWFRM)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+
     static void             SetViewFrame( SfxViewFrame* );
 
     static SfxViewFrame*    LoadHiddenDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId );

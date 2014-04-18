@@ -300,9 +300,6 @@ inline void SfxShell::SetPool
 
 #define SFX_DECL_INTERFACE(nId)                                             \
             static SfxInterface*                pInterface;                 \
-        private:                                                            \
-            static void                         InitInterface_Impl();       \
-        public:                                                             \
             static const SfxFormalArgument*     pSfxFormalArgs_Impl;        \
             static SfxInterface*                GetStaticInterface();       \
             static SfxInterfaceId               GetInterfaceId() {return SfxInterfaceId(nId);} \

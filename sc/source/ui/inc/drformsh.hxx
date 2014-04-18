@@ -27,18 +27,21 @@
 
 class ScViewData;
 
-
 #include "drawsh.hxx"
 
 class ScDrawFormShell: public ScDrawShell
 {
 public:
-
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_FORM_SHELL)
 
-                ScDrawFormShell(ScViewData* pData);
-    virtual     ~ScDrawFormShell();
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+    ScDrawFormShell(ScViewData* pData);
+    virtual ~ScDrawFormShell();
 };
 
 #endif

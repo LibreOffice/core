@@ -116,6 +116,11 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
                     ScModule( SfxObjectFactory* pFact );
     virtual         ~ScModule();
 

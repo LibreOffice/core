@@ -23,10 +23,14 @@
 
 class SwFrameShell: public SwBaseShell
 {
-
 public:
     SFX_DECL_INTERFACE(SW_FRAMESHELL)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
             SwFrameShell(SwView &rView);
     virtual ~SwFrameShell();
 

@@ -230,11 +230,14 @@ protected:
 
 public:
                     TYPEINFO_VISIBILITY(SC_DLLPUBLIC);
-
                     SFX_DECL_INTERFACE(SCID_TABVIEW_SHELL)
                     SFX_DECL_VIEWFACTORY(ScTabViewShell);
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
 
+public:
                     /** -> Clone Method for Factory
                         Created from a general shell and inherit as much as possible */
                     ScTabViewShell( SfxViewFrame*           pViewFrame,

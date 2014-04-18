@@ -41,7 +41,12 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SVX_INTERFACE_FONTWORK_BAR)
 
-     FontworkBar(SfxViewShell* pViewShell );
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+    FontworkBar(SfxViewShell* pViewShell);
     virtual ~FontworkBar();
 
     static void execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBindings );

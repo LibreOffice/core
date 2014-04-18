@@ -32,15 +32,19 @@ class ScViewData;
 class ScMediaShell: public ScDrawShell
 {
 public:
-
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_MEDIA_SHELL)
 
-                ScMediaShell(ScViewData* pData);
-    virtual     ~ScMediaShell();
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
 
-    void    ExecuteMedia(SfxRequest& rReq);
-    void    GetMediaState(SfxItemSet &rSet);
+public:
+    ScMediaShell(ScViewData* pData);
+    virtual ~ScMediaShell();
+
+    void ExecuteMedia(SfxRequest& rReq);
+    void GetMediaState(SfxItemSet &rSet);
 };
 
 #endif

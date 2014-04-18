@@ -26,12 +26,17 @@ class SW_DLLPUBLIC SwWebView: public SwView
 {
 protected:
     virtual void    SelectShell() SAL_OVERRIDE;
-public:
 
+public:
     SFX_DECL_VIEWFACTORY(SwWebView);
     SFX_DECL_INTERFACE(SW_WEBVIEWSHELL)
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     SwWebView(SfxViewFrame* pFrame, SfxViewShell*);
     virtual ~SwWebView();
 };

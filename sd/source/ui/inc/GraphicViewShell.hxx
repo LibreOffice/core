@@ -44,6 +44,11 @@ public:
     SFX_DECL_VIEWFACTORY(GraphicViewShell);
     SFX_DECL_INTERFACE(SD_IF_SDGRAPHICVIEWSHELL)
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     /** Create a new view shell for the Draw application.
         @param rViewShellBase
             The new object will be stacked on this view shell base.

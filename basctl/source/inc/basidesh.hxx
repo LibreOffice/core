@@ -152,6 +152,11 @@ public:
     SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_VIEWSH )
     SFX_DECL_VIEWFACTORY(Shell);
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     Shell( SfxViewFrame *pFrame, SfxViewShell *pOldSh );
     virtual ~Shell();
 

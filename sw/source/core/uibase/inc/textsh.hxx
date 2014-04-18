@@ -37,10 +37,14 @@ class SwTextShell: public SwBaseShell
     bool InsertMediaDlg( SfxRequest& );
 
 public:
-
     SFX_DECL_INTERFACE(SW_TEXTSHELL)
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
     DECL_LINK( RedlineNextHdl, AbstractSvxPostItDialog * );
     DECL_LINK( RedlinePrevHdl, AbstractSvxPostItDialog * );
 

@@ -170,10 +170,14 @@ protected:
 
 public:
                     TYPEINFO_OVERRIDE();
-
                     SFX_DECL_INTERFACE(SCID_DOC_SHELL)
                     SFX_DECL_OBJECTFACTORY();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
                     ScDocShell( const ScDocShell& rDocShell );
                     ScDocShell( const sal_uInt64 i_nSfxCreationFlags = SFXMODEL_EMBEDDED_OBJECT );
                     virtual ~ScDocShell();

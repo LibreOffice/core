@@ -34,6 +34,11 @@ public:
     SFX_DECL_INTERFACE(SW_ANNOTATIONSHELL)
     TYPEINFO_OVERRIDE();
 
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
                 SwAnnotationShell(SwView&);
     virtual     ~SwAnnotationShell();
 

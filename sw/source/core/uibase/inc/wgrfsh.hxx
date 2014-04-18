@@ -29,6 +29,10 @@ public:
 
     SFX_DECL_INTERFACE(SW_WEBGRFSHELL)
     TYPEINFO_OVERRIDE();
+
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
 };
 
 #endif
