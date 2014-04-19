@@ -6712,7 +6712,7 @@ if test "$ENABLE_JAVA" != ""; then
         fi
 
         if test -z "$with_jdk_home"; then
-            for ver in 1.7 1.6; do
+            for ver in 1.8 1.7 1.6; do
                reg_get_value_$bitness "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Development Kit/$ver/JavaHome"
                if test -n "$regvalue"; then
                    _jdk_home=$regvalue
