@@ -57,8 +57,12 @@ public:
 
 PBMWriter::PBMWriter(SvStream &rPBM)
     : m_rOStm(rPBM)
+    , mpOStmOldModus(0)
     , mbStatus(sal_True)
+    , mnMode(0)
     , mpAcc(NULL)
+    , mnWidth(0)
+    , mnHeight(0)
 {
 }
 
