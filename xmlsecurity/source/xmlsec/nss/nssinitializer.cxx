@@ -358,6 +358,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
     return return_value;
 }
 
+} // namespace
 
 // must be extern "C" because we pass the function pointer to atexit
 extern "C" void nsscrypto_finalize()
@@ -385,7 +386,6 @@ extern "C" void nsscrypto_finalize()
     PK11_LogoutAll();
     NSS_Shutdown();
 }
-} // namespace
 
 ONSSInitializer::ONSSInitializer(
     const css::uno::Reference< css::uno::XComponentContext > &rxContext)
