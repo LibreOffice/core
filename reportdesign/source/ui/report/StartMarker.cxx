@@ -113,8 +113,7 @@ void OStartMarker::Paint( const Rectangle& rRect )
         SetClipRegion(Region(PixelToLogic(Rectangle(Point(),Size(nSize,aSize.Height())))));
     }
 
-    const Point aGcc3WorkaroundTemporary;
-    Rectangle aWholeRect(aGcc3WorkaroundTemporary,aSize);
+    Rectangle aWholeRect(Point(),aSize);
     {
         const ColorChanger aColors( this, m_nTextBoundaries, m_nColor );
         PolyPolygon aPoly;

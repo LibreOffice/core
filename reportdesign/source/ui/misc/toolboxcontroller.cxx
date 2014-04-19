@@ -247,8 +247,7 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
                     {
                         util::Color nColor(COL_TRANSPARENT);
                         Event.State >>= nColor;
-                        ::Color aGcc3WorkaroundTemporary( nColor);
-                        SvxColorItem aColorItem(aGcc3WorkaroundTemporary,1);
+                        SvxColorItem aColorItem(::Color(nColor), 1);
                         if ( SID_ATTR_CHAR_COLOR2 == m_nSlotId )
                             static_cast<SvxColorExtToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SFX_ITEM_SET : SFX_ITEM_DISABLED,&aColorItem);
                         else
