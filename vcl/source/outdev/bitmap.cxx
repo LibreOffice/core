@@ -941,10 +941,9 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
                                   const Point& rDestPt, const Size& rDestSize,
                                   const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
-    const Point aNullPt;
     Point       aOutPt( LogicToPixel( rDestPt ) );
     Size        aOutSz( LogicToPixel( rDestSize ) );
-    Rectangle   aDstRect( aNullPt, GetOutputSizePixel() );
+    Rectangle   aDstRect( Point(), GetOutputSizePixel() );
     const bool  bHMirr = aOutSz.Width() < 0;
     const bool  bVMirr = aOutSz.Height() < 0;
 
@@ -999,7 +998,7 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
 
         VirtualDevice* pOldVDev = mpAlphaVDev;
 
-        Rectangle aBmpRect( aNullPt, rBmp.GetSizePixel() );
+        Rectangle aBmpRect( Point(), rBmp.GetSizePixel() );
         if( !bNativeAlpha
                 &&  !aBmpRect.Intersection( Rectangle( rSrcPtPixel, rSrcSizePixel ) ).IsEmpty() )
         {
