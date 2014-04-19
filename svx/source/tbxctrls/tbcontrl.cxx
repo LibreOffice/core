@@ -1128,6 +1128,17 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd));
         aColorSet.Clear();
         aColorSet.addEntriesForXColorList(*pColorList);
+
+        short i = 0;
+        long nCount = pColorList->Count();
+        XColorEntry* pEntry = NULL;
+
+        for ( i = 0; i < nCount; i++ )
+        {
+            pEntry = pColorList->GetColor(i);
+            if( pEntry->GetColor() == mLastColor )
+                aColorSet.SelectItem( i+1 );
+        }
     }
 
     aColorSet.SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectHdl ) );
@@ -1200,6 +1211,7 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
                                      maCommand,
                                      aArgs );
+        aColorSet.SelectItem( nItemId );
     }
 
     return 0;
