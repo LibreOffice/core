@@ -36,7 +36,7 @@
 
 static nsIServiceManager*   sServiceManager = nsnull;
 static sal_Int32            sInitCounter = 0;
-static sal_Bool             s_bProfilePresentAfterInitialized = sal_False;
+static bool                 s_bProfilePresentAfterInitialized = false;
 
 static NS_DEFINE_CID(kProfileCID, NS_PROFILE_CID);
 static NS_DEFINE_CID(kPrefCID, NS_PREF_CID);
@@ -93,7 +93,7 @@ extern "C" void NS_SetupRegistry();
 }
 
 
-sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists)
+bool MNS_InitXPCOM(bool* aProfileExists)
 {
     nsresult rv;
     OSL_TRACE( "IN : MNS_InitXPCOM()" );
@@ -126,7 +126,7 @@ sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists)
             nsDependentCString sPath(path2.getStr());
             rv = NS_NewNativeLocalFile(sPath, PR_TRUE, getter_AddRefs(binDir));
             if (NS_FAILED(rv))
-                return sal_False;
+                return false;
         }
 
 
@@ -135,7 +135,7 @@ sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists)
     NS_InitXPCOM2(&sServiceManager, binDir, NULL);
 
 //      if (!sServiceManager)
-//          return sal_False;
+//          return false;
 
 #ifdef HACK_AROUND_NONREENTRANT_INITXPCOM
         sXPCOMInitializedFlag = PR_TRUE;
@@ -151,7 +151,7 @@ sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists)
     nsCOMPtr<nsIEventQueueService> eventQService(
                 do_GetService(NS_EVENTQUEUESERVICE_CONTRACTID, &rv));
     if (NS_FAILED(rv))
-      return NS_SUCCEEDED( rv ) ? sal_True : sal_False;
+      return NS_SUCCEEDED( rv ) ? true : false;
 
     eventQService->CreateThreadEventQueue();
 
@@ -179,12 +179,12 @@ sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists)
     {
         OSL_TRACE("Created an nsIPref i/f");
         thePref->ReadUserPrefs( nsnull );
-        *aProfileExists = sal_True ;
-        s_bProfilePresentAfterInitialized = sal_True;
+        *aProfileExists = true;
+        s_bProfilePresentAfterInitialized = true;
     }
     OSL_TRACE( "OUT : MNS_InitXPCOM() - XPCOM Init" );
 
-    return sal_True;
+    return true;
 }
 
 void MNS_XPCOM_EventLoop()
@@ -232,7 +232,7 @@ extern "C" void MNS_Mozilla_UI_Thread( void *arg )
     aLive=1;
     OSL_TRACE( "IN : MNS_Mozilla_UI_Thread()" );
     UI_Thread_ARGS * args = (UI_Thread_ARGS*) arg;
-    sal_Bool* aProfileExists=args->bProfileExists;
+    bool* aProfileExists=args->bProfileExists;
     delete args;
     args=NULL;
 
@@ -264,9 +264,9 @@ extern "C" void MNS_Mozilla_UI_Thread( void *arg )
 }
 
 
-sal_Bool MNS_Init(sal_Bool& aProfileExists)
+bool MNS_Init(bool& aProfileExists)
 {
-    aProfileExists = sal_False ;
+    aProfileExists = false;
 
     OSL_TRACE( "IN : MNS_Init()" );
     // Reentrant calls to this method do nothing except increment a counter
@@ -278,7 +278,7 @@ sal_Bool MNS_Init(sal_Bool& aProfileExists)
 
         OSL_TRACE( "OUT : MNS_Init() : counter = %d", sInitCounter );
         aProfileExists = s_bProfilePresentAfterInitialized;
-        return sal_True;
+        return true;
     }
 
     UI_Thread_ARGS * args = new UI_Thread_ARGS;
@@ -287,7 +287,7 @@ sal_Bool MNS_Init(sal_Bool& aProfileExists)
     m_aUI_Thread_Condition.reset();
     if (osl_createThread(MNS_Mozilla_UI_Thread, (void*)args) == 0)
     {
-        return sal_False;
+        return false;
     }
 
     //wait for xpcom to be initted
@@ -298,10 +298,10 @@ sal_Bool MNS_Init(sal_Bool& aProfileExists)
 
     OSL_TRACE( "OUT : MNS_Init() - First Init" );
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool MNS_Term(sal_Bool aForce)
+bool MNS_Term(bool aForce)
 {
     // Reentrant calls to this method do nothing except decrement a counter
     OSL_TRACE( "IN : MNS_Term()" );
@@ -309,7 +309,7 @@ sal_Bool MNS_Term(sal_Bool aForce)
     {
         --sInitCounter;
         OSL_TRACE( "OUT : MNS_Term() : counter = %d", sInitCounter );
-        return sal_True;
+        return true;
     }
     sInitCounter = 0;
 
@@ -321,7 +321,7 @@ sal_Bool MNS_Term(sal_Bool aForce)
 
 
     OSL_TRACE( "OUT : MNS_Term() - Final Term" );
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

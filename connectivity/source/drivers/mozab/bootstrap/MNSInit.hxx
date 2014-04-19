@@ -26,7 +26,7 @@
 bool MNS_Init(bool& aProfileExists);
 bool MNS_Term(bool aForce = false);
 
-bool MNS_InitXPCOM(sal_Bool* aProfileExists);
+bool MNS_InitXPCOM(bool* aProfileExists);
 
 typedef struct UI_Thread_ARGS
 {
