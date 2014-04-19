@@ -24,21 +24,6 @@
 #include <boost/noncopyable.hpp>
 #include <osl/module.h>
 
-// #define UNLOAD_ON_LAST_CLIENT_DYING
-    // this is not recommended currently. If enabled, the implementation will log
-    // the number of active clients, and unload the acc library when the last client
-    // goes away.
-    // Sounds like a good idea, unfortunately, there's no guarantee that all objects
-    // implemented in this library are already dead.
-    // Iow, just because an object implementing an XAccessible (implemented in this lib
-    // here) died, it's not said that everybody released all references to the
-    // XAccessibleContext used by this component, and implemented in the acc lib.
-    // So we cannot really unload the lib.
-
-    // Alternatively, if the lib would us own "usage counting", i.e. every component
-    // implemented therein would affect a static ref count, the acc lib could care
-    // for unloading itself.
-
 namespace svt
 {
     using namespace ::com::sun::star::uno;
@@ -47,9 +32,6 @@ namespace svt
 
     namespace
     {
-#ifdef UNLOAD_ON_LAST_CLIENT_DYING
-        static oslInterlockedCount                      s_nAccessibleFactoryAccesss = 0;
-#endif
 #ifndef DISABLE_DYNLOADING
         static oslModule                                s_hAccessibleImplementationModule = NULL;
 #endif
@@ -273,78 +255,45 @@ namespace svt
 
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
-#ifdef UNLOAD_ON_LAST_CLIENT_DYING
-        if ( 1 == osl_atomic_increment( &s_nAccessibleFactoryAccesss ) )
-        {   // the first client
-#endif // UNLOAD_ON_LAST_CLIENT_DYING
-
 #if HAVE_FEATURE_DESKTOP
-            // load the library implementing the factory
-            if ( !s_pFactory.get() )
-            {
+        // load the library implementing the factory
+        if ( !s_pFactory.get() )
+        {
 #ifndef DISABLE_DYNLOADING
-                const OUString sModuleName( SVLIBRARY( "acc" ));
-                s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
-                if ( s_hAccessibleImplementationModule != NULL )
-                {
-                    const OUString sFactoryCreationFunc( "getSvtAccessibilityComponentFactory" );
-                    s_pAccessibleFactoryFunc = (GetSvtAccessibilityComponentFactory)
-                        osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData );
+            const OUString sModuleName( SVLIBRARY( "acc" ));
+            s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
+            if ( s_hAccessibleImplementationModule != NULL )
+            {
+                const OUString sFactoryCreationFunc( "getSvtAccessibilityComponentFactory" );
+                s_pAccessibleFactoryFunc = (GetSvtAccessibilityComponentFactory)
+                    osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData );
 
-                }
-                OSL_ENSURE( s_pAccessibleFactoryFunc, "ac_registerClient: could not load the library, or not retrieve the needed symbol!" );
+            }
+            OSL_ENSURE( s_pAccessibleFactoryFunc, "ac_registerClient: could not load the library, or not retrieve the needed symbol!" );
 #else
-                s_pAccessibleFactoryFunc = getSvtAccessibilityComponentFactory;
+            s_pAccessibleFactoryFunc = getSvtAccessibilityComponentFactory;
 #endif // DISABLE_DYNLOADING
 
-                // get a factory instance
-                if ( s_pAccessibleFactoryFunc )
+            // get a factory instance
+            if ( s_pAccessibleFactoryFunc )
+            {
+                IAccessibleFactory* pFactory = static_cast< IAccessibleFactory* >( (*s_pAccessibleFactoryFunc)() );
+                if ( pFactory )
                 {
-                    IAccessibleFactory* pFactory = static_cast< IAccessibleFactory* >( (*s_pAccessibleFactoryFunc)() );
-                    if ( pFactory )
-                    {
-                        s_pFactory = pFactory;
-                        pFactory->release();
-                    }
+                    s_pFactory = pFactory;
+                    pFactory->release();
                 }
             }
+        }
 #endif // HAVE_FEATURE_DESKTOP
 
-            if ( !s_pFactory.get() )
-                // the attempt to load the lib, or to create the factory, failed
-                // -> fall back to a dummy factory
-                s_pFactory = new AccessibleDummyFactory;
-#ifdef UNLOAD_ON_LAST_CLIENT_DYING
-        }
-#endif
+        if ( !s_pFactory.get() )
+            // the attempt to load the lib, or to create the factory, failed
+            // -> fall back to a dummy factory
+            s_pFactory = new AccessibleDummyFactory;
 
         m_bInitialized = true;
     }
-
-
-    AccessibleFactoryAccess::~AccessibleFactoryAccess()
-    {
-        if ( m_bInitialized )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-
-#ifdef UNLOAD_ON_LAST_CLIENT_DYING
-            if( 0 == osl_atomic_decrement( &s_nAccessibleFactoryAccesss ) )
-            {
-                s_pFactory = NULL;
-#if HAVE_FEATURE_DESKTOP
-                s_pAccessibleFactoryFunc = NULL;
-#endif
-                if ( s_hAccessibleImplementationModule )
-                {
-                    osl_unloadModule( s_hAccessibleImplementationModule );
-                    s_hAccessibleImplementationModule = NULL;
-                }
-            }
-#endif // UNLOAD_ON_LAST_CLIENT_DYING
-        }
-    }
-
 
     IAccessibleFactory& AccessibleFactoryAccess::getFactory()
     {
@@ -355,6 +304,5 @@ namespace svt
 
 
 }   // namespace svt
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
