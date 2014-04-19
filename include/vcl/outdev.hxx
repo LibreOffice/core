@@ -1146,9 +1146,9 @@ public:
                                           const Bitmap& rBitmap, const Color& rMaskColor,
                                           sal_uLong nAction );
 
-    void                        DrawImage( const Point& rPos,
+    virtual void                DrawImage( const Point& rPos,
                                            const Image& rImage, sal_uInt16 nStyle = 0 );
-    void                        DrawImage( const Point& rPos, const Size& rSize,
+    virtual void                DrawImage( const Point& rPos, const Size& rSize,
                                            const Image& rImage, sal_uInt16 nStyle = 0 );
 
 #ifdef _MSC_VER

@@ -759,48 +759,15 @@ namespace
 
 void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, sal_uInt16 nStyle )
 {
-    DBG_ASSERT( GetOutDevType() != OUTDEV_PRINTER, "DrawImage(): Images can't be drawn on any mprinter" );
-
-    if( !rImage.mpImplData || ImplIsRecordLayout() )
-        return;
-
-    switch( rImage.mpImplData->meType )
-    {
-        case IMAGETYPE_BITMAP:
-        {
-            const Bitmap &rBitmap = *static_cast< Bitmap* >( rImage.mpImplData->mpData );
-            if( nStyle & IMAGE_DRAW_DISABLE )
-                DrawBitmapEx( rPos, makeDisabledBitmap(rBitmap) );
-            else
-                DrawBitmap( rPos, rBitmap );
-        }
-        break;
-
-        case IMAGETYPE_IMAGE:
-        {
-            ImplImageData* pData = static_cast< ImplImageData* >( rImage.mpImplData->mpData );
-
-            if( !pData->mpImageBitmap )
-            {
-                const Size aSize( pData->maBmpEx.GetSizePixel() );
-
-                pData->mpImageBitmap = new ImplImageBmp;
-                pData->mpImageBitmap->Create( pData->maBmpEx, aSize.Width(), aSize.Height(), 1 );
-            }
-
-            pData->mpImageBitmap->Draw( 0, this, rPos, nStyle );
-        }
-        break;
-
-        default:
-        break;
-    }
+    DrawImage( rPos, Size(), rImage, nStyle );
 }
 
 void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
                               const Image& rImage, sal_uInt16 nStyle )
 {
     DBG_ASSERT( GetOutDevType() != OUTDEV_PRINTER, "DrawImage(): Images can't be drawn on any mprinter" );
+
+    bool bIsSizeValid = (rSize.getWidth() == 0 || rSize.getHeight() == 0) ? false : true;
 
     if( rImage.mpImplData && !ImplIsRecordLayout() )
     {
@@ -810,9 +777,16 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
             {
                 const Bitmap &rBitmap = *static_cast< Bitmap* >( rImage.mpImplData->mpData );
                 if( nStyle & IMAGE_DRAW_DISABLE )
-                    DrawBitmapEx( rPos, rSize, makeDisabledBitmap(rBitmap) );
+                {
+                    if ( bIsSizeValid )
+                        DrawBitmapEx( rPos, rSize, makeDisabledBitmap(rBitmap) );
+                    else
+                        DrawBitmapEx( rPos, makeDisabledBitmap(rBitmap) );
+                }
                 else
+                {
                     DrawBitmap( rPos, rSize, rBitmap );
+                }
             }
             break;
 
@@ -828,7 +802,10 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
                     pData->mpImageBitmap->Create( pData->maBmpEx, aSize.Width(), aSize.Height(), 1 );
                 }
 
-                pData->mpImageBitmap->Draw( 0, this, rPos, nStyle, &rSize );
+                if ( bIsSizeValid )
+                    pData->mpImageBitmap->Draw( 0, this, rPos, nStyle, &rSize );
+                else
+                    pData->mpImageBitmap->Draw( 0, this, rPos, nStyle );
             }
             break;
 
