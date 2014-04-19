@@ -49,11 +49,13 @@ namespace svt
     {
 #ifdef UNLOAD_ON_LAST_CLIENT_DYING
         static oslInterlockedCount                      s_nAccessibleFactoryAccesss = 0;
-#endif // UNLOAD_ON_LAST_CLIENT_DYING
+#endif
 #ifndef DISABLE_DYNLOADING
         static oslModule                                s_hAccessibleImplementationModule = NULL;
 #endif
+#if HAVE_FEATURE_DESKTOP
         static GetSvtAccessibilityComponentFactory      s_pAccessibleFactoryFunc = NULL;
+#endif
         static ::rtl::Reference< IAccessibleFactory >   s_pFactory;
 
 
@@ -330,7 +332,9 @@ namespace svt
             if( 0 == osl_atomic_decrement( &s_nAccessibleFactoryAccesss ) )
             {
                 s_pFactory = NULL;
+#if HAVE_FEATURE_DESKTOP
                 s_pAccessibleFactoryFunc = NULL;
+#endif
                 if ( s_hAccessibleImplementationModule )
                 {
                     osl_unloadModule( s_hAccessibleImplementationModule );
