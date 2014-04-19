@@ -218,7 +218,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	) \
 	$(if $(ENABLE_OPENGL), \
 		slideshow/source/engine/OGLTrans/ogltrans \
-		$(call gb_Helper_optional,AVMEDIA,avmedia/source/opengl/avmediaogl) \
 	) \
 	$(if $(ENABLE_TDE), \
 		shell/source/backends/kdebe/tdebe1 \
@@ -232,6 +231,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 		wizards/com/sun/star/wizards/query/query \
 		wizards/com/sun/star/wizards/report/report \
 		wizards/com/sun/star/wizards/table/table \
+	) \
+	$(if $(ENABLE_GLTF), \
+		$(call gb_Helper_optional,AVMEDIA,avmedia/source/opengl/avmediaogl) \
 	) \
 ))
 
