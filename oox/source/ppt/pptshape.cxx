@@ -279,7 +279,7 @@ void PPTShape::addShape(
                         // SAL_INFO("oox.ppt","combined master text list style");
                         // aMasterTextListStyle->dump();
                     }
-                    if( pPPTPlaceholder->mpPlaceholder.get() ) {
+                    if( pPPTPlaceholder && pPPTPlaceholder->mpPlaceholder.get() ) {
                         SAL_INFO("oox.ppt","placeholder has parent placeholder: " << pPPTPlaceholder->mpPlaceholder->getId() << " type: " << lclDebugSubType( pPPTPlaceholder->mpPlaceholder->getSubType() ) << " index: " << pPPTPlaceholder->mpPlaceholder->getSubTypeIndex().get() );
                         SAL_INFO("oox.ppt","has textbody " << (pPPTPlaceholder->mpPlaceholder->getTextBody() != 0) );
                         TextListStylePtr pPlaceholderStyle = getSubTypeTextListStyle( rSlidePersist, pPPTPlaceholder->mpPlaceholder->getSubType() );
