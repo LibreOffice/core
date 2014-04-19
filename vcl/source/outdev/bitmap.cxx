@@ -519,13 +519,10 @@ void OutputDevice::DrawTransformedBitmapEx(
             {
                 // parts will be uncovered, extend aTransformed with a mask bitmap
                 const Bitmap aContent(aTransformed.GetBitmap());
-#if defined(MACOSX) || defined(IOS)
+
                 AlphaMask aMaskBmp(aContent.GetSizePixel());
                 aMaskBmp.Erase(0);
-#else
-                Bitmap aMaskBmp(aContent.GetSizePixel(), 1);
-                aMaskBmp.Erase(Color(COL_BLACK)); // #122758# Initialize to non-transparent
-#endif
+
                 aTransformed = BitmapEx(aContent, aMaskBmp);
             }
 
