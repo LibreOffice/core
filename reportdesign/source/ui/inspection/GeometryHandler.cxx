@@ -1580,8 +1580,7 @@ bool GeometryHandler::impl_dialogFilter_nothrow( OUString& _out_rSelectedClause,
         // create the dialog
         uno::Reference< ui::dialogs::XExecutableDialog > xDialog = sdb::FilterDialog::createWithQuery(m_xContext, xComposer, m_xRowSet, xInspectorWindow);
 
-        const OUString aGcc3WorkaroundTemporary( ModuleRes(RID_STR_FILTER));
-        const OUString sPropertyUIName( aGcc3WorkaroundTemporary );
+        const OUString sPropertyUIName(OUString(ModuleRes(RID_STR_FILTER)));
         // initialize the dialog
         xDialog->setTitle( sPropertyUIName );
 

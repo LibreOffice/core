@@ -1616,8 +1616,7 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
             BitmapDeviceSharedPtr pAlphaCopy(
                 cloneBitmapDevice( aSize,
                                    shared_from_this()) );
-            basegfx::B2ITuple aGcc3WorkaroundTemporary;
-            const basegfx::B2IBox aAlphaRange( aGcc3WorkaroundTemporary,
+            const basegfx::B2IBox aAlphaRange( basegfx::B2ITuple(),
                                                aSize );
             pAlphaCopy->drawBitmap(rAlphaMask,
                                    aSrcRange,
@@ -1669,8 +1668,7 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
                 BitmapDeviceSharedPtr pAlphaCopy(
                     cloneBitmapDevice( aSize,
                                        shared_from_this()) );
-                basegfx::B2ITuple aGcc3WorkaroundTemporary;
-                const basegfx::B2IBox aAlphaRange( aGcc3WorkaroundTemporary,
+                const basegfx::B2IBox aAlphaRange( basegfx::B2ITuple(),
                                                    aSize );
                 pAlphaCopy->drawBitmap(rAlphaMask,
                                        aSrcRange,
