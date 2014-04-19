@@ -3013,9 +3013,6 @@ void ChartExport::exportMarker(Reference< chart2::XDataSeries > xSeries)
             break;
     }
 
-    if( aSymbol.Style == chart2::SymbolStyle_AUTO )
-        pSymbolType = "auto";
-
     if( pSymbolType )
     {
         pFS->singleElement( FSNS( XML_c, XML_symbol ),
