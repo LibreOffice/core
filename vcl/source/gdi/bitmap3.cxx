@@ -1093,139 +1093,68 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
     if( ( nNewWidth > 1L ) && ( nNewHeight > 1L ) )
     {
         BitmapReadAccess* pReadAcc = AcquireReadAccess();
-        long nWidth = pReadAcc->Width();
-        long nHeight = pReadAcc->Height();
-        Bitmap aNewBmp( Size( nNewWidth, nHeight ), 24 );
-        BitmapWriteAccess* pWriteAcc = aNewBmp.AcquireWriteAccess();
-
-        if( pReadAcc && pWriteAcc )
+        if( pReadAcc )
         {
-            const long nNewWidth1 = nNewWidth - 1L;
-            const long nWidth1 = pReadAcc->Width() - 1L;
-            const double fRevScaleX = (double) nWidth1 / nNewWidth1;
+            long nWidth = pReadAcc->Width();
+            long nHeight = pReadAcc->Height();
+            Bitmap aNewBmp( Size( nNewWidth, nHeight ), 24 );
+            BitmapWriteAccess* pWriteAcc = aNewBmp.AcquireWriteAccess();
 
-            boost::scoped_array<long> pLutInt(new long[ nNewWidth ]);
-            boost::scoped_array<long> pLutFrac(new long[ nNewWidth ]);
-
-            for( long nX = 0L, nTemp = nWidth - 2L; nX < nNewWidth; nX++ )
+            if( pWriteAcc )
             {
-                double fTemp = nX * fRevScaleX;
-                pLutInt[ nX ] = MinMax( (long) fTemp, 0, nTemp );
-                fTemp -= pLutInt[ nX ];
-                pLutFrac[ nX ] = (long) ( fTemp * 1024. );
-            }
+                const long nNewWidth1 = nNewWidth - 1L;
+                const long nWidth1 = pReadAcc->Width() - 1L;
+                const double fRevScaleX = (double) nWidth1 / nNewWidth1;
 
-            for( long nY = 0L; nY < nHeight; nY++ )
-            {
-                if( 1 == nWidth )
+                boost::scoped_array<long> pLutInt(new long[ nNewWidth ]);
+                boost::scoped_array<long> pLutFrac(new long[ nNewWidth ]);
+
+                for( long nX = 0L, nTemp = nWidth - 2L; nX < nNewWidth; nX++ )
                 {
-                    BitmapColor aCol0;
-                    if( pReadAcc->HasPalette() )
-                    {
-                        aCol0 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, 0 ) );
-                    }
-                    else
-                    {
-                        aCol0 = pReadAcc->GetPixel( nY, 0 );
-                    }
-
-                    for( long nX = 0L; nX < nNewWidth; nX++ )
-                    {
-                        pWriteAcc->SetPixel( nY, nX, aCol0 );
-                    }
+                    double fTemp = nX * fRevScaleX;
+                    pLutInt[ nX ] = MinMax( (long) fTemp, 0, nTemp );
+                    fTemp -= pLutInt[ nX ];
+                    pLutFrac[ nX ] = (long) ( fTemp * 1024. );
                 }
-                else
-                {
-                    for( long nX = 0L; nX < nNewWidth; nX++ )
-                    {
-                        long nTemp = pLutInt[ nX ];
 
-                        BitmapColor aCol0, aCol1;
+                for( long nY = 0L; nY < nHeight; nY++ )
+                {
+                    if( 1 == nWidth )
+                    {
+                        BitmapColor aCol0;
                         if( pReadAcc->HasPalette() )
                         {
-                            aCol0 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nTemp++ ) );
-                            aCol1 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nTemp ) );
+                            aCol0 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, 0 ) );
                         }
                         else
                         {
-                            aCol0 = pReadAcc->GetPixel( nY, nTemp++ );
-                            aCol1 = pReadAcc->GetPixel( nY, nTemp );
+                            aCol0 = pReadAcc->GetPixel( nY, 0 );
                         }
 
-                        nTemp = pLutFrac[ nX ];
-
-                        long lXR0 = aCol0.GetRed();
-                        long lXG0 = aCol0.GetGreen();
-                        long lXB0 = aCol0.GetBlue();
-                        long lXR1 = aCol1.GetRed() - lXR0;
-                        long lXG1 = aCol1.GetGreen() - lXG0;
-                        long lXB1 = aCol1.GetBlue() - lXB0;
-
-                        aCol0.SetRed( (sal_uInt8) ( ( lXR1 * nTemp + ( lXR0 << 10 ) ) >> 10 ) );
-                        aCol0.SetGreen( (sal_uInt8) ( ( lXG1 * nTemp + ( lXG0 << 10 ) ) >> 10 ) );
-                        aCol0.SetBlue( (sal_uInt8) ( ( lXB1 * nTemp + ( lXB0 << 10 ) ) >> 10 ) );
-
-                        pWriteAcc->SetPixel( nY, nX, aCol0 );
-                    }
-                }
-            }
-
-            bRet = true;
-        }
-
-        ReleaseAccess( pReadAcc );
-        aNewBmp.ReleaseAccess( pWriteAcc );
-
-        if( bRet )
-        {
-            bRet = false;
-            const Bitmap aOriginal(*this);
-            *this = aNewBmp;
-            aNewBmp = Bitmap( Size( nNewWidth, nNewHeight ), 24 );
-            pReadAcc = AcquireReadAccess();
-            pWriteAcc = aNewBmp.AcquireWriteAccess();
-
-            if( pReadAcc && pWriteAcc )
-            {
-                const long nNewHeight1 = nNewHeight - 1L;
-                const long nHeight1 = pReadAcc->Height() - 1L;
-                const double fRevScaleY = (double) nHeight1 / nNewHeight1;
-
-                boost::scoped_array<long> pLutInt(new long[ nNewHeight ]);
-                boost::scoped_array<long> pLutFrac(new long[ nNewHeight ]);
-
-                for( long nY = 0L, nTemp = nHeight - 2L; nY < nNewHeight; nY++ )
-                {
-                    double fTemp = nY * fRevScaleY;
-                    pLutInt[ nY ] = MinMax( (long) fTemp, 0, nTemp );
-                    fTemp -= pLutInt[ nY ];
-                    pLutFrac[ nY ] = (long) ( fTemp * 1024. );
-                }
-
-                // after 1st step, bitmap *is* 24bit format (see above)
-                OSL_ENSURE(!pReadAcc->HasPalette(), "OOps, somehow ImplScaleInterpolate in-between format has palette, should not happen (!)");
-
-                for( long nX = 0L; nX < nNewWidth; nX++ )
-                {
-                    if( 1 == nHeight )
-                    {
-                        BitmapColor aCol0 = pReadAcc->GetPixel( 0, nX );
-
-                        for( long nY = 0L; nY < nNewHeight; nY++ )
+                        for( long nX = 0L; nX < nNewWidth; nX++ )
                         {
                             pWriteAcc->SetPixel( nY, nX, aCol0 );
                         }
                     }
                     else
                     {
-                        for( long nY = 0L; nY < nNewHeight; nY++ )
+                        for( long nX = 0L; nX < nNewWidth; nX++ )
                         {
-                            long nTemp = pLutInt[ nY ];
+                            long nTemp = pLutInt[ nX ];
 
-                            BitmapColor aCol0 = pReadAcc->GetPixel( nTemp++, nX );
-                            BitmapColor aCol1 = pReadAcc->GetPixel( nTemp, nX );
+                            BitmapColor aCol0, aCol1;
+                            if( pReadAcc->HasPalette() )
+                            {
+                                aCol0 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nTemp++ ) );
+                                aCol1 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nTemp ) );
+                            }
+                            else
+                            {
+                                aCol0 = pReadAcc->GetPixel( nY, nTemp++ );
+                                aCol1 = pReadAcc->GetPixel( nY, nTemp );
+                            }
 
-                            nTemp = pLutFrac[ nY ];
+                            nTemp = pLutFrac[ nX ];
 
                             long lXR0 = aCol0.GetRed();
                             long lXG0 = aCol0.GetGreen();
@@ -1251,8 +1180,82 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
 
             if( bRet )
             {
-                aOriginal.ImplAdaptBitCount(aNewBmp);
+                bRet = false;
+                const Bitmap aOriginal(*this);
                 *this = aNewBmp;
+                aNewBmp = Bitmap( Size( nNewWidth, nNewHeight ), 24 );
+                pReadAcc = AcquireReadAccess();
+                pWriteAcc = aNewBmp.AcquireWriteAccess();
+
+                if( pReadAcc && pWriteAcc )
+                {
+                    const long nNewHeight1 = nNewHeight - 1L;
+                    const long nHeight1 = pReadAcc->Height() - 1L;
+                    const double fRevScaleY = (double) nHeight1 / nNewHeight1;
+
+                    boost::scoped_array<long> pLutInt(new long[ nNewHeight ]);
+                    boost::scoped_array<long> pLutFrac(new long[ nNewHeight ]);
+
+                    for( long nY = 0L, nTemp = nHeight - 2L; nY < nNewHeight; nY++ )
+                    {
+                        double fTemp = nY * fRevScaleY;
+                        pLutInt[ nY ] = MinMax( (long) fTemp, 0, nTemp );
+                        fTemp -= pLutInt[ nY ];
+                        pLutFrac[ nY ] = (long) ( fTemp * 1024. );
+                    }
+
+                    // after 1st step, bitmap *is* 24bit format (see above)
+                    OSL_ENSURE(!pReadAcc->HasPalette(), "OOps, somehow ImplScaleInterpolate in-between format has palette, should not happen (!)");
+
+                    for( long nX = 0L; nX < nNewWidth; nX++ )
+                    {
+                        if( 1 == nHeight )
+                        {
+                            BitmapColor aCol0 = pReadAcc->GetPixel( 0, nX );
+
+                            for( long nY = 0L; nY < nNewHeight; nY++ )
+                            {
+                                pWriteAcc->SetPixel( nY, nX, aCol0 );
+                            }
+                        }
+                        else
+                        {
+                            for( long nY = 0L; nY < nNewHeight; nY++ )
+                            {
+                                long nTemp = pLutInt[ nY ];
+
+                                BitmapColor aCol0 = pReadAcc->GetPixel( nTemp++, nX );
+                                BitmapColor aCol1 = pReadAcc->GetPixel( nTemp, nX );
+
+                                nTemp = pLutFrac[ nY ];
+
+                                long lXR0 = aCol0.GetRed();
+                                long lXG0 = aCol0.GetGreen();
+                                long lXB0 = aCol0.GetBlue();
+                                long lXR1 = aCol1.GetRed() - lXR0;
+                                long lXG1 = aCol1.GetGreen() - lXG0;
+                                long lXB1 = aCol1.GetBlue() - lXB0;
+
+                                aCol0.SetRed( (sal_uInt8) ( ( lXR1 * nTemp + ( lXR0 << 10 ) ) >> 10 ) );
+                                aCol0.SetGreen( (sal_uInt8) ( ( lXG1 * nTemp + ( lXG0 << 10 ) ) >> 10 ) );
+                                aCol0.SetBlue( (sal_uInt8) ( ( lXB1 * nTemp + ( lXB0 << 10 ) ) >> 10 ) );
+
+                                pWriteAcc->SetPixel( nY, nX, aCol0 );
+                            }
+                        }
+                    }
+
+                    bRet = true;
+                }
+
+                ReleaseAccess( pReadAcc );
+                aNewBmp.ReleaseAccess( pWriteAcc );
+
+                if( bRet )
+                {
+                    aOriginal.ImplAdaptBitCount(aNewBmp);
+                    *this = aNewBmp;
+                }
             }
         }
     }
