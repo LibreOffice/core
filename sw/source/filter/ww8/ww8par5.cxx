@@ -2529,7 +2529,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
                             sal_Int32 nEnd = sPart.indexOf(')');
 
                             if ((nBegin != -1) &&
-                                (nEnd != -1))
+                                (nEnd != -1) && (nBegin < nEnd))
                             {
                                 sRuby = sPart.copy(nBegin+1,nEnd-nBegin-1);
                             }
@@ -2542,7 +2542,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
                                 }
                                 nEnd = sPart.lastIndexOf(')');
                             }
-                            if ((nBegin != -1) && (nEnd != -1))
+                            if ((nBegin != -1) && (nEnd != -1) && (nBegin < nEnd))
                             {
                                 sText = sPart.copy(nBegin+1,nEnd-nBegin-1);
                             }
