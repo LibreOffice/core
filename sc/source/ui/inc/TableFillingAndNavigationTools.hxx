@@ -64,12 +64,14 @@ public:
     AddressWalker(ScAddress aInitialAddress, bool aTrackRange = true);
 
     ScAddress current(SCCOL aRelativeCol = 0, SCROW aRelativeRow = 0, SCTAB aRelativeTab = 0);
-    void      reset();
-    void      resetColumn();
-    void      resetRow();
-    void      nextColumn();
-    void      nextRow();
-    void      push(SCCOL aRelativeCol = 0, SCROW aRelativeRow = 0, SCTAB aRelativeTab = 0);
+
+    void reset();
+    void resetColumn();
+    void resetRow();
+    void nextColumn();
+    void nextRow();
+    void newLine();
+    void push(SCCOL aRelativeCol = 0, SCROW aRelativeRow = 0, SCTAB aRelativeTab = 0);
 };
 
 class AddressWalkerWriter : public AddressWalker

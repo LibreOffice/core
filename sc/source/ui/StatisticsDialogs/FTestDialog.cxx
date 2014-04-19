@@ -80,22 +80,19 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aTemplate.autoReplaceRange(strWildcardVariable2Range, pVariable2Iterator->get());
 
     aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_UNDO_NAME));
-    aOutput.resetColumn();
-    aOutput.nextRow();
+    aOutput.newLine();
 
     aOutput.writeString("Alpha");
     aOutput.nextColumn();
     aOutput.writeValue(0.05);
     aTemplate.autoReplaceAddress("%ALPHA%", aOutput.current());
-    aOutput.resetColumn();
-    aOutput.nextRow();
+    aOutput.newLine();
 
     aOutput.nextColumn();
     aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_VARIABLE_1_LABEL));
     aOutput.nextColumn();
     aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_VARIABLE_2_LABEL));
-    aOutput.resetColumn();
-    aOutput.nextRow();
+    aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STRID_CALC_MEAN));
     aOutput.nextColumn();
@@ -104,8 +101,7 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.nextColumn();
     aTemplate.setTemplate("=AVERAGE(%VAR2_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aOutput.resetColumn();
-    aOutput.nextRow();
+    aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STRID_CALC_VARIANCE));
     aOutput.nextColumn();
@@ -116,8 +112,7 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aTemplate.setTemplate("=VAR(%VAR2_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%VAR2_VARIANCE%", aOutput.current());
-    aOutput.resetColumn();
-    aOutput.nextRow();
+    aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_OBSERVATIONS_LABEL));
     aOutput.nextColumn();
@@ -128,8 +123,7 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aTemplate.setTemplate("=COUNT(%VAR2_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%VAR2_OBSERVATIONS%", aOutput.current());
-    aOutput.resetColumn();
-    aOutput.nextRow();
+    aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_DF));
     aOutput.nextColumn();
@@ -140,54 +134,46 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aTemplate.setTemplate("=%VAR2_OBSERVATIONS% - 1");
     aOutput.writeFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%VAR2_DEGREE_OF_FREEDOM%", aOutput.current());
-    aOutput.resetColumn();
-    aOutput.nextRow();
+    aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_F));
     aOutput.nextColumn();
     aTemplate.setTemplate("=%VAR1_VARIANCE% / %VAR2_VARIANCE%");
     aOutput.writeFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%F_VALUE%", aOutput.current());
-    aOutput.resetColumn();
-    aOutput.nextRow();
+    aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_P_RIGHT_TAIL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=FDIST(%F_VALUE%; %VAR1_DEGREE_OF_FREEDOM%; %VAR2_DEGREE_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%P_RIGHT_TAIL_VALUE%", aOutput.current());
-    aOutput.resetColumn();
-    aOutput.nextRow();
-
+    aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_F_CRITICAL_RIGHT_TAIL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=FINV(%ALPHA%; %VAR1_DEGREE_OF_FREEDOM%; %VAR2_DEGREE_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aOutput.resetColumn();
-    aOutput.nextRow();
+    aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_P_LEFT_TAIL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=1 - %P_RIGHT_TAIL_VALUE%");
     aOutput.writeFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%P_LEFT_TAIL_VALUE%", aOutput.current());
-    aOutput.resetColumn();
-    aOutput.nextRow();
+    aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_F_CRITICAL_LEFT_TAIL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=FINV(1-%ALPHA%; %VAR1_DEGREE_OF_FREEDOM%; %VAR2_DEGREE_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aOutput.resetColumn();
-    aOutput.nextRow();
+    aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_P_TWO_TAIL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=2*MIN(%P_RIGHT_TAIL_VALUE%; %P_LEFT_TAIL_VALUE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aOutput.resetColumn();
-    aOutput.nextRow();
+    aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_F_CRITICAL_TWO_TAIL));
     aOutput.nextColumn();

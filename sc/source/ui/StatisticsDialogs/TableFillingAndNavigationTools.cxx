@@ -111,6 +111,12 @@ void AddressWalker::reset()
     mCurrentAddress = mAddressStack.back();
 }
 
+void AddressWalker::newLine()
+{
+    resetColumn();
+    nextRow();
+}
+
 ScAddress AddressWalker::current(SCCOL aRelCol, SCROW aRelRow, SCTAB aRelTab)
 {
     return ScAddress(
