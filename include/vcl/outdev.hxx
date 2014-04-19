@@ -1436,8 +1436,8 @@ public:
     Size                        GetOutputSize() const
                                     { return PixelToLogic( GetOutputSizePixel() ); }
 
-    void                        Erase();
-    void                        Erase( const Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
+    virtual void                Erase();
+    virtual void                Erase( const Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
 
     bool                        AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
     int                         GetDevFontCount() const;

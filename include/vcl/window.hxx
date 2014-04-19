@@ -606,6 +606,8 @@ public:
     virtual void        KeyUp( const KeyEvent& rKEvt );
     virtual void        PrePaint();
     virtual void        Paint( const Rectangle& rRect );
+    virtual void        Erase() SAL_OVERRIDE;
+    virtual void        Erase( const Rectangle& rRect ) SAL_OVERRIDE { OutputDevice::Erase( rRect ); }
 
     virtual void        PostPaint();
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );

@@ -1581,25 +1581,7 @@ void OutputDevice::Erase()
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
-    bool bNativeOK = false;
-
-    if( meOutDevType == OUTDEV_WINDOW )
-    {
-        Window* pWindow = static_cast<Window*>(this);
-        ControlPart aCtrlPart = pWindow->ImplGetWindowImpl()->mnNativeBackground;
-        if( aCtrlPart != 0 && ! pWindow->IsControlBackground() )
-        {
-            ImplControlValue    aControlValue;
-            Rectangle           aCtrlRegion( Point(), GetOutputSizePixel() );
-            ControlState        nState = 0;
-
-            if( pWindow->IsEnabled() )              nState |= CTRL_STATE_ENABLED;
-            bNativeOK = pWindow->DrawNativeControl( CTRL_WINDOW_BACKGROUND, aCtrlPart, aCtrlRegion,
-                                                    nState, aControlValue, OUString() );
-        }
-    }
-
-    if ( mbBackground && ! bNativeOK )
+    if ( mbBackground )
     {
         RasterOp eRasterOp = GetRasterOp();
         if ( eRasterOp != ROP_OVERPAINT )

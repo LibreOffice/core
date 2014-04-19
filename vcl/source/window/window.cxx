@@ -9417,5 +9417,38 @@ void Window::DrawGradientWallpaper( long nX, long nY,
     mpMetaFile = pOldMetaFile;
 }
 
+void Window::Erase()
+{
+    if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
+        return;
+
+    bool bNativeOK = false;
+
+    ControlPart aCtrlPart = ImplGetWindowImpl()->mnNativeBackground;
+    if( aCtrlPart != 0 && ! IsControlBackground() )
+    {
+        Rectangle           aCtrlRegion( Point(), GetOutputSizePixel() );
+        ControlState        nState = 0;
+
+        if( IsEnabled() )
+            nState |= CTRL_STATE_ENABLED;
+
+        bNativeOK = DrawNativeControl( CTRL_WINDOW_BACKGROUND, aCtrlPart, aCtrlRegion,
+                                       nState, ImplControlValue(), OUString() );
+    }
+
+    if ( mbBackground && ! bNativeOK )
+    {
+        RasterOp eRasterOp = GetRasterOp();
+        if ( eRasterOp != ROP_OVERPAINT )
+            SetRasterOp( ROP_OVERPAINT );
+        ImplDrawWallpaper( 0, 0, mnOutWidth, mnOutHeight, maBackground );
+        if ( eRasterOp != ROP_OVERPAINT )
+            SetRasterOp( eRasterOp );
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->Erase();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
