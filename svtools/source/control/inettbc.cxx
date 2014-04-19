@@ -152,7 +152,7 @@ SvtMatchContext_Impl::~SvtMatchContext_Impl()
 void SvtMatchContext_Impl::FillPicklist(std::vector<OUString>& rPickList)
 {
     // Einlesung der Historypickliste
-    Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( eHISTORY );
+    Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
     sal_uInt32 nCount = seqPicklist.getLength();
 
     for( sal_uInt32 nItem=0; nItem < nCount; nItem++ )
@@ -948,7 +948,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
     if ( !bHistoryDisabled )
     {
         // read history pick list
-        Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( eHISTORY );
+        Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
         sal_uInt32 nCount = seqPicklist.getLength();
         INetURLObject aCurObj;
 
