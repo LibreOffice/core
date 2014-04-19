@@ -393,6 +393,7 @@ private:
 
 protected:
      virtual void                   ImplReleaseFonts();
+     virtual void                   SetFontOrientation( ImplFontEntry* const pFontEntry ) const;
 
 public:
     /** @name Initialization and accessor functions

@@ -304,6 +304,7 @@ protected:
     virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent ) SAL_OVERRIDE;
 
     virtual void                InitFont() const SAL_OVERRIDE;
+    virtual void                SetFontOrientation( ImplFontEntry* const pFontEntry ) const SAL_OVERRIDE;
 
 public:
                                 Printer();

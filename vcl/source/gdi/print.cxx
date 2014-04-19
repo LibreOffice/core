@@ -1834,4 +1834,10 @@ void Printer::InitFont() const
         mbInitFont = false;
     }
 }
+
+void Printer::SetFontOrientation( ImplFontEntry* const pFontEntry ) const
+{
+    pFontEntry->mnOrientation = pFontEntry->maMetric.mnOrientation;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

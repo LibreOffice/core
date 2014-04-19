@@ -1242,15 +1242,7 @@ bool OutputDevice::ImplNewFont() const
 
             pFontEntry->mnLineHeight = pFontEntry->maMetric.mnAscent + pFontEntry->maMetric.mnDescent;
 
-            if( pFontEntry->maFontSelData.mnOrientation
-            && !pFontEntry->maMetric.mnOrientation
-            && (meOutDevType != OUTDEV_PRINTER) )
-            {
-                pFontEntry->mnOwnOrientation = sal::static_int_cast<short>(pFontEntry->maFontSelData.mnOrientation);
-                pFontEntry->mnOrientation = pFontEntry->mnOwnOrientation;
-            }
-            else
-                pFontEntry->mnOrientation = pFontEntry->maMetric.mnOrientation;
+            SetFontOrientation( pFontEntry );
         }
     }
 
@@ -1329,6 +1321,19 @@ bool OutputDevice::ImplNewFont() const
     }
 
     return true;
+}
+
+void OutputDevice::SetFontOrientation( ImplFontEntry* const pFontEntry ) const
+{
+    if( pFontEntry->maFontSelData.mnOrientation && !pFontEntry->maMetric.mnOrientation )
+    {
+        pFontEntry->mnOwnOrientation = sal::static_int_cast<short>(pFontEntry->maFontSelData.mnOrientation);
+        pFontEntry->mnOrientation = pFontEntry->mnOwnOrientation;
+    }
+    else
+    {
+        pFontEntry->mnOrientation = pFontEntry->maMetric.mnOrientation;
+    }
 }
 
 bool ImplFontAttributes::operator==(const ImplFontAttributes& rOther) const
