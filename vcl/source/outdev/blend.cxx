@@ -52,35 +52,35 @@ namespace
         return sal_uInt8( c );
     }
 
-inline BitmapColor lcl_AlphaBlend( int nX,               int nY,
-                                   const long            nMapX,
-                                   const long            nMapY,
-                                   BitmapReadAccess*     pP,
-                                   BitmapReadAccess*     pA,
-                                   BitmapReadAccess*     pB,
-                                   BitmapWriteAccess*    pAlphaW,
-                                   sal_uInt8&            nResAlpha )
-{
-    BitmapColor aDstCol,aSrcCol;
-    aSrcCol = pP->GetColor( nMapY, nMapX );
-    aDstCol = pB->GetColor( nY, nX );
+    inline BitmapColor lcl_AlphaBlend( int nX,               int nY,
+                                       const long            nMapX,
+                                       const long            nMapY,
+                                       BitmapReadAccess*     pP,
+                                       BitmapReadAccess*     pA,
+                                       BitmapReadAccess*     pB,
+                                       BitmapWriteAccess*    pAlphaW,
+                                       sal_uInt8&            nResAlpha )
+    {
+        BitmapColor aDstCol,aSrcCol;
+        aSrcCol = pP->GetColor( nMapY, nMapX );
+        aDstCol = pB->GetColor( nY, nX );
 
-    // vcl stores transparency, not alpha - invert it
-    const sal_uInt8 nSrcAlpha = 255 - pA->GetPixelIndex( nMapY, nMapX );
-    const sal_uInt8 nDstAlpha = 255 - pAlphaW->GetPixelIndex( nY, nX );
+        // vcl stores transparency, not alpha - invert it
+        const sal_uInt8 nSrcAlpha = 255 - pA->GetPixelIndex( nMapY, nMapX );
+        const sal_uInt8 nDstAlpha = 255 - pAlphaW->GetPixelIndex( nY, nX );
 
-    // Perform porter-duff compositing 'over' operation
+        // Perform porter-duff compositing 'over' operation
 
-    // Co = Cs + Cd*(1-As)
-    // Ad = As + Ad*(1-As)
-    nResAlpha = (int)nSrcAlpha + (int)nDstAlpha - (int)nDstAlpha*nSrcAlpha/255;
+        // Co = Cs + Cd*(1-As)
+        // Ad = As + Ad*(1-As)
+        nResAlpha = (int)nSrcAlpha + (int)nDstAlpha - (int)nDstAlpha*nSrcAlpha/255;
 
-    aDstCol.SetRed( lcl_calcColor( aSrcCol.GetRed(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetRed() ) );
-    aDstCol.SetBlue( lcl_calcColor( aSrcCol.GetBlue(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetBlue() ) );
-    aDstCol.SetGreen( lcl_calcColor( aSrcCol.GetGreen(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetGreen() ) );
+        aDstCol.SetRed( lcl_calcColor( aSrcCol.GetRed(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetRed() ) );
+        aDstCol.SetBlue( lcl_calcColor( aSrcCol.GetBlue(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetBlue() ) );
+        aDstCol.SetGreen( lcl_calcColor( aSrcCol.GetGreen(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetGreen() ) );
 
-    return aDstCol;
-}
+        return aDstCol;
+    }
 }
 
 Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
