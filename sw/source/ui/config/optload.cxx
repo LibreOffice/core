@@ -40,7 +40,6 @@
 #include <fldmgr.hxx>
 #include <poolfmt.hxx>
 #include <expfld.hxx>
-#include <caption.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 
 #include <svtools/insdlg.hxx>
