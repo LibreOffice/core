@@ -91,9 +91,9 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.nextRow();
 
     aOutput.nextColumn();
-    aOutput.writeBoldString("Variable 1");
+    aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_VARIABLE_1_LABEL));
     aOutput.nextColumn();
-    aOutput.writeBoldString("Variable 2");
+    aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_VARIABLE_2_LABEL));
     aOutput.resetColumn();
     aOutput.nextRow();
 
