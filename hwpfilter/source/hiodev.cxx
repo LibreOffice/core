@@ -143,7 +143,7 @@ void HStreamIODev::flush(void)
 
 void HStreamIODev::close(void)
 {
-/* ÇÃ·¯½ÃÇÑ ÈÄ ´Ý´Â´Ù. */
+/* í”ŒëŸ¬ì‹œí•œ í›„ ë‹«ëŠ”ë‹¤. */
     this->flush();
     if (_gzfp)
         gz_close(_gzfp);                          /* gz_close() calls stream_closeInput() */
@@ -159,7 +159,7 @@ int HStreamIODev::state(void) const
 }
 
 
-/* zlib °ü·Ã ºÎºÐ */
+/* zlib ê´€ë ¨ ë¶€ë¶„ */
 bool HStreamIODev::setCompressed(bool flag)
 {
     compressed = flag;

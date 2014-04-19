@@ -2043,7 +2043,7 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
 
     m_aCurrentSelection = _rSelection;
 
-    // determine the form which all the selected obj�cts belong to, if any
+    // determine the form which all the selected objects belong to, if any
     Reference< XForm > xNewCurrentForm;
     for ( InterfaceBag::const_iterator loop = m_aCurrentSelection.begin();
           loop != m_aCurrentSelection.end();

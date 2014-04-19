@@ -2077,7 +2077,7 @@ namespace xmloff
         OElementExport::exportSubTags();
         // loop through all children
         Reference< XIndexAccess > xCollection(m_xProps, UNO_QUERY);
-        OSL_ENSURE(xCollection.is(), "OFormLayerXMLExport::implExportForm: a form which is not an index access? Suspic�ous!");
+        OSL_ENSURE(xCollection.is(), "OFormLayerXMLExport::implExportForm: a form which is not an index access? Suspicious!");
 
         if (xCollection.is())
             m_rContext.exportCollectionElements(xCollection);

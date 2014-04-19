@@ -2197,7 +2197,7 @@ void FormController::setControlLock(const Reference< XControl > & xControl)
     // b.) wenn das zugehoerige Feld gespeert ist
     Reference< XBoundControl >  xBound(xControl, UNO_QUERY);
     if (xBound.is() && (( (bLocked && (bLocked ? 1 : 0) != xBound->getLock()) ||
-                         !bLocked)))    // beim entlocken immer einzelne Felder ueberpr�fen
+                         !bLocked)))    // beim entlocken immer einzelne Felder ueberprüfen
     {
         // gibt es eine Datenquelle
         Reference< XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
@@ -2910,7 +2910,7 @@ void SAL_CALL FormController::elementRemoved(const ContainerEvent& evt) throw( R
     if (xModel.is() && m_xModelAsIndex == xModel->getParent())
     {
         removeControl(xControl);
-        // TabOrder nicht neu berechnen, da das intern schon funktionieren mu�!
+        // TabOrder nicht neu berechnen, da das intern schon funktionieren muss!
     }
     // are we in filtermode and a XModeSelector has inserted an element
     else if (m_bFiltering && Reference< XModeSelector > (evt.Source, UNO_QUERY).is())
