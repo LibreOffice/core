@@ -60,7 +60,9 @@ namespace toolkit
 #ifndef DISABLE_DYNLOADING
         static oslModule                                s_hAccessibleImplementationModule = NULL;
 #endif
+#if HAVE_FEATURE_DESKTOP
         static GetStandardAccComponentFactory           s_pAccessibleFactoryFunc = NULL;
+#endif
         static ::rtl::Reference< IAccessibleFactory >   s_pFactory;
     }
 
@@ -260,7 +262,9 @@ namespace toolkit
             if( 0 == osl_atomic_decrement( &s_nAccessibilityClients ) )
             {
                 s_pFactory = NULL;
+#if HAVE_FEATURE_DESKTOP
                 s_pAccessibleFactoryFunc = NULL;
+#endif
                 if ( s_hAccessibleImplementationModule )
                 {
                     osl_unloadModule( s_hAccessibleImplementationModule );
