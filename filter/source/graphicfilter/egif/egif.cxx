@@ -76,8 +76,14 @@ public:
 GIFWriter::GIFWriter(SvStream &rStream)
     : m_rGIF(rStream)
     , m_pAcc(NULL)
+    , nMinPercent(0)
+    , nMaxPercent(0)
+    , nLastPercent(0)
     , nActX(0)
     , nActY(0)
+    , nInterlaced(0)
+    , bStatus(false)
+    , bTransparent(false)
 {
 }
 
