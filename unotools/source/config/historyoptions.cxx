@@ -54,10 +54,8 @@ namespace {
     const char s_sCommonHistory[] = "org.openoffice.Office.Common/History";
     const char s_sHistories[] = "org.openoffice.Office.Histories/Histories";
     const char s_sPickListSize[] = "PickListSize";
-    const char s_sURLHistorySize[] = "Size";
     const char s_sHelpBookmarksSize[] = "HelpBookmarkSize";
     const char s_sPickList[] = "PickList";
-    const char s_sURLHistory[] = "URLHistory";
     const char s_sHelpBookmarks[] = "HelpBookmarks";
     const char s_sItemList[] = "ItemList";
     const char s_sOrderList[] = "OrderList";
@@ -147,10 +145,6 @@ sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
             xListAccess->getPropertyValue(OUString(s_sPickListSize)) >>= nSize;
             break;
 
-        case eHISTORY:
-            xListAccess->getPropertyValue(OUString(s_sURLHistorySize)) >>= nSize;
-            break;
-
         case eHELPBOOKMARKS:
             xListAccess->getPropertyValue(OUString(s_sHelpBookmarksSize)) >>= nSize;
             break;
@@ -180,10 +174,6 @@ void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt
         {
         case ePICKLIST:
             m_xCfg->getByName(OUString(s_sPickList)) >>= xList;
-            break;
-
-        case eHISTORY:
-            m_xCfg->getByName(OUString(s_sURLHistory)) >>= xList;
             break;
 
         case eHELPBOOKMARKS:
@@ -240,12 +230,6 @@ void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
         case ePICKLIST:
             {
                 m_xCfg->getByName(OUString(s_sPickList)) >>= xListAccess;
-                break;
-            }
-
-        case eHISTORY:
-            {
-                m_xCfg->getByName(OUString(s_sURLHistory)) >>= xListAccess;
                 break;
             }
 
@@ -323,12 +307,6 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
         case ePICKLIST:
             {
                 m_xCfg->getByName(OUString(s_sPickList)) >>= xListAccess;
-                break;
-            }
-
-        case eHISTORY:
-            {
-                m_xCfg->getByName(OUString(s_sURLHistory)) >>= xListAccess;
                 break;
             }
 
@@ -413,12 +391,6 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
         {
             m_xCfg->getByName(OUString(s_sPickList)) >>= xListAccess;
             nMaxSize = GetSize(ePICKLIST);
-        }
-        break;
-    case eHISTORY:
-        {
-            m_xCfg->getByName(OUString(s_sURLHistory)) >>= xListAccess;
-            nMaxSize = GetSize(eHISTORY);
         }
         break;
     case eHELPBOOKMARKS:
