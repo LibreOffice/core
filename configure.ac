@@ -7334,7 +7334,6 @@ if test $_os = iOS; then
     enable_coinmp=no
     enable_lpsolve=no
     enable_postgresql_sdbc=no
-    enable_lotuswordpro=no
     enable_extension_integration=no
     enable_report_builder=no
     with_theme="tango"
