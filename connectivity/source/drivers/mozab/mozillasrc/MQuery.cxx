@@ -296,7 +296,7 @@ sal_uInt32 MQuery::InsertLoginInfo(OConnection* _pCon)
 }
 
 //determine whether current profile is locked,any error will lead to return true
-sal_Bool isProfileLocked(OConnection* _pCon)
+bool isProfileLocked(OConnection* _pCon)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XMozillaBootstrap > xMozillaBootstrap;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
