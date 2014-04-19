@@ -75,6 +75,8 @@
 #define STR_CORRELATION_LABEL                       80
 #define STR_COVARIANCE_LABEL                        81
 #define STR_LABEL_ALPHA                             82
+#define STR_VARIABLE_1_LABEL                        83
+#define STR_VARIABLE_2_LABEL                        84
 
 #define STR_FTEST_OBSERVATIONS_LABEL                90
 #define STR_FTEST_P_RIGHT_TAIL                      91
@@ -83,5 +85,16 @@
 #define STR_FTEST_F_CRITICAL_LEFT_TAIL              94
 #define STR_FTEST_P_TWO_TAIL                        95
 #define STR_FTEST_F_CRITICAL_TWO_TAIL               96
+
+#define STR_TTEST_PEARSON_CORRELATION               100
+#define STR_TTEST_HYPOTHESIZED_MEAN_DIFFERENCE      101
+#define STR_TTEST_OBSERVED_MEAN_DIFFERENCE          102
+#define STR_TTEST_VARIANCE_OF_THE_DIFFERENCES       103
+#define STR_TTEST_T_STAT                            104
+#define STR_TTEST_P_ONE_TAIL                        105
+#define STR_TTEST_T_CRITICAL_ONE_TAIL               106
+#define STR_TTEST_P_TWO_TAIL                        107
+#define STR_TTEST_T_CRITICAL_TWO_TAIL               108
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -79,115 +79,138 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aTemplate.autoReplaceRange(strWildcardVariable1Range, pVariable1Iterator->get());
     aTemplate.autoReplaceRange(strWildcardVariable2Range, pVariable2Iterator->get());
 
+
+    aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_UNDO_NAME));
+    aOutput.resetColumn();
     aOutput.nextRow();
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STRID_CALC_MEAN));
+
+    aOutput.writeString("Alpha");
+    aOutput.nextColumn();
+    aOutput.writeValue(0.05);
+    aTemplate.autoReplaceAddress("%ALPHA%", aOutput.current());
+    aOutput.resetColumn();
     aOutput.nextRow();
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STRID_CALC_VARIANCE));
-    aOutput.nextRow();
-    aOutput.writeString("Observations");
-    aOutput.nextRow();
-    aOutput.writeString("Pearson Correlation");
-    aOutput.nextRow();
-    aOutput.writeString("Hypothesized Mean Difference");
-    aOutput.nextRow();
-    aOutput.writeString("Observed Mean Difference");
-    aOutput.nextRow();
-    aOutput.writeString("Variance of the Differences");
-    aOutput.nextRow();
-    aOutput.writeString("df");
-    aOutput.nextRow();
-    aOutput.writeString("t Stat");
-    aOutput.nextRow();
-    aOutput.writeString("P (T<=t) one-tail");
-    aOutput.nextRow();
-    aOutput.writeString("t Critical one-tail");
-    aOutput.nextRow();
-    aOutput.writeString("P (T<=t) two-tail");
-    aOutput.nextRow();
-    aOutput.writeString("t Critical two-tail");
-    aOutput.resetRow();
 
     aOutput.nextColumn();
-
-    aOutput.writeString("Variable 1");
+    aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_VARIABLE_1_LABEL));
+    aOutput.nextColumn();
+    aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_VARIABLE_2_LABEL));
+    aOutput.resetColumn();
     aOutput.nextRow();
 
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STRID_CALC_MEAN));
+    aOutput.nextColumn();
     aTemplate.setTemplate("=AVERAGE(%VAR1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
+    aOutput.nextColumn();
+    aTemplate.setTemplate("=AVERAGE(%VAR2_RANGE%)");
+    aOutput.writeFormula(aTemplate.getTemplate());
+    aOutput.resetColumn();
     aOutput.nextRow();
 
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STRID_CALC_VARIANCE));
+    aOutput.nextColumn();
     aTemplate.setTemplate("=VAR(%VAR1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
+    aOutput.nextColumn();
+    aTemplate.setTemplate("=VAR(%VAR2_RANGE%)");
+    aOutput.writeFormula(aTemplate.getTemplate());
+    aOutput.resetColumn();
     aOutput.nextRow();
 
+    // Observations
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_OBSERVATIONS_LABEL));
+    aOutput.nextColumn();
     aTemplate.setTemplate("=COUNT(%VAR1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
+    aOutput.nextColumn();
+    aTemplate.setTemplate("=COUNT(%VAR2_RANGE%)");
+    aOutput.writeFormula(aTemplate.getTemplate());
+    aOutput.resetColumn();
     aOutput.nextRow();
 
+    // Pearson Correlation
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_PEARSON_CORRELATION));
+    aOutput.nextColumn();
     aTemplate.setTemplate("=CORREL(%VAR1_RANGE%;%VAR2_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
+    aOutput.resetColumn();
     aOutput.nextRow();
 
+    // Hypothesized mean difference
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_HYPOTHESIZED_MEAN_DIFFERENCE));
+    aOutput.nextColumn();
     aOutput.writeValue(2);
     aTemplate.autoReplaceAddress("%HYPOTHESIZED_MEAN_DIFFERENCE%", aOutput.current());
+    aOutput.resetColumn();
     aOutput.nextRow();
 
+    // Observed mean difference
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_OBSERVED_MEAN_DIFFERENCE));
+    aOutput.nextColumn();
     aTemplate.setTemplate("=AVERAGE(IF(ISODD(IF(ISNUMBER(%VAR1_RANGE%); 1; 0) * IF(ISNUMBER(%VAR2_RANGE%); 1; 0)); %VAR1_RANGE% - %VAR2_RANGE%; \"NA\"))");
     aOutput.writeMatrixFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%OBSERVED_MEAN_DIFFERENCE%", aOutput.current());
+    aOutput.resetColumn();
     aOutput.nextRow();
 
+    // Variance of the Differences
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_VARIANCE_OF_THE_DIFFERENCES));
+    aOutput.nextColumn();
     aTemplate.setTemplate("=VAR(IF(ISODD(IF(ISNUMBER(%VAR1_RANGE%); 1; 0) * IF(ISNUMBER(%VAR2_RANGE%); 1; 0)); %VAR1_RANGE% - %VAR2_RANGE%; \"NA\"))");
     aOutput.writeMatrixFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%VARIANCE_OF_DIFFERENCES%", aOutput.current());
+    aOutput.resetColumn();
     aOutput.nextRow();
 
+    // df
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_DF));
+    aOutput.nextColumn();
     aTemplate.setTemplate("=SUM(IF(ISNUMBER(%VAR1_RANGE%); 1; 0) * IF(ISNUMBER(%VAR2_RANGE%); 1; 0)) - 1");
     aOutput.writeMatrixFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%DEGREE_OF_FREEDOM%", aOutput.current());
+    aOutput.resetColumn();
     aOutput.nextRow();
 
+    // t stat
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_T_STAT));
+    aOutput.nextColumn();
     aTemplate.setTemplate("=(%OBSERVED_MEAN_DIFFERENCE% - %HYPOTHESIZED_MEAN_DIFFERENCE%) / (%VARIANCE_OF_DIFFERENCES% / ( %DEGREE_OF_FREEDOM% + 1)) ^ 0.5");
     aOutput.writeFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%T_STAT%", aOutput.current());
+    aOutput.resetColumn();
     aOutput.nextRow();
 
+    // P one-tail
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_P_ONE_TAIL));
+    aOutput.nextColumn();
     aTemplate.setTemplate("=TDIST(ABS(%T_STAT%); %DEGREE_OF_FREEDOM%; 1)");
     aOutput.writeFormula(aTemplate.getTemplate());
+    aOutput.resetColumn();
     aOutput.nextRow();
 
+    // T critical one-tail
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_T_CRITICAL_ONE_TAIL));
+    aOutput.nextColumn();
     aTemplate.setTemplate("=TINV(2*0.05; %DEGREE_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());
+    aOutput.resetColumn();
     aOutput.nextRow();
 
+    // P two-tail
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_P_TWO_TAIL));
+    aOutput.nextColumn();
     aTemplate.setTemplate("=TDIST(ABS(%T_STAT%); %DEGREE_OF_FREEDOM%; 2)");
     aOutput.writeFormula(aTemplate.getTemplate());
+    aOutput.resetColumn();
     aOutput.nextRow();
 
+    // T critical two-tail
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_T_CRITICAL_TWO_TAIL));
+    aOutput.nextColumn();
     aTemplate.setTemplate("=TINV(0.05; %DEGREE_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aOutput.nextRow();
-
-    aOutput.resetRow();
-
-    aOutput.nextColumn();
-
-    aOutput.writeString("Variable 2");
-    aOutput.nextRow();
-
-    aTemplate.setTemplate("=AVERAGE(%VAR2_RANGE%)");
-    aOutput.writeFormula(aTemplate.getTemplate());
-    aOutput.nextRow();
-
-    aTemplate.setTemplate("=VAR(%VAR2_RANGE%)");
-    aOutput.writeFormula(aTemplate.getTemplate());
-    aOutput.nextRow();
-
-    aTemplate.setTemplate("=COUNT(%VAR2_RANGE%)");
-    aOutput.writeFormula(aTemplate.getTemplate());
-    aOutput.nextRow();
-
-    aOutput.resetRow();
+    aOutput.resetColumn();
 
     return ScRange(aOutput.mMinimumAddress, aOutput.mMaximumAddress);
 }

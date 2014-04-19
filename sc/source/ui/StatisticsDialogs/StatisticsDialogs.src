@@ -286,6 +286,15 @@ Resource RID_STATISTICS_DLGS
     {
         Text [ en-US ] = "Alpha";
     };
+    String STR_VARIABLE_1_LABEL
+    {
+        Text [ en-US ] = "Variable 1";
+    };
+    String STR_VARIABLE_2_LABEL
+    {
+        Text [ en-US ] = "Variable 2";
+    };
+
 
     /*F Test */
     String STR_FTEST_OBSERVATIONS_LABEL
@@ -315,6 +324,44 @@ Resource RID_STATISTICS_DLGS
     String STR_FTEST_F_CRITICAL_TWO_TAIL
     {
         Text [ en-US ] = "F Critical two-tail";
+    };
+
+    /*t Test*/
+    String STR_TTEST_PEARSON_CORRELATION
+    {
+        Text [ en-US ] = "Pearson Correlation";
+    };
+    String STR_TTEST_HYPOTHESIZED_MEAN_DIFFERENCE
+    {
+        Text [ en-US ] = "Hypothesized Mean Difference";
+    };
+    String STR_TTEST_OBSERVED_MEAN_DIFFERENCE
+    {
+        Text [ en-US ] = "Observed Mean Difference";
+    };
+    String STR_TTEST_VARIANCE_OF_THE_DIFFERENCES
+    {
+        Text [ en-US ] = "Variance of the Differences";
+    };
+    String STR_TTEST_T_STAT
+    {
+        Text [ en-US ] = "t Stat";
+    };
+    String STR_TTEST_P_ONE_TAIL
+    {
+        Text [ en-US ] = "P (T<=t) one-tail";
+    };
+    String STR_TTEST_T_CRITICAL_ONE_TAIL
+    {
+        Text [ en-US ] = "t Critical one-tail";
+    };
+    String STR_TTEST_P_TWO_TAIL
+    {
+        Text [ en-US ] = "P (T<=t) two-tail";
+    };
+    String STR_TTEST_T_CRITICAL_TWO_TAIL
+    {
+        Text [ en-US ] = "t Critical two-tail";
     };
 };
 
