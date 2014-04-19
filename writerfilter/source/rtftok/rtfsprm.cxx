@@ -13,12 +13,14 @@
 #include <resourcemodel/QNameToString.hxx>
 
 
-namespace writerfilter {
-namespace rtftok {
+namespace writerfilter
+{
+namespace rtftok
+{
 
 RTFSprm::RTFSprm(Id nKeyword, RTFValue::Pointer_t& pValue)
     : m_nKeyword(nKeyword),
-    m_pValue(pValue)
+      m_pValue(pValue)
 {
 }
 
@@ -156,7 +158,8 @@ void RTFSprms::deduplicate(RTFSprms& rReference)
 
 void RTFSprms::ensureCopyBeforeWrite()
 {
-    if (m_pSprms->m_nRefCount > 1) {
+    if (m_pSprms->m_nRefCount > 1)
+    {
         boost::intrusive_ptr<RTFSprmsImpl> pClone(new RTFSprmsImpl());
         for (std::vector< std::pair<Id, RTFValue::Pointer_t> >::const_iterator i = m_pSprms->begin(); i != m_pSprms->end(); ++i)
             pClone->push_back(std::make_pair(i->first, RTFValue::Pointer_t(i->second->Clone())));

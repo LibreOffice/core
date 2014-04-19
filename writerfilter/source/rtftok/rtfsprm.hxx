@@ -20,84 +20,101 @@
 #include <rtfcontrolwords.hxx>
 #include <rtfvalue.hxx>
 
-namespace writerfilter {
-    namespace rtftok {
+namespace writerfilter
+{
+namespace rtftok
+{
 
-        typedef std::vector< std::pair<Id, RTFValue::Pointer_t> > RTFSprmsImplBase;
+typedef std::vector< std::pair<Id, RTFValue::Pointer_t> > RTFSprmsImplBase;
 
-        /// The payload of RTFSprms which is only copied on write.
-        class RTFSprmsImpl : public RTFSprmsImplBase
-        {
-        public:
-            sal_Int32 m_nRefCount;
-            RTFSprmsImpl() : RTFSprmsImplBase(), m_nRefCount(0) {}
-        };
+/// The payload of RTFSprms which is only copied on write.
+class RTFSprmsImpl : public RTFSprmsImplBase
+{
+public:
+    sal_Int32 m_nRefCount;
+    RTFSprmsImpl() : RTFSprmsImplBase(), m_nRefCount(0) {}
+};
 
-        inline void intrusive_ptr_add_ref(RTFSprmsImpl* p)
-        {
-            ++(p->m_nRefCount);
-        }
-        inline void intrusive_ptr_release(RTFSprmsImpl* p)
-        {
-            if (!--(p->m_nRefCount))
-                delete p;
-        }
+inline void intrusive_ptr_add_ref(RTFSprmsImpl* p)
+{
+    ++(p->m_nRefCount);
+}
+inline void intrusive_ptr_release(RTFSprmsImpl* p)
+{
+    if (!--(p->m_nRefCount))
+        delete p;
+}
 
-        enum RTFOverwrite
-        {
-            OVERWRITE_YES, ///< Yes, if an existing key is found, overwrite it.
-            OVERWRITE_NO_APPEND, ///< No, always append the value to the end of the list.
-            OVERWRITE_NO_IGNORE ///< No, if the key is already in the list, then ignore, otherwise append.
-        };
+enum RTFOverwrite
+{
+    OVERWRITE_YES, ///< Yes, if an existing key is found, overwrite it.
+    OVERWRITE_NO_APPEND, ///< No, always append the value to the end of the list.
+    OVERWRITE_NO_IGNORE ///< No, if the key is already in the list, then ignore, otherwise append.
+};
 
-        /// A list of RTFSprm with a copy constructor that performs a deep copy.
-        class RTFSprms
-        {
-        public:
-            typedef ::boost::shared_ptr<RTFSprms> Pointer_t;
-            typedef std::pair<Id, RTFValue::Pointer_t> Entry_t;
-            typedef std::vector<Entry_t>::iterator Iterator_t;
-            RTFSprms();
-            RTFSprms(const RTFSprms& rSprms);
-            ~RTFSprms();
-            RTFSprms& operator=(const RTFSprms& rOther);
-            RTFValue::Pointer_t find(Id nKeyword, bool bFirst = true, bool bForWrite = false);
-            /// Does the same as ->push_back(), except that it can overwrite or ignore existing entries.
-            void set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwrite = OVERWRITE_YES);
-            bool erase(Id nKeyword);
-            /// Removes elements, which are already in the reference set.
-            void deduplicate(RTFSprms& rReference);
-            size_t size() const { return m_pSprms->size(); }
-            bool empty() const { return m_pSprms->empty(); }
-            Entry_t& back() { return m_pSprms->back(); }
-            Iterator_t begin() { return m_pSprms->begin(); }
-            Iterator_t end() { return m_pSprms->end(); }
-            void clear();
-        private:
-            void ensureCopyBeforeWrite();
-            boost::intrusive_ptr<RTFSprmsImpl> m_pSprms;
-        };
+/// A list of RTFSprm with a copy constructor that performs a deep copy.
+class RTFSprms
+{
+public:
+    typedef ::boost::shared_ptr<RTFSprms> Pointer_t;
+    typedef std::pair<Id, RTFValue::Pointer_t> Entry_t;
+    typedef std::vector<Entry_t>::iterator Iterator_t;
+    RTFSprms();
+    RTFSprms(const RTFSprms& rSprms);
+    ~RTFSprms();
+    RTFSprms& operator=(const RTFSprms& rOther);
+    RTFValue::Pointer_t find(Id nKeyword, bool bFirst = true, bool bForWrite = false);
+    /// Does the same as ->push_back(), except that it can overwrite or ignore existing entries.
+    void set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwrite = OVERWRITE_YES);
+    bool erase(Id nKeyword);
+    /// Removes elements, which are already in the reference set.
+    void deduplicate(RTFSprms& rReference);
+    size_t size() const
+    {
+        return m_pSprms->size();
+    }
+    bool empty() const
+    {
+        return m_pSprms->empty();
+    }
+    Entry_t& back()
+    {
+        return m_pSprms->back();
+    }
+    Iterator_t begin()
+    {
+        return m_pSprms->begin();
+    }
+    Iterator_t end()
+    {
+        return m_pSprms->end();
+    }
+    void clear();
+private:
+    void ensureCopyBeforeWrite();
+    boost::intrusive_ptr<RTFSprmsImpl> m_pSprms;
+};
 
-        /// RTF keyword with a parameter
-        class RTFSprm
-            : public Sprm
-        {
-            public:
-                RTFSprm(Id nKeyword, RTFValue::Pointer_t& pValue);
-                virtual ~RTFSprm() {}
-                virtual sal_uInt32 getId() const SAL_OVERRIDE;
-                virtual Value::Pointer_t getValue() SAL_OVERRIDE;
-                virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
-                virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE;
-                virtual writerfilter::Reference<Properties>::Pointer_t getProps() SAL_OVERRIDE;
-                virtual Kind getKind() SAL_OVERRIDE;
-                virtual std::string getName() const SAL_OVERRIDE;
-                virtual std::string toString() const SAL_OVERRIDE;
-            private:
-                Id m_nKeyword;
-                RTFValue::Pointer_t& m_pValue;
-        };
-    } // namespace rtftok
+/// RTF keyword with a parameter
+class RTFSprm
+    : public Sprm
+{
+public:
+    RTFSprm(Id nKeyword, RTFValue::Pointer_t& pValue);
+    virtual ~RTFSprm() {}
+    virtual sal_uInt32 getId() const SAL_OVERRIDE;
+    virtual Value::Pointer_t getValue() SAL_OVERRIDE;
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
+    virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE;
+    virtual writerfilter::Reference<Properties>::Pointer_t getProps() SAL_OVERRIDE;
+    virtual Kind getKind() SAL_OVERRIDE;
+    virtual std::string getName() const SAL_OVERRIDE;
+    virtual std::string toString() const SAL_OVERRIDE;
+private:
+    Id m_nKeyword;
+    RTFValue::Pointer_t& m_pValue;
+};
+} // namespace rtftok
 } // namespace writerfilter
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSPRM_HXX
