@@ -179,7 +179,7 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     // T critical one-tail
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_T_CRITICAL_ONE_TAIL));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=TINV(2*0.05; %DEGREE_OF_FREEDOM%)");
+    aTemplate.setTemplate("=TINV(2*%ALPHA%; %DEGREE_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 
@@ -193,7 +193,7 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     // T critical two-tail
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_T_CRITICAL_TWO_TAIL));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=TINV(0.05; %DEGREE_OF_FREEDOM%)");
+    aTemplate.setTemplate("=TINV(%ALPHA%; %DEGREE_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());
 
     return ScRange(aOutput.mMinimumAddress, aOutput.mMaximumAddress);
