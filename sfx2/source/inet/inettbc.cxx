@@ -219,7 +219,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
             SvtURLBox* pURLBox = GetURLBox();
             pURLBox->Clear();
 
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > lList = SvtHistoryOptions().GetList(eHISTORY);
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > lList = SvtHistoryOptions().GetList(ePICKLIST);
             for (sal_Int32 i=0; i<lList.getLength(); ++i)
             {
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lProps = lList[i];
