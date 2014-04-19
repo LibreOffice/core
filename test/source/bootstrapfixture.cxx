@@ -163,7 +163,8 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
     OUString aOutputFile = aOutput.GetFileName();
     OUString aCommand = aValidator + rPath + " > " + aOutputFile;
 
-    system(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8).getStr());
+    int returnValue = system(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8).getStr());
+    (void)returnValue;
 
     OString aContentString = loadFile(aOutput.GetURL());
     OUString aContentOUString = OStringToOUString(aContentString, RTL_TEXTENCODING_UTF8);
