@@ -181,7 +181,7 @@ namespace dbtools
                 case PROPERTY_ID_ACTIVE_CONNECTION:         { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_ACTIVE_CONNECTION() ); break; }
             }
             m_aPropertyMap[_nIndex] = pStr;
-            return pStr;
+            return pStr ? OUString(pStr) : OUString();
         }
 }
 
