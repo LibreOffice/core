@@ -1590,8 +1590,7 @@ void OutputDevice::Erase()
         if( aCtrlPart != 0 && ! pWindow->IsControlBackground() )
         {
             ImplControlValue    aControlValue;
-            Point               aGcc3WorkaroundTemporary;
-            Rectangle           aCtrlRegion( aGcc3WorkaroundTemporary, GetOutputSizePixel() );
+            Rectangle           aCtrlRegion( Point(), GetOutputSizePixel() );
             ControlState        nState = 0;
 
             if( pWindow->IsEnabled() )              nState |= CTRL_STATE_ENABLED;

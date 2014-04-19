@@ -91,8 +91,7 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     aPos.Y() *= 0.5;
     Rectangle aOutRect( aPos, aOut );
     aOutRect = m_pParent->PixelToLogic( aOutRect );
-    Point aGcc3WorkaroundTemporary;
-    Rectangle aWorkArea(aGcc3WorkaroundTemporary,pScrollWindow->getTotalSize());
+    Rectangle aWorkArea(Point(), pScrollWindow->getTotalSize());
     aWorkArea.Right() -= (long)aStartWidth;
     aWorkArea = pScrollWindow->PixelToLogic( aWorkArea );
     if( !aOutRect.IsInside( rPos ) && aWorkArea.IsInside( rPos ) )
