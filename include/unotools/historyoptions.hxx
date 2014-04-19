@@ -45,8 +45,7 @@
 enum EHistoryType
 {
     ePICKLIST       = 0,
-    eHISTORY        = 1,
-    eHELPBOOKMARKS  = 2
+    eHELPBOOKMARKS  = 1
 };
 
 /*-************************************************************************************************************
