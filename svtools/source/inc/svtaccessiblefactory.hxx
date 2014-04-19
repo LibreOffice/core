@@ -22,14 +22,8 @@
 
 #include <svtools/accessiblefactory.hxx>
 
-
 namespace svt
 {
-
-
-
-    //= AccessibleFactoryAccess
-
     /** a client for the accessibility implementations which have been outsourced
         from the main svtools library
 
@@ -49,7 +43,6 @@ namespace svt
 
     public:
         AccessibleFactoryAccess();
-        ~AccessibleFactoryAccess();
 
         IAccessibleFactory& getFactory();
 
@@ -59,7 +52,6 @@ namespace svt
 
 
 }   // namespace svt
-
 
 #endif // INCLUDED_SVTOOLS_SOURCE_INC_SVTACCESSIBLEFACTORY_HXX
 
