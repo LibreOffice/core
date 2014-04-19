@@ -781,7 +781,7 @@ public:
      */
     ///@{
     SAL_DLLPRIVATE void         ImplDrawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
-    SAL_DLLPRIVATE void         ImplDrawAlpha        ( const Bitmap& rBmp, const AlphaMask& rAlpha,
+    SAL_DLLPRIVATE void         DrawAlphaBitmap      ( const Bitmap& rBmp, const AlphaMask& rAlpha,
                                                        const Point& rDestPt, const Size& rDestSize,
                                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel );
     virtual void                ClipToPaintRegion    ( Rectangle& rDstRect );

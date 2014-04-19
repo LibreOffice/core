@@ -578,7 +578,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
             aSrcPtPixel.X() = rSrcPtPixel.X() * fScaleX;
             aSrcPtPixel.Y() = rSrcPtPixel.Y() * fScaleY;
         }
-        ImplDrawAlpha(aScaledBitmapEx.GetBitmap(), aScaledBitmapEx.GetAlpha(), rDestPt, rDestSize, aSrcPtPixel, aSrcSizePixel);
+        DrawAlphaBitmap(aScaledBitmapEx.GetBitmap(), aScaledBitmapEx.GetAlpha(), rDestPt, rDestSize, aSrcPtPixel, aSrcSizePixel);
         return;
     }
 
@@ -937,9 +937,9 @@ BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) con
         return GetBitmap( rSrcPt, rSize );
 }
 
-void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
-                                  const Point& rDestPt, const Size& rDestSize,
-                                  const Point& rSrcPtPixel, const Size& rSrcSizePixel )
+void OutputDevice::DrawAlphaBitmap( const Bitmap& rBmp, const AlphaMask& rAlpha,
+                                    const Point& rDestPt, const Size& rDestSize,
+                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
     Point       aOutPt( LogicToPixel( rDestPt ) );
     Size        aOutSz( LogicToPixel( rDestSize ) );
