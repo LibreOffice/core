@@ -1366,6 +1366,10 @@ AC_ARG_ENABLE(library-bin-tar,
         for the next time.]),
 )
 
+AC_ARG_ENABLE(gltf,
+    AS_HELP_STRING([--disable-gltf],
+        [Determines whether to build libraries related to glTF 3D model rendering.]))
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -10364,7 +10368,7 @@ dnl ===================================================================
 
 ENABLE_GLTF=
 AC_MSG_CHECKING([whether to enable glTF support])
-if test "$enable_opengl" = "yes"; then
+if test $_os != iOS -a $_os != Android -a "x$enable_gltf" != "xno"; then
     ENABLE_GLTF=TRUE
     AC_MSG_RESULT([yes])
     BUILD_TYPE="$BUILD_TYPE LIBGLTF"
