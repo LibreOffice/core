@@ -26,9 +26,6 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <toolkit/helper/imagealign.hxx>
-#include <toolkit/helper/accessibilityclient.hxx>
-#include <toolkit/helper/tkresmgr.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -60,6 +57,11 @@
 #include <boost/function.hpp>
 
 #include <vcl/group.hxx>
+
+#include "helper/accessibilityclient.hxx"
+#include "helper/imagealign.hxx"
+#include "helper/tkresmgr.hxx"
+
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::makeAny;

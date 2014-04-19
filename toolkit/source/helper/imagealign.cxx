@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <toolkit/helper/imagealign.hxx>
 #include <com/sun/star/awt/ImagePosition.hpp>
 #include <com/sun/star/awt/ImageAlign.hpp>
 
+#include "helper/imagealign.hxx"
 
 namespace toolkit
 {

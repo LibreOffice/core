@@ -23,11 +23,12 @@
 
 #include <boost/noncopyable.hpp>
 
-#include <toolkit/helper/accessibilityclient.hxx>
 #include <toolkit/helper/accessiblefactory.hxx>
 #include <osl/module.h>
 #include <osl/diagnose.h>
 #include <tools/solar.h>
+
+#include "helper/accessibilityclient.hxx"
 
 namespace toolkit
 {

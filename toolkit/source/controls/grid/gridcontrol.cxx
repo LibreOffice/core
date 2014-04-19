@@ -29,7 +29,6 @@
 #include <com/sun/star/awt/grid/DefaultGridDataModel.hpp>
 #include <com/sun/star/awt/grid/SortableGridDataModel.hpp>
 #include <com/sun/star/awt/grid/DefaultGridColumnModel.hpp>
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/color.hxx>
@@ -38,6 +37,8 @@
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 #include <boost/scoped_ptr.hpp>
+
+#include "helper/unopropertyarrayhelper.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

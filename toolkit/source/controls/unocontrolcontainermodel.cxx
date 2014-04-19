@@ -21,8 +21,8 @@
 #include <toolkit/controls/unocontrolcontainermodel.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
 
+#include "helper/unopropertyarrayhelper.hxx"
 
 //  class UnoControlContainerModel
 

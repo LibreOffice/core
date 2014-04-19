@@ -41,7 +41,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/accessibilityclient.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uuid.h>
 #include <rtl/ustrbuf.hxx>
@@ -57,10 +56,12 @@
 #include <comphelper/flagguard.hxx>
 #include "stylesettings.hxx"
 #include <tools/urlobj.hxx>
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
 
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
+
+#include "helper/accessibilityclient.hxx"
+#include "helper/unopropertyarrayhelper.hxx"
 
 using namespace ::com::sun::star;
 

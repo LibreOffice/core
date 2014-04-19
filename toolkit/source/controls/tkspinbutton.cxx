@@ -28,7 +28,8 @@
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
+
+#include "helper/unopropertyarrayhelper.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;

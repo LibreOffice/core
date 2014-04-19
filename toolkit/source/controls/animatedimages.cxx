@@ -20,7 +20,6 @@
 
 #include <toolkit/controls/animatedimages.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
@@ -39,6 +38,8 @@
 #include <cppuhelper/implbase2.hxx>
 
 #include <boost/scoped_ptr.hpp>
+
+#include "helper/unopropertyarrayhelper.hxx"
 
 using namespace css::awt;
 using namespace css::container;

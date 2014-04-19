@@ -18,7 +18,6 @@
  */
 
 #include <toolkit/controls/formattedcontrol.hxx>
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
 
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
@@ -29,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
+#include "helper/unopropertyarrayhelper.hxx"
 
 namespace toolkit
 {

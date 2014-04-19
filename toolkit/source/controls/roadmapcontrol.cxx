@@ -19,11 +19,11 @@
 
 
 #include <toolkit/controls/roadmapcontrol.hxx>
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <osl/diagnose.h>
 
+#include "helper/unopropertyarrayhelper.hxx"
 
 namespace toolkit
 {

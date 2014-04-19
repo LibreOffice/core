@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <toolkit/helper/tkresmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
@@ -25,6 +24,8 @@
 #include <tools/diagnose_ex.h>
 
 #include <vcl/image.hxx>
+
+#include "helper/tkresmgr.hxx"
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::graphic::XGraphic;

@@ -20,7 +20,6 @@
 #include <com/sun/star/awt/WindowEvent.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include <toolkit/helper/unowrapper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
@@ -35,6 +34,8 @@
 #include <vcl/menu.hxx>
 
 #include <tools/debug.hxx>
+
+#include "helper/unowrapper.hxx"
 
 using namespace ::com::sun::star;
 

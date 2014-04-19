@@ -18,10 +18,10 @@
  */
 
 
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
 #include <map>
 
+#include "helper/unopropertyarrayhelper.hxx"
 
 //  class UnoPropertyArrayHelper
 

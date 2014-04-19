@@ -24,7 +24,6 @@
 #include <vcl/wall.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/controls/geometrycontrolmodel.hxx>
 #include <toolkit/controls/unocontrols.hxx>
 #include "toolkit/controls/formattedcontrol.hxx"
@@ -45,7 +44,6 @@
 #include <comphelper/types.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/helper/tkresmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
@@ -62,6 +60,9 @@
 #include "tools/urlobj.hxx"
 #include "osl/file.hxx"
 #include "toolkit/controls/dialogcontrol.hxx"
+
+#include "helper/tkresmgr.hxx"
+#include "helper/unopropertyarrayhelper.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

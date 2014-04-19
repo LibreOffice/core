@@ -35,10 +35,8 @@
 #include <toolkit/controls/unocontrols.hxx>
 #include <toolkit/controls/stdtabcontroller.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/macros.hxx>
-#include <toolkit/helper/imagealign.hxx>
 
 // for introspection
 #include <toolkit/awt/vclxwindows.hxx>
@@ -59,6 +57,9 @@
 
 #include <algorithm>
 #include <functional>
+
+#include "helper/imagealign.hxx"
+#include "helper/unopropertyarrayhelper.hxx"
 
 using namespace css;
 using namespace css::awt;

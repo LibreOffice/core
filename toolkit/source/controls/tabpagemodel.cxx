@@ -23,7 +23,6 @@
 #include <vcl/window.hxx>
 #include <vcl/wall.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/controls/stdtabcontroller.hxx>
 #include <com/sun/star/awt/UnoControlDialogModelProvider.hpp>
 #include <com/sun/star/awt/tab/XTabPage.hpp>
@@ -44,6 +43,8 @@
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase2.hxx>
+
+#include "helper/unopropertyarrayhelper.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

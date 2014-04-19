@@ -23,9 +23,10 @@
 #include <com/sun/star/awt/tree/XTreeControl.hpp>
 #include <com/sun/star/awt/tree/XTreeDataModel.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
 #include <osl/diagnose.h>
+
+#include "helper/unopropertyarrayhelper.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

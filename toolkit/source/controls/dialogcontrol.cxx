@@ -25,7 +25,6 @@
 #include <toolkit/controls/dialogcontrol.hxx>
 #include <toolkit/controls/geometrycontrolmodel.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/controls/stdtabcontroller.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -51,6 +50,8 @@
 #include <vcl/tabctrl.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
 #include "toolkit/controls/unocontrols.hxx"
+
+#include "helper/unopropertyarrayhelper.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

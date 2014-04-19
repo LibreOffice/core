@@ -19,12 +19,11 @@
 
 #include "toolkit/controls/tkscrollbar.hxx"
 #include "toolkit/helper/property.hxx"
-#include "toolkit/helper/unopropertyarrayhelper.hxx"
 #include <cppuhelper/typeprovider.hxx>
 
-// for introspection
 #include <toolkit/awt/vclxwindows.hxx>
 
+#include "helper/unopropertyarrayhelper.hxx"
 
 namespace toolkit
 {

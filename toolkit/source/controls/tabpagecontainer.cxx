@@ -22,7 +22,6 @@
 #include <toolkit/controls/tabpagecontainer.hxx>
 #include <toolkit/controls/tabpagemodel.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
@@ -31,6 +30,8 @@
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
+
+#include "helper/unopropertyarrayhelper.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

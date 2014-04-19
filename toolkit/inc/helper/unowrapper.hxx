@@ -24,11 +24,11 @@
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <toolkit/helper/accessibilityclient.hxx>
 
 #include <vcl/unowrap.hxx>
 #include <vcl/window.hxx>
 
+#include "helper/accessibilityclient.hxx"
 
 //  class UnoWrapper
 

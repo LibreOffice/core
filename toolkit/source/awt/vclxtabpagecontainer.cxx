@@ -26,8 +26,9 @@
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/helper/tkresmgr.hxx>
 #include <cppuhelper/typeprovider.hxx>
+
+#include "helper/tkresmgr.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -79,7 +79,6 @@ using org::libreoffice::touch::ByteBufferWrapper;
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/helper/unowrapper.hxx>
 #include <toolkit/helper/servicenames.hxx>
 
 #include <toolkit/helper/macros.hxx>
@@ -122,6 +121,8 @@ using org::libreoffice::touch::ByteBufferWrapper;
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/awt/scrollabledialog.hxx>
+
+#include "helper/unowrapper.hxx"
 
 #define VCLWINDOW_FRAMEWINDOW               0x1000
 #define VCLWINDOW_SYSTEMCHILDWINDOW         0x1001
