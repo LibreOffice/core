@@ -95,7 +95,7 @@ void ScTabViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(ScExponentialSmoothingDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScMovingAverageDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScTTestDialogWrapper::GetChildWindowId());
-
+    GetStaticInterface()->RegisterChildWindow(ScFTestDialogWrapper::GetChildWindowId());
 }
 
 SFX_IMPL_NAMED_VIEWFACTORY( ScTabViewShell, "Default" )

@@ -725,6 +725,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:FTestDialog" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~F-test...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:EditHeaderAndFooter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Headers &amp; Footers...</value>

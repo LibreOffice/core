@@ -270,6 +270,7 @@ void ScDLL::Init()
     ScExponentialSmoothingDialogWrapper ::RegisterChildWindow(false, pMod);
     ScMovingAverageDialogWrapper        ::RegisterChildWindow(false, pMod);
     ScTTestDialogWrapper                ::RegisterChildWindow(false, pMod);
+    ScFTestDialogWrapper                ::RegisterChildWindow(false, pMod);
 
     // First docking Window for Calc
     ScFunctionChildWindow       ::RegisterChildWindow(false, pMod);

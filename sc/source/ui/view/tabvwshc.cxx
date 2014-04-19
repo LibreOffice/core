@@ -67,6 +67,7 @@
 #include "ExponentialSmoothingDialog.hxx"
 #include "MovingAverageDialog.hxx"
 #include "TTestDialog.hxx"
+#include "FTestDialog.hxx"
 
 #include "PivotLayoutDialog.hxx"
 
@@ -371,6 +372,12 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_TTEST_DIALOG:
         {
             pResult = new ScTTestDialog( pB, pCW, pParent, GetViewData() );
+        }
+        break;
+
+        case SID_FTEST_DIALOG:
+        {
+            pResult = new ScFTestDialog( pB, pCW, pParent, GetViewData() );
         }
         break;
 

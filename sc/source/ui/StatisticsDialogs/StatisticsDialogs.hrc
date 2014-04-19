@@ -54,25 +54,34 @@
 #define STR_EXPONENTIAL_SMOOTHING_UNDO_NAME         38
 #define STR_MOVING_AVERAGE_UNDO_NAME                39
 #define STR_TTEST_UNDO_NAME                         40
+#define STR_FTEST_UNDO_NAME                         41
 
-#define STR_COLUMN_LABEL_TEMPLATE                   41
-#define STR_ROW_LABEL_TEMPLATE                      42
+#define STR_COLUMN_LABEL_TEMPLATE                   60
+#define STR_ROW_LABEL_TEMPLATE                      61
 
-#define STR_ANOVA_SINGLE_FACTOR_LABEL               43
-#define STR_ANOVA_LABEL_GROUPS                      44
-#define STR_ANOVA_LABEL_BETWEEN_GROUPS              45
-#define STR_ANOVA_LABEL_WITHIN_GROUPS               46
-#define STR_ANOVA_LABEL_SOURCE_OF_VARIATION         47
-#define STR_ANOVA_LABEL_SS                          48
-#define STR_ANOVA_LABEL_DF                          49
-#define STR_ANOVA_LABEL_MS                          50
-#define STR_ANOVA_LABEL_F                           51
-#define STR_ANOVA_LABEL_P_VALUE                     52
-#define STR_ANOVA_LABEL_F_CRITICAL                  53
-#define STR_ANOVA_LABEL_TOTAL                       54
+#define STR_ANOVA_SINGLE_FACTOR_LABEL               62
+#define STR_ANOVA_LABEL_GROUPS                      63
+#define STR_ANOVA_LABEL_BETWEEN_GROUPS              64
+#define STR_ANOVA_LABEL_WITHIN_GROUPS               65
+#define STR_ANOVA_LABEL_SOURCE_OF_VARIATION         66
+#define STR_ANOVA_LABEL_SS                          67
+#define STR_ANOVA_LABEL_DF                          68
+#define STR_ANOVA_LABEL_MS                          69
+#define STR_ANOVA_LABEL_F                           70
+#define STR_ANOVA_LABEL_P_VALUE                     71
+#define STR_ANOVA_LABEL_F_CRITICAL                  72
+#define STR_ANOVA_LABEL_TOTAL                       73
 
-#define STR_CORRELATION_LABEL                       55
-#define STR_COVARIANCE_LABEL                        56
-#define STR_LABEL_ALPHA                             57
+#define STR_CORRELATION_LABEL                       80
+#define STR_COVARIANCE_LABEL                        81
+#define STR_LABEL_ALPHA                             82
+
+#define STR_FTEST_OBSERVATIONS_LABEL                90
+#define STR_FTEST_P_RIGHT_TAIL                      91
+#define STR_FTEST_F_CRITICAL_RIGHT_TAIL             92
+#define STR_FTEST_P_LEFT_TAIL                       93
+#define STR_FTEST_F_CRITICAL_LEFT_TAIL              94
+#define STR_FTEST_P_TWO_TAIL                        95
+#define STR_FTEST_F_CRITICAL_TWO_TAIL               96
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

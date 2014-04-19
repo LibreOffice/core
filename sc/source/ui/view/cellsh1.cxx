@@ -984,6 +984,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
             }
             break;
+        case SID_FTEST_DIALOG:
+            {
+                sal_uInt16 nId  = ScFTestDialogWrapper::GetChildWindowId();
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+
+            }
+            break;
 
 
         //  disposal (Outlines)

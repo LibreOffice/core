@@ -268,6 +268,11 @@ Resource RID_STATISTICS_DLGS
         Text [ en-US ] = "t-test";
     };
 
+    String STR_FTEST_UNDO_NAME
+    {
+        Text [ en-US ] = "F-test";
+    };
+
     /* Common */
     String STR_COLUMN_LABEL_TEMPLATE
     {
@@ -280,6 +285,36 @@ Resource RID_STATISTICS_DLGS
     String STR_LABEL_ALPHA
     {
         Text [ en-US ] = "Alpha";
+    };
+
+    /*F Test */
+    String STR_FTEST_OBSERVATIONS_LABEL
+    {
+        Text [ en-US ] = "Observations";
+    };
+    String STR_FTEST_P_RIGHT_TAIL
+    {
+        Text [ en-US ] = "P (F<=f) right-tail";
+    };
+    String STR_FTEST_F_CRITICAL_RIGHT_TAIL
+    {
+        Text [ en-US ] = "F Critical right-tail";
+    };
+    String STR_FTEST_P_LEFT_TAIL
+    {
+        Text [ en-US ] = "P (F<=f) left-tail";
+    };
+    String STR_FTEST_F_CRITICAL_LEFT_TAIL
+    {
+        Text [ en-US ] = "F Critical left-tail";
+    };
+    String STR_FTEST_P_TWO_TAIL
+    {
+        Text [ en-US ] = "P two-tail";
+    };
+    String STR_FTEST_F_CRITICAL_TWO_TAIL
+    {
+        Text [ en-US ] = "F Critical two-tail";
     };
 };
 
