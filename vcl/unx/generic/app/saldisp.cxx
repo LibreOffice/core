@@ -238,10 +238,22 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
 }
 
 SalDisplay::SalDisplay( Display *display ) :
+        pXLib_( NULL ),
         mpInputMethod( NULL ),
+        mpKbdExtension( NULL ),
+        mpFactory( NULL ),
         pDisp_( display ),
         m_nXDefaultScreen( 0 ),
+        nMaxRequestSize_( 0 ),
+        meServerVendor( vendor_unknown ),
+        bNumLockFromXS_( false ),
+        nNumLockIndex_( 0 ),
+        nNumLockMask_( 0 ),
+        nShiftKeySym_( 0 ),
+        nCtrlKeySym_( 0 ),
+        nMod1KeySym_( 0 ),
         m_pWMAdaptor( NULL ),
+        m_bXinerama( false ),
         m_bUseRandRWrapper( true ),
         m_nLastUserEventTime( CurrentTime )
 {
@@ -250,7 +262,6 @@ SalDisplay::SalDisplay( Display *display ) :
 #endif
     SalGenericData *pData = GetGenericData();
 
-    pXLib_ = NULL;
     DBG_ASSERT( ! pData->GetDisplay(), "Second SalDisplay created !!!\n" );
     pData->SetDisplay( this );
 
