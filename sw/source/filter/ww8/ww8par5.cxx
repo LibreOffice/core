@@ -2533,12 +2533,15 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
                             {
                                 sRuby = sPart.copy(nBegin+1,nEnd-nBegin-1);
                             }
-                            if (-1 ==
-                                (nBegin = sPart.indexOf(',',nEnd)))
+                            if (-1 != nEnd)
                             {
-                                nBegin = sPart.indexOf(';',nEnd);
+                                if (-1 ==
+                                    (nBegin = sPart.indexOf(',',nEnd)))
+                                {
+                                    nBegin = sPart.indexOf(';',nEnd);
+                                }
+                                nEnd = sPart.lastIndexOf(')');
                             }
-                            nEnd = sPart.lastIndexOf(')');
                             if ((nBegin != -1) && (nEnd != -1))
                             {
                                 sText = sPart.copy(nBegin+1,nEnd-nBegin-1);
