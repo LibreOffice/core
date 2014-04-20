@@ -43,8 +43,7 @@ bridge_exception_objects := cpp2uno except uno2cpp
 else ifeq ($(OS)-$(CPUNAME),LINUX-HPPA)
 
 bridges_SELECTED_BRIDGE := gcc3_linux_hppa
-bridge_asm_objects := call
-bridge_noopt_objects := cpp2uno except uno2cpp
+bridge_noopt_objects := call cpp2uno except uno2cpp
 
 else ifeq ($(OS)-$(CPUNAME),LINUX-IA64)
 
