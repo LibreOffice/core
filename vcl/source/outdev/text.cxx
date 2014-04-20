@@ -97,9 +97,6 @@ using namespace ::utl;
 
 #define TEXT_DRAW_ELLIPSIS  (TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_PATHELLIPSIS | TEXT_DRAW_NEWSELLIPSIS)
 
-#define UNDERLINE_LAST      UNDERLINE_BOLDWAVE
-#define STRIKEOUT_LAST      STRIKEOUT_X
-
 ImplMultiTextLineInfo::ImplMultiTextLineInfo()
 {
     mpLines = new PImplTextLineInfo[MULTITEXTLINEINFO_RESIZE];
