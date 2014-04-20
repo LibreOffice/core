@@ -735,23 +735,6 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     return nMaxLineWidth;
 }
 
-void OutputDevice::SetAntialiasing( sal_uInt16 nMode )
-{
-    if ( mnAntialiasing != nMode )
-    {
-        mnAntialiasing = nMode;
-        mbInitFont = true;
-
-        if(mpGraphics)
-        {
-            mpGraphics->setAntiAliasB2DDraw(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW);
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetAntialiasing( nMode );
-}
-
 void OutputDevice::SetLayoutMode( sal_uLong nTextLayoutMode )
 {
     if( mpMetaFile )
