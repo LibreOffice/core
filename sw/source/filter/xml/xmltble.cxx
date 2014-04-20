@@ -290,24 +290,18 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
 }
 
 void sw_GetTblBoxColStr( sal_uInt16 nCol, OUString& rNm );
-static void lcl_xmltble_appendBoxPrefix( OUStringBuffer& rBuffer,
-                                  const OUString& rNamePrefix,
+static OUString lcl_xmltble_appendBoxPrefix(const OUString& rNamePrefix,
                                   sal_uInt32 nCol, sal_uInt32 nRow, sal_Bool bTop )
 {
-    rBuffer.append( rNamePrefix );
-    rBuffer.append( '.' );
     if( bTop )
     {
         OUString sTmp;
         sw_GetTblBoxColStr( (sal_uInt16)nCol, sTmp );
-        rBuffer.append( sTmp );
+        return rNamePrefix + "." + sTmp + OUString::number(nRow + 1);
     }
-    else
-    {
-        rBuffer.append( (sal_Int32)(nCol + 1));
-        rBuffer.append( '.' );
-    }
-    rBuffer.append( (sal_Int32)(nRow + 1));
+    return rNamePrefix
+        + "." + OUString::number(nCol + 1)
+        + "." + OUString::number(nRow + 1);
 }
 
 bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
@@ -455,9 +449,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
 
     if( bInsert )
     {
-        OUStringBuffer sBuffer( rNamePrefix.getLength() + 8UL );
-        lcl_xmltble_appendBoxPrefix( sBuffer, rNamePrefix, nCol, nRow, bTop );
-        rFrmFmt.SetName( sBuffer.makeStringAndClear() );
+        rFrmFmt.SetName( lcl_xmltble_appendBoxPrefix( rNamePrefix, nCol, nRow, bTop ) );
         if ( i != aFormatList.end() ) ++i;
         aFormatList.insert( i, &rFrmFmt );
     }
@@ -692,14 +684,12 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             }
             else
             {
-                lcl_xmltble_appendBoxPrefix( sBuffer, rNamePrefix, nOldCol,
-                                             nLine, bTop );
-
                 ExportTableLinesAutoStyles( pBox->GetTabLines(),
                                             nAbsWidth, nBaseWidth,
-                                            sBuffer.makeStringAndClear(),
+                                            lcl_xmltble_appendBoxPrefix( rNamePrefix,
+                                                                         nOldCol, nLine, bTop ),
                                             rExpCols, rExpRows, rExpCells,
-                                             rTblInfo );
+                                            rTblInfo );
             }
 
             nCol++;
