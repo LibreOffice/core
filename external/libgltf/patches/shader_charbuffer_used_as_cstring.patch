@@ -1,0 +1,94 @@
+diff -ur libgltf.org/src/Common.cpp libgltf/src/Common.cpp
+--- libgltf.org/src/Common.cpp	2014-04-20 10:46:20.065036606 +0200
++++ libgltf/src/Common.cpp	2014-04-20 12:12:26.940821223 +0200
+@@ -521,8 +521,10 @@
+         if(vShaderIdx >= 0 && fShaderIdx >= 0)
+         {
+             const char* pvShader = pGltfHandle->files[vShaderIdx]->buffer;
++            size_t ivShaderSize = pGltfHandle->files[vShaderIdx]->size;
+             const char* pfShader = pGltfHandle->files[fShaderIdx]->buffer;
+-            mProgramId = mShaderProg.createProgram(pvShader, pfShader);
++            size_t ifShaderSize = pGltfHandle->files[fShaderIdx]->size;
++            mProgramId = mShaderProg.createProgram(pvShader, ivShaderSize, pfShader, ifShaderSize);
+         }
+         if (0 != mProgramId)
+         {
+diff -ur libgltf.org/src/Shaders.cpp libgltf/src/Shaders.cpp
+--- libgltf.org/src/Shaders.cpp	2014-04-20 10:46:20.065036606 +0200
++++ libgltf/src/Shaders.cpp	2014-04-20 12:15:42.683813064 +0200
+@@ -110,12 +110,12 @@
+ 	return programId;
+ }
+ 
+-unsigned int ShaderProgram::createProgram(const char* pvShader, const char* pfShader)
++unsigned int ShaderProgram::createProgram(const char* pvShader, size_t ivShaderSize, const char* pfShader, size_t ifShaderSize)
+ {
+     unsigned int programId = glCreateProgram();
+-    if (!loadShader(programId, pvShader, GL_VERTEX_SHADER))
++    if (!loadShader(programId, pvShader, ivShaderSize, GL_VERTEX_SHADER))
+         return 0;
+-    if (!loadShader(programId, pfShader, GL_FRAGMENT_SHADER))
++    if (!loadShader(programId, pfShader, ifShaderSize, GL_FRAGMENT_SHADER))
+         return 0;
+ 
+     return programId;
+@@ -142,7 +142,7 @@
+ 		return false;
+ 	}
+ 
+-	if (!compileShader(shaderCode.c_str(), shaderId))
++	if (!compileShader(shaderCode.c_str(), shader.length(), shaderId))
+ 	{
+ 		std::cout << "compileShader : compileShader failed." << std::endl;
+ 		return false;
+@@ -158,11 +158,11 @@
+ 	return true;
+ }
+ 
+-bool ShaderProgram::loadShader(unsigned int programId, const char* pShader, int type)
++bool ShaderProgram::loadShader(unsigned int programId, const char* pShader, size_t iSize, int type)
+ {
+     unsigned int shaderId = glCreateShader(type);
+ 
+-    if (!compileShader(pShader, shaderId))
++    if (!compileShader(pShader, iSize, shaderId))
+     {
+         std::cout << "compileShader : compileShader failed." << std::endl;
+         return false;
+@@ -178,9 +178,10 @@
+     return true;
+ }
+ 
+-bool ShaderProgram::compileShader(const char* pShader, unsigned int shaderId)
++bool ShaderProgram::compileShader(const char* pShader, size_t iSize, unsigned int shaderId)
+ {
+-	glShaderSource(shaderId, 1, &pShader, NULL);
++	GLint iGLSize = iSize;
++	glShaderSource(shaderId, 1, &pShader, &iGLSize);
+ 	glCompileShader(shaderId);
+ 	int iStatus = 0;
+ 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &iStatus);
+diff -ur libgltf.org/src/Shaders.h libgltf/src/Shaders.h
+--- libgltf.org/src/Shaders.h	2014-04-20 10:46:20.065036606 +0200
++++ libgltf/src/Shaders.h	2014-04-20 12:11:36.816823313 +0200
+@@ -39,17 +39,17 @@
+     void setUniform(unsigned int uProgId, const char* name, const glm::mat4 mMatrix);
+ 
+ 	unsigned int createProgram(const std::string& vName, const std::string& fName);
+-    unsigned int createProgram(const char* pvShader, const char* pfShader);
++    unsigned int createProgram(const char* pvShader, size_t ivShaderSize, const char* pfShader, size_t ifShaderSize);
+ 
+ 	void deleteProgram(unsigned int programId);
+ 
+ 	void useProgram(unsigned int programId);
+ 
+     bool loadShader(unsigned int programId, const std::string& shaderName, int type);
+-    bool loadShader(unsigned int programId, const char* pShader, int type);
++    bool loadShader(unsigned int programId, const char* pShader, size_t iSize, int type);
+ private:
+ 
+-	bool compileShader(const char* pShader, unsigned int shaderId);
++	bool compileShader(const char* pShader, size_t iSize, unsigned int shaderId);
+ 
+ 	bool linkProgram(unsigned int programId, unsigned int shaderId);
+ 

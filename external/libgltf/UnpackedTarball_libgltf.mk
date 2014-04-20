@@ -24,7 +24,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,libgltf,\
 	external/libgltf/patches/include_typo_texture.patch \
 	external/libgltf/patches/adress_of_temporary.patch \
 	external/libgltf/patches/avoid_c++11.patch \
-	external/libgltf/patches/charbuffer_used_as_cstring.patch \
+	external/libgltf/patches/json_charbuffer_used_as_cstring.patch \
+	external/libgltf/patches/shader_charbuffer_used_as_cstring.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
