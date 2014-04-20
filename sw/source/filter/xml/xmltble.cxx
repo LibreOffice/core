@@ -593,20 +593,16 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             }
             else
             {
-                sBuffer.append( rNamePrefix );
-                sBuffer.append( '.' );
                 if( bTop )
                 {
                     OUString sTmp;
                     sw_GetTblBoxColStr( nColumn, sTmp );
-                    sBuffer.append( sTmp );
+                    pColumn->SetStyleName( rNamePrefix + "." + sTmp );
                 }
                 else
                 {
-                    sBuffer.append( (sal_Int32)(nColumn + 1U) );
+                    pColumn->SetStyleName( rNamePrefix + "." + OUString::number(nColumn + 1U) );
                 }
-
-                pColumn->SetStyleName( sBuffer.makeStringAndClear() );
                 ExportTableColumnStyle( *pColumn );
                 rExpCols.insert( pColumn );
             }
@@ -663,8 +659,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                     {
                         Reference<XPropertySet> xCellPropertySet( xCell,
                                                                  UNO_QUERY );
-                        OUString sTextSection("TextSection");
-                        Any aAny = xCellPropertySet->getPropertyValue(sTextSection);
+                        Any aAny = xCellPropertySet->getPropertyValue("TextSection");
                         Reference < XTextSection > xTextSection;
                         aAny >>= xTextSection;
                         rTblInfo.SetBaseSection( xTextSection );
@@ -724,13 +719,12 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
         }
         ExportTableFmt( *pTblFmt, nAbsWidth );
 
-        OUString sName( pTblFmt->GetName() );
         SwXMLTableColumnsSortByWidth_Impl aExpCols;
         SwXMLTableFrmFmtsSort_Impl aExpRows;
         SwXMLTableFrmFmtsSort_Impl aExpCells;
         SwXMLTableInfo_Impl aTblInfo( &rTbl );
         ExportTableLinesAutoStyles( rTbl.GetTabLines(), nAbsWidth, nBaseWidth,
-                                    sName, aExpCols, aExpRows, aExpCells,
+                                    pTblFmt->GetName(), aExpCols, aExpRows, aExpCells,
                                     aTblInfo, sal_True);
     }
 }
@@ -756,18 +750,14 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
 
     if( nRowSpan != 1 )
     {
-        OUStringBuffer sTmp;
-        sTmp.append( (sal_Int32)nRowSpan );
         AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED,
-                      sTmp.makeStringAndClear() );
+                      OUString::number(nRowSpan) );
     }
 
     if( nColSpan != 1 )
     {
-        OUStringBuffer sTmp;
-        sTmp.append( (sal_Int32)nColSpan );
         AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_SPANNED,
-                      sTmp.makeStringAndClear() );
+                      OUString::number(nColSpan) );
     }
 
     {
@@ -784,13 +774,13 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                 Reference<XText> xText( xCell, UNO_QUERY );
 
                 // get formula (and protection)
-                OUString sCellFormula = xCell->getFormula();
+                const OUString sCellFormula = xCell->getFormula();
 
                 // if this cell has a formula, export it
                 //     (with value and number format)
                 if (!sCellFormula.isEmpty())
                 {
-                    OUString sQValue =
+                    const OUString sQValue =
                         GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_OOOW, sCellFormula, false );
                     // formula
@@ -833,8 +823,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
 
                     if( !rTblInfo.IsBaseSectionValid() )
                     {
-                        OUString sTextSection("TextSection");
-                        aAny = xCellPropertySet->getPropertyValue(sTextSection);
+                        aAny = xCellPropertySet->getPropertyValue("TextSection");
                         Reference < XTextSection > xTextSection;
                         aAny >>= xTextSection;
                         rTblInfo.SetBaseSection( xTextSection );
@@ -1010,10 +999,8 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
 
             if( nColRep > 1 )
             {
-                OUStringBuffer sTmp(4);
-                sTmp.append( nColRep );
                 AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,
-                              sTmp.makeStringAndClear() );
+                              OUString::number(nColRep) );
             }
 
             {
