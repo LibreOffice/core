@@ -73,8 +73,8 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     get(m_pRemovePB, "remove");
     get(m_pAssignPB, "apply");
 
-    sal_uInt16 nStrCount = m_pFilterLB->GetEntryCount();
-    for (sal_uInt16 i = 0; i < nStrCount; ++i)
+    const sal_Int32 nStrCount = m_pFilterLB->GetEntryCount();
+    for (sal_Int32 i = 0; i < nStrCount; ++i)
         m_aStrArr.push_back(m_pFilterLB->GetEntry(i));
     m_pFilterLB->Clear();
 
@@ -102,7 +102,7 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     size_t nCount = aFamilies.size();
     for( size_t i = 0; i < nCount; ++i )
     {
-        if(SFX_STYLE_FAMILY_PARA == (sal_uInt16)(pFamilyItem = aFamilies.at( i ))->GetFamily())
+        if(SFX_STYLE_FAMILY_PARA == (pFamilyItem = aFamilies.at( i ))->GetFamily())
             break;
     }
 
@@ -124,7 +124,7 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
 
 SwCondCollPage::~SwCondCollPage()
 {
-    for(sal_uInt16 i = 0; i < m_pFilterLB->GetEntryCount(); ++i)
+    for(sal_Int32 i = 0; i < m_pFilterLB->GetEntryCount(); ++i)
         delete (sal_uInt16*)m_pFilterLB->GetEntryData(i);
 
 }
@@ -252,8 +252,8 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     if (pBox == m_pFilterLB)
     {
         m_pStyleLB->Clear();
-        sal_uInt16 nSearchFlags = pBox->GetSelectEntryPos();
-        nSearchFlags = *(sal_uInt16*)m_pFilterLB->GetEntryData(nSearchFlags);
+        const sal_Int32 nSelPos = pBox->GetSelectEntryPos();
+        const sal_uInt16 nSearchFlags = *(sal_uInt16*)m_pFilterLB->GetEntryData(nSelPos);
         SfxStyleSheetBasePool* pPool = rSh.GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, nSearchFlags);
         const SfxStyleSheetBase* pBase = pPool->First();
