@@ -71,7 +71,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
     if(pTitle)
     {
         // Update title
-        SetText(GetText() + SW_RESSTR(STR_TEXTCOLL_HEADER) + *pTitle + OUString(')'));
+        SetText(GetText() + SW_RESSTR(STR_TEXTCOLL_HEADER) + *pTitle + ")");
     }
     // tabs common to paragraph and draw paragraphs (paragraphs inside a text box)
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
