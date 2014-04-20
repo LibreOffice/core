@@ -413,7 +413,6 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_FRAME, m_sText);
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_DRAWING, m_sDrawing);
 
-    sal_uInt16 i, nCount;
     SwWrtShell *pSh = ::GetActiveWrtShell();
 
     // m_pFormatBox
@@ -421,7 +420,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     if (pSh)
     {
         SwFieldType* pFldType;
-        for ( i = pMgr->GetFldTypeCount(); i; )
+        for ( sal_uInt16 i = pMgr->GetFldTypeCount(); i; )
         {
             pFldType = pMgr->GetFldType(USHRT_MAX, --i);
             if (pFldType->GetName().equals(m_pCategoryBox->GetText()))
@@ -434,8 +433,8 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
         ::FillCharStyleListBox( *m_pCharStyleLB, pSh->GetView().GetDocShell(), true, true );
     }
 
-    nCount = pMgr->GetFormatCount(TYP_SEQFLD, false);
-    for ( i = 0; i < nCount; ++i )
+    const sal_uInt16 nCount = pMgr->GetFormatCount(TYP_SEQFLD, false);
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         m_pFormatBox->InsertEntry( pMgr->GetFormatStr(TYP_SEQFLD, i) );
         const sal_uInt16 nFmtId = pMgr->GetFormatId(TYP_SEQFLD, i);
@@ -444,7 +443,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
             m_pFormatBox->SelectEntryPos( i );
     }
 
-    for (i = 0; i < MAXLEVEL; i++)
+    for (int i = 0; i < MAXLEVEL; ++i)
         m_pLbLevel->InsertEntry(OUString::number(i + 1));
 
     sal_Unicode nLvl = MAXLEVEL;
