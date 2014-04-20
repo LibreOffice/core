@@ -132,7 +132,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     sal_Bool bRet = sal_False;
     SwModule* pMod = SW_MOD();
 
-    sal_uInt16 nNewLinkMode = AUTOMATIC;
+    sal_Int32 nNewLinkMode = AUTOMATIC;
     if (m_pNeverRB->IsChecked())
         nNewLinkMode = NEVER;
     else if (m_pRequestRB->IsChecked())
@@ -168,8 +168,8 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     if ( nMPos != m_pMetricLB->GetSavedValue() )
     {
         // Double-Cast for VA3.0
-        sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
-        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)nFieldUnit ) );
+        const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
+        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
         bRet = sal_True;
     }
 
@@ -420,9 +420,8 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     sal_uInt16 nSelFmt = SVX_NUM_ARABIC;
     if (pSh)
     {
-        nCount = pMgr->GetFldTypeCount();
         SwFieldType* pFldType;
-        for ( i = nCount; i; )
+        for ( i = pMgr->GetFldTypeCount(); i; )
         {
             pFldType = pMgr->GetFldType(USHRT_MAX, --i);
             if (pFldType->GetName().equals(m_pCategoryBox->GetText()))
@@ -439,7 +438,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     for ( i = 0; i < nCount; ++i )
     {
         m_pFormatBox->InsertEntry( pMgr->GetFormatStr(TYP_SEQFLD, i) );
-        sal_uInt16 nFmtId = pMgr->GetFormatId(TYP_SEQFLD, i);
+        const sal_uInt16 nFmtId = pMgr->GetFormatId(TYP_SEQFLD, i);
         m_pFormatBox->SetEntryData( i, reinterpret_cast<void*>(nFmtId) );
         if( nFmtId == nSelFmt )
             m_pFormatBox->SelectEntryPos( i );
@@ -618,7 +617,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
         m_pCategoryBox->InsertEntry(m_sNone);
         if (pSh)
         {
-            sal_uInt16 nCount = pMgr->GetFldTypeCount();
+            const sal_uInt16 nCount = pMgr->GetFldTypeCount();
 
             for (sal_uInt16 i = 0; i < nCount; i++)
             {
@@ -794,7 +793,7 @@ void SwCaptionOptPage::DrawSample()
         //#i61007# order of captions
         bool bOrderNumberingFirst = m_pLbCaptionOrder->GetSelectEntryPos() == 1;
         // number
-        sal_uInt16 nNumFmt = (sal_uInt16)(sal_uLong)m_pFormatBox->GetEntryData(
+        const sal_uInt16 nNumFmt = (sal_uInt16)(sal_uLong)m_pFormatBox->GetEntryData(
                                         m_pFormatBox->GetSelectEntryPos() );
         if( SVX_NUM_NUMBER_NONE != nNumFmt )
         {
