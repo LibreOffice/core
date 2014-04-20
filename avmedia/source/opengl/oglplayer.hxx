@@ -14,6 +14,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
+#include <libgltf.h>
 
 namespace avmedia { namespace ogl {
 
@@ -54,6 +55,7 @@ public:
 
 private:
     OUString m_sURL;
+    glTFHandle* m_pHandle;
 };
 
 } // namespace ogl

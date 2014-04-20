@@ -12,6 +12,11 @@
 #include "oglwindow.hxx"
 
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/stream.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <tools/urlobj.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 using namespace com::sun::star;
 
@@ -26,9 +31,66 @@ OGLPlayer::~OGLPlayer()
 {
 }
 
+static bool lcl_LoadFile( glTFFile* io_pFile, const OUString& rURL)
+{
+    SvFileStream aStream( rURL, STREAM_READ );
+    if( !aStream.IsOpen() )
+        return false;
+
+    const sal_Int64 nBytes = aStream.remainingSize();
+    char* pBuffer = new char[nBytes];
+    aStream.Read( pBuffer, nBytes );
+    aStream.Close();
+
+    io_pFile->buffer = pBuffer;
+    io_pFile->size = nBytes;
+
+    return true;
+}
+
 bool OGLPlayer::create( const OUString& rURL )
 {
     m_sURL = rURL;
+
+    // Load *.json file and init renderer
+    glTFFile aJsonFile;
+    aJsonFile.type = GLTF_JSON;
+    OString sFileName = OUStringToOString(m_sURL.copy(m_sURL.lastIndexOf("/")+1),RTL_TEXTENCODING_UTF8);
+    aJsonFile.filename = (char*)sFileName.getStr();
+    if( !lcl_LoadFile(&aJsonFile, m_sURL) )
+        return false;
+
+    m_pHandle = gltf_renderer_init(&aJsonFile);
+
+    if( !m_pHandle || !m_pHandle->files )
+        return false;
+
+    // Load external resources
+    for( size_t i = 0; i < m_pHandle->size; ++i )
+    {
+        glTFFile* pFile = m_pHandle->files[i];
+        if( pFile && pFile->filename )
+        {
+            const OUString sFilesURL = m_sURL.copy(0,m_sURL.lastIndexOf("/")+1) +
+                OStringToOUString(OString(pFile->filename),RTL_TEXTENCODING_UTF8);
+            if( pFile->type == GLTF_IMAGE )
+            {
+                // Load images as bitmaps
+                GraphicFilter aFilter;
+                Graphic aGraphic;
+                aFilter.ImportGraphic(aGraphic, INetURLObject(sFilesURL));
+                const BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
+                pFile->buffer = (char*)OpenGLHelper::ConvertBitmapExToRGBABuffer(aBitmapEx);
+                pFile->imagewidth = aBitmapEx.GetSizePixel().Width();
+                pFile->imageheight = aBitmapEx.GetSizePixel().Height();
+            }
+            else if( pFile->type == GLTF_BINARY || pFile->type == GLTF_GLSL )
+            {
+                if( !lcl_LoadFile(pFile, sFilesURL) )
+                    return false;
+            }
+        }
+    }
     return true;
 }
 

@@ -13,7 +13,17 @@ $(eval $(call gb_Library_set_componentfile,avmediaogl,avmedia/source/opengl/avme
 
 $(eval $(call gb_Library_use_sdk_api,avmediaogl))
 
-$(eval $(call gb_Library_use_external,avmediaogl,boost_headers))
+# Avoid warnings until libgltf's interface is minimized
+$(eval $(call gb_Library_add_cxxflags,avmediaogl,-w))
+
+$(eval $(call gb_Library_use_externals,avmediaogl, \
+    boost_headers \
+    libgltf \
+    mesa_headers \
+    glew \
+    zlib \
+    freetype \
+))
 
 $(eval $(call gb_Library_use_libraries,avmediaogl,\
     comphelper \
@@ -23,7 +33,12 @@ $(eval $(call gb_Library_use_libraries,avmediaogl,\
     salhelper \
     tl \
     vcl \
+    vclopengl \
     $(gb_UWINAPI) \
+))
+
+$(eval $(call gb_Library_set_include,avmediaogl,\
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,avmediaogl,\
@@ -33,5 +48,24 @@ $(eval $(call gb_Library_add_exception_objects,avmediaogl,\
     avmedia/source/opengl/ogluno \
     avmedia/source/opengl/oglwindow \
 ))
+
+ifeq ($(strip $(OS)),WNT)
+$(eval $(call gb_Library_use_system_win32_libs,avmediaogl,\
+    opengl32 \
+    gdi32 \
+    glu32 \
+))
+else ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_use_system_darwin_frameworks,avmediaogl,\
+	OpenGL \
+))
+else ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,avmediaogl,\
+    -ldl \
+    -lGL \
+    -lGLU \
+    -lX11 \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
