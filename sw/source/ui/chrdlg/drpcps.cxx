@@ -713,8 +713,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
     {
         const sal_Int32 nTmp = m_pTextEdit->GetText().getLength();
         m_pDropCapsField->SetValue(std::max<sal_Int32>(1, nTmp));
-
-        sPreview = m_pTextEdit->GetText().copy(0, nTmp);
+        sPreview = m_pTextEdit->GetText();
     }
 
     // adjust image
