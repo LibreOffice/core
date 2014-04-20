@@ -338,7 +338,7 @@ private:
     void    convertOneTypeOp( void);
     void    convertOneTypeEsc( void);
     void    callType2Subr( bool bGlobal, int nSubrNumber);
-    long    getReadOfs( void) const { return (long)(mpReadPtr - mpBasePtr);}
+    sal_Int32 getReadOfs( void) const { return (sal_Int32)(mpReadPtr - mpBasePtr);}
 
     const U8* mpBasePtr;
     const U8* mpBaseEnd;
@@ -350,7 +350,7 @@ private:
     bool    mbSawError;
     bool    mbNeedClose;
     bool    mbIgnoreHints;
-    long    mnCntrMask;
+    sal_Int32 mnCntrMask;
 
 private:
     int     seekIndexData( int nIndexBase, int nDataIndex);
@@ -824,7 +824,7 @@ void CffSubsetterContext::convertOneTypeOp( void)
         mpReadPtr += (mnHintSize + 15) / 16;
 #else
         {
-        long nHintMask = 0;
+        sal_Int32 nHintMask = 0;
         int nCntrBits[2] = {0,0};
         U8 nMaskBit = 0;
         U8 nMaskByte = 0;
@@ -1471,7 +1471,7 @@ void CffSubsetterContext::initialCffRead( void)
     seekIndexEnd( mnNameIdxBase);
 
     // get the TopDict index
-    const long nTopDictBase = getReadOfs();
+    const sal_Int32 nTopDictBase = getReadOfs();
     const int nTopDictCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
     if( nTopDictCount) {
         for( int i = 0; i < nTopDictCount; ++i) {
@@ -2166,10 +2166,10 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         fXFactor = 1000.0F * maFontMatrix[0];
         fYFactor = 1000.0F * maFontMatrix[3];
     }
-    rFSInfo.m_aFontBBox = Rectangle( Point( static_cast<long>(maFontBBox[0] * fXFactor),
-                                        static_cast<long>(maFontBBox[1] * fYFactor) ),
-                                    Point( static_cast<long>(maFontBBox[2] * fXFactor),
-                                        static_cast<long>(maFontBBox[3] * fYFactor) ) );
+    rFSInfo.m_aFontBBox = Rectangle( Point( static_cast<sal_Int32>(maFontBBox[0] * fXFactor),
+                                        static_cast<sal_Int32>(maFontBBox[1] * fYFactor) ),
+                                    Point( static_cast<sal_Int32>(maFontBBox[2] * fXFactor),
+                                        static_cast<sal_Int32>(maFontBBox[3] * fYFactor) ) );
     // PDF-Spec says the values below mean the ink bounds!
     // TODO: use better approximations for these ink bounds
     rFSInfo.m_nAscent  = +rFSInfo.m_aFontBBox.Bottom(); // for capital letters
