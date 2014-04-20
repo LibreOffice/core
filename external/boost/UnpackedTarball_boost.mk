@@ -54,7 +54,7 @@ boost_patches += boost.preprocessor.Wundef.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9892
 boost_patches += boost.property_tree.Wshadow.warnings.patch.1
 # https://svn.boost.org/trac/boost/ticket/9893
-boost_patches += boost.property_tree.Wtautological-constant-out-of-range-compare.warnings.patch.0
+boost_patches += boost.property_tree.Wtype-limits.warnings.patch.1
 # https://svn.boost.org/trac/boost/ticket/9894
 boost_patches += boost.ptr_container.Wshadow.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9895

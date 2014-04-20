@@ -1,0 +1,41 @@
+diff -ur boost.org/boost/property_tree/detail/json_parser_write.hpp boost/boost/property_tree/detail/json_parser_write.hpp
+--- boost.org/boost/property_tree/detail/json_parser_write.hpp	2014-04-20 13:27:59.126224368 +0300
++++ boost/boost/property_tree/detail/json_parser_write.hpp	2014-04-20 13:32:35.206229552 +0300
+@@ -29,25 +29,26 @@
+         typename std::basic_string<Ch>::const_iterator e = s.end();
+         while (b != e)
+         {
++            typename std::basic_string<Ch>::traits_type::int_type bDref = *b;
+             // This assumes an ASCII superset. But so does everything in PTree.
+             // We escape everything outside ASCII, because this code can't
+             // handle high unicode characters.
+-            if (*b == 0x20 || *b == 0x21 || (*b >= 0x23 && *b <= 0x2E) ||
+-                (*b >= 0x30 && *b <= 0x5B) || (*b >= 0x5D && *b <= 0xFF))
+-                result += *b;
+-            else if (*b == Ch('\b')) result += Ch('\\'), result += Ch('b');
+-            else if (*b == Ch('\f')) result += Ch('\\'), result += Ch('f');
+-            else if (*b == Ch('\n')) result += Ch('\\'), result += Ch('n');
+-            else if (*b == Ch('\r')) result += Ch('\\'), result += Ch('r');
+-            else if (*b == Ch('/')) result += Ch('\\'), result += Ch('/');
+-            else if (*b == Ch('"'))  result += Ch('\\'), result += Ch('"');
+-            else if (*b == Ch('\\')) result += Ch('\\'), result += Ch('\\');
++            if (bDref == 0x20 || bDref == 0x21 || (bDref >= 0x23 && bDref <= 0x2E) ||
++                (bDref >= 0x30 && bDref <= 0x5B) || (bDref >= 0x5D && bDref <= 0xFF))
++                result += bDref;
++            else if (bDref == Ch('\b')) result += Ch('\\'), result += Ch('b');
++            else if (bDref == Ch('\f')) result += Ch('\\'), result += Ch('f');
++            else if (bDref == Ch('\n')) result += Ch('\\'), result += Ch('n');
++            else if (bDref == Ch('\r')) result += Ch('\\'), result += Ch('r');
++            else if (bDref == Ch('/')) result += Ch('\\'), result += Ch('/');
++            else if (bDref == Ch('"'))  result += Ch('\\'), result += Ch('"');
++            else if (bDref == Ch('\\')) result += Ch('\\'), result += Ch('\\');
+             else
+             {
+                 const char *hexdigits = "0123456789ABCDEF";
+                 typedef typename make_unsigned<Ch>::type UCh;
+                 unsigned long u = (std::min)(static_cast<unsigned long>(
+-                                                 static_cast<UCh>(*b)),
++                                                 static_cast<UCh>(bDref)),
+                                              0xFFFFul);
+                 int d1 = u / 4096; u -= d1 * 4096;
+                 int d2 = u / 256; u -= d2 * 256;
