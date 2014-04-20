@@ -40,9 +40,6 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::uno;
 using namespace ::std;
 
-#define DEFAULT_ENTRY       COMPATIBILITY_DEFAULT_NAME
-#define USER_ENTRY          "_user"
-
 // struct CompatibilityItem ----------------------------------------------
 
 struct CompatibilityItem
@@ -112,7 +109,7 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(Window* pParent, const SfxItemSet
 
     for (sal_Int32 nId = COPT_USE_PRINTERDEVICE; nId <= COPT_EXPAND_WORDSPACE; ++nId)
     {
-        OUString sEntry = m_pFormattingLB->GetEntry(nId);
+        const OUString sEntry = m_pFormattingLB->GetEntry(nId);
         SvTreeListEntry* pEntry = m_pOptionsLB->SvTreeListBox::InsertEntry( sEntry );
         if ( pEntry )
         {
@@ -264,20 +261,23 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
                 aValue.Value >>= bExpandWordSpace;
         }
 
+        const bool bIsUserEntry = sName == "_user";
+        const bool bIsDefaultEntry = sName == COMPATIBILITY_DEFAULT_NAME;
+
         CompatibilityItem aItem(
             sName, sModule, bUsePrtMetrics, bAddSpacing,
             bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading,
             bUseLineSpacing, bAddTableSpacing, bUseObjPos,
             bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace,
-            sName.equals( DEFAULT_ENTRY ),
-            sName.equals( USER_ENTRY ) );
+            bIsDefaultEntry,
+            bIsUserEntry );
         m_pImpl->m_aList.push_back( aItem );
 
         if ( aItem.m_bIsDefault )
             continue;
 
         OUString sNewEntry;
-        if ( sName.equals( USER_ENTRY ) )
+        if ( bIsUserEntry )
             sNewEntry = m_sUserEntry;
         else if ( pObjShell && !sName.isEmpty() )
         {
