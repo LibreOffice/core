@@ -67,7 +67,7 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
 {
     if(pStr)
     {
-        SetText(GetText() + SW_RESSTR(STR_TEXTCOLL_HEADER) + *pStr + OUString(')'));
+        SetText(GetText() + SW_RESSTR(STR_TEXTCOLL_HEADER) + *pStr + ")");
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -238,14 +238,12 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
 
 bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 {
-   OUString sURL = m_pURLED->GetText();
-   if(!sURL.isEmpty())
+    OUString sURL = m_pURLED->GetText();
+    if(!sURL.isEmpty())
     {
         sURL = URIHelper::SmartRel2Abs(INetURLObject(), sURL, Link(), false );
         // #i100683# file URLs should be normalized in the UI
-        static const sal_Char* pFile = "file:";
-       sal_Int32 nLength = ((sal_Int32)sizeof(pFile)-1);
-       if( sURL.copy(0, nLength ).equalsAsciiL( pFile, nLength ))
+        if ( sURL.startsWith("file:") )
             sURL = URIHelper::simpleNormalizedMakeRelative(OUString(), sURL);
     }
 
