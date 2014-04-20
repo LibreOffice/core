@@ -148,7 +148,7 @@ bool SwCondCollPage::FillItemSet(SfxItemSet &rSet)
     SwCondCollItem aCondItem;
     for (size_t i = 0; i < m_aStrArr.size(); ++i)
     {
-        OUString sEntry = m_pTbLinks->GetEntryText(i, 1);
+        const OUString sEntry = m_pTbLinks->GetEntryText(i, 1);
         aCondItem.SetStyle( &sEntry, i);
     }
     rSet.Put(aCondItem);
@@ -229,8 +229,7 @@ IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
         return 0;
     }
 
-    OUString sSel = m_aStrArr[nPos];
-    sSel += "\t";
+    OUString sSel = m_aStrArr[nPos] + "\t";
 
     const sal_Bool bAssEnabled = pBtn != m_pRemovePB && m_pAssignPB->IsEnabled();
     m_pAssignPB->Enable( !bAssEnabled );
@@ -270,12 +269,11 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     }
     else
     {
-        OUString sTbEntry;
         SvTreeListEntry* pE = m_pTbLinks->FirstSelected();
-        if(pE)
-            sTbEntry = m_pTbLinks->GetEntryText(pE);
-        sTbEntry = sTbEntry.getToken(1, '\t');
-        OUString sStyle = m_pStyleLB->GetSelectEntry();
+        const OUString sTbEntry = pE
+            ? m_pTbLinks->GetEntryText(pE).getToken(1, '\t')
+            : OUString();
+        const OUString sStyle = m_pStyleLB->GetSelectEntry();
 
         m_pAssignPB->Enable( sStyle != sTbEntry && m_pConditionCB->IsChecked() );
 
