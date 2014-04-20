@@ -85,7 +85,7 @@ SwLoadOptPage::SwLoadOptPage(Window* pParent, const SfxItemSet& rSet)
     SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
     for ( sal_uInt32 i = 0; i < aMetricArr.Count(); ++i )
     {
-        OUString sMetric = aMetricArr.GetStringByPos( i );
+        const OUString sMetric = aMetricArr.GetStringByPos( i );
         FieldUnit eFUnit = (FieldUnit)aMetricArr.GetValue( i );
 
         switch ( eFUnit )
@@ -537,8 +537,8 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     SetOptions(nPos++, GRAPHIC_CAP);
 
     // get Productname and -version
-    OUString sWithoutVersion( utl::ConfigManager::getProductName() );
-    OUString sComplete(
+    const OUString sWithoutVersion( utl::ConfigManager::getProductName() );
+    const OUString sComplete(
         sWithoutVersion + " " +
         utl::ConfigManager::getProductVersion() );
 
@@ -639,7 +639,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
         else
             m_pCategoryBox->SetText(m_sNone);
         if (!pOpt->GetCategory().isEmpty() &&
-            m_pCategoryBox->GetEntryPos(OUString(pOpt->GetCategory())) == COMBOBOX_ENTRY_NOTFOUND)
+            m_pCategoryBox->GetEntryPos(pOpt->GetCategory()) == COMBOBOX_ENTRY_NOTFOUND)
             m_pCategoryBox->InsertEntry(pOpt->GetCategory());
         if (m_pCategoryBox->GetText().isEmpty())
         {
@@ -719,13 +719,13 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
         InsCaptionOpt* pOpt = (InsCaptionOpt*)pEntry->GetUserData();
 
         pOpt->UseCaption() = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pEntry));
-        OUString aName( m_pCategoryBox->GetText() );
+        const OUString aName( m_pCategoryBox->GetText() );
         if (aName == m_sNone)
-            pOpt->SetCategory(aEmptyOUStr);
+            pOpt->SetCategory("");
         else
             pOpt->SetCategory(comphelper::string::strip(aName, ' '));
         pOpt->SetNumType((sal_uInt16)(sal_uLong)m_pFormatBox->GetEntryData(m_pFormatBox->GetSelectEntryPos()));
-        pOpt->SetCaption(m_pTextEdit->IsEnabled() ? m_pTextEdit->GetText() : OUString(aEmptyOUStr) );
+        pOpt->SetCaption(m_pTextEdit->IsEnabled() ? m_pTextEdit->GetText() : OUString() );
         pOpt->SetPos(m_pPosBox->GetSelectEntryPos());
         sal_Int32 nPos = m_pLbLevel->GetSelectEntryPos();
         sal_Int32 nLevel = ( nPos > 0 && nPos != LISTBOX_ENTRY_NOTFOUND ) ? nPos - 1 : MAXLEVEL;
@@ -733,7 +733,7 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
         pOpt->SetSeparator(m_pEdDelim->GetText());
         pOpt->SetNumSeparator( m_pNumberingSeparatorED->GetText());
         if(!m_pCharStyleLB->GetSelectEntryPos())
-            pOpt->SetCharacterStyle(aEmptyOUStr);
+            pOpt->SetCharacterStyle("");
         else
             pOpt->SetCharacterStyle(m_pCharStyleLB->GetSelectEntry());
         pOpt->CopyAttributes() = m_pApplyBorderCB->IsChecked();
@@ -742,7 +742,7 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
 
 IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
 {
-    OUString sFldTypeName = m_pCategoryBox->GetText();
+    const OUString sFldTypeName = m_pCategoryBox->GetText();
 
     SfxSingleTabDialog *pDlg = dynamic_cast<SfxSingleTabDialog*>(GetParentDialog());
     PushButton *pBtn = pDlg ? pDlg->GetOKButton() : NULL;
@@ -800,16 +800,14 @@ void SwCaptionOptPage::DrawSample()
             if( !bOrderNumberingFirst )
             {
                 // category
-                aStr += m_pCategoryBox->GetText();
-                aStr += " ";
+                aStr += m_pCategoryBox->GetText() + " ";
             }
 
             SwWrtShell *pSh = ::GetActiveWrtShell();
-            OUString sFldTypeName( m_pCategoryBox->GetText() );
             if (pSh)
             {
                 SwSetExpFieldType* pFldType = (SwSetExpFieldType*)pMgr->GetFldType(
-                                                RES_SETEXPFLD, sFldTypeName );
+                                                RES_SETEXPFLD, m_pCategoryBox->GetText() );
                 if( pFldType && pFldType->GetOutlineLvl() < MAXLEVEL )
                 {
                     sal_uInt8 nLvl = pFldType->GetOutlineLvl();
@@ -817,10 +815,10 @@ void SwCaptionOptPage::DrawSample()
                     for( sal_uInt8 i = 0; i <= nLvl; ++i )
                         aNumVector.push_back(1);
 
-                    OUString sNumber( pSh->GetOutlineNumRule()->MakeNumString(
+                    const OUString sNumber( pSh->GetOutlineNumRule()->MakeNumString(
                                                             aNumVector, sal_False ));
                     if( !sNumber.isEmpty() )
-                        (aStr += sNumber) += pFldType->GetDelimiter();
+                        aStr += sNumber + pFldType->GetDelimiter();
                 }
             }
 
@@ -839,8 +837,7 @@ void SwCaptionOptPage::DrawSample()
         //#i61007# order of captions
         if( bOrderNumberingFirst )
         {
-            aStr += m_pNumberingSeparatorED->GetText();
-            aStr += m_pCategoryBox->GetText();
+            aStr += m_pNumberingSeparatorED->GetText() + m_pCategoryBox->GetText();
         }
         aStr += m_pTextEdit->GetText();
     }
