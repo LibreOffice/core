@@ -815,6 +815,10 @@ AC_ARG_ENABLE(lpsolve,
     AS_HELP_STRING([--disable-lpsolve],
         [Disable compilation of the lp solve solver ])
 )
+AC_ARG_ENABLE(coinmp,
+    AS_HELP_STRING([--disable-coinmp],
+        [Disable compilation of the CoinMP solver ])
+)
 
 AC_ARG_ENABLE(pdfimport,
     AS_HELP_STRING([--disable-pdfimport],
