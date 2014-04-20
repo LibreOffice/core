@@ -157,16 +157,14 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS )
 
     // Insert page description to Listbox
     const sal_uInt16 nCount = rSh.GetPageDescCnt();
-    sal_uInt16 i;
-
-    for( i = 0; i < nCount; ++i)
+    for( sal_uInt16 i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = rSh.GetPageDesc(i);
         ::InsertStringSorted(rPageDesc.GetName(), *m_pPageCollBox, 1 );
     }
 
     OUString aFmtName;
-    for(i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
+    for(sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
         if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos( aFmtName =
                                     SwStyleNameMapper::GetUIName( i, aFmtName )))
             ::InsertStringSorted(aFmtName, *m_pPageCollBox, 1 );
