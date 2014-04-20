@@ -181,11 +181,7 @@ class SwXMLTableFrmFmtsSort_Impl
 {
 private:
     SwXMLFrmFmts_Impl aFormatList;
-
 public:
-    SwXMLTableFrmFmtsSort_Impl ( sal_uInt16 /* nInit */, sal_uInt16 /*nGrow*/ )
-    {}
-
     bool AddRow( SwFrmFmt& rFrmFmt, const OUString& rNamePrefix, sal_uInt32 nLine );
     bool AddCell( SwFrmFmt& rFrmFmt, const OUString& rNamePrefix,
                   sal_uInt32 nCol, sal_uInt32 nRow, sal_Bool bTop );
@@ -740,8 +736,8 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
 
         OUString sName( pTblFmt->GetName() );
         SwXMLTableColumnsSortByWidth_Impl aExpCols;
-        SwXMLTableFrmFmtsSort_Impl aExpRows( 10, 10 );
-        SwXMLTableFrmFmtsSort_Impl aExpCells( 10, 10 );
+        SwXMLTableFrmFmtsSort_Impl aExpRows;
+        SwXMLTableFrmFmtsSort_Impl aExpCells;
         SwXMLTableInfo_Impl aTblInfo( &rTbl );
         ExportTableLinesAutoStyles( rTbl.GetTabLines(), nAbsWidth, nBaseWidth,
                                     sName, aExpCols, aExpRows, aExpCells,
