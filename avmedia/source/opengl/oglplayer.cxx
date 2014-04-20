@@ -196,7 +196,10 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
      throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    OGLFrameGrabber *pFrameGrabber = new OGLFrameGrabber( m_sURL );
+    m_aContext.init();
+    m_pHandle->viewport = glTFViewport({0,0,800,600}); //TODO: Use real values instead of constants.
+    gltf_renderer_set_content(m_pHandle);
+    OGLFrameGrabber *pFrameGrabber = new OGLFrameGrabber( m_pHandle );
     return uno::Reference< media::XFrameGrabber >( pFrameGrabber );;
 }
 

@@ -385,19 +385,19 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
 
 
 
-uno::Reference< media::XPlayer > MediaWindow::createPlayer( const OUString& rURL, const OUString& rReferer )
+uno::Reference< media::XPlayer > MediaWindow::createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType )
 {
-    return priv::MediaWindowImpl::createPlayer( rURL, rReferer );
+    return priv::MediaWindowImpl::createPlayer( rURL, rReferer, pMimeType );
 }
 
 
 
 uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL,
                                                             const OUString& rReferer,
-                                                            bool bAllowToCreateReplacementGraphic,
+                                                            const OUString& sMimeType,
                                                             double fMediaTime )
 {
-    uno::Reference< media::XPlayer >    xPlayer( createPlayer( rURL, rReferer ) );
+    uno::Reference< media::XPlayer >    xPlayer( createPlayer( rURL, rReferer, &sMimeType ) );
     uno::Reference< graphic::XGraphic > xRet;
     boost::scoped_ptr< Graphic > apGraphic;
 
@@ -416,7 +416,7 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
             xRet = xGrabber->grabFrame( fMediaTime );
         }
 
-        if( !xRet.is() && bAllowToCreateReplacementGraphic  )
+        if( !xRet.is() )
         {
             awt::Size aPrefSize( xPlayer->getPreferredPlayerWindowSize() );
 
@@ -428,7 +428,7 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
         }
     }
 
-    if( !xRet.is() && !apGraphic.get() && bAllowToCreateReplacementGraphic )
+    if( !xRet.is() && !apGraphic.get() )
     {
         const BitmapEx aBmpEx( getEmptyLogo() );
         apGraphic.reset( new Graphic( aBmpEx ) );

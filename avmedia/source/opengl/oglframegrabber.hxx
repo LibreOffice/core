@@ -14,6 +14,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XFrameGrabber.hpp>
 
+#include <libgltf.h>
+
 namespace avmedia { namespace ogl {
 
 typedef ::cppu::WeakImplHelper2< com::sun::star::media::XFrameGrabber,
@@ -23,7 +25,7 @@ class OGLFrameGrabber : public FrameGrabber_BASE
 {
 public:
 
-    OGLFrameGrabber( const OUString& rURL );
+    OGLFrameGrabber( glTFHandle* pHandle );
     virtual ~OGLFrameGrabber();
 
     // XFrameGrabber
@@ -33,6 +35,9 @@ public:
     virtual OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+private:
+    glTFHandle* m_pHandle;
 };
 
 } // namespace ogl

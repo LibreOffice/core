@@ -102,11 +102,10 @@ namespace avmedia
         static void         executeFormatErrorBox( Window* pParent );
         static bool         isMediaURL( const OUString& rURL, const OUString& rReferer, bool bDeep = false, Size* pPreferredSizePixel = NULL );
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer );
+        static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = 0 );
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > grabFrame( const OUString& rURL, const OUString& rReferer,
-                                                                                                  bool bAllowToCreateReplacementGraphic = false,
-                                                                                                  double fMediaTime = AVMEDIA_FRAMEGRABBER_DEFAULTFRAME );
+            const OUString& sMimeType, double fMediaTime = AVMEDIA_FRAMEGRABBER_DEFAULTFRAME );
 
         static BitmapEx getAudioLogo();
         static BitmapEx getEmptyLogo();

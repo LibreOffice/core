@@ -205,7 +205,7 @@ MediaWindowImpl::~MediaWindowImpl()
     delete mpMediaWindowControl;
 }
 
-uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& rURL, const OUString& rReferer, OUString* pMimeType )
+uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType )
 {
 
     uno::Reference< media::XPlayer > xPlayer;

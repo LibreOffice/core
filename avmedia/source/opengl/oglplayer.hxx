@@ -15,6 +15,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <libgltf.h>
+#include <vcl/opengl/OpenGLContext.hxx>
 
 namespace avmedia { namespace ogl {
 
@@ -56,6 +57,7 @@ public:
 private:
     OUString m_sURL;
     glTFHandle* m_pHandle;
+    OpenGLContext m_aContext;
 };
 
 } // namespace ogl

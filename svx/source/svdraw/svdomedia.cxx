@@ -171,7 +171,7 @@ uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot()
         OUString aRealURL = m_pImpl->m_MediaProperties.getTempURL();
         if( aRealURL.isEmpty() )
             aRealURL = m_pImpl->m_MediaProperties.getURL();
-        m_pImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame( aRealURL, m_pImpl->m_MediaProperties.getReferer(), true );
+        m_pImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame( aRealURL, m_pImpl->m_MediaProperties.getReferer(), m_pImpl->m_MediaProperties.getMimeType());
     }
     return m_pImpl->m_xCachedSnapshot;
 }
