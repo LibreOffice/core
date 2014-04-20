@@ -349,7 +349,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
      }
      catch(const Exception&)
     {
-         OSL_FAIL( "XMLTableExport::exportTable(), exception cought!" );
+         OSL_FAIL( "XMLTableExport::exportTable(), exception caught!" );
      }
  }
 

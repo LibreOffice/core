@@ -1352,7 +1352,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
     }
     catch (const Exception&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportAnimate(), Exception cought!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportAnimate(), exception caught!" );
     }
 }
 

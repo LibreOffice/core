@@ -413,7 +413,7 @@ void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode
     }
     catch( Exception& )
     {
-        OSL_FAIL( "(@CL)AnimationExporter::processAfterEffectNodes(), exception cought!" );
+        OSL_FAIL( "(@CL)AnimationExporter::processAfterEffectNodes(), exception caught!" );
     }
 }
 

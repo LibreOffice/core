@@ -104,7 +104,7 @@ public class _XIndexAccess extends MultiMethodTest {
                 log.println("no exception thrown - FAILED");
                 result = false;
             } catch (IndexOutOfBoundsException e) {
-                    log.println("Expected exception cought! " + e + " OK");
+                    log.println("Expected exception caught! " + e + " OK");
             } catch (WrappedTargetException e) {
                     log.println("Wrong exception! " + e + " FAILED");
                     result = false;

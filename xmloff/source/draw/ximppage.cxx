@@ -337,7 +337,7 @@ void SdXMLGenericPageContext::EndElement()
         }
         catch(const uno::Exception&)
         {
-            OSL_FAIL("xmloff::SdXMLGenericPageContext::EndElement(), unexpected exception cought!");
+            OSL_FAIL("xmloff::SdXMLGenericPageContext::EndElement(), unexpected exception caught!");
         }
     }
 
@@ -612,7 +612,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
     }
     catch(const uno::Exception&)
     {
-        OSL_FAIL("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), unexpected exception cought while importing shape navigation order!");
+        OSL_FAIL("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), unexpected exception caught while importing shape navigation order!");
     }
 }
 
