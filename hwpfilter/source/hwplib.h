@@ -23,7 +23,7 @@
 
 #include <string>
 
-/* hwp96ºÎÅÍ hunit°¡ 4byte°¡ µÇ¾ú´Ù. */
+/* hwp96ë¶€í„° hunitê°€ 4byteê°€ ë˜ì—ˆë‹¤. */
 /**
  * size of hunit is 4 since hwp96 version
  */
@@ -124,11 +124,11 @@ typedef struct
 #define ONE_MILI        (71)
 #define ONE_DOT         (19)
 
-/* HWP 3.0 ¹®¼­ Á¤º¸ */
+/* HWP 3.0 ë¬¸ì„œ ì •ë³´ */
 
 #define NLanguage       7
 
-/* Á¦¾î ¹®ÀÚ */
+/* ì œì–´ ë¬¸ì */
 /**
  * Control character
  */

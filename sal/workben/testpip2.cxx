@@ -22,7 +22,7 @@
 
 #include <osl/pipe.h>
 
-// eindeutiger Name fr die Pipe
+// eindeutiger Name fÃ¼r die Pipe
 const char pszPipeName[] = "TestPipe";
 
 oslPipe Pipe;
@@ -62,7 +62,7 @@ int main (void)
 
     printf( "TestPipe Client: data received: %s.\n", szBuffer );
 
-    // Sende die Daten wieder zurck.
+    // Sende die Daten wieder zurÃ¼ck.
     nChars = osl_sendPipe( Pipe, szBuffer, nChars );
 
     if( nChars < 0 )

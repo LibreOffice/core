@@ -53,7 +53,7 @@ class HWPPara;
 
 struct LineInfo
 {
-/* ½ÃÀÛÇÏ´Â ±ÛÀÚÀÇ À§Ä¡ : ÄÜÆ®·ÑÀº ¿©·¯ ±æÀÌ¸¦ °¡Áø´Ù */
+/* ì‹œì‘í•˜ëŠ” ê¸€ìì˜ ìœ„ì¹˜ : ì½˜íŠ¸ë¡¤ì€ ì—¬ëŸ¬ ê¸¸ì´ë¥¼ ê°€ì§„ë‹¤ */
 /**
  * Starting character position
  */
@@ -84,7 +84,7 @@ class DLLEXPORT HWPPara
 /**
  * Zero is for the new paragraph style.
  */
-        unsigned char     reuse_shape;            /* 0ÀÌ¸é »õ¸ğ¾ç */
+        unsigned char     reuse_shape;            /* 0ì´ë©´ ìƒˆëª¨ì–‘ */
         unsigned short    nch;
         unsigned short    nline;
 
@@ -95,15 +95,15 @@ class DLLEXPORT HWPPara
 /**
  * If the value is 0, all character of paragraph have same style given cshape
  */
-        unsigned char     contain_cshape;         /* 0ÀÌ¸é ¸ğµç ±ÛÀÚ°¡ ´ëÇ¥ ±ÛÀÚ ¸ğ¾ç */
+        unsigned char     contain_cshape;         /* 0ì´ë©´ ëª¨ë“  ê¸€ìê°€ ëŒ€í‘œ ê¸€ì ëª¨ì–‘ */
         unsigned char     etcflag;
 /**
  * Checks the special characters in the paragraph
  */
         unsigned long     ctrlflag;
         unsigned char     pstyno;
-        CharShape     cshape;                     /* ±ÛÀÚ°¡ ¸ğµÎ °°Àº ¸ğ¾çÀÏ¶§  */
-        ParaShape     pshape;                     /* reuse flag°¡ 0ÀÌ¸é     */
+        CharShape     cshape;                     /* ê¸€ìê°€ ëª¨ë‘ ê°™ì€ ëª¨ì–‘ì¼ë•Œ  */
+        ParaShape     pshape;                     /* reuse flagê°€ 0ì´ë©´     */
         int           pno;                        /* run-time only      */
 
         LineInfo      *linfo;
@@ -122,7 +122,7 @@ class DLLEXPORT HWPPara
 
         void  SetNext(HWPPara *n) { _next = n; };
 
-/* layoutÀ» À§ÇÑ ÇÔ¼ö */
+/* layoutì„ ìœ„í•œ í•¨ìˆ˜ */
 /**
  * Returns the character sytle of paragraph.
  */

@@ -187,7 +187,7 @@ class DLLEXPORT HWPFile
  * Reads paragraph list of hwp file from HIODev
  */
         bool ParaListRead();
-/* ±×¸² µîÀÇ Ãß°¡ Á¤º¸¸¦ ÀĞ´Â´Ù. */
+/* ê·¸ë¦¼ ë“±ì˜ ì¶”ê°€ ì •ë³´ë¥¼ ì½ëŠ”ë‹¤. */
 /**
  * Reads additional information like embeded image of hwp file from HIODev
  */
@@ -266,7 +266,7 @@ class DLLEXPORT HWPFile
         OlePicture *oledata;
 
     private:
-/* hwp ÆÄÀÏ ÀÌ¸§ */
+/* hwp íŒŒì¼ ì´ë¦„ */
           int           m_nCurrentPage;
           int m_nMaxSettedPage;
         HIODev    *hiodev;
@@ -283,7 +283,7 @@ class DLLEXPORT HWPFile
         std::list<EmPicture*> emblist;
         std::list<HyperText*> hyperlist;
         int currenthyper;
-        std::list<ParaShape*> pslist;             /* ½ºÅ¸¿ÀÇÇ½ºÀÇ ±¸Á¶»ó ÇÊ¿ä */
+        std::list<ParaShape*> pslist;             /* ìŠ¤íƒ€ì˜¤í”¼ìŠ¤ì˜ êµ¬ì¡°ìƒ í•„ìš” */
         std::list<CharShape*> cslist;
         std::list<FBoxStyle*> fbslist;
         std::list<DateCode*> datecodes;

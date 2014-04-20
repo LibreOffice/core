@@ -248,7 +248,7 @@ namespace svgio
                 else
                 {
                     // An empty clipping path will completely clip away the element that had
-                    // the ‘clip-path’ property applied. (Svg spec)
+                    // the clip-path property applied. (Svg spec)
                     rContent.realloc(0);
                 }
             }

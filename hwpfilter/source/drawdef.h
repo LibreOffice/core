@@ -127,9 +127,9 @@ struct RotationProperty
  */
 struct HWPDOProperty
 {
-    int line_pstyle; /* ¼± Áß°£ ¸ğ¾ç */
-    int line_hstyle; /* ³¡ È­»ìÇ¥ ¸ğ¾ç */
-    int line_tstyle; /* ½ÃÀÛ ¸ğ¾ç */
+    int line_pstyle; /* ì„  ì¤‘ê°„ ëª¨ì–‘ */
+    int line_hstyle; /* ë í™”ì‚´í‘œ ëª¨ì–‘ */
+    int line_tstyle; /* ì‹œì‘ ëª¨ì–‘ */
     DWORD line_color;
     hunit line_width;
     DWORD fill_color;
