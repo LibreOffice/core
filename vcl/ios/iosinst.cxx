@@ -301,7 +301,7 @@ IMPL_LINK( IosSalInstance, DisplayConfigurationChanged, void*, )
 {
     for( std::list< SalFrame* >::const_iterator it = getFrames().begin();
          it != getFrames().end();
-         it++ ) {
+         ++it ) {
         (*it)->Show( false, false );
         (*it)->CallCallback( SALEVENT_SETTINGSCHANGED, 0 );
         (*it)->SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
@@ -343,7 +343,7 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
 
     for( std::list< SalFrame* >::const_reverse_iterator it = getFrames().rbegin();
          it != getFrames().rend();
-         it++ ) {
+         ++it ) {
         IosSalFrame *pFrame = static_cast<IosSalFrame *>(*it);
         SalFrameGeometry aGeom = pFrame->GetGeometry();
         CGRect bbox = CGRectMake( 0, 0, aGeom.nWidth, aGeom.nHeight );

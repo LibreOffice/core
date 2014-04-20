@@ -2282,7 +2282,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
                 m_pAuthFieldsLB->RemoveEntry(nLstBoxPos);
             }
 
-            aIt++; // #i21237#
+            ++aIt; // #i21237#
         }
         m_pAuthFieldsLB->SelectEntryPos(0);
     }
