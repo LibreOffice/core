@@ -6211,8 +6211,9 @@ bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
                 wwSprmParser aSprmParser(rReader.pWwFib->GetFIBVersion());
                 while (nStartCp <= nEndCp && !nPictureId)
                 {
+                    if (!pChp->SeekPos( nStartCp))
+                        break;
                     WW8PLCFxDesc aDesc;
-                    pChp->SeekPos( nStartCp );
                     pChp->GetSprms( &aDesc );
 
                     if (aDesc.nSprmsLen && aDesc.pMemPos) // Attributes present
