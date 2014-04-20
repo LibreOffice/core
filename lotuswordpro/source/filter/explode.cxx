@@ -167,7 +167,7 @@ Decompression::Decompression(SvStream * pInStream, SvStream * pOutStream)
  */
 sal_uInt32 Decompression::ReadBits(sal_uInt16 iCount, sal_uInt32 & nBits)
 {
-    if ( (iCount == 0) || (iCount > 32 ) )
+    if ( (iCount == 0) || (iCount > 31 ) )
     {
         return 1;
     }
