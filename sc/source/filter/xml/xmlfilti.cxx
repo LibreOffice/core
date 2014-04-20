@@ -534,6 +534,7 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
     bSkipDuplicates(false),
     bCopyOutputData(false),
     bUseRegularExpressions(false),
+    bIsCaseSensitive(false),
     bConnectionOr(true),
     bNextConnectionOr(true),
     bConditionSourceRange(false)
