@@ -124,16 +124,15 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
 #if OSL_DEBUG_LEVEL > 0
     sal_uInt32 nEndCPos = 0U;
 #endif
-    sal_uInt16 nLines = rLines.size();
-    sal_uInt16 nLine;
-    for( nLine=0U; nLine<nLines; nLine++ )
+    const size_t nLines = rLines.size();
+    for( size_t nLine=0U; nLine<nLines; ++nLine )
     {
         const SwTableLine *pLine = rLines[nLine];
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-        sal_uInt16 nBoxes = rBoxes.size();
+        const size_t nBoxes = rBoxes.size();
 
         sal_uInt32 nCPos = 0U;
-        for( sal_uInt16 nBox=0U; nBox<nBoxes; nBox++ )
+        for( size_t nBox=0U; nBox<nBoxes; ++nBox )
         {
             const SwTableBox *pBox = rBoxes[nBox];
 
@@ -565,8 +564,8 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
     {
         const SwXMLTableColumns_Impl& rCols = pLines->GetColumns();
         sal_uInt32 nCPos = 0U;
-        sal_uInt16 nColumns = rCols.size();
-        for( sal_uInt16 nColumn=0U; nColumn<nColumns; nColumn++ )
+        const size_t nColumns = rCols.size();
+        for( size_t nColumn=0U; nColumn<nColumns; ++nColumn )
         {
             SwXMLTableColumn_Impl *pColumn = rCols[nColumn];
 
@@ -627,8 +626,8 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
     }
 
     // pass 3: export line/rows
-    sal_uInt16 nLines = rLines.size();
-    for( sal_uInt16 nLine=0U; nLine<nLines; nLine++ )
+    const size_t nLines = rLines.size();
+    for( size_t nLine=0U; nLine<nLines; ++nLine )
     {
         SwTableLine *pLine = rLines[nLine];
 
@@ -637,11 +636,11 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             ExportFmt( *pFrmFmt, XML_TABLE_ROW );
 
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-        sal_uInt16 nBoxes = rBoxes.size();
+        const size_t nBoxes = rBoxes.size();
 
         sal_uInt32 nCPos = 0U;
-        sal_uInt16 nCol = 0U;
-        for( sal_uInt16 nBox=0U; nBox<nBoxes; nBox++ )
+        size_t nCol = 0U;
+        for( size_t nBox=0U; nBox<nBoxes; nBox++ )
         {
             SwTableBox *pBox = rBoxes[nBox];
 
@@ -651,7 +650,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                 nCPos = pLines->GetWidth();
 
             // Und ihren Index
-            sal_uInt16 nOldCol = nCol;
+            const size_t nOldCol = nCol;
             SwXMLTableColumn_Impl aCol( nCPos );
             SwXMLTableColumns_Impl::const_iterator it = pLines->GetColumns().find( &aCol );
             OSL_ENSURE( it != pLines->GetColumns().end(), "couldn't find column" );
@@ -751,8 +750,8 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
 }
 
 void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
-                                  sal_uInt16 nColSpan,
-                                  sal_uInt16 nRowSpan,
+                                  sal_uInt32 nColSpan,
+                                  sal_uInt32 nRowSpan,
                                   SwXMLTableInfo_Impl& rTblInfo )
 {
     const SwStartNode *pBoxSttNd = rBox.GetSttNd();
@@ -911,11 +910,11 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
         SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
                                   XML_TABLE_ROW, true, true );
         const SwTableBoxes& rBoxes = rLine.GetTabBoxes();
-        sal_uInt16 nBoxes = rBoxes.size();
+        const size_t nBoxes = rBoxes.size();
 
         sal_uInt32 nCPos = 0U;
-        sal_uInt16 nCol = 0U;
-        for( sal_uInt16 nBox=0U; nBox<nBoxes; nBox++ )
+        size_t nCol = 0U;
+        for( size_t nBox=0U; nBox<nBoxes; ++nBox )
         {
             const SwTableBox *pBox = rBoxes[nBox];
 
@@ -934,7 +933,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
                 nCPos = rLines.GetWidth();
 
             // Und ihren Index
-            const sal_uInt16 nOldCol = nCol;
+            const size_t nOldCol = nCol;
             SwXMLTableColumn_Impl aCol( nCPos );
             SwXMLTableColumns_Impl::const_iterator it = rLines.GetColumns().find( &aCol );
             OSL_ENSURE( it != rLines.GetColumns().end(), "couldn't find column" );
@@ -949,12 +948,12 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
                 nCol = nOldCol;
             }
 
-            sal_uInt16 nColSpan = nCol - nOldCol + 1U;
+            const sal_uInt32 nColSpan = nCol - nOldCol + 1U;
 
             if ( nRowSpan >= 1 )
-                ExportTableBox( *pBox, nColSpan, static_cast< sal_uInt16 >(nRowSpan), rTblInfo );
+                ExportTableBox( *pBox, nColSpan, static_cast< sal_uInt32 >(nRowSpan), rTblInfo );
 
-            for( sal_uInt16 i=nOldCol; i<nCol; i++ )
+            for( size_t i=nOldCol; i<nCol; ++i )
             {
                 SvXMLElementExport aElemExport( *this, XML_NAMESPACE_TABLE,
                                           XML_COVERED_TABLE_CELL, true,
@@ -968,7 +967,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
 
 void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
                                     SwXMLTableInfo_Impl& rTblInfo,
-                                    sal_uInt16 nHeaderRows )
+                                    sal_uInt32 nHeaderRows )
 {
     OSL_ENSURE( pTableLines && !pTableLines->empty(),
             "SwXMLExport::ExportTableLines: table columns infos missing" );
@@ -1004,9 +1003,9 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
 
     // pass 2: export columns
     const SwXMLTableColumns_Impl& rCols = pLines->GetColumns();
-    sal_uInt16 nColumn = 0U;
-    sal_uInt16 nColumns = rCols.size();
-    sal_uInt16 nColRep = 1U;
+    size_t nColumn = 0U;
+    const size_t nColumns = rCols.size();
+    sal_Int32 nColRep = 1;
     SwXMLTableColumn_Impl *pColumn = (nColumns > 0) ? rCols[0U] : 0;
     while( pColumn )
     {
@@ -1023,10 +1022,10 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
             AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME,
                           EncodeStyleName(pColumn->GetStyleName()) );
 
-            if( nColRep > 1U )
+            if( nColRep > 1 )
             {
                 OUStringBuffer sTmp(4);
-                sTmp.append( (sal_Int32)nColRep );
+                sTmp.append( nColRep );
                 AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,
                               sTmp.makeStringAndClear() );
             }
@@ -1036,13 +1035,13 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
                                           XML_TABLE_COLUMN, true, true );
             }
 
-            nColRep = 1U;
+            nColRep = 1;
         }
         pColumn = pNextColumn;
     }
 
     // pass 3: export line/rows
-    sal_uInt16 nLines = rLines.size();
+    const size_t nLines = rLines.size();
     // export header rows, if present
     if( nHeaderRows > 0 )
     {
@@ -1050,11 +1049,11 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
                                   XML_TABLE_HEADER_ROWS, true, true );
 
         OSL_ENSURE( nHeaderRows <= nLines, "more headers then lines?" );
-        for( sal_uInt16 nLine = 0U; nLine < nHeaderRows; nLine++ )
+        for( size_t nLine = 0U; nLine < nHeaderRows; ++nLine )
             ExportTableLine( *(rLines[nLine]), *pLines, rTblInfo );
     }
     // export remaining rows
-    for( sal_uInt16 nLine = nHeaderRows; nLine < nLines; nLine++ )
+    for( size_t nLine = nHeaderRows; nLine < nLines; ++nLine )
     {
         ExportTableLine( *(rLines[nLine]), *pLines, rTblInfo );
     }

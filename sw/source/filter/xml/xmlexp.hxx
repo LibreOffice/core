@@ -79,14 +79,14 @@ class SwXMLExport : public SvXMLExport
     void ExportTableFmt( const SwFrmFmt& rFmt, sal_uInt32 nAbsWidth );
 
     void ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol );
-    void ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan, sal_uInt16 nRowSpan,
+    void ExportTableBox( const SwTableBox& rBox, sal_uInt32 nColSpan, sal_uInt32 nRowSpan,
                          SwXMLTableInfo_Impl& rTblInfo );
     void ExportTableLine( const SwTableLine& rLine,
                           const SwXMLTableLines_Impl& rLines,
                           SwXMLTableInfo_Impl& rTblInfo );
     void ExportTableLines( const SwTableLines& rLines,
                            SwXMLTableInfo_Impl& rTblInfo,
-                           sal_uInt16 nHeaderRows = 0 );
+                           sal_uInt32 nHeaderRows = 0 );
 
     virtual void _ExportMeta() SAL_OVERRIDE;
     virtual void _ExportFontDecls() SAL_OVERRIDE;
