@@ -195,15 +195,16 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
         try
         {
             DropDescriptor aTrans;
+            bool bOk;
             if ( _nFormatId != SOT_FORMAT_RTF )
-                const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SOT_FORMATSTR_ID_HTML ,aTrans.aHtmlRtfStorage);
+                bOk = const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SOT_FORMATSTR_ID_HTML ,aTrans.aHtmlRtfStorage);
             else
-                const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SOT_FORMAT_RTF,aTrans.aHtmlRtfStorage);
+                bOk = const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SOT_FORMAT_RTF,aTrans.aHtmlRtfStorage);
 
             aTrans.nType            = E_TABLE;
             aTrans.bHtml            = SOT_FORMATSTR_ID_HTML == _nFormatId;
             aTrans.sDefaultTableName = GetTableNameForAppend();
-            if ( !copyTagTable(aTrans,false,_xConnection) )
+            if ( !bOk || !copyTagTable(aTrans,false,_xConnection) )
                 m_pController->showError(SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, OUString("S1000"), 0, Any()));
         }
         catch(const SQLException&)
