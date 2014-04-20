@@ -702,7 +702,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
 
         if (!sEdit.isEmpty() && !sPreview.startsWith(sEdit))
         {
-            sPreview = sEdit.copy(0, sPreview.getLength());
+            sPreview = sEdit.copy(0, std::min(sEdit.getLength(), sPreview.getLength()));
             bSetText = false;
         }
 
@@ -781,7 +781,10 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
             OUString sText(m_pTextEdit->GetText());
 
             if (!m_pWholeWordCB->IsChecked())
-                sText = sText.copy( 0, m_pDropCapsField->GetValue());
+            {
+                sText = sText.copy( 0, std::max<sal_Int32>(
+                    sText.getLength(), m_pDropCapsField->GetValue()) );
+            }
 
             SfxStringItem aStr(FN_PARAM_1, sText);
             rSet.Put( aStr );
