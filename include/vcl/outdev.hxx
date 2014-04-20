@@ -390,10 +390,10 @@ private:
     mutable bool                    mbRefPoint : 1;
     mutable bool                    mbEnableRTL : 1;
 
-
 protected:
      virtual void                   ImplReleaseFonts();
      virtual void                   SetFontOrientation( ImplFontEntry* const pFontEntry ) const;
+     virtual long                   GetFontExtLeading() const;
 
 public:
     /** @name Initialization and accessor functions

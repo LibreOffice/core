@@ -548,4 +548,18 @@ void VirtualDevice::Compat_ZeroExtleadBug()
     meRefDevMode = (sal_uInt8)meRefDevMode | REFDEV_FORCE_ZERO_EXTLEAD;
 }
 
+long VirtualDevice::GetFontExtLeading() const
+{
+#ifdef UNX
+    // backwards compatible line metrics after fixing #i60945#
+    if ( ForceZeroExtleadBug() )
+        return 0;
+#endif
+
+    ImplFontEntry*      pEntry = mpFontEntry;
+    ImplFontMetricData* pMetric = &(pEntry->maMetric);
+
+    return pMetric->mnExtLeading;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

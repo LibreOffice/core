@@ -2137,14 +2137,12 @@ Size OutputDevice::GetDevFontSize( const Font& rFont, int nSizeIndex ) const
 
 bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
 {
-
     PhysicalFontFamily* pFound = mpFontCollection->FindFontFamily( rFontName );
     return (pFound != NULL);
 }
 
 FontMetric OutputDevice::GetFontMetric() const
 {
-
     FontMetric aMetric;
     if( mbNewFont && !ImplNewFont() )
         return aMetric;
@@ -2181,18 +2179,20 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.mpImplMetric->mnAscent      = ImplDevicePixelToLogicHeight( pMetric->mnAscent+mnEmphasisAscent );
     aMetric.mpImplMetric->mnDescent     = ImplDevicePixelToLogicHeight( pMetric->mnDescent+mnEmphasisDescent );
     aMetric.mpImplMetric->mnIntLeading  = ImplDevicePixelToLogicHeight( pMetric->mnIntLeading+mnEmphasisAscent );
+    aMetric.mpImplMetric->mnExtLeading  = ImplDevicePixelToLogicHeight( GetFontExtLeading() );
     aMetric.mpImplMetric->mnExtLeading  = ImplDevicePixelToLogicHeight( pMetric->mnExtLeading );
     aMetric.mpImplMetric->mnLineHeight  = ImplDevicePixelToLogicHeight( pMetric->mnAscent+pMetric->mnDescent+mnEmphasisAscent+mnEmphasisDescent );
     aMetric.mpImplMetric->mnSlant       = ImplDevicePixelToLogicHeight( pMetric->mnSlant );
 
-#ifdef UNX
-    // backwards compatible line metrics after fixing #i60945#
-    if( (meOutDevType == OUTDEV_VIRDEV)
-    &&  static_cast<const VirtualDevice*>(this)->ForceZeroExtleadBug() )
-        aMetric.mpImplMetric->mnExtLeading = 0;
-#endif
-
     return aMetric;
+}
+
+long OutputDevice::GetFontExtLeading() const
+{
+    ImplFontEntry*      pEntry = mpFontEntry;
+    ImplFontMetricData* pMetric = &(pEntry->maMetric);
+
+    return pMetric->mnExtLeading;
 }
 
 FontMetric OutputDevice::GetFontMetric( const Font& rFont ) const

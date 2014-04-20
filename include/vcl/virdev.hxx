@@ -141,7 +141,9 @@ private:
     SAL_DLLPRIVATE void ImplSetReferenceDevice( RefDevMode, sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
 
 protected:
-    virtual bool                UsePolyPolygonForComplexGradient() SAL_OVERRIDE;
+    virtual bool        UsePolyPolygonForComplexGradient() SAL_OVERRIDE;
+
+    virtual long        GetFontExtLeading() const SAL_OVERRIDE;
 
 };
 
