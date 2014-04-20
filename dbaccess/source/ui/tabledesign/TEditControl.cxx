@@ -798,8 +798,8 @@ void OTableEditorCtrl::InsertRows( long nRow )
     if(aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_TABED))
     {
         SotStorageStreamRef aStreamRef;
-        aTransferData.GetSotStorageStream(SOT_FORMATSTR_ID_SBA_TABED,aStreamRef);
-        if(aStreamRef.Is())
+        bool bOk = aTransferData.GetSotStorageStream(SOT_FORMATSTR_ID_SBA_TABED,aStreamRef);
+        if (bOk && aStreamRef.Is())
         {
             aStreamRef->Seek(STREAM_SEEK_TO_BEGIN);
             aStreamRef->ResetError();
