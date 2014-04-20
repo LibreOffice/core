@@ -660,7 +660,7 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	xmerge \
 ))
 
-$(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_rhino, \
+$(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder, \
 	reportbuilder \
 	reportbuilderwizard \
 ))
