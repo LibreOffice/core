@@ -188,7 +188,7 @@ Resource RID_ANALYSIS_DEFFUNCTION_NAMES
     {
         ItemList =
         {
-            < "KURSFÄLLIG"; >;
+            < "KURSFÃ„LLIG"; >;
             < "PRICEMAT"; >;
         };
     };
@@ -251,7 +251,7 @@ Resource RID_ANALYSIS_DEFFUNCTION_NAMES
     {
         ItemList =
         {
-            < "RENDITEFÄLL"; >;
+            < "RENDITEFÃ„LL"; >;
             < "YIELDMAT"; >;
         };
     };
@@ -260,7 +260,7 @@ Resource RID_ANALYSIS_DEFFUNCTION_NAMES
     {
         ItemList =
         {
-            < "TBILLÄQUIV"; >;
+            < "TBILLÃ„QUIV"; >;
             < "TBILLEQ"; >;
         };
     };
@@ -665,7 +665,7 @@ Resource RID_ANALYSIS_DEFFUNCTION_NAMES
     {
         ItemList =
         {
-            < "IMAGINÄRTEIL"; >;
+            < "IMAGINÃ„RTEIL"; >;
             < "IMAGINARY"; >;
         };
     };
@@ -926,7 +926,7 @@ Resource RID_ANALYSIS_DEFFUNCTION_NAMES
     {
         ItemList =
         {
-            < "ZWEIFAKULTÄT"; >;
+            < "ZWEIFAKULTÃ„T"; >;
             < "FACTDOUBLE"; >;
         };
     };
