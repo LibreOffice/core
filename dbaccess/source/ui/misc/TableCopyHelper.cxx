@@ -270,15 +270,16 @@ bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
     bool bHtml = _aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML);
     if ( bHtml || _aDroppedData.HasFormat(SOT_FORMAT_RTF) )
     {
+        bool bOk;
         if ( bHtml )
-            const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(SOT_FORMATSTR_ID_HTML ,_rAsyncDrop.aHtmlRtfStorage);
+            bOk = const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(SOT_FORMATSTR_ID_HTML ,_rAsyncDrop.aHtmlRtfStorage);
         else
-            const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(SOT_FORMAT_RTF,_rAsyncDrop.aHtmlRtfStorage);
+            bOk = const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(SOT_FORMAT_RTF,_rAsyncDrop.aHtmlRtfStorage);
 
         _rAsyncDrop.bHtml           = bHtml;
         _rAsyncDrop.bError          = !copyTagTable(_rAsyncDrop,true,_xConnection);
 
-        bRet = ( !_rAsyncDrop.bError && _rAsyncDrop.aHtmlRtfStorage.Is() );
+        bRet = ( !_rAsyncDrop.bError && bOk && _rAsyncDrop.aHtmlRtfStorage.Is() );
         if ( bRet )
         {
             // now we need to copy the stream
