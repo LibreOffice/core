@@ -330,7 +330,7 @@ SwXMLTableRow_Impl::SwXMLTableRow_Impl( const OUString& rStyleName,
     if( nCells > USHRT_MAX )
         nCells = USHRT_MAX;
 
-    for( sal_uInt16 i=0U; i<nCells; i++ )
+    for( sal_uInt32 i=0U; i<nCells; ++i )
     {
         aCells.push_back( new SwXMLTableCell_Impl );
     }
@@ -343,7 +343,7 @@ inline SwXMLTableCell_Impl *SwXMLTableRow_Impl::GetCell( sal_uInt32 nCol )
     // #i95726# - some fault tolerance
     OSL_ENSURE( nCol < aCells.size(),
             "SwXMLTableRow_Impl::GetCell: column number is out of bound" );
-    return nCol < aCells.size() ? &aCells[(sal_uInt16)nCol] : 0;
+    return nCol < aCells.size() ? &aCells[nCol] : 0;
 }
 
 void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, sal_Bool bOneCell )
@@ -354,7 +354,7 @@ void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, sal_Bool bOneCell )
         nCells = USHRT_MAX;
 
     sal_uInt32 nColSpan = nCells - aCells.size();
-    for( sal_uInt16 i=aCells.size(); i<nCells; i++ )
+    for( size_t i=aCells.size(); i<nCells; ++i )
     {
         aCells.push_back( new SwXMLTableCell_Impl( 1UL,
                                                 bOneCell ? nColSpan : 1UL ) );
@@ -376,7 +376,7 @@ inline void SwXMLTableRow_Impl::Set( const OUString& rStyleName,
 
 void SwXMLTableRow_Impl::Dispose()
 {
-    for( sal_uInt16 i=0; i < aCells.size(); i++ )
+    for( size_t i=0; i < aCells.size(); ++i )
         aCells[i].Dispose();
 }
 
@@ -453,7 +453,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
 
         OUString aLocalName;
-        sal_uInt16 nPrefix =
+        const sal_uInt16 nPrefix =
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
         const OUString& rValue = xAttrList->getValueByIndex( i );
@@ -486,7 +486,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         case XML_TOK_TABLE_FORMULA:
             {
                 OUString sTmp;
-                sal_uInt16 nPrefix2 = GetImport().GetNamespaceMap().
+                const sal_uInt16 nPrefix2 = GetImport().GetNamespaceMap().
                         _GetKeyByAttrName( rValue, &sTmp, false );
                 sFormula = XML_NAMESPACE_OOOW == nPrefix2 ? sTmp : rValue;
             }
@@ -616,7 +616,7 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
             const OUString& rAttrName = xAttrList->getNameByIndex( i );
 
             OUString aLocalName;
-            sal_uInt16 nPrefix2 =
+            const sal_uInt16 nPrefix2 =
                 GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                                 &aLocalName );
             if( XML_NAMESPACE_TABLE == nPrefix2 &&
@@ -761,7 +761,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
 
         OUString aLocalName;
-        sal_uInt16 nPrefix =
+        const sal_uInt16 nPrefix =
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
         const OUString& rValue = xAttrList->getValueByIndex( i );
@@ -913,7 +913,7 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
 
         OUString aLocalName;
-        sal_uInt16 nPrefix =
+        const sal_uInt16 nPrefix =
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
         const OUString& rValue = xAttrList->getValueByIndex( i );
@@ -1103,7 +1103,7 @@ void SwXMLDDETableContext_Impl::StartElement(
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
 
         OUString aLocalName;
-        sal_uInt16 nPrefix =
+        const sal_uInt16 nPrefix =
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
         const OUString& rValue = xAttrList->getValueByIndex( i );
@@ -1180,8 +1180,10 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
     sCommand += OUString(sfx2::cTokenSeparator);
     sCommand += pContext->GetDDETopic();
 
-    sal_uInt16 nType = static_cast< sal_uInt16 >(pContext->GetIsAutomaticUpdate() ? sfx2::LINKUPDATE_ALWAYS
-                                                        : sfx2::LINKUPDATE_ONCALL);
+    const sal_uInt16 nType = static_cast< sal_uInt16 >(
+        pContext->GetIsAutomaticUpdate()
+        ? sfx2::LINKUPDATE_ALWAYS
+        : sfx2::LINKUPDATE_ONCALL);
 
     OUString sName(pContext->GetConnectionName());
 
@@ -1266,13 +1268,13 @@ typedef boost::ptr_vector<SwXMLTableRow_Impl> SwXMLTableRows_Impl;
 const SwXMLTableCell_Impl *SwXMLTableContext::GetCell( sal_uInt32 nRow,
                                                  sal_uInt32 nCol ) const
 {
-    return (*pRows)[(sal_uInt16)nRow].GetCell( (sal_uInt16)nCol );
+    return (*pRows)[nRow].GetCell( nCol );
 }
 
 SwXMLTableCell_Impl *SwXMLTableContext::GetCell( sal_uInt32 nRow,
                                                  sal_uInt32 nCol )
 {
-    return (*pRows)[(sal_uInt16)nRow].GetCell( (sal_uInt16)nCol );
+    return (*pRows)[nRow].GetCell( nCol );
 }
 
 TYPEINIT1( SwXMLTableContext, XMLTextTableContext );
@@ -1311,7 +1313,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
 
         OUString aLocalName;
-        sal_uInt16 nPrefix =
+        const sal_uInt16 nPrefix =
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
         const OUString& rValue = xAttrList->getValueByIndex( i );
@@ -1592,8 +1594,6 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     if( 0UL == nColSpan )
         nColSpan = 1UL;
 
-    sal_uInt32 i, j;
-
     // Until it is possible to add columns here, fix the column span.
     sal_uInt32 nColsReq = nCurCol + nColSpan;
     if( nColsReq > GetColumnCount() )
@@ -1606,10 +1606,10 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     // into the current row.
     if( nCurRow > 0UL && nColSpan > 1UL )
     {
-        SwXMLTableRow_Impl *pCurRow = &(*pRows)[(sal_uInt16)nCurRow];
+        SwXMLTableRow_Impl *pCurRow = &(*pRows)[nCurRow];
         sal_uInt32 nLastCol = GetColumnCount() < nColsReq ? GetColumnCount()
                                                      : nColsReq;
-        for( i=nCurCol+1UL; i<nLastCol; i++ )
+        for( sal_uInt32 i=nCurCol+1UL; i<nLastCol; ++i )
         {
             if( pCurRow->GetCell(i)->IsUsed() )
             {
@@ -1632,27 +1632,27 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     // This should never happen, since we require column definitions!
     if ( nColsReq > GetColumnCount() )
     {
-        for( i=GetColumnCount(); i<nColsReq; i++ )
+        for( sal_uInt32 i=GetColumnCount(); i<nColsReq; ++i )
         {
             aColumnWidths.push_back( ColumnWidthInfo(MINLAY, true) );
         }
         // adjust columns in *all* rows, if columns must be inserted
-        for( i=0; i<pRows->size(); i++ )
-            (*pRows)[(sal_uInt16)i].Expand( nColsReq, i<nCurRow );
+        for( size_t i=0; i<pRows->size(); ++i )
+            (*pRows)[i].Expand( nColsReq, i<nCurRow );
     }
 
     // Add rows
     if( pRows->size() < nRowsReq )
     {
         OUString aStyleName2;
-        for( i = pRows->size(); i < nRowsReq; ++i )
+        for( size_t i = pRows->size(); i < nRowsReq; ++i )
             pRows->push_back( new SwXMLTableRow_Impl(aStyleName2, GetColumnCount()) );
     }
 
     OUString sStyleName( rStyleName );
     if( sStyleName.isEmpty() )
     {
-        sStyleName = (*pRows)[(sal_uInt16)nCurRow].GetDefaultCellStyleName();
+        sStyleName = (*pRows)[nCurRow].GetDefaultCellStyleName();
         if( sStyleName.isEmpty() && HasColumnDefaultCellStyleNames() )
         {
             sStyleName = GetColumnDefaultCellStyleName( nCurCol );
@@ -1662,9 +1662,9 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     }
 
     // Fill the cells
-    for( i=nColSpan; i>0UL; i-- )
+    for( sal_uInt32 i=nColSpan; i>0UL; --i )
     {
-        for( j=nRowSpan; j>0UL; j-- )
+        for( sal_uInt32 j=nRowSpan; j>0UL; --j )
         {
             const bool bCovered = i != nColSpan || j != nRowSpan;
             GetCell( nRowsReq-j, nColsReq-i )
@@ -1698,7 +1698,7 @@ void SwXMLTableContext::InsertRow( const OUString& rStyleName,
     {
         // The current row has already been inserted because of a row span
         // of a previous row.
-        (*pRows)[(sal_uInt16)nCurRow].Set(
+        (*pRows)[nCurRow].Set(
             rStyleName, rDfltCellStyleName, i_rXmlId );
     }
     else
@@ -1721,7 +1721,7 @@ void SwXMLTableContext::InsertRow( const OUString& rStyleName,
 
 void SwXMLTableContext::InsertRepRows( sal_uInt32 nCount )
 {
-    const SwXMLTableRow_Impl *pSrcRow = &(*pRows)[(sal_uInt16)nCurRow-1];
+    const SwXMLTableRow_Impl *pSrcRow = &(*pRows)[nCurRow-1];
     while( nCount > 1 && IsInsertRowPossible() )
     {
         InsertRow( pSrcRow->GetStyleName(), pSrcRow->GetDefaultCellStyleName(),
@@ -1802,7 +1802,7 @@ void SwXMLTableContext::FixRowSpan( sal_uInt32 nRow, sal_uInt32 nCol,
                                     sal_uInt32 nColSpan )
 {
     sal_uInt32 nLastCol = nCol + nColSpan;
-    for( sal_uInt16 i = (sal_uInt16)nCol; i < nLastCol; i++ )
+    for( sal_uInt32 i = nCol; i < nLastCol; i++ )
     {
         sal_uInt32 j = nRow;
         sal_uInt32 nRowSpan = 1UL;
@@ -1826,7 +1826,7 @@ void SwXMLTableContext::ReplaceWithEmptyCell( sal_uInt32 nRow, sal_uInt32 nCol, 
 
     for( sal_uInt32 i=nRow; i<nLastRow; i++ )
     {
-        SwXMLTableRow_Impl *pRow = &(*pRows)[(sal_uInt16)i];
+        SwXMLTableRow_Impl *pRow = &(*pRows)[i];
         for( sal_uInt32 j=nCol; j<nLastCol; j++ )
             pRow->GetCell( j )->SetStartNode( pSttNd );
     }
@@ -1973,7 +1973,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
             while( nStartRow < nBottomRow )
             {
                 sal_uInt32 nMaxRowSpan = 0UL;
-                SwXMLTableRow_Impl *pStartRow = &(*pRows)[(sal_uInt16)nStartRow];
+                SwXMLTableRow_Impl *pStartRow = &(*pRows)[nStartRow];
                 const SwXMLTableCell_Impl *pCell;
                 for( i=nLeftCol; i<nRightCol; i++ )
                     if( ( pCell=pStartRow->GetCell(i),
@@ -1983,8 +1983,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
                 nStartRow += nMaxRowSpan;
                 if( nStartRow<nBottomRow )
                 {
-                    SwXMLTableRow_Impl *pPrevRow =
-                                        &(*pRows)[(sal_uInt16)nStartRow-1U];
+                    SwXMLTableRow_Impl *pPrevRow = &(*pRows)[nStartRow-1U];
                     i = nLeftCol;
                     while( i < nRightCol )
                     {
@@ -2208,7 +2207,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
     pFrmFmt->SetFmtAttr( aFillOrder );
 
     const SfxItemSet *pAutoItemSet = 0;
-    const OUString& rStyleName = (*pRows)[(sal_uInt16)nTopRow].GetStyleName();
+    const OUString& rStyleName = (*pRows)[nTopRow].GetStyleName();
     if( 1UL == (nBottomRow - nTopRow) &&
         !rStyleName.isEmpty() &&
         GetSwImport().FindAutomaticStyle(
@@ -2224,7 +2223,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
     while( nStartCol < nRightCol )
     {
         for( sal_uInt32 nRow=nTopRow; nRow<nBottomRow; nRow++ )
-            (*pRows)[(sal_uInt16)nRow].SetSplitable( sal_True );
+            (*pRows)[nRow].SetSplitable( sal_True );
 
         sal_uInt32 nCol = nStartCol;
         sal_uInt32 nSplitCol = nRightCol;
@@ -2248,10 +2247,10 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                     SwXMLTableCell_Impl *pCell = GetCell(nRow,nCol);
                     // Could the table fragment be splitted horizontally behind
                     // the current line?
-                    bool bHoriSplit = (*pRows)[(sal_uInt16)nRow].IsSplitable() &&
+                    bool bHoriSplit = (*pRows)[nRow].IsSplitable() &&
                                       nRow+1UL < nBottomRow &&
                                       1UL == pCell->GetRowSpan();
-                    (*pRows)[(sal_uInt16)nRow].SetSplitable( bHoriSplit );
+                    (*pRows)[nRow].SetSplitable( bHoriSplit );
 
                     // Could the table fragment be splitted vertically behind the
                     // current column (uptp the current line?
@@ -2395,7 +2394,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
 
     if( pRows->size() > nCurRow )
     {
-        SwXMLTableRow_Impl *pPrevRow = &(*pRows)[(sal_uInt16)nCurRow-1U];
+        SwXMLTableRow_Impl *pPrevRow = &(*pRows)[nCurRow-1U];
         const SwXMLTableCell_Impl *pCell;
         for( sal_uLong i = 0; i < aColumnWidths.size(); ++i )
         {
@@ -2621,7 +2620,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
         bool bSplit = true;
         if ( bHasSubTables )
         {
-            SwXMLTableRow_Impl *pRow = &(*pRows)[(sal_uInt16)i];
+            SwXMLTableRow_Impl *pRow = &(*pRows)[i];
             for( sal_uInt32 j=0UL; j<nCols; j++ )
             {
                 bSplit = ( 1UL == pRow->GetCell(j)->GetRowSpan() );
@@ -2666,7 +2665,7 @@ void SwXMLTableContext::MakeTable()
     sal_Int16 eHoriOrient = text::HoriOrientation::FULL;
     bool bSetHoriOrient = false;
 
-    sal_uInt16 nPrcWidth = 0U;
+    sal_uInt8 nPrcWidth = 0U;
 
     pTableNode->GetTable().SetRowsToRepeat( nHeaderRows );
     pTableNode->GetTable().SetTableModel( !bHasSubTables );
@@ -2787,11 +2786,11 @@ void SwXMLTableContext::MakeTable()
     // changed there.
     pFrmFmt->LockModify();
     SwFmtFrmSize aSize( ATT_VAR_SIZE, nWidth );
-    aSize.SetWidthPercent( (sal_Int8)nPrcWidth );
+    aSize.SetWidthPercent( nPrcWidth );
     pFrmFmt->SetFmtAttr( aSize );
     pFrmFmt->UnlockModify();
 
-    for( sal_uInt16 i=0; i<pRows->size(); i++ )
+    for( size_t i=0; i<pRows->size(); i++ )
         (*pRows)[i].Dispose();
 
     // now that table is complete, change into DDE table (if appropriate)
