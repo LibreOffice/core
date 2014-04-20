@@ -991,6 +991,9 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                                         OUString("UIName"),
                                         OUString() );
         pFileDlg->SetCurrentFilter( aFilterUIName );
+        aAdjustToType = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
+                                        OUString("Type"),
+                                        OUString() );
     }
     // it is no export, bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
     else if ( bSetStandardName || GetStorable()->hasLocation() )
