@@ -19,6 +19,7 @@ $(eval $(call gb_Library_add_cxxflags,avmediaogl,-w))
 $(eval $(call gb_Library_use_externals,avmediaogl, \
     boost_headers \
     libgltf \
+    glm_headers \
     mesa_headers \
     glew \
     zlib \
