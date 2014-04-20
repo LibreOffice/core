@@ -57,7 +57,6 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                    const Bitmap& rBitmap, const sal_uLong nAction )
 {
-
     if( ImplIsRecordLayout() )
         return;
 
