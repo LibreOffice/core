@@ -14,55 +14,57 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
-namespace writerfilter {
-    namespace rtftok {
-        class RTFSprms;
-        class RTFShape;
-        /// Value of an RTF keyword
-        class RTFValue
-            : public Value
-        {
-            public:
-                typedef boost::shared_ptr<RTFValue> Pointer_t;
-                RTFValue(int nValue, const OUString& sValue, RTFSprms rAttributes, RTFSprms rSprms, uno::Reference<drawing::XShape> rShape,
-                        uno::Reference<io::XInputStream> rStream, uno::Reference<embed::XEmbeddedObject> rObject, bool bForceString,
-                        RTFShape aShape);
-                RTFValue();
-                RTFValue(int nValue);
-                RTFValue(const OUString& sValue, bool bForce = false);
-                RTFValue(RTFSprms rAttributes);
-                RTFValue(RTFSprms rAttributes, RTFSprms rSprms);
-                RTFValue(uno::Reference<drawing::XShape> rShape);
-                RTFValue(uno::Reference<io::XInputStream> rStream);
-                RTFValue(uno::Reference<embed::XEmbeddedObject> rObject);
-                RTFValue(RTFShape aShape);
-                virtual ~RTFValue();
-                void setString(const OUString& sValue);
-                virtual int getInt() const SAL_OVERRIDE;
-                virtual OUString getString() const SAL_OVERRIDE;
-                virtual uno::Any getAny() const SAL_OVERRIDE;
-                virtual writerfilter::Reference<Properties>::Pointer_t getProperties() SAL_OVERRIDE;
-                virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE;
-                virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
-                virtual std::string toString() const SAL_OVERRIDE;
-                virtual RTFValue* Clone();
-                RTFSprms& getAttributes();
-                RTFSprms& getSprms();
-                RTFShape& getShape() const;
-                bool equals(RTFValue& rOther);
-            private:
-                RTFValue& operator=(RTFValue const& rOther);
-                int m_nValue;
-                OUString m_sValue;
-                boost::shared_ptr<RTFSprms> m_pAttributes;
-                boost::shared_ptr<RTFSprms> m_pSprms;
-                uno::Reference<drawing::XShape> m_xShape;
-                uno::Reference<io::XInputStream> m_xStream;
-                uno::Reference<embed::XEmbeddedObject> m_xObject;
-                bool m_bForceString;
-                boost::shared_ptr<RTFShape> m_pShape;
-        };
-    } // namespace rtftok
+namespace writerfilter
+{
+namespace rtftok
+{
+class RTFSprms;
+class RTFShape;
+/// Value of an RTF keyword
+class RTFValue
+    : public Value
+{
+public:
+    typedef boost::shared_ptr<RTFValue> Pointer_t;
+    RTFValue(int nValue, const OUString& sValue, RTFSprms rAttributes, RTFSprms rSprms, uno::Reference<drawing::XShape> rShape,
+             uno::Reference<io::XInputStream> rStream, uno::Reference<embed::XEmbeddedObject> rObject, bool bForceString,
+             RTFShape aShape);
+    RTFValue();
+    RTFValue(int nValue);
+    RTFValue(const OUString& sValue, bool bForce = false);
+    RTFValue(RTFSprms rAttributes);
+    RTFValue(RTFSprms rAttributes, RTFSprms rSprms);
+    RTFValue(uno::Reference<drawing::XShape> rShape);
+    RTFValue(uno::Reference<io::XInputStream> rStream);
+    RTFValue(uno::Reference<embed::XEmbeddedObject> rObject);
+    RTFValue(RTFShape aShape);
+    virtual ~RTFValue();
+    void setString(const OUString& sValue);
+    virtual int getInt() const SAL_OVERRIDE;
+    virtual OUString getString() const SAL_OVERRIDE;
+    virtual uno::Any getAny() const SAL_OVERRIDE;
+    virtual writerfilter::Reference<Properties>::Pointer_t getProperties() SAL_OVERRIDE;
+    virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE;
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
+    virtual std::string toString() const SAL_OVERRIDE;
+    virtual RTFValue* Clone();
+    RTFSprms& getAttributes();
+    RTFSprms& getSprms();
+    RTFShape& getShape() const;
+    bool equals(RTFValue& rOther);
+private:
+    RTFValue& operator=(RTFValue const& rOther);
+    int m_nValue;
+    OUString m_sValue;
+    boost::shared_ptr<RTFSprms> m_pAttributes;
+    boost::shared_ptr<RTFSprms> m_pSprms;
+    uno::Reference<drawing::XShape> m_xShape;
+    uno::Reference<io::XInputStream> m_xStream;
+    uno::Reference<embed::XEmbeddedObject> m_xObject;
+    bool m_bForceString;
+    boost::shared_ptr<RTFShape> m_pShape;
+};
+} // namespace rtftok
 } // namespace writerfilter
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFVALUE_HXX

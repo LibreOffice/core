@@ -10,20 +10,22 @@
 #include <rtfreferenceproperties.hxx>
 #include <rtfdocumentimpl.hxx>
 
-namespace writerfilter {
-namespace rtftok {
+namespace writerfilter
+{
+namespace rtftok
+{
 
 
 RTFValue::RTFValue(int nValue, const OUString& sValue, RTFSprms rAttributes,
-        RTFSprms rSprms, uno::Reference<drawing::XShape> xShape,
-        uno::Reference<io::XInputStream> xStream, uno::Reference<embed::XEmbeddedObject> xObject, bool bForceString,
-        RTFShape aShape)
+                   RTFSprms rSprms, uno::Reference<drawing::XShape> xShape,
+                   uno::Reference<io::XInputStream> xStream, uno::Reference<embed::XEmbeddedObject> xObject, bool bForceString,
+                   RTFShape aShape)
     : m_nValue(nValue),
-    m_sValue(sValue),
-    m_xShape(xShape),
-    m_xStream(xStream),
-    m_xObject(xObject),
-    m_bForceString(bForceString)
+      m_sValue(sValue),
+      m_xShape(xShape),
+      m_xStream(xStream),
+      m_xObject(xObject),
+      m_bForceString(bForceString)
 {
     m_pAttributes.reset(new RTFSprms(rAttributes));
     m_pSprms.reset(new RTFSprms(rSprms));
@@ -32,11 +34,11 @@ RTFValue::RTFValue(int nValue, const OUString& sValue, RTFSprms rAttributes,
 
 RTFValue::RTFValue()
     : m_nValue(0),
-    m_sValue(),
-    m_xShape(),
-    m_xStream(),
-    m_xObject(),
-    m_bForceString(false)
+      m_sValue(),
+      m_xShape(),
+      m_xStream(),
+      m_xObject(),
+      m_bForceString(false)
 {
     m_pAttributes.reset(new RTFSprms());
     m_pSprms.reset(new RTFSprms());
@@ -45,11 +47,11 @@ RTFValue::RTFValue()
 
 RTFValue::RTFValue(int nValue)
     : m_nValue(nValue),
-    m_sValue(),
-    m_xShape(),
-    m_xStream(),
-    m_xObject(),
-    m_bForceString(false)
+      m_sValue(),
+      m_xShape(),
+      m_xStream(),
+      m_xObject(),
+      m_bForceString(false)
 {
     m_pAttributes.reset(new RTFSprms());
     m_pSprms.reset(new RTFSprms());
@@ -58,11 +60,11 @@ RTFValue::RTFValue(int nValue)
 
 RTFValue::RTFValue(const OUString& sValue, bool bForce)
     : m_nValue(),
-    m_sValue(sValue),
-    m_xShape(),
-    m_xStream(),
-    m_xObject(),
-    m_bForceString(bForce)
+      m_sValue(sValue),
+      m_xShape(),
+      m_xStream(),
+      m_xObject(),
+      m_bForceString(bForce)
 {
     m_pAttributes.reset(new RTFSprms());
     m_pSprms.reset(new RTFSprms());
@@ -71,11 +73,11 @@ RTFValue::RTFValue(const OUString& sValue, bool bForce)
 
 RTFValue::RTFValue(RTFSprms rAttributes)
     : m_nValue(),
-    m_sValue(),
-    m_xShape(),
-    m_xStream(),
-    m_xObject(),
-    m_bForceString(false)
+      m_sValue(),
+      m_xShape(),
+      m_xStream(),
+      m_xObject(),
+      m_bForceString(false)
 {
     m_pAttributes.reset(new RTFSprms(rAttributes));
     m_pSprms.reset(new RTFSprms());
@@ -84,11 +86,11 @@ RTFValue::RTFValue(RTFSprms rAttributes)
 
 RTFValue::RTFValue(RTFSprms rAttributes, RTFSprms rSprms)
     : m_nValue(),
-    m_sValue(),
-    m_xShape(),
-    m_xStream(),
-    m_xObject(),
-    m_bForceString(false)
+      m_sValue(),
+      m_xShape(),
+      m_xStream(),
+      m_xObject(),
+      m_bForceString(false)
 {
     m_pAttributes.reset(new RTFSprms(rAttributes));
     m_pSprms.reset(new RTFSprms(rSprms));
@@ -97,11 +99,11 @@ RTFValue::RTFValue(RTFSprms rAttributes, RTFSprms rSprms)
 
 RTFValue::RTFValue(uno::Reference<drawing::XShape> rShape)
     : m_nValue(),
-    m_sValue(),
-    m_xShape(rShape),
-    m_xStream(),
-    m_xObject(),
-    m_bForceString(false)
+      m_sValue(),
+      m_xShape(rShape),
+      m_xStream(),
+      m_xObject(),
+      m_bForceString(false)
 {
     m_pAttributes.reset(new RTFSprms());
     m_pSprms.reset(new RTFSprms());
@@ -110,11 +112,11 @@ RTFValue::RTFValue(uno::Reference<drawing::XShape> rShape)
 
 RTFValue::RTFValue(uno::Reference<io::XInputStream> rStream)
     : m_nValue(),
-    m_sValue(),
-    m_xShape(),
-    m_xStream(rStream),
-    m_xObject(),
-    m_bForceString(false)
+      m_sValue(),
+      m_xShape(),
+      m_xStream(rStream),
+      m_xObject(),
+      m_bForceString(false)
 {
     m_pAttributes.reset(new RTFSprms());
     m_pSprms.reset(new RTFSprms());
@@ -123,11 +125,11 @@ RTFValue::RTFValue(uno::Reference<io::XInputStream> rStream)
 
 RTFValue::RTFValue(uno::Reference<embed::XEmbeddedObject> xObject)
     : m_nValue(),
-    m_sValue(),
-    m_xShape(),
-    m_xStream(),
-    m_xObject(xObject),
-    m_bForceString(false)
+      m_sValue(),
+      m_xShape(),
+      m_xStream(),
+      m_xObject(xObject),
+      m_bForceString(false)
 {
     m_pAttributes.reset(new RTFSprms());
     m_pSprms.reset(new RTFSprms());
@@ -136,11 +138,11 @@ RTFValue::RTFValue(uno::Reference<embed::XEmbeddedObject> xObject)
 
 RTFValue::RTFValue(RTFShape aShape)
     : m_nValue(),
-    m_sValue(),
-    m_xShape(),
-    m_xStream(),
-    m_xObject(),
-    m_bForceString(false)
+      m_sValue(),
+      m_xShape(),
+      m_xStream(),
+      m_xObject(),
+      m_bForceString(false)
 {
     m_pAttributes.reset(new RTFSprms());
     m_pSprms.reset(new RTFSprms());
@@ -192,9 +194,7 @@ RTFShape& RTFValue::getShape() const
 
 writerfilter::Reference<Properties>::Pointer_t RTFValue::getProperties()
 {
-    writerfilter::Reference<Properties>::Pointer_t const pProperties(
-            new RTFReferenceProperties(*m_pAttributes, *m_pSprms)
-            );
+    writerfilter::Reference<Properties>::Pointer_t pProperties(new RTFReferenceProperties(*m_pAttributes, *m_pSprms));
     return pProperties;
 }
 
