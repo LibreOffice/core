@@ -756,6 +756,7 @@ ScXMLDPConditionContext::ScXMLDPConditionContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pFilterContext(pTempFilterContext),
     sDataType(GetXMLToken(XML_TEXT)),
+    nField(0),
     bIsCaseSensitive(false)
 {
 
