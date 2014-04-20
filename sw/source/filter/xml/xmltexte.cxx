@@ -99,7 +99,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
         {
             const SwFmtCollConditions& rConditions =
                 ((const SwConditionTxtFmtColl *)pColl)->GetCondColls();
-            for( sal_uInt16 i=0; i < rConditions.size(); i++ )
+            for( size_t i=0; i < rConditions.size(); ++i )
             {
                 const SwCollCondition& rCond = rConditions[i];
 
@@ -566,7 +566,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 while ( i > 0 )
                 {
                     beans::PropertyValue& aProp = aProps[--i];
-                    sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_True );
+                    const sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_True );
                     if ( nType2 == SWHTML_OPTTYPE_TAG)
                     {
                         OUString aStr2;
@@ -662,7 +662,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     while ( i > 0 )
                     {
                         beans::PropertyValue& aProp = aProps[--i];
-                        sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_True );
+                        const sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_True );
                         if (SWHTML_OPTTYPE_PARAM == nType2 || SWHTML_OPTTYPE_SIZE == nType2 )
                         {
                             OUString aStr;
@@ -688,7 +688,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     while ( i > 0 )
                     {
                         beans::PropertyValue& aProp = aProps[--i];
-                        sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_False );
+                        const sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_False );
                         if ( nType2 == SWHTML_OPTTYPE_TAG)
                         {
                             OUString aStr;
