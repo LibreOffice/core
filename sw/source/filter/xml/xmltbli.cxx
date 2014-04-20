@@ -294,7 +294,7 @@ class SwXMLTableRow_Impl
 public:
 
     SwXMLTableRow_Impl( const OUString& rStyleName, sal_uInt32 nCells,
-                         const OUString *pDfltCellStyleName = 0,
+                        const OUString *pDfltCellStyleName = 0,
                         const OUString& i_rXmlId = OUString() );
     ~SwXMLTableRow_Impl() {}
 
@@ -1143,12 +1143,7 @@ void SwXMLDDETableContext_Impl::StartElement(
 // generate a new name for DDE field type (called by lcl_GetDDEFieldType below)
 static OUString lcl_GenerateFldTypeName(const OUString& sPrefix, SwTableNode* pTableNode)
 {
-    OUString sPrefixStr(sPrefix);
-
-    if (sPrefixStr.isEmpty())
-    {
-        sPrefixStr = "_";
-    }
+    const OUString sPrefixStr(sPrefix.isEmpty() ? OUString("_") : sPrefix);
 
     // increase count until we find a name that is not yet taken
     OUString sName;
@@ -1160,9 +1155,7 @@ static OUString lcl_GenerateFldTypeName(const OUString& sPrefix, SwTableNode* pT
             return sName;
 
         ++nCount;
-        sName = sPrefixStr;
-        sName += OUString::number(nCount);
-
+        sName = sPrefixStr + OUString::number(nCount);
     }
     while (NULL != pTableNode->GetDoc()->GetFldType(RES_DDEFLD, sName, false));
 
@@ -1174,11 +1167,11 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
                                     SwTableNode* pTableNode)
 {
     // make command string
-    OUString sCommand(pContext->GetDDEApplication());
-    sCommand += OUString(sfx2::cTokenSeparator);
-    sCommand += pContext->GetDDEItem();
-    sCommand += OUString(sfx2::cTokenSeparator);
-    sCommand += pContext->GetDDETopic();
+    const OUString sCommand(pContext->GetDDEApplication()
+        + OUString(sfx2::cTokenSeparator)
+        + pContext->GetDDEItem()
+        + OUString(sfx2::cTokenSeparator)
+        + pContext->GetDDETopic());
 
     const sal_uInt16 nType = static_cast< sal_uInt16 >(
         pContext->GetIsAutomaticUpdate()
@@ -1356,8 +1349,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     OSL_ENSURE( xFactory.is(), "factory missing" );
     if( xFactory.is() )
     {
-        OUString sService( "com.sun.star.text.TextTable" );
-        Reference<XInterface> xIfc = xFactory->createInstance( sService );
+        Reference<XInterface> xIfc = xFactory->createInstance( "com.sun.star.text.TextTable" );
         OSL_ENSURE( xIfc.is(), "Couldn't create a table" );
 
         if( xIfc.is() )
@@ -1644,9 +1636,8 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     // Add rows
     if( pRows->size() < nRowsReq )
     {
-        OUString aStyleName2;
         for( size_t i = pRows->size(); i < nRowsReq; ++i )
-            pRows->push_back( new SwXMLTableRow_Impl(aStyleName2, GetColumnCount()) );
+            pRows->push_back( new SwXMLTableRow_Impl("", GetColumnCount()));
     }
 
     OUString sStyleName( rStyleName );
@@ -1752,8 +1743,7 @@ void SwXMLTableContext::FinishRow()
     // Insert an empty cell at the end of the line if the row is not complete
     if( nCurCol < GetColumnCount() )
     {
-        OUString aStyleName2;
-        InsertCell( aStyleName2, 1U, GetColumnCount() - nCurCol,
+        InsertCell( "", 1U, GetColumnCount() - nCurCol,
                     InsertTableSection() );
     }
 
@@ -2033,7 +2023,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     }
 
     // Share formats!
-    OUString sStyleName = pCell->GetStyleName();
+    const OUString sStyleName = pCell->GetStyleName();
     bool bModifyLocked;
     sal_Bool bNew;
     SwTableBoxFmt *pBoxFmt2 = GetSharedBoxFormat(
@@ -2409,8 +2399,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
 
     if( pRows->empty() )
     {
-        OUString aStyleName2;
-        InsertCell( aStyleName2, 1U, nCols, InsertTableSection() );
+        InsertCell( "", 1U, nCols, InsertTableSection() );
     }
 
     // TODO: Do we have to keep both values, the relative and the absolute
@@ -2858,9 +2847,8 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         // The Cursor already is in the first section
         pStNd = pTxtCrsr->GetPaM()->GetNode()->FindTableBoxStartNode();
         bFirstSection = false;
-        OUString sStyleName("Standard");
         GetImport().GetTextImport()->SetStyleAndAttrs( GetImport(),
-            GetImport().GetTextImport()->GetCursor(), sStyleName, true );
+            GetImport().GetTextImport()->GetCursor(), "Standard", true );
     }
     else
     {
