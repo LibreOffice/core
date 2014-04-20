@@ -424,16 +424,14 @@ void SwDropCapsPict::CheckScript( void )
             nScript = css::i18n::ScriptType::LATIN;
     }
 
-    do
+    for(;;)
     {
         nChg = xBreak->endOfScript( maText, nChg, nScript );
         maScriptChanges.push_back( _ScriptInfo(0, nScript, nChg) );
-
-        if( nChg < maText.getLength() )
-            nScript = xBreak->getScriptType( maText, nChg );
-        else
+        if( nChg >= maText.getLength() )
             break;
-    } while( true );
+        nScript = xBreak->getScriptType( maText, nChg );
+    }
 }
 
 Size SwDropCapsPict::CalcTextSize( void )
