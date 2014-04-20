@@ -104,16 +104,16 @@ void SwXMLTextParagraphExport::exportStyleContent(
                 const SwCollCondition& rCond = rConditions[i];
 
                 enum XMLTokenEnum eFunc = XML_TOKEN_INVALID;
-                OUStringBuffer sBuffer( 20 );
+                OUString sVal;
                 switch( rCond.GetCondition() )
                 {
                 case PARA_IN_LIST:
                     eFunc = XML_LIST_LEVEL;
-                    sBuffer.append( (sal_Int32)(rCond.GetSubCondition()+1) );
+                    sVal = OUString::number(rCond.GetSubCondition()+1);
                     break;
                 case PARA_IN_OUTLINE:
                     eFunc = XML_OUTLINE_LEVEL;
-                    sBuffer.append( (sal_Int32)(rCond.GetSubCondition()+1) );
+                    sVal = OUString::number(rCond.GetSubCondition()+1);
                     break;
                 case PARA_IN_FRAME:
                     eFunc = XML_TEXT_BOX;
@@ -140,24 +140,18 @@ void SwXMLTextParagraphExport::exportStyleContent(
                     eFunc = XML_ENDNOTE;
                     break;
                 }
-                OUString sVal( sBuffer.makeStringAndClear() );
-
                 OSL_ENSURE( eFunc != XML_TOKEN_INVALID,
                             "SwXMLExport::ExportFmt: unknown condition" );
                 if( eFunc != XML_TOKEN_INVALID )
                 {
-                    sBuffer.append( GetXMLToken(eFunc) );
-                    sBuffer.append( '(' );
-                    sBuffer.append( ')' );
+                    OUString sCond = GetXMLToken(eFunc) + "()";
                     if( !sVal.isEmpty() )
                     {
-                        sBuffer.append( '=' );
-                        sBuffer.append( sVal );
+                        sCond += "=" + sVal;
                     }
 
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                XML_CONDITION,
-                                sBuffer.makeStringAndClear() );
+                                XML_CONDITION, sCond );
                     OUString aString;
                     SwStyleNameMapper::FillProgName(
                                     rCond.GetTxtFmtColl()->GetName(),
@@ -212,13 +206,9 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
 static void lcl_addURL ( SvXMLExport &rExport, const OUString &rURL,
                          bool bToRel = true )
 {
-    OUString sRelURL;
-
-    if( bToRel && !rURL.isEmpty() )
-        sRelURL = URIHelper::simpleNormalizedMakeRelative(rExport.GetOrigFileName(),
-              rURL);
-    else
-        sRelURL = rURL;
+    const OUString sRelURL = ( bToRel && !rURL.isEmpty() )
+        ? URIHelper::simpleNormalizedMakeRelative(rExport.GetOrigFileName(), rURL)
+        : rURL;
 
     if (!sRelURL.isEmpty())
     {
@@ -443,9 +433,8 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     lcl_addAspect( rObjRef, aStates,
         GetAutoFramePropMapper()->getPropertySetMapper() );
 
-    OUString sAutoStyle( sStyle );
-    sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle,
-                       aStates );
+    const OUString sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME,
+                                      rPropSet, sStyle, aStates );
     const XMLPropertyState **pStates = aStates;
     while( *pStates )
     {
@@ -487,8 +476,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
 
             if ( !bIsOwnLink )
             {
-                sURL = OUString( sEmbeddedObjectProtocol );
-                sURL += rOLEObj.GetCurrentPersistName();
+                sURL = sEmbeddedObjectProtocol + rOLEObj.GetCurrentPersistName();
             }
 
             sURL = GetExport().AddEmbeddedObject( sURL );
@@ -640,11 +628,10 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         case SV_EMBEDDED_OUTPLACE:
             if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
             {
-                OUString sURL( sEmbeddedObjectProtocol );
-                sURL += rOLEObj.GetCurrentPersistName();
+                OUString sURL( sEmbeddedObjectProtocol + rOLEObj.GetCurrentPersistName() );
 
                 if ( ( rXMLExport.getExportFlags() & EXPORT_OASIS ) == 0 )
-                    sURL += OUString( "?oasis=false" );
+                    sURL += "?oasis=false";
 
                 rXMLExport.AddEmbeddedObjectAsBase64( sURL );
             }
@@ -707,8 +694,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     }
     if( SV_EMBEDDED_OUTPLACE==nType || SV_EMBEDDED_OWN==nType )
     {
-        OUString sURL( sGraphicObjectProtocol );
-        sURL += rOLEObj.GetCurrentPersistName();
+        OUString sURL( sGraphicObjectProtocol + rOLEObj.GetCurrentPersistName() );
         if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) == 0 )
         {
             sURL = GetExport().AddEmbeddedObject( sURL );
