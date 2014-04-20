@@ -75,7 +75,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent, const SfxItemSet& 
         ( 0 != ( pObjSh = SfxObjectShell::Current()) &&
           0 != (pItem = pObjSh->GetItem(SID_HTML_MODE))))
     {
-        sal_uInt16 nHtmlMode = ((const SfxUInt16Item*)pItem)->GetValue();
+        const sal_uInt16 nHtmlMode = ((const SfxUInt16Item*)pItem)->GetValue();
 
         if (HTMLMODE_ON & nHtmlMode)
             m_pCountParaFram->Hide();
@@ -107,7 +107,7 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( m_pOutlineLvLB->GetSelectEntryPos() != m_pOutlineLvLB->GetSavedValue())
     {
-        sal_uInt16 aOutlineLv = m_pOutlineLvLB->GetSelectEntryPos();
+        const sal_uInt16 aOutlineLv = m_pOutlineLvLB->GetSelectEntryPos();
         const SfxUInt16Item* pOldOutlineLv = (const SfxUInt16Item*)GetOldItem( rSet, SID_ATTR_PARA_OUTLINE_LEVEL);
         SfxUInt16Item* pOutlineLv = (SfxUInt16Item*)pOldOutlineLv->Clone();
         pOutlineLv->SetValue( aOutlineLv );
@@ -221,12 +221,10 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     eItemState = rSet.GetItemState( FN_NUMBER_NEWSTART_AT);
     if( eItemState > SFX_ITEM_AVAILABLE )
     {
-        sal_uInt16 nNewStart = ((const SfxUInt16Item&)rSet.Get(FN_NUMBER_NEWSTART_AT)).GetValue();
-        m_pNewStartNumberCB->Check(USHRT_MAX != nNewStart);
-        if(USHRT_MAX == nNewStart)
-            nNewStart = 1;
-
-        m_pNewStartNF->SetValue(nNewStart);
+        const sal_uInt16 nNewStart = ((const SfxUInt16Item&)rSet.Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+        const bool bNotMax = USHRT_MAX != nNewStart;
+        m_pNewStartNumberCB->Check(bNotMax);
+        m_pNewStartNF->SetValue(bNotMax ? nNewStart : 1);
         m_pNewStartNumberCB->EnableTriState(false);
     }
     else
