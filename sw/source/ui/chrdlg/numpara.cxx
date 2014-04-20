@@ -177,10 +177,9 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
 
     eItemState = rSet.GetItemState( GetWhich(SID_ATTR_PARA_NUMRULE) );
 
-    OUString aStyle;
     if( eItemState >= SFX_ITEM_AVAILABLE )
     {
-        aStyle = ((const SfxStringItem &)rSet.Get( GetWhich(SID_ATTR_PARA_NUMRULE) )).GetValue();
+        OUString aStyle = ((const SfxStringItem &)rSet.Get( GetWhich(SID_ATTR_PARA_NUMRULE) )).GetValue();
         if(aStyle.isEmpty())
             aStyle = m_pNumberStyleLB->GetEntry(0);
 
