@@ -71,8 +71,10 @@ IMPL_LINK_NOARG_INLINE_END(SwBreakDlg, ClickHdl)
 
 IMPL_LINK_INLINE_START( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 {
-    if(pBox->IsChecked()) m_pPageNumEdit->SetValue(1);
-    else m_pPageNumEdit->SetText(OUString());
+    if(pBox->IsChecked())
+        m_pPageNumEdit->SetValue(1);
+    else
+        m_pPageNumEdit->SetText(OUString());
     return 0;
 }
 IMPL_LINK_INLINE_END( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
@@ -165,12 +167,14 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS )
 
     OUString aFmtName;
     for(sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
-        if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos( aFmtName =
-                                    SwStyleNameMapper::GetUIName( i, aFmtName )))
+    {
+        aFmtName = SwStyleNameMapper::GetUIName( i, aFmtName );
+        if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos(aFmtName))
             ::InsertStringSorted(aFmtName, *m_pPageCollBox, 1 );
+    }
     //add landscape page
-    if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos( aFmtName =
-                                    SwStyleNameMapper::GetUIName( RES_POOLPAGE_LANDSCAPE, aFmtName )))
+    aFmtName = SwStyleNameMapper::GetUIName( RES_POOLPAGE_LANDSCAPE, aFmtName );
+    if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos(aFmtName))
             ::InsertStringSorted(aFmtName, *m_pPageCollBox, 1 );
     CheckEnable();
     m_pPageNumEdit->SetText(OUString());
