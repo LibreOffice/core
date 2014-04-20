@@ -357,17 +357,15 @@ void  SwDropCapsPict::Paint(const Rectangle &/*rRect*/)
     OSL_ENSURE(mnLineH > 0, "We cannot make it that small");
     long nY0 = (aOutputSizePixel.Height() - (LINES * mnTotLineH)) / 2;
     SetFillColor( maTextLineColor );
-    for (sal_uInt16 i = 0; i < LINES; ++i)
+    for (int i = 0; i < LINES; ++i)
         DrawRect(Rectangle(Point(BORDER, nY0 + i * mnTotLineH), Size(aOutputSizePixel.Width() - 2 * BORDER, mnLineH)));
 
     // Text background with gap (240 twips ~ 1 line height)
-    sal_uLong lDistance = mnDistance;
-    sal_uInt16 nDistW = (sal_uInt16) (sal_uLong) (((lDistance * 100) / 240) * mnTotLineH) / 100;
+    const long nDistW = (((static_cast<long>(mnDistance) * 100) / 240) * mnTotLineH) / 100;
     SetFillColor( maBackColor );
     if (mpPage && mpPage->m_pDropCapsBox->IsChecked())
     {
-        Size    aTextSize( maTextSize );
-        aTextSize.Width() += nDistW;
+        const Size aTextSize( maTextSize.Width()+nDistW, maTextSize.Height() );
         DrawRect( Rectangle( Point( BORDER, nY0 ), aTextSize ) );
 
         // draw Text
@@ -415,11 +413,11 @@ void SwDropCapsPict::CheckScript( void )
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         xBreak = css::i18n::BreakIterator::create(xContext);
     }
-    sal_uInt16 nScript = xBreak->getScriptType( maText, 0 );
-    sal_uInt16 nChg = 0;
+    sal_Int16 nScript = xBreak->getScriptType( maText, 0 );
+    sal_Int32 nChg = 0;
     if( css::i18n::ScriptType::WEAK == nScript )
     {
-        nChg = (sal_Int32)xBreak->endOfScript( maText, nChg, nScript );
+        nChg = xBreak->endOfScript( maText, nChg, nScript );
         if( nChg < maText.getLength() )
             nScript = xBreak->getScriptType( maText, nChg );
         else
@@ -428,7 +426,7 @@ void SwDropCapsPict::CheckScript( void )
 
     do
     {
-        nChg = (sal_Int32)xBreak->endOfScript( maText, nChg, nScript );
+        nChg = xBreak->endOfScript( maText, nChg, nScript );
         maScriptChanges.push_back( _ScriptInfo(0, nScript, nChg) );
 
         if( nChg < maText.getLength() )
@@ -542,7 +540,7 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet)
 
     SetExchangeSupport();
 
-    sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
+    const sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
     bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
 
     // In the template dialog the text is not influenceable
@@ -689,13 +687,10 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
     // set text if applicable
     if (pEdit == m_pDropCapsField)
     {
-        sal_uInt16 nVal;
+        const sal_uInt16 nVal = !m_pWholeWordCB->IsChecked()
+            ? (sal_uInt16)m_pDropCapsField->GetValue()
+            : 0;
         bool bSetText = false;
-
-        if (!m_pWholeWordCB->IsChecked())
-            nVal = (sal_uInt16)m_pDropCapsField->GetValue();
-        else
-            nVal = 0;
 
         if (bFormat || rSh.GetDropTxt(1).isEmpty())
             sPreview = GetDefaultString(nVal);
@@ -718,8 +713,8 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
     }
     else if (pEdit == m_pTextEdit)   // set quantity if applicable
     {
-        sal_Int32 nTmp = m_pTextEdit->GetText().getLength();
-        m_pDropCapsField->SetValue(std::max((sal_uInt16)1, (sal_uInt16)nTmp));
+        const sal_Int32 nTmp = m_pTextEdit->GetText().getLength();
+        m_pDropCapsField->SetValue(std::max<sal_Int32>(1, nTmp));
 
         sPreview = m_pTextEdit->GetText().copy(0, nTmp);
     }
