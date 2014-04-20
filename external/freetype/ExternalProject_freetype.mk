@@ -29,8 +29,7 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 			--without-bzip2 \
 			--prefix=$(call gb_UnpackedTarball_get_dir,freetype/instdir) \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
-			CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS) $(if $(filter MACOSX,$(OS)),-arch i386 -arch x86_64)" \
-			$(if $(filter MACOSX,$(OS)),LDFLAGS="-arch i386 -arch x86_64") \
+			CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS)" \
 		&& chmod +x builds/unix/freetype-config \
 		&& $(MAKE) install \
 		&& touch $@	)
