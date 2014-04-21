@@ -22,7 +22,6 @@
  // Strings for the Draw-Dialog --------------------------------------------
 String RID_SVXSTR_SOLID
 {
-    /* ### ATTENTION: New text in Resource? Continuous : Continuous  */
     Text [ en-US ] = "Continuous" ;
 };
 String RID_SVXSTR_GRADIENT
@@ -56,7 +55,6 @@ String RID_SVXSTR_LINEEND
 
 String RID_SVXSTR_CLOSE
 {
-    /* ### ATTENTION: New text in Resource? Close : Close  */
     Text [ en-US ] = "Close" ;
 };
 String RID_SVXSTR_COLOR_BLACK
@@ -69,12 +67,10 @@ String RID_SVXSTR_COLOR_BLUE
 };
 String RID_SVXSTR_COLOR_GREEN
 {
-    /* ### ATTENTION: New text in Resource? Green : Green */
     Text [ en-US ] = "Green" ;
 };
 String RID_SVXSTR_COLOR_CYAN
 {
-    /* ### ATTENTION: New text in Resource? Turquoise : Turquoise */
     Text [ en-US ] = "Cyan" ;
 };
 String RID_SVXSTR_COLOR_RED
@@ -83,7 +79,6 @@ String RID_SVXSTR_COLOR_RED
 };
 String RID_SVXSTR_COLOR_MAGENTA
 {
-    /* ### ATTENTION: New text in Resource? Magenta : Violett */
     Text [ en-US ] = "Magenta" ;
 };
 String RID_SVXSTR_COLOR_GREY
@@ -96,7 +91,6 @@ String RID_SVXSTR_COLOR_YELLOW
 };
 String RID_SVXSTR_COLOR_WHITE
 {
-    /* ### ATTENTION: New text in Resource? White : White */
     Text [ en-US ] = "White" ;
 };
 String RID_SVXSTR_COLOR_BLUEGREY
