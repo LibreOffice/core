@@ -10321,7 +10321,7 @@ void PDFWriterImpl::drawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch
         aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME );
         push( PUSH_LINECOLOR );
         setLineColor( rHatch.GetColor() );
-        getReferenceDevice()->ImplDrawHatch( aPolyPoly, rHatch, false );
+        getReferenceDevice()->DrawHatch( aPolyPoly, rHatch, false );
         pop();
     }
 }

@@ -736,14 +736,6 @@ public:
     ///@}
 
 public:
-    /** @name Hatch functions
-     */
-    ///@{
-    SAL_DLLPRIVATE void         ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf );
-    SAL_DLLPRIVATE void         ImplCalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt16 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
-    SAL_DLLPRIVATE void         ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
-    ///@}
-
     /** @name Wallpaper functions
      */
     ///@{
@@ -1240,7 +1232,10 @@ public:
                                           const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                           const Bitmap& rBitmap, const Color& rMaskColor,
                                           sal_uLong nAction );
-
+public:
+    /** @name Hatch functions
+     */
+    ///@{
 #ifdef _MSC_VER
     void                        DrawHatch( const PolyPolygon& rPolyPoly, const ::Hatch& rHatch );
     void                        AddHatchActions( const PolyPolygon& rPolyPoly,
@@ -1253,6 +1248,14 @@ public:
                                                  GDIMetaFile& rMtf );
 #endif
 
+    void                        DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf );
+
+private:
+    SAL_DLLPRIVATE void         CalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt16 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
+    SAL_DLLPRIVATE void         DrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
+    ///@}
+
+public:
     void                        DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
     void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos );
     void                        DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags );

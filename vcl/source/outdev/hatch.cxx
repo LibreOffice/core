@@ -105,7 +105,7 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
         Push( PUSH_LINECOLOR );
         SetLineColor( aHatch.GetColor() );
         ImplInitLineColor();
-        ImplDrawHatch( aPolyPoly, aHatch, false );
+        DrawHatch( aPolyPoly, aHatch, false );
         Pop();
         EnableMapMode( bOldMap );
         mpMetaFile = pOldMetaFile;
@@ -129,17 +129,17 @@ void OutputDevice::AddHatchActions( const PolyPolygon& rPolyPoly, const Hatch& r
         mpMetaFile = &rMtf;
         mpMetaFile->AddAction( new MetaPushAction( PUSH_ALL ) );
         mpMetaFile->AddAction( new MetaLineColorAction( rHatch.GetColor(), true ) );
-        ImplDrawHatch( aPolyPoly, rHatch, true );
+        DrawHatch( aPolyPoly, rHatch, true );
         mpMetaFile->AddAction( new MetaPopAction() );
         mpMetaFile = pOldMtf;
     }
 }
 
-void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf )
+void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf )
 {
     if(rPolyPoly.Count())
     {
-        // #i115630# ImplDrawHatch does not work with beziers included in the polypolygon, take care of that
+        // #i115630# DrawHatch does not work with beziers included in the polypolygon, take care of that
         bool bIsCurve(false);
 
         for(sal_uInt16 a(0); !bIsCurve && a < rPolyPoly.Count(); a++)
@@ -152,11 +152,11 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
 
         if(bIsCurve)
         {
-            OSL_ENSURE(false, "ImplDrawHatch does *not* support curves, falling back to AdaptiveSubdivide()...");
+            OSL_ENSURE(false, "DrawHatch does *not* support curves, falling back to AdaptiveSubdivide()...");
             PolyPolygon aPolyPoly;
 
             rPolyPoly.AdaptiveSubdivide(aPolyPoly);
-            ImplDrawHatch(aPolyPoly, rHatch, bMtf);
+            DrawHatch(aPolyPoly, rHatch, bMtf);
         }
         else
         {
@@ -169,10 +169,10 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
 
             // Single hatch
             aRect.Left() -= nLogPixelWidth; aRect.Top() -= nLogPixelWidth; aRect.Right() += nLogPixelWidth; aRect.Bottom() += nLogPixelWidth;
-            ImplCalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1 );
+            CalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1 );
             do
             {
-                ImplDrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
+                DrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
                 aPt1.X() += aInc.Width(); aPt1.Y() += aInc.Height();
                 aPt2.X() += aInc.Width(); aPt2.Y() += aInc.Height();
             }
@@ -181,10 +181,10 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
             if( ( rHatch.GetStyle() == HATCH_DOUBLE ) || ( rHatch.GetStyle() == HATCH_TRIPLE ) )
             {
                 // Double hatch
-                ImplCalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900, aPt1, aPt2, aInc, aEndPt1 );
+                CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900, aPt1, aPt2, aInc, aEndPt1 );
                 do
                 {
-                    ImplDrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
+                    DrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
                     aPt1.X() += aInc.Width(); aPt1.Y() += aInc.Height();
                     aPt2.X() += aInc.Width(); aPt2.Y() += aInc.Height();
                 }
@@ -193,10 +193,10 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
                 if( rHatch.GetStyle() == HATCH_TRIPLE )
                 {
                     // Triple hatch
-                    ImplCalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450, aPt1, aPt2, aInc, aEndPt1 );
+                    CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450, aPt1, aPt2, aInc, aEndPt1 );
                     do
                     {
-                        ImplDrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
+                        DrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
                         aPt1.X() += aInc.Width(); aPt1.Y() += aInc.Height();
                         aPt2.X() += aInc.Width(); aPt2.Y() += aInc.Height();
                     }
@@ -207,8 +207,8 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
     }
 }
 
-void OutputDevice::ImplCalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt16 nAngle10,
-                                        Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 )
+void OutputDevice::CalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt16 nAngle10,
+                                    Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 )
 {
     Point   aRef;
     long    nAngle = nAngle10 % 1800;
@@ -315,7 +315,7 @@ void OutputDevice::ImplCalcHatchValues( const Rectangle& rRect, long nDist, sal_
     }
 }
 
-void OutputDevice::ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly,
+void OutputDevice::DrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly,
                                       Point* pPtBuffer, bool bMtf )
 {
     double  fX, fY;
