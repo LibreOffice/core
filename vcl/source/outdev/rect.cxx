@@ -51,7 +51,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
         return;
 
     if ( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
     if ( mbInitFillColor )
         ImplInitFillColor();
 
@@ -92,7 +92,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
         return;
 
     if ( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
     if ( mbInitFillColor )
         ImplInitFillColor();
 

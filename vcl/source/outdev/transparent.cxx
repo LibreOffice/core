@@ -196,7 +196,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
         return;
 
     if( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
     if( mbInitFillColor )
         ImplInitFillColor();
 
@@ -276,7 +276,7 @@ bool OutputDevice::DrawTransparentNatively ( const PolyPolygon& rPolyPoly,
         if( mbOutputClipped )
             return false;
         if( mbInitLineColor )
-            ImplInitLineColor();
+            InitLineColor();
         if( mbInitFillColor )
             ImplInitFillColor();
 
@@ -360,7 +360,7 @@ void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
             if ( mbInitClipRegion )
                 ImplInitClipRegion();
             if ( mbInitLineColor )
-                ImplInitLineColor();
+                InitLineColor();
             if ( mbInitFillColor )
                 ImplInitFillColor();
 

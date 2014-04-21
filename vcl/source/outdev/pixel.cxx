@@ -92,7 +92,7 @@ void OutputDevice::DrawPixel( const Point& rPt )
         return;
 
     if ( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
 
     mpGraphics->DrawPixel( aPt.X(), aPt.Y(), this );
 

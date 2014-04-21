@@ -104,7 +104,7 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
         EnableMapMode( false );
         Push( PUSH_LINECOLOR );
         SetLineColor( aHatch.GetColor() );
-        ImplInitLineColor();
+        InitLineColor();
         DrawHatch( aPolyPoly, aHatch, false );
         Pop();
         EnableMapMode( bOldMap );

@@ -272,7 +272,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
         return true;
 
     if ( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
     if ( mbInitFillColor )
         ImplInitFillColor();
 

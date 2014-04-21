@@ -24,6 +24,8 @@
 
 #include <salgdi.hxx>
 
+#include "outdata.hxx"
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -45,8 +47,11 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     if ( !IsDeviceOutputNecessary() || !mbLineColor || ( LINE_NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
         return;
 
-    if( !mpGraphics && !ImplGetGraphics() )
-        return;
+    if( !mpGraphics )
+    {
+        if ( !ImplGetGraphics() )
+            return;
+    }
 
     if ( mbInitClipRegion )
         ImplInitClipRegion();
@@ -61,7 +66,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     const bool bLineWidthUsed(aInfo.GetWidth() > 1);
 
     if ( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
 
     if(bDashUsed || bLineWidthUsed)
     {
@@ -69,7 +74,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
         aLinePolygon.append(basegfx::B2DPoint(aStartPt.X(), aStartPt.Y()));
         aLinePolygon.append(basegfx::B2DPoint(aEndPt.X(), aEndPt.Y()));
 
-        ImplPaintLineGeometryWithEvtlExpand(aInfo, basegfx::B2DPolyPolygon(aLinePolygon));
+        PaintLineGeometryWithEvtlExpand(aInfo, basegfx::B2DPolyPolygon(aLinePolygon));
     }
     else
     {
@@ -97,11 +102,12 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 
     if ( mbInitClipRegion )
         ImplInitClipRegion();
+
     if ( mbOutputClipped )
         return;
 
     if ( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
 
     // #i101598# support AA and snap for lines, too
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
@@ -139,9 +145,78 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
         mpAlphaVDev->DrawLine( rStartPt, rEndPt );
 }
 
-void OutputDevice::ImplPaintLineGeometryWithEvtlExpand(
-    const LineInfo& rInfo,
-    basegfx::B2DPolyPolygon aLinePolyPolygon)
+void OutputDevice::SetLineColor()
+{
+
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
+
+    if ( mbLineColor )
+    {
+        mbInitLineColor = true;
+        mbLineColor = false;
+        maLineColor = Color( COL_TRANSPARENT );
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetLineColor();
+}
+
+void OutputDevice::SetLineColor( const Color& rColor )
+{
+
+    Color aColor = ImplDrawModeToColor( rColor );
+
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaLineColorAction( aColor, true ) );
+
+    if( ImplIsColorTransparent( aColor ) )
+    {
+        if ( mbLineColor )
+        {
+            mbInitLineColor = true;
+            mbLineColor = false;
+            maLineColor = Color( COL_TRANSPARENT );
+        }
+    }
+    else
+    {
+        if( maLineColor != aColor )
+        {
+            mbInitLineColor = true;
+            mbLineColor = true;
+            maLineColor = aColor;
+        }
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetLineColor( COL_BLACK );
+}
+
+void OutputDevice::InitLineColor()
+{
+    DBG_TESTSOLARMUTEX();
+
+    if( mbLineColor )
+    {
+        if( ROP_0 == meRasterOp )
+            mpGraphics->SetROPLineColor( SAL_ROP_0 );
+        else if( ROP_1 == meRasterOp )
+            mpGraphics->SetROPLineColor( SAL_ROP_1 );
+        else if( ROP_INVERT == meRasterOp )
+            mpGraphics->SetROPLineColor( SAL_ROP_INVERT );
+        else
+            mpGraphics->SetLineColor( ImplColorToSal( maLineColor ) );
+    }
+    else
+        mpGraphics->SetLineColor();
+
+    mbInitLineColor = false;
+}
+
+void OutputDevice::PaintLineGeometryWithEvtlExpand(
+            const LineInfo& rInfo,
+            basegfx::B2DPolyPolygon aLinePolyPolygon)
 {
     const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
@@ -245,7 +320,7 @@ void OutputDevice::ImplPaintLineGeometryWithEvtlExpand(
         const Color     aOldFillColor( maFillColor );
 
         SetLineColor();
-        ImplInitLineColor();
+        InitLineColor();
         SetFillColor( aOldLineColor );
         ImplInitFillColor();
 

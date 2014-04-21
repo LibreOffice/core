@@ -699,29 +699,7 @@ public:
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
     ///@}
 
-    /** @name Line functions
-     */
-    ///@{
-    SAL_DLLPRIVATE void         ImplInitLineColor();
     SAL_DLLPRIVATE void         ImplInitFillColor();
-
-    // #i101491#
-    // Helper which holds the old line geometry creation and is extended to use AA when
-    // switched on. Advantage is that line geometry is only temporarily used for paint
-    SAL_DLLPRIVATE void         ImplDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo);
-
-    // #i101491#
-    // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
-    SAL_DLLPRIVATE bool         ImplTryDrawPolyLineDirect(
-                                    const basegfx::B2DPolygon& rB2DPolygon,
-                                    double fLineWidth = 0.0,
-                                    double fTransparency = 0.0,
-                                    basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
-                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
-
-    // Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
-    void                        ImplPaintLineGeometryWithEvtlExpand(const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon);
-    ///@}
 
     /** @name Polygon functions
      */
@@ -928,44 +906,6 @@ public:
     void                        DrawPixel( const Point& rPt, const Color& rColor );
     void                        DrawPixel( const Polygon& rPts, const Color* pColors = NULL );
     void                        DrawPixel( const Polygon& rPts, const Color& rColor );
-
-    void                        DrawLine( const Point& rStartPt, const Point& rEndPt );
-    void                        DrawLine( const Point& rStartPt, const Point& rEndPt,
-                                          const LineInfo& rLineInfo );
-
-    /** Render the given polygon as a line stroke
-
-        The given polygon is stroked with the current LineColor, start
-        and end point are not automatically connected
-
-        @see DrawPolygon
-        @see DrawPolyPolygon
-     */
-    void                        DrawPolyLine( const Polygon& rPoly );
-    void                        DrawPolyLine(
-                                    const basegfx::B2DPolygon&,
-                                    double fLineWidth = 0.0,
-                                    basegfx::B2DLineJoin = basegfx::B2DLINEJOIN_ROUND,
-                                    css::drawing::LineCap = css::drawing::LineCap_BUTT);
-    bool                        TryDrawPolyLineDirect(
-                                    const basegfx::B2DPolygon& rB2DPolygon,
-                                    double fLineWidth = 0.0,
-                                    double fTransparency = 0.0,
-                                    basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
-                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
-
-    /** Render the given polygon as a line stroke
-
-        The given polygon is stroked with the current LineColor, start
-        and end point are not automatically connected. The line is
-        rendered according to the specified LineInfo, e.g. supplying a
-        dash pattern, or a line thickness.
-
-        @see DrawPolygon
-        @see DrawPolyPolygon
-     */
-    void                        DrawPolyLine( const Polygon& rPoly,
-                                              const LineInfo& rLineInfo );
 
     /** Render the given polygon
 
@@ -1256,6 +1196,86 @@ private:
     ///@}
 
 public:
+    /** @name Line functions
+     */
+    ///@{
+
+    void                        DrawLine( const Point& rStartPt, const Point& rEndPt );
+
+    void                        DrawLine( const Point& rStartPt, const Point& rEndPt,
+                                          const LineInfo& rLineInfo );
+
+    void                        SetLineColor();
+    void                        SetLineColor( const Color& rColor );
+    const Color&                GetLineColor() const { return maLineColor; }
+    bool                        IsLineColor() const { return mbLineColor; }
+
+private:
+    SAL_DLLPRIVATE void         InitLineColor();
+
+    /** Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
+     */
+    SAL_DLLPRIVATE void         PaintLineGeometryWithEvtlExpand( const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon );
+    ///@}
+
+public:
+    /** @name Polyline functions
+     */
+    ///@{
+
+    /** Render the given polygon as a line stroke
+
+        The given polygon is stroked with the current LineColor, start
+        and end point are not automatically connected
+
+        @see DrawPolygon
+        @see DrawPolyPolygon
+     */
+    void                        DrawPolyLine( const Polygon& rPoly );
+
+    void                        DrawPolyLine(
+                                    const basegfx::B2DPolygon&,
+                                    double fLineWidth = 0.0,
+                                    basegfx::B2DLineJoin = basegfx::B2DLINEJOIN_ROUND,
+                                    css::drawing::LineCap = css::drawing::LineCap_BUTT);
+
+    /** Render the given polygon as a line stroke
+
+        The given polygon is stroked with the current LineColor, start
+        and end point are not automatically connected. The line is
+        rendered according to the specified LineInfo, e.g. supplying a
+        dash pattern, or a line thickness.
+
+        @see DrawPolygon
+        @see DrawPolyPolygon
+     */
+    void                        DrawPolyLine( const Polygon& rPoly,
+                                              const LineInfo& rLineInfo );
+private:
+    // #i101491#
+    // Helper which holds the old line geometry creation and is extended to use AA when
+    // switched on. Advantage is that line geometry is only temporarily used for paint
+    SAL_DLLPRIVATE void         DrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo);
+
+
+    bool                        TryDrawPolyLineDirect(
+                                    const basegfx::B2DPolygon& rB2DPolygon,
+                                    double fLineWidth = 0.0,
+                                    double fTransparency = 0.0,
+                                    basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
+                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
+
+    // #i101491#
+    // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
+    SAL_DLLPRIVATE bool         TryDrawPolyLineDirectNoAA(
+                                    const basegfx::B2DPolygon& rB2DPolygon,
+                                    double fLineWidth = 0.0,
+                                    double fTransparency = 0.0,
+                                    basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
+                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
+    ///@}
+
+public:
     void                        DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
     void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos );
     void                        DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags );
@@ -1339,11 +1359,6 @@ public:
     */
     void                        SetOutDevViewType( OutDevViewType eOutDevViewType ) { meOutDevViewType=eOutDevViewType; }
     OutDevViewType              GetOutDevViewType() const { return meOutDevViewType; }
-
-    void                        SetLineColor();
-    void                        SetLineColor( const Color& rColor );
-    const Color&                GetLineColor() const { return maLineColor; }
-    bool                        IsLineColor() const { return mbLineColor; }
 
     void                        SetFillColor();
     void                        SetFillColor( const Color& rColor );

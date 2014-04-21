@@ -50,31 +50,34 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         return;
 
     if ( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
 
-    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
-        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
-        && ROP_OVERPAINT == GetRasterOp()
-        && IsLineColor());
+    const bool bTryAA( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+                    && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+                    && ROP_OVERPAINT == GetRasterOp()
+                    && IsLineColor());
 
     // use b2dpolygon drawing if possible
-    if(bTryAA && ImplTryDrawPolyLineDirect(rPoly.getB2DPolygon()))
+    if(bTryAA)
     {
-        basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
-        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
-
-        // transform the polygon
-        aB2DPolyLine.transform( aTransform );
-
-        if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+        if ( TryDrawPolyLineDirectNoAA( rPoly.getB2DPolygon() ) )
         {
-            aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
-        }
+            basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
+            const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
+            const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
 
-        if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this))
-        {
-            return;
+            // transform the polygon
+            aB2DPolyLine.transform( aTransform );
+
+            if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+            {
+                aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
+            }
+
+            if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this))
+            {
+                return;
+            }
         }
     }
 
@@ -122,7 +125,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyLineAction( rPoly, rLineInfo ) );
 
-    ImplDrawPolyLineWithLineInfo(rPoly, rLineInfo);
+    DrawPolyLineWithLineInfo(rPoly, rLineInfo);
 }
 
 void OutputDevice::DrawPolyLine(
@@ -156,7 +159,7 @@ void OutputDevice::DrawPolyLine(
         return;
 
     if( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
 
     const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
@@ -164,9 +167,10 @@ void OutputDevice::DrawPolyLine(
         && IsLineColor());
 
     // use b2dpolygon drawing if possible
-    if(bTryAA && ImplTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, 0.0, eLineJoin, eLineCap))
+    if(bTryAA)
     {
-        return;
+        if ( TryDrawPolyLineDirectNoAA(rB2DPolygon, fLineWidth, 0.0, eLineJoin, eLineCap) )
+            return;
     }
 
     // #i101491#
@@ -188,7 +192,7 @@ void OutputDevice::DrawPolyLine(
         const Color aOldFillColor(maFillColor);
 
         SetLineColor();
-        ImplInitLineColor();
+        InitLineColor();
         SetFillColor(aOldLineColor);
         ImplInitFillColor();
 
@@ -200,7 +204,7 @@ void OutputDevice::DrawPolyLine(
         }
 
         SetLineColor(aOldLineColor);
-        ImplInitLineColor();
+        InitLineColor();
         SetFillColor(aOldFillColor);
         ImplInitFillColor();
 
@@ -210,7 +214,7 @@ void OutputDevice::DrawPolyLine(
             // to avoid optical gaps
             for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
             {
-                ImplTryDrawPolyLineDirect(aAreaPolyPolygon.getB2DPolygon(a));
+                TryDrawPolyLineDirectNoAA(aAreaPolyPolygon.getB2DPolygon(a));
             }
         }
     }
@@ -221,11 +225,11 @@ void OutputDevice::DrawPolyLine(
         LineInfo aLineInfo;
         if( fLineWidth != 0.0 )
             aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
-        ImplDrawPolyLineWithLineInfo( aToolsPolygon, aLineInfo );
+        DrawPolyLineWithLineInfo( aToolsPolygon, aLineInfo );
     }
 }
 
-void OutputDevice::ImplDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo)
+void OutputDevice::DrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo)
 {
     sal_uInt16 nPoints(rPoly.GetSize());
 
@@ -245,7 +249,7 @@ void OutputDevice::ImplDrawPolyLineWithLineInfo(const Polygon& rPoly, const Line
         return;
 
     if ( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
 
     const LineInfo aInfo( ImplLogicToDevicePixel( rLineInfo ) );
     const bool bDashUsed(LINE_DASH == aInfo.GetStyle());
@@ -253,7 +257,7 @@ void OutputDevice::ImplDrawPolyLineWithLineInfo(const Polygon& rPoly, const Line
 
     if(bDashUsed || bLineWidthUsed)
     {
-        ImplPaintLineGeometryWithEvtlExpand(aInfo, basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()));
+        PaintLineGeometryWithEvtlExpand(aInfo, basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()));
     }
     else
     {
@@ -273,7 +277,7 @@ void OutputDevice::ImplDrawPolyLineWithLineInfo(const Polygon& rPoly, const Line
         mpAlphaVDev->DrawPolyLine( rPoly, rLineInfo );
 }
 
-bool OutputDevice::ImplTryDrawPolyLineDirect(
+bool OutputDevice::TryDrawPolyLineDirectNoAA(
             const basegfx::B2DPolygon& rB2DPolygon,
             double fLineWidth,
             double fTransparency,
@@ -336,7 +340,7 @@ bool OutputDevice::TryDrawPolyLineDirect(
         return true;
 
     if( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
 
     const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
@@ -345,7 +349,7 @@ bool OutputDevice::TryDrawPolyLineDirect(
 
     if(bTryAA)
     {
-        if(ImplTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, fTransparency, eLineJoin, eLineCap))
+        if(TryDrawPolyLineDirectNoAA(rB2DPolygon, fLineWidth, fTransparency, eLineJoin, eLineCap))
         {
             // worked, add metafile action (if recorded) and return true
             if( mpMetaFile )

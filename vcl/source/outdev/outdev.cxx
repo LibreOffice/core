@@ -781,27 +781,6 @@ void OutputDevice::ImplGetFrameDev( const Point& rPt, const Point& rDevPt, const
 }
 
 
-void OutputDevice::ImplInitLineColor()
-{
-    DBG_TESTSOLARMUTEX();
-
-    if( mbLineColor )
-    {
-        if( ROP_0 == meRasterOp )
-            mpGraphics->SetROPLineColor( SAL_ROP_0 );
-        else if( ROP_1 == meRasterOp )
-            mpGraphics->SetROPLineColor( SAL_ROP_1 );
-        else if( ROP_INVERT == meRasterOp )
-            mpGraphics->SetROPLineColor( SAL_ROP_INVERT );
-        else
-            mpGraphics->SetLineColor( ImplColorToSal( maLineColor ) );
-    }
-    else
-        mpGraphics->SetLineColor();
-
-    mbInitLineColor = false;
-}
-
 void OutputDevice::ImplInitFillColor()
 {
     DBG_TESTSOLARMUTEX();
@@ -1068,23 +1047,6 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
         mpAlphaVDev->SetRasterOp( eRasterOp );
 }
 
-void OutputDevice::SetLineColor()
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
-
-    if ( mbLineColor )
-    {
-        mbInitLineColor = true;
-        mbLineColor = false;
-        maLineColor = Color( COL_TRANSPARENT );
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLineColor();
-}
-
 Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
 {
     Color aColor( rColor );
@@ -1123,37 +1085,6 @@ Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
         }
     }
     return aColor;
-}
-
-void OutputDevice::SetLineColor( const Color& rColor )
-{
-
-    Color aColor = ImplDrawModeToColor( rColor );
-
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLineColorAction( aColor, true ) );
-
-    if( ImplIsColorTransparent( aColor ) )
-    {
-        if ( mbLineColor )
-        {
-            mbInitLineColor = true;
-            mbLineColor = false;
-            maLineColor = Color( COL_TRANSPARENT );
-        }
-    }
-    else
-    {
-        if( maLineColor != aColor )
-        {
-            mbInitLineColor = true;
-            mbLineColor = true;
-            maLineColor = aColor;
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLineColor( COL_BLACK );
 }
 
 void OutputDevice::SetFillColor()

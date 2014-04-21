@@ -56,7 +56,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
         return;
 
     if ( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
     if ( mbInitFillColor )
         ImplInitFillColor();
 
@@ -163,7 +163,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
         return;
 
     if ( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
     if ( mbInitFillColor )
         ImplInitFillColor();
 
@@ -263,7 +263,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
         return;
 
     if( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
     if( mbInitFillColor )
         ImplInitFillColor();
 
@@ -528,7 +528,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
     }
 
     if( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
 
     if( mbInitFillColor )
         ImplInitFillColor();

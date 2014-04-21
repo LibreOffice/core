@@ -56,7 +56,7 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
         return;
 
     if ( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
 
     Polygon aRectPoly( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
     if ( aRectPoly.GetSize() >= 2 )
@@ -103,7 +103,7 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
         return;
 
     if ( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
 
     const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
     const Point     aEnd( ImplLogicToDevicePixel( rEndPt ) );
@@ -146,7 +146,7 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
         return;
 
     if ( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
 
     const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
     const Point     aEnd( ImplLogicToDevicePixel( rEndPt ) );
@@ -196,7 +196,7 @@ void OutputDevice::DrawChord( const Rectangle& rRect,
         return;
 
     if ( mbInitLineColor )
-        ImplInitLineColor();
+        InitLineColor();
 
     const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
     const Point     aEnd( ImplLogicToDevicePixel( rEndPt ) );
