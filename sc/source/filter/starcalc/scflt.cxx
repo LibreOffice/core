@@ -407,11 +407,14 @@ template < typename T > sal_uLong insert_new( ScCollection* pCollection, SvStrea
 
 
 Sc10FontData::Sc10FontData(SvStream& rStream)
+    : Height(0)
+    , CharSet(0)
+    , PitchAndFamily(0)
 {
     rStream.ReadInt16( Height );
     rStream.ReadUChar( CharSet );
     rStream.ReadUChar( PitchAndFamily );
-    sal_uInt16 nLen;
+    sal_uInt16 nLen(0);
     rStream.ReadUInt16( nLen );
     if (nLen < sizeof(FaceName))
         rStream.Read(FaceName, nLen);
@@ -419,16 +422,15 @@ Sc10FontData::Sc10FontData(SvStream& rStream)
         rStream.SetError(ERRCODE_IO_WRONGFORMAT);
 }
 
-
-Sc10FontCollection::Sc10FontCollection(SvStream& rStream) :
-    ScCollection (4, 4),
-    nError     (0)
+Sc10FontCollection::Sc10FontCollection(SvStream& rStream)
+    : ScCollection(4, 4)
+    , nError(0)
 {
-  sal_uInt16 ID;
+  sal_uInt16 ID(0);
   rStream.ReadUInt16( ID );
   if (ID == FontID)
   {
-    sal_uInt16 nAnz;
+    sal_uInt16 nAnz(0);
     rStream.ReadUInt16( nAnz );
     for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
     {

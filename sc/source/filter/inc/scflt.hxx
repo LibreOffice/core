@@ -528,16 +528,16 @@ public:
     sal_uInt8               PitchAndFamily;
     sal_Char            FaceName[32];
 
-                        Sc10FontData( const Sc10FontData& rData ) :
-                            ScDataObject( rData ),
-                            Height( rData.Height ),
-                            CharSet( rData.CharSet ),
-                            PitchAndFamily( rData.PitchAndFamily )
-                                {
-                                    strncpy( FaceName, rData.FaceName, sizeof(FaceName) );
-                                    FaceName[sizeof(FaceName)-1] = 0;
-                                }
-                        Sc10FontData( SvStream& rStream );
+    Sc10FontData( const Sc10FontData& rData )
+        : ScDataObject( rData )
+        , Height( rData.Height )
+        , CharSet( rData.CharSet )
+        , PitchAndFamily( rData.PitchAndFamily )
+    {
+        strncpy( FaceName, rData.FaceName, sizeof(FaceName) );
+        FaceName[sizeof(FaceName)-1] = 0;
+    }
+    Sc10FontData( SvStream& rStream );
     virtual ScDataObject*   Clone() const SAL_OVERRIDE { return new Sc10FontData(*this); }
 };
 
