@@ -1645,15 +1645,6 @@ DECLARE_OOXMLIMPORT_TEST(testStrictLockedcanvas, "strict-lockedcanvas.docx")
     getShape(1);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testFdo55381, "fdo55381.docx")
-{
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(4), xCursor->getPage());
-}
-
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
