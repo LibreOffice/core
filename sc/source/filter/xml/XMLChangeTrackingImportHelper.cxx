@@ -78,7 +78,8 @@ const ScCellValue& ScMyCellInfo::CreateCell( ScDocument* pDoc )
 }
 
 ScMyDeleted::ScMyDeleted()
-    : pCellInfo(NULL)
+    : nID(0)
+    , pCellInfo(NULL)
 {
 }
 
@@ -88,9 +89,9 @@ ScMyDeleted::~ScMyDeleted()
 }
 
 ScMyGenerated::ScMyGenerated(ScMyCellInfo* pTempCellInfo, const ScBigRange& aTempBigRange)
-    : aBigRange(aTempBigRange),
-    nID(0),
-    pCellInfo(pTempCellInfo)
+    : aBigRange(aTempBigRange)
+    , nID(0)
+    , pCellInfo(pTempCellInfo)
 {
 }
 
