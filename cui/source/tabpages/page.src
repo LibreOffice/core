@@ -95,6 +95,5 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "Japanese Postcard" ; PAPERSIZE_POSTCARD_JP; > ;
     };
 };
- // ********************************************************************** EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

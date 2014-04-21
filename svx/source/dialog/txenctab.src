@@ -24,7 +24,6 @@
 #define PairedList ItemList
 // Encodings for which no conversion exist yet are commented out.
 
- // RID_SVXSTR_TEXTENCODING_TABLE ----------------------------------------------------
 StringArray RID_SVXSTR_TEXTENCODING_TABLE
 {
     PairedList [ en-US ] =
@@ -108,6 +107,5 @@ StringArray RID_SVXSTR_TEXTENCODING_TABLE
         < "Cyrillic (PT154)"                                ; RTL_TEXTENCODING_PT154            ; > ;
     };
 };
- // ********************************************************************** EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

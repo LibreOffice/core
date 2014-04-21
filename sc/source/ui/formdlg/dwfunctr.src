@@ -114,6 +114,5 @@ DockingWindow FID_FUNCTION_BOX
     };
     Text [ en-US ] = "Functions" ;
 };
- // ********************************************************************** EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

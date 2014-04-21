@@ -99,8 +99,6 @@ ModalDialog WIZ_RTFCOPYTABLE
 };
 
 
- // TAB_WIZ_COLUMN_SELECT
-
 TabPage TAB_WIZ_COLUMN_SELECT
 {
     SVLook  = TRUE ;
@@ -226,8 +224,6 @@ TabPage TAB_WIZ_COLUMN_SELECT
 };
 
 
- // TAB_WIZ_TYPE_SELECT
-
 TabPage TAB_WIZ_TYPE_SELECT
 {
     SVLook  = TRUE ;
@@ -312,8 +308,6 @@ Menu RID_SBA_RTF_PKEYPOPUP
     };
 };
 
-
- // TAB_WIZ_NAME_MATCHING
 
 TabPage TAB_WIZ_NAME_MATCHING
 {

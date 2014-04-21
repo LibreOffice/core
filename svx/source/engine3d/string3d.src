@@ -64,6 +64,5 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
 {
     Text [ en-US ] = "3D Attributes" ;
 };
- // ********************************************************************** EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

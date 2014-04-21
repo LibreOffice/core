@@ -165,6 +165,4 @@ String RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE
     Text [ en-US ] = "Font Name. The current font is not available and will be substituted.";
 };
 
-// ********************************************************************** EOF
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

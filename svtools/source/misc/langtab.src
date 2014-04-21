@@ -24,7 +24,6 @@
 
 #define PairedList ItemList
 
- // STR_ARR_SVT_LANGUAGE_TABLE ----------------------------------------------------
 StringArray STR_ARR_SVT_LANGUAGE_TABLE
 {
     PairedList [ en-US ] =
@@ -385,7 +384,5 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Lengo" ; LANGUAGE_USER_LENGO ; > ;
     };
 };
-
-// ********************************************************************** EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

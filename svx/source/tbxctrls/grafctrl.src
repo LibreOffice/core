@@ -106,9 +106,6 @@ FloatingWindow RID_SVXTBX_GRFFILTER
 };
 
 
-// - Strings -
-
-
 String RID_SVXSTR_UNDO_GRAFMODE
 {
     Text [ en-US ] = "Image Mode";
@@ -145,7 +142,5 @@ String RID_SVXSTR_GRAFCROP
 {
     Text [ en-US ] = "Crop";
 };
-
-// ********************************************************************** EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

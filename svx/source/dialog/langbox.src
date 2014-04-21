@@ -31,6 +31,4 @@ Image RID_SVXIMG_CHECKED
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 };
 
-// ********************************************************************** EOF
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

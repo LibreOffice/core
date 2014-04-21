@@ -140,6 +140,5 @@ Resource RID_SVXERRCODE
         Text [ en-US ] = "Password protection is not supported when documents are saved in a Microsoft Office format.\nDo you want to save the document without password protection?";
     };
 };
- // ********************************************************************** EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

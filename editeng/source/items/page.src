@@ -27,6 +27,5 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
 {
     Text [ en-US ] = "[From printer settings]" ;
 };
- // ********************************************************************** EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,7 +21,6 @@
 #include "helpid.hrc"
 #include <cuires.hrc>
 
- // Strings ---------------------------------------------------------------
 String RID_SVXSTR_OPT_DOUBLE_DICTS
 {
     Text [ en-US ] = "The specified name already exists.\nPlease enter a new name." ;
@@ -30,13 +29,12 @@ String STR_MODIFY
 {
     Text [ en-US ] = "~Replace" ;
 };
- // RID_SFXQB_SET_LANGUAGE ------------------------------------------------
+
 QueryBox RID_SFXQB_SET_LANGUAGE
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
     Message [ en-US ] = "Do you want to change the '%1' dictionary language?" ;
 };
- // ********************************************************************** EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

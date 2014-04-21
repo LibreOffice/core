@@ -80,6 +80,4 @@ String STR_MENU_THESAURUS
     Text [ en-US ] = "~Thesaurus..." ;
 };
 
-// ******************************************************************* EOF
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

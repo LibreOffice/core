@@ -26,6 +26,4 @@ String RID_SVXSTR_LANGUAGE_ALL
     Text [ en-US ] = "[All]" ;
 };
 
- // ********************************************************************** EOF
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

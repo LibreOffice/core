@@ -22,7 +22,6 @@
 #define MASKCOLOR \
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; }
 
- // define ---------------------------------------------------------------
 #define IL_LOCK_MCOL Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
 
 ImageList IL_LOCK_BMPS
@@ -37,6 +36,5 @@ ImageList IL_LOCK_BMPS
         };
         IdCount = { 3 ; };
     };
- // ********************************************************************** EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

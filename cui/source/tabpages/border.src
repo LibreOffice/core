@@ -22,7 +22,6 @@
 #include "border.hrc"
 #include <svx/dialogs.hrc>
 
- // define ---------------------------------------------------------------
 #define STD_MASKCOLOR Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
 
 ImageList IL_PRE_BITMAPS
