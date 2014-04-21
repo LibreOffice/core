@@ -18,6 +18,7 @@
  */
 
 #include <tools/poly.hxx>
+#include <tools/helpers.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/outdev.hxx>
