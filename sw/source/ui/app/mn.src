@@ -183,17 +183,6 @@
         };\
     };
 
-/* --------------------- M E N U  --------------------------------- */
-
-/*
-
-
-The application menu bar resource has become obsolete. You can now find the menu bar at the following
-location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
-
-
-*/
-
 /* --------------------- D O C U M E N T -------------------------- */
 
 
