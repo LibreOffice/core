@@ -4595,9 +4595,8 @@ void Test::testFindAreaPosColRight()
 // if cells in the sort are referenced by formulas
 void Test::testSortWithFormulaRefs()
 {
-    ScDocument* pDoc = getDocShell().GetDocument();
-    pDoc->InsertTab(0, "List1");
-    pDoc->InsertTab(1, "List2");
+    m_pDoc->InsertTab(0, "List1");
+    m_pDoc->InsertTab(1, "List2");
 
     const char* aFormulaData[6] = {
         "=IF($List1.A2<>\"\",$List1.A2,\"\")",
@@ -4615,7 +4614,7 @@ void Test::testSortWithFormulaRefs()
         "larry",
     };
 
-    const char* aResults[ 6 ] = {
+    const char* aResults[6] = {
         "bob",
         "brian",
         "larry",
@@ -4626,12 +4625,12 @@ void Test::testSortWithFormulaRefs()
     // insert data to sort
     SCROW nStart = 1, nEnd = 4;
     for ( SCROW i = nStart; i <= nEnd; ++i )
-        pDoc->SetString( 0, i, 0, OUString::createFromAscii(aTextData[i-1]) );
+        m_pDoc->SetString( 0, i, 0, OUString::createFromAscii(aTextData[i-1]) );
     // insert forumulas
     nStart = 0;
     nEnd = SAL_N_ELEMENTS(aFormulaData);
     for ( SCROW i = nStart; i < nEnd; ++i )
-        pDoc->SetString( 0, i, 1, OUString::createFromAscii(aFormulaData[i]) );
+        m_pDoc->SetString( 0, i, 1, OUString::createFromAscii(aFormulaData[i]) );
 
     ScSortParam aSortData;
     aSortData.nCol1 = 0;
@@ -4641,16 +4640,16 @@ void Test::testSortWithFormulaRefs()
     aSortData.maKeyState[0].bDoSort = true;
     aSortData.maKeyState[0].nField = 0;
 
-    pDoc->Sort(0, aSortData, false, NULL);
+    m_pDoc->Sort(0, aSortData, false, NULL);
 
     nEnd = SAL_N_ELEMENTS( aResults );
     for ( SCROW i = nStart; i < nEnd; ++i )
     {
-        OUString sResult = pDoc->GetString( 0, i + 1, 0);
-        CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aResults[ i ] ), sResult );
+        OUString sResult = m_pDoc->GetString(0, i + 1, 0);
+        CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aResults[i] ), sResult );
     }
-    pDoc->DeleteTab(0);
-    pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testSortWithStrings()
