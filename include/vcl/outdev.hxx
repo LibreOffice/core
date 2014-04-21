@@ -770,10 +770,6 @@ public:
 protected:
                                 OutputDevice();
 
-    virtual void                ApplyMask ( const Bitmap& rMask, const Color& rMaskColor,
-                                            const Point& rDestPt, const Size& rDestSize,
-                                            const Point& rSrcPtPixel, const Size& rSrcSizePixel );
-
     virtual bool                UsePolyPolygonForComplexGradient() = 0;
 
     virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
@@ -1164,15 +1160,6 @@ private:
     ///@}
 
 public:
-    void                        DrawMask( const Point& rDestPt,
-                                          const Bitmap& rBitmap, const Color& rMaskColor );
-    void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
-                                          const Bitmap& rBitmap, const Color& rMaskColor );
-    void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
-                                          const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                          const Bitmap& rBitmap, const Color& rMaskColor,
-                                          sal_uLong nAction );
-public:
     /** @name Hatch functions
      */
     ///@{
@@ -1273,6 +1260,29 @@ private:
                                     double fTransparency = 0.0,
                                     basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
                                     css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
+    ///@}
+
+
+public:
+    /** @name Polyline functions
+     */
+    ///@{
+
+    void                        DrawMask( const Point& rDestPt,
+                                          const Bitmap& rBitmap, const Color& rMaskColor );
+
+    void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
+                                          const Bitmap& rBitmap, const Color& rMaskColor );
+
+    void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
+                                          const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                          const Bitmap& rBitmap, const Color& rMaskColor,
+                                          sal_uLong nAction );
+
+protected:
+    virtual void                ApplyMask ( const Bitmap& rMask, const Color& rMaskColor,
+                                            const Point& rDestPt, const Size& rDestSize,
+                                            const Point& rSrcPtPixel, const Size& rSrcSizePixel );
     ///@}
 
 public:
