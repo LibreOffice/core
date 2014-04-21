@@ -242,6 +242,8 @@ ScMyStylesImportHelper::ScMyStylesImportHelper(ScXMLImport& rTempImport)
     pPrevStyleName(NULL),
     pCurrency(NULL),
     pPrevCurrency(NULL),
+    nCellType(0),
+    nPrevCellType(0),
     bPrevRangeAdded(true)
 {
 }
