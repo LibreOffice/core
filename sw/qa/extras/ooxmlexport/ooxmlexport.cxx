@@ -3185,6 +3185,18 @@ DECLARE_OOXMLEXPORT_TEST(testFDO75431, "fdo75431.docx")
     assertXPath(pXmlDoc, "//w:p/w:pPr/w:sectPr/w:type", "val", "nextPage");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO77725, "fdo77725.docx")
+{
+    xmlDocPtr pXmlFootnotes = parseExport("word/footnotes.xml");
+    if (!pXmlFootnotes)
+        return;
+
+    assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[1]", 0);
+    assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[2]", 0);
+    assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[3]", 0);
+
+}
+
 DECLARE_OOXMLEXPORT_TEST(testContentTypeOLE, "fdo77759.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");

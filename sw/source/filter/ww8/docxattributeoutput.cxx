@@ -1610,7 +1610,7 @@ void DocxAttributeOutput::FootnoteEndnoteRefTag()
     1, meaning that it skips one character after the text.  This is to make
     the switch in DocxAttributeOutput::RunText() nicer ;-)
  */
-static void impl_WriteRunText( FSHelperPtr pSerializer, sal_Int32 nTextToken,
+static bool impl_WriteRunText( FSHelperPtr pSerializer, sal_Int32 nTextToken,
         const sal_Unicode* &rBegin, const sal_Unicode* pEnd, bool bMove = true )
 {
     const sal_Unicode *pBegin = rBegin;
@@ -1620,7 +1620,7 @@ static void impl_WriteRunText( FSHelperPtr pSerializer, sal_Int32 nTextToken,
         rBegin = pEnd + 1;
 
     if ( pBegin >= pEnd )
-        return; // we want to write at least one character
+        return false; // we want to write at least one character
 
     // we have to add 'preserve' when starting/ending with space
     if ( *pBegin == ' ' || *( pEnd - 1 ) == ' ' )
@@ -1633,6 +1633,8 @@ static void impl_WriteRunText( FSHelperPtr pSerializer, sal_Int32 nTextToken,
     pSerializer->writeEscaped( OUString( pBegin, pEnd - pBegin ) );
 
     pSerializer->endElementNS( XML_w, nTextToken );
+
+    return true;
 }
 
 void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCharSet*/ )
@@ -1660,8 +1662,10 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
                 m_pSerializer->singleElementNS( XML_w, XML_tab, FSEND );
                 break;
             case 0x0b: // line break
-                impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt );
-                m_pSerializer->singleElementNS( XML_w, XML_br, FSEND );
+                {
+                    if (impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt ))
+                        m_pSerializer->singleElementNS( XML_w, XML_br, FSEND );
+                }
                 break;
             case 0x1E: //non-breaking hyphen
                 impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt );
