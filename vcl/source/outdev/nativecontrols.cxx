@@ -24,7 +24,7 @@
 
 #include "salgdi.hxx"
 
-static bool lcl_enableNativeWidget( const OutputDevice& i_rDevice )
+static bool EnableNativeWidget( const OutputDevice& i_rDevice )
 {
     const OutDevType eType( i_rDevice.GetOutDevType() );
     switch ( eType )
@@ -142,7 +142,7 @@ PushButtonValue* PushButtonValue::clone() const
 
 bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPart ) const
 {
-    if( !lcl_enableNativeWidget( *this ) )
+    if( !EnableNativeWidget( *this ) )
         return false;
 
     if ( !mpGraphics )
@@ -158,7 +158,7 @@ bool OutputDevice::HitTestNativeControl( ControlType nType,
                               const Point& aPos,
                               bool& rIsInside ) const
 {
-    if( !lcl_enableNativeWidget( *this ) )
+    if( !EnableNativeWidget( *this ) )
         return false;
 
     if ( !mpGraphics )
@@ -173,7 +173,7 @@ bool OutputDevice::HitTestNativeControl( ControlType nType,
         rIsInside, this ) );
 }
 
-static boost::shared_ptr< ImplControlValue > lcl_transformControlValue( const ImplControlValue& rVal, const OutputDevice& rDev )
+static boost::shared_ptr< ImplControlValue > TransformControlValue( const ImplControlValue& rVal, const OutputDevice& rDev )
 {
     boost::shared_ptr< ImplControlValue > aResult;
     switch( rVal.getType() )
@@ -258,7 +258,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
                             const ImplControlValue& aValue,
                             const OUString& aCaption )
 {
-    if( !lcl_enableNativeWidget( *this ) )
+    if( !EnableNativeWidget( *this ) )
         return false;
 
     // make sure the current clip region is initialized correctly
@@ -278,7 +278,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
 
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code
-    boost::shared_ptr< ImplControlValue > aScreenCtrlValue( lcl_transformControlValue( aValue, *this ) );
+    boost::shared_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
     Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
     Region aTestRegion( GetActiveClipRegion() );
@@ -300,7 +300,7 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 Rectangle &rNativeBoundingRegion,
                                 Rectangle &rNativeContentRegion ) const
 {
-    if( !lcl_enableNativeWidget( *this ) )
+    if( !EnableNativeWidget( *this ) )
         return false;
 
     if ( !mpGraphics )
@@ -309,7 +309,7 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
 
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code
-    boost::shared_ptr< ImplControlValue > aScreenCtrlValue( lcl_transformControlValue( aValue, *this ) );
+    boost::shared_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
     Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
     bool bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, *aScreenCtrlValue,
