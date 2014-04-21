@@ -456,27 +456,26 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                 ScSortInfoArray::Cell& rCell = (*pRow)[j];
 
                 sc::CellStoreType& rCellStore = aSortedCols.at(j).maCells;
-                size_t n = rCellStore.size();
-                rCellStore.resize(n+1);
                 switch (rCell.maCell.meType)
                 {
                     case CELLTYPE_STRING:
                         assert(rCell.mpAttr);
-                        rCellStore.set(n, *rCell.maCell.mpString);
+                        rCellStore.push_back(*rCell.maCell.mpString);
                     break;
                     case CELLTYPE_VALUE:
                         assert(rCell.mpAttr);
-                        rCellStore.set(n, rCell.maCell.mfValue);
+                        rCellStore.push_back(rCell.maCell.mfValue);
                     break;
                     case CELLTYPE_EDIT:
                         assert(rCell.mpAttr);
-                        rCellStore.set(n, rCell.maCell.mpEditText->Clone());
+                        rCellStore.push_back(rCell.maCell.mpEditText->Clone());
                     break;
                     case CELLTYPE_FORMULA:
                     {
                         assert(rCell.mpAttr);
+                        size_t n = rCellStore.size();
                         ScAddress aCellPos(aSortParam.nCol1 + j, nRow1 + i, nTab);
-                        sc::CellStoreType::iterator itBlk = rCellStore.set(n, rCell.maCell.mpFormula->Clone(aCellPos));
+                        sc::CellStoreType::iterator itBlk = rCellStore.push_back(rCell.maCell.mpFormula->Clone(aCellPos));
 
                         size_t nOffset = n - itBlk->position;
                         sc::CellStoreType::position_type aPos(itBlk, nOffset);
@@ -485,21 +484,24 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                     break;
                     default:
                         assert(!rCell.mpAttr);
+                        rCellStore.push_back_empty();
                 }
 
                 sc::CellTextAttrStoreType& rAttrStore = aSortedCols.at(j).maCellTextAttrs;
-                rAttrStore.resize(n+1);
                 if (rCell.mpAttr)
-                    rAttrStore.set(n, *rCell.mpAttr);
+                    rAttrStore.push_back(*rCell.mpAttr);
+                else
+                    rAttrStore.push_back_empty();
 
                 // At this point each broadcaster instance is managed by 2
                 // containers. We will release those in the original storage
                 // below before transferring them to the document.
                 sc::BroadcasterStoreType& rBCStore = aSortedCols.at(j).maBroadcasters;
-                rBCStore.resize(n+1);
                 if (rCell.mpBroadcaster)
                     // A const pointer would be implicitly converted to a bool type.
-                    rBCStore.set(n, const_cast<SvtBroadcaster*>(rCell.mpBroadcaster));
+                    rBCStore.push_back(const_cast<SvtBroadcaster*>(rCell.mpBroadcaster));
+                else
+                    rBCStore.push_back_empty();
             }
 
             if (pProgress)
@@ -526,9 +528,7 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                 sc::BroadcasterStoreType& rBCDest = aCol[nThisCol].maBroadcasters;
 
                 // Release current broadcasters first, to prevent them from getting deleted.
-                SvtBroadcaster* pBC = NULL;
-                for (SCROW nRow = nRow1; nRow <= aSortParam.nRow2; ++nRow)
-                    rBCDest.release(nRow, pBC);
+                rBCDest.release(nRow1, aSortParam.nRow2);
 
                 // Transfer sorted broadcaster segment to the document.
                 sc::BroadcasterStoreType& rBCSrc = aSortedCols[i].maBroadcasters;
