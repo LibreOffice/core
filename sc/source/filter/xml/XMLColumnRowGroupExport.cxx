@@ -27,7 +27,10 @@
 
 using namespace xmloff::token;
 
-ScMyColumnRowGroup::ScMyColumnRowGroup() : bDisplay(false)
+ScMyColumnRowGroup::ScMyColumnRowGroup()
+    : nField(0)
+    , nLevel(0)
+    , bDisplay(false)
 {
 }
 
