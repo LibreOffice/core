@@ -48,6 +48,10 @@ ScMyValidation::ScMyValidation()
     sImputTitle(),
     sFormula1(),
     sFormula2(),
+    aAlertStyle(sheet::ValidationAlertStyle_STOP),
+    aValidationType(sheet::ValidationType_ANY),
+    aOperator(sheet::ConditionOperator_NONE),
+    nShowList(0),
     bShowErrorMessage(false),
     bShowImputMessage(false),
     bIgnoreBlanks(false)
