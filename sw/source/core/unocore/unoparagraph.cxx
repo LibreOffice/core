@@ -86,9 +86,6 @@ SwParaSelection::~SwParaSelection()
     }
 }
 
-/******************************************************************
- * forward declarations
- ******************************************************************/
 static beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             const SwTxtNode& rTxtNode,
                             const SwAttrSet** ppSet,
@@ -96,9 +93,6 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             sal_Bool &rAttrSetFetched )
     throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception);
 
-/******************************************************************
- * SwXParagraph
- ******************************************************************/
 class SwXParagraph::Impl
     : public SwClient
 {

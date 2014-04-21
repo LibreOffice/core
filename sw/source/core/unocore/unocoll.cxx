@@ -473,9 +473,6 @@ const SvEventDescription* sw_GetSupportedMacroItems()
     return aMacroDescriptionsImpl;
 }
 
-/******************************************************************
- * SwXServiceProvider
- ******************************************************************/
 OUString    SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
 {
     SolarMutexGuard aGuard;
@@ -841,9 +838,6 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
     return xRet;
 }
 
-/******************************************************************
- * SwXTextTables
- ******************************************************************/
 //SMART_UNO_IMPLEMENTATION( SwXTextTables, UsrObject );
 SwXTextTables::SwXTextTables(SwDoc* pDc) :
         SwUnoCollection(pDc)
@@ -1001,9 +995,6 @@ XTextTable* SwXTextTables::GetObject( SwFrmFmt& rFmt )
     return pTbl ;
 }
 
-/******************************************************************
- *  SwXFrameEnumeration
- ******************************************************************/
 namespace
 {
     template<FlyCntType T> struct UnoFrameWrap_traits {};
@@ -1148,9 +1139,6 @@ Sequence< OUString > SwXFrameEnumeration<T>::getSupportedServiceNames(void) thro
     return ::comphelper::makeSequence(OUString("com.sun.star.container.XEnumeration"));
 }
 
-/******************************************************************
- *  SwXFrames
- ******************************************************************/
 OUString SwXFrames::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return OUString("SwXFrames");
@@ -1315,9 +1303,6 @@ SwXFrame* SwXFrames::GetObject(SwFrmFmt& rFmt, FlyCntType eType)
     }
 }
 
-/******************************************************************
- * SwXTextFrames
- ******************************************************************/
 OUString SwXTextFrames::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return OUString("SwXTextFrames");
@@ -1345,9 +1330,6 @@ SwXTextFrames::~SwXTextFrames()
 {
 }
 
-/******************************************************************
- *  SwXTextGraphicObjects
- ******************************************************************/
 OUString SwXTextGraphicObjects::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return OUString("SwXTextGraphicObjects");
@@ -1375,9 +1357,6 @@ SwXTextGraphicObjects::~SwXTextGraphicObjects()
 {
 }
 
-/******************************************************************
- *  SwXTextEmbeddedObjects
- ******************************************************************/
 OUString SwXTextEmbeddedObjects::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return OUString("SwXTextEmbeddedObjects");

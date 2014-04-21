@@ -21,12 +21,7 @@
 
 #include "drawbase.hxx"
 
-/*************************************************************************
-|*
-|* draw rectangle
-|*
-\************************************************************************/
-
+// draw rectangle
 class DrawSelection : public SwDrawBase
 {
  public:

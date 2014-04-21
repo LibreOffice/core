@@ -127,11 +127,6 @@ extern bool bNoInterrupt;       // in swapp.cxx
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::SelectObj()
-*************************************************************************/
-
 sal_Bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
 {
     SwDrawView *pDView = Imp()->GetDrawView();
@@ -247,24 +242,20 @@ sal_Bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pOb
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*  sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
-|*
-|*  Description: MoveAnchor( nDir ) looked for an another Anchor for
-|*  the selected drawing object (or fly frame) in the given direction.
-|*  An object "as character" doesn't moves anyway.
-|*  A page bounded object could move to the previous/next page with up/down,
-|*  an object bounded "at paragraph" moves to the previous/next paragraph, too.
-|*  An object bounded "at character" moves to the previous/next paragraph
-|*  with up/down and to the previous/next character with left/right.
-|*  If the anchor for at paragraph/character bounded objects has vertical or
-|*  right_to_left text direction, the directions for up/down/left/right will
-|*  interpreted accordingly.
-|*  An object bounded "at fly" takes the center of the actual anchor and looks
-|*  for the nearest fly frame in the given direction.
-|*
-*************************************************************************/
+/*
+ *  Description: MoveAnchor( nDir ) looked for an another Anchor for
+ *  the selected drawing object (or fly frame) in the given direction.
+ *  An object "as character" doesn't moves anyway.
+ *  A page bounded object could move to the previous/next page with up/down,
+ *  an object bounded "at paragraph" moves to the previous/next paragraph, too.
+ *  An object bounded "at character" moves to the previous/next paragraph
+ *  with up/down and to the previous/next character with left/right.
+ *  If the anchor for at paragraph/character bounded objects has vertical or
+ *  right_to_left text direction, the directions for up/down/left/right will
+ *  interpreted accordingly.
+ *  An object bounded "at fly" takes the center of the actual anchor and looks
+ *  for the nearest fly frame in the given direction.
+ */
 
 #define LESS_X( aPt1, aPt2, bOld ) ( aPt1.getX() < aPt2.getX() || \
         ( aPt1.getX() == aPt2.getX() && ( aPt1.getY() < aPt2.getY() || \
@@ -514,12 +505,6 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::GetSelFrmType()
-|*
-*************************************************************************/
-
 const SdrMarkList* SwFEShell::_GetMarkList() const
 {
     const SdrMarkList* pMarkList = NULL;
@@ -578,12 +563,6 @@ bool SwFEShell::IsSelContainsControl() const
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::Scroll()
-|*
-*************************************************************************/
-
 void SwFEShell::ScrollTo( const Point &rPt )
 {
     const SwRect aRect( rPt, rPt );
@@ -595,23 +574,11 @@ void SwFEShell::ScrollTo( const Point &rPt )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::SetDragMode()
-|*
-*************************************************************************/
-
 void SwFEShell::SetDragMode( sal_uInt16 eDragMode )
 {
     if ( Imp()->HasDrawView() )
         Imp()->GetDrawView()->SetDragMode( (SdrDragMode)eDragMode );
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::BeginDrag()
-|*
-*************************************************************************/
 
 long SwFEShell::BeginDrag( const Point* pPt, sal_Bool )
 {
@@ -626,11 +593,6 @@ long SwFEShell::BeginDrag( const Point* pPt, sal_Bool )
     }
     return 0;
 }
-/*************************************************************************
-|*
-|*  SwFEShell::Drag()
-|*
-*************************************************************************/
 
 long SwFEShell::Drag( const Point *pPt, sal_Bool )
 {
@@ -645,12 +607,6 @@ long SwFEShell::Drag( const Point *pPt, sal_Bool )
     }
     return 0;
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::EndDrag()
-|*
-*************************************************************************/
 
 long SwFEShell::EndDrag( const Point *, sal_Bool )
 {
@@ -696,12 +652,6 @@ long SwFEShell::EndDrag( const Point *, sal_Bool )
     return 0;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::BreakDrag()
-|*
-*************************************************************************/
-
 void SwFEShell::BreakDrag()
 {
     OSL_ENSURE( Imp()->HasDrawView(), "BreakDrag without DrawView?" );
@@ -710,14 +660,7 @@ void SwFEShell::BreakDrag()
     SetChainMarker();
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::SelFlyGrabCrsr()
-|*
-|*  Description         If a fly is selected, pulls the crsr in
-|*                      the first CntntFrm
-*************************************************************************/
-
+// If a fly is selected, pulls the crsr in the first CntntFrm
 const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
 {
     if ( Imp()->HasDrawView() )
@@ -750,14 +693,7 @@ const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
     return 0;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::SelectionToTop(), SelectionToBottom()
-|*
-|*  Description        Selection to above/below (Z-Order)
-|*
-*************************************************************************/
-
+// Selection to above/below (Z-Order)
 static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
 {
     // Rules for evasion have changed.
@@ -876,14 +812,8 @@ void SwFEShell::SelectionToBottom( sal_Bool bBottom )
     EndAllAction();
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::GetLayerId()
-|*
-|*  Description         Object above/below the document?
-|*                      2 Controls, 1 Heaven, 0 Hell, -1 Ambiguous
-*************************************************************************/
-
+// Object above/below the document? 2 Controls, 1 Heaven, 0 Hell,
+// -1 Ambiguous
 short SwFEShell::GetLayerId() const
 {
     short nRet = SHRT_MAX;
@@ -909,13 +839,7 @@ short SwFEShell::GetLayerId() const
     return nRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::SelectionToHeaven(), SelectionToHell()
-|*
-|*  Description         Object above/below the document
-|*
-*************************************************************************/
+// Object above/below the document
 // Note: only visible objects can be marked. Thus, objects with invisible
 //       layer IDs have not to be considered.
 //       If <SwFEShell> exists, layout exists!!
@@ -966,12 +890,6 @@ void SwFEShell::SelectionToHell()
     ChangeOpaque( getIDocumentDrawModelAccess()->GetHellId() );
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::IsObjSelected(), IsFrmSelected()
-|*
-*************************************************************************/
-
 sal_uInt16 SwFEShell::IsObjSelected() const
 {
     if ( IsFrmSelected() || !Imp()->HasDrawView() )
@@ -1017,12 +935,6 @@ sal_Bool SwFEShell::IsObjSameLevelWithMarked(const SdrObject* pObj) const
     }
     return sal_False;
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::EndTextEdit()
-|*
-*************************************************************************/
 
 void SwFEShell::EndTextEdit()
 {
@@ -1076,12 +988,6 @@ void SwFEShell::EndTextEdit()
     EndAllAction();
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::IsInsideSelectedObj()
-|*
-*************************************************************************/
-
 int SwFEShell::IsInsideSelectedObj( const Point &rPt )
 {
     if( Imp()->HasDrawView() )
@@ -1096,12 +1002,6 @@ int SwFEShell::IsInsideSelectedObj( const Point &rPt )
     }
     return SDRHIT_NONE;
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::IsObjSelectable()
-|*
-*************************************************************************/
 
 bool SwFEShell::IsObjSelectable( const Point& rPt )
 {
@@ -1248,18 +1148,12 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::GotoObj()
-|*
-|*  Description        If an object was selected, we assume its upper-left corner
-|*                     otherwise the middle of the current CharRects.
-|*
-*************************************************************************/
-/* --------------------------------------------------
+/*
+ * If an object was selected, we assume its upper-left corner
+ * otherwise the middle of the current CharRects.
  * Does the object include a control or groups,
  * which comprise only controls
- * --------------------------------------------------*/
+ */
 static bool lcl_IsControlGroup( const SdrObject *pObj )
 {
     bool bRet = false;
@@ -1498,12 +1392,6 @@ sal_Bool SwFEShell::GotoObj( sal_Bool bNext, sal_uInt16 /*GOTOOBJ_...*/ eType )
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::BeginCreate()
-|*
-*************************************************************************/
-
 sal_Bool SwFEShell::BeginCreate( sal_uInt16 /*SdrObjKind ?*/  eSdrObjectKind, const Point &rPos )
 {
     sal_Bool bRet = sal_False;
@@ -1546,12 +1434,6 @@ sal_Bool SwFEShell::BeginCreate( sal_uInt16 /*SdrObjKind ?*/  eSdrObjectKind, sa
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::MoveCreate()
-|*
-*************************************************************************/
-
 void SwFEShell::MoveCreate( const Point &rPos )
 {
     OSL_ENSURE( Imp()->HasDrawView(), "MoveCreate without DrawView?" );
@@ -1562,12 +1444,6 @@ void SwFEShell::MoveCreate( const Point &rPos )
         ::FrameNotify( this, FLY_DRAG );
     }
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::EndCreate(), ImpEndCreate()
-|*
-*************************************************************************/
 
 sal_Bool SwFEShell::EndCreate( sal_uInt16 eSdrCreateCmd )
 {
@@ -1931,12 +1807,6 @@ sal_Bool SwFEShell::ImpEndCreate()
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::BreakCreate()
-|*
-*************************************************************************/
-
 void SwFEShell::BreakCreate()
 {
     OSL_ENSURE( Imp()->HasDrawView(), "BreakCreate without DrawView?" );
@@ -1944,22 +1814,10 @@ void SwFEShell::BreakCreate()
     ::FrameNotify( this, FLY_DRAG_END );
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::IsDrawCreate()
-|*
-*************************************************************************/
-
 bool SwFEShell::IsDrawCreate() const
 {
     return Imp()->HasDrawView() ? Imp()->GetDrawView()->IsCreateObj() : false;
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::BeginMark()
-|*
-*************************************************************************/
 
 sal_Bool SwFEShell::BeginMark( const Point &rPos )
 {
@@ -1979,12 +1837,6 @@ sal_Bool SwFEShell::BeginMark( const Point &rPos )
         return sal_False;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::MoveMark()
-|*
-*************************************************************************/
-
 void SwFEShell::MoveMark( const Point &rPos )
 {
     OSL_ENSURE( Imp()->HasDrawView(), "MoveMark without DrawView?" );
@@ -2002,12 +1854,6 @@ void SwFEShell::MoveMark( const Point &rPos )
             pDView->MovAction( rPos );
     }
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::EndMark()
-|*
-*************************************************************************/
 
 sal_Bool SwFEShell::EndMark()
 {
@@ -2066,23 +1912,11 @@ sal_Bool SwFEShell::EndMark()
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::BreakSelect()
-|*
-*************************************************************************/
-
 void SwFEShell::BreakMark()
 {
     OSL_ENSURE( Imp()->HasDrawView(), "BreakMark without DrawView?" );
     Imp()->GetDrawView()->BrkMarkObj();
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::GetAnchorId()
-|*
-*************************************************************************/
 
 short SwFEShell::GetAnchorId() const
 {
@@ -2114,12 +1948,6 @@ short SwFEShell::GetAnchorId() const
     return nRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::ChgAnchor()
-|*
-*************************************************************************/
-
 void SwFEShell::ChgAnchor( int eAnchorId, bool bSameOnly, bool bPosCorr )
 {
     OSL_ENSURE( Imp()->HasDrawView(), "ChgAnchor without DrawView?" );
@@ -2138,12 +1966,6 @@ void SwFEShell::ChgAnchor( int eAnchorId, bool bSameOnly, bool bPosCorr )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::DelSelectedObj()
-|*
-*************************************************************************/
-
 void SwFEShell::DelSelectedObj()
 {
     OSL_ENSURE( Imp()->HasDrawView(), "DelSelectedObj(), no DrawView available" );
@@ -2156,15 +1978,7 @@ void SwFEShell::DelSelectedObj()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::GetObjSize(), GetAnchorObjDiff()
-|*
-|*  Description        For the statusline to request the current
-|*                     conditions
-|*
-*************************************************************************/
-
+// For the statusline to request the current conditions
 Size SwFEShell::GetObjSize() const
 {
     Rectangle aRect;
@@ -2212,12 +2026,6 @@ Point SwFEShell::GetObjAbsPos() const
     OSL_ENSURE( Imp()->GetDrawView(), "GetObjAbsPos() without DrawView?" );
     return Imp()->GetDrawView()->GetDragStat().GetActionRect().TopLeft();
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::IsGroupSelected()
-|*
-*************************************************************************/
 
 sal_Bool SwFEShell::IsGroupSelected()
 {
@@ -2319,15 +2127,7 @@ bool SwFEShell::IsGroupAllowed() const
     return bIsGroupAllowed;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::GroupSelection()
-|*
-|*  Description        The group gets the anchor and the contactobject
-|*                     of the first in the selection
-|*
-*************************************************************************/
-
+// The group gets the anchor and the contactobject of the first in the selection
 void SwFEShell::GroupSelection()
 {
     if ( IsGroupAllowed() )
@@ -2342,15 +2142,7 @@ void SwFEShell::GroupSelection()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::UnGroupSelection()
-|*
-|*  Description         The individual objects get a copy of the anchor and
-|*                      the contactobject of the group
-|*
-*************************************************************************/
-
+// The individual objects get a copy of the anchor and the contactobject of the group
 void SwFEShell::UnGroupSelection()
 {
     if ( IsGroupSelected() )
@@ -2364,12 +2156,6 @@ void SwFEShell::UnGroupSelection()
         EndAllAction();
     }
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::MirrorSelection()
-|*
-*************************************************************************/
 
 void SwFEShell::MirrorSelection( bool bHorizontal )
 {

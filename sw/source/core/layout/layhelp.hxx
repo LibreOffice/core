@@ -33,9 +33,8 @@ class SwSectionFrm;
 class SwSectionNode;
 class SvStream;
 
-/*************************************************************************
- *                      class SwLayCacheImpl
- * contains the page break information and the text frame positions
+/*
+ * Contains the page break information and the text frame positions
  * of the document (after loading)
  * and is used inside the constructor of the layout rootframe to
  * insert content and text frames at the right pages.
@@ -45,7 +44,7 @@ class SvStream;
  * and if it's not the first part of the table/paragraph,
  * the row/character-offset inside the table/paragraph.
  * The text frame positions are stored in the SwPageFlyCache array.
- *************************************************************************/
+ */
 
 class SwFlyCache;
 typedef boost::ptr_vector<SwFlyCache> SwPageFlyCache;
@@ -72,12 +71,8 @@ public:
     bool IsUseFlyCache() const { return bUseFlyCache; }
 };
 
-/*************************************************************************
- *                      class SwActualSection
- * helps to create the sectionframes during the _InsertCnt-function
- * by controlling nested sections.
- *************************************************************************/
-
+// Helps to create the sectionframes during the _InsertCnt-function
+// by controlling nested sections.
 class SwActualSection
 {
     SwActualSection *pUpper;
@@ -94,12 +89,8 @@ public:
     SwActualSection *GetUpper()                         { return pUpper; }
 };
 
-/*************************************************************************
- *                      class SwLayHelper
- * helps during the _InsertCnt-function to create new pages.
- * If there's a layoutcache available, this information is used.
- *************************************************************************/
-
+// Helps during the _InsertCnt-function to create new pages.
+// If there's a layoutcache available, this information is used.
 class SwLayHelper
 {
     SwFrm* &rpFrm;
@@ -137,12 +128,7 @@ public:
     static bool CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly );
 };
 
-/*************************************************************************
- *                      class SwLayCacheIoImpl
- * contains the data structures that are required to read and write a
- * layout cache.
- *************************************************************************/
-
+// Contains the data structures that are required to read and write a layout cache.
 #define SW_LAYCACHE_IO_REC_PAGES    'p'
 #define SW_LAYCACHE_IO_REC_PARA     'P'
 #define SW_LAYCACHE_IO_REC_TABLE    'T'

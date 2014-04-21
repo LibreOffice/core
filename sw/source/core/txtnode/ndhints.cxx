@@ -29,10 +29,6 @@
 
 inline void DumpHints(const SwpHtStart &, const SwpHtEnd &) { }
 
-/*************************************************************************
- *                      IsLessStart()
- *************************************************************************/
-
 // Sortierreihenfolge: Start, Ende (umgekehrt!), Which-Wert (umgekehrt!),
 //                     als letztes die Adresse selbst
 
@@ -65,10 +61,6 @@ static bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
     }
     return ( *rHt1.GetStart() < *rHt2.GetStart() );
 }
-
-/*************************************************************************
- *                      inline IsLessEnd()
- *************************************************************************/
 
 // Zuerst nach Ende danach nach Ptr
 static bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
@@ -112,10 +104,6 @@ bool CompareSwpHtEnd::operator()(SwTxtAttr* const lhs, SwTxtAttr* const rhs) con
   return lcl_IsLessEnd( *lhs, *rhs );
 }
 
-/*************************************************************************
- *                      class SwpHintsArr
- *************************************************************************/
-
 void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 {
     Resort();
@@ -156,10 +144,6 @@ sal_uInt16 SwpHintsArray::GetPos( const SwTxtAttr *pHt ) const
 }
 
 #ifdef DBG_UTIL
-
-/*************************************************************************
- *                      SwpHintsArray::Check()
- *************************************************************************/
 
 #define CHECK_ERR(cond, text) \
         if(!(cond)) \
@@ -389,10 +373,6 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
 }
 
 #endif      /* DBG_UTIL */
-
-/*************************************************************************
- *                          SwpHintsArray::Resort()
- *************************************************************************/
 
 // Resort() is called before every Insert and Delete.
 // Various SwTxtNode methods modify hints in a way that violates the

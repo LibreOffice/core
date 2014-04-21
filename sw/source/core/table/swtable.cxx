@@ -242,11 +242,6 @@ void _InsTblBox( SwDoc* pDoc, SwTableNode* pTblNd,
     }
 }
 
-/*************************************************************************
-|*
-|*  SwTable::SwTable()
-|*
-|*************************************************************************/
 SwTable::SwTable( SwTableFmt* pFmt )
     : SwClient( pFmt ),
     pHTMLLayout( 0 ),
@@ -307,11 +302,6 @@ SwTable::~SwTable()
     delete pHTMLLayout;
 }
 
-/*************************************************************************
-|*
-|*  SwTable::Modify()
-|*
-|*************************************************************************/
 static void FmtInArr( std::vector<SwFmt*>& rFmtArr, SwFmt* pBoxFmt )
 {
     std::vector<SwFmt*>::const_iterator it = std::find( rFmtArr.begin(), rFmtArr.end(), pBoxFmt );
@@ -420,11 +410,6 @@ void SwTable::AdjustWidths( const long nOld, const long nNew )
     ::lcl_ModifyLines( aLines, nOld, nNew, aFmtArr, true );
 }
 
-/*************************************************************************
-|*
-|*  SwTable::GetTabCols()
-|*
-|*************************************************************************/
 static void lcl_RefreshHidden( SwTabCols &rToFill, size_t nPos )
 {
     for ( size_t i = 0; i < rToFill.Count(); ++i )
@@ -660,11 +645,6 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
     }
 }
 
-/*************************************************************************
-|*
-|*  SwTable::SetTabCols()
-|*
-|*************************************************************************/
 // Structure for parameter passing
 struct Parm
 {
@@ -1331,13 +1311,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
     CHECK_TABLE( *this )
 }
 
-/*************************************************************************
-|*
-|*  const SwTableBox* SwTable::GetTblBox( const Strn?ng& rName ) const
-|*      return the pointer of the box specified.
-|*
-|*************************************************************************/
-
+// return the pointer of the box specified.
 static bool lcl_IsValidRowName( const OUString& rStr )
 {
     bool bIsValid = true;
@@ -1523,11 +1497,6 @@ bool SwTable::IsTblComplex() const
     return false;
 }
 
-/*************************************************************************
-|*
-|*  SwTableLine::SwTableLine()
-|*
-|*************************************************************************/
 SwTableLine::SwTableLine( SwTableLineFmt *pFmt, sal_uInt16 nBoxes,
                             SwTableBox *pUp )
     : SwClient( pFmt ),
@@ -1550,11 +1519,6 @@ SwTableLine::~SwTableLine()
         delete pMod;    // and delete
 }
 
-/*************************************************************************
-|*
-|*  SwTableLine::ClaimFrmFmt(), ChgFrmFmt()
-|*
-|*************************************************************************/
 SwFrmFmt* SwTableLine::ClaimFrmFmt()
 {
     // This method makes sure that this object is an exclusive SwTableLine client
@@ -1671,11 +1635,6 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
     return nRet;
 }
 
-/*************************************************************************
-|*
-|*  SwTableBox::SwTableBox()
-|*
-|*************************************************************************/
 SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, sal_uInt16 nLines, SwTableLine *pUp )
     : SwClient( 0 ),
     aLines(),
@@ -1780,11 +1739,6 @@ SwTableBoxFmt* SwTableBox::CheckBoxFmt( SwTableBoxFmt* pFmt )
     return pFmt;
 }
 
-/*************************************************************************
-|*
-|*  SwTableBox::ClaimFrmFmt(), ChgFrmFmt()
-|*
-|*************************************************************************/
 SwFrmFmt* SwTableBox::ClaimFrmFmt()
 {
     // This method makes sure that this object is an exclusive SwTableBox client
@@ -1859,13 +1813,8 @@ void SwTableBox::ChgFrmFmt( SwTableBoxFmt* pNewFmt )
         delete pOld;
 }
 
-/*************************************************************************
-|*
-|*  String SwTableBox::GetName() const
-|*      Return the name of this box. This is determined dynamically
-|*      resulting from the position in the lines/boxes/tables.
-|*
-|*************************************************************************/
+// Return the name of this box. This is determined dynamically
+// resulting from the position in the lines/boxes/tables.
 void sw_GetTblBoxColStr( sal_uInt16 nCol, OUString& rNm )
 {
     const sal_uInt16 coDiff = 52;   // 'A'-'Z' 'a' - 'z'

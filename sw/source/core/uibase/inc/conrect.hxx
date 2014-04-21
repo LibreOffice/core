@@ -22,12 +22,7 @@
 
 #include "drawbase.hxx"
 
-/*************************************************************************
-|*
-|* draw rectangle
-|*
-\************************************************************************/
-
+// draw rectangle
 class ConstRectangle : public SwDrawBase
 {
     bool bMarquee;

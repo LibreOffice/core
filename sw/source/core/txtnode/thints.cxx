@@ -941,10 +941,6 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
         rNode.DestroyAttr( &rNewHint );
 }
 
-/*************************************************************************
- *                      SwTxtNode::MakeTxtAttr()
- *************************************************************************/
-
 SwTxtAttr* MakeRedlineTxtAttr( SwDoc & rDoc, SfxPoolItem & rAttr )
 {
     // this is intended _only_ for special-purpose redline attributes!
@@ -1207,10 +1203,6 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
         SwTxtAttr::Destroy( pAttr, pDoc->GetAttrPool() );
     }
 }
-
-/*************************************************************************
- *                      SwTxtNode::Insert()
- *************************************************************************/
 
 SwTxtAttr* SwTxtNode::InsertItem(
     SfxPoolItem& rAttr,
@@ -1644,10 +1636,6 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
     return bRet;
 }
 
-/*************************************************************************
- *                        SwTxtNode::DeleteAttribute()
- *************************************************************************/
-
 void SwTxtNode::DeleteAttribute( SwTxtAttr * const pAttr )
 {
     if ( !HasHints() )
@@ -1681,10 +1669,6 @@ void SwTxtNode::DeleteAttribute( SwTxtAttr * const pAttr )
         TryDeleteSwpHints();
     }
 }
-
-/*************************************************************************
- *                        SwTxtNode::DeleteAttributes()
- *************************************************************************/
 
 //FIXME: this does NOT respect SORT NUMBER (for CHARFMT)!
 void SwTxtNode::DeleteAttributes(
@@ -1759,10 +1743,6 @@ void SwTxtNode::DeleteAttributes(
     }
     TryDeleteSwpHints();
 }
-
-/*************************************************************************
- *                      SwTxtNode::DelSoftHyph()
- *************************************************************************/
 
 void SwTxtNode::DelSoftHyph( const sal_Int32 nStt, const sal_Int32 nEnd )
 {
@@ -2577,10 +2557,6 @@ void SwTxtNode::FmtToTxtAttr( SwTxtNode* pNd )
     pNd->TryDeleteSwpHints();
 }
 
-/*************************************************************************
- *                      SwpHints::CalcFlags()
- *************************************************************************/
-
 void SwpHints::CalcFlags()
 {
     m_bDDEFields = m_bFootnote = false;
@@ -2609,10 +2585,6 @@ void SwpHints::CalcFlags()
         }
     }
 }
-
-/*************************************************************************
- *                      SwpHints::CalcVisibleFlag()
- *************************************************************************/
 
 bool SwpHints::CalcHiddenParaField()
 {
@@ -2648,18 +2620,10 @@ bool SwpHints::CalcHiddenParaField()
     return bOldHasHiddenParaField != bNewHasHiddenParaField;
 }
 
-/*************************************************************************
- *                      SwpHints::NoteInHistory()
- *************************************************************************/
-
 void SwpHints::NoteInHistory( SwTxtAttr *pAttr, const bool bNew )
 {
     if ( m_pHistory ) { m_pHistory->AddHint( pAttr, bNew ); }
 }
-
-/*************************************************************************
- *                      SwpHints::MergePortions( )
- *************************************************************************/
 
 bool SwpHints::MergePortions( SwTxtNode& rNode )
 {
@@ -2964,10 +2928,6 @@ static void lcl_CheckSortNumber( const SwpHints& rHints, SwTxtCharFmt& rNewCharF
     if ( nSortNumber > 0 )
         rNewCharFmt.SetSortNumber( nSortNumber );
 }
-
-/*************************************************************************
- *                      SwpHints::Insert()
- *************************************************************************/
 
 /*
  * Try to insert the new hint.
@@ -3288,10 +3248,6 @@ bool SwpHints::TryInsertHint(
 
     return true;
 }
-
-/*************************************************************************
- *                      SwpHints::DeleteAtPos()
- *************************************************************************/
 
 void SwpHints::DeleteAtPos( const sal_uInt16 nPos )
 {

@@ -112,12 +112,6 @@ namespace {
 
 }
 
-/*************************************************************************
-|*
-|*    class SwFmtFtn
-|*
-*************************************************************************/
-
 SwFmtFtn::SwFmtFtn( bool bEndNote )
     : SfxPoolItem( RES_TXTATR_FTN ),
     m_pTxtAttr( 0 ),
@@ -229,10 +223,6 @@ OUString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrings ) con
     }
     return sRet;
 }
-
-/*************************************************************************
- *                      class SwTxt/FmtFnt
- *************************************************************************/
 
 SwTxtFtn::SwTxtFtn( SwFmtFtn& rAttr, sal_Int32 nStartPos )
     : SwTxtAttr( rAttr, nStartPos )
