@@ -1039,7 +1039,21 @@ public:
                                     const Image& rImage,
                                     sal_uInt16 nStyle = 0 );
 
+    /** Retrieve downsampled and cropped bitmap
+
+        @attention This method ignores negative rDstSz values, thus
+        mirroring must happen outside this method (e.g. in DrawBitmap)
+     */
+    Bitmap                      GetDownsampledBitmap(
+                                    const Size& rDstSz,
+                                    const Point& rSrcPt,
+                                    const Size& rSrcSz,
+                                    const Bitmap& rBmp,
+                                    long nMaxBmpDPIX,
+                                    long nMaxBmpDPIY );
+
 protected:
+
     /** Draw BitmapEx transformed
 
         @param rTransformation
@@ -1651,30 +1665,27 @@ public:
                                                                   bool bDownsampleBitmaps,
                                                                   const Color& rBackground = Color( COL_TRANSPARENT )
                                                                 );
-    /** Retrieve downsampled and cropped bitmap
+public:
+    /** @name Native Widget Rendering functions
 
-        @attention This method ignores negative rDstSz values, thus
-        mirroring must happen outside this method (e.g. in DrawBitmap)
+        These all just call through to the private mpGraphics functions of the same name.
      */
-    Bitmap                      GetDownsampledBitmap( const Size& rDstSz,
-                                                      const Point& rSrcPt, const Size& rSrcSz,
-                                                      const Bitmap& rBmp, long nMaxBmpDPIX, long nMaxBmpDPIY );
+    ///@{
 
-    //  Native Widget Rendering functions
-
-    // These all just call through to the private mpGraphics functions of the same name.
-
-    // Query the platform layer for control support
+    /** Query the platform layer for control support
+     */
     bool                        IsNativeControlSupported( ControlType nType, ControlPart nPart ) const;
 
-    // Query the native control to determine if it was acted upon
+    /** Query the native control to determine if it was acted upon
+     */
     bool                        HitTestNativeControl(   ControlType nType,
                                                         ControlPart nPart,
                                                         const Rectangle& rControlRegion,
                                                         const Point& aPos,
                                                         bool& rIsInside ) const;
 
-    // Request rendering of a particular control and/or part
+    /** Request rendering of a particular control and/or part
+     */
     bool                        DrawNativeControl(  ControlType nType,
                                                     ControlPart nPart,
                                                     const Rectangle& rControlRegion,
@@ -1682,7 +1693,8 @@ public:
                                                     const ImplControlValue& aValue,
                                                     const OUString& aCaption );
 
-    // Query the native control's actual drawing region (including adornment)
+    /** Query the native control's actual drawing region (including adornment)
+     */
     bool                        GetNativeControlRegion( ControlType nType,
                                                         ControlPart nPart,
                                                         const Rectangle& rControlRegion,
@@ -1691,6 +1703,7 @@ public:
                                                         const OUString& aCaption,
                                                         Rectangle &rNativeBoundingRegion,
                                                         Rectangle &rNativeContentRegion ) const;
+    ///@}
 
 };
 

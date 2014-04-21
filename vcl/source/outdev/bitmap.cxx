@@ -160,6 +160,73 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
     }
 }
 
+Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
+                                           const Point& rSrcPt, const Size& rSrcSz,
+                                           const Bitmap& rBmp, long nMaxBmpDPIX, long nMaxBmpDPIY )
+{
+    Bitmap aBmp( rBmp );
+
+    if( !aBmp.IsEmpty() )
+    {
+        Point           aPoint;
+        const Rectangle aBmpRect( aPoint, aBmp.GetSizePixel() );
+        Rectangle       aSrcRect( rSrcPt, rSrcSz );
+
+        // do cropping if necessary
+        if( aSrcRect.Intersection( aBmpRect ) != aBmpRect )
+        {
+            if( !aSrcRect.IsEmpty() )
+                aBmp.Crop( aSrcRect );
+            else
+                aBmp.SetEmpty();
+        }
+
+        if( !aBmp.IsEmpty() )
+        {
+            // do downsampling if necessary
+            Size aDstSizeTwip( PixelToLogic( LogicToPixel( rDstSz ), MAP_TWIP ) );
+
+            // #103209# Normalize size (mirroring has to happen outside of this method)
+            aDstSizeTwip = Size( labs(aDstSizeTwip.Width()), labs(aDstSizeTwip.Height()) );
+
+            const Size      aBmpSize( aBmp.GetSizePixel() );
+            const double    fBmpPixelX = aBmpSize.Width();
+            const double    fBmpPixelY = aBmpSize.Height();
+            const double    fMaxPixelX = aDstSizeTwip.Width() * nMaxBmpDPIX / 1440.0;
+            const double    fMaxPixelY = aDstSizeTwip.Height() * nMaxBmpDPIY / 1440.0;
+
+            // check, if the bitmap DPI exceeds the maximum DPI (allow 4 pixel rounding tolerance)
+            if( ( ( fBmpPixelX > ( fMaxPixelX + 4 ) ) ||
+                  ( fBmpPixelY > ( fMaxPixelY + 4 ) ) ) &&
+                ( fBmpPixelY > 0.0 ) && ( fMaxPixelY > 0.0 ) )
+            {
+                // do scaling
+                Size            aNewBmpSize;
+                const double    fBmpWH = fBmpPixelX / fBmpPixelY;
+                const double    fMaxWH = fMaxPixelX / fMaxPixelY;
+
+                if( fBmpWH < fMaxWH )
+                {
+                    aNewBmpSize.Width() = FRound( fMaxPixelY * fBmpWH );
+                    aNewBmpSize.Height() = FRound( fMaxPixelY );
+                }
+                else if( fBmpWH > 0.0 )
+                {
+                    aNewBmpSize.Width() = FRound( fMaxPixelX );
+                    aNewBmpSize.Height() = FRound( fMaxPixelX / fBmpWH);
+                }
+
+                if( aNewBmpSize.Width() && aNewBmpSize.Height() )
+                    aBmp.Scale( aNewBmpSize );
+                else
+                    aBmp.SetEmpty();
+            }
+        }
+    }
+
+    return aBmp;
+}
+
 void OutputDevice::DrawBitmapEx( const Point& rDestPt,
                                  const BitmapEx& rBitmapEx )
 {
