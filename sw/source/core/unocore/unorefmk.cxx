@@ -38,9 +38,6 @@
 
 using namespace ::com::sun::star;
 
-/******************************************************************
- * SwXReferenceMark
- ******************************************************************/
 class SwXReferenceMark::Impl
     : public SwClient
 {
@@ -527,9 +524,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 #include <fmtmeta.hxx>
 #include <docsh.hxx>
 
-/******************************************************************
- * SwXMetaText
- ******************************************************************/
 class SwXMetaText
     : public SwXText
 {
@@ -647,9 +641,6 @@ SwXMetaText::createTextCursorByRange(
     return xCursor;
 }
 
-/******************************************************************
- * SwXMeta
- ******************************************************************/
 // the Meta has a cached list of text portions for its contents
 // this list is created by SwXTextPortionEnumeration
 // the Meta listens at the SwTxtNode and throws away the cache when it changes
@@ -1299,9 +1290,6 @@ uno::Reference<frame::XModel> SwXMeta::GetModel()
     return 0;
 }
 
-/******************************************************************
- * SwXMetaField
- ******************************************************************/
 inline const ::sw::MetaField * SwXMeta::Impl::GetMetaField() const
 {
     return static_cast< const ::sw::MetaField * >(GetRegisteredIn());

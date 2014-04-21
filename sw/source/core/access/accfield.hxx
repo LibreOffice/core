@@ -71,13 +71,13 @@ public:
     virtual void SAL_CALL release(  ) throw () SAL_OVERRIDE ;
 
 public:
-    //=====  XAccessible  =====================================================
+    // XAccessible
 
     /// Return the XAccessibleContext.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
         getAccessibleContext (void) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  XAccessibleContext  ==============================================
+    // XAccessibleContext
 
     /// Return the number of currently visible children.
     virtual sal_Int32 SAL_CALL getAccessibleChildCount (void)
@@ -133,7 +133,7 @@ public:
         getLocale (void)
         throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  XAccessibleComponent  ============================================
+    // XAccessibleComponent
     virtual sal_Bool SAL_CALL containsPoint(
             const ::com::sun::star::awt::Point& aPoint )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

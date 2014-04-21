@@ -70,13 +70,8 @@
 
 using namespace ::com::sun::star;
 
-/***********************************************************************
-#*  Class       :  SwDoc
-#*  Methode     :  UseSpzLayoutFmt
-#*  Description :  based on the request, changes to the specific layouts
-#*                 will be made, to fit to the format
-#***********************************************************************/
-
+// Based on the request, changes to the specific layouts will be made, to
+// fit to the format
 static bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
                         const Point& rPt )
 {
@@ -258,14 +253,7 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::FindFlyFrm()
-|*
-|*  Description        returns a Fly if one is selected
-|*
-*************************************************************************/
-
+// returns a Fly if one is selected
 SwFlyFrm *SwFEShell::FindFlyFrm() const
 {
     if ( Imp()->HasDrawView() )
@@ -281,15 +269,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm() const
     return 0;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::IsFlyInFly()
-|*
-|*  Description        Returns sal_True, if the current Fly could be anchored
-|*                     to another one (so it is inside)
-|*
-*************************************************************************/
-
+// Returns sal_True, if the current Fly could be anchored to another one (so it is inside)
 const SwFrmFmt* SwFEShell::IsFlyInFly()
 {
     SET_CURR_SHELL( this );
@@ -345,12 +325,6 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
     return NULL;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::SetFlyPos
-|*
-*************************************************************************/
-
 void SwFEShell::SetFlyPos( const Point& rAbsPos )
 {
     SET_CURR_SHELL( this );
@@ -384,12 +358,6 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
     }
     CallChgLnk();       // call the AttrChangeNotify on the UI-side.
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::FindAnchorPos
-|*
-*************************************************************************/
 
 Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
 {
@@ -595,12 +563,6 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
     return aRet;
 }
 
-/***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  NewFlyFrm
-#*  Description :
-#***********************************************************************/
-
 const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchValid,
                            SwFrmFmt *pParent )
 {
@@ -774,11 +736,6 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
     return pRet;
 }
 
-/***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  Insert
-#***********************************************************************/
-
 void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
                         const Graphic* pGraphic,
                         const SfxItemSet* pFlyAttrSet,
@@ -938,11 +895,6 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
     }
 }
 
-/***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  GetPageObjs
-#***********************************************************************/
-
 void SwFEShell::GetPageObjs( std::vector<SwFrmFmt*>& rFillArr )
 {
     rFillArr.clear();
@@ -956,11 +908,6 @@ void SwFEShell::GetPageObjs( std::vector<SwFrmFmt*>& rFillArr )
         }
     }
 }
-
-/***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  SetPageFlysNewPage
-#***********************************************************************/
 
 void SwFEShell::SetPageObjsNewPage( std::vector<SwFrmFmt*>& rFillArr, int nOffset )
 {
@@ -1012,16 +959,9 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrmFmt*>& rFillArr, int nOffse
     EndAllAction();
 }
 
-/***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  GetFlyFrmAttr
-#*  Description :  all attributes in the "baskets" will be filled
-#*                 with the attributes of the current FlyFrms.
-#*                 Attributes which cannot be filled due to being at the wrong place
-#*                 or which are ambiguous (multiple selections) will be removed.
-#*
-#***********************************************************************/
-
+// All attributes in the "baskets" will be filled with the attributes of the
+// current FlyFrms. Attributes which cannot be filled due to being at the
+// wrong place or which are ambiguous (multiple selections) will be removed.
 sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
 {
     SwFlyFrm *pFly = FindFlyFrm();
@@ -1073,12 +1013,8 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
     rSet.ClearItem( RES_CHAIN );
     return sal_True;
 }
-/***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  SetFlyFrmAttr
-#*  Description :  Attributes of the current fly will change.
-#***********************************************************************/
 
+// Attributes of the current fly will change.
 bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
 {
     SET_CURR_SHELL( this );
@@ -1157,13 +1093,7 @@ sal_Bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
     return bRet;
 }
 
-/***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  ResetFlyFrmAttr
-#*  Description :  Reset requested attributes or the ones contained in
-#*                 the set.
-#***********************************************************************/
-
+// Reset requested attributes or the ones contained in the set.
 sal_Bool SwFEShell::ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
 {
     sal_Bool bRet = sal_False;
@@ -1208,12 +1138,7 @@ sal_Bool SwFEShell::ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
     return bRet;
 }
 
-/***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  GetCurFrmFmt
-#*  Description :  Returns frame-format if frame, otherwise 0
-#***********************************************************************/
-
+// Returns frame-format if frame, otherwise 0
 SwFrmFmt* SwFEShell::GetCurFrmFmt() const
 {
     SwFrmFmt* pRet = 0;
@@ -1223,11 +1148,6 @@ SwFrmFmt* SwFEShell::GetCurFrmFmt() const
         pRet = 0;
     return pRet;
 }
-
-/******************************************************************************
- *  Methode     :   void SwFEShell::SetFrmFmt(SwFrmFmt *pNewFmt)
- *  Description :
- ******************************************************************************/
 
 void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, bool bKeepOrient, Point* pDocPos )
 {
@@ -1274,12 +1194,6 @@ void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, bool bKeepOrient, Point* pDocPos )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::GetFlyFrmFmt()
-|*
-*************************************************************************/
-
 const SwFrmFmt* SwFEShell::GetFlyFrmFmt() const
 {
     const SwFlyFrm* pFly = FindFlyFrm();
@@ -1306,12 +1220,6 @@ SwFrmFmt* SwFEShell::GetFlyFrmFmt()
     return 0;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::GetFlyRect()
-|*
-*************************************************************************/
-
 SwRect SwFEShell::GetFlyRect() const
 {
     SwCntntFrm *pCntnt = GetCurrFrm( sal_False );
@@ -1324,12 +1232,6 @@ SwRect SwFEShell::GetFlyRect() const
     else
         return pFly->Frm();
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::GetObjRect()
-|*
-*************************************************************************/
 
 SwRect SwFEShell::GetObjRect() const
 {
@@ -1350,11 +1252,6 @@ void SwFEShell::SetObjRect( const SwRect& rRect )
         CallChgLnk();   // call AttrChangeNotify on the UI-side.
     }
 }
-
-/***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  RequestObjectResize()
-#***********************************************************************/
 
 Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference < embed::XEmbeddedObject >& xObj )
 {
@@ -1480,11 +1377,6 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
 
     return aResult;
 }
-
-/***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  WizzardFindCurFrmFmt
-#***********************************************************************/
 
 SwFrmFmt* SwFEShell::WizzardGetFly()
 {

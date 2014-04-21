@@ -34,15 +34,10 @@
 
 using namespace ::com::sun::star::i18n;
 
-/*************************************************************************
- *                      class SwCapitalInfo
- *
- * The information encapsulated in SwCapitalInfo is required
- * by the ::Do functions. They contain the information about
- * the original string, whereas rDo.GetInf() contains information
- * about the display string.
- *************************************************************************/
-
+// The information encapsulated in SwCapitalInfo is required
+// by the ::Do functions. They contain the information about
+// the original string, whereas rDo.GetInf() contains information
+// about the display string.
 class SwCapitalInfo
 {
 public:
@@ -53,17 +48,12 @@ public:
     sal_Int32 nLen;
 };
 
-/*************************************************************************
- *                      sal_Int32 sw_CalcCaseMap()
- *
- * rFnt: required for CalcCaseMap
- * rOrigString: The original string
- * nOfst: Position of the substring in rOrigString
- * nLen: Length if the substring in rOrigString
- * nIdx: Referes to a position in the display string and should be mapped
- *       to a position in rOrigString
- *************************************************************************/
-
+// rFnt: required for CalcCaseMap
+// rOrigString: The original string
+// nOfst: Position of the substring in rOrigString
+// nLen: Length if the substring in rOrigString
+// nIdx: Referes to a position in the display string and should be mapped
+//       to a position in rOrigString
 sal_Int32 sw_CalcCaseMap( const SwFont& rFnt,
                             const OUString& rOrigString,
                             sal_Int32 nOfst,
@@ -97,10 +87,6 @@ sal_Int32 sw_CalcCaseMap( const SwFont& rFnt,
     return nOfst + nLen;
 }
 
-/*************************************************************************
- *                      class SwDoCapitals
- *************************************************************************/
-
 class SwDoCapitals
 {
 protected:
@@ -117,10 +103,6 @@ public:
     inline SwCapitalInfo* GetCapInf() const { return pCapInf; }
     inline void SetCapInf( SwCapitalInfo& rNew ) { pCapInf = &rNew; }
 };
-
-/*************************************************************************
- *                    class SwDoGetCapitalSize
- *************************************************************************/
 
 class SwDoGetCapitalSize : public SwDoCapitals
 {
@@ -147,10 +129,6 @@ void SwDoGetCapitalSize::Do()
         aTxtSize.Height() = rInf.GetSize().Height();
 }
 
-/*************************************************************************
- *                    SwSubFont::GetCapitalSize()
- *************************************************************************/
-
 Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
 {
     // Start:
@@ -173,10 +151,6 @@ Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
     rInf.SetKern( nOldKern );
     return aTxtSize;
 }
-
-/*************************************************************************
- *                    class SwDoGetCapitalBreak
- *************************************************************************/
 
 class SwDoGetCapitalBreak : public SwDoCapitals
 {
@@ -232,10 +206,6 @@ void SwDoGetCapitalBreak::Do()
     }
 }
 
-/*************************************************************************
- *                    SwFont::GetCapitalBreak()
- *************************************************************************/
-
 sal_Int32 SwFont::GetCapitalBreak( SwViewShell* pSh, const OutputDevice* pOut,
     const SwScriptInfo* pScript, const OUString& rTxt, long const nTextWidth,
     const sal_Int32 nIdx, const sal_Int32 nLen )
@@ -258,10 +228,6 @@ sal_Int32 SwFont::GetCapitalBreak( SwViewShell* pSh, const OutputDevice* pOut,
     DoOnCapitals( aDo );
     return aDo.getBreak();
 }
-
-/*************************************************************************
- *                     class SwDoDrawCapital
- *************************************************************************/
 
 class SwDoDrawCapital : public SwDoCapitals
 {
@@ -304,10 +270,6 @@ void SwDoDrawCapital::Do()
     rInf.SetWidth( nOrgWidth );
 }
 
-/*************************************************************************
- *                    SwDoDrawCapital::DrawSpace()
- *************************************************************************/
-
 void SwDoDrawCapital::DrawSpace( Point &rPos )
 {
     long nDiff = rInf.GetPos().X() - rPos.X();
@@ -338,10 +300,6 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
     rPos.X() = rInf.GetPos().X() + rInf.GetWidth();
 }
 
-/*************************************************************************
- *                    SwSubFont::DrawCapital()
- *************************************************************************/
-
 void SwSubFont::DrawCapital( SwDrawTextInfo &rInf )
 {
     // Es wird vorausgesetzt, dass rPos bereits kalkuliert ist!
@@ -352,10 +310,6 @@ void SwSubFont::DrawCapital( SwDrawTextInfo &rInf )
     SwDoDrawCapital aDo( rInf );
     DoOnCapitals( aDo );
 }
-
-/*************************************************************************
- *                     class SwDoDrawCapital
- *************************************************************************/
 
 class SwDoCapitalCrsrOfst : public SwDoCapitals
 {
@@ -418,10 +372,6 @@ void SwDoCapitalCrsrOfst::Do()
     }
 }
 
-/*************************************************************************
- *                    SwSubFont::GetCapitalCrsrOfst()
- *************************************************************************/
-
 sal_Int32 SwSubFont::GetCapitalCrsrOfst( SwDrawTextInfo& rInf )
 {
     const long nOldKern = rInf.GetKern();
@@ -434,10 +384,6 @@ sal_Int32 SwSubFont::GetCapitalCrsrOfst( SwDrawTextInfo& rInf )
     rInf.SetKern( nOldKern );
     return aDo.GetCrsr();
 }
-
-/*************************************************************************
- *                    class SwDoDrawStretchCapital
- *************************************************************************/
 
 class SwDoDrawStretchCapital : public SwDoDrawCapital
 {
@@ -456,10 +402,6 @@ public:
 
     virtual ~SwDoDrawStretchCapital() {}
 };
-
-/*************************************************************************
- *                    SwDoDrawStretchCapital
- *************************************************************************/
 
 void SwDoDrawStretchCapital::Do()
 {
@@ -502,10 +444,6 @@ void SwDoDrawStretchCapital::Do()
     ((Point&)rInf.GetPos()).X() += nPartWidth;
 }
 
-/*************************************************************************
- *                    SwSubFont::DrawStretchCapital()
- *************************************************************************/
-
 void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
 {
     // Es wird vorausgesetzt, dass rPos bereits kalkuliert ist!
@@ -524,10 +462,6 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
     SwDoDrawStretchCapital aDo( rInf, nCapWidth );
     DoOnCapitals( aDo );
 }
-
-/*************************************************************************
- *                  SwSubFont::DoOnCapitals() const
- *************************************************************************/
 
 void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 {

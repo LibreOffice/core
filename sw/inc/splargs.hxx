@@ -31,10 +31,6 @@ class Font;
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 
-/*************************************************************************
- *                      struct SwArgsBase
- *************************************************************************/
-
 struct SwArgsBase     // used for text conversion (Hangul/Hanja, ...)
 {
     SwTxtNode  *pStartNode;
@@ -60,11 +56,7 @@ struct SwArgsBase     // used for text conversion (Hangul/Hanja, ...)
     }
 };
 
-/*************************************************************************
- *                      struct SwConversionArgs
- * used for text conversion (Hangul/Hanja, Simplified/Traditional Chinese, ...)
- *************************************************************************/
-
+// used for text conversion (Hangul/Hanja, Simplified/Traditional Chinese, ...)
 struct SwConversionArgs : SwArgsBase
 {
     OUString   aConvText;          // convertible text found
@@ -89,10 +81,6 @@ struct SwConversionArgs : SwArgsBase
         {}
 };
 
-/*************************************************************************
- *                      struct SwSpellArgs
- *************************************************************************/
-
 struct SwSpellArgs : SwArgsBase
 {
     ::com::sun::star::uno::Reference<
@@ -113,10 +101,6 @@ struct SwSpellArgs : SwArgsBase
             bIsGrammarCheck( bGrammar )
         {}
 };
-
-/*************************************************************************
- *                      class SwInterHyphInfo
- *************************************************************************/
 
 // Parameter-class for Hyphenate.
 // docedt.cxx:  SwDoc::Hyphenate()

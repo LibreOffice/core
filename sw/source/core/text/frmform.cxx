@@ -942,11 +942,7 @@ bool SwTxtFrm::CalcPreps()
     return bRet;
 }
 
-/*************************************************************************
- * SwTxtFrm::FormatAdjust()
- * We rewire the footnotes and the character bound objects
- *************************************************************************/
-
+// We rewire the footnotes and the character bound objects
 #define CHG_OFFSET( pFrm, nNew )\
     {\
         if( pFrm->GetOfst() < nNew )\
@@ -1109,12 +1105,8 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     UNDO_SWAP( this )
 }
 
-/*************************************************************************
- * SwTxtFrm::FormatLine()
- * bPrev is set whether Reformat.Start() was called because of Prev().
- * Else, wo don't know whether we can limit the repaint or not.
-*************************************************************************/
-
+// bPrev is set whether Reformat.Start() was called because of Prev().
+// Else, wo don't know whether we can limit the repaint or not.
 bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const bool bPrev )
 {
     OSL_ENSURE( ! IsVertical() || IsSwapped(),
@@ -1694,12 +1686,8 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
     }
 }
 
-/*************************************************************************
- * SwTxtFrm::Format()
- * We calculate the text frame's size and send a notification.
- * Shrink() or Grow() to adjust the frame's size to the changed required space.
- *************************************************************************/
-
+// We calculate the text frame's size and send a notification.
+// Shrink() or Grow() to adjust the frame's size to the changed required space.
 void SwTxtFrm::Format( const SwBorderAttrs * )
 {
     SWRECTFN( this )
@@ -1863,19 +1851,14 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     _CalcHeightOfLastLine(); // #i11860#
 }
 
-/*************************************************************************
- * SwTxtFrm::FormatQuick()
- *
- * bForceQuickFormat is set if GetFormatted() has been called during the
- * painting process. Actually I cannot imagine a situation which requires
- * a full formatting of the paragraph during painting, on the other hand
- * a full formatting can cause the invalidation of other layout frames,
- * e.g., if there are footnotes in this paragraph, and invalid layout
- * frames will not calculated during the painting. So I actually want to
- * avoid a formatting during painting, but since I'm a coward, I'll only
- * force the quick formatting in the situation of issue i29062.
- *************************************************************************/
-
+// bForceQuickFormat is set if GetFormatted() has been called during the
+// painting process. Actually I cannot imagine a situation which requires
+// a full formatting of the paragraph during painting, on the other hand
+// a full formatting can cause the invalidation of other layout frames,
+// e.g., if there are footnotes in this paragraph, and invalid layout
+// frames will not calculated during the painting. So I actually want to
+// avoid a formatting during painting, but since I'm a coward, I'll only
+// force the quick formatting in the situation of issue i29062.
 bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),

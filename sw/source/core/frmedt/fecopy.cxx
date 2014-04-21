@@ -76,13 +76,7 @@
 
 using namespace ::com::sun::star;
 
-/*************************************************************************
-|*
-|*  SwFEShell::Copy()   copy for the internal clipboard.
-|*      Copies all selections to the clipboard.
-|*
-|*************************************************************************/
-
+// Copy for the internal clipboard. Copies all selections to the clipboard.
 sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
 {
     OSL_ENSURE( pClpDoc, "kein Clipboard-Dokument"  );
@@ -665,13 +659,8 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::Paste()  Paste for  the interal clipboard.
-|*      Copy the content of the clipboard in the document
-|*
-|*************************************************************************/
-
+// Paste for  the interal clipboard. Copy the content of the clipboard
+// in the document
 namespace {
     typedef boost::shared_ptr<SwPaM> PaMPtr;
     typedef boost::shared_ptr<SwPosition> PositionPtr;

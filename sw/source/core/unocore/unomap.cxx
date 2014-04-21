@@ -97,10 +97,6 @@ using namespace ::com::sun::star::beans;
 #define MID_TXT_LMARGIN 11
 #endif
 
-/******************************************************************************
-    UI-Maps
-******************************************************************************/
-
 SwUnoPropertyMapProvider aSwMapProvider;
 
 SwUnoPropertyMapProvider::SwUnoPropertyMapProvider()

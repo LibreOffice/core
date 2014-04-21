@@ -36,10 +36,6 @@
 TYPEINIT1(SwTxtINetFmt,SwClient);
 TYPEINIT1(SwTxtRuby,SwClient);
 
-/*************************************************************************
- *                      class SwTxtCharFmt
- *************************************************************************/
-
 SwTxtCharFmt::SwTxtCharFmt( SwFmtCharFmt& rAttr,
                     sal_Int32 nStt, sal_Int32 nEnde )
     : SwTxtAttrEnd( rAttr, nStt, nEnde )
@@ -80,10 +76,6 @@ bool SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
     return false;
 }
 
-/*************************************************************************
- *                        class SwTxtAttrNesting
- *************************************************************************/
-
 SwTxtAttrNesting::SwTxtAttrNesting( SfxPoolItem & i_rAttr,
             const sal_Int32 i_nStart, const sal_Int32 i_nEnd )
     : SwTxtAttrEnd( i_rAttr, i_nStart, i_nEnd )
@@ -99,10 +91,6 @@ SwTxtAttrNesting::SwTxtAttrNesting( SfxPoolItem & i_rAttr,
 SwTxtAttrNesting::~SwTxtAttrNesting()
 {
 }
-
-/*************************************************************************
- *                      class SwTxtINetFmt
- *************************************************************************/
 
 SwTxtINetFmt::SwTxtINetFmt( SwFmtINetFmt& rAttr,
                             sal_Int32 nStart, sal_Int32 nEnd )
@@ -202,10 +190,6 @@ sal_Bool SwTxtINetFmt::IsProtect( ) const
     return m_pTxtNode && m_pTxtNode->IsProtect();
 }
 
-/*************************************************************************
- *                      class SwTxtRuby
- *************************************************************************/
-
 SwTxtRuby::SwTxtRuby( SwFmtRuby& rAttr,
                       sal_Int32 nStart, sal_Int32 nEnd )
     : SwTxtAttrNesting( rAttr, nStart, nEnd )
@@ -286,10 +270,6 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
 
     return pRet;
 }
-
-/*************************************************************************
- *                        class SwTxtMeta
- *************************************************************************/
 
 SwTxtMeta *
 SwTxtMeta::CreateTxtMeta(

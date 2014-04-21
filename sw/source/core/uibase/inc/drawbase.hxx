@@ -27,12 +27,7 @@ class SwEditWin;
 class KeyEvent;
 class MouseEvent;
 
-/*************************************************************************
-|*
-|* base class for all functions
-|*
-\************************************************************************/
-
+// base class for all functions
 class SwDrawBase
 {
 protected:

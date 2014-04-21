@@ -1186,19 +1186,17 @@ void SwTable::InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nRowIdx, sal_uInt16 nCnt
 typedef std::pair< sal_uInt16, sal_uInt16 > SwLineOffset;
 typedef std::list< SwLineOffset > SwLineOffsetArray;
 
-/******************************************************************************
-When a couple of table boxes has to be split,
-lcl_SophisticatedFillLineIndices delivers the information where and how many
-rows have to be inserted.
-Input
-    rTable: the table to manipulate
-    rBoxes: an array of boxes to split
-    nCnt:   how many parts are wanted
-Output
-    rArr:   a list of pairs ( line index, number of lines to insert )
-
-******************************************************************************/
-
+/*
+* When a couple of table boxes has to be split,
+* lcl_SophisticatedFillLineIndices delivers the information where and how many
+* rows have to be inserted.
+* Input
+*     rTable: the table to manipulate
+*     rBoxes: an array of boxes to split
+*     nCnt:   how many parts are wanted
+* Output
+*     rArr:   a list of pairs ( line index, number of lines to insert )
+*/
 static void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
     const SwTable& rTable, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
 {

@@ -26,9 +26,7 @@ class SwDoc;
 class SwLayCacheImpl;
 class SvStream;
 
-/*************************************************************************
- *                      class SwLayoutCache
- *
+/*
  * This class allows to save layout information in the file and it contains
  * this information after loading of a file.
  * Call Write(..) with a stream and the document to save and the page break
@@ -38,8 +36,7 @@ class SvStream;
  * There's a simple locking mechanism at these classes,
  * if somebody reads the information, he increments the lock count by 1,
  * during the Read(..) function the lock count will set to $8000.
- *
- **************************************************************************/
+ */
 class SwLayoutCache
 {
     SwLayCacheImpl *pImpl;

@@ -229,9 +229,6 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     }
 }
 
-/****************************************************************************
-    ActionContext
-****************************************************************************/
 UnoActionContext::UnoActionContext(SwDoc *const pDoc)
     : m_pDoc(pDoc)
 {
@@ -255,9 +252,6 @@ UnoActionContext::~UnoActionContext()
     }
 }
 
-/****************************************************************************
-    ActionRemoveContext
-****************************************************************************/
 UnoActionRemoveContext::UnoActionRemoveContext(SwDoc *const pDoc)
     : m_pDoc(pDoc)
 {
@@ -407,9 +401,6 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
     } while ( pCurrent != &rPam );
 }
 
-/******************************************************************
- * SwXParagraphEnumeration
- ******************************************************************/
 class SwXParagraphEnumeration::Impl
     : public SwClient
 {
@@ -704,9 +695,6 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
     return aRet;
 }
 
-/******************************************************************
- * SwXTextRange
- ******************************************************************/
 class SwXTextRange::Impl
     : public SwClient
 {
@@ -1512,9 +1500,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     SwUnoCursorHelper::makeRedline( aPaM, rRedlineType, rRedlineProperties );
 }
 
-/******************************************************************
- * SwXTextRanges
- ******************************************************************/
 class SwXTextRanges::Impl
     : public SwClient
 {
@@ -1607,11 +1592,11 @@ throw (uno::RuntimeException, std::exception)
     return ::sw::UnoTunnelImpl<SwXTextRanges>(rId, this);
 }
 
-/****************************************************************************
+/*
  *  Text positions
  * Up to the first access to a text position, only a SwCursor is stored.
  * Afterwards, an array with uno::Reference<XTextPosition> will be created.
-****************************************************************************/
+ */
 OUString SAL_CALL
 SwXTextRanges::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
@@ -1697,9 +1682,6 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
 }
 
-/******************************************************************
- * SwXParaFrameEnumeration
- ******************************************************************/
 class SwXParaFrameEnumeration::Impl
     : public SwClient
 {
@@ -1797,10 +1779,8 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
     return o_rNextObject.is();
 }
 
-/* ---------------------------------------------------------------------------
-    Description: Search for a FLYCNT text attribute at the cursor point
-                and fill the frame into the array
- ---------------------------------------------------------------------------*/
+// Search for a FLYCNT text attribute at the cursor point and fill the frame
+// into the array
 static void
 lcl_FillFrame(SwClient & rEnum, SwUnoCrsr& rUnoCrsr,
         FrameDependList_t & rFrames)

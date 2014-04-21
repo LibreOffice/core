@@ -573,8 +573,7 @@ public:
     bool IsSelectAll() { return mbSelectAll; }
 };
 
-//---- class CurrShell manages global ShellPointer -------------------
-
+// manages global ShellPointer
 class CurrShell
 {
 public:

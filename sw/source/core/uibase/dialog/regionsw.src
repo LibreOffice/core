@@ -21,11 +21,9 @@
 #include "cmdid.h"
 #include "globals.hrc"
 #include "helpid.h"
-/*************************************************************************
 
-    Dialog "paste region"
+// Dialog "paste region"
 
-*************************************************************************/
 #define FT_SUBREG_TEXT \
     Text [ en-US ] = "~Section" ; \
 

@@ -456,7 +456,7 @@ sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
     return crBack;
 }
 
-//=====  XAccessibleSelection  ============================================
+// XAccessibleSelection
 void SwAccessibleCell::selectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )

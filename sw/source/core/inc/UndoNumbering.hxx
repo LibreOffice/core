@@ -26,7 +26,6 @@
 #include <rtl/ustring.hxx>
 #include <numrule.hxx>
 
-//----------- Undo for Numbering -------------------------------------
 class SwUndoInsNum : public SwUndo, private SwUndRng
 {
     SwNumRule aNumRule;

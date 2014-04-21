@@ -226,8 +226,6 @@ public:
     }
 };
 
-//----------------- End of classes for border lines ----------------------
-
 static SwViewShell *pGlobalShell = 0;
 
 //Only repaint the Fly content as well as the background of the Fly content if
@@ -443,8 +441,6 @@ SwSavePaintStatics::~SwSavePaintStatics()
     aScaleX            = aSScaleX;
     aScaleY            = aSScaleY;
 }
-
-//----------------- Implementation for the table borders --------------
 
 /**
  * Check whether the two primitve can be merged
@@ -1670,8 +1666,6 @@ static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
 //    if ( pRetoucheFly == pRetoucheFly2 )
 //        pRetoucheFly = 0;
 //}
-
-//---------------- Output for BrushItem ----------------
 
 static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
                                  OutputDevice* _pOut,

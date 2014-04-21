@@ -98,10 +98,6 @@ public:
 
 public:
 
-    /*************************************************
-        Query
-    *************************************************/
-
     /** Query the currently set redline mode
 
         @returns
@@ -138,10 +134,6 @@ public:
     virtual bool HasExtraRedlineTbl() const = 0;
 
     virtual bool IsInRedlines(const SwNode& rNode) const = 0;
-
-    /***************************************************
-        Manipulation
-     ***************************************************/
 
     /** Append a new redline
 

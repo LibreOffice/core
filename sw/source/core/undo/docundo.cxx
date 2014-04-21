@@ -186,8 +186,6 @@ void UndoManager::DelAllUndoObj()
     m_UndoSaveMark = MARK_INVALID;
 }
 
-/**************** UNDO ******************/
-
 SwUndoId
 UndoManager::StartUndo(SwUndoId const i_eUndoId,
         SwRewriter const*const pRewriter)
@@ -321,8 +319,6 @@ SwUndoComments_t UndoManager::GetUndoComments() const
     return ret;
 }
 
-/**************** REDO ******************/
-
 bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
                                    SwUndoId *const o_pId) const
 {
@@ -366,8 +362,6 @@ SwUndoComments_t UndoManager::GetRedoComments() const
 
     return ret;
 }
-
-/**************** REPEAT ******************/
 
 SwUndoId UndoManager::GetRepeatInfo(OUString *const o_pStr) const
 {

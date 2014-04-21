@@ -136,7 +136,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
     }
 }
 
-//=====  XInterface  ==========================================================
+// XInterface
 
 com::sun::star::uno::Any SAL_CALL
     SwAccessibleTextFrame::queryInterface (const com::sun::star::uno::Type & rType)
@@ -164,7 +164,7 @@ void SAL_CALL
     SwAccessibleContext::release ();
 }
 
-//=====  XAccessibleSelection  ============================================
+// XAccessibleSelection
 
 void SAL_CALL SwAccessibleTextFrame::selectAccessibleChild( sal_Int32 )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )

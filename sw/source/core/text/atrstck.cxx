@@ -56,7 +56,7 @@
 
 #define STACK_INCREMENT 4
 
-/*************************************************************************
+/*
  *                      Attribute to Stack Mapping
  *
  * Attributes applied to a text are pushed on different stacks. For each
@@ -67,8 +67,7 @@
  * are stored in the defaultitem-cache, if you add one, you have to increase
  * NUM_DEFAULT_VALUES.
  * Also adjust NUM_ATTRIBUTE_STACKS in atrhndl.hxx.
- *************************************************************************/
-
+ */
 const sal_uInt8 StackPos[ static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
                      static_cast<sal_uInt16>(RES_CHRATR_BEGIN) + 1 ] =
 {
@@ -190,15 +189,11 @@ bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr )
 }
 }
 
-/*************************************************************************
- *                      lcl_ChgHyperLinkColor
- * The color of hyperlinks is taken from the associated character attribute,
- * depending on its 'visited' state. There are actually two cases, which
- * should override the colors from the character attribute:
- * 1. We never take the 'visited' color during printing/pdf export/preview
- * 2. The user has chosen to override these colors in the view options
- *************************************************************************/
-
+// The color of hyperlinks is taken from the associated character attribute,
+// depending on its 'visited' state. There are actually two cases, which
+// should override the colors from the character attribute:
+// 1. We never take the 'visited' color during printing/pdf export/preview
+// 2. The user has chosen to override these colors in the view options
 static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
                             const SfxPoolItem& rItem,
                             const SwViewShell* pShell,
@@ -631,14 +626,9 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
         rFnt.GetInputField()--;
 }
 
-/*************************************************************************
- *                      Font Changing Function
- *
- * When popping an attribute from the stack, the top mose remaining
- * attribute in the stack becomes valid. The following function change
- * a font depending on the stack id.
- *************************************************************************/
-
+// When popping an attribute from the stack, the top mose remaining
+// attribute in the stack becomes valid. The following function change
+// a font depending on the stack id.
 void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
 {
     switch ( rItem.Which() )

@@ -30,7 +30,6 @@ class SwSectionData;
 class SwSectionFmt;
 class SwTOXBase;
 
-//------------ Undo of Insert-/Delete-Section ----------------------
 class SwUndoInsSection : public SwUndo, private SwUndRng
 {
 private:

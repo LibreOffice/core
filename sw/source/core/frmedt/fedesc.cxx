@@ -31,22 +31,10 @@
 #include <edimp.hxx>
 #include <SwStyleNameMapper.hxx>
 
-/*************************************************************************
-|*
-|*  SwFEShell::GetPageDescCnt()
-|*
-|*************************************************************************/
-
 sal_uInt16 SwFEShell::GetPageDescCnt() const
 {
     return GetDoc()->GetPageDescCnt();
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::ChgCurPageDesc()
-|*
-|*************************************************************************/
 
 void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 {
@@ -112,12 +100,6 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     EndAllActionAndCall();
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::ChgPageDesc()
-|*
-|*************************************************************************/
-
 void SwFEShell::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
 {
     StartAllAction();
@@ -132,12 +114,6 @@ void SwFEShell::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     GetDoc()->ChgPageDesc( i, aDesc );
     EndAllActionAndCall();
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::GetPageDesc(), GetCurPageDesc()
-|*
-|*************************************************************************/
 
 const SwPageDesc& SwFEShell::GetPageDesc( sal_uInt16 i ) const
 {

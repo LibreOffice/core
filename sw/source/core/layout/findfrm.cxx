@@ -557,24 +557,22 @@ const SwAttrSet* SwFrm::GetAttrSet() const
         return &((const SwLayoutFrm*)this)->GetFmt()->GetAttrSet();
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::_FindNext(), _FindPrev(), InvalidateNextPos()
-|*         _FindNextCnt() visits tables and sections and only returns SwCntntFrms.
-|*
-|*  Description         Invalidates the position of the next frame.
-|*      This is the direct successor or in case of CntntFrms the next
-|*      CntntFrm which sits in the same flow as I do:
-|*      - body,
-|*      - footnote,
-|*      - in headers/footers the notification only needs to be forwarded
-|*        inside the section
-|*      - same for Flys
-|*      - Cntnts in tabs remain only inside their cell
-|*      - in principle tables behave exactly like the Cntnts
-|*      - sections also
-|*************************************************************************/
-
+/*
+ *  SwFrm::_FindNext(), _FindPrev(), InvalidateNextPos()
+ *         _FindNextCnt() visits tables and sections and only returns SwCntntFrms.
+ *
+ *  Description         Invalidates the position of the next frame.
+ *      This is the direct successor or in case of CntntFrms the next
+ *      CntntFrm which sits in the same flow as I do:
+ *      - body,
+ *      - footnote,
+ *      - in headers/footers the notification only needs to be forwarded
+ *        inside the section
+ *      - same for Flys
+ *      - Cntnts in tabs remain only inside their cell
+ *      - in principle tables behave exactly like the Cntnts
+ *      - sections also
+ */
 // This helper function is an equivalent to the ImplGetNextCntntFrm() method,
 // besides ContentFrames this function also returns TabFrms and SectionFrms.
 static SwFrm* lcl_NextFrm( SwFrm* pFrm )

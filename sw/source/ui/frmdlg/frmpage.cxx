@@ -158,9 +158,7 @@ static RelationMap aAsCharRelationMap[] =
     {SwFPos::REL_ROW,    SwFPos::REL_ROW,   LB_REL_ROW,     text::RelOrientation::FRAME}
 };
 
-/*--------------------------------------------------------------------
-    Description: site anchored
- --------------------------------------------------------------------*/
+// site anchored
 #define HORI_PAGE_REL   (LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_PG_LEFT| \
                         LB_REL_PG_RIGHT)
 
@@ -192,9 +190,7 @@ static FrmMap aVPageHtmlMap[] =
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        text::VertOrientation::NONE,      LB_REL_PG_FRAME}
 };
 
-/*--------------------------------------------------------------------
-    Description: frame anchored
- --------------------------------------------------------------------*/
+// frame anchored
 #define HORI_FRAME_REL  (LB_FLY_REL_PG_FRAME|LB_FLY_REL_PG_PRTAREA| \
                         LB_FLY_REL_PG_LEFT|LB_FLY_REL_PG_RIGHT)
 
@@ -229,9 +225,7 @@ static FrmMap aVFlyHtmlMap[] =
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        text::VertOrientation::NONE,      LB_FLY_VERT_FRAME}
 };
 
-/*--------------------------------------------------------------------
-    Description: paragraph anchored
- --------------------------------------------------------------------*/
+// paragraph anchored
 #define HORI_PARA_REL   (LB_FRAME|LB_PRTAREA|LB_REL_PG_LEFT|LB_REL_PG_RIGHT| \
                         LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_FRM_LEFT| \
                         LB_REL_FRM_RIGHT)
@@ -275,9 +269,7 @@ static FrmMap aVParaHtmlMap[] =
     {SwFPos::TOP,           SwFPos::TOP,            text::VertOrientation::TOP,       LB_VERT_PRTAREA}
 };
 
-/*--------------------------------------------------------------------
-    Description: anchored relative to the character
- --------------------------------------------------------------------*/
+// anchored relative to the character
 #define HORI_CHAR_REL   (LB_FRAME|LB_PRTAREA|LB_REL_PG_LEFT|LB_REL_PG_RIGHT| \
                         LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_FRM_LEFT| \
                         LB_REL_FRM_RIGHT|LB_REL_CHAR)
@@ -339,9 +331,7 @@ static FrmMap aVCharHtmlAbsMap[] =
     {SwFPos::BELOW,             SwFPos::BELOW,          text::VertOrientation::CHAR_BOTTOM,   LB_REL_CHAR}
 };
 
-/*--------------------------------------------------------------------
-    Description: anchored as character
- --------------------------------------------------------------------*/
+// anchored as character
 static FrmMap aVAsCharMap[] =
 {
     {SwFPos::TOP,               SwFPos::TOP,            text::VertOrientation::TOP,           LB_REL_BASE},
@@ -593,9 +583,7 @@ static sal_uLong lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
     return nLBRelations;
 }
 
-/*--------------------------------------------------------------------
-    Description:    standard frame TabPage
- --------------------------------------------------------------------*/
+// standard frame TabPage
 namespace
 {
     void HandleAutoCB( sal_Bool _bChecked, FixedText& _rFT_man, FixedText& _rFT_auto, MetricField& _rPF_Edit)
@@ -1034,9 +1022,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     fWidthHeightRatio = nHeight ? double(nWidth) / double(nHeight) : 1.0;
 }
 
-/*--------------------------------------------------------------------
-    Description:    stuff attributes into the set when OK
- --------------------------------------------------------------------*/
+// stuff attributes into the set when OK
 bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
 {
     bool bRet = false;
@@ -1233,9 +1219,7 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Description:    initialise horizonal and vertical Pos
- --------------------------------------------------------------------*/
+// initialise horizonal and vertical Pos
 void SwFrmPage::InitPos(RndStdIds eId,
                                 sal_Int16 nH,
                                 sal_Int16 nHRel,
@@ -1707,9 +1691,7 @@ RndStdIds SwFrmPage::GetAnchor()
     return nRet;
 }
 
-/*--------------------------------------------------------------------
-    Description:    Bsp - Update
- --------------------------------------------------------------------*/
+// Bsp - Update
 void SwFrmPage::ActivatePage(const SfxItemSet& rSet)
 {
     bNoModifyHdl = sal_True;
@@ -1742,9 +1724,7 @@ int SwFrmPage::DeactivatePage(SfxItemSet * _pSet)
     return sal_True;
 }
 
-/*--------------------------------------------------------------------
-    Description: swap left/right with inside/outside
- --------------------------------------------------------------------*/
+// swap left/right with inside/outside
 IMPL_LINK_NOARG(SwFrmPage, MirrorHdl)
 {
     RndStdIds eId = GetAnchor();
@@ -1780,9 +1760,7 @@ IMPL_LINK( SwFrmPage, RelSizeClickHdl, CheckBox *, pBtn )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Description:    range check
- --------------------------------------------------------------------*/
+// range check
 IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
 {
     if (bNoModifyHdl)
@@ -2035,9 +2013,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Description:    horizontal Pos
- --------------------------------------------------------------------*/
+//  horizontal Pos
 IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
 {
     bool bHori = pLB == m_pHoriRelationLB;
@@ -2621,9 +2597,7 @@ IMPL_LINK_NOARG(SwGrfExtPage, MirrorHdl)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Description: example window
- --------------------------------------------------------------------*/
+// example window
 BmpWindow::BmpWindow(Window* pPar, WinBits nStyle)
     : Window(pPar, nStyle)
     , bHorz(false)
@@ -2718,9 +2692,7 @@ void BmpWindow::SetBitmapEx(const BitmapEx& rBmp)
     Invalidate();
 }
 
-/***************************************************************************
-    Description:    set URL and ImageMap at frames
-***************************************************************************/
+// set URL and ImageMap at frames
 SwFrmURLPage::SwFrmURLPage( Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage(pParent, "FrmURLPage" , "modules/swriter/ui/frmurlpage.ui", rSet)
 {
