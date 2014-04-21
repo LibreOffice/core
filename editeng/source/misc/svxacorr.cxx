@@ -72,7 +72,6 @@ static const int C_NONE             = 0x00;
 static const int C_FULL_STOP        = 0x01;
 static const int C_EXCLAMATION_MARK = 0x02;
 static const int C_QUESTION_MARK    = 0x04;
-static const int C_ASTERISK         = 0x2A;
 static const sal_Unicode cNonBreakingSpace = 0xA0;
 
 static const sal_Char pXMLImplWrdStt_ExcptLstStr[] = "WordExceptList.xml";
@@ -2761,7 +2760,7 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                                       sal_Int32 nEndPos) const
 {
     const OUString& rChk = pFnd->GetShort();
-    xub_StrLen left_wildcard = ( rChk[0] == C_ASTERISK ) ? 1 : 0; // "*word" pattern?
+    xub_StrLen left_wildcard = rChk.startsWith( ".*" ) ? 2 : 0; // ".*word" pattern?
     xub_StrLen nSttWdPos = nEndPos;
     if( nEndPos >= rChk.getLength() - left_wildcard)
     {
@@ -2774,22 +2773,25 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
         {
             TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
             OUString sWord = rTxt.copy(nCalcStt, rChk.getLength() - left_wildcard);
-            if( (!left_wildcard && rCmp.isEqual( rChk, sWord )) || (left_wildcard && rCmp.isEqual( rChk.copy(1), sWord) ))
+            if( (!left_wildcard && rCmp.isEqual( rChk, sWord )) || (left_wildcard && rCmp.isEqual( rChk.copy(left_wildcard), sWord) ))
             {
                 rStt = nCalcStt;
                 if (!left_wildcard) return pFnd;
-                // get the first word delimiter position before the matching "*word" pattern
+                // get the first word delimiter position before the matching ".*word" pattern
                 while( rStt && !(bWasWordDelim = IsWordDelim( rTxt[ --rStt ])))
                     ;
                 if (bWasWordDelim) rStt++;
-                SvxAutocorrWord* pNew = new SvxAutocorrWord(rTxt.copy(rStt, nEndPos - rStt), rTxt.copy(rStt, nEndPos - rStt - rChk.getLength() + 1) + pFnd->GetLong());
+                OUString left_pattern = rTxt.copy(rStt, nEndPos - rStt - rChk.getLength() + left_wildcard);
+                // avoid double spaces before simple "word" replacement
+                left_pattern += (left_pattern.getLength() == 0 && pFnd->GetLong()[0] == 0x20) ? pFnd->GetLong().copy(1) : pFnd->GetLong();
+                SvxAutocorrWord* pNew = new SvxAutocorrWord(rTxt.copy(rStt, nEndPos - rStt), left_pattern);
                 if( Insert( pNew ) ) return pNew; else delete pNew;
             }
         }
-        // match "word*" patterns, eg. "i18n*"
-        if ( rChk[ rChk.getLength() - 1] == C_ASTERISK )
+        // match "word.*" patterns, eg. "i18n.*"
+        if ( rChk.endsWith( ".*" ) )
         {
-            OUString sTmp( rChk.copy( 0, rChk.getLength() - 1 ) );
+            OUString sTmp( rChk.copy( 0, rChk.getLength() - 2 ) );
             // Get the last word delimiter position
             bool not_suffix;
             while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nSttWdPos ])))
