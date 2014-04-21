@@ -14,7 +14,6 @@ ifneq (,$(or $(findstring ANDROID,$(OS)),$(ENABLE_GLTF)))
 $(eval $(call gb_Module_add_targets,freetype,\
 	ExternalProject_freetype \
 	UnpackedTarball_freetype \
-	ExternalPackage_freetype \
 ))
 
 endif

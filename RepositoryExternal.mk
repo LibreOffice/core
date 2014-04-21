@@ -1267,6 +1267,7 @@ endef
 
 define gb_LinkTarget__use_freetype
 $(call gb_LinkTarget_use_external,$(1),freetype_headers)
+$(call gb_LinkTarget_add_libs,$(1),$(FREETYPE_LIBS))
 
 endef
 

@@ -10378,6 +10378,9 @@ if test $_os != iOS -a $_os != Android -a $_os != Darwin -a "x$enable_gltf" != "
     BUILD_TYPE="$BUILD_TYPE LIBGLTF"
     if test "$test_freetype" = "no"; then
         BUILD_TYPE="$BUILD_TYPE FREETYPE"
+        if test "$COM" = "MSC"; then
+            FREETYPE_LIBS="${WORKDIR}/UnpackedTarball/freetype/objs/win32/vc2010/freetype248.lib"
+        fi
     fi
 else
     AC_MSG_RESULT([no])
