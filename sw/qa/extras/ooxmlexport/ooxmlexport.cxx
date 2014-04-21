@@ -2748,9 +2748,41 @@ DECLARE_OOXMLEXPORT_TEST(testFdo74792, "fdo74792.docx")
                          comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
 
     //check that images are also saved
-    OUString sImageFile( "word/media/OOXDiagramDataRels0.jpeg" );
+    OUString sImageFile( "word/media/OOXDiagramDataRels1_0.jpeg" ); //added anchor id to form a uniqe name
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName( sImageFile ), uno::UNO_QUERY);
     CPPUNIT_ASSERT( xInputStream.is() );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFdo77718, "fdo77718.docx")
+{
+    //in case of multiple smart arts the names for images were getting
+    //repeated and thereby causing a data loss as the binary stream was
+    //getting over written. This test case ensures that unique names are
+    //given for images in different smart arts.
+    xmlDocPtr pXmlDataRels1 = parseExport("word/diagrams/_rels/data1.xml.rels");
+    if( !pXmlDataRels1 )
+        return;
+
+    xmlDocPtr pXmlDataRels2 = parseExport("word/diagrams/_rels/data2.xml.rels");
+    if( !pXmlDataRels2 )
+        return;
+
+    //ensure that the rels file is present.
+    assertXPath(pXmlDataRels1,"/rels:Relationships/rels:Relationship", 4);
+    assertXPath(pXmlDataRels2,"/rels:Relationships/rels:Relationship", 4);
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
+                         comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
+
+    //check that images are also saved
+    OUString sImageFile1( "word/media/OOXDiagramDataRels1_0.jpeg" ); //added anchor id to form a uniqe name
+    uno::Reference<io::XInputStream> xInputStream1(xNameAccess->getByName( sImageFile1 ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT( xInputStream1.is() );
+
+    //check that images are saved for other smart-arts as well.
+    OUString sImageFile2( "word/media/OOXDiagramDataRels2_0.jpeg" ); //added anchor id to form a uniqe name
+    uno::Reference<io::XInputStream> xInputStream2(xNameAccess->getByName( sImageFile2 ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT( xInputStream2.is() );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableCurruption, "tableCurrupt.docx")
