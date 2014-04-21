@@ -1105,12 +1105,6 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
                 CheckParaMarkerRedline( xParaEnd );
 
-                m_bIsFirstParaInSection = false;
-                m_bIsLastParaInSection = false;
-                m_bParaChanged = false;
-
-                // Reset the frame properties for the next paragraph
-                pParaContext->ResetFrameProperties();
             }
             if( !bKeepLastParagraphProperties )
                 rAppendContext.pLastParagraphProperties = pToBeSavedProperties;
@@ -1119,10 +1113,21 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
         {
             OSL_FAIL( "IllegalArgumentException in DomainMapper_Impl::finishParagraph" );
         }
-        catch(const uno::Exception&)
+        catch(const uno::Exception& e)
         {
+            SAL_WARN( "writerfilter", "finishParagraph() exception: " << e.Message );
         }
     }
+
+    m_bParaChanged = false;
+    if(!pParaContext->IsFrameMode())
+    { // If the paragraph is in a frame, it's not a paragraph of the section itself.
+        m_bIsFirstParaInSection = false;
+        m_bIsLastParaInSection = false;
+    }
+
+    // Reset the frame properties for the next paragraph
+    pParaContext->ResetFrameProperties();
 
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement();
