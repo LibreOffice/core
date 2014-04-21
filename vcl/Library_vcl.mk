@@ -236,7 +236,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/oldprintadaptor \
     vcl/source/outdev/outdev \
     vcl/source/outdev/clipping \
-    vcl/source/outdev/tworect \
     vcl/source/outdev/polygon \
     vcl/source/outdev/transparent \
     vcl/source/outdev/mask \

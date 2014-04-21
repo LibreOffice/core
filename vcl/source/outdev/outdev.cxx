@@ -529,7 +529,7 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect
     const Rectangle aSrcOutRect( Point( pSrcDev->mnOutOffX, pSrcDev->mnOutOffY ),
                                  Size( pSrcDev->mnOutWidth, pSrcDev->mnOutHeight ) );
 
-    ImplAdjustTwoRect( rPosAry, aSrcOutRect );
+    AdjustTwoRect( rPosAry, aSrcOutRect );
 
     if ( rPosAry.mnSrcWidth && rPosAry.mnSrcHeight && rPosAry.mnDestWidth && rPosAry.mnDestHeight )
     {
@@ -584,7 +584,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
         const Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
                                      Size( mnOutWidth, mnOutHeight ) );
 
-        ImplAdjustTwoRect( aPosAry, aSrcOutRect );
+        AdjustTwoRect( aPosAry, aSrcOutRect );
 
         if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
             mpGraphics->CopyBits( aPosAry, NULL, this, NULL );
@@ -683,7 +683,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
         const Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
                                      Size( mnOutWidth, mnOutHeight ) );
 
-        ImplAdjustTwoRect( aPosAry, aSrcOutRect );
+        AdjustTwoRect( aPosAry, aSrcOutRect );
 
         CopyAreaFinal ( aPosAry, nFlags );
     }

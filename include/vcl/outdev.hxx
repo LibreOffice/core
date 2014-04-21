@@ -278,8 +278,8 @@ typedef ::std::vector< VCLXGraphics* > VCLXGraphicsList_impl;
 
 const char* ImplDbgCheckOutputDevice( const void* pObj );
 
-sal_uLong ImplAdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
-void ImplAdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect );
+sal_uLong AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
+void AdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect );
 
 void ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
                     int nOrientation );

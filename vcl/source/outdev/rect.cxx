@@ -116,3 +116,99 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
     if( mpAlphaVDev )
         mpAlphaVDev->DrawRect( rRect, nHorzRound, nVertRound );
 }
+
+sal_uLong AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix )
+{
+    sal_uLong nMirrFlags = 0;
+
+    if ( rTwoRect.mnDestWidth < 0 )
+    {
+        rTwoRect.mnSrcX = rSizePix.Width() - rTwoRect.mnSrcX - rTwoRect.mnSrcWidth;
+        rTwoRect.mnDestWidth = -rTwoRect.mnDestWidth;
+        rTwoRect.mnDestX -= rTwoRect.mnDestWidth-1;
+        nMirrFlags |= BMP_MIRROR_HORZ;
+    }
+
+    if ( rTwoRect.mnDestHeight < 0 )
+    {
+        rTwoRect.mnSrcY = rSizePix.Height() - rTwoRect.mnSrcY - rTwoRect.mnSrcHeight;
+        rTwoRect.mnDestHeight = -rTwoRect.mnDestHeight;
+        rTwoRect.mnDestY -= rTwoRect.mnDestHeight-1;
+        nMirrFlags |= BMP_MIRROR_VERT;
+    }
+
+    if( ( rTwoRect.mnSrcX < 0 ) || ( rTwoRect.mnSrcX >= rSizePix.Width() ) ||
+        ( rTwoRect.mnSrcY < 0 ) || ( rTwoRect.mnSrcY >= rSizePix.Height() ) ||
+        ( ( rTwoRect.mnSrcX + rTwoRect.mnSrcWidth ) > rSizePix.Width() ) ||
+        ( ( rTwoRect.mnSrcY + rTwoRect.mnSrcHeight ) > rSizePix.Height() ) )
+    {
+        const Rectangle aSourceRect( Point( rTwoRect.mnSrcX, rTwoRect.mnSrcY ),
+                                     Size( rTwoRect.mnSrcWidth, rTwoRect.mnSrcHeight ) );
+        Rectangle       aCropRect( aSourceRect );
+
+        aCropRect.Intersection( Rectangle( Point(), rSizePix ) );
+
+        if( aCropRect.IsEmpty() )
+            rTwoRect.mnSrcWidth = rTwoRect.mnSrcHeight = rTwoRect.mnDestWidth = rTwoRect.mnDestHeight = 0;
+        else
+        {
+            const double    fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? (double) ( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
+            const double    fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? (double) ( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
+
+            const long nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
+            const long nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
+            const long nDstX2 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Right() - rTwoRect.mnSrcX ) );
+            const long nDstY2 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Bottom() - rTwoRect.mnSrcY ) );
+
+            rTwoRect.mnSrcX = aCropRect.Left();
+            rTwoRect.mnSrcY = aCropRect.Top();
+            rTwoRect.mnSrcWidth = aCropRect.GetWidth();
+            rTwoRect.mnSrcHeight = aCropRect.GetHeight();
+            rTwoRect.mnDestX = nDstX1;
+            rTwoRect.mnDestY = nDstY1;
+            rTwoRect.mnDestWidth = nDstX2 - nDstX1 + 1;
+            rTwoRect.mnDestHeight = nDstY2 - nDstY1 + 1;
+        }
+    }
+
+    return nMirrFlags;
+}
+
+void AdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect )
+{
+    if( ( rTwoRect.mnSrcX < rValidSrcRect.Left() ) || ( rTwoRect.mnSrcX >= rValidSrcRect.Right() ) ||
+        ( rTwoRect.mnSrcY < rValidSrcRect.Top() ) || ( rTwoRect.mnSrcY >= rValidSrcRect.Bottom() ) ||
+        ( ( rTwoRect.mnSrcX + rTwoRect.mnSrcWidth ) > rValidSrcRect.Right() ) ||
+        ( ( rTwoRect.mnSrcY + rTwoRect.mnSrcHeight ) > rValidSrcRect.Bottom() ) )
+    {
+        const Rectangle aSourceRect( Point( rTwoRect.mnSrcX, rTwoRect.mnSrcY ),
+                                     Size( rTwoRect.mnSrcWidth, rTwoRect.mnSrcHeight ) );
+        Rectangle       aCropRect( aSourceRect );
+
+        aCropRect.Intersection( rValidSrcRect );
+
+        if( aCropRect.IsEmpty() )
+            rTwoRect.mnSrcWidth = rTwoRect.mnSrcHeight = rTwoRect.mnDestWidth = rTwoRect.mnDestHeight = 0;
+        else
+        {
+            const double    fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? (double) ( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
+            const double    fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? (double) ( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
+
+            const long nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
+            const long nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
+            const long nDstX2 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Right() - rTwoRect.mnSrcX ) );
+            const long nDstY2 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Bottom() - rTwoRect.mnSrcY ) );
+
+            rTwoRect.mnSrcX = aCropRect.Left();
+            rTwoRect.mnSrcY = aCropRect.Top();
+            rTwoRect.mnSrcWidth = aCropRect.GetWidth();
+            rTwoRect.mnSrcHeight = aCropRect.GetHeight();
+            rTwoRect.mnDestX = nDstX1;
+            rTwoRect.mnDestY = nDstY1;
+            rTwoRect.mnDestWidth = nDstX2 - nDstX1 + 1;
+            rTwoRect.mnDestHeight = nDstY2 - nDstY1 + 1;
+        }
+    }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
