@@ -874,7 +874,6 @@ public:
                                     long nMaxBmpDPIX,
                                     long nMaxBmpDPIY );
 
-protected:
 
     /** Draw BitmapEx transformed
 
@@ -889,6 +888,9 @@ protected:
     void                        DrawTransformedBitmapEx(
                                     const basegfx::B2DHomMatrix& rTransformation,
                                     const BitmapEx& rBitmapEx);
+
+
+protected:
 
     /** Transform and draw a bitmap directly
 
