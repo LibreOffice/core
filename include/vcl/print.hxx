@@ -271,7 +271,7 @@ public:
     SAL_DLLPRIVATE void         ImplEndPage();
 
 protected:
-    long                        ImplGetGradientStepCount( long nMinRect ) SAL_OVERRIDE;
+    virtual long                GetGradientStepCount( long nMinRect ) SAL_OVERRIDE;
     virtual bool                UsePolyPolygonForComplexGradient() SAL_OVERRIDE;
 
     void                        ScaleBitmap ( Bitmap&, SalTwoRect& ) SAL_OVERRIDE { };

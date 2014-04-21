@@ -278,7 +278,7 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
     }
 
     // calculate step count
-    long    nStepCount  = ImplGetGradientSteps( rGradient, aRect, bMtf );
+    long    nStepCount  = GetGradientSteps( rGradient, aRect, bMtf );
 
     // minimal three steps and maximal as max color steps
     long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );
@@ -402,7 +402,7 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
         pPolyPoly.reset(new PolyPolygon( 2 ));
 
     // last parameter - true if complex gradient, false if linear
-    long nStepCount = ImplGetGradientSteps( rGradient, rRect, bMtf, true );
+    long nStepCount = GetGradientSteps( rGradient, rRect, bMtf, true );
 
     // at least three steps and at most the number of colour differences
     long nSteps = std::max( nStepCount, 2L );
@@ -554,14 +554,14 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
     }
 }
 
-long OutputDevice::ImplGetGradientStepCount( long nMinRect )
+long OutputDevice::GetGradientStepCount( long nMinRect )
 {
     long nInc = (nMinRect < 50) ? 2 : 4;
 
     return nInc;
 }
 
-long OutputDevice::ImplGetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex )
+long OutputDevice::GetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex )
 {
     // calculate step count
     long nStepCount  = rGradient.GetSteps();
@@ -577,7 +577,7 @@ long OutputDevice::ImplGetGradientSteps( const Gradient& rGradient, const Rectan
     {
         long nInc;
 
-        nInc = ImplGetGradientStepCount (nMinRect);
+        nInc = GetGradientStepCount (nMinRect);
         if ( !nInc || bMtf )
             nInc = 1;
         nStepCount = nMinRect / nInc;

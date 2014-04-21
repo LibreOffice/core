@@ -735,31 +735,6 @@ public:
     SAL_DLLPRIVATE void         ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
     ///@}
 
-    /** @name Gradient functions
-     */
-    ///@{
-public:
-    void                        DrawGradient( const Rectangle& rRect, const Gradient& rGradient );
-    void                        DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
-
-    void                        AddGradientActions(
-                                    const Rectangle& rRect,
-                                    const Gradient& rGradient,
-                                    GDIMetaFile& rMtf );
-
-protected:
-    virtual long                ImplGetGradientStepCount( long nMinRect );
-
-private:
-    SAL_DLLPRIVATE void         DrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
-    SAL_DLLPRIVATE void         DrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
-
-    SAL_DLLPRIVATE long         ImplGetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex=false );
-
-    SAL_DLLPRIVATE Color        GetSingleColorGradientFill();
-    SAL_DLLPRIVATE void         SetGrayscaleColors( Gradient &rGradient );
-    ///@}
-
 public:
     /** @name Hatch functions
      */
@@ -1029,13 +1004,6 @@ public:
     void                        DrawRect( const Rectangle& rRect );
     void                        DrawRect( const Rectangle& rRect,
                                           sal_uLong nHorzRount, sal_uLong nVertRound );
-    void                        DrawEllipse( const Rectangle& rRect );
-    void                        DrawArc( const Rectangle& rRect,
-                                         const Point& rStartPt, const Point& rEndPt );
-    void                        DrawPie( const Rectangle& rRect,
-                                         const Point& rStartPt, const Point& rEndPt );
-    void                        DrawChord( const Rectangle& rRect,
-                                           const Point& rStartPt, const Point& rEndPt );
 
     virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                             const Point& rSrcPt,  const Size& rSrcSize );
@@ -1175,6 +1143,49 @@ private:
                                     const sal_Int32     nDstWidth,
                                     const long*         pMapX,
                                     const long*         pMapY );
+    ///@}
+
+public:
+    /** @name Curved shape functions
+     */
+    ///@{
+    void                        DrawEllipse( const Rectangle& rRect );
+
+    void                        DrawArc( const Rectangle& rRect,
+                                         const Point& rStartPt, const Point& rEndPt );
+
+    void                        DrawPie( const Rectangle& rRect,
+                                         const Point& rStartPt, const Point& rEndPt );
+
+    void                        DrawChord( const Rectangle& rRect,
+                                           const Point& rStartPt, const Point& rEndPt );
+
+    ///@}
+
+
+public:
+    /** @name Gradient functions
+     */
+    ///@{
+    void                        DrawGradient( const Rectangle& rRect, const Gradient& rGradient );
+    void                        DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+
+    void                        AddGradientActions(
+                                    const Rectangle& rRect,
+                                    const Gradient& rGradient,
+                                    GDIMetaFile& rMtf );
+
+protected:
+    virtual long                GetGradientStepCount( long nMinRect );
+
+private:
+    SAL_DLLPRIVATE void         DrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         DrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
+
+    SAL_DLLPRIVATE long         GetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex=false );
+
+    SAL_DLLPRIVATE Color        GetSingleColorGradientFill();
+    SAL_DLLPRIVATE void         SetGrayscaleColors( Gradient &rGradient );
     ///@}
 
 public:
