@@ -107,7 +107,7 @@ IMPL_LINK_NOARG(SwBlink, Blinker)
                     ->GetCurrShell()->InvalidateWindows( aRefresh );
             }
             else // Portions without a shell can be removed from the list
-                aList.erase( it );
+                it = aList.erase(it);
         }
     }
     else // If the list is empty, the timer can be stopped
