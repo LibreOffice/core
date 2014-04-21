@@ -605,6 +605,8 @@ ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport
     pDetectiveObj(NULL),
     pDetectiveOp(NULL),
     rExport(rTempXMLExport),
+    nCellCol(0),
+    nCellRow(0),
     nCurrentTable(SCTAB_MAX)
 {
 }
