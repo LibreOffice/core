@@ -4599,12 +4599,12 @@ void Test::testSortWithFormulaRefs()
     m_pDoc->InsertTab(1, "List2");
 
     const char* aFormulaData[6] = {
-        "=IF($List1.A2<>\"\",$List1.A2,\"\")",
-        "=IF($List1.A3<>\"\",$List1.A3,\"\")",
-        "=IF($List1.A4<>\"\",$List1.A4,\"\")",
-        "=IF($List1.A5<>\"\",$List1.A5,\"\")",
-        "=IF($List1.A6<>\"\",$List1.A6,\"\")",
-        "=IF($List1.A7<>\"\",$List1.A7,\"\")",
+        "=IF($List1.A2<>\"\";$List1.A2;\"\")",
+        "=IF($List1.A3<>\"\";$List1.A3;\"\")",
+        "=IF($List1.A4<>\"\";$List1.A4;\"\")",
+        "=IF($List1.A5<>\"\";$List1.A5;\"\")",
+        "=IF($List1.A6<>\"\";$List1.A6;\"\")",
+        "=IF($List1.A7<>\"\";$List1.A7;\"\")",
     };
 
     const char* aTextData[4] = {
@@ -4622,16 +4622,16 @@ void Test::testSortWithFormulaRefs()
         "",
         "",
     };
-    // insert data to sort
-    SCROW nStart = 1, nEnd = 4;
-    for ( SCROW i = nStart; i <= nEnd; ++i )
+
+    // Insert data to sort in A2:A5 on the 1st sheet.
+    for (SCROW i = 1; i <= 4; ++i)
         m_pDoc->SetString( 0, i, 0, OUString::createFromAscii(aTextData[i-1]) );
-    // insert forumulas
-    nStart = 0;
-    nEnd = SAL_N_ELEMENTS(aFormulaData);
-    for ( SCROW i = nStart; i < nEnd; ++i )
+
+    // Insert forumulas in A1:A6 on the 2nd sheet.
+    for (SCROW i = 0; i < SAL_N_ELEMENTS(aFormulaData); ++i)
         m_pDoc->SetString( 0, i, 1, OUString::createFromAscii(aFormulaData[i]) );
 
+    // Sort data in A2:A8 on the 1st sheet. No column header.
     ScSortParam aSortData;
     aSortData.nCol1 = 0;
     aSortData.nCol2 = 0;
@@ -4642,8 +4642,7 @@ void Test::testSortWithFormulaRefs()
 
     m_pDoc->Sort(0, aSortData, false, NULL);
 
-    nEnd = SAL_N_ELEMENTS( aResults );
-    for ( SCROW i = nStart; i < nEnd; ++i )
+    for (SCROW i = 0; i < SAL_N_ELEMENTS(aResults); ++i)
     {
         OUString sResult = m_pDoc->GetString(0, i + 1, 0);
         CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aResults[i] ), sResult );
