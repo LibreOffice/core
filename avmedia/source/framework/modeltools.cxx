@@ -100,7 +100,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
     }
 
     // Reload json with modified path to external resources
-    rContent = ::ucbhelper::Content("file://" + OUString::createFromAscii(sUrl.c_str()),
+    rContent = ::ucbhelper::Content(sTempFileURL,
         uno::Reference<ucb::XCommandEnvironment>(),
         comphelper::getProcessComponentContext());
 
