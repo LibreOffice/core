@@ -3469,6 +3469,18 @@ void DomainMapper::lcl_endSectionGroup()
 {
     m_pImpl->CheckUnregisteredFrameConversion();
     m_pImpl->ExecuteFrameConversion();
+    if(m_pImpl->GetIsFirstParagraphInSection())
+    {
+        // This section has no paragraph at all (e.g. they are all actually in a frame).
+        // If this section has a page break, there would be nothing to apply to the page
+        // style, so force a dummy paragraph.
+        lcl_startParagraphGroup();
+        lcl_startCharacterGroup();
+        sal_uInt8 sBreak[] = { 0xd };
+        lcl_text(sBreak, 1);
+        lcl_endCharacterGroup();
+        lcl_endParagraphGroup();
+    }
     PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
     SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
     OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
