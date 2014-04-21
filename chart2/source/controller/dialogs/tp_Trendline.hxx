@@ -38,6 +38,7 @@ public:
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     void SetNumFormatter( SvNumberFormatter* pFormatter );
+    void SetNbPoints( sal_Int32 nNbPoints );
 
 private:
     TrendlineResources   m_aTrendlineResources;
