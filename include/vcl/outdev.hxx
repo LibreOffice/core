@@ -886,7 +886,7 @@ protected:
         @param rBitmapEx
         The BitmapEx to be painted
     */
-    void                        DrawTransformBitmapEx(
+    void                        DrawTransformedBitmapEx(
                                     const basegfx::B2DHomMatrix& rTransformation,
                                     const BitmapEx& rBitmapEx);
 

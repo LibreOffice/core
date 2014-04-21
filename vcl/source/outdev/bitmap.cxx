@@ -366,7 +366,7 @@ void OutputDevice::ScaleBitmap (Bitmap &rBmp, SalTwoRect &rPosAry)
     }
 }
 
-bool OutputDevice::DrawTransformBitmapExDirect(
+bool OutputDevice::DrawTransformedBitmapExDirect(
         const basegfx::B2DHomMatrix& aFullTransform,
         const BitmapEx& rBitmapEx)
 {
