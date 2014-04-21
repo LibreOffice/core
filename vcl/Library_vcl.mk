@@ -252,7 +252,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/curvedshapes \
     vcl/source/outdev/wallpaper \
     vcl/source/outdev/nativecontrols \
-    vcl/source/outdev/outmap \
+    vcl/source/outdev/map \
     vcl/source/gdi/pdfextoutdevdata \
     vcl/source/gdi/pdffontcache \
     vcl/source/gdi/pdfwriter \

@@ -390,11 +390,6 @@ private:
     mutable bool                    mbRefPoint : 1;
     mutable bool                    mbEnableRTL : 1;
 
-protected:
-     virtual void                   ImplReleaseFonts();
-     virtual void                   SetFontOrientation( ImplFontEntry* const pFontEntry ) const;
-     virtual long                   GetFontExtLeading() const;
-
 public:
     /** @name Initialization and accessor functions
      */
@@ -463,181 +458,6 @@ public:
      @returns y-axis DPI value
      */
     SAL_DLLPRIVATE sal_Int32    ImplGetDPIY() const { return mnDPIY; }
-
-    /** Convert a logical X coordinate to a device pixel's X coordinate.
-
-     To get the device's X coordinate, it must calculate the mapping offset
-     coordinate X position (if there is one - if not then it just adds
-     the pseudo-window offset to the logical X coordinate), the X-DPI of
-     the device and the mapping's X scaling factor.
-
-     @param         nX          Logical X coordinate
-
-     @returns Device's X pixel coordinate
-     */
-    SAL_DLLPRIVATE long         ImplLogicXToDevicePixel( long nX ) const;
-
-    /** Convert a logical Y coordinate to a device pixel's Y coordinate.
-
-     To get the device's Y coordinate, it must calculate the mapping offset
-     coordinate Y position (if there is one - if not then it just adds
-     the pseudo-window offset to the logical Y coordinate), the Y-DPI of
-     the device and the mapping's Y scaling factor.
-
-     @param         nY          Logical Y coordinate
-
-     @returns Device's Y pixel coordinate
-     */
-    SAL_DLLPRIVATE long         ImplLogicYToDevicePixel( long nY ) const;
-
-    /** Convert a logical width to a width in units of device pixels.
-
-     To get the number of device pixels, it must calculate the X-DPI of the device and
-     the map scaling factor. If there is no mapping, then it just returns the
-     width as nothing more needs to be done.
-
-     @param         nWidth      Logical width
-
-     @returns Width in units of device pixels.
-     */
-    SAL_DLLPRIVATE long         ImplLogicWidthToDevicePixel( long nWidth ) const;
-
-    /** Convert a logical height to a height in units of device pixels.
-
-     To get the number of device pixels, it must calculate the Y-DPI of the device and
-     the map scaling factor. If there is no mapping, then it just returns the
-     height as nothing more needs to be done.
-
-     @param         nHeight     Logical height
-
-     @returns Height in units of device pixels.
-     */
-    SAL_DLLPRIVATE long         ImplLogicHeightToDevicePixel( long nHeight ) const;
-
-    /** Convert device pixels to a width in logical units.
-
-     To get the logical width, it must calculate the X-DPI of the device and the
-     map scaling factor.
-
-     @param         nWidth      Width in device pixels
-
-     @returns Width in logical units.
-     */
-    SAL_DLLPRIVATE long         ImplDevicePixelToLogicWidth( long nWidth ) const;
-
-    /** Convert device pixels to a height in logical units.
-
-     To get the logical height, it must calculate the Y-DPI of the device and the
-     map scaling factor.
-
-     @param         nHeight     Height in device pixels
-
-     @returns Height in logical units.
-     */
-    SAL_DLLPRIVATE long         ImplDevicePixelToLogicHeight( long nHeight ) const;
-
-    /** Convert logical height to device pixels, with exact sub-pixel value.
-
-     To get the \em exact pixel height, it must calculate the Y-DPI of the device and the
-     map scaling factor.
-
-     @param         nHeight     Exact height in logical units.
-
-     @returns Exact height in pixels - returns as a float to provide for subpixel value.
-     */
-    SAL_DLLPRIVATE float        ImplFloatLogicHeightToDevicePixel( float ) const;
-
-    /** Convert a logical point to a physical point on the device.
-
-     @param         rLogicPt    Const reference to a point in logical units.
-
-     @returns Physical point on the device.
-     */
-    SAL_DLLPRIVATE Point        ImplLogicToDevicePixel( const Point& rLogicPt ) const;
-
-    /** Convert a logical size to the size on the physical device.
-
-     @param         rLogicSize  Const reference to a size in logical units
-
-     @returns Physical size on the device.
-     */
-    SAL_DLLPRIVATE Size         ImplLogicToDevicePixel( const Size& rLogicSize ) const;
-
-    /** Convert a logical rectangle to a rectangle in physical device pixel units.
-
-     @param         rLogicSize  Const reference to a rectangle in logical units
-
-     @returns Rectangle based on physical device pixel coordinates and units.
-     */
-    SAL_DLLPRIVATE Rectangle    ImplLogicToDevicePixel( const Rectangle& rLogicRect ) const;
-
-    /** Convert a rectangle in physical pixel units to a rectangle in physical pixel units and coords.
-
-     @param         rPixelRect  Const reference to rectangle in logical units and coords.
-
-     @returns Rectangle based on logical coordinates and units.
-     */
-    SAL_DLLPRIVATE Rectangle    ImplDevicePixelToLogic( const Rectangle& rPixelRect ) const;
-
-    /** Convert a logical B2DPolygon to a B2DPolygon in physical device pixel units.
-
-     @param         rLogicSize  Const reference to a B2DPolygon in logical units
-
-     @returns B2DPolyPolygon based on physical device pixel coordinates and units.
-     */
-    SAL_DLLPRIVATE ::basegfx::B2DPolygon ImplLogicToDevicePixel( const ::basegfx::B2DPolygon& rLogicPoly ) const;
-
-    /** Convert a logical B2DPolyPolygon to a B2DPolyPolygon in physical device pixel units.
-
-     @param         rLogicPolyPoly  Const reference to a B2DPolyPolygon in logical units
-
-     @returns B2DPolyPolygon based on physical device pixel coordinates and units.
-     */
-    SAL_DLLPRIVATE ::basegfx::B2DPolyPolygon ImplLogicToDevicePixel( const ::basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
-
-    /** Convert a logical polygon to a polygon in physical device pixel units.
-
-     @param         rLogicPoly  Const reference to a polygon in logical units
-
-     @returns Polygon based on physical device pixel coordinates and units.
-     */
-    SAL_DLLPRIVATE Polygon      ImplLogicToDevicePixel( const Polygon& rLogicPoly ) const;
-
-    /** Convert a logical polypolygon to a polypolygon in physical device pixel units.
-
-     @param         rLogicPolyPoly  Const reference to a polypolygon in logical units
-
-     @returns Polypolygon based on physical device pixel coordinates and units.
-     */
-    SAL_DLLPRIVATE PolyPolygon  ImplLogicToDevicePixel( const PolyPolygon& rLogicPolyPoly ) const;
-
-    /** Convert a line in logical units to a line in physical device pixel units.
-
-     @param         rLineInfo   Const refernece to a line in logical units
-
-     @returns Line based on physical device pixel coordinates and units.
-     */
-    SAL_DLLPRIVATE LineInfo     ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const;
-
-    /** Convert a region in pixel units to a region in device pixel units and coords.
-
-     @param         rPixelRect  Const reference to region.
-
-     @returns Region based on device pixel coordinates and units.
-     */
-    SAL_DLLPRIVATE Region       ImplPixelToDevicePixel( const Region& rRegion ) const;
-
-    /** Invalidate the view transformation.
-
-     @since AOO bug 75163 (OpenOffice.org 2.4.3 - OOH 680 milestone 212)
-     */
-    SAL_DLLPRIVATE void         ImplInvalidateViewTransform();
-
-    /** Get device transformation.
-
-     @since AOO bug 75163 (OpenOffice.org 2.4.3 - OOH 680 milestone 212)
-     */
-    SAL_DLLPRIVATE basegfx::B2DHomMatrix ImplGetDeviceTransformation() const;
     ///@}
 
     /** @name Clipping functions
@@ -650,16 +470,12 @@ public:
 
     ///@}
 
+public:
     /** @name Text and font functions
      */
     ///@{
     SAL_DLLPRIVATE bool         ImplNewFont() const;
     SAL_DLLPRIVATE void         ImplInitTextColor();
-
-protected:
-    virtual void                InitFont() const;
-
-public:
     static
     SAL_DLLPRIVATE void         ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
                                               const OUString& rOrigStr, sal_uInt16 nStyle,
@@ -697,6 +513,12 @@ public:
     SAL_DLLPRIVATE void         ImplInitFontList() const;
     SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
+
+protected:
+    virtual void                InitFont() const;
+    virtual void                ImplReleaseFonts();
+    virtual void                SetFontOrientation( ImplFontEntry* const pFontEntry ) const;
+    virtual long                GetFontExtLeading() const;
     ///@}
 
     SAL_DLLPRIVATE void         ImplInitFillColor();
@@ -1300,6 +1122,358 @@ protected:
     ///@}
 
 public:
+    /** @name Map functions
+     */
+    ///@{
+    void                        EnableMapMode( bool bEnable = true );
+    bool                        IsMapModeEnabled() const { return mbMap; }
+
+    virtual void                SetMapMode();
+    virtual void                SetMapMode( const MapMode& rNewMapMode );
+    virtual void                SetRelativeMapMode( const MapMode& rNewMapMode );
+    const MapMode&              GetMapMode() const { return maMapMode; }
+    bool                        IsMapMode() const { return mbMap; }
+
+     // #i75163#
+    basegfx::B2DHomMatrix       GetViewTransformation() const;
+    basegfx::B2DHomMatrix       GetInverseViewTransformation() const;
+
+    basegfx::B2DHomMatrix       GetViewTransformation( const MapMode& rMapMode ) const;
+    basegfx::B2DHomMatrix       GetInverseViewTransformation( const MapMode& rMapMode ) const;
+
+
+    /** Set an offset in pixel
+
+        This method offsets every drawing operation that converts its
+        coordinates to pixel by the given value. Normally, the effect
+        can be achieved by setting a MapMode with a different
+        origin. Unfortunately, this origin is in logical coordinates
+        and can lead to rounding errors (see #102532# for details).
+
+        @attention This offset is only applied when converting to
+        pixel, i.e. some output modes such as metafile recordings
+        might be completely unaffected by this method! Use with
+        care. Furthermore, if the OutputDevice's MapMode is the
+        default (that's MAP_PIXEL), then any pixel offset set is
+        ignored also. This might be unintuitive for cases, but would
+        have been far more fragile to implement. What's more, the
+        reason why the pixel offset was introduced (avoiding rounding
+        errors) does not apply for MAP_PIXEL, because one can always
+        use the MapMode origin then.
+
+        @param rOffset
+        The offset in pixel
+     */
+    void                        SetPixelOffset( const Size& rOffset );
+
+    /** Get the offset in pixel
+
+        @see OutputDevice::SetPixelOffset for details
+
+        @return the current offset in pixel
+     */
+    Size                        GetPixelOffset() const;
+
+    Point                       LogicToPixel( const Point& rLogicPt ) const;
+    Size                        LogicToPixel( const Size& rLogicSize ) const;
+    Rectangle                   LogicToPixel( const Rectangle& rLogicRect ) const;
+    Polygon                     LogicToPixel( const Polygon& rLogicPoly ) const;
+    PolyPolygon                 LogicToPixel( const PolyPolygon& rLogicPolyPoly ) const;
+    basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
+    Region                      LogicToPixel( const Region& rLogicRegion )const;
+    Point                       LogicToPixel( const Point& rLogicPt,
+                                              const MapMode& rMapMode ) const;
+    Size                        LogicToPixel( const Size& rLogicSize,
+                                              const MapMode& rMapMode ) const;
+    Rectangle                   LogicToPixel( const Rectangle& rLogicRect,
+                                              const MapMode& rMapMode ) const;
+    Polygon                     LogicToPixel( const Polygon& rLogicPoly,
+                                              const MapMode& rMapMode ) const;
+    basegfx::B2DPolygon         LogicToPixel( const basegfx::B2DPolygon& rLogicPoly,
+                                              const MapMode& rMapMode ) const;
+    PolyPolygon                 LogicToPixel( const PolyPolygon& rLogicPolyPoly,
+                                              const MapMode& rMapMode ) const;
+    basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
+                                              const MapMode& rMapMode ) const;
+    Region                      LogicToPixel( const Region& rLogicRegion,
+                                              const MapMode& rMapMode ) const;
+    basegfx::B2DPolygon         LogicToPixel( const basegfx::B2DPolygon& rLogicPoly ) const;
+
+    Point                       PixelToLogic( const Point& rDevicePt ) const;
+    Size                        PixelToLogic( const Size& rDeviceSize ) const;
+    Rectangle                   PixelToLogic( const Rectangle& rDeviceRect ) const;
+    Polygon                     PixelToLogic( const Polygon& rDevicePoly ) const;
+    PolyPolygon                 PixelToLogic( const PolyPolygon& rDevicePolyPoly ) const;
+    basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly ) const;
+    Region                      PixelToLogic( const Region& rDeviceRegion ) const;
+    Point                       PixelToLogic( const Point& rDevicePt,
+                                              const MapMode& rMapMode ) const;
+    Size                        PixelToLogic( const Size& rDeviceSize,
+                                              const MapMode& rMapMode ) const;
+    Rectangle                   PixelToLogic( const Rectangle& rDeviceRect,
+                                              const MapMode& rMapMode ) const;
+    Polygon                     PixelToLogic( const Polygon& rDevicePoly,
+                                              const MapMode& rMapMode ) const;
+    basegfx::B2DPolygon         PixelToLogic( const basegfx::B2DPolygon& rDevicePoly,
+                                              const MapMode& rMapMode ) const;
+    PolyPolygon                 PixelToLogic( const PolyPolygon& rDevicePolyPoly,
+                                              const MapMode& rMapMode ) const;
+    basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly,
+                                              const MapMode& rMapMode ) const;
+    Region                      PixelToLogic( const Region& rDeviceRegion,
+                                              const MapMode& rMapMode ) const;
+
+    Point                       LogicToLogic( const Point&      rPtSource,
+                                              const MapMode*    pMapModeSource,
+                                              const MapMode*    pMapModeDest ) const;
+    Size                        LogicToLogic( const Size&       rSzSource,
+                                              const MapMode*    pMapModeSource,
+                                              const MapMode*    pMapModeDest ) const;
+    Rectangle                   LogicToLogic( const Rectangle&  rRectSource,
+                                              const MapMode*    pMapModeSource,
+                                              const MapMode*    pMapModeDest ) const;
+    static Point                LogicToLogic( const Point&      rPtSource,
+                                              const MapMode&    rMapModeSource,
+                                              const MapMode&    rMapModeDest );
+    static Size                 LogicToLogic( const Size&       rSzSource,
+                                              const MapMode&    rMapModeSource,
+                                              const MapMode&    rMapModeDest );
+    static Rectangle            LogicToLogic( const Rectangle&  rRectSource,
+                                              const MapMode&    rMapModeSource,
+                                              const MapMode&    rMapModeDest );
+    static long                 LogicToLogic( long              nLongSource,
+                                              MapUnit           eUnitSource,
+                                              MapUnit           eUnitDest );
+
+    static basegfx::B2DPolygon  LogicToLogic( const basegfx::B2DPolygon& rPoly,
+                                              const MapMode&    rMapModeSource,
+                                              const MapMode&    rMapModeDest );
+    static basegfx::B2DPolyPolygon LogicToLogic( const basegfx::B2DPolyPolygon& rPolyPoly,
+                                                 const MapMode&    rMapModeSource,
+                                                 const MapMode&    rMapModeDest );
+
+    // create a mapping transformation from rMapModeSource to rMapModeDest (the above methods
+    // for B2DPoly/Polygons use this internally anyway to transform the B2DPolygon)
+    static basegfx::B2DHomMatrix LogicToLogic(const MapMode& rMapModeSource, const MapMode& rMapModeDest);
+
+    /** Convert a logical rectangle to a rectangle in physical device pixel units.
+
+     @param         rLogicSize  Const reference to a rectangle in logical units
+
+     @returns Rectangle based on physical device pixel coordinates and units.
+     */
+    SAL_DLLPRIVATE Rectangle    ImplLogicToDevicePixel( const Rectangle& rLogicRect ) const;
+
+    /** Convert a logical point to a physical point on the device.
+
+     @param         rLogicPt    Const reference to a point in logical units.
+
+     @returns Physical point on the device.
+     */
+    SAL_DLLPRIVATE Point        ImplLogicToDevicePixel( const Point& rLogicPt ) const;
+
+    /** Convert a logical width to a width in units of device pixels.
+
+     To get the number of device pixels, it must calculate the X-DPI of the device and
+     the map scaling factor. If there is no mapping, then it just returns the
+     width as nothing more needs to be done.
+
+     @param         nWidth      Logical width
+
+     @returns Width in units of device pixels.
+     */
+    SAL_DLLPRIVATE long         ImplLogicWidthToDevicePixel( long nWidth ) const;
+
+private:
+    /** Convert a logical X coordinate to a device pixel's X coordinate.
+
+     To get the device's X coordinate, it must calculate the mapping offset
+     coordinate X position (if there is one - if not then it just adds
+     the pseudo-window offset to the logical X coordinate), the X-DPI of
+     the device and the mapping's X scaling factor.
+
+     @param         nX          Logical X coordinate
+
+     @returns Device's X pixel coordinate
+     */
+    SAL_DLLPRIVATE long         ImplLogicXToDevicePixel( long nX ) const;
+
+    /** Convert a logical Y coordinate to a device pixel's Y coordinate.
+
+     To get the device's Y coordinate, it must calculate the mapping offset
+     coordinate Y position (if there is one - if not then it just adds
+     the pseudo-window offset to the logical Y coordinate), the Y-DPI of
+     the device and the mapping's Y scaling factor.
+
+     @param         nY          Logical Y coordinate
+
+     @returns Device's Y pixel coordinate
+     */
+    SAL_DLLPRIVATE long         ImplLogicYToDevicePixel( long nY ) const;
+
+    /** Convert a logical height to a height in units of device pixels.
+
+     To get the number of device pixels, it must calculate the Y-DPI of the device and
+     the map scaling factor. If there is no mapping, then it just returns the
+     height as nothing more needs to be done.
+
+     @param         nHeight     Logical height
+
+     @returns Height in units of device pixels.
+     */
+    SAL_DLLPRIVATE long         ImplLogicHeightToDevicePixel( long nHeight ) const;
+
+    /** Convert device pixels to a width in logical units.
+
+     To get the logical width, it must calculate the X-DPI of the device and the
+     map scaling factor.
+
+     @param         nWidth      Width in device pixels
+
+     @returns Width in logical units.
+     */
+    SAL_DLLPRIVATE long         ImplDevicePixelToLogicWidth( long nWidth ) const;
+
+    /** Convert device pixels to a height in logical units.
+
+     To get the logical height, it must calculate the Y-DPI of the device and the
+     map scaling factor.
+
+     @param         nHeight     Height in device pixels
+
+     @returns Height in logical units.
+     */
+    SAL_DLLPRIVATE long         ImplDevicePixelToLogicHeight( long nHeight ) const;
+
+    /** Convert logical height to device pixels, with exact sub-pixel value.
+
+     To get the \em exact pixel height, it must calculate the Y-DPI of the device and the
+     map scaling factor.
+
+     @param         nHeight     Exact height in logical units.
+
+     @returns Exact height in pixels - returns as a float to provide for subpixel value.
+     */
+    SAL_DLLPRIVATE float        ImplFloatLogicHeightToDevicePixel( float ) const;
+
+    /** Convert a logical size to the size on the physical device.
+
+     @param         rLogicSize  Const reference to a size in logical units
+
+     @returns Physical size on the device.
+     */
+    SAL_DLLPRIVATE Size         ImplLogicToDevicePixel( const Size& rLogicSize ) const;
+
+    /** Convert a rectangle in physical pixel units to a rectangle in physical pixel units and coords.
+
+     @param         rPixelRect  Const reference to rectangle in logical units and coords.
+
+     @returns Rectangle based on logical coordinates and units.
+     */
+    SAL_DLLPRIVATE Rectangle    ImplDevicePixelToLogic( const Rectangle& rPixelRect ) const;
+
+    /** Convert a logical B2DPolygon to a B2DPolygon in physical device pixel units.
+
+     @param         rLogicSize  Const reference to a B2DPolygon in logical units
+
+     @returns B2DPolyPolygon based on physical device pixel coordinates and units.
+     */
+    SAL_DLLPRIVATE ::basegfx::B2DPolygon ImplLogicToDevicePixel( const ::basegfx::B2DPolygon& rLogicPoly ) const;
+
+    /** Convert a logical B2DPolyPolygon to a B2DPolyPolygon in physical device pixel units.
+
+     @param         rLogicPolyPoly  Const reference to a B2DPolyPolygon in logical units
+
+     @returns B2DPolyPolygon based on physical device pixel coordinates and units.
+     */
+    SAL_DLLPRIVATE ::basegfx::B2DPolyPolygon ImplLogicToDevicePixel( const ::basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
+
+    /** Convert a logical polygon to a polygon in physical device pixel units.
+
+     @param         rLogicPoly  Const reference to a polygon in logical units
+
+     @returns Polygon based on physical device pixel coordinates and units.
+     */
+    SAL_DLLPRIVATE Polygon      ImplLogicToDevicePixel( const Polygon& rLogicPoly ) const;
+
+    /** Convert a logical polypolygon to a polypolygon in physical device pixel units.
+
+     @param         rLogicPolyPoly  Const reference to a polypolygon in logical units
+
+     @returns Polypolygon based on physical device pixel coordinates and units.
+     */
+    SAL_DLLPRIVATE PolyPolygon  ImplLogicToDevicePixel( const PolyPolygon& rLogicPolyPoly ) const;
+
+    /** Convert a line in logical units to a line in physical device pixel units.
+
+     @param         rLineInfo   Const refernece to a line in logical units
+
+     @returns Line based on physical device pixel coordinates and units.
+     */
+    SAL_DLLPRIVATE LineInfo     ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const;
+
+    /** Convert a region in pixel units to a region in device pixel units and coords.
+
+     @param         rPixelRect  Const reference to region.
+
+     @returns Region based on device pixel coordinates and units.
+     */
+    SAL_DLLPRIVATE Region       ImplPixelToDevicePixel( const Region& rRegion ) const;
+
+    /** Invalidate the view transformation.
+
+     @since AOO bug 75163 (OpenOffice.org 2.4.3 - OOH 680 milestone 212)
+     */
+    SAL_DLLPRIVATE void         ImplInvalidateViewTransform();
+
+    /** Get device transformation.
+
+     @since AOO bug 75163 (OpenOffice.org 2.4.3 - OOH 680 milestone 212)
+     */
+    SAL_DLLPRIVATE basegfx::B2DHomMatrix ImplGetDeviceTransformation() const;
+    ///@}
+
+public:
+    /** @name Native Widget Rendering functions
+
+        These all just call through to the private mpGraphics functions of the same name.
+     */
+    ///@{
+
+    /** Query the platform layer for control support
+     */
+    bool                        IsNativeControlSupported( ControlType nType, ControlPart nPart ) const;
+
+    /** Query the native control to determine if it was acted upon
+     */
+    bool                        HitTestNativeControl(   ControlType nType,
+                                                        ControlPart nPart,
+                                                        const Rectangle& rControlRegion,
+                                                        const Point& aPos,
+                                                        bool& rIsInside ) const;
+
+    /** Request rendering of a particular control and/or part
+     */
+    bool                        DrawNativeControl(  ControlType nType,
+                                                    ControlPart nPart,
+                                                    const Rectangle& rControlRegion,
+                                                    ControlState nState,
+                                                    const ImplControlValue& aValue,
+                                                    const OUString& aCaption );
+
+    /** Query the native control's actual drawing region (including adornment)
+     */
+    bool                        GetNativeControlRegion( ControlType nType,
+                                                        ControlPart nPart,
+                                                        const Rectangle& rControlRegion,
+                                                        ControlState nState,
+                                                        const ImplControlValue& aValue,
+                                                        const OUString& aCaption,
+                                                        Rectangle &rNativeBoundingRegion,
+                                                        Rectangle &rNativeContentRegion ) const;
+    ///@}
+
+public:
     void                        DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
     void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos );
     void                        DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags );
@@ -1332,9 +1506,6 @@ public:
     /** Query extended bitmap (with alpha channel, if available).
      */
     BitmapEx                    GetBitmapEx( const Point& rSrcPt, const Size& rSize ) const;
-
-    void                        EnableMapMode( bool bEnable = true );
-    bool                        IsMapModeEnabled() const { return mbMap; }
 
     // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphisLayout
     virtual void                EnableRTL( bool bEnable = true);
@@ -1427,136 +1598,10 @@ public:
     SystemGraphicsData          GetSystemGfxData() const;
     css::uno::Any               GetSystemGfxDataAny() const;
 
-    virtual void                SetMapMode();
-    virtual void                SetMapMode( const MapMode& rNewMapMode );
-    virtual void                SetRelativeMapMode( const MapMode& rNewMapMode );
-    const MapMode&              GetMapMode() const { return maMapMode; }
-    bool                        IsMapMode() const { return mbMap; }
-
     void                        SetRefPoint();
     void                        SetRefPoint( const Point& rRefPoint );
     const Point&                GetRefPoint() const { return maRefPoint; }
     bool                        IsRefPoint() const { return mbRefPoint; }
-
-     // #i75163#
-    basegfx::B2DHomMatrix       GetViewTransformation() const;
-    basegfx::B2DHomMatrix       GetInverseViewTransformation() const;
-
-    basegfx::B2DHomMatrix       GetViewTransformation( const MapMode& rMapMode ) const;
-    basegfx::B2DHomMatrix       GetInverseViewTransformation( const MapMode& rMapMode ) const;
-
-
-    /** Set an offset in pixel
-
-        This method offsets every drawing operation that converts its
-        coordinates to pixel by the given value. Normally, the effect
-        can be achieved by setting a MapMode with a different
-        origin. Unfortunately, this origin is in logical coordinates
-        and can lead to rounding errors (see #102532# for details).
-
-        @attention This offset is only applied when converting to
-        pixel, i.e. some output modes such as metafile recordings
-        might be completely unaffected by this method! Use with
-        care. Furthermore, if the OutputDevice's MapMode is the
-        default (that's MAP_PIXEL), then any pixel offset set is
-        ignored also. This might be unintuitive for cases, but would
-        have been far more fragile to implement. What's more, the
-        reason why the pixel offset was introduced (avoiding rounding
-        errors) does not apply for MAP_PIXEL, because one can always
-        use the MapMode origin then.
-
-        @param rOffset
-        The offset in pixel
-     */
-    void                        SetPixelOffset( const Size& rOffset );
-
-    /** Get the offset in pixel
-
-        @see OutputDevice::SetPixelOffset for details
-
-        @return the current offset in pixel
-     */
-    Size                        GetPixelOffset() const;
-
-    Point                       LogicToPixel( const Point& rLogicPt ) const;
-    Size                        LogicToPixel( const Size& rLogicSize ) const;
-    Rectangle                   LogicToPixel( const Rectangle& rLogicRect ) const;
-    Polygon                     LogicToPixel( const Polygon& rLogicPoly ) const;
-    PolyPolygon                 LogicToPixel( const PolyPolygon& rLogicPolyPoly ) const;
-    basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
-    Region                      LogicToPixel( const Region& rLogicRegion )const;
-    Point                       LogicToPixel( const Point& rLogicPt,
-                                              const MapMode& rMapMode ) const;
-    Size                        LogicToPixel( const Size& rLogicSize,
-                                              const MapMode& rMapMode ) const;
-    Rectangle                   LogicToPixel( const Rectangle& rLogicRect,
-                                              const MapMode& rMapMode ) const;
-    Polygon                     LogicToPixel( const Polygon& rLogicPoly,
-                                              const MapMode& rMapMode ) const;
-    basegfx::B2DPolygon         LogicToPixel( const basegfx::B2DPolygon& rLogicPoly,
-                                              const MapMode& rMapMode ) const;
-    PolyPolygon                 LogicToPixel( const PolyPolygon& rLogicPolyPoly,
-                                              const MapMode& rMapMode ) const;
-    basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
-                                              const MapMode& rMapMode ) const;
-    Region                      LogicToPixel( const Region& rLogicRegion,
-                                              const MapMode& rMapMode ) const;
-    Point                       PixelToLogic( const Point& rDevicePt ) const;
-    Size                        PixelToLogic( const Size& rDeviceSize ) const;
-    Rectangle                   PixelToLogic( const Rectangle& rDeviceRect ) const;
-    Polygon                     PixelToLogic( const Polygon& rDevicePoly ) const;
-    basegfx::B2DPolygon         LogicToPixel( const basegfx::B2DPolygon& rLogicPoly ) const;
-    PolyPolygon                 PixelToLogic( const PolyPolygon& rDevicePolyPoly ) const;
-    basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly ) const;
-    Region                      PixelToLogic( const Region& rDeviceRegion ) const;
-    Point                       PixelToLogic( const Point& rDevicePt,
-                                              const MapMode& rMapMode ) const;
-    Size                        PixelToLogic( const Size& rDeviceSize,
-                                              const MapMode& rMapMode ) const;
-    Rectangle                   PixelToLogic( const Rectangle& rDeviceRect,
-                                              const MapMode& rMapMode ) const;
-    Polygon                     PixelToLogic( const Polygon& rDevicePoly,
-                                              const MapMode& rMapMode ) const;
-    basegfx::B2DPolygon         PixelToLogic( const basegfx::B2DPolygon& rDevicePoly,
-                                              const MapMode& rMapMode ) const;
-    PolyPolygon                 PixelToLogic( const PolyPolygon& rDevicePolyPoly,
-                                              const MapMode& rMapMode ) const;
-    basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly,
-                                              const MapMode& rMapMode ) const;
-    Region                      PixelToLogic( const Region& rDeviceRegion,
-                                              const MapMode& rMapMode ) const;
-    Point                       LogicToLogic( const Point&      rPtSource,
-                                              const MapMode*    pMapModeSource,
-                                              const MapMode*    pMapModeDest ) const;
-    Size                        LogicToLogic( const Size&       rSzSource,
-                                              const MapMode*    pMapModeSource,
-                                              const MapMode*    pMapModeDest ) const;
-    Rectangle                   LogicToLogic( const Rectangle&  rRectSource,
-                                              const MapMode*    pMapModeSource,
-                                              const MapMode*    pMapModeDest ) const;
-    static Point                LogicToLogic( const Point&      rPtSource,
-                                              const MapMode&    rMapModeSource,
-                                              const MapMode&    rMapModeDest );
-    static Size                 LogicToLogic( const Size&       rSzSource,
-                                              const MapMode&    rMapModeSource,
-                                              const MapMode&    rMapModeDest );
-    static Rectangle            LogicToLogic( const Rectangle&  rRectSource,
-                                              const MapMode&    rMapModeSource,
-                                              const MapMode&    rMapModeDest );
-    static long                 LogicToLogic( long              nLongSource,
-                                              MapUnit           eUnitSource,
-                                              MapUnit           eUnitDest );
-
-    static basegfx::B2DPolygon  LogicToLogic( const basegfx::B2DPolygon& rPoly,
-                                              const MapMode&    rMapModeSource,
-                                              const MapMode&    rMapModeDest );
-    static basegfx::B2DPolyPolygon LogicToLogic( const basegfx::B2DPolyPolygon& rPolyPoly,
-                                                 const MapMode&    rMapModeSource,
-                                                 const MapMode&    rMapModeDest );
-
-    // create a mapping transformation from rMapModeSource to rMapModeDest (the above methods
-    // for B2DPoly/Polygons use this internally anyway to transform the B2DPolygon)
-    static basegfx::B2DHomMatrix LogicToLogic(const MapMode& rMapModeSource, const MapMode& rMapModeDest);
 
     Size                        GetOutputSizePixel() const
                                     { return Size( mnOutWidth, mnOutHeight ); }
@@ -1665,46 +1710,6 @@ public:
                                                                   bool bDownsampleBitmaps,
                                                                   const Color& rBackground = Color( COL_TRANSPARENT )
                                                                 );
-public:
-    /** @name Native Widget Rendering functions
-
-        These all just call through to the private mpGraphics functions of the same name.
-     */
-    ///@{
-
-    /** Query the platform layer for control support
-     */
-    bool                        IsNativeControlSupported( ControlType nType, ControlPart nPart ) const;
-
-    /** Query the native control to determine if it was acted upon
-     */
-    bool                        HitTestNativeControl(   ControlType nType,
-                                                        ControlPart nPart,
-                                                        const Rectangle& rControlRegion,
-                                                        const Point& aPos,
-                                                        bool& rIsInside ) const;
-
-    /** Request rendering of a particular control and/or part
-     */
-    bool                        DrawNativeControl(  ControlType nType,
-                                                    ControlPart nPart,
-                                                    const Rectangle& rControlRegion,
-                                                    ControlState nState,
-                                                    const ImplControlValue& aValue,
-                                                    const OUString& aCaption );
-
-    /** Query the native control's actual drawing region (including adornment)
-     */
-    bool                        GetNativeControlRegion( ControlType nType,
-                                                        ControlPart nPart,
-                                                        const Rectangle& rControlRegion,
-                                                        ControlState nState,
-                                                        const ImplControlValue& aValue,
-                                                        const OUString& aCaption,
-                                                        Rectangle &rNativeBoundingRegion,
-                                                        Rectangle &rNativeContentRegion ) const;
-    ///@}
-
 };
 
 #endif // INCLUDED_VCL_OUTDEV_HXX
