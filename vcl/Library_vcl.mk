@@ -238,7 +238,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/tworect \
     vcl/source/outdev/polygon \
     vcl/source/outdev/transparent \
-    vcl/source/outdev/blend \
     vcl/source/outdev/mask \
     vcl/source/outdev/bitmap \
     vcl/source/outdev/font \

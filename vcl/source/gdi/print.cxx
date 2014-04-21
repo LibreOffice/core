@@ -217,7 +217,7 @@ bool Printer::DrawTransformBitmapExDirect(
     return false;
 }
 
-bool Printer::TransformReduceBitmapExTargetRange(
+bool Printer::TransformAndReduceBitmapExToTargetRange(
     const basegfx::B2DHomMatrix& /*aFullTransform*/,
     basegfx::B2DRange& /*aVisibleRange*/,
     double& /*fMaximumArea*/)

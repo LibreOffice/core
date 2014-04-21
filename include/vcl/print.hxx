@@ -291,7 +291,7 @@ protected:
                                     const basegfx::B2DHomMatrix& aFullTransform,
                                     const BitmapEx& rBitmapEx) SAL_OVERRIDE;
 
-    bool                        TransformReduceBitmapExTargetRange(
+    bool                        TransformAndReduceBitmapExToTargetRange(
                                     const basegfx::B2DHomMatrix& aFullTransform,
                                     basegfx::B2DRange &aVisibleRange,
                                     double &fMaximumArea) SAL_OVERRIDE;

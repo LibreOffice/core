@@ -785,29 +785,6 @@ public:
                                                        const Point& rDestPt, const Size& rDestSize,
                                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel );
     virtual void                ClipToPaintRegion    ( Rectangle& rDstRect );
-    SAL_DLLPRIVATE Bitmap       ImplBlend            ( Bitmap              aBmp,
-                                                       BitmapReadAccess*   pP,
-                                                       BitmapReadAccess*   pA,
-                                                       const sal_Int32     nOffY,
-                                                       const sal_Int32     nDstHeight,
-                                                       const sal_Int32     nOffX,
-                                                       const sal_Int32     nDstWidth,
-                                                       const Rectangle&    aBmpRect,
-                                                       const Size&         aOutSz,
-                                                       const bool          bHMirr,
-                                                       const bool          bVMirr,
-                                                       const long*         pMapX,
-                                                       const long*         pMapY );
-    SAL_DLLPRIVATE Bitmap       ImplBlendWithAlpha   ( Bitmap              aBmp,
-                                                       BitmapReadAccess*   pP,
-                                                       BitmapReadAccess*   pA,
-                                                       const Rectangle&    aDstRect,
-                                                       const sal_Int32     nOffY,
-                                                       const sal_Int32     nDstHeight,
-                                                       const sal_Int32     nOffX,
-                                                       const sal_Int32     nDstWidth,
-                                                       const long*         pMapX,
-                                                       const long*         pMapY );
     SAL_DLLPRIVATE void         ImplPrintTransparent ( const Bitmap& rBmp, const Bitmap& rMask,
                                                        const Point& rDestPt, const Size& rDestSize,
                                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel );
@@ -853,40 +830,6 @@ protected:
                                             const Point& rSrcPtPixel, const Size& rSrcSizePixel );
 
     virtual bool                UsePolyPolygonForComplexGradient() = 0;
-
-    /** Transform and draw a bitmap directly
-
-     @param     aFullTransform      The B2DHomMatrix used for the transformation
-     @param     rBitmapEx           Reference to the bitmap to be transformed and drawn
-
-     @return true if it was able to draw the bitmap, false if not
-     */
-    virtual bool                DrawTransformBitmapExDirect(
-                                    const basegfx::B2DHomMatrix& aFullTransform,
-                                    const BitmapEx& rBitmapEx);
-
-    /** Reduce the area that needs to be drawn of the bitmap and return the new
-        visible range and the maximum area.
-
-
-      @param     aFullTransform      B2DHomMatrix used for transformation
-      @param     aVisibleRange       The new visible area of the bitmap
-      @param     fMaximumArea        The maximum area of the bitmap
-
-      @returns true if there is an area to be drawn, otherwise nothing is left to be drawn
-        so return false
-      */
-    virtual bool                TransformReduceBitmapExTargetRange(
-                                    const basegfx::B2DHomMatrix& aFullTransform,
-                                    basegfx::B2DRange &aVisibleRange,
-                                    double &fMaximumArea);
-
-    virtual void                ScaleBitmap ( Bitmap &rBmp, SalTwoRect &rPosAry );
-
-    virtual void                DrawDeviceBitmap(
-                                    const Point& rDestPt, const Size& rDestSize,
-                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                    BitmapEx& rBitmapEx );
 
     virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     void                        DrawInvisiblePolygon( const PolyPolygon& rPolyPoly );
@@ -1105,25 +1048,60 @@ public:
 protected:
     virtual void                CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags);
 
+
 public:
-    void                        DrawBitmap( const Point& rDestPt,
-                                            const Bitmap& rBitmap );
-    void                        DrawBitmap( const Point& rDestPt, const Size& rDestSize,
-                                            const Bitmap& rBitmap );
-    void                        DrawBitmap( const Point& rDestPt, const Size& rDestSize,
-                                            const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                            const Bitmap& rBitmap, sal_uLong nAction = META_BMPSCALEPART_ACTION );
+    /** @name Bitmap functions
+     */
+    ///@{
 
+    /** @overload void DrawBitmap(const Point& rDestPt, const Size& rDestSize, const Point& rSrcPtPixel,
+                                  const Size& rSecSizePixel, const Bitmap& rBitmap,
+                                  sal_uLong nAction = META_BMPSCALEPART_ACTION) */
+    void                        DrawBitmap(
+                                    const Point& rDestPt,
+                                    const Bitmap& rBitmap );
 
-    void                        DrawBitmapEx( const Point& rDestPt,
-                                              const BitmapEx& rBitmapEx );
-    void                        DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
-                                              const BitmapEx& rBitmapEx );
-    void                        DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
-                                              const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                              const BitmapEx& rBitmapExi, sal_uLong nAction = META_BMPEXSCALEPART_ACTION );
+    /** @overload void DrawBitmap(const Point& rDestPt, const Size& rDestSize, const Point& rSrcPtPixel,
+                                  const Size& rSecSizePixel, const Bitmap& rBitmap,
+                                  sal_uLong nAction = META_BMPSCALEPART_ACTION) */
+    void                        DrawBitmap(
+                                    const Point& rDestPt,
+                                    const Size& rDestSize,
+                                    const Bitmap& rBitmap );
 
-    /** Draw BitampEx transformed
+    void                        DrawBitmap(
+                                    const Point& rDestPt,
+                                    const Size& rDestSize,
+                                    const Point& rSrcPtPixel,
+                                    const Size& rSrcSizePixel,
+                                    const Bitmap& rBitmap,
+                                    sal_uLong nAction = META_BMPSCALEPART_ACTION );
+
+    /** @overload void DrawBitmapEx(const Point& rDestPt, const Size& rDestSize, const Point& rSrcPtPixel,
+                                    const Size& rSecSizePixel, const BitmapEx& rBitmapEx,
+                                    sal_uLong nAction = META_BMPEXSCALEPART_ACTION) */
+    void                        DrawBitmapEx(
+                                    const Point& rDestPt,
+                                    const BitmapEx& rBitmapEx );
+
+    /** @overload void DrawBitmapEx(const Point& rDestPt, const Size& rDestSize, const Point& rSrcPtPixel,
+                                    const Size& rSecSizePixel, const BitmapEx& rBitmapEx,
+                                    sal_uLong nAction = META_BMPEXSCALEPART_ACTION) */
+    void                        DrawBitmapEx(
+                                    const Point& rDestPt,
+                                    const Size& rDestSize,
+                                    const BitmapEx& rBitmapEx );
+
+    void                        DrawBitmapEx(
+                                    const Point& rDestPt,
+                                    const Size& rDestSize,
+                                    const Point& rSrcPtPixel,
+                                    const Size& rSrcSizePixel,
+                                    const BitmapEx& rBitmapEx,
+                                    sal_uLong nAction = META_BMPEXSCALEPART_ACTION );
+
+protected:
+    /** Draw BitmapEx transformed
 
         @param rTransformation
         The transformation describing the target positioning of the given bitmap. Transforming
@@ -1133,10 +1111,73 @@ public:
         @param rBitmapEx
         The BitmapEx to be painted
     */
-    void                        DrawTransformedBitmapEx(
+    void                        DrawTransformBitmapEx(
                                     const basegfx::B2DHomMatrix& rTransformation,
                                     const BitmapEx& rBitmapEx);
 
+    /** Transform and draw a bitmap directly
+
+     @param     aFullTransform      The B2DHomMatrix used for the transformation
+     @param     rBitmapEx           Reference to the bitmap to be transformed and drawn
+
+     @return true if it was able to draw the bitmap, false if not
+     */
+    virtual bool                DrawTransformBitmapExDirect(
+                                    const basegfx::B2DHomMatrix& aFullTransform,
+                                    const BitmapEx& rBitmapEx);
+
+    /** Transform and reduce the area that needs to be drawn of the bitmap and return the new
+        visible range and the maximum area.
+
+
+      @param     aFullTransform      B2DHomMatrix used for transformation
+      @param     aVisibleRange       The new visible area of the bitmap
+      @param     fMaximumArea        The maximum area of the bitmap
+
+      @returns true if there is an area to be drawn, otherwise nothing is left to be drawn
+        so return false
+      */
+    virtual bool                TransformAndReduceBitmapExToTargetRange(
+                                    const basegfx::B2DHomMatrix& aFullTransform,
+                                    basegfx::B2DRange &aVisibleRange,
+                                    double &fMaximumArea);
+
+    virtual void                ScaleBitmap ( Bitmap &rBmp, SalTwoRect &rPosAry );
+
+    virtual void                DrawDeviceBitmap(
+                                    const Point& rDestPt, const Size& rDestSize,
+                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                    BitmapEx& rBitmapEx );
+private:
+    SAL_DLLPRIVATE Bitmap       BlendBitmap(
+                                    Bitmap              aBmp,
+                                    BitmapReadAccess*   pP,
+                                    BitmapReadAccess*   pA,
+                                    const sal_Int32     nOffY,
+                                    const sal_Int32     nDstHeight,
+                                    const sal_Int32     nOffX,
+                                    const sal_Int32     nDstWidth,
+                                    const Rectangle&    aBmpRect,
+                                    const Size&         aOutSz,
+                                    const bool          bHMirr,
+                                    const bool          bVMirr,
+                                    const long*         pMapX,
+                                    const long*         pMapY );
+
+    SAL_DLLPRIVATE Bitmap       BlendBitmapWithAlpha(
+                                    Bitmap              aBmp,
+                                    BitmapReadAccess*   pP,
+                                    BitmapReadAccess*   pA,
+                                    const Rectangle&    aDstRect,
+                                    const sal_Int32     nOffY,
+                                    const sal_Int32     nDstHeight,
+                                    const sal_Int32     nOffX,
+                                    const sal_Int32     nDstWidth,
+                                    const long*         pMapX,
+                                    const long*         pMapY );
+    ///@}
+
+public:
     void                        DrawMask( const Point& rDestPt,
                                           const Bitmap& rBitmap, const Color& rMaskColor );
     void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
