@@ -46,6 +46,7 @@
 
 #include "framework.hxx"
 #include "fwkutil.hxx"
+#include <boost/scoped_array.hpp>
 
 using namespace osl;
 
@@ -114,10 +115,10 @@ rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData)
     static const char EncodingTable[] =
         {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
     sal_Int32 lenRaw = rawData.getLength();
-    char* pBuf = new char[lenRaw * 2];
+    boost::scoped_array<char> pBuf(new char[lenRaw * 2]);
     const sal_Int8* arRaw = rawData.getConstArray();
 
-    char* pCurBuf = pBuf;
+    char* pCurBuf = pBuf.get();
     for (int i = 0; i < lenRaw; i++)
     {
         unsigned char curChar = arRaw[i];
@@ -133,8 +134,7 @@ rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData)
         pCurBuf++;
     }
 
-    rtl::ByteSequence ret((sal_Int8*) pBuf, lenRaw * 2);
-    delete [] pBuf;
+    rtl::ByteSequence ret((sal_Int8*) pBuf.get(), lenRaw * 2);
     return ret;
 }
 
@@ -144,7 +144,7 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
         {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
     sal_Int32 lenData = data.getLength();
     sal_Int32 lenBuf = lenData / 2; //always divisable by two
-    unsigned char* pBuf = new unsigned char[lenBuf];
+    boost::scoped_array<unsigned char> pBuf(new unsigned char[lenBuf]);
     const sal_Int8* pData = data.getConstArray();
     for (sal_Int32 i = 0; i < lenBuf; i++)
     {
@@ -173,8 +173,7 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
         }
         pBuf[i] = nibble;
     }
-    rtl::ByteSequence ret((sal_Int8*) pBuf, lenBuf );
-    delete [] pBuf;
+    rtl::ByteSequence ret((sal_Int8*) pBuf.get(), lenBuf );
     return ret;
 }
 

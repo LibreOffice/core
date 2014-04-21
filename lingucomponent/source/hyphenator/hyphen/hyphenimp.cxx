@@ -47,6 +47,7 @@
 
 #include <list>
 #include <set>
+#include <boost/scoped_array.hpp>
 
 using namespace utl;
 using namespace osl;
@@ -253,8 +254,6 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
     int nHyphenationPosAlt = -1;
     int nHyphenationPosAltHyph = -1;
     int wordlen;
-    char *hyphens;
-    char *lcword;
     int k = 0;
 
     PropertyHelper_Hyphenation& rHelper = GetPropHelper();
@@ -341,15 +340,15 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         OString encWord(OU2ENC(nTerm,eEnc));
 
         wordlen = encWord.getLength();
-        lcword = new char[wordlen + 1];
-        hyphens = new char[wordlen + 5];
+        boost::scoped_array<char> lcword(new char[wordlen + 1]);
+        boost::scoped_array<char> hyphens(new char[wordlen + 5]);
 
         char ** rep = NULL; // replacements of discretionary hyphenation
         int * pos = NULL; // array of [hyphenation point] minus [deletion position]
         int * cut = NULL; // length of deletions in original word
 
         // copy converted word into simple char buffer
-        strcpy(lcword,encWord.getStr());
+        strcpy(lcword.get(),encWord.getStr());
 
         // now strip off any ending periods
         int n = wordlen-1;
@@ -358,15 +357,13 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         n++;
         if (n > 0)
         {
-            const bool bFailed = 0 != hnj_hyphen_hyphenate3( dict, lcword, n, hyphens, NULL,
+            const bool bFailed = 0 != hnj_hyphen_hyphenate3( dict, lcword.get(), n, hyphens.get(), NULL,
                     &rep, &pos, &cut, minLead, minTrail,
                     Max(dict->clhmin, Max(dict->clhmin, 2) + Max(0, minLead  - Max(dict->lhmin, 2))),
                     Max(dict->crhmin, Max(dict->crhmin, 2) + Max(0, minTrail - Max(dict->rhmin, 2))) );
             if (bFailed)
             {
                 // whoops something did not work
-                delete[] hyphens;
-                delete[] lcword;
                 if (rep)
                 {
                     for(int j = 0; j < n; j++)
@@ -480,8 +477,6 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
             }
         }
 
-        delete[] lcword;
-        delete[] hyphens;
         if (rep)
         {
             for(int j = 0; j < n; j++)
@@ -603,14 +598,14 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         OString encWord(OU2ENC(nTerm,eEnc));
 
         int wordlen = encWord.getLength();
-        char *lcword = new char[wordlen+1];
-        char *hyphens = new char[wordlen+5];
+        boost::scoped_array<char> lcword(new char[wordlen+1]);
+        boost::scoped_array<char> hyphens(new char[wordlen+5]);
         char ** rep = NULL; // replacements of discretionary hyphenation
         int * pos = NULL; // array of [hyphenation point] minus [deletion position]
         int * cut = NULL; // length of deletions in original word
 
         // copy converted word into simple char buffer
-        strcpy(lcword,encWord.getStr());
+        strcpy(lcword.get(),encWord.getStr());
 
         // first remove any trailing periods
         int n = wordlen-1;
@@ -619,15 +614,12 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         n++;
         if (n > 0)
         {
-            const bool bFailed = 0 != hnj_hyphen_hyphenate3(dict, lcword, n, hyphens, NULL,
+            const bool bFailed = 0 != hnj_hyphen_hyphenate3(dict, lcword.get(), n, hyphens.get(), NULL,
                     &rep, &pos, &cut, minLead, minTrail,
                     Max(dict->clhmin, Max(dict->clhmin, 2) + Max(0, minLead - Max(dict->lhmin, 2))),
                     Max(dict->crhmin, Max(dict->crhmin, 2) + Max(0, minTrail - Max(dict->rhmin, 2))) );
             if (bFailed)
             {
-                delete[] hyphens;
-                delete[] lcword;
-
                 if (rep)
                 {
                     for(int j = 0; j < n; j++)
@@ -677,9 +669,6 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
 
         Reference< XPossibleHyphens > xRes = PossibleHyphens::CreatePossibleHyphens(
             aWord, LinguLocaleToLanguage( aLocale ), hyphenatedWord, aHyphPos);
-
-        delete[] hyphens;
-        delete[] lcword;
 
         if (rep)
         {

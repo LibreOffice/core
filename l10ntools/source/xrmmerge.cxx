@@ -33,6 +33,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <boost/scoped_array.hpp>
 
 using namespace std;
 
@@ -327,13 +328,12 @@ void XRMResExport::WorkOnDesc(
     ifstream file (sDescFileName.getStr(), ios::in|ios::binary|ios::ate);
     if (file.is_open()) {
         int size = static_cast<int>(file.tellg());
-        char* memblock = new char [size+1];
+        boost::scoped_array<char> memblock(new char [size+1]);
         file.seekg (0, ios::beg);
-        file.read (memblock, size);
+        file.read (memblock.get(), size);
         file.close();
         memblock[size] = '\0';
-        rText = OString(memblock);
-        delete[] memblock;
+        rText = OString(memblock.get());
      }
     WorkOnText( rOpenTag, rText );
     EndOfText( rOpenTag, rOpenTag );
