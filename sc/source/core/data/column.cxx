@@ -2234,34 +2234,25 @@ void resetColumnPosition(sc::CellStoreType& rCells, SCCOL nCol)
     }
 }
 
+class NoteCaptionUpdater
+{
+    SCCOL mnCol;
+    SCTAB mnTab;
+public:
+    NoteCaptionUpdater( SCCOL nCol, SCTAB nTab ) : mnCol(nCol), mnTab(nTab) {}
+
+    void operator() ( size_t nRow, ScPostIt* p )
+    {
+        p->UpdateCaptionPos(ScAddress(mnCol,nRow,mnTab));
+    }
+};
+
 }
 
-void ScColumn::UpdateNoteCaptions()
+void ScColumn::UpdateNoteCaptions( SCROW nRow1, SCROW nRow2 )
 {
-    sc::CellNoteStoreType::const_iterator itBlk = maCellNotes.begin(), itBlkEnd = maCellNotes.end();
-    sc::cellnote_block::const_iterator itData, itDataEnd;
-
-    SCROW curRow = 0;
-    for (;itBlk!=itBlkEnd;++itBlk)
-    {
-        if (itBlk->data)
-        {
-            // non empty block
-            itData = sc::cellnote_block::begin(*itBlk->data);
-            itDataEnd = sc::cellnote_block::end(*itBlk->data);
-            for(;itData!=itDataEnd; ++itData)
-            {
-                ScPostIt* pNote = *itData;
-                pNote->UpdateCaptionPos(ScAddress(nCol, curRow, nTab));
-                curRow +=1;
-            }
-        }
-        else
-        {
-            // empty block
-            curRow += itBlk->size;
-        }
-    }
+    NoteCaptionUpdater aFunc(nCol, nTab);
+    sc::ProcessNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
 }
 
 void ScColumn::SwapCol(ScColumn& rCol)
@@ -2272,8 +2263,8 @@ void ScColumn::SwapCol(ScColumn& rCol)
     maCellNotes.swap(rCol.maCellNotes);
 
     // notes update caption
-    UpdateNoteCaptions();
-    rCol.UpdateNoteCaptions();
+    UpdateNoteCaptions(0, MAXROW);
+    rCol.UpdateNoteCaptions(0, MAXROW);
 
     ScAttrArray* pTempAttr = rCol.pAttrArray;
     rCol.pAttrArray = pAttrArray;
@@ -2322,7 +2313,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 
     // move the notes to the destination column
     maCellNotes.transfer(nStartRow, nEndRow, rCol.maCellNotes, nStartRow);
-    UpdateNoteCaptions();
+    UpdateNoteCaptions(0, MAXROW);
 
     // Re-group transferred formula cells.
     aPos = rCol.maCells.position(nStartRow);

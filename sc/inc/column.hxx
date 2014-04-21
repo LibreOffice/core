@@ -526,6 +526,7 @@ public:
     // cell notes
     ScPostIt* GetCellNote( SCROW nRow );
     const ScPostIt* GetCellNote( SCROW nRow ) const;
+    const ScPostIt* GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
     void DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 );
     bool HasCellNotes() const;
     void SetCellNote( SCROW nRow, ScPostIt* pNote);
@@ -548,7 +549,8 @@ public:
 
     void DuplicateNotes(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol,
                             sc::ColumnBlockPosition& maDestBlockPos, bool bCloneCaption = true, SCROW nRowOffsetDest=0 ) const;
-    void UpdateNoteCaptions();
+
+    void UpdateNoteCaptions( SCROW nRow1, SCROW nRow2 );
 
     void InterpretDirtyCells( SCROW nRow1, SCROW nRow2 );
 

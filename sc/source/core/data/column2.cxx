@@ -1848,6 +1848,17 @@ const ScPostIt* ScColumn::GetCellNote(SCROW nRow) const
     return maCellNotes.get<ScPostIt*>(nRow);
 }
 
+const ScPostIt* ScColumn::GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const
+{
+    sc::CellNoteStoreType::const_position_type aPos = maCellNotes.position(rBlockPos.miCellNotePos, nRow);
+    rBlockPos.miCellNotePos = aPos.first;
+
+    if (aPos.first->type != sc::element_type_cellnote)
+        return NULL;
+
+    return sc::cellnote_block::at(*aPos.first->data, aPos.second);
+}
+
 void ScColumn::SetCellNote(SCROW nRow, ScPostIt* pNote)
 {
     //pNote->UpdateCaptionPos(ScAddress(nCol, nRow, nTab)); // TODO notes usefull ? slow import with many notes

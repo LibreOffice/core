@@ -228,8 +228,9 @@ public:
         ScRefCellValue maCell;
         const sc::CellTextAttr* mpAttr;
         const SvtBroadcaster* mpBroadcaster;
+        const ScPostIt* mpNote;
 
-        Cell() : mpAttr(NULL), mpBroadcaster(NULL) {}
+        Cell() : mpAttr(NULL), mpBroadcaster(NULL), mpNote(NULL) {}
     };
 
     typedef std::vector<Cell> RowType;
@@ -356,6 +357,7 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
                 rCell.maCell = rCol.GetCellValue(aBlockPos, nRow);
                 rCell.mpAttr = rCol.GetCellTextAttr(aBlockPos, nRow);
                 rCell.mpBroadcaster = rCol.GetBroadcaster(aBlockPos, nRow);
+                rCell.mpNote = rCol.GetCellNote(aBlockPos, nRow);
             }
         }
     }
@@ -383,11 +385,13 @@ struct SortedColumn : boost::noncopyable
     sc::CellStoreType maCells;
     sc::CellTextAttrStoreType maCellTextAttrs;
     sc::BroadcasterStoreType maBroadcasters;
+    sc::CellNoteStoreType maCellNotes;
 
     SortedColumn( size_t nTopEmptyRows ) :
         maCells(nTopEmptyRows),
         maCellTextAttrs(nTopEmptyRows),
-        maBroadcasters(nTopEmptyRows) {}
+        maBroadcasters(nTopEmptyRows),
+        maCellNotes(nTopEmptyRows) {}
 };
 
 }
@@ -512,6 +516,13 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                     rBCStore.push_back(const_cast<SvtBroadcaster*>(rCell.mpBroadcaster));
                 else
                     rBCStore.push_back_empty();
+
+                // The same with cell note instances ...
+                sc::CellNoteStoreType& rNoteStore = aSortedCols.at(j).maCellNotes;
+                if (rCell.mpNote)
+                    rNoteStore.push_back(const_cast<ScPostIt*>(rCell.mpNote));
+                else
+                    rNoteStore.push_back_empty();
             }
 
             if (pProgress)
@@ -535,14 +546,24 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
             }
 
             {
-                sc::BroadcasterStoreType& rBCDest = aCol[nThisCol].maBroadcasters;
+                sc::BroadcasterStoreType& rSrc = aSortedCols[i].maBroadcasters;
+                sc::BroadcasterStoreType& rDest = aCol[nThisCol].maBroadcasters;
 
                 // Release current broadcasters first, to prevent them from getting deleted.
-                rBCDest.release_range(nRow1, aSortParam.nRow2);
+                rDest.release_range(nRow1, aSortParam.nRow2);
 
                 // Transfer sorted broadcaster segment to the document.
-                sc::BroadcasterStoreType& rBCSrc = aSortedCols[i].maBroadcasters;
-                rBCSrc.transfer(nRow1, aSortParam.nRow2, rBCDest, nRow1);
+                rSrc.transfer(nRow1, aSortParam.nRow2, rDest, nRow1);
+            }
+
+            {
+                sc::CellNoteStoreType& rSrc = aSortedCols[i].maCellNotes;
+                sc::CellNoteStoreType& rDest = aCol[nThisCol].maCellNotes;
+
+                // Do the same as broadcaster storage transfer (to prevent double deletion).
+                rDest.release_range(nRow1, aSortParam.nRow2);
+                rSrc.transfer(nRow1, aSortParam.nRow2, rDest, nRow1);
+                aCol[nThisCol].UpdateNoteCaptions(nRow1, aSortParam.nRow2);
             }
 
             aCol[nThisCol].CellStorageModified();
