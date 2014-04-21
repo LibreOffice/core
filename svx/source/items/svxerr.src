@@ -112,8 +112,6 @@ Resource RID_SVXERRCODE
 
     String ERRCODE_SVX_MODIFIED_VBASIC_STORAGE & ERRCODE_RES_MASK
     {
-//      TEXT = "Der Basic-Code wurde verändert und kann somit nicht mehr als Original gespeichert werden." ;
-//      TEXT [ English ] = "The Basic-Code is modified and so it can not be saved as original." ;
         Text [ en-US ] = "All changes to the Basic Code are lost. The original VBA Macro Code is saved instead.";
     };
 
