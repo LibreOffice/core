@@ -803,7 +803,8 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrmFmt& rFrmFmt)
 
 void DocxSdrExport::writeDiagramRels(uno::Reference<xml::dom::XDocument> xDom,
                                      uno::Sequence< uno::Sequence< uno::Any > > xRelSeq,
-                                     uno::Reference< io::XOutputStream > xOutStream, const OUString& sGrabBagProperyName)
+                                     uno::Reference< io::XOutputStream > xOutStream, const OUString& sGrabBagProperyName,
+                                     int nAnchorId)
 {
     // add image relationships of OOXData, OOXDiagram
     OUString sType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/image");
@@ -834,7 +835,8 @@ void DocxSdrExport::writeDiagramRels(uno::Reference<xml::dom::XDocument> xDom,
         uno::Reference<io::XInputStream> dataImagebin(new ::comphelper::SequenceInputStream(dataSeq));
 
         OUString sFragment("../media/");
-        sFragment += sGrabBagProperyName + OUString::number(j) + sExtension;
+        //nAnchorId is used to make the name unique irrespective of the number of smart arts.
+        sFragment += sGrabBagProperyName + OUString::number(nAnchorId) + "_" + OUString::number(j) + sExtension;
 
         PropertySet aProps(xOutStream);
         aProps.setAnyProperty(PROP_RelId, uno::makeAny(sal_Int32(sRelId.toInt32())));
@@ -1017,7 +1019,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
                           uno::Sequence< beans::StringPair >());
 
     // write the associated Images and rels for data file
-    writeDiagramRels(dataDom, xDataRelSeq, xDataOutputStream, OUString("OOXDiagramDataRels"));
+    writeDiagramRels(dataDom, xDataRelSeq, xDataOutputStream, OUString("OOXDiagramDataRels"), nAnchorId);
 
     // write layout file
     serializer.set(layoutDom, uno::UNO_QUERY);
@@ -1054,7 +1056,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
         // write the associated Images and rels for drawing file
         uno::Sequence< uno::Sequence< uno::Any > > xDrawingRelSeq;
         diagramDrawing[1] >>= xDrawingRelSeq;
-        writeDiagramRels(drawingDom, xDrawingRelSeq, xDrawingOutputStream, OUString("OOXDiagramDrawingRels"));
+        writeDiagramRels(drawingDom, xDrawingRelSeq, xDrawingOutputStream, OUString("OOXDiagramDrawingRels"), nAnchorId);
     }
 }
 
