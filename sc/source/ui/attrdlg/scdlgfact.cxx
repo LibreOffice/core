@@ -72,8 +72,6 @@
 #include "condformatdlg.hxx"
 #include "condformatmgr.hxx"
 #include "xmlsourcedlg.hxx"
-
-// ause
 #include "editutil.hxx"
 
 IMPL_ABSTDLG_BASE(ScVclAbstractDialog_Impl);

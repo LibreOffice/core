@@ -26,19 +26,11 @@
 
 #include <svx/svxids.hrc>
 #include <rtl/math.hxx>
-// header for class SvxDoubleItem
 #include <svx/chrtitem.hxx>
-// header for class SfxBoolItem
 #include <svl/eitem.hxx>
-// header for SfxInt32Item
 #include <svl/intitem.hxx>
-
-// header for class WarningBox
 #include <vcl/msgbox.hxx>
-
-// header for class SvNumberformat
 #include <svl/zformat.hxx>
-
 #include <svtools/controldims.hrc>
 
 #include <com/sun/star/chart2/AxisType.hpp>

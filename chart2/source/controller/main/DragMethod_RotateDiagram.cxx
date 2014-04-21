@@ -30,7 +30,6 @@
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 
-// header for class E3dScene
 #include <svx/scene3d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -24,7 +24,6 @@
 #include "HelpIds.hrc"
 #include "ObjectNameProvider.hxx"
 
-// header for class SfxBoolItem
 #include <svl/eitem.hxx>
 
 namespace chart

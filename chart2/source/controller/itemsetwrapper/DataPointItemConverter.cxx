@@ -34,19 +34,15 @@
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 
-// header for class XFillColorItem
 #include <svx/xflclit.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/sizeitem.hxx>
-// header for class SfxStringItem
 #include <svl/stritem.hxx>
 #include <editeng/brushitem.hxx>
-//SfxIntegerListItem
 #include <svl/ilstitem.hxx>
 #include <vcl/graph.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
-// for SVX_SYMBOLTYPE_...
 #include <svx/tabline.hxx>
 
 #include <functional>

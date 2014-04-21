@@ -27,21 +27,15 @@
 #include <com/sun/star/linguistic2/XConversionPropertyType.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-// header for class HeaderBar
 #include <svtools/headbar.hxx>
 #include <svtools/svlbitm.hxx>
 #include "svtools/treelistentry.hxx"
-// header for define RET_OK
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
-
-// header for class SvtLinguConfigItem
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
-// header for class IntlWrapper
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>
-// header for class Application
 #include <vcl/svapp.hxx>
 #include "helpid.hrc"
 

@@ -34,8 +34,6 @@
 #include <svx/e3dsceneupdater.hxx>
 #include <rtl/strbuf.hxx>
 #include <svx/svdview.hxx>
-
-// #i13033#
 #include <clonelist.hxx>
 
 void SdrEditView::ImpResetPossibilityFlags()

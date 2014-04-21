@@ -62,19 +62,13 @@
 #include <svx/svxids.hrc>
 #include <svx/ActionDescriptionProvider.hxx>
 
-// header for class E3dObject
 #include <svx/obj3d.hxx>
-// header for class E3dScene
 #include <svx/scene3d.hxx>
-// header for class SdrDragMethod
 #include <svx/svddrgmt.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <osl/mutex.hxx>
-
-// for InfoBox
 #include <vcl/msgbox.hxx>
-
 #include <rtl/math.hxx>
 #include <svtools/acceleratorexecute.hxx>
 

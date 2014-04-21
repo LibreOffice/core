@@ -45,7 +45,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-// #i42894#
 #include <EffectMigration.hxx>
 
 #include <string>

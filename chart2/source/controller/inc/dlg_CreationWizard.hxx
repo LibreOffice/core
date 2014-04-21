@@ -28,7 +28,6 @@
 #include <svtools/roadmapwizard.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-// for auto_ptr
 #include <memory>
 
 namespace chart

@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_SCUITPHFEDIT_HXX
 
 #include "tphfedit.hxx"
-//#include <boost/graph/graph_concepts.hpp>
 
 
 enum ScHFEntryId

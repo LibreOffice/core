@@ -21,13 +21,9 @@
 #include "chinese_translation_unodialog.hxx"
 #include "chinese_translationdialog.hxx"
 #include <osl/mutex.hxx>
-// header for class Application
 #include <vcl/svapp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-// header for define RET_CANCEL
 #include <vcl/msgbox.hxx>
-
-// header for class OImplementationId
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

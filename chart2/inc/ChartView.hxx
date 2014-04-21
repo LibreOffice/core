@@ -25,7 +25,6 @@
 #include <cppuhelper/implbase10.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
-// header for class SfxListener
 #include <svl/lstner.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>

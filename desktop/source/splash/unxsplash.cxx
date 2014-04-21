@@ -20,7 +20,6 @@
 #include "unxsplash.hxx"
 #include <stdio.h>
 #include <osl/process.h>
-//#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>

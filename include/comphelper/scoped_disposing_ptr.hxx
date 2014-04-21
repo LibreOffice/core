@@ -17,7 +17,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 
-// for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 

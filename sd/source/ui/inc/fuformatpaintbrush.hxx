@@ -22,7 +22,6 @@
 
 #include "futext.hxx"
 
-// header for class SfxItemSet
 #include <svl/itemset.hxx>
 #include <boost/scoped_ptr.hpp>
 

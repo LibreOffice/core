@@ -38,7 +38,6 @@
 #include "porlay.hxx"
 #include "inftxt.hxx"
 
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 
 // class SwFlyPortion => we expect a frame-locale SwRect!

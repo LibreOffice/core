@@ -27,8 +27,6 @@
 #include "unoredline.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/frame/XModel.hpp>
-
-// for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 

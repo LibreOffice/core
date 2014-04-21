@@ -19,19 +19,14 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATASOURCE_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATASOURCE_HXX
 
-// header for class TabDialog
 #include <vcl/tabdlg.hxx>
-// header for class TabControl
 #include <vcl/tabctrl.hxx>
-// header for class OKButton
 #include <vcl/button.hxx>
-
 
 #include "TabPageNotifiable.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
-// for auto_ptr
 #include <memory>
 
 namespace chart

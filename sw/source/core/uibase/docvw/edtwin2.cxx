@@ -65,7 +65,6 @@
 #include <PostItMgr.hxx>
 #include <fmtfld.hxx>
 
-// #i104300#
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
 

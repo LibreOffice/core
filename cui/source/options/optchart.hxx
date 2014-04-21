@@ -20,16 +20,11 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTCHART_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTCHART_HXX
 
-// header for SfxTabPage
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
-// header for ValueSet
 #include <svtools/valueset.hxx>
-// header for ColorLB
 #include <svx/dlgctrl.hxx>
-// header for PushButton
 #include <vcl/button.hxx>
-// header for XColorList
 #include <svx/xtable.hxx>
 
 #include "cfgchart.hxx"

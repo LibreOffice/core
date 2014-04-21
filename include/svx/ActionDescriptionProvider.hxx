@@ -22,7 +22,6 @@
 
 #include <svx/svxdllapi.h>
 
-// header for class OUString
 #include <rtl/ustring.hxx>
 
 

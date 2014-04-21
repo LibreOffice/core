@@ -21,7 +21,6 @@
 #include "ResId.hxx"
 #include "Bitmaps.hrc"
 #include "RangeSelectionHelper.hxx"
-// for RANGE_SELECTION_INVALID_RANGE_BACKGROUND_COLOR
 #include "TabPageNotifiable.hxx"
 #include "macros.hxx"
 

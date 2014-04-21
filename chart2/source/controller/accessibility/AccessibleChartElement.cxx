@@ -30,7 +30,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-// for SolarMutex
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 

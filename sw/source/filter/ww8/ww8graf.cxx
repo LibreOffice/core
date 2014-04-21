@@ -80,7 +80,6 @@
 #include <fmtinfmt.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
-// #i18732#
 #include <fmtfollowtextflow.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"

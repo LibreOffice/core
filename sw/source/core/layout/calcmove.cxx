@@ -37,10 +37,8 @@
 #include "sectfrm.hxx"
 #include "dbg_lay.hxx"
 
-// #i28701#
 #include <sortedobjs.hxx>
 #include <layouter.hxx>
-// #i36347#
 #include <flyfrms.hxx>
 
 // Move methods

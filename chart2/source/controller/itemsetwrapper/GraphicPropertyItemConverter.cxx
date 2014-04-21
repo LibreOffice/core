@@ -36,9 +36,7 @@
 #include <svx/xfltrit.hxx>
 #include <svx/xlntrit.hxx>
 #include <editeng/eeitem.hxx>
-// for SfxBoolItem
 #include <svl/eitem.hxx>
-// for XFillGradientStepCountItem
 #include <svx/xgrscit.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart2/FillBitmap.hpp>

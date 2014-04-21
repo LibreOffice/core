@@ -53,11 +53,8 @@
 #include <docsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <switerator.hxx>
-
-// for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svl/urihelper.hxx>

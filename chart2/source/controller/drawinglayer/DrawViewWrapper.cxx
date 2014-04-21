@@ -24,20 +24,13 @@
 
 #include <unotools/lingucfg.hxx>
 #include <editeng/langitem.hxx>
-// header for class SdrPage
 #include <svx/svdpage.hxx>
-//header for class SdrPageView
 #include <svx/svdpagv.hxx>
-// header for class SdrModel
 #include <svx/svdmodel.hxx>
-// header for class E3dScene
 #include <svx/scene3d.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
-
 #include <svx/svxids.hrc>
-
-// header for class SvxShape
 #include <svx/unoshape.hxx>
 #include <editeng/fhgtitem.hxx>
 

@@ -46,7 +46,6 @@
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include "xexptran.hxx"
 #include <rtl/math.hxx>
-// header for any2enum
 #include <comphelper/extract.hxx>
 
 #include <list>

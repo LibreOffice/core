@@ -51,8 +51,6 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-
-// #i76201#
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <rtl/strbuf.hxx>
 #include <math.h>

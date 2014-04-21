@@ -43,10 +43,8 @@
 #include <porfld.hxx>
 #include <sectfrm.hxx>
 #include <pormulti.hxx>
-
 #include <rootfrm.hxx>
 #include <frmfmt.hxx>
-// #i28701#
 #include <sortedobjs.hxx>
 #include <portab.hxx>
 #include <editeng/lrspitem.hxx>

@@ -20,11 +20,8 @@
 #include "ConfigurationAccess.hxx"
 #include "macros.hxx"
 
-// header for class SvtSysLocale
 #include <unotools/syslocale.hxx>
-// header for class ConfigItem
 #include <unotools/configitem.hxx>
-// header for rtl::Static
 #include <rtl/instance.hxx>
 
 namespace chart

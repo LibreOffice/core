@@ -23,9 +23,7 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 
-// header for class SvTabListBox
 #include <svtools/svtabbx.hxx>
-// header for class SvTreeListBox
 #include <svtools/treelistbox.hxx>
 #include "svtools/treelistentry.hxx"
 

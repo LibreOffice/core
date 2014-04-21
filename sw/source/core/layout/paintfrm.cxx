@@ -65,11 +65,9 @@
 #include <bodyfrm.hxx>
 #include <hffrm.hxx>
 #include <colfrm.hxx>
-// --> OD #i76669#
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-// <--
 
 #include <ndole.hxx>
 #include <svx/charthelper.hxx>

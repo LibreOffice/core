@@ -9,7 +9,6 @@
 
 #include <svl/IndexedStyleSheets.hxx>
 
-// for SfxStyleSheetBase
 #include <svl/style.hxx>
 
 #include <cppunit/TestAssert.h>

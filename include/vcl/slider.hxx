@@ -22,7 +22,6 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
-// for enum ScrollType
 #include <vcl/scrbar.hxx>
 
 class VCL_DLLPUBLIC Slider : public Control

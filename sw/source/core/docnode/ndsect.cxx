@@ -50,7 +50,6 @@
 #include <doctxm.hxx>
 #include <fmtftntx.hxx>
 #include <comcore.hrc>
-// #i27138#
 #include <viewsh.hxx>
 #include <txtfrm.hxx>
 #include <boost/scoped_ptr.hpp>

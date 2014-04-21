@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_PORFLY_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_PORFLY_HXX
-// OD 28.10.2003 #113049#
+
 #include <ascharanchoredobjectposition.hxx>
 
 #include "porglue.hxx"

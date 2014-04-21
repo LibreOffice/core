@@ -24,9 +24,7 @@
 #include <tolayoutanchoredobjectposition.hxx>
 #include <frmtool.hxx>
 #include <fmtornt.hxx>
-// --> #i32795#
 #include <txtfrm.hxx>
-// --> #i32795#
 #include <vector>
 #include <svx/svdogrp.hxx>
 

@@ -29,7 +29,6 @@
 #include <dcontact.hxx>
 #include <frmfmt.hxx>
 #include <fmtornt.hxx>
-// #i62875#
 #include <fmtfollowtextflow.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>

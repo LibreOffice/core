@@ -27,10 +27,7 @@
 #include <vcl/taskpanelist.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/pathoptions.hxx>
-
-// for SfxBoolItem
 #include <svl/eitem.hxx>
-
 #include <vcl/edit.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>

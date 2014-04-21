@@ -21,13 +21,9 @@
 #define INCLUDED_SVX_SOURCE_UNODIALOGS_TEXTCONVERSIONDLGS_CHINESE_DICTIONARYDIALOG_HXX
 
 #include <vcl/dialog.hxx>
-// header for class FixedLine
 #include <vcl/fixed.hxx>
-// header for class RadioButton
 #include <vcl/button.hxx>
-// header for class Edit
 #include <vcl/edit.hxx>
-// header for class ListBox
 #include <vcl/lstbox.hxx>
 #include <svtools/simptabl.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>

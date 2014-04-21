@@ -57,7 +57,6 @@
 
 #include <statstr.hrc>
 
-// #i44177#
 #include <SwStyleNameMapper.hxx>
 #include <poolfmt.hxx>
 #include <numrule.hxx>

@@ -44,8 +44,6 @@
 #include <sfx2/app.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
-
-// for child window ids
 #include <sfx2/templdlg.hxx>
 #include <svx/f3dchild.hxx>
 #include <svx/imapdlg.hxx>

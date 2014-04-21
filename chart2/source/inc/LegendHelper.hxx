@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_LEGENDHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_LEGENDHELPER_HXX
 
-// header for class OUString
 #include <rtl/ustring.hxx>
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>

@@ -23,16 +23,10 @@
 #include "CommonConverters.hxx"
 
 #include "svx/dialogs.hrc"
-// header for define SVX_RES
 #include <svx/dialmgr.hxx>
 #include <rtl/math.hxx>
-
-// header for class SvColorDialog
 #include <svtools/colrdlg.hxx>
-
-// header for define RET_OK
 #include <vcl/msgbox.hxx>
-
 #include <svx/svx3ditems.hxx>
 #include <svx/svddef.hxx>
 

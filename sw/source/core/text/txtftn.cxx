@@ -36,7 +36,6 @@
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <tabfrm.hxx>
-// #i28701#
 #include <sortedobjs.hxx>
 
 #include "swfont.hxx"

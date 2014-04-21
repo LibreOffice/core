@@ -32,7 +32,6 @@
 #include "CommonConverters.hxx"
 #include <svx/ActionDescriptionProvider.hxx>
 
-// header for define RET_OK
 #include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc>
 #include <svx/rectenum.hxx>

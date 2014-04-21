@@ -75,18 +75,13 @@
 #include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/sdr/properties/oleproperties.hxx>
-
-// #i100710#
 #include <svx/xlnclit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
-
-// #i118485#
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <editeng/outlobj.hxx>
-
 #include <svx/svdpage.hxx>
 
 using namespace ::rtl;

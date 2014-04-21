@@ -43,7 +43,6 @@
 #include "browserids.hxx"
 #include <sfx2/new.hxx>
 #include "moduledbu.hxx"
-// for calling basic
 #include <sfx2/app.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>

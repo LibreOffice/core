@@ -61,8 +61,6 @@
 #include "markdata.hxx"
 #include "sc.hrc"
 #include <vcl/virdev.hxx>
-
-// #i74769#
 #include <svx/sdrpaintwindow.hxx>
 
 #include <boost/scoped_ptr.hpp>

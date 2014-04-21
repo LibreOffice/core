@@ -22,13 +22,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
-// header for class TabPage
 #include <vcl/tabpage.hxx>
-// header for class FixedLine
 #include <vcl/fixed.hxx>
-// header for class MetricField
 #include <vcl/field.hxx>
-// header for class OKButton
 #include <vcl/button.hxx>
 
 #include "ControllerLockGuard.hxx"

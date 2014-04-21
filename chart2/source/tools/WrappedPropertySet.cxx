@@ -20,7 +20,6 @@
 #include "WrappedPropertySet.hxx"
 #include "macros.hxx"
 
-// header for define DELETEZ
 #include <tools/solar.h>
 
 namespace chart

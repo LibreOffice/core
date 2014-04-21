@@ -37,7 +37,6 @@
 #include "docoptio.hxx"
 #include "optuno.hxx"
 #include <docuno.hxx>
-// for lcl_CopyData:
 #include "markdata.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"

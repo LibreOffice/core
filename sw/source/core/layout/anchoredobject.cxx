@@ -19,7 +19,6 @@
 
 #include <txtfrm.hxx>
 #include <fmtornt.hxx>
-// --> #i28701#
 #include <doc.hxx>
 #include <fmtsrnd.hxx>
 #include <dcontact.hxx>
@@ -27,7 +26,6 @@
 #include <editeng/lrspitem.hxx>
 #include <sortedobjs.hxx>
 #include <pagefrm.hxx>
-// --> #i35911#
 #include <layouter.hxx>
 
 using namespace ::com::sun::star;

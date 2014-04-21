@@ -24,17 +24,11 @@
 #include "DialogModel.hxx"
 #include "TabPageNotifiable.hxx"
 
-// header for class Edit
 #include <vcl/edit.hxx>
-// header for class ListBox
 #include <vcl/lstbox.hxx>
-// header for class PushButton, OKButton, CancelButton, HelpButton
 #include <vcl/button.hxx>
-// header for class FixedText, FixedLine
 #include <vcl/fixed.hxx>
-// header for class SvTabListBox
 #include <svtools/svtabbx.hxx>
-// header for class SvTreeListBox
 #include <svtools/treelistbox.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>

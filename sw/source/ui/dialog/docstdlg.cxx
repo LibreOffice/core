@@ -29,8 +29,6 @@
 #include <doc.hxx>
 #include <docstdlg.hxx>
 #include <modcfg.hxx>
-
-// for statistics fields
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
 

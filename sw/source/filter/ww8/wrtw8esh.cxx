@@ -49,8 +49,6 @@
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/unoapi.hxx>
-
-// #i71538#
 #include <svx/svdview.hxx>
 #include <fmtcnct.hxx>
 #include <fmtanchr.hxx>

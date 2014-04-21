@@ -49,7 +49,6 @@
 #include "clipdata.hxx"
 #include "clipparam.hxx"
 
-// for InitDocShell
 #include <editeng/paperinf.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/algitem.hxx>

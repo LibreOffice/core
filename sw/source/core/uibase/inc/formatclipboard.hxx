@@ -20,11 +20,8 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_FORMATCLIPBOARD_HXX
 #define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_FORMATCLIPBOARD_HXX
 
-// header for class SwWrtShell
 #include <wrtsh.hxx>
-// header for class SfxItemSet
 #include <svl/itemset.hxx>
-// header for class SfxStyleSheetBasePool
 #include <svl/style.hxx>
 
 /** This class acts as data container and execution class for the format paintbrush feature in writer.

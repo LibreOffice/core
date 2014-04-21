@@ -28,7 +28,6 @@
 #include "win/salgdi.h"
 #include "win/saldata.hxx"
 
-// for GetMirroredChar
 #include "sft.hxx"
 #include "sallayout.hxx"
 

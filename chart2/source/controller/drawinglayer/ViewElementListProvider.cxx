@@ -22,39 +22,24 @@
 #include "chartview/DataPointSymbolSupplier.hxx"
 #include "macros.hxx"
 #include "DrawViewWrapper.hxx"
+
 #include <svx/xtable.hxx>
 #include <svx/XPropertyTable.hxx>
 #include <svx/unofill.hxx>
 #include <svx/unoapi.hxx>
-
-// header for class NameOrIndex
 #include <svx/xit.hxx>
-// header for class XFillBitmapItem
 #include <svx/xbtmpit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xflgrit.hxx>
-// header for class XLineStartItem
 #include <svx/xlnstit.hxx>
-// header for class XLineEndItem
 #include <svx/xlnedit.hxx>
-
-//oldChartModelWrapper
-
-// header for class SfxItemPool
 #include <svl/itempool.hxx>
-// header for class FontList
 #include <svtools/ctrltool.hxx>
-// header for class Application
 #include <vcl/svapp.hxx>
-// header for class SdrObject
 #include <svx/svdobj.hxx>
-
-//for creation of a symbol Graphic
-// header for class VirtualDevice
 #include <vcl/virdev.hxx>
-// header for class SdrView
 #include <svx/svdview.hxx>
 
 namespace chart

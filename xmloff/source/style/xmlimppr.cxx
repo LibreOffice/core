@@ -36,7 +36,6 @@
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/contextid.hxx>
 
-// STL includes
 #include <algorithm>
 #include <functional>
 #include <utility>

@@ -24,15 +24,10 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-// header for class TabPage
 #include <vcl/tabpage.hxx>
-// header for class FixedText
 #include <vcl/fixed.hxx>
-// header for class CheckBox
 #include <vcl/button.hxx>
-// header for class ColorLB
 #include <svx/dlgctrl.hxx>
-// header for class SvxLightCtl3D
 #include <svx/dlgctl3d.hxx>
 
 namespace chart

@@ -40,7 +40,6 @@
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/fmview.hxx>
 
-// for search on vector
 #include <algorithm>
 
 using namespace ::rtl;

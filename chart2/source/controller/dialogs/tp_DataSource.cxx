@@ -36,7 +36,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 
-// for RET_OK
 #include <vcl/msgbox.hxx>
 #include <rtl/ustrbuf.hxx>
 

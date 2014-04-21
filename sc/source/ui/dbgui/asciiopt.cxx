@@ -26,7 +26,6 @@
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
 #include <unotools/transliterationwrapper.hxx>
-// ause
 #include "editutil.hxx"
 
 static const sal_Char pStrFix[] = "FIX";

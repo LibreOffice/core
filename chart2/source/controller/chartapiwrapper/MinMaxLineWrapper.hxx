@@ -26,7 +26,6 @@
 
 #include <com/sun/star/chart2/XDiagram.hpp>
 
-// header for class OPropertyArrayHelper
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>

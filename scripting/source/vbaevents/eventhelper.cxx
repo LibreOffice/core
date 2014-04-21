@@ -67,7 +67,6 @@
 #include <filter/msfilter/msvbahelper.hxx>
 #include <vbahelper/vbareturntypes.hxx>
 
-// for debug
 #include <comphelper/anytostring.hxx>
 
 #include <com/sun/star/script/XScriptListener.hpp>

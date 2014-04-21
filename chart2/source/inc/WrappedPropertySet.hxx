@@ -28,8 +28,6 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <cppuhelper/implbase4.hxx>
-
-// header for class OPropertyArrayHelper, OMultiTypeInterfaceContainerHelperInt32
 #include <cppuhelper/propshlp.hxx>
 
 #include <vector>

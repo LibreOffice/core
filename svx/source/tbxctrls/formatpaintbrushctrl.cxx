@@ -20,13 +20,8 @@
 
 #include "svx/formatpaintbrushctrl.hxx"
 
-// header for class SfxBoolItem
 #include <svl/eitem.hxx>
-
-// header for define SFX_APP
 #include <sfx2/app.hxx>
-
-// header for class ToolBox
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 

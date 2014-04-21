@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_ANCHOREDOBJECTPOSITION_HXX
 
 #include <swtypes.hxx>
-// #i11860#
 #include <frame.hxx>
 
 class SdrObject;
@@ -33,7 +32,6 @@ class SwRect;
 class SvxLRSpaceItem;
 class SvxULSpaceItem;
 class SwFmtHoriOrient;
-// #i26701#
 class SwAnchoredObject;
 
 namespace objectpositioning

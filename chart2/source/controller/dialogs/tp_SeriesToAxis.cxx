@@ -22,11 +22,8 @@
 #include "ResId.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
 
-// header for class SfxBoolItem
 #include <svl/eitem.hxx>
-// header for SfxInt32Item
 #include <svl/intitem.hxx>
-//SfxIntegerListItem
 #include <svl/ilstitem.hxx>
 #include <svtools/controldims.hrc>
 

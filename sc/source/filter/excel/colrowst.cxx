@@ -28,8 +28,6 @@
 #include "xistream.hxx"
 #include "xistyle.hxx"
 #include "queryparam.hxx"
-
-// for filter manager
 #include "excimp8.hxx"
 
 const sal_uInt8 EXC_COLROW_USED         = 0x01;

@@ -45,7 +45,6 @@
 #include "pordrop.hxx"
 #include "crstate.hxx"
 #include <pormulti.hxx>
-// #i111284#
 #include <numrule.hxx>
 
 // Not reentrant !!!

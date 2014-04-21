@@ -28,16 +28,11 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ChartSymbolType.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
-// for UNO_NAME_GRAPHOBJ_URLPREFIX
 #include <editeng/unoprnms.hxx>
-
-// for Graphic
 #include <vcl/graph.hxx>
-// for GraphicObject
 #include <svtools/grfmgr.hxx>
 #include <vcl/outdev.hxx>
 

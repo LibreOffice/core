@@ -22,11 +22,8 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-// header for class TabDialog
 #include <vcl/tabdlg.hxx>
-// header for class TabControl
 #include <vcl/tabctrl.hxx>
-// header for class XColorList
 #include <svx/xtable.hxx>
 
 #include "ControllerLockGuard.hxx"

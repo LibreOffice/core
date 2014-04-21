@@ -52,7 +52,6 @@
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include "RptDef.hxx"
-// for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <sal/macros.h>

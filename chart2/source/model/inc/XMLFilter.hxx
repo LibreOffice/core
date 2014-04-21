@@ -30,7 +30,6 @@
 #include <com/sun/star/xml/sax/XWriter.hpp>
 #include <osl/mutex.hxx>
 
-// for APPHELPER_... macros
 #include "ServiceMacros.hxx"
 
 namespace com { namespace sun { namespace star {

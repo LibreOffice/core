@@ -76,7 +76,6 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-// #i28749#
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <swtypes.hxx>
 #include <unomap.hxx>

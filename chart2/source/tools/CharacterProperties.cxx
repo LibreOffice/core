@@ -41,7 +41,6 @@
 
 #include <comphelper/InlineContainer.hxx>
 
-// header for struct SvtLinguConfig
 #include <unotools/lingucfg.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>

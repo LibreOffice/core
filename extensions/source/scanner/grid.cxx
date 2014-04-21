@@ -27,7 +27,6 @@
 
 #include <grid.hxx>
 
-// for ::std::sort
 #include <algorithm>
 #include <boost/scoped_array.hpp>
 

@@ -28,7 +28,6 @@
 #include "ResId.hxx"
 #include "Strings.hrc"
 
-// for RET_OK
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

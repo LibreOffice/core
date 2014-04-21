@@ -50,8 +50,6 @@
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
 #include <svx/svxids.hrc>
-
-// #i4219#
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/aeitem.hxx>

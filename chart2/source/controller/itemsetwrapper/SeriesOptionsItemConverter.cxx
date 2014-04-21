@@ -33,14 +33,11 @@
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 
-// for SfxBoolItem
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-
-//SfxIntegerListItem
 #include <svl/ilstitem.hxx>
-
 #include <rtl/math.hxx>
+
 #include <functional>
 #include <algorithm>
 

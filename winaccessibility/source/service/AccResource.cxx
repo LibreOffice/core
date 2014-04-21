@@ -24,16 +24,6 @@
 // ---- needed as long as we have no contexts for components ---
 #include <vcl/svapp.hxx>
 
-//2009.04. Comment the following code because the acc resource is not necessary now. Can open them if necessary
-//#ifndef _TOOLS_INTN_HXX
-//#include <tools/intn.hxx>
-//#endif
-//#ifndef _SOLAR_HRC
-//#include <svtools/solar.hrc>
-//#endif
-
-
-
 
 //= ResourceManager
 

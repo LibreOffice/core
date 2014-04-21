@@ -47,8 +47,6 @@
 #include "shapeimpl.hxx"
 #include "svx/unoshprp.hxx"
 #include <svx/svdoashp.hxx>
-
-// #i29181#
 #include "svx/svdviter.hxx"
 #include <svx/svdview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

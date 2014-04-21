@@ -26,7 +26,6 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 
 #include <oleembobj.hxx>
-//#include <olecomponent.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/seqstream.hxx>
 

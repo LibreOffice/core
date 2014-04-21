@@ -21,13 +21,10 @@
 
 #define NUMBER_SEPARATORS 4
 
-// header for class CheckBox
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
-// header for class SfxItemSet
 #include <svl/itemset.hxx>
 #include "TextDirectionListBox.hxx"
-
 #include <svx/dialcontrol.hxx>
 #include <svx/wrapfield.hxx>
 #include <sfx2/tabdlg.hxx>

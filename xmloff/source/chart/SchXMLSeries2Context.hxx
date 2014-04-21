@@ -23,7 +23,6 @@
 #include "SchXMLChartContext.hxx"
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/SchXMLImportHelper.hxx>
-// header for class SvXMLStyleContext
 #include <xmloff/xmlstyle.hxx>
 
 #include <vector>

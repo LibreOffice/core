@@ -21,15 +21,10 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/InlineContainer.hxx>
-// header for class SvXMLUnitConverter
 #include <xmloff/xmluconv.hxx>
-// header for struct SvXMLEnumMapEntry
 #include <xmloff/xmlement.hxx>
-// header for class SvXMLImportPropertyMapper
 #include <xmloff/xmlimppr.hxx>
-// header for class XMLPropStyleContext
 #include <xmloff/prstylei.hxx>
-// header for class XMLPropertySetMapper
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlnmspe.hxx>

@@ -22,7 +22,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <svl/itemprop.hxx>
 #include <svl/itemiter.hxx>
-// header for class SfxWhichIter
 #include <svl/whiter.hxx>
 #include <svx/svxids.hrc>
 

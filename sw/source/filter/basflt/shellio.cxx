@@ -50,8 +50,6 @@
 #include <redline.hxx>
 #include <swerror.h>
 #include <paratr.hxx>
-
-// #i73788#
 #include <pausethreadstarting.hxx>
 
 using namespace ::com::sun::star;

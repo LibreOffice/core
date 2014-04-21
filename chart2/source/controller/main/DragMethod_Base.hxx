@@ -21,10 +21,7 @@
 
 #include "DrawViewWrapper.hxx"
 #include <svx/ActionDescriptionProvider.hxx>
-// header for class SdrDragMethod
 #include <svx/svddrgmt.hxx>
-
-// header for class WeakReference
 #include <cppuhelper/weakref.hxx>
 
 namespace chart

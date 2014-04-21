@@ -37,11 +37,8 @@
 #include <com/sun/star/chart2/AxisOrientation.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 
-// for SfxBoolItem
 #include <svl/eitem.hxx>
-// for SvxDoubleItem
 #include <svx/chrtitem.hxx>
-// for SfxInt32Item
 #include <svl/intitem.hxx>
 #include <rtl/math.hxx>
 

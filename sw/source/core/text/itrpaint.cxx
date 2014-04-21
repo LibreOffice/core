@@ -36,7 +36,6 @@
 #include <pagedesc.hxx>
 #include <tgrditem.hxx>
 
-// #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 
 #include "flyfrms.hxx"

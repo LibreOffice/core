@@ -20,10 +20,7 @@
 #include "xiname.hxx"
 #include "rangenam.hxx"
 #include "xistream.hxx"
-
-// for formula compiler
 #include "excform.hxx"
-// for filter manager
 #include "excimp8.hxx"
 #include "scextopt.hxx"
 #include "document.hxx"

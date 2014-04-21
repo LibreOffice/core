@@ -19,17 +19,11 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_SCALE_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_SCALE_HXX
 
-// header for SfxTabPage
 #include <sfx2/tabdlg.hxx>
-// header for class FormattedField
 #include <svtools/fmtfield.hxx>
-// header for FixedText
 #include <vcl/fixed.hxx>
-// header for CheckBox
 #include <vcl/button.hxx>
-// header for MetricField
 #include <vcl/field.hxx>
-// header for class ListBox
 #include <vcl/lstbox.hxx>
 
 namespace chart

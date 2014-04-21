@@ -32,7 +32,6 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-// header for define DECL_LINK
 #include <tools/link.hxx>
 #include <vcl/vclevent.hxx>
 

@@ -23,10 +23,7 @@
 #include "TabPages.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 
-// header for SvxChartTextOrientItem / SvxChartTextOrderItem
 #include <svx/chrtitem.hxx>
-
-// header for SfxInt32Item
 #include <svl/intitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>

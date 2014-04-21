@@ -26,7 +26,6 @@
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 
-// for SfxBoolItem
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>

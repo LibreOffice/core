@@ -54,7 +54,6 @@
 #include "mdiexp.hxx"
 #include "sectfrm.hxx"
 #include <acmplwrd.hxx>
-// #i28701#
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <vector>

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_FILTER_PPT_PPT97ANIMATIONS_HXX
 #define INCLUDED_SD_SOURCE_FILTER_PPT_PPT97ANIMATIONS_HXX
 
-// header for class SvStream
 #include <tools/stream.hxx>
 
 class SdrObject;

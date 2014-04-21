@@ -19,17 +19,11 @@
 
 #include "dlg_NumberFormat.hxx"
 
-// header for class SfxItemSet
 #include <svl/itemset.hxx>
-
-// header for class SvxNumberInfoItem
 #include <svx/numinf.hxx>
-
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <sfx2/tabdlg.hxx>
-
-// header for SvNumberFormatter
 #include <svl/zforlist.hxx>
 
 namespace chart

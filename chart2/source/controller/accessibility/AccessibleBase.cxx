@@ -32,7 +32,6 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <rtl/ustrbuf.hxx>
-// for SolarMutex
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
 #include <cppuhelper/queryinterface.hxx>

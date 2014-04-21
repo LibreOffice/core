@@ -21,9 +21,7 @@
 #include "chinese_translationdialog.hxx"
 #include "chinese_dictionarydialog.hxx"
 #include <com/sun/star/i18n/TextConversionOption.hpp>
-// header for define RET_OK
 #include <vcl/msgbox.hxx>
-// header for class SvtLinguConfigItem
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include "helpid.hrc"

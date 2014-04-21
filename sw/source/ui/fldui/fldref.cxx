@@ -28,7 +28,6 @@
 
 #include <fldui.hrc>
 #include <globals.hrc>
-// #i83479#
 #include <SwNodeNum.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>

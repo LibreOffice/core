@@ -20,9 +20,7 @@
 #ifndef INCLUDED_SVX_FORMATPAINTBRUSHCTRL_HXX
 #define INCLUDED_SVX_FORMATPAINTBRUSHCTRL_HXX
 
-// header for class SfxToolBoxControl
 #include <sfx2/tbxctrl.hxx>
-// header for class Timer
 #include <vcl/timer.hxx>
 #include <svx/svxdllapi.h>
 

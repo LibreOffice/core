@@ -46,11 +46,10 @@
 #include "shellres.hxx"
 #include <IDocumentUndoRedo.hxx>
 
-// #i7672#
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <vector>
-// #i28701#
+
 #include <sortedobjs.hxx>
 #include <flyfrms.hxx>
 #include <UndoManager.hxx>

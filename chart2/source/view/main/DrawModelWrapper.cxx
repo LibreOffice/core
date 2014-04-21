@@ -24,29 +24,17 @@
 #include "ObjectIdentifier.hxx"
 #include <svx/unomodel.hxx>
 #include <svl/itempool.hxx>
-// header for class SfxBoolItem
 #include <svl/eitem.hxx>
-// header for define EE_PARA_HYPHENATE
 #include <editeng/eeitem.hxx>
-// header for class Svx3DPercentDiagonalItem
 #include <svx/svx3ditems.hxx>
-// header for class SvtPathOptions
 #include <unotools/pathoptions.hxx>
-// header E3dObjFactory
 #include <svx/objfac3d.hxx>
-// header for class SdrObjList
 #include <svx/svdpage.hxx>
-// header for SvxUnoXDashTable_createInstance
 #include <svx/XPropertyTable.hxx>
-// header for class XDashList
 #include <svx/xtable.hxx>
-// header for class SdrOutliner
 #include <svx/svdoutl.hxx>
-// header for class LinguMgr
 #include <editeng/unolingu.hxx>
-// header for class Application
 #include <vcl/svapp.hxx>
-// header for class VirtualDevice
 #include <vcl/virdev.hxx>
 
 #include <com/sun/star/container/XChild.hpp>

@@ -19,11 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CHARTTYPE_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CHARTTYPE_HXX
 
-// header for class ModalDialog
 #include <vcl/dialog.hxx>
-// header for class FixedLine
 #include <vcl/fixed.hxx>
-// header for class OKButton
 #include <vcl/button.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

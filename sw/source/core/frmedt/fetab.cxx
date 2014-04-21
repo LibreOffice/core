@@ -57,7 +57,6 @@
 #include <frmtool.hxx>
 
 #include <node.hxx>
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 
 using namespace ::com::sun::star;

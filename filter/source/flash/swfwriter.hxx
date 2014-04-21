@@ -30,8 +30,6 @@
 #include <tools/poly.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
-
-// #i73264#
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <osl/file.hxx>
 

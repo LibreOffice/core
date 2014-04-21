@@ -24,7 +24,6 @@
 #include "layfrm.hxx"
 #include "frmatr.hxx"
 #include "swcache.hxx"
-// #i96772#
 #include <editeng/lrspitem.hxx>
 #include <swfont.hxx>
 

@@ -43,7 +43,6 @@
 #include "XMLTextColumnsPropertyHandler.hxx"
 #include <xmloff/NamedBoolPropertyHdl.hxx>
 #include "txtprhdl.hxx"
-// OD 2004-05-05 #i28701#
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 

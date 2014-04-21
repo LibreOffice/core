@@ -96,7 +96,6 @@
 #include "ww8par2.hxx"
 #include "ww8graf.hxx"
 
-// #i27767#
 #include <fmtwrapinfluenceonobjpos.hxx>
 
 using namespace sw::util;

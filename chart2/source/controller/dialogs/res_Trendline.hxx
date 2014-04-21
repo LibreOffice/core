@@ -25,10 +25,9 @@
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
 #include <vcl/field.hxx>
-// header for class SvNumberformat
 #include <svl/zformat.hxx>
-// header for class FormattedField
 #include <svtools/fmtfield.hxx>
+
 namespace chart
 {
 

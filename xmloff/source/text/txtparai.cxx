@@ -52,10 +52,8 @@
 #include "XMLChangeImportContext.hxx"
 #include "txtlists.hxx"
 
-// OD 2004-04-21 #i26791#
 #include <txtparaimphint.hxx>
 class XMLHints_Impl : public boost::ptr_vector<XMLHint_Impl> {};
-// OD 2004-04-21 #i26791#
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

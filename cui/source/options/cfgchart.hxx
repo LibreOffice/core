@@ -20,13 +20,9 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_CFGCHART_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_CFGCHART_HXX
 
-// header for TYPEINFO
 #include <tools/rtti.hxx>
-// header for ConfigItem
 #include <unotools/configitem.hxx>
-// header for SfxPoolItem
 #include <svl/poolitem.hxx>
-// header for XColorEntry
 #include <svx/xtable.hxx>
 
 #include <vector>

@@ -65,7 +65,6 @@
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <modcfg.hxx>
-//#include "accnote.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "swmodule.hxx"
 #include "redline.hxx"
@@ -79,14 +78,12 @@
 #include <unosett.hxx>
 #include <paratr.hxx>
 #include <com/sun/star/container/XIndexReplace.hpp>
-// --> OD 2006-07-12 #i63870#
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <viewimp.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <textmarkuphelper.hxx>
-// #i10825#
 #include <parachangetrackinginfo.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <comphelper/servicehelper.hxx>

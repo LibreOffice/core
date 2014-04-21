@@ -28,7 +28,6 @@
 #include "charttoolsdllapi.hxx"
 #include "ChartModel.hxx"
 
-// header for class OUString
 #include <rtl/ustring.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

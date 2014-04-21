@@ -20,13 +20,9 @@
 
 #include "ppt97animations.hxx"
 
-// header for class SdrObject
 #include <svx/svdobj.hxx>
-// header for class SdPage
 #include "sdpage.hxx"
-// header for define DBG_ERROR
 #include <tools/debug.hxx>
-// header for define GetXShapeForSdrObject
 #include <svx/unoapi.hxx>
 #include "EffectMigration.hxx"
 #include <CustomAnimationPreset.hxx>

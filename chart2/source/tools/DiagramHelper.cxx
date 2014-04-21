@@ -55,7 +55,6 @@
 #include <unotools/saveopt.hxx>
 #include <rtl/math.hxx>
 #include <svl/zformat.hxx>
-// header for class Application
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

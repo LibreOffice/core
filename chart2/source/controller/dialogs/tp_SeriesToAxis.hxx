@@ -19,13 +19,9 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_SERIESTOAXIS_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_SERIESTOAXIS_HXX
 
-// header for SfxTabPage
 #include <sfx2/tabdlg.hxx>
-// header for FixedText
 #include <vcl/fixed.hxx>
-// header for CheckBox
 #include <vcl/button.hxx>
-// header for MetricField
 #include <vcl/field.hxx>
 
 namespace chart

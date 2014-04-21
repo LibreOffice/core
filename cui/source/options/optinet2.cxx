@@ -52,7 +52,6 @@
 #include <sfx2/htmlmode.hxx>
 #include <svx/svxids.hrc>
 
-// for security TP
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
 #ifdef UNX

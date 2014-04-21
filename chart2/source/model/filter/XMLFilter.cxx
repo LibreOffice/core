@@ -22,17 +22,12 @@
 #include "MediaDescriptorHelper.hxx"
 #include "ContainerHelper.hxx"
 
-// for ERRCODE_SFX_GENERAL etc.
-// header contains only macros
 #include <svtools/sfxecode.hxx>
-// header for class SvtSaveOptions
 #include <unotools/saveopt.hxx>
 #include <comphelper/genericpropertyset.hxx>
-// header for struct PropertyMapEntry
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/documentconstants.hxx>
 
-// header for class SotStorage
 #include <sot/storage.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

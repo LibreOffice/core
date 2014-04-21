@@ -21,8 +21,6 @@
 #include <vcl/builder.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
-
-// ause
 #include "editutil.hxx"
 
 ScCsvTableBox::ScCsvTableBox( Window* pParent, WinBits nBits ) :

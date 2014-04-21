@@ -23,7 +23,6 @@
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
-// header for rtl::Static
 #include <rtl/instance.hxx>
 
 using namespace ::xmloff::token;

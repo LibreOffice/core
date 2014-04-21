@@ -56,7 +56,6 @@
 #include <tools/diagnose_ex.h>
 #include <boost/unordered_set.hpp>
 
-// for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <unotxdoc.hxx>

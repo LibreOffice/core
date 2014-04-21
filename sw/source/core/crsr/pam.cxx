@@ -31,8 +31,6 @@
 #include <frmatr.hxx>
 #include <swtable.hxx>
 #include <crsskip.hxx>
-
-// Formular view
 #include <flyfrm.hxx>
 #include <fmteiro.hxx>
 #include <section.hxx>

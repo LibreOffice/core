@@ -18,9 +18,7 @@
  */
 
 #include <svx/svdobj.hxx>
-// header for class OGuard
 #include <osl/mutex.hxx>
-// header for class Application
 #include <vcl/svapp.hxx>
 
 #include "unomlstr.hxx"

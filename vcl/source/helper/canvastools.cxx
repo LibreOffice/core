@@ -43,8 +43,6 @@
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/range/b2irectangle.hxx>
-
-// #i79917#
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

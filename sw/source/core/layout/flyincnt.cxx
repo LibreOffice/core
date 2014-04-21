@@ -23,7 +23,6 @@
 #include <fmtornt.hxx>
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
-// OD 2004-01-19 #110582#
 #include <dflyobj.hxx>
 
 SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :

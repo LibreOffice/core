@@ -39,7 +39,6 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 
-// header for class OUStringBuffer
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 

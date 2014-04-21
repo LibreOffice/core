@@ -19,7 +19,6 @@
 
 #include "TimerTriggeredControllerLock.hxx"
 
-// header for define EDIT_UPDATEDATA_TIMEOUT
 #include <vcl/edit.hxx>
 
 namespace chart

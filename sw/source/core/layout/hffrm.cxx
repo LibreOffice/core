@@ -29,9 +29,7 @@
 #include "flyfrm.hxx"
 #include "frmtool.hxx"
 #include "hfspacingitem.hxx"
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-// #i43771#
 #include <objectformatter.hxx>
 
 extern bool bObjsDirect;    //frmtool.cxx

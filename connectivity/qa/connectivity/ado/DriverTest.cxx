@@ -9,10 +9,6 @@
 
 #include <test/bootstrapfixture.hxx>
 
-//#include "ado/ADriver.hxx"
-//#include "ado/AConnection.hxx"
-//#include <com/sun/star/sdbc/XDriver.hpp>
-
 #include "ado/AConnection.hxx"
 #include "ado/ADatabaseMetaData.hxx"
 #include "ado/ADriver.hxx"

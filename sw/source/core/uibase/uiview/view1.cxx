@@ -35,9 +35,7 @@
 #include <edtwin.hxx>
 #include "formatclipboard.hxx"
 #include <cmdid.h>
-// header for class SfxRequest
 #include <sfx2/request.hxx>
-
 #include <sfx2/viewfrm.hxx>
 
 extern int bDocSzUpdated;

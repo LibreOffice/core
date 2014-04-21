@@ -24,7 +24,6 @@
 #include <svl/itemset.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-// for pair
 #include <utility>
 
 namespace comphelper

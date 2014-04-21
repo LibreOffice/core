@@ -24,9 +24,7 @@
 #include "ftnfrm.hxx"
 #include "txtfrm.hxx"
 
-// #i28701#
 #include <movedfwdfrmsbyobjpos.hxx>
-// #i35911#
 #include <objstmpconsiderwrapinfl.hxx>
 
 #define LOOP_DETECT 250

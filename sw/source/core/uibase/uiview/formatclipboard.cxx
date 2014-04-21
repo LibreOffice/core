@@ -25,20 +25,13 @@
 #include <frmfmt.hxx>
 #include <docstyle.hxx>
 #include <fchrfmt.hxx>
-// header for class SdrView
 #include <svx/svdview.hxx>
-//SvxBrushItem
 #include <editeng/brushitem.hxx>
 #include <editeng/shaditem.hxx>
-// header for class SvxBoxInfoItem
 #include <editeng/boxitem.hxx>
-// header for class SvxFmtBreakItem
 #include <editeng/formatbreakitem.hxx>
-// header for class SwFmtLayoutSplit
 #include <fmtlsplt.hxx>
-// header for class SvxFmtKeepItem
 #include <editeng/keepitem.hxx>
-// header for class SvxFrameDirectionItem
 #include <editeng/frmdiritem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtrowsplt.hxx>

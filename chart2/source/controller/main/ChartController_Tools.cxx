@@ -52,24 +52,16 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 #include <svx/ActionDescriptionProvider.hxx>
-// for TransferableDataHelper/TransferableHelper
 #include <svtools/transfer.hxx>
-// for SotStorageStreamRef
 #include <sot/storage.hxx>
-// for Graphic
 #include <vcl/graph.hxx>
-// for SvxDrawingLayerImport/SvxUnoDrawingModel
 #include <svx/unomodel.hxx>
-// for SdrModel
 #include <svx/svdmodel.hxx>
-// for OInputStreamWrapper
 #include <unotools/streamwrap.hxx>
-// for SolarMutex
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-// for OutlinerView
 #include <editeng/outliner.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>

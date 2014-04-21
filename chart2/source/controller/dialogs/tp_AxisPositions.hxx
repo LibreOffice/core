@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_AXISPOSITIONS_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_AXISPOSITIONS_HXX
 
-// header for SfxTabPage
 #include <sfx2/tabdlg.hxx>
 #include <svtools/fmtfield.hxx>
 #include <vcl/fixed.hxx>

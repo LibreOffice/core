@@ -28,8 +28,6 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unomodel.hxx>
-
-// header for class SdrView
 #include <svx/svdview.hxx>
 
 #define CHARTTRANSFER_OBJECTTYPE_DRAWMODEL      1

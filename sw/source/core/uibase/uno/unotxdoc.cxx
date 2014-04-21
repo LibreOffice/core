@@ -102,7 +102,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-// #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 #include <numrule.hxx>
 

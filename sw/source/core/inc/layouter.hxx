@@ -28,15 +28,11 @@ class SwFtnFrm;
 class SwPageFrm;
 class SwLooping;
 
-// --> #i28701#
 class SwMovedFwdFrmsByObjPos;
 class SwTxtFrm;
-// --> #i26945#
 class SwRowFrm;
-// --> #i35911#
 class SwObjsMarkedAsTmpConsiderWrapInfluence;
 class SwAnchoredObject;
-// --> #i65250#
 #include <boost/unordered_map.hpp>
 class SwFlowFrm;
 class SwLayoutFrm;

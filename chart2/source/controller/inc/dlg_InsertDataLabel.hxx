@@ -19,11 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTDATALABEL_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTDATALABEL_HXX
 
-// header for class ModalDialog
 #include <vcl/dialog.hxx>
-// header for class CheckBox
 #include <vcl/button.hxx>
-// header for class SfxItemSet
 #include <svl/itemset.hxx>
 #include <boost/scoped_ptr.hpp>
 

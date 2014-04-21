@@ -34,10 +34,8 @@
 #include "ndole.hxx"
 #include "tabfrm.hxx"
 #include "flyfrms.hxx"
-// #i18732#
 #include <fmtfollowtextflow.hxx>
 #include <environmentofanchoredobject.hxx>
-// #i28701#
 #include <sortedobjs.hxx>
 #include <viewimp.hxx>
 

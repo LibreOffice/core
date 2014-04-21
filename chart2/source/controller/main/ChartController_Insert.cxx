@@ -55,13 +55,9 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <svx/ActionDescriptionProvider.hxx>
 
-// header for define RET_OK
 #include <vcl/msgbox.hxx>
-// header for class OUStringBuffer
 #include <rtl/ustrbuf.hxx>
-// header for class Application
 #include <vcl/svapp.hxx>
-// header for class ::vos::OGuard
 #include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;

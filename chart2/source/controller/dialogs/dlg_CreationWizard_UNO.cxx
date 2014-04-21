@@ -24,12 +24,9 @@
 #include "ContainerHelper.hxx"
 #include "TimerTriggeredControllerLock.hxx"
 #include <osl/mutex.hxx>
-// header for class Application
 #include <vcl/svapp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-// header for define RET_CANCEL
 #include <vcl/msgbox.hxx>
-// header for class OImplementationId
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/Point.hpp>

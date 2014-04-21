@@ -42,7 +42,6 @@
 #include "rtl/ref.hxx"
 #include <animations/animationnodehelper.hxx>
 
-// header for class SdrObjListIter
 #include <svx/svditer.hxx>
 
 #include "CustomAnimationCloner.hxx"

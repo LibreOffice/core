@@ -46,7 +46,6 @@
 #include <numrule.hxx>
 #include <SwGrammarMarkUp.hxx>
 
-// #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 
 #include <IDocumentStylePoolAccess.hxx>

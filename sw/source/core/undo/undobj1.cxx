@@ -35,7 +35,6 @@
 #include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-// OD 26.06.2003 #108784#
 #include <dcontact.hxx>
 #include <ndole.hxx>
 

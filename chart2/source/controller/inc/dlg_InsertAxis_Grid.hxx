@@ -19,11 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTAXIS_GRID_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTAXIS_GRID_HXX
 
-// header for class ModalDialog
 #include <vcl/dialog.hxx>
-// header for class FixedLine
 #include <vcl/fixed.hxx>
-// header for class CheckBox
 #include <vcl/button.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 

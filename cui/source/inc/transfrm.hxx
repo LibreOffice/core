@@ -24,7 +24,6 @@
 
 #include <vcl/fixed.hxx>
 
-// #i75273#
 #include <basegfx/range/b2drange.hxx>
 
 // predefines

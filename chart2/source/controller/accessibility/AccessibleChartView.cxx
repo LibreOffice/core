@@ -34,10 +34,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-// for SolarMutex
 #include <vcl/svapp.hxx>
-
-// header for typedef MutexGuard
 #include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;

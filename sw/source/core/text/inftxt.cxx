@@ -61,7 +61,6 @@
 #include <pam.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include "numrule.hxx"
-// #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 #include <docufld.hxx>
 

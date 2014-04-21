@@ -42,7 +42,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-// header for define DBG_ERROR1
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -50,7 +49,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include "SchXMLImport.hxx"
-// header for class XMLPropStyleContext
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlprmap.hxx>
 

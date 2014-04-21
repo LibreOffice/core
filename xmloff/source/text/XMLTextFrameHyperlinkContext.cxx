@@ -26,7 +26,6 @@
 #include "XMLTextFrameContext.hxx"
 #include "XMLTextFrameHyperlinkContext.hxx"
 
-// OD 2004-04-21 #i26791#
 #include <txtparaimphint.hxx>
 
 using namespace ::com::sun::star::uno;

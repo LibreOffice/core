@@ -33,7 +33,6 @@
 #include <svx/svdpage.hxx>
 #include <accmap.hxx>
 
-// OD 12.12.2002 #103492#
 #include <pagepreviewlayout.hxx>
 
 #include <comcore.hrc>

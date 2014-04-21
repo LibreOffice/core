@@ -29,7 +29,6 @@
 #include "ControllerLockGuard.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-// for RET_OK
 #include <vcl/msgbox.hxx>
 
 namespace chart

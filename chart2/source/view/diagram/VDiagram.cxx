@@ -36,9 +36,7 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-// header for class SvxShape
 #include <svx/unoshape.hxx>
-// header for class E3dScene
 #include <svx/scene3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
 

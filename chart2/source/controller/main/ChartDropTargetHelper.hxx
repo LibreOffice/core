@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTDROPTARGETHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTDROPTARGETHELPER_HXX
 
-// for DropTargetHelper
 #include <svtools/transfer.hxx>
 
 namespace com { namespace sun { namespace star {

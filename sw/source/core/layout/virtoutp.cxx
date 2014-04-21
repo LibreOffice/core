@@ -24,7 +24,6 @@
 #include "virtoutp.hxx"
 #include "viewopt.hxx"
 #include "rootfrm.hxx"
-// OD 12.11.2002 #96272# - include declaration for <SetMappingForVirtDev>
 #include "setmapvirtdev.hxx"
 
 #if OSL_DEBUG_LEVEL > 1

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_CONFIGURATIONACCESS_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_CONFIGURATIONACCESS_HXX
 
-// header for enum FieldUnit
 #include <tools/fldunit.hxx>
 
 namespace chart

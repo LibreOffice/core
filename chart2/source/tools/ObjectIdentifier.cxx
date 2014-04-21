@@ -32,7 +32,6 @@
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 
-// header for define DBG_ASSERT
 #include <tools/debug.hxx>
 #include <comphelper/InlineContainer.hxx>
 

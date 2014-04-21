@@ -23,7 +23,6 @@
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <sal/types.h>
 
-// STL includes
 #include <vector>
 
 

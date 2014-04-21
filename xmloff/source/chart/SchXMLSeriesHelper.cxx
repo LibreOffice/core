@@ -26,7 +26,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <rtl/ustring.h>
-// header for define DBG_ERROR1
 #include <tools/debug.hxx>
 
 #include <typeinfo>

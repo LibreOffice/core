@@ -30,9 +30,7 @@
 #include <svtools/wizardmachine.hxx>
 #include <svtools/valueset.hxx>
 #include <vcl/fixed.hxx>
-// header for class MetricField
 #include <vcl/field.hxx>
-// header for class ListBox
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

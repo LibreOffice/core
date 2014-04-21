@@ -23,7 +23,6 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <stdio.h>
-// #i83479#
 #include <IDocumentListItems.hxx>
 #include <doc.hxx>
 

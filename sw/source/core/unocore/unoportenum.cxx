@@ -19,7 +19,6 @@
 
 #include <unoport.hxx>
 #include <IMark.hxx>
-// #i81002#
 #include <crossrefbookmark.hxx>
 #include <annotationmark.hxx>
 #include <doc.hxx>

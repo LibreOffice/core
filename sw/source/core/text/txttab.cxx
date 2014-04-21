@@ -32,7 +32,6 @@
 #include "itrform2.hxx"
 #include "txtfrm.hxx"
 #include <numrule.hxx>
-// #i89179#
 #include <porfld.hxx>
 #include <boost/scoped_ptr.hpp>
 

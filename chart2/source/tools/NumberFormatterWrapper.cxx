@@ -20,9 +20,7 @@
 #include "NumberFormatterWrapper.hxx"
 #include "macros.hxx"
 #include <comphelper/processfactory.hxx>
-// header for class SvNumberFormatsSupplierObj
 #include <svl/numuno.hxx>
-// header for class SvNumberformat
 #include <svl/zformat.hxx>
 #include <tools/color.hxx>
 #include <i18nlangtag/mslangid.hxx>

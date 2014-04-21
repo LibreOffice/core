@@ -23,7 +23,6 @@
 #include "ObjectIdentifier.hxx"
 
 class SdrObject;
-// header for enum SdrDragMode
 #include <svx/svdtypes.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 

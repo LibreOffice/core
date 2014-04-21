@@ -38,11 +38,8 @@
 #include <editeng/eeitem.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-
-// #i37011#
 #include <svx/svdoashp.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 

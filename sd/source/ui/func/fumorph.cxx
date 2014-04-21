@@ -40,7 +40,6 @@
 
 #include "sdabstdlg.hxx"
 
-// #i48168#
 #include <svx/svditer.hxx>
 
 #include <basegfx/color/bcolor.hxx>

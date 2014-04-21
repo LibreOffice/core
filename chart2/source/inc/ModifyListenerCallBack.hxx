@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_MODIFYLISTENERCALLBACK_HXX
 #define INCLUDED_CHART2_SOURCE_INC_MODIFYLISTENERCALLBACK_HXX
 
-// header for class Link
 #include <tools/link.hxx>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>

@@ -20,12 +20,9 @@
 #include <svx/sdrmasterpagedescriptor.hxx>
 #include <svx/sdr/contact/viewcontactofmasterpagedescriptor.hxx>
 #include <svx/svdpage.hxx>
-
-// #i42075#
 #include <svx/svdobj.hxx>
 #include <svx/xfillit0.hxx>
 #include <svl/itemset.hxx>
-
 
 
 namespace sdr

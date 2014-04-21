@@ -56,7 +56,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 
-// header for any2enum
 #include <comphelper/extract.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>

@@ -11,7 +11,6 @@
 #define INCLUDED_VCL_ICONTHEMEINFO_HXX
 
 #include <vcl/dllapi.h>
-// for Size
 #include <tools/gen.hxx>
 #include <rtl/ustring.hxx>
 

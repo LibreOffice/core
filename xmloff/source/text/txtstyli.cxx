@@ -43,7 +43,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
-// STL includes
 #include <algorithm>
 #include <functional>
 #include <utility>

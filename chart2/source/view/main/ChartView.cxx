@@ -58,15 +58,10 @@
 #include <comphelper/servicehelper.hxx>
 #include <boost/bind.hpp>
 #include <unotools/streamwrap.hxx>
-// header for class LocaleDataWrapper
 #include <unotools/localedatawrapper.hxx>
-// header for class SdrPage
 #include <svx/svdpage.hxx>
-// header for class SvxDrawPage
 #include <svx/unopage.hxx>
-// header for class SvxShape
 #include <svx/unoshape.hxx>
-// header for class Application
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <svx/unofill.hxx>

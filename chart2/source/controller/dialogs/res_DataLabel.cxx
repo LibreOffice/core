@@ -22,22 +22,15 @@
 #include "chartview/ChartSfxItemIds.hxx"
 #include "dlg_NumberFormat.hxx"
 
-// header for class SvxNumberInfoItem
 #include <svx/numinf.hxx>
 #include <svl/eitem.hxx>
-// for SfxUInt32Item
 #include <svl/intitem.hxx>
-// header for class SfxStringItem
 #include <svl/stritem.hxx>
-//SfxIntegerListItem
 #include <svl/ilstitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
-
-// header for define RET_OK
 #include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc>
-// header for SvNumberFormatter
 #include <svl/zforlist.hxx>
 #include <svtools/controldims.hrc>
 

@@ -27,7 +27,6 @@
 #include <vcl/edit.hxx>
 
 #include "fldpage.hxx"
-// #i83479#
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentListItems.hxx>
 #include <FldRefTreeListBox.hxx>

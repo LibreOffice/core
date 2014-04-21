@@ -21,7 +21,6 @@
 
 #include "DragMethod_Base.hxx"
 
-// header for class ::basegfx::B3DPolyPolygon
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 
 namespace chart

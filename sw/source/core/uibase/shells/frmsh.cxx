@@ -39,7 +39,6 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/hlnkitem.hxx>
-// #i73249#
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/diagnose_ex.h>
@@ -75,7 +74,7 @@
 #include <shells.hrc>
 #include "swabstdlg.hxx"
 #include "misc.hrc"
-// #i73249#
+
 #include <svx/dialogs.hrc>
 #include <wordcountdialog.hxx>
 

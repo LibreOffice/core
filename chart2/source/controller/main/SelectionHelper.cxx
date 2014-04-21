@@ -23,11 +23,9 @@
 #include "DiagramHelper.hxx"
 #include "ChartModelHelper.hxx"
 
-// header for class SdrObjList
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include "svx/obj3d.hxx"
-// header for class SdrPathObj
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

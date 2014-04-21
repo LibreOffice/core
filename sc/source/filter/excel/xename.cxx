@@ -28,8 +28,6 @@
 #include "xehelper.hxx"
 #include "xelink.hxx"
 #include "globalnames.hxx"
-
-// for filter manager
 #include "excrecds.hxx"
 
 #include <formula/grammar.hxx>

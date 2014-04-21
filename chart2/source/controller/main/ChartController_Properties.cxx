@@ -52,12 +52,9 @@
 #include "RegressionCurveHelper.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
-//for auto_ptr
 #include <memory>
 
-// header for define RET_OK
 #include <vcl/msgbox.hxx>
-// for SolarMutex
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <svx/ActionDescriptionProvider.hxx>

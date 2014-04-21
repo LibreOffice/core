@@ -19,13 +19,9 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_3D_SCENEAPPEARANCE_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_3D_SCENEAPPEARANCE_HXX
 
-// header for class TabPage
 #include <vcl/tabpage.hxx>
-// header for class MetricField
 #include <vcl/field.hxx>
-// header for class CheckBox
 #include <vcl/button.hxx>
-// header for class ListBox
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/frame/XModel.hpp>

@@ -41,7 +41,6 @@
 #include <editeng/txtrange.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
-// #i28701#
 #include <editeng/lspcitem.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtanchr.hxx>

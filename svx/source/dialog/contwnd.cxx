@@ -28,8 +28,6 @@
 #include <svx/xfillit.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-
-// #i75482#
 #include "svx/sdrpaintwindow.hxx"
 
 #define TRANSCOL Color( COL_WHITE )

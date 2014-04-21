@@ -49,7 +49,6 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <fmtftntx.hxx>
-// OD 2004-05-24 #i28701#
 #include <dflyobj.hxx>
 #include <flyfrms.hxx>
 #include <sortedobjs.hxx>

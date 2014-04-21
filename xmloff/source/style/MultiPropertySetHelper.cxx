@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-// STL includes
 #include <algorithm>
 
 

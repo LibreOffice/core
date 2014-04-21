@@ -51,8 +51,6 @@
 #include <sfx2/linkmgr.hxx>
 #include "xmlimp.hxx"
 #include "xmltbli.hxx"
-
-// for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include "ndtxt.hxx"

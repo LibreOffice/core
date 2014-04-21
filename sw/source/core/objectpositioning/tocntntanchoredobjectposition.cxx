@@ -23,7 +23,6 @@
 #include <txtfrm.hxx>
 #include <pagefrm.hxx>
 #include <sectfrm.hxx>
-// #i26945#
 #include <tabfrm.hxx>
 #include "rootfrm.hxx"
 #include "viewopt.hxx"

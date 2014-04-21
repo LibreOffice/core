@@ -90,7 +90,6 @@
 
 #include <vector>
 
-// #i68523#
 #include "svx/lathe3d.hxx"
 #include "svx/extrud3d.hxx"
 
