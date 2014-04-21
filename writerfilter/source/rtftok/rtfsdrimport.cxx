@@ -40,13 +40,15 @@
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/propertyset.hxx>
 
-namespace writerfilter {
-namespace rtftok {
+namespace writerfilter
+{
+namespace rtftok
+{
 
 RTFSdrImport::RTFSdrImport(RTFDocumentImpl& rDocument,
-        uno::Reference<lang::XComponent> const& xDstDoc)
+                           uno::Reference<lang::XComponent> const& xDstDoc)
     : m_rImport(rDocument),
-    m_bTextFrame(false)
+      m_bTextFrame(false)
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawings(xDstDoc, uno::UNO_QUERY);
     if (xDrawings.is())
@@ -145,40 +147,40 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, const O
     {
         switch (aValue.toInt32())
         {
-            case 1:
-                nHoriOrient = text::HoriOrientation::LEFT;
-                break;
-            case 2:
-                nHoriOrient = text::HoriOrientation::CENTER;
-                break;
-            case 3:
-                nHoriOrient = text::HoriOrientation::RIGHT;
-                break;
-            case 4:
-                nHoriOrient = text::HoriOrientation::INSIDE;
-                break;
-            case 5:
-                nHoriOrient = text::HoriOrientation::OUTSIDE;
-                break;
-            default:
-                break;
+        case 1:
+            nHoriOrient = text::HoriOrientation::LEFT;
+            break;
+        case 2:
+            nHoriOrient = text::HoriOrientation::CENTER;
+            break;
+        case 3:
+            nHoriOrient = text::HoriOrientation::RIGHT;
+            break;
+        case 4:
+            nHoriOrient = text::HoriOrientation::INSIDE;
+            break;
+        case 5:
+            nHoriOrient = text::HoriOrientation::OUTSIDE;
+            break;
+        default:
+            break;
         }
     }
     else if (aKey == "posv")
     {
         switch (aValue.toInt32())
         {
-            case 1:
-                nVertOrient = text::VertOrientation::TOP;
-                break;
-            case 2:
-                nVertOrient = text::VertOrientation::CENTER;
-                break;
-            case 3:
-                nVertOrient = text::VertOrientation::BOTTOM;
-                break;
-            default:
-                break;
+        case 1:
+            nVertOrient = text::VertOrientation::TOP;
+            break;
+        case 2:
+            nVertOrient = text::VertOrientation::CENTER;
+            break;
+        case 3:
+            nVertOrient = text::VertOrientation::BOTTOM;
+            break;
+        default:
+            break;
         }
     }
     else if (aKey == "fFitShapeToText")
@@ -247,39 +249,39 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
 
     // The spec doesn't state what is the default for shapeType, Word seems to implement it as a rectangle.
     if (std::find_if(rShape.aProperties.begin(),
-                rShape.aProperties.end(),
-                boost::bind(&OUString::equals, boost::bind(&std::pair<OUString, OUString>::first, _1), OUString("shapeType")))
+                     rShape.aProperties.end(),
+                     boost::bind(&OUString::equals, boost::bind(&std::pair<OUString, OUString>::first, _1), OUString("shapeType")))
             == rShape.aProperties.end())
         rShape.aProperties.insert(rShape.aProperties.begin(), std::pair<OUString, OUString>("shapeType", OUString::number(ESCHER_ShpInst_Rectangle)));
 
     for (std::vector< std::pair<OUString, OUString> >::iterator i = rShape.aProperties.begin();
             i != rShape.aProperties.end(); ++i)
     {
-        if ( i->first == "shapeType" )
+        if (i->first == "shapeType")
         {
             nType = i->second.toInt32();
             switch (nType)
             {
-                case ESCHER_ShpInst_Line:
-                    createShape("com.sun.star.drawing.LineShape", xShape, xPropertySet);
-                    break;
-                case ESCHER_ShpInst_Rectangle:
-                case ESCHER_ShpInst_TextBox:
-                    // If we're inside a groupshape, can't use text frames.
-                    if (!bClose && m_aParents.size() == 1)
-                    {
-                        createShape("com.sun.star.text.TextFrame", xShape, xPropertySet);
-                        m_bTextFrame = true;
-                        std::vector<beans::PropertyValue> aDefaults = getTextFrameDefaults(true);
-                        for (size_t j = 0; j < aDefaults.size(); ++j)
-                            xPropertySet->setPropertyValue(aDefaults[j].Name, aDefaults[j].Value);
-                    }
-                    else
-                        bCustom = true;
-                    break;
-                default:
+            case ESCHER_ShpInst_Line:
+                createShape("com.sun.star.drawing.LineShape", xShape, xPropertySet);
+                break;
+            case ESCHER_ShpInst_Rectangle:
+            case ESCHER_ShpInst_TextBox:
+                // If we're inside a groupshape, can't use text frames.
+                if (!bClose && m_aParents.size() == 1)
+                {
+                    createShape("com.sun.star.text.TextFrame", xShape, xPropertySet);
+                    m_bTextFrame = true;
+                    std::vector<beans::PropertyValue> aDefaults = getTextFrameDefaults(true);
+                    for (size_t j = 0; j < aDefaults.size(); ++j)
+                        xPropertySet->setPropertyValue(aDefaults[j].Name, aDefaults[j].Value);
+                }
+                else
                     bCustom = true;
-                    break;
+                break;
+            default:
+                bCustom = true;
+                break;
             }
 
             // Defaults
@@ -287,7 +289,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             if (xPropertySet.is() && !m_bTextFrame)
                 xPropertySet->setPropertyValue("FillColor", aAny);
         }
-        else if ( i->first == "wzName" )
+        else if (i->first == "wzName")
         {
             if (m_bTextFrame)
             {
@@ -297,9 +299,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             else
                 xPropertySet->setPropertyValue("Name", uno::makeAny(i->second));
         }
-        else if ( i->first == "wzDescription" )
+        else if (i->first == "wzDescription")
             xPropertySet->setPropertyValue("Description", uno::makeAny(i->second));
-        else if ( i->first == "pib" )
+        else if (i->first == "pib")
         {
             m_rImport.setDestinationText(i->second);
             bPib = true;
@@ -315,12 +317,12 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             // fillType will decide, possible it'll be the start color of a gradient.
             aFillModel.moColor.set(OUString("#") + OStringToOUString(msfilter::util::ConvertColor(aAny.get<sal_Int32>()), RTL_TEXTENCODING_UTF8));
         }
-        else if ( i->first == "fillBackColor" )
+        else if (i->first == "fillBackColor")
             // fillType will decide, possible it'll be the end color of a gradient.
             aFillModel.moColor2.set(OUString("#") + OStringToOUString(msfilter::util::ConvertColor(msfilter::util::BGRToRGB(i->second.toInt32())), RTL_TEXTENCODING_UTF8));
         else if (i->first == "lineColor")
             aLineColor <<= msfilter::util::BGRToRGB(i->second.toInt32());
-        else if ( i->first == "lineBackColor" )
+        else if (i->first == "lineBackColor")
             ; // Ignore: complementer of lineColor
         else if (i->first == "txflTextFlow" && xPropertySet.is())
         {
@@ -331,13 +333,13 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             resolveFLine(xPropertySet, i->second.toInt32());
         else if (i->first == "fillOpacity" && xPropertySet.is())
         {
-           int opacity = 100 - (i->second.toInt32())*100/65536;
-           aAny <<= uno::makeAny(sal_uInt32(opacity));
-           xPropertySet->setPropertyValue("FillTransparence", aAny);
+            int opacity = 100 - (i->second.toInt32())*100/65536;
+            aAny <<= uno::makeAny(sal_uInt32(opacity));
+            xPropertySet->setPropertyValue("FillTransparence", aAny);
         }
         else if (i->first == "lineWidth")
             aLineWidth <<= i->second.toInt32()/360;
-        else if ( i->first == "pVerticies" )
+        else if (i->first == "pVerticies")
         {
             uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
             sal_Int32 nSize = 0; // Size of a token (its value is hardwired in the exporter)
@@ -380,7 +382,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             aPropertyValue.Value <<= aCoordinates;
             aPathPropVec.push_back(aPropertyValue);
         }
-        else if ( i->first == "pSegmentInfo" )
+        else if (i->first == "pSegmentInfo")
         {
             uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
             sal_Int32 nSize = 0;
@@ -408,35 +410,35 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
 
                     switch (nSeg)
                     {
-                        case 0x0001: // lineto
-                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
-                            aSegments[nIndex].Count = sal_Int32(1);
-                            break;
-                        case 0x4000: // moveto
-                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
-                            aSegments[nIndex].Count = sal_Int32(1);
-                            break;
-                        case 0x2000: // curveto
-                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
-                            aSegments[nIndex].Count = sal_Int32(nPoints);
-                            break;
-                        case 0xb300: // arcto
-                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
-                            aSegments[nIndex].Count = sal_Int32(0);
-                            break;
-                        case 0xac00:
-                        case 0xaa00: // nofill
-                        case 0xab00: // nostroke
-                        case 0x6001: // close
-                            break;
-                        case 0x8000: // end
-                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
-                            aSegments[nIndex].Count = sal_Int32(0);
-                            break;
-                        default: // given number of lineto elements
-                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
-                            aSegments[nIndex].Count = nSeg;
-                            break;
+                    case 0x0001: // lineto
+                        aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                        aSegments[nIndex].Count = sal_Int32(1);
+                        break;
+                    case 0x4000: // moveto
+                        aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
+                        aSegments[nIndex].Count = sal_Int32(1);
+                        break;
+                    case 0x2000: // curveto
+                        aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
+                        aSegments[nIndex].Count = sal_Int32(nPoints);
+                        break;
+                    case 0xb300: // arcto
+                        aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
+                        aSegments[nIndex].Count = sal_Int32(0);
+                        break;
+                    case 0xac00:
+                    case 0xaa00: // nofill
+                    case 0xab00: // nostroke
+                    case 0x6001: // close
+                        break;
+                    case 0x8000: // end
+                        aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
+                        aSegments[nIndex].Count = sal_Int32(0);
+                        break;
+                    default: // given number of lineto elements
+                        aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                        aSegments[nIndex].Count = nSeg;
+                        break;
                     }
                     nIndex++;
                 }
@@ -446,15 +448,15 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             aPropertyValue.Value <<= aSegments;
             aPathPropVec.push_back(aPropertyValue);
         }
-        else if ( i->first == "geoLeft" )
+        else if (i->first == "geoLeft")
             aViewBox.X = i->second.toInt32();
-        else if ( i->first == "geoTop" )
+        else if (i->first == "geoTop")
             aViewBox.Y = i->second.toInt32();
-        else if ( i->first == "geoRight" )
+        else if (i->first == "geoRight")
             aViewBox.Width = i->second.toInt32();
-        else if ( i->first == "geoBottom" )
+        else if (i->first == "geoBottom")
             aViewBox.Height = i->second.toInt32();
-        else if ( i->first == "dhgt" )
+        else if (i->first == "dhgt")
         {
             // dhgt is Word 2007, \shpz is Word 97-2003, the later has priority.
             if (!rShape.oZ)
@@ -481,11 +483,11 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         {
             switch (i->second.toInt32())
             {
-                case 7: // Shade using the fillAngle
-                    aFillModel.moType.set(oox::XML_gradient);
+            case 7: // Shade using the fillAngle
+                aFillModel.moType.set(oox::XML_gradient);
                 break;
-                default:
-                    SAL_INFO("writerfilter", "TODO handle fillType value '" << i->second << "'");
+            default:
+                SAL_INFO("writerfilter", "TODO handle fillType value '" << i->second << "'");
                 break;
             }
         }
@@ -507,22 +509,22 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         {
             switch (i->second.toInt32())
             {
-                case 1:
-                    rShape.nHoriOrientRelation = text::RelOrientation::PAGE_FRAME;
-                    break;
-                default:
-                    break;
+            case 1:
+                rShape.nHoriOrientRelation = text::RelOrientation::PAGE_FRAME;
+                break;
+            default:
+                break;
             }
         }
         else if (i->first == "posrelv")
         {
             switch (i->second.toInt32())
             {
-                case 1:
-                    rShape.nVertOrientRelation = text::RelOrientation::PAGE_FRAME;
-                    break;
-                default:
-                    break;
+            case 1:
+                rShape.nVertOrientRelation = text::RelOrientation::PAGE_FRAME;
+                break;
+            default:
+                break;
             }
         }
         else if (i->first == "groupLeft")
@@ -599,7 +601,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         }
         else
         {
-            static const OUString aBorders[] = {
+            static const OUString aBorders[] =
+            {
                 OUString("TopBorder"), OUString("LeftBorder"), OUString("BottomBorder"), OUString("RightBorder")
             };
             for (unsigned int i = 0; i < SAL_N_ELEMENTS(aBorders); ++i)
@@ -670,7 +673,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         sal_Int32 nTop = rShape.nTop;
 
         bool bInShapeGroup = oGroupLeft && oGroupTop && oGroupRight && oGroupBottom
-            && oRelLeft && oRelTop && oRelRight && oRelBottom;
+                             && oRelLeft && oRelTop && oRelRight && oRelBottom;
         if (bInShapeGroup)
         {
             // See lclGetAbsPoint() in the VML import: rShape is the group shape, oGroup is its coordinate system, oRel is the relative child shape.
@@ -678,10 +681,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             sal_Int32 nShapeHeight = rShape.nBottom - rShape.nTop;
             sal_Int32 nCoordSysWidth = *oGroupRight - *oGroupLeft;
             sal_Int32 nCoordSysHeight = *oGroupBottom - *oGroupTop;
-            double fWidthRatio = static_cast< double >( nShapeWidth ) / nCoordSysWidth;
-            double fHeightRatio = static_cast< double >( nShapeHeight ) / nCoordSysHeight;
-            nLeft = static_cast< sal_Int32 >( rShape.nLeft + fWidthRatio * (*oRelLeft - *oGroupLeft) );
-            nTop = static_cast< sal_Int32 >( rShape.nTop + fHeightRatio * (*oRelTop - *oGroupTop) );
+            double fWidthRatio = static_cast< double >(nShapeWidth) / nCoordSysWidth;
+            double fHeightRatio = static_cast< double >(nShapeHeight) / nCoordSysHeight;
+            nLeft = static_cast< sal_Int32 >(rShape.nLeft + fWidthRatio * (*oRelLeft - *oGroupLeft));
+            nTop = static_cast< sal_Int32 >(rShape.nTop + fHeightRatio * (*oRelTop - *oGroupTop));
         }
 
         if (m_bTextFrame)

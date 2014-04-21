@@ -14,43 +14,45 @@
 
 #include <rtfdocumentimpl.hxx>
 
-namespace writerfilter {
-    namespace rtftok {
-        /// Handles the import of drawings using RTF markup.
-        class RTFSdrImport
-        {
-            public:
-                RTFSdrImport(RTFDocumentImpl& rImport, uno::Reference<lang::XComponent> const& xDstDoc);
-                virtual ~RTFSdrImport();
+namespace writerfilter
+{
+namespace rtftok
+{
+/// Handles the import of drawings using RTF markup.
+class RTFSdrImport
+{
+public:
+    RTFSdrImport(RTFDocumentImpl& rImport, uno::Reference<lang::XComponent> const& xDstDoc);
+    virtual ~RTFSdrImport();
 
-                void resolve(RTFShape& rShape, bool bClose);
-                void close();
-                void append(const OUString& aKey, const OUString& aValue);
-                /// Append property on the current parent.
-                void appendGroupProperty(const OUString& aKey, const OUString& aValue);
-                void resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder, bool bOldStyle);
-                void resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nFLine);
-                /**
-                 * These are the default in Word, but not in Writer.
-                 *
-                 * @param bNew if the frame is new-style or old-style.
-                 */
-                std::vector<beans::PropertyValue> getTextFrameDefaults(bool bNew);
-                /// Push a new group shape to the parent stack.
-                void pushParent(uno::Reference<drawing::XShapes> xParent);
-                /// Pop the current group shape from the parent stack.
-                void popParent();
-            private:
-                void createShape(const OUString& aService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet);
-                void applyProperty(uno::Reference<drawing::XShape> xShape, const OUString& aKey, const OUString& aValue);
+    void resolve(RTFShape& rShape, bool bClose);
+    void close();
+    void append(const OUString& aKey, const OUString& aValue);
+    /// Append property on the current parent.
+    void appendGroupProperty(const OUString& aKey, const OUString& aValue);
+    void resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder, bool bOldStyle);
+    void resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nFLine);
+    /**
+     * These are the default in Word, but not in Writer.
+     *
+     * @param bNew if the frame is new-style or old-style.
+     */
+    std::vector<beans::PropertyValue> getTextFrameDefaults(bool bNew);
+    /// Push a new group shape to the parent stack.
+    void pushParent(uno::Reference<drawing::XShapes> xParent);
+    /// Pop the current group shape from the parent stack.
+    void popParent();
+private:
+    void createShape(const OUString& aService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet);
+    void applyProperty(uno::Reference<drawing::XShape> xShape, const OUString& aKey, const OUString& aValue);
 
-                RTFDocumentImpl& m_rImport;
-                std::stack< uno::Reference<drawing::XShapes> > m_aParents;
-                uno::Reference<drawing::XShape> m_xShape;
-                /// If m_xShape is imported as a Writer text frame (instead of a drawinglayer rectangle).
-                bool m_bTextFrame;
-        };
-    } // namespace rtftok
+    RTFDocumentImpl& m_rImport;
+    std::stack< uno::Reference<drawing::XShapes> > m_aParents;
+    uno::Reference<drawing::XShape> m_xShape;
+    /// If m_xShape is imported as a Writer text frame (instead of a drawinglayer rectangle).
+    bool m_bTextFrame;
+};
+} // namespace rtftok
 } // namespace writerfilter
 
 #endif // _RTFSDRIPORT_HXX_
