@@ -48,8 +48,13 @@ struct ScMyImpDetectiveOp
     ScDetOpType                 eOpType;
     sal_Int32                   nIndex;
 
-    inline                      ScMyImpDetectiveOp() : nIndex( -1 ) {}
-    bool                        operator<(const ScMyImpDetectiveOp& rDetOp) const;
+    ScMyImpDetectiveOp()
+        : eOpType(SCDETOP_ADDSUCC)
+        , nIndex(-1)
+    {
+    }
+
+    bool operator<(const ScMyImpDetectiveOp& rDetOp) const;
 };
 
 typedef ::std::list< ScMyImpDetectiveOp > ScMyImpDetectiveOpList;
