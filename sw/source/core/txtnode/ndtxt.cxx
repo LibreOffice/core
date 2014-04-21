@@ -272,12 +272,7 @@ sal_Int32 SwTxtNode::Len() const
     return m_Text.getLength();
 }
 
-/*---------------------------------------------------------------------------
- * lcl_ChangeFtnRef
- *  After a split node, it's necessary to actualize the ref-pointer of the
- *  ftnfrms.
- * --------------------------------------------------------------------------*/
-
+// After a split node, it's necessary to actualize the ref-pointer of the ftnfrms.
 static void lcl_ChangeFtnRef( SwTxtNode &rNode )
 {
     SwpHints *pSwpHints = rNode.GetpSwpHints();
@@ -1310,10 +1305,6 @@ SwTxtFld* SwTxtNode::GetFldTxtAttrAt(
     return pTxtFld;
 }
 
-/*************************************************************************
- *                          CopyHint()
- *************************************************************************/
-
 static SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const OUString& rName )
 {
     if( !rName.isEmpty() )
@@ -1456,15 +1447,11 @@ void lcl_CopyHint(
     }
 }
 
-/*************************************************************************
-|*  SwTxtNode::CopyAttr()
-|*  Beschreibung    kopiert Attribute an der Position nStart in pDest.
-|*  BP 7.6.93:      Es werden mit Absicht nur die Attribute _mit_ EndIdx
-|*                  kopiert! CopyAttr wird vornehmlich dann gerufen,
-|*                  wenn Attribute fuer einen Node mit leerem String
-|*                  gesetzt werden sollen.
-*************************************************************************/
-
+//  Beschreibung    kopiert Attribute an der Position nStart in pDest.
+//  BP 7.6.93:      Es werden mit Absicht nur die Attribute _mit_ EndIdx
+//                  kopiert! CopyAttr wird vornehmlich dann gerufen,
+//                  wenn Attribute fuer einen Node mit leerem String
+//                  gesetzt werden sollen.
 void SwTxtNode::CopyAttr( SwTxtNode *pDest, const sal_Int32 nTxtStartIdx,
                           const sal_Int32 nOldPos )
 {
@@ -1519,12 +1506,7 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const sal_Int32 nTxtStartIdx,
     }
 }
 
-/*************************************************************************
-|*  SwTxtNode::Copy()
-|*  Beschreibung        kopiert Zeichen und Attibute in pDest,
-|*                      wird angehaengt
-*************************************************************************/
-
+// kopiert Zeichen und Attibute in pDest, wird angehaengt
 // introduction of new optional parameter to control, if all attributes have to be copied.
 void SwTxtNode::CopyText( SwTxtNode *const pDest,
                       const SwIndex &rStart,
@@ -1918,14 +1900,6 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
     CHECK_SWPHINTS(this);
     return sInserted;
 }
-
-/*************************************************************************
-|*
-|*  SwTxtNode::Cut()
-|*
-|*  Beschreibung        text.doc
-|*
-*************************************************************************/
 
 void SwTxtNode::CutText( SwTxtNode * const pDest,
             const SwIndex & rStart, const sal_Int32 nLen )
@@ -2394,14 +2368,6 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
     CHECK_SWPHINTS(this);
 }
 
-/***********************************************************************
-#*  Class       :   SwTxtNode
-#*  Methode     :   GCAttr
-#*
-#*  Beschreibung
-#*                  text.doc
-#***********************************************************************/
-
 void SwTxtNode::GCAttr()
 {
     if ( !HasHints() )
@@ -2693,10 +2659,6 @@ SwCntntNode* SwTxtNode::AppendNode( const SwPosition & rPos )
         MakeFrms( *pNew );
     return pNew;
 }
-
-/*************************************************************************
- *                      SwTxtNode::GetTxtAttr
- *************************************************************************/
 
 SwTxtAttr * SwTxtNode::GetTxtAttrForCharAt(
     const sal_Int32 nIndex,
@@ -3096,10 +3058,7 @@ static void Replace0xFF(
     }
 }
 
-/*************************************************************************
- *                      SwTxtNode::GetExpandTxt
- * Expand fields
- *************************************************************************/
+// Expand fields
 // #i83479# - handling of new parameters
 OUString SwTxtNode::GetExpandTxt(  const sal_Int32 nIdx,
                                    const sal_Int32 nLen,
@@ -3400,10 +3359,6 @@ OUString SwTxtNode::GetRedlineTxt( sal_Int32 nIdx, sal_Int32 nLen,
         aTxt.insert(0, GetNumString());
     return aTxt.makeStringAndClear();
 }
-
-/*************************************************************************
- *                        SwTxtNode::ReplaceText
- *************************************************************************/
 
 void SwTxtNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
                              const OUString & rStr)

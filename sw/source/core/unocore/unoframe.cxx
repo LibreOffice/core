@@ -151,9 +151,6 @@ const sal_Char sGraphicObjectProtocol[] = "vnd.sun.star.GraphicObject:";
 //UUUU
 #define OWN_ATTR_FILLBMP_MODE   (OWN_ATTR_VALUE_START+45)
 
-/****************************************************************************
-    Rahmenbeschreibung
-****************************************************************************/
 class BaseFrameProperties_Impl
 {
     SwUnoCursorHelper::SwAnyMapHelper aAnyMap;
@@ -975,9 +972,6 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
     return bRet;
 }
 
-/****************************************************************************
-    Grafik-Descriptor
-****************************************************************************/
 class SwGraphicProperties_Impl : public BaseFrameProperties_Impl
 {
 public:
@@ -3071,9 +3065,6 @@ OUString SwXFrame::getShapeType(void) throw( uno::RuntimeException, std::excepti
     return OUString("FrameShape");
 }
 
-/******************************************************************
- *  SwXTextFrame
- ******************************************************************/
 SwXTextFrame::SwXTextFrame( SwDoc *_pDoc ) :
     SwXText(0, CURSOR_FRAME),
     SwXFrame(FLYCNTTYPE_FRM, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_FRAME), _pDoc )
@@ -3364,9 +3355,6 @@ sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& 
     return aRet;
 }
 
-/******************************************************************
- *  SwXTextGraphicObject
- ******************************************************************/
 SwXTextGraphicObject::SwXTextGraphicObject( SwDoc *pDoc ) :
     SwXFrame(FLYCNTTYPE_GRF, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_GRAPHIC), pDoc)
 {

@@ -54,8 +54,6 @@ using namespace css;
 using namespace css::uno;
 using namespace css::lang;
 
-// Globals ******************************************************************
-
 static sal_uInt16 aPageRg[] = {
     RES_PARATR_DROP, RES_PARATR_DROP,
     0
@@ -181,10 +179,7 @@ void SwDropCapsPict::InitPrinter( void )
         _InitPrinter();
 }
 
-/****************************************************************************
- Create Default-String from character-count (A, AB, ABC, ...)
-****************************************************************************/
-
+// Create Default-String from character-count (A, AB, ABC, ...)
 OUString GetDefaultString(sal_uInt16 nChars)
 {
     OUString aStr;
@@ -340,10 +335,6 @@ void SwDropCapsPict::UpdatePaintSettings( void )
 
     Invalidate();
 }
-
-/****************************************************************************
-Pict: Paint-Overload
-****************************************************************************/
 
 void  SwDropCapsPict::Paint(const Rectangle &/*rRect*/)
 {
@@ -588,19 +579,11 @@ int  SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
     return LEAVE_PAGE;
 }
 
-/****************************************************************************
-Page: Factory
-****************************************************************************/
-
 SfxTabPage*  SwDropCapsPage::Create(Window *pParent,
     const SfxItemSet &rSet)
 {
     return new SwDropCapsPage(pParent, rSet);
 }
-
-/****************************************************************************
-Page: FillItemSet-Overload
-****************************************************************************/
 
 bool  SwDropCapsPage::FillItemSet(SfxItemSet &rSet)
 {
@@ -608,10 +591,6 @@ bool  SwDropCapsPage::FillItemSet(SfxItemSet &rSet)
         FillSet(rSet);
     return bModified;
 }
-
-/****************************************************************************
-Page: Reset-Overload
-****************************************************************************/
 
 void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
 {
@@ -661,10 +640,6 @@ void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
     bModified = sal_False;
 }
 
-/****************************************************************************
-Page: CheckBox's Click-Handler
-****************************************************************************/
-
 IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl)
 {
     sal_Bool bChecked = m_pDropCapsBox->IsChecked();
@@ -695,10 +670,6 @@ IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl)
     return 0;
 }
 
-/****************************************************************************
-Page: CheckBox's Click-Handler
-****************************************************************************/
-
 IMPL_LINK_NOARG(SwDropCapsPage, WholeWordHdl)
 {
     m_pDropCapsField->Enable( !m_pWholeWordCB->IsChecked() );
@@ -710,10 +681,6 @@ IMPL_LINK_NOARG(SwDropCapsPage, WholeWordHdl)
 
     return 0;
 }
-
-/****************************************************************************
-Page: SpinFields' Modify-Handler
-****************************************************************************/
 
 IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
 {
@@ -769,10 +736,6 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
 
     return 0;
 }
-
-/****************************************************************************
-Page: Template-Box' Select-Handler.
-*****************************************************************************/
 
 IMPL_LINK_NOARG_INLINE_START(SwDropCapsPage, SelectHdl)
 {

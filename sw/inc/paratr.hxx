@@ -188,10 +188,7 @@ inline SwParaConnectBorderItem& SwParaConnectBorderItem::operator=(
     return *this;
 }
 
-/******************************************************************************
- *  Implementation of paragraph-attributes methods of SwAttrSet
- ******************************************************************************/
-
+//  Implementation of paragraph-attributes methods of SwAttrSet
 inline const SvxLineSpacingItem &SwAttrSet::GetLineSpacing(sal_Bool bInP) const
     {   return (const SvxLineSpacingItem&)Get( RES_PARATR_LINESPACING,bInP); }
 inline const SvxAdjustItem &SwAttrSet::GetAdjust(sal_Bool bInP) const
@@ -225,10 +222,7 @@ inline const SvxParaGridItem &SwAttrSet::GetParaGrid(sal_Bool bInP) const
 inline const SwParaConnectBorderItem &SwAttrSet::GetParaConnectBorder(sal_Bool bInP) const
     {   return (const SwParaConnectBorderItem&)Get( RES_PARATR_CONNECT_BORDER, bInP ); }
 
-/******************************************************************************
- *  Implementation of paragraph-attributes methods of SwFmt
- ******************************************************************************/
-
+// Implementation of paragraph-attributes methods of SwFmt
 inline const SvxLineSpacingItem &SwFmt::GetLineSpacing(sal_Bool bInP) const
     {   return aSet.GetLineSpacing(bInP); }
 inline const SvxAdjustItem &SwFmt::GetAdjust(sal_Bool bInP) const

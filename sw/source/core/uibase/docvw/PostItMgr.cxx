@@ -979,7 +979,6 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
     //    otherwise the next one down
     //  - first all notes are resized
     //  - then the real layout starts
-    /*************************************************************/
 
     //rBorder is the page rect
     const Rectangle rBorder         = mpEditWin->LogicToPixel( aBorder);

@@ -235,9 +235,6 @@ public:
     }
 };
 
-/****************************************************************************
-    class SwFmDrawPage
-****************************************************************************/
 SwFmDrawPage::SwFmDrawPage( SdrPage* pPage ) :
     SvxFmDrawPage( pPage ), pPageView(0)
 {
@@ -361,9 +358,6 @@ uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj )
     return xRet;
 }
 
-/****************************************************************************
-    class SwXShapesEnumeration
-****************************************************************************/
 namespace
 {
     class SwXShapesEnumeration
@@ -432,9 +426,6 @@ uno::Sequence< OUString > SwXShapesEnumeration::getSupportedServiceNames(void) t
     return ::comphelper::makeSequence(OUString("com.sun.star.container.XEnumeration"));
 }
 
-/****************************************************************************
-    class SwXDrawPage
-****************************************************************************/
 uno::Reference< container::XEnumeration > SwXDrawPage::createEnumeration(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;

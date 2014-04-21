@@ -1772,7 +1772,7 @@ void SwAccessibleTable::AddSelectionCell(const SwAccessibleContext* pAccCell ,sa
     }
 }
 
-//=====  XAccessibleTableSelection  ============================================
+// XAccessibleTableSelection
 sal_Bool SAL_CALL SwAccessibleTable::selectRow( sal_Int32 row )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {

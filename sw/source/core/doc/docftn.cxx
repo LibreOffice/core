@@ -33,8 +33,6 @@
 #include <poolfmt.hxx>
 #include <ftninfo.hxx>
 
-/*********************** SwEndNoteInfo ***************************/
-
 SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 {
     if( rInfo.GetFtnTxtColl() )
@@ -209,8 +207,6 @@ void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         CheckRegistration( pOld, pNew );
 }
 
-/*********************** SwFtnInfo ***************************/
-
 SwFtnInfo& SwFtnInfo::operator=(const SwFtnInfo& rInfo)
 {
     SwEndNoteInfo::operator=(rInfo);
@@ -248,8 +244,6 @@ SwFtnInfo::SwFtnInfo(SwTxtFmtColl *pFmt) :
     aFmt.SetNumberingType(SVX_NUM_ARABIC);
     m_bEndNote = false;
 }
-
-/*********************** SwDoc ***************************/
 
 void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
 {

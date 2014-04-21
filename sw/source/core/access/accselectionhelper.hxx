@@ -40,7 +40,7 @@ public:
     SwAccessibleSelectionHelper( SwAccessibleContext& rContext );
     ~SwAccessibleSelectionHelper();
 
-    //=====  XAccessibleSelection  ============================================
+    // XAccessibleSelection
 
     void selectAccessibleChild(
         sal_Int32 nChildIndex )

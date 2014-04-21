@@ -584,10 +584,6 @@ public:
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) SAL_OVERRIDE;
 };
 
-/*************************************************************************
- *                          class SwTxtFrmLocker
- *************************************************************************/
-
 class SwTxtFrmLocker
 {
 private:
@@ -598,10 +594,6 @@ public:
     { if( pFrm ) pFrm->Lock(); }
     inline ~SwTxtFrmLocker() { if( pFrm ) pFrm->Unlock(); }
 };
-
-/*************************************************************************
- *                      Inline-Implementierung
- *************************************************************************/
 
 inline const SwParaPortion *SwTxtFrm::GetPara() const
 {

@@ -109,7 +109,7 @@ public:
 
     // XAccessibleValue
 
-    //=====  XAccessibleExtendedAttributes ================================================
+    // XAccessibleExtendedAttributes
     ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
 private:
@@ -128,11 +128,11 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL getMinimumValue(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    //=====  XAccessibleComponent  ============================================
+    // XAccessibleComponent
     sal_Int32 SAL_CALL getBackground()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  XAccessibleSelection  ============================================
+    // XAccessibleSelection
     virtual void SAL_CALL selectAccessibleChild(
         sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,

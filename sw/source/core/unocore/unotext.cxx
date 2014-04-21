@@ -71,9 +71,6 @@ using namespace ::com::sun::star;
 
 const sal_Char cInvalidObject[] = "this object is invalid";
 
-/******************************************************************
- * SwXText
- ******************************************************************/
 class SwXText::Impl
 {
 
@@ -1441,10 +1438,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     return xRet;
 }
 
-/*-------------------------------------------------------------------------
-    Append text portions at the end of the last paragraph of the text
-    interface. Support of import filters.
-  -----------------------------------------------------------------------*/
+// Append text portions at the end of the last paragraph of the text interface.
+// Support of import filters.
 uno::Reference< text::XTextRange > SAL_CALL
 SwXText::appendTextPortion(
         const OUString& rText,
@@ -1458,10 +1453,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     return insertTextPortion(rText, rCharacterAndParagraphProperties, xInsertPosition);
 }
 
-/*-------------------------------------------------------------------------
-    enable inserting/appending text contents like graphic objects, shapes and so on
-    to support import filters
-  -----------------------------------------------------------------------*/
+// enable inserting/appending text contents like graphic objects, shapes and so on to
+// support import filters
 uno::Reference< text::XTextRange > SAL_CALL
 SwXText::insertTextContentWithProperties(
     const uno::Reference< text::XTextContent >& xTextContent,
@@ -1789,9 +1782,7 @@ SwXText::convertToTextFrame(
     return xRet;
 }
 
-/*-------------------------------------------------------------------------
-    Move previously imported paragraphs into a new text table.
-  -----------------------------------------------------------------------*/
+// Move previously imported paragraphs into a new text table.
 struct VerticallyMergedCell
 {
     std::vector<uno::Reference< beans::XPropertySet > > aCells;
@@ -2355,9 +2346,6 @@ throw (uno::RuntimeException, std::exception)
     m_pImpl->m_pDoc->CopyRange( *pCursor->GetPaM(), rPos, false );
 }
 
-/******************************************************************
- * SwXBodyText
- ******************************************************************/
 SwXBodyText::SwXBodyText(SwDoc *const pDoc)
     : SwXText(pDoc, CURSOR_BODY)
 {
@@ -2582,9 +2570,6 @@ SwXBodyText::hasElements() throw (uno::RuntimeException, std::exception)
     return sal_True;
 }
 
-/******************************************************************
- *  SwXHeadFootText
- ******************************************************************/
 class SwXHeadFootText::Impl
     : public SwClient
 {

@@ -647,16 +647,12 @@ sal_Int32 clipIndexBounds(const OUString &rStr, sal_Int32 nPos)
     return nPos;
 }
 
-/*************************************************************************
- *                SwTxtNode::GetCurWord()
- *
- * Aktuelles Wort zurueckliefern:
- * Wir suchen immer von links nach rechts, es wird also das Wort
- * vor nPos gesucht. Es sei denn, wir befinden uns am Anfang des
- * Absatzes, dann wird das erste Wort zurueckgeliefert.
- * Wenn dieses erste Wort nur aus Whitespaces besteht, returnen wir
- * einen leeren String.
- *************************************************************************/
+// Aktuelles Wort zurueckliefern:
+// Wir suchen immer von links nach rechts, es wird also das Wort
+// vor nPos gesucht. Es sei denn, wir befinden uns am Anfang des
+// Absatzes, dann wird das erste Wort zurueckgeliefert.
+// Wenn dieses erste Wort nur aus Whitespaces besteht, returnen wir
+// einen leeren String.
 OUString SwTxtNode::GetCurWord( sal_Int32 nPos ) const
 {
     assert(nPos <= m_Text.getLength()); // invalid index

@@ -355,12 +355,7 @@ interface BaseTextFrame
                 DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
         ]
 
-    /*****************************************************
-
- Abfragefunktionen fuer ImageMaps
-
- ****************************************************/
-
+// Abfragefunktionen fuer ImageMaps
 // Slots ohne Export
 
     FN_INSERT_FRAME

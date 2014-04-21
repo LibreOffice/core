@@ -52,10 +52,6 @@ namespace
     }
 }
 
-/******************************************************************
- * SwXBookmark
- ******************************************************************/
-
 class SwXBookmark::Impl
     : public SwClient
 {
@@ -493,10 +489,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 {
     OSL_FAIL("SwXBookmark::removeVetoableChangeListener(): not implemented");
 }
-
-/******************************************************************
- * SwXFieldmark
- ******************************************************************/
 
 SwXFieldmark::SwXFieldmark(bool _isReplacementObject, ::sw::mark::IMark* pBkm, SwDoc* pDc)
     : SwXFieldmark_Base(pBkm, pDc)

@@ -21,12 +21,7 @@
 
 #include "drawbase.hxx"
 
-/*************************************************************************
-|*
-|* draw rectangle
-|*
-\************************************************************************/
-
+// draw rectangle
 class ConstArc : public SwDrawBase
 {
     Point aStartPnt;

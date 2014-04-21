@@ -55,12 +55,6 @@ using namespace ::com::sun::star;
 TYPEINIT1_AUTOFACTORY(SwFmtINetFmt, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SwFmtAutoFmt, SfxPoolItem);
 
-/*************************************************************************
-|*
-|*    class SwFmtCharFmt
-|*
-*************************************************************************/
-
 SwFmtCharFmt::SwFmtCharFmt( SwCharFmt *pFmt )
     : SfxPoolItem( RES_TXTATR_CHARFMT ),
     SwClient(pFmt),
@@ -114,12 +108,6 @@ bool SwFmtCharFmt::PutValue( const uno::Any& , sal_uInt8   )
     return false;
 }
 
-/*************************************************************************
-|*
-|*    class SwFmtAutoFmt
-|*
-*************************************************************************/
-
 SwFmtAutoFmt::SwFmtAutoFmt( sal_uInt16 nInitWhich )
     : SfxPoolItem( nInitWhich )
 {
@@ -157,12 +145,6 @@ bool SwFmtAutoFmt::PutValue( const uno::Any& , sal_uInt8 )
     //the format is not renameable via API
     return false;
 }
-
-/*************************************************************************
-|*
-|*    class SwFmtINetFmt
-|*
-*************************************************************************/
 
 SwFmtINetFmt::SwFmtINetFmt()
     : SfxPoolItem( RES_TXTATR_INETFMT )
@@ -401,10 +383,6 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
     return bRet;
 }
 
-/*************************************************************************
-|*    class SwFmtRuby
-*************************************************************************/
-
 SwFmtRuby::SwFmtRuby( const OUString& rRubyTxt )
     : SfxPoolItem( RES_TXTATR_CJK_RUBY ),
     sRubyTxt( rRubyTxt ),
@@ -531,10 +509,6 @@ bool SwFmtRuby::PutValue( const uno::Any& rVal,
     return bRet;
 }
 
-/*************************************************************************
- class SwFmtMeta
- ************************************************************************/
-
 SwFmtMeta * SwFmtMeta::CreatePoolDefault(const sal_uInt16 i_nWhich)
 {
     return new SwFmtMeta(i_nWhich);
@@ -647,10 +621,6 @@ void SwFmtMeta::DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
 
 namespace sw {
 
-/*************************************************************************
- class sw::Meta
- ************************************************************************/
-
 Meta::Meta(SwFmtMeta * const i_pFmt)
     : ::sfx2::Metadatable()
     , SwModify()
@@ -746,10 +716,6 @@ Meta::MakeUnoObject()
     return SwXMeta::CreateXMeta(*this);
 }
 
-/*************************************************************************
- class sw::MetaField
- ************************************************************************/
-
 MetaField::MetaField(SwFmtMeta * const i_pFmt,
             const sal_uInt32 nNumberFormat, const bool bIsFixedLanguage)
     : Meta(i_pFmt)
@@ -803,10 +769,6 @@ void MetaField::SetNumberFormat(sal_uInt32 nNumberFormat)
     // GetNumberFormat checks if the text actually conforms
     m_nNumberFormat = nNumberFormat;
 }
-
-/*************************************************************************
- class sw::MetaFieldManager
- ************************************************************************/
 
 MetaFieldManager::MetaFieldManager()
 {

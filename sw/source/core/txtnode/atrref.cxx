@@ -22,12 +22,6 @@
 #include <fmtrfmrk.hxx>
 #include <swfont.hxx>
 
-/****************************************************************************
- *
- *  class SwFmtRefMark
- *
- ****************************************************************************/
-
 SwFmtRefMark::~SwFmtRefMark( )
 {
 }
@@ -56,10 +50,6 @@ SfxPoolItem* SwFmtRefMark::Clone( SfxItemPool* ) const
 {
     return new SwFmtRefMark( *this );
 }
-
-/*************************************************************************
- *                      class SwTxtRefMark
- *************************************************************************/
 
 // Attribut fuer Inhalts-/Positions-Referenzen im Text
 

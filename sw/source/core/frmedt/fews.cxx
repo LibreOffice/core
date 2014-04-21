@@ -53,11 +53,6 @@ using namespace com::sun::star;
 
 TYPEINIT1(SwFEShell,SwEditShell)
 
-/***********************************************************************
-#*  Class      :  SwFEShell
-#*  Method     :  EndAllActionAndCall()
-#***********************************************************************/
-
 void SwFEShell::EndAllActionAndCall()
 {
     SwViewShell *pTmp = this;
@@ -72,12 +67,7 @@ void SwFEShell::EndAllActionAndCall()
     } while( this != ( pTmp = (SwViewShell*)pTmp->GetNext() ));
 }
 
-/***********************************************************************
-#*  Class       :  SwFEShell
-#*  Method      :  GetCntntPos
-#*  Description :  Determine the Cntnt's nearest to the point
-#***********************************************************************/
-
+// Determine the Cntnt's nearest to the point
 Point SwFEShell::GetCntntPos( const Point& rPoint, sal_Bool bNext ) const
 {
     SET_CURR_SHELL( (SwViewShell*)this );
@@ -212,25 +202,11 @@ sal_Bool SwFEShell::GetPageNumber( long nYPos, sal_Bool bAtCrsrPos, sal_uInt16& 
     return 0 != pPage;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::IsDirectlyInSection()
-|*
-|*  Hack for OS:
-|*
-*************************************************************************/
-
 bool SwFEShell::IsDirectlyInSection() const
 {
     SwFrm* pFrm = GetCurrFrm( sal_False );
     return pFrm && pFrm->GetUpper() && pFrm->GetUpper()->IsSctFrm();
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::GetFrmType()
-|*
-*************************************************************************/
 
 sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const
 {
@@ -299,12 +275,6 @@ sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const
     return nReturn;
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::ShLooseFcs(), ShGetFcs()
-|*
-*************************************************************************/
-
 void SwFEShell::ShGetFcs( sal_Bool bUpdate )
 {
     ::SetShell( this );
@@ -329,13 +299,6 @@ void SwFEShell::ShLooseFcs()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFEShell::GetPhyPageNum()
-|*  SwFEShell::GetVirtPageNum()
-|*
-*************************************************************************/
-
 sal_uInt16 SwFEShell::GetPhyPageNum()
 {
     SwFrm *pFrm = GetCurrFrm();
@@ -351,15 +314,6 @@ sal_uInt16 SwFEShell::GetVirtPageNum( const sal_Bool bCalcFrm )
         return pFrm->GetVirtPageNum();
     return 0;
 }
-
-/*************************************************************************
-|*
-|*  void lcl_SetAPageOffset()
-|*  void SwFEShell::SetNewPageOffset()
-|*  void SwFEShell::SetPageOffset()
-|*  sal_uInt16 SwFEShell::GetPageOffset() const
-|*
-*************************************************************************/
 
 static void lcl_SetAPageOffset( sal_uInt16 nOffset, SwPageFrm* pPage, SwFEShell* pThis )
 {
@@ -429,12 +383,6 @@ sal_uInt16 SwFEShell::GetPageOffset() const
     }
     return 0;
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::InsertLabel()
-|*
-*************************************************************************/
 
 void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rTxt, const OUString& rSeparator,
                              const OUString& rNumberSeparator,
@@ -524,11 +472,6 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rTxt, cons
     }
 }
 
-/***********************************************************************
-#*  Class       :  SwFEShell
-#*  Method      :  Sort
-#***********************************************************************/
-
 sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
 {
     if( !HasSelection() )
@@ -598,12 +541,6 @@ sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
     EndAllAction();
     return bRet;
 }
-
-/*************************************************************************
-|*
-|*  SwFEShell::GetCurColNum(), _GetColNum()
-|*
-|*************************************************************************/
 
 sal_uInt16 SwFEShell::_GetCurColNum( const SwFrm *pFrm,
                                 SwGetCurColNumPara* pPara ) const

@@ -314,9 +314,6 @@ void SwWW8ImplReader::DeleteFormImpl()
     delete pFormImpl, pFormImpl = 0;
 }
 
-//          WW8ListManager          oeffentliche Methoden stehen ganz am Ende
-//------------------------- ============ --------------- ============ --------
-
 // Hilfs-Deklarationen
 
 // Style Id's for each level
@@ -2070,7 +2067,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
     }
 }
 
-// ------------------------- Reading Controls ------------------------
+// Reading Controls
 
 bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
     WW8_CP nStart, SwWw8ControlType nWhich )

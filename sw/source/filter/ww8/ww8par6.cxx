@@ -130,12 +130,9 @@ inline sal_uInt32 MSRoundTweak(sal_uInt32 x)
     return x;
 }
 
-/***************************************************************************
-#  Seiten - Attribute, die nicht ueber die Attribut-Verwaltung, sondern
-#   ueber ...->HasSprm abgearbeitet werden
-#   ( ausser OLST, dass weiterhin ein normales Attribut ist )
-#**************************************************************************/
-
+// Seiten - Attribute, die nicht ueber die Attribut-Verwaltung, sondern
+//  ueber ...->HasSprm abgearbeitet werden
+//  ( ausser OLST, dass weiterhin ein normales Attribut ist )
 static short ReadSprm( const WW8PLCFx_SEPX* pSep, sal_uInt16 nId, short nDefaultVal )
 {
     const sal_uInt8* pS = pSep->HasSprm( nId );          // sprm da ?
@@ -2549,10 +2546,6 @@ bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
     return aF == *pWFlyPara;
 }
 
-/***************************************************************************
-#       Attribut - Verwaltung
-#**************************************************************************/
-
 void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
                                const bool bFirstLineOfStSet,
                                const bool bLeftIndentSet )
@@ -2629,17 +2622,8 @@ const SfxPoolItem* SwWW8ImplReader::GetFmtAttr( sal_uInt16 nWhich )
     return pRet;
 }
 
-/***************************************************************************
-#       eigentliche Attribute
-#
-# Die Methoden erhalten die Token-Id und die Laenge der noch folgenden
-# Parameter gemaess Tabelle in WWScan.cxx als Parameter
-#**************************************************************************/
-
-/***************************************************************************
-#  Spezial WW - Attribute
-#**************************************************************************/
-
+// Die Methoden erhalten die Token-Id und die Laenge der noch folgenden
+// Parameter gemaess Tabelle in WWScan.cxx als Parameter
 void SwWW8ImplReader::Read_Special(sal_uInt16, const sal_uInt8* pData, short nLen)
 {
     if( nLen < 0 )
@@ -2749,10 +2733,6 @@ SwWW8StyInf *SwWW8ImplReader::GetStyle(sal_uInt16 nColl) const
 {
     return const_cast<SwWW8StyInf *>(nColl < vColl.size() ? &vColl[nColl] : 0);
 }
-
-/***************************************************************************
-#  Zeichen - Attribute
-#**************************************************************************/
 
 // Read_BoldUsw fuer Italic, Bold, Kapitaelchen, Versalien, durchgestrichen,
 // Contour und Shadow
@@ -3831,10 +3811,6 @@ void SwWW8ImplReader::Read_CharHighlight(sal_uInt16, const sal_uInt8* pData, sho
         NewAttr( SvxBrushItem( aCol , RES_CHRATR_BACKGROUND ));
     }
 }
-
-/***************************************************************************
-#  Absatz - Attribute
-#**************************************************************************/
 
 void SwWW8ImplReader::Read_NoLineNumb(sal_uInt16 , const sal_uInt8* pData, short nLen)
 {
@@ -4944,16 +4920,11 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
     return bRet;
 }
 
-/***************************************************************************
-#  Seiten - Attribute werden nicht mehr als Attribute gehandhabt
-#   ( ausser OLST )
-#**************************************************************************/
-
+// Seiten - Attribute werden nicht mehr als Attribute gehandhabt
+//  ( ausser OLST )
 long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
 {
-    /*************************************************************************
-    #       Arrays zum Lesen der erweiterten ( selbstdefinierten ) SPRMs
-    #*************************************************************************/
+    // Arrays zum Lesen der erweiterten ( selbstdefinierten ) SPRMs
     typedef long (SwWW8ImplReader:: *FNReadRecordExt)(WW8PLCFManResult*);
 
     static const FNReadRecordExt aWwSprmTab[] =
@@ -4997,9 +4968,7 @@ void SwWW8ImplReader::EndExtSprm(sal_uInt16 nSprmId)
         (this->*aWwSprmTab[nIdx])();
 }
 
-/***************************************************************************
-#       Arrays zum Lesen der SPRMs
-#**************************************************************************/
+// Arrays zum Lesen der SPRMs
 
 // Funktion zum Einlesen von Sprms. Par1: SprmId
 typedef void (SwWW8ImplReader:: *FNReadRecord)( sal_uInt16, const sal_uInt8*, short );

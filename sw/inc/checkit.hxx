@@ -24,12 +24,7 @@
 
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 
-/*************************************************************************
- *                      class SwCheckIt
- *
- * Wrapper for the XInputSequenceChecker
- *************************************************************************/
-
+// Wrapper for the XInputSequenceChecker
 class SwCheckIt
 {
 public:

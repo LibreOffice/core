@@ -54,9 +54,7 @@ namespace sfx2
     class FileDialogHelper;
 }
 
-/*************************************************************************
-    dialog "edit regions"
-*************************************************************************/
+// dialog "edit regions"
 class SectRepr;
 typedef SectRepr* SectReprPtr;
 typedef boost::ptr_set<SectRepr> SectReprArr;
@@ -138,9 +136,7 @@ public:
 
 };
 
-/*************************************************************************
-    dialog "insert region"
-*************************************************************************/
+// dialog "insert region"
 class SwInsertSectionTabPage : public SfxTabPage
 {
     ComboBox*       m_pCurName;

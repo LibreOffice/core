@@ -48,7 +48,7 @@ SwAccessibleEmbeddedObject::~SwAccessibleEmbeddedObject()
 {
 }
 
-//=====  XInterface  ==========================================================
+// XInterface
 com::sun::star::uno::Any SAL_CALL
     SwAccessibleEmbeddedObject::queryInterface (const com::sun::star::uno::Type & rType)
     throw (::com::sun::star::uno::RuntimeException, std::exception)

@@ -29,10 +29,6 @@
 class SwViewShell;
 class SfxPoolItem;
 
-/*************************************************************************
- *                      class SwFontCache
- *************************************************************************/
-
 class SwFontCache : public SwCache
 {
 public:
@@ -47,10 +43,6 @@ public:
 
 // AttributSet/Font-Cache, globale Variable, in FontCache.Cxx angelegt
 extern SwFontCache *pSwFontCache;
-
-/*************************************************************************
- *                      class SwFontObj
- *************************************************************************/
 
 class SwFontObj : public SwCacheObj
 {
@@ -71,10 +63,6 @@ public:
     inline const SwFont *GetFont() const  { return &aSwFont; }
     inline const SfxPoolItem** GetDefault() { return pDefaultArray; }
 };
-
-/*************************************************************************
- *                      class SwFontAccess
- *************************************************************************/
 
 class SwFontAccess : public SwCacheAccess
 {

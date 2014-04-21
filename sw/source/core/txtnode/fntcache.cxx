@@ -83,12 +83,6 @@ sal_uInt16 GetDefaultFontHeight( SwDrawTextInfo &rInf )
     return (sal_uInt16)aDefaultFontItem.GetHeight();
 }
 
-/*************************************************************************
-|*
-|*  SwFntCache::Flush()
-|*
-|*************************************************************************/
-
 void SwFntCache::Flush( )
 {
     if ( pLastFont )
@@ -98,12 +92,6 @@ void SwFntCache::Flush( )
     }
     SwCache::Flush( );
 }
-
-/*************************************************************************
-|*
-|*  SwFntObj::SwFntObj(), ~SwFntObj()
-|*
-|*************************************************************************/
 
 SwFntObj::SwFntObj(const SwSubFont &rFont, const void *pOwn, SwViewShell *pSh)
     : SwCacheObj((void*)pOwn)
@@ -159,10 +147,7 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
     }
 }
 
-/*************************************************************************
- *
- *  bool lcl_IsFontAdjustNecessary( rOutDev, rRefDev )
- *
+/*
  *  returns whether we have to adjust the output font to resemble
  *  the formatting font
  *
@@ -171,9 +156,7 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
  *  1. RefDef == OutDev (text formatting, online layout...)
  *  2. PDF export from online layout
  *  3. Prospect/PagePreview pringing
- *
- *************************************************************************/
-
+ */
 static bool lcl_IsFontAdjustNecessary( const OutputDevice& rOutDev,
                                 const OutputDevice& rRefDev )
 {
@@ -209,12 +192,8 @@ struct CalcLinePosData
     }
 };
 
-/** Function: lcl_calcLinePos
-
-   Computes the start and end position of an underline. This function is called
-   from the DrawText-method (for underlining misspelled words or smarttag terms).
-*/
-
+// Computes the start and end position of an underline. This function is called
+// from the DrawText-method (for underlining misspelled words or smarttag terms).
 static void lcl_calcLinePos( const CalcLinePosData &rData,
     Point &rStart, Point &rEnd, sal_Int32 nStart, sal_Int32 nWrLen )
 {
@@ -275,14 +254,8 @@ static void lcl_calcLinePos( const CalcLinePosData &rData,
    }
 }
 
-/*************************************************************************
- *
- *  sal_uInt16 SwFntObj::GetFontAscent( const OutputDevice& rOut )
- *
- * Returns the Ascent of the Font on the given output device;
- * it may be necessary to create the screen font first.
- *************************************************************************/
-
+// Returns the Ascent of the Font on the given output device;
+// it may be necessary to create the screen font first.
 sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& rOut )
 {
     sal_uInt16 nRet = 0;
@@ -318,14 +291,8 @@ sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& 
     return nRet;
 }
 
-/*************************************************************************
- *
- *  sal_uInt16 SwFntObj::GetFontHeight( const OutputDevice* pOut )
- *
- * Returns the height of the Font on the given output device;
- * it may be necessary to create the screen font first.
- *************************************************************************/
-
+// Returns the height of the Font on the given output device;
+// it may be necessary to create the screen font first.
 sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& rOut )
 {
     sal_uInt16 nRet = 0;
@@ -417,14 +384,7 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
     return nRet;
 }
 
-/*************************************************************************
- *
- *  SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
- *
- *  pOut is the output device, not the reference device
- *
- *************************************************************************/
-
+//  pOut is the output device, not the reference device
 void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
 {
     if ( pScrFont )
@@ -594,15 +554,8 @@ void SwFntObj::GuessLeading( const SwViewShell&
         nGuessedLeading = 0;
 }
 
-/*************************************************************************
- *
- *  void SwFntObj::SetDeviceFont( const OutputDevice *pOut ),
- *
- * Set the font at the given output device; for screens it may be
- * necessary to do some adjustment first.
- *
- *************************************************************************/
-
+// Set the font at the given output device; for screens it may be
+// necessary to do some adjustment first.
 void SwFntObj::SetDevFont( const SwViewShell *pSh, OutputDevice& rOut )
 {
     const OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
@@ -629,17 +582,12 @@ void SwFntObj::SetDevFont( const SwViewShell *pSh, OutputDevice& rOut )
 
 #define WRONG_SHOW_MIN 5
 
-/*************************************************************************
- *
- * void SwFntObj::DrawText( ... )
- *
+/*
  * Output text:
  *      on screen              => DrawTextArray
  *      on printer, !Kerning   => DrawText
  *      on printer + Kerning   => DrawStretchText
- *
- *************************************************************************/
-
+ */
 static sal_uInt8 lcl_WhichPunctuation( sal_Unicode cChar )
 {
     if ( ( cChar < 0x3001 || cChar > 0x3002 ) &&
@@ -2220,12 +2168,6 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     delete[] pKernArray;
     return nCnt;
 }
-
-/*************************************************************************
-|*
-|*  SwFntAccess::SwFntAccess()
-|*
-|*************************************************************************/
 
 SwFntAccess::SwFntAccess( const void* &rMagic,
                 sal_uInt16 &rIndex, const void *pOwn, SwViewShell *pSh,

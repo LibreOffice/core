@@ -66,9 +66,7 @@ SvStatistics g_SvStat;
 
 using namespace ::com::sun::star;
 
-/************************************************************************
- * Hintergrundbrush setzen, z.B. bei Zeichenvorlagen
- ***********************************************************************/
+// Hintergrundbrush setzen, z.B. bei Zeichenvorlagen
 void SwFont::SetBackColor( Color* pNewColor )
 {
     delete pBackColor;
@@ -439,7 +437,7 @@ void SwFont::SetVertical( sal_uInt16 nDir, const sal_Bool bVertFormat )
     }
 }
 
-/*************************************************************************
+/*
  Escapement:
     frEsc:  Fraction, Grad des Escapements
     Esc = resultierendes Escapement
@@ -464,8 +462,7 @@ void SwFont::SetVertical( sal_uInt16 nDir, const sal_Bool bVertFormat )
         Ax = A1;
         Hx = A1 + Esc + (H2 - A2);
         Bx = A1 + Esc;
-
-*************************************************************************/
+*/
 
 // nEsc ist der Prozentwert
 sal_uInt16 SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent ) const
@@ -705,8 +702,6 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
     bPaintWrong = sal_False;
     OSL_ENSURE( aSub[SW_LATIN].IsTransparent(), "SwFont: Transparent revolution" );
 }
-
-// SwFont
 
 SwFont::SwFont( const SwFont &rFont )
 {
@@ -1018,13 +1013,10 @@ void SwFont::ChgPhysFnt( SwViewShell *pSh, OutputDevice& rOut )
         rOut.SetOverlineColor( aOverColor );
 }
 
-/*************************************************************************
- *                      SwFont::CalcEscHeight()
- *         Height = MaxAscent + MaxDescent
- *      MaxAscent = Max (T1_ascent, T2_ascent + (Esc * T1_height) );
- *     MaxDescent = Max (T1_height-T1_ascent,
- *                       T2_height-T2_ascent - (Esc * T1_height)
- *************************************************************************/
+//         Height = MaxAscent + MaxDescent
+//      MaxAscent = Max (T1_ascent, T2_ascent + (Esc * T1_height) );
+//     MaxDescent = Max (T1_height-T1_ascent,
+//                       T2_height-T2_ascent - (Esc * T1_height)
 sal_uInt16 SwSubFont::CalcEscHeight( const sal_uInt16 nOldHeight,
                               const sal_uInt16 nOldAscent  ) const
 {

@@ -1152,7 +1152,7 @@ GlossarySetActGroup SwAbstractDialogFactory_Impl::SetGlossaryActGroupFunc()
     return SwGlossaryDlg::SetActGroup;
 }
 
-//------------------ Factories for TabPages
+// Factories for TabPages
 CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId )
 {
     CreateTabPage pRet = 0;

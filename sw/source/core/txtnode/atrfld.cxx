@@ -40,12 +40,6 @@
 TYPEINIT3( SwFmtFld, SfxPoolItem, SwClient,SfxBroadcaster)
 TYPEINIT1(SwFmtFldHint, SfxHint);
 
-/****************************************************************************
- *
- *  class SwFmtFld
- *
- ****************************************************************************/
-
 // constructor for default item in attribute-pool
 SwFmtFld::SwFmtFld( sal_uInt16 nWhich )
     : SfxPoolItem( nWhich )

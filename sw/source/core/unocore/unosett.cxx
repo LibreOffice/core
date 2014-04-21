@@ -280,9 +280,6 @@ const unsigned short aUnoToSvxAdjust[] =
     USHRT_MAX
 };
 
-/******************************************************************
- * SwXFootnoteProperties
- ******************************************************************/
 OUString SwXFootnoteProperties::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return OUString("SwXFootnoteProperties");
@@ -590,9 +587,6 @@ void SwXFootnoteProperties::removeVetoableChangeListener(
     OSL_FAIL("not implemented");
 }
 
-/******************************************************************
- * SwXEndnoteProperties
- ******************************************************************/
 OUString SwXEndnoteProperties::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return OUString("SwXEndnoteProperties");
@@ -819,9 +813,6 @@ void SwXEndnoteProperties::removeVetoableChangeListener(const OUString& /*Proper
     OSL_FAIL("not implemented");
 }
 
-/******************************************************************
- * SwXLineNumberingProperties
- ******************************************************************/
 OUString SwXLineNumberingProperties::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return OUString("SwXLineNumberingProperties");
@@ -1101,9 +1092,6 @@ void SwXLineNumberingProperties::removeVetoableChangeListener(const OUString& /*
 OSL_FAIL("not implemented");
 }
 
-/******************************************************************
- * SwXNumberingRules
- ******************************************************************/
 const char aInvalidStyle[] = "__XXX___invalid";
 
 bool SwXNumberingRules::isInvalidStyle(const OUString &rName)
@@ -2342,9 +2330,6 @@ SwXChapterNumbering::~SwXChapterNumbering()
 {
 }
 
-/******************************************************************
- * SwXTextColumns
- ******************************************************************/
 OUString SwXTextColumns::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return OUString("SwXTextColumns");

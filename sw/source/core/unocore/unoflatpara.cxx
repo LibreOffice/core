@@ -60,10 +60,6 @@ CreateFlatParagraphIterator(SwDoc & rDoc, sal_Int32 const nTextMarkupType,
 
 }
 
-/******************************************************************************
- * SwXFlatParagraph
- ******************************************************************************/
-
 SwXFlatParagraph::SwXFlatParagraph( SwTxtNode& rTxtNode, const OUString& aExpandText, const ModelToViewHelper& rMap )
     : SwXFlatParagraph_Base(& rTxtNode, rMap)
     , maExpandText(aExpandText)
@@ -342,10 +338,6 @@ SwXFlatParagraph::getSomething(
 {
     return sw::UnoTunnelImpl(rId, this);
 }
-
-/******************************************************************************
- * SwXFlatParagraphIterator
- ******************************************************************************/
 
 SwXFlatParagraphIterator::SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType, sal_Bool bAutomatic )
     : mpDoc( &rDoc ),

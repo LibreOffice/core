@@ -28,7 +28,6 @@ struct SwSortOptions;
 class SwTableNode;
 class SwUndoAttrTbl;
 
-//-------------------- Undo for Sorting ------------------------------
 struct SwSortUndoElement
 {
     union {

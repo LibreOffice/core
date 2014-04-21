@@ -44,10 +44,6 @@ namespace com { namespace sun { namespace star { namespace text {
 class SwTxtNode;
 class SwDoc;
 
-/******************************************************************************
- * SwXFlatParagraph
- ******************************************************************************/
-
 typedef ::cppu::ImplInheritanceHelper3
 <   SwXTextMarkup
 ,   css::beans::XPropertySet
@@ -143,10 +139,6 @@ private:
 
     OUString maExpandText;
 };
-
-/******************************************************************************
- * SwXFlatParagraphIterator
- ******************************************************************************/
 
 class SwXFlatParagraphIterator:
     public ::cppu::WeakImplHelper1

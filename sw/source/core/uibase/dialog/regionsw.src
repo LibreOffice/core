@@ -21,11 +21,7 @@
 #include "cmdid.h"
 #include "globals.hrc"
 #include "helpid.h"
-/*************************************************************************
 
-    Dialog "paste region"
-
-*************************************************************************/
 #define DLG_IMAGE_IDLIST \
         IdList =                        \
         {                               \
