@@ -10372,7 +10372,7 @@ dnl ===================================================================
 
 ENABLE_GLTF=
 AC_MSG_CHECKING([whether to enable glTF support])
-if test $_os != iOS -a $_os != Android -a $_os != WINNT -a $_os != Darwin -a "x$enable_gltf" != "xno"; then
+if test $_os != iOS -a $_os != Android -a $_os != Darwin -a "x$enable_gltf" != "xno"; then
     ENABLE_GLTF=TRUE
     AC_MSG_RESULT([yes])
     BUILD_TYPE="$BUILD_TYPE LIBGLTF"
