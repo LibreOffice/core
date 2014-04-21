@@ -690,9 +690,10 @@ void ScRowFormatRanges::Sort()
 
 
 ScMyFormatRange::ScMyFormatRange()
-    : nStyleNameIndex(-1),
-    nValidationIndex(-1),
-    bIsAutoStyle(true)
+    : nStyleNameIndex(-1)
+    , nValidationIndex(-1)
+    , nNumberFormat(0)
+    , bIsAutoStyle(true)
 {
 }
 
