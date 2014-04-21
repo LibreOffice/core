@@ -45,6 +45,8 @@
 #include "AxisHelper.hxx"
 #include "ExplicitCategoriesProvider.hxx"
 #include "ChartModel.hxx"
+#include "CommonConverters.hxx"
+#include "../../tools/RegressionCalculationHelper.hxx"
 
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
@@ -73,6 +75,9 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::beans::XPropertySet;
 
 ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString& rObjectCID )
         : m_aObjectCID( rObjectCID )
@@ -97,6 +102,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString
         , m_aCategories()
         , m_xChartDocument( 0 )
         , m_bComplexCategoriesAxis( false )
+        , m_nNbPoints( 0 )
 {
     OUString aParticleID = ObjectIdentifier::getParticleID( m_aObjectCID );
     m_bAffectsMultipleObjects = (aParticleID == "ALLELEMENTS");
@@ -211,7 +217,63 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
         m_bCanAxisLabelsBeStaggered = nDimensionCount==2;
     }
 
-    //create gui name for this object
+    if( OBJECTTYPE_DATA_CURVE == m_eObjectType )
+    {
+        uno::Reference< data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
+        Sequence< Reference< data::XLabeledDataSequence > > aDataSeqs( xSource->getDataSequences());
+        Sequence< double > aXValues, aYValues;
+        bool bXValuesFound = false, bYValuesFound = false;
+        m_nNbPoints = 0;
+        sal_Int32 i = 0;
+        for( i=0;
+             ! (bXValuesFound && bYValuesFound) && i<aDataSeqs.getLength();
+             ++i )
+        {
+            try
+            {
+                Reference< data::XDataSequence > xSeq( aDataSeqs[i]->getValues());
+                Reference< XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
+                OUString aRole;
+                if( xProp->getPropertyValue( "Role" ) >>= aRole )
+                {
+                    if( !bXValuesFound && aRole == "values-x" )
+                    {
+                        aXValues = DataSequenceToDoubleSequence( xSeq );
+                        bXValuesFound = true;
+                    }
+                    else if( !bYValuesFound && aRole == "values-y" )
+                    {
+                        aYValues = DataSequenceToDoubleSequence( xSeq );
+                        bYValuesFound = true;
+                    }
+                }
+            }
+            catch( const Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+        }
+        if( !bXValuesFound && bYValuesFound )
+        {
+            // initialize with 1, 2, ...
+            //first category (index 0) matches with real number 1.0
+            aXValues.realloc( aYValues.getLength() );
+            for( i=0; i<aXValues.getLength(); ++i )
+                aXValues[i] = i+1;
+            bXValuesFound = true;
+        }
+
+        if( bXValuesFound && bYValuesFound &&
+            aXValues.getLength() > 0 &&
+            aYValues.getLength() > 0 )
+        {
+            RegressionCalculationHelper::tDoubleVectorPair aValues(
+                RegressionCalculationHelper::cleanup( aXValues, aYValues, RegressionCalculationHelper::isValid()));
+            m_nNbPoints = aValues.second.size();
+        }
+    }
+
+     //create gui name for this object
     {
         if( !m_bAffectsMultipleObjects && OBJECTTYPE_AXIS == m_eObjectType )
         {
@@ -322,6 +384,10 @@ uno::Reference< chart2::XChartDocument > ObjectPropertiesDialogParameter::getDoc
 bool ObjectPropertiesDialogParameter::IsComplexCategoriesAxis() const
 {
     return m_bComplexCategoriesAxis;
+}
+sal_Int32 ObjectPropertiesDialogParameter::getNbPoints() const
+{
+    return m_nNbPoints;
 }
 
 const sal_uInt16 nNoArrowNoShadowDlg    = 1101;
@@ -644,6 +710,7 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
             if(pTrendlineTabPage)
             {
                 pTrendlineTabPage->SetNumFormatter( m_pNumberFormatter );
+                pTrendlineTabPage->SetNbPoints( m_pParameter->getNbPoints() );
             }
             break;
         }

@@ -64,6 +64,11 @@ void TrendlineTabPage::SetNumFormatter( SvNumberFormatter* pNumFormatter )
     m_aTrendlineResources.SetNumFormatter( pNumFormatter );
 }
 
+void TrendlineTabPage::SetNbPoints( sal_Int32 nNbPoints )
+{
+    m_aTrendlineResources.SetNbPoints( nNbPoints );
+}
+
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

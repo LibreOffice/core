@@ -44,6 +44,7 @@ public:
     void FillValueSets();
 
     void SetNumFormatter( SvNumberFormatter* pFormatter );
+    void SetNbPoints( sal_Int32 nNbPoints );
 
 private:
     RadioButton* m_pRB_Linear;
@@ -75,6 +76,7 @@ private:
     bool                m_bTrendLineUnique;
 
     SvNumberFormatter*  m_pNumFormatter;
+    sal_Int32           m_nNbPoints;
 
     void UpdateControlStates();
     DECL_LINK( SelectTrendLine, RadioButton * );

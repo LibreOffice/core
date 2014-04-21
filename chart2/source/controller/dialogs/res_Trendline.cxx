@@ -42,7 +42,8 @@ void lcl_setValue( FormattedField& rFmtField, double fValue )
 TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInAttrs ) :
         m_eTrendLineType( CHREGRESS_LINEAR ),
         m_bTrendLineUnique( true ),
-        m_pNumFormatter(NULL)
+        m_pNumFormatter( NULL ),
+        m_nNbPoints( 0 )
 {
     SfxTabPage* pTabPage = reinterpret_cast<SfxTabPage*>(pParent);
     pTabPage->get(m_pRB_Linear,"linear");
@@ -293,19 +294,26 @@ void TrendlineResources::FillValueSets()
 
 void TrendlineResources::UpdateControlStates()
 {
+    if( m_nNbPoints > 0 )
+    {
+        sal_Int32 nMaxValue = m_nNbPoints - 1 + ( m_pCB_SetIntercept->IsChecked()?1:0 );
+//        if( nMaxValue > 10) nMaxValue = 10;
+        m_pNF_Degree->SetMax( nMaxValue );
+        m_pNF_Period->SetMax( m_nNbPoints - 1 );
+    }
     bool bMovingAverage = ( m_eTrendLineType == CHREGRESS_MOVING_AVERAGE );
     bool bInterceptAvailable = ( m_eTrendLineType == CHREGRESS_LINEAR ) || ( m_eTrendLineType == CHREGRESS_POLYNOMIAL );
-    m_pFmtFld_ExtrapolateForward->Enable(!bMovingAverage);
-    m_pFmtFld_ExtrapolateBackward->Enable(!bMovingAverage);
+    m_pFmtFld_ExtrapolateForward->Enable( !bMovingAverage );
+    m_pFmtFld_ExtrapolateBackward->Enable( !bMovingAverage );
     m_pCB_SetIntercept->Enable( bInterceptAvailable );
     m_pFmtFld_InterceptValue->Enable( bInterceptAvailable );
-    if(bMovingAverage)
+    if( bMovingAverage )
     {
         m_pCB_ShowEquation->SetState( TRISTATE_FALSE );
         m_pCB_ShowCorrelationCoeff->SetState( TRISTATE_FALSE );
     }
-    m_pCB_ShowEquation->Enable(!bMovingAverage);
-    m_pCB_ShowCorrelationCoeff->Enable(!bMovingAverage);
+    m_pCB_ShowEquation->Enable( !bMovingAverage );
+    m_pCB_ShowCorrelationCoeff->Enable( !bMovingAverage );
 }
 
 IMPL_LINK( TrendlineResources, ChangeValue, void *, pNumericField)
@@ -344,6 +352,11 @@ void TrendlineResources::SetNumFormatter( SvNumberFormatter* pFormatter )
     m_pFmtFld_InterceptValue->SetFormatter( m_pNumFormatter );
 }
 
+void TrendlineResources::SetNbPoints( sal_Int32 nNbPoints )
+{
+    m_nNbPoints = nNbPoints;
+    UpdateControlStates();
+}
 
 } //  namespace chart
 
