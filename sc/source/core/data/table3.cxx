@@ -383,6 +383,11 @@ struct SortedColumn : boost::noncopyable
     sc::CellStoreType maCells;
     sc::CellTextAttrStoreType maCellTextAttrs;
     sc::BroadcasterStoreType maBroadcasters;
+
+    SortedColumn( size_t nTopEmptyRows ) :
+        maCells(nTopEmptyRows),
+        maCellTextAttrs(nTopEmptyRows),
+        maBroadcasters(nTopEmptyRows) {}
 };
 
 }
@@ -446,7 +451,12 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
         boost::ptr_vector<SortedColumn> aSortedCols; // storage for copied cells.
         aSortedCols.reserve(nColCount);
         for (size_t i = 0; i < nColCount; ++i)
-            aSortedCols.push_back(new SortedColumn);
+        {
+            // In the sorted column container, element positions and row
+            // positions must match, else formula cells may mis-behave during
+            // grouping.
+            aSortedCols.push_back(new SortedColumn(nRow1));
+        }
 
         for (size_t i = 0; i < pRows->size(); ++i)
         {
@@ -515,24 +525,24 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
             {
                 sc::CellStoreType& rDest = aCol[nThisCol].maCells;
                 sc::CellStoreType& rSrc = aSortedCols[i].maCells;
-                rSrc.transfer(0, rSrc.size()-1, rDest, nRow1);
+                rSrc.transfer(nRow1, aSortParam.nRow2, rDest, nRow1);
             }
 
             {
                 sc::CellTextAttrStoreType& rDest = aCol[nThisCol].maCellTextAttrs;
                 sc::CellTextAttrStoreType& rSrc = aSortedCols[i].maCellTextAttrs;
-                rSrc.transfer(0, rSrc.size()-1, rDest, nRow1);
+                rSrc.transfer(nRow1, aSortParam.nRow2, rDest, nRow1);
             }
 
             {
                 sc::BroadcasterStoreType& rBCDest = aCol[nThisCol].maBroadcasters;
 
                 // Release current broadcasters first, to prevent them from getting deleted.
-                rBCDest.release(nRow1, aSortParam.nRow2);
+                rBCDest.release_range(nRow1, aSortParam.nRow2);
 
                 // Transfer sorted broadcaster segment to the document.
                 sc::BroadcasterStoreType& rBCSrc = aSortedCols[i].maBroadcasters;
-                rBCSrc.transfer(0, rBCSrc.size()-1, rBCDest, nRow1);
+                rBCSrc.transfer(nRow1, aSortParam.nRow2, rBCDest, nRow1);
             }
 
             aCol[nThisCol].CellStorageModified();
