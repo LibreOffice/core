@@ -136,7 +136,7 @@
 #define ITEM_HEIGHT             17
 #define ITEM_HEIGHT2            15
 
-//========================================Position==============================================
+// Position
 
 #define FT_CUSTOM_X                 POPUP_MARGIN + OFFSET_X
 #define FT_CUSTOM_Y                 POPUPPANEL_MARGIN_SMALL * 2 + ITEM_HEIGHT * 5

@@ -61,9 +61,7 @@ SwTxtFlyCnt::SwTxtFlyCnt( SwFmtFlyCnt& rAttr, sal_Int32 nStartPos )
     SetHasDummyChar(true);
 }
 
-/*************************************************************************
- *                  SwTxtFlyCnt::MakeTxtHint()
- *
+/*
  * An dieser Stelle soll einmal der Gesamtzusammenhang bei der Erzeugung
  * eines neuen SwTxtFlyCnt erlaeutert werden.
  * Das MakeTxtHint() wird z.B. im SwTxtNode::Copy() gerufen.
@@ -92,7 +90,7 @@ SwTxtFlyCnt::SwTxtFlyCnt( SwFmtFlyCnt& rAttr, sal_Int32 nStartPos )
  * Attraktiv ist der Umstand, dass niemand ueber die vom Node abhaengigen
  * CntntFrms iterieren braucht, um die FlyInCntFrm anzulegen. Dies geschieht
  * bei der Arbeit.
- *************************************************************************/
+ */
 
 void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
 {
@@ -133,16 +131,11 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
     ((SwFmtFlyCnt&)GetFlyCnt()).SetFlyFmt( pNew );
 }
 
-/*************************************************************************
- *                  SwTxtFlyCnt::SetAnchor()
- *
- * SetAnchor() wird von SwTxtNode::Insert() gerufen und sorgt fuer das
- * setzen des Ankers (die SwPosition des Dummy-Zeichens wird dem FlyFrmFmt
- * per SetAttr bekannt gegeben). Dies kann nicht im MakeTxtHint erledigt
- * werden, da der Zielnode unbestimmt ist.
- * (siehe Kommentar in SwTxtFlyCnt::MakeTxtHint)
- *************************************************************************/
-
+// SetAnchor() wird von SwTxtNode::Insert() gerufen und sorgt fuer das
+// setzen des Ankers (die SwPosition des Dummy-Zeichens wird dem FlyFrmFmt
+// per SetAttr bekannt gegeben). Dies kann nicht im MakeTxtHint erledigt
+// werden, da der Zielnode unbestimmt ist.
+// (siehe Kommentar in SwTxtFlyCnt::MakeTxtHint)
 void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
 {
     // fuers Undo muss der neue Anker schon bekannt sein !
@@ -200,15 +193,10 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
     // Fuer jeden CntFrm wird ein SwFlyInCntFrm angelegt.
 }
 
-/*************************************************************************
- *                      SwTxtFlyCnt::_GetFlyFrm()
- *
- * _GetFlyFrm() wird im Formatierungsprozess vom LineIter gerufen
- * und sucht den FlyFrm zum Dummyzeichen des aktuellen CntntFrm. Wird keiner
- * gefunden, so wird ein neuer FlyFrm angelegt.
- * (siehe Kommentar ind SwTxtFlyCnt::MakeTxtHint)
- *************************************************************************/
-
+// _GetFlyFrm() wird im Formatierungsprozess vom LineIter gerufen
+// und sucht den FlyFrm zum Dummyzeichen des aktuellen CntntFrm. Wird keiner
+// gefunden, so wird ein neuer FlyFrm angelegt.
+// (siehe Kommentar ind SwTxtFlyCnt::MakeTxtHint)
 SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
 {
     SwFrmFmt* pFrmFmt = GetFlyCnt().GetFrmFmt();

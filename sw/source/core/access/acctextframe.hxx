@@ -50,7 +50,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
     virtual void SAL_CALL release() throw () SAL_OVERRIDE;
-    //=====  XAccessibleSelection  ============================================
+    // XAccessibleSelection
     virtual void SAL_CALL selectAccessibleChild(
         sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
@@ -80,7 +80,7 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    //=====  XAccessibleContext  ==============================================
+    // XAccessibleContext
 
     // #i73249# - Return the object's current name.
     virtual OUString SAL_CALL
@@ -91,7 +91,7 @@ public:
         getAccessibleDescription (void)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  XServiceInfo  ====================================================
+    // XServiceInfo
 
     /** Returns an identifier for the implementation of this object.
     */
@@ -112,10 +112,10 @@ public:
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //====== XTypeProvider ====================================================
+    // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  XAccessibleContext::getAccessibleRelationSet  ====================
+    // XAccessibleContext::getAccessibleRelationSet
 
     // text frame may have accessible relations to their
     // predocesor/successor frames

@@ -398,11 +398,8 @@ interface BaseTextEditView
         ExecMethod = Execute ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    /****************************************************/
-    /*                                                  */
-    /*       Properties Page Format                      */
-    /*                                                  */
-    /****************************************************/
+
+    // Properties Page Format
     SID_ATTR_PAGE // status()
     [
         ExecMethod = Execute ;

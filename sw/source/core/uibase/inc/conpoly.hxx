@@ -21,12 +21,7 @@
 
 #include "drawbase.hxx"
 
-/*************************************************************************
-|*
-|* base class for all functions
-|*
-\************************************************************************/
-
+// base class for all functions
 class ConstPolygon : public SwDrawBase
 {
     Point aLastPos;
@@ -34,7 +29,7 @@ class ConstPolygon : public SwDrawBase
 public:
     ConstPolygon(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
-                                       // Mouse- & Key-Events
+    // Mouse- & Key-Events
     virtual sal_Bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;

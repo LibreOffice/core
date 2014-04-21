@@ -269,9 +269,6 @@ public:
 
 };
 
-/******************************************************************
- * SwXDocumentIndex
- ******************************************************************/
 class SwDocIndexDescriptorProperties_Impl
 {
 private:
@@ -1519,9 +1516,6 @@ uno::Reference<frame::XModel> SwXDocumentIndex::GetModel()
     return 0;
 }
 
-/******************************************************************
- * SwXDocumentIndexMark
- ******************************************************************/
 static sal_uInt16
 lcl_TypeToPropertyMap_Mark(const TOXTypes eType)
 {
@@ -2430,9 +2424,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     OSL_FAIL("SwXDocumentIndexMark::removeVetoableChangeListener(): not implemented");
 }
 
-/******************************************************************
- * SwXDocumentIndexes
- ******************************************************************/
 SwXDocumentIndexes::SwXDocumentIndexes(SwDoc *const _pDoc)
     : SwUnoCollection(_pDoc)
 {
@@ -2626,9 +2617,6 @@ SwXDocumentIndexes::hasElements() throw (uno::RuntimeException, std::exception)
     return 0 != getCount();
 }
 
-/******************************************************************
- * SwXDocumentIndex::StyleAccess_Impl
- ******************************************************************/
 SwXDocumentIndex::StyleAccess_Impl::StyleAccess_Impl(
         SwXDocumentIndex& rParentIdx)
     : m_xParent(&rParentIdx)
@@ -2757,9 +2745,6 @@ SwXDocumentIndex::StyleAccess_Impl::hasElements() throw (uno::RuntimeException, 
     return sal_True;
 }
 
-/******************************************************************
- * SwXDocumentIndex::TokenAccess_Impl
- ******************************************************************/
 SwXDocumentIndex::TokenAccess_Impl::TokenAccess_Impl(
         SwXDocumentIndex& rParentIdx)
     : m_xParent(&rParentIdx)

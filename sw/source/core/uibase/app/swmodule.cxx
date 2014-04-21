@@ -405,12 +405,7 @@ void SwDLL::RegisterControls()
     ::sfx2::TaskPaneWrapper::RegisterChildWindow(false, pMod);
 }
 
-/*************************************************************************
-|*
-|* Load Module (only dummy for linking of the DLL)
-|*
-\************************************************************************/
-
+// Load Module (only dummy for linking of the DLL)
 void    SwModule::InitAttrPool()
 {
     OSL_ENSURE(!pAttrPool, "Pool already exists!");

@@ -192,9 +192,6 @@ public:
     SwDoc* getDoc() const { return pDoc; }
 };
 
-/******************************************************************
- * SwXStyleFamilies
- ******************************************************************/
 OUString SwXStyleFamilies::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXStyleFamilies");
@@ -442,9 +439,6 @@ uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions(vo
     return aSeq;
 }
 
-/******************************************************************
- * SwXStyleFamily
- ******************************************************************/
 OUString SwXStyleFamily::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXStyleFamily");
@@ -3185,9 +3179,6 @@ void SwXStyle::Invalidate()
     mxStyleFamily.clear();
 }
 
-/******************************************************************
- * SwXPageStyle
- ******************************************************************/
 SwXPageStyle::SwXPageStyle(SfxStyleSheetBasePool& rPool,
         SwDocShell* pDocSh, SfxStyleFamily eFam,
         const OUString& rStyleName):

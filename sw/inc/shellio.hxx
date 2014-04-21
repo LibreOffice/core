@@ -94,7 +94,6 @@ public:
     SwAsciiOptions() { Reset(); }
 };
 
-/**************** SwReader/Reader ************************/
 // Base class of possible options for a special reader.
 class Reader;
 // Calls reader with its options, document, cursor etc.
@@ -183,8 +182,6 @@ public:
 protected:
     void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
 };
-
-/****************  Special Readers ************************/
 
 // Special Readers can be both!! (Excel, W4W, .. ).
 #define SW_STREAM_READER    1

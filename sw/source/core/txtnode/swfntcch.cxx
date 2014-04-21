@@ -29,12 +29,6 @@ extern const sal_uInt8 StackPos[];
 // Der FontCache wird in TxtInit.Cxx _TXTINIT erzeugt und in _TXTEXIT geloescht
 SwFontCache *pSwFontCache = NULL;
 
-/*************************************************************************
-|*
-|*  SwFontObj::SwFontObj(), ~SwFontObj()
-|*
-|*************************************************************************/
-
 SwFontObj::SwFontObj( const void *pOwn, SwViewShell *pSh ) :
     SwCacheObj( (void*)pOwn ),
     aSwFont( &((SwTxtFmtColl *)pOwn)->GetAttrSet(), pSh ? pSh->getIDocumentSettingAccess() : 0 )
@@ -48,12 +42,6 @@ SwFontObj::SwFontObj( const void *pOwn, SwViewShell *pSh ) :
 SwFontObj::~SwFontObj()
 {
 }
-
-/*************************************************************************
-|*
-|*  SwFontAccess::SwFontAccess()
-|*
-|*************************************************************************/
 
 SwFontAccess::SwFontAccess( const void *pOwn, SwViewShell *pSh ) :
     SwCacheAccess( *pSwFontCache, pOwn,

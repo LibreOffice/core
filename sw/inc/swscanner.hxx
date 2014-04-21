@@ -25,12 +25,8 @@
 
 class SwTxtNode;
 
-/*************************************************************************
- *                class SwScanner
- * Helper class that provides consecutively the words of a selected area
- * during spell check
- *************************************************************************/
-
+// Helper class that provides consecutively the words of a selected area
+// during spell check
 class SwScanner
 {
     OUString aWord;

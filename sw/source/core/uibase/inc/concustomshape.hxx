@@ -26,12 +26,7 @@
 class SdrObject;
 class SfxRequest;
 
-/*************************************************************************
-|*
-|* draw rectangle
-|*
-\************************************************************************/
-
+// draw rectangle
 class ConstCustomShape : public SwDrawBase
 {
 

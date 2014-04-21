@@ -384,10 +384,6 @@ static sal_uInt16 lcl_GetPropertyMapOfService( sal_uInt16 nServiceId )
     return nRet;
 }
 
-/******************************************************************
- * SwXFieldMaster
- ******************************************************************/
-
 class SwXFieldMaster::Impl
     : public SwClient
 {
@@ -1067,10 +1063,6 @@ OUString SwXFieldMaster::LocalizeFormula(
     }
     return rFormula;
 }
-
-/******************************************************************
- * SwXTextField
- ******************************************************************/
 
 uno::Reference<text::XTextField>
 SwXTextField::CreateXTextField(SwDoc & rDoc, SwFmtFld const& rFmt)
@@ -2631,9 +2623,6 @@ const SwField*  SwXTextField::Impl::GetField() const
     return 0;
 }
 
-/******************************************************************
- * SwXTextFieldMasters
- ******************************************************************/
 OUString SwXTextFieldMasters::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXTextFieldMasters");
@@ -2662,7 +2651,7 @@ SwXTextFieldMasters::~SwXTextFieldMasters()
 
 }
 
-/*-----------------------------------------------------------------------
+/*
     Iteration ueber nicht-Standard Feldtypen
     USER/SETEXP/DDE/DATABASE
     Der Name ist demnach:
@@ -2673,7 +2662,7 @@ SwXTextFieldMasters::~SwXTextFieldMasters()
 
     Falls wir grosszuegig werden wollen, dann koennte man com.sun.star.text
     auch optional weglassen
-  -----------------------------------------------------------------------*/
+ */
 static sal_uInt16 lcl_GetIdByName( OUString& rName, OUString& rTypeName )
 {
     if (rName.startsWithIgnoreAsciiCase(COM_TEXT_FLDMASTER_CC))
@@ -2835,10 +2824,6 @@ sal_Bool SwXTextFieldMasters::hasElements(void) throw( uno::RuntimeException, st
     return sal_True;
 }
 
-/******************************************************************
- * SwXFieldTypes
- ******************************************************************/
-
 class SwXTextFieldTypes::Impl
 {
 private:
@@ -2938,10 +2923,6 @@ throw (uno::RuntimeException, std::exception)
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_RefreshListeners.removeInterface(xListener);
 }
-
-/******************************************************************
- * SwXFieldEnumeration
- ******************************************************************/
 
 class SwXFieldEnumeration::Impl
     : public SwClient

@@ -39,8 +39,6 @@
 
 #include <unomid.h>
 
-// ******************************************************************
-
 //!! order of entries has to be the same as in
 //!! CommandStruct SwCondCollItem::aCmds[]
 
@@ -97,7 +95,7 @@ OUString GetCommandContextByIndex( sal_Int16 nIndex )
     return aRes;
 }
 
-// Globals ******************************************************************
+// Globals
 
 const CommandStruct SwCondCollItem::aCmds[] =
 {
@@ -133,10 +131,7 @@ const CommandStruct SwCondCollItem::aCmds[] =
 
 TYPEINIT1_AUTOFACTORY(SwCondCollItem, SfxPoolItem)
 
-/****************************************************************************
-    Item for the transport of the condition table
-****************************************************************************/
-
+// Item for the transport of the condition table
 SwCondCollItem::SwCondCollItem(sal_uInt16 _nWhich ) :
     SfxPoolItem(_nWhich)
 {

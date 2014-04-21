@@ -88,7 +88,7 @@ protected:
 public:
     SwAccessibleTable( SwAccessibleMap* pInitMap, const SwTabFrm* pTableFrm );
 
-    //=====  XInterface  ======================================================
+    // XInterface
 
     // (XInterface methods need to be implemented to disambigouate
     // between those inherited through SwAcessibleContext and
@@ -104,18 +104,18 @@ public:
     virtual void SAL_CALL release(  ) throw () SAL_OVERRIDE
         { SwAccessibleContext::release(); };
 
-    //====== XTypeProvider ====================================================
+    // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  XAccessibleContext  ==============================================
+    // XAccessibleContext
 
     /// Return this object's description.
     virtual OUString SAL_CALL
         getAccessibleDescription (void)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  XAccessibleTable  ================================================
+    // XAccessibleTable
 
     virtual sal_Int32 SAL_CALL getAccessibleRowCount()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -184,7 +184,7 @@ public:
     virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int32 nChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    //=====  XAccessibleTableSelection  ============================================
+    // XAccessibleTableSelection
     virtual sal_Bool SAL_CALL selectRow( sal_Int32 row )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
     virtual sal_Bool SAL_CALL selectColumn( sal_Int32 column )
@@ -197,7 +197,7 @@ public:
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                ::com::sun::star::uno::RuntimeException,
                std::exception) SAL_OVERRIDE;
-    //=====  XServiceInfo  ====================================================
+    // XServiceInfo
 
     /** Returns an identifier for the implementation of this object.
     */
@@ -218,7 +218,7 @@ public:
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //===== C++ interface ======================================================
+    // C++ interface
 
     // The object has been moved by the layout
     virtual void InvalidatePosOrSize( const SwRect& rOldBox ) SAL_OVERRIDE;
@@ -231,7 +231,7 @@ public:
     virtual void InvalidateChildPosOrSize( const sw::access::SwAccessibleChild& rFrmOrObj,
                                            const SwRect& rFrm ) SAL_OVERRIDE;
 
-    //=====  XAccessibleSelection  ============================================
+    // XAccessibleSelection
 
     virtual void SAL_CALL selectAccessibleChild(
         sal_Int32 nChildIndex )
@@ -263,7 +263,7 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    //=====  XAccessibleComponent  ============================================
+    // XAccessibleComponent
     sal_Int32 SAL_CALL getBackground()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     typedef std::vector<const SwAccessibleContext*> VEC_CELL;
@@ -293,7 +293,7 @@ protected:
 public:
     SwAccessibleTableColHeaders( SwAccessibleMap *pMap, const SwTabFrm *pTabFrm );
 
-    //=====  XInterface  ======================================================
+    // XInterface
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         const ::com::sun::star::uno::Type& aType )
@@ -305,7 +305,7 @@ public:
     virtual void SAL_CALL release(  ) throw () SAL_OVERRIDE
         { SwAccessibleContext::release(); };
 
-    //=====  XAccessibleContext  ==============================================
+    // XAccessibleContext
 
     /// Return the number of currently visible children.
     virtual sal_Int32 SAL_CALL getAccessibleChildCount (void)
@@ -317,7 +317,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException, std::exception) SAL_OVERRIDE;
 
-    //=====  XAccessibleTable  ================================================
+    // XAccessibleTable
 
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleTable >
@@ -328,7 +328,7 @@ public:
         SAL_CALL getAccessibleColumnHeaders(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  XServiceInfo  ====================================================
+    // XServiceInfo
 
     /** Returns an identifier for the implementation of this object.
     */

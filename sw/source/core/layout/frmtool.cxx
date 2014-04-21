@@ -2130,8 +2130,6 @@ void SwBorderAttrs::_GetBottomLine( const SwFrm& _rFrm )
     nGetBottomLine = nRet;
 }
 
-/*************************************************************************/
-
 SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrm *pFrm ) :
     SwCacheAccess( rCach, (pFrm->IsCntntFrm() ?
                                 (void*)((SwCntntFrm*)pFrm)->GetNode() :

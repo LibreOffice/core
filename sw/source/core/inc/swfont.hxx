@@ -1016,12 +1016,7 @@ inline void SwFont::SetHighlightColor( const Color& aNewColor )
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
-/*************************************************************************
- *                      class SwUnderlineFont
- *
- * Used for the "continuous underline" feature.
- *************************************************************************/
-
+// Used for the "continuous underline" feature.
 class SwUnderlineFont
 {
     Point aPos;
@@ -1042,10 +1037,6 @@ public:
     // the x coordinate of the starting point has to be set for each portion
     void SetPos( const Point& rPoint ) { aPos = rPoint;  }
 };
-
-/*************************************************************************
- *                      class SvStatistics
- *************************************************************************/
 
 #ifdef DBG_UTIL
 

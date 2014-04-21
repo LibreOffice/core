@@ -22,12 +22,7 @@
 
 #include <svx/SmartTagMgr.hxx>
 
-/*************************************************************************
- *                      class SwSmartTagMgr
- *
- * Wrapper for the svx SmartTagMgr
- *************************************************************************/
-
+// Wrapper for the svx SmartTagMgr
 class SwSmartTagMgr : public SmartTagMgr
 {
 private:

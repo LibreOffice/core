@@ -28,10 +28,6 @@
 #include <swatrset.hxx>
 #include <format.hxx>
 
-/******************************************************************************
- *  class SwMirrorGrf
- ******************************************************************************/
-
 enum MirrorGraph
 {
 RES_MIRROR_GRAPH_BEGIN,
@@ -82,10 +78,6 @@ public:
     inline sal_Bool IsGrfToggle() const         { return bGrfToggle; }
     inline void SetGrfToggle( sal_Bool bNew )   { bGrfToggle = bNew; }
 };
-
-/******************************************************************************
- *  class SwAttrCropGrf
- ******************************************************************************/
 
 class SW_DLLPUBLIC SwCropGrf : public SvxGrfCrop
 {
@@ -296,10 +288,7 @@ public:
                                         sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 };
 
-/******************************************************************************
- *  Implementation of graphics attributes methods of SwAttr
- ******************************************************************************/
-
+// Implementation of graphics attributes methods of SwAttr
 inline const SwMirrorGrf &SwAttrSet::GetMirrorGrf(sal_Bool bInP) const
     { return (const SwMirrorGrf&)Get( RES_GRFATR_MIRRORGRF,bInP); }
 inline const SwCropGrf   &SwAttrSet::GetCropGrf(sal_Bool bInP) const
@@ -325,10 +314,7 @@ inline const SwTransparencyGrf &SwAttrSet::GetTransparencyGrf(sal_Bool bInP) con
 inline const SwDrawModeGrf      &SwAttrSet::GetDrawModeGrf(sal_Bool bInP) const
     { return (const SwDrawModeGrf&)Get( RES_GRFATR_DRAWMODE,bInP); }
 
-/******************************************************************************
- *  Implementation of graphics attributes methods of SwFmt
- ******************************************************************************/
-
+// Implementation of graphics attributes methods of SwFmt
 inline const SwMirrorGrf &SwFmt::GetMirrorGrf(sal_Bool bInP) const
     { return aSet.GetMirrorGrf(bInP); }
 inline const SwCropGrf   &SwFmt::GetCropGrf(sal_Bool bInP) const

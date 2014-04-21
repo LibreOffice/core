@@ -35,9 +35,6 @@ class SwUserFieldType;
 
 const sal_Unicode cListDelim    = '|';
 
-/******************************************************************************
- *                          Calculate Operations
- ******************************************************************************/
 enum SwCalcOper
 {
     CALC_NAME,              CALC_NUMBER,            CALC_ENDCALC,
@@ -58,8 +55,7 @@ enum SwCalcOper
     CALC_DAY=284
 };
 
-//-- Calculate Operations Strings -----------------------------------------
-
+// Calculate Operations Strings
 extern const sal_Char sCalc_Add[];
 extern const sal_Char sCalc_Sub[];
 extern const sal_Char sCalc_Mul[];
@@ -91,9 +87,7 @@ extern const sal_Char sCalc_Tdif[];
 extern const sal_Char sCalc_Round[];
 extern const sal_Char sCalc_Date[];
 
-/******************************************************************************
- *                          Calculate ErrorCodes
- ******************************************************************************/
+//  Calculate ErrorCodes
 enum SwCalcError
 {
     CALC_NOERR=0,
@@ -128,9 +122,7 @@ public:
     void SetVoidValue(bool bSet) {bVoid = bSet;}
 };
 
-/******************************************************************************
- *          Calculate HashTables for VarTable und Operations
- ******************************************************************************/
+// Calculate HashTables for VarTable und Operations
 struct SwHash
 {
     SwHash( const OUString& rStr );
@@ -157,9 +149,6 @@ void DeleteHashTable( SwHash** ppTable, sal_uInt16 nTblSize );
 struct _CalcOp;
 _CalcOp* FindOperator( const OUString& rSearch );
 
-/******************************************************************************
- *                               class SwCalc
- ******************************************************************************/
 class SwCalc
 {
     SwHash*     VarTable[ TBLSZ ];

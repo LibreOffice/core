@@ -37,7 +37,7 @@ class SwAccessiblePreview : public  SwAccessibleDocumentBase
 public:
     SwAccessiblePreview( SwAccessibleMap *pMap );
 
-    //=====  XServiceInfo  ====================================================
+    // XServiceInfo
 
     /** Returns an identifier for the implementation of this object.
     */
@@ -58,7 +58,7 @@ public:
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //====== XTypeProvider ====================================================
+    // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     OUString SAL_CALL getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

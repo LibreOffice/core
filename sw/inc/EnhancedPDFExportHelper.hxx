@@ -122,12 +122,8 @@ struct lt_TableColumn
     }
 };
 
-/*************************************************************************
- *                class SwTaggedPDFHelper
- * Analyses a given frame during painting and generates the appropriate
- * structure elements.
- *************************************************************************/
-
+// Analyses a given frame during painting and generates the appropriate
+// structure elements.
 class SwTaggedPDFHelper
 {
     private:
@@ -172,8 +168,7 @@ class SwTaggedPDFHelper
     static bool IsExportTaggedPDF( const OutputDevice& rOut );
 };
 
-/*************************************************************************
- *                class SwEnhancedPDFExportHelper
+/*
  * Analyses the document structure and export Notes, Hyperlinks, References,
  * and Outline. Link ids created during pdf export are stored in
  * aReferenceIdMap and aHyperlinkIdMap, in order to use them during
@@ -183,8 +178,7 @@ class SwTaggedPDFHelper
  * Therefore SwEnhancedPDFExportHelper also has to be used after the
  * painting process, the parameter bEditEngineOnly indicated that only
  * the bookmarks from the EditEngine have to be processed.
- *************************************************************************/
-
+ */
 typedef std::set< long, lt_TableColumn > TableColumnsMapEntry;
 typedef std::pair< SwRect, sal_Int32 > IdMapEntry;
 typedef std::vector< IdMapEntry > LinkIdMap;

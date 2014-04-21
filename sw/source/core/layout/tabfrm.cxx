@@ -191,9 +191,6 @@ void SwTabFrm::RegistFlys()
     }
 }
 
-/*************************************************************************
-|*  Some prototypes
-|*************************************************************************/
 void SwInvalidateAll( SwFrm *pFrm, long nBottom );
 static void lcl_RecalcRow( SwRowFrm& rRow, long nBottom );
 static bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, bool bInva );
@@ -209,10 +206,6 @@ static bool lcl_InnerCalcLayout( SwFrm *pFrm,
 static SwTwips lcl_CalcMinRowHeight( const SwRowFrm *pRow,
                                           const sal_Bool _bConsiderObjs );
 static SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm&, const SwBorderAttrs& );
-
-/*************************************************************************
-|*  START: local helper functions for repeated headlines
-|*************************************************************************/
 
 static SwTwips lcl_GetHeightOfRows( const SwFrm* pStart, long nCount )
 {
@@ -230,14 +223,6 @@ static SwTwips lcl_GetHeightOfRows( const SwFrm* pStart, long nCount )
 
     return nRet;
 }
-
-/*************************************************************************
-|*  END: local helper functions for repeated headlines
-|*************************************************************************/
-
-/*************************************************************************
-|*  START: local helper functions for splitting row frames
-|*************************************************************************/
 
 // Local helper function to insert a new follow flow line
 static SwRowFrm* lcl_InsertNewFollowFlowLine( SwTabFrm& rTab, const SwFrm& rTmpRow, bool bRowSpanLine )
@@ -804,10 +789,6 @@ static long lcl_GetMaximumLayoutRowSpan( const SwRowFrm& rRow )
 
     return nRet;
 }
-
-/*************************************************************************
-|*  END: local helper functions for splitting row frames
-|*************************************************************************/
 
 // Function to remove the FollowFlowLine of rTab.
 // The content of the FollowFlowLine is moved to the associated line in the
