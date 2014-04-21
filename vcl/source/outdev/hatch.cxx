@@ -31,7 +31,7 @@
 
 #define HATCH_MAXPOINTS             1024
 
-extern "C" int SAL_CALL ImplHatchCmpFnc( const void* p1, const void* p2 )
+extern "C" int SAL_CALL HatchCmpFnc( const void* p1, const void* p2 )
 {
     const long nX1 = ( (Point*) p1 )->X();
     const long nX2 = ( (Point*) p2 )->X();
@@ -374,7 +374,7 @@ void OutputDevice::DrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPol
 
     if( nPCounter > 1 )
     {
-        qsort( pPtBuffer, nPCounter, sizeof( Point ), ImplHatchCmpFnc );
+        qsort( pPtBuffer, nPCounter, sizeof( Point ), HatchCmpFnc );
 
         if( nPCounter & 1 )
             nPCounter--;
