@@ -242,22 +242,24 @@ private:
     ScSortInfo***   pppInfo;
     SCSIZE          nCount;
     SCCOLROW        nStart;
+    SCCOLROW        mnLastIndex; /// index of last non-empty cell position.
     sal_uInt16      nUsedSorts;
 
 public:
-                ScSortInfoArray( sal_uInt16 nSorts, SCCOLROW nInd1, SCCOLROW nInd2 ) :
-                        pppInfo( new ScSortInfo**[nSorts]),
-                        nCount( nInd2 - nInd1 + 1 ), nStart( nInd1 ),
-                        nUsedSorts( nSorts )
-                    {
-                        for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
-                        {
-                            ScSortInfo** ppInfo = new ScSortInfo* [nCount];
-                            for ( SCSIZE j = 0; j < nCount; j++ )
-                                ppInfo[j] = new ScSortInfo;
-                            pppInfo[nSort] = ppInfo;
-                        }
-                    }
+    ScSortInfoArray( sal_uInt16 nSorts, SCCOLROW nInd1, SCCOLROW nInd2 ) :
+            pppInfo( new ScSortInfo**[nSorts]),
+            nCount( nInd2 - nInd1 + 1 ), nStart( nInd1 ),
+            mnLastIndex(nInd2),
+            nUsedSorts( nSorts )
+        {
+            for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
+            {
+                ScSortInfo** ppInfo = new ScSortInfo* [nCount];
+                for ( SCSIZE j = 0; j < nCount; j++ )
+                    ppInfo[j] = new ScSortInfo;
+                pppInfo[nSort] = ppInfo;
+            }
+        }
 
     ~ScSortInfoArray()
     {
@@ -300,6 +302,7 @@ public:
     sal_uInt16      GetUsedSorts() const { return nUsedSorts; }
     ScSortInfo**    GetFirstArray() const { return pppInfo[0]; }
     SCCOLROW    GetStart() const { return nStart; }
+    SCCOLROW GetLast() const { return mnLastIndex; }
     SCSIZE      GetCount() const { return nCount; }
 
     RowsType& InitDataRows( size_t nRowSize, size_t nColSize )
@@ -340,7 +343,7 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
             }
         }
 
-        // Filll row-wise data table.
+        // Fill row-wise data table.
         ScSortInfoArray::RowsType& rRows = pArray->InitDataRows(
             nInd2 - nInd1 + 1, aSortParam.nCol2 - aSortParam.nCol1 + 1);
 
@@ -440,13 +443,14 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
 
     if (aSortParam.bByRow)
     {
-        SCROW nRow1 = aSortParam.nRow1 + (aSortParam.bHasHeader ? 1 : 0);
+        SCROW nRow1 = pArray->GetStart();
+        SCROW nRow2 = pArray->GetLast();
         ScSortInfoArray::RowsType* pRows = pArray->GetDataRows();
         assert(pRows); // In sort-by-row mode we must have data rows already populated.
 
         // Detach all formula cells within the sorted range first.
         sc::EndListeningContext aCxt(*pDocument);
-        DetachFormulaCells(aCxt, aSortParam.nCol1, nRow1, aSortParam.nCol2, aSortParam.nRow2);
+        DetachFormulaCells(aCxt, aSortParam.nCol1, nRow1, aSortParam.nCol2, nRow2);
 
         // Cells in the data rows only reference values in the document. Make
         // a copy before updating the document.
@@ -536,13 +540,13 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
             {
                 sc::CellStoreType& rDest = aCol[nThisCol].maCells;
                 sc::CellStoreType& rSrc = aSortedCols[i].maCells;
-                rSrc.transfer(nRow1, aSortParam.nRow2, rDest, nRow1);
+                rSrc.transfer(nRow1, nRow2, rDest, nRow1);
             }
 
             {
                 sc::CellTextAttrStoreType& rDest = aCol[nThisCol].maCellTextAttrs;
                 sc::CellTextAttrStoreType& rSrc = aSortedCols[i].maCellTextAttrs;
-                rSrc.transfer(nRow1, aSortParam.nRow2, rDest, nRow1);
+                rSrc.transfer(nRow1, nRow2, rDest, nRow1);
             }
 
             {
@@ -550,10 +554,10 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                 sc::BroadcasterStoreType& rDest = aCol[nThisCol].maBroadcasters;
 
                 // Release current broadcasters first, to prevent them from getting deleted.
-                rDest.release_range(nRow1, aSortParam.nRow2);
+                rDest.release_range(nRow1, nRow2);
 
                 // Transfer sorted broadcaster segment to the document.
-                rSrc.transfer(nRow1, aSortParam.nRow2, rDest, nRow1);
+                rSrc.transfer(nRow1, nRow2, rDest, nRow1);
             }
 
             {
@@ -561,9 +565,9 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                 sc::CellNoteStoreType& rDest = aCol[nThisCol].maCellNotes;
 
                 // Do the same as broadcaster storage transfer (to prevent double deletion).
-                rDest.release_range(nRow1, aSortParam.nRow2);
-                rSrc.transfer(nRow1, aSortParam.nRow2, rDest, nRow1);
-                aCol[nThisCol].UpdateNoteCaptions(nRow1, aSortParam.nRow2);
+                rDest.release_range(nRow1, nRow2);
+                rSrc.transfer(nRow1, nRow2, rDest, nRow1);
+                aCol[nThisCol].UpdateNoteCaptions(nRow1, nRow2);
             }
 
             aCol[nThisCol].CellStorageModified();
@@ -572,7 +576,7 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
         // Attach all formula cells within sorted range, to have them start listening again.
         sc::StartListeningContext aStartListenCxt(*pDocument);
         AttachFormulaCells(
-            aStartListenCxt, aSortParam.nCol1, nRow1, aSortParam.nCol2, aSortParam.nRow2);
+            aStartListenCxt, aSortParam.nCol1, nRow1, aSortParam.nCol2, nRow2);
     }
     else
     {
