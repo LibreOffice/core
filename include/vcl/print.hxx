@@ -413,6 +413,10 @@ public:
                                           const Point& rSrcPt,  const Size& rSrcSize,
                                           sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
 
+    virtual void                DrawImage( const Point&, const Image&, sal_uInt16 ) SAL_OVERRIDE;
+    virtual void                DrawImage( const Point&, const Size&,
+                                           const Image&, sal_uInt16 ) SAL_OVERRIDE;
+
 
     // implementation detail of PrintJob being asynchronous
     // not exported, not usable outside vcl

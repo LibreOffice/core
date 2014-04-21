@@ -1022,16 +1022,28 @@ public:
      */
     ///@{
 
-    /** @overload void DrawBitmap(const Point& rDestPt, const Size& rDestSize, const Point& rSrcPtPixel,
-                                  const Size& rSecSizePixel, const Bitmap& rBitmap,
-                                  sal_uLong nAction = META_BMPSCALEPART_ACTION) */
+    /** @overload
+        void DrawBitmap(
+                const Point& rDestPt,
+                const Size& rDestSize,
+                const Point& rSrcPtPixel,
+                const Size& rSecSizePixel,
+                const Bitmap& rBitmap,
+                sal_uLong nAction = META_BMPSCALEPART_ACTION)
+      */
     void                        DrawBitmap(
                                     const Point& rDestPt,
                                     const Bitmap& rBitmap );
 
-    /** @overload void DrawBitmap(const Point& rDestPt, const Size& rDestSize, const Point& rSrcPtPixel,
-                                  const Size& rSecSizePixel, const Bitmap& rBitmap,
-                                  sal_uLong nAction = META_BMPSCALEPART_ACTION) */
+    /** @overload
+        void DrawBitmap(
+                const Point& rDestPt,
+                const Size& rDestSize,
+                const Point& rSrcPtPixel,
+                const Size& rSecSizePixel,
+                const Bitmap& rBitmap,
+                sal_uLong nAction = META_BMPSCALEPART_ACTION)
+      */
     void                        DrawBitmap(
                                     const Point& rDestPt,
                                     const Size& rDestSize,
@@ -1045,16 +1057,29 @@ public:
                                     const Bitmap& rBitmap,
                                     sal_uLong nAction = META_BMPSCALEPART_ACTION );
 
-    /** @overload void DrawBitmapEx(const Point& rDestPt, const Size& rDestSize, const Point& rSrcPtPixel,
-                                    const Size& rSecSizePixel, const BitmapEx& rBitmapEx,
-                                    sal_uLong nAction = META_BMPEXSCALEPART_ACTION) */
+    /** @overload
+        void DrawBitmapEx(
+                const Point& rDestPt,
+                const Size& rDestSize,
+                const Point& rSrcPtPixel,
+                const Size& rSecSizePixel,
+                const BitmapEx& rBitmapEx,
+                sal_uLong nAction = META_BMPEXSCALEPART_ACTION)
+     */
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
                                     const BitmapEx& rBitmapEx );
 
-    /** @overload void DrawBitmapEx(const Point& rDestPt, const Size& rDestSize, const Point& rSrcPtPixel,
-                                    const Size& rSecSizePixel, const BitmapEx& rBitmapEx,
-                                    sal_uLong nAction = META_BMPEXSCALEPART_ACTION) */
+
+    /** @overload
+        void DrawBitmapEx(
+                const Point& rDestPt,
+                const Size& rDestSize,
+                const Point& rSrcPtPixel,
+                const Size& rSecSizePixel,
+                const BitmapEx& rBitmapEx,
+                sal_uLong nAction = META_BMPEXSCALEPART_ACTION)
+     */
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
                                     const Size& rDestSize,
@@ -1067,6 +1092,24 @@ public:
                                     const Size& rSrcSizePixel,
                                     const BitmapEx& rBitmapEx,
                                     sal_uLong nAction = META_BMPEXSCALEPART_ACTION );
+
+    /** @overload
+        virtual void DrawImage(
+                        const Point& rPos,
+                        const Size& rSize,
+                        const Image& rImage,
+                        sal_uInt16 nStyle = 0)
+     */
+    virtual void                DrawImage(
+                                    const Point& rPos,
+                                    const Image& rImage,
+                                    sal_uInt16 nStyle = 0 );
+
+    virtual void                DrawImage(
+                                    const Point& rPos,
+                                    const Size& rSize,
+                                    const Image& rImage,
+                                    sal_uInt16 nStyle = 0 );
 
 protected:
     /** Draw BitmapEx transformed
@@ -1197,11 +1240,6 @@ public:
                                           const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                           const Bitmap& rBitmap, const Color& rMaskColor,
                                           sal_uLong nAction );
-
-    virtual void                DrawImage( const Point& rPos,
-                                           const Image& rImage, sal_uInt16 nStyle = 0 );
-    virtual void                DrawImage( const Point& rPos, const Size& rSize,
-                                           const Image& rImage, sal_uInt16 nStyle = 0 );
 
 #ifdef _MSC_VER
     void                        DrawHatch( const PolyPolygon& rPolyPoly, const ::Hatch& rHatch );

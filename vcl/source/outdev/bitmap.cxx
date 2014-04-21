@@ -763,8 +763,6 @@ void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, sal_uInt16
 void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
                               const Image& rImage, sal_uInt16 nStyle )
 {
-    DBG_ASSERT( GetOutDevType() != OUTDEV_PRINTER, "DrawImage(): Images can't be drawn on any mprinter" );
-
     bool bIsSizeValid = (rSize.getWidth() == 0 || rSize.getHeight() == 0) ? false : true;
 
     if( rImage.mpImplData && !ImplIsRecordLayout() )
