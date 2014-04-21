@@ -721,7 +721,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
 
         const SfxPoolItem * pItem = NULL;
 
-        if (bCalledFromShell && !lcl_IsItemSet(*pNewTxtNd, RES_PARATR_ADJUST) &&
+        if (bCalledFromShell && pAnchorNode && !lcl_IsItemSet(*pNewTxtNd, RES_PARATR_ADJUST) &&
             SFX_ITEM_SET == pAnchorNode->GetSwAttrSet().
             GetItemState(RES_PARATR_ADJUST, true, &pItem))
         {
