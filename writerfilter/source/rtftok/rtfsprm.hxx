@@ -90,6 +90,7 @@ public:
         return m_pSprms->end();
     }
     void clear();
+    bool equals(RTFValue& rOther);
 private:
     void ensureCopyBeforeWrite();
     boost::intrusive_ptr<RTFSprmsImpl> m_pSprms;

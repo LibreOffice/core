@@ -1663,6 +1663,12 @@ DECLARE_RTFIMPORT_TEST(testFdo75735, "fdo75735.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty< uno::Sequence<style::TabStop> >(getParagraph(2), "ParaTabStops").getLength());
 }
 
+DECLARE_RTFIMPORT_TEST(testFontOverride, "font-override.rtf")
+{
+    // This was "Times New Roman".
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

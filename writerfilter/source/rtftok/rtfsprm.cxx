@@ -156,6 +156,15 @@ void RTFSprms::deduplicate(RTFSprms& rReference)
     }
 }
 
+bool RTFSprms::equals(RTFValue& rOther)
+{
+    RTFSprms::Iterator_t i = m_pSprms->begin();
+    while (i != m_pSprms->end())
+        if (!i->second->equals(rOther))
+            return false;
+    return true;
+}
+
 void RTFSprms::ensureCopyBeforeWrite()
 {
     if (m_pSprms->m_nRefCount > 1)
