@@ -34,7 +34,7 @@ const int MAX_TOKEN_LEN = 128;
 #define RTF_ISALPHA( c ) comphelper::string::isalphaAscii(c)
 
 SvRTFParser::SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize )
-    : SvParser( rIn, nStackSize ),
+    : SvParser( rIn, nStackSize )
     , nOpenBrakets(0)
     , eCodeSet(RTL_TEXTENCODING_MS_1252)
     , eUNICodeSet(RTL_TEXTENCODING_MS_1252)    // default ist ANSI-CodeSet
