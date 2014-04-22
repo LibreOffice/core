@@ -86,7 +86,7 @@ struct DBTextStruct_Impl
 void SwTextShell::ExecDB(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
-    SwDBMgr* pNewDBMgr = GetShell().GetNewDBMgr();
+    SwDBMgr* pDBMgr = GetShell().GetDBMgr();
     sal_uInt16 nSlot = rReq.GetSlot();
     OUString sSourceArg, sCommandArg;
     sal_Int32 nCommandTypeArg = 0;
@@ -128,7 +128,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     if ( !xConnection.is() )
     {
         Reference<XDataSource> xSource;
-        xConnection = pNewDBMgr->GetConnection(sSourceArg, xSource);
+        xConnection = pDBMgr->GetConnection(sSourceArg, xSource);
     }
     if(!xConnection.is())
         return ;
@@ -180,7 +180,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 aDescriptor[daCommandType]  <<= nCommandTypeArg;
 
                 SwMergeDescriptor aMergeDesc( DBMGR_MERGE, *GetShellPtr(), aDescriptor );
-                pNewDBMgr->MergeNew(aMergeDesc);
+                pDBMgr->MergeNew(aMergeDesc);
 
                 if ( bDisposeResultSet )
                     ::comphelper::disposeComponent(xCursor);

@@ -1371,7 +1371,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
 #if !HAVE_FEATURE_DBCONNECTIVITY
         (void) pDoc;
 #else
-        SwDBMgr* pMgr = pDoc->GetNewDBMgr();
+        SwDBMgr* pMgr = pDoc->GetDBMgr();
 #endif
         bValid = sal_False;
         OUString sTmpName = (bCanToggle && !bIsHidden) ? aTRUETxt : aFALSETxt;

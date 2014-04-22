@@ -1105,11 +1105,11 @@ sal_Bool SwFldMgr::InsertFld(
                 rData.aDBColumn >>= xColumn;
                 if(xColumn.is())
                 {
-                    nFormatId = pCurShell->GetNewDBMgr()->GetColumnFmt(xSource, xConnection, xColumn,
+                    nFormatId = pCurShell->GetDBMgr()->GetColumnFmt(xSource, xConnection, xColumn,
                         pCurShell->GetNumberFormatter(), GetCurrLanguage() );
                 }
                 else
-                    nFormatId = pCurShell->GetNewDBMgr()->GetColumnFmt(
+                    nFormatId = pCurShell->GetDBMgr()->GetColumnFmt(
                     aDBData.sDataSource, aDBData.sCommand, sPar1,
                     pCurShell->GetNumberFormatter(), GetCurrLanguage() );
             }

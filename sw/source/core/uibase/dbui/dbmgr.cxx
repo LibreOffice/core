@@ -1038,8 +1038,8 @@ sal_Bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     static_cast< SwView* >(pWorkFrame->GetViewShell())->GetWrtShell();
                             rWorkShell.CalcLayout();
                             SwDoc* pWorkDoc = ((SwDocShell*)(&xWorkDocSh))->GetDoc();
-                            SwDBMgr* pOldDBMgr = pWorkDoc->GetNewDBMgr();
-                            pWorkDoc->SetNewDBMgr( this );
+                            SwDBMgr* pOldDBMgr = pWorkDoc->GetDBMgr();
+                            pWorkDoc->SetDBMgr( this );
                             SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), xWorkDocSh));
                             pWorkDoc->UpdateFlds(NULL, false);
                             SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), xWorkDocSh));
@@ -1225,7 +1225,7 @@ sal_Bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     }
                                 }
                             }
-                            pWorkDoc->SetNewDBMgr( pOldDBMgr );
+                            pWorkDoc->SetDBMgr( pOldDBMgr );
                         }
                         xWorkDocSh->DoClose();
                     }
@@ -2469,8 +2469,8 @@ void SwDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                     pView->AttrChangedNotify( &pView->GetWrtShell() );// in order for SelectShell to be called
                     //set the current DBMgr
                     SwDoc* pWorkDoc = pView->GetWrtShell().GetDoc();
-                    SwDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
-                    pWorkDoc->SetNewDBMgr( this );
+                    SwDBMgr* pWorkDBMgr = pWorkDoc->GetDBMgr();
+                    pWorkDoc->SetDBMgr( this );
 
                     SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), pView->GetWrtShell(), aDescriptor );
                     aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
@@ -2483,7 +2483,7 @@ void SwDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
 
                     MergeNew(aMergeDesc);
 
-                    pWorkDoc->SetNewDBMgr( pWorkDBMgr );
+                    pWorkDoc->SetDBMgr( pWorkDBMgr );
                     //close the temporary file
                     uno::Reference< util::XCloseable > xClose( xWorkDocSh->GetModel(), uno::UNO_QUERY );
                     if (xClose.is())
@@ -2802,8 +2802,8 @@ sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
 
                 // merge the data
                 SwDoc* pWorkDoc = rWorkShell.GetDoc();
-                SwDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
-                pWorkDoc->SetNewDBMgr( this );
+                SwDBMgr* pWorkDBMgr = pWorkDoc->GetDBMgr();
+                pWorkDoc->SetDBMgr( this );
                 pWorkDoc->EmbedAllLinks();
                 SwUndoId nLastUndoId(UNDO_EMPTY);
                 if (rWorkShell.GetLastUndoInfo(0, & nLastUndoId))
@@ -2904,7 +2904,7 @@ sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 Application::Reschedule();
 
             //restore the ole DBMgr
-            pWorkDoc->SetNewDBMgr( pWorkDBMgr );
+            pWorkDoc->SetDBMgr( pWorkDBMgr );
             //now the temporary document should be closed
             SfxObjectShellRef xDocSh(pWorkView->GetDocShell());
             xDocSh->DoClose();

@@ -353,7 +353,7 @@ public:
     virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert ) = 0;
 
     virtual AbstractSwLabDlg* CreateSwLabDlg(Window* pParent, const SfxItemSet& rSet,
-                                                     SwDBMgr* pNewDBMgr, bool bLabel) = 0;
+                                                     SwDBMgr* pDBMgr, bool bLabel) = 0;
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod () =0;
 

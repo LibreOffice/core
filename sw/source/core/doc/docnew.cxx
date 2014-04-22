@@ -399,7 +399,7 @@ SwDoc::SwDoc()
     maStatsUpdateTimer.SetTimeoutHdl( LINK( this, SwDoc, DoIdleStatsUpdate ) );
 
     // Create DBMgr
-    mpNewDBMgr = new SwDBMgr;
+    mpDBMgr = new SwDBMgr;
 
     // create TOXTypes
     InitTOXTypes();
@@ -641,7 +641,7 @@ SwDoc::~SwDoc()
     mpCharFmtTbl->erase( mpCharFmtTbl->begin() );
 
     DELETEZ( mpPrt );
-    DELETEZ( mpNewDBMgr );
+    DELETEZ( mpDBMgr );
 
     // All Flys need to be destroyed before the Drawing Model,
     // because Flys can still contain DrawContacts, when no

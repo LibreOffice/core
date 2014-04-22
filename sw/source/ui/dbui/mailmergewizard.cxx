@@ -277,7 +277,7 @@ void SwMailMergeWizard::UpdateRoadmap()
   -----------------------------------------------------------------------*/
 void SwMailMergeWizard::CreateTargetDocument()
 {
-    GetSwView()->GetWrtShell().GetNewDBMgr()->
+    GetSwView()->GetWrtShell().GetDBMgr()->
                 MergeDocuments( m_rConfigItem, *GetSwView() );
     m_rConfigItem.SetMergeDone();
     if( m_rConfigItem.GetTargetView() )

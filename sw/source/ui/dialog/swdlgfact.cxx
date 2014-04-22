@@ -782,9 +782,9 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwEnvDlg ( Window* pPa
 }
 
 AbstractSwLabDlg* SwAbstractDialogFactory_Impl::CreateSwLabDlg(Window* pParent, const SfxItemSet& rSet,
-                                                     SwDBMgr* pNewDBMgr, bool bLabel)
+                                                     SwDBMgr* pDBMgr, bool bLabel)
 {
-    SwLabDlg* pDlg = new SwLabDlg(pParent, rSet, pNewDBMgr, bLabel);
+    SwLabDlg* pDlg = new SwLabDlg(pParent, rSet, pDBMgr, bLabel);
     return new AbstractSwLabDlg_Impl(pDlg);
 }
 

@@ -158,7 +158,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
     static sal_uInt16 nBCTitleNo = 0;
 
     // Create DB-Manager
-    boost::scoped_ptr<SwDBMgr> pNewDBMgr(new SwDBMgr);
+    boost::scoped_ptr<SwDBMgr> pDBMgr(new SwDBMgr);
 
     // Read SwLabItem from Config
     SwLabCfgItem aLabCfg(bLabel);
@@ -170,7 +170,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
     SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pDialogFactory, "SwAbstractDialogFactory fail!");
 
-    boost::scoped_ptr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(0, aSet, pNewDBMgr.get(), bLabel));
+    boost::scoped_ptr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(0, aSet, pDBMgr.get(), bLabel));
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
     if ( RET_OK == pDlg->Execute() )

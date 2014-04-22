@@ -1094,8 +1094,8 @@ void SwView::Execute(SfxRequest &rReq)
             SwWrtShell &rSh = GetWrtShell();
             if(m_bInMailMerge && rSh.IsAnyDatabaseFieldInDoc())
             {
-                SwDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
-                if (pNewDBMgr)
+                SwDBMgr* pDBMgr = rSh.GetDBMgr();
+                if (pDBMgr)
                 {
                     SwDBData aData;
                     aData = rSh.GetDBData();
@@ -1110,7 +1110,7 @@ void SwView::Execute(SfxRequest &rReq)
                     pValues[0].Value <<= aData.sDataSource;
                     pValues[1].Value <<= aData.sCommand;
                     pValues[2].Value <<= aData.nCommandType;
-                    pNewDBMgr->ExecuteFormLetter(rSh, aProperties, sal_True);
+                    pDBMgr->ExecuteFormLetter(rSh, aProperties, sal_True);
                 }
             }
 #endif
@@ -2373,7 +2373,7 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
                 return ;
             }
         }
-        SwDBMgr* pNewDBMgr = GetWrtShell().GetNewDBMgr();
+        SwDBMgr* pDBMgr = GetWrtShell().GetDBMgr();
 
         SwDBData aData;
         SwWrtShell &rSh = GetWrtShell();
@@ -2391,7 +2391,7 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
         rSh.EnterStdMode(); // force change in text shell; necessary for mixing DB fields
         AttrChangedNotify( &rSh );
 
-        if (pNewDBMgr)
+        if (pDBMgr)
         {
             Sequence<PropertyValue> aProperties(3);
             PropertyValue* pValues = aProperties.getArray();
@@ -2401,7 +2401,7 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
             pValues[0].Value <<= aData.sDataSource;
             pValues[1].Value <<= aData.sCommand;
             pValues[2].Value <<= aData.nCommandType;
-            pNewDBMgr->ExecuteFormLetter(GetWrtShell(), aProperties, sal_True);
+            pDBMgr->ExecuteFormLetter(GetWrtShell(), aProperties, sal_True);
         }
     }
     else

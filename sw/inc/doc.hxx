@@ -315,7 +315,7 @@ class SW_DLLPUBLIC SwDoc :
 
     SwDocUpdtFld    *mpUpdtFlds;         //< Struct for updating fields
     SwFldTypes      *mpFldTypes;
-    SwDBMgr      *mpNewDBMgr;         /**< Pointer to the new DBMgr for
+    SwDBMgr         *mpDBMgr;            /**< Pointer to the DBMgr for
                                          evaluation of DB-fields. */
 
     VirtualDevice   *mpVirDev;           //< can be used for formatting
@@ -1144,8 +1144,8 @@ public:
                                const Point* pPt = 0 ) const;
 
     // Database  and DB-Manager
-    void SetNewDBMgr( SwDBMgr* pNewMgr )     { mpNewDBMgr = pNewMgr; }
-    SwDBMgr* GetNewDBMgr() const             { return mpNewDBMgr; }
+    void SetDBMgr( SwDBMgr* pNewMgr )     { mpDBMgr = pNewMgr; }
+    SwDBMgr* GetDBMgr() const             { return mpDBMgr; }
     void ChangeDBFields( const std::vector<OUString>& rOldNames,
                         const OUString& rNewName );
     void SetInitDBFields(sal_Bool b);

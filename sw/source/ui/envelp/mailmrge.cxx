@@ -352,11 +352,11 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aFromNF.SetMax(SAL_MAX_INT32);
     aToNF.SetMax(SAL_MAX_INT32);
 
-    SwDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
+    SwDBMgr* pDBMgr = rSh.GetDBMgr();
     if(_xConnection.is())
-        pNewDBMgr->GetColumnNames(&aAddressFldLB, _xConnection, rTblName);
+        pDBMgr->GetColumnNames(&aAddressFldLB, _xConnection, rTblName);
     else
-        pNewDBMgr->GetColumnNames(&aAddressFldLB, rSourceName, rTblName);
+        pDBMgr->GetColumnNames(&aAddressFldLB, rSourceName, rTblName);
     for(sal_Int32 nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); ++nEntry)
         aColumnLB.InsertEntry(aAddressFldLB.GetEntry(nEntry));
 
@@ -647,7 +647,7 @@ bool SwMailMergeDlg::ExecQryShell()
     {
         pImpl->xSelSupp->removeSelectionChangeListener(  pImpl->xChgLstnr );
     }
-    SwDBMgr* pMgr = rSh.GetNewDBMgr();
+    SwDBMgr* pMgr = rSh.GetDBMgr();
 
     if (aPrinterRB.IsChecked())
         nMergeType = DBMGR_MERGE_MAILMERGE;

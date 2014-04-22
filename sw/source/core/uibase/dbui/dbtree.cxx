@@ -163,7 +163,7 @@ Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const OUString& rSource
     {
         SwConnectionData* pPtr = new SwConnectionData();
         pPtr->sSourceName = rSourceName;
-        xRet = pWrtSh->GetNewDBMgr()->RegisterConnection(pPtr->sSourceName);
+        xRet = pWrtSh->GetDBMgr()->RegisterConnection(pPtr->sSourceName);
         aConnections.push_back(pPtr);
     }
     return xRet;

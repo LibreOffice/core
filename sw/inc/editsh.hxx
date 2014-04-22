@@ -393,7 +393,7 @@ public:
     void SetFldUpdateFlags( SwFldUpdateFlags eFlags );
 
     /// For evaluation of DB fields (new DB-manager).
-    SwDBMgr* GetNewDBMgr() const;
+    SwDBMgr* GetDBMgr() const;
 
     SwFieldType* InsertFldType(const SwFieldType &);
 

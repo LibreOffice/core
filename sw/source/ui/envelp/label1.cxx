@@ -81,7 +81,7 @@ void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
     {
         if(m_bLabel)
         {
-            ((SwLabPage*)&rPage)->SetNewDBMgr(pNewDBMgr);
+            ((SwLabPage*)&rPage)->SetDBMgr(pDBMgr);
             ((SwLabPage*)&rPage)->InitDatabaseBox();
         }
         else
@@ -92,10 +92,10 @@ void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 }
 
 SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
-                                SwDBMgr* pDBMgr, sal_Bool bLabel)
+                                SwDBMgr* pDBMgr_, sal_Bool bLabel)
     : SfxTabDialog(pParent, "LabelDialog",
         "modules/swriter/ui/labeldialog.ui", &rSet)
-    , pNewDBMgr(pDBMgr)
+    , pDBMgr(pDBMgr_)
     , pPrtPage(0)
     , aTypeIds(50, 10)
     , pRecs(new SwLabRecs())
@@ -230,7 +230,7 @@ Printer *SwLabDlg::GetPrt()
 SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "CardMediumPage",
         "modules/swriter/ui/cardmediumpage.ui", rSet)
-    , pNewDBMgr(NULL)
+    , pDBMgr(NULL)
     , aItem((const SwLabItem&)rSet.Get(FN_LABEL))
 {
     WaitObject aWait( pParent );
@@ -317,9 +317,9 @@ IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
     WaitObject aObj( GetParentSwLabDlg() );
 
     if (pListBox == m_pDatabaseLB)
-        GetNewDBMgr()->GetTableNames(m_pTableLB, sActDBName);
+        GetDBMgr()->GetTableNames(m_pTableLB, sActDBName);
 
-    GetNewDBMgr()->GetColumnNames(m_pDBFieldLB, sActDBName, m_pTableLB->GetSelectEntry());
+    GetDBMgr()->GetColumnNames(m_pDBFieldLB, sActDBName, m_pTableLB->GetSelectEntry());
     return 0;
 }
 
@@ -439,7 +439,7 @@ SwLabRec* SwLabPage::GetSelectedEntryPos()
 
 void SwLabPage::InitDatabaseBox()
 {
-    if( GetNewDBMgr() )
+    if( GetDBMgr() )
     {
         m_pDatabaseLB->Clear();
         ::com::sun::star::uno::Sequence<OUString> aDataNames = SwDBMgr::GetExistingDatabaseNames();
@@ -449,10 +449,10 @@ void SwLabPage::InitDatabaseBox()
         OUString sDBName = sActDBName.getToken( 0, DB_DELIM );
         OUString sTableName = sActDBName.getToken( 1, DB_DELIM );
         m_pDatabaseLB->SelectEntry(sDBName);
-        if( !sDBName.isEmpty() && GetNewDBMgr()->GetTableNames(m_pTableLB, sDBName))
+        if( !sDBName.isEmpty() && GetDBMgr()->GetTableNames(m_pTableLB, sDBName))
         {
             m_pTableLB->SelectEntry(sTableName);
-            GetNewDBMgr()->GetColumnNames(m_pDBFieldLB, sActDBName, sTableName);
+            GetDBMgr()->GetColumnNames(m_pDBFieldLB, sActDBName, sTableName);
         }
         else
             m_pDBFieldLB->Clear();

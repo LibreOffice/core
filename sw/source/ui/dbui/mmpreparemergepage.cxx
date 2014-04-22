@@ -120,7 +120,7 @@ IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
     ::svx::ODataAccessDescriptor aDescriptor(aArgs);
     SwWrtShell& rSh = m_pWizard->GetSwView()->GetWrtShell();
     SwMergeDescriptor aMergeDesc( DBMGR_MERGE, rSh, aDescriptor );
-    rSh.GetNewDBMgr()->MergeNew(aMergeDesc);
+    rSh.GetDBMgr()->MergeNew(aMergeDesc);
     return 0;
 }
 

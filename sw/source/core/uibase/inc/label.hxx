@@ -34,7 +34,7 @@ class Printer;
 class SwLabDlg : public SfxTabDialog
 {
     SwLabelConfig   aLabelsCfg;
-    SwDBMgr*     pNewDBMgr;
+    SwDBMgr*     pDBMgr;
     SwLabPrtPage*   pPrtPage;
 
     std::vector<sal_uInt16> aTypeIds;
@@ -56,7 +56,7 @@ class SwLabDlg : public SfxTabDialog
 public:
 
      SwLabDlg( Window* pParent, const SfxItemSet& rSet,
-                 SwDBMgr* pNewDBMgr, sal_Bool bLabel);
+                 SwDBMgr* pDBMgr, sal_Bool bLabel);
     virtual ~SwLabDlg();
 
     SwLabRec*   GetRecord(const OUString &rRecName, sal_Bool bCont);
