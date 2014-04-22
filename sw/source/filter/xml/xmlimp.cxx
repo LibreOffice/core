@@ -518,31 +518,26 @@ void SwXMLImport::startDocument()
             Sequence< OUString> aFamiliesSeq;
             if( aAny >>= aFamiliesSeq )
             {
-                OUString sFrameStyles( "FrameStyles" );
-                OUString sPageStyles( "PageStyles" );
-                OUString sCharacterStyles( "CharacterStyles" );
-                OUString sParagraphStyles( "ParagraphStyles" );
-                OUString sNumberingStyles( "NumberingStyles" );
                 sal_uInt16 nFamilyMask = 0U;
                 sal_Int32 nCount = aFamiliesSeq.getLength();
                 const OUString *pSeq = aFamiliesSeq.getConstArray();
                 for( sal_Int32 i=0; i < nCount; i++ )
                 {
                     const OUString& rFamily = pSeq[i];
-                    if( rFamily==sFrameStyles )
+                    if( rFamily=="FrameStyles" )
                         nFamilyMask |= SFX_STYLE_FAMILY_FRAME;
-                    else if( rFamily==sPageStyles )
+                    else if( rFamily=="PageStyles" )
                         nFamilyMask |= SFX_STYLE_FAMILY_PAGE;
-                    else if( rFamily==sCharacterStyles )
+                    else if( rFamily=="CharacterStyles" )
                         nFamilyMask |= SFX_STYLE_FAMILY_CHAR;
-                    else if( rFamily==sParagraphStyles )
+                    else if( rFamily=="ParagraphStyles" )
                         nFamilyMask |= SFX_STYLE_FAMILY_PARA;
-                    else if( rFamily==sNumberingStyles )
+                    else if( rFamily=="NumberingStyles" )
                         nFamilyMask |= SFX_STYLE_FAMILY_PSEUDO;
                 }
 
                 sal_Bool bOverwrite = sal_False;
-                OUString sStyleInsertModeOverwrite("StyleInsertModeOverwrite");
+                const OUString sStyleInsertModeOverwrite("StyleInsertModeOverwrite");
                 if( xPropertySetInfo->hasPropertyByName(sStyleInsertModeOverwrite) )
                 {
                     aAny = xImportInfo->getPropertyValue(sStyleInsertModeOverwrite);
@@ -556,7 +551,7 @@ void SwXMLImport::startDocument()
         }
 
         // text insert mode?
-        OUString sTextInsertModeRange("TextInsertModeRange");
+        const OUString sTextInsertModeRange("TextInsertModeRange");
         if( xPropertySetInfo->hasPropertyByName(sTextInsertModeRange) )
         {
             aAny = xImportInfo->getPropertyValue(sTextInsertModeRange);
@@ -566,7 +561,7 @@ void SwXMLImport::startDocument()
         }
 
         // auto text mode
-        OUString sAutoTextMode("AutoTextMode");
+        const OUString sAutoTextMode("AutoTextMode");
         if( xPropertySetInfo->hasPropertyByName(sAutoTextMode) )
         {
             aAny = xImportInfo->getPropertyValue(sAutoTextMode);
@@ -576,7 +571,7 @@ void SwXMLImport::startDocument()
         }
 
         // organizer mode
-        OUString sOrganizerMode("OrganizerMode");
+        const OUString sOrganizerMode("OrganizerMode");
         if( xPropertySetInfo->hasPropertyByName(sOrganizerMode) )
         {
             aAny = xImportInfo->getPropertyValue(sOrganizerMode);
@@ -892,7 +887,7 @@ void SwXMLImport::endDocument( void )
             {
                 Sequence< beans::PropertyValue > aXFormsSettings;
 
-                OUString sXFormsSettingsName( GetXMLToken( XML_XFORM_MODEL_SETTINGS ) );
+                const OUString sXFormsSettingsName( GetXMLToken( XML_XFORM_MODEL_SETTINGS ) );
                 if ( xLateInitSettings.is() && xLateInitSettings->hasByName( sXFormsSettingsName ) )
                 {
                     OSL_VERIFY( xLateInitSettings->getByName( sXFormsSettingsName ) >>= aXFormsSettings );
@@ -1078,37 +1073,37 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         return;
 
     boost::unordered_set< OUString, OUStringHash > aSet;
-    aSet.insert(OUString("ForbiddenCharacters"));
-    aSet.insert(OUString("IsKernAsianPunctuation"));
-    aSet.insert(OUString("CharacterCompressionType"));
-    aSet.insert(OUString("LinkUpdateMode"));
-    aSet.insert(OUString("FieldAutoUpdate"));
-    aSet.insert(OUString("ChartAutoUpdate"));
-    aSet.insert(OUString("AddParaTableSpacing"));
-    aSet.insert(OUString("AddParaTableSpacingAtStart"));
-    aSet.insert(OUString("PrintAnnotationMode"));
-    aSet.insert(OUString("PrintBlackFonts"));
-    aSet.insert(OUString("PrintControls"));
-    aSet.insert(OUString("PrintDrawings"));
-    aSet.insert(OUString("PrintGraphics"));
-    aSet.insert(OUString("PrintLeftPages"));
-    aSet.insert(OUString("PrintPageBackground"));
-    aSet.insert(OUString("PrintProspect"));
-    aSet.insert(OUString("PrintReversed"));
-    aSet.insert(OUString("PrintRightPages"));
-    aSet.insert(OUString("PrintFaxName"));
-    aSet.insert(OUString("PrintPaperFromSetup"));
-    aSet.insert(OUString("PrintTables"));
-    aSet.insert(OUString("PrintSingleJobs"));
-    aSet.insert(OUString("UpdateFromTemplate"));
-    aSet.insert(OUString("PrinterIndependentLayout"));
-    aSet.insert(OUString("PrintEmptyPages"));
-    aSet.insert(OUString("SmallCapsPercentage66"));
-    aSet.insert(OUString("TabOverflow"));
-    aSet.insert(OUString("UnbreakableNumberings"));
-    aSet.insert(OUString("ClippedPictures"));
-    aSet.insert(OUString("BackgroundParaOverDrawings"));
-    aSet.insert(OUString("TabOverMargin"));
+    aSet.insert("ForbiddenCharacters");
+    aSet.insert("IsKernAsianPunctuation");
+    aSet.insert("CharacterCompressionType");
+    aSet.insert("LinkUpdateMode");
+    aSet.insert("FieldAutoUpdate");
+    aSet.insert("ChartAutoUpdate");
+    aSet.insert("AddParaTableSpacing");
+    aSet.insert("AddParaTableSpacingAtStart");
+    aSet.insert("PrintAnnotationMode");
+    aSet.insert("PrintBlackFonts");
+    aSet.insert("PrintControls");
+    aSet.insert("PrintDrawings");
+    aSet.insert("PrintGraphics");
+    aSet.insert("PrintLeftPages");
+    aSet.insert("PrintPageBackground");
+    aSet.insert("PrintProspect");
+    aSet.insert("PrintReversed");
+    aSet.insert("PrintRightPages");
+    aSet.insert("PrintFaxName");
+    aSet.insert("PrintPaperFromSetup");
+    aSet.insert("PrintTables");
+    aSet.insert("PrintSingleJobs");
+    aSet.insert("UpdateFromTemplate");
+    aSet.insert("PrinterIndependentLayout");
+    aSet.insert("PrintEmptyPages");
+    aSet.insert("SmallCapsPercentage66");
+    aSet.insert("TabOverflow");
+    aSet.insert("UnbreakableNumberings");
+    aSet.insert("ClippedPictures");
+    aSet.insert("BackgroundParaOverDrawings");
+    aSet.insert("TabOverMargin");
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
@@ -1144,23 +1139,16 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bBackgroundParaOverDrawings = false;
     bool bTabOverMargin = false;
 
-    OUString sRedlineProtectionKey( "RedlineProtectionKey" );
-
     const PropertyValue* currentDatabaseDataSource = NULL;
     const PropertyValue* currentDatabaseCommand = NULL;
     const PropertyValue* currentDatabaseCommandType = NULL;
-    OUString currentDatabaseDataSourceKey( "CurrentDatabaseDataSource" );
-    OUString currentDatabaseCommandKey( "CurrentDatabaseCommand" );
-    OUString currentDatabaseCommandTypeKey( "CurrentDatabaseCommandType" );
 
     while( nCount-- )
     {
         if( !bIsUserSetting )
         {
             // test over the hash value if the entry is in the table.
-            OUString aStr(pValues->Name);
-
-            bSet = aSet.find(aStr) == aSet.end();
+            bSet = aSet.find(pValues->Name) == aSet.end();
         }
 
         if( bSet )
@@ -1169,7 +1157,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             {
                 if( xInfo->hasPropertyByName( pValues->Name ) )
                 {
-                    if( pValues->Name.equals( sRedlineProtectionKey ) )
+                    if( pValues->Name == "RedlineProtectionKey" )
                     {
                         Sequence<sal_Int8> aKey;
                         pValues->Value >>= aKey;
@@ -1178,11 +1166,11 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     else
                     {
                         // HACK: Setting these out of order does not work.
-                        if( pValues->Name.equals( currentDatabaseDataSourceKey ))
+                        if( pValues->Name == "CurrentDatabaseDataSource" )
                             currentDatabaseDataSource = pValues;
-                        else if( pValues->Name.equals( currentDatabaseCommandKey ))
+                        else if( pValues->Name == "CurrentDatabaseCommand" )
                             currentDatabaseCommand = pValues;
-                        else if( pValues->Name.equals( currentDatabaseCommandTypeKey ))
+                        else if( pValues->Name == "CurrentDatabaseCommandType" )
                             currentDatabaseCommandType = pValues;
                         else
                             xProps->setPropertyValue( pValues->Name,
@@ -1268,27 +1256,22 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         Any aAny;
         sal_Int16 nTmp = document::PrinterIndependentLayout::DISABLED;
         aAny <<= nTmp;
-        xProps->setPropertyValue(
-            OUString("PrinterIndependentLayout"),
-            aAny );
+        xProps->setPropertyValue( "PrinterIndependentLayout", aAny );
     }
 
     if( ! bAddExternalLeading )
     {
-        xProps->setPropertyValue(
-            OUString("AddExternalLeading"), makeAny( false ) );
+        xProps->setPropertyValue( "AddExternalLeading", makeAny( false ) );
     }
 
     if( ! bUseFormerLineSpacing )
     {
-        xProps->setPropertyValue(
-            OUString("UseFormerLineSpacing"), makeAny( true ) );
+        xProps->setPropertyValue( "UseFormerLineSpacing", makeAny( true ) );
     }
 
     if( !bUseFormerObjectPositioning )
     {
-        xProps->setPropertyValue(
-            OUString("UseFormerObjectPositioning"), makeAny( true ) );
+        xProps->setPropertyValue( "UseFormerObjectPositioning", makeAny( true ) );
     }
 
     if( !bUseOldNumbering )
@@ -1296,9 +1279,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         Any aAny;
         sal_Bool bOldNum = true;
         aAny.setValue(&bOldNum, ::getBooleanCppuType());
-        xProps->setPropertyValue
-            (OUString("UseOldNumbering"),
-                       aAny );
+        xProps->setPropertyValue( "UseOldNumbering", aAny );
     }
 
     if( !bOutlineLevelYieldsOutlineRule )
@@ -1306,27 +1287,23 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         Any aAny;
         sal_Bool bTmp = true;
         aAny.setValue(&bTmp, ::getBooleanCppuType());
-        xProps->setPropertyValue
-            (OUString("OutlineLevelYieldsNumbering"),
-                       aAny );
+        xProps->setPropertyValue( "OutlineLevelYieldsNumbering", aAny );
     }
 
     if( !bAddParaSpacingToTableCells )
     {
-        xProps->setPropertyValue(
-            OUString("AddParaSpacingToTableCells"), makeAny( false ) );
+        xProps->setPropertyValue( "AddParaSpacingToTableCells",
+            makeAny( false ) );
     }
 
     if( !bUseFormerTextWrapping )
     {
-        xProps->setPropertyValue(
-            OUString("UseFormerTextWrapping"), makeAny( true ) );
+        xProps->setPropertyValue( "UseFormerTextWrapping", makeAny( true ) );
     }
 
     if( !bConsiderWrapOnObjPos )
     {
-        xProps->setPropertyValue(
-            OUString("ConsiderTextWrapOnObjPos"), makeAny( false ) );
+        xProps->setPropertyValue( "ConsiderTextWrapOnObjPos", makeAny( false ) );
     }
 
     // #i47448#
@@ -1342,42 +1319,41 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     // therefore the correct condition to set this flag is this:
     if( !bIgnoreFirstLineIndentInNumbering && bDocumentPriorSO8 )
     {
-        xProps->setPropertyValue(
-            OUString("IgnoreFirstLineIndentInNumbering"), makeAny( true ) );
+        xProps->setPropertyValue( "IgnoreFirstLineIndentInNumbering",
+            makeAny( true ) );
     }
 
     // This flag has to be set for all documents < SO8
     if ( !bDoNotJustifyLinesWithManualBreak && bDocumentPriorSO8 )
     {
-        xProps->setPropertyValue(
-            OUString("DoNotJustifyLinesWithManualBreak"), makeAny( true ) );
+        xProps->setPropertyValue( "DoNotJustifyLinesWithManualBreak",
+            makeAny( true ) );
     }
 
     // This flag has to be set for all documents < SO8
     if ( !bDoNotResetParaAttrsForNumFont && bDocumentPriorSO8 )
     {
-        xProps->setPropertyValue(
-            OUString("DoNotResetParaAttrsForNumFont"), makeAny( true ) );
+        xProps->setPropertyValue( "DoNotResetParaAttrsForNumFont",
+            makeAny( true ) );
     }
 
     if ( !bLoadReadonly )
     {
-        xProps->setPropertyValue(
-            OUString("LoadReadonly"), makeAny( false ) );
+        xProps->setPropertyValue( "LoadReadonly", makeAny( false ) );
     }
 
     // This flag has to be set for all documents < SO8
     if ( !bDoNotCaptureDrawObjsOnPage && bDocumentPriorSO8 )
     {
-        xProps->setPropertyValue(
-            OUString("DoNotCaptureDrawObjsOnPage"), makeAny( true ) );
+        xProps->setPropertyValue( "DoNotCaptureDrawObjsOnPage",
+            makeAny( true ) );
     }
 
     // This flag has to be set for all documents < SO8
     if ( !bClipAsCharacterAnchoredWriterFlyFrames && bDocumentPriorSO8 )
     {
-        xProps->setPropertyValue(
-            OUString("ClipAsCharacterAnchoredWriterFlyFrames"), makeAny( true ) );
+        xProps->setPropertyValue( "ClipAsCharacterAnchoredWriterFlyFrames",
+            makeAny( true ) );
     }
 
     if ( !bUnixForceZeroExtLeading )
@@ -1410,14 +1386,12 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if ( !bUnbreakableNumberings )
     {
-        xProps->setPropertyValue(
-            OUString("UnbreakableNumberings"), makeAny( false ) );
+        xProps->setPropertyValue( "UnbreakableNumberings", makeAny( false ) );
     }
 
     if ( !bClippedPictures )
     {
-        xProps->setPropertyValue(
-            OUString("ClippedPictures"), makeAny( false ) );
+        xProps->setPropertyValue( "ClippedPictures", makeAny( false ) );
     }
 
     if ( !bBackgroundParaOverDrawings )
