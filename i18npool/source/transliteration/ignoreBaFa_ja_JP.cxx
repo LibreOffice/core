@@ -24,11 +24,11 @@ using namespace com::sun::star::uno;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 static const Mapping BaFa[] = {
-    { 0x30F4, 0x30A1, 0x30D0, sal_True },
-    { 0x3094, 0x3041, 0x3070, sal_True },
-    { 0x30D5, 0x30A1, 0x30CF, sal_True },
-    { 0x3075, 0x3041, 0x306F, sal_True },
-    { 0, 0, 0, sal_True }
+    { 0x30F4, 0x30A1, 0x30D0, true },
+    { 0x3094, 0x3041, 0x3070, true },
+    { 0x30D5, 0x30A1, 0x30CF, true },
+    { 0x3075, 0x3041, 0x306F, true },
+    { 0, 0, 0, true }
 };
 
 ignoreBaFa_ja_JP::ignoreBaFa_ja_JP()

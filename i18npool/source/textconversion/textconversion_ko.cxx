@@ -124,7 +124,7 @@ const sal_Unicode* getHanja2HangulData();
 #endif
 
 Sequence< OUString > SAL_CALL
-TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toHanja)
+TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toHanja)
 {
     sal_Unicode ch;
     Sequence< OUString > output;
@@ -236,7 +236,7 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
 
         sal_Int16 scriptType = SCRIPT_OTHERS;
         sal_Int32 len = 1;
-        sal_Bool toHanja = (nConversionType == TextConversionType::TO_HANJA);
+        bool toHanja = (nConversionType == TextConversionType::TO_HANJA);
         // FROM_LEFT:  Hangul -> Hanja
         // FROM_RIGHT: Hanja  -> Hangul
         ConversionDirection eDirection = toHanja ? ConversionDirection_FROM_LEFT : ConversionDirection_FROM_RIGHT;

@@ -39,9 +39,9 @@ OUString SAL_CALL
 halfwidthToFullwidth::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException, std::exception)
 {
-    sal_Bool _useOffset = useOffset;
+    bool _useOffset = useOffset;
     // One to One mapping
-    useOffset = sal_False;
+    useOffset = false;
     const OUString& newStr = transliteration_OneToOne::transliterate( inStr, startPos, nCount, offset);
     useOffset = _useOffset;
 
@@ -69,9 +69,9 @@ OUString SAL_CALL
 halfwidthKatakanaToFullwidthKatakana::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException, std::exception)
 {
-    sal_Bool _useOffset = useOffset;
+    bool _useOffset = useOffset;
     // One to One mapping
-    useOffset = sal_False;
+    useOffset = false;
     const OUString& newStr = transliteration_OneToOne::transliterate( inStr, startPos, nCount, offset);
     useOffset = _useOffset;
 
@@ -99,9 +99,9 @@ OUString SAL_CALL
 halfwidthToFullwidthLikeJIS::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException, std::exception)
 {
-    sal_Bool _useOffset = useOffset;
+    bool _useOffset = useOffset;
     // One to One mapping
-    useOffset = sal_False;
+    useOffset = false;
     const OUString& newStr = transliteration_OneToOne::transliterate( inStr, startPos, nCount, offset);
     useOffset = _useOffset;
 

@@ -103,12 +103,12 @@ private:
 #define maxCascade 27
     com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedTransliteration > bodyCascade[maxCascade];
     sal_Int16 numCascade;
-    sal_Bool caseignoreOnly;
+    bool caseignoreOnly;
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
     com::sun::star::uno::Reference< XLocaleData4 > mxLocaledata;
     com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedTransliteration > caseignore;
 
-    virtual sal_Bool SAL_CALL loadModuleByName( const OUString& implName,
+    virtual bool SAL_CALL loadModuleByName( const OUString& implName,
         com::sun::star::uno::Reference<com::sun::star::i18n::XExtendedTransliteration> & body, const com::sun::star::lang::Locale& rLocale)
         throw(com::sun::star::uno::RuntimeException);
 

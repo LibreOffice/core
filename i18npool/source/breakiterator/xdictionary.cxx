@@ -66,7 +66,7 @@ xdictionary::xdictionary(const sal_Char *lang) :
     hModule( NULL ),
 #endif
     boundary(),
-    japaneseWordBreak( sal_False )
+    japaneseWordBreak( false )
 {
     existMark = NULL;
     index1 = NULL;
@@ -150,7 +150,7 @@ xdictionary::xdictionary(const sal_Char *lang) :
     for (sal_Int32 i = 0; i < CACHE_MAX; i++)
         cache[i].size = 0;
 
-    japaneseWordBreak = sal_False;
+    japaneseWordBreak = false;
 }
 
 xdictionary::~xdictionary()
@@ -168,13 +168,13 @@ xdictionary::~xdictionary()
 
 void xdictionary::setJapaneseWordBreak()
 {
-    japaneseWordBreak = sal_True;
+    japaneseWordBreak = true;
 }
 
-sal_Bool xdictionary::exists(const sal_uInt32 c)
+bool xdictionary::exists(const sal_uInt32 c)
 {
     // 0x1FFF is the hardcoded limit in gendict for existMarks
-    sal_Bool exist = (existMark && ((c>>3) < 0x1FFF)) ? sal::static_int_cast<sal_Bool>((existMark[c>>3] & (1<<(c&0x07))) != 0) : sal_False;
+    bool exist = (existMark && ((c>>3) < 0x1FFF)) ? sal::static_int_cast<sal_Bool>((existMark[c>>3] & (1<<(c&0x07))) != 0) : sal_False;
     if (!exist && japaneseWordBreak)
         return BreakIteratorImpl::getScriptClass(c) == ScriptType::ASIAN;
     else
@@ -229,15 +229,15 @@ WordBreakCache::WordBreakCache() :
  * Compare two unicode string,
  */
 
-sal_Bool WordBreakCache::equals(const sal_Unicode* str, Boundary& boundary)
+bool WordBreakCache::equals(const sal_Unicode* str, Boundary& boundary)
 {
     // Different length, different string.
-    if (length != boundary.endPos - boundary.startPos) return sal_False;
+    if (length != boundary.endPos - boundary.startPos) return false;
 
     for (sal_Int32 i = 0; i < length; i++)
-        if (contents[i] != str[i + boundary.startPos]) return sal_False;
+        if (contents[i] != str[i + boundary.startPos]) return false;
 
-    return sal_True;
+    return true;
 }
 
 
@@ -246,7 +246,7 @@ sal_Bool WordBreakCache::equals(const sal_Unicode* str, Boundary& boundary)
  * @param pos : Position of the given character.
  * @return true if CJK.
  */
-sal_Bool xdictionary::seekSegment(const OUString &rText, sal_Int32 pos,
+bool xdictionary::seekSegment(const OUString &rText, sal_Int32 pos,
     Boundary& segBoundary)
 {
     sal_Int32 indexUtf16;
@@ -382,7 +382,7 @@ Boundary xdictionary::nextWord(const OUString& rText, sal_Int32 anyPos, sal_Int1
         return getWordBoundary(rText, anyPos, wordType, true);
 }
 
-Boundary xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType, sal_Bool bDirection)
+Boundary xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType, bool bDirection)
 {
         const sal_Unicode *text=rText.getStr();
         sal_Int32 len=rText.getLength();

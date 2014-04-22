@@ -77,7 +77,7 @@ const sal_uInt16 *getSTC_WordEntry_S2T();
 #endif
 
 OUString SAL_CALL
-TextConversion_zh::getCharConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions)
+TextConversion_zh::getCharConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions)
 {
     const sal_Unicode *Data;
     const sal_uInt16 *Index;
@@ -114,7 +114,7 @@ TextConversion_zh::getCharConversion(const OUString& aText, sal_Int32 nStartPos,
 }
 
 OUString SAL_CALL
-TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions, Sequence<sal_Int32>& offset)
+TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions, Sequence<sal_Int32>& offset)
 {
     sal_Int32 dictLen = 0;
     sal_Int32 maxLen = 0;
@@ -122,7 +122,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
     const sal_uInt16 *entry;
     const sal_Unicode *charData;
     const sal_uInt16 *charIndex;
-    sal_Bool one2one=sal_True;
+    bool one2one=true;
 
 #ifndef DISABLE_DYNLOADING
     const sal_Unicode *wordData = ((const sal_Unicode* (*)(sal_Int32&)) getFunctionBySymbol("getSTC_WordData"))(dictLen);
@@ -169,7 +169,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
     sal_Int32 currPos = 0, count = 0;
     while (currPos < nLength) {
         sal_Int32 len = nLength - currPos;
-        sal_Bool found = sal_False;
+        bool found = false;
         if (len > maxLen)
             len = maxLen;
         for (; len > 0 && ! found; len--) {
@@ -197,7 +197,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                 if (conversions.getLength() > 0) {
                     if (offset.getLength() > 0) {
                         if (word.getLength() != conversions[0].getLength())
-                            one2one=sal_False;
+                            one2one=false;
                         while (current < conversions[0].getLength()) {
                             offset[count] = nStartPos + currPos + (current *
                                     word.getLength() / conversions[0].getLength());
@@ -209,7 +209,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                             newStr[count++] = conversions[0][current++];
                     }
                     currPos += word.getLength();
-                    found = sal_True;
+                    found = true;
                 }
             }
 
@@ -232,7 +232,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                         sal_Int32 start=current;
                         if (offset.getLength() > 0) {
                             if (word.getLength() != OUString(&wordData[current]).getLength())
-                                one2one=sal_False;
+                                one2one=false;
                             sal_Int32 convertedLength=OUString(&wordData[current]).getLength();
                             while (wordData[current]) {
                                 offset[count]=nStartPos + currPos + ((current-start) *
@@ -245,7 +245,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                                 newStr[count++] = wordData[current++];
                         }
                         currPos += word.getLength();
-                        found = sal_True;
+                        found = true;
                     }
                 }
             }
@@ -287,7 +287,7 @@ TextConversion_zh::getConversion( const OUString& aText, sal_Int32 nStartPos, sa
     if (rLocale.Language == "zh" && ( nConversionType == TextConversionType::TO_SCHINESE || nConversionType == TextConversionType::TO_TCHINESE) ) {
 
         aLocale=rLocale;
-        sal_Bool toSChinese = nConversionType == TextConversionType::TO_SCHINESE;
+        bool toSChinese = nConversionType == TextConversionType::TO_SCHINESE;
 
         if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER)
             // char to char dictionary
@@ -309,7 +309,7 @@ TextConversion_zh::getConversionWithOffset( const OUString& aText, sal_Int32 nSt
     if (rLocale.Language == "zh" && ( nConversionType == TextConversionType::TO_SCHINESE || nConversionType == TextConversionType::TO_TCHINESE) ) {
 
         aLocale=rLocale;
-        sal_Bool toSChinese = nConversionType == TextConversionType::TO_SCHINESE;
+        bool toSChinese = nConversionType == TextConversionType::TO_SCHINESE;
 
         if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER) {
             offset.realloc(0);

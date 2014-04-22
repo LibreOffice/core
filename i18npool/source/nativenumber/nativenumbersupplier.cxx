@@ -57,10 +57,10 @@ typedef struct {
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, sal_Bool useGeresh);
+OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, bool useGeresh);
 
 OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        Sequence< sal_Int32 >& offset, sal_Bool useOffset, sal_Int16 number ) throw(RuntimeException)
+        Sequence< sal_Int32 >& offset, bool useOffset, sal_Int16 number ) throw(RuntimeException)
 {
     const sal_Unicode *src = inStr.getStr() + startPos;
     rtl_uString *newStr = rtl_uString_alloc(nCount);
@@ -87,22 +87,22 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
     return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
 
-sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
-        sal_Unicode *dst, sal_Int32& count, sal_Int16 multiChar_index, Sequence< sal_Int32 >& offset, sal_Bool useOffset, sal_Int32 startPos,
+bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
+        sal_Unicode *dst, sal_Int32& count, sal_Int16 multiChar_index, Sequence< sal_Int32 >& offset, bool useOffset, sal_Int32 startPos,
  const Number *number, const sal_Unicode* numberChar)
 {
     sal_Unicode multiChar = (multiChar_index == -1 ? 0 : number->multiplierChar[multiChar_index]);
     if ( len <= number->multiplierExponent[number->exponentCount-1] ) {
         if (number->multiplierExponent[number->exponentCount-1] > 1) {
             sal_Int16 i;
-            sal_Bool notZero = false;
+            bool notZero = false;
             for (i = 0; i < len; i++, begin++) {
                 if (notZero || str[begin] != NUMBER_ZERO) {
                     dst[count] = numberChar[str[begin] - NUMBER_ZERO];
                     if (useOffset)
                         offset[count] = begin + startPos;
                     count++;
-                    notZero = sal_True;
+                    notZero = true;
                 }
             }
             if (notZero && multiChar > 0) {
@@ -133,7 +133,7 @@ sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 be
         }
         return str[begin] != NUMBER_ZERO;
     } else {
-        sal_Bool printPower = sal_False;
+        bool printPower = false;
         // sal_Int16 last = 0;
         for (sal_Int16 i = 1; i <= number->exponentCount; i++) {
             sal_Int32 tmp = len - (i == number->exponentCount ? 0 : number->multiplierExponent[i]);
@@ -160,7 +160,7 @@ sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 be
 }
 
 OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        Sequence< sal_Int32 >& offset, sal_Bool useOffset, const Number* number ) throw(RuntimeException)
+        Sequence< sal_Int32 >& offset, bool useOffset, const Number* number ) throw(RuntimeException)
 {
     OUString aRet;
 
@@ -179,7 +179,7 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
 
         if (useOffset)
             offset.realloc( nCount * 2 );
-        sal_Bool doDecimal = sal_False;
+        bool doDecimal = false;
 
         for (i = 0; i <= nCount; i++)
         {
@@ -196,7 +196,7 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                 if (len > 0) {
                     if (i < nCount-1 && isSeparator(str[i]) && isNumber(str[i+1]))
                         continue; // skip comma inside number string
-                    sal_Bool notZero = sal_False;
+                    bool notZero = false;
                     for (sal_Int32 begin = 0, end = len % number->multiplierExponent[0];
                             end <= len; begin = end, end += number->multiplierExponent[0]) {
                         if (end == 0) continue;
@@ -224,7 +224,7 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                     len = 0;
                 }
                 if (i < nCount) {
-                    if ((doDecimal = (!doDecimal && i < nCount-1 && isDecimal(str[i]) && isNumber(str[i+1]))) != sal_False)
+                    if ((doDecimal = (!doDecimal && i < nCount-1 && isDecimal(str[i]) && isNumber(str[i+1]))) != false)
                         newStr[count] = (DecimalChar[number->number] ? DecimalChar[number->number] : str[i]);
                     else if (i < nCount-1 && isMinus(str[i]) && isNumber(str[i+1]))
                         newStr[count] = (MinusChar[number->number] ? MinusChar[number->number] : str[i]);
@@ -246,7 +246,7 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
     return aRet;
 }
 static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, const sal_Unicode *str,
-        sal_Int32& i, sal_Int32 nCount, sal_Unicode *dst, sal_Int32& count, Sequence< sal_Int32 >& offset, sal_Bool useOffset,
+        sal_Int32& i, sal_Int32 nCount, sal_Unicode *dst, sal_Int32& count, Sequence< sal_Int32 >& offset, bool useOffset,
         OUString& numberChar, OUString& multiplierChar)
 {
     sal_Int16 curr = 0, num = 0, end = 0, shift = 0;
@@ -295,7 +295,7 @@ static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, co
 }
 
 static OUString SAL_CALL NativeToAscii(const OUString& inStr,
-        sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, sal_Bool useOffset ) throw(RuntimeException)
+        sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset ) throw(RuntimeException)
 {
     OUString aRet;
 
@@ -730,12 +730,12 @@ NativeNumberXmlAttributes SAL_CALL NativeNumberSupplier::convertToXmlAttributes(
             OUString::createFromAscii(attType[type]));
 }
 
-static sal_Bool natNumIn(sal_Int16 num, const sal_Int16 natnum[], sal_Int16 len)
+static bool natNumIn(sal_Int16 num, const sal_Int16 natnum[], sal_Int16 len)
 {
     for (sal_Int16 i = 0; i < len; i++)
         if (natnum[i] == num)
-            return sal_True;
-    return sal_False;
+            return true;
+    return false;
 }
 
 sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeNumberXmlAttributes& aAttr ) throw (RuntimeException, std::exception)
@@ -822,7 +822,7 @@ static sal_Unicode thousands_last[] = {0x05d0, 0x05dc, 0x05e4, 0x05d9, 0x05dd, 0
 static sal_Unicode geresh = 0x05f3;
 static sal_Unicode gershayim = 0x05f4;
 
-void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, sal_Bool isLast, sal_Bool useGeresh)
+void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, bool isLast, bool useGeresh)
 {
     sal_Int16 num = sal::static_int_cast<sal_Int16>(value % 1000);
 
@@ -852,7 +852,7 @@ void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, sal_Bool isLast, 
     }
 }
 
-OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, sal_Bool useGeresh)
+OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, bool useGeresh)
 {
     sal_Int64 value = 0;
     sal_Int32 i, count = 0, len = aNumberString.getLength();
@@ -873,7 +873,7 @@ OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, sal
     if (value > 0) {
         OUStringBuffer output(count*2 + 2 + len - i);
 
-        makeHebrewNumber(value, output, sal_True, useGeresh);
+        makeHebrewNumber(value, output, true, useGeresh);
 
         if (i < len)
             output.append(aNumberString.copy(i));

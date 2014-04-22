@@ -141,7 +141,7 @@ static struct TMlist {
 TransliterationImpl::TransliterationImpl(const Reference <XComponentContext>& xContext) : mxContext(xContext)
 {
     numCascade = 0;
-    caseignoreOnly = sal_True;
+    caseignoreOnly = true;
 
     mxLocaledata.set(LocaleData::create(xContext));
 }
@@ -578,7 +578,7 @@ TransliterationImpl::clear()
             bodyCascade[i].clear();
     numCascade = 0;
     caseignore.clear();
-    caseignoreOnly = sal_True;
+    caseignoreOnly = true;
 }
 
 namespace
@@ -607,7 +607,7 @@ void TransliterationImpl::loadBody( OUString &implName, Reference<XExtendedTrans
     body = lastTransBody.Body;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 TransliterationImpl::loadModuleByName( const OUString& implName,
         Reference<XExtendedTransliteration>& body, const Locale& rLocale) throw(RuntimeException)
 {
@@ -628,10 +628,10 @@ TransliterationImpl::loadModuleByName( const OUString& implName,
                 }
                 if (caseignore.is())
                     caseignore->loadModule(TMlist[i].tm, rLocale);
-                return sal_True;
+                return true;
             }
         }
-        caseignoreOnly = sal_False; // has other module than just ignore case/kana/width
+        caseignoreOnly = false; // has other module than just ignore case/kana/width
     }
     return body.is();
 }

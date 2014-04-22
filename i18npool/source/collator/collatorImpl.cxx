@@ -141,7 +141,7 @@ CollatorImpl::listCollatorOptions( const OUString& /*collatorAlgorithmName*/ ) t
     return option_int;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& serviceName, const OUString& rSortAlgorithm)
     throw(RuntimeException)
 {
@@ -149,7 +149,7 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
         cachedItem = lookupTable[l];
         if (cachedItem->service.equals(serviceName)) {// cross locale sharing
             lookupTable.push_back(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, cachedItem->xC));
-            return sal_True;
+            return true;
         }
     }
     Reference < XInterface > xI =
@@ -160,10 +160,10 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
         xC.set( xI, UNO_QUERY );
         if (xC.is()) {
             lookupTable.push_back(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, xC));
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL

@@ -111,8 +111,8 @@ class TextSearch: public cppu::WeakImplHelper2
 
     bool IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const;
 
-    sal_Bool checkCTLStart, checkCTLEnd;
-    sal_Bool SAL_CALL isCellStart(const OUString& searchStr, sal_Int32 nPos)
+    bool checkCTLStart, checkCTLEnd;
+    bool SAL_CALL isCellStart(const OUString& searchStr, sal_Int32 nPos)
                             throw(::com::sun::star::uno::RuntimeException);
 
 public:

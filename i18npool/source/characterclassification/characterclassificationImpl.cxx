@@ -127,14 +127,14 @@ ParseResult SAL_CALL CharacterClassificationImpl::parsePredefinedToken(
             contCharTokenType, userDefinedCharactersCont);
 }
 
-sal_Bool SAL_CALL CharacterClassificationImpl::createLocaleSpecificCharacterClassification(const OUString& serviceName, const Locale& rLocale)
+bool SAL_CALL CharacterClassificationImpl::createLocaleSpecificCharacterClassification(const OUString& serviceName, const Locale& rLocale)
 {
     // to share service between same Language but different Country code, like zh_CN and zh_SG
     for (size_t l = 0; l < lookupTable.size(); l++) {
         cachedItem = lookupTable[l];
         if (serviceName == cachedItem->aName) {
             lookupTable.push_back( cachedItem = new lookupTableItem(rLocale, serviceName, cachedItem->xCI) );
-            return sal_True;
+            return true;
         }
     }
 
@@ -146,10 +146,10 @@ sal_Bool SAL_CALL CharacterClassificationImpl::createLocaleSpecificCharacterClas
         xCI.set( xI, UNO_QUERY );
         if (xCI.is()) {
             lookupTable.push_back( cachedItem =  new lookupTableItem(rLocale, serviceName, xCI) );
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 Reference < XCharacterClassification > SAL_CALL

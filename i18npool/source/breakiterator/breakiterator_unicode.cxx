@@ -80,7 +80,7 @@ class OOoRuleBasedBreakIterator : public RuleBasedBreakIterator
 void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::lang::Locale& rLocale,
         sal_Int16 rBreakType, sal_Int16 nWordType, const sal_Char *rule, const OUString& rText) throw(uno::RuntimeException)
 {
-    sal_Bool newBreak = sal_False;
+    bool newBreak = false;
     UErrorCode status = U_ZERO_ERROR;
     sal_Int16 breakType = 0;
     switch (rBreakType) {
@@ -179,7 +179,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
         }
         if (icuBI->aBreakIterator) {
             icuBI->maLocale=rLocale;
-            newBreak=sal_True;
+            newBreak=true;
         } else {
             throw uno::RuntimeException();
         }
@@ -371,7 +371,7 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
 
     loadICUBreakIterator(rLocale, LOAD_LINE_BREAKITERATOR, 0, lineRule, Text);
 
-    sal_Bool GlueSpace=sal_True;
+    bool GlueSpace=true;
     while (GlueSpace) {
         if (line.aBreakIterator->preceding(nStartPos + 1) == nStartPos) { //Line boundary break
             lbr.breakIndex = nStartPos;
@@ -423,15 +423,15 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
         }
 
 #define WJ 0x2060   // Word Joiner
-        GlueSpace=sal_False;
+        GlueSpace=false;
         if (lbr.breakType == BreakType::WORDBOUNDARY) {
             nStartPos = lbr.breakIndex;
             if (Text[nStartPos--] == WJ)
-                GlueSpace=sal_True;
+                GlueSpace=true;
             while (nStartPos >= 0 &&
                     (u_isWhitespace(Text.iterateCodePoints(&nStartPos, 0)) || Text[nStartPos] == WJ)) {
                 if (Text[nStartPos--] == WJ)
-                    GlueSpace=sal_True;
+                    GlueSpace=true;
             }
             if (GlueSpace && nStartPos < 0)  {
                 lbr.breakIndex = 0;

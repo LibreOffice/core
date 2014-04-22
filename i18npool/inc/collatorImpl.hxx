@@ -83,7 +83,7 @@ private :
         com::sun::star::uno::Reference < XCollator > xC;
         lookupTableItem(const lang::Locale& rLocale, const OUString& _algorithm, const OUString& _service,
         com::sun::star::uno::Reference < XCollator >& _xC) : aLocale(rLocale), algorithm(_algorithm), service(_service), xC(_xC) {}
-        sal_Bool SAL_CALL equals(const lang::Locale& rLocale, const OUString& _algorithm) {
+        bool SAL_CALL equals(const lang::Locale& rLocale, const OUString& _algorithm) {
         return aLocale.Language == rLocale.Language &&
             aLocale.Country == rLocale.Country &&
             aLocale.Variant == rLocale.Variant &&
@@ -98,7 +98,7 @@ private :
     // lang::Locale Data
     com::sun::star::uno::Reference < XLocaleData4 > mxLocaleData;
 
-    sal_Bool SAL_CALL createCollator(const lang::Locale& rLocale, const OUString& serviceName,
+    bool SAL_CALL createCollator(const lang::Locale& rLocale, const OUString& serviceName,
         const OUString& rSortAlgorithm) throw(com::sun::star::uno::RuntimeException);
     void SAL_CALL loadCachedCollator(const lang::Locale& rLocale, const OUString& rSortAlgorithm)
         throw(com::sun::star::uno::RuntimeException);

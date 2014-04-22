@@ -37,7 +37,7 @@ class NativeNumberSupplier : public cppu::WeakImplHelper2
 >
 {
 public:
-        NativeNumberSupplier(sal_Bool _useOffset = sal_False) : useOffset(_useOffset) {}
+        NativeNumberSupplier(bool _useOffset = false) : useOffset(_useOffset) {}
 
         // Methods
         virtual OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
@@ -75,7 +75,7 @@ public:
 
 private:
         ::com::sun::star::lang::Locale aLocale;
-        sal_Bool useOffset;
+        bool useOffset;
 };
 
 } } } }

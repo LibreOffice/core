@@ -76,7 +76,7 @@ TextConversionImpl::interactiveConversion( const Locale& rLocale, sal_Int16 nTex
     return xTC->interactiveConversion(rLocale, nTextConversionType, nTextConversionOptions);
 }
 
-static inline sal_Bool operator != (const Locale& l1, const Locale& l2) {
+static inline bool operator != (const Locale& l1, const Locale& l2) {
     return l1.Language != l2.Language || l1.Country != l2.Country || l1.Variant != l2.Variant;
 }
 

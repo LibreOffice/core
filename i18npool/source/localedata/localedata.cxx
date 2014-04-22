@@ -312,7 +312,7 @@ struct LocaleDataLookupTableItem
     const sal_Char* localeName;
 
     com::sun::star::lang::Locale aLocale;
-    sal_Bool equals(const com::sun::star::lang::Locale& rLocale)
+    bool equals(const com::sun::star::lang::Locale& rLocale)
     {
         return (rLocale == aLocale);
     }
@@ -703,7 +703,7 @@ LocaleDataImpl::getAllCalendars2( const Locale& rLocale ) throw(RuntimeException
         for(sal_Int16 i = 0; i < calendarsCount; i++) {
             OUString calendarID(allCalendars[offset]);
             offset++;
-            sal_Bool defaultCalendar = sal::static_int_cast<sal_Bool>( allCalendars[offset][0] );
+            bool defaultCalendar = sal::static_int_cast<sal_Bool>( allCalendars[offset][0] );
             offset++;
             Sequence< CalendarItem2 > days = getCalendarItems( allCalendars, offset, REF_DAYS, i,
                     rLocale, calendarsSeq);
@@ -1042,7 +1042,7 @@ LocaleDataImpl::getDefaultIndexAlgorithm( const Locale& rLocale ) throw(RuntimeE
     return OUString();
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 LocaleDataImpl::hasPhonetic( const Locale& rLocale ) throw(RuntimeException)
 {
     sal_Int16 indexCount = 0;
@@ -1051,10 +1051,10 @@ LocaleDataImpl::hasPhonetic( const Locale& rLocale ) throw(RuntimeException)
     if ( indexArray ) {
         for(sal_Int16 i = 0; i < indexCount; i++) {
             if (indexArray[i*5 + 4][0])
-                return sal_True;
+                return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 sal_Unicode ** SAL_CALL
@@ -1071,7 +1071,7 @@ LocaleDataImpl::getIndexArrayForAlgorithm(const Locale& rLocale, const OUString&
     return NULL;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 LocaleDataImpl::isPhonetic( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException)
 {
     sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);

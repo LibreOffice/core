@@ -98,7 +98,7 @@ throw (RuntimeException, std::exception)
         getIndexCharacter( rIndexEntry, rLocale, rSortAlgorithm );
 }
 
-sal_Bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const OUString& name) throw( RuntimeException )
+bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const OUString& name) throw( RuntimeException )
 {
     Reference < XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
             OUString("com.sun.star.i18n.IndexEntrySupplier_") + name, m_xContext);
@@ -107,7 +107,7 @@ sal_Bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(con
         xIES.set( xI, UNO_QUERY );
         return xIES.is();
     }
-    return sal_False;
+    return false;
 }
 
 Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > SAL_CALL

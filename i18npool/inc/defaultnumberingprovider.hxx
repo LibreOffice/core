@@ -90,7 +90,7 @@ private:
     TransliterationImpl* translit;
     OUString SAL_CALL makeNumberingIdentifier( sal_Int16 index )
         throw(com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL isScriptFlagEnabled(const OUString& aName )
+    bool SAL_CALL isScriptFlagEnabled(const OUString& aName )
         throw(com::sun::star::uno::RuntimeException);
 };
 } } } }

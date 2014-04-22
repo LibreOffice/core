@@ -66,17 +66,17 @@ NumToText##name::NumToText##name() \
         implementationName = "com.sun.star.i18n.Transliteration.NumToText"#name; \
 }
 
-TRANSLITERATION_NUMTOTEXT ( AIUFullWidth_ja_JP, table_AIUFullWidth_ja_JP, sal_True)
-TRANSLITERATION_NUMTOTEXT ( AIUHalfWidth_ja_JP, table_AIUHalfWidth_ja_JP, sal_True)
-TRANSLITERATION_NUMTOTEXT ( IROHAFullWidth_ja_JP, table_IROHAFullWidth_ja_JP, sal_True)
-TRANSLITERATION_NUMTOTEXT ( IROHAHalfWidth_ja_JP, table_IROHAHalfWidth_ja_JP, sal_True)
-TRANSLITERATION_NUMTOTEXT ( CircledNumber, table_CircledNumber, sal_False)
-TRANSLITERATION_NUMTOTEXT ( TianGan_zh, table_TianGan_zh, sal_False)
-TRANSLITERATION_NUMTOTEXT ( DiZi_zh, table_DiZi_zh, sal_False)
-TRANSLITERATION_NUMTOTEXT ( HangulJamo_ko, table_HangulJamo_ko, sal_True)
-TRANSLITERATION_NUMTOTEXT ( HangulSyllable_ko, table_HangulSyllable_ko, sal_True)
-TRANSLITERATION_NUMTOTEXT ( HangulCircledJamo_ko, table_HangulCircledJamo_ko, sal_True)
-TRANSLITERATION_NUMTOTEXT ( HangulCircledSyllable_ko, table_HangulCircledSyllable_ko, sal_True)
+TRANSLITERATION_NUMTOTEXT ( AIUFullWidth_ja_JP, table_AIUFullWidth_ja_JP, true)
+TRANSLITERATION_NUMTOTEXT ( AIUHalfWidth_ja_JP, table_AIUHalfWidth_ja_JP, true)
+TRANSLITERATION_NUMTOTEXT ( IROHAFullWidth_ja_JP, table_IROHAFullWidth_ja_JP, true)
+TRANSLITERATION_NUMTOTEXT ( IROHAHalfWidth_ja_JP, table_IROHAHalfWidth_ja_JP, true)
+TRANSLITERATION_NUMTOTEXT ( CircledNumber, table_CircledNumber, false)
+TRANSLITERATION_NUMTOTEXT ( TianGan_zh, table_TianGan_zh, false)
+TRANSLITERATION_NUMTOTEXT ( DiZi_zh, table_DiZi_zh, false)
+TRANSLITERATION_NUMTOTEXT ( HangulJamo_ko, table_HangulJamo_ko, true)
+TRANSLITERATION_NUMTOTEXT ( HangulSyllable_ko, table_HangulSyllable_ko, true)
+TRANSLITERATION_NUMTOTEXT ( HangulCircledJamo_ko, table_HangulCircledJamo_ko, true)
+TRANSLITERATION_NUMTOTEXT ( HangulCircledSyllable_ko, table_HangulCircledSyllable_ko, true)
 
 #undef TRANSLITERATION_NUMTOTEXT
 

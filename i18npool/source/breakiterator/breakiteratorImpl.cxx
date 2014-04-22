@@ -67,7 +67,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, 
 
 #define isZWSP(c) (ch == 0x200B)
 
-static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, sal_Int16 rWordType, sal_Bool bDirection)
+static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, sal_Int16 rWordType, bool bDirection)
 {
     sal_uInt32 ch=0;
     sal_Int32 pos=nPos;
@@ -107,7 +107,7 @@ Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 n
     else {
         result = LBI->nextWord(Text, nStartPos, rLocale, rWordType);
 
-        nStartPos = skipSpace(Text, result.startPos, len, rWordType, sal_True);
+        nStartPos = skipSpace(Text, result.startPos, len, rWordType, true);
 
         if ( nStartPos != result.startPos) {
             if( nStartPos >= len )
@@ -122,7 +122,7 @@ Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 n
     return result;
 }
 
-static inline sal_Bool SAL_CALL isCJK( const Locale& rLocale ) {
+static inline bool SAL_CALL isCJK( const Locale& rLocale ) {
         return rLocale.Language == "zh" || rLocale.Language == "ja" || rLocale.Language == "ko";
 }
 
@@ -138,7 +138,7 @@ Boundary SAL_CALL BreakIteratorImpl::previousWord( const OUString& Text, sal_Int
         return result;
     }
 
-    sal_Int32 nPos = skipSpace(Text, nStartPos, len, rWordType, sal_False);
+    sal_Int32 nPos = skipSpace(Text, nStartPos, len, rWordType, false);
 
     // if some spaces are skiped, and the script type is Asian with no CJK rLocale, we have to return
     // (nStartPos, -1) for caller to send correct rLocale for loading correct dictionary.
@@ -162,8 +162,8 @@ Boundary SAL_CALL BreakIteratorImpl::getWordBoundary( const OUString& Text, sal_
         result.endPos = result.startPos = len;
     else {
         sal_Int32 next, prev;
-        next = skipSpace(Text, nPos, len, rWordType, sal_True);
-        prev = skipSpace(Text, nPos, len, rWordType, sal_False);
+        next = skipSpace(Text, nPos, len, rWordType, true);
+        prev = skipSpace(Text, nPos, len, rWordType, false);
         if (prev == 0 && next == len) {
             result.endPos = result.startPos = nPos;
         } else if (prev == 0 && ! bDirection) {
@@ -192,7 +192,7 @@ sal_Bool SAL_CALL BreakIteratorImpl::isBeginWord( const OUString& Text, sal_Int3
 
     if (nPos < 0 || nPos >= len) return sal_False;
 
-    sal_Int32 tmp = skipSpace(Text, nPos, len, rWordType, sal_True);
+    sal_Int32 tmp = skipSpace(Text, nPos, len, rWordType, true);
 
     if (tmp != nPos) return sal_False;
 
@@ -208,7 +208,7 @@ sal_Bool SAL_CALL BreakIteratorImpl::isEndWord( const OUString& Text, sal_Int32 
 
     if (nPos <= 0 || nPos > len) return sal_False;
 
-    sal_Int32 tmp = skipSpace(Text, nPos, len, rWordType, sal_False);
+    sal_Int32 tmp = skipSpace(Text, nPos, len, rWordType, false);
 
     if (tmp != nPos) return sal_False;
 
@@ -525,18 +525,18 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
     return nRet;
 }
 
-static inline sal_Bool operator == (const Locale& l1, const Locale& l2) {
+static inline bool operator == (const Locale& l1, const Locale& l2) {
         return l1.Language == l2.Language && l1.Country == l2.Country && l1.Variant == l2.Variant;
 }
 
-sal_Bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUString& aLocaleName) throw( RuntimeException )
+bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUString& aLocaleName) throw( RuntimeException )
 {
     // to share service between same Language but different Country code, like zh_CN and zh_TW
     for (size_t l = 0; l < lookupTable.size(); l++) {
         lookupTableItem *listItem = lookupTable[l];
         if (aLocaleName == listItem->aLocale.Language) {
             xBI = listItem->xBI;
-            return sal_True;
+            return true;
         }
     }
 
@@ -547,10 +547,10 @@ sal_Bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUS
         xBI.set(xI, UNO_QUERY);
         if (xBI.is()) {
             lookupTable.push_back(new lookupTableItem(Locale(aLocaleName, aLocaleName, aLocaleName), xBI));
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 Reference < XBreakIterator > SAL_CALL

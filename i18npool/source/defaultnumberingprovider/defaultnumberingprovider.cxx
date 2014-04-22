@@ -529,7 +529,7 @@ bool should_ignore( const OUString& s )
 
 static
 Any getPropertyByName( const Sequence<beans::PropertyValue>& aProperties,
-                                                const char* name, sal_Bool bRequired )
+                                                const char* name, bool bRequired )
 {
         for( int i=0; i<aProperties.getLength(); i++ )
                 if( aProperties[i].Name.equalsAscii(name) )
@@ -565,7 +565,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
      sal_Int16 natNum = 0;
      sal_Int16 tableSize = 0;
      const sal_Unicode *table = NULL;     // initialize to avoid compiler warning
-     sal_Bool recycleSymbol = sal_False;
+     bool recycleSymbol = false;
      Locale locale;
 
      OUString  prefix;
@@ -577,22 +577,22 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 //     int last        = nProperties-1;
 
      try {
-        getPropertyByName(aProperties, "Prefix", sal_False)      >>=prefix;
+        getPropertyByName(aProperties, "Prefix", false)      >>=prefix;
      } catch (Exception&) {
         //prefix _must_ be empty here!
      }
      try {
-        getPropertyByName(aProperties, "Suffix", sal_False)      >>=suffix;
+        getPropertyByName(aProperties, "Suffix", false)      >>=suffix;
      } catch (Exception&) {
         //suffix _must_ be empty here!
      }
      try {
-        getPropertyByName(aProperties, "NumberingType", sal_True)   >>=numType;
+        getPropertyByName(aProperties, "NumberingType", true)   >>=numType;
      } catch (Exception& ) {
         numType = -1;
      }
      try {
-        getPropertyByName(aProperties, "Value", sal_True)       >>=number;
+        getPropertyByName(aProperties, "Value", true)       >>=number;
      } catch (Exception& ) {
         number = -1;
      }
@@ -644,7 +644,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                try {
                     const OUString &tmp = OUString::number( number );
                     OUString transliteration;
-                    getPropertyByName(aProperties, "Transliteration", sal_True) >>= transliteration;
+                    getPropertyByName(aProperties, "Transliteration", true) >>= transliteration;
                     impl_loadTranslit();
                     translit->loadModuleByImplName(transliteration, aLocale);
                     result += translit->transliterateString2String(tmp, 0, tmp.getLength());
@@ -704,42 +704,42 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
           case AIU_FULLWIDTH_JA:
               table = table_AIUFullWidth_ja_JP;
               tableSize = SAL_N_ELEMENTS(table_AIUFullWidth_ja_JP);
-              recycleSymbol = sal_True;
+              recycleSymbol = true;
               break;
           case AIU_HALFWIDTH_JA:
               table = table_AIUHalfWidth_ja_JP;
               tableSize = SAL_N_ELEMENTS(table_AIUHalfWidth_ja_JP);
-              recycleSymbol = sal_True;
+              recycleSymbol = true;
               break;
           case IROHA_FULLWIDTH_JA:
               table = table_IROHAFullWidth_ja_JP;
               tableSize = SAL_N_ELEMENTS(table_IROHAFullWidth_ja_JP);
-              recycleSymbol = sal_True;
+              recycleSymbol = true;
               break;
           case IROHA_HALFWIDTH_JA:
               table = table_IROHAHalfWidth_ja_JP;
               tableSize = SAL_N_ELEMENTS(table_IROHAHalfWidth_ja_JP);
-              recycleSymbol = sal_True;
+              recycleSymbol = true;
               break;
           case HANGUL_JAMO_KO:
               table = table_HangulJamo_ko;
               tableSize = SAL_N_ELEMENTS(table_HangulJamo_ko);
-              recycleSymbol = sal_True;
+              recycleSymbol = true;
               break;
           case HANGUL_SYLLABLE_KO:
               table = table_HangulSyllable_ko;
               tableSize = SAL_N_ELEMENTS(table_HangulSyllable_ko);
-              recycleSymbol = sal_True;
+              recycleSymbol = true;
               break;
           case HANGUL_CIRCLED_JAMO_KO:
               table = table_HangulCircledJamo_ko;
               tableSize = SAL_N_ELEMENTS(table_HangulCircledJamo_ko);
-              recycleSymbol = sal_True;
+              recycleSymbol = true;
               break;
           case HANGUL_CIRCLED_SYLLABLE_KO:
               table = table_HangulCircledSyllable_ko;
               tableSize = SAL_N_ELEMENTS(table_HangulCircledSyllable_ko);
-              recycleSymbol = sal_True;
+              recycleSymbol = true;
               break;
           case CHARS_ARABIC:
               lcl_formatChars(table_Alphabet_ar, SAL_N_ELEMENTS(table_Alphabet_ar), number - 1, result);
@@ -965,7 +965,7 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(RuntimeException)
 {
     if (! xHierarchicalNameAccess.is()) {
@@ -992,7 +992,7 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(Runti
 
     Any aEnabled = xHierarchicalNameAccess->getByHierarchicalName(aName);
 
-    sal_Bool enabled = sal_False;
+    bool enabled = false;
 
     aEnabled >>= enabled;
 
@@ -1005,8 +1005,8 @@ Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
     Sequence< sal_Int16 > aRet(nSupported_NumberingTypes );
     sal_Int16* pArray = aRet.getArray();
 
-    sal_Bool cjkEnabled = isScriptFlagEnabled(OUString("CJK/CJKFont"));
-    sal_Bool ctlEnabled = isScriptFlagEnabled(OUString("CTL/CTLFont"));
+    bool cjkEnabled = isScriptFlagEnabled(OUString("CJK/CJKFont"));
+    bool ctlEnabled = isScriptFlagEnabled(OUString("CTL/CTLFont"));
 
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++) {
         if ( (aSupportedTypes[i].langOption & LANG_ALL) ||

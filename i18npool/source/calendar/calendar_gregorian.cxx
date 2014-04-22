@@ -806,13 +806,13 @@ Calendar_gregorian::isValid() throw(RuntimeException, std::exception)
 static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& aLocale,
         sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, sal_Int16 value )
 {
-    sal_Bool isShort = ((nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
+    bool isShort = ((nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
         nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR) && value >= 100) ||
         nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
         nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER;
-    sal_Bool isChinese = aLocale.Language == "zh";
-    sal_Bool isJapanese = aLocale.Language == "ja";
-    sal_Bool isKorean = aLocale.Language == "ko";
+    bool isChinese = aLocale.Language == "zh";
+    bool isJapanese = aLocale.Language == "ja";
+    bool isKorean = aLocale.Language == "ko";
 
     if (isChinese || isJapanese || isKorean) {
         switch (nNativeNumberMode) {

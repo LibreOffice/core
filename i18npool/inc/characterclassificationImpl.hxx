@@ -87,7 +87,7 @@ private:
         com::sun::star::lang::Locale aLocale;
         OUString aName;
         com::sun::star::uno::Reference < XCharacterClassification > xCI;
-        sal_Bool SAL_CALL equals(const com::sun::star::lang::Locale& rLocale) {
+        bool SAL_CALL equals(const com::sun::star::lang::Locale& rLocale) {
         return aLocale.Language == rLocale.Language &&
             aLocale.Country == rLocale.Country &&
             aLocale.Variant == rLocale.Variant;
@@ -101,7 +101,7 @@ private:
 
     com::sun::star::uno::Reference < XCharacterClassification > SAL_CALL
     getLocaleSpecificCharacterClassification(const com::sun::star::lang::Locale& rLocale) throw(com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL
+    bool SAL_CALL
     createLocaleSpecificCharacterClassification(const OUString& serviceName, const com::sun::star::lang::Locale& rLocale);
 
 };

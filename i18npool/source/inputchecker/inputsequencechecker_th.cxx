@@ -62,7 +62,7 @@ sal_Bool _TAC_Composible[3][5] = {
 /* Mode 2 */    {sal_True,  sal_True,   sal_False,      sal_False,      sal_True}  // STRICT = 2
 };
 
-static sal_Bool SAL_CALL check(sal_Unicode ch1, sal_Unicode ch2, sal_Int16 inputCheckMode)
+static bool SAL_CALL check(sal_Unicode ch1, sal_Unicode ch2, sal_Int16 inputCheckMode)
 {
     sal_Int16  composible_class;
     switch (_TAC_celltype_inputcheck[getCharType(ch1)][getCharType(ch2)]) {

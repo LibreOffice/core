@@ -26,19 +26,19 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 static const Mapping TiJi[] = {
     // TU + I --> TI
-    { 0x30C4, 0x30A3, 0x30C1, sal_True },
+    { 0x30C4, 0x30A3, 0x30C1, true },
     // TE + I --> TI
-    { 0x30C6, 0x30A3, 0x30C1, sal_True },
+    { 0x30C6, 0x30A3, 0x30C1, true },
     // TU + I --> TI
-    { 0x3064, 0x3043, 0x3061, sal_True },
+    { 0x3064, 0x3043, 0x3061, true },
     // TE + I --> TI
-    { 0x3066, 0x3043, 0x3061, sal_True },
+    { 0x3066, 0x3043, 0x3061, true },
     // DE + I --> ZI
-    { 0x30C7, 0x30A3, 0x30B8, sal_True },
+    { 0x30C7, 0x30A3, 0x30B8, true },
     // DE + I --> ZI
-    { 0x3067, 0x3043, 0x3058, sal_True },
+    { 0x3067, 0x3043, 0x3058, true },
 
-    { 0, 0, 0, sal_True }
+    { 0, 0, 0, true }
 };
 
 ignoreTiJi_ja_JP::ignoreTiJi_ja_JP()

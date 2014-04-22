@@ -50,7 +50,7 @@ Calendar_jewish::Calendar_jewish()
 const int HebrewEpoch = -1373429; // Absolute date of start of Hebrew calendar
 
 // True if year is an Hebrew leap year
-sal_Bool HebrewLeapYear(sal_Int32 year) {
+bool HebrewLeapYear(sal_Int32 year) {
     return ((((7 * year) + 1) % 19) < 7);
 }
 
@@ -102,12 +102,12 @@ sal_Int32 DaysInHebrewYear(sal_Int32 year) {
 }
 
 // True if Heshvan is long in Hebrew year.
-sal_Bool LongHeshvan(sal_Int32 year) {
+bool LongHeshvan(sal_Int32 year) {
     return ((DaysInHebrewYear(year) % 10) == 5);
 }
 
 // True if Kislev is short in Hebrew year.
-sal_Bool ShortKislev(sal_Int32 year) {
+bool ShortKislev(sal_Int32 year) {
     return ((DaysInHebrewYear(year) % 10) == 3);
 }
 

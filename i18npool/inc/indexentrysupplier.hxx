@@ -89,7 +89,7 @@ private:
     OUString aServiceName;
     com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > xIES;
     com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
-    sal_Bool SAL_CALL createLocaleSpecificIndexEntrySupplier(const OUString& name) throw( com::sun::star::uno::RuntimeException );
+    bool SAL_CALL createLocaleSpecificIndexEntrySupplier(const OUString& name) throw( com::sun::star::uno::RuntimeException );
     com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > SAL_CALL getLocaleSpecificIndexEntrySupplier(
         const com::sun::star::lang::Locale& rLocale, const OUString& rSortAlgorithm) throw (com::sun::star::uno::RuntimeException);
 

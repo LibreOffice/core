@@ -389,9 +389,9 @@ sal_Int32 cclass_Unicode::getParseTokensType( const sal_Unicode* aStr, sal_Int32
     }
 }
 
-sal_Bool cclass_Unicode::setupInternational( const Locale& rLocale )
+bool cclass_Unicode::setupInternational( const Locale& rLocale )
 {
-    sal_Bool bChanged = (aParserLocale.Language != rLocale.Language
+    bool bChanged = (aParserLocale.Language != rLocale.Language
         || aParserLocale.Country != rLocale.Country
         || aParserLocale.Variant != rLocale.Variant);
     if ( bChanged )

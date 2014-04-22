@@ -52,7 +52,7 @@ protected:
         sal_Int16 nNativeNumberMode;
         sal_Int16 tableSize;
         const sal_Unicode* table;
-        sal_Bool recycleSymbol;
+        bool recycleSymbol;
 private:
         OUString SAL_CALL
         transliterateBullet( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,

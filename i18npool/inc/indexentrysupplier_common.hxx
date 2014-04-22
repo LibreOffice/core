@@ -89,7 +89,7 @@ public:
 
 protected:
     const sal_Char *implementationName;
-    sal_Bool usePhonetic;
+    bool usePhonetic;
     CollatorImpl *collator;
     const OUString& SAL_CALL getEntry( const OUString& IndexEntry,
         const OUString& PhoneticEntry, const com::sun::star::lang::Locale& rLocale )

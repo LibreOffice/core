@@ -28,7 +28,7 @@ typedef struct {
     sal_Unicode previousChar;
     sal_Unicode currentChar;
     sal_Unicode replaceChar;
-    sal_Bool two2one;
+    bool two2one;
 } Mapping;
 
 namespace com { namespace sun { namespace star { namespace i18n {

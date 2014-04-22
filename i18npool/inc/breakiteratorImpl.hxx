@@ -125,12 +125,12 @@ private :
     com::sun::star::uno::Reference < XBreakIterator > xBI;
     com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
 
-    sal_Bool SAL_CALL createLocaleSpecificBreakIterator( const OUString& aLocaleName )
+    bool SAL_CALL createLocaleSpecificBreakIterator( const OUString& aLocaleName )
         throw( com::sun::star::uno::RuntimeException );
     com::sun::star::uno::Reference < XBreakIterator > SAL_CALL getLocaleSpecificBreakIterator( const com::sun::star::lang::Locale& rLocale )
         throw( com::sun::star::uno::RuntimeException );
     const com::sun::star::lang::Locale& SAL_CALL getLocaleByScriptType(const com::sun::star::lang::Locale& rLocale, const OUString& Text,
-        sal_Int32 nStartPos, sal_Bool forward, sal_Bool skipWhiteSpace)
+        sal_Int32 nStartPos, bool forward, bool skipWhiteSpace)
         throw(com::sun::star::uno::RuntimeException);
 
 };

@@ -26,15 +26,15 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 static const Mapping SeZe[] = {
     // SI + E --> SE
-    { 0x30B7, 0x30A7, 0x30BB, sal_True },
+    { 0x30B7, 0x30A7, 0x30BB, true },
     // SI + E --> SE
-    { 0x3057, 0x3047, 0x305B, sal_True },
+    { 0x3057, 0x3047, 0x305B, true },
     // ZI + E --> ZE
-    { 0x30B8, 0x30A7, 0x30BC, sal_True },
+    { 0x30B8, 0x30A7, 0x30BC, true },
     // ZI + E --> ZE
-    { 0x3058, 0x3047, 0x305C, sal_True },
+    { 0x3058, 0x3047, 0x305C, true },
 
-    { 0, 0, 0, sal_True }
+    { 0, 0, 0, true }
 };
 
 ignoreSeZe_ja_JP::ignoreSeZe_ja_JP()

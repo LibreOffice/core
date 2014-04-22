@@ -109,7 +109,7 @@ protected:
         com::sun::star::lang::Locale   aLocale;
         const sal_Char* transliterationName;
         const sal_Char* implementationName;
-        sal_Bool useOffset;
+        bool useOffset;
 };
 
 } } } }

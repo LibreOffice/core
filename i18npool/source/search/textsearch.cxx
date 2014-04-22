@@ -218,7 +218,7 @@ sal_Int32 FindPosInSeq_Impl( const Sequence <sal_Int32>& rOff, sal_Int32 nPos )
     return nRet;
 }
 
-sal_Bool TextSearch::isCellStart(const OUString& searchStr, sal_Int32 nPos)
+bool TextSearch::isCellStart(const OUString& searchStr, sal_Int32 nPos)
         throw( RuntimeException )
 {
     sal_Int32 nDone;

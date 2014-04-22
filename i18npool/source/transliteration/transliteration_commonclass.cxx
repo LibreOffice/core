@@ -31,7 +31,7 @@ transliteration_commonclass::transliteration_commonclass()
 {
     transliterationName = "";
     implementationName = "";
-    useOffset = sal_True;
+    useOffset = true;
 }
 
 OUString SAL_CALL transliteration_commonclass::getName() throw(RuntimeException, std::exception)
@@ -120,9 +120,9 @@ OUString SAL_CALL
 transliteration_commonclass::transliterateString2String( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount ) throw(RuntimeException, std::exception)
 {
     Sequence < sal_Int32 > dummy_offset;
-    useOffset = sal_False;
+    useOffset = false;
     OUString tmpStr = transliterate(inStr, startPos, nCount, dummy_offset);
-    useOffset = sal_True;
+    useOffset = true;
     return tmpStr;
 }
 

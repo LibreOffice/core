@@ -47,9 +47,9 @@ fullwidthToHalfwidth::transliterate( const OUString& inStr, sal_Int32 startPos, 
     const OUString& newStr = widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
 
     // One to One mapping
-    useOffset = sal_False;
+    useOffset = false;
     const OUString &tmp = transliteration_OneToOne::transliterate( newStr, 0, newStr.getLength(), offset);
-    useOffset = sal_True;
+    useOffset = true;
     return tmp;
 }
 
@@ -82,9 +82,9 @@ fullwidthKatakanaToHalfwidthKatakana::transliterate( const OUString& inStr, sal_
     const OUString& newStr = widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
 
     // One to One mapping
-    useOffset = sal_False;
+    useOffset = false;
     const OUString &tmp = transliteration_OneToOne::transliterate( newStr, 0, newStr.getLength(), offset);
-    useOffset = sal_True;
+    useOffset = true;
     return tmp;
 }
 
@@ -117,9 +117,9 @@ fullwidthToHalfwidthLikeASC::transliterate( const OUString& inStr, sal_Int32 sta
     const OUString& newStr = widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
 
     // One to One mapping
-    useOffset = sal_False;
+    useOffset = false;
     const OUString &tmp = transliteration_OneToOne::transliterate( newStr, 0, newStr.getLength(), offset);
-    useOffset = sal_True;
+    useOffset = true;
 
     return tmp;
 }

@@ -32,7 +32,7 @@ IndexEntrySupplier_Common::IndexEntrySupplier_Common(const Reference < uno::XCom
 {
     implementationName = "com.sun.star.i18n.IndexEntrySupplier_Common";
     collator = new CollatorImpl(rxContext);
-    usePhonetic = sal_False;
+    usePhonetic = false;
 }
 
 IndexEntrySupplier_Common::~IndexEntrySupplier_Common()

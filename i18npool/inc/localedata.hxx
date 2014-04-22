@@ -58,7 +58,7 @@ struct LocaleDataLookupTableItem;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-inline sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2) {
+inline bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2) {
     return l1.Language == l2.Language && l1.Country == l2.Country && l1.Variant == l2.Variant;
 };
 
@@ -112,8 +112,8 @@ public:
     virtual OUString SAL_CALL getIndexModuleByAlgorithm( const com::sun::star::lang::Locale& rLocale, const OUString& algorithm ) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< UnicodeScript > SAL_CALL getUnicodeScripts( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getFollowPageWords( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasPhonetic( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isPhonetic( const com::sun::star::lang::Locale& rLocale, const OUString& algorithm ) throw(com::sun::star::uno::RuntimeException);
+    virtual bool SAL_CALL hasPhonetic( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
+    virtual bool SAL_CALL isPhonetic( const com::sun::star::lang::Locale& rLocale, const OUString& algorithm ) throw(com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getHangingCharacters( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
@@ -122,7 +122,7 @@ public:
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private :
-    friend sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2);
+    friend bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2);
 
     ::std::auto_ptr< LocaleDataLookupTableItem > cachedItem;
 
