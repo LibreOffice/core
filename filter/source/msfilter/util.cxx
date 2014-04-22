@@ -1329,10 +1329,8 @@ MSO_SPT GETVMLShapeType(const OString& aType)
             (*pDMLToVMLMap)[pDMLToVMLTable[i].sDML] = pDMLToVMLTable[i].nVML;
     }
 
-    if (pDMLToVMLMap->find(pDML) == pDMLToVMLMap->end())
-        return mso_sptNil;
-
-    return (*pDMLToVMLMap)[pDML];
+    DMLToVMLTranslationHashMap::iterator i(pDMLToVMLMap->find(pDML));
+    return i == pDMLToVMLMap->end() ? mso_sptNil : i->second;
 }
 
 }
