@@ -26,41 +26,21 @@
 
 namespace abp
 {
-
-
-
     //= FieldMappingPage
-
-
     FieldMappingPage::FieldMappingPage( OAddessBookSourcePilot* _pParent )
-        :AddressBookSourcePage( _pParent, ModuleRes( RID_PAGE_FIELDMAPPING ) )
-        ,m_aExplanation     ( this, ModuleRes( FT_FIELDASSIGMENTEXPL ) )
-        ,m_aInvokeDialog    ( this, ModuleRes( PB_INVOKE_FIELDS_DIALOG ) )
-        ,m_aHint            ( this, ModuleRes( FT_ASSIGNEDFIELDS ) )
+        : AddressBookSourcePage(_pParent, "FieldAssignPage",
+            "modules/sabpilot/ui/fieldassignpage.ui")
     {
-        FreeResource();
+        get(m_pInvokeDialog, "assign");
+        get(m_pHint, "hint");
 
-        m_aInvokeDialog.SetClickHdl( LINK( this, FieldMappingPage, OnInvokeDialog ) );
-
-        // check the size of the InvokeDialog button - some languages are very ... gossipy here ....
-        sal_Int32 nTextWidth = m_aInvokeDialog.GetTextWidth( m_aInvokeDialog.GetText() );
-
-        sal_Int32 nBorderSpace = m_aInvokeDialog.LogicToPixel( Point( 4, 0 ), MAP_APPFONT ).X();
-        sal_Int32 nSpace = m_aInvokeDialog.GetOutputSizePixel().Width() - 2 * nBorderSpace;
-
-        if ( nSpace < nTextWidth )
-        {
-            Size aButtonSize = m_aInvokeDialog.GetSizePixel();
-            aButtonSize.Width() += nTextWidth - nSpace;
-            m_aInvokeDialog.SetSizePixel( aButtonSize );
-        }
+        m_pInvokeDialog->SetClickHdl( LINK( this, FieldMappingPage, OnInvokeDialog ) );
     }
-
 
     void FieldMappingPage::ActivatePage()
     {
         AddressBookSourcePage::ActivatePage();
-        m_aInvokeDialog.GrabFocus();
+        m_pInvokeDialog->GrabFocus();
     }
 
 
@@ -83,7 +63,7 @@ namespace abp
         OUString sHint;
         if ( rSettings.aFieldMapping.empty() )
             sHint = ModuleRes(RID_STR_NOFIELDSASSIGNED).toString();
-        m_aHint.SetText( sHint );
+        m_pHint->SetText( sHint );
     }
 
 

@@ -246,7 +246,7 @@
 
 This wizard helps you create the data source.</property>
         <property name="wrap">True</property>
-        <property name="max_width_chars">100</property>
+        <property name="max_width_chars">90</property>
       </object>
       <packing>
         <property name="left_attach">0</property>

@@ -33,9 +33,8 @@ namespace abp
     class FieldMappingPage : public AddressBookSourcePage
     {
     protected:
-        FixedText       m_aExplanation;
-        PushButton      m_aInvokeDialog;
-        FixedText       m_aHint;
+        PushButton*     m_pInvokeDialog;
+        FixedText*      m_pHint;
 
     public:
         FieldMappingPage( OAddessBookSourcePilot* _pParent );

@@ -47,7 +47,6 @@
 
 #define RID_PAGE_ADMININVOKATION        ( RID_PAGE_START +  1 )
 #define RID_PAGE_TABLESELECTION_AB      ( RID_PAGE_START +  2 )
-#define RID_PAGE_FIELDMAPPING           ( RID_PAGE_START +  3 )
 #define RID_PAGE_FINAL                  ( RID_PAGE_START +  4 )
 // please adjust RID_PAGE_END (below) when adding new tab pages
 
@@ -140,7 +139,6 @@
 #define FT_NAME_EXPL             4
 #define FT_ERROR                 5
 #define FL_TOOMUCHTABLES         6
-#define FT_FIELDASSIGMENTEXPL    7
 #define FT_ASSIGNEDFIELDS        8
 #define FT_FINISH_EXPL           9
 #define FT_DUPLICATENAME        10
@@ -151,7 +149,6 @@
 
 
 #define PB_INVOKE_ADMIN_DIALOG  1
-#define PB_INVOKE_FIELDS_DIALOG 2
 #define PB_BROWSE               3
 
 
