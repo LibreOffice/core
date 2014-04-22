@@ -3164,6 +3164,16 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeTIF, "fdo77476.docx")
     assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[@ContentType='image/tif']", "PartName", "/word/media/image1.tif");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testContentTypeOLE, "fdo77759.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']", "PartName", "/word/embeddings/oleObject1.xlsx");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
