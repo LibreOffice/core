@@ -65,7 +65,7 @@ struct SwDBData;
 class SwField;
 class Printer;
 class SwLabItem;
-class SwNewDBMgr;
+class SwDBMgr;
 class SwTableFUNC;
 class SwChildWinWrapper;
 struct SfxChildWinInfo;
@@ -353,7 +353,7 @@ public:
     virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert ) = 0;
 
     virtual AbstractSwLabDlg* CreateSwLabDlg(Window* pParent, const SfxItemSet& rSet,
-                                                     SwNewDBMgr* pNewDBMgr, bool bLabel) = 0;
+                                                     SwDBMgr* pNewDBMgr, bool bLabel) = 0;
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod () =0;
 

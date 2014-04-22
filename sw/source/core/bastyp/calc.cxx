@@ -517,7 +517,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
 
     if( !ins )
     {
-        SwNewDBMgr *pMgr = rDoc.GetNewDBMgr();
+        SwDBMgr *pMgr = rDoc.GetNewDBMgr();
 
         OUString sDBName(GetDBName( sTmpName ));
         OUString sSourceName(sDBName.getToken(0, DB_DELIM));
@@ -579,7 +579,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
     if( sColumnName.equalsIgnoreAsciiCase(
                             SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) ))
     {
-        SwNewDBMgr *pMgr = rDoc.GetNewDBMgr();
+        SwDBMgr *pMgr = rDoc.GetNewDBMgr();
         OUString sDBName(GetDBName( sTmpName ));
         OUString sSourceName(sDBName.getToken(0, DB_DELIM));
         OUString sTableName(sDBName.getToken(0, ';').getToken(1, DB_DELIM));

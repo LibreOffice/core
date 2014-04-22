@@ -55,7 +55,7 @@ sal_Bool SwFldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTblQry
 {
     sal_Bool bNumeric = sal_True;
 
-    SwNewDBMgr* pDBMgr = pWrtShell ? pWrtShell->GetNewDBMgr() :
+    SwDBMgr* pDBMgr = pWrtShell ? pWrtShell->GetNewDBMgr() :
                             ::GetActiveView()->GetWrtShell().GetNewDBMgr();
 
     OUString sSource(rDBName);

@@ -1366,7 +1366,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
 
     if( TYP_CONDTXTFLD == nSubType )
     {
-        SwNewDBMgr* pMgr = pDoc->GetNewDBMgr();
+        SwDBMgr* pMgr = pDoc->GetNewDBMgr();
 
         bValid = sal_False;
         OUString sTmpName = (bCanToggle && !bIsHidden) ? aTRUETxt : aFALSETxt;

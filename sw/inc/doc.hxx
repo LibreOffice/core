@@ -132,7 +132,7 @@ class GraphicObject;
 class SwGrfFmtColl;
 class SwGrfFmtColls;
 class SwLineNumberInfo;
-class SwNewDBMgr;
+class SwDBMgr;
 class SwNoTxtNode;
 class SwNodeIndex;
 class SwNodeRange;
@@ -315,7 +315,7 @@ class SW_DLLPUBLIC SwDoc :
 
     SwDocUpdtFld    *mpUpdtFlds;         //< Struct for updating fields
     SwFldTypes      *mpFldTypes;
-    SwNewDBMgr      *mpNewDBMgr;         /**< Pointer to the new DBMgr for
+    SwDBMgr      *mpNewDBMgr;         /**< Pointer to the new DBMgr for
                                          evaluation of DB-fields. */
 
     VirtualDevice   *mpVirDev;           //< can be used for formatting
@@ -1144,8 +1144,8 @@ public:
                                const Point* pPt = 0 ) const;
 
     // Database  and DB-Manager
-    void SetNewDBMgr( SwNewDBMgr* pNewMgr )     { mpNewDBMgr = pNewMgr; }
-    SwNewDBMgr* GetNewDBMgr() const             { return mpNewDBMgr; }
+    void SetNewDBMgr( SwDBMgr* pNewMgr )     { mpNewDBMgr = pNewMgr; }
+    SwDBMgr* GetNewDBMgr() const             { return mpNewDBMgr; }
     void ChangeDBFields( const std::vector<OUString>& rOldNames,
                         const OUString& rNewName );
     void SetInitDBFields(sal_Bool b);

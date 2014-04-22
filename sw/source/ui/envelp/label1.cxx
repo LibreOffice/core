@@ -92,7 +92,7 @@ void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 }
 
 SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
-                                SwNewDBMgr* pDBMgr, sal_Bool bLabel)
+                                SwDBMgr* pDBMgr, sal_Bool bLabel)
     : SfxTabDialog(pParent, "LabelDialog",
         "modules/swriter/ui/labeldialog.ui", &rSet)
     , pNewDBMgr(pDBMgr)
@@ -442,7 +442,7 @@ void SwLabPage::InitDatabaseBox()
     if( GetNewDBMgr() )
     {
         m_pDatabaseLB->Clear();
-        ::com::sun::star::uno::Sequence<OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
+        ::com::sun::star::uno::Sequence<OUString> aDataNames = SwDBMgr::GetExistingDatabaseNames();
         const OUString* pDataNames = aDataNames.getConstArray();
         for (long i = 0; i < aDataNames.getLength(); i++)
             m_pDatabaseLB->InsertEntry(pDataNames[i]);

@@ -369,7 +369,7 @@ void SwEditShell::UpdateExpFlds(sal_Bool bCloseDB)
     EndAllAction();
 }
 
-SwNewDBMgr* SwEditShell::GetNewDBMgr() const
+SwDBMgr* SwEditShell::GetNewDBMgr() const
 {
     return GetDoc()->GetNewDBMgr();
 }

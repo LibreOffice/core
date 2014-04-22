@@ -856,7 +856,7 @@ Reference< XColumnsSupplier> SwMailMergeConfigItem::GetColumnsSupplier()
 {
     if(!m_pImpl->xColumnsSupplier.is() && m_pImpl->xConnection.is())
     {
-        m_pImpl->xColumnsSupplier = SwNewDBMgr::GetColumnSupplier(m_pImpl->xConnection,
+        m_pImpl->xColumnsSupplier = SwDBMgr::GetColumnSupplier(m_pImpl->xConnection,
                                 m_pImpl->aDBData.sCommand,
                                 m_pImpl->aDBData.nCommandType == CommandType::TABLE ?
                                         SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY );
@@ -886,7 +886,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
     if(!m_pImpl->xConnection.is() && !m_pImpl->aDBData.sDataSource.isEmpty())
     {
         m_pImpl->xConnection.reset(
-            SwNewDBMgr::GetConnection( m_pImpl->aDBData.sDataSource, m_pImpl->xSource ),
+            SwDBMgr::GetConnection( m_pImpl->aDBData.sDataSource, m_pImpl->xSource ),
             SharedConnection::TakeOwnership
         );
     }

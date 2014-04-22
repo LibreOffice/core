@@ -403,7 +403,7 @@ public:
         SwField* pField, sal_Bool bNextButton = sal_False) SAL_OVERRIDE;
     virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert ) SAL_OVERRIDE;
     virtual AbstractSwLabDlg* CreateSwLabDlg(Window* pParent, const SfxItemSet& rSet,
-                                                     SwNewDBMgr* pNewDBMgr, bool bLabel) SAL_OVERRIDE;
+                                                     SwDBMgr* pNewDBMgr, bool bLabel) SAL_OVERRIDE;
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod () SAL_OVERRIDE;
     virtual SfxAbstractTabDialog* CreateSwParaDlg ( Window *pParent,

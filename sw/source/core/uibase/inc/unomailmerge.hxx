@@ -59,7 +59,7 @@ namespace com { namespace sun { namespace star {
 typedef cppu::OMultiTypeInterfaceContainerHelperVar<sal_Int32>
     OPropertyListenerContainerHelper;
 
-class SwNewDBMgr;
+class SwDBMgr;
 class MailMergeExecuteFinalizer;
 
 class SwXMailMerge :
@@ -122,7 +122,7 @@ class SwXMailMerge :
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSaveFilterData;
 
     sal_Bool        bDisposing;
-    SwNewDBMgr     *m_pMgr;
+    SwDBMgr     *m_pMgr;
 
     void    launchEvent( const com::sun::star::beans::PropertyChangeEvent &rEvt ) const;
 

@@ -24,7 +24,7 @@
 
 class SwLabPage : public SfxTabPage
 {
-    SwNewDBMgr*   pNewDBMgr;
+    SwDBMgr*   pNewDBMgr;
     OUString      sActDBName;
     SwLabItem     aItem;
 
@@ -76,8 +76,8 @@ public:
     void    SetToBusinessCard();
 
     void InitDatabaseBox();
-    inline void SetNewDBMgr(SwNewDBMgr* pDBMgr) { pNewDBMgr = pDBMgr; }
-    inline SwNewDBMgr* GetNewDBMgr() const { return pNewDBMgr; }
+    inline void SetNewDBMgr(SwDBMgr* pDBMgr) { pNewDBMgr = pDBMgr; }
+    inline SwDBMgr* GetNewDBMgr() const { return pNewDBMgr; }
 };
 
 class SwOneExampleFrame;

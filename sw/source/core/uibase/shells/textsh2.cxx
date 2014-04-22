@@ -86,7 +86,7 @@ struct DBTextStruct_Impl
 void SwTextShell::ExecDB(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
-    SwNewDBMgr* pNewDBMgr = GetShell().GetNewDBMgr();
+    SwDBMgr* pNewDBMgr = GetShell().GetNewDBMgr();
     sal_uInt16 nSlot = rReq.GetSlot();
     OUString sSourceArg, sCommandArg;
     sal_Int32 nCommandTypeArg = 0;
@@ -168,7 +168,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 sal_Bool bDisposeResultSet = sal_False;
                 if ( !xCursor.is() )
                 {
-                    xCursor = SwNewDBMgr::createCursor(sSourceArg,sCommandArg,nCommandTypeArg,xConnection);
+                    xCursor = SwDBMgr::createCursor(sSourceArg,sCommandArg,nCommandTypeArg,xConnection);
                     bDisposeResultSet = xCursor.is();
                 }
 
@@ -241,20 +241,20 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
     {
         bool bDispose = false;
         Reference< sdbc::XConnection> xConnection = pDBStruct->xConnection;
-        Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,pDBStruct->aDBData.sDataSource);
+        Reference<XDataSource> xSource = SwDBMgr::getDataSourceAsParent(xConnection,pDBStruct->aDBData.sDataSource);
         // #111987# the connection is disposed an so no parent has been found
         if(xConnection.is() && !xSource.is())
             return 0;
 
         if ( !xConnection.is()  )
         {
-            xConnection = SwNewDBMgr::GetConnection(pDBStruct->aDBData.sDataSource, xSource);
+            xConnection = SwDBMgr::GetConnection(pDBStruct->aDBData.sDataSource, xSource);
             bDispose = true;
         }
 
         Reference< XColumnsSupplier> xColSupp;
         if(xConnection.is())
-            xColSupp = SwNewDBMgr::GetColumnSupplier(xConnection,
+            xColSupp = SwDBMgr::GetColumnSupplier(xConnection,
                                     pDBStruct->aDBData.sCommand,
                                     pDBStruct->aDBData.nCommandType == CommandType::QUERY ?
                                         SW_DB_SELECT_QUERY : SW_DB_SELECT_TABLE);

@@ -331,7 +331,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
 
 IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl)
 {
-    const OUString sNewSource = SwNewDBMgr::LoadAndRegisterDataSource();
+    const OUString sNewSource = SwDBMgr::LoadAndRegisterDataSource();
     if(!sNewSource.isEmpty())
     {
         SvTreeListEntry* pNewSource = m_pListLB->InsertEntry(sNewSource);
@@ -594,7 +594,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             m_xDBContext->getByName(m_aDBData.sDataSource) >>= xSourceProperties;
             pUserData->sURL = lcl_getFlatURL( xSourceProperties );
 
-            pUserData->xColumnsSupplier = SwNewDBMgr::GetColumnSupplier(pUserData->xConnection,
+            pUserData->xColumnsSupplier = SwDBMgr::GetColumnSupplier(pUserData->xConnection,
                                     m_aDBData.sCommand,
                                     m_aDBData.nCommandType == CommandType::TABLE ?
                                             SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY );

@@ -399,7 +399,7 @@ SwDoc::SwDoc()
     maStatsUpdateTimer.SetTimeoutHdl( LINK( this, SwDoc, DoIdleStatsUpdate ) );
 
     // Create DBMgr
-    mpNewDBMgr = new SwNewDBMgr;
+    mpNewDBMgr = new SwDBMgr;
 
     // create TOXTypes
     InitTOXTypes();

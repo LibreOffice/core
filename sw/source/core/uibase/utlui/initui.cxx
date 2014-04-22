@@ -146,7 +146,7 @@ std::vector<OUString>* pAuthFieldTypeList = 0;
 
 void _FinitUI()
 {
-    SwNewDBMgr::RemoveDbtoolsClient();
+    SwDBMgr::RemoveDbtoolsClient();
     delete SwViewShell::GetShellRes();
     SwViewShell::SetShellRes( 0 );
 

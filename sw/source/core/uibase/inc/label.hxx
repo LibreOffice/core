@@ -28,13 +28,13 @@ class SwLabRec;
 class SwLabRecs;
 class SwLabItem;
 class SwLabPrtPage;
-class SwNewDBMgr;
+class SwDBMgr;
 class Printer;
 
 class SwLabDlg : public SfxTabDialog
 {
     SwLabelConfig   aLabelsCfg;
-    SwNewDBMgr*     pNewDBMgr;
+    SwDBMgr*     pNewDBMgr;
     SwLabPrtPage*   pPrtPage;
 
     std::vector<sal_uInt16> aTypeIds;
@@ -56,7 +56,7 @@ class SwLabDlg : public SfxTabDialog
 public:
 
      SwLabDlg( Window* pParent, const SfxItemSet& rSet,
-                 SwNewDBMgr* pNewDBMgr, sal_Bool bLabel);
+                 SwDBMgr* pNewDBMgr, sal_Bool bLabel);
     virtual ~SwLabDlg();
 
     SwLabRec*   GetRecord(const OUString &rRecName, sal_Bool bCont);

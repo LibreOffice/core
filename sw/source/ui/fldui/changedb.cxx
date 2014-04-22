@@ -261,7 +261,7 @@ void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 
 IMPL_LINK_NOARG(SwChangeDBDlg, AddDBHdl)
 {
-    const OUString sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
+    const OUString sNewDB = SwDBMgr::LoadAndRegisterDataSource();
     if (!sNewDB.isEmpty())
         m_pAvailDBTLB->AddDataSource(sNewDB);
     return 0;

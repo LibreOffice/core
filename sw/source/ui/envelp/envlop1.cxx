@@ -287,7 +287,7 @@ void SwEnvPage::InitDatabaseBox()
     if (pSh->GetNewDBMgr())
     {
         m_pDatabaseLB->Clear();
-        Sequence<OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
+        Sequence<OUString> aDataNames = SwDBMgr::GetExistingDatabaseNames();
         const OUString* pDataNames = aDataNames.getConstArray();
 
         for (sal_Int32 i = 0; i < aDataNames.getLength(); i++)

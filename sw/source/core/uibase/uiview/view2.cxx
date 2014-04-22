@@ -1091,7 +1091,7 @@ void SwView::Execute(SfxRequest &rReq)
             SwWrtShell &rSh = GetWrtShell();
             if(m_bInMailMerge && rSh.IsAnyDatabaseFieldInDoc())
             {
-                SwNewDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
+                SwDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
                 if (pNewDBMgr)
                 {
                     SwDBData aData;
@@ -2362,7 +2362,7 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
                 return ;
             }
         }
-        SwNewDBMgr* pNewDBMgr = GetWrtShell().GetNewDBMgr();
+        SwDBMgr* pNewDBMgr = GetWrtShell().GetNewDBMgr();
 
         SwDBData aData;
         SwWrtShell &rSh = GetWrtShell();

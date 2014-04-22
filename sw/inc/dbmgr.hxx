@@ -173,11 +173,11 @@ struct SwMergeDescriptor
 
 };
 
-struct SwNewDBMgr_Impl;
+struct SwDBMgr_Impl;
 class SwConnectionDisposedListener_Impl;
 class AbstractMailMergeDlg;
 
-class SW_DLLPUBLIC SwNewDBMgr
+class SW_DLLPUBLIC SwDBMgr
 {
 friend class SwConnectionDisposedListener_Impl;
 
@@ -194,7 +194,7 @@ friend class SwConnectionDisposedListener_Impl;
     sal_Bool            bMergeLock : 1;     /**< prevent update of database fields while document is
                                              actually printed at the SwViewShell */
     SwDSParamArr        aDataSourceParams;
-    SwNewDBMgr_Impl*    pImpl;
+    SwDBMgr_Impl*    pImpl;
     const SwXMailMerge* pMergeEvtSrc;   ///< != 0 if mail merge events are to be send
 
     SAL_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, sal_Bool bCreate);
@@ -214,8 +214,8 @@ friend class SwConnectionDisposedListener_Impl;
     SAL_DLLPRIVATE sal_Bool          ToNextRecord(SwDSParam* pParam);
 
 public:
-    SwNewDBMgr();
-    ~SwNewDBMgr();
+    SwDBMgr();
+    ~SwDBMgr();
 
     /// MailMergeEvent source
     const SwXMailMerge *    GetMailMergeEvtSrc() const  { return pMergeEvtSrc; }

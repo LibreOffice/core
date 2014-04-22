@@ -1016,7 +1016,7 @@ static OUString lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
 }
 
 static void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
-                        SwNewDBMgr* pMgr )
+                        SwDBMgr* pMgr )
 {
     const SwTxtFld* pTxtFld = rSGEFld.GetTxtFld();
     if( !pTxtFld )
@@ -1078,7 +1078,7 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
     mpUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_CALC );
     mbNewFldLst = false;
 
-    SwNewDBMgr* pMgr = GetNewDBMgr();
+    SwDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(sal_False);
 
     if( !mpUpdtFlds->GetSortLst()->empty() )
@@ -1099,7 +1099,7 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt )
     mpUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_CALC );
     mbNewFldLst = false;
 
-    SwNewDBMgr* pMgr = GetNewDBMgr();
+    SwDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(sal_False);
 
     for( _SetGetExpFlds::const_iterator it = mpUpdtFlds->GetSortLst()->begin();
@@ -1259,7 +1259,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     OUString sDBNumNm( SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) );
 
     // already set the current record number
-    SwNewDBMgr* pMgr = GetNewDBMgr();
+    SwDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(sal_False);
 
     // Make sure we don't hide all sections, which would lead to a crash. First, count how many of them do we have.
@@ -1517,7 +1517,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
 void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
 {
-    SwNewDBMgr* pMgr = GetNewDBMgr();
+    SwDBMgr* pMgr = GetNewDBMgr();
 
     sal_uInt16 nFldType = rDBFld.Which();
 
@@ -1742,7 +1742,7 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
 
 void SwDoc::GetAllDBNames( std::vector<OUString>& rAllDBNames )
 {
-    SwNewDBMgr* pMgr = GetNewDBMgr();
+    SwDBMgr* pMgr = GetNewDBMgr();
 
     const SwDSParamArr& rArr = pMgr->GetDSParamArray();
     for(sal_uInt16 i = 0; i < rArr.size(); i++)

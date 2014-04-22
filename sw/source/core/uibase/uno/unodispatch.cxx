@@ -206,7 +206,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
     if(!m_pView)
         throw uno::RuntimeException();
     SwWrtShell& rSh = m_pView->GetWrtShell();
-    SwNewDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
+    SwDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
     if(aURL.Complete.equalsAscii(cURLInsertContent))
     {
         ::svx::ODataAccessDescriptor aDescriptor(aArgs);

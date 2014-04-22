@@ -158,7 +158,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
     static sal_uInt16 nBCTitleNo = 0;
 
     // Create DB-Manager
-    boost::scoped_ptr<SwNewDBMgr> pNewDBMgr(new SwNewDBMgr);
+    boost::scoped_ptr<SwDBMgr> pNewDBMgr(new SwDBMgr);
 
     // Read SwLabItem from Config
     SwLabCfgItem aLabCfg(bLabel);
