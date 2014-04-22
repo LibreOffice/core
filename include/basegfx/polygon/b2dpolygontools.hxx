@@ -422,10 +422,6 @@ namespace basegfx
         */
         BASEGFX_DLLPUBLIC B2DPolygon createWaveline(const B2DPolygon& rCandidate, double fWaveWidth, double fWaveHeight);
 
-
-        // comparators with tolerance for 2D Polygons
-        BASEGFX_DLLPUBLIC bool equal(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB, const double& rfSmallValue);
-
         /** snap some polygon coordinates to discrete coordinates
 
             This method allows to snap some polygon points to discrete (integer) values

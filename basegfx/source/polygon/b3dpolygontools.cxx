@@ -734,32 +734,6 @@ namespace basegfx
             return false;
         }
 
-
-        // comparators with tolerance for 3D Polygons
-
-        bool equal(const B3DPolygon& rCandidateA, const B3DPolygon& rCandidateB, const double& rfSmallValue)
-        {
-            const sal_uInt32 nPointCount(rCandidateA.count());
-
-            if(nPointCount != rCandidateB.count())
-                return false;
-
-            const bool bClosed(rCandidateA.isClosed());
-
-            if(bClosed != rCandidateB.isClosed())
-                return false;
-
-            for(sal_uInt32 a(0); a < nPointCount; a++)
-            {
-                const B3DPoint aPoint(rCandidateA.getB3DPoint(a));
-
-                if(!aPoint.equal(rCandidateB.getB3DPoint(a), rfSmallValue))
-                    return false;
-            }
-
-            return true;
-        }
-
         // snap points of horizontal or vertical edges to discrete values
         B3DPolygon snapPointsOfHorizontalOrVerticalEdges(const B3DPolygon& rCandidate)
         {

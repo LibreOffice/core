@@ -113,10 +113,6 @@ namespace basegfx
         // and a line given by start and end point
         BASEGFX_DLLPUBLIC bool getCutBetweenLineAndPlane(const B3DVector& rPlaneNormal, const B3DPoint& rPlanePoint, const B3DPoint& rEdgeStart, const B3DPoint& rEdgeEnd, double& fCut);
 
-
-        // comparators with tolerance for 3D Polygons
-        BASEGFX_DLLPUBLIC bool equal(const B3DPolygon& rCandidateA, const B3DPolygon& rCandidateB, const double& rfSmallValue);
-
         /** snap some polygon coordinates to discrete coordinates
 
             This method allows to snap some polygon points to discrete (integer) values
