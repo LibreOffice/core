@@ -27,10 +27,8 @@
 
 #define FL_BOTTOM_SEP                   50
 #define BTN_HELP                        53
-#define LB_SIGNATURES                   54
-#define BTN_VIEWCERT                    55
+
 #define STR_HEADERBAR                   56
-#define BTN_RESET                       57
 #define STR_VALID_SIGNATURE             58
 #define STR_NO_INFO_TO_VERIFY           59
 #define STR_INVALID_SIGNATURE           60
@@ -41,20 +39,14 @@
 // --------- ... for tab dialogs -----
 #define TP_WIDTH                        260
 #define TP_HEIGHT                       185
-#define RIDDER_HEIGHT                   (RSC_CD_PUSHBUTTON_HEIGHT)
 #define TD_SP_INNERBORDER_LEFT          3
 #define TD_SP_INNERBORDER_RIGHT         3
-#define TD_SP_INNERBORDER_TOP           3
-#define TD_SP_INNERBORDER_BOTTOM        3
 #define TD_WIDTH                        (TP_WIDTH+RSC_SP_DLG_INNERBORDER_LEFT+RSC_SP_DLG_INNERBORDER_RIGHT)
-#define TD_HEIGHT                       (TP_HEIGHT+TD_SP_INNERBORDER_TOP+2*TD_SP_INNERBORDER_BOTTOM+RSC_CD_PUSHBUTTON_HEIGHT+RIDDER_HEIGHT)
 
 #define SEP_FL_SPACE_Y                  6
-#define SEP_FL_ADJ_Y(val)               (val-3)
 #define DLGS_BOTTOM_BTN_L(dlgh)         (dlgh-RSC_SP_DLG_INNERBORDER_BOTTOM)
 #define DLGS_BOTTOM_BTN_Y(dlgh)         (DLGS_BOTTOM_BTN_L(dlgh)-RSC_CD_PUSHBUTTON_HEIGHT)
 #define DLGS_BOTTOM_FL_Y(dlgh)          (DLGS_BOTTOM_BTN_Y(dlgh)-SEP_FL_SPACE_Y-5)
-#define DLGS_BOTTOM_LAST_CTRL_L(dlgh)   (DLGS_BOTTOM_BTN_Y(dlgh)-2*SEP_FL_SPACE_Y-3)
 #define DLGS_BOTTOM_HELP_X(dlgw)        (dlgw-RSC_SP_DLG_INNERBORDER_RIGHT-RSC_CD_PUSHBUTTON_WIDTH)
 #define DLGS_BOTTOM_CANCEL_X(dlgw)      (DLGS_BOTTOM_HELP_X(dlgw)-RSC_SP_CTRL_X-RSC_CD_PUSHBUTTON_WIDTH)
 #define DLGS_BOTTOM_OK_X(dlgw)          (DLGS_BOTTOM_CANCEL_X(dlgw)-RSC_SP_CTRL_DESC_X-RSC_CD_PUSHBUTTON_WIDTH)
@@ -79,9 +71,6 @@
 #define CV_COL_C                        (CV_COL_D-RSC_CD_PUSHBUTTON_WIDTH)
 #define CV_COL_B                        (CV_COL_C-RSC_SP_CTRL_X)
 #define CV_COL_A                        (CV_COL_B-RSC_CD_PUSHBUTTON_WIDTH)
-
-#define CV_ROW_B                        (TD_HEIGHT-TD_SP_INNERBORDER_BOTTOM)
-#define CV_ROW_A                        (CV_ROW_B-RSC_CD_PUSHBUTTON_HEIGHT)
 
 // --------- tab page Certificate viewer - General ---------
 #define WIN_FRAME                       2
@@ -147,21 +136,12 @@
 
 // --------- tab page Certificate viewer - Certification Path ---------
 
-#define FT_CERTPATH                     1
-#define FT_CERTSTATUS                   2
-#define ML_CERTSTATUS                   3
-#define IMG_CERT_SMALL                  4
-#define IMG_CERT_NOTVALIDATED_SMALL     6
 #define STR_PATH_CERT_OK                8
 #define STR_PATH_CERT_NOT_VALIDATED     9
 
 #define CVP_ROW_0                       RSC_SP_TBPG_INNERBORDER_TOP
 #define CVP_ROW_1                       (CVP_ROW_0+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
 #define REST_HEIGHT                     (TP_HEIGHT-CVP_ROW_1-2*RSC_SP_GRP_SPACE_Y-RSC_CD_FIXEDTEXT_HEIGHT-RSC_CD_PUSHBUTTON_HEIGHT)
-#define CVP_ROW_2                       (CVP_ROW_1+REST_HEIGHT/3*2+RSC_SP_CTRL_DESC_Y)
-#define CVP_ROW_3                       (CVP_ROW_2+RSC_CD_PUSHBUTTON_HEIGHT)
-#define CVP_ROW_4                       (CVP_ROW_3+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
-
 
 // --------- tab dialog macro security ---------
 

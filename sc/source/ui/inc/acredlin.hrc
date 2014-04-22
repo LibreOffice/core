@@ -19,10 +19,6 @@
 
 #include "sc.hrc"
 
-#define BTN_OK          1
-#define BTN_CANCEL      2
-#define BTN_HELP        5
-
 #define SC_CHANGES_COMMENT  49
 #define SC_SUB_SORT         50
 #define SC_SORT_ACTION      51

@@ -41,13 +41,6 @@
 #define RID_ANNOTATION_CONTEXTMENU          (RID_ANNOTATIONS_START+0)
 #define RID_ANNOTATION_TAG_CONTEXTMENU      (RID_ANNOTATIONS_START+1)
 
-#define BTN_NEW     1
-#define BTN_DELETE  2
-#define BTN_NEXT    3
-#define BTN_PREV    4
-
-#define FT_AUTHOR   1
-
 #endif // _SD_ANNOTATIONPANE_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,18 +24,6 @@
 
 #define IBX_MNUCFG_ALREADY_INCLUDED         (RID_SFX_MENU_START+2)
 
-#define BTN_UP                3
-#define BTN_LEFT              4
-#define BTN_RIGHT             5
-#define BTN_DOWN              6
-#define BTN_NEW               7
-#define BTN_CHANGE            8
-#define BTN_REMOVE            9
-#define BOX_ENTRIES          10
-#define TXT_TEXT             11
-#define EDT_TEXT             12
-#define GRP_FUNCTIONS        22
-
 #define STR_MENU_CFGITEM                    RID_SFX_MENU_START+1
 #define STR_MENU_ADDONS                     RID_SFX_MENU_START+2
 #define STR_MENU_ADDONHELP                  RID_SFX_MENU_START+3

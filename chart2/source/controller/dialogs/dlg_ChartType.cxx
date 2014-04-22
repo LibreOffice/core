@@ -18,7 +18,6 @@
  */
 
 #include "dlg_ChartType.hxx"
-#include "dlg_ChartType.hrc"
 #include "ResId.hxx"
 #include "ResourceIds.hrc"
 #include "Strings.hrc"

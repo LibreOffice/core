@@ -65,54 +65,14 @@
 #define FT_SUGGESTION               22
 
 
-
 // Hangul / Hanja Options Dialog
 
-#define FT_USERDEFDICT              1
 #define BTN_OPTIONS                 10
-
-#define LB_DICTS                    1
-
-#define CB_IGNOREPOST               1
-#define CB_SHOWRECENTLYFIRST        3
-#define CB_AUTOREPLACEUNIQUE        4
-
-#define PB_HHO_NEW                  1
-#define PB_HHO_EDIT                 2
-#define PB_HHO_DELETE               3
-#define PB_HHO_OK                   4
-#define PB_HHO_CANCEL               5
-#define PB_HHO_HELP                 6
 
 // metrics
 
 #define HHO_DLGWIDTH                287
 #define HHx_DLGHIGHT                175
-#define HHO_COL_1                   RSC_SP_DLG_INNERBORDER_LEFT
-#define HHO_COL_1a                  (HHO_COL_1+3)
-#define HHO_COL_6                   (HHO_DLGWIDTH-6)
-#define HHO_COL_5                   (HHO_COL_6-50)
-#define HHO_COL_4                   (HHO_COL_5-12)
-#define HHO_COL_3                   (HHO_COL_4-50)
-#define HHO_COL_2                   (HHO_COL_3-6)
-
-#define HHO_ROW_1                   RSC_SP_DLG_INNERBORDER_TOP
-#define HHO_ROW_2                   (HHO_ROW_1+8+2)
-#define HHO_ROW_3                   (HHO_ROW_2+14)
-#define HHO_ROW_4                   (HHO_ROW_3+2)
-#define HHO_ROW_5                   (HHO_ROW_4+14)
-#define HHO_ROW_6                   (HHO_ROW_5+2)
-#define HHO_ROW_7                   (HHO_ROW_6+14)
-#define HHO_ROW_8                   (HHO_ROW_7+4)
-#define HHO_ROW_9                   (HHO_ROW_8+8+4)
-#define HHO_ROW_11                  (HHO_ROW_9+8+4)
-#define HHO_ROW_12                  (HHO_ROW_11+8+4)
-
-#define HHO_ROW_a1                  HHO_ROW_1
-#define HHO_ROW_a2                  (HHO_ROW_a1+14)
-#define HHO_ROW_a3                  (HHO_ROW_a2+2)
-#define HHO_ROW_a4                  (HHO_ROW_a3+14)
-#define HHO_ROW_a5                  (HHO_ROW_a4+4)
 
 // Hangul Hanja Edit Custom Dictionary Dialog
 #define MAXNUM_SUGGESTIONS          50

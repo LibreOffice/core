@@ -18,7 +18,6 @@
  */
 
 #include "solveroptions.hxx"
-#include "solveroptions.hrc"
 #include "scresid.hxx"
 #include "global.hxx"
 #include "miscuno.hxx"

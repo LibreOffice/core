@@ -24,12 +24,6 @@
 
 // --------- general metrics ---------
 
-#define SEP_FL_SPACE_Y                  6
-#define SEP_FL_ADJ_Y(val)               (val-3)
-#define DLGS_BOTTOM_BTN_L(dlgh)         (dlgh-RSC_SP_DLG_INNERBORDER_BOTTOM)
-#define DLGS_BOTTOM_BTN_Y(dlgh)         (DLGS_BOTTOM_BTN_L(dlgh)-RSC_CD_PUSHBUTTON_HEIGHT)
-#define DLGS_BOTTOM_FL_Y(dlgh)          (DLGS_BOTTOM_BTN_Y(dlgh)-SEP_FL_SPACE_Y-5)
-#define DLGS_BOTTOM_LAST_CTRL_L(dlgh)   (DLGS_BOTTOM_BTN_Y(dlgh)-2*SEP_FL_SPACE_Y-3)
 #define DLGS_BOTTOM_HELP_X(dlgw)        (dlgw-RSC_SP_DLG_INNERBORDER_RIGHT-RSC_CD_PUSHBUTTON_WIDTH)
 #define DLGS_BOTTOM_CANCEL_X(dlgw)      (DLGS_BOTTOM_HELP_X(dlgw)-RSC_SP_CTRL_X-RSC_CD_PUSHBUTTON_WIDTH)
 #define DLGS_BOTTOM_OK_X(dlgw)          (DLGS_BOTTOM_CANCEL_X(dlgw)-RSC_SP_CTRL_GROUP_X-RSC_CD_PUSHBUTTON_WIDTH)
