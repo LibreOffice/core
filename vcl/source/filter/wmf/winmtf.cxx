@@ -224,7 +224,7 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
     else
         aFont.SetOrientation( (short)rFont.lfEscapement );
 
-    Size  aFontSize( Size( rFont.lfWidth, rFont.lfHeight ) );
+    Size aFontSize( Size( rFont.lfWidth, rFont.lfHeight ) );
     if ( rFont.lfHeight > 0 )
     {
         // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
@@ -242,8 +242,10 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
             aFontSize.Height() = (sal_Int32)( fHeight + 0.5 );
         }
     }
-    else if ( aFontSize.Height() < 0 )
-        aFontSize.Height() *= -1;
+    else if ( rFont.lfHeight < 0 )
+    {
+        aFontSize.Height() = std::abs(rFont.lfHeight);
+    }
 
     if ( !rFont.lfWidth )
     {
@@ -471,10 +473,12 @@ void WinMtfOutput::ImplMap( Font& rFont )
 {
     // !!! HACK: we now always set the width to zero because the OS width is interpreted differently;
     // must later be made portable in SV (KA 1996-02-08)
-    Size  aFontSize = ImplMap ( rFont.GetSize() );
+    Size  aFontSize = rFont.GetSize();
 
     if( aFontSize.Height() < 0 )
         aFontSize.Height() *= -1;
+
+    aFontSize = ImplMap (aFontSize);
 
     rFont.SetSize( aFontSize );
 
@@ -683,14 +687,17 @@ void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
     {
         if ( eType == GDI_FONT )
         {
-            ImplMap( ((WinMtfFontStyle*)pStyle)->aFont );
-            if (!((WinMtfFontStyle*)pStyle)->aFont.GetHeight() )
-                ((WinMtfFontStyle*)pStyle)->aFont.SetHeight( 423 );     // defaulting to 12pt
+            WinMtfFontStyle* pFontStyle = (WinMtfFontStyle*) pStyle;
+            if (pFontStyle->aFont.GetHeight() == 0)
+                pFontStyle->aFont.SetHeight(423);
+            ImplMap(pFontStyle->aFont); // defaulting to 12pt
         }
         else if ( eType == GDI_PEN )
         {
-            Size aSize( ((WinMtfLineStyle*)pStyle)->aLineInfo.GetWidth(), 0 );
-            ((WinMtfLineStyle*)pStyle)->aLineInfo.SetWidth( ImplMap( aSize ).Width() );
+            WinMtfLineStyle* pLineStyle = (WinMtfLineStyle*) pStyle;
+            Size aSize(pLineStyle->aLineInfo.GetWidth(), 0);
+            aSize = ImplMap(aSize);
+            pLineStyle->aLineInfo.SetWidth(aSize.Width());
         }
     }
     sal_uInt32 nIndex;
@@ -713,11 +720,18 @@ void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pS
         if ( pStyle )
         {
             if ( eType == GDI_FONT )
-                ImplMap( ((WinMtfFontStyle*)pStyle)->aFont );
+            {
+                WinMtfFontStyle* pFontStyle = (WinMtfFontStyle*) pStyle;
+                if (pFontStyle->aFont.GetHeight() == 0)
+                    pFontStyle->aFont.SetHeight(423);
+                ImplMap(pFontStyle->aFont);
+            }
             else if ( eType == GDI_PEN )
             {
-                Size aSize( ((WinMtfLineStyle*)pStyle)->aLineInfo.GetWidth(), 0 );
-                ((WinMtfLineStyle*)pStyle)->aLineInfo.SetWidth( ImplMap( aSize ).Width() );
+                WinMtfLineStyle* pLineStyle = (WinMtfLineStyle*) pStyle;
+                Size aSize(pLineStyle->aLineInfo.GetWidth(), 0);
+                aSize = ImplMap(aSize);
+                pLineStyle->aLineInfo.SetWidth(aSize.Width());
             }
         }
         if ( (sal_uInt32)nIndex >= vGDIObj.size() )
@@ -1329,19 +1343,22 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, sal_Int32* pDXAr
     sal_Int32 nOldGfxMode = GetGfxMode();
     SetGfxMode( GM_COMPATIBLE );
 
-    if ( pDXArry )
+    if (pDXArry)
     {
-        sal_Int32 i, nSum, nLen = rText.getLength();
+        sal_Int32 i;
+        sal_Int32 nSum = 0;
+        sal_Int32 nLen = rText.getLength();
 
-        for( i = 0, nSum = 0; i < nLen; i++ )
+        for (i = 0; i < nLen; i++ )
         {
-            if ( i ) {
+            if (i > 0)
+            {
                 // #i121382# Map DXArray using WorldTransform
-                const Size aSize(ImplMap(Size( nSum, 0)));
+                const Size aSize(ImplMap(Size(nSum, 0)));
                 const basegfx::B2DVector aVector(aSize.Width(), aSize.Height());
-                pDXArry[ i - 1 ] = basegfx::fround(aVector.getLength());
+                pDXArry[i - 1] = basegfx::fround(aVector.getLength());
             }
-            nSum += pDXArry[ i ];
+            nSum += pDXArry[i];
         }
     }
     if ( mnLatestTextLayoutMode != mnTextLayoutMode )
@@ -1472,7 +1489,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, sal_Int32* pDXAr
         /* because text without dx array is badly scaled, we
            will create such an array if necessary */
         sal_Int32* pDX = pDXArry;
-        if ( !pDXArry )
+        if (!pDXArry)
         {
             // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
             SolarMutexGuard aGuard;
