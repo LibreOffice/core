@@ -71,7 +71,7 @@ namespace io_acceptor
         SocketAcceptor *m_pSocket;
         Mutex m_mutex;
         OUString m_sLastDescription;
-        sal_Bool m_bInAccept;
+        bool m_bInAccept;
 
         Reference< XMultiComponentFactory > _xSMgr;
         Reference< XComponentContext > _xCtx;
@@ -82,7 +82,7 @@ namespace io_acceptor
     OAcceptor::OAcceptor( const Reference< XComponentContext > & xCtx )
         : m_pPipe( 0 )
         , m_pSocket( 0 )
-        , m_bInAccept( sal_False )
+        , m_bInAccept( false )
         , _xSMgr( xCtx->getServiceManager() )
         , _xCtx( xCtx )
     {}
@@ -101,7 +101,7 @@ namespace io_acceptor
 
     struct BeingInAccept
     {
-        BeingInAccept( sal_Bool *pFlag,const OUString & sConnectionDescription  ) throw( AlreadyAcceptingException)
+        BeingInAccept( bool *pFlag,const OUString & sConnectionDescription  ) throw( AlreadyAcceptingException)
             : m_pFlag( pFlag )
             {
                   if( *m_pFlag )
@@ -110,13 +110,13 @@ namespace io_acceptor
                       sMessage += sConnectionDescription;
                       throw AlreadyAcceptingException( sMessage , Reference< XInterface > () );
                   }
-                  *m_pFlag = sal_True;
+                  *m_pFlag = true;
             }
         ~BeingInAccept()
             {
-                *m_pFlag = sal_False;
+                *m_pFlag = false;
             }
-        sal_Bool *m_pFlag;
+        bool *m_pFlag;
     };
 
     Reference< XConnection > OAcceptor::accept( const OUString &sConnectionDescription )

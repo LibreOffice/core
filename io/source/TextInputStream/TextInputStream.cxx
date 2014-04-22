@@ -62,7 +62,7 @@ class OTextInputStream : public TextInputStreamHelper
 
     // Encoding
     OUString mEncoding;
-    sal_Bool mbEncodingInitialized;
+    bool mbEncodingInitialized;
     rtl_TextToUnicodeConverter  mConvText2Unicode;
     rtl_TextToUnicodeContext    mContextText2Unicode;
     Sequence<sal_Int8>          mSeqSource;
@@ -71,11 +71,11 @@ class OTextInputStream : public TextInputStreamHelper
     sal_Unicode* mpBuffer;
     sal_Int32 mnBufferSize;
     sal_Int32 mnCharsInBuffer;
-    sal_Bool mbReachedEOF;
+    bool mbReachedEOF;
 
     void implResizeBuffer( void );
     OUString implReadString( const Sequence< sal_Unicode >& Delimiters,
-        sal_Bool bRemoveDelimiter, sal_Bool bFindLineEnd )
+        bool bRemoveDelimiter, bool bFindLineEnd )
             throw(IOException, RuntimeException);
     sal_Int32 implReadNext() throw(IOException, RuntimeException);
 
@@ -124,7 +124,7 @@ OTextInputStream::OTextInputStream()
     , mpBuffer(NULL)
     , mnBufferSize(0)
     , mnCharsInBuffer(0)
-    , mbReachedEOF(sal_False)
+    , mbReachedEOF(false)
 {
 }
 
@@ -157,27 +157,27 @@ OUString OTextInputStream::readLine(  )
     throw(IOException, RuntimeException, std::exception)
 {
     static Sequence< sal_Unicode > aDummySeq;
-    return implReadString( aDummySeq, sal_True, sal_True );
+    return implReadString( aDummySeq, true, true );
 }
 
 OUString OTextInputStream::readString( const Sequence< sal_Unicode >& Delimiters, sal_Bool bRemoveDelimiter )
         throw(IOException, RuntimeException, std::exception)
 {
-    return implReadString( Delimiters, bRemoveDelimiter, sal_False );
+    return implReadString( Delimiters, bRemoveDelimiter, false );
 }
 
 sal_Bool OTextInputStream::isEOF()
     throw(IOException, RuntimeException, std::exception)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( mnCharsInBuffer == 0 && mbReachedEOF )
-        bRet = sal_True;
+        bRet = true;
     return bRet;
 }
 
 
 OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimiters,
-                                           sal_Bool bRemoveDelimiter, sal_Bool bFindLineEnd )
+                                           bool bRemoveDelimiter, bool bFindLineEnd )
         throw(IOException, RuntimeException)
 {
     OUString aRetStr;
@@ -201,8 +201,8 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
 
     sal_Int32 nBufferReadPos = 0;
     sal_Int32 nCopyLen = 0;
-    sal_Bool bFound = sal_False;
-    sal_Bool bFoundFirstLineEndChar = sal_False;
+    bool bFound = false;
+    bool bFoundFirstLineEndChar = false;
     sal_Unicode cFirstLineEndChar = 0;
     const sal_Unicode* pDelims = Delimiters.getConstArray();
     const sal_Int32 nDelimCount = Delimiters.getLength();
@@ -228,7 +228,7 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
         {
             if( bFoundFirstLineEndChar )
             {
-                bFound = sal_True;
+                bFound = true;
                 nCopyLen = nBufferReadPos - 2;
                 if( c == cLineEndChar1 || c == cLineEndChar2 )
                 {
@@ -246,7 +246,7 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
             }
             else if( c == cLineEndChar1 || c == cLineEndChar2 )
             {
-                bFoundFirstLineEndChar = sal_True;
+                bFoundFirstLineEndChar = true;
                 cFirstLineEndChar = c;
             }
         }
@@ -256,7 +256,7 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
             {
                 if( c == pDelims[ i ] )
                 {
-                    bFound = sal_True;
+                    bFound = true;
                     nCopyLen = nBufferReadPos;
                     if( bRemoveDelimiter )
                         nCopyLen--;
@@ -296,7 +296,7 @@ sal_Int32 OTextInputStream::implReadNext()
         sal_Int32 nRead = mxStream->readSomeBytes( mSeqSource, nBytesToRead );
         sal_Int32 nTotalRead = nRead;
         if( nRead < nBytesToRead )
-            mbReachedEOF = sal_True;
+            mbReachedEOF = true;
 
         // Try to convert
         sal_uInt32 uiInfo;
@@ -322,11 +322,11 @@ sal_Int32 OTextInputStream::implReadNext()
                                 &nSrcCvtBytes );
             nSourceCount += nSrcCvtBytes;
 
-            sal_Bool bCont = sal_False;
+            bool bCont = false;
             if( uiInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL )
             {
                 implResizeBuffer();
-                bCont = sal_True;
+                bCont = true;
             }
 
             if( uiInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL )
@@ -336,7 +336,7 @@ sal_Int32 OTextInputStream::implReadNext()
                 nRead = mxStream->readSomeBytes( aOneByteSeq, 1 );
                 if( nRead == 0 )
                 {
-                    mbReachedEOF = sal_True;
+                    mbReachedEOF = true;
                     break;
                 }
 
@@ -348,7 +348,7 @@ sal_Int32 OTextInputStream::implReadNext()
                 }
                 mSeqSource.getArray()[ nOldLen ] = aOneByteSeq.getConstArray()[ 0 ];
                 pbSource = mSeqSource.getConstArray();
-                bCont = sal_True;
+                bCont = true;
             }
 
             if( bCont )

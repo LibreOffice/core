@@ -64,7 +64,7 @@ namespace io_stm {
         Reference< XInputStream >               m_xInput;
         Reference< XOutputStream >              m_xOutput;
         OInterfaceContainerHelper               m_cnt;
-        sal_Bool                                m_closeFired;
+        bool                                m_closeFired;
 
         void run();
         static void static_run( void* pObject );
@@ -107,7 +107,7 @@ namespace io_stm {
 
 Pump::Pump() : m_aThread( 0 ),
                m_cnt( m_aMutex ),
-               m_closeFired( sal_False )
+               m_closeFired( false )
 {
 }
 
@@ -139,13 +139,13 @@ void Pump::fireError( const  Any & exception )
 
 void Pump::fireClose()
 {
-    sal_Bool bFire = sal_False;
+    bool bFire = false;
     {
         MutexGuard guard( m_aMutex );
         if( ! m_closeFired  )
         {
-            m_closeFired = sal_True;
-            bFire = sal_True;
+            m_closeFired = true;
+            bFire = true;
         }
     }
 

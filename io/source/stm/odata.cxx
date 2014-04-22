@@ -59,7 +59,7 @@ class ODataInputStream :
 {
 public:
     ODataInputStream( )
-        : m_bValidStream( sal_False )
+        : m_bValidStream( false )
         {
         }
 
@@ -116,7 +116,7 @@ protected:
     Reference < XConnectable >  m_pred;
     Reference < XConnectable >  m_succ;
     Reference < XInputStream >  m_input;
-    sal_Bool m_bValidStream;
+    bool m_bValidStream;
 };
 
 ODataInputStream::~ODataInputStream()
@@ -199,7 +199,7 @@ void ODataInputStream::closeInput(void )
          setInputStream( Reference< XInputStream > () );
          setPredecessor( Reference < XConnectable >() );
          setSuccessor( Reference < XConnectable >() );
-         m_bValidStream = sal_False;
+         m_bValidStream = false;
      }
      else
     {
@@ -510,7 +510,7 @@ class ODataOutputStream :
 {
 public:
     ODataOutputStream()
-        : m_bValidStream( sal_False )
+        : m_bValidStream( false )
         {
         }
     virtual ~ODataOutputStream();
@@ -564,7 +564,7 @@ protected:
     Reference < XConnectable >  m_succ;
     Reference < XConnectable >  m_pred;
     Reference<  XOutputStream > m_output;
-    sal_Bool m_bValidStream;
+    bool m_bValidStream;
 };
 
 ODataOutputStream::~ODataOutputStream()
@@ -929,7 +929,7 @@ class OObjectOutputStream:
 public:
     OObjectOutputStream()
         : m_nMaxId(0) ,
-          m_bValidMarkable(sal_False)
+          m_bValidMarkable(false)
         {
         }
 
@@ -998,7 +998,7 @@ private:
     ObjectContainer_Impl                m_mapObject;
     sal_Int32                           m_nMaxId;
     Reference< XMarkableStream >        m_rMarkable;
-    sal_Bool                            m_bValidMarkable;
+    bool                            m_bValidMarkable;
 };
 
 OObjectOutputStream::~OObjectOutputStream()
@@ -1009,7 +1009,7 @@ void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj
 {
 
     connectToMarkable();
-    sal_Bool bWriteObj = sal_False;
+    bool bWriteObj = false;
     // create Mark to write length of info
     sal_uInt32 nInfoLenMark = m_rMarkable->createMark();
 
@@ -1029,7 +1029,7 @@ void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj
             m_mapObject[ rX ] = ++m_nMaxId;
             ODataOutputStream::writeLong( m_nMaxId );
             ODataOutputStream::writeUTF( xPObj->getServiceName() );
-            bWriteObj = sal_True;
+            bWriteObj = true;
         }
         else
         {
@@ -1096,7 +1096,7 @@ void OObjectOutputStream::connectToMarkable(void)
             Reference < XActiveDataSource > source( rTry , UNO_QUERY );
             rTry = source;
         }
-        m_bValidMarkable = sal_True;
+        m_bValidMarkable = true;
     }
 }
 
@@ -1197,7 +1197,7 @@ public:
     OObjectInputStream( const Reference < XComponentContext > &r)
         : m_rSMgr( r->getServiceManager() )
         , m_rCxt( r )
-        , m_bValidMarkable(sal_False)
+        , m_bValidMarkable(false)
         {
         }
     virtual ~OObjectInputStream();
@@ -1273,7 +1273,7 @@ private:
 private:
     Reference < XMultiComponentFactory > m_rSMgr;
     Reference < XComponentContext >     m_rCxt;
-    sal_Bool                m_bValidMarkable;
+    bool                m_bValidMarkable;
     Reference < XMarkableStream > m_rMarkable;
     vector < Reference<  XPersistObject > > m_aPersistVector;
 
@@ -1316,7 +1316,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject() throw (::com::sun:
     // skip data of new version
     skipBytes( nLen - m_rMarkable->offsetToMark( nMark ) );
 
-    sal_Bool bLoadSuccesfull = sal_True;
+    bool bLoadSuccesfull = true;
     if( nId )
     {
         if( !aName.isEmpty() )
@@ -1341,14 +1341,14 @@ Reference< XPersistObject >  OObjectInputStream::readObject() throw (::com::sun:
             else
             {
                 // no service with this name could be instantiated
-                bLoadSuccesfull = sal_False;
+                bLoadSuccesfull = false;
             }
         }
         else {
             if( m_aPersistVector.size() < nId )
             {
                 // id unknown, load failure !
-                bLoadSuccesfull = sal_False;
+                bLoadSuccesfull = false;
             }
             else
             {
@@ -1394,7 +1394,7 @@ void OObjectInputStream::connectToMarkable()
             Reference < XActiveDataSink > sink( rTry , UNO_QUERY );
             rTry = sink;
         }
-        m_bValidMarkable = sal_True;
+        m_bValidMarkable = true;
     }
 }
 

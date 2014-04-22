@@ -41,7 +41,7 @@ namespace stoc_connector
     template<class T>
     struct ReferenceEqual
     {
-        sal_Bool operator () (const ::com::sun::star::uno::Reference<T> & op1,
+        bool operator () (const ::com::sun::star::uno::Reference<T> & op1,
                               const ::com::sun::star::uno::Reference<T> & op2) const
         {
             return op1.get() == op2.get();
@@ -122,9 +122,9 @@ namespace stoc_connector
         OUString m_sDescription;
 
         ::osl::Mutex _mutex;
-        sal_Bool     _started;
-        sal_Bool     _closed;
-        sal_Bool     _error;
+        bool     _started;
+        bool     _closed;
+        bool     _error;
 
           XStreamListener_hash_set _listeners;
     };

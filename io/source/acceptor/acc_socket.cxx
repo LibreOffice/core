@@ -49,7 +49,7 @@ namespace io_acceptor {
     template<class T>
     struct ReferenceEqual
     {
-        sal_Bool operator () (const ::com::sun::star::uno::Reference<T> & op1,
+        bool operator () (const ::com::sun::star::uno::Reference<T> & op1,
                               const ::com::sun::star::uno::Reference<T> & op2) const
         {
             return op1.get() == op2.get();
@@ -103,14 +103,14 @@ namespace io_acceptor {
         OUString m_sDescription;
 
         ::osl::Mutex _mutex;
-        sal_Bool     _started;
-        sal_Bool     _closed;
-        sal_Bool     _error;
+        bool     _started;
+        bool     _closed;
+        bool     _error;
         XStreamListener_hash_set _listeners;
     };
 
     template<class T>
-    void notifyListeners(SocketConnection * pCon, sal_Bool * notified, T t)
+    void notifyListeners(SocketConnection * pCon, bool * notified, T t)
     {
           XStreamListener_hash_set listeners;
 
@@ -118,7 +118,7 @@ namespace io_acceptor {
             ::osl::MutexGuard guard(pCon->_mutex);
             if(!*notified)
             {
-                *notified = sal_True;
+                *notified = true;
                 listeners = pCon->_listeners;
             }
         }
@@ -158,9 +158,9 @@ namespace io_acceptor {
     SocketConnection::SocketConnection( const OUString &sConnectionDescription) :
         m_nStatus( 0 ),
         m_sDescription( sConnectionDescription ),
-        _started(sal_False),
-        _closed(sal_False),
-        _error(sal_False)
+        _started(false),
+        _closed(false),
+        _error(false)
     {
         // make it unique
         m_sDescription += ",uniqueValue=" ;
@@ -317,13 +317,13 @@ namespace io_acceptor {
 
     SocketAcceptor::SocketAcceptor( const OUString &sSocketName,
                                     sal_uInt16 nPort,
-                                    sal_Bool bTcpNoDelay,
+                                    bool bTcpNoDelay,
                                     const OUString &sConnectionDescription) :
         m_sSocketName( sSocketName ),
         m_sConnectionDescription( sConnectionDescription ),
         m_nPort( nPort ),
         m_bTcpNoDelay( bTcpNoDelay ),
-        m_bClosed( sal_False )
+        m_bClosed( false )
     {
     }
 
@@ -396,7 +396,7 @@ namespace io_acceptor {
 
     void SocketAcceptor::stopAccepting()
     {
-        m_bClosed = sal_True;
+        m_bClosed = true;
         m_socket.close();
     }
 }

@@ -115,8 +115,8 @@ private:
 
     sal_Int32 m_nBytesToSkip;
 
-    sal_Bool m_bOutputStreamClosed;
-    sal_Bool m_bInputStreamClosed;
+    bool m_bOutputStreamClosed;
+    bool m_bInputStreamClosed;
 
     oslCondition m_conditionBytesAvail;
     Mutex     m_mutexAccess;
@@ -129,8 +129,8 @@ OPipeImpl::OPipeImpl()
 {
     m_nBytesToSkip  = 0;
 
-    m_bOutputStreamClosed   = sal_False;
-    m_bInputStreamClosed    = sal_False;
+    m_bOutputStreamClosed   = false;
+    m_bInputStreamClosed    = false;
 
     m_pFIFO = new MemFIFO;
     m_conditionBytesAvail = osl_createCondition();
@@ -264,7 +264,7 @@ void OPipeImpl::closeInput(void)
 {
     MutexGuard guard( m_mutexAccess );
 
-    m_bInputStreamClosed = sal_True;
+    m_bInputStreamClosed = true;
 
     delete m_pFIFO;
     m_pFIFO = 0;
@@ -356,7 +356,7 @@ void OPipeImpl::closeOutput(void)
 {
     MutexGuard guard( m_mutexAccess );
 
-    m_bOutputStreamClosed = sal_True;
+    m_bOutputStreamClosed = true;
     osl_setCondition( m_conditionBytesAvail );
     setPredecessor( Reference < XConnectable > () );
     return;

@@ -31,7 +31,7 @@ using namespace ::com::sun::star::connection;
 
 namespace stoc_connector {
     template<class T>
-    void notifyListeners(SocketConnection * pCon, sal_Bool * notified, T t)
+    void notifyListeners(SocketConnection * pCon, bool * notified, T t)
     {
           XStreamListener_hash_set listeners;
 
@@ -39,7 +39,7 @@ namespace stoc_connector {
             ::osl::MutexGuard guard(pCon->_mutex);
             if(!*notified)
             {
-                *notified = sal_True;
+                *notified = true;
                 listeners = pCon->_listeners;
             }
         }
@@ -80,9 +80,9 @@ namespace stoc_connector {
     SocketConnection::SocketConnection( const OUString &sConnectionDescription ) :
         m_nStatus( 0 ),
         m_sDescription( sConnectionDescription ),
-        _started(sal_False),
-        _closed(sal_False),
-        _error(sal_False)
+        _started(false),
+        _closed(false),
+        _error(false)
     {
         // make it unique
         m_sDescription += ",uniqueValue=";

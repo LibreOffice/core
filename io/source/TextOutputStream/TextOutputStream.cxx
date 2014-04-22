@@ -59,7 +59,7 @@ class OTextOutputStream : public TextOutputStreamHelper
 
     // Encoding
     OUString mEncoding;
-    sal_Bool mbEncodingInitialized;
+    bool mbEncodingInitialized;
     rtl_UnicodeToTextConverter  mConvUnicode2Text;
     rtl_UnicodeToTextContext    mContextUnicode2Text;
 

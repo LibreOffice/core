@@ -38,7 +38,7 @@ namespace io_acceptor {
         ::osl::Pipe m_pipe;
         OUString m_sPipeName;
         OUString m_sConnectionDescription;
-        sal_Bool m_bClosed;
+        bool m_bClosed;
     };
 
     class SocketAcceptor
@@ -46,7 +46,7 @@ namespace io_acceptor {
     public:
         SocketAcceptor( const OUString & sSocketName ,
                         sal_uInt16 nPort,
-                        sal_Bool bTcpNoDelay,
+                        bool bTcpNoDelay,
                         const OUString &sConnectionDescription );
 
         void init();
@@ -59,8 +59,8 @@ namespace io_acceptor {
         OUString m_sSocketName;
         OUString m_sConnectionDescription;
         sal_uInt16 m_nPort;
-        sal_Bool m_bTcpNoDelay;
-        sal_Bool m_bClosed;
+        bool m_bTcpNoDelay;
+        bool m_bClosed;
     };
 
 }

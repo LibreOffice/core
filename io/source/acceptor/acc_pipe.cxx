@@ -149,7 +149,7 @@ namespace io_acceptor
     PipeAcceptor::PipeAcceptor( const OUString &sPipeName , const OUString & sConnectionDescription) :
         m_sPipeName( sPipeName ),
         m_sConnectionDescription( sConnectionDescription ),
-        m_bClosed( sal_False )
+        m_bClosed( false )
     {
     }
 
@@ -199,7 +199,7 @@ namespace io_acceptor
 
     void PipeAcceptor::stopAccepting()
     {
-        m_bClosed = sal_True;
+        m_bClosed = true;
         Pipe pipe;
         {
             MutexGuard guard( m_mutex );

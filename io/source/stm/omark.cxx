@@ -136,7 +136,7 @@ private:
     Reference< XConnectable > m_pred;
 
     Reference< XOutputStream >  m_output;
-    sal_Bool m_bValidStream;
+    bool m_bValidStream;
 
     IRingBuffer *m_pBuffer;
     map<sal_Int32,sal_Int32,less< sal_Int32 > > m_mapMarks;
@@ -551,7 +551,7 @@ private:
     Reference < XConnectable >  m_pred;
 
     Reference< XInputStream > m_input;
-    sal_Bool m_bValidStream;
+    bool m_bValidStream;
 
     IRingBuffer *m_pBuffer;
     map<sal_Int32,sal_Int32,less< sal_Int32 > > m_mapMarks;
