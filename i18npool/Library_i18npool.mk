@@ -120,8 +120,14 @@ $(eval $(call gb_Library_add_exception_objects,i18npool,\
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(call gb_CxxObject_get_target,i18npool/source/localedata/localedata): $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_static.hxx
 
+ifeq ($(WITH_LOCALES),)
+i18npool_locale_pattern=%
+else
+i18npool_locale_pattern=$(WITH_LOCALES) $(addsuffix _%,$(WITH_LOCALES))
+endif
+
 $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_static.hxx : $(SRCDIR)/i18npool/source/localedata/genstaticheader.pl
-	$(PERL) $(SRCDIR)/i18npool/source/localedata/genstaticheader.pl $(patsubst $(SRCDIR)/i18npool/source/localedata/data/%.xml,%,$(shell echo $(SRCDIR)/i18npool/source/localedata/data/*.xml)) >$@
+	$(PERL) $(SRCDIR)/i18npool/source/localedata/genstaticheader.pl $(filter $(i18npool_locale_pattern),$(patsubst $(SRCDIR)/i18npool/source/localedata/data/%.xml,%,$(shell echo $(SRCDIR)/i18npool/source/localedata/data/*.xml))) >$@
 
 $(call gb_CxxObject_get_target,i18npool/source/localedata/localedata) : \
 	INCLUDE += -I$(call gb_CustomTarget_get_workdir,i18npool/localedata)

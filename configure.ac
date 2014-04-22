@@ -1948,12 +1948,26 @@ AC_ARG_WITH(windows-sdk,
 
 AC_ARG_WITH(lang,
     AS_HELP_STRING([--with-lang],
-        [Use this option to build LibreOffice with additional language support.
+        [Use this option to build LibreOffice with additional UI language support.
          English (US) is always included by default.
          Separate multiple languages with space.
          For all languages, use --with-lang=ALL.])
     [
                           Usage:     --with-lang="es sw tu cs sk"
+    ],
+,)
+
+AC_ARG_WITH(locales,
+    AS_HELP_STRING([--with-locales],
+        [Use this option to limit the locale information built in.
+         By default all the locales available is included.
+         This option is completely unrelated to --with-lang.
+         Separate multiple locales with space.
+         For the default, all locales, don't use this switch at all.
+         Specifying just the language part of a locale means all matching
+         locales will be included.])
+    [
+                          Usage:     --with-locales="en es pt fr zh kr ja"
     ],
 ,)
 
@@ -12184,6 +12198,11 @@ if test -d "$SRC_ROOT/translations/source"; then
     done
 fi
 AC_SUBST(WITH_POOR_HELP_LOCALIZATIONS)
+
+if test -n "$with_locales"; then
+    WITH_LOCALES="$with_locales"
+fi
+AC_SUBST(WITH_LOCALES)
 
 dnl git submodule update --reference
 dnl ===================================================================
