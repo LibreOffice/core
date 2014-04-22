@@ -40,7 +40,7 @@ namespace connectivity
             OFlatConnection(ODriver*    _pDriver);
             virtual ~OFlatConnection();
 
-            virtual void construct(const OUString& _rUrl,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo ) throw(css::sdbc::SQLException, css::uno::RuntimeException, css::uno::DeploymentException) SAL_OVERRIDE;
+            virtual void construct(const OUString& _rUrl,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
 
             // own methods
             inline bool     isHeaderLine()          const { return m_bHeaderLine;       }
