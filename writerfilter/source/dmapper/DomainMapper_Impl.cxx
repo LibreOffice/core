@@ -2287,14 +2287,14 @@ void DomainMapper_Impl::ChainTextFrames()
                 if ( nTxbxId1 == nTxbxId2 )
                 {
                     //who connects whom ??
-                    if ( ( nTxbxSeq1 == ( nTxbxSeq2 + 1 ) ) )
+                    if ( nTxbxSeq1 == ( nTxbxSeq2 + 1 ) )
                     {
                         xPropertySet2->setPropertyValue(sChainNextName, uno::makeAny(sName1));
                         xPropertySet1->setPropertyValue(sChainPrevName, uno::makeAny(sName2));
                         bIsTxbxChained = true ;
                         break ; //there cannot be more than one previous/next frames
                     }
-                    else if(  (nTxbxSeq2 == ( nTxbxSeq1 + 1 ) ))
+                    else if ( nTxbxSeq2 == ( nTxbxSeq1 + 1 ) )
                     {
                         xPropertySet1->setPropertyValue(sChainNextName, uno::makeAny(sName2));
                         xPropertySet2->setPropertyValue(sChainPrevName, uno::makeAny(sName1));
