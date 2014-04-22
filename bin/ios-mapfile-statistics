@@ -1,0 +1,27 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+my $state = 0;
+my %libofnumber;
+my %sizeoflib;
+
+while (<>) {
+  if ($state == 0 && m!^# Object files:!) {
+    $state = 1;
+  } elsif ($state == 1 && m!^\[ *([0-9]+)\] .*/([-_a-z0-9]+\.a)\(.*!i) {
+    $libofnumber{$1} = $2;
+  } elsif ($state == 1 && m!^# Sections:!) {
+    $state = 2;
+  } elsif ($state == 2 && m!^# Address\s+Size\s+File\s+Name!) {
+    $state = 3;
+  } elsif ($state == 3 && m!^0x[0-9A-F]+\s+(0x[0-9A-F]+)\s+\[ *([0-9]+)\] (.*)!) {
+    if (defined($libofnumber{$2})) {
+      $sizeoflib{$libofnumber{$2}} += hex($1);
+    }
+  }
+}
+
+foreach (sort keys(%sizeoflib)) {
+  print $_, ": ", $sizeoflib{$_}, "\n";
+}
