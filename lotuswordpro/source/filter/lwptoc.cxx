@@ -146,7 +146,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
 {
     XFIndex* pToc = new XFIndex();
 
-    pToc->SetProtected(sal_False);
+    pToc->SetProtected(false);
     pToc->SetIndexType(enumXFIndexTOC);
 
     // add TOC template
@@ -162,7 +162,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
             continue;
         }
 
-        sal_Bool bInserted = sal_False;
+        bool bInserted = false;
         do
         {
             // One level has 1 template
@@ -225,7 +225,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
                 }
 
                 pToc->AddTemplate(OUString::number((sal_Int32)i),  m_pFoundry->FindActuralStyleName(pLevel->GetSearchStyle()), pTemplate);
-                bInserted = sal_True;
+                bInserted = true;
             }
 
             // 1 style in WordPro may be mapped to several styles in SODC
@@ -253,7 +253,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
  * @param pCont -
  * @return
  */
-void  LwpTocSuperLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart , sal_Int32 nEnd , sal_Bool bAll)
+void  LwpTocSuperLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart, sal_Int32 nEnd, bool bAll)
 {
     if(m_pFrame)
     {
@@ -334,22 +334,22 @@ void LwpTocSuperLayout::AddSourceStyle(XFIndex* pToc, LwpTocLevelData * pLevel, 
  * @param  index - TOC level
  * @return sal_Bool
  */
-sal_Bool LwpTocSuperLayout::GetRightAlignPageNumber(sal_uInt16 index)
+bool LwpTocSuperLayout::GetRightAlignPageNumber(sal_uInt16 index)
 {
     if (index < MAX_LEVELS)
         return (m_nFlags[index] & TS_RIGHTALIGN) ? sal_True : sal_False;
-    return sal_False;
+    return false;
 }
 /**
  * @short   Get whether page number is used in TOC entries
  * @param  index - TOC level
  * @return sal_Bool
  */
-sal_Bool LwpTocSuperLayout::GetUsePageNumber(sal_uInt16 index)
+bool LwpTocSuperLayout::GetUsePageNumber(sal_uInt16 index)
 {
     if (index < MAX_LEVELS)
         return (m_nFlags[index] & TS_PAGENUMBER) ? sal_True : sal_False;
-    return sal_False;
+    return false;
 }
 /**
  * @short   Get what is used for separater

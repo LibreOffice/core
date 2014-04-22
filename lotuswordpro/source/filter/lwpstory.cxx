@@ -69,10 +69,10 @@
 
 LwpStory::LwpStory(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpContent(objHdr, pStrm)
-    , m_bPMModified(sal_False)
+    , m_bPMModified(false)
     , m_pCurrentLayout(NULL)
     , m_pTabLayout(NULL)
-    , m_bDropcap(sal_False)
+    , m_bDropcap(false)
     , m_pHyperlinkMgr(new LwpHyperlinkMgr)
     , m_pXFContainer(NULL)
 {
@@ -192,7 +192,7 @@ void LwpStory::SetCurrentLayout(LwpPageLayout *pPageLayout)
         m_pCurrentLayout = pPageLayout;
         m_pTabLayout = pPageLayout;
     }
-    m_bPMModified = sal_True;
+    m_bPMModified = true;
 }
 
 void LwpStory::AddPageLayout(LwpPageLayout * pObject)
@@ -282,16 +282,16 @@ void LwpStory::SortPageLayout()
  * @param:
  * @return:  sal_True if need create a new section
 **************************************************************************/
-sal_Bool LwpStory::IsNeedSection()
+bool LwpStory::IsNeedSection()
 {
-    sal_Bool bColumns = sal_False;
-    sal_Bool bNewSection = sal_False;
+    bool bColumns = false;
+    bool bNewSection = false;
     if(m_pCurrentLayout)
     {
         if(m_pCurrentLayout->HasColumns())
         {
             //get the following pagelayout and its type
-            bColumns = sal_True;
+            bColumns = true;
             LwpPageLayout* pNextLayout = GetNextPageLayout();
             if(pNextLayout)
             {
@@ -302,16 +302,16 @@ sal_Bool LwpStory::IsNeedSection()
                 case LwpLayout::StartWithinColume://not support now
                 case LwpLayout::StartWithinPage:
                 {
-                    bColumns =sal_False;
-                    bNewSection = sal_True;
+                    bColumns =false;
+                    bNewSection = true;
                     break;
                 }
                 case LwpLayout::StartOnNextPage:
                 case LwpLayout::StartOnOddPage://not support now
                 case LwpLayout::StartOnEvenPage://not support now
                 {
-                    bColumns =sal_True;
-                    bNewSection = sal_False;
+                    bColumns =true;
+                    bNewSection = false;
                     break;
                 }
                 default:
@@ -325,7 +325,7 @@ sal_Bool LwpStory::IsNeedSection()
                 m_pCurrentLayout->ResetXFColumns();
             }
         }
-        SetPMModified(sal_False);
+        SetPMModified(false);
     }
     return bNewSection;
 }
@@ -464,7 +464,7 @@ LwpPara* LwpStory::GetLastParaOfPreviousStory()
  * @param:
  * @return:
 **************************************************************************/
-OUString LwpStory::GetContentText(sal_Bool bAllText)
+OUString LwpStory::GetContentText(bool bAllText)
 {
     if (bAllText)//convert all text fribs
     {
@@ -474,7 +474,7 @@ OUString LwpStory::GetContentText(sal_Bool bAllText)
         while (pPara)
         {
             pPara->SetFoundry(m_pFoundry);
-            sText += pPara->GetContentText(sal_True);
+            sText += pPara->GetContentText(true);
             pPara = dynamic_cast<LwpPara*>(pPara->GetNext()->obj());
         }
         return sText;
@@ -519,7 +519,7 @@ OUString LwpStory::RegisterFirstFribStyle()
     return OUString("");
 }
 
-sal_Bool LwpStory::IsBullStyleUsedBefore(const OUString& rStyleName, const sal_uInt8& nPos)
+bool LwpStory::IsBullStyleUsedBefore(const OUString& rStyleName, const sal_uInt8& nPos)
 {
     std::vector <NamePosPair>::reverse_iterator rIter;
     for (rIter = m_vBulletStyleNameList.rbegin(); rIter != m_vBulletStyleNameList.rend(); ++rIter)
@@ -528,10 +528,10 @@ sal_Bool LwpStory::IsBullStyleUsedBefore(const OUString& rStyleName, const sal_u
         sal_uInt8 nPosition = (*rIter).second;
         if (aName == rStyleName && nPosition == nPos)
         {
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

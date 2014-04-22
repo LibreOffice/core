@@ -91,14 +91,14 @@ void LwpBookmarkMgr::AddXFBookmarkEnd(const OUString& sName,XFBookmarkEnd* pMark
         m_MapEnd[sName] = pMark;
     }
 }
-sal_Bool LwpBookmarkMgr::FindBookmark(const OUString& sName)
+bool LwpBookmarkMgr::FindBookmark(const OUString& sName)
 {
     std::map<OUString,XFBookmarkStart*>::iterator iter;
     iter = m_MapStart.find(sName);
     if (iter != m_MapStart.end())
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 LwpBookmarkMgr::LwpBookmarkMgr()

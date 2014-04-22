@@ -73,8 +73,8 @@ struct ImageProcessingData
     sal_uInt8 nContrast;
     sal_uInt8 nEdgeEnchancement;
     sal_uInt8 nSmoothing;
-    sal_Bool bAutoContrast;
-    sal_Bool bInvertImage;
+    bool bAutoContrast;
+    bool bInvertImage;
 
     ImageProcessingData()
     {
@@ -82,8 +82,8 @@ struct ImageProcessingData
         nContrast = 50;
         nEdgeEnchancement = 0;
         nSmoothing = 0;
-        bAutoContrast = sal_False;
-        bInvertImage= sal_False;
+        bAutoContrast = false;
+        bInvertImage= false;
     }
 };
 
@@ -108,7 +108,7 @@ private:
     void XFConvertEquation(XFContentContainer* pCont);
 
     void ParseChart(IXFStream* pOutputStream);
-    sal_Bool IsGrafFormatValid();
+    bool IsGrafFormatValid();
     // add by , 03/25/2005
     std::vector <XFFrame*> m_vXFDrawObjects;
     // end add

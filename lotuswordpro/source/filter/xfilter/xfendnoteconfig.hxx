@@ -67,8 +67,8 @@ class XFEndnoteConfig : public XFFootnoteConfig
 public:
     XFEndnoteConfig() : XFFootnoteConfig()
     {
-        m_bIsFootnote = sal_False;
-        m_bInsertInPage = sal_False;
+        m_bIsFootnote = false;
+        m_bInsertInPage = false;
         m_strDefaultStyle = "Endnote";
         m_strMasterPage = "Endnote";
         m_strCitationStyle = "Endnote Symbol";

@@ -108,7 +108,7 @@ public:
     void ConvertCommonRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uInt8 nEndCol);
     void CollectMergeInfo();
     void SetCellSplit(sal_uInt16 nEffectRows);
-    sal_Bool GetMergeCellFlag();
+    bool GetMergeCellFlag();
     sal_uInt16 GetCurMaxSpannedRows(sal_uInt8 nStartCol,sal_uInt8 nEndCol);
     void RegisterCurRowStyle(XFRow* pXFRow,sal_uInt16 nRowMark);
 };

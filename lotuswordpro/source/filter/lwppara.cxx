@@ -109,12 +109,12 @@ LwpPara::LwpPara(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     , m_pBreaks(NULL)
     , m_pIndentOverride(NULL)
     , m_AllText("")
-    , m_bHasBullet(sal_False)
+    , m_bHasBullet(false)
     , m_pSilverBullet(NULL)
     , m_pBullOver(NULL)
-    , m_bBullContinue(sal_False)
+    , m_bBullContinue(false)
     , m_SectionStyleName("")
-    , m_bHasDropcap(sal_False)
+    , m_bHasDropcap(false)
     , m_nLines(0)
     , m_nChars(0)
     , m_pDropcapLayout(NULL)
@@ -160,10 +160,10 @@ void LwpPara::Read()
 {
     LwpDLVList::Read();
 
-    sal_Bool Simple;
-    sal_Bool Notify = sal_False;
+    bool Simple;
+    bool Notify = false;
     if(LwpFileHeader::m_nFileRevision<0x0006)
-        Simple = sal_False;
+        Simple = false;
     else if(LwpFileHeader::m_nFileRevision<0x000B)
         Simple = m_pObjStrm->QuickReaduInt8();
     else
@@ -264,7 +264,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
 
     LwpStory *pStory = dynamic_cast<LwpStory*>(m_Story.obj());
 
-    if (pStory && pStory->GetDropcapFlag() == sal_True)
+    if (pStory && pStory->GetDropcapFlag())
     {
         ParseDropcapContent();
         return;
@@ -301,7 +301,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
         if (pBulletStyleMgr)
         {
             pBulletStyleMgr->SetCurrentSilverBullet(LwpObjectID());
-            pBulletStyleMgr->SetContinueFlag(sal_False);
+            pBulletStyleMgr->SetContinueFlag(false);
         }
         m_pXFContainer->Add(pPara);
     }
@@ -313,22 +313,22 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
         AddBreakAfter(m_pXFContainer);
 }
 
-sal_Bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
+bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
 {
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     //get story
     LwpStory* pStory = dynamic_cast<LwpStory*>(m_Story.obj());
     //if pagelayout is modified, register the pagelayout
     if(pStory && pStory->IsPMModified())
     {
-        sal_Bool bNewSection = pStory->IsNeedSection();
+        bool bNewSection = pStory->IsNeedSection();
         LwpPageLayout* pLayout = pStory->GetCurrentLayout();
         if(bNewSection)
         {
             RegisterNewSectionStyle(pLayout);
         }
 
-        bSuccess = sal_True;
+        bSuccess = true;
         //register master page style
         XFParaStyle* pOverStyle = new XFParaStyle();
         *pOverStyle = *pBaseStyle;
@@ -366,8 +366,8 @@ void LwpPara::RegisterStyle()
     }
 
     XFParaStyle* pOverStyle = NULL;
-    sal_Bool noSpacing = sal_True;
-    sal_Bool noIndent = sal_True;
+    bool noSpacing = true;
+    bool noIndent = true;
     LwpParaProperty* pBulletProps = NULL, *pNumberingProps = NULL;
 
     if (m_pProps != NULL)
@@ -399,7 +399,7 @@ void LwpPara::RegisterStyle()
                 break;
             case PP_LOCAL_INDENT:
             {
-                noIndent = sal_False;
+                noIndent = false;
                 if (!rParaStyle.GetIndent())
                     OverrideIndent(NULL,static_cast<LwpParaIndentProperty*>(pProps)->GetIndent(),pOverStyle);
 
@@ -411,7 +411,7 @@ void LwpPara::RegisterStyle()
                 break;
             case PP_LOCAL_SPACING:
             {
-                noSpacing = sal_False;
+                noSpacing = false;
                 if (!rParaStyle.GetSpacing())
                     OverrideSpacing(NULL,static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),pOverStyle);
                 else
@@ -576,9 +576,9 @@ void LwpPara::RegisterStyle()
                     OUString aPreBullStyleName;
                     LwpNumberingOverride* pNumbering = this->GetParaNumbering();
                     sal_uInt16 nPosition = pNumbering->GetPosition();
-                    sal_Bool bLesser = m_pSilverBullet->IsLesserLevel(nPosition);
+                    bool bLesser = m_pSilverBullet->IsLesserLevel(nPosition);
                     /*sal_Bool bResetSection =*/ m_pSilverBullet->IsNewSection(nPosition);
-                    sal_Bool bHeading;
+                    bool bHeading;
                     LwpPara* pPara = this;
                     LwpPara* pPrePara = NULL;
                     LwpSilverBullet* pParaSilverBullet = NULL;
@@ -711,11 +711,11 @@ void LwpPara::RegisterStyle()
                     if (nNum > 1)
                     {
                         m_aBulletStyleName = aPreBullStyleName;
-                        m_bBullContinue = sal_True;
+                        m_bBullContinue = true;
                     }
                     else
                     {
-                        m_bBullContinue = sal_False;
+                        m_bBullContinue = false;
                         if (this->IsInCell())
                         {
                             XFListStyle* pOldStyle = static_cast<XFListStyle*>(pXFStyleManager->FindStyle(m_aBulletStyleName));
@@ -781,7 +781,7 @@ void LwpPara::RegisterStyle()
     m_Fribs.SetPara(this);
     m_Fribs.RegisterStyle();
 
-    if (m_bHasDropcap == sal_True)
+    if (m_bHasDropcap)
     {
         GatherDropcapInfo();
         XFParaStyle* pStyle = new XFParaStyle;
@@ -930,14 +930,14 @@ XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
     }
 
     sal_uInt16 nLevel = m_nLevel;
-    sal_Bool bOrdered = sal_False;
+    bool bOrdered = false;
     /*LwpStory* pMyStory =*/ GetStory();
 
     pBulletStyleMgr->SetContinueFlag(m_bBullContinue);
 
     if (m_pSilverBullet->IsBulletOrdered())
     {
-        bOrdered = sal_True;
+        bOrdered = true;
     }
     if (m_pSilverBullet->HasName())
     {

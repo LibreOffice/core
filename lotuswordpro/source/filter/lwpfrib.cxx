@@ -90,9 +90,9 @@ LwpFrib::LwpFrib(LwpPara* pPara)
     , m_pNext(NULL)
     , m_nFribType(0)
     , m_pModifiers(NULL)
-    , m_ModFlag(sal_False)
+    , m_ModFlag(false)
     , m_nRevisionType(0)
-    , m_bRevisionFlag(sal_False)
+    , m_bRevisionFlag(false)
     , m_nEditor(0)
 {
 }
@@ -112,10 +112,10 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
         pModInfo  = new ModifierInfo();
         pModInfo->CodePage = 0;
         pModInfo->FontID = 0;
-        pModInfo->RevisionFlag = sal_False;
-        pModInfo->HasCharStyle = sal_False;
-        pModInfo->HasLangOverride = sal_False;
-        pModInfo->HasHighlight = sal_False;
+        pModInfo->RevisionFlag = false;
+        pModInfo->HasCharStyle = false;
+        pModInfo->HasLangOverride = false;
+        pModInfo->HasHighlight = false;
         ReadModifiers( pObjStrm, pModInfo );
     }
 
@@ -221,10 +221,10 @@ void LwpFrib::SetModifiers(ModifierInfo* pModifiers)
     if (pModifiers)
     {
         m_pModifiers = pModifiers;
-        m_ModFlag = sal_True;
+        m_ModFlag = true;
         if (pModifiers->RevisionFlag)
         {
-            m_bRevisionFlag = sal_True;
+            m_bRevisionFlag = true;
             m_nRevisionType = pModifiers->RevisionType;
         }
     }
@@ -236,7 +236,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
         return;
     if (!m_pModifiers->FontID && !m_pModifiers->HasCharStyle && !m_pModifiers->HasHighlight)
     {
-        m_ModFlag = sal_False;
+        m_ModFlag = false;
         return;
     }
     //we only read four modifiers, in these modifiers,CodePage and LangOverride are not styles,
@@ -339,11 +339,11 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
                     pModInfo->FontID = pObjStrm->QuickReaduInt32();
                 break;
             case FRIB_MTAG_CHARSTYLE:
-                pModInfo->HasCharStyle = sal_True;
+                pModInfo->HasCharStyle = true;
                 pModInfo->CharStyleID.ReadIndexed(pObjStrm);
                 break;
             case FRIB_MTAG_LANGUAGE:
-                pModInfo->HasLangOverride = sal_True;
+                pModInfo->HasLangOverride = true;
                 pModInfo->Language.Read(pObjStrm);
                 break;
             case FRIB_MTAG_CODEPAGE:
@@ -358,11 +358,11 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
             case FRIB_MTAG_ATTRIBUTE:
                 pModInfo->aTxtAttrOverride.Read(pObjStrm);
                 if (pModInfo->aTxtAttrOverride.IsHighlight())
-                    pModInfo->HasHighlight = sal_True;
+                    pModInfo->HasHighlight = true;
                 break;
             case FRIB_MTAG_REVISION:
                 pModInfo->RevisionType = pObjStrm->QuickReaduInt8();
-                pModInfo->RevisionFlag = sal_True;
+                pModInfo->RevisionFlag = true;
                 break;
             default:
                 pObjStrm->SeekRel(len);
@@ -376,11 +376,11 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
 *  @descr:   Whether there are other fribs following current frib.
 *  @return:  Ture if having following fribs, or false.
 */
-sal_Bool LwpFrib::HasNextFrib()
+bool LwpFrib::HasNextFrib()
 {
     if (!GetNext() || GetNext()->GetType()==FRIB_TAG_EOP)
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
 void LwpFrib::ConvertChars(XFContentContainer* pXFPara,const OUString& text)

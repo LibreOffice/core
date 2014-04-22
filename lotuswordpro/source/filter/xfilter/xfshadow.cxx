@@ -105,17 +105,17 @@ void    XFShadow::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( "style:shadow", ToString() );
 }
 
-sal_Bool operator==(XFShadow& s1, XFShadow& s2)
+bool operator==(XFShadow& s1, XFShadow& s2)
 {
     if( (s1.m_ePosition == s2.m_ePosition) &&
         (s1.m_fOffset == s2.m_fOffset) &&
         (s1.m_aColor == s2.m_aColor)
         )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
-sal_Bool operator!=(XFShadow& s1, XFShadow& s2)
+bool operator!=(XFShadow& s1, XFShadow& s2)
 {
     return !(s1==s2);
 }

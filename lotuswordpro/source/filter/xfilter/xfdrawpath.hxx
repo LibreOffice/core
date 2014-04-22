@@ -104,22 +104,22 @@ public:
     /**
      * @descr   Move command.
      */
-    void    MoveTo(XFPoint pt, sal_Bool absPosition = sal_True);
+    void    MoveTo(XFPoint pt, bool absPosition = true);
 
     /**
      * @descr   Line command.
      */
-    void    LineTo(XFPoint pt, sal_Bool absPosition = sal_True);
+    void    LineTo(XFPoint pt, bool absPosition = true);
 
     /**
      * @descr   Curve command.
      */
-    void    CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, sal_Bool absPosition = sal_True);
+    void    CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, bool absPosition = true);
 
     /**
      * @descr   Close path command.
      */
-    void    ClosePath(sal_Bool absPosition = sal_True);
+    void    ClosePath(bool absPosition = true);
 
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 

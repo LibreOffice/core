@@ -120,7 +120,7 @@ void LwpSilverBullet::RegisterStyle()
     if (this->IsBulletOrdered() && this->HasName())
     {
         //todo: find the flag in the file
-        sal_Bool bCumulative = sal_False;
+        bool bCumulative = false;
 
         for (sal_uInt8 nPos = 1; nPos < 10; nPos++)
         {
@@ -134,7 +134,7 @@ void LwpSilverBullet::RegisterStyle()
                 {
                     m_pHideLevels[nPos] = aParaNumbering.nNumLevel;
                     sal_uInt16 nDisplayLevel = this->GetDisplayLevel(nPos);
-                    bCumulative = (sal_Bool)(nDisplayLevel > 1);
+                    bCumulative = (nDisplayLevel > 1);
                     OUString aPrefix = this->GetAdditionalName(nPos);
 
                     XFNumFmt aFmt;
@@ -327,17 +327,17 @@ OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber* pParaNumber)
  * @descr:
  * @return:  sal_True if list is ordered, sal_False if list is unordered.
  */
-sal_Bool LwpSilverBullet::IsBulletOrdered()
+bool LwpSilverBullet::IsBulletOrdered()
 {
     if (!m_pBulletPara)
-        return sal_False;
+        return false;
 
     LwpFribPtr* pFribs = m_pBulletPara->GetFribs();
 
     if (!pFribs)
-        return sal_False;
+        return false;
 
-    return (sal_Bool)(pFribs->HasFrib(FRIB_TAG_PARANUMBER) != NULL);
+    return (pFribs->HasFrib(FRIB_TAG_PARANUMBER) != NULL);
 }
 
 /**
@@ -375,8 +375,8 @@ OUString LwpSilverBullet::GetAdditionalName(sal_uInt8 nPos)
 {
     OUString aRet, aEmpty;
     sal_uInt16 nHideBit = (1 << nPos);
-    sal_Bool bDivisionName = sal_False;
-    sal_Bool bSectionName = sal_False;
+    bool bDivisionName = false;
+    bool bSectionName = false;
 
     LwpFrib* pParaFrib = m_pBulletPara->GetFribs()->GetFribs();
     if (!pParaFrib)
@@ -400,11 +400,11 @@ OUString LwpSilverBullet::GetAdditionalName(sal_uInt8 nPos)
             {
                 if (nType == 0x000D)
                 {
-                    bDivisionName = sal_True;
+                    bDivisionName = true;
                 }
                 else if (nType == 0x000E)
                 {
-                    bSectionName= sal_True;
+                    bSectionName= true;
                 }
             }
         }
@@ -459,16 +459,16 @@ OUString LwpSilverBullet::GetSectionName()
     return pStory->GetSectionName();
 }
 
-sal_Bool LwpSilverBullet::HasName()
+bool LwpSilverBullet::HasName()
 {
     LwpAtomHolder* pName = this->GetName();
     if (pName)
     {
-        return (sal_Bool)(!pName->str().isEmpty());
+        return (!pName->str().isEmpty());
     }
     else
     {
-        return sal_False;
+        return false;
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

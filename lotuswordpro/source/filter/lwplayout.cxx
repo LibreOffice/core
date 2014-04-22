@@ -107,7 +107,7 @@ void LwpVirtualLayout::Read()
     pStrm->SkipExtra();
 }
 
-sal_Bool LwpVirtualLayout::MarginsSameAsParent()
+bool LwpVirtualLayout::MarginsSameAsParent()
 {
     return m_nAttributes2 & STYLE2_MARGINSSAMEASPARENT ? sal_True : sal_False;
 }
@@ -138,10 +138,10 @@ double LwpVirtualLayout::GetColGap(sal_uInt16 /*nIndex*/)
 * @descr:   Whether it is honoring protection
 *
 */
-sal_Bool LwpVirtualLayout::HonorProtection()
+bool LwpVirtualLayout::HonorProtection()
 {
     if(!(m_nAttributes2 & STYLE2_HONORPROTECTION))
-        return sal_False;
+        return false;
 
     LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj());
     if(pParent && !pParent->IsHeader())
@@ -160,23 +160,23 @@ sal_Bool LwpVirtualLayout::HonorProtection()
             return pDoc->GetRootDocument()->HonorProtection();
     }
 
-    return sal_True;
+    return true;
 }
 
 /**
 * @descr:   Whether it is protected
 *
 */
-sal_Bool LwpVirtualLayout::IsProtected()
+bool LwpVirtualLayout::IsProtected()
 {
-    sal_Bool bProtected = (m_nAttributes & STYLE_PROTECTED)!=0;
+    bool bProtected = (m_nAttributes & STYLE_PROTECTED)!=0;
 
     LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj());
     if(pParent && !pParent->IsHeader())
     {
         if(pParent->HonorProtection()&&(pParent->HasProtection()||bProtected))
         {
-            return sal_True;
+            return true;
         }
     }
     else if(m_pFoundry)//is null now
@@ -186,22 +186,22 @@ sal_Bool LwpVirtualLayout::IsProtected()
         {
             if (pDoc->HonorProtection() && bProtected)
             {
-                return sal_True;
+                return true;
             }
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 /**
 * @descr:   Whether it has protection
 *
 */
-sal_Bool LwpVirtualLayout::HasProtection()
+bool LwpVirtualLayout::HasProtection()
 {
     if(m_nAttributes & STYLE_PROTECTED)
-        return sal_True;
+        return true;
 
     LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj());
     if(pParent && !pParent->IsHeader())
@@ -209,14 +209,14 @@ sal_Bool LwpVirtualLayout::HasProtection()
         return pParent->HasProtection();
     }
 
-    return sal_False;
+    return false;
 }
 
 /**
 * @descr:   Whether it is a mirror layout
 *
 */
-sal_Bool LwpVirtualLayout::IsComplex()
+bool LwpVirtualLayout::IsComplex()
 {
     return m_nAttributes & STYLE_COMPLEX ? sal_True : sal_False;
 }
@@ -247,7 +247,7 @@ LwpUseWhen* LwpVirtualLayout::GetUseWhen()
  * @param:
  * @return:
 */
-sal_Bool LwpVirtualLayout::IsPage()
+bool LwpVirtualLayout::IsPage()
 {
     return (GetLayoutType() == LWP_PAGE_LAYOUT);
 }
@@ -256,7 +256,7 @@ sal_Bool LwpVirtualLayout::IsPage()
  * @param:
  * @return:
 */
-sal_Bool LwpVirtualLayout::IsHeader()
+bool LwpVirtualLayout::IsHeader()
 {
     return (GetLayoutType() == LWP_HEADER_LAYOUT);
 }
@@ -265,7 +265,7 @@ sal_Bool LwpVirtualLayout::IsHeader()
  * @param:
  * @return:
 */
-sal_Bool LwpVirtualLayout::IsFooter()
+bool LwpVirtualLayout::IsFooter()
 {
     return (GetLayoutType() == LWP_FOOTER_LAYOUT);
 }
@@ -274,7 +274,7 @@ sal_Bool LwpVirtualLayout::IsFooter()
  * @param:
  * @return:
 */
-sal_Bool LwpVirtualLayout::IsFrame()
+bool LwpVirtualLayout::IsFrame()
 {
     return (GetLayoutType() == LWP_FRAME_LAYOUT);
 }
@@ -284,7 +284,7 @@ sal_Bool LwpVirtualLayout::IsFrame()
  * @param:
  * @return:
 */
-sal_Bool LwpVirtualLayout::IsCell()
+bool LwpVirtualLayout::IsCell()
 {
     return (GetLayoutType() == LWP_CELL_LAYOUT
         || GetLayoutType() == LWP_CONNECTED_CELL_LAYOUT
@@ -295,7 +295,7 @@ sal_Bool LwpVirtualLayout::IsCell()
  * @param:
  * @return:
 */
-sal_Bool LwpVirtualLayout::IsSuperTable()
+bool LwpVirtualLayout::IsSuperTable()
 {
     return (GetLayoutType() == LWP_SUPERTABLE_LAYOUT);
 }
@@ -304,7 +304,7 @@ sal_Bool LwpVirtualLayout::IsSuperTable()
  * @param:
  * @return:
 */
-sal_Bool LwpVirtualLayout::IsGroupHead()
+bool LwpVirtualLayout::IsGroupHead()
 {
     return (GetLayoutType() == LWP_GROUP_LAYOUT);
 }
@@ -322,7 +322,7 @@ sal_uInt8 LwpVirtualLayout::GetRelativeType()
  * @param:
  * @return:
 */
-sal_Bool LwpVirtualLayout::IsRelativeAnchored()
+bool LwpVirtualLayout::IsRelativeAnchored()
 {
     sal_uInt8 nType;
 
@@ -335,7 +335,7 @@ sal_Bool LwpVirtualLayout::IsRelativeAnchored()
  * @param:
  * @return:
 */
-sal_Bool LwpVirtualLayout::IsMinimumHeight()
+bool LwpVirtualLayout::IsMinimumHeight()
 {
     return ((m_nAttributes3& STYLE3_MINHEIGHTVALID) != 0);
 }
@@ -365,20 +365,20 @@ void LwpVirtualLayout::RegisterChildStyle()
     }
 }
 
-sal_Bool LwpVirtualLayout::NoContentReference()
+bool LwpVirtualLayout::NoContentReference()
 {
     return (m_nAttributes2 & STYLE2_NOCONTENTREFERENCE) != 0;
 }
 
-sal_Bool LwpVirtualLayout::IsStyleLayout()
+bool LwpVirtualLayout::IsStyleLayout()
 {
     if (m_nAttributes3 & STYLE3_STYLELAYOUT)
-        return sal_True;
+        return true;
 
     LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*>(GetParent()->obj());
     if (pParent)
         return pParent->IsStyleLayout();
-    return sal_False;
+    return false;
 }
 
 /**
@@ -411,7 +411,7 @@ LwpVirtualLayout* LwpVirtualLayout::FindChildByType(LWP_LAYOUT_TYPE eType)
 * @descr:   Whether the size of layout is fit the graphic
 *
 */
-sal_Bool LwpVirtualLayout::IsFitGraphic()
+bool LwpVirtualLayout::IsFitGraphic()
 {
     return IsAutoGrowRight() && !IsAutoGrowLeft() && IsAutoGrowDown();
 }
@@ -420,7 +420,7 @@ sal_Bool LwpVirtualLayout::IsFitGraphic()
 * @descr:   Whether the width of layout is auto grow
 *
 */
-sal_Bool LwpVirtualLayout::IsAutoGrowWidth()
+bool LwpVirtualLayout::IsAutoGrowWidth()
 {
     return IsAutoGrowLeft() || IsAutoGrowRight();
 }
@@ -429,7 +429,7 @@ sal_Bool LwpVirtualLayout::IsAutoGrowWidth()
 * @descr:   Determine whether the layout width is to margin
 *
 */
-sal_Bool LwpVirtualLayout::IsInlineToMargin()
+bool LwpVirtualLayout::IsInlineToMargin()
 {
     return (m_nAttributes3 & STYLE3_INLINETOMARGIN) != 0;
 }
@@ -704,7 +704,7 @@ double LwpMiddleLayout::GetGeometryWidth()
 * @descr:   Whether the margins is same as parent layout
 *
 */
-sal_Bool LwpMiddleLayout::MarginsSameAsParent()
+bool LwpMiddleLayout::MarginsSameAsParent()
 {
     if(m_nOverrideFlag & OVER_MARGINS)
     {
@@ -1002,16 +1002,16 @@ double LwpMiddleLayout::GetScaleHeight(void)
     else
         return 0;
 }
-sal_Bool LwpMiddleLayout::CanSizeRight(void)
+bool LwpMiddleLayout::CanSizeRight(void)
 {
     sal_uInt8 RelType = GetRelativeType();
 
     if (RelType == LwpLayoutRelativityGuts::LAY_INLINE || RelType == LwpLayoutRelativityGuts::LAY_PARA_RELATIVE
     || RelType == LwpLayoutRelativityGuts::LAY_INLINE_VERTICAL)
     {
-        return sal_False;
+        return false;
     }
-    return sal_True;
+    return true;
 }
 sal_Int32 LwpMiddleLayout::GetMinimumWidth()
 {
@@ -1042,10 +1042,10 @@ sal_Int32 LwpMiddleLayout::DetermineWidth()
     }
     return 0;
 }
-sal_Bool LwpMiddleLayout::IsSizeRightToContainer(void)
+bool LwpMiddleLayout::IsSizeRightToContainer(void)
 {
     if (!CanSizeRight())
-        return sal_False;
+        return false;
 
     if (m_nOverrideFlag & OVER_SIZE)
     {
@@ -1059,12 +1059,12 @@ sal_Bool LwpMiddleLayout::IsSizeRightToContainer(void)
         return pLayout ? pLayout->IsSizeRightToContainer() : sal_False;
     }
     else
-        return sal_False;
+        return false;
 }
-sal_Bool LwpMiddleLayout::IsSizeRightToContent(void)
+bool LwpMiddleLayout::IsSizeRightToContent(void)
 {
     if (!CanSizeRight())
-        return sal_False;
+        return false;
 
     if (m_nOverrideFlag & OVER_SIZE)
     {
@@ -1078,7 +1078,7 @@ sal_Bool LwpMiddleLayout::IsSizeRightToContent(void)
         return pLayout ? pLayout->IsSizeRightToContent() : sal_False;
     }
     else
-        return sal_False;
+        return false;
 }
 
 /**
@@ -1125,7 +1125,7 @@ LwpPoint LwpMiddleLayout::GetOrigin()
 * @descr:   Whether the fill is pattern fill or not
 * @return:  True if yes, false if not.
 */
-sal_Bool LwpMiddleLayout::IsPatternFill()
+bool LwpMiddleLayout::IsPatternFill()
 {
     LwpBackgroundStuff* pBackgroundStuff = GetBackgroundStuff();
     if (pBackgroundStuff)
@@ -1133,7 +1133,7 @@ sal_Bool LwpMiddleLayout::IsPatternFill()
         return pBackgroundStuff->IsPatternFill();
     }
 
-    return sal_False;
+    return false;
 }
 
 /**
@@ -1156,7 +1156,7 @@ XFBGImage* LwpMiddleLayout::GetFillPattern()
 * @descr:   Whether the height and width of layout is auto grow
 *
 */
-sal_Bool LwpMiddleLayout::IsAutoGrow()
+bool LwpMiddleLayout::IsAutoGrow()
 {
     if(m_nOverrideFlag & OVER_SIZE)
     {
@@ -1177,7 +1177,7 @@ sal_Bool LwpMiddleLayout::IsAutoGrow()
 * @descr:   Whether the height of layout is auto grow down
 *
 */
-sal_Bool LwpMiddleLayout::IsAutoGrowDown()
+bool LwpMiddleLayout::IsAutoGrowDown()
 {
     if(m_nOverrideFlag & OVER_SIZE)
     {
@@ -1195,7 +1195,7 @@ sal_Bool LwpMiddleLayout::IsAutoGrowDown()
 * @descr:   Whether the height of layout is auto grow up
 *
 */
-sal_Bool LwpMiddleLayout::IsAutoGrowUp()
+bool LwpMiddleLayout::IsAutoGrowUp()
 {
     if(m_nOverrideFlag & OVER_SIZE)
     {
@@ -1213,7 +1213,7 @@ sal_Bool LwpMiddleLayout::IsAutoGrowUp()
 * @descr:   Whether the height of layout is auto grow down
 *
 */
-sal_Bool LwpMiddleLayout::IsAutoGrowLeft()
+bool LwpMiddleLayout::IsAutoGrowLeft()
 {
     if(m_nOverrideFlag & OVER_SIZE)
     {
@@ -1232,7 +1232,7 @@ sal_Bool LwpMiddleLayout::IsAutoGrowLeft()
 * @descr:   Whether the height of layout is auto grow down
 *
 */
-sal_Bool LwpMiddleLayout::IsAutoGrowRight()
+bool LwpMiddleLayout::IsAutoGrowRight()
 {
     if(m_nOverrideFlag & OVER_SIZE)
     {
@@ -1272,12 +1272,12 @@ sal_uInt8 LwpMiddleLayout::GetContentOrientation()
 * @descr:   Whether it is honoring protection
 *
 */
-sal_Bool LwpMiddleLayout::HonorProtection()
+bool LwpMiddleLayout::HonorProtection()
 {
     if(m_nOverrideFlag & OVER_MISC)
     {
         if(!(m_nAttributes2 & STYLE2_HONORPROTECTION))
-            return sal_False;
+            return false;
 
         LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj());
         if(pParent && !pParent->IsHeader())
@@ -1308,9 +1308,9 @@ sal_Bool LwpMiddleLayout::HonorProtection()
 * @descr:   Whether it is pretected
 *
 */
-sal_Bool LwpMiddleLayout::IsProtected()
+bool LwpMiddleLayout::IsProtected()
 {
-    sal_Bool bProtected = sal_False;
+    bool bProtected = false;
     if(m_nOverrideFlag & OVER_MISC)
     {
         bProtected = (m_nAttributes & STYLE_PROTECTED)!=0;
@@ -1328,13 +1328,13 @@ sal_Bool LwpMiddleLayout::IsProtected()
     {
         /* If a parent's protected then none of its children can be accessed. */
         if(pParent->IsProtected())
-            return sal_True;
+            return true;
 
         if(pParent->HonorProtection())
             return bProtected;
 
         /* If our parent isn't honoring protection then we aren't protected. */
-        return sal_False;
+        return false;
 
     }
     if(m_pFoundry)//is null now
@@ -1346,7 +1346,7 @@ sal_Bool LwpMiddleLayout::IsProtected()
                 return bProtected;
 
             /* If the document isn't honoring protection then we aren't protected.*/
-            return sal_False;
+            return false;
         }
     }
 
@@ -1435,7 +1435,7 @@ XFBGImage* LwpMiddleLayout::GetXFBGImage()
 * @descr:   Whether the page uses the printer setting
 *
 */
-sal_Bool LwpMiddleLayout::GetUsePrinterSettings()
+bool LwpMiddleLayout::GetUsePrinterSettings()
 {
     if(m_nOverrideFlag & OVER_SIZE)
     {
@@ -1446,16 +1446,16 @@ sal_Bool LwpMiddleLayout::GetUsePrinterSettings()
         LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj() );
         return pLay ? pLay->GetUsePrinterSettings() : sal_False;
     }
-    return sal_False;
+    return false;
 }
 
 //Check whether there are contents in the layout
-sal_Bool LwpMiddleLayout::HasContent()
+bool LwpMiddleLayout::HasContent()
 {
     LwpObject* content = m_Content.obj();
     if(content)
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 //End by
 
@@ -1751,7 +1751,7 @@ LwpUseWhen* LwpLayout::VirtualGetUseWhen()
 * @descr:   Whether it is use on all pages
 *
 */
-sal_Bool LwpLayout::IsUseOnAllPages()
+bool LwpLayout::IsUseOnAllPages()
 {
     if(m_nOverrideFlag & OVER_PLACEMENT)
     {
@@ -1759,7 +1759,7 @@ sal_Bool LwpLayout::IsUseOnAllPages()
         if(pUseWhen)
             return pUseWhen->IsUseOnAllPages();
         else
-            return sal_False;
+            return false;
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
@@ -1774,7 +1774,7 @@ sal_Bool LwpLayout::IsUseOnAllPages()
 * @descr:   Whether it is use on all even pages
 *
 */
-sal_Bool LwpLayout::IsUseOnAllEvenPages()
+bool LwpLayout::IsUseOnAllEvenPages()
 {
     if(m_nOverrideFlag & OVER_PLACEMENT)
     {
@@ -1782,7 +1782,7 @@ sal_Bool LwpLayout::IsUseOnAllEvenPages()
         if(pUseWhen)
             return pUseWhen->IsUseOnAllEvenPages();
         else
-            return sal_False;
+            return false;
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
@@ -1797,7 +1797,7 @@ sal_Bool LwpLayout::IsUseOnAllEvenPages()
 * @descr:   Whether it is use on all odd pages
 *
 */
-sal_Bool LwpLayout::IsUseOnAllOddPages()
+bool LwpLayout::IsUseOnAllOddPages()
 {
     if(m_nOverrideFlag & OVER_PLACEMENT)
     {
@@ -1805,7 +1805,7 @@ sal_Bool LwpLayout::IsUseOnAllOddPages()
         if(pUseWhen)
             return pUseWhen->IsUseOnAllOddPages();
         else
-            return sal_False;
+            return false;
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
@@ -1820,7 +1820,7 @@ sal_Bool LwpLayout::IsUseOnAllOddPages()
 * @descr:   Whether it is use on current page
 *
 */
-sal_Bool LwpLayout::IsUseOnPage()
+bool LwpLayout::IsUseOnPage()
 {
     if(m_nOverrideFlag & OVER_PLACEMENT)
     {
@@ -1828,7 +1828,7 @@ sal_Bool LwpLayout::IsUseOnPage()
         if(pUseWhen)
             return pUseWhen->IsUseOnPage();
         else
-            return sal_False;
+            return false;
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
@@ -1881,12 +1881,12 @@ XFShadow* LwpLayout::GetXFShadow()
             enumXFShadowPos eXFShadowPos = enumXFShadowLeftTop;
             double fOffset = 0;
 
-            sal_Bool left = sal_False;
-            sal_Bool top = sal_False;
+            bool left = false;
+            bool top = false;
             if( offsetX < 0 )
-                left = sal_True;
+                left = true;
             if( offsetY < 0 )
-                top = sal_True;
+                top = true;
             if( left )
             {
                 fOffset = -offsetX;
@@ -2077,50 +2077,50 @@ sal_Int32 LwpPlacableLayout::GetBaseLineOffset()
 * @descr:   whether the parent layout is page layout
 *
 */
-sal_Bool LwpPlacableLayout::IsAnchorPage()
+bool LwpPlacableLayout::IsAnchorPage()
 {
     if(IsRelativeAnchored())
-        return sal_False;
+        return false;
 
     LwpVirtualLayout* pLayout = GetParentLayout();
     if(pLayout && (pLayout->IsPage() || pLayout->IsHeader() || pLayout->IsFooter()))
     //if(pLayout && pLayout->IsPage())
     {
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 /**
 * @descr:   whether the parent layout is frame layout
 *
 */
-sal_Bool LwpPlacableLayout::IsAnchorFrame()
+bool LwpPlacableLayout::IsAnchorFrame()
 {
     if(IsRelativeAnchored())
-        return sal_False;
+        return false;
 
     LwpVirtualLayout* pLayout = GetParentLayout();
     if(pLayout && (pLayout->IsFrame()||pLayout->IsGroupHead()))
     {
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 /**
 * @descr:   whether the parent layout is cell layout
 *
 */
-sal_Bool LwpPlacableLayout::IsAnchorCell()
+bool LwpPlacableLayout::IsAnchorCell()
 {
     if(IsRelativeAnchored())
-        return sal_False;
+        return false;
 
     LwpVirtualLayout* pLayout = GetParentLayout();
     if(pLayout && pLayout->IsCell())
     {
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /**

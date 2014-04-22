@@ -69,7 +69,7 @@
 class XFBookmark : public XFContent
 {
 public:
-    XFBookmark(sal_Bool isStart)
+    XFBookmark(bool isStart)
     {
         m_bStart = isStart;
     }
@@ -106,7 +106,7 @@ public:
     }
 
 private:
-    sal_Bool    m_bStart;
+    bool    m_bStart;
     OUString m_strName;
     OUString m_strDivision;
 };
@@ -114,13 +114,13 @@ private:
 class XFBookmarkStart : public XFBookmark
 {
 public:
-    XFBookmarkStart():XFBookmark(sal_True){}
+    XFBookmarkStart():XFBookmark(true){}
 };
 
 class XFBookmarkEnd : public XFBookmark
 {
 public:
-    XFBookmarkEnd():XFBookmark(sal_False){}
+    XFBookmarkEnd():XFBookmark(false){}
 };
 
 #endif

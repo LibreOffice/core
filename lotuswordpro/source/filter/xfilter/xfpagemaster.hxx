@@ -89,7 +89,7 @@ public:
 
     void    SetPageUsage(enumXFPageUsage usage);
 
-    void    SetPrintOrient(sal_Bool bUseWidth=sal_True);
+    void    SetPrintOrient(bool bUseWidth=true);
 
     void    SetBorders(XFBorders *pBorders);
 
@@ -127,7 +127,7 @@ private:
 
     enumXFPageUsage m_eUsage;
     enumXFTextDir   m_eTextDir;
-    sal_Bool    m_bPrintOrient;
+    bool    m_bPrintOrient;
 
     XFBorders   *m_pBorders;
     XFShadow    *m_pShadow;
@@ -152,7 +152,7 @@ inline void XFPageMaster::SetPageUsage(enumXFPageUsage usage)
     this->m_eUsage = usage;
 }
 
-inline void XFPageMaster::SetPrintOrient(sal_Bool bUseWidth)
+inline void XFPageMaster::SetPrintOrient(bool bUseWidth)
 {
     m_bPrintOrient = bUseWidth;
 }

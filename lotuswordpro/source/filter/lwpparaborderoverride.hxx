@@ -90,19 +90,19 @@ public:
 
     void Override(LwpParaBorderOverride* pOther);
 
-    inline sal_Bool IsBorderStuffOverridden();
-    inline sal_Bool IsBetweenStuffOverridden();
-    inline sal_Bool IsShadowOverridden();
-    inline sal_Bool IsMarginsOverridden();
-    inline sal_Bool IsAboveTypeOverridden();
-    inline sal_Bool IsBelowTypeOverridden();
-    inline sal_Bool IsRightTypeOverridden();
-    inline sal_Bool IsBetweenTypeOverridden();
-    inline sal_Bool IsAboveWidthOverridden();
-    inline sal_Bool IsBelowWidthOverridden();
-    inline sal_Bool IsBetweenWidthOverridden();
-    inline sal_Bool IsRightWidthOverridden();
-    inline sal_Bool IsBetweenMarginOverridden();
+    inline bool IsBorderStuffOverridden();
+    inline bool IsBetweenStuffOverridden();
+    inline bool IsShadowOverridden();
+    inline bool IsMarginsOverridden();
+    inline bool IsAboveTypeOverridden();
+    inline bool IsBelowTypeOverridden();
+    inline bool IsRightTypeOverridden();
+    inline bool IsBetweenTypeOverridden();
+    inline bool IsAboveWidthOverridden();
+    inline bool IsBelowWidthOverridden();
+    inline bool IsBetweenWidthOverridden();
+    inline bool IsRightWidthOverridden();
+    inline bool IsBetweenMarginOverridden();
 
     void OverrideBorderStuff(LwpBorderStuff* pBorderStuff);
     void OverrideBetweenStuff(LwpBorderStuff* pBorderStuff);
@@ -178,57 +178,57 @@ private:
     sal_uInt32          m_nBetweenMargin;
 };
 
-inline sal_Bool LwpParaBorderOverride::IsBorderStuffOverridden()
+inline bool LwpParaBorderOverride::IsBorderStuffOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_STUFF) != 0);
+    return ((m_nOverride & PBO_STUFF) != 0);
 }
-inline sal_Bool LwpParaBorderOverride::IsBetweenStuffOverridden()
+inline bool LwpParaBorderOverride::IsBetweenStuffOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_BETWEENSTUFF) != 0);
+    return ((m_nOverride & PBO_BETWEENSTUFF) != 0);
 }
-inline sal_Bool LwpParaBorderOverride::IsShadowOverridden()
+inline bool LwpParaBorderOverride::IsShadowOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_SHADOW) != 0);
+    return ((m_nOverride & PBO_SHADOW) != 0);
 }
-inline sal_Bool LwpParaBorderOverride::IsMarginsOverridden()
+inline bool LwpParaBorderOverride::IsMarginsOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_MARGINS) != 0);
+    return ((m_nOverride & PBO_MARGINS) != 0);
 }
-inline sal_Bool LwpParaBorderOverride::IsAboveTypeOverridden()
+inline bool LwpParaBorderOverride::IsAboveTypeOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_ABOVETYPE) != 0);
+    return ((m_nOverride & PBO_ABOVETYPE) != 0);
 }
-inline sal_Bool LwpParaBorderOverride::IsBelowTypeOverridden()
+inline bool LwpParaBorderOverride::IsBelowTypeOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_BELOWTYPE) != 0);
+    return ((m_nOverride & PBO_BELOWTYPE) != 0);
 }
-inline sal_Bool LwpParaBorderOverride::IsRightTypeOverridden()
+inline bool LwpParaBorderOverride::IsRightTypeOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_RIGHTTYPE) != 0);
+    return ((m_nOverride & PBO_RIGHTTYPE) != 0);
 }
-inline sal_Bool LwpParaBorderOverride::IsBetweenTypeOverridden()
+inline bool LwpParaBorderOverride::IsBetweenTypeOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_BETWEENTYPE) != 0);
+    return ((m_nOverride & PBO_BETWEENTYPE) != 0);
 }
-inline sal_Bool LwpParaBorderOverride::IsAboveWidthOverridden()
+inline bool LwpParaBorderOverride::IsAboveWidthOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_ABOVE) != 0);
+    return ((m_nOverride & PBO_ABOVE) != 0);
 }
-inline sal_Bool LwpParaBorderOverride::IsBelowWidthOverridden()
+inline bool LwpParaBorderOverride::IsBelowWidthOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_BELOW) != 0);
+    return ((m_nOverride & PBO_BELOW) != 0);
 }
-inline sal_Bool LwpParaBorderOverride::IsBetweenWidthOverridden()
+inline bool LwpParaBorderOverride::IsBetweenWidthOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_BETWEEN) != 0);
+    return ((m_nOverride & PBO_BETWEEN) != 0);
 }
-inline sal_Bool LwpParaBorderOverride::IsRightWidthOverridden()
+inline bool LwpParaBorderOverride::IsRightWidthOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_RIGHT) != 0);
+    return ((m_nOverride & PBO_RIGHT) != 0);
 }
-inline sal_Bool LwpParaBorderOverride::IsBetweenMarginOverridden()
+inline bool LwpParaBorderOverride::IsBetweenMarginOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_BETWEENMARGIN) != 0);
+    return ((m_nOverride & PBO_BETWEENMARGIN) != 0);
 }
 
 inline void LwpParaBorderOverride::RevertBorderStuff()

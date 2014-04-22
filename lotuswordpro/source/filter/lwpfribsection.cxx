@@ -204,7 +204,7 @@ void LwpFribSection::SetDefaultAlphaIndex(XFIndex * pXFIndex)
     XFIndexTemplate * pTemplateSep = new XFIndexTemplate();
     if (pIndexSection->IsFormatSeparator())
     {
-        pXFIndex->SetSeparator(sal_True);
+        pXFIndex->SetSeparator(true);
         pTemplateSep->AddEntry(enumXFIndexTemplateText,"");
     }
     //pXFIndex->AddTemplate("separator","Separator",pTemplateSep);
@@ -246,7 +246,7 @@ void LwpFribSection::SetDefaultAlphaIndex(XFIndex * pXFIndex)
 }
 
 LwpMasterPage::LwpMasterPage(LwpPara* pPara, LwpPageLayout* pLayout)
-    :m_bNewSection(sal_False),m_pPara(pPara),m_pLayout(pLayout)
+    :m_bNewSection(false),m_pPara(pPara),m_pLayout(pLayout)
 {
 }
 
@@ -254,7 +254,7 @@ LwpMasterPage::LwpMasterPage(LwpPara* pPara, LwpPageLayout* pLayout)
  * @descr:  Register master page style for para style and register section style if necessary
  *
  */
-sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
+bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
 {
     //if there is no other frib after current firb, register master page in starting para of next page
     if(IsNextPageType()&&(!pFrib->HasNextFrib()))
@@ -262,10 +262,10 @@ sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
         LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
         pStory->SetCurrentLayout(m_pLayout);
         RegisterFillerPageStyle();
-        return sal_False;
+        return false;
     }
 
-    m_bNewSection = sal_False;
+    m_bNewSection = false;
     //sal_Bool bSectionColumns = sal_False;
 
     XFParaStyle* pOverStyle = new XFParaStyle;
@@ -277,12 +277,12 @@ sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     {
         case LwpLayout::StartWithinColume://not support now
         {
-            m_bNewSection = sal_False;
+            m_bNewSection = false;
             break;
         }
         case LwpLayout::StartWithinPage:
         {
-            m_bNewSection = sal_True;
+            m_bNewSection = true;
             //bSectionColumns = sal_True;
             break;
         }
@@ -337,16 +337,16 @@ sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
         //}
         m_SectionStyleName = pXFStyleManager->AddStyle(pSectStyle)->GetStyleName();
     }
-    return sal_False;
+    return false;
 }
 
 /**
  * @descr:  Whether it need create a new section
  *
  */
-sal_Bool LwpMasterPage::IsNeedSection()
+bool LwpMasterPage::IsNeedSection()
 {
-    sal_Bool bNewSection = sal_False;
+    bool bNewSection = false;
     //get story
     LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
     //if pagelayout is modified, register the pagelayout
@@ -456,16 +456,16 @@ void LwpMasterPage::RegisterFillerPageStyle()
  * @descr:  Whether the layout is next page type
  *
  */
-sal_Bool LwpMasterPage::IsNextPageType()
+bool LwpMasterPage::IsNextPageType()
 {
     LwpLayout::UseWhenType eUserType = m_pLayout->GetUseWhenType();
     if(eUserType == LwpLayout::StartOnNextPage
         || eUserType == LwpLayout::StartOnOddPage
         || eUserType == LwpLayout::StartOnEvenPage )
     {
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

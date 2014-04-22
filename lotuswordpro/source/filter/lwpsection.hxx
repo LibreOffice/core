@@ -153,8 +153,8 @@ class LwpIndexSection : public LwpSection
 public:
     LwpIndexSection(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpIndexSection();
-    sal_Bool IsFormatRunin();
-    sal_Bool IsFormatSeparator();
+    bool IsFormatRunin();
+    bool IsFormatSeparator();
 protected:
     void Read() SAL_OVERRIDE;
 private:

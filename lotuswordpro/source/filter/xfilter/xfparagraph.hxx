@@ -79,7 +79,7 @@ public:
     virtual ~XFParagraph();
 
 public:
-    sal_Bool    HasContents();
+    bool    HasContents();
 
     virtual enumXFContent   GetContentType() SAL_OVERRIDE;
 

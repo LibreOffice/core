@@ -136,11 +136,11 @@ void LwpFribFrame::SetParaDropcap(LwpPara* pPara)
 
     if (pObject && pObject->GetTag() == VO_DROPCAPLAYOUT)
     {
-        pPara->SetParaDropcap(sal_True);
+        pPara->SetParaDropcap(true);
         pPara->SetDropcapLayout(dynamic_cast<LwpDropcapLayout*>(pObject));
     }
     else
-        pPara->SetParaDropcap(sal_False);
+        pPara->SetParaDropcap(false);
 }
 
 /**

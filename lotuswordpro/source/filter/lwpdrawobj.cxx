@@ -317,11 +317,11 @@ void LwpDrawObj::SetArrowHead(XFDrawStyle* pOpenedObjStyle, sal_uInt8 nArrowFlag
 
     if (nLeftArrow)
     {
-        pOpenedObjStyle->SetArrowStart( this->GetArrowName(nLeftArrow), fArrowSize, sal_True);
+        pOpenedObjStyle->SetArrowStart( this->GetArrowName(nLeftArrow), fArrowSize, true);
     }
     if (nRightArrow)
     {
-        pOpenedObjStyle->SetArrowEnd( this->GetArrowName(nRightArrow), fArrowSize, sal_True);
+        pOpenedObjStyle->SetArrowEnd( this->GetArrowName(nRightArrow), fArrowSize, true);
     }
 
 }
@@ -710,7 +710,7 @@ XFFrame* LwpDrawRectangle::CreateDrawObj(const OUString& rStyleName)
         }
         pRect->LineTo(XFPoint((double)m_aVector[0].x/TWIPS_PER_CM * m_pTransData->fScaleX,
                 (double)m_aVector[0].y/TWIPS_PER_CM * m_pTransData->fScaleY));
-        pRect->ClosePath(sal_True);
+        pRect->ClosePath(true);
         this->SetPosition(pRect);
 
         pRect->SetStyleName(rStyleName);
@@ -754,7 +754,7 @@ XFFrame* LwpDrawRectangle::CreateRoundedRect(const OUString& rStyleName)
 
     pRoundedRect->LineTo(XFPoint((double)m_aVector[0].x/TWIPS_PER_CM * m_pTransData->fScaleX,
                 (double)m_aVector[0].y/TWIPS_PER_CM * m_pTransData->fScaleY));
-    pRoundedRect->ClosePath(sal_True);
+    pRoundedRect->ClosePath(true);
     this->SetPosition(pRoundedRect);
 
     pRoundedRect->SetStyleName(rStyleName);
@@ -871,7 +871,7 @@ XFFrame* LwpDrawEllipse::CreateDrawObj(const OUString& rStyleName )
 
         pEllipse->CurveTo(aDest, aCtrl1, aCtrl2);
     }
-    pEllipse->ClosePath(sal_True);
+    pEllipse->ClosePath(true);
     this->SetPosition(pEllipse);
 
     pEllipse->SetStyleName(rStyleName);
@@ -981,9 +981,9 @@ void LwpDrawTextBox::SetFontStyle(XFFont* pFont, SdwTextBoxRecord* pRec)
     //size
     pFont->SetFontSize(pRec->nTextSize/20);
     // bold
-    pFont->SetBold((sal_Bool)((pRec->nTextAttrs & TA_BOLD) != 0));
+    pFont->SetBold(((pRec->nTextAttrs & TA_BOLD) != 0));
     // italic
-    pFont->SetItalic((sal_Bool)((pRec->nTextAttrs & TA_ITALIC) != 0));
+    pFont->SetItalic(((pRec->nTextAttrs & TA_ITALIC) != 0));
     // strike-through
     if (pRec->nTextAttrs & TA_STRIKETHRU)
     {
@@ -1000,7 +1000,7 @@ void LwpDrawTextBox::SetFontStyle(XFFont* pFont, SdwTextBoxRecord* pRec)
     }
     else if (pRec->nTextAttrs & TA_WORDUNDERLINE)
     {
-        pFont->SetUnderline(enumXFUnderlineSingle, sal_True);
+        pFont->SetUnderline(enumXFUnderlineSingle, true);
     }
     else if (pRec->nTextAttrs & TA_DOUBLEUNDER)
     {
@@ -1082,7 +1082,7 @@ OUString LwpDrawTextBox::RegisterStyle()
 
 XFFrame* LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName )
 {
-    XFFrame* pTextBox = new XFFrame(sal_True);
+    XFFrame* pTextBox = new XFFrame(true);
 
     sal_Int16 TextLength = m_aObjHeader.nRecLen - 71;
     rtl_TextEncoding aEncoding;

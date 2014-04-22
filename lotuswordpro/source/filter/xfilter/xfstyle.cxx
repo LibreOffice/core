@@ -98,8 +98,8 @@ void    XFStyle::SetStyleFamily(enumXFStyle family)
     m_enumFamily = family;
 }
 
-sal_Bool    XFStyle::Equal(IXFStyle * /*pStyle*/)
+bool    XFStyle::Equal(IXFStyle * /*pStyle*/)
 {
-    return sal_False;
+    return false;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

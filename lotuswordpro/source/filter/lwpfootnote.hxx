@@ -232,8 +232,8 @@ public:
     sal_uInt32 GetAbove(){ return m_nAbove;}
     sal_uInt32 GetBelow(){ return m_nBelow;}
     LwpBorderStuff* GetBorderStuff(){ return &m_BorderStuff;}
-    sal_Bool HasCustomLength(){ return (m_nFlag & CUSTOM_LENGTH) != 0;}
-    sal_Bool HasSeparator(){ return (m_nFlag & HAS_SEPARATOR) != 0;}
+    bool HasCustomLength(){ return (m_nFlag & CUSTOM_LENGTH) != 0;}
+    bool HasSeparator(){ return (m_nFlag & HAS_SEPARATOR) != 0;}
     float GetTopBorderWidth(){ return m_BorderStuff.GetSideWidth(LwpBorderStuff::TOP);}
     LwpColor GetTopBorderColor(){ return m_BorderStuff.GetSideColor(LwpBorderStuff::TOP);}
 };
@@ -282,8 +282,8 @@ public:
     LwpFootnoteNumberOptions* GetEndnoteDocNumbering(){ return &m_EndnoteDocNumbering;}
     LwpFootnoteSeparatorOptions* GetFootnoteSeparator(){ return &m_FootnoteSeparator;}
     LwpFootnoteSeparatorOptions* GetFootnoteContinuedSeparator(){ return &m_FootnoteContinuedSeparator;}
-    sal_Bool GetContinuedFrom(){ return ((m_nFlag & FO_CONTINUEFROM) != 0);}
-    sal_Bool GetContinuedOn(){ return ((m_nFlag & FO_CONTINUEON) != 0);}
+    bool GetContinuedFrom(){ return ((m_nFlag & FO_CONTINUEFROM) != 0);}
+    bool GetContinuedOn(){ return ((m_nFlag & FO_CONTINUEON) != 0);}
     OUString GetContinuedOnMessage();
     OUString GetContinuedFromMessage();
     void SetMasterPage(const OUString& strMasterPage){ m_strMasterPage = strMasterPage;}

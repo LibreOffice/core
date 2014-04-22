@@ -78,11 +78,11 @@ public:
     void RegisterStyle() SAL_OVERRIDE;
     virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_TOC_SUPERTABLE_LAYOUT;}
-    virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, sal_Bool bAll = sal_False) SAL_OVERRIDE;
+    virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, bool bAll = false) SAL_OVERRIDE;
 protected:
     void Read() SAL_OVERRIDE;
-    sal_Bool GetRightAlignPageNumber(sal_uInt16 index);
-    sal_Bool GetUsePageNumber(sal_uInt16 index);
+    bool GetRightAlignPageNumber(sal_uInt16 index);
+    bool GetUsePageNumber(sal_uInt16 index);
     sal_uInt16 GetSeparatorType(sal_uInt16 index);
     LwpTocLevelData * GetSearchLevelPtr(sal_uInt16 index);
     LwpTocLevelData * GetNextSearchLevelPtr(sal_uInt16 index, LwpTocLevelData * pCurData);
@@ -154,9 +154,9 @@ public:
     void RegisterStyle() SAL_OVERRIDE;
     virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     inline sal_uInt16 GetLevel(void){return m_nLevel;}
-    inline sal_Bool GetUseText(void){   return (m_nFlags & USETEXT) ? sal_True : sal_False;}
+    inline bool GetUseText(void){   return (m_nFlags & USETEXT) ? sal_True : sal_False;}
     inline OUString GetSearchStyle(void){return m_SearchName.str();}
-    inline sal_Bool GetUseLeadingText(void){    return (m_nFlags & USENUMBER) ? sal_True : sal_False;}
+    inline bool GetUseLeadingText(void){    return (m_nFlags & USENUMBER) ? sal_True : sal_False;}
 private:
     sal_uInt16 m_nFlags;
     sal_uInt16 m_nLevel;

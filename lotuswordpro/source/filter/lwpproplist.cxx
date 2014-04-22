@@ -82,7 +82,7 @@ void LwpPropListElement::Read()
     m_pObjStrm->SkipExtra();
 }
 
-sal_Bool LwpPropListElement::IsNamed(const OUString& name)
+bool LwpPropListElement::IsNamed(const OUString& name)
 {
     return name.equals(m_Name.str());
 }

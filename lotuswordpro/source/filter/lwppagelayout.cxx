@@ -429,20 +429,20 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
 * @descr:   Whether current page layout has columns
 *
 */
-sal_Bool LwpPageLayout::HasColumns()
+bool LwpPageLayout::HasColumns()
 {
-    return GetNumCols() > 1 ? sal_True : sal_False;
+    return GetNumCols() > 1;
 }
 
 /**
 * @descr:   Whether has filler page text in current page layout
 *
 */
-sal_Bool LwpPageLayout::HasFillerPageText(LwpFoundry* pFoundry)
+bool LwpPageLayout::HasFillerPageText(LwpFoundry* pFoundry)
 {
-    if(!pFoundry) return sal_False;
+    if(!pFoundry) return false;
 
-    sal_Bool bFillerPage = sal_False;
+    bool bFillerPage = false;
     LwpLayout::UseWhenType eWhenType = GetUseWhenType();
     if(eWhenType==LwpLayout::StartOnOddPage||eWhenType==LwpLayout::StartOnEvenPage)
     {
@@ -456,15 +456,15 @@ sal_Bool LwpPageLayout::HasFillerPageText(LwpFoundry* pFoundry)
         {
             if((eWhenType==LwpLayout::StartOnOddPage)&&(LwpTools::IsOddNumber(nPageNumber)))
             {
-                bFillerPage = sal_True;
+                bFillerPage = true;
             }
             else if((eWhenType==LwpLayout::StartOnEvenPage)&&(LwpTools::IsEvenNumber(nPageNumber)))
             {
-                bFillerPage = sal_True;
+                bFillerPage = true;
             }
             else
             {
-                bFillerPage = sal_False;
+                bFillerPage = false;
             }
         }
     }
@@ -641,7 +641,7 @@ void LwpPageLayout::GetWidthAndHeight(double& fWidth, double& fHeight)
     {
         //replaced by printer paper size
         Printer aPrinter;
-        sal_Bool bScreen = aPrinter.IsDisplayPrinter();
+        bool bScreen = aPrinter.IsDisplayPrinter();
         if (!bScreen)//Printer available
         {
             Size aPaperSize = aPrinter.GetPaperSize();
@@ -686,7 +686,7 @@ double LwpPageLayout::GetHeight()
 * @descr:  Compare the position of layout. If the poistion of this layout is earlier than other layout,return ture, or return false
 *
 */
-sal_Bool LwpPageLayout::operator<(LwpPageLayout& Other)
+bool LwpPageLayout::operator<(LwpPageLayout& Other)
 {
     LwpPara* pThisPara = GetPagePosition();
     LwpPara* pOtherPara = Other.GetPagePosition();
@@ -704,9 +704,9 @@ sal_Bool LwpPageLayout::operator<(LwpPageLayout& Other)
     }
 
     if(!pThisPara)
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 /**
@@ -804,7 +804,7 @@ void LwpHeaderLayout::ParseMargins(XFHeaderStyle* ph1)
     ph1->SetMargins( left, right, GetMarginsValue(MARGIN_BOTTOM));
 
     //Word Pro has no dynamic spacing, should be set to false
-    ph1->SetDynamicSpace(sal_False);
+    ph1->SetDynamicSpace(false);
 }
 
 void LwpHeaderLayout::ParseBorder(XFHeaderStyle* pHeaderStyle)
@@ -880,7 +880,7 @@ void LwpHeaderLayout::RegisterStyle(XFMasterPage* mp1)
     {
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
-        pChangeMgr->SetHeadFootFribMap(sal_True);
+        pChangeMgr->SetHeadFootFribMap(true);
 
         //Call the RegisterStyle first to register the styles in header paras, and then XFConvert()
         pStory->SetFoundry(m_pFoundry);
@@ -892,7 +892,7 @@ void LwpHeaderLayout::RegisterStyle(XFMasterPage* mp1)
         pChangeMgr->SetHeadFootChange(pHeader);
         pStory->XFConvert(pHeader);
 
-        pChangeMgr->SetHeadFootFribMap(sal_False);
+        pChangeMgr->SetHeadFootFribMap(false);
     }
     mp1->SetHeader(pHeader);
 }
@@ -968,7 +968,7 @@ void LwpFooterLayout::ParseMargins(XFFooterStyle* pFooterStyle)
     pFooterStyle->SetMargins( left, right, GetMarginsValue(MARGIN_TOP));
 
     //Word Pro has no dynamic spacing, should be set to false
-    pFooterStyle->SetDynamicSpace(sal_False);
+    pFooterStyle->SetDynamicSpace(false);
 }
 
 void LwpFooterLayout::ParseBorder(XFFooterStyle* pFooterStyle)
@@ -1034,7 +1034,7 @@ void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
     {
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
-        pChangeMgr->SetHeadFootFribMap(sal_True);
+        pChangeMgr->SetHeadFootFribMap(true);
 
         pStory->SetFoundry(m_pFoundry);
         pStory->RegisterStyle();
@@ -1047,7 +1047,7 @@ void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
 
         pStory->XFConvert(pFooter);
 
-        pChangeMgr->SetHeadFootFribMap(sal_False);
+        pChangeMgr->SetHeadFootFribMap(false);
     }
     mp1->SetFooter(pFooter);
 }

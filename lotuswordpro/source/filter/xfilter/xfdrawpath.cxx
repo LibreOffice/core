@@ -81,7 +81,7 @@ XFDrawPath::XFDrawPath()
 {
 }
 
-void    XFDrawPath::MoveTo(XFPoint pt, sal_Bool absPosition)
+void    XFDrawPath::MoveTo(XFPoint pt, bool absPosition)
 {
     XFSvgPathEntry  entry;
 
@@ -93,7 +93,7 @@ void    XFDrawPath::MoveTo(XFPoint pt, sal_Bool absPosition)
     m_aPaths.push_back(entry);
 }
 
-void    XFDrawPath::LineTo(XFPoint pt, sal_Bool absPosition)
+void    XFDrawPath::LineTo(XFPoint pt, bool absPosition)
 {
     XFSvgPathEntry  entry;
 
@@ -105,7 +105,7 @@ void    XFDrawPath::LineTo(XFPoint pt, sal_Bool absPosition)
     m_aPaths.push_back(entry);
 }
 
-void    XFDrawPath::CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, sal_Bool absPosition)
+void    XFDrawPath::CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, bool absPosition)
 {
     XFSvgPathEntry  entry;
 
@@ -120,7 +120,7 @@ void    XFDrawPath::CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, sal_Bool
     m_aPaths.push_back(entry);
 }
 
-void    XFDrawPath::ClosePath(sal_Bool absPosition)
+void    XFDrawPath::ClosePath(bool absPosition)
 {
     XFSvgPathEntry  entry;
 

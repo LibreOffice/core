@@ -104,7 +104,7 @@ public:
 
     sal_Int32   GetColumnCount();
 
-    sal_Bool    IsSubTable();
+    bool    IsSubTable();
 
     void        Normalize();
 
@@ -119,7 +119,7 @@ public:
 
 private:
     OUString   m_strName;
-    sal_Bool    m_bSubTable;
+    bool    m_bSubTable;
     XFCell      *m_pOwnerCell;
     XFContentContainer  m_aHeaderRows;
     std::map<sal_uInt16, XFRow*>  m_aRows;
@@ -140,7 +140,7 @@ inline void XFTable::SetOwnerCell(XFCell *pCell)
     m_bSubTable = (pCell!=NULL);
 }
 
-inline sal_Bool XFTable::IsSubTable()
+inline bool XFTable::IsSubTable()
 {
     return m_bSubTable;
 }

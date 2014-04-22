@@ -129,11 +129,11 @@ void LwpTable::Read()
     m_pObjStrm->SkipExtra();
 }
 
-sal_Bool LwpTable::IsNumberDown()
+bool LwpTable::IsNumberDown()
 {
     if (m_nAttributes & NUMBER_DOWN)
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 void  LwpTable::Parse(IXFStream* /*pOutputStream*/)

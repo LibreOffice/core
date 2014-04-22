@@ -80,29 +80,29 @@ public:
 
     void    SetText(OUString& text);
 
-    void    SetFixed(sal_Bool fixed = sal_True);
+    void    SetFixed(bool fixed = true);
 
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
-    sal_Bool    m_bFixed;
+    bool    m_bFixed;
     OUString m_strText;
     XFDateTime  m_aDateTime;
     OUString   m_strDate;
-    sal_Bool    m_bValued;
+    bool    m_bValued;
 };
 
 inline  void XFDate::SetDate(XFDateTime& dt)
 {
     m_aDateTime = dt;
     m_strDate = DateTimeToOUString(m_aDateTime);
-    m_bValued = sal_True;
+    m_bValued = true;
 }
 
 inline void XFDate::SetDate(const OUString& date)
 {
     m_strDate = date;
-    m_bValued = sal_True;
+    m_bValued = true;
 }
 
 inline  void XFDate::SetText(OUString& text)
@@ -110,7 +110,7 @@ inline  void XFDate::SetText(OUString& text)
     m_strText = text;
 }
 
-inline  void XFDate::SetFixed(sal_Bool fixed)
+inline  void XFDate::SetFixed(bool fixed)
 {
     m_bFixed = fixed;
 }

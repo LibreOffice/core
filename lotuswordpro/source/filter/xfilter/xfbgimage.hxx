@@ -101,7 +101,7 @@ public:
      * @descr   decide whether there has been a style that is the same as this object.
      *          If it use base64 stream, i'll simply return sal_False because it's too slow to compare two base64 stream.
      */
-    virtual sal_Bool Equal(IXFStyle *pStyle) SAL_OVERRIDE;
+    virtual bool Equal(IXFStyle *pStyle) SAL_OVERRIDE;
 
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
@@ -110,10 +110,10 @@ public:
 private:
     OUString   m_strFileName;
     OUString   m_strData;
-    sal_Bool    m_bUserFileLink;
-    sal_Bool    m_bRepeate;
-    sal_Bool    m_bStretch;
-    sal_Bool    m_bPosition;
+    bool       m_bUserFileLink;
+    bool       m_bRepeate;
+    bool       m_bStretch;
+    bool       m_bPosition;
     enumXFAlignType m_eHoriAlign;
     enumXFAlignType m_eVertAlign;
 };
@@ -121,31 +121,31 @@ private:
 inline void XFBGImage::SetFileLink(const OUString& fileName)
 {
     m_strFileName = fileName;
-    m_bUserFileLink = sal_True;
+    m_bUserFileLink = true;
 }
 
 inline void XFBGImage::SetPosition(enumXFAlignType horiAlign, enumXFAlignType vertAlign)
 {
-    m_bPosition = sal_True;
+    m_bPosition = true;
     m_eHoriAlign = horiAlign;
     m_eVertAlign = vertAlign;
 
-    m_bStretch = sal_False;
-    m_bRepeate = sal_False;
+    m_bStretch = false;
+    m_bRepeate = false;
 }
 
 inline void XFBGImage::SetRepeate()
 {
-    m_bRepeate = sal_True;
-    m_bStretch = sal_False;
-    m_bPosition = sal_False;
+    m_bRepeate = true;
+    m_bStretch = false;
+    m_bPosition = false;
 }
 
 inline void XFBGImage::SetStretch()
 {
-    m_bStretch = sal_True;
-    m_bRepeate = sal_False;
-    m_bPosition = sal_False;
+    m_bStretch = true;
+    m_bRepeate = false;
+    m_bPosition = false;
 }
 
 #endif

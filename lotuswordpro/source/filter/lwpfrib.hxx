@@ -79,11 +79,11 @@ struct ModifierInfo
     LwpTextAttributeOverride aTxtAttrOverride;
     //end add
     sal_uInt16 CodePage;
-    sal_Bool HasCharStyle;
-    sal_Bool HasLangOverride;
-    sal_Bool HasHighlight;
+    bool HasCharStyle;
+    bool HasLangOverride;
+    bool HasHighlight;
     sal_uInt8 RevisionType;
-    sal_Bool RevisionFlag;
+    bool RevisionFlag;
 };
 
 class LwpPara;
@@ -110,20 +110,20 @@ protected:
     ModifierInfo* m_pModifiers;
     OUString m_StyleName;
 public:
-    sal_Bool m_ModFlag;
+    bool m_ModFlag;
     OUString GetStyleName(){return m_StyleName;}//add by  1-10
 //  void SetStyle(LwpFoundry* pFoundry);
-    sal_Bool IsModified(){return m_ModFlag;}
+    bool IsModified(){return m_ModFlag;}
     void SetModifiers(ModifierInfo* pModifiers);
     ModifierInfo* GetModifiers(){return m_pModifiers;}
     virtual void RegisterStyle(LwpFoundry* pFoundry);
-    sal_Bool HasNextFrib();
+    bool HasNextFrib();
     void ConvertChars(XFContentContainer* pXFPara,const OUString& text);
     void ConvertHyperLink(XFContentContainer* pXFPara,LwpHyperlinkMgr* pHyperlink,const OUString& text);
     XFFont* GetFont();
 
     sal_uInt8 GetRevisionType(){return m_nRevisionType;}
-    sal_Bool GetRevisionFlag(){return m_bRevisionFlag;}
+    bool GetRevisionFlag(){return m_bRevisionFlag;}
     enum{
         REV_INSERT =0,
         REV_DELETE = 1,
@@ -133,7 +133,7 @@ private:
     static void ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo);
 protected:
     sal_uInt8 m_nRevisionType;
-    sal_Bool m_bRevisionFlag;
+    bool m_bRevisionFlag;
     sal_uInt8 m_nEditor;
 };
 

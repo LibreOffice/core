@@ -68,7 +68,7 @@
  * @date:   11/19/2004
  * @short:  Default constructor
 **************************************************************************/
-SdwRectangle::SdwRectangle() : m_bRotated(sal_False)
+SdwRectangle::SdwRectangle() : m_bRotated(false)
 {
     for (sal_uInt16 i = 0; i < 4; i++)
     {
@@ -81,7 +81,7 @@ SdwRectangle::SdwRectangle() : m_bRotated(sal_False)
  * @param:  aPt0~aPt3 four corner points of a rectangle.
 **************************************************************************/
 SdwRectangle::SdwRectangle(const Point& rPt0, const Point& rPt1,
-        const Point& rPt2, const Point& rPt3) : m_bRotated(sal_True)
+        const Point& rPt2, const Point& rPt3) : m_bRotated(true)
 {
     m_nRectCorner[0] = rPt0;
     m_nRectCorner[1] = rPt1;
@@ -90,7 +90,7 @@ SdwRectangle::SdwRectangle(const Point& rPt0, const Point& rPt1,
 
     if (rPt0.Y() == rPt1.Y() && rPt0.Y() < rPt3.Y())
     {
-        m_bRotated = sal_False;
+        m_bRotated = false;
     }
 }
 
@@ -119,7 +119,7 @@ SdwRectangle::~SdwRectangle()
  * @short:  Get the flag whether if the rectangle has been rotated.
  * @return: m_bRotated rotation flag.
 **************************************************************************/
-sal_Bool SdwRectangle::IsRectRotated() const
+bool SdwRectangle::IsRectRotated() const
 {
     return m_bRotated;
 }

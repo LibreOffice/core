@@ -68,7 +68,7 @@
 #include "lwpglobalmgr.hxx"
 
 LwpObjectID::LwpObjectID(sal_uInt32 low, sal_uInt16 high)
-    :m_nLow(low), m_nHigh(high), m_nIndex(0), m_bIsCompressed(sal_False)
+    :m_nLow(low), m_nHigh(high), m_nIndex(0), m_bIsCompressed(false)
 {
 }
 /**
@@ -98,7 +98,7 @@ sal_uInt32 LwpObjectID::Read(LwpObjectStream *pObj)
 sal_uInt32 LwpObjectID::ReadIndexed(LwpSvStream *pStrm)
 {
 //note the m_nLow store the index instead of time from the timetable as in LWP
-    m_bIsCompressed = sal_False;
+    m_bIsCompressed = false;
     if( LwpFileHeader::m_nFileRevision < 0x000B)
     {
         return Read(pStrm);
@@ -108,7 +108,7 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpSvStream *pStrm)
 
     if (m_nIndex)
     {
-        m_bIsCompressed = sal_True;
+        m_bIsCompressed = true;
         //m_nLow = index;       //note the m_nLow stores the index instead of the actual time id
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pFactory = pGlobal->GetLwpObjFactory();
@@ -130,7 +130,7 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpSvStream *pStrm)
 */
 sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
 {
-    m_bIsCompressed = sal_False;
+    m_bIsCompressed = false;
     if(LwpFileHeader::m_nFileRevision < 0x000B)
     {
         return Read(pStrm);
@@ -139,7 +139,7 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
     m_nIndex = pStrm->QuickReaduInt8();
     if (m_nIndex)
     {
-        m_bIsCompressed = sal_True;
+        m_bIsCompressed = true;
         //m_nLow = index;       //note the m_nLow stores the index instead of the actual time id
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pFactory = pGlobal->GetLwpObjFactory();

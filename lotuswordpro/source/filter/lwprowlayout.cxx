@@ -459,12 +459,12 @@ void LwpRowLayout::SetCellSplit(sal_uInt16 nEffectRows)
 /**
  * @short   check if the row has merge cell
  */
-sal_Bool LwpRowLayout::GetMergeCellFlag()
+bool LwpRowLayout::GetMergeCellFlag()
 {
     if (m_ConnCellList.empty())
-        return sal_False;
+        return false;
     else
-        return sal_True;
+        return true;
 }
 
 LwpRowHeadingLayout::LwpRowHeadingLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)

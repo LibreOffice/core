@@ -62,10 +62,10 @@
 
 XFBGImage::XFBGImage()
 {
-    m_bUserFileLink = sal_False;
-    m_bRepeate = sal_False;
-    m_bStretch = sal_False;
-    m_bPosition = sal_True;
+    m_bUserFileLink = false;
+    m_bRepeate = false;
+    m_bStretch = false;
+    m_bPosition = true;
     m_eHoriAlign = enumXFAlignCenter;
     m_eVertAlign = enumXFAlignCenter;
 }
@@ -73,12 +73,12 @@ XFBGImage::XFBGImage()
 void XFBGImage::SetImageData(sal_uInt8 *buf, int len)
 {
     m_strData = XFBase64::Encode(buf,len);
-    m_bUserFileLink = sal_False;
+    m_bUserFileLink = false;
 }
 
-sal_Bool    XFBGImage::Equal(IXFStyle * /* pStyle */)
+bool    XFBGImage::Equal(IXFStyle * /* pStyle */)
 {
-    return sal_False;
+    return false;
 }
 
 void    XFBGImage::ToXml(IXFStream *pStrm)

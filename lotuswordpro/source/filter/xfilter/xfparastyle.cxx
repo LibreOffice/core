@@ -68,17 +68,17 @@
 XFParaStyle::XFParaStyle()
     : m_eAlignType(enumXFAlignNone)
     , m_eLastLineAlign(enumXFAlignNone)
-    , m_bJustSingleWord(sal_False)
-    , m_bKeepWithNext(sal_False)
+    , m_bJustSingleWord(false)
+    , m_bKeepWithNext(false)
     , m_fTextIndent(0)
     , m_pFont(NULL)
     , m_pBorders(NULL)
     , m_pBGImage(NULL)
     , m_nPageNumber(0)
-    , m_bNumberLines(sal_True)
+    , m_bNumberLines(true)
     , m_nLineNumberRestart(0)
     , m_nFlag(0)
-    , m_bNumberRight(sal_False)
+    , m_bNumberRight(false)
 {
 }
 
@@ -302,102 +302,102 @@ void    XFParaStyle::AddTabStyle(enumXFTab type, double len, sal_Unicode leader,
 /**
  *Affirm whether two XFParaStyle objects are equal.
  */
-sal_Bool    XFParaStyle::Equal(IXFStyle *pStyle)
+bool    XFParaStyle::Equal(IXFStyle *pStyle)
 {
     if( this == pStyle )
-        return sal_True;
+        return true;
     if( !pStyle || pStyle->GetStyleFamily() != enumXFStylePara )
-        return sal_False;
+        return false;
 
     XFParaStyle *pOther = (XFParaStyle*)(pStyle);
     if( !pOther )
-        return sal_False;
+        return false;
 
     if( m_nFlag != pOther->m_nFlag )
-        return sal_False;
+        return false;
     if( m_strParentStyleName != pOther->m_strParentStyleName )
-        return sal_False;
+        return false;
     if( m_strMasterPage != pOther->m_strMasterPage )
-        return sal_False;
+        return false;
     if( m_fTextIndent != pOther->m_fTextIndent )
-        return sal_False;
+        return false;
     if( m_bJustSingleWord != pOther->m_bJustSingleWord )
-        return sal_False;
+        return false;
     if( m_bKeepWithNext != pOther->m_bKeepWithNext )
-        return sal_False;
+        return false;
     //line number:
     if( m_bNumberLines != pOther->m_bNumberLines )
-        return sal_False;
+        return false;
     if( m_nLineNumberRestart != pOther->m_nLineNumberRestart )
-        return sal_False;
+        return false;
     //align:
     if( m_eAlignType != pOther->m_eAlignType )
-        return sal_False;
+        return false;
     //last line align:
     if( m_eLastLineAlign != pOther->m_eLastLineAlign )
-        return sal_False;
+        return false;
 
     //shadow:
     if( m_aShadow != pOther->m_aShadow )
-        return sal_False;
+        return false;
     //margin:
     if( m_aMargin != pOther->m_aMargin )
-        return sal_False;
+        return false;
 
     if( m_aPadding != pOther->m_aPadding )
-        return sal_False;
+        return false;
 
     //dropcap:
     if( m_aDropcap != pOther->m_aDropcap )
-        return sal_False;
+        return false;
     //line height:
     if( m_aLineHeight != pOther->m_aLineHeight )
-        return sal_False;
+        return false;
     //breaks:
     if( m_aBreaks != pOther->m_aBreaks )
-        return sal_False;
+        return false;
     if( m_nPageNumber != pOther->m_nPageNumber )
-        return sal_False;
+        return false;
     if( m_aTabs != pOther->m_aTabs )
-        return sal_False;
+        return false;
 
     //font:
     if( m_pFont )
     {
         if( !pOther->m_pFont )
-            return sal_False;
+            return false;
         if(*m_pFont != *pOther->m_pFont )
-            return sal_False;
+            return false;
     }
     else if( pOther->m_pFont )
-        return sal_False;
+        return false;
 
     //border:
     if( m_pBorders )
     {
         if( !pOther->m_pBorders )
-            return sal_False;
+            return false;
         if( *m_pBorders != *pOther->m_pBorders )
-            return sal_False;
+            return false;
     }
     else if( pOther->m_pBorders )
-        return sal_False;
+        return false;
 
     if( m_pBGImage )
     {
         if( !pOther->m_pBGImage )
-            return sal_False;
+            return false;
         if( *m_pBGImage != *pOther->m_pBGImage )
-            return sal_False;
+            return false;
     }
     else if( pOther->m_pBGImage )
-        return sal_False;//add end
+        return false;//add end
 
     //number right
     if (    m_bNumberRight  != pOther->m_bNumberRight)
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 void    XFParaStyle::ToXml(IXFStream *pStrm)

@@ -150,37 +150,37 @@ public:
     /**
      * @descr   Set whether font is italic.
      */
-    void    SetItalic(sal_Bool italic = true);
+    void    SetItalic(bool italic = true);
 
     /**
      * @descr   Set whether font is italic for asia locale.
      */
-    void    SetItalicAsia(sal_Bool italic);
+    void    SetItalicAsia(bool italic);
 
     /**
      * @descr   Set whether font is italic for BIDI locale.
      */
-    void    SetItalicComplex(sal_Bool italic);
+    void    SetItalicComplex(bool italic);
 
     /**
      * @descr   Set font bold.
      */
-    void    SetBold(sal_Bool bold = true);
+    void    SetBold(bool bold = true);
 
     /**
      * @descr   Set font bold for asia locale.
      */
-    void    SetBoldAsia(sal_Bool bold);
+    void    SetBoldAsia(bool bold);
 
     /**
      * @descr   Set font bold for complex locale.
      */
-    void    SetBoldComplex(sal_Bool bold);
+    void    SetBoldComplex(bool bold);
 
     /**
      * @descr   Set underline style.
      */
-    void    SetUnderline(enumXFUnderline underline,sal_Bool wordByWord=sal_False);
+    void    SetUnderline(enumXFUnderline underline,bool wordByWord=false);
 
     /**
      * @descr   Set underline color.
@@ -190,7 +190,7 @@ public:
     /**
      * @descr   Set crossout.
      */
-    void    SetCrossout(enumXFCrossout cross,sal_Bool wordByWord=sal_False);
+    void    SetCrossout(enumXFCrossout cross,bool wordByWord=false);
 
     /**
      * @descr   Set font relief.
@@ -205,27 +205,27 @@ public:
     /**
      * @descr   Set font emphasize effect.
      */
-    void    SetEmphasize(enumXFEmphasize emphasize, sal_Bool top = sal_True);
+    void    SetEmphasize(enumXFEmphasize emphasize, bool top = true);
 
     /**
      * @descr   Set outline effect.
      */
-    void    SetOutline(sal_Bool outline);
+    void    SetOutline(bool outline);
 
     /**
      * @descr   Set font shadow.
      */
-    void    SetShadow(sal_Bool shadow);
+    void    SetShadow(bool shadow);
 
     /**
      * @descr   Set font blink effect.
      */
-    void    SetBlink(sal_Bool blink);
+    void    SetBlink(bool blink);
 
     /**
      * @descr   Set upper script or lower script.
      */
-    void    SetPosition(sal_Bool bUpperScript = sal_True, sal_Int16 pos = 33, sal_Int16 scale = 58);
+    void    SetPosition(bool bUpperScript = true, sal_Int16 pos = 33, sal_Int16 scale = 58);
 
     /**
      * @descr   Set space between chars in percent.
@@ -268,12 +268,12 @@ private:
     sal_Int16   m_nFontSize;
     sal_Int16   m_nFontSizeAsia;
     sal_Int16   m_nFontSizeComplex;
-    sal_Bool    m_bItalic;
-    sal_Bool    m_bItalicAsia;
-    sal_Bool    m_bItalicComplex;
-    sal_Bool    m_bBold;
-    sal_Bool    m_bBoldAsia;
-    sal_Bool    m_bBoldComplex;
+    bool    m_bItalic;
+    bool    m_bItalicAsia;
+    bool    m_bItalicComplex;
+    bool    m_bBold;
+    bool    m_bBoldAsia;
+    bool    m_bBoldComplex;
     XFColor     m_aUnderlineColor;
 
     enumXFUnderline m_eUnderline;
@@ -281,11 +281,11 @@ private:
     enumXFRelief    m_eRelief;
     enumXFTransform m_eTransform;
     enumXFEmphasize m_eEmphasize;
-    sal_Bool    m_bWordByWord;
-    sal_Bool    m_bEmphasizeTop;
-    sal_Bool    m_bOutline;
-    sal_Bool    m_bShadow;
-    sal_Bool    m_bBlink;
+    bool    m_bWordByWord;
+    bool    m_bEmphasizeTop;
+    bool    m_bOutline;
+    bool    m_bShadow;
+    bool    m_bBlink;
     sal_Int16   m_nPosition;
     sal_Int16   m_nScale;
     double      m_fCharSpace;
@@ -294,7 +294,7 @@ private:
     XFColor     m_aBackColor;
     //The flag defines which variable will be funtional.
     sal_uInt32  m_nFlag;
-    sal_Bool    m_bTransparent;
+    bool    m_bTransparent;
 };
 
 inline void XFFont::SetFontName(const OUString& name)
@@ -340,7 +340,7 @@ inline void XFFont::SetFontSizeComplex(sal_Int16 size)
 }
 
 //---------Italic:
-inline void XFFont::SetItalic(sal_Bool italic)
+inline void XFFont::SetItalic(bool italic)
 {
     m_bItalic = italic;
     m_nFlag |= XFFONT_FLAG_ITALIC;
@@ -349,20 +349,20 @@ inline void XFFont::SetItalic(sal_Bool italic)
     SetItalicComplex(italic);
 }
 
-inline void XFFont::SetItalicAsia(sal_Bool italic)
+inline void XFFont::SetItalicAsia(bool italic)
 {
     m_bItalicAsia = italic;
     m_nFlag |= XFFONT_FLAG_ITALIC_ASIA;
 }
 
-inline void XFFont::SetItalicComplex(sal_Bool italic)
+inline void XFFont::SetItalicComplex(bool italic)
 {
     m_bItalicComplex = italic;
     m_nFlag |= XFFONT_FLAG_ITALIC_COMPLEX;
 }
 
 //--------Bold
-inline void XFFont::SetBold(sal_Bool bold)
+inline void XFFont::SetBold(bool bold)
 {
     m_bBold = bold;
     m_nFlag |= XFFONT_FLAG_BOLD;
@@ -370,20 +370,20 @@ inline void XFFont::SetBold(sal_Bool bold)
     SetBoldComplex(bold);
 }
 
-inline void XFFont::SetBoldAsia(sal_Bool bold)
+inline void XFFont::SetBoldAsia(bool bold)
 {
     m_bBoldAsia = bold;
     m_nFlag |= XFFONT_FLAG_BOLD_ASIA;
 }
 
-inline void XFFont::SetBoldComplex(sal_Bool bold)
+inline void XFFont::SetBoldComplex(bool bold)
 {
     m_bBoldComplex = bold;
     m_nFlag |= XFFONT_FLAG_BOLD_COMPLEX;
 }
 
 //--------Underline:
-inline void XFFont::SetUnderline(enumXFUnderline underline, sal_Bool wordByWord)
+inline void XFFont::SetUnderline(enumXFUnderline underline, bool wordByWord)
 {
     m_eUnderline = underline;
     m_bWordByWord = wordByWord;
@@ -396,7 +396,7 @@ inline void XFFont::SetUnderlineColor(XFColor color)
     m_nFlag |= XFFONT_FLAG_UNDERLINECOLOR;
 }
 
-inline void XFFont::SetCrossout(enumXFCrossout cross, sal_Bool wordByWord)
+inline void XFFont::SetCrossout(enumXFCrossout cross, bool wordByWord)
 {
     m_eCrossout = cross;
     m_bWordByWord = wordByWord;
@@ -413,29 +413,29 @@ inline void XFFont::SetTransform(enumXFTransform transform)
     m_nFlag |= XFFONT_FLAG_TRANSFORM;
 }
 
-inline void XFFont::SetEmphasize(enumXFEmphasize emphasize, sal_Bool top)
+inline void XFFont::SetEmphasize(enumXFEmphasize emphasize, bool top)
 {
     m_eEmphasize = emphasize;
     m_bEmphasizeTop = top;
     m_nFlag |= XFFONT_FLAG_EMPHASIZE;
 }
-inline void XFFont::SetOutline(sal_Bool outline)
+inline void XFFont::SetOutline(bool outline)
 {
     m_bOutline = outline;
     m_nFlag |= XFFONT_FLAG_OUTLINE;
 }
-inline void XFFont::SetShadow(sal_Bool shadow)
+inline void XFFont::SetShadow(bool shadow)
 {
     m_bShadow = shadow;
     m_nFlag |= XFFONT_FLAG_SHADOW;
 }
-inline void XFFont::SetBlink(sal_Bool blink)
+inline void XFFont::SetBlink(bool blink)
 {
     m_bBlink = blink;
     m_nFlag |= XFFONT_FLAG_BLINK;
 }
 
-inline void XFFont::SetPosition(sal_Bool bUpperScript, sal_Int16 pos, sal_Int16 scale)
+inline void XFFont::SetPosition(bool bUpperScript, sal_Int16 pos, sal_Int16 scale)
 {
     assert(pos>=0&&pos<=100);
     assert(scale>0&&scale<=100);
@@ -474,14 +474,14 @@ inline void XFFont::SetColor(XFColor& color)
 
 inline void XFFont::SetBackColor(XFColor& color)
 {
-    m_bTransparent = sal_False;
+    m_bTransparent = false;
     m_nFlag |= XFFONT_FLAG_BGCOLOR;
     m_aBackColor = color;
 }
 
 inline void XFFont::SetBackColorTransparent()
 {
-    m_bTransparent = sal_True;
+    m_bTransparent = true;
     m_nFlag |= XFFONT_FLAG_BGCOLOR;
 }
 

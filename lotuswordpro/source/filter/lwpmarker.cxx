@@ -186,8 +186,8 @@ void LwpCHBlkMarker::ConvertCHBlock(XFContentContainer* pXFPara, sal_uInt8 nType
 void LwpCHBlkMarker::ProcessPlaceHolder(XFContentContainer* pXFPara,sal_uInt16 nAction,
                 sal_uInt8 nType)
 {
-    sal_Bool bFillFlag = IsHasFilled();
-    sal_Bool bHelpFlag = IsBubbleHelp();
+    bool bFillFlag = IsHasFilled();
+    bool bHelpFlag = IsBubbleHelp();
 
     if ( bFillFlag )
         return;
@@ -226,8 +226,8 @@ void LwpCHBlkMarker::ProcessPlaceHolder(XFContentContainer* pXFPara,sal_uInt16 n
 
 void LwpCHBlkMarker::ProcessOtherCHB(XFContentContainer* pXFPara,sal_uInt8 nType)
 {
-    sal_Bool bFillFlag = IsHasFilled();
-    sal_Bool bHelpFlag = IsBubbleHelp();
+    bool bFillFlag = IsHasFilled();
+    bool bHelpFlag = IsBubbleHelp();
 
     if ( bFillFlag )
         return;
@@ -252,7 +252,7 @@ void LwpCHBlkMarker::ProcessOtherCHB(XFContentContainer* pXFPara,sal_uInt8 nType
 //all input content of key list processed as normal text
 void LwpCHBlkMarker::ProcessKeylist(XFContentContainer* pXFPara,sal_uInt8 nType)
 {
-    sal_Bool bFillFlag = IsHasFilled();
+    bool bFillFlag = IsHasFilled();
 
     if ( bFillFlag )
     {
@@ -291,14 +291,14 @@ void LwpCHBlkMarker::ProcessKeylist(XFContentContainer* pXFPara,sal_uInt8 nType)
     }
 }
 
-sal_Bool LwpCHBlkMarker::IsHasFilled()
+bool LwpCHBlkMarker::IsHasFilled()
 {
     if (CHB_PROMPT & m_nFlag)
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
-sal_Bool LwpCHBlkMarker::IsBubbleHelp()
+bool LwpCHBlkMarker::IsBubbleHelp()
 {
     return (CHB_HELP & m_nFlag);
 }
@@ -342,11 +342,11 @@ void LwpBookMark::Read()
     m_pObjStrm->SkipExtra();
 }
 
-sal_Bool LwpBookMark::IsRightMarker(LwpObjectID objMarker)
+bool LwpBookMark::IsRightMarker(LwpObjectID objMarker)
 {
     if (objMarker == m_objMarker)
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 OUString LwpBookMark::GetName()
@@ -361,10 +361,10 @@ LwpFieldMark::LwpFieldMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     : LwpStoryMarker(objHdr,pStrm)
     , m_nFlag(0)
     , m_nFieldType(0)
-    , m_bHasStyle(sal_False)
-    , m_bHasStart(sal_False)
+    , m_bHasStyle(false)
+    , m_bHasStart(false)
     , m_pFrib(NULL)
-    , m_bRevisionFlag(sal_False)
+    , m_bRevisionFlag(false)
 {
 }
 
@@ -423,14 +423,14 @@ void LwpFieldMark::ParseTOC(OUString& sLevel,OUString& sText)
         sText = "";
 }
 
-sal_Bool LwpFieldMark::IsFormulaInsert()
+bool LwpFieldMark::IsFormulaInsert()
 {
     if (m_nFlag & FF_FORMULAINSERTED)
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
-sal_Bool LwpFieldMark::IsDateTimeField(sal_uInt8& type,OUString& formula)
+bool LwpFieldMark::IsDateTimeField(sal_uInt8& type,OUString& formula)
 {
     OUString sFormula = m_Formula.str();
     sal_Int32 index;
@@ -443,9 +443,9 @@ sal_Bool LwpFieldMark::IsDateTimeField(sal_uInt8& type,OUString& formula)
         if (sFormula == "TotalEditingTime")
         {
             type = DATETIME_TOTALTIME;
-            return sal_True;
+            return true;
         }
-        return sal_False;
+        return false;
     }
 
     tag = sFormula.copy(0,index);
@@ -453,31 +453,31 @@ sal_Bool LwpFieldMark::IsDateTimeField(sal_uInt8& type,OUString& formula)
     {
         type = DATETIME_NOW;
         formula = sFormula.copy(index+1,sFormula.getLength()-index-1);
-        return sal_True;
+        return true;
     }
     else if (tag == "CreateDate")
     {
         type = DATETIME_CREATE;
         formula = sFormula.copy(index+1,sFormula.getLength()-index-1);
-        return sal_True;
+        return true;
     }
     else if (tag == "EditDate")
     {
         type = DATETIME_LASTEDIT;
         formula = sFormula.copy(index+1,sFormula.getLength()-index-1);
-        return sal_True;
+        return true;
     }
     else if (tag == "YesterdaysDate" || tag == "TomorrowsDate"
             || tag == "TodaysDate")
     {
         type = DATETIME_SKIP;
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
-sal_Bool LwpFieldMark::IsCrossRefField(sal_uInt8& nType, OUString& sMarkName)
+bool LwpFieldMark::IsCrossRefField(sal_uInt8& nType, OUString& sMarkName)
 {
     OUString sFormula = m_Formula.str();
     sal_Int32 index;
@@ -493,10 +493,10 @@ sal_Bool LwpFieldMark::IsCrossRefField(sal_uInt8& nType, OUString& sMarkName)
         {
             sMarkName = sFormula;
             nType = CROSSREF_TEXT;
-            return sal_True;
+            return true;
         }
         else
-            return sal_False;
+            return false;
     }
 
     tag = sFormula.copy(0,index);
@@ -504,45 +504,45 @@ sal_Bool LwpFieldMark::IsCrossRefField(sal_uInt8& nType, OUString& sMarkName)
     {
         sMarkName = sFormula.copy(index+1,sFormula.getLength()-index-1);
         nType = CROSSREF_PAGE;
-        return sal_True;
+        return true;
     }
     else if (tag == "ParaRef")
     {
         sMarkName = sFormula.copy(index+1,sFormula.getLength()-index-1);
         nType = CROSSREF_PARANUMBER;
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
-sal_Bool LwpFieldMark::IsDocPowerField(sal_uInt8& nType,OUString& sFormula)
+bool LwpFieldMark::IsDocPowerField(sal_uInt8& nType,OUString& sFormula)
 {
     sFormula = m_Formula.str();
 
     if (sFormula == "Description")
     {
         nType = DOC_DESCRIPTION;
-        return sal_True;
+        return true;
     }
     else if (sFormula == "NumPages")
     {
         nType = DOC_NUMPAGES;
-        return sal_True;
+        return true;
     }
     else if (sFormula == "NumChars")
     {
         nType = DOC_NUMCHARS;
-        return sal_True;
+        return true;
     }
     else if (sFormula == "NumWords")
     {
         nType = DOC_NUMWORDS;
-        return sal_True;
+        return true;
     }
     else
     {
-        return sal_False;
+        return false;
     }
 }
 

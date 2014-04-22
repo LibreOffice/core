@@ -111,12 +111,12 @@ public:
     /**
      * @descr   Set drawing object arrow start style,only lines can have arrows.
      */
-    void    SetArrowStart(const OUString& start, double size=0.3, sal_Bool center = sal_False);
+    void    SetArrowStart(const OUString& start, double size=0.3, bool center = false);
 
     /**
      * @descr   Set drawing object arrow end style,only lines can have arrows.
      */
-    void    SetArrowEnd(const OUString& end, double size=0.3, sal_Bool center = sal_False);
+    void    SetArrowEnd(const OUString& end, double size=0.3, bool center = false);
 
     void SetFontWorkStyle(sal_Int8 nForm, enumXFFWStyle eStyle, enumXFFWAdjust eAdjust);
 
@@ -134,8 +134,8 @@ private:
     OUString   m_strArrowEnd;
     double  m_fArrowStartSize;
     double  m_fArrowEndSize;
-    sal_Bool m_bArrowStartCenter;
-    sal_Bool m_bArrowEndCenter;
+    bool m_bArrowStartCenter;
+    bool m_bArrowEndCenter;
 };
 
 inline void XFDrawStyle::SetWrapType(enumXFWrap wrap, sal_Int32 nParagraphs)
@@ -144,7 +144,7 @@ inline void XFDrawStyle::SetWrapType(enumXFWrap wrap, sal_Int32 nParagraphs)
     m_nWrapLines = nParagraphs;
 }
 
-inline void XFDrawStyle::SetArrowStart(const OUString& start, double size, sal_Bool center)
+inline void XFDrawStyle::SetArrowStart(const OUString& start, double size, bool center)
 {
     assert(size>0);
     m_strArrowStart = start;
@@ -152,7 +152,7 @@ inline void XFDrawStyle::SetArrowStart(const OUString& start, double size, sal_B
     m_bArrowStartCenter = center;
 }
 
-inline void XFDrawStyle::SetArrowEnd(const OUString& end, double size, sal_Bool center)
+inline void XFDrawStyle::SetArrowEnd(const OUString& end, double size, bool center)
 {
     assert(size>0);
     m_strArrowEnd = end;

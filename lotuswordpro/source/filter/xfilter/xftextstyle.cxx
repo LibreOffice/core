@@ -78,30 +78,30 @@ void    XFTextStyle::SetFont(XFFont *font)
     m_pFont = font;
 }
 
-sal_Bool    XFTextStyle::Equal(IXFStyle *pStyle)
+bool    XFTextStyle::Equal(IXFStyle *pStyle)
 {
     if( !pStyle || pStyle->GetStyleFamily() != enumXFStyleText )
     {
-        return sal_False;
+        return false;
     }
 
     XFTextStyle *pOther = (XFTextStyle*)pStyle;
     if( !pOther )
     {
-        return sal_False;
+        return false;
     }
 
     if( m_pFont )
     {
         if( !pOther->m_pFont )
-            return sal_False;
+            return false;
         if( *m_pFont != *pOther->m_pFont )
-            return sal_False;
+            return false;
     }
     else if( pOther->m_pFont )
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 enumXFStyle XFTextStyle::GetStyleFamily()

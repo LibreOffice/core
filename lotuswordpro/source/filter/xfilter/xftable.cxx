@@ -66,7 +66,7 @@
 XFTable::XFTable()
 {
     m_strName = XFGlobal::GenTableName();
-    m_bSubTable = sal_False;
+    m_bSubTable = false;
     m_pOwnerCell = NULL;
 }
 

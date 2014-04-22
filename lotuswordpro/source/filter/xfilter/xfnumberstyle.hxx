@@ -77,7 +77,7 @@ public:
 
     void    SetMinExponent(sal_Int32 exponent);
 
-    void    SetGroup(sal_Bool group = sal_True);
+    void    SetGroup(bool group = true);
 
     void    SetColor(const XFColor& color);
     XFColor GetColor(){return m_aColor;}
@@ -90,11 +90,11 @@ public:
 
     void    SetNumberType(enumXFNumberType type);
 
-    void    SetCurrencySymbol(sal_Bool post, const OUString& symbol, sal_Bool bShowSpace=sal_False);
+    void    SetCurrencySymbol(bool post, const OUString& symbol, bool bShowSpace=false);
 
     virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
-    virtual sal_Bool Equal(IXFStyle *pStyle) SAL_OVERRIDE;
+    virtual bool Equal(IXFStyle *pStyle) SAL_OVERRIDE;
 
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
@@ -107,21 +107,21 @@ protected:
 
     void    ToXml_Negative(IXFStream *pStrm);
 
-    void    ToXml_Content(IXFStream *pStrm, sal_Bool nagetive);
+    void    ToXml_Content(IXFStream *pStrm, bool nagetive);
 
 protected:
     enumXFNumberType    m_eType;
     sal_Int32   m_nDecimalDigits;
     sal_Int32   m_nMinInteger;
     sal_Int32   m_nMinExponent;
-    sal_Bool    m_bGroup;
+    bool    m_bGroup;
     XFColor     m_aColor;
-    sal_Bool    m_bCurrencySymbolPost;
+    bool    m_bCurrencySymbolPost;
     OUString   m_strCurrencySymbol;
     OUString   m_strPrefix;
     OUString   m_strSuffix;
 
-    sal_Bool    m_bRedIfNegative;
+    bool    m_bRedIfNegative;
     XFColor     m_aNegativeColor;
     OUString   m_strNegativePrefix;
     OUString   m_strNegativeSuffix;
@@ -144,13 +144,13 @@ inline void XFNumberStyle::SetMinExponent(sal_Int32 exponent)
 
 inline void XFNumberStyle::SetNegativeStyle(const OUString& prefix, const OUString& suffix, const XFColor& color)
 {
-    m_bRedIfNegative = sal_True;
+    m_bRedIfNegative = true;
     m_aNegativeColor = color;
     m_strNegativePrefix = prefix;
     m_strNegativeSuffix = suffix;
 }
 
-inline void XFNumberStyle::SetGroup(sal_Bool group)
+inline void XFNumberStyle::SetGroup(bool group)
 {
     m_bGroup = group;
 }
@@ -175,7 +175,7 @@ inline void XFNumberStyle::SetSurfix(const OUString& surfix)
     m_strSuffix = surfix;
 }
 
-inline void XFNumberStyle::SetCurrencySymbol(sal_Bool post, const OUString& symbol, sal_Bool bShowSpace)
+inline void XFNumberStyle::SetCurrencySymbol(bool post, const OUString& symbol, bool bShowSpace)
 {
     m_bCurrencySymbolPost = post;
     m_strCurrencySymbol = symbol;

@@ -111,12 +111,12 @@ protected:
 public:
     inline LwpAssociatedLayouts* GetLayoutsWithMe();
     LwpVirtualLayout* GetLayout(LwpVirtualLayout* pStartLayout);
-    inline sal_Bool IsActive();
-    virtual sal_Bool IsTable();
+    inline bool IsActive();
+    virtual bool IsTable();
     inline OUString GetClassName();
     inline LwpContent* GetNextEnumerated();
-    sal_Bool HasNonEmbeddedLayouts();
-    sal_Bool IsStyleContent();
+    bool HasNonEmbeddedLayouts();
+    bool IsStyleContent();
 };
 
 LwpAssociatedLayouts* LwpContent::GetLayoutsWithMe()
@@ -124,14 +124,14 @@ LwpAssociatedLayouts* LwpContent::GetLayoutsWithMe()
     return &m_LayoutsWithMe;
 }
 
-inline sal_Bool LwpContent::IsActive()
+inline bool LwpContent::IsActive()
 {
     return !(m_nFlags & CF_DEACTIVATED);
 }
 
-inline sal_Bool LwpContent::IsTable()
+inline bool LwpContent::IsTable()
 {
-    return sal_False;
+    return false;
 }
 
 inline OUString LwpContent::GetClassName()

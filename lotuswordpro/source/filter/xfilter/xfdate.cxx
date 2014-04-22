@@ -62,9 +62,9 @@
 
 XFDate::XFDate()
 {
-    m_bFixed = 0;
+    m_bFixed = false;
     memset(&m_aDateTime, 0, sizeof(m_aDateTime));
-    m_bValued = sal_False;
+    m_bValued = false;
 }
 
 XFDate::~XFDate()

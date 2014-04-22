@@ -84,13 +84,13 @@ void LwpLineNumberOptions::RegisterStyle()
     pLineNumber->SetNumberOffset(LwpTools::ConvertFromUnitsToMetric(m_nDistance));
     pLineNumber->SetNumberIncrement(m_nSeparator);
     if (m_nFlags & LN_RESETEACHPAGE)
-        pLineNumber->SetRestartOnPage(sal_True);
+        pLineNumber->SetRestartOnPage(true);
     else
-        pLineNumber->SetRestartOnPage(sal_False);
+        pLineNumber->SetRestartOnPage(false);
     if (m_nFlags & LN_COUNTBLANKLINES)
-        pLineNumber->SetCountEmptyLines(sal_True);
+        pLineNumber->SetCountEmptyLines(true);
     else
-        pLineNumber->SetCountEmptyLines(sal_False);
+        pLineNumber->SetCountEmptyLines(false);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     pXFStyleManager->SetLineNumberConfig(pLineNumber);

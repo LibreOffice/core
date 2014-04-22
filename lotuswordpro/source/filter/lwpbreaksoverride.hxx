@@ -91,23 +91,23 @@ public:
     //add by , 01/28/2005
     void Override(LwpBreaksOverride* pOther);
 
-    inline sal_Bool IsPageBreakBefore();
-    inline sal_Bool IsPageBreakAfter();
-    inline sal_Bool IsPageBreakWithin();
-    inline sal_Bool IsColumnBreakBefore();
-    inline sal_Bool IsColumnBreakAfter();
-    inline sal_Bool IsKeepWithNext();
-    inline sal_Bool IsKeepWithPrevious();
-    inline sal_Bool IsUseNextStyle();
+    inline bool IsPageBreakBefore();
+    inline bool IsPageBreakAfter();
+    inline bool IsPageBreakWithin();
+    inline bool IsColumnBreakBefore();
+    inline bool IsColumnBreakAfter();
+    inline bool IsKeepWithNext();
+    inline bool IsKeepWithPrevious();
+    inline bool IsUseNextStyle();
 
-    inline sal_Bool IsPageBreakBeforeOverridden();
-    inline sal_Bool IsPageBreakAfterOverridden();
-    inline sal_Bool IsPageBreakWithinOverridden();
-    inline sal_Bool IsColumnBreakBeforeOverridden();
-    inline sal_Bool IsColumnBreakAfterOverridden();
-    inline sal_Bool IsKeepWithNextOverridden();
-    inline sal_Bool IsKeepWithPreviousOverridden();
-    inline sal_Bool IsUseNextStyleOverridden();
+    inline bool IsPageBreakBeforeOverridden();
+    inline bool IsPageBreakAfterOverridden();
+    inline bool IsPageBreakWithinOverridden();
+    inline bool IsColumnBreakBeforeOverridden();
+    inline bool IsColumnBreakAfterOverridden();
+    inline bool IsKeepWithNextOverridden();
+    inline bool IsKeepWithPreviousOverridden();
+    inline bool IsUseNextStyleOverridden();
 
     inline void RevertPageBreakBefore();
     inline void RevertPageBreakAfter();
@@ -118,14 +118,14 @@ public:
     inline void RevertKeepWithPrevious();
     inline void RevertUseNextStyle();
 
-    void OverridePageBreakBefore(sal_Bool bVal);
-    void OverridePageBreakAfter(sal_Bool bVal);
-    void OverridePageBreakWithin(sal_Bool bVal);
-    void OverrideColumnBreakBefore(sal_Bool bVal);
-    void OverrideColumnBreakAfter(sal_Bool bVal);
-    void OverrideKeepWithNext(sal_Bool bVal);
-    void OverrideKeepWithPrevious(sal_Bool bVal);
-    void OverrideUseNextStyle(sal_Bool bVal);
+    void OverridePageBreakBefore(bool bVal);
+    void OverridePageBreakAfter(bool bVal);
+    void OverridePageBreakWithin(bool bVal);
+    void OverrideColumnBreakBefore(bool bVal);
+    void OverrideColumnBreakAfter(bool bVal);
+    void OverrideKeepWithNext(bool bVal);
+    void OverrideKeepWithPrevious(bool bVal);
+    void OverrideUseNextStyle(bool bVal);
 
     inline LwpAtomHolder* GetNextStyle();
     //end add
@@ -140,71 +140,71 @@ private:
     LwpAtomHolder       *m_pNextStyle;
 };
 
-inline sal_Bool LwpBreaksOverride::IsPageBreakBefore()
+inline bool LwpBreaksOverride::IsPageBreakBefore()
 {
-    return (sal_Bool)((m_nValues & BO_PAGEBEFORE) != 0);
+    return ((m_nValues & BO_PAGEBEFORE) != 0);
 }
 
-inline sal_Bool LwpBreaksOverride::IsPageBreakAfter()
+inline bool LwpBreaksOverride::IsPageBreakAfter()
 {
-    return (sal_Bool)((m_nValues & BO_PAGEAFTER) != 0);
+    return ((m_nValues & BO_PAGEAFTER) != 0);
 }
-inline sal_Bool LwpBreaksOverride::IsPageBreakWithin()
+inline bool LwpBreaksOverride::IsPageBreakWithin()
 {
-    return (sal_Bool)((m_nValues & BO_KEEPTOGETHER) != 0);
+    return ((m_nValues & BO_KEEPTOGETHER) != 0);
 }
-inline sal_Bool LwpBreaksOverride::IsColumnBreakBefore()
+inline bool LwpBreaksOverride::IsColumnBreakBefore()
 {
-    return (sal_Bool)((m_nValues & BO_COLBEFORE) != 0);
+    return ((m_nValues & BO_COLBEFORE) != 0);
 }
-inline sal_Bool LwpBreaksOverride::IsColumnBreakAfter()
+inline bool LwpBreaksOverride::IsColumnBreakAfter()
 {
-    return (sal_Bool)((m_nValues & BO_COLAFTER) != 0);
+    return ((m_nValues & BO_COLAFTER) != 0);
 }
-inline sal_Bool LwpBreaksOverride::IsKeepWithNext()
+inline bool LwpBreaksOverride::IsKeepWithNext()
 {
-    return (sal_Bool)((m_nValues & BO_KEEPNEXT) != 0);
+    return ((m_nValues & BO_KEEPNEXT) != 0);
 }
-inline sal_Bool LwpBreaksOverride::IsKeepWithPrevious()
+inline bool LwpBreaksOverride::IsKeepWithPrevious()
 {
-    return (sal_Bool)((m_nValues & BO_KEEPPREV) != 0);
+    return ((m_nValues & BO_KEEPPREV) != 0);
 }
-inline sal_Bool LwpBreaksOverride::IsUseNextStyle()
+inline bool LwpBreaksOverride::IsUseNextStyle()
 {
-    return (sal_Bool)((m_nValues & BO_USENEXTSTYLE) != 0);
+    return ((m_nValues & BO_USENEXTSTYLE) != 0);
 }
 
-inline sal_Bool LwpBreaksOverride::IsPageBreakBeforeOverridden()
+inline bool LwpBreaksOverride::IsPageBreakBeforeOverridden()
 {
-    return (sal_Bool)((m_nOverride& BO_PAGEBEFORE) != 0);
+    return ((m_nOverride& BO_PAGEBEFORE) != 0);
 }
-inline sal_Bool LwpBreaksOverride::IsPageBreakAfterOverridden()
+inline bool LwpBreaksOverride::IsPageBreakAfterOverridden()
 {
-    return (sal_Bool)((m_nOverride& BO_PAGEAFTER) != 0);
+    return ((m_nOverride& BO_PAGEAFTER) != 0);
 }
-inline sal_Bool LwpBreaksOverride::IsPageBreakWithinOverridden()
+inline bool LwpBreaksOverride::IsPageBreakWithinOverridden()
 {
-    return (sal_Bool)((m_nOverride& BO_KEEPTOGETHER) != 0);
+    return ((m_nOverride& BO_KEEPTOGETHER) != 0);
 }
-inline sal_Bool LwpBreaksOverride::IsColumnBreakBeforeOverridden()
+inline bool LwpBreaksOverride::IsColumnBreakBeforeOverridden()
 {
-    return (sal_Bool)((m_nOverride& BO_COLBEFORE) != 0);
+    return ((m_nOverride& BO_COLBEFORE) != 0);
 }
-inline sal_Bool LwpBreaksOverride::IsColumnBreakAfterOverridden()
+inline bool LwpBreaksOverride::IsColumnBreakAfterOverridden()
 {
-    return (sal_Bool)((m_nOverride& BO_COLAFTER) != 0);
+    return ((m_nOverride& BO_COLAFTER) != 0);
 }
-inline sal_Bool LwpBreaksOverride::IsKeepWithNextOverridden()
+inline bool LwpBreaksOverride::IsKeepWithNextOverridden()
 {
-    return (sal_Bool)((m_nOverride& BO_KEEPNEXT) != 0);
+    return ((m_nOverride& BO_KEEPNEXT) != 0);
 }
-inline sal_Bool LwpBreaksOverride::IsKeepWithPreviousOverridden()
+inline bool LwpBreaksOverride::IsKeepWithPreviousOverridden()
 {
-    return (sal_Bool)((m_nOverride& BO_KEEPPREV) != 0);
+    return ((m_nOverride& BO_KEEPPREV) != 0);
 }
-inline sal_Bool LwpBreaksOverride::IsUseNextStyleOverridden()
+inline bool LwpBreaksOverride::IsUseNextStyleOverridden()
 {
-    return (sal_Bool)((m_nOverride& BO_USENEXTSTYLE) != 0);
+    return ((m_nOverride& BO_USENEXTSTYLE) != 0);
 }
 
 inline void LwpBreaksOverride::RevertPageBreakBefore()

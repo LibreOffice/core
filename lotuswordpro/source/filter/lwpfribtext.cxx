@@ -79,7 +79,7 @@
 #include "xfilter/xfdate.hxx"
 #include "xfilter/xfannotation.hxx"
 
-LwpFribText::LwpFribText( LwpPara *pPara, sal_Bool bNoUnicode )
+LwpFribText::LwpFribText( LwpPara *pPara, bool bNoUnicode )
     : LwpFrib(pPara), m_bNoUnicode(bNoUnicode)
 {}
 
@@ -202,7 +202,7 @@ void LwpFribDocVar::RegisterDefaultTimeStyle()
     pDateStyle->AddText(":");
     pDateStyle->AddMinute();
     pDateStyle->AddText(":");
-    pDateStyle->AddSecond(sal_True,0);
+    pDateStyle->AddSecond(true,0);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_TimeStyle = pXFStyleManager->AddStyle(pDateStyle)->GetStyleName();
@@ -210,7 +210,7 @@ void LwpFribDocVar::RegisterDefaultTimeStyle()
 void LwpFribDocVar::RegisterTotalTimeStyle()
 {
     XFTimeStyle* pTimeStyle = new XFTimeStyle;//use the default format
-    pTimeStyle->SetTruncate(sal_False);
+    pTimeStyle->SetTruncate(false);
     pTimeStyle->AddMinute();
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle)->GetStyleName();

@@ -81,10 +81,10 @@ public:
     sal_uInt16 GetRed();
     sal_uInt16 GetGreen();
     sal_uInt16 GetBlue();
-    sal_Bool IsValidColor();
+    bool IsValidColor();
     sal_uInt32 To24Color();
     LwpColor& operator = (const LwpColor& rOther);
-    sal_Bool IsTransparent();
+    bool IsTransparent();
 private:
     sal_uInt16 m_nRed;          // When extra is AGLRGB_INDEX, m_nRed holds the
     sal_uInt16 m_nGreen;        // hi 16 bits and m_nGreen holds the lo 16 bits of
@@ -118,11 +118,11 @@ inline sal_uInt16 LwpColor::GetBlue()
 {
     return m_nBlue;
 }
-inline sal_Bool LwpColor::IsValidColor()
+inline bool LwpColor::IsValidColor()
 {
     return ((m_nExtra!=AGLRGB_INVALID) && (m_nExtra!=AGLRGB_TRANSPARENT));
 }
-inline sal_Bool LwpColor::IsTransparent()
+inline bool LwpColor::IsTransparent()
 {
     return (m_nExtra==AGLRGB_TRANSPARENT);
 }

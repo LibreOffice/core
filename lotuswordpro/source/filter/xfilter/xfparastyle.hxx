@@ -127,7 +127,7 @@ public:
     /**
      * @descr   Set line number style.
      */
-    void    SetLineNumber(sal_Bool show, sal_Int32 restart=1);
+    void    SetLineNumber(bool show, sal_Int32 restart=1);
     /**
      * @descr   Set the pading of the paragraph.This is the distance
                 between the border and the top of the text.
@@ -156,7 +156,7 @@ public:
                 eJustSingleWord If chars of the last-line'word should be
                 stretched.
      */
-    void    SetLastLineAlign(enumXFAlignType align,sal_Bool bJustSingleWord = sal_False);
+    void    SetLastLineAlign(enumXFAlignType align,bool bJustSingleWord = false);
 
     /**
      * @descr   Set the shadow of the paragraph.there is 4 postions, you
@@ -225,7 +225,7 @@ public:
      * descr    set the paragraph to be in the same page with the next paragraph.
      *          If that can't be insured,the paragraph will start with a new page.
      */
-    void    SetKeepWithNext(sal_Bool keepWithNext);
+    void    SetKeepWithNext(bool keepWithNext);
 
     sal_uInt32 GetFlag(){ return m_nFlag; }
 
@@ -233,19 +233,19 @@ public:
 
     virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
-    virtual sal_Bool Equal(IXFStyle *pStyle) SAL_OVERRIDE;
+    virtual bool Equal(IXFStyle *pStyle) SAL_OVERRIDE;
 
     virtual void    ToXml(IXFStream *strm) SAL_OVERRIDE;
 
-    void SetNumberRight(sal_Bool bFlag){m_bNumberRight = bFlag;}
-    sal_Bool GetNumberRight(){return m_bNumberRight;}
+    void SetNumberRight(bool bFlag){m_bNumberRight = bFlag;}
+    bool GetNumberRight(){return m_bNumberRight;}
 
 protected:
     OUString   m_strMasterPage;
     enumXFAlignType m_eAlignType;
     enumXFAlignType m_eLastLineAlign;
-    sal_Bool        m_bJustSingleWord;
-    sal_Bool        m_bKeepWithNext;
+    bool        m_bJustSingleWord;
+    bool        m_bKeepWithNext;
 
     double      m_fTextIndent;
     XFColor     m_aBackColor;
@@ -260,11 +260,11 @@ protected:
     XFLineHeight m_aLineHeight;
     XFBreaks    m_aBreaks;
     sal_Int32   m_nPageNumber;
-    sal_Bool    m_bNumberLines;
+    bool    m_bNumberLines;
     sal_Int32   m_nLineNumberRestart;
 
     sal_uInt32  m_nFlag;
-    sal_Bool m_bNumberRight;
+    bool m_bNumberRight;
 };
 
 inline void XFParaStyle::SetMasterPage(const OUString& master)
@@ -283,7 +283,7 @@ inline void XFParaStyle::SetPageNumber(sal_Int32 num)
     m_nPageNumber = num;
 }
 
-inline void XFParaStyle::SetLineNumber(sal_Bool show, sal_Int32 restart)
+inline void XFParaStyle::SetLineNumber(bool show, sal_Int32 restart)
 {
     m_bNumberLines = show;
     m_nLineNumberRestart = restart;
@@ -311,13 +311,13 @@ inline void XFParaStyle::SetAlignType(enumXFAlignType eAlign)
     m_eAlignType = eAlign;
 }
 
-inline void XFParaStyle::SetLastLineAlign(enumXFAlignType align, sal_Bool   bJustSingleWord)
+inline void XFParaStyle::SetLastLineAlign(enumXFAlignType align, bool   bJustSingleWord)
 {
     m_eLastLineAlign = align;
     m_bJustSingleWord = bJustSingleWord;
 }
 
-inline void XFParaStyle::SetKeepWithNext(sal_Bool keep)
+inline void XFParaStyle::SetKeepWithNext(bool keep)
 {
     m_bKeepWithNext = keep;
 }

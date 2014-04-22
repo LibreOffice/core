@@ -74,8 +74,8 @@ XFImageStyle::XFImageStyle()
     m_fClipRight = 0;
     m_fClipTop = 0;
     m_fClipBottom = 0;
-    m_bHoriFlip = sal_False;
-    m_bVertFlip = sal_False;
+    m_bHoriFlip = false;
+    m_bVertFlip = false;
     m_eColorMode = enumXFColorStandard;
 }
 

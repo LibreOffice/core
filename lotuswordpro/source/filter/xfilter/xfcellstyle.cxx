@@ -70,7 +70,7 @@ XFCellStyle::XFCellStyle()
     m_pBorders = NULL;
     m_pFont = NULL;
     m_pBackImage = NULL;
-    m_bWrapText = sal_False;
+    m_bWrapText = false;
 }
 
 XFCellStyle::~XFCellStyle()
@@ -118,84 +118,84 @@ enumXFStyle XFCellStyle::GetStyleFamily()
 /**
  *Affirm whether two XFCellStyle objects are equal.
  */
-sal_Bool    XFCellStyle::Equal(IXFStyle *pStyle)
+bool    XFCellStyle::Equal(IXFStyle *pStyle)
 {
     if( this == pStyle )
-        return sal_True;
+        return true;
     if( !pStyle || pStyle->GetStyleFamily() != enumXFStyleTableCell )
-        return sal_False;
+        return false;
 
     XFCellStyle *pOther = static_cast<XFCellStyle*>(pStyle);
     if( !pOther )
-        return sal_False;
+        return false;
 
     if( m_strDataStyle != pOther->m_strDataStyle )
-        return sal_False;
+        return false;
 
     if( m_strParentStyleName != pOther->m_strParentStyleName )
-        return sal_False;
+        return false;
     if( m_fTextIndent != pOther->m_fTextIndent )
-        return sal_False;
+        return false;
 
     //align:
     if( m_eHoriAlign != pOther->m_eHoriAlign )
-        return sal_False;
+        return false;
     if( m_eVertAlign != pOther->m_eVertAlign )
-        return sal_False;
+        return false;
 
     if( m_aBackColor != pOther->m_aBackColor )
-        return sal_False;
+        return false;
     //shadow:
     if( m_aShadow != pOther->m_aShadow )
-        return sal_False;
+        return false;
     //margin:
     if( m_aMargin != pOther->m_aMargin )
-        return sal_False;
+        return false;
     //padding:
     if( m_aPadding != pOther->m_aPadding )
-        return sal_False;
+        return false;
 
     //wrap:
     if( m_bWrapText != pOther->m_bWrapText )
-        return sal_False;
+        return false;
 
     //font:
     if( m_pFont )
     {
         if( !pOther->m_pFont )
-            return sal_False;
+            return false;
         if(*m_pFont != *pOther->m_pFont )
-            return sal_False;
+            return false;
     }
     else if( pOther->m_pFont )
-        return sal_False;
+        return false;
 
     //border:
     if( m_pBorders )
     {
         if( !pOther->m_pBorders )
-            return sal_False;
+            return false;
         if( *m_pBorders != *pOther->m_pBorders )
-            return sal_False;
+            return false;
     }
     else if( pOther->m_pBorders )
-        return sal_False;
+        return false;
 
     //if there is backimage
     if( m_pBackImage )
     {
         if( !pOther->m_pBackImage )
-            return sal_False;
+            return false;
         if( !m_pBackImage->Equal(pOther) )
-            return sal_False;
+            return false;
     }
     else
     {
         if( pOther->m_pBackImage )
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 void XFCellStyle::ToXml(IXFStream *pStrm)

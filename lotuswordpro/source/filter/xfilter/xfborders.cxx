@@ -62,8 +62,8 @@
 XFBorder::XFBorder()
 {
     m_fOffset = 0;
-    m_bDouble = sal_False;
-    m_bSameWidth = sal_False;
+    m_bDouble = false;
+    m_bSameWidth = false;
     m_fWidthInner = 0;
     m_fWidthSpace = 0;
     m_fWidthOuter = 0;
@@ -79,7 +79,7 @@ void    XFBorder::SetWidth(double width)
     if( !m_bDouble )
     {
         m_fWidthInner = width;
-        m_bSameWidth = sal_True;
+        m_bSameWidth = true;
     }
     else if( m_bDouble && m_bSameWidth )
     {
@@ -89,7 +89,7 @@ void    XFBorder::SetWidth(double width)
     }
 }
 
-void    XFBorder::SetDoubleLine(sal_Bool dual,sal_Bool bSameWidth)
+void    XFBorder::SetDoubleLine(bool dual,bool bSameWidth)
 {
     m_bDouble = dual;
     m_bSameWidth = bSameWidth;
@@ -227,7 +227,7 @@ void    XFBorders::SetWidth(enumXFBorder side, double width)
     }
 }
 
-void    XFBorders::SetDoubleLine(enumXFBorder side, sal_Bool dual,sal_Bool bSameWidth)
+void    XFBorders::SetDoubleLine(enumXFBorder side, bool dual,bool bSameWidth)
 {
     switch(side)
     {

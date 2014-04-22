@@ -172,7 +172,7 @@ public:
     OUString GetBulletChar() const;
     sal_uInt32 GetBulletFontID() const;
     sal_uInt16 GetLevel() const;
-    sal_Bool GetBulletFlag() const;
+    bool GetBulletFlag() const;
 
     void GetParaNumber(sal_uInt16 nPosition, ParaNumbering* pParaNumbering);
     LwpFribPtr* GetFribs();
@@ -182,16 +182,16 @@ public:
     OUString GetBulletStyleName() const;
     void SetBelowSpacing(double value);
     void SetBulletStyleName(const OUString& rNewName);
-    void SetBulletFlag(sal_Bool bFlag);
+    void SetBulletFlag(bool bFlag);
     void SetIndent(LwpIndentOverride* pIndentOverride);
     void SetFirstFrib(const OUString& Content,sal_uInt32 FontID);
-    OUString GetContentText(sal_Bool bAllText = sal_False);
+    OUString GetContentText(bool bAllText = false);
 
-    void SetParaDropcap(sal_Bool bFlag);
+    void SetParaDropcap(bool bFlag);
     void SetDropcapLines(sal_uInt16 number);
     void SetDropcapChars(sal_uInt32 chars);
     void SetDropcapLayout(LwpDropcapLayout* pLayout);
-    sal_Bool IsHasDropcap();
+    bool IsHasDropcap();
 
     XFContentContainer* GetXFContainer();
     void AddXFContent(XFContent* pCont);
@@ -201,10 +201,10 @@ public:
 
     LwpBulletStyleMgr* GetBulletStyleMgr();
     sal_uInt32 GetOrdinal(){ return m_nOrdinal;}
-    sal_Bool operator <(LwpPara& Other);
-    sal_Bool ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLayout* pNextLayout);
+    bool operator <(LwpPara& Other);
+    bool ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLayout* pNextLayout);
 
-    sal_Bool IsInCell();
+    bool IsInCell();
 
     void SetAllText(const OUString& sText);
     OUString GetStyleName(){return m_StyleName;}
@@ -234,17 +234,17 @@ protected:
     sal_uInt32 m_FontID;//for silver bullet
     OUString m_AllText;//get all text in this paragraph
 
-    sal_Bool m_bHasBullet;
+    bool m_bHasBullet;
     LwpObjectID m_aSilverBulletID;
     LwpSilverBullet* m_pSilverBullet;
     LwpBulletOverride* m_pBullOver;
     boost::scoped_ptr<LwpNumberingOverride> m_pParaNumbering;
     OUString m_aBulletStyleName;
-    sal_Bool m_bBullContinue;
+    bool m_bBullContinue;
     //end add
 
     OUString m_SectionStyleName;
-    sal_Bool m_bHasDropcap;
+    bool m_bHasDropcap;
     sal_uInt16 m_nLines;
     sal_uInt32 m_nChars;
     LwpDropcapLayout* m_pDropcapLayout;
@@ -285,7 +285,7 @@ private:
     void OverrideParaBullet(LwpParaProperty* pProps);
     void OverrideParaNumbering(LwpParaProperty* pProps);
 
-    sal_Bool RegisterMasterPage(XFParaStyle* pBaseStyle);
+    bool RegisterMasterPage(XFParaStyle* pBaseStyle);
     void RegisterNewSectionStyle(LwpPageLayout* pLayout);
 
     void ParseDropcapContent();
@@ -319,11 +319,11 @@ inline void LwpPara::SetBulletStyleName(const OUString& rNewName)
 {
     m_aBulletStyleName = rNewName;
 }
-inline void LwpPara::SetBulletFlag(sal_Bool bFlag)
+inline void LwpPara::SetBulletFlag(bool bFlag)
 {
     m_bHasBullet = bFlag;
 }
-inline sal_Bool LwpPara::GetBulletFlag() const
+inline bool LwpPara::GetBulletFlag() const
 {
     return m_bHasBullet;
 }
@@ -372,11 +372,11 @@ inline LwpStory* LwpPara::GetStory()
     return NULL;
 }
 
-inline sal_Bool LwpPara::IsHasDropcap()
+inline bool LwpPara::IsHasDropcap()
 {
     return m_bHasDropcap;
 }
-inline void LwpPara::SetParaDropcap(sal_Bool bFlag)
+inline void LwpPara::SetParaDropcap(bool bFlag)
 {
     m_bHasDropcap = bFlag;
 }

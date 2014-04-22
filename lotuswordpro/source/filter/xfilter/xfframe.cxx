@@ -62,7 +62,7 @@
 #define     ZINDEX_MIN 0
 XFFrame::XFFrame()
 {
-    m_isTextBox = sal_False;
+    m_isTextBox = false;
     m_eAnchor = enumXFAnchorPara;
     m_nAnchorPage = 0;
     m_nZIndex = ZINDEX_MIN;
@@ -73,7 +73,7 @@ XFFrame::XFFrame()
     m_nFlag = 0;
     m_eType = enumXFFrameTextbox;
 }
-XFFrame::XFFrame(sal_Bool isTextBox):m_isTextBox(isTextBox)
+XFFrame::XFFrame(bool isTextBox):m_isTextBox(isTextBox)
 {
     m_eAnchor = enumXFAnchorPara;
     m_nAnchorPage = 0;
@@ -141,7 +141,7 @@ void    XFFrame::StartFrame(IXFStream *pStrm)
         pAttrList->AddAttribute( "draw:style-name", GetStyleName() );
 
     assert(!m_strName.isEmpty());    //name should not be null.
-    if( !m_strName.isEmpty() && m_isTextBox == sal_False)
+    if( !m_strName.isEmpty() && m_isTextBox == false)
         pAttrList->AddAttribute( "draw:name", m_strName );
     //anchor type:
     switch( m_eAnchor )

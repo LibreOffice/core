@@ -70,7 +70,7 @@ XFCell::XFCell()
     m_nColSpaned = 1;
     m_nRepeated = 0;
     m_eValueType = enumXFValueTypeNone;
-    m_bProtect = sal_False;
+    m_bProtect = false;
 }
 
 XFCell::XFCell(const XFCell& other) : XFContentContainer(other)

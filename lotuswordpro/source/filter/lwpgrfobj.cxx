@@ -123,8 +123,8 @@ void LwpGraphicObject::Read()
             m_aIPData.nContrast = pServerContext[19];
             m_aIPData.nEdgeEnchancement = pServerContext[24];
             m_aIPData.nSmoothing = pServerContext[29];
-            m_aIPData.bInvertImage = (sal_Bool)(pServerContext[34] == 0x01);
-            m_aIPData.bAutoContrast = (sal_Bool)(pServerContext[44] == 0x00);
+            m_aIPData.bInvertImage = (pServerContext[34] == 0x01);
+            m_aIPData.bAutoContrast = (pServerContext[44] == 0x00);
         }
     }
     m_pObjStrm->QuickReaduInt16(); //disksize
@@ -242,7 +242,7 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
  *  these formats by Word Pro.
  * @return  sal_True if yes sal_False if not.
  */
-sal_Bool LwpGraphicObject::IsGrafFormatValid()
+bool LwpGraphicObject::IsGrafFormatValid()
 {
     if ((m_sServerContextFormat[1]=='b'&& m_sServerContextFormat[2]=='m' && m_sServerContextFormat[3]=='p')
     || (m_sServerContextFormat[1]=='j' && m_sServerContextFormat[2]=='p' && m_sServerContextFormat[3]=='g')
@@ -252,11 +252,11 @@ sal_Bool LwpGraphicObject::IsGrafFormatValid()
     || (m_sServerContextFormat[1]=='p' && m_sServerContextFormat[2]=='n' && m_sServerContextFormat[3]=='g')
     || (m_sServerContextFormat[1]=='e' && m_sServerContextFormat[2]=='p' && m_sServerContextFormat[3]=='s'))
     {
-        return sal_True;
+        return true;
     }
     else
     {
-        return sal_False;
+        return false;
     }
 }
 
@@ -547,18 +547,18 @@ void LwpGraphicObject::CreateGrafObject()
                 // need horizontal crop?
                 double fClipWidth = 0;
                 double fClipHeight = 0;
-                sal_Bool sal_bCropped = sal_False;
+                bool sal_bCropped = false;
                 if (fSclGrafWidth > fDisFrameWidth)
                 {
                     fClipWidth = (fSclGrafWidth-fDisFrameWidth ) / 2 / fXRatio;
-                    sal_bCropped = sal_True;
+                    sal_bCropped = true;
                 }
 
                 // need vertical crop?
                 if (fSclGrafHeight > fDisFrameHeight)
                 {
                     fClipHeight = (fSclGrafHeight-fDisFrameHeight ) / 2 / fYRatio;
-                    sal_bCropped = sal_True;
+                    sal_bCropped = true;
                 }
 
                 if (sal_bCropped)

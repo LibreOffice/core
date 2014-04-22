@@ -71,7 +71,7 @@
 class   XFFontDecl
 {
 public:
-    XFFontDecl(const OUString& name, const OUString& family, sal_Bool fixed = false);
+    XFFontDecl(const OUString& name, const OUString& family, bool fixed = false);
 
 public:
     /**
@@ -84,12 +84,12 @@ public:
      */
     OUString   GetFontFamily();
 
-    sal_Bool        GetFontPitchFixed();
+    bool        GetFontPitchFixed();
 
 private:
     OUString   m_strFontName;
     OUString   m_strFontFamily;
-    sal_Bool        m_bPitchFixed;
+    bool        m_bPitchFixed;
 };
 
 #endif

@@ -64,8 +64,8 @@
 
 XFList::XFList()
 {
-    m_bOrdered = sal_True;
-    m_bContinueNumber = sal_False;
+    m_bOrdered = true;
+    m_bContinueNumber = false;
     m_pHeader = NULL;
 }
 

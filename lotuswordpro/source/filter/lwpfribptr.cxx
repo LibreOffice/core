@@ -155,7 +155,7 @@ void LwpFribPtr::XFConvert()
     while(pFrib)
     {
         sal_uInt8 nFribType = pFrib->GetType();
-        sal_Bool bRevisionFlag = pFrib->GetRevisionFlag();
+        bool bRevisionFlag = pFrib->GetRevisionFlag();
         OUString sChangeID;
         if (bRevisionFlag)
         {
@@ -229,7 +229,7 @@ void LwpFribPtr::XFConvert()
             }
             else
             {
-                if (pPageBreak->IsLastFrib() == sal_True)
+                if (pPageBreak->IsLastFrib())
                 {
                     m_pXFPara->SetStyleName( pPageBreak->GetStyleName() );
                 }
@@ -601,7 +601,7 @@ void LwpFribPtr::ProcessDropcap(LwpStory* pStory,LwpFrib* pFrib,sal_uInt32 nLen)
 {
     if (pStory)
     {
-        if (pStory->GetDropcapFlag() == sal_True)
+        if (pStory->GetDropcapFlag())
         {
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
             XFTextStyle* pFribStyle = pXFStyleManager->FindTextStyle(pFrib->GetStyleName());
@@ -617,10 +617,10 @@ void LwpFribPtr::ProcessDropcap(LwpStory* pStory,LwpFrib* pFrib,sal_uInt32 nLen)
  * @descr:  If the position of pPreLayout is earlier than pNextLayout, return true, or return false, defalut return true
  *
 */
-sal_Bool LwpFribPtr::ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLayout* pNextLayout)
+bool LwpFribPtr::ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLayout* pNextLayout)
 {
     if(!pPreLayout || !pNextLayout)
-        return sal_True;
+        return true;
 
     LwpFrib* pFrib = m_pFribs;
     LwpVirtualLayout* pLayout = NULL;
@@ -652,14 +652,14 @@ sal_Bool LwpFribPtr::ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtua
         if(pLayout)
         {
             if(pPreLayout == pLayout)
-                return sal_True;
+                return true;
             if(pNextLayout == pLayout)
-                return sal_False;
+                return false;
         }
         pFrib = pFrib->GetNext();
     }
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

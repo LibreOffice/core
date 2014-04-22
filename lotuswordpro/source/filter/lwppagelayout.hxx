@@ -103,13 +103,13 @@ protected:
     LwpAtomHolder*  m_pPaperName;
     XFPageMaster* m_pXFPageMaster;
 public:
-    sal_Bool HasColumns();
-    sal_Bool HasFillerPageText(LwpFoundry* pFoundry);
+    bool HasColumns();
+    bool HasFillerPageText(LwpFoundry* pFoundry);
     void ConvertFillerPageText(XFContentContainer* pCont);
     void ResetXFColumns();
     LwpPageLayout* GetOddChildLayout();
     virtual sal_Int32 GetPageNumber(sal_uInt16 nLayoutNumber = 0) SAL_OVERRIDE;
-    sal_Bool operator <(LwpPageLayout& Other);
+    bool operator <(LwpPageLayout& Other);
     LwpPara* GetPagePosition();
 };
 

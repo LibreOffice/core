@@ -101,7 +101,7 @@ public:
 
     void Read() SAL_OVERRIDE;
 
-    sal_Bool IsBulletOrdered();
+    bool IsBulletOrdered();
 
     OUString GetBulletFontName();
 
@@ -117,13 +117,13 @@ public:
 
     inline LwpPara* GetNumberingPara();
 
-    sal_Bool HasName();
+    bool HasName();
 
     static OUString GetNumCharByStyleID(LwpFribParaNumber* pParaNumber);
 
-    inline sal_Bool IsPosCumulative(sal_uInt16 nHideLevels);
-    inline sal_Bool IsLesserLevel(sal_uInt16 nPos);
-    inline sal_Bool IsNewSection(sal_uInt16 nPos);
+    inline bool IsPosCumulative(sal_uInt16 nHideLevels);
+    inline bool IsLesserLevel(sal_uInt16 nPos);
+    inline bool IsNewSection(sal_uInt16 nPos);
 
     LwpPara* GetBulletPara();
 
@@ -169,18 +169,18 @@ inline LwpPara* LwpSilverBullet::GetNumberingPara()
 {
     return m_pBulletPara;
 }
-inline sal_Bool LwpSilverBullet::IsPosCumulative(sal_uInt16 nHideLevels)
+inline bool LwpSilverBullet::IsPosCumulative(sal_uInt16 nHideLevels)
 {
     sal_uInt16 AttrMask = ~nHideLevels;
-    return (sal_Bool)((AttrMask & (AttrMask - 1)) != 0);
+    return ((AttrMask & (AttrMask - 1)) != 0);
 }
-inline sal_Bool LwpSilverBullet::IsLesserLevel(sal_uInt16 nPos)
+inline bool LwpSilverBullet::IsLesserLevel(sal_uInt16 nPos)
 {
-    return (sal_Bool)((m_pResetPositionFlags[nPos] & LESSERLEVEL) != 0);
+    return ((m_pResetPositionFlags[nPos] & LESSERLEVEL) != 0);
 }
-inline sal_Bool LwpSilverBullet::IsNewSection(sal_uInt16 nPos)
+inline bool LwpSilverBullet::IsNewSection(sal_uInt16 nPos)
 {
-    return (sal_Bool)((m_pResetPositionFlags[nPos] & NEWSECTION) != 0);
+    return ((m_pResetPositionFlags[nPos] & NEWSECTION) != 0);
 }
 
 #endif

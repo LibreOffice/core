@@ -102,12 +102,12 @@ void    XFIndex::AddTemplate(const OUString& level, const OUString& style, XFInd
     m_aTemplates.push_back( templ );
 }
 
-void    XFIndex::SetProtected(sal_Bool protect)
+void    XFIndex::SetProtected(bool protect)
 {
     m_bProtect = protect;
 }
 
-void    XFIndex::SetSeparator(sal_Bool sep)
+void    XFIndex::SetSeparator(bool sep)
 {
     m_bSeparator = sep;
 }

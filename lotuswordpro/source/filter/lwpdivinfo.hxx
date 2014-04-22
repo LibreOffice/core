@@ -86,10 +86,10 @@ public:
     // end add
 
     OUString GetClassName() { return m_ClassName.str(); }
-    inline sal_Bool HasContents();
-    inline sal_Bool IsOleDivision();
-    inline sal_Bool IsScrollable();
-    inline sal_Bool IsGotoable();
+    inline bool HasContents();
+    inline bool IsOleDivision();
+    inline bool IsScrollable();
+    inline bool IsGotoable();
     inline LwpDocument* GetDivision();
     void GetNumberOfPages(sal_uInt16& nPageno);
     sal_uInt16 GetMaxNumberOfPages();
@@ -136,25 +136,25 @@ private:
 
 };
 
-inline sal_Bool LwpDivInfo::HasContents()
+inline bool LwpDivInfo::HasContents()
 {
     return (m_nFlags & DI_HASCONTENTS) ? sal_True : sal_False;
 }
 
-inline sal_Bool LwpDivInfo::IsOleDivision()
+inline bool LwpDivInfo::IsOleDivision()
 {
     OUString strClassName = GetClassName();
     if (strClassName == STR_OleDivisionClassName)
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
-inline sal_Bool LwpDivInfo::IsScrollable()
+inline bool LwpDivInfo::IsScrollable()
 {
     return (m_nFlags & DI_SCROLLABLE) ? sal_True : sal_False;
 }
 
-inline sal_Bool LwpDivInfo::IsGotoable()
+inline bool LwpDivInfo::IsGotoable()
 {
     return HasContents() && (IsScrollable() || IsOleDivision());
 }

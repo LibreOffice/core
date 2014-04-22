@@ -108,9 +108,9 @@ void    XFTimePart::ToXml(IXFStream *pStrm)
 
 XFTimeStyle::XFTimeStyle()
 {
-    m_bFixed = sal_True;
-    m_bAmPm = sal_False;
-    m_bTruncate = sal_True;
+    m_bFixed = true;
+    m_bAmPm = false;
+    m_bTruncate = true;
 }
 
 XFTimeStyle::~XFTimeStyle()

@@ -147,7 +147,7 @@ public:
     LwpDLNFPVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpDLNFPVList();
 protected:
-    sal_Bool m_bHasProperties;
+    bool m_bHasProperties;
     LwpPropList* m_pPropList;
 protected:
     void Read() SAL_OVERRIDE;

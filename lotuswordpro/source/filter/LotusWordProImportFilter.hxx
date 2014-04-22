@@ -50,7 +50,7 @@ protected:
     OUString msFilterName;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
 
-    sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+    bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
         throw (::com::sun::star::uno::RuntimeException);
 
 public:
@@ -91,7 +91,7 @@ public:
 OUString LotusWordProImportFilter_getImplementationName()
     throw ( ::com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL LotusWordProImportFilter_supportsService( const OUString& ServiceName )
+bool SAL_CALL LotusWordProImportFilter_supportsService( const OUString& ServiceName )
     throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL LotusWordProImportFilter_getSupportedServiceNames(  )

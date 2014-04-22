@@ -65,7 +65,7 @@
 
 LwpHyperlinkMgr::LwpHyperlinkMgr()
 {
-    m_bIsHyperlink = sal_False;
+    m_bIsHyperlink = false;
 }
 
 LwpHyperlinkMgr::~LwpHyperlinkMgr()

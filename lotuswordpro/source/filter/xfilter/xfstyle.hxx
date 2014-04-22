@@ -107,7 +107,7 @@ public:
     /**
      * @descr   decide whether two style are equal.
      */
-    virtual sal_Bool        Equal(IXFStyle *pStyle) SAL_OVERRIDE;
+    virtual bool             Equal(IXFStyle *pStyle) SAL_OVERRIDE;
 
 protected:
     OUString   m_strStyleName;

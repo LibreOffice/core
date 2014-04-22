@@ -82,7 +82,7 @@ private:
     sal_uInt32 m_nLow;
     sal_uInt16 m_nHigh;
     sal_uInt8 m_nIndex;
-    sal_Bool m_bIsCompressed;
+    bool m_bIsCompressed;
 public:
     sal_uInt32  Read( LwpSvStream *pStrm );
     sal_uInt32 Read( LwpObjectStream *pStrm );
@@ -92,36 +92,36 @@ public:
 
     sal_uInt32 DiskSize() const;
     sal_uInt32 DiskSizeIndexed() const;
-    sal_Bool IsNull() const;
-    sal_Bool IsCompressed();
+    bool IsNull() const;
+    bool IsCompressed();
 
     sal_uInt32 GetLow() const ;
     sal_uInt16 GetHigh() const ;
     void SetLow(sal_uInt32 nl);
     void SetHigh(sal_uInt16 nh);
 
-    sal_Bool operator == (const LwpObjectID &Other) const;
-    sal_Bool operator != (const LwpObjectID &Other) const;
+    bool operator == (const LwpObjectID &Other) const;
+    bool operator != (const LwpObjectID &Other) const;
     LwpObject* obj(VO_TYPE tag=VO_INVALID) const;
     size_t HashCode() const;
 };
 
-inline sal_Bool LwpObjectID::IsNull() const
+inline bool LwpObjectID::IsNull() const
 {
     return (m_nLow == 0) && (m_nHigh == 0);
 }
 
-inline sal_Bool LwpObjectID::operator == (const LwpObjectID &Other) const
+inline bool LwpObjectID::operator == (const LwpObjectID &Other) const
 {
     return (m_nHigh == Other.m_nHigh) && (m_nLow == Other.m_nLow);
 }
 
-inline sal_Bool LwpObjectID::operator != (const LwpObjectID &Other) const
+inline bool LwpObjectID::operator != (const LwpObjectID &Other) const
 {
     return (m_nHigh != Other.m_nHigh) || (m_nLow != Other.m_nLow);
 }
 
-inline sal_Bool LwpObjectID::IsCompressed()
+inline bool LwpObjectID::IsCompressed()
 {
     return m_bIsCompressed;
 }

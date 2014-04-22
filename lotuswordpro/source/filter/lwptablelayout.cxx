@@ -175,20 +175,20 @@ void LwpSuperTableLayout::RegisterNewStyle()
  * @param
  * @return sal_Bool
  */
-sal_Bool LwpSuperTableLayout::IsSizeRightToContent()
+bool LwpSuperTableLayout::IsSizeRightToContent()
 {
     /* Only "with paragraph above" tables can size right to content. */
     if (GetRelativeType() == LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE)
         return LwpPlacableLayout::IsSizeRightToContent();
 
-    return sal_False;
+    return false;
 }
 /**
  * @short   Judge whether table is justifiable, borrowed from Word Pro code
  * @param
  * @return sal_Bool
  */
-sal_Bool LwpSuperTableLayout::IsJustifiable()
+bool LwpSuperTableLayout::IsJustifiable()
 {
     return (GetRelativeType() != LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE || IsSizeRightToContent());
 }
@@ -379,7 +379,7 @@ void  LwpSuperTableLayout::XFConvert(XFContentContainer* pCont)
  * @param
  * @return
  */
-void  LwpSuperTableLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart , sal_Int32 nEnd , sal_Bool bAll)
+void  LwpSuperTableLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart, sal_Int32 nEnd, bool bAll)
 {
     if(m_pFrame)
     {
@@ -851,7 +851,7 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
 
     sal_uInt16 nRowNum = pTmpTable->GetRowCount();
     sal_uInt8* CellMark = new sal_uInt8[nRowNum];
-    sal_Bool bFindFlag = sal_False;
+    bool bFindFlag = false;
 
     if (nRowNum == 1)
     {
@@ -982,7 +982,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable,XFTable* pXFTable,
  * @param  pXFTable - pointer of tmp XFtable
  * @param  CellMark - pointer of cell mark array
  */
-sal_Bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMark,
+bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable, sal_uInt8* pCellMark,
             sal_uInt8& nMaxColSpan)
 {
     sal_uInt16 nRowNum = pXFTable->GetRowCount();
@@ -990,7 +990,7 @@ sal_Bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMar
     sal_uInt8 nCellMark=0;
     sal_uInt8 nCount;
     sal_uInt8 nColSpan;
-    sal_Bool bFindFlag = sal_False;
+    bool bFindFlag = false;
     XFRow* pTmpRow;
 
     for(sal_uInt8 i=1;i<=nColNum;i++)
@@ -1010,7 +1010,7 @@ sal_Bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMar
                 if (pCell)
                     nColSpan += static_cast<sal_uInt8>(pCell->GetColSpaned());
                 else
-                    return sal_False;
+                    return false;
             }
             if (nColSpan > nMaxColSpan)
                 nMaxColSpan = nColSpan;
@@ -1046,7 +1046,7 @@ sal_Bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMar
         }
         if (nRowLoop == nRowNum+1)
         {
-            bFindFlag = sal_True;
+            bFindFlag = true;
             return bFindFlag;
         }
 
@@ -1192,7 +1192,7 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
         if ( pXFPara)
         {
             OUString sNumfmt = pCellLayout->GetNumfmtName();
-            sal_Bool bColorMod = sal_False;
+            bool bColorMod = false;
             XFNumberStyle* pNumStyle = NULL;
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
             if (!sNumfmt.isEmpty())
@@ -1200,7 +1200,7 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
                 pNumStyle = (XFNumberStyle*)pXFStyleManager->FindStyle( sNumfmt);
                 XFColor aColor = pNumStyle->GetColor();
                 if ( aColor != aNullColor )
-                    bColorMod = sal_True;//end
+                    bColorMod = true;//end
             }
 
             XFParaStyle * pStyle = pXFStyleManager->FindParaStyle(pXFPara->GetStyleName());
@@ -1294,7 +1294,7 @@ void LwpTableLayout::SplitConflictCells()
             continue;
         }
         pRowLayout= iter1->second;
-        if (pRowLayout->GetMergeCellFlag() == sal_False)
+        if (pRowLayout->GetMergeCellFlag() == false)
         {
             i++;
             continue;
@@ -1309,7 +1309,7 @@ void LwpTableLayout::SplitConflictCells()
                     if (iter2 == m_RowsMap.end())
                         continue;
                     pEffectRow = iter2->second;
-                if (pEffectRow->GetMergeCellFlag() == sal_False)
+                if (pEffectRow->GetMergeCellFlag() == false)
                     continue;
                 else
                     pEffectRow->SetCellSplit(nEffectRows);

@@ -142,7 +142,7 @@ private:
                 sal_uInt8 nEndCol,sal_uInt16 nRowID);
     void ConvertColumn(XFTable *pXFTable,sal_uInt8 nStartCol,sal_uInt8 nEndCol);
     sal_uInt16 ConvertHeadingRow(XFTable* pXFTable,sal_uInt16 nStartHeadRow,sal_uInt16 nEndHeadRow);
-    sal_Bool  FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMark,sal_uInt8& nMaxColSpan);
+    bool  FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMark,sal_uInt8& nMaxColSpan);
     void SplitRowToCells(XFTable* pTmpTable,XFTable* pXFTable,
                 sal_uInt8 nFirstColSpann,sal_uInt8* pCellMark);
 
@@ -178,14 +178,14 @@ public:
     void ApplyAlignment(XFTableStyle * pTableStyle);
     void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     // for frame style
-    virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, sal_Bool bAll = sal_False) SAL_OVERRIDE;
+    virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, bool bAll = false) SAL_OVERRIDE;
     void RegisterFrameStyle();
     LwpTableHeadingLayout* GetTableHeadingLayout();
 protected:
     void Read() SAL_OVERRIDE;
     LwpTableLayout* GetTableLayout();
-    sal_Bool IsSizeRightToContent();
-    sal_Bool IsJustifiable();
+    bool IsSizeRightToContent();
+    bool IsJustifiable();
     LwpFrame* m_pFrame;
 
 private:
@@ -204,7 +204,7 @@ public:
     double GetWidth() SAL_OVERRIDE {return LwpTools::ConvertFromUnitsToMetric(cwidth);}
     using LwpVirtualLayout::RegisterStyle;
     void RegisterStyle(double dCalculatedWidth);
-    sal_Bool IsJustifiable(){return (( m_nAttributes2 & STYLE2_JUSTIFIABLE) != 0);}
+    bool IsJustifiable(){return (( m_nAttributes2 & STYLE2_JUSTIFIABLE) != 0);}
 protected:
     void Read() SAL_OVERRIDE;
     sal_uInt8 ccolid;

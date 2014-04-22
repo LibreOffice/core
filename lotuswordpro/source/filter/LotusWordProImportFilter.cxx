@@ -60,7 +60,7 @@ using com::sun::star::xml::sax::XParser;
 //                                 W     o     r     d     P     r     o
 static const sal_Int8 header[] = { 0x57, 0x6f, 0x72, 0x64, 0x50, 0x72, 0x6f };
 
-sal_Bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
 {
 
@@ -76,7 +76,7 @@ sal_Bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::s
 
     SvFileStream inputStream( sURL, STREAM_READ );
     if ( inputStream.IsEof() || ( inputStream.GetError() != SVSTREAM_OK ) )
-         return sal_False;
+         return false;
 
     // An XML import service: what we push sax messages to..
     OUString sXMLImportService ( "com.sun.star.comp.Writer.XMLImporter" );

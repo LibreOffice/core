@@ -86,7 +86,7 @@ public:
     /**
      * @descr   Set whether the border has double line.
      */
-    void        SetDoubleLine(sal_Bool dual,sal_Bool bSameWidth);
+    void        SetDoubleLine(bool dual,bool bSameWidth);
 
     /**
      * @descr   Set inner line width for border with double line.
@@ -118,8 +118,8 @@ private:
 private:
     double      m_fOffset;
     XFColor     m_aColor;
-    sal_Bool    m_bDouble;
-    sal_Bool    m_bSameWidth;
+    bool    m_bDouble;
+    bool    m_bSameWidth;
     double      m_fWidthInner;
     double      m_fWidthSpace;
     double      m_fWidthOuter;
@@ -150,7 +150,7 @@ public:
      * @descr   Set border side as doubel line.
      * @param   bSameWidth whether two borders are same width.
      */
-    void    SetDoubleLine(enumXFBorder side, sal_Bool dual,sal_Bool bSameWidth);
+    void    SetDoubleLine(enumXFBorder side, bool dual,bool bSameWidth);
 
     /**
      * @descr   Set inner border with of border side.

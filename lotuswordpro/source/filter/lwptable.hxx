@@ -125,8 +125,8 @@ public:
     sal_uInt16 GetRow() {return m_nRow;}
     sal_uInt16 GetColumn() {return m_nColumn;}
     LwpTableLayout * GetTableLayout(){return static_cast<LwpTableLayout *>(GetLayout(NULL));}
-    sal_Bool IsNumberDown();
-    virtual sal_Bool IsTable() SAL_OVERRIDE { return sal_True;}
+    bool IsNumberDown();
+    virtual bool IsTable() SAL_OVERRIDE { return true;}
     LwpSuperTableLayout* GetSuperTableLayout();
 protected:
     LwpDLVListHeadTail m_RowCache;

@@ -59,7 +59,7 @@
  ************************************************************************/
 #include "xffloatframe.hxx"
 
-XFFloatFrame::XFFloatFrame(sal_Int32 start, sal_Int32 end, sal_Bool all)
+XFFloatFrame::XFFloatFrame(sal_Int32 start, sal_Int32 end, bool all)
 {
     m_nStart = start;
     m_nEnd = end;

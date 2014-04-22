@@ -277,20 +277,20 @@ void LwpParaStyle::ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::
         break;
     case 0x15: //double , fall through!
     case 0x16: //thick double
-        pXFBorders->SetDoubleLine(eXFBorderSide, sal_True, sal_False);
+        pXFBorders->SetDoubleLine(eXFBorderSide, true, false);
         pXFBorders->SetWidthOuter(eXFBorderSide, static_cast<float>(fWidth*0.333));
         pXFBorders->SetWidthSpace(eXFBorderSide, static_cast<float>(fWidth*0.334));
         pXFBorders->SetWidthInner(eXFBorderSide, static_cast<float>(fWidth*0.333));
 //      pXFBorders->SetWidth(eXFBorderSide, fWidth);
         break;
     case 0x18: //thick-thin
-        pXFBorders->SetDoubleLine(eXFBorderSide, sal_True, sal_False);
+        pXFBorders->SetDoubleLine(eXFBorderSide, true, false);
         pXFBorders->SetWidthOuter(eXFBorderSide, static_cast<float>(fWidth*0.5));
         pXFBorders->SetWidthInner(eXFBorderSide, static_cast<float>(fWidth*0.25));
         pXFBorders->SetWidthSpace(eXFBorderSide, static_cast<float>(fWidth*0.25));
         break;
     case 0x19: //thin-thick
-        pXFBorders->SetDoubleLine(eXFBorderSide, sal_True, sal_False);
+        pXFBorders->SetDoubleLine(eXFBorderSide, true, false);
         pXFBorders->SetWidthInner(eXFBorderSide, static_cast<float>(fWidth*0.7));
         pXFBorders->SetWidthOuter(eXFBorderSide, static_cast<float>(fWidth*0.15));
         pXFBorders->SetWidthSpace(eXFBorderSide, static_cast<float>(fWidth*0.15));
@@ -317,12 +317,12 @@ void LwpParaStyle::ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverrid
         if( offsetX && offsetY && color.IsValidColor() )
         {
             XFColor aXFColor(color.To24Color());
-            sal_Bool left = sal_False;
-            sal_Bool top = sal_False;
+            bool left = false;
+            bool top = false;
             if( offsetX < 0 )
-                left = sal_True;
+                left = true;
             if( offsetY < 0 )
-                top = sal_True;
+                top = true;
             if( left )
             {
                 if( top )
@@ -405,7 +405,7 @@ void LwpParaStyle::ApplyAlignment(XFParaStyle* pParaStyle, LwpAlignmentOverride*
     LwpAlignmentOverride::AlignType type;
 
     type = pAlign->GetAlignType();
-    pParaStyle->SetNumberRight(sal_False);//to identify its align attribute
+    pParaStyle->SetNumberRight(false);//to identify its align attribute
     switch(type)
     {
     case LwpAlignmentOverride::ALIGN_LEFT:
@@ -425,7 +425,7 @@ void LwpParaStyle::ApplyAlignment(XFParaStyle* pParaStyle, LwpAlignmentOverride*
         alignType = enumXFAlignJustify;
         break;
     case LwpAlignmentOverride::ALIGN_NUMERICRIGHT:
-        pParaStyle->SetNumberRight(sal_True);//to identify its align attribute
+        pParaStyle->SetNumberRight(true);//to identify its align attribute
         alignType = enumXFAlignEnd;
         break;
     default:

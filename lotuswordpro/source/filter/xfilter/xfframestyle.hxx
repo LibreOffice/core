@@ -124,7 +124,7 @@ public:
     /**
      * @descr   Set whether frame is protected. There are three properties that can be protected, content,size and position.
      */
-    void    SetProtect(sal_Bool content, sal_Bool size, sal_Bool pos);
+    void    SetProtect(bool content, bool size, bool pos);
 
     /**
      * @descr   Set text dir.
@@ -144,7 +144,7 @@ public:
     /**
      * @descr   Set frame background.
      */
-    void    SetBackGround(sal_Bool bBackground);
+    void    SetBackGround(bool bBackground);
 
     void SetTransparency(sal_Int16 nTransparency);
 
@@ -162,12 +162,12 @@ protected:
     XFShadow    *m_pShadow;
     XFBGImage   *m_pBGImage;
     XFColor     m_aBackColor;
-    sal_Bool    m_bProtectContent;
-    sal_Bool    m_bProtectSize;
-    sal_Bool    m_bProtectPos;
-    sal_Bool    m_bEditable;
-    sal_Bool    m_bPrintable;
-    sal_Bool    m_bBackground;
+    bool    m_bProtectContent;
+    bool    m_bProtectSize;
+    bool    m_bProtectPos;
+    bool    m_bEditable;
+    bool    m_bPrintable;
+    bool    m_bBackground;
     sal_Int16 m_nTransparency;
 
     enumXFTextDir   m_eTextDir;
@@ -216,7 +216,7 @@ inline void XFFrameStyle::SetTextDir(enumXFTextDir dir)
     m_eTextDir = dir;
 }
 
-inline void XFFrameStyle::SetProtect(sal_Bool content, sal_Bool size, sal_Bool pos)
+inline void XFFrameStyle::SetProtect(bool content, bool size, bool pos)
 {
     m_bProtectContent = content;
     m_bProtectSize = size;
@@ -235,7 +235,7 @@ inline void XFFrameStyle::SetYPosType(enumXFFrameYPos pos, enumXFFrameYRel rel)
     m_eYRel = rel;
 }
 
-inline void XFFrameStyle::SetBackGround(sal_Bool bBackground)
+inline void XFFrameStyle::SetBackGround(bool bBackground)
 {
     m_bBackground = bBackground;
 }

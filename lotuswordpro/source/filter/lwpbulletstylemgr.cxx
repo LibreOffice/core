@@ -77,8 +77,8 @@
 LwpBulletStyleMgr::LwpBulletStyleMgr()
     : m_pFoundry(NULL)
     , m_pBulletList(NULL)
-    , m_bContinue(sal_True)
-    , m_bIsBulletSkipped(sal_False)
+    , m_bContinue(true)
+    , m_bIsBulletSkipped(false)
     , m_nCurrentPos(0xFF)
 {
 }
@@ -156,7 +156,7 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
     OUString aStyleName;
 
     LwpFribPtr* pBulletParaFribs = pBulletPara->GetFribs();
-    sal_Bool bIsNumbering = (sal_Bool)(pBulletParaFribs->HasFrib(FRIB_TAG_PARANUMBER) != 0);
+    bool bIsNumbering = (pBulletParaFribs->HasFrib(FRIB_TAG_PARANUMBER) != 0);
 
     enumXFAlignType eAlign = enumXFAlignStart;
     if (pBullOver->IsRightAligned())
@@ -258,15 +258,15 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
 //Create nested XFList and XFItems and then add it to XFContentContainer(pCont)
 //Return the inner XFItem created.
 XFContentContainer* LwpBulletStyleMgr::AddBulletList(
-        XFContentContainer* pCont, sal_Bool bIsOrdered,
-        const OUString& rStyleName, sal_Int16 nLevel, sal_Bool bIsBulletSkiped)
+        XFContentContainer* pCont, bool bIsOrdered,
+        const OUString& rStyleName, sal_Int16 nLevel, bool bIsBulletSkiped)
 {
     assert(nLevel>0);
 
     m_bIsBulletSkipped = bIsBulletSkiped;
 
     //todo: need judge here.
-    sal_Bool bContinue = m_bContinue;
+    bool bContinue = m_bContinue;
 
     XFList* theList;
     XFList* prevList = NULL;
@@ -280,12 +280,12 @@ XFContentContainer* LwpBulletStyleMgr::AddBulletList(
 
         if (bIsOrdered)
         {
-            theList->SetOrdered(sal_True);
+            theList->SetOrdered(true);
         }
         else
         {
-            bContinue = sal_False;
-            theList->SetOrdered(sal_False);
+            bContinue = false;
+            theList->SetOrdered(false);
         }
 
         if (nC == nLevel-1)
@@ -301,9 +301,9 @@ XFContentContainer* LwpBulletStyleMgr::AddBulletList(
 
         if ((nC == nLevel-1) && bIsBulletSkiped)
         {
-            theItem->SetIsHeader(sal_True);
+            theItem->SetIsHeader(true);
 
-            theList->SetContinueNumber(sal_True);
+            theList->SetContinueNumber(true);
             // end of add
         }
 

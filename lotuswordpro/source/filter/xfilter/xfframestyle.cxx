@@ -72,12 +72,12 @@ XFFrameStyle::XFFrameStyle()
     m_pShadow = NULL;
     m_pBGImage = NULL;
 
-    m_bProtectContent = sal_False;
-    m_bProtectSize = sal_False;
-    m_bProtectPos = sal_False;
-    m_bEditable = sal_False;
-    m_bPrintable = sal_True;
-    m_bBackground = sal_False;
+    m_bProtectContent = false;
+    m_bProtectSize = false;
+    m_bProtectPos = false;
+    m_bEditable = false;
+    m_bPrintable = true;
+    m_bBackground = false;
     m_nTransparency = 0;
 
     m_eTextDir = enumXFTextDirNone;

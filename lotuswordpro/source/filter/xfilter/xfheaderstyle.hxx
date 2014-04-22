@@ -74,7 +74,7 @@ class XFBGImage;
 class XFHeaderStyle : public XFStyle
 {
 public:
-    explicit XFHeaderStyle(sal_Bool isFooter=sal_False);
+    explicit XFHeaderStyle(bool isFooter=false);
 
     virtual ~XFHeaderStyle();
 
@@ -84,7 +84,7 @@ public:
      */
     void    SetMargins(double left = -1, double right = -1, double bottom = -1);
 
-    void    SetDynamicSpace(sal_Bool dynamic);
+    void    SetDynamicSpace(bool dynamic);
 
     /**
      * @descr   Set header fixed height.
@@ -119,8 +119,8 @@ public:
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 protected:
-    sal_Bool    m_bIsFooter;
-    sal_Bool    m_bDynamicSpace;
+    bool    m_bIsFooter;
+    bool    m_bDynamicSpace;
     double      m_fHeight;
     double      m_fMinHeight;
     XFMargins   m_aMargin;

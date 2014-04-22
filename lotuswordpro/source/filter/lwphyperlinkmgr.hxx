@@ -71,13 +71,13 @@ class LwpHyperlinkMgr
 public:
     LwpHyperlinkMgr();
     ~LwpHyperlinkMgr();
-    void SetHyperlinkFlag(sal_Bool bFlag){m_bIsHyperlink = bFlag;}
-    sal_Bool GetHyperlinkFlag(){return m_bIsHyperlink;}
+    void SetHyperlinkFlag(bool bFlag){m_bIsHyperlink = bFlag;}
+    bool GetHyperlinkFlag(){return m_bIsHyperlink;}
     void SetHyperlink(const OUString& hyperlink);
     OUString GetHyperlink();
 private:
     OUString m_Hyperlink;
-    sal_Bool m_bIsHyperlink;
+    bool m_bIsHyperlink;
 };
 
 #endif

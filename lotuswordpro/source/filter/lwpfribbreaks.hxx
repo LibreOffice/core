@@ -78,11 +78,11 @@ public:
     void RegisterBreakStyle(LwpPara* pPara);
     void ParseLayout();
     LwpObjectID* GetLayout(){return &m_Layout;}
-    sal_Bool IsLastFrib(){return m_bLastFrib;}
+    bool IsLastFrib(){return m_bLastFrib;}
 
 private:
     LwpObjectID m_Layout;
-    sal_Bool m_bLastFrib;
+    bool m_bLastFrib;
 
     LwpMasterPage* m_pMasterPage;
 };

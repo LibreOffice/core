@@ -91,7 +91,7 @@
 class SdwRectangle
 {
 private:
-    sal_Bool m_bRotated;
+    bool m_bRotated;
 
 public:
     Point m_nRectCorner[4];
@@ -108,7 +108,7 @@ public:
     ~SdwRectangle();
 
 public:
-    sal_Bool IsRectRotated() const;
+    bool IsRectRotated() const;
 
     Point GetRectCenter() const ;
 

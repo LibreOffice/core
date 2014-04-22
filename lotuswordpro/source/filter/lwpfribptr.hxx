@@ -94,7 +94,7 @@ public:
     void FindLayouts();// for register pagelayout, add by , 02/20/2005
     LwpFrib* GetFribs(){return m_pFribs;}
     LwpFrib* HasFrib(sal_uInt8 nType);
-    sal_Bool ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLayout* pNextLayout);
+    bool ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLayout* pNextLayout);
     void GatherAllText();
 };
 

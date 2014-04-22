@@ -121,7 +121,7 @@ public:
     /**
      * @descr   decide whether it's a solid line.
      */
-    sal_Bool    IsSolid();
+    bool    IsSolid();
 
     double  GetWidth();
 
@@ -190,7 +190,7 @@ inline void XFDrawLineStyle::SetSpace(double space)
     m_fSpace = space;
 }
 
-inline sal_Bool XFDrawLineStyle::IsSolid()
+inline bool XFDrawLineStyle::IsSolid()
 {
     return (m_eLineStyle==enumXFLineSolid);
 }

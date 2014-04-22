@@ -222,7 +222,7 @@ OUString LwpNoteLayout::GetAuthor()
         {
             LwpPara* pFirst = static_cast<LwpPara*>(pStory->GetFirstPara()->obj());
             if(pFirst)
-                return pFirst->GetContentText(sal_True);
+                return pFirst->GetContentText(true);
         }
     }
 

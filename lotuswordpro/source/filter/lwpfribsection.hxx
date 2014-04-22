@@ -78,22 +78,22 @@ public:
 
 public:
     //for page layout register and parse
-    sal_Bool RegisterMasterPage(LwpFrib* pFrib);
+    bool RegisterMasterPage(LwpFrib* pFrib);
     void RegisterFillerPageStyle();
     void ParseSection(LwpFrib* pFrib);
     XFSection* CreateXFSection();
 
-    sal_Bool IsNewSection(){return m_bNewSection;}
+    bool IsNewSection(){return m_bNewSection;}
     OUString GetSectionStyleName(){return m_SectionStyleName;}
     OUString GetStyleName(){ return m_StyleName;}
     OUString GetFillerPageStyleName(){ return m_FillerPageStyleName;}
-    sal_Bool IsNextPageType();
+    bool IsNextPageType();
 
 private:
-    sal_Bool IsNeedSection();
+    bool IsNeedSection();
 
 private:
-    sal_Bool m_bNewSection;
+    bool m_bNewSection;
     OUString m_FillerPageStyleName;
     OUString m_SectionStyleName;
     OUString m_StyleName; //master page style name

@@ -84,7 +84,7 @@ public:
 
     virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
-    virtual sal_Bool    Equal(IXFStyle *pStyle) SAL_OVERRIDE;
+    virtual bool        Equal(IXFStyle *pStyle) SAL_OVERRIDE;
 
     virtual void        ToXml(IXFStream *strm) SAL_OVERRIDE;
 

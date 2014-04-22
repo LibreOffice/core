@@ -100,7 +100,7 @@ public:
     /**
      * @descr   Set whether it's a main entry. This is available only for enumXFEntryAlphabetical.
      */
-    void    SetMainEntry(sal_Bool main);
+    void    SetMainEntry(bool main);
 
     /**
      * @descr   Set outline level. This is available for enumXFEntryTOC and enumXFEntryUserIndex.
@@ -116,7 +116,7 @@ private:
     OUString   m_strKey1;
     OUString   m_strKey2;
     OUString   m_strName;
-    sal_Bool        m_bMainEntry;
+    bool        m_bMainEntry;
     sal_Int32       m_nOutlineLevel;
 };
 
@@ -146,7 +146,7 @@ inline void XFEntry::SetKey(const OUString& key1, const OUString& key2)
     m_strKey2 = key2;
 }
 
-inline void XFEntry::SetMainEntry(sal_Bool main)
+inline void XFEntry::SetMainEntry(bool main)
 {
     m_bMainEntry = main;
 }

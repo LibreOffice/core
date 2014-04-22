@@ -110,8 +110,8 @@ public:
 
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
-    friend sal_Bool operator==(XFShadow& s1, XFShadow& s2);
-    friend sal_Bool operator!=(XFShadow& s1, XFShadow& s2);
+    friend bool operator==(XFShadow& s1, XFShadow& s2);
+    friend bool operator!=(XFShadow& s1, XFShadow& s2);
 private:
     enumXFShadowPos m_ePosition;
     double          m_fOffset;

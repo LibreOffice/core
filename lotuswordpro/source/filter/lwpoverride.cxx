@@ -168,7 +168,7 @@ void LwpTextAttributeOverride::Read(LwpObjectStream* pStrm)
     pStrm->SkipExtra();
 }
 
-sal_Bool LwpTextAttributeOverride::IsHighlight()
+bool LwpTextAttributeOverride::IsHighlight()
 {
     return (m_nValues & TAO_HIGHLIGHT);
 }
@@ -213,16 +213,16 @@ void LwpBulletOverride::Read(LwpObjectStream * pStrm)
 {
     if (pStrm->QuickReadBool())
     {
-        m_bIsNull= sal_False;
+        m_bIsNull= false;
         ReadCommon(pStrm);
         m_SilverBullet.ReadIndexed(pStrm);
     }
     else
-        m_bIsNull = sal_True;
+        m_bIsNull = true;
 
     pStrm->SkipExtra();
 }
-void LwpBulletOverride::OverrideSkip(sal_Bool bOver)
+void LwpBulletOverride::OverrideSkip(bool bOver)
 {
     if (bOver)
     {
@@ -234,7 +234,7 @@ void LwpBulletOverride::OverrideSkip(sal_Bool bOver)
     }
 }
 
-void LwpBulletOverride::OverrideRightAligned(sal_Bool bOver)
+void LwpBulletOverride::OverrideRightAligned(bool bOver)
 {
     if(bOver)
     {
@@ -551,7 +551,7 @@ sal_uInt16 LwpIndentOverride::GetRelative()
     return RELATIVE_REST;
 }
 
-sal_Bool LwpIndentOverride::IsUseRelative()
+bool LwpIndentOverride::IsUseRelative()
 {
     return (m_nValues & IO_USE_RELATIVE) != 0;
 }
@@ -582,7 +582,7 @@ void LwpIndentOverride::OverrideIndentRest(sal_Int32 val)
     m_nOverride |= IO_REST;
 }
 
-void LwpIndentOverride::OverrideUseRelative(sal_Bool use)
+void LwpIndentOverride::OverrideUseRelative(bool use)
 {
     if (use)
     {

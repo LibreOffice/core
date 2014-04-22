@@ -130,26 +130,26 @@ LwpVirtualLayout* LwpContent::GetLayout(LwpVirtualLayout* pStartLayout)
     return m_LayoutsWithMe.GetLayout(pStartLayout);
 }
 
-sal_Bool LwpContent::HasNonEmbeddedLayouts()
+bool LwpContent::HasNonEmbeddedLayouts()
 {
     LwpVirtualLayout* pLayout = NULL;
     while( (pLayout = GetLayout(pLayout)) )
     {
         if(!pLayout->NoContentReference())
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool LwpContent::IsStyleContent()
+bool LwpContent::IsStyleContent()
 {
     LwpVirtualLayout* pLayout = NULL;
     while( (pLayout = GetLayout(pLayout)) )
     {
         if(pLayout->IsStyleLayout())
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

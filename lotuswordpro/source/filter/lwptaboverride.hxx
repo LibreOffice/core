@@ -88,7 +88,7 @@ public:
     }
 
     inline LwpObjectID* GetTabRackID();
-    inline sal_Bool IsTabRackOverridden();
+    inline bool IsTabRackOverridden();
     inline void Override(LwpTabOverride* pOther);
     inline void OverrideTabRack(LwpObjectID* pTabRackID);
 
@@ -121,7 +121,7 @@ inline void LwpTabOverride::Override(LwpTabOverride* pOther)
     }
 }
 
-inline sal_Bool LwpTabOverride::IsTabRackOverridden()
+inline bool LwpTabOverride::IsTabRackOverridden()
 {
     return (m_nOverride & TO_TABRACK) != 0;
 }

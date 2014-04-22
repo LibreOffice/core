@@ -102,7 +102,7 @@ public:
      * @param:  pStyle the style to be compared.
      * @return: return sal_True if equals,else sal_False.
      */
-    virtual sal_Bool    Equal(IXFStyle *pStyle) = 0;
+    virtual bool    Equal(IXFStyle *pStyle) = 0;
 
 };
 

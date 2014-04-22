@@ -65,9 +65,9 @@ XFNumberStyle::XFNumberStyle():m_aColor(0,0,0),m_aNegativeColor(255,0,0)
     m_nDecimalDigits = 0;
     m_nMinInteger = 1;
     m_nMinExponent = 2;
-    m_bGroup = sal_False;
-    m_bRedIfNegative = sal_False;
-    m_bCurrencySymbolPost = sal_False;
+    m_bGroup = false;
+    m_bRedIfNegative = false;
+    m_bCurrencySymbolPost = false;
 }
 
 enumXFStyle XFNumberStyle::GetStyleFamily()
@@ -75,54 +75,54 @@ enumXFStyle XFNumberStyle::GetStyleFamily()
     return enumXFStyleNumber;
 }
 
-sal_Bool XFNumberStyle::Equal(IXFStyle *pStyle)
+bool XFNumberStyle::Equal(IXFStyle *pStyle)
 {
     if( !pStyle || pStyle->GetStyleFamily() != enumXFStyleNumber )
-        return sal_False;
+        return false;
     XFNumberStyle *pOther = (XFNumberStyle*)pStyle;
     if( !pOther )
-        return sal_False;
+        return false;
 
     if( m_eType != pOther->m_eType )
-        return sal_False;
+        return false;
     if( m_nDecimalDigits != pOther->m_nDecimalDigits )
-        return sal_False;
+        return false;
     if( m_nMinInteger != pOther->m_nMinInteger )
-        return sal_False;
+        return false;
     if( m_bRedIfNegative != pOther->m_bRedIfNegative )
-        return sal_False;
+        return false;
     if( m_bGroup != pOther->m_bGroup )
-        return sal_False;
+        return false;
     if( m_aColor != pOther->m_aColor )
-        return sal_False;
+        return false;
     if( m_strPrefix != pOther->m_strPrefix )
-        return sal_False;
+        return false;
     if( m_strSuffix != pOther->m_strSuffix )
-        return sal_False;
+        return false;
 
     //When category of number format is scientific, the number can not be displayed normally in table.
     if ( m_nMinExponent != pOther->m_nMinExponent )
-        return sal_False;
+        return false;
 
     if( m_bRedIfNegative )
     {
         if( m_aNegativeColor != pOther->m_aNegativeColor )
-            return sal_False;
+            return false;
         if( m_strNegativePrefix != pOther->m_strNegativePrefix )
-            return sal_False;
+            return false;
         if( m_strNegativeSuffix != pOther->m_strNegativeSuffix )
-            return sal_False;
+            return false;
     }
 
     if( m_eType == enuMXFNumberCurrency )
     {
         if( m_bCurrencySymbolPost != pOther->m_bCurrencySymbolPost )
-            return sal_False;
+            return false;
         if( m_strCurrencySymbol != pOther->m_strCurrencySymbol )
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 void XFNumberStyle::ToXml(IXFStream *pStrm)
@@ -218,7 +218,7 @@ void XFNumberStyle::ToXml_Normal(IXFStream *pStrm)
 {
     ToXml_StartElement(pStrm);
 
-    ToXml_Content(pStrm,sal_False);
+    ToXml_Content(pStrm,false);
 
     ToXml_EndElement(pStrm);
 }
@@ -237,7 +237,7 @@ void XFNumberStyle::ToXml_Negative(IXFStream *pStrm)
 
     ToXml_StartElement(pStrm);
 
-    ToXml_Content(pStrm,sal_True);
+    ToXml_Content(pStrm,true);
 
     pAttrList->Clear();
     pAttrList->AddAttribute( "style:condition", "value()>=0" );
@@ -248,7 +248,7 @@ void XFNumberStyle::ToXml_Negative(IXFStream *pStrm)
     ToXml_EndElement(pStrm);
 }
 
-void XFNumberStyle::ToXml_Content(IXFStream *pStrm, sal_Bool nagetive)
+void XFNumberStyle::ToXml_Content(IXFStream *pStrm, bool nagetive)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();

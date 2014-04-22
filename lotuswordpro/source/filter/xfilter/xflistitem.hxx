@@ -70,20 +70,20 @@ public:
     XFListItem();
 
 public:
-    void    SetIsHeader(sal_Bool isHeader=sal_True);
+    void    SetIsHeader(bool isHeader=true);
 
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
-    sal_Bool    m_bIsHeader;
+    bool    m_bIsHeader;
 };
 
 inline XFListItem::XFListItem()
 {
-    m_bIsHeader = sal_False;
+    m_bIsHeader = false;
 }
 
-inline void XFListItem::SetIsHeader(sal_Bool isHeader)
+inline void XFListItem::SetIsHeader(bool isHeader)
 {
     m_bIsHeader = isHeader;
 }

@@ -84,7 +84,7 @@ public:
 
     void    SetRestartOnChapter();
 
-    void    SetInsertInPage(sal_Bool page=sal_True);
+    void    SetInsertInPage(bool page=true);
 
     void    SetNumPrefix(const OUString& numprefix);
 
@@ -108,8 +108,8 @@ protected:
     OUString   m_strMessageOn;
     sal_Int32   m_nStartValue;
     sal_Int32   m_nRestartType;
-    sal_Bool    m_bInsertInPage;
-    sal_Bool    m_bIsFootnote;
+    bool    m_bInsertInPage;
+    bool    m_bIsFootnote;
 };
 
 inline XFFootnoteConfig::XFFootnoteConfig()
@@ -117,12 +117,12 @@ inline XFFootnoteConfig::XFFootnoteConfig()
     m_nStartValue = 0;
     m_nRestartType = -1;
     m_strNumFmt = "1";
-    m_bInsertInPage = sal_True;
+    m_bInsertInPage = true;
     m_strDefaultStyle = "Footnote";
     m_strMasterPage = "Footnote";
     m_strCitationStyle = "Footnote Symbol";
     m_strBodyStyle = "Footnote anchor";
-    m_bIsFootnote = sal_True;
+    m_bIsFootnote = true;
 }
 
 inline void XFFootnoteConfig::SetBodyStyle(const OUString& style)
@@ -167,7 +167,7 @@ inline void XFFootnoteConfig::SetRestartOnChapter()
     m_nRestartType = 1;
 }
 
-inline void XFFootnoteConfig::SetInsertInPage(sal_Bool page)
+inline void XFFootnoteConfig::SetInsertInPage(bool page)
 {
     m_bInsertInPage = page;
 }

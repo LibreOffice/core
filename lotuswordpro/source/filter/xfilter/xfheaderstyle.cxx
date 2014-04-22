@@ -60,10 +60,10 @@
 #include "xfheaderstyle.hxx"
 #include "xfbgimage.hxx"
 
-XFHeaderStyle::XFHeaderStyle(sal_Bool isFooter)
+XFHeaderStyle::XFHeaderStyle(bool isFooter)
 {
     m_bIsFooter = isFooter;
-    m_bDynamicSpace = sal_True;
+    m_bDynamicSpace = true;
     m_fHeight = -1;
     m_fMinHeight = -1;
     m_pBorders = NULL;
@@ -90,7 +90,7 @@ void    XFHeaderStyle::SetMargins(double left, double right, double bottom)
     if( bottom != -1 )
         m_aMargin.SetBottom(bottom);
 }
-void    XFHeaderStyle::SetDynamicSpace(sal_Bool dynamic)
+void    XFHeaderStyle::SetDynamicSpace(bool dynamic)
 {
     m_bDynamicSpace = dynamic;
 }

@@ -80,7 +80,7 @@ class XFFrame : public XFContentContainer
 {
 public:
     XFFrame();
-    XFFrame(sal_Bool isTextBox);
+    XFFrame(bool isTextBox);
 
     virtual ~XFFrame();
 
@@ -189,7 +189,7 @@ protected:
     OUString   m_strNextLink;
     enumXFFrameType m_eType;
     sal_uInt32      m_nFlag;
-    sal_Bool            m_isTextBox;
+    bool            m_isTextBox;
 };
 
 inline void XFFrame::SetAnchorType(enumXFAnchor anchor)

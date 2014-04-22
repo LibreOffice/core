@@ -69,13 +69,13 @@
 class LwpFribText : public LwpFrib
 {
 public:
-    LwpFribText( LwpPara* pPara, sal_Bool bNoUnicode=false);
+    LwpFribText( LwpPara* pPara, bool bNoUnicode=false);
     virtual ~LwpFribText(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     void XFConvert(XFContentContainer* pXFPara,LwpStory* pStory);
 private:
     OUString m_Content;
-    sal_Bool m_bNoUnicode;
+    bool m_bNoUnicode;
 public:
     OUString GetText(){return m_Content;}
 };

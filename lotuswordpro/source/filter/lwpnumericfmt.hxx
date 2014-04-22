@@ -78,9 +78,9 @@ public:
     void QuickRead(LwpObjectStream* pStrm);
     OUString GetPrefix(){ return cPrefix.str();}
     OUString GetSuffix(){ return cSuffix.str();}
-    sal_Bool IsBlack(){ return (cColor.GetBlue()==0 && cColor.GetGreen()==0 && cColor.GetRed()==0);}
-    sal_Bool IsDefaultPrefix(){ return !(cSubFlags&SF_OVER_PREFIX); }
-    sal_Bool IsDefaultSuffix(){ return !(cSubFlags&SF_OVER_SUFFIX); }
+    bool IsBlack(){ return (cColor.GetBlue()==0 && cColor.GetGreen()==0 && cColor.GetRed()==0);}
+    bool IsDefaultPrefix(){ return !(cSubFlags&SF_OVER_PREFIX); }
+    bool IsDefaultSuffix(){ return !(cSubFlags&SF_OVER_SUFFIX); }
     LwpColor GetColor();
 
 protected:
@@ -100,20 +100,20 @@ protected:
 struct LwpCurrencyInfo
 {
     OUString sSymbol;
-    sal_Bool bPost;
-    sal_Bool bShowSpace;
+    bool bPost;
+    bool bShowSpace;
     LwpCurrencyInfo(const OUString& sSym)
     {
         sSymbol = sSym;
-        bPost = sal_False;
-        bShowSpace = sal_False;
+        bPost = false;
+        bShowSpace = false;
     }
     LwpCurrencyInfo()
     {
-        bPost = sal_False;
-        bShowSpace = sal_False;
+        bPost = false;
+        bShowSpace = false;
     }
-    LwpCurrencyInfo(const OUString& sSym, sal_Bool bPost_, sal_Bool bShowSpace_)
+    LwpCurrencyInfo(const OUString& sSym, bool bPost_, bool bShowSpace_)
     {
         sSymbol = sSym;
         bPost = bPost_;
@@ -188,8 +188,8 @@ class LwpCurrencyPool
 public:
     LwpCurrencyPool(){InitCurrencySymbol();}
     OUString GetCurrencySymbol(sal_uInt16 nFormat);
-    sal_Bool IsShowSpace(sal_uInt16 nFormat);
-    sal_Bool IsSymbolPost(sal_uInt16 nFormat);
+    bool IsShowSpace(sal_uInt16 nFormat);
+    bool IsSymbolPost(sal_uInt16 nFormat);
 
 private:
     std::map<sal_uInt16,LwpCurrencyInfo> m_aCurrencyInfo;
@@ -198,48 +198,48 @@ private:
         sal_uInt16 nC=FMT_ARGENTINEANPESO;
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("A");                    //FMT_ARGENTINEANPESO       = 1,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("A$");                   //FMT_AUSTRALIANDOLLAR  = 2,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("oS",sal_True, sal_True);//FMT_AUSTRIANSCHILLING = 3,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("BF",sal_True, sal_True);//FMT_BELGIANFRANC      = 4,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("R$",sal_False, sal_True);//FMT_BRAZILIANCRUZEIRO    = 5,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("oS",true, true);//FMT_AUSTRIANSCHILLING = 3,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("BF",true, true);//FMT_BELGIANFRANC      = 4,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("R$",false, true);//FMT_BRAZILIANCRUZEIRO    = 5,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo(OUString(RTL_CONSTUTF8_USTRINGPARAM("\357\277\241")));                 //FMT_BRITISHPOUND      = 6,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("C$");                   //FMT_CANADIANDOLLAR        = 7,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo(OUString(RTL_CONSTUTF8_USTRINGPARAM("PRC\357\277\245")),sal_False,sal_True);   //FMT_CHINESEYUAN           = 8,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Kc",sal_True, sal_True);//FMT_CZECHKORUNA           = 9,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Dkr",sal_False, sal_True);//FMT_DANISHKRONE         = 10,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("ECU",sal_True, sal_True);//FMT_ECU                  = 11,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("mk",sal_True, sal_True);//FMT_FINNISHMARKKA     = 12,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("F",sal_True, sal_True);//FMT_FRENCHFRANC            = 13,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("DM",sal_True, sal_True);//FMT_GERMANMARK            = 14,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Dr",sal_True, sal_True);//FMT_GREEKDRACHMA      = 15,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo(OUString(RTL_CONSTUTF8_USTRINGPARAM("PRC\357\277\245")),false,true);   //FMT_CHINESEYUAN           = 8,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Kc",true, true);//FMT_CZECHKORUNA           = 9,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Dkr",false, true);//FMT_DANISHKRONE         = 10,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("ECU",true, true);//FMT_ECU                  = 11,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("mk",true, true);//FMT_FINNISHMARKKA     = 12,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("F",true, true);//FMT_FRENCHFRANC            = 13,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("DM",true, true);//FMT_GERMANMARK            = 14,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Dr",true, true);//FMT_GREEKDRACHMA      = 15,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("HK$");                  //FMT_HONGKONGDOLLAR        = 16,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Ft",sal_True, sal_True);//FMT_HUNGARIANFORINT       = 17,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Rs",sal_False, sal_True);//FMT_INDIANRUPEE          = 18,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Rp",sal_False, sal_True);//FMT_INDONESIANRUPIAH = 19,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Ft",true, true);//FMT_HUNGARIANFORINT       = 17,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Rs",false, true);//FMT_INDIANRUPEE          = 18,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Rp",false, true);//FMT_INDONESIANRUPIAH = 19,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo(OUString(RTL_CONSTUTF8_USTRINGPARAM("IR\357\277\241")));                   //FMT_IRISHPUNT         = 20,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("L.",sal_False, sal_True);//FMT_ITALIANLIRA          = 21,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("L.",false, true);//FMT_ITALIANLIRA          = 21,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo(OUString(RTL_CONSTUTF8_USTRINGPARAM("\357\277\245")));             //FMT_JAPANESEYEN           = 22,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("LF",sal_True, sal_True);//FMT_LUXEMBOURGFRANC       = 23,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Rm",sal_False, sal_True);//FMT_MALAYSIANRINGGIT = 24,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("LF",true, true);//FMT_LUXEMBOURGFRANC       = 23,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Rm",false, true);//FMT_MALAYSIANRINGGIT = 24,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Mex$");                 //FMT_MEXICANPESO           = 25,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("F",sal_False, sal_True);//FMT_NETHERLANDSGUILDER    = 26,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("F",false, true);//FMT_NETHERLANDSGUILDER    = 26,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("NZ$");                  //FMT_NEWZEALANDDOLLAR  = 27,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Nkr",sal_False, sal_True);//FMT_NORWEGIANKRONE      = 28,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Zl",sal_True, sal_True);//FMT_POLISHZLOTY           = 29,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Esc.",sal_True, sal_True);//FMT_PORTUGUESEESCUDO    = 30,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Leu",sal_True, sal_True);//FMT_ROMANIANLEI          = 31,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("R",sal_True, sal_True);//FMT_RUSSIANRUBLE       = 32,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Nkr",false, true);//FMT_NORWEGIANKRONE      = 28,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Zl",true, true);//FMT_POLISHZLOTY           = 29,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Esc.",true, true);//FMT_PORTUGUESEESCUDO    = 30,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Leu",true, true);//FMT_ROMANIANLEI          = 31,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("R",true, true);//FMT_RUSSIANRUBLE       = 32,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("S$");                   //FMT_SINGAPOREDOLLAR       = 33,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Sk",sal_True, sal_True);//FMT_SLOVAKIANKORUNA       = 34,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("SIT",sal_False, sal_True);//FMT_SLOVENIANTHOLAR     = 35,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Sk",true, true);//FMT_SLOVAKIANKORUNA       = 34,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("SIT",false, true);//FMT_SLOVENIANTHOLAR     = 35,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("R");                    //FMT_SOUTHAFRICANRAND  = 36,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("W");                    //FMT_SOUTHKOREANWON        = 37,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Pts",sal_True, sal_True);//FMT_SPANISHPESETA        = 38,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Skr",sal_True, sal_True);//FMT_SWEDISHKRONA     = 39,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("SFr",sal_False, sal_True);//FMT_SWISSFRANC          = 40,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Pts",true, true);//FMT_SPANISHPESETA        = 38,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Skr",true, true);//FMT_SWEDISHKRONA     = 39,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("SFr",false, true);//FMT_SWISSFRANC          = 40,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("NT$");                  //FMT_TAIWANDOLLAR      = 41,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Bt",sal_True, sal_True);//FMT_THAIBAHT          = 42,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Bt",true, true);//FMT_THAIBAHT          = 42,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("$");                    //FMT_USDOLLAR          = 43,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("OTH",sal_False, sal_True);//FMT_OTHERCURRENCY       = 44,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("OTH",false, true);//FMT_OTHERCURRENCY       = 44,
 
         m_aCurrencyInfo[FMT_EURO]=LwpCurrencyInfo(OUString(RTL_CONSTUTF8_USTRINGPARAM("\342\202\254")));             //FMT_EURO              = 52
     }
@@ -251,11 +251,11 @@ public:
     LwpNumericFormat(LwpObjectStream * pStrm);
     ~LwpNumericFormat(){}
     void Read();
-    static sal_Bool IsCurrencyFormat(sal_uInt16 Format);
+    static bool IsCurrencyFormat(sal_uInt16 Format);
     sal_uInt16 GetDecimalPlaces(void);
-    sal_Bool IsDecimalPlacesOverridden(void);
-    sal_Bool IsNegativeOverridden(void);
-    sal_Bool IsZeroOverridden(void);
+    bool IsDecimalPlacesOverridden(void);
+    bool IsNegativeOverridden(void);
+    bool IsZeroOverridden(void);
     XFStyle* Convert();
 
 private:
@@ -280,24 +280,24 @@ private:
     static sal_uInt16 GetDefaultDecimalPlaces(sal_uInt16 Format);
     static LwpCurrencyPool m_aCurrencyInfo;
 
-    void GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& aPrefix, OUString& aSuffix, sal_Bool bNegtive=sal_False);
+    void GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& aPrefix, OUString& aSuffix, bool bNegtive=false);
     void SetNumberType(XFNumberStyle* pStyle);
     OUString    reencode(const OUString& sCode);
 };
 
-inline sal_Bool
+inline bool
 LwpNumericFormat::IsDecimalPlacesOverridden(void)
 {
     return (cFlags & NF_OVER_DECIMAL_PLACES) != 0;
 }
 
-inline sal_Bool
+inline bool
 LwpNumericFormat::IsNegativeOverridden(void)
 {
     return (cFlags & NF_OVER_NEGATIVE) != 0;
 }
 
-inline sal_Bool
+inline bool
 LwpNumericFormat::IsZeroOverridden(void)
 {
     return (cFlags & NF_OVER_ZERO) != 0;

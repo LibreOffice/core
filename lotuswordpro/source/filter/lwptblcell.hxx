@@ -88,7 +88,7 @@ public:
     virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     LwpObjectID GetNextID(){return *GetNext();}
     sal_uInt8 GetColumnID(){return cColumn;}
-    virtual sal_Bool IsFormula(){return sal_False;}
+    virtual bool IsFormula(){return false;}
     LwpObjectID GetValueID(){return cValue;}
 
     virtual void Convert(XFCell * pCell, LwpTableLayout* pCellsMap=NULL);
@@ -229,14 +229,14 @@ public:
 
     inline void SetAbsolute(void);
     inline void ClearAbsolute(void);
-    sal_Bool IsAbsolute(void);
+    bool IsAbsolute(void);
 
     inline void SetAfter(void);
     inline void ClearAfter(void);
-    sal_Bool IsAfter(void);
+    bool IsAfter(void);
 
-    void SetBad(sal_Bool Bad);
-    sal_Bool IsBad(void);
+    void SetBad(bool Bad);
+    bool IsBad(void);
 
     void QuickRead(LwpObjectStream *pStrm);
 
@@ -280,19 +280,19 @@ LwpRowColumnQualifier::LwpRowColumnQualifier()
     cFlags = 0;
 }
 
-inline sal_Bool
+inline bool
 LwpRowColumnQualifier::IsAfter()
 {
     return cFlags & REF_AFTER ? sal_True : sal_False;
 }
 
-inline sal_Bool
+inline bool
 LwpRowColumnQualifier::IsBad()
 {
     return cFlags & REF_BAD ? sal_True : sal_False;
 }
 
-inline sal_Bool
+inline bool
 LwpRowColumnQualifier::IsAbsolute()
 {
     return cFlags & REF_ABSOLUTE ? sal_True : sal_False;
@@ -317,14 +317,14 @@ public:
 
     void SetAbsolute(void);
     void ClearAbsolute(void);
-    sal_Bool IsAbsolute(void);
+    bool IsAbsolute(void);
 
     void SetAfter(void);
     void ClearAfter(void);
-    sal_Bool IsAfter(void);
+    bool IsAfter(void);
 
-    void SetBad(sal_Bool Bad);
-    sal_Bool IsBad(void);
+    void SetBad(bool Bad);
+    bool IsBad(void);
     void SetRowDelta(sal_uInt16 ReferenceRowID, sal_uInt16 FormulaRowID);
 
 private:
@@ -365,7 +365,7 @@ LwpRowSpecifier::ClearAbsolute(void)
     cQualifier.ClearAbsolute();
 }
 
-inline sal_Bool
+inline bool
 LwpRowSpecifier::IsAbsolute()
 {
     return cQualifier.IsAbsolute();
@@ -383,19 +383,19 @@ LwpRowSpecifier::ClearAfter(void)
     cQualifier.ClearAfter();
 }
 
-inline sal_Bool
+inline bool
 LwpRowSpecifier::IsAfter()
 {
     return cQualifier.IsAfter();
 }
 
 inline void
-LwpRowSpecifier::SetBad(sal_Bool Bad)
+LwpRowSpecifier::SetBad(bool Bad)
 {
     cQualifier.SetBad(Bad);
 }
 
-inline sal_Bool
+inline bool
 LwpRowSpecifier::IsBad()
 {
     return cQualifier.IsBad();
@@ -420,12 +420,12 @@ public:
     sal_uInt8 ColumnID(sal_uInt8 FormulaColumn);
     void SetAbsolute(void);
     void ClearAbsolute(void);
-    sal_Bool IsAbsolute(void);
+    bool IsAbsolute(void);
     void SetAfter(void);
     void ClearAfter(void);
-    sal_Bool IsAfter(void);
-    void SetBad(sal_Bool Bad);
-    sal_Bool IsBad(void);
+    bool IsAfter(void);
+    void SetBad(bool Bad);
+    bool IsBad(void);
     void SetColumnDelta(sal_uInt8 ReferenceColumnID, sal_uInt8 FormulaColumnID);
 
 private:
@@ -459,7 +459,7 @@ LwpColumnSpecifier::ClearAbsolute(void)
     cQualifier.ClearAbsolute();
 }
 
-inline sal_Bool
+inline bool
 LwpColumnSpecifier::IsAbsolute()
 {
     return cQualifier.IsAbsolute();
@@ -477,19 +477,19 @@ LwpColumnSpecifier::ClearAfter(void)
     cQualifier.ClearAfter();
 }
 
-inline sal_Bool
+inline bool
 LwpColumnSpecifier::IsAfter()
 {
     return cQualifier.IsAfter();
 }
 
 inline void
-LwpColumnSpecifier::SetBad(sal_Bool Bad)
+LwpColumnSpecifier::SetBad(bool Bad)
 {
     cQualifier.SetBad(Bad);
 }
 
-inline sal_Bool
+inline bool
 LwpColumnSpecifier::IsBad()
 {
     return cQualifier.IsBad();

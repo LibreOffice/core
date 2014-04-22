@@ -67,7 +67,7 @@ class XFFontWorkStyle
 public:
     XFFontWorkStyle() :
         m_nButtonForm(-1),
-        m_bHideForm(sal_True),
+        m_bHideForm(true),
         m_fDistance(-0.10),
         m_eStyleType(enumXFFWOff),
         m_eAdjustType(enumXFFWAdjustAutosize),
@@ -77,7 +77,7 @@ public:
     ~XFFontWorkStyle(){}
 
     inline void SetButtonForm(sal_Int8 nIndex);
-    inline void SetHideForm(sal_Bool bHide);
+    inline void SetHideForm(bool bHide);
     inline void SetFWDistance(double fDist);
     inline void SetFWStyleType(enumXFFWStyle eStyle);
     inline void SetFWAdjustType(enumXFFWAdjust eAdjust);
@@ -91,7 +91,7 @@ public:
 
 private:
     sal_Int8 m_nButtonForm;
-    sal_Bool m_bHideForm;
+    bool m_bHideForm;
     double m_fDistance;
     enumXFFWStyle m_eStyleType;
     enumXFFWAdjust m_eAdjustType;
@@ -103,7 +103,7 @@ inline void XFFontWorkStyle::SetButtonForm(sal_Int8 nIndex)
     m_nButtonForm = nIndex;
 }
 
-inline void XFFontWorkStyle::SetHideForm(sal_Bool bHide)
+inline void XFFontWorkStyle::SetHideForm(bool bHide)
 {
     m_bHideForm = bHide;
 }

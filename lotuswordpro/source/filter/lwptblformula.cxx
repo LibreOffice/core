@@ -78,7 +78,7 @@ LwpFormulaArg::~LwpFormulaArg()
 
  LwpFormulaInfo::LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpCellList(objHdr, pStrm)
-    , m_bSupported(sal_True)
+    , m_bSupported(true)
     , m_nFormulaRow(0)
 {}
 
@@ -104,13 +104,13 @@ LwpFormulaInfo::~LwpFormulaInfo()
 *   @param
 *   @return sal_Bool.
 */
-sal_Bool LwpFormulaInfo::ReadConst()
+bool LwpFormulaInfo::ReadConst()
 {
     double Constant = m_pObjStrm->QuickReadDouble();
 
     m_aStack.push_back( new LwpFormulaConst(Constant) );
 
-    return sal_True;
+    return true;
 }
 /**
 *   Need more effort for unicode.
@@ -119,7 +119,7 @@ sal_Bool LwpFormulaInfo::ReadConst()
 *   @param
 *   @return sal_Bool.
 */
-sal_Bool LwpFormulaInfo::ReadText()
+bool LwpFormulaInfo::ReadText()
 {
     m_pObjStrm->QuickReadInt16(); //Disk Size
     sal_uInt16 nStrLen = m_pObjStrm->QuickReadInt16();
@@ -133,7 +133,7 @@ sal_Bool LwpFormulaInfo::ReadText()
     aText += "\"";
 
     m_aStack.push_back(new LwpFormulaText(aText));
-    return sal_True;
+    return true;
 }
 /**
 *
@@ -142,11 +142,11 @@ sal_Bool LwpFormulaInfo::ReadText()
 *   @param
 *   @return sal_Bool.
 */
-sal_Bool LwpFormulaInfo::ReadCellID()
+bool LwpFormulaInfo::ReadCellID()
 {
     LwpRowSpecifier RowSpecifier;
     LwpColumnSpecifier ColumnSpecifier;
-    sal_Bool readSucceeded = true;
+    bool readSucceeded = true;
 
     RowSpecifier.QuickRead(m_pObjStrm);
     ColumnSpecifier.QuickRead(m_pObjStrm);
@@ -162,9 +162,9 @@ sal_Bool LwpFormulaInfo::ReadCellID()
 *   @param
 *   @return sal_Bool.
 */
-sal_Bool LwpFormulaInfo::ReadCellRange()
+bool LwpFormulaInfo::ReadCellRange()
 {
-    sal_Bool readSucceeded = sal_True;
+    bool readSucceeded = true;
     if (!ReadCellID( )) // start
         readSucceeded = false;
     LwpFormulaCellAddr* pStartCellAddr = (LwpFormulaCellAddr*)m_aStack.back();
@@ -192,10 +192,10 @@ sal_Bool LwpFormulaInfo::ReadCellRange()
 *   @param
 *   @return sal_Bool.
 */
-sal_Bool LwpFormulaInfo::ReadExpression()
+bool LwpFormulaInfo::ReadExpression()
 {
     sal_uInt16 TokenType, DiskLength;
-    sal_Bool readSucceeded = sal_True;
+    bool readSucceeded = true;
 
     /* Read the compiled expression length */
 //  Len = m_pObjStrm->QuickReaduInt16();
@@ -216,7 +216,7 @@ sal_Bool LwpFormulaInfo::ReadExpression()
 
             case TK_CELLID:
                 if (!ReadCellID())
-                    readSucceeded = sal_False;
+                    readSucceeded = false;
                 break;
 
             case TK_CELLRANGE:
@@ -232,7 +232,7 @@ sal_Bool LwpFormulaInfo::ReadExpression()
                 {
                     LwpFormulaFunc* pFunc = new LwpFormulaFunc(TokenType);
                     if (!ReadArguments(*pFunc))
-                        readSucceeded = sal_False;
+                        readSucceeded = false;
                     m_aStack.push_back(pFunc);
                 }
                 break;
@@ -269,7 +269,7 @@ sal_Bool LwpFormulaInfo::ReadExpression()
             default:
                 // We don't know what to do with this token, so eat it.
                 m_pObjStrm->SeekRel(DiskLength);
-                readSucceeded = sal_False;
+                readSucceeded = false;
                 break;
         }
         MarkUnsupported(TokenType);
@@ -292,7 +292,7 @@ void LwpFormulaInfo::MarkUnsupported(sal_uInt16 TokenType)
     case TK_COUNT:
     case TK_NOT:
         {
-            m_bSupported = sal_False;//Not supported formulas
+            m_bSupported = false;//Not supported formulas
         }
         break;
     default:
@@ -305,19 +305,19 @@ void LwpFormulaInfo::MarkUnsupported(sal_uInt16 TokenType)
 *   @param  LwpFormulaFunc& aFunc, functions object
 *   @return sal_Bool.
 */
-sal_Bool LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
+bool LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
 {
     sal_uInt16 NumberOfArguments = m_pObjStrm->QuickReaduInt16();
     sal_uInt16 ArgumentDiskLength, Count;
     sal_uInt8 ArgumentType;
-    sal_Bool bArgument = sal_False;
-    sal_Bool readSucceeded = sal_True;
+    bool bArgument = false;
+    bool readSucceeded = true;
 
     for (Count = 0; Count < NumberOfArguments; Count++)
     {
         ArgumentType = (sal_uInt8) m_pObjStrm->QuickReaduInt16(); // written as lushort
         ArgumentDiskLength = m_pObjStrm->QuickReaduInt16();
-        bArgument = sal_True;
+        bArgument = true;
 
         switch(ArgumentType)
         {
@@ -342,9 +342,9 @@ sal_Bool LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
                 break;
 
             default:
-                bArgument = sal_False;
+                bArgument = false;
                 m_pObjStrm->SeekRel(ArgumentDiskLength);
-                readSucceeded = sal_False;
+                readSucceeded = false;
                 break;
         }
 

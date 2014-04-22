@@ -85,10 +85,10 @@ public:
     inline sal_Int32 GetAboveWidth() const;
     inline sal_Int32 GetBelowWidth() const;
 
-    inline sal_Bool IsBorderStuffOverridden();
-    inline sal_Bool IsMarginsOverridden();
-    inline sal_Bool IsAboveWidthOverridden();
-    inline sal_Bool IsBelowWidthOverridden();
+    inline bool IsBorderStuffOverridden();
+    inline bool IsMarginsOverridden();
+    inline bool IsAboveWidthOverridden();
+    inline bool IsBelowWidthOverridden();
 
     inline void OverrideBorderStuff(LwpBorderStuff* pOther);
     inline void OverrideMargins(LwpMargins* pOther);
@@ -141,24 +141,24 @@ inline sal_Int32 LwpCharacterBorderOverride::GetBelowWidth() const
     return m_nBelowWidth;
 }
 
-inline sal_Bool LwpCharacterBorderOverride::IsBorderStuffOverridden()
+inline bool LwpCharacterBorderOverride::IsBorderStuffOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_STUFF) != 0);
+    return ((m_nOverride & PBO_STUFF) != 0);
 }
 
-inline sal_Bool LwpCharacterBorderOverride::IsMarginsOverridden()
+inline bool LwpCharacterBorderOverride::IsMarginsOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_MARGINS) != 0);
+    return ((m_nOverride & PBO_MARGINS) != 0);
 }
 
-inline sal_Bool LwpCharacterBorderOverride::IsAboveWidthOverridden()
+inline bool LwpCharacterBorderOverride::IsAboveWidthOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_ABOVE) != 0);
+    return ((m_nOverride & PBO_ABOVE) != 0);
 }
 
-inline sal_Bool LwpCharacterBorderOverride::IsBelowWidthOverridden()
+inline bool LwpCharacterBorderOverride::IsBelowWidthOverridden()
 {
-    return (sal_Bool)((m_nOverride & PBO_BELOW) != 0);
+    return ((m_nOverride & PBO_BELOW) != 0);
 }
 
 inline void LwpCharacterBorderOverride::OverrideBorderStuff(LwpBorderStuff* pOther)

@@ -115,7 +115,7 @@ LwpParaProperty* LwpParaProperty::ReadPropertyList(LwpObjectStream* pFile,LwpObj
 
             case TAG_PARA_BULLET:
                 NewProp = new LwpParaBulletProperty(pFile);
-                static_cast<LwpPara*>(Whole)->SetBulletFlag(sal_True);
+                static_cast<LwpPara*>(Whole)->SetBulletFlag(true);
                 break;
 
             case TAG_PARA_NUMBERING:

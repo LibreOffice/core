@@ -61,8 +61,8 @@
 
 XFSection::XFSection()
 {
-    m_bProtected = sal_False;
-    m_bHiden = sal_False;
+    m_bProtected = false;
+    m_bHiden = false;
     m_strSectionName = XFGlobal::GenSectionName();
 }
 

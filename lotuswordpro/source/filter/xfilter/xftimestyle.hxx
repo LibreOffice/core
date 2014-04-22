@@ -71,20 +71,20 @@ public:
     XFDateTimePart()
     {
         m_ePart = enumXFDateUnknown;
-        m_bLongFmt = sal_False;
+        m_bLongFmt = false;
     }
 
     virtual ~XFDateTimePart(){}
 public:
     void    SetPartType(enumXFDatePart ePart);
 
-    void    SetLongFmt(sal_Bool bLongFmt);
+    void    SetLongFmt(bool bLongFmt);
 
     void    SetText(const OUString& text);
 
 protected:
     enumXFDatePart  m_ePart;
-    sal_Bool        m_bLongFmt;
+    bool        m_bLongFmt;
     OUString   m_strText;
 };
 
@@ -112,13 +112,13 @@ public:
 
 public:
 
-    void    AddHour( sal_Bool bLongFmt = sal_True );
+    void    AddHour( bool bLongFmt = true );
 
-    void    AddMinute( sal_Bool bLongFmt = sal_True );
+    void    AddMinute( bool bLongFmt = true );
 
-    void    AddSecond( sal_Bool bLongFmt = sal_True, sal_Int16 nDecimalPos = 2);
+    void    AddSecond( bool bLongFmt = true, sal_Int16 nDecimalPos = 2);
 
-    void    SetAmPm(sal_Bool bAmPm);
+    void    SetAmPm(bool bAmPm);
 
     void    AddText( const OUString& part );
 
@@ -126,13 +126,13 @@ public:
 
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
-    void    SetTruncate(sal_Bool bTrunc);
+    void    SetTruncate(bool bTrunc);
 
 private:
-    sal_Bool    m_bFixed;
-    sal_Bool    m_bAmPm;
+    bool    m_bFixed;
+    bool    m_bAmPm;
     std::vector<XFTimePart> m_aParts;
-    sal_Bool    m_bTruncate;
+    bool    m_bTruncate;
 };
 
 inline void XFDateTimePart::SetPartType(enumXFDatePart ePart)
@@ -140,7 +140,7 @@ inline void XFDateTimePart::SetPartType(enumXFDatePart ePart)
     m_ePart = ePart;
 }
 
-inline void XFDateTimePart::SetLongFmt(sal_Bool bLongFmt)
+inline void XFDateTimePart::SetLongFmt(bool bLongFmt)
 {
     m_bLongFmt = bLongFmt;
 }
@@ -155,7 +155,7 @@ inline void XFTimePart::SetDecimalPos(sal_Int32 pos)
     m_nDecimalPos = pos;
 }
 
-inline void XFTimeStyle::AddHour( sal_Bool bLongFmt )
+inline void XFTimeStyle::AddHour( bool bLongFmt )
 {
     XFTimePart  part;
     part.SetPartType(enumXFDateHour);
@@ -163,7 +163,7 @@ inline void XFTimeStyle::AddHour( sal_Bool bLongFmt )
     m_aParts.push_back(part);
 }
 
-inline void XFTimeStyle::AddMinute( sal_Bool bLongFmt )
+inline void XFTimeStyle::AddMinute( bool bLongFmt )
 {
     XFTimePart  part;
     part.SetPartType(enumXFDateMinute);
@@ -171,7 +171,7 @@ inline void XFTimeStyle::AddMinute( sal_Bool bLongFmt )
     m_aParts.push_back(part);
 }
 
-inline void XFTimeStyle::AddSecond( sal_Bool bLongFmt, sal_Int16 pos)
+inline void XFTimeStyle::AddSecond( bool bLongFmt, sal_Int16 pos)
 {
     XFTimePart  part;
     part.SetPartType(enumXFDateSecond);
@@ -180,7 +180,7 @@ inline void XFTimeStyle::AddSecond( sal_Bool bLongFmt, sal_Int16 pos)
     m_aParts.push_back(part);
 }
 
-inline void XFTimeStyle::SetAmPm(sal_Bool bAmPm)
+inline void XFTimeStyle::SetAmPm(bool bAmPm)
 {
     m_bAmPm = bAmPm;
 }
@@ -193,7 +193,7 @@ inline void XFTimeStyle::AddText( const OUString& text )
     m_aParts.push_back(part);
 }
 
-inline  void    XFTimeStyle::SetTruncate(sal_Bool bTrunc)
+inline  void    XFTimeStyle::SetTruncate(bool bTrunc)
 {
     m_bTruncate = bTrunc;
 }

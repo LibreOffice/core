@@ -91,7 +91,7 @@ public:
 private:
     OUString m_strImageFile;
     OUString m_strData;
-    sal_Bool    m_bUseLink;
+    bool    m_bUseLink;
 };
 
 #endif

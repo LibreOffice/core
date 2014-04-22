@@ -100,7 +100,7 @@ void    XFParagraph::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "text:p" );
 }
 
-sal_Bool XFParagraph::HasContents()
+bool XFParagraph::HasContents()
 {
     return GetCount()>0;
 }

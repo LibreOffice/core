@@ -66,7 +66,7 @@
 class XFFooterStyle : public XFHeaderStyle
 {
 public:
-    XFFooterStyle() : XFHeaderStyle(sal_True)
+    XFFooterStyle() : XFHeaderStyle(true)
     {
     }
 

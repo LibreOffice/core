@@ -119,7 +119,7 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
         sal_uInt8 readbyte;
         sal_uInt16 readword;
 
-        sal_Bool flag = sal_False;  //switch if unicode part reached
+        bool flag = false;  //switch if unicode part reached
         sal_uInt16 sublen = 0;
 
         while(readLen<strlen)
@@ -133,7 +133,7 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
 
                 if(readbyte == 0x00)
                 {
-                    flag = sal_True;
+                    flag = true;
                     if(sublen>0)    //add it to the strBuf
                     {
                         strBuf.append( OUString(buf, sublen, aEncoding) ); //try the aEncoding
@@ -159,7 +159,7 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
 
                 if(readword == 0x0000)
                 {
-                    flag = sal_False;
+                    flag = false;
                     if(sublen)
                     {
                         unibuf[sublen] = '\0';
@@ -187,7 +187,7 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
 /**
  * @descr       Judge if the data (len) in object stream is lwp unicode packed
 */
-sal_Bool LwpTools::IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len)
+bool LwpTools::IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len)
 {
     sal_uInt8 byte;
     sal_uInt16 oldpos = pObjStrm->GetPos();
@@ -198,18 +198,18 @@ sal_Bool LwpTools::IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len)
         if (byte == 0x00)
         {
             pObjStrm->Seek(oldpos);
-            return sal_True;
+            return true;
         }
     }
     pObjStrm->Seek(oldpos);
-    return sal_False;
+    return false;
 }
 
-sal_Bool LwpTools::isFileUrl(const OString &fileName)
+bool LwpTools::isFileUrl(const OString &fileName)
 {
     if (fileName.startsWith("file://") )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 OUString LwpTools::convertToFileUrl(const OString &fileName)
@@ -245,7 +245,7 @@ OUString LwpTools::DateTimeToOUString(LtTm & dt)
 /**
  * @descr   get the system date format
 */
-XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
+XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
 {
     icu::DateFormat::EStyle style;
     if (bLongFormat)
@@ -314,7 +314,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
                     }
                 }
                 if (j <= 2)
-                    pDateStyle->AddYear(sal_False);
+                    pDateStyle->AddYear(false);
                 else
                     pDateStyle->AddYear();
                 break;
@@ -331,13 +331,13 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
                     }
                 }
                 if (j==1)
-                    pDateStyle->AddMonth(sal_False,sal_False);
+                    pDateStyle->AddMonth(false,false);
                 else if (j==2)
-                    pDateStyle->AddMonth(sal_True,sal_False);
+                    pDateStyle->AddMonth(true,false);
                 else if (j==3)
-                    pDateStyle->AddMonth(sal_False,sal_True);
+                    pDateStyle->AddMonth(false,true);
                 else
-                    pDateStyle->AddMonth(sal_True,sal_True);
+                    pDateStyle->AddMonth(true,true);
                 break;
             }
             case 'd':
@@ -352,7 +352,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
                     }
                 }
                 if (j==1)
-                    pDateStyle->AddMonthDay(sal_False);
+                    pDateStyle->AddMonthDay(false);
                 else
                     pDateStyle->AddMonthDay();
                 break;
@@ -369,7 +369,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
                     }
                 }
                 if (j==1)
-                    pDateStyle->AddHour(sal_False);
+                    pDateStyle->AddHour(false);
                 else
                     pDateStyle->AddHour();
                 break;
@@ -386,7 +386,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
                     }
                 }
                 if (j==1)
-                    pDateStyle->AddHour(sal_False);
+                    pDateStyle->AddHour(false);
                 else
                     pDateStyle->AddHour();
                 break;
@@ -403,7 +403,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
                     }
                 }
                 if (j==1)
-                    pDateStyle->AddMinute(sal_False);
+                    pDateStyle->AddMinute(false);
                 else
                     pDateStyle->AddMinute();
                 break;
@@ -420,9 +420,9 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
                     }
                 }
                 if (j==1)
-                    pDateStyle->AddSecond(sal_False,0);
+                    pDateStyle->AddSecond(false,0);
                 else
-                    pDateStyle->AddSecond(sal_True,0);
+                    pDateStyle->AddSecond(true,0);
                 break;
             }
             case 'S':
@@ -454,7 +454,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
                     }
                 }
                 if (j<=2)
-                    pDateStyle->AddWeekDay(sal_False);
+                    pDateStyle->AddWeekDay(false);
                 else
                     pDateStyle->AddWeekDay();
                 break;
@@ -538,7 +538,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
                         break;
                     }
                 }
-                pDateStyle->AddAmPm(sal_True);
+                pDateStyle->AddAmPm(true);
                 break;
             }
             case 'k':
@@ -566,7 +566,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
                     }
                 }
                 if (j==1)
-                    pDateStyle->AddHour(sal_False);
+                    pDateStyle->AddHour(false);
                 else
                     pDateStyle->AddHour();
                 break;
@@ -687,7 +687,7 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
                     }
                 }
                 if (j==1)
-                    pTimeStyle->AddHour(sal_False);
+                    pTimeStyle->AddHour(false);
                 else
                     pTimeStyle->AddHour();
                 break;
@@ -704,7 +704,7 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
                     }
                 }
                 if (j==1)
-                    pTimeStyle->AddHour(sal_False);
+                    pTimeStyle->AddHour(false);
                 else
                     pTimeStyle->AddHour();
                 break;
@@ -721,7 +721,7 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
                     }
                 }
                 if (j==1)
-                    pTimeStyle->AddMinute(sal_False);
+                    pTimeStyle->AddMinute(false);
                 else
                     pTimeStyle->AddMinute();
                 break;
@@ -738,9 +738,9 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
                     }
                 }
                 if (j==1)
-                    pTimeStyle->AddSecond(sal_False,0);
+                    pTimeStyle->AddSecond(false,0);
                 else
-                    pTimeStyle->AddSecond(sal_True,0);
+                    pTimeStyle->AddSecond(true,0);
                 break;
             }
             case 'S':
@@ -771,7 +771,7 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
                         break;
                     }
                 }
-                pTimeStyle->SetAmPm(sal_True);
+                pTimeStyle->SetAmPm(true);
                 break;
             }
             case 'k':
@@ -799,7 +799,7 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
                     }
                 }
                 if (j==1)
-                    pTimeStyle->AddHour(sal_False);
+                    pTimeStyle->AddHour(false);
                 else
                     pTimeStyle->AddHour();
                 break;

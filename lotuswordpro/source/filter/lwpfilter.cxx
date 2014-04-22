@@ -136,7 +136,7 @@ void LWPFilterReader::cancel() throw (com::sun::star::uno::RuntimeException, std
 #include "bento.hxx"
 using namespace OpenStormBento;
 #include "explode.hxx"
- sal_Bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
+ bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
 {
     pCompressed->Seek(0);
     std::auto_ptr<SvStream> aDecompressed(new SvMemoryStream(4096, 4096));
@@ -148,17 +148,17 @@ using namespace OpenStormBento;
     LtcBenContainer* pBentoContainer;
     sal_uLong ulRet = BenOpenContainer(aLwpStream.get(), &pBentoContainer);
     if (ulRet != BenErr_OK)
-        return sal_False;
+        return false;
 
     boost::scoped_ptr<LtcUtBenValueStream> aWordProData((LtcUtBenValueStream *)pBentoContainer->FindValueStreamWithPropertyName("WordProData"));
 
     if (!aWordProData.get())
-        return sal_False;
+        return false;
 
     // decompressing
     Decompression decompress(aWordProData.get(), aDecompressed.get());
     if (0!= decompress.explode())
-        return sal_False;
+        return false;
 
     sal_uInt32 nPos = aWordProData->GetSize();
     nPos += 0x10;
@@ -169,7 +169,7 @@ using namespace OpenStormBento;
 
     //transfer ownership of aDecompressed's ptr
     pOutDecompressed = aDecompressed.release();
-    return sal_True;
+    return true;
 }
 
  /**
@@ -179,7 +179,7 @@ using namespace OpenStormBento;
  * @param    LwpSvStream * , created inside, deleted outside
  * @param      sal_Bool, sal_True -
  */
- sal_Bool GetLwpSvStream(SvStream *pStream, LwpSvStream * & pLwpSvStream)
+ bool GetLwpSvStream(SvStream *pStream, LwpSvStream * & pLwpSvStream)
 {
     SvStream * pDecompressed = NULL;
 
@@ -192,19 +192,19 @@ using namespace OpenStormBento;
         if (!Decompress(pStream, pDecompressed))
         {
             pLwpSvStream = NULL;
-            return sal_True;
+            return true;
         }
         pStream->Seek(0);
         pDecompressed->Seek(0);
     }
 
     pLwpSvStream = NULL;
-    sal_Bool bCompressed = sal_False;
+    bool bCompressed = false;
     if (pDecompressed)
     {
         LwpSvStream *pOriginalLwpSvStream = new LwpSvStream(pStream);
         pLwpSvStream  = new LwpSvStream(pDecompressed, pOriginalLwpSvStream);
-        bCompressed = sal_True;
+        bCompressed = true;
     }
     else
     {

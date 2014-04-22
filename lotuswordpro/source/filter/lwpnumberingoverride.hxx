@@ -84,12 +84,12 @@ public:
     inline sal_uInt16 GetLevel() const;
     inline sal_uInt16 GetPosition() const;
 
-    inline sal_Bool IsLevelOverridden();
-    inline sal_Bool IsPositionOverridden();
-    inline sal_Bool IsHeadingOverridden();
-    inline sal_Bool IsSmartLevelOverridden();
-    inline sal_Bool IsHeading();
-    inline sal_Bool IsSmartLevel();
+    inline bool IsLevelOverridden();
+    inline bool IsPositionOverridden();
+    inline bool IsHeadingOverridden();
+    inline bool IsSmartLevelOverridden();
+    inline bool IsHeading();
+    inline bool IsSmartLevel();
 
     void OverrideLevel(sal_uInt16 nNewLv);
 
@@ -120,27 +120,27 @@ inline sal_uInt16 LwpNumberingOverride::GetPosition() const
     return m_nPosition;
 }
 
-inline sal_Bool LwpNumberingOverride::IsLevelOverridden()
+inline bool LwpNumberingOverride::IsLevelOverridden()
 {
-    return (sal_Bool)((m_nOverride & NO_LEVEL) != 0);
+    return ((m_nOverride & NO_LEVEL) != 0);
 }
-inline sal_Bool LwpNumberingOverride::IsPositionOverridden()
+inline bool LwpNumberingOverride::IsPositionOverridden()
 {
-    return (sal_Bool)((m_nOverride & NO_POSITION) != 0);
+    return ((m_nOverride & NO_POSITION) != 0);
 }
-inline sal_Bool LwpNumberingOverride::IsHeadingOverridden()
+inline bool LwpNumberingOverride::IsHeadingOverridden()
 {
-    return (sal_Bool)((m_nOverride & HEADING) != 0);
+    return ((m_nOverride & HEADING) != 0);
 }
-inline sal_Bool LwpNumberingOverride::IsSmartLevelOverridden()
+inline bool LwpNumberingOverride::IsSmartLevelOverridden()
 {
-    return (sal_Bool)((m_nOverride & SMARTLEVEL) != 0);
+    return ((m_nOverride & SMARTLEVEL) != 0);
 }
-inline sal_Bool LwpNumberingOverride::IsHeading()
+inline bool LwpNumberingOverride::IsHeading()
 {
     return (m_nValues & HEADING) != 0;
 }
-inline sal_Bool LwpNumberingOverride::IsSmartLevel()
+inline bool LwpNumberingOverride::IsSmartLevel()
 {
     return (m_nValues & SMARTLEVEL) != 0;
 }

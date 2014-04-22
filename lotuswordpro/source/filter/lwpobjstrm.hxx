@@ -75,7 +75,7 @@
 class LwpObjectStream
 {
 public:
-    LwpObjectStream(LwpSvStream *pStrm, sal_Bool isCompressed, sal_uInt16 size);
+    LwpObjectStream(LwpSvStream *pStrm, bool isCompressed, sal_uInt16 size);
     ~LwpObjectStream();
 private:
     sal_uInt8* m_pContentBuf;           //The content buffer of the object
@@ -87,16 +87,16 @@ private:
     sal_uInt16 m_nBufSize;              //The total size of m_pContentBuf
     sal_uInt16 m_nReadPos;          //The position of the quick read
     LwpSvStream* m_pStrm;
-    sal_Bool m_bCompressed;
+    bool m_bCompressed;
 public:
     sal_uInt16 QuickRead(void* buf, sal_uInt16 len);
     sal_uInt16 GetPos() { return m_nReadPos; }
     void SeekRel(sal_uInt16 pos);
-    sal_Bool Seek( sal_uInt16 pos);
+    bool Seek( sal_uInt16 pos);
     void SkipExtra();
     sal_uInt16 CheckExtra();
 
-    sal_Bool QuickReadBool(bool *pFailure=NULL);
+    bool QuickReadBool(bool *pFailure=NULL);
     sal_uInt32 QuickReaduInt32(bool *pFailure=NULL);
     sal_uInt16 QuickReaduInt16(bool *pFailure=NULL);
     sal_uInt8 QuickReaduInt8(bool *pFailure=NULL);

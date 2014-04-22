@@ -118,7 +118,7 @@ using boost::polymorphic_downcast;
 /**
  * @short   get text of paragraph
  */
-OUString LwpPara::GetContentText(sal_Bool bAllText)
+OUString LwpPara::GetContentText(bool bAllText)
 {
 //  rFont = m_FontID;
     if (bAllText)
@@ -472,7 +472,7 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
         }
         else
         {
-            m_bHasBullet = sal_True;
+            m_bHasBullet = true;
 
             LwpOverride* pBullet= pParaStyle->GetBulletOverride();
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -508,7 +508,7 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
             m_aSilverBulletID = pBullOver->GetSilverBullet();
             if (!m_aSilverBulletID.IsNull())
             {
-                m_bHasBullet = sal_True;
+                m_bHasBullet = true;
 
                 m_pSilverBullet = dynamic_cast<LwpSilverBullet*>(m_aSilverBulletID.obj(VO_SILVERBULLET));
                 if (m_pSilverBullet)
@@ -617,7 +617,7 @@ LwpTabOverride* LwpPara::GetLocalTabOverride()
 * @descr:   Determined which para is earlier in position
 *
 */
-sal_Bool LwpPara::operator< (LwpPara& Other)
+bool LwpPara::operator< (LwpPara& Other)
 {
     return m_nOrdinal < Other.GetOrdinal();
 }
@@ -626,7 +626,7 @@ sal_Bool LwpPara::operator< (LwpPara& Other)
 * @descr:  If the two layouts in the same para, compare which layout is earlied according to frib order
 *
 */
-sal_Bool LwpPara::ComparePagePosition(LwpVirtualLayout * pPreLayout, LwpVirtualLayout * pNextLayout)
+bool LwpPara::ComparePagePosition(LwpVirtualLayout * pPreLayout, LwpVirtualLayout * pNextLayout)
 {
     m_Fribs.SetPara(this);
     return m_Fribs.ComparePagePosition(pPreLayout, pNextLayout);
@@ -635,13 +635,13 @@ sal_Bool LwpPara::ComparePagePosition(LwpVirtualLayout * pPreLayout, LwpVirtualL
 /**
  * @short   check paragraph in cell or not
  */
-sal_Bool LwpPara::IsInCell()
+bool LwpPara::IsInCell()
 {
     LwpStory *pStory = GetStory();
     LwpVirtualLayout* pLayout = pStory ? pStory->GetLayout(NULL) : NULL;
     if(pLayout && pLayout->IsCell())
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

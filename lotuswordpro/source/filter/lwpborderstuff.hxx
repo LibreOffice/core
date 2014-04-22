@@ -82,7 +82,7 @@ public:
     void    Read(LwpObjectStream *pStrm);
 
     sal_uInt16  GetSide(){ return m_nSides; }
-    sal_Bool    HasSide(sal_uInt16 side);
+    bool    HasSide(sal_uInt16 side);
     sal_uInt16  GetSideType(sal_uInt16 side);
     LwpColor    GetSideColor(sal_uInt16 side);
     float       GetSideWidth(sal_uInt16 side);

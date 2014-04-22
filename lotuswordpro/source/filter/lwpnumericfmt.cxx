@@ -85,7 +85,7 @@ OUString LwpCurrencyPool::GetCurrencySymbol(sal_uInt16 nFormat)
 *   @param
 *   @return sal_Bool.
 */
-sal_Bool LwpCurrencyPool::IsSymbolPost(sal_uInt16 nFormat)
+bool LwpCurrencyPool::IsSymbolPost(sal_uInt16 nFormat)
 {
     return m_aCurrencyInfo[nFormat].bPost;
 }
@@ -97,7 +97,7 @@ sal_Bool LwpCurrencyPool::IsSymbolPost(sal_uInt16 nFormat)
 *   @param
 *   @return sal_Bool.
 */
-sal_Bool LwpCurrencyPool::IsShowSpace(sal_uInt16 nFormat)
+bool LwpCurrencyPool::IsShowSpace(sal_uInt16 nFormat)
 {
     return m_aCurrencyInfo[nFormat].bShowSpace;
 }
@@ -212,8 +212,7 @@ void LwpNumericFormat::Read()
 *   @param
 *   @return sal_Bool.
 */
-sal_Bool
-LwpNumericFormat::IsCurrencyFormat(sal_uInt16 Format)
+bool LwpNumericFormat::IsCurrencyFormat(sal_uInt16 Format)
 {
     switch (Format)
     {
@@ -262,10 +261,10 @@ LwpNumericFormat::IsCurrencyFormat(sal_uInt16 Format)
     case FMT_JAPANESEYEN:
     case FMT_SPANISHPESETA:
     case FMT_EURO:
-        return sal_True;
+        return true;
 
     default:
-        return sal_False;
+        return false;
     }
 }
 /**
@@ -289,15 +288,15 @@ LwpNumericFormat::GetDecimalPlaces(void)
 *   @param
 *   @return
 */
-void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& aPrefix, OUString& aSuffix, sal_Bool bNegtive)
+void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& aPrefix, OUString& aSuffix, bool bNegtive)
 {
     aPrefix = aNumber.GetPrefix();
     aSuffix = aNumber.GetSuffix();
 
     //Make the default prefix and suffix
     OUString aSymbol = m_aCurrencyInfo.GetCurrencySymbol(cFormat);
-    sal_Bool bPost = m_aCurrencyInfo.IsSymbolPost(cFormat);
-    sal_Bool bShowSpace = m_aCurrencyInfo.IsShowSpace(cFormat);
+    bool bPost = m_aCurrencyInfo.IsSymbolPost(cFormat);
+    bool bShowSpace = m_aCurrencyInfo.IsShowSpace(cFormat);
     if ( aNumber.IsDefaultPrefix())
     {
         if (bNegtive)
@@ -390,7 +389,7 @@ XFStyle* LwpNumericFormat::Convert()
         pStyle->SetNumberType(enuMXFNumberCurrency);
         pStyle->SetGroup();
         GetCurrencyStr(cAnyNumber, aPrefix, aSuffix);
-        GetCurrencyStr(cNegative, aNegPrefix, aNegSuffix,sal_True);
+        GetCurrencyStr(cNegative, aNegPrefix, aNegSuffix,true);
     }
     else
     {
@@ -465,7 +464,7 @@ OUString    LwpNumericFormat::reencode(const OUString& sCode)
 {
     const sal_Unicode * pString = sCode.getStr();
     sal_uInt16 nLen = sCode.getLength();
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     sal_uInt16 i;
     sal_Unicode *pBuff = new sal_Unicode[sCode.getLength()];
 
@@ -473,7 +472,7 @@ OUString    LwpNumericFormat::reencode(const OUString& sCode)
     {
         if ( (pString[i] == 0x00a1) && (pString[i+1] == 0x00ea))
         {
-            bFound = sal_True;
+            bFound = true;
             break;
         }
         pBuff[i] = pString[i];

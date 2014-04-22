@@ -71,12 +71,12 @@ class XFColor
 public:
     XFColor():m_nRed((sal_Int8)0),m_nGreen((sal_Int8)0),m_nBlue((sal_Int8)0)
     {
-        m_bValid = sal_False;
+        m_bValid = false;
     }
     XFColor(sal_Int32 red, sal_Int32 green, sal_Int32 blue)
         :m_nRed((sal_Int8)red),m_nGreen((sal_Int8)green),m_nBlue((sal_Int8)blue)
     {
-        m_bValid = sal_True;
+        m_bValid = true;
     }
     XFColor(sal_uInt32 color)
     {
@@ -90,7 +90,7 @@ public:
         temp = c;
         m_nBlue = static_cast<sal_uInt8>((temp&0x00ff0000)>>16);
 
-        m_bValid = sal_True;
+        m_bValid = true;
     }
 
     /**
@@ -111,7 +111,7 @@ public:
     /**
      * @descr   helper function to assert whether a color is valid.
      */
-    sal_Bool    IsValid() const{ return m_bValid;}
+    bool    IsValid() const{ return m_bValid;}
 
     OUString   ToString ()const;
 
@@ -121,7 +121,7 @@ private:
     sal_uInt8   m_nRed;
     sal_uInt8   m_nGreen;
     sal_uInt8   m_nBlue;
-    sal_Bool    m_bValid;
+    bool    m_bValid;
 };
 
 #endif

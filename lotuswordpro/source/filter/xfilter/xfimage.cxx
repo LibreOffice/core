@@ -60,7 +60,7 @@
 #include "xfimage.hxx"
 #include "xfbase64.hxx"
 
-XFImage::XFImage() : m_bUseLink(sal_False)
+XFImage::XFImage() : m_bUseLink(false)
 {
     m_eType = enumXFFrameImage;
     m_strName = XFGlobal::GenImageName();
@@ -69,13 +69,13 @@ XFImage::XFImage() : m_bUseLink(sal_False)
 void XFImage::SetFileURL(const OUString& url)
 {
     m_strImageFile = url;
-    m_bUseLink  = sal_True;
+    m_bUseLink  = true;
 }
 
 void XFImage::SetImageData(sal_uInt8 *buf, int len)
 {
     m_strData = XFBase64::Encode(buf, len);
-    m_bUseLink = sal_False;
+    m_bUseLink = false;
 }
 
 /*

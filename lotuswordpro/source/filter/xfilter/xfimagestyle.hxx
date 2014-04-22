@@ -85,7 +85,7 @@ public:
 
     void    SetClip(double left, double right, double top, double bottom);
 
-    void    SetFlip(sal_Bool hori, sal_Bool vert);
+    void    SetFlip(bool hori, bool vert);
 
     void    SetColorMode(enumXFColorMode mode);
 
@@ -103,8 +103,8 @@ private:
     double      m_fClipRight;
     double      m_fClipTop;
     double      m_fClipBottom;
-    sal_Bool    m_bHoriFlip;
-    sal_Bool    m_bVertFlip;
+    bool    m_bHoriFlip;
+    bool    m_bVertFlip;
     enumXFColorMode m_eColorMode;
 };
 
@@ -151,7 +151,7 @@ inline void XFImageStyle::SetClip(double left, double right, double top, double 
     m_fClipBottom = bottom;
 }
 
-inline void XFImageStyle::SetFlip(sal_Bool hori, sal_Bool vert)
+inline void XFImageStyle::SetFlip(bool hori, bool vert)
 {
     m_bHoriFlip = hori;
     m_bVertFlip = vert;

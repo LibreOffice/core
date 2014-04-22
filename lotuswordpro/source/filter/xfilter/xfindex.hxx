@@ -158,12 +158,12 @@ public:
     /**
      * @descr   Set if protected index to prevent handly-revise.
      */
-    void    SetProtected(sal_Bool protect);
+    void    SetProtected(bool protect);
 
     /**
      * @descr   Set separator.
      */
-    void    SetSeparator(sal_Bool sep);
+    void    SetSeparator(bool sep);
 
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 

@@ -144,8 +144,8 @@ private:
     void ProcessPlaceHolder(XFContentContainer* pXFPara,sal_uInt16 nAction,sal_uInt8 nType);
     void ProcessOtherCHB(XFContentContainer* pXFPara,sal_uInt8 nType);
     void ProcessKeylist(XFContentContainer* pXFPara,sal_uInt8 nType);
-    sal_Bool IsHasFilled();
-    sal_Bool IsBubbleHelp();
+    bool IsHasFilled();
+    bool IsBubbleHelp();
     OUString GetPromptText();
     void EnumAllKeywords();
 private:
@@ -181,7 +181,7 @@ public:
 protected:
     void Read() SAL_OVERRIDE;
 public:
-    sal_Bool IsRightMarker(LwpObjectID objMarker);
+    bool IsRightMarker(LwpObjectID objMarker);
     OUString GetName();
 private:
     enum {  BKMK_NOTESFX = 0x0001,
@@ -200,19 +200,19 @@ public:
     void ParseIndex(OUString& sKey1,OUString& sKey2);
     void ParseTOC(OUString& sLevel,OUString& sText);
     sal_uInt16 GetFieldType(){return m_nFieldType;}
-    sal_Bool IsFormulaInsert();
-    sal_Bool IsDateTimeField(sal_uInt8& type,OUString& formula);
-    sal_Bool IsCrossRefField(sal_uInt8& nType, OUString& sMarkName);
-    sal_Bool IsDocPowerField(sal_uInt8& nType,OUString& sFormula);
+    bool IsFormulaInsert();
+    bool IsDateTimeField(sal_uInt8& type,OUString& formula);
+    bool IsCrossRefField(sal_uInt8& nType, OUString& sMarkName);
+    bool IsDocPowerField(sal_uInt8& nType,OUString& sFormula);
     OUString GetFormula(){return m_Formula.str();}
-    void SetStyleFlag(sal_Bool bFalg){m_bHasStyle = bFalg;}
-    sal_Bool GetStyleFlag(){return m_bHasStyle;}
-    sal_Bool GetStart(){return m_bHasStart;}
-    void SetStart(sal_Bool bFlag){m_bHasStart = bFlag;}
+    void SetStyleFlag(bool bFalg){m_bHasStyle = bFalg;}
+    bool GetStyleFlag(){return m_bHasStyle;}
+    bool GetStart(){return m_bHasStart;}
+    void SetStart(bool bFlag){m_bHasStart = bFlag;}
     LwpFrib* GetStartFrib(){return m_pFrib;}
     void SetStartFrib(LwpFrib* pFrib){m_pFrib = pFrib;}
-    sal_Bool GetRevisionFlag(){return m_bRevisionFlag;}
-    void SetRevisionFlag(sal_Bool bFlag){m_bRevisionFlag = bFlag;}
+    bool GetRevisionFlag(){return m_bRevisionFlag;}
+    void SetRevisionFlag(bool bFlag){m_bRevisionFlag = bFlag;}
 
     enum{
         FLD_FIELD = 0x0003,
@@ -248,11 +248,11 @@ private:
     sal_uInt16 m_nFieldType;
     LwpAtomHolder m_Formula;
 
-    sal_Bool m_bHasStyle;
-    sal_Bool m_bHasStart;
+    bool m_bHasStyle;
+    bool m_bHasStart;
 
     LwpFrib* m_pFrib;
-    sal_Bool m_bRevisionFlag;
+    bool m_bRevisionFlag;
 };
 
 class LwpRubyMarker : public LwpStoryMarker

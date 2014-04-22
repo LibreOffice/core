@@ -157,9 +157,9 @@ void LwpChangeMgr::ConvertAllChange(IXFStream* pStream)
     }
     m_ChangeList.clear();
 }
-void LwpChangeMgr::SetHeadFootFribMap(sal_Bool bFlag)
+void LwpChangeMgr::SetHeadFootFribMap(bool bFlag)
 {
-    if (bFlag == sal_True)
+    if (bFlag)
         m_pFribMap = &m_HeadFootFribMap;
     else
     {

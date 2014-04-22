@@ -80,12 +80,12 @@ public:
     /**
      * @descr   Set whether it's an ordered list or an unordered list.
      */
-    void    SetOrdered(sal_Bool ordered);
+    void    SetOrdered(bool ordered);
 
     /**
      * @descr   Set whether to continue to number list.
      */
-    void    SetContinueNumber(sal_Bool bContinueNumber=sal_False);
+    void    SetContinueNumber(bool bContinueNumber=false);
 
     /**
      * @descr   Output list object.
@@ -97,8 +97,8 @@ public:
     virtual void    EndList(IXFStream *pStrm);
 
 private:
-    sal_Bool    m_bOrdered;
-    sal_Bool    m_bContinueNumber;
+    bool    m_bOrdered;
+    bool    m_bContinueNumber;
     XFListItem  *m_pHeader;
 
 };
@@ -108,7 +108,7 @@ class XFUnorderedList : public XFList
 public:
     XFUnorderedList()
     {
-        SetOrdered(sal_False);
+        SetOrdered(false);
     }
 };
 
@@ -117,16 +117,16 @@ class XFOrderedList : public XFList
 public:
     XFOrderedList()
     {
-        SetOrdered(sal_True);
+        SetOrdered(true);
     }
 };
 
-inline void XFList::SetOrdered(sal_Bool ordered)
+inline void XFList::SetOrdered(bool ordered)
 {
     m_bOrdered = ordered;
 }
 
-inline void XFList::SetContinueNumber(sal_Bool bContinueNumber)
+inline void XFList::SetContinueNumber(bool bContinueNumber)
 {
     m_bContinueNumber = bContinueNumber;
 }

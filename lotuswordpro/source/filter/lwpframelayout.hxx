@@ -98,7 +98,7 @@ private:
     void ApplyBackGround(XFFrameStyle* pFrameStyle);
     // end add
     void ParseAnchorType(XFFrame* pXFFrame);
-    sal_Bool IsLeftWider();
+    bool IsLeftWider();
 private:
     LwpPlacableLayout* m_pLayout;
     OUString m_StyleName;
@@ -133,10 +133,10 @@ public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_FRAME_LAYOUT;}
     virtual void RegisterStyle() SAL_OVERRIDE;
     virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
-    void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, sal_Bool bAll = sal_False) SAL_OVERRIDE;
+    void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, bool bAll = false) SAL_OVERRIDE;
     OUString GetNextLinkName();
-    sal_Bool HasPreviousLinkLayout();
-    sal_Bool IsForWaterMark() SAL_OVERRIDE;
+    bool HasPreviousLinkLayout();
+    bool IsForWaterMark() SAL_OVERRIDE;
     double GetWidth() SAL_OVERRIDE;
     void ApplyGraphicSize(XFFrame* pXFFrame);
 protected:
@@ -161,7 +161,7 @@ public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_GROUP_LAYOUT;}
     virtual void RegisterStyle() SAL_OVERRIDE;
     virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
-    void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, sal_Bool bAll = sal_False) SAL_OVERRIDE;
+    void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, bool bAll = false) SAL_OVERRIDE;
 protected:
     void Read() SAL_OVERRIDE;
 private:

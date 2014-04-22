@@ -136,8 +136,8 @@ public:
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     void RegisterStyle() SAL_OVERRIDE;
 
-    inline sal_Bool IsChildDoc();
-    inline sal_Bool HonorProtection();
+    inline bool IsChildDoc();
+    inline bool HonorProtection();
     inline LwpObjectID* GetContentList();
     inline LwpObjectID* GetDocData();
     inline LwpObjectID* GetSocket();
@@ -166,7 +166,7 @@ public:
     LwpDocument* GetLastDivision();
     LwpDocument* GetFirstDivision();
     LwpVirtualLayout* GetEnSuperTableLayout();
-    sal_Bool GetNumberOfPages(LwpDocument* pEndDivision, sal_uInt16& nCount);
+    bool GetNumberOfPages(LwpDocument* pEndDivision, sal_uInt16& nCount);
 
     sal_uInt16 GetNumberOfPagesBefore();
     void ParseFrameInPage(IXFStream* pOutputStream);
@@ -175,16 +175,16 @@ private:
     void MaxNumberOfPages(sal_uInt16& nNumPages);
     void XFConvertFrameInPage(XFContentContainer* pCont);
     void ChangeStyleName();
-    sal_Bool IsSkippedDivision();
+    bool IsSkippedDivision();
 };
 
-inline sal_Bool LwpDocument::IsChildDoc()
+inline bool LwpDocument::IsChildDoc()
 {
-    return (sal_Bool) ((m_nPersistentFlags & DOC_CHILDDOC) ? sal_True : sal_False);
+    return (m_nPersistentFlags & DOC_CHILDDOC);
 }
-inline sal_Bool LwpDocument::HonorProtection()
+inline bool LwpDocument::HonorProtection()
 {
-    return m_nPersistentFlags & DOC_PROTECTED ? sal_True : sal_False;
+    return m_nPersistentFlags & DOC_PROTECTED;
 }
 inline LwpObjectID* LwpDocument::GetContentList()
 {

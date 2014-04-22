@@ -201,21 +201,21 @@ class LwpFormulaInfo : public LwpCellList
 public:
     LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpFormulaInfo();
-    sal_Bool IsFormula() SAL_OVERRIDE {return sal_True;}
+    bool IsFormula() SAL_OVERRIDE {return true;}
     void SetRow(sal_uInt16 nRow){ m_nFormulaRow = nRow;}
     OUString Convert(LwpTableLayout* pCellsMap);
     void Convert(XFCell * pCell, LwpTableLayout* pCellsMap) SAL_OVERRIDE;
 protected:
     void Read() SAL_OVERRIDE;
-    sal_Bool ReadCellID();
-    sal_Bool ReadText();
-    sal_Bool ReadCellRange();
-    sal_Bool ReadExpression();
-    sal_Bool ReadArguments(LwpFormulaFunc& aFunc);
-    sal_Bool m_bSupported;
+    bool ReadCellID();
+    bool ReadText();
+    bool ReadCellRange();
+    bool ReadExpression();
+    bool ReadArguments(LwpFormulaFunc& aFunc);
+    bool m_bSupported;
 private:
     vector<LwpFormulaArg*> m_aStack;
-    sal_Bool ReadConst();
+    bool ReadConst();
     void MarkUnsupported(sal_uInt16 TokenType);
 
     sal_uInt16 m_nFormulaRow;

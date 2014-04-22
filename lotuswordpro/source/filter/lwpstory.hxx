@@ -84,12 +84,12 @@ private:
     std::vector <NamePosPair> m_vBulletStyleNameList;
 
     // , 02/16/2005
-    sal_Bool m_bPMModified;
+    bool m_bPMModified;
     LwpPageLayout* m_pCurrentLayout;    //for register page layout style
     std::vector<LwpPageLayout*> m_LayoutList;
     LwpLayout* m_pTabLayout;    //for register tab style
 
-    sal_Bool m_bDropcap;
+    bool m_bDropcap;
     LwpHyperlinkMgr* m_pHyperlinkMgr;
     OUString m_CurrSectionName;
 
@@ -112,29 +112,29 @@ public:
      XFContentContainer* GetXFContent();
     void AddXFContent(XFContent* pContent);
 
-    inline sal_Bool GetDropcapFlag();
+    inline bool GetDropcapFlag();
     inline LwpPageLayout* GetCurrentLayout();
     inline LwpMiddleLayout* GetTabLayout();//for register tab style
     inline OUString GetSectionName();
     inline LwpHyperlinkMgr* GetHyperlinkMgr();
 
-    inline sal_Bool IsPMModified();
-    inline void SetPMModified(sal_Bool bPMModified);
-    inline void SetDropcapFlag(sal_Bool bFlag);
+    inline bool IsPMModified();
+    inline void SetPMModified(bool bPMModified);
+    inline void SetDropcapFlag(bool bFlag);
     inline void SetTabLayout(LwpLayout* pLayout);
     inline void SetSectionName(const OUString& StyleName);
 
     void SetCurrentLayout(LwpPageLayout* pPageLayout);
     void AddPageLayout(LwpPageLayout* pObject);
     LwpPageLayout* GetNextPageLayout();
-    sal_Bool IsNeedSection();
+    bool IsNeedSection();
     void SortPageLayout();
 
     LwpPara* GetLastParaOfPreviousStory();
 
-    OUString GetContentText(sal_Bool bAllText = sal_False);//add by ,for CHB,05/5/25
+    OUString GetContentText(bool bAllText = false);//add by ,for CHB,05/5/25
     inline void AddBullStyleName2List(const OUString& rStyleName, const sal_uInt8& nPos);
-    sal_Bool IsBullStyleUsedBefore(const OUString& rStyleName, const sal_uInt8& nPos);
+    bool IsBullStyleUsedBefore(const OUString& rStyleName, const sal_uInt8& nPos);
 
     OUString RegisterFirstFribStyle();
 };
@@ -151,7 +151,7 @@ LwpObjectID* LwpStory::GetLastPara()
 {
     return m_ParaList.GetTail();
 }
-sal_Bool LwpStory::GetDropcapFlag()
+bool LwpStory::GetDropcapFlag()
 {
     return m_bDropcap;
 }
@@ -161,11 +161,11 @@ LwpMiddleLayout* LwpStory::GetTabLayout()
         return m_pTabLayout;
     return static_cast<LwpMiddleLayout*>(GetLayout(NULL));
 }
-void LwpStory::SetPMModified(sal_Bool bPMModified)
+void LwpStory::SetPMModified(bool bPMModified)
 {
     m_bPMModified = bPMModified;
 }
-void LwpStory::SetDropcapFlag(sal_Bool bFlag)
+void LwpStory::SetDropcapFlag(bool bFlag)
 {
     m_bDropcap = bFlag;
 }
@@ -181,7 +181,7 @@ OUString LwpStory::GetSectionName()
 {
     return m_CurrSectionName;
 }
-sal_Bool LwpStory::IsPMModified()
+bool LwpStory::IsPMModified()
 {
     return m_bPMModified;
 }

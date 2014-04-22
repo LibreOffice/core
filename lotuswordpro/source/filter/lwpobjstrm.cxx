@@ -65,7 +65,7 @@
 /**
  * @descr  ctor() from LwpSvStream
  */
-LwpObjectStream::LwpObjectStream(LwpSvStream *pStrm, sal_Bool isCompressed, sal_uInt16 size)
+LwpObjectStream::LwpObjectStream(LwpSvStream *pStrm, bool isCompressed, sal_uInt16 size)
     :m_pContentBuf(NULL), m_nBufSize(size), m_nReadPos(0),
     m_pStrm(pStrm), m_bCompressed(isCompressed)
 {
@@ -192,26 +192,26 @@ void LwpObjectStream::SeekRel(sal_uInt16 pos)
 /**
  * @descr  Seek to pos in object buffer/buffer
  */
-sal_Bool LwpObjectStream::Seek( sal_uInt16 pos)
+bool LwpObjectStream::Seek( sal_uInt16 pos)
 {
     if (pos < m_nBufSize)
     {
         m_nReadPos = pos;
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /**
  * @descr  Quick read sal_Bool
  */
-sal_Bool LwpObjectStream::QuickReadBool(bool *pFailure)
+bool LwpObjectStream::QuickReadBool(bool *pFailure)
 {
     SVBT16 aValue = {0};
     sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
     if (pFailure)
         *pFailure = (nRead != sizeof(aValue));
-    return static_cast<sal_Bool>(SVBT16ToShort(aValue));
+    return static_cast<bool>(SVBT16ToShort(aValue));
 }
 /**
  * @descr  Quick read sal_uInt32

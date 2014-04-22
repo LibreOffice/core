@@ -125,8 +125,8 @@ public:
     inline sal_uInt16 GetFaceID(){return m_nFaceName;}
     inline sal_uInt16 GetAltFaceID(){return m_nAltFaceName;}
     void Override(XFFont* pFont);
-    inline sal_Bool IsFaceNameOverridden();
-    inline sal_Bool IsAltFaceNameOverridden();
+    inline bool IsFaceNameOverridden();
+    inline bool IsAltFaceNameOverridden();
 private:
     //Data of CFontDescriptionOverrideBase
     sal_uInt8 m_nOverrideBits;
@@ -153,9 +153,9 @@ private:
                             | TIGHTNESS | FACENAME | BKCOLOR)
     };
 
-    inline sal_Bool IsPointSizeOverridden();
-    inline sal_Bool IsColorOverridden();
-    inline sal_Bool IsBackgroundColorOverridden();
+    inline bool IsPointSizeOverridden();
+    inline bool IsColorOverridden();
+    inline bool IsBackgroundColorOverridden();
 //TODO
 //    inline sal_Bool IsTightnessOverridden();
 //    inline sal_Bool IsAnythingOverridden();
@@ -235,15 +235,15 @@ private:
         UNDER   = 0x02,
         ALL_ATTRS2          = CASE | UNDER
     };
-    sal_Bool Is(sal_uInt16 Attr);
-    sal_Bool IsBoldOverridden();
-    sal_Bool IsItalicOverridden();
-    sal_Bool IsStrikeThruOverridden();
-    sal_Bool IsSmallCapsOverridden();
-    sal_Bool IsSuperOverridden();
-    sal_Bool IsSubOverridden();
-    sal_Bool IsUnderlineOverridden();
-    sal_Bool IsCaseOverridden();
+    bool Is(sal_uInt16 Attr);
+    bool IsBoldOverridden();
+    bool IsItalicOverridden();
+    bool IsStrikeThruOverridden();
+    bool IsSmallCapsOverridden();
+    bool IsSuperOverridden();
+    bool IsSubOverridden();
+    bool IsUnderlineOverridden();
+    bool IsCaseOverridden();
 
 };
 

@@ -123,11 +123,11 @@ public:
     /**
      * @descr   Set cell value to warp if it's content is too long to be placed in an single cell.
      */
-    void    SetWrapText(sal_Bool wrap);
+    void    SetWrapText(bool wrap);
 
     virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
-    virtual sal_Bool Equal(IXFStyle *pStyle) SAL_OVERRIDE;
+    virtual bool Equal(IXFStyle *pStyle) SAL_OVERRIDE;
 
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
@@ -145,7 +145,7 @@ private:
     XFFont      *m_pFont;
     XFShadow    m_aShadow;
     XFBorders   *m_pBorders;
-    sal_Bool    m_bWrapText;
+    bool    m_bWrapText;
 };
 
 inline void XFCellStyle::SetAlignType(enumXFAlignType hori, enumXFAlignType vert)
@@ -159,7 +159,7 @@ inline void XFCellStyle::SetDataStyle(const OUString& style)
     m_strDataStyle = style;
 }
 
-inline void XFCellStyle::SetWrapText(sal_Bool wrap)
+inline void XFCellStyle::SetWrapText(bool wrap)
 {
     m_bWrapText = wrap;
 }

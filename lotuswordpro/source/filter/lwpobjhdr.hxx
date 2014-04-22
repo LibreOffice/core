@@ -78,7 +78,7 @@ private:
     sal_uInt32 m_nTag;
     LwpObjectID m_ID;
     sal_uInt32 m_nSize;     //Data size
-    sal_Bool m_bCompressed;
+    bool m_bCompressed;
 
     //localize the following memebers to save memory
     //sal_uInt8 m_nFlagBits;
@@ -115,7 +115,7 @@ public:
     inline sal_uInt32 GetTag();
     inline sal_uInt32 GetSize();
     inline LwpObjectID* GetID();
-    inline sal_Bool IsCompressed();
+    inline bool IsCompressed();
 };
 
 inline sal_uInt32 LwpObjectHeader::GetTag()
@@ -130,7 +130,7 @@ inline LwpObjectID* LwpObjectHeader::GetID()
 {
     return &m_ID;
 }
-inline sal_Bool LwpObjectHeader::IsCompressed()
+inline bool LwpObjectHeader::IsCompressed()
 {
     return m_bCompressed;
 }

@@ -80,11 +80,11 @@ public:
 
     void    SetTextStyle(const OUString& style);
 
-    void    SetRestartOnPage(sal_Bool restart = sal_True);
+    void    SetRestartOnPage(bool restart = true);
 
-    void    SetCountEmptyLines(sal_Bool empty = sal_True);
+    void    SetCountEmptyLines(bool empty = true);
 
-    void    SetCountFrameLines(sal_Bool frame = sal_True);
+    void    SetCountFrameLines(bool frame = true);
 
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
@@ -96,9 +96,9 @@ private:
     OUString   m_strSeparator;
     OUString   m_strNumFmt;
     OUString   m_strTextStyle;
-    sal_Bool    m_bRestartOnPage;
-    sal_Bool    m_bCountEmptyLines;
-    sal_Bool    m_bCountFrameLines;
+    bool    m_bRestartOnPage;
+    bool    m_bCountEmptyLines;
+    bool    m_bCountFrameLines;
 };
 
 inline XFLineNumberConfig::XFLineNumberConfig()
@@ -107,9 +107,9 @@ inline XFLineNumberConfig::XFLineNumberConfig()
     m_fOffset = 0;
     m_nIncrement = 5;
     m_nSepIncrement = 3;
-    m_bRestartOnPage = sal_False;
-    m_bCountEmptyLines = sal_True;
-    m_bCountFrameLines = sal_False;
+    m_bRestartOnPage = false;
+    m_bCountEmptyLines = true;
+    m_bCountFrameLines = false;
 }
 
 inline void XFLineNumberConfig::SetNumberOffset(double offset)
@@ -143,17 +143,17 @@ inline void XFLineNumberConfig::SetTextStyle(const OUString& style)
     m_strTextStyle = style;
 }
 
-inline void XFLineNumberConfig::SetRestartOnPage(sal_Bool restart)
+inline void XFLineNumberConfig::SetRestartOnPage(bool restart)
 {
     m_bRestartOnPage = restart;
 }
 
-inline void XFLineNumberConfig::SetCountEmptyLines(sal_Bool empty)
+inline void XFLineNumberConfig::SetCountEmptyLines(bool empty)
 {
     m_bCountEmptyLines = empty;
 }
 
-inline void XFLineNumberConfig::SetCountFrameLines(sal_Bool frame)
+inline void XFLineNumberConfig::SetCountFrameLines(bool frame)
 {
     m_bCountFrameLines = frame;
 }

@@ -87,9 +87,9 @@ public:
     OUString RegisterBulletStyle(LwpPara* pPara, LwpBulletOverride* pBullOver,
         LwpIndentOverride* pIndent);
     inline void SetFoundry(LwpFoundry* pFoundry);
-    inline void SetContinueFlag(sal_Bool bFlag);
-    XFContentContainer* AddBulletList(XFContentContainer* pCont, sal_Bool bIsOrdered,
-        const OUString& rStyleName, sal_Int16 nLevel, sal_Bool bIsBulletSkiped);
+    inline void SetContinueFlag(bool bFlag);
+    XFContentContainer* AddBulletList(XFContentContainer* pCont, bool bIsOrdered,
+        const OUString& rStyleName, sal_Int16 nLevel, bool bIsBulletSkiped);
     inline void SetCurrentPos(sal_uInt16 nNewPos);
     inline void SetCurrentSilverBullet(const LwpObjectID& rNewID);
     inline LwpObjectID GetCurrentSilverBullet();
@@ -104,8 +104,8 @@ private:
     OUString m_aCurrentStyleName;
     LwpFoundry* m_pFoundry;
     XFList* m_pBulletList;
-    sal_Bool m_bContinue;
-    sal_Bool m_bIsBulletSkipped;
+    bool m_bContinue;
+    bool m_bIsBulletSkipped;
     LwpObjectID m_aCurrentNumberingID;
     boost::scoped_ptr<LwpNumberingOverride> m_pCurrentNumOverride;
     sal_uInt16 m_nCurrentPos;
@@ -116,7 +116,7 @@ inline void LwpBulletStyleMgr::SetFoundry(LwpFoundry* pFoundry)
 {
     m_pFoundry = pFoundry;
 }
-inline void LwpBulletStyleMgr::SetContinueFlag(sal_Bool bFlag)
+inline void LwpBulletStyleMgr::SetContinueFlag(bool bFlag)
 {
     m_bContinue = bFlag;
 }

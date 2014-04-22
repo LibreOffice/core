@@ -118,7 +118,7 @@ public:
     /**
      * @descr   Set cell protected.
      */
-    void    SetProtect(sal_Bool protect=sal_True);
+    void    SetProtect(bool protect=true);
 
     /**
      * @descr   Set cell column id.
@@ -170,7 +170,7 @@ private:
     OUString   m_strValue;
     OUString   m_strDisplay;
     OUString   m_strFormula;
-    sal_Bool    m_bProtect;
+    bool    m_bProtect;
 };
 
 inline void XFCell::SetColumnSpaned(sal_Int32 num)
@@ -188,7 +188,7 @@ inline void XFCell::SetFormula(const OUString& formula)
     m_strFormula = formula;
 }
 
-inline void XFCell::SetProtect(sal_Bool protect/* =sal_True */)
+inline void XFCell::SetProtect(bool protect/* =sal_True */)
 {
     m_bProtect = protect;
 }

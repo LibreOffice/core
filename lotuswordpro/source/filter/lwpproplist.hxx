@@ -75,7 +75,7 @@ public:
     LwpPropListElement(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
     virtual ~LwpPropListElement(){}
     void Read() SAL_OVERRIDE;
-    sal_Bool IsNamed(const OUString& name);
+    bool IsNamed(const OUString& name);
     LwpPropListElement* GetNext();
     LwpAtomHolder GetValue(){return m_Value;}
     LwpAtomHolder GetName(){return m_Name;}

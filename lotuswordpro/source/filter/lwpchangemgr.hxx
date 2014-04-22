@@ -80,7 +80,7 @@ public:
     void AddChangeFrib(LwpFrib* pFrib);
     OUString GetChangeID(LwpFrib* pFrib);
     void ConvertAllChange(IXFStream* pStream);
-    void SetHeadFootFribMap(sal_Bool bFlag);
+    void SetHeadFootFribMap(bool bFlag);
     void SetHeadFootChange(XFContentContainer* pCont);
     ~LwpChangeMgr();
     LwpChangeMgr();

@@ -435,8 +435,8 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
     }
     XFBorder *pLeftBorder = pBorders->GetLeft();
     XFBorder *pBottomBorder = pBorders->GetBottom();
-    sal_Bool bNoLeftBorder = sal_False;
-    sal_Bool bNoBottomBorder = sal_False;
+    bool bNoLeftBorder = false;
+    bool bNoBottomBorder = false;
 
     LwpCellLayout * pLeftNeighbour = GetCellByRowCol(nRow, GetLeftColID(nCol), pTableLayout);
     if (pLeftNeighbour)
@@ -450,7 +450,7 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
                 // for these 2 types cell, left border should be ignored for sake of avoiding duplication border
                 // but if left border is different with right border of left cell
                 // we should not ignored it
-                bNoLeftBorder = sal_True;
+                bNoLeftBorder = true;
             }
             delete pNeighbourBorders;
         }
@@ -469,7 +469,7 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
                 // for these 2 types cell, bottom border should be ignored for sake of avoiding duplication border
                 // but if bottom border is different with right border of left cell
                 // we should not ignored it
-                bNoBottomBorder = sal_True;
+                bNoBottomBorder = true;
             }
             delete pBelowBorders;
         }
@@ -648,11 +648,11 @@ void LwpCellLayout::Read()
 */
 void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
 {
-    sal_Bool bProtected = sal_False;
+    bool bProtected = false;
     // judge current cell
     if (IsProtected())
     {
-        bProtected = sal_True;
+        bProtected = true;
     }
     else
     {
@@ -660,7 +660,7 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
         LwpCellLayout * pBase = dynamic_cast<LwpCellLayout *>(m_BasedOnStyle.obj());
         if (pBase && pBase->IsProtected())
         {
-            bProtected = sal_True;
+            bProtected = true;
         }
         else
         {
@@ -670,7 +670,7 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
             LwpSuperTableLayout * pSuper = pTableLayout ? pTableLayout->GetSuperTableLayout() : NULL;
             if (pSuper && pSuper->IsProtected())
             {
-                bProtected = sal_True;
+                bProtected = true;
             }
         }
     }
@@ -732,12 +732,12 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
     }
     XFBorder *pLeftBorder = pBorders->GetLeft();
     XFBorder *pBottomBorder = pBorders->GetBottom();
-    sal_Bool bNoLeftBorder = sal_True;
-    sal_Bool bNoBottomBorder = sal_True;
+    bool bNoLeftBorder = true;
+    bool bNoBottomBorder = true;
 
     if (nCol == 0)
     {
-        bNoLeftBorder = sal_False;
+        bNoLeftBorder = false;
     }
     else
     {
@@ -754,7 +754,7 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
                     {
                         // if left border is different with right border of left cell
                         // we should not ignored it
-                        bNoLeftBorder = sal_False;
+                        bNoLeftBorder = false;
                         break;
                     }
                 }
@@ -764,7 +764,7 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
 
     if ( (nRow + nRowSpan) == pTableLayout->GetTable()->GetRow() )
     {
-        bNoBottomBorder = sal_False;
+        bNoBottomBorder = false;
     }
     else
     {
@@ -781,7 +781,7 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
                     {
                         // if bottom border is different with right border of left cell
                         // we should not ignored it
-                        bNoBottomBorder = sal_False;
+                        bNoBottomBorder = false;
                         break;
                     }
                 }

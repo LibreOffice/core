@@ -59,7 +59,7 @@
  ************************************************************************/
 #include "xffontdecl.hxx"
 
-XFFontDecl::XFFontDecl(const OUString& name, const OUString& family, sal_Bool fixed)
+XFFontDecl::XFFontDecl(const OUString& name, const OUString& family, bool fixed)
 {
     m_strFontName = name;
     m_strFontFamily = family;
@@ -76,7 +76,7 @@ OUString   XFFontDecl::GetFontFamily()
     return m_strFontFamily;
 }
 
-sal_Bool    XFFontDecl::GetFontPitchFixed()
+bool    XFFontDecl::GetFontPitchFixed()
 {
     return m_bPitchFixed;
 }

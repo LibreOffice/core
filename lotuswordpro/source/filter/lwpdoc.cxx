@@ -170,16 +170,16 @@ void LwpDocument::Parse(IXFStream* pOutputStream)
     }
 }
 
-sal_Bool LwpDocument::IsSkippedDivision()
+bool LwpDocument::IsSkippedDivision()
 {
     OUString sDivName;
-    sal_uInt8 ret = sal_False;
+    bool ret = false;
     LwpDivInfo* pDiv = dynamic_cast<LwpDivInfo*>(GetDivInfoID()->obj(VO_DIVISIONINFO));
     if (pDiv == NULL)
-        return sal_True;
+        return true;
     sDivName = pDiv->GetDivName();
     if (!sDivName.isEmpty() && !pDiv->IsGotoable()) //including toa,scripts division
-        return sal_True;
+        return true;
     //skip endnote division
     OUString strClassName = pDiv->GetClassName();
     if ((strClassName == STR_DivisionEndnote)
@@ -197,7 +197,7 @@ sal_Bool LwpDocument::IsSkippedDivision()
                 LwpObjectID* pFirst = pStory->GetFirstPara();
                 LwpObjectID* pLast = pStory->GetLastPara();
                 if(*pFirst == *pLast)
-                    ret = sal_True;
+                    ret = true;
             }
         }
     }
@@ -664,10 +664,10 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 /**
  * @descr    Get the numbers of page  before pEndDivision, copy from lwp source code
  */
- sal_Bool LwpDocument::GetNumberOfPages(LwpDocument* pEndDivision, sal_uInt16& nCount)
+bool LwpDocument::GetNumberOfPages(LwpDocument* pEndDivision, sal_uInt16& nCount)
 {
     if(this == pEndDivision)
-        return sal_True;
+        return true;
 
     LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(m_DivInfo.obj());
     if(pDivInfo)
@@ -679,11 +679,11 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     while(pDivision)
     {
         if(pDivision->GetNumberOfPages(pEndDivision,nCount))
-            return sal_True;
+            return true;
         pDivision = pDivision->GetNextDivision();
 
     }
-    return sal_False;
+    return false;
 }
 /**
  * @descr    Get the numbers of page  before curruent division

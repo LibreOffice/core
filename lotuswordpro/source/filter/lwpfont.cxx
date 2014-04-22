@@ -94,13 +94,13 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
     if (IsSuperOverridden())
     {
         if(Is(SUPERSCRIPT))
-            pFont->SetPosition(sal_True);
+            pFont->SetPosition(true);
     }
 
     if (IsSubOverridden())
     {
         if(Is(SUBSCRIPT))
-            pFont->SetPosition(sal_False);
+            pFont->SetPosition(false);
     }
 
     if (IsUnderlineOverridden())
@@ -168,44 +168,44 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
     //  pFont->SetTightness(cTightness);*/
 }
 
-sal_Bool LwpFontAttrEntry::Is(sal_uInt16 Attr)
+bool LwpFontAttrEntry::Is(sal_uInt16 Attr)
 {
     return (0 != (m_nAttrBits & Attr));
 }
 
-sal_Bool LwpFontAttrEntry::IsBoldOverridden()
+bool LwpFontAttrEntry::IsBoldOverridden()
 {
     return (0 != (m_nAttrOverrideBits & BOLD));
 }
 
-sal_Bool LwpFontAttrEntry::IsItalicOverridden()
+bool LwpFontAttrEntry::IsItalicOverridden()
 {
     return (0 != (m_nAttrOverrideBits & ITALIC));
 }
-sal_Bool LwpFontAttrEntry::IsStrikeThruOverridden()
+bool LwpFontAttrEntry::IsStrikeThruOverridden()
 {
     return (0 != (m_nAttrOverrideBits & STRIKETHRU));
 }
-sal_Bool LwpFontAttrEntry::IsSmallCapsOverridden()
+bool LwpFontAttrEntry::IsSmallCapsOverridden()
 {
     return (0 != (m_nAttrOverrideBits & SMALLCAPS));
 }
-sal_Bool LwpFontAttrEntry::IsSuperOverridden()
+bool LwpFontAttrEntry::IsSuperOverridden()
 {
     return (0 != (m_nAttrOverrideBits & SUPERSCRIPT));
 
 }
-sal_Bool LwpFontAttrEntry::IsSubOverridden()
+bool LwpFontAttrEntry::IsSubOverridden()
 {
     return (0 != (m_nAttrOverrideBits & SUBSCRIPT));
 
 }
 
-sal_Bool LwpFontAttrEntry::IsUnderlineOverridden()
+bool LwpFontAttrEntry::IsUnderlineOverridden()
 {
     return (0 != (m_nAttrOverrideBits2 & UNDER));
 }
-sal_Bool LwpFontAttrEntry::IsCaseOverridden()
+bool LwpFontAttrEntry::IsCaseOverridden()
 {
     return (0 != (m_nAttrOverrideBits2 & CASE));
 }
@@ -322,27 +322,27 @@ void LwpFontNameEntry::Override(XFFont* pFont)
     //  pFont->SetTightness(cTightness);
 }
 
-sal_Bool LwpFontNameEntry::IsFaceNameOverridden()
+bool LwpFontNameEntry::IsFaceNameOverridden()
 {
     return (0 != (m_nOverrideBits & FACENAME));
 }
 
-sal_Bool LwpFontNameEntry::IsAltFaceNameOverridden()
+bool LwpFontNameEntry::IsAltFaceNameOverridden()
 {
     return (0 != (m_nOverrideBits & ALTFACENAME));
 }
 
-sal_Bool LwpFontNameEntry::IsPointSizeOverridden()
+bool LwpFontNameEntry::IsPointSizeOverridden()
 {
     return (0 != (m_nOverrideBits & POINTSIZE));
 }
 
-sal_Bool LwpFontNameEntry::IsColorOverridden()
+bool LwpFontNameEntry::IsColorOverridden()
 {
     return (0 != (m_nOverrideBits & COLOR));
 }
 
-sal_Bool LwpFontNameEntry::IsBackgroundColorOverridden()
+bool LwpFontNameEntry::IsBackgroundColorOverridden()
 {
     return (0 != (m_nOverrideBits & BKCOLOR));
 }

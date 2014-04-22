@@ -210,7 +210,7 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
             sal_Int32 nFirst = pParent->GetPageNumber(FIRST_LAYOUTPAGENO);
             sal_Int32 nLast = pParent->GetPageNumber(LAST_LAYOUTPAGENO);
             if(nLast > 0)
-                m_pLayout->XFConvertFrame(pCont, nFirst, nLast, sal_True);
+                m_pLayout->XFConvertFrame(pCont, nFirst, nLast, true);
 
         }
         else if(m_pLayout->IsUseOnAllOddPages()||m_pLayout->IsUseOnAllEvenPages())
@@ -225,7 +225,7 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
                     nFirst++;
                 if(nFirst <= nLast)
                 {
-                    m_pLayout->XFConvertFrame(pCont, nFirst, nLast, sal_False);
+                    m_pLayout->XFConvertFrame(pCont, nFirst, nLast, false);
                 }
             }
         }
@@ -400,7 +400,7 @@ void LwpFrame::ApplyProtect(XFFrameStyle* pFrameStyle)
 {
     if(m_pLayout->IsProtected())
     {
-        pFrameStyle->SetProtect(sal_True,sal_True,sal_True);
+        pFrameStyle->SetProtect(true,true,true);
     }
 }
 /**
@@ -713,7 +713,7 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
  * @descr Calculate the distance between the frame object and the page margins.
  *       And determine which side(left or right) is wider
  */
-sal_Bool LwpFrame::IsLeftWider()
+bool LwpFrame::IsLeftWider()
 {
     //LwpMiddleLayout* pParent = static_cast<LwpMiddleLayout*>(m_pLayout->GetContainerLayout());
     LwpVirtualLayout* pParent = static_cast<LwpVirtualLayout*>(m_pLayout->GetContainerLayout());
@@ -739,9 +739,9 @@ sal_Bool LwpFrame::IsLeftWider()
         double fLeft = fXOffset - fWrapLeft -fParentMarginLeft;
         double fRight = fParentWidth - fParentMarginRight -(fXOffset + fWidth + fWrapRight);
         if(fLeft > fRight)
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 LwpFrameLink::LwpFrameLink()
@@ -815,7 +815,7 @@ void LwpFrameLayout::Read()
  * @param:  nPageNo - the page number that the frame anchors
  *
  */
-void LwpFrameLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart , sal_Int32 nEnd, sal_Bool bAll )
+void LwpFrameLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart , sal_Int32 nEnd, bool bAll )
 {
     if(m_pFrame)
     {
@@ -901,27 +901,27 @@ OUString LwpFrameLayout::GetNextLinkName()
  * @descr whether current frame is linked by other frame
  *
  */
-sal_Bool LwpFrameLayout::HasPreviousLinkLayout()
+bool LwpFrameLayout::HasPreviousLinkLayout()
 {
     LwpObjectID* pObjectID = m_Link.GetPreviousLayout();
     if(pObjectID->IsNull())
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 /**
  * @descr whether current frame is for water mark. Problem maybe exsits by this method, must be tracking
  *
  */
- sal_Bool LwpFrameLayout::IsForWaterMark()
+bool LwpFrameLayout::IsForWaterMark()
 {
     if(m_nBuoyancy >=LAY_BUOYLAYER)
     {
         if(!m_Content.IsNull() && (m_Content.obj()->GetTag()==VO_GRAPHIC) )
         {
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 /**
@@ -1080,7 +1080,7 @@ void LwpGroupLayout::XFConvert(XFContentContainer *pCont)
  * @param:  nPageNo - the page number that the frame anchors
  *
  */
-void LwpGroupLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart , sal_Int32 nEnd, sal_Bool bAll)
+void LwpGroupLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart , sal_Int32 nEnd, bool bAll)
 {
     if(m_pFrame)
     {
@@ -1178,7 +1178,7 @@ void LwpDropcapLayout::RegisterStyle(LwpFoundry* pFoundry)
     LwpStory* pStory = GetContentStory();
     if (pStory)
     {
-        pStory->SetDropcapFlag(sal_True);
+        pStory->SetDropcapFlag(true);
         pStory->SetFoundry(pFoundry);
         LwpPara* pPara = static_cast<LwpPara*>(pStory->GetFirstPara()->obj());
         while(pPara)
@@ -1235,7 +1235,7 @@ void LwpRubyLayout::ConvertContentText()
     LwpStory* pStory = GetContentStory();
     LwpRubyMarker* pMarker = GetMarker();
     if (pStory && pMarker)
-        pMarker->SetRubyText(pStory->GetContentText(sal_True));
+        pMarker->SetRubyText(pStory->GetContentText(true));
 }
 
 void LwpRubyLayout::RegisterStyle()

@@ -106,7 +106,7 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
 }
 
 LwpFribPageBreak::LwpFribPageBreak( LwpPara* pPara )
-    : LwpFrib(pPara), m_bLastFrib(sal_False), m_pMasterPage(NULL)
+    : LwpFrib(pPara), m_bLastFrib(false), m_pMasterPage(NULL)
 {
 }
 
@@ -143,11 +143,11 @@ void LwpFribPageBreak::RegisterBreakStyle(LwpPara* pPara)
     pOverStyle->SetMasterPage(pBaseStyle->GetMasterPage());
 
     if (!GetNext() || GetNext()->GetType()==FRIB_TAG_EOP)
-        m_bLastFrib = sal_True;
+        m_bLastFrib = true;
     else
-        m_bLastFrib = sal_False;
+        m_bLastFrib = false;
 
-    if (m_bLastFrib == sal_True)
+    if (m_bLastFrib)
         pOverStyle->SetBreaks(enumXFBreakAftPage);
     else
         pOverStyle->SetBreaks(enumXFBreakBefPage);

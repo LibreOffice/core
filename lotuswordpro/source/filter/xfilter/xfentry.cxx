@@ -62,7 +62,7 @@
 XFEntry::XFEntry()
 {
     m_eType = enumXFEntryTOC;
-    m_bMainEntry = sal_False;
+    m_bMainEntry = false;
     m_nOutlineLevel = 1;
 }
 

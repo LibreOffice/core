@@ -61,7 +61,7 @@
 
 XFDatePart::XFDatePart()
 {
-    m_bTexture = sal_False;
+    m_bTexture = false;
 }
 
 void    XFDatePart::ToXml(IXFStream *pStrm)
@@ -159,8 +159,8 @@ void    XFDatePart::ToXml(IXFStream *pStrm)
 
 XFDateStyle::XFDateStyle()
 {
-    m_bFixed = sal_False;
-    m_bAutoOrder = sal_False;
+    m_bFixed = false;
+    m_bAutoOrder = false;
 }
 
 XFDateStyle::~XFDateStyle()
