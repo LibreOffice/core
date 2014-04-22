@@ -1844,4 +1844,12 @@ void Printer::DrawImage( const Point&, const Size&, const Image&, sal_uInt16 )
     assert(false);
 }
 
+
+Bitmap Printer::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
+{
+    SAL_WARN("vcl.gdi", "GetBitmap(): This should never be called on by a Printer instance");
+
+    return OutputDevice::GetBitmap( rSrcPt, rSize );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

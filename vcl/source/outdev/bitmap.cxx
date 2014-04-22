@@ -474,7 +474,7 @@ bool OutputDevice::TransformAndReduceBitmapExToTargetRange(
         aVisibleRange.transform(aMakeVisibleRangeRelative);
     }
 
-    // for pixel devices, do *not* limit size, else OutputDevice::ImplDrawAlpha
+    // for pixel devices, do *not* limit size, else OutputDevice::DrawAlphaBitmap
     // will create another, badly scaled bitmap to do the job. Nonetheless, do a
     // maximum clipping of something big (1600x1280x2). Add 1.0 to avoid rounding
     // errors in rough estimations
@@ -880,8 +880,6 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
 
 Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 {
-    OSL_ENSURE(OUTDEV_PRINTER != GetOutDevType(), "OutputDevice::GetBitmap with sorce type OUTDEV_PRINTER should not be used (!)");
-
     Bitmap  aBmp;
     long    nX = ImplLogicXToDevicePixel( rSrcPt.X() );
     long    nY = ImplLogicYToDevicePixel( rSrcPt.Y() );

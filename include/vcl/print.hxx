@@ -51,18 +51,12 @@ namespace vcl {
 }
 
 
-// - Printer-Types -
-
-
 #define PAGEQUEUE_ALLPAGES   0xFFFF
 
 enum PrinterSupport { SUPPORT_SET_ORIENTATION, SUPPORT_SET_PAPERBIN,
                       SUPPORT_SET_PAPERSIZE, SUPPORT_SET_PAPER,
                       SUPPORT_COPY, SUPPORT_COLLATECOPY,
                       SUPPORT_SETUPDIALOG, SUPPORT_FAX, SUPPORT_PDF };
-
-
-// - PrinterPage -
 
 
 class VCL_DLLPUBLIC PrinterPage
@@ -83,9 +77,6 @@ public:
     bool            IsNewJobSetup() const { return mbNewJobSetup; }
 };
 
-
-
-// - QueueInfo -
 
 
 class VCL_DLLPUBLIC QueueInfo
@@ -117,9 +108,6 @@ public:
     friend VCL_DLLPUBLIC SvStream&          ReadQueueInfo( SvStream& rIStream, QueueInfo& rInfo );
     friend VCL_DLLPUBLIC SvStream&          WriteQueueInfo( SvStream& rOStream, const QueueInfo& rInfo );
 };
-
-
-// - PrinterOptions -
 
 
 enum PrinterTransparencyMode
@@ -208,9 +196,6 @@ public:
 };
 
 
-// - Printer -
-
-
 class VCL_DLLPUBLIC Printer : public OutputDevice
 {
     friend class OutputDevice;
@@ -278,6 +263,7 @@ protected:
 
 public:
     void                        DrawGradientEx( OutputDevice* pOut, const Rectangle& rRect, const Gradient& rGradient );
+    virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const SAL_OVERRIDE;
 
 protected:
 

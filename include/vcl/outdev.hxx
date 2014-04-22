@@ -544,19 +544,13 @@ public:
     SAL_DLLPRIVATE void         ImplDrawBitmapWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
     ///@}
 
-    /** @name Bitmap functions
-     */
-    ///@{
     SAL_DLLPRIVATE void         ImplDrawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
-    SAL_DLLPRIVATE void         DrawAlphaBitmap      ( const Bitmap& rBmp, const AlphaMask& rAlpha,
-                                                       const Point& rDestPt, const Size& rDestSize,
-                                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel );
+
     virtual void                ClipToPaintRegion    ( Rectangle& rDstRect );
     SAL_DLLPRIVATE void         ImplPrintTransparent ( const Bitmap& rBmp, const Bitmap& rMask,
                                                        const Point& rDestPt, const Size& rDestSize,
                                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel );
     SAL_DLLPRIVATE Color        ImplDrawModeToColor  ( const Color& rColor ) const;
-    ///@}
 
     /** @name Frame functions
      */
@@ -861,6 +855,13 @@ public:
                                     const Image& rImage,
                                     sal_uInt16 nStyle = 0 );
 
+
+    virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const;
+
+    /** Query extended bitmap (with alpha channel, if available).
+     */
+    BitmapEx                    GetBitmapEx( const Point& rSrcPt, const Size& rSize ) const;
+
     /** Retrieve downsampled and cropped bitmap
 
         @attention This method ignores negative rDstSz values, thus
@@ -926,6 +927,15 @@ protected:
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                     BitmapEx& rBitmapEx );
 private:
+
+    SAL_DLLPRIVATE void         DrawAlphaBitmap(
+                                    const Bitmap& rBmp,
+                                    const AlphaMask& rAlpha,
+                                    const Point& rDestPt,
+                                    const Size& rDestSize,
+                                    const Point& rSrcPtPixel,
+                                    const Size& rSrcSizePixel );
+
     SAL_DLLPRIVATE Bitmap       BlendBitmap(
                                     Bitmap              aBmp,
                                     BitmapReadAccess*   pP,
@@ -1502,12 +1512,6 @@ public:
                                     Color aEnd = Color(COL_BLACK));
 
     Color                       GetPixel( const Point& rPt ) const;
-
-    Bitmap                      GetBitmap( const Point& rSrcPt, const Size& rSize ) const;
-
-    /** Query extended bitmap (with alpha channel, if available).
-     */
-    BitmapEx                    GetBitmapEx( const Point& rSrcPt, const Size& rSize ) const;
 
     // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphisLayout
     virtual void                EnableRTL( bool bEnable = true);
