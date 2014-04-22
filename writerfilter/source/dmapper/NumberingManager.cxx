@@ -531,6 +531,9 @@ OUString ListDef::GetStyleName( sal_Int32 nId )
 
 uno::Sequence< uno::Sequence< beans::PropertyValue > > ListDef::GetPropertyValues( )
 {
+    if (!m_pAbstractDef)
+        return uno::Sequence< uno::Sequence< beans::PropertyValue > >();
+
     // [1] Call the same method on the abstract list
     uno::Sequence< uno::Sequence< beans::PropertyValue > > aAbstract = m_pAbstractDef->GetPropertyValues( );
 
@@ -603,7 +606,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
             uno::Sequence< uno::Sequence< beans::PropertyValue > > aProps = GetPropertyValues( );
 
-            sal_Int32 nAbstLevels = m_pAbstractDef->Size( );
+            sal_Int32 nAbstLevels = m_pAbstractDef ? m_pAbstractDef->Size() : 0;
             sal_Int16 nLevel = 0;
             while ( nLevel < nAbstLevels )
             {
