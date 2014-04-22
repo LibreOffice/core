@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_0bffc102",
+        "filename": "include/oox/drawingml/shape.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-22T07:40:41Z",
+      "side": 1,
+      "message": "New classes / structures should always have at least a one-liner doxygen documentation. See here for details: https://wiki.documentfoundation.org/Development/Doxygen",
+      "revId": "279063fca451fc23ae0c3720b1aeb8b067e0915f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_2b047d14",
+        "filename": "include/oox/drawingml/shape.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-22T07:40:41Z",
+      "side": 1,
+      "message": "The \"ms\" prefix is used for member strings, not member structures. Other instances in this class use the \"ma\" prefix.",
+      "revId": "279063fca451fc23ae0c3720b1aeb8b067e0915f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_c805af15",
+        "filename": "oox/source/shape/WpsContext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-22T07:40:41Z",
+      "side": 1,
+      "message": "This file had a consistent style so far, please follow that. \"if (id.has())\" should be used.",
+      "revId": "279063fca451fc23ae0c3720b1aeb8b067e0915f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_e8026b0a",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-22T07:40:41Z",
+      "side": 1,
+      "message": "This file had a consistent style so far. Please keep using \"if (...)\".",
+      "revId": "279063fca451fc23ae0c3720b1aeb8b067e0915f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_4b09b92b",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-22T07:40:41Z",
+      "side": 1,
+      "message": "If this is a \"local\" (lcl) function, why is it a member?",
+      "revId": "279063fca451fc23ae0c3720b1aeb8b067e0915f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
