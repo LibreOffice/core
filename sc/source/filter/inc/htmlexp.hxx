@@ -29,7 +29,6 @@
 
 #include "expbase.hxx"
 
-
 class ScDocument;
 class SfxItemSet;
 class SdrPage;
@@ -50,19 +49,23 @@ struct ScHTMLStyle
     sal_uInt8           nDefaultScriptType; // Font values are valid for the default script type
     bool                bInitialized;
 
-    ScHTMLStyle() : nFontHeight(0), nFontSizeNumber(2), nDefaultScriptType(0),
-        bInitialized(false) {}
+    ScHTMLStyle() :
+        nFontHeight(0),
+        nFontSizeNumber(2),
+        nDefaultScriptType(),
+        bInitialized(false)
+    {}
 
-    const ScHTMLStyle& operator=( const ScHTMLStyle& r )
-        {
-            aBackgroundColor    = r.aBackgroundColor;
-            aFontFamilyName     = r.aFontFamilyName;
-            nFontHeight         = r.nFontHeight;
-            nFontSizeNumber     = r.nFontSizeNumber;
-            nDefaultScriptType  = r.nDefaultScriptType;
-            bInitialized        = r.bInitialized;
-            return *this;
-        }
+    const ScHTMLStyle& operator=( const ScHTMLStyle& rScHTMLStyle )
+    {
+        aBackgroundColor   = rScHTMLStyle.aBackgroundColor;
+        aFontFamilyName    = rScHTMLStyle.aFontFamilyName;
+        nFontHeight        = rScHTMLStyle.nFontHeight;
+        nFontSizeNumber    = rScHTMLStyle.nFontSizeNumber;
+        nDefaultScriptType = rScHTMLStyle.nDefaultScriptType;
+        bInitialized       = rScHTMLStyle.bInitialized;
+        return *this;
+    }
 };
 
 struct ScHTMLGraphEntry
@@ -75,9 +78,14 @@ struct ScHTMLGraphEntry
     bool                bWritten;
 
     ScHTMLGraphEntry( SdrObject* pObj, const ScRange& rRange,
-        const Size& rSize,  bool bIn, const Size& rSpace ) :
-        aRange( rRange ), aSize( rSize ), aSpace( rSpace ),
-        pObject( pObj ), bInCell( bIn ), bWritten( false ) {}
+                      const Size& rSize,  bool bIn, const Size& rSpace ) :
+        aRange( rRange ),
+        aSize( rSize ),
+        aSpace( rSpace ),
+        pObject( pObj ),
+        bInCell( bIn ),
+        bWritten( false )
+    {}
 };
 
 
@@ -94,73 +102,86 @@ class ScHTMLExport : public ScExportBase
     static const sal_uInt16 nCellSpacing;
     static const sal_Char sIndentSource[];
 
-    boost::ptr_vector< ScHTMLGraphEntry > aGraphList;
-    ScHTMLStyle         aHTMLStyle;
-    OUString            aBaseURL;
-    OUString            aStreamPath;
-    OUString            aFilterOptions;
-    OUString            aCId;           // Content-Id fuer Mail-Export
-    OutputDevice*       pAppWin;        // fuer Pixelei
-    boost::scoped_ptr< std::map<OUString, OUString> >  pFileNameMap;        // fuer CopyLocalFileToINet
-    OUString            aNonConvertibleChars;   // collect nonconvertible characters
-    rtl_TextEncoding    eDestEnc;
-    SCTAB               nUsedTables;
-    short               nIndent;
-    sal_Char            sIndent[nIndentMax+1];
-    bool                bAll;           // ganzes Dokument
-    bool                bTabHasGraphics;
-    bool                bTabAlignedLeft;
-    bool                bCalcAsShown;
-    bool                bCopyLocalFileToINet;
-    bool                bTableDataWidth;
-    bool                bTableDataHeight;
+    typedef boost::scoped_ptr<std::map<OUString, OUString>> FileNameMapPtr;
+    typedef boost::ptr_vector< ScHTMLGraphEntry > GraphEntryList;
 
-    const SfxItemSet&   PageDefaults( SCTAB nTab );
+    GraphEntryList   aGraphList;
+    ScHTMLStyle      aHTMLStyle;
+    OUString         aBaseURL;
+    OUString         aStreamPath;
+    OUString         aFilterOptions;
+    OUString         aCId;           // Content-Id fuer Mail-Export
+    OutputDevice*    pAppWin;        // fuer Pixelei
+    FileNameMapPtr   pFileNameMap;        // fuer CopyLocalFileToINet
+    OUString         aNonConvertibleChars;   // collect nonconvertible characters
+    rtl_TextEncoding eDestEnc;
+    SCTAB            nUsedTables;
+    short            nIndent;
+    sal_Char         sIndent[nIndentMax+1];
+    bool             bAll;           // ganzes Dokument
+    bool             bTabHasGraphics;
+    bool             bTabAlignedLeft;
+    bool             bCalcAsShown;
+    bool             bCopyLocalFileToINet;
+    bool             bTableDataWidth;
+    bool             bTableDataHeight;
 
-    void                WriteBody();
-    void                WriteHeader();
-    void                WriteOverview();
-    void                WriteTables();
-    void                WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    void                WriteGraphEntry( ScHTMLGraphEntry* );
-    void                WriteImage( OUString& rLinkName,
-                                    const Graphic&, const OString& rImgOptions,
-                                    sal_uLong nXOutFlags = 0 );
-                            // nXOutFlags fuer XOutBitmap::WriteGraphic
+    const SfxItemSet& PageDefaults( SCTAB nTab );
 
-                        // write to stream if and only if URL fields in edit cell
+    void WriteBody();
+    void WriteHeader();
+    void WriteOverview();
+    void WriteTables();
+    void WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    void WriteGraphEntry( ScHTMLGraphEntry* );
+    void WriteImage( OUString& rLinkName,
+                     const Graphic&, const OString& rImgOptions,
+                     sal_uLong nXOutFlags = 0 );
+            // nXOutFlags fuer XOutBitmap::WriteGraphic
+
+    // write to stream if and only if URL fields in edit cell
     bool WriteFieldText( const EditTextObject* pData );
 
-                        // kopiere ggfs. eine lokale Datei ins Internet
-    bool            CopyLocalFileToINet( OUString& rFileNm,
-                            const OUString& rTargetNm, bool bFileToFile = false );
-    bool            HasCId() { return !aCId.isEmpty(); }
-    void                MakeCIdURL( OUString& rURL );
+    // kopiere ggfs. eine lokale Datei ins Internet
+    bool CopyLocalFileToINet( OUString& rFileNm, const OUString& rTargetNm, bool bFileToFile = false );
+    bool HasCId()
+    {
+        return !aCId.isEmpty();
+    }
+    void MakeCIdURL( OUString& rURL );
 
-    void                PrepareGraphics( ScDrawLayer*, SCTAB nTab,
-                                        SCCOL nStartCol, SCROW nStartRow,
-                                        SCCOL nEndCol, SCROW nEndRow );
-    void                FillGraphList( const SdrPage*, SCTAB nTab,
-                                        SCCOL nStartCol, SCROW nStartRow,
-                                        SCCOL nEndCol, SCROW nEndRow );
+    void PrepareGraphics( ScDrawLayer*, SCTAB nTab,
+                          SCCOL nStartCol, SCROW nStartRow,
+                          SCCOL nEndCol, SCROW nEndRow );
+
+    void FillGraphList( const SdrPage*, SCTAB nTab,
+                        SCCOL nStartCol, SCROW nStartRow,
+                        SCCOL nEndCol, SCROW nEndRow );
 
     OString BorderToStyle(const char* pBorderName,
-        const ::editeng::SvxBorderLine* pLine, bool& bInsertSemicolon);
+                          const editeng::SvxBorderLine* pLine,
+                          bool& bInsertSemicolon);
 
-    sal_uInt16              GetFontSizeNumber( sal_uInt16 nHeight );
-    const char*         GetFontSizeCss( sal_uInt16 nHeight );
-    sal_uInt16              ToPixel( sal_uInt16 nTwips );
-    Size                MMToPixel( const Size& r100thMMSize );
-    void                IncIndent( short nVal );
-    const sal_Char*         GetIndentStr() { return sIndent; }
+    sal_uInt16  GetFontSizeNumber( sal_uInt16 nHeight );
+    const char* GetFontSizeCss( sal_uInt16 nHeight );
+    sal_uInt16  ToPixel( sal_uInt16 nTwips );
+    Size        MMToPixel( const Size& r100thMMSize );
+    void        IncIndent( short nVal );
+
+    const sal_Char* GetIndentStr()
+    {
+        return sIndent;
+    }
 
 public:
                         ScHTMLExport( SvStream&, const OUString&, ScDocument*, const ScRange&,
-                                        bool bAll, const OUString& aStreamPath, const OUString& rFilterOptions );
+                                      bool bAll, const OUString& aStreamPath, const OUString& rFilterOptions );
     virtual             ~ScHTMLExport();
-    sal_uLong               Write();
+    sal_uLong           Write();
     const OUString&     GetNonConvertibleChars() const
-                            { return aNonConvertibleChars; }
+    {
+        return aNonConvertibleChars;
+    }
 };
 
 #endif
