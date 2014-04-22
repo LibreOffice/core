@@ -67,7 +67,17 @@ private:
         ::sal_Int32     mnRowSpan;
         ::sal_Int32     mnColSpan;
 
-        Data() : mpProperties(NULL), mpOutlinerParaObject(NULL), mfValue(0) {};
+        Data()
+            : mpProperties(NULL)
+            , mpOutlinerParaObject(NULL)
+            , mnCellContentType(CellContentType_EMPTY)
+            , mfValue(0)
+            , mnError(0)
+            , mbMerged(false)
+            , mnRowSpan(0)
+            , mnColSpan(0)
+        {
+        }
     };
 
     void setDataToCell( const Data& rData );
