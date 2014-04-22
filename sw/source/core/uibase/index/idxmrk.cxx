@@ -43,7 +43,6 @@
 #include <swundo.hxx>
 #include <cmdid.h>
 #include <index.hrc>
-#include <idxmrk.hrc>
 #include <swmodule.hxx>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>

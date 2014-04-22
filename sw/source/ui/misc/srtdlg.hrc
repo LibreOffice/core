@@ -16,43 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define BT_OK        1
-#define BT_CANCEL    2
-#define FT_COL       3
-#define FT_KEYTYP    4
-#define CB_KEY1      5
-#define ED_KEY1      6
-#define DLB_KEY1     7
-#define CB_KEY2      8
-#define ED_KEY2      9
-#define DLB_KEY2    10
-#define CB_KEY3     11
-#define ED_KEY3     12
-#define DLB_KEY3    13
-#define FL_SORT_2     14
-#define RB_COL      15
-#define RB_ROW      16
-#define FL_DIR      17
-#define RB_UP       18
-#define RB_DN       19
-#define FL_ORDER    20
-#define RB_TAB      21
-#define RB_TABCH    22
-#define ED_TABCH    23
-#define FL_DELIM    24
+
 #define STR_ROW     25
 #define STR_COL     26
-#define BT_HELP     27
-#define FT_DIR      28
-#define RB_UP2      29
-#define RB_DN2      30
-#define RB_UP3      31
-#define RB_DN3      32
 #define STR_NUMERIC 33
-#define PB_DELIM    34
-#define FL_LANG     35
-#define LB_LANG     36
-#define FL_SORT     37
-#define CB_CASE     38
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

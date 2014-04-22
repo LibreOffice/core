@@ -41,7 +41,6 @@
 #include <viewopt.hxx>
 #include <globals.hrc>
 #include <config.hrc>
-#include <optdlg.hrc>
 #include <swwrtshitem.hxx>
 #include <unomid.h>
 

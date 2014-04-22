@@ -49,7 +49,6 @@
 #include <cmdid.h>
 #include <app.hrc>
 #include <index.hrc>
-#include <../../core/uibase/index/idxmrk.hrc>
 #include <swmodule.hxx>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>

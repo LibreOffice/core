@@ -33,7 +33,6 @@
 
 
 #define MD_UPDATE_BASELINKS 32002
-#define LB_LINKS               30
 #define FT_FILES               31
 #define FT_LINKS               32
 #define FT_TYPE                33
@@ -49,7 +48,6 @@
 #define RB_MANUAL              43
 #define FT_FULL_SOURCE_NAME    44
 #define FT_FULL_TYPE_NAME      45
-#define GB_LINK                46
 #define FT_FILES2              47
 #define FT_FULL_FILE_NAME      48
 

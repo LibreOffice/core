@@ -11,7 +11,6 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include "tpdefaults.hxx"
-#include "optdlg.hrc"
 #include "scresid.hxx"
 #include "scmod.hxx"
 #include "defaultsoptions.hxx"

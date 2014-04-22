@@ -20,16 +20,9 @@
 #ifndef _SCRIPTDLG_HRC
 #define _SCRIPTDLG_HRC
 
-#include <svl/solar.hrc>
-
-// NewObjectDialog
-#define FT_NEWLIB                       10
 #define STR_FT_NEWMACRO                 11
 #define STR_NEWLIB                      12
 #define STR_NEWMACRO                    13
-#define ED_LIBNAME                      14
-#define PB_OK                           15
-#define PB_CANCEL                       16
 #define STR_FT_RENAME                   18
 #define STR_RENAME                      19
 

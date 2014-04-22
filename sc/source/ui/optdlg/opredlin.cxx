@@ -20,8 +20,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
@@ -37,7 +35,6 @@
 #include "scresid.hxx"
 #include "docsh.hxx"
 #include "sc.hrc"
-#include "optdlg.hrc"
 #include "globstr.hrc"
 
 #include "opredlin.hxx"

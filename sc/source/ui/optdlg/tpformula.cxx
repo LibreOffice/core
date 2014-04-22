@@ -24,7 +24,6 @@
 #include <svl/stritem.hxx>
 #include "tpformula.hxx"
 #include "formulaopt.hxx"
-#include "optdlg.hrc"
 #include "scresid.hxx"
 #include "formula/grammar.hxx"
 #include "calcoptionsdlg.hxx"

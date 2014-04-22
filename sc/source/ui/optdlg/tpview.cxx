@@ -20,8 +20,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include "scitems.hxx"
 #include "tpview.hxx"
 #include "global.hxx"
@@ -31,7 +29,6 @@
 #include "scresid.hxx"
 #include "docsh.hxx"
 #include "sc.hrc"
-#include "optdlg.hrc"
 #include "globstr.hrc"
 #include <appoptio.hxx>
 #include <scmod.hxx>

@@ -20,7 +20,6 @@
 #include <vcl/msgbox.hxx>
 
 #include <ids.hrc>
-#include <unknownauthdlg.hrc>
 #include <unknownauthdlg.hxx>
 #include <comphelper/processfactory.hxx>
 

@@ -19,26 +19,8 @@
 
 #include "sc.hrc"
 
-#define BTN_OK          1
-#define BTN_CANCEL      2
-#define BTN_ADD         3
-#define BTN_REMOVE      4
-#define BTN_HELP        5
-#define FL_NAME         10
-#define ED_NAME         11
-#define FL_ASSIGN       12
-#define ED_DBAREA       13
-#define RB_DBAREA       14
-#define FL_OPTIONS      20
-#define BTN_HEADER      21
-#define BTN_SIZE        22
-#define BTN_FORMAT      23
-#define BTN_STRIPDATA   24
-#define FT_SOURCE       25
-#define FT_OPERATIONS   26
 #define STR_ADD         30
 #define STR_MODIFY      31
 #define STR_DB_INVALID  32
-#define BTN_MORE        33
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

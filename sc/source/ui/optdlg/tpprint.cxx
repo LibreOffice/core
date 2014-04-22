@@ -27,7 +27,6 @@
 #include "scmod.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
-#include "optdlg.hrc"
 
 ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
                                     const SfxItemSet& rCoreAttrs )

@@ -11,7 +11,6 @@
 
 #include <scmod.hxx>
 #include "tpcompatibility.hxx"
-#include "optdlg.hrc"
 #include "scresid.hxx"
 #include "appoptio.hxx"
 

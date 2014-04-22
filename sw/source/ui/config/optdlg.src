@@ -21,7 +21,6 @@
 #include <svx/dialogs.hrc>
 #include "globals.hrc"
 #include "config.hrc"
-#include "optdlg.hrc"
 #include "helpid.h"
 
 String ST_SCRIPT_ASIAN

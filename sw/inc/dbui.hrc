@@ -74,11 +74,6 @@
 #define ST_CONFIGUREMAIL        (RC_DBUI_BEGIN + 32)
 
 // Elements -----------------------------------------------------------------
-
-#define BTN_OK              2
-#define BTN_CANCEL          3
-#define BTN_HELP            4
-
 #define MM_PART_TITLE                   0
 #define MM_PART_FIRSTNAME               1
 #define MM_PART_LASTNAME                2

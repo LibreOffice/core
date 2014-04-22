@@ -30,8 +30,6 @@
 #define FT_KEEPTOGETHER     (9)
 #define LST_KEEPTOGETHERLST (10)
 #define PB_OK               (11)
-#define PB_CANCEL           (12)
-#define PB_HELP             (13)
 #define WND_CONTROL         (14)
 #define HELP_FIELD          (15)
 #define FT_ORDER            (16)

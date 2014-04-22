@@ -30,7 +30,6 @@
 #include "docoptio.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
-#include "optdlg.hrc"
 
 #include "tpcalc.hxx"
 

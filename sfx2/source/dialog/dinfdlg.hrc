@@ -42,26 +42,6 @@
 #define RB_PROPERTY_YES     100
 #define RB_PROPERTY_NO      101
 
-#define PB_OK                   100
-#define PB_CANCEL               101
-#define PB_HELP                 102
-#define CB_NEGATIVE             103
-#define FT_YEAR                 104
-#define ED_YEAR                 105
-#define FT_MONTH                106
-#define ED_MONTH                107
-#define FT_DAY                  108
-#define ED_DAY                  109
-#define FT_HOUR                 110
-#define ED_HOUR                 111
-#define FT_MINUTE               112
-#define ED_MINUTE               113
-#define FT_SECOND               114
-#define ED_SECOND               115
-#define FT_MSECOND              116
-#define ED_MSECOND              117
-#define FL_DURATION             118
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,7 +19,6 @@
 
 #include <svtools/controldims.hrc>
 #include "index.hrc"
-#include "idxmrk.hrc"
 #include "helpid.h"
 #include "cmdid.h"
 

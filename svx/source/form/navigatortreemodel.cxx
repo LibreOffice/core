@@ -30,7 +30,6 @@
 
 #include "fmundo.hxx"
 #include "fmhelp.hrc"
-#include "fmexpl.hrc"
 #include "fmexpl.hxx"
 #include "svx/fmresids.hrc"
 #include "fmshimp.hxx"

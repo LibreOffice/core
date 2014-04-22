@@ -131,7 +131,6 @@
 
 #define FL_SEPARATOR            1
 #define FL_TYPE                 2
-#define FL_NAME                 3
 
 
 #define FT_TYPE_HINTS            1

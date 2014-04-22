@@ -18,7 +18,6 @@
  */
 
 #include "RelationControl.hxx"
-#include "RelationControl.hrc"
 
 #include <svtools/editbrowsebox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

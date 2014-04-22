@@ -19,7 +19,6 @@
 
 
 #include "svx/fmresids.hrc"
-#include "fmexpl.hrc"
 #include "fmexpl.hxx"
 
 #include "fmhelp.hrc"

@@ -75,35 +75,6 @@
 #define RID_SVXBMP_GALLERY_MEDIA                (RID_SVX_GALLERY_START + 71)
 
 // lokale Defines
-#define BTN_OK 1
-#define BTN_CANCEL 1
-#define BTN_HELP 1
-
-#define FL_INFO 1
-#define FT_SIZE 1
-#define FT_DEPTH 2
-#define FT_FORMAT 4
-#define LBX_FOUND 1
-#define BTN_TAKE 5
-#define BTN_IMPORT 5
-#define BTN_PATH 1
-#define BTN_SEARCH 4
-#define CBX_PREVIEW 3
-#define FT_PATH 1
-#define FT_FILETYPE 2
-#define CBB_FILETYPE 1
-#define FL_SEARCH_DIR 1
-#define FL_SEARCH_TYPE 2
-#define FT_SEARCH_DIR 1
-#define FT_SEARCH_TYPE 2
-#define FL_TAKE_PROGRESS 1
-#define FT_TAKE_FILE 1
-#define BTN_ADD 2
-#define WND_PREVIEW 1
-#define BTN_TAKEALL 1
-#define BTN_PREVIEW 6
-#define WND_BRSPRV 1
-#define MN_ADDMENU 2
 #define MN_ADD 6
 #define MN_PREVIEW 10
 #define MN_DELETE 12
@@ -116,27 +87,6 @@
 #define MN_RENAME 22
 #define MN_PROPERTIES 23
 #define MN_ASSIGN_ID 24
-
-#define FL_ACTUALIZE_PROGRESS 1
-#define FT_ACTUALIZE_FILE 1
-#define FL_ID                  1
-#define LB_RESNAME      1
-#define EDT_TITLE       20
-#define FL_TITLE               21
-
-// Gallery-TabDialog
-#define FI_MS_IMAGE 1
-#define EDT_MS_NAME 1
-#define FL_MS_GENERAL_FIRST 1
-#define FT_MS_TYPE 2
-#define FT_MS_SHOW_TYPE 3
-#define FT_MS_PATH 4
-#define FT_MS_SHOW_PATH 5
-#define FT_MS_CONTENT 6
-#define FT_MS_SHOW_CONTENT 7
-#define FL_MS_GENERAL_SECOND 2
-#define FT_MS_CHANGEDATE 10
-#define FT_MS_SHOW_CHANGEDATE 11
 
 // Gallery Browser
 #define GALLERY_BROWSER1    1

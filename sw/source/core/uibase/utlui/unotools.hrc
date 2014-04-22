@@ -19,13 +19,6 @@
 #ifndef _UNOTOOLS_HRC
 #define _UNOTOOLS_HRC
 
-#define FT_NEW_NAME         1
-#define ED_NEW_NAME         2
-#define FL_NAME             3
-#define PB_OK               4
-#define PB_HELP             5
-#define PB_CANCEL           6
-
 #define ST_MENU_ZOOM        1
 #define ST_MENU_UP          2
 #define ST_MENU_DOWN        3

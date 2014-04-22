@@ -69,7 +69,6 @@
 // Hangul / Hanja Options Dialog
 
 #define FT_USERDEFDICT              1
-#define FL_OPTIONS                  2
 #define BTN_OPTIONS                 10
 
 #define LB_DICTS                    1

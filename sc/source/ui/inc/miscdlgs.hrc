@@ -18,32 +18,9 @@
  */
 
 #include "sc.hrc"
-                    // -> RID_SCDLG_MOVETAB
-                    // -> RID_SCDLG_SELENTRY
-                    // -> RID_SCDLG_FILLSERIES
 
-// General
-#define BTN_OK          100
-#define BTN_CANCEL      102
-#define BTN_HELP        103
-#define BTN_MORE        104
-#define BTN_ADD         105
-#define BTN_REMOVE      106
-#define FT_LABEL        110
-#define FL_FRAME        112
 #define STR_BTN_CLOSE   200
 
-
-// String input
-#define ED_INPUT        10
-
-// Selection from a (String-)ListBox
-#define FL_ENTRYLIST    10
-#define LB_ENTRYLIST    11
-
-// Set/Reset Grouping:
-#define BTN_GROUP_COLS  1
-#define BTN_GROUP_ROWS  3
 #define STR_GROUP       1
 #define STR_UNGROUP     2
 

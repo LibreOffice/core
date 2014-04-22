@@ -22,52 +22,8 @@
 #define BTN_OK          1
 #define BTN_CANCEL      2
 #define BTN_HELP        3
-#define BTN_MORE        4
-#define BTN_OPTIONS     5
 
-#define RB_NONE         1
-#define RB_AUTO         2
-#define RB_USER         3
-#define RB_SORT_ASC     4
-#define RB_SORT_DESC    5
-#define RB_SORT_MAN     6
-
-#define FL_FUNC         1
-#define FL_DISPLAY      2
-#define FL_SORT_BY      3
-#define FL_LAYOUT       4
-#define FL_AUTOSHOW     5
-#define FL_HIDE         6
-
-#define LB_FUNC         1
-#define LB_TYPE         2
-#define LB_BASEFIELD    3
-#define LB_BASEITEM     4
-#define LB_SORT_BY      5
-#define LB_LAYOUT       6
-#define LB_SHOW_FROM    7
-#define LB_SHOW_USING   8
-#define LB_HIERARCHY    9
 #define LB_DIMS         10
-
-#define FT_NAMELABEL    1
-#define FT_NAME         2
-#define FT_TYPE         3
-#define FT_BASEFIELD    4
-#define FT_BASEITEM     5
-#define FT_LAYOUT       6
-#define FT_SHOW         7
-#define FT_SHOW_FROM    8
-#define FT_SHOW_USING   9
-#define FT_HIERARCHY    10
 #define FT_DIMS         11
-
-#define CB_SHOWALL      1
-#define CB_LAYOUT_EMPTY 2
-#define CB_SHOW         3
-
-#define NF_SHOW         1
-
-#define CT_HIDE         1
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

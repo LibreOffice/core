@@ -22,12 +22,8 @@
 
 #include <sfx2/sfx.hrc>
 
-// #defines *****************************************************************
-
 #define IBX_MNUCFG_ALREADY_INCLUDED         (RID_SFX_MENU_START+2)
 
-#define BTN_OK                1
-#define BTN_CANCEL            2
 #define BTN_UP                3
 #define BTN_LEFT              4
 #define BTN_RIGHT             5
