@@ -195,16 +195,16 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, const O
         xPropertySet->setPropertyValue("RotateAngle", uno::makeAny(sal_Int32(NormAngle360(nRotation * -1))));
     }
 
-    if (nHoriOrient != 0)
+    if (nHoriOrient != 0 && xPropertySet.is())
         xPropertySet->setPropertyValue("HoriOrient", uno::makeAny(nHoriOrient));
-    if (nVertOrient != 0)
+    if (nVertOrient != 0 && xPropertySet.is())
         xPropertySet->setPropertyValue("VertOrient", uno::makeAny(nVertOrient));
-    if (obFitShapeToText)
+    if (obFitShapeToText && xPropertySet.is())
     {
         xPropertySet->setPropertyValue("SizeType", uno::makeAny(*obFitShapeToText ? text::SizeType::MIN : text::SizeType::FIX));
         xPropertySet->setPropertyValue("FrameIsAutomaticHeight", uno::makeAny(*obFitShapeToText));
     }
-    if (!bFilled)
+    if (!bFilled && xPropertySet.is())
     {
         if (m_bTextFrame)
             xPropertySet->setPropertyValue("BackColorTransparency", uno::makeAny(sal_Int32(100)));
@@ -464,21 +464,45 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         }
         // These are in EMU, convert to mm100.
         else if (i->first == "dxTextLeft")
-            xPropertySet->setPropertyValue("LeftBorderDistance", uno::makeAny(i->second.toInt32() / 360));
+        {
+            if (xPropertySet.is())
+                xPropertySet->setPropertyValue("LeftBorderDistance", uno::makeAny(i->second.toInt32() / 360));
+        }
         else if (i->first == "dyTextTop")
-            xPropertySet->setPropertyValue("TopBorderDistance", uno::makeAny(i->second.toInt32() / 360));
+        {
+            if (xPropertySet.is())
+                xPropertySet->setPropertyValue("TopBorderDistance", uno::makeAny(i->second.toInt32() / 360));
+        }
         else if (i->first == "dxTextRight")
-            xPropertySet->setPropertyValue("RightBorderDistance", uno::makeAny(i->second.toInt32() / 360));
+        {
+            if (xPropertySet.is())
+                xPropertySet->setPropertyValue("RightBorderDistance", uno::makeAny(i->second.toInt32() / 360));
+        }
         else if (i->first == "dyTextBottom")
-            xPropertySet->setPropertyValue("BottomBorderDistance", uno::makeAny(i->second.toInt32() / 360));
+        {
+            if (xPropertySet.is())
+                xPropertySet->setPropertyValue("BottomBorderDistance", uno::makeAny(i->second.toInt32() / 360));
+        }
         else if (i->first == "dxWrapDistLeft")
-            xPropertySet->setPropertyValue("LeftMargin", uno::makeAny(i->second.toInt32() / 360));
+        {
+            if (xPropertySet.is())
+                xPropertySet->setPropertyValue("LeftMargin", uno::makeAny(i->second.toInt32() / 360));
+        }
         else if (i->first == "dyWrapDistTop")
-            xPropertySet->setPropertyValue("TopMargin", uno::makeAny(i->second.toInt32() / 360));
+        {
+            if (xPropertySet.is())
+                xPropertySet->setPropertyValue("TopMargin", uno::makeAny(i->second.toInt32() / 360));
+        }
         else if (i->first == "dxWrapDistRight")
-            xPropertySet->setPropertyValue("RightMargin", uno::makeAny(i->second.toInt32() / 360));
+        {
+            if (xPropertySet.is())
+                xPropertySet->setPropertyValue("RightMargin", uno::makeAny(i->second.toInt32() / 360));
+        }
         else if (i->first == "dyWrapDistBottom")
-            xPropertySet->setPropertyValue("BottomMargin", uno::makeAny(i->second.toInt32() / 360));
+        {
+            if (xPropertySet.is())
+                xPropertySet->setPropertyValue("BottomMargin", uno::makeAny(i->second.toInt32() / 360));
+        }
         else if (i->first == "fillType")
         {
             switch (i->second.toInt32())
