@@ -30,7 +30,11 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <svx/svxids.hrc>
+#include <svx/xflclit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xfltrit.hxx>
 #include <editeng/memberids.hrc>
 
 #include <swtypes.hxx>

@@ -26,6 +26,7 @@
 
 #include <svl/eitem.hxx>
 #include "svx/svxdllapi.h"
+#include "svx/rectenum.hxx"
 
 /*************************************************************************
 |*

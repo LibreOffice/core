@@ -26,6 +26,7 @@
 #include <hintids.hxx>
 
 #include <svx/svxids.hrc>
+#include <svx/xdef.hxx>
 #include <comphelper/TypeGeneration.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>

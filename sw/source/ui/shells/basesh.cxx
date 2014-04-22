@@ -33,6 +33,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/imapdlg.hxx>
+#include <svx/xflclit.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>

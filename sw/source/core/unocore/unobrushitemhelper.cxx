@@ -37,6 +37,9 @@
 #include <svx/xflbstit.hxx>
 #include <svx/xflboxy.hxx>
 #include <svx/xflbckit.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xfltrit.hxx>
+#include <svx/xflhtit.hxx>
 #include <svx/unoshape.hxx>
 #include <hintids.hxx>
 

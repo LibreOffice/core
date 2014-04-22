@@ -51,6 +51,7 @@
 #include <editeng/lrspitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
+#include <svl/itemiter.hxx>
 #include <unosett.hxx>
 #include <unostyle.hxx>
 #include <fmtclds.hxx>

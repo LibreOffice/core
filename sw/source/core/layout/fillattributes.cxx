@@ -31,6 +31,7 @@
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <svx/xfillit0.hxx>
+#include <vcl/graph.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
