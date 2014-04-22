@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <cstdarg>
 
 #include <hintids.hxx>
@@ -157,8 +159,10 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
     static sal_uInt16 nLabelTitleNo = 0;
     static sal_uInt16 nBCTitleNo = 0;
 
+#if HAVE_FEATURE_DBCONNECTIVITY
     // Create DB-Manager
     boost::scoped_ptr<SwDBMgr> pDBMgr(new SwDBMgr);
+#endif
 
     // Read SwLabItem from Config
     SwLabCfgItem aLabCfg(bLabel);
@@ -170,7 +174,13 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
     SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pDialogFactory, "SwAbstractDialogFactory fail!");
 
-    boost::scoped_ptr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(0, aSet, pDBMgr.get(), bLabel));
+    boost::scoped_ptr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(0, aSet,
+#if HAVE_FEATURE_DBCONNECTIVITY
+                                                                            pDBMgr.get(),
+#else
+                                                                            NULL,
+#endif
+                                                                            bLabel));
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
     if ( RET_OK == pDlg->Execute() )

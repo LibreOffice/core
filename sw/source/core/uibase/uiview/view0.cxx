@@ -136,14 +136,16 @@ void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOpt
 
 }
 
-void   SwView::SetMailMergeConfigItem(SwMailMergeConfigItem*  pConfigItem,
+#if HAVE_FEATURE_DBCONNECTIVITY
+
+void SwView::SetMailMergeConfigItem(SwMailMergeConfigItem*  pConfigItem,
                 sal_uInt16 nRestart, sal_Bool bIsSource)
 {
     m_pViewImpl->SetMailMergeConfigItem(pConfigItem, nRestart, bIsSource);
     UIFeatureChanged();
 }
 
-SwMailMergeConfigItem*  SwView::GetMailMergeConfigItem()
+SwMailMergeConfigItem* SwView::GetMailMergeConfigItem()
 {
     return m_pViewImpl->GetMailMergeConfigItem();
 }
@@ -157,6 +159,8 @@ sal_Bool SwView::IsMailMergeSourceView() const
 {
     return m_pViewImpl->IsMailMergeSourceView();
 }
+
+#endif
 
 static sal_Bool lcl_IsViewMarks( const SwViewOption& rVOpt )
 {

@@ -697,7 +697,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/uibase/uno/unodispatch \
     sw/source/core/uibase/uno/unodoc \
     sw/source/core/uibase/uno/unofreg \
-    sw/source/core/uibase/uno/unomailmerge \
     sw/source/core/uibase/uno/unomod \
     sw/source/core/uibase/uno/unomodule \
     sw/source/core/uibase/uno/unotxdoc \
@@ -752,6 +751,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/uibase/dbui/mailmergehelper \
     sw/source/core/uibase/dbui/mmconfigitem \
     sw/source/core/uibase/dbui/swdbtoolsclient \
+    sw/source/core/uibase/uno/unomailmerge \
 ))
 endif
 

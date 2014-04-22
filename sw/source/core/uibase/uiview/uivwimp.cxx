@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <cmdid.h>
 #include "globals.hrc"
 
@@ -58,9 +60,11 @@ SwView_Impl::SwView_Impl(SwView* pShell)
     , pScanEvtLstnr(0)
     , pClipEvtLstnr(0)
     , eShellMode(SHELL_MODE_TEXT)
+#if HAVE_FEATURE_DBCONNECTIVITY
     , pConfigItem(0)
     , nMailMergeRestartPage(0)
     , bMailMergeSourceView(sal_True)
+#endif
     , m_pDocInserter(NULL)
     , m_pRequest(NULL)
     , m_nParam(0)
@@ -92,8 +96,9 @@ SwView_Impl::~SwView_Impl()
         pClipEvtLstnr->AddRemoveListener( sal_False );
         pClipEvtLstnr->ViewDestroyed();
     }
+#if HAVE_FEATURE_DBCONNECTIVITY
     delete pConfigItem;
-
+#endif
     delete m_pDocInserter;
     delete m_pRequest;
 }

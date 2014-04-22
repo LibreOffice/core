@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <hintids.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -377,12 +379,14 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case FN_MAILMERGE_SENDMAIL_CHILDWINDOW:
             break;
+#if HAVE_FEATURE_DBCONNECTIVITY
             case FN_MAILMERGE_CHILDWINDOW:
             {
                 if(!GetMailMergeConfigItem())
                     rSet.DisableItem(nWhich);
             }
             break;
+#endif
             case SID_ALIGN_ANY_LEFT :
             case SID_ALIGN_ANY_HCENTER  :
             case SID_ALIGN_ANY_RIGHT    :
@@ -518,7 +522,9 @@ bool SwView::HasUIFeature( sal_uInt32 nFeature )
     switch(nFeature)
     {
         case CHILDWIN_LABEL     : bRet = m_pWrtShell->IsLabelDoc(); break;
+#if HAVE_FEATURE_DBCONNECTIVITY
         case CHILDWIN_MAILMERGE : bRet = 0 != GetMailMergeConfigItem(); break;
+#endif
     }
     return bRet;
 }

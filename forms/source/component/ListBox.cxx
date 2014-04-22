@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "ListBox.hxx"
 #include "property.hxx"
@@ -352,6 +353,7 @@ namespace frm
         }
         break;
 
+#if HAVE_FEATURE_DBCONNECTIVITY
         case PROPERTY_ID_SELECT_VALUE :
         {
             ORowSetValue v;
@@ -360,7 +362,7 @@ namespace frm
             setControlValue( newSelectSeq, eOther );
         }
         break;
-
+#endif
         case PROPERTY_ID_DEFAULT_SELECT_SEQ :
             DBG_ASSERT(_rValue.getValueType().equals(::getCppuType(static_cast< Sequence<sal_Int16>*>(0))),
                 "OListBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
@@ -859,6 +861,7 @@ namespace frm
 
             switch (m_eListSourceType)
             {
+#if HAVE_FEATURE_DBCONNECTIVITY
             case ListSourceType_SQL:
             case ListSourceType_SQLPASSTHROUGH:
             case ListSourceType_TABLE:
@@ -928,7 +931,7 @@ namespace frm
                     }
                 }
                 break;
-
+#endif
             case ListSourceType_TABLEFIELDS:
                 {
                     Reference<XNameAccess> xFieldNames = getTableFields(xConnection, sListSource);
@@ -1173,8 +1176,10 @@ namespace frm
         const ValueList aValues( impl_getValues() );
         assert( m_nConvertedBoundValuesType == getValueType());
         Sequence< sal_Int16 > aSelectionIndicies(i_aValues.getLength());
+
         sal_Int32 nCount(0);
 
+#if HAVE_FEATURE_DBCONNECTIVITY
         sal_Int16 *pIndex = aSelectionIndicies.getArray();
         const Any *pValue = i_aValues.getConstArray();
         const Any * const pValueEnd = i_aValues.getConstArray() + i_aValues.getLength();
@@ -1204,12 +1209,14 @@ namespace frm
             }
         }
         assert(aSelectionIndicies.getArray() + nCount == pIndex);
+#endif
         aSelectionIndicies.realloc(nCount);
         return aSelectionIndicies;
     }
 
     Any OListBoxModel::translateDbColumnToControlValue()
     {
+#if HAVE_FEATURE_DBCONNECTIVITY
         Reference< XPropertySet > xBoundField( getField() );
         if ( !xBoundField.is() )
         {
@@ -1223,6 +1230,9 @@ namespace frm
         m_aSaveValue = aCurrentValue;
 
         return makeAny( translateDbValueToControlValue(aCurrentValue) );
+#else
+        return Any();
+#endif
     }
 
     // XReset
@@ -1325,11 +1335,13 @@ namespace frm
         break;
 
         case eValue:
+#if HAVE_FEATURE_DBCONNECTIVITY
         {
             ORowSetValue v;
             v.fill(_rExternalValue);
             aSelectIndexes = translateDbValueToControlValue(v);
         }
+#endif
         break;
 
         case eIndexList:

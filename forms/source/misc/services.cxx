@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "services.hxx"
 #include "frm_module.hxx"
 #include <cppuhelper/factory.hxx>
@@ -220,7 +222,9 @@ void SAL_CALL createRegistryInfo_FORMS()
     static sal_Bool bInit = sal_False;
     if (!bInit)
     {
+#if HAVE_FEATURE_DBCONNECTIVITY
         createRegistryInfo_ODatabaseForm();
+#endif
         createRegistryInfo_OFilterControl();
         createRegistryInfo_OScrollBarModel();
         createRegistryInfo_OSpinButtonModel();
@@ -229,7 +233,9 @@ void SAL_CALL createRegistryInfo_FORMS()
         createRegistryInfo_ORichTextModel();
         createRegistryInfo_ORichTextControl();
         createRegistryInfo_CLibxml2XFormsExtension();
+#if HAVE_FEATURE_DBCONNECTIVITY
         createRegistryInfo_FormOperations();
+#endif
         bInit = sal_True;
     }
 }

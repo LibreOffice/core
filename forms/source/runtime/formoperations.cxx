@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "formoperations.hxx"
 #include "frm_strings.hxx"
@@ -1741,6 +1742,7 @@ namespace frm
         {
             f();
         }
+#if HAVE_FEATURE_DBCONNECTIVITY
         catch( const SQLException& e )
         {
             (void)e;
@@ -1753,6 +1755,7 @@ namespace frm
             aInfo.prepend( sAdditionalError );
             aInfo.doThrow();
         }
+#endif
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {

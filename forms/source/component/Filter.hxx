@@ -20,6 +20,8 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_FILTER_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_FILTER_HXX
 
+#include <config_features.h>
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -70,7 +72,9 @@ namespace frm
         MapString2String                m_aDisplayItemToValueItem;
 
         OUString                 m_aText;
+#if HAVE_FEATURE_DBCONNECTIVITY
         ::connectivity::OSQLParser      m_aParser;
+#endif
         sal_Int16                       m_nControlClass;        // which kind of control do we use?
         sal_Bool                        m_bFilterList : 1;
         sal_Bool                        m_bMultiLine : 1;

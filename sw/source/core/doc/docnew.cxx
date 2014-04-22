@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <doc.hxx>
 #include <dcontact.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
@@ -398,8 +400,10 @@ SwDoc::SwDoc()
     maStatsUpdateTimer.SetTimeout( 100 );
     maStatsUpdateTimer.SetTimeoutHdl( LINK( this, SwDoc, DoIdleStatsUpdate ) );
 
+#if HAVE_FEATURE_DBCONNECTIVITY
     // Create DBMgr
     mpDBMgr = new SwDBMgr;
+#endif
 
     // create TOXTypes
     InitTOXTypes();
@@ -641,7 +645,9 @@ SwDoc::~SwDoc()
     mpCharFmtTbl->erase( mpCharFmtTbl->begin() );
 
     DELETEZ( mpPrt );
+#if HAVE_FEATURE_DBCONNECTIVITY
     DELETEZ( mpDBMgr );
+#endif
 
     // All Flys need to be destroyed before the Drawing Model,
     // because Flys can still contain DrawContacts, when no

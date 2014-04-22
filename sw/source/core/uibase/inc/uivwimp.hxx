@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_UIVWIMP_HXX
 #define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_UIVWIMP_HXX
 
+#include <config_features.h>
+
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <view.hxx>
 
@@ -103,9 +105,11 @@ class SwView_Impl
     SwClipboardChangeListener*  pClipEvtLstnr;
     ShellModes                  eShellMode;
 
+#if HAVE_FEATURE_DBCONNECTIVITY
     SwMailMergeConfigItem*      pConfigItem;
     sal_uInt16                  nMailMergeRestartPage;
     sal_Bool                    bMailMergeSourceView;
+#endif
 
     sfx2::DocumentInserter*     m_pDocInserter;
     SfxRequest*                 m_pRequest;
@@ -136,6 +140,7 @@ public:
 
     void                            AddTransferable(SwTransferable& rTransferable);
 
+#if HAVE_FEATURE_DBCONNECTIVITY
     void   SetMailMergeConfigItem(SwMailMergeConfigItem*  pItem,
                                                 sal_uInt16 nRestart, sal_Bool bIsSource)
                             {   pConfigItem = pItem;
@@ -145,6 +150,7 @@ public:
     SwMailMergeConfigItem*  GetMailMergeConfigItem() {return pConfigItem;}
     sal_uInt16              GetMailMergeRestartPage() const {return nMailMergeRestartPage;}
     sal_Bool                IsMailMergeSourceView() const { return bMailMergeSourceView;  }
+#endif
 
     //#i33307# restore editing position
     void                    SetRestorePosition(const Point& rCrsrPos, bool bSelectObj)

@@ -98,7 +98,9 @@ namespace frm
         :UnoControl()
         ,m_aTextListeners( *this )
         ,m_xContext( _rxORB )
+#if HAVE_FEATURE_DBCONNECTIVITY
         ,m_aParser( _rxORB )
+#endif
         ,m_nControlClass( FormComponentType::TEXTFIELD )
         ,m_bFilterList( sal_False )
         ,m_bMultiLine( sal_False )
@@ -109,6 +111,7 @@ namespace frm
 
     sal_Bool OFilterControl::ensureInitialized( )
     {
+#if HAVE_FEATURE_DBCONNECTIVITY
         if ( !m_xField.is() )
         {
             OSL_FAIL( "OFilterControl::ensureInitialized: improperly initialized: no field!" );
@@ -139,7 +142,7 @@ namespace frm
             // no fallback anymore
             return sal_False;
         }
-
+#endif
         return sal_True;
     }
 
@@ -291,6 +294,9 @@ namespace frm
 
     void SAL_CALL OFilterControl::itemStateChanged( const ItemEvent& rEvent ) throw(RuntimeException, std::exception)
     {
+#if !HAVE_FEATURE_DBCONNECTIVITY
+        (void) rEvent;
+#else
         OUStringBuffer aText;
         switch (m_nControlClass)
         {
@@ -377,11 +383,13 @@ namespace frm
             while( aIt.hasMoreElements() )
                 ((XTextListener *)aIt.next())->textChanged( aEvt );
         }
+#endif
     }
 
 
     void OFilterControl::implInitFilterList()
     {
+#if HAVE_FEATURE_DBCONNECTIVITY
         if ( !ensureInitialized( ) )
             // already asserted in ensureInitialized
             return;
@@ -487,6 +495,7 @@ namespace frm
         {
             DBG_UNHANDLED_EXCEPTION();
         }
+#endif
     }
 
     // XFocusListener
@@ -506,6 +515,7 @@ namespace frm
 
     sal_Bool SAL_CALL OFilterControl::commit() throw(RuntimeException, std::exception)
     {
+#if HAVE_FEATURE_DBCONNECTIVITY
         if ( !ensureInitialized( ) )
             // already asserted in ensureInitialized
             return sal_True;
@@ -550,6 +560,7 @@ namespace frm
             while( aIt.hasMoreElements() )
                 static_cast< XTextListener* >( aIt.next() )->textChanged( aEvt );
         }
+#endif
         return sal_True;
     }
 
@@ -820,6 +831,9 @@ namespace frm
 
     void OFilterControl::initControlModel(Reference< XPropertySet >& xControlModel)
     {
+#if !HAVE_FEATURE_DBCONNECTIVITY
+        (void) xControlModel;
+#else
         if ( !xControlModel.is() )
         {
             OSL_FAIL( "OFilterControl::initialize: invalid control model argument!" );
@@ -873,6 +887,7 @@ namespace frm
             xForm = xForm.query( xModel->getParent() );
         m_xConnection = ::dbtools::getConnection( xForm );
         OSL_ENSURE( m_xConnection.is(), "OFilterControl::initialize: unable to determine the form's connection!" );
+#endif
     }
 
     OUString SAL_CALL OFilterControl::getImplementationName(  ) throw (RuntimeException, std::exception)

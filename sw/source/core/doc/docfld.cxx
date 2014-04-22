@@ -1924,6 +1924,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
         switch( pFld->GetTyp()->Which() )
         {
             case RES_DBFLD:
+#if HAVE_FEATURE_DBCONNECTIVITY
                 if( IsNameInArray( rOldNames, lcl_DBDataToString(((SwDBField*)pFld)->GetDBData())))
                 {
                     SwDBFieldType* pOldTyp = (SwDBFieldType*)pFld->GetTyp();
@@ -1939,6 +1940,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
 
                     bExpand = true;
                 }
+#endif
                 break;
 
             case RES_DBSETNUMBERFLD:
@@ -2486,12 +2488,13 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
         SwGetExpField* pGetFld = (SwGetExpField*)rTFld.GetFmtFld().GetField();
         pGetFld->ChgBodyTxtFlag( bIsInBody );
     }
+#if HAVE_FEATURE_DBCONNECTIVITY
     else if( RES_DBFLD == nFldWhich )
     {
         SwDBField* pDBFld = (SwDBField*)rTFld.GetFmtFld().GetField();
         pDBFld->ChgBodyTxtFlag( bIsInBody );
     }
-
+#endif
     if( pNew != NULL )
         if( !pFldSortLst->insert( pNew ).second )
             delete pNew;
@@ -2698,6 +2701,7 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
             break;
 
         case RES_DBFLD:
+#if HAVE_FEATURE_DBCONNECTIVITY
             {
                 // JP 10.02.96: call ChgValue, so that the style change sets the
                 // ContentString correctly
@@ -2708,6 +2712,7 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
                 pDBFld->ClearInitialized();
                 pDBFld->InitContent();
             }
+#endif
             // no break;
 
         default:

@@ -62,12 +62,10 @@ $(eval $(call gb_Library_add_exception_objects,frm,\
     forms/source/component/Columns \
     forms/source/component/ComboBox \
     forms/source/component/Currency \
-    forms/source/component/DatabaseForm \
     forms/source/component/Date \
     forms/source/component/EditBase \
     forms/source/component/Edit \
     forms/source/component/entrylisthelper \
-    forms/source/component/errorbroadcaster \
     forms/source/component/EventThread \
     forms/source/component/File \
     forms/source/component/Filter \
@@ -123,7 +121,6 @@ $(eval $(call gb_Library_add_exception_objects,frm,\
     forms/source/richtext/richtextviewport \
     forms/source/richtext/rtattributehandler \
     forms/source/richtext/specialdispatchers \
-    forms/source/runtime/formoperations \
     forms/source/solar/component/navbarcontrol \
     forms/source/solar/control/navtoolbar \
     forms/source/xforms/binding \
@@ -152,6 +149,14 @@ $(eval $(call gb_Library_add_exception_objects,frm,\
     forms/source/xforms/xmlhelper \
     forms/source/xforms/xpathlib/extension \
     forms/source/xforms/xpathlib/xpathlib \
+))
+
+$(eval $(call gb_Library_add_exception_objects,frm,\
+    $(call gb_Helper_optional,DBCONNECTIVITY, \
+        forms/source/component/DatabaseForm \
+        forms/source/component/errorbroadcaster \
+        forms/source/runtime/formoperations \
+    ) \
 ))
 
 # vim: set noet sw=4 ts=4:
