@@ -41,7 +41,7 @@ class   StructListBox : public SvTreeListBox
 {
 private:
 
-    sal_Bool            bActiveFlag;
+    bool            bActiveFlag;
 
 protected:
                     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -58,8 +58,8 @@ public:
                         sal_uLong nPos = TREELIST_APPEND,
                         IFormulaToken* pToken = NULL );
 
-    void            SetActiveFlag(sal_Bool bFlag=sal_True);
-    sal_Bool            GetActiveFlag();
+    void            SetActiveFlag(bool bFlag=true);
+    bool            GetActiveFlag();
     void            GetFocus() SAL_OVERRIDE;
     void            LoseFocus() SAL_OVERRIDE;
 };

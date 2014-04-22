@@ -35,7 +35,7 @@ namespace formula
 StructListBox::StructListBox(Window* pParent, const ResId& rResId ):
     SvTreeListBox(pParent,rResId )
 {
-    bActiveFlag=sal_False;
+    bActiveFlag=false;
 
     Font aFont( GetFont() );
     Size aSize = aFont.GetSize();
@@ -53,31 +53,31 @@ SvTreeListEntry* StructListBox::InsertStaticEntry(
     return pEntry;
 }
 
-void StructListBox::SetActiveFlag(sal_Bool bFlag)
+void StructListBox::SetActiveFlag(bool bFlag)
 {
     bActiveFlag=bFlag;
 }
 
-sal_Bool StructListBox::GetActiveFlag()
+bool StructListBox::GetActiveFlag()
 {
     return bActiveFlag;
 }
 
 void StructListBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    bActiveFlag=sal_True;
+    bActiveFlag=true;
     SvTreeListBox::MouseButtonDown(rMEvt);
 }
 
 void StructListBox::GetFocus()
 {
-    bActiveFlag=sal_True;
+    bActiveFlag=true;
     SvTreeListBox::GetFocus();
 }
 
 void StructListBox::LoseFocus()
 {
-    bActiveFlag=sal_False;
+    bActiveFlag=false;
     SvTreeListBox::LoseFocus();
 }
 
@@ -105,14 +105,14 @@ StructPage::StructPage(Window* pParent):
 
 void StructPage::ClearStruct()
 {
-    aTlbStruct.SetActiveFlag(sal_False);
+    aTlbStruct.SetActiveFlag(false);
     aTlbStruct.Clear();
 }
 
 SvTreeListEntry* StructPage::InsertEntry( const OUString& rText, SvTreeListEntry* pParent,
                                        sal_uInt16 nFlag,sal_uLong nPos,IFormulaToken* pIFormulaToken)
 {
-    aTlbStruct.SetActiveFlag( sal_False );
+    aTlbStruct.SetActiveFlag( false );
 
     SvTreeListEntry* pEntry = NULL;
     switch( nFlag )

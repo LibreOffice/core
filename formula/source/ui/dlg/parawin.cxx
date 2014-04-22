@@ -67,7 +67,7 @@ ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos):
     aSlider         ( this, ModuleRes( WND_SLIDER ) ),
     m_sOptional     ( ModuleRes( STR_OPTIONAL ) ),
     m_sRequired     ( ModuleRes( STR_REQUIRED ) ),
-    bRefMode        (sal_False)
+    bRefMode        (false)
 {
     FreeResource();
     aDefaultString=aFtEditDesc.GetText();

@@ -130,7 +130,7 @@ void FormulaHelper::FillArgStrings( const OUString&   rFormula,
     sal_Int32       nStart  = 0;
     sal_Int32       nEnd    = 0;
     sal_uInt16      i;
-    sal_Bool        bLast   = sal_False;
+    bool        bLast   = false;
 
     for ( i=0; i<nArgs && !bLast; i++ )
     {
@@ -143,7 +143,7 @@ void FormulaHelper::FillArgStrings( const OUString&   rFormula,
             if ( nEnd != nStart )
                 _rArgs.push_back(rFormula.copy( nStart, nEnd-1-nStart ));
             else
-                _rArgs.push_back(OUString()), bLast = sal_True;
+                _rArgs.push_back(OUString()), bLast = true;
         }
         else
         {
@@ -175,10 +175,10 @@ void FormulaHelper::GetArgStrings( ::std::vector< OUString >& _rArgs,
 
 
 
-inline sal_Bool IsFormulaText( const CharClass* _pCharClass,const OUString& rStr, sal_Int32 nPos )
+inline bool IsFormulaText( const CharClass* _pCharClass,const OUString& rStr, sal_Int32 nPos )
 {
     if( _pCharClass->isLetterNumeric( rStr, nPos ) )
-        return sal_True;
+        return true;
     else
     {   // In internationalized versions function names may contain a dot
         //  and in every version also an underscore... ;-)
@@ -201,11 +201,11 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
     sal_Int32  nFStart = FUNC_NOTFOUND;
     sal_Int32  nParPos = nStart;
 
-    sal_Bool bRepeat, bFound;
+    bool bRepeat, bFound;
     do
     {
-        bFound  = sal_False;
-        bRepeat = sal_False;
+        bFound  = false;
+        bRepeat = false;
 
         if ( bBack )
         {
@@ -219,7 +219,7 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
                     if (nParPos > 0)
                         nParPos--;
                 }
-                else if ( (bFound = ( rFormula[nParPos] == '(' ) ) == sal_False )
+                else if ( (bFound = ( rFormula[nParPos] == '(' ) ) == false )
                     nParPos--;
             }
         }
@@ -234,7 +234,7 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
                         nParPos++;
                     nParPos++;
                 }
-                else if ( (bFound = ( rFormula[nParPos] == '(' ) ) == sal_False )
+                else if ( (bFound = ( rFormula[nParPos] == '(' ) ) == false )
                     nParPos++;
             }
         }
@@ -259,13 +259,13 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
             }
             else                    // Brackets without function -> keep searching
             {
-                bRepeat = sal_True;
+                bRepeat = true;
                 if ( !bBack )
                     nParPos++;
                 else if (nParPos > 0)
                     nParPos--;
                 else
-                    bRepeat = sal_False;
+                    bRepeat = false;
             }
         }
         else                        // No brackets found
@@ -291,7 +291,7 @@ sal_Int32  FormulaHelper::GetFunctionEnd( const OUString& rStr, sal_Int32 nStart
 
     short   nParCount = 0;
     bool    bInArray = false;
-    sal_Bool    bFound = sal_False;
+    bool    bFound = false;
 
     while ( !bFound && (nStart < nStrLen) )
     {
@@ -309,10 +309,10 @@ sal_Int32  FormulaHelper::GetFunctionEnd( const OUString& rStr, sal_Int32 nStart
         {
             nParCount--;
             if ( nParCount == 0 )
-                bFound = sal_True;
+                bFound = true;
             else if ( nParCount < 0 )
             {
-                bFound = sal_True;
+                bFound = true;
                 nStart--;   // read one too far
             }
         }
@@ -328,7 +328,7 @@ sal_Int32  FormulaHelper::GetFunctionEnd( const OUString& rStr, sal_Int32 nStart
         {
             if ( !bInArray && nParCount == 0 )
             {
-                bFound = sal_True;
+                bFound = true;
                 nStart--;   // read one too far
             }
         }
@@ -349,7 +349,7 @@ sal_Int32 FormulaHelper::GetArgStart( const OUString& rStr, sal_Int32 nStart, sa
 
     short   nParCount   = 0;
     bool    bInArray    = false;
-    sal_Bool    bFound      = sal_False;
+    bool    bFound      = false;
 
     while ( !bFound && (nStart < nStrLen) )
     {

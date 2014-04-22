@@ -83,7 +83,7 @@ private:
         ScrollBar       aSlider;
         OUString        m_sOptional;
         OUString        m_sRequired;
-        sal_Bool        bRefMode;
+        bool        bRefMode;
 
         sal_uInt16      nEdFocus;
         sal_uInt16      nActiveLine;
@@ -132,8 +132,8 @@ public:
         void            UpdateParas();
         void            ClearAll();
 
-        sal_Bool            IsRefMode() {return bRefMode;}
-        void            SetRefMode(sal_Bool bFlag) {bRefMode=bFlag;}
+        bool            IsRefMode() {return bRefMode;}
+        void            SetRefMode(bool bFlag) {bRefMode=bFlag;}
 
         sal_uInt16          GetActiveLine();
         void            SetActiveLine(sal_uInt16 no);

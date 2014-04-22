@@ -102,8 +102,8 @@ void ArgEdit::Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
 void ArgEdit::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode     aCode   = rKEvt.GetKeyCode();
-    sal_Bool        bUp     = (aCode.GetCode() == KEY_UP);
-    sal_Bool        bDown   = (aCode.GetCode() == KEY_DOWN);
+    bool        bUp     = (aCode.GetCode() == KEY_UP);
+    bool        bDown   = (aCode.GetCode() == KEY_DOWN);
 
     if (   pSlider
         && ( !aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
@@ -113,8 +113,8 @@ void ArgEdit::KeyInput( const KeyEvent& rKEvt )
         {
             ArgEdit* pEd = NULL;
             long nThumb = pSlider->GetThumbPos();
-            sal_Bool bDoScroll = sal_False;
-            sal_Bool bChangeFocus = sal_False;
+            bool bDoScroll = false;
+            bool bChangeFocus = false;
 
             if ( bDown )
             {
@@ -128,13 +128,13 @@ void ArgEdit::KeyInput( const KeyEvent& rKEvt )
                     else
                     {
                         pEd = pEdNext;
-                        bChangeFocus = sal_True;
+                        bChangeFocus = true;
                     }
                 }
                 else if ( pEdNext )
                 {
                     pEd = pEdNext;
-                    bChangeFocus = sal_True;
+                    bChangeFocus = true;
                 }
             }
             else // if ( bUp )
@@ -149,13 +149,13 @@ void ArgEdit::KeyInput( const KeyEvent& rKEvt )
                     else
                     {
                         pEd = pEdPrev;
-                        bChangeFocus = sal_True;
+                        bChangeFocus = true;
                     }
                 }
                 else if ( pEdPrev )
                 {
                     pEd = pEdPrev;
-                    bChangeFocus = sal_True;
+                    bChangeFocus = true;
                 }
             }
 
@@ -376,7 +376,7 @@ IMPL_LINK( ArgInput, EdModifyHdl,ArgEdit*, pEd )
 // class EditBox
 EditBox::EditBox( Window* pParent, const ResId& rResId )
         :Control(pParent,rResId),
-        bMouseFlag(sal_False)
+        bMouseFlag(false)
 {
     WinBits nStyle=GetStyle();
     SetStyle( nStyle| WB_DIALOGCONTROL);
@@ -456,7 +456,7 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
 
         if(nSwitch==EVENT_MOUSEBUTTONDOWN || nSwitch==EVENT_MOUSEBUTTONUP)
         {
-            bMouseFlag=sal_True;
+            bMouseFlag=true;
             Application::PostUserEvent( LINK( this, EditBox, ChangedHdl ) );
         }
     }

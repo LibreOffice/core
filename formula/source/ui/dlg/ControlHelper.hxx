@@ -50,7 +50,7 @@ private:
     MultiLineEdit*  pMEdit;
     Link            aSelChangedLink;
     Selection       aOldSel;
-    sal_Bool            bMouseFlag;
+    bool            bMouseFlag;
                     DECL_LINK(ChangedHdl, void *);
 
 protected:
