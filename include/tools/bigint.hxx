@@ -58,7 +58,14 @@ private:
     TOOLS_DLLPRIVATE bool ABS_IsLess(BigInt const &) const;
 
 public:
-                    BigInt();
+    BigInt()
+        : nVal(0)
+        , nLen(0)
+        , bIsNeg(false)
+        , bIsBig(false)
+        , bIsSet(false)
+    {
+    }
 
     BigInt(short nValue)
         : nVal(nValue)
@@ -86,14 +93,24 @@ public:
         , bIsSet(true)
     {
     }
-                    BigInt( double nVal );
-                    BigInt( sal_uInt16 nVal );
-                    BigInt( sal_uInt32 nVal );
-                    BigInt( const BigInt& rBigInt );
-                    BigInt( const OUString& rString );
+
+    BigInt( double nVal );
+
+    BigInt(sal_uInt16 nValue)
+        : nVal(nValue)
+        , nLen(0)
+        , bIsNeg(false)
+        , bIsBig(false)
+        , bIsSet(true)
+    {
+    }
+
+    BigInt( sal_uInt32 nVal );
+    BigInt( const BigInt& rBigInt );
+    BigInt( const OUString& rString );
 #ifdef _TLBIGINT_INT64
-                    BigInt( const SbxINT64  &r );
-                    BigInt( const SbxUINT64 &r );
+    BigInt( const SbxINT64  &r );
+    BigInt( const SbxUINT64 &r );
 #endif
 
     operator        short() const;
@@ -143,20 +160,6 @@ public:
 
     friend class Fraction;
 };
-
-inline BigInt::BigInt()
-{
-    bIsSet = false;
-    bIsBig = false;
-    nVal   = 0;
-}
-
-inline BigInt::BigInt( sal_uInt16 nValue )
-{
-    bIsSet = true;
-    bIsBig = false;
-    nVal   = nValue;
-}
 
 inline BigInt::operator short() const
 {
