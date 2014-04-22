@@ -55,7 +55,7 @@ bool OGLPlayer::create( const OUString& rURL )
     // Load *.json file and init renderer
     glTFFile aJsonFile;
     aJsonFile.type = GLTF_JSON;
-    OString sFileName = OUStringToOString(m_sURL.copy(m_sURL.lastIndexOf("/")+1),RTL_TEXTENCODING_UTF8);
+    OString sFileName = OUStringToOString(INetURLObject(m_sURL).GetLastName(),RTL_TEXTENCODING_UTF8);
     aJsonFile.filename = (char*)sFileName.getStr();
     if( !lcl_LoadFile(&aJsonFile, m_sURL) )
         return false;
@@ -71,8 +71,8 @@ bool OGLPlayer::create( const OUString& rURL )
         glTFFile* pFile = m_pHandle->files[i];
         if( pFile && pFile->filename )
         {
-            const OUString sFilesURL = m_sURL.copy(0,m_sURL.lastIndexOf("/")+1) +
-                OStringToOUString(OString(pFile->filename),RTL_TEXTENCODING_UTF8);
+            const OUString sFilesURL =
+                INetURLObject::GetAbsURL(m_sURL,OStringToOUString(OString(pFile->filename),RTL_TEXTENCODING_UTF8));
             if( pFile->type == GLTF_IMAGE )
             {
                 // Load images as bitmaps
