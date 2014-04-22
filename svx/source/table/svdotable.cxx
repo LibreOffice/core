@@ -248,6 +248,8 @@ private:
     static bool lastLayoutFitWidth;
     static bool lastLayoutFitHeight;
     static WritingMode lastLayoutMode;
+    static sal_Int32 lastRowCount;
+    static sal_Int32 lastColCount;
 };
 
 SdrTableObjImpl* SdrTableObjImpl::lastLayoutTable = NULL;
@@ -255,6 +257,8 @@ Rectangle SdrTableObjImpl::lastLayoutRectangle;
 bool SdrTableObjImpl::lastLayoutFitWidth;
 bool SdrTableObjImpl::lastLayoutFitHeight;
 WritingMode SdrTableObjImpl::lastLayoutMode;
+sal_Int32 SdrTableObjImpl::lastRowCount;
+sal_Int32 SdrTableObjImpl::lastColCount;
 
 SdrTableObjImpl::SdrTableObjImpl()
 : mpTableObj( 0 )
@@ -694,13 +698,17 @@ void SdrTableObjImpl::LayoutTable( Rectangle& rArea, bool bFitWidth, bool bFitHe
         WritingMode writingMode = mpTableObj->GetWritingMode();
         if( lastLayoutTable != this || lastLayoutRectangle != rArea
             || lastLayoutFitWidth != bFitWidth || lastLayoutFitHeight != bFitHeight
-            || lastLayoutMode != writingMode )
+            || lastLayoutMode != writingMode
+            || lastRowCount != getRowCount()
+            || lastColCount != getColumnCount() )
         {
             lastLayoutTable = this;
             lastLayoutRectangle = rArea;
             lastLayoutFitWidth = bFitWidth;
             lastLayoutFitHeight = bFitHeight;
             lastLayoutMode = writingMode;
+            lastRowCount = getRowCount();
+            lastColCount = getColumnCount();
             TableModelNotifyGuard aGuard( mxTable.get() );
             mpLayouter->LayoutTable( rArea, bFitWidth, bFitHeight );
         }
