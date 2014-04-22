@@ -299,7 +299,7 @@ public:
         { PropertySetBase::addVetoableChangeListener(p1, p2); }
 
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2)
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::beans::UnknownPropertyException,  css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         { PropertySetBase::removeVetoableChangeListener(p1, p2); }
 
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo()
