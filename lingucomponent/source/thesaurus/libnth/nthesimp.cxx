@@ -255,7 +255,7 @@ sal_Bool SAL_CALL Thesaurus::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (!aSuppLocales.getLength())
         getLocales();
     sal_Int32 nLen = aSuppLocales.getLength();
@@ -264,7 +264,7 @@ sal_Bool SAL_CALL Thesaurus::hasLocale(const Locale& rLocale)
         const Locale *pLocale = aSuppLocales.getConstArray();
         if (rLocale == pLocale[i])
         {
-            bRes = sal_True;
+            bRes = true;
             break;
         }
     }

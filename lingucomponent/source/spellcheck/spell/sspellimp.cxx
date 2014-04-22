@@ -233,7 +233,7 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (!aSuppLocales.getLength())
         getLocales();
 
@@ -243,7 +243,7 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
     {
         if (rLocale == pLocale[i])
         {
-            bRes = sal_True;
+            bRes = true;
             break;
         }
     }
@@ -515,7 +515,7 @@ sal_Bool SAL_CALL SpellChecker::addLinguServiceEventListener(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (!bDisposing && rxLstnr.is())
     {
         bRes = GetPropHelper().addLinguServiceEventListener( rxLstnr );
@@ -529,7 +529,7 @@ sal_Bool SAL_CALL SpellChecker::removeLinguServiceEventListener(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (!bDisposing && rxLstnr.is())
     {
         bRes = GetPropHelper().removeLinguServiceEventListener( rxLstnr );

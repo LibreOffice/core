@@ -227,7 +227,7 @@ sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (!aSuppLocales.getLength())
         getLocales();
 
@@ -237,7 +237,7 @@ sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
     {
         if (rLocale == pLocale[i])
         {
-            bRes = sal_True;
+            bRes = true;
             break;
         }
     }
@@ -387,7 +387,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         for (sal_Int32 i = 0; i < n; i++)
         {
             int leftrep = 0;
-            sal_Bool hit = (n >= minLen);
+            bool hit = (n >= minLen);
             if (!rep || !rep[i] || (i >= n))
             {
                 hit = hit && (hyphens[i]&1) && (i < Leading);
@@ -729,7 +729,7 @@ sal_Bool SAL_CALL Hyphenator::addLinguServiceEventListener(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (!bDisposing && rxLstnr.is())
     {
         bRes = GetPropHelper().addLinguServiceEventListener( rxLstnr );
@@ -743,7 +743,7 @@ sal_Bool SAL_CALL Hyphenator::removeLinguServiceEventListener(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (!bDisposing && rxLstnr.is())
     {
         bRes = GetPropHelper().removeLinguServiceEventListener( rxLstnr );
