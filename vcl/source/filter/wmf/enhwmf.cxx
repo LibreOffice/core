@@ -492,541 +492,529 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
             }
         }
         else if( !bEMFPlus || bHaveDC || nRecType == EMR_EOF )
+        switch( nRecType )
         {
-            switch( nRecType )
+            case EMR_POLYBEZIERTO :
+                ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), sal_True);
+            break;
+            case EMR_POLYBEZIER :
+                ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), sal_False);
+            break;
+
+            case EMR_POLYGON :
+                ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolygon, _1, _2, _3, _4), sal_False);
+            break;
+
+            case EMR_POLYLINETO :
+                ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), sal_True);
+            break;
+            case EMR_POLYLINE :
+                ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), sal_False);
+            break;
+
+            case EMR_POLYPOLYLINE :
+                ReadAndDrawPolyLine<sal_Int32>();
+            break;
+
+            case EMR_POLYPOLYGON :
+                ReadAndDrawPolyPolygon<sal_Int32>();
+            break;
+
+            case EMR_SETWINDOWEXTEX :
+            {                                                       // #75383#
+                *pWMF >> nW >> nH;
+                pOut->SetWinExt( Size( nW, nH ), true);
+            }
+            break;
+
+            case EMR_SETWINDOWORGEX :
             {
-                case EMR_POLYBEZIERTO :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), sal_True);
-                break;
-                case EMR_POLYBEZIER :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), sal_False);
-                break;
+                *pWMF >> nX32 >> nY32;
+                pOut->SetWinOrg( Point( nX32, nY32 ), true);
+            }
+            break;
 
-                case EMR_POLYGON :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolygon, _1, _2, _3, _4), sal_False);
-                break;
+            case EMR_SCALEWINDOWEXTEX :
+            {
+                *pWMF >> nNom1 >> nDen1 >> nNom2 >> nDen2;
+                pOut->ScaleWinExt( (double)nNom1 / nDen1, (double)nNom2 / nDen2 );
+            }
+            break;
 
-                case EMR_POLYLINETO :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), sal_True);
-                break;
-                case EMR_POLYLINE :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), sal_False);
-                break;
+            case EMR_SETVIEWPORTORGEX :
+            {
+                *pWMF >> nX32 >> nY32;
+                pOut->SetDevOrg( Point( nX32, nY32 ) );
+            }
+            break;
 
-                case EMR_POLYPOLYLINE :
-                    ReadAndDrawPolyLine<sal_Int32>();
-                break;
+            case EMR_SCALEVIEWPORTEXTEX :
+            {
+                *pWMF >> nNom1 >> nDen1 >> nNom2 >> nDen2;
+                pOut->ScaleDevExt( (double)nNom1 / nDen1, (double)nNom2 / nDen2 );
+            }
+            break;
 
-                case EMR_POLYPOLYGON :
-                    ReadAndDrawPolyPolygon<sal_Int32>();
-                break;
+            case EMR_SETVIEWPORTEXTEX :
+            {
+                *pWMF >> nW >> nH;
+                pOut->SetDevExt( Size( nW, nH ) );
+            }
+            break;
 
-                case EMR_SETWINDOWEXTEX :
-                {                                                       // #75383#
-                    *pWMF >> nW >> nH;
-                    pOut->SetWinExt( Size( nW, nH ) );
-                }
-                break;
+            case EMR_EOF :
+                nRecordCount = 0;           // #76846#
+            break;
 
-                case EMR_SETWINDOWORGEX :
+            case EMR_SETPIXELV :
+            {
+                *pWMF >> nX32 >> nY32;
+                pOut->DrawPixel( Point( nX32, nY32 ), ReadColor() );
+            }
+            break;
+
+            case EMR_SETMAPMODE :
+            {
+                sal_uInt32 nMapMode;
+                *pWMF >> nMapMode;
+                pOut->SetMapMode( nMapMode );
+            }
+            break;
+
+            case EMR_SETBKMODE :
+            {
+                *pWMF >> nDat32;
+                pOut->SetBkMode( nDat32 );
+            }
+            break;
+
+            case EMR_SETPOLYFILLMODE :
+            break;
+
+            case EMR_SETROP2 :
+            {
+                *pWMF >> nDat32;
+                pOut->SetRasterOp( nDat32 );
+            }
+            break;
+
+            case EMR_SETSTRETCHBLTMODE :
+            {
+                *pWMF >> nStretchBltMode;
+            }
+            break;
+
+            case EMR_SETTEXTALIGN :
+            {
+                *pWMF >> nDat32;
+                pOut->SetTextAlign( nDat32 );
+            }
+            break;
+
+            case EMR_SETTEXTCOLOR :
+            {
+                pOut->SetTextColor( ReadColor() );
+            }
+            break;
+
+            case EMR_SETBKCOLOR :
+            {
+                pOut->SetBkColor( ReadColor() );
+            }
+            break;
+
+            case EMR_OFFSETCLIPRGN :
+            {
+                *pWMF >> nX32 >> nY32;
+                pOut->MoveClipRegion( Size( nX32, nY32 ) );
+            }
+            break;
+
+            case EMR_MOVETOEX :
+            {
+                *pWMF >> nX32 >> nY32;
+                pOut->MoveTo( Point( nX32, nY32 ), bRecordPath );
+            }
+            break;
+
+            case EMR_INTERSECTCLIPRECT :
+            {
+                *pWMF >> nX32 >> nY32 >> nx32 >> ny32;
+                pOut->IntersectClipRect( ReadRectangle( nX32, nY32, nx32, ny32 ) );
+            }
+            break;
+
+            case EMR_SAVEDC :
+            {
+                pOut->Push();
+            }
+            break;
+
+            case EMR_RESTOREDC :
+            {
+                pOut->Pop();
+            }
+            break;
+
+            case EMR_SETWORLDTRANSFORM :
+            {
+                XForm aTempXForm;
+                *pWMF >> aTempXForm;
+                pOut->SetWorldTransform( aTempXForm );
+            }
+            break;
+
+            case EMR_MODIFYWORLDTRANSFORM :
+            {
+                sal_uInt32  nMode;
+                XForm   aTempXForm;
+                *pWMF >> aTempXForm >> nMode;
+                pOut->ModifyWorldTransform( aTempXForm, nMode );
+            }
+            break;
+
+            case EMR_SELECTOBJECT :
+            {
+                *pWMF >> nIndex;
+                pOut->SelectObject( nIndex );
+            }
+            break;
+
+            case EMR_CREATEPEN :
+            {
+                *pWMF >> nIndex;
+                if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                 {
-                    *pWMF >> nX32 >> nY32;
-                    pOut->SetWinOrg( Point( nX32, nY32 ) );
-                }
-                break;
 
-                case EMR_SCALEWINDOWEXTEX :
-                {
-                    *pWMF >> nNom1 >> nDen1 >> nNom2 >> nDen2;
-                    pOut->ScaleWinExt( (double)nNom1 / nDen1, (double)nNom2 / nDen2 );
-                }
-                break;
+                    LineInfo    aLineInfo;
+                    sal_uInt32      nStyle;
+                    Size        aSize;
+                    //#fdo39428 Remove SvStream operator>>(long&)
+                    sal_Int32 nTmpW(0), nTmpH(0);
 
-                case EMR_SETVIEWPORTORGEX :
-                {
-                    *pWMF >> nX32 >> nY32;
-                    pOut->SetDevOrg( Point( nX32, nY32 ) );
-                }
-                break;
+                    *pWMF >> nStyle >> nTmpW >> nTmpH;
+                    aSize.Width() = nTmpW;
+                    aSize.Height() = nTmpH;
 
-                case EMR_SCALEVIEWPORTEXTEX :
-                {
-                    *pWMF >> nNom1 >> nDen1 >> nNom2 >> nDen2;
-                    pOut->ScaleDevExt( (double)nNom1 / nDen1, (double)nNom2 / nDen2 );
-                }
-                break;
+                    if ( aSize.Width() )
+                        aLineInfo.SetWidth( aSize.Width() );
 
-                case EMR_SETVIEWPORTEXTEX :
-                {
-                    *pWMF >> nW >> nH;
-                    pOut->SetDevExt( Size( nW, nH ) );
-                }
-                break;
-
-                case EMR_EOF :
-                    nRecordCount = 0;           // #76846#
-                break;
-
-                case EMR_SETPIXELV :
-                {
-                    *pWMF >> nX32 >> nY32;
-                    pOut->DrawPixel( Point( nX32, nY32 ), ReadColor() );
-                }
-                break;
-
-                case EMR_SETMAPMODE :
-                {
-                    sal_uInt32 nMapMode;
-                    *pWMF >> nMapMode;
-                    pOut->SetMapMode( nMapMode );
-                }
-                break;
-
-                case EMR_SETBKMODE :
-                {
-                    *pWMF >> nDat32;
-                    pOut->SetBkMode( nDat32 );
-                }
-                break;
-
-                case EMR_SETPOLYFILLMODE :
-                break;
-
-                case EMR_SETROP2 :
-                {
-                    *pWMF >> nDat32;
-                    pOut->SetRasterOp( nDat32 );
-                }
-                break;
-
-                case EMR_SETSTRETCHBLTMODE :
-                {
-                    *pWMF >> nStretchBltMode;
-                }
-                break;
-
-                case EMR_SETTEXTALIGN :
-                {
-                    *pWMF >> nDat32;
-                    pOut->SetTextAlign( nDat32 );
-                }
-                break;
-
-                case EMR_SETTEXTCOLOR :
-                {
-                    pOut->SetTextColor( ReadColor() );
-                }
-                break;
-
-                case EMR_SETBKCOLOR :
-                {
-                    pOut->SetBkColor( ReadColor() );
-                }
-                break;
-
-                case EMR_OFFSETCLIPRGN :
-                {
-                    *pWMF >> nX32 >> nY32;
-                    pOut->MoveClipRegion( Size( nX32, nY32 ) );
-                }
-                break;
-
-                case EMR_MOVETOEX :
-                {
-                    *pWMF >> nX32 >> nY32;
-                    pOut->MoveTo( Point( nX32, nY32 ), bRecordPath );
-                }
-                break;
-
-                case EMR_INTERSECTCLIPRECT :
-                {
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32;
-                    pOut->IntersectClipRect( ReadRectangle( nX32, nY32, nx32, ny32 ) );
-                }
-                break;
-
-                case EMR_SAVEDC :
-                {
-                    pOut->Push();
-                }
-                break;
-
-                case EMR_RESTOREDC :
-                {
-                    pOut->Pop();
-                }
-                break;
-
-                case EMR_SETWORLDTRANSFORM :
-                {
-                    XForm aTempXForm;
-                    *pWMF >> aTempXForm;
-                    pOut->SetWorldTransform( aTempXForm );
-                }
-                break;
-
-                case EMR_MODIFYWORLDTRANSFORM :
-                {
-                    sal_uInt32  nMode;
-                    XForm   aTempXForm;
-                    *pWMF >> aTempXForm >> nMode;
-                    pOut->ModifyWorldTransform( aTempXForm, nMode );
-                }
-                break;
-
-                case EMR_SELECTOBJECT :
-                {
-                    *pWMF >> nIndex;
-                    pOut->SelectObject( nIndex );
-                }
-                break;
-
-                case EMR_CREATEPEN :
-                {
-                    *pWMF >> nIndex;
-                    if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
+                    sal_Bool bTransparent = sal_False;
+                    sal_uInt16 nDashCount = 0;
+                    sal_uInt16 nDotCount = 0;
+                    switch( nStyle & 0xFF )
                     {
-
-                        LineInfo    aLineInfo;
-                        sal_uInt32      nStyle;
-                        Size        aSize;
-                        // #fdo39428 Remove SvStream operator>>(long&)
-                        sal_Int32 nTmpW(0), nTmpH(0);
-
-                        *pWMF >> nStyle >> nTmpW >> nTmpH;
-                        aSize.Width() = nTmpW;
-                        aSize.Height() = nTmpH;
-
-                        if ( aSize.Width() )
-                            aLineInfo.SetWidth( aSize.Width() );
-
-                        sal_Bool bTransparent = sal_False;
-                        switch( nStyle & 0xFF )
-                        {
-                            case PS_DASHDOTDOT :
-                                aLineInfo.SetStyle( LINE_DASH );
-                                aLineInfo.SetDashCount( 1 );
-                                aLineInfo.SetDotCount( 2 );
-                                aLineInfo.SetDashLen( 150 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 50 );
-                            break;
-                            case PS_DASHDOT :
-                                aLineInfo.SetStyle( LINE_DASH );
-                                aLineInfo.SetDashCount( 1 );
-                                aLineInfo.SetDotCount( 1 );
-                                aLineInfo.SetDashLen( 150 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 90 );
-                            break;
-                            case PS_DOT :
-                                aLineInfo.SetStyle( LINE_DASH );
-                                aLineInfo.SetDashCount( 0 );
-                                aLineInfo.SetDotCount( 1 );
-                                aLineInfo.SetDotLen( 30 );
-                                aLineInfo.SetDistance( 50 );
-                            break;
-                            case PS_DASH :
-                                aLineInfo.SetStyle( LINE_DASH );
-                                aLineInfo.SetDashCount( 1 );
-                                aLineInfo.SetDotCount( 0 );
-                                aLineInfo.SetDashLen( 225 );
-                                aLineInfo.SetDistance( 100 );
-                            break;
-                            case PS_NULL :
-                                bTransparent = sal_True;
-                                aLineInfo.SetStyle( LINE_NONE );
-                            break;
-                            case PS_INSIDEFRAME :
-                            case PS_SOLID :
-                            default :
-                                aLineInfo.SetStyle( LINE_SOLID );
-                        }
-                        switch( nStyle & 0xF00 )
-                        {
-                            case PS_ENDCAP_ROUND :
-                                aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_ROUND );
-                            break;
-                            case PS_ENDCAP_SQUARE :
-                                aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_SQUARE );
-                            break;
-                            case PS_ENDCAP_FLAT :
-                            default :
-                                aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_BUTT );
-                        }
-                        switch( nStyle & 0xF000 )
-                        {
-                            case PS_JOIN_ROUND :
-                                aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_ROUND );
-                            break;
-                            case PS_JOIN_MITER :
-                                aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_MITER );
-                            break;
-                            case PS_JOIN_BEVEL :
-                                aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_BEVEL );
-                            break;
-                            default :
-                                aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_NONE );
-                        }
-                        pOut->CreateObject( nIndex, GDI_PEN, new WinMtfLineStyle( ReadColor(), aLineInfo, bTransparent ) );
+                        case PS_DASHDOTDOT :
+                            nDotCount++;
+                        case PS_DASHDOT :
+                            nDashCount++;
+                        case PS_DOT :
+                            nDotCount++;
+                        break;
+                        case PS_DASH :
+                            nDashCount++;
+                        break;
+                        case PS_NULL :
+                            bTransparent = sal_True;
+                            aLineInfo.SetStyle( LINE_NONE );
+                        break;
+                        default :
+                        case PS_INSIDEFRAME :
+                        case PS_SOLID :
+                            aLineInfo.SetStyle( LINE_SOLID );
                     }
-                }
-                break;
-
-                case EMR_EXTCREATEPEN :
-                {
-                    sal_Int32   elpHatch;
-                    sal_uInt32  offBmi, cbBmi, offBits, cbBits, nStyle, nWidth, nBrushStyle, elpNumEntries;
-                    Color       aColorRef;
-
-                    *pWMF >> nIndex;
-                    if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
+                    switch( nStyle & 0xF00 )
                     {
-                        *pWMF >> offBmi >> cbBmi >> offBits >> cbBits >>  nStyle >> nWidth >> nBrushStyle;
-                         aColorRef = ReadColor();
-                         *pWMF >> elpHatch >> elpNumEntries;
-
-                        LineInfo    aLineInfo;
-                        if ( nWidth )
-                            aLineInfo.SetWidth( nWidth );
-
-                        sal_Bool bTransparent = sal_False;
-                        sal_uInt16 nDashCount = 0;
-                        sal_uInt16 nDotCount = 0;
-
-                        switch( nStyle & PS_STYLE_MASK )
-                        {
-                            case PS_DASHDOTDOT :
-                                nDotCount++;
-                            case PS_DASHDOT :
-                                nDashCount++;
-                            case PS_DOT :
-                                nDotCount++;
-                            break;
-                            case PS_DASH :
-                                nDashCount++;
-                            break;
-                            case PS_NULL :
-                                bTransparent = sal_True;
-                                aLineInfo.SetStyle( LINE_NONE );
-                            break;
-
-                            case PS_INSIDEFRAME :
-                            case PS_SOLID :
-                            default :
-                                aLineInfo.SetStyle( LINE_SOLID );
-                        }
-                        if ( nDashCount | nDotCount )
-                        {
-                            aLineInfo.SetStyle( LINE_DASH );
-                            aLineInfo.SetDashCount( nDashCount );
-                            aLineInfo.SetDotCount( nDotCount );
-                        }
-                        pOut->CreateObject( nIndex, GDI_PEN, new WinMtfLineStyle( aColorRef, aLineInfo, bTransparent ) );
+                        case PS_ENDCAP_ROUND :
+                            aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_ROUND );
+                        break;
+                        case PS_ENDCAP_SQUARE :
+                            aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_SQUARE );
+                        break;
+                        case PS_ENDCAP_FLAT :
+                        default :
+                            aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_BUTT );
                     }
-                }
-                break;
-
-                case EMR_CREATEBRUSHINDIRECT :
-                {
-                    sal_uInt32  nStyle;
-                    *pWMF >> nIndex;
-                    if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
+                    switch( nStyle & 0xF000 )
                     {
-                        *pWMF >> nStyle;
-                        pOut->CreateObject( nIndex, GDI_BRUSH, new WinMtfFillStyle( ReadColor(), ( nStyle == BS_HOLLOW ) ? sal_True : sal_False ) );
+                        case PS_JOIN_ROUND :
+                            aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_ROUND );
+                        break;
+                        case PS_JOIN_MITER :
+                            aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_MITER );
+                        break;
+                        case PS_JOIN_BEVEL :
+                            aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_BEVEL );
+                        break;
+                        default :
+                            aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_NONE );
                     }
+
+                    if ( nDashCount | nDotCount )
+                    {
+                        aLineInfo.SetStyle( LINE_DASH );
+                        aLineInfo.SetDashCount( nDashCount );
+                        aLineInfo.SetDotCount( nDotCount );
+                    }
+                    pOut->CreateObject( nIndex, GDI_PEN, new WinMtfLineStyle( ReadColor(), aLineInfo, bTransparent ) );
                 }
-                break;
+            }
+            break;
 
-                case EMR_DELETEOBJECT :
+            case EMR_EXTCREATEPEN :
+            {
+                sal_Int32   elpHatch;
+                sal_uInt32  offBmi, cbBmi, offBits, cbBits, nStyle, nWidth, nBrushStyle, elpNumEntries;
+                Color       aColorRef;
+
+                *pWMF >> nIndex;
+                if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                 {
-                    *pWMF >> nIndex;
-                    if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
-                        pOut->DeleteObject( nIndex );
+                    *pWMF >> offBmi >> cbBmi >> offBits >> cbBits >>  nStyle >> nWidth >> nBrushStyle;
+                     aColorRef = ReadColor();
+                     *pWMF >> elpHatch >> elpNumEntries;
+
+                    LineInfo    aLineInfo;
+                    if ( nWidth )
+                        aLineInfo.SetWidth( nWidth );
+
+                    sal_Bool bTransparent = sal_False;
+                    sal_uInt16 nDashCount = 0;
+                    sal_uInt16 nDotCount = 0;
+
+                    switch( nStyle & PS_STYLE_MASK )
+                    {
+                        case PS_DASHDOTDOT :
+                            nDotCount++;
+                        case PS_DASHDOT :
+                            nDashCount++;
+                        case PS_DOT :
+                            nDotCount++;
+                        break;
+                        case PS_DASH :
+                            nDashCount++;
+                        break;
+                        case PS_NULL :
+                            bTransparent = sal_True;
+                            aLineInfo.SetStyle( LINE_NONE );
+                        break;
+
+                        default :
+                        case PS_INSIDEFRAME :
+                        case PS_SOLID :
+                            aLineInfo.SetStyle( LINE_SOLID );
+                    }
+                    if ( nDashCount | nDotCount )
+                    {
+                        aLineInfo.SetStyle( LINE_DASH );
+                        aLineInfo.SetDashCount( nDashCount );
+                        aLineInfo.SetDotCount( nDotCount );
+                    }
+                    pOut->CreateObject( nIndex, GDI_PEN, new WinMtfLineStyle( aColorRef, aLineInfo, bTransparent ) );
                 }
-                break;
+            }
+            break;
 
-                case EMR_ELLIPSE :
+            case EMR_CREATEBRUSHINDIRECT :
+            {
+                sal_uInt32  nStyle;
+                *pWMF >> nIndex;
+                if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                 {
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32;
-                    pOut->DrawEllipse( ReadRectangle( nX32, nY32, nx32, ny32 ) );
+                    *pWMF >> nStyle;
+                    pOut->CreateObject( nIndex, GDI_BRUSH, new WinMtfFillStyle( ReadColor(), ( nStyle == BS_HOLLOW ) ? sal_True : sal_False ) );
                 }
-                break;
+            }
+            break;
 
-                case EMR_RECTANGLE :
-                {
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32;
-                    pOut->DrawRect( ReadRectangle( nX32, nY32, nx32, ny32 ) );
-                }
-                break;
+            case EMR_DELETEOBJECT :
+            {
+                *pWMF >> nIndex;
+                if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
+                    pOut->DeleteObject( nIndex );
+            }
+            break;
 
-                case EMR_ROUNDRECT :
-                {
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nW >> nH;
-                    Size aSize( Size( nW, nH ) );
-                    pOut->DrawRoundRect( ReadRectangle( nX32, nY32, nx32, ny32 ), aSize );
-                }
-                break;
+            case EMR_ELLIPSE :
+            {
+                *pWMF >> nX32 >> nY32 >> nx32 >> ny32;
+                pOut->DrawEllipse( ReadRectangle( nX32, nY32, nx32, ny32 ) );
+            }
+            break;
 
-                case EMR_ARC :
-                {
-                    sal_uInt32 nStartX, nStartY, nEndX, nEndY;
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
-                    pOut->DrawArc( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ) );
-                }
-                break;
+            case EMR_RECTANGLE :
+            {
+                *pWMF >> nX32 >> nY32 >> nx32 >> ny32;
+                pOut->DrawRect( ReadRectangle( nX32, nY32, nx32, ny32 ) );
+            }
+            break;
 
-                case EMR_CHORD :
-                {
-                    sal_uInt32 nStartX, nStartY, nEndX, nEndY;
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
-                    pOut->DrawChord( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ) );
-                }
-                break;
+            case EMR_ROUNDRECT :
+            {
+                *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nW >> nH;
+                Size aSize( Size( nW, nH ) );
+                pOut->DrawRoundRect( ReadRectangle( nX32, nY32, nx32, ny32 ), aSize );
+            }
+            break;
 
-                case EMR_PIE :
-                {
-                    sal_uInt32 nStartX, nStartY, nEndX, nEndY;
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
-                    const Rectangle aRect( ReadRectangle( nX32, nY32, nx32, ny32 ));
+            case EMR_ARC :
+            {
+                sal_uInt32 nStartX, nStartY, nEndX, nEndY;
+                *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
+                pOut->DrawArc( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ) );
+            }
+            break;
 
-                    // #i73608# OutputDevice deviates from WMF
-                    // semantics. start==end means full ellipse here.
-                    if( nStartX == nEndX && nStartY == nEndY )
-                        pOut->DrawEllipse( aRect );
-                    else
-                        pOut->DrawPie( aRect, Point( nStartX, nStartY ), Point( nEndX, nEndY ) );
-                }
-                break;
+            case EMR_CHORD :
+            {
+                sal_uInt32 nStartX, nStartY, nEndX, nEndY;
+                *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
+                pOut->DrawChord( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ) );
+            }
+            break;
 
-                case EMR_LINETO :
-                {
-                    *pWMF >> nX32 >> nY32;
-                    pOut->LineTo( Point( nX32, nY32 ), bRecordPath );
-                }
-                break;
+            case EMR_PIE :
+            {
+                sal_uInt32 nStartX, nStartY, nEndX, nEndY;
+                *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
+                const Rectangle aRect( ReadRectangle( nX32, nY32, nx32, ny32 ));
 
-                case EMR_ARCTO :
-                {
-                    sal_uInt32 nStartX, nStartY, nEndX, nEndY;
-                    *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
-                    pOut->DrawArc( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), sal_True );
-                }
-                break;
+                // #i73608# OutputDevice deviates from WMF
+                // semantics. start==end means full ellipse here.
+                if( nStartX == nEndX && nStartY == nEndY )
+                    pOut->DrawEllipse( aRect );
+                else
+                    pOut->DrawPie( aRect, Point( nStartX, nStartY ), Point( nEndX, nEndY ) );
+            }
+            break;
 
-                case EMR_BEGINPATH :
-                {
-                    pOut->ClearPath();
-                    bRecordPath = sal_True;
-                }
-                break;
+            case EMR_LINETO :
+            {
+                *pWMF >> nX32 >> nY32;
+                pOut->LineTo( Point( nX32, nY32 ), bRecordPath );
+            }
+            break;
 
-                case EMR_ABORTPATH :
-                    pOut->ClearPath();
-                case EMR_ENDPATH :
-                    bRecordPath = sal_False;
-                break;
+            case EMR_ARCTO :
+            {
+                sal_uInt32 nStartX, nStartY, nEndX, nEndY;
+                *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
+                pOut->DrawArc( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), sal_True );
+            }
+            break;
 
-                case EMR_CLOSEFIGURE :
-                    pOut->ClosePath();
-                break;
+            case EMR_BEGINPATH :
+            {
+                pOut->ClearPath();
+                bRecordPath = sal_True;
+            }
+            break;
 
-                case EMR_FILLPATH :
-                    pOut->StrokeAndFillPath( sal_False, sal_True );
-                break;
+            case EMR_ABORTPATH :
+                pOut->ClearPath();
+            case EMR_ENDPATH :
+                bRecordPath = sal_False;
+            break;
 
-                case EMR_STROKEANDFILLPATH :
-                    pOut->StrokeAndFillPath( sal_True, sal_True );
-                break;
+            case EMR_CLOSEFIGURE :
+                pOut->ClosePath();
+            break;
 
-                case EMR_STROKEPATH :
-                    pOut->StrokeAndFillPath( sal_True, sal_False );
-                break;
+            case EMR_FILLPATH :
+                pOut->StrokeAndFillPath( sal_False, sal_True );
+            break;
 
-                case EMR_SELECTCLIPPATH :
-                {
-                    sal_Int32 nClippingMode;
-                    *pWMF >> nClippingMode;
-                    pOut->SetClipPath( pOut->GetPathObj(), nClippingMode, sal_True );
-                }
-                break;
+            case EMR_STROKEANDFILLPATH :
+                pOut->StrokeAndFillPath( sal_True, sal_True );
+            break;
 
-                case EMR_EXTSELECTCLIPRGN :
-                {
-                    sal_Int32 iMode, cbRgnData;
-                    *pWMF >> cbRgnData
-                          >> iMode;
+            case EMR_STROKEPATH :
+                pOut->StrokeAndFillPath( sal_True, sal_False );
+            break;
 
-                    PolyPolygon aPolyPoly;
-                    if ( cbRgnData )
-                        ImplReadRegion( aPolyPoly, *pWMF, nRecSize );
-                    pOut->SetClipPath( aPolyPoly, iMode, sal_False );
-                }
-                break;
+            case EMR_SELECTCLIPPATH :
+            {
+                sal_Int32 nClippingMode;
+                *pWMF >> nClippingMode;
+                pOut->SetClipPath( pOut->GetPathObj(), nClippingMode, sal_True );
+            }
+            break;
 
-                case EMR_BITBLT :   // PASSTHROUGH INTENDED
-                case EMR_STRETCHBLT :
-                {
-                    sal_Int32   xDest, yDest, cxDest, cyDest, xSrc, ySrc, cxSrc, cySrc;
-                    sal_uInt32  dwRop, iUsageSrc, offBmiSrc, cbBmiSrc, offBitsSrc, cbBitsSrc;
-                    XForm   xformSrc;
+            case EMR_EXTSELECTCLIPRGN :
+            {
+                sal_Int32 iMode, cbRgnData;
+                *pWMF >> cbRgnData
+                      >> iMode;
 
-                    sal_uInt32  nStart = pWMF->Tell() - 8;
+                PolyPolygon aPolyPoly;
+                if ( cbRgnData )
+                    ImplReadRegion( aPolyPoly, *pWMF, nRecSize );
+                pOut->SetClipPath( aPolyPoly, iMode, sal_True );
+            }
+            break;
 
-                    pWMF->SeekRel( 0x10 );
-                    *pWMF >> xDest >> yDest >> cxDest >> cyDest >> dwRop >> xSrc >> ySrc
+            case EMR_BITBLT :   // PASSTHROUGH INTENDED
+            case EMR_STRETCHBLT :
+            {
+                sal_Int32   xDest, yDest, cxDest, cyDest, xSrc, ySrc, cxSrc, cySrc;
+                sal_uInt32  dwRop, iUsageSrc, offBmiSrc, cbBmiSrc, offBitsSrc, cbBitsSrc;
+                XForm   xformSrc;
+
+                sal_uInt32  nStart = pWMF->Tell() - 8;
+
+                pWMF->SeekRel( 0x10 );
+                *pWMF >> xDest >> yDest >> cxDest >> cyDest >> dwRop >> xSrc >> ySrc
                         >> xformSrc >> nColor >> iUsageSrc >> offBmiSrc >> cbBmiSrc
-                        >> offBitsSrc >> cbBitsSrc;
+                            >> offBitsSrc >> cbBitsSrc;
 
-                    if ( nRecType == EMR_STRETCHBLT )
-                        *pWMF >> cxSrc >> cySrc;
-                    else
-                        cxSrc = cySrc = 0;
+                if ( nRecType == EMR_STRETCHBLT )
+                    *pWMF >> cxSrc >> cySrc;
+                else
+                    cxSrc = cySrc = 0;
 
-                    Bitmap      aBitmap;
-                    Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
+                Bitmap      aBitmap;
+                Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
 
-                    cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
-                    cyDest = abs( (int)cyDest );        // and also 122889
+                cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
+                cyDest = abs( (int)cyDest );        // and also 122889
 
-                    if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
-                        bStatus = sal_False;
-                    else
+                if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
+                    bStatus = sal_False;
+                else
+                {
+                    sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
+                    if ( nSize <= ( nEndPos - nStartPos ) )
                     {
-                        sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
-                        if ( nSize <= ( nEndPos - nStartPos ) )
-                        {
-                            char* pBuf = new char[ nSize ];
-                            SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
-                            aTmp.ObjectOwnsMemory( sal_True );
-                            aTmp << (sal_uInt8)'B'
-                                 << (sal_uInt8)'M'
-                                 << (sal_uInt32)cbBitsSrc
-                                 << (sal_uInt16)0
-                                 << (sal_uInt16)0
-                                 << (sal_uInt32)cbBmiSrc + 14;
-                            pWMF->Seek( nStart + offBmiSrc );
-                            pWMF->Read( pBuf + 14, cbBmiSrc );
-                            pWMF->Seek( nStart + offBitsSrc );
-                            pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
-                            aTmp.Seek( 0 );
-                            aBitmap.Read( aTmp, sal_True );
+                        char* pBuf = new char[ nSize ];
+                        SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
+                        aTmp.ObjectOwnsMemory( sal_True );
+                        aTmp << (sal_uInt8)'B'
+                             << (sal_uInt8)'M'
+                             << (sal_uInt32)cbBitsSrc
+                             << (sal_uInt16)0
+                             << (sal_uInt16)0
+                             << (sal_uInt32)cbBmiSrc + 14;
+                        pWMF->Seek( nStart + offBmiSrc );
+                        pWMF->Read( pBuf + 14, cbBmiSrc );
+                        pWMF->Seek( nStart + offBitsSrc );
+                        pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
+                        aTmp.Seek( 0 );
+                        aBitmap.Read( aTmp, sal_True );
 
-                            // test if it is sensible to crop
-                            if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
-                                ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
-                                    ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
-                                        ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
-                            {
-                                Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
-                                aBitmap.Crop( aCropRect );
-                            }
-                            aBmpSaveList.push_back( new BSaveStruct( aBitmap, aRect, dwRop, pOut->GetFillStyle () ) );
+                        // test if it is sensible to crop
+                        if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
+                            ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
+                                ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
+                                    ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
+                        {
+                            Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+                            aBitmap.Crop( aCropRect );
                         }
+                    aBmpSaveList.push_back( new BSaveStruct( aBitmap, aRect, dwRop, pOut->GetFillStyle () ) );
                     }
                 }
-                break;
+            }
+            break;
 
             case EMR_STRETCHDIBITS :
             {
@@ -1396,7 +1384,7 @@ sal_Bool EnhWMFReader::ReadHeader()
         return sal_False;
 
     // bound size
-    Rectangle rclBounds;    // rectangle in logical units 1/100th mm
+    Rectangle rclBounds;    // rectangle in logical units
     *pWMF >> nLeft >> nTop >> nRight >> nBottom;
     rclBounds.Left() = nLeft;
     rclBounds.Top() = nTop;
@@ -1404,7 +1392,7 @@ sal_Bool EnhWMFReader::ReadHeader()
     rclBounds.Bottom() = nBottom;
 
     // picture frame size
-    Rectangle rclFrame;     // rectangle in device units
+    Rectangle rclFrame;     // rectangle in device units 1/100th mm
     *pWMF >> nLeft >> nTop >> nRight >> nBottom;
     rclFrame.Left() = nLeft;
     rclFrame.Top() = nTop;

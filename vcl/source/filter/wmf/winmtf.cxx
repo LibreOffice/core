@@ -772,6 +772,14 @@ void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
         {
             Size aSize( ((WinMtfLineStyle*)pStyle)->aLineInfo.GetWidth(), 0 );
             ((WinMtfLineStyle*)pStyle)->aLineInfo.SetWidth( ImplMap( aSize ).Width() );
+            if ( ((WinMtfLineStyle*)pStyle)->aLineInfo.GetStyle() == LINE_DASH )
+            {
+                aSize.Width() += 1;
+                long nDotLen = ImplMap( aSize ).Width();
+                ((WinMtfLineStyle*)pStyle)->aLineInfo.SetDistance( nDotLen );
+                ((WinMtfLineStyle*)pStyle)->aLineInfo.SetDotLen( nDotLen );
+                ((WinMtfLineStyle*)pStyle)->aLineInfo.SetDashLen( nDotLen * 4 );
+            }
         }
     }
     sal_uInt32 nIndex;
@@ -801,6 +809,14 @@ void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pS
             {
                 Size aSize( ((WinMtfLineStyle*)pStyle)->aLineInfo.GetWidth(), 0 );
                 ((WinMtfLineStyle*)pStyle)->aLineInfo.SetWidth( ImplMap( aSize ).Width() );
+                if ( ((WinMtfLineStyle*)pStyle)->aLineInfo.GetStyle() == LINE_DASH )
+                {
+                    aSize.Width() += 1;
+                    long nDotLen = ImplMap( aSize ).Width();
+                    ((WinMtfLineStyle*)pStyle)->aLineInfo.SetDistance( nDotLen );
+                    ((WinMtfLineStyle*)pStyle)->aLineInfo.SetDotLen( nDotLen );
+                    ((WinMtfLineStyle*)pStyle)->aLineInfo.SetDashLen( nDotLen * 4 );
+                }
             }
         }
         if ( (sal_uInt32)nIndex >= vGDIObj.size() )
