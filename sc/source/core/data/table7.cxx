@@ -101,4 +101,13 @@ void ScTable::PostprocessRangeNameUpdate( sc::CompileFormulaContext& rCompileCxt
         aCol[i].PostprocessRangeNameUpdate(rCompileCxt);
 }
 
+void ScTable::UpdateScriptTypes( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    if (!ValidCol(nCol1) || !ValidCol(nCol2) || nCol1 > nCol2)
+        return;
+
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        aCol[nCol].UpdateScriptTypes(nRow1, nRow2);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

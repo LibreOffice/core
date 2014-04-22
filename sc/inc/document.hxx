@@ -2060,6 +2060,7 @@ public:
 
     sal_uInt8 GetScriptType( const ScAddress& rPos ) const;
     void SetScriptType( const ScAddress& rPos, sal_uInt8 nType );
+    void UpdateScriptTypes( const ScAddress& rPos, SCCOL nColSize, SCROW nRowSize );
 
     size_t GetFormulaHash( const ScAddress& rPos ) const;
 

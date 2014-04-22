@@ -270,4 +270,13 @@ void ScDocument::SharePooledResources( ScDocument* pSrcDoc )
     mpCellStringPool = pSrcDoc->mpCellStringPool;
 }
 
+void ScDocument::UpdateScriptTypes( const ScAddress& rPos, SCCOL nColSize, SCROW nRowSize )
+{
+    ScTable* pTab = FetchTable(rPos.Tab());
+    if (!pTab)
+        return;
+
+    pTab->UpdateScriptTypes(rPos.Col(), rPos.Row(), rPos.Col()+nColSize-1, rPos.Row()+nRowSize-1);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

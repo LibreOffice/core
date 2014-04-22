@@ -499,6 +499,7 @@ public:
             sc::CellStoreType::iterator itr);
 
     void SetScriptType( SCROW nRow, sal_uInt8 nType );
+    void UpdateScriptTypes( SCROW nRow1, SCROW nRow2 );
 
     size_t GetFormulaHash( SCROW nRow ) const;
 

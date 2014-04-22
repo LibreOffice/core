@@ -864,6 +864,7 @@ public:
 
     sal_uInt8 GetScriptType( SCCOL nCol, SCROW nRow ) const;
     void SetScriptType( SCCOL nCol, SCROW nRow, sal_uInt8 nType );
+    void UpdateScriptTypes( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     sal_uInt8 GetRangeScriptType( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow1, SCROW nRow2 );
 

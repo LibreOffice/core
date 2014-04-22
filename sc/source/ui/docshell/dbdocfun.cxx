@@ -490,6 +490,14 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
     WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
+    // Calculate the script types for all cells in the sort range beforehand.
+    // This will speed up the row height adjustment that takes place after the
+    // sort.
+    pDoc->UpdateScriptTypes(
+        ScAddress(rSortParam.nCol1,rSortParam.nRow1,nTab),
+        rSortParam.nCol2-rSortParam.nCol1+1,
+        rSortParam.nRow2-rSortParam.nRow1+1);
+
     bool bRepeatQuery = false;                          // bestehenden Filter wiederholen?
     ScQueryParam aQueryParam;
     pDBData->GetQueryParam( aQueryParam );
@@ -651,7 +659,6 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         rDocShell.PostPaint(ScRange(nStartX, nStartY, nTab, nEndX, nEndY, nTab), nPaint);
     }
 
-    //  AdjustRowHeight( aLocalParam.nRow1, aLocalParam.nRow2, bPaint );
     rDocShell.AdjustRowHeight( aLocalParam.nRow1, aLocalParam.nRow2, nTab );
 
     // #i59745# set collected drawing undo actions at sorting undo action
