@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
@@ -1088,6 +1090,7 @@ void SwView::Execute(SfxRequest &rReq)
                 GetViewFrame()->ToggleChildWindow(nSlot);
             //if fields have been successfully inserted call the "real"
             //mail merge dialog
+#if HAVE_FEATURE_DBCONNECTIVITY
             SwWrtShell &rSh = GetWrtShell();
             if(m_bInMailMerge && rSh.IsAnyDatabaseFieldInDoc())
             {
@@ -1110,6 +1113,7 @@ void SwView::Execute(SfxRequest &rReq)
                     pNewDBMgr->ExecuteFormLetter(rSh, aProperties, sal_True);
                 }
             }
+#endif
             m_bInMailMerge &= bShow;
             GetViewFrame()->GetBindings().Invalidate(FN_INSERT_FIELD);
         }
@@ -2269,6 +2273,8 @@ void SwView::EnableMailMerge(sal_Bool bEnable )
     rBind.Update(FN_INSERT_FIELD_DATA_ONLY);
 }
 
+#if HAVE_FEATURE_DBCONNECTIVITY
+
 namespace
 {
     sal_Bool lcl_NeedAdditionalDataSource( const uno::Reference< XDatabaseContext >& _rDatasourceContext )
@@ -2283,8 +2289,13 @@ namespace
     }
 }
 
+#endif
+
 void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
 {
+#if !HAVE_FEATURE_DBCONNECTIVITY
+    (void) bUseCurrentDocument;
+#else
     if(bUseCurrentDocument)
     {
         if(!GetWrtShell().IsAnyDatabaseFieldInDoc())
@@ -2419,6 +2430,7 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
             // but we want that the new document is on top
             pTopWin->ToTop();
     }
+#endif
 }
 
 IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )

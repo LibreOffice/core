@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <vcl/svapp.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -205,6 +207,12 @@ void SwXDispatch::dispatch(const util::URL& aURL,
 {
     if(!m_pView)
         throw uno::RuntimeException();
+#if !HAVE_FEATURE_DBCONNECTIVITY
+    (void) aArgs;
+    if (false)
+    {
+    }
+#else
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
     if(aURL.Complete.equalsAscii(cURLInsertContent))
@@ -225,6 +233,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
             SFX_CALLMODE_ASYNCHRON,
             &aDBProperties, 0L);
     }
+#endif
     else if(aURL.Complete.equalsAscii(cURLDocumentDataSource))
     {
         OSL_FAIL("SwXDispatch::dispatch: this URL is not to be dispatched!");

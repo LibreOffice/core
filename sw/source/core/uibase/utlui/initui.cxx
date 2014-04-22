@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <unotools/localedatawrapper.hxx>
 #include <viewsh.hxx>
 #include <initui.hxx>
@@ -146,7 +148,9 @@ std::vector<OUString>* pAuthFieldTypeList = 0;
 
 void _FinitUI()
 {
+#if HAVE_FEATURE_DBCONNECTIVITY
     SwDBMgr::RemoveDbtoolsClient();
+#endif
     delete SwViewShell::GetShellRes();
     SwViewShell::SetShellRes( 0 );
 

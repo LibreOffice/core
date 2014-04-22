@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sal/config.h>
 
 #include <algorithm>
@@ -760,6 +762,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 
 SwFieldType* SwXFieldMaster::GetFldType(bool const bDontCreate) const
 {
+#if !HAVE_FEATURE_DBCONNECTIVITY
+    (void) bDontCreate;
+#else
     if (!bDontCreate && RES_DBFLD == m_pImpl->m_nResTypeId
         && m_pImpl->m_bIsDescriptor && m_pImpl->m_pDoc)
     {
@@ -780,6 +785,7 @@ SwFieldType* SwXFieldMaster::GetFldType(bool const bDontCreate) const
         pType->Add(m_pImpl.get());
         const_cast<SwXFieldMaster*>(this)->m_pImpl->m_bIsDescriptor = false;
     }
+#endif
     if (m_pImpl->m_bIsDescriptor)
         return 0;
     else
@@ -1618,6 +1624,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         }
         break;
         case SW_SERVICE_FIELDTYPE_DATABASE_NAME:
+#if HAVE_FEATURE_DBCONNECTIVITY
         {
             SwFieldType* pFldType = pDoc->GetSysFldType(RES_DBNAMEFLD);
             SwDBData aData;
@@ -1632,8 +1639,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
             pFld->SetSubType(nSubType);
         }
+#endif
         break;
         case SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET:
+#if HAVE_FEATURE_DBCONNECTIVITY
         {
             SwDBData aData;
             aData.sDataSource = m_pImpl->m_pProps->sPar1;
@@ -1643,8 +1652,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             pFld = new SwDBNextSetField((SwDBNextSetFieldType*)pFldType,
                     m_pImpl->m_pProps->sPar3, OUString(), aData);
         }
+#endif
         break;
         case SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET:
+#if HAVE_FEATURE_DBCONNECTIVITY
         {
             SwDBData aData;
             aData.sDataSource = m_pImpl->m_pProps->sPar1;
@@ -1656,8 +1667,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 OUString::number(m_pImpl->m_pProps->nFormat),
                 aData );
         }
+#endif
         break;
         case SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM:
+#if HAVE_FEATURE_DBCONNECTIVITY
         {
             SwDBData aData;
             aData.sDataSource = m_pImpl->m_pProps->sPar1;
@@ -1676,8 +1689,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
             pFld->SetSubType(nSubType);
         }
+#endif
         break;
         case SW_SERVICE_FIELDTYPE_DATABASE:
+#if HAVE_FEATURE_DBCONNECTIVITY
         {
             SwFieldType* pFldType =
                 pDoc->GetFldType(RES_DBFLD, m_pImpl->m_sTypeName, false);
@@ -1693,6 +1708,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
             pFld->SetSubType(nSubType);
         }
+#endif
         break;
         case SW_SERVICE_FIELDTYPE_SET_EXP:
         {

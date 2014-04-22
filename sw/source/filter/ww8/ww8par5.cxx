@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sal/types.h>
 #include <tools/solar.h>
 #include <comphelper/processfactory.hxx>
@@ -2383,6 +2385,10 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, OUString& rSt
 // "SERIENDRUCKFELD"
 eF_ResT SwWW8ImplReader::Read_F_DBField( WW8FieldDesc* pF, OUString& rStr )
 {
+#if !HAVE_FEATURE_DBCONNECTIVITY
+    (void) pF;
+    (void) rStr;
+#else
     OUString aName;
     WW8ReadFieldParams aReadParam( rStr );
     for (;;)
@@ -2411,29 +2417,33 @@ eF_ResT SwWW8ImplReader::Read_F_DBField( WW8FieldDesc* pF, OUString& rStr )
     aFld.InitContent(aResult);
 
     rDoc.InsertPoolItem(*pPaM, SwFmtFld( aFld ), 0);
-
+#endif
     return FLD_OK;
 }
 
 // "N"ACHSTER"
 eF_ResT SwWW8ImplReader::Read_F_DBNext( WW8FieldDesc*, OUString& )
 {
+#if HAVE_FEATURE_DBCONNECTIVITY
     SwDBNextSetFieldType aN;
     SwFieldType* pFT = rDoc.InsertFldType( aN );
     SwDBNextSetField aFld( (SwDBNextSetFieldType*)pFT, OUString(), OUString(),
                             SwDBData() );       // Datenbank: Nichts
     rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
+#endif
     return FLD_OK;
 }
 
 // "DATENSATZ"
 eF_ResT SwWW8ImplReader::Read_F_DBNum( WW8FieldDesc*, OUString& )
 {
+#if HAVE_FEATURE_DBCONNECTIVITY
     SwDBSetNumberFieldType aN;
     SwFieldType* pFT = rDoc.InsertFldType( aN );
     SwDBSetNumberField aFld( (SwDBSetNumberFieldType*)pFT,
                            SwDBData() );            // Datenbank: Nichts
     rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
+#endif
     return FLD_OK;
 }
 

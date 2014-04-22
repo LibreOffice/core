@@ -390,8 +390,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/xoutdev/xtablend \
 ))
 
-ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
-
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/fmcomp/dbaexchange \
     svx/source/fmcomp/fmgridcl \
@@ -445,7 +443,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/form/typemap \
     svx/source/form/xfm_addcondition \
 ))
-endif
 
 $(eval $(call gb_SdiTarget_SdiTarget,svx/sdi/svxslots,svx/sdi/svx))
 

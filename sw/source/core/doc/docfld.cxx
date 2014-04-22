@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <hintids.hxx>
 
 #include <string.h>
@@ -347,10 +349,12 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
 
     // References
     UpdateRefFlds(pNewHt);
-
     if( bCloseDB )
+    {
+#if HAVE_FEATURE_DBCONNECTIVITY
         GetNewDBMgr()->CloseAll();
-
+#endif
+    }
     // Only evaluate on full update
     SetModified();
 }
@@ -997,6 +1001,8 @@ OUString LookString( SwHash** ppTbl, sal_uInt16 nSize, const OUString& rName,
     return OUString();
 }
 
+#if HAVE_FEATURE_DBCONNECTIVITY
+
 static OUString lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
 {
     SwDBData aDBData( rDBFld.GetDBData( &rDoc ));
@@ -1014,6 +1020,8 @@ static OUString lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
 
     return sDBNumNm;
 }
+
+#endif
 
 static void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
                         SwDBMgr* pMgr )
@@ -1039,6 +1047,9 @@ static void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFl
     }
     else if( pMgr )
     {
+#if !HAVE_FEATURE_DBCONNECTIVITY
+        (void) rDoc;
+#else
         switch( nFldWhich )
         {
         case RES_DBNUMSETFLD:
@@ -1069,6 +1080,7 @@ static void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFl
             break;
 
         }
+#endif
     }
 }
 
@@ -1078,8 +1090,12 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
     mpUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_CALC );
     mbNewFldLst = false;
 
+#if !HAVE_FEATURE_DBCONNECTIVITY
+    SwDBMgr* pMgr = NULL;
+#else
     SwDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(sal_False);
+#endif
 
     if( !mpUpdtFlds->GetSortLst()->empty() )
     {
@@ -1089,8 +1105,9 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
         for( _SetGetExpFlds::const_iterator it = mpUpdtFlds->GetSortLst()->begin(); it != itLast; ++it )
             lcl_CalcFld( *this, rCalc, **it, pMgr );
     }
-
+#if HAVE_FEATURE_DBCONNECTIVITY
     pMgr->CloseAll(sal_False);
+#endif
 }
 
 void SwDoc::FldsToCalc( SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt )
@@ -1099,8 +1116,12 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt )
     mpUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_CALC );
     mbNewFldLst = false;
 
+#if !HAVE_FEATURE_DBCONNECTIVITY
+    SwDBMgr* pMgr = NULL;
+#else
     SwDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(sal_False);
+#endif
 
     for( _SetGetExpFlds::const_iterator it = mpUpdtFlds->GetSortLst()->begin();
         it != mpUpdtFlds->GetSortLst()->end() &&
@@ -1112,7 +1133,9 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt )
         lcl_CalcFld( *this, rCalc, **it, pMgr );
     }
 
+#if HAVE_FEATURE_DBCONNECTIVITY
     pMgr->CloseAll(sal_False);
+#endif
 }
 
 void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
@@ -1256,11 +1279,13 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     // The array is filled with all fields; start calculation.
     SwCalc aCalc( *this );
 
+#if HAVE_FEATURE_DBCONNECTIVITY
     OUString sDBNumNm( SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) );
 
     // already set the current record number
     SwDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(sal_False);
+#endif
 
     // Make sure we don't hide all sections, which would lead to a crash. First, count how many of them do we have.
     int nShownSections = 0;
@@ -1342,17 +1367,24 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         }
         break;
         case RES_DBSETNUMBERFLD:
+#if HAVE_FEATURE_DBCONNECTIVITY
         {
             ((SwDBSetNumberField*)pFld)->Evaluate(this);
             aCalc.VarChange( sDBNumNm, ((SwDBSetNumberField*)pFld)->GetSetNumber());
         }
+#endif
         break;
         case RES_DBNEXTSETFLD:
         case RES_DBNUMSETFLD:
+#if HAVE_FEATURE_DBCONNECTIVITY
+        {
             UpdateDBNumFlds( *(SwDBNameInfField*)pFld, aCalc );
+        }
+#endif
         break;
         case RES_DBFLD:
         {
+#if HAVE_FEATURE_DBCONNECTIVITY
             // evaluate field
             ((SwDBField*)pFld)->Evaluate();
 
@@ -1379,6 +1411,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
                 *(pHashStrTbl + nPos ) = new _HashStr( rName,
                     value, static_cast<_HashStr *>(*(pHashStrTbl + nPos)));
             }
+#endif
         }
         break;
         case RES_GETEXPFLD:
@@ -1503,7 +1536,9 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         }
     }
 
+#if HAVE_FEATURE_DBCONNECTIVITY
     pMgr->CloseAll(sal_False);
+#endif
     // delete hash table
     ::DeleteHashTable( pHashStrTbl, nStrFmtCnt );
 
@@ -1517,6 +1552,10 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
 void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
 {
+#if !HAVE_FEATURE_DBCONNECTIVITY
+    (void) rDBFld;
+    (void) rCalc;
+#else
     SwDBMgr* pMgr = GetNewDBMgr();
 
     sal_uInt16 nFldType = rDBFld.Which();
@@ -1546,6 +1585,7 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
     {
         OSL_FAIL("TODO: what should happen with unnamed DBFields?");
     }
+#endif
 }
 
 void SwDoc::_InitFieldTypes()       // is being called by the CTOR
@@ -1567,9 +1607,11 @@ void SwDoc::_InitFieldTypes()       // is being called by the CTOR
     mpFldTypes->push_back( new SwTblFieldType( this ) );
     mpFldTypes->push_back( new SwMacroFieldType(this) );
     mpFldTypes->push_back( new SwHiddenParaFieldType );
+#if HAVE_FEATURE_DBCONNECTIVITY
     mpFldTypes->push_back( new SwDBNextSetFieldType );
     mpFldTypes->push_back( new SwDBNumSetFieldType );
     mpFldTypes->push_back( new SwDBSetNumberFieldType );
+#endif
     mpFldTypes->push_back( new SwTemplNameFieldType(this) );
     mpFldTypes->push_back( new SwTemplNameFieldType(this) );
     mpFldTypes->push_back( new SwExtUserFieldType );
@@ -1609,6 +1651,7 @@ SwDBData SwDoc::GetDBData()
 
 const SwDBData& SwDoc::GetDBDesc()
 {
+#if HAVE_FEATURE_DBCONNECTIVITY
     if(maDBData.sDataSource.isEmpty())
     {
         const sal_uInt16 nSize = mpFldTypes->size();
@@ -1645,13 +1688,20 @@ const SwDBData& SwDoc::GetDBDesc()
     }
     if(maDBData.sDataSource.isEmpty())
         maDBData = GetNewDBMgr()->GetAddressDBName();
+#endif
     return maDBData;
 }
 
 void SwDoc::SetInitDBFields( sal_Bool b )
 {
+#if !HAVE_FEATURE_DBCONNECTIVITY
+    (void) b;
+#else
     GetNewDBMgr()->SetInitDBFields( b );
+#endif
 }
+
+#if HAVE_FEATURE_DBCONNECTIVITY
 
 /// Get all databases that are used by fields
 static OUString lcl_DBDataToString(const SwDBData& rData)
@@ -1664,9 +1714,15 @@ static OUString lcl_DBDataToString(const SwDBData& rData)
     return sRet;
 }
 
+#endif
+
 void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
                           const std::vector<OUString>* pAllDBNames )
 {
+#if !HAVE_FEATURE_DBCONNECTIVITY
+    (void) rDBNameList;
+    (void) pAllDBNames;
+#else
     std::vector<OUString> aUsedDBNames;
     std::vector<OUString> aAllDBNames;
 
@@ -1738,10 +1794,14 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
                 break;
         }
     }
+#endif
 }
 
 void SwDoc::GetAllDBNames( std::vector<OUString>& rAllDBNames )
 {
+#if !HAVE_FEATURE_DBCONNECTIVITY
+    (void) rAllDBNames;
+#else
     SwDBMgr* pMgr = GetNewDBMgr();
 
     const SwDSParamArr& rArr = pMgr->GetDSParamArray();
@@ -1750,6 +1810,7 @@ void SwDoc::GetAllDBNames( std::vector<OUString>& rAllDBNames )
         const SwDSParam* pParam = &rArr[i];
         rAllDBNames.push_back(pParam->sDataSource + OUString(DB_DELIM) + pParam->sCommand);
     }
+#endif
 }
 
 std::vector<OUString>& SwDoc::FindUsedDBs( const std::vector<OUString>& rAllDBNames,
@@ -1794,6 +1855,10 @@ void SwDoc::AddUsedDBToList( std::vector<OUString>& rDBNameList,
 
 void SwDoc::AddUsedDBToList( std::vector<OUString>& rDBNameList, const OUString& rDBName)
 {
+#if !HAVE_FEATURE_DBCONNECTIVITY
+    (void) rDBNameList;
+    (void) rDBName;
+#else
     if( rDBName.isEmpty() )
         return;
 
@@ -1814,11 +1879,16 @@ void SwDoc::AddUsedDBToList( std::vector<OUString>& rDBNameList, const OUString&
     aData.nCommandType = -1;
     GetNewDBMgr()->CreateDSData(aData);
     rDBNameList.push_back(rDBName);
+#endif
 }
 
 void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
                             const OUString& rNewName )
 {
+#if !HAVE_FEATURE_DBCONNECTIVITY
+    (void) rOldNames;
+    (void) rNewName;
+#else
     SwDBData aNewDBData;
     aNewDBData.sDataSource = rNewName.getToken(0, DB_DELIM);
     aNewDBData.sCommand = rNewName.getToken(1, DB_DELIM);
@@ -1908,6 +1978,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
             pTxtFld->ExpandAlways();
     }
     SetModified();
+#endif
 }
 
 namespace
@@ -2259,7 +2330,9 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
     const OUString sTrue("TRUE");
     const OUString sFalse("FALSE");
 
+#if HAVE_FEATURE_DBCONNECTIVITY
     bool bIsDBMgr = 0 != rDoc.GetNewDBMgr();
+#endif
     sal_uInt16 nWhich, n;
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
@@ -2333,6 +2406,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 }
                 break;
 
+#if HAVE_FEATURE_DBCONNECTIVITY
             case RES_DBNUMSETFLD:
             {
                 SwDBData aDBData(((SwDBNumSetField*)pFld)->GetDBData(&rDoc));
@@ -2359,6 +2433,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 }
             }
             break;
+#endif
         }
 
         if (!sFormula.isEmpty())

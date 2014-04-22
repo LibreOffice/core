@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <unotools/charclass.hxx>
 #include <editsh.hxx>
 #include <fldbas.hxx>
@@ -365,13 +367,21 @@ void SwEditShell::UpdateExpFlds(sal_Bool bCloseDB)
     StartAllAction();
     GetDoc()->UpdateExpFlds(NULL, true);
     if (bCloseDB)
+    {
+#if HAVE_FEATURE_DBCONNECTIVITY
         GetDoc()->GetNewDBMgr()->CloseAll(); // close all database connections
+#endif
+    }
     EndAllAction();
 }
 
 SwDBMgr* SwEditShell::GetNewDBMgr() const
 {
+#if HAVE_FEATURE_DBCONNECTIVITY
     return GetDoc()->GetNewDBMgr();
+#else
+    return NULL;
+#endif
 }
 
 /// insert field type

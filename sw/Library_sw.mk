@@ -256,7 +256,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/fields/authfld \
     sw/source/core/fields/cellfml \
     sw/source/core/fields/chpfld \
-    sw/source/core/fields/dbfld \
     sw/source/core/fields/ddefld \
     sw/source/core/fields/ddetbl \
     sw/source/core/fields/docufld \
@@ -744,6 +743,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
 
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 $(eval $(call gb_Library_add_exception_objects,sw,\
+    sw/source/core/fields/dbfld \
     sw/source/core/uibase/dbui/dbmgr \
     sw/source/core/uibase/dbui/dbtree \
     sw/source/core/uibase/dbui/dbui \

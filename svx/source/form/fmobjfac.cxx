@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <tools/diagnose_ex.h>
 #include <svx/svdobj.hxx>
 #include "svx/fmtools.hxx"
@@ -79,8 +81,9 @@ FmFormObjFactory::FmFormObjFactory()
         FmPropBrwMgr::RegisterChildWindow();
         NavigatorFrameManager::RegisterChildWindow();
         DataNavigatorManager::RegisterChildWindow();
+#if HAVE_FEATURE_DBCONNECTIVITY
         FmFilterNavigatorWinMgr::RegisterChildWindow();
-
+#endif
 
         // Interface fuer die Formshell registrieren
         FmFormShell::RegisterInterface(0);

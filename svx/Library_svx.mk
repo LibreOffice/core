@@ -247,12 +247,11 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/unogallery/unogalthemeprovider \
 ))
 
-ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/fmcomp/dbaobjectex \
     svx/source/form/databaselocationinput \
     svx/source/form/dbcharsethelper \
-    svx/source/form/filtnav \
+    $(call gb_Helper_optional,DBCONNECTIVITY,svx/source/form/filtnav) \
     svx/source/form/fmobjfac \
     svx/source/form/fmPropBrw \
     svx/source/form/fmsrccfg \
@@ -260,7 +259,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/form/tabwin \
     svx/source/form/tbxform \
 ))
-endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,svx,\

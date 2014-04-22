@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <hintids.hxx>
 
 #include <osl/diagnose.h>
@@ -181,7 +183,15 @@ void SwModule::StateOther(SfxItemSet &rSet)
     }
 }
 
-static SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
+// start field dialog
+void NewXForms( SfxRequest& rReq ); // implementation: below
+
+#if HAVE_FEATURE_DBCONNECTIVITY
+
+namespace
+{
+
+SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
 {
     SwView* pNewView = 0;
     if(!rURL.isEmpty())
@@ -225,12 +235,6 @@ static SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
 
     return pNewView;
 }
-
-// start field dialog
-void NewXForms( SfxRequest& rReq ); // implementation: below
-
-namespace
-{
 
 class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
 {
@@ -573,6 +577,8 @@ IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CloseFrameHdl)
 
 } // namespace
 
+#endif // HAVE_FEATURE_DBCONNECTIVITY
+
 void SwModule::ExecOther(SfxRequest& rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -630,11 +636,13 @@ void SwModule::ExecOther(SfxRequest& rReq)
                 pModuleConfig->SetInsTblFormatNum( bWebView, bSet );
             }
             break;
+#if HAVE_FEATURE_DBCONNECTIVITY
         case FN_MAILMERGE_WIZARD:
         {
             rtl::Reference< SwMailMergeWizardExecutor > xEx( new SwMailMergeWizardExecutor );
             xEx->ExecuteMailMergeWizard( pArgs );
         }
+#endif
         break;
     }
 }

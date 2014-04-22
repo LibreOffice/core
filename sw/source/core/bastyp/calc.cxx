@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <calc.hxx>
 #include <cctype>
 #include <cfloat>
@@ -513,6 +515,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
 
     if( !ins )
     {
+#if HAVE_FEATURE_DBCONNECTIVITY
         SwDBMgr *pMgr = rDoc.GetNewDBMgr();
 
         OUString sDBName(GetDBName( sTmpName ));
@@ -558,6 +561,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
             }
         }
         else
+#endif
         {
             //data source was not available - set return to "NoValue"
             aErrExpr.nValue.SetVoidValue(true);
@@ -575,6 +579,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
     if( sColumnName.equalsIgnoreAsciiCase(
                             SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) ))
     {
+#if HAVE_FEATURE_DBCONNECTIVITY
         SwDBMgr *pMgr = rDoc.GetNewDBMgr();
         OUString sDBName(GetDBName( sTmpName ));
         OUString sSourceName(sDBName.getToken(0, DB_DELIM));
@@ -586,6 +591,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
             pNewExp->nValue.PutULong( pMgr->GetSelectedRecordId(sSourceName, sTableName));
         }
         else
+#endif
         {
             pNewExp->nValue.SetVoidValue(true);
         }

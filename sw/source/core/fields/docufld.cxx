@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <textapi.hxx>
 
 #include <hintids.hxx>
@@ -1366,8 +1368,11 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
 
     if( TYP_CONDTXTFLD == nSubType )
     {
+#if !HAVE_FEATURE_DBCONNECTIVITY
+        (void) pDoc;
+#else
         SwDBMgr* pMgr = pDoc->GetNewDBMgr();
-
+#endif
         bValid = sal_False;
         OUString sTmpName = (bCanToggle && !bIsHidden) ? aTRUETxt : aFALSETxt;
 
@@ -1389,7 +1394,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
             {   // remove brackets
                 sTmpName = sTmpName.copy(1, sTmpName.getLength() - 2);
             }
-
+#if HAVE_FEATURE_DBCONNECTIVITY
             if( pMgr)
             {
                 OUString sDBName( GetDBName( sTmpName, pDoc ));
@@ -1409,6 +1414,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
                          !sDataTableOrQuery.isEmpty() )
                     bValid = sal_True;
             }
+#endif
         }
     }
 }

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <svl/stritem.hxx>
@@ -1068,6 +1070,7 @@ sal_Bool SwFldMgr::InsertFld(
 
     case TYP_DBFLD:
         {
+#if HAVE_FEATURE_DBCONNECTIVITY
             SwDBData aDBData;
             OUString sPar1;
 
@@ -1113,6 +1116,7 @@ sal_Bool SwFldMgr::InsertFld(
             pFld->ChangeFormat( nFormatId );
 
             bExp = true;
+#endif
             break;
         }
 
@@ -1121,6 +1125,7 @@ sal_Bool SwFldMgr::InsertFld(
     case TYP_DBNEXTSETFLD:
     case TYP_DBNAMEFLD:
         {
+#if HAVE_FEATURE_DBCONNECTIVITY
             SwDBData aDBData;
 
             // excract DBName from rData.sPar1. Format: DBName.TableName.CommandType.ExpStrg
@@ -1189,6 +1194,7 @@ sal_Bool SwFldMgr::InsertFld(
                     break;
                 }
             }
+#endif
             break;
         }
 
