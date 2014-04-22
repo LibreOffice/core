@@ -1011,7 +1011,7 @@ private:
         ScRefCellValue& rCell2, SCCOL nCell2Col, SCROW nCell2Row ) const;
     short       Compare(SCCOLROW nIndex1, SCCOLROW nIndex2) const;
     short       Compare( ScSortInfoArray*, SCCOLROW nIndex1, SCCOLROW nIndex2) const;
-    ScSortInfoArray*    CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 );
+    ScSortInfoArray* CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2, bool bKeepQuery );
     void        QuickSort( ScSortInfoArray*, SCsCOLROW nLo, SCsCOLROW nHi);
     void        SortReorder( ScSortInfoArray*, ScProgress* );
 

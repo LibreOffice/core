@@ -57,6 +57,7 @@
 #include "mtvcellfunc.hxx"
 #include "columnspanset.hxx"
 #include <stlalgorithm.hxx>
+#include <fstalgorithm.hxx>
 #include <listenercontext.hxx>
 #include <sharedformula.hxx>
 
@@ -234,8 +235,17 @@ public:
         Cell() : mpAttr(NULL), mpBroadcaster(NULL), mpNote(NULL), mpPattern(NULL) {}
     };
 
-    typedef std::vector<Cell> RowType;
-    typedef std::vector<RowType*> RowsType;
+    struct Row
+    {
+        std::vector<Cell> maCells;
+
+        bool mbHidden:1;
+        bool mbFiltered:1;
+
+        Row( size_t nColSize ) : maCells(nColSize, Cell()), mbHidden(false), mbFiltered(false) {}
+    };
+
+    typedef std::vector<Row*> RowsType;
 
 private:
     boost::scoped_ptr<RowsType> mpRows; /// row-wise data table for sort by row operation.
@@ -246,21 +256,24 @@ private:
     SCCOLROW        mnLastIndex; /// index of last non-empty cell position.
     sal_uInt16      nUsedSorts;
 
+    bool mbKeepQuery;
+
 public:
     ScSortInfoArray( sal_uInt16 nSorts, SCCOLROW nInd1, SCCOLROW nInd2 ) :
-            pppInfo( new ScSortInfo**[nSorts]),
-            nCount( nInd2 - nInd1 + 1 ), nStart( nInd1 ),
-            mnLastIndex(nInd2),
-            nUsedSorts( nSorts )
+        pppInfo( new ScSortInfo**[nSorts]),
+        nCount( nInd2 - nInd1 + 1 ), nStart( nInd1 ),
+        mnLastIndex(nInd2),
+        nUsedSorts(nSorts),
+        mbKeepQuery(false)
+    {
+        for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
         {
-            for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
-            {
-                ScSortInfo** ppInfo = new ScSortInfo* [nCount];
-                for ( SCSIZE j = 0; j < nCount; j++ )
-                    ppInfo[j] = new ScSortInfo;
-                pppInfo[nSort] = ppInfo;
-            }
+            ScSortInfo** ppInfo = new ScSortInfo* [nCount];
+            for ( SCSIZE j = 0; j < nCount; j++ )
+                ppInfo[j] = new ScSortInfo;
+            pppInfo[nSort] = ppInfo;
         }
+    }
 
     ~ScSortInfoArray()
     {
@@ -274,8 +287,12 @@ public:
         delete[] pppInfo;
 
         if (mpRows)
-            std::for_each(mpRows->begin(), mpRows->end(), ScDeleteObjectByPtr<RowType>());
+            std::for_each(mpRows->begin(), mpRows->end(), ScDeleteObjectByPtr<Row>());
     }
+
+    void SetKeepQuery( bool b ) { mbKeepQuery = b; }
+
+    bool IsKeepQuery() const { return mbKeepQuery; }
 
     ScSortInfo* Get( sal_uInt16 nSort, SCCOLROW nInd )
                     { return (pppInfo[nSort])[ nInd - nStart ]; }
@@ -311,7 +328,7 @@ public:
         mpRows.reset(new RowsType);
         mpRows->reserve(nRowSize);
         for (size_t i = 0; i < nRowSize; ++i)
-            mpRows->push_back(new RowType(nColSize, Cell()));
+            mpRows->push_back(new Row(nColSize));
 
         return *mpRows;
     }
@@ -322,12 +339,14 @@ public:
     }
 };
 
-ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
+ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2, bool bKeepQuery )
 {
     sal_uInt16 nUsedSorts = 1;
     while ( nUsedSorts < aSortParam.GetSortKeyCount() && aSortParam.maKeyState[nUsedSorts].bDoSort )
         nUsedSorts++;
     ScSortInfoArray* pArray = new ScSortInfoArray( nUsedSorts, nInd1, nInd2 );
+    pArray->SetKeepQuery(bKeepQuery);
+
     if ( aSortParam.bByRow )
     {
         for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
@@ -355,8 +374,8 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
             rCol.InitBlockPosition(aBlockPos);
             for (SCROW nRow = nInd1; nRow <= nInd2; ++nRow)
             {
-                ScSortInfoArray::RowType& rRow = *rRows[nRow-nInd1];
-                ScSortInfoArray::Cell& rCell = rRow[nCol-aSortParam.nCol1];
+                ScSortInfoArray::Row& rRow = *rRows[nRow-nInd1];
+                ScSortInfoArray::Cell& rCell = rRow.maCells[nCol-aSortParam.nCol1];
 
                 rCell.maCell = rCol.GetCellValue(aBlockPos, nRow);
                 rCell.mpAttr = rCol.GetCellTextAttr(aBlockPos, nRow);
@@ -365,6 +384,16 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
 
                 if (aSortParam.bIncludePattern)
                     rCell.mpPattern = rCol.GetPattern(nRow);
+            }
+        }
+
+        if (bKeepQuery)
+        {
+            for (SCROW nRow = nInd1; nRow <= nInd2; ++nRow)
+            {
+                ScSortInfoArray::Row& rRow = *rRows[nRow-nInd1];
+                rRow.mbHidden = RowHidden(nRow);
+                rRow.mbFiltered = RowFiltered(nRow);
             }
         }
     }
@@ -389,6 +418,7 @@ namespace {
 
 struct SortedColumn : boost::noncopyable
 {
+
     sc::CellStoreType maCells;
     sc::CellTextAttrStoreType maCellTextAttrs;
     sc::BroadcasterStoreType maBroadcasters;
@@ -399,6 +429,32 @@ struct SortedColumn : boost::noncopyable
         maCellTextAttrs(nTopEmptyRows),
         maBroadcasters(nTopEmptyRows),
         maCellNotes(nTopEmptyRows) {}
+};
+
+struct SortedRowFlags
+{
+    typedef mdds::flat_segment_tree<SCROW,bool> FlagsType;
+
+    FlagsType maRowsHidden;
+    FlagsType maRowsFiltered;
+    FlagsType::const_iterator miPosHidden;
+    FlagsType::const_iterator miPosFiltered;
+
+    SortedRowFlags() :
+        maRowsHidden(0, MAXROWCOUNT, false),
+        maRowsFiltered(0, MAXROWCOUNT, false),
+        miPosHidden(maRowsHidden.begin()),
+        miPosFiltered(maRowsFiltered.begin()) {}
+
+    void setRowHidden( SCROW nRow, bool b )
+    {
+        miPosHidden = maRowsHidden.insert(miPosHidden, nRow, nRow+1, b).first;
+    }
+
+    void setRowFiltered( SCROW nRow, bool b )
+    {
+        miPosFiltered = maRowsFiltered.insert(miPosFiltered, nRow, nRow+1, b).first;
+    }
 };
 
 }
@@ -461,6 +517,7 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
 
         size_t nColCount = aSortParam.nCol2 - aSortParam.nCol1 + 1;
         boost::ptr_vector<SortedColumn> aSortedCols; // storage for copied cells.
+        SortedRowFlags aRowFlags;
         aSortedCols.reserve(nColCount);
         for (size_t i = 0; i < nColCount; ++i)
         {
@@ -472,12 +529,12 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
 
         for (size_t i = 0; i < pRows->size(); ++i)
         {
-            ScSortInfoArray::RowType* pRow = (*pRows)[i];
-            for (size_t j = 0; j < pRow->size(); ++j)
+            ScSortInfoArray::Row* pRow = (*pRows)[i];
+            for (size_t j = 0; j < pRow->maCells.size(); ++j)
             {
                 ScAddress aCellPos(aSortParam.nCol1 + j, nRow1 + i, nTab);
 
-                ScSortInfoArray::Cell& rCell = (*pRow)[j];
+                ScSortInfoArray::Cell& rCell = pRow->maCells[j];
 
                 sc::CellStoreType& rCellStore = aSortedCols.at(j).maCells;
                 switch (rCell.maCell.meType)
@@ -539,6 +596,14 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                     aCol[aCellPos.Col()].SetPattern(aCellPos.Row(), *rCell.mpPattern, true);
             }
 
+            if (pArray->IsKeepQuery())
+            {
+                // Hidden and filtered flags are first converted to segments.
+                SCROW nRow = nRow1 + i;
+                aRowFlags.setRowHidden(nRow, pRow->mbHidden);
+                aRowFlags.setRowFiltered(nRow, pRow->mbFiltered);
+            }
+
             if (pProgress)
                 pProgress->SetStateOnPercent(i);
         }
@@ -581,6 +646,29 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
             }
 
             aCol[nThisCol].CellStorageModified();
+        }
+
+        if (pArray->IsKeepQuery())
+        {
+            aRowFlags.maRowsHidden.build_tree();
+            aRowFlags.maRowsFiltered.build_tree();
+
+            // Remove all flags in the range first.
+            SetRowHidden(nRow1, nRow2, false);
+            SetRowFiltered(nRow1, nRow2, false);
+
+            std::vector<sc::RowSpan> aSpans =
+                sc::toSpanArray<SCROW,sc::RowSpan>(aRowFlags.maRowsHidden, nRow1);
+
+            std::vector<sc::RowSpan>::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
+            for (; it != itEnd; ++it)
+                SetRowHidden(it->mnRow1, it->mnRow2, true);
+
+            aSpans = sc::toSpanArray<SCROW,sc::RowSpan>(aRowFlags.maRowsFiltered, nRow1);
+
+            it = aSpans.begin(), itEnd = aSpans.end();
+            for (; it != itEnd; ++it)
+                SetRowFiltered(it->mnRow1, it->mnRow2, true);
         }
 
         // Attach all formula cells within sorted range, to have them start listening again.
@@ -906,7 +994,7 @@ void ScTable::Sort(const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* p
             if(pProgress)
                 pProgress->SetState( 0, nLastRow-nRow1 );
 
-            boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(nRow1, nLastRow));
+            boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(nRow1, nLastRow, bKeepQuery));
 
             if ( nLastRow - nRow1 > 255 )
                 DecoladeRow(pArray.get(), nRow1, nLastRow);
@@ -931,7 +1019,7 @@ void ScTable::Sort(const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* p
             if(pProgress)
                 pProgress->SetState( 0, nLastCol-nCol1 );
 
-            boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(nCol1, nLastCol));
+            boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(nCol1, nLastCol, bKeepQuery));
 
             QuickSort(pArray.get(), nCol1, nLastCol);
             SortReorder(pArray.get(), pProgress);
@@ -1932,7 +2020,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                     bSortCollatorInitialized = true;
                     InitSortCollator( aLocalSortParam );
                 }
-                ScSortInfoArray* pArray = CreateSortInfoArray( nRow1, rParam.nRow2 );
+                ScSortInfoArray* pArray = CreateSortInfoArray(nRow1, rParam.nRow2, bGlobalKeepQuery);
                 DecoladeRow( pArray, nRow1, rParam.nRow2 );
                 QuickSort( pArray, nRow1, rParam.nRow2 );
                 ScSortInfo** ppInfo = pArray->GetFirstArray();
