@@ -217,7 +217,8 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
     bTabAlignedLeft( false ),
     bCalcAsShown( pDocP->GetDocOptions().IsCalcAsShown() ),
     bTableDataWidth( true ),
-    bTableDataHeight( true )
+    bTableDataHeight( true ),
+    mbSkipImages ( false )
 {
     strcpy( sIndent, sIndentSource );
     sIndent[0] = 0;
@@ -226,6 +227,12 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
     SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
     eDestEnc = (pDoc->IsClipOrUndo() ? RTL_TEXTENCODING_UTF8 : rHtmlOptions.GetTextEncoding());
     bCopyLocalFileToINet = rHtmlOptions.IsSaveGraphicsLocal();
+
+    if (rFilterOptions == "SkipImages")
+    {
+        mbSkipImages = true;
+    }
+
     for ( sal_uInt16 j=0; j < SC_HTML_FONTSIZES; j++ )
     {
         sal_uInt16 nSize = rHtmlOptions.GetFontSize( j );
@@ -798,7 +805,7 @@ void ScHTMLExport::WriteTables()
 
         IncIndent(-1); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_table );
 
-        if ( bTabHasGraphics )
+        if ( bTabHasGraphics && mbSkipImages )
         {
             // the rest that is not in a cell
             size_t ListSize = aGraphList.size();

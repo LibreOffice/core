@@ -125,6 +125,7 @@ class ScHTMLExport : public ScExportBase
     bool             bCopyLocalFileToINet;
     bool             bTableDataWidth;
     bool             bTableDataHeight;
+    bool             mbSkipImages;
 
     const SfxItemSet& PageDefaults( SCTAB nTab );
 
