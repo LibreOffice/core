@@ -72,6 +72,8 @@ public:
 
     virtual ::svl::IUndoManager*
                 GetUndoManager() SAL_OVERRIDE;
+
+    static SfxItemPool* GetAnnotationPool(SwView& rV);
 };
 
 #endif

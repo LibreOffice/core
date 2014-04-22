@@ -17,9 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <chrdlgmodes.hxx>
 #include <crsskip.hxx>
 #include <hintids.hxx>
-
+#include <SidebarWin.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/outliner.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <fmtfld.hxx>
 #include <vcl/msgbox.hxx>
@@ -319,6 +323,13 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             case FN_DELETE_ALL_NOTES:
                 if ( GetView().GetPostItMgr() )
                     GetView().GetPostItMgr()->Delete();
+            break;
+            case FN_FORMAT_ALL_NOTES:
+            {
+                SwPostItMgr* pPostItMgr = GetView().GetPostItMgr();
+                if (pPostItMgr)
+                    pPostItMgr->ExecuteFormatAllDialog(GetView());
+            }
             break;
             case FN_DELETE_NOTE_AUTHOR:
             {
@@ -623,6 +634,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
         case FN_DELETE_COMMENT:
         case FN_DELETE_NOTE_AUTHOR:
         case FN_DELETE_ALL_NOTES:
+        case FN_FORMAT_ALL_NOTES:
         case FN_HIDE_NOTE:
         case FN_HIDE_NOTE_AUTHOR:
         case FN_HIDE_ALL_NOTES:

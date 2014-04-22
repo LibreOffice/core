@@ -35,6 +35,11 @@ String STR_DELETE_ALL_NOTES
     Text [ en-US ] = "All Comments" ;
 };
 
+String STR_FORMAT_ALL_NOTES
+{
+    Text [ en-US ] = "All Comments" ;
+};
+
 String STR_DELETE_AUTHOR_NOTES
 {
     Text [ en-US ] = "Comments by " ;

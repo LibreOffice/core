@@ -34,8 +34,8 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 
+#include <chrdlgmodes.hxx>
 #include <viewopt.hxx>
-
 #include <view.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
@@ -67,11 +67,14 @@
 #include <svx/svdview.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/kernitem.hxx>
 #include <editeng/outliner.hxx>
 
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/lang.h>
 
+#include "annotsh.hxx"
+#include "swabstdlg.hxx"
 #include "swevent.hxx"
 #include "switerator.hxx"
 
@@ -1242,6 +1245,78 @@ void SwPostItMgr::Delete()
     CalcRects();
     LayoutPostIts();
 }
+
+void SwPostItMgr::ExecuteFormatAllDialog(SwView& rView)
+{
+    if (mvPostItFlds.empty())
+        return;
+    sw::sidebarwindows::SwSidebarWin *pOrigActiveWin = GetActiveSidebarWin();
+    sw::sidebarwindows::SwSidebarWin *pWin = pOrigActiveWin;
+    if (!pWin)
+    {
+        for (SwSidebarItem_iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end(); ++i)
+        {
+            pWin = (*i)->pPostIt;
+            if (pWin)
+                break;
+        }
+    }
+    if (!pWin)
+        return;
+    SetActiveSidebarWin(pWin);
+    OutlinerView* pOLV = pWin->GetOutlinerView();
+    SfxItemSet aEditAttr(pOLV->GetAttribs());
+    SfxItemPool* pPool(SwAnnotationShell::GetAnnotationPool(rView));
+    SfxItemSet aDlgAttr(*pPool, EE_ITEMS_START, EE_ITEMS_END);
+    aDlgAttr.Put(aEditAttr);
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg(rView.GetWindow(), rView, aDlgAttr, DLG_CHAR_ANN);
+    sal_uInt16 nRet = pDlg->Execute();
+    if (RET_OK == nRet)
+    {
+        aDlgAttr.Put(*pDlg->GetOutputItemSet());
+        FormatAll(aDlgAttr);
+    }
+    delete pDlg;
+    SetActiveSidebarWin(pOrigActiveWin);
+}
+
+void SwPostItMgr::FormatAll(const SfxItemSet &rNewAttr)
+{
+    mpWrtShell->StartAllAction();
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, SW_RES(STR_FORMAT_ALL_NOTES) );
+    mpWrtShell->StartUndo( UNDO_INSATTR, &aRewriter );
+
+    for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)
+    {
+        if (!(*i)->pPostIt)
+            continue;
+        OutlinerView* pOLV = (*i)->pPostIt->GetOutlinerView();
+        //save old selection
+        ESelection aOrigSel(pOLV->GetSelection());
+        //select all
+        Outliner *pOutliner = pOLV->GetOutliner();
+        if (pOutliner)
+        {
+            sal_Int32 nParaCount = pOutliner->GetParagraphCount();
+            if (nParaCount > 0)
+                pOLV->SelectRange(0, nParaCount);
+        }
+        //set new char properties
+        pOLV->SetAttribs(rNewAttr);
+        //restore old selection
+        pOLV->SetSelection(aOrigSel);
+    }
+
+    mpWrtShell->EndUndo();
+    PrepareView();
+    mpWrtShell->EndAllAction();
+    mbLayout = true;
+    CalcRects();
+    LayoutPostIts();
+}
+
 void SwPostItMgr::Hide( const OUString& rAuthor )
 {
     for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)

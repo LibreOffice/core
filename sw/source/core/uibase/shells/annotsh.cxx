@@ -147,11 +147,16 @@ void SwAnnotationShell::InitInterface_Impl()
 
 TYPEINIT1(SwAnnotationShell,SfxShell)
 
-SwAnnotationShell::SwAnnotationShell( SwView& r )
-: rView(r)
+SfxItemPool* SwAnnotationShell::GetAnnotationPool(SwView& rV)
 {
-    SwWrtShell &rSh = rView.GetWrtShell();
-    SetPool(rSh.GetAttrPool().GetSecondaryPool());
+    SwWrtShell &rSh = rV.GetWrtShell();
+    return rSh.GetAttrPool().GetSecondaryPool();
+}
+
+SwAnnotationShell::SwAnnotationShell( SwView& r )
+    : rView(r)
+{
+    SetPool(SwAnnotationShell::GetAnnotationPool(rView));
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Annotation));
 }
 
@@ -1080,8 +1085,11 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             pPostItMgr->GetActiveSidebarWin()->ExecuteCommand(nSlot);
         break;
 
-    case FN_DELETE_ALL_NOTES:
+        case FN_DELETE_ALL_NOTES:
             pPostItMgr->Delete();
+            break;
+        case FN_FORMAT_ALL_NOTES:
+            pPostItMgr->ExecuteFormatAllDialog(rView);
             break;
         case FN_DELETE_NOTE_AUTHOR:
         {
@@ -1117,6 +1125,7 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
         case FN_POSTIT:
         case FN_DELETE_NOTE_AUTHOR:
         case FN_DELETE_ALL_NOTES:
+        case FN_FORMAT_ALL_NOTES:
         case FN_HIDE_NOTE:
         case FN_HIDE_NOTE_AUTHOR:
         case FN_HIDE_ALL_NOTES:

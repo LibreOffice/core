@@ -1054,6 +1054,7 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
                 //Delete(); // do not kill the parent of our open popup menu
                 mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), 0 );
             break;
+        case FN_FORMAT_ALL_NOTES:
         case FN_DELETE_ALL_NOTES:
         case FN_HIDE_ALL_NOTES:
             // not possible as slot as this would require that "this" is the active postit

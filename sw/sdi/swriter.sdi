@@ -9604,6 +9604,30 @@ SfxVoidItem DeleteAllNotes FN_DELETE_ALL_NOTES
     GroupId = GID_EDIT;
 ]
 
+SfxVoidItem FormatAllNotes FN_FORMAT_ALL_NOTES
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
 SfxVoidItem HideNote FN_HIDE_NOTE
 ()
 [

@@ -75,12 +75,14 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
         pButtonPopup->EnableItem( FN_DELETE_COMMENT, false );
         pButtonPopup->EnableItem( FN_DELETE_NOTE_AUTHOR, false );
         pButtonPopup->EnableItem( FN_DELETE_ALL_NOTES, false );
+        pButtonPopup->EnableItem( FN_FORMAT_ALL_NOTES, false );
     }
     else
     {
         pButtonPopup->EnableItem( FN_DELETE_COMMENT, !mrSidebarWin.IsProtected() );
         pButtonPopup->EnableItem( FN_DELETE_NOTE_AUTHOR, true );
         pButtonPopup->EnableItem( FN_DELETE_ALL_NOTES, true );
+        pButtonPopup->EnableItem( FN_FORMAT_ALL_NOTES, true );
     }
 
     if ( mrSidebarWin.IsProtected() )

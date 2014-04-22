@@ -32,6 +32,7 @@
 #define STR_NOAUTHOR                    (RC_ANNOTATION_BEGIN +  6)
 
 #define STR_REPLY                       (RC_ANNOTATION_BEGIN +  7)
+#define STR_FORMAT_ALL_NOTES            (RC_ANNOTATION_BEGIN +  8)
 
 
 #define ANNOTATION_ACT_END   STR_REPLY

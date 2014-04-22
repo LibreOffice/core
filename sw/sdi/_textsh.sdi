@@ -940,6 +940,11 @@ interface BaseText
         ExecMethod = ExecField ;
         StateMethod = StateField;
     ]
+    FN_FORMAT_ALL_NOTES
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField;
+    ]
     FN_HIDE_NOTE
     [
         ExecMethod = ExecField ;

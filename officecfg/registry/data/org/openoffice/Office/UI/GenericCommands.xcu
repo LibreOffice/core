@@ -5308,6 +5308,11 @@
           <value xml:lang="en-US">Delete All Comments</value>
         </prop>
       </node>
+      <node oor:name=".uno:FormatAllNotes" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Format All Comments</value>
+        </prop>
+      </node>
       <node oor:name=".uno:DeleteAuthor" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Delete All Comments by This Author</value>

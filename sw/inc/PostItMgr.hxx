@@ -44,6 +44,8 @@ class SfxBroadcaster;
 class SfxHint;
 class SwEditWin;
 class Color;
+class SfxItemPool;
+class SfxItemSet;
 class SvxSearchItem;
 class SvxLanguageItem;
 namespace sw { namespace annotation {
@@ -217,6 +219,9 @@ class SwPostItMgr: public SfxListener
             void SetLayout() { mbLayout = true; };
             void Delete(const OUString& aAuthor);
             void Delete();
+
+            void ExecuteFormatAllDialog(SwView& rView);
+            void FormatAll(const SfxItemSet &rNewAttr);
 
             void Hide( const OUString& rAuthor );
             void Hide();

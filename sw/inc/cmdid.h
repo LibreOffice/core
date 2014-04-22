@@ -783,7 +783,7 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_DELETE_COMMENT           (FN_NOTES+6)
 #define FN_REPLY                    (FN_NOTES+7)
-
+#define FN_FORMAT_ALL_NOTES         (FN_NOTES+8)
 
 #define FN_HEADERFOOTER_EDIT        (FN_HEADERFOOTER+1)
 #define FN_HEADERFOOTER_DELETE      (FN_HEADERFOOTER+2)

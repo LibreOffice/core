@@ -37,6 +37,12 @@ interface _Annotation
         StateMethod = GetNoteState ;
     ]
 
+    FN_FORMAT_ALL_NOTES
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
     FN_HIDE_NOTE
     [
         ExecMethod = NoteExec ;
