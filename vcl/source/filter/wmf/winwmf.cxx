@@ -728,13 +728,17 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
         case W_META_CREATEPENINDIRECT:
         {
-            LineInfo    aLineInfo;
-            sal_uInt16      nStyle = 0, nWidth = 0, nHeight = 0;
+            LineInfo   aLineInfo;
+            sal_uInt16 nStyle = 0;
+            sal_uInt16 nWidth = 0;
+            sal_uInt16 nHeight = 0;
 
-            pWMF->ReadUInt16( nStyle ).ReadUInt16( nWidth ).ReadUInt16( nHeight );
+            pWMF->ReadUInt16(nStyle);
+            pWMF->ReadUInt16(nWidth);
+            pWMF->ReadUInt16(nHeight);
 
-            if ( nWidth )
-                aLineInfo.SetWidth( nWidth );
+            if (nWidth > 0)
+                aLineInfo.SetWidth(nWidth);
 
             bool bTransparent = false;
             switch( nStyle & 0xFF )
@@ -818,15 +822,25 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
         case W_META_CREATEFONTINDIRECT:
         {
-            Size    aFontSize;
-            char    lfFaceName[ LF_FACESIZE ];
-            sal_Int16   lfEscapement = 0, lfOrientation = 0, lfWeight = 0;  // ( formerly sal_uInt16 )
+            Size aFontSize;
+            char lfFaceName[LF_FACESIZE];
+            sal_Int16 lfEscapement = 0;
+            sal_Int16 lfOrientation = 0;
+            sal_Int16 lfWeight = 0;
 
             LOGFONTW aLogFont;
             aFontSize = ReadYXExt();
-            pWMF->ReadInt16( lfEscapement ).ReadInt16( lfOrientation ).ReadInt16( lfWeight )
-                   .ReadUChar( aLogFont.lfItalic ).ReadUChar( aLogFont.lfUnderline ).ReadUChar( aLogFont.lfStrikeOut ).ReadUChar( aLogFont.lfCharSet ).ReadUChar( aLogFont.lfOutPrecision )
-                       .ReadUChar( aLogFont.lfClipPrecision ).ReadUChar( aLogFont.lfQuality ).ReadUChar( aLogFont.lfPitchAndFamily );
+            pWMF->ReadInt16( lfEscapement );
+            pWMF->ReadInt16( lfOrientation );
+            pWMF->ReadInt16( lfWeight );
+            pWMF->ReadUChar( aLogFont.lfItalic );
+            pWMF->ReadUChar( aLogFont.lfUnderline );
+            pWMF->ReadUChar( aLogFont.lfStrikeOut );
+            pWMF->ReadUChar( aLogFont.lfCharSet );
+            pWMF->ReadUChar( aLogFont.lfOutPrecision );
+            pWMF->ReadUChar( aLogFont.lfClipPrecision );
+            pWMF->ReadUChar( aLogFont.lfQuality );
+            pWMF->ReadUChar( aLogFont.lfPitchAndFamily );
             pWMF->Read( lfFaceName, LF_FACESIZE );
             aLogFont.lfWidth = aFontSize.Width();
             aLogFont.lfHeight = aFontSize.Height();
