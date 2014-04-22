@@ -242,6 +242,16 @@ define gb_Helper_optional
 $(if $(filter $(1),$(BUILD_TYPE)),$(2))
 endef
 
+ifeq ($(WITH_LOCALES),)
+define gb_Helper_optional_locale
+$(2)
+endef
+else
+define gb_Helper_optional_locale
+$(if $(filter $(1) $(1)_%,$(WITH_LOCALES)),$(2))
+endef
+endif
+
 define gb_Helper_optional_for_host
 $(if $(filter $(1),$(BUILD_TYPE_FOR_HOST)),$(2))
 endef
