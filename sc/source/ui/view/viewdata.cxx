@@ -390,6 +390,17 @@ ScViewData::ScViewData( const ScViewData& rViewData ) :
         eRefType    ( SC_REFTYPE_NONE ),
         nTabNo      ( rViewData.nTabNo ),
         nRefTabNo   ( rViewData.nTabNo ),           // no RefMode
+        nRefStartX(0),
+        nRefStartY(0),
+        nRefStartZ(0),
+        nRefEndX(0),
+        nRefEndY(0),
+        nRefEndZ(0),
+        nFillStartX(0),
+        nFillStartY(0),
+        nFillEndX(0),
+        nFillEndY(0),
+        nPasteFlags ( SC_PASTE_NONE ),
         eEditActivePart( rViewData.eEditActivePart ),
         nFillMode   ( SC_FILL_NONE ),
         bActive     ( true ),                               // how to initialize?
