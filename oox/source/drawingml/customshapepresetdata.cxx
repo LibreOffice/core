@@ -801,7 +801,7 @@ void CustomShapeProperties::initializePresetDataMap()
                 aStream.ReadLine(aLine);
                 if (aLine == "true" || aLine == "false")
                 {
-                    aPropertyMap.setProperty(PROP_MirroredX, sal_Bool(aLine == "true" ? sal_True : sal_False));
+                    aPropertyMap.setProperty(PROP_MirroredX, aLine == "true");
                 }
                 else
                     SAL_WARN("oox", "CustomShapeProperties::initializePresetDataMap: unexpected MirroredX parameter");
@@ -811,7 +811,7 @@ void CustomShapeProperties::initializePresetDataMap()
                 aStream.ReadLine(aLine);
                 if (aLine == "true" || aLine == "false")
                 {
-                    aPropertyMap.setProperty(PROP_MirroredY, sal_Bool(aLine == "true" ? sal_True : sal_False));
+                    aPropertyMap.setProperty(PROP_MirroredY, aLine == "true");
                 }
                 else
                     SAL_WARN("oox", "CustomShapeProperties::initializePresetDataMap: unexpected MirroredY parameter");

@@ -76,10 +76,10 @@ namespace oox { namespace ppt {
         const sal_Char* mpName;
         sal_Int16 mnType;
         sal_Int16 mnSubType;
-        sal_Bool mbDirection; // true: default geometric direction
+        bool mbDirection; // true: default geometric direction
 
         static const transition* find( const OUString& rName );
-        static const sal_Char* find( const sal_Int16 mnType, const sal_Int16 mnSubType, const sal_Bool bDirection );
+        static const sal_Char* find( const sal_Int16 mnType, const sal_Int16 mnSubType, const bool bDirection );
     };
     // END CUT&PASTE
 

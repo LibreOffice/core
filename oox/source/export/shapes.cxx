@@ -157,7 +157,7 @@ bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
         {
             if ( xPropSetInfo->hasPropertyByName( "IsEmptyPresentationObject" ) )
             {
-                sal_Bool bIsEmptyPresObj = sal_False;
+                bool bIsEmptyPresObj = false;
                 if ( xPropSet->getPropertyValue( "IsEmptyPresentationObject" ) >>= bIsEmptyPresObj )
                 {
                     DBG(fprintf(stderr, "empty presentation object %d, props:\n", bIsEmptyPresObj));
@@ -168,7 +168,7 @@ bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
 
             if ( xPropSetInfo->hasPropertyByName( "IsPresentationObject" ) )
             {
-                sal_Bool bIsPresObj = sal_False;
+                bool bIsPresObj = false;
                 if ( xPropSet->getPropertyValue( "IsPresentationObject" ) >>= bIsPresObj )
                 {
                     DBG(fprintf(stderr, "presentation object %d, props:\n", bIsPresObj));

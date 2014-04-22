@@ -76,7 +76,7 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
         sal_Int32 nSubType( rAttribs.getToken( XML_type, XML_obj ) );
         mpShapePtr->setSubType( nSubType );
         OUString sIdx( rAttribs.getString( XML_idx ).get() );
-        sal_Bool bHasIdx = !sIdx.isEmpty();
+        bool bHasIdx = !sIdx.isEmpty();
         sal_Int32 nIdx = sIdx.toInt32();
         if( rAttribs.hasAttribute( XML_idx ) )
             mpShapePtr->setSubTypeIndex( nIdx );

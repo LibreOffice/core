@@ -487,7 +487,7 @@ MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rInStrm
     return rxFormComp.is();
 }
 
-sal_Bool
+bool
 MSConvertOCXControls::ReadOCXCtlsStream( SotStorageStreamRef& rSrc1, Reference< XFormComponent > & rxFormComp,
                                    sal_Int32 nPos,
                                    sal_Int32 nStreamSize)
@@ -499,7 +499,7 @@ MSConvertOCXControls::ReadOCXCtlsStream( SotStorageStreamRef& rSrc1, Reference< 
         OUString aStrmClassId = ::oox::ole::OleHelper::importGuid( aCtlsStrm );
         return  importControlFromStream( aCtlsStrm, rxFormComp, aStrmClassId, nStreamSize );
     }
-    return sal_False;
+    return false;
 }
 
 bool MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rInStrm, Reference< XFormComponent >& rxFormComp, const OUString& rStrmClassId,
@@ -537,7 +537,7 @@ bool MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rI
     return rxFormComp.is();
 }
 
-sal_Bool MSConvertOCXControls::ReadOCXStorage( SotStorageRef& xOleStg,
+bool MSConvertOCXControls::ReadOCXStorage( SotStorageRef& xOleStg,
                                   Reference< XFormComponent > & rxFormComp )
 {
     if ( xOleStg.Is() )
@@ -568,14 +568,14 @@ sal_Bool MSConvertOCXControls::ReadOCXStorage( SotStorageRef& xOleStg,
             return rxFormComp.is();
         }
     }
-    return  sal_False;
+    return  false;
 }
 
-sal_Bool MSConvertOCXControls::WriteOCXExcelKludgeStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStrm, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rxControlModel, const com::sun::star::awt::Size& rSize,OUString &rName )
+bool MSConvertOCXControls::WriteOCXExcelKludgeStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStrm, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rxControlModel, const com::sun::star::awt::Size& rSize,OUString &rName )
 {
     OleFormCtrlExportHelper exportHelper( comphelper::getProcessComponentContext(), rxModel, rxControlModel );
     if ( !exportHelper.isValid() )
-        return sal_False;
+        return false;
     rName = exportHelper.getTypeName();
     SvGlobalName aName;
     OUString sId = exportHelper.getGUID();
@@ -583,10 +583,10 @@ sal_Bool MSConvertOCXControls::WriteOCXExcelKludgeStream( const ::com::sun::star
     BinaryXOutputStream xOut( xOutStrm, false );
     OleHelper::exportGuid( xOut, aName );
     exportHelper.exportControl( xOutStrm, rSize );
-    return sal_True;
+    return true;
 }
 
-sal_Bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, SotStorageRef &xOleStg,
+bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, SotStorageRef &xOleStg,
     const Reference< XControlModel > &rxControlModel,
     const com::sun::star::awt::Size& rSize, OUString &rName)
 {
@@ -595,7 +595,7 @@ sal_Bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxMode
     OleFormCtrlExportHelper exportHelper( comphelper::getProcessComponentContext(), rxModel, rxControlModel );
 
     if ( !exportHelper.isValid() )
-        return sal_False;
+        return false;
 
     OUString sId = exportHelper.getGUID();
     aName.MakeId(sId);
@@ -618,7 +618,7 @@ sal_Bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxMode
         Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pContents );
         exportHelper.exportControl( xOut, rSize );
     }
-    return sal_True;
+    return true;
 }
 
 } // namespace ole

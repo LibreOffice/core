@@ -48,7 +48,7 @@ struct IteratorAttr
 
     sal_Int32 mnAxis;
     sal_Int32 mnCnt;
-    sal_Bool  mbHideLastTrans;
+    bool  mbHideLastTrans;
     sal_Int32 mnPtType;
     sal_Int32 mnSt;
     sal_Int32 mnStep;

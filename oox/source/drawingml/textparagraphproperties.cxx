@@ -296,7 +296,7 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
     OUString aBulletFontName;
     sal_Int16 nBulletFontPitch = 0;
     sal_Int16 nBulletFontFamily = 0;
-    sal_Bool bSymbolFont = sal_False;
+    bool bSymbolFont = false;
     if( pFilterBase) {
         if (maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, *pFilterBase ) )
         {
@@ -319,7 +319,7 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
                  aBulletFontName.equalsIgnoreAsciiCase("StarMath") ||
                  aBulletFontName.equalsIgnoreAsciiCase("ZapfDingbats") ) {
                 aFontDesc.CharSet = RTL_TEXTENCODING_SYMBOL;
-                bSymbolFont = sal_True;
+                bSymbolFont = true;
             }
             rPropMap.setProperty( PROP_BulletFont, aFontDesc);
             rPropMap.setProperty( PROP_BulletFontName, aBulletFontName);

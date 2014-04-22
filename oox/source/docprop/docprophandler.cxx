@@ -243,13 +243,13 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const OUString& aChars )
 
     if ( !aName.isEmpty() )
     {
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         sal_Int32 nLen = aSet.getLength();
         for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
             if ( aSet[nInd].Name.equals( aName ) )
             {
                 aSet[nInd].Value = uno::makeAny( aChars.toInt32() );
-                bFound = sal_True;
+                bFound = true;
                 break;
             }
 

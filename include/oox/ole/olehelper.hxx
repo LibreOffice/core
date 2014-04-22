@@ -168,11 +168,11 @@ protected:
 public:
     MSConvertOCXControls( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
     virtual ~MSConvertOCXControls();
-    sal_Bool ReadOCXStorage( SotStorageRef& rSrc1, ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp );
-    sal_Bool ReadOCXCtlsStream(SotStorageStreamRef& rSrc1, ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
+    bool ReadOCXStorage( SotStorageRef& rSrc1, ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp );
+    bool ReadOCXCtlsStream(SotStorageStreamRef& rSrc1, ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
                                    sal_Int32 nPos, sal_Int32 nSize );
-    static sal_Bool WriteOCXStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, SotStorageRef &rSrc1, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rControlModel, const com::sun::star::awt::Size& rSize,OUString &rName);
-    static sal_Bool WriteOCXExcelKludgeStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStrm, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rControlModel, const com::sun::star::awt::Size& rSize,OUString &rName);
+    static bool WriteOCXStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, SotStorageRef &rSrc1, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rControlModel, const com::sun::star::awt::Size& rSize,OUString &rName);
+    static bool WriteOCXExcelKludgeStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStrm, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rControlModel, const com::sun::star::awt::Size& rSize,OUString &rName);
 };
 
 

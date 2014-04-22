@@ -444,7 +444,7 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
     if( !mxImpl->mxModel.is() || !mxImpl->mxModelFactory.is() || (mxImpl->meDirection == FILTERDIRECTION_UNKNOWN) )
         throw RuntimeException();
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     setMediaDescriptor( rMediaDescSeq );
     DocumentOpenedGuard aOpenedGuard( mxImpl->maFileUrl );
     if( aOpenedGuard.isValid() || mxImpl->maFileUrl.isEmpty() )

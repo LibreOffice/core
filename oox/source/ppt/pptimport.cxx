@@ -100,7 +100,7 @@ sal_Int32 PowerPointImport::getSchemeColor( sal_Int32 nToken ) const
     sal_Int32 nColor = 0;
     if ( mpActualSlidePersist )
     {
-        sal_Bool bColorMapped = sal_False;
+        bool bColorMapped = false;
         oox::drawingml::ClrMapPtr pClrMapPtr( mpActualSlidePersist->getClrMap() );
         if ( pClrMapPtr )
             bColorMapped = pClrMapPtr->getColorMap( nToken );

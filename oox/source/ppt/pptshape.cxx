@@ -127,7 +127,7 @@ void PPTShape::addShape(
         {
             oox::drawingml::TextListStylePtr aMasterTextListStyle;
             Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
-            sal_Bool bClearText = sal_False;
+            bool bClearText = false;
 
             if ( sServiceName != "com.sun.star.drawing.GraphicObjectShape" &&
                  sServiceName != "com.sun.star.drawing.OLE2Shape" )
@@ -175,19 +175,19 @@ void PPTShape::addShape(
                     break;
                     case XML_dt :
                         sServiceName = "com.sun.star.presentation.DateTimeShape";
-                        bClearText = sal_True;
+                        bClearText = true;
                     break;
                     case XML_hdr :
                         sServiceName = "com.sun.star.presentation.HeaderShape";
-                        bClearText = sal_True;
+                        bClearText = true;
                     break;
                     case XML_ftr :
                         sServiceName = "com.sun.star.presentation.FooterShape";
-                        bClearText = sal_True;
+                        bClearText = true;
                     break;
                     case XML_sldNum :
                         sServiceName = "com.sun.star.presentation.SlideNumberShape";
-                        bClearText = sal_True;
+                        bClearText = true;
                     break;
                     case XML_sldImg :
                         sServiceName = "com.sun.star.presentation.PageShape";

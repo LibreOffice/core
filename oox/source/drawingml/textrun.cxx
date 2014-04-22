@@ -90,7 +90,7 @@ sal_Int32 TextRun::insertAt(
                     while ( true )
                     {
                         sal_Int32 nCount = 0;
-                        sal_Bool bSymbol = ( getText()[ nIndex ] & 0xff00 ) == 0xf000;
+                        bool bSymbol = ( getText()[ nIndex ] & 0xff00 ) == 0xf000;
                         if ( bSymbol )
                         {
                             do

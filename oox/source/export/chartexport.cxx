@@ -821,9 +821,9 @@ void ChartExport::exportChart( Reference< ::com::sun::star::chart::XChartDocumen
         mxNewDiagram.set( xNewDoc->getFirstDiagram());
 
     // get Properties of ChartDocument
-    sal_Bool bHasMainTitle = sal_False;
-    sal_Bool bHasSubTitle = sal_False;
-    sal_Bool bHasLegend = sal_False;
+    bool bHasMainTitle = false;
+    bool bHasSubTitle = false;
+    bool bHasLegend = false;
     Reference< beans::XPropertySet > xDocPropSet( rChartDoc, uno::UNO_QUERY );
     if( xDocPropSet.is())
     {
@@ -983,7 +983,7 @@ void ChartExport::exportTitle( Reference< XShape > xShape )
 
     // TODO: bodyPr
     const char* sWritingMode = NULL;
-    sal_Bool bVertical = sal_False;
+    bool bVertical = false;
     xPropSet->getPropertyValue("StackedText") >>= bVertical;
     if( bVertical )
         sWritingMode = "wordArtVert";
@@ -1240,9 +1240,9 @@ void ChartExport::exportDataTable( )
     FSHelperPtr pFS = GetFS();
     Reference< beans::XPropertySet > aPropSet( mxDiagram, uno::UNO_QUERY );
 
-    sal_Bool bShowVBorder = sal_False;
-    sal_Bool bShowHBorder = sal_False;
-    sal_Bool bShowOutline = sal_False;
+    bool bShowVBorder = false;
+    bool bShowHBorder = false;
+    bool bShowOutline = false;
 
     if (GetProperty( aPropSet, "DataTableHBorder"))
         mAny >>= bShowHBorder;
@@ -1298,7 +1298,7 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
     pFS->startElement( FSNS( XML_c, nTypeId ),
             FSEND );
     // bar direction
-    sal_Bool bVertical = sal_False;
+    bool bVertical = false;
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
     if( GetProperty( xPropSet, "Vertical" ) )
         mAny >>= bVertical;
@@ -1638,7 +1638,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
     // special export for stock charts
     if( eChartType == chart::TYPEID_STOCK )
     {
-        sal_Bool bJapaneseCandleSticks = sal_False;
+        bool bJapaneseCandleSticks = false;
         Reference< beans::XPropertySet > xCTProp( xChartType, uno::UNO_QUERY );
         if( xCTProp.is())
             xCTProp->getPropertyValue("Japanese") >>= bJapaneseCandleSticks;
@@ -2080,17 +2080,17 @@ void ChartExport::exportAxes( )
 void ChartExport::exportAxis( AxisIdPair aAxisIdPair )
 {
     // get some properties from document first
-    sal_Bool bHasXAxisTitle = sal_False,
-        bHasYAxisTitle = sal_False,
-        bHasZAxisTitle = sal_False,
-        bHasSecondaryXAxisTitle = sal_False,
-        bHasSecondaryYAxisTitle = sal_False;
-    sal_Bool bHasXAxisMajorGrid = sal_False,
-        bHasXAxisMinorGrid = sal_False,
-        bHasYAxisMajorGrid = sal_False,
-        bHasYAxisMinorGrid = sal_False,
-        bHasZAxisMajorGrid = sal_False,
-        bHasZAxisMinorGrid = sal_False;
+    bool bHasXAxisTitle = false,
+        bHasYAxisTitle = false,
+        bHasZAxisTitle = false,
+        bHasSecondaryXAxisTitle = false,
+        bHasSecondaryYAxisTitle = false;
+    bool bHasXAxisMajorGrid = false,
+        bHasXAxisMinorGrid = false,
+        bHasYAxisMajorGrid = false,
+        bHasYAxisMinorGrid = false,
+        bHasZAxisMajorGrid = false,
+        bHasZAxisMinorGrid = false;
 
        Reference< XPropertySet > xDiagramProperties (mxDiagram, uno::UNO_QUERY);
 
@@ -2232,7 +2232,7 @@ void ChartExport::_exportAxis(
     // logBase, min, max
     if(GetProperty( xAxisProp, "Logarithmic" ) )
     {
-        sal_Bool bLogarithmic = sal_False;
+        bool bLogarithmic = false;
         mAny >>= bLogarithmic;
         if( bLogarithmic )
         {
@@ -2245,7 +2245,7 @@ void ChartExport::_exportAxis(
     }
 
     // orientation: minMax, maxMin
-    sal_Bool bReverseDirection = sal_False;
+    bool bReverseDirection = false;
     if(GetProperty( xAxisProp, "ReverseDirection" ) )
         mAny >>= bReverseDirection;
 
@@ -2254,7 +2254,7 @@ void ChartExport::_exportAxis(
             XML_val, orientation,
             FSEND );
 
-    sal_Bool bAutoMax = sal_False;
+    bool bAutoMax = false;
     if(GetProperty( xAxisProp, "AutoMax" ) )
         mAny >>= bAutoMax;
 
@@ -2267,7 +2267,7 @@ void ChartExport::_exportAxis(
             FSEND );
     }
 
-    sal_Bool bAutoMin = sal_False;
+    bool bAutoMin = false;
     if(GetProperty( xAxisProp, "AutoMin" ) )
         mAny >>= bAutoMin;
 
@@ -2282,7 +2282,7 @@ void ChartExport::_exportAxis(
 
     pFS->endElement( FSNS( XML_c, XML_scaling ) );
 
-    sal_Bool bVisible = sal_True;
+    bool bVisible = true;
     if( xAxisProp.is() )
     {
         xAxisProp->getPropertyValue(
@@ -2324,8 +2324,8 @@ void ChartExport::_exportAxis(
     if(GetProperty( xAxisProp, "Marks" ) )
     {
         mAny >>= nValue;
-        sal_Bool bInner = nValue & ::com::sun::star::chart::ChartAxisMarks::INNER;
-        sal_Bool bOuter = nValue & ::com::sun::star::chart::ChartAxisMarks::OUTER;
+        bool bInner = nValue & ::com::sun::star::chart::ChartAxisMarks::INNER;
+        bool bOuter = nValue & ::com::sun::star::chart::ChartAxisMarks::OUTER;
         const char* majorTickMark = NULL;
         if( bInner && bOuter )
             majorTickMark = "cross";
@@ -2343,8 +2343,8 @@ void ChartExport::_exportAxis(
     if(GetProperty( xAxisProp, "HelpMarks" ) )
     {
         mAny >>= nValue;
-        sal_Bool bInner = nValue & ::com::sun::star::chart::ChartAxisMarks::INNER;
-        sal_Bool bOuter = nValue & ::com::sun::star::chart::ChartAxisMarks::OUTER;
+        bool bInner = nValue & ::com::sun::star::chart::ChartAxisMarks::INNER;
+        bool bOuter = nValue & ::com::sun::star::chart::ChartAxisMarks::OUTER;
         const char* minorTickMark = NULL;
         if( bInner && bOuter )
             minorTickMark = "cross";
@@ -2360,7 +2360,7 @@ void ChartExport::_exportAxis(
     }
     // tickLblPos
     const char* sTickLblPos = NULL;
-    sal_Bool bDisplayLabel = sal_True;
+    bool bDisplayLabel = true;
     if(GetProperty( xAxisProp, "DisplayLabels" ) )
         mAny >>= bDisplayLabel;
     if( bDisplayLabel && (GetProperty( xAxisProp, "LabelPosition" ) ) )
@@ -2400,7 +2400,7 @@ void ChartExport::_exportAxis(
             FSEND );
 
     // crosses & crossesAt
-    sal_Bool bCrossesValue = sal_False;
+    bool bCrossesValue = false;
     const char* sCrosses = NULL;
     if(GetProperty( xAxisProp, "CrossoverPosition" ) )
     {
@@ -2418,7 +2418,7 @@ void ChartExport::_exportAxis(
                 sCrosses = "autoZero";
                 break;
             default:
-                bCrossesValue = sal_True;
+                bCrossesValue = true;
                 break;
         }
     }
@@ -2464,7 +2464,7 @@ void ChartExport::_exportAxis(
     }
 
     // majorUnit
-    sal_Bool bAutoStepMain = sal_False;
+    bool bAutoStepMain = false;
     if(GetProperty( xAxisProp, "AutoStepMain" ) )
         mAny >>= bAutoStepMain;
 
@@ -2477,7 +2477,7 @@ void ChartExport::_exportAxis(
             FSEND );
     }
     // minorUnit
-    sal_Bool bAutoStepHelp = sal_False;
+    bool bAutoStepHelp = false;
     if(GetProperty( xAxisProp, "AutoStepHelp" ) )
         mAny >>= bAutoStepHelp;
 
@@ -2490,7 +2490,7 @@ void ChartExport::_exportAxis(
             FSEND );
     }
 
-    sal_Bool bDisplayUnits = sal_False;
+    bool bDisplayUnits = false;
     if( nAxisType == XML_valAx && GetProperty( xAxisProp, "DisplayUnits" ) )
     {
         mAny >>= bDisplayUnits;
@@ -2771,10 +2771,10 @@ void ChartExport::exportGrouping( bool isBar )
     FSHelperPtr pFS = GetFS();
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
     // grouping
-    sal_Bool bStacked = sal_False;
+    bool bStacked = false;
     if( GetProperty( xPropSet, "Stacked" ) )
         mAny >>= bStacked;
-    sal_Bool bPercentage = sal_False;
+    bool bPercentage = false;
     if( GetProperty( xPropSet, "Percent" ) )
         mAny >>= bPercentage;
 
@@ -2910,7 +2910,7 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
                     XML_val, OString::number(aExtrapolateBackward).getStr(),
                     FSEND );
 
-            sal_Bool aForceIntercept = false;
+            bool aForceIntercept = false;
             xProperties->getPropertyValue("ForceIntercept") >>= aForceIntercept;
 
             if (aForceIntercept)
@@ -2927,11 +2927,11 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
             Reference< XPropertySet > xEquationProperties( xRegCurve->getEquationProperties() );
 
             // Show Equation
-            sal_Bool aShowEquation = false;
+            bool aShowEquation = false;
             xEquationProperties->getPropertyValue("ShowEquation") >>= aShowEquation;
 
             // Show R^2
-            sal_Bool aShowCorrelationCoefficient = false;
+            bool aShowCorrelationCoefficient = false;
             xEquationProperties->getPropertyValue("ShowCorrelationCoefficient") >>= aShowCorrelationCoefficient;
 
             pFS->singleElement( FSNS( XML_c, XML_dispRSqr ),
@@ -3255,7 +3255,7 @@ void ChartExport::exportView3D()
     // rAngAx
     if( GetProperty( xPropSet, "RightAngledAxes" ) )
     {
-        sal_Bool bRightAngled = sal_False;
+        bool bRightAngled = false;
         mAny >>= bRightAngled;
         const char* sRightAngled = bRightAngled ? "1":"0";
         pFS->singleElement( FSNS( XML_c, XML_rAngAx ),
@@ -3278,7 +3278,7 @@ void ChartExport::exportView3D()
 
 bool ChartExport::isDeep3dChart()
 {
-    sal_Bool isDeep = sal_False;
+    bool isDeep = false;
     if( mbIs3DChart )
     {
         Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);

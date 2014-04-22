@@ -424,7 +424,7 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             aPropSet.setProperty( PROP_MovingAveragePeriod, mrModel.mnPeriod );
 
             // Intercept
-            sal_Bool hasIntercept = mrModel.mfIntercept.has();
+            bool hasIntercept = mrModel.mfIntercept.has();
             aPropSet.setProperty( PROP_ForceIntercept, hasIntercept);
             if (hasIntercept)
                 aPropSet.setProperty( PROP_InterceptValue,  mrModel.mfIntercept.get());

@@ -98,14 +98,14 @@ void ResolveTextFields( XmlFilterBase& rFilter )
                 {
                     const OUString sSlide = "#Slide ";
                     const OUString sNotes = "#Notes ";
-                    sal_Bool bNotes = sal_False;
+                    bool bNotes = false;
                     sal_Int32 nPageNumber = 0;
                     if ( aURL.match( sSlide ) )
                         nPageNumber = aURL.copy( sSlide.getLength() ).toInt32();
                     else if ( aURL.match( sNotes ) )
                     {
                         nPageNumber = aURL.copy( sNotes.getLength() ).toInt32();
-                        bNotes = sal_True;
+                        bNotes = true;
                     }
                     if ( nPageNumber )
                     {
@@ -376,7 +376,7 @@ void PresentationFragmentHandler::finalizeImport()
     // writing back the original PageCount of this document, it can be accessed from the XModel
     // via getArgs after the import.
     rFilterData["OriginalPageCount"] = makeAny(nPageCount);
-    sal_Bool bImportNotesPages = rFilterData.getUnpackedValueOrDefault("ImportNotesPages", sal_True);
+    bool bImportNotesPages = rFilterData.getUnpackedValueOrDefault("ImportNotesPages", sal_True);
     OUString aPageRange = rFilterData.getUnpackedValueOrDefault("PageRange", OUString());
 
     if( !aPageRange.getLength() )

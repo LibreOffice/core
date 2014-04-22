@@ -211,8 +211,8 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         sal_uInt32 i;
         PropertyMap aPropertyMap;
         aPropertyMap.setProperty( PROP_Type, OUString( "ooxml-non-primitive" ));
-        aPropertyMap.setProperty( PROP_MirroredX, (sal_Bool) mbMirroredX );
-        aPropertyMap.setProperty( PROP_MirroredY, (sal_Bool) mbMirroredY );
+        aPropertyMap.setProperty( PROP_MirroredX, mbMirroredX );
+        aPropertyMap.setProperty( PROP_MirroredY, mbMirroredY );
         // Note 1: If Equations are defined - they are processed using internal div by 360 coordinates
         // while if they are not, standard ooxml coordinates are used.
         // This size specifically affects scaling.
@@ -261,11 +261,11 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
 
         if ( maPath2DList.size() )
         {
-            sal_Bool bAllZero = sal_True;
+            bool bAllZero = true;
             for ( i=0; i < maPath2DList.size(); i++ )
             {
                 if ( maPath2DList[i].w || maPath2DList[i].h ) {
-                    bAllZero = sal_False;
+                    bAllZero = false;
                     break;
                 }
             }

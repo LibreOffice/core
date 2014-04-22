@@ -298,7 +298,7 @@ namespace oox { namespace ppt {
             Reference< XCommand > xCommand( xNode, UNO_QUERY );
             Reference< XIterateContainer > xIterateContainer( xNode, UNO_QUERY );
             sal_Int16 nInt16 = 0;
-            sal_Bool bBool = sal_False;
+            bool bBool = false;
             double fDouble = 0;
             OUString sString;
             Sequence< NamedValue > aSeq;

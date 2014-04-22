@@ -536,7 +536,7 @@ void ControlConverter::convertToAxState( PropertySet& rPropSet,
 
     sal_Int16 nState = API_STATE_DONTKNOW;
 
-    sal_Bool bTmp = sal_False;
+    bool bTmp = false;
     // need to use State for current state ( I think this is regardless of whether
     // control is awt or not )
     rPropSet.getProperty( nState, PROP_State );
