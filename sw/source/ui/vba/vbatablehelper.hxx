@@ -47,7 +47,7 @@ public:
     sal_Int32 getTableWidth( ) throw (css::uno::RuntimeException);
 
     sal_Int32 GetColWidth( sal_Int32 nCol, sal_Int32 nRow = 0, bool bCurRowOnly  = false ) throw (css::uno::RuntimeException);
-    void SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 nRow = 0, bool bCurRowOnly  = false ) throw (css::uno::RuntimeException);
+    void SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 nRow = 0, bool bCurRowOnly  = false ) throw (css::uno::RuntimeException, std::exception);
 
     static SwTable* GetSwTable( const css::uno::Reference< css::text::XTextTable >& xTextTable ) throw (css::uno::RuntimeException);
     static OUString getColumnStr( sal_Int32 nCol );
