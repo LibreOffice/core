@@ -701,8 +701,10 @@ class SmTableNode : public SmStructureNode
     long nFormulaBaseline;
 public:
     SmTableNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NTABLE, rNodeToken)
-    {}
+        :   SmStructureNode(NTABLE, rNodeToken)
+        , nFormulaBaseline(0)
+    {
+    }
 
     using   SmNode::GetLeftMost;
     virtual SmNode * GetLeftMost() SAL_OVERRIDE;
