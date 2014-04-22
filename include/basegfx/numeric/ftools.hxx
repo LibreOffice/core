@@ -148,17 +148,6 @@ namespace basegfx
      */
     BASEGFX_DLLPUBLIC double snapToNearestMultiple(double v, const double fStep);
 
-    /** return fValue with the sign of fSignCarrier, thus evtl. changed
-    */
-    inline double copySign(double fValue, double fSignCarrier)
-    {
-#ifdef WNT
-        return _copysign(fValue, fSignCarrier);
-#else
-        return copysign(fValue, fSignCarrier);
-#endif
-    }
-
     class BASEGFX_DLLPUBLIC fTools
     {
     public:
