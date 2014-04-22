@@ -1302,8 +1302,6 @@ static CustomShapeTypeTranslationHashMap* pCustomShapeTypeTranslationHashMap = N
 
 const char* GetOOXMLPresetGeometry( const char* sShapeType )
 {
-    const char* sPresetGeo;
-
     if( pCustomShapeTypeTranslationHashMap == NULL )
     {
         pCustomShapeTypeTranslationHashMap = new CustomShapeTypeTranslationHashMap ();
@@ -1312,13 +1310,9 @@ const char* GetOOXMLPresetGeometry( const char* sShapeType )
             (*pCustomShapeTypeTranslationHashMap)[ pCustomShapeTypeTranslationTable[ i ].sOOo ] = pCustomShapeTypeTranslationTable[ i ].sMSO;
         }
     }
-
-    sPresetGeo = (*pCustomShapeTypeTranslationHashMap)[ sShapeType ];
-
-    if( sPresetGeo == NULL )
-        sPresetGeo = "rect";
-
-    return sPresetGeo;
+    CustomShapeTypeTranslationHashMap::iterator i(
+        pCustomShapeTypeTranslationHashMap->find(sShapeType));
+    return i == pCustomShapeTypeTranslationHashMap->end() ? "rect" : i->second;
 }
 
 typedef boost::unordered_map< const char*, MSO_SPT, rtl::CStringHash, rtl::CStringEqual> DMLToVMLTranslationHashMap;
