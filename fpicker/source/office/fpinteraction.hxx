@@ -53,7 +53,7 @@ namespace svt
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > m_xMaster        ; // our master handler
         ::com::sun::star::uno::Any                                                      m_aException     ; // the last handled request
-        sal_Bool                                                                        m_bUsed          ; // indicates using of this interaction handler instance
+        bool                                                                        m_bUsed          ; // indicates using of this interaction handler instance
         EInterceptedInteractions                                                        m_eInterceptions ; // enable/disable interception of some special interactions
 
     public:
@@ -61,12 +61,12 @@ namespace svt
 
         // some generic functions
         void     enableInterceptions( EInterceptedInteractions eInterceptions );
-        sal_Bool wasUsed            () const;
+        bool wasUsed            () const;
         void     resetUseState      ();
         void     forgetRequest      ();
 
         // functions to analyze last cached request
-        sal_Bool wasAccessDenied() const;
+        bool wasAccessDenied() const;
 
     protected:
         // XInteractionHandler

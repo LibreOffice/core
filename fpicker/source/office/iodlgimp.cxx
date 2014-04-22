@@ -230,12 +230,12 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
     _eDlgType           ( FILEDLG_TYPE_FILEDLG ),
     _nState             ( FILEDLG_STATE_REMOTE ),
     _nStyle             ( 0 ),
-    _bDoubleClick       ( sal_False ),
-    m_bNeedDelayedFilterExecute ( sal_False ),
+    _bDoubleClick       ( false ),
+    m_bNeedDelayedFilterExecute ( false ),
     _pDefaultFilter     ( NULL ),
-    _bMultiSelection    ( sal_False ),
+    _bMultiSelection    ( false ),
     _nFixDeltaHeight    ( 0 ),
-    _bFolderHasOpened   ( sal_False )
+    _bFolderHasOpened   ( false )
 {
 }
 

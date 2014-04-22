@@ -59,7 +59,7 @@ public:
     const OUString&     GetType() const     { return m_aType; }
     const OUString      GetExtension() const    { return m_aType.copy( 2 ); }
 
-    sal_Bool            isGroupSeparator() const    { return m_aType.isEmpty(); }
+    bool            isGroupSeparator() const    { return m_aType.isEmpty(); }
 };
 
 typedef boost::ptr_deque<SvtFileDialogFilter_Impl> SvtFileDialogFilterList_Impl;
@@ -171,15 +171,15 @@ public:
     Timer                           _aFilterTimer;
 
     // shows OpenHdl_Imp() if the open was triggered by a double click
-    sal_Bool                        _bDoubleClick;
-    sal_Bool                        m_bNeedDelayedFilterExecute;
+    bool                        _bDoubleClick;
+    bool                        m_bNeedDelayedFilterExecute;
 
     // list of the 5 most recently used filters
     // Defaultfilter for <All> oder <All ...>
     const SvtFileDialogFilter_Impl* _pDefaultFilter;
 
     // MultiSelection?
-    sal_Bool                        _bMultiSelection;
+    bool                        _bMultiSelection;
 
     // remember fixsizes for resize
     long                            _nFixDeltaHeight;
@@ -187,7 +187,7 @@ public:
     Size                            _aDlgSize;
     OUString                        _aIniKey;
 
-    sal_Bool                        _bFolderHasOpened;
+    bool                        _bFolderHasOpened;
 
                             SvtExpFileDlg_Impl( WinBits nBits );
                             ~SvtExpFileDlg_Impl();
@@ -209,13 +209,13 @@ public:
     // inits the listbox for the filters from the filter list (_pFilter)
             void            ClearFilterList( );
             void            InitFilterList( );
-    inline  sal_Bool        HasFilterListEntry( const OUString& _rFilterName );
+    inline  bool        HasFilterListEntry( const OUString& _rFilterName );
     inline  void            SelectFilterListEntry( const OUString& _rFilterName );
     inline  void            SetNoFilterListSelection( );
             void            InsertFilterListEntry( const SvtFileDialogFilter_Impl* _pFilterDesc );
                                 // _pFilterDesc must already have been added to _pFilter
     inline  SvtFileDialogFilter_Impl*   GetSelectedFilterEntry( OUString& /* [out] */ _rDisplayName ) const;
-    inline  sal_Bool        IsFilterListTravelSelect() const;
+    inline  bool        IsFilterListTravelSelect() const;
 
 
     // access to the current filter via methods only - need to care for consistency between _pCurFilter and m_sCurrentFilterDisplayName
@@ -230,7 +230,7 @@ inline void SvtExpFileDlg_Impl::SetFilterListSelectHdl( const Link& _rHandler )
     _pLbFilter->SetSelectHdl( _rHandler );
 }
 
-inline sal_Bool SvtExpFileDlg_Impl::HasFilterListEntry( const OUString& _rFilterName )
+inline bool SvtExpFileDlg_Impl::HasFilterListEntry( const OUString& _rFilterName )
 {
     return ( LISTBOX_ENTRY_NOTFOUND != _pLbFilter->GetEntryPos( _rFilterName ) );
 }
@@ -251,7 +251,7 @@ inline SvtFileDialogFilter_Impl* SvtExpFileDlg_Impl::GetSelectedFilterEntry( OUS
     return static_cast< SvtFileDialogFilter_Impl* >( _pLbFilter->GetEntryData ( _pLbFilter->GetSelectEntryPos() ) );
 }
 
-inline sal_Bool SvtExpFileDlg_Impl::IsFilterListTravelSelect() const
+inline bool SvtExpFileDlg_Impl::IsFilterListTravelSelect() const
 {
     return _pLbFilter->IsTravelSelect();
 }

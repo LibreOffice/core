@@ -65,16 +65,16 @@ private:
     FilterList*         m_pFilterList;
     ElementList*        m_pElemList;
 
-    sal_Bool            m_bMultiSelection;
+    bool                m_bMultiSelection;
     sal_Int16           m_nServiceType;
-    OUString     m_aDefaultName;
-    OUString     m_aCurrentFilter;
+    OUString            m_aDefaultName;
+    OUString            m_aCurrentFilter;
 
     // #97148# --------------
-    OUString     m_aOldDisplayDirectory;
-    OUString     m_aOldHideDirectory;
+    OUString            m_aOldDisplayDirectory;
+    OUString            m_aOldHideDirectory;
 
-    OUString     m_aStandardDir;
+    OUString            m_aStandardDir;
     OUStringList        m_aBlackList;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >
@@ -207,7 +207,7 @@ protected:
 
     virtual SvtFileDialog*  implCreateDialog( Window* _pParent ) SAL_OVERRIDE;
     virtual sal_Int16       implExecutePicker( ) SAL_OVERRIDE;
-    virtual sal_Bool        implHandleInitializationArgument(
+    virtual bool            implHandleInitializationArgument(
                                 const OUString& _rName,
                                 const ::com::sun::star::uno::Any& _rValue
                             )
@@ -217,8 +217,8 @@ private:
     WinBits             getWinBits( WinBits& rExtraBits );
     virtual void        notify( sal_Int16 _nEventId, sal_Int16 _nControlId ) SAL_OVERRIDE;
 
-    sal_Bool            FilterNameExists( const OUString& rTitle );
-    sal_Bool            FilterNameExists( const UnoFilterList& _rGroupedFilters );
+    bool                FilterNameExists( const OUString& rTitle );
+    bool                FilterNameExists( const UnoFilterList& _rGroupedFilters );
 
     void                ensureFilterList( const OUString& _rInitialCurrentFilter );
 

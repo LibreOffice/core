@@ -140,7 +140,7 @@ namespace
     }
 
 
-    sal_Bool restoreCurrentFilter( SvtExpFileDlg_Impl* _pImpl )
+    bool restoreCurrentFilter( SvtExpFileDlg_Impl* _pImpl )
     {
         DBG_ASSERT( _pImpl->GetCurFilter(), "restoreCurrentFilter: no current filter!" );
         DBG_ASSERT( !_pImpl->GetCurFilterDisplayName().isEmpty(), "restoreCurrentFilter: no current filter (no display name)!" );
@@ -224,11 +224,11 @@ namespace
             {
                 // check if it is a real file extension, and not only the "post-dot" part in
                 // a directory name
-                sal_Bool bRealExtensions = sal_True;
+                bool bRealExtensions = true;
                 if ( -1 != aExt.indexOf( '/' ) )
-                    bRealExtensions = sal_False;
+                    bRealExtensions = false;
                 else if ( -1 != aExt.indexOf( '\\' ) )
-                    bRealExtensions = sal_False;
+                    bRealExtensions = false;
                 else
                 {
                     // no easy way to tell, because the part containing the dot already is the last
@@ -265,7 +265,7 @@ namespace
     }
 
 
-    sal_Bool lcl_getHomeDirectory( const OUString& _rForURL, OUString& /* [out] */ _rHomeDir )
+    bool lcl_getHomeDirectory( const OUString& _rForURL, OUString& /* [out] */ _rHomeDir )
     {
         _rHomeDir = "";
 
@@ -329,7 +329,7 @@ struct ControlChain_Impl
 {
     Window*            _pControl;
     ControlChain_Impl* _pNext;
-    sal_Bool               _bHasOwnership;
+    bool               _bHasOwnership;
 
     ControlChain_Impl( Window* pControl, ControlChain_Impl* pNext );
     ~ControlChain_Impl();
@@ -344,7 +344,7 @@ ControlChain_Impl::ControlChain_Impl
 )
     : _pControl( pControl ),
       _pNext( pNext ),
-      _bHasOwnership( sal_True )
+      _bHasOwnership( true )
 {
 }
 
@@ -382,7 +382,7 @@ SvtFileDialog::SvtFileDialog
     ,_pFileNotifier( NULL )
     ,_pImp( new SvtExpFileDlg_Impl( nBits ) )
     ,_nExtraBits( nExtraBits )
-    ,_bIsInExecute( sal_False )
+    ,_bIsInExecute( false )
     ,m_bInExecuteAsync( false )
     ,m_bHasFilename( false )
     ,m_context(comphelper::getProcessComponentContext())
@@ -406,7 +406,7 @@ SvtFileDialog::SvtFileDialog ( Window* _pParent, WinBits nBits )
     ,_pFileNotifier( NULL )
     ,_pImp( new SvtExpFileDlg_Impl( nBits ) )
     ,_nExtraBits( 0L )
-    ,_bIsInExecute( sal_False )
+    ,_bIsInExecute( false )
     ,m_bHasFilename( false )
 {
     Init_Impl( nBits );
@@ -547,7 +547,7 @@ void SvtFileDialog::Init_Impl
     _pImp->_pBtnNewFolder->SetAccessibleName( _pImp->_pBtnNewFolder->GetQuickHelpText() );
 
     if ( ( nStyle & SFXWB_MULTISELECTION ) == SFXWB_MULTISELECTION )
-        _pImp->_bMultiSelection = sal_True;
+        _pImp->_bMultiSelection = true;
 
     _pFileView = new SvtFileView( this, SvtResId( CTL_EXPLORERFILE_FILELIST ),
                                        FILEDLG_TYPE_PATHDLG == _pImp->_eDlgType,
@@ -775,7 +775,7 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
     OUString aTitle;
     aContent.getTitle( aTitle );
     QueryFolderNameDialog aDlg( pThis, aTitle, SVT_RESSTR(STR_SVT_NEW_FOLDER) );
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
 
     while ( !bHandled )
     {
@@ -785,11 +785,11 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
             if ( !aUrl.isEmpty( ) )
             {
                 pThis->_pFileView->CreatedFolder( aUrl, aDlg.GetName() );
-                bHandled = sal_True;
+                bHandled = true;
             }
         }
         else
-            bHandled = sal_True;
+            bHandled = true;
     }
 
     return 0;
@@ -803,14 +803,14 @@ IMPL_STATIC_LINK_NOINSTANCE( SvtFileDialog, ViewHdl_Impl, ImageButton*, EMPTYARG
 }
 
 
-sal_Bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter, sal_Bool _bAllowUserDefExt )
+bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter, bool _bAllowUserDefExt )
 {
     // delete the old user filter and create a new one
     DELETEZ( _pImp->_pUserFilter );
     _pImp->_pUserFilter = new SvtFileDialogFilter_Impl( _rNewFilter, _rNewFilter );
 
     // remember the extension
-    sal_Bool bIsAllFiles = _rNewFilter == FILEDIALOG_FILTER_ALL;
+    bool bIsAllFiles = _rNewFilter == FILEDIALOG_FILTER_ALL;
     if ( bIsAllFiles )
         EraseDefaultExt();
     else
@@ -821,7 +821,7 @@ sal_Bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter, sal_Bo
     // now, the default extension is set to the one of the user filter (or empty)
     // if the former is not allowed (_bAllowUserDefExt = <FALSE/>), we have to use the ext of the current filter
     // (if possible)
-    sal_Bool bUseCurFilterExt = sal_True;
+    bool bUseCurFilterExt = true;
     OUString sUserFilter = _pImp->_pUserFilter->GetType();
     sal_Int32 nSepPos = sUserFilter.lastIndexOf( '.' );
     if ( nSepPos != -1 )
@@ -830,7 +830,7 @@ sal_Bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter, sal_Bo
         if  (   ( -1 == sUserExt.indexOf( '*' ) )
             &&  ( -1 == sUserExt.indexOf( '?' ) )
             )
-            bUseCurFilterExt = sal_False;
+            bUseCurFilterExt = false;
     }
 
     if ( !_bAllowUserDefExt || bUseCurFilterExt )
@@ -856,15 +856,15 @@ sal_uInt16 SvtFileDialog::adjustFilter( const OUString& _rFilter )
 {
     sal_uInt16 nReturn = 0;
 
-    const sal_Bool bNonEmpty = !_rFilter.isEmpty();
+    const bool bNonEmpty = !_rFilter.isEmpty();
     if ( bNonEmpty )
     {
         nReturn |= FLT_NONEMPTY;
 
-        sal_Bool bFilterChanged = sal_True;
+        bool bFilterChanged = true;
 
         // search for a corresponding filter
-        SvtFileDialogFilter_Impl* pFilter = FindFilter_Impl( _rFilter, sal_False, bFilterChanged );
+        SvtFileDialogFilter_Impl* pFilter = FindFilter_Impl( _rFilter, false, bFilterChanged );
 
 #ifdef AUTOSELECT_USERFILTER
         // if we found a filter which without allowing multi-extensions -> select it
@@ -877,7 +877,7 @@ sal_uInt16 SvtFileDialog::adjustFilter( const OUString& _rFilter )
 
         // look for multi-ext filters if necessary
         if ( !pFilter )
-            pFilter = FindFilter_Impl( _rFilter, sal_True, bFilterChanged );
+            pFilter = FindFilter_Impl( _rFilter, true, bFilterChanged );
 
         if ( bFilterChanged )
             nReturn |= FLT_CHANGED;
@@ -889,7 +889,7 @@ sal_uInt16 SvtFileDialog::adjustFilter( const OUString& _rFilter )
 #ifdef AUTOSELECT_USERFILTER
             if ( createNewUserFilter( _rFilter, sal_True ) )
 #else
-            if ( createNewUserFilter( _rFilter, sal_False ) )
+            if ( createNewUserFilter( _rFilter, false ) )
 #endif
             {   // it's the "all files" filter
                 nReturn |= FLT_ALLFILESFILTER;
@@ -1045,7 +1045,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     }
 
     // check if it is a folder
-    sal_Bool bIsFolder = sal_False;
+    bool bIsFolder = false;
 
     // first thing before doing anyhing with the content: Reset it. When the user presses "open" (or "save" or "export",
     // for that matter), s/he wants the complete handling, including all possible error messages, even if s/he
@@ -1112,7 +1112,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                                pThis->_pImp->GetCurFilter()->GetType());
     }
 
-    sal_Bool bOpenFolder = ( FILEDLG_TYPE_PATHDLG == pThis->_pImp->_eDlgType ) &&
+    bool bOpenFolder = ( FILEDLG_TYPE_PATHDLG == pThis->_pImp->_eDlgType ) &&
                        !pThis->_pImp->_bDoubleClick && pVoid != pThis->_pImp->_pEdFileName;
     if ( bIsFolder )
     {
@@ -1178,7 +1178,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     // if content does not exist: at least its path must exist
                     INetURLObject aPathObj = aFileObj;
                     aPathObj.removeSegment();
-                    sal_Bool bFolder = pThis->m_aContent.isFolder( aPathObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                    bool bFolder = pThis->m_aContent.isFolder( aPathObj.GetMainURL( INetURLObject::NO_DECODE ) );
                     if ( !bFolder )
                     {
                         ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTSPATH );
@@ -1195,7 +1195,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 
             if ( INET_PROT_FILE == aFileObj.GetProtocol( ) )
             {
-                sal_Bool bExists = sal_False;
+                bool bExists = false;
                 bExists = pThis->m_aContent.is( aFileObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
 
@@ -1243,7 +1243,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 
 
 
-void SvtFileDialog::EnableAutocompletion( sal_Bool _bEnable )
+void SvtFileDialog::EnableAutocompletion( bool _bEnable )
 {
     _pImp->_pEdFileName->EnableAutocompletion( _bEnable );
 }
@@ -1282,7 +1282,7 @@ IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, ListBox*, pBox )
 
                 // stop the timer for executing the filter
                 if ( pThis->_pImp->_aFilterTimer.IsActive() )
-                    pThis->_pImp->m_bNeedDelayedFilterExecute = sal_True;
+                    pThis->_pImp->m_bNeedDelayedFilterExecute = true;
                 pThis->_pImp->_aFilterTimer.Stop();
             }
             else
@@ -1413,10 +1413,10 @@ IMPL_LINK_NOARG ( SvtFileDialog, RemovePlacePressed_Hdl )
 SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
 (
     const OUString& _rFilter,
-    sal_Bool _bMultiExt,/*  TRUE - regard filter with several extensions
+    bool _bMultiExt,/*  TRUE - regard filter with several extensions
                             FALSE - do not ...
                         */
-    sal_Bool& _rFilterChanged
+    bool& _rFilterChanged
 )
 
 /*  [Description]
@@ -1461,7 +1461,7 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
             // activate filter
             _rFilterChanged = _pImp->_pUserFilter || ( _pImp->GetCurFilter() != pFilter );
 
-            createNewUserFilter( _rFilter, sal_False );
+            createNewUserFilter( _rFilter, false );
 
             break;
         }
@@ -1473,7 +1473,7 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
 
 void SvtFileDialog::ExecuteFilter()
 {
-    _pImp->m_bNeedDelayedFilterExecute = sal_False;
+    _pImp->m_bNeedDelayedFilterExecute = false;
     executeAsync( AsyncPickerAction::eExecuteFilter, OUString(), getMostCurrentFilter( _pImp ) );
 }
 
@@ -1616,9 +1616,9 @@ IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
 
 IMPL_LINK_NOARG(SvtFileDialog, DblClickHdl_Impl)
 {
-    _pImp->_bDoubleClick = sal_True;
+    _pImp->_bDoubleClick = true;
     OpenHdl_Impl( this, NULL );
-    _pImp->_bDoubleClick = sal_False;
+    _pImp->_bDoubleClick = false;
 
     return 0;
 }
@@ -1828,8 +1828,8 @@ OUString SvtFileDialog::implGetInitialURL( const OUString& _rPath, const OUStrin
 
     // is it a valid folder?
     m_aContent.bindTo( aURLParser.GetMainURL( INetURLObject::NO_DECODE ) );
-    sal_Bool bIsFolder = m_aContent.isFolder( );    // do this _before_ asking isInvalid!
-    sal_Bool bIsInvalid = m_aContent.isInvalid();
+    bool bIsFolder = m_aContent.isFolder( );    // do this _before_ asking isInvalid!
+    bool bIsInvalid = m_aContent.isInvalid();
 
     if ( bIsInvalid && m_bHasFilename && !aURLParser.hasFinalSlash() )
     {   // check if the parent folder exists
@@ -1875,9 +1875,9 @@ short SvtFileDialog::Execute()
         return 0;
 
     // start the dialog
-    _bIsInExecute = sal_True;
+    _bIsInExecute = true;
     short nResult = ModalDialog::Execute();
-    _bIsInExecute = sal_False;
+    _bIsInExecute = false;
 
     DBG_ASSERT( !m_pCurrentAsyncAction.is(), "SvtFilePicker::Execute: still running an async action!" );
         // the dialog should not be cancellable while an async action is running - first, the action
@@ -1891,7 +1891,7 @@ short SvtFileDialog::Execute()
         {
             // remember the selected directory only for file URLs not for virtual folders
             sal_Int32 nLevel = aURL.getSegmentCount();
-            sal_Bool bDir = m_aContent.isFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            bool bDir = m_aContent.isFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
             if ( nLevel > 1 && ( FILEDLG_TYPE_FILEDLG == _pImp->_eDlgType || !bDir ) )
                 aURL.removeSegment();
         }
@@ -1912,7 +1912,7 @@ void SvtFileDialog::StartExecuteModal( const Link& rEndDialogHdl )
 
 void SvtFileDialog::onAsyncOperationStarted()
 {
-    EnableUI( sal_False );
+    EnableUI( false );
     // the cancel button must be always enabled
     _pImp->_pBtnCancel->Enable( true );
     _pImp->_pBtnCancel->GrabFocus();
@@ -1921,7 +1921,7 @@ void SvtFileDialog::onAsyncOperationStarted()
 
 void SvtFileDialog::onAsyncOperationFinished()
 {
-    EnableUI( sal_True );
+    EnableUI( true );
     m_pCurrentAsyncAction = NULL;
     if ( !m_bInExecuteAsync )
         _pImp->_pEdFileName->GrabFocus();
@@ -1974,7 +1974,7 @@ void SvtFileDialog::displayIOException( const OUString& _rURL, IOErrorCode _eCod
 }
 
 
-void SvtFileDialog::EnableUI( sal_Bool _bEnable )
+void SvtFileDialog::EnableUI( bool _bEnable )
 {
     Enable( _bEnable );
 
@@ -1991,7 +1991,7 @@ void SvtFileDialog::EnableUI( sal_Bool _bEnable )
 }
 
 
-void SvtFileDialog::EnableControl( Control* _pControl, sal_Bool _bEnable )
+void SvtFileDialog::EnableControl( Control* _pControl, bool _bEnable )
 {
     if ( !_pControl )
     {
@@ -2105,7 +2105,7 @@ short SvtFileDialog::PrepareExecute()
     // set up initial filter
     sal_uInt16 nFilterCount = GetFilterCount();
     OUString aAll = SvtResId( STR_FILTERNAME_ALL ).toString();
-    sal_Bool bHasAll = _pImp->HasFilterListEntry( aAll );
+    bool bHasAll = _pImp->HasFilterListEntry( aAll );
     if ( _pImp->GetCurFilter() || nFilterCount == 1 || ( nFilterCount == 2 && bHasAll ) )
     {
         // if applicable set the only filter or the only filter that
@@ -2485,7 +2485,7 @@ void SvtFileDialog::implArrangeControls()
 
 
 
-sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilter )
+bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilter )
 {
     OUString aEmpty;
     OUString aReversePath = comphelper::string::reverseString(rPath);
@@ -2534,7 +2534,7 @@ sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& r
             if ( nPathTokenPos < (rPath.getLength() - nWildCardPos - 1) )
             {
                 ErrorHandler::HandleError( ERRCODE_SFX_INVALIDSYNTAX );
-                return sal_False;
+                return false;
             }
 
             // cut off filter
@@ -2554,7 +2554,7 @@ sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& r
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -3024,7 +3024,7 @@ void SvtFileDialog::setImage( sal_Int16 /*aImageFormat*/, const Any& rImage )
 }
 
 
-sal_Bool SvtFileDialog::setShowState( sal_Bool /*bShowState*/ )
+bool SvtFileDialog::setShowState( bool /*bShowState*/ )
 {
     // #97633 for the system filedialog it's
     // useful to make the preview switchable
@@ -3038,7 +3038,7 @@ sal_Bool SvtFileDialog::setShowState( sal_Bool /*bShowState*/ )
     // support for set/getShowState is opionally
     // see com::sun::star::ui::dialogs::XFilePreview
 
-    return sal_False;
+    return false;
 }
 
 
@@ -3062,18 +3062,18 @@ void SvtFileDialog::setCurrentFileText( const OUString& _rText, bool _bSelectAll
 }
 
 
-sal_Bool SvtFileDialog::isAutoExtensionEnabled()
+bool SvtFileDialog::isAutoExtensionEnabled()
 {
     return _pImp->_pCbAutoExtension && _pImp->_pCbAutoExtension->IsChecked();
 }
 
 
-sal_Bool SvtFileDialog::getShowState()
+bool SvtFileDialog::getShowState()
 {
     if ( _pPrevBmp )
         return _pPrevBmp->IsVisible();
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -3091,7 +3091,7 @@ void SvtFileDialog::ReleaseOwnership( Window* pUserControl )
     {
         if ( pElement->_pControl == pUserControl )
         {
-            pElement->_bHasOwnership = sal_False;
+            pElement->_bHasOwnership = false;
             break;
         }
         pElement = pElement->_pNext;
@@ -3100,14 +3100,14 @@ void SvtFileDialog::ReleaseOwnership( Window* pUserControl )
 
 
 
-sal_Bool SvtFileDialog::AddControl( Window* pControl, sal_Bool bNewLine )
+bool SvtFileDialog::AddControl( Window* pControl, sal_Bool bNewLine )
 {
     // control already exists
     ControlChain_Impl* pElement = _pUserControls;
     while ( pElement )
     {
         if ( pElement->_pControl == pControl )
-            return sal_False;
+            return false;
         pElement = pElement->_pNext;
     }
 
@@ -3149,7 +3149,7 @@ sal_Bool SvtFileDialog::AddControl( Window* pControl, sal_Bool bNewLine )
     }
     Point aNewControlPos;
     Size* pNewDlgSize = NULL;
-    sal_Bool bNewRow = bNewLine;
+    bool bNewRow = bNewLine;
 
     if ( nType == WINDOW_WINDOW )
     {
@@ -3176,12 +3176,12 @@ sal_Bool SvtFileDialog::AddControl( Window* pControl, sal_Bool bNewLine )
 
         // Check if a new row has to be created.
         if ( aNewControlRange.X() > aDlgSize.Width() )
-            bNewRow = sal_True;
+            bNewRow = true;
     }
     else
     {
         // Create a new row if there was no usercontrol before.
-        bNewRow = sal_True;
+        bNewRow = true;
     }
 
     // Check if a new row has to be created.
@@ -3221,35 +3221,35 @@ sal_Bool SvtFileDialog::AddControl( Window* pControl, sal_Bool bNewLine )
     pControl->Show();
     _pUserControls = new ControlChain_Impl( pControl, _pUserControls );
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvtFileDialog::ContentHasParentFolder( const OUString& rURL )
+bool SvtFileDialog::ContentHasParentFolder( const OUString& rURL )
 {
     m_aContent.bindTo( rURL );
 
     if ( m_aContent.isInvalid() )
-        return sal_False;
+        return false;
 
     return m_aContent.hasParentFolder( ) && m_aContent.isValid();
 }
 
-sal_Bool SvtFileDialog::ContentCanMakeFolder( const OUString& rURL )
+bool SvtFileDialog::ContentCanMakeFolder( const OUString& rURL )
 {
     m_aContent.bindTo( rURL );
 
     if ( m_aContent.isInvalid() )
-        return sal_False;
+        return false;
 
     return m_aContent.canCreateFolder( ) && m_aContent.isValid();
 }
 
-sal_Bool SvtFileDialog::ContentGetTitle( const OUString& rURL, OUString& rTitle )
+bool SvtFileDialog::ContentGetTitle( const OUString& rURL, OUString& rTitle )
 {
     m_aContent.bindTo( rURL );
 
     if ( m_aContent.isInvalid() )
-        return sal_False;
+        return false;
 
     OUString sTitle;
     m_aContent.getTitle( sTitle );

@@ -52,7 +52,7 @@ namespace svt
         ,m_xORB( _rxFactory )
         ,m_pDlg( NULL )
         ,m_nCancelEvent( 0 )
-        ,m_bExecuting( sal_False )
+        ,m_bExecuting( false )
     {
         // the two properties we have
         registerProperty(
@@ -142,8 +142,8 @@ namespace svt
     void SAL_CALL OCommonPicker::disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
-        sal_Bool bDialogDying = _rSource.Source == m_xWindow;
-        sal_Bool bParentDying = _rSource.Source == m_xDialogParent;
+        bool bDialogDying = _rSource.Source == m_xWindow;
+        bool bParentDying = _rSource.Source == m_xDialogParent;
 
         if ( bDialogDying || bParentDying )
         {
@@ -192,12 +192,12 @@ namespace svt
         // if the HelpURL changed, forward this to the dialog
         if ( PROPERTY_ID_HELPURL == _nHandle )
             if ( m_pDlg )
-                OControlAccess::setHelpURL( m_pDlg, m_sHelpURL, sal_False );
+                OControlAccess::setHelpURL( m_pDlg, m_sHelpURL, false );
     }
 
 
 
-    sal_Bool OCommonPicker::createPicker()
+    bool OCommonPicker::createPicker()
     {
         SolarMutexGuard aGuard;
 
@@ -211,11 +211,11 @@ namespace svt
                 // synchronize the help id of the dialog with out help URL property
                 if ( !m_sHelpURL.isEmpty() )
                 {   // somebody already set the help URL while we had no dialog yet
-                    OControlAccess::setHelpURL( m_pDlg, m_sHelpURL, sal_False );
+                    OControlAccess::setHelpURL( m_pDlg, m_sHelpURL, false );
                 }
                 else
                 {
-                    m_sHelpURL = OControlAccess::getHelpURL( m_pDlg, sal_False );
+                    m_sHelpURL = OControlAccess::getHelpURL( m_pDlg, false );
                 }
 
                 m_xWindow = VCLUnoHelper::GetInterface( m_pDlg );
@@ -355,12 +355,12 @@ namespace svt
 
         {
             ::osl::MutexGuard aOwnGuard( m_aMutex );
-            m_bExecuting = sal_True;
+            m_bExecuting = true;
         }
         sal_Int16 nResult = implExecutePicker();
         {
             ::osl::MutexGuard aOwnGuard( m_aMutex );
-            m_bExecuting = sal_False;
+            m_bExecuting = false;
         }
 
         return nResult;
@@ -463,7 +463,7 @@ namespace svt
             }
 
 #ifdef DBG_UTIL
-            sal_Bool bKnownSetting =
+            bool bKnownSetting =
 #endif
             implHandleInitializationArgument( sSettingName, aSettingValue );
             DBG_ASSERT( bKnownSetting,
@@ -476,9 +476,9 @@ namespace svt
     }
 
 
-    sal_Bool OCommonPicker::implHandleInitializationArgument( const OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
+    bool OCommonPicker::implHandleInitializationArgument( const OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
     {
-        sal_Bool bKnown = sal_True;
+        bool bKnown = true;
         if ( _rName == "ParentWindow" )
         {
             m_xDialogParent.clear();
@@ -486,7 +486,7 @@ namespace svt
             OSL_ENSURE( VCLUnoHelper::GetWindow( m_xDialogParent ), "OCommonPicker::implHandleInitializationArgument: invalid parent window given!" );
         }
         else
-            bKnown = sal_False;
+            bKnown = false;
         return bKnown;
     }
 

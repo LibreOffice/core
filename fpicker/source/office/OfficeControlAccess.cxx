@@ -155,7 +155,7 @@ namespace svt
             OUString m_sLookup;
             ControlPropertyLookup( const OUString& _rLookup ) : m_sLookup( _rLookup ) { }
 
-            sal_Bool operator()( const ControlProperty& _rProp )
+            bool operator()( const ControlProperty& _rProp )
             {
                 return m_sLookup.equalsAscii( _rProp.pPropertyName );
             }
@@ -178,7 +178,7 @@ namespace svt
     }
 
 
-    void OControlAccess::setHelpURL( Window* _pControl, const OUString& sHelpURL, sal_Bool _bFileView )
+    void OControlAccess::setHelpURL( Window* _pControl, const OUString& sHelpURL, bool _bFileView )
     {
         OUString sHelpID( sHelpURL );
         INetURLObject aHID( sHelpURL );
@@ -195,7 +195,7 @@ namespace svt
     }
 
 
-    OUString OControlAccess::getHelpURL( Window* _pControl, sal_Bool _bFileView )
+    OUString OControlAccess::getHelpURL( Window* _pControl, bool _bFileView )
     {
         OString aHelpId = _pControl->GetHelpId();
         if ( _bFileView )
@@ -275,7 +275,7 @@ namespace svt
             lcl_throwIllegalArgumentException();
 
         // set the property
-        implSetControlProperty( nControlId, pControl, aPropDesc->nPropertyId, _rValue, sal_False );
+        implSetControlProperty( nControlId, pControl, aPropDesc->nPropertyId, _rValue, false );
     }
 
 
@@ -316,7 +316,7 @@ namespace svt
     }
 
 
-    sal_Bool OControlAccess::isControlSupported( const OUString& _rControlName )
+    bool OControlAccess::isControlSupported( const OUString& _rControlName )
     {
         ControlDescription tmpDesc;
         tmpDesc.pControlName = OUStringToOString(_rControlName, RTL_TEXTENCODING_UTF8).getStr();
@@ -324,7 +324,7 @@ namespace svt
     }
 
 
-    sal_Bool OControlAccess::isControlPropertySupported( const OUString& _rControlName, const OUString& _rControlProperty )
+    bool OControlAccess::isControlPropertySupported( const OUString& _rControlName, const OUString& _rControlProperty )
     {
         // look up the control
         sal_Int16 nControlId = -1;
@@ -336,7 +336,7 @@ namespace svt
         ControlPropertyIterator aPropDesc = ::std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( _rControlProperty ) );
         if ( aPropDesc == s_pPropertiesEnd )
             // it's a property which is completely unknown
-            return sal_False;
+            return false;
 
         return 0 != ( aPropDesc->nPropertyId & nPropertyMask );
     }
@@ -483,7 +483,7 @@ namespace svt
     }
 
 
-    void OControlAccess::enableControl( sal_Int16 _nId, sal_Bool _bEnable )
+    void OControlAccess::enableControl( sal_Int16 _nId, bool _bEnable )
     {
         m_pFilePickerController->enableControl( _nId, _bEnable );
     }
@@ -533,7 +533,7 @@ namespace svt
     }
 
 
-    void OControlAccess::implSetControlProperty( sal_Int16 _nControlId, Control* _pControl, sal_Int16 _nProperty, const Any& _rValue, sal_Bool _bIgnoreIllegalArgument )
+    void OControlAccess::implSetControlProperty( sal_Int16 _nControlId, Control* _pControl, sal_Int16 _nProperty, const Any& _rValue, bool _bIgnoreIllegalArgument )
     {
         if ( !_pControl )
             _pControl = m_pFilePickerController->getControl( _nControlId );
@@ -562,7 +562,7 @@ namespace svt
 
             case PROPERTY_FLAG_ENDBALED:
             {
-                sal_Bool bEnabled = sal_False;
+                bool bEnabled = false;
                 if ( _rValue >>= bEnabled )
                 {
                     m_pFilePickerController->enableControl( _nControlId, bEnabled );
@@ -576,7 +576,7 @@ namespace svt
 
             case PROPERTY_FLAG_VISIBLE:
             {
-                sal_Bool bVisible = sal_False;
+                bool bVisible = false;
                 if ( _rValue >>= bVisible )
                 {
                     _pControl->Show( bVisible );
@@ -671,7 +671,7 @@ namespace svt
                 DBG_ASSERT( WINDOW_CHECKBOX == _pControl->GetType(),
                     "OControlAccess::implSetControlProperty: invalid control/property combination!" );
 
-                sal_Bool bChecked = sal_False;
+                bool bChecked = false;
                 if ( _rValue >>= bChecked )
                 {
                     static_cast< CheckBox* >( _pControl )->Check( bChecked );
@@ -701,11 +701,11 @@ namespace svt
                 break;
 
             case PROPERTY_FLAG_ENDBALED:
-                aReturn <<= (sal_Bool)_pControl->IsEnabled();
+                aReturn <<= _pControl->IsEnabled();
                 break;
 
             case PROPERTY_FLAG_VISIBLE:
-                aReturn <<= (sal_Bool)_pControl->IsVisible();
+                aReturn <<= _pControl->IsVisible();
                 break;
 
             case PROPERTY_FLAG_HELPURL:
@@ -756,7 +756,7 @@ namespace svt
                 DBG_ASSERT( WINDOW_CHECKBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
-                aReturn <<= (sal_Bool)static_cast< CheckBox* >( _pControl )->IsChecked( );
+                aReturn <<= static_cast< CheckBox* >( _pControl )->IsChecked( );
                 break;
 
             default:

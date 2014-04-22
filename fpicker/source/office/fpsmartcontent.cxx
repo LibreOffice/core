@@ -183,20 +183,20 @@ namespace svt
     }
 
 
-    sal_Bool SmartContent::implIs( const OUString& _rURL, Type _eType )
+    bool SmartContent::implIs( const OUString& _rURL, Type _eType )
     {
         // bind to this content
         bindTo( _rURL );
 
         // did we survive this?
         if ( isInvalid() || !isBound() )
-            return sal_False;
+            return false;
 
         DBG_ASSERT( m_pContent, "SmartContent::implIs: inconsistence!" );
             // if, after an bindTo, we don't have a content, then we should be INVALID, or at least
             // NOT_BOUND (the latter happens, for example, if somebody tries to ask for an empty URL)
 
-        sal_Bool bIs = sal_False;
+        bool bIs = false;
         try
         {
             if ( Folder == _eType )
@@ -238,12 +238,12 @@ namespace svt
     }
 
 
-    sal_Bool SmartContent::hasParentFolder( )
+    bool SmartContent::hasParentFolder( )
     {
         if ( !isBound() || isInvalid() )
-            return sal_False;
+            return false;
 
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
         try
         {
             Reference< XChild > xChild( m_pContent->get(), UNO_QUERY );
@@ -269,12 +269,12 @@ namespace svt
     }
 
 
-    sal_Bool SmartContent::canCreateFolder( )
+    bool SmartContent::canCreateFolder( )
     {
         if ( !isBound() || isInvalid() )
-            return sal_False;
+            return false;
 
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
         try
         {
             Sequence< ContentInfo > aInfo = m_pContent->queryCreatableContentsInfo();
@@ -285,7 +285,7 @@ namespace svt
                 // Simply look for the first KIND_FOLDER...
                 if ( pInfo->Attributes & ContentInfoAttribute::KIND_FOLDER )
                 {
-                    bRet = sal_True;
+                    bRet = true;
                     break;
                 }
             }

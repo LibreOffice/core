@@ -66,7 +66,7 @@ namespace svt
 
         SvtFileDialog*      m_pDlg;
         sal_uInt32          m_nCancelEvent;
-        sal_Bool            m_bExecuting;
+        bool            m_bExecuting;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xDialogParent;
 
@@ -171,13 +171,13 @@ namespace svt
         void prepareDialog();
 
     protected:
-                sal_Bool    createPicker();
+                bool    createPicker();
 
         /** handle a single argument from the XInitialization::initialize method
 
             @return <TRUE/> if the argument could be handled
         */
-        virtual sal_Bool    implHandleInitializationArgument(
+        virtual bool    implHandleInitializationArgument(
                                 const OUString& _rName,
                                 const ::com::sun::star::uno::Any& _rValue
                             )

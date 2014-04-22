@@ -98,7 +98,7 @@ private:
     ::svt::IFilePickerListener* _pFileNotifier;
     SvtExpFileDlg_Impl*         _pImp;
     WinBits                     _nExtraBits;
-    sal_Bool                        _bIsInExecute   :   1;
+    bool                        _bIsInExecute   :   1;
 
     ImageList                   m_aImages;
     ::svt::SmartContent         m_aContent;
@@ -142,8 +142,8 @@ private:
         the filter which has been found
     */
     SvtFileDialogFilter_Impl*   FindFilter_Impl( const OUString& _rFilter,
-                                                 sal_Bool _bMultiExt,
-                                                 sal_Bool& _rFilterChanged
+                                                 bool _bMultiExt,
+                                                 bool& _rFilterChanged
                                                  );
     void                        ExecuteFilter();
     void                        OpenMultiSelection_Impl();
@@ -159,14 +159,14 @@ private:
 
 
     // removes a filter with wildcards from the path and returns it
-    sal_Bool IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilter );
+    bool IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilter );
 
     void    implArrangeControls();
     void    implUpdateImages( );
 
 protected:
     virtual bool                Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    void                        EnableInternet( sal_Bool bInternet );
+    void                        EnableInternet( bool bInternet );
 
     // originally from VclFileDialog
     Link                        _aOKHdl;
@@ -187,14 +187,14 @@ protected:
         This is under the assumption that you'll use EnableControl. Direct access to the control
         (such as pControl->Enable()) will break this.
     */
-    void                        EnableUI( sal_Bool _bEnable );
+    void                        EnableUI( bool _bEnable );
 
     /** enables or disables a control
 
         You are strongly encouraged to prefer this method over pControl->Enable( _bEnable ). See
         <member>EnableUI</member> for details.
     */
-    void                        EnableControl( Control* _pControl, sal_Bool _bEnable );
+    void                        EnableControl( Control* _pControl, bool _bEnable );
     short                       PrepareExecute();
 
 public:
@@ -238,7 +238,7 @@ public:
     void                        DisableSaveLastDirectory();
     void                        InitSize();
     void                        UpdateControls( const OUString& rURL );
-    void                        EnableAutocompletion( sal_Bool _bEnable = sal_True );
+    void                        EnableAutocompletion( bool _bEnable = true );
 
     void                        SetFileCallback( ::svt::IFilePickerListener *pNotifier ) { _pFileNotifier = pNotifier; }
 
@@ -246,9 +246,9 @@ public:
     sal_Int32                   getAvailableWidth();
     sal_Int32                   getAvailableHeight();
     void                        setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage );
-    sal_Bool                    setShowState( sal_Bool bShowState );
-    sal_Bool                    getShowState();
-    sal_Bool                    isAutoExtensionEnabled();
+    bool                    setShowState( bool bShowState );
+    bool                    getShowState();
+    bool                    isAutoExtensionEnabled();
 
     OUString                    getCurrentFileText( ) const;
     void                        setCurrentFileText( const OUString& _rText, bool _bSelectAll = false );
@@ -261,7 +261,7 @@ public:
     void                        displayIOException( const OUString& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode );
 
     // originally from VclFileDialog
-    virtual sal_Bool                AddControl( Window* pControl, sal_Bool bNewLine = sal_False );
+    virtual bool                AddControl( Window* pControl, sal_Bool bNewLine = sal_False );
 
     // inline
     inline void                 SetPath( const OUString& rNewURL );
@@ -279,10 +279,10 @@ public:
 
     inline Image                GetButtonImage( sal_uInt16 _nButtonId ) const { return m_aImages.GetImage( _nButtonId ); }
 
-    sal_Bool                    ContentIsFolder( const OUString& rURL ) { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
-    sal_Bool                    ContentHasParentFolder( const OUString& rURL );
-    sal_Bool                    ContentCanMakeFolder( const OUString& rURL );
-    sal_Bool                    ContentGetTitle( const OUString& rURL, OUString& rTitle );
+    bool                    ContentIsFolder( const OUString& rURL ) { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
+    bool                    ContentHasParentFolder( const OUString& rURL );
+    bool                    ContentCanMakeFolder( const OUString& rURL );
+    bool                    ContentGetTitle( const OUString& rURL, OUString& rTitle );
 
     /** updates the sizes of the listboxes in the bottom area of the dialog, and of their labels,
         according to the space occupied by the current label texts
@@ -308,7 +308,7 @@ private:
             </p>
         @return <TRUE/> if the new filter is "*.*"
     */
-    sal_Bool                    createNewUserFilter( const OUString& _rNewFilter, sal_Bool _bAllowUserDefExt );
+    bool                    createNewUserFilter( const OUString& _rNewFilter, bool _bAllowUserDefExt );
 
     sal_uInt16                  adjustFilter( const OUString& _rFilter );
 

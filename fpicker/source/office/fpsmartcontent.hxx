@@ -59,7 +59,7 @@ namespace svt
     private:
         enum Type { Folder, Document };
         /// checks if the currently bound content is a folder or document
-        sal_Bool implIs( const OUString& _rURL, Type _eType );
+        bool implIs( const OUString& _rURL, Type _eType );
 
         SmartContent( const SmartContent& _rSource );               // never implemented
         SmartContent& operator=( const SmartContent& _rSource );    // never implemented
@@ -118,16 +118,16 @@ namespace svt
         /** checks if the content is valid
             <p>Note that "not (is valid)" is not the same as "is invalid"</p>
         */
-        inline  sal_Bool    isValid( ) const { return VALID == getState(); }
+        inline  bool    isValid( ) const { return VALID == getState(); }
 
         /** checks if the content is valid
             <p>Note that "not (is invalid)" is not the same as "is valid"</p>
         */
-        inline  sal_Bool    isInvalid( ) const { return INVALID == getState(); }
+        inline  bool    isInvalid( ) const { return INVALID == getState(); }
 
         /** checks if the content is bound
         */
-        inline  sal_Bool    isBound( ) const { return NOT_BOUND != getState(); }
+        inline  bool    isBound( ) const { return NOT_BOUND != getState(); }
 
         /** returns the URL of the content
         */
@@ -155,13 +155,13 @@ namespace svt
             @precond
                 the content is bound and not invalid
         */
-        sal_Bool    hasParentFolder( );
+        bool    hasParentFolder( );
 
         /** checks if sub folders below the content can be created
             @precond
                 the content is bound and not invalid
         */
-        sal_Bool    canCreateFolder( );
+        bool    canCreateFolder( );
 
         /** creates a new folder with the given title and return the corresponding URL.
 
@@ -175,7 +175,7 @@ namespace svt
             @postcond
                 the content is not in the state UNKNOWN
         */
-        inline  sal_Bool    isFolder( const OUString& _rURL )
+        inline  bool    isFolder( const OUString& _rURL )
         {
             return implIs( _rURL, Folder );
         }
@@ -185,21 +185,21 @@ namespace svt
             @postcond
                 the content is not in the state UNKNOWN
         */
-        inline  sal_Bool    isDocument(  const OUString& _rURL )
+        inline  bool    isDocument(  const OUString& _rURL )
         {
             return implIs( _rURL, Document );
         }
 
         /** checks if the content is existent (it is if and only if it is a document or a folder)
         */
-        inline  sal_Bool    is( const OUString& _rURL )
+        inline  bool    is( const OUString& _rURL )
         {
             return  implIs( _rURL, Folder ) || implIs( _rURL, Document );
         }
 
-        inline  sal_Bool    isFolder( )     { return isFolder( getURL() ); }
-        inline  sal_Bool    isDocument( )   { return isDocument( getURL() ); }
-        inline  sal_Bool    is( )           { return is( getURL() ); }
+        inline  bool    isFolder( )     { return isFolder( getURL() ); }
+        inline  bool    isDocument( )   { return isDocument( getURL() ); }
+        inline  bool    is( )           { return is( getURL() ); }
     };
 
 

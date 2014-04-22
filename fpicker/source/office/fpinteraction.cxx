@@ -35,7 +35,7 @@ namespace svt
 
     OFilePickerInteractionHandler::OFilePickerInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxMaster )
         :m_xMaster( _rxMaster )
-        ,m_bUsed( sal_False )
+        ,m_bUsed( false )
         ,m_eInterceptions( OFilePickerInteractionHandler::E_NOINTERCEPTION )
     {
         DBG_ASSERT( m_xMaster.is(), "OFilePickerInteractionHandler::OFilePickerInteractionHandler: invalid master handler!" );
@@ -52,7 +52,7 @@ namespace svt
         if (!_rxRequest.is())
             return;
 
-        m_bUsed = sal_True;
+        m_bUsed = true;
 
         // extract some generic continuations ... might we need it later
         // if something goes wrong.
@@ -115,7 +115,7 @@ namespace svt
     }
 
 
-    sal_Bool OFilePickerInteractionHandler::wasUsed() const
+    bool OFilePickerInteractionHandler::wasUsed() const
     {
         return m_bUsed;
     }
@@ -123,7 +123,7 @@ namespace svt
 
     void OFilePickerInteractionHandler::resetUseState()
     {
-        m_bUsed = sal_False;
+        m_bUsed = false;
     }
 
 
@@ -133,7 +133,7 @@ namespace svt
     }
 
 
-    sal_Bool OFilePickerInteractionHandler::wasAccessDenied() const
+    bool OFilePickerInteractionHandler::wasAccessDenied() const
     {
         InteractiveIOException aIoException;
         if (
@@ -141,9 +141,9 @@ namespace svt
             (IOErrorCode_ACCESS_DENIED  == aIoException.Code)
            )
         {
-            return sal_True;
+            return true;
         }
-        return sal_False;
+        return false;
     }
 
 

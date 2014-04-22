@@ -78,7 +78,7 @@ public:
     OUString     getFilter() const { return m_sFilter; }
 
     /// determines if the filter has sub filter (i.e., the filter is a filter group in real)
-    sal_Bool            hasSubFilters( ) const;
+    bool            hasSubFilters( ) const;
 
     /** retrieves the filters belonging to the entry
     @return
@@ -101,7 +101,7 @@ FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFil
 }
 
 
-sal_Bool FilterEntry::hasSubFilters( ) const
+bool FilterEntry::hasSubFilters( ) const
 {
     return ( 0 < m_aSubFilters.getLength() );
 }
@@ -121,27 +121,27 @@ struct ElementEntry_Impl
     sal_Int16       m_nControlAction;
     Any         m_aValue;
     OUString       m_aLabel;
-    sal_Bool        m_bEnabled      : 1;
+    bool        m_bEnabled      : 1;
 
-    sal_Bool        m_bHasValue     : 1;
-    sal_Bool        m_bHasLabel     : 1;
-    sal_Bool        m_bHasEnabled   : 1;
+    bool        m_bHasValue     : 1;
+    bool        m_bHasLabel     : 1;
+    bool        m_bHasEnabled   : 1;
 
                     ElementEntry_Impl( sal_Int16 nId );
 
-    void            setValue( const Any& rVal ) { m_aValue = rVal; m_bHasValue = sal_True; }
+    void            setValue( const Any& rVal ) { m_aValue = rVal; m_bHasValue = true; }
     void            setAction( sal_Int16 nAction ) { m_nControlAction = nAction; }
-    void            setLabel( const OUString& rVal ) { m_aLabel = rVal; m_bHasLabel = sal_True; }
-    void            setEnabled( sal_Bool bEnabled ) { m_bEnabled = bEnabled; m_bHasEnabled = sal_True; }
+    void            setLabel( const OUString& rVal ) { m_aLabel = rVal; m_bHasLabel = true; }
+    void            setEnabled( bool bEnabled ) { m_bEnabled = bEnabled; m_bHasEnabled = true; }
 };
 
 ElementEntry_Impl::ElementEntry_Impl( sal_Int16 nId )
     : m_nElementID( nId )
     , m_nControlAction( 0 )
-    , m_bEnabled( sal_False )
-    , m_bHasValue( sal_False )
-    , m_bHasLabel( sal_False )
-    , m_bHasEnabled( sal_False )
+    , m_bEnabled( false )
+    , m_bHasValue( false )
+    , m_bHasLabel( false )
+    , m_bHasEnabled( false )
 {}
 
 
@@ -352,7 +352,7 @@ namespace {
 
         bool operator () ( const FilterEntry& _rEntry )
         {
-            sal_Bool bMatch;
+            bool bMatch;
             if ( !_rEntry.hasSubFilters() )
                 // a real filter
                 bMatch = ( _rEntry.getTitle() == rTitle );
@@ -375,9 +375,9 @@ namespace {
 }
 
 
-sal_Bool SvtFilePicker::FilterNameExists( const OUString& rTitle )
+bool SvtFilePicker::FilterNameExists( const OUString& rTitle )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if ( m_pFilterList )
         bRet =
@@ -391,9 +391,9 @@ sal_Bool SvtFilePicker::FilterNameExists( const OUString& rTitle )
 }
 
 
-sal_Bool SvtFilePicker::FilterNameExists( const UnoFilterList& _rGroupedFilters )
+bool SvtFilePicker::FilterNameExists( const UnoFilterList& _rGroupedFilters )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if ( m_pFilterList )
     {
@@ -429,7 +429,7 @@ SvtFilePicker::SvtFilePicker( const Reference < XMultiServiceFactory >& xFactory
     :OCommonPicker( xFactory )
     ,m_pFilterList      ( NULL )
     ,m_pElemList        ( NULL )
-    ,m_bMultiSelection  ( sal_False )
+    ,m_bMultiSelection  ( false )
     ,m_nServiceType     ( TemplateDescription::FILEOPEN_SIMPLE )
 {
 }
@@ -452,7 +452,7 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
 
     prepareExecute();
 
-    getDialog()->EnableAutocompletion( sal_True );
+    getDialog()->EnableAutocompletion( true );
     // now we are ready to execute the dialog
     sal_Int16 nRet = getDialog()->Execute();
 
@@ -526,7 +526,7 @@ void SAL_CALL SvtFilePicker::startExecuteModal( const Reference< ::com::sun::sta
     m_xDlgClosedListener = xListener;
     prepareDialog();
     prepareExecute();
-    getDialog()->EnableAutocompletion( sal_True );
+    getDialog()->EnableAutocompletion( true );
     getDialog()->StartExecuteModal( LINK( this, SvtFilePicker, DialogClosedHdl ) );
 }
 
@@ -647,7 +647,7 @@ void SAL_CALL SvtFilePicker::setValue( sal_Int16 nElementID,
         if ( !m_pElemList )
             m_pElemList = new ElementList;
 
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         ElementList::iterator aListIter;
 
         for ( aListIter = m_pElemList->begin();
@@ -659,7 +659,7 @@ void SAL_CALL SvtFilePicker::setValue( sal_Int16 nElementID,
             {
                 rEntry.setAction( nControlAction );
                 rEntry.setValue( rValue );
-                bFound = sal_True;
+                bFound = true;
             }
         }
 
@@ -727,7 +727,7 @@ void SAL_CALL SvtFilePicker::setLabel( sal_Int16 nLabelID, const OUString& rValu
         if ( !m_pElemList )
             m_pElemList = new ElementList;
 
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         ElementList::iterator aListIter;
 
         for ( aListIter = m_pElemList->begin();
@@ -737,7 +737,7 @@ void SAL_CALL SvtFilePicker::setLabel( sal_Int16 nLabelID, const OUString& rValu
             if ( rEntry.m_nElementID == nLabelID )
             {
                 rEntry.setLabel( rValue );
-                bFound = sal_True;
+                bFound = true;
             }
         }
 
@@ -800,7 +800,7 @@ void SAL_CALL SvtFilePicker::enableControl( sal_Int16 nElementID, sal_Bool bEnab
         if ( !m_pElemList )
             m_pElemList = new ElementList;
 
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         ElementList::iterator aListIter;
 
         for ( aListIter = m_pElemList->begin();
@@ -810,7 +810,7 @@ void SAL_CALL SvtFilePicker::enableControl( sal_Int16 nElementID, sal_Bool bEnab
             if ( rEntry.m_nElementID == nElementID )
             {
                 rEntry.setEnabled( bEnable );
-                bFound = sal_True;
+                bFound = true;
             }
         }
 
@@ -921,7 +921,7 @@ sal_Bool SAL_CALL SvtFilePicker::setShowState( sal_Bool bShowState )
     checkAlive();
 
     SolarMutexGuard aGuard;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if ( getDialog() )
         bRet = getDialog()->setShowState( bShowState );
@@ -935,7 +935,7 @@ sal_Bool SAL_CALL SvtFilePicker::getShowState() throw ( RuntimeException, std::e
     checkAlive();
 
     SolarMutexGuard aGuard;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if ( getDialog() )
         bRet = getDialog()->getShowState();
@@ -1082,24 +1082,24 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
 }
 
 
-sal_Bool SvtFilePicker::implHandleInitializationArgument( const OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
+bool SvtFilePicker::implHandleInitializationArgument( const OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
 {
     if ( _rName == "TemplateDescription" )
     {
         m_nServiceType = TemplateDescription::FILEOPEN_SIMPLE;
         OSL_VERIFY( _rValue >>= m_nServiceType );
-        return sal_True;
+        return true;
     }
     if ( _rName == "StandardDir" )
     {
         OSL_VERIFY( _rValue >>= m_aStandardDir );
-        return sal_True;
+        return true;
     }
 
     if ( _rName == "BlackList" )
     {
         OSL_VERIFY( _rValue >>= m_aBlackList );
-        return sal_True;
+        return true;
     }
 
 
