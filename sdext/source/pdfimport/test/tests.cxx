@@ -84,16 +84,16 @@ namespace
 
         virtual ~TestSink()
         {
-            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "A4 page size (in 100th of points): Width", m_aPageSize.Width, 79400, 0.00000001);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "A4 page size (in 100th of points): Height" , m_aPageSize.Height, 59500, 0.0000001 );
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "A4 page size (in 100th of points): Width", 79400, m_aPageSize.Width, 0.00000001);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "A4 page size (in 100th of points): Height", 59500, m_aPageSize.Height, 0.0000001 );
             CPPUNIT_ASSERT_MESSAGE( "endPage() called", m_bPageEnded );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Num pages equal one", m_nNumPages, (sal_Int32) 1 );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Num pages equal one", (sal_Int32) 1, m_nNumPages );
             CPPUNIT_ASSERT_MESSAGE( "Correct hyperlink bounding box",
                                     rtl::math::approxEqual(m_aHyperlinkBounds.X1,34.7 ) &&
                                     rtl::math::approxEqual(m_aHyperlinkBounds.Y1,386.0) &&
                                     rtl::math::approxEqual(m_aHyperlinkBounds.X2,166.7) &&
                                     rtl::math::approxEqual(m_aHyperlinkBounds.Y2,406.2) );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Correct hyperlink URI", m_aURI, OUString("http://download.openoffice.org/") );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Correct hyperlink URI", OUString("http://download.openoffice.org/"), m_aURI );
 
             const char* sText = " \n \nThis is a testtext\nNew paragraph,\nnew line\n"
                 "Hyperlink, this is\n?\nThis is more text\noutline mode\n?\nNew paragraph\n";
@@ -103,7 +103,7 @@ namespace
                                                              OUSTRING_TO_OSTRING_CVTFLAGS );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Imported text is \"This is a testtext New paragraph, new line"
                                     " Hyperlink, this is * This is more text outline mode * New paragraph\"",
-                                    OString(sText), aTmp );
+                                    aTmp, OString(sText) );
 
             CPPUNIT_ASSERT_MESSAGE( "red circle seen in input", m_bRedCircleSeen );
             CPPUNIT_ASSERT_MESSAGE( "green stroke seen in input", m_bGreenStrokeSeen );
@@ -161,7 +161,7 @@ namespace
             GraphicsContext& rContext( getCurrentContext() );
             if( dashes.getLength() )
                 comphelper::sequenceToContainer(rContext.DashArray,dashes);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "line dashing start offset", start, 0.0, 0.000000001 );
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "line dashing start offset", 0.0, start, 0.000000001 );
         }
 
         virtual void setFlatness( double nFlatness ) SAL_OVERRIDE
@@ -226,10 +226,10 @@ namespace
 
             if( rContext.DashArray.empty() )
             {
-                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is green", rContext.LineColor.Alpha, 1.0, 0.00000001);
-                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is green", rContext.LineColor.Blue, 0.0, 0.00000001);
-                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is green", rContext.LineColor.Green, 1.0, 0.00000001);
-                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is green", rContext.LineColor.Red, 0.0, 0.00000001);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is green", 1.0, rContext.LineColor.Alpha, 0.00000001);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is green", 0.0, rContext.LineColor.Blue, 0.00000001);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is green", 1.0, rContext.LineColor.Green, 0.00000001);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is green", 0.0, rContext.LineColor.Red, 0.00000001);
 
                 CPPUNIT_ASSERT_MESSAGE( "Line width is 0",
                                         rtl::math::approxEqual(rContext.LineWidth, 28.3) );
@@ -249,13 +249,13 @@ namespace
                                         rContext.DashArray[1] == rContext.DashArray[2] &&
                                         rContext.DashArray[2] == rContext.DashArray[3] );
 
-                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", rContext.LineColor.Alpha, 1.0, 0.00000001);
-                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", rContext.LineColor.Blue, 0.0, 0.00000001);
-                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", rContext.LineColor.Green, 0.0, 0.00000001);
-                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", rContext.LineColor.Red, 0.0, 0.00000001);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 1.0, rContext.LineColor.Alpha, 0.00000001);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 0.0, rContext.LineColor.Blue, 0.00000001);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 0.0, rContext.LineColor.Green, 0.00000001);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 0.0, rContext.LineColor.Red, 0.00000001);
 
                 CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line width is 0",
-                                        rContext.LineWidth, 0, 0.0000001 );
+                                        0, rContext.LineWidth, 0.0000001 );
 
                 const char* sExportString = "m49890 5670.00000000001-35430 24090";
                 CPPUNIT_ASSERT_MESSAGE( "Stroke is m49890 5670.00000000001-35430 24090",
@@ -270,11 +270,11 @@ namespace
             CPPUNIT_ASSERT_MESSAGE( "Cap type is butt",
                                     rContext.LineCap == rendering::PathCapType::BUTT );
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line miter limit is 10",
-                                    rContext.MiterLimit, 10, 0.0000001 );
+                                    10, rContext.MiterLimit, 0.0000001 );
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Flatness is 0",
-                                    rContext.Flatness, 1, 0.00000001 );
+                                    1, rContext.Flatness, 0.00000001 );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font id is 0",
-                                    rContext.FontId, (sal_Int32) 0 );
+                                    (sal_Int32) 0, rContext.FontId );
         }
 
         virtual void fillPath( const uno::Reference<rendering::XPolyPolygon2D>& rPath ) SAL_OVERRIDE
@@ -283,17 +283,17 @@ namespace
             basegfx::B2DPolyPolygon aPath = basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
             aPath.transform( rContext.Transformation );
 
-            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", rContext.LineColor.Alpha, 1.0, 0.00000001);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", rContext.LineColor.Blue, 0.0, 0.00000001);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", rContext.LineColor.Green, 0.0, 0.00000001);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", rContext.LineColor.Red, 0.0, 0.00000001);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 1.0, rContext.LineColor.Alpha, 0.00000001);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 0.0, rContext.LineColor.Blue, 0.00000001);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 0.0, rContext.LineColor.Green, 0.00000001);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 0.0, rContext.LineColor.Red, 0.00000001);
 
             CPPUNIT_ASSERT_MESSAGE( "Blend mode is normal",
                                     rContext.BlendMode == rendering::BlendMode::NORMAL );
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Flatness is 10",
-                                    rContext.Flatness, 10, 0.00000001 );
+                                    10, rContext.Flatness, 0.00000001 );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font id is 0",
-                                    rContext.FontId, (sal_Int32) 0 );
+                                    (sal_Int32) 0, rContext.FontId );
         }
 
         virtual void eoFillPath( const uno::Reference<rendering::XPolyPolygon2D>& rPath ) SAL_OVERRIDE
@@ -302,17 +302,17 @@ namespace
             basegfx::B2DPolyPolygon aPath = basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
             aPath.transform( rContext.Transformation );
 
-            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", rContext.LineColor.Alpha, 1.0, 0.00000001);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", rContext.LineColor.Blue, 0.0, 0.00000001);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", rContext.LineColor.Green, 0.0, 0.00000001);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", rContext.LineColor.Red, 0.0, 0.00000001);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 1.0, rContext.LineColor.Alpha, 0.00000001);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 0.0, rContext.LineColor.Blue, 0.00000001);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 0.0, rContext.LineColor.Green, 0.00000001);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 0.0, rContext.LineColor.Red, 0.00000001);
 
             CPPUNIT_ASSERT_MESSAGE( "Blend mode is normal",
                                     rContext.BlendMode == rendering::BlendMode::NORMAL );
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Flatness is 0",
-                                    rContext.Flatness, 1, 0.00000001 );
+                                    1, rContext.Flatness, 0.00000001 );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font id is 0",
-                                    rContext.FontId, (sal_Int32) 0 );
+                                    (sal_Int32) 0, rContext.FontId );
 
             const char* sExportString = "m12050 49610c-4310 0-7800-3490-7800-7800 0-4300 "
                 "3490-7790 7800-7790 4300 0 7790 3490 7790 7790 0 4310-3490 7800-7790 7800z";
@@ -360,7 +360,7 @@ namespace
                               bool                                       /*bInvert*/ ) SAL_OVERRIDE
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMask received two properties",
-                                    xBitmap.getLength(), (sal_Int32) 3 );
+                                    (sal_Int32) 3, xBitmap.getLength() );
             CPPUNIT_ASSERT_MESSAGE( "drawMask got URL param",
                                     xBitmap[0].Name.equalsAscii( "URL" ) );
             CPPUNIT_ASSERT_MESSAGE( "drawMask got InputStream param",
@@ -370,7 +370,7 @@ namespace
         virtual void drawImage(const uno::Sequence<beans::PropertyValue>& xBitmap ) SAL_OVERRIDE
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawImage received two properties",
-                                    xBitmap.getLength(), (sal_Int32) 3 );
+                                    (sal_Int32) 3, xBitmap.getLength() );
             CPPUNIT_ASSERT_MESSAGE( "drawImage got URL param",
                                     xBitmap[0].Name.equalsAscii( "URL" ) );
             CPPUNIT_ASSERT_MESSAGE( "drawImage got InputStream param",
@@ -382,7 +382,7 @@ namespace
                                           const uno::Sequence<uno::Any>&             /*xMaskColors*/ ) SAL_OVERRIDE
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawColorMaskedImage received two properties",
-                                    xBitmap.getLength(), (sal_Int32) 3 );
+                                    (sal_Int32) 3, xBitmap.getLength() );
             CPPUNIT_ASSERT_MESSAGE( "drawColorMaskedImage got URL param",
                                     xBitmap[0].Name.equalsAscii( "URL" ) );
             CPPUNIT_ASSERT_MESSAGE( "drawColorMaskedImage got InputStream param",
@@ -394,14 +394,14 @@ namespace
                                      bool                                       /*bInvertMask*/) SAL_OVERRIDE
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage received two properties #1",
-                                    xBitmap.getLength(), (sal_Int32) 3 );
+                                    (sal_Int32) 3, xBitmap.getLength() );
             CPPUNIT_ASSERT_MESSAGE( "drawMaskedImage got URL param #1",
                                     xBitmap[0].Name.equalsAscii( "URL" ) );
             CPPUNIT_ASSERT_MESSAGE( "drawMaskedImage got InputStream param #1",
                                     xBitmap[1].Name.equalsAscii( "InputStream" ) );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage received two properties #2",
-                                    xMask.getLength(), (sal_Int32) 3 );
+                                    (sal_Int32) 3, xMask.getLength() );
             CPPUNIT_ASSERT_MESSAGE( "drawMaskedImage got URL param #2",
                                     xMask[0].Name.equalsAscii( "URL" ) );
             CPPUNIT_ASSERT_MESSAGE( "drawMaskedImage got InputStream param #2",
@@ -412,14 +412,14 @@ namespace
                                           const uno::Sequence<beans::PropertyValue>& xMask) SAL_OVERRIDE
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage received two properties #1",
-                                    xBitmap.getLength(), (sal_Int32) 3 );
+                                    (sal_Int32) 3, xBitmap.getLength() );
             CPPUNIT_ASSERT_MESSAGE( "drawAlphaMaskedImage got URL param #1",
                                     xBitmap[0].Name.equalsAscii( "URL" ) );
             CPPUNIT_ASSERT_MESSAGE( "drawAlphaMaskedImage got InputStream param #1",
                                     xBitmap[1].Name.equalsAscii( "InputStream" ) );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage received two properties #2",
-                                    xMask.getLength(), (sal_Int32) 3 );
+                                    (sal_Int32) 3, xMask.getLength() );
             CPPUNIT_ASSERT_MESSAGE( "drawAlphaMaskedImage got URL param #2",
                                     xMask[0].Name.equalsAscii( "URL" ) );
             CPPUNIT_ASSERT_MESSAGE( "drawAlphaMaskedImage got InputStream param #2",
