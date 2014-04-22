@@ -12,6 +12,7 @@
 #include <document.hxx>
 #include <clipparam.hxx>
 #include <bcaslot.hxx>
+#include <segmenttree.hxx>
 
 bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
 {
@@ -108,6 +109,19 @@ void ScTable::UpdateScriptTypes( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
 
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         aCol[nCol].UpdateScriptTypes(nRow1, nRow2);
+}
+
+bool ScTable::HasUniformRowHeight( SCROW nRow1, SCROW nRow2 ) const
+{
+    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
+        return false;
+
+    ScFlatUInt16RowSegments::RangeData aData;
+    if (!mpRowHeights->getRangeData(nRow1, aData))
+        // Search failed.
+        return false;
+
+    return nRow2 <= aData.mnRow2;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

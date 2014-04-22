@@ -1572,6 +1572,8 @@ public:
 
     SC_DLLPUBLIC bool IsManualRowHeight(SCROW nRow, SCTAB nTab) const;
 
+    bool HasUniformRowHeight( SCTAB nTab, SCROW nRow1, SCROW nRow2 ) const;
+
     /**
      * Write all column row flags to table's flag data, because not all column
      * row attributes are stored in the flag data members.  This is necessary

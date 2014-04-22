@@ -815,6 +815,8 @@ public:
 
     bool IsManualRowHeight(SCROW nRow) const;
 
+    bool HasUniformRowHeight( SCROW nRow1, SCROW nRow2 ) const;
+
     void        SyncColRowFlags();
 
     void        StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
