@@ -23,6 +23,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+#if !defined(MACOSX) && !defined(WNT)
 
 class DBAccessTest : public UnoApiTest
 {
@@ -32,9 +33,7 @@ public:
     void test();
 
     CPPUNIT_TEST_SUITE(DBAccessTest);
-#if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(test);
-#endif
     CPPUNIT_TEST_SUITE_END();
 
 };
@@ -55,6 +54,8 @@ void DBAccessTest::test()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DBAccessTest);
+
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
