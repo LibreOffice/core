@@ -2424,25 +2424,34 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         SvStream* pStream = rMed.GetOutStream();
         if ( pStream )
         {
-            WaitObject aWait( GetActiveDialogParent() );
-            ScImportExport aImExport( &aDocument );
-            aImExport.SetStreamPath( rMed.GetName() );
-            bRet = aImExport.ExportStream( *pStream, rMed.GetBaseURL( true ), SOT_FORMATSTR_ID_HTML );
-            if ( bRet && !aImExport.GetNonConvertibleChars().isEmpty() )
-                SetError( *new StringErrorInfo(
+            SfxItemSet* pSet = rMed.GetItemSet();
+            const SfxPoolItem* pItem;
+            OUString sFilterOptions;
+
+            if (pSet->GetItemState(SID_FILE_FILTEROPTIONS, true, &pItem) == SFX_ITEM_SET)
+                sFilterOptions = ((SfxStringItem*)pItem)->GetValue();
+
+            WaitObject aWait(GetActiveDialogParent());
+            ScImportExport aImExport(&aDocument);
+            aImExport.SetStreamPath(rMed.GetName());
+            aImExport.SetFilterOptions(sFilterOptions);
+            bRet = aImExport.ExportStream(*pStream, rMed.GetBaseURL(true), SOT_FORMATSTR_ID_HTML);
+            if (bRet && !aImExport.GetNonConvertibleChars().isEmpty())
+            {
+                SetError(*new StringErrorInfo(
                     SCWARN_EXPORT_NONCONVERTIBLE_CHARS,
                     aImExport.GetNonConvertibleChars(),
-                    ERRCODE_BUTTON_OK | ERRCODE_MSG_INFO ), OUString( OSL_LOG_PREFIX ) );
+                    ERRCODE_BUTTON_OK | ERRCODE_MSG_INFO), OUString(OSL_LOG_PREFIX));
+            }
         }
     }
     else
     {
         if (GetError())
-            SetError(SCERR_IMPORT_NI, OUString( OSL_LOG_PREFIX ) );
+            SetError(SCERR_IMPORT_NI, OUString(OSL_LOG_PREFIX));
     }
     return bRet;
 }
-
 
 bool ScDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor )
 {

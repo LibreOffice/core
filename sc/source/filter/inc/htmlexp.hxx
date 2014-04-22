@@ -98,6 +98,7 @@ class ScHTMLExport : public ScExportBase
     ScHTMLStyle         aHTMLStyle;
     OUString            aBaseURL;
     OUString            aStreamPath;
+    OUString            aFilterOptions;
     OUString            aCId;           // Content-Id fuer Mail-Export
     OutputDevice*       pAppWin;        // fuer Pixelei
     boost::scoped_ptr< std::map<OUString, OUString> >  pFileNameMap;        // fuer CopyLocalFileToINet
@@ -155,7 +156,7 @@ class ScHTMLExport : public ScExportBase
 
 public:
                         ScHTMLExport( SvStream&, const OUString&, ScDocument*, const ScRange&,
-                                        bool bAll, const OUString& aStreamPath );
+                                        bool bAll, const OUString& aStreamPath, const OUString& rFilterOptions );
     virtual             ~ScHTMLExport();
     sal_uLong               Write();
     const OUString&     GetNonConvertibleChars() const

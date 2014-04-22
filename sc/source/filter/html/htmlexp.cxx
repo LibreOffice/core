@@ -130,9 +130,9 @@ const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
 
 FltError ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const OUString& rBaseURL, ScDocument* pDoc,
         const ScRange& rRange, const rtl_TextEncoding /*eNach*/, bool bAll,
-        const OUString& rStreamPath, OUString& rNonConvertibleChars )
+        const OUString& rStreamPath, OUString& rNonConvertibleChars, const OUString& rFilterOptions )
 {
-    ScHTMLExport aEx( rStrm, rBaseURL, pDoc, rRange, bAll, rStreamPath );
+    ScHTMLExport aEx( rStrm, rBaseURL, pDoc, rRange, bAll, rStreamPath, rFilterOptions );
     FltError nErr = aEx.Write();
     rNonConvertibleChars = aEx.GetNonConvertibleChars();
     return nErr;
@@ -203,11 +203,12 @@ static OString lcl_makeHTMLColorTriplet(const Color& rColor)
 }
 
 ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocument* pDocP,
-                            const ScRange& rRangeP,
-                            bool bAllP, const OUString& rStreamPathP ) :
+                            const ScRange& rRangeP, bool bAllP,
+                            const OUString& rStreamPathP, const OUString& rFilterOptions ) :
     ScExportBase( rStrmP, pDocP, rRangeP ),
     aBaseURL( rBaseURL ),
     aStreamPath( rStreamPathP ),
+    aFilterOptions( rFilterOptions ),
     pAppWin( Application::GetDefaultDevice() ),
     nUsedTables( 0 ),
     nIndent( 0 ),

@@ -53,6 +53,7 @@ class ScImportExport
     ScRange     aRange;
     OUString    aStreamPath;
     OUString    aNonConvertibleChars;
+    OUString    maFilterOptions;
     sal_uLong   nSizeLimit;
     sal_Unicode cSep;                   // Separator
     sal_Unicode cStr;                   // String Delimiter
@@ -92,6 +93,7 @@ public:
    ~ScImportExport();
 
     void SetExtOptions( const ScAsciiOptions& rOpt );
+    void SetFilterOptions( const OUString& rFilterOptions );
 
     bool IsDoubleRef() const { return !( bAll || bSingle ); }
     bool IsSingleRef() const { return bSingle; }

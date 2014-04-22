@@ -183,6 +183,11 @@ void ScImportExport::SetExtOptions( const ScAsciiOptions& rOpt )
     cStr = rOpt.GetTextSep();
 }
 
+void ScImportExport::SetFilterOptions(const OUString& rFilterOptions)
+{
+    maFilterOptions = rFilterOptions;
+}
+
 bool ScImportExport::IsFormatSupported( sal_uLong nFormat )
 {
     return nFormat == FORMAT_STRING
@@ -2064,7 +2069,7 @@ bool ScImportExport::Doc2HTML( SvStream& rStrm, const OUString& rBaseURL )
 {
     // rtl_TextEncoding is ignored in ScExportHTML, read from Load/Save HTML options
     ScFormatFilter::Get().ScExportHTML( rStrm, rBaseURL, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
-        aStreamPath, aNonConvertibleChars );
+        aStreamPath, aNonConvertibleChars, maFilterOptions );
     return rStrm.GetError() == SVSTREAM_OK;
 }
 
@@ -2199,7 +2204,7 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress&, const rtl_TextEncoding, sal_uInt32 ) SAL_OVERRIDE { return eERR_INTERN; }
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding, sal_uInt32 ) SAL_OVERRIDE { return eERR_INTERN; }
     virtual FltError ScExportHTML( SvStream&, const OUString&, ScDocument*, const ScRange&, const rtl_TextEncoding, bool,
-                  const OUString&, OUString& ) SAL_OVERRIDE { return eERR_INTERN; }
+                  const OUString&, OUString&, const OUString& ) SAL_OVERRIDE { return eERR_INTERN; }
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding ) SAL_OVERRIDE { return eERR_INTERN; }
 
     virtual ScOrcusFilters* GetOrcusFilters() SAL_OVERRIDE { return NULL; }

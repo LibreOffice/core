@@ -111,7 +111,7 @@ class ScFormatFilterPlugin {
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest,
                  sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
     virtual FltError ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest, bool bAll,
-                  const OUString& rStreamPath, OUString& rNonConvertibleChars ) = 0;
+                  const OUString& rStreamPath, OUString& rNonConvertibleChars, const OUString& rFilterOptions ) = 0;
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest ) = 0;
 
     virtual ScOrcusFilters* GetOrcusFilters() = 0;

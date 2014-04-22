@@ -299,7 +299,7 @@ public:
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest,
                  sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) SAL_OVERRIDE;
     virtual FltError ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest, bool bAll,
-                  const OUString& rStreamPath, OUString& rNonConvertibleChars ) SAL_OVERRIDE;
+                  const OUString& rStreamPath, OUString& rNonConvertibleChars, const OUString& rFilterOptions ) SAL_OVERRIDE;
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest ) SAL_OVERRIDE;
 
     virtual ScOrcusFilters* GetOrcusFilters() SAL_OVERRIDE;
