@@ -61,7 +61,7 @@ public:
 
     void setPrintData(/*[in]*/ const SwPrintData& rPrtData ) SAL_OVERRIDE;
 
-    virtual ~DocumentDeviceManager() SAL_OVERRIDE;
+    virtual ~DocumentDeviceManager();
 
 private:
 
