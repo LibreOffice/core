@@ -109,10 +109,10 @@ private:
     void makeTextDecls();
 
     /* -------- Paragraph Parsing --------- */
-    void parsePara(HWPPara *para, sal_Bool bParaStart = sal_False);
-    void make_text_p0(HWPPara *para, sal_Bool bParaStart = sal_False);
-    void make_text_p1(HWPPara *para, sal_Bool bParaStart = sal_False);
-    void make_text_p3(HWPPara *para, sal_Bool bParaStart = sal_False);
+    void parsePara(HWPPara *para, bool bParaStart = false);
+    void make_text_p0(HWPPara *para, bool bParaStart = false);
+    void make_text_p1(HWPPara *para, bool bParaStart = false);
+    void make_text_p3(HWPPara *para, bool bParaStart = false);
 
     /* -------- rDocument->characters(x) --------- */
     void makeChars(hchar_string & rStr);
