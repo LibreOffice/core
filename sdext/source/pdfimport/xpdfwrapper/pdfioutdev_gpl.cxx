@@ -143,20 +143,85 @@ void writeBinaryBuffer( const OutputBuffer& rBuffer )
     fflush(g_binary_out);
 }
 
+bool ExtractJpegData(Stream* str, OutputBuffer& outBuf)
+{
+    int bytesToMarker = 0;
+    int bytesToLen = -1;
+    bool collectBytes = false;
+    int startOfScan = 0;
+    int b2 = -1;
+    int b1 = -1;
+    for (; ; )
+    {
+        b2 = b1;
+        b1 = str->getChar();
+
+        if (b1 == -1)
+            return false;
+
+        if (collectBytes)
+        {
+            outBuf.push_back((Output_t)b1);
+
+            bytesToMarker--;
+            bytesToLen--;
+        }
+
+        if (bytesToMarker == 0)
+        {
+            if (startOfScan == 1)
+            {
+                bytesToMarker = -1;
+                startOfScan = 2;
+            }
+            else if (b2 == 0xFF)
+            {
+                if (b1 == 0xD8)
+                {
+                    collectBytes = true;
+                    bytesToMarker = 2;
+
+                    outBuf.push_back((Output_t)0xFF);
+                    outBuf.push_back((Output_t)0xD8);
+                }
+                else
+                {
+                    bytesToLen = 2;
+                }
+                if (b1 == 0xDA)
+                {
+                    startOfScan = 1;
+                }
+            }
+            else if (collectBytes)
+            {
+                return false;
+            }
+        }
+
+        if (bytesToLen == 0)
+        {
+            bytesToMarker = b2 * 256 + b1;
+        }
+
+        if (startOfScan == 2)
+            if ((b2 == 0xFF) && (b1 == 0xD9))
+                return true;
+    }
+}
+
 void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str, bool bWithLinefeed )
 {
     // dump JPEG file as-is
 #if POPPLER_CHECK_VERSION(0, 17, 3)
-    str = str->getBaseStream();
+    str = str->getNextStream();
 #else
     str = ((DCTStream *)str)->getRawStream();
 #endif
     str->reset();
 
-    int c;
     o_rOutputBuf.clear();
-    while((c=str->getChar()) != EOF)
-        o_rOutputBuf.push_back(static_cast<char>(c));
+    ExtractJpegData(str, o_rOutputBuf);
 
     printf( " JPEG %d", (int)o_rOutputBuf.size() );
     if( bWithLinefeed )
