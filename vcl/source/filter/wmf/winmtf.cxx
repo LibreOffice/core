@@ -1316,6 +1316,13 @@ void WinMtfOutput::DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordP
         {
             UpdateLineStyle();
             mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPolygon ) );
+            if (maLineStyle.aLineInfo.GetWidth() > 0 || maLineStyle.aLineInfo.GetStyle() == LINE_DASH)
+            {
+                for (sal_uInt16 nPoly = 0; nPoly < rPolyPolygon.Count(); ++nPoly)
+                {
+                    mpGDIMetaFile->AddAction(new MetaPolyLineAction(rPolyPolygon[nPoly], maLineStyle.aLineInfo));
+                }
+            }
         }
     }
 }
