@@ -135,10 +135,6 @@ namespace basegfx
             matrixFromHomMatrix( ::com::sun::star::geometry::Matrix2D& matrix,
                                  const ::basegfx::B2DHomMatrix&        transform);
 
-        BASEGFX_DLLPUBLIC ::basegfx::B2DHomMatrix&
-            homMatrixFromMatrix( ::basegfx::B2DHomMatrix&                    transform,
-                                 const ::com::sun::star::geometry::Matrix2D& matrix );
-
         // Geometry conversions
 
 

@@ -391,20 +391,6 @@ namespace basegfx
             return output;
         }
 
-        ::basegfx::B2DHomMatrix& homMatrixFromMatrix( ::basegfx::B2DHomMatrix&  output,
-                                                      const geometry::Matrix2D& input )
-        {
-            // ensure last row is [0,0,1] (and optimized away)
-            output.identity();
-
-            output.set(0,0, input.m00);
-            output.set(0,1, input.m01);
-            output.set(1,0, input.m10);
-            output.set(1,1, input.m11);
-
-            return output;
-        }
-
         geometry::RealSize2D size2DFromB2DSize( const ::basegfx::B2DVector& rVec )
         {
             return geometry::RealSize2D( rVec.getX(),
