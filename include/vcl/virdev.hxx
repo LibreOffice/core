@@ -61,7 +61,7 @@ private:
     SAL_DLLPRIVATE bool ForceZeroExtleadBug() const
         { return ((meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD) != 0); }
 public:
-    bool ImplInitGraphics() const SAL_OVERRIDE;
+    bool AcquireGraphics() const SAL_OVERRIDE;
     void ImplReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
 
 public:

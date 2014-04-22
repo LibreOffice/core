@@ -404,7 +404,7 @@ public:
     SAL_DLLPRIVATE SalGraphics const *ImplGetGraphics() const;
     SAL_DLLPRIVATE SalGraphics*     ImplGetGraphics();
 
-    /** Initialize the graphics device that the output device uses to draw on.
+    /** Acquire a graphics device that the output device uses to draw on.
 
      There is an LRU of OutputDevices that is used to get the graphics. The
      actual creation of a SalGraphics instance is done via the SalFrame
@@ -412,7 +412,7 @@ public:
 
      However, the SalFrame instance will only return a valid SalGraphics
      instance if it is not in use or there wasn't one in the first place. When
-     this happens, ImplInitGraphics finds the least recently used OutputDevice
+     this happens, AcquireGraphics finds the least recently used OutputDevice
      in a different frame and "steals" it (releases it then starts using it).
 
      If there are no frames to steal an OutputDevice's SalGraphics instance from
@@ -423,7 +423,7 @@ public:
 
      @returns true if was able to initialize the graphics device, false otherwise.
      */
-    virtual bool                ImplInitGraphics() const = 0;
+    virtual bool                AcquireGraphics() const = 0;
 
     /** Release the graphics device, and remove it from the graphics device
      list.

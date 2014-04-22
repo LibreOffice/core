@@ -74,7 +74,7 @@ bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGr
     if( !pGraphics )
     {
         if( !mpGraphics )
-            if( !ImplInitGraphics() )
+            if( !AcquireGraphics() )
                 return false;
         pGraphics = mpGraphics;
     }

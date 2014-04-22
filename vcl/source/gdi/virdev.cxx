@@ -34,7 +34,7 @@
 
 using namespace ::com::sun::star::uno;
 
-bool VirtualDevice::ImplInitGraphics() const
+bool VirtualDevice::AcquireGraphics() const
 {
     DBG_TESTSOLARMUTEX();
 

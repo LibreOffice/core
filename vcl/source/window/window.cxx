@@ -339,7 +339,7 @@ const char* ImplDbgCheckWindow( const void* pObj )
 }
 #endif
 
-bool Window::ImplInitGraphics() const
+bool Window::AcquireGraphics() const
 {
     DBG_TESTSOLARMUTEX();
 

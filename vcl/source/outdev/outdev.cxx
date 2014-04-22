@@ -382,7 +382,7 @@ SalGraphics* OutputDevice::ImplGetGraphics()
 
     if ( !mpGraphics )
     {
-        if ( !ImplInitGraphics() )
+        if ( !AcquireGraphics() )
         {
             SAL_WARN("vcl", "No mpGraphics set");
         }
@@ -397,7 +397,7 @@ SalGraphics const *OutputDevice::ImplGetGraphics() const
 
     if ( !mpGraphics )
     {
-        if ( !ImplInitGraphics() )
+        if ( !AcquireGraphics() )
         {
             SAL_WARN("vcl", "No mpGraphics set");
         }

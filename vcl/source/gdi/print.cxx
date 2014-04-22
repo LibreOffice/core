@@ -574,7 +574,7 @@ void Printer::ImplInitData()
     pSVData->maGDIData.mpFirstPrinter = this;
 }
 
-bool Printer::ImplInitGraphics() const
+bool Printer::AcquireGraphics() const
 {
     DBG_TESTSOLARMUTEX();
 

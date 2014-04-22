@@ -230,7 +230,7 @@ private:
     bool                        mbIsQueuePrinter;
     Link                        maErrorHdl;
 
-    bool                        ImplInitGraphics() const SAL_OVERRIDE;
+    bool                        AcquireGraphics() const SAL_OVERRIDE;
     void                        ImplReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
     void                        ImplReleaseFonts() SAL_OVERRIDE;
     SAL_DLLPRIVATE void         ImplInitData();
