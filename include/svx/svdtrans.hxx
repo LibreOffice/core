@@ -280,7 +280,19 @@ private:
     SVX_DLLPRIVATE void Undirty();
     SVX_DLLPRIVATE void ForceUndirty() const { if (bDirty) ((SdrFormatter*)this)->Undirty(); }
 public:
-    SdrFormatter(MapUnit eSrc, MapUnit eDst)     { eSrcMU=eSrc; bSrcFU=false; eDstMU=eDst; bDstFU=false; bDirty=true; }
+    SdrFormatter(MapUnit eSrc, MapUnit eDst)
+        : nMul_(0)
+        , nDiv_(0)
+        , nKomma_(0)
+        , bSrcFU(false)
+        , bDstFU(false)
+        , bDirty(true)
+        , eSrcMU(eSrc)
+        , eDstMU(eDst)
+        , eSrcFU(FUNIT_NONE)
+        , eDstFU(FUNIT_NONE)
+    {
+    }
     SdrFormatter(MapUnit eSrc, FieldUnit eDst)   { eSrcMU=eSrc; bSrcFU=false; eDstFU=eDst; bDstFU=true;  bDirty=true; }
     SdrFormatter(FieldUnit eSrc, MapUnit eDst)   { eSrcFU=eSrc; bSrcFU=true;  eDstMU=eDst; bDstFU=false; bDirty=true; }
     SdrFormatter(FieldUnit eSrc, FieldUnit eDst) { eSrcFU=eSrc; bSrcFU=true;  eDstFU=eDst; bDstFU=true;  bDirty=true; }
