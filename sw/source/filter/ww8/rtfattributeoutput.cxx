@@ -413,6 +413,8 @@ void RtfAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool bSing
 void RtfAttributeOutput::EndRun()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
+    if (m_bInURL)
+        EndURL();
     m_aRun->append(SAL_NEWLINE_STRING);
     m_aRun.appendAndClear(m_aRunText);
     if (!m_bSingleEmptyRun && m_bInRun)
@@ -493,12 +495,18 @@ bool RtfAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarget
 
     m_aStyles.append("}");
     m_bHadFieldResult = false;
+    m_bInURL = true;
     return true;
 }
 
 bool RtfAttributeOutput::EndURL()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
+
+    if (m_bInURL)
+        m_bInURL = false;
+    else
+        return true;
 
     // close the fldrslt group
     if (m_bHadFieldResult)
@@ -3361,6 +3369,7 @@ RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     m_aCells(),
     m_bSingleEmptyRun(false),
     m_bInRun(false),
+    m_bInURL(false),
     m_pFlyFrameSize(0),
     m_pPrevPageDesc(0)
 {

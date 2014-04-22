@@ -619,6 +619,12 @@ DECLARE_RTFEXPORT_TEST(testLineNumbering, "linenumbering.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), getProperty<sal_Int32>(xPropertySet, "Interval"));
 }
 
+DECLARE_RTFEXPORT_TEST(testFdo77600, "fdo77600.rtf")
+{
+    // This was 'Liberation Serif'.
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(getRun(getParagraph(1), 3), "CharFontName"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
