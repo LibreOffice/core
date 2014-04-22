@@ -1612,11 +1612,10 @@ OUString SwXTextTableCursor::getRangeName()
     SolarMutexGuard aGuard;
     OUString aRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
-
+    SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
     //!! see also SwChartDataSequence::getSourceRangeRepresentation
-    if(pUnoCrsr)
+    if (pTblCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         pTblCrsr->MakeBoxSels();
         const SwStartNode* pNode = pTblCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
         const SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
