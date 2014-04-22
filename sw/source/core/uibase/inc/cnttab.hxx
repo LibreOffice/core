@@ -20,13 +20,9 @@
 #define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_CNTTAB_HXX
 
 #include <svx/stddlg.hxx>
-
 #include <vcl/button.hxx>
-
 #include <vcl/edit.hxx>
-
 #include <vcl/fixed.hxx>
-
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
 #include <sfx2/tabdlg.hxx>
