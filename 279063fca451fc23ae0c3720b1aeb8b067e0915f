@@ -84,6 +84,23 @@
       "revId": "279063fca451fc23ae0c3720b1aeb8b067e0915f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_6b2595aa",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2274,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-22T10:09:02Z",
+      "side": 1,
+      "message": "getPropertyValue() can (and does) throw an uno::RuntimeException, but you can\u0027t throw that outside ChainTextFrames() (with the current declaraion), so you at least need a try/catch wrapper around the contents of this method, with a SAL_WARN in the catch block.",
+      "revId": "279063fca451fc23ae0c3720b1aeb8b067e0915f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
