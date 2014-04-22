@@ -34,7 +34,7 @@ uno::Reference< css::graphic::XGraphic > SAL_CALL OGLFrameGrabber::grabFrame( do
 {
     // TODO: libgltf should provide an RGBA buffer, not just an RGB one. See: OpenGLRender::GetAsBitmap().
     char* pBuffer = new char[m_pHandle->viewport.width * m_pHandle->viewport.height * 3];
-    gltf_renderer_get_bitmap(m_pHandle, fMediaTime, pBuffer, 800, 600);
+    gltf_renderer_get_bitmap(m_pHandle, fMediaTime, pBuffer, m_pHandle->viewport.width, m_pHandle->viewport.height);
     Bitmap aBitmap( Size(m_pHandle->viewport.width, m_pHandle->viewport.height), 24 );
     {
         Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
