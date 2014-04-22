@@ -11,13 +11,15 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
-namespace writerfilter {
-namespace rtftok {
+namespace writerfilter
+{
+namespace rtftok
+{
 
 RTFSkipDestination::RTFSkipDestination(RTFListener& rImport)
     : m_rImport(rImport),
-    m_bParsed(true),
-    m_bReset(true)
+      m_bParsed(true),
+      m_bReset(true)
 {
 }
 
