@@ -42,9 +42,4 @@ $(eval $(call gb_SrsTarget_add_nonlocalizable_files,chart2/res,\
     chart2/source/controller/menus/ShapeEditContextMenu.src \
 ))
 
-$(eval $(call gb_SrsTarget_add_templates,chart2/res,\
-    chart2/source/controller/dialogs/res_LegendPosition_tmpl.hrc \
-    chart2/source/controller/dialogs/res_SecondaryAxisCheckBoxes_tmpl.hrc \
-))
-
 # vim: set noet sw=4 ts=4:
