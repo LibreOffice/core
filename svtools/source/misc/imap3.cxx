@@ -28,9 +28,11 @@
 |*
 \******************************************************************************/
 
-IMapCompat::IMapCompat( SvStream& rStm, const sal_uInt16 nStreamMode ) :
-            pRWStm      ( &rStm ),
-            nStmMode    ( nStreamMode )
+IMapCompat::IMapCompat( SvStream& rStm, const sal_uInt16 nStreamMode )
+    : pRWStm(&rStm)
+    , nCompatPos(0)
+    , nTotalSize(0)
+    , nStmMode(nStreamMode)
 {
     DBG_ASSERT( nStreamMode == STREAM_READ || nStreamMode == STREAM_WRITE, "Wrong Mode!" );
 
