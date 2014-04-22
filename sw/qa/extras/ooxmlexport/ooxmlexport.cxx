@@ -3225,6 +3225,19 @@ DECLARE_OOXMLEXPORT_TEST(testFDO75431, "fdo75431.docx")
     assertXPath(pXmlDoc, "//w:p/w:pPr/w:sectPr/w:type", "val", "nextPage");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testContentTypeOLE, "fdo77759.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']",
+                "PartName",
+                "/word/embeddings/oleObject1.xlsx");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

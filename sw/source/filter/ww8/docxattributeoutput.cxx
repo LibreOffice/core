@@ -4011,7 +4011,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     OUString sObjectName = aContainer->GetEmbeddedObjectName( xObj );
 
     // set some attributes according to the type of the embedded object
-    OUString sProgID, sMediaType, sRelationType;
+    OUString sProgID, sMediaType, sRelationType, sFileExtension;
     for( sal_Int32 i=0; i < aObjectsInteropList.getLength(); ++i )
         if ( aObjectsInteropList[i].Name == sObjectName )
         {
@@ -4022,20 +4022,23 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     {
         sMediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        sFileExtension = "xlsx";
     }
     else if( sProgID.startsWith("PowerPoint.Show") )
     {
         sMediaType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
         sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        sFileExtension = "pptx";
     }
     else
     {
         sMediaType = "application/vnd.openxmlformats-officedocument.oleObject";
         sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        sFileExtension = "bin";
     }
 
     // write embedded file
-    OString sId = m_rExport.WriteOLEObject( aObject, sMediaType, sRelationType );
+    OString sId = m_rExport.WriteOLEObject( aObject, sMediaType, sRelationType, sFileExtension );
 
     if( sId.isEmpty() )
     {

@@ -358,13 +358,13 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_In
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
-OString DocxExport::WriteOLEObject( SwOLEObj& rObject, const OUString& sMediaType, const OUString& sRelationType )
+OString DocxExport::WriteOLEObject( SwOLEObj& rObject, const OUString& sMediaType, const OUString& sRelationType, const OUString& sFileExtension )
 {
     uno::Reference <embed::XEmbeddedObject> xObj( rObject.GetOleRef() );
     comphelper::EmbeddedObjectContainer* aContainer = rObject.GetObject().GetContainer();
     uno::Reference< io::XInputStream > xInStream = aContainer->GetObjectStream( xObj, NULL );
 
-    OUString sFileName = "embeddings/oleObject" + OUString::number( ++m_nOLEObjects ) + ".bin";
+    OUString sFileName = "embeddings/oleObject" + OUString::number( ++m_nOLEObjects ) + "." + sFileExtension;
     uno::Reference< io::XOutputStream > xOutStream = GetFilter().openFragmentStream( OUStringBuffer()
                                                                       .appendAscii( "word/" )
                                                                       .append( sFileName )
