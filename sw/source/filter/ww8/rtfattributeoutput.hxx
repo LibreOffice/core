@@ -575,6 +575,8 @@ private:
 
     unsigned int m_nPostitFieldsMaxId;
 
+    bool m_bInURL;
+
     /// When exporting fly frames, this holds the real size of the frame.
     const Size* m_pFlyFrameSize;
 
