@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined(MACOSX)
-#include <stdlib.h>
-#endif
-
 #include <calc.hxx>
 #include <cctype>
 #include <cfloat>
