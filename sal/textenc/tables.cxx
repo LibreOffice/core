@@ -171,11 +171,19 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
             &aImplGBT12345TextEncodingData, /* GBT_12345 */
             &aImplGBKTextEncodingData, /* GBK */
             &aImplBIG5TextEncodingData, /* BIG5 */
+#ifndef IOS
             &aImplEUCJPTextEncodingData, /* EUC_JP */
             &aImplEUCCNTextEncodingData, /* EUC_CN */
             &aImplEucTwTextEncodingData, /* EUC_TW */
             &aImplIso2022JpTextEncodingData, /* ISO_2022_JP */
             &aImplIso2022CnTextEncodingData, /* ISO_2022_CN */
+#else
+            NULL, /* EUC_JP */
+            NULL, /* EUC_CN */
+            NULL, /* EUC_TW */
+            NULL, /* ISO_2022_JP */
+            NULL, /* ISO_2022_CN */
+#endif
             &aImplKOI8RTextEncodingData, /* KOI8_R */
             &aImplUTF7TextEncodingData, /* UTF7 */
             NULL, /* UTF8, see above */
