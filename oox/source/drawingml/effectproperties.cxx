@@ -30,6 +30,8 @@ void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourcePro
 void EffectProperties::assignUsed( const EffectProperties& rSourceProps )
 {
     maShadow.assignUsed(rSourceProps.maShadow);
+    msUnsupportedEffectName.assignIfUsed( rSourceProps.msUnsupportedEffectName );
+    maUnsupportedEffectAttribs = rSourceProps.maUnsupportedEffectAttribs;
 }
 
 void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
@@ -49,6 +51,34 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
         rPropMap.setProperty( PROP_ShadowColor, maShadow.moShadowColor.getColor(rGraphicHelper, -1 ) );
         rPropMap.setProperty( PROP_ShadowTransparence, maShadow.moShadowColor.getTransparency());
     }
+}
+
+void EffectProperties::appendUnsupportedEffectAttrib( const OUString& aKey, const css::uno::Any& aValue )
+{
+    css::beans::PropertyValue aProperty;
+    aProperty.Name = aKey;
+    aProperty.Value = aValue;
+    maUnsupportedEffectAttribs.push_back(aProperty);
+}
+
+css::beans::PropertyValue EffectProperties::getUnsupportedEffect()
+{
+    css::beans::PropertyValue pRet;
+    if(!msUnsupportedEffectName.has())
+        return pRet;
+
+    css::uno::Sequence<css::beans::PropertyValue> aSeq(maUnsupportedEffectAttribs.size());
+    css::beans::PropertyValue* pSeq = aSeq.getArray();
+    for (std::vector<css::beans::PropertyValue>::iterator i = maUnsupportedEffectAttribs.begin(); i != maUnsupportedEffectAttribs.end(); ++i)
+        *pSeq++ = *i;
+
+    pRet.Name = msUnsupportedEffectName.use();
+    pRet.Value = css::uno::Any( aSeq );
+
+    msUnsupportedEffectName.reset();
+    maUnsupportedEffectAttribs.clear();
+
+    return pRet;
 }
 
 

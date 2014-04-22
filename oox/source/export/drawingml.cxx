@@ -2076,6 +2076,124 @@ void DrawingML::WriteShapeStyle( Reference< XPropertySet > xPropSet )
     mpFS->singleElementNS( XML_a, XML_fontRef, XML_idx, "minor", FSEND );
 }
 
+void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
+{
+    if( !GetProperty( rXPropSet, "InteropGrabBag" ) )
+        return;
+
+    Sequence< PropertyValue > aGrabBag, aEffectProps;
+    mAny >>= aGrabBag;
+    for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
+    {
+        if( aGrabBag[i].Name == "EffectProperties" )
+            aGrabBag[i].Value >>= aEffectProps;
+    }
+    if( aEffectProps.getLength() == 0 )
+        return;
+
+    OUString sSchemeClr;
+    sal_uInt32 nRgbClr = 0;
+    sal_Int32 nAlpha = MAX_PERCENT;
+    Sequence< PropertyValue > aTransformations;
+    sax_fastparser::FastAttributeList *aOuterShdwAttrList = mpFS->createAttrList();
+    for( sal_Int32 i=0; i < aEffectProps.getLength(); ++i )
+    {
+        if(aEffectProps[i].Name == "outerShdw")
+        {
+            uno::Sequence< beans::PropertyValue > aOuterShdwProps;
+            aEffectProps[0].Value >>= aOuterShdwProps;
+            for( sal_Int32 j=0; j < aOuterShdwProps.getLength(); ++j )
+            {
+                if( aOuterShdwProps[j].Name == "algn" )
+                {
+                    OUString sVal;
+                    aOuterShdwProps[j].Value >>= sVal;
+                    aOuterShdwAttrList->add( XML_algn, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+                }
+                else if( aOuterShdwProps[j].Name == "blurRad" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_blurRad, OString::number( nVal ).getStr() );
+                }
+                else if( aOuterShdwProps[j].Name == "dir" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_dir, OString::number( nVal ).getStr() );
+                }
+                else if( aOuterShdwProps[j].Name == "dist" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_dist, OString::number( nVal ).getStr() );
+                }
+                else if( aOuterShdwProps[j].Name == "kx" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_kx, OString::number( nVal ).getStr() );
+                }
+                else if( aOuterShdwProps[j].Name == "ky" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_ky, OString::number( nVal ).getStr() );
+                }
+                else if( aOuterShdwProps[j].Name == "rotWithShape" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_rotWithShape, OString::number( nVal ).getStr() );
+                }
+                else if( aOuterShdwProps[j].Name == "sx" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_sx, OString::number( nVal ).getStr() );
+                }
+                else if( aOuterShdwProps[j].Name == "sy" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_sy, OString::number( nVal ).getStr() );
+                }
+            }
+        }
+        else if(aEffectProps[i].Name == "ShadowRgbClr")
+        {
+            aEffectProps[i].Value >>= nRgbClr;
+        }
+        else if(aEffectProps[i].Name == "ShadowRgbClrTransparency")
+        {
+            sal_Int32 nTransparency;
+            aEffectProps[i].Value >>= nTransparency;
+            // Calculate alpha value (see oox/source/drawingml/color.cxx : getTransparency())
+            nAlpha = MAX_PERCENT - ( PER_PERCENT * nTransparency );
+        }
+        else if(aEffectProps[i].Name == "ShadowColorSchemeClr")
+        {
+            aEffectProps[i].Value >>= sSchemeClr;
+        }
+        else if(aEffectProps[i].Name == "ShadowColorTransformations")
+        {
+            aEffectProps[i].Value >>= aTransformations;
+        }
+    }
+
+    mpFS->startElementNS(XML_a, XML_effectLst, FSEND);
+    sax_fastparser::XFastAttributeListRef xAttrList( aOuterShdwAttrList );
+    mpFS->startElementNS( XML_a, XML_outerShdw, xAttrList );
+
+    if( sSchemeClr.isEmpty() )
+        WriteColor( nRgbClr, nAlpha );
+    else
+        WriteColor( sSchemeClr, aTransformations );
+
+    mpFS->endElementNS( XML_a, XML_outerShdw );
+    mpFS->endElementNS(XML_a, XML_effectLst);
+}
+
 }
 }
 

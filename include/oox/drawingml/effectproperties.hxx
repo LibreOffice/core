@@ -34,6 +34,10 @@ struct OOX_DLLPUBLIC EffectProperties
 {
     EffectShadowProperties maShadow;
 
+    /** Store unsupported effect type name and its attributes */
+    OptValue< OUString > msUnsupportedEffectName;
+    std::vector< css::beans::PropertyValue > maUnsupportedEffectAttribs;
+
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const EffectProperties& rSourceProps );
 
@@ -41,6 +45,9 @@ struct OOX_DLLPUBLIC EffectProperties
     void                pushToPropMap(
                             PropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper ) const;
+
+    void appendUnsupportedEffectAttrib( const OUString& aKey, const css::uno::Any& aValue );
+    css::beans::PropertyValue getUnsupportedEffect();
 };
 
 

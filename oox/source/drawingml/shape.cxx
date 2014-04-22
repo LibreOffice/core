@@ -893,6 +893,33 @@ Reference< XShape > Shape::createAndInsert(
                     putPropertyToGrabBag( "GradFillDefinition", Any( aGradientStops ) );
                 putPropertyToGrabBag( "OriginalGradFill", aShapeProps.getProperty(PROP_FillGradient) );
             }
+
+            // store unsupported effect attributes in the grab bag
+            PropertyValue aEffect = aEffectProperties.getUnsupportedEffect();
+            if( aEffect.Name != "" )
+            {
+                Sequence< PropertyValue > aEffectsGrabBag( 3 );
+                PUT_PROP( aEffectsGrabBag, 0, aEffect.Name, aEffect.Value );
+
+                OUString sColorScheme = aEffectProperties.maShadow.moShadowColor.getSchemeName();
+                if( sColorScheme.isEmpty() )
+                {
+                    // RGB color and transparency value
+                    PUT_PROP( aEffectsGrabBag, 1, "ShadowRgbClr",
+                              aEffectProperties.maShadow.moShadowColor.getColor( rGraphicHelper, nFillPhClr ) );
+                    PUT_PROP( aEffectsGrabBag, 2, "ShadowRgbClrTransparency",
+                              aEffectProperties.maShadow.moShadowColor.getTransparency() );
+                }
+                else
+                {
+                    // scheme color with name and transformations
+                    PUT_PROP( aEffectsGrabBag, 1, "ShadowColorSchemeClr", sColorScheme );
+                    PUT_PROP( aEffectsGrabBag, 2, "ShadowColorTransformations",
+                              aEffectProperties.maShadow.moShadowColor.getTransformations() );
+                }
+
+                putPropertyToGrabBag( "EffectProperties", Any( aEffectsGrabBag ) );
+            }
         }
 
         // These can have a custom geometry, so position should be set here,
