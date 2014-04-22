@@ -553,6 +553,15 @@ End
 
 #endif
 
+#if !defined WNT && !defined OS2
+File gid_File_Lib_Mozbootstrap
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = SPECIAL_COMPONENT_LIB_NAME(mozbootstrap.uno);
+    End
+#endif
+
 #if defined UNX && ! defined MACOSX
 
 File gid_File_Lib_Desktopbe

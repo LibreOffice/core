@@ -211,6 +211,10 @@ my_components += component/vcl/vcl.unx
 my_components += updchk.uno
 .END
 
+.IF "$(OS)" != "WNT" && "$(OS)" != "OS2"
+my_components += mozbootstrap
+.END
+
 .IF "$(ENABLE_OOOIMPROVEMENT)" != ""
 my_components += oooimprovement
 .END

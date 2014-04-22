@@ -22,6 +22,7 @@ ex  extensions\source\config\ldap               nmake   -   all ex_ldap ex_inc N
 ex  extensions\source\update\feed               nmake   -   all ex_updchkfeed ex_inc NULL
 ex  extensions\source\update\check              nmake   -   all ex_updchk ex_inc NULL
 ex  extensions\source\update\ui                 nmake   -   all ex_updchkui ex_inc NULL
+ex  extensions\source\mozbootstrap              nmake   -   all ex_mozbootstrap ex_inc NULL
 ex  extensions\util                             nmake   -   all ex_util ex_preload ex_abpilot ex_dbpilots ex_logging ex_ldap ex_propctrlr ex_bib ex_oooimprovecore NULL
 
 # Fails at the moment

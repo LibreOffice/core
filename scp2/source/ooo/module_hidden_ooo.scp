@@ -373,6 +373,9 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_XSec_XMLSecurity,
 	gid_File_Lib_XSec_Framework,
 	gid_File_Lib_XSec_XmlSec,
+#if !defined WNT && ! defined OS2
+    gid_File_Lib_Mozbootstrap,
+#endif
 	gid_File_Lib_Xstor,
 	gid_File_CanvasFactory,
 	gid_File_SimpleCanvas,
