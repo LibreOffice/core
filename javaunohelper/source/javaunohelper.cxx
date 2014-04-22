@@ -52,7 +52,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     JNIEnv * pJEnv, SAL_UNUSED_PARAMETER jclass, jstring jLibName, jobject jSMgr,
     jobject jRegKey, jobject loader )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     const jchar* pJLibName = pJEnv->GetStringChars( jLibName, NULL );
     OUString aLibName( pJLibName );
@@ -126,7 +126,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
         }
     }
 #endif
-    return bRet == sal_False? JNI_FALSE : JNI_TRUE;
+    return bRet == false? JNI_FALSE : JNI_TRUE;
 }
 
 /*
