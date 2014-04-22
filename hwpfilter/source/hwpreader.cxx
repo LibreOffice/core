@@ -826,36 +826,36 @@ void HwpReader::makeAutoStyles()
             makeFStyle(hwpfile.getFBoxStyle(i));
     }
 
-    sal_Bool bIsLeft = sal_False, bIsMiddle = sal_False, bIsRight = sal_False;
+    bool bIsLeft = false, bIsMiddle = false, bIsRight = false;
     for( i = 0 ; i < hwpfile.getPageNumberCount() ; i++ )
     {
         ShowPageNum *pn = hwpfile.getPageNumber(i);
         if( pn->where == 7 || pn->where == 8 )
         {
-            bIsLeft = sal_True;
-            bIsRight = sal_True;
+            bIsLeft = true;
+            bIsRight = true;
         }
         else if( pn->where == 1 || pn->where == 4 )
         {
-            bIsLeft = sal_True;
+            bIsLeft = true;
         }
         else if( pn->where == 2 || pn->where == 5 )
         {
-            bIsMiddle = sal_True;
+            bIsMiddle = true;
         }
         else if( pn->where == 3 || pn->where == 6 )
         {
-            bIsRight = sal_True;
+            bIsRight = true;
         }
     }
 
     for( i = 1; i <= 3 ; i++ )
     {
-        if( i == 1 && bIsLeft == sal_False )
+        if( i == 1 && bIsLeft == false )
             continue;
-        if( i == 2 && bIsMiddle == sal_False )
+        if( i == 2 && bIsMiddle == false )
             continue;
-        if( i == 3 && bIsRight == sal_False )
+        if( i == 3 && bIsRight == false )
             continue;
         padd(ascii("style:name"), sXML_CDATA,
             ascii(Int2Str(i,"PNPara%d", buf)));
@@ -2687,7 +2687,7 @@ void HwpReader::makeChars(hchar_string & rStr)
 /**
  * 문단내에 특수문자가 없고 모든 문자가 동일한 CharShape를 사용하는 경우
  */
-void HwpReader::make_text_p0(HWPPara * para, sal_Bool bParaStart)
+void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
 {
     hchar_string str;
     int n;
@@ -2755,7 +2755,7 @@ void HwpReader::make_text_p0(HWPPara * para, sal_Bool bParaStart)
 /**
  * 문단내에 특수문자가 없으나 문자들이 다른 CharShape를 사용하는 경우
  */
-void HwpReader::make_text_p1(HWPPara * para,sal_Bool bParaStart)
+void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
 {
     hchar_string str;
     int n;
@@ -2838,7 +2838,7 @@ void HwpReader::make_text_p1(HWPPara * para,sal_Bool bParaStart)
 /**
  * 문단 내의 특수문자가 있으며 문자들이 다른 CharShape를 갖는 경우에 대해 처리
  */
-void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
+void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
 {
     hchar_string str;
     int n, res;
@@ -3959,7 +3959,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
     int x = hbox->pgx;
     int y = hbox->pgy;
     int a, b;
-    sal_Bool bIsRotate = sal_False;
+    bool bIsRotate = false;
 
     while (drawobj)
     {
@@ -3997,7 +3997,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
         }
         else
         {
-                bIsRotate = sal_False;
+                bIsRotate = false;
             if( (drawobj->property.flag & HWPDO_FLAG_ROTATION) &&
                     (drawobj->property.parall.pt[0].y != drawobj->property.parall.pt[1].y) &&
                     //(drawobj->type == HWPDO_RECT || drawobj->type == HWPDO_ADVANCED_ELLIPSE || drawobj->type == HWPDO_ADVANCED_ARC )
@@ -4050,21 +4050,21 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                   + ascii(") rotate (") + Double2Str(rotate)
                                   + ascii(") translate (") + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + ascii("mm ")
                                   + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + ascii("mm)");
-                          bIsRotate = sal_True;
+                          bIsRotate = true;
                      }
                      else if( skewX != 0.0 ){
                          trans = ascii("skewX (") + Double2Str(skewX)
                                   + ascii(") translate (") + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + ascii("mm ")
                                   + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + ascii("mm)");
-                          bIsRotate = sal_True;
+                          bIsRotate = true;
                      }
                      else if( rotate != 0.0 ){
                          trans = ascii("rotate (") + Double2Str(rotate)
                                   + ascii(") translate (") + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + ascii("mm ")
                                   + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + ascii("mm)");
-                          bIsRotate = sal_True;
+                          bIsRotate = true;
                      }
-                     if( bIsRotate == sal_True ){
+                     if( bIsRotate ){
                          drawobj->extent.w = (int)sqrt(double(DBL(pt[1].x-pt[0].x)+DBL(pt[1].y-pt[0].y)));
                          drawobj->extent.h = (int)sqrt(double(DBL(pt[2].x-pt[1].x)+DBL(pt[2].y-pt[1].y)));
                          padd(ascii("draw:transform"), sXML_CDATA, trans);
@@ -4310,9 +4310,9 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                 }
                      case HWPDO_CURVE: /* 곡선 : 다각형으로 변환. */
                 {
-                    sal_Bool bIsNatural = sal_True;
+                    bool bIsNatural = true;
                     if( drawobj->property.flag >> 5 & 0x01){
-                        bIsNatural = sal_False;
+                        bIsNatural = false;
                     }
                     if( !bIsRotate )
                     {
@@ -4357,7 +4357,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                               yarr[n] = yarr[0];
                               tarr[n] = n;
 
-                              if( bIsNatural == sal_False ){
+                              if( bIsNatural == false ){
                                   PeriodicSpline(n, tarr, xarr, xb, carr, darr);
                                   // prevent memory leak
                                   delete[] carr;
@@ -4770,7 +4770,7 @@ void HwpReader::makeOutline(Outline * hbox)
 }
 
 
-void HwpReader::parsePara(HWPPara * para, sal_Bool bParaStart)
+void HwpReader::parsePara(HWPPara * para, bool bParaStart)
 {
 
     while (para)
