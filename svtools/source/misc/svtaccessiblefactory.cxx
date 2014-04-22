@@ -205,6 +205,7 @@ namespace svt
 
 
         AccessibleDummyFactory::AccessibleDummyFactory()
+            : m_refCount(0)
         {
         }
 
