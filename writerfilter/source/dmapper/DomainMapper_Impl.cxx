@@ -2230,7 +2230,7 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
     }
 }
 
-static uno::Any lcl_getGrabBagValue( const uno::Sequence<beans::PropertyValue>& grabBag, OUString name )
+tatic uno::Any lcl_getGrabBagValue( const uno::Sequence<beans::PropertyValue>& grabBag, OUString const & name )
 {
     for (int i = 0; i < grabBag.getLength(); ++i)
     {
