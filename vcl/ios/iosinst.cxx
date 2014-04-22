@@ -43,12 +43,6 @@ public:
     virtual bool ErrorTrapPop( bool ) { return false; }
 };
 
-void IosSalInstance::damaged( IosSalFrame */* frame */,
-                              const basegfx::B2IBox& rDamageRect )
-{
-    touch_ui_damaged( rDamageRect.getMinX(), rDamageRect.getMinY(), rDamageRect.getWidth(), rDamageRect.getHeight() );
-}
-
 void IosSalInstance::GetWorkArea( Rectangle& rRect )
 {
     rRect = Rectangle( Point( 0, 0 ),
@@ -90,32 +84,10 @@ IosSalInstance *IosSalInstance::getInstance()
 IosSalInstance::IosSalInstance( SalYieldMutex *pMutex )
     : SvpSalInstance( pMutex )
 {
-    int rc;
-
-    rc = pthread_cond_init( &m_aRenderCond, NULL );
-    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_cond_init failed: " << strerror( rc ) );
-
-#if OSL_DEBUG_LEVEL > 0
-    pthread_mutexattr_t mutexattr;
-
-    rc = pthread_mutexattr_init( &mutexattr );
-    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutexattr_init failed: " << strerror( rc ) );
-
-    rc = pthread_mutexattr_settype( &mutexattr, PTHREAD_MUTEX_ERRORCHECK );
-    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutexattr_settype failed: " << strerror( rc ) );
-
-    rc = pthread_mutex_init( &m_aRenderMutex, &mutexattr );
-    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_init failed: " << strerror( rc ) );
-#else
-    rc = pthread_mutex_init( &m_aRenderMutex, NULL );
-    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_init failed: " << strerror( rc ) );
-#endif
 }
 
 IosSalInstance::~IosSalInstance()
 {
-    pthread_cond_destroy( &m_aRenderCond );
-    pthread_mutex_destroy( &m_aRenderMutex );
 }
 
 #if 0
@@ -149,9 +121,6 @@ SalSystem *IosSalInstance::CreateSalSystem()
 
 class IosSalFrame : public SvpSalFrame
 {
-private:
-    basegfx::B2IBox m_DamagedRect;
-
 public:
     IosSalFrame( IosSalInstance *pInstance,
                      SalFrame           *pParent,
@@ -161,31 +130,22 @@ public:
                        true, basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA,
                        pSysParent )
     {
-        enableDamageTracker();
         if (pParent == NULL && viewWidth > 1 && viewHeight > 1)
             SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
     }
 
-    virtual void GetWorkArea( Rectangle& rRect )
+    virtual void GetWorkArea( Rectangle& rRect ) SAL_OVERRIDE
     {
         IosSalInstance::getInstance()->GetWorkArea( rRect );
     }
 
-    void ShowFullScreen( bool, sal_Int32 )
+    virtual void ShowFullScreen( bool, sal_Int32 ) SAL_OVERRIDE
     {
         SetPosSize( 0, 0, viewWidth, viewHeight,
                     SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
     }
 
-    virtual void damaged( const basegfx::B2IBox& rDamageRect )
-    {
-        if (rDamageRect.isEmpty())
-            return;
-
-        m_DamagedRect.expand(rDamageRect);
-    }
-
-    virtual void UpdateSettings( AllSettings &rSettings )
+    virtual void UpdateSettings( AllSettings &rSettings ) SAL_OVERRIDE
     {
         // Clobber the UI fonts
         Font aFont( OUString( "Helvetica" ), Size( 0, 14 ) );
@@ -204,16 +164,6 @@ public:
         aStyleSet.SetGroupFont( aFont );
 
         rSettings.SetStyleSettings( aStyleSet );
-    }
-
-    virtual void Flush()
-    {
-        IosSalInstance::getInstance()->damaged( this, m_DamagedRect );
-    }
-
-    void resetDamaged()
-    {
-        m_DamagedRect.reset();
     }
 };
 
@@ -308,7 +258,6 @@ IMPL_LINK( IosSalInstance, DisplayConfigurationChanged, void*, )
         (*it)->Show( true, false );
     }
 
-    touch_ui_damaged( 0, 0, viewWidth, viewHeight );
     return 0;
 }
 
@@ -330,69 +279,6 @@ void touch_lo_set_view_size(int width, int height)
 
         Application::PostUserEvent( LINK( pInstance, IosSalInstance, DisplayConfigurationChanged ), NULL );
     }
-}
-
-IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
-{
-    int rc;
-
-    rc = pthread_mutex_lock( &m_aRenderMutex );
-    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_lock failed: " << strerror( rc ) );
-
-    CGRect invalidRect = arg->rect;
-
-    for( std::list< SalFrame* >::const_reverse_iterator it = getFrames().rbegin();
-         it != getFrames().rend();
-         ++it ) {
-        IosSalFrame *pFrame = static_cast<IosSalFrame *>(*it);
-        SalFrameGeometry aGeom = pFrame->GetGeometry();
-        CGRect bbox = CGRectMake( 0, 0, aGeom.nWidth, aGeom.nHeight );
-        if ( pFrame->IsVisible() &&
-             CGRectIntersectsRect( invalidRect, bbox ) ) {
-
-            const basebmp::BitmapDeviceSharedPtr aDevice = pFrame->getDevice();
-            touch_lo_copy_buffer(aDevice->getBuffer().get(),
-                                 aDevice->getSize().getX(),
-                                 aDevice->getSize().getY(),
-                                 aDevice->getScanlineStride(),
-                                 arg->context,
-                                 aGeom.nWidth,
-                                 aGeom.nHeight);
-            /*CGDataProviderRef provider =
-                CGDataProviderCreateWithData( NULL,
-                                              aDevice->getBuffer().get(),
-                                              aDevice->getSize().getY() * aDevice->getScanlineStride(),
-                                              NULL );
-            CGImage *image =
-                CGImageCreate( aDevice->getSize().getX(), aDevice->getSize().getY(),
-                               8, 32, aDevice->getScanlineStride(),
-                               CGColorSpaceCreateDeviceRGB(),
-                               kCGImageAlphaNoneSkipLast,
-                               provider,
-                               NULL,
-                               false,
-                               kCGRenderingIntentDefault );
-            CGContextDrawImage( arg->context, bbox, image );
-             */
-            // if current frame covers the whole invalidRect then break
-            if (CGRectEqualToRect(CGRectIntersection(invalidRect, bbox), invalidRect))
-            {
-                break;
-            }
-
-            pFrame->resetDamaged();
-        }
-    }
-
-    arg->done = true;
-
-    rc = pthread_cond_signal( &m_aRenderCond );
-    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_cond_signal failed:" << strerror( rc ) );
-
-    rc = pthread_mutex_unlock( &m_aRenderMutex );
-    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_unlock failed: " << strerror( rc ) );
-
-    return 0;
 }
 
 extern "C"
@@ -419,35 +305,6 @@ touch_lo_copy_buffer(const void * source, size_t sourceWidth, size_t sourceHeigh
     CGContextDrawImage( context, targetRect, sourceImage );
     CGImageRelease(sourceImage);
     CGDataProviderRelease(provider);
-}
-
-extern "C"
-void touch_lo_render_windows(void *context, int minX, int minY, int width, int height)
-{
-    CGContextRef cgContext = (CGContextRef) context;
-    int rc;
-    IosSalInstance *pInstance = IosSalInstance::getInstance();
-
-    if ( pInstance == NULL )
-        return;
-
-    rc = pthread_mutex_lock( &pInstance->m_aRenderMutex );
-    if (rc != 0) {
-        SAL_WARN( "vcl.ios", "pthread_mutex_lock failed: " << strerror( rc ) );
-        return;
-    }
-
-    CGRect rect = CGRectMake(minX, minY, width, height);
-    IosSalInstance::RenderWindowsArg arg = { false, cgContext, rect };
-    Application::PostUserEvent( LINK( pInstance, IosSalInstance, RenderWindows), &arg );
-
-    while (!arg.done) {
-        rc = pthread_cond_wait( &pInstance->m_aRenderCond, &pInstance->m_aRenderMutex );
-        SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_cond_wait failed: " << strerror( rc ) );
-    }
-
-    rc = pthread_mutex_unlock( &pInstance->m_aRenderMutex );
-    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_unlock failed: " << strerror( rc ) );
 }
 
 extern "C"

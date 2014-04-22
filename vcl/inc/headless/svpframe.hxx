@@ -43,8 +43,11 @@ class SvpSalFrame : public SalFrame
     std::list< SvpSalFrame* >           m_aChildren;     // List of child frames
     sal_uLong                           m_nStyle;
     bool                                m_bVisible;
-    bool                                m_bDamageTracking;
     bool                                m_bTopDown;
+#ifndef IOS
+    basebmp::BitmapDeviceSharedPtr      m_aFrame;
+    bool                                m_bDamageTracking;
+#endif
     basebmp::Format                     m_nScanlineFormat;
     long                                m_nMinWidth;
     long                                m_nMinHeight;
@@ -53,7 +56,6 @@ class SvpSalFrame : public SalFrame
 
     SystemEnvData                       m_aSystemChildData;
 
-    basebmp::BitmapDeviceSharedPtr      m_aFrame;
     std::list< SvpSalGraphics* >        m_aGraphics;
 
     static SvpSalFrame*       s_pFocusFrame;
@@ -71,7 +73,7 @@ public:
     void PostPaint(bool bImmediate) const;
     void AllocateFrame();
 
-#if defined IOS || defined ANDROID
+#if defined ANDROID
     const basebmp::BitmapDeviceSharedPtr& getDevice() const { return m_aFrame; }
 #endif
 
@@ -125,9 +127,11 @@ public:
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
     virtual void                EndSetClipRegion() SAL_OVERRIDE;
 
+#ifndef IOS
     // If enabled we can get damage notifications for regions immediately rendered to ...
     virtual void                enableDamageTracker( bool bOn = true );
     virtual void                damaged( const basegfx::B2IBox& /* rDamageRect */) {}
+#endif
 
     /*TODO: functional implementation */
     virtual void                SetScreenNumber( unsigned int nScreen ) SAL_OVERRIDE { (void)nScreen; }

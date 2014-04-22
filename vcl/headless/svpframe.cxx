@@ -32,6 +32,8 @@ using namespace basegfx;
 
 SvpSalFrame* SvpSalFrame::s_pFocusFrame = NULL;
 
+#ifndef IOS
+
 namespace {
     /// Decouple SalFrame lifetime from damagetracker lifetime
     struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
@@ -61,6 +63,8 @@ void SvpSalFrame::enableDamageTracker( bool bOn )
     m_bDamageTracking = bOn;
 }
 
+#endif
+
 SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
                           SalFrame* pParent,
                           sal_uLong nSalFrameStyle,
@@ -71,8 +75,10 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     m_pParent( static_cast<SvpSalFrame*>(pParent) ),
     m_nStyle( nSalFrameStyle ),
     m_bVisible( false ),
-    m_bDamageTracking( false ),
     m_bTopDown( bTopDown ),
+#ifndef IOS
+    m_bDamageTracking( false ),
+#endif
     m_nScanlineFormat( nScanlineFormat ),
     m_nMinWidth( 0 ),
     m_nMinHeight( 0 ),
@@ -281,6 +287,7 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         if( m_nMinHeight > 0 && maGeometry.nHeight < (unsigned int)m_nMinHeight )
             maGeometry.nHeight = m_nMinHeight;
     }
+#ifndef IOS
     B2IVector aFrameSize( maGeometry.nWidth, maGeometry.nHeight );
     if( ! m_aFrame.get() || m_aFrame->getSize() != aFrameSize )
     {
@@ -296,13 +303,12 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
              it != m_aGraphics.end(); ++it )
         {
-#ifndef IOS
              (*it)->setDevice( m_aFrame );
-#endif
         }
     }
     if( m_bVisible )
         m_pInstance->PostEvent( this, NULL, SALEVENT_RESIZE );
+#endif
 }
 
 void SvpSalFrame::GetClientSize( long& rWidth, long& rHeight )

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_INC_IOS_IOSINST_HXX
 #define INCLUDED_VCL_INC_IOS_IOSINST_HXX
 
-#include <pthread.h>
-
 #include <premac.h>
 #include <CoreGraphics/CoreGraphics.h>
 #include <postmac.h>
@@ -47,17 +45,7 @@ public:
 
     SalFrame *getFocusFrame() const;
 
-    void damaged( IosSalFrame *frame,
-                  const basegfx::B2IBox& rDamageRect);
-
     // Functions scheduled to be run as "user events" in the LO thread
-    typedef struct {
-        bool done;
-        CGContextRef context;
-        CGRect rect;
-    } RenderWindowsArg;
-    DECL_LINK( RenderWindows, RenderWindowsArg* );
-
     DECL_LINK( DisplayConfigurationChanged, void* );
 
     typedef struct {
@@ -71,9 +59,6 @@ public:
         int x, y;
     } SelectionEndMoveArg;
     DECL_LINK( SelectionEndMove, SelectionEndMoveArg* );
-
-    pthread_mutex_t m_aRenderMutex;
-    pthread_cond_t m_aRenderCond;
 };
 
 #endif // INCLUDED_VCL_INC_IOS_IOSINST_HXX
