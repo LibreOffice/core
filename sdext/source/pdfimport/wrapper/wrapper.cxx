@@ -59,8 +59,8 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <string.h>
-#ifdef WNT
 #include <stdlib.h>
+#ifdef WNT
 #include <ctype.h>
 #endif
 
@@ -1042,6 +1042,13 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
     OUStringBuffer aEnvBuf( aStr.getLength() + 20 );
     aEnvBuf.appendAscii( "LD_LIBRARY_PATH=" );
     aEnvBuf.append( aSysPath );
+    char const * path = getenv("LD_LIBRARY_PATH");
+    if (path != 0 && path[0] != 0)
+    {
+        aEnvBuf.append(':');
+        aEnvBuf.append(
+            OUString(path, strlen(path), RTL_TEXTENCODING_ISO_8859_1));
+    }
     aStr = aEnvBuf.makeStringAndClear();
     ppEnv = &aStr.pData;
     nEnv = 1;
