@@ -2831,8 +2831,9 @@ sal_Bool ScaDate::operator<( const ScaDate& rCmp ) const
 
 
 
-ScaAnyConverter::ScaAnyConverter( const uno::Reference< uno::XComponentContext >& xContext ) :
-    bHasValidFormat( sal_False )
+ScaAnyConverter::ScaAnyConverter( const uno::Reference< uno::XComponentContext >& xContext )
+    : nDefaultFormat(0)
+    , bHasValidFormat(false)
 {
     xFormatter = util::NumberFormatter::create(xContext);
 }
