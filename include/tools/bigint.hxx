@@ -60,7 +60,15 @@ private:
 public:
                     BigInt();
                     BigInt( short nVal );
-                    BigInt( long nVal );
+    BigInt(long nValue)
+        : nVal(nValue)
+        , nLen(0)
+        , bIsNeg(false)
+        , bIsBig(false)
+        , bIsSet(true)
+    {
+    }
+
     BigInt(int nValue)
         : nVal(nValue)
         , nLen(0)
@@ -135,13 +143,6 @@ inline BigInt::BigInt()
 }
 
 inline BigInt::BigInt( short nValue )
-{
-    bIsSet = true;
-    bIsBig = false;
-    nVal   = nValue;
-}
-
-inline BigInt::BigInt( long nValue )
 {
     bIsSet = true;
     bIsBig = false;
