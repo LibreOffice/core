@@ -20,10 +20,7 @@
 #ifndef INCLUDED_FILTER_SOURCE_XMLFILTERDETECT_FILTERDETECT_HXX
 #define INCLUDED_FILTER_SOURCE_XMLFILTERDETECT_FILTERDETECT_HXX
 
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
-#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase3.hxx>
@@ -31,16 +28,6 @@
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
-
-enum FilterType
-{
-    FILTER_IMPORT,
-    FILTER_EXPORT
-};
-
-/* This component will be instantiated for both import or export. Whether it calls
- * setSourceDocument or setTargetDocument determines which Impl function the filter
- * member calls */
 
 class FilterDetect : public cppu::WeakImplHelper3 <
     css::document::XExtendedFilterDetection,
@@ -51,18 +38,6 @@ class FilterDetect : public cppu::WeakImplHelper3 <
 
 protected:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
-    css::uno::Reference< css::lang::XComponent > mxDoc;
-
-    OUString msFilterName;
-    OUString msTemplateName;
-
-    css::uno::Sequence< OUString > msUserData;
-
-    bool SAL_CALL exportImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
-        throw (css::uno::RuntimeException);
-
-    bool SAL_CALL importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
-        throw (css::uno::RuntimeException);
 
 public:
     FilterDetect( const css::uno::Reference< css::uno::XComponentContext > &rxCtx)

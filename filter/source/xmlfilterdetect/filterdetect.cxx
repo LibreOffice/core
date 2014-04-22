@@ -17,26 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <iostream>
-#include <stdlib.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <cstring>
 #include "filterdetect.hxx"
 #include <osl/diagnose.h>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
-#include <com/sun/star/xml/XImportFilter.hpp>
-#include <com/sun/star/xml/XExportFilter.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/style/XStyleLoader.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -46,29 +29,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <boost/scoped_ptr.hpp>
 
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::Any;
-using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::XComponentContext;
-using com::sun::star::uno::XInterface;
-using com::sun::star::uno::Exception;
-using com::sun::star::uno::RuntimeException;
-using com::sun::star::io::XActiveDataSource;
-using com::sun::star::io::XOutputStream;
-using com::sun::star::beans::PropertyValue;
-using com::sun::star::document::XExporter;
-using com::sun::star::document::XFilter;
-using com::sun::star::document::XExtendedFilterDetection;
-
-using com::sun::star::io::XInputStream;
-using com::sun::star::document::XImporter;
-using com::sun::star::xml::sax::InputSource;
-using com::sun::star::xml::sax::XDocumentHandler;
-using com::sun::star::xml::sax::XParser;
-
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star;
 using namespace com::sun::star::container;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -142,11 +102,11 @@ OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun:
 
         if ( nUniPos == 0 ) // No BOM detected, try to guess UTF-16 endianness
         {
-            sal_uInt16 sHeader = 0;
-            pInStream->ReadUInt16( sHeader );
-            if ( sHeader == 0x003C )
+            sal_uInt16 nHeader = 0;
+            pInStream->ReadUInt16( nHeader );
+            if ( nHeader == 0x003C )
                 bTryUtf16 = true;
-            else if ( sHeader == 0x3C00 )
+            else if ( nHeader == 0x3C00 )
             {
                 bTryUtf16 = true;
                 pInStream->SetEndianSwap( !pInStream->IsEndianSwap() );
@@ -209,41 +169,10 @@ OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun:
 }
 
 // XInitialization
-
-void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
+void SAL_CALL FilterDetect::initialize( const Sequence< Any >& /*aArguments*/ )
     throw (Exception, RuntimeException, std::exception)
 {
-    Sequence < PropertyValue > aAnySeq;
-    sal_Int32 nLength = aArguments.getLength();
-    if ( nLength && ( aArguments[0] >>= aAnySeq ) )
-    {
-        const PropertyValue * pValue = aAnySeq.getConstArray();
-        nLength = aAnySeq.getLength();
-        for ( sal_Int32 i = 0 ; i < nLength; i++)
-        {
-
-            if ( pValue[i].Name == "Type" )
-            {
-                 pValue[i].Value >>= msFilterName;
-
-            }
-            else if ( pValue[i].Name == "UserData" )
-            {
-
-                pValue[i].Value >>= msUserData;
-
-            }
-            else if ( pValue[i].Name == "TemplateName" )
-            {
-
-              pValue[i].Value>>=msTemplateName;
-            }
-
-        }
-    }
 }
-
-
 
 OUString FilterDetect_getImplementationName ()
 {
@@ -268,6 +197,7 @@ OUString SAL_CALL FilterDetect::getImplementationName(  )
 {
     return FilterDetect_getImplementationName();
 }
+
 sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
     throw (RuntimeException, std::exception)
 {
