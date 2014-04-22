@@ -608,8 +608,10 @@ class SmRootSymbolNode : public SmMathSymbolNode
 
 public:
     SmRootSymbolNode(const SmToken &rNodeToken)
-    :   SmMathSymbolNode(NROOTSYMBOL, rNodeToken)
-    {}
+        : SmMathSymbolNode(NROOTSYMBOL, rNodeToken)
+        , nBodyWidth(0)
+    {
+    }
 
     sal_uLong GetBodyWidth() const {return nBodyWidth;};
     virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nHeight) SAL_OVERRIDE;
