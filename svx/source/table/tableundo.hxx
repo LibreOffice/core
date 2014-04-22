@@ -70,7 +70,7 @@ private:
         Data()
             : mpProperties(NULL)
             , mpOutlinerParaObject(NULL)
-            , mnCellContentType(CellContentType_EMPTY)
+            , mnCellContentType(css::table::CellContentType_EMPTY)
             , mfValue(0)
             , mnError(0)
             , mbMerged(false)
