@@ -35,8 +35,10 @@ const int MAX_TOKEN_LEN = 128;
 
 SvRTFParser::SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize )
     : SvParser( rIn, nStackSize ),
-    eUNICodeSet( RTL_TEXTENCODING_MS_1252 ),    // default ist ANSI-CodeSet
-    nUCharOverread( 1 )
+    , nOpenBrakets(0)
+    , eCodeSet(RTL_TEXTENCODING_MS_1252)
+    , eUNICodeSet(RTL_TEXTENCODING_MS_1252)    // default ist ANSI-CodeSet
+    , nUCharOverread(1)
 {
     // default ist ANSI-CodeSet
     SetSrcEncoding( RTL_TEXTENCODING_MS_1252 );
