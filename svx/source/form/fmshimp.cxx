@@ -2538,7 +2538,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     // when the cursor is a non-STANDARD RecordMode, set it back
     Reference< XPropertySet> xCursorSet(pfmscContextInfo->xCursor, UNO_QUERY);
     Reference< XResultSetUpdate> xUpdateCursor(pfmscContextInfo->xCursor, UNO_QUERY);
-    if (xUpdateCursor.is() && xCursorSet.is() && xCursorSet.is())
+    if (xUpdateCursor.is() && xCursorSet.is())
     {
         if (::comphelper::getBOOL(xCursorSet->getPropertyValue(FM_PROP_ISNEW)))
             xUpdateCursor->moveToCurrentRow();
