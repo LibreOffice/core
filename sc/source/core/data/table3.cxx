@@ -229,8 +229,9 @@ public:
         const sc::CellTextAttr* mpAttr;
         const SvtBroadcaster* mpBroadcaster;
         const ScPostIt* mpNote;
+        const ScPatternAttr* mpPattern;
 
-        Cell() : mpAttr(NULL), mpBroadcaster(NULL), mpNote(NULL) {}
+        Cell() : mpAttr(NULL), mpBroadcaster(NULL), mpNote(NULL), mpPattern(NULL) {}
     };
 
     typedef std::vector<Cell> RowType;
@@ -361,6 +362,9 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
                 rCell.mpAttr = rCol.GetCellTextAttr(aBlockPos, nRow);
                 rCell.mpBroadcaster = rCol.GetBroadcaster(aBlockPos, nRow);
                 rCell.mpNote = rCol.GetCellNote(aBlockPos, nRow);
+
+                if (aSortParam.bIncludePattern)
+                    rCell.mpPattern = rCol.GetPattern(nRow);
             }
         }
     }
@@ -471,6 +475,8 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
             ScSortInfoArray::RowType* pRow = (*pRows)[i];
             for (size_t j = 0; j < pRow->size(); ++j)
             {
+                ScAddress aCellPos(aSortParam.nCol1 + j, nRow1 + i, nTab);
+
                 ScSortInfoArray::Cell& rCell = (*pRow)[j];
 
                 sc::CellStoreType& rCellStore = aSortedCols.at(j).maCells;
@@ -492,9 +498,9 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                     {
                         assert(rCell.mpAttr);
                         size_t n = rCellStore.size();
-                        ScAddress aCellPos(aSortParam.nCol1 + j, nRow1 + i, nTab);
                         sc::CellStoreType::iterator itBlk = rCellStore.push_back(rCell.maCell.mpFormula->Clone(aCellPos));
 
+                        // Join the formula cells as we fill the container.
                         size_t nOffset = n - itBlk->position;
                         sc::CellStoreType::position_type aPos(itBlk, nOffset);
                         sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
@@ -527,6 +533,10 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                     rNoteStore.push_back(const_cast<ScPostIt*>(rCell.mpNote));
                 else
                     rNoteStore.push_back_empty();
+
+                // Set formats to the document directly.
+                if (rCell.mpPattern)
+                    aCol[aCellPos.Col()].SetPattern(aCellPos.Row(), *rCell.mpPattern, true);
             }
 
             if (pProgress)
