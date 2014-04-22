@@ -1081,7 +1081,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         else
         {
             OutputDevice *pOutDev = GetOutDev();
-            if ( pOutDev->ImplGetGraphics() )
+            if ( pOutDev->AcquireGraphics() )
             {
                 mpGraphics->GetResolution( mpWindowImpl->mpFrameData->mnDPIX, mpWindowImpl->mpFrameData->mnDPIY );
             }
@@ -1526,7 +1526,7 @@ SalGraphics* Window::ImplGetFrameGraphics() const
     else
     {
         OutputDevice *pFrameWinOutDev = mpWindowImpl->mpFrameWindow;
-        pFrameWinOutDev->ImplGetGraphics();
+        pFrameWinOutDev->AcquireGraphics();
     }
     mpWindowImpl->mpFrameWindow->mpGraphics->ResetClipRegion();
     return mpWindowImpl->mpFrameWindow->mpGraphics;

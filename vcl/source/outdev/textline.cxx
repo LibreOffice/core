@@ -971,7 +971,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
         return;
 
     // we need a graphics
-    if( !mpGraphics && !ImplGetGraphics() )
+    if( !mpGraphics && !AcquireGraphics() )
         return;
     if( mbInitClipRegion )
         ImplInitClipRegion();
@@ -1003,7 +1003,7 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
 
     // we need a graphics
     if( !mpGraphics )
-        if( !ImplGetGraphics() )
+        if( !AcquireGraphics() )
             return;
 
     if ( mbInitClipRegion )

@@ -886,7 +886,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
     long    nWidth = ImplLogicWidthToDevicePixel( rSize.Width() );
     long    nHeight = ImplLogicHeightToDevicePixel( rSize.Height() );
 
-    if ( mpGraphics || ( (OutputDevice*) this )->ImplGetGraphics() )
+    if ( mpGraphics || AcquireGraphics() )
     {
         if ( nWidth > 0 && nHeight  > 0 && nX <= (mnOutWidth + mnOutOffX) && nY <= (mnOutHeight + mnOutOffY))
         {
@@ -932,7 +932,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 
                 if ( aVDev.SetOutputSizePixel( aRect.GetSize() ) )
                 {
-                    if ( ((OutputDevice*)&aVDev)->mpGraphics || ((OutputDevice*)&aVDev)->ImplGetGraphics() )
+                    if ( ((OutputDevice*)&aVDev)->mpGraphics || ((OutputDevice*)&aVDev)->AcquireGraphics() )
                     {
                         SalTwoRect aPosAry;
 

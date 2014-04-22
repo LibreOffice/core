@@ -42,7 +42,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
 
     if ( !mpGraphics )
     {
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return;
     }
 
@@ -83,7 +83,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
     // we need a graphics
     if ( !mpGraphics )
     {
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return;
     }
 

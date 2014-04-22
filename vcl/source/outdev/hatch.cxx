@@ -82,7 +82,7 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
     if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
-    if( !mpGraphics && !ImplGetGraphics() )
+    if( !mpGraphics && !AcquireGraphics() )
         return;
 
     if( mbInitClipRegion )

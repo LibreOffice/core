@@ -47,7 +47,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
 
     // we need a graphics
     if ( !mpGraphics )
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return;
 
     if ( mbInitClipRegion )
@@ -154,7 +154,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
 
     // we need a graphics
     if ( !mpGraphics )
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return;
 
     if ( mbInitClipRegion )
@@ -254,7 +254,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
 
     // we need a graphics
     if( !mpGraphics )
-        if( !ImplGetGraphics() )
+        if( !AcquireGraphics() )
             return;
 
     if( mbInitClipRegion )
@@ -486,7 +486,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
     if( aDstRect.IsEmpty() || ImplIsRecordLayout() )
         return;
 
-    if( !mpGraphics && !ImplGetGraphics() )
+    if( !mpGraphics && !AcquireGraphics() )
         return;
 
     if( mbInitClipRegion )

@@ -187,7 +187,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
 
     // we need a graphics
     if( !mpGraphics )
-        if( !ImplGetGraphics() )
+        if( !AcquireGraphics() )
             return;
 
     if( mbInitClipRegion )
@@ -561,7 +561,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
     // get the device graphics as drawing target
     if( !mpGraphics )
-        if( !ImplGetGraphics() )
+        if( !AcquireGraphics() )
             return;
 
     // try hard to draw it directly, because the emulation layers are slower

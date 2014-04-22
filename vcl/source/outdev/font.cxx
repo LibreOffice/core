@@ -172,7 +172,7 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
         }
 
         // release all physically selected fonts on this device
-        if( ImplGetGraphics() )
+        if( AcquireGraphics() )
             mpGraphics->ReleaseFonts();
     }
 
@@ -186,7 +186,7 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
         if ( bNewFontLists )
         {
             // we need a graphics
-            if ( ImplGetGraphics() )
+            if ( AcquireGraphics() )
             {
                 if( mpFontCollection && mpFontCollection != pSVData->maGDIData.mpScreenFontList )
                     mpFontCollection->Clear();
@@ -225,7 +225,7 @@ void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
         if ( bNewFontLists )
         {
             // we need a graphics
-            if ( ImplGetGraphics() )
+            if ( AcquireGraphics() )
             {
                 if( mpPDFWriter )
                 {
@@ -272,7 +272,7 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
         Window * pFrame = pSVData->maWinData.mpFirstFrame;
         if ( pFrame )
         {
-            if ( pFrame->ImplGetGraphics() )
+            if ( pFrame->AcquireGraphics() )
             {
                 // Stupid typecast here and somewhere ((OutputDevice*)&aVDev)->, because bug in .NET2002 compiler
                 OutputDevice *pDevice = (OutputDevice*)pFrame;
@@ -1131,7 +1131,7 @@ void OutputDevice::ImplInitFontList() const
 {
     if( !mpFontCollection->Count() )
     {
-        if( mpGraphics || ImplGetGraphics() )
+        if( mpGraphics || AcquireGraphics() )
         {
             SAL_INFO( "vcl.gdi", "OutputDevice::ImplInitFontList()" );
             mpGraphics->GetDevFontList( mpFontCollection );
@@ -1192,7 +1192,7 @@ bool OutputDevice::ImplNewFont() const
         return true;
 
     // we need a graphics
-    if ( !mpGraphics && !ImplGetGraphics() )
+    if ( !mpGraphics && !AcquireGraphics() )
         return false;
     SalGraphics* pGraphics = mpGraphics;
     ImplInitFontList();
@@ -2087,7 +2087,7 @@ bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFo
 
     ImplInitFontList();
 
-    if( !mpGraphics && !ImplGetGraphics() )
+    if( !mpGraphics && !AcquireGraphics() )
         return false;
 
     bool bRC = mpGraphics->AddTempDevFont( mpFontCollection, rFileURL, rFontName );
@@ -2225,7 +2225,7 @@ SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
     SystemFontData aSysFontData;
     aSysFontData.nSize = sizeof(aSysFontData);
 
-    if (!mpGraphics) ImplGetGraphics();
+    if (!mpGraphics) AcquireGraphics();
     if (mpGraphics) aSysFontData = mpGraphics->GetSysFontData(nFallbacklevel);
 
     return aSysFontData;
@@ -2299,7 +2299,7 @@ bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rSt
 bool OutputDevice::GetFontCapabilities( FontCapabilities& rFontCapabilities ) const
 {
     // we need a graphics
-    if( !mpGraphics && !ImplGetGraphics() )
+    if( !mpGraphics && !AcquireGraphics() )
         return false;
 
     if( mbNewFont )
@@ -2317,7 +2317,7 @@ bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     rFontCharMap.Reset();
 
     // we need a graphics
-    if( !mpGraphics && !ImplGetGraphics() )
+    if( !mpGraphics && !AcquireGraphics() )
         return false;
 
     if( mbNewFont )

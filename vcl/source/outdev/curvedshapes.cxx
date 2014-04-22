@@ -46,7 +46,7 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
     // we need a graphics
     if ( !mpGraphics )
     {
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return;
     }
 
@@ -93,7 +93,7 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
     // we need a graphics
     if ( !mpGraphics )
     {
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return;
     }
 
@@ -136,7 +136,7 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
     // we need a graphics
     if ( !mpGraphics )
     {
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return;
     }
 
@@ -186,7 +186,7 @@ void OutputDevice::DrawChord( const Rectangle& rRect,
     // we need a graphics
     if ( !mpGraphics )
     {
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return;
     }
 

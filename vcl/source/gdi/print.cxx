@@ -770,7 +770,7 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
     }
 
     // we need a graphics
-    if ( !ImplGetGraphics() )
+    if ( !AcquireGraphics() )
     {
         ImplInitDisplay( NULL );
         return;
@@ -937,7 +937,7 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
 void Printer::ImplUpdatePageData()
 {
     // we need a graphics
-    if ( !ImplGetGraphics() )
+    if ( !AcquireGraphics() )
         return;
 
     mpGraphics->GetResolution( mnDPIX, mnDPIY );

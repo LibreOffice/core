@@ -146,7 +146,7 @@ bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPar
         return false;
 
     if ( !mpGraphics )
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return false;
 
     return( mpGraphics->IsNativeControlSupported(nType, nPart) );
@@ -162,7 +162,7 @@ bool OutputDevice::HitTestNativeControl( ControlType nType,
         return false;
 
     if ( !mpGraphics )
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return false;
 
     Point aWinOffs( mnOutOffX, mnOutOffY );
@@ -263,7 +263,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
 
     // make sure the current clip region is initialized correctly
     if ( !mpGraphics )
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return false;
 
     if ( mbInitClipRegion )
@@ -304,7 +304,7 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
         return false;
 
     if ( !mpGraphics )
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return false;
 
     // Convert the coordinates from relative to Window-absolute, so we draw

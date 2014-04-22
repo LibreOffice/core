@@ -1642,7 +1642,7 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
 {
     Bitmap aDispBmp( *this );
 
-    if( mpImpBmp && ( pDisplay->mpGraphics || pDisplay->ImplGetGraphics() ) )
+    if( mpImpBmp && ( pDisplay->mpGraphics || pDisplay->AcquireGraphics() ) )
     {
         ImpBitmap* pImpDispBmp = new ImpBitmap;
 

@@ -1023,7 +1023,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
 
     if ( !IsDeviceOutputNecessary() )
         return;
-    if( !mpGraphics && !ImplGetGraphics() )
+    if( !mpGraphics && !AcquireGraphics() )
         return;
     if( mbInitClipRegion )
         ImplInitClipRegion();
@@ -1307,7 +1307,7 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
 {
     // we need a graphics
     if( !mpGraphics )
-        if( !ImplGetGraphics() )
+        if( !AcquireGraphics() )
             return NULL;
 
     // initialize font if needed
@@ -1767,7 +1767,7 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
         return;
 
     // we need a graphics
-    if( !mpGraphics && !ImplGetGraphics() )
+    if( !mpGraphics && !AcquireGraphics() )
         return;
     if( mbInitClipRegion )
         ImplInitClipRegion();
@@ -1808,7 +1808,7 @@ void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, s
         return;
 
     // we need a graphics
-    if( !mpGraphics && !ImplGetGraphics() )
+    if( !mpGraphics && !AcquireGraphics() )
         return;
     if( mbInitClipRegion )
         ImplInitClipRegion();
@@ -2115,7 +2115,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
 
     // better get graphics here because ImplDrawMnemonicLine() will not
     // we need a graphics
-    if( !mpGraphics && !ImplGetGraphics() )
+    if( !mpGraphics && !AcquireGraphics() )
         return;
     if( mbInitClipRegion )
         ImplInitClipRegion();

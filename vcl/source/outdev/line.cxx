@@ -49,7 +49,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
 
     if( !mpGraphics )
     {
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return;
     }
 
@@ -96,7 +96,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 
     if ( !mpGraphics )
     {
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return;
     }
 

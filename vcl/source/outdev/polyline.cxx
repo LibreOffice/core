@@ -41,7 +41,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 
     // we need a graphics
     if ( !mpGraphics )
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return;
 
     if ( mbInitClipRegion )
@@ -150,7 +150,7 @@ void OutputDevice::DrawPolyLine(
 
     // we need a graphics
     if( !mpGraphics )
-        if( !ImplGetGraphics() )
+        if( !AcquireGraphics() )
             return;
 
     if( mbInitClipRegion )
@@ -239,7 +239,7 @@ void OutputDevice::DrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
 
     // we need a graphics
-    if ( !mpGraphics && !ImplGetGraphics() )
+    if ( !mpGraphics && !AcquireGraphics() )
         return;
 
     if ( mbInitClipRegion )
@@ -330,7 +330,7 @@ bool OutputDevice::TryDrawPolyLineDirect(
 
     // we need a graphics
     if( !mpGraphics )
-        if( !ImplGetGraphics() )
+        if( !AcquireGraphics() )
             return false;
 
     if( mbInitClipRegion )

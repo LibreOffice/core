@@ -56,7 +56,7 @@
         return;                             \
                                             \
     if ( !mpGraphics )                      \
-        if ( !ImplGetGraphics() )           \
+        if ( !AcquireGraphics() )           \
             return;                         \
                                             \
     if ( mbInitClipRegion )                 \
@@ -401,8 +401,8 @@ public:
 
      @returns SalGraphics instance.
      */
-    SAL_DLLPRIVATE SalGraphics const *ImplGetGraphics() const;
-    SAL_DLLPRIVATE SalGraphics*     ImplGetGraphics();
+    SAL_DLLPRIVATE SalGraphics const *GetGraphics() const;
+    SAL_DLLPRIVATE SalGraphics*       GetGraphics();
 
     /** Acquire a graphics device that the output device uses to draw on.
 

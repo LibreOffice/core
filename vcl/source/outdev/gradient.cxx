@@ -108,7 +108,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             // do nothing if the rectangle is empty
             if ( !aRect.IsEmpty() )
             {
-                if( !mpGraphics && !ImplGetGraphics() )
+                if( !mpGraphics && !AcquireGraphics() )
                     return;
 
                 // secure clip region

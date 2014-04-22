@@ -133,7 +133,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 
     SalGraphics* pGraphics;
     if ( !pOutDev->mpGraphics )
-        ((OutputDevice*)pOutDev)->ImplGetGraphics();
+        pOutDev->AcquireGraphics();
     pGraphics = pOutDev->mpGraphics;
     if ( pGraphics )
         mpVirDev = pSVData->mpDefInst->CreateVirtualDevice( pGraphics, nDX, nDY, nBitCount, pData );
@@ -315,7 +315,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
         // we need a graphics
         if ( !mpGraphics )
         {
-            if ( !ImplGetGraphics() )
+            if ( !AcquireGraphics() )
                 return false;
         }
 
@@ -422,7 +422,7 @@ void VirtualDevice::EnableRTL( bool bEnable )
     // under rare circumstances in the UI, eg the valueset control
     // because each virdev has its own SalGraphics we can safely switch the SalGraphics here
     // ...hopefully
-    if( ImplGetGraphics() )
+    if( AcquireGraphics() )
         mpGraphics->SetLayout( bEnable ? SAL_LAYOUT_BIDI_RTL : 0 );
 
     OutputDevice::EnableRTL(bEnable);
@@ -518,7 +518,7 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
         delete mpFontCache;
 
     // get font list with scalable fonts only
-    ImplGetGraphics();
+    AcquireGraphics();
     mpFontCollection = pSVData->maGDIData.mpScreenFontList->Clone( true, false );
 
     // prepare to use new font lists

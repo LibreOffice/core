@@ -230,7 +230,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
         return url;
     }
     bool ok = false;
-    SalGraphics* graphics = Application::GetDefaultDevice()->ImplGetGraphics();
+    SalGraphics* graphics = Application::GetDefaultDevice()->GetGraphics();
     PhysicalFontCollection fonts;
     graphics->GetDevFontList( &fonts );
     boost::scoped_ptr< ImplGetDevFontList > fontInfo( fonts.GetDevFontList());

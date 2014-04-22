@@ -164,7 +164,7 @@ static void ImplDeleteObjStack( ImplObjStack* pObjStack )
 bool OutputDevice::ImplIsAntiparallel() const
 {
     bool bRet = false;
-    if( ImplGetGraphics() )
+    if( AcquireGraphics() )
     {
         if( ( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) && ! IsRTLEnabled() ) ||
             ( ! (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) && IsRTLEnabled() ) )
@@ -324,7 +324,7 @@ OutputDevice::~OutputDevice()
 bool OutputDevice::supportsOperation( OutDevSupportType eType ) const
 {
     if( !mpGraphics )
-        if( !ImplGetGraphics() )
+        if( !AcquireGraphics() )
             return false;
     const bool bHasSupport = mpGraphics->supportsOperation( eType );
     return bHasSupport;
@@ -340,7 +340,7 @@ void OutputDevice::EnableRTL( bool bEnable )
 
 bool OutputDevice::HasMirroredGraphics() const
 {
-   return ( ImplGetGraphics() && (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) );
+   return ( AcquireGraphics() && (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) );
 }
 
 // note: the coordiantes to be remirrored are in frame coordiantes !
@@ -376,7 +376,7 @@ void    OutputDevice::ReMirror( Region &rRegion ) const
 
 }
 
-SalGraphics* OutputDevice::ImplGetGraphics()
+SalGraphics* OutputDevice::GetGraphics()
 {
     DBG_TESTSOLARMUTEX();
 
@@ -391,7 +391,7 @@ SalGraphics* OutputDevice::ImplGetGraphics()
     return mpGraphics;
 }
 
-SalGraphics const *OutputDevice::ImplGetGraphics() const
+SalGraphics const *OutputDevice::GetGraphics() const
 {
     DBG_TESTSOLARMUTEX();
 
@@ -496,7 +496,7 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect
         {
             if ( !pSrcDev->mpGraphics )
             {
-                if ( !((OutputDevice*)pSrcDev)->ImplGetGraphics() )
+                if ( !((OutputDevice*)pSrcDev)->AcquireGraphics() )
                     return;
             }
             pGraphics2 = pSrcDev->mpGraphics;
@@ -509,14 +509,14 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect
             {
                 if ( !pSrcDev->mpGraphics )
                 {
-                    if ( !((OutputDevice*)pSrcDev)->ImplGetGraphics() )
+                    if ( !((OutputDevice*)pSrcDev)->AcquireGraphics() )
                         return;
                 }
                 pGraphics2 = pSrcDev->mpGraphics;
 
                 if ( !mpGraphics )
                 {
-                    if ( !ImplGetGraphics() )
+                    if ( !AcquireGraphics() )
                         return;
                 }
                 DBG_ASSERT( mpGraphics && pSrcDev->mpGraphics,
@@ -720,7 +720,7 @@ void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, cons
 
     if ( !mpGraphics )
     {
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return;
     }
 
@@ -801,7 +801,7 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
         meRasterOp = eRasterOp;
         mbInitLineColor = mbInitFillColor = true;
 
-        if( mpGraphics || ImplGetGraphics() )
+        if( mpGraphics || AcquireGraphics() )
             mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp), ROP_INVERT == meRasterOp );
     }
 
@@ -1196,7 +1196,7 @@ sal_uInt16 OutputDevice::GetBitCount() const
     // we need a graphics instance
     if ( !mpGraphics )
     {
-        if ( !((OutputDevice*)this)->ImplGetGraphics() )
+        if ( !((OutputDevice*)this)->AcquireGraphics() )
             return 0;
     }
 
@@ -1230,7 +1230,7 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
 {
     if ( !mpGraphics )
     {
-        if ( !ImplGetGraphics() )
+        if ( !AcquireGraphics() )
             return SystemGraphicsData();
     }
 
@@ -1316,7 +1316,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
         // draw the real EPS graphics
         if( rGfxLink.GetData() && rGfxLink.GetDataSize() )
         {
-            if( !mpGraphics && !ImplGetGraphics() )
+            if( !mpGraphics && !AcquireGraphics() )
                 return bDrawn;
 
             if( mbInitClipRegion )
