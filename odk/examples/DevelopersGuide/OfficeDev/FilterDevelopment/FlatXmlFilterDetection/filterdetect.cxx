@@ -167,9 +167,6 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
             else if (aMimeType.equals("application/x-vnd.oasis.opendocument.presentation") ||
                        aMimeType.equals("application/vnd.oasis.opendocument.presentation"))
                 sTypeName = "devguide_FlatXMLType_Cpp_impress";
-            else if (aMimeType.equals("application/x-vnd.oasis.opendocument.presentation") ||
-                       aMimeType.equals("application/vnd.oasis.opendocument.presentation"))
-                sTypeName = "devguide_FlatXMLType_Cpp_impress";
         }
     }
     return sTypeName;
