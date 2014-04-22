@@ -18,7 +18,6 @@
  */
 
 #include "tp_Wizard_TitlesAndObjects.hxx"
-#include "tp_Wizard_TitlesAndObjects.hrc"
 #include "Strings.hrc"
 #include "res_Titles.hxx"
 #include "res_LegendPosition.hxx"

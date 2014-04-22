@@ -26,11 +26,6 @@
 
 //Dialog Ids:
 #define DLG_CHART_WIZARD    902
-#define DLG_DATA_SOURCE     901
-#define DLG_DATA_DESCR      836
-#define DLG_LEGEND          835
-#define DLG_SPLINE_PROPERTIES 904
-
 
 //TabPage Ids:
 #define TP_LEGEND_POS   900
@@ -42,7 +37,6 @@
 #define TP_AXIS_LABEL   920
 #define TP_SCALE        903
 #define TP_AXIS_POSITIONS   904
-#define TP_CHARTTYPE    910
 
 #define TP_3D_SCENEGEOMETRY     915
 #define TP_3D_SCENEAPPEARANCE   916
