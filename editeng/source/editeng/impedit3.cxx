@@ -3558,7 +3558,74 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
                                     String aText;
                                     aText.Fill( (sal_uInt16)nChars, pTextPortion->GetExtraValue() );
-                                    pOutDev->DrawStretchText( aTmpPos, pTextPortion->GetSize().Width(), aText );
+
+                                    if(bStripOnly)
+                                    {
+                                        // #71056# when converting to primitives, visualized TAB spaces need to be
+                                        // visualized. Add tab#ed text here. Alternatively a primitive especially
+                                        // representing this space and the single fill character would be possible, too.
+                                        // For now, use what we have (the DrawingText callback)
+                                        const lang::Locale aLocale(GetLocale(EditPaM(pPortion->GetNode(),nIndex + 1)));
+
+                                        // get Overline color (from ((const SvxOverlineItem*)GetItem())->GetColor() in
+                                        // consequence, but also already set at pOutDev)
+                                        const Color aOverlineColor(pOutDev->GetOverlineColor());
+
+                                        // get TextLine color (from ((const SvxUnderlineItem*)GetItem())->GetColor() in
+                                        // consequence, but also already set at pOutDev)
+                                        const Color aTextLineColor(pOutDev->GetTextLineColor());
+
+                                        // get AllWidth and together with nCharWidth create DXArray using per character
+                                        // difference
+                                        const sal_Int32 nAllWidth(pTextPortion->GetSize().Width());
+                                        const double fSingleCharDiff((double(nAllWidth) / double(nChars)) - double(nCharWidth));
+                                        sal_Int32* pTmpDXArray = 0;
+
+                                        if(fSingleCharDiff > 1.0)
+                                        {
+                                            // if more than one unit per character, create DXArray to create
+                                            // something adequate to StretchText
+                                            const double fAdvance(nCharWidth + fSingleCharDiff);
+                                            const sal_uInt32 nCount(static_cast< sal_uInt32 >(nChars));
+                                            pTmpDXArray = new sal_Int32[nCount];
+                                            double fPos(0.0);
+
+                                            for(sal_uInt32 a(0); a < nCount; a++)
+                                            {
+                                                fPos += fAdvance;
+                                                pTmpDXArray[a] = basegfx::fround(fPos);
+                                            }
+                                        }
+
+                                        // StripPortions() data callback
+                                        GetEditEnginePtr()->DrawingText(
+                                            aTmpPos,
+                                            aText,
+                                            0,
+                                            nChars,
+                                            pTmpDXArray,
+                                            aTmpFont,
+                                            n,
+                                            nIndex,
+                                            pTextPortion->GetRightToLeft(),
+                                            0,
+                                            0,
+                                            false,
+                                            false,
+                                            false, // support for EOL/EOP TEXT comments
+                                            &aLocale,
+                                            aOverlineColor,
+                                            aTextLineColor);
+
+                                        if(pTmpDXArray)
+                                        {
+                                            delete pTmpDXArray;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        pOutDev->DrawStretchText(aTmpPos,pTextPortion->GetSize().Width(),aText);
+                                    }
                                 }
                             }
                             break;
