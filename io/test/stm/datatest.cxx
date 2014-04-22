@@ -118,7 +118,7 @@ void ODataStreamTest::testInvariant(
 
 
     }
-    else if( OUString("com.sun.star.io.DataInputStream") == TestName ) {
+    else if( OUString("com.sun.star.io.DataOutputStream") == TestName ) {
         Reference < XConnectable >  connect( TestObject , UNO_QUERY );
         Reference < XActiveDataSource > active( TestObject , UNO_QUERY );
         Reference < XOutputStream > output( TestObject , UNO_QUERY );
