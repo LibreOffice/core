@@ -33,7 +33,6 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/print.hxx>
-#include <vcl/settings.hxx>
 
 #include <salinst.hxx>
 #include <salvd.hxx>
@@ -1822,13 +1821,6 @@ void Printer::InitFont() const
 
     if ( mbInitFont )
     {
-        // decide if antialiasing is appropriate
-        bool bNonAntialiased = (GetAntialiasing() & ANTIALIASING_DISABLE_TEXT) != 0;
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        bNonAntialiased |= ((rStyleSettings.GetDisplayOptions() & DISPLAY_OPTION_AA_DISABLE) != 0);
-        bNonAntialiased |= (int(rStyleSettings.GetAntialiasingMinPixelHeight()) > mpFontEntry->maFontSelData.mnHeight);
-        mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
-
         // select font in the device layers
         mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(mpFontEntry->maFontSelData), 0 );
         mbInitFont = false;
