@@ -524,14 +524,14 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 case EMR_SETWINDOWEXTEX :
                 {                                                       // #75383#
                     *pWMF >> nW >> nH;
-                    pOut->SetWinExt( Size( nW, nH ), true);
+                    pOut->SetWinExt( Size( nW, nH ) );
                 }
                 break;
 
                 case EMR_SETWINDOWORGEX :
                 {
                     *pWMF >> nX32 >> nY32;
-                    pOut->SetWinOrg( Point( nX32, nY32 ), true);
+                    pOut->SetWinOrg( Point( nX32, nY32 ) );
                 }
                 break;
 
@@ -961,67 +961,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     PolyPolygon aPolyPoly;
                     if ( cbRgnData )
                         ImplReadRegion( aPolyPoly, *pWMF, nRecSize );
-                    pOut->SetClipPath( aPolyPoly, iMode, sal_True );
-                }
-                break;
-
-                case EMR_ALPHABLEND:
-                {
-                    sal_Int32 xDest(0), yDest(0), cxDest(0), cyDest(0);
-
-                    BLENDFUNCTION aFunc;
-                    sal_Int32 xSrc(0), ySrc(0), cxSrc(0), cySrc(0);
-                    XForm xformSrc;
-                    sal_uInt32 BkColorSrc(0), iUsageSrc(0), offBmiSrc(0);
-                    sal_uInt32 cbBmiSrc(0), offBitsSrc(0), cbBitsSrc(0);
-
-                    sal_uInt32   nStart = pWMF->Tell() - 8;
-                    pWMF->SeekRel( 0x10 );
-
-                    *pWMF >> xDest >> yDest >> cxDest >> cyDest >> aFunc >> xSrc >> ySrc
-                            >> xformSrc >> BkColorSrc >> iUsageSrc >> offBmiSrc >> cbBmiSrc
-                                >> offBitsSrc >> cbBitsSrc >>cxSrc>>cySrc ;
-
-                    sal_uInt32  dwRop = SRCAND|SRCINVERT;
-
-                    Bitmap      aBitmap;
-                    Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
-
-                    if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
-                        bStatus = sal_False;
-                    else
-                    {
-                        sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
-                        if ( nSize <= ( nEndPos - nStartPos ) )
-                        {
-                            char* pBuf = new char[ nSize ];
-                            SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
-                            aTmp.ObjectOwnsMemory( sal_True );
-                            aTmp << (sal_uInt8)'B'
-                                 << (sal_uInt8)'M'
-                                 << (sal_uInt32)cbBitsSrc
-                                 << (sal_uInt16)0
-                                 << (sal_uInt16)0
-                                 << (sal_uInt32)cbBmiSrc + 14;
-                            pWMF->Seek( nStart + offBmiSrc );
-                            pWMF->Read( pBuf + 14, cbBmiSrc );
-                            pWMF->Seek( nStart + offBitsSrc );
-                            pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
-                            aTmp.Seek( 0 );
-                            ReadDIB(aBitmap, aTmp, true);
-
-                            // test if it is sensible to crop
-                            if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
-                                ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
-                                    ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
-                                        ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
-                            {
-                                Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
-                                aBitmap.Crop( aCropRect );
-                            }
-                            aBmpSaveList.push_back( new BSaveStruct( aBitmap, aRect, dwRop, pOut->GetFillStyle () ) );
-                        }
-                    }
+                    pOut->SetClipPath( aPolyPoly, iMode, sal_False );
                 }
                 break;
 
@@ -1036,8 +976,8 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
                     pWMF->SeekRel( 0x10 );
                     *pWMF >> xDest >> yDest >> cxDest >> cyDest >> dwRop >> xSrc >> ySrc
-                            >> xformSrc >> nColor >> iUsageSrc >> offBmiSrc >> cbBmiSrc
-                                >> offBitsSrc >> cbBitsSrc;
+                        >> xformSrc >> nColor >> iUsageSrc >> offBmiSrc >> cbBmiSrc
+                        >> offBitsSrc >> cbBitsSrc;
 
                     if ( nRecType == EMR_STRETCHBLT )
                         *pWMF >> cxSrc >> cySrc;
@@ -1071,7 +1011,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             pWMF->Seek( nStart + offBitsSrc );
                             pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
                             aTmp.Seek( 0 );
-                            ReadDIB(aBitmap, aTmp, true);
+                            aBitmap.Read( aTmp, sal_True );
 
                             // test if it is sensible to crop
                             if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
@@ -1088,362 +1028,348 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 }
                 break;
 
-                case EMR_STRETCHDIBITS :
+            case EMR_STRETCHDIBITS :
+            {
+                sal_Int32   xDest, yDest, xSrc, ySrc, cxSrc, cySrc, cxDest, cyDest;
+                sal_uInt32  offBmiSrc, cbBmiSrc, offBitsSrc, cbBitsSrc, iUsageSrc, dwRop;
+                sal_uInt32  nStart = pWMF->Tell() - 8;
+
+                pWMF->SeekRel( 0x10 );
+                *pWMF >> xDest
+                      >> yDest
+                      >> xSrc
+                      >> ySrc
+                      >> cxSrc
+                      >> cySrc
+                      >> offBmiSrc
+                      >> cbBmiSrc
+                      >> offBitsSrc
+                      >> cbBitsSrc
+                      >> iUsageSrc
+                      >> dwRop
+                      >> cxDest
+                      >> cyDest;
+
+                Bitmap      aBitmap;
+                Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
+
+                cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
+                cyDest = abs( (int)cyDest );        // and also 122889
+
+                if (  ((SAL_MAX_UINT32 - 14)             < cbBitsSrc)
+                   || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc )
+                   )
                 {
-                    sal_Int32   xDest, yDest, xSrc, ySrc, cxSrc, cySrc, cxDest, cyDest;
-                    sal_uInt32  offBmiSrc, cbBmiSrc, offBitsSrc, cbBitsSrc, iUsageSrc, dwRop;
-                    sal_uInt32  nStart = pWMF->Tell() - 8;
-
-                    pWMF->SeekRel( 0x10 );
-                    *pWMF >> xDest
-                          >> yDest
-                          >> xSrc
-                          >> ySrc
-                          >> cxSrc
-                          >> cySrc
-                          >> offBmiSrc
-                          >> cbBmiSrc
-                          >> offBitsSrc
-                          >> cbBitsSrc
-                          >> iUsageSrc
-                          >> dwRop
-                          >> cxDest
-                          >> cyDest;
-
-                    Bitmap      aBitmap;
-                    Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
-
-                    cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
-                    cyDest = abs( (int)cyDest );        // and also 122889
-
-                    if (  ((SAL_MAX_UINT32 - 14)             < cbBitsSrc)
-                       || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc )
-                       )
+                    bStatus = sal_False;
+                }
+                else
+                {
+                    sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
+                    if ( nSize <= ( nEndPos - nStartPos ) )
                     {
-                        bStatus = sal_False;
+                        char* pBuf = new char[ nSize ];
+                        SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
+                        aTmp.ObjectOwnsMemory( sal_True );
+                        aTmp << (sal_uInt8)'B'
+                            << (sal_uInt8)'M'
+                            << (sal_uInt32)cbBitsSrc
+                            << (sal_uInt16)0
+                            << (sal_uInt16)0
+                            << (sal_uInt32)cbBmiSrc + 14;
+                        pWMF->Seek( nStart + offBmiSrc );
+                        pWMF->Read( pBuf + 14, cbBmiSrc );
+                        pWMF->Seek( nStart + offBitsSrc );
+                        pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
+                        aTmp.Seek( 0 );
+                        aBitmap.Read( aTmp, sal_True );
+
+                        // test if it is sensible to crop
+                        if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
+                            ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
+                                ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
+                                    ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
+                        {
+                            Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+                            aBitmap.Crop( aCropRect );
+                        }
+                    aBmpSaveList.push_back( new BSaveStruct( aBitmap, aRect, dwRop, pOut->GetFillStyle () ) );
+                    }
+                }
+            }
+            break;
+
+            case EMR_EXTCREATEFONTINDIRECTW :
+            {
+                *pWMF >> nIndex;
+                if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
+                {
+                    LOGFONTW aLogFont;
+                    *pWMF >> aLogFont.lfHeight
+                          >> aLogFont.lfWidth
+                          >> aLogFont.lfEscapement
+                          >> aLogFont.lfOrientation
+                          >> aLogFont.lfWeight
+                          >> aLogFont.lfItalic
+                          >> aLogFont.lfUnderline
+                          >> aLogFont.lfStrikeOut
+                          >> aLogFont.lfCharSet
+                          >> aLogFont.lfOutPrecision
+                          >> aLogFont.lfClipPrecision
+                          >> aLogFont.lfQuality
+                          >> aLogFont.lfPitchAndFamily;
+
+                    sal_Unicode lfFaceName[ LF_FACESIZE ];
+
+                    for ( int i = 0; i < LF_FACESIZE; i++ )
+                    {
+                        sal_uInt16 nChar;
+                        *pWMF >> nChar;
+                        lfFaceName[ i ] = nChar;
+                    }
+                    aLogFont.alfFaceName = rtl::OUString( lfFaceName );
+                    pOut->CreateObject( nIndex, GDI_FONT, new WinMtfFontStyle( aLogFont ) );
+                }
+            }
+            break;
+
+            case EMR_EXTTEXTOUTA :
+                bFlag = sal_True;
+            case EMR_EXTTEXTOUTW :
+            {
+                sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
+                sal_uInt32  nCurPos, nLen, nOffString, nOptions, offDx;
+                sal_Int32*  pDX = NULL;
+
+                nCurPos = pWMF->Tell() - 8;
+
+                *pWMF >> nLeft >> nTop >> nRight >> nBottom >> nGfxMode >> nXScale >> nYScale
+                    >> ptlReferenceX >> ptlReferenceY >> nLen >> nOffString >> nOptions;
+
+                pWMF->SeekRel( 0x10 );
+                *pWMF >> offDx;
+
+                sal_Int32 nTextLayoutMode = TEXT_LAYOUT_DEFAULT;
+                if ( nOptions & ETO_RTLREADING )
+                    nTextLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
+                pOut->SetTextLayoutMode( nTextLayoutMode );
+                DBG_ASSERT( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) == 0, "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
+
+                Point aPos( ptlReferenceX, ptlReferenceY );
+                if ( nLen && ( nLen < SAL_MAX_UINT32 / sizeof(sal_Int32) ) )
+                {
+                    if ( offDx && (( nCurPos + offDx + nLen * 4 ) <= nNextPos ) )
+                    {
+                        pWMF->Seek( nCurPos + offDx );
+                        if ( ( nLen * sizeof(sal_uInt32) ) <= ( nEndPos - pWMF->Tell() ) )
+                        {
+                            pDX = new sal_Int32[ nLen ];
+                            sal_uInt32 i;
+                            for ( i = 0; i < nLen; i++ )
+                                *pWMF >> pDX[ i ];
+                        }
+                    }
+                    pWMF->Seek( nCurPos + nOffString );
+                    String aText;
+                    if ( bFlag )
+                    {
+                        if ( nLen <= ( nEndPos - pWMF->Tell() ) )
+                        {
+                            sal_Char* pBuf = new sal_Char[ nLen ];
+                            pWMF->Read( pBuf, nLen );
+                            aText = String( pBuf, (sal_uInt16)nLen, pOut->GetCharSet() );
+                            delete[] pBuf;
+
+                            if ( aText.Len() != nLen )
+                            {
+                                sal_uInt16 i, j;
+                                sal_Int32* pOldDx = pDX;
+                                pDX = new sal_Int32[ aText.Len() ];
+                                for ( i = 0, j = 0; i < aText.Len(); i++ )
+                                {
+                                    sal_Unicode cUniChar = aText.GetChar(i);
+                                    rtl::OString aCharacter(&cUniChar, 1, pOut->GetCharSet());
+                                    pDX[ i ] = 0;
+                                    for (sal_Int32 k = 0; ( k < aCharacter.getLength() ) && ( j < nLen ) && ( i < aText.Len() ); ++k)
+                                        pDX[ i ] += pOldDx[ j++ ];
+                                }
+                                delete[] pOldDx;
+                            }
+                        }
                     }
                     else
                     {
-                        sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
+                        if ( ( nLen * sizeof(sal_Unicode) ) <= ( nEndPos - pWMF->Tell() ) )
+                        {
+                            sal_Unicode* pBuf = new sal_Unicode[ nLen ];
+                            pWMF->Read( pBuf, nLen << 1 );
+#ifdef OSL_BIGENDIAN
+                            sal_Char nTmp, *pTmp = (sal_Char*)( pBuf + nLen );
+                            while ( pTmp-- != (sal_Char*)pBuf )
+                            {
+                                nTmp = *pTmp--;
+                                pTmp[ 1 ] = *pTmp;
+                                *pTmp = nTmp;
+                            }
+#endif
+                            aText = rtl::OUString(pBuf, nLen);
+                            delete[] pBuf;
+                        }
+                    }
+                    pOut->DrawText( aPos, aText, pDX, bRecordPath, nGfxMode );
+                }
+                delete[] pDX;
+            }
+            break;
+
+            case EMR_POLYBEZIERTO16 :
+                ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), sal_True);
+                break;
+            case EMR_POLYBEZIER16 :
+                ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), sal_False);
+            break;
+
+            case EMR_POLYGON16 :
+                ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolygon, _1, _2, _3, _4), sal_False);
+            break;
+
+            case EMR_POLYLINETO16 :
+                ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), sal_True);
+                break;
+            case EMR_POLYLINE16 :
+                ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), sal_False);
+            break;
+
+            case EMR_POLYPOLYLINE16 :
+                ReadAndDrawPolyLine<sal_Int16>();
+                break;
+
+            case EMR_POLYPOLYGON16 :
+                ReadAndDrawPolyPolygon<sal_Int16>();
+            break;
+
+            case EMR_FILLRGN :
+            {
+                sal_uInt32 nLen;
+                PolyPolygon aPolyPoly;
+                pWMF->SeekRel( 0x10 );
+                *pWMF >> nLen >> nIndex;
+
+                if ( ImplReadRegion( aPolyPoly, *pWMF, nRecSize ) )
+                {
+                    pOut->Push();
+                    pOut->SelectObject( nIndex );
+                    pOut->DrawPolyPolygon( aPolyPoly, sal_False );
+                    pOut->Pop();
+                }
+            }
+            break;
+
+            case EMR_CREATEDIBPATTERNBRUSHPT :
+            {
+                sal_uInt32  nStart = pWMF->Tell() - 8;
+                Bitmap aBitmap;
+
+                *pWMF >> nIndex;
+
+                if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
+                {
+                    sal_uInt32 usage, offBmi, cbBmi, offBits, cbBits;
+
+                    *pWMF >> usage;
+                    *pWMF >> offBmi;
+                    *pWMF >> cbBmi;
+                    *pWMF >> offBits;
+                    *pWMF >> cbBits;
+
+                    if ( (cbBits > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBits < cbBmi) )
+                       bStatus = sal_False;
+                    else if ( offBmi )
+                    {
+                        sal_uInt32  nSize = cbBmi + cbBits + 14;
                         if ( nSize <= ( nEndPos - nStartPos ) )
                         {
-                            char* pBuf = new char[ nSize ];
+                            char*   pBuf = new char[ nSize ];
+
                             SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
                             aTmp.ObjectOwnsMemory( sal_True );
                             aTmp << (sal_uInt8)'B'
-                                << (sal_uInt8)'M'
-                                << (sal_uInt32)cbBitsSrc
-                                << (sal_uInt16)0
-                                << (sal_uInt16)0
-                                << (sal_uInt32)cbBmiSrc + 14;
-                            pWMF->Seek( nStart + offBmiSrc );
-                            pWMF->Read( pBuf + 14, cbBmiSrc );
-                            pWMF->Seek( nStart + offBitsSrc );
-                            pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
+                                 << (sal_uInt8)'M'
+                                 << (sal_uInt32)cbBits
+                                 << (sal_uInt16)0
+                                 << (sal_uInt16)0
+                                 << (sal_uInt32)cbBmi + 14;
+                            pWMF->Seek( nStart + offBmi );
+                            pWMF->Read( pBuf + 14, cbBmi );
+                            pWMF->Seek( nStart + offBits );
+                            pWMF->Read( pBuf + 14 + cbBmi, cbBits );
                             aTmp.Seek( 0 );
-                            ReadDIB(aBitmap, aTmp, true);
-
-                            // test if it is sensible to crop
-                            if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
-                                ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
-                                    ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
-                                        ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
-                            {
-                                Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
-                                aBitmap.Crop( aCropRect );
-                            }
-                        aBmpSaveList.push_back( new BSaveStruct( aBitmap, aRect, dwRop, pOut->GetFillStyle () ) );
+                            aBitmap.Read( aTmp, sal_True );
                         }
                     }
                 }
-                break;
 
-                case EMR_EXTCREATEFONTINDIRECTW :
-                {
-                    *pWMF >> nIndex;
-                    if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
-                    {
-                        LOGFONTW aLogFont;
-                        *pWMF >> aLogFont.lfHeight
-                              >> aLogFont.lfWidth
-                              >> aLogFont.lfEscapement
-                              >> aLogFont.lfOrientation
-                              >> aLogFont.lfWeight
-                              >> aLogFont.lfItalic
-                              >> aLogFont.lfUnderline
-                              >> aLogFont.lfStrikeOut
-                              >> aLogFont.lfCharSet
-                              >> aLogFont.lfOutPrecision
-                              >> aLogFont.lfClipPrecision
-                              >> aLogFont.lfQuality
-                              >> aLogFont.lfPitchAndFamily;
-
-                        sal_Unicode lfFaceName[ LF_FACESIZE ];
-
-                        for ( int i = 0; i < LF_FACESIZE; i++ )
-                        {
-                            sal_uInt16 nChar;
-                            *pWMF >> nChar;
-                            lfFaceName[ i ] = nChar;
-                        }
-                        aLogFont.alfFaceName = OUString( lfFaceName );
-
-                        // #i123216# Not used in the test case of #121382# (always identity in XForm), also
-                        // no hints in ms docu if FontSize should be scaled with WT. Using with the example
-                        // from #i123216# creates errors, so removing.
-                        //
-                        // // #i121382# Need to apply WorldTransform to FontHeight/Width; this should be completely
-                        // // changed to basegfx::B2DHomMatrix instead of 'struct XForm', but not now due to time
-                        // // constraints and dangers
-                        // const XForm& rXF = pOut->GetWorldTransform();
-                        // const basegfx::B2DHomMatrix aWT(rXF.eM11, rXF.eM21, rXF.eDx, rXF.eM12, rXF.eM22, rXF.eDy);
-                        // const basegfx::B2DVector aTransVec(aWT * basegfx::B2DVector(aLogFont.lfWidth, aLogFont.lfHeight));
-                        // aLogFont.lfWidth = aTransVec.getX();
-                        // aLogFont.lfHeight = aTransVec.getY();
-
-                        pOut->CreateObject( nIndex, GDI_FONT, new WinMtfFontStyle( aLogFont ) );
-                    }
-                }
-                break;
-
-                case EMR_EXTTEXTOUTA :
-                    bFlag = sal_True;
-                case EMR_EXTTEXTOUTW :
-                {
-                    sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
-                    sal_uInt32  nCurPos, nOffString, nOptions, offDx;
-                    sal_Int32   nLen;
-                    sal_Int32*  pDX = NULL;
-
-                    nCurPos = pWMF->Tell() - 8;
-
-                    *pWMF >> nLeft >> nTop >> nRight >> nBottom >> nGfxMode >> nXScale >> nYScale
-                        >> ptlReferenceX >> ptlReferenceY >> nLen >> nOffString >> nOptions;
-
-                    pWMF->SeekRel( 0x10 );
-                    *pWMF >> offDx;
-
-                    sal_Int32 nTextLayoutMode = TEXT_LAYOUT_DEFAULT;
-                    if ( nOptions & ETO_RTLREADING )
-                        nTextLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
-                    pOut->SetTextLayoutMode( nTextLayoutMode );
-                    DBG_ASSERT( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) == 0, "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
-
-                    Point aPos( ptlReferenceX, ptlReferenceY );
-                    if ( nLen && nLen < static_cast<sal_Int32>( SAL_MAX_UINT32 / sizeof(sal_Int32) ) )
-                    {
-                        if ( offDx && (( nCurPos + offDx + nLen * 4 ) <= nNextPos ) )
-                        {
-                            pWMF->Seek( nCurPos + offDx );
-                            if ( ( nLen * sizeof(sal_uInt32) ) <= ( nEndPos - pWMF->Tell() ) )
-                            {
-                                pDX = new sal_Int32[ nLen ];
-                                sal_Int32 i;
-                                for ( i = 0; i < nLen; i++ )
-                                    *pWMF >> pDX[ i ];
-                            }
-                        }
-                        pWMF->Seek( nCurPos + nOffString );
-                        OUString aText;
-                        if ( bFlag )
-                        {
-                            if ( nLen <= static_cast<sal_Int32>( nEndPos - pWMF->Tell() ) )
-                            {
-                                sal_Char* pBuf = new sal_Char[ nLen ];
-                                pWMF->Read( pBuf, nLen );
-                                aText = OUString( pBuf, (sal_uInt16)nLen, pOut->GetCharSet() );
-                                delete[] pBuf;
-
-                                if ( aText.getLength() != nLen )
-                                {
-                                    sal_uInt16 i, j;
-                                    sal_Int32* pOldDx = pDX;
-                                    pDX = new sal_Int32[ aText.getLength() ];
-                                    for ( i = 0, j = 0; i < aText.getLength(); i++ )
-                                    {
-                                        sal_Unicode cUniChar = aText[i];
-                                        OString aCharacter(&cUniChar, 1, pOut->GetCharSet());
-                                        pDX[ i ] = 0;
-                                        for (sal_Int32 k = 0; ( k < aCharacter.getLength() ) && ( j < nLen ) && ( i < aText.getLength() ); ++k)
-                                            pDX[ i ] += pOldDx[ j++ ];
-                                    }
-                                    delete[] pOldDx;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if ( ( nLen * sizeof(sal_Unicode) ) <= ( nEndPos - pWMF->Tell() ) )
-                            {
-                                sal_Unicode* pBuf = new sal_Unicode[ nLen ];
-                                pWMF->Read( pBuf, nLen << 1 );
-#ifdef OSL_BIGENDIAN
-                                sal_Char nTmp, *pTmp = (sal_Char*)( pBuf + nLen );
-                                while ( pTmp-- != (sal_Char*)pBuf )
-                                {
-                                    nTmp = *pTmp--;
-                                    pTmp[ 1 ] = *pTmp;
-                                    *pTmp = nTmp;
-                                }
-#endif
-                                aText = OUString(pBuf, nLen);
-                                delete[] pBuf;
-                            }
-                        }
-                        pOut->DrawText( aPos, aText, pDX, bRecordPath, nGfxMode );
-                    }
-                    delete[] pDX;
-                }
-                break;
-
-                case EMR_POLYBEZIERTO16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), sal_True);
-                    break;
-                case EMR_POLYBEZIER16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), sal_False);
-                break;
-
-                case EMR_POLYGON16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolygon, _1, _2, _3, _4), sal_False);
-                break;
-
-                case EMR_POLYLINETO16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), sal_True);
-                    break;
-                case EMR_POLYLINE16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), sal_False);
-                break;
-
-                case EMR_POLYPOLYLINE16 :
-                    ReadAndDrawPolyLine<sal_Int16>();
-                    break;
-
-                case EMR_POLYPOLYGON16 :
-                    ReadAndDrawPolyPolygon<sal_Int16>();
-                break;
-
-                case EMR_FILLRGN :
-                {
-                    sal_uInt32 nLen;
-                    PolyPolygon aPolyPoly;
-                    pWMF->SeekRel( 0x10 );
-                    *pWMF >> nLen >> nIndex;
-
-                    if ( ImplReadRegion( aPolyPoly, *pWMF, nRecSize ) )
-                    {
-                        pOut->Push();
-                        pOut->SelectObject( nIndex );
-                        pOut->DrawPolyPolygon( aPolyPoly, sal_False );
-                        pOut->Pop();
-                    }
-                }
-                break;
-
-                case EMR_CREATEDIBPATTERNBRUSHPT :
-                {
-                    sal_uInt32  nStart = pWMF->Tell() - 8;
-                    Bitmap aBitmap;
-
-                    *pWMF >> nIndex;
-
-                    if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
-                    {
-                        sal_uInt32 usage, offBmi, cbBmi, offBits, cbBits;
-
-                        *pWMF >> usage;
-                        *pWMF >> offBmi;
-                        *pWMF >> cbBmi;
-                        *pWMF >> offBits;
-                        *pWMF >> cbBits;
-
-                        if ( (cbBits > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBits < cbBmi) )
-                           bStatus = sal_False;
-                        else if ( offBmi )
-                        {
-                            sal_uInt32  nSize = cbBmi + cbBits + 14;
-                            if ( nSize <= ( nEndPos - nStartPos ) )
-                            {
-                                char*   pBuf = new char[ nSize ];
-
-                                SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
-                                aTmp.ObjectOwnsMemory( sal_True );
-                                aTmp << (sal_uInt8)'B'
-                                     << (sal_uInt8)'M'
-                                     << (sal_uInt32)cbBits
-                                     << (sal_uInt16)0
-                                     << (sal_uInt16)0
-                                     << (sal_uInt32)cbBmi + 14;
-                                pWMF->Seek( nStart + offBmi );
-                                pWMF->Read( pBuf + 14, cbBmi );
-                                pWMF->Seek( nStart + offBits );
-                                pWMF->Read( pBuf + 14 + cbBmi, cbBits );
-                                aTmp.Seek( 0 );
-                                ReadDIB(aBitmap, aTmp, true);
-                            }
-                        }
-                    }
-
-                    pOut->CreateObject( nIndex, GDI_BRUSH, new WinMtfFillStyle( aBitmap ) );
-                }
-                break;
-
-                case EMR_MASKBLT :                  SAL_INFO("vcl.emf", "not implemented '" << "MaskBlt" << "'");                   break;
-                case EMR_PLGBLT :                   SAL_INFO("vcl.emf", "not implemented '" << "PlgBlt" << "'");                    break;
-                case EMR_SETDIBITSTODEVICE :        SAL_INFO("vcl.emf", "not implemented '" << "SetDIBitsToDevice" << "'");         break;
-                case EMR_FRAMERGN :                 SAL_INFO("vcl.emf", "not implemented '" << "FrameRgn" << "'");                  break;
-                case EMR_INVERTRGN :                SAL_INFO("vcl.emf", "not implemented '" << "InvertRgn" << "'");                 break;
-                case EMR_PAINTRGN :                 SAL_INFO("vcl.emf", "not implemented '" << "PaintRgn" << "'");                  break;
-                case EMR_FLATTENPATH :              SAL_INFO("vcl.emf", "not implemented '" << "FlattenPath" << "'");               break;
-                case EMR_WIDENPATH :                SAL_INFO("vcl.emf", "not implemented '" << "WidenPath" << "'");                 break;
-                case EMR_POLYDRAW :                 SAL_INFO("vcl.emf", "not implemented '" << "Polydraw" << "'");                  break;
-                case EMR_SETARCDIRECTION :          SAL_INFO("vcl.emf", "not implemented '" << "SetArcDirection" << "'");           break;
-                case EMR_SETPALETTEENTRIES :        SAL_INFO("vcl.emf", "not implemented '" << "SetPaletteEntries" << "'");         break;
-                case EMR_RESIZEPALETTE :            SAL_INFO("vcl.emf", "not implemented '" << "ResizePalette" << "'");             break;
-                case EMR_EXTFLOODFILL :             SAL_INFO("vcl.emf", "not implemented '" << "ExtFloodFill" << "'");              break;
-                case EMR_ANGLEARC :                 SAL_INFO("vcl.emf", "not implemented '" << "AngleArc" << "'");                  break;
-                case EMR_SETCOLORADJUSTMENT :       SAL_INFO("vcl.emf", "not implemented '" << "SetColorAdjustment" << "'");        break;
-                case EMR_POLYDRAW16 :               SAL_INFO("vcl.emf", "not implemented '" << "PolyDraw16" << "'");                break;
-                case EMR_POLYTEXTOUTA :             SAL_INFO("vcl.emf", "not implemented '" << "PolyTextOutA" << "'");              break;
-                case EMR_POLYTEXTOUTW :             SAL_INFO("vcl.emf", "not implemented '" << "PolyTextOutW" << "'");              break;
-                case EMR_CREATECOLORSPACE :         SAL_INFO("vcl.emf", "not implemented '" << "CreateColorSpace" << "'");          break;
-                case EMR_SETCOLORSPACE :            SAL_INFO("vcl.emf", "not implemented '" << "SetColorSpace" << "'");             break;
-                case EMR_DELETECOLORSPACE :         SAL_INFO("vcl.emf", "not implemented '" << "DeleteColorSpace" << "'");          break;
-                case EMR_GLSRECORD :                SAL_INFO("vcl.emf", "not implemented '" << "GlsRecord" << "'");                 break;
-                case EMR_GLSBOUNDEDRECORD :         SAL_INFO("vcl.emf", "not implemented '" << "GlsBoundRecord" << "'");            break;
-                case EMR_PIXELFORMAT :              SAL_INFO("vcl.emf", "not implemented '" << "PixelFormat" << "'");               break;
-                case EMR_DRAWESCAPE :               SAL_INFO("vcl.emf", "not implemented '" << "DrawEscape" << "'");                break;
-                case EMR_EXTESCAPE :                SAL_INFO("vcl.emf", "not implemented '" << "ExtEscape" << "'");                 break;
-                case EMR_STARTDOC :                 SAL_INFO("vcl.emf", "not implemented '" << "StartDoc" << "'");                  break;
-                case EMR_SMALLTEXTOUT :             SAL_INFO("vcl.emf", "not implemented '" << "SmallTextOut" << "'");              break;
-                case EMR_FORCEUFIMAPPING :          SAL_INFO("vcl.emf", "not implemented '" << "ForceUFIMapping" << "'");           break;
-                case EMR_NAMEDESCAPE :              SAL_INFO("vcl.emf", "not implemented '" << "NamedEscape" << "'");               break;
-                case EMR_COLORCORRECTPALETTE :      SAL_INFO("vcl.emf", "not implemented '" << "ColorCorrectPalette" << "'");       break;
-                case EMR_SETICMPROFILEA :           SAL_INFO("vcl.emf", "not implemented '" << "SetICMProfileA" << "'");            break;
-                case EMR_SETICMPROFILEW :           SAL_INFO("vcl.emf", "not implemented '" << "SetICMProfileW" << "'");            break;
-                case EMR_TRANSPARENTBLT :           SAL_INFO("vcl.emf", "not implemented '" << "TransparenBlt" << "'");             break;
-                case EMR_TRANSPARENTDIB :           SAL_INFO("vcl.emf", "not implemented '" << "TransparenDib" << "'");             break;
-                case EMR_GRADIENTFILL :             SAL_INFO("vcl.emf", "not implemented '" << "GradientFill" << "'");              break;
-                case EMR_SETLINKEDUFIS :            SAL_INFO("vcl.emf", "not implemented '" << "SetLinkedUFIS" << "'");             break;
-
-                case EMR_SETMAPPERFLAGS :           SAL_INFO("vcl.emf", "not implemented '" << "SetMapperFlags" << "'");            break;
-                case EMR_SETICMMODE :               SAL_INFO("vcl.emf", "not implemented '" << "SetICMMode" << "'");                break;
-                case EMR_CREATEMONOBRUSH :          SAL_INFO("vcl.emf", "not implemented '" << "CreateMonoBrush" << "'");           break;
-                case EMR_SETBRUSHORGEX :            SAL_INFO("vcl.emf", "not implemented '" << "SetBrushOrgEx" << "'");             break;
-                case EMR_SETMETARGN :               SAL_INFO("vcl.emf", "not implemented '" << "SetMetArgn" << "'");                break;
-                case EMR_SETMITERLIMIT :            SAL_INFO("vcl.emf", "not implemented '" << "SetMiterLimit" << "'");             break;
-                case EMR_EXCLUDECLIPRECT :          SAL_INFO("vcl.emf", "not implemented '" << "ExcludeClipRect" << "'");           break;
-                case EMR_REALIZEPALETTE :           SAL_INFO("vcl.emf", "not implemented '" << "RealizePalette" << "'");            break;
-                case EMR_SELECTPALETTE :            SAL_INFO("vcl.emf", "not implemented '" << "SelectPalette" << "'");             break;
-                case EMR_CREATEPALETTE :            SAL_INFO("vcl.emf", "not implemented '" << "CreatePalette" << "'");             break;
-                case EMR_ALPHADIBBLEND :            SAL_INFO("vcl.emf", "not implemented '" << "AlphaDibBlend" << "'");             break;
-                case EMR_SETTEXTJUSTIFICATION :     SAL_INFO("vcl.emf", "not implemented '" << "SetTextJustification" << "'");      break;
-
-                case EMR_GDICOMMENT :
-                case EMR_HEADER :               // has already been read at ReadHeader()
-                break;
-
-                default :                           SAL_INFO("vcl.emf", "Unknown Meta Action");                                     break;
+                pOut->CreateObject( nIndex, GDI_BRUSH, new WinMtfFillStyle( aBitmap ) );
             }
+            break;
+
+#ifdef WIN_MTF_ASSERT
+            default :                           WinMtfAssertHandler( "Unknown Meta Action" );       break;
+            case EMR_MASKBLT :                  WinMtfAssertHandler( "MaskBlt" );                   break;
+            case EMR_PLGBLT :                   WinMtfAssertHandler( "PlgBlt" );                    break;
+            case EMR_SETDIBITSTODEVICE :        WinMtfAssertHandler( "SetDIBitsToDevice" );         break;
+            case EMR_FRAMERGN :                 WinMtfAssertHandler( "FrameRgn" );                  break;
+            case EMR_INVERTRGN :                WinMtfAssertHandler( "InvertRgn" );                 break;
+            case EMR_PAINTRGN :                 WinMtfAssertHandler( "PaintRgn" );                  break;
+            case EMR_FLATTENPATH :              WinMtfAssertHandler( "FlattenPath" );               break;
+            case EMR_WIDENPATH :                WinMtfAssertHandler( "WidenPath" );                 break;
+            case EMR_POLYDRAW :                 WinMtfAssertHandler( "Polydraw" );                  break;
+            case EMR_SETARCDIRECTION :          WinMtfAssertHandler( "SetArcDirection" );           break;
+            case EMR_SETPALETTEENTRIES :        WinMtfAssertHandler( "SetPaletteEntries" );         break;
+            case EMR_RESIZEPALETTE :            WinMtfAssertHandler( "ResizePalette" );             break;
+            case EMR_EXTFLOODFILL :             WinMtfAssertHandler( "ExtFloodFill" );              break;
+            case EMR_ANGLEARC :                 WinMtfAssertHandler( "AngleArc" );                  break;
+            case EMR_SETCOLORADJUSTMENT :       WinMtfAssertHandler( "SetColorAdjustment" );        break;
+            case EMR_POLYDRAW16 :               WinMtfAssertHandler( "PolyDraw16" );                break;
+            case EMR_POLYTEXTOUTA :             WinMtfAssertHandler( "PolyTextOutA" );              break;
+            case EMR_POLYTEXTOUTW :             WinMtfAssertHandler( "PolyTextOutW" );              break;
+            case EMR_CREATECOLORSPACE :         WinMtfAssertHandler( "CreateColorSpace" );          break;
+            case EMR_SETCOLORSPACE :            WinMtfAssertHandler( "SetColorSpace" );             break;
+            case EMR_DELETECOLORSPACE :         WinMtfAssertHandler( "DeleteColorSpace" );          break;
+            case EMR_GLSRECORD :                WinMtfAssertHandler( "GlsRecord" );                 break;
+            case EMR_GLSBOUNDEDRECORD :         WinMtfAssertHandler( "GlsBoundRecord" );            break;
+            case EMR_PIXELFORMAT :              WinMtfAssertHandler( "PixelFormat" );               break;
+            case EMR_DRAWESCAPE :               WinMtfAssertHandler( "DrawEscape" );                break;
+            case EMR_EXTESCAPE :                WinMtfAssertHandler( "ExtEscape" );                 break;
+            case EMR_STARTDOC :                 WinMtfAssertHandler( "StartDoc" );                  break;
+            case EMR_SMALLTEXTOUT :             WinMtfAssertHandler( "SmallTextOut" );              break;
+            case EMR_FORCEUFIMAPPING :          WinMtfAssertHandler( "ForceUFIMapping" );           break;
+            case EMR_NAMEDESCAPE :              WinMtfAssertHandler( "NamedEscape" );               break;
+            case EMR_COLORCORRECTPALETTE :      WinMtfAssertHandler( "ColorCorrectPalette" );       break;
+            case EMR_SETICMPROFILEA :           WinMtfAssertHandler( "SetICMProfileA" );            break;
+            case EMR_SETICMPROFILEW :           WinMtfAssertHandler( "SetICMProfileW" );            break;
+            case EMR_ALPHABLEND :               WinMtfAssertHandler( "Alphablend" );                break;
+            case EMR_TRANSPARENTBLT :           WinMtfAssertHandler( "TransparenBlt" );             break;
+            case EMR_TRANSPARENTDIB :           WinMtfAssertHandler( "TransparenDib" );             break;
+            case EMR_GRADIENTFILL :             WinMtfAssertHandler( "GradientFill" );              break;
+            case EMR_SETLINKEDUFIS :            WinMtfAssertHandler( "SetLinkedUFIS" );             break;
+
+            case EMR_SETMAPPERFLAGS :           WinMtfAssertHandler( "SetMapperFlags", 0 );         break;
+            case EMR_SETICMMODE :               WinMtfAssertHandler( "SetICMMode", 0 );             break;
+            case EMR_CREATEMONOBRUSH :          WinMtfAssertHandler( "CreateMonoBrush", 0 );        break;
+            case EMR_SETBRUSHORGEX :            WinMtfAssertHandler( "SetBrushOrgEx", 0 );          break;
+            case EMR_SETMETARGN :               WinMtfAssertHandler( "SetMetArgn", 0 );             break;
+            case EMR_SETMITERLIMIT :            WinMtfAssertHandler( "SetMiterLimit", 0 );          break;
+            case EMR_EXCLUDECLIPRECT :          WinMtfAssertHandler( "ExcludeClipRect", 0 );        break;
+            case EMR_REALIZEPALETTE :           WinMtfAssertHandler( "RealizePalette", 0 );         break;
+            case EMR_SELECTPALETTE :            WinMtfAssertHandler( "SelectPalette", 0 );          break;
+            case EMR_CREATEPALETTE :            WinMtfAssertHandler( "CreatePalette", 0 );          break;
+            case EMR_ALPHADIBBLEND :            WinMtfAssertHandler( "AlphaDibBlend", 0 );          break;
+            case EMR_SETTEXTJUSTIFICATION :     WinMtfAssertHandler( "SetTextJustification", 0 );   break;
+
+            case EMR_GDICOMMENT :
+            case EMR_HEADER :               // has already been read at ReadHeader()
+            break;
+#endif
         }
         pWMF->Seek( nNextPos );
     }
@@ -1470,7 +1396,7 @@ sal_Bool EnhWMFReader::ReadHeader()
         return sal_False;
 
     // bound size
-    Rectangle rclBounds;    // rectangle in logical units
+    Rectangle rclBounds;    // rectangle in logical units 1/100th mm
     *pWMF >> nLeft >> nTop >> nRight >> nBottom;
     rclBounds.Left() = nLeft;
     rclBounds.Top() = nTop;
@@ -1478,7 +1404,7 @@ sal_Bool EnhWMFReader::ReadHeader()
     rclBounds.Bottom() = nBottom;
 
     // picture frame size
-    Rectangle rclFrame;     // rectangle in device units 1/100th mm
+    Rectangle rclFrame;     // rectangle in device units
     *pWMF >> nLeft >> nTop >> nRight >> nBottom;
     rclFrame.Left() = nLeft;
     rclFrame.Top() = nTop;
