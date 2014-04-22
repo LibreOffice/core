@@ -59,7 +59,16 @@ private:
 
 public:
                     BigInt();
-                    BigInt( short nVal );
+
+    BigInt(short nValue)
+        : nVal(nValue)
+        , nLen(0)
+        , bIsNeg(false)
+        , bIsBig(false)
+        , bIsSet(true)
+    {
+    }
+
     BigInt(long nValue)
         : nVal(nValue)
         , nLen(0)
@@ -140,13 +149,6 @@ inline BigInt::BigInt()
     bIsSet = false;
     bIsBig = false;
     nVal   = 0;
-}
-
-inline BigInt::BigInt( short nValue )
-{
-    bIsSet = true;
-    bIsBig = false;
-    nVal   = nValue;
 }
 
 inline BigInt::BigInt( sal_uInt16 nValue )
