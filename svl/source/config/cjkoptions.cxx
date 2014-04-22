@@ -199,11 +199,9 @@ void SvtCJKOptions_Impl::Load()
 
     if (!bCJKFont)
     {
-        bool bAutoEnableCJK = false;
-
         sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
         //system locale is CJK
-        bAutoEnableCJK = (nScriptType & SCRIPTTYPE_ASIAN);
+        bool bAutoEnableCJK = (nScriptType & SCRIPTTYPE_ASIAN);
 
         if (!bAutoEnableCJK)
         {
