@@ -146,10 +146,22 @@ public:
 
 SvxBoundArgs::SvxBoundArgs( TextRanger* pRanger, LongDqPtr pLong,
     const Range& rRange )
-    : pLongArr( pLong ), pTextRanger( pRanger ),
-    nTop( rRange.Min() ), nBottom( rRange.Max() ),
-    bInner( pRanger->IsInner() ), bMultiple( bInner || !pRanger->IsSimple() ),
-    bConcat( false ), bRotate( pRanger->IsVertical() )
+    : pLongArr(pLong)
+    , pTextRanger(pRanger)
+    , nMin(0)
+    , nMax(0)
+    , nTop(rRange.Min())
+    , nBottom(rRange.Max())
+    , nCut(0)
+    , nLast(0)
+    , nNext(0)
+    , nAct(0)
+    , nFirst(0)
+    , bClosed(false)
+    , bInner(pRanger->IsInner())
+    , bMultiple(bInner || !pRanger->IsSimple())
+    , bConcat(false)
+    , bRotate(pRanger->IsVertical())
 {
     if( bRotate )
     {
