@@ -165,6 +165,8 @@
 
 #define SID_SFX_START                5000
 //      SID_SFX_END                  8999
+#define SID_CHAOS_START              9000
+//      SID_CHAOS_END                9799
 #define SID_DOCKWIN_START            9800
 //      SID_DOCKWIN_END              9999
 

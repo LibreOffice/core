@@ -22,21 +22,8 @@
 
 #include <svl/solar.hrc>
 
-// Slot-ID's -----------------------------------------------------------------
-
-#ifndef SID_SFX_START
-// HACK() - SID's may not change its numerical value just like that,
-//          sfxsids.hrc may not be included!!! Solution: sfxsids.hrc
-//          include it on a lower level - for example svtools???
-#define SID_SFX_START                   5000
-#endif
 #define SID_TITLE                       (SID_SFX_START + 307)
 #define SID_DELETE                      (SID_SFX_START + 713)
-
-// Don't let SID_CHAOS_END grow. Internal docking windows use the range between
-// SID_CHAOS_END and SID_LIB_START!! Look into sfxsids.hrc for more information!
-#define SID_CHAOS_START                 9000
-#define SID_CHAOS_END                   9799
 
 #define SID_DISTRIBUTION                (SID_CHAOS_START + 26)
 #define SID_INSERT                      (SID_CHAOS_START + 90)
