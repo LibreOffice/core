@@ -264,7 +264,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     {
         PropertyValue *pProps = aProps.getArray();
         pProps->Name = "FileName";
-        (pProps++)->Value <<= *pOrigFileName;
+        pProps->Value <<= *pOrigFileName;
     }
 
     // export sub streams for package, else full stream into a file
