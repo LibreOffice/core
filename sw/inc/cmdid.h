@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/******************************************************************************
-Attention : "In this file C++ style // comments are not allowed as it will be
-included in c-context files, so c++ style stuff will cause problems.
-******************************************************************************/
-
 #ifndef INCLUDED_SW_INC_CMDID_H
 #define INCLUDED_SW_INC_CMDID_H
 
