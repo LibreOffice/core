@@ -809,7 +809,7 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
 
     if(bUsePolygon)
     {
-        // #i122149# check the comment above to know that this may lead to potentioal repaint
+        // #i122149# check the comment above to know that this may lead to potential repaint
         // problems. It may be solved (if needed) by scaling the polygon by one in X
         // and Y. Currently the workaround to only use it if really unavoidable will
         // solve most cases. When someone is really using polygon-based Regions he

@@ -127,7 +127,7 @@ namespace drawinglayer
 
                 if(rViewInformation.getDiscreteViewport().isEmpty())
                 {
-                    // not set, use logic size to travel over all potentioal grid points
+                    // not set, use logic size to travel over all potential grid points
                     aExtendedViewport = basegfx::B2DRange(0.0, 0.0, aScale.getX(), aScale.getY());
                 }
                 else
