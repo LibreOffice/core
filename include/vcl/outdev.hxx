@@ -745,11 +745,11 @@ protected:
     virtual void                CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags);
 
 
-public:
     /** @name Bitmap functions
      */
     ///@{
 
+public:
     /** @overload
         void DrawBitmap(
                 const Point& rDestPt,
@@ -846,19 +846,6 @@ public:
      */
     BitmapEx                    GetBitmapEx( const Point& rSrcPt, const Size& rSize ) const;
 
-    /** Retrieve downsampled and cropped bitmap
-
-        @attention This method ignores negative rDstSz values, thus
-        mirroring must happen outside this method (e.g. in DrawBitmap)
-     */
-    Bitmap                      GetDownsampledBitmap(
-                                    const Size& rDstSz,
-                                    const Point& rSrcPt,
-                                    const Size& rSrcSz,
-                                    const Bitmap& rBmp,
-                                    long nMaxBmpDPIX,
-                                    long nMaxBmpDPIY );
-
 
     /** Draw BitmapEx transformed
 
@@ -876,6 +863,13 @@ public:
 
 
 protected:
+
+    virtual void                DrawDeviceBitmap(
+                                    const Point& rDestPt, const Size& rDestSize,
+                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                    BitmapEx& rBitmapEx );
+
+    virtual void                ScaleBitmap ( Bitmap &rBmp, SalTwoRect &rPosAry );
 
     /** Transform and draw a bitmap directly
 
@@ -904,12 +898,6 @@ protected:
                                     basegfx::B2DRange &aVisibleRange,
                                     double &fMaximumArea);
 
-    virtual void                ScaleBitmap ( Bitmap &rBmp, SalTwoRect &rPosAry );
-
-    virtual void                DrawDeviceBitmap(
-                                    const Point& rDestPt, const Size& rDestSize,
-                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                    BitmapEx& rBitmapEx );
 private:
 
     SAL_DLLPRIVATE void         DrawAlphaBitmap(
@@ -946,12 +934,27 @@ private:
                                     const sal_Int32     nDstWidth,
                                     const long*         pMapX,
                                     const long*         pMapY );
+
+    /** Retrieve downsampled and cropped bitmap
+
+        @attention This method ignores negative rDstSz values, thus
+        mirroring must happen outside this method (e.g. in DrawBitmap)
+     */
+    Bitmap                      GetDownsampledBitmap(
+                                    const Size& rDstSz,
+                                    const Point& rSrcPt,
+                                    const Size& rSrcSz,
+                                    const Bitmap& rBmp,
+                                    long nMaxBmpDPIX,
+                                    long nMaxBmpDPIY );
+
     ///@}
 
-public:
     /** @name Curved shape functions
      */
     ///@{
+public:
+
     void                        DrawEllipse( const Rectangle& rRect );
 
     void                        DrawArc( const Rectangle& rRect,
