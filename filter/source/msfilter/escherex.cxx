@@ -4445,12 +4445,6 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                     aStream.Seek( STREAM_SEEK_TO_END );
                     p_EscherBlibEntry->mnSize = aStream.Tell();
                     pGraphicAry = (sal_uInt8*)aStream.GetData();
-
-                    if ( p_EscherBlibEntry->meBlibType == WMF )     // the fileheader is not used
-                    {
-                        p_EscherBlibEntry->mnSize -= 22;
-                        pGraphicAry += 22;
-                    }
                 }
             }
         }
