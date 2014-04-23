@@ -39,6 +39,7 @@ using namespace psp ;
 static const sal_Int32 nMaxTextColumn = 80;
 
 GraphicsStatus::GraphicsStatus() :
+        maEncoding(RTL_TEXTENCODING_DONTKNOW),
         mbArtItalic( false ),
         mbArtBold( false ),
         mnTextHeight( 0 ),
