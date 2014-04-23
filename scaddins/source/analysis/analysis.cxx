@@ -82,7 +82,7 @@ class AnalysisResourcePublisher : public Resource
 {
 public:
                     AnalysisResourcePublisher( const AnalysisResId& rId ) : Resource( rId ) {}
-    sal_Bool            IsAvailableRes( const ResId& rId ) const { return Resource::IsAvailableRes( rId ); }
+    bool            IsAvailableRes( const ResId& rId ) const { return Resource::IsAvailableRes( rId ); }
     void            FreeResource() { Resource::FreeResource(); }
 };
 
@@ -192,7 +192,7 @@ double AnalysisAddIn::FactDouble( sal_Int32 nNum ) throw( uno::RuntimeException,
         pFactDoubles[ 1 ] = fOdd;
         pFactDoubles[ 2 ] = fEven;
 
-        sal_Bool    bOdd = sal_True;
+        bool    bOdd = true;
 
         for( sal_uInt16 nCnt = 3 ; nCnt <= MAXFACTDOUBLE ; nCnt++ )
         {
@@ -457,7 +457,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( const uno::Reference< beans::XProp
 
     SortedIndividualInt32List   aSrtLst;
 
-    aSrtLst.InsertHolidayList( aAnyConv, xOptions, aHDay, nNullDate, sal_False );
+    aSrtLst.InsertHolidayList( aAnyConv, xOptions, aHDay, nNullDate, false );
 
     sal_Int32                   nActDate = nDate + nNullDate;
 
@@ -565,7 +565,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getNetworkdays( const uno::Reference< beans::X
 
     SortedIndividualInt32List   aSrtLst;
 
-    aSrtLst.InsertHolidayList( aAnyConv, xOpt, aHDay, nNullDate, sal_False );
+    aSrtLst.InsertHolidayList( aAnyConv, xOpt, aHDay, nNullDate, false );
 
     sal_Int32                   nActDate = nStartDate + nNullDate;
     sal_Int32                   nStopDate = nEndDate + nNullDate;
@@ -797,7 +797,7 @@ OUString SAL_CALL AnalysisAddIn::getBin2Oct( const uno::Reference< beans::XPrope
 {
     double fVal = ConvertToDec( aNum, 2, SCA_MAXPLACES );
     sal_Int32 nPlaces = 0;
-    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
     return ConvertFromDec( fVal, SCA_MIN8, SCA_MAX8, 8, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
@@ -811,7 +811,7 @@ OUString SAL_CALL AnalysisAddIn::getBin2Hex( const uno::Reference< beans::XPrope
 {
     double fVal = ConvertToDec( aNum, 2, SCA_MAXPLACES );
     sal_Int32 nPlaces = 0;
-    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
     return ConvertFromDec( fVal, SCA_MIN16, SCA_MAX16, 16, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
@@ -819,7 +819,7 @@ OUString SAL_CALL AnalysisAddIn::getOct2Bin( const uno::Reference< beans::XPrope
 {
     double fVal = ConvertToDec( aNum, 8, SCA_MAXPLACES );
     sal_Int32 nPlaces = 0;
-    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
     return ConvertFromDec( fVal, SCA_MIN2, SCA_MAX2, 2, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
@@ -833,28 +833,28 @@ OUString SAL_CALL AnalysisAddIn::getOct2Hex( const uno::Reference< beans::XPrope
 {
     double fVal = ConvertToDec( aNum, 8, SCA_MAXPLACES );
     sal_Int32 nPlaces = 0;
-    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
     return ConvertFromDec( fVal, SCA_MIN16, SCA_MAX16, 16, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
 OUString SAL_CALL AnalysisAddIn::getDec2Bin( const uno::Reference< beans::XPropertySet >& xOpt, sal_Int32 nNum, const uno::Any& rPlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     sal_Int32 nPlaces = 0;
-    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
     return ConvertFromDec( nNum, SCA_MIN2, SCA_MAX2, 2, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
 OUString SAL_CALL AnalysisAddIn::getDec2Oct( const uno::Reference< beans::XPropertySet >& xOpt, sal_Int32 nNum, const uno::Any& rPlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     sal_Int32 nPlaces = 0;
-    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
     return ConvertFromDec( nNum, SCA_MIN8, SCA_MAX8, 8, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
 OUString SAL_CALL AnalysisAddIn::getDec2Hex( const uno::Reference< beans::XPropertySet >& xOpt, double fNum, const uno::Any& rPlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     sal_Int32 nPlaces = 0;
-    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
     return ConvertFromDec( fNum, SCA_MIN16, SCA_MAX16, 16, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
@@ -862,7 +862,7 @@ OUString SAL_CALL AnalysisAddIn::getHex2Bin( const uno::Reference< beans::XPrope
 {
     double fVal = ConvertToDec( aNum, 16, SCA_MAXPLACES );
     sal_Int32 nPlaces = 0;
-    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
     return ConvertFromDec( fVal, SCA_MIN2, SCA_MAX2, 2, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
@@ -876,7 +876,7 @@ OUString SAL_CALL AnalysisAddIn::getHex2Oct( const uno::Reference< beans::XPrope
 {
     double fVal = ConvertToDec( aNum, 16, SCA_MAXPLACES );
     sal_Int32 nPlaces = 0;
-    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
     return ConvertFromDec( fVal, SCA_MIN8, SCA_MAX8, 8, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
@@ -888,7 +888,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getDelta( const uno::Reference< beans::XProper
 double SAL_CALL AnalysisAddIn::getErf( const uno::Reference< beans::XPropertySet >& xOpt, double fLL, const uno::Any& rUL ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     double fUL, fRet;
-    sal_Bool bContainsValue = aAnyConv.getDouble( fUL, xOpt, rUL );
+    bool bContainsValue = aAnyConv.getDouble( fUL, xOpt, rUL );
 
     fRet = bContainsValue ? (Erf( fUL ) - Erf( fLL )) : Erf( fLL );
     RETURN_FINITE( fRet );
@@ -1142,12 +1142,12 @@ OUString SAL_CALL AnalysisAddIn::getImcsch( const OUString& aNum ) throw( uno::R
 
 OUString SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const uno::Any& rSuff ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
-    sal_Bool    bi;
+    bool    bi;
 
     switch( rSuff.getValueTypeClass() )
     {
         case uno::TypeClass_VOID:
-            bi = sal_True;
+            bi = true;
             break;
         case uno::TypeClass_STRING:
             {

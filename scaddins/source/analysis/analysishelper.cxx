@@ -30,11 +30,11 @@
 
 using namespace                 ::com::sun::star;
 
-#define UNIQUE              sal_False   // function name does not exist in Calc
-#define DOUBLE              sal_True    // function name exists in Calc
+#define UNIQUE              false   // function name does not exist in Calc
+#define DOUBLE              true    // function name exists in Calc
 
-#define STDPAR              sal_False   // all parameters are described
-#define INTPAR              sal_True    // first parameter is internal
+#define STDPAR              false   // all parameters are described
+#define INTPAR              true    // first parameter is internal
 
 #define FUNCDATA( FUNCNAME, DBL, OPT, NUMOFPAR, CAT ) \
     { "get" #FUNCNAME, ANALYSIS_FUNCNAME_##FUNCNAME, ANALYSIS_##FUNCNAME, DBL, OPT, ANALYSIS_DEFFUNCNAME_##FUNCNAME, NUMOFPAR, CAT }
@@ -198,7 +198,7 @@ void DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt
 
     sal_Int32   nTempDays;
     sal_Int32   i = 0;
-    sal_Bool    bCalc;
+    bool        bCalc;
 
     do
     {
@@ -206,11 +206,11 @@ void DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt
         rYear = (sal_uInt16)((nTempDays / 365) - i);
         nTempDays -= ((sal_Int32) rYear -1) * 365;
         nTempDays -= (( rYear -1) / 4) - (( rYear -1) / 100) + ((rYear -1) / 400);
-        bCalc = sal_False;
+        bCalc = false;
         if ( nTempDays < 1 )
         {
             i++;
-            bCalc = sal_True;
+            bCalc = true;
         }
         else
         {
@@ -219,7 +219,7 @@ void DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt
                 if ( (nTempDays != 366) || !IsLeapYear( rYear ) )
                 {
                     i--;
-                    bCalc = sal_True;
+                    bCalc = true;
                 }
             }
         }
@@ -267,9 +267,9 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOpt ) throw
 
 
 sal_Int32 GetDiffDate360(
-                sal_uInt16 nDay1, sal_uInt16 nMonth1, sal_uInt16 nYear1, sal_Bool bLeapYear1,
+                sal_uInt16 nDay1, sal_uInt16 nMonth1, sal_uInt16 nYear1, bool bLeapYear1,
                 sal_uInt16 nDay2, sal_uInt16 nMonth2, sal_uInt16 nYear2,
-                sal_Bool bUSAMethod )
+                bool bUSAMethod )
 {
     if( nDay1 == 31 )
         nDay1--;
@@ -297,7 +297,7 @@ sal_Int32 GetDiffDate360(
 }
 
 
-sal_Int32 GetDiffDate360( sal_Int32 nNullDate, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod )
+sal_Int32 GetDiffDate360( sal_Int32 nNullDate, sal_Int32 nDate1, sal_Int32 nDate2, bool bUSAMethod )
 {
     nDate1 += nNullDate;
     nDate2 += nNullDate;
@@ -333,7 +333,7 @@ sal_Int32 GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 )
 sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
     sal_Int32* pOptDaysIn1stYear ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    sal_Bool    bNeg = nStartDate > nEndDate;
+    bool    bNeg = nStartDate > nEndDate;
 
     if( bNeg )
     {
@@ -357,7 +357,7 @@ sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEnd
             DaysToDate( nStartDate, nD1, nM1, nY1 );
             DaysToDate( nEndDate, nD2, nM2, nY2 );
 
-            sal_Bool        bLeap = IsLeapYear( nY1 );
+            bool            bLeap = IsLeapYear( nY1 );
             sal_Int32       nDays, nMonths;
 
             nMonths = nM2 - nM1;
@@ -665,7 +665,7 @@ double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim
     const sal_Unicode* p = aStr.getStr();
 
     sal_uInt16          nFirstDig = 0;
-    sal_Bool            bFirstDig = sal_True;
+    bool                bFirstDig = true;
     double              fBase = nBase;
 
     while ( *p )
@@ -685,7 +685,7 @@ double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim
         {
             if( bFirstDig )
             {
-                bFirstDig = sal_False;
+                bFirstDig = false;
                 nFirstDig = n;
             }
             fVal = fVal * fBase + double( n );
@@ -716,7 +716,7 @@ static inline sal_Char GetMaxChar( sal_uInt16 nBase )
 
 
 OUString ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase,
-    sal_Int32 nPlaces, sal_Int32 nMaxPlaces, sal_Bool bUsePlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+    sal_Int32 nPlaces, sal_Int32 nMaxPlaces, bool bUsePlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     fNum = ::rtl::math::approxFloor( fNum );
     fMin = ::rtl::math::approxFloor( fMin );
@@ -726,7 +726,7 @@ OUString ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase
         throw lang::IllegalArgumentException();
 
     sal_Int64 nNum = static_cast< sal_Int64 >( fNum );
-    sal_Bool        bNeg = nNum < 0;
+    bool      bNeg = nNum < 0;
     if( bNeg )
         nNum = sal_Int64( pow( double( nBase ), double( nMaxPlaces ) ) ) + nNum;
 
@@ -769,25 +769,25 @@ double Erfc( double x )
     return ::rtl::math::erfc(x);
 }
 
-inline sal_Bool IsNum( sal_Unicode c )
+inline bool IsNum( sal_Unicode c )
 {
     return c >= '0' && c <= '9';
 }
 
 
-inline sal_Bool IsComma( sal_Unicode c )
+inline bool IsComma( sal_Unicode c )
 {
     return c == '.' || c == ',';
 }
 
 
-inline sal_Bool IsExpStart( sal_Unicode c )
+inline bool IsExpStart( sal_Unicode c )
 {
     return c == 'e' || c == 'E';
 }
 
 
-inline sal_Bool IsImagUnit( sal_Unicode c )
+inline bool IsImagUnit( sal_Unicode c )
 {
     return c == 'i' || c == 'j';
 }
@@ -799,7 +799,7 @@ inline sal_uInt16 GetVal( sal_Unicode c )
 }
 
 
-sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
+bool ParseDouble( const sal_Unicode*& rp, double& rRet )
 {
     double              fInt = 0.0;
     double              fFrac = 0.0;
@@ -812,8 +812,8 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
 
     State           eS = S_Sign;
 
-    sal_Bool            bNegNum = sal_False;
-    sal_Bool            bNegExp = sal_False;
+    bool            bNegNum = false;
+    bool            bNegExp = false;
 
     const sal_Unicode*  p = rp;
     sal_Unicode         c;
@@ -832,7 +832,7 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
                 }
                 else if( c == '-' )
                 {
-                    bNegNum = sal_True;
+                    bNegNum = true;
                     eS = S_IntStart;
                 }
                 else if( c == '+' )
@@ -840,7 +840,7 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
                 else if( IsComma( c ) )
                     eS = S_Frac;
                 else
-                    return sal_False;
+                    return false;
                 break;
             case S_IntStart:
                 if( IsNum( c ) )
@@ -854,10 +854,10 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
                 else if( IsImagUnit( c ) )
                 {
                     rRet = 0.0;
-                    return sal_True;
+                    return true;
                 }
                 else
-                    return sal_False;
+                    return false;
                 break;
             case S_Int:
                 if( IsNum( c ) )
@@ -914,7 +914,7 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
                 }
                 else if( c == '-' )
                 {
-                    bNegExp = sal_True;
+                    bNegExp = true;
                     eS = S_Exp;
                 }
                 else if( c != '+' )
@@ -926,7 +926,7 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
                     nExp *= 10;
                     nExp += GetVal( c );
                     if( nExp > nMaxExp )
-                        return sal_False;
+                        return false;
                 }
                 else
                     eS = S_End;
@@ -948,7 +948,7 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
         nExp = -nExp;
 
     if( nLog10 + nExp > nMaxExp )
-        return sal_False;
+        return false;
 
     fInt = ::rtl::math::pow10Exp( fInt, nExp );
 
@@ -957,11 +957,11 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
 
     rRet = fInt;
 
-    return sal_True;
+    return true;
 }
 
 
-OUString GetString( double f, sal_Bool bLeadingSign, sal_uInt16 nMaxDig )
+OUString GetString( double f, bool bLeadingSign, sal_uInt16 nMaxDig )
 {
     const int       nBuff = 256;
     sal_Char        aBuff[ nBuff + 1 ];
@@ -1501,7 +1501,7 @@ void SortedIndividualInt32List::Insert( sal_Int32 nDay )
 }
 
 
-void SortedIndividualInt32List::Insert( sal_Int32 nDay, sal_Int32 nNullDate, sal_Bool bInsertOnWeekend )
+void SortedIndividualInt32List::Insert( sal_Int32 nDay, sal_Int32 nNullDate, bool bInsertOnWeekend )
 {
     if( !nDay )
         return;
@@ -1513,7 +1513,7 @@ void SortedIndividualInt32List::Insert( sal_Int32 nDay, sal_Int32 nNullDate, sal
 
 
 void SortedIndividualInt32List::Insert(
-        double fDay, sal_Int32 nNullDate, sal_Bool bInsertOnWeekend ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        double fDay, sal_Int32 nNullDate, bool bInsertOnWeekend ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( (fDay < -2147483648.0) || (fDay > 2147483649.0) )
         throw lang::IllegalArgumentException();
@@ -1521,12 +1521,12 @@ void SortedIndividualInt32List::Insert(
 }
 
 
-sal_Bool SortedIndividualInt32List::Find( sal_Int32 nVal ) const
+bool SortedIndividualInt32List::Find( sal_Int32 nVal ) const
 {
     sal_uInt32  nE = Count();
 
     if( !nE || nVal < Get( 0 ) || nVal > Get( nE - 1 ) )
-        return sal_False;
+        return false;
 
     // linear search
 
@@ -1535,11 +1535,11 @@ sal_Bool SortedIndividualInt32List::Find( sal_Int32 nVal ) const
         sal_Int32   nRef = Get( n );
 
         if( nRef == nVal )
-            return sal_True;
+            return true;
         else if( nRef > nVal )
-            return sal_False;
+            return false;
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -1547,7 +1547,7 @@ void SortedIndividualInt32List::InsertHolidayList(
         const ScaAnyConverter& rAnyConv,
         const uno::Any& rHolAny,
         sal_Int32 nNullDate,
-        sal_Bool bInsertOnWeekend ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        bool bInsertOnWeekend ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fDay;
     if( rAnyConv.getDouble( fDay, rHolAny ) )
@@ -1560,7 +1560,7 @@ void SortedIndividualInt32List::InsertHolidayList(
         const uno::Reference< beans::XPropertySet >& xOptions,
         const uno::Any& rHolAny,
         sal_Int32 nNullDate,
-        sal_Bool bInsertOnWeekend ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        bool bInsertOnWeekend ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     rAnyConv.init( xOptions );
     if( rHolAny.getValueTypeClass() == uno::TypeClass_SEQUENCE )
@@ -1617,7 +1617,7 @@ void ScaDoubleList::Append(
 void ScaDoubleList::Append(
         const ScaAnyConverter& rAnyConv,
         const uno::Any& rAny,
-        sal_Bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( rAny.getValueTypeClass() == uno::TypeClass_SEQUENCE )
         Append( rAnyConv, *static_cast< const uno::Sequence< uno::Sequence< uno::Any > >* >( rAny.getValue() ), bIgnoreEmpty );
@@ -1635,7 +1635,7 @@ void ScaDoubleList::Append(
 void ScaDoubleList::Append(
         const ScaAnyConverter& rAnyConv,
         const uno::Sequence< uno::Any >& rAnySeq,
-        sal_Bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     const uno::Any* pArray = rAnySeq.getConstArray();
     for( sal_Int32 nIndex = 0; nIndex < rAnySeq.getLength(); nIndex++ )
@@ -1646,7 +1646,7 @@ void ScaDoubleList::Append(
 void ScaDoubleList::Append(
         const ScaAnyConverter& rAnyConv,
         const uno::Sequence< uno::Sequence< uno::Any > >& rAnySeq,
-        sal_Bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     const uno::Sequence< uno::Any >* pArray = rAnySeq.getConstArray();
     for( sal_Int32 nIndex = 0; nIndex < rAnySeq.getLength(); nIndex++ )
@@ -1657,21 +1657,21 @@ void ScaDoubleList::Append(
         ScaAnyConverter& rAnyConv,
         const uno::Reference< beans::XPropertySet >& xOpt,
         const uno::Sequence< uno::Any >& rAnySeq,
-        sal_Bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     rAnyConv.init( xOpt );
     Append( rAnyConv, rAnySeq, bIgnoreEmpty );
 }
 
 
-sal_Bool ScaDoubleList::CheckInsert( double ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
+bool ScaDoubleList::CheckInsert( double ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    return sal_True;
+    return true;
 }
 
 
 
-sal_Bool ScaDoubleListGT0::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
+bool ScaDoubleListGT0::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( fValue < 0.0 )
         throw lang::IllegalArgumentException();
@@ -1680,11 +1680,11 @@ sal_Bool ScaDoubleListGT0::CheckInsert( double fValue ) const throw( uno::Runtim
 
 
 
-sal_Bool ScaDoubleListGE0::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
+bool ScaDoubleListGE0::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( fValue < 0.0 )
         throw lang::IllegalArgumentException();
-    return sal_True;
+    return true;
 }
 
 
@@ -1696,12 +1696,12 @@ Complex::Complex( const OUString& rStr ) throw( uno::RuntimeException, lang::Ill
 }
 
 
-inline sal_Bool Complex::IsImagUnit( sal_Unicode c )
+inline bool Complex::IsImagUnit( sal_Unicode c )
 {
     return c == 'i' || c == 'j';
 }
 
-sal_Bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
+bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
 {
     rCompl.c = '\0';    // do not force a symbol, if only real part present
 
@@ -1712,13 +1712,13 @@ sal_Bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
         rCompl.r = 0.0;
         rCompl.i = 1.0;
         rCompl.c = *pStr;
-        return sal_True;
+        return true;
     }
 
     double                  f;
 
     if( !ParseDouble( pStr, f ) )
-        return sal_False;
+        return false;
 
     switch( *pStr )
     {
@@ -1733,7 +1733,7 @@ sal_Bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
                 {
                     rCompl.r = f;
                     rCompl.i = ( *pStr == '+' )? 1.0 : -1.0;
-                    return sal_True;
+                    return true;
                 }
             }
             else if( ParseDouble( pStr, f ) && IsImagUnit( *pStr ) )
@@ -1744,7 +1744,7 @@ sal_Bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
                 {
                     rCompl.r = r;
                     rCompl.i = f;
-                    return sal_True;
+                    return true;
                 }
             }
             }
@@ -1757,16 +1757,16 @@ sal_Bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
             {
                 rCompl.i = f;
                 rCompl.r = 0.0;
-                return sal_True;
+                return true;
             }
             break;
         case 0:     // only real-part
             rCompl.r = f;
             rCompl.i = 0.0;
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -1922,7 +1922,7 @@ void Complex::Ln( void ) throw( uno::RuntimeException, lang::IllegalArgumentExce
         throw lang::IllegalArgumentException();
 
     double      fAbs = Abs();
-    sal_Bool    bNegi = i < 0.0;
+    bool        bNegi = i < 0.0;
 
     i = acos( r / fAbs );
 
@@ -2115,8 +2115,8 @@ void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r, C
     sal_Int32   n1, n2;
     sal_Int32   nE1 = r.getLength();
     sal_Int32   nE2;
-    sal_Bool    bEmpty0 = eAH == AH_EmpyAs0;
-    sal_Bool    bErrOnEmpty = eAH == AH_EmptyAsErr;
+    bool        bEmpty0 = eAH == AH_EmpyAs0;
+    bool        bErrOnEmpty = eAH == AH_EmptyAsErr;
 
     for( n1 = 0 ; n1 < nE1 ; n1++ )
     {
@@ -2141,8 +2141,8 @@ void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r, C
 void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListAppendHandl eAH ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32       nEle = aMultPars.getLength();
-    sal_Bool        bEmpty0 = eAH == AH_EmpyAs0;
-    sal_Bool        bErrOnEmpty = eAH == AH_EmptyAsErr;
+    bool            bEmpty0 = eAH == AH_EmpyAs0;
+    bool            bErrOnEmpty = eAH == AH_EmptyAsErr;
 
     for( sal_Int32 i = 0 ; i < nEle ; i++ )
     {
@@ -2186,7 +2186,7 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListA
 }
 
 
-ConvertData::ConvertData( const sal_Char p[], double fC, ConvertDataClass e, sal_Bool bPrefSupport ) : aName( p, strlen( p ), RTL_TEXTENCODING_MS_1252 )
+ConvertData::ConvertData( const sal_Char p[], double fC, ConvertDataClass e, bool bPrefSupport ) : aName( p, strlen( p ), RTL_TEXTENCODING_MS_1252 )
 {
     fConst = fC;
     eClass = e;
@@ -2307,8 +2307,8 @@ double ConvertData::Convert(
     if( Class() != r.Class() )
         throw lang::IllegalArgumentException();
 
-    sal_Bool bBinFromLev = ( nLevFrom > 0 && ( nLevFrom % 10 ) == 0 );
-    sal_Bool bBinToLev   = ( nLevTo > 0 && ( nLevTo % 10 ) == 0 );
+    bool bBinFromLev = ( nLevFrom > 0 && ( nLevFrom % 10 ) == 0 );
+    bool bBinToLev   = ( nLevTo > 0 && ( nLevTo % 10 ) == 0 );
 
     if ( Class() == CDC_Information && ( bBinFromLev || bBinToLev ) )
     {
@@ -2388,9 +2388,9 @@ double ConvertDataLinear::ConvertFromBase( double f, sal_Int16 n ) const
 ConvertDataList::ConvertDataList( void )
 {
 #define NEWD(str,unit,cl)   maVector.push_back(new ConvertData(str,unit,cl))
-#define NEWDP(str,unit,cl)  maVector.push_back(new ConvertData(str,unit,cl,sal_True))
+#define NEWDP(str,unit,cl)  maVector.push_back(new ConvertData(str,unit,cl,true))
 #define NEWL(str,unit,offs,cl)  maVector.push_back(new ConvertDataLinear(str,unit,offs,cl))
-#define NEWLP(str,unit,offs,cl) maVector.push_back(new ConvertDataLinear(str,unit,offs,cl,sal_True))
+#define NEWLP(str,unit,offs,cl) maVector.push_back(new ConvertDataLinear(str,unit,offs,cl,true))
 
     // *** are extra and not standard Excel Analysis Addin!
 
@@ -2576,8 +2576,8 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
 {
     ConvertData*    pFrom = NULL;
     ConvertData*    pTo = NULL;
-    sal_Bool        bSearchFrom = sal_True;
-    sal_Bool        bSearchTo = sal_True;
+    bool            bSearchFrom = true;
+    bool            bSearchTo = true;
     sal_Int16       nLevelFrom = 0;
     sal_Int16       nLevelTo = 0;
 
@@ -2598,7 +2598,7 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
                 else
                 {   // ... but exact match rulz most
                     pFrom = p;
-                    bSearchFrom = sal_False;
+                    bSearchFrom = false;
                     nLevelFrom = n;
                 }
             }
@@ -2617,7 +2617,7 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
                 else
                 {   // ... but exact match rulz most
                     pTo = p;
-                    bSearchTo = sal_False;
+                    bSearchTo = false;
                     nLevelTo = n;
                 }
             }
@@ -2639,10 +2639,10 @@ ScaDate::ScaDate() :
     nDay( 1 ),
     nMonth( 1 ),
     nYear( 1900 ),
-    bLastDayMode( sal_True ),
-    bLastDay( sal_False ),
-    b30Days( sal_False ),
-    bUSMode( sal_False )
+    bLastDayMode( true ),
+    bLastDay( false ),
+    b30Days( false ),
+    bUSMode( false )
 {
 }
 
@@ -2793,7 +2793,7 @@ sal_Int32 ScaDate::getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( la
         // move aFrom to 1st day of next month
         nDiff = aFrom.getDaysInMonth() - aFrom.nDay + 1;
         aFrom.nOrigDay = aFrom.nDay = 1;
-        aFrom.bLastDay = sal_False;
+        aFrom.bLastDay = false;
         aFrom.addMonths( 1 );
 
         if( aFrom.nYear < aTo.nYear )
@@ -2816,7 +2816,7 @@ sal_Int32 ScaDate::getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( la
     return nDiff > 0 ? nDiff : 0;
 }
 
-sal_Bool ScaDate::operator<( const ScaDate& rCmp ) const
+bool ScaDate::operator<( const ScaDate& rCmp ) const
 {
     if( nYear != rCmp.nYear )
         return nYear < rCmp.nYear;
@@ -2845,7 +2845,7 @@ ScaAnyConverter::~ScaAnyConverter()
 void ScaAnyConverter::init( const uno::Reference< beans::XPropertySet >& xPropSet ) throw( uno::RuntimeException )
 {
     // try to get default number format
-    bHasValidFormat = sal_False;
+    bHasValidFormat = false;
     if( xFormatter.is() )
     {
         // get XFormatsSupplier from outer XPropertySet
@@ -2860,7 +2860,7 @@ void ScaAnyConverter::init( const uno::Reference< beans::XPropertySet >& xPropSe
                 lang::Locale eLocale;
                 nDefaultFormat = xFormatTypes->getStandardIndex( eLocale );
                 xFormatter->attachNumberFormatsSupplier( xFormatsSupp );
-                bHasValidFormat = sal_True;
+                bHasValidFormat = true;
             }
         }
     }
@@ -2891,16 +2891,16 @@ double ScaAnyConverter::convertToDouble( const OUString& rString ) const throw( 
     return fValue;
 }
 
-sal_Bool ScaAnyConverter::getDouble(
+bool ScaAnyConverter::getDouble(
         double& rfResult,
         const uno::Any& rAny ) const throw( lang::IllegalArgumentException )
 {
     rfResult = 0.0;
-    sal_Bool bContainsVal = sal_True;
+    bool bContainsVal = true;
     switch( rAny.getValueTypeClass() )
     {
         case uno::TypeClass_VOID:
-            bContainsVal = sal_False;
+            bContainsVal = false;
         break;
         case uno::TypeClass_DOUBLE:
             rAny >>= rfResult;
@@ -2911,7 +2911,7 @@ sal_Bool ScaAnyConverter::getDouble(
             if( !pString->isEmpty() )
                 rfResult = convertToDouble( *pString );
             else
-                bContainsVal = sal_False;
+                bContainsVal = false;
         }
         break;
         default:
@@ -2920,7 +2920,7 @@ sal_Bool ScaAnyConverter::getDouble(
     return bContainsVal;
 }
 
-sal_Bool ScaAnyConverter::getDouble(
+bool ScaAnyConverter::getDouble(
         double& rfResult,
         const uno::Reference< beans::XPropertySet >& xPropSet,
         const uno::Any& rAny ) throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -2940,13 +2940,13 @@ double ScaAnyConverter::getDouble(
     return fResult;
 }
 
-sal_Bool ScaAnyConverter::getInt32(
+bool ScaAnyConverter::getInt32(
         sal_Int32& rnResult,
         const uno::Reference< beans::XPropertySet >& xPropSet,
         const uno::Any& rAny ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fResult;
-    sal_Bool bContainsVal = getDouble( fResult, xPropSet, rAny );
+    bool bContainsVal = getDouble( fResult, xPropSet, rAny );
     if( (fResult <= -2147483649.0) || (fResult >= 2147483648.0) )
         throw lang::IllegalArgumentException();
 

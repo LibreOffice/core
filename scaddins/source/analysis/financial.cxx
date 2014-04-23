@@ -348,7 +348,7 @@ double SAL_CALL AnalysisAddIn::getTbilleq( const css::uno::Reference< css::beans
 {
     nMat++;
 
-    sal_Int32   nDiff = GetDiffDate360( xOpt, nSettle, nMat, sal_True );
+    sal_Int32   nDiff = GetDiffDate360( xOpt, nSettle, nMat, true );
 
     if( fDisc <= 0.0 || nSettle >= nMat || nDiff > 360 )
         throw css::lang::IllegalArgumentException();
@@ -380,7 +380,7 @@ double SAL_CALL AnalysisAddIn::getTbillprice( const css::uno::Reference< css::be
 double SAL_CALL AnalysisAddIn::getTbillyield( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice )
     throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception )
 {
-    sal_Int32   nDiff = GetDiffDate360( xOpt, nSettle, nMat, sal_True );
+    sal_Int32   nDiff = GetDiffDate360( xOpt, nSettle, nMat, true );
     nDiff++;
 
     if( fPrice <= 0.0 || nSettle >= nMat || nDiff > 360 )

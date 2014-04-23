@@ -174,7 +174,7 @@ class ScaResPublisher : public Resource
 public:
     inline                      ScaResPublisher( const ScaResId& rResId ) : Resource( rResId ) {}
 
-    inline sal_Bool             IsAvailableRes( const ResId& rResId ) const
+    inline bool             IsAvailableRes( const ResId& rResId ) const
                                     { return Resource::IsAvailableRes( rResId ); }
     inline void                 FreeResource()
                                     { Resource::FreeResource(); }
@@ -207,8 +207,8 @@ struct ScaFuncDataBase
     sal_uInt16                  nCompListID;        // resource ID to list of valid names
     sal_uInt16                  nParamCount;        // number of named / described parameters
     ScaCategory                 eCat;               // function category
-    sal_Bool                    bDouble;            // name already exist in Calc
-    sal_Bool                    bWithOpt;           // first parameter is internal
+    bool                    bDouble;            // name already exist in Calc
+    bool                    bWithOpt;           // first parameter is internal
 };
 
 class ScaFuncData
@@ -221,8 +221,8 @@ private:
     sal_uInt16                  nParamCount;        // num of parameters
     ScaStringList               aCompList;          // list of all valid names
     ScaCategory                 eCat;               // function category
-    sal_Bool                    bDouble;            // name already exist in Calc
-    sal_Bool                    bWithOpt;           // first parameter is internal
+    bool                    bDouble;            // name already exist in Calc
+    bool                    bWithOpt;           // first parameter is internal
 
 public:
                                 ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rRscMgr );
@@ -231,11 +231,11 @@ public:
     inline sal_uInt16           GetUINameID() const     { return nUINameID; }
     inline sal_uInt16           GetDescrID() const      { return nDescrID; }
     inline ScaCategory          GetCategory() const     { return eCat; }
-    inline sal_Bool             IsDouble() const        { return bDouble; }
-    inline sal_Bool             HasIntParam() const     { return bWithOpt; }
+    inline bool             IsDouble() const        { return bDouble; }
+    inline bool             HasIntParam() const     { return bWithOpt; }
 
     sal_uInt16                  GetStrIndex( sal_uInt16 nParam ) const;
-    inline sal_Bool             Is( const OUString& rCompare ) const
+    inline bool             Is( const OUString& rCompare ) const
                                                     { return aIntName == rCompare; }
 
     inline const ScaStringList& GetCompNameList() const { return aCompList; }

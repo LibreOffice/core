@@ -48,7 +48,7 @@ class ScaAnyConverter;
 #define EOE         ( ( const sal_Char* ) 2 )
 
 
-inline sal_Bool     IsLeapYear( sal_uInt16 nYear );
+inline bool     IsLeapYear( sal_uInt16 nYear );
 
 #ifdef DISABLE_DYNLOADING
 
@@ -71,11 +71,11 @@ sal_Int32           DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 n
 void                DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear ) throw( css::lang::IllegalArgumentException );
 sal_Int32           GetNullDate( const css::uno::Reference< css::beans::XPropertySet >& xOptions ) throw( css::uno::RuntimeException );
 sal_Int32           GetDiffDate360(
-                        sal_uInt16 nDay1, sal_uInt16 nMonth1, sal_uInt16 nYear1, sal_Bool bLeapYear1,
+                        sal_uInt16 nDay1, sal_uInt16 nMonth1, sal_uInt16 nYear1, bool bLeapYear1,
                         sal_uInt16 nDay2, sal_uInt16 nMonth2, sal_uInt16 nYear2,
-                        sal_Bool bUSAMethod );
-inline sal_Int32    GetDiffDate360( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod );
-sal_Int32           GetDiffDate360( sal_Int32 nNullDate, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod );
+                        bool bUSAMethod );
+inline sal_Int32    GetDiffDate360( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, bool bUSAMethod );
+sal_Int32           GetDiffDate360( sal_Int32 nNullDate, sal_Int32 nDate1, sal_Int32 nDate2, bool bUSAMethod );
 
 sal_Int32           GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 );
 inline sal_Int16    GetDayOfWeek( sal_Int32 nDate );
@@ -95,11 +95,11 @@ double              GetGcd( double f1, double f2 );
 double              ConvertToDec( const OUString& rFromNum, sal_uInt16 nBaseFrom, sal_uInt16 nCharLim ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 OUString              ConvertFromDec(
                         double fNum, double fMin, double fMax, sal_uInt16 nBase,
-                        sal_Int32 nPlaces, sal_Int32 nMaxPlaces, sal_Bool bUsePlaces ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+                        sal_Int32 nPlaces, sal_Int32 nMaxPlaces, bool bUsePlaces ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              Erf( double fX );
 double              Erfc( double fX );
-sal_Bool            ParseDouble( const sal_Unicode*& rpDoubleAsString, double& rReturn );
-OUString              GetString( double fNumber, sal_Bool bLeadingSign = sal_False, sal_uInt16 nMaxNumOfDigits = 15 );
+bool                ParseDouble( const sal_Unicode*& rpDoubleAsString, double& rReturn );
+OUString            GetString( double fNumber, bool bLeadingSign = false, sal_uInt16 nMaxNumOfDigits = 15 );
 inline double       Exp10( sal_Int16 nPower );      // 10 ^ nPower
 
 double              GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
@@ -160,8 +160,8 @@ struct FuncDataBase
     const sal_Char*         pIntName;
     sal_uInt16              nUINameID;          // resource ID to UI name
     sal_uInt16              nDescrID;           // resource ID to description, parameter names and ~ description
-    sal_Bool                bDouble;            // name already exist in Calc
-    sal_Bool                bWithOpt;           // first parameter is internal
+    bool                bDouble;            // name already exist in Calc
+    bool                bWithOpt;           // first parameter is internal
     sal_uInt16              nCompListID;        // resource ID to list of valid names
     sal_uInt16              nNumOfParams;       // number of named / described parameters
     FDCategory              eCat;               // function category
@@ -174,8 +174,8 @@ private:
     OUString         aIntName;
     sal_uInt16              nUINameID;
     sal_uInt16              nDescrID;           // leads also to parameter descriptions!
-    sal_Bool                bDouble;            // flag for names that already exist in Calc
-    sal_Bool                bWithOpt;           // has internal parameter on first position
+    bool                bDouble;            // flag for names that already exist in Calc
+    bool                bWithOpt;           // has internal parameter on first position
 
     sal_uInt16              nParam;             // num of parameters
     sal_uInt16              nCompID;
@@ -187,11 +187,11 @@ public:
 
     inline sal_uInt16       GetUINameID( void ) const;
     inline sal_uInt16       GetDescrID( void ) const;
-    inline sal_Bool         IsDouble( void ) const;
-    inline sal_Bool         HasIntParam( void ) const;
+    inline bool         IsDouble( void ) const;
+    inline bool         HasIntParam( void ) const;
 
     sal_uInt16              GetStrIndex( sal_uInt16 nParamNum ) const;
-    inline sal_Bool         Is( const OUString& rCompareTo ) const;
+    inline bool         Is( const OUString& rCompareTo ) const;
 
     inline const std::vector<OUString> &
                             GetCompNameList( void ) const;
@@ -249,17 +249,17 @@ private:
     std::vector<sal_Int32>      maVector;
 protected:
     void                        Insert( sal_Int32 nDay );
-    void                        Insert( sal_Int32 nDay, sal_Int32 nNullDate, sal_Bool bInsertOnWeekend );
-    void                        Insert( double fDay, sal_Int32 nNullDate, sal_Bool bInsertOnWeekend )
+    void                        Insert( sal_Int32 nDay, sal_Int32 nNullDate, bool bInsertOnWeekend );
+    void                        Insert( double fDay, sal_Int32 nNullDate, bool bInsertOnWeekend )
                                     throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
-                                    @param bInsertOnWeekend  insertion mode: sal_False = holidays on weekend are omitted */
+                                    @param bInsertOnWeekend  insertion mode: false = holidays on weekend are omitted */
     void                        InsertHolidayList(
                                     const ScaAnyConverter& rAnyConv,
                                     const css::uno::Any& rHolAny,
                                     sal_Int32 nNullDate,
-                                    sal_Bool bInsertOnWeekend ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+                                    bool bInsertOnWeekend ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
 public:
                                 SortedIndividualInt32List();
@@ -272,17 +272,17 @@ public:
     inline sal_Int32            Get( sal_uInt32 n ) const
                                     { return maVector[n]; }
 
-                                /// @return  sal_True if nVal (internal date representation) is contained
-    sal_Bool                    Find( sal_Int32 nVal ) const;
+                                /// @return  true if nVal (internal date representation) is contained
+    bool                        Find( sal_Int32 nVal ) const;
 
                                 /** @param rAnyConv  is an initialized or uninitialized ScaAnyConverter
-                                    @param bInsertOnWeekend  insertion mode: sal_False = holidays on weekend are omitted */
+                                    @param bInsertOnWeekend  insertion mode: false = holidays on weekend are omitted */
     void                        InsertHolidayList(
                                     ScaAnyConverter& rAnyConv,
                                     const css::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     const css::uno::Any& rHolAny,
                                     sal_Int32 nNullDate,
-                                    sal_Bool bInsertOnWeekend ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+                                    bool bInsertOnWeekend ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
 
 
@@ -297,25 +297,25 @@ protected:
                                     { if( CheckInsert( fValue ) ) ListAppend( fValue ); }
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
-                                    @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
+                                    @param bIgnoreEmpty  handling of empty Any's/strings: false = inserted as 0.0; true = omitted */
     void                        Append(
                                     const ScaAnyConverter& rAnyConv,
                                     const css::uno::Any& rAny,
-                                    sal_Bool bIgnoreEmpty ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+                                    bool bIgnoreEmpty ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
-                                    @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
+                                    @param bIgnoreEmpty  handling of empty Any's/strings: false = inserted as 0.0; true = omitted */
     void                        Append(
                                     const ScaAnyConverter& rAnyConv,
                                     const css::uno::Sequence< css::uno::Any >& rAnySeq,
-                                    sal_Bool bIgnoreEmpty ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+                                    bool bIgnoreEmpty ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
-                                    @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
+                                    @param bIgnoreEmpty  handling of empty Any's/strings: false = inserted as 0.0; true = omitted */
     void                        Append(
                                     const ScaAnyConverter& rAnyConv,
                                     const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& rAnySeq,
-                                    sal_Bool bIgnoreEmpty ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+                                    bool bIgnoreEmpty ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
 public:
     virtual                     ~ScaDoubleList() {}
@@ -331,14 +331,14 @@ public:
                                     throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
                                 /** @param rAnyConv  is an initialized or uninitialized ScaAnyConverter
-                                    @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
+                                    @param bIgnoreEmpty  handling of empty Any's/strings: false = inserted as 0.0; true = omitted */
     void                        Append(
                                     ScaAnyConverter& rAnyConv,
                                     const css::uno::Reference< css::beans::XPropertySet >& xOpt,
                                     const css::uno::Sequence< css::uno::Any >& rAnySeq,
-                                    sal_Bool bIgnoreEmpty = sal_True ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+                                    bool bIgnoreEmpty = true ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual sal_Bool            CheckInsert( double fValue ) const
+    virtual bool                CheckInsert( double fValue ) const
                                     throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
 
@@ -347,7 +347,7 @@ public:
 class ScaDoubleListGT0 : public ScaDoubleList
 {
 public:
-    virtual sal_Bool            CheckInsert( double fValue ) const
+    virtual bool                CheckInsert( double fValue ) const
                                     throw( css::uno::RuntimeException, css::lang::IllegalArgumentException ) SAL_OVERRIDE;
 };
 
@@ -356,7 +356,7 @@ public:
 class ScaDoubleListGE0 : public ScaDoubleList
 {
 public:
-    virtual sal_Bool            CheckInsert( double fValue ) const
+    virtual bool                CheckInsert( double fValue ) const
                                     throw( css::uno::RuntimeException, css::lang::IllegalArgumentException ) SAL_OVERRIDE;
 };
 
@@ -371,9 +371,9 @@ public:
     inline                  Complex( double fReal, double fImag = 0.0, sal_Unicode cC = '\0' );
                             Complex( const OUString& rComplexAsString ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    inline static sal_Bool  IsImagUnit( sal_Unicode c );
-    static sal_Bool         ParseString( const OUString& rComplexAsString, Complex& rReturn );
-    OUString                  GetString() const throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    inline static bool      IsImagUnit( sal_Unicode c );
+    static bool             ParseString( const OUString& rComplexAsString, Complex& rReturn );
+    OUString                GetString() const throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
     inline double           Real( void ) const;
     inline double           Imag( void ) const;
@@ -456,13 +456,13 @@ protected:
     double                  fConst;
     OUString                  aName;
     ConvertDataClass        eClass;
-    sal_Bool                bPrefixSupport;
+    bool                bPrefixSupport;
 public:
                             ConvertData(
                                 const sal_Char      pUnitName[],
                                 double              fConvertConstant,
                                 ConvertDataClass    eClass,
-                                sal_Bool            bPrefSupport = sal_False );
+                                bool                bPrefSupport = false );
 
     virtual                 ~ConvertData();
 
@@ -481,7 +481,7 @@ public:
     virtual double          ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const;
 
     inline ConvertDataClass Class( void ) const;
-    inline sal_Bool         IsPrefixSupport( void ) const;
+    inline bool         IsPrefixSupport( void ) const;
 };
 
 
@@ -495,7 +495,7 @@ public:
                                 double              fConvertConstant,
                                 double              fConvertOffset,
                                 ConvertDataClass    eClass,
-                                sal_Bool            bPrefSupport = sal_False );
+                                bool            bPrefSupport = false );
 
     virtual                 ~ConvertDataLinear();
 
@@ -520,13 +520,13 @@ public:
 };
 
 
-inline sal_Bool IsLeapYear( sal_uInt16 n )
+inline bool IsLeapYear( sal_uInt16 n )
 {
     return ( (( ( n % 4 ) == 0 ) && ( ( n % 100 ) != 0)) || ( ( n % 400 ) == 0 ) );
 }
 
 
-inline sal_Int32 GetDiffDate360( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod )
+inline sal_Int32 GetDiffDate360( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, bool bUSAMethod )
 {
     return GetDiffDate360( GetNullDate( xOpt ), nDate1, nDate2, bUSAMethod );
 }
@@ -565,19 +565,19 @@ inline sal_uInt16 FuncData::GetDescrID( void ) const
 }
 
 
-inline sal_Bool FuncData::IsDouble( void ) const
+inline bool FuncData::IsDouble( void ) const
 {
     return bDouble;
 }
 
 
-inline sal_Bool FuncData::HasIntParam( void ) const
+inline bool FuncData::HasIntParam( void ) const
 {
     return bWithOpt;
 }
 
 
-inline sal_Bool FuncData::Is( const OUString& r ) const
+inline bool FuncData::Is( const OUString& r ) const
 {
     return aIntName == r;
 }
@@ -689,13 +689,13 @@ inline ConvertDataClass ConvertData::Class( void ) const
     return eClass;
 }
 
-inline sal_Bool ConvertData::IsPrefixSupport( void ) const
+inline bool ConvertData::IsPrefixSupport( void ) const
 {
     return bPrefixSupport;
 }
 
 inline ConvertDataLinear::ConvertDataLinear( const sal_Char* p, double fC, double fO, ConvertDataClass e,
-        sal_Bool bPrefSupport ) :
+        bool bPrefSupport ) :
     ConvertData( p, fC, e, bPrefSupport ),
     fOffs( fO )
 {
@@ -712,10 +712,10 @@ private:
     sal_uInt16                  nDay;               /// is the calculated day depending on the current month/year.
     sal_uInt16                  nMonth;             /// is the current month (one-based).
     sal_uInt16                  nYear;              /// is the current year.
-    sal_Bool                    bLastDayMode : 1;   /// if sal_True, recalculate nDay after every calculation.
-    sal_Bool                    bLastDay : 1;       /// is sal_True, if original date was the last day in month.
-    sal_Bool                    b30Days : 1;        /// is sal_True, if every month has 30 days in calculations.
-    sal_Bool                    bUSMode : 1;        /// is sal_True, if the US method of 30-day-calculations is used.
+    bool                        bLastDayMode : 1;   /// if true, recalculate nDay after every calculation.
+    bool                        bLastDay : 1;       /// is true, if original date was the last day in month.
+    bool                        b30Days : 1;        /// is true, if every month has 30 days in calculations.
+    bool                        bUSMode : 1;        /// is true, if the US method of 30-day-calculations is used.
 
                                 /// Calculates nDay from nOrigDay and current date.
     void                        setDay();
@@ -765,10 +765,10 @@ public:
                                 /// @return  the number of days between the two dates
     static sal_Int32            getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( css::lang::IllegalArgumentException );
 
-    sal_Bool                    operator<( const ScaDate& rCmp ) const;
-    inline sal_Bool             operator<=( const ScaDate& rCmp ) const { return !(rCmp < *this); }
-    inline sal_Bool             operator>( const ScaDate& rCmp ) const  { return rCmp < *this; }
-    inline sal_Bool             operator>=( const ScaDate& rCmp ) const { return !(*this < rCmp); }
+    bool                        operator<( const ScaDate& rCmp ) const;
+    inline bool                 operator<=( const ScaDate& rCmp ) const { return !(rCmp < *this); }
+    inline bool                 operator>( const ScaDate& rCmp ) const  { return rCmp < *this; }
+    inline bool                 operator>=( const ScaDate& rCmp ) const { return !(*this < rCmp); }
 };
 
 inline sal_uInt16 ScaDate::getDaysInMonth() const
@@ -800,7 +800,7 @@ class ScaAnyConverter
 private:
     css::uno::Reference< css::util::XNumberFormatter2 > xFormatter;
     sal_Int32                   nDefaultFormat;
-    sal_Bool                    bHasValidFormat;
+    bool                    bHasValidFormat;
 
                                 /** Converts a string to double using the number formatter. If the formatter is not
                                     valid, ::rtl::math::stringToDouble() with english separators will be used.
@@ -825,9 +825,9 @@ public:
                                     The Any can be empty or contain a double or string.
                                     @throws com::sun::star::lang::IllegalArgumentException
                                         on other Any types or on invalid strings.
-                                    @return  sal_True if the Any contains a double or a non-empty valid string,
-                                             sal_False if the Any is empty or the string is empty */
-    sal_Bool                    getDouble(
+                                    @return  true if the Any contains a double or a non-empty valid string,
+                                             false if the Any is empty or the string is empty */
+    bool                        getDouble(
                                     double& rfResult,
                                     const css::uno::Any& rAny ) const
                                 throw( css::lang::IllegalArgumentException );
@@ -836,9 +836,9 @@ public:
                                     The Any can be empty or contain a double or string.
                                     @throws com::sun::star::lang::IllegalArgumentException
                                         on other Any types or on invalid strings.
-                                    @return  sal_True if the Any contains a double or a non-empty valid string,
-                                             sal_False if the Any is empty or the string is empty */
-    sal_Bool                    getDouble(
+                                    @return  true if the Any contains a double or a non-empty valid string,
+                                             false if the Any is empty or the string is empty */
+    bool                        getDouble(
                                     double& rfResult,
                                     const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
                                     const css::uno::Any& rAny )
@@ -859,9 +859,9 @@ public:
                                     The Any can be empty or contain a double or string.
                                     @throws com::sun::star::lang::IllegalArgumentException
                                         on other Any types or on invalid values or strings.
-                                    @return  sal_True if the Any contains a double or a non-empty valid string,
-                                             sal_False if the Any is empty or the string is empty */
-    sal_Bool                    getInt32(
+                                    @return  true if the Any contains a double or a non-empty valid string,
+                                             false if the Any is empty or the string is empty */
+    bool                        getInt32(
                                     sal_Int32& rnResult,
                                     const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
                                     const css::uno::Any& rAny )

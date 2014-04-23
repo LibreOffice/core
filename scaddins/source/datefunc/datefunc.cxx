@@ -74,10 +74,10 @@ ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
 {
 }
 
-#define UNIQUE              sal_False   // function name does not exist in Calc
+#define UNIQUE              false   // function name does not exist in Calc
 
-#define STDPAR              sal_False   // all parameters are described
-#define INTPAR              sal_True    // first parameter is internal
+#define STDPAR              false   // all parameters are described
+#define INTPAR              true    // first parameter is internal
 
 #define FUNCDATA( FuncName, ParamCount, Category, Double, IntPar )  \
     { "get" #FuncName, DATE_FUNCNAME_##FuncName, DATE_FUNCDESC_##FuncName, DATE_DEFFUNCNAME_##FuncName, ParamCount, Category, Double, IntPar }
@@ -469,7 +469,7 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL ScaDateAddIn::getCompatibilityNam
 namespace {
 
 // auxiliary functions
-sal_Bool IsLeapYear( sal_uInt16 nYear )
+bool IsLeapYear( sal_uInt16 nYear )
 {
     return ((((nYear % 4) == 0) && ((nYear % 100) != 0)) || ((nYear % 400) == 0));
 }
@@ -529,7 +529,7 @@ void DaysToDate( sal_Int32 nDays,
 
     sal_Int32   nTempDays;
     sal_Int32   i = 0;
-    sal_Bool    bCalc;
+    bool    bCalc;
 
     do
     {
@@ -537,11 +537,11 @@ void DaysToDate( sal_Int32 nDays,
         rYear = (sal_uInt16)((nTempDays / 365) - i);
         nTempDays -= ((sal_Int32) rYear -1) * 365;
         nTempDays -= (( rYear -1) / 4) - (( rYear -1) / 100) + ((rYear -1) / 400);
-        bCalc = sal_False;
+        bCalc = false;
         if ( nTempDays < 1 )
         {
             i++;
-            bCalc = sal_True;
+            bCalc = true;
         }
         else
         {
@@ -550,7 +550,7 @@ void DaysToDate( sal_Int32 nDays,
                 if ( (nTempDays != 366) || !IsLeapYear( rYear ) )
                 {
                     i--;
-                    bCalc = sal_True;
+                    bCalc = true;
                 }
             }
         }
