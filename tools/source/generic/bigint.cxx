@@ -556,6 +556,7 @@ BigInt::BigInt( double nValue )
 }
 
 BigInt::BigInt( sal_uInt32 nValue )
+    : nVal(0)
 {
     bIsSet  = true;
     if ( nValue & 0x80000000UL )
