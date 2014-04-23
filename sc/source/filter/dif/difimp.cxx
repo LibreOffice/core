@@ -233,10 +233,14 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 }
 
 
-DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rDoc, rtl_TextEncoding e ) :
-    rIn( rNewIn )
+DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rDoc, rtl_TextEncoding e )
+    : fVal(0.0)
+    , nVector(0)
+    , nVal(0)
+    , nNumFormat(0)
+    , eCharSet(e)
+    , rIn(rNewIn)
 {
-    eCharSet = e;
     if ( rIn.GetStreamCharSet() != eCharSet )
     {
         OSL_FAIL( "CharSet passed overrides and modifies StreamCharSet" );
