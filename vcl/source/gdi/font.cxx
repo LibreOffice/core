@@ -74,6 +74,12 @@ Impl_Font::Impl_Font() :
     mbVertical          = false;
     mbTransparent       = true;
     mbConfigLookup      = false;
+
+    // #124686# the Size is defaulted to (0,0) when default constructed,
+    // this is not useful for a default font. Init it to a useful default
+    // so that the Font::Font() constructor which uses a 'naked' static
+    // Impl_Font instance (aStaticImplFont) creates a useful default font
+    maSize = Size(0, 16);
 }
 
 // -----------------------------------------------------------------------
