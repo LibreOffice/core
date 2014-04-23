@@ -269,6 +269,12 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
                 rSet.Put(SfxVisibilityItem(nWhich, SvtCJKOptions().IsAnyEnabled()));
             }
             break;
+            case SID_LANGUAGE_STATUS:
+            {
+                // Keeping this enabled for the time being
+                rSet.Put(SfxVisibilityItem(nWhich, true));
+            }
+            break;
 
             default:
             break;
