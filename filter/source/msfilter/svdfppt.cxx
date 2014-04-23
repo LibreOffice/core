@@ -4341,9 +4341,10 @@ PPTParaPropSet& PPTParaPropSet::operator=( PPTParaPropSet& rParaPropSet )
 }
 
 PPTCharPropSet::PPTCharPropSet( sal_uInt32 nParagraph ) :
-    mnParagraph     ( nParagraph ),
-    mpFieldItem     ( NULL ),
-    pCharSet        ( new ImplPPTCharPropSet )
+    : mnOriginalTextPos(0)
+    , mnParagraph(nParagraph)
+    , mpFieldItem(NULL)
+    , pCharSet(new ImplPPTCharPropSet)
 {
     mnHylinkOrigColor = 0;
     mbIsHyperlink = false;
