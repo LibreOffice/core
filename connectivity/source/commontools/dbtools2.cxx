@@ -917,8 +917,7 @@ sal_Int32 DBTypeConversion::convertUnicodeString( const OUString& _rSource, OStr
             _eEncoding,
             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |
-            RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 |
-            RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE )
+            RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 )
         )
     {
         SharedResources aResources;

@@ -1324,8 +1324,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getToken(
 #define OUSTRING_TO_OSTRING_CVTFLAGS    (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |\
                                          RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |\
                                          RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |\
-                                         RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 |\
-                                         RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE)
+                                         RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0)
 
 /* ----------------------------------------------------------------------- */
 

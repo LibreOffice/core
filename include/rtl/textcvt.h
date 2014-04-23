@@ -143,7 +143,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_resetUnicodeToTextContext( rtl_UnicodeToTextConv
 #define RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE           ((sal_uInt32)0x0800)
 #define RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE              ((sal_uInt32)0x1000)
 #define RTL_UNICODETOTEXT_FLAGS_PRIVATE_IGNORE              ((sal_uInt32)0x2000)
-#define RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE                 ((sal_uInt32)0x4000)
+#define RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE                 ((sal_uInt32)0x4000) ///< has no effect @deprecated
 #define RTL_UNICODETOTEXT_FLAGS_FLUSH                       ((sal_uInt32)0x8000)
 #define RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE 0x10000
     /* Write any global document signatures (for example, in UTF-8, a leading
