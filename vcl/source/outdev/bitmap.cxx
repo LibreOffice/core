@@ -20,13 +20,13 @@
 #include <tools/debug.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/window.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
+
 #include <bmpfast.hxx>
 #include <salbmp.hxx>
 #include <salgdi.hxx>
@@ -36,6 +36,7 @@
 #include <outdev.h>
 #include <window.h>
 #include <outdata.hxx>
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <boost/scoped_array.hpp>
@@ -1261,7 +1262,7 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
     int         nX, nY;
     sal_uInt8   nResAlpha;
 
-    SAL_WARN_IF( !mpAlphaVDev, "BlendBitmapWithAlpha(): call me only with valid alpha VirtualDevice!" );
+    SAL_WARN_IF( !mpAlphaVDev, "vcl.gdi", "BlendBitmapWithAlpha(): call me only with valid alpha VirtualDevice!" );
 
     bool bOldMapMode( mpAlphaVDev->IsMapModeEnabled() );
     mpAlphaVDev->EnableMapMode(false);
