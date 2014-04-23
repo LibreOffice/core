@@ -229,8 +229,16 @@ SwHTMLTxtCollOutputInfo::~SwHTMLTxtCollOutputInfo()
 SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                               sal_Bool bOutStyles,
                               LanguageType eDfltLang,
-                              sal_uInt16 nCSS1Script, sal_Bool bHardDrop ) :
-    pFmt( pF ), pRefFmt(0), pItemSet( 0 ), bScriptDependent( false )
+                              sal_uInt16 nCSS1Script, sal_Bool bHardDrop )
+    : pFmt(pF)
+    , pRefFmt(0)
+    , pItemSet(0)
+    , nLeftMargin(0)
+    , nRightMargin(0)
+    , nFirstLineIndent(0)
+    , nTopMargin(0)
+    , nBottomMargin(0)
+    , bScriptDependent( false )
 {
     sal_uInt16 nRefPoolId = 0;
     // Den Selektor des Formats holen
