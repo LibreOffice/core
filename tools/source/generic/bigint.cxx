@@ -472,6 +472,8 @@ bool BigInt::ABS_IsLess( const BigInt& rB ) const
 }
 
 BigInt::BigInt( const BigInt& rBigInt )
+    : nLen(0)
+    , bIsNeg(false)
 {
     if ( rBigInt.bIsBig )
         memcpy( (void*)this, (const void*)&rBigInt, sizeof( BigInt ) );
