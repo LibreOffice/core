@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _L10N_TRANSLITERATION_NUMTOCHAR_H_
-#define _L10N_TRANSLITERATION_NUMTOCHAR_H_
+
+#ifndef INCLUDED_I18NPOOL_SOURCE_TRANSLITERATION_DATA_NUMBERCHAR_H
+#define INCLUDED_I18NPOOL_SOURCE_TRANSLITERATION_DATA_NUMBERCHAR_H
 
 #include <sal/types.h>
 
@@ -77,12 +78,10 @@ const sal_Int16 Multiplier_Count    = 7;
 
 const sal_Int16 ExponentCount_CJK   = 6;
 
-
 const sal_Int16 ExponentCount_short_CJK     = 2;
-
 
 } } } }
 
-#endif // _L10N_TRANSLITERATION_NUMTOCHAR_H_
+#endif // INCLUDED_I18NPOOL_SOURCE_TRANSLITERATION_DATA_NUMBERCHAR_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

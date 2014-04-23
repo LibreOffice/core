@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _L10N_TRANSLITERATION_NUMTOCHAR_HXX_
-#define _L10N_TRANSLITERATION_NUMTOCHAR_HXX_
+
+#ifndef INCLUDED_I18NPOOL_INC_NUMTOCHAR_HXX
+#define INCLUDED_I18NPOOL_INC_NUMTOCHAR_HXX
 
 #include <transliteration_Numeric.hxx>
 
@@ -50,6 +51,6 @@ TRANSLITERATION_NUMTOCHAR(Halfwidth)
 
 } } } }
 
-#endif // _L10N_TRANSLITERATION_NUMTOCHAR_HXX_
+#endif // INCLUDED_I18NPOOL_INC_NUMTOCHAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

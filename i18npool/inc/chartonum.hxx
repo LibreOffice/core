@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _L10N_TRANSLITERATION_CHARTONUM_HXX_
-#define _L10N_TRANSLITERATION_CHARTONUM_HXX_
+
+#ifndef INCLUDED_I18NPOOL_INC_CHARTONUM_HXX
+#define INCLUDED_I18NPOOL_INC_CHARTONUM_HXX
 
 #include <transliteration_Numeric.hxx>
 
@@ -49,6 +50,6 @@ TRANSLITERATION_CHARTONUM(_th)
 
 } } } }
 
-#endif // _L10N_TRANSLITERATION_CHARTONUM_HXX_
+#endif // INCLUDED_I18NPOOL_INC_CHARTONUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
