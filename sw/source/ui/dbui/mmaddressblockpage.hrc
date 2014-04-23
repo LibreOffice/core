@@ -19,25 +19,11 @@
 #ifndef _MAILMERGEADDRESSBLOCKPAGE_HRC
 #define _MAILMERGEADDRESSBLOCKPAGE_HRC
 
-#define FI_ADDRESSLIST          1
-#define PB_ADDRESSLIST          2
-#define FI_SETTINGS             3
-#define WIN_SETTINGS            4
-#define PB_SETTINGS             5
-#define CB_ADDRESS              6
 #define FI_PREVIEW              7
 #define WIN_PREVIEW             8
-#define PB_ASSIGN               9
-#define FI_DOCINDEX             10
-#define IB_PREVSET              11
-#define IB_NEXTSET              12
+
 #define STR_DOCUMENT            13
-#define FI_HEADER               14
-#define FI_CURRENTADDRESS       15
 #define STR_CHANGEADDRESS       16
-#define FI_SECOND               17
-#define FI_THIRD                18
-#define FI_MATCH_FIELDS         19
 
 #define FL_SEPARATOR            29
 #define PB_OK                   30
@@ -49,12 +35,6 @@
 #define ST_SALUTATIONPREVIEW    72
 #define ST_SALUTATIONMATCHING   73
 #define ST_SALUTATIONELEMENT   74
-#define CB_HIDE_EMPTY_PARA     75
-#define FI_FIRST                76
-#define FL_FIRST                77
-#define FL_SECOND               78
-#define FL_THIRD                79
-#define FI_FOURTH               80
 
 #define SCR_1                   1
 #define ST_ADDRESSELEMENT       2

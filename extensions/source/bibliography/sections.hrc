@@ -59,16 +59,6 @@
 #define FL_2                35
 #define FL_3                36
 
-//Business Address
-#define FT_STREET       2
-#define FT_CITY         3
-#define FT_COUNTRY      5
-#define ED_STREET       8
-#define ED_CITY         9
-#define ED_STATE        10
-#define ED_COUNTRY      11
-#define ED_ZIP          12
-
 #define ST_TYPE_ARTICLE                 40
 #define ST_TYPE_BOOK                    41
 #define ST_TYPE_BOOKLET                 42

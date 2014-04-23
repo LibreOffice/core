@@ -29,7 +29,7 @@
 #define SID_CONDITIONALFORMATTING               ( SID_RPTUI_START +   4 )
 #define SID_PAGEDIALOG                          ( SID_RPTUI_START +   5 )
 #define SID_SETCONTROLDEFAULTS                  ( SID_RPTUI_START +   6 )
-#define SID_INSERTBREAK                         ( SID_RPTUI_START +   7 )
+// free
 #define SID_PAGEHEADER_WITHOUT_UNDO             ( SID_RPTUI_START +   8 )
 #define SID_PAGEFOOTER_WITHOUT_UNDO             ( SID_RPTUI_START +   9 )
 #define SID_REPORTHEADER_WITHOUT_UNDO           ( SID_RPTUI_START +  10 )
@@ -48,7 +48,6 @@
 #define SID_SPLIT_POSITION                      ( SID_RPTUI_START +  23 )
 #define SID_PROPERTYBROWSER_LAST_PAGE           ( SID_RPTUI_START +  24 )
 // free
-
 #define SID_DRAWTBX_CS_BASIC1                   ( SID_RPTUI_START +  26 )
 #define SID_DRAWTBX_CS_BASIC2                   ( SID_RPTUI_START +  27 )
 #define SID_DRAWTBX_CS_BASIC3                   ( SID_RPTUI_START +  28 )

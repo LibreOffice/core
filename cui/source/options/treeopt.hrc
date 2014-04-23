@@ -28,7 +28,6 @@
 
 #define FL_SEPARATOR            19
 
-#define FT_HINT                 21
 #define ST_LOAD_ERROR           24
 
 // metrics

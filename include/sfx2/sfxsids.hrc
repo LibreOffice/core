@@ -302,7 +302,6 @@
 #define SID_ACTIVATE                        (SID_SFX_START + 525)
 #define SID_PRINTOUT                        (SID_SFX_START + 526)
 
-#define SID_FILE_LONGNAME                   (SID_SFX_START + 529)
 #define SID_FILTER_NAME                     (SID_SFX_START + 530)
 #define SID_DOC_SALVAGE                     (SID_SFX_START + 531)
 #define SID_INSERTDOC                       (SID_SFX_START + 532)
@@ -370,7 +369,6 @@
 #define SID_STYLE_REFERENCE                 (SID_SFX_START + 1602)
 
 #define SID_TEMPLATE_NAME                   (SID_SFX_START + 660)
-#define SID_TEMPLATE_REGION                 (SID_SFX_START + 661)
 #define SID_TEMPLATE_REGIONNAME             (SID_SFX_START + 662)
 #define SID_TEMPLATE_LOAD                   (SID_SFX_START + 663)
 
@@ -675,7 +673,6 @@
 #define SID_BASICIDE_ARG_DOCUMENT_MODEL     ( SID_BASICIDE_START + 51 )
 #define SID_BASICIDE_MANAGE_LANG            ( SID_BASICIDE_START + 52 )
 #define SID_BASICIDE_CURRENT_LANG           ( SID_BASICIDE_START + 53 )
-#define SID_BASICIDE_IDEOPTIONS             ( SID_BASICIDE_START + 54 )
 
 // SlotIds for Apps --------------------------------------------------------
 #define FN_PARAM                            (SID_SW_START + 1100)
@@ -758,7 +755,5 @@
 #endif
 #define FID_CHG_RECORD          (EDIT_MENU_START + 18)
 #define SID_CHG_PROTECT         (SC_VIEW_START + 84)
-
-// eof ------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

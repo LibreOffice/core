@@ -26,7 +26,6 @@
 #define DLG_COLUMN              (RC_FRMDLG_BEGIN +  4)
 
 #define DLG_CAPTION             (RC_FRMDLG_BEGIN + 11)
-#define DLG_SEQUENCE_OPTION     (RC_FRMDLG_BEGIN + 12)
 
 #define STR_FRMUI_BORDER        (RC_FRMDLG_BEGIN + 16)
 #define STR_FRMUI_PATTERN       (RC_FRMDLG_BEGIN + 17)

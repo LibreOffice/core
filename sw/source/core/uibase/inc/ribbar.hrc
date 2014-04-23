@@ -21,15 +21,6 @@
 
 #include "rcid.hrc"
 
-#define MN_FORM1        1           // Defines fuer NumNames-Popup
-#define MN_FORMBASE     MN_FORM1
-#define MN_FORM2        2
-#define MN_FORM3        3
-#define MN_FORM4        4
-#define MN_FORM5        5
-
-#define CB_FORMAT           (RC_RIBBAR_BEGIN +1)
-#define CB_SIZE             (RC_RIBBAR_BEGIN +3)
 #define RID_TBX_FORMULA     (RC_RIBBAR_BEGIN +6)
 #define FT_POS              (RC_RIBBAR_BEGIN +7)
 #define STR_TBL_FORMULA                  (RC_RIBBAR_BEGIN +9)

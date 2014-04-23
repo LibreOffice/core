@@ -24,13 +24,7 @@
 // From: Dialogue Specification and Guidelines - Visual Design V1.3
 // by Christian Jansen
 
-
-
-// Usage:
-
-
 // all values have to be mapped by MAP_APPFONT
-
 
 // Base
 #define RSC_BS_CHARHEIGHT                   8
@@ -42,9 +36,7 @@
 
 #define RSC_CD_FIXEDTEXT_HEIGHT             RSC_BS_CHARHEIGHT
 #define RSC_CD_FIXEDLINE_HEIGHT             RSC_BS_CHARHEIGHT
-#define RSC_CD_FIXEDLINE_WIDTH              RSC_BS_CHARWIDTH    // for vertical FixedLines
 
-#define RSC_CD_DROPDOWN_HEIGHT              12      // also combobox and dropdown list
 #define RSC_CD_TEXTBOX_HEIGHT               12      // also numeric fields etc.
 
 #define RSC_CD_CHECKBOX_HEIGHT              10      // also tristate
@@ -62,8 +54,6 @@
 #define RSC_SP_FLGR_SPACE_X                 6       // between groupings made with FixedLine
 #define RSC_SP_FLGR_SPACE_Y                 4
 #define RSC_SP_GRP_SPACE_X                  6       // between groupings made with GroupBox
-#define RSC_SP_GRP_SPACE_Y                  6
-#define RSC_SP_CHK_TEXTINDENT               8       // x indent of text aligned to checkbox title
 
 // dialog inner border
 #define RSC_SP_DLG_INNERBORDER_LEFT         6
@@ -72,15 +62,12 @@
 #define RSC_SP_DLG_INNERBORDER_BOTTOM       6
 
 // tab page inner border
-#define RSC_SP_TBPG_INNERBORDER_LEFT        6       // for tabpage groupings
 #define RSC_SP_TBPG_INNERBORDER_TOP         3
 #define RSC_SP_TBPG_INNERBORDER_RIGHT       6
 #define RSC_SP_TBPG_INNERBORDER_BOTTOM      6
 
 // FixedLine group inner border
-#define RSC_SP_FLGR_INNERBORDER_LEFT        6       // for FixedLine groupings
 #define RSC_SP_FLGR_INNERBORDER_TOP         3
-#define RSC_SP_FLGR_INNERBORDER_RIGHT       0
 #define RSC_SP_FLGR_INNERBORDER_BOTTOM      0
 
 // GroupBox inner border

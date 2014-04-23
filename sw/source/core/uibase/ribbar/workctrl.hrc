@@ -21,8 +21,6 @@
 #include "ribbar.hrc"
 
 #define IL_VALUES           5
-#define IMG_BTN             6
-#define ST_QUICK            7
 #define FI_INFO             8
 #define FL_SEP              9
 

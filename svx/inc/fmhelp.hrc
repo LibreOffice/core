@@ -19,28 +19,12 @@
 #ifndef _SVX_FMHELP_HRC
 #define _SVX_FMHELP_HRC
 
-// Help-Ids --------------------------------------------------------------
 #define HID_FORM_NAVIGATOR                                    "SVX_HID_FORM_NAVIGATOR"
 #define HID_FORM_NAVIGATOR_WIN                                "SVX_HID_FORM_NAVIGATOR_WIN"
 #define HID_FIELD_SEL                                         "SVX_HID_FIELD_SEL"
 #define HID_FIELD_SEL_WIN                                     "SVX_HID_FIELD_SEL_WIN"
 #define HID_FILTER_NAVIGATOR                                  "SVX_HID_FILTER_NAVIGATOR"
 #define HID_FILTER_NAVIGATOR_WIN                              "SVX_HID_FILTER_NAVIGATOR_WIN"
-#define HID_FM_DLG_SEARCH                                     "SVX_HID_FM_DLG_SEARCH"
-#define HID_SEARCH_TEXT                                       "SVX_HID_SEARCH_TEXT"
-#define HID_SEARCH_ALLFIELDS                                  "SVX_HID_SEARCH_ALLFIELDS"
-#define HID_SEARCH_FIELDSELECTION                             "SVX_HID_SEARCH_FIELDSELECTION"
-#define HID_SEARCH_POSITION                                   "SVX_HID_SEARCH_POSITION"
-#define HID_SEARCH_FORMATTER                                  "SVX_HID_SEARCH_FORMATTER"
-#define HID_SEARCH_CASE                                       "SVX_HID_SEARCH_CASE"
-#define HID_SEARCH_BACKWARD                                   "SVX_HID_SEARCH_BACKWARD"
-#define HID_SEARCH_STARTOVER                                  "SVX_HID_SEARCH_STARTOVER"
-#define HID_SEARCH_WILDCARD                                   "SVX_HID_SEARCH_WILDCARD"
-#define HID_SEARCH_REGULAR                                    "SVX_HID_SEARCH_REGULAR"
-#define HID_SEARCH_APPROX                                     "SVX_HID_SEARCH_APPROX"
-#define HID_SEARCH_APPROXSETTINGS                             "SVX_HID_SEARCH_APPROXSETTINGS"
-#define HID_SEARCH_BTN_SEARCH                                 "SVX_HID_SEARCH_BTN_SEARCH"
-#define HID_SEARCH_BTN_CLOSE                                  "SVX_HID_SEARCH_BTN_CLOSE"
 #define HID_CONTROLS_DATE_N_TIME                              "SVX_HID_CONTROLS_DATE_N_TIME"
 #define HID_GRID_TRAVEL_FIRST                                 "SVX_HID_GRID_TRAVEL_FIRST"
 #define HID_GRID_TRAVEL_PREV                                  "SVX_HID_GRID_TRAVEL_PREV"

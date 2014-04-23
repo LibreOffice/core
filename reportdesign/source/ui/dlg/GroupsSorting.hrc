@@ -36,8 +36,6 @@
 #define LST_ORDER           (17)
 #define FL_SEPARATOR1       (18)
 #define FT_MOVELABEL        (19)
-#define PB_UP               (20)
-#define PB_DOWN             (21)
 #define FL_SEPARATOR2       (22)
 #define FL_SEPARATOR3       (23)
 #define TB_TOOLBOX                      (27)

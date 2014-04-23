@@ -142,7 +142,6 @@
 #define RES_FRMEX_MENU                  (STR_AUTH_FIELD_END + 1)
 
 #define DLG_NAVIGATION_PI           (RC_UTLUI_BEGIN + 1)
-#define DLG_GLOSSARY_DECIDE_DLG     (RC_UTLUI_BEGIN + 3)
 
 #define IMG_NAVI_ENTRYBMP           (RC_UTLUI_BEGIN + 4)
 #define ILIST_DB_DLG                (RC_UTLUI_BEGIN + 6)

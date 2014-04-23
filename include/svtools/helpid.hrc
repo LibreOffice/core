@@ -20,34 +20,10 @@
 #ifndef _SVT_HELPID_HRC
 #define _SVT_HELPID_HRC
 
-#define HID_FILEDLG_PATHDLG                                    "SVT_HID_FILEDLG_PATHDLG"
-#define HID_FILEDLG_DIR                                        "SVT_HID_FILEDLG_DIR"
-#define HID_FILEDLG_EDIT                                       "SVT_HID_FILEDLG_EDIT"
-#define HID_FILEDLG_DIRS                                       "SVT_HID_FILEDLG_DIRS"
-#define HID_FILEDLG_DRIVE                                      "SVT_HID_FILEDLG_DRIVE"
-#define HID_FILEDLG_DRIVES                                     "SVT_HID_FILEDLG_DRIVES"
-#define HID_FILEDLG_NEWDIR                                     "SVT_HID_FILEDLG_NEWDIR"
-#define HID_FILEDLG_HOME                                       "SVT_HID_FILEDLG_HOME"
-#define HID_FILEDLG_FILE                                       "SVT_HID_FILEDLG_FILE"
 #define HID_FILEDLG_LINK_CB                                    "SVT_HID_FILEDLG_LINK_CB"
 #define HID_FILEDLG_PREVIEW_CB                                 "SVT_HID_FILEDLG_PREVIEW_CB"
 #define HID_FILEDLG_STANDARD                                  "SVT_HID_FILEDLG_STANDARD"
-#define HID_FILEDLG_MANAGER                                   "SVT_HID_FILEDLG_MANAGER"
-#define HID_FILEDLG_URL                                       "SVT_HID_FILEDLG_URL"
-#define HID_FILEDLG_USE_PASSWD                                "SVT_HID_FILEDLG_USE_PASSWD"
-#define HID_FILEDLG_READ_ONLY                                 "SVT_HID_FILEDLG_READ_ONLY"
 #define HID_FILEDLG_AUTOCOMPLETEBOX                           "SVT_HID_FILEDLG_AUTOCOMPLETEBOX"
-#define HID_FILEDLG_SAVE_BTN                                  "SVT_HID_FILEDLG_SAVE_BTN"
-#define HID_FILEDLG_SAVE_FILENAME                             "SVT_HID_FILEDLG_SAVE_FILENAME"
-#define HID_FILEDLG_SAVE_FILETYPE                             "SVT_HID_FILEDLG_SAVE_FILETYPE"
-#define HID_FILEDLG_INSERT_BTN                                "SVT_HID_FILEDLG_INSERT_BTN"
-#define HID_FILEDLG_PATH_BTN                                  "SVT_HID_FILEDLG_PATH_BTN"
-#define HID_FILEDLG_PATH_FILENAME                             "SVT_HID_FILEDLG_PATH_FILENAME"
-#define HID_FILEDLG_FOLDER_BTN                                "SVT_HID_FILEDLG_FOLDER_BTN"
-#define HID_FILEDLG_FOLDER_FILENAME                           "SVT_HID_FILEDLG_FOLDER_FILENAME"
-#define HID_FILEDLG_SRCHFOLDER_BTN                            "SVT_HID_FILEDLG_SRCHFOLDER_BTN"
-#define HID_FILEDLG_EDIT_FAVORITES_LISTBOX                    "SVT_HID_FILEDLG_EDIT_FAVORITES_LISTBOX"
-#define HID_FILEDLG_EDIT_FAVORITES_HEADERBAR                  "SVT_HID_FILEDLG_EDIT_FAVORITES_HEADERBAR"
 
 // Help ids of template dialog
 #define HID_TEMPLATEDLG_DIALOG                                 "SVT_HID_TEMPLATEDLG_DIALOG"
@@ -67,10 +43,8 @@
 #define HID_FILEVIEW_MENU_RENAME                               "SVT_HID_FILEVIEW_MENU_RENAME"
 
 // help ids for the different modi of the file picker dialog
-    // FREE
 #define HID_FILESAVE_LEVELUP                                   "SVT_HID_FILESAVE_LEVELUP"
 #define HID_FILESAVE_CREATEDIRECTORY                           "SVT_HID_FILESAVE_CREATEDIRECTORY"
-#define HID_FILESAVE_DEFAULTDIRECTORY                          "SVT_HID_FILESAVE_DEFAULTDIRECTORY"
 #define HID_FILESAVE_FILEVIEW                                  "SVT_HID_FILESAVE_FILEVIEW"
 #define HID_FILESAVE_TEMPLATE                                  "SVT_HID_FILESAVE_TEMPLATE"
 #define HID_FILESAVE_FILEURL                                   "SVT_HID_FILESAVE_FILEURL"
@@ -86,8 +60,6 @@
 #define HID_FILEOPEN_READONLY                                  "SVT_HID_FILEOPEN_READONLY"
 #define HID_FILEOPEN_VERSION                                   "SVT_HID_FILEOPEN_VERSION"
 #define HID_FILEOPEN_IMAGE_TEMPLATE                            "SVT_HID_FILEOPEN_IMAGE_TEMPLATE"
-
-#define HID_PRINTDIALOG_TOFILE                                 "SVT_HID_PRINTDIALOG_TOFILE"
 
 #define HID_WIZARD_NEXT                                        "SVT_HID_WIZARD_NEXT"
 #define HID_WIZARD_PREVIOUS                                    "SVT_HID_WIZARD_PREVIOUS"

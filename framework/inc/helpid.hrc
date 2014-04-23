@@ -20,11 +20,8 @@
 #define _FRAMEWORK_HELPID_HRC
 
 #define HID_BACKINGWINDOW                           "FWK_HID_BACKINGWINDOW"
-#define HID_LICENSEDIALOG                           "FWK_HID_LICENSEDIALOG"
 #define HID_STATUSBAR                   "FWK_HID_STATUSBAR"
 
 #endif // #ifndef _FRAMEWORK_HELPID_HRC
-
-// ******************************************************************* EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

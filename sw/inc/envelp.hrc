@@ -33,10 +33,10 @@
 // Bereiche -------------------------------------------------------------------
 
 #define RC_ENVLOP_BEGIN  (RC_ENVELP_BEGIN     )
-#define RC_ENVLOP_END    (RC_ENVELP_BEGIN +  9)
+//      RC_ENVLOP_END    (RC_ENVELP_BEGIN +  9)
 
-#define RC_ENVFMT_BEGIN  (RC_ENVELP_BEGIN + 10)
-#define RC_ENVFMT_END    (RC_ENVELP_BEGIN + 19)
+//      RC_ENVFMT_BEGIN  (RC_ENVELP_BEGIN + 10)
+//      RC_ENVFMT_END    (RC_ENVELP_BEGIN + 19)
 
 #define RC_ENVPRT_BEGIN  (RC_ENVELP_BEGIN + 20)
 //      RC_ENVPRT_END    (RC_ENVELP_BEGIN + 39)

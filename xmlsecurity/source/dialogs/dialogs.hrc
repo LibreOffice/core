@@ -40,8 +40,6 @@
 #define TP_WIDTH                        260
 #define TP_HEIGHT                       185
 #define TD_SP_INNERBORDER_LEFT          3
-#define TD_SP_INNERBORDER_RIGHT         3
-#define TD_WIDTH                        (TP_WIDTH+RSC_SP_DLG_INNERBORDER_LEFT+RSC_SP_DLG_INNERBORDER_RIGHT)
 
 #define SEP_FL_SPACE_Y                  6
 #define DLGS_BOTTOM_BTN_L(dlgh)         (dlgh-RSC_SP_DLG_INNERBORDER_BOTTOM)
@@ -66,11 +64,6 @@
 #define CV_CONT_HEIGHT                  (CV_ROW_3-CV_ROW_0)
 #define CV_ROW_1                        (CV_ROW_0+2*CV_CONT_HEIGHT/3)
 #define CV_ROW_2                        (CV_ROW_1+RSC_SP_CTRL_GROUP_Y)
-
-#define CV_COL_D                        (TD_WIDTH-TD_SP_INNERBORDER_RIGHT)
-#define CV_COL_C                        (CV_COL_D-RSC_CD_PUSHBUTTON_WIDTH)
-#define CV_COL_B                        (CV_COL_C-RSC_SP_CTRL_X)
-#define CV_COL_A                        (CV_COL_B-RSC_CD_PUSHBUTTON_WIDTH)
 
 // --------- tab page Certificate viewer - General ---------
 #define WIN_FRAME                       2
@@ -139,21 +132,6 @@
 #define STR_PATH_CERT_OK                8
 #define STR_PATH_CERT_NOT_VALIDATED     9
 
-#define CVP_ROW_0                       RSC_SP_TBPG_INNERBORDER_TOP
-#define CVP_ROW_1                       (CVP_ROW_0+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
-#define REST_HEIGHT                     (TP_HEIGHT-CVP_ROW_1-2*RSC_SP_GRP_SPACE_Y-RSC_CD_FIXEDTEXT_HEIGHT-RSC_CD_PUSHBUTTON_HEIGHT)
-
-// --------- tab dialog macro security ---------
-
-#define MS_COL_A                        (TD_WIDTH-RSC_SP_DLG_INNERBORDER_LEFT)
-#define MS_COL_B                        (MS_COL_A-RSC_CD_PUSHBUTTON_WIDTH)
-#define MS_COL_C                        (MS_COL_B-RSC_SP_CTRL_X)
-#define MS_COL_D                        (MS_COL_C-RSC_CD_PUSHBUTTON_WIDTH)
-#define MS_COL_E                        (MS_COL_D-RSC_SP_CTRL_X)
-#define MS_COL_F                        (MS_COL_E-RSC_CD_PUSHBUTTON_WIDTH)
-#define MS_COL_G                        (MS_COL_F-RSC_SP_CTRL_X)
-#define MS_COL_H                        (MS_COL_G-RSC_CD_PUSHBUTTON_WIDTH)
-
 // --------- signed macro warning ---------
 
 #define FI_DOCNAME                      1
@@ -176,14 +154,11 @@
 #define MW_COL_4                        (MW_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
 #define MW_COL_3                        (MW_COL_4-RSC_CD_PUSHBUTTON_WIDTH)
 #define MW_COL_2                        (MW_COL_3-RSC_SP_CTRL_DESC_X)
-#define MW_COL_A                        (DLGS_BOTTOM_OK_X(MW_WIDTH))
-#define MW_COL_C                        (DLGS_BOTTOM_CANCEL_X(MW_WIDTH))
-#define MW_COL_E                        (DLGS_BOTTOM_HELP_X(MW_WIDTH))
+
 #define MW_ROW_0                        (RSC_SP_DLG_INNERBORDER_TOP)
 #define MW_ROW_1                        (MW_ROW_0+3*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_Y)
 #define MW_ROW_2                        (MW_ROW_1+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_Y)
-#define MW_ROW_7                        (MW_HEIGHT-RSC_SP_DLG_INNERBORDER_BOTTOM)
-#define MW_ROW_6                        (DLGS_BOTTOM_BTN_Y(MW_HEIGHT))
+
 #define MW_ROW_5                        (DLGS_BOTTOM_FL_Y(MW_HEIGHT))
 #define MW_ROW_4                        (MW_ROW_5-RSC_CD_CHECKBOX_HEIGHT-RSC_SP_CTRL_Y)
 #define MW_ROW_3                        (MW_ROW_4-4*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_Y)

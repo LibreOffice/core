@@ -35,8 +35,6 @@
 #define IMAGE_BUTTON_WIDTH  12
 #define IMAGE_BUTTON_HEIGHT 14
 
-
-#define FL_FORMAT                   1
 #define FL_CONDITION_HEADER         2
 #define CRTL_FORMAT_PREVIEW         3
 #define TB_FORMAT                   4

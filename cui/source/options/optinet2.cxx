@@ -46,7 +46,6 @@
 #include "optinet2.hxx"
 #include <svx/svxdlg.hxx>
 #include <cuires.hrc>
-#include "optinet2.hrc"
 #include "helpid.hrc"
 #include <svx/ofaitem.hxx>
 #include <sfx2/htmlmode.hxx>
