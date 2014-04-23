@@ -121,7 +121,18 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
         }
     }
 
-    OUTDEV_INIT();
+    if ( !IsDeviceOutputNecessary() )
+        return;
+
+    if ( !mpGraphics )
+        if ( !AcquireGraphics() )
+            return;
+
+    if ( mbInitClipRegion )
+        ImplInitClipRegion();
+
+    if ( mbOutputClipped )
+        return;
 
     if( !aBmp.IsEmpty() )
     {
@@ -346,7 +357,18 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
             }
         }
 
-        OUTDEV_INIT();
+        if ( !IsDeviceOutputNecessary() )
+            return;
+
+        if ( !mpGraphics )
+            if ( !AcquireGraphics() )
+                return;
+
+        if ( mbInitClipRegion )
+            ImplInitClipRegion();
+
+        if ( mbOutputClipped )
+            return;
 
         DrawDeviceBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmpEx );
     }

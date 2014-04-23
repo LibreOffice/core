@@ -566,7 +566,18 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
         mpMetaFile->AddAction( new MetaBmpScaleAction( rDestPt, rDestSize, aBmp ) );
     }
 
-    OUTDEV_INIT();
+    if ( !IsDeviceOutputNecessary() )
+        return;
+
+    if ( !mpGraphics )
+        if ( !AcquireGraphics() )
+            return;
+
+    if ( mbInitClipRegion )
+        ImplInitClipRegion();
+
+    if ( mbOutputClipped )
+        return;
 
     SalTwoRect aPosAry;
     aPosAry.mnSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
@@ -613,7 +624,18 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
         mpMetaFile->AddAction( new MetaBmpScaleAction( rDestPt, rDestSize, aBmp ) );
     }
 
-    OUTDEV_INIT();
+    if ( !IsDeviceOutputNecessary() )
+        return;
+
+    if ( !mpGraphics )
+        if ( !AcquireGraphics() )
+            return;
+
+    if ( mbInitClipRegion )
+        ImplInitClipRegion();
+
+    if ( mbOutputClipped )
+        return;
 
     SalTwoRect aPosAry;
     aPosAry.mnSrcX       = rOutDev.ImplLogicXToDevicePixel( rSrcPt.X() );
@@ -665,7 +687,18 @@ void OutputDevice::CopyArea( const Point& rDestPt,
     RasterOp eOldRop = GetRasterOp();
     SetRasterOp( ROP_OVERPAINT );
 
-    OUTDEV_INIT();
+    if ( !IsDeviceOutputNecessary() )
+        return;
+
+    if ( !mpGraphics )
+        if ( !AcquireGraphics() )
+            return;
+
+    if ( mbInitClipRegion )
+        ImplInitClipRegion();
+
+    if ( mbOutputClipped )
+        return;
 
     SalTwoRect aPosAry;
     aPosAry.mnSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );

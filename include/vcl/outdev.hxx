@@ -50,22 +50,6 @@
 #define GLYPH_FONT_HEIGHT   256
 #endif
 
-#define OUTDEV_INIT()                       \
-{                                           \
-    if ( !IsDeviceOutputNecessary() )       \
-        return;                             \
-                                            \
-    if ( !mpGraphics )                      \
-        if ( !AcquireGraphics() )           \
-            return;                         \
-                                            \
-    if ( mbInitClipRegion )                 \
-        ImplInitClipRegion();               \
-                                            \
-    if ( mbOutputClipped )                  \
-        return;                             \
-}
-
 struct ImplOutDevData;
 class ImplFontEntry;
 struct ImplObjStack;
