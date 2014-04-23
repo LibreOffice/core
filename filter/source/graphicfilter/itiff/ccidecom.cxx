@@ -570,9 +570,14 @@ CCIDecompressor::CCIDecompressor( sal_uLong nOpts, sal_uInt32 nImageWidth ) :
     bStatus     ( false ),
     pByteSwap   ( NULL ),
     pIStream    ( NULL ),
+    nEOLCount   ( 0 ),
     nWidth      ( nImageWidth ),
     nOptions    ( nOpts ),
-    pLastLine   ( NULL )
+    bFirstEOL   ( false ),
+    nInputBitsBuf( 0 ),
+    nInputBitsBufSize( 0 ),
+    pLastLine   ( NULL ),
+    nLastLineSize( 0 )
 {
     if ( nOpts & CCI_OPTION_INVERSEBITORDER )
     {
