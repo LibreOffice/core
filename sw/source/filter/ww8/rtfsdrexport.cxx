@@ -264,7 +264,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                          rProps.GetOpt( ESCHER_Prop_pSegmentInfo, aSegments ) )
                     {
                         const sal_uInt8 *pVerticesIt = aVertices.pBuf + 6;
-                        sal_Size nVerticesPos = 0;
+                        sal_Size nVerticesPos = 6;
                         const sal_uInt8 *pSegmentIt = aSegments.pBuf;
 
                         OStringBuffer aSegmentInfo( 512 );
