@@ -5648,7 +5648,8 @@ PPTParagraphObj::PPTParagraphObj( const PPTStyleSheet& rStyleSheet, sal_uInt32 n
     PPTNumberFormatCreator  ( NULL ),
     mrStyleSheet            ( rStyleSheet ),
     mnInstance              ( nInstance ),
-    mbTab                   ( true )       // style sheets always have to get the right tabulator setting
+    mbTab                   ( true ),      // style sheets always have to get the right tabulator setting
+    mnCurrentObject         ( 0 )
 {
     if ( nDepth > 4 )
         nDepth = 4;
