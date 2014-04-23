@@ -1016,7 +1016,8 @@ private:
     short       Compare( ScSortInfoArray*, SCCOLROW nIndex1, SCCOLROW nIndex2) const;
     ScSortInfoArray* CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2, bool bKeepQuery );
     void        QuickSort( ScSortInfoArray*, SCsCOLROW nLo, SCsCOLROW nHi);
-    void        SortReorder( ScSortInfoArray*, ScProgress* );
+    void SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress );
+    void SortReorderByRow( ScSortInfoArray* pArray, ScProgress* pProgress );
 
     bool        CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
     bool        CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
