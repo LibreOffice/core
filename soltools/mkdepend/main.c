@@ -736,6 +736,7 @@ void redirect(line, makefile)
 #endif /* USGISH */
     fclose(fdin);
 #endif
+fclose(fdout);
 }
 
 void fatalerr(char *msg, ...)
