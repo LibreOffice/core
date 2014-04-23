@@ -439,12 +439,6 @@
     Identifier = SID_OBJECT_ROTATE ; \
     Command = ".uno:ToggleObjectRotateMode" ; \
 
-#define ITEM_FILE_BLUETOOTH_SENDDOC \
-    Identifier = SID_BLUETOOTH_SENDDOC ; \
-    Command = ".uno:SendViaBluetooth" ; \
-    HelpID = SID_BLUETOOTH_SENDDOC ; \
-    Text [ en-US ] = "Document via ~Bluetooth..." ; \
-
 #define ITEM_TRANSLITERATE_MENU\
     MenuItem\
     {\

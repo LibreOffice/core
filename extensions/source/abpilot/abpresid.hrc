@@ -23,7 +23,6 @@
 #include "abpilot.hrc"
 #include "extensio.hrc"
 
-
 // basics
 
 #define RID_DIALOG_START                RID_ABP_START
@@ -127,38 +126,26 @@
 
 
 // local resource ids
-
-
 #define FL_SEPARATOR            1
-#define FL_TYPE                 2
 
-
-#define FT_TYPE_HINTS            1
 #define FT_ADMINEXPLANATION      3
 #define FT_NAME_EXPL             4
 #define FT_ERROR                 5
 #define FL_TOOMUCHTABLES         6
-#define FT_ASSIGNEDFIELDS        8
 #define FT_FINISH_EXPL           9
 #define FT_DUPLICATENAME        10
 #define FT_LOCATION             11
 
-
 #define ET_DATASOURCENAME       1
-
 
 #define PB_INVOKE_ADMIN_DIALOG  1
 #define PB_BROWSE               3
 
-
 #define LB_TABLELIST            1
-
 
 #define CB_REGISTER_DS          1
 
-
 #define CBB_LOCATION            1
-
 
 #define STR_SELECT_ABTYPE           1
 #define STR_INVOKE_ADMIN_DIALOG     2
@@ -168,8 +155,6 @@
 
 
 // some defines
-
-
 #define WINDOW_SIZE_X   240
 #define WINDOW_SIZE_Y   185
 
@@ -183,14 +168,6 @@
 
 #define BORDER_X        12
 
-
-
 #endif // EXTENSIONS_ABPRESID_HRC
-
-/*************************************************************************
- * history:
- *
- *  Revision 1.0 30.01.01 16:38:29  fs
- ************************************************************************/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

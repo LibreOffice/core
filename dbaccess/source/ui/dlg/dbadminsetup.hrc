@@ -92,13 +92,9 @@
 
 #define RB_CONNECTVIAODBC           1
 #define RB_CONNECTVIAJDBC           2
-#define RB_REGISTERDATASOURCE       3
-#define RB_DONTREGISTERDATASOURCE   4
 #define RB_CONNECTVIANATIVE         5
 
 #define CB_WIZ_USESSL                       1
-#define CB_STARTTABLEWIZARD                 2
-#define CB_OPENAFTERWARDS                   3
 #define CB_SPREADSHEETPASSWORDREQUIRED      4
 #define CB_GENERALPASSWORDREQUIRED          5
 

@@ -19,14 +19,7 @@
 #ifndef _BASCTL_HELPID_HRC
 #define _BASCTL_HELPID_HRC
 
-#define HID_BASICIDE_TOOLBOX                              "BASCTL_HID_BASICIDE_TOOLBOX"
-#define HID_BASICIDE_OBJECTS                              "BASCTL_HID_BASICIDE_OBJECTS"
-#define HID_BASICIDE_MACROS                               "BASCTL_HID_BASICIDE_MACROS"
-#define HID_BASICIDE_LIBS                                 "BASCTL_HID_BASICIDE_LIBS"
-
 #define HID_BASICIDE_OBJECTCAT                            "BASCTL_HID_BASICIDE_OBJECTCAT"
-
-#define HID_BASICIDE_OBJCAT_SHOW                          "BASCTL_HID_BASICIDE_OBJCAT_SHOW"
 
 #define HID_BASICIDE_BRKDLG                               "BASCTL_HID_BASICIDE_BRKDLG"
 #define HID_BASICIDE_ACTIV                                "BASCTL_HID_BASICIDE_ACTIV"
@@ -44,8 +37,6 @@
 #define HID_BASICIDE_WATCHWINDOW_EDIT                     "BASCTL_HID_BASICIDE_WATCHWINDOW_EDIT"
 #define HID_BASICIDE_WATCHWINDOW_LIST                     "BASCTL_HID_BASICIDE_WATCHWINDOW_LIST"
 #define HID_BASICIDE_STACKWINDOW_LIST                     "BASCTL_HID_BASICIDE_STACKWINDOW_LIST"
-
-#define HID_BASICIDE_ADDNEW_LANGUAGE                      "BASCTL_HID_BASICIDE_ADDNEW_LANGUAGE"
 
 #endif
 

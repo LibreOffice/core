@@ -252,18 +252,6 @@
 #define MID_DOCINFO_DELETEUSERDATA           0x32
 
 // only for FastPropertySet
-#define MID_DOCINFO_REVISION                 0x15
-#define MID_DOCINFO_EDITTIME                 0x16
-#define MID_DOCINFO_MODIFICATIONAUTHOR       0x18
-#define MID_DOCINFO_TEMPLATE                 0x1c
-#define MID_DOCINFO_PRINTDATE                0x28
-#define MID_DOCINFO_PRINTEDBY                0x2a
-#define MID_DOCINFO_TEMPLATEDATE             0x2b
-#define MID_DOCINFO_STATISTIC                0x33
-#define MID_DOCINFO_CHARLOCALE               0x34
-#define MID_CATEGORY                         0x35
-#define MID_COMPANY                          0x36
-#define MID_MANAGER                          0x37
 #define MID_TYPE                             0x38
 #define MID_VALUE               	     0x39
 #define MID_VALUESET   	                     0x40
@@ -285,10 +273,6 @@
 
 #include <sfx2/sfxsids.hrc>
 
-#define HID_INTERFACE_SFXHELP_VIEWSH            24
-
 #endif // #ifndef _SFX_HRC
-
-// ******************************************************************* EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,12 +24,6 @@
 #include <svx/globlmn.hrc>
 #include "toolbox.hrc"
 
-#define MN_EDIT     20
-#define MN_VIEW     21
-#define MN_EXTRA    22
-#define MN_WIN      30
-#define MN_HELP     31
-
 String STR_TABLEDESIGN_DBFIELDTYPES
 {
     Text [ en-US ] = "Unknown;Text;Number;Date/Time;Date;Time;Yes/No;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Structure;Field;BLOB;CLOB;REF;OTHER;Bit (fix)";
@@ -372,15 +366,10 @@ String STR_TABLEDESIGN_NO_PRIM_KEY
     Text [ en-US ] = "A unique index or primary key is required for data record identification in this database.\nYou can only enter data into this table when one of these two structural conditions has been met.\n\nShould a primary key be created now?" ;
 };
 
-
 String STR_TABLEDESIGN_TITLE
 {
     Text [ en-US ] = " - %PRODUCTNAME Base: Table Design";
 };
-
-/*
-  The menubar resource has become obsolete - you can now find the menubar definition at: <project>/uiconfig/dbtable/menubar/menubar.xml
-*/
 
 String STR_TABLEDESIGN_ALTER_ERROR
 {

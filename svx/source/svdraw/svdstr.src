@@ -18,7 +18,7 @@
  */
 
 #include "svx/svdstr.hrc"
- // Ab hier gecachte Strings
+
 String STR_ObjNameSingulNONE
 {
     Text [ en-US ] = "draw object" ;
@@ -453,7 +453,6 @@ String STR_ObjNamePluralGRAFSVG
 };
 
 
-
 String STR_ObjNameSingulOLE2
 {
     Text [ en-US ] = "embedded object (OLE)" ;
@@ -547,9 +546,6 @@ String STR_ObjNameSingulPlural
 };
 
 
-
-
-
 // New in 537: names for 3D objects
 String STR_ObjNameSingulCube3d
 {
@@ -625,9 +621,6 @@ String STR_ObjNamePluralSphere3d
 {
     Text [ en-US ] = "spheres";
 };
-
-
-
 
 
 String STR_EditWithCopy
@@ -1118,7 +1111,6 @@ String STR_StandardLayerName
 };
 
 
-
 String STR_ItemValON
 {
     Text [ en-US ] = "on" ;
@@ -1569,9 +1561,6 @@ String STR_ItemNam_SHEARANGLE
     Text [ en-US ] = "Shear angle" ;
 };
 
-
-
- // End of cached strings
 
  // Now: bitmaps:
 Bitmap BMAP_GrafikEi { File = "grafikei.png" ; };

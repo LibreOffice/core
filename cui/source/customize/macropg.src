@@ -55,7 +55,7 @@ ModalDialog RID_SVXDLG_ASSIGNCOMPONENT
     };
     FixedText FT_METHOD
     {
-        Pos = MAP_APPFONT ( COMP_COL0 , ROW0 ) ;
+        Pos = MAP_APPFONT ( COMP_COL0 , COMP_ROW0 ) ;
         Size = MAP_APPFONT ( COMP_EDIT_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Component method name" ;
     };

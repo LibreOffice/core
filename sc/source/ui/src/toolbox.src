@@ -21,64 +21,6 @@
 #include <svx/globlmn.hrc>
 #include "tbinsert.hrc"
 
-
- // ToolBoxen: ----------------------------------------------------------------
-
-/*
- *  ToolBox mit Eingabezeile: HelpStrings fuer Knoepfe und Fenster:
- */
-
-#define ITEM_TOOLBAR_SORT_ASCENDING \
-    Identifier = SID_SORT_ASCENDING ; \
-    HelpId = SID_SORT_ASCENDING ;
-
-#define ITEM_TOOLBAR_SORT_DESCENDING \
-    Identifier = SID_SORT_DESCENDING ; \
-    HelpId = SID_SORT_DESCENDING ;
-
-#define ITEM_TOOLBAR_INSERT_FRAME \
-    Identifier = SID_INSERT_FRAME ; \
-    HelpId = SID_INSERT_FRAME ;
-
-
-#define ITEM_TOOLBAR_INSERT_GRAPHIC \
-    Identifier = SID_INSERT_GRAPHIC ; \
-    HelpId = SID_INSERT_GRAPHIC ;
-
-#define ITEM_TOOLBAR_AUTO_FILTER \
-    Identifier = SID_AUTO_FILTER ; \
-    HelpId = SID_AUTO_FILTER ;
-
-
-#define ITEM_TOOLBAR_OUTLINE_MAKE \
-    Identifier = SID_OUTLINE_MAKE ; \
-    HelpId = SID_OUTLINE_MAKE ;
-
-
-#define ITEM_TOOLBAR_OUTLINE_REMOVE \
-    Identifier = SID_OUTLINE_REMOVE ; \
-    HelpId = SID_OUTLINE_REMOVE ;
-
-#define ITEM_TOOLBAR_DRAW_CHART \
-    Identifier = SID_INSERT_DIAGRAM ; \
-    HelpId = SID_DRAW_CHART ;
-
-#define ITEM_TOOLBAR_SPELLING \
-    Identifier = SID_SPELL_DIALOG ; \
-    HelpId = SID_SPELL_DIALOG ;
-
-#define ITEM_TOOLBAR_THESAURUS \
-    Identifier = SID_THESAURUS ; \
-    HelpId = SID_THESAURUS ;
-
-#define ITEM_TOOLBAR_FILTER \
-    Identifier = SID_FILTER ; \
-    HelpId = SID_FILTER ;
-
-#define ITEM_TOOLBAR_SPECIAL_FILTER \
-    Identifier = SID_SPECIAL_FILTER;\
-    HelpId = SID_SPECIAL_FILTER ;
-
 String SCSTR_QHELP_POSWND
 {
     Text [ en-US ] = "Name Box" ;

@@ -23,18 +23,6 @@
 
  // Defines -------------------------------------------------------------------------------
 
-#define MN_LAYER\
-    ToolBoxItem\
-    {\
-        Identifier = SID_FRAME_TO_TOP ; \
-        HelpID = CMD_SID_FRAME_TO_TOP ; \
-    };\
-    ToolBoxItem\
-    {\
-        Identifier = SID_FRAME_TO_BOTTOM ; \
-        HelpID = CMD_SID_FRAME_TO_BOTTOM ; \
-    };
-
 #define MN_RENAME_OBJECT \
     MenuItem\
     {\

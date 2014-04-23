@@ -81,9 +81,6 @@
 #define MN_SET_PARA_RESET           (MN_SET_LANGUAGE_PARAGRAPH_START + MN_RESET_OFFSET)
 #define MN_SET_PARA_MORE            (MN_SET_LANGUAGE_PARAGRAPH_START + MN_MORE_OFFSET)
 
-// id range for 'set language for all text' sub menu entries
-#define MN_SET_LANGUAGE_ALL_TEXT_START      1300
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

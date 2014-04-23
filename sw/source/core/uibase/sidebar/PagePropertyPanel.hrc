@@ -69,10 +69,7 @@
 #define IMG_LANDSCAPE           11
 #define STR_PORTRAIT            12
 #define STR_LANDSCAPE           13
-#define ED_SWPAPER_WIDTH        14
-#define ED_SWPAPER_HEIGHT       15
-#define LB_SWPAPER_TRAY         16
-#define LB_SWPAPER_SIZE         17
+
 #define MF_SWLEFT_MARGIN        18
 #define MF_SWRIGHT_MARGIN       19
 #define MF_SWTOP_MARGIN         20
@@ -124,10 +121,6 @@
 #define IMG_NORMAL_L            110
 #define IMG_WIDE_L              111
 #define IMG_MIRRORED_L          112
-#define FLD_LEFT_MARGIN         113
-#define FLD_RIGHT_MARGIN        114
-#define FLD_TOP_MARGIN          115
-#define FLD_BOTTOM_MARGIN       116
 
 #define IMG_CUSTOM_DIS          121
 
@@ -145,29 +138,11 @@
 
 //========================================Position==============================================
 
-#define FT_ORIENTATION_X            SECTIONPAGE_MARGIN_HORIZONTAL
-#define FT_ORIENTATION_Y            SECTIONPAGE_MARGIN_VERTICAL_TOP
-#define TBX_ORIENTATION_X           FT_ORIENTATION_X
-#define TBX_ORIENTATION_Y           FT_ORIENTATION_Y + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL
-#define FT_MARGIN_X                 FT_ORIENTATION_X + MBOX_WIDTH + CONTROL_SPACING_HORIZONTAL
-#define FT_MARGIN_Y                 FT_ORIENTATION_Y
-#define TBX_MARGIN_X                FT_MARGIN_X
-#define TBX_MARGIN_Y                TBX_ORIENTATION_Y
-#define FT_SIZE_X                   FT_ORIENTATION_X
-#define FT_SIZE_Y                   TBX_ORIENTATION_Y + 20 + CONTROL_SPACING_VERTICAL
-#define TBX_SIZE_X                  FT_SIZE_X
-#define TBX_SIZE_Y                  FT_SIZE_Y + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL
-#define FT_COLUMN_X                 FT_MARGIN_X
-#define FT_COLUMN_Y                 FT_SIZE_Y
-#define TBX_COLUMN_X                FT_COLUMN_X
-#define TBX_COLUMN_Y                TBX_SIZE_Y
-
 #define FT_CUSTOM_X                 POPUP_MARGIN + OFFSET_X
 #define FT_CUSTOM_Y                 POPUPPANEL_MARGIN_SMALL * 2 + ITEM_HEIGHT * 5
 
 #define POP_BORDER_X                        POPUP_MARGIN + OFFSET_X + 1
 #define POP_BORDER_Y                        POPUPPANEL_MARGIN_SMALL * 3 + ITEM_HEIGHT * 5 + TEXT_HEIGHT
-#define BD_WIDTH                            VS_WIDTH - 6
 #define BD_HEIGHT                           MBOX_HEIGHT*4 + CONTROL_SPACING_VERTICAL*5
 
 #define FT_X                                POP_BORDER_X +  CONTROL_SPACING_HORIZONTAL
@@ -182,7 +157,5 @@
 #define FT_BOTTOM_Y                         BOTTOM_MF_Y + 1
 
 #define MARGIN_PANEL_HEIGHT                 POP_BORDER_Y +  BD_HEIGHT + POPUP_MARGIN + OFFSET_Y
-#define CUST_MORE_BUTTON_IMG_OFF_X          POPUPPANEL_MARGIN_HORIZONTAL + OFFSET_X
-#define PAGE_HEIGHT                         TBX_COLUMN_Y + 20 + SECTIONPAGE_MARGIN_VERTICAL_BOT
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

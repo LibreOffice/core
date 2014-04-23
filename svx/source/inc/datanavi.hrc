@@ -80,14 +80,6 @@
 #define STR_HEADER_PREFIX       10
 #define STR_HEADER_URL          11
 
-// class AddModelDialog
-#define FL_MODEL                10
-#define FT_MODEL_NAME           11
-#define ED_MODEL_NAME           12
-
-// class AddModelDialog
-#define CB_MODIFIES_DOCUMENT    1
-
 #endif //_SVX_DATANAVI_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

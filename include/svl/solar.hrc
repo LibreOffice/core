@@ -123,12 +123,12 @@
 
 #define HID_START                   32768
 
-#define HID_VCL_START               (HID_START+100)
+//      HID_VCL_START               (HID_START+100)
 //      HID_VCL_END                 (HID_START+150)
 
 // free: 200-299
 
-#define HID_SFX_START               (HID_START+300)
+//      HID_SFX_START               (HID_START+300)
 //      HID_SFX_END                 (HID_START+999)
 
 #define HID_LIB_START               (HID_START+1000)
@@ -141,7 +141,7 @@
 
 // free: HID_LIB_START 2000-2050
 
-#define HID_CHAOS_START             (HID_LIB_START+2051)
+//      HID_CHAOS_START             (HID_LIB_START+2051)
 //      HID_CHAOS_END               (HID_LIB_START+2069)
 
 // free: HID_LIB_START 2070-9999
@@ -156,7 +156,7 @@
 
 // free: HID_START 28000-29999
 
-#define HID_OBJ_START               (HID_START+30000)
+//      HID_OBJ_START               (HID_START+30000)
 //      HID_OBJ_END                 (HID_START+32767)
 
 // free: HID_OBJ_START+2281 to HID_OBJ_START+2800

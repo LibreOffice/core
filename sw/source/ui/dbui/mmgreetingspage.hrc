@@ -19,7 +19,6 @@
 #ifndef _MAILMERGEGREETINGSPAGE_HRC
 #define _MAILMERGEGREETINGSPAGE_HRC
 
-
 #define CB_PERSONALIZED         2
 #define LB_FEMALE               3
 #define PB_FEMALE               4
@@ -34,14 +33,8 @@
 
 #define CB_NEUTRAL              14
 #define CB_GREETINGLINE         15
-#define FI_PREVIEW              16
-#define WIN_PREVIEW             17
-#define PB_ASSIGN               18
-#define FI_DOCINDEX             19
-#define IB_PREVSET              20
-#define IB_NEXTSET              21
+
 #define STR_DOCUMENT            22
-#define FI_HEADER               23
 #define FT_FEMALE               24
 #define FT_MALE                 25
 

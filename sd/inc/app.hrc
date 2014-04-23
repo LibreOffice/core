@@ -62,11 +62,6 @@
 #define HID_SD_CELL_STYLE_FIRST_COLUMN                      (HID_SD_START + 198)
 #define HID_SD_CELL_STYLE_LAST_COLUMN                       (HID_SD_START + 199)
 
-#define SHELLID_SD_TASK_PANE_PREVIEW_CURRENT    (HID_SD_START + 174)
-#define SHELLID_SD_TASK_PANE_PREVIEW_RECENT     (HID_SD_START + 175)
-#define SHELLID_SD_TASK_PANE_PREVIEW_ALL        (HID_SD_START + 176)
-#define SHELLID_SD_TASK_PANE_PREVIEW_LAYOUTS    (HID_SD_START + 177)
-
 #define SID_PAGESETUP                       (SID_SD_START+2)
 #define SID_COPYOBJECTS                     (SID_SD_START+4)
 #define SID_MANAGE_LINKS                    (SID_SD_START+5)
@@ -265,7 +260,6 @@
 #define ID_VAL_DISTANCE                     (SID_SD_START+245)
 #define ID_VAL_INDEX                        (SID_SD_START+246)
 #define ID_VAL_WIDTH                        (SID_SD_START+247)
-#define ID_VAL_PANEL_INDEX                  (SID_SD_START+249)
 
 // just for tests, namely that APP:HRC ff. has not to be build every time
 #define ID_VAL_DUMMY0                       (SID_SD_START+230)

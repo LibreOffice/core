@@ -24,13 +24,6 @@
 #include "dbaccess_helpid.hrc"
 #include "toolbox.hrc"
 
-#define MN_EDIT 20
-#define MN_VIEW 21
-#define MN_EXTRA 22
-#define MN_INSERT 23
-#define MN_WIN 30
-#define MN_HELP 31
-
 Menu RID_MENU_JOINVIEW_CONNECTION
 {
     ItemList =
@@ -299,10 +292,6 @@ String STR_QUERYDESIGN_NO_VIEW_ASK
 {
     Text [ en-US ] = "Do you want to create a query instead?";
 };
-
-/*
-  The menubar resource has become obsolete - you can now find the menubar definition at: <project>/uiconfig/dbquery/menubar/menubar.xml
- */
 
 String STR_DATASOURCE_DELETED
 {

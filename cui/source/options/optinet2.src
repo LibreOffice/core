@@ -20,7 +20,6 @@
 #include <sfx2/sfx.hrc>
 #include "helpid.hrc"
 #include <cuires.hrc>
-#include "optinet2.hrc"
 
 ErrorBox RID_SVXERR_OPT_PROXYPORTS
 {

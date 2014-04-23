@@ -247,14 +247,6 @@
         ITEM_OPEN_SMARTTAGMENU                                              \
     };
 
-#define _MN_EDIT__HYPERLINK \
-    MenuItem\
-    {\
-        Identifier = FN_EDIT_HYPERLINK ; \
-        HelpId = CMD_FN_EDIT_HYPERLINK ; \
-        Text [ en-US ] = "~Edit Hyperlink" ; \
-    };
-
 #define _DEFAULT_TEXT_EDIT_ELEMENTS                                         \
     _MN_EDIT_FIELD                                                              \
     _MN_EDIT_FOOTNOTE                                                           \

@@ -55,7 +55,6 @@
 #include <vcl/settings.hxx>
 #include <unoprnms.hxx>
 
-#include <mmlayoutpage.hrc>
 #include <dbui.hrc>
 #include <unomid.h>
 

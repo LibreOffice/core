@@ -36,22 +36,10 @@
     Text [ en-US ] = "New ~Table Design" ;\
 
 
-#define MID_QUERY_WIZARD    \
-    Identifier = ID_NEW_QUERY_WIZARD;   \
-    HelpId = HID_BROWSER_QUERY_WIZARD ; \
-    Text[ en-US ] = "Query AutoPilot...";   \
-
-
 #define MID_QUERY_NEW_DESIGN    \
     Identifier = ID_NEW_QUERY_DESIGN;   \
     HelpId = HID_BROWSER_QUERY_CREATE_DESIGN ; \
     Text [ en-US ] = "New ~Query (Design View)" ; \
-
-
-#define MID_QUERY_EDIT_DESIGN   \
-    Identifier = ID_EDIT_QUERY_DESIGN;  \
-    HelpId = HID_BROWSER_QUERY_EDIT ; \
-    Text [ en-US ] = "~Edit Query" ; \
 
 
 #define MID_QUERY_NEW_SQL   \
@@ -76,13 +64,6 @@
     Identifier = ID_DOCUMENT_CREATE_REPWIZ ;\
     HelpID = HID_DOCUMENT_CREATE_REPWIZ ;\
     Text [ en-US ] = "Report Wizard...";    \
-
-
-#define MID_DOCUMENT_NEW_AUTOPILOT                              \
-    Identifier = SID_DB_FORM_NEW_PILOT;                             \
-    HelpID = SID_DB_FORM_NEW_PILOT ;\
-    Text [ en-US ] = "Form AutoPilot...";   \
-
 
 #endif // DBAUI_TOOLBOX_HXX
 
