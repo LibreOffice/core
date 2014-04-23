@@ -20,9 +20,6 @@
 #ifndef INCLUDED_VCL_OUTDEV_HXX
 #define INCLUDED_VCL_OUTDEV_HXX
 
-#define META_BMPSCALEPART_ACTION            (118)
-#define META_BMPEXSCALEPART_ACTION          (121)
-
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -49,6 +46,9 @@
 #else
 #define GLYPH_FONT_HEIGHT   256
 #endif
+
+#define META_BMPSCALEPART_ACTION            (118)
+#define META_BMPEXSCALEPART_ACTION          (121)
 
 struct ImplOutDevData;
 class ImplFontEntry;
@@ -1096,7 +1096,7 @@ private:
 
 
 public:
-    /** @name Polyline functions
+    /** @name Mask functions
      */
     ///@{
 
