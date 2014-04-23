@@ -47,6 +47,7 @@
 
 #include "boost/noncopyable.hpp"
 #include "boost/ptr_container/ptr_vector.hpp"
+#include <boost/scoped_array.hpp>
 #include "boost/static_assert.hpp"
 
 namespace {
@@ -108,9 +109,9 @@ class EyecatcherListener
 public:
     void startTest( CppUnit::Test* test) SAL_OVERRIDE
     {
-        char* tn = new char [ test->getName().length() + 2 ];
-        strcpy(tn, test->getName().c_str());
-        int len = strlen(tn);
+        boost::scoped_array<char> tn(new char [ test->getName().length() + 2 ]);
+        strcpy(tn.get(), test->getName().c_str());
+        int len = strlen(tn.get());
         for(int i = 0; i < len; i++)
         {
             if(!isalnum(tn[i]))
@@ -120,8 +121,7 @@ public:
         }
         tn[len] = '_';
         tn[len + 1] = 0;
-        setenv("LO_TESTNAME", tn, true);
-        delete[] tn;
+        setenv("LO_TESTNAME", tn.get(), true);
     }
 
     void endTest( CppUnit::Test* /* test */ ) SAL_OVERRIDE

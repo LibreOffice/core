@@ -49,6 +49,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 
 #include "xml2utf.hxx"
+#include <boost/scoped_array.hpp>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -493,11 +494,11 @@ inline void SaxWriterHelper::insertIndentation(sal_uInt32 m_nLevel) throw( SAXEx
         else
         {
             sal_uInt32 nCount(m_nLevel + 1);
-            sal_Int8* pBytes = new sal_Int8[nCount];
+            boost::scoped_array<sal_Int8> pBytes(new sal_Int8[nCount]);
             pBytes[0] = LINEFEED;
             memset( &(pBytes[1]), 32, m_nLevel );
-            AddBytes(mp_Sequence, nCurrentPos, pBytes, nCount);
-            delete[] pBytes;
+            AddBytes(mp_Sequence, nCurrentPos, pBytes.get(), nCount);
+            pBytes.reset();
             nLastLineFeedPos = nCurrentPos - nCount;
             if (nCurrentPos == SEQUENCESIZE)
                 nCurrentPos = writeSequence();

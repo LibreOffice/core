@@ -32,6 +32,7 @@ using namespace ::com::sun::star::io;
 
 
 #include "xml2utf.hxx"
+#include <boost/scoped_array.hpp>
 
 namespace sax_expatwrap {
 
@@ -394,14 +395,14 @@ Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &
     Sequence<sal_Unicode>   seqUnicode ( nSourceSize );
 
     const sal_Int8 *pbSource = seqText.getConstArray();
-    sal_Int8 *pbTempMem = 0;
+    boost::scoped_array<sal_Int8> pbTempMem;
 
     if( m_seqSource.getLength() ) {
         // put old rest and new byte sequence into one array
-        pbTempMem = new sal_Int8[ nSourceSize ];
-        memcpy( pbTempMem , m_seqSource.getConstArray() , m_seqSource.getLength() );
+        pbTempMem.reset(new sal_Int8[ nSourceSize ]);
+        memcpy( pbTempMem.get() , m_seqSource.getConstArray() , m_seqSource.getLength() );
         memcpy( &(pbTempMem[ m_seqSource.getLength() ]) , seqText.getConstArray() , seqText.getLength() );
-        pbSource = pbTempMem;
+        pbSource = pbTempMem.get();
 
         // set to zero again
         m_seqSource = Sequence< sal_Int8 >();
@@ -436,11 +437,6 @@ Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &
         memcpy( m_seqSource.getArray() , &(pbSource[nSourceCount]) , nSourceSize-nSourceCount );
     }
 
-
-    if( pbTempMem ) {
-        delete [] pbTempMem;
-    }
-
     // set to correct unicode size
     seqUnicode.realloc( nTargetCount );
 
@@ -471,7 +467,7 @@ Unicode2TextConverter::~Unicode2TextConverter()
 
 Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , sal_Int32 nSourceSize)
 {
-    sal_Unicode *puTempMem = 0;
+    boost::scoped_array<sal_Unicode> puTempMem;
 
     if( m_seqSource.getLength() ) {
         // For surrogates !
@@ -479,15 +475,15 @@ Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , 
         // In general when surrogates are used, they should be rarely
         // cut off between two convert()-calls. So this code is used
         // rarely and the extra copy is acceptable.
-        puTempMem = new sal_Unicode[ nSourceSize + m_seqSource.getLength()];
-        memcpy( puTempMem ,
+        puTempMem.reset(new sal_Unicode[ nSourceSize + m_seqSource.getLength()]);
+        memcpy( puTempMem.get() ,
                 m_seqSource.getConstArray() ,
                 m_seqSource.getLength() * sizeof( sal_Unicode ) );
         memcpy(
             &(puTempMem[ m_seqSource.getLength() ]) ,
             puSource ,
             nSourceSize*sizeof( sal_Unicode ) );
-        puSource = puTempMem;
+        puSource = puTempMem.get();
         nSourceSize += m_seqSource.getLength();
 
         m_seqSource = Sequence< sal_Unicode > ();
@@ -537,10 +533,6 @@ Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , 
         memcpy( m_seqSource.getArray() ,
                 &(puSource[nSourceCount]),
                 (nSourceSize - nSourceCount) * sizeof( sal_Unicode ) );
-    }
-
-    if( puTempMem ) {
-        delete [] puTempMem;
     }
 
     // reduce the size of the buffer (fast, no copy necessary)

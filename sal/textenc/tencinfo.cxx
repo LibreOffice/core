@@ -26,6 +26,7 @@
 
 #include "gettextencodingdata.hxx"
 #include "tenchelp.hxx"
+#include <boost/scoped_array.hpp>
 
 sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
 {
@@ -407,20 +408,19 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
     };
 
     rtl_TextEncoding    eEncoding = RTL_TEXTENCODING_DONTKNOW;
-    char*           pBuf;
     char*           pTempBuf;
     sal_uInt32          nBufLen = strlen( pUnixCharset )+1;
     const char*     pFirstPart;
     const char*     pSecondPart;
 
     /* Alloc Buffer and map to lower case */
-    pBuf = new char[nBufLen];
-    Impl_toAsciiLower( pUnixCharset, pBuf );
+    boost::scoped_array<char> pBuf(new char[nBufLen]);
+    Impl_toAsciiLower( pUnixCharset, pBuf.get() );
 
     /* Search FirstPart */
-    pFirstPart = pBuf;
+    pFirstPart = pBuf.get();
     pSecondPart = NULL;
-    pTempBuf = pBuf;
+    pTempBuf = pBuf.get();
     while ( *pTempBuf )
     {
         if ( *pTempBuf == '-' )
@@ -462,8 +462,6 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
             pFirstPartData++;
         }
     }
-
-    delete[] pBuf;
 
     return eEncoding;
 }
@@ -740,18 +738,17 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const char* pMimeC
     };
 
     rtl_TextEncoding            eEncoding = RTL_TEXTENCODING_DONTKNOW;
-    char*                   pBuf;
     const ImplStrCharsetDef*    pData = aVIPMimeCharsetTab;
     sal_uInt32                  nBufLen = strlen( pMimeCharset )+1;
 
     /* Alloc Buffer and map to lower case and remove non alphanumeric chars */
-    pBuf = new char[nBufLen];
-    Impl_toAsciiLowerAndRemoveNonAlphanumeric( pMimeCharset, pBuf );
+    boost::scoped_array<char> pBuf(new char[nBufLen]);
+    Impl_toAsciiLowerAndRemoveNonAlphanumeric( pMimeCharset, pBuf.get() );
 
     /* Search for equal in the VIP table */
     while ( pData->mpCharsetStr )
     {
-        if ( strcmp( pBuf, pData->mpCharsetStr ) == 0 )
+        if ( strcmp( pBuf.get(), pData->mpCharsetStr ) == 0 )
         {
             eEncoding = pData->meTextEncoding;
             break;
@@ -766,7 +763,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const char* pMimeC
         pData = aMimeCharsetTab;
         while ( pData->mpCharsetStr )
         {
-            if ( Impl_matchString( pBuf, pData->mpCharsetStr ) )
+            if ( Impl_matchString( pBuf.get(), pData->mpCharsetStr ) )
             {
                 eEncoding = pData->meTextEncoding;
                 break;
@@ -775,8 +772,6 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const char* pMimeC
             pData++;
         }
     }
-
-    delete[] pBuf;
 
     return eEncoding;
 }
