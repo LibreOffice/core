@@ -3300,8 +3300,15 @@ PPTExtParaProv::~PPTExtParaProv()
     aBuGraList.clear();
 }
 
-PPTNumberFormatCreator::PPTNumberFormatCreator( PPTExtParaProv* pParaProv ) :
-    pExtParaProv ( pParaProv )
+PPTNumberFormatCreator::PPTNumberFormatCreator( PPTExtParaProv* pParaProv )
+    : pExtParaProv(pParaProv)
+    , nIsBullet(0)
+    , nBulletChar(0)
+    , nBulletFont(0)
+    , nBulletHeight(0)
+    , nBulletColor(0)
+    , nTextOfs(0)
+    , nBulletOfs(0)
 {
 }
 
