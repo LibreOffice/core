@@ -1531,6 +1531,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
         pDoc( pDocument ),
         aPos( rPos ),
         mpFormatter(pDoc->GetFormatTable()),
+        nSrcPos(0),
         pCharClass( ScGlobal::pCharClass ),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
