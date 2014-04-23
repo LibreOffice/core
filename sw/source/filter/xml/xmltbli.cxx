@@ -182,6 +182,7 @@ public:
         nRowSpan( nRSpan ),
         nColSpan( nCSpan ),
         bProtected( sal_False ),
+        bHasValue( sal_False ),
         mbCovered( sal_False )
         , m_bHasStringValue(false)
         {}
