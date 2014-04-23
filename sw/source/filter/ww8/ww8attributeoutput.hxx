@@ -457,7 +457,19 @@ protected:
     bool mbOnTOXEnding;
 
 public:
-    WW8AttributeOutput( WW8Export &rWW8Export ) : AttributeOutputBase(), m_rWW8Export( rWW8Export ),mbOnTOXEnding(false) {}
+    WW8AttributeOutput( WW8Export &rWW8Export )
+        : AttributeOutputBase()
+        , m_rWW8Export(rWW8Export)
+        , nPOPosStdLen1(0)
+        , nPOPosStdLen2(0)
+        , m_nStyleStartSize(0)
+        , m_nStyleLenPos(0)
+        , m_nStyAnzPos(0)
+        , m_nFieldResults(0)
+        , mbOnTOXEnding(false)
+    {
+    }
+
     virtual ~WW8AttributeOutput() {}
 
     /// Return the right export class.
