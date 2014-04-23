@@ -491,6 +491,9 @@ public:
 
     void startRow();
     void endRow();
+    void handleGridBefore( OOXMLValue::Pointer_t val );
+private:
+    OOXMLProperty::Pointer_t fakeNoBorder( Id id );
 };
 
 class OOXMLFastContextHandlerTextTable : public OOXMLFastContextHandler

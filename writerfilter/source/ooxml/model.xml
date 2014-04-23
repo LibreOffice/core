@@ -19563,7 +19563,7 @@
             </optional>
             <optional>
               <element name="gridBefore">
-                <ref name="CT_DecimalNumber"/>
+                <ref name="CT_TrPrBaseGridBefore"/>
               </element>
             </optional>
             <optional>
@@ -19613,6 +19613,11 @@
             </optional>
           </choice>
         </oneOrMore>
+      </define>
+      <define name="CT_TrPrBaseGridBefore">
+        <attribute name="val">
+          <ref name="ST_DecimalNumber"/>
+        </attribute>
       </define>
       <define name="CT_TrPr">
         <ref name="CT_TrPrBase"/>
@@ -24766,7 +24771,7 @@
       <kind name="table"/>
       <element name="cnfStyle" tokenid="ooxml:CT_TrPrBase_cnfStyle"/>
       <element name="divId" tokenid="ooxml:CT_TrPrBase_divId"/>
-      <element name="gridBefore" tokenid="ooxml:CT_TrPrBase_gridBefore"/>
+<!--      <element name="gridBefore" tokenid="ooxml:CT_TrPrBase_gridBefore"/> -->
       <element name="gridAfter" tokenid="ooxml:CT_TrPrBase_gridAfter"/>
       <element name="wBefore" tokenid="ooxml:CT_TrPrBase_wBefore"/>
       <element name="wAfter" tokenid="ooxml:CT_TrPrBase_wAfter"/>
@@ -24776,6 +24781,9 @@
       <element name="tblCellSpacing" tokenid="ooxml:CT_TrPrBase_tblCellSpacing"/>
       <element name="jc" tokenid="ooxml:CT_TrPrBase_jc"/>
       <element name="hidden" tokenid="ooxml:CT_TrPrBase_hidden"/>
+    </resource>
+    <resource name="CT_TrPrBaseGridBefore" resource="TextTableRow">
+      <attribute name="val" tokenid="ooxml:CT_TrPrBase_gridBefore" action="handleGridBefore"/>
     </resource>
     <resource name="CT_TrPr" resource="Properties" tag="table">
       <kind name="table"/>

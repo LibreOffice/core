@@ -1966,6 +1966,85 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
     endParagraphGroup();
 }
 
+// Handle w:gridBefore here by faking necessary input that'll fake cells. I'm apparently
+// not insane enough to find out how to add cells in dmapper.
+void OOXMLFastContextHandlerTextTableRow::handleGridBefore( OOXMLValue::Pointer_t val )
+{
+    int count = val->getInt();
+    for( int i = 0;
+         i < count;
+         ++i )
+    {
+        endOfParagraph();
+
+        if (isForwardEvents())
+        {
+            // This whole part is OOXMLFastContextHandlerTextTableCell::endCell() .
+            OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
+            {
+                OOXMLValue::Pointer_t pVal
+                    (new OOXMLIntegerValue(mnTableDepth));
+                OOXMLProperty::Pointer_t pProp
+                    (new OOXMLPropertyImpl(NS_ooxml::LN_tblDepth, pVal, OOXMLPropertyImpl::SPRM));
+                pProps->add(pProp);
+            }
+            {
+                OOXMLValue::Pointer_t pVal
+                    (new OOXMLIntegerValue(1));
+                OOXMLProperty::Pointer_t pProp
+                    (new OOXMLPropertyImpl(NS_ooxml::LN_inTbl, pVal, OOXMLPropertyImpl::SPRM));
+                pProps->add(pProp);
+            }
+            {
+                OOXMLValue::Pointer_t pVal
+                    (new OOXMLBooleanValue(mnTableDepth > 0));
+                OOXMLProperty::Pointer_t pProp
+                    (new OOXMLPropertyImpl(NS_ooxml::LN_tblCell, pVal, OOXMLPropertyImpl::SPRM));
+                pProps->add(pProp);
+            }
+
+    #ifdef DEBUG_PROPERTIES
+            debug_logger->startElement("handlegridbefore");
+            debug_logger->propertySet(OOXMLPropertySet::Pointer_t(pProps->clone()),
+                    IdToString::Pointer_t(new OOXMLIdToString()));
+            debug_logger->endElement();
+    #endif
+            mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+
+            // fake <w:tcBorders> with no border
+            OOXMLPropertySet::Pointer_t pCellProps( new OOXMLPropertySetImpl());
+            {
+                OOXMLPropertySet::Pointer_t pBorderProps( new OOXMLPropertySetImpl());
+                static Id borders[] = { NS_ooxml::LN_CT_TcBorders_top, NS_ooxml::LN_CT_TcBorders_bottom,
+                    NS_ooxml::LN_CT_TcBorders_start, NS_ooxml::LN_CT_TcBorders_end };
+                for( size_t j = 0; j < SAL_N_ELEMENTS( borders ); ++j )
+                    pBorderProps->add( fakeNoBorder( borders[ j ] ));
+                OOXMLValue::Pointer_t pValue( new OOXMLPropertySetValue( pBorderProps ));
+                OOXMLProperty::Pointer_t pProp
+                    (new OOXMLPropertyImpl(NS_ooxml::LN_CT_TcPrBase_tcBorders, pValue, OOXMLPropertyImpl::SPRM));
+                pCellProps->add(pProp);
+                mpParserState->setCellProperties(pCellProps);
+            }
+        }
+
+        sendCellProperties();
+        endParagraphGroup();
+    }
+}
+
+OOXMLProperty::Pointer_t OOXMLFastContextHandlerTextTableRow::fakeNoBorder( Id id )
+{
+    OOXMLPropertySet::Pointer_t pProps( new OOXMLPropertySetImpl());
+    OOXMLValue::Pointer_t pVal(new OOXMLIntegerValue(0));
+    OOXMLProperty::Pointer_t pPropVal
+        (new OOXMLPropertyImpl(NS_ooxml::LN_CT_Border_val, pVal, OOXMLPropertyImpl::ATTRIBUTE));
+    pProps->add(pPropVal);
+    OOXMLValue::Pointer_t pValue( new OOXMLPropertySetValue( pProps ));
+    OOXMLProperty::Pointer_t pProp
+        (new OOXMLPropertyImpl(id, pValue, OOXMLPropertyImpl::SPRM));
+    return pProp;
+}
+
 /*
   class OOXMLFastContextHandlerTextTable
  */

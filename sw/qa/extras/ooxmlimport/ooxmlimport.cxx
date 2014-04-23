@@ -2065,6 +2065,18 @@ DECLARE_OOXMLIMPORT_TEST(testFdo55381, "fdo55381.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(4), xCursor->getPage());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testGridBefore, "gridbefore.docx")
+{
+    // w:gridBefore is faked by inserting two cells without border (because Writer can't do non-rectangular tables).
+    // So check the first cell in the first row is in fact 3rd and that it's more to the right than the second
+    // cell on the second row.
+    OUString textA3 = parseDump("/root/page/body/tab/row[1]/cell[1]/txt/text()" );
+    OUString leftA3 = parseDump("/root/page/body/tab/row[1]/cell[1]/infos/bounds", "left" );
+    OUString leftB2 = parseDump("/root/page/body/tab/row[2]/cell[2]/infos/bounds", "left" );
+    CPPUNIT_ASSERT_EQUAL( OUString( "A3" ), textA3 );
+    CPPUNIT_ASSERT( leftA3.toInt32() > leftB2.toInt32());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
