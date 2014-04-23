@@ -2093,13 +2093,17 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
 
     OUString sSchemeClr;
     sal_uInt32 nRgbClr = 0;
+    sal_Int32 nEffectToken = 0;
     sal_Int32 nAlpha = MAX_PERCENT;
     Sequence< PropertyValue > aTransformations;
     sax_fastparser::FastAttributeList *aOuterShdwAttrList = mpFS->createAttrList();
     for( sal_Int32 i=0; i < aEffectProps.getLength(); ++i )
     {
-        if(aEffectProps[i].Name == "outerShdw")
+        if( aEffectProps[i].Name == "outerShdw" || aEffectProps[i].Name == "innerShdw" )
         {
+            nEffectToken = ( aEffectProps[i].Name == "outerShdw") ?
+                    FSNS( XML_a, XML_outerShdw ) :
+                    FSNS( XML_a, XML_innerShdw );
             uno::Sequence< beans::PropertyValue > aOuterShdwProps;
             aEffectProps[0].Value >>= aOuterShdwProps;
             for( sal_Int32 j=0; j < aOuterShdwProps.getLength(); ++j )
@@ -2183,7 +2187,7 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
 
     mpFS->startElementNS(XML_a, XML_effectLst, FSEND);
     sax_fastparser::XFastAttributeListRef xAttrList( aOuterShdwAttrList );
-    mpFS->startElementNS( XML_a, XML_outerShdw, xAttrList );
+    mpFS->startElement( nEffectToken, xAttrList );
 
     if( sSchemeClr.isEmpty() )
         WriteColor( nRgbClr, nAlpha );

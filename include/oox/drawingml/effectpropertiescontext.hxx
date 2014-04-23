@@ -31,6 +31,9 @@ public:
 
 protected:
     EffectProperties& mrEffectProperties;
+
+private:
+    void saveUnsupportedAttribs( const AttributeList& rAttribs );
 };
 
 } }
