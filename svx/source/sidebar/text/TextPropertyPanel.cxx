@@ -129,11 +129,7 @@ void TextPropertyPanel::HandleContextChange (
         return;
 
     maContext = aContext;
-
-    if (maContext.GetApplication_DI() == sfx2::sidebar::EnumContext::Application_Calc)
-        mpToolBoxIncDec->Hide();
-    else
-        mpToolBoxIncDec->Show();
+    mpToolBoxIncDec->Show(maContext.GetApplication_DI() != sfx2::sidebar::EnumContext::Application_Calc);
 
     bool bWriterText = false;
     switch (maContext.GetCombinedContext_DI())
