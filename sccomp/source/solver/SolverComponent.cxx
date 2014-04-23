@@ -96,13 +96,13 @@ double SolverComponent::GetValue( const uno::Reference<sheet::XSpreadsheetDocume
 
 SolverComponent::SolverComponent() :
     OPropertyContainer( GetBroadcastHelper() ),
-    mbMaximize( sal_True ),
-    mbNonNegative( sal_False ),
-    mbInteger( sal_False ),
+    mbMaximize( true ),
+    mbNonNegative( false ),
+    mbInteger( false ),
     mnTimeout( 100 ),
     mnEpsilonLevel( 0 ),
-    mbLimitBBDepth( sal_True ),
-    mbSuccess( sal_False ),
+    mbLimitBBDepth( true ),
+    mbSuccess( false ),
     mfResultValue( 0.0 )
 {
     // for XPropertySet implementation:

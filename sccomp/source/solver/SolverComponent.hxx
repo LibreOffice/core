@@ -73,15 +73,15 @@ protected:
     com::sun::star::table::CellAddress                                            maObjective;
     com::sun::star::uno::Sequence< com::sun::star::table::CellAddress >           maVariables;
     com::sun::star::uno::Sequence< com::sun::star::sheet::SolverConstraint >      maConstraints;
-    sal_Bool                                                                      mbMaximize;
+    bool                                                                      mbMaximize;
     // set via XPropertySet
-    sal_Bool                                                                      mbNonNegative;
-    sal_Bool                                                                      mbInteger;
+    bool                                                                      mbNonNegative;
+    bool                                                                      mbInteger;
     sal_Int32                                                                     mnTimeout;
     sal_Int32                                                                     mnEpsilonLevel;
-    sal_Bool                                                                      mbLimitBBDepth;
+    bool                                                                      mbLimitBBDepth;
     // results
-    sal_Bool                                                                      mbSuccess;
+    bool                                                                      mbSuccess;
     double                                                                        mfResultValue;
     com::sun::star::uno::Sequence< double >                                       maSolution;
     OUString                                                                 maStatus;
