@@ -22,22 +22,17 @@
 
 #include "rcid.hrc"
 
-#define DLG_PARA                (RC_CHRDLG_BEGIN +  2)
-#define DLG_DRAWPARA            (RC_CHRDLG_BEGIN + 10)
-
-// Tabpages -> now in globals.hrc
-
 #define MSG_ILLEGAL_PAGENUM     (RC_CHRDLG_BEGIN +  1)
 #define STR_TEXTCOLL_HEADER     (RC_CHRDLG_BEGIN +  2)
 #define STR_PAGEFMT_HEADER      (RC_CHRDLG_BEGIN +  4)
 
-#define CHRDLG_ACT_END  DLG_DRAWPARA
+#define DLG_SWDROPCAPS          (RC_CHRDLG_BEGIN + 11)
+
+#define CHRDLG_ACT_END  DLG_SWDROPCAPS
 
 #if CHRDLG_ACT_END > RC_CHRDLG_END
 #error Resource-Id overflow in #file, #line
 #endif
-
-#define DLG_SWDROPCAPS            (RC_CHRDLG_BEGIN + 11)
 
 #endif
 
