@@ -32,11 +32,16 @@ interface DrawDocument
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-        SID_CHINESE_CONVERSION // ole : ?, status : ?
-        [
-                ExecMethod = Execute ;
-                StateMethod = GetState ;
-        ]
+    SID_CHINESE_CONVERSION // ole : ?, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_LANGUAGE_STATUS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
          // ?
     FID_SEARCH_NOW // ole : ?, status : ?
     [

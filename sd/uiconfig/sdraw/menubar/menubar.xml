@@ -245,6 +245,8 @@
       <menu:menuitem menu:id=".uno:SpellDialog"/>
       <menu:menu menu:id=".uno:LanguageMenu">
         <menu:menupopup>
+          <menu:menuitem menu:id=".uno:SetLanguageAllTextMenu"/>
+          <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:HangulHanjaConversion"/>
           <menu:menuitem menu:id=".uno:ChineseConversion"/>
           <menu:menuitem menu:id=".uno:ThesaurusDialog"/>
