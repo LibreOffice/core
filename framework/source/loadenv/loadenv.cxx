@@ -125,7 +125,12 @@ class LoadEnvListener : public ::cppu::WeakImplHelper2< css::frame::XLoadEventLi
 
 LoadEnv::LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     throw(LoadEnvException, css::uno::RuntimeException)
-    : m_xContext    (xContext)
+    : m_xContext(xContext)
+    , m_nSearchFlags(0)
+    , m_eFeature(E_NO_FEATURE)
+    , m_eContentType(E_UNSUPPORTED_CONTENT)
+    , m_bCloseFrameOnError(false)
+    , m_bReactivateControllerOnError(false)
     , m_pQuietInteraction( 0 )
 {
 }
