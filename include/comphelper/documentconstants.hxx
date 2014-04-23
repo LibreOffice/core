@@ -48,11 +48,6 @@
 #define MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE_ASCII     "application/vnd.sun.xml.impress.template"
 #define MIMETYPE_VND_SUN_XML_CALC_TEMPLATE_ASCII        "application/vnd.sun.xml.calc.template"
 
-#define MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE            OUString( MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE_ASCII )
-#define MIMETYPE_VND_SUN_XML_DRAW_TEMPLATE              OUString( MIMETYPE_VND_SUN_XML_DRAW_TEMPLATE_ASCII )
-#define MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE           OUString( MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE_ASCII )
-#define MIMETYPE_VND_SUN_XML_CALC_TEMPLATE              OUString( MIMETYPE_VND_SUN_XML_CALC_TEMPLATE_ASCII )
-
 // formats of SO8
 #define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII          "application/vnd.oasis.opendocument.text"
 #define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII      "application/vnd.oasis.opendocument.text-web"
