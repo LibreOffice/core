@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <data/numberchar.h>
-#include <rtl/ustrbuf.hxx>
-
 #include <texttonum.hxx>
 
 using namespace com::sun::star::uno;

@@ -20,7 +20,6 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <chartonum.hxx>
-#include <data/numberchar.h>
 
 using namespace com::sun::star::uno;
 
