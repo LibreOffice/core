@@ -2071,6 +2071,11 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Print Range Empty";
     };
+
+    String STR_UNDO_CONDFORMAT
+    {
+        Text [ en-US ] = "Conditional Format";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

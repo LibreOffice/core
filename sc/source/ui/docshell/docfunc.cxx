@@ -5302,6 +5302,31 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
     if(pDoc->IsTabProtected(nTab))
         return;
 
+    bool bUndo = pDoc->IsUndoEnabled();
+    ScDocument* pUndoDoc = NULL;
+    ScRange aCombinedRange = rRanges.Combine();
+    ScRange aCompleteRange;
+    if(bUndo)
+    {
+        pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+        pUndoDoc->InitUndo( pDoc, nTab, nTab );
+
+        if(pFormat)
+        {
+            aCompleteRange = aCombinedRange;
+        }
+        if(nOldFormat)
+        {
+            ScConditionalFormat* pOldFormat = pDoc->GetCondFormList(nTab)->GetFormat(nOldFormat);
+            if(pOldFormat)
+                aCompleteRange.ExtendTo(pOldFormat->GetRange().Combine());
+        }
+
+        pDoc->CopyToDocument( aCompleteRange.aStart.Col(),aCompleteRange.aStart.Row(),nTab,
+                aCompleteRange.aEnd.Col(),aCompleteRange.aEnd.Row(),nTab,
+                IDF_ALL, false, pUndoDoc );
+    }
+
     boost::scoped_ptr<ScRange> pRepaintRange;
     if(nOldFormat)
     {
@@ -5318,14 +5343,25 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
     if(pFormat)
     {
         if(pRepaintRange)
-            pRepaintRange->ExtendTo(rRanges.Combine());
+            pRepaintRange->ExtendTo(aCombinedRange);
         else
-            pRepaintRange.reset(new ScRange(rRanges.Combine()));
+            pRepaintRange.reset(new ScRange(aCombinedRange));
 
 	sal_uLong nIndex = pDoc->AddCondFormat(pFormat, nTab);
 
         SetConditionalFormatAttributes(pDoc, rRanges, nIndex, nTab);
         pDoc->SetStreamValid(nTab, false);
+    }
+
+    if(bUndo)
+    {
+        ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
+        pRedoDoc->InitUndo( pDoc, nTab, nTab );
+        pDoc->CopyToDocument( aCompleteRange.aStart.Col(),aCompleteRange.aStart.Row(),nTab,
+                aCompleteRange.aEnd.Col(),aCompleteRange.aEnd.Row(),nTab,
+                IDF_ALL, false, pRedoDoc );
+        rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoConditionalFormat(&rDocShell, pUndoDoc, pRedoDoc, aCompleteRange));
     }
 
     if(pRepaintRange)

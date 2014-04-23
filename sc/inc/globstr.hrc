@@ -692,7 +692,9 @@
 #define STR_PRINT_PREVIEW_NODATA        529
 #define STR_PRINT_PREVIEW_EMPTY_RANGE   530
 
-#define SC_GLOBSTR_STR_COUNT            531     /**< the count of permanently resident strings */
+#define STR_UNDO_CONDFORMAT             531
+
+#define SC_GLOBSTR_STR_COUNT            532     /**< the count of permanently resident strings */
 
 #endif
 

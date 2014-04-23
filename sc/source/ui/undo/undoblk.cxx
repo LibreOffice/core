@@ -61,6 +61,7 @@ TYPEINIT1(ScUndoCut,                ScBlockUndo);
 TYPEINIT1(ScUndoPaste,              SfxUndoAction);
 TYPEINIT1(ScUndoDragDrop,           SfxUndoAction);
 TYPEINIT1(ScUndoListNames,          SfxUndoAction);
+TYPEINIT1(ScUndoConditionalFormat,  SfxUndoAction);
 TYPEINIT1(ScUndoUseScenario,        SfxUndoAction);
 TYPEINIT1(ScUndoSelectionStyle,     SfxUndoAction);
 TYPEINIT1(ScUndoEnterMatrix,        ScBlockUndo);
@@ -1429,6 +1430,57 @@ bool ScUndoListNames::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return rTarget.ISA(ScTabViewTarget);
 }
+
+ScUndoConditionalFormat::ScUndoConditionalFormat(ScDocShell* pNewDocShell,
+        ScDocument* pUndoDoc, ScDocument* pRedoDoc, const ScRange& rRange):
+    ScSimpleUndo( pNewDocShell ),
+    mpUndoDoc(pUndoDoc),
+    mpRedoDoc(pRedoDoc),
+    maRange(rRange)
+{
+}
+
+ScUndoConditionalFormat::~ScUndoConditionalFormat()
+{
+}
+
+OUString ScUndoConditionalFormat::GetComment() const
+{
+    return ScGlobal::GetRscString( STR_UNDO_CONDFORMAT );
+}
+
+void ScUndoConditionalFormat::Undo()
+{
+    DoChange(mpUndoDoc.get());
+}
+
+void ScUndoConditionalFormat::Redo()
+{
+    DoChange(mpRedoDoc.get());
+}
+
+void ScUndoConditionalFormat::DoChange(ScDocument* pSrcDoc)
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+
+    pDoc->DeleteAreaTab( maRange, IDF_ALL );
+    pSrcDoc->CopyToDocument( maRange, IDF_ALL, false, pDoc );
+    pDocShell->PostPaint( maRange, PAINT_GRID );
+    pDocShell->PostDataChanged();
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (pViewShell)
+        pViewShell->CellContentChanged();
+}
+
+void ScUndoConditionalFormat::Repeat(SfxRepeatTarget& )
+{
+}
+
+bool ScUndoConditionalFormat::CanRepeat(SfxRepeatTarget& ) const
+{
+    return false;
+}
+
 
 ScUndoUseScenario::ScUndoUseScenario( ScDocShell* pNewDocShell,
                         const ScMarkData& rMark,
