@@ -234,7 +234,11 @@ struct SwHTMLFmtInfo
         pFmt( pF ),
         pRefFmt(0),
         pItemSet( 0 ),
+        nLeftMargin( 0 ),
+        nRightMargin( 0 ),
         nFirstLineIndent(0),
+        nTopMargin( 0 ),
+        nBottomMargin( 0 ),
         bScriptDependent(false)
     {}
 
