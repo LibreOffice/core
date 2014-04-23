@@ -216,7 +216,7 @@ ScPrintUIOptions::ScPrintUIOptions()
 {
     const ScPrintOptions& rPrintOpt = SC_MOD()->GetPrintOptions();
     sal_Int32 nContent = rPrintOpt.GetAllSheets() ? 0 : 1;
-    sal_Bool bSuppress = rPrintOpt.GetSkipEmpty();
+    bool bSuppress = rPrintOpt.GetSkipEmpty();
 
     ResStringArray aStrings( ScResId( SCSTR_PRINT_OPTIONS ) );
     OSL_ENSURE( aStrings.Count() >= 10, "resource incomplete" );
@@ -305,7 +305,7 @@ void ScPrintUIOptions::SetDefaults()
 
     const ScPrintOptions& rPrintOpt = SC_MOD()->GetPrintOptions();
     sal_Int32 nContent = rPrintOpt.GetAllSheets() ? 0 : 1;
-    sal_Bool bSuppress = rPrintOpt.GetSkipEmpty();
+    bool bSuppress = rPrintOpt.GetSkipEmpty();
 
     for (sal_Int32 nUIPos=0; nUIPos<m_aUIProperties.getLength(); ++nUIPos)
     {
@@ -765,8 +765,8 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     uno::Reference<frame::XController> xView;
 
     // defaults when no options are passed: all sheets, include empty pages
-    sal_Bool bSelectedSheetsOnly = false;
-    sal_Bool bIncludeEmptyPages = true;
+    bool bSelectedSheetsOnly = false;
+    bool bIncludeEmptyPages = true;
 
     bool bHasPrintContent = false;
     sal_Int32 nPrintContent = 0;        // all sheets / selected sheets / selected cells
@@ -1056,7 +1056,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, NULL );
 
     ScRange aCellRange;
-    sal_Bool bWasCellRange = aFunc.GetLastSourceRange( aCellRange );
+    bool bWasCellRange = aFunc.GetLastSourceRange( aCellRange );
     Size aTwips = aFunc.GetPageSize();
     awt::Size aPageSize( TwipsToHMM( aTwips.Width() ), TwipsToHMM( aTwips.Height() ) );
 
@@ -1299,7 +1299,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScModelObj::getLinks() throw(uno
 sal_Bool SAL_CALL ScModelObj::isActionLocked() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bLocked = false;
+    bool bLocked = false;
     if (pDocShell)
         bLocked = ( pDocShell->GetLockCount() != 0 );
     return bLocked;
@@ -1431,7 +1431,7 @@ void SAL_CALL ScModelObj::unprotect( const OUString& aPassword )
     if (pDocShell)
     {
         OUString aString(aPassword);
-        sal_Bool bDone = pDocShell->GetDocFunc().Unprotect( TABLEID_DOC, aString, true );
+        bool bDone = pDocShell->GetDocFunc().Unprotect( TABLEID_DOC, aString, true );
         if (!bDone)
             throw lang::IllegalArgumentException();
     }
@@ -1477,7 +1477,7 @@ sheet::GoalResult SAL_CALL ScModelObj::seekGoal(
         OUString aGoalString(aGoalValue);
         ScDocument* pDoc = pDocShell->GetDocument();
         double fValue = 0.0;
-        sal_Bool bFound = pDoc->Solver(
+        bool bFound = pDoc->Solver(
                     (SCCOL)aFormulaPosition.Column, (SCROW)aFormulaPosition.Row, aFormulaPosition.Sheet,
                     (SCCOL)aVariablePosition.Column, (SCROW)aVariablePosition.Row, aVariablePosition.Sheet,
                     aGoalString, fValue );
@@ -1598,7 +1598,7 @@ void SAL_CALL ScModelObj::setPropertyValue(
         //  Recalculation after loading is handled separately.
         bool bHardRecalc = !pDoc->IsImportingXML();
 
-        sal_Bool bOpt = ScDocOptionsHelper::setPropertyValue( aNewOpt, aPropSet.getPropertyMap(), aPropertyName, aValue );
+        bool bOpt = ScDocOptionsHelper::setPropertyValue( aNewOpt, aPropSet.getPropertyMap(), aPropertyName, aValue );
         if (bOpt)
         {
             // done...
@@ -1672,7 +1672,7 @@ void SAL_CALL ScModelObj::setPropertyValue(
         }
         else if ( aString.equalsAscii( SC_UNO_ISUNDOENABLED ) )
         {
-            sal_Bool bUndoEnabled = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+            bool bUndoEnabled = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             pDoc->EnableUndo( bUndoEnabled );
             pDocShell->GetUndoManager()->SetMaxUndoActionCount(
                 bUndoEnabled
@@ -1810,14 +1810,14 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         {
             // default for no model is TRUE
             ScDrawLayer* pModel = pDoc->GetDrawLayer();
-            sal_Bool bOpenInDesign = pModel ? pModel->GetOpenInDesignMode() : sal_True;
+            bool bOpenInDesign = pModel ? pModel->GetOpenInDesignMode() : sal_True;
             ScUnoHelpFunctions::SetBoolInAny( aRet, bOpenInDesign );
         }
         else if ( aString.equalsAscii( SC_UNO_AUTOCONTFOC ) )
         {
             // default for no model is FALSE
             ScDrawLayer* pModel = pDoc->GetDrawLayer();
-            sal_Bool bAutoControlFocus = pModel ? pModel->GetAutoControlFocus() : false;
+            bool bAutoControlFocus = pModel ? pModel->GetAutoControlFocus() : false;
             ScUnoHelpFunctions::SetBoolInAny( aRet, bAutoControlFocus );
         }
         else if ( aString.equalsAscii( SC_UNO_FORBIDDEN ) )
@@ -2535,7 +2535,7 @@ void SAL_CALL ScTableSheetsObj::insertNewByName( const OUString& aName, sal_Int1
                                                 throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
+    bool bDone = false;
     if (pDocShell)
     {
         OUString aNamStr(aName);
@@ -2549,7 +2549,7 @@ void SAL_CALL ScTableSheetsObj::moveByName( const OUString& aName, sal_Int16 nDe
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
+    bool bDone = false;
     if (pDocShell)
     {
         SCTAB nSource;
@@ -2565,7 +2565,7 @@ void SAL_CALL ScTableSheetsObj::copyByName( const OUString& aName,
         throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
+    bool bDone = false;
     if (pDocShell)
     {
         OUString aNewStr(aCopy);
@@ -2595,8 +2595,8 @@ void SAL_CALL ScTableSheetsObj::insertByName( const OUString& aName, const uno::
                                     lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
-    sal_Bool bIllArg = false;
+    bool bDone = false;
+    bool bIllArg = false;
 
     //! Type of aElement can be some specific interface instead of XInterface
 
@@ -2627,10 +2627,10 @@ void SAL_CALL ScTableSheetsObj::insertByName( const OUString& aName, const uno::
                 }
             }
             else
-                bIllArg = sal_True;
+                bIllArg = true;
         }
         else
-            bIllArg = sal_True;
+            bIllArg = true;
     }
 
     if (!bDone)
@@ -2647,8 +2647,8 @@ void SAL_CALL ScTableSheetsObj::replaceByName( const OUString& aName, const uno:
                                     lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
-    sal_Bool bIllArg = false;
+    bool bDone = false;
+    bool bIllArg = false;
 
     //! Type of aElement can be some specific interface instead of XInterface
 
@@ -2679,10 +2679,10 @@ void SAL_CALL ScTableSheetsObj::replaceByName( const OUString& aName, const uno:
                 }
             }
             else
-                bIllArg = sal_True;
+                bIllArg = true;
         }
         else
-            bIllArg = sal_True;
+            bIllArg = true;
     }
 
     if (!bDone)
@@ -2699,7 +2699,7 @@ void SAL_CALL ScTableSheetsObj::removeByName( const OUString& aName )
                                     lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
+    bool bDone = false;
     if (pDocShell)
     {
         SCTAB nIndex;
@@ -2946,7 +2946,7 @@ void SAL_CALL ScTableColumnsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 n
                                                 throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
+    bool bDone = false;
     if ( pDocShell && nCount > 0 && nPosition >= 0 && nStartCol+nPosition <= nEndCol &&
             nStartCol+nPosition+nCount-1 <= MAXCOL )
     {
@@ -2962,7 +2962,7 @@ void SAL_CALL ScTableColumnsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCou
                                                 throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
+    bool bDone = false;
     //  Der zu loeschende Bereich muss innerhalb des Objekts liegen
     if ( pDocShell && nCount > 0 && nIndex >= 0 && nStartCol+nIndex+nCount-1 <= nEndCol )
     {
@@ -3087,14 +3087,14 @@ void SAL_CALL ScTableColumnsObj::setPropertyValue(
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_CELLVIS ) )
     {
-        sal_Bool bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+        bool bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
         ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
         rFunc.SetWidthOrHeight(true, aColArr, nTab, eMode, 0, true, true);
         //  SC_SIZE_DIRECT with size 0: hide
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_OWIDTH ) )
     {
-        sal_Bool bOpt = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+        bool bOpt = ScUnoHelpFunctions::GetBoolFromAny( aValue );
         if (bOpt)
             rFunc.SetWidthOrHeight(
                 true, aColArr, nTab, SC_SIZE_OPTIMAL, STD_EXTRA_WIDTH, true, true);
@@ -3103,7 +3103,7 @@ void SAL_CALL ScTableColumnsObj::setPropertyValue(
     else if ( aNameString.equalsAscii( SC_UNONAME_NEWPAGE ) || aNameString.equalsAscii( SC_UNONAME_MANPAGE ) )
     {
         //! single function to set/remove all breaks?
-        sal_Bool bSet = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+        bool bSet = ScUnoHelpFunctions::GetBoolFromAny( aValue );
         for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
             if (bSet)
                 rFunc.InsertPageBreak( true, ScAddress(nCol,0,nTab), true, true, true );
@@ -3139,7 +3139,7 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const OUString& aProperty
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_OWIDTH ) )
     {
-        sal_Bool bOpt = !(pDoc->GetColFlags( nStartCol, nTab ) & CR_MANUALSIZE);
+        bool bOpt = !(pDoc->GetColFlags( nStartCol, nTab ) & CR_MANUALSIZE);
         ScUnoHelpFunctions::SetBoolInAny( aAny, bOpt );
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_NEWPAGE ) )
@@ -3201,7 +3201,7 @@ void SAL_CALL ScTableRowsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 nCou
                                                 throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
+    bool bDone = false;
     if ( pDocShell && nCount > 0 && nPosition >= 0 && nStartRow+nPosition <= nEndRow &&
             nStartRow+nPosition+nCount-1 <= MAXROW )
     {
@@ -3217,7 +3217,7 @@ void SAL_CALL ScTableRowsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount 
                                                 throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
+    bool bDone = false;
     //  Der zu loeschende Bereich muss innerhalb des Objekts liegen
     if ( pDocShell && nCount > 0 && nIndex >= 0 && nStartRow+nIndex+nCount-1 <= nEndRow )
     {
@@ -3309,7 +3309,7 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
         }
         else
         {
-            sal_Bool bOpt = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+            bool bOpt = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             if (bOpt)
                 rFunc.SetWidthOrHeight(false, aRowArr, nTab, SC_SIZE_OPTIMAL, 0, true, true);
             else
@@ -3338,7 +3338,7 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_CELLVIS ) )
     {
-        sal_Bool bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+        bool bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
         ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
         rFunc.SetWidthOrHeight(false, aRowArr, nTab, eMode, 0, true, true);
         //  SC_SIZE_DIRECT with size 0: hide
@@ -3360,7 +3360,7 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
     else if ( aNameString.equalsAscii( SC_UNONAME_NEWPAGE) || aNameString.equalsAscii( SC_UNONAME_MANPAGE) )
     {
         //! single function to set/remove all breaks?
-        sal_Bool bSet = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+        bool bSet = ScUnoHelpFunctions::GetBoolFromAny( aValue );
         for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
             if (bSet)
                 rFunc.InsertPageBreak( false, ScAddress(0,nRow,nTab), true, true, true );
@@ -3414,7 +3414,7 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyNam
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_OHEIGHT ) )
     {
-        sal_Bool bOpt = !(pDoc->GetRowFlags( nStartRow, nTab ) & CR_MANUALSIZE);
+        bool bOpt = !(pDoc->GetRowFlags( nStartRow, nTab ) & CR_MANUALSIZE);
         ScUnoHelpFunctions::SetBoolInAny( aAny, bOpt );
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_NEWPAGE ) )

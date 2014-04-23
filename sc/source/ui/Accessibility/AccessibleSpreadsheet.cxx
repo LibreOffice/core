@@ -455,18 +455,18 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         pAccDoc->CommitChange(aEvent);
                     }
                 }
-                sal_Bool bNewPosCell = (aNewCell != maActiveCell) || mpViewShell->GetForceFocusOnCurCell(); // #i123629#
-                sal_Bool bNewPosCellFocus=sal_False;
+                bool bNewPosCell = (aNewCell != maActiveCell) || mpViewShell->GetForceFocusOnCurCell(); // #i123629#
+                bool bNewPosCellFocus=false;
                 if ( bNewPosCell && IsFocused() && aNewCell.Tab() == maActiveCell.Tab() )
                 {//single Focus
-                    bNewPosCellFocus=sal_True;
+                    bNewPosCellFocus=true;
                 }
                 ScMarkData &refScMarkData = pViewData->GetMarkData();
                 // MT IA2: Not used
                 // int nSelCount = refScMarkData.GetSelectCount();
-                sal_Bool bIsMark =refScMarkData.IsMarked();
-                sal_Bool bIsMultMark = refScMarkData.IsMultiMarked();
-                sal_Bool bNewMarked = refScMarkData.GetTableSelect(aNewCell.Tab()) && ( bIsMark || bIsMultMark );
+                bool bIsMark =refScMarkData.IsMarked();
+                bool bIsMultMark = refScMarkData.IsMultiMarked();
+                bool bNewMarked = refScMarkData.GetTableSelect(aNewCell.Tab()) && ( bIsMark || bIsMultMark );
 //              sal_Bool bNewCellSelected = isAccessibleSelected(aNewCell.Row(), aNewCell.Col());
                 sal_uInt16 nTab = pViewData->GetTabNo();
                 ScRange aMarkRange;
@@ -489,8 +489,8 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 refScMarkData.FillRangeListWithMarks(mpMarkedRanges, true);
 
                 //For Whole Col Row
-                sal_Bool bWholeRow = ::labs(aMarkRange.aStart.Row() - aMarkRange.aEnd.Row()) == MAXROW ;
-                sal_Bool bWholeCol = ::abs(aMarkRange.aStart.Col() - aMarkRange.aEnd.Col()) == MAXCOL ;
+                bool bWholeRow = ::labs(aMarkRange.aStart.Row() - aMarkRange.aEnd.Row()) == MAXROW ;
+                bool bWholeCol = ::abs(aMarkRange.aStart.Col() - aMarkRange.aEnd.Col()) == MAXCOL ;
                 if ((bNewMarked || bIsMark || bIsMultMark ) && (bWholeCol || bWholeRow))
                 {
                     if ( aMarkRange != m_aLastWithInMarkRange )
@@ -500,10 +500,10 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         {
                             CommitFocusCell(aNewCell);
                         }
-                        sal_Bool bLastIsWholeColRow =
+                        bool bLastIsWholeColRow =
                             (::labs(m_aLastWithInMarkRange.aStart.Row() - m_aLastWithInMarkRange.aEnd.Row()) == MAXROW && bWholeRow) ||
                             (::abs(m_aLastWithInMarkRange.aStart.Col() - m_aLastWithInMarkRange.aEnd.Col()) == MAXCOL && bWholeCol);
-                        sal_Bool bSelSmaller=
+                        bool bSelSmaller=
                             bLastIsWholeColRow &&
                             !aMarkRange.In(m_aLastWithInMarkRange) &&
                             aMarkRange.Intersects(m_aLastWithInMarkRange);
@@ -519,7 +519,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 }
                 m_aLastWithInMarkRange = aMarkRange;
                 int nNewMarkCount = mpMarkedRanges->GetCellCount();
-                sal_Bool bSendSingle= (0 == nNewMarkCount) && bNewPosCell;
+                bool bSendSingle= (0 == nNewMarkCount) && bNewPosCell;
                 if (bSendSingle)
                 {
                     RemoveSelection(refScMarkData);
@@ -553,7 +553,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 else
                 {
                     ScRange aDelRange;
-                    sal_Bool bIsDel = pViewData->GetDelMark( aDelRange );
+                    bool bIsDel = pViewData->GetDelMark( aDelRange );
                     if ( (!bIsDel || (bIsDel && aMarkRange != aDelRange)) &&
                         bNewMarked &&
                         nNewMarkCount > 0 &&
@@ -886,7 +886,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nR
     if ((nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
         throw lang::IndexOutOfBoundsException();
 
-    sal_Bool bResult(false);
+    bool bResult(false);
     if (mpViewShell && mpViewShell->GetViewData())
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
@@ -908,7 +908,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32
     if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0))
         throw lang::IndexOutOfBoundsException();
 
-    sal_Bool bResult(false);
+    bool bResult(false);
     if (mpViewShell && mpViewShell->GetViewData())
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
@@ -974,7 +974,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow,
         (nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
         throw lang::IndexOutOfBoundsException();
 
-    sal_Bool bResult(false);
+    bool bResult(false);
     if (mpViewShell)
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
@@ -1388,7 +1388,7 @@ bool ScAccessibleSpreadsheet::IsEditable(
     {
         return false;
     }
-    sal_Bool bProtected(false);
+    bool bProtected(false);
     if (mpDoc && mpDoc->IsTabProtected(maRange.aStart.Tab()))
         bProtected = true;
     return !bProtected;

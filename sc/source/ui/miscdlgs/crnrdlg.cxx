@@ -211,7 +211,7 @@ void ScColRowNameRangesDlg::Init()
 void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef)
 {
     theCurData = theCurArea = rLabelRange;
-    sal_Bool bValid = sal_True;
+    bool bValid = true;
     SCCOL nCol1 = theCurArea.aStart.Col();
     SCCOL nCol2 = theCurArea.aEnd.Col();
     SCROW nRow1 = theCurArea.aStart.Row();
@@ -608,11 +608,11 @@ void ScColRowNameRangesDlg::UpdateNames()
 void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, bool bColName )
 {
     ScRangePair* pPair = NULL;
-    sal_Bool bFound = false;
+    bool bFound = false;
     if ( bColName && (pPair = xColNameRanges->Find( rRange )) != NULL )
-        bFound = sal_True;
+        bFound = true;
     else if ( !bColName && (pPair = xRowNameRanges->Find( rRange )) != NULL )
-        bFound = sal_True;
+        bFound = true;
 
     if ( bFound )
     {
@@ -745,7 +745,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl)
     {
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         ScRange aRange1, aRange2;
-        sal_Bool bOk1;
+        bool bOk1;
         if ( (bOk1 = ((aRange1.ParseAny( aNewArea, pDoc, eConv ) & SCA_VALID) == SCA_VALID))
           && ((aRange2.ParseAny( aNewData, pDoc, eConv ) & SCA_VALID) == SCA_VALID) )
         {
@@ -812,7 +812,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
 {
     OUString aRangeStr = pLbRange->GetSelectEntry();
     sal_uInt16 nSelectPos = pLbRange->GetSelectEntryPos();
-    sal_Bool bColName =
+    bool bColName =
         ((sal_uLong)pLbRange->GetEntryData( nSelectPos ) == nEntryDataCol);
     NameRangeMap::const_iterator itr = aRangeMap.find(aRangeStr);
     if (itr == aRangeMap.end())
@@ -820,11 +820,11 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
     const ScRange& rRange = itr->second;
 
     ScRangePair* pPair = NULL;
-    sal_Bool bFound = false;
+    bool bFound = false;
     if ( bColName && (pPair = xColNameRanges->Find( rRange )) != NULL )
-        bFound = sal_True;
+        bFound = true;
     else if ( !bColName && (pPair = xRowNameRanges->Find( rRange )) != NULL )
-        bFound = sal_True;
+        bFound = true;
     if ( bFound )
     {
         OUString aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
@@ -918,7 +918,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
     NameRangeMap::const_iterator itr = aRangeMap.find(aRangeStr);
     if ( itr != aRangeMap.end() )
     {
-        sal_Bool bColName =
+        bool bColName =
             ((sal_uLong)pLbRange->GetEntryData( nSelectPos ) == nEntryDataCol);
         UpdateRangeData( itr->second, bColName );
         pBtnAdd->Disable();
@@ -974,14 +974,14 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1DataModifyHdl)
 {
     OUString aNewArea( pEdAssign->GetText() );
-    sal_Bool bValid = false;
+    bool bValid = false;
     if (!aNewArea.isEmpty() && pDoc)
     {
         ScRange aRange;
         if ( (aRange.ParseAny( aNewArea, pDoc, pDoc->GetAddressConvention() ) & SCA_VALID) == SCA_VALID )
         {
             SetColRowData( aRange );
-            bValid = sal_True;
+            bValid = true;
         }
     }
     if ( bValid )

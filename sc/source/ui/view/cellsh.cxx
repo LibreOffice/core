@@ -282,8 +282,8 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
     sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
-        sal_Bool bDisable = false;
-        sal_Bool bNeedEdit = sal_True;      // need cursor position be editable?
+        bool bDisable = false;
+        bool bNeedEdit = true;      // need cursor position be editable?
         switch ( nWhich )
         {
             case SID_THESAURUS:
@@ -309,7 +309,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                         if (!pDoc->IsBlockEditable( aCursor.Tab(), aRange.aStart.Col(),aRange.aStart.Row(),
                                             aRange.aEnd.Col(),aRange.aEnd.Row() ))
                         {
-                            bDisable = sal_True;
+                            bDisable = true;
                         }
                         bNeedEdit=false;
                     }
@@ -320,7 +320,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                 {
                     if ( pDocShell && pDocShell->IsDocShared() )
                     {
-                        bDisable = sal_True;
+                        bDisable = true;
                     }
                 }
                 break;
@@ -328,14 +328,14 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
         if (!bDisable && bNeedEdit)
             if (!pDoc->IsBlockEditable( aCursor.Tab(), aCursor.Col(),aCursor.Row(),
                                         aCursor.Col(),aCursor.Row() ))
-                bDisable = sal_True;
+                bDisable = true;
         if (bDisable)
             rSet.DisableItem(nWhich);
         nWhich = aIter.NextWhich();
     }
 }
 
-static sal_Bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper& rDataHelper,
+static bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper& rDataHelper,
                         SotFormatStringId nFormatId )
 {
     if ( rDataHelper.HasFormat( nFormatId ) )
@@ -363,7 +363,7 @@ static sal_Bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const Transferabl
         else
             rFormats.AddClipbrdFormat( nFormatId );
 
-        return sal_True;
+        return true;
     }
 
     return false;
@@ -372,7 +372,7 @@ static sal_Bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const Transferabl
 void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
 {
     Window* pWin = GetViewData()->GetActiveWin();
-    sal_Bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
+    bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
@@ -401,11 +401,11 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
 
 //  insert, insert contents
 
-static sal_Bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
+static bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
 {
-    sal_Bool bPossible = false;
+    bool bPossible = false;
     if ( ScTransferObj::GetOwnClipboard( NULL ) || ScDrawTransferObj::GetOwnClipboard( NULL ) )
-        bPossible = sal_True;
+        bPossible = true;
     else
     {
         if ( rData.HasFormat( SOT_FORMATSTR_ID_PNG ) ||
@@ -426,7 +426,7 @@ static sal_Bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
              rData.HasFormat( SOT_FORMATSTR_ID_HTML_SIMPLE ) ||
              rData.HasFormat( SOT_FORMATSTR_ID_DIF ) )
         {
-            bPossible = sal_True;
+            bPossible = true;
         }
     }
     return bPossible;

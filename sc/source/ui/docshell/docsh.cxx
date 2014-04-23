@@ -304,7 +304,7 @@ void ScDocShell::AfterXMLLoading(bool bRet)
                             ScGlobal::UnicodeStrChr( pNameBuffer, SC_COMPILER_FILE_TAB_SEP ) )
                         {
                             OUStringBuffer aDocURLBuffer;
-                            sal_Bool bQuote = sal_True; // Document name is always quoted
+                            bool bQuote = true; // Document name is always quoted
                             ++pNameBuffer;
                             while ( bQuote && *pNameBuffer )
                             {
@@ -446,7 +446,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::R
 
     ScXMLImportWrapper aImport( aDocument, pLoadMedium, xStor );
 
-    sal_Bool bRet(false);
+    bool bRet(false);
     ErrCode nError = ERRCODE_NONE;
     aDocument.EnableAdjustHeight(false);
     if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
@@ -520,7 +520,7 @@ bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::uno::R
     aDocument.EnableIdle(false);
 
     ScXMLImportWrapper aImport( aDocument, pSaveMedium, xStor );
-    sal_Bool bRet(false);
+    bool bRet(false);
     if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
         bRet = aImport.Export(false);
     else
@@ -697,7 +697,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                 ScGlobal::GetRscString( STR_SHARED_DOC_WARNING ) );
                             aBox.SetDefaultCheckBoxText();
                             aBox.Execute();
-                            sal_Bool bChecked = aBox.GetCheckBoxState();
+                            bool bChecked = aBox.GetCheckBoxState();
                             if ( bChecked )
                             {
                                 aAppOptions.SetShowSharedDocumentWarning( !bChecked );
@@ -1065,8 +1065,8 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     {
         OUString aFltName = pFilter->GetFilterName();
 
-        sal_Bool bCalc3 = ( aFltName.equalsAscii(pFilterSc30) );
-        sal_Bool bCalc4 = ( aFltName.equalsAscii(pFilterSc40) );
+        bool bCalc3 = ( aFltName.equalsAscii(pFilterSc30) );
+        bool bCalc4 = ( aFltName.equalsAscii(pFilterSc40) );
         if (!bCalc3 && !bCalc4)
             aDocument.SetInsertingFromOtherDoc( true );
 
@@ -1163,13 +1163,13 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             SfxItemSet*  pSet = rMedium.GetItemSet();
             const SfxPoolItem* pItem;
             ScAsciiOptions aOptions;
-            sal_Bool bOptInit = false;
+            bool bOptInit = false;
 
             if ( pSet && SFX_ITEM_SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
                 aOptions.ReadFromString( ((const SfxStringItem*)pItem)->GetValue() );
-                bOptInit = sal_True;
+                bOptInit = true;
             }
 
             if ( !bOptInit )
@@ -1392,7 +1392,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         else if (aFltName.equalsAscii(pFilterHtml) || aFltName.equalsAscii(pFilterHtmlWebQ))
         {
             FltError eError = SCERR_IMPORT_UNKNOWN;
-            sal_Bool bWebQuery = aFltName.equalsAscii(pFilterHtmlWebQ);
+            bool bWebQuery = aFltName.equalsAscii(pFilterHtmlWebQ);
             if( !rMedium.IsStorage() )
             {
                 SvStream* pInStream = rMedium.GetInStream();
@@ -1725,7 +1725,7 @@ sal_Int32 lcl_ScDocShell_GetColWidthInChars( sal_uInt16 nWidth )
 
 
 void lcl_ScDocShell_GetFixedWidthString( OUString& rStr, const ScDocument& rDoc,
-        SCTAB nTab, SCCOL nCol, sal_Bool bValue, SvxCellHorJustify eHorJust )
+        SCTAB nTab, SCCOL nCol, bool bValue, SvxCellHorJustify eHorJust )
 {
     OUString aString = rStr;
     sal_Int32 nLen = lcl_ScDocShell_GetColWidthInChars(

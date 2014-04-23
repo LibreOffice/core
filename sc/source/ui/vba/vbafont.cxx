@@ -95,7 +95,7 @@ ScVbaFont::setSuperscript( const uno::Any& aValue ) throw ( uno::RuntimeExceptio
         xCell.set( xCellRange->getCellByPosition( 0,0 ) );
 
     uno::Reference< beans::XPropertySet > xProps = lcl_TextProperties( xCell );
-    sal_Bool bValue = false;
+    bool bValue = false;
     aValue >>= bValue;
     sal_Int16 nValue = NORMAL;
     sal_Int8 nValue2 = NORMALHEIGHT;
@@ -167,7 +167,7 @@ ScVbaFont::setSubscript( const uno::Any& aValue ) throw ( uno::RuntimeException,
         xCell.set( xCellRange->getCellByPosition( 0,0 ) );
     uno::Reference< beans::XPropertySet > xProps = lcl_TextProperties( xCell );
 
-    sal_Bool bValue = false;
+    bool bValue = false;
     aValue >>= bValue;
     sal_Int16 nValue = NORMAL;
     sal_Int8 nValue2 = NORMALHEIGHT;
@@ -295,8 +295,8 @@ ScVbaFont::getStandardFont() throw ( uno::RuntimeException, std::exception )
 void SAL_CALL
 ScVbaFont::setFontStyle( const uno::Any& aValue ) throw( uno::RuntimeException, std::exception )
 {
-    sal_Bool bBold = false;
-    sal_Bool bItalic = false;
+    bool bBold = false;
+    bool bItalic = false;
 
     OUString aStyles;
     aValue >>= aStyles;
@@ -313,10 +313,10 @@ ScVbaFont::setFontStyle( const uno::Any& aValue ) throw( uno::RuntimeException, 
     for( it = aTokens.begin(); it != aTokens.end(); ++it )
     {
         if( (*it).equalsIgnoreAsciiCase("Bold") )
-            bBold = sal_True;
+            bBold = true;
 
         if( (*it).equalsIgnoreAsciiCase("Italic") )
-            bItalic = sal_True;
+            bItalic = true;
     }
 
     setBold( uno::makeAny( bBold ) );
@@ -328,7 +328,7 @@ uno::Any SAL_CALL
 ScVbaFont::getFontStyle() throw ( uno::RuntimeException, std::exception )
 {
     OUStringBuffer aStyles;
-    sal_Bool bValue = false;
+    bool bValue = false;
     getBold() >>= bValue;
     if( bValue )
         aStyles.appendAscii("Bold");

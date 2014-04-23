@@ -346,8 +346,8 @@ ScVbaWorksheet::getEnableSelection() throw (uno::RuntimeException, std::exceptio
         uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
         ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
         ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
-        sal_Bool bLockedCells = false;
-        sal_Bool bUnlockedCells = false;
+        bool bLockedCells = false;
+        bool bUnlockedCells = false;
         if( pProtect )
         {
             bLockedCells   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
@@ -383,16 +383,16 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
         ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
         ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
         // default is xlNoSelection
-        sal_Bool bLockedCells = false;
-        sal_Bool bUnlockedCells = false;
+        bool bLockedCells = false;
+        bool bUnlockedCells = false;
         if( nSelection == excel::XlEnableSelection::xlNoRestrictions )
         {
-            bLockedCells = sal_True;
-            bUnlockedCells = sal_True;
+            bLockedCells = true;
+            bUnlockedCells = true;
         }
         else if( nSelection == excel::XlEnableSelection::xlUnlockedCells )
         {
-            bUnlockedCells = sal_True;
+            bUnlockedCells = true;
         }
         if( pProtect )
         {
@@ -578,7 +578,7 @@ ScVbaWorksheet::Move( const uno::Any& Before, const uno::Any& After ) throw (uno
     SCTAB nDest = 0;
     if ( ScVbaWorksheets::nameExists (xSpreadDoc, xSheet->getName(), nDest) )
     {
-        sal_Bool bAfter = After.hasValue();
+        bool bAfter = After.hasValue();
         if (bAfter)
             nDest++;
         uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
@@ -1076,9 +1076,9 @@ ScVbaWorksheet::PrintOut( const uno::Any& From, const uno::Any& To, const uno::A
     sal_Int32 nTo = 0;
     sal_Int32 nFrom = 0;
     sal_Int16 nCopies = 1;
-    sal_Bool bCollate = false;
-    sal_Bool bSelection = false;
-    sal_Bool bIgnorePrintAreas = false;
+    bool bCollate = false;
+    bool bSelection = false;
+    bool bIgnorePrintAreas = false;
     From >>= nFrom;
     To >>= nTo;
     Copies >>= nCopies;
@@ -1087,7 +1087,7 @@ ScVbaWorksheet::PrintOut( const uno::Any& From, const uno::Any& To, const uno::A
         Collate >>= bCollate;
 
     if ( !( nFrom || nTo ) )
-        bSelection = sal_True;
+        bSelection = true;
 
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
     PrintOutHelper( excel::getBestViewShell( xModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, bSelection );

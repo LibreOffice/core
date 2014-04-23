@@ -575,7 +575,7 @@ IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl)
 
     ScTabView* pTabView = mpViewData->GetView();
     pTabView->DoneBlockMode();
-    sal_Bool bContMark = false;
+    bool bContMark = false;
     SvTreeListEntry* pEntry = maLbConflicts.FirstSelected();
     while ( pEntry )
     {
@@ -591,9 +591,9 @@ IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl)
                     const ScBigRange& rBigRange = ( static_cast< const ScChangeAction* >( pAction ) )->GetBigRange();
                     if ( rBigRange.IsValid( mpOwnDoc ) )
                     {
-                        sal_Bool bSetCursor = !maLbConflicts.NextSelected( pEntry );
+                        bool bSetCursor = !maLbConflicts.NextSelected( pEntry );
                         pTabView->MarkRange( rBigRange.MakeRange(), bSetCursor, bContMark );
-                        bContMark = sal_True;
+                        bContMark = true;
                     }
                 }
             }

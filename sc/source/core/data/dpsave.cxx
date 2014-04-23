@@ -58,7 +58,7 @@ using ::std::auto_ptr;
 #define SC_DPSAVEMODE_DONTKNOW 2
 
 static void lcl_SetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
-                            const OUString& rName, sal_Bool bValue )
+                            const OUString& rName, bool bValue )
 {
     //! move to ScUnoHelpFunctions?
 

@@ -199,7 +199,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         }
     }
 
-    sal_Bool bResetPar, bResetAttr;
+    bool bResetPar, bResetAttr;
     bResetPar = bResetAttr = false;
 
     const SvxHorJustifyItem&    rHorJustifyItem = (const SvxHorJustifyItem&)pAttr->GetItem( ATTR_HOR_JUSTIFY );
@@ -225,17 +225,17 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
 
     if ( rWeightItem.GetWeight() >= WEIGHT_BOLD )
     {   // bold
-        bResetAttr = sal_True;
+        bResetAttr = true;
         rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );
     }
     if ( rPostureItem.GetPosture() != ITALIC_NONE )
     {   // italic
-        bResetAttr = sal_True;
+        bResetAttr = true;
         rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
     }
     if ( rUnderlineItem.GetLineStyle() != UNDERLINE_NONE )
     {   // underline
-        bResetAttr = sal_True;
+        bResetAttr = true;
         rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );
     }
 

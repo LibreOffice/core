@@ -137,7 +137,7 @@ void ScInvertMerger::AddRect( const Rectangle& rRect )
     }
     else
     {
-        sal_Bool bDone = false;
+        bool bDone = false;
         if ( aJustified.Top()    == aLineRect.Top()    &&
              aJustified.Bottom() == aLineRect.Bottom() )
         {
@@ -145,12 +145,12 @@ void ScInvertMerger::AddRect( const Rectangle& rRect )
             if ( aJustified.Left() == aLineRect.Right() + 1 )
             {
                 aLineRect.Right() = aJustified.Right();
-                bDone = sal_True;
+                bDone = true;
             }
             else if ( aJustified.Right() + 1 == aLineRect.Left() )  // for RTL layout
             {
                 aLineRect.Left() = aJustified.Left();
-                bDone = sal_True;
+                bDone = true;
             }
         }
         if (!bDone)

@@ -534,7 +534,7 @@ void ScChartObj::Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, b
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
-        sal_Bool bUndo(pDoc->IsUndoEnabled());
+        bool bUndo(pDoc->IsUndoEnabled());
 
         if (bUndo)
         {

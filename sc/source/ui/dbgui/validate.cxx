@@ -401,7 +401,7 @@ void ScTPValidationValue::Reset( const SfxItemSet& rArgSet )
     m_pLbValue->SelectEntryPos( nLbPos );
 
     // *** check boxes ***
-    sal_Bool bCheck = sal_True;
+    bool bCheck = true;
     if( rArgSet.GetItemState( FID_VALID_BLANK, true, &pItem ) == SFX_ITEM_SET )
         bCheck = static_cast< const SfxBoolItem* >( pItem )->GetValue();
     m_pCbAllow->Check( bCheck );
@@ -786,7 +786,7 @@ bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl)
 {
     ScValidErrorStyle eStyle = (ScValidErrorStyle) m_pLbAction->GetSelectEntryPos();
-    sal_Bool bMacro = ( eStyle == SC_VALERR_MACRO );
+    bool bMacro = ( eStyle == SC_VALERR_MACRO );
 
     m_pBtnSearch->Enable( bMacro );
     m_pFtError->Enable( !bMacro );

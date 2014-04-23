@@ -59,7 +59,7 @@ static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
         SVX_UNOEDIT_NUMBERING_PROPERTIE,    // for completeness of service ParagraphProperties
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
-    static sal_Bool bTwipsSet = false;
+    static bool bTwipsSet = false;
 
     if (!bTwipsSet)
     {
@@ -79,7 +79,7 @@ static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
 
             ++pEntry;
         }
-        bTwipsSet = sal_True;
+        bTwipsSet = true;
     }
     static SvxItemPropertySet aHdFtPropertySet_Impl( aHdFtPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aHdFtPropertySet_Impl;

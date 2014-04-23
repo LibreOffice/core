@@ -208,7 +208,7 @@ bool ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
                                            GetItemSet().Get( nWhichUserLists );
 
     ScUserList* pCoreList       = rUserListItem.GetUserList();
-    sal_Bool        bDataModified   = false;
+    bool        bDataModified   = false;
 
     if ( (pUserLists == NULL) && (pCoreList == NULL) )
     {
@@ -219,7 +219,7 @@ bool ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
         if ( pCoreList != NULL )
             bDataModified = (*pUserLists != *pCoreList);
         else
-            bDataModified = sal_True;
+            bDataModified = true;
     }
 
     if ( bDataModified )
@@ -346,7 +346,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
     SCCOL   nEndCol         = rEndPos.Col();
     SCROW   nEndRow         = rEndPos.Row();
     sal_uInt16  nCellDir        = SCRET_COLS;
-    sal_Bool    bValueIgnored   = false;
+    bool    bValueIgnored   = false;
 
     if ( (nStartCol != nEndCol) && (nStartRow != nEndRow) )
     {
@@ -379,7 +379,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
                         }
                     }
                     else
-                        bValueIgnored = sal_True;
+                        bValueIgnored = true;
                 }
                 if ( !aStrList.isEmpty() )
                     AddNewList( aStrList );
@@ -403,7 +403,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
                         }
                     }
                     else
-                        bValueIgnored = sal_True;
+                        bValueIgnored = true;
                 }
                 if ( !aStrList.isEmpty() )
                     AddNewList( aStrList );
@@ -656,7 +656,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
         ScRefAddress theStartPos;
         ScRefAddress theEndPos;
         OUString     theAreaStr( mpEdCopyFrom->GetText() );
-        sal_Bool     bAreaOk = false;
+        bool     bAreaOk = false;
 
         if ( !theAreaStr.isEmpty() )
         {

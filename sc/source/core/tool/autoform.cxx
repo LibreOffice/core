@@ -768,13 +768,13 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
                 nStrResId = USHRT_MAX;
         }
 
-        sal_Bool b;
-        rStream.ReadUChar( b ); bIncludeFont = b;
-        rStream.ReadUChar( b ); bIncludeJustify = b;
-        rStream.ReadUChar( b ); bIncludeFrame = b;
-        rStream.ReadUChar( b ); bIncludeBackground = b;
-        rStream.ReadUChar( b ); bIncludeValueFormat = b;
-        rStream.ReadUChar( b ); bIncludeWidthHeight = b;
+        bool b;
+        rStream.ReadCharAsBool( b ); bIncludeFont = b;
+        rStream.ReadCharAsBool( b ); bIncludeJustify = b;
+        rStream.ReadCharAsBool( b ); bIncludeFrame = b;
+        rStream.ReadCharAsBool( b ); bIncludeBackground = b;
+        rStream.ReadCharAsBool( b ); bIncludeValueFormat = b;
+        rStream.ReadCharAsBool( b ); bIncludeWidthHeight = b;
 
         if (nVer >= AUTOFORMAT_DATA_ID_31005)
             rStream >> m_swFields;

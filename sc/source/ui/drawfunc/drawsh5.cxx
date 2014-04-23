@@ -157,7 +157,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                     const OUString& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
-                    sal_Bool bDone = false;
+                    bool bDone = false;
                     if ( eMode == HLINK_FIELD || eMode == HLINK_BUTTON )
                     {
                         ScDrawView* pView = pViewData->GetScDrawView();
@@ -214,13 +214,13 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
 
                                     //! Undo ???
                                     pViewData->GetDocShell()->SetDocumentModified();
-                                    bDone = sal_True;
+                                    bDone = true;
                                 }
                             }
                             else
                             {
                                 SetHlinkForObject( pObj, rURL );
-                                bDone = sal_True;
+                                bDone = true;
                             }
                         }
                     }
@@ -428,7 +428,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
         case SID_BEZIER_EDIT:
             {
-                sal_Bool bOld = pView->IsFrameDragSingles();
+                bool bOld = pView->IsFrameDragSingles();
                 pView->SetFrameDragSingles( !bOld );
                 rBindings.Invalidate( SID_BEZIER_EDIT );
                 if (bOld && pView->GetDragMode() != SDRDRAG_MOVE)
@@ -468,7 +468,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 if( pItem )
                 {
                     SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
-                    sal_Bool bValue = ( (const SfxBoolItem*) pItem)->GetValue();
+                    bool bValue = ( (const SfxBoolItem*) pItem)->GetValue();
                     aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
                     pView->SetAttributes( aSet );
                 }
@@ -671,7 +671,7 @@ void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
     }
     else
     {
-        sal_Bool bLock = false;
+        bool bLock = false;
         const SfxItemSet *pArgs = rReq.GetArgs();
         if( pArgs && pArgs->Count() >= 1 )
             bLock = static_cast<const SfxBoolItem&>(pArgs->Get(SID_FORMATPAINTBRUSH)).GetValue();
@@ -679,7 +679,7 @@ void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
         ScDrawView* pDrawView = pViewData->GetScDrawView();
         if ( pDrawView && pDrawView->AreObjectsMarked() )
         {
-            sal_Bool bOnlyHardAttr = sal_True;
+            bool bOnlyHardAttr = true;
             SfxItemSet* pItemSet = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
             pView->SetDrawBrushSet( pItemSet, bLock );
         }
@@ -689,8 +689,8 @@ void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
 void ScDrawShell::StateFormatPaintbrush( SfxItemSet& rSet )
 {
     ScDrawView* pDrawView = pViewData->GetScDrawView();
-    sal_Bool bSelection = pDrawView && pDrawView->AreObjectsMarked();
-    sal_Bool bHasPaintBrush = pViewData->GetView()->HasPaintBrush();
+    bool bSelection = pDrawView && pDrawView->AreObjectsMarked();
+    bool bHasPaintBrush = pViewData->GetView()->HasPaintBrush();
 
     if ( !bHasPaintBrush && !bSelection )
         rSet.DisableItem( SID_FORMATPAINTBRUSH );

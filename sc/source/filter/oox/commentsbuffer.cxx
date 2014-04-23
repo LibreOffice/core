@@ -153,7 +153,7 @@ void Comment::finalizeImport()
         Reference< XShape > xAnnoShape( xAnnoShapeSupp->getAnnotationShape(), UNO_SET_THROW );
 
         // convert shape formatting and visibility
-        sal_Bool bVisible = sal_True;
+        bool bVisible = true;
         switch( getFilterType() )
         {
             case FILTER_OOXML:

@@ -78,11 +78,11 @@ private:
     ScRange&    rCurArea;
     OUString    aStr;
     ScRange     aArea;
-    sal_Bool        bHeader:1;
-    sal_Bool        bSize:1;
-    sal_Bool        bFormat:1;
-    sal_Bool        bStrip:1;
-    sal_Bool        bDirty:1;
+    bool        bHeader:1;
+    bool        bSize:1;
+    bool        bFormat:1;
+    bool        bStrip:1;
+    bool        bDirty:1;
 };
 
 
@@ -95,7 +95,7 @@ void DBSaveData::Save()
     bSize   = rBtnSize.IsChecked();
     bFormat = rBtnFormat.IsChecked();
     bStrip  = rBtnStrip.IsChecked();
-    bDirty  = sal_True;
+    bDirty  = true;
 }
 
 
@@ -551,7 +551,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
 IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
 {
     OUString  theName     = m_pEdName->GetText();
-    sal_Bool    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
+    bool    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
                            != m_pEdName->GetEntryPos( theName ));
 
     if ( theName.isEmpty() )

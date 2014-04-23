@@ -197,7 +197,7 @@ void SAL_CALL ScDocOptionsObj::setPropertyValue(
 {
     SolarMutexGuard aGuard;
 
-    sal_Bool bDone = ScDocOptionsHelper::setPropertyValue( aOptions, GetPropertySet().getPropertyMap(), aPropertyName, aValue );
+    bool bDone = ScDocOptionsHelper::setPropertyValue( aOptions, GetPropertySet().getPropertyMap(), aPropertyName, aValue );
 
     if (!bDone)
         ScModelObj::setPropertyValue( aPropertyName, aValue );

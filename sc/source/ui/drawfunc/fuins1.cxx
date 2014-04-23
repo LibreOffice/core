@@ -51,7 +51,7 @@ void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& r
         return;
 
     Size aPageSize = rPage;
-    sal_Bool bNegative = aPageSize.Width() < 0;
+    bool bNegative = aPageSize.Width() < 0;
     if ( bNegative )
     {
         //  make everything positive temporarily
@@ -91,7 +91,7 @@ void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& r
 }
 
 static void lcl_InsertGraphic( const Graphic& rGraphic,
-                        const OUString& rFileName, const OUString& rFilterName, sal_Bool bAsLink, sal_Bool bApi,
+                        const OUString& rFileName, const OUString& rFilterName, bool bAsLink, bool bApi,
                         ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView )
 {
     ScDrawView* pDrawView = pViewSh->GetScDrawView();
@@ -245,7 +245,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
         if ( pReqArgs->GetItemState( FN_PARAM_FILTER, true, &pItem ) == SFX_ITEM_SET )
             aFilterName = ((const SfxStringItem*)pItem)->GetValue();
 
-        sal_Bool bAsLink = false;
+        bool bAsLink = false;
         if ( pReqArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SFX_ITEM_SET )
             bAsLink = ((const SfxBoolItem*)pItem)->GetValue();
 
@@ -253,7 +253,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
         int nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );
         if ( nError == GRFILTER_OK )
         {
-            lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, sal_True, pViewSh, pWindow, pView );
+            lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, true, pViewSh, pWindow, pView );
         }
     }
     else
@@ -268,7 +268,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
             {
                 OUString aFileName = aDlg.GetPath();
                 OUString aFilterName = aDlg.GetCurrentFilter();
-                sal_Bool bAsLink = aDlg.IsAsLink();
+                bool bAsLink = aDlg.IsAsLink();
 
                 // really store as link only?
                 if( bAsLink && SvtMiscOptions().ShowLinkWarningDialog() )

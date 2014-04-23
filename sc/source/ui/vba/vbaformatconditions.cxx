@@ -232,7 +232,7 @@ ScVbaFormatConditions::getStyleName()
 }
 
 void
-ScVbaFormatConditions::removeFormatCondition( const OUString& _sStyleName, sal_Bool _bRemoveStyle) throw ( script::BasicErrorException )
+ScVbaFormatConditions::removeFormatCondition( const OUString& _sStyleName, bool _bRemoveStyle) throw ( script::BasicErrorException )
 {
     try
     {

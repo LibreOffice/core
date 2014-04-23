@@ -52,14 +52,14 @@ public:
             ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos);
     virtual ~ScAccessibleFilterMenu();
 
+    virtual bool SAL_CALL isVisible()
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
     /// XAccessibleComponent
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         SAL_CALL getAccessibleAtPoint( const ::com::sun::star::awt::Point& rPoint )
             throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual sal_Bool SAL_CALL isVisible()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL grabFocus()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

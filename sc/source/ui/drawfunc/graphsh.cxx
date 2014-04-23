@@ -111,14 +111,14 @@ void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_Bool bEnable = false;
+    bool bEnable = false;
 
     if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
         if( pObj && pObj->ISA( SdrGrafObj ) && ( ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP ) )
-            bEnable = sal_True;
+            bEnable = true;
     }
 
     if( !bEnable )

@@ -224,7 +224,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
                                    std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
+    bool bDone = false;
     //  Reflection muss nicht uno::XInterface sein, kann auch irgendein Interface sein...
     uno::Reference< uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
     if ( xInterface.is() )
@@ -250,7 +250,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
                     if (lcl_FindAutoFormatIndex( *pFormats, aNameStr, nNewIndex ))
                     {
                         pFormatObj->InitFormat( nNewIndex );    // kann jetzt benutzt werden
-                        bDone = sal_True;
+                        bDone = true;
                     }
                 }
                 else
@@ -584,7 +584,7 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
         OSL_ENSURE(pData,"AutoFormat Daten nicht da");
 
         OUString aPropString(aPropertyName);
-        sal_Bool bBool = sal_Bool();
+        bool bBool;
         if (aPropString.equalsAscii( SC_UNONAME_INCBACK ) && (aValue >>= bBool))
             pData->SetIncludeBackground( bBool );
         else if (aPropString.equalsAscii( SC_UNONAME_INCBORD ) && (aValue >>= bBool))
@@ -618,8 +618,8 @@ uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const OUString& aPropertyNa
         ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
         OSL_ENSURE(pData,"AutoFormat Daten nicht da");
 
-        sal_Bool bValue;
-        sal_Bool bError = false;
+        bool bValue;
+        bool bError = false;
 
         if (aPropertyName.equalsAscii( SC_UNONAME_INCBACK ))
             bValue = pData->GetIncludeBackground();
@@ -634,7 +634,7 @@ uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const OUString& aPropertyNa
         else if (aPropertyName.equalsAscii( SC_UNONAME_INCWIDTH ))
             bValue = pData->GetIncludeWidthHeight();
         else
-            bError = sal_True;      // unbekannte Property
+            bError = true;      // unbekannte Property
 
         if (!bError)
             aAny <<= bValue;
@@ -691,7 +691,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
         {
             if( const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pEntry->nWID ) )
             {
-                sal_Bool bDone = false;
+                bool bDone = false;
 
                 switch( pEntry->nWID )
                 {
@@ -721,7 +721,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                                     // added to avoid warnings
                                 }
                             }
-                            bDone = sal_True;
+                            bDone = true;
                         }
                     }
                     break;
@@ -802,7 +802,7 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const OUString& aPrope
                     {
                         const SfxInt32Item* pRotItem = (const SfxInt32Item*)pData->GetItem( nFieldIndex, ATTR_ROTATE_VALUE );
                         sal_Int32 nRot = pRotItem ? pRotItem->GetValue() : 0;
-                        sal_Bool bStacked = ((const SfxBoolItem*)pItem)->GetValue();
+                        bool bStacked = ((const SfxBoolItem*)pItem)->GetValue();
                         SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aVal );
                     }
                     break;

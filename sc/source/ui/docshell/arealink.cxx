@@ -144,7 +144,7 @@ void ScAreaLink::Closed()
     // Verknuepfung loeschen: Undo
 
     ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo (pDoc->IsUndoEnabled());
     if (bAddUndo && bUndo)
     {
         pImpl->m_pDocSh->GetUndoManager()->AddUndoAction( new ScUndoRemoveAreaLink( pImpl->m_pDocSh,
@@ -236,7 +236,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
         return false;
 
     OUString aNewUrl( ScGlobal::GetAbsDocName( rNewFile, pImpl->m_pDocSh ) );
-    sal_Bool bNewUrlName = (aNewUrl != aFileName);
+    bool bNewUrlName = (aNewUrl != aFileName);
 
     const SfxFilter* pFilter = pImpl->m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
     if (!pFilter)
@@ -244,7 +244,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
     ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
 
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo (pDoc->IsUndoEnabled());
     pDoc->SetInLinkUpdate( true );
 
     //  wenn neuer Filter ausgewaehlt wurde, Optionen vergessen

@@ -3009,7 +3009,7 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
             "OrganizerMode");
         if (xPropertySetInfo->hasPropertyByName(sOrganizerMode))
         {
-            sal_Bool bStyleOnly(sal_False);
+            bool bStyleOnly(false);
             if (xImportInfo->getPropertyValue(sOrganizerMode) >>= bStyleOnly)
             {
                 bLoadDoc = !bStyleOnly;

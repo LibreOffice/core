@@ -72,7 +72,7 @@ struct ScAccNote
     ScAddress   maNoteCell;
     ::accessibility::AccessibleTextHelper* mpTextHelper;
     sal_Int32   mnParaCount;
-    sal_Bool    mbMarkNote;
+    bool    mbMarkNote;
 
     ScAccNote()
         : mpTextHelper(NULL)
@@ -104,13 +104,13 @@ private:
     sal_Int32               mnParagraphs;
     sal_Int32               mnOffset;
 
-    ::accessibility::AccessibleTextHelper* CreateTextHelper(const OUString& rString, const Rectangle& rVisRect, const ScAddress& aCellPos, sal_Bool bMarkNote, sal_Int32 nChildOffset) const;
-    sal_Int32 AddNotes(const ScPreviewLocationData& rData, const Rectangle& rVisRect, sal_Bool bMark, ScAccNotes& rNotes);
+    ::accessibility::AccessibleTextHelper* CreateTextHelper(const OUString& rString, const Rectangle& rVisRect, const ScAddress& aCellPos, bool bMarkNote, sal_Int32 nChildOffset) const;
+    sal_Int32 AddNotes(const ScPreviewLocationData& rData, const Rectangle& rVisRect, bool bMark, ScAccNotes& rNotes);
 
     sal_Int8 CompareCell(const ScAddress& aCell1, const ScAddress& aCell2);
     void CollectChildren(const ScAccNote& rNote, ScXAccList& rList);
     sal_Int32 CheckChanges(const ScPreviewLocationData& rData, const Rectangle& rVisRect,
-        sal_Bool bMark, ScAccNotes& rOldNotes, ScAccNotes& rNewNotes,
+        bool bMark, ScAccNotes& rOldNotes, ScAccNotes& rNewNotes,
         ScXAccList& rOldParas, ScXAccList& rNewParas);
 
     inline ScDocument* GetDocument() const;
@@ -139,7 +139,7 @@ ScNotesChildren::~ScNotesChildren()
     std::for_each(maMarks.begin(), maMarks.end(), DeleteAccNote());
 }
 
-::accessibility::AccessibleTextHelper* ScNotesChildren::CreateTextHelper(const OUString& rString, const Rectangle& rVisRect, const ScAddress& aCellPos, sal_Bool bMarkNote, sal_Int32 nChildOffset) const
+::accessibility::AccessibleTextHelper* ScNotesChildren::CreateTextHelper(const OUString& rString, const Rectangle& rVisRect, const ScAddress& aCellPos, bool bMarkNote, sal_Int32 nChildOffset) const
 {
     ::accessibility::AccessibleTextHelper* pTextHelper = NULL;
 
@@ -161,7 +161,7 @@ ScNotesChildren::~ScNotesChildren()
     return pTextHelper;
 }
 
-sal_Int32 ScNotesChildren::AddNotes(const ScPreviewLocationData& rData, const Rectangle& rVisRect, sal_Bool bMark, ScAccNotes& rNotes)
+sal_Int32 ScNotesChildren::AddNotes(const ScPreviewLocationData& rData, const Rectangle& rVisRect, bool bMark, ScAccNotes& rNotes)
 {
     sal_Int32 nCount = rData.GetNoteCountInRange(rVisRect, bMark);
 
@@ -208,7 +208,7 @@ void ScNotesChildren::Init(const Rectangle& rVisRect, sal_Int32 nOffset)
         const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
 
         mnParagraphs = AddNotes(rData, rVisRect, false, maMarks);
-        mnParagraphs += AddNotes(rData, rVisRect, sal_True, maNotes);
+        mnParagraphs += AddNotes(rData, rVisRect, true, maNotes);
     }
 }
 
@@ -221,11 +221,11 @@ struct ScParaFound
 {
     sal_Int32 mnIndex;
     ScParaFound(sal_Int32 nIndex) : mnIndex(nIndex) {}
-    sal_Bool operator() (const ScAccNote& rNote)
+    bool operator() (const ScAccNote& rNote)
     {
-        sal_Bool bResult(false);
+        bool bResult(false);
         if (rNote.mnParaCount > mnIndex)
-            bResult = sal_True;
+            bResult = true;
         else
             mnIndex -= rNote.mnParaCount;
         return bResult;
@@ -278,11 +278,11 @@ struct ScPointFound
     Rectangle maPoint;
     sal_Int32 mnParagraphs;
     ScPointFound(const Point& rPoint) : maPoint(rPoint, Size(0, 0)), mnParagraphs(0) {}
-    sal_Bool operator() (const ScAccNote& rNote)
+    bool operator() (const ScAccNote& rNote)
     {
-        sal_Bool bResult(false);
+        bool bResult(false);
         if (maPoint.IsInside(rNote.maRect))
-            bResult = sal_True;
+            bResult = true;
         else
             mnParagraphs += rNote.mnParaCount;
         return bResult;
@@ -334,7 +334,7 @@ void ScNotesChildren::CollectChildren(const ScAccNote& rNote, ScXAccList& rList)
 }
 
 sal_Int32 ScNotesChildren::CheckChanges(const ScPreviewLocationData& rData,
-            const Rectangle& rVisRect, sal_Bool bMark, ScAccNotes& rOldNotes,
+            const Rectangle& rVisRect, bool bMark, ScAccNotes& rOldNotes,
             ScAccNotes& rNewNotes, ScXAccList& rOldParas, ScXAccList& rNewParas)
 {
     sal_Int32 nCount = rData.GetNoteCountInRange(rVisRect, bMark);
@@ -351,7 +351,7 @@ sal_Int32 ScNotesChildren::CheckChanges(const ScPreviewLocationData& rData,
             aNote.mnParaCount = 1;
         ScAccNotes::iterator aItr = rOldNotes.begin();
         ScAccNotes::iterator aEndItr = rOldNotes.end();
-        sal_Bool bAddNote(false);
+        bool bAddNote(false);
         for (sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex)
         {
             if (rData.GetNoteInRange(rVisRect, nIndex, bMark, aNote.maNoteCell, aNote.maRect))
@@ -394,7 +394,7 @@ sal_Int32 ScNotesChildren::CheckChanges(const ScPreviewLocationData& rData,
                         // collect new children
                         CollectChildren(aNote, rNewParas);
                     }
-                    bAddNote = sal_True;
+                    bAddNote = true;
                     // not necessary, because this branch should not be reached if it is the end
                     //if (aItr != aEndItr)
                     ++aItr;
@@ -406,7 +406,7 @@ sal_Int32 ScNotesChildren::CheckChanges(const ScPreviewLocationData& rData,
                         aNote.mnParaCount = aNote.mpTextHelper->GetChildCount();
                     // collect new children
                     CollectChildren(aNote, rNewParas);
-                    bAddNote = sal_True;
+                    bAddNote = true;
                 }
                 else
                 {
@@ -474,7 +474,7 @@ void ScNotesChildren::DataChanged(const Rectangle& rVisRect)
         ScXAccList aNewParas;
         ScXAccList aOldParas;
         ScAccNotes aNewMarks;
-        mnParagraphs = CheckChanges(mpViewShell->GetLocationData(), rVisRect, sal_True, maMarks, aNewMarks, aOldParas, aNewParas);
+        mnParagraphs = CheckChanges(mpViewShell->GetLocationData(), rVisRect, true, maMarks, aNewMarks, aOldParas, aNewParas);
         maMarks = aNewMarks;
         ScAccNotes aNewNotes;
         mnParagraphs += CheckChanges(mpViewShell->GetLocationData(), rVisRect, false, maNotes, aNewNotes, aOldParas, aNewParas);
@@ -515,7 +515,7 @@ private:
     ScPreviewShell*                     mpViewShell;
     ScAccessibleDocumentPagePreview*    mpAccDoc;
     MapMode                             maMapMode;
-    sal_Bool                            mbValid;
+    bool                            mbValid;
 };
 
 ScIAccessibleViewForwarder::ScIAccessibleViewForwarder()
@@ -529,7 +529,7 @@ ScIAccessibleViewForwarder::ScIAccessibleViewForwarder(ScPreviewShell* pViewShel
     : mpViewShell(pViewShell),
     mpAccDoc(pAccDoc),
     maMapMode(aMapMode),
-    mbValid(sal_True)
+    mbValid(true)
 {
 }
 
@@ -643,9 +643,9 @@ ScShapeChild::~ScShapeChild()
 
 struct ScShapeChildLess
 {
-    sal_Bool operator()(const ScShapeChild& rChild1, const ScShapeChild& rChild2) const
+    bool operator()(const ScShapeChild& rChild1, const ScShapeChild& rChild2) const
     {
-      sal_Bool bResult(false);
+      bool bResult(false);
       if (rChild1.mxShape.is() && rChild2.mxShape.is())
           bResult = (rChild1.mxShape.get() < rChild2.mxShape.get());
       return bResult;
@@ -1007,11 +1007,11 @@ struct ScShapePointFound
 {
     Point maPoint;
     ScShapePointFound(const awt::Point& rPoint) : maPoint(VCLPoint(rPoint)) {}
-    sal_Bool operator() (const ScShapeChild& rShape)
+    bool operator() (const ScShapeChild& rShape)
     {
-        sal_Bool bResult(false);
+        bool bResult(false);
         if ((VCLRectangle(rShape.mpAccShape->getBounds())).IsInside(maPoint))
-            bResult = sal_True;
+            bResult = true;
         return bResult;
     }
 };
@@ -1095,9 +1095,9 @@ void ScShapeChildren::FillShapes(const Rectangle& aPixelPaintRect, const MapMode
     Window* pWin = mpViewShell->GetWindow();
     if (pPage && pWin)
     {
-        sal_Bool bForeAdded(false);
-        sal_Bool bBackAdded(false);
-        sal_Bool bControlAdded(false);
+        bool bForeAdded(false);
+        bool bBackAdded(false);
+        bool bControlAdded(false);
         Rectangle aClippedPixelPaintRect(aPixelPaintRect);
         if (mpAccDoc)
         {
@@ -1129,19 +1129,19 @@ void ScShapeChildren::FillShapes(const Rectangle& aPixelPaintRect, const MapMode
                             case SC_LAYER_FRONT:
                             {
                                 maShapeRanges[nRangeId].maForeShapes.push_back(aShape);
-                                bForeAdded = sal_True;
+                                bForeAdded = true;
                             }
                             break;
                             case SC_LAYER_BACK:
                             {
                                 maShapeRanges[nRangeId].maBackShapes.push_back(aShape);
-                                bBackAdded = sal_True;
+                                bBackAdded = true;
                             }
                             break;
                             case SC_LAYER_CONTROLS:
                             {
                                 maShapeRanges[nRangeId].maControls.push_back(aShape);
-                                bControlAdded = sal_True;
+                                bControlAdded = true;
                             }
                             break;
                             default:

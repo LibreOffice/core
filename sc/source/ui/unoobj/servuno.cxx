@@ -561,7 +561,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case SC_SERVICE_LISTCELLBIND:
             if (pDocShell)
             {
-                sal_Bool bListPos = ( nType == SC_SERVICE_LISTCELLBIND );
+                bool bListPos = ( nType == SC_SERVICE_LISTCELLBIND );
                 uno::Reference<sheet::XSpreadsheetDocument> xDoc( pDocShell->GetBaseModel(), uno::UNO_QUERY );
                 xRet.set(*new calc::OCellValueBinding( xDoc, bListPos ));
             }

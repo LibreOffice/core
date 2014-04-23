@@ -70,13 +70,13 @@ ScAccessibleCellBase::~ScAccessibleCellBase()
 
     //=====  XAccessibleComponent  ============================================
 
-sal_Bool SAL_CALL ScAccessibleCellBase::isVisible()
+bool SAL_CALL ScAccessibleCellBase::isVisible()
     throw (uno::RuntimeException, std::exception)
 {
      SolarMutexGuard aGuard;
     IsObjectValid();
     // test whether the cell is hidden (column/row - hidden/filtered)
-    sal_Bool bVisible(sal_True);
+    bool bVisible(true);
     if (mpDoc)
     {
         bool bColHidden = mpDoc->ColHidden(maCellAddress.Col(), maCellAddress.Tab());
@@ -437,7 +437,7 @@ OUString SAL_CALL ScAccessibleCellBase::getShadowAttrs(void)
     sShadowAttrs += OUString::number( (sal_Int32)aShadowFmt.ShadowWidth ) ;
     sShadowAttrs += sInnerSplit;
     sShadowAttrs += "IsTransparent=";
-    sShadowAttrs += OUString::number( (sal_Bool)aShadowFmt.IsTransparent ) ;
+    sShadowAttrs += OUString::number( (int)aShadowFmt.IsTransparent ) ;
     sShadowAttrs += sInnerSplit;
     sShadowAttrs += "Color=";
     sShadowAttrs += OUString::number( (sal_Int32)aShadowFmt.Color );
@@ -495,7 +495,7 @@ OUString SAL_CALL ScAccessibleCellBase::getBorderAttrs(void)
     }
 
     Color aColor;
-    sal_Bool bIn = mpDoc ? mpDoc->IsCellInChangeTrack(maCellAddress,&aColor) : sal_False;
+    bool bIn = mpDoc && mpDoc->IsCellInChangeTrack(maCellAddress,&aColor);
     if (bIn)
     {
         aTopBorder.Color = aColor.GetColor();
@@ -604,7 +604,7 @@ OUString SAL_CALL ScAccessibleCellBase::GetAllDisplayNote(void)
     OUString strTrackText;
     if (mpDoc)
     {
-        sal_Bool bLeftedge=sal_False;
+        bool bLeftedge = false;
         mpDoc->GetCellChangeTrackNote(maCellAddress,strTrackText,bLeftedge);
     }
     if (!strTrackText.isEmpty())

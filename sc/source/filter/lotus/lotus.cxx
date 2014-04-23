@@ -30,7 +30,7 @@
 FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, rtl_TextEncoding eSrc )
 {
         ScFilterOptions aFilterOpt;
-    sal_Bool bWithWK3 = aFilterOpt.GetWK3Flag();
+    bool bWithWK3 = aFilterOpt.GetWK3Flag();
 
     SvStream*           pStream = rMedium.GetInStream();
 

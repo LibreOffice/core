@@ -1226,12 +1226,12 @@ void ScDocument::ClearLookupCaches()
         pLookupCacheMapImpl->clear();
 }
 
-sal_Bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder)
+bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder)
 {
     ScChangeTrack* pTrack = GetChangeTrack();
     ScChangeViewSettings* pSettings = GetChangeViewSettings();
     if ( !pTrack || !pTrack->GetFirst() || !pSettings || !pSettings->ShowChanges() )
-        return sal_False;           // nix da oder abgeschaltet
+        return false;           // nix da oder abgeschaltet
     ScActionColorChanger aColorChanger(*pTrack);
     //  Clipping passiert von aussen
     //! ohne Clipping, nur betroffene Zeilen painten ??!??!?
@@ -1260,7 +1260,7 @@ sal_Bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBo
                             Color aColor( aColorChanger.GetColor() );
                             *pColCellBoder = aColor;
                         }
-                        return sal_True;
+                        return true;
                     }
                 }
             }
@@ -1280,17 +1280,17 @@ sal_Bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBo
                             Color aColor( aColorChanger.GetColor() );
                             *pColCellBoder = aColor;
                         }
-                        return sal_True;
+                        return true;
                     }
                 }
             }
         }
         pAction = pAction->GetNext();
     }
-    return sal_False;
+    return false;
 }
 
-void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aTrackText,sal_Bool &bLeftEdge)
+void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aTrackText,bool &bLeftEdge)
 {
     aTrackText = OUString();
     //  Change-Tracking
@@ -1358,7 +1358,7 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
                 pFound = pFoundMove;        // Move gewinnt
             //  bei geloeschten Spalten: Pfeil auf die linke Seite der Zelle
             if ( pFound->GetType() == SC_CAT_DELETE_COLS )
-                bLeftEdge = sal_True;
+                bLeftEdge = true;
             DateTime aDT = pFound->GetDateTime();
             aTrackText  = pFound->GetUser();
             aTrackText += ", ";

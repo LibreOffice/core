@@ -209,7 +209,7 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     // read the formula, 3D tab refs from extended data
     const ScTokenArray* pArray = NULL;
     aFmlConv.Reset( rPosition );
-    sal_Bool bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize, false, FT_CellFormula) == ConvOK);   // JEG : Check This
+    bool bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize, false, FT_CellFormula) == ConvOK);   // JEG : Check This
     rpTokenArray = (bOK && pArray) ? new ScTokenArray( *pArray ) : NULL;
     pStrm->Ignore( 1 );
 }
@@ -307,7 +307,7 @@ void XclImpChangeTrack::ReadChTrInsert()
         else
             aRange.aEnd.SetCol( MAXCOL );
 
-        sal_Bool bValid = pStrm->IsValid();
+        bool bValid = pStrm->IsValid();
         if( FoundNestedMode() )
             ReadNestedRecords();
 
@@ -407,7 +407,7 @@ void XclImpChangeTrack::ReadChTrMoveRange()
         aSourceRange.aStart.SetTab( ReadTabNum() );
         aSourceRange.aEnd.SetTab( aSourceRange.aStart.Tab() );
 
-        sal_Bool bValid = pStrm->IsValid();
+        bool bValid = pStrm->IsValid();
         if( FoundNestedMode() )
             ReadNestedRecords();
 
@@ -460,7 +460,7 @@ bool XclImpChangeTrack::EndNestedMode()
 
 void XclImpChangeTrack::ReadRecords()
 {
-    sal_Bool bExitLoop = false;
+    bool bExitLoop = false;
 
     while( !bExitLoop && !bGlobExit && pStrm->StartNextRecord() )
     {

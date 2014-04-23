@@ -87,8 +87,8 @@ ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& r
     aTopic = rStream.ReadUniOrByteString( eCharSet );
     aItem = rStream.ReadUniOrByteString( eCharSet );
 
-    sal_Bool bHasValue;
-    rStream.ReadUChar( bHasValue );
+    bool bHasValue;
+    rStream.ReadCharAsBool( bHasValue );
     if ( bHasValue )
         pResult = new ScMatrix(0, 0);
 
@@ -109,7 +109,7 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     rStream.WriteUniOrByteString( aTopic, eCharSet );
     rStream.WriteUniOrByteString( aItem, eCharSet );
 
-    sal_Bool bHasValue = ( pResult != 0 );
+    bool bHasValue = ( pResult != 0 );
     rStream.WriteUChar( bHasValue );
 
     if( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 )      // nicht bei 4.0 Export

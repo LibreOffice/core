@@ -144,7 +144,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
 
 
 static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
-        SvStream* pMedStrm, sal_Bool bBiff8, rtl_TextEncoding eNach )
+        SvStream* pMedStrm, bool bBiff8, rtl_TextEncoding eNach )
 {
     // try to open an OLE storage
     SotStorageRef xRootStrg = new SotStorage( pMedStrm, false );

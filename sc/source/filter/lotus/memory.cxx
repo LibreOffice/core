@@ -38,7 +38,7 @@ extern SvxHorJustifyItem    *pAttrRight, *pAttrLeft, *pAttrCenter,
                             *pAttrRepeat, *pAttrStandard;   // -> tool.cxx, fuer GetFormAttr()
 extern ScProtectionAttr*    pAttrUnprot;   // -> tool.cxx, fuer PutFormString()
 
-sal_Bool MemNew( void )
+bool MemNew( void )
 {
     pValueFormCache = new FormCache( pDoc );
 
@@ -50,7 +50,7 @@ sal_Bool MemNew( void )
     pAttrRepeat = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_REPEAT, ATTR_HOR_JUSTIFY );
     pAttrStandard = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
 
-    return sal_True;
+    return true;
 }
 
 

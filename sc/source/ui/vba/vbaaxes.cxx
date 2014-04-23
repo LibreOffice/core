@@ -94,7 +94,7 @@ public:
         {
             ScVbaChart* pChart = static_cast< ScVbaChart* >( mxChart.get() );
             // primary
-            sal_Bool bBool = false;
+            bool bBool = false;
             uno::Reference< beans::XPropertySet > xDiagramPropertySet( pChart->xDiagramPropertySet() );
             if ( ( xDiagramPropertySet->getPropertyValue("HasXAxis") >>= bBool )  && bBool )
                 mCoordinates.push_back( AxesCoordinate( xlPrimary, xlCategory ) );

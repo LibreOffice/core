@@ -764,12 +764,12 @@ void ScTabView::RepeatResize( bool bUpdateFix )
 
 void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& /* rSize */ )
 {
-    sal_Bool bScrollBars = aViewData.IsVScrollMode();
-    sal_Bool bHeaders    = aViewData.IsHeaderMode();
-    sal_Bool bOutlMode   = aViewData.IsOutlineMode();
-    sal_Bool bHOutline   = bOutlMode && lcl_HasColOutline(aViewData);
-    sal_Bool bVOutline   = bOutlMode && lcl_HasRowOutline(aViewData);
-    sal_Bool bLayoutRTL  = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+    bool bScrollBars = aViewData.IsVScrollMode();
+    bool bHeaders    = aViewData.IsHeaderMode();
+    bool bOutlMode   = aViewData.IsOutlineMode();
+    bool bHOutline   = bOutlMode && lcl_HasColOutline(aViewData);
+    bool bVOutline   = bOutlMode && lcl_HasRowOutline(aViewData);
+    bool bLayoutRTL  = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
 
     rBorder = SvBorder();
 
@@ -907,10 +907,10 @@ Point ScTabView::GetGridOffset() const
 
         // Groessen hier wie in DoResize
 
-    sal_Bool bHeaders    = aViewData.IsHeaderMode();
-    sal_Bool bOutlMode   = aViewData.IsOutlineMode();
-    sal_Bool bHOutline   = bOutlMode && lcl_HasColOutline(aViewData);
-    sal_Bool bVOutline   = bOutlMode && lcl_HasRowOutline(aViewData);
+    bool bHeaders    = aViewData.IsHeaderMode();
+    bool bOutlMode   = aViewData.IsOutlineMode();
+    bool bHOutline   = bOutlMode && lcl_HasColOutline(aViewData);
+    bool bVOutline   = bOutlMode && lcl_HasRowOutline(aViewData);
 
     // Outline-Controls
     if (bVOutline && pRowOutline[SC_SPLIT_BOTTOM])
@@ -1135,7 +1135,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
 
     if (nDelta)
     {
-        sal_Bool bUpdate = ( eType != SCROLL_DRAG );    // bei Drag die Ranges nicht aendern
+        bool bUpdate = ( eType != SCROLL_DRAG );    // bei Drag die Ranges nicht aendern
         if ( bHoriz )
             ScrollX( nDelta, (pScroll == &aHScrollLeft) ? SC_SPLIT_LEFT : SC_SPLIT_RIGHT, bUpdate );
         else
@@ -1403,7 +1403,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
     }
 }
 
-inline void ShowHide( Window* pWin, sal_Bool bShow )
+inline void ShowHide( Window* pWin, bool bShow )
 {
     OSL_ENSURE(pWin || !bShow, "Fenster ist nicht da");
     if (pWin)
@@ -1412,16 +1412,16 @@ inline void ShowHide( Window* pWin, sal_Bool bShow )
 
 void ScTabView::UpdateShow()
 {
-    sal_Bool bHScrollMode = aViewData.IsHScrollMode();
-    sal_Bool bVScrollMode = aViewData.IsVScrollMode();
-    sal_Bool bTabMode     = aViewData.IsTabMode();
-    sal_Bool bOutlMode    = aViewData.IsOutlineMode();
-    sal_Bool bHOutline    = bOutlMode && lcl_HasColOutline(aViewData);
-    sal_Bool bVOutline    = bOutlMode && lcl_HasRowOutline(aViewData);
-    sal_Bool bHeader      = aViewData.IsHeaderMode();
+    bool bHScrollMode = aViewData.IsHScrollMode();
+    bool bVScrollMode = aViewData.IsVScrollMode();
+    bool bTabMode     = aViewData.IsTabMode();
+    bool bOutlMode    = aViewData.IsOutlineMode();
+    bool bHOutline    = bOutlMode && lcl_HasColOutline(aViewData);
+    bool bVOutline    = bOutlMode && lcl_HasRowOutline(aViewData);
+    bool bHeader      = aViewData.IsHeaderMode();
 
-    sal_Bool bShowH = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
-    sal_Bool bShowV = ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );
+    bool bShowH = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
+    bool bShowV = ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );
 
     if ( aViewData.GetDocShell()->IsPreview() )
         bHScrollMode = bVScrollMode = bTabMode = bHeader = bOutlMode = bHOutline = bVOutline = false;
@@ -1533,7 +1533,7 @@ void ScTabView::DoHSplit(long nSplitPos)
     //  nSplitPos is the real pixel position on the frame window,
     //  mirroring for RTL has to be done here.
 
-    sal_Bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+    bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
     if ( bLayoutRTL )
         nSplitPos = pFrameWin->GetOutputSizePixel().Width() - nSplitPos - 1;
 
@@ -1715,7 +1715,7 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
 
         ScDocument* pDoc = aViewData.GetDocument();
         SCTAB nTab = aViewData.GetTabNo();
-        sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+        bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
         long nLayoutSign = bLayoutRTL ? -1 : 1;
 
         long nDocX = (long)( (double) pDoc->GetColOffset( MAXCOL + 1, nTab ) * HMM_PER_TWIPS ) * nLayoutSign;
@@ -1833,7 +1833,7 @@ Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const Rectangle& rL
 
         ScDocument* pDoc = aViewData.GetDocument();
         SCTAB nTab = aViewData.GetTabNo();
-        sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+        bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
         bool bCenterHor = false;
 
@@ -1914,7 +1914,7 @@ Point ScTabView::GetMousePosPixel()
     return aPos;
 }
 
-static sal_Bool lcl_MouseIsOverWin( const Point& rScreenPosPixel, Window* pWin )
+static bool lcl_MouseIsOverWin( const Point& rScreenPosPixel, Window* pWin )
 {
     if (pWin)
     {
@@ -1925,18 +1925,18 @@ static sal_Bool lcl_MouseIsOverWin( const Point& rScreenPosPixel, Window* pWin )
         Size aWinSize = pWin->GetOutputSizePixel();
         if ( aRel.X() >= 0 && aRel.X() < aWinSize.Width() + SPLIT_HANDLE_SIZE &&
                 aRel.Y() >= 0 && aRel.Y() < aWinSize.Height() + SPLIT_HANDLE_SIZE )
-            return sal_True;
+            return true;
     }
     return false;
 }
 
 void ScTabView::SnapSplitPos( Point& rScreenPosPixel )
 {
-    sal_Bool bOverWin = false;
+    bool bOverWin = false;
     sal_uInt16 i;
     for (i=0; i<4; i++)
         if (lcl_MouseIsOverWin(rScreenPosPixel,pGridWin[i]))
-            bOverWin = sal_True;
+            bOverWin = true;
 
     if (!bOverWin)
         return;

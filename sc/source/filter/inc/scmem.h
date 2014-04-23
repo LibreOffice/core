@@ -24,7 +24,7 @@
 
 #include <sal/types.h>
 
-sal_Bool MemNew( void );
+bool MemNew( void );
 void MemDelete( void );
 
 #endif

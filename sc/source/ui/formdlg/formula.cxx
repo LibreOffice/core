@@ -142,8 +142,8 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
 
         OUString aFormula;
         pDoc->GetFormula( nCol, nRow, nTab, aFormula );
-        sal_Bool bEdit   = ( aFormula.getLength() > 1 );
-        sal_Bool bMatrix = false;
+        bool bEdit   = ( aFormula.getLength() > 1 );
+        bool bMatrix = false;
         if ( bEdit )
         {
             bMatrix = CheckMatrix(aFormula);
@@ -314,7 +314,7 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
     // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
     // eingefuegt wird, bei der Einzeldarstellung aber als
     // single-Zellbezug interpretiert wird
-    sal_Bool bColRowName = pFCell->HasColRowName();
+    bool bColRowName = pFCell->HasColRowName();
     if ( bColRowName )
     {
         // ColRowName im RPN-Code?
@@ -384,7 +384,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
     if ( pFunc && pFunc->getSuppressedArgumentCount() > 0 )
     {
         Selection theSel;
-        sal_Bool bRefNull = UpdateParaWin(theSel);
+        bool bRefNull = UpdateParaWin(theSel);
 
         if ( rRef.aStart != rRef.aEnd && bRefNull )
         {
@@ -392,7 +392,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
         }
 
         OUString      aRefStr;
-        sal_Bool bOtherDoc = ( pRefDoc != pDoc && pRefDoc->GetDocumentShell()->HasName() );
+        bool bOtherDoc = ( pRefDoc != pDoc && pRefDoc->GetDocumentShell()->HasName() );
         if ( bOtherDoc )
         {
             //  Referenz auf anderes Dokument - wie inputhdl.cxx

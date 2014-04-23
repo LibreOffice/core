@@ -247,10 +247,10 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
     OUString aCtrlClickHlinkStr = ScGlobal::GetRscString( STR_CTRLCLICKHYPERLINK );
     //Global string STR_CLICKHYPERLINK i.e, "click to open hyperlink"
     OUString aClickHlinkStr = ScGlobal::GetRscString( STR_CLICKHYPERLINK );
-    sal_Bool bDone = false;
-    sal_Bool bHelpEnabled = ( rHEvt.GetMode() & ( HELPMODE_BALLOON | HELPMODE_QUICK ) ) != 0;
+    bool bDone = false;
+    bool bHelpEnabled = ( rHEvt.GetMode() & ( HELPMODE_BALLOON | HELPMODE_QUICK ) ) != 0;
     SdrView* pDrView = pViewData->GetScDrawView();
-    sal_Bool bDrawTextEdit = false;
+    bool bDrawTextEdit = false;
     if (pDrView)
         bDrawTextEdit = pDrView->IsTextEdit();
     //  notes or change tracking
@@ -264,7 +264,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         if ( ShowNoteMarker( nPosX, nPosY, false ) )
         {
             Window::RequestHelp( rHEvt );   // alte Tip/Balloon ausschalten
-            bDone = sal_True;
+            bDone = true;
         }
     }
 
@@ -406,7 +406,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
             else if ( rHEvt.GetMode() & HELPMODE_QUICK )
                 Help::ShowQuickHelp(this,aScreenRect, aHelpText);
 
-            bDone = sal_True;
+            bDone = true;
         }
     }
 
@@ -424,7 +424,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 
     if ( nMouseStatus == SC_GM_TABDOWN && pViewData->GetRefType() == SC_REFTYPE_FILL &&
             Help::IsQuickHelpEnabled() )
-        bDone = sal_True;
+        bDone = true;
 
     if (!bDone)
         Window::RequestHelp( rHEvt );

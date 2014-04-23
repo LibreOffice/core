@@ -231,7 +231,7 @@ static sal_Bool lcl_MayBeAscii( SvStream& rStream )
 }
 #endif
 
-static sal_Bool lcl_MayBeDBase( SvStream& rStream )
+static bool lcl_MayBeDBase( SvStream& rStream )
 {
     // Look for dbf marker, see connectivity/source/inc/dbase/DTable.hxx
     // DBFType for values.
@@ -298,11 +298,11 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
     // there is no parameter that forbids to open as template
-    sal_Bool bOpenAsTemplate = false;
-    sal_Bool bWasReadOnly = false, bReadOnly = false;
+    bool bOpenAsTemplate = false;
+    bool bWasReadOnly = false, bReadOnly = false;
 
-    sal_Bool bRepairPackage = false;
-    sal_Bool bRepairAllowed = false;
+    bool bRepairPackage = false;
+    bool bRepairAllowed = false;
     bool bDeepDetection = false;
 
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
@@ -394,7 +394,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
         SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, NULL, pSet );
         aMedium.UseInteractionHandler( true );
 
-        sal_Bool bIsStorage = aMedium.IsStorage();
+        bool bIsStorage = aMedium.IsStorage();
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
             // remember input stream and content and put them into the descriptor later
@@ -593,7 +593,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
 
-        bOpenAsTemplate = sal_True;
+        bOpenAsTemplate = true;
 
         // TODO/LATER: set progress bar that should be used
     }

@@ -171,7 +171,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
         {
             if (pView->HasMarkablePoints() && pView->IsPointMarkable(*pHdl))
             {
-                sal_Bool bPointMarked=pView->IsPointMarked(*pHdl);
+                bool bPointMarked=pView->IsPointMarked(*pHdl);
 
                 if ( rMEvt.IsShift() )
                 {
@@ -212,7 +212,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 //  deduced from slot ids only if text object has no content
 
                 sal_uInt16 nSlotID = aSfxRequest.GetSlot();
-                sal_Bool bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
+                bool bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if ( pOPO )
                     bVertical = pOPO->IsVertical();     // content wins
@@ -257,7 +257,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else
         {
-            sal_Bool bMacro = false;
+            bool bMacro = false;
 
 //          if (bMacro && pView->TakeMacroObject(aMDPos,pObj,pPV))
             if (bMacro && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
@@ -269,7 +269,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 if (pView->IsEditMode())
                 {
-                    sal_Bool bPointMode=pView->HasMarkablePoints();
+                    bool bPointMode=pView->HasMarkablePoints();
 
                     if (!rMEvt.IsShift())
                     {
@@ -490,7 +490,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
             // init object different when vertical writing
             sal_uInt16 nSlotID(aSfxRequest.GetSlot());
-            sal_Bool bVertical = (SID_DRAW_TEXT_VERTICAL == nSlotID);
+            bool bVertical = (SID_DRAW_TEXT_VERTICAL == nSlotID);
             if(bVertical)
             {
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -741,7 +741,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                 //  deduced from slot ids only if text object has no content
 
                 sal_uInt16 nSlotID = aSfxRequest.GetSlot();
-                sal_Bool bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
+                bool bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if ( pOPO )
                     bVertical = pOPO->IsVertical();     // content wins
@@ -808,8 +808,8 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
             // String aText(ScResId(STR_CAPTION_DEFAULT_TEXT));
             // pText->SetText(aText);
 
-            sal_Bool bVertical = (SID_DRAW_TEXT_VERTICAL == nID);
-            sal_Bool bMarquee = (SID_DRAW_TEXT_MARQUEE == nID);
+            bool bVertical = (SID_DRAW_TEXT_VERTICAL == nID);
+            bool bMarquee = (SID_DRAW_TEXT_MARQUEE == nID);
 
             pText->SetVerticalWriting(bVertical);
 

@@ -656,7 +656,7 @@ void ScAreaLinkObj::Modify_Impl( const OUString* pNewFile, const OUString* pNewF
         pLinkManager->Remove( pLink );
         pLink = NULL;   // bei Remove geloescht
 
-        sal_Bool bFitBlock = sal_True;          // verschieben, wenn durch Update Groesse geaendert
+        bool bFitBlock = true;          // verschieben, wenn durch Update Groesse geaendert
         if (pNewFile)
         {
             aFile = *pNewFile;

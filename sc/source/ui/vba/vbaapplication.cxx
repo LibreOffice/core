@@ -104,23 +104,23 @@ using ::com::sun::star::uno::UNO_QUERY;
 struct ScVbaAppSettings
 {
     sal_Int32 mnCalculation;
-    sal_Bool mbDisplayAlerts;
-    sal_Bool mbEnableEvents;
-    sal_Bool mbExcel4Menus;
-    sal_Bool mbDisplayNoteIndicator;
-    sal_Bool mbShowWindowsInTaskbar;
-    sal_Bool mbEnableCancelKey;
+    bool mbDisplayAlerts;
+    bool mbEnableEvents;
+    bool mbExcel4Menus;
+    bool mbDisplayNoteIndicator;
+    bool mbShowWindowsInTaskbar;
+    bool mbEnableCancelKey;
     explicit ScVbaAppSettings();
 };
 
 ScVbaAppSettings::ScVbaAppSettings() :
     mnCalculation( excel::XlCalculation::xlCalculationAutomatic ),
-    mbDisplayAlerts( sal_True ),
-    mbEnableEvents( sal_True ),
-    mbExcel4Menus( sal_False ),
-    mbDisplayNoteIndicator( sal_True ),
-    mbShowWindowsInTaskbar( sal_True ),
-    mbEnableCancelKey( sal_False )
+    mbDisplayAlerts( true ),
+    mbEnableEvents( true ),
+    mbExcel4Menus( false ),
+    mbDisplayNoteIndicator( true ),
+    mbShowWindowsInTaskbar( true ),
+    mbEnableCancelKey( false )
 {
 }
 
@@ -405,7 +405,7 @@ void SAL_CALL
 ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::RuntimeException, std::exception)
 {
     OUString sText;
-    sal_Bool bDefault = false;
+    bool bDefault = false;
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
     uno::Reference< task::XStatusIndicatorSupplier > xStatusIndicatorSupplier( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     uno::Reference< task::XStatusIndicator > xStatusIndicator( xStatusIndicatorSupplier->getStatusIndicator(), uno::UNO_QUERY_THROW );
@@ -548,12 +548,12 @@ void SAL_CALL
 ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) throw (uno::RuntimeException, std::exception)
 {
     //test Scroll is a boolean
-    sal_Bool bScroll = false;
+    bool bScroll = false;
     //R1C1-style string or a string of procedure name.
 
     if( Scroll.hasValue() )
     {
-        sal_Bool aScroll = false;
+        bool aScroll = false;
         if( Scroll >>= aScroll )
         {
             bScroll = aScroll;
@@ -1226,7 +1226,7 @@ ScVbaApplication::InchesToPoints( double Inches ) throw (uno::RuntimeException, 
 void
 ScVbaApplication::Volatile( const uno::Any& aVolatile )  throw ( uno::RuntimeException, std::exception )
 {
-    sal_Bool bVolatile = sal_True;
+    bool bVolatile = true;
     aVolatile >>= bVolatile;
     SbMethod* pMeth = StarBASIC::GetActiveMethod();
     if ( pMeth )
@@ -1245,7 +1245,7 @@ sal_Bool SAL_CALL
 ScVbaApplication::getDisplayFormulaBar()
     throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool bRes = false;
+    bool bRes = false;
     ScTabViewShell* pViewShell = excel::getCurrentBestViewShell( mxContext );
     if ( pViewShell )
     {

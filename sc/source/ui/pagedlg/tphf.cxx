@@ -94,7 +94,7 @@ void ScHFPage::Reset( const SfxItemSet& rSet )
 
 bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 {
-    sal_Bool bResult = SvxHFPage::FillItemSet( rOutSet );
+    bool bResult = SvxHFPage::FillItemSet( rOutSet );
 
     if ( nId == SID_ATTR_PAGE_HEADERSET )
     {
@@ -207,7 +207,7 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
         OUString  aText;
         SfxSingleTabDialog* pDlg = new SfxSingleTabDialog(this, aDataSet);
         const int nSettingsId = 42;
-        sal_Bool bRightPage =   m_pCntSharedBox->IsChecked()
+        bool bRightPage =   m_pCntSharedBox->IsChecked()
                          || ( SVX_PAGE_LEFT != SvxPageUsage(nPageUsage) );
 
         if ( nId == SID_ATTR_PAGE_HEADERSET )

@@ -72,7 +72,7 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
 
     if ( SFX_ITEM_SET == rCoreSet.GetItemState( SID_PRINT_SELECTEDSHEET, false , &pItem ) )
     {
-        sal_Bool bChecked = ( (const SfxBoolItem*)pItem )->GetValue();
+        bool bChecked = ( (const SfxBoolItem*)pItem )->GetValue();
         m_pSelectedSheetsCB->Check( bChecked );
     }
     else

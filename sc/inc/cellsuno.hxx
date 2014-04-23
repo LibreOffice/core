@@ -208,7 +208,7 @@ private:
 
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges>
                             QueryDifferences_Impl(const com::sun::star::table::CellAddress& aCompare,
-                                                    sal_Bool bColumnDiff);
+                                                    bool bColumnDiff);
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
                             Find_Impl(const com::sun::star::uno::Reference<
                                         com::sun::star::util::XSearchDescriptor>& xDesc,

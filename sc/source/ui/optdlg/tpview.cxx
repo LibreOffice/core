@@ -108,7 +108,7 @@ SfxTabPage* ScTpContentOptions::Create( Window*     pParent,
 
 bool    ScTpContentOptions::FillItemSet( SfxItemSet& rCoreSet )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     if( pFormulaCB ->GetSavedValue() != TriState(pFormulaCB ->IsChecked()) ||
         pNilCB     ->GetSavedValue() != TriState(pNilCB     ->IsChecked()) ||
         pAnnotCB   ->GetSavedValue() != TriState(pAnnotCB   ->IsChecked()) ||
@@ -131,17 +131,17 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet& rCoreSet )
         pLocalOptions->SetGridColor( pColorLB->GetSelectEntryColor(),
                                      pColorLB->GetSelectEntry() );
         rCoreSet.Put(ScTpViewItem(SID_SCVIEWOPTIONS, *pLocalOptions));
-        bRet = sal_True;
+        bRet = true;
     }
     if(pRangeFindCB->GetSavedValue() != TriState(pRangeFindCB->IsChecked()))
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_RANGEFINDER, pRangeFindCB->IsChecked()));
-        bRet = sal_True;
+        bRet = true;
     }
     if(pSyncZoomCB->GetSavedValue() != TriState(pSyncZoomCB->IsChecked()))
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_OPT_SYNCZOOM, pSyncZoomCB->IsChecked()));
-        bRet = sal_True;
+        bRet = true;
     }
 
 
@@ -239,7 +239,7 @@ IMPL_LINK( ScTpContentOptions, SelLbObjHdl, ListBox*, pLb )
 IMPL_LINK( ScTpContentOptions, CBHdl, CheckBox*, pBtn )
 {
     ScViewOption eOption = VOPT_FORMULAS;
-    sal_Bool         bChecked = pBtn->IsChecked();
+    bool         bChecked = pBtn->IsChecked();
 
     if (      pFormulaCB   == pBtn )   eOption = VOPT_FORMULAS;
     else if ( pNilCB       == pBtn )   eOption = VOPT_NULLVALS;
@@ -263,8 +263,8 @@ IMPL_LINK( ScTpContentOptions, CBHdl, CheckBox*, pBtn )
 
 void ScTpContentOptions::InitGridOpt()
 {
-    sal_Bool    bGrid = pLocalOptions->GetOption( VOPT_GRID );
-    sal_Bool    bGridOnTop = pLocalOptions->GetOption( VOPT_GRID_ONTOP );
+    bool    bGrid = pLocalOptions->GetOption( VOPT_GRID );
+    bool    bGridOnTop = pLocalOptions->GetOption( VOPT_GRID_ONTOP );
     sal_Int32   nSelPos = 0;
 
     if ( bGrid || bGridOnTop )
@@ -340,8 +340,8 @@ void ScTpContentOptions::InitGridOpt()
 IMPL_LINK( ScTpContentOptions, GridHdl, ListBox*, pLb )
 {
     sal_Int32   nSelPos = pLb->GetSelectEntryPos();
-    sal_Bool    bGrid = ( nSelPos <= 1 );
-    sal_Bool    bGridOnTop = ( nSelPos == 1 );
+    bool    bGrid = ( nSelPos <= 1 );
+    bool    bGridOnTop = ( nSelPos == 1 );
 
     pColorFT->Enable(bGrid);
     pColorLB->Enable(bGrid);
@@ -425,21 +425,21 @@ SfxTabPage* ScTpLayoutOptions::Create( Window*          pParent,
 
 bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     const sal_Int32 nMPos = m_pUnitLB->GetSelectEntryPos();
     if ( nMPos != m_pUnitLB->GetSavedValue() )
     {
         sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pUnitLB->GetEntryData( nMPos );
         rCoreSet.Put( SfxUInt16Item( SID_ATTR_METRIC,
                                      (sal_uInt16)nFieldUnit ) );
-        bRet = sal_True;
+        bRet = true;
     }
 
     if(m_pTabMF->GetText() != m_pTabMF->GetSavedValue())
     {
         rCoreSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
                     sal::static_int_cast<sal_uInt16>( m_pTabMF->Denormalize(m_pTabMF->GetValue(FUNIT_TWIP)) )));
-        bRet = sal_True;
+        bRet = true;
     }
 
     ScLkUpdMode nSet=LM_ALWAYS;
@@ -461,61 +461,61 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
         ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
         aAppOptions.SetLinkMode(nSet );
         SC_MOD()->SetAppOptions(aAppOptions);
-        bRet = sal_True;
+        bRet = true;
     }
     if(m_pAlignCB->GetSavedValue() != TriState(m_pAlignCB->IsChecked()))
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_SELECTION, m_pAlignCB->IsChecked()));
-        bRet = sal_True;
+        bRet = true;
     }
 
     if(m_pAlignLB->GetSavedValue() != m_pAlignLB->GetSelectEntryPos())
     {
         rCoreSet.Put(SfxUInt16Item(SID_SC_INPUT_SELECTIONPOS, m_pAlignLB->GetSelectEntryPos()));
-        bRet = sal_True;
+        bRet = true;
     }
 
     if(m_pEditModeCB->GetSavedValue() != TriState(m_pEditModeCB->IsChecked()))
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_EDITMODE, m_pEditModeCB->IsChecked()));
-        bRet = sal_True;
+        bRet = true;
     }
 
     if(m_pFormatCB->GetSavedValue() != TriState(m_pFormatCB->IsChecked()))
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_FMT_EXPAND, m_pFormatCB->IsChecked()));
-        bRet = sal_True;
+        bRet = true;
     }
 
 
     if(m_pExpRefCB->GetSavedValue() != TriState(m_pExpRefCB->IsChecked()))
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_REF_EXPAND, m_pExpRefCB->IsChecked()));
-        bRet = sal_True;
+        bRet = true;
     }
 
     if(m_pMarkHdrCB->GetSavedValue() != TriState(m_pMarkHdrCB->IsChecked()))
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_MARK_HEADER, m_pMarkHdrCB->IsChecked()));
-        bRet = sal_True;
+        bRet = true;
     }
 
     if(m_pTextFmtCB->GetSavedValue() != TriState(m_pTextFmtCB->IsChecked()))
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_TEXTWYSIWYG, m_pTextFmtCB->IsChecked()));
-        bRet = sal_True;
+        bRet = true;
     }
 
     if( m_pReplWarnCB->GetSavedValue() != TriState(m_pReplWarnCB->IsChecked()) )
     {
         rCoreSet.Put( SfxBoolItem( SID_SC_INPUT_REPLCELLSWARN, m_pReplWarnCB->IsChecked() ) );
-        bRet = sal_True;
+        bRet = true;
     }
 
     if( m_pLegacyCellSelectionCB->GetSavedValue() != TriState(m_pLegacyCellSelectionCB->IsChecked()) )
     {
         rCoreSet.Put( SfxBoolItem( SID_SC_INPUT_LEGACY_CELL_SELECTION, m_pLegacyCellSelectionCB->IsChecked() ) );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

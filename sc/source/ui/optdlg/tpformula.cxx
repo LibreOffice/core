@@ -229,7 +229,7 @@ bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
 {
     bool bRet = false;
     ScFormulaOptions aOpt;
-    sal_Bool bEnglishFuncName = mpCbEnglishFuncName->IsChecked();
+    bool bEnglishFuncName = mpCbEnglishFuncName->IsChecked();
     sal_Int16 aSyntaxPos      = mpLbFormulaSyntax->GetSelectEntryPos();
     OUString aSep             = mpEdSepFuncArg->GetText();
     OUString aSepArrayCol     = mpEdSepArrayCol->GetText();
@@ -244,7 +244,7 @@ bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
     }
 
     if ( mpLbFormulaSyntax->GetSavedValue() != aSyntaxPos
-         || mpCbEnglishFuncName->GetSavedValue() != bEnglishFuncName
+         || mpCbEnglishFuncName->GetSavedValue() != (bEnglishFuncName ? 1 : 0)
          || static_cast<OUString>(mpEdSepFuncArg->GetSavedValue()) != aSep
          || static_cast<OUString>(mpEdSepArrayCol->GetSavedValue()) != aSepArrayCol
          || static_cast<OUString>(mpEdSepArrayRow->GetSavedValue()) != aSepArrayRow

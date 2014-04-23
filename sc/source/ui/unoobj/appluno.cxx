@@ -330,10 +330,10 @@ uno::Sequence<OUString> ScSpreadsheetSettings::getSupportedServiceNames_Static()
     return aRet;
 }
 
-sal_Bool ScSpreadsheetSettings::getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException)
+bool ScSpreadsheetSettings::getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException)
 {
    uno::Any any = getPropertyValue(aPropertyName);
-   sal_Bool b = sal_False;
+   bool b = false;
    any >>= b;
    return b;
 }
@@ -369,74 +369,74 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
     ScModule* pScMod = SC_MOD();
     ScAppOptions   aAppOpt(pScMod->GetAppOptions());
     ScInputOptions aInpOpt(pScMod->GetInputOptions());
-    sal_Bool bSaveApp = false;
-    sal_Bool bSaveInp = false;
+    bool bSaveApp = false;
+    bool bSaveInp = false;
     // print options aren't loaded until needed
 
     if (aString.equalsAscii( SC_UNONAME_DOAUTOCP ))
     {
         aAppOpt.SetAutoComplete( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        bSaveApp = sal_True;
+        bSaveApp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_ENTERED ))
     {
         aInpOpt.SetEnterEdit( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        bSaveInp = sal_True;
+        bSaveInp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_EXPREF ))
     {
         aInpOpt.SetExpandRefs( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        bSaveInp = sal_True;
+        bSaveInp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_EXTFMT ))
     {
         aInpOpt.SetExtendFormat( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        bSaveInp = sal_True;
+        bSaveInp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_LINKUPD ))
     {
         aAppOpt.SetLinkMode( (ScLkUpdMode) ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
-        bSaveApp = sal_True;
+        bSaveApp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_MARKHDR ))
     {
         aInpOpt.SetMarkHeader( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        bSaveInp = sal_True;
+        bSaveInp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_MOVESEL ))
     {
         aInpOpt.SetMoveSelection( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        bSaveInp = sal_True;
+        bSaveInp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_RANGEFIN ))
     {
         aInpOpt.SetRangeFinder( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        bSaveInp = sal_True;
+        bSaveInp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_USETABCOL ))
     {
         aInpOpt.SetUseTabCol( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        bSaveInp = sal_True;
+        bSaveInp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_PRMETRICS ))
     {
         aInpOpt.SetTextWysiwyg( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        bSaveInp = sal_True;
+        bSaveInp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_REPLWARN ))
     {
         aInpOpt.SetReplaceCellsWarn( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        bSaveInp = sal_True;
+        bSaveInp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_METRIC ))
     {
         aAppOpt.SetAppMetric( (FieldUnit) ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
-        bSaveApp = sal_True;
+        bSaveApp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_MOVEDIR ))
     {
         aInpOpt.SetMoveDir( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
-        bSaveInp = sal_True;
+        bSaveInp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_SCALE ))
     {
@@ -457,12 +457,12 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
             aAppOpt.SetZoom( nVal );
             aAppOpt.SetZoomType( SVX_ZOOM_PERCENT );
         }
-        bSaveApp = sal_True;
+        bSaveApp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_STBFUNC ))
     {
         aAppOpt.SetStatusFunc( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
-        bSaveApp = sal_True;
+        bSaveApp = true;
     }
     else if (aString.equalsAscii( SC_UNONAME_ULISTS ))
     {
@@ -482,7 +482,7 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
                 ScUserListData* pData = new ScUserListData(aEntry);
                 pUserList->push_back(pData);
             }
-            bSaveApp = sal_True;    // Liste wird mit den App-Optionen gespeichert
+            bSaveApp = true;    // Liste wird mit den App-Optionen gespeichert
         }
     }
     else if (aString.equalsAscii( SC_UNONAME_PRALLSH ))

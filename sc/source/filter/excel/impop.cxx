@@ -1347,8 +1347,8 @@ void ImportExcel::PostDocLoad( void )
             p = pExcRoot->pPrintTitles->First(n);
             if( p )
             {
-                sal_Bool    bRowVirgin = sal_True;
-                sal_Bool    bColVirgin = sal_True;
+                bool    bRowVirgin = true;
+                bool    bColVirgin = true;
 
                 while( p )
                 {

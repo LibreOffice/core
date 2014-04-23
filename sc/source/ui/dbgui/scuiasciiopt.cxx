@@ -223,8 +223,8 @@ static void save_Separators(
     {
         pProperties[4] <<= nFromRow;
         pProperties[5] <<= nCharSet;
-        pProperties[6] <<= static_cast<sal_Bool>(bQuotedAsText);
-        pProperties[7] <<= static_cast<sal_Bool>(bDetectSpecialNum);
+        pProperties[6] <<= bQuotedAsText;
+        pProperties[7] <<= bDetectSpecialNum;
         pProperties[8] <<= nLanguage;
     }
 
@@ -604,7 +604,7 @@ OUString ScImportAsciiDlg::GetSeparators() const
 
 void ScImportAsciiDlg::SetupSeparatorCtrls()
 {
-    sal_Bool bEnable = pRbSeparated->IsChecked();
+    bool bEnable = pRbSeparated->IsChecked();
     pCkbTab->Enable( bEnable );
     pCkbSemicolon->Enable( bEnable );
     pCkbComma->Enable( bEnable );

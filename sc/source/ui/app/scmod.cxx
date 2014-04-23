@@ -217,10 +217,10 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
         if ( ScDetectiveFunc::IsColorsInitialized() )
         {
             const svtools::ColorConfig& rColors = GetColorConfig();
-            sal_Bool bArrows =
+            bool bArrows =
                 ( ScDetectiveFunc::GetArrowColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVE).nColor ||
                   ScDetectiveFunc::GetErrorColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVEERROR).nColor );
-            sal_Bool bComments =
+            bool bComments =
                 ( ScDetectiveFunc::GetCommentColor() != (ColorData)rColors.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor );
             if ( bArrows || bComments )
             {
@@ -393,7 +393,7 @@ void ScModule::Execute( SfxRequest& rReq )
             break;
         case SID_AUTOSPELL_CHECK:
             {
-                sal_Bool bSet;
+                bool bSet;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( nSlot, true, &pItem ) )
                     bSet = ((const SfxBoolItem*)pItem)->GetValue();
@@ -765,12 +765,12 @@ void ScModule::InsertEntryToLRUList(sal_uInt16 nFIndex)
 
         sal_uInt16  aIdxList[LRU_MAX];
         sal_uInt16  n = 0;
-        sal_Bool    bFound = false;
+        bool    bFound = false;
 
         while ((n < LRU_MAX) && n<nLRUFuncCount)                        // alte Liste abklappern
         {
             if (!bFound && (pLRUListIds[n]== nFIndex))
-                bFound = sal_True;                                          // erster! Treffer
+                bFound = true;                                          // erster! Treffer
             else if (bFound)
                 aIdxList[n  ] = pLRUListIds[n];                         // hinter Treffer kopieren
             else if ((n+1) < LRU_MAX)
@@ -1084,7 +1084,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             ScViewData*             pViewData = pViewSh->GetViewData();
             const ScViewOptions&    rOldOpt   = pViewData->GetOptions();
 
-            sal_Bool bAnchorList = ( rOldOpt.GetOption( VOPT_ANCHOR ) !=
+            bool bAnchorList = ( rOldOpt.GetOption( VOPT_ANCHOR ) !=
                                  rNewOpt.GetOption( VOPT_ANCHOR ) );
 
             if ( rOldOpt != rNewOpt )
@@ -1266,8 +1266,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     }
     if ( rOptSet.HasItem(SID_SC_INPUT_TEXTWYSIWYG,&pItem) )
     {
-        sal_Bool bNew = ((const SfxBoolItem*)pItem)->GetValue();
-        if ( bNew != ( pInputCfg->GetTextWysiwyg() ? 1 : 0 ) )
+        bool bNew = ((const SfxBoolItem*)pItem)->GetValue();
+        if ( bNew != pInputCfg->GetTextWysiwyg() )
         {
             pInputCfg->SetTextWysiwyg( bNew );
             bSaveInputOptions = true;
@@ -1943,7 +1943,7 @@ IMPL_LINK_NOARG(ScModule, IdleHandler)
 
         sc::DocumentLinkManager& rLinkMgr = pDoc->GetDocLinkManager();
         bool bLinks = rLinkMgr.idleCheckLinks();
-        sal_Bool bWidth = pDoc->IdleCalcTextWidth();
+        bool bWidth = pDoc->IdleCalcTextWidth();
 
         bMore = bLinks || bWidth;         // ueberhaupt noch was?
 

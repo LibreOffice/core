@@ -975,11 +975,11 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     else
         aBgColor = rBrushItem.GetColor();
 
-    sal_Bool bBold          = ( WEIGHT_BOLD     <= rWeightItem.GetWeight() );
-    sal_Bool bItalic        = ( ITALIC_NONE     != rPostureItem.GetPosture() );
-    sal_Bool bUnderline     = ( UNDERLINE_NONE  != rUnderlineItem.GetLineStyle() );
-    sal_Bool bSetFontColor  = ( COL_AUTO        != rColorItem.GetValue().GetColor() );  // default is AUTO now
-    sal_Bool bSetFontName   = ( aHTMLStyle.aFontFamilyName  != rFontItem.GetFamilyName() );
+    bool bBold          = ( WEIGHT_BOLD     <= rWeightItem.GetWeight() );
+    bool bItalic        = ( ITALIC_NONE     != rPostureItem.GetPosture() );
+    bool bUnderline     = ( UNDERLINE_NONE  != rUnderlineItem.GetLineStyle() );
+    bool bSetFontColor  = ( COL_AUTO        != rColorItem.GetValue().GetColor() );  // default is AUTO now
+    bool bSetFontName   = ( aHTMLStyle.aFontFamilyName  != rFontItem.GetFamilyName() );
     sal_uInt16 nSetFontSizeNumber = 0;
     sal_uInt32 nFontHeight = rFontHeightItem.GetHeight();
     if ( nFontHeight != aHTMLStyle.nFontHeight )
@@ -989,7 +989,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             nSetFontSizeNumber = 0;   // no difference, don't set
     }
 
-    sal_Bool bSetFont = (bSetFontColor || bSetFontName || nSetFontSizeNumber);
+    bool bSetFont = (bSetFontColor || bSetFontName || nSetFontSizeNumber);
 
     //! TODO: we could entirely use CSS1 here instead, but that would exclude
     //! Netscape 3.0 and Netscape 4.x without JavaScript enabled.
@@ -1182,7 +1182,7 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
     }
     if ( bFields )
     {
-        sal_Bool bOldUpdateMode = rEngine.GetUpdateMode();
+        bool bOldUpdateMode = rEngine.GetUpdateMode();
         rEngine.SetUpdateMode( true );      // no portions if not formatted
         for ( sal_Int32 nPar=0; nPar < nParas; nPar++ )
         {
@@ -1195,7 +1195,7 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
             {
                 sal_Int32 nEnd = *it;
                 ESelection aSel( nPar, nStart, nPar, nEnd );
-                sal_Bool bUrl = false;
+                bool bUrl = false;
                 // fields are single characters
                 if ( nEnd == nStart+1 )
                 {
@@ -1206,7 +1206,7 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
                         const SvxFieldData* pField = ((const SvxFieldItem*)pItem)->GetField();
                         if ( pField && pField->ISA(SvxURLField) )
                         {
-                            bUrl = sal_True;
+                            bUrl = true;
                             const SvxURLField*  pURLField = (const SvxURLField*)pField;
 //                          String              aFieldText = rEngine.GetText( aSel );
                             rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_anchor ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_href ).WriteCharPtr( "=\"" );

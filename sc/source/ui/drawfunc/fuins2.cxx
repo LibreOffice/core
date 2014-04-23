@@ -204,7 +204,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
     uno::Reference < embed::XEmbeddedObject > xObj;
     uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
-    sal_Bool bIsFromFile = false;
+    bool bIsFromFile = false;
     OUString aName;
 
     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
@@ -508,7 +508,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         ScRangeListRef aDummy;
         Rectangle aMarkDest;
         SCTAB nMarkTab;
-        sal_Bool bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
+        bool bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
 
         //  Objekt-Groesse
         awt::Size aSz = xObj->getVisualAreaSize( nAspect );
@@ -516,17 +516,17 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
         MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
 
-        sal_Bool bSizeCh = false;
+        bool bSizeCh = false;
         if (bDrawRect && !aMarkDest.IsEmpty())
         {
             aSize = aMarkDest.GetSize();
-            bSizeCh = sal_True;
+            bSizeCh = true;
         }
         if (aSize.Height() <= 0 || aSize.Width() <= 0)
         {
             aSize.Width() = 5000;
             aSize.Height() = 5000;
-            bSizeCh = sal_True;
+            bSizeCh = true;
         }
         if (bSizeCh)
         {
@@ -539,7 +539,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         ScViewData* pData = pViewSh->GetViewData();
         ScDocShell* pScDocSh = pData->GetDocShell();
         ScDocument* pScDoc   = pScDocSh->GetDocument();
-        sal_Bool bUndo (pScDoc->IsUndoEnabled());
+        bool bUndo (pScDoc->IsUndoEnabled());
 
         if( pReqArgs )
         {
@@ -579,7 +579,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
                 if ( pScDoc->InsertTab( nNewTab, aTabName ) )
                 {
-                    sal_Bool bAppend = sal_True;
+                    bool bAppend = true;
 
                     if (bUndo)
                     {

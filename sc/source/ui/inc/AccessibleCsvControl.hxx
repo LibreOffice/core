@@ -63,14 +63,14 @@ public:
     using ScAccessibleContextBase::disposing;
     virtual void SAL_CALL       disposing() SAL_OVERRIDE;
 
+    /** Returns true, if the control is visible. */
+    virtual bool SAL_CALL isVisible() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
     // XAccessibleComponent ---------------------------------------------------
 
     /** Returns the child at the specified point (cell returns NULL). */
     virtual XAccessibleRef SAL_CALL getAccessibleAtPoint( const AwtPoint& rPoint )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
-    /** Returns true, if the control is visible. */
-    virtual sal_Bool SAL_CALL isVisible() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** Sets the focus to this control. */
     virtual void SAL_CALL grabFocus() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

@@ -76,7 +76,7 @@ void ScDocShell::ErrorMessage( sal_uInt16 nGlobStrId )
 
     Window* pParent = GetActiveDialogParent();
     ScWaitCursorOff aWaitOff( pParent );
-    sal_Bool bFocus = pParent && pParent->HasFocus();
+    bool bFocus = pParent && pParent->HasFocus();
 
     if(nGlobStrId==STR_PROTECTIONERR)
     {
@@ -130,11 +130,11 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
     if (!pData && pColl)
         pData = pColl->GetDBNearCursor(nCol, nRow, nTab );
 
-    sal_Bool bSelected = ( eSel == SC_DBSEL_FORCE_MARK ||
+    bool bSelected = ( eSel == SC_DBSEL_FORCE_MARK ||
             (rMarked.aStart != rMarked.aEnd && eSel != SC_DBSEL_ROW_DOWN) );
     bool bOnlyDown = (!bSelected && eSel == SC_DBSEL_ROW_DOWN && rMarked.aStart.Row() == rMarked.aEnd.Row());
 
-    sal_Bool bUseThis = false;
+    bool bUseThis = false;
     if (pData)
     {
         //      Bereich nehmen, wenn nichts anderes markiert
@@ -145,11 +145,11 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         SCCOL nOldCol2;
         SCROW nOldRow2;
         pData->GetArea( nDummy, nOldCol1,nOldRow1, nOldCol2,nOldRow2 );
-        sal_Bool bIsNoName = ( pData->GetName() == STR_DB_LOCAL_NONAME );
+        bool bIsNoName = ( pData->GetName() == STR_DB_LOCAL_NONAME );
 
         if (!bSelected)
         {
-            bUseThis = sal_True;
+            bUseThis = true;
             if ( bIsNoName && eMode == SC_DB_MAKE )
             {
                 // If nothing marked or only one row marked, adapt
@@ -180,7 +180,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         {
             if ( nOldCol1 == nStartCol && nOldRow1 == nStartRow &&
                  nOldCol2 == nEndCol && nOldRow2 == nEndRow )               // genau markiert?
-                bUseThis = sal_True;
+                bUseThis = true;
             else
                 bUseThis = false;           // immer Markierung nehmen (Bug 11964)
         }
@@ -222,7 +222,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, false, bOnlyDown );
         }
 
-        sal_Bool bHasHeader = aDocument.HasColHeader( nStartCol,nStartRow, nEndCol,nEndRow, nTab );
+        bool bHasHeader = aDocument.HasColHeader( nStartCol,nStartRow, nEndCol,nEndRow, nTab );
 
         ScDBData* pNoNameData = aDocument.GetAnonymousDBData(nTab);
         if ( eMode != SC_DB_IMPORT && pNoNameData)
@@ -396,7 +396,7 @@ void ScDocShell::UpdateAllRowHeights( const ScMarkData* pTabMark )
 
 void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )
 {
-    sal_Bool bIsUndoEnabled = aDocument.IsUndoEnabled();
+    bool bIsUndoEnabled = aDocument.IsUndoEnabled();
     aDocument.EnableUndo( false );
     aDocument.LockStreamValid( true );      // ignore draw page size (but not formula results)
     if ( bBefore )          // check all sheets up to nUpdateTab
@@ -456,13 +456,13 @@ void ScDocShell::RefreshPivotTables( const ScRange& rSource )
 static OUString lcl_GetAreaName( ScDocument* pDoc, ScArea* pArea )
 {
     OUString aName;
-    sal_Bool bOk = false;
+    bool bOk = false;
     ScDBData* pData = pDoc->GetDBAtArea( pArea->nTab, pArea->nColStart, pArea->nRowStart,
                                                         pArea->nColEnd, pArea->nRowEnd );
     if (pData)
     {
         aName = pData->GetName();
-        bOk = sal_True;
+        bOk = true;
     }
 
     if (!bOk)
@@ -478,7 +478,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
     sal_uInt16 nPos;
     SCCOL nColSize = 0;
     SCROW nRowSize = 0;
-    sal_Bool bErr = false;
+    bool bErr = false;
     for (nPos=0; nPos<rParam.nDataAreaCount; nPos++)
     {
         ScArea* pArea = rParam.ppDataAreas[nPos];
@@ -488,7 +488,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
                                         // Test, ob Quelldaten verschoben wuerden
         if (rParam.bReferenceData)
             if (pArea->nTab == rParam.nTab && pArea->nRowEnd >= rParam.nRow)
-                bErr = sal_True;
+                bErr = true;
     }
 
     if (bErr)
@@ -676,7 +676,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
                         sal_uInt16 nScenFlags;
                         aDocument.GetScenarioData( i, aComment, aColor, nScenFlags );
                         pUndoDoc->SetScenarioData( i, aComment, aColor, nScenFlags );
-                        sal_Bool bActive = aDocument.IsActiveScenario( i );
+                        bool bActive = aDocument.IsActiveScenario( i );
                         pUndoDoc->SetActiveScenario( i, bActive );
                         //  Bei Zurueckkopier-Szenarios auch Inhalte
                         if ( nScenFlags & SC_SCENARIO_TWOWAY )
@@ -762,7 +762,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
         while (aDocument.IsScenario(nNewTab))
             ++nNewTab;
 
-        sal_Bool bCopyAll = ( (nFlags & SC_SCENARIO_COPYALL) != 0 );
+        bool bCopyAll = ( (nFlags & SC_SCENARIO_COPYALL) != 0 );
         const ScMarkData* pCopyMark = NULL;
         if (!bCopyAll)
             pCopyMark = &rMark;
@@ -846,10 +846,10 @@ sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
         pSrcDoc->GetScenarioData( nSrcPos, aComment,aColor, nFlags);
         aDocument.SetScenario(nDestPos,true);
         aDocument.SetScenarioData(nDestPos,aComment,aColor,nFlags);
-        sal_Bool bActive = pSrcDoc->IsActiveScenario(nSrcPos);
+        bool bActive = pSrcDoc->IsActiveScenario(nSrcPos);
         aDocument.SetActiveScenario(nDestPos, bActive );
 
-        sal_Bool bVisible=pSrcDoc->IsVisible(nSrcPos);
+        bool bVisible=pSrcDoc->IsVisible(nSrcPos);
         aDocument.SetVisible(nDestPos,bVisible );
 
     }
@@ -905,7 +905,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
                         new ScUndoCopyTab(this, pSrcList.release(), pDestList.release()));
             }
 
-            sal_Bool bVbaEnabled = aDocument.IsInVBAMode();
+            bool bVbaEnabled = aDocument.IsInVBAMode();
             if ( bVbaEnabled )
             {
                 OUString aLibName( "Standard" );

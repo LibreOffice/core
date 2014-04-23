@@ -60,7 +60,7 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool
 
     ScDocument* pDoc = rDocShell.GetDocument();
     ScDBCollection* pDocColl = pDoc->GetDBCollection();
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo (pDoc->IsUndoEnabled());
 
     ScDBCollection* pUndoColl = NULL;
     if (bUndo)
@@ -264,19 +264,19 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
     {
         ScQueryParam aQueryParam;
         pDBData->GetQueryParam( aQueryParam );
-        sal_Bool bQuery = aQueryParam.GetEntry(0).bDoQuery;
+        bool bQuery = aQueryParam.GetEntry(0).bDoQuery;
 
         ScSortParam aSortParam;
         pDBData->GetSortParam( aSortParam );
-        sal_Bool bSort = aSortParam.maKeyState[0].bDoSort;
+        bool bSort = aSortParam.maKeyState[0].bDoSort;
 
         ScSubTotalParam aSubTotalParam;
         pDBData->GetSubTotalParam( aSubTotalParam );
-        sal_Bool bSubTotal = aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly;
+        bool bSubTotal = aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly;
 
         if ( bQuery || bSort || bSubTotal )
         {
-            sal_Bool bQuerySize = false;
+            bool bQuerySize = false;
             ScRange aOldQuery;
             ScRange aNewQuery;
             if (bQuery && !aQueryParam.bInplace)
@@ -286,7 +286,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
                 if (pDest && pDest->IsDoSize())
                 {
                     pDest->GetArea( aOldQuery );
-                    bQuerySize = sal_True;
+                    bQuerySize = true;
                 }
             }
 
@@ -443,7 +443,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
     ScDBData* pDestData = NULL;
     ScRange aOldDest;
-    sal_Bool bCopy = !rSortParam.bInplace;
+    bool bCopy = !rSortParam.bInplace;
     if ( bCopy && rSortParam.nDestCol == rSortParam.nCol1 &&
                   rSortParam.nDestRow == rSortParam.nRow1 && rSortParam.nDestTab == nTab )
         bCopy = false;
@@ -490,11 +490,11 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
     WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
-    sal_Bool bRepeatQuery = false;                          // bestehenden Filter wiederholen?
+    bool bRepeatQuery = false;                          // bestehenden Filter wiederholen?
     ScQueryParam aQueryParam;
     pDBData->GetQueryParam( aQueryParam );
     if ( aQueryParam.GetEntry(0).bDoQuery )
-        bRepeatQuery = sal_True;
+        bRepeatQuery = true;
 
     if (bRepeatQuery && bCopy)
     {
@@ -699,11 +699,11 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     }
 
     ScQueryParam aLocalParam( rQueryParam );        // fuer Paint / Zielbereich
-    sal_Bool bCopy = !rQueryParam.bInplace;             // kopiert wird in Table::Query
+    bool bCopy = !rQueryParam.bInplace;             // kopiert wird in Table::Query
     ScDBData* pDestData = NULL;                     // Bereich, in den kopiert wird
-    sal_Bool bDoSize = false;                           // Zielgroesse anpassen (einf./loeschen)
+    bool bDoSize = false;                           // Zielgroesse anpassen (einf./loeschen)
     SCCOL nFormulaCols = 0;                     // nur bei bDoSize
-    sal_Bool bKeepFmt = false;
+    bool bKeepFmt = false;
     ScRange aOldDest;
     ScRange aDestTotal;
     if ( bCopy && rQueryParam.nDestCol == rQueryParam.nCol1 &&
@@ -768,14 +768,14 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
 
     WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
-    sal_Bool bKeepSub = false;                          // bestehende Teilergebnisse wiederholen?
+    bool bKeepSub = false;                          // bestehende Teilergebnisse wiederholen?
     ScSubTotalParam aSubTotalParam;
     if (rQueryParam.GetEntry(0).bDoQuery)           // nicht beim Aufheben
     {
         pDBData->GetSubTotalParam( aSubTotalParam );    // Teilergebnisse vorhanden?
 
         if ( aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly )
-            bKeepSub = sal_True;
+            bKeepSub = true;
     }
 
     ScDocument* pUndoDoc = NULL;
@@ -1010,8 +1010,8 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
     //  - neuen Bereich (aus DBData) markieren
     //  - SelectionChanged (?)
 
-    sal_Bool bDo = !rParam.bRemoveOnly;                         // sal_False = nur loeschen
-    sal_Bool bRet = false;
+    bool bDo = !rParam.bRemoveOnly;                         // sal_False = nur loeschen
+    bool bRet = false;
 
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
@@ -1040,7 +1040,7 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         return false;
     }
 
-    sal_Bool bOk = true;
+    bool bOk = true;
     if (rParam.bReplace)
         if (pDoc->TestRemoveSubTotals( nTab, rParam ))
         {
@@ -1064,7 +1064,7 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
 
         if (bRecord)                                        // alte Daten sichern
         {
-            sal_Bool bOldFilter = bDo && rParam.bDoSort;
+            bool bOldFilter = bDo && rParam.bDoSort;
 
             SCTAB nTabCount = pDoc->GetTableCount();
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -1110,7 +1110,7 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
 
         if (rParam.bReplace)
             pDoc->RemoveSubTotals( nTab, aNewParam );
-        sal_Bool bSuccess = sal_True;
+        bool bSuccess = true;
         if (bDo)
         {
             // Sortieren

@@ -106,8 +106,8 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
         pDlg->SetText(aTitle);
         aComment=pChangeAction->GetComment();
 
-        sal_Bool bNext=FindNext(pChangeAction)!=NULL;
-        sal_Bool bPrev=FindPrev(pChangeAction)!=NULL;
+        bool bNext=FindNext(pChangeAction)!=NULL;
+        bool bPrev=FindPrev(pChangeAction)!=NULL;
         pDlg->EnableTravel(bNext,bPrev);
 
         OUString aAuthor = pChangeAction->GetUser();

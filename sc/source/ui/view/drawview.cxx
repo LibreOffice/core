@@ -76,8 +76,8 @@ void ScDrawView::Construct()
         SCTAB nViewTab = pViewData->GetTabNo();
         ShowSdrPage(GetModel()->GetPage(nViewTab));
 
-        sal_Bool bEx = pViewData->GetViewShell()->IsDrawSelMode();
-        sal_Bool bProt = pDoc->IsTabProtected( nViewTab ) ||
+        bool bEx = pViewData->GetViewShell()->IsDrawSelMode();
+        bool bProt = pDoc->IsTabProtected( nViewTab ) ||
                      pViewData->GetSfxDocShell()->IsReadOnly();
 
         SdrLayer* pLayer;
@@ -392,7 +392,7 @@ void ScDrawView::MarkListHasChanged()
         LockInternalLayer();
     }
 
-    sal_Bool bSubShellSet = false;
+    bool bSubShellSet = false;
     if (nMarkCount == 1)
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -403,13 +403,13 @@ void ScDrawView::MarkListHasChanged()
                 pViewSh->SetOleObjectShell(true);
             else
                 pViewSh->SetChartShell(true);
-            bSubShellSet = sal_True;
+            bSubShellSet = true;
         }
         else if (pObj->GetObjIdentifier() == OBJ_GRAF)
         {
             pGrafObj = (SdrGrafObj*) pObj;
             pViewSh->SetGraphicShell(true);
-            bSubShellSet = sal_True;
+            bSubShellSet = true;
         }
         else if (pObj->GetObjIdentifier() == OBJ_MEDIA)
         {
@@ -425,8 +425,8 @@ void ScDrawView::MarkListHasChanged()
 
     if ( nMarkCount && !bSubShellSet )
     {
-        sal_Bool bOnlyControls = sal_True;
-        sal_Bool bOnlyGraf     = sal_True;
+        bool bOnlyControls = true;
+        bool bOnlyGraf     = true;
         for (sal_uLong i=0; i<nMarkCount; i++)
         {
             SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
@@ -481,7 +481,7 @@ void ScDrawView::MarkListHasChanged()
     //  Verben anpassen
 
     SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
-    sal_Bool bOle = pViewSh->GetViewFrame()->GetFrame().IsInPlace();
+    bool bOle = pViewSh->GetViewFrame()->GetFrame().IsInPlace();
     uno::Sequence< embed::VerbDescriptor > aVerbs;
     if ( pOle2Obj && !bOle )
     {
@@ -545,7 +545,7 @@ bool ScDrawView::SdrBeginTextEdit(
     bool bOnlyOneView,
     bool bGrabFocus )
 {
-    const sal_Bool bRet = FmFormView::SdrBeginTextEdit(
+    const bool bRet = FmFormView::SdrBeginTextEdit(
         pObj, pPV, pWinL, bIsNewObj,
         pGivenOutliner, pGivenOutlinerView, bDontDeleteOutliner,
         bOnlyOneView, bGrabFocus );
@@ -869,7 +869,7 @@ void ScDrawView::DeleteMarked()
 
 SdrEndTextEditKind ScDrawView::ScEndTextEdit()
 {
-    sal_Bool bIsTextEdit = IsTextEdit();
+    bool bIsTextEdit = IsTextEdit();
     SdrEndTextEditKind eKind = SdrEndTextEdit();
 
     if ( bIsTextEdit && pViewData )

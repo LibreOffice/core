@@ -802,10 +802,10 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             Color aRColor( nColor.Red, nColor.Green, nColor.Blue );
 
             sal_uInt16 nFact;
-            sal_Bool        bSwapCol = false;
+            bool        bSwapCol = false;
             switch (pHeadFootLine->Raster)
             {
-               case raNone:     nFact = 0xffff; bSwapCol = sal_True; break;
+               case raNone:     nFact = 0xffff; bSwapCol = true; break;
                case raGray12:   nFact = (0xffff / 100) * 12;    break;
                case raGray25:   nFact = (0xffff / 100) * 25;    break;
                case raGray50:   nFact = (0xffff / 100) * 50;    break;
@@ -1083,10 +1083,10 @@ void Sc10Import::LoadProtect()
 
 void Sc10Import::LoadViewColRowBar()
 {
-    sal_uInt8 ViewColRowBar;
-    rStream.ReadUChar( ViewColRowBar );
+    bool bViewColRowBar;
+    rStream.ReadCharAsBool( bViewColRowBar );
     nError = rStream.GetError();
-    aSc30ViewOpt.SetOption( VOPT_HEADER, (sal_Bool)ViewColRowBar );
+    aSc30ViewOpt.SetOption( VOPT_HEADER, bViewColRowBar );
 }
 
 
@@ -1330,11 +1330,11 @@ void Sc10Import::LoadPatternCollection()
                     Color aRColor( COL_BLACK );
                     lcl_ChangeColor( nRColor, aRColor );
                     sal_uInt16 nFact;
-                    sal_Bool        bSwapCol = false;
-                    sal_Bool        bSetItem = sal_True;
+                    bool        bSwapCol = false;
+                    bool        bSetItem = true;
                     switch (pPattern->Raster)
                     {
-                       case raNone:     nFact = 0xffff; bSwapCol = sal_True; bSetItem = (nBColor > 0); break;
+                       case raNone:     nFact = 0xffff; bSwapCol = true; bSetItem = (nBColor > 0); break;
                        case raGray12:   nFact = (0xffff / 100) * 12;    break;
                        case raGray25:   nFact = (0xffff / 100) * 25;    break;
                        case raGray50:   nFact = (0xffff / 100) * 50;    break;
@@ -1363,10 +1363,10 @@ void Sc10Import::LoadPatternCollection()
             if( ( pPattern->Flags != 0 ) &&
                 ( ( pPattern->FormatFlags & pfProtection ) == pfProtection ) )
             {
-                sal_Bool bProtect  = ( ( pPattern->Flags & paProtect ) == paProtect );
-                sal_Bool bHFormula = ( ( pPattern->Flags & paHideFormula ) == paHideFormula );
-                sal_Bool bHCell    = ( ( pPattern->Flags & paHideAll ) == paHideAll );
-                sal_Bool bHPrint   = ( ( pPattern->Flags & paHidePrint ) == paHidePrint );
+                bool bProtect  = ( ( pPattern->Flags & paProtect ) == paProtect );
+                bool bHFormula = ( ( pPattern->Flags & paHideFormula ) == paHideFormula );
+                bool bHCell    = ( ( pPattern->Flags & paHideAll ) == paHideAll );
+                bool bHPrint   = ( ( pPattern->Flags & paHidePrint ) == paHidePrint );
                 rItemSet.Put( ScProtectionAttr( bProtect, bHFormula, bHCell, bHPrint ) );
             }
         } // if Style != 0
@@ -1391,7 +1391,7 @@ void Sc10Import::LoadDataBaseCollection()
                                     ( SCCOL ) pOldData->DataBaseRec.Block.x2,
                                     ( SCROW ) pOldData->DataBaseRec.Block.y2,
                                     true,
-                                    ( sal_Bool) pOldData->DataBaseRec.RowHeader );
+                                    (bool) pOldData->DataBaseRec.RowHeader );
         bool ins = pDoc->GetDBCollection()->getNamedDBs().insert(pNewData);
         assert(ins); (void)ins;
             //TODO: or can this fail (and need delete pNewData)?
@@ -1871,7 +1871,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         nStart = nEnd + 1;
     }
     // Border
-    sal_Bool            bEnd = false;
+    bool            bEnd = false;
     sal_uInt16          nColorIndex = 0;
     sal_uInt16          nFrameIndex = 0;
 
@@ -2027,11 +2027,11 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         ScPatternAttr aScPattern( pDoc->GetPool() );
 
         sal_uInt16 nFact;
-        sal_Bool        bSwapCol = false;
-        sal_Bool        bSetItem = sal_True;
+        bool        bSwapCol = false;
+        bool        bSetItem = true;
         switch ( aRaster.pData[ nRasterIndex ].Value )
         {
-        case raNone:        nFact = 0xffff; bSwapCol = sal_True; bSetItem = (nBColor > 0); break;
+        case raNone:        nFact = 0xffff; bSwapCol = true; bSetItem = (nBColor > 0); break;
         case raGray12:  nFact = (0xffff / 100) * 12;    break;
         case raGray25:  nFact = (0xffff / 100) * 25;    break;
         case raGray50:  nFact = (0xffff / 100) * 50;    break;
@@ -2114,10 +2114,10 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         nEnd = static_cast<SCROW>(aFlag.pData[i].Row);
         if ((nStart <= nEnd) && (aFlag.pData[i].Value != 0))
         {
-            sal_Bool bProtect  = ((aFlag.pData[i].Value & paProtect) == paProtect);
-            sal_Bool bHFormula = ((aFlag.pData[i].Value & paHideFormula) == paHideFormula);
-            sal_Bool bHCell    = ((aFlag.pData[i].Value & paHideAll) == paHideAll);
-            sal_Bool bHPrint   = ((aFlag.pData[i].Value & paHidePrint) == paHidePrint);
+            bool bProtect  = ((aFlag.pData[i].Value & paProtect) == paProtect);
+            bool bHFormula = ((aFlag.pData[i].Value & paHideFormula) == paHideFormula);
+            bool bHCell    = ((aFlag.pData[i].Value & paHideAll) == paHideAll);
+            bool bHPrint   = ((aFlag.pData[i].Value & paHidePrint) == paHidePrint);
             ScPatternAttr aScPattern(pDoc->GetPool());
             aScPattern.GetItemSet().Put(ScProtectionAttr(bProtect, bHFormula, bHCell, bHPrint));
             pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
@@ -2335,7 +2335,7 @@ void Sc10Import::LoadObjects()
     {
       sal_uInt8 ObjectType;
       Sc10GraphHeader GraphHeader;
-      sal_Bool IsOleObject = false; // Achtung dies ist nur ein Notnagel
+      bool IsOleObject = false; // Achtung dies ist nur ein Notnagel
       for (sal_uInt16 i = 0; (i < nAnz) && (nError == 0) && !rStream.IsEof() && !IsOleObject; i++)
       {
         rStream.ReadUChar( ObjectType );
@@ -2361,7 +2361,7 @@ void Sc10Import::LoadObjects()
         {
           case otOle :
            // Achtung hier muss sowas wie OleLoadFromStream passieren
-           IsOleObject = sal_True;
+           IsOleObject = true;
            break;
           case otImage :
           {

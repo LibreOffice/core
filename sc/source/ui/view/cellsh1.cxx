@@ -196,7 +196,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     else
                     {
                         ScDocument* pDoc = GetViewData()->GetDocument();
-                        sal_Bool bTheFlag=(pDoc->GetChangeTrack()!=NULL);
+                        bool bTheFlag=(pDoc->GetChangeTrack()!=NULL);
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
@@ -331,7 +331,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
                     aFlags = aFlags.toAsciiUpperCase();
-                    sal_Bool    bCont = sal_True;
+                    bool    bCont = true;
 
                     for (sal_Int32 i=0 ; bCont && i<aFlags.getLength(); ++i)
                     {
@@ -433,8 +433,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 sal_uInt16 nFlags = IDF_NONE;
                 sal_uInt16 nFunction = PASTE_NOFUNC;
-                sal_Bool bSkipEmpty = false;
-                sal_Bool bAsLink    = false;
+                bool bSkipEmpty = false;
+                bool bAsLink    = false;
 
                 if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                 {
@@ -445,7 +445,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
                     aFlags = aFlags.toAsciiUpperCase();
-                    sal_Bool    bCont = sal_True;
+                    bool    bCont = true;
 
                     for (sal_Int32 i=0; bCont && i < aFlags.getLength(); ++i)
                     {
@@ -530,7 +530,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 double fStartVal = MAXDOUBLE;
                 double fIncVal   = 1;
                 double fMaxVal   = MAXDOUBLE;
-                sal_Bool   bDoIt     = false;
+                bool   bDoIt     = false;
 
                 GetViewData()->GetSimpleArea( nStartCol, nStartRow, nStartTab,
                                               nEndCol, nEndRow, nEndTab );
@@ -613,7 +613,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if( pFormatter->IsNumberFormat( aFillMax, nKey, fTmpVal ))
                         fMaxVal = fTmpVal;
 
-                    bDoIt   = sal_True;
+                    bDoIt   = true;
 
                 }
                 else // (pReqArgs == NULL) => raise Dialog
@@ -729,7 +729,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         fStartVal       = pDlg->GetStart();
                         fIncVal         = pDlg->GetStep();
                         fMaxVal         = pDlg->GetMax();
-                        bDoIt           = sal_True;
+                        bDoIt           = true;
                     }
                     delete pDlg;
                 }
@@ -1037,8 +1037,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_OUTLINE_MAKE:
             {
-                sal_Bool bColumns = false;
-                sal_Bool bOk = sal_True;
+                bool bColumns = false;
+                bool bOk = true;
 
                 if ( GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
@@ -1098,7 +1098,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 else            // Dialog, when not whole rows/columns are marked
                 {
                     if ( GetViewData()->SimpleColMarked() && !GetViewData()->SimpleRowMarked() )
-                        bColumns = sal_True;
+                        bColumns = true;
                     else if ( !GetViewData()->SimpleColMarked() && GetViewData()->SimpleRowMarked() )
                         bColumns = false;
                     else
@@ -1131,8 +1131,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_OUTLINE_REMOVE:
             {
-                sal_Bool bColumns = false;
-                sal_Bool bOk = sal_True;
+                bool bColumns = false;
+                bool bOk = true;
 
                 if ( GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
@@ -1175,7 +1175,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         delete pDlg;
                     }
                     else if ( bColPoss )
-                        bColumns = sal_True;
+                        bColumns = true;
                     else if ( bRowPoss )
                         bColumns = false;
                     else
@@ -1243,9 +1243,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( nFormat )
                 {
                     Window* pWin = GetViewData()->GetActiveWin();
-                    sal_Bool bCells = ( ScTransferObj::GetOwnClipboard( pWin ) != NULL );
-                    sal_Bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
-                    sal_Bool bOle = ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE );
+                    bool bCells = ( ScTransferObj::GetOwnClipboard( pWin ) != NULL );
+                    bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
+                    bool bOle = ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE );
 
                     if ( bCells && bOle )
                         pTabViewShell->PasteFromSystem();
@@ -1266,14 +1266,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 sal_uInt16 nFlags = IDF_NONE;
                 sal_uInt16 nFunction = PASTE_NOFUNC;
-                sal_Bool bSkipEmpty = false;
-                sal_Bool bTranspose = false;
-                sal_Bool bAsLink    = false;
+                bool bSkipEmpty = false;
+                bool bTranspose = false;
+                bool bAsLink    = false;
                 InsCellCmd eMoveMode = INS_NONE;
 
                 Window* pWin = GetViewData()->GetActiveWin();
                 ScDocument* pDoc = GetViewData()->GetDocument();
-                sal_Bool bOtherDoc = !pDoc->IsClipboardSource();
+                bool bOtherDoc = !pDoc->IsClipboardSource();
                 ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
                 if ( pOwnClip )
                 {
@@ -1288,7 +1288,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
                         aFlags = aFlags.toAsciiUpperCase();
-                        sal_Bool    bCont = sal_True;
+                        bool    bCont = true;
 
                         for (sal_Int32 i=0 ; bCont && i<aFlags.getLength(); ++i)
                         {
@@ -1493,10 +1493,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                      pItem->ISA(SfxUInt32Item) )
                 {
                     sal_uLong nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
-                    sal_Bool bRet=sal_True;
+                    bool bRet=true;
                     {
                         WaitObject aWait( GetViewData()->GetDialogParent() );
-                        sal_Bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
+                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
                         if ( bDraw && nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
                             pTabViewShell->PasteDraw();
                         else
@@ -1505,7 +1505,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if ( bRet )
                     {
-                        rReq.SetReturnValue(SfxInt16Item(nSlot, bRet)); // 1 = success, 0 = fail
+                        rReq.SetReturnValue(SfxInt16Item(nSlot, bRet ? 1 : 0)); // 1 = success, 0 = fail
                         rReq.Done();
                     }
                     else
@@ -1523,7 +1523,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else                                    // draw objects or external data
                     {
-                        sal_Bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
+                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
 
                         SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                         GetPossibleClipboardFormats( aFormats );
@@ -1703,9 +1703,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             if( RET_OK == nDialogRet )
                             {
                                 //get some parameters from the dialog
-                                sal_Bool bToSimplified = sal_True;
-                                sal_Bool bUseVariants = sal_True;
-                                sal_Bool bCommonTerms = sal_True;
+                                bool bToSimplified = true;
+                                bool bUseVariants = true;
+                                bool bCommonTerms = true;
                                 Reference< beans::XPropertySet >  xProp( xDialog, UNO_QUERY );
                                 if( xProp.is() )
                                 {
@@ -2020,7 +2020,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_UPDATECHART:
             {
-                sal_Bool bAll = false;
+                bool bAll = false;
 
                 if( pReqArgs )
                 {
@@ -2444,7 +2444,7 @@ void ScCellShell::ExecuteExternalSource(
     if ( !_rFile.isEmpty() && !_rSource.isEmpty() )         // filter may be empty
     {
         ScRange aLinkRange;
-        sal_Bool bMove = false;
+        bool bMove = false;
 
         ScViewData* pData = GetViewData();
         ScMarkData& rMark = pData->GetMarkData();
@@ -2452,7 +2452,7 @@ void ScCellShell::ExecuteExternalSource(
         if ( rMark.IsMarked() )
         {
             rMark.GetMarkArea( aLinkRange );
-            bMove = sal_True;                       // insert/delete cells to fit range
+            bMove = true;                       // insert/delete cells to fit range
         }
         else
             aLinkRange = ScRange( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );

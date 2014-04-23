@@ -54,7 +54,7 @@ void lclConvertDoubleToBoolean( uno::Any& rAny )
 
 void lclConvertBooleanToDouble( uno::Any& rAny )
 {
-    sal_Bool bValue( false );
+    bool bValue( false );
     if ( rAny >>= bValue )
     {
         if ( bValue )
@@ -259,7 +259,7 @@ ScVbaWSFunction::getValue(const OUString& /*PropertyName*/) throw(beans::Unknown
 sal_Bool SAL_CALL
 ScVbaWSFunction::hasMethod(const OUString& Name)  throw(uno::RuntimeException, std::exception)
 {
-    sal_Bool bIsFound = false;
+    bool bIsFound = false;
     try
     {
     // the function name contained in the com.sun.star.sheet.FunctionDescription service is alwayse localized.
@@ -267,7 +267,7 @@ ScVbaWSFunction::hasMethod(const OUString& Name)  throw(uno::RuntimeException, s
         // So m_xNameAccess->hasByName( Name ) may fail to find name when a function name has a localized name.
         ScCompiler aCompiler( NULL, ScAddress() );
         if( aCompiler.IsEnglishSymbol( Name ) )
-            bIsFound = sal_True;
+            bIsFound = true;
     }
     catch( uno::Exception& /*e*/ )
     {

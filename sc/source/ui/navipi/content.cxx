@@ -238,7 +238,7 @@ void ScContentTree::ClearAll()
     //In SvTreeList::Clear(), Broadcast( LISTACTION_CLEARED ) will be called and finally, it will be trapped into the event yield() loop. And
     //the InitRoot() method won't be called. Then if a user click or press key to update the navigator tree, crash happens.
     //So the solution is to disable the UpdateMode of Control, then call Clear(), then recover the update mode
-    sal_Bool bOldUpdate = Control::IsUpdateMode();
+    bool bOldUpdate = Control::IsUpdateMode();
     Control::SetUpdateMode(false);
     Clear();
     Control::SetUpdateMode(bOldUpdate);
@@ -497,7 +497,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                         if(pScDrawView!=NULL)
                          {
                             pScDrawView->SelectCurrentViewObject(aText );
-                            sal_Bool bHasMakredObject = sal_False;
+                            bool bHasMakredObject = false;
                             SvTreeListEntry* pParent = pRootNodes[nType];
                             SvTreeListEntry* pBeginEntry = NULL;
                             if( pParent )
@@ -507,7 +507,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                                 OUString aTempText( GetEntryText( pBeginEntry ) );
                                  if( pScDrawView->GetObjectIsMarked( pScDrawView->GetObjectByName( aTempText ) ) )
                                  {
-                                    bHasMakredObject = sal_True;
+                                    bHasMakredObject = true;
                                     break;
                                   }
                                 pBeginEntry =  Next( pBeginEntry );
@@ -982,7 +982,7 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
                                           pScDrawView =pScTabViewShell->GetViewData()->GetScDrawView();
                                     if(pScDrawView!=NULL)
                                      {
-                                         sal_Bool bMarked =pScDrawView->GetObjectIsMarked(pObject);
+                                         bool bMarked =pScDrawView->GetObjectIsMarked(pObject);
                                          pChild->SetMarked( bMarked );
                                       }
                                 }//end if parent
@@ -1659,7 +1659,7 @@ void ScContentTree::StoreSettings() const
     {
         for( sal_uInt16 nEntry = 1; nEntry < SC_CONTENT_COUNT; ++nEntry )
         {
-            sal_Bool bExp = pRootNodes[ nEntry ] && IsExpanded( pRootNodes[ nEntry ] );
+            bool bExp = pRootNodes[ nEntry ] && IsExpanded( pRootNodes[ nEntry ] );
             pSettings->SetExpanded( nEntry, bExp );
         }
         sal_uInt16 nRoot;

@@ -44,7 +44,7 @@ static void lcl_InvalidateOutliner( SfxBindings* pBindings )
 //! PaintWidthHeight zur DocShell verschieben?
 
 static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
-                                    sal_Bool bColumns, SCCOLROW nStart, SCCOLROW nEnd )
+                                    bool bColumns, SCCOLROW nStart, SCCOLROW nEnd )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
 
@@ -208,7 +208,7 @@ bool ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, bool bColumns, bool
 
 bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
 {
-    sal_Bool bSuccess = false;
+    bool bSuccess = false;
     ScDocument* pDoc = rDocShell.GetDocument();
 
     if (bRecord && !pDoc->IsUndoEnabled())
@@ -253,7 +253,7 @@ bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
                                     PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
         rDocShell.SetDocumentModified();
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
-        bSuccess = sal_True;
+        bSuccess = true;
     }
 
     return bSuccess;
@@ -369,7 +369,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     while ((pEntry=aIter.GetNext()) != NULL)
     {
         sal_uInt16 nThisLevel = aIter.LastLevel();
-        sal_Bool bShow = (nThisLevel < nLevel);
+        bool bShow = (nThisLevel < nLevel);
         if (bShow)                                          // einblenden
         {
             pEntry->SetHidden( false );

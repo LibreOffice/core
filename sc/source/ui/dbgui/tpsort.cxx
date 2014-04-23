@@ -400,14 +400,14 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
 sal_uInt16 ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
 {
     sal_uInt16  nFieldPos   = 0;
-    sal_Bool    bFound      = false;
+    bool    bFound      = false;
 
     for ( sal_uInt16 n=1; n<nFieldCount && !bFound; n++ )
     {
         if ( nFieldArr[n] == nField )
         {
             nFieldPos = n;
-            bFound = sal_True;
+            bFound = true;
         }
     }
 
@@ -761,7 +761,7 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
 
 int ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 {
-    sal_Bool bPosInputOk = sal_True;
+    bool bPosInputOk = true;
 
     if ( m_pBtnCopyResult->IsChecked() )
     {
@@ -895,7 +895,7 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
             OUString* pStr    = NULL;
-            sal_Bool    bFound  = false;
+            bool    bFound  = false;
             sal_uInt16  i       = 0;
             sal_uInt16  nCount  = m_pLbOutPos->GetEntryCount();
 

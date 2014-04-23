@@ -37,7 +37,7 @@ template< typename Ifc1 >
 sal_Int32 ScVbaPageBreak<Ifc1>::getType() throw (uno::RuntimeException)
 {
     uno::Any aValue = mxRowColPropertySet->getPropertyValue("IsStartOfNewPage");
-    sal_Bool hasPageBreak = false;
+    bool hasPageBreak = false;
     aValue >>= hasPageBreak;
 
     if( !hasPageBreak )

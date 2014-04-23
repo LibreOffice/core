@@ -146,7 +146,7 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotItemMap()
     return aDataPilotItemMap_Impl;
 }
 
-inline bool lclCheckValidDouble( double fValue, sal_Bool bAuto )
+inline bool lclCheckValidDouble( double fValue, bool bAuto )
 {
     return bAuto || ::rtl::math::isFinite( fValue );
 }
@@ -400,7 +400,7 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const OUString& aNewName,
     if ( !aNewName.isEmpty() && hasByName( aNewName ) )
         throw RuntimeException();       // no other exceptions specified
 
-    sal_Bool bDone = false;
+    bool bDone = false;
     ScDataPilotDescriptorBase* pImp = ScDataPilotDescriptorBase::getImplementation( xDescriptor );
     if ( pDocShell && pImp )
     {
@@ -1579,13 +1579,13 @@ static sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSourc
     return nRet;
 }
 
-static sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSource,
+static bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSource,
                                 const Any& rOrient, SCSIZE nIndex, ScFieldIdentifier& rFieldId )
 {
     if (!rSource.is())
         throw RuntimeException();
 
-    sal_Bool bOk = false;
+    bool bOk = false;
     SCSIZE nPos = 0;
     sal_Int32 nDimIndex = 0;
 
@@ -1603,7 +1603,7 @@ static sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& r
             {
                 if (nPos == nIndex)
                 {
-                    bOk = sal_True;
+                    bOk = true;
                     nDimIndex = i;
                 }
                 else
@@ -1622,7 +1622,7 @@ static sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& r
             {
                 if (nPos == nIndex)
                 {
-                    bOk = sal_True;
+                    bOk = true;
                     nDimIndex = i;
                 }
                 else
@@ -1666,7 +1666,7 @@ static sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& r
     return bOk;
 }
 
-static sal_Bool lcl_GetFieldDataByName( ScDPObject* pDPObj, const OUString& rFieldName, ScFieldIdentifier& rFieldId )
+static bool lcl_GetFieldDataByName( ScDPObject* pDPObj, const OUString& rFieldName, ScFieldIdentifier& rFieldId )
 {
     // "By name" is always the first match.
     // The name "Data" always refers to the data layout field.
@@ -3263,7 +3263,7 @@ sal_Bool SAL_CALL ScDataPilotItemsObj::hasByName( const OUString& aName )
                                         throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bFound = false;
+    bool bFound = false;
     Reference<XNameAccess> xMembers = GetMembers();
     if (xMembers.is())
     {
@@ -3274,7 +3274,7 @@ sal_Bool SAL_CALL ScDataPilotItemsObj::hasByName( const OUString& aName )
         {
             Reference<XNamed> xMember(xMembersIndex->getByIndex(nItem), UNO_QUERY);
             if (xMember.is() && aName == xMember->getName())
-                bFound = sal_True;
+                bFound = true;
             else
                 nItem++;
         }

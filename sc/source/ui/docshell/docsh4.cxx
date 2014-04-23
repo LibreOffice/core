@@ -120,7 +120,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     SfxBindings* pBindings = GetViewBindings();
-    sal_Bool bUndo (aDocument.IsUndoEnabled());
+    bool bUndo (aDocument.IsUndoEnabled());
 
     sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
@@ -188,7 +188,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if ( pReqArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SFX_ITEM_SET )
                     sTarget = ((const SfxStringItem*)pItem)->GetValue();
 
-                sal_Bool bIsNewArea = sal_True;         // Default sal_True (keine Nachfrage)
+                bool bIsNewArea = true;         // Default sal_True (keine Nachfrage)
                 if ( pReqArgs->GetItemState( FN_PARAM_2, true, &pItem ) == SFX_ITEM_SET )
                     bIsNewArea = ((const SfxBoolItem*)pItem)->GetValue();
 
@@ -259,13 +259,13 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                 ScRange         aSingleRange;
                 ScRangeListRef  aRangeListRef;
-                sal_Bool            bMultiRange = false;
+                bool            bMultiRange = false;
 
-                sal_Bool bColHeaders = sal_True;
-                sal_Bool bRowHeaders = sal_True;
-                sal_Bool bColInit = false;
-                sal_Bool bRowInit = false;
-                sal_Bool bAddRange = (nSlot == SID_CHART_ADDSOURCE);
+                bool bColHeaders = true;
+                bool bRowHeaders = true;
+                bool bColInit = false;
+                bool bRowInit = false;
+                bool bAddRange = (nSlot == SID_CHART_ADDSOURCE);
 
                 if( pReqArgs->HasItem( SID_CHART_NAME, &pItem ) )
                     aChartName = ((const SfxStringItem*)pItem)->GetValue();
@@ -276,16 +276,16 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                 {
                     bColHeaders = ((const SfxBoolItem*)pItem)->GetValue();
-                    bColInit = sal_True;
+                    bColInit = true;
                 }
                 if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
                 {
                     bRowHeaders = ((const SfxBoolItem*)pItem)->GetValue();
-                    bRowInit = sal_True;
+                    bRowInit = true;
                 }
 
                 ScAddress::Details aDetails(pDoc->GetAddressConvention(), 0, 0);
-                sal_Bool bValid = ( aSingleRange.ParseAny( aRangeName, pDoc, aDetails ) & SCA_VALID ) != 0;
+                bool bValid = ( aSingleRange.ParseAny( aRangeName, pDoc, aDetails ) & SCA_VALID ) != 0;
                 if (!bValid)
                 {
                     aRangeListRef = new ScRangeList;
@@ -316,7 +316,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         aDocument.LimitChartArea( nTab, nCol1,nRow1, nCol2,nRow2 );
 
                                         // Dialog fuer Spalten/Zeilenkoepfe
-                    sal_Bool bOk = sal_True;
+                    bool bOk = true;
                     if ( !bAddRange && ( !bColInit || !bRowInit ) )
                     {
                         ScChartPositioner aChartPositioner( &aDocument, nTab, nCol1,nRow1, nCol2,nRow2 );
@@ -384,7 +384,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
         case FID_AUTO_CALC:
             {
-                sal_Bool bNewVal;
+                bool bNewVal;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( nSlot, true, &pItem ) )
                     bNewVal = ((const SfxBoolItem*)pItem)->GetValue();
@@ -469,7 +469,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 //  wird nach dem Laden aufgerufen, wenn DB-Bereiche mit
                 //  weggelassenen Daten enthalten sind
 
-                sal_Bool bDone = false;
+                bool bDone = false;
                 ScDBCollection* pDBColl = aDocument.GetDBCollection();
 
                 if ((nCanUpdate != com::sun::star::document::UpdateDocMode::NO_UPDATE) &&
@@ -562,7 +562,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     // get argument (recorded macro)
                     SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FID_CHG_RECORD, false );
-                    sal_Bool bDo = sal_True;
+                    bool bDo = true;
 
                     // xmlsec05/06:
                     // getting real parent window when called from Security-Options TP
@@ -573,7 +573,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                     // desired state
                     ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
-                    sal_Bool bActivateTracking = (pChangeTrack == 0);   // toggle
+                    bool bActivateTracking = (pChangeTrack == 0);   // toggle
                     if ( pItem )
                         bActivateTracking = pItem->GetValue();      // from argument
 
@@ -643,7 +643,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
         case SID_DOCUMENT_MERGE:
         case SID_DOCUMENT_COMPARE:
             {
-                sal_Bool bDo = sal_True;
+                bool bDo = true;
                 ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
                 if ( pChangeTrack && !pImpl->bIgnoreLostRedliningWarning )
                 {
@@ -737,7 +737,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                     if ( !pOtherDocSh->GetError() )                 // nur Errors
                     {
-                        sal_Bool bHadTrack = ( aDocument.GetChangeTrack() != NULL );
+                        bool bHadTrack = ( aDocument.GetChangeTrack() != NULL );
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                         sal_uLong nStart = 0;
                         if ( nSlot == SID_DOCUMENT_MERGE && pChangeTrack )
@@ -860,7 +860,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                     nActualTab--;
                                 }
                                 while(aDocument.IsScenario(nActualTab));
-                                sal_Bool bSheetProtected = aDocument.IsTabProtected(nActualTab);
+                                bool bSheetProtected = aDocument.IsTabProtected(nActualTab);
 
                                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
@@ -1300,7 +1300,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 
             OUString aNewName = pStyle->GetName();
             OUString aOldName = aNewName;
-            sal_Bool bExtended = rHint.ISA(SfxStyleSheetHintExtended);      // Name geaendert?
+            bool bExtended = rHint.ISA(SfxStyleSheetHintExtended);      // Name geaendert?
             if (bExtended)
                 aOldName = ((SfxStyleSheetHintExtended&)rHint).GetOldName();
 
@@ -1338,7 +1338,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
         {
             OUString aNewName = pStyle->GetName();
             OUString aOldName = aNewName;
-            sal_Bool bExtended = rHint.ISA(SfxStyleSheetHintExtended);
+            bool bExtended = rHint.ISA(SfxStyleSheetHintExtended);
             if (bExtended)
                 aOldName = ((SfxStyleSheetHintExtended&)rHint).GetOldName();
             if ( aNewName != aOldName )
@@ -1361,7 +1361,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 
 void ScDocShell::SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages )
 {
-    sal_Bool bUndo(aDocument.IsUndoEnabled());
+    bool bUndo(aDocument.IsUndoEnabled());
     OUString aStyleName = aDocument.GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
@@ -1404,7 +1404,7 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
     if ( pStyleSheet )
     {
         SfxItemSet& rSet = pStyleSheet->GetItemSet();
-        sal_Bool bHeaders = ((const SfxBoolItem&)rSet.Get(ATTR_PAGE_HEADERS)).GetValue();
+        bool bHeaders = ((const SfxBoolItem&)rSet.Get(ATTR_PAGE_HEADERS)).GetValue();
         sal_uInt16 nOldScale = ((const SfxUInt16Item&)rSet.Get(ATTR_PAGE_SCALE)).GetValue();
         sal_uInt16 nOldPages = ((const SfxUInt16Item&)rSet.Get(ATTR_PAGE_SCALETOPAGES)).GetValue();
         const ScRange* pRepeatCol = aDocument.GetRepeatColRange( nTab );
@@ -1475,7 +1475,7 @@ void ScDocShell::PageStyleModified( const OUString& rStyleName, bool bApi )
 {
     ScDocShellModificator aModificator( *this );
 
-    sal_Bool bWarn = false;
+    bool bWarn = false;
 
     SCTAB nTabCount = aDocument.GetTableCount();
     SCTAB nUseTab = MAXTAB+1;
@@ -1489,7 +1489,7 @@ void ScDocShell::PageStyleModified( const OUString& rStyleName, bool bApi )
     {
         ScPrintFunc aPrintFunc( this, GetPrinter(), nUseTab );  //! ohne CountPages auskommen
         if (!aPrintFunc.UpdatePages())                          //  setzt Umbrueche auf allen Tabs
-            bWarn = sal_True;
+            bWarn = true;
 
         if (bWarn && !bApi)
         {
@@ -1527,7 +1527,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                 }
                 else if ( pReqArgs == NULL )
                 {
-                    sal_Bool bUndo(aDocument.IsUndoEnabled());
+                    bool bUndo(aDocument.IsUndoEnabled());
                     OUString aOldName = aDocument.GetPageStyle( nCurTab );
                     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
                     SfxStyleSheetBase* pStyleSheet
@@ -1619,8 +1619,8 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                             SvxPageUsage( ((const SvxPageItem&)
                                             rStyleSet.Get( ATTR_PAGE )).
                                                 GetPageUsage() );
-                        sal_Bool bShareHeader = IS_SHARE_HEADER(rStyleSet);
-                        sal_Bool bShareFooter = IS_SHARE_FOOTER(rStyleSet);
+                        bool bShareHeader = IS_SHARE_HEADER(rStyleSet);
+                        bool bShareFooter = IS_SHARE_FOOTER(rStyleSet);
                         sal_uInt16 nResId = 0;
 
                         switch ( eUsage )
@@ -1909,7 +1909,7 @@ Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
     if( nAspect == ASPECT_THUMBNAIL )
     {
         Rectangle aArea( 0,0, SC_PREVIEW_SIZE_X,SC_PREVIEW_SIZE_Y );
-        sal_Bool bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );
+        bool bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );
         if ( bNegativePage )
             ScDrawLayer::MirrorRectRTL( aArea );
         SnapVisArea( aArea );

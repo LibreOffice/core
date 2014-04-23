@@ -49,7 +49,7 @@
 
 #include <vector>
 
-extern sal_Bool bDrawIsInUndo; // somewhere as member!
+extern bool bDrawIsInUndo; // somewhere as member!
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -119,7 +119,7 @@ void ScUndoInsertTab::Undo()
     pViewShell->SetTabNo(nTab);
 
     pDocShell->SetInUndo( true );               //! BeginUndo
-    bDrawIsInUndo = sal_True;
+    bDrawIsInUndo = true;
     pViewShell->DeleteTable( nTab, false );
     bDrawIsInUndo = false;
     pDocShell->SetInUndo( false );              //! EndUndo
@@ -141,7 +141,7 @@ void ScUndoInsertTab::Redo()
     RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
 
     pDocShell->SetInUndo( true );               //! BeginRedo
-    bDrawIsInUndo = sal_True;
+    bDrawIsInUndo = true;
     if (bAppend)
         pViewShell->AppendTable( sNewName, false );
     else
@@ -216,7 +216,7 @@ void ScUndoInsertTables::Undo()
     pViewShell->SetTabNo(nTab);
 
     pDocShell->SetInUndo( true );               //! BeginUndo
-    bDrawIsInUndo = sal_True;
+    bDrawIsInUndo = true;
 
     pViewShell->DeleteTables( nTab, static_cast<SCTAB>(aNameList.size()) );
 
@@ -240,7 +240,7 @@ void ScUndoInsertTables::Redo()
     RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
 
     pDocShell->SetInUndo( true );               //! BeginRedo
-    bDrawIsInUndo = sal_True;
+    bDrawIsInUndo = true;
     pViewShell->SetTabNo(nTab);
     pViewShell->InsertTables( aNameList, nTab, static_cast<SCTAB>(aNameList.size()),false );
 
@@ -349,7 +349,7 @@ void ScUndoDeleteTab::Undo()
                 sal_uInt16 nScenFlags;
                 pRefUndoDoc->GetScenarioData( nTab, aComment, aColor, nScenFlags );
                 pDoc->SetScenarioData( nTab, aComment, aColor, nScenFlags );
-                sal_Bool bActive = pRefUndoDoc->IsActiveScenario( nTab );
+                bool bActive = pRefUndoDoc->IsActiveScenario( nTab );
                 pDoc->SetActiveScenario( nTab, bActive );
             }
             pDoc->SetVisible( nTab, pRefUndoDoc->IsVisible( nTab ) );
@@ -397,7 +397,7 @@ void ScUndoDeleteTab::Redo()
     RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
 
     pDocShell->SetInUndo( true );               //! BeginRedo
-    bDrawIsInUndo = sal_True;
+    bDrawIsInUndo = true;
     pViewShell->DeleteTables( theTabs, false );
     bDrawIsInUndo = false;
     pDocShell->SetInUndo( true );               //! EndRedo
@@ -638,7 +638,7 @@ void ScUndoCopyTab::Undo()
         if (nDestTab > MAXTAB)                          // append?
             nDestTab = pDoc->GetTableCount() - 1;
 
-        bDrawIsInUndo = sal_True;
+        bDrawIsInUndo = true;
         pDoc->DeleteTab(nDestTab);
         bDrawIsInUndo = false;
     }
@@ -672,7 +672,7 @@ void ScUndoCopyTab::Redo()
         if (nDestTab > MAXTAB)                          // appended ?
             nDestTab = pDoc->GetTableCount() - 1;
 
-        bDrawIsInUndo = sal_True;
+        bDrawIsInUndo = true;
         pDoc->CopyTab( nOldTab, nNewTab );
         bDrawIsInUndo = false;
 
@@ -690,9 +690,9 @@ void ScUndoCopyTab::Redo()
             sal_uInt16 nScenFlags;
             pDoc->GetScenarioData(nAdjSource, aComment, aColor, nScenFlags );
             pDoc->SetScenarioData(nNewTab, aComment, aColor, nScenFlags );
-            sal_Bool bActive = pDoc->IsActiveScenario(nAdjSource);
+            bool bActive = pDoc->IsActiveScenario(nAdjSource);
             pDoc->SetActiveScenario(nNewTab, bActive );
-            sal_Bool bVisible=pDoc->IsVisible(nAdjSource);
+            bool bVisible=pDoc->IsVisible(nAdjSource);
             pDoc->SetVisible(nNewTab,bVisible );
         }
 
@@ -826,7 +826,7 @@ void ScUndoMakeScenario::Undo()
     ScDocument* pDoc = pDocShell->GetDocument();
 
     pDocShell->SetInUndo( true );
-    bDrawIsInUndo = sal_True;
+    bDrawIsInUndo = true;
     pDoc->DeleteTab( nDestTab );
     bDrawIsInUndo = false;
     pDocShell->SetInUndo( false );
@@ -853,7 +853,7 @@ void ScUndoMakeScenario::Redo()
     RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
 
     pDocShell->SetInUndo( true );
-    bDrawIsInUndo = sal_True;
+    bDrawIsInUndo = true;
 
     pDocShell->MakeScenario( nSrcTab, aName, aComment, aColor, nFlags, *mpMarkData, false );
 
@@ -930,7 +930,7 @@ void ScUndoImportTab::Undo()
 
     SCTAB i;
     ScDocument* pDoc = pDocShell->GetDocument();
-    sal_Bool bMakeRedo = !pRedoDoc;
+    bool bMakeRedo = !pRedoDoc;
     if (bMakeRedo)
     {
         pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -954,9 +954,9 @@ void ScUndoImportTab::Undo()
                 sal_uInt16 nScenFlags;
                 pDoc->GetScenarioData(nTabPos, aComment, aColor, nScenFlags );
                 pRedoDoc->SetScenarioData(nTabPos, aComment, aColor, nScenFlags );
-                sal_Bool bActive = pDoc->IsActiveScenario(nTabPos);
+                bool bActive = pDoc->IsActiveScenario(nTabPos);
                 pRedoDoc->SetActiveScenario(nTabPos, bActive );
-                sal_Bool bVisible=pDoc->IsVisible(nTabPos);
+                bool bVisible=pDoc->IsVisible(nTabPos);
                 pRedoDoc->SetVisible(nTabPos,bVisible );
             }
 
@@ -968,7 +968,7 @@ void ScUndoImportTab::Undo()
 
     DoSdrUndoAction( pDrawUndo, pDoc );             // before the sheets are deleted
 
-    bDrawIsInUndo = sal_True;
+    bDrawIsInUndo = true;
     for (i=0; i<nCount; i++)
         pDoc->DeleteTab( nTab );
     bDrawIsInUndo = false;
@@ -991,7 +991,7 @@ void ScUndoImportTab::Redo()
     {
         SCTAB nTabPos=nTab+i;
         pRedoDoc->GetName(nTabPos,aName);
-        bDrawIsInUndo = sal_True;
+        bDrawIsInUndo = true;
         pDoc->InsertTab(nTabPos,aName);
         bDrawIsInUndo = false;
     }
@@ -1009,9 +1009,9 @@ void ScUndoImportTab::Redo()
             sal_uInt16 nScenFlags;
             pRedoDoc->GetScenarioData(nTabPos, aComment, aColor, nScenFlags );
             pDoc->SetScenarioData(nTabPos, aComment, aColor, nScenFlags );
-            sal_Bool bActive = pRedoDoc->IsActiveScenario(nTabPos);
+            bool bActive = pRedoDoc->IsActiveScenario(nTabPos);
             pDoc->SetActiveScenario(nTabPos, bActive );
-            sal_Bool bVisible=pRedoDoc->IsVisible(nTabPos);
+            bool bVisible=pRedoDoc->IsVisible(nTabPos);
             pDoc->SetVisible(nTabPos,bVisible );
         }
 

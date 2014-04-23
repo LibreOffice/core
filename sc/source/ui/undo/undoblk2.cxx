@@ -135,11 +135,11 @@ void ScUndoWidthOrHeight::Redo()
 {
     BeginRedo();
 
-    sal_Bool bPaintAll = false;
+    bool bPaintAll = false;
     if (eMode==SC_SIZE_OPTIMAL)
     {
         if ( SetViewMarkData( aMarkData ) )
-            bPaintAll = sal_True;       // paint all, because of changed selection
+            bPaintAll = true;       // paint all, because of changed selection
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();

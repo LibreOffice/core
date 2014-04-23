@@ -175,7 +175,7 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
     if ( aStart.hasValue() )
     {
         sal_Int16 nStart = 0;
-        sal_Bool bOverwrite = sal_True;
+        bool bOverwrite = true;
         Overwrite >>= bOverwrite;
 
         if ( aStart >>= nStart )

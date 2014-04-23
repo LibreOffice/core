@@ -150,7 +150,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         {
             SdrObject* pObj;
             SdrPageView* pPV;
-            sal_Bool bAlt = rMEvt.IsMod2();
+            bool bAlt = rMEvt.IsMod2();
             if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
             {
                 pView->BegMacroObj(aMDPos, pObj, pPV, pWindow);
@@ -542,7 +542,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     else if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) && !pObj->ISA(SdrMediaObj) )
                     {
                         OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
-                        sal_Bool bVertical = ( pOPO && pOPO->IsVertical() );
+                        bool bVertical = ( pOPO && pOPO->IsVertical() );
                         sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
                         pViewShell->GetViewData()->GetDispatcher().

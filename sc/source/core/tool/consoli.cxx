@@ -356,7 +356,7 @@ static void lcl_UpdateArray( ScSubTotalFunc eFunc,
         case SUBTOTAL_FUNC_VAR:
         case SUBTOTAL_FUNC_VARP:
         {
-            sal_Bool bOk = SubTotal::SafePlus(rSum, nVal);
+            bool bOk = SubTotal::SafePlus(rSum, nVal);
             bOk = bOk && SubTotal::SafeMult(nVal, nVal);
             bOk = bOk && SubTotal::SafePlus(rSumSqr, nVal);
             if (!bOk)
@@ -391,7 +391,7 @@ static void lcl_InitArray( ScSubTotalFunc eFunc,
         case SUBTOTAL_FUNC_VARP:
         {
             rSum = nVal;
-            sal_Bool bOk = SubTotal::SafeMult(nVal, nVal);
+            bool bOk = SubTotal::SafeMult(nVal, nVal);
             if (bOk)
                 rSumSqr = nVal;
             else

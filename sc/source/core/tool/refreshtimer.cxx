@@ -106,7 +106,7 @@ void ScRefreshTimer::StopRefreshTimer()
 
 void ScRefreshTimer::SetRefreshDelay( sal_uLong nSeconds )
 {
-    sal_Bool bActive = IsActive();
+    bool bActive = IsActive();
     if ( bActive && !nSeconds )
         Stop();
     SetTimeout( nSeconds * 1000 );

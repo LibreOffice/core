@@ -223,7 +223,7 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 // #109985#
 void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
 {
-    sal_Bool    bHad    = false;
+    bool    bHad    = false;
     SCSIZE  nArrY;
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -233,7 +233,7 @@ void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
         {
             if (!bHad)
             {
-                bHad = sal_True;
+                bHad = true;
             }
         }
         else if (bHad)

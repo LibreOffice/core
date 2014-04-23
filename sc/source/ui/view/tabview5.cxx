@@ -304,10 +304,10 @@ void ScTabView::UpdateLayerLocks()
     if (pDrawView)
     {
         SCTAB nTab = aViewData.GetTabNo();
-        sal_Bool bEx = aViewData.GetViewShell()->IsDrawSelMode();
-        sal_Bool bProt = aViewData.GetDocument()->IsTabProtected( nTab ) ||
+        bool bEx = aViewData.GetViewShell()->IsDrawSelMode();
+        bool bProt = aViewData.GetDocument()->IsTabProtected( nTab ) ||
                      aViewData.GetSfxDocShell()->IsReadOnly();
-        sal_Bool bShared = aViewData.GetDocShell()->IsDocShared();
+        bool bShared = aViewData.GetDocShell()->IsDocShared();
 
         SdrLayer* pLayer;
         SdrLayerAdmin& rAdmin = pDrawView->GetModel()->GetLayerAdmin();
@@ -462,9 +462,9 @@ void ScTabView::DrawMarkRect( const Rectangle& rRect )
         if ( pGridWin[i] && pGridWin[i]->IsVisible() )
         {
             RasterOp aROp = pGridWin[i]->GetRasterOp();
-            sal_Bool bHasLine = pGridWin[i]->IsLineColor();
+            bool bHasLine = pGridWin[i]->IsLineColor();
             Color aLine   = pGridWin[i]->GetLineColor();
-            sal_Bool bHasFill = pGridWin[i]->IsFillColor();
+            bool bHasFill = pGridWin[i]->IsFillColor();
             Color aFill   = pGridWin[i]->GetFillColor();
 
             pGridWin[i]->SetRasterOp( ROP_INVERT );

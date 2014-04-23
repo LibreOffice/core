@@ -196,7 +196,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         }
     }
 
-    sal_Bool bCanRename = false;
+    bool bCanRename = false;
     if ( nMarkCount > 1 )
     {
         // no hypelink options for a selected group
@@ -215,7 +215,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         }
         SdrLayerID nLayerID = pObj->GetLayer();
         if ( nLayerID != SC_LAYER_INTERN )
-            bCanRename = sal_True;                          // #i51351# anything except internal objects can be renamed
+            bCanRename = true;                          // #i51351# anything except internal objects can be renamed
 
         // #91929#; don't show original size entry if not possible
         sal_uInt16 nObjType = pObj->GetObjIdentifier();
@@ -271,7 +271,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         pView->GetAttributes( aAttrs );
         if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_AVAILABLE )
         {
-            sal_Bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
+            bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
             rSet.Put( SfxBoolItem( SID_ENABLE_HYPHENATION, bValue ) );
         }
     }
@@ -290,7 +290,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
     Window*     pWindow     = pViewData->GetActiveWin();
     ScDrawView* pDrView     = pViewData->GetScDrawView();
     Point       aPos        = pWindow->PixelToLogic(aMousePos);
-    sal_Bool        bHasMarked  = pDrView->AreObjectsMarked();
+    bool        bHasMarked  = pDrView->AreObjectsMarked();
 
     if( bHasMarked )
     {
@@ -312,7 +312,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
         // #i34458# The SvxSizeItem in SID_TABLE_CELL is no longer needed by
         // SvxPosSizeStatusBarControl, it's enough to have it in SID_ATTR_SIZE.
 
-        sal_Bool bActionItem = false;
+        bool bActionItem = false;
         if ( pDrView->IsAction() )              // action rectangle
         {
             Rectangle aRect;
@@ -323,7 +323,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
                 rSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
                 Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
                 rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize ) );
-                bActionItem = sal_True;
+                bActionItem = true;
             }
         }
         if ( !bActionItem )
@@ -364,9 +364,9 @@ void ScDrawShell::GetAttrFuncState(SfxItemSet &rSet)
         rSet.DisableItem( SID_ATTRIBUTES_AREA );
 }
 
-sal_Bool ScDrawShell::AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList& rMark)
+bool ScDrawShell::AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList& rMark)
 {
-    sal_Bool bResult=sal_True;
+    bool bResult=true;
     sal_uLong nCount = rMark.GetMarkCount();
     for (sal_uLong i=0; i<nCount; i++)
     {

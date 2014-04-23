@@ -47,13 +47,13 @@ public:
 
     virtual short   Execute() SAL_OVERRIDE;      // overloaded to set parent dialog
 
-    sal_Bool        GetTablesFromFile() const { return m_pBtnFromFile->IsChecked(); }
-    sal_Bool        GetTablesAsLink() const { return m_pBtnLink->IsChecked(); }
+    bool        GetTablesFromFile() const { return m_pBtnFromFile->IsChecked(); }
+    bool        GetTablesAsLink() const { return m_pBtnLink->IsChecked(); }
 
     const OUString* GetFirstTable( sal_uInt16* pN = NULL );
     const OUString* GetNextTable( sal_uInt16* pN = NULL );
     ScDocShell*     GetDocShellTables() { return pDocShTables; }
-    sal_Bool        IsTableBefore() const { return m_pBtnBefore->IsChecked(); }
+    bool        IsTableBefore() const { return m_pBtnBefore->IsChecked(); }
     SCTAB           GetTableCount() const { return nTableCount;}
 
 private:

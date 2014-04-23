@@ -254,7 +254,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
             {
                 if(pObj->ISA(SdrCaptionObj))
                 {
-                    sal_Bool bIsVertical(SID_DRAW_CAPTION_VERTICAL == nID);
+                    bool bIsVertical(SID_DRAW_CAPTION_VERTICAL == nID);
 
                     ((SdrTextObj*)pObj)->SetVerticalWriting(bIsVertical);
 

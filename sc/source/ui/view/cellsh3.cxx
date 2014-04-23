@@ -449,13 +449,13 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                         //  first test, if the prefix is recognised as valid,
                         //  else avoid only doubles
-                        sal_Bool bPrefix = pDoc->ValidTabName( aBaseName );
+                        bool bPrefix = pDoc->ValidTabName( aBaseName );
                         OSL_ENSURE(bPrefix, "ungueltiger Tabellenname");
 
                         while ( pDoc->IsScenario(nTab+i) )
                             i++;
 
-                        sal_Bool bValid;
+                        bool bValid;
                         SCTAB nDummy;
                         do
                         {
@@ -487,7 +487,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         }
                         else
                         {
-                            sal_Bool bSheetProtected = pDoc->IsTabProtected(nTab);
+                            bool bSheetProtected = pDoc->IsTabProtected(nTab);
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                             OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
@@ -726,7 +726,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 // test whether to merge or to split
                 bool bMerge = false;
-                sal_Bool bCenter = false;
+                bool bCenter = false;
                 switch( nSlot )
                 {
                     case FID_MERGE_ON:
@@ -751,7 +751,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     // merge - check if to move contents of covered cells
                     bool bMoveContents = false;
-                    sal_Bool bApi = rReq.IsAPI();
+                    bool bApi = rReq.IsAPI();
                     const SfxPoolItem* pItem;
                     if ( pReqArgs &&
                         pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET )
@@ -874,7 +874,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_DETECTIVE_FILLMODE:
             {
-                sal_Bool bOldMode = pTabViewShell->IsAuditShell();
+                bool bOldMode = pTabViewShell->IsAuditShell();
                 pTabViewShell->SetAuditShell( !bOldMode );
                 pTabViewShell->Invalidate( nSlot );
             }

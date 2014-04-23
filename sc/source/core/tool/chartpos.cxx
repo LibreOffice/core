@@ -197,9 +197,9 @@ void ScChartPositioner::GlueState()
                 *p = nOccu;
         }
     }
-    sal_Bool bGlue = sal_True;
+    bool bGlue = true;
 
-    sal_Bool bGlueCols = false;
+    bool bGlueCols = false;
     for ( nCol = 0; bGlue && nCol < nC; nCol++ )
     {   // iterate columns and try to mark as unused
         p = pA.get() + (sal_uLong)nCol * nR;
@@ -220,11 +220,11 @@ void ScChartPositioner::GlueState()
         if ( bGlue && *(p = (pA.get() + ((((sal_uLong)nCol+1) * nR) - 1))) == nFree )
         {   // mark column as totally unused
             *p = nGlue;
-            bGlueCols = sal_True; // one unused column at least
+            bGlueCols = true; // one unused column at least
         }
     }
 
-    sal_Bool bGlueRows = false;
+    bool bGlueRows = false;
     for ( nRow = 0; bGlue && nRow < nR; nRow++ )
     {   // iterate rows and try to mark as unused
         p = pA.get() + nRow;
@@ -243,7 +243,7 @@ void ScChartPositioner::GlueState()
         if ( bGlue && *(p = (pA.get() + ((((sal_uLong)nC-1) * nR) + nRow))) == nFree )
         {   // mark row as totally unused
             *p = nGlue;
-            bGlueRows = sal_True; // one unused row at least
+            bGlueRows = true; // one unused row at least
         }
     }
 
@@ -278,8 +278,8 @@ void ScChartPositioner::CheckColRowHeaders()
     SCROW nRow1, nRow2, iRow;
     SCTAB nTab1, nTab2;
 
-    sal_Bool bColStrings = sal_True;
-    sal_Bool bRowStrings = sal_True;
+    bool bColStrings = true;
+    bool bRowStrings = true;
     GlueState();
     if ( aRangeListRef->size() == 1 )
     {
@@ -302,7 +302,7 @@ void ScChartPositioner::CheckColRowHeaders()
     }
     else
     {
-        sal_Bool bVert = (eGlue == SC_CHARTGLUE_NONE || eGlue == SC_CHARTGLUE_ROWS);
+        bool bVert = (eGlue == SC_CHARTGLUE_NONE || eGlue == SC_CHARTGLUE_ROWS);
         for ( size_t i = 0, nRanges = aRangeListRef->size();
               (i < nRanges) && (bColStrings || bRowStrings);
               ++i
@@ -310,7 +310,7 @@ void ScChartPositioner::CheckColRowHeaders()
         {
             ScRange* pR = (*aRangeListRef)[i];
             pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-            sal_Bool bTopRow = (nRow1 == nStartRow);
+            bool bTopRow = (nRow1 == nStartRow);
             if ( bRowStrings && (bVert || nCol1 == nStartCol) )
             {   // NONE or ROWS: RowStrings in every selection possible
                 // COLS or BOTH: only from first column
@@ -370,7 +370,7 @@ void ScChartPositioner::CreatePositionMap()
 
     GlueState();
 
-    const sal_Bool bNoGlue = (eGlue == SC_CHARTGLUE_NONE);
+    const bool bNoGlue = (eGlue == SC_CHARTGLUE_NONE);
     ColumnMap* pCols = new ColumnMap;
     SCROW nNoGlueRow = 0;
     for ( size_t i = 0, nRanges = aRangeListRef->size(); i < nRanges; ++i )

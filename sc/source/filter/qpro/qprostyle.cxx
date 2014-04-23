@@ -131,7 +131,7 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
 
     // Font Attributes
     sal_uInt16 nTmpFnt = maFontRecord[ maFont[ nStyle ] ];
-    sal_Bool bIsBold, bIsItalic, bIsUnderLine;
+    bool bIsBold, bIsItalic, bIsUnderLine;
 
     bIsBold = ( nTmpFnt & 0x0001 ) != 0;
     bIsItalic = ( nTmpFnt & 0x0002 ) != 0;

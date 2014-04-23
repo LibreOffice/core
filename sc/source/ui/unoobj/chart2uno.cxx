@@ -1442,7 +1442,7 @@ ScChart2DataProvider::createDataSource(
     bool bOrientCol = true;
     OUString aRangeRepresentation;
     uno::Sequence< sal_Int32 > aSequenceMapping;
-    sal_Bool bTimeBased = false;
+    bool bTimeBased = false;
     for(sal_Int32 i = 0; i < aArguments.getLength(); ++i)
     {
         if ( aArguments[i].Name == "DataRowSource" )
@@ -2354,7 +2354,7 @@ uno::Any SAL_CALL ScChart2DataProvider::getPropertyValue(
     else if (rPropertyName == SC_UNONAME_USE_INTERNAL_DATA_PROVIDER)
     {
         // This is a read-only property.
-        aRet <<= static_cast<sal_Bool>(m_pDocument->PastingDrawFromOtherDoc());
+        aRet <<= m_pDocument->PastingDrawFromOtherDoc();
     }
     else
         throw beans::UnknownPropertyException();
@@ -3502,7 +3502,7 @@ void SAL_CALL ScChart2DataSequence::setPropertyValue(
     }
     else if( rPropertyName == "TimeBased" )
     {
-        sal_Bool bTimeBased = mbTimeBased;
+        bool bTimeBased = mbTimeBased;
         rValue>>= bTimeBased;
         mbTimeBased = bTimeBased;
     }

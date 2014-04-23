@@ -46,8 +46,8 @@ const sal_uInt16        nBOF = 0x0000;
 extern WKTYP        eTyp;   // Typ der gerade in bearbeitung befindlichen Datei
 WKTYP               eTyp;
 
-extern sal_Bool         bEOF;           // zeigt Ende der Datei
-sal_Bool                bEOF;
+extern bool         bEOF;           // zeigt Ende der Datei
+bool                bEOF;
 
 extern rtl_TextEncoding eCharVon;
 rtl_TextEncoding        eCharVon;
@@ -100,7 +100,7 @@ generate_Opcodes( SvStream& aStream, ScDocument& rDoc,
         aStream.ReadUInt16( nOpcode ).ReadUInt16( nLength );
         aPrgrsBar.Progress();
         if( nOpcode == LOTUS_EOF )
-        bEOF = sal_True;
+        bEOF = true;
 
         else if( nOpcode == LOTUS_FILEPASSWD )
         return eERR_FILEPASSWD;

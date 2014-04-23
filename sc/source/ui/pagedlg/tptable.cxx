@@ -39,12 +39,12 @@ static sal_uInt16 pPageTableRanges[] =
     0
 };
 
-static sal_Bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
+static bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
                           SfxItemSet&       rCoreSet,
                           const SfxItemSet& rOldSet,
                           const CheckBox&   rBtn );
 
-static sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
+static bool lcl_PutScaleItem( sal_uInt16               nWhich,
                        SfxItemSet&          rCoreSet,
                        const SfxItemSet&    rOldSet,
                        const ListBox&       rListBox,
@@ -52,7 +52,7 @@ static sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
                        const SpinField&     rEd,
                        sal_uInt16               nValue );
 
-static sal_Bool lcl_PutScaleItem2( sal_uInt16               nWhich,
+static bool lcl_PutScaleItem2( sal_uInt16               nWhich,
                        SfxItemSet&          rCoreSet,
                        const SfxItemSet&    rOldSet,
                        const ListBox&       rListBox,
@@ -60,11 +60,11 @@ static sal_Bool lcl_PutScaleItem2( sal_uInt16               nWhich,
                        const NumericField&  rEd1,
                        const NumericField&  rEd2 );
 
-static sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
+static bool lcl_PutBoolItem( sal_uInt16            nWhich,
                       SfxItemSet&       rCoreSet,
                       const SfxItemSet& rOldSet,
-                      sal_Bool              bIsChecked,
-                      sal_Bool              bSavedValue );
+                      bool              bIsChecked,
+                      bool              bSavedValue );
 
 
 #define PAGENO_HDL          LINK(this,ScTablePage,PageNoHdl)
@@ -142,7 +142,7 @@ SfxTabPage* ScTablePage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 
 void ScTablePage::Reset( const SfxItemSet& rCoreSet )
 {
-    sal_Bool    bTopDown = GET_BOOL( SID_SCATTR_PAGE_TOPDOWN, rCoreSet );
+    bool    bTopDown = GET_BOOL( SID_SCATTR_PAGE_TOPDOWN, rCoreSet );
     sal_uInt16  nWhich   = 0;
 
     // sal_Bool flags
@@ -235,7 +235,7 @@ bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
 {
     const SfxItemSet&   rOldSet      = GetItemSet();
     sal_uInt16              nWhichPageNo = GetWhich(SID_SCATTR_PAGE_FIRSTPAGENO);
-    sal_Bool                bDataChanged = false;
+    bool                bDataChanged = false;
 
     // sal_Bool flags
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_NOTES),
@@ -269,11 +269,11 @@ bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
                                      m_pBtnNullVals->GetSavedValue() != TRISTATE_FALSE );
 
     // first printed page:
-    sal_Bool bUseValue = m_pBtnPageNo->IsChecked();
+    bool bUseValue = m_pBtnPageNo->IsChecked();
 
     if (   WAS_DEFAULT(nWhichPageNo,rOldSet)
-        && (    (!bUseValue && bUseValue == m_pBtnPageNo->GetSavedValue())
-            || (   bUseValue && bUseValue == m_pBtnPageNo->GetSavedValue()
+        && (    (!bUseValue && (bUseValue ? 1 : 0) == m_pBtnPageNo->GetSavedValue())
+            || (   bUseValue && (bUseValue ? 1 : 0) == m_pBtnPageNo->GetSavedValue()
                    && m_pEdPageNo->GetText() == m_pEdPageNo->GetSavedValue() ) ) )
     {
             rCoreSet.ClearItem( nWhichPageNo );
@@ -285,7 +285,7 @@ bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
                                     : 0 );
 
         rCoreSet.Put( SfxUInt16Item( nWhichPageNo, nPage ) );
-        bDataChanged = sal_True;
+        bDataChanged = true;
     }
 
     // object representation:
@@ -376,13 +376,13 @@ IMPL_LINK_NOARG(ScTablePage, ScaleHdl)
 
 // Helper functions for FillItemSet:
 
-static sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
+static bool lcl_PutBoolItem( sal_uInt16            nWhich,
                      SfxItemSet&        rCoreSet,
                      const SfxItemSet&  rOldSet,
-                     sal_Bool               bIsChecked,
-                     sal_Bool               bSavedValue )
+                     bool               bIsChecked,
+                     bool               bSavedValue )
 {
-    sal_Bool bDataChanged = (   bSavedValue == bIsChecked
+    bool bDataChanged = (   bSavedValue == bIsChecked
                          && WAS_DEFAULT(nWhich,rOldSet) );
 
     if ( bDataChanged )
@@ -393,14 +393,14 @@ static sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
     return bDataChanged;
 }
 
-static sal_Bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
+static bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
                          SfxItemSet&        rCoreSet,
                          const SfxItemSet&  rOldSet,
                          const CheckBox&    rBtn )
 {
-    sal_Bool bIsChecked   = rBtn.IsChecked();
-    sal_Bool bDataChanged = (   rBtn.GetSavedValue() == bIsChecked
-                         && WAS_DEFAULT(nWhich,rOldSet) );
+    bool bIsChecked   = rBtn.IsChecked();
+    bool bDataChanged =     rBtn.GetSavedValue() == (bIsChecked ? 1 : 0)
+                         && WAS_DEFAULT(nWhich,rOldSet);
 
     if ( bDataChanged )
         rCoreSet.ClearItem( nWhich );
@@ -412,7 +412,7 @@ static sal_Bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
     return bDataChanged;
 }
 
-static sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
+static bool lcl_PutScaleItem( sal_uInt16               nWhich,
                       SfxItemSet&           rCoreSet,
                       const SfxItemSet&     rOldSet,
                       const ListBox&        rListBox,
@@ -420,8 +420,8 @@ static sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
                       const SpinField&      rEd,
                       sal_uInt16                nValue )
 {
-    sal_Bool bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
-    sal_Bool bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
+    bool bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
+    bool bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
         (rEd.GetSavedValue() != rEd.GetText()) ||
                         !WAS_DEFAULT( nWhich, rOldSet );
 
@@ -434,7 +434,7 @@ static sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
 }
 
 
-static sal_Bool lcl_PutScaleItem2( sal_uInt16               nWhich,
+static bool lcl_PutScaleItem2( sal_uInt16               nWhich,
                       SfxItemSet&           rCoreSet,
                       const SfxItemSet&     rOldSet,
                       const ListBox&        rListBox,
@@ -444,8 +444,8 @@ static sal_Bool lcl_PutScaleItem2( sal_uInt16               nWhich,
 {
     sal_uInt16 nValue1 = (sal_uInt16)rEd1.GetValue();
     sal_uInt16 nValue2 = (sal_uInt16)rEd2.GetValue();
-    sal_Bool bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
-    sal_Bool bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
+    bool bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
+    bool bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
         (rEd1.GetSavedValue() != rEd1.GetText()) ||
         (rEd2.GetSavedValue() != rEd2.GetText()) ||
                         !WAS_DEFAULT( nWhich, rOldSet );

@@ -29,13 +29,13 @@ private:
     uno::Reference< XHelperInterface > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;
     uno::Reference< sheet::XSheetPageBreak > mxSheetPageBreak;
-    sal_Bool m_bColumn;
+    bool m_bColumn;
 
 public:
     RangePageBreaks( const uno::Reference< XHelperInterface >& xParent,
                      const uno::Reference< uno::XComponentContext >& xContext,
                      uno::Reference< sheet::XSheetPageBreak >& xSheetPageBreak,
-                     sal_Bool bColumn ) : mxParent( xParent ), mxContext( xContext ), mxSheetPageBreak( xSheetPageBreak ), m_bColumn( bColumn )
+                     bool bColumn ) : mxParent( xParent ), mxContext( xContext ), mxSheetPageBreak( xSheetPageBreak ), m_bColumn( bColumn )
     {
     }
 
@@ -257,7 +257,7 @@ ScVbaHPageBreaks::getServiceNames()
 ScVbaVPageBreaks::ScVbaVPageBreaks( const uno::Reference< XHelperInterface >& xParent,
                                     const uno::Reference< uno::XComponentContext >& xContext,
                                     uno::Reference< sheet::XSheetPageBreak >& xSheetPageBreak ) throw ( uno::RuntimeException )
-:   ScVbaVPageBreaks_BASE( xParent, xContext, new RangePageBreaks( xParent, xContext, xSheetPageBreak, sal_True ) ),
+:   ScVbaVPageBreaks_BASE( xParent, xContext, new RangePageBreaks( xParent, xContext, xSheetPageBreak, true ) ),
     mxSheetPageBreak( xSheetPageBreak )
 {
 }

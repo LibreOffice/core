@@ -108,7 +108,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvControl::getAccessibleAtPoint( 
     return NULL;
 }
 
-sal_Bool SAL_CALL ScAccessibleCsvControl::isVisible() throw( RuntimeException, std::exception )
+bool SAL_CALL ScAccessibleCsvControl::isVisible() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     ensureAlive();

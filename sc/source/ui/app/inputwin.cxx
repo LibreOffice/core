@@ -268,7 +268,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
 
 ScInputWindow::~ScInputWindow()
 {
-    sal_Bool bDown = ( ScGlobal::pSysLocale == NULL );    // after Clear?
+    bool bDown = ( ScGlobal::pSysLocale == NULL );    // after Clear?
 
     //  if any view's input handler has a pointer to this input window, reset it
     //  (may be several ones, #74522#)
@@ -431,18 +431,18 @@ void ScInputWindow::Select()
                         if ( bEmpty )
                         {
                             ScRangeList aRangeList;
-                            const sal_Bool bDataFound = pViewSh->GetAutoSumArea( aRangeList );
+                            const bool bDataFound = pViewSh->GetAutoSumArea( aRangeList );
                             if ( bDataFound )
                             {
                                 ScAddress aAddr = aRangeList.back()->aEnd;
                                 aAddr.IncRow();
-                                const sal_Bool bSubTotal( UseSubTotal( &aRangeList ) );
+                                const bool bSubTotal( UseSubTotal( &aRangeList ) );
                                 pViewSh->EnterAutoSum( aRangeList, bSubTotal, aAddr );
                             }
                         }
                         else
                         {
-                            const sal_Bool bSubTotal( UseSubTotal( &aMarkRangeList ) );
+                            const bool bSubTotal( UseSubTotal( &aMarkRangeList ) );
                             for ( size_t i = 0; i < nCount; ++i )
                             {
                                 const ScRange aRange( *aMarkRangeList[i] );
@@ -466,8 +466,8 @@ void ScInputWindow::Select()
                     else                                    // nur in Eingabezeile einfuegen
                     {
                         ScRangeList aRangeList;
-                        const sal_Bool bDataFound = pViewSh->GetAutoSumArea( aRangeList );
-                        const sal_Bool bSubTotal( UseSubTotal( &aRangeList ) );
+                        const bool bDataFound = pViewSh->GetAutoSumArea( aRangeList );
+                        const bool bSubTotal( UseSubTotal( &aRangeList ) );
                         ScAddress aAddr = pViewSh->GetViewData()->GetCurPos();
                         const OUString aFormula = pViewSh->GetAutoSumFormula( aRangeList, bSubTotal, aAddr );
                         SetFuncString( aFormula );
@@ -1390,7 +1390,7 @@ void ScMultiTextWnd::InitEditEngine()
     //	Wenn in der Zelle URL-Felder enthalten sind, muessen die auch in
     //	die Eingabezeile uebernommen werden, weil sonst die Positionen nicht stimmen.
 
-    sal_Bool bFilled = false;
+    bool bFilled = false;
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
     if ( pHdl )			//!	Testen, ob's der richtige InputHdl ist?
         bFilled = pHdl->GetTextAndFields( *pEditEngine );
@@ -1669,7 +1669,7 @@ void ScTextWnd::KeyInput(const KeyEvent& rKEvt)
     bInputMode = true;
     if (!SC_MOD()->InputKeyEvent( rKEvt ))
     {
-        sal_Bool bUsed = false;
+        bool bUsed = false;
         ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
         if ( pViewSh )
             bUsed = pViewSh->SfxKeyInput(rKEvt);    // nur Acceleratoren, keine Eingabe
@@ -1771,7 +1771,7 @@ void ScTextWnd::StartEditEngine()
         //  Wenn in der Zelle URL-Felder enthalten sind, muessen die auch in
         //  die Eingabezeile uebernommen werden, weil sonst die Positionen nicht stimmen.
 
-        sal_Bool bFilled = false;
+        bool bFilled = false;
         ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
         if ( pHdl )         //! Testen, ob's der richtige InputHdl ist?
             bFilled = pHdl->GetTextAndFields( *pEditEngine );
@@ -1851,7 +1851,7 @@ void ScTextWnd::StopEditEngine( bool bAll )
             pScMod->InputSelection( pEditView );
         aString = pEditEngine->GetText();
         bIsInsertMode = pEditView->IsInsertMode();
-        sal_Bool bSelection = pEditView->HasSelection();
+        bool bSelection = pEditView->HasSelection();
         pEditEngine->SetModifyHdl(Link());
         DELETEZ(pEditView);
         DELETEZ(pEditEngine);
@@ -1897,9 +1897,9 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
 
         if (!pEditEngine)
         {
-            sal_Bool bPaintAll;
+            bool bPaintAll;
             if ( bIsRTL )
-                bPaintAll = sal_True;
+                bPaintAll = true;
             else
             {
                 //  test if CTL script type is involved

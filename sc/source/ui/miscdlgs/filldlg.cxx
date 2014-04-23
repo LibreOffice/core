@@ -291,7 +291,7 @@ IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl)
     else if ( m_pBtnMonth->IsChecked() )       theFillDateCmd = FILL_MONTH;
     else if ( m_pBtnYear->IsChecked() )        theFillDateCmd = FILL_YEAR;
 
-    sal_Bool  bAllOk = true;
+    bool  bAllOk = true;
     Edit* pEdWrong = NULL;
     if ( !CheckStartVal() )
     {

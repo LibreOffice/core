@@ -152,7 +152,7 @@ ScVbaAxis::getCrosses(  ) throw (script::BasicErrorException, uno::RuntimeExcept
     sal_Int32 nCrosses = xlAxisCrossesCustom;
     try
     {
-        sal_Bool bisAutoOrigin = false;
+        bool bisAutoOrigin = false;
         mxPropertySet->getPropertyValue(AUTOORIGIN) >>= bisAutoOrigin;
         if (bisAutoOrigin)
             nCrosses = xlAxisCrossesAutomatic;
@@ -251,7 +251,7 @@ ScVbaAxis::setHasTitle( sal_Bool _bHasTitle ) throw (script::BasicErrorException
  sal_Bool SAL_CALL
 ScVbaAxis::getHasTitle(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
-    sal_Bool bHasTitle = false;
+    bool bHasTitle = false;
     try
     {
         ScVbaChart* pChart = getChartPtr();
@@ -322,7 +322,7 @@ ScVbaAxis::setMinorUnitIsAuto( sal_Bool _bMinorUnitIsAuto ) throw (script::Basic
  sal_Bool SAL_CALL
 ScVbaAxis::getMinorUnitIsAuto(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
-    sal_Bool bIsAuto = false;
+    bool bIsAuto = false;
     try
     {
         if (isValueAxis())
@@ -401,7 +401,7 @@ ScVbaAxis::setMajorUnitIsAuto( sal_Bool _bMajorUnitIsAuto ) throw (script::Basic
 sal_Bool SAL_CALL
 ScVbaAxis::getMajorUnitIsAuto(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
-    sal_Bool bIsAuto = false;
+    bool bIsAuto = false;
     try
     {
         if (isValueAxis())
@@ -470,7 +470,7 @@ ScVbaAxis::setMaximumScaleIsAuto( sal_Bool _bMaximumScaleIsAuto ) throw (script:
 sal_Bool SAL_CALL
 ScVbaAxis::getMaximumScaleIsAuto(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
-    sal_Bool bIsAuto = false;
+    bool bIsAuto = false;
     try
     {
         if (isValueAxis())
@@ -532,7 +532,7 @@ ScVbaAxis::setMinimumScaleIsAuto( sal_Bool _bMinimumScaleIsAuto ) throw (script:
 sal_Bool SAL_CALL
 ScVbaAxis::getMinimumScaleIsAuto(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
-    sal_Bool bIsAuto = false;
+    bool bIsAuto = false;
     try
     {
         if (isValueAxis())
@@ -588,7 +588,7 @@ ScVbaAxis::getScaleType(  ) throw (script::BasicErrorException, uno::RuntimeExce
     {
         if (isValueAxis())
         {
-            sal_Bool bisLogarithmic = false;
+            bool bisLogarithmic = false;
             mxPropertySet->getPropertyValue( OUString( OUString("Logarithmic")) ) >>= bisLogarithmic;
             if (bisLogarithmic)
                 nScaleType = xlScaleLogarithmic;

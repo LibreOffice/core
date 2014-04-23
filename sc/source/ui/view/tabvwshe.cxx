@@ -120,7 +120,7 @@ void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, con
                                 sal_uInt16 nMode )
 {
     SvxLinkInsertMode eMode = (SvxLinkInsertMode) nMode;
-    sal_Bool bAsText = ( eMode != HLINK_BUTTON );       // Default ist jetzt Text
+    bool bAsText = ( eMode != HLINK_BUTTON );       // Default ist jetzt Text
 
     if ( bAsText )
     {
@@ -171,7 +171,7 @@ void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL
     ScModule*       pScMod      = SC_MOD();
     ScInputHandler* pHdl        = pScMod->GetInputHdl( pViewData->GetViewShell() );
 
-    sal_Bool bSelectFirst = false;
+    bool bSelectFirst = false;
     if ( !pScMod->IsEditMode() )
     {
         if ( !SelectionEditable() )

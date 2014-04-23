@@ -279,8 +279,8 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
         OUString          theAreaStr( pEdFilterArea->GetText() );
         ScQueryParam    theOutParam( theQueryData );
         ScAddress       theAdrCopy;
-        sal_Bool            bEditInputOk    = true;
-        sal_Bool            bQueryOk        = false;
+        bool            bEditInputOk    = true;
+        bool            bQueryOk        = false;
         ScRange         theFilterArea;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
@@ -444,7 +444,7 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )
             if ( SCA_VALID == (nResult & SCA_VALID) )
             {
                 OUString* pStr    = NULL;
-                sal_Bool    bFound  = false;
+                bool    bFound  = false;
                 sal_uInt16  i       = 0;
                 sal_uInt16  nCount  = pLbFilterArea->GetEntryCount();
 

@@ -143,7 +143,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     double                  fDouble;
     OUString                aString;
     bool                    bError = false;
-    sal_Bool                    bArrayFormula = false;
+    bool                    bArrayFormula = false;
     TokenId                 nMerk0;
     const bool              bCondFormat = eFT == FT_CondFormat;
     const bool              bRangeName = eFT == FT_RangeName || bCondFormat;
@@ -185,7 +185,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x02: // Data Table                            [325 277]
                 aIn.Ignore( 4 );
 
-                bArrayFormula = sal_True;
+                bArrayFormula = true;
                 break;
             case 0x03: // Addition                              [312 264]
                 aStack >> nMerk0;

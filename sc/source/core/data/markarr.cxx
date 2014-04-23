@@ -122,8 +122,8 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
 
             SCSIZE ni;          // number of entries in beginning
             SCSIZE nInsert;     // insert position (MAXROW+1 := no insert)
-            sal_Bool bCombined = false;
-            sal_Bool bSplit = false;
+            bool bCombined = false;
+            bool bSplit = false;
             if ( nStartRow > 0 )
             {
                 // skip beginning
@@ -138,7 +138,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                     {   // may be a split or a simple insert or just a shrink,
                         // row adjustment is done further down
                         if ( pData[ni].nRow > nEndRow )
-                            bSplit = sal_True;
+                            bSplit = true;
                         ni++;
                         nInsert = ni;
                     }
@@ -149,7 +149,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                 {   // combine
                     pData[ni-1].nRow = nEndRow;
                     nInsert = MAXROWCOUNT;
-                    bCombined = sal_True;
+                    bCombined = true;
                 }
             }
             else
@@ -176,7 +176,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                             pData[ni-1].nRow = nStartRow - 1;   // shrink
                     }
                     nInsert = MAXROWCOUNT;
-                    bCombined = sal_True;
+                    bCombined = true;
                 }
                 else if ( ni > 0 && ni == nInsert )
                     pData[ni-1].nRow = nStartRow - 1;   // shrink

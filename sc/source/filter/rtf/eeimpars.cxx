@@ -177,7 +177,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 aSet.ClearItem( EE_PARA_JUST );
 
             // Test whether simple String without mixed attributes
-            sal_Bool bSimple = ( pE->aSel.nStartPara == pE->aSel.nEndPara );
+            bool bSimple = ( pE->aSel.nStartPara == pE->aSel.nEndPara );
             for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END && bSimple; nId++)
             {
                 const SfxPoolItem* pItem = 0;

@@ -67,7 +67,7 @@ sal_Bool SAL_CALL
 ScVbaValidation::getIgnoreBlank() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
-    sal_Bool bBlank = false;
+    bool bBlank = false;
     xProps->getPropertyValue( IGNOREBLANK )  >>= bBlank;
     return bBlank;
 }
@@ -104,7 +104,7 @@ sal_Bool SAL_CALL
 ScVbaValidation::getShowInput() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
-    sal_Bool bShowInput = false;
+    bool bShowInput = false;
     xProps->getPropertyValue( SHOWINPUT )  >>= bShowInput;
     return bShowInput;
 }
@@ -121,7 +121,7 @@ sal_Bool SAL_CALL
 ScVbaValidation::getShowError() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
-    sal_Bool bShowError = false;
+    bool bShowError = false;
     xProps->getPropertyValue( SHOWERROR )  >>= bShowError;
     return bShowError;
 }

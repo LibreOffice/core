@@ -109,7 +109,7 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
                 if( pItem )
                 {
                     SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
-                    sal_Bool bValue = ( (const SfxBoolItem*) pItem)->GetValue();
+                    bool bValue = ( (const SfxBoolItem*) pItem)->GetValue();
                     aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
                     pView->SetAttributes( aSet );
                 }
@@ -167,7 +167,7 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
                                     EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
                                     EE_PARA_JUST, EE_PARA_JUST,
                                     0 );
-                sal_Bool bLeft = ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT );
+                bool bLeft = ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT );
                 aAttr.Put( SvxFrameDirectionItem(
                                 bLeft ? FRMDIR_HORI_LEFT_TOP : FRMDIR_HORI_RIGHT_TOP,
                                 EE_PARA_WRITINGDIR ) );

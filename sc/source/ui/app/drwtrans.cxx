@@ -268,9 +268,9 @@ ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard( Window* )
     return pObj;
 }
 
-static sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
+static bool lcl_HasOnlyControls( SdrModel* pModel )
 {
-    sal_Bool bOnlyControls = false;         // default if there are no objects
+    bool bOnlyControls = false;         // default if there are no objects
 
     if ( pModel )
     {
@@ -281,7 +281,7 @@ static sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
             SdrObject* pObj = aIter.Next();
             if ( pObj )
             {
-                bOnlyControls = sal_True;   // only set if there are any objects at all
+                bOnlyControls = true;   // only set if there are any objects at all
                 while ( pObj )
                 {
                     if (!pObj->ISA(SdrUnoObj))

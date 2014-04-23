@@ -109,7 +109,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     if ( !xStorage.is() && pMedium )
         xStorage = pMedium->GetStorage();
 
-    sal_Bool bEncrypted = false;
+    bool bEncrypted = false;
     OUString sStream(sDocName);
     if( xStorage.is() )
     {
@@ -188,7 +188,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
         // sax parser sends wrapped exceptions,
         // try to find the original one
         xml::sax::SAXException aSaxEx = *(xml::sax::SAXException*)(&r);
-        sal_Bool bTryChild = sal_True;
+        bool bTryChild = true;
 
         while( bTryChild )
         {
@@ -409,7 +409,7 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
 
         xInfoSet->setPropertyValue( "SourceStorage", uno::Any( xStorage ) );
 
-        sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
+        bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
 
         if (!bStylesOnly && bOasis)
         {
@@ -804,7 +804,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         xInfoSet->setPropertyValue("ProgressRange", uno::makeAny(nProgressRange));
 
         SvtSaveOptions aSaveOpt;
-        sal_Bool bUsePrettyPrinting(aSaveOpt.IsPrettyPrinting());
+        bool bUsePrettyPrinting(aSaveOpt.IsPrettyPrinting());
         xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(bUsePrettyPrinting));
 
         const OUString sTargetStorage("TargetStorage");
@@ -840,7 +840,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         bool bSettingsRet(false);
         ScMySharedData* pSharedData = NULL;
 
-        sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
+        bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
 
         // RDF metadata: ODF >= 1.2
         if ( !bStylesOnly && bOasis )

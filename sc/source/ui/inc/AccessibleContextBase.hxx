@@ -80,6 +80,13 @@ public:
 protected:
     virtual ~ScAccessibleContextBase(void);
 public:
+
+    virtual bool SAL_CALL isShowing(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual bool SAL_CALL isVisible()
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
+
     ///=====  SfxListener  =====================================================
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
@@ -122,12 +129,6 @@ public:
 
     virtual ::com::sun::star::awt::Size SAL_CALL getSize(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual sal_Bool SAL_CALL isShowing(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL isVisible()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL grabFocus(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

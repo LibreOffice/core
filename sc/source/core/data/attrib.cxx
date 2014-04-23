@@ -223,13 +223,13 @@ bool ScProtectionAttr::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             break;
         }
         case MID_1 :
-            rVal <<= (sal_Bool ) bProtection; break;
+            rVal <<= bProtection; break;
         case MID_2 :
-            rVal <<= (sal_Bool ) bHideFormula; break;
+            rVal <<= bHideFormula; break;
         case MID_3 :
-            rVal <<= (sal_Bool ) bHideCell; break;
+            rVal <<= bHideCell; break;
         case MID_4 :
-            rVal <<= (sal_Bool ) bHidePrint; break;
+            rVal <<= bHidePrint; break;
         default:
             OSL_FAIL("Wrong MemberID!");
             return false;
@@ -241,7 +241,7 @@ bool ScProtectionAttr::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 bool ScProtectionAttr::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bRet = false;
-    sal_Bool bVal = sal_False;
+    bool bVal = false;
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -359,15 +359,15 @@ SfxPoolItem* ScProtectionAttr::Clone( SfxItemPool * ) const
 
 SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream, sal_uInt16 /* n */ ) const
 {
-    sal_Bool bProtect;
-    sal_Bool bHFormula;
-    sal_Bool bHCell;
-    sal_Bool bHPrint;
+    bool bProtect;
+    bool bHFormula;
+    bool bHCell;
+    bool bHPrint;
 
-    rStream.ReadUChar( bProtect );
-    rStream.ReadUChar( bHFormula );
-    rStream.ReadUChar( bHCell );
-    rStream.ReadUChar( bHPrint );
+    rStream.ReadCharAsBool( bProtect );
+    rStream.ReadCharAsBool( bHFormula );
+    rStream.ReadCharAsBool( bHCell );
+    rStream.ReadCharAsBool( bHPrint );
 
     return new ScProtectionAttr(bProtect,bHFormula,bHCell,bHPrint);
 }

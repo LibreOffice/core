@@ -388,7 +388,7 @@ bool ScUserListItem::operator==( const SfxPoolItem& rItem ) const
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScUserListItem& r = (const ScUserListItem&)rItem;
-    sal_Bool bEqual = false;
+    bool bEqual = false;
 
     if ( !pUserList || !(r.pUserList) )
         bEqual = ( !pUserList && !(r.pUserList) );

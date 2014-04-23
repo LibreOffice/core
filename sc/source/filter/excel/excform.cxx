@@ -49,7 +49,7 @@ void ImportExcel::Formula25()
     sal_uInt16  nXF = 0, nFormLen;
     double  fCurVal;
     sal_uInt8   nFlag0;
-    sal_Bool    bShrFmla;
+    bool    bShrFmla;
 
     aIn >> aXclPos;
 
@@ -214,12 +214,12 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
     double          fDouble;
     OUString        aString;
     bool            bError = false;
-    sal_Bool            bArrayFormula = false;
+    bool            bArrayFormula = false;
     TokenId         nMerk0;
-    const sal_Bool      bRangeName = eFT == FT_RangeName;
-    const sal_Bool      bSharedFormula = eFT == FT_SharedFormula;
-    const sal_Bool      bConditional = eFT == FT_CondFormat;
-    const sal_Bool      bRNorSF = bRangeName || bSharedFormula || bConditional;
+    const bool      bRangeName = eFT == FT_RangeName;
+    const bool      bSharedFormula = eFT == FT_SharedFormula;
+    const bool      bConditional = eFT == FT_CondFormat;
+    const bool      bRNorSF = bRangeName || bSharedFormula || bConditional;
 
     ScSingleRefData     aSRD;
     ScComplexRefData        aCRD;
@@ -263,7 +263,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
 
                 aIn.Ignore( nUINT16 );
 
-                bArrayFormula = sal_True;
+                bArrayFormula = true;
                 break;
             case 0x03: // Addition                              [312 264]
                 aStack >> nMerk0;
@@ -903,9 +903,9 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
     sal_uInt16          nUINT16;
     sal_uInt8           nByte;
     bool            bError = false;
-    const sal_Bool      bRangeName = eFT == FT_RangeName;
-    const sal_Bool      bSharedFormula = eFT == FT_SharedFormula;
-    const sal_Bool      bRNorSF = bRangeName || bSharedFormula;
+    const bool      bRangeName = eFT == FT_RangeName;
+    const bool      bSharedFormula = eFT == FT_SharedFormula;
+    const bool      bRNorSF = bRangeName || bSharedFormula;
 
     ScSingleRefData aSRD;
     ScComplexRefData    aCRD;

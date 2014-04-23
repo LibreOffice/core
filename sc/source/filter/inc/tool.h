@@ -69,12 +69,12 @@ public:
                         pAttr = NULL;
                     }
 
-    sal_Bool            operator ==( const FormIdent& rComp ) const
+    bool            operator ==( const FormIdent& rComp ) const
                     {
                         return ( nStamp == rComp.nStamp );
                     }
 
-    sal_Bool            operator ==( const StampTyp& rStamp ) const
+    bool            operator ==( const StampTyp& rStamp ) const
                     {
                         return ( nStamp == rStamp );
                     }

@@ -209,10 +209,10 @@ void ScTabOpDlg::RaiseError( ScTabOpErr eError )
     pEd->GrabFocus();
 }
 
-static sal_Bool lcl_Parse( const OUString& rString, ScDocument* pDoc, SCTAB nCurTab,
+static bool lcl_Parse( const OUString& rString, ScDocument* pDoc, SCTAB nCurTab,
                 ScRefAddress& rStart, ScRefAddress& rEnd )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     if ( rString.indexOf(':') != -1 )
         bRet = ConvertDoubleRef( pDoc, rString, nCurTab, rStart, rEnd, eConv );

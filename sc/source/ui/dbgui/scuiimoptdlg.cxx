@@ -294,7 +294,7 @@ IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
 {
     if (pCheckBox == m_pCbFixed)
     {
-        sal_Bool bEnable = !m_pCbFixed->IsChecked();
+        bool bEnable = !m_pCbFixed->IsChecked();
         m_pFtFieldSep->Enable( bEnable );
         m_pEdFieldSep->Enable( bEnable );
         m_pFtTextSep->Enable( bEnable );

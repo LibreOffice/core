@@ -148,7 +148,7 @@ void SAL_CALL ScVbaPageSetup::setFitToPagesTall( const uno::Any& fitToPagesTall)
     sal_uInt16 scaleToPageY = 0;
     try
     {
-        sal_Bool aValue;
+        bool aValue;
         if( fitToPagesTall.getValueTypeClass() != uno::TypeClass_BOOLEAN || (fitToPagesTall >>= aValue))
         {
             fitToPagesTall >>= scaleToPageY;
@@ -171,7 +171,7 @@ void SAL_CALL ScVbaPageSetup::setFitToPagesWide( const uno::Any& fitToPagesWide)
     sal_uInt16 scaleToPageX = 0;
     try
     {
-        sal_Bool aValue = false;
+        bool aValue = false;
         if( fitToPagesWide.getValueTypeClass() != uno::TypeClass_BOOLEAN || (fitToPagesWide >>= aValue))
         {
             fitToPagesWide >>= scaleToPageX;
@@ -196,7 +196,7 @@ void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom) throw (css::uno::Ru
     {
         if( zoom.getValueTypeClass() == uno::TypeClass_BOOLEAN )
         {
-            sal_Bool aValue = false;
+            bool aValue = false;
             zoom >>= aValue;
             if( aValue )
             {
@@ -455,7 +455,7 @@ sal_Int32 SAL_CALL ScVbaPageSetup::getOrder() throw (css::uno::RuntimeException,
     try
     {
         uno::Any aValue = mxPageProps->getPropertyValue("PrintDownFirst");
-        sal_Bool bPrintDownFirst = false;
+        bool bPrintDownFirst = false;
         aValue >>= bPrintDownFirst;
         if( !bPrintDownFirst )
             order = excel::XlOrder::xlOverThenDown;
@@ -469,7 +469,7 @@ sal_Int32 SAL_CALL ScVbaPageSetup::getOrder() throw (css::uno::RuntimeException,
 
 void SAL_CALL ScVbaPageSetup::setOrder( sal_Int32 order) throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool bOrder = sal_True;
+    bool bOrder = true;
     switch( order )
     {
         case excel::XlOrder::xlDownThenOver:
@@ -528,7 +528,7 @@ void SAL_CALL ScVbaPageSetup::setFirstPageNumber( sal_Int32 firstPageNumber) thr
 
 sal_Bool SAL_CALL ScVbaPageSetup::getCenterVertically() throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool centerVertically = false;
+    bool centerVertically = false;
     try
     {
         uno::Any aValue = mxPageProps->getPropertyValue("CenterVertically");
@@ -553,7 +553,7 @@ void SAL_CALL ScVbaPageSetup::setCenterVertically( sal_Bool centerVertically) th
 
 sal_Bool SAL_CALL ScVbaPageSetup::getCenterHorizontally() throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool centerHorizontally = false;
+    bool centerHorizontally = false;
     try
     {
         uno::Any aValue = mxPageProps->getPropertyValue("CenterHorizontally");
@@ -578,7 +578,7 @@ void SAL_CALL ScVbaPageSetup::setCenterHorizontally( sal_Bool centerHorizontally
 
 sal_Bool SAL_CALL ScVbaPageSetup::getPrintHeadings() throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool printHeadings = false;
+    bool printHeadings = false;
     try
     {
         uno::Any aValue = mxPageProps->getPropertyValue("PrintHeaders");

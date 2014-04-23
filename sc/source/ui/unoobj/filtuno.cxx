@@ -236,9 +236,9 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
     }
     else
     {
-        sal_Bool bMultiByte = sal_True;
-        sal_Bool bDBEnc     = false;
-        sal_Bool bAscii     = false;
+        bool bMultiByte = true;
+        bool bDBEnc     = false;
+        bool bAscii     = false;
 
         sal_Unicode cStrDel = '"';
         sal_Unicode cAsciiDel = ';';
@@ -258,7 +258,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
                 cAsciiDel = '\t';
 
             aTitle = ScGlobal::GetRscString( STR_EXPORT_ASCII );
-            bAscii = sal_True;
+            bAscii = true;
         }
         else if ( aFilterString == ScDocShell::GetLotusFilterName() )
         {
@@ -281,7 +281,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
                 aTitle = ScGlobal::GetRscString( STR_IMPORT_DBF );
             }
             load_CharSet( eEncoding, bExport );
-            bDBEnc = sal_True;
+            bDBEnc = true;
         }
         else if ( aFilterString == ScDocShell::GetDifFilterName() )
         {

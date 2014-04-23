@@ -60,11 +60,11 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
         return;     // #i43092# rectangle with size 0 would have RECT_EMPTY as end position
 
     // save old state
-    sal_Bool        bHadFill   = pOut->IsFillColor();
+    bool        bHadFill   = pOut->IsFillColor();
     Color       aOldFill   = pOut->GetFillColor();
-    sal_Bool        bHadLine   = pOut->IsLineColor();
+    bool        bHadLine   = pOut->IsLineColor();
     Color       aOldLine   = pOut->GetLineColor();
-    sal_Bool        bOldEnable = pOut->IsMapModeEnabled();
+    bool        bOldEnable = pOut->IsMapModeEnabled();
 
     Rectangle   aBtnRect( rAt, rSize );
     Rectangle   aInnerRect = aBtnRect;

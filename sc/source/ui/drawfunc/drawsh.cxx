@@ -378,7 +378,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
 void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 {
     ScDrawView*         pView       = pViewData->GetScDrawView();
-    sal_Bool                bHasMarked  = pView->AreObjectsMarked();
+    bool                bHasMarked  = pView->AreObjectsMarked();
     const SdrObject*    pObj        = NULL;
     const SdrMarkList&  rMarkList   = pView->GetMarkedObjectList();
 
@@ -417,7 +417,7 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 {
     ScDrawView* pView       = pViewData->GetScDrawView();
-    sal_Bool        bHasMarked  = pView->AreObjectsMarked();
+    bool        bHasMarked  = pView->AreObjectsMarked();
 
     SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
@@ -449,7 +449,7 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, sal_uInt16 /* nTabPage */ )
 {
     ScDrawView* pView       = pViewData->GetScDrawView();
-    sal_Bool        bHasMarked  = pView->AreObjectsMarked();
+    bool        bHasMarked  = pView->AreObjectsMarked();
     SfxItemSet  aNewAttr    ( pView->GetDefaultAttr() );
 
     if( bHasMarked )

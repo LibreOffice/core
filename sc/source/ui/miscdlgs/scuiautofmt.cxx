@@ -309,7 +309,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl)
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
 {
-    sal_Bool bOk = false;
+    bool bOk = false;
     while( !bOk )
     {
 

@@ -106,13 +106,13 @@ using ::std::for_each;
 
 struct ScAccessibleShapeData
 {
-    ScAccessibleShapeData() : pAccShape(NULL), pRelationCell(NULL), bSelected(false), bSelectable(sal_True) {}
+    ScAccessibleShapeData() : pAccShape(NULL), pRelationCell(NULL), bSelected(false), bSelectable(true) {}
     ~ScAccessibleShapeData();
     mutable ::accessibility::AccessibleShape* pAccShape;
     mutable ScAddress*          pRelationCell; // if it is NULL this shape is anchored on the table
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape;
-    mutable sal_Bool            bSelected;
-    sal_Bool                    bSelectable;
+    mutable bool            bSelected;
+    bool                    bSelectable;
 };
 
 ScAccessibleShapeData::~ScAccessibleShapeData()
@@ -151,9 +151,9 @@ struct ScShapeDataLess
             break;
         }
     }
-    sal_Bool LessThanSheet(const ScAccessibleShapeData* pData) const
+    bool LessThanSheet(const ScAccessibleShapeData* pData) const
     {
-        sal_Bool bResult(false);
+        bool bResult(false);
         uno::Reference< beans::XPropertySet> xProps(pData->xShape, uno::UNO_QUERY);
         if (xProps.is())
         {
@@ -162,14 +162,14 @@ struct ScShapeDataLess
             if( (aPropAny >>= nLayerID) )
             {
                 if (nLayerID == SC_LAYER_BACK)
-                    bResult = sal_True;
+                    bResult = true;
             }
         }
         return bResult;
     }
-    sal_Bool operator()(const ScAccessibleShapeData* pData1, const ScAccessibleShapeData* pData2) const
+    bool operator()(const ScAccessibleShapeData* pData1, const ScAccessibleShapeData* pData2) const
     {
-        sal_Bool bResult(false);
+        bool bResult(false);
         if (pData1 && pData2)
         {
             uno::Reference< beans::XPropertySet> xProps1(pData1->xShape, uno::UNO_QUERY);
@@ -231,7 +231,7 @@ struct SelectShape
     {
         if (pAccShapeData && pAccShapeData->bSelectable)
         {
-            pAccShapeData->bSelected = sal_True;
+            pAccShapeData->bSelected = true;
             if (pAccShapeData->pAccShape)
                 pAccShapeData->pAccShape->SetState(AccessibleStateType::SELECTED);
             if (xShapes.is())
@@ -287,16 +287,16 @@ public:
 
     // gets the index of the shape starting on 0 (without the index of the table)
     // returns the selected shape
-    sal_Bool IsSelected(sal_Int32 nIndex,
+    bool IsSelected(sal_Int32 nIndex,
         com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& rShape) const;
 
-    sal_Bool SelectionChanged();
+    bool SelectionChanged();
 
     void Select(sal_Int32 nIndex);
     void DeselectAll(); // deselect also the table
     void SelectAll();
     sal_Int32 GetSelectedCount() const;
-    uno::Reference< XAccessible > GetSelected(sal_Int32 nSelectedChildIndex, sal_Bool bTabSelected) const;
+    uno::Reference< XAccessible > GetSelected(sal_Int32 nSelectedChildIndex, bool bTabSelected) const;
     void Deselect(sal_Int32 nChildIndex);
 
     SdrPage* GetDrawPage() const;
@@ -318,17 +318,17 @@ private:
     ScSplitPos meSplitPos;
 
     void FillShapes(std::vector < uno::Reference < drawing::XShape > >& rShapes) const;
-    sal_Bool FindSelectedShapesChanges(const com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>& xShapes, sal_Bool bCommitChange) const;
+    bool FindSelectedShapesChanges(const com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>& xShapes, bool bCommitChange) const;
     void FillSelectionSupplier() const;
 
     ScAddress* GetAnchor(const uno::Reference<drawing::XShape>& xShape) const;
     uno::Reference<XAccessibleRelationSet> GetRelationSet(const ScAccessibleShapeData* pData) const;
     void CheckWhetherAnchorChanged(const uno::Reference<drawing::XShape>& xShape) const;
     void SetAnchor(const uno::Reference<drawing::XShape>& xShape, ScAccessibleShapeData* pData) const;
-    void AddShape(const uno::Reference<drawing::XShape>& xShape, sal_Bool bCommitChange) const;
+    void AddShape(const uno::Reference<drawing::XShape>& xShape, bool bCommitChange) const;
     void RemoveShape(const uno::Reference<drawing::XShape>& xShape) const;
 
-    sal_Bool FindShape(const uno::Reference<drawing::XShape>& xShape, SortedShapes::iterator& rItr) const;
+    bool FindShape(const uno::Reference<drawing::XShape>& xShape, SortedShapes::iterator& rItr) const;
 
     sal_Int8 Compare(const ScAccessibleShapeData* pData1,
         const ScAccessibleShapeData* pData2) const;
@@ -432,7 +432,7 @@ void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
                     {
                         uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
                         if (xShape.is())
-                            AddShape(xShape, sal_True);
+                            AddShape(xShape, true);
                     }
                     break;
                     case HINT_OBJREMOVED :     // Zeichenobjekt aus Liste entfernt
@@ -600,7 +600,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
     if(mpViewShell)
     {
         sal_Int32 i(maZOrderedShapes.size() - 1);
-        sal_Bool bFound(false);
+        bool bFound(false);
         while (!bFound && i >= 0)
         {
             ScAccessibleShapeData* pShape = maZOrderedShapes[i];
@@ -616,7 +616,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
                     if (pShape->pAccShape->containsPoint(AWTPoint(aPoint)))
                     {
                         xAccessible = pShape->pAccShape;
-                        bFound = sal_True;
+                        bFound = true;
                     }
                 }
                 else
@@ -625,7 +625,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
                 }
             }
             else
-                bFound = sal_True; // this is the sheet and it lies before the rest of the shapes which are background shapes
+                bFound = true; // this is the sheet and it lies before the rest of the shapes which are background shapes
 
             --i;
         }
@@ -633,10 +633,10 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
     return xAccessible;
 }
 
-sal_Bool ScChildrenShapes::IsSelected(sal_Int32 nIndex,
+bool ScChildrenShapes::IsSelected(sal_Int32 nIndex,
                         uno::Reference<drawing::XShape>& rShape) const
 {
-    sal_Bool bResult (false);
+    bool bResult (false);
     if (maZOrderedShapes.size() <= 1)
         GetCount(); // fill list with filtered shapes (no internal shapes)
 
@@ -651,7 +651,7 @@ sal_Bool ScChildrenShapes::IsSelected(sal_Int32 nIndex,
 
 #if OSL_DEBUG_LEVEL > 0 // test whether it is truly selected by a slower method
     uno::Reference< drawing::XShape > xReturnShape;
-    sal_Bool bDebugResult(false);
+    bool bDebugResult(false);
     uno::Reference<container::XIndexAccess> xIndexAccess;
     xSelectionSupplier->getSelection() >>= xIndexAccess;
 
@@ -668,7 +668,7 @@ sal_Bool ScChildrenShapes::IsSelected(sal_Int32 nIndex,
                 xIndexAccess->getByIndex(i) >>= xShape;
                 if (xShape.is() && (xIndexShape.get() == xShape.get()))
                 {
-                    bDebugResult = sal_True;
+                    bDebugResult = true;
                     xReturnShape = xShape;
                 }
                 else
@@ -682,15 +682,15 @@ sal_Bool ScChildrenShapes::IsSelected(sal_Int32 nIndex,
     return bResult;
 }
 
-sal_Bool ScChildrenShapes::SelectionChanged()
+bool ScChildrenShapes::SelectionChanged()
 {
-    sal_Bool bResult(false);
+    bool bResult(false);
     if (!xSelectionSupplier.is())
         throw uno::RuntimeException();
 
     uno::Reference<drawing::XShapes> xShapes(xSelectionSupplier->getSelection(), uno::UNO_QUERY);
 
-    bResult = FindSelectedShapesChanges(xShapes, sal_True);
+    bResult = FindSelectedShapesChanges(xShapes, true);
 
     return bResult;
 }
@@ -721,7 +721,7 @@ void ScChildrenShapes::Select(sal_Int32 nIndex)
         try
         {
             xSelectionSupplier->select(uno::makeAny(xShapes));
-            maZOrderedShapes[nIndex]->bSelected = sal_True;
+            maZOrderedShapes[nIndex]->bSelected = true;
             if (maZOrderedShapes[nIndex]->pAccShape)
                 maZOrderedShapes[nIndex]->pAccShape->SetState(AccessibleStateType::SELECTED);
         }
@@ -736,7 +736,7 @@ void ScChildrenShapes::DeselectAll()
     if (!xSelectionSupplier.is())
         throw uno::RuntimeException();
 
-    sal_Bool bSomethingSelected(sal_True);
+    bool bSomethingSelected(true);
     try
     {
         xSelectionSupplier->select(uno::Any()); //deselects all
@@ -805,7 +805,7 @@ sal_Int32 ScChildrenShapes::GetSelectedCount() const
     return aShapes.size();
 }
 
-uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedChildIndex, sal_Bool bTabSelected) const
+uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedChildIndex, bool bTabSelected) const
 {
     uno::Reference< XAccessible > xAccessible;
 
@@ -827,7 +827,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedC
     {
         SortedShapes::iterator aItr = maZOrderedShapes.begin();
         SortedShapes::iterator aEndItr = maZOrderedShapes.end();
-        sal_Bool bFound(false);
+        bool bFound(false);
         while(!bFound && aItr != aEndItr)
         {
             if (*aItr)
@@ -835,7 +835,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedC
                 if ((*aItr)->bSelected)
                 {
                     if (nSelectedChildIndex == 0)
-                        bFound = sal_True;
+                        bFound = true;
                     else
                         --nSelectedChildIndex;
                 }
@@ -843,7 +843,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedC
             else
             {
                 if (nSelectedChildIndex == 0)
-                    bFound = sal_True;
+                    bFound = true;
                 else
                     --nSelectedChildIndex;
             }
@@ -942,9 +942,9 @@ utl::AccessibleRelationSetHelper* ScChildrenShapes::GetRelationSet(const ScAddre
     return aSetRelation.mpRelationSet;
 }
 
-sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::XShapes>& xShapes, sal_Bool /* bCommitChange */) const
+bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::XShapes>& xShapes, bool /* bCommitChange */) const
 {
-    sal_Bool bResult(false);
+    bool bResult(false);
     SortedShapes aShapesList;
     uno::Reference<container::XIndexAccess> xIndexAcc(xShapes, uno::UNO_QUERY);
     if (xIndexAcc.is())
@@ -973,7 +973,7 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
     std::sort(aShapesList.begin(), aShapesList.end(), aLess);
     SortedShapes vecSelectedShapeAdd;
     SortedShapes vecSelectedShapeRemove;
-    sal_Bool bHasSelect=sal_False;
+    bool bHasSelect=false;
     SortedShapes::iterator aXShapesItr(aShapesList.begin());
     SortedShapes::const_iterator aXShapesEndItr(aShapesList.end());
     SortedShapes::iterator aDataItr(maZOrderedShapes.begin());
@@ -992,19 +992,19 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
             {
                 if (!(*aDataItr)->bSelected)
                 {
-                    (*aDataItr)->bSelected = sal_True;
+                    (*aDataItr)->bSelected = true;
                     if ((*aDataItr)->pAccShape)
                     {
                         (*aDataItr)->pAccShape->SetState(AccessibleStateType::SELECTED);
                         (*aDataItr)->pAccShape->ResetState(AccessibleStateType::FOCUSED);
-                        bResult = sal_True;
+                        bResult = true;
                         vecSelectedShapeAdd.push_back((*aDataItr));
                     }
                     aFocusedItr = aDataItr;
                 }
                 else
                 {
-                     bHasSelect = sal_True;
+                     bHasSelect = true;
                 }
                 ++aDataItr;
                 ++aXShapesItr;
@@ -1018,7 +1018,7 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
                     {
                         (*aDataItr)->pAccShape->ResetState(AccessibleStateType::SELECTED);
                         (*aDataItr)->pAccShape->ResetState(AccessibleStateType::FOCUSED);
-                        bResult = sal_True;
+                        bResult = true;
                         vecSelectedShapeRemove.push_back(*aDataItr);
                     }
                 }
@@ -1046,7 +1046,7 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
     const SdrMarkList* pMarkList = NULL;
     SdrObject* pMarkedObj = NULL;
     SdrObject* pUpObj = NULL;
-    sal_Bool bIsFocuseMarked = sal_True;
+    bool bIsFocuseMarked = true;
     if( mpViewShell && mnShapesSelected == 1 && bWinFocus)
     {
         ScViewData *pViewData = mpViewShell->GetViewData();
@@ -1062,7 +1062,7 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
                     (*aFocusedItr)->xShape.is() &&
                     xMarkedXShape.is() &&
                     (*aFocusedItr)->xShape != xMarkedXShape )
-                    bIsFocuseMarked = sal_False;
+                    bIsFocuseMarked = false;
             }
         }
     }
@@ -1246,7 +1246,7 @@ void ScChildrenShapes::SetAnchor(const uno::Reference<drawing::XShape>& xShape, 
     }
 }
 
-void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, sal_Bool bCommitChange) const
+void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, bool bCommitChange) const
 {
     SortedShapes::iterator aFindItr;
     if (!FindShape(xShape, aFindItr))
@@ -1266,7 +1266,7 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, s
                 if( (nLayerID == SC_LAYER_INTERN) || (nLayerID == SC_LAYER_HIDDEN) )
                     pShape->bSelectable = false;
                 else
-                    pShape->bSelectable = sal_True;
+                    pShape->bSelectable = true;
             }
         }
 
@@ -1281,14 +1281,14 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, s
             if (xEnum.is())
             {
                 uno::Reference<drawing::XShape> xSelectedShape;
-                sal_Bool bFound(false);
+                bool bFound(false);
                 while (!bFound && xEnum->hasMoreElements())
                 {
                     xEnum->nextElement() >>= xSelectedShape;
                     if (xShape.is() && (xShape.get() == xSelectedShape.get()))
                     {
-                        pShape->bSelected = sal_True;
-                        bFound = sal_True;
+                        pShape->bSelected = true;
+                        bFound = true;
                     }
                 }
             }
@@ -1340,28 +1340,28 @@ void ScChildrenShapes::RemoveShape(const uno::Reference<drawing::XShape>& xShape
     }
 }
 
-sal_Bool ScChildrenShapes::FindShape(const uno::Reference<drawing::XShape>& xShape, ScChildrenShapes::SortedShapes::iterator& rItr) const
+bool ScChildrenShapes::FindShape(const uno::Reference<drawing::XShape>& xShape, ScChildrenShapes::SortedShapes::iterator& rItr) const
 {
-    sal_Bool bResult(false);
+    bool bResult(false);
     ScAccessibleShapeData aShape;
     aShape.xShape = xShape;
     ScShapeDataLess aLess;
     rItr = std::lower_bound(maZOrderedShapes.begin(), maZOrderedShapes.end(), &aShape, aLess);
     if ((rItr != maZOrderedShapes.end()) && (*rItr != NULL) && ((*rItr)->xShape.get() == xShape.get()))
-        bResult = sal_True; // if the shape is found
+        bResult = true; // if the shape is found
 
 #if OSL_DEBUG_LEVEL > 0 // test whether it finds truly the correct shape (perhaps it is not really sorted)
     SortedShapes::iterator aDebugItr = maZOrderedShapes.begin();
     SortedShapes::iterator aEndItr = maZOrderedShapes.end();
-    sal_Bool bFound(false);
+    bool bFound(false);
     while (!bFound && aDebugItr != aEndItr)
     {
         if (*aDebugItr && ((*aDebugItr)->xShape.get() == xShape.get()))
-            bFound = sal_True;
+            bFound = true;
         else
             ++aDebugItr;
     }
-    sal_Bool bResult2 = (aDebugItr != maZOrderedShapes.end());
+    bool bResult2 = (aDebugItr != maZOrderedShapes.end());
     OSL_ENSURE((bResult == bResult2) && ((bResult && (rItr == aDebugItr)) || !bResult), "wrong Shape found");
 #endif
     return bResult;
@@ -1372,8 +1372,8 @@ sal_Int8 ScChildrenShapes::Compare(const ScAccessibleShapeData* pData1,
 {
     ScShapeDataLess aLess;
 
-    sal_Bool bResult1(aLess(pData1, pData2));
-    sal_Bool bResult2(aLess(pData2, pData1));
+    bool bResult1(aLess(pData1, pData2));
+    bool bResult2(aLess(pData2, pData1));
 
     sal_Int8 nResult(0);
     if (!bResult1 && bResult2)
@@ -1541,7 +1541,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             uno::Reference<XAccessible> xAccessible;
             if (mpChildrenShapes)
             {
-                sal_Bool bTabMarked(IsTableSelected());
+                bool bTabMarked(IsTableSelected());
                 xAccessible = mpChildrenShapes->GetSelected(0, bTabMarked);
             }
             if( xAccessible.is() )
@@ -1672,7 +1672,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /* aEvent */ )
         throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bSelectionChanged(false);
+    bool bSelectionChanged(false);
     if (mpAccessibleSpreadsheet)
     {
         bool bOldSelected(mbCompleteSheetSelected);
@@ -1680,12 +1680,12 @@ void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /
         if (bOldSelected != mbCompleteSheetSelected)
         {
             mpAccessibleSpreadsheet->CompleteSelectionChanged(mbCompleteSheetSelected);
-            bSelectionChanged = sal_True;
+            bSelectionChanged = true;
         }
     }
 
     if (mpChildrenShapes && mpChildrenShapes->SelectionChanged())
-        bSelectionChanged = sal_True;
+        bSelectionChanged = true;
 
     if (bSelectionChanged)
     {
@@ -1919,7 +1919,7 @@ void SAL_CALL
         uno::Reference < XAccessible > xAccessible = mpChildrenShapes->Get(nChildIndex);
         if (xAccessible.is())
         {
-            sal_Bool bWasTableSelected(IsTableSelected());
+            bool bWasTableSelected(IsTableSelected());
 
             if (mpChildrenShapes)
                 mpChildrenShapes->Select(nChildIndex); // throws no lang::IndexOutOfBoundsException if Index is to high
@@ -1941,7 +1941,7 @@ sal_Bool SAL_CALL
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    sal_Bool bResult(false);
+    bool bResult(false);
 
     if (mpChildrenShapes)
     {
@@ -1960,7 +1960,7 @@ sal_Bool SAL_CALL
         else
         {
             if (mxTempAcc.is() && nChildIndex == nCount)
-                bResult = sal_True;
+                bResult = true;
             else
                 bResult = IsTableSelected();
         }
@@ -2029,7 +2029,7 @@ uno::Reference<XAccessible > SAL_CALL
         if (nSelectedChildIndex < 0 || nSelectedChildIndex >= nCount)
             throw lang::IndexOutOfBoundsException();
 
-        sal_Bool bTabMarked(IsTableSelected());
+        bool bTabMarked(IsTableSelected());
 
         if (mpChildrenShapes)
             xAccessible = mpChildrenShapes->GetSelected(nSelectedChildIndex, bTabMarked); // throws no lang::IndexOutOfBoundsException if Index is to high
@@ -2059,7 +2059,7 @@ void SAL_CALL
         if (nChildIndex < 0 || nChildIndex >= nCount)
             throw lang::IndexOutOfBoundsException();
 
-        sal_Bool bTabMarked(IsTableSelected());
+        bool bTabMarked(IsTableSelected());
 
         uno::Reference < XAccessible > xAccessible = mpChildrenShapes->Get(nChildIndex);
         if (xAccessible.is())
@@ -2534,7 +2534,7 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Any > ScAccessibleDocument::
     }
     else if ( nType == FINDREPLACEFLOWTO )
     {
-        sal_Bool bSuccess(sal_False);
+        bool bSuccess(false);
         rAny >>= bSuccess;
         if ( bSuccess )
         {

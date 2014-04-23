@@ -190,7 +190,7 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
     sal_uInt32      nIndex1;
     sal_uInt32      nHandle;
     NfIndexTableOffset eIndexTableOffset = NF_NUMERIC_START;
-    sal_Bool        bDefault = false;
+    bool        bDefault = false;
 
     if( nForm == 0xFF ) // Default-Format?
         nForm = nDefaultFormat;
@@ -330,11 +330,11 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
                     break;
                 case 0x0F:  // Standardeinstellung
                     //fStandard;nSt;
-                    bDefault = sal_True;
+                    bDefault = true;
                     break;
                 default:
                     //fStandard;nSt;
-                    bDefault = sal_True;
+                    bDefault = true;
                     break;
             }
             break;

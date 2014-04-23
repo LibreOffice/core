@@ -137,7 +137,7 @@ void ScTempDocCache::Clear()
 //! merge this with ScAreaLink::Refresh
 //! copy directly without a clipboard document?
 
-static sal_Bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
+static bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
                     ScDocument* pDestDoc, const ScAddress& rDestPos )
 {
     SCTAB nSrcTab = rSrcRange.aStart.Tab();
@@ -170,7 +170,7 @@ static sal_Bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     pDestDoc->CopyFromClip( aNewRange, aDestMark, IDF_ALL & ~IDF_FORMULA, NULL, pClipDoc, false );
 
     delete pClipDoc;
-    return sal_True;
+    return true;
 }
 
 ScFunctionAccess::ScFunctionAccess() :
@@ -275,7 +275,7 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
 
         // options aren't initialized from configuration - always get the same default behaviour
 
-        sal_Bool bDone = ScDocOptionsHelper::setPropertyValue( *pOptions, aPropertyMap, aPropertyName, aValue );
+        bool bDone = ScDocOptionsHelper::setPropertyValue( *pOptions, aPropertyMap, aPropertyName, aValue );
         if (!bDone)
             throw beans::UnknownPropertyException();
     }
@@ -302,7 +302,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFunctionAccess )
 
 // XFunctionAccess
 
-static sal_Bool lcl_AddFunctionToken( ScTokenArray& rArray, const OUString& rName,const ScCompiler& rCompiler )
+static bool lcl_AddFunctionToken( ScTokenArray& rArray, const OUString& rName,const ScCompiler& rCompiler )
 {
     // function names are always case-insensitive
     OUString aUpper = ScGlobal::pCharClass->uppercase(rName);
@@ -464,7 +464,7 @@ class ArrayOfArrayProc
 {
 public:
 static void processSequences( ScDocument* pDoc, const uno::Any& rArg, ScTokenArray& rTokenArr,
-                                long& rDocRow, sal_Bool& rArgErr, sal_Bool& rOverflow )
+                                long& rDocRow, bool& rArgErr, bool& rOverflow )
 {
     SequencesContainer< T > aContainer( rArg, rTokenArr, rDocRow, pDoc );
     aContainer.process();
@@ -520,8 +520,8 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
     //  add arguments to token array
 
 
-    sal_Bool bArgErr = false;
-    sal_Bool bOverflow = false;
+    bool bArgErr = false;
+    bool bOverflow = false;
     long nDocRow = 0;
     long nArgCount = aArguments.getLength();
     const uno::Any* pArgArr = aArguments.getConstArray();
@@ -597,12 +597,12 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
                     long nRowCount = aSrcRange.aEnd.Row() - aSrcRange.aStart.Row() + 1;
 
                     if ( nStartRow + nRowCount > MAXROWCOUNT )
-                        bOverflow = sal_True;
+                        bOverflow = true;
                     else
                     {
                         // copy data
                         if ( !lcl_CopyData( pSrcDoc, aSrcRange, pDoc, ScAddress( 0, (SCROW)nDocRow, 0 ) ) )
-                            bOverflow = sal_True;
+                            bOverflow = true;
                     }
 
                     nDocRow += nRowCount;
@@ -610,13 +610,13 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
                         lcl_AddRef( aTokenArr, nStartRow, nColCount, nRowCount );
                 }
                 else
-                    bArgErr = sal_True;
+                    bArgErr = true;
             }
             else
-                bArgErr = sal_True;
+                bArgErr = true;
         }
         else
-            bArgErr = sal_True;                 // invalid type
+            bArgErr = true;                 // invalid type
     }
     aTokenArr.AddOpCode(ocClose);
     aTokenArr.AddOpCode(ocStop);
@@ -667,7 +667,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         else
         {
             //  any other error: IllegalArgumentException
-            bArgErr = sal_True;
+            bArgErr = true;
         }
 
         pDoc->DeleteAreaTab( 0, 0, MAXCOL, MAXROW, 0, IDF_ALL );

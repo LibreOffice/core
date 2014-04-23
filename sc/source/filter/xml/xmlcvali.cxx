@@ -45,9 +45,9 @@ class ScXMLContentValidationContext : public SvXMLImportContext
     OUString      sBaseCellAddress;
     OUString      sCondition;
     sal_Int16          nShowList;
-    sal_Bool           bAllowEmptyCell;
-    sal_Bool           bDisplayHelp;
-    sal_Bool           bDisplayError;
+    bool           bAllowEmptyCell;
+    bool           bDisplayHelp;
+    bool           bDisplayError;
 
     SvXMLImportContextRef           xEventContext;
 
@@ -75,9 +75,9 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 
-    void SetHelpMessage(const OUString& sTitle, const OUString& sMessage, const sal_Bool bDisplay);
-    void SetErrorMessage(const OUString& sTitle, const OUString& sMessage, const OUString& sMessageType, const sal_Bool bDisplay);
-    void SetErrorMacro(const sal_Bool bExecute);
+    void SetHelpMessage(const OUString& sTitle, const OUString& sMessage, const bool bDisplay);
+    void SetErrorMessage(const OUString& sTitle, const OUString& sMessage, const OUString& sMessageType, const bool bDisplay);
+    void SetErrorMacro(const bool bExecute);
 };
 
 class ScXMLHelpMessageContext : public SvXMLImportContext
@@ -85,7 +85,7 @@ class ScXMLHelpMessageContext : public SvXMLImportContext
     OUString   sTitle;
     OUStringBuffer sMessage;
     sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay;
+    bool        bDisplay;
 
     ScXMLContentValidationContext* pValidationContext;
 
@@ -115,7 +115,7 @@ class ScXMLErrorMessageContext : public SvXMLImportContext
     OUStringBuffer sMessage;
     OUString   sMessageType;
     sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay;
+    bool        bDisplay;
 
     ScXMLContentValidationContext* pValidationContext;
 
@@ -142,7 +142,7 @@ public:
 class ScXMLErrorMacroContext : public SvXMLImportContext
 {
     OUString   sName;
-    sal_Bool        bExecute;
+    bool        bExecute;
 
     ScXMLContentValidationContext*  pValidationContext;
 
@@ -453,7 +453,7 @@ void ScXMLContentValidationContext::EndElement()
     GetScImport().AddValidation(aValidation);
 }
 
-void ScXMLContentValidationContext::SetHelpMessage(const OUString& sTitle, const OUString& sMessage, const sal_Bool bDisplay)
+void ScXMLContentValidationContext::SetHelpMessage(const OUString& sTitle, const OUString& sMessage, const bool bDisplay)
 {
     sHelpTitle = sTitle;
     sHelpMessage = sMessage;
@@ -461,7 +461,7 @@ void ScXMLContentValidationContext::SetHelpMessage(const OUString& sTitle, const
 }
 
 void ScXMLContentValidationContext::SetErrorMessage(const OUString& sTitle, const OUString& sMessage,
-    const OUString& sMessageType, const sal_Bool bDisplay)
+    const OUString& sMessageType, const bool bDisplay)
 {
     sErrorTitle = sTitle;
     sErrorMessage = sMessage;
@@ -469,7 +469,7 @@ void ScXMLContentValidationContext::SetErrorMessage(const OUString& sTitle, cons
     bDisplayError = bDisplay;
 }
 
-void ScXMLContentValidationContext::SetErrorMacro(const sal_Bool bExecute)
+void ScXMLContentValidationContext::SetErrorMacro(const bool bExecute)
 {
     sErrorMessageType = "macro";
     bDisplayError = bExecute;

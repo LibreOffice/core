@@ -221,7 +221,7 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
         return uno::Any(); // or should we throw?
 
     OUString aStringSheet;
-    sal_Bool bBefore(sal_True);
+    bool bBefore(true);
     SCTAB nSheetIndex = 0;
     SCTAB nNewSheets = 1, nType = 0;
     Count >>= nNewSheets;
@@ -250,7 +250,7 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
     {
         uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
         aStringSheet = xApplication->getActiveWorkbook()->getActiveSheet()->getName();
-        bBefore = sal_True;
+        bBefore = true;
     }
         nCount = static_cast< SCTAB >( m_xIndexAccess->getCount() );
         for (SCTAB i=0; i < nCount; i++)
@@ -314,8 +314,8 @@ ScVbaWorksheets::PrintOut( const uno::Any& From, const uno::Any& To, const uno::
     sal_Int32 nTo = 0;
     sal_Int32 nFrom = 0;
     sal_Int16 nCopies = 1;
-    sal_Bool bCollate = false;
-    sal_Bool bSelection = false;
+    bool bCollate = false;
+    bool bSelection = false;
     From >>= nFrom;
     To >>= nTo;
     Copies >>= nCopies;
@@ -324,7 +324,7 @@ ScVbaWorksheets::PrintOut( const uno::Any& From, const uno::Any& To, const uno::
 
     if ( !( nFrom || nTo ) )
         if ( isSelectedSheets() )
-            bSelection = sal_True;
+            bSelection = true;
 
     PrintOutHelper( excel::getBestViewShell( mxModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, bSelection );
 }
@@ -332,7 +332,7 @@ ScVbaWorksheets::PrintOut( const uno::Any& From, const uno::Any& To, const uno::
 uno::Any SAL_CALL
 ScVbaWorksheets::getVisible() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bVisible = sal_True;
+    bool bVisible = true;
     uno::Reference< container::XEnumeration > xEnum( createEnumeration(), uno::UNO_QUERY_THROW );
     while ( xEnum->hasMoreElements() )
     {
@@ -349,14 +349,14 @@ ScVbaWorksheets::getVisible() throw (uno::RuntimeException, std::exception)
 void SAL_CALL
 ScVbaWorksheets::setVisible( const uno::Any& _visible ) throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bState = false;
+    bool bState = false;
     if ( _visible >>= bState )
     {
         uno::Reference< container::XEnumeration > xEnum( createEnumeration(), uno::UNO_QUERY_THROW );
         while ( xEnum->hasMoreElements() )
         {
             uno::Reference< excel::XWorksheet > xSheet( xEnum->nextElement(), uno::UNO_QUERY_THROW );
-            xSheet->setVisible( bState );
+            xSheet->setVisible( bState ? 1 : 0 );
         }
     }
     else
@@ -371,7 +371,7 @@ ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException,
         throw uno::RuntimeException("Cannot obtain view shell", uno::Reference< uno::XInterface >() );
 
     ScMarkData& rMarkData = pViewShell->GetViewData()->GetMarkData();
-    sal_Bool bReplace = sal_True;
+    bool bReplace = true;
     Replace >>= bReplace;
     // Replace is defaulted to True, meanining this current collection
     // becomes the Selection, if it were false then the current selection would

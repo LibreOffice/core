@@ -540,9 +540,9 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const OUString& aURL,
     {
         //  collect options
 
-        sal_Bool bLoadReplace = sal_True;           // defaults
-        sal_Bool bLoadCellStyles = sal_True;
-        sal_Bool bLoadPageStyles = sal_True;
+        bool bLoadReplace = true;           // defaults
+        bool bLoadCellStyles = true;
+        bool bLoadPageStyles = true;
 
         const beans::PropertyValue* pPropArray = aOptions.getConstArray();
         long nPropCount = aOptions.getLength();
@@ -1055,7 +1055,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
         //! Undo ?????????????
 
         OUString aString(ScStyleNameConversion::ProgrammaticToDisplayName( rParentStyle, sal::static_int_cast<sal_uInt16>(eFamily) ));
-        sal_Bool bOk = pStyle->SetParent( aString );
+        bool bOk = pStyle->SetParent( aString );
         if (bOk)
         {
             //  wie bei setPropertyValue
@@ -1111,7 +1111,7 @@ void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
         //! Undo ?????????????
 
         OUString aString(aNewName);
-        sal_Bool bOk = pStyle->SetName( aString );
+        bool bOk = pStyle->SetName( aString );
         if (bOk)
         {
             aStyleName = aString;       //! notify other objects for this style?
@@ -1294,8 +1294,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const OUString& aPropertyName 
                 case ATTR_PAGE_OBJECTS:
                 case ATTR_PAGE_DRAWINGS:
                     //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
-                    aAny <<= sal_Bool( ((const ScViewObjectModeItem&)pItemSet->Get(nWhich)).
-                                    GetValue() == VOBJ_MODE_SHOW );
+                    aAny <<= ((const ScViewObjectModeItem&)pItemSet->Get(nWhich)).GetValue() == VOBJ_MODE_SHOW;
                     break;
                 case ATTR_PAGE_SCALETO:
                     {
@@ -1670,7 +1669,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
                             case ATTR_PAGE_OBJECTS:
                             case ATTR_PAGE_DRAWINGS:
                                 {
-                                    sal_Bool bBool = false;
+                                    bool bBool = false;
                                     *pValue >>= bBool;
                                     //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
                                     rSet.Put( ScViewObjectModeItem( pEntry->nWID,
@@ -1727,7 +1726,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
                                 break;
                             case ATTR_HIDDEN:
                                 {
-                                    sal_Bool bHidden = sal_False;
+                                    bool bHidden = false;
                                     if ( *pValue >>= bHidden )
                                         pStyle->SetHidden( bHidden );
                                 }
@@ -1874,7 +1873,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const OUString& aPropertyName )
                     case ATTR_STACKED:
                         {
                             sal_Int32 nRot = ((const SfxInt32Item&)pItemSet->Get(ATTR_ROTATE_VALUE)).GetValue();
-                            sal_Bool bStacked = ((const SfxBoolItem&)pItemSet->Get(nWhich)).GetValue();
+                            bool bStacked = ((const SfxBoolItem&)pItemSet->Get(nWhich)).GetValue();
                             SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aAny );
                         }
                         break;
@@ -1887,8 +1886,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const OUString& aPropertyName )
                     case ATTR_PAGE_OBJECTS:
                     case ATTR_PAGE_DRAWINGS:
                         //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
-                        aAny <<= sal_Bool( ((const ScViewObjectModeItem&)pItemSet->
-                                        Get(nWhich)).GetValue() == VOBJ_MODE_SHOW );
+                        aAny <<= ((const ScViewObjectModeItem&)pItemSet->Get(nWhich)).GetValue() == VOBJ_MODE_SHOW;
                         break;
                     case ATTR_PAGE_PAPERBIN:
                         {
@@ -1918,7 +1916,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const OUString& aPropertyName )
                         break;
                     case ATTR_HIDDEN:
                         {
-                            sal_Bool bHidden = sal_False;
+                            bool bHidden = false;
                             SfxStyleSheetBase* pStyle = GetStyle_Impl();
                             if ( pStyle )
                                 bHidden = pStyle->IsHidden();

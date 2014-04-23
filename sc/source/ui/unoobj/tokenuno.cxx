@@ -422,7 +422,7 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                     {
                         sheet::NameToken aNameToken;
                         aNameToken.Index = static_cast<sal_Int32>( rToken.GetIndex() );
-                        aNameToken.Global = static_cast<sal_Bool>( rToken.IsGlobal() );
+                        aNameToken.Global = rToken.IsGlobal();
                         rAPI.Data <<= aNameToken;
                     }
                     break;

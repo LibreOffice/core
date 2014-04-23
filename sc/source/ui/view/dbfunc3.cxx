@@ -336,7 +336,7 @@ void ScDBFunc::ShowMarkedOutlines( bool bRecord )
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScOutlineDocFunc aFunc(*pDocSh);
-        sal_Bool bDone = aFunc.ShowMarkedOutlines( aRange, bRecord );
+        bool bDone = aFunc.ShowMarkedOutlines( aRange, bRecord );
         if (bDone)
             UpdateScrollBars();
     }
@@ -368,7 +368,7 @@ void ScDBFunc::HideMarkedOutlines( bool bRecord )
 void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
                             const ScSortParam* pForceNewSort )
 {
-    sal_Bool bDo = !rParam.bRemoveOnly;                         // sal_False = nur loeschen
+    bool bDo = !rParam.bRemoveOnly;                         // sal_False = nur loeschen
 
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -400,7 +400,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
     }
 
     WaitObject aWait( GetViewData()->GetDialogParent() );
-    sal_Bool bOk = true;
+    bool bOk = true;
     if (rParam.bReplace)
         if (pDoc->TestRemoveSubTotals( nTab, rParam ))
         {
@@ -423,7 +423,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
 
         if (bRecord)                                        // alte Daten sichern
         {
-            sal_Bool bOldFilter = bDo && rParam.bDoSort;
+            bool bOldFilter = bDo && rParam.bDoSort;
             SCTAB nTabCount = pDoc->GetTableCount();
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
@@ -477,7 +477,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
 
         if (rParam.bReplace)
             pDoc->RemoveSubTotals( nTab, aNewParam );
-        sal_Bool bSuccess = sal_True;
+        bool bSuccess = true;
         if (bDo)
         {
             // Sortieren
@@ -695,7 +695,7 @@ void ScDBFunc::GetSelectedMemberList(ScDPUniqueStringSet& rEntries, long& rDimen
     ScRangeListRef xRanges;
     GetViewData()->GetMultiArea( xRanges );         // incl. cursor if nothing is selected
     size_t nRangeCount = xRanges->size();
-    sal_Bool bContinue = true;
+    bool bContinue = true;
 
     for (size_t nRangePos=0; nRangePos < nRangeCount && bContinue; nRangePos++)
     {
@@ -767,8 +767,8 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
             OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
             OUString aBaseDimName( aDimName );
 
-            sal_Bool bInGroupDim = false;
-            sal_Bool bFoundParts = false;
+            bool bInGroupDim = false;
+            bool bFoundParts = false;
 
             ScDPDimensionSaveData* pDimData =
                 const_cast<ScDPDimensionSaveData*>( pDPObj->GetSaveData()->GetExistingDimensionData() );
@@ -795,10 +795,10 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
 
                         rOldInfo = pNumGroupDim->GetInfo();
                         rParts = com::sun::star::sheet::DataPilotFieldGroupBy::DAYS;               // not found in CollectDateParts
-                        bFoundParts = sal_True;
+                        bFoundParts = true;
                         bFound = true;
                     }
-                    bInGroupDim = sal_True;
+                    bInGroupDim = true;
                 }
                 else if ( pGroupDim )
                 {
@@ -813,7 +813,7 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                         aBaseDimName = pGroupDim->GetSourceDimName();
                         bFound = true;
                     }
-                    bInGroupDim = sal_True;
+                    bInGroupDim = true;
                 }
             }
             if ( bFound && !bFoundParts )
@@ -879,7 +879,7 @@ bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
             bool bIsDataLayout;
             OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
 
-            sal_Bool bInGroupDim = false;
+            bool bInGroupDim = false;
 
             ScDPDimensionSaveData* pDimData =
                 const_cast<ScDPDimensionSaveData*>( pDPObj->GetSaveData()->GetExistingDimensionData() );
@@ -895,7 +895,7 @@ bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
                     bFound = true;
                 }
                 else if ( pDimData->GetNamedGroupDim( aDimName ) )
-                    bInGroupDim = sal_True;                                    // in a group dimension
+                    bInGroupDim = true;                                    // in a group dimension
             }
             if ( !bFound && !bInGroupDim )
             {
@@ -2086,19 +2086,19 @@ void ScDBFunc::RepeatDB( bool bRecord )
 
     ScQueryParam aQueryParam;
     pDBData->GetQueryParam( aQueryParam );
-    sal_Bool bQuery = aQueryParam.GetEntry(0).bDoQuery;
+    bool bQuery = aQueryParam.GetEntry(0).bDoQuery;
 
     ScSortParam aSortParam;
     pDBData->GetSortParam( aSortParam );
-    sal_Bool bSort = aSortParam.maKeyState[0].bDoSort;
+    bool bSort = aSortParam.maKeyState[0].bDoSort;
 
     ScSubTotalParam aSubTotalParam;
     pDBData->GetSubTotalParam( aSubTotalParam );
-    sal_Bool bSubTotal = aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly;
+    bool bSubTotal = aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly;
 
     if ( bQuery || bSort || bSubTotal )
     {
-        sal_Bool bQuerySize = false;
+        bool bQuerySize = false;
         ScRange aOldQuery;
         ScRange aNewQuery;
         if (bQuery && !aQueryParam.bInplace)
@@ -2108,7 +2108,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
             if (pDest && pDest->IsDoSize())
             {
                 pDest->GetArea( aOldQuery );
-                bQuerySize = sal_True;
+                bQuerySize = true;
             }
         }
 

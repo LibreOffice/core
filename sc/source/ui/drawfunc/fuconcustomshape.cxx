@@ -85,9 +85,9 @@ bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
         if ( pObj )
         {
             SetAttributes( pObj );
-            sal_Bool bForceNoFillStyle = false;
+            bool bForceNoFillStyle = false;
             if ( ((SdrObjCustomShape*)pObj)->UseNoFillStyle() )
-                bForceNoFillStyle = sal_True;
+                bForceNoFillStyle = true;
             if ( bForceNoFillStyle )
                 pObj->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
             pObj->SetGridOffset( aGridOff );
@@ -207,7 +207,7 @@ SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, c
 
 void FuConstCustomShape::SetAttributes( SdrObject* pObj )
 {
-    sal_Bool bAttributesAppliedFromGallery = false;
+    bool bAttributesAppliedFromGallery = false;
 
     if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
     {
@@ -250,7 +250,7 @@ void FuConstCustomShape::SetAttributes( SdrObject* pObj )
                                 double a = nAngle * F_PI18000;
                                 pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
                             }
-                            bAttributesAppliedFromGallery = sal_True;
+                            bAttributesAppliedFromGallery = true;
                         }
                     }
                     break;

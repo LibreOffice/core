@@ -171,7 +171,7 @@ ScHFEditActiveDlg::ScHFEditActiveDlg( SfxViewFrame*     pFrameP,
                 rCoreSet.Get(
                     rCoreSet.GetPool()->GetWhich(SID_ATTR_PAGE) );
 
-    sal_Bool bRightPage = ( SVX_PAGE_LEFT !=
+    bool bRightPage = ( SVX_PAGE_LEFT !=
                         SvxPageUsage(rPageItem.GetPageUsage()) );
 
     if ( bRightPage )
@@ -183,13 +183,13 @@ ScHFEditActiveDlg::ScHFEditActiveDlg( SfxViewFrame*     pFrameP,
     {
         //  #69193a# respect "shared" setting
 
-        sal_Bool bShareHeader = IS_SHARE_HEADER(rCoreSet);
+        bool bShareHeader = IS_SHARE_HEADER(rCoreSet);
         if ( bShareHeader )
             AddTabPage( "header", ScRightHeaderEditPage::Create, NULL );
         else
             AddTabPage( "header", ScLeftHeaderEditPage::Create, NULL );
 
-        sal_Bool bShareFooter = IS_SHARE_FOOTER(rCoreSet);
+        bool bShareFooter = IS_SHARE_FOOTER(rCoreSet);
         if ( bShareFooter )
             AddTabPage( "footer", ScRightFooterEditPage::Create, NULL );
         else

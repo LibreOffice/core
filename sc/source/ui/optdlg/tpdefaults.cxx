@@ -41,7 +41,7 @@ SfxTabPage* ScTpDefaultsOptions::Create(Window *pParent, const SfxItemSet &rCore
 
 bool ScTpDefaultsOptions::FillItemSet(SfxItemSet &rCoreSet)
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     ScDefaultsOptions aOpt;
 
     SCTAB nTabCount = static_cast<SCTAB>(m_pEdNSheets->GetValue());

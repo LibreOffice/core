@@ -296,7 +296,7 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                 break;
                 case SCFORMULAOPT_ENGLISH_FUNCNAME:
                 {
-                    sal_Bool bEnglish = false;
+                    bool bEnglish = false;
                     if (pValues[nProp] >>= bEnglish)
                         SetUseEnglishFuncName(bEnglish);
                 }
@@ -390,7 +390,7 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                 break;
                 case SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO:
                 {
-                    sal_Bool bVal = GetCalcConfig().mbEmptyStringAsZero;
+                    bool bVal = GetCalcConfig().mbEmptyStringAsZero;
                     pValues[nProp] >>= bVal;
                     GetCalcConfig().mbEmptyStringAsZero = bVal;
                 }
@@ -445,7 +445,7 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                 break;
                 case SCFORMULAOPT_OPENCL_ENABLED:
                 {
-                    sal_Bool bVal = GetCalcConfig().mbOpenCLEnabled;
+                    bool bVal = GetCalcConfig().mbOpenCLEnabled;
                     pValues[nProp] >>= bVal;
 #if 0 // Don't remove please.
       // The intent here is that tml when running CppunitTest_sc_opencl_test turns this on.
@@ -456,7 +456,7 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                 break;
                 case SCFORMULAOPT_OPENCL_AUTOSELECT:
                 {
-                    sal_Bool bVal = GetCalcConfig().mbOpenCLAutoSelect;
+                    bool bVal = GetCalcConfig().mbOpenCLAutoSelect;
                     pValues[nProp] >>= bVal;
                     GetCalcConfig().mbOpenCLAutoSelect = bVal;
                 }
@@ -501,7 +501,7 @@ void ScFormulaCfg::Commit()
             break;
             case SCFORMULAOPT_ENGLISH_FUNCNAME:
             {
-                sal_Bool b = GetUseEnglishFuncName();
+                bool b = GetUseEnglishFuncName();
                 pValues[nProp] <<= b;
             }
             break;
@@ -542,7 +542,7 @@ void ScFormulaCfg::Commit()
             break;
             case SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO:
             {
-                sal_Bool bVal = GetCalcConfig().mbEmptyStringAsZero;
+                bool bVal = GetCalcConfig().mbEmptyStringAsZero;
                 pValues[nProp] <<= bVal;
             }
             break;
@@ -586,14 +586,14 @@ void ScFormulaCfg::Commit()
             break;
             case SCFORMULAOPT_OPENCL_ENABLED:
             {
-                sal_Bool bVal = GetCalcConfig().mbOpenCLEnabled;
+                bool bVal = GetCalcConfig().mbOpenCLEnabled;
                 pValues[nProp] <<= bVal;
                 bSetOpenCL = bVal;
             }
             break;
             case SCFORMULAOPT_OPENCL_AUTOSELECT:
             {
-                sal_Bool bVal = GetCalcConfig().mbOpenCLAutoSelect;
+                bool bVal = GetCalcConfig().mbOpenCLAutoSelect;
                 pValues[nProp] <<= bVal;
                 bSetOpenCL = true;
             }

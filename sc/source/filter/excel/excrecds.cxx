@@ -907,8 +907,8 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
 {
     XclExpNameManager& rNameMgr = GetNameManager();
 
-    sal_Bool        bFound  = false;
-    sal_Bool        bAdvanced = false;
+    bool        bFound  = false;
+    bool        bAdvanced = false;
     ScDBData*   pData   = rRoot.GetDoc().GetAnonymousDBData(nTab);
     ScRange     aAdvRange;
     if (pData)
@@ -951,8 +951,8 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
         // AutoFilter
         else
         {
-            sal_Bool    bConflict   = false;
-            sal_Bool    bContLoop   = sal_True;
+            bool    bConflict   = false;
+            bool    bContLoop   = true;
             bool        bHasOr      = false;
             SCCOLROW nFirstField = aParam.GetEntry( 0 ).nField;
 

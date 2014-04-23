@@ -265,7 +265,7 @@ void ScTabControl::Select()
 
     //  InputEnterHandler nur wenn nicht Referenzeingabe
 
-    sal_Bool bRefMode = pScMod->IsFormulaMode();
+    bool bRefMode = pScMod->IsFormulaMode();
     if (!bRefMode)
         pScMod->InputEnterHandler();
 
@@ -326,7 +326,7 @@ void ScTabControl::UpdateStatus()
 {
     ScDocument* pDoc = pViewData->GetDocument();
     ScMarkData& rMark = pViewData->GetMarkData();
-    sal_Bool bActive = pViewData->IsActive();
+    bool bActive = pViewData->IsActive();
 
     SCTAB nCount = pDoc->GetTableCount();
     SCTAB i;
@@ -334,7 +334,7 @@ void ScTabControl::UpdateStatus()
     SCTAB nMaxCnt = std::max( nCount, static_cast<SCTAB>(GetMaxId()) );
     Color aTabBgColor;
 
-    sal_Bool bModified = false;                                     // Tabellen-Namen
+    bool bModified = false;                                     // Tabellen-Namen
     for (i=0; i<nMaxCnt && !bModified; i++)
     {
         if (pDoc->IsVisible(i))
@@ -348,7 +348,7 @@ void ScTabControl::UpdateStatus()
         }
 
         if ( !aString.equals(GetPageText(static_cast<sal_uInt16>(i)+1)) || (GetTabBgColor(static_cast<sal_uInt16>(i)+1) != aTabBgColor) )
-            bModified = sal_True;
+            bModified = true;
     }
 
     if (bModified)
@@ -380,7 +380,7 @@ void ScTabControl::UpdateStatus()
         bModified = false;                                          // Selektion
         for (i=0; i<nMaxCnt && !bModified; i++)
             if ( rMark.GetTableSelect(i) != (bool) IsPageSelected(static_cast<sal_uInt16>(i)+1) )
-                bModified = sal_True;
+                bModified = true;
 
         // #i99576# the following loop is mis-optimized on unxsoli4 and the reason
         // why this file is in NOOPTFILES.
@@ -403,7 +403,7 @@ void ScTabControl::SwitchToPageId(sal_uInt16 nId)
 {
     if (nId)
     {
-        sal_Bool bAlreadySelected = IsPageSelected( nId );
+        bool bAlreadySelected = IsPageSelected( nId );
         //make the clicked page the current one
         SetCurPageId( nId );
         //change the selection when the current one is not already
@@ -423,7 +423,7 @@ void ScTabControl::Command( const CommandEvent& rCEvt )
 {
     ScModule*       pScMod   = SC_MOD();
     ScTabViewShell* pViewSh  = pViewData->GetViewShell();
-    sal_Bool            bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
+    bool            bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
 
     // ViewFrame erstmal aktivieren (Bug 19493):
     pViewSh->SetActive();
@@ -452,7 +452,7 @@ void ScTabControl::Command( const CommandEvent& rCEvt )
 void ScTabControl::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 {
     ScModule* pScMod = SC_MOD();
-    sal_Bool bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
+    bool bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
 
     if (!bDisable)
     {
@@ -598,7 +598,7 @@ long ScTabControl::AllowRenaming()
     {
         SCTAB nTab = nId - 1;
         OUString aNewName = GetEditText();
-        sal_Bool bDone = pViewSh->RenameTable( aNewName, nTab );
+        bool bDone = pViewSh->RenameTable( aNewName, nTab );
         if ( bDone )
             nRet = TABBAR_RENAMING_YES;
         else if ( bErrorShown )

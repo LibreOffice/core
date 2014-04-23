@@ -203,7 +203,7 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::
     ScDocument* pDoc = pDocShell->GetDocument();
     ScDBCollection* pOldColl = pDoc->GetDBCollection();
     ScDBCollection* pUndoColl = NULL;
-    const sal_Bool bRecord (pDoc->IsUndoEnabled());
+    const bool bRecord (pDoc->IsUndoEnabled());
 
     std::vector<ScRange>::const_iterator iter;
     for (iter = rDelAreaList.begin(); iter != rDelAreaList.end(); ++iter)
@@ -276,7 +276,7 @@ void ScDBFunc::Sort( const ScSortParam& rSortParam, bool bRecord, bool bPaint )
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     SCTAB nTab = GetViewData()->GetTabNo();
     ScDBDocFunc aDBDocFunc( *pDocSh );
-    sal_Bool bSuccess = aDBDocFunc.Sort( nTab, rSortParam, bRecord, bPaint, false );
+    bool bSuccess = aDBDocFunc.Sort( nTab, rSortParam, bRecord, bPaint, false );
     if ( bSuccess && !rSortParam.bInplace )
     {
         //  mark target
@@ -297,11 +297,11 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     SCTAB nTab = GetViewData()->GetTabNo();
     ScDBDocFunc aDBDocFunc( *pDocSh );
-    sal_Bool bSuccess = aDBDocFunc.Query( nTab, rQueryParam, pAdvSource, bRecord, false );
+    bool bSuccess = aDBDocFunc.Query( nTab, rQueryParam, pAdvSource, bRecord, false );
 
     if (bSuccess)
     {
-        sal_Bool bCopy = !rQueryParam.bInplace;
+        bool bCopy = !rQueryParam.bInplace;
         if (bCopy)
         {
             //  mark target range (data base range has been set up if applicable)
@@ -346,9 +346,9 @@ void ScDBFunc::ToggleAutoFilter()
     SCROW  nRow = aParam.nRow1;
     SCTAB  nTab = GetViewData()->GetTabNo();
     sal_Int16   nFlag;
-    sal_Bool    bHasAuto = sal_True;
-    sal_Bool    bHeader  = pDBData->HasHeader();
-    sal_Bool    bPaint   = false;
+    bool    bHasAuto = true;
+    bool    bHeader  = pDBData->HasHeader();
+    bool    bPaint   = false;
 
     //!     instead retrieve from DB-range?
 
@@ -394,7 +394,7 @@ void ScDBFunc::ToggleAutoFilter()
 
         pDocSh->GetUndoManager()->LeaveListAction();
 
-        bPaint = sal_True;
+        bPaint = true;
     }
     else                                    // show filter buttons
     {
@@ -410,7 +410,7 @@ void ScDBFunc::ToggleAutoFilter()
                     ).Execute() == RET_YES )
                 {
                     pDBData->SetHeader( true );     //! Undo ??
-                    bHeader = sal_True;
+                    bHeader = true;
                 }
             }
 
@@ -429,7 +429,7 @@ void ScDBFunc::ToggleAutoFilter()
             }
             pDocSh->PostPaint(ScRange(aParam.nCol1, nRow, nTab, aParam.nCol2, nRow, nTab),
                               PAINT_GRID);
-            bPaint = sal_True;
+            bPaint = true;
         }
         else
         {

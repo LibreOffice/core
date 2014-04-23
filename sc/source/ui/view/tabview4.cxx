@@ -48,7 +48,7 @@ void ScTabView::HideTip()
 
 void ScTabView::ShowRefTip()
 {
-    sal_Bool bDone = false;
+    bool bDone = false;
     if ( aViewData.GetRefType() == SC_REFTYPE_REF && Help::IsQuickHelpEnabled() )
     {
         SCCOL nStartX = aViewData.GetRefStartX();
@@ -57,8 +57,8 @@ void ScTabView::ShowRefTip()
         SCROW nEndY   = aViewData.GetRefEndY();
         if ( nEndX != nStartX || nEndY != nStartY )     // nicht fuer einzelne Zelle
         {
-            sal_Bool bLeft = ( nEndX < nStartX );
-            sal_Bool bTop  = ( nEndY < nStartY );
+            bool bLeft = ( nEndX < nStartX );
+            bool bTop  = ( nEndY < nStartY );
             PutInOrder( nStartX, nEndX );
             PutInOrder( nStartY, nEndY );
             SCCOL nCols = nEndX+1-nStartX;
@@ -95,7 +95,7 @@ void ScTabView::ShowRefTip()
 
                 HideTip();
                 nTipVisible = Help::ShowTip( pWin, aRect, aHelp, nFlags );
-                bDone = sal_True;
+                bDone = true;
             }
         }
     }
@@ -156,7 +156,7 @@ void ScTabView::DoneRefMode( bool bContinue )
     if ( aViewData.GetRefType() == SC_REFTYPE_REF && bContinue )
         SC_MOD()->AddRefEntry();
 
-    sal_Bool bWasRef = aViewData.IsRefMode();
+    bool bWasRef = aViewData.IsRefMode();
     aViewData.SetRefMode( false, SC_REFTYPE_NONE );
 
     HideTip();
@@ -361,8 +361,8 @@ static long lcl_GetScrollRange( SCCOLROW nDocEnd, SCCOLROW nPos, SCCOLROW nVis, 
 void ScTabView::UpdateScrollBars()
 {
     long        nDiff;
-    sal_Bool        bTop =   ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );
-    sal_Bool        bRight = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
+    bool        bTop =   ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );
+    bool        bRight = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB       nTab = aViewData.GetTabNo();
     bool        bLayoutRTL = pDoc->IsLayoutRTL( nTab );

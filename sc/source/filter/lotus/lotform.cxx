@@ -41,7 +41,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
     sal_Int32                       nLauf;
     TokenId                     nMerk0, nMerk1;
 
-    sal_Bool                        bAddIn = false;
+    bool                        bAddIn = false;
 
     OSL_ENSURE( nAnz < 128, "-LotusToSc::DoFunc(): Neee! -so viel kann ich nicht!" );
 
@@ -70,7 +70,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
 
         if( eOc == ocNoName )
         {
-            bAddIn = sal_True;
+            bAddIn = true;
             nMerk0 = aPool.Store(eOc, OStringToOUString(t, eSrcChar));
 
             aPool << nMerk0;

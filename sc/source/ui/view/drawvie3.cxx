@@ -101,8 +101,8 @@ void ScDrawView::SetCellAnchored()
 
 ScAnchorType ScDrawView::GetAnchorType() const
 {
-    sal_Bool bPage = false;
-    sal_Bool bCell = false;
+    bool bPage = false;
+    bool bCell = false;
     if( AreObjectsMarked() )
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
@@ -114,7 +114,7 @@ ScAnchorType ScDrawView::GetAnchorType() const
             if( ScDrawLayer::GetAnchorType( *pObj ) == SCA_CELL )
                 bCell =true;
             else
-                bPage = sal_True;
+                bPage = true;
         }
     }
     if( bPage && !bCell )

@@ -264,7 +264,7 @@ bool ScViewFunc::SelectionEditable( bool* pOnlyNotBecauseOfMatrix /* = NULL */ )
 #define LRU_MAX 10
 #endif
 
-static sal_Bool lcl_FunctionKnown( sal_uInt16 nOpCode )
+static bool lcl_FunctionKnown( sal_uInt16 nOpCode )
 {
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
@@ -272,12 +272,12 @@ static sal_Bool lcl_FunctionKnown( sal_uInt16 nOpCode )
         sal_uLong nCount = pFuncList->GetCount();
         for (sal_uLong i=0; i<nCount; i++)
             if ( pFuncList->GetFunction(i)->nFIndex == nOpCode )
-                return sal_True;
+                return true;
     }
     return false;
 }
 
-static sal_Bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
+static bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
 {
     sal_uInt16 nOldCount = rAppOpt.GetLRUFuncListCount();
     sal_uInt16* pOldList = rAppOpt.GetLRUFuncList();
@@ -294,7 +294,7 @@ static sal_Bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
                 pOldList[nCopy] = pOldList[nCopy-1];
             pOldList[0] = nOpCode;
 
-            return sal_True;                        // list has changed
+            return true;                        // list has changed
         }
 
     if ( !lcl_FunctionKnown( nOpCode ) )
@@ -307,7 +307,7 @@ static sal_Bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
         nNewList[nPos] = pOldList[nPos-1];
     rAppOpt.SetLRUFuncList( nNewList, nNewCount );
 
-    return sal_True;                                // list has changed
+    return true;                                // list has changed
 }
 
 namespace HelperNotifyChanges

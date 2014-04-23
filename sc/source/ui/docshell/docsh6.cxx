@@ -87,7 +87,7 @@ static void lcl_SetTopRight( Rectangle& rRect, const Point& rPos )
 
 void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, bool bModifyStart )
 {
-    sal_Bool bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );
+    bool bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );
 
     Rectangle aArea = rVisArea;
     if (bModifyStart)
@@ -188,7 +188,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
     Rectangle aOldArea = SfxObjectShell::GetVisArea();
     Rectangle aNewArea = aOldArea;
 
-    sal_Bool bEmbedded = aDocument.IsEmbedded();
+    bool bEmbedded = aDocument.IsEmbedded();
     if (bEmbedded)
         aNewArea = aDocument.GetEmbeddedRect();
     else
@@ -197,7 +197,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
         if ( nTab != aDocument.GetVisibleTab() )
             aDocument.SetVisibleTab( nTab );
 
-        sal_Bool bNegativePage = aDocument.IsNegativePage( nTab );
+        bool bNegativePage = aDocument.IsNegativePage( nTab );
         SCCOL nX = pViewData->GetPosX(SC_SPLIT_LEFT);
         SCROW nY = pViewData->GetPosY(SC_SPLIT_BOTTOM);
         Rectangle aMMRect = aDocument.GetMMRect( nX,nY, nX,nY, nTab );

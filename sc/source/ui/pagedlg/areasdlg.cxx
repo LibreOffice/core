@@ -193,7 +193,7 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ 
         }
         else
         {
-            sal_Bool bRow = ( pEdRepeatRow == pRefInputEdit );
+            bool bRow = ( pEdRepeatRow == pRefInputEdit );
             lcl_GetRepeatRangeString(&rRef, pDoc, bRow, aStr);
             pRefInputEdit->SetRefString( aStr );
         }
@@ -401,7 +401,7 @@ void ScPrintAreasDlg::Impl_FillLists()
 
     ScRange  aRange;
     OUString aStrRange;
-    sal_Bool bSimple = sal_True;
+    bool bSimple = true;
 
     if ( pViewData )
         bSimple = (pViewData->GetSimpleArea( aRange ) == SC_MARK_SIMPLE);
@@ -615,7 +615,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
 
     if ( (nEntryCount > nFirstCustomPos) && !aStrEd.isEmpty() )
     {
-        sal_Bool    bFound  = false;
+        bool    bFound  = false;
         OUString* pSymbol = NULL;
         sal_uInt16 i;
 
@@ -646,7 +646,7 @@ static bool lcl_CheckOne_OOO( const OUString& rStr, bool bIsRow, SCCOLROW& rVal 
     OUString    aStr    = rStr;
     sal_Int32   nLen    = aStr.getLength();
     SCCOLROW    nNum    = 0;
-    sal_Bool    bStrOk  = ( nLen > 0 ) && ( bIsRow ? ( nLen < 6 ) : ( nLen < 4 ) );
+    bool    bStrOk  = ( nLen > 0 ) && ( bIsRow ? ( nLen < 6 ) : ( nLen < 4 ) );
 
     if ( bStrOk )
     {

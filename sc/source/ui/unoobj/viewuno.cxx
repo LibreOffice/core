@@ -337,7 +337,7 @@ sal_Bool SAL_CALL ScViewPaneBase::isFormDesignMode(  ) throw (uno::RuntimeExcept
 {
     SolarMutexGuard aGuard;
 
-    sal_Bool bIsFormDesignMode( sal_True );
+    bool bIsFormDesignMode( true );
 
     FmFormShell* pFormShell( pViewShell ? pViewShell->GetFormShell() : NULL );
     if ( pFormShell )
@@ -632,20 +632,20 @@ uno::Sequence<sal_Int8> SAL_CALL ScTabViewObj::getImplementationId()
 
 // XDocumentView
 
-static sal_Bool lcl_TabInRanges( SCTAB nTab, const ScRangeList& rRanges )
+static bool lcl_TabInRanges( SCTAB nTab, const ScRangeList& rRanges )
 {
     for (size_t i = 0, nCount = rRanges.size(); i < nCount; ++i)
     {
         const ScRange* pRange = rRanges[ i ];
         if ( nTab >= pRange->aStart.Tab() && nTab <= pRange->aEnd.Tab() )
-            return sal_True;
+            return true;
     }
     return false;
 }
 
 static void lcl_ShowObject( ScTabViewShell& rViewSh, ScDrawView& rDrawView, SdrObject* pSelObj )
 {
-    sal_Bool bFound = false;
+    bool bFound = false;
     SCTAB nObjectTab = 0;
 
     SdrModel* pModel = rDrawView.GetModel();
@@ -661,7 +661,7 @@ static void lcl_ShowObject( ScTabViewShell& rViewSh, ScDrawView& rDrawView, SdrO
             {
                 if ( pObject == pSelObj )
                 {
-                    bFound = sal_True;
+                    bFound = true;
                     nObjectTab = static_cast<SCTAB>(i);
                 }
                 pObject = aIter.Next();
@@ -688,7 +688,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
 
     //! Type of aSelection can be some specific interface instead of XInterface
 
-    sal_Bool bRet = false;
+    bool bRet = false;
     uno::Reference<uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
     if ( !xInterface.is() )  //clear all selections
     {
@@ -700,7 +700,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
         }
         else //#102232#; if there is  no DrawView remove range selection
             pViewSh->Unmark();
-        bRet = sal_True;
+        bRet = true;
     }
 
     if (bDrawSelModeSet) // remove DrawSelMode if set by API; if necessary it will be set again later
@@ -774,7 +774,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
 
                 //! Methode an der View, um RangeList zu selektieren
             }
-            bRet = sal_True;
+            bRet = true;
         }
     }
     else if ( pShapeImp || xShapeColl.is() )            // Drawing-Layer
@@ -795,7 +795,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                     if ( pPV && pObj->GetPage() == pPV->GetPage() )
                     {
                         pDrawView->MarkObj( pObj, pPV );
-                        bRet = sal_True;
+                        bRet = true;
                     }
                 }
             }
@@ -809,7 +809,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 if (nCount)
                 {
                     SdrPageView* pPV = NULL;
-                    sal_Bool bAllMarked(sal_True);
+                    bool bAllMarked(true);
                     for ( long i = 0; i < nCount; i++ )
                     {
                         uno::Reference<drawing::XShape> xShapeInt(xShapeColl->getByIndex(i), uno::UNO_QUERY);
@@ -844,10 +844,10 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                         }
                     }
                     if (bAllMarked)
-                        bRet = sal_True;
+                        bRet = true;
                 }
                 else
-                    bRet = sal_True; // empty XShapes (all shapes are deselected)
+                    bRet = true; // empty XShapes (all shapes are deselected)
             }
 
             if (bRet)
@@ -1033,22 +1033,22 @@ ScViewPaneObj* ScTabViewObj::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
     if (pViewSh)
     {
         ScSplitPos eWhich = SC_SPLIT_BOTTOMLEFT;    // default Position
-        sal_Bool bError = false;
+        bool bError = false;
         ScViewData* pViewData = pViewSh->GetViewData();
-        sal_Bool bHor = ( pViewData->GetHSplitMode() != SC_SPLIT_NONE );
-        sal_Bool bVer = ( pViewData->GetVSplitMode() != SC_SPLIT_NONE );
+        bool bHor = ( pViewData->GetHSplitMode() != SC_SPLIT_NONE );
+        bool bVer = ( pViewData->GetVSplitMode() != SC_SPLIT_NONE );
         if ( bHor && bVer )
         {
             //  links oben, links unten, rechts oben, rechts unten - wie in Excel
             if ( nIndex < 4 )
                 eWhich = ePosHV[nIndex];
             else
-                bError = sal_True;
+                bError = true;
         }
         else if ( bHor )
         {
             if ( nIndex > 1 )
-                bError = sal_True;
+                bError = true;
             else if ( nIndex == 1 )
                 eWhich = SC_SPLIT_BOTTOMRIGHT;
             // sonst SC_SPLIT_BOTTOMLEFT
@@ -1056,13 +1056,13 @@ ScViewPaneObj* ScTabViewObj::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
         else if ( bVer )
         {
             if ( nIndex > 1 )
-                bError = sal_True;
+                bError = true;
             else if ( nIndex == 0 )
                 eWhich = SC_SPLIT_TOPLEFT;
             // sonst SC_SPLIT_BOTTOMLEFT
         }
         else if ( nIndex > 0 )
-            bError = sal_True;          // nicht geteilt: nur 0 gueltig
+            bError = true;          // nicht geteilt: nur 0 gueltig
 
         if (!bError)
             return new ScViewPaneObj( pViewSh, sal::static_int_cast<sal_uInt16>(eWhich) );
@@ -1146,7 +1146,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
                                  Size(pDrawView->GetHitTolerancePixel(),0)).Width();
 
                 sal_uInt32 nCount(pDrawPage->GetObjCount());
-                sal_Bool bFound(false);
+                bool bFound(false);
                 sal_uInt32 i(0);
                 while (i < nCount && !bFound)
                 {
@@ -1154,7 +1154,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
                     if (pObj && SdrObjectPrimitiveHit(*pObj, aPos, nHitLog, *pDrawView->GetSdrPageView(), 0, false))
                     {
                         xTarget.set(pObj->getUnoShape(), uno::UNO_QUERY);
-                        bFound = sal_True;
+                        bFound = true;
                     }
                     ++i;
                 }
@@ -1244,7 +1244,7 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
                 /*ErrCode eRet =*/ pDocSh->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
 
                 // look for a boolean return value of true
-                sal_Bool bRetValue = false;
+                bool bRetValue = false;
                 if (aRet >>= bRetValue)
                 {
                     if (bRetValue)
@@ -2056,9 +2056,9 @@ void SAL_CALL ScTabViewObj::startRangeSelection(
     if (pViewSh)
     {
         OUString aInitVal, aTitle;
-        sal_Bool bCloseOnButtonUp = false;
-        sal_Bool bSingleCell = false;
-        sal_Bool bMultiSelection = false;
+        bool bCloseOnButtonUp = false;
+        bool bSingleCell = false;
+        bool bMultiSelection = false;
 
         OUString aStrVal;
         const beans::PropertyValue* pPropArray = aArguments.getConstArray();

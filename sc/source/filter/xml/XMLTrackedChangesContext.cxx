@@ -103,8 +103,8 @@ class ScXMLCellContentDeletionContext : public SvXMLImportContext
     formula::FormulaGrammar::Grammar                  eGrammar;
     sal_uInt16                          nType;
     sal_uInt8                           nMatrixFlag;
-    sal_Bool                            bBigRange;
-    sal_Bool                            bContainsCell;
+    bool                            bBigRange;
+    bool                            bContainsCell;
 
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
@@ -250,10 +250,10 @@ class ScXMLChangeCellContext : public SvXMLImportContext
     double&                 rDateTimeValue;
     double                  fValue;
     sal_uInt16&             rType;
-    sal_Bool                bEmpty;
-    sal_Bool                bFirstParagraph;
-    sal_Bool                bString;
-    sal_Bool                bFormula;
+    bool                bEmpty;
+    bool                bFirstParagraph;
+    bool                bString;
+    bool                bFormula;
 
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
@@ -273,8 +273,8 @@ public:
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    void CreateTextPContext(sal_Bool bIsNewParagraph);
-    sal_Bool IsEditCell() { return pEditTextObj != 0; }
+    void CreateTextPContext(bool bIsNewParagraph);
+    bool IsEditCell() { return pEditTextObj != 0; }
     void SetText(const OUString& sTempText) { sText = sTempText; }
 
     virtual void EndElement() SAL_OVERRIDE;
@@ -640,9 +640,9 @@ ScXMLBigRangeContext::ScXMLBigRangeContext(  ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     rBigRange(rTempBigRange)
 {
-    sal_Bool bColumn(false);
-    sal_Bool bRow(false);
-    sal_Bool bTable(false);
+    bool bColumn(false);
+    bool bRow(false);
+    bool bTable(false);
     sal_Int32 nColumn(0);
     sal_Int32 nRow(0);
     sal_Int32 nTable(0);
@@ -666,17 +666,17 @@ ScXMLBigRangeContext::ScXMLBigRangeContext(  ScXMLImport& rImport,
             if (IsXMLToken(aLocalName, XML_COLUMN))
             {
                 ::sax::Converter::convertNumber(nColumn, sValue);
-                bColumn = sal_True;
+                bColumn = true;
             }
             else if (IsXMLToken(aLocalName, XML_ROW))
             {
                 ::sax::Converter::convertNumber(nRow, sValue);
-                bRow = sal_True;
+                bRow = true;
             }
             else if (IsXMLToken(aLocalName, XML_TABLE))
             {
                 ::sax::Converter::convertNumber(nTable, sValue);
-                bTable = sal_True;
+                bTable = true;
             }
             else if (IsXMLToken(aLocalName, XML_START_COLUMN))
                 ::sax::Converter::convertNumber(nStartColumn, sValue);
@@ -774,7 +774,7 @@ SvXMLImportContext *ScXMLCellContentDeletionContext::CreateChildContext( sal_uIn
         else if (IsXMLToken(rLocalName, XML_CELL_ADDRESS))
         {
             OSL_ENSURE(!nID, "a action with a ID should not contain a BigRange");
-            bBigRange = sal_True;
+            bBigRange = true;
             pContext = new ScXMLBigRangeContext(GetScImport(), nPrefix, rLocalName, xAttrList, aBigRange);
         }
     }
@@ -1014,7 +1014,7 @@ SvXMLImportContext *ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nTem
     {
         if (!pChangeCellContext->IsEditCell())
             pChangeCellContext->CreateTextPContext(false);
-        sal_Bool bWasContext (sal_True);
+        bool bWasContext (true);
         if (!pTextPContext)
         {
             bWasContext = false;
@@ -1065,13 +1065,13 @@ ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
     , rDateTimeValue(fDateTimeValue)
     , fValue(0.0)
     , rType(nType)
-    , bEmpty(sal_True)
-    , bFirstParagraph(sal_True)
-    , bString(sal_True)
+    , bEmpty(true)
+    , bFirstParagraph(true)
+    , bString(true)
     , bFormula(false)
 {
-    sal_Bool bIsMatrix(false);
-    sal_Bool bIsCoveredMatrix(false);
+    bool bIsMatrix(false);
+    bool bIsCoveredMatrix(false);
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
@@ -1087,7 +1087,7 @@ ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
             {
                 bEmpty = false;
                 GetScImport().ExtractFormulaNamespaceGrammar( rFormula, rFormulaNmsp, rGrammar, sValue );
-                bFormula = sal_True;
+                bFormula = true;
             }
             else if (IsXMLToken(aLocalName, XML_CELL_ADDRESS))
             {
@@ -1099,12 +1099,12 @@ ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
             }
             else if (IsXMLToken(aLocalName, XML_NUMBER_MATRIX_COLUMNS_SPANNED))
             {
-                bIsMatrix = sal_True;
+                bIsMatrix = true;
                 ::sax::Converter::convertNumber(nMatrixCols, sValue);
             }
             else if (IsXMLToken(aLocalName, XML_NUMBER_MATRIX_ROWS_SPANNED))
             {
-                bIsMatrix = sal_True;
+                bIsMatrix = true;
                 ::sax::Converter::convertNumber(nMatrixRows, sValue);
             }
         }
@@ -1173,7 +1173,7 @@ SvXMLImportContext *ScXMLChangeCellContext::CreateChildContext( sal_uInt16 nPref
         else
         {
             if (!pEditTextObj)
-                CreateTextPContext(sal_True);
+                CreateTextPContext(true);
             pContext = GetScImport().GetTextImport()->CreateTextChildContext(
                 GetScImport(), nPrefix, rLocalName, xAttrList);
         }
@@ -1185,7 +1185,7 @@ SvXMLImportContext *ScXMLChangeCellContext::CreateChildContext( sal_uInt16 nPref
     return pContext;
 }
 
-void ScXMLChangeCellContext::CreateTextPContext(sal_Bool bIsNewParagraph)
+void ScXMLChangeCellContext::CreateTextPContext(bool bIsNewParagraph)
 {
     if (GetScImport().GetDocument())
     {
@@ -1575,7 +1575,7 @@ ScXMLMovementCutOffContext::ScXMLMovementCutOffContext( ScXMLImport& rImport,
     sal_Int32 nPosition(0);
     sal_Int32 nStartPosition(0);
     sal_Int32 nEndPosition(0);
-    sal_Bool bPosition(false);
+    bool bPosition(false);
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
@@ -1593,7 +1593,7 @@ ScXMLMovementCutOffContext::ScXMLMovementCutOffContext( ScXMLImport& rImport,
             }
             else if (IsXMLToken(aLocalName, XML_POSITION))
             {
-                bPosition = sal_True;
+                bPosition = true;
                 ::sax::Converter::convertNumber(nPosition, sValue);
             }
             else if (IsXMLToken(aLocalName, XML_START_POSITION))

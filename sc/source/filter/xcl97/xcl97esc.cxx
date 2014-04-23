@@ -194,7 +194,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
 {
     if ( nAdditionalText )
         nAdditionalText++;
-    sal_Bool bInGroup = ( pCurrXclObj != NULL );
+    bool bInGroup = ( pCurrXclObj != NULL );
     if ( bInGroup )
     {   // stacked recursive group object
         if ( !pCurrAppData->IsStackedGroup() )

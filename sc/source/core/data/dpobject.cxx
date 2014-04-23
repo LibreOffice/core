@@ -265,7 +265,7 @@ sal_uInt16 lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSup
         uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
         uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
         long nIntCount = xIntDims->getCount();
-        sal_Bool bFound = false;
+        bool bFound = false;
         for (long nIntDim=0; nIntDim<nIntCount && !bFound; nIntDim++)
         {
             uno::Reference<uno::XInterface> xIntDim =
@@ -536,7 +536,7 @@ void ScDPObject::CreateOutput()
     CreateObjects();
     if (!pOutput)
     {
-        sal_Bool bFilterButton = IsSheetData() && pSaveData && pSaveData->GetFilterButton();
+        bool bFilterButton = IsSheetData() && pSaveData && pSaveData->GetFilterButton();
         pOutput = new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton );
         pOutput->SetHeaderLayout ( mbHeaderLayout );
 
@@ -936,7 +936,7 @@ const ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType )
     return pOutput->GetOutputRange(nType);
 }
 
-static sal_Bool lcl_HasButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
+static bool lcl_HasButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     return ((const ScMergeFlagAttr*)pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->HasPivotButton();
 }
@@ -1223,7 +1223,7 @@ OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFla
             uno::Reference<beans::XPropertySet> xDimProp( xIntDim, uno::UNO_QUERY );
             if ( xDimName.is() && xDimProp.is() )
             {
-                sal_Bool bData = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
+                bool bData = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
                                 OUString(SC_UNO_DP_ISDATALAYOUT) );
                 //! error checking -- is "IsDataLayoutDimension" property required??
 
@@ -1694,7 +1694,7 @@ bool ScDPObject::ParseFilters(
         uno::Reference<container::XNamed> xDim( xIntDim, uno::UNO_QUERY );
         uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
         uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDim, uno::UNO_QUERY );
-        sal_Bool bDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
+        bool bDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
                             OUString(SC_UNO_DP_ISDATALAYOUT) );
         sal_Int32 nOrient = ScUnoHelpFunctions::GetEnumProperty(
                             xDimProp, OUString(SC_UNO_DP_ORIENTATION),
@@ -1901,7 +1901,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     OUString aDimName = xDim->getName();
 
     uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
-    sal_Bool bDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
+    bool bDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
                         OUString(SC_UNO_DP_ISDATALAYOUT) );
     if (bDataLayout)
     {
@@ -1947,8 +1947,8 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     if ( xMbrSupp.is() )
         xMembers = xMbrSupp->getMembers();
 
-    sal_Bool bFound = false;
-    sal_Bool bShowDetails = sal_True;
+    bool bFound = false;
+    bool bShowDetails = true;
 
     if ( xMembers.is() )
     {
@@ -1962,7 +1962,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
                 bShowDetails = ScUnoHelpFunctions::GetBoolProperty( xMbrProp,
                                     OUString(SC_UNO_DP_SHOWDETAILS) );
                 //! don't set bFound if property is unknown?
-                bFound = sal_True;
+                bFound = true;
             }
         }
     }

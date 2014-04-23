@@ -706,8 +706,8 @@ void ScOutlineArray::InsertSpace(SCCOLROW nStartPos, SCSIZE nSize)
 bool ScOutlineArray::DeleteSpace(SCCOLROW nStartPos, SCSIZE nSize)
 {
     SCCOLROW nEndPos = nStartPos + nSize - 1;
-    sal_Bool bNeedSave = false;                         // Original fuer Undo benoetigt?
-    sal_Bool bChanged = false;                          // fuer Test auf Level
+    bool bNeedSave = false;                         // Original fuer Undo benoetigt?
+    bool bChanged = false;                          // fuer Test auf Level
 
     ScSubOutlineIterator aIter( this );
     ScOutlineEntry* pEntry;

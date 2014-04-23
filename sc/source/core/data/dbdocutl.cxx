@@ -41,9 +41,9 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
 {
     OUString aString;
     double nVal = 0.0;
-    sal_Bool bValue = false;
-    sal_Bool bEmptyFlag = false;
-    sal_Bool bError = false;
+    bool bValue = false;
+    bool bEmptyFlag = false;
+    bool bError = false;
     sal_uLong nFormatIndex = 0;
 
     //! wasNull calls only if null value was found?
@@ -59,7 +59,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                                     NUMBERFORMAT_LOGICAL, ScGlobal::eLnge );
                 nVal = (xRow->getBoolean(nRowPos) ? 1 : 0);
                 bEmptyFlag = ( nVal == 0.0 ) && xRow->wasNull();
-                bValue = sal_True;
+                bValue = true;
                 break;
 
             case sdbc::DataType::TINYINT:
@@ -74,7 +74,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                 //! do the conversion here?
                 nVal = xRow->getDouble(nRowPos);
                 bEmptyFlag = ( nVal == 0.0 ) && xRow->wasNull();
-                bValue = sal_True;
+                bValue = true;
                 break;
 
             case sdbc::DataType::CHAR:
@@ -94,7 +94,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                     nVal = Date( aDate.Day, aDate.Month, aDate.Year ) -
                                                 *pFormTable->GetNullDate();
                     bEmptyFlag = xRow->wasNull();
-                    bValue = sal_True;
+                    bValue = true;
                 }
                 break;
 
@@ -110,7 +110,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                            aTime.Seconds     / static_cast<double>(::Time::secondPerDay) +
                            aTime.NanoSeconds / static_cast<double>(::Time::nanoSecPerDay);
                     bEmptyFlag = xRow->wasNull();
-                    bValue = sal_True;
+                    bValue = true;
                 }
                 break;
 
@@ -128,24 +128,24 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                            aStamp.Seconds     / static_cast<double>(::Time::secondPerDay) +
                            aStamp.NanoSeconds / static_cast<double>(::Time::nanoSecPerDay);
                     bEmptyFlag = xRow->wasNull();
-                    bValue = sal_True;
+                    bValue = true;
                 }
                 break;
 
             case sdbc::DataType::SQLNULL:
-                bEmptyFlag = sal_True;
+                bEmptyFlag = true;
                 break;
 
             case sdbc::DataType::BINARY:
             case sdbc::DataType::VARBINARY:
             case sdbc::DataType::LONGVARBINARY:
             default:
-                bError = sal_True;      // unknown type
+                bError = true;      // unknown type
         }
     }
     catch ( uno::Exception& )
     {
-        bError = sal_True;
+        bError = true;
     }
 
     if ( bValue && bCurrency )

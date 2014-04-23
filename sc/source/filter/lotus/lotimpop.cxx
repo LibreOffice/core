@@ -404,7 +404,7 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
     sal_uInt8           nRepeats;
     LotAttrWK3      aAttr;
 
-    sal_Bool            bCenter = false;
+    bool            bCenter = false;
     SCCOL           nCenterStart = 0, nCenterEnd = 0;
 
     Read( nRow );
@@ -440,7 +440,7 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
                 }
             else
                 {// ganz neue Center
-                bCenter = sal_True;
+                bCenter = true;
                 nCenterStart = nColCnt;
                 }
             nCenterEnd = nColCnt + static_cast<SCCOL>(nRepeats);

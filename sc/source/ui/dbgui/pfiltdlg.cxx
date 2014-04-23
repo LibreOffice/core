@@ -350,7 +350,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
         sal_uInt16      nField  = aFieldLbArr[i]->GetSelectEntryPos();
         ScQueryOp   eOp     = (ScQueryOp)aCondLbArr[i]->GetSelectEntryPos();
 
-        sal_Bool bDoThis = (aFieldLbArr[i]->GetSelectEntryPos() != 0);
+        bool bDoThis = (aFieldLbArr[i]->GetSelectEntryPos() != 0);
         theParam.GetEntry(i).bDoQuery = bDoThis;
 
         if ( bDoThis )

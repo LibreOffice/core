@@ -437,7 +437,7 @@ void CommandToolBox::UpdateButtons()
     else
     {
         EnableItem( IID_CHANGEROOT, true );
-        sal_Bool bRootSet = rDlg.aLbEntries.GetRootType() != SC_CONTENT_ROOT;
+        bool bRootSet = rDlg.aLbEntries.GetRootType() != SC_CONTENT_ROOT;
         CheckItem( IID_CHANGEROOT, bRootSet );
     }
 
@@ -517,7 +517,7 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
     //  deshalb muessen in Abhaengigkeit von der momentanen Groesse die
     //  Inhalte eingeblendet werden oder nicht
 
-    sal_Bool bSmall = ( aInfoSize.Height() <= pNavigator->aInitSize.Height() + SCNAV_MINTOL );
+    bool bSmall = ( aInfoSize.Height() <= pNavigator->aInitSize.Height() + SCNAV_MINTOL );
     NavListMode eNavMode = NAV_LMODE_NONE;
     if (!bSmall)
     {
@@ -775,7 +775,7 @@ void ScNavigatorDlg::DoResize()
     //  bei angedocktem Navigator wird das Fenster evtl. erst klein erzeugt,
     //  dann kommt ein Resize auf die wirkliche Groesse -> dann Inhalte einschalten
 
-    sal_Bool bSmall = ( nTotalHeight <= aInitSize.Height() + SCNAV_MINTOL );
+    bool bSmall = ( nTotalHeight <= aInitSize.Height() + SCNAV_MINTOL );
     if ( !bSmall && bFirstBig )
     {
         //  Inhalte laut Config wieder einschalten
@@ -815,7 +815,7 @@ void ScNavigatorDlg::DoResize()
     aWndScenarios.SetSizePixel( aNewSize );
     aLbDocuments.SetSizePixel( aDocSize );
 
-    sal_Bool bListMode = (eListMode != NAV_LMODE_NONE);
+    bool bListMode = (eListMode != NAV_LMODE_NONE);
     if (pContextWin != NULL)
     {
         FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
@@ -932,7 +932,7 @@ void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
         ScAddress aScAddress( nColNo, nRowNo, 0 );
         OUString aAddr(aScAddress.Format(SCA_ABS));
 
-        sal_Bool bUnmark = false;
+        bool bUnmark = false;
         if ( GetViewData() )
             bUnmark = !pViewData->GetMarkData().IsCellMarked( nColNo, nRowNo );
 

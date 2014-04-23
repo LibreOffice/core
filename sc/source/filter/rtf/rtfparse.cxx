@@ -113,7 +113,7 @@ inline void ScRTFParser::NextRow()
 bool ScRTFParser::SeekTwips( sal_uInt16 nTwips, SCCOL* pCol )
 {
     ScRTFColTwips::const_iterator it = pColTwips->find( nTwips );
-    sal_Bool bFound = it != pColTwips->end();
+    bool bFound = it != pColTwips->end();
     sal_uInt16 nPos = it - pColTwips->begin();
     *pCol = static_cast<SCCOL>(nPos);
     if ( bFound )

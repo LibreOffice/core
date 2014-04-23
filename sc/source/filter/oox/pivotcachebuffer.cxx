@@ -285,10 +285,10 @@ OUString PivotCacheItem::getName() const
     {
         case XML_m: return OUString();
         case XML_s: return maValue.get< OUString >();
-        case XML_n: return OUString::number( maValue.get< double >() );                            // !TODO
+        case XML_n: return OUString::number( maValue.get< double >() );                             // !TODO
         case XML_i: return OUString::number( maValue.get< sal_Int32 >() );
         case XML_d: return OUString();                                                              // !TODO
-        case XML_b: return OUString::boolean( static_cast< sal_Bool >( maValue.get< bool >() ) );   // !TODO
+        case XML_b: return OUString::boolean( maValue.get< bool >() );                              // !TODO
         case XML_e: return OUString();                                                              // !TODO
     }
     OSL_FAIL( "PivotCacheItem::getName - invalid data type" );

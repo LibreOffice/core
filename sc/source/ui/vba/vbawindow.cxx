@@ -495,7 +495,7 @@ sal_Bool SAL_CALL
 ScVbaWindow::getDisplayGridlines() throw (uno::RuntimeException, std::exception)
 {
     OUString sName( SC_UNO_SHOWGRID );
-    sal_Bool bGrid = sal_True;
+    bool bGrid = true;
     getControllerProps()->getPropertyValue( sName ) >>= bGrid;
     return bGrid;
 }
@@ -512,7 +512,7 @@ sal_Bool SAL_CALL
 ScVbaWindow::getDisplayHeadings() throw (uno::RuntimeException, std::exception)
 {
     OUString sName( SC_UNO_COLROWHDR );
-    sal_Bool bHeading = sal_True;
+    bool bHeading = true;
     getControllerProps()->getPropertyValue( sName ) >>= bHeading;
     return bHeading;
 }
@@ -528,7 +528,7 @@ sal_Bool SAL_CALL
 ScVbaWindow::getDisplayHorizontalScrollBar() throw (uno::RuntimeException, std::exception)
 {
     OUString sName( SC_UNO_HORSCROLL );
-    sal_Bool bHorizontalScrollBar = sal_True;
+    bool bHorizontalScrollBar = true;
     getControllerProps()->getPropertyValue( sName ) >>= bHorizontalScrollBar;
     return bHorizontalScrollBar;
 }
@@ -544,7 +544,7 @@ sal_Bool SAL_CALL
 ScVbaWindow::getDisplayOutline() throw (uno::RuntimeException, std::exception)
 {
     OUString sName( SC_UNO_OUTLSYMB );
-    sal_Bool bOutline = sal_True;
+    bool bOutline = true;
     getControllerProps()->getPropertyValue( sName ) >>= bOutline;
     return bOutline;
 }
@@ -560,7 +560,7 @@ sal_Bool SAL_CALL
 ScVbaWindow::getDisplayVerticalScrollBar() throw (uno::RuntimeException, std::exception)
 {
     OUString sName( SC_UNO_VERTSCROLL );
-    sal_Bool bVerticalScrollBar = sal_True;
+    bool bVerticalScrollBar = true;
     getControllerProps()->getPropertyValue( sName ) >>= bVerticalScrollBar;
     return bVerticalScrollBar;
 }
@@ -576,7 +576,7 @@ sal_Bool SAL_CALL
 ScVbaWindow::getDisplayWorkbookTabs() throw (uno::RuntimeException, std::exception)
 {
     OUString sName( SC_UNO_SHEETTABS );
-    sal_Bool bWorkbookTabs = sal_True;
+    bool bWorkbookTabs = true;
     getControllerProps()->getPropertyValue( sName ) >>= bWorkbookTabs;
     return bWorkbookTabs;
 }
@@ -789,7 +789,7 @@ ScVbaWindow::ActiveSheet(  ) throw (script::BasicErrorException, uno::RuntimeExc
 uno::Any SAL_CALL
 ScVbaWindow::getView() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bPageBreak = sal_False;
+    bool bPageBreak = false;
     sal_Int32 nWindowView = excel::XlWindowView::xlNormalView;
 
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );

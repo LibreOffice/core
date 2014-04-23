@@ -1796,7 +1796,7 @@ bool XmlScPropHdl_BreakBefore::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
-    sal_Bool aBreak1 = 0, aBreak2 = 0;
+    bool aBreak1 = false, aBreak2 = false;
 
     if((r1 >>= aBreak1) && (r2 >>= aBreak2))
         return (aBreak1 == aBreak2);

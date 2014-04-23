@@ -282,7 +282,7 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
 
     Point aStartPos = aScrPos;
 
-    sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     const ScMergeAttr* pMerge = (const ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
@@ -317,7 +317,7 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
                                                 GetItem(ATTR_VER_JUSTIFY)).GetValue();
 
     //  asian vertical is always edited top-aligned
-    sal_Bool bAsianVertical = ((const SfxBoolItem&)pPattern->GetItem( ATTR_STACKED )).GetValue() &&
+    bool bAsianVertical = ((const SfxBoolItem&)pPattern->GetItem( ATTR_STACKED )).GetValue() &&
         ((const SfxBoolItem&)pPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
 
     if ( eJust == SVX_VER_JUSTIFY_TOP ||
@@ -486,9 +486,9 @@ void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, bool bRememberC
         bDeleteDefaults = true;
     }
     const SfxItemSet& rNewSet = bRememberCopy ? *pDefaults : rSet;
-    sal_Bool bUndo = IsUndoEnabled();
+    bool bUndo = IsUndoEnabled();
     EnableUndo( false );
-    sal_Bool bUpdateMode = GetUpdateMode();
+    bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
     sal_Int32 nPara = GetParagraphCount();
@@ -535,7 +535,7 @@ const SfxItemSet& ScEditEngineDefaulter::GetDefaults()
 
 void ScEditEngineDefaulter::SetText( const EditTextObject& rTextObject )
 {
-    sal_Bool bUpdateMode = GetUpdateMode();
+    bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
     EditEngine::SetText( rTextObject );
@@ -548,7 +548,7 @@ void ScEditEngineDefaulter::SetText( const EditTextObject& rTextObject )
 void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
             const SfxItemSet& rSet, bool bRememberCopy )
 {
-    sal_Bool bUpdateMode = GetUpdateMode();
+    bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
     EditEngine::SetText( rTextObject );
@@ -560,7 +560,7 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObjec
 void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
             SfxItemSet* pSet, bool bTakeOwnership )
 {
-    sal_Bool bUpdateMode = GetUpdateMode();
+    bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
     EditEngine::SetText( rTextObject );
@@ -571,7 +571,7 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObjec
 
 void ScEditEngineDefaulter::SetText( const OUString& rText )
 {
-    sal_Bool bUpdateMode = GetUpdateMode();
+    bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
     EditEngine::SetText( rText );
@@ -584,7 +584,7 @@ void ScEditEngineDefaulter::SetText( const OUString& rText )
 void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
             const SfxItemSet& rSet, bool bRememberCopy )
 {
-    sal_Bool bUpdateMode = GetUpdateMode();
+    bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
     EditEngine::SetText( rText );
@@ -596,7 +596,7 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
 void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
             SfxItemSet* pSet, bool bTakeOwnership )
 {
-    sal_Bool bUpdateMode = GetUpdateMode();
+    bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
     EditEngine::SetText( rText );
@@ -618,7 +618,7 @@ void ScEditEngineDefaulter::RepeatDefaults()
 void ScEditEngineDefaulter::RemoveParaAttribs()
 {
     SfxItemSet* pCharItems = NULL;
-    sal_Bool bUpdateMode = GetUpdateMode();
+    bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
     sal_Int32 nParCount = GetParagraphCount();

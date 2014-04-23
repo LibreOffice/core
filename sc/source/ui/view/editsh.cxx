@@ -132,7 +132,7 @@ static void lcl_RemoveAttribs( EditView& rEditView )
 {
     ScEditEngineDefaulter* pEngine = static_cast<ScEditEngineDefaulter*>(rEditView.GetEditEngine());
 
-    sal_Bool bOld = pEngine->GetUpdateMode();
+    bool bOld = pEngine->GetUpdateMode();
     pEngine->SetUpdateMode(false);
 
     OUString aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
@@ -180,7 +180,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
     EditEngine* pEngine = pTableView->GetEditEngine();
 
     pHdl->DataChanging();
-    sal_Bool bSetSelIsRef = false;
+    bool bSetSelIsRef = false;
     bool bSetModified = true;
 
     switch ( nSlot )
@@ -507,7 +507,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         }
 
                         //  Referenz wird selektiert -> beim Tippen nicht ueberschreiben
-                        bSetSelIsRef = sal_True;
+                        bSetSelIsRef = true;
                     }
                 }
             }
@@ -525,7 +525,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     const OUString& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
-                    sal_Bool bDone = false;
+                    bool bDone = false;
                     if ( eMode == HLINK_DEFAULT || eMode == HLINK_FIELD )
                     {
                         const SvxURLField* pURLField = GetURLField();
@@ -559,7 +559,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                                 pTopView->SetSelection( aSel );     // select inserted field
                             }
 
-                            bDone = sal_True;
+                            bDone = true;
                         }
                     }
 
@@ -733,7 +733,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                     rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
                     // disable thesaurus context menu entry if there is nothing to look up
-                    sal_Bool bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
+                    bool bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
                     if (!bIsLookUpWord || !bCanDoThesaurus)
                         rSet.DisableItem( SID_THES );
                 }
@@ -888,12 +888,12 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
                 SfxItemPool& rPool = GetPool();
 
-                sal_Bool bOld = false;
+                bool bOld = false;
                 SvxScriptSetItem aOldSetItem( nSlot, rPool );
                 aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), false );
                 const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
                 if ( pCore && ((const SvxWeightItem*)pCore)->GetWeight() > WEIGHT_NORMAL )
-                    bOld = sal_True;
+                    bOld = true;
 
                 SvxScriptSetItem aSetItem( nSlot, rPool );
                 aSetItem.PutItemForScriptType( nScript,
@@ -911,12 +911,12 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
                 SfxItemPool& rPool = GetPool();
 
-                sal_Bool bOld = false;
+                bool bOld = false;
                 SvxScriptSetItem aOldSetItem( nSlot, rPool );
                 aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), false );
                 const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
                 if ( pCore && ((const SvxPostureItem*)pCore)->GetValue() != ITALIC_NONE )
-                    bOld = sal_True;
+                    bOld = true;
 
                 SvxScriptSetItem aSetItem( nSlot, rPool );
                 aSetItem.PutItemForScriptType( nScript,
@@ -980,7 +980,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_STRIKEOUT:
             {
-                sal_Bool bOld = ((const SvxCrossedOutItem&)pEditView->GetAttribs().
+                bool bOld = ((const SvxCrossedOutItem&)pEditView->GetAttribs().
                                 Get(EE_CHAR_STRIKEOUT)).GetValue() != STRIKEOUT_NONE;
                 aSet.Put( SvxCrossedOutItem( bOld ? STRIKEOUT_NONE : STRIKEOUT_SINGLE, EE_CHAR_STRIKEOUT ) );
                 rBindings.Invalidate( nSlot );
@@ -989,7 +989,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_SHADOWED:
             {
-                sal_Bool bOld = ((const SvxShadowedItem&)pEditView->GetAttribs().
+                bool bOld = ((const SvxShadowedItem&)pEditView->GetAttribs().
                                 Get(EE_CHAR_SHADOW)).GetValue();
                 aSet.Put( SvxShadowedItem( !bOld, EE_CHAR_SHADOW ) );
                 rBindings.Invalidate( nSlot );
@@ -998,7 +998,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_CONTOUR:
             {
-                sal_Bool bOld = ((const SvxContourItem&)pEditView->GetAttribs().
+                bool bOld = ((const SvxContourItem&)pEditView->GetAttribs().
                                 Get(EE_CHAR_OUTLINE)).GetValue();
                 aSet.Put( SvxContourItem( !bOld, EE_CHAR_OUTLINE ) );
                 rBindings.Invalidate( nSlot );
@@ -1041,7 +1041,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
 
     EditEngine* pEngine = pEditView->GetEditEngine();
-    sal_Bool bOld = pEngine->GetUpdateMode();
+    bool bOld = pEngine->GetUpdateMode();
     pEngine->SetUpdateMode(false);
 
     pEditView->SetAttribs( aSet );
@@ -1187,7 +1187,7 @@ void ScEditShell::ExecuteUndo(SfxRequest& rReq)
         case SID_UNDO:
         case SID_REDO:
             {
-                sal_Bool bIsUndo = ( nSlot == SID_UNDO );
+                bool bIsUndo = ( nSlot == SID_UNDO );
 
                 sal_uInt16 nCount = 1;
                 const SfxPoolItem* pItem;

@@ -137,7 +137,7 @@ void ScPivotShell::GetState( SfxItemSet& rSet )
 {
     ScDocShell* pDocSh = pViewShell->GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
-    sal_Bool bDisable = pDocSh->IsReadOnly() || pDoc->GetChangeTrack();
+    bool bDisable = pDocSh->IsReadOnly() || pDoc->GetChangeTrack();
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();

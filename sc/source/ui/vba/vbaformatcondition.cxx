@@ -44,7 +44,7 @@ void SAL_CALL
 ScVbaFormatCondition::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     ScVbaFormatConditions* pFormatConditions = lcl_getScVbaFormatConditionsPtr( moFormatConditions );
-    pFormatConditions->removeFormatCondition(msStyleName, sal_True);
+    pFormatConditions->removeFormatCondition(msStyleName, true);
         notifyRange();
 }
 

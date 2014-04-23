@@ -329,7 +329,7 @@ TOPIC DifParser::GetNextTopic( void )
             {
                 const sal_Unicode*  pRef;
                 sal_uInt16          nCnt = 0;
-                sal_Bool            bSearch = sal_True;
+                bool            bSearch = true;
 
                 pRef = ppKeys[ nCnt ];
 
@@ -637,11 +637,11 @@ const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, sal_uInt32&
 
 bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
 {
-    sal_Bool                    bNeg = false;
+    bool                    bNeg = false;
     double                      fFracPos = 1.0;
     sal_Int32                   nExp = 0;
-    sal_Bool                    bExpNeg = false;
-    sal_Bool                    bExpOverflow = false;
+    bool                    bExpNeg = false;
+    bool                    bExpOverflow = false;
     static const sal_uInt16     nExpLimit = 4096;   // ACHTUNG: muss genauer ermittelt werden!
 
     sal_Unicode             cAkt;
@@ -767,7 +767,7 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
                     }
                     else
                     {
-                        bExpOverflow = sal_True;
+                        bExpOverflow = true;
                         eS = S_FINDEND;
                     }
                 }

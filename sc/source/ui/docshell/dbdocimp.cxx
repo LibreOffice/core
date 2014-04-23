@@ -143,9 +143,9 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         pWaitWin->EnterWait();
     ScDocShellModificator aModificator( rDocShell );
 
-    sal_Bool bSuccess = false;
-    sal_Bool bApi = false;                      //! pass as argument
-    sal_Bool bTruncated = false;                // for warning
+    bool bSuccess = false;
+    bool bApi = false;                      //! pass as argument
+    bool bTruncated = false;                // for warning
     sal_uInt16 nErrStringId = 0;
     OUString aErrorMessage;
 
@@ -155,9 +155,9 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     SCROW nEndRow = nRow;
     long i;
 
-    sal_Bool bDoSelection = false;
-    sal_Bool bRealSelection = false;            // sal_True if not everything is selected
-    sal_Bool bBookmarkSelection = sal_False;
+    bool bDoSelection = false;
+    bool bRealSelection = false;            // sal_True if not everything is selected
+    bool bBookmarkSelection = false;
     sal_Int32 nListPos = 0;
     sal_Int32 nRowsRead = 0;
     sal_Int32 nListCount = 0;
@@ -201,10 +201,10 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
         uno::Reference<sdbc::XRowSet> xRowSet = uno::Reference<sdbc::XRowSet>(
                 xResultSet, uno::UNO_QUERY );
-        sal_Bool bDispose = false;
+        bool bDispose = false;
         if ( !xRowSet.is() )
         {
-            bDispose = sal_True;
+            bDispose = true;
             xRowSet = uno::Reference<sdbc::XRowSet>(
                     comphelper::getProcessServiceFactory()->createInstance(
                         OUString( SC_SERVICE_ROWSET ) ),
@@ -273,7 +273,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 if ( !xLocate.is() )
                 {
                     SAL_WARN( "sc.ui","can't get XRowLocate");
-                    bDoSelection = bRealSelection = bBookmarkSelection = sal_False;
+                    bDoSelection = bRealSelection = bBookmarkSelection = false;
                 }
             }
 
@@ -304,7 +304,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                     ++nRow;
                 }
 
-                sal_Bool bEnd = false;
+                bool bEnd = false;
                 if ( !bDoSelection )
                     xRowSet->beforeFirst();
                 sal_uInt16 nInserted = 0;
@@ -368,7 +368,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
                                 if (!aProgress.SetStateText( 0, aText ))    // stopped by user?
                                 {
-                                    bEnd = sal_True;
+                                    bEnd = true;
                                     bSuccess = false;
                                     nErrStringId = STR_DATABASE_ABORTED;
                                 }
@@ -376,13 +376,13 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                         }
                         else        // past the end of the spreadsheet
                         {
-                            bEnd = sal_True;            // don't continue
-                            bTruncated = sal_True;      // warning flag
+                            bEnd = true;            // don't continue
+                            bTruncated = true;      // warning flag
                         }
                     }
                 }
 
-                bSuccess = sal_True;
+                bSuccess = true;
             }
 
             if ( bDispose )
@@ -402,8 +402,8 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     //  test for cell protection
 
 
-    sal_Bool bKeepFormat = !bAddrInsert && pDBData->IsKeepFmt();
-    sal_Bool bMoveCells = !bAddrInsert && pDBData->IsDoSize();
+    bool bKeepFormat = !bAddrInsert && pDBData->IsKeepFmt();
+    bool bMoveCells = !bAddrInsert && pDBData->IsDoSize();
     SCCOL nFormulaCols = 0; // columns to be filled with formulas
     if (bMoveCells && nEndCol == rParam.nCol2)
     {
@@ -553,7 +553,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         pDoc->DeleteAreaTab( rParam.nCol1, rParam.nRow1, nEndCol, nEndRow, nTab, IDF_CONTENTS & ~IDF_NOTE );
 
         //  remove each column from ImportDoc after copying to reduce memory usage
-        sal_Bool bOldAutoCalc = pDoc->GetAutoCalc();
+        bool bOldAutoCalc = pDoc->GetAutoCalc();
         pDoc->SetAutoCalc( false );             // outside of the loop
         for (SCCOL nCopyCol = rParam.nCol1; nCopyCol <= nEndCol; nCopyCol++)
         {

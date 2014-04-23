@@ -242,7 +242,7 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-    sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
+    bool bNegativePage = pDoc->IsNegativePage( nTab );
 
     MapMode aDrawMode = pViewData->GetLogicMode();
 
@@ -301,7 +301,7 @@ void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddres
         const ScViewOptions& rOpts = pViewData->GetOptions();
         if(rOpts.GetOption( VOPT_ANCHOR ))
         {
-            sal_Bool bNegativePage = pViewData->GetDocument()->IsNegativePage( pViewData->GetTabNo() );
+            bool bNegativePage = pViewData->GetDocument()->IsNegativePage( pViewData->GetTabNo() );
             Point aPos = pViewData->GetScrPos( rAddress.Col(), rAddress.Row(), eWhich, true );
             aPos = PixelToLogic(aPos);
             rHdl.AddHdl(new SdrHdl(aPos, bNegativePage ? HDL_ANCHOR_TR : HDL_ANCHOR));
@@ -339,7 +339,7 @@ void ScGridWindow::UpdateStatusPosSize()
     //  position and size of selected object(s) if something is selected,
     //  mouse position otherwise
 
-    sal_Bool bActionItem = false;
+    bool bActionItem = false;
     if ( pDrView->IsAction() )              // action rectangle
     {
         Rectangle aRect;
@@ -354,7 +354,7 @@ void ScGridWindow::UpdateStatusPosSize()
             aSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE,
                     Size( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() ) ) );
-            bActionItem = sal_True;
+            bActionItem = true;
         }
     }
     if ( !bActionItem )

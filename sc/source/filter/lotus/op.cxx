@@ -55,7 +55,7 @@
 #include <boost/scoped_array.hpp>
 
 extern WKTYP eTyp;           // -> filter.cxx, aktueller Dateityp
-extern sal_Bool bEOF;           // -> filter.cxx, zeigt Dateiende an
+extern bool bEOF;           // -> filter.cxx, zeigt Dateiende an
 extern sal_uInt8 nDefaultFormat; // -> tool.cxx, Default-Zellenformat
 extern ScDocument* pDoc;            // -> filter.cxx, Aufhaenger zum Dokumentzugriff
 extern rtl_TextEncoding eCharVon;   // -> filter.cxx, character set specified
@@ -76,7 +76,7 @@ void OP_BOF( SvStream& r, sal_uInt16 /*n*/ )
 
 void OP_EOF( SvStream& /*r*/, sal_uInt16 /*n*/ )
 {
-    bEOF = sal_True;
+    bEOF = true;
 }
 
 void OP_Integer( SvStream& r, sal_uInt16 /*n*/ )
@@ -344,7 +344,7 @@ void OP_BOF123( SvStream& r, sal_uInt16 /*n*/ )
 
 void OP_EOF123( SvStream& /*r*/, sal_uInt16 /*n*/ )
 {
-    bEOF = sal_True;
+    bEOF = true;
 }
 
 void OP_Label123( SvStream& r, sal_uInt16 n )
@@ -513,7 +513,7 @@ void OP_CreatePattern123( SvStream& r, sal_uInt16 n)
         r.ReadUInt16( nPatternId );
 
         sal_uInt8 Hor_Align, Ver_Align, temp;
-        sal_Bool bIsBold,bIsUnderLine,bIsItalics;
+        bool bIsBold,bIsUnderLine,bIsItalics;
 
         r.SeekRel(12);
 

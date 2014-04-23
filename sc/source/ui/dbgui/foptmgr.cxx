@@ -243,7 +243,7 @@ IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
             OUString* pStr    = NULL;
-            sal_Bool    bFound  = false;
+            bool    bFound  = false;
             sal_uInt16  i       = 0;
             sal_uInt16  nCount  = pLbCopyArea->GetEntryCount();
 

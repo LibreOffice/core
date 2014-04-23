@@ -137,9 +137,9 @@ private:
     SfxItemPropertySet      aPropSet;
 
 
-    sal_Bool getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException);
+    bool getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException);
     sal_Int16 getPropertyInt16(const OUString& aPropertyName) throw (css::uno::RuntimeException);
-    void setProperty(const OUString& aPropertyName, sal_Bool p1) throw (css::uno::RuntimeException)
+    void setProperty(const OUString& aPropertyName, bool p1) throw (css::uno::RuntimeException)
         { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
     void setProperty(const OUString& aPropertyName, sal_Int16 p1) throw (css::uno::RuntimeException)
         { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
@@ -154,7 +154,7 @@ public:
     virtual sal_Bool SAL_CALL getMoveSelection() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool("MoveSelection"); }
     virtual void SAL_CALL setMoveSelection(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty("MoveSelection", p1); }
+        { setProperty("MoveSelection", (bool)p1); }
     virtual sal_Int16 SAL_CALL getMoveDirection() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyInt16("MoveDirection"); }
     virtual void SAL_CALL setMoveDirection(sal_Int16 p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -162,27 +162,27 @@ public:
     virtual sal_Bool SAL_CALL getEnterEdit() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool("EnterEdit"); }
     virtual void SAL_CALL setEnterEdit(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty("EnterEdit", p1); }
+        { setProperty("EnterEdit", (bool)p1); }
     virtual sal_Bool SAL_CALL getExtendFormat() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool("ExtendFormat"); }
     virtual void SAL_CALL setExtendFormat(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty("ExtendFormat", p1); }
+        { setProperty("ExtendFormat", (bool)p1); }
     virtual sal_Bool SAL_CALL getRangeFinder() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool("RangeFinder"); }
     virtual void SAL_CALL setRangeFinder(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty("RangeFinder", p1); }
+        { setProperty("RangeFinder", (bool)p1); }
     virtual sal_Bool SAL_CALL getExpandReferences() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool("ExpandReferences"); }
     virtual void SAL_CALL setExpandReferences(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty("ExpandReferences", p1); }
+        { setProperty("ExpandReferences", (bool)p1); }
     virtual sal_Bool SAL_CALL getMarkHeader() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool("MarkHeader"); }
     virtual void SAL_CALL setMarkHeader(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty("MarkHeader", p1); }
+        { setProperty("MarkHeader", (bool)p1); }
     virtual sal_Bool SAL_CALL getUseTabCol() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool("UseTabCol"); }
     virtual void SAL_CALL setUseTabCol(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty("UseTabCol", p1); }
+        { setProperty("UseTabCol", (bool)p1); }
     virtual sal_Int16 SAL_CALL getMetric() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyInt16("Metric"); }
     virtual void SAL_CALL setMetric(sal_Int16 p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -194,7 +194,7 @@ public:
     virtual sal_Bool SAL_CALL getDoAutoComplete() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool("DoAutoComplete"); }
     virtual void SAL_CALL setDoAutoComplete(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty("DoAutoComplete", p1); }
+        { setProperty("DoAutoComplete", (bool)p1); }
     virtual sal_Int16 SAL_CALL getStatusBarFunction() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyInt16("StatusBarFunction"); }
     virtual void SAL_CALL setStatusBarFunction(sal_Int16 p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -215,19 +215,19 @@ public:
     virtual sal_Bool SAL_CALL getPrintAllSheets() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool("PrintAllSheets"); }
     virtual void SAL_CALL setPrintAllSheets(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty("PrintAllSheets", p1); }
+        { setProperty("PrintAllSheets", (bool)p1); }
     virtual sal_Bool SAL_CALL getPrintEmptyPages() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool("PrintEmptyPages"); }
     virtual void SAL_CALL setPrintEmptyPages(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty("PrintEmptyPages", p1); }
+        { setProperty("PrintEmptyPages", (bool)p1); }
     virtual sal_Bool SAL_CALL getUsePrinterMetrics() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool("UsePrinterMetrics"); }
     virtual void SAL_CALL setUsePrinterMetrics(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty("UsePrinterMetrics", p1); }
+        { setProperty("UsePrinterMetrics", (bool)p1); }
     virtual sal_Bool SAL_CALL getReplaceCellsWarning() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool("ReplaceCellsWarning"); }
     virtual void SAL_CALL setReplaceCellsWarning(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty("ReplaceCellsWarning", p1); }
+        { setProperty("ReplaceCellsWarning", (bool)p1); }
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >

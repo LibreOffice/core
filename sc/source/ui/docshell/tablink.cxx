@@ -143,7 +143,7 @@ void ScTableLink::Closed()
 {
     // Verknuepfung loeschen: Undo
     ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo (pDoc->IsUndoEnabled());
 
     if (bAddUndo && bUndo)
     {
@@ -181,7 +181,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
     pDoc->SetInLinkUpdate( true );
 
-    sal_Bool bUndo(pDoc->IsUndoEnabled());
+    bool bUndo(pDoc->IsUndoEnabled());
 
     //  wenn neuer Filter ausgewaehlt wurde, Optionen vergessen
     if (!aFilterName.equals(rNewFilter))
@@ -212,7 +212,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     //  Undo...
 
     ScDocument* pUndoDoc = NULL;
-    sal_Bool bFirst = true;
+    bool bFirst = true;
     if (bAddUndo && bUndo)
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
 
@@ -220,12 +220,12 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
     ScDocShellModificator aModificator( *pImpl->m_pDocSh );
 
-    sal_Bool bNotFound = false;
+    bool bNotFound = false;
     ScDocument* pSrcDoc = pSrcShell->GetDocument();
 
     //  from text filters that don't set the table name,
     //  use the one table regardless of link table name
-    sal_Bool bAutoTab = (pSrcDoc->GetTableCount() == 1) &&
+    bool bAutoTab = (pSrcDoc->GetTableCount() == 1) &&
                     ScDocShell::HasAutomaticTableName( rNewFilter );
 
     SCTAB nCount = pDoc->GetTableCount();
@@ -482,7 +482,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
             aMatcher.GuessFilterIgnoringContent( *pMedium, &pSfxFilter );
     }
 
-    sal_Bool bOK = false;
+    bool bOK = false;
     if ( pMedium->GetError() == ERRCODE_NONE )
     {
         if ( pSfxFilter )

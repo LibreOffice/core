@@ -451,8 +451,8 @@ private:
     bool                mbUseEmbedFonts;
 
 public:
-    sal_Bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
-    void GetCellChangeTrackNote(const ScAddress &cell, OUString &strTrackText, sal_Bool &pbLeftEdge);
+    bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
+    void GetCellChangeTrackNote(const ScAddress &cell, OUString &strTrackText, bool &pbLeftEdge);
     bool              IsUsingEmbededFonts() { return mbUseEmbedFonts; }
     void              SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }
     SC_DLLPUBLIC sal_uLong          GetCellCount() const;       // all cells

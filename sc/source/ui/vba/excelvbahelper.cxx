@@ -64,7 +64,7 @@ GetAutoFiltRange( ScDocShell* pShell, sal_Int16 nSheet ) throw ( uno::RuntimeExc
     if (xUnnamedDBRanges->hasByTable( nSheet ) )
     {
         uno::Reference< sheet::XDatabaseRange > xDBRange( xUnnamedDBRanges->getByTable( nSheet ) , uno::UNO_QUERY_THROW );
-        sal_Bool bHasAuto = false;
+        bool bHasAuto = false;
         uno::Reference< beans::XPropertySet > xProps( xDBRange, uno::UNO_QUERY_THROW );
         xProps->getPropertyValue("AutoFilter") >>= bHasAuto;
         if ( bHasAuto )
@@ -115,8 +115,7 @@ private:
 
     bool getReplaceCellsWarning() throw ( uno::RuntimeException )
     {
-        sal_Bool res = getGlobalSheetSettings()->getReplaceCellsWarning();
-        return ( res == sal_True );
+        return getGlobalSheetSettings()->getReplaceCellsWarning();
     }
 
     void setReplaceCellsWarning( bool bState ) throw ( uno::RuntimeException )

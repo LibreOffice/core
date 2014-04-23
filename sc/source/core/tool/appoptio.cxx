@@ -176,7 +176,7 @@ static void lcl_SetSortList( const Any& rValue )
 
         //  if setting is "default", keep default values from ScUserList ctor
         //! mark "default" in a safe way
-        sal_Bool bDefault = ( nCount == 1 && pArray[0] == "NULL" );
+        bool bDefault = ( nCount == 1 && pArray[0] == "NULL" );
 
         if (!bDefault)
         {

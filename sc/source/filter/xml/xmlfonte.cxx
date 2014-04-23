@@ -36,14 +36,14 @@ private:
     // #i120077# remember owned pool
     SfxItemPool*    mpEditEnginePool;
 
-    void AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pItemPool, const sal_Bool bExportDefaults);
+    void AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pItemPool, const bool bExportDefaults);
 
 public:
     ScXMLFontAutoStylePool_Impl( ScXMLExport& rExport, bool bBlockFontEmbedding );
     virtual ~ScXMLFontAutoStylePool_Impl();
 };
 
-void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pItemPool, const sal_Bool bExportDefaults)
+void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pItemPool, const bool bExportDefaults)
 {
     const SfxPoolItem* pItem;
     for( sal_uInt16 i=0; i < nIdCount; ++i )
@@ -82,7 +82,7 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, 
                                     ATTR_PAGE_HEADERRIGHT, ATTR_PAGE_FOOTERRIGHT };
 
     const SfxItemPool* pItemPool(rExportP.GetDocument() ? rExportP.GetDocument()->GetPool() : NULL);
-    AddFontItems(aWhichIds, 3, pItemPool, sal_True);
+    AddFontItems(aWhichIds, 3, pItemPool, true);
     const SfxItemPool* pEditPool(rExportP.GetDocument()->GetEditPool());
     AddFontItems(aEditWhichIds, 3, pEditPool, false);
 

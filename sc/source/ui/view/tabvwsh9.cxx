@@ -179,15 +179,15 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
                 {
                     //  Disabled wird nicht mehr...
 
-                    sal_Bool bThere = false;
+                    bool bThere = false;
                     SfxViewFrame* pThisFrame = GetViewFrame();
                     sal_uInt16 nId = ScIMapChildWindowId();
                     if ( pThisFrame->KnowsChildWindow(nId) )
                         if ( pThisFrame->HasChildWindow(nId) )
-                            bThere = sal_True;
+                            bThere = true;
 
                     ObjectSelectionType eType=GetCurObjectSelectionType();
-                    sal_Bool bEnable=(eType==OST_OleObject) ||(eType==OST_Graphic);
+                    bool bEnable=(eType==OST_OleObject) ||(eType==OST_Graphic);
                     if(!bThere && !bEnable)
                     {
                        rSet.DisableItem( nWhich );
@@ -201,7 +201,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
 
             case SID_IMAP_EXEC:
                 {
-                    sal_Bool bDisable = sal_True;
+                    bool bDisable = true;
 
                     SdrView* pDrView = GetSdrView();
                     if ( pDrView )

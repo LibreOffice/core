@@ -153,7 +153,7 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
         pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Value <<= nPageZoomValue;
 
         pSettings[SC_TABLE_SHOWGRID].Name = OUString(SC_UNO_SHOWGRID);
-        pSettings[SC_TABLE_SHOWGRID].Value <<= static_cast<sal_Bool>(bShowGrid);
+        pSettings[SC_TABLE_SHOWGRID].Value <<= bShowGrid;
     }
 }
 

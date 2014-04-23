@@ -377,15 +377,15 @@ Rectangle ScPreviewViewForwarder::CorrectVisArea(const Rectangle& rVisArea) cons
 
 class ScPreviewHeaderFooterViewForwarder : public ScPreviewViewForwarder
 {
-    sal_Bool            mbHeader;
+    bool            mbHeader;
 public:
-                        ScPreviewHeaderFooterViewForwarder(ScPreviewShell* pViewShell, sal_Bool bHeader);
+                        ScPreviewHeaderFooterViewForwarder(ScPreviewShell* pViewShell, bool bHeader);
     virtual             ~ScPreviewHeaderFooterViewForwarder();
 
     virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
 };
 
-ScPreviewHeaderFooterViewForwarder::ScPreviewHeaderFooterViewForwarder(ScPreviewShell* pViewShell, sal_Bool bHeader)
+ScPreviewHeaderFooterViewForwarder::ScPreviewHeaderFooterViewForwarder(ScPreviewShell* pViewShell, bool bHeader)
     :
     ScPreviewViewForwarder(pViewShell),
     mbHeader(bHeader)
@@ -459,11 +459,11 @@ Rectangle ScPreviewCellViewForwarder::GetVisArea() const
 class ScPreviewHeaderCellViewForwarder : public ScPreviewViewForwarder
 {
     ScAddress           maCellPos;
-    sal_Bool            mbColHeader;
+    bool            mbColHeader;
 public:
                         ScPreviewHeaderCellViewForwarder(ScPreviewShell* pViewShell,
                             ScAddress aCellPos,
-                            sal_Bool bColHeader);
+                            bool bColHeader);
     virtual             ~ScPreviewHeaderCellViewForwarder();
 
     virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
@@ -471,7 +471,7 @@ public:
 
 ScPreviewHeaderCellViewForwarder::ScPreviewHeaderCellViewForwarder(ScPreviewShell* pViewShell,
                                                                    ScAddress aCellPos,
-                                                                   sal_Bool bColHeader)
+                                                                   bool bColHeader)
     :
     ScPreviewViewForwarder(pViewShell),
     maCellPos(aCellPos),
@@ -503,11 +503,11 @@ Rectangle ScPreviewHeaderCellViewForwarder::GetVisArea() const
 class ScPreviewNoteViewForwarder : public ScPreviewViewForwarder
 {
     ScAddress           maCellPos;
-    sal_Bool            mbNoteMark;
+    bool            mbNoteMark;
 public:
                         ScPreviewNoteViewForwarder(ScPreviewShell* pViewShell,
                             ScAddress aCellPos,
-                            sal_Bool bNoteMark);
+                            bool bNoteMark);
     virtual             ~ScPreviewNoteViewForwarder();
 
     virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
@@ -515,7 +515,7 @@ public:
 
 ScPreviewNoteViewForwarder::ScPreviewNoteViewForwarder(ScPreviewShell* pViewShell,
                                                                    ScAddress aCellPos,
-                                                                   sal_Bool bNoteMark)
+                                                                   bool bNoteMark)
     :
     ScPreviewViewForwarder(pViewShell),
     maCellPos(aCellPos),
@@ -1281,7 +1281,7 @@ ScAccessibleTextData* ScAccessiblePreviewCellTextData::Clone() const
 
 SvxTextForwarder* ScAccessiblePreviewCellTextData::GetTextForwarder()
 {
-    sal_Bool bEditEngineBefore(pEditEngine != NULL);
+    bool bEditEngineBefore(pEditEngine != NULL);
 
     ScCellTextData::GetTextForwarder(); // creates Forwarder and EditEngine
 

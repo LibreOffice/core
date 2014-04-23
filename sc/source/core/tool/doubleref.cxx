@@ -56,7 +56,7 @@ bool lcl_createStarQuery(
     if (pQueryRef->getColSize() < 4)
         return false;
 
-    sal_Bool bValid;
+    bool bValid;
     OUString aCellStr;
     SCSIZE nIndex = 0;
     SCROW nRow = 0;
@@ -78,12 +78,12 @@ bool lcl_createStarQuery(
             if ( aCellStr.equals(ScGlobal::GetRscString(STR_TABLE_UND)) )
             {
                 rEntry.eConnect = SC_AND;
-                bValid = sal_True;
+                bValid = true;
             }
             else if ( aCellStr.equals(ScGlobal::GetRscString(STR_TABLE_ODER)) )
             {
                 rEntry.eConnect = SC_OR;
-                bValid = sal_True;
+                bValid = true;
             }
         }
 
@@ -345,7 +345,7 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
     SCCOL nDBCol2 = e.Col();
 
     SCCOL   nField = nDBCol1;
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     OUString aCellStr;
     ScAddress aLook( nDBCol1, nDBRow1, nDBTab1 );

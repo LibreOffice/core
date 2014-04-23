@@ -189,7 +189,7 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 
 
         OUString  cellString;
-        sal_Bool    bNumFormat  = pCurData->GetIncludeValueFormat();
+        bool    bNumFormat  = pCurData->GetIncludeValueFormat();
         sal_uLong   nNum;
         double  nVal;
         Color*  pDummy = NULL;
@@ -248,7 +248,7 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
             Rectangle           cellRect        = maArray.GetCellRect( nCol, nRow );
             Point               aPos            = cellRect.TopLeft();
             sal_uInt16              nRightX         = 0;
-            sal_Bool                bJustify        = pCurData->GetIncludeJustify();
+            bool                bJustify        = pCurData->GetIncludeJustify();
             SvxHorJustifyItem    aHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
             SvxCellHorJustify      eJustification;
 

@@ -37,8 +37,8 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
     sal_uInt16              nSlotId  = rReq.GetSlot();
     SCsCOLROW           nRepeat = 1;
-    sal_Bool                bSel = false;
-    sal_Bool                bKeep = false;
+    bool                bSel = false;
+    bool                bKeep = false;
 
     if ( pReqArgs != NULL )
     {
@@ -54,7 +54,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
 
         sal_uInt16 nLocked = pTabViewShell->GetLockedModifiers();
         if ( nLocked & KEY_SHIFT )
-            bSel = sal_True;                // EXT
+            bSel = true;                // EXT
         else if ( nLocked & KEY_MOD1 )
         {
             // ADD mode: keep the selection, start a new block when marking with shift again
@@ -393,8 +393,8 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
     sal_uInt16              nSlotId  = rReq.GetSlot();
-    sal_Bool                bSel = false;
-    sal_Bool                bKeep = false;
+    bool                bSel = false;
+    bool                bKeep = false;
 
     if ( pReqArgs != NULL )
     {
@@ -408,7 +408,7 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
 
         sal_uInt16 nLocked = pTabViewShell->GetLockedModifiers();
         if ( nLocked & KEY_SHIFT )
-            bSel = sal_True;                // EXT
+            bSel = true;                // EXT
         else if ( nLocked & KEY_MOD1 )
         {
             // ADD mode: keep the selection, start a new block when marking with shift again

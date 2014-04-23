@@ -79,7 +79,7 @@ ScOutlineWindow::~ScOutlineWindow()
 
 void ScOutlineWindow::SetHeaderSize( long nNewSize )
 {
-    sal_Bool bLayoutRTL = GetDoc().IsLayoutRTL( GetTab() );
+    bool bLayoutRTL = GetDoc().IsLayoutRTL( GetTab() );
     mbMirrorEntries = bLayoutRTL && mbHoriz;
     mbMirrorLevels = bLayoutRTL && !mbHoriz;
 

@@ -348,7 +348,7 @@ void ScDocShell::CalcOutputFactor()
         return;
     }
 
-    sal_Bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
+    bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
     if (bTextWysiwyg)
     {
         nPrtToScreenFactor = 1.0;
@@ -528,8 +528,8 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlag
             if (nDiffFlags & SFX_PRINTER_CHG_ORIENTATION)
             {
                 const SvxPageItem& rOldItem = (const SvxPageItem&)rSet.Get(ATTR_PAGE);
-                sal_Bool bWasLand = rOldItem.IsLandscape();
-                sal_Bool bNewLand = ( pNewPrinter->GetOrientation() == ORIENTATION_LANDSCAPE );
+                bool bWasLand = rOldItem.IsLandscape();
+                bool bNewLand = ( pNewPrinter->GetOrientation() == ORIENTATION_LANDSCAPE );
                 if (bNewLand != bWasLand)
                 {
                     SvxPageItem aNewItem( rOldItem );
@@ -685,7 +685,7 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
             if (pOtherMed)
                 aOtherFile = pOtherMed->GetName();
         }
-        sal_Bool bSameDoc = ( aThisFile == aOtherFile && !aThisFile.isEmpty() );
+        bool bSameDoc = ( aThisFile == aOtherFile && !aThisFile.isEmpty() );
         if ( !bSameDoc )
         {
             //  create change actions from comparing with the name of the user
@@ -717,7 +717,7 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
 
 //              Merge (Aenderungen zusammenfuehren)
 
-static inline sal_Bool lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, sal_Bool bIgnore100Sec )
+static inline bool lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, bool bIgnore100Sec )
 {
     return pA && pB &&
         pA->GetActionNumber() == pB->GetActionNumber() &&
@@ -729,7 +729,7 @@ static inline sal_Bool lcl_Equal( const ScChangeAction* pA, const ScChangeAction
     //  State nicht vergleichen, falls eine alte Aenderung akzeptiert wurde
 }
 
-static bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument* pSearchDoc, const ScChangeAction* pFirstSearchAction, const ScChangeAction* pLastSearchAction, sal_Bool bIgnore100Sec )
+static bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument* pSearchDoc, const ScChangeAction* pFirstSearchAction, const ScChangeAction* pLastSearchAction, bool bIgnore100Sec )
 {
     if ( !pDoc || !pAction || !pSearchDoc || !pFirstSearchAction || !pLastSearchAction )
     {
@@ -789,7 +789,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
     }
 
     // include Nano seconds in compare?
-    sal_Bool bIgnore100Sec = !pSourceTrack->IsTimeNanoSeconds() ||
+    bool bIgnore100Sec = !pSourceTrack->IsTimeNanoSeconds() ||
             !pThisTrack->IsTimeNanoSeconds();
 
     //  gemeinsame Ausgangsposition suchen
@@ -882,7 +882,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
     LockPaint();    // #i73877# no repainting after each action
 
     //  MergeChangeData in das aktuelle Dokument uebernehmen
-    sal_Bool bHasRejected = false;
+    bool bHasRejected = false;
     OUString aOldUser = pThisTrack->GetUser();
     pThisTrack->SetUseFixDateTime( true );
     ScMarkData& rMarkData = pViewSh->GetViewData()->GetMarkData();
@@ -950,7 +950,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         if ( pOldAction && pOldAction->IsVirgin() )
                         {
                             pThisTrack->Reject( pOldAction );
-                            bHasRejected = sal_True;
+                            bHasRejected = true;
                             bExecute = false;
                         }
                     }
@@ -965,7 +965,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             //! oder Reject-Aenderung normal ausfuehren
 
                             pThisTrack->Reject(pOldAction);
-                            bHasRejected = sal_True;                // fuer Paint
+                            bHasRejected = true;                // fuer Paint
                         }
                         bExecute = false;
                     }
@@ -1170,7 +1170,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
     aDocument.SetChangeViewSettings( aChangeViewSet );
 
     // find first merge action in this document
-    sal_Bool bIgnore100Sec = !pThisTrack->IsTimeNanoSeconds() || !pSharedTrack->IsTimeNanoSeconds();
+    bool bIgnore100Sec = !pThisTrack->IsTimeNanoSeconds() || !pSharedTrack->IsTimeNanoSeconds();
     ScChangeAction* pThisAction = pThisTrack->GetFirst();
     ScChangeAction* pSharedAction = pSharedTrack->GetFirst();
     while ( lcl_Equal( pThisAction, pSharedAction, bIgnore100Sec ) )

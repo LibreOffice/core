@@ -505,7 +505,7 @@ ScVbaFormat<Ifc1>::setLocked( const uno::Any& _aLocked ) throw (script::BasicErr
 {
     try
     {
-        sal_Bool bIsLocked = false;
+        bool bIsLocked = false;
         if ( !( _aLocked >>= bIsLocked ) )
             throw uno::RuntimeException();
         util::CellProtection aCellProtection;
@@ -526,7 +526,7 @@ ScVbaFormat<Ifc1>::setFormulaHidden( const uno::Any& FormulaHidden ) throw (scri
 {
     try
     {
-        sal_Bool bIsFormulaHidden = false;
+        bool bIsFormulaHidden = false;
         FormulaHidden >>= bIsFormulaHidden;
         util::CellProtection aCellProtection;
         OUString sCellProt( SC_UNONAME_CELLPRO );

@@ -322,7 +322,7 @@ namespace calc
 
         // get the cell address
         CellRangeAddress aRangeAddress;
-        sal_Bool bFoundAddress = false;
+        bool bFoundAddress = false;
 
         const Any* pLoop = _rArguments.getConstArray();
         const Any* pLoopEnd = _rArguments.getConstArray() + _rArguments.getLength();
@@ -334,7 +334,7 @@ namespace calc
                 if ( aValue.Name == "CellRange" )
                 {
                     if ( aValue.Value >>= aRangeAddress )
-                        bFoundAddress = sal_True;
+                        bFoundAddress = true;
                 }
             }
         }

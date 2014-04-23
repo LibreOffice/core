@@ -262,7 +262,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     const OUString& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
-                    sal_Bool bDone = false;
+                    bool bDone = false;
                     if ( pOutView && ( eMode == HLINK_DEFAULT || eMode == HLINK_FIELD ) )
                     {
                         const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
@@ -299,7 +299,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                             pOutView->SetSelection( aSel );
                         }
 
-                        bDone = sal_True;
+                        bDone = true;
                     }
 
                     if (!bDone)
@@ -360,13 +360,13 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
 {
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
-    sal_Bool bHasFontWork = pViewFrm->HasChildWindow(SID_FONTWORK);
-    sal_Bool bDisableFontWork = false;
+    bool bHasFontWork = pViewFrm->HasChildWindow(SID_FONTWORK);
+    bool bDisableFontWork = false;
 
     if (IsNoteEdit())
     {
         // #i21255# notes now support rich text formatting (#i74140# but not fontwork)
-        bDisableFontWork = sal_True;
+        bDisableFontWork = true;
     }
 
     if ( bDisableFontWork )
@@ -381,7 +381,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
         if ( pOutView )
         {
-            sal_Bool bField = false;
+            bool bField = false;
             const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
             if (pFieldItem)
             {
@@ -392,7 +392,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
                     aHLinkItem.SetName( pURLField->GetRepresentation() );
                     aHLinkItem.SetURL( pURLField->GetURL() );
                     aHLinkItem.SetTargetFrame( pURLField->GetTargetFrame() );
-                    bField = sal_True;
+                    bField = true;
                 }
             }
             if (!bField)
@@ -441,7 +441,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         pView->GetAttributes( aAttrs );
         if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_AVAILABLE )
         {
-            sal_Bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
+            bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
             rSet.Put( SfxBoolItem( SID_ENABLE_HYPHENATION, bValue ) );
         }
     }
@@ -463,7 +463,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
         // disable thesaurus main menu and context menu entry if there is nothing to look up
-        sal_Bool bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
+        bool bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
         if (!bIsLookUpWord || !bCanDoThesaurus)
             rSet.DisableItem( SID_THES );
         if (!bCanDoThesaurus)
@@ -595,8 +595,8 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
     aSel.Adjust();
     sal_Int32 nNewEnd = aSel.nEndPos;
 
-    sal_Bool bUpdate = pOutliner->GetUpdateMode();
-    sal_Bool bChanged = false;
+    bool bUpdate = pOutliner->GetUpdateMode();
+    bool bChanged = false;
 
     //! GetPortions and GetAttribs should be const!
     EditEngine& rEditEng = (EditEngine&)pOutliner->GetEditEngine();
@@ -628,7 +628,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
                                 pOutliner->SetUpdateMode( false );
                             OUString aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
                             pOutliner->GetUndoManager().EnterListAction( aName, aName );
-                            bChanged = sal_True;
+                            bChanged = true;
                         }
 
                         OUString aFieldText = rEditEng.GetText( aFieldSel );
@@ -924,8 +924,8 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     }
 
     SvtLanguageOptions  aLangOpt;
-    sal_Bool bDisableCTLFont = !aLangOpt.IsCTLFontEnabled();
-    sal_Bool bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
+    bool bDisableCTLFont = !aLangOpt.IsCTLFontEnabled();
+    bool bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
 
     SdrView* pView = pViewData->GetScDrawView();
     SfxItemSet aAttrSet(pView->GetModel()->GetItemPool());
@@ -1079,7 +1079,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     //  horizontal / vertical
 
-    sal_Bool bLeftToRight = sal_True;
+    bool bLeftToRight = true;
 
     SdrOutliner* pOutl = pView->GetTextEditOutliner();
     if( pOutl )
@@ -1171,7 +1171,7 @@ void ScDrawTextObjectBar::GetStatePropPanelAttr(SfxItemSet &rSet)
             case SID_TABLE_VERT_NONE:
             case SID_TABLE_VERT_CENTER:
             case SID_TABLE_VERT_BOTTOM:
-                sal_Bool bContour = sal_False;
+                bool bContour = false;
                 SfxItemState eConState = aEditAttr.GetItemState( SDRATTR_TEXT_CONTOURFRAME );
                 if( eConState != SFX_ITEM_DONTCARE )
                 {
@@ -1186,7 +1186,7 @@ void ScDrawTextObjectBar::GetStatePropPanelAttr(SfxItemSet &rSet)
                 if(SFX_ITEM_DONTCARE != eVState)
                 {
                     SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)aEditAttr.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
-                    sal_Bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||
+                    bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||
                             (nSlotId == SID_TABLE_VERT_CENTER && eTVA == SDRTEXTVERTADJUST_CENTER) ||
                             (nSlotId == SID_TABLE_VERT_BOTTOM && eTVA == SDRTEXTVERTADJUST_BOTTOM);
                     rSet.Put(SfxBoolItem(nSlotId, bSet));

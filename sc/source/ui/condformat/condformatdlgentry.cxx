@@ -490,7 +490,7 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
         // (SetDispatcherLock would affect all Calc documents)
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
         SfxDispatcher* pDisp = pViewShell->GetDispatcher();
-        sal_Bool bLocked = pDisp->IsLocked();
+        bool bLocked = pDisp->IsLocked();
         if (bLocked)
             pDisp->Lock(false);
 

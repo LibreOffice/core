@@ -103,7 +103,7 @@ OUString ScUndoModifyStyle::GetComment() const
     return ScGlobal::GetRscString( nId );
 }
 
-static void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, sal_Bool bRemoved )
+static void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, bool bRemoved )
 {
     //! move to document or docshell
 
@@ -125,8 +125,8 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
     ScDocument* pDoc = pDocSh->GetDocument();
     ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
     OUString aNewName = rData.GetName();
-    sal_Bool bDelete = aNewName.isEmpty();         // no new name -> delete style
-    sal_Bool bNew = ( rName.isEmpty() && !bDelete );   // creating new style
+    bool bDelete = aNewName.isEmpty();         // no new name -> delete style
+    bool bNew = ( rName.isEmpty() && !bDelete );   // creating new style
 
     SfxStyleSheetBase* pStyle = NULL;
     if ( !rName.isEmpty() )
@@ -155,7 +155,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
         if ( bDelete )
         {
             if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
-                lcl_DocStyleChanged( pDoc, pStyle, sal_True );      // TRUE: remove usage of style
+                lcl_DocStyleChanged( pDoc, pStyle, true );      // TRUE: remove usage of style
             else
                 pDoc->RemovePageStyleInUse( rName );
 

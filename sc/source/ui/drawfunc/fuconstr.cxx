@@ -79,7 +79,7 @@ Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
         // involved. Lets calculate where aPos would be at 100% zoom
         // that's the actual correct position for the object ( when you
         // restore the zoom.
-        sal_Bool bNegative = pDoc->IsNegativePage(pView->GetTab());
+        bool bNegative = pDoc->IsNegativePage(pView->GetTab());
         Rectangle aObjRect( rInOutPos, rInOutPos );
         ScRange aRange = pDoc->GetRange( pView->GetTab(), aObjRect );
         ScAddress aOldStt = aRange.aStart;
@@ -234,7 +234,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
                 {
                     OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
-                    sal_Bool bVertical = ( pOPO && pOPO->IsVertical() );
+                    bool bVertical = ( pOPO && pOPO->IsVertical() );
                     sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
                     pViewShell->GetViewData()->GetDispatcher().

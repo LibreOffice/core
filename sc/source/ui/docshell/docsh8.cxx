@@ -414,7 +414,7 @@ sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncodi
         lcl_setScalesToColumns(aDocument, aScales);
 
         SCROW nRow = 1;     // 0 is column titles
-        sal_Bool bEnd = false;
+        bool bEnd = false;
         while ( !bEnd && xRowSet->next() )
         {
             if ( nRow <= MAXROW )
@@ -448,7 +448,7 @@ sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncodi
             }
             else        // past the end of the spreadsheet
             {
-                bEnd = sal_True;                            // don't continue
+                bEnd = true;                            // don't continue
                 nErr = SCWARN_IMPORT_RANGE_OVERFLOW;    // warning message
             }
         }
@@ -806,7 +806,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
                                                     nLastRow - nFirstRow );
     SvNumberFormatter* pNumFmt = aDocument.GetFormatTable();
 
-    sal_Bool bHasFieldNames = sal_True;
+    bool bHasFieldNames = true;
     for ( SCCOL nDocCol = nFirstCol; nDocCol <= nLastCol && bHasFieldNames; nDocCol++ )
     {   // nur Strings in erster Zeile => sind Feldnamen
         if ( !aDocument.HasStringData( nDocCol, nFirstRow, nTab ) )
@@ -993,7 +993,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
                         {
                             aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
                             // zwischen 0 Wert und 0 kein Wert unterscheiden
-                            sal_Bool bIsNull = (fVal == 0.0);
+                            bool bIsNull = (fVal == 0.0);
                             if ( bIsNull )
                                 bIsNull = !aDocument.HasValueData( nDocCol, nDocRow, nTab );
                             if ( bIsNull )

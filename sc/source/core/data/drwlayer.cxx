@@ -93,7 +93,7 @@ static sal_uInt16 nInst = 0;
 
 SfxObjectShell* ScDrawLayer::pGlobalDrawPersist = NULL;
 
-sal_Bool bDrawIsInUndo = false;         //! Member
+bool bDrawIsInUndo = false;         //! Member
 
 ScUndoObjData::ScUndoObjData( SdrObject* pObjP, const ScAddress& rOS, const ScAddress& rOE,
                                                const ScAddress& rNS, const ScAddress& rNE ) :
@@ -456,7 +456,7 @@ void ScDrawLayer::ResetTab( SCTAB nStart, SCTAB nEnd )
     }
 }
 
-inline sal_Bool IsInBlock( const ScAddress& rPos, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2 )
+inline bool IsInBlock( const ScAddress& rPos, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2 )
 {
     return rPos.Col() >= nCol1 && rPos.Col() <= nCol2 &&
            rPos.Row() >= nRow1 && rPos.Row() <= nRow2;
@@ -470,7 +470,7 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
     if (!pPage)
         return;
 
-    sal_Bool bNegativePage = pDoc && pDoc->IsNegativePage( nTab );
+    bool bNegativePage = pDoc && pDoc->IsNegativePage( nTab );
 
     sal_uLong nCount = pPage->GetObjCount();
     for ( sal_uLong i = 0; i < nCount; i++ )
@@ -481,18 +481,18 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
         {
             const ScAddress aOldStt = pData->maStart;
             const ScAddress aOldEnd = pData->maEnd;
-            sal_Bool bChange = false;
+            bool bChange = false;
             if ( aOldStt.IsValid() && IsInBlock( aOldStt, nCol1,nRow1, nCol2,nRow2 ) )
             {
                 pData->maStart.IncCol( nDx );
                 pData->maStart.IncRow( nDy );
-                bChange = sal_True;
+                bChange = true;
             }
             if ( aOldEnd.IsValid() && IsInBlock( aOldEnd, nCol1,nRow1, nCol2,nRow2 ) )
             {
                 pData->maEnd.IncCol( nDx );
                 pData->maEnd.IncRow( nDy );
-                bChange = sal_True;
+                bChange = true;
             }
             if (bChange)
             {
@@ -520,7 +520,7 @@ void ScDrawLayer::SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpda
         //  auch wenn Groesse gleich geblieben ist
         //  (einzelne Zeilen/Spalten koennen geaendert sein)
 
-        sal_Bool bNegativePage = pDoc && pDoc->IsNegativePage( static_cast<SCTAB>(nPageNo) );
+        bool bNegativePage = pDoc && pDoc->IsNegativePage( static_cast<SCTAB>(nPageNo) );
 
         sal_uLong nCount = pPage->GetObjCount();
         for ( sal_uLong i = 0; i < nCount; i++ )
@@ -873,7 +873,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
     SCTAB nTab = rRange.aStart.Tab();
     OSL_ENSURE( rRange.aEnd.Tab() == nTab, "GetPrintArea: Tab differ" );
 
-    sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
+    bool bNegativePage = pDoc->IsNegativePage( nTab );
 
     bool bAny = false;
     long nEndX = 0;
@@ -924,7 +924,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
                             //! Flags (ausgeblendet?) testen
 
             Rectangle aObjRect = pObject->GetCurrentBoundRect();
-            sal_Bool bFit = sal_True;
+            bool bFit = true;
             if ( !bSetHor && ( aObjRect.Right() < nStartX || aObjRect.Left() > nEndX ) )
                 bFit = false;
             if ( !bSetVer && ( aObjRect.Bottom() < nStartY || aObjRect.Top() > nEndY ) )
@@ -1044,7 +1044,7 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
     if (!bAdjustEnabled)
         return;
 
-    sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
+    bool bNegativePage = pDoc->IsNegativePage( nTab );
 
     Rectangle aRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
     lcl_ReverseTwipsToMM( aRect );
@@ -1115,7 +1115,7 @@ bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
     aTestRect.Left()  = 0;
     aTestRect.Right() = MAXMM;
 
-    sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
+    bool bNegativePage = pDoc->IsNegativePage( nTab );
     if ( bNegativePage )
         MirrorRectRTL( aTestRect );
 
@@ -1312,7 +1312,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
     }
 }
 
-static sal_Bool lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector, const ScRange& rClipRange )
+static bool lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector, const ScRange& rClipRange )
 {
     //  check if every range of rRangesVector is completely in rClipRange
 
@@ -1330,12 +1330,12 @@ static sal_Bool lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVec
         }
     }
 
-    return sal_True;            // everything is fine
+    return true;            // everything is fine
 }
 
-static sal_Bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const ScRange& rSourceRange, const ScAddress& rDestPos )
+static bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const ScRange& rSourceRange, const ScAddress& rDestPos )
 {
-    sal_Bool bChanged = false;
+    bool bChanged = false;
 
     ::std::vector< ScRangeList >::iterator aIt = rRangesVector.begin();
     for( ;aIt!=rRangesVector.end(); ++aIt )
@@ -1350,7 +1350,7 @@ static sal_Bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, con
                 SCsROW nDiffY = rDestPos.Row() - (SCsROW)rSourceRange.aStart.Row();
                 SCsTAB nDiffZ = rDestPos.Tab() - (SCsTAB)rSourceRange.aStart.Tab();
                 pRange->Move( nDiffX, nDiffY, nDiffZ );
-                bChanged = sal_True;
+                bChanged = true;
             }
         }
     }
@@ -1374,7 +1374,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
         return;
     }
 
-    sal_Bool bMirrorObj = ( rSourceRange.Left() < 0 && rSourceRange.Right() < 0 &&
+    bool bMirrorObj = ( rSourceRange.Left() < 0 && rSourceRange.Right() < 0 &&
                         rDestRange.Left()   > 0 && rDestRange.Right()   > 0 ) ||
                       ( rSourceRange.Left() > 0 && rSourceRange.Right() > 0 &&
                         rDestRange.Left()   < 0 && rDestRange.Right()   < 0 );
@@ -1397,13 +1397,13 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
     //  a clipboard document and its source share the same document item pool,
     //  so the pointers can be compared to see if this is copy&paste within
     //  the same document
-    sal_Bool bSameDoc = pDoc && pClipDoc && pDoc->GetPool() == pClipDoc->GetPool();
-    sal_Bool bDestClip = pDoc && pDoc->IsClipboard();
+    bool bSameDoc = pDoc && pClipDoc && pDoc->GetPool() == pClipDoc->GetPool();
+    bool bDestClip = pDoc && pDoc->IsClipboard();
 
     //#i110034# charts need correct sheet names for xml range conversion during load
     //so the target sheet name is temporarily renamed (if we have any SdrObjects)
     OUString aDestTabName;
-    sal_Bool bRestoreDestTabName = false;
+    bool bRestoreDestTabName = false;
     if( pOldObject && !bSameDoc && !bDestClip )
     {
         if( pDoc && pClipDoc )
@@ -1434,18 +1434,18 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
     Fraction aHorFract(1,1);
     Fraction aVerFract(1,1);
-    sal_Bool bResize = false;
+    bool bResize = false;
     // sizes can differ by 1 from twips->1/100mm conversion for equal cell sizes,
     // don't resize to empty size when pasting into hidden columns or rows
     if ( std::abs(nWidthDiff) > 1 && nDestWidth > 1 && nSourceWidth > 1 )
     {
         aHorFract = Fraction( nDestWidth, nSourceWidth );
-        bResize = sal_True;
+        bResize = true;
     }
     if ( std::abs(nHeightDiff) > 1 && nDestHeight > 1 && nSourceHeight > 1 )
     {
         aVerFract = Fraction( nDestHeight, nSourceHeight );
-        bResize = sal_True;
+        bResize = true;
     }
     Point aRefPos = rDestRange.TopLeft();       // for resizing (after moving)
 
@@ -1497,7 +1497,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                         pDoc->GetChartRanges( aChartName, aRangesVector, pDoc );
                         if( !aRangesVector.empty() )
                         {
-                            sal_Bool bInSourceRange = false;
+                            bool bInSourceRange = false;
                             ScRange aClipRange;
                             if ( pClipDoc )
                             {
@@ -1565,7 +1565,7 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
 
     //  don't mirror OLE or graphics, otherwise ask the object
     //  if it can be mirrored
-    sal_Bool bCanMirror = ( nIdent != OBJ_GRAF && nIdent != OBJ_OLE2 );
+    bool bCanMirror = ( nIdent != OBJ_GRAF && nIdent != OBJ_OLE2 );
     if (bCanMirror)
     {
         SdrObjTransformInfoRec aInfo;
@@ -1659,7 +1659,7 @@ OUString ScDrawLayer::GetVisibleName( SdrObject* pObj )
     return aName;
 }
 
-inline sal_Bool IsNamedObject( SdrObject* pObj, const OUString& rName )
+inline bool IsNamedObject( SdrObject* pObj, const OUString& rName )
 {
     //  sal_True if rName is the object's Name or PersistName
     //  (used to find a named object)
@@ -1959,7 +1959,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
         Size        aGraphSize;
         ImageMap&   rImageMap = (ImageMap&) pIMapInfo->GetImageMap();
         Graphic     aGraphic;
-        sal_Bool        bObjSupported = false;
+        bool        bObjSupported = false;
 
         if ( pObj->ISA( SdrGrafObj )  ) // einfaches Grafik-Objekt
         {
@@ -1988,7 +1988,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
                                                          rGraphic.GetPrefMapMode(),
                                                          aMap100 );
 
-            bObjSupported = sal_True;
+            bObjSupported = true;
         }
         else if ( pObj->ISA( SdrOle2Obj ) ) // OLE-Objekt
         {

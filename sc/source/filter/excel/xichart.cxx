@@ -1619,7 +1619,7 @@ Reference< XRegressionCurve > XclImpChSerTrendLine::CreateRegressionCurve() cons
         aPropSet.SetProperty(EXC_CHPROP_EXTRAPOLATE_FORWARD, maData.mfForecastFor);
         aPropSet.SetProperty(EXC_CHPROP_EXTRAPOLATE_BACKWARD, maData.mfForecastBack);
 
-        sal_Bool bForceIntercept = !rtl::math::isNan(maData.mfIntercept);
+        bool bForceIntercept = !rtl::math::isNan(maData.mfIntercept);
         aPropSet.SetProperty(EXC_CHPROP_FORCE_INTERCEPT, bForceIntercept);
         if (bForceIntercept)
         {

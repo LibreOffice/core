@@ -1156,8 +1156,8 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                             break;
                     }
 
-                    const sal_Bool bThousand = (sal_Bool)sFormat[0].toInt32();
-                    const sal_Bool bNegRed = (sal_Bool)sFormat[1].toInt32();
+                    const bool bThousand = (bool)sFormat[0].toInt32();
+                    const bool bNegRed = (bool)sFormat[1].toInt32();
                     const sal_uInt16 nPrecision = (sal_uInt16)sFormat[2].toInt32();
                     const sal_uInt16 nLeadZeroes = (sal_uInt16)sFormat[3].toInt32();
 
@@ -2578,7 +2578,7 @@ void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
         {
-            sal_Bool bVert = (nSlot == SID_TEXTDIRECTION_TOP_TO_BOTTOM);
+            bool bVert = (nSlot == SID_TEXTDIRECTION_TOP_TO_BOTTOM);
             ScPatternAttr aAttr( GetViewData()->GetDocument()->GetPool() );
             SfxItemSet& rItemSet = aAttr.GetItemSet();
             rItemSet.Put( SfxBoolItem( ATTR_STACKED, bVert ) );
@@ -2606,15 +2606,15 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
     ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
     const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
 
-    sal_Bool bVertDontCare =
+    bool bVertDontCare =
         (rAttrSet.GetItemState( ATTR_VERTICAL_ASIAN ) == SFX_ITEM_DONTCARE) ||
         (rAttrSet.GetItemState( ATTR_STACKED ) == SFX_ITEM_DONTCARE);
-    sal_Bool bLeftRight = !bVertDontCare &&
+    bool bLeftRight = !bVertDontCare &&
         !((const SfxBoolItem&) rAttrSet.Get( ATTR_STACKED )).GetValue();
-    sal_Bool bTopBottom = !bVertDontCare && !bLeftRight &&
+    bool bTopBottom = !bVertDontCare && !bLeftRight &&
         ((const SfxBoolItem&) rAttrSet.Get( ATTR_VERTICAL_ASIAN )).GetValue();
 
-    sal_Bool bBidiDontCare = (rAttrSet.GetItemState( ATTR_WRITINGDIR ) == SFX_ITEM_DONTCARE);
+    bool bBidiDontCare = (rAttrSet.GetItemState( ATTR_WRITINGDIR ) == SFX_ITEM_DONTCARE);
     EEHorizontalTextDirection eBidiDir = EE_HTEXTDIR_DEFAULT;
     if ( !bBidiDontCare )
     {
@@ -2630,8 +2630,8 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
     }
 
     SvtLanguageOptions  aLangOpt;
-    sal_Bool bDisableCTLFont = !aLangOpt.IsCTLFontEnabled();
-    sal_Bool bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
+    bool bDisableCTLFont = !aLangOpt.IsCTLFontEnabled();
+    bool bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
 
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -2684,7 +2684,7 @@ void ScFormatShell::ExecFormatPaintbrush( SfxRequest& rReq )
     }
     else
     {
-        sal_Bool bLock = false;
+        bool bLock = false;
         const SfxItemSet *pArgs = rReq.GetArgs();
         if( pArgs && pArgs->Count() >= 1 )
             bLock = static_cast<const SfxBoolItem&>(pArgs->Get(SID_FORMATPAINTBRUSH)).GetValue();

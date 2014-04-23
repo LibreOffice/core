@@ -78,11 +78,11 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
     sal_Int32    nCount;
     TokenId  nPush, nPush1;
 
-    sal_Bool bAddIn = false;
+    bool bAddIn = false;
 
     if( eOc == ocNoName )
     {
-        bAddIn = sal_True;
+        bAddIn = true;
         if( pExtString )
         {
             OStringBuffer s("QPRO_");

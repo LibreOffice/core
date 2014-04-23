@@ -49,7 +49,7 @@ public:
 
     ~ScAreaData() {}
 
-    void Set( const OUString& rName, const OUString& rArea, sal_Bool bDb )
+    void Set( const OUString& rName, const OUString& rArea, bool bDb )
                 {
                     aStrName  = rName;
                     aStrArea  = rArea;
@@ -58,7 +58,7 @@ public:
 
     OUString  aStrName;
     OUString  aStrArea;
-    sal_Bool  bIsDbArea;
+    bool  bIsDbArea;
 };
 
 

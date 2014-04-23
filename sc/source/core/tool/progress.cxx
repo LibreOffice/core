@@ -47,7 +47,7 @@ ScDocument*     ScProgress::pInterpretDoc;
 bool            ScProgress::bIdleWasEnabled = false;
 
 
-static sal_Bool lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
+static bool lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
 {
     if (pObjSh)
     {
@@ -58,7 +58,7 @@ static sal_Bool lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
             const SfxPoolItem* pItem;
             if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_HIDDEN, true, &pItem ) &&
                         ((const SfxBoolItem*)pItem)->GetValue() )
-                return sal_True;
+                return true;
         }
     }
     return false;

@@ -420,7 +420,7 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
     long nTotalPages    = pPreview->GetTotalPages();
     long nPageNo        = 0;
     long nPerPageLength = 0;
-    sal_Bool bIsDivide      = sal_True;
+    bool bIsDivide      = true;
 
     if( nTotalPages )
         nPerPageLength = nMaxRange / nTotalPages;
@@ -435,7 +435,7 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
         }
     }
 
-    sal_Bool bHoriz = ( pScroll == pHorScroll );
+    bool bHoriz = ( pScroll == pHorScroll );
 
     if( bHoriz )
         pPreview->SetXOffset( nPos );
@@ -464,7 +464,7 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
             }
             else if( nDelta > 0 )
             {
-                sal_Bool bAllTested = pPreview->AllTested();
+                bool bAllTested = pPreview->AllTested();
                 if ( nTotalPages && ( nPageNo < nTotalPages || !bAllTested ) )
                     pPreview->SetPageNo( nPageNo );
 
@@ -597,7 +597,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
         case SID_NEXT_TABLE: // Accelerator
         case SID_PREVIEW_NEXT:
             {
-                sal_Bool bAllTested = pPreview->AllTested();
+                bool bAllTested = pPreview->AllTested();
                 long nPage = pPreview->GetPageNo();
                 long nTotal = pPreview->GetTotalPages();
                 if (nTotal && (nPage+1 < nTotal || !bAllTested))
@@ -629,7 +629,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
         case FID_SCALE:
             {
                 sal_uInt16      nZoom       = 100;
-                sal_Bool        bCancel     = false;
+                bool        bCancel     = false;
 
                 eZoom = SVX_ZOOM_PERCENT;
 
@@ -713,7 +713,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
             break;
         case SID_PREVIEW_MARGIN:
             {
-                sal_Bool bMargin = pPreview->GetPageMargins();
+                bool bMargin = pPreview->GetPageMargins();
                 pPreview->SetPageMargins( !bMargin );
                 pPreview->Invalidate();
                 rReq.Done();
@@ -791,7 +791,7 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
     long nPage      = pPreview->GetPageNo();
     long nTotal     = pPreview->GetTotalPages();
     sal_uInt16 nZoom    = pPreview->GetZoom();
-    sal_Bool bAllTested = pPreview->AllTested();
+    bool bAllTested = pPreview->AllTested();
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -913,7 +913,7 @@ void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
         rData.aShortDocName = rData.aLongDocName = rData.aTitle;
     rData.nPageNo       = pPreview->GetPageNo() + 1;
 
-    sal_Bool bAllTested = pPreview->AllTested();
+    bool bAllTested = pPreview->AllTested();
     if (bAllTested)
         rData.nTotalPages = pPreview->GetTotalPages();
     else

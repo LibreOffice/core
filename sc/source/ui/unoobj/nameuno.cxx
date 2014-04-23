@@ -512,7 +512,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
     if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= RT_COLHEADER;
     if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= RT_ROWHEADER;
 
-    sal_Bool bDone = false;
+    bool bDone = false;
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -546,10 +546,10 @@ void SAL_CALL ScNamedRangesObj::addNewFromTitles( const table::CellRangeAddress&
     SolarMutexGuard aGuard;
     //! this cannot be an enum, because multiple bits can be set !!!
 
-    sal_Bool bTop    = ( aBorder == sheet::Border_TOP );
-    sal_Bool bLeft   = ( aBorder == sheet::Border_LEFT );
-    sal_Bool bBottom = ( aBorder == sheet::Border_BOTTOM );
-    sal_Bool bRight  = ( aBorder == sheet::Border_RIGHT );
+    bool bTop    = ( aBorder == sheet::Border_TOP );
+    bool bLeft   = ( aBorder == sheet::Border_LEFT );
+    bool bBottom = ( aBorder == sheet::Border_BOTTOM );
+    bool bRight  = ( aBorder == sheet::Border_RIGHT );
 
     ScRange aRange;
     ScUnoConversion::FillScRange( aRange, aSource );
@@ -1131,7 +1131,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
                                                 throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
+    bool bDone = false;
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -1155,7 +1155,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
                 pDoc->CompileColRowNameFormula();
                 pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
                 pDocShell->SetDocumentModified();
-                bDone = sal_True;
+                bDone = true;
 
                 //! Undo ?!?! (here and from dialog)
             }

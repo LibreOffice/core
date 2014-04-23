@@ -599,7 +599,7 @@ IMPL_LINK( ScOptSolverDlg, DelBtnHdl, PushButton*, pBtn )
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
         if( pBtn == mpDelButton[nRow] )
         {
-            sal_Bool bHadFocus = pBtn->HasFocus();
+            bool bHadFocus = pBtn->HasFocus();
 
             ReadConditions();
             long nVecPos = nScrollPos + nRow;
@@ -893,7 +893,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         }
     }
 
-    sal_Bool bMaximize = m_pRbMax->IsChecked();
+    bool bMaximize = m_pRbMax->IsChecked();
     if ( m_pRbValue->IsChecked() )
     {
         // handle "value of" with an additional constraint (and then minimize)
@@ -969,7 +969,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     }
 
     xSolver->solve();
-    sal_Bool bSuccess = xSolver->getSuccess();
+    bool bSuccess = xSolver->getSuccess();
 
     aProgress.Hide();
     bool bClose = false;

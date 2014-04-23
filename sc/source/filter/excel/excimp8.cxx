@@ -578,7 +578,7 @@ void XclImpAutoFilterData::InsertQueryParam()
     if (pCurrDBData)
     {
         ScRange aAdvRange;
-        sal_Bool    bHasAdv = pCurrDBData->GetAdvancedQuerySource( aAdvRange );
+        bool    bHasAdv = pCurrDBData->GetAdvancedQuerySource( aAdvRange );
         if( bHasAdv )
             pExcRoot->pIR->GetDoc().CreateQueryParam( aAdvRange.aStart.Col(),
                 aAdvRange.aStart.Row(), aAdvRange.aEnd.Col(), aAdvRange.aEnd.Row(),

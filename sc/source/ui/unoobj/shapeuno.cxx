@@ -72,7 +72,7 @@ const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
     return aMacroDescriptionsImpl;
 }
 // #i66550 HLINK_FOR_SHAPES
-ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( ScShapeObj* pShape, sal_Bool bCreate = false )
+ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( ScShapeObj* pShape, bool bCreate = false )
 {
         if( pShape )
             if( SdrObject* pObj = pShape->GetSdrObject() )
@@ -244,31 +244,31 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScShapeObj::getPropertySetInfo(
     return mxPropSetInfo;
 }
 
-static sal_Bool lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
+static bool lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
 {
     sal_uInt16 nCount = rModel.GetPageCount();
     for (sal_uInt16 i=0; i<nCount; i++)
         if ( rModel.GetPage(i) == pPage )
         {
             rNum = static_cast<SCTAB>(i);
-            return sal_True;
+            return true;
         }
 
     return false;
 }
 
-static sal_Bool lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt::Point& rCaptionPoint )
+static bool lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt::Point& rCaptionPoint )
 {
-    sal_Bool bReturn = false;
+    bool bReturn = false;
     OUString sType(xShape->getShapeType());
-    sal_Bool bCaptionShape( sType == "com.sun.star.drawing.CaptionShape" );
+    bool bCaptionShape( sType == "com.sun.star.drawing.CaptionShape" );
     if (bCaptionShape)
     {
         uno::Reference < beans::XPropertySet > xShapeProp (xShape, uno::UNO_QUERY);
         if (xShapeProp.is())
         {
             xShapeProp->getPropertyValue("CaptionPoint") >>= rCaptionPoint;
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
     return bReturn;
@@ -279,7 +279,7 @@ static ScRange lcl_GetAnchorCell( uno::Reference< drawing::XShape >& xShape, ScD
 {
     ScRange aReturn;
     rUnoPoint = xShape->getPosition();
-    sal_Bool bCaptionShape(lcl_GetCaptionPoint(xShape, rCaptionPoint));
+    bool bCaptionShape(lcl_GetCaptionPoint(xShape, rCaptionPoint));
     if (pDoc->IsNegativePage(nTab))
     {
         rUnoSize = xShape->getSize();
@@ -639,7 +639,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
     {
         if( SdrObject* pObj = this->GetSdrObject() )
         {
-            sal_Bool aProt = false;
+            bool aProt = false;
             if( aValue >>= aProt )
                 pObj->SetMoveProtect( aProt );
         }
@@ -822,7 +822,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_MOVEPROTECT ) )
     {
-        sal_Bool aProt = false;
+        bool aProt = false;
         if ( SdrObject* pObj = this->GetSdrObject() )
             aProt = pObj->IsMoveProtect();
         aAny <<= aProt;
@@ -1367,7 +1367,7 @@ class ShapeUnoEventAccessImpl : public ShapeUnoEventAcess_BASE
 private:
     ScShapeObj* mpShape;
 
-    ScMacroInfo* getInfo( sal_Bool bCreate = false )
+    ScMacroInfo* getInfo( bool bCreate = false )
     {
         return ScShapeObj_getShapeHyperMacroInfo( mpShape, bCreate );
     }
@@ -1403,7 +1403,7 @@ public:
                 OUString sValue;
                 if ( pProperties->Value >>= sValue )
                 {
-                    ScMacroInfo* pInfo = getInfo( sal_True );
+                    ScMacroInfo* pInfo = getInfo( true );
                     OSL_ENSURE( pInfo, "shape macro info could not be created!" );
                     if ( !pInfo )
                         break;

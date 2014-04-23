@@ -46,6 +46,9 @@ protected:
     virtual ~ScAccessibleCellBase();
 public:
 
+    virtual bool SAL_CALL isVisible()
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
     ///=====  XInterface  =====================================================
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -57,9 +60,6 @@ public:
     virtual void SAL_CALL release() throw () SAL_OVERRIDE;
 
     ///=====  XAccessibleComponent  ============================================
-
-    virtual sal_Bool SAL_CALL isVisible()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL getForeground(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

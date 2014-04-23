@@ -1717,9 +1717,9 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
     double                      fEnd(0.0);
     double                      fStep(0.0);
     sal_Int32                   nGroupPart(0);
-    sal_Bool                    bDateValue(false);
-    sal_Bool                    bAutoStart(sal_True);
-    sal_Bool                    bAutoEnd(sal_True);
+    bool                    bDateValue(false);
+    bool                    bAutoStart(true);
+    bool                    bAutoEnd(true);
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -1736,9 +1736,9 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
                 sGroupSource = sValue;
         else if (IsXMLToken(aLocalName, XML_DATE_START))
         {
-            bDateValue = sal_True;
+            bDateValue = true;
             if (IsXMLToken(sValue, XML_AUTO))
-                bAutoStart = sal_True;
+                bAutoStart = true;
             else
             {
                 GetScImport().GetMM100UnitConverter().convertDateTime(fStart, sValue);
@@ -1747,9 +1747,9 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
         }
         else if (IsXMLToken(aLocalName, XML_DATE_END))
         {
-            bDateValue = sal_True;
+            bDateValue = true;
             if (IsXMLToken(sValue, XML_AUTO))
-                bAutoEnd = sal_True;
+                bAutoEnd = true;
             else
             {
                 GetScImport().GetMM100UnitConverter().convertDateTime(fEnd, sValue);
@@ -1759,7 +1759,7 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
         else if (IsXMLToken(aLocalName, XML_START))
         {
             if (IsXMLToken(sValue, XML_AUTO))
-                bAutoStart = sal_True;
+                bAutoStart = true;
             else
             {
                 ::sax::Converter::convertDouble(fStart, sValue);
@@ -1769,7 +1769,7 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
         else if (IsXMLToken(aLocalName, XML_END))
         {
             if (IsXMLToken(sValue, XML_AUTO))
-                bAutoEnd = sal_True;
+                bAutoEnd = true;
             else
             {
                 ::sax::Converter::convertDouble(fEnd, sValue);

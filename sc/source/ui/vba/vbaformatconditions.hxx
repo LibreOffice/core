@@ -54,7 +54,7 @@ public:
     virtual css::uno::Reference< ov::excel::XFormatCondition > Add( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2, const css::uno::Reference< ov::excel::XStyle >& _xCalcStyle ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     OUString getA1Formula(const css::uno::Any& _aFormula) throw ( css::script::BasicErrorException );
     OUString getStyleName();
-    void removeFormatCondition( const OUString& _sStyleName, sal_Bool _bRemoveStyle) throw ( css::script::BasicErrorException );
+    void removeFormatCondition( const OUString& _sStyleName, bool _bRemoveStyle) throw ( css::script::BasicErrorException );
     css::uno::Reference< css::sheet::XSheetConditionalEntries > getSheetConditionalEntries() const { return mxSheetConditionalEntries; }
     // XFormatConditions
     virtual void SAL_CALL Delete(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

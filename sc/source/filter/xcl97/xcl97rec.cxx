@@ -1225,7 +1225,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
     if( !pRList )
         return;
 
-    sal_Bool    bContLoop = sal_True;
+    bool    bContLoop = true;
     SCROW   nRow;
     SCCOL   nCol;
     OUString  sText;

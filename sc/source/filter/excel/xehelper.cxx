@@ -570,7 +570,7 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
 
     // formatted cell
     ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
-    sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
+    bool bOldUpdateMode = rEE.GetUpdateMode();
     rEE.SetUpdateMode( true );
 
     // default items
@@ -595,7 +595,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
     if( const OutlinerParaObject* pParaObj = rTextObj.GetOutlinerParaObject() )
     {
         EditEngine& rEE = rRoot.GetDrawEditEngine();
-        sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
+        bool bOldUpdateMode = rEE.GetUpdateMode();
         rEE.SetUpdateMode( true );
         // create the string
         rEE.SetText( pParaObj->GetTextObject() );
@@ -623,7 +623,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
 {
     XclExpStringRef xString;
     EditEngine& rEE = rRoot.GetDrawEditEngine();
-    sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
+    bool bOldUpdateMode = rEE.GetUpdateMode();
     rEE.SetUpdateMode( true );
     rEE.SetText( rEditObj );
     xString = lclCreateFormattedString( rRoot, rEE, 0, nFlags, nMaxLen );
@@ -683,7 +683,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
     SfxItemSet aItemSet( *GetDoc().GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END );
 
     // edit engine
-    sal_Bool bOldUpdateMode = mrEE.GetUpdateMode();
+    bool bOldUpdateMode = mrEE.GetUpdateMode();
     mrEE.SetUpdateMode( true );
     mrEE.SetText( *pTextObj );
 

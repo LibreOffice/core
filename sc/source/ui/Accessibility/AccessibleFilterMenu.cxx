@@ -101,7 +101,7 @@ Reference<XAccessible> ScAccessibleFilterMenu::getAccessibleAtPoint( const ::com
     return this;
 }
 
-sal_Bool ScAccessibleFilterMenu::isVisible() throw (RuntimeException, std::exception)
+bool ScAccessibleFilterMenu::isVisible() throw (RuntimeException, std::exception)
 {
     return mpWindow->IsVisible();
 }

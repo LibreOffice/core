@@ -604,13 +604,13 @@ bool ScAccessibleCell::IsDropdown()
                 mpDoc->MarkScenario( i, nTab, aMarks, false, SC_SCENARIO_SHOWFRAME );
             ScRangeList aRanges;
             aMarks.FillRangeListWithMarks( &aRanges, false );
-            sal_Bool bHasScenario;
+            bool bHasScenario;
             SCTAB nRangeCount = aRanges.size();
             for (i=0; i<nRangeCount; i++)
             {
                 ScRange aRange = *aRanges[i];
                 mpDoc->ExtendTotalMerge( aRange );
-                sal_Bool bTextBelow = ( aRange.aStart.Row() == 0 );
+                bool bTextBelow = ( aRange.aStart.Row() == 0 );
                 // MT IA2: Not used: sal_Bool bIsInScen = sal_False;
                 if ( bTextBelow )
                 {

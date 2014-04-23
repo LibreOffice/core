@@ -129,7 +129,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         ScDocument* pDoc = pDocShell->GetDocument();
         if (pDoc)
         {
-            sal_Bool bUpdateHeights = false;
+            bool bUpdateHeights = false;
 
             ScViewOptions aViewOpt(pDoc->GetViewOptions());
 
@@ -216,7 +216,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.equalsAscii( SC_UNO_APPLYDOCINF ) )
             {
-                sal_Bool bTmp=sal_True;
+                bool bTmp=true;
                 if ( aValue >>= bTmp )
                     pDocShell->SetUseUserData( bTmp );
             }
@@ -229,35 +229,35 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 // Int16 contains CharacterCompressionType values
                 sal_Int16 nUno = ScUnoHelpFunctions::GetInt16FromAny( aValue );
                 pDoc->SetAsianCompression( (sal_uInt8) nUno );
-                bUpdateHeights = sal_True;
+                bUpdateHeights = true;
             }
             else if ( aPropertyName.equalsAscii( SC_UNO_ASIANKERN ) )
             {
                 pDoc->SetAsianKerning( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-                bUpdateHeights = sal_True;
+                bUpdateHeights = true;
             }
             else if ( aPropertyName.equalsAscii( SCSAVEVERSION ) )
             {
-                sal_Bool bTmp=false;
+                bool bTmp=false;
                 if ( aValue >>= bTmp )
                     pDocShell->SetSaveVersionOnClose( bTmp );
             }
             else if ( aPropertyName.equalsAscii( SC_UNO_UPDTEMPL ) )
             {
-                sal_Bool bTmp=sal_True;
+                bool bTmp=true;
                 if ( aValue >>= bTmp )
                     pDocShell->SetQueryLoadTemplate( bTmp );
             }
             else if ( aPropertyName.equalsAscii( SC_UNO_LOADREADONLY ) )
             {
-                sal_Bool bTmp=false;
+                bool bTmp=false;
                 if ( aValue >>= bTmp )
                     pDocShell->SetLoadReadonly( bTmp );
             }
             else if ( aPropertyName.equalsAscii( SC_UNO_SHAREDOC ) )
             {
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-                sal_Bool bDocShared = false;
+                bool bDocShared = false;
                 if ( aValue >>= bDocShared )
                 {
                     pDocShell->SetSharedXMLFlag( bDocShared );
@@ -280,7 +280,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.equalsAscii( SC_UNO_EMBED_FONTS ) )
             {
-                sal_Bool bVal = sal_False;
+                bool bVal = false;
                 if ( aValue >>=bVal )
                 {
                     pDoc->SetIsUsingEmbededFonts(bVal);

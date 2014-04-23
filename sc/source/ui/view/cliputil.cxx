@@ -45,7 +45,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
         nClipEndY = nClipEndY + nClipStartY;   // GetClipArea returns the difference
 
         ScRange aSource( nClipStartX, nClipStartY, nSourceTab, nClipEndX, nClipEndY, nSourceTab );
-        sal_Bool bDone = pTabViewShell->DataPilotMove( aSource, pViewData->GetCurPos() );
+        bool bDone = pTabViewShell->DataPilotMove( aSource, pViewData->GetCurPos() );
         if ( !bDone )
             pTabViewShell->ErrorMessage( STR_ERR_DATAPILOT_INPUT );
     }

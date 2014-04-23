@@ -39,9 +39,9 @@
 
 using namespace com::sun::star;
 
-static sal_Bool lcl_IsURLButton( SdrObject* pObject )
+static bool lcl_IsURLButton( SdrObject* pObject )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
 
     SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObject);
     if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
@@ -59,7 +59,7 @@ static sal_Bool lcl_IsURLButton( SdrObject* pObject )
                 uno::Any aAny = xPropSet->getPropertyValue( sPropButtonType );
                 form::FormButtonType eTmp;
                 if ( (aAny >>= eTmp) && eTmp == form::FormButtonType_URL )
-                    bRet = sal_True;
+                    bRet = true;
             }
          }
     }
@@ -292,7 +292,7 @@ void ScSelectionTransferObj::CreateCellData()
             // bApi = sal_True -> no error messages
             // #i18364# bStopEdit = sal_False -> don't end edit mode
             // (this may be called from pasting into the edit line)
-            sal_Bool bCopied = pViewData->GetView()->CopyToClip( pClipDoc, false, true, true, false );
+            bool bCopied = pViewData->GetView()->CopyToClip( pClipDoc, false, true, true, false );
 
             ScDrawLayer::SetGlobalDrawPersist(NULL);
 

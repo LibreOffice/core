@@ -370,7 +370,7 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, EngineSelectHdl)
 
 IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl)
 {
-    sal_Bool bCheckbox = false;
+    bool bCheckbox = false;
 
     SvTreeListEntry* pEntry = m_pLbSettings->GetCurEntry();
     if (pEntry)

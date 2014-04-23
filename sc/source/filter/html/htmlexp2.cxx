@@ -93,7 +93,7 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
                 SCCOL nCol2 = aR.aEnd.Col();
                 SCROW nRow2 = aR.aEnd.Row();
                 // All cells empty under object?
-                sal_Bool bInCell = (pDoc->GetEmptyLinesInBlock(
+                bool bInCell = (pDoc->GetEmptyLinesInBlock(
                     nCol1, nRow1, nTab, nCol2, nRow2, nTab, DIR_TOP )
                     == static_cast< SCSIZE >( nRow2 - nRow1 ));    // rows-1 !
                 if ( bInCell )
@@ -142,8 +142,8 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
             const SdrGrafObjGeoData* pGeo = (SdrGrafObjGeoData*)pSGO->GetGeoData();
             sal_uInt16 nMirrorCase = (pGeo->aGeo.nDrehWink == 18000 ?
                     ( pGeo->bMirrored ? 3 : 4 ) : ( pGeo->bMirrored ? 2 : 1 ));
-            sal_Bool bHMirr = ( ( nMirrorCase == 2 ) || ( nMirrorCase == 4 ) );
-            sal_Bool bVMirr = ( ( nMirrorCase == 3 ) || ( nMirrorCase == 4 ) );
+            bool bHMirr = ( ( nMirrorCase == 2 ) || ( nMirrorCase == 4 ) );
+            bool bVMirr = ( ( nMirrorCase == 3 ) || ( nMirrorCase == 4 ) );
             sal_uLong nXOutFlags = 0;
             if ( bHMirr )
                 nXOutFlags |= XOUTBMP_MIRROR_HORZ;

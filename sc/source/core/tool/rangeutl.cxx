@@ -357,7 +357,7 @@ sal_Int32 ScRangeStringConverter::IndexOf(
     sal_Int32       nLength     = rString.getLength();
     sal_Int32       nIndex      = nOffset;
     bool            bQuoted     = false;
-    sal_Bool        bExitLoop   = false;
+    bool        bExitLoop   = false;
 
     while( !bExitLoop && (nIndex >= 0 && nIndex < nLength) )
     {
@@ -377,7 +377,7 @@ sal_Int32 ScRangeStringConverter::IndexOfDifferent(
 {
     sal_Int32       nLength     = rString.getLength();
     sal_Int32       nIndex      = nOffset;
-    sal_Bool        bExitLoop   = false;
+    bool        bExitLoop   = false;
 
     while( !bExitLoop && (nIndex >= 0 && nIndex < nLength) )
     {

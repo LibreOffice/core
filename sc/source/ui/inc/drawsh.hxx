@@ -85,7 +85,7 @@ public:
 
     ScDrawView* GetDrawView();
 
-    sal_Bool    AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList& rMark);
+    bool    AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList& rMark);
 
     void GetDrawAttrStateForIFBX( SfxItemSet& rSet );
     ::rtl::OUString GetSidebarContextName (void);

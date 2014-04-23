@@ -1433,7 +1433,7 @@ SdrObject* XclImpTextObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const Re
     OUString aRectType = "rectangle";
     xSdrObj->MergeDefaultAttributes( &aRectType );
     ConvertRectStyle( *xSdrObj );
-    sal_Bool bAutoSize = ::get_flag( maTextData.maData.mnFlags, EXC_OBJ_TEXT_AUTOSIZE );
+    bool bAutoSize = ::get_flag( maTextData.maData.mnFlags, EXC_OBJ_TEXT_AUTOSIZE );
     xSdrObj->SetMergedItem( SdrTextAutoGrowWidthItem( bAutoSize ) );
     xSdrObj->SetMergedItem( SdrTextAutoGrowHeightItem( bAutoSize ) );
     xSdrObj->SetMergedItem( SdrTextWordWrapItem( true ) );

@@ -74,7 +74,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 OUString aName;
                 pDoc->GetName( nCurrentTab, aName );
 
-                sal_Bool bVisible=sal_True;
+                bool bVisible=true;
                 if( pReqArgs != NULL )
                 {
                     const SfxPoolItem* pItem;
@@ -135,7 +135,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     OUString aTabName;
-                    sal_Bool bFirst = sal_True;
+                    bool bFirst = true;
                     for ( SCTAB i=0; i != nTabCount; i++ )
                     {
                         if (!pDoc->IsVisible(i))
@@ -175,7 +175,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                 if ( pReqArgs != NULL )             // von Basic
                 {
-                    sal_Bool bOk = false;
+                    bool bOk = false;
                     const SfxPoolItem*  pTabItem;
                     const SfxPoolItem*  pNameItem;
                     OUString            aName;
@@ -215,7 +215,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 nTabs.push_back( static_cast<SCTAB>(n) );
                                 pStr = pDlg->GetNextTable( &n );
                             }
-                            sal_Bool bLink = pDlg->GetTablesAsLink();
+                            bool bLink = pDlg->GetTablesAsLink();
                             if (!nTabs.empty())
                             {
                                 if(pDlg->IsTableBefore())
@@ -322,7 +322,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                 if( pReqArgs != NULL )
                 {
-                    sal_Bool        bDone   = false;
+                    bool        bDone   = false;
                     const SfxPoolItem* pItem;
                     OUString      aName;
 
@@ -350,7 +350,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 else
                 {
                     sal_uInt16      nRet    = RET_OK;
-                    sal_Bool        bDone   = false;
+                    bool        bDone   = false;
                     OUString      aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
                     OUString aName;
                     OUString      aDlgTitle;
@@ -433,10 +433,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 if ( pDoc->GetChangeTrack() != NULL )
                     break;      // bei aktiviertem ChangeTracking kein TabMove
 
-                sal_Bool   bDoIt = false;
+                bool   bDoIt = false;
                 sal_uInt16 nDoc = 0;
                 SCTAB nTab = pViewData->GetTabNo();
-                sal_Bool   bCpy = false;
+                bool   bCpy = false;
                 OUString aDocName;
                 OUString aTabName;
 
@@ -488,7 +488,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     else // Kein Dokumentname -> neues Dokument
                     {
                         nDoc = SC_DOC_NEW;
-                        bDoIt = sal_True;
+                        bDoIt = true;
                     }
 
                     if ( bDoIt && nTab >= nTableCount )     // ggf. anhaengen
@@ -569,7 +569,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             {
                 //  Parameter war ueberfluessig, weil die Methode an der Table haengt
 
-                sal_Bool bDoIt = rReq.IsAPI();
+                bool bDoIt = rReq.IsAPI();
                 if( !bDoIt )
                 {
                     //  wenn's nicht von Basic kommt, nochmal nachfragen:
@@ -611,7 +611,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             {
                 ScDocShell* pDocSh = pViewData->GetDocShell();
                 ScDocFunc &rFunc = pDocSh->GetDocFunc();
-                sal_Bool bSet = !pDoc->IsLayoutRTL( nCurrentTab );
+                bool bSet = !pDoc->IsLayoutRTL( nCurrentTab );
 
                 const ScMarkData& rMark = pViewData->GetMarkData();
                 if ( rMark.GetSelectCount() != 0 )
@@ -660,7 +660,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                 if( pReqArgs != NULL )
                 {
-                    sal_Bool                bDone = false;
+                    bool                bDone = false;
                     const SfxPoolItem*  pItem;
                     Color               aColor;
                     if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
@@ -697,7 +697,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 else
                 {
                     sal_uInt16      nRet    = RET_OK; /// temp
-                    sal_Bool        bDone   = false; /// temp
+                    bool        bDone   = false; /// temp
                     Color       aTabBgColor;
 
                     aTabBgColor = pDoc->GetTabBgColor( nCurrentTab );
@@ -818,10 +818,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
             case FID_TABLE_SHOW:
                 {
-                    sal_Bool bHasHidden = false;
+                    bool bHasHidden = false;
                     for ( SCTAB i=0; i < nTabCount && !bHasHidden; i++ )
                         if (!pDoc->IsVisible(i))
-                            bHasHidden = sal_True;
+                            bHasHidden = true;
                     if ( !bHasHidden || pDoc->IsDocProtected() || nTabSelCount > 1 )
                         rSet.DisableItem( nWhich );
                 }

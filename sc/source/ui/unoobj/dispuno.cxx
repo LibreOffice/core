@@ -224,7 +224,7 @@ void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
 {
     SolarMutexGuard aGuard;
 
-    sal_Bool bDone = false;
+    bool bDone = false;
     if ( pViewShell && aURL.Complete.equalsAscii(cURLInsertColumns) )
     {
         ScViewData* pViewData = pViewShell->GetViewData();

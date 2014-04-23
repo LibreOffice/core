@@ -198,12 +198,12 @@ awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
     return AWTSize(GetBoundingBox().GetSize());
 }
 
-sal_Bool SAL_CALL ScAccessibleContextBase::isShowing(  )
+bool SAL_CALL ScAccessibleContextBase::isShowing(  )
         throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    sal_Bool bShowing(false);
+    bool bShowing(false);
     if (mxParent.is())
     {
         uno::Reference<XAccessibleComponent> xParentComponent (mxParent->getAccessibleContext(), uno::UNO_QUERY);
@@ -217,10 +217,10 @@ sal_Bool SAL_CALL ScAccessibleContextBase::isShowing(  )
     return bShowing;
 }
 
-sal_Bool SAL_CALL ScAccessibleContextBase::isVisible()
+bool SAL_CALL ScAccessibleContextBase::isVisible()
     throw (uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL ScAccessibleContextBase::grabFocus(  )

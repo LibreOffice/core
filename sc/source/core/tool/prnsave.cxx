@@ -54,7 +54,7 @@ void ScPrintSaverTab::SetRepeat( const ScRange* pCol, const ScRange* pRow )
     mpRepeatRow = pRow ? new ScRange(*pRow) : NULL;
 }
 
-inline sal_Bool PtrEqual( const ScRange* p1, const ScRange* p2 )
+inline bool PtrEqual( const ScRange* p1, const ScRange* p2 )
 {
     return ( !p1 && !p2 ) || ( p1 && p2 && *p1 == *p2 );
 }

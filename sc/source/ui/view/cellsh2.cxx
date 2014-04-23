@@ -106,14 +106,14 @@ static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange 
     return bRet;
 }
 
-static sal_Bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
+static bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
 {
     ScTabViewShell* pTabViewShell   = pData->GetViewShell();
     ScDBData*   pDBData             = pTabViewShell->GetDBData();
     ScDocument* pDoc                = pData->GetDocument();
     SCTAB nTab                      = pData->GetTabNo();
     ScDirection eFillDir            = DIR_TOP;
-    sal_Bool  bSort                     = sal_True;
+    bool  bSort                     = true;
     ScRange aExternalRange;
 
     if( rSortParam.nCol1 != rSortParam.nCol2 )
@@ -213,14 +213,14 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 //  check if database beamer is open
 
                 SfxViewFrame* pViewFrame = pTabViewShell->GetViewFrame();
-                sal_Bool bWasOpen = false;
+                bool bWasOpen = false;
                 {
                     uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
                     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
                                                         OUString("_beamer"),
                                                         frame::FrameSearchFlag::CHILDREN);
                     if ( xBeamerFrame.is() )
-                        bWasOpen = sal_True;
+                        bWasOpen = true;
                 }
 
                 if ( bWasOpen )
@@ -250,7 +250,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
         case SID_REIMPORT_DATA:
             {
-                sal_Bool bOk = false;
+                bool bOk = false;
                 ScDBData* pDBData = pTabViewShell->GetDBData(true,SC_DB_OLD);
                 if (pDBData)
                 {
@@ -260,7 +260,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     {
                         pTabViewShell->ImportData( aImportParam );
                         pDBData->SetImportParam( aImportParam );    //! Undo ??
-                        bOk = sal_True;
+                        bOk = true;
                     }
                 }
 
@@ -279,7 +279,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     //  repeat import like SID_REIMPORT_DATA
 
-                    sal_Bool bContinue = sal_True;
+                    bool bContinue = true;
                     ScImportParam aImportParam;
                     pDBData->GetImportParam( aImportParam );
                     if (aImportParam.bImport && !pDBData->HasImportSelection())
@@ -356,7 +356,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScDocument* pDoc    = GetViewData()->GetDocument();
 
                     pDBData->GetSortParam( aSortParam );
-                    sal_Bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, nTab );
+                    bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, nTab );
 
                     if( nCol < aSortParam.nCol1 )
                         nCol = aSortParam.nCol1;
@@ -405,7 +405,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         ScDocument* pDoc = GetViewData()->GetDocument();
 
                         pDBData->GetSortParam( aSortParam );
-                        sal_Bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
+                        bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
                         if( bHasHeader )
                             aSortParam.bHasHeader = bHasHeader;
 
@@ -472,7 +472,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         SfxItemSet  aArgSet( GetPool(), SCITEM_SORTDATA, SCITEM_SORTDATA );
 
                         pDBData->GetSortParam( aSortParam );
-                        sal_Bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
+                        bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
                         if( bHasHeader )
                             aSortParam.bHasHeader = bHasHeader;
 
@@ -792,11 +792,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScValidationMode eMode = SC_VALID_ANY;
                     ScConditionMode eOper = SC_COND_EQUAL;
                     OUString aExpr1, aExpr2;
-                    sal_Bool bBlank = sal_True;
+                    bool bBlank = true;
                     sal_Int16 nListType = ValidListType::UNSORTED;
-                    sal_Bool bShowHelp = false;
+                    bool bShowHelp = false;
                     OUString aHelpTitle, aHelpText;
-                    sal_Bool bShowError = false;
+                    bool bShowError = false;
                     ScValidErrorStyle eErrStyle = SC_VALERR_STOP;
                     OUString aErrTitle, aErrText;
 
@@ -1004,8 +1004,8 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
     SCROW       nPosY       = pData->GetCurY();
     SCTAB       nTab        = pData->GetTabNo();
 
-    sal_Bool bAutoFilter = false;
-    sal_Bool bAutoFilterTested = false;
+    bool bAutoFilter = false;
+    bool bAutoFilterTested = false;
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -1017,7 +1017,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 {
                     //  imported data without selection
                     //  or filter,sort,subtotal (also without import)
-                    sal_Bool bOk = false;
+                    bool bOk = false;
                     ScDBData* pDBData = pTabViewShell->GetDBData(false,SC_DB_OLD);
                     if (pDBData && pDoc->GetChangeTrack() == NULL)
                     {
@@ -1090,7 +1090,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 {
                     //  SBA wants a sal_Bool-item, enabled
 
-                    sal_Bool bEnable = sal_True;
+                    bool bEnable = true;
                     rSet.Put(SfxBoolItem(nWhich, bEnable));
                 }
                 break;
@@ -1101,7 +1101,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     if (!bAutoFilterTested)
                     {
                         bAutoFilter = pDoc->HasAutoFilter( nPosX, nPosY, nTab );
-                        bAutoFilterTested = sal_True;
+                        bAutoFilterTested = true;
                     }
                     if ( nWhich == SID_AUTO_FILTER )
                     {
@@ -1129,9 +1129,9 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     SCCOL nStartCol, nEndCol;
                     SCROW  nStartRow, nEndRow;
                     SCTAB  nStartTab, nEndTab;
-                    sal_Bool bAnyQuery = false;
+                    bool bAnyQuery = false;
 
-                    sal_Bool bSelected = (GetViewData()->GetSimpleArea(
+                    bool bSelected = (GetViewData()->GetSimpleArea(
                                 nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab )
                             == SC_MARK_SIMPLE);
 
@@ -1156,7 +1156,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                         ScQueryParam aParam;
                         pDBData->GetQueryParam( aParam );
                         if ( aParam.GetEntry(0).bDoQuery )
-                            bAnyQuery = sal_True;
+                            bAnyQuery = true;
                     }
 
                     if ( !bAnyQuery )

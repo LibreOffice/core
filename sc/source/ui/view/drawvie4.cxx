@@ -469,7 +469,7 @@ void ScDrawView::SetMarkedOriginalSize()
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         sal_uInt16 nIdent = pObj->GetObjIdentifier();
-        sal_Bool bDo = false;
+        bool bDo = false;
         Size aOriginalSize;
         if (nIdent == OBJ_OLE2)
         {
@@ -483,7 +483,7 @@ void ScDrawView::SetMarkedOriginalSize()
                 {
                     MapMode aMapMode( MAP_100TH_MM );
                     aOriginalSize = ((SdrOle2Obj*)pObj)->GetOrigObjSize( &aMapMode );
-                    bDo = sal_True;
+                    bDo = true;
                 }
                 else
                 {
@@ -495,7 +495,7 @@ void ScDrawView::SetMarkedOriginalSize()
                         aOriginalSize = OutputDevice::LogicToLogic(
                                             Size( aSz.Width, aSz.Height ),
                                             aUnit, MAP_100TH_MM );
-                        bDo = sal_True;
+                        bDo = true;
                     } catch( embed::NoVisualAreaSizeException& )
                     {
                         OSL_ENSURE( false, "Can't get the original size of the object!" );
@@ -525,7 +525,7 @@ void ScDrawView::SetMarkedOriginalSize()
                 {
                     aOriginalSize = pActWin->LogicToLogic(
                                     rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
-                    bDo = sal_True;
+                    bDo = true;
                 }
             }
         }

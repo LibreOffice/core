@@ -118,7 +118,7 @@ void ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
 
 bool ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
 {
-    sal_Bool                bAttrsChanged   = false;
+    bool                bAttrsChanged   = false;
     sal_uInt16              nWhich          = GetWhich( SID_SCATTR_PROTECTION );
     const SfxPoolItem*  pOldItem        = GetOldItem( rCoreAttrs, SID_SCATTR_PROTECTION );
     const SfxItemSet&   rOldSet         = GetItemSet();
@@ -133,7 +133,7 @@ bool ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
         aProtAttr.SetHidePrint( bHidePrint );
 
         if ( bTriEnabled )
-            bAttrsChanged = sal_True;                   // DontCare -> properly value
+            bAttrsChanged = true;                   // DontCare -> properly value
         else
             bAttrsChanged = !pOldItem || !( aProtAttr == *(const ScProtectionAttr*)pOldItem );
     }
@@ -162,7 +162,7 @@ IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
     else
     {
         bDontCare = false;                          // DontCare from everywhere
-        sal_Bool bOn = ( eState == TRISTATE_TRUE );       // from a selected value
+        bool bOn = ( eState == TRISTATE_TRUE );       // from a selected value
 
         if ( pBox == m_pBtnProtect )
             bProtect = bOn;
@@ -200,7 +200,7 @@ void ScTabPageProtection::UpdateButtons()
         m_pBtnHidePrint->SetState( bHidePrint ? TRISTATE_TRUE : TRISTATE_FALSE );
     }
 
-    sal_Bool bEnable = ( m_pBtnHideCell->GetState() != TRISTATE_TRUE );
+    bool bEnable = ( m_pBtnHideCell->GetState() != TRISTATE_TRUE );
     {
         m_pBtnProtect->Enable( bEnable );
         m_pBtnHideFormula->Enable( bEnable );

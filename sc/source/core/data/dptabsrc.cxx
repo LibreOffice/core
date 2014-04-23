@@ -85,14 +85,14 @@ SC_SIMPLE_SERVICE_INFO( ScDPMember,      "ScDPMember",      "com.sun.star.sheet.
 //  DataDescription / NumberFormat are internal
 
 //! move to a header?
-static sal_Bool lcl_GetBoolFromAny( const uno::Any& aAny )
+static bool lcl_GetBoolFromAny( const uno::Any& aAny )
 {
     if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
         return *(sal_Bool*)aAny.getValue();
     return false;
 }
 
-static void lcl_SetBoolInAny( uno::Any& rAny, sal_Bool bValue )
+static void lcl_SetBoolInAny( uno::Any& rAny, bool bValue )
 {
     rAny.setValue( &bValue, getBooleanCppuType() );
 }
@@ -571,7 +571,7 @@ static long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vecto
 
     long nTotal = 1;
     long nDataCount = 1;
-    sal_Bool bWasShowAll = sal_True;
+    bool bWasShowAll = true;
     long nPos = nLevels;
     while ( nPos > 0 )
     {
@@ -583,7 +583,7 @@ static long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vecto
             return 0;
         }
 
-        sal_Bool bDo = false;
+        bool bDo = false;
         if ( ppDim[nPos]->getIsDataLayoutDimension() )
         {
             //  data layout dim doesn't interfere with "show all" flags
@@ -593,7 +593,7 @@ static long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vecto
         }
         else if ( bWasShowAll )     // "show all" set for all following levels?
         {
-            bDo = sal_True;
+            bDo = true;
             if ( !ppLevel[nPos]->getShowEmpty() )
             {
                 //  this level is counted, following ones are not
@@ -1565,7 +1565,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
         aValue >>= aReferenceValue;
     else if ( aPropertyName.equalsAscii( SC_UNO_DP_FILTER ) )
     {
-        sal_Bool bDone = false;
+        bool bDone = false;
         uno::Sequence<sheet::TableFilterField> aSeq;
         if (aValue >>= aSeq)
         {
@@ -1574,7 +1574,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
             {
                 aSelectedPage = "";
                 bHasSelectedPage = false;
-                bDone = sal_True;
+                bDone = true;
             }
             else if ( nLength == 1 )
             {
@@ -1583,7 +1583,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
                 {
                     aSelectedPage = rField.StringValue;
                     bHasSelectedPage = true;
-                    bDone = sal_True;
+                    bDone = true;
                 }
             }
         }
@@ -1608,7 +1608,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
     }
     else if (aPropertyName.equalsAscii(SC_UNO_DP_HAS_HIDDEN_MEMBER))
     {
-        sal_Bool b = false;
+        bool b = false;
         aValue >>= b;
         mbHasHiddenMember = b;
     }
@@ -1697,7 +1697,7 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
     else if (aPropertyName.equalsAscii(SC_UNO_DP_FIELD_SUBTOTALNAME))
         aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString("");
     else if (aPropertyName.equalsAscii(SC_UNO_DP_HAS_HIDDEN_MEMBER))
-        aRet <<= static_cast<sal_Bool>(mbHasHiddenMember);
+        aRet <<= mbHasHiddenMember;
     else if (aPropertyName.equalsAscii(SC_UNO_DP_FLAGS))
     {
         sal_Int32 nFlags = 0;       // tabular data: all orientations are possible
@@ -1998,19 +1998,19 @@ ScDPLevel* ScDPLevels::getByIndex(long nIndex) const
 class ScDPGlobalMembersOrder
 {
     ScDPLevel&  rLevel;
-    sal_Bool        bAscending;
+    bool        bAscending;
 
 public:
-            ScDPGlobalMembersOrder( ScDPLevel& rLev, sal_Bool bAsc ) :
+            ScDPGlobalMembersOrder( ScDPLevel& rLev, bool bAsc ) :
                 rLevel(rLev),
                 bAscending(bAsc)
             {}
             ~ScDPGlobalMembersOrder() {}
 
-    sal_Bool operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const;
+    bool operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const;
 };
 
-sal_Bool ScDPGlobalMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const
+bool ScDPGlobalMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const
 {
     sal_Int32 nCompare = 0;
     // seems that some ::std::sort() implementations pass the same index twice
@@ -2080,7 +2080,7 @@ void ScDPLevel::EvaluateSortOrder()
                     aGlobalOrder[nPos] = nPos;
 
                 // allow manual or name (manual is always ascending)
-                sal_Bool bAscending = ( aSortInfo.Mode == sheet::DataPilotFieldSortMode::MANUAL || aSortInfo.IsAscending );
+                bool bAscending = ( aSortInfo.Mode == sheet::DataPilotFieldSortMode::MANUAL || aSortInfo.IsAscending );
                 ScDPGlobalMembersOrder aComp( *this, bAscending );
                 ::std::sort( aGlobalOrder.begin(), aGlobalOrder.end(), aComp );
             }

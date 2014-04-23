@@ -1714,7 +1714,7 @@ void SAL_CALL ScDatabaseRangeObj::setName( const OUString& aNewName )
     {
         ScDBDocFunc aFunc(*pDocShell);
         OUString aNewStr(aNewName);
-        sal_Bool bOk = aFunc.RenameDBRange( aName, aNewStr );
+        bool bOk = aFunc.RenameDBRange( aName, aNewStr );
         if (bOk)
             aName = aNewStr;
     }
@@ -1920,7 +1920,7 @@ void SAL_CALL ScDatabaseRangeObj::refresh() throw(uno::RuntimeException, std::ex
         ScDBDocFunc aFunc(*pDocShell);
 
         // Import zu wiederholen?
-        sal_Bool bContinue = sal_True;
+        bool bContinue = true;
         ScImportParam aImportParam;
         pData->GetImportParam( aImportParam );
         if (aImportParam.bImport && !pData->HasImportSelection())
@@ -2022,7 +2022,7 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
     if ( pDocShell && pData )
     {
         ScDBData aNewData( *pData );
-        sal_Bool bDo = sal_True;
+        bool bDo = true;
 
         OUString aString(aPropertyName);
         if ( aString.equalsAscii( SC_UNONAME_KEEPFORM ) )
@@ -2033,7 +2033,7 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
             aNewData.SetStripData( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else if (aString.equalsAscii( SC_UNONAME_AUTOFLT ))
         {
-            sal_Bool bAutoFilter(ScUnoHelpFunctions::GetBoolFromAny( aValue ));
+            bool bAutoFilter(ScUnoHelpFunctions::GetBoolFromAny( aValue ));
             aNewData.SetAutoFilter(bAutoFilter);
             ScRange aRange;
             aNewData.GetArea(aRange);
@@ -2135,14 +2135,14 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
             aRet <<= OUString( aName );
         else if (aString.equalsAscii( SC_UNONAME_AUTOFLT ))
         {
-            sal_Bool bAutoFilter(GetDBData_Impl()->HasAutoFilter());
+            bool bAutoFilter(GetDBData_Impl()->HasAutoFilter());
 
             ScUnoHelpFunctions::SetBoolInAny( aRet, bAutoFilter );
         }
         else if (aString.equalsAscii( SC_UNONAME_USEFLTCRT ))
         {
             ScRange aRange;
-            sal_Bool bIsAdvancedSource(GetDBData_Impl()->GetAdvancedQuerySource(aRange));
+            bool bIsAdvancedSource(GetDBData_Impl()->GetAdvancedQuerySource(aRange));
 
             ScUnoHelpFunctions::SetBoolInAny( aRet, bIsAdvancedSource );
         }
@@ -2259,7 +2259,7 @@ void SAL_CALL ScDatabaseRangesObj::addNewByName( const OUString& aName,
                                         throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
+    bool bDone = false;
     if (pDocShell)
     {
         ScDBDocFunc aFunc(*pDocShell);
@@ -2277,7 +2277,7 @@ void SAL_CALL ScDatabaseRangesObj::removeByName( const OUString& aName )
                                         throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
+    bool bDone = false;
     if (pDocShell)
     {
         ScDBDocFunc aFunc(*pDocShell);

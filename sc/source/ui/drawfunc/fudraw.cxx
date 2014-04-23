@@ -77,8 +77,8 @@ void FuDraw::DoModifiers(const MouseEvent& rMEvt)
     //  Control = Snap (Toggle)
     //  Alt     = zentrisch
 
-    sal_Bool bShift = rMEvt.IsShift();
-    sal_Bool bAlt   = rMEvt.IsMod2();
+    bool bShift = rMEvt.IsShift();
+    bool bAlt   = rMEvt.IsMod2();
 
     bool bOrtho     = bShift;
     bool bAngleSnap = bShift;
@@ -180,16 +180,16 @@ bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-static sal_Bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const KeyEvent* pInitialKey )
+static bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const KeyEvent* pInitialKey )
 {
-    sal_Bool bReturn = false;
+    bool bReturn = false;
     if ( pObj && pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
     {
         // start text edit - like FuSelection::MouseButtonUp,
         // but with bCursorToEnd instead of mouse position
 
         OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
-        sal_Bool bVertical = ( pOPO && pOPO->IsVertical() );
+        bool bVertical = ( pOPO && pOPO->IsVertical() );
         sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
         // don't switch shells if text shell is already active
@@ -208,7 +208,7 @@ static sal_Bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, co
             pText->SetInEditMode( pObj, NULL, true, pInitialKey );
             //! set cursor to end of text
         }
-        bReturn = sal_True;
+        bReturn = true;
     }
     return bReturn;
 }
@@ -264,7 +264,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
-                    sal_Bool bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
+                    bool bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if( pObj && pObj->ISA( SdrOle2Obj ) && !bOle )
                     {
@@ -333,7 +333,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 {
                     // II do something with a selected handle?
                     const SdrHdlList& rHdlList = pView->GetHdlList();
-                    sal_Bool bForward(!rKEvt.GetKeyCode().IsShift());
+                    bool bForward(!rKEvt.GetKeyCode().IsShift());
 
                     ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
 
@@ -454,7 +454,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     nY = 0;
                 }
 
-                sal_Bool bReadOnly = rViewData.GetDocShell()->IsReadOnly();
+                bool bReadOnly = rViewData.GetDocShell()->IsReadOnly();
 
                 if(!rKEvt.GetKeyCode().IsMod1() && !bReadOnly)
                 {
@@ -546,7 +546,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                                 if(pView->IsDragObj())
                                 {
                                     bool bWasNoSnap = rDragStat.IsNoSnap();
-                                    sal_Bool bWasSnapEnabled = pView->IsSnapEnabled();
+                                    bool bWasSnapEnabled = pView->IsSnapEnabled();
 
                                     // switch snapping off
                                     if(!bWasNoSnap)
@@ -701,7 +701,7 @@ void FuDraw::Deactivate()
 |*
 \************************************************************************/
 
-static sal_Bool lcl_UrlHit( SdrView* pView, const Point& rPosPixel, Window* pWindow )
+static bool lcl_UrlHit( SdrView* pView, const Point& rPosPixel, Window* pWindow )
 {
     SdrViewEvent aVEvt;
     MouseEvent aMEvt( rPosPixel, 1, 0, MOUSE_LEFT );
@@ -711,10 +711,10 @@ static sal_Bool lcl_UrlHit( SdrView* pView, const Point& rPosPixel, Window* pWin
     {
         if ( ScDrawLayer::GetIMapInfo( aVEvt.pObj ) && ScDrawLayer::GetHitIMapObject(
                                 aVEvt.pObj, pWindow->PixelToLogic(rPosPixel), *pWindow ) )
-            return sal_True;
+            return true;
 
         if ( aVEvt.eEvent == SDREVENT_EXECUTEURL )
-            return sal_True;
+            return true;
     }
 
     return false;
@@ -725,7 +725,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     if ( !pView->IsAction() )
     {
         Point aPosPixel = pWindow->GetPointerPosPixel();
-        sal_Bool bAlt       = pMEvt && pMEvt->IsMod2();
+        bool bAlt       = pMEvt && pMEvt->IsMod2();
         Point aPnt      = pWindow->PixelToLogic( aPosPixel );
         SdrHdl* pHdl    = pView->PickHandle(aPnt);
         SdrObject* pObj;
