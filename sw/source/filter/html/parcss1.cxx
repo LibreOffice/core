@@ -1114,7 +1114,13 @@ CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
 }
 
 CSS1Parser::CSS1Parser()
-    : nValue(0)
+    : bWhiteSpace(false)
+    , bEOF(false)
+    , cNextCh(0)
+    , nInPos(0)
+    , nlLineNr(0)
+    , nlLinePos(0)
+    , nValue(0)
     , eState(CSS1_PAR_ACCEPTED)
     , nToken(CSS1_NULL)
 {
