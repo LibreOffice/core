@@ -137,7 +137,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     throw ( RuntimeException, std::exception )
 {
 
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     Any invokeResult;
     bool bCaughtException = false;
     Any aException;
@@ -196,14 +196,14 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             if ( bIsDocumentScript )
                 pUndoGuard.reset( new ::framework::DocumentUndoGuard( m_xScriptInvocation ) );
 
-            bSuccess = sal_False;
+            bSuccess = false;
             while ( !bSuccess )
             {
                 Any aFirstCaughtException;
                 try
                 {
                     invokeResult = xFunc->invoke( inArgs, outIndex, outArgs );
-                    bSuccess = sal_True;
+                    bSuccess = true;
                 }
                 catch( const provider::ScriptFrameworkErrorException& se )
                 {

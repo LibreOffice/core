@@ -115,7 +115,7 @@ namespace basprov
     {
         SolarMutexGuard aGuard;
 
-        sal_Bool bReturn = sal_False;
+        bool bReturn = false;
         if ( m_xLibrary.is() )
             bReturn = m_xLibrary->hasElements();
 

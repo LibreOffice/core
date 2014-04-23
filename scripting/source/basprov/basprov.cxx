@@ -490,7 +490,7 @@ namespace basprov
     {
         SolarMutexGuard aGuard;
 
-        sal_Bool bReturn = sal_False;
+        bool bReturn = false;
         Reference< script::XLibraryContainer > xLibContainer;
         if ( m_bIsAppScriptCtx )
         {

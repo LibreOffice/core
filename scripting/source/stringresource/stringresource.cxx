@@ -215,7 +215,7 @@ OUString StringResourceImpl::resolveStringForLocale( const OUString& ResourceID,
     return implResolveString( ResourceID, pLocaleItem );
 }
 
-sal_Bool StringResourceImpl::implHasEntryForId( const OUString& ResourceID, LocaleItem* pLocaleItem )
+bool StringResourceImpl::implHasEntryForId( const OUString& ResourceID, LocaleItem* pLocaleItem )
 {
     bool bSuccess = false;
     if( pLocaleItem != NULL && loadLocale( pLocaleItem ) )
@@ -341,7 +341,7 @@ sal_Bool StringResourceImpl::isReadOnly()
 }
 
 void StringResourceImpl::implSetCurrentLocale( const Locale& locale,
-    sal_Bool FindClosestMatch, sal_Bool bUseDefaultIfNoMatch )
+    bool FindClosestMatch, bool bUseDefaultIfNoMatch )
         throw (IllegalArgumentException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -368,7 +368,7 @@ void StringResourceImpl::implSetCurrentLocale( const Locale& locale,
 void StringResourceImpl::setCurrentLocale( const Locale& locale, sal_Bool FindClosestMatch )
     throw (IllegalArgumentException, RuntimeException, std::exception)
 {
-    sal_Bool bUseDefaultIfNoMatch = false;
+    bool bUseDefaultIfNoMatch = false;
     implSetCurrentLocale( locale, FindClosestMatch, bUseDefaultIfNoMatch );
 }
 
@@ -559,7 +559,7 @@ void StringResourceImpl::removeLocale( const Locale& locale )
                 }
                 if( m_pCurrentLocaleItem == pRemoveItem )
                 {
-                    sal_Bool FindClosestMatch = false;
+                    bool FindClosestMatch = false;
                     setCurrentLocale( pFallbackItem->m_locale, FindClosestMatch );
                 }
                 if( m_pDefaultLocaleItem == pRemoveItem )
@@ -642,7 +642,7 @@ sal_Int32 StringResourceImpl::getUniqueNumericId(  )
 // Private helper methods
 
 LocaleItem* StringResourceImpl::getItemForLocale
-    ( const Locale& locale, sal_Bool bException )
+    ( const Locale& locale, bool bException )
         throw (::com::sun::star::lang::IllegalArgumentException)
 {
     LocaleItem* pRetItem = NULL;
@@ -839,8 +839,8 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
 
     implScanLocales();
 
-    sal_Bool FindClosestMatch = true;
-    sal_Bool bUseDefaultIfNoMatch = true;
+    bool FindClosestMatch = true;
+    bool bUseDefaultIfNoMatch = true;
     implSetCurrentLocale( aCurrentLocale, FindClosestMatch, bUseDefaultIfNoMatch );
 }
 

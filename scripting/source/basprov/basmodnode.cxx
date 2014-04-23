@@ -116,12 +116,12 @@ namespace basprov
     {
         SolarMutexGuard aGuard;
 
-        sal_Bool bReturn = sal_False;
+        bool bReturn = false;
         if ( m_pModule )
         {
             SbxArray* pMethods = m_pModule->GetMethods();
             if ( pMethods && pMethods->Count() > 0 )
-                bReturn = sal_True;
+                bReturn = true;
         }
 
         return bReturn;

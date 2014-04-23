@@ -312,9 +312,9 @@ namespace basprov
 
     sal_Bool BasicMethodNodeImpl::hasMethod( const OUString& aName ) throw (RuntimeException, std::exception)
     {
-        sal_Bool bReturn = sal_False;
+        bool bReturn = false;
         if ( aName == BASPROV_PROPERTY_EDITABLE )
-            bReturn = sal_True;
+            bReturn = true;
 
         return bReturn;
     }

@@ -334,9 +334,9 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
             if( xCurrentController.is() )
             {
                 utl::MediaDescriptor aMD( model->getArgs() );
-                sal_Bool bDefault = false;
-                sal_Bool bHidden  = aMD.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_HIDDEN(),  bDefault );
-                sal_Bool bPreview = aMD.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_PREVIEW(), bDefault );
+                bool bDefault = false;
+                bool bHidden  = aMD.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_HIDDEN(),  bDefault );
+                bool bPreview = aMD.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_PREVIEW(), bDefault );
                 if( !bHidden && !bPreview )
                 {
                     Reference< document::XEmbeddedScripts > xScripts( model, UNO_QUERY );
@@ -587,10 +587,10 @@ public:
     hasChildNodes()
         throw ( RuntimeException, std::exception ) SAL_OVERRIDE
     {
-        sal_Bool result = sal_True;
+        bool result = true;
         if ( !m_vNodes.size() )
         {
-            result = sal_False;
+            result = false;
         }
         return result;
     }

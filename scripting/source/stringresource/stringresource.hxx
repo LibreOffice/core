@@ -63,7 +63,7 @@ struct hashName_Impl
 
 struct eqName_Impl
 {
-    sal_Bool operator()(const OUString& Str1, const OUString& Str2) const
+    bool operator()(const OUString& Str1, const OUString& Str2) const
     {
         return ( Str1 == Str2 );
     }
@@ -148,14 +148,14 @@ protected:
 
     // Returns the LocalItem for a given locale, if it exists, otherwise NULL
     // This method compares the locales exactly, no closest match search is performed
-    LocaleItem* getItemForLocale( const ::com::sun::star::lang::Locale& locale, sal_Bool bException )
+    LocaleItem* getItemForLocale( const ::com::sun::star::lang::Locale& locale, bool bException )
         throw (::com::sun::star::lang::IllegalArgumentException);
 
     // Returns the LocalItem for a given locale, if it exists, otherwise NULL
     // This method performes a closest match search, at least the language must match
     LocaleItem* getClosestMatchItemForLocale( const ::com::sun::star::lang::Locale& locale );
     void implSetCurrentLocale( const ::com::sun::star::lang::Locale& locale,
-        sal_Bool FindClosestMatch, sal_Bool bUseDefaultIfNoMatch )
+        bool FindClosestMatch, bool bUseDefaultIfNoMatch )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     void implModified( void );
@@ -164,7 +164,7 @@ protected:
     //=== Impl methods for ...ForLocale methods ===
     OUString SAL_CALL implResolveString( const OUString& ResourceID, LocaleItem* pLocaleItem )
         throw (::com::sun::star::resource::MissingResourceException);
-    sal_Bool implHasEntryForId( const OUString& ResourceID, LocaleItem* pLocaleItem );
+    bool implHasEntryForId( const OUString& ResourceID, LocaleItem* pLocaleItem );
     ::com::sun::star::uno::Sequence< OUString > implGetResourceIDs( LocaleItem* pLocaleItem );
     void implSetString( const OUString& ResourceID,
         const OUString& Str, LocaleItem* pLocaleItem );

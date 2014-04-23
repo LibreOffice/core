@@ -673,7 +673,7 @@ MasterScriptProvider::getByName( const OUString& aName ) throw ( container::NoSu
 sal_Bool SAL_CALL
 MasterScriptProvider::hasByName( const OUString& aName ) throw (RuntimeException, std::exception)
 {
-    sal_Bool result = sal_False;
+    bool result = false;
     if ( !m_bIsPkgMSP )
     {
         if ( m_xMSPPkg.is() )
@@ -728,7 +728,7 @@ MasterScriptProvider::hasByName( const OUString& aName ) throw (RuntimeException
             try
             {
                 result = xCont->hasByName( aName );
-                if ( result == sal_True )
+                if ( result )
                 {
                     break;
                 }
