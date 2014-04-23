@@ -42,6 +42,7 @@ SaneDlg::SaneDlg( Window* pParent, Sane& rSane, bool bScanEnabled ) :
         mbIsDragging( sal_False ),
         mbScanEnabled( bScanEnabled ),
         mbDragDrawn( sal_False ),
+        meDragDirection( TopLeft ),
         maMapMode( MAP_APPFONT ),
         maOKButton( this, SaneResId( RID_SCAN_OK ) ),
         maCancelButton( this, SaneResId( RID_SCAN_CANCEL ) ),
@@ -76,8 +77,12 @@ SaneDlg::SaneDlg( Window* pParent, Sane& rSane, bool bScanEnabled ) :
         maStringEdit( this, SaneResId( RID_SCAN_STRING_OPTION_EDT ) ),
         maNumericEdit( this, SaneResId( RID_SCAN_NUMERIC_OPTION_EDT ) ),
         maOptionBox( this, SaneResId( RID_SCAN_OPTION_BOX ) ),
-        mpRange( 0 ),
-        doScan( false )
+        mnCurrentOption(0),
+        mnCurrentElement(0),
+        mpRange(0),
+        mfMin(0.0),
+        mfMax(0.0),
+        doScan(false)
 {
     if( Sane::IsSane() )
     {
