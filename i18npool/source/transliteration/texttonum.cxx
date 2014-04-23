@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define TRANSLITERATION_ALL
-#include <texttonum.hxx>
 #include <data/numberchar.h>
 #include <rtl/ustrbuf.hxx>
+
+#include <texttonum.hxx>
 
 using namespace com::sun::star::uno;
 
@@ -48,6 +47,7 @@ TRANSLITERATION_TEXTTONUM( InformalUpper_ko)
 TRANSLITERATION_TEXTTONUM( InformalHangul_ko)
 TRANSLITERATION_TEXTTONUM( KanjiLongTraditional_ja_JP)
 TRANSLITERATION_TEXTTONUM( KanjiLongModern_ja_JP)
+
 #undef TRANSLITERATION_TEXTTONUM
 
 } } } }

@@ -80,47 +80,19 @@ public:\
         ignore##name ();\
 };
 
-#if defined( TRANSLITERATION_BaFa_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(BaFa_ja_JP)
-#endif
-#if defined( TRANSLITERATION_HyuByu_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(HyuByu_ja_JP)
-#endif
-#if defined( TRANSLITERATION_SeZe_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(SeZe_ja_JP)
-#endif
-#if defined( TRANSLITERATION_TiJi_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(TiJi_ja_JP)
-#endif
-#if defined( TRANSLITERATION_MiddleDot_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(MiddleDot_ja_JP)
-#endif
-#if defined( TRANSLITERATION_MinusSign_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(MinusSign_ja_JP)
-#endif
-#if defined( TRANSLITERATION_Separator_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(Separator_ja_JP)
-#endif
-#if defined( TRANSLITERATION_Space_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(Space_ja_JP)
-#endif
-#if defined( TRANSLITERATION_TraditionalKana_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(TraditionalKana_ja_JP)
-#endif
-#if defined( TRANSLITERATION_TraditionalKanji_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(TraditionalKanji_ja_JP)
-#endif
-#if defined( TRANSLITERATION_ZiZu_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(ZiZu_ja_JP)
-#endif
-
-#if defined( TRANSLITERATION_Diacritics_CTL ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(Diacritics_CTL)
-#endif
-
-#if defined( TRANSLITERATION_Kashida_CTL ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(Kashida_CTL)
-#endif
 
 #undef TRANSLITERATION_IGNORE
 
@@ -138,18 +110,11 @@ public:\
                 com::sun::star::uno::Sequence< sal_Int32 >& offset) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
 };
 
-#if defined( TRANSLITERATION_KiKuFollowedBySa_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(KiKuFollowedBySa_ja_JP)
-#endif
-#if defined( TRANSLITERATION_IandEfollowedByYa_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(IandEfollowedByYa_ja_JP)
-#endif
-#if defined( TRANSLITERATION_IterationMark_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(IterationMark_ja_JP)
-#endif
-#if defined( TRANSLITERATION_ProlongedSoundMark_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(ProlongedSoundMark_ja_JP)
-#endif
+
 #undef TRANSLITERATION_IGNORE
 
 #define TRANSLITERATION_IGNORE( name ) \
@@ -173,15 +138,10 @@ public:\
             com::sun::star::i18n::MultipleCharsOutputException, std::exception) SAL_OVERRIDE;\
 };
 
-#if defined( TRANSLITERATION_Kana ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(Kana)
-#endif
-#if defined( TRANSLITERATION_Width ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(Width)
-#endif
-#if defined( TRANSLITERATION_Size_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_IGNORE(Size_ja_JP)
-#endif
+
 #undef TRANSLITERATION_IGNORE
 
 } } } }

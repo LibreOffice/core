@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define BREAKITERATOR_ALL
 #include <breakiterator_cjk.hxx>
 #include <localedata.hxx>
 #include <i18nutil/unicode.hxx>

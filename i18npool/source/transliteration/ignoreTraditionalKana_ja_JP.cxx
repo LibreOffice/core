@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// prevent internal compiler error with MSVC6SP3
-#include <utility>
-
-#define TRANSLITERATION_TraditionalKana_ja_JP
 #include <transliteration_Ignore.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {

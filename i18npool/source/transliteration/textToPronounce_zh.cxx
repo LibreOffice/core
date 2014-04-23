@@ -17,17 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// prevent internal compiler error with MSVC6SP3
-#include <utility>
-
-#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#define TRANSLITERATION_ALL
+
 #include <textToPronounce_zh.hxx>
 
 using namespace com::sun::star::uno;
-
 
 namespace com { namespace sun { namespace star { namespace i18n {
 

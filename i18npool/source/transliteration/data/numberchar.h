@@ -19,6 +19,8 @@
 #ifndef _L10N_TRANSLITERATION_NUMTOCHAR_H_
 #define _L10N_TRANSLITERATION_NUMTOCHAR_H_
 
+#include <sal/types.h>
+
 namespace com { namespace sun { namespace star { namespace i18n {
 
 static const sal_Int16 NumberChar_HalfWidth     = 0;

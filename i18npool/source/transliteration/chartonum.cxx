@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/ustrbuf.hxx>
 
-#define TRANSLITERATION_ALL
 #include <chartonum.hxx>
 #include <data/numberchar.h>
-#include <rtl/ustrbuf.hxx>
 
 using namespace com::sun::star::uno;
 
@@ -34,6 +33,7 @@ CharToNum##name::CharToNum##name() \
         tableSize = 0; \
         implementationName = "com.sun.star.i18n.Transliteration.CharToNum"#name; \
 }
+
 TRANSLITERATION_CHARTONUM( Fullwidth)
 TRANSLITERATION_CHARTONUM( Lower_zh_CN)
 TRANSLITERATION_CHARTONUM( Lower_zh_TW)
@@ -48,6 +48,7 @@ TRANSLITERATION_CHARTONUM( Indic_ar)
 TRANSLITERATION_CHARTONUM( EastIndic_ar)
 TRANSLITERATION_CHARTONUM( Indic_hi)
 TRANSLITERATION_CHARTONUM( _th)
+
 #undef TRANSLITERATION_CHARTONUM
 
 } } } }

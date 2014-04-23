@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#define TRANSLITERATION_Diacritics_CTL
 #include <transliteration_Ignore.hxx>
 #include <unicode/uchar.h>
 

@@ -17,16 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// prevent internal compiler error with MSVC6SP3
-#include <utility>
-
-#define TRANSLITERATION_ALL
-#include <numtochar.hxx>
 #include <com/sun/star/i18n/NativeNumberMode.hpp>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+#include <numtochar.hxx>
 
+namespace com { namespace sun { namespace star { namespace i18n {
 
 #define TRANSLITERATION_NUMTOCHAR( name, number ) \
 NumToChar##name::NumToChar##name() \
@@ -54,6 +49,7 @@ TRANSLITERATION_NUMTOCHAR( Indic_ar, NATNUM1 )
 TRANSLITERATION_NUMTOCHAR( EastIndic_ar, NATNUM1 )
 TRANSLITERATION_NUMTOCHAR( Indic_hi, NATNUM1 )
 TRANSLITERATION_NUMTOCHAR( _th, NATNUM1 )
+
 #undef TRANSLITERATION_NUMTOCHAR
 
 } } } }

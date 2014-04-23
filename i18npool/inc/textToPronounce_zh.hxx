@@ -68,10 +68,9 @@ public: \
         name (); \
 };
 
-#ifdef TRANSLITERATION_ALL
 TRANSLITERATION_TextToPronounce_zh( TextToPinyin_zh_CN)
 TRANSLITERATION_TextToPronounce_zh( TextToChuyin_zh_TW)
-#endif
+
 #undef TRANSLITERATION_TextToPronounce_zh
 
 } } } }

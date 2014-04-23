@@ -73,24 +73,13 @@ public: \
         com::sun::star::i18n::MultipleCharsOutputException, std::exception) SAL_OVERRIDE; \
 };
 
-#if defined( TRANSLITERATION_fullwidthToHalfwidth ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_ONETOONE( fullwidthToHalfwidth )
-#endif
-#if defined( TRANSLITERATION_halfwidthToFullwidth ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_ONETOONE(halfwidthToFullwidth)
-#endif
-#if defined( TRANSLITERATION_fullwidthKatakanaToHalfwidthKatakana ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_ONETOONE( fullwidthKatakanaToHalfwidthKatakana )
-#endif
-#if defined( TRANSLITERATION_halfwidthKatakanaToFullwidthKatakana ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_ONETOONE(halfwidthKatakanaToFullwidthKatakana)
-#endif
-#if defined( TRANSLITERATION_fullwidthToHalfwidthLikeASC ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_ONETOONE( fullwidthToHalfwidthLikeASC )
-#endif
-#if defined( TRANSLITERATION_halfwidthToFullwidthLikeJIS ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_ONETOONE( halfwidthToFullwidthLikeJIS )
-#endif
+
 #undef TRANSLITERATION_ONETOONE
 
 #define TRANSLITERATION_ONETOONE( name ) \
@@ -100,18 +89,11 @@ public: \
     name (); \
 };
 
-#if defined( TRANSLITERATION_hiraganaToKatakana ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_ONETOONE(hiraganaToKatakana)
-#endif
-#if defined( TRANSLITERATION_katakanaToHiragana ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_ONETOONE(katakanaToHiragana)
-#endif
-#if defined( TRANSLITERATION_largeToSmall_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_ONETOONE(largeToSmall_ja_JP)
-#endif
-#if defined( TRANSLITERATION_smallToLarge_ja_JP ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_ONETOONE(smallToLarge_ja_JP)
-#endif
+
 #undef TRANSLITERATION_ONETOONE
 
 } } } }

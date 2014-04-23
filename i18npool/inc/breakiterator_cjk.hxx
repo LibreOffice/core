@@ -57,12 +57,11 @@ public:\
     virtual ~BreakIterator_##lang (); \
 };
 
-#ifdef BREAKITERATOR_ALL
 BREAKITERATOR_CJK( zh )
 BREAKITERATOR_CJK( zh_TW )
 BREAKITERATOR_CJK( ja )
 BREAKITERATOR_CJK( ko )
-#endif
+
 #undef BREAKITERATOR__CJK
 
 } } } }

@@ -17,19 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// prevent internal compiler error with MSVC6SP3
-#include <utility>
-
-#define TRANSLITERATION_Size_ja_JP
 #include <transliteration_Ignore.hxx>
-#define TRANSLITERATION_smallToLarge_ja_JP
-#define TRANSLITERATION_largeToSmall_ja_JP
 #include <transliteration_OneToOne.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-
 
 namespace com { namespace sun { namespace star { namespace i18n {
 

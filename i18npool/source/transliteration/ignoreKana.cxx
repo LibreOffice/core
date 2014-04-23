@@ -17,21 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// prevent internal compiler error with MSVC6SP3
-#include <utility>
-
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#define TRANSLITERATION_Kana
 #include <transliteration_Ignore.hxx>
-#define TRANSLITERATION_hiraganaToKatakana
-#define TRANSLITERATION_katakanaToHiragana
 #include <transliteration_OneToOne.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-
 
 namespace com { namespace sun { namespace star { namespace i18n {
 

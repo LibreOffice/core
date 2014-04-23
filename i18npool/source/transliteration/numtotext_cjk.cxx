@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/i18n/NativeNumberMode.hpp>
 
-#define TRANSLITERATION_ALL
 #include <numtotext_cjk.hxx>
 #include <bullet.h>
-#include <com/sun/star/i18n/NativeNumberMode.hpp>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -54,6 +53,7 @@ TRANSLITERATION_NUMTOTEXT( KanjiLongModern_ja_JP, NATNUM4)
 TRANSLITERATION_NUMTOTEXT( Date_zh, NATNUM7)
 TRANSLITERATION_NUMTOTEXT( KanjiShortTraditional_ja_JP, NATNUM8)
 TRANSLITERATION_NUMTOTEXT( KanjiShortModern_ja_JP, NATNUM7)
+
 #undef TRANSLITERATION_NUMTOTEXT
 
 #define TRANSLITERATION_NUMTOTEXT( name, _table, recycle ) \
@@ -77,6 +77,7 @@ TRANSLITERATION_NUMTOTEXT ( HangulJamo_ko, table_HangulJamo_ko, sal_True)
 TRANSLITERATION_NUMTOTEXT ( HangulSyllable_ko, table_HangulSyllable_ko, sal_True)
 TRANSLITERATION_NUMTOTEXT ( HangulCircledJamo_ko, table_HangulCircledJamo_ko, sal_True)
 TRANSLITERATION_NUMTOTEXT ( HangulCircledSyllable_ko, table_HangulCircledSyllable_ko, sal_True)
+
 #undef TRANSLITERATION_NUMTOTEXT
 
 } } } }

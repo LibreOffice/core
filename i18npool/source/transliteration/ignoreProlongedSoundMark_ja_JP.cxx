@@ -17,15 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <utility>
-#include <comphelper/string.hxx>
-#define TRANSLITERATION_ProlongedSoundMark_ja_JP
 #include <transliteration_Ignore.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-
 
 namespace com { namespace sun { namespace star { namespace i18n {
 

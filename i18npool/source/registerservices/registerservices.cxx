@@ -28,7 +28,6 @@
 
 #include <servicename.hxx>
 
-#define TRANSLITERATION_ALL
 #include <transliteration_body.hxx>
 #include <transliteration_OneToOne.hxx>
 #include <textToPronounce_zh.hxx>
@@ -42,7 +41,6 @@
 #include <calendar_hijri.hxx>
 #include <calendar_jewish.hxx>
 
-#define BREAKITERATOR_ALL
 #include <breakiterator_cjk.hxx>
 #include <breakiterator_th.hxx>
 

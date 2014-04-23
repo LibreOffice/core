@@ -59,7 +59,6 @@ protected:
     sal_uInt8 nMappingType;
 };
 
-#if defined( TRANSLITERATION_UPPER_LOWER ) || defined( TRANSLITERATION_ALL )
 class Transliteration_u2l : public Transliteration_body
 {
 public:
@@ -71,19 +70,14 @@ class Transliteration_l2u : public Transliteration_body
 public:
     Transliteration_l2u();
 };
-#endif
 
-#if defined( TRANSLITERATION_casemapping ) || defined( TRANSLITERATION_ALL )
 class Transliteration_casemapping : public Transliteration_body
 {
 public:
     Transliteration_casemapping();
     void SAL_CALL setMappingType(const sal_uInt8 rMappingType, const com::sun::star::lang::Locale& rLocale );
 };
-#endif
 
-
-#if defined( TRANSLITERATION_ALL )
 class Transliteration_togglecase : public Transliteration_body
 {
 public:
@@ -105,7 +99,6 @@ public:
 
     virtual OUString SAL_CALL transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-#endif
 
 } } } }
 

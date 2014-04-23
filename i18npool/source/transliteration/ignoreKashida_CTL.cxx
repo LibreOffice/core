@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#define TRANSLITERATION_Kashida_CTL
 #include <transliteration_Ignore.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {

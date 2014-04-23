@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// prevent internal compiler error with MSVC6SP3
-#include <utility>
-
-#define TRANSLITERATION_hiraganaToKatakana
 #include <transliteration_OneToOne.hxx>
 
 using namespace com::sun::star::uno;

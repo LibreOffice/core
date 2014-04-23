@@ -30,7 +30,6 @@
 #include "characterclassificationImpl.hxx"
 #include "breakiteratorImpl.hxx"
 
-#define TRANSLITERATION_ALL
 #include "transliteration_body.hxx"
 #include <boost/scoped_array.hpp>
 
