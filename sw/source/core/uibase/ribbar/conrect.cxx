@@ -38,10 +38,11 @@
 
 ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
                                 SwView* pSwView )
-    : SwDrawBase( pWrtShell, pEditWin, pSwView ),
-    bMarquee(false),
+    : SwDrawBase( pWrtShell, pEditWin, pSwView )
+    , bMarquee(false)
+    , bCapVertical(false)
     // #93382#
-    mbVertical(false)
+    , mbVertical(false)
 {
 }
 
