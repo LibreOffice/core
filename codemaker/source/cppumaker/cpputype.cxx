@@ -2901,7 +2901,7 @@ void ExceptionType::dumpComprehensiveGetCppuType(FileStream & out) {
     out << indent() << "::css::uno::Type * operator()() const\n"
         << indent() << "{\n";
     inc();
-    out << indent() << "::rtl::OUString sTypeName( \"" << name_ << "\" );\n\n"
+    out << indent() << "const char * pTypeName( \"" << name_ << "\" );\n\n"
         << indent() << "// Start inline typedescription generation\n"
         << indent() << "typelib_TypeDescription * pTD = 0;\n";
     OUString base(entity_->getDirectBase());
@@ -2942,10 +2942,10 @@ void ExceptionType::dumpComprehensiveGetCppuType(FileStream & out) {
             ++n;
         }
     }
-    out << "\n" << indent() << "typelib_typedescription_new(\n";
+    out << "\n" << indent() << "typelib_typedescription_newFromChar(\n";
     inc();
     out << indent() << "&pTD,\n" << indent() << "(typelib_TypeClass)"
-        << getTypeClass(name_) << ", sTypeName.pData,\n" << indent()
+        << getTypeClass(name_) << ", pTypeName,\n" << indent()
         << (base.isEmpty() ? "0" : "rSuperType.getTypeLibType()") << ",\n"
         << indent() << entity_->getDirectMembers().size() << ",\n" << indent()
         << (entity_->getDirectMembers().empty() ? "0" : "aMembers")
@@ -2957,7 +2957,7 @@ void ExceptionType::dumpComprehensiveGetCppuType(FileStream & out) {
         << indent() << "typelib_typedescription_release( pTD );\n" << indent()
         << "// End inline typedescription generation\n\n" << indent()
         << "return new ::css::uno::Type( " << getTypeClass(name_)
-        << ", sTypeName ); // leaked\n";
+        << ", pTypeName ); // leaked\n";
     dec();
     out << indent() << "}\n";
     dec();

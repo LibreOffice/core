@@ -861,6 +861,20 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_new(
         ppRet, eTypeClass, pTypeName, pType, nMembers, pMembers, 0);
 }
 
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newFromChar(
+    typelib_TypeDescription ** ppRet,
+    typelib_TypeClass eTypeClass,
+    const char * pTypeName,
+    typelib_TypeDescriptionReference * pType,
+    sal_Int32 nMembers,
+    typelib_CompoundMember_Init * pMembers )
+    SAL_THROW_EXTERN_C()
+{
+    OUString sTypeName = OUString::createFromAscii(pTypeName);
+    newTypeDescription(
+        ppRet, eTypeClass, sTypeName.pData, pType, nMembers, pMembers, 0);
+}
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newStruct(
     typelib_TypeDescription ** ppRet,
     rtl_uString * pTypeName,

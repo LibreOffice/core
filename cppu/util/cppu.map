@@ -20,6 +20,7 @@ UDK_3_0_0 {
         _ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions
 
         typelib_typedescription_new;
+        typelib_typedescription_newFromChar;
         typelib_typedescription_newInterface;
         typelib_typedescription_newInterfaceMethod;
         typelib_typedescription_newInterfaceAttribute;

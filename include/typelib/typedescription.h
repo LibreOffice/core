@@ -523,6 +523,16 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_new(
     typelib_CompoundMember_Init * pMembers )
     SAL_THROW_EXTERN_C();
 
+/// Same as typelib_typedescription_new(), but takes a char, not an rtl_uString pointer.
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newFromChar(
+    typelib_TypeDescription ** ppRet,
+    typelib_TypeClass eTypeClass,
+    const char * pTypeName,
+    typelib_TypeDescriptionReference * pType,
+    sal_Int32 nMembers,
+    typelib_CompoundMember_Init * pMembers )
+    SAL_THROW_EXTERN_C();
+
 /** Creates a new struct type description.
 
     @param ppRet inout type description
