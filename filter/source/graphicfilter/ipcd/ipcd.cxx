@@ -79,10 +79,19 @@ private:
 public:
 
     PCDReader(SvStream &rStream)
-        : m_rPCD(rStream)
+        : bStatus(false)
+        , nLastPercent(0)
+        , m_rPCD(rStream)
+        , mpAcc(NULL)
+        , nOrientation(0)
+        , eResolution(PCDRES_BASE16)
+        , nWidth(0)
+        , nHeight(0)
+        , nImagePos(0)
+        , nBMPWidth(0)
+        , nBMPHeight(0)
     {
     }
-    ~PCDReader() {}
 
     bool ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem );
 };
