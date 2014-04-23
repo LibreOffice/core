@@ -10,7 +10,7 @@
 $(eval $(call gb_PythonTest_PythonTest,pyuno_pytests_ssl))
 
 $(eval $(call gb_PythonTest_add_modules,pyuno_pytests_ssl,$(SRCDIR)/pyuno/qa/pytests,\
-    ssl \
+    testssl \
 ))
 
 # vim: set noet sw=4 ts=4:
