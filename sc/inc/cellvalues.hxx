@@ -13,12 +13,10 @@
 #include <address.hxx>
 
 class ScColumn;
-struct ScRefCellValue;
 
 namespace sc {
 
 struct CellValuesImpl;
-struct CellTextAttr;
 
 /**
  * Think of this as a mini-ScColumn like storage that only stores cell
