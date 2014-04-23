@@ -59,8 +59,8 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <string.h>
-#include <stdlib.h>
 #ifdef WNT
+#include <stdlib.h>
 #include <ctype.h>
 #endif
 
@@ -1031,29 +1031,6 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
 
     // spawn separate process to keep LGPL/GPL code apart.
 
-    rtl_uString** ppEnv = NULL;
-    sal_uInt32 nEnv = 0;
-
-    #if defined UNX && ! defined MACOSX
-    OUString aStr( "$URE_LIB_DIR"  );
-    rtl_bootstrap_expandMacros( &aStr.pData );
-    OUString aSysPath;
-    osl_getSystemPathFromFileURL( aStr.pData, &aSysPath.pData );
-    OUStringBuffer aEnvBuf( aStr.getLength() + 20 );
-    aEnvBuf.appendAscii( "LD_LIBRARY_PATH=" );
-    aEnvBuf.append( aSysPath );
-    char const * path = getenv("LD_LIBRARY_PATH");
-    if (path != 0 && path[0] != 0)
-    {
-        aEnvBuf.append(':');
-        aEnvBuf.append(
-            OUString(path, strlen(path), RTL_TEXTENCODING_ISO_8859_1));
-    }
-    aStr = aEnvBuf.makeStringAndClear();
-    ppEnv = &aStr.pData;
-    nEnv = 1;
-    #endif
-
     rtl_uString*  args[] = { aSysUPath.pData, errPathname.pData };
     sal_Int32 nArgs = 2;
 
@@ -1068,7 +1045,7 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
                                             nArgs,
                                             osl_Process_SEARCHPATH|osl_Process_HIDDEN,
                                             pSecurity,
-                                            0, ppEnv, nEnv,
+                                            0, 0, 0,
                                             &aProcess, &pIn, &pOut, &pErr);
     osl_freeSecurityHandle(pSecurity);
 
