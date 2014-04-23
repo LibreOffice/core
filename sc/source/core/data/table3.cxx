@@ -935,40 +935,6 @@ void ScTable::SwapCol(SCCOL nCol1, SCCOL nCol2)
     }
 }
 
-void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
-{
-    SCCOL nColStart = aSortParam.nCol1;
-    SCCOL nColEnd = aSortParam.nCol2;
-    for (SCCOL nCol = nColStart; nCol <= nColEnd; nCol++)
-    {
-        aCol[nCol].SwapRow(nRow1, nRow2);
-        if (aSortParam.bIncludePattern)
-        {
-            const ScPatternAttr* pPat1 = GetPattern(nCol, nRow1);
-            const ScPatternAttr* pPat2 = GetPattern(nCol, nRow2);
-            if (pPat1 != pPat2)
-            {
-                pDocument->GetPool()->Put(*pPat1);
-                SetPattern(nCol, nRow1, *pPat2, true);
-                SetPattern(nCol, nRow2, *pPat1, true);
-                pDocument->GetPool()->Remove(*pPat1);
-            }
-        }
-    }
-    if (bGlobalKeepQuery)
-    {
-        bool bRow1Hidden = RowHidden(nRow1);
-        bool bRow2Hidden = RowHidden(nRow2);
-        SetRowHidden(nRow1, nRow1, bRow2Hidden);
-        SetRowHidden(nRow2, nRow2, bRow1Hidden);
-
-        bool bRow1Filtered = RowFiltered(nRow1);
-        bool bRow2Filtered = RowFiltered(nRow2);
-        SetRowFiltered(nRow1, nRow1, bRow2Filtered);
-        SetRowFiltered(nRow2, nRow2, bRow1Filtered);
-    }
-}
-
 short ScTable::Compare(SCCOLROW nIndex1, SCCOLROW nIndex2) const
 {
     short nRes;

@@ -186,7 +186,6 @@ public:
 
     void        Delete( SCROW nRow );
     void        FreeAll();
-    void        SwapRow( SCROW nRow1, SCROW nRow2 );
     void        SwapCell( SCROW nRow, ScColumn& rCol);
 
     bool        HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const;
