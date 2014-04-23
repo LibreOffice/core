@@ -31,7 +31,9 @@ class SotStorage;
 class EQNOLEFILEHDR
 {
 public:
-    EQNOLEFILEHDR() {}
+    EQNOLEFILEHDR() : nCBHdr(0),nVersion(0),
+        nCf(0),nCBObject(0),nReserved1(0),nReserved2(0),
+        nReserved3(0), nReserved4(0) {}
     EQNOLEFILEHDR(sal_uInt32 nLenMTEF) : nCBHdr(0x1c),nVersion(0x20000),
         nCf(0xc1c6),nCBObject(nLenMTEF),nReserved1(0),nReserved2(0x0014F690),
         nReserved3(0x0014EBB4), nReserved4(0) {}
