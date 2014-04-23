@@ -647,5 +647,30 @@ size_t ScOrcusStyles::commit_cell_style()
     return 0;
 }
 
+// auto filter import
+
+ScOrcusAutoFilter::~ScOrcusAutoFilter()
+{
+}
+
+void ScOrcusAutoFilter::set_range(const char* p_ref, size_t n_ref)
+{
+}
+
+void ScOrcusAutoFilter::set_column(orcus::spreadsheet::col_t /*col*/)
+{
+}
+
+void ScOrcusAutoFilter::append_column_match_value(const char* p, size_t n)
+{
+}
+
+void ScOrcusAutoFilter::commit_column()
+{
+}
+
+void ScOrcusAutoFilter::commit()
+{
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

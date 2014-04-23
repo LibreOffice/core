@@ -71,12 +71,33 @@ public:
     virtual size_t commit_segments() SAL_OVERRIDE;
 };
 
+class ScOrcusAutoFilter : public orcus::spreadsheet::iface::import_auto_filter
+{
+public:
+
+    virtual ~ScOrcusAutoFilter();
+
+    virtual void set_range(const char* p_ref, size_t n_ref);
+
+    virtual void set_column(orcus::spreadsheet::col_t col);
+
+    virtual void append_column_match_value(const char* p, size_t n);
+
+    virtual void commit_column();
+
+    virtual void commit();
+
+private:
+
+};
+
 class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
 {
     ScDocumentImport& mrDoc;
     SCTAB mnTab;
     ScOrcusFactory& mrFactory;
     sc::SharedFormulaGroups maFormulaGroups;
+    ScOrcusAutoFilter maAutoFilter;
 
     typedef std::map<size_t, ScRangeData*> SharedFormulaContainer;
     SharedFormulaContainer maSharedFormulas;
@@ -87,6 +108,8 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
 
 public:
     ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& rFactory);
+
+    virtual orcus::spreadsheet::iface::import_auto_filter* get_auto_filter() { return &maAutoFilter; }
 
     // Orcus import interface
     virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n) SAL_OVERRIDE;
