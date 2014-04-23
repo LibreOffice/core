@@ -192,7 +192,7 @@ void ScOrcusFactory::setStatusIndicator(const uno::Reference<task::XStatusIndica
 }
 
 ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& rFactory) :
-    mrDoc(rDoc), mnTab(nTab), mrFactory(rFactory), mnCellCount(0) {}
+    mrDoc(rDoc), mnTab(nTab), mrFactory(rFactory), maAutoFilter(rDoc.getDoc()), mnCellCount(0) {}
 
 void ScOrcusSheet::cellInserted()
 {
@@ -647,5 +647,36 @@ size_t ScOrcusStyles::commit_cell_style()
     return 0;
 }
 
+// auto filter import
+
+ScOrcusAutoFilter::ScOrcusAutoFilter(ScDocument& rDoc):
+    mrDoc(rDoc)
+{
+    (void)mrDoc;
+}
+
+ScOrcusAutoFilter::~ScOrcusAutoFilter()
+{
+}
+
+void ScOrcusAutoFilter::set_range(const char* /*p_ref*/, size_t /*n_ref*/)
+{
+}
+
+void ScOrcusAutoFilter::set_column(orcus::spreadsheet::col_t /*col*/)
+{
+}
+
+void ScOrcusAutoFilter::append_column_match_value(const char* /*p*/, size_t /*n*/)
+{
+}
+
+void ScOrcusAutoFilter::commit_column()
+{
+}
+
+void ScOrcusAutoFilter::commit()
+{
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
