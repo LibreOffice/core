@@ -4306,8 +4306,9 @@ PPTStyleSheet::~PPTStyleSheet()
     }
 }
 
-PPTParaPropSet::PPTParaPropSet() :
-    pParaSet( new ImplPPTParaPropSet )
+PPTParaPropSet::PPTParaPropSet()
+    : mnOriginalTextPos(0)
+    , pParaSet( new ImplPPTParaPropSet )
 {
     pParaSet->mnHasAnm = 1;
 }
