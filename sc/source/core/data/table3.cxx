@@ -370,6 +370,10 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2, b
         for (SCCOL nCol = aSortParam.nCol1; nCol <= aSortParam.nCol2; ++nCol)
         {
             ScColumn& rCol = aCol[nCol];
+
+            // Skip reordering of cell formats if the whole span is on the same pattern entry.
+            bool bUniformPattern = rCol.GetPatternCount(nInd1, nInd2) < 2u;
+
             sc::ColumnBlockConstPosition aBlockPos;
             rCol.InitBlockPosition(aBlockPos);
             for (SCROW nRow = nInd1; nRow <= nInd2; ++nRow)
@@ -382,7 +386,7 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2, b
                 rCell.mpBroadcaster = rCol.GetBroadcaster(aBlockPos, nRow);
                 rCell.mpNote = rCol.GetCellNote(aBlockPos, nRow);
 
-                if (aSortParam.bIncludePattern)
+                if (!bUniformPattern && aSortParam.bIncludePattern)
                     rCell.mpPattern = rCol.GetPattern(nRow);
             }
         }
