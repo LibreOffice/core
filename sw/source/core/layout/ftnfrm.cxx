@@ -2782,7 +2782,7 @@ SwSaveFtnHeight::SwSaveFtnHeight( SwFtnBossFrm *pBs, const SwTwips nDeadLine ) :
 
 SwSaveFtnHeight::~SwSaveFtnHeight()
 {
-    // If somebody tweaked the dealine meanwhile, we let it happen
+    // If somebody tweaked the deadline meanwhile, we let it happen
     if ( nNewHeight == pBoss->GetMaxFtnHeight() )
         pBoss->nMaxFtnHeight = nOldHeight;
 }
