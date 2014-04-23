@@ -76,11 +76,11 @@ enough if you want to test a paragraph or character property.
 Figuring out the UNO API just by reading the idl files under `offapi/` is not
 that productive. Xray can help in this case. Download it from:
 
-http://dev-www.libreoffice.org/extern/XrayTool52_en.sxw
+http://bernard.marcelly.perso.sfr.fr/index2.html
 
-It's an SXW file, start Writer, Tools -> Options -> LibreOffice -> Security,
-Macro Security, and there choose Low. Then open the SXW, and click `Install
-Xray`. Now you can close the SXW. Open your testcase, which is imported
+It's a document file, start Writer, Tools -> Options -> LibreOffice -> Security,
+Macro Security, and there choose Low. Then open the document, and click `Install
+Xray`. Now you can close the file. Open your testcase, which is imported
 correctly (from a fixed bugs's point of view). Then open the basic editor
 (Tools -> Macros -> LibreOffice Basic -> Organize Macros, Edit), and start to
 write your testcase as `Sub Main`. You don't have to know much about basic, for
