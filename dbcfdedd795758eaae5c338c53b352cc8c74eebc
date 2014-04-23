@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_cb0209b4",
+        "filename": "oox/source/drawingml/shapegroupcontext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-23T07:49:45Z",
+      "side": 1,
+      "message": "Be careful here, you should set the \"false\" only for wsp, not for sp, which is the generic drawingML shapes also used for Calc/Impress import.",
+      "revId": "dbcfdedd795758eaae5c338c53b352cc8c74eebc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
