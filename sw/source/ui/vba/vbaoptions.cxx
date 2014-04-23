@@ -39,7 +39,8 @@ SwVbaOptions::~SwVbaOptions()
 }
 
 uno::Any SAL_CALL
-SwVbaOptions::DefaultFilePath( sal_Int32 _path ) throw ( uno::RuntimeException, std::exception )
+SwVbaOptions::DefaultFilePath( sal_Int32 _path )
+    throw (css::script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     switch( _path )
     {

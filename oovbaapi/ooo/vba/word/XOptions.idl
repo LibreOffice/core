@@ -42,7 +42,7 @@ interface XOptions
     [attribute] boolean AutoFormatApplyLists;
     [attribute] boolean AutoFormatApplyBulletedLists;
 
-    any DefaultFilePath( [in] long Path );
+    any DefaultFilePath( [in] long Path ) raises (com::sun::star::script::BasicErrorException);
 };
 
 }; }; };

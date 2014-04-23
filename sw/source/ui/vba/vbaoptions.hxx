@@ -65,7 +65,8 @@ public:
     virtual void SAL_CALL setAutoFormatApplyBulletedLists( sal_Bool _autoformatapplybulletedlists ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods
-    virtual css::uno::Any SAL_CALL DefaultFilePath( sal_Int32 _path ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL DefaultFilePath( sal_Int32 _path )
+        throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //PropListener
     virtual void setValueEvent( const css::uno::Any& value ) SAL_OVERRIDE;
