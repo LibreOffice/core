@@ -107,26 +107,19 @@ shell::UnqPathData& shell::UnqPathData::operator=( UnqPathData& a )
 
 shell::UnqPathData::~UnqPathData()
 {
-    if( properties )
-        delete properties;
-    if( notifier )
-        delete notifier;
+    delete properties;
+    delete notifier;
 }
-
-
-
-
-
-
-
-
 
 shell::MyProperty::MyProperty( const OUString&                         __PropertyName )
     : PropertyName( __PropertyName )
+    , Handle(-1)
+    , isNative(false)
+    , State(beans::PropertyState_AMBIGUOUS_VALUE)
+    , Attributes(0)
 {
     // empty
 }
-
 
 shell::MyProperty::MyProperty( const sal_Bool&                              __isNative,
                                const OUString&                         __PropertyName,
