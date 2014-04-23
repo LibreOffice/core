@@ -36,7 +36,7 @@ interface XDocument : com::sun::star::script::XInvocation
     [attribute] long HyphenationZone;
     [attribute] long ConsecutiveHyphensLimit;
 
-    XRange Range( [in] any Start, [in] any End );
+    XRange Range( [in] any Start, [in] any End ) raises (com::sun::star::script::BasicErrorException);
     any BuiltInDocumentProperties( [in] any Index );
     any CustomDocumentProperties( [in] any Index );
     any Bookmarks( [in] any Index );

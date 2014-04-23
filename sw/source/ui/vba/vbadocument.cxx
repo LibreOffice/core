@@ -81,7 +81,8 @@ SwVbaDocument::getContent() throw ( uno::RuntimeException, std::exception )
 }
 
 uno::Reference< word::XRange > SAL_CALL
-SwVbaDocument::Range( const uno::Any& rStart, const uno::Any& rEnd ) throw ( uno::RuntimeException, std::exception )
+SwVbaDocument::Range( const uno::Any& rStart, const uno::Any& rEnd )
+    throw (css::script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     if( !rStart.hasValue() && !rEnd.hasValue() )
         return getContent();
