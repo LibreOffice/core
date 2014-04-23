@@ -3301,14 +3301,14 @@ PPTExtParaProv::~PPTExtParaProv()
 }
 
 PPTNumberFormatCreator::PPTNumberFormatCreator( PPTExtParaProv* pParaProv )
-    : pExtParaProv(pParaProv)
-    , nIsBullet(0)
+    : nIsBullet(0)
     , nBulletChar(0)
     , nBulletFont(0)
     , nBulletHeight(0)
     , nBulletColor(0)
     , nTextOfs(0)
     , nBulletOfs(0)
+    , pExtParaProv(pParaProv)
 {
 }
 
@@ -4348,7 +4348,7 @@ PPTParaPropSet& PPTParaPropSet::operator=( PPTParaPropSet& rParaPropSet )
     return *this;
 }
 
-PPTCharPropSet::PPTCharPropSet( sal_uInt32 nParagraph ) :
+PPTCharPropSet::PPTCharPropSet(sal_uInt32 nParagraph)
     : mnOriginalTextPos(0)
     , mnParagraph(nParagraph)
     , mpFieldItem(NULL)
@@ -4588,10 +4588,13 @@ PPTTextRulerInterpreter::~PPTTextRulerInterpreter()
         delete mpImplRuler;
 }
 
-PPTTextCharacterStyleAtomInterpreter::PPTTextCharacterStyleAtomInterpreter() :
-    nFlags1 ( 0 ),
-    nFlags2 ( 0 ),
-    nFlags3 ( 0 )
+PPTTextCharacterStyleAtomInterpreter::PPTTextCharacterStyleAtomInterpreter()
+    : nFlags1(0)
+    , nFlags2(0)
+    , nFlags3(0)
+    , n1(0)
+    , nFontHeight(0)
+    , nFontColor(0)
 {
 }
 
