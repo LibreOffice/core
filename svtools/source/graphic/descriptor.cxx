@@ -324,7 +324,7 @@ void GraphicDescriptor::_setPropertyValues( const comphelper::PropertyMapEntry**
 
 
 void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValues )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
