@@ -44,6 +44,35 @@ void buildSpan(
     }
 }
 
+template<typename _Key, typename _Val, typename _Span>
+void buildSpanWithValue(
+    std::vector<_Span>& rSpans,
+    typename mdds::flat_segment_tree<_Key,_Val>::const_iterator it,
+    typename mdds::flat_segment_tree<_Key,_Val>::const_iterator itEnd, const _Key* pStart )
+{
+    _Key nLastPos = it->first;
+    _Val nLastVal = it->second;
+    for (++it; it != itEnd; ++it)
+    {
+        _Key nThisPos = it->first;
+        _Val nThisVal = it->second;
+
+        if (nLastVal)
+        {
+            _Key nIndex1 = nLastPos;
+            _Key nIndex2 = nThisPos-1;
+
+            if (!pStart || *pStart < nIndex1)
+                rSpans.push_back(_Span(nIndex1, nIndex2, nLastVal));
+            else if (*pStart <= nIndex2)
+                rSpans.push_back(_Span(*pStart, nIndex2, nLastVal));
+        }
+
+        nLastPos = nThisPos;
+        nLastVal = nThisVal;
+    }
+}
+
 /**
  * Convert a flat_segment_tree structure whose value type is boolean, into
  * an array of ranges that corresponds with the segments that have a 'true'
@@ -58,6 +87,25 @@ std::vector<_Span> toSpanArray( const mdds::flat_segment_tree<_Key,bool>& rTree 
 
     typename FstType::const_iterator it = rTree.begin(), itEnd = rTree.end();
     buildSpan<_Key,_Span>(aSpans, it, itEnd, NULL);
+    return aSpans;
+}
+
+/**
+ * Convert a flat_segment_tree structure into an array of ranges with
+ * values.  Only those ranges whose value is evaluated to be true will be
+ * included.  The value type must be something that supports bool operator.
+ * The span type must support a constructor that takes a start key, an end
+ * key and a value in this order.
+ */
+template<typename _Key, typename _Val, typename _Span>
+std::vector<_Span> toSpanArrayWithValue( const mdds::flat_segment_tree<_Key,_Val>& rTree )
+{
+    typedef mdds::flat_segment_tree<_Key,_Val> FstType;
+
+    std::vector<_Span> aSpans;
+
+    typename FstType::const_iterator it = rTree.begin(), itEnd = rTree.end();
+    buildSpanWithValue<_Key,_Val,_Span>(aSpans, it, itEnd, NULL);
     return aSpans;
 }
 

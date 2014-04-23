@@ -69,6 +69,7 @@
 #include <boost/unordered_set.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <mdds/flat_segment_tree.hpp>
 
 using namespace ::com::sun::star;
 
@@ -422,17 +423,28 @@ namespace {
 
 struct SortedColumn : boost::noncopyable
 {
+    typedef mdds::flat_segment_tree<SCROW, const ScPatternAttr*> PatRangeType;
 
     sc::CellStoreType maCells;
     sc::CellTextAttrStoreType maCellTextAttrs;
     sc::BroadcasterStoreType maBroadcasters;
     sc::CellNoteStoreType maCellNotes;
 
+    PatRangeType maPatterns;
+    PatRangeType::const_iterator miPatternPos;
+
     SortedColumn( size_t nTopEmptyRows ) :
         maCells(nTopEmptyRows),
         maCellTextAttrs(nTopEmptyRows),
         maBroadcasters(nTopEmptyRows),
-        maCellNotes(nTopEmptyRows) {}
+        maCellNotes(nTopEmptyRows),
+        maPatterns(0, MAXROWCOUNT, NULL),
+        miPatternPos(maPatterns.begin()) {}
+
+    void setPattern( SCROW nRow, const ScPatternAttr* pPat )
+    {
+        miPatternPos = maPatterns.insert(miPatternPos, nRow, nRow+1, pPat).first;
+    }
 };
 
 struct SortedRowFlags
@@ -459,6 +471,16 @@ struct SortedRowFlags
     {
         miPosFiltered = maRowsFiltered.insert(miPosFiltered, nRow, nRow+1, b).first;
     }
+};
+
+struct PatternSpan
+{
+    SCROW mnRow1;
+    SCROW mnRow2;
+    const ScPatternAttr* mpPattern;
+
+    PatternSpan( SCROW nRow1, SCROW nRow2, const ScPatternAttr* pPat ) :
+        mnRow1(nRow1), mnRow2(nRow2), mpPattern(pPat) {}
 };
 
 }
@@ -595,9 +617,8 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                 else
                     rNoteStore.push_back_empty();
 
-                // Set formats to the document directly.
                 if (rCell.mpPattern)
-                    aCol[aCellPos.Col()].SetPattern(aCellPos.Row(), *rCell.mpPattern, true);
+                    aSortedCols.at(j).setPattern(aCellPos.Row(), rCell.mpPattern);
             }
 
             if (pArray->IsKeepQuery())
@@ -647,6 +668,20 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
                 rDest.release_range(nRow1, nRow2);
                 rSrc.transfer(nRow1, nRow2, rDest, nRow1);
                 aCol[nThisCol].UpdateNoteCaptions(nRow1, nRow2);
+            }
+
+            {
+                // Get all row spans where the pattern is not NULL.
+                std::vector<PatternSpan> aSpans =
+                    sc::toSpanArrayWithValue<SCROW,const ScPatternAttr*,PatternSpan>(
+                        aSortedCols[i].maPatterns);
+
+                std::vector<PatternSpan>::iterator it = aSpans.begin(), itEnd = aSpans.end();
+                for (; it != itEnd; ++it)
+                {
+                    assert(it->mpPattern); // should never be NULL.
+                    aCol[nThisCol].SetPatternArea(it->mnRow1, it->mnRow2, *it->mpPattern, true);
+                }
             }
 
             aCol[nThisCol].CellStorageModified();
