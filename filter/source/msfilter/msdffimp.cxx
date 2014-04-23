@@ -7214,6 +7214,7 @@ SvxMSDffImportRec::SvxMSDffImportRec()
       nYAlign( 0 ), // position n cm below
       pYRelTo( NULL ), //   relative to paragraph
       nLayoutInTableCell( 0 ), // element is laid out in table cell
+      nFlags( 0 ),
       nTextRotationAngle( 0 ),
       nDxTextLeft( 144 ),
       nDyTextTop( 72 ),
@@ -7254,6 +7255,7 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
       nYAlign( rCopy.nYAlign ),
       pYRelTo( NULL ),
       nLayoutInTableCell( rCopy.nLayoutInTableCell ),
+      nFlags( rCopy.nFlags ),
       nTextRotationAngle( rCopy.nTextRotationAngle ),
       nDxTextLeft( rCopy.nDxTextLeft    ),
       nDyTextTop( rCopy.nDyTextTop ),
