@@ -62,7 +62,7 @@ using namespace ::com::sun::star::uno;
 
 
 
-bool areListsEqual( const Sequence< OUString >& rListA, const Sequence< OUString >& rListB )
+static bool areListsEqual( const Sequence< OUString >& rListA, const Sequence< OUString >& rListB )
 {
     bool bRet = true;
     const sal_Int32 nLen = rListA.getLength();
