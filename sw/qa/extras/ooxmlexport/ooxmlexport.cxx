@@ -2248,6 +2248,15 @@ DECLARE_OOXMLEXPORT_TEST(testPreserveXfieldTOC, "PreserveXfieldTOC.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " TOC \\x \\f \\o \"1-3\" \\h");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO77715,"FDO77715.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:instrText[1]", " TOC \\c ");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTrackChangesParagraphProperties, "testTrackChangesParagraphProperties.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
