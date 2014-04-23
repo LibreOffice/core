@@ -513,6 +513,7 @@ BigInt::BigInt( const OUString& rString )
 }
 
 BigInt::BigInt( double nValue )
+    : nVal(0)
 {
     bIsSet = true;
 
