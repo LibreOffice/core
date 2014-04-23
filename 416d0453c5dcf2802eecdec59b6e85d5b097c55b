@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_6b14b5f5",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1758,
+      "author": {
+        "id": 1000599
+      },
+      "writtenOn": "2014-04-23T07:34:02Z",
+      "side": 0,
+      "message": "should we now be considering removing the check eChartType !\u003d chart::TYPEID_BAR ??",
+      "range": {
+        "startLine": 1758,
+        "startChar": 84,
+        "endLine": 1758,
+        "endChar": 94
+      },
+      "revId": "416d0453c5dcf2802eecdec59b6e85d5b097c55b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
