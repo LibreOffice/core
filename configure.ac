@@ -12831,7 +12831,7 @@ _EOF
 
 if test $_os != WINNT -a "$CROSS_COMPILING" != TRUE; then
     cat << _EOF
-After the build has finished, your can immediately run it using:
+After the build has finished, you can immediately run it using:
 instdir/program/soffice
 
 If you want to run the smoketest, issue:
