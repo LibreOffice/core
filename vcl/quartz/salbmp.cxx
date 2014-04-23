@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+#include <limits>
+
 #include "basebmp/scanlineformats.hxx"
 #include "basebmp/color.hxx"
 
@@ -296,21 +301,31 @@ bool QuartzSalBitmap::AllocateUserData()
         }
     }
 
-    try
+    bool alloc = false;
+    if (mnBytesPerRow != 0
+        && mnBytesPerRow <= std::numeric_limits<std::size_t>::max() / mnHeight)
     {
-        if( mnBytesPerRow )
+        try
+        {
             maUserBuffer.reset( new sal_uInt8[mnBytesPerRow * mnHeight] );
-#ifdef DBG_UTIL
-        for (size_t i = 0; i < mnBytesPerRow * mnHeight; i++)
-            maUserBuffer.get()[i] = (i & 0xFF);
-#endif
+            alloc = true;
+        }
+        catch (std::bad_alloc &) {}
     }
-    catch( const std::bad_alloc& )
+    if (!alloc)
     {
-        OSL_FAIL( "vcl::QuartzSalBitmap::AllocateUserData: bad alloc" );
+        SAL_WARN(
+            "vcl.quartz", "bad alloc " << mnBytesPerRow << "x" << mnHeight);
         maUserBuffer.reset( static_cast<sal_uInt8*>(NULL) );
         mnBytesPerRow = 0;
     }
+#ifdef DBG_UTIL
+    else
+    {
+        for (size_t i = 0; i < mnBytesPerRow * mnHeight; i++)
+            maUserBuffer.get()[i] = (i & 0xFF);
+    }
+#endif
 
     return maUserBuffer.get() != 0;
 }
