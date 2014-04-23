@@ -178,7 +178,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
     if( m_pCert != NULL && m_pCert->extensions != NULL ) {
         CERTCertExtension** extns ;
         CertificateExtension_XmlSecImpl* pExtn ;
-        sal_Bool crit ;
+        bool crit ;
         int len ;
 
         for( len = 0, extns = m_pCert->extensions; *extns != NULL; len ++, extns ++ ) ;
@@ -202,7 +202,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
                 pExtn = new CertificateExtension_XmlSecImpl() ;
 
             if( (*extns)->critical.data == NULL )
-                crit = sal_False ;
+                crit = false ;
             else
                 crit = ( (*extns)->critical.data[0] == 0xFF ) ? sal_True : sal_False ;
             pExtn->setCertExtn( (*extns)->value.data, (*extns)->value.len, (unsigned char*)objID.getStr(), objID.getLength(), crit ) ;
@@ -221,7 +221,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
         CertificateExtension_XmlSecImpl* pExtn ;
         CERTCertExtension** extns ;
         SECItem idItem ;
-        sal_Bool crit ;
+        bool crit ;
 
         idItem.data = ( unsigned char* )&oid[0] ;
         idItem.len = oid.getLength() ;
@@ -236,7 +236,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
                 else
                     pExtn = new CertificateExtension_XmlSecImpl() ;
                 if( (*extns)->critical.data == NULL )
-                    crit = sal_False ;
+                    crit = false ;
                 else
                     crit = ( (*extns)->critical.data[0] == 0xFF ) ? sal_True : sal_False ;
                 pExtn->setCertExtn( (*extns)->value.data, (*extns)->value.len, (*extns)->id.data, (*extns)->id.len, crit ) ;

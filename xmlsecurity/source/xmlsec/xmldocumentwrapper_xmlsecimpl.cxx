@@ -768,11 +768,11 @@ sal_Bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::isCurrent( const cssu::Referenc
 sal_Bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::isCurrentElementEmpty(  )
     throw (cssu::RuntimeException, std::exception)
 {
-    sal_Bool rc = sal_False;
+    bool rc = false;
 
     if (m_pCurrentElement->children == NULL)
     {
-        rc = sal_True;
+        rc = true;
     }
 
     return rc;

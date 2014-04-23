@@ -163,7 +163,7 @@ bool DigitalSignaturesDialog::isXML(const OUString& rURI )
 DigitalSignaturesDialog::DigitalSignaturesDialog(
     Window* pParent,
     uno::Reference< uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
-    sal_Bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature)
+    bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature)
     : ModalDialog(pParent, "DigitalSignaturesDialog", "xmlsec/ui/digitalsignaturesdialog.ui")
     , mxCtx(rxCtx)
     , maSignatureHelper(rxCtx)
@@ -235,7 +235,7 @@ DigitalSignaturesDialog::~DigitalSignaturesDialog()
     delete m_pSignaturesLB;
 }
 
-sal_Bool DigitalSignaturesDialog::Init()
+bool DigitalSignaturesDialog::Init()
 {
     bool bInit = maSignatureHelper.Init();
 

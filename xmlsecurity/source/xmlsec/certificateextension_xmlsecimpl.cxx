@@ -29,7 +29,7 @@ using namespace ::com::sun::star::uno ;
 using ::com::sun::star::security::XCertificateExtension ;
 
 CertificateExtension_XmlSecImpl :: CertificateExtension_XmlSecImpl() :
-    m_critical( sal_False ) ,
+    m_critical( false ) ,
     m_xExtnId() ,
     m_xExtnValue()
 {
@@ -52,7 +52,7 @@ sal_Bool SAL_CALL CertificateExtension_XmlSecImpl :: isCritical() throw( ::com::
     return m_xExtnValue ;
 }
 
-void CertificateExtension_XmlSecImpl :: setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, sal_Bool critical ) {
+void CertificateExtension_XmlSecImpl :: setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, bool critical ) {
     unsigned int i ;
     if( value != NULL && vlen != 0 ) {
         Sequence< sal_Int8 > extnv( vlen ) ;

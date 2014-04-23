@@ -54,7 +54,7 @@ void SAL_CALL SecurityEngine::setKeyId( sal_Int32 id )
 sal_Bool SAL_CALL SecurityEngine::endMission(  )
     throw (com::sun::star::uno::RuntimeException, std::exception)
 {
-    sal_Bool rc = m_bMissionDone;
+    bool rc = m_bMissionDone;
 
     if (!rc)
     {

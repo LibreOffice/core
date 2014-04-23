@@ -26,16 +26,16 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-sal_Bool
+bool
 CertificateContainer::searchMap( const OUString & url, const OUString & certificate_name, Map &_certMap )
 {
     Map::iterator p = _certMap.find(url);
 
-    sal_Bool ret = sal_False;
+    bool ret = false;
 
     while( p != _certMap.end() )
     {
-        ret = (sal_Bool) (*p).second.equals(certificate_name);
+        ret = (*p).second.equals(certificate_name);
         if( ret )
                     break;
         ++p;
@@ -44,14 +44,14 @@ CertificateContainer::searchMap( const OUString & url, const OUString & certific
     return ret;
 }
 
-sal_Bool
+bool
 CertificateContainer::isTemporaryCertificate ( const OUString & url, const OUString & certificate_name )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return searchMap( url, certificate_name, certMap);
 }
 
-sal_Bool
+bool
 CertificateContainer::isCertificateTrust ( const OUString & url, const OUString & certificate_name )
     throw(::com::sun::star::uno::RuntimeException)
 {

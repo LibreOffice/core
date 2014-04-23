@@ -41,7 +41,7 @@ using ::com::sun::star::security::XCertificateExtension ;
 
 
 SanExtensionImpl :: SanExtensionImpl() :
-m_critical( sal_False )
+m_critical( false )
 {
 }
 

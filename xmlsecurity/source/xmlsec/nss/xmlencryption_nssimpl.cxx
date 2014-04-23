@@ -125,7 +125,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     }
 
     //remember the position of the element to be signed
-    sal_Bool isParentRef = sal_True;
+    bool isParentRef = true;
     pEncryptedData = pTemplate->getNativeElement();
 
     xmlNodePtr pParent = pEncryptedData->parent;
@@ -138,7 +138,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     else
     {
         referenceNode = pEncryptedData->prev;
-        isParentRef = sal_False;
+        isParentRef = false;
     }
 
      setErrorRecorder( );
@@ -226,7 +226,7 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
     pEncryptedData = pTemplate->getNativeElement() ;
 
     //remember the position of the element to be signed
-    sal_Bool isParentRef = sal_True;
+    bool isParentRef = true;
     xmlNodePtr pParent = pEncryptedData->parent;
     xmlNodePtr referenceNode;
 
@@ -237,7 +237,7 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
     else
     {
         referenceNode = pEncryptedData->prev;
-        isParentRef = sal_False;
+        isParentRef = false;
     }
 
      setErrorRecorder( );

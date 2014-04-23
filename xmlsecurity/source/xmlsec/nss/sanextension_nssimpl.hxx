@@ -34,7 +34,7 @@ class SanExtensionImpl : public ::cppu::WeakImplHelper1<
     ::com::sun::star::security::XSanExtension >
 {
     private :
-        sal_Bool m_critical ;
+        bool m_critical ;
         ::com::sun::star::uno::Sequence< sal_Int8 > m_xExtnId ;
         ::com::sun::star::uno::Sequence< sal_Int8 > m_xExtnValue ;
         ::com::sun::star::uno::Sequence< com::sun::star::security::CertAltNameEntry > m_Entries;
@@ -57,7 +57,7 @@ class SanExtensionImpl : public ::cppu::WeakImplHelper1<
         virtual ::com::sun::star::uno::Sequence< com::sun::star::security::CertAltNameEntry > SAL_CALL getAlternativeNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
         //Helper method
-        void setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, sal_Bool critical ) ;
+        void setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, bool critical ) ;
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_SANEXTENSION_NSSIMPL_HXX

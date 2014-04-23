@@ -108,9 +108,6 @@ public:
 OUString SignatureCreatorImpl_getImplementationName()
     throw ( com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL SignatureCreatorImpl_supportsService( const OUString& ServiceName )
-    throw ( com::sun::star::uno::RuntimeException );
-
 com::sun::star::uno::Sequence< OUString > SAL_CALL SignatureCreatorImpl_getSupportedServiceNames(  )
     throw ( com::sun::star::uno::RuntimeException );
 

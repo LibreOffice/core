@@ -1233,7 +1233,7 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
 void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
     throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
-        sal_Bool bIsCurrent = m_xXMLDocument->isCurrent(m_pCurrentBufferNode->getXMLElement());
+        bool bIsCurrent = m_xXMLDocument->isCurrent(m_pCurrentBufferNode->getXMLElement());
 
         /*
          * If there is a following handler and no blocking now, then

@@ -96,9 +96,6 @@ public:
 OUString DecryptorImpl_getImplementationName()
     throw ( com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL DecryptorImpl_supportsService( const OUString& ServiceName )
-    throw ( com::sun::star::uno::RuntimeException );
-
 com::sun::star::uno::Sequence< OUString > SAL_CALL DecryptorImpl_getSupportedServiceNames(  )
     throw ( com::sun::star::uno::RuntimeException );
 

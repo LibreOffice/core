@@ -132,7 +132,7 @@ void CertificateChooser::ImplInitialize()
         for( sal_Int32 nCert = nCertificates; nCert; )
         {
             uno::Reference< security::XCertificate > xCert = maCerts[ --nCert ];
-            sal_Bool bIgnoreThis = false;
+            bool bIgnoreThis = false;
 
             // Do we already use that?
             if( nCertificatesToIgnore )
@@ -194,7 +194,7 @@ uno::Reference< css::security::XCertificate > CertificateChooser::GetSelectedCer
 
 IMPL_LINK_NOARG(CertificateChooser, CertificateHighlightHdl)
 {
-    sal_Bool bEnable = GetSelectedCertificate().is();
+    bool bEnable = GetSelectedCertificate().is();
     m_pViewBtn->Enable( bEnable );
     m_pOKBtn->Enable( bEnable );
     return 0;

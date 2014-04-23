@@ -116,11 +116,11 @@ private:
 public:
     DigitalSignaturesDialog( Window* pParent, cssu::Reference<
         cssu::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
-        sal_Bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature);
+        bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature);
     virtual ~DigitalSignaturesDialog();
 
     // Initialize the dialog and the security environment, returns TRUE on success
-    sal_Bool    Init();
+    bool    Init();
 
             // Set the storage which should be signed or verified
     void    SetStorage( const cssu::Reference < css::embed::XStorage >& rxStore );
@@ -130,7 +130,7 @@ public:
     short       Execute() SAL_OVERRIDE;
 
                 // Did signatures change?
-    sal_Bool    SignaturesChanged() const { return mbSignaturesChanged; }
+    bool    SignaturesChanged() const { return mbSignaturesChanged; }
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_DIGITALSIGNATURESDIALOG_HXX

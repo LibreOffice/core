@@ -66,9 +66,6 @@ public:
 OUString ONSSInitializer_getImplementationName()
     throw ( ::com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL ONSSInitializer_supportsService( const OUString& ServiceName )
-    throw ( ::com::sun::star::uno::RuntimeException );
-
 com::sun::star::uno::Sequence< OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames()
     throw ( ::com::sun::star::uno::RuntimeException );
 

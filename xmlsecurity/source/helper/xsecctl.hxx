@@ -422,7 +422,7 @@ public:
     /*
      * For signature generation
      */
-    void signAStream( sal_Int32 securityId, const OUString& uri, const OUString& objectURL, sal_Bool isBinary);
+    void signAStream( sal_Int32 securityId, const OUString& uri, const OUString& objectURL, bool isBinary);
 
 
     /** sets data that describes the certificate.

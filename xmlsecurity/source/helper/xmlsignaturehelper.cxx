@@ -134,7 +134,7 @@ void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const Date& rDate, 
     mpXSecController->setDate( nSecurityId, stDateTime );
 }
 
-void XMLSignatureHelper::AddForSigning( sal_Int32 nSecurityId, const OUString& uri, const OUString& objectURL, sal_Bool bBinary )
+void XMLSignatureHelper::AddForSigning( sal_Int32 nSecurityId, const OUString& uri, const OUString& objectURL, bool bBinary )
 {
     mpXSecController->signAStream( nSecurityId, uri, objectURL, bBinary );
 }

@@ -183,9 +183,9 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     return xReferenceResolvedListener;
 }
 
-void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, const OUString& /*objectURL*/, sal_Bool isBinary)
+void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, const OUString& /*objectURL*/, bool isBinary)
 {
-        sal_Int32 type = ((isBinary==sal_True)?TYPE_BINARYSTREAM_REFERENCE:TYPE_XMLSTREAM_REFERENCE);
+    sal_Int32 type = isBinary ? TYPE_BINARYSTREAM_REFERENCE : TYPE_XMLSTREAM_REFERENCE;
 
     int index = findSignatureInfor( securityId );
 

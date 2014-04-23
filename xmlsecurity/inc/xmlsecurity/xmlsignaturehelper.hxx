@@ -167,7 +167,7 @@ public:
 
     void        SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const Time& rTime );
 
-    void        AddForSigning( sal_Int32 securityId, const OUString& uri, const OUString& objectURL, sal_Bool bBinary );
+    void        AddForSigning( sal_Int32 securityId, const OUString& uri, const OUString& objectURL, bool bBinary );
     bool        CreateAndWriteSignature( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler );
     bool        ReadAndVerifySignature( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& xInputStream );
 

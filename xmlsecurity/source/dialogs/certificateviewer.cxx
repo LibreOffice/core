@@ -187,7 +187,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     XmlSec::AlignAfterImage( maKeyImg, maHintCorrespPrivKeyFI, 12 );
 
     // Check if we have the private key...
-    sal_Bool bHasPrivateKey = sal_False;
+    bool bHasPrivateKey = false;
     // #i41270# Check only if we have that certificate in our security environment
     if ( _pDlg->mbCheckForPrivateKey )
     {

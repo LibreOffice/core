@@ -30,9 +30,8 @@ struct UseDiagnose : public rtl::StaticWithInit< bool, UseDiagnose>
     bool operator () () const
     {
         OUString value;
-        sal_Bool res = rtl::Bootstrap::get(
-            OUString("XMLSECURITY_TRACE"), value);
-        return res == sal_True ? true : false;
+        bool res = rtl::Bootstrap::get( OUString("XMLSECURITY_TRACE"), value);
+        return res;
     }
 };
 

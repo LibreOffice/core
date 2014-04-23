@@ -186,7 +186,7 @@ OUString DocumentDigitalSignatures::getPackageSignatureDefaultStreamName(  )
 }
 
 
-sal_Bool DocumentDigitalSignatures::ImplViewSignatures(
+bool DocumentDigitalSignatures::ImplViewSignatures(
     const Reference< css::embed::XStorage >& rxStorage,
     const Reference< css::io::XInputStream >& xSignStream,
     DocumentSignatureMode eMode, bool bReadOnly ) throw (RuntimeException)
@@ -197,11 +197,11 @@ sal_Bool DocumentDigitalSignatures::ImplViewSignatures(
     return ImplViewSignatures( rxStorage, xStream, eMode, bReadOnly );
 }
 
-sal_Bool DocumentDigitalSignatures::ImplViewSignatures(
+bool DocumentDigitalSignatures::ImplViewSignatures(
     const Reference< css::embed::XStorage >& rxStorage, const Reference< css::io::XStream >& xSignStream,
     DocumentSignatureMode eMode, bool bReadOnly ) throw (RuntimeException)
 {
-    sal_Bool bChanges = sal_False;
+    bool bChanges = false;
     DigitalSignaturesDialog aSignaturesDialog(
         NULL, mxCtx, eMode, bReadOnly, m_sODFVersion, m_bHasDocumentSignature);
     bool bInit = aSignaturesDialog.Init();
@@ -214,7 +214,7 @@ sal_Bool DocumentDigitalSignatures::ImplViewSignatures(
         {
             if ( aSignaturesDialog.SignaturesChanged() )
             {
-                bChanges = sal_True;
+                bChanges = true;
                 // If we have a storage and no stream, we are responsible for commit
                 if ( rxStorage.is() && !xSignStream.is() )
                 {
@@ -390,7 +390,7 @@ void DocumentDigitalSignatures::showCertificate(
 sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     const Reference< css::security::XCertificate >& Author ) throw (RuntimeException, std::exception)
 {
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     Reference<security::XSerialNumberAdapter> xSerialNumberAdapter =
         ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
@@ -405,7 +405,7 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
         SvtSecurityOptions::Certificate aAuthor = *pAuthors;
         if ( ( aAuthor[0] == Author->getIssuerName() ) && ( aAuthor[1] == sSerialNum ) )
         {
-            bFound = sal_True;
+            bFound = true;
             break;
         }
     }
