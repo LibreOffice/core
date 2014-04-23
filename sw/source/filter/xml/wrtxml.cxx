@@ -155,8 +155,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
                 comphelper::GenericPropertySet_CreateInstance(
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
-    const OUString sTargetStorage("TargetStorage");
-    xInfoSet->setPropertyValue( sTargetStorage, Any( xStg ) );
+    xInfoSet->setPropertyValue( "TargetStorage", Any( xStg ) );
 
     uno::Any aAny;
     if (bShowProgress)
@@ -169,22 +168,19 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
                                     nProgressRange);
         }
         aAny <<= nProgressRange;
-        OUString sProgressRange("ProgressRange");
-        xInfoSet->setPropertyValue(sProgressRange, aAny);
+        xInfoSet->setPropertyValue("ProgressRange", aAny);
 
         aAny <<= static_cast < sal_Int32 >( -1 );
-        OUString sProgressMax("ProgressMax");
-        xInfoSet->setPropertyValue(sProgressMax, aAny);
+        xInfoSet->setPropertyValue("ProgressMax", aAny);
     }
 
     SvtSaveOptions aSaveOpt;
-    OUString sUsePrettyPrinting("UsePrettyPrinting");
     sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
     aAny.setValue( &bUsePrettyPrinting, ::getBooleanCppuType() );
-    xInfoSet->setPropertyValue( sUsePrettyPrinting, aAny );
+    xInfoSet->setPropertyValue( "UsePrettyPrinting", aAny );
 
     // save show redline mode ...
-    OUString sShowChanges("ShowChanges");
+    const OUString sShowChanges("ShowChanges");
     sal_uInt16 nRedlineMode = pDoc->GetRedlineMode();
     sal_Bool bShowChanges( IDocumentRedlineAccess::IsShowChanges( nRedlineMode ) );
     aAny.setValue( &bShowChanges, ::getBooleanCppuType() );
@@ -195,28 +191,23 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     pDoc->SetRedlineMode((RedlineMode_t)( nRedlineMode ));
 
     // Set base URI
-    OUString sPropName("BaseURI");
-    xInfoSet->setPropertyValue( sPropName, makeAny( OUString( GetBaseURL() ) ) );
+    xInfoSet->setPropertyValue( "BaseURI", makeAny( GetBaseURL() ) );
 
     if( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocShell()->GetCreateMode() )
     {
-        OUString aName;
-        if ( !aDocHierarchicalName.isEmpty() )
-            aName = aDocHierarchicalName;
-        else
-            aName = "dummyObjectName";
+        const OUString aName( !aDocHierarchicalName.isEmpty()
+            ? aDocHierarchicalName
+            : OUString( "dummyObjectName" ) );
 
-        sPropName = "StreamRelPath";
-        xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
+        xInfoSet->setPropertyValue( "StreamRelPath", makeAny( aName ) );
     }
 
     if( bBlock )
     {
-        OUString sAutoTextMode("AutoTextMode");
         sal_Bool bTmp = sal_True;
         Any aAny2;
         aAny2.setValue( &bTmp, ::getBooleanCppuType() );
-        xInfoSet->setPropertyValue( sAutoTextMode, aAny2 );
+        xInfoSet->setPropertyValue( "AutoTextMode", aAny2 );
     }
 
     // #i69627#
@@ -224,8 +215,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     if ( bOASIS &&
          docfunc::HasOutlineStyleToBeWrittenAsNormalListStyle( *pDoc ) )
     {
-        OUString sOutlineStyleAsNormalListStyle("OutlineStyleAsNormalListStyle");
-        xInfoSet->setPropertyValue( sOutlineStyleAsNormalListStyle, makeAny( sal_True ) );
+        xInfoSet->setPropertyValue( "OutlineStyleAsNormalListStyle", makeAny( sal_True ) );
     }
 
     // filter arguments
@@ -274,7 +264,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     {
         PropertyValue *pProps = aProps.getArray();
         pProps->Name = "FileName";
-        (pProps++)->Value <<= OUString( *pOrigFileName  );
+        (pProps++)->Value <<= *pOrigFileName;
     }
 
     // export sub streams for package, else full stream into a file
@@ -286,14 +276,13 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     {
         const uno::Reference<beans::XPropertySet> xPropSet(xStg,
             uno::UNO_QUERY_THROW);
-        const OUString VersionProp("Version");
         try
         {
             OUString Version;
             // ODF >= 1.2
-            if ((xPropSet->getPropertyValue(VersionProp) >>= Version)
-                && !Version.equals(ODFVER_010_TEXT)
-                && !Version.equals(ODFVER_011_TEXT))
+            if ((xPropSet->getPropertyValue("Version") >>= Version)
+                && Version != ODFVER_010_TEXT
+                && Version != ODFVER_011_TEXT)
             {
                 const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(
                     xModelComp, uno::UNO_QUERY_THROW);
@@ -316,8 +305,10 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
             Reference< frame::XModule > xModule( xModelComp, UNO_QUERY );
             if ( xModule.is() )
             {
-                OUString aModuleID = xModule->getIdentifier();
-                bStoreMeta = ( !aModuleID.isEmpty() && ( aModuleID == "com.sun.star.sdb.FormDesign" || aModuleID == "com.sun.star.sdb.TextReportDesign" ) );
+                const OUString aModuleID = xModule->getIdentifier();
+                bStoreMeta = !aModuleID.isEmpty() &&
+                    ( aModuleID == "com.sun.star.sdb.FormDesign" ||
+                      aModuleID == "com.sun.star.sdb.TextReportDesign" );
             }
         }
         catch( uno::Exception& )
@@ -384,17 +375,15 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     if( pDoc->GetCurrentViewShell() && pDoc->GetDocStat().nPage > 1 &&
         !(bOrganizerMode || bBlock || bErr) )
     {
-        OUString sStreamName("layout-cache");
         try
         {
-            uno::Reference < io::XStream > xStm = xStg->openStreamElement( sStreamName, embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+            uno::Reference < io::XStream > xStm = xStg->openStreamElement( "layout-cache", embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
             SvStream* pStream = utl::UcbStreamHelper::CreateStream( xStm );
             if( !pStream->GetError() )
             {
                 uno::Reference < beans::XPropertySet > xSet( xStm, UNO_QUERY );
-                OUString aMime("application/binary");
                 uno::Any aAny2;
-                aAny2 <<= aMime;
+                aAny2 <<= OUString("application/binary");
                 xSet->setPropertyValue("MediaType", aAny2 );
                 pDoc->WriteLayoutCache( *pStream );
             }
@@ -492,7 +481,7 @@ bool SwXMLWriter::WriteThroughComponent(
     bool bRet = false;
     try
     {
-        OUString sStreamName = OUString::createFromAscii( pStreamName );
+        const OUString sStreamName = OUString::createFromAscii( pStreamName );
         uno::Reference<io::XStream> xStream =
                 xStg->openStreamElement( sStreamName,
                 embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
@@ -501,17 +490,14 @@ bool SwXMLWriter::WriteThroughComponent(
         if( !xSet.is() )
             return false;
 
-        OUString aMime("text/xml");
         uno::Any aAny;
-        aAny <<= aMime;
+        aAny <<= OUString("text/xml");
         xSet->setPropertyValue("MediaType", aAny );
-
-        OUString aUseCommonPassPropName("UseCommonStoragePasswordEncryption");
 
         // even plain stream should be encrypted in encrypted documents
         sal_Bool bTrue = sal_True;
         aAny.setValue( &bTrue, ::getBooleanCppuType() );
-        xSet->setPropertyValue( aUseCommonPassPropName, aAny );
+        xSet->setPropertyValue( "UseCommonStoragePasswordEncryption", aAny );
 
         // set buffer and create outputstream
         uno::Reference< io::XOutputStream > xOutputStream = xStream->getOutputStream();
@@ -523,8 +509,7 @@ bool SwXMLWriter::WriteThroughComponent(
         OSL_ENSURE( xInfoSet.is(), "missing property set" );
         if( xInfoSet.is() )
         {
-            OUString sPropName("StreamName");
-            xInfoSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
+            xInfoSet->setPropertyValue( "StreamName", makeAny( sStreamName ) );
         }
 
         // write the stuff
