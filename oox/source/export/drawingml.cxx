@@ -2194,7 +2194,7 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
     else
         WriteColor( sSchemeClr, aTransformations );
 
-    mpFS->endElementNS( XML_a, XML_outerShdw );
+    mpFS->endElement( nEffectToken );
     mpFS->endElementNS(XML_a, XML_effectLst);
 }
 
