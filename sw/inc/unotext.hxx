@@ -277,8 +277,9 @@ public:
                 ::com::sun::star::text::XTextRange >& xEnd,
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::PropertyValue >& xFrameProperties)
-        throw (::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException,
+               css::beans::UnknownPropertyException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextTable > SAL_CALL
         convertToTable(
