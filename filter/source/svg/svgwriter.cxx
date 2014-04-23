@@ -1642,7 +1642,8 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     mpContext( NULL ),
     maTextWriter( rExport ),
     mnInnerMtfCount( 0 ),
-    mbClipAttrChanged( false )
+    mbClipAttrChanged( false ),
+    mbIsPlacehlolderShape( false )
 {
     mpVDev = new VirtualDevice;
     mpVDev->EnableOutput( false );

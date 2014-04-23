@@ -317,9 +317,6 @@ private:
     VirtualDevice*                              mpVDev;
     MapMode                                     maTargetMapMode;
     sal_uInt32                                  mnInnerMtfCount;
-    bool                                    mbDestroyVDev;
-    bool                                    mbPaintAttrChanged;
-    bool                                    mbFontAttrChanged;
     bool                                    mbClipAttrChanged;
     bool                                    mbIsPlacehlolderShape;
 
