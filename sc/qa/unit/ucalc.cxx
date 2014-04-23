@@ -59,6 +59,7 @@
 #include <docoptio.hxx>
 #include <patattr.hxx>
 #include <docpool.hxx>
+#include <globalnames.hxx>
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -4845,6 +4846,167 @@ void Test::testSortInFormulaGroup()
     }
 
     m_pDoc->DeleteTab( 0 );
+}
+
+void Test::testSortWithCellFormats()
+{
+    struct
+    {
+        bool isBold( const ScPatternAttr* pPat ) const
+        {
+            if (!pPat)
+            {
+                cerr << "Pattern is NULL!" << endl;
+                return false;
+            }
+
+            const SfxPoolItem* pItem = NULL;
+            if (!pPat->GetItemSet().HasItem(ATTR_FONT_WEIGHT, &pItem))
+            {
+                cerr << "Pattern does not have a font weight item, but it should." << endl;
+                return false;
+            }
+
+            if (static_cast<const SvxWeightItem*>(pItem)->GetEnumValue() != WEIGHT_BOLD)
+            {
+                cerr << "Font weight should be bold." << endl;
+                return false;
+            }
+
+            return true;
+        }
+
+        bool isItalic( const ScPatternAttr* pPat ) const
+        {
+            if (!pPat)
+            {
+                cerr << "Pattern is NULL!" << endl;
+                return false;
+            }
+
+            const SfxPoolItem* pItem = NULL;
+            if (!pPat->GetItemSet().HasItem(ATTR_FONT_POSTURE, &pItem))
+            {
+                cerr << "Pattern does not have a font posture item, but it should." << endl;
+                return false;
+            }
+
+            if (static_cast<const SvxPostureItem*>(pItem)->GetEnumValue() != ITALIC_NORMAL)
+            {
+                cerr << "Italic should be applied.." << endl;
+                return false;
+            }
+
+            return true;
+        }
+
+        bool isNormal( const ScPatternAttr* pPat ) const
+        {
+            if (!pPat)
+            {
+                cerr << "Pattern is NULL!" << endl;
+                return false;
+            }
+
+            const SfxPoolItem* pItem = NULL;
+            if (pPat->GetItemSet().HasItem(ATTR_FONT_WEIGHT))
+            {
+                // Check if the font weight is applied.
+                if (static_cast<const SvxWeightItem*>(pItem)->GetEnumValue() == WEIGHT_BOLD)
+                {
+                    cerr << "This cell is bold, but shouldn't." << endl;
+                    return false;
+                }
+            }
+
+            if (pPat->GetItemSet().HasItem(ATTR_FONT_POSTURE))
+            {
+                // Check if the italics is applied.
+                if (static_cast<const SvxPostureItem*>(pItem)->GetEnumValue() == ITALIC_NORMAL)
+                {
+                    cerr << "This cell is bold, but shouldn't." << endl;
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+    } aCheck;
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Insert some values into A1:A4.
+    m_pDoc->SetString(ScAddress(0,0,0), "Header");
+    m_pDoc->SetString(ScAddress(0,1,0), "Normal");
+    m_pDoc->SetString(ScAddress(0,2,0), "Bold");
+    m_pDoc->SetString(ScAddress(0,3,0), "Italic");
+
+    // Set A3 bold and A4 italic.
+    const ScPatternAttr* pPat = m_pDoc->GetPattern(ScAddress(0,2,0));
+    CPPUNIT_ASSERT(pPat);
+    {
+        ScPatternAttr aNewPat(*pPat);
+        SfxItemSet& rSet = aNewPat.GetItemSet();
+        rSet.Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+        m_pDoc->ApplyPattern(0, 2, 0, aNewPat);
+
+        // Make sure it's really in.
+        bool bGood = aCheck.isBold(m_pDoc->GetPattern(ScAddress(0,2,0)));
+        CPPUNIT_ASSERT_MESSAGE("A3 is not bold but it should.", bGood);
+    }
+
+    pPat = m_pDoc->GetPattern(ScAddress(0,3,0));
+    CPPUNIT_ASSERT(pPat);
+    {
+        ScPatternAttr aNewPat(*pPat);
+        SfxItemSet& rSet = aNewPat.GetItemSet();
+        rSet.Put(SvxPostureItem(ITALIC_NORMAL, ATTR_FONT_POSTURE));
+        m_pDoc->ApplyPattern(0, 3, 0, aNewPat);
+
+        bool bGood = aCheck.isItalic(m_pDoc->GetPattern(ScAddress(0,3,0)));
+        CPPUNIT_ASSERT_MESSAGE("A4 is not italic but it should.", bGood);
+    }
+
+    // Define A1:A4 as sheet-local anonymous database range, else sort wouldn't run.
+    m_pDoc->SetAnonymousDBData(
+        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 3));
+
+    // Sort A1:A4 ascending with cell formats.
+    ScDBDocFunc aFunc(getDocShell());
+
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 0;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 3;
+    aSortData.bHasHeader = true;
+    aSortData.bIncludePattern = true;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+    bool bSorted = aFunc.Sort(0, aSortData, true, false, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // Check the sort result.
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Bold"),   m_pDoc->GetString(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Italic"), m_pDoc->GetString(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Normal"), m_pDoc->GetString(ScAddress(0,3,0)));
+
+    // A2 should be bold now.
+    bool bBold = aCheck.isBold(m_pDoc->GetPattern(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_MESSAGE("A2 should be bold after the sort.", bBold);
+
+    // and A3 should be italic.
+    bool bItalic = aCheck.isItalic(m_pDoc->GetPattern(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_MESSAGE("A3 should be italic.", bItalic);
+
+    // A4 should have neither bold nor italic.
+    bool bNormal = aCheck.isNormal(m_pDoc->GetPattern(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_MESSAGE("A4 should be neither bold nor italic.", bNormal);
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testShiftCells()
