@@ -20,6 +20,5 @@
 #define SUBMENU_OBJARRANGE  23
 #define SUBMENU_ANCHOR      24
 #define SUBMENU_OBJMIRROR   33
-#define MN_TEMPLATES        39
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,13 +24,8 @@
 #define TOOLBOX_WIDTH       50
 #define TOOLBOX_HEIGHT      15
 
-#define TOOLBOX_WIDTH_2     34
-#define TOOLBOX_HEIGHT_2    30
-
 #define TOOLBOX_BORDER_WIDTH    107
-#define PB_BORDER_MOREBTN       57
 #define POPUPPANEL_MARGIN_SMALL_PIXEL   8
-
 
 
 Image IMG_CELL_BORDER

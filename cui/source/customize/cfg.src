@@ -23,9 +23,6 @@
 #define TEXT_RENAME \
     Text [ en-US ] = "Rename..." ;\
 
-#define TEXT_DELETE \
-    Text [ en-US ] = "Delete..." ;\
-
 #define TEXT_DELETE_NODOTS \
     Text [ en-US ] = "Delete" ;\
 

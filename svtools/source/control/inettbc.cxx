@@ -56,7 +56,6 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
-#include "iodlg.hrc"
 #include <svtools/asynclink.hxx>
 #include <svl/urlfilter.hxx>
 

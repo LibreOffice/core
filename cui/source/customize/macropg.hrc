@@ -39,40 +39,6 @@
 #define     FT_METHOD               44
 #define     EDIT_METHOD             45
 
-
-// COL0<---------------WIDTH_1_2--------------->COL3<->COL4<----WIDTH4---->COL5
-//     <--WIDTH1-->COL1<-SPACE1->COL2<--WIDTH2->
-
-#define WIDTH_TP        260                                     // of whole tabpage
-#define COL5            (WIDTH_TP-RSC_SP_DLG_INNERBORDER_RIGHT)
-#define COL4            (COL5-RSC_CD_PUSHBUTTON_WIDTH)
-#define COL3            (COL4-RSC_SP_CTRL_X)
-#define COL0            (RSC_SP_TBPG_INNERBORDER_LEFT)
-#define WIDTH1_2        (COL3-COL0)                             // width of upper listbox
-#define SPACE1          4                                       // space between lower listboxes
-#define WIDTH1          ((WIDTH1_2-SPACE1)/2)                   // width of lower left listbox
-#define WIDTH2          (WIDTH1_2-WIDTH1-SPACE1)                // width of lower right listbox
-#define COL1            (COL0+WIDTH1)
-#define COL2            (COL1+SPACE1)
-
-#define HEIGHT0         158                                     // of upper listbox
-#define HEIGHT_TP       (HEIGHT0+6)                             // of whole tabpage
-#define ROW0            6                                       // more than RSC_SP_FLGR_INNERBORDER_TOP cause of bad design
-#define ROW0A           (ROW0+RSC_CD_FIXEDTEXT_HEIGHT+SPACE1)
-#define ROW1            (ROW0A+RSC_CD_PUSHBUTTON_HEIGHT)        // Assign button
-#define ROW2            (ROW1+RSC_SP_CTRL_GROUP_Y)
-#define ROW3            (ROW2+RSC_CD_PUSHBUTTON_HEIGHT)         // Assign component button
-#define ROW4            (ROW3+RSC_SP_CTRL_GROUP_Y)
-#define ROW5_REMOVE     (ROW4+RSC_SP_CTRL_GROUP_Y)              // Remove button
-#define ROW5            (ROW4+RSC_CD_DROPDOWN_HEIGHT)           // script type listbox (hidden)
-#define ROW6            (ROW0+HEIGHT0)
-#define ROW7            (ROW6+RSC_SP_CTRL_Y)
-#define HEIGHT_EXTRA7   (RSC_CD_FIXEDTEXT_HEIGHT)               // additional height for FT_LABEL4LB_MACROS
-#define ROW7A           (ROW7+HEIGHT_EXTRA7)
-#define ROW8            (ROW7+RSC_CD_FIXEDTEXT_HEIGHT+HEIGHT_EXTRA7)// label for lower listboxes (2 lines!)
-#define ROW9            (HEIGHT_TP-RSC_SP_TBPG_INNERBORDER_BOTTOM)
-#define HEIGHT8         (ROW9-ROW8)                             // of lower listboxes
-
 #define COMP_EDIT_WIDTH 100
 #define COMP_DIST_Y     6
 #define COMP_WIDTH      (COMP_EDIT_WIDTH+RSC_CD_PUSHBUTTON_WIDTH+3*COMP_DIST_Y)

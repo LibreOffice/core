@@ -36,7 +36,6 @@
 #include "sdattr.hxx"
 #include "sdresid.hxx"
 #include "optsitem.hxx"
-#include "tpoption.hrc"
 #include "tpoption.hxx"
 #include "strings.hrc"
 #include "app.hrc"

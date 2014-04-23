@@ -23,8 +23,6 @@
 
 #define LB_USER             1
 
-#define NF_TIMEOUT          1
-
 #define FL_TABLE_GRANTS     1
 #define FL_USER             2
 

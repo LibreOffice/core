@@ -99,14 +99,11 @@
 #define STR_SVT_MIMETYPE_APP_SXGLOBAL       (STR_SVT_MIMETYPE_START+76)
 #define STR_SVT_MIMETYPE_APP_SXIPACKED      (STR_SVT_MIMETYPE_START+77)
 
-
 #define STR_SVT_MIMETYPE_VIDEO_WEBM         (STR_SVT_MIMETYPE_START+78)
 #define STR_SVT_MIMETYPE_AUDIO_WEBM         (STR_SVT_MIMETYPE_START+79)
 
 #define STR_SVT_MIMETYPE_END                (STR_SVT_MIMETYPE_AUDIO_WEBM)
 
-#endif  // #ifndef _SVTOOLS_HRC
-
-// ******************************************************************* EOF
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

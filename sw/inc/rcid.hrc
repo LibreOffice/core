@@ -131,7 +131,7 @@
 
 // Format-Templates
 #define RC_FMTUI_BEGIN              RC_FMTUI
-#define RC_FMTUI_END                (RC_FMTUI_BEGIN + 69)
+//      RC_FMTUI_END                (RC_FMTUI_BEGIN + 69)
 
 // Graphic Dialogues
 #define RC_GRFDLG_BEGIN             RC_GRFDLG
@@ -202,7 +202,7 @@
 #define RC_POOLCOLL_DOC_BEGIN       (RC_POOLTXTCOLL + 130)
 //      RC_POOLCOLL_DOC_END         (RC_POOLTXTCOLL + 139)
 #define RC_POOLCOLL_HTML_BEGIN      (RC_POOLTXTCOLL + 140)
-#define RC_POOLCOLL_HTML_END        (RC_POOLTXTCOLL + 169)
+//      RC_POOLCOLL_HTML_END        (RC_POOLTXTCOLL + 169)
 
 
 // Pooltemplates Page
@@ -259,7 +259,7 @@
 
 // property panel
 #define RC_PROPERTYPANEL_BEGIN            RC_PROPERTYPANEL
-#define RC_PROPERTYPANEL_END              (RC_PROPERTYPANEL + 10)
+//      RC_PROPERTYPANEL_END              (RC_PROPERTYPANEL + 10)
 
 // sidebar (mostly the Page one)
 #define RC_SIDEBAR_BEGIN            RC_SIDEBAR

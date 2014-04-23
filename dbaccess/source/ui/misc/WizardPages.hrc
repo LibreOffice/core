@@ -33,7 +33,6 @@
 #define PB_HELP                 8
 #define PB_NEXT                 9
 #define PB_PREV                 10
-#define PB_UNDO                 11
 #define IB_COLUMN_UP                    12
 #define IB_COLUMN_DOWN                  13
 #define IB_COLUMN_UP_RIGHT              14

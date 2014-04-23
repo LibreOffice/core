@@ -18,8 +18,11 @@
  */
 #include <svx/svxids.hrc>
 #include <svx/globlmn.hrc>
-#include "toolbox.hrc"
 #include "helpid.h"
+#include "shells.hrc"
+#include "globals.hrc"
+#include "cmdid.h"
+
 String STR_GRFILTER_OPENERROR
 {
         Text [ en-US ] = "Image file cannot be opened" ;
@@ -230,8 +233,5 @@ String STR_SWBG_FOOTER
         Text [ en-US ] = "Footer" ;
 };
  //End: strings for gallery/background
-
-// #i68101# no longer needed:
-// String STR_NAME_SHAPE_LABEL {// String STR_NAME_SHAPE_DIALOG { Text [ en-US ] = "Name Object"; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

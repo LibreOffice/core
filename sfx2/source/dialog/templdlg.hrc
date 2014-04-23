@@ -18,7 +18,4 @@
  */
 #define TB_ACTION 15
 
-#define BT_FLIST 8
-#define BT_VLIST 9
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,12 +23,8 @@
 
 // control ids
 
-    // FREE
-    // FREE
 #define FT_USERNAME             3
-#define FT_PASSWORD             4
 #define FT_OPTIONS              5
-    // FREE
 #define FT_JDBCDRIVERCLASS      7
 #define FT_SPECIAL_MESSAGE      8
 #define FT_HOSTNAME             10

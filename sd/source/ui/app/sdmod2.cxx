@@ -52,7 +52,6 @@
 #include "ViewShell.hxx"
 #include "FrameView.hxx"
 #include "sdattr.hxx"
-#include "tpoption.hrc"
 #include "optsitem.hxx"
 #include "DrawDocShell.hxx"
 #include "drawdoc.hxx"

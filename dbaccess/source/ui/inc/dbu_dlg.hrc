@@ -26,8 +26,6 @@
 #define WIZARD_PAGE_X       225
 #define WIZARD_PAGE_Y       210
 #define START_X             6
-#define START_Y             6
-
 
 #define CHECKBOX_HEIGHT      8
 #define LISTBOX_HEIGHT      12

@@ -26,52 +26,6 @@
     Dialog "paste region"
 
 *************************************************************************/
-#define FT_SUBREG_TEXT \
-    Text [ en-US ] = "~Section" ; \
-
-#define CB_HIDE_TEXT \
-    Text [ en-US ] = "H~ide" ;\
-
-#define FL_HIDE_TEXT \
-    Text [ en-US ] = "Hide" ;\
-
-#define CB_CONDITION_TEXT  \
-    Text [ en-US ] = "~With Condition" ;\
-
-#define FL_PROPERTIES_TEXT \
-    Text [ en-US ] = "Properties" ;\
-
-#define CB_EDIT_IN_READONLY_TEXT \
-    Text [ en-US ] = "E~ditable in read-only document" ;\
-
-#define FL_FILE_TEXT \
-    Text [ en-US ] = "Link" ;\
-
-#define CB_FILE_TEXT\
-    Text [ en-US ] = "~Link";\
-
-#define CB_DDE_TEXT \
-    Text [ en-US ] = "DD~E" ;\
-
-#define FT_DDE_TEXT \
-    Text [ en-US ] = "DDE ~command" ;\
-
-#define FT_FILE_TEXT \
-    Text [ en-US ] = "~File name" ;\
-
-
-#define GB_HIDE_TEXT \
-    Text [ en-US ] = "Hide";\
-
-#define GB_OPTIONS_TEXT \
-    Text [ en-US ] = "Options" ;\
-
-#define FL_PROTECT_TEXT \
-    Text [ en-US ] = "Write protection";\
-
-#define CB_PASSWD_TEXT\
-    Text [ en-US ] = "Wit~h password";\
-
 #define DLG_IMAGE_IDLIST \
         IdList =                        \
         {                               \

@@ -601,18 +601,4 @@ String RID_STR_DLGIMP_MISMATCH_TEXT
     Text [ en-US ] = "The dialog to be imported supports other languages than the target library.\n\nAdd these languages to the library to keep additional language resources provided by the dialog or omit them to stay with the current library languages.\n\nNote: For languages not supported by the dialog the resources of the dialog's default language will be used.\n " ;
 };
 
-#define MN_EDIT       20
-#define MN_VIEW 21
-#define MN_EXTRA 22
-#define MN_WIN 30
-#define MN_HELP 31
-#define MN_TEMPLATES 11
-
-/*
-
-The application menu bar resource has become obsolete. You can now find the menu bar definition at:
-<project>/basicide/menubar/menubar.xml.
-
-*/
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

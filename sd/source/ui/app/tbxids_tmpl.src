@@ -326,55 +326,6 @@
         Hide = TRUE; \
     };
 
-#define TBI_TRANSPARENCE \
-    ToolBoxItem\
-    {\
-        Identifier = SID_OBJECT_TRANSPARENCE; \
-        HelpID = SID_OBJECT_TRANSPARENCE; \
-        Hide = TRUE; \
-    };
-
-#define TBI_GRADIENT \
-    ToolBoxItem\
-    {\
-        Identifier = SID_OBJECT_GRADIENT; \
-        HelpID = SID_OBJECT_GRADIENT; \
-        Hide = TRUE; \
-    };
-
-#define TBI_CONVERT \
-    ToolBoxItem\
-    {\
-        Identifier = SID_CONVERT;\
-        HelpID = SID_CONVERT;\
-        Hide = TRUE; \
-    };
-
-#define TBI_LSPACE_10 \
-    ToolBoxItem \
-    {\
-        Identifier = SID_ATTR_PARA_LINESPACE_10; \
-        HelpID = SID_ATTR_PARA_LINESPACE_10; \
-        Hide = TRUE; \
-    };
-
-#define TBI_LSPACE_15 \
-    ToolBoxItem \
-    {\
-        Identifier = SID_ATTR_PARA_LINESPACE_15; \
-        HelpID = SID_ATTR_PARA_LINESPACE_15; \
-        Hide = TRUE; \
-    };
-
-#define TBI_LSPACE_20 \
-    ToolBoxItem \
-    {\
-        Identifier = SID_ATTR_PARA_LINESPACE_20; \
-        HelpID = SID_ATTR_PARA_LINESPACE_20; \
-        Hide = TRUE; \
-    };
-
-
 
 
  // Option bar

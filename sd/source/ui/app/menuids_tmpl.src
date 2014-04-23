@@ -1102,14 +1102,6 @@
         };\
     };
 
-#define MNSUB_ROTATE \
-    MenuItem\
-    {\
-        Identifier = SID_OBJECT_ROTATE ; \
-        HelpId = CMD_SID_OBJECT_ROTATE ; \
-        Text [ en-US ] = "~Rotate";\
-    };
-
 #define MN_CONNECT \
     MenuItem\
     {\

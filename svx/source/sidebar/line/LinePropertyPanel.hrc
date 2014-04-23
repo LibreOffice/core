@@ -21,14 +21,8 @@
 #define CUSTOM_W    74
 #define CUSTOM_H    POPUPPANEL_MARGIN_LARGE * 2 +  TEXT_HEIGHT + 12 +  TEXT_CONTROL_SPACING_VERTICAL
 
-#define TBI_STYLE           14
 #define STR_QH_TB_WIDTH     15
 #define STR_QH_TB_COLOR     16
-
-#define FT_EDGESTYLE        18
-#define LB_EDGESTYLE        19
-#define FT_CAPSTYLE         20
-#define LB_CAPSTYLE         21
 
 #define IMG_COLOR           (RID_SVX_SIDEBAR_BEGIN + 20)
 #define IMG_NONE_ICON       (RID_SVX_SIDEBAR_BEGIN + 21)

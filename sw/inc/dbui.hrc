@@ -25,14 +25,9 @@
 // Dialoge --------------------------------------------------------------------
 
 #define DLG_MAILMERGEWIZARD         (RC_DBUI_BEGIN + 3)
-#define DLG_MM_DOCSELECT_PAGE       (RC_DBUI_BEGIN + 4)
-#define DLG_MM_OUTPUTTYPE_PAGE      (RC_DBUI_BEGIN + 5)
-#define DLG_MM_ADDRESSLISTDIALOG    (RC_DBUI_BEGIN + 11)
 #define DLG_MM_SELECTDBTABLEDDIALOG (RC_DBUI_BEGIN + 12)
 #define DLG_MM_DBTABLEPREVIEWDIALOG (RC_DBUI_BEGIN + 13)
 #define DLG_MM_CREATEADDRESSLIST    (RC_DBUI_BEGIN + 14)
-#define DLG_MM_CUSTOMIZE_ADDRESS_LIST (RC_DBUI_BEGIN + 17)
-
 
 #define DLG_MM_ASSIGNFIELDS           (RC_DBUI_BEGIN + 20)
 

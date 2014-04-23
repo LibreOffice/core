@@ -283,7 +283,7 @@
 #define SID_ATTR_POSTIT_AUTHOR                          ( SID_SVX_START + 44 )
 #define SID_ATTR_POSTIT_DATE                            ( SID_SVX_START + 45 )
 #define SID_ATTR_POSTIT_TEXT                            ( SID_SVX_START + 46 )
-#define SID_ATTR_SEARCH                                 ( SID_SVX_START + 47 )
+// free
 
 // CAUTION! Range <48 .. 49> used by EditEngine (!)
 

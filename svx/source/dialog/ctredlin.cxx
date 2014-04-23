@@ -31,7 +31,6 @@
 #include <editeng/unolingu.hxx>
 #include <svx/dialmgr.hxx>
 #include "svx/dialogs.hrc"
-#include "ctredlin.hrc"
 #include <svx/ctredlin.hxx>
 #include "helpid.hrc"
 

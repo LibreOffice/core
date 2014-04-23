@@ -56,7 +56,6 @@
 #define EXPLORERFILE_SPLITTER               52
 
 
-
 #define STR_EXPLORERFILE_OPEN               1
 #define STR_EXPLORERFILE_SAVE               2
 #define STR_EXPLORERFILE_BUTTONSAVE         3
@@ -67,11 +66,6 @@
 #define STR_PREVIEW             			8
 #define STR_DEFAULT_DIRECTORY     			9
 #define STR_PLACES_TITLE         			10
-
-
-
-#define SID_SFX_START                       5000
-#define SID_OPENURL                     (SID_SFX_START + 596)
 
 #endif
 
