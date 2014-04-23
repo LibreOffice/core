@@ -2172,10 +2172,14 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 {
                     sStr = FieldString(eCode);
 
-                    sStr += "\\c \"";
-                    sStr += pTOX->GetSequenceName();
-                    sStr += sEntryEnd;
-
+                    sStr += "\\c ";
+                    OUString seqName = pTOX->GetSequenceName();
+                    if(!seqName.isEmpty())
+                    {
+                        sStr += "\"";
+                        sStr += seqName;
+                        sStr += sEntryEnd;
+                    }
                     OUString aTxt;
                     int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(), 1, aTxt );
                     if (1 == nRet)
