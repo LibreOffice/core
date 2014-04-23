@@ -2006,8 +2006,15 @@ DECLARE_OOXMLIMPORT_TEST(testNegativeCellMarginTwips, "negative-cell-margin-twip
 DECLARE_OOXMLIMPORT_TEST(testFdo38414, "fdo38414.docx" )
 {
     // The cells in the last (4th) column were merged properly and so the result didn't have the same height.
-    OUString height3 = parseDump("/root/page/body/tab/row[1]/cell[3]/infos/bounds", "height" );
-    OUString height4 = parseDump("/root/page/body/tab/row[1]/cell[4]/infos/bounds", "height" );
+    // (Since w:gridBefore is worked around by faking another cell in the row, so column count is thus 5
+    // instead of 4, therefore compare height of cells 4 and 5 rather than 3 and 4.)
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableColumns> xTableColumns(xTextTable->getColumns(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 5 ), xTableColumns->getCount());
+    OUString height3 = parseDump("/root/page/body/tab/row[1]/cell[4]/infos/bounds", "height" );
+    OUString height4 = parseDump("/root/page/body/tab/row[1]/cell[5]/infos/bounds", "height" );
     CPPUNIT_ASSERT_EQUAL( height3, height4 );
 }
 
@@ -2070,8 +2077,13 @@ DECLARE_OOXMLIMPORT_TEST(testGridBefore, "gridbefore.docx")
     // w:gridBefore is faked by inserting two cells without border (because Writer can't do non-rectangular tables).
     // So check the first cell in the first row is in fact 3rd and that it's more to the right than the second
     // cell on the second row.
-    OUString textA3 = parseDump("/root/page/body/tab/row[1]/cell[1]/txt/text()" );
-    OUString leftA3 = parseDump("/root/page/body/tab/row[1]/cell[1]/infos/bounds", "left" );
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableColumns> xTableColumns(xTextTable->getColumns(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 3 ), xTableColumns->getCount());
+    OUString textA3 = parseDump("/root/page/body/tab/row[1]/cell[3]/txt/text()" );
+    OUString leftA3 = parseDump("/root/page/body/tab/row[1]/cell[3]/infos/bounds", "left" );
     OUString leftB2 = parseDump("/root/page/body/tab/row[2]/cell[2]/infos/bounds", "left" );
     CPPUNIT_ASSERT_EQUAL( OUString( "A3" ), textA3 );
     CPPUNIT_ASSERT( leftA3.toInt32() > leftB2.toInt32());
