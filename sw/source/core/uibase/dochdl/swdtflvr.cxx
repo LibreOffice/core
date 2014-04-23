@@ -3579,8 +3579,11 @@ SwTransferable* SwTransferable::GetSwTransferable( const TransferableDataHelper&
 }
 
 SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
-    : rTrnsfr( rTrans ), pDocShell( 0 ),
-    bDelBookmrk( sal_False ), bInDisconnect( sal_False )
+    : rTrnsfr(rTrans)
+    , pDocShell(0)
+    , nOldTimeOut(0)
+    , bDelBookmrk(false)
+    , bInDisconnect(false)
 {
     // we only end up here with table- or text selection
     if( nsSelectionType::SEL_TBL_CELLS & rSh.GetSelectionType() )
