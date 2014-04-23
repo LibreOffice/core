@@ -21,8 +21,15 @@
 #include <string.h>
 
 RawBitmap::RawBitmap()
-: mnAllocated(0)
-{}
+    : mnAllocated(0)
+    , mnWidth(0)
+    , mnHeight(0)
+    , mnScanlineSize(0)
+    , mnBitCount(0)
+    , mnXOffset(0)
+    , mnYOffset(0)
+{
+}
 
 RawBitmap::~RawBitmap()
 {}
