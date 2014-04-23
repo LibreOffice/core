@@ -1564,6 +1564,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
         pDoc( pDocument ),
         aPos( rPos ),
         mpFormatter(pDoc ? pDoc->GetFormatTable() : NULL),
+        nSrcPos(0),
         pCharClass( ScGlobal::pCharClass ),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
