@@ -161,7 +161,7 @@ sal_Size SAL_CALL rtl_convertTextToUnicode( rtl_TextToUnicodeConverter hConverte
 {
     const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
 
-    /* Only temporaer, because we don't want die, if we don't have a
+    /* Only temporary, because we don't want die, if we don't have a
        converter, because not all converters are implemented yet */
     if ( !pConverter )
     {
@@ -239,7 +239,7 @@ sal_Size SAL_CALL rtl_convertUnicodeToText( rtl_UnicodeToTextConverter hConverte
 {
     const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
 
-    /* Only temporaer, because we don't want die, if we don't have a
+    /* Only temporary, because we don't want die, if we don't have a
        converter, because not all converters are implemented yet */
     if ( !pConverter )
     {

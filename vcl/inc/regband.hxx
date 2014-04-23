@@ -60,7 +60,7 @@ class ImplRegionBand
 {
 public:
     ImplRegionBand*             mpNextBand;         // pointer to the next element of the list
-    ImplRegionBand*             mpPrevBand;         // pointer to the previous element of the list (only used temporaery)
+    ImplRegionBand*             mpPrevBand;         // pointer to the previous element of the list (only used temporarily)
     ImplRegionBandSep*          mpFirstSep;         // root of the list with x-separations
     ImplRegionBandPoint*        mpFirstBandPoint;   // root of the list with lines
     long                        mnYTop;             // actual boundary of the band
