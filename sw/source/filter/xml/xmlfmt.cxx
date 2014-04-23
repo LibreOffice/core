@@ -223,7 +223,7 @@ SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        sal_uInt16 nPrefix =
+        const sal_uInt16 nPrefix =
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
         const OUString& rValue = xAttrList->getValueByIndex( i );
@@ -392,9 +392,9 @@ void SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
     if( !pColl || RES_CONDTXTFMTCOLL != pColl->Which() )
         return;
 
-    sal_uInt16 nCount = pConditions->size();
+    const size_t nCount = pConditions->size();
     OUString sName;
-    for( sal_uInt16 i = 0; i < nCount; i++ )
+    for( size_t i = 0; i < nCount; i++ )
     {
         const SwXMLConditionContext_Impl *pCond = (*pConditions)[i];
         OUString aDisplayName(
@@ -639,7 +639,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     {
         // If the page style is a pool style, then we maybe have to create it
         // first if it hasn't been used by now.
-        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
+        const sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
         if( USHRT_MAX != nPoolId )
             pPageDesc = pDoc->GetPageDescFromPool( nPoolId, false );
     }
@@ -829,7 +829,7 @@ SwXMLStylesContext_Impl::~SwXMLStylesContext_Impl()
 bool SwXMLStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) const
 {
     const SwXMLImport& rSwImport = GetSwImport();
-    sal_uInt16 nStyleFamilyMask = rSwImport.GetStyleFamilyMask();
+    const sal_uInt16 nStyleFamilyMask = rSwImport.GetStyleFamilyMask();
 
     bool bIns = true;
     switch( nFamily )
@@ -945,7 +945,7 @@ bool SwXMLMasterStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) cons
     bool bIns;
 
     const SwXMLImport& rSwImport = GetSwImport();
-    sal_uInt16 nStyleFamilyMask = rSwImport.GetStyleFamilyMask();
+    const sal_uInt16 nStyleFamilyMask = rSwImport.GetStyleFamilyMask();
     if( XML_STYLE_FAMILY_MASTER_PAGE == nFamily )
         bIns = (nStyleFamilyMask & SFX_STYLE_FAMILY_PAGE) != 0;
     else
@@ -1008,8 +1008,8 @@ void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
         pDoc = SwImport::GetDocFromXMLImport( *this );
 
     const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
-    sal_uInt16 nCount = rColls.size();
-    for( sal_uInt16 i=0; i < nCount; i++ )
+    const size_t nCount = rColls.size();
+    for( size_t i=0; i < nCount; ++i )
     {
         SwTxtFmtColl *pColl = rColls[i];
         if( pColl && RES_CONDTXTFMTCOLL == pColl->Which() )
@@ -1017,7 +1017,7 @@ void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
             const SwFmtCollConditions& rConditions =
                 ((const SwConditionTxtFmtColl *)pColl)->GetCondColls();
             bool bSendModify = false;
-            for( sal_uInt16 j=0; j < rConditions.size() && !bSendModify; j++ )
+            for( size_t j=0; j < rConditions.size() && !bSendModify; ++j )
             {
                 const SwCollCondition& rCond = rConditions[j];
                 switch( rCond.GetCondition() )
