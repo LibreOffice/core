@@ -2063,9 +2063,9 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                     bSortCollatorInitialized = true;
                     InitSortCollator( aLocalSortParam );
                 }
-                ScSortInfoArray* pArray = CreateSortInfoArray(nRow1, rParam.nRow2, bGlobalKeepQuery);
-                DecoladeRow( pArray, nRow1, rParam.nRow2 );
-                QuickSort( pArray, nRow1, rParam.nRow2 );
+                boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(nRow1, rParam.nRow2, bGlobalKeepQuery));
+                DecoladeRow( pArray.get(), nRow1, rParam.nRow2 );
+                QuickSort( pArray.get(), nRow1, rParam.nRow2 );
                 ScSortInfo** ppInfo = pArray->GetFirstArray();
                 SCSIZE nValidCount = nCount;
                 // keine Note-/Leerzellen zaehlen, sind ans Ende sortiert
@@ -2142,7 +2142,6 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                     rItem.meType = ScQueryEntry::ByValue;
                     rItem.mfVal = 0;
                 }
-                delete pArray;
             }
             break;
             default:
