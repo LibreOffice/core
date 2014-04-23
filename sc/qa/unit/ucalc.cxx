@@ -4629,7 +4629,7 @@ void Test::testSortWithFormulaRefs()
         m_pDoc->SetString( 0, i, 0, OUString::createFromAscii(aTextData[i-1]) );
 
     // Insert forumulas in A1:A6 on the 2nd sheet.
-    for (SCROW i = 0; i < SAL_N_ELEMENTS(aFormulaData); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aFormulaData); ++i)
         m_pDoc->SetString( 0, i, 1, OUString::createFromAscii(aFormulaData[i]) );
 
     // Sort data in A2:A8 on the 1st sheet. No column header.
@@ -4643,7 +4643,7 @@ void Test::testSortWithFormulaRefs()
 
     m_pDoc->Sort(0, aSortData, false, NULL);
 
-    for (SCROW i = 0; i < SAL_N_ELEMENTS(aResults); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aResults); ++i)
     {
         OUString sResult = m_pDoc->GetString(0, i + 1, 0);
         CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aResults[i] ), sResult );
