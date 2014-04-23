@@ -82,6 +82,10 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
         {
             mrEffectProperties.msUnsupportedEffectName = "innerShdw";
             saveUnsupportedAttribs( rAttribs );
+
+            mrEffectProperties.maShadow.moShadowDist = rAttribs.getInteger( XML_dist, 0 );
+            mrEffectProperties.maShadow.moShadowDir = rAttribs.getInteger( XML_dir, 0 );
+            return new ColorContext( *this, mrEffectProperties.maShadow.moShadowColor );
         }
         break;
     }
