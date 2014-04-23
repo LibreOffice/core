@@ -32,6 +32,9 @@
 #include "userdat.hxx"
 #include "formulacell.hxx"
 #include "tabprotection.hxx"
+#include <dbdocfun.hxx>
+#include <globalnames.hxx>
+#include <dbdata.hxx>
 
 #include <svx/svdpage.hxx>
 
@@ -72,6 +75,7 @@ public:
     void testLegacyCellAnchoredRotatedShape();
     void testEnhancedProtectionXLS();
     void testEnhancedProtectionXLSX();
+    void testSortWithSharedFormulasODS();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
@@ -88,6 +92,7 @@ public:
     CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
     CPPUNIT_TEST(testEnhancedProtectionXLS);
     CPPUNIT_TEST(testEnhancedProtectionXLSX);
+    CPPUNIT_TEST(testSortWithSharedFormulasODS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -537,6 +542,55 @@ void ScFiltersTest::testEnhancedProtectionXLSX()
     ScDocument* pDoc = xDocSh->GetDocument();
 
     testEnhancedProtectionImpl( pDoc);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testSortWithSharedFormulasODS()
+{
+    ScDocShellRef xDocSh = loadDoc("shared-formula/sort-crash.", ODS, true);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // E2:E10 should be shared.
+    const ScFormulaCell* pFC = pDoc->GetFormulaCell(ScAddress(4,1,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(9), pFC->GetSharedLength());
+
+    // E12:E17 should be shared.
+    pFC = pDoc->GetFormulaCell(ScAddress(4,11,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(11), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), pFC->GetSharedLength());
+
+    // Set A1:E17 as an anonymous database range to sheet, or else Calc would
+    // refuse to sort the range.
+    ScDBData* pDBData = new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 4, 16, true, true);
+    pDoc->SetAnonymousDBData(0, pDBData);
+
+    // Sort ascending by Column E.
+
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 4;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 16;
+    aSortData.bHasHeader = true;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 4;
+    aSortData.maKeyState[0].bAscending = true;
+
+    // Do the sorting.  This should not crash.
+    ScDBDocFunc aFunc(*xDocSh);
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // After the sort, E2:E16 should be shared.
+    pFC = pDoc->GetFormulaCell(ScAddress(4,1,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(15), pFC->GetSharedLength());
 
     xDocSh->DoClose();
 }
