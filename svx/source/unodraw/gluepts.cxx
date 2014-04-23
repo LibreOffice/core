@@ -343,7 +343,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
         }
     }
 
-    throw lang::IndexOutOfBoundsException();
+    throw container::NoSuchElementException();
 }
 
 uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers() throw (uno::RuntimeException, std::exception)
