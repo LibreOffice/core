@@ -295,10 +295,8 @@ uno::Reference < style::XStyle > SwXMLTextStyleContext_Impl::Create()
                                                     uno::UNO_QUERY );
         if( xFactory.is() )
         {
-            OUString sServiceName(
-                        "com.sun.star.style.ConditionalParagraphStyle" );
             uno::Reference < uno::XInterface > xIfc =
-                xFactory->createInstance( sServiceName );
+                xFactory->createInstance( "com.sun.star.style.ConditionalParagraphStyle" );
             if( xIfc.is() )
                 xNewStyle = uno::Reference < style::XStyle >( xIfc, uno::UNO_QUERY );
         }
@@ -397,7 +395,7 @@ void SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
     for( size_t i = 0; i < nCount; i++ )
     {
         const SwXMLConditionContext_Impl *pCond = (*pConditions)[i];
-        OUString aDisplayName(
+        const OUString aDisplayName(
             GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
                 pCond->GetApplyStyle() ) );
         SwStyleNameMapper::FillUIName(aDisplayName,
@@ -598,7 +596,8 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
             if( !pTextStyle )
             {
                 SvXMLAttributeList *pTmp = new SvXMLAttributeList;
-                OUString aStr = GetImport().GetNamespaceMap().GetQNameByKey( nPrefix, GetXMLToken(XML_NAME) );
+                const OUString aStr = GetImport().GetNamespaceMap().GetQNameByKey(
+                    nPrefix, GetXMLToken(XML_NAME) );
                 pTmp->AddAttribute( aStr, GetName() );
                 uno::Reference <xml::sax::XAttributeList> xTmpAttrList = pTmp;
                 pTextStyle = new SwXMLTextStyleContext_Impl( GetSwImport(), nPrefix,
@@ -625,10 +624,9 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
 
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
-    OUString sName;
     // #i40788# - first determine the display name of the page style,
     // then map this name to the corresponding user interface name.
-    sName = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE,
+    OUString sName = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE,
                                              GetMasterPageName() );
     SwStyleNameMapper::FillUIName( sName,
                                    sName,
@@ -891,13 +889,10 @@ uno::Reference < container::XNameContainer > SwXMLStylesContext_Impl::GetStylesC
 
 OUString SwXMLStylesContext_Impl::GetServiceName( sal_uInt16 nFamily ) const
 {
-    OUString sServiceName;
     if( XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily )
-        sServiceName = "com.sun.star.style.FrameStyle";
-    else
-        sServiceName = SvXMLStylesContext::GetServiceName( nFamily );
+        return OUString( "com.sun.star.style.FrameStyle" );
 
-    return sServiceName;
+    return SvXMLStylesContext::GetServiceName( nFamily );
 }
 
 void SwXMLStylesContext_Impl::EndElement()
