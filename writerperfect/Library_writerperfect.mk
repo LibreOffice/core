@@ -36,6 +36,7 @@ $(eval $(call gb_Library_use_sdk_api,writerperfect))
 $(eval $(call gb_Library_use_libraries,writerperfect,\
 	comphelper \
 	cppu \
+	cppuhelper \
 	sal \
 	sot \
 	tl \
