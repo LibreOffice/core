@@ -173,14 +173,16 @@ void ScQueryParamBase::FillInExcelSyntax(
     svl::SharedStringPool& rPool, const OUString& rStr, SCSIZE nIndex)
 {
     const OUString aCellStr = rStr;
-    if (!aCellStr.isEmpty())
+    if (nIndex >= maEntries.size())
+        Resize(nIndex+1);
+
+    ScQueryEntry& rEntry = GetEntry(nIndex);
+    ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+
+    if (aCellStr.isEmpty())
+        rItem.maString = svl::SharedString::getEmptyString();
+    else
     {
-        if ( nIndex >= maEntries.size() )
-            Resize( nIndex+1 );
-
-        ScQueryEntry& rEntry = GetEntry(nIndex);
-        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-
         rEntry.bDoQuery = true;
         // Operatoren herausfiltern
         if (aCellStr[0] == '<')
