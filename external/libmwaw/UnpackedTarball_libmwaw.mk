@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libmwaw,1))
 $(eval $(call gb_UnpackedTarball_add_patches,libmwaw,\
 	external/libmwaw/0001-std-isfinite-is-C-11.patch \
 	external/libmwaw/0001-use-correct-type.patch \
+	external/libmwaw/0001-values4003-apparently-contains-22-patterns-not-28.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

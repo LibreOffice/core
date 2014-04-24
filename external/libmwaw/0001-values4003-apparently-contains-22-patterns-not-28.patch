@@ -1,0 +1,29 @@
+From 83188cec2826a2bffdb3daf27702510c3e02edea Mon Sep 17 00:00:00 2001
+From: Stephan Bergmann <sbergman@redhat.com>
+Date: Thu, 24 Apr 2014 10:40:05 +0200
+Subject: [PATCH] values4003 apparently contains 22 patterns, not 28
+
+(cherry picked from commit c2ee6f30deb497dcf0ffa18a7ade603f398d889f)
+
+Conflicts:
+	src/lib/MSKGraph.cxx
+---
+ src/lib/MSKGraph.cxx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib/MSKGraph.cxx b/src/lib/MSKGraph.cxx
+index 7c1a9f6..f32d7c6 100644
+--- a/src/lib/MSKGraph.cxx
++++ b/src/lib/MSKGraph.cxx
+@@ -728,7 +728,7 @@ void State::initPatterns(int vers)
+     0x55ff, 0x55ff, 0x55ff, 0x55ff,  0x55ff, 0xeeff, 0x55ff, 0xbbff,  0x77ff, 0xddff, 0x77ff, 0xddff,  0x7fff, 0xf7ff, 0x7fff, 0xf7ff,
+     0x7fff, 0xffff, 0xf7ff, 0xffff,  0xffff, 0xffff, 0xffff, 0xffff
+   };
+-  m_rsrcPatternsMap.insert(std::map<long, Patterns>::value_type(4003,Patterns(28, values4003)));
++  m_rsrcPatternsMap.insert(std::map<long, Patterns>::value_type(4003,Patterns(22, values4003)));
+   static uint16_t const (values4004[]) = {
+     0xf0f0, 0xf0f0, 0x0f0f, 0x0f0f,  0xcccc, 0x3333, 0xcccc, 0x3333,  0x3333, 0xcccc, 0x3333, 0xcccc
+   };
+-- 
+1.9.0
+
