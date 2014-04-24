@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_0b4a6183",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-24T17:50:03Z",
+      "side": 0,
+      "message": "I think the original intention was to suggest functions from the MRU list first for partial matches; just to say.. we\u0027re giving that up by removing the code.\n\nNote: I don\u0027t say this is a no-go, just to clarify what this code\u0027s intention was. If the functionality could be preserved it would be even better..",
+      "revId": "880e7587f704bf96c26388198ca32168735f2d0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_4b445974",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-24T17:50:03Z",
+      "side": 1,
+      "message": "So this actually wants to keep track of which characters are used?\n\nAs noted in the header declaration, the mbFormulaChar[] array is of a different size than assumed here where we write out-of-bounds. Apart from that, the array size would have to be 64k (actually more if surrogates and full UTF-16 range are to be considered), do we really want that? Is the benefit of remembering each used char worth the memory?",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_8b5d714b",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-24T17:50:03Z",
+      "side": 1,
+      "message": "Bail out early if aStart is empty, because then all the following using nPos doesn\u0027t work.",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_6b49158b",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-24T17:50:03Z",
+      "side": 1,
+      "message": "Creating a dynamic array on the stack doesn\u0027t work on all platforms/compilers, use std::vector instead. But note that here nPos is already one less than aStart.getLength().",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_2b4f1d94",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1021,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-24T17:50:03Z",
+      "side": 1,
+      "message": "toupper() / tolower() don\u0027t work on sal_Unicode but only unsigned char instead (even if the type is declared as int, but only for the EOF value). These functions further should not be used because in some environments they may be localized and in some they are not. Instead, if upper/lower are really to be used, use the CharClass methods, for example with ScGlobal::pCharClass-\u003euppercase()",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_cb576925",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-24T17:50:03Z",
+      "side": 1,
+      "message": "This copies the reverse string aStart to aTemp ...",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_0b31810b",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-24T17:50:03Z",
+      "side": 1,
+      "message": "... and here we copy it reverse from aTemp to aResult character by character, so why not just copy a substring in one go from aStart to aResult instead?",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_6b403557",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-24T17:50:03Z",
+      "side": 1,
+      "message": "GetFuncName() always returns a size \u003e0 unless aStart is empty, so this branch is always executed.",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_eb7d05b3",
+        "filename": "sc/source/ui/inc/inputhdl.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-24T17:50:03Z",
+      "side": 1,
+      "message": "?? this is a bool array of size 2, probably not what was intended?",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
