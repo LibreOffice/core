@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -89,3 +90,5 @@ module ModuleC
         XInterfaceA methodD([in] ModuleA::ModuleB::EnumA aEnumA) raises (ModuleA::ExceptionA, ModuleA::ExceptionB, ModuleA::ExceptionC);
     };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  File Name (api_all_headers.idl)
@@ -5471,3 +5472,5 @@ library IAccessible2Lib
     enum IA2TextBoundaryType;
     enum IA2TextSpecialOffsets;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
