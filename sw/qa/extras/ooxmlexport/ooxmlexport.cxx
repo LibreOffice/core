@@ -3114,6 +3114,14 @@ DECLARE_OOXMLEXPORT_TEST(testFDO76586, "fdo76586.docx")
     assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[2]", "w", "7843");
 }
 
+DECLARE_OOXMLEXPORT_TEST(fdo77719, "fdo77719.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]", "prst", "rect");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFDO76587 , "fdo76587.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/styles.xml");

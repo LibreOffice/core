@@ -1162,6 +1162,9 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
             }
         }
     }
+    //Empty shapeType will lead to corruption so to avoid that shapeType is set to default i.e. "rect"
+    if(shapeType.isEmpty())
+        shapeType = "rect";
 
     pFS->singleElementNS(XML_a, XML_prstGeom,
                          XML_prst, OUStringToOString(shapeType, RTL_TEXTENCODING_UTF8).getStr(),
