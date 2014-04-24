@@ -29,7 +29,7 @@ $(call gb_ExternalProject_get_state_target,libmwaw,build) :
 			--enable-static \
 			--disable-shared \
 			--without-docs \
-			--disable-debug \
+			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug,--disable-debug) \
 			--disable-werror \
 			CXXFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost) -I$(BUILDDIR)/config_$(gb_Side))" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
