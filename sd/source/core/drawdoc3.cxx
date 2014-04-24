@@ -1367,7 +1367,6 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
     SdPage& rOldNotesMaster = (SdPage&)pNotes->TRG_GetMasterPage();
     SdPage* pMaster         = NULL;
     SdPage* pNotesMaster    = NULL;
-    SdPage* pPage           = NULL;
     OUString aOldPageLayoutName(pSelectedPage->GetLayoutName());
     OUString aOldLayoutName(aOldPageLayoutName);
     sal_Int32 nIndex = aOldLayoutName.indexOf( SD_LT_SEPARATOR );
@@ -1664,7 +1663,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         {
             for (sal_uInt16 nPage = 1; nPage < GetPageCount(); nPage++)
             {
-                pPage = (SdPage*) GetPage(nPage);
+                SdPage* pPage = (SdPage*) GetPage(nPage);
                 OUString aTest = pPage->GetLayoutName();
                 if (aTest == aOldPageLayoutName)
                 {
@@ -1681,20 +1680,21 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
         for (std::vector<SdPage*>::iterator pIter = aPageList.begin(); pIter != aPageList.end(); ++pIter)
         {
-            AutoLayout eAutoLayout = (*pIter)->GetAutoLayout();
+            SdPage* pPage = *pIter;
+            AutoLayout eAutoLayout = pPage->GetAutoLayout();
 
             if( bUndo )
             {
                 SdPresentationLayoutUndoAction * pPLUndoAction =
                     new SdPresentationLayoutUndoAction
                         (this,
-                        ( pPage && pPage->IsMasterPage() ) ? aLayoutName : aOldLayoutName,
+                        pPage->IsMasterPage() ? aLayoutName : aOldLayoutName,
                         aLayoutName,
                          eAutoLayout, eAutoLayout, sal_False, *pIter);
                 pUndoMgr->AddUndoAction(pPLUndoAction);
             }
-            (*pIter)->SetPresentationLayout(aLayoutName);
-            (*pIter)->SetAutoLayout(eAutoLayout);
+            pPage->SetPresentationLayout(aLayoutName);
+            pPage->SetAutoLayout(eAutoLayout);
         }
 
         // Adapt new master pages
@@ -1797,7 +1797,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         {
             for (sal_uInt16 nPage = 1; nPage < GetPageCount(); nPage++)
             {
-                pPage = (SdPage*) GetPage(nPage);
+                SdPage* pPage = (SdPage*) GetPage(nPage);
                 if (pPage->GetLayoutName() == aOldPageLayoutName)
                 {
                     aPageList.push_back(pPage);
