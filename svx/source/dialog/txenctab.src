@@ -100,7 +100,7 @@ StringArray RID_SVXSTR_TEXTENCODING_TABLE
         < "Korean (EUC-KR)"                             ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "Korean (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "Korean (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
-        < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Unicode (UTF-16)"                            ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Thai (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (Windows-874)"                              ; RTL_TEXTENCODING_MS_874           ; > ;
         < "Cyrillic (KOI8-U)"                             ; RTL_TEXTENCODING_KOI8_U           ; > ;
