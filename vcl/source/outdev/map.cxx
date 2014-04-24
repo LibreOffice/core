@@ -20,26 +20,17 @@
 #include <limits.h>
 
 #include <tools/bigint.hxx>
-#include <tools/debug.hxx>
-#include <tools/poly.hxx>
 
 #include <vcl/virdev.hxx>
-#include <vcl/region.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/cursor.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/lineinfo.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/cursor.hxx>
 
 #include <svdata.hxx>
 #include <window.h>
 #include <outdev.h>
-#include <salgdi.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 static int const s_ImplArySize = MAP_PIXEL+1;
 static const long aImplNumeratorAry[s_ImplArySize] =
