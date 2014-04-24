@@ -589,7 +589,7 @@ NeonSession::NeonSession( const rtl::Reference< DAVSessionFactory > & rSessionFa
                           const OUString& inUri,
                           const uno::Sequence< beans::NamedValue >& rFlags,
                           const ucbhelper::InternetProxyDecider & rProxyDecider )
-    throw ( DAVException )
+    throw ( std::exception )
     : DAVSession( rSessionFactory )
     , m_nProxyPort( 0 )
     , m_aFlags( rFlags )
@@ -617,7 +617,7 @@ NeonSession::~NeonSession( )
 }
 
 void NeonSession::Init( const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     m_aEnv = rEnv;
@@ -625,7 +625,7 @@ void NeonSession::Init( const DAVRequestEnvironment & rEnv )
 }
 
 void NeonSession::Init()
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -826,7 +826,7 @@ sal_Bool NeonSession::UsesProxy()
 void NeonSession::OPTIONS( const OUString & inPath,
                            DAVCapabilities & outCapabilities,
                            const DAVRequestEnvironment & rEnv )
-    throw( DAVException )
+    throw( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -852,7 +852,7 @@ void NeonSession::PROPFIND( const OUString & inPath,
                             const std::vector< OUString > & inPropNames,
                             std::vector< DAVResource > & ioResources,
                             const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -874,7 +874,7 @@ void NeonSession::PROPFIND( const OUString & inPath,
                             const Depth inDepth,
                             std::vector< DAVResourceInfo > & ioResInfo,
                             const DAVRequestEnvironment & rEnv )
-    throw( DAVException )
+    throw( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -894,7 +894,7 @@ void NeonSession::PROPFIND( const OUString & inPath,
 void NeonSession::PROPPATCH( const OUString & inPath,
                              const std::vector< ProppatchValue > & inValues,
                              const DAVRequestEnvironment & rEnv )
-    throw( DAVException )
+    throw( std::exception )
 {
     /* @@@ Which standard live properties can be set by the client?
            This is a known WebDAV RFC issue ( verified: 04/10/2001 )
@@ -1023,7 +1023,7 @@ void NeonSession::HEAD( const OUString &  inPath,
                         const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource,
                         const DAVRequestEnvironment & rEnv )
-    throw( DAVException )
+    throw( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1042,7 +1042,7 @@ void NeonSession::HEAD( const OUString &  inPath,
 uno::Reference< io::XInputStream >
 NeonSession::GET( const OUString & inPath,
                   const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1065,7 +1065,7 @@ NeonSession::GET( const OUString & inPath,
 void NeonSession::GET( const OUString & inPath,
                        uno::Reference< io::XOutputStream > & ioOutputStream,
                        const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1087,7 +1087,7 @@ NeonSession::GET( const OUString & inPath,
                   const std::vector< OUString > & inHeaderNames,
                   DAVResource & ioResource,
                   const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1115,7 +1115,7 @@ void NeonSession::GET( const OUString & inPath,
                        const std::vector< OUString > & inHeaderNames,
                        DAVResource & ioResource,
                        const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1138,7 +1138,7 @@ void NeonSession::GET( const OUString & inPath,
 void NeonSession::PUT( const OUString & inPath,
                        const uno::Reference< io::XInputStream > & inInputStream,
                        const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1164,7 +1164,7 @@ NeonSession::POST( const OUString & inPath,
                    const OUString & rReferer,
                    const uno::Reference< io::XInputStream > & inInputStream,
                    const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1197,7 +1197,7 @@ void NeonSession::POST( const OUString & inPath,
                         const uno::Reference< io::XInputStream > & inInputStream,
                         uno::Reference< io::XOutputStream > & oOutputStream,
                         const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1223,7 +1223,7 @@ void NeonSession::POST( const OUString & inPath,
 
 void NeonSession::MKCOL( const OUString & inPath,
                          const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1240,7 +1240,7 @@ void NeonSession::COPY( const OUString & inSourceURL,
                         const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
                         sal_Bool inOverWrite )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1266,7 +1266,7 @@ void NeonSession::MOVE( const OUString & inSourceURL,
                         const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
                         sal_Bool inOverWrite )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1288,7 +1288,7 @@ void NeonSession::MOVE( const OUString & inSourceURL,
 
 void NeonSession::DESTROY( const OUString & inPath,
                            const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1334,7 +1334,7 @@ namespace
 void NeonSession::LOCK( const OUString & inPath,
                         ucb::Lock & rLock,
                         const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1427,7 +1427,7 @@ void NeonSession::LOCK( const OUString & inPath,
 sal_Int64 NeonSession::LOCK( const OUString & inPath,
                              sal_Int64 nTimeout,
                              const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1493,7 +1493,7 @@ bool NeonSession::LOCK( NeonLock * pLock,
 
 void NeonSession::UNLOCK( const OUString & inPath,
                           const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1545,7 +1545,7 @@ bool NeonSession::UNLOCK( NeonLock * pLock )
 }
 
 void NeonSession::abort()
-    throw ( DAVException )
+    throw ( std::exception )
 {
     SAL_INFO("ucb.ucp.webdav", "neon commands cannot be aborted");
 }
@@ -1654,7 +1654,7 @@ bool NeonSession::removeExpiredLocktoken( const OUString & inURL,
 void NeonSession::HandleError( int nError,
                                const OUString & inPath,
                                const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
+    throw ( std::exception )
 {
     m_aEnv = DAVRequestEnvironment();
 
