@@ -567,6 +567,8 @@ protected:
     virtual bool                AcquireGraphics() const SAL_OVERRIDE;
     virtual void                ReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
 
+    virtual void                ImplInitClipRegion() SAL_OVERRIDE;
+
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void ImplAdjustNWFSizes();
 

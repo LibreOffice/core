@@ -58,83 +58,51 @@ void OutputDevice::ImplInitClipRegion()
 {
     DBG_TESTSOLARMUTEX();
 
-    if ( GetOutDevType() == OUTDEV_WINDOW )
+    if ( mbClipRegion )
     {
-        Window* pWindow = (Window*)this;
-        Region  aRegion;
-
-        // Put back backed up background
-        if ( pWindow->mpWindowImpl->mpFrameData->mpFirstBackWin )
-            pWindow->ImplInvalidateAllOverlapBackgrounds();
-        if ( pWindow->mpWindowImpl->mbInPaint )
-            aRegion = *(pWindow->mpWindowImpl->mpPaintRegion);
-        else
-        {
-            aRegion = *(pWindow->ImplGetWinChildClipRegion());
-            // --- RTL -- only this region is in frame coordinates, so re-mirror it
-            // the mpWindowImpl->mpPaintRegion above is already correct (see ImplCallPaint()) !
-            if( ImplIsAntiparallel() )
-                ReMirror ( aRegion );
-        }
-        if ( mbClipRegion )
-            aRegion.Intersect( ImplPixelToDevicePixel( maRegion ) );
-        if ( aRegion.IsEmpty() )
+        if ( maRegion.IsEmpty() )
             mbOutputClipped = true;
         else
         {
             mbOutputClipped = false;
-            ImplSelectClipRegion( aRegion );
+
+            // #102532# Respect output offset also for clip region
+            Region aRegion( ImplPixelToDevicePixel( maRegion ) );
+            const bool bClipDeviceBounds( ! GetPDFWriter()
+                                          && GetOutDevType() != OUTDEV_PRINTER );
+            if( bClipDeviceBounds )
+            {
+                // Perform actual rect clip against outdev
+                // dimensions, to generate empty clips whenever one of the
+                // values is completely off the device.
+                Rectangle aDeviceBounds( mnOutOffX, mnOutOffY,
+                                         mnOutOffX+GetOutputWidthPixel()-1,
+                                         mnOutOffY+GetOutputHeightPixel()-1 );
+                aRegion.Intersect( aDeviceBounds );
+            }
+
+            if ( aRegion.IsEmpty() )
+            {
+                mbOutputClipped = true;
+            }
+            else
+            {
+                mbOutputClipped = false;
+                ImplSelectClipRegion( aRegion );
+            }
         }
+
         mbClipRegionSet = true;
     }
     else
     {
-        if ( mbClipRegion )
+        if ( mbClipRegionSet )
         {
-            if ( maRegion.IsEmpty() )
-                mbOutputClipped = true;
-            else
-            {
-                mbOutputClipped = false;
-
-                // #102532# Respect output offset also for clip region
-                Region aRegion( ImplPixelToDevicePixel( maRegion ) );
-                const bool bClipDeviceBounds( ! GetPDFWriter()
-                                              && GetOutDevType() != OUTDEV_PRINTER );
-                if( bClipDeviceBounds )
-                {
-                    // Perform actual rect clip against outdev
-                    // dimensions, to generate empty clips whenever one of the
-                    // values is completely off the device.
-                    Rectangle aDeviceBounds( mnOutOffX, mnOutOffY,
-                                             mnOutOffX+GetOutputWidthPixel()-1,
-                                             mnOutOffY+GetOutputHeightPixel()-1 );
-                    aRegion.Intersect( aDeviceBounds );
-                }
-
-                if ( aRegion.IsEmpty() )
-                {
-                    mbOutputClipped = true;
-                }
-                else
-                {
-                    mbOutputClipped = false;
-                    ImplSelectClipRegion( aRegion );
-                }
-            }
-
-            mbClipRegionSet = true;
+            mpGraphics->ResetClipRegion();
+            mbClipRegionSet = false;
         }
-        else
-        {
-            if ( mbClipRegionSet )
-            {
-                mpGraphics->ResetClipRegion();
-                mbClipRegionSet = false;
-            }
 
-            mbOutputClipped = false;
-        }
+        mbOutputClipped = false;
     }
 
     mbInitClipRegion = false;

@@ -455,9 +455,11 @@ public:
      */
     ///@{
 
-    SAL_DLLPRIVATE void         ImplInitClipRegion();
     SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
     SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
+
+protected:
+    virtual void                ImplInitClipRegion();
 
     ///@}
 

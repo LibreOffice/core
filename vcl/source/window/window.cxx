@@ -406,6 +406,39 @@ bool Window::AcquireGraphics() const
     return mpGraphics ? true : false;
 }
 
+void Window::ImplInitClipRegion()
+{
+    DBG_TESTSOLARMUTEX();
+
+    Region  aRegion;
+
+    // Put back backed up background
+    if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
+        ImplInvalidateAllOverlapBackgrounds();
+    if ( mpWindowImpl->mbInPaint )
+        aRegion = *(mpWindowImpl->mpPaintRegion);
+    else
+    {
+        aRegion = *(ImplGetWinChildClipRegion());
+        // --- RTL -- only this region is in frame coordinates, so re-mirror it
+        // the mpWindowImpl->mpPaintRegion above is already correct (see ImplCallPaint()) !
+        if( ImplIsAntiparallel() )
+            ReMirror ( aRegion );
+    }
+    if ( mbClipRegion )
+        aRegion.Intersect( ImplPixelToDevicePixel( maRegion ) );
+    if ( aRegion.IsEmpty() )
+        mbOutputClipped = true;
+    else
+    {
+        mbOutputClipped = false;
+        ImplSelectClipRegion( aRegion );
+    }
+    mbClipRegionSet = true;
+
+    mbInitClipRegion = false;
+}
+
 void Window::EnableRTL ( bool bEnable )
 {
     StateChanged( STATE_CHANGE_MIRRORING );
