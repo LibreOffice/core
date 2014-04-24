@@ -89,11 +89,6 @@
 #include <memory>
 #include <algorithm>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::rtl;
-using namespace ::vcl;
-using namespace ::utl;
 
 #define TEXT_DRAW_ELLIPSIS  (TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_PATHELLIPSIS | TEXT_DRAW_NEWSELLIPSIS)
 
@@ -540,16 +535,16 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     rLineInfo.Clear();
     if ( !rStr.isEmpty() && (nWidth > 0) )
     {
-        uno::Reference < i18n::XBreakIterator > xBI;
+        css::uno::Reference < css::i18n::XBreakIterator > xBI;
         // get service provider
-        uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
         bool bHyphenate = (nStyle & TEXT_DRAW_WORDBREAK_HYPHENATION)
             == TEXT_DRAW_WORDBREAK_HYPHENATION;
-        uno::Reference< linguistic2::XHyphenator > xHyph;
+        css::uno::Reference< css::linguistic2::XHyphenator > xHyph;
         if ( bHyphenate )
         {
-            uno::Reference< linguistic2::XLinguServiceManager2> xLinguMgr = linguistic2::LinguServiceManager::create(xContext);
+            css::uno::Reference< css::linguistic2::XLinguServiceManager2> xLinguMgr = css::linguistic2::LinguServiceManager::create(xContext);
             xHyph = xLinguMgr->getHyphenator();
         }
 
@@ -570,12 +565,12 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
 
                 if ( xBI.is() )
                 {
-                    const com::sun::star::lang::Locale& rDefLocale(Application::GetSettings().GetUILanguageTag().getLocale());
+                    const css::lang::Locale& rDefLocale(Application::GetSettings().GetUILanguageTag().getLocale());
                     sal_Int32 nSoftBreak = _rLayout.GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
                     DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
-                    i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, uno::Sequence <beans::PropertyValue>(), 1 );
-                    i18n::LineBreakUserOptions aUserOptions;
-                    i18n::LineBreakResults aLBR = xBI->getLineBreak( rStr, nSoftBreak, rDefLocale, nPos, aHyphOptions, aUserOptions );
+                    css::i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, css::uno::Sequence <css::beans::PropertyValue>(), 1 );
+                    css::i18n::LineBreakUserOptions aUserOptions;
+                    css::i18n::LineBreakResults aLBR = xBI->getLineBreak( rStr, nSoftBreak, rDefLocale, nPos, aHyphOptions, aUserOptions );
                     nBreakPos = aLBR.breakIndex;
                     if ( nBreakPos <= nPos )
                         nBreakPos = nSoftBreak;
@@ -592,7 +587,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                         if ( xHyph.is() )
                         {
                             sal_Unicode cAlternateReplChar = 0;
-                            i18n::Boundary aBoundary = xBI->getWordBoundary( rStr, nBreakPos, rDefLocale, ::com::sun::star::i18n::WordType::DICTIONARY_WORD, sal_True );
+                            css::i18n::Boundary aBoundary = xBI->getWordBoundary( rStr, nBreakPos, rDefLocale, css::i18n::WordType::DICTIONARY_WORD, sal_True );
                             sal_Int32 nWordStart = nPos;
                             sal_Int32 nWordEnd = aBoundary.endPos;
                             DBG_ASSERT( nWordEnd > nWordStart, "ImpBreakLine: Start >= End?" );
@@ -604,9 +599,9 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                 // DBG_ASSERT( nWordEnd >= nMaxBreakPos, "Hyph: Break?" );
                                 OUString aWord = rStr.copy( nWordStart, nWordLen );
                                 sal_Int32 nMinTrail = nWordEnd-nSoftBreak+1;  //+1: Before the "broken off" char
-                                uno::Reference< linguistic2::XHyphenatedWord > xHyphWord;
+                                css::uno::Reference< css::linguistic2::XHyphenatedWord > xHyphWord;
                                 if (xHyph.is())
-                                    xHyphWord = xHyph->hyphenate( aWord, rDefLocale, aWord.getLength() - nMinTrail, uno::Sequence< beans::PropertyValue >() );
+                                    xHyphWord = xHyph->hyphenate( aWord, rDefLocale, aWord.getLength() - nMinTrail, css::uno::Sequence< css::beans::PropertyValue >() );
                                 if (xHyphWord.is())
                                 {
                                     bool bAlternate = xHyphWord->isAlternativeSpelling();
@@ -1782,7 +1777,7 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
 
     // #i47157# Factored out to ImplDrawTextRect(), to be shared
     // between us and DrawText()
-    DefaultTextLayout aLayout( *this );
+    vcl::DefaultTextLayout aLayout( *this );
     ImplDrawText( *this, rRect, rOrigStr, nStyle, NULL, NULL, aLayout );
 
     // and restore again
@@ -1823,7 +1818,7 @@ void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, s
 
     // #i47157# Factored out to ImplDrawText(), to be used also
     // from AddTextRectActions()
-    DefaultTextLayout aDefaultLayout( *this );
+    vcl::DefaultTextLayout aDefaultLayout( *this );
     ImplDrawText( *this, rRect, rOrigStr, nStyle, pVector, pDisplayText, _pTextLayout ? *_pTextLayout : aDefaultLayout );
 
     // and enable again
@@ -1857,7 +1852,7 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
         sal_Int32               i;
 
         nMaxWidth = 0;
-        DefaultTextLayout aDefaultLayout( *const_cast< OutputDevice* >( this ) );
+        vcl::DefaultTextLayout aDefaultLayout( *const_cast< OutputDevice* >( this ) );
         ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _pTextLayout ? *_pTextLayout : aDefaultLayout );
         nFormatLines = aMultiLineInfo.Count();
         if ( !nTextHeight )
@@ -1965,7 +1960,7 @@ static bool ImplIsCharIn( sal_Unicode c, const sal_Char* pStr )
 OUString OutputDevice::GetEllipsisString( const OUString& rOrigStr, long nMaxWidth,
                                         sal_uInt16 nStyle ) const
 {
-    DefaultTextLayout aTextLayout( *const_cast< OutputDevice* >( this ) );
+    vcl::DefaultTextLayout aTextLayout( *const_cast< OutputDevice* >( this ) );
     return ImplGetEllipsisString( *this, rOrigStr, nMaxWidth, nStyle, aTextLayout );
 }
 
