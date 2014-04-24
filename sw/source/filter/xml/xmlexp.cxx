@@ -149,10 +149,10 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                                     EE_PARA_XMLATTRIBS,
                                     EE_CHAR_XMLATTRIBS };
 
-        sal_uInt16 nWhichIds = rPool.GetSecondaryPool() ? 5 : 2;
-        for( sal_uInt16 j=0; j < nWhichIds; j++ )
+        const int nWhichIds = rPool.GetSecondaryPool() ? 5 : 2;
+        for( int j=0; j < nWhichIds; ++j )
         {
-            sal_uInt16 nWhichId = aWhichIds[j];
+            const sal_uInt16 nWhichId = aWhichIds[j];
             sal_uInt32 i=0, nItems = rPool.GetItemCount2( nWhichId );
             for( i = 0; i < nItems; ++i )
             {
