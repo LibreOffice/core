@@ -608,10 +608,6 @@ private:
     void CellStorageModified();
 
     void CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const;
-    void SwapCellTextAttrs( SCROW nRow1, SCROW nRow2 );
-
-    // cell notes
-    void SwapCellNotes( SCROW nRow1, SCROW nRow2 );
 
     void DeleteCells(
         sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, sal_uInt16 nDelFlag,
