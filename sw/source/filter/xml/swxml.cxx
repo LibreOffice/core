@@ -143,7 +143,7 @@ sal_Int32 ReadThroughComponent(
     uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(rxContext);
     SAL_INFO( "sw.filter", "parser created" );
     // get filter
-    OUString aFilterName(OUString::createFromAscii(pFilterName));
+    const OUString aFilterName(OUString::createFromAscii(pFilterName));
     uno::Reference< xml::sax::XDocumentHandler > xFilter(
         rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(aFilterName, rFilterArguments, rxContext),
         UNO_QUERY);
@@ -193,9 +193,9 @@ sal_Int32 ReadThroughComponent(
         OSL_FAIL(aError.getStr());
 #endif
 
-        OUString sErr( OUString::number( r.LineNumber ));
-        sErr += ",";
-        sErr += OUString::number( r.ColumnNumber );
+        const OUString sErr( OUString::number( r.LineNumber )
+            + ","
+            + OUString::number( r.ColumnNumber ) );
 
         if( !rStreamName.isEmpty() )
         {
@@ -658,10 +658,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     xInfoSet->setPropertyValue("ProgressRange", aProgRange);
 
     Reference< container::XNameAccess > xLateInitSettings( document::NamedPropertyValues::create(xContext), UNO_QUERY_THROW );
-    beans::NamedValue aLateInitSettings(
-        OUString( "LateInitSettings" ),
-        makeAny( xLateInitSettings )
-    );
+    beans::NamedValue aLateInitSettings( "LateInitSettings", makeAny( xLateInitSettings ) );
 
     xInfoSet->setPropertyValue( "SourceStorage", Any( xStorage ) );
 
@@ -880,10 +877,9 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     if( !(IsOrganizerMode() || IsBlockMode() || bInsertMode ||
           aOpt.IsFmtsOnly() ) )
     {
-        OUString sStreamName("layout-cache");
         try
         {
-            uno::Reference < io::XStream > xStm = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
+            uno::Reference < io::XStream > xStm = xStorage->openStreamElement( "layout-cache", embed::ElementModes::READ );
             SvStream* pStrm2 = utl::UcbStreamHelper::CreateStream( xStm );
             if( !pStrm2->GetError() )
                 rDoc.ReadLayoutCache( *pStrm2 );
@@ -1006,7 +1002,7 @@ size_t XMLReader::GetSectionList( SfxMedium& rMedium,
         try
         {
             xml::sax::InputSource aParserInput;
-            OUString sDocName( "content.xml" );
+            const OUString sDocName( "content.xml" );
             aParserInput.sSystemId = sDocName;
 
             uno::Reference < io::XStream > xStm = xStg2->openStreamElement( sDocName, embed::ElementModes::READ );
