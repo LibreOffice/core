@@ -156,23 +156,23 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
 #else
             if (false) {
                 ;
-#if WITH_LOCALE_ALL || WITH_LOCALE_CA
+#if WITH_LOCALE_ALL || WITH_LOCALE_ca
             } else if ( rLocale.Language == "ca" ) {
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_ca_charset;
 #endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_DZ
+#if WITH_LOCALE_ALL || WITH_LOCALE_dz
             } else if ( rLocale.Language == "dz" || rLocale.Language == "bo" ) {
                 // 'bo' Tibetan uses the same collation rules as 'dz' Dzongkha
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_dz_charset;
 #endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_HU
+#if WITH_LOCALE_ALL || WITH_LOCALE_hu
             } else if ( rLocale.Language == "hu" ) {
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_hu_charset;
 #endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_JA
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
             } else if ( rLocale.Language == "ja" ) {
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_ja_charset;
@@ -181,37 +181,37 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 else if ( rAlgorithm == "phonetic (alphanumeric last)" )
                     func = get_collator_data_ja_phonetic_alphanumeric_last;
 #endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_KO
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
             } else if ( rLocale.Language == "ko" ) {
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_ko_charset;
 #endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_KU
+#if WITH_LOCALE_ALL || WITH_LOCALE_ku
             } else if ( rLocale.Language == "ku" ) {
                 if ( rAlgorithm == "alphanumeric" )
                     func = get_collator_data_ku_alphanumeric;
 #endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_LN
+#if WITH_LOCALE_ALL || WITH_LOCALE_ln
             } else if ( rLocale.Language == "ln" ) {
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_ln_charset;
 #endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_MY
+#if WITH_LOCALE_ALL || WITH_LOCALE_my
             } else if ( rLocale.Language == "my" ) {
                 if ( rAlgorithm == "dictionary" )
                     func = get_collator_data_my_dictionary;
 #endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_NE
+#if WITH_LOCALE_ALL || WITH_LOCALE_ne
             } else if ( rLocale.Language == "ne" ) {
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_ne_charset;
 #endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_SID
+#if WITH_LOCALE_ALL || WITH_LOCALE_sid
             } else if ( rLocale.Language == "sid" ) {
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_sid_charset;
 #endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ZH
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
             } else if ( rLocale.Language == "zh" && (rLocale.Country == "TW" || rLocale.Country == "HK" || rLocale.Country == "MO") ) {
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_zh_TW_charset;
