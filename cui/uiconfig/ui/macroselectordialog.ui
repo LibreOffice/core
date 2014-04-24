@@ -101,12 +101,15 @@
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkLabel" id="helpmacro">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
+                <property name="hexpand">True</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Select the library that contains the macro you want. Then select the macro under 'Macro name'.</property>
                 <property name="wrap">True</property>
@@ -122,6 +125,7 @@
               <object class="GtkLabel" id="helptoolbar">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
+                <property name="hexpand">True</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">To add a command to a toolbar, select the category and then the command. Then drag the command to the Commands list of the Toolbars tab page in the Customize dialog.</property>
                 <property name="wrap">True</property>
@@ -137,11 +141,15 @@
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
                 <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkFrame" id="frame2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">none</property>
                     <child>
@@ -156,6 +164,8 @@
                             <property name="height_request">300</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="SvxConfigGroupListBox-selection1"/>
                             </child>
@@ -210,6 +220,8 @@
                   <object class="GtkFrame" id="frame3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">none</property>
                     <child>
@@ -224,6 +236,8 @@
                             <property name="height_request">300</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="SvxConfigFunctionListBox-selection1"/>
                             </child>
@@ -309,6 +323,8 @@
                           <object class="GtkTextView" id="description:border">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                             <property name="editable">False</property>
                             <property name="wrap_mode">word</property>
                             <property name="cursor_visible">False</property>
