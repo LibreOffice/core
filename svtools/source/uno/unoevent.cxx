@@ -497,7 +497,7 @@ void SvDetachedEventDescriptor::getByName(
         rMacro = (*aMacros[nIndex]);
 }
 
-sal_Bool SvDetachedEventDescriptor::hasByName(
+bool SvDetachedEventDescriptor::hasByName(
     const sal_uInt16 nEvent ) const     /// item ID of event
         throw(IllegalArgumentException)
 {
@@ -505,7 +505,7 @@ sal_Bool SvDetachedEventDescriptor::hasByName(
     if (-1 == nIndex)
         throw IllegalArgumentException();
 
-    return (NULL == aMacros[nIndex]) ? sal_False : aMacros[nIndex]->HasMacro();
+    return (NULL != aMacros[nIndex]) && aMacros[nIndex]->HasMacro();
 }
 
 

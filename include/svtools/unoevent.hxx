@@ -290,11 +290,11 @@ protected:
                 ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     /// do we have an event?
-    /// return sal_True: we have a macro for the event
-    /// return sal_False: no macro; getByName() will return an empty macro
+    /// return true: we have a macro for the event
+    /// return false: no macro; getByName() will return an empty macro
     /// IllegalArgumentException: the event is not supported
     using SvBaseEventDescriptor::hasByName;
-    virtual sal_Bool hasByName(
+    bool hasByName(
         const sal_uInt16 nEvent ) const     /// item ID of event
              throw(
                 ::com::sun::star::lang::IllegalArgumentException);
