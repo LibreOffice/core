@@ -113,7 +113,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         Reference<XPropertySet> rInfoSet = getExportInfo();
         if( rInfoSet.is() )
         {
-            OUString sAutoTextMode("AutoTextMode");
+            const OUString sAutoTextMode("AutoTextMode");
             if( rInfoSet->getPropertySetInfo()->hasPropertyByName(
                         sAutoTextMode ) )
             {
@@ -166,9 +166,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                         sal_uInt16 nIdx = pUnknown->GetFirstNamespaceIndex();
                         while( USHRT_MAX != nIdx )
                         {
-                            const OUString& rPrefix =
-                                pUnknown->GetPrefix( nIdx );
-                            _GetNamespaceMap().Add( rPrefix,
+                            _GetNamespaceMap().Add( pUnknown->GetPrefix( nIdx ),
                                                 pUnknown->GetNamespace( nIdx ),
                                                 XML_NAMESPACE_UNKNOWN );
                             nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
@@ -284,9 +282,8 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         Reference<XPropertySet> rInfoSet = getExportInfo();
         if( rInfoSet.is() )
         {
-            OUString sShowChanges("ShowChanges");
             bSaveRedline = ! rInfoSet->getPropertySetInfo()->hasPropertyByName(
-                                                                sShowChanges );
+                                                                "ShowChanges" );
         }
     }
     sal_uInt16 nRedlineMode = 0;
@@ -385,7 +382,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     Reference<XPropertySet> xInfoSet( getExportInfo() );
     if ( xInfoSet.is() )
     {
-        OUString sShowChanges( "ShowChanges" );
+        const OUString sShowChanges( "ShowChanges" );
         if( xInfoSet->getPropertySetInfo()->hasPropertyByName( sShowChanges ) )
         {
             bShowRedlineChanges = *(sal_Bool*) xInfoSet->
@@ -478,9 +475,7 @@ void SwXMLExport::_ExportContent()
     Reference<XPropertySet> xPropSet(GetModel(), UNO_QUERY);
     if (xPropSet.is())
     {
-        OUString sTwoDigitYear("TwoDigitYear");
-
-        Any aAny = xPropSet->getPropertyValue( sTwoDigitYear );
+        Any aAny = xPropSet->getPropertyValue( "TwoDigitYear" );
         aAny <<= (sal_Int16)1930;
 
         sal_Int16 nYear = 0;
