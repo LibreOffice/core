@@ -166,12 +166,14 @@
               <object class="GtkFrame" id="frame3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="vexpand">True</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
                   <object class="GtkAlignment" id="alignment3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="vexpand">True</property>
                     <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
@@ -181,6 +183,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="vexpand">True</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="Tree List-selection1"/>
                         </child>
@@ -211,12 +214,14 @@
               <object class="GtkFrame" id="frame2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="vexpand">True</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
                   <object class="GtkAlignment" id="alignment2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="vexpand">True</property>
                     <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
@@ -226,6 +231,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="vexpand">True</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
                         </child>
