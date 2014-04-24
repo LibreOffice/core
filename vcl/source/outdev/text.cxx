@@ -19,36 +19,27 @@
 
 #include <sal/types.h>
 
-#include <algorithm>
-#include <cmath>
-#include <cstring>
-#include <memory>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <com/sun/star/beans/PropertyValues.hpp>
+
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
-#include <comphelper/processfactory.hxx>
-#include <rtl/logfile.hxx>
-#include <tools/debug.hxx>
 
+#include <comphelper/processfactory.hxx>
+
+#include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/controllayout.hxx>
 
-#include "outdata.hxx"
-#include "outdev.h"
-#include "salgdi.hxx"
-#include "sallayout.hxx"
-#include "svdata.hxx"
-#include "textlayout.hxx"
+#include <outdata.hxx>
+#include <outdev.h>
+#include <salgdi.hxx>
+#include <svdata.hxx>
+#include <textlayout.hxx>
 
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
