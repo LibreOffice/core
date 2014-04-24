@@ -867,28 +867,28 @@ void ThumbnailView::Command( const CommandEvent& rCEvt )
     Control::Command( rCEvt );
 }
 
-void ThumbnailView::Paint( const Rectangle &aRect)
+void ThumbnailView::Paint(const Rectangle &aRect)
 {
-    size_t      nItemCount = mItemList.size();
+    size_t nItemCount = mItemList.size();
 
     // Draw background
     drawinglayer::primitive2d::Primitive2DSequence aSeq(1);
-    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonColorPrimitive2D(
-                                        B2DPolyPolygon(Polygon(aRect,5,5).getB2DPolygon()),
-                                        maColor.getBColor()));
+    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(new PolyPolygonColorPrimitive2D(
+                B2DPolyPolygon(Polygon(aRect, 5, 5).getB2DPolygon()),
+                maColor.getBColor()));
 
     mpProcessor->process(aSeq);
 
     // draw items
-    for ( size_t i = 0; i < nItemCount; i++ )
+    for (size_t i = 0; i < nItemCount; i++)
     {
         ThumbnailViewItem *const pItem = mItemList[i];
 
-        if ( pItem->isVisible() )
+        if (pItem->isVisible())
             DrawItem(pItem);
     }
 
-    if ( mpScrBar && mpScrBar->IsVisible() )
+    if (mpScrBar && mpScrBar->IsVisible())
         mpScrBar->Paint(aRect);
 }
 
