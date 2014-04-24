@@ -141,7 +141,6 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
         GetTextParagraphExport()->SetBlockMode( bBlock );
 
-        const SfxPoolItem* pItem;
         const SfxItemPool& rPool = pDoc->GetAttrPool();
         sal_uInt16 aWhichIds[5] = { RES_UNKNOWNATR_CONTAINER,
                                     RES_TXTATR_UNKNOWN_CONTAINER,
@@ -153,10 +152,11 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         for( int j=0; j < nWhichIds; ++j )
         {
             const sal_uInt16 nWhichId = aWhichIds[j];
-            sal_uInt32 i=0, nItems = rPool.GetItemCount2( nWhichId );
-            for( i = 0; i < nItems; ++i )
+            const sal_uInt32 nItems = rPool.GetItemCount2( nWhichId );
+            for( sal_uInt32 i = 0; i < nItems; ++i )
             {
-                if( 0 != (pItem = rPool.GetItem2( nWhichId , i ) ) )
+                const SfxPoolItem* const pItem = rPool.GetItem2( nWhichId , i );
+                if( 0 != pItem )
                 {
                     const SvXMLAttrContainerItem *pUnknown =
                                 PTR_CAST( SvXMLAttrContainerItem, pItem );
