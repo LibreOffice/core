@@ -149,7 +149,7 @@ public:
 
     bool isInCell()
     {
-        return TableManager::isInCell();
+        return DomainMapperTableManager_Base_t::isInCell();
     }
 
 };
