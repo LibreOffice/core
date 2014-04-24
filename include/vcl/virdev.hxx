@@ -63,7 +63,7 @@ private:
 
 protected:
     virtual bool AcquireGraphics() const SAL_OVERRIDE;
-    virtual void ImplReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
+    virtual void ReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
 
 public:
     /** Create a virtual device of size 1x1

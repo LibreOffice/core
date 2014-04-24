@@ -230,7 +230,6 @@ private:
     bool                        mbIsQueuePrinter;
     Link                        maErrorHdl;
 
-    void                        ImplReleaseFonts() SAL_OVERRIDE;
     SAL_DLLPRIVATE void         ImplInitData();
     SAL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
     SAL_DLLPRIVATE void         ImplInitDisplay( const Window* pWindow );
@@ -255,7 +254,8 @@ public:
 
 protected:
     virtual bool                AcquireGraphics() const SAL_OVERRIDE;
-    virtual void                ImplReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
+    virtual void                ReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
+    virtual void                ImplReleaseFonts() SAL_OVERRIDE;
 
     virtual long                GetGradientStepCount( long nMinRect ) SAL_OVERRIDE;
     virtual bool                UsePolyPolygonForComplexGradient() SAL_OVERRIDE;

@@ -421,7 +421,7 @@ protected:
      @param         bRelease    Determines whether to release the fonts of the
                                 physically released graphics device.
      */
-    virtual void                ImplReleaseGraphics( bool bRelease = true ) = 0;
+    virtual void                ReleaseGraphics( bool bRelease = true ) = 0;
 
 public:
     /** Initialize the graphics device's data structures.

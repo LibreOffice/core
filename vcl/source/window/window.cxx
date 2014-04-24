@@ -371,7 +371,7 @@ bool Window::AcquireGraphics() const
         {
             // steal the wingraphics from the other outdev
             mpGraphics = pReleaseOutDev->mpGraphics;
-            pReleaseOutDev->ImplReleaseGraphics( false );
+            pReleaseOutDev->ReleaseGraphics( false );
         }
         else
         {
@@ -380,7 +380,7 @@ bool Window::AcquireGraphics() const
             {
                 if ( !pSVData->maGDIData.mpLastWinGraphics )
                     break;
-                pSVData->maGDIData.mpLastWinGraphics->ImplReleaseGraphics();
+                pSVData->maGDIData.mpLastWinGraphics->ReleaseGraphics();
                 mpGraphics = mpWindowImpl->mpFrame->AcquireGraphics();
             }
         }
@@ -446,7 +446,7 @@ void Window::ClipToPaintRegion(Rectangle& rDstRect)
         rDstRect.Intersection(LogicToPixel(aPaintRgn.GetBoundRect()));
 }
 
-void Window::ImplReleaseGraphics( bool bRelease )
+void Window::ReleaseGraphics( bool bRelease )
 {
     DBG_TESTSOLARMUTEX();
 
@@ -1270,7 +1270,7 @@ void Window::ImplRemoveWindow( bool bRemoveFrameData )
     {
         // release the graphic
         OutputDevice *pOutDev = GetOutDev();
-        pOutDev->ImplReleaseGraphics();
+        pOutDev->ReleaseGraphics();
     }
 }
 
@@ -3192,7 +3192,7 @@ void Window::ImplUpdateWindowPtr( Window* pWindow )
     {
         // release graphic
         OutputDevice *pOutDev = GetOutDev();
-        pOutDev->ImplReleaseGraphics();
+        pOutDev->ReleaseGraphics();
     }
 
     mpWindowImpl->mpFrameData     = pWindow->mpWindowImpl->mpFrameData;
@@ -4651,7 +4651,7 @@ Window::~Window()
 
     // release SalGraphics
     OutputDevice *pOutDev = GetOutDev();
-    pOutDev->ImplReleaseGraphics();
+    pOutDev->ReleaseGraphics();
 
     // notify ImplDelData subscribers of this window about the window deletion
     ImplDelData* pDelData = mpWindowImpl->mpFirstDel;

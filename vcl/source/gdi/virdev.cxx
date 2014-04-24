@@ -57,7 +57,7 @@ bool VirtualDevice::AcquireGraphics() const
         {
             if ( !pSVData->maGDIData.mpLastVirGraphics )
                 break;
-            pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
+            pSVData->maGDIData.mpLastVirGraphics->ReleaseGraphics();
             mpGraphics = mpVirDev->AcquireGraphics();
         }
         // update global LRU list of virtual device graphics
@@ -81,7 +81,7 @@ bool VirtualDevice::AcquireGraphics() const
     return mpGraphics ? true : false;
 }
 
-void VirtualDevice::ImplReleaseGraphics( bool bRelease )
+void VirtualDevice::ReleaseGraphics( bool bRelease )
 {
     DBG_TESTSOLARMUTEX();
 
@@ -251,7 +251,7 @@ VirtualDevice::~VirtualDevice()
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    ImplReleaseGraphics();
+    ReleaseGraphics();
 
     delete mpVirDev;
 
@@ -347,7 +347,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
 
                 pGraphics->CopyBits( aPosAry, mpGraphics, this, this );
                 pNewVirDev->ReleaseGraphics( pGraphics );
-                ImplReleaseGraphics();
+                ReleaseGraphics();
                 delete mpVirDev;
                 mpVirDev = pNewVirDev;
                 mnOutWidth  = rNewSize.Width();

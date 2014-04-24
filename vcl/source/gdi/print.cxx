@@ -600,7 +600,7 @@ bool Printer::AcquireGraphics() const
         {
             if ( !pSVData->maGDIData.mpLastVirGraphics )
                 break;
-            pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
+            pSVData->maGDIData.mpLastVirGraphics->ReleaseGraphics();
             mpGraphics = pVirDev->mpVirDev->AcquireGraphics();
         }
         // update global LRU list of virtual device graphics
@@ -622,7 +622,7 @@ bool Printer::AcquireGraphics() const
         {
             if ( !pSVData->maGDIData.mpLastPrnGraphics )
                 break;
-            pSVData->maGDIData.mpLastPrnGraphics->ImplReleaseGraphics();
+            pSVData->maGDIData.mpLastPrnGraphics->ReleaseGraphics();
             mpGraphics = mpInfoPrinter->AcquireGraphics();
         }
         // update global LRU list of printer graphics
@@ -677,7 +677,7 @@ void Printer::ImplReleaseFonts()
     }
 }
 
-void Printer::ImplReleaseGraphics( bool bRelease )
+void Printer::ReleaseGraphics( bool bRelease )
 {
     DBG_TESTSOLARMUTEX();
 
@@ -1020,7 +1020,7 @@ Printer::~Printer()
 
     delete mpPrinterOptions;
 
-    ImplReleaseGraphics();
+    ReleaseGraphics();
     if ( mpInfoPrinter )
         ImplGetSVData()->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
     if ( mpDisplayDev )
@@ -1107,7 +1107,7 @@ bool Printer::SetJobSetup( const JobSetup& rSetup )
 
     JobSetup aJobSetup = rSetup;
 
-    ImplReleaseGraphics();
+    ReleaseGraphics();
     if ( mpInfoPrinter->SetPrinterData( aJobSetup.ImplGetData() ) )
     {
         ImplUpdateJobSetupPaper( aJobSetup );
@@ -1137,7 +1137,7 @@ bool Printer::Setup( Window* pWindow )
         return false;
 
     pFrame = pWindow->ImplGetFrame();
-    ImplReleaseGraphics();
+    ReleaseGraphics();
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mnModalMode++;
     nImplSysDialog++;
@@ -1176,7 +1176,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
         // Destroy old printer
         if ( !IsDisplayPrinter() )
         {
-            ImplReleaseGraphics();
+            ReleaseGraphics();
             pSVData->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
             if ( mpFontEntry )
             {
@@ -1212,7 +1212,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
     // Destroy old printer?
     if ( GetName() != pPrinter->GetName() )
     {
-        ImplReleaseGraphics();
+        ReleaseGraphics();
         if ( mpDisplayDev )
         {
             delete mpDisplayDev;
@@ -1281,7 +1281,7 @@ bool Printer::SetOrientation( Orientation eOrientation )
             return true;
         }
 
-        ImplReleaseGraphics();
+        ReleaseGraphics();
         if ( mpInfoPrinter->SetData( SAL_JOBSET_ORIENTATION, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
@@ -1322,7 +1322,7 @@ bool Printer::SetPaperBin( sal_uInt16 nPaperBin )
             return true;
         }
 
-        ImplReleaseGraphics();
+        ReleaseGraphics();
         if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERBIN, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
@@ -1457,7 +1457,7 @@ bool Printer::SetPaper( Paper ePaper )
             return true;
         }
 
-        ImplReleaseGraphics();
+        ReleaseGraphics();
         if ( ePaper == PAPER_USER )
             ImplFindPaperFormatForUserSize( aJobSetup, false );
         if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERSIZE|SAL_JOBSET_ORIENTATION, pSetupData ) )
@@ -1519,7 +1519,7 @@ bool Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
             return true;
         }
 
-        ImplReleaseGraphics();
+        ReleaseGraphics();
         ImplFindPaperFormatForUserSize( aJobSetup, bMatchNearest );
 
         // Changing the paper size can also change the orientation!
@@ -1616,7 +1616,7 @@ bool Printer::SetDuplexMode( DuplexMode eDuplex )
             return true;
         }
 
-        ImplReleaseGraphics();
+        ReleaseGraphics();
         if ( mpInfoPrinter->SetData( SAL_JOBSET_DUPLEXMODE, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
@@ -1705,7 +1705,7 @@ bool Printer::EndJob()
 
     if ( mpPrinter )
     {
-        ImplReleaseGraphics();
+        ReleaseGraphics();
 
         mnCurPage = 0;
 
@@ -1735,7 +1735,7 @@ void Printer::ImplStartPage()
         SalGraphics* pGraphics = mpPrinter->StartPage( maJobSetup.ImplGetConstData(), mbNewJobSetup );
         if ( pGraphics )
         {
-            ImplReleaseGraphics();
+            ReleaseGraphics();
             mpJobGraphics = pGraphics;
         }
         mbDevOutput = true;
@@ -1760,7 +1760,7 @@ void Printer::ImplEndPage()
     if ( mpPrinter )
     {
         mpPrinter->EndPage();
-        ImplReleaseGraphics();
+        ReleaseGraphics();
         mbDevOutput = false;
 
         mpJobGraphics = NULL;

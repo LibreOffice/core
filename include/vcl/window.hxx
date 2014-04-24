@@ -375,8 +375,6 @@ private:
     friend Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
 public:
     SAL_DLLPRIVATE void                ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
-    bool                               AcquireGraphics() const SAL_OVERRIDE;
-    void                               ImplReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
     SAL_DLLPRIVATE WinBits             ImplInitRes( const ResId& rResId );
     SAL_DLLPRIVATE WindowResHeader     ImplLoadResHeader( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplLoadRes( const ResId& rResId );
@@ -565,6 +563,9 @@ protected:
             void        ImplCallEventListeners( sal_uLong nEvent, void* pData = NULL );
             void        CallEventListeners( sal_uLong nEvent, void* pData = NULL );
             void        FireVclEvent( VclSimpleEvent* pEvent );
+
+    virtual bool                AcquireGraphics() const SAL_OVERRIDE;
+    virtual void                ReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
 
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void ImplAdjustNWFSizes();
