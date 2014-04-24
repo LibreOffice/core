@@ -951,7 +951,7 @@ namespace {
 
 struct SumOp
 {
-    static const int InitVal = 0;
+    static const double InitVal;
 
     void operator() (double& rAccum, double fVal)
     {
@@ -959,9 +959,11 @@ struct SumOp
     }
 };
 
+const double SumOp::InitVal = 0.0;
+
 struct SumSquareOp
 {
-    static const int InitVal = 0;
+    static const double InitVal;
 
     void operator() (double& rAccum, double fVal)
     {
@@ -969,15 +971,19 @@ struct SumSquareOp
     }
 };
 
+const double SumSquareOp::InitVal = 0.0;
+
 struct ProductOp
 {
-    static const int InitVal = 1;
+    static const double InitVal;
 
     void operator() (double& rAccum, double fVal)
     {
         rAccum *= fVal;
     }
 };
+
+const double ProductOp::InitVal = 1.0;
 
 template<typename _Op>
 class WalkElementBlocks : std::unary_function<MatrixImplType::element_block_node_type, void>
@@ -988,7 +994,7 @@ class WalkElementBlocks : std::unary_function<MatrixImplType::element_block_node
     bool mbFirst:1;
     bool mbTextAsZero:1;
 public:
-    WalkElementBlocks(bool bTextAsZero) : maRes(0.0, _Op::InitVal, 0), mbFirst(true), mbTextAsZero(bTextAsZero) {}
+    WalkElementBlocks(bool bTextAsZero) : maRes(_Op::InitVal, _Op::InitVal, 0), mbFirst(true), mbTextAsZero(bTextAsZero) {}
 
     const ScMatrix::IterateResult& getResult() const { return maRes; }
 
