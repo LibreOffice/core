@@ -23,7 +23,6 @@
 #include <svtools/controldims.hrc>
 
 #define     LB_EVENT                1
-#define     PB_ASSIGN               2
 #define     PB_DELETE               3
 #define     STR_EVENT               4
 #define     STR_ASSMACRO            5

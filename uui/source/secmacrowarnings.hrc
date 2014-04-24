@@ -56,10 +56,6 @@
 #define MW_COL_3                        (MW_COL_4-RSC_CD_PUSHBUTTON_WIDTH)
 #define MW_COL_2                        (MW_COL_3-RSC_SP_CTRL_DESC_X)
 
-#define MW_COL_A                        (DLGS_BOTTOM_OK_X(MW_WIDTH))
-#define MW_COL_C                        (DLGS_BOTTOM_CANCEL_X(MW_WIDTH))
-#define MW_COL_E                        (DLGS_BOTTOM_HELP_X(MW_WIDTH))
-
 #define MW_ROW_0                        (RSC_SP_DLG_INNERBORDER_TOP)
 #define MW_ROW_1                        (MW_ROW_0+3*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
 #define MW_ROW_2                        (MW_ROW_1+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)

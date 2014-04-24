@@ -30,7 +30,6 @@
 #include <viewopt.hxx>
 
 #include "table.hrc"
-#include "instable.hrc"
 
 #include "swabstdlg.hxx"
 

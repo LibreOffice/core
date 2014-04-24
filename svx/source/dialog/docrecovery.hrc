@@ -88,7 +88,6 @@
 #define FT_RECOV_FILELIST           7
 #define LB_RECOV_FILELIST           8
 #define FL_RECOV_BOTTOM             9
-#define BTN_RECOV_PREV              10
 #define BTN_RECOV_NEXT              11
 #define BTN_RECOV_CANCEL            12
 #define STR_HEADERBAR               13
