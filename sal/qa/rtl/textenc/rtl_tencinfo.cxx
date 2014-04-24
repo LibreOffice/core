@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_locales.h>
+
 #include <string.h>
 
 #include <osl/thread.h>
@@ -242,22 +244,6 @@ namespace
         {
             check( RTL_TEXTENCODING_APPLE_UKRAINIAN, RTL_TEXTENCODING_ISO_8859_5 );
         }
-        void MimeCharsetFromTextEncoding_APPLE_CHINSIMP()
-        {
-            check( RTL_TEXTENCODING_APPLE_CHINSIMP, RTL_TEXTENCODING_GB_2312 );
-        }
-        void MimeCharsetFromTextEncoding_APPLE_CHINTRAD()
-        {
-            check( RTL_TEXTENCODING_APPLE_CHINTRAD, RTL_TEXTENCODING_BIG5 );
-        }
-        void MimeCharsetFromTextEncoding_APPLE_JAPANESE()
-        {
-            check( RTL_TEXTENCODING_APPLE_JAPANESE, RTL_TEXTENCODING_SHIFT_JIS );
-        }
-        void MimeCharsetFromTextEncoding_APPLE_KOREAN()
-        {
-            check( RTL_TEXTENCODING_APPLE_KOREAN, RTL_TEXTENCODING_EUC_KR );
-        }
         void MimeCharsetFromTextEncoding_MS_932()
         {
             check( RTL_TEXTENCODING_MS_932, RTL_TEXTENCODING_SHIFT_JIS );
@@ -273,46 +259,6 @@ namespace
         void MimeCharsetFromTextEncoding_MS_950()
         {
             check( RTL_TEXTENCODING_MS_950, RTL_TEXTENCODING_BIG5 );
-        }
-        void MimeCharsetFromTextEncoding_SHIFT_JIS()
-        {
-            check( RTL_TEXTENCODING_SHIFT_JIS, RTL_TEXTENCODING_SHIFT_JIS );
-        }
-        void MimeCharsetFromTextEncoding_GB_2312()
-        {
-            check( RTL_TEXTENCODING_GB_2312, RTL_TEXTENCODING_GB_2312 );
-        }
-        void MimeCharsetFromTextEncoding_GBT_12345()
-        {
-            check( RTL_TEXTENCODING_GBT_12345, RTL_TEXTENCODING_GBT_12345 );
-        }
-        void MimeCharsetFromTextEncoding_GBK()
-        {
-            check( RTL_TEXTENCODING_GBK, RTL_TEXTENCODING_GBK );
-        }
-        void MimeCharsetFromTextEncoding_BIG5()
-        {
-            check( RTL_TEXTENCODING_BIG5, RTL_TEXTENCODING_BIG5 );
-        }
-        void MimeCharsetFromTextEncoding_EUC_JP()
-        {
-            check( RTL_TEXTENCODING_EUC_JP, RTL_TEXTENCODING_EUC_JP );
-        }
-        void MimeCharsetFromTextEncoding_EUC_CN()
-        {
-            check( RTL_TEXTENCODING_EUC_CN, RTL_TEXTENCODING_GB_2312 );
-        }
-        void MimeCharsetFromTextEncoding_EUC_TW()
-        {
-            check( RTL_TEXTENCODING_EUC_TW, RTL_TEXTENCODING_BIG5 );
-        }
-        void MimeCharsetFromTextEncoding_ISO_2022_JP()
-        {
-            check( RTL_TEXTENCODING_ISO_2022_JP, RTL_TEXTENCODING_ISO_2022_JP );
-        }
-        void MimeCharsetFromTextEncoding_ISO_2022_CN()
-        {
-            check( RTL_TEXTENCODING_ISO_2022_CN, RTL_TEXTENCODING_ISO_2022_CN );
         }
         void MimeCharsetFromTextEncoding_KOI8_R()
         {
@@ -334,13 +280,34 @@ namespace
         {
             check( RTL_TEXTENCODING_ISO_8859_13, RTL_TEXTENCODING_ISO_8859_13 );
         }
-        void MimeCharsetFromTextEncoding_EUC_KR()
+        void MimeCharsetFromTextEncoding_MS_1361()
         {
-            check( RTL_TEXTENCODING_EUC_KR, RTL_TEXTENCODING_EUC_KR );
+            check( RTL_TEXTENCODING_MS_1361, RTL_TEXTENCODING_EUC_KR );
         }
-        void MimeCharsetFromTextEncoding_ISO_2022_KR()
+        void MimeCharsetFromTextEncoding_TIS_620()
         {
-            check( RTL_TEXTENCODING_ISO_2022_KR, RTL_TEXTENCODING_ISO_2022_KR );
+            check( RTL_TEXTENCODING_TIS_620, RTL_TEXTENCODING_TIS_620 );
+        }
+        void MimeCharsetFromTextEncoding_KOI8_U()
+        {
+            check( RTL_TEXTENCODING_KOI8_U, RTL_TEXTENCODING_KOI8_U );
+        }
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
+        void MimeCharsetFromTextEncoding_APPLE_JAPANESE()
+        {
+            check( RTL_TEXTENCODING_APPLE_JAPANESE, RTL_TEXTENCODING_SHIFT_JIS );
+        }
+        void MimeCharsetFromTextEncoding_SHIFT_JIS()
+        {
+            check( RTL_TEXTENCODING_SHIFT_JIS, RTL_TEXTENCODING_SHIFT_JIS );
+        }
+        void MimeCharsetFromTextEncoding_EUC_JP()
+        {
+            check( RTL_TEXTENCODING_EUC_JP, RTL_TEXTENCODING_EUC_JP );
+        }
+        void MimeCharsetFromTextEncoding_ISO_2022_JP()
+        {
+            check( RTL_TEXTENCODING_ISO_2022_JP, RTL_TEXTENCODING_ISO_2022_JP );
         }
         void MimeCharsetFromTextEncoding_JIS_X_0201()
         {
@@ -354,9 +321,57 @@ namespace
         {
             check( RTL_TEXTENCODING_JIS_X_0212, RTL_TEXTENCODING_EUC_JP );
         }
-        void MimeCharsetFromTextEncoding_MS_1361()
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
+        void MimeCharsetFromTextEncoding_APPLE_KOREAN()
         {
-            check( RTL_TEXTENCODING_MS_1361, RTL_TEXTENCODING_EUC_KR );
+            check( RTL_TEXTENCODING_APPLE_KOREAN, RTL_TEXTENCODING_EUC_KR );
+        }
+        void MimeCharsetFromTextEncoding_EUC_KR()
+        {
+            check( RTL_TEXTENCODING_EUC_KR, RTL_TEXTENCODING_EUC_KR );
+        }
+        void MimeCharsetFromTextEncoding_ISO_2022_KR()
+        {
+            check( RTL_TEXTENCODING_ISO_2022_KR, RTL_TEXTENCODING_ISO_2022_KR );
+        }
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
+        void MimeCharsetFromTextEncoding_APPLE_CHINSIMP()
+        {
+            check( RTL_TEXTENCODING_APPLE_CHINSIMP, RTL_TEXTENCODING_GB_2312 );
+        }
+        void MimeCharsetFromTextEncoding_APPLE_CHINTRAD()
+        {
+            check( RTL_TEXTENCODING_APPLE_CHINTRAD, RTL_TEXTENCODING_BIG5 );
+        }
+        void MimeCharsetFromTextEncoding_GB_2312()
+        {
+            check( RTL_TEXTENCODING_GB_2312, RTL_TEXTENCODING_GB_2312 );
+        }
+        void MimeCharsetFromTextEncoding_GBT_12345()
+        {
+            check( RTL_TEXTENCODING_GBT_12345, RTL_TEXTENCODING_GBT_12345 );
+        }
+        void MimeCharsetFromTextEncoding_GBK()
+        {
+            check( RTL_TEXTENCODING_GBK, RTL_TEXTENCODING_GBK );
+        }
+        void MimeCharsetFromTextEncoding_BIG5()
+        {
+            check( RTL_TEXTENCODING_BIG5, RTL_TEXTENCODING_BIG5 );
+        }
+        void MimeCharsetFromTextEncoding_EUC_CN()
+        {
+            check( RTL_TEXTENCODING_EUC_CN, RTL_TEXTENCODING_GB_2312 );
+        }
+        void MimeCharsetFromTextEncoding_EUC_TW()
+        {
+            check( RTL_TEXTENCODING_EUC_TW, RTL_TEXTENCODING_BIG5 );
+        }
+        void MimeCharsetFromTextEncoding_ISO_2022_CN()
+        {
+            check( RTL_TEXTENCODING_ISO_2022_CN, RTL_TEXTENCODING_ISO_2022_CN );
         }
         void MimeCharsetFromTextEncoding_GB_18030()
         {
@@ -366,19 +381,13 @@ namespace
         {
             check( RTL_TEXTENCODING_BIG5_HKSCS, RTL_TEXTENCODING_BIG5_HKSCS );
         }
-        void MimeCharsetFromTextEncoding_TIS_620()
-        {
-            check( RTL_TEXTENCODING_TIS_620, RTL_TEXTENCODING_TIS_620 );
-        }
-        void MimeCharsetFromTextEncoding_KOI8_U()
-        {
-            check( RTL_TEXTENCODING_KOI8_U, RTL_TEXTENCODING_KOI8_U );
-        }
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_FOR_SCRIPT_Deva
         void MimeCharsetFromTextEncoding_ISCII_DEVANAGARI()
         {
             check( RTL_TEXTENCODING_ISCII_DEVANAGARI, RTL_TEXTENCODING_ISCII_DEVANAGARI );
         }
-
+#endif
         CPPUNIT_TEST_SUITE( testBestMime );
 
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_MS_1252 );
@@ -428,41 +437,48 @@ namespace
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_ROMANIAN );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_TURKISH );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_UKRAINIAN );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_CHINSIMP );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_CHINTRAD );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_JAPANESE );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_KOREAN );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_MS_932 );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_MS_936 );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_MS_949 );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_MS_950 );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_SHIFT_JIS );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_GB_2312 );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_GBT_12345 );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_GBK );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_BIG5 );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_EUC_JP );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_EUC_CN );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_EUC_TW );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_ISO_2022_JP );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_ISO_2022_CN );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_KOI8_R );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_UTF7 );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_UTF8 );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_ISO_8859_10 );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_ISO_8859_13 );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_EUC_KR );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_ISO_2022_KR );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_MS_1361 );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_TIS_620 );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_KOI8_U );
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_JAPANESE );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_SHIFT_JIS );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_EUC_JP );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_ISO_2022_JP );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_JIS_X_0201 );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_JIS_X_0208 );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_JIS_X_0212 );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_MS_1361 );
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_KOREAN );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_EUC_KR );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_ISO_2022_KR );
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_CHINSIMP );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_CHINTRAD );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_GB_2312 );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_GBT_12345 );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_GBK );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_BIG5 );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_EUC_CN );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_EUC_TW );
+        CPPUNIT_TEST( MimeCharsetFromTextEncoding_ISO_2022_CN );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_GB_18030 );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_BIG5_HKSCS );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_TIS_620 );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_KOI8_U );
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_FOR_SCRIPT_Deva
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_ISCII_DEVANAGARI );
-
+#endif
         CPPUNIT_TEST_SUITE_END( );
     };
 
@@ -714,7 +730,7 @@ namespace
         {
             check( RTL_TEXTENCODING_APPLE_UKRAINIAN, RTL_TEXTENCODING_ISO_8859_5 );
         }
-
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
         void UnixCharsetFromTextEncoding_APPLE_CHINSIMP()
         {
             check( RTL_TEXTENCODING_APPLE_CHINSIMP, RTL_TEXTENCODING_DONTKNOW );
@@ -724,17 +740,19 @@ namespace
         {
             check( RTL_TEXTENCODING_APPLE_CHINTRAD, RTL_TEXTENCODING_DONTKNOW );
         }
-
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
         void UnixCharsetFromTextEncoding_APPLE_JAPANESE()
         {
             check( RTL_TEXTENCODING_APPLE_JAPANESE, RTL_TEXTENCODING_DONTKNOW );
         }
-
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
         void UnixCharsetFromTextEncoding_APPLE_KOREAN()
         {
             check( RTL_TEXTENCODING_APPLE_KOREAN, RTL_TEXTENCODING_DONTKNOW );
         }
-
+#endif
         void UnixCharsetFromTextEncoding_MS_932()
         {
             check( RTL_TEXTENCODING_MS_932, RTL_TEXTENCODING_DONTKNOW );
@@ -754,12 +772,13 @@ namespace
         {
             check( RTL_TEXTENCODING_MS_950, RTL_TEXTENCODING_DONTKNOW );
         }
-
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
         void UnixCharsetFromTextEncoding_SHIFT_JIS()
         {
             check( RTL_TEXTENCODING_SHIFT_JIS, RTL_TEXTENCODING_DONTKNOW );
         }
-
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
         void UnixCharsetFromTextEncoding_GB_2312()
         {
             check( RTL_TEXTENCODING_GB_2312, RTL_TEXTENCODING_DONTKNOW );
@@ -779,12 +798,14 @@ namespace
         {
             check( RTL_TEXTENCODING_BIG5, RTL_TEXTENCODING_DONTKNOW );
         }
-
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
         void UnixCharsetFromTextEncoding_EUC_JP()
         {
             check( RTL_TEXTENCODING_EUC_JP, RTL_TEXTENCODING_DONTKNOW );
         }
-
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
         void UnixCharsetFromTextEncoding_EUC_CN()
         {
             check( RTL_TEXTENCODING_EUC_CN, RTL_TEXTENCODING_DONTKNOW );
@@ -794,17 +815,19 @@ namespace
         {
             check( RTL_TEXTENCODING_EUC_TW, RTL_TEXTENCODING_DONTKNOW );
         }
-
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
         void UnixCharsetFromTextEncoding_ISO_2022_JP()
         {
             check( RTL_TEXTENCODING_ISO_2022_JP, RTL_TEXTENCODING_DONTKNOW );
         }
-
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
         void UnixCharsetFromTextEncoding_ISO_2022_CN()
         {
             check( RTL_TEXTENCODING_ISO_2022_CN, RTL_TEXTENCODING_DONTKNOW );
         }
-
+#endif
         void UnixCharsetFromTextEncoding_KOI8_R()
         {
             check( RTL_TEXTENCODING_KOI8_R, RTL_TEXTENCODING_KOI8_R );
@@ -829,7 +852,7 @@ namespace
         {
             check( RTL_TEXTENCODING_ISO_8859_13, RTL_TEXTENCODING_ISO_8859_13 );
         }
-
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
         void UnixCharsetFromTextEncoding_EUC_KR()
         {
             check( RTL_TEXTENCODING_EUC_KR, RTL_TEXTENCODING_DONTKNOW );
@@ -839,7 +862,8 @@ namespace
         {
             check( RTL_TEXTENCODING_ISO_2022_KR, RTL_TEXTENCODING_DONTKNOW );
         }
-
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
         void UnixCharsetFromTextEncoding_JIS_X_0201()
         {
             check( RTL_TEXTENCODING_JIS_X_0201, RTL_TEXTENCODING_DONTKNOW );
@@ -854,12 +878,12 @@ namespace
         {
             check( RTL_TEXTENCODING_JIS_X_0212, RTL_TEXTENCODING_DONTKNOW );
         }
-
+#endif
         void UnixCharsetFromTextEncoding_MS_1361()
         {
             check( RTL_TEXTENCODING_MS_1361, RTL_TEXTENCODING_DONTKNOW );
         }
-
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
         void UnixCharsetFromTextEncoding_GB_18030()
         {
             check( RTL_TEXTENCODING_GB_18030, RTL_TEXTENCODING_GBK );
@@ -869,7 +893,7 @@ namespace
         {
             check( RTL_TEXTENCODING_BIG5_HKSCS, RTL_TEXTENCODING_DONTKNOW );
         }
-
+#endif
         void UnixCharsetFromTextEncoding_TIS_620()
         {
             check( RTL_TEXTENCODING_TIS_620, RTL_TEXTENCODING_ISO_8859_1 );
@@ -929,37 +953,61 @@ namespace
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_ROMANIAN );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_TURKISH );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_UKRAINIAN );
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_CHINSIMP );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_CHINTRAD );
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_JAPANESE );
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_KOREAN );
+#endif
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_MS_932 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_MS_936 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_MS_949 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_MS_950 );
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_SHIFT_JIS );
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_GB_2312 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_GBT_12345 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_GBK );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_BIG5 );
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_EUC_JP );
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_EUC_CN );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_EUC_TW );
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_ISO_2022_JP );
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_ISO_2022_CN );
+#endif
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_KOI8_R );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_UTF7 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_UTF8 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_ISO_8859_10 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_ISO_8859_13 );
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_EUC_KR );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_ISO_2022_KR );
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_JIS_X_0201 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_JIS_X_0208 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_JIS_X_0212 );
+#endif
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_MS_1361 );
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_GB_18030 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_BIG5_HKSCS );
+#endif
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_TIS_620 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_KOI8_U );
 

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_locales.h>
+
 #include "sal/config.h"
 
 #include <cassert>
@@ -158,48 +160,101 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
             NULL, /* TODO! APPLE_THAI */
             &aImplAPPLETURKISHTextEncodingData, /* APPLE_TURKISH */
             &aImplAPPLEUKRAINIANTextEncodingData, /* APPLE_UKRAINIAN */
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
             &aImplAPPLECHINSIMPTextEncodingData, /* APPLE_CHINSIMP */
             &aImplAPPLECHINTRADTextEncodingData, /* APPLE_CHINTRAD */
+#else
+            NULL,
+            NULL,
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
             &aImplAPPLEJAPANESETextEncodingData, /* APPLE_JAPANESE */
+#else
+            NULL,
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
             &aImplAPPLEKOREANTextEncodingData, /* APPLE_KOREAN */
+#else
+            NULL,
+#endif
             &aImplMS932TextEncodingData, /* MS_932 */
             &aImplMS936TextEncodingData, /* MS_936 */
             &aImplMS949TextEncodingData, /* MS_949 */
             &aImplMS950TextEncodingData, /* MS_950 */
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
             &aImplSJISTextEncodingData, /* SHIFT_JIS */
+#else
+            NULL,
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
             &aImplGB2312TextEncodingData, /* GB_2312 */
             &aImplGBT12345TextEncodingData, /* GBT_12345 */
             &aImplGBKTextEncodingData, /* GBK */
             &aImplBIG5TextEncodingData, /* BIG5 */
-#ifndef IOS
+#else
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
             &aImplEUCJPTextEncodingData, /* EUC_JP */
+#else
+            NULL,
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
             &aImplEUCCNTextEncodingData, /* EUC_CN */
             &aImplEucTwTextEncodingData, /* EUC_TW */
+#else
+            NULL,
+            NULL,
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
             &aImplIso2022JpTextEncodingData, /* ISO_2022_JP */
+#else
+            NULL,
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
             &aImplIso2022CnTextEncodingData, /* ISO_2022_CN */
 #else
-            NULL, /* EUC_JP */
-            NULL, /* EUC_CN */
-            NULL, /* EUC_TW */
-            NULL, /* ISO_2022_JP */
-            NULL, /* ISO_2022_CN */
+            NULL,
 #endif
             &aImplKOI8RTextEncodingData, /* KOI8_R */
             &aImplUTF7TextEncodingData, /* UTF7 */
             NULL, /* UTF8, see above */
             &aImplISO885910TextEncodingData, /* ISO_8859_10 */
             &aImplISO885913TextEncodingData, /* ISO_8859_13 */
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
             &aImplEUCKRTextEncodingData, /* EUC_KR */
             &aImplIso2022KrTextEncodingData, /* ISO_2022_KR */
+#else
+            NULL,
+            NULL,
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
             &aImplJISX0201TextEncodingData, /* JIS_X_0201 */
             &aImplJISX0208TextEncodingData, /* JIS_X_0208 */
             &aImplJISX0212TextEncodingData, /* JIS_X_0212 */
+#else
+            NULL,
+            NULL,
+            NULL,
+#endif
             &aImplMS1361TextEncodingData, /* MS_1361 */
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
             &aImplGb18030TextEncodingData, /* GB_18030 */
             &aImplBig5HkscsTextEncodingData, /* BIG5_HKSCS */
+#else
+            NULL,
+            NULL,
+#endif
             &aImplTis620TextEncodingData, /* TIS_620 */
             &aImplKoi8UTextEncodingData, /* KOI8_U */
+#if WITH_LOCALE_ALL || WITH_LOCALE_FOR_SCRIPT_Deva
             &aImplIsciiDevanagariTextEncodingData, /* ISCII_DEVANAGARI */
+#else
+            NULL,
+#endif
             NULL, /* JAVA_UTF8, see above */
             &adobeStandardEncodingData, /* ADOBE_STANDARD */
             &adobeSymbolEncodingData, /* ADOBE_SYMBOL */

@@ -12201,6 +12201,26 @@ AC_SUBST(WITH_POOR_HELP_LOCALIZATIONS)
 
 if test -n "$with_locales"; then
     WITH_LOCALES="$with_locales"
+
+    just_langs="`echo $WITH_LOCALES | sed -e 's/_[A-Z]*//g'`"
+    # Only languages and scripts for which we actually have ifdefs need to be handled. Also see
+    # config_host/config_locales.h.in
+    for locale in $WITH_LOCALES; do
+        lang=${locale%_*}
+
+        AC_DEFINE_UNQUOTED(WITH_LOCALE_$lang, 1)
+
+        case $lang in
+        hi|mr*ne)
+            AC_DEFINE(WITH_LOCALE_FOR_SCRIPT_Deva)
+            ;;
+        bg|ru)
+            AC_DEFINE(WITH_LOCALE_FOR_SCRIPT_Cyrl)
+            ;;
+        esac
+    done
+else
+    AC_DEFINE(WITH_LOCALE_ALL)
 fi
 AC_SUBST(WITH_LOCALES)
 
@@ -12759,6 +12779,7 @@ AC_CONFIG_HEADERS([config_host/config_gcc.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])
+AC_CONFIG_HEADERS([config_host/config_locales.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
 AC_CONFIG_HEADERS([config_host/config_orcus.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])

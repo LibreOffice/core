@@ -55,20 +55,10 @@ $(i18npool_CODIR)/collator_%.cxx : \
 	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_Helper_execute,gencoll_rule) $< $@ $*)
 
-define i18npool_echo_one_lang
-	echo '#define LOCAL_RULE_$(1)' >>$@
-
-endef
-
 $(i18npool_CODIR)/lrl_include.hxx : \
 		$(SRCDIR)/i18npool/source/collator/data | $(i18npool_CODIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	echo '#define LOCAL_RULE_LANGS "$(sort $(foreach txt,$(i18npool_COTXTS), \
 		$(firstword $(subst _, ,$(txt)))))"' > $@
-ifeq ($(WITH_LOCALES),)
-	echo '#define LOCAL_RULE_ALL' >>$@
-else
-	$(foreach txt,$(i18npool_COTXTS),$(call i18npool_echo_one_lang,$(subst .txt,,$(txt))))
-endif
 
 # vim: set noet sw=4 ts=4:
