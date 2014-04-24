@@ -3946,6 +3946,7 @@ void IterateMatrix(
         case ifPRODUCT:
         {
             ScMatrix::IterateResult aRes = pMat->Product(bTextAsZero);
+            fRes = aRes.mfFirst;
             fRes *= aRes.mfRest;
             rCount += aRes.mnCount;
         }
