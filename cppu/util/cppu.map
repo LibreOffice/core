@@ -45,6 +45,7 @@ UDK_3_0_0 {
         typelib_setCacheSize;
 
         typelib_typedescriptionreference_newByAsciiName;
+        typelib_typedescriptionreference_registerAndNewByAsciiName;
         typelib_static_type_getByTypeClass;
         typelib_static_type_init;
         typelib_static_sequence_type_init;

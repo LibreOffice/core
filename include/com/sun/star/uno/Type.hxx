@@ -52,6 +52,12 @@ inline Type::Type( TypeClass eTypeClass, const sal_Char * pTypeName ) SAL_THROW(
     ::typelib_typedescriptionreference_newByAsciiName( &_pType, (typelib_TypeClass)eTypeClass, pTypeName );
 }
 
+inline Type::Type( TypeClass eTypeClass, const sal_Char * pTypeName, typelib_TypeDescriptionReference * pSuperType ) SAL_THROW(())
+    : _pType( 0 )
+{
+    ::typelib_typedescriptionreference_registerAndNewByAsciiName( &_pType, (typelib_TypeClass)eTypeClass, pTypeName, pSuperType );
+}
+
 inline Type::Type( typelib_TypeDescriptionReference * pType ) SAL_THROW(())
     : _pType( pType )
 {

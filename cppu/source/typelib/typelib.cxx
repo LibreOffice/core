@@ -2080,6 +2080,27 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_newByAs
     typelib_typedescriptionreference_new( ppTDR, eTypeClass, aTypeName.pData );
 }
 
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_registerAndNewByAsciiName(
+    typelib_TypeDescriptionReference ** ppTDR,
+    typelib_TypeClass eTypeClass,
+    const sal_Char * pTypeName,
+    typelib_TypeDescriptionReference * pSuperType)
+    SAL_THROW_EXTERN_C()
+{
+    OUString aTypeName( OUString::createFromAscii( pTypeName ) );
+    typelib_TypeDescription * pTD = 0;
+    typelib_typedescription_new(
+        &pTD,
+        eTypeClass, aTypeName.pData,
+        pSuperType,
+        0,
+        0 );
+    typelib_typedescription_register( (typelib_TypeDescription**)&pTD );
+    typelib_typedescription_release( pTD );
+
+    typelib_typedescriptionreference_new(ppTDR, eTypeClass, aTypeName.pData);
+}
+
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_new(
     typelib_TypeDescriptionReference ** ppTDR,
     typelib_TypeClass eTypeClass, rtl_uString * pTypeName )

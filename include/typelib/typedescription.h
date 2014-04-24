@@ -780,6 +780,17 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_newByAsciiName(
     const sal_Char * pTypeName )
     SAL_THROW_EXTERN_C();
 
+/**
+ * Same as typelib_typedescriptionreference_newByAsciiName(), but before
+ * creating the reference, it also registers the type.
+ */
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_registerAndNewByAsciiName(
+    typelib_TypeDescriptionReference ** ppTDR,
+    typelib_TypeClass eTypeClass,
+    const sal_Char * pTypeName,
+    typelib_TypeDescriptionReference * pSuperType)
+    SAL_THROW_EXTERN_C();
+
 /** Increments reference count of type description reference.
 
     @param pRef type description reference

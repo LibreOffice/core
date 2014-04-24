@@ -89,6 +89,14 @@ public:
     */
     inline Type( TypeClass eTypeClass, const sal_Char * pTypeName ) SAL_THROW(());
 
+    /** Constructor: Type is registered, then constructed by given name and type class.
+
+        @param eTypeClass type class of type
+        @param pTypeName name of type
+        @param pSuperType parent type
+    */
+    inline Type( TypeClass eTypeClass, const sal_Char * pTypeName, typelib_TypeDescriptionReference * pSuperType ) SAL_THROW(());
+
     /** Constructor: Type is (copy) constructed by given C type description reference.
 
         @param pType C type description reference
