@@ -2163,6 +2163,8 @@ void Test::testFuncSUM()
 
 void Test::testFuncPRODUCT()
 {
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto recalc.
+
     OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
@@ -2175,14 +2177,12 @@ void Test::testFuncPRODUCT()
     val = 3;
     m_pDoc->SetValue(0, 2, 0, val);
     m_pDoc->SetString(0, 3, 0, OUString("=PRODUCT(A1:A3)"));
-    m_pDoc->CalcAll();
     m_pDoc->GetValue(0, 3, 0, result);
     CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT failed", result == 6.0);
 
-    m_pDoc->SetString(0, 4, 0, OUString("=PRODUCT({1;2;3})"));
-    m_pDoc->CalcAll();
+    m_pDoc->SetString(0, 4, 0, OUString("=PRODUCT({2;3;4})"));
     m_pDoc->GetValue(0, 4, 0, result);
-    CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT with inline array failed", result == 6.0);
+    CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT with inline array failed", result == 24.0);
 
     m_pDoc->DeleteTab(0);
 }
