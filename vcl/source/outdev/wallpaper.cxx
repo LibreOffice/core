@@ -17,31 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/bmpacc.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/graph.hxx>
 
 #include <wall2.hxx>
-#include <salgdi.hxx>
-#include <window.h>
-#include <svdata.hxx>
-#include <outdev.h>
-
-#include <com/sun/star/uno/Sequence.hxx>
-
-#include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-
-#include <math.h>
-#include <boost/scoped_ptr.hpp>
 
 void OutputDevice::ImplDrawColorWallpaper( long nX, long nY,
                                            long nWidth, long nHeight,
