@@ -59,7 +59,7 @@ using namespace ::com::sun::star::container;
 
 
 OUString InsertFixedText( InformationDialog& rInformationDialog, const OUString& rControlName, const OUString& rLabel,
-                                sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Int16 nTabIndex )
+                                sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, bool bMultiLine, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
         OUString("Height"),
@@ -98,7 +98,7 @@ OUString InsertImage(
     sal_Int32 nPosY,
     sal_Int32 nWidth,
     sal_Int32 nHeight,
-    sal_Bool bScale )
+    bool bScale )
 {
     OUString pNames[] = {
         OUString("Border"),
@@ -301,19 +301,19 @@ void InformationDialog::InitDialog()
     InsertImage( *this,
                  OUString( "aboutimage" ),
                  OUString( "private:standardimage/query" ),
-                 5, 5, 25, 25, sal_False );
-    InsertFixedText( *this, OUString("fixedtext"), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 );
+                 5, 5, 25, 25, false );
+    InsertFixedText( *this, OUString("fixedtext"), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, true, 0 );
     if ( !maSaveAsURL.isEmpty() )
         InsertCheckBox(  *this, "OpenNewDocument", xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
     InsertButton( *this, OUString("button"), mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
 
-    sal_Bool bOpenNewDocument = mrbOpenNewDocument;
+    bool bOpenNewDocument = mrbOpenNewDocument;
     setControlProperty( "OpenNewDocument", "State", Any( (sal_Int16)bOpenNewDocument ) );
 }
 
 
 
-InformationDialog::InformationDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame, const OUString& rSaveAsURL, sal_Bool& rbOpenNewDocument, const sal_Int64& rSourceSize, const sal_Int64& rDestSize, const sal_Int64& rApproxSize ) :
+InformationDialog::InformationDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame, const OUString& rSaveAsURL, bool& rbOpenNewDocument, const sal_Int64& rSourceSize, const sal_Int64& rDestSize, const sal_Int64& rApproxSize ) :
     UnoDialog( rxContext, rxFrame ),
     ConfigurationAccess( rxContext, NULL ),
     mxContext( rxContext ),
@@ -341,7 +341,7 @@ InformationDialog::~InformationDialog()
 
 
 
-sal_Bool InformationDialog::execute()
+bool InformationDialog::execute()
 {
     UnoDialog::execute();
 
@@ -351,7 +351,7 @@ sal_Bool InformationDialog::execute()
         Any aAny( getControlProperty( "OpenNewDocument", "State" ) );
         if ( aAny >>= nInt16 )
         {
-            sal_Bool bOpenNewDocument = static_cast< sal_Bool >( nInt16 );
+            bool bOpenNewDocument = static_cast< bool >( nInt16 );
             mrbOpenNewDocument = bOpenNewDocument;
         }
     }
@@ -365,7 +365,7 @@ void OKActionListener::actionPerformed( const ActionEvent& rEvent )
 {
     if ( rEvent.ActionCommand == "button" )
     {
-        mrInformationDialog.endExecute( sal_True );
+        mrInformationDialog.endExecute( true );
     }
 }
 void OKActionListener::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )

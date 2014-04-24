@@ -112,11 +112,11 @@ void OptimizerDialog::InitRoadmap()
         Reference< XPropertySet > xPropertySet( mxRoadmapControlModel, UNO_QUERY_THROW );
         xPropertySet->setPropertyValue( "Name", Any( OUString("rdmNavi") ) );
         mxRoadmapControl = mxDialog->getControl( "rdmNavi" );
-        InsertRoadmapItem( 0, sal_True, getString( STR_INTRODUCTION ), ITEM_ID_INTRODUCTION );
-        InsertRoadmapItem( 1, sal_True, getString( STR_SLIDES ), ITEM_ID_SLIDES );
-        InsertRoadmapItem( 2, sal_True, getString( STR_IMAGE_OPTIMIZATION ), ITEM_ID_GRAPHIC_OPTIMIZATION );
-        InsertRoadmapItem( 3, sal_True, getString( STR_OLE_OBJECTS ), ITEM_ID_OLE_OPTIMIZATION );
-        InsertRoadmapItem( 4, sal_True, getString( STR_SUMMARY ), ITEM_ID_SUMMARY );
+        InsertRoadmapItem( 0, true, getString( STR_INTRODUCTION ), ITEM_ID_INTRODUCTION );
+        InsertRoadmapItem( 1, true, getString( STR_SLIDES ), ITEM_ID_SLIDES );
+        InsertRoadmapItem( 2, true, getString( STR_IMAGE_OPTIMIZATION ), ITEM_ID_GRAPHIC_OPTIMIZATION );
+        InsertRoadmapItem( 3, true, getString( STR_OLE_OBJECTS ), ITEM_ID_OLE_OPTIMIZATION );
+        InsertRoadmapItem( 4, true, getString( STR_SUMMARY ), ITEM_ID_SUMMARY );
 
         // Well, that's messy, but the
         // BMP_PRESENTATION_MINIMIZER from sd module cannot be used here directly
@@ -124,8 +124,8 @@ void OptimizerDialog::InitRoadmap()
         OUString sURL( "private:graphicrepository/sd/res/minimize_presi_80.png" );
 
         xPropertySet->setPropertyValue( "ImageURL", Any( sURL ) );
-        xPropertySet->setPropertyValue( "Activated", Any( (sal_Bool)sal_True ) );
-        xPropertySet->setPropertyValue( "Complete", Any( (sal_Bool)sal_True ) );
+        xPropertySet->setPropertyValue( "Activated", Any( true ) );
+        xPropertySet->setPropertyValue( "Complete", Any( true ) );
         xPropertySet->setPropertyValue( "CurrentItemID", Any( (sal_Int16)ITEM_ID_INTRODUCTION ) );
         xPropertySet->setPropertyValue( "Text", Any( getString( STR_STEPS ) ) );
     }
@@ -136,7 +136,7 @@ void OptimizerDialog::InitRoadmap()
 
 
 
-void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool bEnabled, const OUString& rLabel, const sal_Int32 nItemID )
+void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const bool bEnabled, const OUString& rLabel, const sal_Int32 nItemID )
 {
     try
     {
@@ -251,7 +251,7 @@ OptimizerDialog::~OptimizerDialog()
 
 
 
-sal_Bool OptimizerDialog::execute()
+bool OptimizerDialog::execute()
 {
     Reference< XItemEventBroadcaster > maRoadmapBroadcaster( mxRoadmapControl, UNO_QUERY_THROW );
     maRoadmapBroadcaster->addItemListener( mxItemListener );
@@ -518,7 +518,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             mrOptimizerDialog.setControlProperty( "FixedText0Pg4", "Enabled", Any( sal_True ) );
 
             // check if we have to open the FileDialog
-            sal_Bool    bSuccessfullyExecuted = sal_True;
+            bool    bSuccessfullyExecuted = true;
             sal_Int16   nInt16 = 0;
             mrOptimizerDialog.getControlProperty( "RadioButton1Pg4", "State" ) >>= nInt16;
             if ( nInt16 )
@@ -550,7 +550,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                         }
                     }
                 }
-                 sal_Bool bDialogExecuted = aFileOpenDialog.execute() == dialogs::ExecutableDialogResults::OK;
+                 bool bDialogExecuted = aFileOpenDialog.execute() == dialogs::ExecutableDialogResults::OK;
                 if ( bDialogExecuted )
                 {
                     aSaveAsURL = aFileOpenDialog.getURL();
@@ -560,7 +560,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 if ( aSaveAsURL.isEmpty() )
                 {
                     // something goes wrong...
-                    bSuccessfullyExecuted = sal_False;
+                    bSuccessfullyExecuted = false;
                 }
 
                 // waiting for 500ms
@@ -622,7 +622,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             }
         }
         break;
-        case TK_btnNavCancel :  mrOptimizerDialog.endExecute( sal_False ); break;
+        case TK_btnNavCancel :  mrOptimizerDialog.endExecute( false ); break;
         case TK_Button0Pg0 :    // delete configuration
         {
             OUString aSelectedItem( mrOptimizerDialog.GetSelectedString( "ListBox0Pg0" ) );

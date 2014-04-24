@@ -58,7 +58,7 @@ PDFIHybridAdaptor::PDFIHybridAdaptor( const uno::Reference< uno::XComponentConte
 // XFilter
 sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::PropertyValue >& rFilterData ) throw( uno::RuntimeException, std::exception )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( m_xModel.is() )
     {
         uno::Reference< io::XStream > xSubStream;

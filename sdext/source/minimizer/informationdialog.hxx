@@ -19,6 +19,7 @@
 
 #ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_INFORMATIONDIALOG_HXX
 #define INCLUDED_SDEXT_SOURCE_MINIMIZER_INFORMATIONDIALOG_HXX
+
 #include "unodialog.hxx"
 #include "configurationaccess.hxx"
 #include "pppoptimizertoken.hxx"
@@ -47,10 +48,10 @@ public :
 
     InformationDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
             com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame, const OUString& rSaveAsURL,
-                sal_Bool& bOpenNewDocument, const sal_Int64& nSourceSize, const sal_Int64& nDestSize, const sal_Int64& nApproxDest );
+                bool& bOpenNewDocument, const sal_Int64& nSourceSize, const sal_Int64& nDestSize, const sal_Int64& nApproxDest );
     ~InformationDialog();
 
-    sal_Bool                execute();
+    bool                execute();
 
 private :
 
@@ -65,7 +66,7 @@ private :
     sal_Int64 mnSourceSize;
     sal_Int64 mnDestSize;
     sal_Int64 mnApproxSize;
-    sal_Bool& mrbOpenNewDocument;
+    bool& mrbOpenNewDocument;
     const OUString& maSaveAsURL;
 
 public :

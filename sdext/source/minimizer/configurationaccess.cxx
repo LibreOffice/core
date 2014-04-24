@@ -131,7 +131,7 @@ void OptimizerSettings::SaveSettingsToConfiguration( const Reference< XNameRepla
     }
 }
 
-sal_Bool OptimizerSettings::operator==( const OptimizerSettings& rOptimizerSettings ) const
+bool OptimizerSettings::operator==( const OptimizerSettings& rOptimizerSettings ) const
 {
     return ( rOptimizerSettings.mbJPEGCompression == mbJPEGCompression )
         && ( rOptimizerSettings.mnJPEGQuality == mnJPEGQuality )
@@ -440,9 +440,9 @@ void ConfigurationAccess::SetConfigProperty( const PPPOptimizerTokenEnum eProper
     }
 }
 
-sal_Bool ConfigurationAccess::GetConfigProperty( const PPPOptimizerTokenEnum ePropertyToken, const sal_Bool bDefault ) const
+bool ConfigurationAccess::GetConfigProperty( const PPPOptimizerTokenEnum ePropertyToken, const bool bDefault ) const
 {
-    sal_Bool bRetValue = bDefault;
+    bool bRetValue = bDefault;
     if ( ! ( GetConfigProperty( ePropertyToken ) >>= bRetValue ) )
         bRetValue = bDefault;
     return bRetValue;

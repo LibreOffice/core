@@ -57,7 +57,7 @@ UnoDialog::UnoDialog( const Reference< XComponentContext > &rxContext, Reference
     mxControlModel( mxDialogModel, UNO_QUERY_THROW ),
     mxDialog( UnoControlDialog::create(rxContext) ),
     mxControl( mxDialog, UNO_QUERY_THROW ),
-    mbStatus( sal_False )
+    mbStatus( false )
 {
     mxControl->setModel( mxControlModel );
 
@@ -83,7 +83,7 @@ void UnoDialog::execute()
     mxDialog->execute();
 }
 
-void UnoDialog::endExecute( sal_Bool bStatus )
+void UnoDialog::endExecute( bool bStatus )
 {
     mbStatus = bStatus;
     mxDialog->endExecute();
@@ -125,7 +125,7 @@ Reference< XInterface > UnoDialog::insertControlModel( const OUString& rServiceN
 
 
 
-void UnoDialog::setVisible( const OUString& rName, sal_Bool bVisible )
+void UnoDialog::setVisible( const OUString& rName, bool bVisible )
 {
     try
     {

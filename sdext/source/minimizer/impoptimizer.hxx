@@ -42,24 +42,24 @@ private:
     com::sun::star::uno::Reference< com::sun::star::frame::XModel >             mxModel;
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >          mxStatusDispatcher;
 
-    sal_Bool        mbJPEGCompression;
-    sal_Int32       mnJPEGQuality;
-    sal_Bool        mbRemoveCropArea;
-    sal_Int32       mnImageResolution;
-    sal_Bool        mbEmbedLinkedGraphics;
-    sal_Bool        mbOLEOptimization;
-    sal_Int32       mnOLEOptimizationType;
-    OUString   maCustomShowName;
-    sal_Bool        mbDeleteUnusedMasterPages;
-    sal_Bool        mbDeleteHiddenSlides;
-    sal_Bool        mbDeleteNotesPages;
-    OUString   maSaveAsURL;
-    OUString   maFilterName;
-    sal_Bool        mbOpenNewDocument;
+    bool        mbJPEGCompression;
+    sal_Int32   mnJPEGQuality;
+    bool        mbRemoveCropArea;
+    sal_Int32   mnImageResolution;
+    bool        mbEmbedLinkedGraphics;
+    bool        mbOLEOptimization;
+    sal_Int32   mnOLEOptimizationType;
+    OUString    maCustomShowName;
+    bool        mbDeleteUnusedMasterPages;
+    bool        mbDeleteHiddenSlides;
+    bool        mbDeleteNotesPages;
+    OUString    maSaveAsURL;
+    OUString    maFilterName;
+    bool        mbOpenNewDocument;
 
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame > mxInformationDialog;
 
-    sal_Bool Optimize();
+    bool Optimize();
 
 public:
 
@@ -67,7 +67,7 @@ public:
             const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel );
         ~ImpOptimizer();
 
-        sal_Bool Optimize( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rArguments );
+        bool     Optimize( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rArguments );
         void     DispatchStatus();
 };
 

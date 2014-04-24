@@ -62,10 +62,9 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
     Reference< XFilePickerControlAccess > xAccess( mxFilePicker, UNO_QUERY );
     if ( xAccess.is() )
     {
-        Any aValue( static_cast< sal_Bool >( sal_True ) );
         try
         {
-            xAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue );
+            xAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, Any( true ) );
         }
         catch( com::sun::star::uno::Exception& )
         {}
@@ -83,7 +82,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
             if ( xFilters->getByName( aFilterList[ i ] ) >>= aFilterProperties )
             {
                 FilterEntry aFilterEntry;
-                sal_Bool bImpressFilter = sal_False;
+                bool bImpressFilter = false;
                 for ( int j = 0; j < aFilterProperties.getLength(); j++ )
                 {
                     PropertyValue& rProperty( aFilterProperties[ j ] );
@@ -94,7 +93,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
                             OUString sDocumentService;
                             rProperty.Value >>= sDocumentService;
                             if ( sDocumentService == "com.sun.star.presentation.PresentationDocument" )
-                                bImpressFilter = sal_True;
+                                bImpressFilter = true;
                             else
                                 j = aFilterProperties.getLength();
                         }

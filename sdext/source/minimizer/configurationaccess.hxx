@@ -39,43 +39,43 @@
 struct OptimizerSettings
 {
     OUString   maName;
-    sal_Bool        mbJPEGCompression;
+    bool        mbJPEGCompression;
     sal_Int32       mnJPEGQuality;
-    sal_Bool        mbRemoveCropArea;
+    bool        mbRemoveCropArea;
     sal_Int32       mnImageResolution;
-    sal_Bool        mbEmbedLinkedGraphics;
-    sal_Bool        mbOLEOptimization;
+    bool        mbEmbedLinkedGraphics;
+    bool        mbOLEOptimization;
     sal_Int16       mnOLEOptimizationType;
-    sal_Bool        mbDeleteUnusedMasterPages;
-    sal_Bool        mbDeleteHiddenSlides;
-    sal_Bool        mbDeleteNotesPages;
+    bool        mbDeleteUnusedMasterPages;
+    bool        mbDeleteHiddenSlides;
+    bool        mbDeleteNotesPages;
     OUString   maCustomShowName;
-    sal_Bool        mbSaveAs;
+    bool        mbSaveAs;
     OUString   maSaveAsURL;
     OUString   maFilterName;
-    sal_Bool        mbOpenNewDocument;
+    bool        mbOpenNewDocument;
     sal_Int64       mnEstimatedFileSize;
 
     OptimizerSettings() :
-        mbJPEGCompression( sal_False ),
+        mbJPEGCompression( false ),
         mnJPEGQuality( 90 ),
-        mbRemoveCropArea( sal_False ),
+        mbRemoveCropArea( false ),
         mnImageResolution( 0 ),
-        mbEmbedLinkedGraphics( sal_False ),
-        mbOLEOptimization( sal_False ),
+        mbEmbedLinkedGraphics( false ),
+        mbOLEOptimization( false ),
         mnOLEOptimizationType( 0 ),
-        mbDeleteUnusedMasterPages( sal_False ),
-        mbDeleteHiddenSlides( sal_False ),
-        mbDeleteNotesPages( sal_False ),
-        mbSaveAs( sal_True ),
-        mbOpenNewDocument( sal_True ),
+        mbDeleteUnusedMasterPages( false ),
+        mbDeleteHiddenSlides( false ),
+        mbDeleteNotesPages( false ),
+        mbSaveAs( true ),
+        mbOpenNewDocument( true ),
         mnEstimatedFileSize( 0 ){};
         ~OptimizerSettings(){};
 
         void LoadSettingsFromConfiguration( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rSettings );
         void SaveSettingsToConfiguration( const com::sun::star::uno::Reference< com::sun::star::container::XNameReplace >& rSettings );
 
-        sal_Bool operator==( const OptimizerSettings& rOptimizerSettings ) const;
+        bool operator==( const OptimizerSettings& rOptimizerSettings ) const;
 
 };
 class ConfigurationAccess
@@ -94,7 +94,7 @@ class ConfigurationAccess
         com::sun::star::uno::Any GetConfigProperty( const PPPOptimizerTokenEnum ) const;
         void SetConfigProperty( const PPPOptimizerTokenEnum, const com::sun::star::uno::Any& aValue );
 
-        sal_Bool GetConfigProperty( const PPPOptimizerTokenEnum, const sal_Bool bDefault ) const;
+        bool GetConfigProperty( const PPPOptimizerTokenEnum, const bool bDefault ) const;
         sal_Int16 GetConfigProperty( const PPPOptimizerTokenEnum, const sal_Int16 nDefault ) const;
         sal_Int32 GetConfigProperty( const PPPOptimizerTokenEnum, const sal_Int32 nDefault ) const;
 

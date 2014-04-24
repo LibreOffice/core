@@ -99,7 +99,7 @@ void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Reference
 
         GraphicCollector::GraphicUser aUser;
         aUser.mxShape = rxShape;
-        aUser.mbFillBitmap = sal_False;
+        aUser.mbFillBitmap = false;
         xShapePropertySet->getPropertyValue( "GraphicURL" ) >>= aUser.maGraphicURL;
         xShapePropertySet->getPropertyValue( "GraphicStreamURL" ) >>= aUser.maGraphicStreamURL;
         xShapePropertySet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropLogic;
@@ -154,7 +154,7 @@ void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const 
                                 {
                                     if ( ( eBitmapMode == BitmapMode_REPEAT ) || ( eBitmapMode == BitmapMode_NO_REPEAT ) )
                                     {
-                                        sal_Bool bLogicalSize = sal_False;
+                                        bool bLogicalSize = false;
                                         awt::Size aSize( 0, 0 );
                                         if ( ( rxPropertySet->getPropertyValue( "FillBitmapLogicalSize" ) >>= bLogicalSize )
                                           && ( rxPropertySet->getPropertyValue( "FillBitmapSizeX" ) >>= aSize.Width )
@@ -184,7 +184,7 @@ void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const 
                         GraphicCollector::GraphicUser aUser;
                         aUser.mxPropertySet = rxPropertySet;
                         rxPropertySet->getPropertyValue( "FillBitmapURL" ) >>= aUser.maGraphicURL;
-                        aUser.mbFillBitmap = sal_True;
+                        aUser.mbFillBitmap = true;
                         aUser.maLogicalSize = aLogicalSize;
                         aUser.mxPagePropertySet = rxPagePropertySet;
                         ImpAddEntity( rGraphicEntities, rGraphicSettings, aUser );
@@ -320,11 +320,11 @@ void GraphicCollector::CollectGraphics( const Reference< XComponentContext >& rx
                             || ( aGraphicIter->maGraphicCropLogic.Right != aGUIter->maGraphicCropLogic.Right )
                             || ( aGraphicIter->maGraphicCropLogic.Bottom != aGUIter->maGraphicCropLogic.Bottom ) )
                         {
-                            aGraphicIter->mbRemoveCropArea = sal_False;
+                            aGraphicIter->mbRemoveCropArea = false;
                         }
                     }
                     else
-                        aGraphicIter->mbRemoveCropArea = sal_False;
+                        aGraphicIter->mbRemoveCropArea = false;
                     ++aGUIter;
                 }
             }

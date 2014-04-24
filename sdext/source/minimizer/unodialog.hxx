@@ -66,7 +66,7 @@ public :
     ~UnoDialog();
 
     void execute();
-    void endExecute( sal_Bool bStatus );
+    void endExecute( bool bStatus );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer > createWindowPeer( com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer > xParentPeer )
         throw ( com::sun::star::uno::Exception );
@@ -74,7 +74,7 @@ public :
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > insertControlModel( const OUString& rServiceName, const OUString& rName,
         const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
 
-    void setVisible( const OUString& rName, sal_Bool bVisible );
+    void setVisible( const OUString& rName, bool bVisible );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XButton > insertButton( const OUString& rName,
         com::sun::star::uno::Reference< com::sun::star::awt::XActionListener > xActionListener, const com::sun::star::uno::Sequence< OUString >& rPropertyNames,
@@ -124,7 +124,7 @@ public :
     com::sun::star::uno::Reference< com::sun::star::awt::XControl >                 mxControl;
     com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer >              mxWindowPeer;
 
-    sal_Bool                                                                        mbStatus;
+    bool                                                                        mbStatus;
 };
 
 #endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_UNODIALOG_HXX

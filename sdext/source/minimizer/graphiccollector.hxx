@@ -33,14 +33,14 @@
 
 struct GraphicSettings
 {
-    sal_Bool    mbJPEGCompression;
+    bool    mbJPEGCompression;
     sal_Int32   mnJPEGQuality;
-    sal_Bool    mbRemoveCropArea;
+    bool    mbRemoveCropArea;
     sal_Int32   mnImageResolution;
-    sal_Bool    mbEmbedLinkedGraphics;
+    bool    mbEmbedLinkedGraphics;
 
-    GraphicSettings( sal_Bool bJPEGCompression, sal_Int32 nJPEGQuality, sal_Bool bRemoveCropArea,
-                        sal_Int32 nImageResolution, sal_Bool bEmbedLinkedGraphics )
+    GraphicSettings( bool bJPEGCompression, sal_Int32 nJPEGQuality, bool bRemoveCropArea,
+                        sal_Int32 nImageResolution, bool bEmbedLinkedGraphics )
     : mbJPEGCompression( bJPEGCompression )
     , mnJPEGQuality( nJPEGQuality )
     , mbRemoveCropArea( bRemoveCropArea )
@@ -61,20 +61,20 @@ class GraphicCollector
         OUString                       maGraphicStreamURL;
         com::sun::star::text::GraphicCrop   maGraphicCropLogic;
         com::sun::star::awt::Size           maLogicalSize;
-        sal_Bool                            mbFillBitmap;
+        bool                            mbFillBitmap;
 
-        GraphicUser() : mxShape(), maGraphicCropLogic( 0, 0, 0, 0 ), mbFillBitmap( sal_False ) {};
+        GraphicUser() : mxShape(), maGraphicCropLogic( 0, 0, 0, 0 ), mbFillBitmap( false ) {};
     };
 
     struct GraphicEntity
     {
         com::sun::star::awt::Size                       maLogicalSize;                          // the biggest logical size the graphic will be displayed
-        sal_Bool                                        mbRemoveCropArea;
+        bool                                        mbRemoveCropArea;
         com::sun::star::text::GraphicCrop               maGraphicCropLogic;
         std::vector< GraphicUser >                      maUser;
 
         GraphicEntity( const GraphicUser& rUser )
-            : maLogicalSize( rUser.maLogicalSize ), mbRemoveCropArea( sal_False ), maGraphicCropLogic( 0, 0, 0, 0 ) { maUser.push_back( rUser ); };
+            : maLogicalSize( rUser.maLogicalSize ), mbRemoveCropArea( false ), maGraphicCropLogic( 0, 0, 0, 0 ) { maUser.push_back( rUser ); };
     };
 
     static const com::sun::star::awt::DeviceInfo& GetDeviceInfo( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxFact );

@@ -122,7 +122,7 @@ void ImpDeleteHiddenSlides(  const Reference< XModel >& rxModel )
             Reference< XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
             Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY_THROW );
 
-            sal_Bool bVisible = sal_True;
+            bool bVisible = true;
             const OUString sVisible( "Visible"  );
             if ( xPropSet->getPropertyValue( sVisible ) >>= bVisible )
             {
@@ -180,10 +180,10 @@ void ImpConvertOLE( const Reference< XModel >& rxModel, sal_Int32 nOLEOptimizati
                 {
                     Reference< XPropertySet > xPropSet( xShape, UNO_QUERY_THROW );
 
-                    sal_Bool bConvertOLE = nOLEOptimizationType == 0;
+                    bool bConvertOLE = nOLEOptimizationType == 0;
                     if ( nOLEOptimizationType == 1 )
                     {
-                        sal_Bool bIsInternal = sal_True;
+                        bool bIsInternal = true;
                         xPropSet->getPropertyValue( "IsInternal" ) >>= bIsInternal;
                         bConvertOLE = !bIsInternal;
                     }
@@ -214,7 +214,7 @@ void ImpConvertOLE( const Reference< XModel >& rxModel, sal_Int32 nOLEOptimizati
 }
 
 void ImpCompressGraphic( Reference< XGraphicProvider >& rxGraphicProvider, const Reference< XGraphic >& rxGraphic, Reference< XOutputStream >& rxOutputStream,
-    const OUString& rDestMimeType, const awt::Size& rLogicalSize, sal_Int32 nJPEGQuality, sal_Int32 nImageResolution, sal_Bool bRemoveCropping, const text::GraphicCrop& rGraphicCropLogic )
+    const OUString& rDestMimeType, const awt::Size& rLogicalSize, sal_Int32 nJPEGQuality, sal_Int32 nImageResolution, bool bRemoveCropping, const text::GraphicCrop& rGraphicCropLogic )
 {
     try
     {
@@ -268,9 +268,9 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
             sal_Int8 nGraphicType( xGraphic->getType() );
             if ( nGraphicType == com::sun::star::graphic::GraphicType::PIXEL )
             {
-                sal_Bool bTransparent = sal_False;
-                sal_Bool bAlpha       = sal_False;
-                sal_Bool bAnimated    = sal_False;
+                bool bTransparent = false;
+                bool bAlpha       = false;
+                bool bAnimated    = false;
 
                 awt::Size aSourceSizePixel( 0, 0 );
                 text::GraphicCrop aGraphicCropPixel( 0, 0, 0, 0 );
@@ -283,8 +283,8 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                     awt::Size aDestSizePixel( aSourceSizePixel );
                     if ( !bAnimated )
                     {
-                        sal_Bool bNeedsOptimizing = sal_False;
-                        sal_Bool bRemoveCropArea( rGraphicSettings.mbRemoveCropArea );
+                        bool bNeedsOptimizing = false;
+                        bool bRemoveCropArea( rGraphicSettings.mbRemoveCropArea );
 
                         // cropping has to be removed from SourceSizePixel
                         if ( aGraphicCropLogic.Left || aGraphicCropLogic.Top || aGraphicCropLogic.Right || aGraphicCropLogic.Bottom )
@@ -292,7 +292,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                             const awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxContext, xGraphic ) );
 
                             if ( bRemoveCropArea )
-                                bNeedsOptimizing = sal_True;
+                                bNeedsOptimizing = true;
 
                             if ( aSize100thMM.Width && aSize100thMM.Height )
                             {
@@ -307,7 +307,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                             }
                             else
                             {
-                                bRemoveCropArea = sal_False;
+                                bRemoveCropArea = false;
                             }
                         }
                         if ( ( aSourceSizePixel.Width > 0 ) && ( aSourceSizePixel.Height > 0 ) )
@@ -317,7 +317,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                             {
                                 aDestMimeType = "image/jpeg";
 //                                      if( aSourceMimeType != aDestMimeType )
-                                bNeedsOptimizing = sal_True;
+                                bNeedsOptimizing = true;
                             }
                             if ( bRemoveCropArea )
                                 aDestSizePixel = aSourceSizePixel;
@@ -333,7 +333,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                                     const double fNewSizePixelY = ((double)aDestSizePixel.Height* rGraphicSettings.mnImageResolution ) / fSourceDPIY;
 
                                     aDestSizePixel = awt::Size( (sal_Int32)fNewSizePixelX, (sal_Int32)fNewSizePixelY );
-                                    bNeedsOptimizing = sal_True;
+                                    bNeedsOptimizing = true;
                                 }
                             }
                             if ( bNeedsOptimizing && aDestSizePixel.Width && aDestSizePixel.Height )
@@ -361,7 +361,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                 Reference< XStream > xTempFile( io::TempFile::create(rxContext), UNO_QUERY_THROW );
                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
                 Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create( rxContext ) );
-                ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, sal_False, aGraphicCropLogic );
+                ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, false, aGraphicCropLogic );
                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
                 Reference< XSeekable > xSeekable( xInputStream, UNO_QUERY_THROW );
                 xSeekable->seek( 0 );
@@ -449,7 +449,7 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                                 if ( xFillBitmap.is() )
                                 {
                                     awt::Size aSize;
-                                    sal_Bool bLogicalSize;
+                                    bool bLogicalSize;
 
                                     Reference< XPropertySet >& rxPropertySet( aGraphicUserIter->mxPropertySet );
                                     rxPropertySet->setPropertyValue( "FillBitmap", Any( xFillBitmap ) );
@@ -488,17 +488,17 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
 ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxContext, const Reference< XModel >& rxModel ) :
     mxContext                   ( rxContext ),
     mxModel                     ( rxModel ),
-    mbJPEGCompression           ( sal_False ),
+    mbJPEGCompression           ( false ),
     mnJPEGQuality               ( 90 ),
-    mbRemoveCropArea            ( sal_False ),
+    mbRemoveCropArea            ( false ),
     mnImageResolution           ( 0 ),
-    mbEmbedLinkedGraphics       ( sal_True ),
-    mbOLEOptimization           ( sal_False ),
+    mbEmbedLinkedGraphics       ( true ),
+    mbOLEOptimization           ( false ),
     mnOLEOptimizationType       ( 0 ),
-    mbDeleteUnusedMasterPages   ( sal_False ),
-    mbDeleteHiddenSlides        ( sal_False ),
-    mbDeleteNotesPages          ( sal_False ),
-    mbOpenNewDocument           ( sal_True )
+    mbDeleteUnusedMasterPages   ( false ),
+    mbDeleteHiddenSlides        ( false ),
+    mbDeleteNotesPages          ( false ),
+    mbOpenNewDocument           ( true )
 {
 }
 
@@ -523,7 +523,7 @@ void ImpOptimizer::DispatchStatus()
 
 
 
-sal_Bool ImpOptimizer::Optimize()
+bool ImpOptimizer::Optimize()
 {
 
     if ( !maCustomShowName.isEmpty() )
@@ -573,7 +573,7 @@ sal_Bool ImpOptimizer::Optimize()
     }
     SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 100 ) ) );
     DispatchStatus();
-    return sal_True;
+    return true;
 }
 
 static void DispatchURL( Reference< XComponentContext > xContext, const OUString& sURL, Reference< XFrame > xFrame )
@@ -597,9 +597,9 @@ static void DispatchURL( Reference< XComponentContext > xContext, const OUString
 
 
 
-sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
+bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     if ( mxModel.is() )
     {
@@ -686,7 +686,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
 
                 Sequence< PropertyValue > aLoadProps( 1 );
                 aLoadProps[ 0 ].Name = "Hidden";
-                aLoadProps[ 0 ].Value <<= (sal_Bool)( sal_True );
+                aLoadProps[ 0 ].Value <<= true;
                 mxModel = Reference< XModel >( xComponentLoader->loadComponentFromURL(
                     maSaveAsURL, "_self", 0, aLoadProps ), UNO_QUERY );
             }
@@ -747,7 +747,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         }
     }
     else
-        bRet = sal_False;
+        bRet = false;
     return bRet;
 }
 

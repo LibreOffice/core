@@ -226,7 +226,7 @@ protected:
 
     void UpdateState (const sal_Int16 aState, const bool bValue);
 
-    sal_Bool IsDisposed (void) const;
+    bool IsDisposed (void) const;
 
     void ThrowIfDisposed (void) const
         throw (css::lang::DisposedException);
@@ -1355,7 +1355,7 @@ awt::Point PresenterAccessible::AccessibleObject::GetAbsoluteParentLocation (voi
         return awt::Point();
 }
 
-sal_Bool PresenterAccessible::AccessibleObject::IsDisposed (void) const
+bool PresenterAccessible::AccessibleObject::IsDisposed (void) const
 {
     return (rBHelper.bDisposed || rBHelper.bInDispose);
 }

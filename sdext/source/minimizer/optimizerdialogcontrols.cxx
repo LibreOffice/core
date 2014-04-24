@@ -92,7 +92,7 @@ OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString& rCo
 
 
 OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, Reference< XActionListener >& xActionListener,
-    sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, sal_Bool bEnabled, PPPOptimizerTokenEnum nResID, sal_Int16 nPushButtonType )
+    sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, bool bEnabled, PPPOptimizerTokenEnum nResID, sal_Int16 nPushButtonType )
 {
     OUString pNames[] = {
         OUString("Enabled"),
@@ -129,7 +129,7 @@ OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rContr
 
 
 OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const OUString& rLabel,
-                                sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Bool bBold, sal_Int16 nTabIndex )
+                                sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, bool bMultiLine, bool bBold, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
         OUString("Height"),
@@ -225,8 +225,8 @@ OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString
         Any( (sal_Int32)12 ),
         Any( nXPos ),
         Any( nYPos ),
-        Any( (sal_Bool)sal_True ),
-        Any( (sal_Bool)sal_True ),
+        Any( true ),
+        Any( true ),
         Any( (sal_Int16)0 ),
         Any( nTabIndex ),
         Any( nWidth ) };
@@ -250,7 +250,7 @@ OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString
 
 
 OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
-    const Reference< XTextListener > xTextListener, const sal_Bool bEnabled, const Sequence< OUString >& rItemList,
+    const Reference< XTextListener > xTextListener, const bool bEnabled, const Sequence< OUString >& rItemList,
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
@@ -291,7 +291,7 @@ OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
 
 
 OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const Reference< XItemListener > xItemListener,
-    const OUString& rLabel, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Int16 nTabIndex )
+    const OUString& rLabel, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, bool bMultiLine, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
         OUString("Height"),
@@ -327,7 +327,7 @@ OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& r
 
 
 OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
-    const Reference< XActionListener > xActionListener, const sal_Bool bEnabled, const Sequence< OUString >& rItemList,
+    const Reference< XActionListener > xActionListener, const bool bEnabled, const Sequence< OUString >& rItemList,
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
@@ -379,10 +379,10 @@ void OptimizerDialog::InitNavigationBar()
     InsertSeparator( *this, "lnNavSep1", 0, 0, DIALOG_HEIGHT - 26, OD_DIALOG_WIDTH, 1 );
     InsertSeparator( *this, "lnNavSep2", 1, 85, 0, 1, BUTTON_POS_Y - 6 );
 
-    InsertButton( *this, "btnNavBack", mxActionListener, nBackPosX, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, sal_False, STR_BACK, PushButtonType_STANDARD );
-    InsertButton( *this, "btnNavNext", mxActionListener, nNextPosX, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, sal_True, STR_NEXT, PushButtonType_STANDARD );
-    InsertButton( *this, "btnNavFinish", mxActionListener, nFinishPosX, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, sal_True, STR_FINISH, PushButtonType_STANDARD );
-    InsertButton( *this, "btnNavCancel", mxActionListener, nCancelPosX, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, sal_True, STR_CANCEL, PushButtonType_STANDARD );
+    InsertButton( *this, "btnNavBack", mxActionListener, nBackPosX, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, false, STR_BACK, PushButtonType_STANDARD );
+    InsertButton( *this, "btnNavNext", mxActionListener, nNextPosX, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, true, STR_NEXT, PushButtonType_STANDARD );
+    InsertButton( *this, "btnNavFinish", mxActionListener, nFinishPosX, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, true, STR_FINISH, PushButtonType_STANDARD );
+    InsertButton( *this, "btnNavCancel", mxActionListener, nCancelPosX, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, true, STR_CANCEL, PushButtonType_STANDARD );
 
     setControlProperty( "btnNavNext", "DefaultButton", Any( sal_True ) );
 }
@@ -408,14 +408,14 @@ void OptimizerDialog::UpdateControlStatesPage0()
             }
         }
     }
-    sal_Bool bRemoveButtonEnabled = sal_False;
+    bool bRemoveButtonEnabled = false;
     Sequence< short > aSelectedItems;
     if ( nSelectedItem >= 0 )
     {
         aSelectedItems.realloc( 1 );
         aSelectedItems[ 0 ] = nSelectedItem;
         if ( nSelectedItem > 2 )    // only allowing to delete custom themes, the first can|t be deleted
-            bRemoveButtonEnabled = sal_True;
+            bRemoveButtonEnabled = true;
     }
     setControlProperty( "ListBox0Pg0", "StringItemList", Any( aItemList ) );
     setControlProperty( "ListBox0Pg0", "SelectedItems", Any( aSelectedItems ) );
@@ -425,12 +425,12 @@ void OptimizerDialog::InitPage0()
 {
     Sequence< OUString > aItemList;
     std::vector< OUString > aControlList;
-    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg0", getString( STR_INTRODUCTION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, sal_False, sal_True, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText1Pg0", getString( STR_INTRODUCTION_T ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 100, sal_True, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg0", getString( STR_INTRODUCTION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText1Pg0", getString( STR_INTRODUCTION_T ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 100, true, false, mnTabIndex++ ) );
     aControlList.push_back( InsertSeparator( *this, "Separator1Pg0", 0, PAGE_POS_X + 6, DIALOG_HEIGHT - 66, PAGE_WIDTH - 12, 1 ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText2Pg0", getString( STR_CHOSE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 60, PAGE_WIDTH - 12, 8, sal_True, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertListBox(  *this, "ListBox0Pg0", mxActionListenerListBox0Pg0, sal_True, aItemList, PAGE_POS_X + 6, DIALOG_HEIGHT - 48, ( OD_DIALOG_WIDTH - 50 ) - ( PAGE_POS_X + 6 ), 12, mnTabIndex++ ) );
-    aControlList.push_back( InsertButton( *this, "Button0Pg0", mxActionListener, OD_DIALOG_WIDTH - 46, DIALOG_HEIGHT - 49, 40, 14, mnTabIndex++, sal_True, STR_REMOVE, PushButtonType_STANDARD ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText2Pg0", getString( STR_CHOSE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 60, PAGE_WIDTH - 12, 8, true, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertListBox(  *this, "ListBox0Pg0", mxActionListenerListBox0Pg0, true, aItemList, PAGE_POS_X + 6, DIALOG_HEIGHT - 48, ( OD_DIALOG_WIDTH - 50 ) - ( PAGE_POS_X + 6 ), 12, mnTabIndex++ ) );
+    aControlList.push_back( InsertButton( *this, "Button0Pg0", mxActionListener, OD_DIALOG_WIDTH - 46, DIALOG_HEIGHT - 49, 40, 14, mnTabIndex++, true, STR_REMOVE, PushButtonType_STANDARD ) );
     maControlPages.push_back( aControlList );
     DeactivatePage( 0 );
     UpdateControlStatesPage0();
@@ -440,9 +440,9 @@ void OptimizerDialog::InitPage0()
 
 void OptimizerDialog::UpdateControlStatesPage1()
 {
-    sal_Bool bDeleteUnusedMasterPages( GetConfigProperty( TK_DeleteUnusedMasterPages, sal_False ) );
-    sal_Bool bDeleteHiddenSlides( GetConfigProperty( TK_DeleteHiddenSlides, sal_False ) );
-    sal_Bool bDeleteNotesPages( GetConfigProperty( TK_DeleteNotesPages, sal_False ) );
+    bool bDeleteUnusedMasterPages( GetConfigProperty( TK_DeleteUnusedMasterPages, sal_False ) );
+    bool bDeleteHiddenSlides( GetConfigProperty( TK_DeleteHiddenSlides, sal_False ) );
+    bool bDeleteNotesPages( GetConfigProperty( TK_DeleteNotesPages, sal_False ) );
 
     setControlProperty( "CheckBox0Pg3", "State", Any( (sal_Int16)bDeleteUnusedMasterPages ) );
     setControlProperty( "CheckBox1Pg3", "State", Any( (sal_Int16)bDeleteNotesPages ) );
@@ -460,11 +460,11 @@ void OptimizerDialog::InitPage1()
             aCustomShowList = aXCont->getElementNames();
     }
     std::vector< OUString > aControlList;
-    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg3", getString( STR_CHOOSE_SLIDES ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, sal_False, sal_True, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg3", getString( STR_CHOOSE_SLIDES ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ) );
     aControlList.push_back( InsertCheckBox(  *this, "CheckBox0Pg3", mxItemListener, getString( STR_DELETE_MASTER_PAGES ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
     aControlList.push_back( InsertCheckBox(  *this, "CheckBox2Pg3", mxItemListener, getString( STR_DELETE_HIDDEN_SLIDES ), PAGE_POS_X + 6, PAGE_POS_Y + 28, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
     aControlList.push_back( InsertCheckBox(  *this, "CheckBox3Pg3", mxItemListener, getString( STR_CUSTOM_SHOW ), PAGE_POS_X + 6, PAGE_POS_Y + 42, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
-    aControlList.push_back( InsertListBox(  *this, "ListBox0Pg3", mxActionListener, sal_True, aCustomShowList, PAGE_POS_X + 14, PAGE_POS_Y + 54, 150, 12, mnTabIndex++ ) );
+    aControlList.push_back( InsertListBox(  *this, "ListBox0Pg3", mxActionListener, true, aCustomShowList, PAGE_POS_X + 14, PAGE_POS_Y + 54, 150, 12, mnTabIndex++ ) );
     aControlList.push_back( InsertCheckBox(  *this, "CheckBox1Pg3", mxItemListener, getString( STR_DELETE_NOTES_PAGES ), PAGE_POS_X + 6, PAGE_POS_Y + 70, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
     maControlPages.push_back( aControlList );
     DeactivatePage( 1 );
@@ -480,9 +480,9 @@ void OptimizerDialog::InitPage1()
 
 void OptimizerDialog::UpdateControlStatesPage2()
 {
-    sal_Bool bJPEGCompression( GetConfigProperty( TK_JPEGCompression, sal_False ) );
-    sal_Bool bRemoveCropArea( GetConfigProperty( TK_RemoveCropArea, sal_False ) );
-    sal_Bool bEmbedLinkedGraphics( GetConfigProperty( TK_EmbedLinkedGraphics, sal_True ) );
+    bool bJPEGCompression( GetConfigProperty( TK_JPEGCompression, sal_False ) );
+    bool bRemoveCropArea( GetConfigProperty( TK_RemoveCropArea, sal_False ) );
+    bool bEmbedLinkedGraphics( GetConfigProperty( TK_EmbedLinkedGraphics, sal_True ) );
     sal_Int32 nJPEGQuality( GetConfigProperty( TK_JPEGQuality, (sal_Int32)90 ) );
 
     sal_Int32 nImageResolution( GetConfigProperty( TK_ImageResolution, (sal_Int32)0 ) );
@@ -507,8 +507,8 @@ void OptimizerDialog::UpdateControlStatesPage2()
     if ( aResolutionText.isEmpty() )
         aResolutionText = OUString::number( nImageResolution );
 
-    setControlProperty( "RadioButton0Pg1", "State", Any( (sal_Int16)( bJPEGCompression != sal_True ) ) );
-    setControlProperty( "RadioButton1Pg1", "State", Any( (sal_Int16)( bJPEGCompression != sal_False ) ) );
+    setControlProperty( "RadioButton0Pg1", "State", Any( (sal_Int16)( bJPEGCompression == false ) ) );
+    setControlProperty( "RadioButton1Pg1", "State", Any( (sal_Int16)( bJPEGCompression == true ) ) );
     setControlProperty( "FixedText1Pg1", "Enabled", Any( bJPEGCompression ) );
     setControlProperty( "FormattedField0Pg1", "Enabled", Any( bJPEGCompression ) );
     setControlProperty( "FormattedField0Pg1", "EffectiveValue", Any( (double)nJPEGQuality ) );
@@ -527,13 +527,13 @@ void OptimizerDialog::InitPage2()
     aResolutionItemList[ 3 ] = getString( STR_IMAGE_RESOLUTION_3 ).getToken( 1, ';', nI3 );
 
     std::vector< OUString > aControlList;
-    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg1", getString( STR_GRAPHIC_OPTIMIZATION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, sal_False, sal_True, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg1", mxItemListener, getString( STR_LOSSLESS_COMPRESSION ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg1", mxItemListener, getString( STR_JPEG_COMPRESSION ), PAGE_POS_X + 6, PAGE_POS_Y + 28, PAGE_WIDTH - 12, 8, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText1Pg1", getString( STR_QUALITY ), PAGE_POS_X + 20, PAGE_POS_Y + 40, 72, 8, sal_False, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg1", getString( STR_GRAPHIC_OPTIMIZATION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg1", mxItemListener, getString( STR_LOSSLESS_COMPRESSION ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg1", mxItemListener, getString( STR_JPEG_COMPRESSION ), PAGE_POS_X + 6, PAGE_POS_Y + 28, PAGE_WIDTH - 12, 8, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText1Pg1", getString( STR_QUALITY ), PAGE_POS_X + 20, PAGE_POS_Y + 40, 72, 8, false, false, mnTabIndex++ ) );
     aControlList.push_back( InsertFormattedField( *this, "FormattedField0Pg1", mxTextListenerFormattedField0Pg1, mxSpinListenerFormattedField0Pg1, PAGE_POS_X + 106, PAGE_POS_Y + 38, 50, 0, 100, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText2Pg1", getString( STR_IMAGE_RESOLUTION ), PAGE_POS_X + 6, PAGE_POS_Y + 54, 94, 8, sal_False, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertComboBox(  *this, "ComboBox0Pg1", mxTextListenerComboBox0Pg1, sal_True, aResolutionItemList, PAGE_POS_X + 106, PAGE_POS_Y + 52, 100, 12, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText2Pg1", getString( STR_IMAGE_RESOLUTION ), PAGE_POS_X + 6, PAGE_POS_Y + 54, 94, 8, false, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertComboBox(  *this, "ComboBox0Pg1", mxTextListenerComboBox0Pg1, true, aResolutionItemList, PAGE_POS_X + 106, PAGE_POS_Y + 52, 100, 12, mnTabIndex++ ) );
     aControlList.push_back( InsertCheckBox(  *this, "CheckBox1Pg1", mxItemListener, getString( STR_REMOVE_CROP_AREA ), PAGE_POS_X + 6, PAGE_POS_Y + 68, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
     aControlList.push_back( InsertCheckBox(  *this, "CheckBox2Pg1", mxItemListener, getString( STR_EMBED_LINKED_GRAPHICS ), PAGE_POS_X + 6, PAGE_POS_Y + 82, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
     maControlPages.push_back( aControlList );
@@ -545,7 +545,7 @@ void OptimizerDialog::InitPage2()
 
 void OptimizerDialog::UpdateControlStatesPage3()
 {
-    sal_Bool bConvertOLEObjects( GetConfigProperty( TK_OLEOptimization, sal_False ) );
+    bool bConvertOLEObjects( GetConfigProperty( TK_OLEOptimization, sal_False ) );
     sal_Int16 nOLEOptimizationType( GetConfigProperty( TK_OLEOptimizationType, (sal_Int16)0 ) );
 
     setControlProperty( "CheckBox0Pg2", "State", Any( (sal_Int16)bConvertOLEObjects ) );
@@ -573,11 +573,11 @@ void OptimizerDialog::InitPage3()
     }
 
     std::vector< OUString > aControlList;
-    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg2", getString( STR_OLE_OPTIMIZATION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, sal_False, sal_True, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg2", getString( STR_OLE_OPTIMIZATION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ) );
     aControlList.push_back( InsertCheckBox(  *this, "CheckBox0Pg2", mxItemListener, getString( STR_OLE_REPLACE ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg2", mxItemListener, getString( STR_ALL_OLE_OBJECTS ), PAGE_POS_X + 14, PAGE_POS_Y + 28, PAGE_WIDTH - 22, 8, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg2", mxItemListener, getString( STR_ALIEN_OLE_OBJECTS_ONLY ), PAGE_POS_X + 14, PAGE_POS_Y + 40, PAGE_WIDTH - 22, 8, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText1Pg2", nOLECount ? getString( STR_OLE_OBJECTS_DESC ) : getString( STR_NO_OLE_OBJECTS_DESC ), PAGE_POS_X + 6, PAGE_POS_Y + 64, PAGE_WIDTH - 22, 50, sal_True, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg2", mxItemListener, getString( STR_ALL_OLE_OBJECTS ), PAGE_POS_X + 14, PAGE_POS_Y + 28, PAGE_WIDTH - 22, 8, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg2", mxItemListener, getString( STR_ALIEN_OLE_OBJECTS_ONLY ), PAGE_POS_X + 14, PAGE_POS_Y + 40, PAGE_WIDTH - 22, 8, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText1Pg2", nOLECount ? getString( STR_OLE_OBJECTS_DESC ) : getString( STR_NO_OLE_OBJECTS_DESC ), PAGE_POS_X + 6, PAGE_POS_Y + 64, PAGE_WIDTH - 22, 50, true, false, mnTabIndex++ ) );
     maControlPages.push_back( aControlList );
     DeactivatePage( 3 );
     UpdateControlStatesPage3();
@@ -603,7 +603,7 @@ static OUString ImpValueOfInMB( const sal_Int64& rVal, sal_Unicode nSeparator = 
 
 void OptimizerDialog::UpdateControlStatesPage4()
 {
-    sal_Bool bSaveAs( GetConfigProperty( TK_SaveAs, sal_True ) );
+    bool bSaveAs( GetConfigProperty( TK_SaveAs, sal_True ) );
     if ( mbIsReadonly )
     {
         setControlProperty( "RadioButton0Pg4", "State", Any( (sal_Int16)( sal_False ) ) );
@@ -611,8 +611,8 @@ void OptimizerDialog::UpdateControlStatesPage4()
     }
     else
     {
-        setControlProperty( "RadioButton0Pg4", "State", Any( (sal_Int16)( bSaveAs == sal_False ) ) );
-        setControlProperty( "RadioButton1Pg4", "State", Any( (sal_Int16)( bSaveAs == sal_True ) ) );
+        setControlProperty( "RadioButton0Pg4", "State", Any( (sal_Int16)( bSaveAs == false ) ) );
+        setControlProperty( "RadioButton1Pg4", "State", Any( (sal_Int16)( bSaveAs == true ) ) );
     }
     setControlProperty( "ComboBox0Pg4", "Enabled", Any( sal_False ) );
 
@@ -628,14 +628,14 @@ void OptimizerDialog::UpdateControlStatesPage4()
     setControlProperty( "ComboBox0Pg4", "StringItemList", Any( aItemList ) );
 
     // now check if it is sensible to enable the combo box
-    sal_Bool bSaveSettingsEnabled = sal_True;
+    bool bSaveSettingsEnabled = true;
     if ( rList.size() > 1 ) // the first session in the list is the actual one -> skipping first one
     {
         for ( w = 1; w < rList.size(); w++ )
         {
             if ( rList[ w ] == rList[ 0 ] )
             {
-                bSaveSettingsEnabled = sal_False;
+                bSaveSettingsEnabled = false;
                 break;
             }
         }
@@ -688,7 +688,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
             while( aIter != vUsedPageList.end() )
             {
                 Reference< XPropertySet > xPropSet( *aIter, UNO_QUERY_THROW );
-                sal_Bool bVisible = sal_True;
+                bool bVisible = true;
                 const OUString sVisible( "Visible"  );
                 if ( xPropSet->getPropertyValue( sVisible ) >>= bVisible )
                 {
@@ -707,7 +707,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
                 Reference< XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
                 Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY_THROW );
 
-                sal_Bool bVisible = sal_True;
+                bool bVisible = true;
                 const OUString sVisible( "Visible"  );
                 if ( xPropSet->getPropertyValue( sVisible ) >>= bVisible )
                 {
@@ -743,7 +743,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
 
 // generating graphic compression info
     sal_Int32 nGraphics = 0;
-    sal_Bool bJPEGCompression( GetConfigProperty( TK_JPEGCompression, sal_False ) );
+    bool bJPEGCompression( GetConfigProperty( TK_JPEGCompression, sal_False ) );
     sal_Int32 nJPEGQuality( GetConfigProperty( TK_JPEGQuality, (sal_Int32)90 ) );
     sal_Int32 nImageResolution( GetConfigProperty( TK_ImageResolution, (sal_Int32)0 ) );
     GraphicSettings aGraphicSettings( bJPEGCompression, nJPEGQuality, GetConfigProperty( TK_RemoveCropArea, sal_False ),
@@ -867,27 +867,27 @@ void OptimizerDialog::InitPage4()
     Reference< XTextListener > xTextListener;
     Sequence< OUString > aItemList;
     std::vector< OUString > aControlList;
-    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg4", getString( STR_SUMMARY_TITLE ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, sal_False, sal_True, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg4", getString( STR_SUMMARY_TITLE ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ) );
 //  aControlList.push_back( InsertSeparator( *this, "Separator0Pg4", 0, PAGE_POS_X + 6, PAGE_POS_Y + 90, PAGE_WIDTH - 12, 1 ) );
 
-    aControlList.push_back( InsertFixedText( *this, "FixedText4Pg4", OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, sal_False, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText5Pg4", OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 22, PAGE_WIDTH - 12, 8, sal_False, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText6Pg4", OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 30, PAGE_WIDTH - 12, 8, sal_False, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText4Pg4", OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, false, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText5Pg4", OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 22, PAGE_WIDTH - 12, 8, false, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText6Pg4", OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 30, PAGE_WIDTH - 12, 8, false, false, mnTabIndex++ ) );
 
-    aControlList.push_back( InsertFixedText( *this, "FixedText2Pg4", getString( STR_CURRENT_FILESIZE ), PAGE_POS_X + 6, PAGE_POS_Y + 50, 88, 8, sal_False, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText7Pg4", OUString(), PAGE_POS_X + 100, PAGE_POS_Y + 50, 30, 8, sal_False, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText2Pg4", getString( STR_CURRENT_FILESIZE ), PAGE_POS_X + 6, PAGE_POS_Y + 50, 88, 8, false, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText7Pg4", OUString(), PAGE_POS_X + 100, PAGE_POS_Y + 50, 30, 8, false, false, mnTabIndex++ ) );
     setControlProperty( "FixedText7Pg4", "Align", Any( static_cast< short >( 2 ) ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText3Pg4", getString( STR_ESTIMATED_FILESIZE ), PAGE_POS_X + 6, PAGE_POS_Y + 58, 88, 8, sal_False, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText8Pg4", OUString(), PAGE_POS_X + 100, PAGE_POS_Y + 58, 30, 8, sal_False, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText3Pg4", getString( STR_ESTIMATED_FILESIZE ), PAGE_POS_X + 6, PAGE_POS_Y + 58, 88, 8, false, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText8Pg4", OUString(), PAGE_POS_X + 100, PAGE_POS_Y + 58, 30, 8, false, false, mnTabIndex++ ) );
     setControlProperty( "FixedText8Pg4", "Align", Any( static_cast< short >( 2 ) ) );
 
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg4", mxItemListener, getString(  STR_APPLY_TO_CURRENT ), PAGE_POS_X + 6, PAGE_POS_Y + 78, PAGE_WIDTH - 12, 8, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg4", mxItemListener, getString( STR_SAVE_AS ), PAGE_POS_X + 6, PAGE_POS_Y + 90, PAGE_WIDTH - 12, 8, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText1Pg4", OUString(), PAGE_POS_X + 6, DIALOG_HEIGHT - 87, PAGE_WIDTH - 12, 8, sal_True, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg4", mxItemListener, getString(  STR_APPLY_TO_CURRENT ), PAGE_POS_X + 6, PAGE_POS_Y + 78, PAGE_WIDTH - 12, 8, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg4", mxItemListener, getString( STR_SAVE_AS ), PAGE_POS_X + 6, PAGE_POS_Y + 90, PAGE_WIDTH - 12, 8, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, "FixedText1Pg4", OUString(), PAGE_POS_X + 6, DIALOG_HEIGHT - 87, PAGE_WIDTH - 12, 8, true, false, mnTabIndex++ ) );
     aControlList.push_back( "Progress" );
     aControlList.push_back( InsertSeparator( *this, "Separator1Pg4", 0, PAGE_POS_X + 6, DIALOG_HEIGHT - 58, PAGE_WIDTH - 12, 1 ) );
     aControlList.push_back( InsertCheckBox(  *this, "CheckBox1Pg4", mxItemListener, getString( STR_SAVE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 47, 100, 8, mnTabIndex++ ) );
-    aControlList.push_back( InsertComboBox(  *this, "ComboBox0Pg4", xTextListener, sal_True, aItemList, PAGE_POS_X + 106, DIALOG_HEIGHT - 48, 100, 12, mnTabIndex++ ) );
+    aControlList.push_back( InsertComboBox(  *this, "ComboBox0Pg4", xTextListener, true, aItemList, PAGE_POS_X + 106, DIALOG_HEIGHT - 48, 100, 12, mnTabIndex++ ) );
     maControlPages.push_back( aControlList );
     DeactivatePage( 4 );
 
@@ -937,14 +937,14 @@ void OptimizerDialog::ActivatePage( sal_Int16 nStep )
     std::vector< OUString >::iterator aBeg( maControlPages[ nStep ].begin() );
     std::vector< OUString >::iterator aEnd( maControlPages[ nStep ].end() );
     while( aBeg != aEnd )
-        setVisible( *aBeg++, sal_True );
+        setVisible( *aBeg++, true );
 }
 void OptimizerDialog::DeactivatePage( sal_Int16 nStep )
 {
     std::vector< OUString >::iterator aBeg( maControlPages[ nStep ].begin() );
     std::vector< OUString >::iterator aEnd( maControlPages[ nStep ].end() );
     while( aBeg != aEnd )
-        setVisible( *aBeg++, sal_False );
+        setVisible( *aBeg++, false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

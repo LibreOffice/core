@@ -64,11 +64,11 @@ public :
         com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > rxStatusDispatcher );
     ~OptimizerDialog();
 
-    sal_Bool                execute();
+    bool                execute();
 
     sal_Int16               mnCurrentStep;
     sal_Int16               mnTabIndex;
-    sal_Bool                mbIsReadonly;
+    bool                mbIsReadonly;
 
 private :
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
@@ -103,7 +103,7 @@ private :
 
     void ActivatePage( sal_Int16 nStep );
     void DeactivatePage( sal_Int16 nStep );
-    void InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool bEnabled, const OUString& rLabel, const sal_Int32 nItemID );
+    void InsertRoadmapItem( const sal_Int32 nIndex, const bool bEnabled, const OUString& rLabel, const sal_Int32 nItemID );
 
 public :
 
