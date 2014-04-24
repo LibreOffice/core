@@ -476,10 +476,10 @@ private:
 
     ///@}
 
-public:
     /** @name Text and font functions
      */
     ///@{
+public:
     SAL_DLLPRIVATE bool         ImplNewFont() const;
     SAL_DLLPRIVATE void         ImplInitTextColor();
     static
@@ -618,10 +618,9 @@ public:
 
     OutDevType                  GetOutDevType() const { return meOutDevType; }
 
-    /** query an <code>OutputDevice</code> to see whether it supports a specific operation
+    /** Query an OutputDevice to see whether it supports a specific operation
 
-    @return
-    true if operation supported, else false
+    @return true if operation supported, else false
     */
     bool                        supportsOperation( OutDevSupportType ) const;
 
