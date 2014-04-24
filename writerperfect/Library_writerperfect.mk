@@ -17,14 +17,13 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,writerperfect))
+$(eval $(call gb_Library_Library,writerperfect))
 
-$(eval $(call gb_StaticLibrary_set_include,writerperfect,\
-	$$(INCLUDE) \
-    -I$(SRCDIR)/writerperfect/source \
+$(eval $(call gb_Library_add_defs,writerperfect,\
+	-DWRITERPERFECT_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_StaticLibrary_use_externals,writerperfect,\
+$(eval $(call gb_Library_use_externals,writerperfect,\
 	boost_headers \
 	etonyek \
 	odfgen \
@@ -32,15 +31,24 @@ $(eval $(call gb_StaticLibrary_use_externals,writerperfect,\
 	wpg \
 ))
 
-$(eval $(call gb_StaticLibrary_use_api,writerperfect,\
-    offapi \
-    udkapi \
+$(eval $(call gb_Library_use_sdk_api,writerperfect))
+
+$(eval $(call gb_Library_use_libraries,writerperfect,\
+	comphelper \
+	cppu \
+	sal \
+	sot \
+	tl \
+	ucbhelper \
+	utl \
+	xo \
+	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_StaticLibrary_add_exception_objects,writerperfect,\
+$(eval $(call gb_Library_add_exception_objects,writerperfect,\
 	writerperfect/source/common/DirectoryStream \
 	writerperfect/source/common/DocumentHandler \
-	writerperfect/source/common/WPXSvStream \
+	writerperfect/source/common/WPXSvInputStream \
 ))
 
 # vim: set noet sw=4 ts=4:

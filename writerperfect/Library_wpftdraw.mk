@@ -21,11 +21,6 @@ $(eval $(call gb_Library_Library,wpftdraw))
 
 $(eval $(call gb_Library_set_componentfile,wpftdraw,writerperfect/source/draw/wpftdraw))
 
-$(eval $(call gb_Library_set_include,wpftdraw,\
-	$$(INCLUDE) \
-    -I$(SRCDIR)/writerperfect/source \
-))
-
 $(eval $(call gb_Library_use_sdk_api,wpftdraw))
 
 $(eval $(call gb_Library_use_libraries,wpftdraw,\
@@ -36,12 +31,9 @@ $(eval $(call gb_Library_use_libraries,wpftdraw,\
 	sot \
 	tl \
 	utl \
+	writerperfect \
 	xo \
 	$(gb_UWINAPI) \
-))
-
-$(eval $(call gb_Library_use_static_libraries,wpftdraw,\
-	writerperfect \
 ))
 
 $(eval $(call gb_Library_use_externals,wpftdraw,\

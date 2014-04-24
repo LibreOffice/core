@@ -362,6 +362,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 		$(if $(ENABLE_KDE4),vclplug_kde4) \
 		$(if $(ENABLE_HEADLESS),,vclplug_svp) \
 	) \
+	writerperfect \
 	xmlscript \
 	xmlfa \
 	xmlfd \

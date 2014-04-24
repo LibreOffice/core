@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "WPXSvStream.hxx"
+#include <writerperfect/WPXSvInputStream.hxx>
 
 #include <com/sun/star/packages/zip/XZipFileAccess2.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -16,6 +16,9 @@
 #include <comphelper/seekableinput.hxx>
 
 #include <rtl/string.hxx>
+
+#include <sot/storage.hxx>
+
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -26,6 +29,9 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
+
+namespace writerperfect
+{
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -948,6 +954,8 @@ bool WPXSvInputStream::isOLEStream()
 WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
 {
     return getSubStreamByName(name);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

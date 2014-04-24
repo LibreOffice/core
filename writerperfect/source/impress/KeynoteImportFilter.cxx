@@ -28,11 +28,13 @@
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include <ucbhelper/content.hxx>
+
+#include <writerperfect/DirectoryStream.hxx>
+#include <writerperfect/DocumentHandler.hxx>
+#include <writerperfect/WPXSvInputStream.hxx>
+
 #include <xmloff/attrlist.hxx>
 
-#include "common/DirectoryStream.hxx"
-#include "common/DocumentHandler.hxx"
-#include "common/WPXSvStream.hxx"
 #include "KeynoteImportFilter.hxx"
 
 using boost::shared_ptr;
@@ -55,6 +57,9 @@ using com::sun::star::xml::sax::InputSource;
 using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
+
+using writerperfect::DocumentHandler;
+using writerperfect::WPXSvInputStream;
 
 namespace beans = com::sun::star::beans;
 namespace container = com::sun::star::container;

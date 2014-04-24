@@ -7,22 +7,29 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef WPXSVSTREAM_H
-#define WPXSVSTREAM_H
-
-#include <sot/storage.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
+#ifndef INCLUDED_WRITERPERFECT_WPXSVINPUTSTREAM_HXX
+#define INCLUDED_WRITERPERFECT_WPXSVSINPUTTREAM_HXX
 
 #include <libwpd-stream/libwpd-stream.h>
 
+#include <com/sun/star/uno/Reference.h>
+
+#include <writerperfect/writerperfectdllapi.h>
+
+namespace com { namespace sun { namespace star { namespace io {
+    class XInputStream;
+    class XSeekable;
+} } } }
+
+namespace writerperfect
+{
+
 class WPXSvInputStreamImpl;
 
-class WPXSvInputStream : public WPXInputStream
+class WRITERPERFECT_DLLPUBLIC WPXSvInputStream : public WPXInputStream
 {
 public:
-    WPXSvInputStream( ::com::sun::star::uno::Reference<
-                      ::com::sun::star::io::XInputStream > xStream );
+    WPXSvInputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xStream );
     virtual ~WPXSvInputStream();
 
     virtual bool isStructured();
@@ -45,6 +52,8 @@ private:
     WPXSvInputStreamImpl *mpImpl;
 };
 
-#endif
+}
+
+#endif // INCLUDED_WRITERPERFECT_WPXSVINPUTSTREAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

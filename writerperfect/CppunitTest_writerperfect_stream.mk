@@ -36,6 +36,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_stream,\
 	tl \
 	unotest \
 	utl \
+	writerperfect \
 ))
 
 $(eval $(call gb_CppunitTest_use_static_libraries,writerperfect_stream,\

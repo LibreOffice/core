@@ -23,13 +23,14 @@
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <writerperfect/DocumentHandler.hxx>
+#include <writerperfect/WPXSvInputStream.hxx>
+
 #include <xmloff/attrlist.hxx>
 
 #include <libcdr/libcdr.h>
 #include <libodfgen/libodfgen.hxx>
 
-#include "common/DocumentHandler.hxx"
-#include "common/WPXSvStream.hxx"
 #include "CDRImportFilter.hxx"
 
 #include <iostream>
@@ -53,6 +54,8 @@ using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
 
+using writerperfect::DocumentHandler;
+using writerperfect::WPXSvInputStream;
 
 sal_Bool SAL_CALL CDRImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException, std::exception)

@@ -17,22 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DOCUMENTHANDLER_HXX_
-#define _DOCUMENTHANDLER_HXX_
-
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-
-#include <libwpd/libwpd.h>
+#ifndef INCLUDED_WRITERPERFECT_DOCUMENTHANDLER_HXX
+#define INCLUDED_WRITERPERFECT_DOCUMENTHANDLER_HXX
 
 #include <libodfgen/libodfgen.hxx>
 
-using com::sun::star::uno::Reference;
-using com::sun::star::xml::sax::XDocumentHandler;
+#include <libwpd/libwpd.h>
 
-class DocumentHandler: public OdfDocumentHandler
+#include <com/sun/star/uno/Reference.h>
+
+#include <writerperfect/writerperfectdllapi.h>
+
+namespace com { namespace sun { namespace star { namespace xml { namespace sax {
+    class XDocumentHandler;
+} } } } }
+
+namespace writerperfect
+{
+
+class WRITERPERFECT_DLLPUBLIC DocumentHandler: public OdfDocumentHandler
 {
 public:
-    DocumentHandler(Reference < XDocumentHandler > &xHandler);
+    DocumentHandler(com::sun::star::uno::Reference < com::sun::star::xml::sax::XDocumentHandler > &xHandler);
     void startDocument() SAL_OVERRIDE;
     void endDocument() SAL_OVERRIDE;
     void startElement(const char *psName, const WPXPropertyList &xPropList) SAL_OVERRIDE;
@@ -40,9 +46,11 @@ public:
     void characters(const WPXString &sCharacters) SAL_OVERRIDE;
 
 private:
-    Reference < XDocumentHandler > mxHandler;
+    com::sun::star::uno::Reference < com::sun::star::xml::sax::XDocumentHandler > mxHandler;
 };
 
-#endif // _DOCUMENTHANDLER_HXX_
+}
+
+#endif // INCLUDED_WRITERPERFECT_DOCUMENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

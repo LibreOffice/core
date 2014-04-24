@@ -21,6 +21,9 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <writerperfect/DocumentHandler.hxx>
+#include <writerperfect/WPXSvInputStream.hxx>
+
 #include <xmloff/attrlist.hxx>
 #include <sfx2/passwd.hxx>
 #include <ucbhelper/content.hxx>
@@ -28,8 +31,6 @@
 #include <libwpd/libwpd.h>
 #include <libodfgen/libodfgen.hxx>
 
-#include "common/DocumentHandler.hxx"
-#include "common/WPXSvStream.hxx"
 #include "WordPerfectImportFilter.hxx"
 
 using ::ucbhelper::Content;
@@ -53,6 +54,8 @@ using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
 
+using writerperfect::DocumentHandler;
+using writerperfect::WPXSvInputStream;
 
 static bool handleEmbeddedWPGObject(const WPXBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
 {

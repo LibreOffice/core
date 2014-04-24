@@ -7,12 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef DIRECTORYSTREAM_H_INCLUDED
-#define DIRECTORYSTREAM_H_INCLUDED
+#ifndef INCLUDED_WRITERPERFECT_DIRECTORYSTREAM_HXX
+#define INCLUDED_WRITERPERFECT_DIRECTORYSTREAM_HXX
 
 #include <libwpd-stream/libwpd-stream.h>
 
 #include <com/sun/star/uno/Reference.h>
+
+#include <writerperfect/writerperfectdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace ucb {
     class XContent;
@@ -21,7 +23,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
 namespace writerperfect
 {
 
-class DirectoryStream : public WPXInputStream
+class WRITERPERFECT_DLLPUBLIC DirectoryStream : public WPXInputStream
 {
     struct Impl;
 
@@ -43,6 +45,6 @@ private:
 
 }
 
-#endif //  DIRECTORYSTREAM_H_INCLUDED
+#endif //  INCLUDED_WRITERPERFECT_DIRECTORYSTREAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,11 +21,6 @@ $(eval $(call gb_Library_Library,wpftimpress))
 
 $(eval $(call gb_Library_set_componentfile,wpftimpress,writerperfect/source/impress/wpftimpress))
 
-$(eval $(call gb_Library_set_include,wpftimpress,\
-	$$(INCLUDE) \
-    -I$(SRCDIR)/writerperfect/source \
-))
-
 $(eval $(call gb_Library_use_sdk_api,wpftimpress))
 
 $(eval $(call gb_Library_use_libraries,wpftimpress,\
@@ -37,12 +32,9 @@ $(eval $(call gb_Library_use_libraries,wpftimpress,\
 	tl \
 	ucbhelper \
 	utl \
+	writerperfect \
 	xo \
 	$(gb_UWINAPI) \
-))
-
-$(eval $(call gb_Library_use_static_libraries,wpftimpress,\
-	writerperfect \
 ))
 
 $(eval $(call gb_Library_use_externals,wpftimpress,\

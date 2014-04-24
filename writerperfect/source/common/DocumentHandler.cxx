@@ -6,15 +6,23 @@
  *
  * For further information visit http://libwpd.sourceforge.net
  */
-#include "DocumentHandler.hxx"
+
+#include <writerperfect/DocumentHandler.hxx>
 
 #include <string.h>
+
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 #include <xmloff/attrlist.hxx>
 
+namespace writerperfect
+{
+
+using com::sun::star::uno::Reference;
 using com::sun::star::xml::sax::XAttributeList;
+using com::sun::star::xml::sax::XDocumentHandler;
 
 DocumentHandler::DocumentHandler(Reference < XDocumentHandler > &xHandler) :
     mxHandler(xHandler)
@@ -61,6 +69,8 @@ void DocumentHandler::characters(const WPXString &sCharacters)
 {
     OUString sCharU16(sCharacters.cstr(), strlen(sCharacters.cstr()), RTL_TEXTENCODING_UTF8);
     mxHandler->characters(sCharU16);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

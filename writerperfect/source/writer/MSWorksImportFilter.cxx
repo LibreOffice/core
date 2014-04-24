@@ -21,6 +21,9 @@
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <writerperfect/DocumentHandler.hxx>
+#include <writerperfect/WPXSvInputStream.hxx>
+
 #include <xmloff/attrlist.hxx>
 #include <ucbhelper/content.hxx>
 
@@ -28,8 +31,6 @@
 
 #include <libodfgen/libodfgen.hxx>
 
-#include "common/DocumentHandler.hxx"
-#include "common/WPXSvStream.hxx"
 #include "MSWorksImportFilter.hxx"
 
 #include <iostream>
@@ -54,6 +55,8 @@ using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
 
+using writerperfect::DocumentHandler;
+using writerperfect::WPXSvInputStream;
 
 sal_Bool SAL_CALL MSWorksImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException)

@@ -26,7 +26,7 @@
 
 #include "test/bootstrapfixture.hxx"
 
-#include "WPXSvStream.hxx"
+#include <writerperfect/WPXSvInputStream.hxx>
 
 namespace io = com::sun::star::io;
 namespace ucb = com::sun::star::ucb;
@@ -35,6 +35,8 @@ namespace uno = com::sun::star::uno;
 using boost::shared_ptr;
 
 using std::equal;
+
+using writerperfect::WPXSvInputStream;
 
 namespace
 {

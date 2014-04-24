@@ -35,8 +35,8 @@
 
 #include <ucbhelper/content.hxx>
 
-#include "DirectoryStream.hxx"
-#include "WPXSvStream.hxx"
+#include <writerperfect/DirectoryStream.hxx>
+#include <writerperfect/WPXSvInputStream.hxx>
 
 namespace io = com::sun::star::io;
 namespace sdbc = com::sun::star::sdbc;

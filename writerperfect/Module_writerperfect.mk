@@ -23,7 +23,7 @@ $(eval $(call gb_Module_add_targets,writerperfect,\
 	Library_wpftdraw \
 	Library_wpftimpress \
 	Library_wpftwriter \
-	StaticLibrary_writerperfect \
+	Library_writerperfect \
 ))
 
 $(eval $(call gb_Module_add_check_targets,writerperfect,\

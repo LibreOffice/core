@@ -18,14 +18,15 @@
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <writerperfect/DocumentHandler.hxx>
+#include <writerperfect/WPXSvInputStream.hxx>
+
 #include <xmloff/attrlist.hxx>
 #include <ucbhelper/content.hxx>
 
 #include <libmwaw/libmwaw.hxx>
 #include <libodfgen/libodfgen.hxx>
 
-#include "common/DocumentHandler.hxx"
-#include "common/WPXSvStream.hxx"
 #include "MWAWImportFilter.hxx"
 
 using namespace ::com::sun::star::uno;
@@ -47,6 +48,9 @@ using com::sun::star::xml::sax::InputSource;
 using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
+
+using writerperfect::DocumentHandler;
+using writerperfect::WPXSvInputStream;
 
 static bool handleEmbeddedMWAWObject(const WPXBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
 {
