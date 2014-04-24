@@ -2294,6 +2294,8 @@ void Test::testFuncN()
 
 void Test::testFuncCOUNTIF()
 {
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
     // COUNTIF (test case adopted from OOo i#36381)
 
     OUString aTabName("foo");
@@ -2345,7 +2347,6 @@ void Test::testFuncCOUNTIF()
         SCROW nRow = 20 + i;
         m_pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aChecks[i].pFormula));
     }
-    m_pDoc->CalcAll();
 
     for (SCROW i = 0; i < nRows; ++i)
     {
@@ -2368,10 +2369,22 @@ void Test::testFuncCOUNTIF()
 
     m_pDoc->SetString(0, 0, 0, OUString("=\"\""));
     m_pDoc->SetString(0, 1, 0, OUString("=COUNTIF(A1;1)"));
-    m_pDoc->CalcAll();
 
     double result = m_pDoc->GetValue(0, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("We shouldn't count empty string as valid number.", result == 0.0);
+
+    // Another test case adopted from fdo#77039.
+    clearSheet(m_pDoc, 0);
+
+    // Set formula cells with blank results in A1:A4.
+    for (SCROW i = 0; i <=3; ++i)
+        m_pDoc->SetString(ScAddress(0,i,0), "=\"\"");
+
+    // Insert formula into A5 to count all cells with empty strings.
+    m_pDoc->SetString(ScAddress(0,4,0), "=COUNTIF(A1:A4;\"\"");
+
+    // We should correctly count with empty string key.
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0,4,0)));
 
     m_pDoc->DeleteTab(0);
 }
