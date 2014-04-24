@@ -546,6 +546,8 @@ public:
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >
                                ImplGetCanvas( const Size& rFullscreenSize, bool bFullscreen, bool bSpriteCanvas ) const;
 
+    virtual Region              GetActiveClipRegion() const SAL_OVERRIDE;
+
 private:
     // Default construction is forbidden and not implemented.
     SAL_DLLPRIVATE             Window();
@@ -568,7 +570,6 @@ protected:
     virtual void                ReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
 
     virtual void                InitClipRegion() SAL_OVERRIDE;
-    virtual Region              GetActiveClipRegion() const SAL_OVERRIDE;
 
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void ImplAdjustNWFSizes();

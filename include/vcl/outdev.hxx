@@ -466,9 +466,10 @@ public:
     void                        IntersectClipRegion( const Rectangle& rRect );
     void                        IntersectClipRegion( const Region& rRegion );
 
+    virtual Region              GetActiveClipRegion() const;
+
 protected:
     virtual void                InitClipRegion();
-    virtual Region              GetActiveClipRegion() const;
     virtual void                ClipToPaintRegion    ( Rectangle& rDstRect );
 
 private:
