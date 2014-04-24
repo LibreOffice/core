@@ -505,11 +505,11 @@ private:
                     DECL_LINK(AutoScroll, void *);
                     DECL_LINK( ShowHideListener, VclWindowEvent* );
 
-    void            StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 protected:
     Region          ImplCalcClipRegion( bool bIncludeLogo = true ) const;
-    void            ImplInitClipRegion();
+    virtual void    ImplInitClipRegion() SAL_OVERRIDE;
     void            ImplDrawScroller( bool bUp );
     using Window::ImplScroll;
     void            ImplScroll( const Point& rMousePos );
