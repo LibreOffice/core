@@ -16,12 +16,14 @@
 
 using namespace com::sun::star;
 
-namespace writerfilter {
-namespace rtftok {
+namespace writerfilter
+{
+namespace rtftok
+{
 
 RTFLookahead::RTFLookahead(SvStream& rStream, sal_Size nGroupStart)
     : m_rStream(rStream),
-    m_bHasTable(false)
+      m_bHasTable(false)
 {
     sal_Size nPos = m_rStream.Tell();
     m_rStream.Seek(nGroupStart);
@@ -64,8 +66,8 @@ int RTFLookahead::dispatchValue(RTFKeyword /*nKeyword*/, int /*nParam*/)
 
 int RTFLookahead::resolveChars(char ch)
 {
-    while(!m_rStream.IsEof() && (ch != '{' && ch != '}' && ch != '\\'))
-        m_rStream.ReadChar( ch );
+    while (!m_rStream.IsEof() && (ch != '{' && ch != '}' && ch != '\\'))
+        m_rStream.ReadChar(ch);
     if (!m_rStream.IsEof())
         m_rStream.SeekRel(-1);
     return 0;

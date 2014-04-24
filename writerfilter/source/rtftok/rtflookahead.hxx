@@ -15,40 +15,42 @@
 
 class SvStream;
 
-namespace writerfilter {
-    namespace rtftok {
-        /**
-         * This acts like an importer, but used for looking ahead, e.g. to
-         * determine if the current group contains a table, etc.
-         */
-        class RTFLookahead : public RTFListener
-        {
-            public:
-                RTFLookahead(SvStream& rStream, sal_Size nGroupStart);
-                virtual ~RTFLookahead();
-                virtual int dispatchDestination(RTFKeyword nKeyword) SAL_OVERRIDE;
-                virtual int dispatchFlag(RTFKeyword nKeyword) SAL_OVERRIDE;
-                virtual int dispatchSymbol(RTFKeyword nKeyword) SAL_OVERRIDE;
-                virtual int dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) SAL_OVERRIDE;
-                virtual int dispatchValue(RTFKeyword nKeyword, int nParam) SAL_OVERRIDE;
-                virtual int resolveChars(char ch) SAL_OVERRIDE;
-                virtual int pushState() SAL_OVERRIDE;
-                virtual int popState() SAL_OVERRIDE;
-                virtual RTFDestinationState getDestinationState() SAL_OVERRIDE;
-                virtual void setDestinationState(RTFDestinationState nDestinationState) SAL_OVERRIDE;
-                virtual RTFInternalState getInternalState() SAL_OVERRIDE;
-                virtual void setInternalState(RTFInternalState nInternalState) SAL_OVERRIDE;
-                virtual bool getSkipUnknown() SAL_OVERRIDE;
-                virtual void setSkipUnknown(bool bSkipUnknown) SAL_OVERRIDE;
-                virtual void finishSubstream() SAL_OVERRIDE;
-                virtual bool isSubstream() const SAL_OVERRIDE;
-                bool hasTable();
-            private:
-                boost::shared_ptr<RTFTokenizer> m_pTokenizer;
-                SvStream& m_rStream;
-                bool m_bHasTable;
-        };
-    } // namespace rtftok
+namespace writerfilter
+{
+namespace rtftok
+{
+/**
+ * This acts like an importer, but used for looking ahead, e.g. to
+ * determine if the current group contains a table, etc.
+ */
+class RTFLookahead : public RTFListener
+{
+public:
+    RTFLookahead(SvStream& rStream, sal_Size nGroupStart);
+    virtual ~RTFLookahead();
+    virtual int dispatchDestination(RTFKeyword nKeyword) SAL_OVERRIDE;
+    virtual int dispatchFlag(RTFKeyword nKeyword) SAL_OVERRIDE;
+    virtual int dispatchSymbol(RTFKeyword nKeyword) SAL_OVERRIDE;
+    virtual int dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) SAL_OVERRIDE;
+    virtual int dispatchValue(RTFKeyword nKeyword, int nParam) SAL_OVERRIDE;
+    virtual int resolveChars(char ch) SAL_OVERRIDE;
+    virtual int pushState() SAL_OVERRIDE;
+    virtual int popState() SAL_OVERRIDE;
+    virtual RTFDestinationState getDestinationState() SAL_OVERRIDE;
+    virtual void setDestinationState(RTFDestinationState nDestinationState) SAL_OVERRIDE;
+    virtual RTFInternalState getInternalState() SAL_OVERRIDE;
+    virtual void setInternalState(RTFInternalState nInternalState) SAL_OVERRIDE;
+    virtual bool getSkipUnknown() SAL_OVERRIDE;
+    virtual void setSkipUnknown(bool bSkipUnknown) SAL_OVERRIDE;
+    virtual void finishSubstream() SAL_OVERRIDE;
+    virtual bool isSubstream() const SAL_OVERRIDE;
+    bool hasTable();
+private:
+    boost::shared_ptr<RTFTokenizer> m_pTokenizer;
+    SvStream& m_rStream;
+    bool m_bHasTable;
+};
+} // namespace rtftok
 } // namespace writerfilter
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLOOKAHEAD_HXX
