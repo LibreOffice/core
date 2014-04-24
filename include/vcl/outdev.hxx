@@ -459,7 +459,7 @@ public:
     SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
 
 protected:
-    virtual void                ImplInitClipRegion();
+    virtual void                InitClipRegion();
 
     ///@}
 

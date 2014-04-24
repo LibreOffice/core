@@ -54,7 +54,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     }
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     if ( mbOutputClipped )
         return;
@@ -101,7 +101,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     }
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     if ( mbOutputClipped )
         return;

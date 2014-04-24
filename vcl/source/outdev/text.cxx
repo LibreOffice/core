@@ -461,7 +461,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
 void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
 {
     if( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if( mbOutputClipped )
         return;
     if( mbInitTextColor )
@@ -977,7 +977,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
     if( !mpGraphics && !AcquireGraphics() )
         return;
     if( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if( mbOutputClipped )
         return;
 
@@ -1721,7 +1721,7 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
     if( !mpGraphics && !AcquireGraphics() )
         return;
     if( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     // temporarily swap in passed mtf for action generation, and
     // disable output generation.
@@ -1762,7 +1762,7 @@ void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, s
     if( !mpGraphics && !AcquireGraphics() )
         return;
     if( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if( mbOutputClipped && !bDecomposeTextRectAction )
         return;
 
@@ -2069,7 +2069,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
     if( !mpGraphics && !AcquireGraphics() )
         return;
     if( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if ( mbOutputClipped )
         return;
 

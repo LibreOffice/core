@@ -377,7 +377,7 @@ void Window::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
     }
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     if ( mbOutputClipped )
         return;
@@ -411,7 +411,7 @@ void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
     }
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     if ( mbOutputClipped )
         return;
@@ -486,7 +486,7 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
         }
 
         if ( mbInitClipRegion )
-            ImplInitClipRegion();
+            InitClipRegion();
 
         if ( mbOutputClipped )
             return;
@@ -550,7 +550,7 @@ void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
         }
 
         if ( mbInitClipRegion )
-            ImplInitClipRegion();
+            InitClipRegion();
 
         if ( mbOutputClipped )
             return;

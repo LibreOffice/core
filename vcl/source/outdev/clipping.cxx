@@ -31,30 +31,7 @@
 
 #include <numeric>
 
-void OutputDevice::ClipToPaintRegion(Rectangle& /*rDstRect*/)
-{
-}
-
-bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGraphics )
-{
-    DBG_TESTSOLARMUTEX();
-
-    if( !pGraphics )
-    {
-        if( !mpGraphics )
-            if( !AcquireGraphics() )
-                return false;
-        pGraphics = mpGraphics;
-    }
-
-    bool bClipRegion = pGraphics->SetClipRegion( rRegion, this );
-    OSL_ENSURE( bClipRegion, "OutputDevice::ImplSelectClipRegion() - can't create region" );
-    return bClipRegion;
-}
-
-// TODO: fdo#74424 - this needs to be moved out of OutputDevice and into the
-// Window, VirtualDevice and Printer classes
-void OutputDevice::ImplInitClipRegion()
+void OutputDevice::InitClipRegion()
 {
     DBG_TESTSOLARMUTEX();
 
@@ -106,6 +83,27 @@ void OutputDevice::ImplInitClipRegion()
     }
 
     mbInitClipRegion = false;
+}
+
+void OutputDevice::ClipToPaintRegion(Rectangle& /*rDstRect*/)
+{
+}
+
+bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGraphics )
+{
+    DBG_TESTSOLARMUTEX();
+
+    if( !pGraphics )
+    {
+        if( !mpGraphics )
+            if( !AcquireGraphics() )
+                return false;
+        pGraphics = mpGraphics;
+    }
+
+    bool bClipRegion = pGraphics->SetClipRegion( rRegion, this );
+    OSL_ENSURE( bClipRegion, "OutputDevice::ImplSelectClipRegion() - can't create region" );
+    return bClipRegion;
 }
 
 void OutputDevice::ImplSetClipRegion( const Region* pRegion )

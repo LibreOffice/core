@@ -406,7 +406,7 @@ bool Window::AcquireGraphics() const
     return mpGraphics ? true : false;
 }
 
-void Window::ImplInitClipRegion()
+void Window::InitClipRegion()
 {
     DBG_TESTSOLARMUTEX();
 

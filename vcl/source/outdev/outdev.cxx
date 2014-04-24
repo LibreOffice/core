@@ -574,7 +574,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
             return;
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     if ( mbOutputClipped )
         return;
@@ -632,7 +632,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
             return;
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     if ( mbOutputClipped )
         return;
@@ -695,7 +695,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
             return;
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     if ( mbOutputClipped )
         return;
@@ -1353,7 +1353,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
                 return bDrawn;
 
             if( mbInitClipRegion )
-                ImplInitClipRegion();
+                InitClipRegion();
 
             aRect.Justify();
             bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),

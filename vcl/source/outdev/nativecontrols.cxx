@@ -268,7 +268,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
             return false;
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if ( mbOutputClipped )
         return true;
 

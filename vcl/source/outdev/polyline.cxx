@@ -44,7 +44,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
             return;
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if ( mbOutputClipped )
         return;
 
@@ -153,7 +153,7 @@ void OutputDevice::DrawPolyLine(
             return;
 
     if( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if( mbOutputClipped )
         return;
 
@@ -242,7 +242,7 @@ void OutputDevice::DrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo
         return;
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     if ( mbOutputClipped )
         return;
@@ -333,7 +333,7 @@ bool OutputDevice::TryDrawPolyLineDirect(
             return false;
 
     if( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     if( mbOutputClipped )
         return true;

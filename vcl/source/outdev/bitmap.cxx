@@ -121,7 +121,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
             return;
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     if ( mbOutputClipped )
         return;
@@ -357,7 +357,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                 return;
 
         if ( mbInitClipRegion )
-            ImplInitClipRegion();
+            InitClipRegion();
 
         if ( mbOutputClipped )
             return;

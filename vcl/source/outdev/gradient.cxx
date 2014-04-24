@@ -45,7 +45,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
         return;     // nothing to draw!
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     if ( mbOutputClipped )
         return;
@@ -116,7 +116,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                 IntersectClipRegion( aBoundRect );
 
                 if( mbInitClipRegion )
-                    ImplInitClipRegion();
+                    InitClipRegion();
 
                 if( !mbOutputClipped )
                 {

@@ -86,7 +86,7 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
         return;
 
     if( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     if( mbOutputClipped )
         return;

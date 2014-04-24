@@ -41,7 +41,7 @@ Color OutputDevice::GetPixel( const Point& rPt ) const
     if ( mpGraphics || AcquireGraphics() )
     {
         if ( mbInitClipRegion )
-            const_cast<OutputDevice*>(this)->ImplInitClipRegion();
+            const_cast<OutputDevice*>(this)->InitClipRegion();
 
         if ( !mbOutputClipped )
         {
@@ -74,7 +74,7 @@ void OutputDevice::DrawPixel( const Point& rPt )
     }
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if ( mbOutputClipped )
         return;
 
@@ -107,7 +107,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
     }
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if ( mbOutputClipped )
         return;
 
@@ -139,7 +139,7 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
             if ( mpGraphics || AcquireGraphics() )
             {
                 if ( mbInitClipRegion )
-                    ImplInitClipRegion();
+                    InitClipRegion();
 
                 if ( mbOutputClipped )
                     return;

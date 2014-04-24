@@ -47,7 +47,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
     }
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if ( mbOutputClipped )
         return;
 
@@ -88,7 +88,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
     }
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if ( mbOutputClipped )
         return;
 

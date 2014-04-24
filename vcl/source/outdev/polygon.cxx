@@ -49,7 +49,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
             return;
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if ( mbOutputClipped )
         return;
 
@@ -156,7 +156,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
             return;
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if ( mbOutputClipped )
         return;
 
@@ -256,7 +256,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
             return;
 
     if( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if( mbOutputClipped )
         return;
 
@@ -488,7 +488,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
         return;
 
     if( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     if( mbOutputClipped )
         return;

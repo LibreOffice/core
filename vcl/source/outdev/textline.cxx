@@ -640,7 +640,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     Push( PUSH_CLIPREGION );
     IntersectClipRegion( PixelToLogic(aPixelRect) );
     if( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
 
     pLayout->DrawText( *mpGraphics );
 
@@ -917,7 +917,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
     if( !mpGraphics && !AcquireGraphics() )
         return;
     if( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if( mbOutputClipped )
         return;
 
@@ -950,7 +950,7 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
             return;
 
     if ( mbInitClipRegion )
-        ImplInitClipRegion();
+        InitClipRegion();
     if ( mbOutputClipped )
         return;
 
