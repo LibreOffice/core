@@ -442,7 +442,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                 rHeader.nSizeImage = rIStm.remainingSize();
             }
 
-            boost::scoped_ptr<sal_uInt8> pBuffer(
+            boost::scoped_array<sal_uInt8> pBuffer(
                 new sal_uInt8[rHeader.nSizeImage]);
             if (rIStm.Read((char*)pBuffer.get(), rHeader.nSizeImage)
                 != rHeader.nSizeImage)
