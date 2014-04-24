@@ -54,7 +54,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
     {
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rSet.m_nEncoding);
-        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rSet.m_nEncoding)) + " failed"),
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rSet.m_nEncoding)) + ") failed"),
                                                  RTL_TEXTENCODING_UTF8).getStr(),
                                aConverter != NULL);
         rtl_TextToUnicodeContext aContext
@@ -100,7 +100,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
     {
         rtl_UnicodeToTextConverter aConverter
             = rtl_createUnicodeToTextConverter(rSet.m_nEncoding);
-        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rSet.m_nEncoding)) + " failed"),
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rSet.m_nEncoding)) + ") failed"),
                                                  RTL_TEXTENCODING_UTF8).getStr(),
                                aConverter != NULL);
         rtl_UnicodeToTextContext aContext
@@ -144,7 +144,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
             aText[0] = static_cast< sal_Char >(i);
             rtl_TextToUnicodeConverter aConverter
                 = rtl_createTextToUnicodeConverter(rSet.m_nEncoding);
-            CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rSet.m_nEncoding)) + " failed"),
+            CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rSet.m_nEncoding)) + ") failed"),
                                                      RTL_TEXTENCODING_UTF8).getStr(),
                                aConverter != NULL);
             rtl_TextToUnicodeContext aContext
@@ -192,7 +192,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
         sal_Unicode aUnicode[TEST_STRING_SIZE];
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rTest.m_nEncoding);
-        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rTest.m_nEncoding)) + " failed"),
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rTest.m_nEncoding)) + ") failed"),
                                                  RTL_TEXTENCODING_UTF8).getStr(),
                                aConverter != NULL);
         rtl_TextToUnicodeContext aContext
@@ -232,7 +232,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
         sal_Unicode aUnicode[TEST_STRING_SIZE];
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rTest.m_nEncoding);
-        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rTest.m_nEncoding)) + " failed"),
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rTest.m_nEncoding)) + ") failed"),
                                                  RTL_TEXTENCODING_UTF8).getStr(),
                                aConverter != NULL);
         rtl_TextToUnicodeContext aContext
@@ -288,7 +288,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
         int nSize = 0;
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rTest.m_nEncoding);
-        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rTest.m_nEncoding)) + " failed"),
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rTest.m_nEncoding)) + ") failed"),
                                                  RTL_TEXTENCODING_UTF8).getStr(),
                                aConverter != NULL);
         for (sal_Size i = 0;;) {
@@ -409,7 +409,7 @@ void doComplexCharSetCutTest(ComplexCharSetTest const & rTest) {
         sal_Unicode aUnicode[TEST_STRING_SIZE];
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rTest.m_nEncoding);
-        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rTest.m_nEncoding)) + " failed"),
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rTest.m_nEncoding)) + ") failed"),
                                                  RTL_TEXTENCODING_UTF8).getStr(),
                                aConverter != NULL);
         sal_Size nSize;
