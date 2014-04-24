@@ -158,7 +158,8 @@ class VBAHELPER_DLLPUBLIC ShapeHelper
 protected:
     css::uno::Reference< css::drawing::XShape > xShape;
 public:
-    ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xShape) throw (css::script::BasicErrorException );
+    ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xShape)
+        throw (css::script::BasicErrorException, css::uno::RuntimeException);
 
     double getHeight() const;
        void setHeight(double _fheight) throw ( css::script::BasicErrorException );
