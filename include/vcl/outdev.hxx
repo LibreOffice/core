@@ -469,6 +469,7 @@ public:
 protected:
     virtual void                InitClipRegion();
     virtual Region              GetActiveClipRegion() const;
+    virtual void                ClipToPaintRegion    ( Rectangle& rDstRect );
 
 private:
     SAL_DLLPRIVATE void         SetDeviceClipRegion( const Region* pRegion );
@@ -551,7 +552,6 @@ public:
 
     SAL_DLLPRIVATE void         ImplDrawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
 
-    virtual void                ClipToPaintRegion    ( Rectangle& rDstRect );
     SAL_DLLPRIVATE void         ImplPrintTransparent ( const Bitmap& rBmp, const Bitmap& rMask,
                                                        const Point& rDestPt, const Size& rDestSize,
                                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel );

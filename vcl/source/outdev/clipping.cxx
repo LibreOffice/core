@@ -31,6 +31,111 @@
 
 #include <numeric>
 
+Region OutputDevice::GetClipRegion() const
+{
+
+    return PixelToLogic( maRegion );
+}
+
+void OutputDevice::SetClipRegion()
+{
+
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaClipRegionAction( Region(), false ) );
+
+    SetDeviceClipRegion( NULL );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetClipRegion();
+}
+
+void OutputDevice::SetClipRegion( const Region& rRegion )
+{
+
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaClipRegionAction( rRegion, true ) );
+
+    if ( rRegion.IsNull() )
+    {
+        SetDeviceClipRegion( NULL );
+    }
+    else
+    {
+        Region aRegion = LogicToPixel( rRegion );
+        SetDeviceClipRegion( &aRegion );
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetClipRegion( rRegion );
+}
+
+bool OutputDevice::SelectClipRegion( const Region& rRegion, SalGraphics* pGraphics )
+{
+    DBG_TESTSOLARMUTEX();
+
+    if( !pGraphics )
+    {
+        if( !mpGraphics )
+            if( !AcquireGraphics() )
+                return false;
+        pGraphics = mpGraphics;
+    }
+
+    bool bClipRegion = pGraphics->SetClipRegion( rRegion, this );
+    OSL_ENSURE( bClipRegion, "OutputDevice::SelectClipRegion() - can't create region" );
+    return bClipRegion;
+}
+
+void OutputDevice::MoveClipRegion( long nHorzMove, long nVertMove )
+{
+
+    if ( mbClipRegion )
+    {
+        if( mpMetaFile )
+            mpMetaFile->AddAction( new MetaMoveClipRegionAction( nHorzMove, nVertMove ) );
+
+        maRegion.Move( ImplLogicWidthToDevicePixel( nHorzMove ),
+                       ImplLogicHeightToDevicePixel( nVertMove ) );
+        mbInitClipRegion = true;
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->MoveClipRegion( nHorzMove, nVertMove );
+}
+
+void OutputDevice::IntersectClipRegion( const Rectangle& rRect )
+{
+
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaISectRectClipRegionAction( rRect ) );
+
+    Rectangle aRect = LogicToPixel( rRect );
+    maRegion.Intersect( aRect );
+    mbClipRegion        = true;
+    mbInitClipRegion    = true;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->IntersectClipRegion( rRect );
+}
+
+void OutputDevice::IntersectClipRegion( const Region& rRegion )
+{
+
+    if(!rRegion.IsNull())
+    {
+        if ( mpMetaFile )
+            mpMetaFile->AddAction( new MetaISectRegionClipRegionAction( rRegion ) );
+
+        Region aRegion = LogicToPixel( rRegion );
+        maRegion.Intersect( aRegion );
+        mbClipRegion        = true;
+        mbInitClipRegion    = true;
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->IntersectClipRegion( rRegion );
+}
+
 void OutputDevice::InitClipRegion()
 {
     DBG_TESTSOLARMUTEX();
@@ -85,25 +190,15 @@ void OutputDevice::InitClipRegion()
     mbInitClipRegion = false;
 }
 
-void OutputDevice::ClipToPaintRegion(Rectangle& /*rDstRect*/)
+Region OutputDevice::GetActiveClipRegion() const
 {
+    return GetClipRegion();
 }
 
-bool OutputDevice::SelectClipRegion( const Region& rRegion, SalGraphics* pGraphics )
+void OutputDevice::ClipToPaintRegion(Rectangle& /*rDstRect*/)
 {
-    DBG_TESTSOLARMUTEX();
-
-    if( !pGraphics )
-    {
-        if( !mpGraphics )
-            if( !AcquireGraphics() )
-                return false;
-        pGraphics = mpGraphics;
-    }
-
-    bool bClipRegion = pGraphics->SetClipRegion( rRegion, this );
-    OSL_ENSURE( bClipRegion, "OutputDevice::SelectClipRegion() - can't create region" );
-    return bClipRegion;
+    // this is only used in Window, but we still need it as it's called
+    // on in other clipping functions
 }
 
 void OutputDevice::SetDeviceClipRegion( const Region* pRegion )
@@ -125,99 +220,6 @@ void OutputDevice::SetDeviceClipRegion( const Region* pRegion )
         mbClipRegion        = true;
         mbInitClipRegion    = true;
     }
-}
-
-void OutputDevice::SetClipRegion()
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaClipRegionAction( Region(), false ) );
-
-    SetDeviceClipRegion( NULL );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetClipRegion();
-}
-
-void OutputDevice::SetClipRegion( const Region& rRegion )
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaClipRegionAction( rRegion, true ) );
-
-    if ( rRegion.IsNull() )
-    {
-        SetDeviceClipRegion( NULL );
-    }
-    else
-    {
-        Region aRegion = LogicToPixel( rRegion );
-        SetDeviceClipRegion( &aRegion );
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetClipRegion( rRegion );
-}
-
-Region OutputDevice::GetClipRegion() const
-{
-
-    return PixelToLogic( maRegion );
-}
-
-Region OutputDevice::GetActiveClipRegion() const
-{
-    return GetClipRegion();
-}
-
-void OutputDevice::MoveClipRegion( long nHorzMove, long nVertMove )
-{
-
-    if ( mbClipRegion )
-    {
-        if( mpMetaFile )
-            mpMetaFile->AddAction( new MetaMoveClipRegionAction( nHorzMove, nVertMove ) );
-
-        maRegion.Move( ImplLogicWidthToDevicePixel( nHorzMove ),
-                       ImplLogicHeightToDevicePixel( nVertMove ) );
-        mbInitClipRegion = true;
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->MoveClipRegion( nHorzMove, nVertMove );
-}
-
-void OutputDevice::IntersectClipRegion( const Rectangle& rRect )
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaISectRectClipRegionAction( rRect ) );
-
-    Rectangle aRect = LogicToPixel( rRect );
-    maRegion.Intersect( aRect );
-    mbClipRegion        = true;
-    mbInitClipRegion    = true;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->IntersectClipRegion( rRect );
-}
-
-void OutputDevice::IntersectClipRegion( const Region& rRegion )
-{
-
-    if(!rRegion.IsNull())
-    {
-        if ( mpMetaFile )
-            mpMetaFile->AddAction( new MetaISectRegionClipRegionAction( rRegion ) );
-
-        Region aRegion = LogicToPixel( rRegion );
-        maRegion.Intersect( aRegion );
-        mbClipRegion        = true;
-        mbInitClipRegion    = true;
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->IntersectClipRegion( rRegion );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
