@@ -711,11 +711,11 @@ void SlideShowImpl::stopSlideTransitionSound()
 
 SoundPlayerSharedPtr SlideShowImpl::resetSlideTransitionSound( const uno::Any& rSound, bool bLoopSound )
 {
-    sal_Bool bStopSound = sal_False;
+    bool bStopSound = false;
     OUString url;
 
     if( !(rSound >>= bStopSound) )
-        bStopSound = sal_False;
+        bStopSound = false;
     rSound >>= url;
 
     if( !bStopSound && url.isEmpty() )
@@ -810,7 +810,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     const RGBColor aTransitionFadeColor( unoColor2RGBColor( aUnoColor ));
 
     uno::Any aSound;
-    sal_Bool bLoopSound = sal_False;
+    bool bLoopSound = false;
 
     if( !getPropertyValue( aSound, xPropSet, "Sound") )
         OSL_TRACE( "createSlideTransition(): Could not determine transition sound effect URL from XDrawPage - using no sound" );
@@ -1690,7 +1690,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
 
     if ( rProperty.Name == "AdvanceOnClick" )
     {
-        sal_Bool bAdvanceOnClick = sal_False;
+        bool bAdvanceOnClick = false;
         if (! (rProperty.Value >>= bAdvanceOnClick))
             return false;
         maUserEventQueue.setAdvanceOnClick( bAdvanceOnClick );
@@ -1699,10 +1699,10 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
 
     if ( rProperty.Name == "DisableAnimationZOrder" )
     {
-        sal_Bool bDisableAnimationZOrder = sal_False;
+        bool bDisableAnimationZOrder = false;
         if (! (rProperty.Value >>= bDisableAnimationZOrder))
             return false;
-        mbDisableAnimationZOrder = bDisableAnimationZOrder == sal_True;
+        mbDisableAnimationZOrder = bDisableAnimationZOrder;
         return true;
     }
 
@@ -1817,7 +1817,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
     {
         uno::Sequence<uno::Any> aValues;
         uno::Reference<presentation::XSlideShowView> xView;
-        sal_Bool bValue (false);
+        bool bValue (false);
         if ((rProperty.Value >>= aValues)
             && aValues.getLength()==2
             && (aValues[0] >>= xView)

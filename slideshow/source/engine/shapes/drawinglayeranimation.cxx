@@ -159,8 +159,8 @@ private:
                                 basegfx::B2DRectangle const& parentBounds );
 
     // Access to VisibleWhenSTarted flags
-    sal_Bool IsVisibleWhenStarted() const { return mbVisibleWhenStarted; }
-    sal_Bool IsVisibleWhenStopped() const { return mbVisibleWhenStopped; }
+    bool IsVisibleWhenStarted() const { return mbVisibleWhenStarted; }
+    bool IsVisibleWhenStopped() const { return mbVisibleWhenStopped; }
 
     // scroll horizontal? if sal_False, scroll is vertical.
     bool ScrollHorizontal() const {
@@ -270,7 +270,7 @@ double ActivityImpl::GetMixerState( sal_uInt32 nTime )
     {
         // from AInfoBlinkText:
         double fRetval(0.0);
-        sal_Bool bDone(sal_False);
+        bool bDone(false);
         const sal_uInt32 nLoopTime(2 * mnFrequency);
 
         if(mnRepeat)
@@ -284,7 +284,7 @@ double ActivityImpl::GetMixerState( sal_uInt32 nTime )
                 else
                     fRetval = 1.0;
 
-                bDone = sal_True;
+                bDone = true;
             }
         }
 

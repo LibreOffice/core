@@ -259,7 +259,7 @@ namespace internal
                         // initially. This is currently the only place
                         // where a shape effect influences shape
                         // attributes outside it's effective duration.
-                        sal_Bool bVisible( sal_False );
+                        bool bVisible( false );
                         if( xAnimateNode->getAttributeName().equalsIgnoreAsciiCase("visibility") )
                         {
 
@@ -277,12 +277,12 @@ namespace internal
                                     if( aString.equalsIgnoreAsciiCase("true") ||
                                         aString.equalsIgnoreAsciiCase("on") )
                                     {
-                                        bVisible = sal_True;
+                                        bVisible = true;
                                     }
                                     if( aString.equalsIgnoreAsciiCase("false") ||
                                         aString.equalsIgnoreAsciiCase("off") )
                                     {
-                                        bVisible = sal_False;
+                                        bVisible = false;
                                     }
                                 }
                             }

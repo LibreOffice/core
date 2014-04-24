@@ -79,8 +79,8 @@ namespace slideshow
             double      mnMagicValue;
         };
 
-        sal_Bool operator==( const HSLColor& rLHS, const HSLColor& rRHS );
-        sal_Bool operator!=( const HSLColor& rLHS, const HSLColor& rRHS );
+        bool operator==( const HSLColor& rLHS, const HSLColor& rRHS );
+        bool operator!=( const HSLColor& rLHS, const HSLColor& rRHS );
         HSLColor operator+( const HSLColor& rLHS, const HSLColor& rRHS );
         HSLColor operator*( const HSLColor& rLHS, const HSLColor& rRHS );
         HSLColor operator*( double nFactor, const HSLColor& rRHS );

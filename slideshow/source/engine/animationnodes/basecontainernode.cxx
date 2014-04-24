@@ -172,7 +172,7 @@ bool BaseContainerNode::notifyDeactivatedChild(
 bool BaseContainerNode::repeat()
 {
     forEachChildNode( boost::mem_fn(&AnimationNode::end), ~ENDED );
-    sal_Bool bState = init_children();
+    bool bState = init_children();
     if( bState )
         activate_st();
     return bState;

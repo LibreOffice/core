@@ -374,7 +374,7 @@ namespace slideshow
                            const ShapeSharedPtr&        /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
-            sal_Bool nTmp = sal_Bool();
+            bool nTmp;
             // try to extract bool value
             if( (rSourceAny >>= nTmp) )
             {

@@ -380,13 +380,13 @@ namespace slideshow
 
                 if( rxProps.is() )
                 {
-                    sal_Bool bLoop( false );
+                    bool bLoop( false );
                     getPropertyValue( bLoop,
                                       rxProps,
                                       OUString( "Loop" ));
                     mxPlayer->setPlaybackLoop( bLoop );
 
-                    sal_Bool bMute( false );
+                    bool bMute( false );
                     getPropertyValue( bMute,
                                       rxProps,
                                       OUString( "Mute" ));
