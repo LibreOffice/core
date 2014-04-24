@@ -45,6 +45,7 @@
 #include "cellvalue.hxx"
 #include "editutil.hxx"
 #include <rtl/strbuf.hxx>
+#include <boost/scoped_ptr.hpp>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -586,7 +587,7 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
         do
         {
             const ScPatternAttr* pOldPattern = pData[nPos].pPattern;
-            ScPatternAttr* pNewPattern = new ScPatternAttr(*pOldPattern);
+            boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pOldPattern));
             pNewPattern->SetStyleSheet(pStyle);
             SCROW nY1 = nStart;
             SCROW nY2 = pData[nPos].nRow;
@@ -602,7 +603,7 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
             {
                 if (nY1 < nStartRow) nY1=nStartRow;
                 if (nY2 > nEndRow) nY2=nEndRow;
-                SetPatternArea( nY1, nY2, pNewPattern, true );
+                SetPatternArea( nY1, nY2, pNewPattern.get(), true );
                 Search( nStart, nPos );
             }
             else
@@ -629,7 +630,6 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
                 else
                     nPos++;
             }
-            delete pNewPattern;
         }
         while ((nStart <= nEndRow) && (nPos < nCount));
 
@@ -687,7 +687,7 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
 
             if ( (SFX_ITEM_SET == eState) || (SFX_ITEM_SET == eTLBRState) || (SFX_ITEM_SET == eBLTRState) )
             {
-                ScPatternAttr*  pNewPattern = new ScPatternAttr(*pOldPattern);
+                boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pOldPattern));
                 SfxItemSet&     rNewSet = pNewPattern->GetItemSet();
                 SCROW           nY1 = nStart;
                 SCROW           nY2 = pData[nPos].nRow;
@@ -754,7 +754,7 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                 {
                     if (nY1 < nStartRow) nY1=nStartRow;
                     if (nY2 > nEndRow) nY2=nEndRow;
-                    SetPatternArea( nY1, nY2, pNewPattern, true );
+                    SetPatternArea( nY1, nY2, pNewPattern.get(), true );
                     Search( nStart, nPos );
                 }
                 else
@@ -772,7 +772,6 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                 delete pNewBoxItem;
                 delete pNewTLBRItem;
                 delete pNewBLTRItem;
-                delete pNewPattern;
             }
             else
             {
@@ -1467,12 +1466,12 @@ bool ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
             for (SCROW nThisRow = nThisStart; nThisRow <= nThisEnd; nThisRow++)
                 pDocument->ApplyAttr( nThisCol, nThisRow, nTab, *pAttr );
 
-            ScPatternAttr*  pNewPattern = new ScPatternAttr( pDocument->GetPool() );
+            boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( pDocument->GetPool() ));
             SfxItemSet*     pSet = &pNewPattern->GetItemSet();
             pSet->Put( *pFlagAttr );
             pDocument->ApplyPatternAreaTab( nThisCol, nThisStart, nMergeEndCol, nMergeEndRow,
                                                 nTab, *pNewPattern );
-            delete pNewPattern;
+            pNewPattern.reset();
 
             Search( nThisEnd, nIndex );    // data changed
         }
@@ -1524,11 +1523,10 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
                 //  because it would have no cell style information.
                 //  Instead, the document's GetDefPattern is copied. Since it is passed as
                 //  pWantedPattern, no special treatment of default is needed here anymore.
-                ScPatternAttr*  pNewPattern = new ScPatternAttr( *pWantedPattern );
+                boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( *pWantedPattern ));
                 SfxItemSet*     pSet = &pNewPattern->GetItemSet();
                 pSet->Put( *pItem );
-                SetPatternArea( nThisRow, nAttrRow, pNewPattern, true );
-                delete pNewPattern;
+                SetPatternArea( nThisRow, nAttrRow, pNewPattern.get(), true );
             }
             else
             {
@@ -1762,7 +1760,7 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBo
 
             if (bReset)
             {
-                ScPatternAttr* pNewPattern = new ScPatternAttr(*pData[nPos].pPattern);
+                boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pData[nPos].pPattern));
                 pDocument->GetPool()->Remove(*pData[nPos].pPattern);
                 pNewPattern->SetStyleSheet( (ScStyleSheet*)
                     pDocument->GetStyleSheetPool()->
@@ -1771,7 +1769,7 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBo
                               SFXSTYLEBIT_AUTO | SCSTYLEBIT_STANDARD ) );
                 pData[nPos].pPattern = (const ScPatternAttr*)
                                             &pDocument->GetPool()->Put(*pNewPattern);
-                delete pNewPattern;
+                pNewPattern.reset();
 
                 if (Concat(nPos))
                 {
@@ -2273,7 +2271,7 @@ void ScAttrArray::CopyArea(
             }
             else if ( nStripFlags )
             {
-                ScPatternAttr* pTmpPattern = new ScPatternAttr( *pOldPattern );
+                boost::scoped_ptr<ScPatternAttr> pTmpPattern(new ScPatternAttr( *pOldPattern ));
                 sal_Int16 nNewFlags = 0;
                 if ( nStripFlags != SC_MF_ALL )
                     nNewFlags = ((const ScMergeFlagAttr&)pTmpPattern->GetItem(ATTR_MERGE_FLAG)).
@@ -2288,7 +2286,6 @@ void ScAttrArray::CopyArea(
                     pNewPattern = (ScPatternAttr*) &pDestDocPool->Put(*pTmpPattern);
                 else
                     pNewPattern = pTmpPattern->PutInPool( rAttrArray.pDocument, pDocument );
-                delete pTmpPattern;
             }
             else
             {

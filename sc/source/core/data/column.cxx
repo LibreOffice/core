@@ -574,12 +574,11 @@ void ScColumn::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
 void ScColumn::ApplyStyle( SCROW nRow, const ScStyleSheet& rStyle )
 {
     const ScPatternAttr* pPattern = pAttrArray->GetPattern(nRow);
-    ScPatternAttr* pNewPattern = new ScPatternAttr(*pPattern);
+    boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pPattern));
     if (pNewPattern)
     {
         pNewPattern->SetStyleSheet((ScStyleSheet*)&rStyle);
-        pAttrArray->SetPattern(nRow, pNewPattern, true);
-        delete pNewPattern;
+        pAttrArray->SetPattern(nRow, pNewPattern.get(), true);
     }
 }
 
@@ -740,7 +739,7 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
     ScDocumentPool* pDocPool = pDocument->GetPool();
 
     const ScPatternAttr* pOldPattern = pAttrArray->GetPattern( nRow );
-    ScPatternAttr* pTemp = new ScPatternAttr(*pOldPattern);
+    boost::scoped_ptr<ScPatternAttr> pTemp(new ScPatternAttr(*pOldPattern));
     pTemp->GetItemSet().Put(rAttr);
     const ScPatternAttr* pNewPattern = (const ScPatternAttr*) &pDocPool->Put( *pTemp );
 
@@ -748,8 +747,6 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
         pAttrArray->SetPattern( nRow, pNewPattern );
     else
         pDocPool->Remove( *pNewPattern );       // free up resources
-
-    delete pTemp;
 }
 
 ScDocument& ScColumn::GetDoc()
@@ -1708,10 +1705,9 @@ void ScColumn::CopyToColumn(
                 const ScStyleSheet* pStyle =
                     rColumn.pAttrArray->GetPattern( nRow )->GetStyleSheet();
                 const ScPatternAttr* pPattern = pAttrArray->GetPattern( nRow );
-                ScPatternAttr* pNewPattern = new ScPatternAttr( *pPattern );
+                boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( *pPattern ));
                 pNewPattern->SetStyleSheet( (ScStyleSheet*)pStyle );
-                rColumn.pAttrArray->SetPattern( nRow, pNewPattern, true );
-                delete pNewPattern;
+                rColumn.pAttrArray->SetPattern( nRow, pNewPattern.get(), true );
             }
         }
         else
