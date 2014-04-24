@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_ab506d5f",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2014-04-24T15:32:12Z",
+      "side": 1,
+      "message": "There is a member variable of the same name in ScInputHandler.  So I assume this one is not necessary?  If so, let\u0027s remove this.\n\nAlso, when adding a member variable to a class, we try to add \u0027m\u0027 prefix to make it clear.  I know that many existing code doesn\u0027t follow that, but we do make it a rule for the new ones we add.",
+      "revId": "2d29686ac6c95d492dadf31b9b053539ff9b4303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_ebe1859b",
+        "filename": "sc/source/ui/inc/inputhdl.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2014-04-24T15:32:12Z",
+      "side": 1,
+      "message": "Let\u0027s name this mbFormulaChar, to make it clear it\u0027s a member variable.",
+      "revId": "2d29686ac6c95d492dadf31b9b053539ff9b4303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
