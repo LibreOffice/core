@@ -150,7 +150,7 @@ gb_MERGEDLIBS := \
 	utl \
 	uui \
 	vcl \
-	$(if $(filter FREEBSD LINUX MACOSX WNT,$(OS)),vclopengl) \
+	vclopengl \
 	xmlscript \
 	xo \
 	xstor \

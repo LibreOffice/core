@@ -74,8 +74,8 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
     ucbhelper \
     utl \
     vcl \
+    vclopengl \
     xo \
-    $(if $(filter FREEBSD LINUX MACOSX WNT,$(OS)),vclopengl) \
 	$(gb_UWINAPI) \
 ))
 
