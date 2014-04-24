@@ -461,7 +461,7 @@ void getJavaPropsFromSafetySettings(
             OUString("VirtualMachine/Security"));
         if( key_CheckSecurity.is())
         {
-            sal_Bool val= (sal_Bool) key_CheckSecurity->getLongValue();
+            bool val = (bool) key_CheckSecurity->getLongValue();
             OUString sProperty("stardiv.security.disableSecurity=");
             if( val)
                 sProperty= sProperty + "false";
@@ -1136,7 +1136,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     else if ( aAccessor == "Security" )
     {
         aPropertyName = "stardiv.security.disableSecurity";
-        sal_Bool b = sal_Bool();
+        bool b;
         if (rEvent.Element >>= b)
             if (b)
                 aPropertyValue = "false";

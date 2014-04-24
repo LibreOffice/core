@@ -822,7 +822,7 @@ Sequence< Reference< XRegistryKey > > SAL_CALL NestedKeyImpl::openKeys(  )
     }
 
     Sequence< Reference<XRegistryKey> > retSeq(local + def - len);
-    sal_Bool                            insert = sal_True;
+    bool                            insert = true;
     OUString                            name;
     sal_Int32                           lastIndex;
 
@@ -838,14 +838,14 @@ Sequence< Reference< XRegistryKey > > SAL_CALL NestedKeyImpl::openKeys(  )
     sal_uInt32 k = local;
     for (i=0; i < def; i++)
     {
-        insert = sal_True;
+        insert = true;
 
         for (j=0 ; j < local; j++)
         {
             if ( retSeq.getConstArray()[j]->getKeyName()
                     == defaultSeq.getConstArray()[i] )
             {
-                insert = sal_False;
+                insert = false;
                 break;
             }
         }
@@ -902,7 +902,7 @@ Sequence< OUString > SAL_CALL NestedKeyImpl::getKeyNames(  )
     }
 
     Sequence<OUString>  retSeq(local + def - len);
-    sal_Bool            insert = sal_True;
+    bool            insert = true;
 
     for (i=0; i < local; i++)
     {
@@ -912,13 +912,13 @@ Sequence< OUString > SAL_CALL NestedKeyImpl::getKeyNames(  )
     sal_uInt32 k = local;
     for (i=0; i < def; i++)
     {
-        insert = sal_True;
+        insert = true;
 
         for (j=0 ; j < local; j++)
         {
             if ( retSeq.getConstArray()[j] == defaultSeq.getConstArray()[i] )
             {
-                insert = sal_False;
+                insert = false;
                 break;
             }
         }
@@ -936,7 +936,7 @@ sal_Bool SAL_CALL NestedKeyImpl::createLink( const OUString& aLinkName, const OU
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
 
-    sal_Bool isCreated = sal_False;
+    bool isCreated = false;
     if ( !m_localKey.is() && !m_defaultKey.is() )
     {
         throw InvalidRegistryException();

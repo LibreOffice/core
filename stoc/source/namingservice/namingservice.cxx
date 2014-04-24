@@ -63,7 +63,7 @@ static OUString ns_getImplementationName()
 
 struct equalOWString_Impl
 {
-  sal_Bool operator()(const OUString & s1, const OUString & s2) const
+  bool operator()(const OUString & s1, const OUString & s2) const
         { return s1 == s2; }
 };
 

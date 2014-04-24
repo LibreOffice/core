@@ -201,7 +201,7 @@ static void prepareLink( const Reference < XSimpleRegistry > & xDest,
 {
     OUString linkRefName = xSource->getKeyName();
     OUString linkName(link);
-    sal_Bool    isRelativ = sal_False;
+    bool    isRelativ = false;
 
     const sal_Unicode*  pTmpName = link.getStr();
     const sal_Unicode*  pShortName;
@@ -212,7 +212,7 @@ static void prepareLink( const Reference < XSimpleRegistry > & xDest,
         pShortName = pTmpName+nIndex;
 
     if (pTmpName[0] != L'/')
-        isRelativ = sal_True;
+        isRelativ = true;
 
     while (pShortName && pShortName[1] == L'%')
     {
@@ -333,7 +333,7 @@ static void createUniqueSubEntry(const Reference < XRegistryKey > & xSuperKey,
         if (xSuperKey->getValueType() == RegistryValueType_ASCIILIST)
         {
             sal_Int32 length = 0;
-            sal_Bool bReady = sal_False;
+            bool bReady = false;
 
             Sequence<OUString> implEntries = xSuperKey->getAsciiListValue();
             length = implEntries.getLength();
@@ -383,7 +383,7 @@ static void createUniqueSubEntry(const Reference < XRegistryKey > & xSuperKey,
 
 //  static deleteSubEntry
 
-static sal_Bool deleteSubEntry(const Reference < XRegistryKey >& xSuperKey, const OUString& value)
+static bool deleteSubEntry(const Reference < XRegistryKey >& xSuperKey, const OUString& value)
     // throw ( InvalidRegistryException, RuntimeException )
 {
     if (xSuperKey->getValueType() == RegistryValueType_ASCIILIST)
@@ -391,7 +391,7 @@ static sal_Bool deleteSubEntry(const Reference < XRegistryKey >& xSuperKey, cons
         Sequence<OUString> implEntries = xSuperKey->getAsciiListValue();
         sal_Int32 length = implEntries.getLength();
         sal_Int32 equals = 0;
-        sal_Bool hasNoImplementations = sal_False;
+        bool hasNoImplementations = false;
 
         for (sal_Int32 i = 0; i < length; i++)
         {
@@ -401,7 +401,7 @@ static sal_Bool deleteSubEntry(const Reference < XRegistryKey >& xSuperKey, cons
 
         if (equals == length)
         {
-            hasNoImplementations = sal_True;
+            hasNoImplementations = true;
         } else
         {
             Sequence<OUString> implEntriesNew(length - equals);
@@ -419,10 +419,10 @@ static sal_Bool deleteSubEntry(const Reference < XRegistryKey >& xSuperKey, cons
 
         if (hasNoImplementations)
         {
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -489,7 +489,7 @@ static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
                                const OUString& implName)
     // throw ( InvalidRegistryException, RuntimeException )
 {
-    sal_Bool bClean = sal_False;
+    bool bClean = false;
 
     if (xRootKey->getKeyType(linkName) == RegistryKeyType_LINK)
     {
@@ -505,7 +505,7 @@ static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
         linkName + spool().colon_old );
     if (xOldKey.is())
     {
-        sal_Bool hasNoImplementations = sal_False;
+        bool hasNoImplementations = false;
 
         if (xOldKey->getValueType() == RegistryValueType_ASCIILIST)
         {
@@ -521,7 +521,7 @@ static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
 
             if (equals == length)
             {
-                hasNoImplementations = sal_True;
+                hasNoImplementations = true;
             } else
             {
                 OUString oldImpl;
@@ -531,7 +531,7 @@ static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
                     Sequence<OUString> implEntriesNew(length - equals - 1);
 
                     sal_Int32 j = 0;
-                    sal_Bool first = sal_True;
+                    bool first = true;
                     for (sal_Int32 i = 0; i < length; i++)
                     {
                         if (implEntries.getConstArray()[i] != implName)
@@ -539,7 +539,7 @@ static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
                             if (first)
                             {
                                 oldImpl = implEntries.getConstArray()[i];
-                                first = sal_False;
+                                first = false;
                             } else
                             {
                                 implEntriesNew.getArray()[j++] = implEntries.getConstArray()[i];
@@ -565,8 +565,8 @@ static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
 
             if (hasNoImplementations)
             {
-                bClean = sal_True;
-                hasNoImplementations = sal_False;
+                bClean = true;
+                hasNoImplementations = false;
                 OUString path(xOldKey->getKeyName());
                 xOldKey->closeKey();
                 xRootKey->deleteKey(path);
@@ -574,7 +574,7 @@ static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
         }
     } else
     {
-        bClean = sal_True;
+        bClean = true;
     }
 
     if (bClean)
@@ -592,9 +592,9 @@ static void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
                                 const Reference < XRegistryKey >& xUnoKey,
                                 const Reference < XRegistryKey >& xKey,
                                 const OUString& implName,
-                                sal_Bool bRegister)
+                                bool bRegister)
 {
-    sal_Bool hasSubKeys = sal_False;
+    bool hasSubKeys = false;
 
     Sequence<OUString> keyNames = xKey->getKeyNames();
 
@@ -605,7 +605,7 @@ static void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
     if (keyNames.getLength() == 1 &&
         xKey->getKeyType(relativKey) == RegistryKeyType_LINK)
     {
-        hasSubKeys = sal_True;
+        hasSubKeys = true;
 
         OUString linkTarget = xKey->getLinkTarget(relativKey);
         OUString linkName(xKey->getKeyName().copy(xUnoKey->getKeyName().getLength()));
@@ -625,7 +625,7 @@ static void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
 
         if (subKeys.getLength())
         {
-            hasSubKeys = sal_True;
+            hasSubKeys = true;
             const Reference < XRegistryKey > * pSubKeys = subKeys.getConstArray();
 
             for (sal_Int32 i = 0; i < subKeys.getLength(); i++)
@@ -677,7 +677,7 @@ static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xRe
     {
         const Reference < XRegistryKey> * pSubKeys = subKeys.getConstArray();
         Reference < XRegistryKey > xImplKey;
-        sal_Bool hasLocationUrl = sal_False;
+        bool hasLocationUrl = false;
 
         const StringPool &pool = spool();
         for (sal_Int32 i = 0; i < subKeys.getLength(); i++)
@@ -690,7 +690,7 @@ static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xRe
             {
                 if (xKey->getAsciiValue() == locationUrl)
                 {
-                    hasLocationUrl = sal_True;
+                    hasLocationUrl = true;
 
                     OUString implName(xImplKey->getKeyName().getStr() + 1);
                     sal_Int32 firstDot = implName.indexOf('/');
@@ -719,7 +719,7 @@ static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xRe
                                     pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_SINGLETONS ) &&
                                     pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_LOCATION) )
                                 {
-                                    prepareUserKeys(xReg, xKey, pSubKeys2[j], implName, sal_False);
+                                    prepareUserKeys(xReg, xKey, pSubKeys2[j], implName, false);
                                 }
                             }
                         }
@@ -729,7 +729,7 @@ static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xRe
 
             if (hasLocationUrl)
             {
-                hasLocationUrl = sal_False;
+                hasLocationUrl = false;
                 OUString path(xImplKey->getKeyName());
                 xImplKey->closeKey();
                 xReg->getRootKey()->deleteKey(path);
@@ -828,7 +828,7 @@ static void deleteAllServiceEntries(    const Reference < XSimpleRegistry >& xRe
     {
         const Reference < XRegistryKey > * pSubKeys = subKeys.getConstArray();
         Reference < XRegistryKey > xServiceKey;
-        sal_Bool hasNoImplementations = sal_False;
+        bool hasNoImplementations = false;
 
         for (sal_Int32 i = 0; i < subKeys.getLength(); i++)
         {
@@ -848,7 +848,7 @@ static void deleteAllServiceEntries(    const Reference < XSimpleRegistry >& xRe
 
                 if (equals == length)
                 {
-                    hasNoImplementations = sal_True;
+                    hasNoImplementations = true;
                 } else
                 {
                     if (equals > 0)
@@ -871,7 +871,7 @@ static void deleteAllServiceEntries(    const Reference < XSimpleRegistry >& xRe
 
             if (hasNoImplementations)
             {
-                hasNoImplementations = sal_False;
+                hasNoImplementations = false;
                 OUString path(xServiceKey->getKeyName());
                 xServiceKey->closeKey();
                 xReg->getRootKey()->deleteKey(path);
@@ -1107,7 +1107,7 @@ static void prepareRegistry(
                             pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_REGISTRY_LINKS ) &&
                             pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_SINGLETONS ))
                         {
-                            prepareUserKeys(xDest, xKey, pSubKeys2[j], implName, sal_True);
+                            prepareUserKeys(xDest, xKey, pSubKeys2[j], implName, true);
                         }
                     }
                 }
@@ -1156,7 +1156,7 @@ static void prepareRegistry(
 static void findImplementations(    const Reference < XRegistryKey > & xSource,
                                     std::list <OUString>& implNames)
 {
-    sal_Bool isImplKey = sal_False;
+    bool isImplKey = false;
 
     try
     {
@@ -1165,7 +1165,7 @@ static void findImplementations(    const Reference < XRegistryKey > & xSource,
 
         if (xKey.is() && (xKey->getKeyNames().getLength() > 0))
         {
-            isImplKey = sal_True;
+            isImplKey = true;
 
             OUString implName = OUString(xSource->getKeyName().getStr() + 1).replace('/', '.').getStr();
             sal_Int32 firstDot = implName.indexOf('.');
@@ -1555,7 +1555,7 @@ sal_Bool ImplementationRegistration::revokeImplementation(const OUString& locati
                                                       const Reference < XSimpleRegistry >& xReg)
     throw ( RuntimeException, std::exception )
 {
-    sal_Bool ret = sal_False;
+    bool ret = false;
 
     Reference < XSimpleRegistry > xRegistry;
 
@@ -1583,7 +1583,7 @@ sal_Bool ImplementationRegistration::revokeImplementation(const OUString& locati
         try
         {
             doRevoke(xRegistry, location);
-            ret = sal_True;
+            ret = true;
         }
         catch( InvalidRegistryException & )
         {
@@ -1763,7 +1763,7 @@ void ImplementationRegistration::doRegister(
                 xSourceKey = xReg->getRootKey()->createKey( spool().slash_IMPLEMENTATIONS );
             }
 
-            sal_Bool bSuccess =
+            bool bSuccess =
                 xAct->writeRegistryInfo(xSourceKey, implementationLoaderUrl, locationUrl);
             if ( bSuccess )
             {

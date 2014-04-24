@@ -371,7 +371,7 @@ public:
 
 // coerces to type descr pTo else queries for it: the interface pointer is returned via rDest
 // ## type to XidlClass coercion possible
-inline sal_Bool extract(
+inline bool extract(
     const Any & rObj, typelib_InterfaceTypeDescription * pTo,
     Reference< XInterface > & rDest,
     IdlReflectionServiceImpl * pRefl )
@@ -380,7 +380,7 @@ inline sal_Bool extract(
     if (0 != pTo)
     {
         if (! rObj.hasValue())
-            return sal_True;
+            return true;
         if (rObj.getValueTypeClass() == TypeClass_INTERFACE)
         {
             return ::uno_type_assignData(
@@ -396,10 +396,10 @@ inline sal_Bool extract(
             return rDest.is();
         }
     }
-    return sal_False;
+    return false;
 }
 
-inline sal_Bool coerce_assign(
+inline bool coerce_assign(
     void * pDest, typelib_TypeDescription * pTD, const Any & rSource,
     IdlReflectionServiceImpl * pRefl )
 {
@@ -413,9 +413,9 @@ inline sal_Bool coerce_assign(
             *(XInterface **)pDest = xVal.get();
             if (*(XInterface **)pDest)
                 (*(XInterface **)pDest)->acquire();
-            return sal_True;
+            return true;
         }
-        return sal_False;
+        return false;
     }
     else if (pTD->eTypeClass == typelib_TypeClass_ANY)
     {

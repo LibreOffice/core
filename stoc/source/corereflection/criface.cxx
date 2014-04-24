@@ -222,18 +222,18 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
         void * pArgs[1];
         void * pArg = pArgs[0] = alloca( pTD->nSize );
 
-        sal_Bool bAssign;
+        bool bAssign;
         if (pTD->eTypeClass == typelib_TypeClass_ANY)
         {
             uno_copyAndConvertData( pArg, (const_cast< Any * >(&rValue)),
                                     pTD, getReflection()->getCpp2Uno().get() );
-            bAssign = sal_True;
+            bAssign = true;
         }
         else if (typelib_typedescriptionreference_equals( rValue.getValueTypeRef(), pTD->pWeakRef ))
         {
             uno_copyAndConvertData( pArg, (const_cast< void * >(rValue.getValue()) ),
                                     pTD, getReflection()->getCpp2Uno().get() );
-            bAssign = sal_True;
+            bAssign = true;
         }
         else if (pTD->eTypeClass == typelib_TypeClass_INTERFACE)
         {
@@ -628,21 +628,21 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
             ppUnoArgs[nPos] = alloca( pTD->nSize );
             if (pParams[nPos].bIn)
             {
-                sal_Bool bAssign;
+                bool bAssign;
                 if (typelib_typedescriptionreference_equals(
                         pCppArgs[nPos].getValueTypeRef(), pTD->pWeakRef ))
                 {
                     uno_type_copyAndConvertData(
                         ppUnoArgs[nPos], (void *)pCppArgs[nPos].getValue(),
                         pCppArgs[nPos].getValueTypeRef(), getReflection()->getCpp2Uno().get() );
-                    bAssign = sal_True;
+                    bAssign = true;
                 }
                 else if (pTD->eTypeClass == typelib_TypeClass_ANY)
                 {
                     uno_type_any_constructAndConvert(
                         (uno_Any *)ppUnoArgs[nPos], (void *)pCppArgs[nPos].getValue(),
                         pCppArgs[nPos].getValueTypeRef(), getReflection()->getCpp2Uno().get() );
-                    bAssign = sal_True;
+                    bAssign = true;
                 }
                 else if (pTD->eTypeClass == typelib_TypeClass_INTERFACE)
                 {

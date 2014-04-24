@@ -92,7 +92,7 @@ typedef WeakImplHelper3< XIntrospectionAccess, XMaterialHolder, XExactName > Int
 
 
 // Method to assert, if a class is derived from another class
-sal_Bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> xDerivedFromClass )
+bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> xDerivedFromClass )
 {
     Sequence< Reference<XIdlClass> > aClassesSeq = xToTestClass->getSuperclasses();
     const Reference<XIdlClass>* pClassesArray = aClassesSeq.getConstArray();
@@ -105,10 +105,10 @@ sal_Bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> 
         if ( xDerivedFromClass->equals( rxClass ) ||
              isDerivedFrom( rxClass, xDerivedFromClass )
            )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -146,7 +146,7 @@ struct hashName_Impl
 
 struct eqName_Impl
 {
-    sal_Bool operator()(const OUString& Str1, const OUString& Str2) const
+    bool operator()(const OUString& Str1, const OUString& Str2) const
     {
         return ( Str1 == Str2 );
     }
@@ -212,7 +212,7 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
     sal_Int32 mnMethodPropCount;
 
     // Flag, if a FastPropertySet is supported
-    sal_Bool mbFastPropSet;
+    bool mbFastPropSet;
 
     // Original-Handles of FastPropertySets
     sal_Int32* mpOrgPropertyHandleArray;
@@ -277,7 +277,7 @@ IntrospectionAccessStatic_Impl::IntrospectionAccessStatic_Impl( Reference< XIdlR
     maMapTypeSeq.realloc( ARRAY_SIZE_STEP );
     maPropertyConceptSeq.realloc( ARRAY_SIZE_STEP );
 
-    mbFastPropSet = sal_False;
+    mbFastPropSet = false;
     mpOrgPropertyHandleArray = NULL;
 
     mnPropCount = 0;
@@ -423,7 +423,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
             const Property& rProp = maAllPropertySeq.getConstArray()[ nSequenceIndex ];
 
             // Convert Interface-Parameter to the correct type
-            sal_Bool bUseCopy = sal_False;
+            bool bUseCopy = false;
             Any aRealValue;
 
             TypeClass eValType = aValue.getValueType().getTypeClass();
@@ -441,7 +441,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
                         //Any queryInterface( const Type& rType );
                         aRealValue = valInterface->queryInterface( aPropType );
                         if( aRealValue.hasValue() )
-                            bUseCopy = sal_True;
+                            bUseCopy = true;
                     }
                 }
             }
@@ -1179,7 +1179,7 @@ Property ImplIntrospectionAccess::getProperty(const OUString& Name, sal_Int32 Pr
 {
     Property aRet;
     sal_Int32 i = mpStaticImpl->getPropertyIndex( Name );
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     if( i != -1 )
     {
         sal_Int32 nConcept = mpStaticImpl->getPropertyConcepts().getConstArray()[ i ];
@@ -1187,7 +1187,7 @@ Property ImplIntrospectionAccess::getProperty(const OUString& Name, sal_Int32 Pr
         {
             const Property* pProps = mpStaticImpl->getProperties().getConstArray();
             aRet = pProps[ i ];
-            bFound = sal_True;
+            bFound = true;
         }
     }
     if( !bFound )
@@ -1199,12 +1199,12 @@ sal_Bool ImplIntrospectionAccess::hasProperty(const OUString& Name, sal_Int32 Pr
     throw( RuntimeException, std::exception )
 {
     sal_Int32 i = mpStaticImpl->getPropertyIndex( Name );
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( i != -1 )
     {
         sal_Int32 nConcept = mpStaticImpl->getPropertyConcepts().getConstArray()[ i ];
         if( (PropertyConcepts & nConcept) != 0 )
-            bRet = sal_True;
+            bRet = true;
     }
     return bRet;
 }
@@ -1290,12 +1290,12 @@ sal_Bool ImplIntrospectionAccess::hasMethod(const OUString& Name, sal_Int32 Meth
     throw( RuntimeException, std::exception )
 {
     sal_Int32 i = mpStaticImpl->getMethodIndex( Name );
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( i != -1 )
     {
         sal_Int32 nConcept = mpStaticImpl->getMethodConcepts().getConstArray()[ i ];
         if( (MethodConcepts & nConcept) != 0 )
-            bRet = sal_True;
+            bRet = true;
     }
     return bRet;
 }
@@ -1753,7 +1753,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         {
             // Gibt es auch ein FastPropertySet?
             Reference<XFastPropertySet> xDummy = Reference<XFastPropertySet>::query( x );
-            sal_Bool bFast = pAccess->mbFastPropSet = xDummy.is();
+            bool bFast = pAccess->mbFastPropSet = xDummy.is();
 
             Sequence<Property> aPropSeq = xPropSetInfo->getProperties();
             const Property* pProps = aPropSeq.getConstArray();
@@ -1814,12 +1814,12 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
         // Flag, ob XInterface-Methoden erfasst werden sollen
         // (das darf nur einmal erfolgen, initial zulassen)
-        sal_Bool bXInterfaceIsInvalid = sal_False;
+        bool bXInterfaceIsInvalid = false;
 
         // Flag, ob die XInterface-Methoden schon erfasst wurden. Wenn sal_True,
         // wird bXInterfaceIsInvalid am Ende der Iface-Schleife aktiviert und
         // XInterface-Methoden werden danach abgeklemmt.
-        sal_Bool bFoundXInterface = sal_False;
+        bool bFoundXInterface = false;
 
         sal_Int32 nClassCount = SupportedClassSeq.getLength();
         for( sal_Int32 nIdx = 0 ; nIdx < nClassCount; nIdx++ )
@@ -1951,7 +1951,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         rtl::OUString className(
                             rxMethod_i->getDeclaringClass()->getName());
                         if (className == "com.sun.star.uno.XInterface") {
-                            bFoundXInterface = sal_True;
+                            bFoundXInterface = true;
 
                             if( bXInterfaceIsInvalid )
                             {
@@ -2407,7 +2407,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                     // Wenn in diesem Durchlauf XInterface-Methoden
                     // dabei waren, diese zukuenftig ignorieren
                     if( bFoundXInterface )
-                        bXInterfaceIsInvalid = sal_True;
+                        bXInterfaceIsInvalid = true;
 
                     delete[] pMethodTypes;
                     delete[] pLocalMethodConcepts;

@@ -292,7 +292,7 @@ Any ImplementationEnumeration_Impl::nextElement()
 *****************************************************************************/
 struct equalOWString_Impl
 {
-  sal_Bool operator()(const OUString & s1, const OUString & s2) const
+  bool operator()(const OUString & s1, const OUString & s2) const
         { return s1 == s2; }
 };
 
@@ -456,7 +456,7 @@ protected:
     inline void check_undisposed() const SAL_THROW( (lang::DisposedException) );
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    sal_Bool haveFactoryWithThisImplementation(const OUString& aImplName);
+    bool haveFactoryWithThisImplementation(const OUString& aImplName);
 
     virtual Sequence< Reference< XInterface > > queryServiceFactories(
         const OUString& aServiceName, Reference< XComponentContext > const & xContext );
@@ -1232,7 +1232,7 @@ void OServiceManager::insert( const Any & Element )
 }
 
 // helper function
-sal_Bool OServiceManager::haveFactoryWithThisImplementation(const OUString& aImplName)
+bool OServiceManager::haveFactoryWithThisImplementation(const OUString& aImplName)
 {
     return ( m_ImplementationNameMap.find(aImplName) != m_ImplementationNameMap.end());
 }
@@ -1374,7 +1374,7 @@ private:
         const OUString & rImplName, Reference< XComponentContext > const & xContext );
     void                        fillAllNamesFromRegistry( HashSet_OWString & );
 
-    sal_Bool                    m_searchedRegistry;
+    bool                    m_searchedRegistry;
     Reference<XSimpleRegistry > m_xRegistry;    // readonly property Registry
     Reference<XRegistryKey >    m_xRootKey;
 
@@ -1388,7 +1388,7 @@ private:
  */
 ORegistryServiceManager::ORegistryServiceManager( Reference< XComponentContext > const & xContext )
     : OServiceManager( xContext )
-    , m_searchedRegistry(sal_False)
+    , m_searchedRegistry(false)
 #if OSL_DEBUG_LEVEL > 0
     , m_init( false )
 #endif
@@ -1431,7 +1431,7 @@ Reference<XRegistryKey > ORegistryServiceManager::getRootKey()
         if( !m_xRegistry.is() && !m_searchedRegistry )
         {
             // merken, es wird nur einmal gesucht
-            m_searchedRegistry = sal_True;
+            m_searchedRegistry = true;
 
             m_xRegistry.set(
                 createInstanceWithContext(

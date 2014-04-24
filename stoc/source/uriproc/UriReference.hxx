@@ -40,22 +40,22 @@ public:
     OUString getUriReference()
         throw (com::sun::star::uno::RuntimeException);
 
-    sal_Bool isAbsolute() throw (com::sun::star::uno::RuntimeException);
+    bool isAbsolute() throw (com::sun::star::uno::RuntimeException);
 
     OUString getScheme() throw (com::sun::star::uno::RuntimeException);
 
     OUString getSchemeSpecificPart()
         throw (com::sun::star::uno::RuntimeException);
 
-    sal_Bool isHierarchical() throw (com::sun::star::uno::RuntimeException);
+    bool isHierarchical() throw (com::sun::star::uno::RuntimeException);
 
-    sal_Bool hasAuthority() throw (com::sun::star::uno::RuntimeException);
+    bool hasAuthority() throw (com::sun::star::uno::RuntimeException);
 
     OUString getAuthority() throw (com::sun::star::uno::RuntimeException);
 
     OUString getPath() throw (com::sun::star::uno::RuntimeException);
 
-    sal_Bool hasRelativePath() throw (com::sun::star::uno::RuntimeException);
+    bool hasRelativePath() throw (com::sun::star::uno::RuntimeException);
 
     sal_Int32 getPathSegmentCount()
         throw (com::sun::star::uno::RuntimeException);
@@ -63,11 +63,11 @@ public:
     OUString getPathSegment(sal_Int32 index)
         throw (com::sun::star::uno::RuntimeException);
 
-    sal_Bool hasQuery() throw (com::sun::star::uno::RuntimeException);
+    bool hasQuery() throw (com::sun::star::uno::RuntimeException);
 
     OUString getQuery() throw (com::sun::star::uno::RuntimeException);
 
-    sal_Bool hasFragment() throw (com::sun::star::uno::RuntimeException);
+    bool hasFragment() throw (com::sun::star::uno::RuntimeException);
 
     OUString getFragment() throw (com::sun::star::uno::RuntimeException);
 

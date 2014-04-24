@@ -101,7 +101,7 @@ static inline double unsigned_int64_to_double( sal_uInt64 n ) SAL_THROW(())
 
 static inline double round( double aVal )
 {
-    sal_Bool bPos   = (aVal >= 0.0);
+    bool bPos   = (aVal >= 0.0);
     aVal            = ::fabs( aVal );
     double aUpper   = ::ceil( aVal );
 
@@ -110,7 +110,7 @@ static inline double round( double aVal )
 }
 
 
-static sal_Bool getNumericValue( double & rfVal, const OUString & rStr )
+static bool getNumericValue( double & rfVal, const OUString & rStr )
 {
     double fRet = rStr.toDouble();
     if (fRet == 0.0)
@@ -119,7 +119,7 @@ static sal_Bool getNumericValue( double & rfVal, const OUString & rStr )
         if (!nLen || (nLen == 1 && rStr[0] == '0')) // common case
         {
             rfVal = 0.0;
-            return sal_True;
+            return true;
         }
 
         OUString trim( rStr.trim() );
@@ -131,18 +131,18 @@ static sal_Bool getNumericValue( double & rfVal, const OUString & rStr )
 
         if (nX > 0 && trim[nX-1] == '0') // 0x
         {
-            sal_Bool bNeg = sal_False;
+            bool bNeg = false;
             switch (nX)
             {
             case 2: // (+|-)0x...
                 if (trim[0] == '-')
-                    bNeg = sal_True;
+                    bNeg = true;
                 else if (trim[0] != '+')
-                    return sal_False;
+                    return false;
             case 1: // 0x...
                 break;
             default:
-                return sal_False;
+                return false;
             }
 
             OUString aHexRest( trim.copy( nX+1 ) );
@@ -153,12 +153,12 @@ static sal_Bool getNumericValue( double & rfVal, const OUString & rStr )
                 for ( sal_Int32 nPos = aHexRest.getLength(); nPos--; )
                 {
                     if (aHexRest[nPos] != '0')
-                        return sal_False;
+                        return false;
                 }
             }
 
             rfVal = (bNeg ? -(double)nRet : (double)nRet);
-            return sal_True;
+            return true;
         }
 
         nLen = trim.getLength();
@@ -173,12 +173,12 @@ static sal_Bool getNumericValue( double & rfVal, const OUString & rStr )
             if (trim[nPos] != '0')
             {
                 if (trim[nPos] != '.')
-                    return sal_False;
+                    return false;
                 ++nPos;
                 while (nPos < nLen) // skip trailing zeros
                 {
                     if (trim[nPos] != '0')
-                        return sal_False;
+                        return false;
                     ++nPos;
                 }
                 break;
@@ -187,17 +187,17 @@ static sal_Bool getNumericValue( double & rfVal, const OUString & rStr )
         }
     }
     rfVal = fRet;
-    return sal_True;
+    return true;
 }
 
 
-static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
+static bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
 {
     sal_Int32 nLen = rStr.getLength();
     if (!nLen || (nLen == 1 && rStr[0] == '0')) // common case
     {
         rnVal = 0;
-        return sal_True;
+        return true;
     }
 
     OUString trim( rStr.trim() );
@@ -211,18 +211,18 @@ static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
     {
         if (nX > 0 && trim[nX-1] == '0') // 0x
         {
-            sal_Bool bNeg = sal_False;
+            bool bNeg = false;
             switch (nX)
             {
             case 2: // (+|-)0x...
                 if (trim[0] == '-')
-                    bNeg = sal_True;
+                    bNeg = true;
                 else if (trim[0] != '+')
-                    return sal_False;
+                    return false;
             case 1: // 0x...
                 break;
             default:
-                return sal_False;
+                return false;
             }
 
             OUString aHexRest( trim.copy( nX+1 ) );
@@ -233,14 +233,14 @@ static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
                 for ( sal_Int32 nPos = aHexRest.getLength(); nPos--; )
                 {
                     if (aHexRest[nPos] != '0')
-                        return sal_False;
+                        return false;
                 }
             }
 
             rnVal = (bNeg ? -static_cast<sal_Int64>(nRet) : nRet);
-            return sal_True;
+            return true;
         }
-        return sal_False;
+        return false;
     }
 
     double fVal;
@@ -249,9 +249,9 @@ static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
         fVal <= DOUBLE_SAL_UINT64_MAX)
     {
         rnVal = (sal_Int64)round( fVal );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 

@@ -82,7 +82,7 @@ public:
         @param rKey a key
         @return true, if value is cached
     */
-    inline sal_Bool hasValue( const t_Key & rKey ) const;
+    inline bool hasValue( const t_Key & rKey ) const;
     /** Clears the cache, thus releasing all cached elements and keys.
         <br>
     */
@@ -142,7 +142,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::toFront( CacheEntr
 }
 
 template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
-inline sal_Bool LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::hasValue( const t_Key & rKey ) const
+inline bool LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::hasValue( const t_Key & rKey ) const
 {
     ::osl::MutexGuard aGuard( _aCacheMutex );
     const typename t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
