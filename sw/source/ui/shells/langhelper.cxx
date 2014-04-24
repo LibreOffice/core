@@ -573,7 +573,8 @@ namespace SwLangHelper
         // string for guessing language
         OUString aText;
 
-        aText = rEditEngine->GetText(aDocSelection);
+        // get the full text of the paragraph that the end of selection is in
+        aText = rEditEngine->GetText(aDocSelection.nEndPos);
         if (!aText.isEmpty())
         {
             xub_StrLen nStt = 0;
