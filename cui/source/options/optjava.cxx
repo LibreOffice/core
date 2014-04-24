@@ -60,7 +60,7 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-
+#if HAVE_FEATURE_JAVA
 
 static bool areListsEqual( const Sequence< OUString >& rListA, const Sequence< OUString >& rListB )
 {
@@ -86,6 +86,8 @@ static bool areListsEqual( const Sequence< OUString >& rListA, const Sequence< O
 
     return bRet;
 }
+
+#endif
 
 class SvxJavaListBox : public svx::SvxRadioButtonListBox
 {
