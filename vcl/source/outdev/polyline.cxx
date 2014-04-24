@@ -289,7 +289,7 @@ bool OutputDevice::TryDrawPolyLineDirectNoAA(
     // transform the line width if used
     if( fLineWidth != 0.0 )
     {
-        aB2DLineWidth = aTransform * ::basegfx::B2DVector( fLineWidth, fLineWidth );
+        aB2DLineWidth = aTransform * ::basegfx::B2DVector( fLineWidth, 0.0 );
     }
 
     // transform the polygon
