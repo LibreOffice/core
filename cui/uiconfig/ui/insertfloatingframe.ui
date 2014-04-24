@@ -131,6 +131,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="scrollbaron">
                                 <property name="label" translatable="yes">On</property>
@@ -218,6 +219,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="borderon">
                                 <property name="label" translatable="yes">On</property>
@@ -291,6 +293,7 @@
                           <object class="GtkGrid" id="grid2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="widthlabel">
                                 <property name="visible">True</property>
