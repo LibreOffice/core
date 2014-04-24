@@ -56,6 +56,7 @@ $(eval $(call gb_Library_add_exception_objects,wpftdraw,\
 	writerperfect/source/draw/CDRImportFilter \
 	writerperfect/source/draw/CMXImportFilter \
 	writerperfect/source/draw/FreehandImportFilter \
+	writerperfect/source/draw/ImportFilterBase \
 	writerperfect/source/draw/MSPUBImportFilter \
 	writerperfect/source/draw/VisioImportFilter \
 	writerperfect/source/draw/WPGImportFilter \

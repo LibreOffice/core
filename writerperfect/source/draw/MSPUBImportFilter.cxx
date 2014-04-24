@@ -7,22 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <osl/diagnose.h>
-#include <rtl/tencinfo.h>
-
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
-
-#include <writerperfect/DocumentHandler.hxx>
-#include <writerperfect/WPXSvInputStream.hxx>
-
-#include <xmloff/attrlist.hxx>
 
 #include <libmspub/libmspub.h>
 #include <libodfgen/libodfgen.hxx>
@@ -31,142 +18,33 @@
 
 #include <iostream>
 
-using namespace ::com::sun::star::uno;
 using com::sun::star::uno::Reference;
-using com::sun::star::io::XInputStream;
-using com::sun::star::io::XSeekable;
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::Any;
-using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
-using com::sun::star::beans::PropertyValue;
-using com::sun::star::document::XFilter;
-using com::sun::star::document::XExtendedFilterDetection;
-using com::sun::star::document::XImporter;
-using com::sun::star::xml::sax::InputSource;
-using com::sun::star::xml::sax::XAttributeList;
-using com::sun::star::xml::sax::XDocumentHandler;
-using com::sun::star::xml::sax::XParser;
+using com::sun::star::uno::Sequence;
+using com::sun::star::uno::XComponentContext;
+using com::sun::star::uno::XInterface;
 
-using writerperfect::DocumentHandler;
-using writerperfect::WPXSvInputStream;
-
-sal_Bool SAL_CALL MSPUBImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-throw (RuntimeException, std::exception)
+bool MSPUBImportFilter::doImportDocument( WPXInputStream &rInput, libwpg::WPGPaintInterface &rGenerator )
 {
-    SAL_INFO("writerperfect", "MSPUBImportFilter::filter");
-    sal_Int32 nLength = aDescriptor.getLength();
-    const PropertyValue *pValue = aDescriptor.getConstArray();
-    Reference < XInputStream > xInputStream;
-    for ( sal_Int32 i = 0 ; i < nLength; i++)
-    {
-        if ( pValue[i].Name == "InputStream" )
-            pValue[i].Value >>= xInputStream;
-    }
-    if ( !xInputStream.is() )
-    {
-        OSL_ASSERT( false );
-        return sal_False;
-    }
+    SAL_INFO("writerperfect", "MSPUBImportFilter::doImportDocument");
 
-    // An XML import service: what we push sax messages to..
-    Reference < XDocumentHandler > xInternalHandler(
-        mxContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.comp.Draw.XMLOasisImporter", mxContext),
-        css::uno::UNO_QUERY_THROW);
-
-    // The XImporter sets up an empty target document for XDocumentHandler to write to..
-    Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
-    xImporter->setTargetDocument( mxDoc );
-
-    // OO Graphics Handler: abstract class to handle document SAX messages, concrete implementation here
-    // writes to in-memory target doc
-    DocumentHandler xHandler(xInternalHandler);
-
-    WPXSvInputStream input( xInputStream );
-
-    OdgGenerator exporter(&xHandler, ODF_FLAT_XML);
-    bool tmpParseResult = libmspub::MSPUBDocument::parse(&input, &exporter);
-    return tmpParseResult;
+    return libmspub::MSPUBDocument::parse(&rInput, &rGenerator);
 }
 
-void SAL_CALL MSPUBImportFilter::cancel(  )
-throw (RuntimeException, std::exception)
+bool MSPUBImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
 {
-    SAL_INFO("writerperfect", "MSPUBImportFilter::cancel");
-}
+    SAL_INFO("writerperfect", "MSPUBImportFilter::doDetectFormat");
 
-// XImporter
-void SAL_CALL MSPUBImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
-{
-    SAL_INFO("writerperfect", "MSPUBImportFilter::setTargetDocument");
-    mxDoc = xDoc;
-}
-
-// XExtendedFilterDetection
-OUString SAL_CALL MSPUBImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
-throw( com::sun::star::uno::RuntimeException, std::exception )
-{
-    SAL_INFO("writerperfect", "MSPUBImportFilter::detect");
-    OUString sTypeName;
-    sal_Int32 nLength = Descriptor.getLength();
-    sal_Int32 location = nLength;
-    const PropertyValue *pValue = Descriptor.getConstArray();
-    Reference < XInputStream > xInputStream;
-    for ( sal_Int32 i = 0 ; i < nLength; i++)
+    if (libmspub::MSPUBDocument::isSupported(&rInput))
     {
-        if ( pValue[i].Name == "TypeName" )
-            location=i;
-        else if ( pValue[i].Name == "InputStream" )
-            pValue[i].Value >>= xInputStream;
+        rTypeName = "draw_Publisher_Document";
+        return true;
     }
 
-    if (!xInputStream.is())
-        return OUString();
-
-    WPXSvInputStream input( xInputStream );
-
-    if (libmspub::MSPUBDocument::isSupported(&input))
-        sTypeName = "draw_Publisher_Document";
-
-    if (!sTypeName.isEmpty())
-    {
-        if ( location == nLength )
-        {
-            Descriptor.realloc(nLength+1);
-            Descriptor[location].Name = "TypeName";
-        }
-
-        Descriptor[location].Value <<=sTypeName;
-    }
-    return sTypeName;
+    return false;
 }
 
-
-// XInitialization
-void SAL_CALL MSPUBImportFilter::initialize( const Sequence< Any >& aArguments )
-throw (Exception, RuntimeException, std::exception)
-{
-    SAL_INFO("writerperfect", "MSPUBImportFilter::initialize");
-    Sequence < PropertyValue > aAnySeq;
-    sal_Int32 nLength = aArguments.getLength();
-    if ( nLength && ( aArguments[0] >>= aAnySeq ) )
-    {
-        const PropertyValue *pValue = aAnySeq.getConstArray();
-        nLength = aAnySeq.getLength();
-        for ( sal_Int32 i = 0 ; i < nLength; i++)
-        {
-            if ( pValue[i].Name == "Type" )
-            {
-                pValue[i].Value >>= msFilterName;
-                break;
-            }
-        }
-    }
-}
 OUString MSPUBImportFilter_getImplementationName ()
 throw (RuntimeException)
 {
