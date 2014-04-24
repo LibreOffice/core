@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <iostream>
 #include <cppuhelper/supportsservice.hxx>
 #include "vlcwindow.hxx"
@@ -195,3 +196,5 @@ void SAL_CALL VLCWindow::removePaintListener( const uno::Reference< awt::XPaintL
 
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

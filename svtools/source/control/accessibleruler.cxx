@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -430,3 +431,5 @@ void SvtRulerAccessible::ThrowExceptionIfNotAlive( void ) throw( lang::DisposedE
     if( IsNotAlive() )
         throw lang::DisposedException();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

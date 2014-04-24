@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -536,3 +537,5 @@ void  SvxNumValueSet3::UserDraw( const UserDrawEvent& rUDEvt )
 }
 
 } } // end of namespace svx::sidebar
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

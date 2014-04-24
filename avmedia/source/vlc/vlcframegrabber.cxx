@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <boost/bind.hpp>
 #include <iostream>
 #include <osl/conditn.hxx>
@@ -116,3 +117,5 @@ sal_Bool SAL_CALL VLCFrameGrabber::supportsService( const ::rtl::OUString& servi
 
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -779,3 +780,4 @@ void ParaLineSpacingControl::ExecuteLineSpacing( bool aIsCustom, sal_uInt16 aEnt
 
 }} // end of namespace sidebar
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

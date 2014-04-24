@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "MNSProfileDiscover.hxx"
 #include "MorkParser.hxx"
 
@@ -52,3 +53,5 @@ int main( int argc, const char* argv[] )
   OString aOString = OUStringToOString( profilePath, RTL_TEXTENCODING_UTF8 );
   openAddressBook(aOString.getStr());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

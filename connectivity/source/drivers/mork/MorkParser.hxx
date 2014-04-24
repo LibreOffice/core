@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Software License Agreement (BSD License)
  *
@@ -165,3 +166,4 @@ private:
 
 #endif // __MorkParser_h__
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
