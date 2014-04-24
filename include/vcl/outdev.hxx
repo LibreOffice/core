@@ -458,6 +458,8 @@ public:
     Region                      GetClipRegion() const;
     void                        SetClipRegion();
     void                        SetClipRegion( const Region& rRegion );
+    bool                        SelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
+
     bool                        IsClipRegion() const { return mbClipRegion; }
 
     void                        MoveClipRegion( long nHorzMove, long nVertMove );
@@ -470,7 +472,6 @@ protected:
 
 private:
     SAL_DLLPRIVATE void         SetDeviceClipRegion( const Region* pRegion );
-    SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
 
     ///@}
 

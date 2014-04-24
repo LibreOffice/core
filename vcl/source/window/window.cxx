@@ -432,7 +432,7 @@ void Window::InitClipRegion()
     else
     {
         mbOutputClipped = false;
-        ImplSelectClipRegion( aRegion );
+        SelectClipRegion( aRegion );
     }
     mbClipRegionSet = true;
 
@@ -3150,7 +3150,7 @@ void Window::ImplScroll( const Rectangle& rRect,
                 pOutDev->ReMirror( aRegion );
             }
 
-            pOutDev->ImplSelectClipRegion( aRegion, pGraphics );
+            pOutDev->SelectClipRegion( aRegion, pGraphics );
             pGraphics->CopyArea( rRect.Left()+nHorzScroll, rRect.Top()+nVertScroll,
                                  rRect.Left(), rRect.Top(),
                                  rRect.GetWidth(), rRect.GetHeight(),
@@ -3578,7 +3578,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                             {
 
                                 OutputDevice *pOutDev = GetOutDev();
-                                const bool bSelectClipRegion = pOutDev->ImplSelectClipRegion( aRegion, pGraphics );
+                                const bool bSelectClipRegion = pOutDev->SelectClipRegion( aRegion, pGraphics );
                                 if ( bSelectClipRegion )
                                 {
                                     pGraphics->CopyArea( mnOutOffX, mnOutOffY,

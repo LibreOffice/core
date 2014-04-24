@@ -761,7 +761,7 @@ void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, cons
     if ( rRegion.IsNull() )
         mpGraphics->ResetClipRegion();
     else
-        ImplSelectClipRegion( rRegion );
+        SelectClipRegion( rRegion );
 
     SalTwoRect aPosAry;
     aPosAry.mnSrcX       = rDevPt.X();

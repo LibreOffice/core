@@ -65,7 +65,7 @@ void OutputDevice::InitClipRegion()
             else
             {
                 mbOutputClipped = false;
-                ImplSelectClipRegion( aRegion );
+                SelectClipRegion( aRegion );
             }
         }
 
@@ -89,7 +89,7 @@ void OutputDevice::ClipToPaintRegion(Rectangle& /*rDstRect*/)
 {
 }
 
-bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGraphics )
+bool OutputDevice::SelectClipRegion( const Region& rRegion, SalGraphics* pGraphics )
 {
     DBG_TESTSOLARMUTEX();
 
@@ -102,7 +102,7 @@ bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGr
     }
 
     bool bClipRegion = pGraphics->SetClipRegion( rRegion, this );
-    OSL_ENSURE( bClipRegion, "OutputDevice::ImplSelectClipRegion() - can't create region" );
+    OSL_ENSURE( bClipRegion, "OutputDevice::SelectClipRegion() - can't create region" );
     return bClipRegion;
 }
 
