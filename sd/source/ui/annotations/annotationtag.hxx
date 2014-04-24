@@ -52,9 +52,9 @@ public:
     // callbacks from sdr view
     virtual sal_uLong GetMarkablePointCount() const SAL_OVERRIDE;
     virtual sal_uLong GetMarkedPointCount() const SAL_OVERRIDE;
-    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False) SAL_OVERRIDE;
+    virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false) SAL_OVERRIDE;
     virtual void CheckPossibilities() SAL_OVERRIDE;
-    virtual sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark) SAL_OVERRIDE;
+    virtual bool MarkPoints(const Rectangle* pRect, bool bUnmark) SAL_OVERRIDE;
 
     void Move( int nDX, int nDY );
     bool OnMove( const KeyEvent& rKEvt );

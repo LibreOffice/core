@@ -34,20 +34,20 @@ class SdrObject;
 class SdAnimationPrmsUndoAction : public SdUndoAction
 {
     SdrObject*      pObject;
-    sal_Bool            bOldActive;
-    sal_Bool            bNewActive;
-    sal_Bool            bOldDimPrevious;
-    sal_Bool            bNewDimPrevious;
-    sal_Bool            bOldDimHide;
-    sal_Bool            bNewDimHide;
-    sal_Bool            bOldSoundOn;
-    sal_Bool            bNewSoundOn;
-    sal_Bool            bOldSecondSoundOn;
-    sal_Bool            bNewSecondSoundOn;
-    sal_Bool            bOldPlayFull;
-    sal_Bool            bNewPlayFull;
-    sal_Bool            bOldSecondPlayFull;
-    sal_Bool            bNewSecondPlayFull;
+    bool            bOldActive;
+    bool            bNewActive;
+    bool            bOldDimPrevious;
+    bool            bNewDimPrevious;
+    bool            bOldDimHide;
+    bool            bNewDimHide;
+    bool            bOldSoundOn;
+    bool            bNewSoundOn;
+    bool            bOldSecondSoundOn;
+    bool            bNewSecondSoundOn;
+    bool            bOldPlayFull;
+    bool            bNewPlayFull;
+    bool            bOldSecondPlayFull;
+    bool            bNewSecondPlayFull;
     ::com::sun::star::presentation::AnimationEffect eOldEffect;
     ::com::sun::star::presentation::AnimationEffect eNewEffect;
     ::com::sun::star::presentation::AnimationEffect eOldTextEffect;
@@ -70,25 +70,25 @@ class SdAnimationPrmsUndoAction : public SdUndoAction
     ::com::sun::star::presentation::ClickAction     eNewClickAction;
     OUString        aOldBookmark;
     OUString        aNewBookmark;
-    sal_Bool            bOldInvisibleInPres;
-    sal_Bool            bNewInvisibleInPres;
+    bool            bOldInvisibleInPres;
+    bool            bNewInvisibleInPres;
     sal_uInt16          nOldVerb;
     sal_uInt16          nNewVerb;
     sal_uLong           nOldPresOrder;
     sal_uLong           nNewPresOrder;
 
-    sal_Bool            bInfoCreated;
+    bool            bInfoCreated;
 
 public:
     TYPEINFO_OVERRIDE();
         SdAnimationPrmsUndoAction(SdDrawDocument* pTheDoc, SdrObject* pObj,
-                                  sal_Bool bCreated):
+                                  bool bCreated):
         SdUndoAction    (pTheDoc),
         pObject         (pObj),
         bInfoCreated    (bCreated)
         {}
 
-        void SetActive(sal_Bool bTheOldActive, sal_Bool bTheNewActive)
+        void SetActive(bool bTheOldActive, bool bTheNewActive)
             { bOldActive = bTheOldActive; bNewActive = bTheNewActive; }
         void SetEffect(::com::sun::star::presentation::AnimationEffect eTheOldEffect, ::com::sun::star::presentation::AnimationEffect eTheNewEffect)
             { eOldEffect = eTheOldEffect; eNewEffect = eTheNewEffect; }
@@ -96,19 +96,19 @@ public:
             { eOldTextEffect = eTheOldEffect; eNewTextEffect = eTheNewEffect; }
         void SetSpeed(::com::sun::star::presentation::AnimationSpeed eTheOldSpeed, ::com::sun::star::presentation::AnimationSpeed eTheNewSpeed)
             { eOldSpeed = eTheOldSpeed; eNewSpeed = eTheNewSpeed; }
-        void SetDim(sal_Bool bTheOldDim, sal_Bool bTheNewDim)
+        void SetDim(bool bTheOldDim, bool bTheNewDim)
             { bOldDimPrevious = bTheOldDim; bNewDimPrevious = bTheNewDim; }
         void SetDimColor(Color aTheOldDimColor, Color aTheNewDimColor)
             { aOldDimColor = aTheOldDimColor; aNewDimColor = aTheNewDimColor; }
-        void SetDimHide(sal_Bool bTheOldDimHide, sal_Bool bTheNewDimHide)
+        void SetDimHide(bool bTheOldDimHide, bool bTheNewDimHide)
             { bOldDimHide = bTheOldDimHide; bNewDimHide = bTheNewDimHide; }
-        void SetSoundOn(sal_Bool bTheOldSoundOn, sal_Bool bTheNewSoundOn)
+        void SetSoundOn(bool bTheOldSoundOn, bool bTheNewSoundOn)
             { bOldSoundOn = bTheOldSoundOn; bNewSoundOn = bTheNewSoundOn; }
         void SetSound(const OUString& aTheOldSound, const OUString& aTheNewSound)
             { aOldSoundFile = aTheOldSound; aNewSoundFile = aTheNewSound; }
         void SetBlueScreen(Color aTheOldBlueScreen, Color aTheNewBlueScreen)
             { aOldBlueScreen = aTheOldBlueScreen; aNewBlueScreen = aTheNewBlueScreen; }
-        void SetPlayFull(sal_Bool bTheOldPlayFull, sal_Bool bTheNewPlayFull)
+        void SetPlayFull(bool bTheOldPlayFull, bool bTheNewPlayFull)
             { bOldPlayFull = bTheOldPlayFull; bNewPlayFull = bTheNewPlayFull; }
         void SetPathObj(SdrPathObj* pTheOldPath, SdrPathObj* pTheNewPath)
             { pOldPathObj = pTheOldPath; pNewPathObj = pTheNewPath; }
@@ -116,7 +116,7 @@ public:
             { eOldClickAction = eTheOldAction; eNewClickAction = eTheNewAction; }
         void SetBookmark(const OUString& aTheOldBookmark, const OUString& aTheNewBookmark)
             { aOldBookmark = aTheOldBookmark; aNewBookmark = aTheNewBookmark; }
-        void SetInvisibleInPres(sal_Bool bTheOldInvisibleInPres, sal_Bool bTheNewInvisibleInPres)
+        void SetInvisibleInPres(bool bTheOldInvisibleInPres, bool bTheNewInvisibleInPres)
             { bOldInvisibleInPres = bTheOldInvisibleInPres; bNewInvisibleInPres = bTheNewInvisibleInPres; }
         void SetVerb(sal_uInt16 nTheOldVerb, sal_uInt16 nTheNewVerb)
             { nOldVerb = nTheOldVerb; nNewVerb = nTheNewVerb; }
@@ -124,9 +124,9 @@ public:
             { eOldSecondEffect = eTheOldEffect; eNewSecondEffect = eTheNewEffect; }
         void SetSecondSpeed(::com::sun::star::presentation::AnimationSpeed eTheOldSpeed, ::com::sun::star::presentation::AnimationSpeed eTheNewSpeed)
             { eOldSecondSpeed = eTheOldSpeed; eNewSecondSpeed = eTheNewSpeed; }
-        void SetSecondSoundOn(sal_Bool bTheOldSoundOn, sal_Bool bTheNewSoundOn)
+        void SetSecondSoundOn(bool bTheOldSoundOn, bool bTheNewSoundOn)
             { bOldSecondSoundOn = bTheOldSoundOn; bNewSecondSoundOn = bTheNewSoundOn; }
-        void SetSecondPlayFull(sal_Bool bTheOldPlayFull, sal_Bool bTheNewPlayFull)
+        void SetSecondPlayFull(bool bTheOldPlayFull, bool bTheNewPlayFull)
             { bOldSecondPlayFull = bTheOldPlayFull; bNewSecondPlayFull = bTheNewPlayFull; }
         void SetPresOrder(sal_uLong nTheOldPresOrder, sal_uLong nTheNewPresOrder)
             { nOldPresOrder = nTheOldPresOrder; nNewPresOrder = nTheNewPresOrder; }

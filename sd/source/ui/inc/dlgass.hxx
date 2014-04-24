@@ -41,19 +41,19 @@ private:
     AssistentDlgImpl* mpImpl;
 
 public:
-    AssistentDlg(Window* pParent, sal_Bool bAutoPilot);
+    AssistentDlg(Window* pParent, bool bAutoPilot);
     virtual ~AssistentDlg();
 
     DECL_LINK( FinishHdl, void * );
 
     SfxObjectShellLock GetDocument();
     OutputType GetOutputMedium() const;
-    sal_Bool IsSummary() const;
+    bool IsSummary() const;
     StartType GetStartType() const;
     OUString GetDocPath() const;
-    sal_Bool GetStartWithFlag() const;
+    bool GetStartWithFlag() const;
 
-    sal_Bool IsDocEmpty() const;
+    bool IsDocEmpty() const;
     com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > GetPassword();
 };
 

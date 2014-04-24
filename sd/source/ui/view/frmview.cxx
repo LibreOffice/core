@@ -207,8 +207,8 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetGridCoarse( Size( 1000, 1000 ) );
         SetSnapGridWidth(Fraction(1000, 1), Fraction(1000, 1));
         SetActiveLayer( SD_RESSTR(STR_LAYER_LAYOUT) );
-        mbNoColors = sal_True;
-        mbNoAttribs = sal_False;
+        mbNoColors = true;
+        mbNoAttribs = false;
         maVisArea = Rectangle( Point(), Size(0, 0) );
         mePageKind = PK_STANDARD;
         mePageKindOnLoad = PK_STANDARD;
@@ -218,10 +218,10 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         meNotesEditMode = EM_PAGE;
         meHandoutEditMode = EM_MASTERPAGE;
         SetViewShEditModeOnLoad(EM_PAGE);
-        mbLayerMode = sal_False;
+        mbLayerMode = false;
         SetEliminatePolyPoints(false);
-        mbDoubleClickTextEdit = sal_False;
-        mbClickChangeRotation = sal_False;
+        mbDoubleClickTextEdit = false;
+        mbClickChangeRotation = false;
         mnSlidesPerRow = 4;
 
         {
@@ -234,15 +234,15 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetViewShellTypeOnLoad (ViewShell::ST_IMPRESS);
 
         // get default for design mode
-        sal_Bool bInitDesignMode = pDrawDoc->GetOpenInDesignMode();
+        bool bInitDesignMode = pDrawDoc->GetOpenInDesignMode();
         if( pDrawDoc->OpenInDesignModeIsDefaulted() )
         {
-            bInitDesignMode = sal_True;
+            bInitDesignMode = true;
         }
 
         SfxObjectShell* pObjShell = pDrawDoc->GetObjectShell();
         if( pObjShell && pObjShell->IsReadOnly() )
-            bInitDesignMode = sal_False;
+            bInitDesignMode = false;
         SetDesignMode( bInitDesignMode );
 
         Update( SD_MOD()->GetSdOptions(pDrawDoc->GetDocumentType()) );
@@ -427,19 +427,19 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
 {
     std::vector< std::pair< OUString, Any > > aUserData;
 
-    aUserData.addValue( sUNO_View_GridIsVisible, makeAny( (sal_Bool)IsGridVisible() ) );
-    aUserData.addValue( sUNO_View_GridIsFront, makeAny( (sal_Bool)IsGridFront() ) );
-    aUserData.addValue( sUNO_View_IsSnapToGrid, makeAny( (sal_Bool)IsGridSnap() ) );
-    aUserData.addValue( sUNO_View_IsSnapToPageMargins, makeAny( (sal_Bool)IsBordSnap() ) );
-    aUserData.addValue( sUNO_View_IsSnapToSnapLines, makeAny( (sal_Bool)IsHlplSnap() ) );
-    aUserData.addValue( sUNO_View_IsSnapToObjectFrame, makeAny( (sal_Bool)IsOFrmSnap() ) );
-    aUserData.addValue( sUNO_View_IsSnapToObjectPoints, makeAny( (sal_Bool)IsOPntSnap() ) );
+    aUserData.addValue( sUNO_View_GridIsVisible, makeAny( IsGridVisible() ) );
+    aUserData.addValue( sUNO_View_GridIsFront, makeAny( IsGridFront() ) );
+    aUserData.addValue( sUNO_View_IsSnapToGrid, makeAny( IsGridSnap() ) );
+    aUserData.addValue( sUNO_View_IsSnapToPageMargins, makeAny( IsBordSnap() ) );
+    aUserData.addValue( sUNO_View_IsSnapToSnapLines, makeAny( IsHlplSnap() ) );
+    aUserData.addValue( sUNO_View_IsSnapToObjectFrame, makeAny( IsOFrmSnap() ) );
+    aUserData.addValue( sUNO_View_IsSnapToObjectPoints, makeAny( IsOPntSnap() ) );
 
-    aUserData.addValue( sUNO_View_IsPlusHandlesAlwaysVisible, makeAny( (sal_Bool)IsPlusHandlesAlwaysVisible() ) );
-    aUserData.addValue( sUNO_View_IsFrameDragSingles, makeAny( (sal_Bool)IsFrameDragSingles() ) );
+    aUserData.addValue( sUNO_View_IsPlusHandlesAlwaysVisible, makeAny( IsPlusHandlesAlwaysVisible() ) );
+    aUserData.addValue( sUNO_View_IsFrameDragSingles, makeAny( IsFrameDragSingles() ) );
 
     aUserData.addValue( sUNO_View_EliminatePolyPointLimitAngle, makeAny( (sal_Int32)GetEliminatePolyPointLimitAngle() ) );
-    aUserData.addValue( sUNO_View_IsEliminatePolyPoints, makeAny( (sal_Bool)IsEliminatePolyPoints() ) );
+    aUserData.addValue( sUNO_View_IsEliminatePolyPoints, makeAny( IsEliminatePolyPoints() ) );
 
     Any aAny;
     GetVisibleLayers().QueryValue( aAny );
@@ -451,8 +451,8 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
     GetLockedLayers().QueryValue( aAny );
     aUserData.addValue( sUNO_View_LockedLayers, aAny );
 
-    aUserData.addValue( sUNO_View_NoAttribs, makeAny( (sal_Bool)IsNoAttribs() ) );
-    aUserData.addValue( sUNO_View_NoColors, makeAny( (sal_Bool)IsNoColors() ) );
+    aUserData.addValue( sUNO_View_NoAttribs, makeAny( IsNoAttribs() ) );
+    aUserData.addValue( sUNO_View_NoColors, makeAny( IsNoColors() ) );
 
     if( GetStandardHelpLines().GetCount() )
         aUserData.addValue( sUNO_View_SnapLinesDrawing, makeAny( createHelpLinesString( GetStandardHelpLines() ) ) );
@@ -463,13 +463,13 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
     if( GetHandoutHelpLines().GetCount() )
         aUserData.addValue( sUNO_View_SnapLinesHandout, makeAny( createHelpLinesString( GetHandoutHelpLines() ) ) );
 
-    aUserData.addValue( sUNO_View_RulerIsVisible, makeAny( (sal_Bool)HasRuler() ) );
+    aUserData.addValue( sUNO_View_RulerIsVisible, makeAny( HasRuler() ) );
     aUserData.addValue( sUNO_View_PageKind, makeAny( (sal_Int16)GetPageKind() ) );
     aUserData.addValue( sUNO_View_SelectedPage, makeAny( (sal_Int16)GetSelectedPage() ) );
-    aUserData.addValue( sUNO_View_IsLayerMode, makeAny( (sal_Bool)IsLayerMode() ) );
+    aUserData.addValue( sUNO_View_IsLayerMode, makeAny( IsLayerMode() ) );
 
-    aUserData.addValue( sUNO_View_IsDoubleClickTextEdit,  makeAny( (sal_Bool)IsDoubleClickTextEdit() ) );
-    aUserData.addValue( sUNO_View_IsClickChangeRotation, makeAny( (sal_Bool)IsClickChangeRotation() ) );
+    aUserData.addValue( sUNO_View_IsDoubleClickTextEdit,  makeAny( IsDoubleClickTextEdit() ) );
+    aUserData.addValue( sUNO_View_IsClickChangeRotation, makeAny( IsClickChangeRotation() ) );
 
     aUserData.addValue( sUNO_View_SlidesPerRow, makeAny( (sal_Int16)GetSlidesPerRow() ) );
     aUserData.addValue( sUNO_View_EditModeStandard, makeAny( (sal_Int32)GetViewShEditMode( PK_STANDARD ) ) );
@@ -493,7 +493,7 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
     aUserData.addValue( sUNO_View_GridSnapWidthXDenominator, makeAny( (sal_Int32)GetSnapGridWidthX().GetDenominator() ) );
     aUserData.addValue( sUNO_View_GridSnapWidthYNumerator, makeAny( (sal_Int32)GetSnapGridWidthY().GetNumerator() ) );
     aUserData.addValue( sUNO_View_GridSnapWidthYDenominator, makeAny( (sal_Int32)GetSnapGridWidthY().GetDenominator() ) );
-    aUserData.addValue( sUNO_View_IsAngleSnapEnabled, makeAny( (sal_Bool)IsAngleSnapEnabled() ) );
+    aUserData.addValue( sUNO_View_IsAngleSnapEnabled, makeAny( IsAngleSnapEnabled() ) );
     aUserData.addValue( sUNO_View_SnapAngle, makeAny( (sal_Int32)GetSnapAngle() ) );
 
     const sal_Int32 nOldLength = rValues.getLength();
@@ -580,7 +580,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
     {
         const bool bImpress = dynamic_cast< SdDrawDocument* >(GetModel())->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
 
-        sal_Bool bBool = sal_False;
+        bool bBool = false;
         sal_Int32 nInt32 = 0;
         sal_Int16 nInt16 = 0;
         OUString aString;

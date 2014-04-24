@@ -66,7 +66,7 @@ public:
 
     void HideRadioGroup();
     void HideDeleteBtn() { m_pBtnDelete->Hide(); }
-    void SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY);
+    void SetInputFields(bool bEnableX, bool bEnableY);
 };
 
 

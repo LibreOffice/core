@@ -146,7 +146,7 @@ enum SdDocumentSettingsPropertyHandles
 
 #define MID_PRINTER 1
 
-    PropertySetInfo * createSettingsInfoImpl( sal_Bool bIsDraw )
+    PropertySetInfo * createSettingsInfoImpl( bool bIsDraw )
     {
         static PropertyMapEntry const aImpressSettingsInfoMap[] =
         {
@@ -405,12 +405,12 @@ throw (UnknownPropertyException, PropertyVetoException,
                 static_cast<OWeakObject *>(this));
     }
 
-    sal_Bool bValue = sal_False;
+    bool bValue = false;
     bool bOk, bChanged = false, bOptionsChanged = false;
 
     SdOptionsPrintItem aOptionsPrintItem( ATTR_OPTIONS_PRINT );
 
-    SfxPrinter* pPrinter = pDocSh->GetPrinter( sal_False );
+    SfxPrinter* pPrinter = pDocSh->GetPrinter( false );
     if( pPrinter )
     {
         SdOptionsPrintItem* pPrinterOptions = NULL;
@@ -723,7 +723,7 @@ throw (UnknownPropertyException, PropertyVetoException,
                         bOk = true;
                         if( !aPrinterName.isEmpty() && pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                         {
-                            SfxPrinter *pTempPrinter = pDocSh->GetPrinter( sal_True );
+                            SfxPrinter *pTempPrinter = pDocSh->GetPrinter( true );
                             if (pTempPrinter)
                             {
                                 SfxPrinter *pNewPrinter = new SfxPrinter( pTempPrinter->GetOptions().Clone(), aPrinterName );
@@ -775,7 +775,7 @@ throw (UnknownPropertyException, PropertyVetoException,
 
             case HANDLE_PARAGRAPHSUMMATION :
             {
-                sal_Bool bIsSummationOfParagraphs = sal_False;
+                bool bIsSummationOfParagraphs = false;
                 if ( *pValues >>= bIsSummationOfParagraphs )
                 {
                     bOk = true;
@@ -790,13 +790,13 @@ throw (UnknownPropertyException, PropertyVetoException,
                         SdrOutliner& rOutl = pDocument->GetDrawOutliner();
                         nCntrl = rOutl.GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
                         rOutl.SetControlWord( nCntrl | nSum );
-                        ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
+                        ::sd::Outliner* pOutl = pDocument->GetOutliner( false );
                         if( pOutl )
                         {
                             nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
                             pOutl->SetControlWord( nCntrl | nSum );
                         }
-                        pOutl = pDocument->GetInternalOutliner( sal_False );
+                        pOutl = pDocument->GetInternalOutliner( false );
                         if( pOutl )
                         {
                             nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
@@ -818,12 +818,12 @@ throw (UnknownPropertyException, PropertyVetoException,
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
                     SdrOutliner& rOutl = pDocument->GetDrawOutliner();
                     rOutl.SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
-                    ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
+                    ::sd::Outliner* pOutl = pDocument->GetOutliner( false );
                     if( pOutl )
                     {
                         pOutl->SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
                     }
-                    pOutl = pDocument->GetInternalOutliner( sal_False );
+                    pOutl = pDocument->GetInternalOutliner( false );
                     if( pOutl )
                     {
                         pOutl->SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
@@ -834,7 +834,7 @@ throw (UnknownPropertyException, PropertyVetoException,
             }
             case HANDLE_ASIANPUNCT:
             {
-                sal_Bool bAsianPunct = sal_False;
+                bool bAsianPunct = false;
                 if( *pValues >>= bAsianPunct )
                 {
                     bOk = true;
@@ -843,12 +843,12 @@ throw (UnknownPropertyException, PropertyVetoException,
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
                     SdrOutliner& rOutl = pDocument->GetDrawOutliner();
                     rOutl.SetKernAsianPunctuation( bAsianPunct );
-                    ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
+                    ::sd::Outliner* pOutl = pDocument->GetOutliner( false );
                     if( pOutl )
                     {
                         pOutl->SetKernAsianPunctuation( bAsianPunct );
                     }
-                    pOutl = pDocument->GetInternalOutliner( sal_False );
+                    pOutl = pDocument->GetInternalOutliner( false );
                     if( pOutl )
                     {
                         pOutl->SetKernAsianPunctuation( bAsianPunct );
@@ -934,14 +934,14 @@ throw (UnknownPropertyException, PropertyVetoException,
     if( bOptionsChanged )
     {
         if( !pPrinter )
-            pPrinter = pDocSh->GetPrinter( sal_True );
+            pPrinter = pDocSh->GetPrinter( true );
         SfxItemSet aNewOptions( pPrinter->GetOptions() );
         aNewOptions.Put( aOptionsPrintItem );
         pPrinter->SetOptions( aNewOptions );
     }
 
     if( bChanged || bOptionsChanged )
-        mxModel->SetModified( sal_True );
+        mxModel->SetModified( true );
 }
 
 void DocumentSettings::ExtractURL( XPropertyListType t, Any* pValue )
@@ -974,7 +974,7 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 
     SdOptionsPrintItem aOptionsPrintItem( ATTR_OPTIONS_PRINT );
 
-    SfxPrinter* pPrinter = pDocSh->GetPrinter( sal_False );
+    SfxPrinter* pPrinter = pDocSh->GetPrinter( false );
     if( pPrinter )
     {
         SdOptionsPrintItem* pPrinterOptions = NULL;
@@ -1016,49 +1016,49 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
                 *pValue <<= pDocSh->IsUseUserData();
                 break;
             case HANDLE_PRINTDRAWING:
-                *pValue <<= (sal_Bool)aPrintOpts.IsDraw();
+                *pValue <<= aPrintOpts.IsDraw();
                 break;
             case HANDLE_PRINTNOTES:
-                *pValue <<= (sal_Bool)aPrintOpts.IsNotes();
+                *pValue <<= aPrintOpts.IsNotes();
                 break;
             case HANDLE_PRINTHANDOUT:
-                *pValue <<= (sal_Bool)aPrintOpts.IsHandout();
+                *pValue <<= aPrintOpts.IsHandout();
                 break;
             case HANDLE_PRINTOUTLINE:
-                *pValue <<= (sal_Bool)aPrintOpts.IsOutline();
+                *pValue <<= aPrintOpts.IsOutline();
                 break;
             case HANDLE_SLIDESPERHANDOUT:
                 *pValue <<= (sal_Int16)aPrintOpts.GetHandoutPages();
                 break;
             case HANDLE_HANDOUTHORIZONTAL:
-                *pValue <<= (sal_Bool)aPrintOpts.IsHandoutHorizontal();
+                *pValue <<= aPrintOpts.IsHandoutHorizontal();
                 break;
             case HANDLE_PRINTPAGENAME:
-                *pValue <<= (sal_Bool)aPrintOpts.IsPagename();
+                *pValue <<= aPrintOpts.IsPagename();
                 break;
             case HANDLE_PRINTDATE:
-                *pValue <<= (sal_Bool)aPrintOpts.IsDate();
+                *pValue <<= aPrintOpts.IsDate();
                 break;
             case HANDLE_PRINTTIME:
-                *pValue <<= (sal_Bool)aPrintOpts.IsTime();
+                *pValue <<= aPrintOpts.IsTime();
                 break;
             case HANDLE_PRINTHIDENPAGES:
-                *pValue <<= (sal_Bool)aPrintOpts.IsHiddenPages();
+                *pValue <<= aPrintOpts.IsHiddenPages();
                 break;
             case HANDLE_PRINTFITPAGE:
-                *pValue <<= (sal_Bool)aPrintOpts.IsPagesize();
+                *pValue <<= aPrintOpts.IsPagesize();
                 break;
             case HANDLE_PRINTTILEPAGE:
-                *pValue <<= (sal_Bool)aPrintOpts.IsPagetile();
+                *pValue <<= aPrintOpts.IsPagetile();
                 break;
             case HANDLE_PRINTBOOKLET:
-                *pValue <<= (sal_Bool)aPrintOpts.IsBooklet();
+                *pValue <<= aPrintOpts.IsBooklet();
                 break;
             case HANDLE_PRINTBOOKLETFRONT:
-                *pValue <<= (sal_Bool)aPrintOpts.IsFrontPage();
+                *pValue <<= aPrintOpts.IsFrontPage();
                 break;
             case HANDLE_PRINTBOOKLETBACK:
-                *pValue <<= (sal_Bool)aPrintOpts.IsBackPage();
+                *pValue <<= aPrintOpts.IsBackPage();
                 break;
             case HANDLE_PRINTQUALITY:
                 *pValue <<= (sal_Int32)aPrintOpts.GetOutputQuality();
@@ -1084,13 +1084,13 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
                 break;
             case HANDLE_PRINTERNAME:
                 {
-                    SfxPrinter *pTempPrinter = pDocSh->GetPrinter( sal_False );
+                    SfxPrinter *pTempPrinter = pDocSh->GetPrinter( false );
                     *pValue <<= pTempPrinter ? OUString ( pTempPrinter->GetName()) : OUString();
                 }
                 break;
             case HANDLE_PRINTERJOB:
                 {
-                    SfxPrinter *pTempPrinter = pDocSh->GetPrinter( sal_False );
+                    SfxPrinter *pTempPrinter = pDocSh->GetPrinter( false );
                     if (pTempPrinter)
                     {
                         SvMemoryStream aStream;
@@ -1112,7 +1112,7 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 
             case HANDLE_PARAGRAPHSUMMATION :
             {
-                sal_Bool bIsSummationOfParagraphs = pDoc->IsSummationOfParagraphs();
+                bool bIsSummationOfParagraphs = pDoc->IsSummationOfParagraphs();
                 *pValue <<= bIsSummationOfParagraphs;
             }
             break;
@@ -1125,7 +1125,7 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 
             case HANDLE_ASIANPUNCT:
             {
-                *pValue <<= (sal_Bool)pDoc->IsKernAsianPunctuation();
+                *pValue <<= pDoc->IsKernAsianPunctuation();
                 break;
             }
 

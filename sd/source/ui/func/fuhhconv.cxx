@@ -63,16 +63,16 @@ FuHangulHanjaConversion::FuHangulHanjaConversion (
     SfxRequest& rReq )
        : FuPoor(pViewSh, pWin, pView, pDocument, rReq),
     pSdOutliner(NULL),
-    bOwnOutliner(sal_False)
+    bOwnOutliner(false)
 {
     if ( mpViewShell->ISA(DrawViewShell) )
     {
-        bOwnOutliner = sal_True;
+        bOwnOutliner = true;
         pSdOutliner = new Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
     }
     else if ( mpViewShell->ISA(OutlineViewShell) )
     {
-        bOwnOutliner = sal_False;
+        bOwnOutliner = false;
         pSdOutliner = mpDoc->GetOutliner();
     }
 
@@ -101,7 +101,7 @@ rtl::Reference<FuPoor> FuHangulHanjaConversion::Create( ViewShell* pViewSh, ::sd
  * Search and replace
  */
 void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_Int16 nTargetLanguage,
-        const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive )
+        const Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive )
 {
 
     mpView->BegUndo(SD_RESSTR(STR_UNDO_HANGULHANJACONVERSION));
@@ -116,7 +116,7 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
         {
             pSdOutliner->EndConversion();
 
-            bOwnOutliner = sal_True;
+            bOwnOutliner = true;
             pSdOutliner = new Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
             pSdOutliner->BeginConversion();
         }
@@ -125,7 +125,7 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
             pSdOutliner->EndConversion();
             delete pSdOutliner;
 
-            bOwnOutliner = sal_False;
+            bOwnOutliner = false;
             pSdOutliner = mpDoc->GetOutliner();
             pSdOutliner->BeginConversion();
         }
@@ -222,9 +222,9 @@ void FuHangulHanjaConversion::StartChineseConversion()
                 if( RET_OK == nDialogRet )
                 {
                     //get some parameters from the dialog
-                    sal_Bool bToSimplified = sal_True;
-                    sal_Bool bUseVariants = sal_True;
-                    sal_Bool bCommonTerms = sal_True;
+                    bool bToSimplified = true;
+                    bool bUseVariants = true;
+                    bool bCommonTerms = true;
                     Reference< beans::XPropertySet >  xProp( xDialog, UNO_QUERY );
                     if( xProp.is() )
                     {
@@ -250,7 +250,7 @@ void FuHangulHanjaConversion::StartChineseConversion()
                                         DEFAULTFONT_CJK_PRESENTATION,
                                         nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
 
-                    StartConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, sal_False );
+                    StartConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, false );
                     ConvertStyles( nTargetLang, &aTargetFont );
                 }
             }

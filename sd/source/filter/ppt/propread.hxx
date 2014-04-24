@@ -123,7 +123,7 @@ public:
     void            Clear();
 
     void            SetTextEncoding( sal_uInt16 nTextEnc ){ mnTextEnc = nTextEnc; };
-    sal_Bool        Read( OUString& rString, sal_uInt32 nType = VT_EMPTY, sal_Bool bDwordAlign = sal_True );
+    bool        Read( OUString& rString, sal_uInt32 nType = VT_EMPTY, bool bDwordAlign = true );
     PropItem&       operator=( PropItem& rPropItem );
 
     using SvStream::Read;
@@ -145,15 +145,15 @@ class Section
                                 Section( const Section& rSection );
 
         Section&                operator=( const Section& rSection );
-        sal_Bool                GetProperty( sal_uInt32 nId, PropItem& rPropItem );
-        sal_Bool                GetDictionary( Dictionary& rDict );
+        bool                GetProperty( sal_uInt32 nId, PropItem& rPropItem );
+        bool                GetDictionary( Dictionary& rDict );
         const sal_uInt8*        GetFMTID() const { return aFMTID; };
         void                    Read( SvStorageStream* pStrm );
 };
 
 class PropRead
 {
-        sal_Bool                mbStatus;
+        bool                mbStatus;
         SvStorageStreamRef      mpSvStream;
 
         sal_uInt16              mnByteOrder;
@@ -170,7 +170,7 @@ class PropRead
 
         PropRead&               operator=( const PropRead& rPropRead );
         const Section*          GetSection( const sal_uInt8* pFMTID );
-        sal_Bool                IsValid() const { return mbStatus; };
+        bool                IsValid() const { return mbStatus; };
         void                    Read();
 };
 

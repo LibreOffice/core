@@ -491,17 +491,17 @@ sal_uLong AnnotationTag::GetMarkedPointCount() const
 
 
 
-sal_Bool AnnotationTag::MarkPoint(SdrHdl& /*rHdl*/, sal_Bool /*bUnmark*/ )
+bool AnnotationTag::MarkPoint(SdrHdl& /*rHdl*/, bool /*bUnmark*/ )
 {
-    sal_Bool bRet=sal_False;
+    bool bRet=false;
     return bRet;
 }
 
 
 
-sal_Bool AnnotationTag::MarkPoints(const Rectangle* /*pRect*/, sal_Bool /*bUnmark*/ )
+bool AnnotationTag::MarkPoints(const Rectangle* /*pRect*/, bool /*bUnmark*/ )
 {
-    sal_Bool bChgd=sal_False;
+    bool bChgd=false;
     return bChgd;
 }
 

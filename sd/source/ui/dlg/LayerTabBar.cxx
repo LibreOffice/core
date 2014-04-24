@@ -82,7 +82,7 @@ void LayerTabBar::Select()
 
 void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bSetPageID=sal_False;
+    bool bSetPageID=false;
 
     if (rMEvt.IsLeft() && !rMEvt.IsMod1() && !rMEvt.IsMod2())
     {
@@ -94,14 +94,14 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
             SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
             pDispatcher->Execute(SID_INSERTLAYER, SFX_CALLMODE_SYNCHRON);
 
-            bSetPageID=sal_True;
+            bSetPageID=true;
         }
         else if (rMEvt.IsShift())
         {
             // Toggle between layer visible / hidden
             OUString aName(GetPageText(aLayerId));
             SdrPageView* pPV = pDrViewSh->GetView()->GetSdrPageView();
-            sal_Bool bVisible = pPV->IsLayerVisible(aName);
+            bool bVisible = pPV->IsLayerVisible(aName);
             pPV->SetLayerVisible(aName, !bVisible);
             pDrViewSh->ResetActualLayer();
         }
@@ -176,7 +176,7 @@ void  LayerTabBar::Command(const CommandEvent& rCEvt)
 
 long LayerTabBar::StartRenaming()
 {
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
     OUString aLayerName = GetPageText( GetEditPageId() );
     OUString aLayoutLayer = SD_RESSTR(STR_LAYER_LAYOUT);
     OUString aControlsLayer = SD_RESSTR(STR_LAYER_CONTROLS);
@@ -189,7 +189,7 @@ long LayerTabBar::StartRenaming()
          aLayerName == aBackgroundLayer   || aLayerName == aBackgroundObjLayer )
     {
         // It is not allowed to change this names
-        bOK = sal_False;
+        bOK = false;
     }
     else
     {
@@ -201,12 +201,12 @@ long LayerTabBar::StartRenaming()
         }
     }
 
-    return(bOK);
+    return bOK ? 1 : 0;
 }
 
 long LayerTabBar::AllowRenaming()
 {
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
 
     // Check if names already exists
     ::sd::View* pView = pDrViewSh->GetView();
@@ -222,7 +222,7 @@ long LayerTabBar::AllowRenaming()
         WarningBox aWarningBox( &pDrViewSh->GetViewFrame()->GetWindow(), WinBits( WB_OK ),
                                 SD_RESSTR( STR_WARN_NAME_DUPLICATE ) );
         aWarningBox.Execute();
-        bOK = sal_False;
+        bOK = false;
     }
 
     if (bOK)
@@ -238,11 +238,11 @@ long LayerTabBar::AllowRenaming()
              aNewName == aBackgroundLayer   || aNewName == aBackgroundObjLayer )
         {
             // It is not allowed to use his names
-            bOK = sal_False;
+            bOK = false;
         }
     }
 
-    return(bOK);
+    return bOK ? 1 : 0;
 }
 
 void LayerTabBar::EndRenaming()

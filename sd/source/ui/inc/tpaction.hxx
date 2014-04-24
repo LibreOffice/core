@@ -75,7 +75,7 @@ private:
     SdDrawDocument*         mpDoc;
     XColorListRef           pColList;
 
-    sal_Bool                    bTreeUpdated;
+    bool                    bTreeUpdated;
     std::vector<com::sun::star::presentation::ClickAction> maCurrentActions;
     OUString                aLastFile;
     ::std::vector< long >   aVerbVector;
@@ -93,7 +93,7 @@ private:
     void                    SetActualClickAction( ::com::sun::star::presentation::ClickAction eCA );
     void                    SetActualAnimationEffect( ::com::sun::star::presentation::AnimationEffect eAE );
     void                    SetEditText( OUString const & rStr );
-    OUString                GetEditText( sal_Bool bURL = sal_False );
+    OUString                GetEditText( bool bURL = false );
     sal_uInt16                  GetClickActionSdResId( ::com::sun::star::presentation::ClickAction eCA );
     sal_uInt16                  GetAnimationEffectSdResId( ::com::sun::star::presentation::AnimationEffect eAE );
 

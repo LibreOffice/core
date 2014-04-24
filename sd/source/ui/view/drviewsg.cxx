@@ -76,7 +76,7 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
 
 void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 {
-    sal_Bool bDisable = sal_True;
+    bool bDisable = true;
 
     if( GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
     {
@@ -92,7 +92,7 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
                 && pImageMapDialog!=NULL
                 && ( pImageMapDialog->GetEditingObject() == (void*) pObj ) )
             {
-                bDisable = sal_False;
+                bDisable = false;
             }
         }
     }
@@ -107,7 +107,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
-    sal_Bool   bDefault = sal_False;
+    bool   bDefault = false;
     sal_uInt16 nSlot = rReq.GetSlot();
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
@@ -196,7 +196,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         break;
 
         default:
-            bDefault = sal_True;
+            bDefault = true;
         break;
     }
 

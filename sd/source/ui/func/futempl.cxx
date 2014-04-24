@@ -258,7 +258,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 if (pArgs && pArgs->GetItemState( nSId ) == SFX_ITEM_SET)
                 {
                     aStyleName = ( ( (const SfxStringItem &) pArgs->Get( nSId ) ).GetValue() );
-                    SD_MOD()->SetWaterCan( sal_True );
+                    SD_MOD()->SetWaterCan( true );
                     pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
                 }
                 // no presentation object templates, they are only allowed implicitly
@@ -272,11 +272,11 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                 }
                 else
-                    SD_MOD()->SetWaterCan( sal_False );
+                    SD_MOD()->SetWaterCan( false );
             }
             else
             {
-                SD_MOD()->SetWaterCan( sal_False );
+                SD_MOD()->SetWaterCan( false );
                 // we have to re-enable to tools-bar
                 mpViewShell->Invalidate();
             }
@@ -299,7 +299,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 SfxAbstractTabDialog*  pStdDlg  = NULL;
                 SfxAbstractTabDialog*  pPresDlg = NULL;
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                sal_Bool bOldDocInOtherLanguage = sal_False;
+                bool bOldDocInOtherLanguage = false;
                 SfxItemSet aOriSet( pStyleSheet->GetItemSet() );
 
                 SfxStyleFamily eFamily = pStyleSheet->GetFamily();
@@ -365,7 +365,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     else
                     {
                         OSL_FAIL("StyleSheet from older version with different language");
-                        bOldDocInOtherLanguage = sal_True;
+                        bOldDocInOtherLanguage = true;
                     }
 
                     if( !bOldDocInOtherLanguage )
@@ -596,7 +596,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             {
                 nRetMask = pStyleSheet->GetMask();
                 SfxItemSet aCoreSet( mpDoc->GetPool() );
-                mpView->GetAttributes( aCoreSet, sal_True );
+                mpView->GetAttributes( aCoreSet, true );
 
                 // if the object had a template, this becomes parent of the new template
                 SfxStyleSheet* pOldStyle = mpView->GetStyleSheet();

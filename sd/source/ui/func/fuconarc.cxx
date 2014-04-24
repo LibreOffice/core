@@ -104,9 +104,9 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
 }
 
 
-sal_Bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
+bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown( rMEvt );
+    bool bReturn = FuConstruct::MouseButtonDown( rMEvt );
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
@@ -125,22 +125,22 @@ sal_Bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
             pObj->SetMergedItemSet(aAttr);
         }
 
-        bReturn = sal_True;
+        bReturn = true;
     }
     return bReturn;
 }
 
 
-sal_Bool FuConstructArc::MouseMove( const MouseEvent& rMEvt )
+bool FuConstructArc::MouseMove( const MouseEvent& rMEvt )
 {
     return FuConstruct::MouseMove(rMEvt);
 }
 
 
-sal_Bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
+bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    sal_Bool bReturn = sal_False;
-    sal_Bool bCreated = sal_False;
+    bool bReturn = false;
+    bool bCreated = false;
 
     if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
     {
@@ -150,11 +150,11 @@ sal_Bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
         {
             if (nCount != mpView->GetSdrPageView()->GetObjList()->GetObjCount())
             {
-                bCreated = sal_True;
+                bCreated = true;
             }
         }
 
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
@@ -169,10 +169,9 @@ sal_Bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
  * Process keyboard input
  * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
  */
-sal_Bool FuConstructArc::KeyInput(const KeyEvent& rKEvt)
+bool FuConstructArc::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
-    return(bReturn);
+    return FuConstruct::KeyInput(rKEvt);
 }
 
 

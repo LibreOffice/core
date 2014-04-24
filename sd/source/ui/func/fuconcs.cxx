@@ -110,9 +110,9 @@ void FuConstructCustomShape::DoExecute( SfxRequest& rReq )
 }
 
 
-sal_Bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
@@ -127,12 +127,12 @@ sal_Bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
         if ( pObj )
         {
             SetAttributes( pObj );
-            sal_Bool bForceFillStyle = sal_True;
-            sal_Bool bForceNoFillStyle = sal_False;
+            bool bForceFillStyle = true;
+            bool bForceNoFillStyle = false;
             if ( ((SdrObjCustomShape*)pObj)->UseNoFillStyle() )
             {
-                bForceFillStyle = sal_False;
-                bForceNoFillStyle = sal_True;
+                bForceFillStyle = false;
+                bForceNoFillStyle = true;
             }
             SfxItemSet aAttr(mpDoc->GetPool());
             SetStyleSheet( aAttr, pObj, bForceFillStyle, bForceNoFillStyle );
@@ -144,22 +144,22 @@ sal_Bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 }
 
 
-sal_Bool FuConstructCustomShape::MouseMove(const MouseEvent& rMEvt)
+bool FuConstructCustomShape::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
 
 
-sal_Bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn(sal_False);
+    bool bReturn(false);
 
     if(mpView->IsCreateObj() && rMEvt.IsLeft())
     {
         SdrObject* pObj = mpView->GetCreateObj();
         if( pObj && mpView->EndCreateObj( SDRCREATE_FORCEEND ) )
         {
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
@@ -174,10 +174,9 @@ sal_Bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
  * Process keyboard input
  * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
  */
-sal_Bool FuConstructCustomShape::KeyInput(const KeyEvent& rKEvt)
+bool FuConstructCustomShape::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
-    return(bReturn);
+    return FuConstruct::KeyInput(rKEvt);
 }
 
 
@@ -192,7 +191,7 @@ void FuConstructCustomShape::Activate()
  */
 void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
 {
-    sal_Bool bAttributesAppliedFromGallery = sal_False;
+    bool bAttributesAppliedFromGallery = false;
 
     if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
     {
@@ -238,7 +237,7 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                                     double a = nAngle * F_PI18000;
                                     pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
                                 }
-                                bAttributesAppliedFromGallery = sal_True;
+                                bAttributesAppliedFromGallery = true;
 
 
     /*

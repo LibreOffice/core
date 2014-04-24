@@ -544,9 +544,9 @@ SfxRequest LayoutMenu::CreateRequest (
 void LayoutMenu::Fill (void)
 {
     SvtLanguageOptions aLanguageOptions;
-    sal_Bool bVertical = aLanguageOptions.IsVerticalTextEnabled();
+    bool bVertical = aLanguageOptions.IsVerticalTextEnabled();
     SdDrawDocument* pDocument = mrBase.GetDocument();
-    sal_Bool bRightToLeft = (pDocument!=NULL
+    bool bRightToLeft = (pDocument!=NULL
         && pDocument->GetDefaultWritingMode() == WritingMode_RL_TB);
 
     // Get URL of the view in the center pane.

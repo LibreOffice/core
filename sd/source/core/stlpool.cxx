@@ -187,12 +187,12 @@ void SdStyleSheetPool::CreateOutlineSheetList (const OUString& rLayoutName, std:
 |*
 \************************************************************************/
 
-void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_Bool bCheck /*= sal_False*/ )
+void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool bCheck /*= sal_False*/ )
 {
     const sal_uInt16 nUsedMask = SFXSTYLEBIT_ALL & ~SFXSTYLEBIT_USERDEF;
 
     (void)bCheck;
-    sal_Bool bCreated = sal_False;
+    bool bCreated = false;
 
     SfxStyleSheetBase* pSheet = NULL;
 
@@ -230,7 +230,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_
 
         if (!Find(aLevelName, SD_STYLE_FAMILY_MASTERPAGE))
         {
-            bCreated = sal_True;
+            bCreated = true;
             pSheet = &Make(aLevelName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
             pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_OUTLINE + nLevel );
 
@@ -347,7 +347,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
-        bCreated = sal_True;
+        bCreated = true;
 
         pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_TITLE );
@@ -392,7 +392,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
-        bCreated = sal_True;
+        bCreated = true;
 
         pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_SUBTITLE );
@@ -440,7 +440,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
-        bCreated = sal_True;
+        bCreated = true;
 
         pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_NOTES );
@@ -484,7 +484,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
-        bCreated = sal_True;
+        bCreated = true;
 
         pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUNDOBJECTS );
@@ -506,7 +506,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
-        bCreated = sal_True;
+        bCreated = true;
 
         pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUND );
@@ -961,7 +961,7 @@ void SdStyleSheetPool::UpdateStdNames()
             sal_uLong nHelpId   = pStyle->GetHelpId( aHelpFile );
             SfxStyleFamily eFam = pStyle->GetFamily();
 
-            sal_Bool bHelpKnown = sal_True;
+            bool bHelpKnown = true;
             OUString aNewName;
             sal_uInt16 nNameId = 0;
             switch( nHelpId )
@@ -1007,7 +1007,7 @@ void SdStyleSheetPool::UpdateStdNames()
 
                 default:
                     // 0 or wrong (old) HelpId
-                    bHelpKnown = sal_False;
+                    bHelpKnown = false;
             }
             if( bHelpKnown )
             {

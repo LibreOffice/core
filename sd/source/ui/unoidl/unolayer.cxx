@@ -192,7 +192,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
     {
     case WID_LAYER_LOCKED:
     {
-        sal_Bool bValue = sal_False;
+        bool bValue = false;
         if(!sd::any2bool( aValue, bValue ))
             throw lang::IllegalArgumentException();
         set( LOCKED, bValue );
@@ -200,7 +200,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
     }
     case WID_LAYER_PRINTABLE:
     {
-        sal_Bool bValue = sal_False;
+        bool bValue = false;
         if(!sd::any2bool( aValue, bValue ))
             throw lang::IllegalArgumentException();
         set( PRINTABLE, bValue );
@@ -208,7 +208,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
     }
     case WID_LAYER_VISIBLE:
     {
-        sal_Bool bValue = sal_False;
+        bool bValue = false;
         if(!sd::any2bool( aValue, bValue ))
             throw lang::IllegalArgumentException();
         set( VISIBLE, bValue );
@@ -300,7 +300,7 @@ void SAL_CALL SdLayer::removePropertyChangeListener( const OUString& , const uno
 void SAL_CALL SdLayer::addVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) {}
 void SAL_CALL SdLayer::removeVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) {}
 
-sal_Bool SdLayer::get( LayerAttribute what ) throw()
+bool SdLayer::get( LayerAttribute what ) throw()
 {
     if(pLayer&&pLayerManager)
     {
@@ -334,10 +334,10 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
                 }
         }
     }
-    return sal_False; //TODO: uno::Exception?
+    return false; //TODO: uno::Exception?
 }
 
-void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
+void SdLayer::set( LayerAttribute what, bool flag ) throw()
 {
     if(pLayer&&pLayerManager)
     {
@@ -708,7 +708,7 @@ sal_Bool SAL_CALL SdLayerManager::hasElements() throw(uno::RuntimeException, std
  * If something was changed at the layers, this methods takes care that the
  * changes are made visible in sdbcx::View.
  */
-void SdLayerManager::UpdateLayerView( sal_Bool modify ) const throw()
+void SdLayerManager::UpdateLayerView( bool modify ) const throw()
 {
     if(mpModel->mpDocShell)
     {
@@ -717,7 +717,7 @@ void SdLayerManager::UpdateLayerView( sal_Bool modify ) const throw()
 
         if(pDrViewSh)
         {
-            sal_Bool bLayerMode = pDrViewSh->IsLayerModeActive();
+            bool bLayerMode = pDrViewSh->IsLayerModeActive();
             pDrViewSh->ChangeEditMode(pDrViewSh->GetEditMode(), !bLayerMode);
             pDrViewSh->ChangeEditMode(pDrViewSh->GetEditMode(), bLayerMode);
         }
@@ -753,7 +753,7 @@ namespace
     @return
         Return </True> if both pointers point to the same object.
 */
-sal_Bool compare_layers (uno::WeakReference<uno::XInterface> xRef, void* pSearchData)
+bool compare_layers (uno::WeakReference<uno::XInterface> xRef, void* pSearchData)
 {
     uno::Reference<uno::XInterface> xLayer (xRef);
     if (xLayer.is())
@@ -763,10 +763,10 @@ sal_Bool compare_layers (uno::WeakReference<uno::XInterface> xRef, void* pSearch
         {
             SdrLayer* pSdrLayer = pSdLayer->GetSdrLayer ();
             if (pSdrLayer == static_cast<SdrLayer*>(pSearchData))
-                return sal_True;
+                return true;
         }
     }
-    return sal_False;
+    return false;
 }
 }
 

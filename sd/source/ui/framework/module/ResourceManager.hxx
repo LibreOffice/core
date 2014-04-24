@@ -60,7 +60,7 @@ public:
         activate the resource managed by the called object.
     */
     void AddActiveMainView (const OUString& rsMainViewURL);
-    sal_Bool IsResourceActive (const OUString& rsMainViewURL);
+    bool IsResourceActive (const OUString& rsMainViewURL);
     virtual void SaveResourceState (void);
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;

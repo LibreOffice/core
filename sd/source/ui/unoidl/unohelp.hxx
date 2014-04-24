@@ -19,7 +19,7 @@
 
 namespace sd
 {
-inline sal_Bool any2bool( const ::com::sun::star::uno::Any& rAny, sal_Bool& rBool )
+inline bool any2bool( const ::com::sun::star::uno::Any& rAny, bool& rBool )
 {
     if( rAny.getValueType() == ::getCppuBooleanType() )
     {
@@ -29,14 +29,14 @@ inline sal_Bool any2bool( const ::com::sun::star::uno::Any& rAny, sal_Bool& rBoo
     {
         sal_Int32 nValue = 0;
         if(!(rAny >>= nValue))
-            return sal_False;
+            return false;
         rBool = nValue != 0;
     }
 
-    return sal_True;
+    return true;
 }
 
-inline void bool2any( sal_Bool bBool, ::com::sun::star::uno::Any& rAny )
+inline void bool2any( bool bBool, ::com::sun::star::uno::Any& rAny )
 {
     rAny.setValue( &bBool, ::getCppuBooleanType() );
 }

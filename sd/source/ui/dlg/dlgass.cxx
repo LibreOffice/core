@@ -137,7 +137,7 @@ private:
 class AssistentDlgImpl : public SfxListener
 {
 public:
-    AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, sal_Bool bAutoPilot  );
+    AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, bool bAutoPilot  );
     virtual ~AssistentDlgImpl();
 
     /// Local mutex used to serialize concurrent method calls.
@@ -155,7 +155,7 @@ public:
     /** Flag that is set to sal_True after the recently used files have been
         scanned.
     */
-    sal_Bool mbRecentDocumentsReady;
+    bool mbRecentDocumentsReady;
 
     /** When the list of templates has not been scanned already this is done
         when this method is called.  That includes requesting the whole list
@@ -180,13 +180,13 @@ public:
     /** Flag that is set to sal_True after the impress templates have been
         scanned.
     */
-    sal_Bool mbTemplatesReady;
+    bool mbTemplatesReady;
 
     /** Flag used to prevent nested or concurrent calls to the
         <member>UpdatePreview</memember> method.  A <TRUE/> value indicates
         that a preview update is currently active.
     */
-    sal_Bool mbPreviewUpdating;
+    bool mbPreviewUpdating;
 
     ::Window* mpWindow;
 
@@ -216,7 +216,7 @@ public:
     TemplateDir* mpLayoutRegion;
 
     // preview
-    sal_Bool mbUserDataDirty;
+    bool mbUserDataDirty;
     Timer maPrevTimer;
     Timer maEffectPrevTimer;
     Timer maUpdatePageListTimer;
@@ -228,11 +228,11 @@ public:
 
     bool mbPreview;
     sal_uInt16 mnShowPage;
-    sal_Bool mbDocPreview;
+    bool mbDocPreview;
 
     OUString maPageListFile;
 
-    void UpdatePreview( sal_Bool bDocPreview );
+    void UpdatePreview( bool bDocPreview );
     void UpdatePageList();
     void UpdateUserData();
 
@@ -347,15 +347,15 @@ public:
 
 
 
-AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, sal_Bool bAutoPilot ) :
+AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, bool bAutoPilot ) :
     mpTemplateRegion(NULL),
     mpLayoutRegion(NULL),
-    mbUserDataDirty(sal_False),
+    mbUserDataDirty(false),
     xDocShell (NULL),
     mpWindowUpdater (new WindowUpdater()),
     mbPreview(true),
     mnShowPage(0),
-    mbDocPreview(sal_False),
+    mbDocPreview(false),
     maAssistentFunc(5),
     maPreviewFlag(pWindow,SdResId(CB_PREVIEW)),
     maStartWithFlag(pWindow,SdResId(CB_STARTWITH)),
@@ -369,9 +369,9 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     maOpenStr(SdResId(STR_OPEN))
 {
     maPageListFile = "?";
-    mbRecentDocumentsReady = sal_False;
-    mbTemplatesReady = sal_False;
-    mbPreviewUpdating = sal_False;
+    mbRecentDocumentsReady = false;
+    mbTemplatesReady = false;
+    mbPreviewUpdating = false;
 
     mpWindow = pWindow;
 
@@ -613,7 +613,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
 
     mpWindowUpdater->RegisterWindow (&maPreview);
 
-    UpdatePreview( sal_True );
+    UpdatePreview( true );
 
     //check whether we should start with a template document initialy and preselect it
     const OUString aServiceName( "com.sun.star.presentation.PresentationDocument" );
@@ -825,10 +825,10 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
             }
         }
     }
-    mbRecentDocumentsReady = sal_True;
+    mbRecentDocumentsReady = true;
     try
     {
-        UpdatePreview(sal_True);
+        UpdatePreview(true);
     }
     catch (uno::RuntimeException& )
     {
@@ -849,7 +849,7 @@ void AssistentDlgImpl::ProvideTemplates (void)
 
         try
         {
-            UpdatePreview(sal_True);
+            UpdatePreview(true);
         }
         catch (uno::RuntimeException& )
         {
@@ -920,7 +920,7 @@ void AssistentDlgImpl::TemplateScanDone (
     SelectLayoutRegion (mpPage2RegionLB->GetSelectEntry());
 
     //  Make the changes visible.
-    mbTemplatesReady = sal_True;
+    mbTemplatesReady = true;
     if (mpWindow)
         UpdatePage();
 }
@@ -1016,7 +1016,7 @@ OUString AssistentDlgImpl::GetLayoutFileName()
 
 SfxObjectShellLock AssistentDlgImpl::GetDocument()
 {
-    UpdatePreview(sal_False);   // but load completely
+    UpdatePreview(false);   // but load completely
     UpdatePageList();
 
     SfxObjectShell* pShell = xDocShell;
@@ -1026,7 +1026,7 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
     if(pDoc)
     {
         const sal_uInt16 nPageCount = pDoc->GetSdPageCount(PK_STANDARD);
-        sal_Bool bKiosk = mpPage3PresTypeKioskRB->IsChecked();
+        bool bKiosk = mpPage3PresTypeKioskRB->IsChecked();
         double fNewTime = (double)mpPage3PresTimeTMF->GetTime().GetMSFromTime() / 1000.0;
         if(bKiosk)
         {
@@ -1150,7 +1150,7 @@ void AssistentDlgImpl::UpdatePage()
             if(GetStartType() != ST_TEMPLATE)
                 maNextPageButton.Enable(false);
 
-            sal_Bool bKiosk = mpPage3PresTypeKioskRB->IsChecked();
+            bool bKiosk = mpPage3PresTypeKioskRB->IsChecked();
             mpPage3PresTimeFT->Enable(bKiosk);
             mpPage3BreakFT->Enable(bKiosk);
             mpPage3PresTimeTMF->Enable(bKiosk);
@@ -1221,7 +1221,7 @@ IMPL_LINK_NOARG(AssistentDlgImpl, PreviewFlagHdl)
     if( maPreviewFlag.IsChecked() != mbPreview )
     {
         mbPreview = maPreviewFlag.IsChecked();
-        UpdatePreview(sal_True);
+        UpdatePreview(true);
     }
     return 0;
 }
@@ -1254,7 +1254,7 @@ IMPL_LINK_NOARG(AssistentDlgImpl, PageSelectHdl)
     if( mnShowPage != nPage )
     {
         mnShowPage = nPage;
-        UpdatePreview(sal_False);
+        UpdatePreview(false);
     }
 
     return 0;
@@ -1268,7 +1268,7 @@ IMPL_LINK_NOARG(AssistentDlgImpl, UpdatePageListHdl)
 
 IMPL_LINK_NOARG(AssistentDlgImpl, UpdatePreviewHdl)
 {
-    UpdatePreview( sal_True );
+    UpdatePreview( true );
     return 0;
 }
 
@@ -1325,7 +1325,7 @@ IMPL_LINK_NOARG(AssistentDlgImpl, PresTypeHdl)
         maNextPageButton.Enable(false);
     }
 
-    sal_Bool bKiosk = mpPage3PresTypeKioskRB->IsChecked();
+    bool bKiosk = mpPage3PresTypeKioskRB->IsChecked();
     mpPage3PresTimeFT->Enable(bKiosk);
     mpPage3BreakFT->Enable(bKiosk);
     mpPage3PresTimeTMF->Enable(bKiosk);
@@ -1336,7 +1336,7 @@ IMPL_LINK_NOARG(AssistentDlgImpl, PresTypeHdl)
 
 IMPL_LINK_NOARG(AssistentDlgImpl, UpdateUserDataHdl)
 {
-    mbUserDataDirty = sal_True;
+    mbUserDataDirty = true;
     OUString aTopic = mpPage4AskTopicEDT->GetText();
     OUString aName  = mpPage4AskNameEDT->GetText();
     OUString aInfo  = mpPage4AskInfoEDT->GetText();
@@ -1409,7 +1409,7 @@ void AssistentDlgImpl::UpdateUserData()
     if (pPage && (!aTopic.isEmpty() || !aName.isEmpty() || !aInfo.isEmpty()))
     {
         if( pPage->GetAutoLayout() == AUTOLAYOUT_NONE )
-            pPage->SetAutoLayout(AUTOLAYOUT_TITLE, sal_True);
+            pPage->SetAutoLayout(AUTOLAYOUT_TITLE, true);
 
         SdrTextObj* pObj;
 
@@ -1452,13 +1452,13 @@ void AssistentDlgImpl::UpdateUserData()
         }
     }
 
-    mbUserDataDirty = sal_False;
+    mbUserDataDirty = false;
 }
 
 void AssistentDlgImpl::UpdatePageList()
 {
     if(mbDocPreview || !mbPreview)
-        UpdatePreview(sal_False);
+        UpdatePreview(false);
     else if(maPageListFile == maDocFile)
         return;
 
@@ -1474,20 +1474,20 @@ void AssistentDlgImpl::UpdatePageList()
         mpPage5PageListCT->Fill(pDoc);
 }
 
-void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
+void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
 {
     // Guard against multiple concurrent execution to this method caused either
     // by calls from different threads or recursion.
     ::osl::MutexGuard aGuard (maMutex);
     if (mbPreviewUpdating)
         return;
-    mbPreviewUpdating = sal_True;
+    mbPreviewUpdating = true;
 
     if(!mbPreview && bDocPreview)
     {
         maPreview.Invalidate();
         maPreview.SetObjectShell(0);
-        mbPreviewUpdating = sal_False;
+        mbPreviewUpdating = false;
         return;
     }
 
@@ -1496,7 +1496,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
 
     SfxApplication *pSfxApp = SFX_APP();
     sal_uLong lErr;
-    sal_Bool bChangeMaster = !aLayoutFile.isEmpty();
+    bool bChangeMaster = !aLayoutFile.isEmpty();
 
     if (aDocFile.isEmpty())
     {
@@ -1506,15 +1506,15 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
             CloseDocShell();
 
             DrawDocShell* pNewDocSh;
-            xDocShell = pNewDocSh = new DrawDocShell(SFX_CREATE_MODE_STANDARD, sal_False);
+            xDocShell = pNewDocSh = new DrawDocShell(SFX_CREATE_MODE_STANDARD, false);
             pNewDocSh->DoInitNew(NULL);
             SdDrawDocument* pDoc = pNewDocSh->GetDoc();
             pDoc->CreateFirstPages();
             pDoc->StopWorkStartupDelay();
-            mbDocPreview = sal_False;
+            mbDocPreview = false;
 
             maDocFile = aDocFile;
-            mbUserDataDirty = sal_True;
+            mbUserDataDirty = true;
         }
         else
             bChangeMaster = !aLayoutFile.isEmpty() && (maLayoutFile != aLayoutFile);
@@ -1528,10 +1528,10 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
             ::svl::IUndoManager* pUndoMgr = pDocShell?pDocShell->GetUndoManager():NULL;
             if(pUndoMgr)
                 pUndoMgr->Undo();
-            mbUserDataDirty = sal_True;
+            mbUserDataDirty = true;
         }
         else
-            bChangeMaster = sal_False;
+            bChangeMaster = false;
     }
     else
     {
@@ -1575,7 +1575,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
         mnShowPage = 0;
         mbDocPreview = bDocPreview;
         maDocFile = aDocFile;
-        mbUserDataDirty = sal_True;
+        mbUserDataDirty = true;
     }
 
     if(bChangeMaster && (aLayoutFile != maDocFile))
@@ -1612,14 +1612,14 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
 
         if( pDoc && pLayoutDoc )
         {
-            pDoc->SetMasterPage(0, OUString(), pLayoutDoc, sal_True,  sal_False );
+            pDoc->SetMasterPage(0, OUString(), pLayoutDoc, true,  false );
         }
         else
         {
             OSL_FAIL("sd::AssistentDlgImpl::UpdatePreview(), no document for preview?");
         }
 
-        mbUserDataDirty = sal_True;
+        mbUserDataDirty = true;
     }
     maLayoutFile = aLayoutFile;
 
@@ -1633,7 +1633,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
         maPreview.SetObjectShell( xDocShell, mnShowPage );
     }
 
-    mbPreviewUpdating = sal_False;
+    mbPreviewUpdating = false;
 }
 
 void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const OUString& rPath )
@@ -1819,7 +1819,7 @@ Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
 
 
 
-AssistentDlg::AssistentDlg(Window* pParent, sal_Bool bAutoPilot) :
+AssistentDlg::AssistentDlg(Window* pParent, bool bAutoPilot) :
     ModalDialog(pParent,SdResId(DLG_ASS))
 {
     Link aFinishLink = LINK(this,AssistentDlg, FinishHdl);
@@ -1894,7 +1894,7 @@ OutputType AssistentDlg::GetOutputMedium() const
         return OUTPUT_ORIGINAL;
 }
 
-sal_Bool AssistentDlg::IsSummary() const
+bool AssistentDlg::IsSummary() const
 {
     return mpImpl->mpPage5SummaryCB->IsChecked();
 }
@@ -1909,12 +1909,12 @@ OUString AssistentDlg::GetDocPath() const
     return mpImpl->GetDocFileName();
 }
 
-sal_Bool AssistentDlg::GetStartWithFlag() const
+bool AssistentDlg::GetStartWithFlag() const
 {
     return !mpImpl->maStartWithFlag.IsChecked();
 }
 
-sal_Bool AssistentDlg::IsDocEmpty() const
+bool AssistentDlg::IsDocEmpty() const
 {
     return mpImpl->GetDocFileName().isEmpty() &&
            mpImpl->GetLayoutFileName().isEmpty();

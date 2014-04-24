@@ -90,27 +90,27 @@ TYPEINIT2( SdPage, FmFormPage, SdrObjUserCall );
 |*
 \************************************************************************/
 
-SdPage::SdPage(SdDrawDocument& rNewDoc, sal_Bool bMasterPage)
+SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
 :   FmFormPage(rNewDoc, bMasterPage)
 ,   SdrObjUserCall()
 ,   mePageKind(PK_STANDARD)
 ,   meAutoLayout(AUTOLAYOUT_NONE)
-,   mbSelected(sal_False)
+,   mbSelected(false)
 ,   mePresChange(PRESCHANGE_MANUAL)
 ,   mfTime(1.0)
-,   mbSoundOn(sal_False)
-,   mbExcluded(sal_False)
+,   mbSoundOn(false)
+,   mbExcluded(false)
 ,   mbLoopSound(false)
 ,   mbStopSound(false)
-,   mbScaleObjects(sal_True)
-,   mbBackgroundFullSize( sal_False )
+,   mbScaleObjects(true)
+,   mbBackgroundFullSize( false )
 ,   meCharSet(osl_getThreadTextEncoding())
 ,   mnPaperBin(PAPERBIN_PRINTER_SETTINGS)
 ,   mpPageLink(NULL)
 ,   mpItems(NULL)
 ,   mnTransitionType(0)
 ,   mnTransitionSubtype(0)
-,   mbTransitionDirection(sal_True)
+,   mbTransitionDirection(true)
 ,   mnTransitionFadeColor(0)
 ,   mfTransitionDuration(2.0)
 ,   mbIsPrecious(true)
@@ -242,7 +242,7 @@ void SdPage::EnsureMasterPageDefaultBackground()
 
 /** creates a presentation object with the given PresObjKind on this page. A user call will be set
 */
-SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const Rectangle& rRect, sal_Bool /* bInsert */ )
+SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rectangle& rRect, bool /* bInsert */ )
 {
     ::svl::IUndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
@@ -751,7 +751,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
 |*
 \************************************************************************/
 
-void SdPage::CreateTitleAndLayout(sal_Bool bInit, sal_Bool bCreate )
+void SdPage::CreateTitleAndLayout(bool bInit, bool bCreate )
 {
     ::svl::IUndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
@@ -806,7 +806,7 @@ void SdPage::CreateTitleAndLayout(sal_Bool bInit, sal_Bool bCreate )
 
             while( iter != aAreas.end() )
             {
-                SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pMasterPage->CreatePresObj(PRESOBJ_HANDOUT, sal_False, (*iter++), sal_True) );
+                SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pMasterPage->CreatePresObj(PRESOBJ_HANDOUT, false, (*iter++), true) );
                 // #i105146# We want no content to be displayed for PK_HANDOUT,
                 // so just never set a page as content
                 pPageObj->SetReferencedPage(0L);
@@ -938,17 +938,17 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
     if( eObjKind == PRESOBJ_TITLE )
     {
         Rectangle aTitleRect( GetTitleRect() );
-        return CreatePresObj(PRESOBJ_TITLE, sal_False, aTitleRect, bInsert);
+        return CreatePresObj(PRESOBJ_TITLE, false, aTitleRect, bInsert);
     }
     else if( eObjKind == PRESOBJ_OUTLINE )
     {
         Rectangle aLayoutRect( GetLayoutRect() );
-        return CreatePresObj( PRESOBJ_OUTLINE, sal_False, aLayoutRect, bInsert);
+        return CreatePresObj( PRESOBJ_OUTLINE, false, aLayoutRect, bInsert);
     }
     else if( eObjKind == PRESOBJ_NOTES )
     {
         Rectangle aLayoutRect( GetLayoutRect() );
-        return CreatePresObj( PRESOBJ_NOTES, sal_False, aLayoutRect, bInsert);
+        return CreatePresObj( PRESOBJ_NOTES, false, aLayoutRect, bInsert);
     }
     else if( (eObjKind == PRESOBJ_FOOTER) || (eObjKind == PRESOBJ_DATETIME) || (eObjKind == PRESOBJ_SLIDENUMBER) || (eObjKind == PRESOBJ_HEADER ) )
     {
@@ -981,7 +981,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
             else
             {
                 Rectangle aRect( aPos, aSize );
-                return CreatePresObj( eObjKind, sal_False, aRect, bInsert );
+                return CreatePresObj( eObjKind, false, aRect, bInsert );
             }
         }
         else
@@ -1008,7 +1008,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
                 aPos.Y() = aPosition.Y() + long( aPageSize.Height() - NOTES_HEADER_FOOTER_HEIGHT );
 
             Rectangle aRect( aPos, aSize );
-            return CreatePresObj( eObjKind, sal_False, aRect, bInsert );
+            return CreatePresObj( eObjKind, false, aRect, bInsert );
         }
     }
     else
@@ -1554,7 +1554,7 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
     }
 }
 
-void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate )
+void SdPage::SetAutoLayout(AutoLayout eLayout, bool bInit, bool bCreate )
 {
     sd::ScopeLockGuard aGuard( maLockAutoLayoutArrangement );
 
@@ -1775,7 +1775,7 @@ void SdPage::SetLwrBorder(sal_Int32 nBorder)
 |*
 \************************************************************************/
 
-void SdPage::SetBackgroundFullSize( sal_Bool bIn )
+void SdPage::SetBackgroundFullSize( bool bIn )
 {
     if( bIn != mbBackgroundFullSize )
     {
@@ -1793,7 +1793,7 @@ void SdPage::SetBackgroundFullSize( sal_Bool bIn )
 |*
 \************************************************************************/
 
-void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect, sal_Bool bScaleAllObj)
+void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect, bool bScaleAllObj)
 {
     sd::ScopeLockGuard aGuard( maLockAutoLayoutArrangement );
 
@@ -1855,7 +1855,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
     for (sal_uLong nObj = 0; nObj < nObjCnt; nObj++)
     {
-        sal_Bool bIsPresObjOnMaster = sal_False;
+        bool bIsPresObjOnMaster = false;
 
         // all Objects
         pObj = GetObj(nObj);
@@ -1863,7 +1863,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
         if (mbMaster && IsPresObj(pObj))
         {
             // There is a presentation object on the master page
-            bIsPresObjOnMaster = sal_True;
+            bIsPresObjOnMaster = true;
         }
 
         if (pObj)
@@ -1966,7 +1966,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                     }
 
                                     // adjust bullet
-                                    ((SdStyleSheet*) pOutlineSheet)->AdjustToFontHeight(aTempSet, sal_False);
+                                    ((SdStyleSheet*) pOutlineSheet)->AdjustToFontHeight(aTempSet, false);
 
                                     // Special treatment: reset the INVALIDS to
                                     // NULL pointer (otherwise we have INVALID's
@@ -2077,7 +2077,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
         if(pOutlParaObj)
         {
             // assign text
-            ::sd::Outliner* pOutl = pModel->GetInternalOutliner( sal_True );
+            ::sd::Outliner* pOutl = pModel->GetInternalOutliner( true );
             pOutl->Clear();
             pOutl->SetText( *pOutlParaObj );
             pOutlParaObj = pOutl->CreateParaObject();
@@ -2382,7 +2382,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
 
         sal_uInt16 nOutlMode = pOutl->GetMode();
         Size aPaperSize = pOutl->GetPaperSize();
-        sal_Bool bUpdateMode = pOutl->GetUpdateMode();
+        bool bUpdateMode = pOutl->GetUpdateMode();
         pOutl->SetUpdateMode(false);
         pOutl->SetParaAttribs( 0, pOutl->GetEmptyItemSet() );
 
@@ -2872,7 +2872,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
 
             if (!aString.isEmpty())
             {
-                sal_Bool bVertical = sal_False;
+                bool bVertical = false;
                 OutlinerParaObject* pOldPara = pTextObj->GetOutlinerParaObject();
                 if( pOldPara )
                     bVertical = pOldPara->IsVertical();  // is old para object vertical?

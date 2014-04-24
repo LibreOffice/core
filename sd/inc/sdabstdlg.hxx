@@ -68,8 +68,8 @@ public:
 class AbstractSdCustomShowDlg : public VclAbstractDialog
 {
 public:
-    virtual sal_Bool        IsModified() const = 0;
-    virtual sal_Bool        IsCustomShow() const = 0;
+    virtual bool        IsModified() const = 0;
+    virtual bool        IsCustomShow() const = 0;
 };
 
 class AbstractAssistentDlg : public VclAbstractDialog
@@ -77,11 +77,11 @@ class AbstractAssistentDlg : public VclAbstractDialog
 public:
     virtual SfxObjectShellLock GetDocument() = 0;
     virtual OutputType GetOutputMedium() const = 0;
-    virtual sal_Bool IsSummary() const = 0;
+    virtual bool IsSummary() const = 0;
     virtual StartType GetStartType() const = 0;
     virtual OUString GetDocPath() const = 0;
-    virtual sal_Bool GetStartWithFlag() const = 0;
-    virtual sal_Bool IsDocEmpty() const = 0;
+    virtual bool GetStartWithFlag() const = 0;
+    virtual bool IsDocEmpty() const = 0;
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > GetPassword() = 0;
 };
 
@@ -98,7 +98,7 @@ public:
     virtual void GetAttr(SfxItemSet& rOutAttrs) = 0;
     virtual void HideRadioGroup() = 0;
     virtual void HideDeleteBtn() = 0;
-    virtual void SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY) = 0;
+    virtual void SetInputFields(bool bEnableX, bool bEnableY) = 0;
     //from class ::Window
     virtual void    SetText( const OUString& rStr ) = 0;
 };
@@ -114,7 +114,7 @@ public:
 class AbstractSdInsertPasteDlg : public VclAbstractDialog
 {
 public:
-    virtual sal_Bool            IsInsertBefore() const = 0;
+    virtual bool            IsInsertBefore() const = 0;
 };
 
 class AbstractSdInsertPagesObjsDlg : public VclAbstractDialog
@@ -122,8 +122,8 @@ class AbstractSdInsertPagesObjsDlg : public VclAbstractDialog
 public:
     virtual ::Window*   GetWindow() = 0;  //this method is added for return a ::Window type pointer
     virtual std::vector<OUString> GetList ( const sal_uInt16 nType ) = 0;
-    virtual sal_Bool        IsLink() = 0;
-    virtual sal_Bool        IsRemoveUnnessesaryMasterPages() const = 0;
+    virtual bool        IsLink() = 0;
+    virtual bool        IsRemoveUnnessesaryMasterPages() const = 0;
 };
 
 class AbstractMorphDlg : public VclAbstractDialog
@@ -131,8 +131,8 @@ class AbstractMorphDlg : public VclAbstractDialog
 public:
     virtual void            SaveSettings() const = 0;
     virtual sal_uInt16          GetFadeSteps() const = 0;
-    virtual sal_Bool            IsAttributeFade() const = 0;
-    virtual sal_Bool            IsOrientationFade() const = 0;
+    virtual bool            IsAttributeFade() const = 0;
+    virtual bool            IsOrientationFade() const = 0;
 };
 
 class AbstractSdStartPresDlg : public VclAbstractDialog
@@ -177,8 +177,8 @@ public:
     virtual AbstractCopyDlg*            CreateCopyDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, const rtl::Reference<XColorList> &pColTab, ::sd::View* pView ) = 0;
     virtual AbstractSdCustomShowDlg*    CreateSdCustomShowDlg( ::Window* pWindow, SdDrawDocument& rDrawDoc ) = 0;
     virtual SfxAbstractTabDialog*       CreateSdTabCharDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell ) = 0;
-    virtual SfxAbstractTabDialog*       CreateSdTabPageDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, sal_Bool bAreaPage = sal_True ) = 0;
-    virtual AbstractAssistentDlg*       CreateAssistentDlg( ::Window* pParent, sal_Bool bAutoPilot) = 0;
+    virtual SfxAbstractTabDialog*       CreateSdTabPageDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage = true ) = 0;
+    virtual AbstractAssistentDlg*       CreateAssistentDlg( ::Window* pParent, bool bAutoPilot) = 0;
     virtual AbstractSdModifyFieldDlg*   CreateSdModifyFieldDlg( ::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) = 0;
     virtual AbstractSdSnapLineDlg*      CreateSdSnapLineDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView) = 0;
     virtual AbstractSdInsertLayerDlg*   CreateSdInsertLayerDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr ) = 0;

@@ -66,7 +66,7 @@ CanvasUpdateRequester::CanvasUpdateRequester (
     const Reference<rendering::XSpriteCanvas>& rxCanvas)
     : mxCanvas(rxCanvas),
       mnUserEventId(0),
-      mbUpdateFlag(sal_False)
+      mbUpdateFlag(false)
 {
     Reference<lang::XComponent> xComponent (mxCanvas, UNO_QUERY);
     if (xComponent.is())
@@ -87,7 +87,7 @@ CanvasUpdateRequester::~CanvasUpdateRequester (void)
 
 
 
-void CanvasUpdateRequester::RequestUpdate (const sal_Bool bUpdateAll)
+void CanvasUpdateRequester::RequestUpdate (const bool bUpdateAll)
 {
     if (mnUserEventId == 0)
     {
@@ -108,7 +108,7 @@ IMPL_LINK_NOARG(CanvasUpdateRequester, Callback)
     if (mxCanvas.is())
     {
         mxCanvas->updateScreen(mbUpdateFlag);
-        mbUpdateFlag = sal_False;
+        mbUpdateFlag = false;
     }
     return 0;
 }

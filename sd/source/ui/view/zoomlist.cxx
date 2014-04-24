@@ -82,14 +82,14 @@ Rectangle ZoomList::GetPreviousZoomRect()
     return maRectangles[mnCurPos];
 }
 
-sal_Bool ZoomList::IsNextPossible() const
+bool ZoomList::IsNextPossible() const
 {
     size_t nRectCount = maRectangles.size();
 
     return nRectCount > 0 && mnCurPos < nRectCount - 1;
 }
 
-sal_Bool ZoomList::IsPreviousPossible() const
+bool ZoomList::IsPreviousPossible() const
 {
     return mnCurPos > 0;
 }

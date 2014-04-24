@@ -58,7 +58,7 @@ public:
     static SdTransferable* CreateTransferable (
         SdDrawDocument* pSrcDoc,
         ::sd::View* pWorkView,
-        sal_Bool bInitOnGetData,
+        bool bInitOnGetData,
         SlideSorterViewShell* pViewShell,
         const ::std::vector<TransferableData::Representative>& rRepresentatives);
 

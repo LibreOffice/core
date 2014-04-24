@@ -303,19 +303,19 @@ void SdVectorizeDlg::LoadSettings()
     sal_uInt16              nLayers;
     sal_uInt16              nReduce;
     sal_uInt16              nFillHoles;
-    sal_Bool                bFillHoles;
+    bool                bFillHoles;
 
     if( xIStm.Is() )
     {
         SdIOCompat aCompat( *xIStm, STREAM_READ );
-        xIStm->ReadUInt16( nLayers ).ReadUInt16( nReduce ).ReadUInt16( nFillHoles ).ReadUChar( bFillHoles );
+        xIStm->ReadUInt16( nLayers ).ReadUInt16( nReduce ).ReadUInt16( nFillHoles ).ReadCharAsBool( bFillHoles );
     }
     else
     {
         nLayers = 8;
         nReduce = 0;
         nFillHoles = 32;
-        bFillHoles = sal_False;
+        bFillHoles = false;
     }
 
     m_pNmLayers->SetValue( nLayers );

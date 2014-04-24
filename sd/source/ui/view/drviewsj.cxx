@@ -198,7 +198,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem( SID_CONNECTION_DLG );
             else
             {
-                sal_Bool bDisable = sal_True;
+                bool bDisable = true;
                 SfxItemSet aAttrSet( GetDoc()->GetPool() );
                 GetView()->GetAttributes( aAttrSet );
 
@@ -211,7 +211,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                     long nVal3 = ( ( const SdrEdgeLine3DeltaItem& ) aAttrSet.Get( SDRATTR_EDGELINE3DELTA ) ).GetValue();
                     {
                         if( nVal1 != 0 || nVal2 != 0 || nVal3 != 0 )
-                            bDisable = sal_False;
+                            bDisable = false;
                     }
                 }
                 if( bDisable )
@@ -309,16 +309,16 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem( SID_MODIFY_FIELD );
 
         {
-            sal_Bool bText = sal_False;
-            sal_Bool bLine = sal_False;
-            sal_Bool bGroup = sal_False;
-            sal_Bool bGraf = sal_False;
-            sal_Bool bDrawObj = sal_False;
-            sal_Bool b3dObj = sal_False;
+            bool bText = false;
+            bool bLine = false;
+            bool bGroup = false;
+            bool bGraf = false;
+            bool bDrawObj = false;
+            bool b3dObj = false;
             bool bTable = false;
-            sal_Bool bMeasureObj = sal_False;
-            sal_Bool bEdgeObj = sal_False; // Connector
-            sal_Bool bE3dCompoundObject = sal_False;
+            bool bMeasureObj = false;
+            bool bEdgeObj = false; // Connector
+            bool bE3dCompoundObject = false;
 
             for( sal_uLong i = 0;
                  i < nMarkCount && !bText && i < 50;
@@ -332,13 +332,13 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 {
                     switch (nId)
                     {
-                        case OBJ_TEXT: bText = sal_True; break;
+                        case OBJ_TEXT: bText = true; break;
 
-                        case OBJ_LINE: bLine = sal_True; break;
+                        case OBJ_LINE: bLine = true; break;
 
-                        case OBJ_EDGE: bEdgeObj = sal_True; break;
+                        case OBJ_EDGE: bEdgeObj = true; break;
 
-                        case OBJ_MEASURE: bMeasureObj = sal_True; break;
+                        case OBJ_MEASURE: bMeasureObj = true; break;
 
                         case OBJ_RECT:
                         case OBJ_CIRC:
@@ -348,11 +348,11 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                         case OBJ_PATHLINE:
                         case OBJ_SECT:
                         case OBJ_CARC:
-                        case OBJ_CCUT: bDrawObj = sal_True; break;
+                        case OBJ_CCUT: bDrawObj = true; break;
 
-                        case OBJ_GRUP: bGroup = sal_True; break;
+                        case OBJ_GRUP: bGroup = true; break;
 
-                        case OBJ_GRAF: bGraf = sal_True; break;
+                        case OBJ_GRAF: bGraf = true; break;
 
                         case OBJ_TABLE: bTable = true; break;
                     }
@@ -360,9 +360,9 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 else if (nInv == E3dInventor)
                 {
                     if(pObj->ISA(E3dScene))
-                        b3dObj = sal_True;
+                        b3dObj = true;
                     else if(pObj->ISA(E3dCompoundObject))
-                        bE3dCompoundObject = sal_True;
+                        bE3dCompoundObject = true;
                 }
             }
             if( bLine && !bText && !bDrawObj &&!b3dObj)

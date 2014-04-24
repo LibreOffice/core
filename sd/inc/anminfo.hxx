@@ -40,22 +40,22 @@ public:
     ::com::sun::star::presentation::AnimationEffect meEffect;     ///< Animation effect
     ::com::sun::star::presentation::AnimationEffect meTextEffect; ///< Animation effect for text content
     ::com::sun::star::presentation::AnimationSpeed  meSpeed;      ///< Speed of the animation
-    sal_Bool                    mbActive;       ///< turned on?
-    sal_Bool                    mbDimPrevious;  ///< Object fade out
-    sal_Bool                    mbIsMovie;      ///< if group object than it is a sequence of them.
-    sal_Bool                    mbDimHide;      ///< hide rather than dim
+    bool                    mbActive;       ///< turned on?
+    bool                    mbDimPrevious;  ///< Object fade out
+    bool                    mbIsMovie;      ///< if group object than it is a sequence of them.
+    bool                    mbDimHide;      ///< hide rather than dim
     Color                       maBlueScreen;   ///< identifies "background pixels"
     Color                       maDimColor;     ///< for fading the object
     OUString                    maSoundFile;    ///< Path to the sound file in MS DOS notation
-    sal_Bool                    mbSoundOn;      ///< Sound on / off
-    sal_Bool                    mbPlayFull;     ///< play sound completely.
+    bool                    mbSoundOn;      ///< Sound on / off
+    bool                    mbPlayFull;     ///< play sound completely.
     SdrPathObj*                 mpPathObj;      ///< The path object
     ::com::sun::star::presentation::ClickAction     meClickAction;  ///< Action at mouse click
     ::com::sun::star::presentation::AnimationEffect meSecondEffect; ///< for object fading.
     ::com::sun::star::presentation::AnimationSpeed  meSecondSpeed;  ///< for object fading.
     OUString                    maSecondSoundFile; ///< for object fading.
-    sal_Bool                    mbSecondSoundOn;   ///< for object fading.
-    sal_Bool                    mbSecondPlayFull;  ///< for object fading.
+    bool                    mbSecondSoundOn;   ///< for object fading.
+    bool                    mbSecondPlayFull;  ///< for object fading.
     sal_uInt16                  mnVerb;            ///< for OLE object
     sal_uLong                   mnPresOrder;
     SdrObject&                  mrObject;

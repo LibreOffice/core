@@ -616,7 +616,7 @@ sal_Bool SAL_CALL AccessibleSlideSorterView::isAccessibleChildSelected (sal_Int3
         RuntimeException, std::exception)
 {
     ThrowIfDisposed();
-    sal_Bool bIsSelected = sal_False;
+    bool bIsSelected = false;
     const SolarMutexGuard aSolarGuard;
 
     AccessibleSlideSorterObject* pChild = mpImpl->GetAccessibleChild(nChildIndex);
@@ -755,7 +755,7 @@ void AccessibleSlideSorterView::ThrowIfDisposed (void)
 
 
 
-sal_Bool AccessibleSlideSorterView::IsDisposed (void)
+bool AccessibleSlideSorterView::IsDisposed (void)
 {
     return (rBHelper.bDisposed || rBHelper.bInDispose);
 }
@@ -1086,12 +1086,12 @@ IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, FocusChangeListener)
     sal_Int32 nNewFocusedIndex (
         mrSlideSorter.GetController().GetFocusManager().GetFocusedPageIndex());
 
-    sal_Bool bHasFocus = mrSlideSorter.GetController().GetFocusManager().IsFocusShowing();
+    bool bHasFocus = mrSlideSorter.GetController().GetFocusManager().IsFocusShowing();
     if (!bHasFocus)
         nNewFocusedIndex = -1;
 
     // add a checker whether the focus event is sent out. Only after sent, the mnFocusedIndex should be updated.
-    sal_Bool bSentFocus = sal_False;
+    bool bSentFocus = false;
     if (nNewFocusedIndex != mnFocusedIndex)
     {
         if (mnFocusedIndex >= 0)
@@ -1103,7 +1103,7 @@ IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, FocusChangeListener)
                     AccessibleEventId::STATE_CHANGED,
                     Any(AccessibleStateType::FOCUSED),
                     Any());
-                bSentFocus = sal_True;
+                bSentFocus = true;
             }
         }
         if (nNewFocusedIndex >= 0)
@@ -1115,10 +1115,10 @@ IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, FocusChangeListener)
                     AccessibleEventId::STATE_CHANGED,
                     Any(),
                     Any(AccessibleStateType::FOCUSED));
-                bSentFocus = sal_True;
+                bSentFocus = true;
             }
         }
-        if (bSentFocus == sal_True)
+        if (bSentFocus)
             mnFocusedIndex = nNewFocusedIndex;
     }
     return 1;

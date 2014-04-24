@@ -77,7 +77,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pDrawOptions(NULL),
     pSearchItem(NULL),
     pNumberFormatter( NULL ),
-    bWaterCan(sal_False),
+    bWaterCan(false),
     mpResourceContainer(new ::sd::SdGlobalResourceContainer())
 {
     SetName( OUString( "StarDraw" ) );  // Do not translate!

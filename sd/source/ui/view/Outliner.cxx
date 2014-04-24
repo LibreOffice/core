@@ -180,7 +180,7 @@ Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
     nCntrl |= EE_CNTRL_MARKFIELDS;
     nCntrl |= EE_CNTRL_AUTOCORRECT;
 
-    sal_Bool bOnlineSpell = false;
+    bool bOnlineSpell = false;
 
     DrawDocShell* pDocSh = mpDrawDocument->GetDocSh();
 
@@ -322,7 +322,7 @@ void Outliner::EndSpelling (void)
 
     // When in <member>PrepareSpelling()</member> a new outline view has
     // been created then delete it here.
-    sal_Bool bViewIsDrawViewShell(pViewShell && pViewShell->ISA(DrawViewShell));
+    bool bViewIsDrawViewShell(pViewShell && pViewShell->ISA(DrawViewShell));
     if (bViewIsDrawViewShell)
     {
         SetStatusEventHdl(Link());
@@ -351,7 +351,7 @@ void Outliner::EndSpelling (void)
     if(IsModified())
     {
         if(mpView && mpView->ISA(OutlineView))
-            static_cast<OutlineView*>(mpView)->PrepareClose(sal_False);
+            static_cast<OutlineView*>(mpView)->PrepareClose(false);
         if(mpDrawDocument && !mpDrawDocument->IsChanged())
             mpDrawDocument->SetChanged(true);
     }
@@ -386,7 +386,7 @@ bool Outliner::SpellNextDocument (void)
     else
     {
         if (mpView->ISA(OutlineView))
-            ((OutlineView*)mpView)->PrepareClose(sal_False);
+            ((OutlineView*)mpView)->PrepareClose(false);
         mpDrawDocument->GetDocSh()->SetWaitCursor( true );
 
         Initialize (true);
@@ -458,7 +458,7 @@ bool Outliner::SpellNextDocument (void)
 */
 bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
 {
-    sal_Bool bEndOfSearch = sal_True;
+    bool bEndOfSearch = true;
 
     mpDrawDocument->GetDocSh()->SetWaitCursor( true );
     if (mbPrepareSpellingPending)
@@ -1143,7 +1143,7 @@ bool Outliner::ShowWrapArroundDialog (void)
     if (bShowDialog)
     {
         // The question text depends on the search direction.
-        sal_Bool bImpress = mpDrawDocument!=NULL
+        bool bImpress = mpDrawDocument!=NULL
             && mpDrawDocument->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
         sal_uInt16 nStringId;
         if (mbDirectionIsForward)
@@ -1235,7 +1235,7 @@ void Outliner::PrepareSpellCheck (void)
             }
         }
 
-        EnterEditMode( sal_False );
+        EnterEditMode( false );
     }
 }
 
@@ -1349,7 +1349,7 @@ void Outliner::SetPage (EditMode eEditMode, sal_uInt16 nPageIndex)
 
 
 
-void Outliner::EnterEditMode (sal_Bool bGrabFocus)
+void Outliner::EnterEditMode (bool bGrabFocus)
 {
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
     if (pOutlinerView != NULL)
@@ -1546,10 +1546,10 @@ void Outliner::HandleChangedSelection (void)
 
 
 void Outliner::StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
-        const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive )
+        const Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive )
 {
     ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
-    sal_Bool bMultiDoc = pViewShell->ISA(DrawViewShell);
+    bool bMultiDoc = pViewShell->ISA(DrawViewShell);
 
     meMode = TEXT_CONVERSION;
     mbDirectionIsForward = true;

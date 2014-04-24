@@ -51,7 +51,7 @@ private:
     SfxItemSet  *pOutputSet;
     sal_uInt16  m_nOptionsId;
     sal_uInt16  m_nPositionId;
-    sal_Bool    bTitle;
+    bool    bTitle;
     ::sd::View  *pSdView;
 };
 

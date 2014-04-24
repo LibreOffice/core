@@ -344,14 +344,14 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
         rModel.GetDocument()->InsertBookmarkAsPage(
             rBookmarkList,
             NULL,
-            sal_False,
-            sal_False,
+            false,
+            false,
             nInsertIndex,
-            sal_False,
+            false,
             pClipTransferable->GetPageDocShell(),
-            sal_True,
+            true,
             bMergeMasterPages,
-            sal_False);
+            false);
     }
     else
     {
@@ -369,14 +369,14 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
             rModel.GetDocument()->InsertBookmarkAsPage(
                 std::vector<OUString>(),
                 NULL,
-                sal_False,
-                sal_False,
+                false,
+                false,
                 nInsertIndex,
-                sal_False,
+                false,
                 pDataDocSh,
-                sal_True,
+                true,
                 bMergeMasterPages,
-                sal_False);
+                false);
         }
     }
     mrController.HandleModelChange();
@@ -457,7 +457,7 @@ void Clipboard::CreateSlideTransferable (
         SdTransferable* pTransferable = TransferableData::CreateTransferable (
             pDocument,
             NULL,
-            sal_False,
+            false,
             dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell()),
             aRepresentatives);
 
@@ -544,7 +544,7 @@ void Clipboard::CreateSlideTransferable (
         SdDrawDocument* pTransferableDocument = rSlideSorter.GetModel().GetDocument();
         if (pTransferableDocument == NULL)
             break;
-        sal_Bool bIsMasterPage = sal_False;
+        bool bIsMasterPage = false;
         const sal_uInt16 nPageIndex (pTransferableDocument->GetPageByName(sBookmark, bIsMasterPage));
         if (nPageIndex == SDRPAGE_NOTFOUND)
             break;

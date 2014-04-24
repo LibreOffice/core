@@ -65,8 +65,8 @@ class SdCustomShowDlg;
 class AbstractSdCustomShowDlg_Impl : public AbstractSdCustomShowDlg
 {
     DECL_ABSTDLG_BASE(AbstractSdCustomShowDlg_Impl,SdCustomShowDlg)
-    virtual sal_Bool        IsModified() const SAL_OVERRIDE ;
-    virtual sal_Bool        IsCustomShow() const SAL_OVERRIDE ;
+    virtual bool        IsModified() const SAL_OVERRIDE ;
+    virtual bool        IsCustomShow() const SAL_OVERRIDE ;
 };
 
 class SfxTabDialog;
@@ -117,11 +117,11 @@ class AbstractAssistentDlg_Impl : public AbstractAssistentDlg
     DECL_ABSTDLG_BASE(AbstractAssistentDlg_Impl,AssistentDlg)
     virtual SfxObjectShellLock GetDocument() SAL_OVERRIDE;
     virtual OutputType GetOutputMedium() const SAL_OVERRIDE;
-    virtual sal_Bool IsSummary() const SAL_OVERRIDE;
+    virtual bool IsSummary() const SAL_OVERRIDE;
     virtual StartType GetStartType() const SAL_OVERRIDE;
     virtual OUString GetDocPath() const SAL_OVERRIDE;
-    virtual sal_Bool GetStartWithFlag() const SAL_OVERRIDE;
-    virtual sal_Bool IsDocEmpty() const SAL_OVERRIDE;
+    virtual bool GetStartWithFlag() const SAL_OVERRIDE;
+    virtual bool IsDocEmpty() const SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > GetPassword() SAL_OVERRIDE;
 };
 
@@ -140,7 +140,7 @@ class AbstractSdSnapLineDlg_Impl : public AbstractSdSnapLineDlg
     virtual void GetAttr(SfxItemSet& rOutAttrs) SAL_OVERRIDE;
     virtual void HideRadioGroup() SAL_OVERRIDE;
     virtual void HideDeleteBtn() SAL_OVERRIDE;
-    virtual void SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY) SAL_OVERRIDE;
+    virtual void SetInputFields(bool bEnableX, bool bEnableY) SAL_OVERRIDE;
     //from class Window
     virtual void    SetText( const OUString& rStr ) SAL_OVERRIDE;
 };
@@ -158,7 +158,7 @@ class SdInsertPasteDlg;
 class AbstractSdInsertPasteDlg_Impl : public AbstractSdInsertPasteDlg
 {
     DECL_ABSTDLG_BASE(AbstractSdInsertPasteDlg_Impl,SdInsertPasteDlg)
-    virtual sal_Bool            IsInsertBefore() const SAL_OVERRIDE;
+    virtual bool            IsInsertBefore() const SAL_OVERRIDE;
 };
 
 class SdInsertPagesObjsDlg;
@@ -167,17 +167,17 @@ class AbstractSdInsertPagesObjsDlg_Impl : public AbstractSdInsertPagesObjsDlg
     DECL_ABSTDLG_BASE(AbstractSdInsertPagesObjsDlg_Impl,SdInsertPagesObjsDlg)
     virtual ::Window *  GetWindow() SAL_OVERRIDE;
     virtual std::vector<OUString> GetList ( const sal_uInt16 nType ) SAL_OVERRIDE;
-    virtual sal_Bool        IsLink() SAL_OVERRIDE;
-    virtual sal_Bool        IsRemoveUnnessesaryMasterPages() const SAL_OVERRIDE;
+    virtual bool        IsLink() SAL_OVERRIDE;
+    virtual bool        IsRemoveUnnessesaryMasterPages() const SAL_OVERRIDE;
 };
 
 class AbstractMorphDlg_Impl : public AbstractMorphDlg
 {
     DECL_ABSTDLG_BASE(AbstractMorphDlg_Impl,::sd::MorphDlg)
     virtual void            SaveSettings() const SAL_OVERRIDE;
-    virtual sal_uInt16          GetFadeSteps() const SAL_OVERRIDE;
-    virtual sal_Bool            IsAttributeFade() const SAL_OVERRIDE ;
-    virtual sal_Bool            IsOrientationFade() const SAL_OVERRIDE ;
+    virtual sal_uInt16      GetFadeSteps() const SAL_OVERRIDE;
+    virtual bool            IsAttributeFade() const SAL_OVERRIDE ;
+    virtual bool            IsOrientationFade() const SAL_OVERRIDE ;
 };
 
 class SdStartPresentationDlg;
@@ -235,8 +235,8 @@ public:
     virtual AbstractCopyDlg*            CreateCopyDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, const rtl::Reference<XColorList> &pColTab, ::sd::View* pView ) SAL_OVERRIDE;
     virtual AbstractSdCustomShowDlg*    CreateSdCustomShowDlg( ::Window* pWindow, SdDrawDocument& rDrawDoc ) SAL_OVERRIDE;
     virtual SfxAbstractTabDialog*       CreateSdTabCharDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell ) SAL_OVERRIDE;
-    virtual SfxAbstractTabDialog*       CreateSdTabPageDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, sal_Bool bAreaPage = sal_True ) SAL_OVERRIDE;
-    virtual AbstractAssistentDlg*       CreateAssistentDlg( ::Window* pParent, sal_Bool bAutoPilot) SAL_OVERRIDE;
+    virtual SfxAbstractTabDialog*       CreateSdTabPageDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage = true ) SAL_OVERRIDE;
+    virtual AbstractAssistentDlg*       CreateAssistentDlg( ::Window* pParent, bool bAutoPilot) SAL_OVERRIDE;
     virtual AbstractSdModifyFieldDlg*   CreateSdModifyFieldDlg( ::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual AbstractSdSnapLineDlg*      CreateSdSnapLineDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView) SAL_OVERRIDE;
     virtual AbstractSdInsertLayerDlg*   CreateSdInsertLayerDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr ) SAL_OVERRIDE;

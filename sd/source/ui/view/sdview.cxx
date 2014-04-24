@@ -160,7 +160,7 @@ View::~View()
     maSmartTags.Dispose();
 
     // release content of selection clipboard, if we own the content
-    UpdateSelectionClipboard( sal_True );
+    UpdateSelectionClipboard( true );
 
     maDropErrorTimer.Stop();
     maDropInsertFileTimer.Stop();
@@ -527,14 +527,14 @@ void View::MarkListHasChanged()
 }
 
 
-sal_Bool View::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll)
+bool View::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 {
-    sal_Bool bOk = FmFormView::SetAttributes(rSet, bReplaceAll);
+    bool bOk = FmFormView::SetAttributes(rSet, bReplaceAll);
     return (bOk);
 }
 
 
-sal_Bool View::GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr ) const
+bool View::GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr ) const
 {
     return( FmFormView::GetAttributes( rTargetSet, bOnlyHardAttr ) );
 }
@@ -543,7 +543,7 @@ sal_Bool View::GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr ) c
 /**
  * Is a presentation object selected?
  */
-sal_Bool View::IsPresObjSelected(sal_Bool bOnPage, sal_Bool bOnMasterPage, sal_Bool bCheckPresObjListOnly, sal_Bool bCheckLayoutOnly) const
+bool View::IsPresObjSelected(bool bOnPage, bool bOnMasterPage, bool bCheckPresObjListOnly, bool bCheckLayoutOnly) const
 {
     SdrMarkList* pMarkList;
 
@@ -565,8 +565,8 @@ sal_Bool View::IsPresObjSelected(sal_Bool bOnPage, sal_Bool bOnMasterPage, sal_B
     SdPage* pPage;
     SdrObject* pObj;
 
-    sal_Bool bSelected = sal_False;
-    sal_Bool bMasterPage = sal_False;
+    bool bSelected = false;
+    bool bMasterPage = false;
     long nMark;
     long nMarkMax = long(pMarkList->GetMarkCount()) - 1;
 
@@ -590,11 +590,11 @@ sal_Bool View::IsPresObjSelected(sal_Bool bOnPage, sal_Bool bOnMasterPage, sal_B
                         PresObjKind eKind = pPage->GetPresObjKind(pObj);
 
                         if((eKind != PRESOBJ_FOOTER) && (eKind != PRESOBJ_HEADER) && (eKind != PRESOBJ_DATETIME) && (eKind != PRESOBJ_SLIDENUMBER) )
-                            bSelected = sal_True;
+                            bSelected = true;
                     }
                     else
                     {
-                        bSelected = sal_True;
+                        bSelected = true;
                     }
                 }
             }
@@ -633,7 +633,7 @@ void View::ModelHasChanged()
 }
 
 
-sal_Bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
+bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
     // forward to SdrView
     return FmFormView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
@@ -645,7 +645,7 @@ sal_Bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHar
  */
 static void SetSpellOptions( const SdDrawDocument& rDoc, sal_uLong& rCntrl )
 {
-    sal_Bool bOnlineSpell = rDoc.GetOnlineSpell();
+    bool bOnlineSpell = rDoc.GetOnlineSpell();
 
     if( bOnlineSpell )
         rCntrl |= EE_CNTRL_ONLINESPELLING;
@@ -695,7 +695,7 @@ bool View::SdrBeginTextEdit(
         pOutl->SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
     }
 
-    sal_Bool bReturn = FmFormView::SdrBeginTextEdit(
+    bool bReturn = FmFormView::SdrBeginTextEdit(
         pObj, pPV, pWin, bIsNewObj, pOutl,
         pGivenOutlinerView, bDontDeleteOutliner,
         bOnlyOneView, bGrabFocus);
@@ -739,7 +739,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally )
 {
     SdrObjectWeakRef xObj( GetTextEditObject() );
 
-    sal_Bool bDefaultTextRestored = RestoreDefaultText( dynamic_cast< SdrTextObj* >( GetTextEditObject() ) );
+    bool bDefaultTextRestored = RestoreDefaultText( dynamic_cast< SdrTextObj* >( GetTextEditObject() ) );
 
     SdrEndTextEditKind eKind = FmFormView::SdrEndTextEdit(bDontDeleteReally);
 
@@ -823,7 +823,7 @@ void View::SetMarkedOriginalSize()
 {
     SdrUndoGroup* pUndoGroup = new SdrUndoGroup(mrDoc);
     sal_uLong           nCount = GetMarkedObjectCount();
-    sal_Bool            bOK = sal_False;
+    bool            bOK = false;
 
     for( sal_uInt32 i = 0; i < nCount; i++ )
     {
@@ -845,7 +845,7 @@ void View::SetMarkedOriginalSize()
                     {
                         MapMode aMap100( MAP_100TH_MM );
                         aOleSize = ((SdrOle2Obj*)pObj)->GetOrigObjSize( &aMap100 );
-                        bOK = sal_True;
+                        bOK = true;
                     }
                     else
                     {
@@ -854,7 +854,7 @@ void View::SetMarkedOriginalSize()
                         {
                             awt::Size aSz = xObj->getVisualAreaSize( nAspect );
                             aOleSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aUnit, MAP_100TH_MM );
-                            bOK = sal_True;
+                            bOK = true;
                         }
                         catch( embed::NoVisualAreaSizeException& )
                         {}
@@ -889,7 +889,7 @@ void View::SetMarkedOriginalSize()
                 aRect.SetSize( aSize );
                 pObj->SetLogicRect( aRect );
 
-                bOK = sal_True;
+                bOK = true;
             }
         }
     }
@@ -943,10 +943,10 @@ void View::DoConnect(SdrOle2Obj* pObj)
     }
 }
 
-sal_Bool View::IsMorphingAllowed() const
+bool View::IsMorphingAllowed() const
 {
     const SdrMarkList&  rMarkList = GetMarkedObjectList();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if ( rMarkList.GetMarkCount() == 2 )
     {
@@ -982,17 +982,17 @@ sal_Bool View::IsMorphingAllowed() const
 
             if( ( eFillStyle1 == XFILL_NONE || eFillStyle1 == XFILL_SOLID ) &&
                 ( eFillStyle2 == XFILL_NONE || eFillStyle2 == XFILL_SOLID ) )
-                bRet = sal_True;
+                bRet = true;
         }
     }
 
     return bRet;
 }
 
-sal_Bool View::IsVectorizeAllowed() const
+bool View::IsVectorizeAllowed() const
 {
     const SdrMarkList&  rMarkList = GetMarkedObjectList();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( rMarkList.GetMarkCount() == 1 )
     {
@@ -1002,7 +1002,7 @@ sal_Bool View::IsVectorizeAllowed() const
         {
             if(GRAPHIC_BITMAP == pObj->GetGraphicType() && !pObj->isEmbeddedSvg())
             {
-                bRet = sal_True;
+                bRet = true;
             }
         }
     }
@@ -1161,7 +1161,7 @@ bool View::MarkPoint(SdrHdl& rHdl, bool bUnmark )
         return FmFormView::MarkPoint( rHdl, bUnmark );
 }
 
-sal_Bool View::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
+bool View::MarkPoints(const Rectangle* pRect, bool bUnmark)
 {
     if( maSmartTags.MarkPoints( pRect, bUnmark ) )
         return true;
@@ -1246,7 +1246,7 @@ bool View::ShouldToggleOn(
     if (!pSdrModel)
         return false;
 
-    sal_Bool bToggleOn = sal_False;
+    bool bToggleOn = false;
     SdrOutliner* pOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrModel);
     sal_uInt32 nMarkCount = GetMarkedObjectCount();
     for (sal_uInt32 nIndex = 0; nIndex < nMarkCount && !bToggleOn; nIndex++)

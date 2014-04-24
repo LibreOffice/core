@@ -54,7 +54,7 @@ void GraphicDocShell::InitInterface_Impl()
 SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SvGlobalName(SO3_SDRAW_CLASSID_60), SFXOBJECTSHELL_STD_NORMAL, "sdraw" )
 
 GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode,
-                                     sal_Bool bDataObject,
+                                     bool bDataObject,
                                      DocumentType eDocType) :
     DrawDocShell(eMode, bDataObject, eDocType)
 {
@@ -62,7 +62,7 @@ GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode,
 }
 
 GraphicDocShell::GraphicDocShell(const sal_uInt64 nModelCreationFlags,
-                                     sal_Bool bDataObject,
+                                     bool bDataObject,
                                      DocumentType eDocType) :
     DrawDocShell(nModelCreationFlags, bDataObject, eDocType)
 {

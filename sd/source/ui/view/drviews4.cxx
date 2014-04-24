@@ -124,9 +124,9 @@ void DrawViewShell::DeleteActualLayer()
 
 
 
-sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
+bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if ( !IsInputLocked() || ( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE ) )
     {
@@ -151,7 +151,7 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 
                 // look for a new candidate, a successor of pOldObj
                 SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
-                sal_Bool bDidVisitOldObject(sal_False);
+                bool bDidVisitOldObject(false);
 
                 while(aIter.IsMore() && !pCandidate)
                 {
@@ -171,7 +171,7 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 
                         if(pObj == pOldObj)
                         {
-                            bDidVisitOldObject = sal_True;
+                            bDidVisitOldObject = true;
                         }
                     }
                 }
@@ -222,7 +222,7 @@ void DrawViewShell::StartRulerDrag (
     if ( rRuler.GetExtraRect().IsInside(rMEvt.GetPosPixel()) )
     {
         mpDrawView->BegSetPageOrg(aWPos);
-        mbIsRulerDrag = sal_True;
+        mbIsRulerDrag = true;
     }
     else
     {
@@ -240,7 +240,7 @@ void DrawViewShell::StartRulerDrag (
             eKind = SDRHELPLINE_VERTICAL;
 
         mpDrawView->BegDragHelpLine(aWPos, eKind);
-        mbIsRulerDrag = sal_True;
+        mbIsRulerDrag = true;
     }
 }
 
@@ -280,7 +280,7 @@ void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
     // the contex menu is closed by VCL asynchronously which in the end
     // would work on deleted objects or the context menu has no parent anymore)
     SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
-    sal_Bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
+    bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
 
     if ( bIsOleActive && PopupMenu::IsInExecute() )
         return;
@@ -309,7 +309,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
             if ( !aOutputArea.IsInside(rMEvt.GetPosPixel()) )
             {
-                sal_Bool bInsideOtherWindow = sal_False;
+                bool bInsideOtherWindow = false;
 
                 if (mpContentWindow.get() != NULL)
                 {
@@ -318,7 +318,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
                     Point aPos = mpContentWindow->GetPointerPosPixel();
                     if ( aOutputArea.IsInside(aPos) )
-                        bInsideOtherWindow = sal_True;
+                        bInsideOtherWindow = true;
                 }
 
                 if (! GetActiveWindow()->HasFocus ())
@@ -439,7 +439,7 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
             }
 
             GetActiveWindow()->ReleaseMouse();
-            mbIsRulerDrag = sal_False;
+            mbIsRulerDrag = false;
         }
         else
             ViewShell::MouseButtonUp(rMEvt, pWin);
@@ -457,7 +457,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
     // deactivate the inplace client without any problem regarding parent
     // windows and code on the stack.
     SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
-    sal_Bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
+    bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
     if ( bIsOleActive && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ))
     {
         // Deactivate OLE object
@@ -485,7 +485,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 if( GetActiveWindow() )
                     aPos = GetActiveWindow()->PixelToLogic( rCEvt.GetMousePosPixel() );
 
-                if( !mpDrawView->InsertData( aDataHelper, aPos, nDnDAction, sal_False ) )
+                if( !mpDrawView->InsertData( aDataHelper, aPos, nDnDAction, false ) )
                 {
                     INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
 
@@ -505,7 +505,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                  pWin != NULL && !mpDrawView->IsAction() && !SD_MOD()->GetWaterCan() )
         {
             sal_uInt16 nSdResId = 0;          // ResourceID for popup menu
-            sal_Bool bGraphicShell = this->ISA(GraphicViewShell);
+            bool bGraphicShell = this->ISA(GraphicViewShell);
 
             // is there a snap object under the cursor?
             SdrPageView* pPV;
@@ -564,10 +564,10 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
                     // select field, so that it will be deleted on insert
                     ESelection aSel = pOLV->GetSelection();
-                    sal_Bool bSel = sal_True;
+                    bool bSel = true;
                     if( aSel.nStartPos == aSel.nEndPos )
                     {
-                        bSel = sal_False;
+                        bSel = false;
                         aSel.nEndPos++;
                     }
                     pOLV->SetSelection( aSel );
@@ -794,7 +794,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     //open context menu at that point
                     GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId),GetActiveWindow(),&aMenuPos);
                 }
-                mbMousePosFreezed = sal_False;
+                mbMousePosFreezed = false;
             }
         }
         else

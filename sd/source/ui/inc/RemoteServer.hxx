@@ -65,7 +65,7 @@ namespace sd
 
             // For the control dialog
             SD_DLLPUBLIC static std::vector<ClientInfo*> getClients();
-            SD_DLLPUBLIC static sal_Bool connectClient( ClientInfo *pClient,
+            SD_DLLPUBLIC static bool connectClient( ClientInfo *pClient,
                                                         const OUString& aPin );
 
             /// ensure that discoverability (eg. for Bluetooth) is enabled

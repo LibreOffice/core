@@ -331,7 +331,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( pItem )
             {
                 SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
-                sal_Bool bValue = ( (const SfxBoolItem*) pItem)->GetValue();
+                bool bValue = ( (const SfxBoolItem*) pItem)->GetValue();
                 aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
                 mpDrawView->SetAttributes( aSet );
             }
@@ -339,7 +339,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 OSL_FAIL(" no value for hyphenation!");
                 SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
-                sal_Bool bValue = sal_True;
+                bool bValue = true;
                 aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
                 mpDrawView->SetAttributes( aSet );
             }
@@ -379,7 +379,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     // Create shapes for the default layout.
                     SdPage* pMasterPage = GetDoc()->GetMasterSdPage(
                         nIndex, PK_STANDARD);
-                    pMasterPage->CreateTitleAndLayout (sal_True,sal_True);
+                    pMasterPage->CreateTitleAndLayout (true,true);
                 }
             }
 
@@ -505,7 +505,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     Size aSize (pWidth->GetValue (), pHeight->GetValue ());
 
-                    SetupPage (aSize, 0, 0, 0, 0, sal_True, sal_False, pScaleAll->GetValue ());
+                    SetupPage (aSize, 0, 0, 0, 0, true, false, pScaleAll->GetValue ());
                     rReq.Ignore ();
                     break;
                 }
@@ -533,7 +533,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     SetupPage (aEmptySize, pLeft->GetValue (), pRight->GetValue (),
                                pUpper->GetValue (), pLower->GetValue (),
-                               sal_False, sal_True, pScaleAll->GetValue ());
+                               false, true, pScaleAll->GetValue ());
                     rReq.Ignore ();
                     break;
                 }
@@ -602,7 +602,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ATTR_ZOOM:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
-            mbZoomOnPage = sal_False;
+            mbZoomOnPage = false;
 
             if ( pArgs )
             {
@@ -834,7 +834,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
 
                 pSet = new SfxItemSet( GetPool(), EE_ITEMS_START, EE_ITEMS_END );
-                mpDrawView->SetAttributes( *pSet, sal_True );
+                mpDrawView->SetAttributes( *pSet, true );
             }
             else
             {
@@ -862,7 +862,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
 
                 pSet = new SfxItemSet( GetPool() );
-                mpDrawView->SetAttributes( *pSet, sal_True );
+                mpDrawView->SetAttributes( *pSet, true );
 
                 sal_uLong j = 0;
 
@@ -933,7 +933,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 FuPoor::HITPIX, 0 ) ).Width();
             sal_uInt16  nHelpLine;
 
-            mbMousePosFreezed = sal_False;
+            mbMousePosFreezed = false;
 
             if( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
             {
@@ -1180,7 +1180,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_COPYOBJECTS:
         {
-            if ( mpDrawView->IsPresObjSelected(sal_False, sal_True) )
+            if ( mpDrawView->IsPresObjSelected(false, true) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
@@ -1223,7 +1223,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ZOOM_OUT:
         case SID_ZOOM_PANNING:
         {
-            mbZoomOnPage = sal_False;
+            mbZoomOnPage = false;
             SetCurrentFunction( FuZoom::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
             // finishes itself, no Cancel() needed!
             Invalidate( SID_ZOOM_TOOLBOX );
@@ -1317,7 +1317,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_CONNECTION_NEW_ROUTING:
         {
             SfxItemSet aDefAttr( GetPool(), SDRATTR_EDGELINE1DELTA, SDRATTR_EDGELINE3DELTA );
-            GetView()->SetAttributes( aDefAttr, sal_True ); // (ReplaceAll)
+            GetView()->SetAttributes( aDefAttr, true ); // (ReplaceAll)
 
             Cancel();
             rReq.Done();
@@ -1351,7 +1351,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_TWAIN_TRANSFER:
         {
-            sal_Bool bDone = sal_False;
+            bool bDone = false;
 
             if( mxScannerManager.is() )
             {
@@ -1362,7 +1362,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     if( aContexts.getLength() )
                     {
                         mxScannerManager->startScan( aContexts.getConstArray()[ 0 ], mxScannerListener );
-                        bDone = sal_True;
+                        bDone = true;
                     }
                 }
                 catch( ... )
@@ -1419,9 +1419,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             sal_uInt16 nLayer = nLayerCnt - 2 + 1;
             OUString aLayerName = SD_RESSTR(STR_LAYER) + OUString::number(nLayer);
             OUString aLayerTitle, aLayerDesc;
-            sal_Bool bIsVisible = sal_False;
-            sal_Bool bIsLocked = sal_False;
-            sal_Bool bIsPrintable = sal_False;
+            bool bIsVisible = false;
+            bool bIsLocked = false;
+            bool bIsPrintable = false;
 
             const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -1444,7 +1444,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
 
                     // test for already existing names
-                    sal_Bool bLoop = sal_True;
+                    bool bLoop = true;
                     while( bLoop && pDlg->Execute() == RET_OK )
                     {
                         pDlg->GetAttr( aNewAttr );
@@ -1461,7 +1461,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             aWarningBox.Execute();
                         }
                         else
-                            bLoop = sal_False;
+                            bLoop = false;
                     }
                     if( bLoop ) // was canceled
                     {
@@ -1574,10 +1574,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             OUString aOldLayerTitle(aLayerTitle);
             OUString aOldLayerDesc(aLayerDesc);
 
-            sal_Bool bIsVisible, bIsLocked, bIsPrintable;
-            sal_Bool bOldIsVisible = bIsVisible = mpDrawView->IsLayerVisible(aLayerName);
-            sal_Bool bOldIsLocked = bIsLocked = mpDrawView->IsLayerLocked(aLayerName);
-            sal_Bool bOldIsPrintable = bIsPrintable = mpDrawView->IsLayerPrintable(aLayerName);
+            bool bIsVisible, bIsLocked, bIsPrintable;
+            bool bOldIsVisible = bIsVisible = mpDrawView->IsLayerVisible(aLayerName);
+            bool bOldIsLocked = bIsLocked = mpDrawView->IsLayerLocked(aLayerName);
+            bool bOldIsPrintable = bIsPrintable = mpDrawView->IsLayerPrintable(aLayerName);
 
 
             const SfxItemSet* pArgs = rReq.GetArgs();
@@ -1616,7 +1616,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );
 
                     // test for already existing names
-                    sal_Bool    bLoop = sal_True;
+                    bool    bLoop = true;
                     sal_uInt16  nRet = 0;
                     while( bLoop && ( (nRet = pDlg->Execute()) == RET_OK ) )
                     {
@@ -1634,7 +1634,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             aWarningBox.Execute();
                         }
                         else
-                            bLoop = sal_False;
+                            bLoop = false;
                     }
                     switch (nRet)
                     {
@@ -1971,7 +1971,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         // it is necessary to split the actions here
                         SvxFieldData* pField = pDlg->GetField();
                         ESelection aSel = pOLV->GetSelection();
-                        sal_Bool bSelectionWasModified(sal_False);
+                        bool bSelectionWasModified(false);
 
                         if( pField )
                         {
@@ -1979,7 +1979,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                             if( aSel.nStartPos == aSel.nEndPos )
                             {
-                                bSelectionWasModified = sal_True;
+                                bSelectionWasModified = true;
                                 aSel.nEndPos++;
                                 pOLV->SetSelection( aSel );
                             }
@@ -2041,7 +2041,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_GROUP:  // BASIC
         {
-            if ( mpDrawView->IsPresObjSelected( sal_True, sal_True, sal_True ) )
+            if ( mpDrawView->IsPresObjSelected( true, true, true ) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
@@ -3170,7 +3170,7 @@ void DrawViewShell::GetStatePropPanelAttr(SfxItemSet& rSet)
             case SID_TABLE_VERT_NONE:
             case SID_TABLE_VERT_CENTER:
             case SID_TABLE_VERT_BOTTOM:
-                sal_Bool bContour = sal_False;
+                bool bContour = false;
                 SfxItemState eConState = aAttrs.GetItemState( SDRATTR_TEXT_CONTOURFRAME );
                 if( eConState != SFX_ITEM_DONTCARE )
                 {
@@ -3185,7 +3185,7 @@ void DrawViewShell::GetStatePropPanelAttr(SfxItemSet& rSet)
                 if(SFX_ITEM_DONTCARE != eVState)
                 {
                     SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)aAttrs.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
-                    sal_Bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||
+                    bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||
                             (nSlotId == SID_TABLE_VERT_CENTER && eTVA == SDRTEXTVERTADJUST_CENTER) ||
                             (nSlotId == SID_TABLE_VERT_BOTTOM && eTVA == SDRTEXTVERTADJUST_BOTTOM);
                     rSet.Put(SfxBoolItem(nSlotId, bSet));

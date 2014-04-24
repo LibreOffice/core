@@ -132,7 +132,7 @@ TYPEINIT1( OutlineViewShell, ViewShell );
  */
 void OutlineViewShell::Construct(DrawDocShell* )
 {
-    sal_Bool bModified = GetDoc()->IsChanged();
+    bool bModified = GetDoc()->IsChanged();
 
     meShellType = ST_OUTLINE;
     Size aSize(29700, 21000);
@@ -459,7 +459,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
     if( rReq.GetSlot() == SID_STYLE_FAMILY && rReq.GetArgs())
         GetDocSh()->SetStyleFamily(((SfxUInt16Item&)rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue());
 
-    sal_Bool bPreviewState = sal_False;
+    bool bPreviewState = false;
     sal_uLong nSlot = rReq.GetSlot();
 
     boost::scoped_ptr< OutlineViewModelChangeGuard > aGuard;
@@ -494,7 +494,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                 pOlView->DoCut();
             }
             rReq.Done();
-            bPreviewState = sal_True;
+            bPreviewState = true;
         }
         break;
 
@@ -509,7 +509,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                 pOlView->DoCopy();
             }
             rReq.Done();
-            bPreviewState = sal_True;
+            bPreviewState = true;
         }
         break;
 
@@ -526,7 +526,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                 pOlView->DoPaste();
             }
             rReq.Done();
-            bPreviewState = sal_True;
+            bPreviewState = true;
         }
         break;
 
@@ -546,7 +546,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                 {
                     pOlView->InsertData( aDataHelper,
                                          GetActiveWindow()->PixelToLogic( Rectangle( Point(), GetActiveWindow()->GetOutputSizePixel() ).Center() ),
-                                         nAction, sal_False, FORMAT_STRING);
+                                         nAction, false, FORMAT_STRING);
                 }
             }
 
@@ -573,7 +573,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                 }
             }
             rReq.Done();
-            bPreviewState = sal_True;
+            bPreviewState = true;
         }
         break;
 
@@ -672,7 +672,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
             }
 
             rReq.Done();
-            bPreviewState = sal_True;
+            bPreviewState = true;
         }
         break;
 
@@ -680,13 +680,13 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         case SID_UNDO :
         {
             OutlineViewPageChangesGuard aGuard2(pOlView);
-            ImpSidUndo(sal_False, rReq);
+            ImpSidUndo(false, rReq);
         }
         break;
         case SID_REDO :
         {
             OutlineViewPageChangesGuard aGuard2(pOlView);
-            ImpSidRedo(sal_False, rReq);
+            ImpSidRedo(false, rReq);
         }
         break;
 
@@ -805,13 +805,13 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SELECTALL ) )
     {
         sal_Int32 nParaCount = pOutl->GetParagraphCount();
-        sal_Bool bDisable = nParaCount == 0;
+        bool bDisable = nParaCount == 0;
         if (!bDisable && nParaCount == 1)
         {
             OUString aTest = pOutl->GetText(pOutl->GetParagraph(0));
             if (aTest.isEmpty())
             {
-                bDisable = sal_True;
+                bDisable = true;
             }
         }
         if (bDisable)
@@ -830,18 +830,18 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     {
         // Enable color view?
         sal_uLong nCntrl = pOutl->GetControlWord();
-        sal_Bool bNoColor = sal_False;
+        bool bNoColor = false;
         if (nCntrl & EE_CNTRL_NOCOLORS)
-            bNoColor = sal_True;
+            bNoColor = true;
 
         rSet.Put( SfxBoolItem( SID_COLORVIEW, bNoColor ) );
     }
 
     // Buttons of toolbar
     // first the selection dependent ones: COLLAPSE, EXPAND
-    sal_Bool bDisableCollapse = sal_True;
-    sal_Bool bDisableExpand   = sal_True;
-    sal_Bool bUnique          = sal_True;
+    bool bDisableCollapse = true;
+    bool bDisableExpand   = true;
+    bool bUnique          = true;
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow(GetActiveWindow());
 
     std::vector<Paragraph*> aSelList;
@@ -863,14 +863,14 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
             nDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
 
             if( nDepth != nTmpDepth || bPage != pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ))
-                bUnique = sal_False;
+                bUnique = false;
 
             if (pOutl->HasChildren(pPara))
             {
                 if (!pOutl->IsExpanded(pPara))
-                    bDisableExpand = sal_False;
+                    bDisableExpand = false;
                 else
-                    bDisableCollapse = sal_False;
+                    bDisableCollapse = false;
             }
 
             ++iter;
@@ -889,7 +889,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     OUString aTest = ((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue();
     if (aTest.isEmpty())
     {
-        bUnique = sal_False;
+        bUnique = false;
         rSet.DisableItem(SID_PRESENTATION_TEMPLATES);
     }
 
@@ -897,14 +897,14 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_PRESENTATIONOBJECT );
 
     // now the selection independent ones: COLLAPSE_ALL, EXPAND_ALL
-    sal_Bool bDisableCollapseAll = sal_True;
-    sal_Bool bDisableExpandAll   = sal_True;
+    bool bDisableCollapseAll = true;
+    bool bDisableExpandAll   = true;
 
     // does the selection contain something collapsable/expandable?
     if (!bDisableCollapse)
-        bDisableCollapseAll = sal_False;
+        bDisableCollapseAll = false;
     if (!bDisableExpand)
-        bDisableExpandAll = sal_False;
+        bDisableExpandAll = false;
 
     // otherwise look through all paragraphs
     if (bDisableCollapseAll || bDisableExpandAll)
@@ -914,10 +914,10 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         while (pPara && (bDisableCollapseAll || bDisableExpandAll))
         {
             if (!pOutl->IsExpanded(pPara) && pOutl->HasChildren(pPara))
-                bDisableExpandAll = sal_False;
+                bDisableExpandAll = false;
 
             if (pOutl->IsExpanded(pPara) && pOutl->HasChildren(pPara))
-                bDisableCollapseAll = sal_False;
+                bDisableCollapseAll = false;
 
             pPara = pOutl->GetParagraph( ++nParaPos );
         }
@@ -1000,7 +1000,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
     if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_EXPAND_PAGE))
     {
-        sal_Bool bDisable = sal_True;
+        bool bDisable = true;
         sal_uInt16 i = 0;
         sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
         pOlView->SetSelectedPages();
@@ -1047,7 +1047,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
     if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_SUMMARY_PAGE))
     {
-        sal_Bool bDisable = sal_True;
+        bool bDisable = true;
         sal_uInt16 i = 0;
         sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
         pOlView->SetSelectedPages();
@@ -1062,7 +1062,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
                 if (pObj && !pObj->IsEmptyPresObj())
                 {
-                    bDisable = sal_False;
+                    bDisable = false;
                 }
             }
 
@@ -1094,7 +1094,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     // is starting the presentation possible?
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) )
     {
-        sal_Bool bDisable = sal_True;
+        bool bDisable = true;
         sal_uInt16 nCount = GetDoc()->GetSdPageCount( PK_STANDARD );
 
         for( sal_uInt16 i = 0; i < nCount && bDisable; i++ )
@@ -1102,7 +1102,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
             SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
 
             if( !pPage->IsExcluded() )
-                bDisable = sal_False;
+                bDisable = false;
         }
         if( bDisable || GetDocSh()->IsPreview())
         {
@@ -1170,7 +1170,7 @@ long OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
  * PrepareClose, gets called when the Shell shall be destroyed.
  * Forwards the invocation to the View
  */
-bool OutlineViewShell::PrepareClose( sal_Bool bUI )
+bool OutlineViewShell::PrepareClose( bool bUI )
 {
     if( !ViewShell::PrepareClose(bUI) )
         return false;
@@ -1301,9 +1301,9 @@ void OutlineViewShell::WriteFrameViewData()
     ::Outliner* pOutl = pOlView->GetOutliner();
 
     sal_uLong nCntrl = pOutl->GetControlWord();
-    sal_Bool bNoColor = sal_False;
+    bool bNoColor = false;
     if (nCntrl & EE_CNTRL_NOCOLORS)
-        bNoColor = sal_True;
+        bNoColor = true;
     mpFrameView->SetNoColors(bNoColor);
     mpFrameView->SetNoAttribs( pOutl->IsFlatMode() );
     SdPage* pActualPage = pOlView->GetActualPage();
@@ -1457,9 +1457,9 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
 
 
 
-sal_Bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
+bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
     OutlineViewPageChangesGuard aGuard(pOlView);
 
     if (pWin == NULL && HasCurrentFunction())
@@ -1528,9 +1528,9 @@ OUString OutlineViewShell::GetSelectionText(bool bCompleteWords)
 /**
  * Is something selected?
  */
-sal_Bool OutlineViewShell::HasSelection(sal_Bool bText) const
+bool OutlineViewShell::HasSelection(bool bText) const
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if (bText)
     {
@@ -1538,7 +1538,7 @@ sal_Bool OutlineViewShell::HasSelection(sal_Bool bText) const
 
         if (pOutlinerView && !pOutlinerView->GetSelected().isEmpty())
         {
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
 
@@ -1685,7 +1685,7 @@ SdPage* OutlineViewShell::GetActualPage()
     return pOlView->GetActualPage();
 }
 
-void OutlineViewShell::UpdatePreview( SdPage* pPage, sal_Bool )
+void OutlineViewShell::UpdatePreview( SdPage* pPage, bool )
 {
     const bool bNewPage = pPage != pLastPage;
     pLastPage = pPage;
@@ -1791,7 +1791,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     OutlinerParaObject* pOPO = NULL;
     SdrTextObj*         pTO  = NULL;
 
-    sal_Bool bNewObject = sal_False;
+    bool bNewObject = false;
 
     sal_uInt16 eOutlinerMode = OUTLINERMODE_TITLEOBJECT;
     pTO = (SdrTextObj*)pPage->GetPresObj( PRESOBJ_TEXT );
@@ -1826,7 +1826,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
         if( !pTO )
         {
             pTO = pOlView->CreateOutlineTextObject( pPage );
-            bNewObject = sal_True;
+            bNewObject = true;
         }
 
         // page object, outline text in Outliner:
@@ -1947,14 +1947,14 @@ sal_uLong OutlineViewShell::Read(SvStream& rInput, const OUString& rBaseURL, sal
     return( bRet );
 }
 
-void OutlineViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+void OutlineViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, bool bBrowse )
 {
     WriteFrameViewData();
 
     ViewShell::WriteUserDataSequence( rSequence, bBrowse );
 }
 
-void OutlineViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+void OutlineViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, bool bBrowse )
 {
     WriteFrameViewData();
 
@@ -2032,8 +2032,8 @@ void OutlineViewShell::SetCurrentPage (SdPage* pPage)
     for (sal_uInt16 i=0; i<GetDoc()->GetSdPageCount(PK_STANDARD); i++)
         GetDoc()->SetSelected(
             GetDoc()->GetSdPage(i, PK_STANDARD),
-            sal_False);
-    GetDoc()->SetSelected (pPage, sal_True);
+            false);
+    GetDoc()->SetSelected (pPage, true);
 
     DrawController& rController(GetViewShellBase().GetDrawController());
     rController.FireSelectionChangeListener();

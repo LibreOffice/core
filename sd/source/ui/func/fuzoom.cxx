@@ -49,8 +49,8 @@ FuZoom::FuZoom(
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
-      bVisible(sal_False),
-      bStartDrag(sal_False)
+      bVisible(false),
+      bStartDrag(false)
 {
 }
 
@@ -61,8 +61,8 @@ FuZoom::~FuZoom()
         // Hide ZoomRect
         mpViewShell->DrawMarkRect(aZoomRect);
 
-        bVisible = sal_False;
-        bStartDrag = sal_False;
+        bVisible = false;
+        bStartDrag = false;
     }
 }
 
@@ -72,21 +72,21 @@ rtl::Reference<FuPoor> FuZoom::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
     return xFunc;
 }
 
-sal_Bool FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     mpWindow->CaptureMouse();
-    bStartDrag = sal_True;
+    bStartDrag = true;
 
     aBeginPosPix = rMEvt.GetPosPixel();
     aBeginPos = mpWindow->PixelToLogic(aBeginPosPix);
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool FuZoom::MouseMove(const MouseEvent& rMEvt)
+bool FuZoom::MouseMove(const MouseEvent& rMEvt)
 {
     if (bStartDrag)
     {
@@ -125,13 +125,13 @@ sal_Bool FuZoom::MouseMove(const MouseEvent& rMEvt)
             mpViewShell->DrawMarkRect(aZoomRect);
         }
 
-        bVisible = sal_True;
+        bVisible = true;
     }
 
     return bStartDrag;
 }
 
-sal_Bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -140,7 +140,7 @@ sal_Bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
     {
         // Hide ZoomRect
         mpViewShell->DrawMarkRect(aZoomRect);
-        bVisible = sal_False;
+        bVisible = false;
     }
 
     Point aPosPix = rMEvt.GetPosPixel();
@@ -171,11 +171,11 @@ sal_Bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
                                            mpWindow->GetOutputSizePixel()));
     mpViewShell->GetZoomList()->InsertZoomRect(aVisAreaWin);
 
-    bStartDrag = sal_False;
+    bStartDrag = false;
     mpWindow->ReleaseMouse();
     mpViewShell->Cancel();
 
-    return sal_True;
+    return true;
 }
 
 void FuZoom::Activate()

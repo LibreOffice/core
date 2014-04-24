@@ -43,20 +43,20 @@ public:
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq ) SAL_OVERRIDE;
 
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
-    virtual sal_Bool RequestHelp(const HelpEvent& rHEvt) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
+    virtual bool RequestHelp(const HelpEvent& rHEvt) SAL_OVERRIDE;
     virtual void ReceiveRequest(SfxRequest& rReq) SAL_OVERRIDE;
     virtual void DoubleClick(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
     virtual void Activate() SAL_OVERRIDE;           ///< activates the function
     virtual void Deactivate() SAL_OVERRIDE;         ///< deactivates the function
 
-    void    SetInEditMode(const MouseEvent& rMEvt, sal_Bool bQuickDrag);
-    sal_Bool    DeleteDefaultText();
+    void    SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag);
+    bool    DeleteDefaultText();
     SdrTextObj* GetTextObj() { return static_cast< SdrTextObj* >( mxTextObj.get() ); }
 
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) SAL_OVERRIDE;
@@ -82,7 +82,7 @@ protected:
 
     SdrObjectWeakRef    mxTextObj;
     Link                aOldLink;
-    sal_Bool                bFirstObjCreated;
+    bool                bFirstObjCreated;
     bool                bJustEndedEdit;
 
     SfxRequest&         rRequest;

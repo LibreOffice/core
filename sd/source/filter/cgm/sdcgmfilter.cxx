@@ -49,7 +49,7 @@ extern "C" sal_uInt32 ImportCGM( OUString&, Reference< XModel >&, sal_uInt32, Re
 
 #endif
 
-SdCGMFilter::SdCGMFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
+SdCGMFilter::SdCGMFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress )
 {
 }
@@ -58,12 +58,12 @@ SdCGMFilter::~SdCGMFilter()
 {
 }
 
-sal_Bool SdCGMFilter::Import()
+bool SdCGMFilter::Import()
 {
 #ifndef DISABLE_DYNLOADING
     ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
 #endif
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     if(
 #ifndef DISABLE_DYNLOADING
@@ -87,7 +87,7 @@ sal_Bool SdCGMFilter::Import()
 
         if( nRetValue )
         {
-            bRet = sal_True;
+            bRet = true;
 
             if( ( nRetValue &~0xff000000 ) != 0xffffff )    // maybe the backgroundcolor is already white
             {                                               // so we must not set a master page
@@ -110,14 +110,14 @@ sal_Bool SdCGMFilter::Import()
     return bRet;
 }
 
-sal_Bool SdCGMFilter::Export()
+bool SdCGMFilter::Export()
 {
 #ifdef DISABLE_DYNLOADING
     // No ExportCGM function exists(!)
     return sal_False;
 #else
     ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     if( pLibrary && mxModel.is() )
     {

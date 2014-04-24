@@ -541,7 +541,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             else if ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT ||
                       nSlot == SID_ATTR_PARA_RIGHT_TO_LEFT )
             {
-                sal_Bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
+                bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
                 sal_uInt16 nAdjust = SVX_ADJUST_LEFT;
                 if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )

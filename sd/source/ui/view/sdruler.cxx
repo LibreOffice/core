@@ -84,12 +84,12 @@ Ruler::Ruler( DrawViewShell& rViewSh, ::Window* pParent, ::sd::Window* pWin, sal
 
     if ( nWinStyle & WB_HSCROLL )
     {
-        bHorz = sal_True;
+        bHorz = true;
         SetHelpId( HID_SD_RULER_HORIZONTAL );
     }
     else
     {
-        bHorz = sal_False;
+        bHorz = false;
         SetHelpId( HID_SD_RULER_VERTICAL );
     }
 }

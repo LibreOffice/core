@@ -594,9 +594,9 @@ void Window::SetMinZoomAutoCalc (bool bAuto)
  * If aWinPos.X()/Y() == -1, then we center the corresponding position (e.g. for
  * initialization).
  */
-void Window::UpdateMapOrigin(sal_Bool bInvalidate)
+void Window::UpdateMapOrigin(bool bInvalidate)
 {
-    sal_Bool       bChanged = sal_False;
+    bool       bChanged = false;
     const Size aWinSize = PixelToLogic(GetOutputSizePixel());
 
     if ( mbCenterAllowed )
@@ -607,28 +607,28 @@ void Window::UpdateMapOrigin(sal_Bool bInvalidate)
             // resizes
             maWinPos.X() -= (aWinSize.Width() - maPrevSize.Width()) / 2;
             maWinPos.Y() -= (aWinSize.Height() - maPrevSize.Height()) / 2;
-            bChanged = sal_True;
+            bChanged = true;
         }
 
         if ( maWinPos.X() > maViewSize.Width() - aWinSize.Width() )
         {
             maWinPos.X() = maViewSize.Width() - aWinSize.Width();
-            bChanged = sal_True;
+            bChanged = true;
         }
         if ( maWinPos.Y() > maViewSize.Height() - aWinSize.Height() )
         {
             maWinPos.Y() = maViewSize.Height() - aWinSize.Height();
-            bChanged = sal_True;
+            bChanged = true;
         }
         if ( aWinSize.Width() > maViewSize.Width() || maWinPos.X() < 0 )
         {
             maWinPos.X() = maViewSize.Width()  / 2 - aWinSize.Width()  / 2;
-            bChanged = sal_True;
+            bChanged = true;
         }
         if ( aWinSize.Height() > maViewSize.Height() || maWinPos.Y() < 0 )
         {
             maWinPos.Y() = maViewSize.Height() / 2 - aWinSize.Height() / 2;
-            bChanged = sal_True;
+            bChanged = true;
         }
     }
 
@@ -718,7 +718,7 @@ void Window::SetVisibleXY(double fX, double fY)
         maWinPos.X() = (long) (fX * maViewSize.Width());
     if ( fY >= 0 )
         maWinPos.Y() = (long) (fY * maViewSize.Height());
-    UpdateMapOrigin(sal_False);
+    UpdateMapOrigin(false);
     Scroll(nOldX - maWinPos.X(), nOldY - maWinPos.Y(), SCROLL_CHILDREN);
     Update();
 }
@@ -916,7 +916,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
             {
                 DrawDocShell* pDocSh = mpViewShell->GetDocSh();
                 if( pDocSh )
-                    pDocSh->SetPrinter( pDocSh->GetPrinter( sal_True ) );
+                    pDocSh->SetPrinter( pDocSh->GetPrinter( true ) );
             }
         }
 
@@ -931,7 +931,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
             {
                 DrawDocShell* pDocSh = mpViewShell->GetDocSh();
                 if( pDocSh )
-                    pDocSh->SetPrinter( pDocSh->GetPrinter( sal_True ) );
+                    pDocSh->SetPrinter( pDocSh->GetPrinter( true ) );
             }
         }
 

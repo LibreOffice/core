@@ -201,7 +201,7 @@ static SdTypesCache gImplTypesCache;
         };
         return aDraw_SdXShapePropertyGraphicMap_Impl;
     }
-    static const SfxItemPropertyMapEntry* lcl_ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool bGraphicObj )
+    static const SfxItemPropertyMapEntry* lcl_ImplGetShapePropertyMap( bool bImpress, bool bGraphicObj )
     {
         const SfxItemPropertyMapEntry* pRet = 0;
         if( bImpress )
@@ -221,7 +221,7 @@ static SdTypesCache gImplTypesCache;
         return pRet;
 
     }
-    static const SvxItemPropertySet* lcl_ImplGetShapePropertySet( sal_Bool bImpress, sal_Bool bGraphicObj )
+    static const SvxItemPropertySet* lcl_ImplGetShapePropertySet( bool bImpress, bool bGraphicObj )
     {
         const SvxItemPropertySet* pRet = 0;
         if( bImpress )
@@ -532,7 +532,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
                 }
                 case WID_ISANIMATION:
                 {
-                    sal_Bool bIsAnimation(sal_False);
+                    bool bIsAnimation(false);
 
                     if(!(aValue >>= bIsAnimation))
                     {
@@ -615,7 +615,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
                 }
                 case WID_DIMHIDE:
                 {
-                    sal_Bool bDimHide = sal_False;
+                    bool bDimHide = false;
                     if( !(aValue >>= bDimHide) )
                         lang::IllegalArgumentException();
 
@@ -624,7 +624,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
                 }
                 case WID_DIMPREV:
                 {
-                    sal_Bool bDimPrevious = sal_False;
+                    bool bDimPrevious = false;
                     if( !(aValue >>= bDimPrevious) )
                         lang::IllegalArgumentException();
 
@@ -738,7 +738,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
 
     if( pEntry && mpShape->GetSdrObject() )
     {
-        SdAnimationInfo* pInfo = GetAnimationInfo(sal_False);
+        SdAnimationInfo* pInfo = GetAnimationInfo(false);
 
         switch(pEntry->nWID)
         {
@@ -755,19 +755,19 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
             aRet <<= EffectMigration::GetTextAnimationEffect( mpShape );
             break;
         case WID_ISPRESOBJ:
-            aRet <<= (sal_Bool)IsPresObj();
+            aRet <<= IsPresObj();
             break;
         case WID_ISEMPTYPRESOBJ:
-            aRet <<= (sal_Bool)IsEmptyPresObj();
+            aRet <<= IsEmptyPresObj();
             break;
         case WID_MASTERDEPEND:
-            aRet <<= (sal_Bool)IsMasterDepend();
+            aRet <<= IsMasterDepend();
             break;
         case WID_SPEED:
             aRet <<= EffectMigration::GetAnimationSpeed( mpShape );
             break;
         case WID_ISANIMATION:
-            aRet <<= (sal_Bool)( pInfo && pInfo->mbIsMovie);
+            aRet <<= (pInfo && pInfo->mbIsMovie);
             break;
         case WID_PLACEHOLDERTEXT:
             aRet <<= GetPlaceholderText();
@@ -779,7 +779,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
             {
                 SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
                 // is the bookmark a page?
-                sal_Bool bIsMasterPage;
+                bool bIsMasterPage;
                 if(pDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage ) != SDRPAGE_NOTFOUND)
                 {
                     aString = SdDrawPage::getPageApiNameFromUiName( pInfo->GetBookmark() );
@@ -808,7 +808,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
             aRet = ::cppu::enum2any< presentation::ClickAction >( pInfo?pInfo->meClickAction:presentation::ClickAction_NONE );
             break;
         case WID_PLAYFULL:
-            aRet <<= (sal_Bool)( pInfo && pInfo->mbPlayFull );
+            aRet <<= ( pInfo && pInfo->mbPlayFull );
             break;
         case WID_SOUNDFILE:
             aRet <<= EffectMigration::GetSoundFile( mpShape );
@@ -885,7 +885,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
 }
 
 /** */
-SdAnimationInfo* SdXShape::GetAnimationInfo( sal_Bool bCreate ) const
+SdAnimationInfo* SdXShape::GetAnimationInfo( bool bCreate ) const
     throw (std::exception)
 {
     SdAnimationInfo* pInfo = NULL;
@@ -923,7 +923,7 @@ uno::Sequence< OUString > SAL_CALL SdXShape::getSupportedServiceNames() throw(::
 
 /** checks if this is a presentation object
  */
-sal_Bool SdXShape::IsPresObj() const
+bool SdXShape::IsPresObj() const
     throw (std::exception)
 {
     SdrObject* pObj = mpShape->GetSdrObject();
@@ -933,7 +933,7 @@ sal_Bool SdXShape::IsPresObj() const
         if(pPage)
             return pPage->GetPresObjKind(pObj) != PRESOBJ_NONE;
     }
-    return sal_False;
+    return false;
 }
 
 /** checks if this presentation object is empty
@@ -998,7 +998,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
         if(!bEmpty)
         {
             OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
-            const sal_Bool bVertical = pOutlinerParaObject ? pOutlinerParaObject->IsVertical() : sal_False;
+            const bool bVertical = pOutlinerParaObject ? pOutlinerParaObject->IsVertical() : sal_False;
 
             // really delete SdrOutlinerObj at pObj
             pObj->NbcSetOutlinerParaObject(0L);
@@ -1044,7 +1044,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
 
                 OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
                 pOutliner->SetText( *pOutlinerParaObject );
-                const sal_Bool bVertical = pOutliner->IsVertical();
+                const bool bVertical = pOutliner->IsVertical();
 
                 pOutliner->Clear();
                 pOutliner->SetVertical( bVertical );
@@ -1061,13 +1061,13 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
     }
 }
 
-sal_Bool SdXShape::IsMasterDepend() const throw()
+bool SdXShape::IsMasterDepend() const throw()
 {
     SdrObject* pObj = mpShape->GetSdrObject();
     return pObj && pObj->GetUserCall() != NULL;
 }
 
-void SdXShape::SetMasterDepend( sal_Bool bDepend ) throw()
+void SdXShape::SetMasterDepend( bool bDepend ) throw()
 {
     if( IsMasterDepend() != bDepend )
     {
@@ -1214,8 +1214,8 @@ SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
 static void clearEventsInAnimationInfo( SdAnimationInfo* pInfo )
 {
     pInfo->SetBookmark( "" );
-    pInfo->mbSecondSoundOn = sal_False;
-    pInfo->mbSecondPlayFull = sal_False;
+    pInfo->mbSecondSoundOn = false;
+    pInfo->mbSecondPlayFull = false;
     pInfo->meClickAction = presentation::ClickAction_NONE;
     pInfo->meSecondEffect = presentation::AnimationEffect_NONE;
     pInfo->meSecondSpeed = presentation::AnimationSpeed_MEDIUM;
@@ -1241,7 +1241,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
     presentation::AnimationEffect eEffect = presentation::AnimationEffect_NONE;
     presentation::AnimationSpeed eSpeed = presentation::AnimationSpeed_MEDIUM;
     OUString aStrSoundURL;
-    sal_Bool bPlayFull = sal_False;
+    bool bPlayFull = false;
     sal_Int32 nVerb = 0;
     OUString aStrMacro;
     OUString aStrLibrary;
@@ -1335,7 +1335,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
         throw lang::IllegalArgumentException();
     }
 
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
     do
     {
         if( ( nFound & FOUND_EVENTTYPE ) == 0 )
@@ -1346,15 +1346,15 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             if( ( nFound & FOUND_CLICKACTION ) == 0 )
                 break;
 
-            SdAnimationInfo* pInfo = mpShape->GetAnimationInfo( sal_False );
+            SdAnimationInfo* pInfo = mpShape->GetAnimationInfo( false );
             if( presentation::ClickAction_NONE == eClickAction && NULL == pInfo )
             {
-                bOk = sal_True;
+                bOk = true;
                 break;
             }
 
             if( NULL == pInfo )
-                pInfo = mpShape->GetAnimationInfo( sal_True );
+                pInfo = mpShape->GetAnimationInfo( true );
 
             DBG_ASSERT( pInfo, "shape animation info could not be created!" );
             if( NULL == pInfo )
@@ -1373,7 +1373,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             case presentation::ClickAction_INVISIBLE:
             case presentation::ClickAction_STOPPRESENTATION:
                 {
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
 
@@ -1398,7 +1398,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                     }
 
                     pInfo->SetBookmark( aStrBookmark );
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
 
@@ -1406,7 +1406,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 if( nFound & FOUND_MACRO )
                 {
                     pInfo->SetBookmark( aStrMacro );
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
 
@@ -1414,7 +1414,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 if( nFound & FOUND_VERB )
                 {
                     pInfo->mnVerb = (sal_uInt16)nVerb;
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
 
@@ -1425,7 +1425,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 pInfo->meSecondEffect = eEffect;
                 pInfo->meSecondSpeed = nFound & FOUND_SPEED ? eSpeed : presentation::AnimationSpeed_MEDIUM;
 
-                bOk = sal_True;
+                bOk = true;
 
                 // NOTE: No break here!!!
 
@@ -1437,7 +1437,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                         pInfo->mbSecondSoundOn = !aStrSoundURL.isEmpty();
                     pInfo->mbSecondPlayFull = nFound & FOUND_PLAYFULL ? bPlayFull : sal_False;
 
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
             case presentation::ClickAction_MAKE_FIXED_SIZE:
@@ -1446,7 +1446,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
         }
         else
         {
-            SdAnimationInfo* pInfo = mpShape->GetAnimationInfo( sal_True );
+            SdAnimationInfo* pInfo = mpShape->GetAnimationInfo( true );
 
             DBG_ASSERT( pInfo, "shape animation info could not be created!" );
             if( NULL == pInfo )
@@ -1486,7 +1486,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
 
                 pInfo->SetBookmark( sBuffer.makeStringAndClear() );
             }
-            bOk = sal_True;
+            bOk = true;
         }
     }
     while(false);
@@ -1502,7 +1502,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
     if( mpShape == NULL || aName != maStrOnClick )
         throw container::NoSuchElementException();
 
-    SdAnimationInfo* pInfo = mpShape->GetAnimationInfo( sal_False );
+    SdAnimationInfo* pInfo = mpShape->GetAnimationInfo( false );
 
     presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
     if( pInfo )

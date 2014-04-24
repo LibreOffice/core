@@ -97,11 +97,11 @@ rtl::Reference<FuPoor> FuOutlineText::Create( ViewShell* pViewSh, ::sd::Window* 
 }
 
 
-sal_Bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
 {
     mpWindow->GrabFocus();
 
-    sal_Bool bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseButtonDown(rMEvt);
+    bool bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseButtonDown(rMEvt);
 
     if (bReturn)
     {
@@ -117,9 +117,9 @@ sal_Bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
 }
 
 
-sal_Bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
+bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseMove(rMEvt);
+    bool bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseMove(rMEvt);
 
     if (!bReturn)
     {
@@ -130,9 +130,9 @@ sal_Bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
 }
 
 
-sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseButtonUp(rMEvt);
+    bool bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseButtonUp(rMEvt);
 
     if (bReturn)
     {
@@ -148,7 +148,7 @@ sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 
             if( pField && pField->ISA( SvxURLField ) )
             {
-                bReturn = sal_True;
+                bReturn = true;
                 mpWindow->ReleaseMouse();
                 SfxStringItem aStrItem( SID_FILE_NAME, ( (SvxURLField*) pField)->GetURL() );
                 SfxStringItem aReferer( SID_REFERER, mpDocSh->GetMedium()->GetName() );
@@ -182,9 +182,9 @@ sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
  * Process keyboard input
  * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
  */
-sal_Bool FuOutlineText::KeyInput(const KeyEvent& rKEvt)
+bool FuOutlineText::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     sal_uInt16 nKeyGroup = rKEvt.GetKeyCode().GetGroup();
     if( !mpDocSh->IsReadOnly() || nKeyGroup == KEYGROUP_CURSOR )

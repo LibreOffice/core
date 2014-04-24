@@ -42,7 +42,7 @@ protected:
     SdPageVector                    maPageVectorNotes;
     SdPage*                         mpHandoutPage;
 
-    sal_Bool                        mbPageListValid;
+    bool                        mbPageListValid;
     sal_uInt32                      mnVisiblePageCount;
 
     void ImpRecreateSortedPageListOnDemand();
@@ -58,7 +58,7 @@ public:
     ImpPageListWatcher(const SdrModel& rModel);
     virtual ~ImpPageListWatcher();
 
-    void Invalidate() { mbPageListValid = sal_False; }
+    void Invalidate() { mbPageListValid = false; }
     SdPage* GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum = 0L);
     sal_uInt32 GetSdPageCount(PageKind ePgKind);
     sal_uInt32 GetVisibleSdPageCount();

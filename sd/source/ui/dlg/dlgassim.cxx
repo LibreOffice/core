@@ -183,10 +183,10 @@ sal_uInt16 SdPageListControl::GetSelectedPage()
     return nPage;
 }
 
-sal_Bool SdPageListControl::IsPageChecked( sal_uInt16 nPage )
+bool SdPageListControl::IsPageChecked( sal_uInt16 nPage )
 {
     SvTreeListEntry* pEntry = GetModel()->GetEntry(nPage);
-    return pEntry?(sal_Bool)(GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED): sal_False;
+    return pEntry && (GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED);
 }
 
 void SdPageListControl::DataChanged( const DataChangedEvent& rDCEvt )

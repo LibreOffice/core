@@ -89,9 +89,9 @@ void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
 }
 
 
-sal_Bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     SdrViewEvent aVEvt;
     SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
@@ -139,17 +139,16 @@ sal_Bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 }
 
 
-sal_Bool FuConstructBezierPolygon::MouseMove(const MouseEvent& rMEvt)
+bool FuConstructBezierPolygon::MouseMove(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuConstruct::MouseMove(rMEvt);
-    return(bReturn);
+    return FuConstruct::MouseMove(rMEvt);
 }
 
 
-sal_Bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
+bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
 {
-    sal_Bool bReturn = sal_False;
-    sal_Bool bCreated = sal_False;
+    bool bReturn = false;
+    bool bCreated = false;
 
     SdrViewEvent aVEvt;
     mpView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt);
@@ -167,15 +166,15 @@ sal_Bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
 
     if (aVEvt.eEvent == SDREVENT_ENDCREATE)
     {
-        bReturn = sal_True;
+        bReturn = true;
 
         if (nCount == (mpView->GetSdrPageView()->GetObjList()->GetObjCount() - 1))
         {
-            bCreated = sal_True;
+            bCreated = true;
         }
 
         // trick to suppress FuDraw::DoubleClick
-        bMBDown = sal_False;
+        bMBDown = false;
 
     }
 
@@ -228,11 +227,9 @@ sal_Bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
  * Process keyboard input
  * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
  */
-sal_Bool FuConstructBezierPolygon::KeyInput(const KeyEvent& rKEvt)
+bool FuConstructBezierPolygon::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
-
-    return(bReturn);
+    return FuConstruct::KeyInput(rKEvt);
 }
 
 

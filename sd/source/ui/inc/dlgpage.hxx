@@ -44,7 +44,7 @@ private:
 
 public:
 
-    SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, sal_Bool bAreaPage = sal_True );
+    SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, bool bAreaPage = true );
     virtual ~SdPageDlg() {};
 
     virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) SAL_OVERRIDE;

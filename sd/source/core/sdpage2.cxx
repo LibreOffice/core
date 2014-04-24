@@ -76,9 +76,9 @@ using namespace ::com::sun::star::office;
 \************************************************************************/
 
 void SdPage::SetPresentationLayout(const OUString& rLayoutName,
-                                   sal_Bool bReplaceStyleSheets,
-                                   sal_Bool bSetMasterPage,
-                                   sal_Bool bReverseOrder)
+                                   bool bReplaceStyleSheets,
+                                   bool bSetMasterPage,
+                                   bool bReverseOrder)
 {
     /*********************************************************************
     |* Name of the layout of the page
@@ -388,7 +388,7 @@ SdPage::SdPage(const SdPage& rSrcPage)
         InsertPresObj(GetObj(pObj->GetOrdNum()), rSrcPage.GetPresObjKind(pObj));
     }
 
-    mbSelected           = sal_False;
+    mbSelected           = false;
     mnTransitionType    = rSrcPage.mnTransitionType;
     mnTransitionSubtype = rSrcPage.mnTransitionSubtype;
     mbTransitionDirection = rSrcPage.mbTransitionDirection;
@@ -483,7 +483,7 @@ SfxItemSet* SdPage::getOrCreateItems()
 }
 
 
-sal_Bool SdPage::setAlienAttributes( const com::sun::star::uno::Any& rAttributes )
+bool SdPage::setAlienAttributes( const com::sun::star::uno::Any& rAttributes )
 {
     SfxItemSet* pSet = getOrCreateItems();
 
@@ -491,10 +491,10 @@ sal_Bool SdPage::setAlienAttributes( const com::sun::star::uno::Any& rAttributes
     if( aAlienAttributes.PutValue( rAttributes, 0 ) )
     {
         pSet->Put( aAlienAttributes );
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 void SdPage::getAlienAttributes( com::sun::star::uno::Any& rAttributes )
@@ -550,12 +550,12 @@ void SdPage::setTransitionSubtype ( sal_Int16 nTransitionSubtype )
     ActionChanged();
 }
 
-sal_Bool SdPage::getTransitionDirection (void) const
+bool SdPage::getTransitionDirection (void) const
 {
     return mbTransitionDirection;
 }
 
-void SdPage::setTransitionDirection ( sal_Bool bTransitionbDirection )
+void SdPage::setTransitionDirection ( bool bTransitionbDirection )
 {
     mbTransitionDirection = bTransitionbDirection;
     ActionChanged();

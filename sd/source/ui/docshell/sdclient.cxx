@@ -63,8 +63,8 @@ void Client::RequestNewObjectArea( Rectangle& aObjRect )
 {
     ::sd::View* pView = mpViewShell->GetView();
 
-    sal_Bool bSizeProtect = sal_False;
-    sal_Bool bPosProtect = sal_False;
+    bool bSizeProtect = false;
+    bool bPosProtect = false;
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if (rMarkList.GetMarkCount() == 1)

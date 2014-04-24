@@ -66,7 +66,7 @@ extern "C" sal_Bool SaveVBA( SfxObjectShell&, SvMemoryStream*& );
 // - SdPPTFilter -
 
 
-SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
+SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress ),
     pBas    ( NULL )
 {
@@ -81,9 +81,9 @@ SdPPTFilter::~SdPPTFilter()
 
 
 
-sal_Bool SdPPTFilter::Import()
+bool SdPPTFilter::Import()
 {
-    sal_Bool    bRet = sal_False;
+    bool    bRet = false;
     SotStorageRef pStorage = new SotStorage( mrMedium.GetInStream(), false );
     if( !pStorage->GetError() )
     {
@@ -133,12 +133,12 @@ sal_Bool SdPPTFilter::Import()
 
 
 
-sal_Bool SdPPTFilter::Export()
+bool SdPPTFilter::Export()
 {
 #ifndef DISABLE_DYNLOADING
     ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
 #endif
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
 #ifndef DISABLE_DYNLOADING
     if( pLibrary )

@@ -699,7 +699,7 @@ bool
 {
     const SolarMutexGuard aSolarGuard;
     uno::Reference< view::XSelectionSupplier >  xSel( mxController, uno::UNO_QUERY );
-    sal_Bool                                    bRet = sal_False;
+    bool                                    bRet = false;
 
     OSL_ENSURE( 0 <= nAccessibleChildIndex, "AccessibleDrawDocumentView::implIsSelected: invalid index!" );
 
@@ -722,7 +722,7 @@ bool
                 {
                     for( sal_Int32 i = 0, nCount = xShapes->getCount(); ( i < nCount ) && !bRet; ++i )
                         if( xShapes->getByIndex( i ) == xShape )
-                            bRet = sal_True;
+                            bRet = true;
                 }
             }
         }
@@ -792,7 +792,7 @@ void
                 if( xShape.is() )
                 {
                     uno::Reference< drawing::XShapes >  xShapes;
-                    sal_Bool                            bFound = sal_False;
+                    bool                            bFound = false;
 
                     aAny = xSel->getSelection();
                     aAny >>= xShapes;
@@ -803,7 +803,7 @@ void
                         sal_Int32 nCount = xShapes->getCount();
                         for (sal_Int32 i=0; ( i < nCount ) && !bFound; ++i )
                             if( xShapes->getByIndex( i ) == xShape )
-                                bFound = sal_True;
+                                bFound = true;
                     }
                     else
                         // Create an empty selection to add the shape to.
@@ -831,13 +831,13 @@ void AccessibleDrawDocumentView::Activated (void)
 {
     if (mpChildrenManager != NULL)
     {
-        sal_Bool bChange = sal_False;
+        bool bChange = false;
         // When none of the children has the focus then claim it for the
         // view.
         if ( ! mpChildrenManager->HasFocus())
         {
             SetState (AccessibleStateType::FOCUSED);
-            bChange = sal_True;
+            bChange = true;
         }
         else
             ResetState (AccessibleStateType::FOCUSED);

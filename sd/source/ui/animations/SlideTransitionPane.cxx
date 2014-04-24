@@ -73,7 +73,7 @@ struct TransitionEffect
     TransitionEffect() :
             mnType( 0 ),
             mnSubType( 0 ),
-            mbDirection( sal_True ),
+            mbDirection( true ),
             mnFadeColor( 0 )
     {
         init();
@@ -108,7 +108,7 @@ struct TransitionEffect
         mfDuration = 2.0;
         mfTime = 0.0;
         mePresChange = PRESCHANGE_MANUAL;
-        mbSoundOn = sal_False;
+        mbSoundOn = false;
         mbLoopSound = false;
         mbStopSound = false;
 
@@ -160,7 +160,7 @@ struct TransitionEffect
             if( mbStopSound )
             {
                 rOutPage.SetStopSound( true );
-                rOutPage.SetSound( sal_False );
+                rOutPage.SetSound( false );
             }
             else
             {
@@ -199,14 +199,14 @@ struct TransitionEffect
     // effect
     sal_Int16 mnType;
     sal_Int16 mnSubType;
-    sal_Bool  mbDirection;
+    bool  mbDirection;
     sal_Int32 mnFadeColor;
 
     // other settings
     double      mfDuration;
     double       mfTime;
     PresChange  mePresChange;
-    sal_Bool        mbSoundOn;
+    bool        mbSoundOn;
     OUString    maSound;
     bool        mbLoopSound;
     bool        mbStopSound;
@@ -661,7 +661,7 @@ void SlideTransitionPane::updateControls()
     }
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
-    mpCB_AUTO_PREVIEW->Check( pOptions->IsPreviewTransitions() == sal_True );
+    mpCB_AUTO_PREVIEW->Check( pOptions->IsPreviewTransitions() );
 
     mbUpdatingControls = false;
 

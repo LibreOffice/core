@@ -138,14 +138,14 @@ SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
 
 
 // Find SdPage by name
-sal_uInt16 SdDrawDocument::GetPageByName(const OUString& rPgName, sal_Bool& rbIsMasterPage) const
+sal_uInt16 SdDrawDocument::GetPageByName(const OUString& rPgName, bool& rbIsMasterPage) const
 {
     SdPage* pPage = NULL;
     sal_uInt16 nPage = 0;
     const sal_uInt16 nMaxPages = GetPageCount();
     sal_uInt16 nPageNum = SDRPAGE_NOTFOUND;
 
-    rbIsMasterPage = sal_False;
+    rbIsMasterPage = false;
 
     // Search all regular pages and all notes pages (handout pages are
     // ignored)
@@ -176,7 +176,7 @@ sal_uInt16 SdDrawDocument::GetPageByName(const OUString& rPgName, sal_Bool& rbIs
         if (pPage && pPage->GetName() == rPgName)
         {
             nPageNum = nPage;
-            rbIsMasterPage = sal_True;
+            rbIsMasterPage = true;
         }
 
         nPage++;
@@ -433,7 +433,7 @@ SdrPage* SdDrawDocument::RemoveMasterPage(sal_uInt16 nPgNum)
 }
 
 //Select pages
-void SdDrawDocument::SetSelected(SdPage* pPage, sal_Bool bSelect)
+void SdDrawDocument::SetSelected(SdPage* pPage, bool bSelect)
 {
     PageKind ePageKind = pPage->GetPageKind();
 
@@ -513,7 +513,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         // If nPageCount==1 is, the model for the clipboard was created, thus a
         // default page must already exist
         SdPage* pPage;
-        sal_Bool bClipboard = sal_False;
+        bool bClipboard = false;
 
         if( pRefDocument )
             pRefPage = pRefDocument->GetSdPage( 0, PK_STANDARD );
@@ -532,7 +532,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
                 // Draw: always use default size with margins
                 pPage->SetSize(aDefSize);
 
-                SfxPrinter* pPrinter = mpDocSh->GetPrinter(sal_False);
+                SfxPrinter* pPrinter = mpDocSh->GetPrinter(false);
                 if (pPrinter && pPrinter->IsValid())
                 {
                     Size aOutSize(pPrinter->GetOutputSize());
@@ -569,7 +569,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         }
         else
         {
-            bClipboard = sal_True;
+            bClipboard = true;
             pPage = (SdPage*) GetPage(1);
         }
 
@@ -630,7 +630,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
 
 
         if( !pRefPage && (meDocType != DOCUMENT_TYPE_DRAW) )
-            pPage->SetAutoLayout( AUTOLAYOUT_TITLE, sal_True, sal_True );
+            pPage->SetAutoLayout( AUTOLAYOUT_TITLE, true, true );
 
         mpWorkStartupTimer = new Timer();
         mpWorkStartupTimer->SetTimeoutHdl( LINK(this, SdDrawDocument, WorkStartupHdl) );
@@ -644,9 +644,9 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
 // Creates missing notes and handout pages (after PowerPoint import).
 // We assume that at least one default page and one default master page exist.
 
-sal_Bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
+bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
 {
-    sal_Bool bOK = sal_False;
+    bool bOK = false;
     sal_uInt16 nPageCount = GetPageCount();
 
     if (nPageCount != 0)
@@ -678,7 +678,7 @@ sal_Bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
             pNotesPage->TRG_SetMasterPage(*GetMasterPage(nMasterPageAfterPagesMasterPage));
         }
 
-        bOK = sal_True;
+        bOK = true;
         StopWorkStartupDelay();
         SetChanged(false);
     }
@@ -689,12 +689,12 @@ sal_Bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
 // + Move selected pages after said page
 //   (nTargetPage = (sal_uInt16)-1  --> move before first page)
 // + Returns sal_True when the page has been moved
-sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
+bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
 {
     SdPage* pPage              = NULL;
     sal_uInt16  nPage;
     sal_uInt16  nNoOfPages         = GetSdPageCount(PK_STANDARD);
-    sal_Bool    bSomethingHappened = sal_False;
+    bool    bSomethingHappened = false;
 
     const bool bUndo = IsUndoEnabled();
 
@@ -745,7 +745,7 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
                 if( bUndo )
                     AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, 2));
                 MovePage(nPage+1, 2);
-                bSomethingHappened = sal_True;
+                bSomethingHappened = true;
             }
         }
     }
@@ -774,7 +774,7 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
                     if( bUndo )
                         AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
                     MovePage(nPage+1, nTargetPage+1);
-                    bSomethingHappened = sal_True;
+                    bSomethingHappened = true;
                 }
             }
             else
@@ -789,7 +789,7 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
                     if( bUndo )
                         AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
                     MovePage(nPage, nTargetPage);
-                    bSomethingHappened = sal_True;
+                    bSomethingHappened = true;
                 }
             }
             nTargetPage = pPage->GetPageNum();
@@ -812,22 +812,22 @@ sal_uLong SdDrawDocument::GetLinkCount()
 // Set Language
 void SdDrawDocument::SetLanguage( const LanguageType eLang, const sal_uInt16 nId )
 {
-    sal_Bool bChanged = sal_False;
+    bool bChanged = false;
 
     if( nId == EE_CHAR_LANGUAGE && meLanguage != eLang )
     {
         meLanguage = eLang;
-        bChanged = sal_True;
+        bChanged = true;
     }
     else if( nId == EE_CHAR_LANGUAGE_CJK && meLanguageCJK != eLang )
     {
         meLanguageCJK = eLang;
-        bChanged = sal_True;
+        bChanged = true;
     }
     else if( nId == EE_CHAR_LANGUAGE_CTL && meLanguageCTL != eLang )
     {
         meLanguageCTL = eLang;
-        bChanged = sal_True;
+        bChanged = true;
     }
 
     if( bChanged )
@@ -860,7 +860,7 @@ IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
     if( mpDocSh )
         mpDocSh->SetWaitCursor( true );
 
-    sal_Bool bChanged = IsChanged();        // remember this
+    bool bChanged = IsChanged();        // remember this
 
     // Initialize Autolayouts
     SdPage* pHandoutMPage = GetMasterSdPage(0, PK_HANDOUT);
@@ -868,7 +868,7 @@ IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
     if (pHandoutMPage->GetAutoLayout() == AUTOLAYOUT_NONE)
     {
         // No AutoLayout yet -> initialize
-        pHandoutMPage->SetAutoLayout(AUTOLAYOUT_HANDOUT6, sal_True, sal_True);
+        pHandoutMPage->SetAutoLayout(AUTOLAYOUT_HANDOUT6, true, true);
     }
 
     SdPage* pPage = GetSdPage(0, PK_STANDARD);
@@ -876,7 +876,7 @@ IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
     if (pPage->GetAutoLayout() == AUTOLAYOUT_NONE)
     {
         // No AutoLayout yet -> initialize
-        pPage->SetAutoLayout(AUTOLAYOUT_NONE, sal_True, sal_True);
+        pPage->SetAutoLayout(AUTOLAYOUT_NONE, true, true);
     }
 
     SdPage* pNotesPage = GetSdPage(0, PK_NOTES);
@@ -884,7 +884,7 @@ IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
     if (pNotesPage->GetAutoLayout() == AUTOLAYOUT_NONE)
     {
         // No AutoLayout yet -> initialize
-        pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
+        pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, true, true);
     }
 
     SetChanged(bChanged);
@@ -987,7 +987,7 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
         Point               aRelPoint( rWinPoint );
         ImageMap&           rImageMap = (ImageMap&) pIMapInfo->GetImageMap();
         const Rectangle&    rRect = pObj->GetLogicRect();
-        sal_Bool                bObjSupported = sal_False;
+        bool                bObjSupported = false;
 
         // execute HitTest
         if ( pObj->ISA( SdrGrafObj )  ) // simple graphics object
@@ -1015,12 +1015,12 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
                                                          pGrafObj->GetGrafPrefMapMode(), aMap100 );
 
             delete pGeoData;
-            bObjSupported = sal_True;
+            bObjSupported = true;
         }
         else if ( pObj->ISA( SdrOle2Obj ) ) // OLE object
         {
             aGraphSize = ( (SdrOle2Obj*) pObj )->GetOrigObjSize();
-            bObjSupported = sal_True;
+            bObjSupported = true;
         }
 
         // Everything worked out well, thus execute HitTest
@@ -1082,7 +1082,7 @@ void SdDrawDocument::CheckMasterPages()
     {
         // there is a fatal error in the master page order,
         // we need to repair the document
-        sal_Bool bChanged = sal_False;
+        bool bChanged = false;
 
         nPage = 1;
         while( nPage < nMaxPages )
@@ -1090,7 +1090,7 @@ void SdDrawDocument::CheckMasterPages()
             pPage = static_cast<SdPage*> (GetMasterPage( nPage ));
             if( pPage->GetPageKind() != PK_STANDARD )
             {
-                bChanged = sal_True;
+                bChanged = true;
                 sal_uInt16 nFound = nPage + 1;
                 while( nFound < nMaxPages )
                 {
@@ -1120,7 +1120,7 @@ void SdDrawDocument::CheckMasterPages()
 
             if( (NULL == pNotesPage) || (pNotesPage->GetPageKind() != PK_NOTES) || ( pPage->GetLayoutName() != pNotesPage->GetLayoutName() ) )
             {
-                bChanged = sal_True;
+                bChanged = true;
 
                 sal_uInt16 nFound = nPage + 1;
                 while( nFound < nMaxPages )
@@ -1166,7 +1166,7 @@ void SdDrawDocument::CheckMasterPages()
                     }
                     InsertMasterPage(pNewNotesPage,  nPage );
                     pNewNotesPage->SetLayoutName( pPage->GetLayoutName() );
-                    pNewNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True );
+                    pNewNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, true, true );
                     nMaxPages++;
                 }
             }
@@ -1177,7 +1177,7 @@ void SdDrawDocument::CheckMasterPages()
         // now remove all remaining and unused non PK_STANDARD slides
         while( nPage < nMaxPages )
         {
-            bChanged = sal_True;
+            bChanged = true;
 
             RemoveMasterPage( nPage );
             nMaxPages--;
@@ -1198,8 +1198,8 @@ sal_uInt16 SdDrawDocument::CreatePage (
     const OUString& sNotesPageName,
     AutoLayout eStandardLayout,
     AutoLayout eNotesLayout,
-    sal_Bool bIsPageBack,
-    sal_Bool bIsPageObj,
+    bool bIsPageBack,
+    bool bIsPageObj,
     const sal_Int32 nInsertPosition)
 {
     SdPage* pPreviousStandardPage;
@@ -1240,7 +1240,7 @@ sal_uInt16 SdDrawDocument::CreatePage (
 
     // User layout of current standard page
     pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
-    pStandardPage->SetAutoLayout(eStandardLayout, sal_True);
+    pStandardPage->SetAutoLayout(eStandardLayout, true);
     pStandardPage->setHeaderFooterSettings( pPreviousStandardPage->getHeaderFooterSettings() );
 
     // transition settings of current page
@@ -1263,7 +1263,7 @@ sal_uInt16 SdDrawDocument::CreatePage (
 
     // Use layout of current notes page
     pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
-    pNotesPage->SetAutoLayout(eNotesLayout, sal_True);
+    pNotesPage->SetAutoLayout(eNotesLayout, true);
     pNotesPage->setHeaderFooterSettings( pPreviousNotesPage->getHeaderFooterSettings() );
 
     return InsertPageSet (
@@ -1310,8 +1310,8 @@ sal_uInt16 SdDrawDocument::DuplicatePage (
     PageKind ePageKind,
     const OUString& sStandardPageName,
     const OUString& sNotesPageName,
-    sal_Bool bIsPageBack,
-    sal_Bool bIsPageObj,
+    bool bIsPageBack,
+    bool bIsPageObj,
     const sal_Int32 nInsertPosition)
 {
     SdPage* pPreviousStandardPage;
@@ -1358,8 +1358,8 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
     PageKind ePageKind,
     const OUString& sStandardPageName,
     const OUString& sNotesPageName,
-    sal_Bool bIsPageBack,
-    sal_Bool bIsPageObj,
+    bool bIsPageBack,
+    bool bIsPageObj,
     SdPage* pStandardPage,
     SdPage* pNotesPage,
     sal_Int32 nInsertPosition)
@@ -1426,8 +1426,8 @@ void SdDrawDocument::SetupNewPage (
     SdPage* pPage,
     const OUString& sPageName,
     sal_uInt16 nInsertionPoint,
-    sal_Bool bIsPageBack,
-    sal_Bool bIsPageObj)
+    bool bIsPageBack,
+    bool bIsPageObj)
 {
     if (pPreviousPage != NULL)
     {

@@ -305,7 +305,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
     {
     case ATTR_PRESENT_ALL:
     {
-        sal_Bool bVal = sal_False;
+        bool bVal = false;
 
         if( aValue >>= bVal )
         {
@@ -316,14 +316,14 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
                 rPresSettings.mbAll = bVal;
                 bValuesChanged = true;
                 if( bVal )
-                    rPresSettings.mbCustomShow = sal_False;
+                    rPresSettings.mbCustomShow = false;
             }
         }
         break;
     }
     case ATTR_PRESENT_CHANGE_PAGE:
     {
-        sal_Bool bVal = sal_False;
+        bool bVal = false;
 
         if( aValue >>= bVal )
         {
@@ -340,7 +340,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
 
     case ATTR_PRESENT_ANIMATION_ALLOWED:
     {
-        sal_Bool bVal = sal_False;
+        bool bVal = false;
 
         if( aValue >>= bVal )
         {
@@ -363,7 +363,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
 
             const OUString aShowName( aShow );
 
-            SdCustomShowList* pCustomShowList = mpDoc->GetCustomShowList(sal_False);
+            SdCustomShowList* pCustomShowList = mpDoc->GetCustomShowList(false);
             if(pCustomShowList)
             {
                 SdCustomShow* pCustomShow;
@@ -373,7 +373,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
                         break;
                 }
 
-                rPresSettings.mbCustomShow = sal_True;
+                rPresSettings.mbCustomShow = true;
                 bValuesChanged = true;
             }
         }
@@ -381,7 +381,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
     }
     case ATTR_PRESENT_ENDLESS:
     {
-        sal_Bool bVal = sal_False;
+        bool bVal = false;
 
         if( aValue >>= bVal )
         {
@@ -397,7 +397,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
     }
     case ATTR_PRESENT_FULLSCREEN:
     {
-        sal_Bool bVal = sal_False;
+        bool bVal = false;
 
         if( aValue >>= bVal )
         {
@@ -419,14 +419,14 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
         {
             bValuesChanged = true;
             rPresSettings.maPresPage = getUiNameFromPageApiNameImpl(aPresPage);
-            rPresSettings.mbCustomShow = sal_False;
-            rPresSettings.mbAll = sal_False;
+            rPresSettings.mbCustomShow = false;
+            rPresSettings.mbAll = false;
         }
         break;
     }
     case ATTR_PRESENT_MANUEL:
     {
-        sal_Bool bVal = sal_False;
+        bool bVal = false;
 
         if( aValue >>= bVal )
         {
@@ -442,7 +442,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
     }
     case ATTR_PRESENT_MOUSE:
     {
-        sal_Bool bVal = sal_False;
+        bool bVal = false;
 
         if( aValue >>= bVal )
         {
@@ -457,7 +457,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
     }
     case ATTR_PRESENT_ALWAYS_ON_TOP:
     {
-        sal_Bool bVal = sal_False;
+        bool bVal = false;
 
         if( aValue >>= bVal )
         {
@@ -473,7 +473,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
     }
     case ATTR_PRESENT_NAVIGATOR:
     {
-        sal_Bool bVal = sal_False;
+        bool bVal = false;
 
         if( aValue >>= bVal )
         {
@@ -489,7 +489,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
     }
     case ATTR_PRESENT_PEN:
     {
-        sal_Bool bVal = sal_False;
+        bool bVal = false;
 
         if( aValue >>= bVal )
         {
@@ -519,7 +519,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
     }
     case ATTR_PRESENT_SHOW_PAUSELOGO:
     {
-        sal_Bool bVal = sal_False;
+        bool bVal = false;
 
         if( aValue >>= bVal )
         {
@@ -576,14 +576,14 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(U
     switch( pEntry ? pEntry->nWID : -1 )
     {
     case ATTR_PRESENT_ALL:
-        return Any( (sal_Bool) ( !rPresSettings.mbCustomShow && rPresSettings.mbAll ) );
+        return Any( !rPresSettings.mbCustomShow && rPresSettings.mbAll );
     case ATTR_PRESENT_CHANGE_PAGE:
-        return Any( (sal_Bool) !rPresSettings.mbLockedPages );
+        return Any( !rPresSettings.mbLockedPages );
     case ATTR_PRESENT_ANIMATION_ALLOWED:
         return Any( rPresSettings.mbAnimationAllowed );
     case ATTR_PRESENT_CUSTOMSHOW:
         {
-            SdCustomShowList* pList = mpDoc->GetCustomShowList(sal_False);
+            SdCustomShowList* pList = mpDoc->GetCustomShowList(false);
             SdCustomShow* pShow = (pList && rPresSettings.mbCustomShow) ? pList->GetCurObject() : NULL;
             OUString aShowName;
 
@@ -1210,7 +1210,7 @@ void SlideShow::StartInPlacePresentation()
 
     if( mxController.is() )
     {
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
         if( mxCurrentSettings.get() && mxCurrentSettings->mbPreview )
         {
             bSuccess = mxController->startPreview(mxCurrentSettings->mxStartPage, mxCurrentSettings->mxAnimationNode, mxCurrentSettings->mpParentWindow );

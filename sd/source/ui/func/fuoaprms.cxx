@@ -103,20 +103,20 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     presentation::AnimationEffect eEffect         = presentation::AnimationEffect_NONE;
     presentation::AnimationEffect eTextEffect     = presentation::AnimationEffect_NONE;
     presentation::AnimationSpeed  eSpeed          = presentation::AnimationSpeed_MEDIUM;
-    sal_Bool            bActive         = sal_False;
-    sal_Bool            bFadeOut        = sal_False;
+    bool            bActive         = false;
+    bool            bFadeOut        = false;
     Color           aFadeColor      = COL_LIGHTGRAY;
-    sal_Bool            bInvisible      = sal_False;
-    sal_Bool            bSoundOn        = sal_False;
+    bool            bInvisible      = false;
+    bool            bSoundOn        = false;
     OUString        aSound;
-    sal_Bool            bPlayFull       = sal_False;
+    bool            bPlayFull       = false;
     presentation::ClickAction     eClickAction    = presentation::ClickAction_NONE;
     OUString        aBookmark;
 
     presentation::AnimationEffect eSecondEffect   = presentation::AnimationEffect_NONE;
     presentation::AnimationSpeed  eSecondSpeed    = presentation::AnimationSpeed_MEDIUM;
-    sal_Bool            bSecondSoundOn  = sal_False;
-    sal_Bool            bSecondPlayFull = sal_False;
+    bool            bSecondSoundOn  = false;
+    bool            bSecondPlayFull = false;
 
 
     SdAnimationInfo* pInfo;
@@ -234,7 +234,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         }
         else
         {
-            if (nAnimationSet == ATTR_SET && bActive == sal_True)
+            if (nAnimationSet == ATTR_SET && bActive)
                 nAnimationSet = ATTR_MIXED;
 
             if (nEffectSet == ATTR_SET && eEffect != presentation::AnimationEffect_NONE)
@@ -246,22 +246,22 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             if (nSpeedSet == ATTR_SET)
                 nSpeedSet = ATTR_MIXED;
 
-            if (nFadeOutSet == ATTR_SET && bFadeOut == sal_True)
+            if (nFadeOutSet == ATTR_SET && bFadeOut)
                 nFadeOutSet = ATTR_MIXED;
 
             if (nFadeColorSet == ATTR_SET)
                 nFadeColorSet = ATTR_MIXED;
 
-            if (nInvisibleSet == ATTR_SET && bInvisible == sal_True)
+            if (nInvisibleSet == ATTR_SET && bInvisible)
                 nInvisibleSet = ATTR_MIXED;
 
-            if (nSoundOnSet == ATTR_SET && bSoundOn == sal_True)
+            if (nSoundOnSet == ATTR_SET && bSoundOn)
                 nSoundOnSet = ATTR_MIXED;
 
             if (nSoundFileSet == ATTR_SET)
                 nSoundFileSet = ATTR_MIXED;
 
-            if (nPlayFullSet == ATTR_SET && bPlayFull == sal_True)
+            if (nPlayFullSet == ATTR_SET && bPlayFull)
                 nPlayFullSet = ATTR_MIXED;
 
             if (nClickActionSet == ATTR_SET && eClickAction != presentation::ClickAction_NONE)
@@ -276,10 +276,10 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             if (nSecondSpeedSet == ATTR_SET)
                 nSecondSpeedSet = ATTR_MIXED;
 
-            if (nSecondSoundOnSet == ATTR_SET && bSecondSoundOn == sal_True)
+            if (nSecondSoundOnSet == ATTR_SET && bSecondSoundOn)
                 nSecondSoundOnSet = ATTR_MIXED;
 
-            if (nSecondPlayFullSet == ATTR_SET && bSecondPlayFull == sal_True)
+            if (nSecondPlayFullSet == ATTR_SET && bSecondPlayFull)
                 nSecondPlayFullSet = ATTR_MIXED;
         }
     }
@@ -683,11 +683,11 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
             pInfo = mpDoc->GetAnimationInfo(pObject);
 
-            sal_Bool bCreated = sal_False;
+            bool bCreated = false;
             if( !pInfo )
             {
                 pInfo = SdDrawDocument::GetShapeUserData(*pObject,true);
-                bCreated = sal_True;
+                bCreated = true;
             }
 
             // path object for 'following curves'?

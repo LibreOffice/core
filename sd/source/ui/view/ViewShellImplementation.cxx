@@ -102,14 +102,14 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
     sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false);
     sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false);
     SetOfByte aVisibleLayers;
-    sal_Bool bHandoutMode = sal_False;
+    bool bHandoutMode = false;
     SdPage* pHandoutMPage = NULL;
     OUString aNewName;
 
     AutoLayout aNewAutoLayout;
 
-    sal_Bool bBVisible;
-    sal_Bool bBObjsVisible;
+    bool bBVisible;
+    bool bBObjsVisible;
     const SfxItemSet* pArgs = rRequest.GetArgs();
 
     if (pCurrentPage != NULL && pCurrentPage->TRG_HasMasterPage())
@@ -156,7 +156,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             }
             if (ePageKind == PK_HANDOUT)
             {
-                bHandoutMode = sal_True;
+                bHandoutMode = true;
                 pHandoutMPage = pDocument->GetMasterSdPage(0, PK_HANDOUT);
             }
         }
@@ -202,7 +202,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
                     }
                 }
 
-                pCurrentPage->SetAutoLayout(aNewAutoLayout, sal_True);
+                pCurrentPage->SetAutoLayout(aNewAutoLayout, true);
 
                 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false);
                 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false);
@@ -212,17 +212,17 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             }
             else
             {
-                pHandoutMPage->SetAutoLayout(aNewAutoLayout, sal_True);
+                pHandoutMPage->SetAutoLayout(aNewAutoLayout, true);
             }
 
             mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
                 SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 
-            sal_Bool bSetModified = sal_True;
+            bool bSetModified = true;
 
             if (pArgs && pArgs->Count() == 1)
             {
-                bSetModified = (sal_Bool) ((SfxBoolItem&) pArgs->Get(SID_MODIFYPAGE)).GetValue();
+                bSetModified = ((SfxBoolItem&) pArgs->Get(SID_MODIFYPAGE)).GetValue();
             }
 
             pUndoManager->AddUndoAction( new UndoAutoLayoutPosAndSize( *pUndoPage ) );

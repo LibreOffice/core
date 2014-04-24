@@ -59,18 +59,18 @@ private:
 public:
     DrawDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
-        sal_Bool bSdDataObj=sal_False,
+        bool bSdDataObj=false,
         DocumentType=DOCUMENT_TYPE_IMPRESS);
 
     DrawDocShell (
         const sal_uInt64 nModelCreationFlags,
-        sal_Bool bSdDataObj=sal_False,
+        bool bSdDataObj=false,
         DocumentType=DOCUMENT_TYPE_IMPRESS);
 
     DrawDocShell (
         SdDrawDocument* pDoc,
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
-        sal_Bool bSdDataObj=sal_False,
+        bool bSdDataObj=false,
         DocumentType=DOCUMENT_TYPE_IMPRESS);
     virtual ~DrawDocShell();
 
@@ -116,11 +116,11 @@ public:
     SdDrawDocument*         GetDoc();
     DocumentType            GetDocumentType() const { return meDocType; }
 
-    SfxPrinter*             GetPrinter(sal_Bool bCreate);
+    SfxPrinter*             GetPrinter(bool bCreate);
     void                    SetPrinter(SfxPrinter *pNewPrinter);
     void                    UpdateFontList();
 
-    sal_Bool                    IsInDestruction() const { return mbInDestruction; }
+    bool                    IsInDestruction() const { return mbInDestruction; }
 
     void                    CancelSearching();
 
@@ -131,12 +131,12 @@ public:
     void                    Disconnect(sd::ViewShell* pViewSh);
     void                    UpdateTablePointers();
 
-    sal_Bool                GotoBookmark(const OUString& rBookmark);
+    bool                    GotoBookmark(const OUString& rBookmark);
 
     //realize multi-selection of objects
-    sal_Bool                GotoTreeBookmark(const OUString& rBookmark);
-    sal_Bool                IsMarked(  SdrObject* pObject  );
-    sal_Bool                GetObjectIsmarked(const OUString& rBookmark);
+    bool                    GotoTreeBookmark(const OUString& rBookmark);
+    bool                    IsMarked(  SdrObject* pObject  );
+    bool                    GetObjectIsmarked(const OUString& rBookmark);
     Bitmap                  GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixel);
 
     /** checks, if the given name is a valid new name for a slide
@@ -154,12 +154,12 @@ public:
                 a default name of a not-yet-existing slide (e.g. 'Slide 17'),
                 sal_True is returned, but rName is set to an empty string.
      */
-    sal_Bool                    CheckPageName(::Window* pWin, OUString& rName );
+    bool                    CheckPageName(::Window* pWin, OUString& rName );
 
-    void                    SetSlotFilter(sal_Bool bEnable = sal_False, sal_uInt16 nCount = 0, const sal_uInt16* pSIDs = NULL) { mbFilterEnable = bEnable; mnFilterCount = nCount; mpFilterSIDs = pSIDs; }
+    void                    SetSlotFilter(bool bEnable = false, sal_uInt16 nCount = 0, const sal_uInt16* pSIDs = NULL) { mbFilterEnable = bEnable; mnFilterCount = nCount; mpFilterSIDs = pSIDs; }
     void                    ApplySlotFilter() const;
 
-    sal_uInt16                  GetStyleFamily() const { return mnStyleFamily; }
+    sal_uInt16              GetStyleFamily() const { return mnStyleFamily; }
     void                    SetStyleFamily( sal_uInt16 nSF ) { mnStyleFamily = nSF; }
 
     /** executes the SID_OPENDOC slot to let the framework open a document
@@ -217,11 +217,11 @@ protected:
     sal_uInt16                  mnStyleFamily;
     const sal_uInt16*           mpFilterSIDs;
     sal_uInt16                  mnFilterCount;
-    sal_Bool                    mbFilterEnable;
-    sal_Bool                    mbSdDataObj;
-    sal_Bool                    mbInDestruction;
-    sal_Bool                    mbOwnPrinter;
-    sal_Bool                    mbNewDocument;
+    bool                    mbFilterEnable;
+    bool                    mbSdDataObj;
+    bool                    mbInDestruction;
+    bool                    mbOwnPrinter;
+    bool                    mbNewDocument;
 
     bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
     void                    Construct(bool bClipboard);
@@ -229,8 +229,8 @@ protected:
 public:
     virtual void setDocAccTitle( const OUString& rTitle );
     virtual const OUString getDocAccTitle() const;
-    virtual void setDocReadOnly( sal_Bool bReadOnly);
-    virtual sal_Bool getDocReadOnly() const;
+    virtual void setDocReadOnly( bool bReadOnly);
+    virtual bool getDocReadOnly() const;
 };
 
 #ifndef SV_DECL_DRAW_DOC_SHELL_DEFINED

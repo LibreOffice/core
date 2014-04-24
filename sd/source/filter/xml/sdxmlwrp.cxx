@@ -168,7 +168,7 @@ XML_SERVICES* getServices( bool bImport, bool bDraw, sal_uLong nStoreVer )
 // - SdXMLWrapper -
 
 
-SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress, SdXMLFilterMode eFilterMode, sal_uLong nStoreVer ) :
+SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress, SdXMLFilterMode eFilterMode, sal_uLong nStoreVer ) :
     SdFilter( rMedium, rDocShell, bShowProgress ), meFilterMode( eFilterMode ), mnStoreVer( nStoreVer )
 {
 }
@@ -185,8 +185,8 @@ sal_Int32 ReadThroughComponent(
     const sal_Char* pFilterName,
     Sequence<Any> rFilterArguments,
     const OUString& rName,
-    sal_Bool bMustBeSuccessfull,
-    sal_Bool bEncrypted )
+    bool bMustBeSuccessfull,
+    bool bEncrypted )
 {
     DBG_ASSERT(xInputStream.is(), "input stream missing");
     DBG_ASSERT(xModelComponent.is(), "document missing");
@@ -231,7 +231,7 @@ sal_Int32 ReadThroughComponent(
         // sax parser sends wrapped exceptions,
         // try to find the original one
         xml::sax::SAXException aSaxEx = *(xml::sax::SAXException*)(&r);
-        sal_Bool bTryChild = sal_True;
+        bool bTryChild = true;
 
         while( bTryChild )
         {
@@ -239,7 +239,7 @@ sal_Int32 ReadThroughComponent(
             if ( aSaxEx.WrappedException >>= aTmp )
                 aSaxEx = aTmp;
             else
-                bTryChild = sal_False;
+                bTryChild = false;
         }
 
         packages::zip::ZipIOException aBrokenPackage;
@@ -327,14 +327,14 @@ sal_Int32 ReadThroughComponent(
     const sal_Char* pFilterName,
     Sequence<Any> rFilterArguments,
     const OUString& rName,
-    sal_Bool bMustBeSuccessfull )
+    bool bMustBeSuccessfull )
 {
     DBG_ASSERT(xStorage.is(), "Need storage!");
     DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
 
     // open stream (and set parser input)
     OUString sStreamName = OUString::createFromAscii(pStreamName);
-    sal_Bool bContainsStream = sal_False;
+    bool bContainsStream = false;
     try
     {
         bContainsStream = xStorage->isStreamElement(sStreamName);
@@ -388,7 +388,7 @@ sal_Int32 ReadThroughComponent(
 
         Any aAny = xProps->getPropertyValue( "Encrypted" );
 
-        sal_Bool bEncrypted = aAny.getValueType() == ::getBooleanCppuType() &&
+        bool bEncrypted = aAny.getValueType() == ::getBooleanCppuType() &&
                 *(sal_Bool *)aAny.getValue();
 
         Reference <io::XInputStream> xInputStream = xStream->getInputStream();
@@ -415,7 +415,7 @@ sal_Int32 ReadThroughComponent(
 
 
 
-sal_Bool SdXMLFilter::Import( ErrCode& nError )
+bool SdXMLFilter::Import( ErrCode& nError )
 {
     sal_uInt32  nRet = 0;
 
@@ -614,26 +614,26 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         nWarn = ReadThroughComponent(
             xStorage, xModelComp, "meta.xml", "Meta.xml", rxContext,
             pServices->mpMeta,
-            aEmptyArgs, aName, sal_False );
+            aEmptyArgs, aName, false );
 
         if( meFilterMode != SDXMLMODE_Organizer )
         {
             nWarn2 = ReadThroughComponent(
                 xStorage, xModelComp, "settings.xml", NULL, rxContext,
                 pServices->mpSettings,
-                aFilterArgs, aName, sal_False );
+                aFilterArgs, aName, false );
         }
 
         nRet = ReadThroughComponent(
             xStorage, xModelComp, "styles.xml", NULL, rxContext,
             pServices->mpStyles,
-            aFilterArgs, aName, sal_True );
+            aFilterArgs, aName, true );
 
         if( !nRet && (meFilterMode != SDXMLMODE_Organizer) )
             nRet = ReadThroughComponent(
                xStorage, xModelComp, "content.xml", "Content.xml", rxContext,
                pServices->mpContent,
-               aFilterArgs, aName, sal_True );
+               aFilterArgs, aName, true );
 
         if( !nRet )
         {
@@ -786,19 +786,19 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
 
 
 
-sal_Bool SdXMLFilter::Export()
+bool SdXMLFilter::Export()
 {
     SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
     SvXMLGraphicHelper*         pGraphicHelper = NULL;
-    sal_Bool                    bDocRet = sal_False;
+    bool                    bDocRet = false;
 
     if( !mxModel.is() )
     {
         SAL_WARN( "sd.filter","Got NO Model in XMLExport");
-        return sal_False;
+        return false;
     }
 
-    sal_Bool bLocked = mxModel->hasControllersLocked();
+    bool bLocked = mxModel->hasControllersLocked();
 
     try
     {
@@ -809,7 +809,7 @@ sal_Bool SdXMLFilter::Export()
         if( !xServiceInfo.is() || !xServiceInfo->supportsService( "com.sun.star.drawing.GenericDrawingDocument" ) )
         {
             SAL_WARN( "sd.filter", "Model is no DrawingDocument in XMLExport" );
-            return sal_False;
+            return false;
         }
 
         uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
@@ -850,7 +850,7 @@ sal_Bool SdXMLFilter::Export()
 
         SvtSaveOptions aSaveOpt;
         OUString sUsePrettyPrinting("UsePrettyPrinting");
-        sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
+        bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
         xInfoSet->setPropertyValue( sUsePrettyPrinting, makeAny( bUsePrettyPrinting ) );
 
         const uno::Reference < embed::XStorage >& xStorage = mrMedium.GetOutputStorage();
@@ -963,12 +963,12 @@ sal_Bool SdXMLFilter::Export()
 
                     DBG_ASSERT(xStream.is(), "Can't create output stream in package!");
                     if( !xStream.is() )
-                        return sal_False;
+                        return false;
 
                     xDocOut = xStream->getOutputStream();
                     Reference <beans::XPropertySet > xProps( xStream, uno::UNO_QUERY );
                     if( !xDocOut.is() || !xProps.is() )
-                        return sal_False;
+                        return false;
 
                     uno::Any aAny;
                     aAny <<= OUString( "text/xml");
@@ -976,7 +976,7 @@ sal_Bool SdXMLFilter::Export()
 
                     // encrypt all streams
                     xProps->setPropertyValue( "UseCommonStoragePasswordEncryption",
-                                              uno::makeAny( (sal_Bool)sal_True ) );
+                                              uno::makeAny( true ) );
 
                     const OUString sStreamName( "StreamName");
                     xInfoSet->setPropertyValue( sStreamName, Any( sDocName ) );
@@ -1024,7 +1024,7 @@ sal_Bool SdXMLFilter::Export()
 #else
         (void)e;
 #endif
-        bDocRet = sal_False;
+        bDocRet = false;
     }
     if ( !bLocked )
         mxModel->unlockControllers();

@@ -109,8 +109,8 @@ public:
     ::com::sun::star::uno::Any  getTarget() const { return maTarget; }
     SD_DLLPUBLIC void                       setTarget( const ::com::sun::star::uno::Any& rTarget );
 
-    sal_Bool        hasAfterEffect() const { return mbHasAfterEffect; }
-    void            setHasAfterEffect( sal_Bool bHasAfterEffect ) { mbHasAfterEffect = bHasAfterEffect; }
+    bool        hasAfterEffect() const { return mbHasAfterEffect; }
+    void            setHasAfterEffect( bool bHasAfterEffect ) { mbHasAfterEffect = bHasAfterEffect; }
 
     ::com::sun::star::uno::Any  getDimColor() const { return maDimColor; }
     void                        setDimColor( ::com::sun::star::uno::Any aDimColor ) { maDimColor = aDimColor; }
@@ -120,7 +120,7 @@ public:
 
     sal_Int32       getParaDepth() const { return mnParaDepth; }
 
-    sal_Bool        hasText() const { return mbHasText; }
+    bool        hasText() const { return mbHasText; }
 
     sal_Int16       getCommand() const { return mnCommand; }
 
@@ -130,8 +130,8 @@ public:
     double          getDecelerate() const { return mfDecelerate; }
     void            setDecelerate( double fDecelerate );
 
-    sal_Bool        getAutoReverse() const { return mbAutoReverse; }
-    void            setAutoReverse( sal_Bool bAutoReverse );
+    bool        getAutoReverse() const { return mbAutoReverse; }
+    void            setAutoReverse( bool bAutoReverse );
 
     ::com::sun::star::uno::Any  getProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue );
     bool                        setProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue, const ::com::sun::star::uno::Any& rValue );
@@ -194,10 +194,10 @@ private:
     sal_Int16       mnIterateType;
     double          mfIterateInterval;
     sal_Int32       mnParaDepth;
-    sal_Bool        mbHasText;
+    bool        mbHasText;
     double          mfAcceleration;
     double          mfDecelerate;
-    sal_Bool        mbAutoReverse;
+    bool        mbAutoReverse;
     sal_Int16       mnTargetSubItem;
     sal_Int16       mnCommand;
 
@@ -209,7 +209,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAudio > mxAudio;
     ::com::sun::star::uno::Any maTarget;
 
-    sal_Bool        mbHasAfterEffect;
+    bool        mbHasAfterEffect;
     ::com::sun::star::uno::Any maDimColor;
     bool        mbAfterEffectOnNextEffect;
 };
@@ -251,8 +251,8 @@ public:
     /* -1: as single object, 0: all at once, n > 0: by n Th paragraph */
     sal_Int32 getTextGrouping() const { return mnTextGrouping; }
 
-    sal_Bool getAnimateForm() const { return mbAnimateForm; }
-    sal_Bool getTextReverse() const { return mbTextReverse; }
+    bool getAnimateForm() const { return mbAnimateForm; }
+    bool getTextReverse() const { return mbTextReverse; }
     double getTextGroupingAuto() const { return mfGroupingAuto; }
 
 private:
@@ -262,8 +262,8 @@ private:
     enum { PARA_LEVELS = 5 };
 
     sal_Int32 mnTextGrouping;
-    sal_Bool mbAnimateForm;
-    sal_Bool mbTextReverse;
+    bool mbAnimateForm;
+    bool mbTextReverse;
     double mfGroupingAuto;
     sal_Int32 mnLastPara;
     sal_Int8 mnDepthFlags[PARA_LEVELS];
@@ -326,11 +326,11 @@ public:
     // text group methods
 
     CustomAnimationTextGroupPtr findGroup( sal_Int32 nGroupId );
-    SD_DLLPUBLIC CustomAnimationTextGroupPtr    createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, sal_Bool bAnimateForm, sal_Bool bTextReverse );
+    SD_DLLPUBLIC CustomAnimationTextGroupPtr    createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, bool bAnimateForm, bool bTextReverse );
     void setTextGrouping( CustomAnimationTextGroupPtr pTextGroup, sal_Int32 nTextGrouping );
-    void setAnimateForm( CustomAnimationTextGroupPtr pTextGroup, sal_Bool bAnimateForm );
+    void setAnimateForm( CustomAnimationTextGroupPtr pTextGroup, bool bAnimateForm );
     void setTextGroupingAuto( CustomAnimationTextGroupPtr pTextGroup, double fTextGroupingAuto );
-    void setTextReverse( CustomAnimationTextGroupPtr pTextGroup, sal_Bool bAnimateForm );
+    void setTextReverse( CustomAnimationTextGroupPtr pTextGroup, bool bAnimateForm );
 
     sal_Int32 getSequenceType() const { return mnSequenceType; }
 

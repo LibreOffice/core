@@ -86,7 +86,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         mpView->UnmarkAll();
     }
 
-    sal_Bool bError = sal_False;
+    bool bError = false;
 
     // determine the active page
     sal_uInt16 nSelectedPage = SDRPAGE_NOTFOUND;
@@ -108,19 +108,19 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
     /* if we are on a master page, the changes apply for all pages and notes-
        pages who are using the relevant layout */
-    sal_Bool bOnMaster = sal_False;
+    bool bOnMaster = false;
     if( mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
         EditMode eEditMode =
             static_cast<DrawViewShell*>(mpViewShell)->GetEditMode();
         if (eEditMode == EM_MASTERPAGE)
-            bOnMaster = sal_True;
+            bOnMaster = true;
     }
-    sal_Bool bMasterPage = bOnMaster;
-    sal_Bool bCheckMasters = sal_False;
+    bool bMasterPage = bOnMaster;
+    bool bCheckMasters = false;
 
     // call dialog
-    sal_Bool   bLoad = sal_False;           // appear the new master pages?
+    bool   bLoad = false;           // appear the new master pages?
     OUString aFile;
 
     SfxItemSet aSet(mpDoc->GetPool(), ATTR_PRESLAYOUT_START, ATTR_PRESLAYOUT_END);
@@ -169,7 +169,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             break;
 
             default:
-                bError = sal_True;
+                bError = true;
         }
         delete pDlg;
     }
@@ -185,7 +185,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
            removing a masterpage, it's possible that you are removing the
            current masterpage. So you have to call ResetActualPage ! */
         if( mpViewShell->ISA(DrawViewShell) && !bCheckMasters )
-            static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(sal_True);
+            static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(true);
 
         if (bLoad)
         {
@@ -210,7 +210,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
         // remove blocking
         if (mpViewShell->ISA(DrawViewShell) && !bCheckMasters )
-            static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(sal_False);
+            static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(false);
 
         // if the master page was visible, show it again
         if (!bError && nSelectedPage != SDRPAGE_NOTFOUND)
@@ -245,7 +245,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             DrawViewShell* pDrawViewSh =
                 static_cast<DrawViewShell*>(mpViewShell);
             EditMode eMode = pDrawViewSh->GetEditMode();
-            sal_Bool bLayer = pDrawViewSh->IsLayerModeActive();
+            bool bLayer = pDrawViewSh->IsLayerModeActive();
             pDrawViewSh->ChangeEditMode( eMode, !bLayer );
             pDrawViewSh->ChangeEditMode( eMode, bLayer );
         }

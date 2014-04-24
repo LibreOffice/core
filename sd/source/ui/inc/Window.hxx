@@ -123,7 +123,7 @@ public:
         larger than the view or the value of aWinPos in this direction is -1
         then the window is centered in this direction.
         */
-    void UpdateMapOrigin (sal_Bool bInvalidate = sal_True);
+    void UpdateMapOrigin (bool bInvalidate = true);
 
     void UpdateMapMode (void);
 

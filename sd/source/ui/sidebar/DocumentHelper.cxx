@@ -124,7 +124,7 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
             PK_STANDARD);
         if (pSlide == NULL)
             break;
-        pSlide->SetAutoLayout(AUTOLAYOUT_TITLE, sal_True);
+        pSlide->SetAutoLayout(AUTOLAYOUT_TITLE, true);
 
         // Create a copy of the master page and the associated notes
         // master page and insert them into our document.
@@ -142,9 +142,9 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
             rTargetDocument.GetSdPageCount(PK_STANDARD)-1,
             pNewMasterPage->GetName(),
             &rTargetDocument,
-            sal_False, // Connect the new master page with the new slide but
+            false, // Connect the new master page with the new slide but
                    // do not modify other (master) pages.
-            sal_True);
+            true);
     }
     while (false);
 
@@ -391,9 +391,9 @@ SdPage* DocumentHelper::AddMasterPage (
                 pClonedMasterPage->GetUppBorder(),
                 pClonedMasterPage->GetRgtBorder(),
                 pClonedMasterPage->GetLwrBorder());
-            pClonedMasterPage->ScaleObjects(aNewSize, aBorders, sal_True);
+            pClonedMasterPage->ScaleObjects(aNewSize, aBorders, true);
             pClonedMasterPage->SetSize(aNewSize);
-            pClonedMasterPage->CreateTitleAndLayout(sal_True);
+            pClonedMasterPage->CreateTitleAndLayout(true);
         }
     }
 
@@ -443,8 +443,8 @@ void DocumentHelper::AssignMasterPageToPage (
             (pPage->GetPageNum()-1)/2,
             rsBaseLayoutName,
             pDocument,
-            sal_False,
-            sal_False);
+            false,
+            false);
     }
     else
     {
@@ -470,15 +470,15 @@ void DocumentHelper::AssignMasterPageToPage (
                 (pSlide->GetPageNum()-1)/2,
                 rsBaseLayoutName,
                 pDocument,
-                sal_False,
-                sal_False);
+                false,
+                false);
         }
         else
         {
             // 3. Replace the master page A by a copy of the given master
             // page B.
             pDocument->RemoveUnnecessaryMasterPages (
-                pPage, sal_False);
+                pPage, false);
         }
     }
 }

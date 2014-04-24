@@ -128,7 +128,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         sal_Int32               lWidth = 0, lHeight = 0, lSizeX = 0L, lSizeY = 0L, lAngle = 0L;
         sal_uInt16              nNumber = 0;
         Color               aStartColor, aEndColor;
-        sal_Bool                bColor = sal_False;
+        bool                bColor = false;
         const SfxPoolItem*  pPoolItem = NULL;
 
         // Count
@@ -153,22 +153,22 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
         {
             aStartColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
-            bColor = sal_True;
+            bColor = true;
         }
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_END_COLOR, true, &pPoolItem ) )
         {
             aEndColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
             if( aStartColor == aEndColor )
-                bColor = sal_False;
+                bColor = false;
         }
         else
-            bColor = sal_False;
+            bColor = false;
 
         // remove handles
         //HMHmpView->HideMarkHdl();
 
         SfxProgress*    pProgress = NULL;
-        sal_Bool            bWaiting = sal_False;
+        bool            bWaiting = false;
 
         if( nNumber > 1 )
         {
@@ -177,7 +177,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
             pProgress = new SfxProgress( mpDocSh, aStr, nNumber );
             mpDocSh->SetWaitCursor( true );
-            bWaiting = sal_True;
+            bWaiting = true;
         }
 
         const SdrMarkList   aMarkList( mpView->GetMarkedObjectList() );

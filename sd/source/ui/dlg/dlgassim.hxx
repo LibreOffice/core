@@ -39,7 +39,7 @@ public:
     void Clear();
 
     sal_uInt16 GetSelectedPage();
-    sal_Bool IsPageChecked( sal_uInt16 nPage );
+    bool IsPageChecked( sal_uInt16 nPage );
 
     DECL_LINK( CheckButtonClickHdl, void * );
 

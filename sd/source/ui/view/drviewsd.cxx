@@ -166,7 +166,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     sal_uInt16 nCurrentPage = 0;
     sal_uInt16 nFirstPage = 0;
     sal_uInt16 nLastPage;
-    sal_Bool   bEndless = sal_False;
+    bool   bEndless = false;
     OUString aPageName;
 
     rtl::Reference< SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );

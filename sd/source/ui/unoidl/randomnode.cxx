@@ -148,7 +148,7 @@ private:
     Any maBegin, maDuration, maEnd, maEndSync, maRepeatCount, maRepeatDuration, maTarget;
     sal_Int16 mnFill, mnFillDefault, mnRestart, mnRestartDefault;
     double mfAcceleration, mfDecelerate;
-    sal_Bool mbAutoReverse;
+    bool mbAutoReverse;
     Sequence< NamedValue > maUserData;
 
     Reference< XAnimate > mxFirstNode;
@@ -231,7 +231,7 @@ void RandomAnimationNode::init( sal_Int16 nPresetClass )
     mnRestartDefault = AnimationRestart::INHERIT;
     mfAcceleration = 0.0;
     mfDecelerate = 0.0;
-    mbAutoReverse = sal_False;
+    mbAutoReverse = false;
 }
 
 

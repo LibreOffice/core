@@ -88,30 +88,30 @@ public:
 protected:
 
     virtual void ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,
-                                 sal_Bool bHasBackground, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) SAL_OVERRIDE;
+                                 bool bHasBackground, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) SAL_OVERRIDE;
     virtual void ImplWriteNotes( sal_uInt32 nPageNum ) SAL_OVERRIDE;
     virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) SAL_OVERRIDE;
     virtual void ImplWriteLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum ) SAL_OVERRIDE;
     void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum );
     void WriteTheme( sal_Int32 nThemeNum );
 
-    virtual sal_Bool ImplCreateDocument() SAL_OVERRIDE;
-    virtual sal_Bool ImplCreateMainNotes() SAL_OVERRIDE;
+    virtual bool ImplCreateDocument() SAL_OVERRIDE;
+    virtual bool ImplCreateMainNotes() SAL_OVERRIDE;
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE;
-    sal_Bool WriteNotesMaster();
+    bool WriteNotesMaster();
 
     void WriteAnimateTo( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Any aValue, const OUString& rAttributeName );
     void WriteAnimateValues( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimate >& rXAnimate );
-    void WriteAnimationCondition( ::sax_fastparser::FSHelperPtr pFS, ::com::sun::star::uno::Any& rAny, sal_Bool bWriteEvent, sal_Bool bMainSeqChild );
-    void WriteAnimationCondition( ::sax_fastparser::FSHelperPtr pFS, const char* pDelay, const char* pEvent, double fDelay, sal_Bool bHasFDelay );
+    void WriteAnimationCondition( ::sax_fastparser::FSHelperPtr pFS, ::com::sun::star::uno::Any& rAny, bool bWriteEvent, bool bMainSeqChild );
+    void WriteAnimationCondition( ::sax_fastparser::FSHelperPtr pFS, const char* pDelay, const char* pEvent, double fDelay, bool bHasFDelay );
     void WriteAnimations( ::sax_fastparser::FSHelperPtr pFS );
     void WriteAnimationAttributeName( ::sax_fastparser::FSHelperPtr pFS, const OUString& rAttributeName );
-    void WriteAnimationNode( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Bool bMainSeqChild );
-    void WriteAnimationNodeAnimate( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, sal_Bool bMainSeqChild );
-    void WriteAnimationNodeAnimateInside( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Bool bMainSeqChild, sal_Bool bSimple );
-    void WriteAnimationNodeSeq( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, sal_Bool bMainSeqChild );
-    void WriteAnimationNodeEffect( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, sal_Bool bMainSeqChild );
-    void WriteAnimationNodeCommonPropsStart( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Bool bSingle, sal_Bool bMainSeqChild );
+    void WriteAnimationNode( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, bool bMainSeqChild );
+    void WriteAnimationNodeAnimate( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, bool bMainSeqChild );
+    void WriteAnimationNodeAnimateInside( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, bool bMainSeqChild, bool bSimple );
+    void WriteAnimationNodeSeq( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, bool bMainSeqChild );
+    void WriteAnimationNodeEffect( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, bool bMainSeqChild );
+    void WriteAnimationNodeCommonPropsStart( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, bool bSingle, bool bMainSeqChild );
     void WriteAnimationProperty( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Any& rAny );
     void WriteAnimationTarget( ::sax_fastparser::FSHelperPtr pFS, ::com::sun::star::uno::Any aTarget );
     bool WriteComments( sal_uInt32 nPageNum );
@@ -121,7 +121,7 @@ protected:
     sal_Int32 GetLayoutFileId( sal_Int32 nOffset, sal_uInt32 nMasterNum );
 
     // shapes
-    void WriteShapeTree( ::sax_fastparser::FSHelperPtr pFS, PageType ePageType, sal_Bool bMaster );
+    void WriteShapeTree( ::sax_fastparser::FSHelperPtr pFS, PageType ePageType, bool bMaster );
 
     sal_uInt32 GetNewSlideId() { return mnSlideIdMax ++; }
     sal_uInt32 GetNewSlideMasterId() { return mnSlideMasterIdMax ++; }
@@ -145,7 +145,7 @@ private:
     sal_uInt32 mnSlideMasterIdMax;
     sal_uInt32 mnAnimationNodeIdMax;
 
-    sal_Bool mbCreateNotes;
+    bool mbCreateNotes;
 
     static sal_Int32 nStyleLevelToken[5];
 

@@ -59,7 +59,7 @@ public:
 class SdAttrLayerVisible : public SfxBoolItem
 {
 public:
-    SdAttrLayerVisible( sal_Bool bValue = sal_True ) :
+    SdAttrLayerVisible( bool bValue = true ) :
         SfxBoolItem( ATTR_LAYER_VISIBLE, bValue ) {}
 };
 
@@ -67,7 +67,7 @@ public:
 class SdAttrLayerPrintable : public SfxBoolItem
 {
 public:
-    SdAttrLayerPrintable( sal_Bool bValue = sal_True ) :
+    SdAttrLayerPrintable( bool bValue = true ) :
         SfxBoolItem( ATTR_LAYER_PRINTABLE, bValue ) {}
 };
 
@@ -75,7 +75,7 @@ public:
 class SdAttrLayerLocked : public SfxBoolItem
 {
 public:
-    SdAttrLayerLocked( sal_Bool bValue = sal_False ) :
+    SdAttrLayerLocked( bool bValue = false ) :
         SfxBoolItem( ATTR_LAYER_LOCKED, bValue ) {}
 };
 
@@ -83,7 +83,7 @@ public:
 class SdAttrLayerThisPage : public SfxBoolItem
 {
 public:
-    SdAttrLayerThisPage( sal_Bool bValue = sal_False ) :
+    SdAttrLayerThisPage( bool bValue = false ) :
         SfxBoolItem( ATTR_LAYER_THISPAGE, bValue ) {}
 };
 

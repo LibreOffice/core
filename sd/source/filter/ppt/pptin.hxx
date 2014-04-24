@@ -52,7 +52,7 @@ class ImplSdPPTImport : public SdrPowerPointImport
 //  SvStream*       mpPicStream;
     DffRecordHeader maDocHd;
     std::vector<OUString> maSlideNameList;
-    sal_Bool            mbDocumentFound;
+    bool            mbDocumentFound;
     sal_uInt32      mnFilterOptions;
     SdDrawDocument* mpDoc;
     PresChange      mePresChange;
@@ -61,7 +61,7 @@ class ImplSdPPTImport : public SdrPowerPointImport
 
     tAnimationMap   maAnimations;
     void            SetHeaderFooterPageSettings( SdPage* pPage, const PptSlidePersistEntry* pMasterPersist );
-    void            ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimationsUsed );
+    void            ImportPageEffect( SdPage* pPage, const bool bNewAnimationsUsed );
 
     void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, const OUString& aMacroName );
 
@@ -77,7 +77,7 @@ public:
     ImplSdPPTImport( SdDrawDocument* pDoc, SvStorage& rStorage, SfxMedium& rMed, PowerPointImportParam& );
     virtual ~ImplSdPPTImport();
 
-    sal_Bool        Import();
+    bool         Import();
     virtual bool ReadFormControl(  SotStorageRef& rSrc1, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const SAL_OVERRIDE;
 };
 
@@ -90,7 +90,7 @@ class SdPPTImport
         SdPPTImport( SdDrawDocument* pDoc, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMed );
         ~SdPPTImport();
 
-        sal_Bool Import();
+        bool Import();
 };
 
 #endif // INCLUDED_SD_SOURCE_FILTER_PPT_PPTIN_HXX

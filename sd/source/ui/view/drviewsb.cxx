@@ -67,7 +67,7 @@ namespace sd {
 
 bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
 {
-    sal_Bool   bOutDummy;
+    bool   bOutDummy;
     if( GetDoc()->GetPageByName( rName, bOutDummy ) != SDRPAGE_NOTFOUND )
         return false;
 

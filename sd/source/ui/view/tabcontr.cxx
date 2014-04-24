@@ -81,7 +81,7 @@ TabControl::TabControl(DrawViewShell* pViewSh, Window* pParent) :
     DropTargetHelper( this ),
     RrePageID(1),
     pDrViewSh(pViewSh),
-    bInternalMove(sal_False)
+    bInternalMove(false)
 {
     EnableEditMode();
     SetSizePixel(Size(0, 0));
@@ -164,7 +164,7 @@ void TabControl::DoubleClick()
 
 void TabControl::StartDrag( sal_Int8, const Point& )
 {
-    bInternalMove = sal_True;
+    bInternalMove = true;
 
     // object is delete by reference mechanismn
     ( new TabControl::TabControlTransferable( *this ) )->StartDrag( this, DND_ACTION_COPYMOVE );
@@ -173,7 +173,7 @@ void TabControl::StartDrag( sal_Int8, const Point& )
 
 void TabControl::DragFinished( sal_Int8 )
 {
-    bInternalMove = sal_False;
+    bInternalMove = false;
 }
 
 
@@ -299,7 +299,7 @@ void TabControl::Command(const CommandEvent& rCEvt)
 
     if ( nCmd == COMMAND_CONTEXTMENU )
     {
-        sal_Bool bGraphicShell = pDrViewSh->ISA(GraphicViewShell);
+        bool bGraphicShell = pDrViewSh->ISA(GraphicViewShell);
         sal_uInt16 nResId = bGraphicShell ? RID_GRAPHIC_PAGETAB_POPUP :
                                         RID_DRAW_PAGETAB_POPUP;
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
@@ -309,11 +309,11 @@ void TabControl::Command(const CommandEvent& rCEvt)
 
 long TabControl::StartRenaming()
 {
-    sal_Bool bOK = sal_False;
+    bool bOK = false;
 
     if (pDrViewSh->GetPageKind() == PK_STANDARD)
     {
-        bOK = sal_True;
+        bOK = true;
 
         ::sd::View* pView = pDrViewSh->GetView();
 
@@ -321,12 +321,12 @@ long TabControl::StartRenaming()
             pView->SdrEndTextEdit();
     }
 
-    return( bOK );
+    return bOK ? 1 : 0;
 }
 
 long TabControl::AllowRenaming()
 {
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
 
     OUString aNewName( GetEditText() );
     OUString aCompareName( GetPageText( GetEditPageId() ) );
@@ -341,10 +341,10 @@ long TabControl::AllowRenaming()
         }
         else
         {
-            bOK = sal_False;
+            bOK = false;
         }
     }
-    return( bOK );
+    return bOK ? 1 : 0;
 }
 
 void TabControl::EndRenaming()
@@ -365,7 +365,7 @@ void TabControl::ActivatePage()
 
 long TabControl::DeactivatePage()
 {
-    return pDrViewSh->IsSwitchPageAllowed();
+    return pDrViewSh->IsSwitchPageAllowed() ? 1 : 0;
 }
 
 

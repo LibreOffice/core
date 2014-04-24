@@ -113,10 +113,10 @@ public:
 
     sal_uLong         GetPaperWidth();
 
-    sal_Bool          PrepareClose(sal_Bool bUI = sal_True);
+    bool          PrepareClose(bool bUI = true);
 
-    virtual sal_Bool    GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False ) const SAL_OVERRIDE;
-    virtual sal_Bool    SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll = sal_False) SAL_OVERRIDE;
+    virtual bool    GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const SAL_OVERRIDE;
+    virtual bool    SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false) SAL_OVERRIDE;
 
     void               FillOutliner();
     void               SetLinks();
@@ -186,7 +186,7 @@ private:
     sal_Int32               mnPagesToProcess;    // for the progress bar
     sal_Int32               mnPagesProcessed;
 
-    sal_Bool                mbFirstPaint;
+    bool                mbFirstPaint;
 
     sal_uLong               mnPaperWidth;
 

@@ -159,8 +159,8 @@ struct CellBorder;
 class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
 {
         sal_uInt32                      mnCnvrtFlags;
-        sal_Bool                        mbStatus;
-        sal_Bool                        mbUseNewAnimations;
+        bool                        mbStatus;
+        bool                        mbUseNewAnimations;
         sal_uInt32                      mnStatMaxValue;
         sal_uInt32                      mnLatestStatValue;
 
@@ -174,7 +174,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >              mXTextField;
         sal_uInt32          mnTextStyle;
 
-        sal_Bool            mbFontIndependentLineSpacing;
+        bool            mbFontIndependentLineSpacing;
         sal_uInt32          mnTextSize;
 
         SvStorageRef        mrStg;
@@ -220,56 +220,56 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
 
     protected:
 
-        sal_Bool            ImplCreateDocumentSummaryInformation();
-        sal_Bool            ImplCreateCurrentUserStream();
+        bool                ImplCreateDocumentSummaryInformation();
+        bool                ImplCreateCurrentUserStream();
         void                ImplCreateHeaderFooterStrings( SvStream& rOut,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet );
         void                ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet );
-        virtual sal_Bool        ImplCreateDocument() SAL_OVERRIDE;
-        sal_Bool            ImplCreateHyperBlob( SvMemoryStream& rStream );
+        virtual bool        ImplCreateDocument() SAL_OVERRIDE;
+        bool                ImplCreateHyperBlob( SvMemoryStream& rStream );
         sal_uInt32          ImplInsertBookmarkURL( const OUString& rBookmark, const sal_uInt32 nType,
-            const OUString& rStringVer0, const OUString& rStringVer1, const OUString& rStringVer2, const OUString& rStringVer3 );
-        virtual sal_Bool        ImplCreateMainNotes() SAL_OVERRIDE;
-        sal_Bool            ImplCreateNotes( sal_uInt32 nPageNum );
+                                const OUString& rStringVer0, const OUString& rStringVer1, const OUString& rStringVer2, const OUString& rStringVer3 );
+        virtual bool        ImplCreateMainNotes() SAL_OVERRIDE;
+        bool                ImplCreateNotes( sal_uInt32 nPageNum );
         void                ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXBackgroundPropSet );
-  void              ImplWriteVBA();
+        void                ImplWriteVBA();
         void                ImplWriteOLE();
-        sal_Bool            ImplWriteAtomEnding();
+        bool                ImplWriteAtomEnding();
 
         void                ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt );
-        sal_Bool            ImplGetText();
-        sal_Bool            ImplCreatePresentationPlaceholder( const sal_Bool bMaster, const PageType PageType,
+        bool                ImplGetText();
+        bool                ImplCreatePresentationPlaceholder( const bool bMaster, const PageType PageType,
                                 const sal_uInt32 StyleInstance, const sal_uInt8 PlaceHolderId );
-        sal_Bool            ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
+        bool                ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                 ::com::sun::star::presentation::AnimationEffect& eEffect,
                                 ::com::sun::star::presentation::AnimationEffect& eTextEffect,
-                                sal_Bool& bHasSound );
+                                bool& bHasSound );
         void                ImplWriteObjectEffect( SvStream& rSt,
                                 ::com::sun::star::presentation::AnimationEffect eEffect,
                                 ::com::sun::star::presentation::AnimationEffect eTextEffect,
                                 sal_uInt16 nOrder );
-        void                ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eAction, sal_Bool bMediaClickAction );
+        void                ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eAction, bool bMediaClickAction );
         void                ImplWriteParagraphs( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWritePortions( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_uInt32 nAtomInstance,
                                 TextRuleEntry* pTextRule, SvStream& rExtBu, EscherPropertyContainer* );
         void                ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropertyContainer& rPropOpt );
         void                ImplCreateShape( sal_uInt32 nType, sal_uInt32 nFlags, EscherSolverContainer& );
-        void                ImplCreateTextShape( EscherPropertyContainer&, EscherSolverContainer&, sal_Bool bFill );
+        void                ImplCreateTextShape( EscherPropertyContainer&, EscherSolverContainer&, bool bFill );
 
         void                ImplWritePage( const PHLayout& rLayout,
-                                                EscherSolverContainer& rSolver,
-                                                    PageType ePageType,
-                                                        sal_Bool bMaster,
-                                                            int nPageNumber = 0 );
-        sal_Bool            ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 );
+                                           EscherSolverContainer& rSolver,
+                                           PageType ePageType,
+                                           bool bMaster,
+                                           int nPageNumber = 0 );
+        bool                ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 );
         void                ImplCreateTable( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rXShape, EscherSolverContainer& aSolverContainer,
                                 EscherPropertyContainer& aPropOpt );
 
-        sal_Bool                            ImplCloseDocument();        // we write the font, hyper and sound list
+        bool                ImplCloseDocument();        // we write the font, hyper and sound list
 
         virtual void        ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterID, sal_uInt16 nMode,
-                                            sal_Bool bHasBackground, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) SAL_OVERRIDE;
+                                            bool bHasBackground, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) SAL_OVERRIDE;
         virtual void        ImplWriteNotes( sal_uInt32 nPageNum ) SAL_OVERRIDE;
         virtual void        ImplWriteSlideMaster( sal_uInt32 nPageNum, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) SAL_OVERRIDE;
 
@@ -281,7 +281,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
 
                                 virtual ~PPTWriter();
 
-        sal_Bool                IsValid() const { return mbStatus; };
+        bool                IsValid() const { return mbStatus; };
 
         virtual void        exportPPTPre( const std::vector< com::sun::star::beans::PropertyValue >& ) SAL_OVERRIDE;
         virtual void        exportPPTPost( ) SAL_OVERRIDE;

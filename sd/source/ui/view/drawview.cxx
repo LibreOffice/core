@@ -128,10 +128,10 @@ void DrawView::ModelHasChanged()
  * rectangle of a masterpage into templates, otherwise pass on baseclass.
  */
 
-sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
-                                            sal_Bool bReplaceAll)
+bool DrawView::SetAttributes(const SfxItemSet& rSet,
+                             bool bReplaceAll)
 {
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
 
     // is there a masterpage edit?
     if ( mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE )
@@ -168,7 +168,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                     pSheet->GetItemSet().Put(aTempSet);
                     pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 else if (eObjKind == OBJ_OUTLINETEXT)
                 {
@@ -241,7 +241,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                     mpDocSh->GetUndoManager()->LeaveListAction();
 
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 else
                 {
@@ -281,7 +281,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                         pSheet->GetItemSet().Put(aTempSet,false);
                         pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-                        bOk = sal_True;
+                        bOk = true;
                     }
                     else if (eObjKind == OBJ_OUTLINETEXT)
                     {
@@ -336,7 +336,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                             nWhich = aWhichIter.NextWhich();
                         }
 
-                        bOk = sal_True;
+                        bOk = true;
                     }
                 }
             }
@@ -395,7 +395,7 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
  * Lock/Unlock PageOrderChangedHint
  */
 
-void DrawView::BlockPageOrderChangedHint(sal_Bool bBlock)
+void DrawView::BlockPageOrderChangedHint(bool bBlock)
 {
     if (bBlock)
         mnPOCHSmph++;
@@ -411,19 +411,19 @@ void DrawView::BlockPageOrderChangedHint(sal_Bool bBlock)
  * masterpage.
  */
 
-sal_Bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
+bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
-    sal_Bool bResult = sal_True;
+    bool bResult = true;
 
     // is there a masterpage edit?
     if (mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE)
     {
-        if (IsPresObjSelected(sal_False, sal_True))
+        if (IsPresObjSelected(false, true))
         {
 
             InfoBox(mpDrawViewShell->GetActiveWindow(),
                     SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
-            bResult = sal_False;
+            bResult = false;
         }
         else
         {
@@ -449,7 +449,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::co
         mpVDev = NULL;
     }
 
-    sal_Bool bStandardPaint = sal_True;
+    bool bStandardPaint = true;
 
     SdDrawDocument* pDoc = mpDocShell->GetDoc();
     if( pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS)
@@ -462,7 +462,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::co
             {
                 if( pShowWindow == pOutDev )
                     PresPaint(rReg);
-                bStandardPaint = sal_False;
+                bStandardPaint = false;
             }
         }
     }

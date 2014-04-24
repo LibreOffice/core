@@ -219,7 +219,7 @@ bool PageDescriptor::SetState (const State eState, const bool bNewStateValue)
             // This is a state of the page and has to be handled differently
             // from the view-only states.
             if (mpPage != NULL)
-                if (bNewStateValue != (mpPage->IsExcluded()==sal_True))
+                if (bNewStateValue != mpPage->IsExcluded())
                 {
                     mpPage->SetExcluded(bNewStateValue);
                     bModified = true;
@@ -245,7 +245,7 @@ VisualState& PageDescriptor::GetVisualState (void)
 
 bool PageDescriptor::GetCoreSelection (void)
 {
-    if (mpPage!=NULL && (mpPage->IsSelected()==sal_True) != mbIsSelected)
+    if (mpPage!=NULL && mpPage->IsSelected() != mbIsSelected)
         return SetState(ST_Selected, !mbIsSelected);
     else
         return false;
@@ -258,9 +258,9 @@ void PageDescriptor::SetCoreSelection (void)
 {
     if (mpPage != NULL)
         if (HasState(ST_Selected))
-            mpPage->SetSelected(sal_True);
+            mpPage->SetSelected(true);
         else
-            mpPage->SetSelected(sal_False);
+            mpPage->SetSelected(false);
     else
     {
         OSL_ASSERT(mpPage!=NULL);

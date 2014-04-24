@@ -123,7 +123,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         const SfxPoolItem *pItem = 0;
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_NUMBER_NEWSTART, false, &pItem ) )
         {
-            const sal_Bool bNewStart = ((SfxBoolItem*)pItem)->GetValue() ? sal_True : sal_False;
+            const bool bNewStart = ((SfxBoolItem*)pItem)->GetValue() ? sal_True : sal_False;
             pOutliner->SetParaIsNumberingRestart( eSelection.nStartPara, bNewStart );
         }
 

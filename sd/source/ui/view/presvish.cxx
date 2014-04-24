@@ -110,7 +110,7 @@ void PresentationViewShell::FinishInitialization( FrameView* pFrameView )
 }
 
 
-SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window*, sal_Bool)
+SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window*, bool)
 {
     return NULL;
 }

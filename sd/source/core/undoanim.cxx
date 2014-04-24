@@ -192,7 +192,7 @@ struct UndoTransitionImpl
 
     sal_Int16 mnNewTransitionType;
     sal_Int16 mnNewTransitionSubtype;
-    sal_Bool mbNewTransitionDirection;
+    bool mbNewTransitionDirection;
     sal_Int32 mnNewTransitionFadeColor;
     double mfNewTransitionDuration;
     OUString maNewSoundFile;
@@ -202,7 +202,7 @@ struct UndoTransitionImpl
 
     sal_Int16 mnOldTransitionType;
     sal_Int16 mnOldTransitionSubtype;
-    sal_Bool mbOldTransitionDirection;
+    bool mbOldTransitionDirection;
     sal_Int32 mnOldTransitionFadeColor;
     double mfOldTransitionDuration;
     OUString maOldSoundFile;

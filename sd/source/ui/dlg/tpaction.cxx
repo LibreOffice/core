@@ -178,7 +178,7 @@ void SdTPAction::Construct()
     // fill OLE-Actionlistbox
     SdrOle2Obj* pOleObj = NULL;
     SdrGrafObj* pGrafObj = NULL;
-    sal_Bool        bOLEAction = sal_False;
+    bool        bOLEAction = false;
 
     if ( mpView->AreObjectsMarked() )
     {
@@ -205,7 +205,7 @@ void SdTPAction::Construct()
     }
     if( pGrafObj )
     {
-        bOLEAction = sal_True;
+        bOLEAction = true;
 
         aVerbVector.push_back( 0 );
         m_pLbOLEAction->InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( SD_RESSTR( STR_EDIT_OBJ ) ) );
@@ -215,7 +215,7 @@ void SdTPAction::Construct()
         uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
         if ( xObj.is() )
         {
-            bOLEAction = sal_True;
+            bOLEAction = true;
             uno::Sequence < embed::VerbDescriptor > aVerbs;
             try
             {
@@ -267,7 +267,7 @@ void SdTPAction::Construct()
 
 bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
 
     if( m_pLbAction->GetSelectEntryCount() )
@@ -276,12 +276,12 @@ bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
     if( m_pLbAction->GetSavedValue() != m_pLbAction->GetSelectEntryPos() )
     {
         rAttrs.Put( SfxAllEnumItem( ATTR_ACTION, (sal_uInt16)eCA ) );
-        bModified = sal_True;
+        bModified = true;
     }
     else
         rAttrs.InvalidateItem( ATTR_ACTION );
 
-    OUString aFileName = GetEditText( sal_True );
+    OUString aFileName = GetEditText( true );
     if( aFileName.isEmpty() )
         rAttrs.InvalidateItem( ATTR_ACTION_FILENAME );
     else
@@ -297,7 +297,7 @@ bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
                                                         INetURLObject::DECODE_UNAMBIGUOUS );
 
             rAttrs.Put( SfxStringItem( ATTR_ACTION_FILENAME, aFileName ) );
-            bModified = sal_True;
+            bModified = true;
         }
         else
         {
@@ -388,8 +388,8 @@ void SdTPAction::UpdateTree()
     if( !bTreeUpdated && mpDoc && mpDoc->GetDocSh() && mpDoc->GetDocSh()->GetMedium() )
     {
         //m_pLbTree->Clear();
-        m_pLbTree->Fill( mpDoc, sal_True, mpDoc->GetDocSh()->GetMedium()->GetName() );
-        bTreeUpdated = sal_True;
+        m_pLbTree->Fill( mpDoc, true, mpDoc->GetDocSh()->GetMedium()->GetName() );
+        bTreeUpdated = true;
     }
 }
 
@@ -399,11 +399,11 @@ void SdTPAction::OpenFileDialog()
 {
     // Soundpreview only for interaction with sound
     presentation::ClickAction eCA = GetActualClickAction();
-    sal_Bool bSound = ( eCA == presentation::ClickAction_SOUND );
-    sal_Bool bPage = ( eCA == presentation::ClickAction_BOOKMARK );
-    sal_Bool bDocument = ( eCA == presentation::ClickAction_DOCUMENT ||
+    bool bSound = ( eCA == presentation::ClickAction_SOUND );
+    bool bPage = ( eCA == presentation::ClickAction_BOOKMARK );
+    bool bDocument = ( eCA == presentation::ClickAction_DOCUMENT ||
                        eCA == presentation::ClickAction_PROGRAM );
-    sal_Bool bMacro = ( eCA == presentation::ClickAction_MACRO );
+    bool bMacro = ( eCA == presentation::ClickAction_MACRO );
 
     if( bPage )
     {
@@ -700,7 +700,7 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
                     aLastFile = aFile;
 
                     m_pLbTreeDocument->Clear();
-                    m_pLbTreeDocument->Fill( pBookmarkDoc, sal_True, aFile );
+                    m_pLbTreeDocument->Fill( pBookmarkDoc, true, aFile );
                     mpDoc->CloseBookmarkDoc();
                     m_pLbTreeDocument->Show();
                 }
@@ -806,7 +806,7 @@ void SdTPAction::SetEditText( OUString const & rStr )
 
 
 
-OUString SdTPAction::GetEditText( sal_Bool bFullDocDestination )
+OUString SdTPAction::GetEditText( bool bFullDocDestination )
 {
     OUString aStr;
     presentation::ClickAction eCA = GetActualClickAction();

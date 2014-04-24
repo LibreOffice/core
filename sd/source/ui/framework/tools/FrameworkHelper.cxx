@@ -612,7 +612,7 @@ void FrameworkHelper::HandleModeChangeSlot (
     sal_uLong nSlotId,
     SfxRequest& rRequest)
 {
-    sal_Bool bIsActive = sal_True;
+    bool bIsActive = true;
 
     if ( ! mxConfigurationController.is())
         return;

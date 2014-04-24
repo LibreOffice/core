@@ -40,10 +40,10 @@ public:
     virtual void DoExecute( SfxRequest& rReq ) SAL_OVERRIDE;
 
                                        // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
     virtual void Activate() SAL_OVERRIDE;
     virtual void Deactivate() SAL_OVERRIDE;
@@ -53,7 +53,7 @@ public:
     void    SetEditMode(sal_uInt16 nMode);
     sal_uInt16  GetEditMode() { return nEditMode; }
 
-    sal_Bool    AnimateObj(SdrObject* pObj, const Point& rPos);
+    bool    AnimateObj(SdrObject* pObj, const Point& rPos);
 
     /** is called when the current function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -74,12 +74,12 @@ protected:
 
     virtual ~FuSelection();
 
-    sal_Bool            bTempRotation;
-    sal_Bool            bSelectionChanged;
-    sal_Bool            bHideAndAnimate;
+    bool            bTempRotation;
+    bool            bSelectionChanged;
+    bool            bHideAndAnimate;
     SdrHdl*         pHdl;
-    sal_Bool            bSuppressChangesOfSelection;
-    sal_Bool            bMirrorSide0;
+    bool            bSuppressChangesOfSelection;
+    bool            bMirrorSide0;
     sal_uInt16          nEditMode;
         ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
 
@@ -99,10 +99,10 @@ private:
     SdrObject* pickObject (const Point& rTestPoint);
     //Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
     //and SHIFT+ENTER key to decide the position and draw the new insert point
-    sal_Bool   bBeginInsertPoint;
+    bool   bBeginInsertPoint;
     Point    oldPoint;
     //let mouse cursor move
-    sal_Bool   bMovedToCenterPoint;
+    bool   bMovedToCenterPoint;
 };
 
 } // end of namespace sd

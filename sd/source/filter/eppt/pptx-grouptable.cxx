@@ -54,9 +54,9 @@ void GroupTable::ImplResizeGroupTable( sal_uInt32 nEntrys )
 
 
 
-sal_Bool GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rXIndexAccessRef )
+bool GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rXIndexAccessRef )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( rXIndexAccessRef.is() )
     {
         GroupEntry* pNewGroup = new GroupEntry( rXIndexAccessRef );
@@ -65,7 +65,7 @@ sal_Bool GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::s
             if ( mnMaxGroupEntry == mnCurrentGroupEntry )
                 ImplResizeGroupTable( mnMaxGroupEntry + 8 );
             mpGroupEntry[ mnCurrentGroupEntry++ ] = pNewGroup;
-            bRet = sal_True;
+            bRet = true;
         }
         else
             delete pNewGroup;
@@ -100,21 +100,21 @@ void GroupTable::ResetGroupTable( sal_uInt32 nCount )
 
 
 
-sal_Bool GroupTable::GetNextGroupEntry()
+bool GroupTable::GetNextGroupEntry()
 {
     while ( mnCurrentGroupEntry )
     {
         mnIndex = mpGroupEntry[ mnCurrentGroupEntry - 1 ]->mnCurrentPos++;
 
         if ( mpGroupEntry[ mnCurrentGroupEntry - 1 ]->mnCount > mnIndex )
-            return sal_True;
+            return true;
 
         delete ( mpGroupEntry[ --mnCurrentGroupEntry ] );
 
         if ( mnCurrentGroupEntry )
             mnGroupsClosed++;
     }
-    return sal_False;
+    return false;
 }
 
 

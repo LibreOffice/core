@@ -91,8 +91,8 @@ class PaneHider;
 
 struct PresentationSettingsEx : public PresentationSettings
 {
-    sal_Bool mbRehearseTimings;
-    sal_Bool mbPreview;
+    bool mbRehearseTimings;
+    bool mbPreview;
     ::Window* mpParentWindow;
     css::uno::Reference< css::drawing::XDrawPage > mxStartPage;
     css::uno::Reference< css::animations::XAnimationNode > mxAnimationNode;
@@ -285,7 +285,7 @@ private:
 
     void resize( const Size& rSize );
 
-    void setActiveXToolbarsVisible( sal_Bool bVisible );
+    void setActiveXToolbarsVisible( bool bVisible );
 
     DECL_LINK(updateHdl, void *);
     DECL_LINK( PostYieldListener, void* );
@@ -375,7 +375,7 @@ private:
     bool            mbIsPaused;
     bool            mbWasPaused;        // used to cache pause state during context menu
     bool            mbInputFreeze;
-    sal_Bool        mbActive;
+    bool        mbActive;
 
     PresentationSettings maPresSettings;
     sal_Int32       mnUserPaintColor;

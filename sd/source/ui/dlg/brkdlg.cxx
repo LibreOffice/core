@@ -62,7 +62,7 @@ BreakDlg::BreakDlg(
     pProgrInfo->Init( nSumActionCount*3, nObjCount );
 
     pDrView = _pDrView;
-    bCancel = sal_False;
+    bCancel = false;
 }
 
 BreakDlg::~BreakDlg()
@@ -74,7 +74,7 @@ BreakDlg::~BreakDlg()
 // Control-Handler for cancel button
 IMPL_LINK_NOARG(BreakDlg, CancelButtonHdl)
 {
-  bCancel = sal_True;
+  bCancel = true;
   m_pBtnCancel->Disable();
   return( 0L );
 }

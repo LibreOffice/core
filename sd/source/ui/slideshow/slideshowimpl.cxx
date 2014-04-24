@@ -523,7 +523,7 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 , mbIsPaused(false)
 , mbWasPaused(false)
 , mbInputFreeze(false)
-, mbActive(sal_False)
+, mbActive(false)
 , maPresSettings( pDoc->getPresentationSettings() )
 , mnUserPaintColor( 0x80ff0000L )
 , mbUsePen(false)
@@ -748,7 +748,7 @@ void SAL_CALL SlideshowImpl::disposing()
         // restart the custom show dialog if he started us
         if( mpViewShell->IsStartShowWithDialog() && getDispatcher() )
         {
-            mpViewShell->SetStartShowWithDialog( sal_False );
+            mpViewShell->SetStartShowWithDialog( false );
             getDispatcher()->Execute( SID_CUSTOMSHOW_DLG, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
         }
 
@@ -761,7 +761,7 @@ void SAL_CALL SlideshowImpl::disposing()
         mpShowWindow = 0;
     }
 
-    setActiveXToolbarsVisible( sal_True );
+    setActiveXToolbarsVisible( true );
 
     Application::DisableNoYieldMode();
     Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
@@ -795,19 +795,19 @@ bool SlideshowImpl::startPreview(
         mxPreviewAnimationNode = xAnimationNode;
         meAnimationMode = ANIMATIONMODE_PREVIEW;
 
-        maPresSettings.mbAll = sal_False;
-        maPresSettings.mbEndless = sal_False;
-        maPresSettings.mbCustomShow = sal_False;
-        maPresSettings.mbManual = sal_False;
-        maPresSettings.mbMouseVisible = sal_False;
-        maPresSettings.mbMouseAsPen = sal_False;
-        maPresSettings.mbLockedPages = sal_False;
-        maPresSettings.mbAlwaysOnTop = sal_False;
-        maPresSettings.mbFullScreen = sal_False;
-        maPresSettings.mbAnimationAllowed = sal_True;
+        maPresSettings.mbAll = false;
+        maPresSettings.mbEndless = false;
+        maPresSettings.mbCustomShow = false;
+        maPresSettings.mbManual = false;
+        maPresSettings.mbMouseVisible = false;
+        maPresSettings.mbMouseAsPen = false;
+        maPresSettings.mbLockedPages = false;
+        maPresSettings.mbAlwaysOnTop = false;
+        maPresSettings.mbFullScreen = false;
+        maPresSettings.mbAnimationAllowed = true;
         maPresSettings.mnPauseTimeout = 0;
-        maPresSettings.mbShowPauseLogo = sal_False;
-        maPresSettings.mbStartWithNavigator = sal_False;
+        maPresSettings.mbShowPauseLogo = false;
+        maPresSettings.mbStartWithNavigator = false;
 
         Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
         Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
@@ -924,13 +924,13 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
         // times should be measured?
         if( mbRehearseTimings )
         {
-            maPresSettings.mbEndless = sal_False;
-            maPresSettings.mbManual = sal_True;
-            maPresSettings.mbMouseVisible = sal_True;
-            maPresSettings.mbMouseAsPen = sal_False;
+            maPresSettings.mbEndless = false;
+            maPresSettings.mbManual = true;
+            maPresSettings.mbMouseVisible = true;
+            maPresSettings.mbMouseAsPen = false;
             maPresSettings.mnPauseTimeout = 0;
-            maPresSettings.mbShowPauseLogo = sal_False;
-            maPresSettings.mbStartWithNavigator = sal_False;
+            maPresSettings.mbShowPauseLogo = false;
+            maPresSettings.mbStartWithNavigator = false;
         }
 
         if( pStartPage )
@@ -1004,7 +1004,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             // these Slots are forbiden in other views for this document
             if( mpDocSh )
             {
-                mpDocSh->SetSlotFilter( sal_True, sizeof( pAllowed ) / sizeof( sal_uInt16 ), pAllowed );
+                mpDocSh->SetSlotFilter( true, sizeof( pAllowed ) / sizeof( sal_uInt16 ), pAllowed );
                 mpDocSh->ApplySlotFilter();
             }
 
@@ -1058,24 +1058,24 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
             aProperties.push_back(
                 beans::PropertyValue( "AdvanceOnClick" ,
-                    -1, Any( ! (maPresSettings.mbLockedPages != sal_False) ),
+                    -1, Any( maPresSettings.mbLockedPages ),
                     beans::PropertyState_DIRECT_VALUE ) );
 
             aProperties.push_back(
                 beans::PropertyValue( "ImageAnimationsAllowed" ,
-                    -1, Any( maPresSettings.mbAnimationAllowed != sal_False ),
+                    -1, Any( maPresSettings.mbAnimationAllowed != false ),
                     beans::PropertyState_DIRECT_VALUE ) );
 
-            const sal_Bool bZOrderEnabled(
+            const bool bZOrderEnabled(
                 SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsSlideshowRespectZOrder() );
             aProperties.push_back(
                 beans::PropertyValue( "DisableAnimationZOrder" ,
-                    -1, Any( bZOrderEnabled == sal_False ),
+                    -1, Any( bZOrderEnabled == false ),
                     beans::PropertyState_DIRECT_VALUE ) );
 
             aProperties.push_back(
                 beans::PropertyValue( "ForceManualAdvance" ,
-                    -1, Any( maPresSettings.mbManual != sal_False ),
+                    -1, Any( maPresSettings.mbManual != false ),
                     beans::PropertyState_DIRECT_VALUE ) );
 
             if( mbUsePen )
@@ -1104,7 +1104,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
         }
 
-        setActiveXToolbarsVisible( sal_False );
+        setActiveXToolbarsVisible( false );
     }
     catch( Exception& )
     {
@@ -1669,7 +1669,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
 
 sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark )
 {
-    sal_Bool bIsMasterPage;
+    bool bIsMasterPage;
     OUString aBookmark = getUiNameFromPageApiNameImpl( rStrBookmark );
     sal_uInt16 nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
 
@@ -1681,7 +1681,7 @@ sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark
         if( pObj )
         {
             nPgNum = pObj->GetPage()->GetPageNum();
-            bIsMasterPage = (sal_Bool)pObj->GetPage()->IsMasterPage();
+            bIsMasterPage = pObj->GetPage()->IsMasterPage();
         }
     }
 
@@ -2507,7 +2507,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
             if( !rPresSlide.isEmpty() )
             {
                 sal_Int32 nSlide;
-                sal_Bool bTakeNextAvailable = sal_False;
+                bool bTakeNextAvailable = false;
 
                 for( nSlide = 0, nFirstVisibleSlide = -1;
                     ( nSlide < nSlideCount ) && ( -1 == nFirstVisibleSlide ); nSlide++ )
@@ -2517,7 +2517,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
                     if( pTestSlide->GetName() == rPresSlide )
                     {
                         if( pTestSlide->IsExcluded() )
-                            bTakeNextAvailable = sal_True;
+                            bTakeNextAvailable = true;
                         else
                             nFirstVisibleSlide = nSlide;
                     }
@@ -2683,7 +2683,7 @@ void SlideshowImpl::resize( const Size& rSize )
 
 
 
-void SlideshowImpl::setActiveXToolbarsVisible( sal_Bool bVisible )
+void SlideshowImpl::setActiveXToolbarsVisible( bool bVisible )
 {
     // in case of ActiveX control the toolbars should not be visible if slide show runs in window mode
     // actually it runs always in window mode in case of ActiveX control
@@ -2725,7 +2725,7 @@ void SAL_CALL SlideshowImpl::activate() throw (RuntimeException, std::exception)
 
     if( !mbActive && mxShow.is() )
     {
-        mbActive = sal_True;
+        mbActive = true;
 
         if( ANIMATIONMODE_SHOW == meAnimationMode )
         {
@@ -2774,7 +2774,7 @@ IMPL_LINK_NOARG(SlideshowImpl, deactivateHdl)
 {
     if( mbActive && mxShow.is() )
     {
-        mbActive = sal_False;
+        mbActive = false;
 
         pause();
 
@@ -2831,8 +2831,8 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
             const OUString aTarget( ((SfxStringItem&) pArgs->Get(SID_NAVIGATOR_OBJECT)).GetValue() );
 
             // is the bookmark a Slide?
-            sal_Bool        bIsMasterPage;
-            sal_uInt16      nPgNum = mpDoc->GetPageByName( aTarget, bIsMasterPage );
+            bool        bIsMasterPage;
+            sal_uInt16  nPgNum = mpDoc->GetPageByName( aTarget, bIsMasterPage );
             SdrObject*  pObj   = NULL;
 
             if( nPgNum == SDRPAGE_NOTFOUND )
@@ -2950,7 +2950,7 @@ sal_Bool SAL_CALL SlideshowImpl::getAlwaysOnTop() throw (RuntimeException, std::
 void SAL_CALL SlideshowImpl::setAlwaysOnTop( sal_Bool bAlways ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
-    if( maPresSettings.mbAlwaysOnTop != bAlways )
+    if( (maPresSettings.mbAlwaysOnTop ? 1 : 0) != bAlways )
     {
         maPresSettings.mbAlwaysOnTop = bAlways;
         // todo, can this be changed while running?
@@ -2978,7 +2978,7 @@ sal_Bool SAL_CALL SlideshowImpl::getMouseVisible() throw (RuntimeException, std:
 void SAL_CALL SlideshowImpl::setMouseVisible( sal_Bool bVisible ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
-    if( maPresSettings.mbMouseVisible != bVisible )
+    if( (maPresSettings.mbMouseVisible ? 1 : 0) != bVisible )
     {
         maPresSettings.mbMouseVisible = bVisible;
         if( mpShowWindow )
@@ -3517,8 +3517,8 @@ PresentationSettingsEx::PresentationSettingsEx( const PresentationSettingsEx& r 
 
 PresentationSettingsEx::PresentationSettingsEx( PresentationSettings& r )
 : PresentationSettings( r )
-, mbRehearseTimings(sal_False)
-, mbPreview(sal_False)
+, mbRehearseTimings(false)
+, mbPreview(false)
 , mpParentWindow(0)
 {
 }
@@ -3572,8 +3572,8 @@ void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const 
         if( rValue >>= aPresPage )
         {
             maPresPage = getUiNameFromPageApiNameImpl(aPresPage);
-            mbCustomShow = sal_False;
-            mbAll = sal_False;
+            mbCustomShow = false;
+            mbAll = false;
             return;
         }
         else

@@ -254,8 +254,8 @@ bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPo
     return true;
 }
 
-sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
-                         const Point& rPos, sal_Int8& rDnDAction, sal_Bool bDrag,
+bool View::InsertData( const TransferableDataHelper& rDataHelper,
+                         const Point& rPos, sal_Int8& rDnDAction, bool bDrag,
                          sal_uLong nFormat, sal_uInt16 nPage, sal_uInt16 nLayer )
 {
     maDropPos = rPos;
@@ -267,8 +267,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
     SdPage*                 pPage = NULL;
     ImageMap*               pImageMap = NULL;
     bool bReturn = false;
-    sal_Bool                    bLink = ( ( mnAction & DND_ACTION_LINK ) != 0 );
-    sal_Bool                    bCopy = ( ( ( mnAction & DND_ACTION_COPY ) != 0 ) || bLink );
+    bool                    bLink = ( ( mnAction & DND_ACTION_LINK ) != 0 );
+    bool                    bCopy = ( ( ( mnAction & DND_ACTION_COPY ) != 0 ) || bLink );
     sal_uLong                   nPasteOptions = SDRINSERT_SETDEFLAYER;
 
     if (mpViewSh != NULL)
@@ -377,7 +377,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if( !pPV->IsLayerLocked( aLayer ) )
                     {
-                        pOwnData->SetInternalMove( sal_True );
+                        pOwnData->SetInternalMove( true );
                         SortMarkedObjects();
 
                         for( sal_uLong nM = 0; nM < GetMarkedObjectCount(); nM++ )
@@ -405,12 +405,12 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 else
                 {
                     SdrPageView*    pPV = GetSdrPageView();
-                    sal_Bool            bDropOnTabBar = sal_True;
+                    bool            bDropOnTabBar = true;
 
                     if( !pPage && pPV->GetPage()->GetPageNum() != mnDragSrcPgNum )
                     {
                         pPage = (SdPage*) pPV->GetPage();
-                        bDropOnTabBar = sal_False;
+                        bDropOnTabBar = false;
                     }
 
                     if( pPage )
@@ -586,7 +586,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     }
                     else
                     {
-                        pOwnData->SetInternalMove( sal_True );
+                        pOwnData->SetInternalMove( true );
                         MoveAllMarked( Size( maDropPos.X() - pOwnData->GetStartPos().X(),
                                              maDropPos.Y() - pOwnData->GetStartPos().Y() ), bCopy );
                         bReturn = true;
@@ -611,7 +611,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     sal_Int32 nPos = aLayout.indexOf(SD_LT_SEPARATOR);
                     if (nPos != -1)
                         aLayout = aLayout.copy(0, nPos);
-                    pPage->SetPresentationLayout( aLayout, sal_False, sal_False );
+                    pPage->SetPresentationLayout( aLayout, false, false );
                     pSourceDoc->CreatingDataObj( NULL );
                 }
                 else
@@ -652,7 +652,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             sal_Int32 nPos = aLayout.indexOf(SD_LT_SEPARATOR);
             if (nPos != -1)
                 aLayout = aLayout.copy(0, nPos);
-            pPage->SetPresentationLayout( aLayout, sal_False, sal_False );
+            pPage->SetPresentationLayout( aLayout, false, false );
        }
     }
 
@@ -662,7 +662,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xStm ) )
         {
-            sal_Bool bChanged = sal_False;
+            bool bChanged = false;
 
             DrawDocShellRef xShell = new DrawDocShell(SFX_CREATE_MODE_INTERNAL);
             xShell->DoInitNew(0);
@@ -731,7 +731,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             {
                                 SdrObject::Free(pPickObj2 );
                             }
-                            bChanged = sal_True;
+                            bChanged = true;
                             mnAction = DND_ACTION_COPY;
                         }
                         else if( ( mnAction & DND_ACTION_LINK ) && pPickObj && pObj && !pPickObj->ISA( SdrGrafObj ) && !pPickObj->ISA( SdrOle2Obj ) )
@@ -782,7 +782,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                             if( bUndo )
                                 EndUndo();
-                            bChanged = sal_True;
+                            bChanged = true;
                         }
                     }
                 }
@@ -850,7 +850,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             if( mrDoc.GetDocSh() && ( mrDoc.GetDocSh()->GetClassName() == aObjDesc.maClassName ) )
             {
                 uno::Reference < embed::XStorage > xStore( ::comphelper::OStorageHelper::GetStorageFromInputStream( xStm ) );
-                ::sd::DrawDocShellRef xDocShRef( new ::sd::DrawDocShell( SFX_CREATE_MODE_EMBEDDED, sal_True, mrDoc.GetDocumentType() ) );
+                ::sd::DrawDocShellRef xDocShRef( new ::sd::DrawDocShell( SFX_CREATE_MODE_EMBEDDED, true, mrDoc.GetDocumentType() ) );
 
                 // mba: BaseURL doesn't make sense for clipboard functionality
                 SfxMedium *pMedium = new SfxMedium( xStore, OUString() );
@@ -888,7 +888,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     sal_Int32 nPos = aLayout.indexOf(SD_LT_SEPARATOR);
                     if (nPos != -1)
                         aLayout = aLayout.copy(0, nPos);
-                    pPage->SetPresentationLayout( aLayout, sal_False, sal_False );
+                    pPage->SetPresentationLayout( aLayout, false, false );
                 }
 
                 xDocShRef->DoClose();
@@ -1313,7 +1313,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 Color                   aColor( rColItem.GetColorValue() );
                 OUString                aName( rColItem.GetName() );
                 SfxItemSet              aSet( mrDoc.GetPool() );
-                sal_Bool                    bClosed = pPickObj->IsClosedObj();
+                bool                    bClosed = pPickObj->IsClosedObj();
                 ::sd::Window* pWin = mpViewSh->GetActiveWindow();
                 sal_uInt16 nHitLog = (sal_uInt16) pWin->PixelToLogic(
                     Size(FuPoor::HITPIX, 0 ) ).Width();

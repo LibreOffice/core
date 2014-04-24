@@ -70,18 +70,18 @@ void MorphDlg::LoadSettings()
     SvStorageStreamRef  xIStm( SD_MOD()->GetOptionStream( OUString(SD_OPTION_MORPHING) ,
                                SD_OPTION_LOAD ) );
     sal_uInt16              nSteps;
-    sal_Bool                bOrient, bAttrib;
+    bool                bOrient, bAttrib;
 
     if( xIStm.Is() )
     {
         SdIOCompat aCompat( *xIStm, STREAM_READ );
 
-        xIStm->ReadUInt16( nSteps ).ReadUChar( bOrient ).ReadUChar( bAttrib );
+        xIStm->ReadUInt16( nSteps ).ReadCharAsBool( bOrient ).ReadCharAsBool( bAttrib );
     }
     else
     {
         nSteps = 16;
-        bOrient = bAttrib = sal_True;
+        bOrient = bAttrib = true;
     }
 
     m_pMtfSteps->SetValue( nSteps );

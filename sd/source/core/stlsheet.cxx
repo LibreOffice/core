@@ -553,7 +553,7 @@ void SdStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
  * @param bOnlyMissingItems If sal_True, only not set items are completed. With
  * sal_False, are items are overwritten.
  */
-void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, sal_Bool bOnlyMissingItems)
+void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
 {
     /* If not explicit set, adjust bullet width and text indent to new font
        height. */
@@ -1022,7 +1022,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
     {
         if( pEntry->nWID == WID_STYLE_HIDDEN )
         {
-            sal_Bool bValue = sal_False;
+            bool bValue = false;
             if ( aValue >>= bValue )
                 SetHidden( bValue );
             return;

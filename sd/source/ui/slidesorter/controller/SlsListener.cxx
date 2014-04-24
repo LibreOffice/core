@@ -520,7 +520,7 @@ void SAL_CALL Listener::propertyChange (
     }
     else if (rEvent.PropertyName.equals (sEditModePropertyName))
     {
-        sal_Bool bIsMasterPageMode = sal_False;
+        bool bIsMasterPageMode = false;
         rEvent.NewValue >>= bIsMasterPageMode;
         mrController.ChangeEditMode (
             bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);

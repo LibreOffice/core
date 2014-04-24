@@ -63,7 +63,7 @@ public:
     virtual bool        SetName( const OUString& ) SAL_OVERRIDE;
     virtual void        SetHelpId( const OUString& r, sal_uLong nId ) SAL_OVERRIDE;
 
-    void        AdjustToFontHeight(SfxItemSet& rSet, sal_Bool bOnlyMissingItems = sal_True);
+    void        AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems = true);
 
     SdStyleSheet* GetRealStyleSheet() const;
     SdStyleSheet* GetPseudoStyleSheet() const;

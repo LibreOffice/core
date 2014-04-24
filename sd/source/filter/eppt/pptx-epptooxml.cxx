@@ -105,19 +105,19 @@ class PowerPointShapeExport : public ShapeExport
 {
     PowerPointExport&   mrExport;
     PageType            mePageType;
-    sal_Bool            mbMaster;
+    bool                mbMaster;
 public:
     PowerPointShapeExport( FSHelperPtr pFS, ShapeHashMap* pShapeMap, PowerPointExport* pFB );
-    void                SetMaster( sal_Bool bMaster );
+    void                SetMaster( bool bMaster );
     void                SetPageType( PageType ePageType );
     ShapeExport&        WriteNonVisualProperties( Reference< XShape > xShape ) SAL_OVERRIDE;
     ShapeExport&        WriteTextShape( Reference< XShape > xShape ) SAL_OVERRIDE;
     ShapeExport&        WriteUnknownShape( Reference< XShape > xShape ) SAL_OVERRIDE;
     ShapeExport&        WritePlaceholderShape( Reference< XShape > xShape, PlaceholderType ePlaceholder );
-    ShapeExport&        WritePageShape( Reference< XShape > xShape, PageType ePageType, sal_Bool bPresObj );
+    ShapeExport&        WritePageShape( Reference< XShape > xShape, PageType ePageType, bool bPresObj );
 
     // helper parts
-    sal_Bool WritePlaceholder( Reference< XShape > xShape, PlaceholderType ePlaceholder, sal_Bool bMaster );
+    bool WritePlaceholder( Reference< XShape > xShape, PlaceholderType ePlaceholder, bool bMaster );
 };
 
 enum PPTXLayout {
@@ -211,11 +211,11 @@ PowerPointShapeExport::PowerPointShapeExport( FSHelperPtr pFS, ShapeHashMap* pSh
     : ShapeExport( XML_p, pFS, pShapeMap, pFB )
     , mrExport( *pFB )
     , mePageType(UNDEFINED)
-    , mbMaster(sal_False)
+    , mbMaster(false)
 {
 }
 
-void PowerPointShapeExport::SetMaster( sal_Bool bMaster )
+void PowerPointShapeExport::SetMaster( bool bMaster )
 {
     mbMaster = bMaster;
 }
@@ -733,7 +733,7 @@ void PowerPointExport::WriteAnimationAttributeName( FSHelperPtr pFS, const OUStr
 void PowerPointExport::WriteAnimationTarget( FSHelperPtr pFS, Any aTarget )
 {
     sal_Int32 nBegin = -1, nEnd = -1;
-    sal_Bool bParagraphTarget;
+    bool bParagraphTarget;
     Reference< XShape > rXShape = AnimationExporter::getTargetElementShape( aTarget, nBegin, nEnd, bParagraphTarget );
 
     if( rXShape.is() ) {
@@ -754,7 +754,7 @@ void PowerPointExport::WriteAnimationTarget( FSHelperPtr pFS, Any aTarget )
     }
 }
 
-void PowerPointExport::WriteAnimationNodeAnimate( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, sal_Bool bMainSeqChild )
+void PowerPointExport::WriteAnimationNodeAnimate( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, bool bMainSeqChild )
 {
     Reference< XAnimate > rXAnimate( rXNode, UNO_QUERY );
     if( !rXAnimate.is() )
@@ -762,7 +762,7 @@ void PowerPointExport::WriteAnimationNodeAnimate( FSHelperPtr pFS, const Referen
 
     const char* pCalcMode = NULL;
     const char* pValueType = NULL;
-    sal_Bool bSimple = ( nXmlNodeType != XML_anim );
+    bool bSimple = ( nXmlNodeType != XML_anim );
 
     if( !bSimple ) {
     switch( rXAnimate->getCalcMode() ) {
@@ -795,7 +795,7 @@ void PowerPointExport::WriteAnimationNodeAnimate( FSHelperPtr pFS, const Referen
     pFS->endElementNS( XML_p, nXmlNodeType );
 }
 
-void PowerPointExport::WriteAnimationNodeAnimateInside( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, sal_Bool bMainSeqChild, sal_Bool bSimple )
+void PowerPointExport::WriteAnimationNodeAnimateInside( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, bool bMainSeqChild, bool bSimple )
 {
     Reference< XAnimate > rXAnimate( rXNode, UNO_QUERY );
     if( !rXAnimate.is() )
@@ -826,7 +826,7 @@ void PowerPointExport::WriteAnimationNodeAnimateInside( FSHelperPtr pFS, const R
     pFS->startElementNS( XML_p, XML_cBhvr,
              XML_additive, pAdditive,
              FSEND );
-    WriteAnimationNodeCommonPropsStart( pFS, rXNode, sal_True, bMainSeqChild );
+    WriteAnimationNodeCommonPropsStart( pFS, rXNode, true, bMainSeqChild );
     WriteAnimationTarget( pFS, rXAnimate->getTarget() );
     WriteAnimationAttributeName( pFS, rXAnimate->getAttributeName() );
     pFS->endElementNS( XML_p, XML_cBhvr );
@@ -834,7 +834,7 @@ void PowerPointExport::WriteAnimationNodeAnimateInside( FSHelperPtr pFS, const R
     WriteAnimateTo( pFS, rXAnimate->getTo(), rXAnimate->getAttributeName() );
 }
 
-void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, const char* pDelay, const char* pEvent, double fDelay, sal_Bool bHasFDelay )
+void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, const char* pDelay, const char* pEvent, double fDelay, bool bHasFDelay )
 {
     if( bHasFDelay || pDelay || pEvent ) {
     if( !pEvent )
@@ -856,9 +856,9 @@ void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, const char* pDe
     }
 }
 
-void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, Any& rAny, sal_Bool bWriteEvent, sal_Bool bMainSeqChild )
+void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, Any& rAny, bool bWriteEvent, bool bMainSeqChild )
 {
-    sal_Bool bHasFDelay = sal_False;
+    bool bHasFDelay = false;
     double fDelay = 0;
     Timing eTiming;
     Event aEvent;
@@ -866,7 +866,7 @@ void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, Any& rAny, sal_
     const char* pEvent = NULL;
 
     if( rAny >>= fDelay )
-        bHasFDelay = sal_True;
+        bHasFDelay = true;
     else if( rAny >>= eTiming )
     {
         if( eTiming == Timing_INDEFINITE )
@@ -919,7 +919,7 @@ void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, Any& rAny, sal_
     }
 
     if( aEvent.Offset >>= fDelay ) {
-        bHasFDelay = sal_True;
+        bHasFDelay = true;
         DBG(printf ("event offset: %f\n", fDelay));
     } else if( aEvent.Offset >>= eTiming ) {
         if( eTiming == Timing_INDEFINITE )
@@ -931,7 +931,7 @@ void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, Any& rAny, sal_
     WriteAnimationCondition( pFS, pDelay, pEvent, fDelay, bHasFDelay );
 }
 
-void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, sal_Bool bSingle, sal_Bool bMainSeqChild )
+void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, bool bSingle, bool bMainSeqChild )
 {
     const char* pDuration = NULL;
     const char* pRestart = NULL;
@@ -1023,7 +1023,7 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     }
 
     sal_uInt32 nPresetId = 0;
-    sal_Bool bPresetId = sal_False;
+    bool bPresetId = false;
     if ( pAny[ DFF_ANIM_PRESET_ID ] ) {
     OUString sPreset;
     if ( *pAny[ DFF_ANIM_PRESET_ID ] >>= sPreset )
@@ -1031,12 +1031,12 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     }
 
     sal_uInt32 nPresetSubType = 0;
-    sal_Bool bPresetSubType = sal_False;
+    bool bPresetSubType = false;
     if ( pAny[ DFF_ANIM_PRESET_SUB_TYPE ] ) {
     OUString sPresetSubType;
     if ( *pAny[ DFF_ANIM_PRESET_SUB_TYPE ] >>= sPresetSubType ) {
         nPresetSubType = AnimationExporter::TranslatePresetSubType( nPresetClass, nPresetId, sPresetSubType );
-        bPresetSubType = sal_True;
+        bPresetSubType = true;
     }
     }
 
@@ -1077,9 +1077,9 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     pFS->startElementNS( XML_p, XML_stCondLst, FSEND );
     if( aAny >>= aCondSeq ) {
         for( int i = 0; i < aCondSeq.getLength(); i ++ )
-        WriteAnimationCondition( pFS, aCondSeq[ i ], sal_False, bMainSeqChild );
+        WriteAnimationCondition( pFS, aCondSeq[ i ], false, bMainSeqChild );
     } else
-        WriteAnimationCondition( pFS, aAny, sal_False, bMainSeqChild );
+        WriteAnimationCondition( pFS, aAny, false, bMainSeqChild );
     pFS->endElementNS( XML_p, XML_stCondLst );
     }
 
@@ -1090,9 +1090,9 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     pFS->startElementNS( XML_p, XML_endCondLst, FSEND );
     if( aAny >>= aCondSeq ) {
         for( int i = 0; i < aCondSeq.getLength(); i ++ )
-        WriteAnimationCondition( pFS, aCondSeq[ i ], sal_False, bMainSeqChild );
+        WriteAnimationCondition( pFS, aCondSeq[ i ], false, bMainSeqChild );
     } else
-        WriteAnimationCondition( pFS, aAny, sal_False, bMainSeqChild );
+        WriteAnimationCondition( pFS, aAny, false, bMainSeqChild );
     pFS->endElementNS( XML_p, XML_stCondLst );
     }
 
@@ -1121,26 +1121,26 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     pFS->endElementNS( XML_p, XML_cTn );
 }
 
-void PowerPointExport::WriteAnimationNodeSeq( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, sal_Int32, sal_Bool bMainSeqChild )
+void PowerPointExport::WriteAnimationNodeSeq( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, sal_Int32, bool bMainSeqChild )
 {
     DBG(printf ("write animation node SEQ\n"));
 
     pFS->startElementNS( XML_p, XML_seq, FSEND );
 
-    WriteAnimationNodeCommonPropsStart( pFS, rXNode, sal_True, bMainSeqChild );
+    WriteAnimationNodeCommonPropsStart( pFS, rXNode, true, bMainSeqChild );
 
     pFS->startElementNS( XML_p, XML_prevCondLst, FSEND );
-    WriteAnimationCondition( pFS, NULL, "onPrev", 0, sal_True );
+    WriteAnimationCondition( pFS, NULL, "onPrev", 0, true );
     pFS->endElementNS( XML_p, XML_prevCondLst );
 
     pFS->startElementNS( XML_p, XML_nextCondLst, FSEND );
-    WriteAnimationCondition( pFS, NULL, "onNext", 0, sal_True );
+    WriteAnimationCondition( pFS, NULL, "onNext", 0, true );
     pFS->endElementNS( XML_p, XML_nextCondLst );
 
     pFS->endElementNS( XML_p, XML_seq );
 }
 
-void PowerPointExport::WriteAnimationNodeEffect( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, sal_Int32, sal_Bool bMainSeqChild )
+void PowerPointExport::WriteAnimationNodeEffect( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, sal_Int32, bool bMainSeqChild )
 {
     DBG(printf ("write animation node FILTER\n"));
 
@@ -1153,17 +1153,17 @@ void PowerPointExport::WriteAnimationNodeEffect( FSHelperPtr pFS, const Referenc
                  XML_transition, pDirection,
                  FSEND );
 
-    WriteAnimationNodeAnimateInside( pFS, rXNode, bMainSeqChild, sal_False );
+    WriteAnimationNodeAnimateInside( pFS, rXNode, bMainSeqChild, false );
 
     pFS->endElementNS( XML_p, XML_animEffect );
     }
 }
 
-void PowerPointExport::WriteAnimationNode( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, sal_Bool bMainSeqChild )
+void PowerPointExport::WriteAnimationNode( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, bool bMainSeqChild )
 {
     DBG(printf ("export node type: %d\n", rXNode->getType()));
     sal_Int32 xmlNodeType = -1;
-    typedef void (PowerPointExport::*AnimationNodeWriteMethod)( FSHelperPtr, const Reference< XAnimationNode >&, sal_Int32, sal_Bool );
+    typedef void (PowerPointExport::*AnimationNodeWriteMethod)( FSHelperPtr, const Reference< XAnimationNode >&, sal_Int32, bool );
     AnimationNodeWriteMethod pMethod = NULL;
 
     switch( rXNode->getType() ) {
@@ -1197,7 +1197,7 @@ void PowerPointExport::WriteAnimationNode( FSHelperPtr pFS, const Reference< XAn
 
     pFS->startElementNS( XML_p, xmlNodeType, FSEND );
 
-    WriteAnimationNodeCommonPropsStart( pFS, rXNode, sal_True, bMainSeqChild );
+    WriteAnimationNodeCommonPropsStart( pFS, rXNode, true, bMainSeqChild );
 
     pFS->endElementNS( XML_p, xmlNodeType );
 }
@@ -1216,7 +1216,7 @@ void PowerPointExport::WriteAnimations( FSHelperPtr pFS )
             pFS->startElementNS( XML_p, XML_timing, FSEND );
             pFS->startElementNS( XML_p, XML_tnLst, FSEND );
 
-            WriteAnimationNode( pFS, xNode, sal_False );
+            WriteAnimationNode( pFS, xNode, false );
 
             pFS->endElementNS( XML_p, XML_tnLst );
             pFS->endElementNS( XML_p, XML_timing );
@@ -1350,7 +1350,7 @@ bool PowerPointExport::WriteComments( sal_uInt32 nPageNum )
 }
 
 void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 /* nMode */,
-                                       sal_Bool bHasBackground, Reference< XPropertySet > aXBackgroundPropSet )
+                                       bool bHasBackground, Reference< XPropertySet > aXBackgroundPropSet )
 {
     DBG(printf("write slide: %" SAL_PRIuUINT32 "\n----------------\n", nPageNum));
 
@@ -1389,7 +1389,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
     const char* pShow = NULL;
 
     if( GETA( Visible ) ) {
-    sal_Bool bShow(sal_False);
+    bool bShow(false);
     if( ( mAny >>= bShow ) && !bShow )
         pShow = "0";
     }
@@ -1405,7 +1405,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
         ImplWriteBackground( pFS, aXBackgroundPropSet );
     }
 
-    WriteShapeTree( pFS, NORMAL, sal_False );
+    WriteShapeTree( pFS, NORMAL, false );
 
     pFS->endElementNS( XML_p, XML_cSld );
 
@@ -1438,7 +1438,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
 
 void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
 {
-    if( !mbCreateNotes || !ContainsOtherShapeThanPlaceholders( sal_True ) )
+    if( !mbCreateNotes || !ContainsOtherShapeThanPlaceholders( true ) )
         return;
 
     DBG(printf("write Notes %" SAL_PRIuUINT32 "\n----------------\n", nPageNum));
@@ -1454,7 +1454,7 @@ void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
 
     pFS->startElementNS( XML_p, XML_cSld, FSEND );
 
-    WriteShapeTree( pFS, NOTICE, sal_False );
+    WriteShapeTree( pFS, NOTICE, false );
 
     pFS->endElementNS( XML_p, XML_cSld );
 
@@ -1565,7 +1565,7 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
     pFS->startElementNS( XML_p, XML_cSld, FSEND );
 
     ImplWriteBackground( pFS, aXBackgroundPropSet );
-    WriteShapeTree( pFS, LAYOUT, sal_True );
+    WriteShapeTree( pFS, LAYOUT, true );
 
     pFS->endElementNS( XML_p, XML_cSld );
 
@@ -1679,7 +1679,7 @@ void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMaste
                          XML_name, aLayoutInfo[ nOffset ].sName,
                          FSEND );
     //pFS->write( MINIMAL_SPTREE ); // TODO: write actual shape tree
-    WriteShapeTree( pFS, LAYOUT, sal_True );
+    WriteShapeTree( pFS, LAYOUT, true );
 
     pFS->endElementNS( XML_p, XML_cSld );
 
@@ -1692,7 +1692,7 @@ void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMaste
     xDrawPages->remove( xSlide );
 }
 
-void PowerPointExport::WriteShapeTree( FSHelperPtr pFS, PageType ePageType, sal_Bool bMaster )
+void PowerPointExport::WriteShapeTree( FSHelperPtr pFS, PageType ePageType, bool bMaster )
 {
     PowerPointShapeExport aDML( pFS, &maShapeMap, this );
     aDML.SetMaster( bMaster );
@@ -1711,7 +1711,7 @@ void PowerPointExport::WriteShapeTree( FSHelperPtr pFS, PageType ePageType, sal_
             DBG(printf( "leave group\n" ));
         }
 
-        if ( GetShapeByIndex( GetCurrentGroupIndex(), sal_True ) ) {
+        if ( GetShapeByIndex( GetCurrentGroupIndex(), true ) ) {
             DBG(printf( "mType: \"%s\"\n", mType.getStr() ));
             aDML.WriteShape( mXShape );
         }
@@ -1723,7 +1723,7 @@ void PowerPointExport::WriteShapeTree( FSHelperPtr pFS, PageType ePageType, sal_
 #define BEGIN_SHAPE mpFS->startElementNS( XML_p, XML_sp, FSEND )
 #define END_SHAPE mpFS->endElementNS( XML_p, XML_sp )
 
-ShapeExport& PowerPointShapeExport::WritePageShape( Reference< XShape > xShape, PageType ePageType, sal_Bool bPresObj )
+ShapeExport& PowerPointShapeExport::WritePageShape( Reference< XShape > xShape, PageType ePageType, bool bPresObj )
 {
     if( ( ePageType == NOTICE && bPresObj ) || ePageType == LAYOUT )
         return WritePlaceholderShape( xShape, SlideImage );
@@ -1731,16 +1731,16 @@ ShapeExport& PowerPointShapeExport::WritePageShape( Reference< XShape > xShape, 
     return WriteTextShape( xShape );
 }
 
-sal_Bool PowerPointShapeExport::WritePlaceholder( Reference< XShape > xShape, PlaceholderType ePlaceholder, sal_Bool bMaster )
+bool PowerPointShapeExport::WritePlaceholder( Reference< XShape > xShape, PlaceholderType ePlaceholder, bool bMaster )
 {
     DBG(printf("WritePlaceholder %d %d\n", bMaster, ShapeExport::NonEmptyText( xShape )));
     if( bMaster && ShapeExport::NonEmptyText( xShape ) ) {
     WritePlaceholderShape( xShape, ePlaceholder );
 
-    return sal_True;
+    return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 ShapeExport& PowerPointShapeExport::WritePlaceholderShape( Reference< XShape > xShape, PlaceholderType ePlaceholder )
@@ -2045,25 +2045,25 @@ void PowerPointExport::WriteTheme( sal_Int32 nThemeNum )
     pFS->endElementNS( XML_a, XML_theme );
 }
 
-sal_Bool PowerPointExport::ImplCreateDocument()
+bool PowerPointExport::ImplCreateDocument()
 {
-    mbCreateNotes = sal_False;
+    mbCreateNotes = false;
 
     for( sal_uInt32 i = 0; i < mnPages; i++ )
     {
         if ( !GetPageByIndex( i, NOTICE ) )
-            return sal_False;
+            return false;
 
-    if( ContainsOtherShapeThanPlaceholders( sal_True ) ) {
-        mbCreateNotes = sal_True;
+    if( ContainsOtherShapeThanPlaceholders( true ) ) {
+        mbCreateNotes = true;
         break;
     }
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool PowerPointExport::WriteNotesMaster()
+bool PowerPointExport::WriteNotesMaster()
 {
     DBG(printf("write Notes master\n----------------\n"));
 
@@ -2103,7 +2103,7 @@ sal_Bool PowerPointExport::WriteNotesMaster()
             ( mAny >>= aXBackgroundPropSet ) )
         ImplWriteBackground( pFS, aXBackgroundPropSet );
 
-    WriteShapeTree( pFS, NOTICE, sal_True );
+    WriteShapeTree( pFS, NOTICE, true );
 
     pFS->endElementNS( XML_p, XML_cSld );
 
@@ -2127,15 +2127,15 @@ sal_Bool PowerPointExport::WriteNotesMaster()
 
     DBG(printf("----------------\n"));
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool PowerPointExport::ImplCreateMainNotes()
+bool PowerPointExport::ImplCreateMainNotes()
 {
     if( mbCreateNotes )
         return WriteNotesMaster();
 
-    return sal_True;
+    return true;
 }
 
 OUString SAL_CALL PowerPointExport_getImplementationName() throw()

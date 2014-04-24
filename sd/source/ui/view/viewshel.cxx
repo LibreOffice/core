@@ -113,7 +113,7 @@ private:
 
 namespace sd {
 
-sal_Bool ViewShell::IsPageFlipMode(void) const
+bool ViewShell::IsPageFlipMode(void) const
 {
     return this->ISA(DrawViewShell) && mpContentWindow.get() != NULL &&
         mpContentWindow->GetVisibleHeight() >= 1.0;
@@ -180,7 +180,7 @@ void ViewShell::construct(void)
     mpView = 0;
     mpFrameView = 0;
     mpZoomList = 0;
-    mbStartShowWithDialog = sal_False;
+    mbStartShowWithDialog = false;
     mnPrintedHandoutPageNum = 1;
     mnPrintedHandoutPageCount = 0;
     mpWindowUpdater.reset( new ::sd::WindowUpdater() );
@@ -222,7 +222,7 @@ void ViewShell::construct(void)
     OUString aName( "ViewShell" );
     SetName (aName);
 
-    GetDoc()->StartOnlineSpelling(sal_False);
+    GetDoc()->StartOnlineSpelling(false);
 
     mpWindowUpdater->SetViewShell (*this);
     mpWindowUpdater->SetDocument (GetDoc());
@@ -341,7 +341,7 @@ void ViewShell::Activate(bool bIsMDIActivate)
         }
 
         if(!GetDocSh()->IsUIActive())
-            UpdatePreview( GetActualPage(), sal_True );
+            UpdatePreview( GetActualPage(), true );
 
     }
 
@@ -416,9 +416,9 @@ void ViewShell::Shutdown (void)
 
 
 
-sal_Bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
+bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
-    sal_Bool bReturn(sal_False);
+    bool bReturn(false);
 
     if(pWin)
     {
@@ -430,7 +430,7 @@ sal_Bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
         // give key input first to SfxViewShell to give CTRL+Key
         // (e.g. CTRL+SHIFT+'+', to front) priority.
         OSL_ASSERT (GetViewShell()!=NULL);
-        bReturn = (sal_Bool)GetViewShell()->KeyInput(rKEvt);
+        bReturn = GetViewShell()->KeyInput(rKEvt);
     }
 
     sal_Int32 OriCount = GetView()->GetMarkedObjectList().GetMarkCount();
@@ -458,7 +458,7 @@ sal_Bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
                 }
                 else
                 {
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
             }
         }
@@ -478,7 +478,7 @@ sal_Bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
             && aKeyCode.GetCode() == KEY_R)
         {
             InvalidateWindows();
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
 
@@ -594,7 +594,7 @@ void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
 void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 {
-    sal_Bool bDone = HandleScrollCommand (rCEvt, pWin);
+    bool bDone = HandleScrollCommand (rCEvt, pWin);
 
     if( !bDone )
     {
@@ -736,7 +736,7 @@ void ViewShell::SetupRulers (void)
         }
         if ( mpHorizontalRuler.get() == NULL )
         {
-            mpHorizontalRuler.reset(CreateHRuler(GetActiveWindow(), sal_True));
+            mpHorizontalRuler.reset(CreateHRuler(GetActiveWindow(), true));
             if ( mpHorizontalRuler.get() != NULL )
             {
                 mpHorizontalRuler->SetWinPos(nHRulerOfs);
@@ -763,8 +763,8 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
             return pTmpItem;
         else
         {
-            sal_Bool bOutliner = sal_False;
-            sal_Bool bTitle = sal_False;
+            bool bOutliner = false;
+            bool bTitle = false;
 
             if( mpView )
                  {
@@ -779,10 +779,10 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
                         switch(pObj->GetObjIdentifier())
                         {
                         case OBJ_TITLETEXT:
-                            bTitle = sal_True;
+                            bTitle = true;
                             break;
                         case OBJ_OUTLINETEXT:
-                            bOutliner = sal_True;
+                            bOutliner = true;
                             break;
                         }
                     }
@@ -828,7 +828,7 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
 }
 
 
-sal_Bool ViewShell::HasRuler (void)
+bool ViewShell::HasRuler (void)
 {
     return mbHasRulers;
 }
@@ -1032,7 +1032,7 @@ void ViewShell::SetDefTabHRuler( sal_uInt16 nDefTab )
 /** Tell the FmFormShell that the view shell is closing.  Give it the
     oportunity to prevent that.
 */
-bool ViewShell::PrepareClose (sal_Bool bUI)
+bool ViewShell::PrepareClose (bool bUI)
 {
     bool nResult = true;
 
@@ -1046,7 +1046,7 @@ bool ViewShell::PrepareClose (sal_Bool bUI)
 
 
 
-void ViewShell::UpdatePreview (SdPage*, sal_Bool )
+void ViewShell::UpdatePreview (SdPage*, bool )
 {
     // Do nothing.  After the actual preview has been removed,
     // OutlineViewShell::UpdatePreview() is the place where something
@@ -1151,7 +1151,7 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 
 
 
-void ViewShell::ImpSidUndo(sal_Bool, SfxRequest& rReq)
+void ViewShell::ImpSidUndo(bool, SfxRequest& rReq)
 {
     ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
@@ -1200,7 +1200,7 @@ void ViewShell::ImpSidUndo(sal_Bool, SfxRequest& rReq)
 
 
 
-void ViewShell::ImpSidRedo(sal_Bool, SfxRequest& rReq)
+void ViewShell::ImpSidRedo(bool, SfxRequest& rReq)
 {
     ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);

@@ -31,10 +31,10 @@ public:
     SdHTMLFilter (
         SfxMedium& rMedium,
         ::sd::DrawDocShell& rDocShell,
-        sal_Bool bShowProgress);
+        bool bShowProgress);
     virtual ~SdHTMLFilter (void);
 
-    virtual sal_Bool        Export() SAL_OVERRIDE;
+    virtual bool        Export() SAL_OVERRIDE;
 
 private:
     DECL_LINK( IOProgressHdl, sal_uInt16* );

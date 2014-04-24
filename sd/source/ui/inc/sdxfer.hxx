@@ -42,7 +42,7 @@ class SdTransferable : public TransferableHelper, public SfxListener
 {
 public:
 
-                                    SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, sal_Bool bInitOnGetData );
+                                    SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, bool bInitOnGetData );
                                     virtual ~SdTransferable();
 
     void                            SetDocShell( const SfxObjectShellRef& rRef ) { maDocShellRef = rRef; }
@@ -59,18 +59,18 @@ public:
     void                            SetStartPos( const Point& rStartPos ) { maStartPos = rStartPos; }
     const Point&                    GetStartPos() const { return maStartPos; }
 
-    void                            SetInternalMove( sal_Bool bSet ) { mbInternalMove = bSet; }
-    sal_Bool                            IsInternalMove() const { return mbInternalMove; }
+    void                            SetInternalMove( bool bSet ) { mbInternalMove = bSet; }
+    bool                            IsInternalMove() const { return mbInternalMove; }
 
-    sal_Bool                            HasSourceDoc( const SdDrawDocument* pDoc ) const { return( mpSourceDoc == pDoc ); }
+    bool                            HasSourceDoc( const SdDrawDocument* pDoc ) const { return( mpSourceDoc == pDoc ); }
 
-    void                            SetPageBookmarks( const std::vector<OUString>& rPageBookmarks, sal_Bool bPersistent );
-    sal_Bool                            IsPageTransferable() const { return mbPageTransferable; }
-    sal_Bool                            HasPageBookmarks() const { return( mpPageDocShell && ( !maPageBookmarks.empty() ) ); }
+    void                            SetPageBookmarks( const std::vector<OUString>& rPageBookmarks, bool bPersistent );
+    bool                            IsPageTransferable() const { return mbPageTransferable; }
+    bool                            HasPageBookmarks() const { return( mpPageDocShell && ( !maPageBookmarks.empty() ) ); }
     const std::vector<OUString>& GetPageBookmarks() const { return maPageBookmarks; }
     ::sd::DrawDocShell*                 GetPageDocShell() const { return mpPageDocShell; }
 
-    sal_Bool                        SetTableRTF( SdDrawDocument*, const ::com::sun::star::datatransfer::DataFlavor& );
+    bool                        SetTableRTF( SdDrawDocument*, const ::com::sun::star::datatransfer::DataFlavor& );
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
     static SdTransferable*          getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
@@ -130,12 +130,12 @@ private:
     ImageMap*                       mpImageMap;
     Rectangle                       maVisArea;
     Point                           maStartPos;
-    sal_Bool                            mbInternalMove               : 1;
-    sal_Bool                            mbOwnDocument                : 1;
-    sal_Bool                            mbOwnView                    : 1;
-    sal_Bool                            mbLateInit                   : 1;
-    sal_Bool                            mbPageTransferable           : 1;
-    sal_Bool                            mbPageTransferablePersistent : 1;
+    bool                            mbInternalMove               : 1;
+    bool                            mbOwnDocument                : 1;
+    bool                            mbOwnView                    : 1;
+    bool                            mbLateInit                   : 1;
+    bool                            mbPageTransferable           : 1;
+    bool                            mbPageTransferablePersistent : 1;
     bool                            mbIsUnoObj                  : 1;
     ::std::vector<boost::shared_ptr<UserData> > maUserData;
 

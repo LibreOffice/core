@@ -199,7 +199,7 @@ void SdTbxControl::StateChanged( sal_uInt16 nSId,
 
 /*-------------------------------------------------------------------------*/
 
-sal_Bool SdTbxControl::IsCheckable( sal_uInt16 nSId )
+bool SdTbxControl::IsCheckable( sal_uInt16 nSId )
 {
     switch( nSId )
     {
@@ -305,9 +305,9 @@ sal_Bool SdTbxControl::IsCheckable( sal_uInt16 nSId )
         case SID_CONNECTOR_LINES_CIRCLE_END:
         case SID_CONNECTOR_LINES_CIRCLES:
 
-            return( sal_True );
+            return true;
     }
-    return( sal_False );
+    return false;
 }
 
 

@@ -77,8 +77,8 @@ public:
 
     void                    CompleteRedraw( OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;
 
-    virtual sal_Bool            GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False ) const;
-    virtual sal_Bool            SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll = sal_False);
+    virtual bool            GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const;
+    virtual bool            SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false);
     virtual void            MarkListHasChanged() SAL_OVERRIDE;
     virtual void            ModelHasChanged() SAL_OVERRIDE;
     virtual void            SelectAll();
@@ -86,7 +86,7 @@ public:
     virtual void            DoCopy(::Window* pWindow=NULL);
     virtual void            DoPaste(::Window* pWindow=NULL);
     virtual void            DoConnect(SdrOle2Obj* pOleObj) SAL_OVERRIDE;
-    virtual sal_Bool            SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr = sal_False);
+    virtual bool            SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false);
     virtual void            StartDrag( const Point& rStartPos, ::Window* pWindow );
     virtual void            DragFinished( sal_Int8 nDropAction );
     virtual sal_Int8 AcceptDrop (
@@ -113,11 +113,11 @@ public:
         ::com::sun::star::datatransfer::XTransferable>
         CreateSelectionDataObject (::sd::View*, ::Window& rWindow);
 
-    void                    UpdateSelectionClipboard( sal_Bool bForceDeselect );
+    void                    UpdateSelectionClipboard( bool bForceDeselect );
 
-    inline DrawDocShell* GetDocSh (void) const;
-    inline SdDrawDocument& GetDoc (void) const;
-    inline ViewShell* GetViewShell (void) const;
+    inline DrawDocShell* GetDocSh(void) const;
+    inline SdDrawDocument& GetDoc(void) const;
+    inline ViewShell* GetViewShell(void) const;
 
     virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, ::Window* pWin = 0L, bool bIsNewObj = false,
         SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
@@ -127,8 +127,8 @@ public:
 
     bool RestoreDefaultText( SdrTextObj* pTextObj );
 
-    sal_Bool                    InsertData( const TransferableDataHelper& rDataHelper,
-                                        const Point& rPos, sal_Int8& rDnDAction, sal_Bool bDrag,
+    bool                    InsertData( const TransferableDataHelper& rDataHelper,
+                                        const Point& rPos, sal_Int8& rDnDAction, bool bDrag,
                                         sal_uLong nFormat = 0, sal_uInt16 nPage = SDRPAGE_NOTFOUND, sal_uInt16 nLayer = SDRLAYER_NOTFOUND );
     /** gets the metafile from the given transferable helper and insert it as a graphic shape.
         @param bOptimize if set to true, the metafile is analyzed and if only one bitmap action is
@@ -154,18 +154,18 @@ public:
 
     bool PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, sal_uLong nPasteOptions );
 
-    sal_Bool                    IsPresObjSelected(sal_Bool bOnPage=sal_True, sal_Bool bOnMasterPage=sal_True, sal_Bool bCheckPresObjListOnly=sal_False, sal_Bool bCheckLayoutOnly=sal_False) const;
+    bool                    IsPresObjSelected(bool bOnPage = true, bool bOnMasterPage = true, bool bCheckPresObjListOnly = false, bool bCheckLayoutOnly = false) const;
 
     void                    SetMarkedOriginalSize();
 
-    sal_Bool                    IsMorphingAllowed() const;
-    sal_Bool                    IsVectorizeAllowed() const;
+    bool                    IsMorphingAllowed() const;
+    bool                    IsVectorizeAllowed() const;
 
     virtual SfxStyleSheet*  GetStyleSheet() const;
 
     /** return parameter:
         pExchangeList == NULL -> all names are unique
-        bNameOK == sal_False -> cancel by user
+        bNameOK == false -> cancel by user
         nType == 0 -> pages
         nType == 1 -> objects
         nType == 2 -> pages and objects    */
@@ -197,7 +197,7 @@ public:
     virtual bool IsPointMarkable(const SdrHdl& rHdl) const SAL_OVERRIDE;
     virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false) SAL_OVERRIDE;
     virtual void CheckPossibilities() SAL_OVERRIDE;
-    virtual sal_Bool MarkPoints(const ::Rectangle* pRect, sal_Bool bUnmark);
+    virtual bool MarkPoints(const ::Rectangle* pRect, bool bUnmark) SAL_OVERRIDE;
     using SdrMarkView::MarkPoints;
 
     bool ShouldToggleOn(

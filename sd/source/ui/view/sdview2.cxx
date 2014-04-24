@@ -101,7 +101,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 {
     // since SdTransferable::CopyToClipboard is called, this
     // dynamically created object ist destroyed automatically
-    SdTransferable* pTransferable = new SdTransferable( &mrDoc, NULL, sal_False );
+    SdTransferable* pTransferable = new SdTransferable( &mrDoc, NULL, false );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
 
     SD_MOD()->pTransferClip = pTransferable;
@@ -166,7 +166,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateDragDataObject( View* pWorkView, ::Window& rWindow, const Point& rDragPos )
 {
-    SdTransferable* pTransferable = new SdTransferable( &mrDoc, pWorkView, sal_False );
+    SdTransferable* pTransferable = new SdTransferable( &mrDoc, pWorkView, false );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
 
     SD_MOD()->pTransferDrag = pTransferable;
@@ -217,7 +217,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateSelectionDataObject( View* pWorkView, ::Window& rWindow )
 {
-    SdTransferable*                 pTransferable = new SdTransferable( &mrDoc, pWorkView, sal_True );
+    SdTransferable*                 pTransferable = new SdTransferable( &mrDoc, pWorkView, true );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
     TransferableObjectDescriptor    aObjDesc;
     const Rectangle                 aMarkRect( GetAllMarkedRect() );
@@ -242,7 +242,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
 
 
-void View::UpdateSelectionClipboard( sal_Bool bForceDeselect )
+void View::UpdateSelectionClipboard( bool bForceDeselect )
 {
     if( mpViewSh && mpViewSh->GetActiveWindow() )
     {
@@ -315,7 +315,7 @@ void View::DoPaste (::Window* pWindow)
                 // remove all hard linebreaks from the title
                 if( pOutliner && pOutliner->GetParagraphCount() > 1 )
                 {
-                    sal_Bool bOldUpdateMode = pOutliner->GetUpdateMode();
+                    bool bOldUpdateMode = pOutliner->GetUpdateMode();
 
                     pOutliner->SetUpdateMode( false );
 
@@ -353,7 +353,7 @@ void View::DoPaste (::Window* pWindow)
 
         if (pDrViewSh != NULL)
         {
-            if( !InsertData( aDataHelper, aPos, nDnDAction, sal_False ) )
+            if( !InsertData( aDataHelper, aPos, nDnDAction, false ) )
             {
                 INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
 
@@ -459,7 +459,7 @@ void View::DragFinished( sal_Int8 nDropAction )
     }
 
     if( pDragTransferable )
-        pDragTransferable->SetInternalMove( sal_False );
+        pDragTransferable->SetInternalMove( false );
 
     if( bUndo )
         EndUndo();
@@ -487,7 +487,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
     if( mbIsDropAllowed && !pPV->IsLayerLocked( aLayerName ) && pPV->IsLayerVisible( aLayerName ) )
     {
         const OutlinerView* pOLV = GetTextEditOutlinerView();
-        sal_Bool                bIsInsideOutlinerView = sal_False;
+        bool                bIsInsideOutlinerView = false;
 
         if( pOLV )
         {
@@ -502,7 +502,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 
             if( aRect.IsInside( pOLV->GetWindow()->PixelToLogic( rEvt.maPosPixel ) ) )
             {
-                bIsInsideOutlinerView = sal_True;
+                bIsInsideOutlinerView = true;
             }
         }
 
@@ -535,12 +535,12 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
             }
             else
             {
-                const sal_Bool  bDrawing = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_DRAWING );
-                const sal_Bool  bGraphic = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVXB );
-                const sal_Bool  bMtf = rTargetHelper.IsDropFormatSupported( FORMAT_GDIMETAFILE );
-                const sal_Bool  bBitmap = rTargetHelper.IsDropFormatSupported( FORMAT_BITMAP );
-                sal_Bool        bBookmark = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
-                sal_Bool        bXFillExchange = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_XFA );
+                const bool  bDrawing = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_DRAWING );
+                const bool  bGraphic = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVXB );
+                const bool  bMtf = rTargetHelper.IsDropFormatSupported( FORMAT_GDIMETAFILE );
+                const bool  bBitmap = rTargetHelper.IsDropFormatSupported( FORMAT_BITMAP );
+                bool        bBookmark = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
+                bool        bXFillExchange = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_XFA );
 
                 // check handle insert
                 if( !nRet && ( (bXFillExchange && ( SDRDRAG_GRADIENT == GetDragMode() )) || ( SDRDRAG_TRANSPARENCE == GetDragMode() ) ) )
@@ -573,8 +573,8 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                     SdrPageView*    pPageView = NULL;
                     ::sd::Window* pWindow = mpViewSh->GetActiveWindow();
                     Point           aPos( pWindow->PixelToLogic( rEvt.maPosPixel ) );
-                    const sal_Bool      bHasPickObj = PickObj( aPos, getHitTolLog(), pPickObj, pPageView );
-                    sal_Bool            bIsPresTarget = sal_False;
+                    const bool      bHasPickObj = PickObj( aPos, getHitTolLog(), pPickObj, pPageView );
+                    bool            bIsPresTarget = false;
 
                     if( bHasPickObj && pPickObj && ( pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall() ) )
                     {
@@ -601,18 +601,18 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                         nRet = nDropAction;
                     }
                     else
-                        bXFillExchange = sal_False;
+                        bXFillExchange = false;
                 }
 
                 // check normal insert
                 if( !nRet )
                 {
-                    const sal_Bool  bSBAFormat = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVX_FORMFIELDEXCH );
-                    const sal_Bool  bEditEngine = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_EDITENGINE );
-                    const sal_Bool  bString = rTargetHelper.IsDropFormatSupported( FORMAT_STRING );
-                    const sal_Bool  bRTF = rTargetHelper.IsDropFormatSupported( FORMAT_RTF );
-                    const sal_Bool  bFile = rTargetHelper.IsDropFormatSupported( FORMAT_FILE );
-                    const sal_Bool  bFileList = rTargetHelper.IsDropFormatSupported( FORMAT_FILE_LIST );
+                    const bool  bSBAFormat = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVX_FORMFIELDEXCH );
+                    const bool  bEditEngine = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_EDITENGINE );
+                    const bool  bString = rTargetHelper.IsDropFormatSupported( FORMAT_STRING );
+                    const bool  bRTF = rTargetHelper.IsDropFormatSupported( FORMAT_RTF );
+                    const bool  bFile = rTargetHelper.IsDropFormatSupported( FORMAT_FILE );
+                    const bool  bFileList = rTargetHelper.IsDropFormatSupported( FORMAT_FILE_LIST );
 
                     if( mpDropMarker )
                     {
@@ -621,7 +621,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                     }
 
                     if( bBookmark && bFile && ( nDropAction & DND_ACTION_MOVE ) && mpViewSh && SlideShow::IsRunning(mpViewSh->GetViewShellBase()) )
-                        bBookmark = sal_False;
+                        bBookmark = false;
 
                     if( bDrawing || bGraphic || bMtf || bBitmap || bBookmark || bFile || bFileList || bXFillExchange || bSBAFormat || bEditEngine || bString || bRTF )
                         nRet = nDropAction;
@@ -669,7 +669,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
     if( !pPV->IsLayerLocked( aActiveLayer ) )
     {
         const OutlinerView* pOLV = GetTextEditOutlinerView();
-        sal_Bool                bIsInsideOutlinerView = sal_False;
+        bool                bIsInsideOutlinerView = false;
 
         if( pOLV )
         {
@@ -686,7 +686,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
 
             if( aRect.IsInside( aPos ) )
             {
-                bIsInsideOutlinerView = sal_True;
+                bIsInsideOutlinerView = true;
             }
         }
 
@@ -728,7 +728,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
             }
 
             // standard insert?
-            if( !nRet && InsertData( aDataHelper, aPos, nDropAction, sal_True, 0, nPage, nLayer ) )
+            if( !nRet && InsertData( aDataHelper, aPos, nDropAction, true, 0, nPage, nLayer ) )
                 nRet = nDropAction;
 
             // special insert?
@@ -763,7 +763,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                             // insert as clip action => jump
                             OUString       aBookmark( aINetBookmark.GetURL() );
                             SdAnimationInfo*    pInfo = mrDoc.GetAnimationInfo( pPickObj );
-                            sal_Bool                bCreated = sal_False;
+                            bool                bCreated = false;
 
                             if( !aBookmark.isEmpty() )
                             {
@@ -785,7 +785,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 if( !pInfo )
                                 {
                                     pInfo = SdDrawDocument::GetShapeUserData( *pPickObj, true );
-                                    bCreated = sal_True;
+                                    bCreated = true;
                                 }
 
                                 // create undo action with old and new sizes
@@ -871,9 +871,9 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
         /* In order t ensure unique page names, we test the ones we want to
            insert. If necessary. we put them into and replacement list (bNameOK
            == sal_False -> User canceled).  */
-        sal_Bool    bLink = ( NAVIGATOR_DRAGTYPE_LINK == pPageObjsTransferable->GetDragType()  ? sal_True : sal_False );
-        sal_Bool    bNameOK = GetExchangeList( aExchangeList, aBookmarkList, 2 );
-        sal_Bool    bReplace = sal_False;
+        bool    bLink = ( NAVIGATOR_DRAGTYPE_LINK == pPageObjsTransferable->GetDragType()  ? sal_True : sal_False );
+        bool    bNameOK = GetExchangeList( aExchangeList, aBookmarkList, 2 );
+        bool    bReplace = false;
 
         /* Since we don't know the type (page or object), we fill a list with
            pages and objects.
@@ -882,9 +882,9 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
         if( bNameOK )
         {
             mrDoc.InsertBookmark( aBookmarkList, aExchangeList,
-                                  bLink, bReplace, nPgPos, sal_False,
+                                  bLink, bReplace, nPgPos, false,
                                   &pPageObjsTransferable->GetDocShell(),
-                                  sal_True, &aPos );
+                                  true, &aPos );
         }
     }
 
@@ -959,9 +959,9 @@ typedef std::vector< SdrObject* > SdrObjectVector;
 
 void ImplProcessObjectList(SdrObject* pObj, SdrObjectVector& rVector )
 {
-    sal_Bool bIsGroup(pObj->IsGroupObject());
+    bool bIsGroup(pObj->IsGroupObject());
     if(bIsGroup && pObj->ISA(E3dObject) && !pObj->ISA(E3dScene))
-        bIsGroup = sal_False;
+        bIsGroup = false;
 
     rVector.push_back( pObj );
 

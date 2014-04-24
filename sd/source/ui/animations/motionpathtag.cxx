@@ -656,7 +656,7 @@ bool MotionPathTag::OnTabHandles( const KeyEvent& rKEvt )
     if(rKEvt.GetKeyCode().IsMod1() || rKEvt.GetKeyCode().IsMod2())
     {
         const SdrHdlList& rHdlList = mrView.GetHdlList();
-        sal_Bool bForward(!rKEvt.GetKeyCode().IsShift());
+        bool bForward(!rKEvt.GetKeyCode().IsShift());
 
         ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
 
@@ -788,7 +788,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
             if(mrView.IsDragObj())
             {
                 bool bWasNoSnap = mrView.GetDragStat().IsNoSnap();
-                sal_Bool bWasSnapEnabled = mrView.IsSnapEnabled();
+                bool bWasSnapEnabled = mrView.IsSnapEnabled();
 
                 // switch snapping off
                 if(!bWasNoSnap)
@@ -847,9 +847,9 @@ sal_uLong MotionPathTag::GetMarkedPointCount() const
 
 
 
-sal_Bool MotionPathTag::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
+bool MotionPathTag::MarkPoint(SdrHdl& rHdl, bool bUnmark )
 {
-    sal_Bool bRet=sal_False;
+    bool bRet=false;
     if( mpPathObj && mrView.IsPointMarkable( rHdl ) && (rHdl.GetKind() != HDL_SMARTTAG) )
     {
         SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( &rHdl );
@@ -859,7 +859,7 @@ sal_Bool MotionPathTag::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
             if (mrView.MarkPointHelper(&rHdl,mpMark,bUnmark))
             {
                 mrView.MarkListHasChanged();
-                bRet=sal_True;
+                bRet=true;
             }
         }
     }
@@ -868,9 +868,9 @@ sal_Bool MotionPathTag::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
 
 
 
-sal_Bool MotionPathTag::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark )
+bool MotionPathTag::MarkPoints(const Rectangle* pRect, bool bUnmark )
 {
-    sal_Bool bChgd=sal_False;
+    bool bChgd=false;
 
     if( mpPathObj && isSelected() )
     {
@@ -879,13 +879,13 @@ sal_Bool MotionPathTag::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark )
         {
             SmartHdl* pHdl = dynamic_cast< SmartHdl* >( mrView.GetHdl( sal::static_int_cast< sal_uLong >( nHdlNum-- ) ) );
 
-            if( pHdl && (pHdl->getTag().get() == this) && mrView.IsPointMarkable(*pHdl) && (pHdl->IsSelected() ? 1 : 0)==bUnmark)
+            if( pHdl && (pHdl->getTag().get() == this) && mrView.IsPointMarkable(*pHdl) && pHdl->IsSelected() == bUnmark)
             {
                 Point aPos(pHdl->GetPos());
                 if( pRect==NULL || pRect->IsInside(aPos))
                 {
                     if( mrView.MarkPointHelper(pHdl,mpMark,bUnmark) )
-                        bChgd=sal_True;
+                        bChgd=true;
                 }
             }
         }
@@ -1021,8 +1021,8 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
                 {
                     sal_uLong nCount = rHandlerList.GetHdlCount();
 
-                    sal_Bool bWdt0=aRect.Left()==aRect.Right();
-                    sal_Bool bHgt0=aRect.Top()==aRect.Bottom();
+                    bool bWdt0=aRect.Left()==aRect.Right();
+                    bool bHgt0=aRect.Top()==aRect.Bottom();
                     if (bWdt0 && bHgt0)
                     {
                         rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.TopLeft(),HDL_UPLFT));

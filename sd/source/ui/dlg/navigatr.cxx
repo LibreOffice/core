@@ -72,7 +72,7 @@ SdNavigatorWin::SdNavigatorWin(
     , maTlbObjects( this, SdResId( TLB_OBJECTS ) )
     , maLbDocs ( this, SdResId( LB_DOCS ) )
     , mpChildWinContext( pChWinCtxt )
-    , mbDocImported ( sal_False )
+    , mbDocImported ( false )
       // On changes of the DragType: adjust SelectionMode of TLB!
     , meDragType ( NAVIGATOR_DRAGTYPE_EMBEDDED )
     , mpBindings ( pInBindings )
@@ -110,7 +110,7 @@ SdNavigatorWin::SdNavigatorWin(
     // set focus to listbox, otherwise it is in the toolbox which is only useful
     // for keyboard navigation
     maTlbObjects.GrabFocus();
-    maTlbObjects.SetSdNavigatorWinFlag(sal_True);
+    maTlbObjects.SetSdNavigatorWinFlag(true);
 
     // DragTypeListBox
     maLbDocs.SetSelectHdl( LINK( this, SdNavigatorWin, SelectDocumentHdl ) );
@@ -167,10 +167,10 @@ void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
     sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
     OUString aDocShName( pDocShell->GetName() );
     OUString aDocName = pDocShell->GetMedium()->GetName();
-    maTlbObjects.SetSaveTreeItemStateFlag(sal_True); //Added by yanjun for sym2_6385
+    maTlbObjects.SetSaveTreeItemStateFlag(true); //Added by yanjun for sym2_6385
     maTlbObjects.Clear();
-    maTlbObjects.Fill( pDoc, sal_False, aDocName ); // Nur normale Seiten
-    maTlbObjects.SetSaveTreeItemStateFlag(sal_False); //Added by yanjun for sym2_6385
+    maTlbObjects.Fill( pDoc, false, aDocName ); // Nur normale Seiten
+    maTlbObjects.SetSaveTreeItemStateFlag(false); //Added by yanjun for sym2_6385
     RefreshDocumentLB();
     maLbDocs.SelectEntry( aDocShName );
 }
@@ -207,7 +207,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
     {
         OUString aDocName = pDocShell->GetMedium()->GetName();
         maTlbObjects.Clear();
-        maTlbObjects.Fill( pDoc, (sal_Bool) sal_False, aDocName ); // only normal pages
+        maTlbObjects.Fill( pDoc, false, aDocName ); // only normal pages
 
         RefreshDocumentLB();
         maLbDocs.SelectEntry( aDocShName );
@@ -434,7 +434,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
 {
     OUString aStrLb = maLbDocs.GetSelectEntry();
     long   nPos = maLbDocs.GetSelectEntryPos();
-    sal_Bool   bFound = sal_False;
+    bool   bFound = false;
     ::sd::DrawDocShell* pDocShell = NULL;
     NavDocInfo* pInfo = GetDocInfo();
 
@@ -448,7 +448,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
     {
         pDocShell = pInfo->mpDocShell;
 
-        bFound = sal_True;
+        bFound = true;
     }
 
     if( bFound )
@@ -460,7 +460,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
             ::sd::DrawDocShell* pNCDocShell = pNonConstDoc->GetDocSh();
             OUString aDocName = pNCDocShell->GetMedium()->GetName();
             maTlbObjects.Clear();
-            maTlbObjects.Fill( pDoc, (sal_Bool) sal_False, aDocName ); // only normal pages
+            maTlbObjects.Fill( pDoc, false, aDocName ); // only normal pages
         }
     }
 
@@ -655,7 +655,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
                     if( !maTlbObjects.IsEqualToDoc( pDropDoc ) )
                     {
                         // only normal pages
-                        maTlbObjects.Fill(pDropDoc, (sal_Bool) sal_False, maDropFileName);
+                        maTlbObjects.Fill(pDropDoc, false, maDropFileName);
                         RefreshDocumentLB( &maDropFileName );
                     }
                 }
@@ -687,7 +687,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
             maLbDocs.RemoveEntry( 0 );
 
         maLbDocs.InsertEntry( *pDocName, 0 );
-        mbDocImported = sal_True;
+        mbDocImported = true;
     }
     else
     {
@@ -723,7 +723,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
                 if( !aStr.isEmpty() )
                     aInfo.SetName();
                 else
-                    aInfo.SetName( sal_False );
+                    aInfo.SetName( false );
                 // at the moment, we use the name of the shell again (i.e.
                 // without path) since Koose thinks it is an error if the path
                 // is shown in url notation!
@@ -734,7 +734,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
                 if( pDocShell == pCurrentDocShell )
                     aInfo.SetActive();
                 else
-                    aInfo.SetActive( sal_False );
+                    aInfo.SetActive( false );
 
                 maDocList.push_back( aInfo );
             }
@@ -746,7 +746,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
 
 
 
-sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, sal_Bool bImage )
+sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, bool bImage )
 {
     switch( eDT )
     {
@@ -861,7 +861,7 @@ void SdNavigatorWin::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SdNavigatorWin::SetDragImage()
 {
-    maToolbox.SetItemImage( TBI_DRAGTYPE, maToolbox.GetImageList().GetImage( GetDragTypeSdResId( meDragType, sal_True ) ) );
+    maToolbox.SetItemImage( TBI_DRAGTYPE, maToolbox.GetImageList().GetImage( GetDragTypeSdResId( meDragType, true ) ) );
 }
 
 void SdNavigatorWin::ApplyImageList()

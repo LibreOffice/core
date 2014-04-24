@@ -95,20 +95,20 @@ SdPageLink::~SdPageLink()
             std::vector<OUString> aBookmarkList;
             aBookmarkList.push_back(aBookmarkName);
             sal_uInt16 nInsertPos = pPage->GetPageNum();
-            sal_Bool bLink = sal_True;
-            sal_Bool bReplace = sal_True;
-            sal_Bool bNoDialogs = sal_False;
-            sal_Bool bCopy = sal_False;
+            bool bLink = true;
+            bool bReplace = true;
+            bool bNoDialogs = false;
+            bool bCopy = false;
 
             if( pDoc->pDocLockedInsertingLinks )
             {
                 // resolving links while loading pDoc
-                bNoDialogs = sal_True;
-                bCopy = sal_True;
+                bNoDialogs = true;
+                bCopy = true;
             }
 
             pDoc->InsertBookmarkAsPage(aBookmarkList, NULL, bLink, bReplace,
-                                       nInsertPos, bNoDialogs, NULL, bCopy, sal_True, sal_True);
+                                       nInsertPos, bNoDialogs, NULL, bCopy, true, true);
 
             if( !pDoc->pDocLockedInsertingLinks )
                 pDoc->CloseBookmarkDoc();

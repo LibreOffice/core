@@ -39,7 +39,7 @@ namespace style { struct TabStop; }
 
 struct SOParagraph
 {
-    sal_Bool                bExtendedParameters;
+    bool                bExtendedParameters;
     sal_uInt32              nParaFlags;
     sal_Int16               nBulletFlags;
     OUString                sPrefix;
@@ -57,10 +57,10 @@ struct SOParagraph
     sal_Unicode             cBulletId;              // if Numbering Type == CharSpecial
     ::com::sun::star::awt::FontDescriptor       aFontDesc;
 
-    sal_Bool                bExtendedBulletsUsed;
+    bool                bExtendedBulletsUsed;
     sal_uInt16              nBulletId;
     sal_uInt32              nMappedNumType;
-    sal_Bool                bNumberingIsNumber;
+    bool                bNumberingIsNumber;
 
     SOParagraph()
         : bExtendedParameters(false)
@@ -95,7 +95,7 @@ protected:
     css::beans::PropertyState ePropState;
     css::uno::Reference < css::beans::XPropertyState > mXPropState;
 
-    sal_Bool    ImplGetPropertyValue( const OUString& rString, sal_Bool bGetPropertyState = sal_True );
+    bool    ImplGetPropertyValue( const OUString& rString, bool bGetPropertyState = true );
 };
 
 struct FieldEntry
@@ -126,7 +126,7 @@ class PortionObj : public PropStateValue
         sal_uInt32      ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef, OUString& rURL );
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
-        void            ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool bGetPropStateValue = sal_False );
+        void            ImplGetPortionValues( FontCollection& rFontCollection, bool bGetPropStateValue = false );
 
     public :
 
@@ -146,19 +146,19 @@ class PortionObj : public PropStateValue
         sal_Int16       mnCharEscapement;
 
         sal_uInt32      mnTextSize;
-        sal_Bool        mbLastPortion;
+        bool        mbLastPortion;
 
         sal_uInt16*     mpText;
         FieldEntry*     mpFieldEntry;
 
                         PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef,
-                                        sal_Bool bLast, FontCollection& rFontCollection );
+                                        bool bLast, FontCollection& rFontCollection );
                         PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef,
                                         FontCollection& rFontCollection );
                         PortionObj( const PortionObj& rPortionObj );
                         ~PortionObj();
 
-        void            Write( SvStream* pStrm, sal_Bool bLast );
+        void            Write( SvStream* pStrm, bool bLast );
         sal_uInt32      Count() const { return mnTextSize; };
 
         PortionObj&     operator=( const PortionObj& rPortionObj );
@@ -166,10 +166,10 @@ class PortionObj : public PropStateValue
 
 struct ParaFlags
 {
-    sal_Bool    bFirstParagraph : 1;
-    sal_Bool    bLastParagraph  : 1;
+    bool    bFirstParagraph : 1;
+    bool    bLastParagraph  : 1;
 
-                    ParaFlags() { bFirstParagraph = sal_True; bLastParagraph = sal_False; };
+                    ParaFlags() { bFirstParagraph = true; bLastParagraph = false; };
 };
 
 class ParagraphObj : public std::vector<PortionObj*>, public PropStateValue, public SOParagraph
@@ -185,8 +185,8 @@ class ParagraphObj : public std::vector<PortionObj*>, public PropStateValue, pub
         void            ImplConstruct( const ParagraphObj& rParagraphObj );
         void            ImplClear();
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
-        void            ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Bool bGetPropStateValue = sal_False );
-        void            ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nDepth, sal_Bool bIsBullet, sal_Bool bGetPropStateValue = sal_False );
+        void            ImplGetParagraphValues( PPTExBulletProvider& rBuProv, bool bGetPropStateValue = false );
+        void            ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nDepth, bool bIsBullet, bool bGetPropStateValue = false );
 
     public :
 
@@ -194,9 +194,9 @@ class ParagraphObj : public std::vector<PortionObj*>, public PropStateValue, pub
 
         sal_uInt32          mnTextSize;
 
-        sal_Bool            mbIsBullet;
-        sal_Bool            mbFirstParagraph;
-        sal_Bool            mbLastParagraph;
+        bool            mbIsBullet;
+        bool            mbFirstParagraph;
+        bool            mbLastParagraph;
 
         ::com::sun::star::beans::PropertyState  meBullet;
         ::com::sun::star::beans::PropertyState  meTextAdjust;
@@ -209,11 +209,11 @@ class ParagraphObj : public std::vector<PortionObj*>, public PropStateValue, pub
 
         sal_uInt16                              mnTextAdjust;
         sal_Int16                               mnLineSpacing;
-        sal_Bool                                mbFixedLineSpacing;
+        bool                                mbFixedLineSpacing;
         sal_Int16                               mnLineSpacingTop;
         sal_Int16                               mnLineSpacingBottom;
-        sal_Bool                                mbForbiddenRules;
-        sal_Bool                                mbParagraphPunctation;
+        bool                                mbForbiddenRules;
+        bool                                mbParagraphPunctation;
         sal_uInt16                              mnBiDi;
 
                         ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContentRef,
@@ -247,7 +247,7 @@ public :
     sal_uInt32      ParagraphCount() const;
     sal_uInt32      Count() const;
     int             GetInstance() const;
-    sal_Bool        HasExtendedBullets();
+    bool        HasExtendedBullets();
     void            WriteTextSpecInfo( SvStream* pStrm );
 };
 

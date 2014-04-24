@@ -33,10 +33,10 @@ class ModifyPageUndoAction : public SdUndoAction
     OUString        maNewName;
     AutoLayout      meOldAutoLayout;
     AutoLayout      meNewAutoLayout;
-    sal_Bool        mbOldBckgrndVisible;
-    sal_Bool        mbNewBckgrndVisible;
-    sal_Bool        mbOldBckgrndObjsVisible;
-    sal_Bool        mbNewBckgrndObjsVisible;
+    bool        mbOldBckgrndVisible;
+    bool        mbNewBckgrndVisible;
+    bool        mbOldBckgrndObjsVisible;
+    bool        mbNewBckgrndObjsVisible;
 
     OUString        maComment;
 
@@ -47,8 +47,8 @@ public:
         SdPage*                 pThePage,
         const OUString&         aTheNewName,
         AutoLayout              eTheNewAutoLayout,
-        sal_Bool                    bTheNewBckgrndVisible,
-        sal_Bool                    bTheNewBckgrndObjsVisible);
+        bool                    bTheNewBckgrndVisible,
+        bool                    bTheNewBckgrndObjsVisible);
 
     virtual ~ModifyPageUndoAction();
     virtual void Undo() SAL_OVERRIDE;

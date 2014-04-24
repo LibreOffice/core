@@ -250,7 +250,7 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     return 0;
 }
 
-SvxRuler* ViewShell::CreateHRuler(::sd::Window* , sal_Bool )
+SvxRuler* ViewShell::CreateHRuler(::sd::Window* , bool )
 {
     return NULL;
 }
@@ -413,7 +413,7 @@ void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
  * Initialize imaging parameters for all split windows.
  */
 void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
-                              const Point& rWinPos, sal_Bool bUpdate)
+                              const Point& rWinPos, bool bUpdate)
 {
     if (mpContentWindow.get() != NULL)
     {
@@ -462,9 +462,9 @@ void ViewShell::DrawMarkRect(const Rectangle& rRect) const
 
 void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
                                        long nLeft, long nRight,
-                                       long nUpper, long nLower, sal_Bool bScaleAll,
+                                       long nUpper, long nLower, bool bScaleAll,
                                        Orientation eOrientation, sal_uInt16 nPaperBin,
-                                       sal_Bool bBackgroundFullSize)
+                                       bool bBackgroundFullSize)
 {
     SdPage* pPage = 0;
     SdUndoGroup* pUndoGroup = NULL;
@@ -577,7 +577,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     // adjust handout page to new format of the standard page
     if( (ePageKind == PK_STANDARD) || (ePageKind == PK_HANDOUT) )
-        GetDoc()->GetSdPage(0, PK_HANDOUT)->CreateTitleAndLayout(sal_True);
+        GetDoc()->GetSdPage(0, PK_HANDOUT)->CreateTitleAndLayout(true);
 
     // handed over undo group to undo manager
     pViewShell->GetViewFrame()->GetObjectShell()
@@ -589,7 +589,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     Point aPageOrg = Point(nWidth, nHeight / 2);
     Size aViewSize = Size(nWidth * 3, nHeight * 2);
 
-    InitWindows(aPageOrg, aViewSize, Point(-1, -1), sal_True);
+    InitWindows(aPageOrg, aViewSize, Point(-1, -1), true);
 
     Point aVisAreaPos;
 
@@ -669,9 +669,9 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
 
 
 
-sal_Bool ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window*)
+bool ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window*)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if (rHEvt.GetMode())
     {
@@ -730,12 +730,12 @@ void ViewShell::WriteFrameViewData()
 }
 
 
-sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
+bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 {
     ErrCode aErrCode = 0;
 
     SfxErrorContext aEC(ERRCTX_SO_DOVERB, GetActiveWindow(), RID_SO_ERRCTX);
-    sal_Bool bAbort = sal_False;
+    bool bAbort = false;
     GetDocSh()->SetWaitCursor( true );
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
@@ -786,7 +786,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
             if (!xObj.is())
             {
-                bAbort = sal_True;
+                bAbort = true;
             }
         }
 
@@ -924,7 +924,7 @@ void ViewShell::WriteUserData(OUString&)
 /**
  * Switch ruler on/off
  */
-void ViewShell::SetRuler(sal_Bool bRuler)
+void ViewShell::SetRuler(bool bRuler)
 {
     mbHasRulers = ( bRuler && !GetDocSh()->IsPreview() ); // no rulers on preview mode
 
@@ -981,8 +981,7 @@ sal_Int8 ViewShell::ExecuteDrop (
     return( pView ? pView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE );
 }
 
-void ViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence <
-    ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse)
+void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool bBrowse)
 {
     const sal_Int32 nIndex = rSequence.getLength();
     rSequence.realloc( nIndex + 1 );
@@ -1003,7 +1002,7 @@ void ViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence <
 }
 
 
-void ViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+void ViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool bBrowse )
 {
     mpFrameView->ReadUserDataSequence( rSequence, bBrowse );
 }

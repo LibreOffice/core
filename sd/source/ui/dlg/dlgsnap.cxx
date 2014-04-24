@@ -117,9 +117,9 @@ SdSnapLineDlg::SdSnapLineDlg(
  */
 IMPL_LINK( SdSnapLineDlg, ClickHdl, Button *, pBtn )
 {
-    if ( pBtn == m_pRbPoint )        SetInputFields(sal_True, sal_True);
-    else if ( pBtn == m_pRbHorz )    SetInputFields(sal_False, sal_True);
-    else if ( pBtn == m_pRbVert )    SetInputFields(sal_True, sal_False);
+    if ( pBtn == m_pRbPoint )        SetInputFields(true, true);
+    else if ( pBtn == m_pRbHorz )    SetInputFields(false, true);
+    else if ( pBtn == m_pRbVert )    SetInputFields(true, false);
     else if ( pBtn == m_pBtnDelete ) EndDialog(RET_SNAP_DELETE);
 
     return 0;
@@ -152,7 +152,7 @@ void SdSnapLineDlg::HideRadioGroup()
 /**
  * disable X or Y input fields
  */
-void SdSnapLineDlg::SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY)
+void SdSnapLineDlg::SetInputFields(bool bEnableX, bool bEnableY)
 {
     if ( bEnableX )
     {

@@ -134,7 +134,7 @@ void SdGRFFilter_ImplInteractionHdl::handle( const com::sun::star::uno::Referenc
 
 
 SdGRFFilter::SdGRFFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
-    SdFilter( rMedium, rDocShell, sal_True )
+    SdFilter( rMedium, rDocShell, true )
 {
 }
 
@@ -190,13 +190,13 @@ void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong n
 
 
 
-sal_Bool SdGRFFilter::Import()
+bool SdGRFFilter::Import()
 {
     Graphic         aGraphic;
     const OUString  aFileName( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     const sal_uInt16 nFilter = rGraphicFilter.GetImportFormatNumberForTypeName( mrMedium.GetFilter()->GetTypeName() );
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
         SvStream*       pIStm = mrMedium.GetInStream();
         sal_uInt16          nReturn = pIStm ? rGraphicFilter.ImportGraphic( aGraphic, aFileName, *pIStm, nFilter ) : 1;
@@ -242,18 +242,18 @@ sal_Bool SdGRFFilter::Import()
             aPos.Y() = ( ( aPagSize.Height() - aGrfSize.Height() ) >> 1 )  + pPage->GetUppBorder();
 
             pPage->InsertObject( new SdrGrafObj( aGraphic, Rectangle( aPos, aGrfSize ) ) );
-            bRet = sal_True;
+            bRet = true;
         }
     return bRet;
 }
 
 
 
-sal_Bool SdGRFFilter::Export()
+bool SdGRFFilter::Export()
 {
     // SJ: todo: error handling, the GraphicExportFilter does not support proper errorhandling
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
      uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     uno::Reference< drawing::XGraphicExportFilter > xExporter = drawing::GraphicExportFilter::create( xContext );
@@ -298,14 +298,14 @@ sal_Bool SdGRFFilter::Export()
                     OUString sFilterName( "FilterName" );
                     OUString sShortName( rGraphicFilter.GetExportFormatShortName( nFilter ) );
 
-                    sal_Bool    bFilterNameFound = sal_False;
+                    bool    bFilterNameFound = false;
                     sal_Int32   i, nCount;
                     for ( i = 0, nCount = aArgs.getLength(); i < nCount; i++ )
                     {
                         OUString& rStr = aArgs[ i ].Name;
                         if ( rStr == sFilterName )
                         {
-                            bFilterNameFound = sal_True;
+                            bFilterNameFound = true;
                             aArgs[ i ].Name = sFilterName;
                             aArgs[ i ].Value <<= sShortName;
                         }

@@ -37,8 +37,8 @@ public:
     void        InsertZoomRect(const Rectangle& rRect);
     Rectangle   GetNextZoomRect();
     Rectangle   GetPreviousZoomRect();
-    sal_Bool        IsNextPossible() const;
-    sal_Bool        IsPreviousPossible() const;
+    bool        IsNextPossible() const;
+    bool        IsPreviousPossible() const;
 
 private:
     ViewShell*  mpViewShell;

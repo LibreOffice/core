@@ -152,7 +152,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     // use MasterPage of the current page
                     pPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
                     pPage->SetLayoutName(pActualPage->GetLayoutName());
-                    pPage->SetAutoLayout(AUTOLAYOUT_ENUM, sal_True);
+                    pPage->SetAutoLayout(AUTOLAYOUT_ENUM, true);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
                     // notes-page
@@ -175,7 +175,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     // use MasterPage of the current page
                     pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
                     pNotesPage->SetLayoutName(pActualNotesPage->GetLayoutName());
-                    pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), sal_True);
+                    pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), true);
                     pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
                     // create title text objects

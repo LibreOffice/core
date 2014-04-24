@@ -37,11 +37,11 @@ class FuDraw
 public:
     TYPEINFO_OVERRIDE();
 
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool RequestHelp(const HelpEvent& rHEvt) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool RequestHelp(const HelpEvent& rHEvt) SAL_OVERRIDE;
 
     virtual void Activate() SAL_OVERRIDE;
     virtual void Deactivate() SAL_OVERRIDE;
@@ -50,10 +50,10 @@ public:
 
     virtual void DoubleClick(const MouseEvent& rMEvt);
 
-    sal_Bool    SetPointer(SdrObject* pObj, const Point& rPos);
-    sal_Bool    SetHelpText(SdrObject* pObj, const Point& rPos, const SdrViewEvent& rVEvt);
+    bool    SetPointer(SdrObject* pObj, const Point& rPos);
+    bool    SetHelpText(SdrObject* pObj, const Point& rPos, const SdrViewEvent& rVEvt);
 
-    void    SetPermanent(sal_Bool bSet) { bPermanent = bSet; }
+    void    SetPermanent(bool bSet) { bPermanent = bSet; }
 
     /** is called when the current function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -74,10 +74,10 @@ protected:
 
     Pointer aNewPointer;
     Pointer aOldPointer;
-    sal_Bool    bMBDown;
-    sal_Bool    bDragHelpLine;
+    bool    bMBDown;
+    bool    bDragHelpLine;
     sal_uInt16  nHelpLine;
-    sal_Bool    bPermanent;
+    bool    bPermanent;
 
 };
 

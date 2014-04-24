@@ -60,10 +60,10 @@ class SD_DLLPUBLIC SdPageObjsTLB : public SvTreeListBox
 {
 private:
 
-    static sal_Bool  SAL_DLLPRIVATE bIsInDrag;      ///< static, in the case the navigator is deleted in ExecuteDrag
+    static bool  SAL_DLLPRIVATE bIsInDrag;      ///< static, in the case the navigator is deleted in ExecuteDrag
 
     // set contenttree in SdNavigatorWin
-    sal_Bool                           bisInSdNavigatorWin;
+    bool                           bisInSdNavigatorWin;
 public:
 
     // nested class to implement the TransferableHelper
@@ -129,13 +129,13 @@ protected:
     SfxMedium*              mpOwnMedium;
     Image                   maImgOle;
     Image                   maImgGraphic;
-    sal_Bool                mbLinkableSelected;
+    bool                mbLinkableSelected;
     OUString                maDocName;
     ::sd::DrawDocShellRef   mxBookmarkDocShRef; ///< for the loading of bookmarks
     SdNavigatorWin*         mpDropNavWin;
     SfxViewFrame*           mpFrame;
     vector<OUString>        maTreeItem;
-    sal_Bool                mbSaveTreeItemState;
+    bool                mbSaveTreeItemState;
     OUString                maSelectionEntryText;
 
     // DragSourceHelper
@@ -190,7 +190,7 @@ public:
                             virtual ~SdPageObjsTLB();
 
    // helper function for   GetEntryAltText and GetEntryLongDescription
-    OUString          getAltLongDescText( SvTreeListEntry* pEntry , sal_Bool isAltText) const;
+    OUString          getAltLongDescText( SvTreeListEntry* pEntry , bool isAltText) const;
     OUString          GetEntryAltText( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
     OUString          GetEntryLongDescription( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
     virtual void            SelectHdl() SAL_OVERRIDE;
@@ -199,22 +199,22 @@ public:
     void                    SetViewFrame( SfxViewFrame* pViewFrame ) { mpFrame = pViewFrame; }
     SfxViewFrame*           GetViewFrame() const { return mpFrame; }
 
-    void                    Fill( const SdDrawDocument*, sal_Bool bAllPages, const OUString& rDocName );
+    void                    Fill( const SdDrawDocument*, bool bAllPages, const OUString& rDocName );
     void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName );
     void                    SetShowAllShapes (const bool bShowAllShapes, const bool bFill);
     bool                    GetShowAllShapes (void) const;
-    sal_Bool                IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
-    sal_Bool                HasSelectedChildren( const OUString& rName );
-    sal_Bool                SelectEntry( const OUString& rName );
+    bool                    IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
+    bool                    HasSelectedChildren( const OUString& rName );
+    bool                    SelectEntry( const OUString& rName );
     OUString                GetSelectEntry();
 
     //Mark Current Entry
     void                    MarkCurEntry( const OUString& rName );
-    void                    SetSdNavigatorWinFlag(sal_Bool isInSdNavigatorWin){bisInSdNavigatorWin =isInSdNavigatorWin;};
+    void                    SetSdNavigatorWinFlag(bool isInSdNavigatorWin){bisInSdNavigatorWin =isInSdNavigatorWin;};
     void                    FreshCurEntry();
 
     void                    Clear();
-    void                    SetSaveTreeItemStateFlag(sal_Bool bState){mbSaveTreeItemState = bState;}
+    void                    SetSaveTreeItemStateFlag(bool bState){mbSaveTreeItemState = bState;}
     void                    SaveExpandedTreeItemState(SvTreeListEntry* pEntry, vector<OUString>& vectTreeItem);
 
     /** return selected entries
@@ -225,9 +225,9 @@ public:
 
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
 
-    sal_Bool                    IsLinkableSelected() const { return mbLinkableSelected; }
+    bool                    IsLinkableSelected() const { return mbLinkableSelected; }
 
-    static sal_Bool             IsInDrag();
+    static bool             IsInDrag();
     using SvTreeListBox::ExecuteDrop;
 
     using SvTreeListBox::SelectEntry;

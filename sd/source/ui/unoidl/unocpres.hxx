@@ -48,7 +48,7 @@ private:
     // for xComponent
     ::osl::Mutex aDisposeContainerMutex;
     ::cppu::OInterfaceContainerHelper aDisposeListeners;
-    sal_Bool bDisposing;
+    bool bDisposing;
 
 public:
     SdXCustomPresentation() throw();
@@ -149,7 +149,7 @@ public:
 inline SdCustomShowList* SdXCustomPresentationAccess::GetCustomShowList() const throw()
 {
     if(mrModel.GetDoc())
-        return mrModel.GetDoc()->GetCustomShowList(sal_False);
+        return mrModel.GetDoc()->GetCustomShowList(false);
     else
         return NULL;
 };

@@ -737,14 +737,14 @@ void SdDrawDocument::StopOnlineSpelling()
 }
 
 // Start OnlineSpelling in the background
-void SdDrawDocument::StartOnlineSpelling(sal_Bool bForceSpelling)
+void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
 {
     if (mbOnlineSpell && (bForceSpelling || mbInitialOnlineSpellingEnabled) &&
         mpDocSh && !mpDocSh->IsReadOnly() )
     {
         StopOnlineSpelling();
 
-        ::sd::Outliner* pOutl = GetInternalOutliner(sal_True);
+        ::sd::Outliner* pOutl = GetInternalOutliner(true);
 
         Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
         if ( xSpellChecker.is() )
@@ -803,14 +803,14 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
             SdrObjListIter aGroupIter(*((SdrObjGroup*)pObj)->GetSubList(),
                                       IM_DEEPNOGROUPS);
 
-            sal_Bool bSubTextObjFound = sal_False;
+            bool bSubTextObjFound = false;
 
             while (aGroupIter.IsMore() && !bSubTextObjFound)
             {
                 if (aGroupIter.Next()->GetOutlinerParaObject())
                 {
                     // Found a text object in a group object
-                    bSubTextObjFound = sal_True;
+                    bSubTextObjFound = true;
                 }
             }
 
@@ -883,7 +883,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
     if (pObj && pObj->GetOutlinerParaObject() /* && pObj != pView->GetTextEditObject() */)
     {
         mbHasOnlineSpellErrors = false;
-        ::sd::Outliner* pOutl = GetInternalOutliner(sal_True);
+        ::sd::Outliner* pOutl = GetInternalOutliner(true);
         pOutl->SetUpdateMode(true);
         Link aEvtHdl = pOutl->GetStatusEventHdl();
         pOutl->SetStatusEventHdl(LINK(this, SdDrawDocument, OnlineSpellEventHdl));
@@ -982,7 +982,7 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
     {
         if(pObj && pOutl && pObj->ISA(SdrTextObj))
         {
-            sal_Bool bModified(IsChanged());
+            bool bModified(IsChanged());
             ((SdrTextObj*)pObj)->SetOutlinerParaObject(pOutl->CreateParaObject());
             SetChanged(bModified);
             pObj->BroadcastObjectChange();
@@ -1042,7 +1042,7 @@ void SdDrawDocument::RestoreLayerNames()
 OUString SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
 {
     OUString aPageNumValue;
-    sal_Bool bUpper = sal_False;
+    bool bUpper = false;
 
     switch (mePageNumType)
     {
@@ -1053,7 +1053,7 @@ OUString SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
             aPageNumValue += OUString( (sal_Unicode)(char)((nNum - 1) % 26 + 'a') );
             break;
         case SVX_ROMAN_UPPER:
-            bUpper = sal_True;
+            bUpper = true;
         case SVX_ROMAN_LOWER:
             aPageNumValue += SvxNumberFormat::CreateRomanString(nNum, bUpper);
             break;

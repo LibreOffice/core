@@ -140,8 +140,8 @@ private:
     Size            aFltWinSize;
     Size            aDisplaySize;
     Size            aBmpSize;
-    sal_Bool            bMovie;
-    sal_Bool            bAllObjects;
+    bool            bMovie;
+    bool            bAllObjects;
 
     SfxBindings*                pBindings;
     AnimationControllerItem*    pControllerItem;

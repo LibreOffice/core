@@ -408,7 +408,7 @@ void TableDesignWidget::updateControls()
 
     for (sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i)
     {
-        sal_Bool bUse = gDefaults[i];
+        bool bUse = gDefaults[i];
         if( bHasTable ) try
         {
             mxSelectedTable->getPropertyValue( *pPropNames++ ) >>= bUse;
@@ -793,7 +793,7 @@ void TableDesignWidget::FillDesignPreviewControl()
             aSettings.mbUseColumnBanding = m_aCheckBoxes[CB_BANDED_COLUMNS]->IsChecked();
         }
 
-        sal_Bool bIsPageDark = sal_False;
+        bool bIsPageDark = false;
         if( mxView.is() )
         {
             Reference< XPropertySet > xPageSet( mxView->getCurrentPage(), UNO_QUERY );

@@ -58,7 +58,7 @@ FuSearch::FuSearch (
     SfxRequest& rReq )
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
       pSdOutliner(NULL),
-      bOwnOutliner(sal_False)
+      bOwnOutliner(false)
 {
 }
 
@@ -75,12 +75,12 @@ void FuSearch::DoExecute( SfxRequest& )
 
     if ( mpViewShell->ISA(DrawViewShell) )
     {
-        bOwnOutliner = sal_True;
+        bOwnOutliner = true;
         pSdOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
     }
     else if ( mpViewShell->ISA(OutlineViewShell) )
     {
-        bOwnOutliner = sal_False;
+        bOwnOutliner = false;
         pSdOutliner = mpDoc->GetOutliner();
     }
 
@@ -114,7 +114,7 @@ void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
         {
             pSdOutliner->EndSpelling();
 
-            bOwnOutliner = sal_True;
+            bOwnOutliner = true;
             pSdOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
             pSdOutliner->PrepareSpelling();
         }
@@ -123,14 +123,14 @@ void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
             pSdOutliner->EndSpelling();
             delete pSdOutliner;
 
-            bOwnOutliner = sal_False;
+            bOwnOutliner = false;
             pSdOutliner = mpDoc->GetOutliner();
             pSdOutliner->PrepareSpelling();
         }
 
         if (pSdOutliner)
         {
-            sal_Bool bEndSpelling = pSdOutliner->StartSearchAndReplace(pSearchItem);
+            bool bEndSpelling = pSdOutliner->StartSearchAndReplace(pSearchItem);
 
             if (bEndSpelling)
             {

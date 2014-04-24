@@ -37,10 +37,10 @@ public:
     virtual void DoExecute( SfxRequest& rReq ) SAL_OVERRIDE;
 
     // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
     virtual void Activate() SAL_OVERRIDE;
     virtual void Deactivate() SAL_OVERRIDE;
@@ -54,7 +54,7 @@ public:
     // SJ: setting stylesheet, the use of a filled or unfilled style
     // is determinded by the parameters bUseFillStyle and bUseNoFillStyle :
     void SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
-            const sal_Bool bUseFillStyle, const sal_Bool bUseNoFillStyle );
+            const bool bUseFillStyle, const bool bUseNoFillStyle );
 
 protected:
     FuConstruct (ViewShell* pViewSh,

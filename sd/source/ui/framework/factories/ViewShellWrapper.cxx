@@ -218,7 +218,7 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
     const Reference<XResource>& xResource)
     throw (RuntimeException, std::exception)
 {
-    sal_Bool bResult (false);
+    bool bResult (false);
 
     Reference<XPane> xPane (xResource, UNO_QUERY);
     if (xPane.is())
@@ -234,7 +234,7 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
             ::Window* pWindow = VCLUnoHelper::GetWindow(xPane->getWindow());
             if (pWindow != NULL && mpViewShell->RelocateToParentWindow(pWindow))
             {
-                bResult = sal_True;
+                bResult = true;
 
                 // Attach to the window of the new pane.
                 xWindow = Reference<awt::XWindow>(xPane->getWindow(), UNO_QUERY);

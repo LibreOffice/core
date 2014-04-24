@@ -114,7 +114,7 @@ void SdModule::Execute(SfxRequest& rReq)
             if( pSet && SFX_ITEM_SET == pSet->GetItemState(
                         SID_AUTOSPELL_CHECK, false, &pItem ) )
             {
-                sal_Bool bOnlineSpelling = ( (const SfxBoolItem*) pItem )->GetValue();
+                bool bOnlineSpelling = ( (const SfxBoolItem*) pItem )->GetValue();
                 // save at document:
                 ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
                 if( pDocSh )
@@ -212,7 +212,7 @@ void SdModule::Execute(SfxRequest& rReq)
         case SID_OPENHYPERLINK:
         case SID_OPENDOC:
         {
-            sal_Bool bIntercept = sal_False;
+            bool bIntercept = false;
             ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
             if (pDocShell)
             {
@@ -226,7 +226,7 @@ void SdModule::Execute(SfxRequest& rReq)
                         // from a shape interaction.
                         if (rReq.GetArgs() == NULL)
                         {
-                            bIntercept = sal_True;
+                            bIntercept = true;
                         }
                     }
                 }
@@ -270,7 +270,7 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
             SfxObjectShellLock xDocShell;
             ::sd::DrawDocShell* pDocSh;
             xDocShell = pDocSh = new ::sd::DrawDocShell(
-                SFX_CREATE_MODE_STANDARD, sal_False);
+                SFX_CREATE_MODE_STANDARD, false);
             if(pDocSh)
             {
                 pDocSh->DoInitNew(NULL);
@@ -571,10 +571,10 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
             if( pPilotDlg.get() && pPilotDlg->Execute()==RET_OK )
             {
                 const OUString aDocPath( pPilotDlg->GetDocPath());
-                const sal_Bool bIsDocEmpty = pPilotDlg->IsDocEmpty();
+                const bool bIsDocEmpty = pPilotDlg->IsDocEmpty();
 
                 // So that you can open the document without AutoLayout-Dialog
-                pOpt->SetStartWithTemplate(sal_False);
+                pOpt->SetStartWithTemplate(false);
                 if(bNewDocDirect && !pPilotDlg->GetStartWithFlag())
                     bStartWithTemplate = false;
 
@@ -728,7 +728,7 @@ SfxFrame* SdModule::CreateEmptyDocument( DocumentType eDocType, const Reference<
 
     SfxObjectShellLock xDocShell;
     ::sd::DrawDocShell* pNewDocSh;
-    xDocShell = pNewDocSh = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD,sal_False,eDocType);
+    xDocShell = pNewDocSh = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD,false,eDocType);
     if(pNewDocSh)
     {
         pNewDocSh->DoInitNew(NULL);
@@ -767,7 +767,7 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
         case OUTPUT_PAGE:
         case OUTPUT_OVERHEAD:
         {
-            SfxPrinter* pPrinter = pDocShell->GetPrinter(sal_True);
+            SfxPrinter* pPrinter = pDocShell->GetPrinter(true);
 
             if( pPrinter && pPrinter->IsValid())
             {
@@ -846,7 +846,7 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
         break;
     }
 
-    sal_Bool bScaleAll = sal_True;
+    bool bScaleAll = true;
     sal_uInt16 nPageCnt = pDoc->GetMasterSdPageCount(PK_STANDARD);
     sal_uInt16 i;
     SdPage* pPage;
@@ -896,7 +896,7 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
     }
 
     SdPage* pHandoutPage = pDoc->GetSdPage(0, PK_HANDOUT);
-    pHandoutPage->CreateTitleAndLayout(sal_True);
+    pHandoutPage->CreateTitleAndLayout(true);
 
     if( (eMedium != OUTPUT_ORIGINAL) && pViewFrame && pViewFrame->GetDispatcher())
     {

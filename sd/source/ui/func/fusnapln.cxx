@@ -58,7 +58,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     sal_uInt16  nHelpLine = 0;
-    sal_Bool    bCreateNew = sal_True;
+    bool    bCreateNew = true;
 
     // Get index of snap line or snap point from the request.
     SFX_REQUEST_ARG (rReq, pHelpLineIndex, SfxUInt32Item, ID_VAL_INDEX, false);
@@ -83,7 +83,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
             // request.  Determine it from the mouse position.
 
             aLinePos = static_cast<DrawViewShell*>(mpViewShell)->GetMousePos();
-            static_cast<DrawViewShell*>(mpViewShell)->SetMousePosFreezed( sal_False );
+            static_cast<DrawViewShell*>(mpViewShell)->SetMousePosFreezed( false );
 
 
             if ( aLinePos.X() >= 0 )
@@ -126,18 +126,18 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
             if ( rHelpLine.GetKind() == SDRHELPLINE_POINT )
             {
                 pDlg->SetText(SD_RESSTR(STR_SNAPDLG_SETPOINT));
-                pDlg->SetInputFields(sal_True, sal_True);
+                pDlg->SetInputFields(true, true);
             }
             else
             {
                 pDlg->SetText(SD_RESSTR(STR_SNAPDLG_SETLINE));
 
                 if ( rHelpLine.GetKind() == SDRHELPLINE_VERTICAL )
-                    pDlg->SetInputFields(sal_True, sal_False);
+                    pDlg->SetInputFields(true, false);
                 else
-                    pDlg->SetInputFields(sal_False, sal_True);
+                    pDlg->SetInputFields(false, true);
             }
-            bCreateNew = sal_False;
+            bCreateNew = false;
         }
         else
             pDlg->HideDeleteBtn();

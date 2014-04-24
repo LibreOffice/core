@@ -284,7 +284,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
  * name.
  * @return sal_False if the user cancels the action.
  */
-sal_Bool DrawDocShell::CheckPageName (::Window* pWin, OUString& rName )
+bool DrawDocShell::CheckPageName (::Window* pWin, OUString& rName )
 {
     const OUString aStrForDlg( rName );
     bool bIsNameValid = IsNewPageNameValid( rName, true );
@@ -403,7 +403,7 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
     {
         if (!rInOutPageName.isEmpty())
         {
-            sal_Bool   bOutDummy;
+            bool   bOutDummy;
             sal_uInt16 nExistingPageNum = mpDoc->GetPageByName( rInOutPageName, bOutDummy );
             bCanUseNewName = ( nExistingPageNum == SDRPAGE_NOTFOUND );
         }

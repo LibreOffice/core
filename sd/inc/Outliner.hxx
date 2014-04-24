@@ -155,7 +155,7 @@ public:
     /** Starts the text conversion (hangul/hanja or Chinese simplified/traditional)
     for the current viewshell */
     void StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
-                const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive );
+                const Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive );
 
     /** This is called internally when text conversion is started.
         The position of current view mode/page/object/caret position
@@ -462,7 +462,7 @@ private:
 
     /** Switch on edit mode for the currently selected text object.
     */
-    void EnterEditMode (sal_Bool bGrabFocus=sal_True);
+    void EnterEditMode (bool bGrabFocus=true);
 
     /** Return the position at which a new search is started with respect to
         the search direction as specified by the argument.

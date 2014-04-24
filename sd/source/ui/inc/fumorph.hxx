@@ -54,7 +54,7 @@ private:
 
     void ImpInsertPolygons(
         B2DPolyPolygonList_impl& rPolyPolyList3D,
-        sal_Bool bAttributeFade,
+        bool bAttributeFade,
         const SdrObject* pObj1,
         const SdrObject* pObj2
     );
@@ -65,7 +65,7 @@ private:
         double fMorphingFactor
     );
 
-    sal_Bool ImpMorphPolygons(
+    bool ImpMorphPolygons(
         const ::basegfx::B2DPolyPolygon& rPolyPoly1,
         const ::basegfx::B2DPolyPolygon& rPolyPoly2,
         const sal_uInt16 nSteps,

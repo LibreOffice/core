@@ -585,7 +585,7 @@ sal_uInt16 ViewShellBase::SetPrinter (
         pNewPrinter->SetMapMode(aMap);
         Size aNewSize = pNewPrinter->GetOutputSize();
 
-        sal_Bool bScaleAll = sal_False;
+        bool bScaleAll = false;
         if ( bIsAPI )
         {
             WarningBox aWarnBox (
@@ -1292,7 +1292,7 @@ void ViewShellBase::Implementation::SetPaneVisibility (
 
         // Determine the new visibility state.
         const SfxItemSet* pArguments = rRequest.GetArgs();
-        sal_Bool bShowChildWindow;
+        bool bShowChildWindow;
         sal_uInt16 nSlotId = rRequest.GetSlot();
         if (pArguments != NULL)
             bShowChildWindow = static_cast<const SfxBoolItem&>(

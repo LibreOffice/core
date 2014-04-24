@@ -66,15 +66,15 @@ public:
     virtual void DoPasteUnformatted();
 
     // Mouse- & Key-Events; Returnwert=sal_True: Event wurde bearbeitet
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& );
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual bool KeyInput(const KeyEvent& rKEvt);
+    virtual bool MouseMove(const MouseEvent& );
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt);
 
     // moved from inline to *.cxx
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual sal_Bool Command(const CommandEvent& rCEvt);
-    virtual sal_Bool RequestHelp(const HelpEvent& rHEvt);
+    virtual bool Command(const CommandEvent& rCEvt);
+    virtual bool RequestHelp(const HelpEvent& rHEvt);
     virtual void Paint(const Rectangle&, ::sd::Window* );
     virtual void ReceiveRequest(SfxRequest& rReq);
 
@@ -88,7 +88,7 @@ public:
     sal_uInt16  GetSlotID() const { return( nSlotId ); }
     sal_uInt16  GetSlotValue() const { return( nSlotValue ); }
 
-    void    SetNoScrollUntilInside(sal_Bool bNoScroll = sal_True)
+    void    SetNoScrollUntilInside(bool bNoScroll = true)
             { bNoScrollUntilInside = bNoScroll; }
 
     void StartDelayToScrollTimer ();
@@ -164,17 +164,17 @@ protected:
 
     Timer               aDragTimer;             ///< for Drag&Drop
     DECL_LINK(DragHdl, void *);
-    sal_Bool            bIsInDragMode;
+    bool            bIsInDragMode;
     Point               aMDPos;                 ///< position of MouseButtonDown
 
     /// Flag to prevent auto-scrolling until one drags from outside into the window
-    sal_Bool            bNoScrollUntilInside;
+    bool            bNoScrollUntilInside;
 
     /// timer to delay scrolling (~ 1 sec) when dragging out of the window
     Timer               aDelayToScrollTimer;
-    sal_Bool            bScrollable;
-    sal_Bool            bDelayActive;
-    sal_Bool            bFirstMouseMove;
+    bool            bScrollable;
+    bool            bDelayActive;
+    bool            bFirstMouseMove;
 
     /// member to hold state of the mouse buttons for creation of own MouseEvents (like in ScrollHdl)
 

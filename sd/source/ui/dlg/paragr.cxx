@@ -97,8 +97,8 @@ bool SdParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
        m_pNewStartNF->GetText() != m_pNewStartNF->GetSavedValue())
     {
         mbModified = true;
-        sal_Bool bNewStartChecked = TRISTATE_TRUE == m_pNewStartCB->GetState();
-        sal_Bool bNumberNewStartChecked = TRISTATE_TRUE == m_pNewStartNumberCB->GetState();
+        bool bNewStartChecked = TRISTATE_TRUE == m_pNewStartCB->GetState();
+        bool bNumberNewStartChecked = TRISTATE_TRUE == m_pNewStartNumberCB->GetState();
         rSet.Put(SfxBoolItem(ATTR_NUMBER_NEWSTART, bNewStartChecked));
 
         const sal_Int16 nStartAt = (sal_Int16)m_pNewStartNF->GetValue();
@@ -147,7 +147,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
 
 IMPL_LINK_NOARG(SdParagraphNumTabPage, ImplNewStartHdl)
 {
-    sal_Bool bEnable = m_pNewStartCB->IsChecked();
+    bool bEnable = m_pNewStartCB->IsChecked();
     m_pNewStartNumberCB->Enable(bEnable);
     m_pNewStartNF->Enable(bEnable && m_pNewStartNumberCB->IsChecked());
     return 0;
@@ -169,7 +169,7 @@ SdParagraphDlg::SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr )
 
     AddTabPage( "labelTP_PARA_ALIGN", RID_SVXPAGE_ALIGN_PARAGRAPH);
 
-    static const sal_Bool bShowParaNumbering = ( getenv( "SD_SHOW_NUMBERING_PAGE" ) != NULL );
+    static const bool bShowParaNumbering = ( getenv( "SD_SHOW_NUMBERING_PAGE" ) != NULL );
     if( bShowParaNumbering )
         AddTabPage( "labelNUMBERING", SdParagraphNumTabPage::Create, SdParagraphNumTabPage::GetRanges );
     else

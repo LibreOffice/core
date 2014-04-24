@@ -127,11 +127,11 @@ void DrawViewShell::ArrangeGUIElements (void)
 
     OSL_ASSERT (GetViewShell()!=NULL);
     Client* pIPClient = static_cast<Client*>(GetViewShell()->GetIPClient());
-    sal_Bool bClientActive = sal_False;
+    bool bClientActive = false;
     if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
-        bClientActive = sal_True;
+        bClientActive = true;
 
-    sal_Bool bInPlaceActive = GetViewFrame()->GetFrame().IsInPlace();
+    bool bInPlaceActive = GetViewFrame()->GetFrame().IsInPlace();
 
     if ( mbZoomOnPage && !bInPlaceActive && !bClientActive )
     {
@@ -235,7 +235,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if (mpDrawView->IsSolidDragging() != pView->IsSolidDragging() )
         mpDrawView->SetSolidDragging( pView->IsSolidDragging() );
 
-    if ((mpDrawView->IsQuickTextEditMode() ? 1 : 0) != pView->IsQuickEdit())
+    if (mpDrawView->IsQuickTextEditMode() != pView->IsQuickEdit())
         mpDrawView->SetQuickTextEditMode( pView->IsQuickEdit() );
 
     // #i26631#
@@ -288,7 +288,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     }
 
     EditMode eNewEditMode = pView->GetViewShEditMode(mePageKind);
-    sal_Bool bNewLayerMode = pView->IsLayerMode();
+    bool bNewLayerMode = pView->IsLayerMode();
 
     if(IsLayerModeActive() && bNewLayerMode)
     {
@@ -456,7 +456,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 void DrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY)
 {
     ViewShell::SetZoomFactor(rZoomX, rZoomY);
-    mbZoomOnPage = sal_False;
+    mbZoomOnPage = false;
     Point aOrigin = GetActiveWindow()->GetViewOrigin();
     GetActiveWindow()->SetWinViewPos(aOrigin);
 }
@@ -471,7 +471,7 @@ void DrawViewShell::HidePage()
 
 
 
-void DrawViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+void DrawViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, bool bBrowse )
 {
     WriteFrameViewData();
 
@@ -480,10 +480,10 @@ void DrawViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::
     const sal_Int32 nIndex = rSequence.getLength();
     rSequence.realloc( nIndex + 1 );
     rSequence[nIndex].Name = sUNO_View_ZoomOnPage ;
-    rSequence[nIndex].Value <<= (sal_Bool)mbZoomOnPage;
+    rSequence[nIndex].Value <<= mbZoomOnPage;
 }
 
-void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, bool bBrowse )
 {
     WriteFrameViewData();
 
@@ -495,7 +495,7 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
     {
         if ( pValue->Name == sUNO_View_ZoomOnPage )
         {
-            sal_Bool bZoomPage = sal_False;
+            bool bZoomPage = false;
             if( pValue->Value >>= bZoomPage )
             {
                 mbZoomOnPage = bZoomPage;

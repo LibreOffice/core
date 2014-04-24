@@ -761,7 +761,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
     NamedValue* pLastValue = pValue;
     sal_Int32 nLength = aUserData.getLength(), nRemoved = 0;
 
-    sal_Bool bAfterEffect = false;
+    bool bAfterEffect = false;
     sal_Int32 nMasterRel = 0;
     for( ; nLength--; pValue++ )
     {
@@ -1104,7 +1104,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
 
 void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const AnimationNode& rNode, const PropertySet& rSet )
 {
-    sal_Bool bAfterEffect = false;
+    bool bAfterEffect = false;
 
     // attribute Restart
     if( rNode.mnRestart )
@@ -1368,9 +1368,9 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
     {
         if( rSet.hasProperty( DFF_ANIM_DIRECTION ) )
         {
-            sal_Bool bDirection = sal_False;
+            bool bDirection = false;
             if( rSet.getProperty( DFF_ANIM_DIRECTION ) >>= bDirection )
-                xColor->setDirection( (sal_Bool)!bDirection );
+                xColor->setDirection( !bDirection );
         }
 
         if( rSet.hasProperty( DFF_ANIM_COLORSPACE ) )

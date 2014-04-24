@@ -670,7 +670,7 @@ void CustomAnimationPane::updateControls()
     mpPBMoveDown->Enable(bEnableDown);
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
-    mpCBAutoPreview->Check( pOptions->IsPreviewChangedEffects() == sal_True );
+    mpCBAutoPreview->Check( pOptions->IsPreviewChangedEffects() );
 
     updateMotionPathTags();
 }
@@ -1012,7 +1012,7 @@ bool CustomAnimationPane::setProperty1Value( sal_Int32 nType, CustomAnimationEff
     return bEffectChanged;
 }
 
-static sal_Bool hasVisibleShape( const Reference< XShape >& xShape )
+static bool hasVisibleShape( const Reference< XShape >& xShape )
 {
     try
     {
@@ -1037,7 +1037,7 @@ static sal_Bool hasVisibleShape( const Reference< XShape >& xShape )
     catch( Exception& )
     {
     }
-    return sal_True;
+    return true;
 }
 
 STLPropertySet* CustomAnimationPane::createSelectionSet()
@@ -1089,7 +1089,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
 
         addValue( pSet, nHandlePresetId, makeAny( pEffect->getPresetId() ) );
 
-        addValue( pSet, nHandleHasText, makeAny( (sal_Bool)pEffect->hasText() ) );
+        addValue( pSet, nHandleHasText, makeAny( pEffect->hasText() ) );
 
         addValue( pSet, nHandleHasVisibleShape, Any( hasVisibleShape( pEffect->getTargetShape() ) ) );
 
@@ -1103,7 +1103,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         }
         else if( pEffect->getCommand() == EffectCommands::STOPAUDIO )
         {
-            aSoundSource = makeAny( (sal_Bool)sal_True );
+            aSoundSource = makeAny( true );
         }
         addValue( pSet, nHandleSoundURL, aSoundSource );
 
@@ -1113,9 +1113,9 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
             pTextGroup = pEffectSequence->findGroup( nGroupId );
 
         addValue( pSet, nHandleTextGrouping, makeAny( pTextGroup.get() ? pTextGroup->getTextGrouping() : (sal_Int32)-1 ) );
-        addValue( pSet, nHandleAnimateForm, makeAny( pTextGroup.get() ? (sal_Bool)pTextGroup->getAnimateForm() : sal_True ) );
+        addValue( pSet, nHandleAnimateForm, makeAny( pTextGroup.get() ? pTextGroup->getAnimateForm() : true ) );
         addValue( pSet, nHandleTextGroupingAuto, makeAny( pTextGroup.get() ? pTextGroup->getTextGroupingAuto() : (double)-1.0 ) );
-        addValue( pSet, nHandleTextReverse, makeAny( pTextGroup.get() ? (sal_Bool)pTextGroup->getTextReverse() : sal_False ) );
+        addValue( pSet, nHandleTextReverse, makeAny( pTextGroup.get() && pTextGroup->getTextReverse() ) );
 
         if( pEffectSequence->getSequenceType() == EffectNodeType::INTERACTIVE_SEQUENCE  )
         {
@@ -1277,7 +1277,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleHasAfterEffect ) == STLPropertyState_DIRECT )
         {
-            sal_Bool bHasAfterEffect = sal_False;
+            bool bHasAfterEffect = false;
             if( pResultSet->getPropertyValue( nHandleHasAfterEffect )  >>= bHasAfterEffect )
             {
                 if( pEffect->hasAfterEffect() != bHasAfterEffect )
@@ -1290,8 +1290,9 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleAfterEffectOnNextEffect ) == STLPropertyState_DIRECT )
         {
-            sal_Bool bAfterEffectOnNextEffect = sal_False;
-            if( (pResultSet->getPropertyValue( nHandleAfterEffectOnNextEffect ) >>= bAfterEffectOnNextEffect) && ((pEffect->IsAfterEffectOnNext() ? sal_True : sal_False) != bAfterEffectOnNextEffect) )
+            bool bAfterEffectOnNextEffect = false;
+            if(   (pResultSet->getPropertyValue( nHandleAfterEffectOnNextEffect ) >>= bAfterEffectOnNextEffect)
+               && (pEffect->IsAfterEffectOnNext() != bAfterEffectOnNextEffect) )
             {
                 pEffect->setAfterEffectOnNext( bAfterEffectOnNextEffect );
                 bChanged = true;
@@ -1332,7 +1333,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleAutoReverse ) == STLPropertyState_DIRECT )
         {
-            sal_Bool bAutoReverse = sal_False;
+            bool bAutoReverse = false;
             pResultSet->getPropertyValue( nHandleAutoReverse ) >>= bAutoReverse;
             if( pEffect->getAutoReverse() != bAutoReverse )
             {
@@ -1411,7 +1412,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
         // above
 
         sal_Int32 nTextGrouping = 0;
-        sal_Bool bAnimateForm = sal_True, bTextReverse = sal_False;
+        bool bAnimateForm = true, bTextReverse = false;
         double fTextGroupingAuto = -1.0;
 
         if( bHasTextGrouping )
@@ -1768,7 +1769,7 @@ void CustomAnimationPane::onChange( bool bCreate )
                         Reference< XShape > xShape( (*aIter), UNO_QUERY );
                         if( xShape.is() && !hasVisibleShape( xShape ) )
                         {
-                            mpMainSequence->createTextGroup( pCreated, 1, -1.0, sal_False, sal_False );
+                            mpMainSequence->createTextGroup( pCreated, 1, -1.0, false, false );
                         }
                     }
 

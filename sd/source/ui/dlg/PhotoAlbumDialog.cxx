@@ -627,7 +627,7 @@ Reference< drawing::XDrawPage > SdPhotoAlbumDialog::appendNewSlide(AutoLayout aL
     Reference< container::XIndexAccess > xIndexAccess( xDrawPages, uno::UNO_QUERY );
     xSlide = xDrawPages->insertNewByIndex( xIndexAccess->getCount() );
     SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
-    pSlide->SetAutoLayout(aLayout, sal_True); // Set the layout here
+    pSlide->SetAutoLayout(aLayout, true); // Set the layout here
     return xSlide;
 }
 

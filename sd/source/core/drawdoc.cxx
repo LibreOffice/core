@@ -148,7 +148,7 @@ PresentationSettings::PresentationSettings( const PresentationSettings& r )
 
 SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 : FmFormModel( SvtPathOptions().GetPalettePath(), NULL, pDrDocSh )
-, bReadOnly(sal_False)
+, bReadOnly(false)
 , mpOutliner(NULL)
 , mpInternalOutliner(NULL)
 , mpWorkStartupTimer(NULL)
@@ -290,7 +290,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     nCntrl &= ~ EE_CNTRL_ULSPACESUMMATION;
     if ( meDocType != DOCUMENT_TYPE_IMPRESS )
-        SetSummationOfParagraphs( sal_False );
+        SetSummationOfParagraphs( false );
     else
     {
         SetSummationOfParagraphs( pOptions->IsSummationOfParagraphs() );
@@ -450,10 +450,10 @@ SdrModel* SdDrawDocument::AllocModel() const
 
         if( meDocType == DOCUMENT_TYPE_IMPRESS )
             mpCreatingTransferable->SetDocShell( new ::sd::DrawDocShell(
-                SFX_CREATE_MODE_EMBEDDED, sal_True, meDocType ) );
+                SFX_CREATE_MODE_EMBEDDED, true, meDocType ) );
         else
             mpCreatingTransferable->SetDocShell( new ::sd::GraphicDocShell(
-                SFX_CREATE_MODE_EMBEDDED, sal_True, meDocType ) );
+                SFX_CREATE_MODE_EMBEDDED, true, meDocType ) );
 
         pNewDocSh = static_cast< ::sd::DrawDocShell*>( pObj = mpCreatingTransferable->GetDocShell() );
         pNewDocSh->DoInitNew( NULL );
@@ -486,7 +486,7 @@ SdrModel* SdDrawDocument::AllocModel() const
         SdDrawDocument* pDoc = (SdDrawDocument*) this;
         pDoc->SetAllocDocSh(false);
         pDoc->mxAllocedDocShRef = new ::sd::DrawDocShell(
-            SFX_CREATE_MODE_EMBEDDED, sal_True, meDocType);
+            SFX_CREATE_MODE_EMBEDDED, true, meDocType);
         pDoc->mxAllocedDocShRef->DoInitNew(NULL);
         pNewModel = pDoc->mxAllocedDocShRef->GetDoc();
     }
@@ -528,7 +528,7 @@ void SdDrawDocument::SetChanged(bool bFlag)
 }
 
 // The model changed, don't call anything else
-void SdDrawDocument::NbcSetChanged(sal_Bool bFlag)
+void SdDrawDocument::NbcSetChanged(bool bFlag)
 {
     // forward to baseclass
     FmFormModel::SetChanged(bFlag);
@@ -555,7 +555,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         CheckMasterPages();
 
         if ( GetMasterSdPageCount(PK_STANDARD) > 1 )
-            RemoveUnnecessaryMasterPages( NULL, sal_True, sal_False );
+            RemoveUnnecessaryMasterPages( NULL, true, false );
 
         for ( sal_uInt16 i = 0; i < GetPageCount(); i++ )
         {
@@ -640,7 +640,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         for (nPage = 0; nPage < nPageCount; nPage++)
         {
             SdPage* pPage = GetMasterSdPage(nPage, PK_STANDARD);
-            pSPool->CreateLayoutStyleSheets( pPage->GetName(), sal_True );
+            pSPool->CreateLayoutStyleSheets( pPage->GetName(), true );
         }
 
         // Default and notes pages:
@@ -760,7 +760,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
                     if (!aString.isEmpty())
                     {
-                        sd::Outliner* pInternalOutl = GetInternalOutliner(sal_True);
+                        sd::Outliner* pInternalOutl = GetInternalOutliner(true);
                         pPage->SetObjText( (SdrTextObj*) pObj, pInternalOutl, ePresObjKind, aString );
                         pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), true );
                         pInternalOutl->Clear();
@@ -773,7 +773,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
 // Local outliner that is used for outline mode. In this outliner, OutlinerViews
 // may be inserted.
-::sd::Outliner* SdDrawDocument::GetOutliner(sal_Bool bCreateOutliner)
+::sd::Outliner* SdDrawDocument::GetOutliner(bool bCreateOutliner)
 {
     if (!mpOutliner && bCreateOutliner)
     {
@@ -791,7 +791,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
 // Internal outliner that is used to create text objects. We don't insert any
 // OutlinerViews into this outliner!
-::sd::Outliner* SdDrawDocument::GetInternalOutliner(sal_Bool bCreateOutliner)
+::sd::Outliner* SdDrawDocument::GetInternalOutliner(bool bCreateOutliner)
 {
     if ( !mpInternalOutliner && bCreateOutliner )
     {
@@ -823,7 +823,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 }
 
 // OnlineSpelling on/off
-void SdDrawDocument::SetOnlineSpell(sal_Bool bIn)
+void SdDrawDocument::SetOnlineSpell(bool bIn)
 {
     mbOnlineSpell = bIn;
     sal_uLong nCntrl = 0;

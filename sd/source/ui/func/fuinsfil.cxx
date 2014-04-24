@@ -254,8 +254,8 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
     SFX_APP()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
-    sal_Bool                bDrawMode = mpViewShell && mpViewShell->ISA(DrawViewShell);
-    sal_Bool                bInserted = sal_False;
+    bool                bDrawMode = mpViewShell && mpViewShell->ISA(DrawViewShell);
+    bool                bInserted = false;
 
     if( pFilter )
     {
@@ -275,19 +275,19 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                     InsSDDinOlMode( pMedium );
 
                 // don't delete Medium here, ownership of pMedium has changed in this case
-                bInserted = sal_True;
+                bInserted = true;
             }
         }
         else
         {
-            sal_Bool bFound = ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFilter->GetMimeType() ) != aFilterVector.end() );
+            bool bFound = ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFilter->GetMimeType() ) != aFilterVector.end() );
             if( !bFound &&
                 ( aFilterName.indexOf( "Text" ) != -1 ||
                 aFilterName.indexOf( "Rich" ) != -1 ||
                 aFilterName.indexOf( "RTF" )  != -1 ||
                 aFilterName.indexOf( "HTML" ) != -1 ) )
             {
-                bFound = sal_True;
+                bFound = true;
             }
 
             if( bFound )
@@ -297,7 +297,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 else
                     InsTextOrRTFinOlMode(pMedium);
 
-                bInserted = sal_True;
+                bInserted = true;
                 delete pMedium;
             }
         }
@@ -315,16 +315,16 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
 
 
-sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
+bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 {
-    sal_Bool bOK = sal_False;
+    bool bOK = false;
 
     mpDocSh->SetWaitCursor( false );
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
     AbstractSdInsertPagesObjsDlg* pDlg = pFact ? pFact->CreateSdInsertPagesObjsDlg( NULL, mpDoc, pMedium, aFile ) : 0;
 
     if( !pDlg )
-        return sal_False;
+        return false;
 
     /* Maybe a QueryBox is opened ("update links?"), therefore the dialog
        becomes the current DefModalDialogParent */
@@ -342,8 +342,8 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
         /* list with page names (if NULL, then all pages)
            First, insert pages */
         std::vector<OUString> aBookmarkList = pDlg->GetList( 1 ); // pages
-        sal_Bool bLink = pDlg->IsLink();
-        sal_Bool bReplace = sal_False;
+        bool bLink = pDlg->IsLink();
+        bool bReplace = false;
         SdPage* pPage = NULL;
         ::sd::View* pView = mpViewShell->GetView();
 
@@ -370,7 +370,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             }
         }
 
-        sal_Bool  bNameOK;
+        bool  bNameOK;
         std::vector<OUString> aExchangeList;
         std::vector<OUString> aObjectBookmarkList = pDlg->GetList( 2 ); // objects
 
@@ -387,7 +387,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             if( bNameOK )
                 bOK = mpDoc->InsertBookmarkAsPage( aBookmarkList, &aExchangeList,
                                     bLink, bReplace, nPos,
-                                    sal_False, NULL, sal_True, sal_True, sal_False );
+                                    false, NULL, true, true, false );
 
             aBookmarkList.clear();
             aExchangeList.clear();
@@ -686,7 +686,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
 
 
-sal_Bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
+bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
 {
     OutlineView* pOlView = static_cast<OutlineView*>(mpView);
 
@@ -724,10 +724,10 @@ sal_Bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
         pOutliner->SetEndMovingHdl(aOldEndMovingHdl);
         pOutliner->SetStatusEventHdl(aOldStatusEventHdl);
 
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 

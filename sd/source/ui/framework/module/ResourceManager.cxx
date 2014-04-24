@@ -103,7 +103,7 @@ void ResourceManager::AddActiveMainView (
     mpActiveMainViewContainer->insert(rsMainViewURL);
 }
 
-sal_Bool ResourceManager::IsResourceActive (
+bool ResourceManager::IsResourceActive (
     const OUString& rsMainViewURL)
 {
     return (mpActiveMainViewContainer->find(rsMainViewURL) != mpActiveMainViewContainer->end());

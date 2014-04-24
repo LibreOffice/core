@@ -125,16 +125,16 @@ sal_uLong SmartTag::GetMarkedPointCount() const
 
 
 
-sal_Bool SmartTag::MarkPoint(SdrHdl& /*rHdl*/, sal_Bool /*bUnmark*/ )
+bool SmartTag::MarkPoint(SdrHdl& /*rHdl*/, bool /*bUnmark*/ )
 {
-    return sal_False;
+    return false;
 }
 
 
 
-sal_Bool SmartTag::MarkPoints(const Rectangle* /*pRect*/, sal_Bool /*bUnmark*/ )
+bool SmartTag::MarkPoints(const Rectangle* /*pRect*/, bool /*bUnmark*/ )
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -358,7 +358,7 @@ bool SmartTagSet::getContext( SdrViewContext& rContext ) const
 // support point editing
 
 
-sal_Bool SmartTagSet::HasMarkablePoints() const
+bool SmartTagSet::HasMarkablePoints() const
 {
     return GetMarkablePointCount() != 0 ? sal_True : sal_False;
 }
@@ -374,7 +374,7 @@ sal_uLong SmartTagSet::GetMarkablePointCount() const
 
 
 
-sal_Bool SmartTagSet::HasMarkedPoints() const
+bool SmartTagSet::HasMarkedPoints() const
 {
     return GetMarkedPointCount() != 0 ? sal_True : sal_False;
 }
@@ -391,7 +391,7 @@ sal_uLong SmartTagSet::GetMarkedPointCount() const
 
 
 
-sal_Bool SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
+bool SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
 {
     const SmartHdl* pSmartHdl = dynamic_cast< const SmartHdl* >( &rHdl );
 
@@ -400,21 +400,21 @@ sal_Bool SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
 
 
 
-sal_Bool SmartTagSet::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
+bool SmartTagSet::MarkPoint(SdrHdl& rHdl, bool bUnmark )
 {
     if( mxSelectedTag.is() )
         return mxSelectedTag->MarkPoint( rHdl, bUnmark );
 
-    return sal_False;
+    return false;
 }
 
 
 
-sal_Bool SmartTagSet::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
+bool SmartTagSet::MarkPoints(const Rectangle* pRect, bool bUnmark)
 {
     if( mxSelectedTag.is() )
         return mxSelectedTag->MarkPoints( pRect, bUnmark );
-    return sal_False;
+    return false;
 }
 
 

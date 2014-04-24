@@ -36,13 +36,13 @@ public:
     SdXMLFilter(
         SfxMedium& rMedium,
         ::sd::DrawDocShell& rDocShell,
-        sal_Bool bShowProgress,
+        bool bShowProgress,
         SdXMLFilterMode eFilterMode = SDXMLMODE_Normal,
         sal_uLong nStoreVer = SOFFICE_FILEFORMAT_8 );
     virtual ~SdXMLFilter (void);
 
-    sal_Bool        Import( ErrCode& nError );
-    sal_Bool        Export() SAL_OVERRIDE;
+    bool        Import( ErrCode& nError );
+    bool        Export() SAL_OVERRIDE;
 
 private:
     SdXMLFilterMode meFilterMode;

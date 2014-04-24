@@ -47,7 +47,7 @@ using namespace ::com::sun::star::frame;
 // - SdFilter -
 
 
-SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress )
+SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress )
 :   mxModel( rDocShell.GetModel() )
 ,   mrMedium( rMedium )
 ,   mrDocShell( rDocShell )

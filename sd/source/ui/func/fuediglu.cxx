@@ -50,7 +50,7 @@ FuEditGluePoints::FuEditGluePoints (
     : FuDraw(pViewSh, pWin, pView, pDoc, rReq)
      //Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
      //and SHIFT+ENTER key to decide the position and draw the new insert point
-     ,bBeginInsertPoint(sal_False),
+     ,bBeginInsertPoint(false),
     oldPoint(0,0)
 {
 }
@@ -82,23 +82,23 @@ FuEditGluePoints::~FuEditGluePoints()
 }
 
 
-sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 {
     mpView->SetActualWin( mpWindow );
 
-    sal_Bool bReturn = FuDraw::MouseButtonDown(rMEvt);
+    bool bReturn = FuDraw::MouseButtonDown(rMEvt);
 
     if (mpView->IsAction())
     {
         if (rMEvt.IsRight())
             mpView->BckAction();
 
-        return sal_True;
+        return true;
     }
 
     if (rMEvt.IsLeft())
     {
-        bReturn = sal_True;
+        bReturn = true;
         sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
         sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
         mpWindow->CaptureMouse();
@@ -163,7 +163,7 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
                mpView->UnmarkAllObj();
             }
 
-            sal_Bool bMarked = sal_False;
+            bool bMarked = false;
 
             if (!rMEvt.IsMod1())
             {
@@ -205,7 +205,7 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 }
 
 
-sal_Bool FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
+bool FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
 {
     mpView->SetActualWin( mpWindow );
 
@@ -221,19 +221,19 @@ sal_Bool FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
 
     ForcePointer(&rMEvt);
 
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
 {
     mpView->SetActualWin( mpWindow );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if (mpView->IsAction())
     {
-        bReturn = sal_True;
+        bReturn = true;
         mpView->EndAction();
     }
 
@@ -265,14 +265,14 @@ sal_Bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
  * Process keyboard input
  * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
  */
-sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
+bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
 {
     mpView->SetActualWin( mpWindow );
 
     //Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
     //and SHIFT+ENTER key to decide the position and draw the new insert point
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     switch (rKEvt.GetKeyCode().GetCode())
     {
@@ -319,8 +319,8 @@ sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
                 MouseEvent eMevt(ePoint,1,2,MOUSE_LEFT, 0);
                 MouseMove(eMevt);
                 oldPoint = ePoint;
-                bBeginInsertPoint = sal_True;
-                bReturn = sal_True;
+                bBeginInsertPoint = true;
+                bReturn = true;
             }
         }
         break;
@@ -340,7 +340,7 @@ sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
                     //simulate mouse button up action
                     MouseEvent rMEvt(oldPoint+Point(0,0),1,17, MOUSE_LEFT, KEY_SHIFT);
                     MouseButtonUp(rMEvt);
-                    bReturn= sal_True;
+                    bReturn= true;
                 }
             }
             break;
@@ -368,7 +368,7 @@ void FuEditGluePoints::ForcePointer(const MouseEvent* pMEvt)
     }
 }
 
-sal_Bool FuEditGluePoints::Command(const CommandEvent& rCEvt)
+bool FuEditGluePoints::Command(const CommandEvent& rCEvt)
 {
     mpView->SetActualWin( mpWindow );
     return FuPoor::Command( rCEvt );
@@ -431,7 +431,7 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
         {
             const SfxItemSet* pSet = rReq.GetArgs();
             const SfxPoolItem& rItem = pSet->Get(SID_GLUE_PERCENT);
-            sal_Bool bPercent = ((const SfxBoolItem&) rItem).GetValue();
+            bool bPercent = ((const SfxBoolItem&) rItem).GetValue();
             mpView->SetMarkedGluePointsPercent(bPercent);
         }
         break;

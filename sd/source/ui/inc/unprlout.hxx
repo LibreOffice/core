@@ -32,7 +32,7 @@ class SdPresentationLayoutUndoAction : public SdUndoAction
     OUString        aNewLayoutName;
     AutoLayout      eOldAutoLayout;
     AutoLayout      eNewAutoLayout;
-    sal_Bool        bSetAutoLayout;     // sal_True: change AutoLayout
+    bool        bSetAutoLayout;     // sal_True: change AutoLayout
     SdPage*         pPage;
     OUString        aComment;
 
@@ -43,7 +43,7 @@ public:
                          const OUString& aTheNewLayoutName,
                          AutoLayout      eTheOldAutoLayout,
                          AutoLayout      eTheNewAutoLayout,
-                         sal_Bool            bSet,
+                         bool            bSet,
                          SdPage*         pThePage);
 
     virtual ~SdPresentationLayoutUndoAction();

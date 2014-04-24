@@ -63,7 +63,7 @@ OutlineBulletDlg::OutlineBulletDlg(
     pOutputSet = new SfxItemSet( *pAttr );
     pOutputSet->ClearItem();
 
-    sal_Bool bOutliner = sal_False;
+    bool bOutliner = false;
 
     // special treatment if a title object is selected
     if( pView )
@@ -79,10 +79,10 @@ OutlineBulletDlg::OutlineBulletDlg(
                 switch(pObj->GetObjIdentifier())
                 {
                 case OBJ_TITLETEXT:
-                    bTitle = sal_True;
+                    bTitle = true;
                     break;
                 case OBJ_OUTLINETEXT:
-                    bOutliner = sal_True;
+                    bOutliner = true;
                     break;
                 }
             }

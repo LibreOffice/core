@@ -196,7 +196,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         pNewGrafObj->AdjustToMaxRect( Rectangle( Point(), aPageSize ), true );
 
         sal_uLong   nOptions = SDRINSERT_SETDEFLAYER;
-        sal_Bool    bIsPresTarget = sal_False;
+        bool    bIsPresTarget = false;
 
         if ((mpViewSh
                 && mpViewSh->GetViewShell()!=NULL
@@ -404,7 +404,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
     {
         OUString aCurrentDropFile( *aIter );
         INetURLObject   aURL( aCurrentDropFile );
-        sal_Bool            bOK = sal_False;
+        bool            bOK = false;
 
         if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
         {
@@ -434,7 +434,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                 if( aIter == maDropFileVector.begin() )
                     mnAction = nTempAction;
 
-                bOK = sal_True;
+                bOK = true;
             }
             if( !bOK )
             {
@@ -469,7 +469,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                         aReq.AppendItem( aItem1 );
                         aReq.AppendItem( aItem2 );
                         FuInsertFile::Create( mpViewSh, pWin, this, &mrDoc, aReq );
-                        bOK = sal_True;
+                        bOK = true;
                     }
                 }
             }

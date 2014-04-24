@@ -95,8 +95,8 @@ public:
     SdOptions*              GetSdOptions(DocumentType eDocType);
     SD_DLLPUBLIC SvStorageStreamRef     GetOptionStream( const OUString& rOptionName, SdOptionStreamMode eMode );
 
-    sal_Bool                    GetWaterCan() const { return bWaterCan; }
-    void                    SetWaterCan( sal_Bool bWC ) { bWaterCan = bWC; }
+    bool                    GetWaterCan() const { return bWaterCan; }
+    void                    SetWaterCan( bool bWC ) { bWaterCan = bWC; }
 
     SvxSearchItem*          GetSearchItem() { return (pSearchItem); }
     void                    SetSearchItem(SvxSearchItem* pItem) { pSearchItem = pItem; }
@@ -129,7 +129,7 @@ protected:
     SvxSearchItem*          pSearchItem;
     SvNumberFormatter*      pNumberFormatter;
     SvStorageRef            xOptionStorage;
-    sal_Bool                    bWaterCan;
+    bool                    bWaterCan;
     SfxErrorHandler*        mpErrorHdl;
     /** This device is used for printer independent layout.  It is virtual
         in the sense that it does not represent a printer.  The pointer may

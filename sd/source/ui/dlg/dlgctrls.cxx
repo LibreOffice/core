@@ -85,7 +85,7 @@ void FadeEffectLB::applySelected( SdPage* pSlide ) const
         {
             pSlide->setTransitionType( 0 );
             pSlide->setTransitionSubtype( 0 );
-            pSlide->setTransitionDirection( sal_True );
+            pSlide->setTransitionDirection( true );
             pSlide->setTransitionFadeColor( 0 );
         }
     }

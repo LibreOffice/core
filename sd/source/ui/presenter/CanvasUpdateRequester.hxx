@@ -45,7 +45,7 @@ public:
     static ::boost::shared_ptr<CanvasUpdateRequester> Instance (
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxCanvas);
 
-    void RequestUpdate (const sal_Bool bUpdateAll);
+    void RequestUpdate (const bool bUpdateAll);
 
 private:
     CanvasUpdateRequester (const css::uno::Reference<css::rendering::XSpriteCanvas>& rxCanvas);
@@ -60,7 +60,7 @@ private:
 
     css::uno::Reference<css::rendering::XSpriteCanvas> mxCanvas;
     sal_uLong mnUserEventId;
-    sal_Bool mbUpdateFlag;
+    bool mbUpdateFlag;
     DECL_LINK(Callback, void*);
 };
 

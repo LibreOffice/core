@@ -67,17 +67,17 @@ public:
                          { maPrintableLayers = rPrintableLayers; }
     const SetOfByte& GetPrintableLayers() { return maPrintableLayers; }
 
-    void SetRuler(const sal_Bool bRulerOn)
+    void SetRuler(const bool bRulerOn)
                  { mbRuler = bRulerOn; }
-    sal_Bool HasRuler() const { return mbRuler; }
+    bool HasRuler() const { return mbRuler; }
 
-    void SetNoColors(const sal_Bool bNoCol)
+    void SetNoColors(const bool bNoCol)
                  { mbNoColors = bNoCol; }
-    sal_Bool IsNoColors() const { return mbNoColors; }
+    bool IsNoColors() const { return mbNoColors; }
 
-    void SetNoAttribs(const sal_Bool bNoAttr)
+    void SetNoAttribs(const bool bNoAttr)
                  { mbNoAttribs = bNoAttr; }
-    sal_Bool IsNoAttribs() const { return mbNoAttribs; }
+    bool IsNoAttribs() const { return mbNoAttribs; }
 
     void SetVisArea(const Rectangle& rVisArea)
                  { maVisArea = rVisArea; }
@@ -116,19 +116,19 @@ public:
     */
     EditMode GetViewShEditModeOnLoad (void) const;
 
-    void SetLayerMode(sal_Bool bMode)
+    void SetLayerMode(bool bMode)
                  { mbLayerMode = bMode; }
-    sal_Bool IsLayerMode() const { return mbLayerMode; }
+    bool IsLayerMode() const { return mbLayerMode; }
 
-    void SetQuickEdit(sal_Bool bQEdit)
+    void SetQuickEdit(bool bQEdit)
                  { mbQuickEdit = bQEdit; }
-    sal_Bool IsQuickEdit() const { return mbQuickEdit; }
+    bool IsQuickEdit() const { return mbQuickEdit; }
 
-    void        SetDoubleClickTextEdit( sal_Bool bOn = sal_True ) { mbDoubleClickTextEdit = bOn; }
-    sal_Bool    IsDoubleClickTextEdit() const { return mbDoubleClickTextEdit; }
+    void        SetDoubleClickTextEdit( bool bOn = true ) { mbDoubleClickTextEdit = bOn; }
+    bool    IsDoubleClickTextEdit() const { return mbDoubleClickTextEdit; }
 
-    void        SetClickChangeRotation( sal_Bool bOn = sal_True ) { mbClickChangeRotation = bOn; }
-    sal_Bool    IsClickChangeRotation() const { return mbClickChangeRotation; }
+    void        SetClickChangeRotation( bool bOn = true ) { mbClickChangeRotation = bOn; }
+    bool    IsClickChangeRotation() const { return mbClickChangeRotation; }
 
     /** Remember the type of the view shell that was (or soon will be)
         previously associated with this frame view.
@@ -174,15 +174,15 @@ public:
 
 private:
     sal_uInt16          mnRefCount;
-    sal_Bool            mbRuler;
+    bool            mbRuler;
     SetOfByte       maVisibleLayers;
     SetOfByte       maLockedLayers;
     SetOfByte       maPrintableLayers;
     SdrHelpLineList maStandardHelpLines;
     SdrHelpLineList maNotesHelpLines;
     SdrHelpLineList maHandoutHelpLines;
-    sal_Bool            mbNoColors;        ///< structuring mode
-    sal_Bool            mbNoAttribs;       ///< structuring mode
+    bool            mbNoColors;        ///< structuring mode
+    bool            mbNoAttribs;       ///< structuring mode
     Rectangle           maVisArea;         ///< visible area
     PageKind            mePageKind;        ///< kind of page (standard, notes, handout)
     sal_uInt16          mnSelectedPage;
@@ -192,10 +192,10 @@ private:
     EditMode            meNotesEditMode;    ///< edit mode in notes mode (Page/MasterPage)
     EditMode            meHandoutEditMode;  ///< edit mode in handout mode (Page/MasterPage)
     EditMode            meEditModeOnLoad;
-    sal_Bool            mbLayerMode;        ///< layer on/off
-    sal_Bool            mbQuickEdit;        ///< QuickEdit on/off
-    sal_Bool            mbDoubleClickTextEdit; ///< text mode after double click
-    sal_Bool            mbClickChangeRotation; ///< single click switches between selection/rotation mode
+    bool            mbLayerMode;        ///< layer on/off
+    bool            mbQuickEdit;        ///< QuickEdit on/off
+    bool            mbDoubleClickTextEdit; ///< text mode after double click
+    bool            mbClickChangeRotation; ///< single click switches between selection/rotation mode
     sal_uInt16          mnPresViewShellId;  ///< ViewShell from which the presentation was started
     sal_uInt16          mnSlotId;           ///< SlotId, which was initial mentioned
     sal_uInt16          mnSlidesPerRow;     ///< slides per row on the slide-desk

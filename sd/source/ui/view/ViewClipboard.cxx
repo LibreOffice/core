@@ -91,7 +91,7 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
             for ( pIter = rBookmarks.begin(); pIter != rBookmarks.end(); ++pIter )
             {
                 OUString sName (*pIter);
-                sal_Bool bIsMasterPage;
+                bool bIsMasterPage;
 
                 // SdPage* GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind);
                 // sal_uInt16 GetMasterSdPageCount(PageKind ePgKind) const;
@@ -164,8 +164,8 @@ void ViewClipboard::AssignMasterPage (
         pPage->GetPageNum() / 2,
         sLayoutName,
         pSourceDocument,
-        sal_False, // Exchange the master page of only the target page.
-        sal_False // Keep unused master pages.
+        false, // Exchange the master page of only the target page.
+        false // Keep unused master pages.
         );
 }
 
@@ -202,7 +202,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
     SdDrawDocument& rDoc = mrView.GetDoc();
 
     sal_uInt16 nInsertPgCnt = 0;
-    sal_Bool bMergeMasterPages = !rTransferable.HasSourceDoc( &rDoc );
+    bool bMergeMasterPages = !rTransferable.HasSourceDoc( &rDoc );
 
     // Prepare the insertion.
     const std::vector<OUString> *pBookmarkList = NULL;
@@ -230,7 +230,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
     {
         const SolarMutexGuard aGuard;
         ::sd::Window* pWin = mrView.GetViewShell()->GetActiveWindow();
-        const sal_Bool bWait = pWin && pWin->IsWait();
+        const bool bWait = pWin && pWin->IsWait();
 
         if( bWait )
             pWin->LeaveWait();
@@ -238,14 +238,14 @@ sal_uInt16 ViewClipboard::InsertSlides (
         rDoc.InsertBookmarkAsPage(
             pBookmarkList ? *pBookmarkList : std::vector<OUString>(),
             NULL,
-            sal_False,
-            sal_False,
+            false,
+            false,
             nInsertPosition,
             (&rTransferable == SD_MOD()->pTransferDrag),
             pDataDocSh,
-            sal_True,
+            true,
             bMergeMasterPages,
-            sal_False);
+            false);
 
         if( bWait )
             pWin->EnterWait();

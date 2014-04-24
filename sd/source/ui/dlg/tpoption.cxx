@@ -138,7 +138,7 @@ SdTpOptionsContents::~SdTpOptionsContents()
 
 bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     if( m_pCbxRuler->GetSavedValue()           != TriState(m_pCbxRuler->IsChecked()) ||
         m_pCbxMoveOutline->GetSavedValue()     != TriState(m_pCbxMoveOutline->IsChecked()) ||
@@ -153,7 +153,7 @@ bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
         aOptsItem.GetOptionsLayout().SetHandlesBezier( m_pCbxHandlesBezier->IsChecked() );
 
         rAttrs.Put( aOptsItem );
-        bModified = sal_True;
+        bModified = true;
     }
     return( bModified );
 }
@@ -366,7 +366,7 @@ int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
 
 bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     if( m_pCbxStartWithTemplate->GetSavedValue()   != TriState(m_pCbxStartWithTemplate->IsChecked()) ||
         m_pCbxMarkedHitMovesAlways->GetSavedValue()!= TriState(m_pCbxMarkedHitMovesAlways->IsChecked()) ||
@@ -396,7 +396,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
             : ::com::sun::star::document::PrinterIndependentLayout::ENABLED);
         rAttrs.Put( aOptsItem );
 
-        bModified = sal_True;
+        bModified = true;
     }
 
     // metric
@@ -406,7 +406,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pLbMetric->GetEntryData( nMPos );
         rAttrs.Put( SfxUInt16Item( GetWhich( SID_ATTR_METRIC ),
                                      (sal_uInt16)nFieldUnit ) );
-        bModified |= sal_True;
+        bModified = true;
     }
 
     // tabulator space
@@ -416,7 +416,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         SfxMapUnit eUnit = rAttrs.GetPool()->GetMetric( nWh );
         SfxUInt16Item aDef( nWh,(sal_uInt16)GetCoreValue( *m_pMtrFldTabstop, eUnit ) );
         rAttrs.Put( aDef );
-        bModified |= sal_True;
+        bModified = true;
     }
 
     sal_Int32 nX, nY;
@@ -425,7 +425,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         rAttrs.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_X, nX ) );
         rAttrs.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_Y, nY ) );
 
-        bModified = sal_True;
+        bModified = true;
     }
 
     return( bModified );
@@ -577,35 +577,35 @@ OUString SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
 
 
 
-sal_Bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY )
+bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY )
 {
     if( comphelper::string::getTokenCount(aScale, TOKEN) != 2 )
-        return( sal_False );
+        return false;
 
     OUString aTmp(aScale.getToken(0, TOKEN));
     if (!comphelper::string::isdigitAsciiString(aTmp))
-        return sal_False;
+        return false;
 
     rX = (long) aTmp.toInt32();
     if( rX == 0 )
-        return( sal_False );
+        return false;
 
     aTmp = aScale.getToken(1, TOKEN);
     if (!comphelper::string::isdigitAsciiString(aTmp))
-        return sal_False;
+        return false;
 
     rY = (long) aTmp.toInt32();
     if( rY == 0 )
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 void SdTpOptionsMisc::UpdateCompatibilityControls (void)
 {
     // Disable the compatibility controls by default.  Enable them only when
     // there is at least one open document.
-    sal_Bool bIsEnabled = sal_False;
+    bool bIsEnabled = false;
 
     try
     {
@@ -631,7 +631,7 @@ void SdTpOptionsMisc::UpdateCompatibilityControls (void)
                 if (xModel.is())
                 {
                     // There is at leas one model/document: Enable the compatibility controls.
-                    bIsEnabled = sal_True;
+                    bIsEnabled = true;
                     break;
                 }
             }

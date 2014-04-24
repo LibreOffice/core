@@ -464,14 +464,14 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         {
             if( mbImpress )
             {
-                sal_Bool temp = sal_False;
+                bool temp = false;
                 pParams->Value >>= temp;
                 mbNotes = temp;
             }
         }
         else if ( pParams->Name == "IsExportContentsPage" )
         {
-            sal_Bool temp = sal_False;
+            bool temp = false;
             pParams->Value >>= temp;
             mbContentsPage = temp;
         }
@@ -497,19 +497,19 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         }
         else if ( pParams->Name == "EnableDownload" )
         {
-            sal_Bool temp = sal_False;
+            bool temp = false;
             pParams->Value >>= temp;
             mbDownload = temp;
         }
         else if ( pParams->Name == "SlideSound" )
         {
-            sal_Bool temp = sal_True;
+            bool temp = true;
             pParams->Value >>= temp;
             mbSlideSound = temp;
         }
         else if ( pParams->Name == "HiddenSlides" )
         {
-            sal_Bool temp = sal_True;
+            bool temp = true;
             pParams->Value >>= temp;
             mbHiddenSlides = temp;
         }
@@ -550,7 +550,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         }
         else if ( pParams->Name == "IsUseDocumentColors" )
         {
-            sal_Bool temp = sal_False;
+            bool temp = false;
             pParams->Value >>= temp;
             mbDocColors = temp;
         }
@@ -563,7 +563,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         }
         else if ( pParams->Name == "KioskEndless" )
         {
-            sal_Bool temp = sal_False;
+            bool temp = false;
             pParams->Value >>= temp;
             mbEndless = temp;
         }
@@ -965,7 +965,7 @@ bool HtmlExport::SavePresentation()
         {
             uno::Sequence< beans::PropertyValue > aProperties( 2 );
             aProperties[ 0 ].Name = "Overwrite";
-            aProperties[ 0 ].Value <<= (sal_Bool)sal_True;
+            aProperties[ 0 ].Value <<= true;
             aProperties[ 1 ].Name = "FilterName";
             aProperties[ 1 ].Value <<= OUString("impress8");
             xStorable->storeToURL( aURL, aProperties );
@@ -1675,8 +1675,8 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                         // if necessary, convert page and object names into the
                         // corresponding names of the html file
-                        sal_Bool        bIsMasterPage;
-                        sal_uInt16      nPgNum = mpDoc->GetPageByName( aURL, bIsMasterPage );
+                        bool        bIsMasterPage;
+                        sal_uInt16  nPgNum = mpDoc->GetPageByName( aURL, bIsMasterPage );
                         SdrObject*  pObj = NULL;
 
                         if (nPgNum == SDRPAGE_NOTFOUND)
@@ -1760,8 +1760,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                     {
                         case presentation::ClickAction_BOOKMARK:
                         {
-                            sal_Bool        bIsMasterPage;
-                            sal_uInt16      nPgNum = mpDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage );
+                            bool        bIsMasterPage;
+                            sal_uInt16  nPgNum = mpDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage );
                             SdrObject*  pObj = NULL;
 
                             if( nPgNum == SDRPAGE_NOTFOUND )

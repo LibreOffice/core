@@ -148,7 +148,7 @@ void ImplTranslateAttribute( OUString& rString, const TranslateMode eTranslateMo
 sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_uInt32 nPresetId, const OUString& rPresetSubType )
 {
     sal_uInt32  nPresetSubType = 0;
-    sal_Bool    bTranslated = sal_False;
+    bool    bTranslated = false;
 
     if ( ( nPresetClass == (sal_uInt32)EffectPresetClass::ENTRANCE ) || ( nPresetClass == (sal_uInt32)EffectPresetClass::EXIT ) )
     {
@@ -161,12 +161,12 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
                     if ( rPresetSubType == "downward" )
                     {
                         nPresetSubType = 5;
-                        bTranslated = sal_True;
+                        bTranslated = true;
                     }
                     else if ( rPresetSubType == "across" )
                     {
                         nPresetSubType = 10;
-                        bTranslated = sal_True;
+                        bTranslated = true;
                     }
                 }
                 break;
@@ -175,7 +175,7 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
                     if ( rPresetSubType == "across" )
                     {
                         nPresetSubType = 10;
-                        bTranslated = sal_True;
+                        bTranslated = true;
                     }
                 }
                 break;
@@ -184,22 +184,22 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
                     if ( rPresetSubType == "right-to-top" )
                     {
                         nPresetSubType = 3;
-                        bTranslated = sal_True;
+                        bTranslated = true;
                     }
                     else if ( rPresetSubType == "right-to-bottom" )
                     {
                         nPresetSubType = 6;
-                        bTranslated = sal_True;
+                        bTranslated = true;
                     }
                     else if ( rPresetSubType == "left-to-top" )
                     {
                         nPresetSubType = 9;
-                        bTranslated = sal_True;
+                        bTranslated = true;
                     }
                     else if ( rPresetSubType == "left-to-bottom" )
                     {
                         nPresetSubType = 12;
-                        bTranslated = sal_True;
+                        bTranslated = true;
                     }
                 }
                 break;
@@ -213,7 +213,7 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
                 if ( rPresetSubType.equalsAscii( p->mpStrSubType ) )
                 {
                     nPresetSubType = p->mnID;
-                    bTranslated = sal_True;
+                    bTranslated = true;
                     break;
                 }
                 p++;
@@ -225,7 +225,7 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
     return nPresetSubType;
 }
 
-const sal_Char* AnimationExporter::FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const sal_Bool bDirection )
+const sal_Char* AnimationExporter::FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const bool bDirection )
 {
     const sal_Char* pRet = NULL;
     int             nFit = 0;
@@ -297,7 +297,7 @@ sal_Int16 AnimationExporter::GetFillMode( const Reference< XAnimationNode >& xNo
     if( nFill == AnimationFill::AUTO )
     {
         nFill = AnimationFill::REMOVE;
-        sal_Bool bIsIndefiniteTiming = sal_True;
+        bool bIsIndefiniteTiming = true;
         Any aAny = xNode->getDuration();
         if( aAny.hasValue() )
         {
@@ -343,7 +343,7 @@ void AnimationExporter::doexport( const Reference< XDrawPage >& xPage, SvStream&
         if( xRootNode.is() )
         {
             processAfterEffectNodes( xRootNode );
-            exportNode( rStrm, xRootNode, NULL, DFF_msofbtAnimGroup, 1, 0, sal_False, AnimationFill::AUTO );
+            exportNode( rStrm, xRootNode, NULL, DFF_msofbtAnimGroup, 1, 0, false, AnimationFill::AUTO );
         }
     }
 }
@@ -483,7 +483,7 @@ bool AnimationExporter::isEmptyNode( const Reference< XAnimationNode >& xNode ) 
 }
 
 void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode > xNode, const Reference< XAnimationNode >* pParent, const sal_uInt16 nContainerRecType,
-                                    const sal_uInt16 nInstance, const sal_Int32 nGroupLevel, const sal_Bool bTakeBackInteractiveSequenceTiming, const sal_Int16 nFDef )
+                                    const sal_uInt16 nInstance, const sal_Int32 nGroupLevel, const bool bTakeBackInteractiveSequenceTiming, const sal_Int16 nFDef )
 {
     if( (nGroupLevel == 4) && isEmptyNode( xNode ) )
         return;
@@ -494,7 +494,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
     if( nContainerRecType == DFF_msofbtAnimGroup )
         mnCurrentGroup++;
 
-    sal_Bool bTakeBackInteractiveSequenceTimingForChild = sal_False;
+    bool bTakeBackInteractiveSequenceTimingForChild = false;
     sal_Int16 nFillDefault = GetFillMode( xNode, nFDef );
 
     bool bSkipChildren = false;
@@ -511,7 +511,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                 exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                 exportAnimPropertySet( rStrm, xNode );
                 exportAnimEvent( rStrm, xNode, 0 );
-                exportAnimValue( rStrm, xNode, sal_False );
+                exportAnimValue( rStrm, xNode, false );
             }
             break;
 
@@ -535,11 +535,11 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                 if ( ( nGroupLevel == 1 ) && ( nNodeType == ::com::sun::star::presentation::EffectNodeType::INTERACTIVE_SEQUENCE ) )
                 {
                     nFlags |= 0x20;
-                    bTakeBackInteractiveSequenceTimingForChild = sal_True;
+                    bTakeBackInteractiveSequenceTimingForChild = true;
                 }
                 exportAnimAction( rStrm, xNode );
                 exportAnimEvent( rStrm, xNode, nFlags );
-                exportAnimValue( rStrm, xNode, sal_False );
+                exportAnimValue( rStrm, xNode, false );
             }
             break;
 
@@ -575,7 +575,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                 exportIterate( rStrm, xNode );
                 exportAnimPropertySet( rStrm, xNode );
                 exportAnimEvent( rStrm, xNode, 0 );
-                exportAnimValue( rStrm, xNode, sal_False );
+                exportAnimValue( rStrm, xNode, false );
             }
             break;
 
@@ -584,7 +584,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                 exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                 exportAnimPropertySet( rStrm, xNode );
                 exportAnimEvent( rStrm, xNode, 0 );
-                exportAnimValue( rStrm, xNode, sal_False );
+                exportAnimValue( rStrm, xNode, false );
                 exportAnimate( rStrm, xNode );
             }
             break;
@@ -598,7 +598,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                     exportAnimPropertySet( rStrm, xNode );
                     exportAnimateSet( rStrm, xNode, bIsAfterEffectNode ? AFTEREFFECT_SET : AFTEREFFECT_NONE );
                     exportAnimEvent( rStrm, xNode, 0 );
-                    exportAnimValue( rStrm, xNode, sal_False );
+                    exportAnimValue( rStrm, xNode, false );
                 }
                 else
                 {
@@ -613,7 +613,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                 exportAnimPropertySet( rStrm, xNode );
                 exportAnimateMotion( rStrm, xNode );
                 exportAnimEvent( rStrm, xNode, 0 );
-                exportAnimValue( rStrm, xNode, sal_False );
+                exportAnimValue( rStrm, xNode, false );
             }
             break;
 
@@ -629,7 +629,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                     exportAnimPropertySet( rStrm, xNode );
                     exportAnimateColor( rStrm, xNode, bIsAfterEffectNode ? AFTEREFFECT_COLOR : AFTEREFFECT_NONE );
                     exportAnimEvent( rStrm, xNode, 0 );
-                    exportAnimValue( rStrm, xNode, sal_False );
+                    exportAnimValue( rStrm, xNode, false );
                 }
                 else
                 {
@@ -644,7 +644,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                 exportAnimPropertySet( rStrm, xNode );
                 exportAnimateTransform( rStrm, xNode );
                 exportAnimEvent( rStrm, xNode, 0 );
-                exportAnimValue( rStrm, xNode, sal_False );
+                exportAnimValue( rStrm, xNode, false );
             }
             break;
 
@@ -653,7 +653,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                 exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                 exportAnimPropertySet( rStrm, xNode );
                 exportAnimEvent( rStrm, xNode, 0 );
-                exportAnimValue( rStrm, xNode, sal_False );
+                exportAnimValue( rStrm, xNode, false );
                 exportTransitionFilter( rStrm, xNode );
             }
             break;
@@ -705,7 +705,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                         }
                     }
                 }
-                exportAnimValue( rStrm, xNode, sal_False );
+                exportAnimValue( rStrm, xNode, false );
             }
             break;
         }
@@ -768,7 +768,7 @@ Reference< XAnimationNode > AnimationExporter::createAfterEffectNodeClone( const
     return xNode;
 }
 
-sal_Bool AnimationExporter::GetNodeType( const Reference< XAnimationNode >& xNode, sal_Int16& nType )
+bool AnimationExporter::GetNodeType( const Reference< XAnimationNode >& xNode, sal_Int16& nType )
 {
     // trying to get the nodetype
     Sequence< NamedValue > aUserData = xNode->getUserData();
@@ -781,12 +781,12 @@ sal_Bool AnimationExporter::GetNodeType( const Reference< XAnimationNode >& xNod
         if ( p->Name == "node-type" )
         {
         if ( p->Value >>= nType )
-            return sal_True;
+            return true;
         }
     }
     }
 
-    return sal_False;
+    return false;
 }
 
 void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnimationNode >& xNode,
@@ -916,10 +916,10 @@ void AnimationExporter::GetUserData( const Sequence< NamedValue >& rUserData, co
     }
 }
 
-sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 nAPIPresetClass, sal_Bool& bPresetId )
+sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 nAPIPresetClass, bool& bPresetId )
 {
     sal_uInt32 nPresetId = 0;
-    bPresetId = sal_False;
+    bPresetId = false;
 
     if ( rPreset.match( OUString( "ppt_" ), 0 ) )
     {
@@ -928,7 +928,7 @@ sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 n
     {
         OUString aNumber( rPreset.copy( nLast + 1 ) );
         nPresetId = aNumber.toInt32();
-        bPresetId = sal_True;
+        bPresetId = true;
     }
     }
     else
@@ -940,7 +940,7 @@ sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 n
     if( p->mpStrPresetId )
     {
         nPresetId = p->mnPresetId;
-        bPresetId = sal_True;
+        bPresetId = true;
     }
     }
 
@@ -1005,8 +1005,8 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     sal_uInt32 nPresetSubType = 0;
     sal_uInt32 nAPIPresetClass = EffectPresetClass::CUSTOM;
     sal_uInt32 nPresetClass = DFF_ANIM_PRESS_CLASS_USER_DEFINED;
-    sal_Bool bPresetClass, bPresetId, bPresetSubType;
-    bPresetId = bPresetClass = bPresetSubType = sal_False;
+    bool bPresetClass, bPresetId, bPresetSubType;
+    bPresetId = bPresetClass = bPresetSubType = false;
 
     if ( pAny[ DFF_ANIM_PRESET_CLASS ] )
     {
@@ -1025,7 +1025,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
                     nPPTPresetClass = DFF_ANIM_PRESS_CLASS_USER_DEFINED;
             }
             nPresetClass = nPPTPresetClass;
-            bPresetClass = sal_True;
+            bPresetClass = true;
         }
     }
     if ( pAny[ DFF_ANIM_PRESET_ID ] )
@@ -1041,7 +1041,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
         if ( *pAny[ DFF_ANIM_PRESET_SUB_TYPE ] >>= sPresetSubType )
         {
             nPresetSubType = TranslatePresetSubType( nPresetClass, nPresetId, sPresetSubType );
-            bPresetSubType = sal_True;
+            bPresetSubType = true;
         }
     }
     if ( bPresetId )
@@ -1058,7 +1058,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
 
     if ( pAny[ DFF_ANIM_AFTEREFFECT ] )
     {
-        sal_Bool bAfterEffect = sal_False;
+        bool bAfterEffect = false;
         if ( *pAny[ DFF_ANIM_AFTEREFFECT ] >>= bAfterEffect )
             exportAnimPropertyByte( rStrm, DFF_ANIM_AFTEREFFECT, bAfterEffect, TRANSLATE_NONE );
     }
@@ -1080,8 +1080,8 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
         if( xColor.is() )
         {
 
-            sal_Bool bDirection = !xColor->getDirection();
-            exportAnimPropertyuInt32( rStrm, DFF_ANIM_DIRECTION, bDirection, TRANSLATE_NONE );
+            bool bDirection = !xColor->getDirection();
+            exportAnimPropertyuInt32( rStrm, DFF_ANIM_DIRECTION, bDirection ? 1 : 0, TRANSLATE_NONE );
         }
     }
 
@@ -1124,9 +1124,9 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     return nNodeType;
 }
 
-sal_Bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nPropertyId, const ::com::sun::star::uno::Any& rAny, const TranslateMode eTranslateMode )
+bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nPropertyId, const ::com::sun::star::uno::Any& rAny, const TranslateMode eTranslateMode )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( rAny.hasValue() )
     {
         switch( rAny.getValueType().getTypeClass() )
@@ -1140,7 +1140,7 @@ sal_Bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt1
                 if ( rAny >>= nVal )
                 {
                     exportAnimPropertyuInt32( rStrm, nPropertyId, nVal, eTranslateMode );
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
             break;
@@ -1151,7 +1151,7 @@ sal_Bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt1
                 if ( rAny >>= fVal )
                 {
                     exportAnimPropertyFloat( rStrm, nPropertyId, fVal, eTranslateMode );
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
             break;
@@ -1170,7 +1170,7 @@ sal_Bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt1
                     else
                     {
                         exportAnimPropertyFloat( rStrm, nPropertyId, fVal, eTranslateMode );
-                        bRet = sal_True;
+                        bRet = true;
                     }
                 }
             }
@@ -1181,7 +1181,7 @@ sal_Bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt1
                 if ( rAny >>= aStr )
                 {
                     exportAnimPropertyString( rStrm, nPropertyId, aStr, eTranslateMode );
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
             break;
@@ -1272,7 +1272,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
         sal_Int32 nU3 = 0;
         sal_Int32 nBegin = 0;
 
-        sal_Bool bCreateEvent = sal_False;
+        bool bCreateEvent = false;
         Any aSource;
 
         switch( i )
@@ -1321,7 +1321,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                 double fTiming = 0.0;
                 if ( aAny >>= aEvent )
                 {
-                    bCreateEvent = sal_True;
+                    bCreateEvent = true;
                     switch( aEvent.Trigger )
                     {
                         case EventTrigger::NONE : nTrigger = 0; break;
@@ -1351,13 +1351,13 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                 }
                 else if ( aAny >>= eTiming )
                 {
-                    bCreateEvent = sal_True;
+                    bCreateEvent = true;
                     if ( eTiming == Timing_INDEFINITE )
                         nBegin = -1;
                 }
                 else if ( aAny >>= fTiming )
                 {
-                    bCreateEvent = sal_True;
+                    bCreateEvent = true;
                     nBegin = (sal_Int32)( fTiming * 1000.0 );
                 }
             }
@@ -1367,7 +1367,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
             {
                 if ( nFlags & ( 1 << i ) )
                 {
-                    bCreateEvent = sal_True;
+                    bCreateEvent = true;
                     nU1 = 1;
                     nTrigger = 9;
                 }
@@ -1377,7 +1377,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
             {
                 if ( nFlags & ( 1 << i ) )
                 {
-                    bCreateEvent = sal_True;
+                    bCreateEvent = true;
                     nU1 = 1;
                     nTrigger = 10;
                 }
@@ -1512,7 +1512,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
     }
     else if ( rAttributeName == "Visibility" )
     {
-        sal_Bool bVisible = sal_True;
+        bool bVisible = true;
         if ( rSourceValue >>= bVisible )
         {
             if ( bVisible )
@@ -1713,16 +1713,16 @@ void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< X
                 exportAnimPropertyuInt32( rStrm, 5, 0, TRANSLATE_NONE );
             }
         }
-        exportAnimateTargetElement( rStrm, aTarget.hasValue() ? aTarget : xAnimate->getTarget(), sal_False );
+        exportAnimateTargetElement( rStrm, aTarget.hasValue() ? aTarget : xAnimate->getTarget(), false );
     }
 }
 
-Reference< XShape > AnimationExporter::getTargetElementShape( const Any& rAny, sal_Int32& rBegin, sal_Int32& rEnd, sal_Bool& rParagraphTarget )
+Reference< XShape > AnimationExporter::getTargetElementShape( const Any& rAny, sal_Int32& rBegin, sal_Int32& rEnd, bool& rParagraphTarget )
 {
     Reference< XShape > xShape;
     rAny >>= xShape;
 
-    rParagraphTarget = sal_False;
+    rParagraphTarget = false;
 
     if( !xShape.is() )
     {
@@ -1736,7 +1736,7 @@ Reference< XShape > AnimationExporter::getTargetElementShape( const Any& rAny, s
         Reference< XSimpleText > xText( xShape, UNO_QUERY );
         if ( xText.is() )
         {
-        rParagraphTarget = sal_True;
+        rParagraphTarget = true;
         Reference< XEnumerationAccess > xTextParagraphEnumerationAccess( xText, UNO_QUERY );
         if ( xTextParagraphEnumerationAccess.is() )
         {
@@ -1768,12 +1768,12 @@ Reference< XShape > AnimationExporter::getTargetElementShape( const Any& rAny, s
     return xShape;
 }
 
-void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any aAny, const sal_Bool bCreate2b01Atom )
+void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any aAny, const bool bCreate2b01Atom )
 {
     sal_uInt32 nRefMode = 0;    // nRefMode == 2 -> Paragraph
     sal_Int32 begin = -1;
     sal_Int32 end = -1;
-    sal_Bool bParagraphTarget;
+    bool bParagraphTarget;
 
     Reference< XShape > xShape = getTargetElementShape( aAny, begin, end, bParagraphTarget );
 
@@ -1845,7 +1845,7 @@ void AnimationExporter::exportAnimateKeyPoints( SvStream& rStrm, const Reference
     }
 }
 
-void AnimationExporter::exportAnimValue( SvStream& rStrm, const Reference< XAnimationNode >& xNode, const sal_Bool bExportAlways )
+void AnimationExporter::exportAnimValue( SvStream& rStrm, const Reference< XAnimationNode >& xNode, const bool bExportAlways )
 {
     Any aAny;
     // repeat count (0)
@@ -1888,7 +1888,7 @@ void AnimationExporter::exportAnimValue( SvStream& rStrm, const Reference< XAnim
     }
 
     // autoreverse (5)
-    sal_Bool bAutoReverse = xNode->getAutoReverse();
+    bool bAutoReverse = xNode->getAutoReverse();
     if ( bExportAlways || bAutoReverse )
     {
         EscherExAtom aExAtom( rStrm, DFF_msofbtAnimValue );
@@ -2046,9 +2046,9 @@ void AnimationExporter::exportAnimateTransform( SvStream& rStrm, const Reference
     }
 }
 
-sal_Bool AnimationExporter::getColorAny( const Any& rAny, const sal_Int16 nColorSpace, sal_Int32& rMode, sal_Int32& rA, sal_Int32& rB, sal_Int32& rC ) const
+bool AnimationExporter::getColorAny( const Any& rAny, const sal_Int16 nColorSpace, sal_Int32& rMode, sal_Int32& rA, sal_Int32& rB, sal_Int32& rC ) const
 {
-    sal_Bool bIsColor = sal_True;
+    bool bIsColor = true;
 
     rMode = 0;
     if ( nColorSpace == AnimationColorSpace::HSL )
@@ -2069,7 +2069,7 @@ sal_Bool AnimationExporter::getColorAny( const Any& rAny, const sal_Int16 nColor
         rC = (sal_Int32) ( aHSL[ 2 ] * 255.0 );
     }
     else
-        bIsColor = sal_False;
+        bIsColor = false;
     return bIsColor;
 }
 

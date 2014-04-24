@@ -318,7 +318,7 @@ private:
         @return sal_True, if the object is disposed or in the course
         of being disposed. Otherwise, sal_False is returned.
     */
-    sal_Bool IsDisposed (void);
+    bool IsDisposed (void);
 };
 
 } // end of namespace ::accessibility

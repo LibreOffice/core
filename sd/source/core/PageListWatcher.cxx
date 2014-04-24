@@ -65,13 +65,13 @@ void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
     }
 
     // set to valid
-    mbPageListValid = sal_True;
+    mbPageListValid = true;
 }
 
 ImpPageListWatcher::ImpPageListWatcher(const SdrModel& rModel)
     : mrModel(rModel)
     , mpHandoutPage(0L)
-    , mbPageListValid(sal_False)
+    , mbPageListValid(false)
     , mnVisiblePageCount(0)
 {
 }

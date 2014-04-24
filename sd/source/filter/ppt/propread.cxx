@@ -74,10 +74,10 @@ static sal_Int32 lcl_getMaxSafeStrLen(sal_uInt32 nSize)
     return static_cast< sal_Int32 >( nSize );
 }
 
-sal_Bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, sal_Bool bAlign )
+bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
 {
     sal_uInt32  i, nItemSize, nType, nItemPos;
-    sal_Bool    bRetValue = sal_False;
+    bool    bRetValue = false;
 
     nItemPos = Tell();
 
@@ -113,7 +113,7 @@ sal_Bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, sal_Bool bAl
                         }
                         else
                             rString = OUString();
-                        bRetValue = sal_True;
+                        bRetValue = true;
                     }
                     else
                     {
@@ -124,7 +124,7 @@ sal_Bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, sal_Bool bAl
                                 rString = OUString(pString, rtl_str_getLength(pString), mnTextEnc);
                             else
                                 rString = OUString();
-                            bRetValue = sal_True;
+                            bRetValue = true;
                         }
                     }
                     delete[] pString;
@@ -154,7 +154,7 @@ sal_Bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, sal_Bool bAl
                             rString = OUString(pString, lcl_getMaxSafeStrLen(nItemSize));
                         else
                             rString = OUString();
-                        bRetValue = sal_True;
+                        bRetValue = true;
                     }
                     delete[] pString;
                 }
@@ -212,7 +212,7 @@ Section::Section( const sal_uInt8* pFMTID )
 
 
 
-sal_Bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
+bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
 {
     if ( nId )
     {
@@ -229,10 +229,10 @@ sal_Bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
             rPropItem.SetTextEncoding( mnTextEnc );
             rPropItem.Write( iter->mpBuf,iter->mnSize );
             rPropItem.Seek( STREAM_SEEK_TO_BEGIN );
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -264,9 +264,9 @@ void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBu
 
 
 
-sal_Bool Section::GetDictionary( Dictionary& rDict )
+bool Section::GetDictionary( Dictionary& rDict )
 {
-    sal_Bool bRetValue = sal_False;
+    bool bRetValue = false;
 
     boost::ptr_vector<PropEntry>::iterator iter;
     for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
@@ -313,7 +313,7 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
                     break;
                 rDict.insert( std::make_pair(aString,nId) );
             }
-            bRetValue = sal_True;
+            bRetValue = true;
         }
     }
     return bRetValue;
@@ -354,7 +354,7 @@ void Section::Read( SvStorageStream *pStrm )
                 nVectorCount = 1;
 
 
-            sal_Bool bVariant = ( nPropType == VT_VARIANT );
+            bool bVariant = ( nPropType == VT_VARIANT );
 
             for ( i = 0; nPropSize && ( i < nVectorCount ); i++ )
             {
@@ -523,7 +523,7 @@ Section& Section::operator=( const Section& rSection )
 
 
 PropRead::PropRead( SvStorage& rStorage, const OUString& rName ) :
-        mbStatus            ( sal_False ),
+        mbStatus            ( false ),
         mnByteOrder         ( 0xfffe ),
         mnFormat            ( 0 ),
         mnVersionLo         ( 4 ),
@@ -536,7 +536,7 @@ PropRead::PropRead( SvStorage& rStorage, const OUString& rName ) :
         {
             mpSvStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
             memset( mApplicationCLSID, 0, 16 );
-            mbStatus = sal_True;
+            mbStatus = true;
         }
     }
 }
@@ -580,7 +580,7 @@ void PropRead::Read()
             mpSvStream->ReadUInt32( nSections );
             if ( nSections > 2 )                // sj: PowerPoint documents are containing max 2 sections
             {
-                mbStatus = sal_False;
+                mbStatus = false;
             }
             else for ( sal_uInt32 i = 0; i < nSections; i++ )
             {

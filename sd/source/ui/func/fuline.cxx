@@ -61,7 +61,7 @@ rtl::Reference<FuPoor> FuLine::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 
 void FuLine::DoExecute( SfxRequest& rReq )
 {
-    sal_Bool        bHasMarked = mpView->AreObjectsMarked();
+    bool        bHasMarked = mpView->AreObjectsMarked();
 
     const SfxItemSet* pArgs = rReq.GetArgs();
 

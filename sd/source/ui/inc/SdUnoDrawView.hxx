@@ -101,10 +101,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    sal_Bool getMasterPageMode(void) const throw();
+    bool getMasterPageMode(void) const throw();
     void setMasterPageMode(bool MasterPageMode_) throw();
-    sal_Bool getLayerMode(void) const throw();
-    void setLayerMode(sal_Bool LayerMode_) throw();
+    bool getLayerMode(void) const throw();
+    void setLayerMode(bool LayerMode_) throw();
 public:
     /** Return a reference to the active layer object.
         @return

@@ -47,14 +47,14 @@ uno::Reference< uno::XInterface > createUnoCustomShow( SdCustomShow* pShow )
 SdXCustomPresentation::SdXCustomPresentation() throw()
 :   mpSdCustomShow(NULL), mpModel(NULL),
     aDisposeListeners( aDisposeContainerMutex ),
-    bDisposing( sal_False )
+    bDisposing( false )
 {
 }
 
 SdXCustomPresentation::SdXCustomPresentation( SdCustomShow* pShow, SdXImpressDocument* pMyModel) throw()
 :   mpSdCustomShow(pShow), mpModel(pMyModel),
     aDisposeListeners( aDisposeContainerMutex ),
-    bDisposing( sal_False )
+    bDisposing( false )
 {
 }
 
@@ -251,7 +251,7 @@ void SAL_CALL SdXCustomPresentation::dispose() throw(uno::RuntimeException, std:
     if( bDisposing )
         return; // catched a recursion
 
-    bDisposing = sal_True;
+    bDisposing = true;
 
     uno::Reference< uno::XInterface > xSource( (cppu::OWeakObject*)this );
 
@@ -337,7 +337,7 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
     // get the documents custom show list
     SdCustomShowList* pList = 0;
     if(mrModel.GetDoc())
-        pList = mrModel.GetDoc()->GetCustomShowList(sal_True);
+        pList = mrModel.GetDoc()->GetCustomShowList(true);
 
     // no list, no cookies
     if( NULL == pList)

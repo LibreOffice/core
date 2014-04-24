@@ -56,7 +56,7 @@ public:
 
 protected:
     DrawViewShell*  pDrViewSh;
-    sal_Bool                bInternalMove;
+    bool                bInternalMove;
 
     // TabBar
     virtual void        Select() SAL_OVERRIDE;

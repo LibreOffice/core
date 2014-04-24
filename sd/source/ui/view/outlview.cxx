@@ -90,20 +90,20 @@ TYPEINIT1( OutlineView, ::sd::View );
 OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewShell& rOutlineViewShell)
 : ::sd::View(*rDocSh.GetDoc(), pWindow, &rOutlineViewShell)
 , mrOutlineViewShell(rOutlineViewShell)
-, mrOutliner(*mrDoc.GetOutliner(sal_True))
+, mrOutliner(*mrDoc.GetOutliner(true))
 , mnPagesToProcess(0)
 , mnPagesProcessed(0)
-, mbFirstPaint(sal_True)
+, mbFirstPaint(true)
 , mpProgress(NULL)
 , maDocColor( COL_WHITE )
 , maLRSpaceItem( 0, 0, 2000, 0, EE_PARA_OUTLLRSPACE )
 {
-    sal_Bool bInitOutliner = sal_False;
+    bool bInitOutliner = false;
 
     if (mrOutliner.GetViewCount() == 0)
     {
         // initialize Outliner: set Reference Device
-        bInitOutliner = sal_True;
+        bInitOutliner = true;
         mrOutliner.Init( OUTLINERMODE_OUTLINEVIEW );
         mrOutliner.SetRefDevice( SD_MOD()->GetRefDevice( rDocSh ) );
         //viewsize without the width of the image and number in front
@@ -225,7 +225,7 @@ void OutlineView::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 
         pOlView->ShowCursor(mbFirstPaint);
 
-        mbFirstPaint = sal_False;
+        mbFirstPaint = false;
     }
 }
 
@@ -242,8 +242,8 @@ void OutlineView::AdjustPosSizePixel(const Point &,const Size &,::sd::Window*)
 
 void OutlineView::AddWindowToPaintView(OutputDevice* pWin)
 {
-    sal_Bool bAdded = sal_False;
-    sal_Bool bValidArea = sal_False;
+    bool bAdded = false;
+    bool bValidArea = false;
     Rectangle aOutputArea;
     const Color aWhiteColor( COL_WHITE );
     sal_uInt16 nView = 0;
@@ -255,7 +255,7 @@ void OutlineView::AddWindowToPaintView(OutputDevice* pWin)
             mpOutlinerView[nView] = new OutlinerView(&mrOutliner, dynamic_cast< ::sd::Window* >(pWin));
             mpOutlinerView[nView]->SetBackgroundColor( aWhiteColor );
             mrOutliner.InsertView(mpOutlinerView[nView], EE_APPEND);
-            bAdded = sal_True;
+            bAdded = true;
 
             if (bValidArea)
             {
@@ -265,7 +265,7 @@ void OutlineView::AddWindowToPaintView(OutputDevice* pWin)
         else if (!bValidArea)
         {
             aOutputArea = mpOutlinerView[nView]->GetOutputArea();
-            bValidArea = sal_True;
+            bValidArea = true;
         }
 
         nView++;
@@ -279,7 +279,7 @@ void OutlineView::AddWindowToPaintView(OutputDevice* pWin)
 
 void OutlineView::DeleteWindowFromPaintView(OutputDevice* pWin)
 {
-    sal_Bool bRemoved = sal_False;
+    bool bRemoved = false;
     sal_uInt16 nView = 0;
     ::Window* pWindow;
 
@@ -294,7 +294,7 @@ void OutlineView::DeleteWindowFromPaintView(OutputDevice* pWin)
                 mrOutliner.RemoveView( mpOutlinerView[nView] );
                 delete mpOutlinerView[nView];
                 mpOutlinerView[nView] = NULL;
-                bRemoved = sal_True;
+                bRemoved = true;
             }
         }
 
@@ -467,11 +467,11 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     if (eAutoLayout == AUTOLAYOUT_TITLE ||
         eAutoLayout == AUTOLAYOUT_ONLY_TITLE)
     {
-        pPage->SetAutoLayout(AUTOLAYOUT_ENUM, sal_True);
+        pPage->SetAutoLayout(AUTOLAYOUT_ENUM, true);
     }
     else
     {
-        pPage->SetAutoLayout(pExample->GetAutoLayout(), sal_True);
+        pPage->SetAutoLayout(pExample->GetAutoLayout(), true);
     }
 
     /**********************************************************************
@@ -500,7 +500,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
                            pExample->GetLwrBorder() );
 
     // create presentation objects
-    pNotesPage->SetAutoLayout(pExample->GetAutoLayout(), sal_True);
+    pNotesPage->SetAutoLayout(pExample->GetAutoLayout(), true);
 
     mrOutliner.UpdateFields();
 
@@ -928,7 +928,7 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
     while (nPageCount)
     {
         SdPage* pPage = mrDoc.GetSdPage(nPosNewOrder, PK_STANDARD);
-        pPage->SetSelected(sal_False);
+        pPage->SetSelected(false);
         nPosNewOrder++;
         nPageCount--;
     }
@@ -1048,7 +1048,7 @@ sal_uLong OutlineView::GetPaperWidth()
 }
 
 /** updates draw model with all changes from outliner model */
-sal_Bool OutlineView::PrepareClose(sal_Bool)
+bool OutlineView::PrepareClose(bool)
 {
     ::sd::UndoManager* pDocUndoMgr = dynamic_cast<sd::UndoManager*>(mpDocSh->GetUndoManager());
     if (pDocUndoMgr != NULL)
@@ -1059,23 +1059,23 @@ sal_Bool OutlineView::PrepareClose(sal_Bool)
     BegUndo(SD_RESSTR(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
     UpdateDocument();
     EndUndo();
-    mrDoc.SetSelected(GetActualPage(), sal_True);
-    return sal_True;
+    mrDoc.SetSelected(GetActualPage(), true);
+    return true;
 }
 
 /**
  * Set attributes of the selected text
  */
-sal_Bool OutlineView::SetAttributes(const SfxItemSet& rSet, sal_Bool )
+bool OutlineView::SetAttributes(const SfxItemSet& rSet, bool )
 {
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
 
     OutlinerView* pOlView = GetViewByWindow(mrOutlineViewShell.GetActiveWindow());
 
     if (pOlView)
     {
         pOlView->SetAttribs(rSet);
-        bOk = sal_True;
+        bOk = true;
     }
 
     mrOutlineViewShell.Invalidate (SID_PREVIEW_STATE);
@@ -1086,14 +1086,14 @@ sal_Bool OutlineView::SetAttributes(const SfxItemSet& rSet, sal_Bool )
 /**
  * Get attributes of the selected text
  */
-sal_Bool OutlineView::GetAttributes( SfxItemSet& rTargetSet, sal_Bool ) const
+bool OutlineView::GetAttributes( SfxItemSet& rTargetSet, bool ) const
 {
     OutlinerView* pOlView = GetViewByWindow(
                                 mrOutlineViewShell.GetActiveWindow());
     DBG_ASSERT(pOlView, "keine OutlinerView gefunden");
 
     rTargetSet.Put( pOlView->GetAttribs(), false );
-    return sal_True;
+    return true;
 }
 
 /** creates outliner model from draw model */
@@ -1120,7 +1120,7 @@ void OutlineView::FillOutliner()
             OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
             if (pOPO)
             {
-                sal_Bool bVertical = pOPO->IsVertical();
+                bool bVertical = pOPO->IsVertical();
                 pOPO->SetVertical( false );
                 mrOutliner.AddText(*pOPO);
                 pOPO->SetVertical( bVertical );
@@ -1163,7 +1163,7 @@ void OutlineView::FillOutliner()
             if (pOPO)
             {
                 sal_Int32 nParaCount1 = mrOutliner.GetParagraphCount();
-                sal_Bool bVertical = pOPO->IsVertical();
+                bool bVertical = pOPO->IsVertical();
                 pOPO->SetVertical( false );
                 mrOutliner.AddText(*pOPO);
                 pOPO->SetVertical( bVertical );
@@ -1550,7 +1550,7 @@ void OutlineView::UpdateDocument()
     for (nPage = 0; nPage < nPageCount; nPage++)
     {
         SdPage* pPage = mrDoc.GetSdPage( (sal_uInt16)nPage, PK_STANDARD);
-        mrDoc.SetSelected(pPage, sal_False);
+        mrDoc.SetSelected(pPage, false);
 
         mrOutlineViewShell.UpdateTitleObject( pPage, pPara );
         mrOutlineViewShell.UpdateOutlineObject( pPage, pPara );
@@ -1563,7 +1563,7 @@ void OutlineView::UpdateDocument()
     while( pPara )
     {
         SdPage* pPage = InsertSlideForParagraph( pPara );
-        mrDoc.SetSelected(pPage, sal_False);
+        mrDoc.SetSelected(pPage, false);
 
         mrOutlineViewShell.UpdateTitleObject( pPage, pPara );
         mrOutlineViewShell.UpdateOutlineObject( pPage, pPara );

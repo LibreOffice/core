@@ -34,11 +34,11 @@ public:
     virtual void DoExecute( SfxRequest& rReq ) SAL_OVERRIDE;
 
     // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
     virtual void ReceiveRequest(SfxRequest& rReq) SAL_OVERRIDE;
 
     virtual void Activate() SAL_OVERRIDE;
@@ -48,7 +48,7 @@ public:
     //and SHIFT+ENTER key to decide the position and draw the new insert point
     virtual void ForcePointer(const MouseEvent* pMEvt = NULL) SAL_OVERRIDE;
 private:
-    sal_Bool   bBeginInsertPoint;
+    bool   bBeginInsertPoint;
     Point    oldPoint;
 protected:
     FuEditGluePoints (

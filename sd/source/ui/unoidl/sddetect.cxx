@@ -118,11 +118,11 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
     // there is no parameter that forbids to open as template
-    sal_Bool bOpenAsTemplate = sal_False;
-    sal_Bool bWasReadOnly = sal_False, bReadOnly = sal_False;
+    bool bOpenAsTemplate = false;
+    bool bWasReadOnly = false, bReadOnly = false;
 
-    sal_Bool bRepairPackage = sal_False;
-    sal_Bool bRepairAllowed = sal_False;
+    bool bRepairPackage = false;
+    bool bRepairAllowed = false;
     bool bDeepDetection = false;
 
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
@@ -486,7 +486,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
 
-        bOpenAsTemplate = sal_True;
+        bOpenAsTemplate = true;
 
         // TODO/LATER: set progress bar that should be used
     }

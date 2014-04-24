@@ -77,7 +77,7 @@ using sfx2::sidebar::EnumContext;
 
 namespace sd {
 
-sal_Bool DrawViewShell::mbPipette = sal_False;
+bool DrawViewShell::mbPipette = false;
 
 
 // - ScannerEventListener -
@@ -179,11 +179,11 @@ DrawViewShell::~DrawViewShell()
 
         if (pPage == mpActualPage)
         {
-            GetDoc()->SetSelected(pPage, sal_True);
+            GetDoc()->SetSelected(pPage, true);
         }
         else
         {
-            GetDoc()->SetSelected(pPage, sal_False);
+            GetDoc()->SetSelected(pPage, false);
         }
     }
 
@@ -209,11 +209,11 @@ DrawViewShell::~DrawViewShell()
 void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 {
     mpActualPage = 0;
-    mbMousePosFreezed = sal_False;
+    mbMousePosFreezed = false;
     mbReadOnly = GetDocSh()->IsReadOnly();
     mpSlotArray = 0;
     mpClipEvtLstnr = 0;
-    mbPastePossible = sal_False;
+    mbPastePossible = false;
     mbIsLayerModeActive = false;
 
     mpFrameView->Connect();
@@ -355,14 +355,14 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     if (pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
     {
-        mbZoomOnPage = sal_False;
+        mbZoomOnPage = false;
     }
     else
     {
-        mbZoomOnPage = sal_True;
+        mbZoomOnPage = true;
     }
 
-    mbIsRulerDrag = sal_False;
+    mbIsRulerDrag = false;
 
     OUString aName( "DrawViewShell" );
     SetName (aName);
@@ -478,9 +478,9 @@ void DrawViewShell::SetupPage (Size &rSize,
                                  long nRight,
                                  long nUpper,
                                  long nLower,
-                                 sal_Bool bSize,
-                                 sal_Bool bMargin,
-                                 sal_Bool bScaleAll)
+                                 bool bSize,
+                                 bool bMargin,
+                                 bool bScaleAll)
 {
     sal_uInt16 nPageCnt = GetDoc()->GetMasterSdPageCount(mePageKind);
     sal_uInt16 i;
@@ -552,7 +552,7 @@ void DrawViewShell::SetupPage (Size &rSize,
     if ( mePageKind == PK_STANDARD )
     {
         SdPage* pHandoutPage = GetDoc()->GetSdPage(0, PK_HANDOUT);
-        pHandoutPage->CreateTitleAndLayout(sal_True);
+        pHandoutPage->CreateTitleAndLayout(true);
     }
 
     long nWidth = mpActualPage->GetSize().Width();
@@ -561,7 +561,7 @@ void DrawViewShell::SetupPage (Size &rSize,
     Point aPageOrg(nWidth, nHeight / 2);
     Size aSize( nWidth * 3, nHeight * 2);
 
-    InitWindows(aPageOrg, aSize, Point(-1, -1), sal_True);
+    InitWindows(aPageOrg, aSize, Point(-1, -1), true);
 
     Point aVisAreaPos;
 
@@ -796,7 +796,7 @@ void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
         }
 
         // Turn on design mode when document is not read-only.
-        if ((GetDocSh()->IsReadOnly() ? 1 : 0) != mbReadOnly )
+        if (GetDocSh()->IsReadOnly() != mbReadOnly )
         {
             mbReadOnly = GetDocSh()->IsReadOnly();
 

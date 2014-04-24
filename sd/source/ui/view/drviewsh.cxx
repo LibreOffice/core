@@ -43,9 +43,9 @@
 
 namespace sd {
 
-sal_Bool DrawViewShell::GotoBookmark(const OUString& rBookmark)
+bool DrawViewShell::GotoBookmark(const OUString& rBookmark)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     ::sd::DrawDocShell* pDocSh = GetDocSh();
     if( pDocSh )
     {

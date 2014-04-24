@@ -90,7 +90,7 @@ void PPTExCharSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
     rLev.mnFlags = aPortionObj.mnCharAttr;
 }
 
-void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bool, sal_Bool bSimpleText,
+void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, bool bSimpleText,
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet )
 {
     const PPTExCharLevel& rLev = maCharLevel[ nLev ];
@@ -106,9 +106,9 @@ void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bo
     sal_uInt32 nFontColor = rLev.mnFontColor;
     if ( nFontColor == COL_AUTO )
     {
-        sal_Bool bIsDark = sal_False;
+        bool bIsDark = false;
         ::com::sun::star::uno::Any aAny;
-        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, OUString( "IsBackgroundDark" ), sal_True ) )
+        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, OUString( "IsBackgroundDark" ), true ) )
             aAny >>= bIsDark;
         nFontColor = bIsDark ? 0xffffff : 0x000000;
     }
@@ -134,7 +134,7 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
     rBuProv     ( rProv ),
     mnInstance  ( nInstance )
 {
-    sal_Bool bHasBullet = sal_False;
+    bool bHasBullet = false;
 
     sal_uInt16 nUpperDist = 0;
     sal_uInt16 nBulletChar = 0x2022;
@@ -154,7 +154,7 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
             case EPP_TEXTTYPE_HalfBody :
             case EPP_TEXTTYPE_QuarterBody :
             {
-                bHasBullet = sal_True;
+                bHasBullet = true;
                 nUpperDist = 0x14;
             }
             break;
@@ -216,7 +216,7 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
         rLev.mnAsianSettings = 2;
         rLev.mnBiDi = 0;
 
-        rLev.mbExtendedBulletsUsed = sal_False;
+        rLev.mbExtendedBulletsUsed = false;
         rLev.mnBulletId = 0xffff;
         rLev.mnBulletStart = 0;
         rLev.mnMappedNumType = 0;
@@ -238,7 +238,7 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
         sal_Int16 nLineSpacing = aParagraphObj.mnLineSpacing;
         if ( nLineSpacing > 0 ) // if nLinespacing is < 0 the linespacing is an absolute spacing
         {
-            sal_Bool bFixedLineSpacing = sal_False;
+            bool bFixedLineSpacing = false;
             uno::Any aAny = rXPropSet->getPropertyValue("FontIndependentLineSpacing");
             if( !(aAny >>= bFixedLineSpacing) || !bFixedLineSpacing )
             {
@@ -293,7 +293,7 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
             {
                 PPTExParaLevel& rLevel = maParaLevel[ i ];
                 if ( i )
-                    aParagraphObj.ImplGetNumberingLevel( rBuProv, i, sal_False );
+                    aParagraphObj.ImplGetNumberingLevel( rBuProv, i, false );
                 rLevel.mnTextOfs = aParagraphObj.nTextOfs;
                 rLevel.mnBulletOfs = (sal_uInt16)aParagraphObj.nBulletOfs;
                 rLevel.mnBulletChar = aParagraphObj.cBulletId;
@@ -313,7 +313,7 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
     }
 }
 
-void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bool, sal_Bool bSimpleText,
+void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, bool bSimpleText,
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet )
 {
     const PPTExParaLevel& rLev = maParaLevel[ nLev ];
@@ -349,9 +349,9 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bo
     sal_uInt32 nBulletColor = rLev.mnBulletColor;
     if ( nBulletColor == COL_AUTO )
     {
-        sal_Bool bIsDark = sal_False;
+        bool bIsDark = false;
         ::com::sun::star::uno::Any aAny;
-        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, OUString( "IsBackgroundDark" ), sal_True ) )
+        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, OUString( "IsBackgroundDark" ), true ) )
             aAny >>= bIsDark;
         nBulletColor = bIsDark ? 0xffffff : 0x000000;
     }
@@ -416,7 +416,7 @@ void PPTExStyleSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::c
     mpParaSheet[ nInstance ]->SetStyleSheet( rXPropSet, rFontCollection, nLevel, mpCharSheet[ nInstance ]->maCharLevel[ nLevel ] );
 }
 
-sal_Bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue )
+bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue )
 {
     const PPTExParaLevel& rPara = mpParaSheet[ nInstance ]->maParaLevel[ nLevel ];
     const PPTExCharLevel& rChar = mpCharSheet[ nInstance ]->maCharLevel[ nLevel ];
@@ -449,7 +449,7 @@ sal_Bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLev
         case CharAttr_Embossed : nFlag = 512; break;
         case CharAttr_Font : return ( rChar.mnFont != nValue );
         case CharAttr_AsianOrComplexFont : return ( rChar.mnAsianOrComplexFont != nValue );
-        case CharAttr_Symbol : return sal_True;
+        case CharAttr_Symbol : return true;
         case CharAttr_FontHeight : return ( rChar.mnFontHeight != nValue );
         case CharAttr_FontColor : return ( rChar.mnFontColor != nValue );
         case CharAttr_Escapement : return ( rChar.mnEscapement != nValue );
@@ -463,7 +463,7 @@ sal_Bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLev
         else
             return ( ( nValue & nFlag ) != 0 );
     }
-    return sal_True;
+    return true;
 }
 
 sal_uInt32 PPTExStyleSheet::SizeOfTxCFStyleAtom() const

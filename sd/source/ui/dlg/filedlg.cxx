@@ -55,8 +55,8 @@ private:
 
     css::uno::Reference< css::media::XPlayer > mxPlayer;
     sal_uLong                       mnPlaySoundEvent;
-    sal_Bool                        mbUsableSelection;
-    sal_Bool                        mbLabelPlaying;
+    bool                        mbUsableSelection;
+    bool                        mbLabelPlaying;
 
     void                        CheckSelectionState();
 
@@ -67,7 +67,7 @@ private:
                                 DECL_LINK( IsMusicStoppedHdl, void * );
 
 public:
-                                SdFileDialog_Imp( const short nDialogType, sal_Bool bUsableSelection );
+                                SdFileDialog_Imp( const short nDialogType, bool bUsableSelection );
                                    virtual ~SdFileDialog_Imp();
 
     ErrCode                     Execute();
@@ -119,7 +119,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
             mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
                                        SD_RESSTR( STR_PLAY ) );
 
-            mbLabelPlaying = sal_False;
+            mbLabelPlaying = false;
         }
         catch(const css::lang::IllegalArgumentException&)
         {
@@ -152,7 +152,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
                     mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
                                                SD_RESSTR( STR_STOP ) );
 
-                    mbLabelPlaying = sal_True;
+                    mbLabelPlaying = true;
                 }
                 catch (const css::lang::IllegalArgumentException&)
                 {
@@ -188,7 +188,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl)
         {
             mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
                                        SD_RESSTR( STR_PLAY ) );
-            mbLabelPlaying = sal_False;
+            mbLabelPlaying = false;
         }
         catch (const css::lang::IllegalArgumentException&)
         {
@@ -226,11 +226,11 @@ void SdFileDialog_Imp::CheckSelectionState()
 
 
 SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
-                                    sal_Bool        bUsableSelection    ) :
+                                    bool        bUsableSelection    ) :
     FileDialogHelper( nDialogType, 0 ),
     mnPlaySoundEvent( 0 ),
     mbUsableSelection( bUsableSelection ),
-    mbLabelPlaying(sal_False)
+    mbLabelPlaying(false)
 {
     maUpdateTimer.SetTimeoutHdl(LINK(this, SdFileDialog_Imp, IsMusicStoppedHdl));
 
@@ -256,7 +256,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
 #endif
             }
         }
-        else if( mbUsableSelection != sal_True )
+        else if( mbUsableSelection != true )
         {
             try
             {
@@ -297,7 +297,7 @@ ErrCode SdFileDialog_Imp::Execute()
 SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
     mpImpl(
         new SdFileDialog_Imp(
-            css::ui::dialogs::TemplateDescription::FILEOPEN_PLAY, sal_False ) )
+            css::ui::dialogs::TemplateDescription::FILEOPEN_PLAY, false ) )
 {
     OUString aDescr;
     aDescr = SD_RESSTR(STR_ALL_FILES);

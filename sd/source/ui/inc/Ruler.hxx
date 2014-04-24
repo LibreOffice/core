@@ -46,7 +46,7 @@ public:
 
     void SetNullOffset(const Point& rOffset);
 
-    sal_Bool IsHorizontal() const { return bHorz; }
+    bool IsHorizontal() const { return bHorz; }
 
     using ::Ruler::SetNullOffset;
 protected:
@@ -54,7 +54,7 @@ protected:
     ::sd::Window* pSdWin;
     DrawViewShell* pDrViewShell;
     RulerCtrlItem* pCtrlItem;
-    sal_Bool bHorz;
+    bool bHorz;
 
     virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void    MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;

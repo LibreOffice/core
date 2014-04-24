@@ -43,7 +43,7 @@
 // - SdPPTFilter -
 
 
-SdHTMLFilter::SdHTMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
+SdHTMLFilter::SdHTMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress )
 {
 }
@@ -56,7 +56,7 @@ SdHTMLFilter::~SdHTMLFilter()
 
 
 
-sal_Bool SdHTMLFilter::Export()
+bool SdHTMLFilter::Export()
 {
     mrMedium.Close();
     mrMedium.Commit();

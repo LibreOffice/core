@@ -95,7 +95,7 @@ SFX_IMPL_OBJECTFACTORY(
 
 void DrawDocShell::Construct( bool bClipboard )
 {
-    mbInDestruction = sal_False;
+    mbInDestruction = false;
     SetSlotFilter();     // setzt Filter zurueck
 
     mbOwnDocument = mpDoc == 0;
@@ -116,7 +116,7 @@ void DrawDocShell::Construct( bool bClipboard )
 }
 
 DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
-                               sal_Bool bDataObject,
+                               bool bDataObject,
                                DocumentType eDocumentType) :
     SfxObjectShell( eMode == SFX_CREATE_MODE_INTERNAL ?  SFX_CREATE_MODE_EMBEDDED : eMode),
     mpDoc(NULL),
@@ -127,13 +127,13 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
     meDocType(eDocumentType),
     mpFilterSIDs(0),
     mbSdDataObj(bDataObject),
-    mbOwnPrinter(sal_False),
-    mbNewDocument( sal_True )
+    mbOwnPrinter(false),
+    mbNewDocument( true )
 {
     Construct( eMode == SFX_CREATE_MODE_INTERNAL );
 }
 
-DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, sal_Bool bDataObject, DocumentType eDocumentType ) :
+DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, bool bDataObject, DocumentType eDocumentType ) :
     SfxObjectShell( nModelCreationFlags ),
     mpDoc(NULL),
     mpUndoManager(NULL),
@@ -143,14 +143,14 @@ DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, sal_Bool bData
     meDocType(eDocumentType),
     mpFilterSIDs(0),
     mbSdDataObj(bDataObject),
-    mbOwnPrinter(sal_False),
-    mbNewDocument( sal_True )
+    mbOwnPrinter(false),
+    mbNewDocument( true )
 {
     Construct( false );
 }
 
 DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
-                               sal_Bool bDataObject,
+                               bool bDataObject,
                                DocumentType eDocumentType) :
     SfxObjectShell(eMode == SFX_CREATE_MODE_INTERNAL ?  SFX_CREATE_MODE_EMBEDDED : eMode),
     mpDoc(pDoc),
@@ -161,8 +161,8 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
     meDocType(eDocumentType),
     mpFilterSIDs(0),
     mbSdDataObj(bDataObject),
-    mbOwnPrinter(sal_False),
-    mbNewDocument( sal_True )
+    mbOwnPrinter(false),
+    mbNewDocument( true )
 {
     Construct( eMode == SFX_CREATE_MODE_INTERNAL );
 }
@@ -175,7 +175,7 @@ DrawDocShell::~DrawDocShell()
     // may be useful in other places as well.
     Broadcast(SfxSimpleHint(SFX_HINT_DYING));
 
-    mbInDestruction = sal_True;
+    mbInDestruction = true;
 
     SetDocShellFunction(0);
 
@@ -225,7 +225,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 
             case SID_CLOSEDOC:
             {
-                sal_Bool bDisabled = sal_False;
+                bool bDisabled = false;
                 if (bDisabled)
                 {
                     rSet.DisableItem(SID_CLOSEDOC);

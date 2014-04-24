@@ -83,9 +83,9 @@ void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
         ToolBarManager::msDrawingObjectToolBar);
 }
 
-sal_Bool FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
@@ -93,24 +93,24 @@ sal_Bool FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
         mpWindow->CaptureMouse();
         sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
         mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
-        bReturn = sal_True;
+        bReturn = true;
     }
     return bReturn;
 }
 
-sal_Bool FuConstructUnoControl::MouseMove(const MouseEvent& rMEvt)
+bool FuConstructUnoControl::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
 
-sal_Bool FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
     {
         mpView->EndCreateObj(SDRCREATE_FORCEEND);
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     bReturn = (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
@@ -125,10 +125,9 @@ sal_Bool FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
  * Process keyboard input
  * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
  */
-sal_Bool FuConstructUnoControl::KeyInput(const KeyEvent& rKEvt)
+bool FuConstructUnoControl::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
-    return(bReturn);
+    return FuConstruct::KeyInput(rKEvt);
 }
 
 void FuConstructUnoControl::Activate()

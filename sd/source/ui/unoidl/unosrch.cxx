@@ -101,7 +101,7 @@ SdUnoSearchReplaceShape::~SdUnoSearchReplaceShape() throw()
 uno::Reference< util::XReplaceDescriptor > SAL_CALL SdUnoSearchReplaceShape::createReplaceDescriptor()
     throw( uno::RuntimeException, std::exception )
 {
-    return new SdUnoSearchReplaceDescriptor(sal_True);
+    return new SdUnoSearchReplaceDescriptor(true);
 }
 
 sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< util::XSearchDescriptor >& xDesc )
@@ -199,7 +199,7 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
 uno::Reference< ::com::sun::star::util::XSearchDescriptor > SAL_CALL SdUnoSearchReplaceShape::createSearchDescriptor(  )
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return new SdUnoSearchReplaceDescriptor(sal_False);
+    return new SdUnoSearchReplaceDescriptor(false);
 }
 
 uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape::findAll( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XSearchDescriptor >& xDesc )
@@ -627,7 +627,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
     return uno::Reference< text::XTextRange > ( xFound, uno::UNO_QUERY );
 }
 
-sal_Bool SdUnoSearchReplaceShape::Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) throw()
+bool SdUnoSearchReplaceShape::Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) throw()
 {
     OUString aSearchStr( pDescr->getSearchString() );
     OUString aText( rText );
@@ -654,10 +654,10 @@ sal_Bool SdUnoSearchReplaceShape::Search( const OUString& rText, sal_Int32& nSta
             }
         }
 
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 ESelection SdUnoSearchReplaceShape::GetSelection( uno::Reference< text::XTextRange >  xTextRange ) throw()
@@ -706,13 +706,13 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetShape( uno::Refer
 
 UNO3_GETIMPLEMENTATION_IMPL( SdUnoSearchReplaceDescriptor );
 
-SdUnoSearchReplaceDescriptor::SdUnoSearchReplaceDescriptor( sal_Bool bReplace ) throw()
+SdUnoSearchReplaceDescriptor::SdUnoSearchReplaceDescriptor( bool bReplace ) throw()
 {
     mpPropSet = new SvxItemPropertySet(ImplGetSearchPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool());
 
-    mbBackwards = sal_False;
-    mbCaseSensitive = sal_False;
-    mbWords = sal_False;
+    mbBackwards = false;
+    mbCaseSensitive = false;
+    mbWords = false;
 
     mbReplace = bReplace;
 }
@@ -763,7 +763,7 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const OUString& aP
 
     const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
 
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
 
     switch( pEntry ? pEntry->nWID : -1 )
     {
@@ -796,13 +796,13 @@ uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const OUString
     switch( pEntry ? pEntry->nWID : -1 )
     {
     case WID_SEARCH_BACKWARDS:
-        aAny <<= (sal_Bool)mbBackwards;
+        aAny <<= mbBackwards;
         break;
     case WID_SEARCH_CASE:
-        aAny <<= (sal_Bool)mbCaseSensitive;
+        aAny <<= mbCaseSensitive;
         break;
     case WID_SEARCH_WORDS:
-        aAny <<= (sal_Bool)mbWords;
+        aAny <<= mbWords;
         break;
     default:
         throw beans::UnknownPropertyException();

@@ -111,11 +111,11 @@ protected:
     AutoLayout  meAutoLayout;             ///< AutoLayout
     sd::ShapeList maPresentationShapeList;///< presentation objects
     sd::ScopeLock maLockAutoLayoutArrangement;
-    sal_Bool    mbSelected;               ///< selection identifier
+    bool    mbSelected;               ///< selection identifier
     PresChange  mePresChange;             ///< manual / automatic / semi automatic
     double      mfTime;                   ///< Display time in seconds
-    sal_Bool    mbSoundOn;                ///< with / without sound.
-    sal_Bool    mbExcluded;               ///< will (not) be displayed during show.
+    bool    mbSoundOn;                ///< with / without sound.
+    bool    mbExcluded;               ///< will (not) be displayed during show.
     OUString    maLayoutName;             ///< Name of the layout
     OUString    maSoundFile;              ///< Path to sound file (MSDOS notation).
     bool        mbLoopSound;
@@ -123,8 +123,8 @@ protected:
     OUString    maCreatedPageName;        ///< generated page name by GetPageName.
     OUString    maFileName;               ///< file name.
     OUString    maBookmarkName;           ///< Bookmark name.
-    sal_Bool    mbScaleObjects;           ///< Objects should be scaled
-    sal_Bool    mbBackgroundFullSize;     ///< Background object to represent the whole page.
+    bool    mbScaleObjects;           ///< Objects should be scaled
+    bool    mbBackgroundFullSize;     ///< Background object to represent the whole page.
     rtl_TextEncoding meCharSet;           ///< Text encoding
     sal_uInt16  mnPaperBin;               ///< PaperBin
     Orientation meOrientation;            ///< Print orientation.
@@ -149,14 +149,14 @@ protected:
     // new transition settings
     sal_Int16 mnTransitionType;
     sal_Int16 mnTransitionSubtype;
-    sal_Bool mbTransitionDirection;
+    bool mbTransitionDirection;
     sal_Int32 mnTransitionFadeColor;
     double mfTransitionDuration;
 
 public:
     TYPEINFO_OVERRIDE();
 
-    SdPage(SdDrawDocument& rNewDoc, sal_Bool bMasterPage=sal_False);
+    SdPage(SdDrawDocument& rNewDoc, bool bMasterPage=false);
     SdPage(const SdPage& rSrcPage);
     virtual ~SdPage();
     virtual SdrPage* Clone() const SAL_OVERRIDE;
@@ -174,7 +174,7 @@ public:
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
     void EnsureMasterPageDefaultBackground();
-    SdrObject*      CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const Rectangle& rRect, sal_Bool bInsert=sal_False);
+    SdrObject*      CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rectangle& rRect, bool bInsert=false);
     SdrObject*      CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert);
     SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1, bool bFuzzySearch = false );
     PresObjKind     GetPresObjKind(SdrObject* pObj) const;
@@ -192,9 +192,9 @@ public:
     /** inserts the given SdrObject into the presentation object list */
     void            InsertPresObj(SdrObject* pObj, PresObjKind eKind );
 
-    void            SetAutoLayout(AutoLayout eLayout, sal_Bool bInit=sal_False, sal_Bool bCreate=sal_False);
+    void            SetAutoLayout(AutoLayout eLayout, bool bInit=false, bool bCreate=false);
     AutoLayout      GetAutoLayout() const { return meAutoLayout; }
-    void            CreateTitleAndLayout(sal_Bool bInit=sal_False, sal_Bool bCreate=sal_False);
+    void            CreateTitleAndLayout(bool bInit=false, bool bCreate=false);
     SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect, bool bInit );
 
     virtual void       NbcInsertObject(SdrObject* pObj, sal_uLong nPos=CONTAINER_APPEND,
@@ -212,8 +212,8 @@ public:
     void        SetPageKind(PageKind ePgType)        { mePageKind = ePgType; }
     PageKind    GetPageKind() const                  { return mePageKind; }
 
-    void        SetSelected(sal_Bool bSel)               { mbSelected = bSel; }
-    sal_Bool        IsSelected() const                   { return mbSelected; }
+    void        SetSelected(bool bSel)               { mbSelected = bSel; }
+    bool        IsSelected() const                   { return mbSelected; }
 
     void        SetFadeEffect(::com::sun::star::presentation::FadeEffect eNewEffect);
     ::com::sun::star::presentation::FadeEffect  GetFadeEffect() const;
@@ -224,14 +224,14 @@ public:
     void        SetTime(double fNewTime)             { mfTime = fNewTime; }
     double      GetTime() const                      { return mfTime; }
 
-    void        SetSound(sal_Bool bNewSoundOn)           { mbSoundOn = bNewSoundOn; }
-    sal_Bool        IsSoundOn() const                    { return mbSoundOn; }
+    void        SetSound(bool bNewSoundOn)           { mbSoundOn = bNewSoundOn; }
+    bool        IsSoundOn() const                    { return mbSoundOn; }
 
-    void        SetExcluded(sal_Bool bNewExcluded)      { mbExcluded = bNewExcluded; }
-    sal_Bool        IsExcluded() const                  { return mbExcluded; }
+    void        SetExcluded(bool bNewExcluded)      { mbExcluded = bNewExcluded; }
+    bool        IsExcluded() const                  { return mbExcluded; }
 
-    void        SetScaleObjects(sal_Bool bScale)        { mbScaleObjects = bScale; }
-    sal_Bool        IsScaleObjects() const              { return mbScaleObjects; }
+    void        SetScaleObjects(bool bScale)        { mbScaleObjects = bScale; }
+    bool        IsScaleObjects() const              { return mbScaleObjects; }
 
     void        SetSoundFile(const OUString& rStr)    { maSoundFile = rStr; }
     OUString    GetSoundFile() const                { return maSoundFile; }
@@ -248,8 +248,8 @@ public:
     sal_Int16   getTransitionSubtype() const;
     void        setTransitionSubtype( sal_Int16 nTransitionSubtype );
 
-    sal_Bool    getTransitionDirection() const;
-    void        setTransitionDirection( sal_Bool bTransitionbDirection );
+    bool    getTransitionDirection() const;
+    void        setTransitionDirection( bool bTransitionbDirection );
 
     sal_Int32   getTransitionFadeColor() const;
     void        setTransitionFadeColor( sal_Int32 nTransitionFadeColor );
@@ -273,19 +273,19 @@ public:
     void            DisconnectLink();
 
     void    ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect,
-                         sal_Bool bScaleAllObj);
+                         bool bScaleAllObj);
 
     const OUString&   GetName() const;
     OUString          GetRealName() const { return FmFormPage::GetName(); };
 
     void    SetPresentationLayout(const OUString& rLayoutName,
-                                  sal_Bool bReplaceStyleSheets = sal_True,
-                                  sal_Bool bSetMasterPage = sal_True,
-                                  sal_Bool bReverseOrder = sal_False);
+                                  bool bReplaceStyleSheets = true,
+                                  bool bSetMasterPage = true,
+                                  bool bReverseOrder = false);
     void    EndListenOutlineText();
 
-    void    SetBackgroundFullSize( sal_Bool bIn );
-    sal_Bool    IsBackgroundFullSize() const { return mbBackgroundFullSize; }
+    void    SetBackgroundFullSize( bool bIn );
+    bool    IsBackgroundFullSize() const { return mbBackgroundFullSize; }
 
     rtl_TextEncoding GetCharSet() { return(meCharSet); }
 
@@ -296,7 +296,7 @@ public:
 
     virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const SAL_OVERRIDE;
 
-    sal_Bool setAlienAttributes( const com::sun::star::uno::Any& rAttributes );
+    bool setAlienAttributes( const com::sun::star::uno::Any& rAttributes );
     void getAlienAttributes( com::sun::star::uno::Any& rAttributes );
 
     /** @return the main animation node */

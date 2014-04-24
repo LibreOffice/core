@@ -97,8 +97,8 @@ private:
     SdrLayer*           pLayer;
     const SvxItemPropertySet*   pPropSet;
 
-    sal_Bool get( LayerAttribute what ) throw();
-    void set( LayerAttribute what, sal_Bool flag ) throw();
+    bool get( LayerAttribute what ) throw();
+    void set( LayerAttribute what, bool flag ) throw();
 
 };
 
@@ -173,7 +173,7 @@ private:
 
     ::sd::View* GetView() const throw();
     ::sd::DrawDocShell* GetDocShell() const throw() { return mpModel->mpDocShell; }
-    void UpdateLayerView( sal_Bool modify = sal_True ) const throw();
+    void UpdateLayerView( bool modify = true ) const throw();
 };
 
 #endif

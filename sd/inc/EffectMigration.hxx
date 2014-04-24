@@ -61,15 +61,15 @@ public:
     static ::com::sun::star::presentation::AnimationSpeed GetAnimationSpeed( SvxShape* pShape );
     static void SetDimColor( SvxShape* pShape, sal_Int32 nColor );
     static sal_Int32 GetDimColor( SvxShape* pShape );
-    static void SetDimHide( SvxShape* pShape, sal_Bool bDimHide );
-    static sal_Bool GetDimHide( SvxShape* pShape );
-    static void SetDimPrevious( SvxShape* pShape, sal_Bool bDimPrevious );
-    static sal_Bool GetDimPrevious( SvxShape* pShape );
+    static void SetDimHide( SvxShape* pShape, bool bDimHide );
+    static bool GetDimHide( SvxShape* pShape );
+    static void SetDimPrevious( SvxShape* pShape, bool bDimPrevious );
+    static bool GetDimPrevious( SvxShape* pShape );
     static void SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos );
     static sal_Int32 GetPresentationOrder( SvxShape* pShape );
     static void UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo* pInfo );
     static OUString GetSoundFile( SvxShape* pShape );
-    static sal_Bool GetSoundOn( SvxShape* pShape );
+    static bool GetSoundOn( SvxShape* pShape );
 
     static void SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj );
     static void CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage);

@@ -29,12 +29,12 @@ public:
     SdPPTFilter (
         SfxMedium& rMedium,
         ::sd::DrawDocShell& rDocShell,
-        sal_Bool bShowProgress);
+        bool bShowProgress);
     virtual ~SdPPTFilter (void);
 
     /// these methods are necessary for the export to PowerPoint
-    sal_Bool        Import();
-    sal_Bool        Export() SAL_OVERRIDE;
+    bool        Import();
+    bool        Export() SAL_OVERRIDE;
 
     /// restores the original basic storage
     void                    PreSaveBasic();

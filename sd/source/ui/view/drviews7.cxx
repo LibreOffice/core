@@ -220,7 +220,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     ViewShell::GetMenuState(rSet);
-    sal_Bool bDisableVerticalText = !SvtLanguageOptions().IsVerticalTextEnabled();
+    bool bDisableVerticalText = !SvtLanguageOptions().IsVerticalTextEnabled();
 
     if ( bDisableVerticalText )
     {
@@ -242,7 +242,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     SetChildWindowState( rSet );
 
     // map images of toolboxes (only zoom)
-    UpdateToolboxImages( rSet, sal_False );
+    UpdateToolboxImages( rSet, false );
 
     if(HasCurrentFunction())
     {
@@ -393,7 +393,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REHEARSE_TIMINGS ) )
     {
-        sal_Bool bDisable = sal_True;
+        bool bDisable = true;
         sal_uInt16 nCount = GetDoc()->GetSdPageCount( PK_STANDARD );
 
         for( sal_uInt16 i = 0; i < nCount && bDisable; i++ )
@@ -401,7 +401,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
 
             if( !pPage->IsExcluded() )
-                bDisable = sal_False;
+                bDisable = false;
         }
 
         if( bDisable || GetDocSh()->IsPreview())
@@ -622,7 +622,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                 mbPastePossible = ( aDataHelper.GetFormatCount() != 0 );
             }
             else
-                mbPastePossible = sal_False;
+                mbPastePossible = false;
         }
 
         if( !mbPastePossible )
@@ -754,7 +754,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.GetItemState(SID_TITLE_MASTERPAGE) == SFX_ITEM_AVAILABLE)
         {
             // Is there a page with the AutoLayout "Title"?
-            sal_Bool bDisable = sal_True;
+            bool bDisable = true;
             sal_uInt16 i = 0;
             sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
 
@@ -764,7 +764,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
                 if (pPage->GetAutoLayout() == AUTOLAYOUT_TITLE)
                 {
-                    bDisable = sal_False;
+                    bDisable = false;
                 }
 
                 i++;
@@ -805,8 +805,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
             if (rSet.GetItemState(SID_TITLE_MASTERPAGE) == SFX_ITEM_AVAILABLE)
             {
-                sal_Bool bCheck = sal_False;
-                sal_Bool bDisable = sal_True;
+                bool bCheck = false;
+                bool bDisable = true;
                 if( pPageView )
                 {
                     SdPage* pMPage = dynamic_cast< SdPage* >( pPageView->GetPage() );
@@ -824,7 +824,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         if (pPage->GetAutoLayout() == AUTOLAYOUT_TITLE)
                         {
                             // a page does have a AutoLayout "Title"
-                            bDisable = sal_False;
+                            bDisable = false;
 
                             SdPage& rRefMPage = (SdPage&)(pPage->TRG_GetMasterPage());
 
@@ -832,7 +832,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                             {
                                 // a page with the AutoLayout "Title" does reference
                                 // the current master page
-                                bCheck = sal_True;
+                                bCheck = true;
                             }
                         }
 
@@ -926,8 +926,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         // special treatment of for SID_OUTLINE_BULLET if objects with different
         // kinds of NumBullets are marked
-        sal_Bool bHasOutliner = sal_False;
-        sal_Bool bHasOther    = sal_False;
+        bool bHasOutliner = false;
+        bool bHasOther    = false;
         for(sal_uLong nNum = 0; nNum < nMarkCount; nNum++)
         {
             SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
@@ -935,13 +935,13 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             {
                 if( pObj->GetObjIdentifier() == OBJ_OUTLINETEXT )
                 {
-                    bHasOutliner = sal_True;
+                    bHasOutliner = true;
                     if(bHasOther)
                         break;
                 }
                 else
                 {
-                    bHasOther = sal_True;
+                    bHasOther = true;
                     if(bHasOutliner)
                         break;
                 }
@@ -1393,12 +1393,12 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         // get marklist
         SdrMarkList aMarkList = mpDrawView->GetMarkedObjectList();
 
-        sal_Bool bFoundBitmap         = sal_False;
-        sal_Bool bFoundMetafile       = sal_False;
-        sal_Bool bFoundObjNoLine      = sal_False;
-        sal_Bool bFoundObjNoArea      = sal_False;
-        sal_Bool bFoundNoGraphicObj = sal_False;
-        sal_Bool bFoundAny            = sal_False;
+        bool bFoundBitmap         = false;
+        bool bFoundMetafile       = false;
+        bool bFoundObjNoLine      = false;
+        bool bFoundObjNoArea      = false;
+        bool bFoundNoGraphicObj = false;
+        bool bFoundAny            = false;
         bool bFoundTable = false;
 
 //      const int nMarkCount = (int) aMarkList.GetMarkCount();
@@ -1419,8 +1419,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                     case OBJ_FREELINE :
                     case OBJ_EDGE:
                     case OBJ_CARC :
-                        bFoundObjNoArea      = sal_True;
-                        bFoundNoGraphicObj = sal_True;
+                        bFoundObjNoArea      = true;
+                        bFoundNoGraphicObj = true;
                         break;
                     case OBJ_OLE2 :
                         // #i118485# #i118525# Allow Line, Area and Graphic (Metafile, Bitmap)
@@ -1435,14 +1435,14 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         switch(pSdrGrafObj->GetGraphicType())
                         {
                             case GRAPHIC_BITMAP :
-                                bFoundBitmap = sal_True;
+                                bFoundBitmap = true;
                                 if(pSdrGrafObj->isEmbeddedSvg())
                                 {
                                     bFoundMetafile = true;
                                 }
                                 break;
                             case GRAPHIC_GDIMETAFILE :
-                                bFoundMetafile = sal_True;
+                                bFoundMetafile = true;
                                 break;
                             default:
                                 break;
@@ -1453,13 +1453,13 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         bFoundTable = true;
                         break;
                     default :
-                        bFoundAny = sal_True;
+                        bFoundAny = true;
                 }
             }
             else if(nInv == E3dInventor)
             {
                 // 3D objects
-                bFoundAny = sal_True;
+                bFoundAny = true;
             }
         }
 
@@ -1498,7 +1498,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     // Menuoption: Edit->Hyperlink
     // Disable, if there is no hyperlink
 
-    sal_Bool bDisableEditHyperlink = sal_True;
+    bool bDisableEditHyperlink = true;
     if( mpDrawView->AreObjectsMarked() && ( mpDrawView->GetMarkedObjectList().GetMarkCount() == 1 ) )
     {
         if( mpDrawView->IsTextEdit() )
@@ -1514,7 +1514,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                     {
                         const SvxFieldData* pField = pFieldItem->GetField();
                         if ( pField->ISA(SvxURLField) )
-                            bDisableEditHyperlink = sal_False;
+                            bDisableEditHyperlink = false;
                     }
                 }
             }
@@ -1534,7 +1534,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         uno::Reference< beans::XPropertySetInfo > xPropInfo( xPropSet->getPropertySetInfo() );
                         if( xPropInfo.is() && xPropInfo->hasPropertyByName( "TargetURL") )
                         {
-                            bDisableEditHyperlink = sal_False;
+                            bDisableEditHyperlink = false;
                         }
                     }
                 }

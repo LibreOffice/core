@@ -155,8 +155,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
     sal_uInt16              nWhich = aIter.FirstWhich();
     SfxItemSet          aAttrSet( mpView->GetDoc().GetPool() );
     SvtLanguageOptions  aLangOpt;
-    sal_Bool            bDisableParagraphTextDirection = !aLangOpt.IsCTLFontEnabled();
-    sal_Bool            bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
+    bool            bDisableParagraphTextDirection = !aLangOpt.IsCTLFontEnabled();
+    bool            bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
 
     mpView->GetAttributes( aAttrSet );
 
@@ -249,10 +249,10 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_OUTLINE_UP:
             case SID_OUTLINE_DOWN:
             {
-                sal_Bool bDisableLeft     = sal_True;
-                sal_Bool bDisableRight    = sal_True;
-                sal_Bool bDisableUp       = sal_True;
-                sal_Bool bDisableDown     = sal_True;
+                bool bDisableLeft     = true;
+                bool bDisableRight    = true;
+                bool bDisableUp       = true;
+                bool bDisableDown     = true;
                 OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
                 if (mpView->ISA(OutlineView))
@@ -261,7 +261,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         mpViewShell->GetActiveWindow());
                 }
 
-                sal_Bool bOutlineViewSh = mpViewShell->ISA(OutlineViewShell);
+                bool bOutlineViewSh = mpViewShell->ISA(OutlineViewShell);
 
                 if (pOLV &&
                     ( pOLV->GetOutliner()->GetMode() == OUTLINERMODE_OUTLINEOBJECT || bOutlineViewSh ) )
@@ -274,7 +274,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
 
                     // find out if we are a OutlineView
-                    sal_Bool bIsOutlineView(OUTLINERMODE_OUTLINEVIEW == pOLV->GetOutliner()->GetMode());
+                    bool bIsOutlineView(OUTLINERMODE_OUTLINEVIEW == pOLV->GetOutliner()->GetMode());
 
                     // This is ONLY for OutlineViews
                     if(bIsOutlineView)
@@ -284,7 +284,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         if(pOutl->GetAbsPos(pPara) > 1 || ( pOutl->HasParaFlag(pPara,PARAFLAG_ISPAGE) && pOutl->GetAbsPos(pPara) > 0 ) )
                         {
                             // not at top
-                            bDisableUp = sal_False;
+                            bDisableUp = false;
                         }
                     }
                     else
@@ -293,7 +293,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         if(pOutl->GetAbsPos(pPara) > 0)
                         {
                             // not at top
-                            bDisableUp = sal_False;
+                            bDisableUp = false;
                         }
                     }
 
@@ -306,14 +306,14 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE )) )
                         {
                             // not minimum depth
-                            bDisableLeft = sal_False;
+                            bDisableLeft = false;
                         }
 
                         if( (nDepth < pOLV->GetOutliner()->GetMaxDepth() && ( !bOutlineViewSh || pOutl->GetAbsPos(pPara) != 0 )) ||
                             (bOutlineViewSh && (nDepth <= 0) && pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) && pOutl->GetAbsPos(pPara) != 0) )
                         {
                             // not maximum depth and not at top
-                            bDisableRight = sal_False;
+                            bDisableRight = false;
                         }
                     }
 
@@ -321,7 +321,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                          ( pOutl->GetParagraphCount() > 1 || !bOutlineViewSh) )
                     {
                         // not last paragraph
-                        bDisableDown = sal_False;
+                        bDisableDown = false;
                     }
 
                     // disable when first para and 2nd is not a title
@@ -334,7 +334,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         && !pOutl->HasParaFlag( pOutl->GetParagraph(1), PARAFLAG_ISPAGE ) )
                     {
                         // Needs to be disabled
-                        bDisableDown = sal_True;
+                        bDisableDown = true;
                     }
                 }
 
@@ -359,13 +359,13 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 }
                 else
                 {
-                    sal_Bool bLeftToRight = sal_True;
+                    bool bLeftToRight = true;
 
                     SdrOutliner* pOutl = mpView->GetTextEditOutliner();
                     if( pOutl )
                     {
                         if( pOutl->IsVertical() )
-                            bLeftToRight = sal_False;
+                            bLeftToRight = false;
                     }
                     else
                         bLeftToRight = ( (const SvxWritingModeItem&) aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == com::sun::star::text::WritingMode_LR_TB;
@@ -374,7 +374,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, !bLeftToRight ) );
 
                     if( !bLeftToRight )
-                        bDisableParagraphTextDirection = sal_True;
+                        bDisableParagraphTextDirection = true;
                 }
             }
             break;
@@ -532,12 +532,12 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 {
                     SdDrawDocument& rDoc = mpView->GetDoc();
                     ::com::sun::star::text::WritingMode eMode = rDoc.GetDefaultWritingMode();
-                    sal_Bool bIsLeftToRight(sal_False);
+                    bool bIsLeftToRight(false);
 
                     if(::com::sun::star::text::WritingMode_LR_TB == eMode
                         || ::com::sun::star::text::WritingMode_TB_RL == eMode)
                     {
-                        bIsLeftToRight = sal_True;
+                        bIsLeftToRight = true;
                     }
 
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, bIsLeftToRight ) );

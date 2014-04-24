@@ -72,7 +72,7 @@ public:
     */
     virtual void ArrangeGUIElements (void) SAL_OVERRIDE;
 
-    virtual bool PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
+    virtual bool PrepareClose( bool bUI = true ) SAL_OVERRIDE;
 
     virtual long VirtHScrollHdl(ScrollBar* pHScroll) SAL_OVERRIDE;
     virtual long VirtVScrollHdl(ScrollBar* pVHScroll) SAL_OVERRIDE;
@@ -105,7 +105,7 @@ public:
     virtual void SetZoom(long nZoom) SAL_OVERRIDE;
     virtual void SetZoomRect(const Rectangle& rZoomRect) SAL_OVERRIDE;
     virtual OUString GetSelectionText( bool bCompleteWords = false );
-    virtual sal_Bool    HasSelection( sal_Bool bText = sal_True ) const;
+    virtual bool     HasSelection( bool bText = true ) const;
 
     void Execute(SfxRequest& rReq);
 
@@ -113,13 +113,13 @@ public:
     virtual void WriteFrameViewData() SAL_OVERRIDE;
 
     virtual void Command( const CommandEvent& rCEvt, ::sd::Window* pWin ) SAL_OVERRIDE;
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin) SAL_OVERRIDE;
     virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin) SAL_OVERRIDE;
 
     sal_uLong   Read(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat);
 
-    virtual void WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False ) SAL_OVERRIDE;
-    virtual void ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False ) SAL_OVERRIDE;
+    virtual void WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) SAL_OVERRIDE;
+    virtual void ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) SAL_OVERRIDE;
 
     /** this method is called when the visible area of the view from this viewshell is changed */
     virtual void VisAreaChanged(const Rectangle& rRect) SAL_OVERRIDE;
@@ -139,7 +139,7 @@ public:
 
     /** Update the preview to show the specified page.
     */
-    virtual void UpdatePreview (SdPage* pPage, sal_Bool bInit = sal_False) SAL_OVERRIDE;
+    virtual void UpdatePreview (SdPage* pPage, bool bInit = false) SAL_OVERRIDE;
 
     virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void) SAL_OVERRIDE;
 
@@ -159,7 +159,7 @@ private:
     OutlineView* pOlView;
     SdPage*         pLastPage; // Zur performanten Aufbereitung der Preview
     TransferableClipboardListener* pClipEvtLstnr;
-    sal_Bool            bPastePossible;
+    bool            bPastePossible;
     bool mbInitialized;
 
     void Construct (DrawDocShell* pDocSh);

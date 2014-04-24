@@ -412,7 +412,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
                 SlideSorterController::ModelChangeLock aModelLock (mrSlideSorter.GetController());
                 PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
                 SelectionObserver::Context aContext (mrSlideSorter);
-                pViewShell->ImpSidUndo (sal_False, rRequest);
+                pViewShell->ImpSidUndo (false, rRequest);
             }
             break;
         }
@@ -427,7 +427,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
                 SlideSorterController::ModelChangeLock aModelLock (mrSlideSorter.GetController());
                 PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
                 SelectionObserver::Context aContext (mrSlideSorter);
-                pViewShell->ImpSidRedo (sal_False, rRequest);
+                pViewShell->ImpSidRedo (false, rRequest);
             }
             break;
         }
@@ -625,7 +625,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REHEARSE_TIMINGS ) )
     {
-        sal_Bool bDisable = sal_True;
+        bool bDisable = true;
         model::PageEnumeration aAllPages (
             model::PageEnumerationProvider::CreateAllPagesEnumeration(mrSlideSorter.GetModel()));
         while (aAllPages.HasMoreElements())
@@ -633,7 +633,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
             SdPage* pPage = aAllPages.GetNextElement()->GetPage();
 
             if( !pPage->IsExcluded() )
-                bDisable = sal_False;
+                bDisable = false;
         }
         if( bDisable || pDocShell->IsPreview())
         {
@@ -970,7 +970,7 @@ IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog*, pDialog)
 
 bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUString & rName  )
 {
-    sal_Bool   bOutDummy;
+    bool   bOutDummy;
     SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
     if( pDocument->GetPageByName( rName, bOutDummy ) != SDRPAGE_NOTFOUND )
         return false;
@@ -1102,7 +1102,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
                 // Create shapes for the default layout.
                 pNewPage = pDocument->GetMasterSdPage(
                     (sal_uInt16)(nInsertionIndex+1), PK_STANDARD);
-                pNewPage->CreateTitleAndLayout (sal_True,sal_True);
+                pNewPage->CreateTitleAndLayout (true,true);
             }
         }
     }
@@ -1279,7 +1279,7 @@ namespace {
 SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet)
 {
     SlideExclusionState eState (UNDEFINED);
-    sal_Bool bState;
+    bool bState;
 
     // Get toggle state of the selected pages.
     while (rPageSet.HasMoreElements() && eState!=MIXED)

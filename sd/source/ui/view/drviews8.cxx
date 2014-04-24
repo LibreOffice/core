@@ -100,7 +100,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
                     aPnt += Point( pPage->GetLftBorder(), pPage->GetUppBorder() );
                     Rectangle   aRect( aPnt, aBmpSize );
                     SdrGrafObj* pGrafObj = NULL;
-                    sal_Bool        bInsertNewObject = sal_True;
+                    bool        bInsertNewObject = true;
 
                     if( GetView()->AreObjectsMarked() )
                     {
@@ -117,7 +117,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
 
                                 if( pGrafObj->IsEmptyPresObj() )
                                 {
-                                    bInsertNewObject = sal_False;
+                                    bInsertNewObject = false;
                                     pGrafObj->SetEmptyPresObj(false);
                                     pGrafObj->SetOutlinerParaObject(NULL);
                                     pGrafObj->SetGraphic( Graphic( aScanBmp ) );

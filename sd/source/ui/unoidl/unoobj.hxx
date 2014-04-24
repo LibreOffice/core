@@ -51,18 +51,18 @@ private:
     ::com::sun::star::uno::Any GetStyleSheet() const throw( ::com::sun::star::beans::UnknownPropertyException  );
 
     // Intern
-    SdAnimationInfo* GetAnimationInfo( sal_Bool bCreate = sal_False ) const
+    SdAnimationInfo* GetAnimationInfo( bool bCreate = false ) const
         throw (std::exception);
-    sal_Bool IsPresObj() const
+    bool IsPresObj() const
         throw (std::exception);
-    void SetPresObj( sal_Bool bPresObj ) throw();
+    void SetPresObj( bool bPresObj ) throw();
 
     bool IsEmptyPresObj() const throw();
     void SetEmptyPresObj(bool bEmpty)
         throw (std::exception);
 
-    sal_Bool IsMasterDepend() const throw();
-    void SetMasterDepend( sal_Bool bDepend ) throw();
+    bool IsMasterDepend() const throw();
+    void SetMasterDepend( bool bDepend ) throw();
 
     SdrObject* GetSdrObject() const throw();
     OUString GetPlaceholderText() const;

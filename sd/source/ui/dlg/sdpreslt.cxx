@@ -68,7 +68,7 @@ void SdPresLayoutDlg::Reset()
     // replace master page
     if( mrOutAttrs.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE, false, &pPoolItem ) == SFX_ITEM_SET )
     {
-        sal_Bool bMasterPage = ( (const SfxBoolItem*) pPoolItem)->GetValue();
+        bool bMasterPage = ( (const SfxBoolItem*) pPoolItem)->GetValue();
         m_pCbxMasterPage->Enable( !bMasterPage );
         m_pCbxMasterPage->Check( bMasterPage );
     }
@@ -101,7 +101,7 @@ void SdPresLayoutDlg::Reset()
 void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
 {
     short nId = m_pVS->GetSelectItemId();
-    sal_Bool bLoad = nId > mnLayoutCount;
+    bool bLoad = nId > mnLayoutCount;
     rOutAttrs.Put( SfxBoolItem( ATTR_PRESLAYOUT_LOAD, bLoad ) );
 
     OUString aLayoutName;
@@ -184,7 +184,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
     // Inserted update to force repaint
     Update();
 
-    sal_Bool   bCancel = sal_False;
+    bool   bCancel = false;
 
     switch (nResult)
     {
@@ -203,14 +203,14 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
         break;
 
         default:
-            bCancel = sal_True;
+            bCancel = true;
     }
     delete pDlg;
 
     if( !bCancel )
     {
         // check if template already exists
-        sal_Bool bExists = sal_False;
+        bool bExists = false;
         OUString aCompareStr(maName);
         if (aCompareStr.isEmpty())
             aCompareStr = maStrNone;
@@ -221,7 +221,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
         {
             if( aCompareStr == *it )
             {
-                bExists = sal_True;
+                bExists = true;
                 // select template
                 m_pVS->SelectItem( aPos + 1 );
             }
@@ -258,7 +258,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
                 }
                 else
                 {
-                    bCancel = sal_True;
+                    bCancel = true;
                 }
 
                 pDoc->CloseBookmarkDoc();

@@ -42,7 +42,7 @@ protected:
     ::com::sun::star::drawing::XDrawPage* mpPage;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  Search( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  xText, SdUnoSearchReplaceDescriptor* pDescr ) throw();
-    sal_Bool Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) throw();
+    bool Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) throw();
     ESelection GetSelection( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  xTextRange ) throw();
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  GetShape( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  xTextRange ) throw();
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  GetNextShape( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xShapes, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  xCurrentShape ) throw();
@@ -77,22 +77,22 @@ class SdUnoSearchReplaceDescriptor : public ::cppu::WeakImplHelper2< ::com::sun:
 protected:
     SvxItemPropertySet* mpPropSet;
 
-    sal_Bool mbBackwards;
-    sal_Bool mbCaseSensitive;
-    sal_Bool mbWords;
+    bool mbBackwards;
+    bool mbCaseSensitive;
+    bool mbWords;
 
-    sal_Bool mbReplace;
+    bool mbReplace;
 
     OUString maSearchStr;
     OUString maReplaceStr;
 
 public:
-    SdUnoSearchReplaceDescriptor( sal_Bool bReplace ) throw();
+    SdUnoSearchReplaceDescriptor( bool bReplace ) throw();
     virtual ~SdUnoSearchReplaceDescriptor() throw();
 
-    sal_Bool IsBackwards() const throw() { return mbBackwards; }
-    sal_Bool IsCaseSensitive() const throw() { return mbCaseSensitive; }
-    sal_Bool IsWords() const throw() { return mbWords; }
+    bool IsBackwards() const throw() { return mbBackwards; }
+    bool IsCaseSensitive() const throw() { return mbCaseSensitive; }
+    bool IsWords() const throw() { return mbWords; }
 
     UNO3_GETIMPLEMENTATION_DECL( SdUnoSearchReplaceDescriptor )
 

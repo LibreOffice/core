@@ -181,9 +181,9 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
 }
 
 
-sal_Bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
@@ -221,15 +221,15 @@ sal_Bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 }
 
 
-sal_Bool FuConstructRectangle::MouseMove(const MouseEvent& rMEvt)
+bool FuConstructRectangle::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
 
 
-sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn(sal_False);
+    bool bReturn(false);
 
     if(mpView->IsCreateObj() && rMEvt.IsLeft())
     {
@@ -261,7 +261,7 @@ sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 pObj->SetMergedItemSet(aSet);
             }
 
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
 
@@ -277,10 +277,9 @@ sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
  * Process keyboard input
  * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
  */
-sal_Bool FuConstructRectangle::KeyInput(const KeyEvent& rKEvt)
+bool FuConstructRectangle::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
-    return(bReturn);
+    return FuConstruct::KeyInput(rKEvt);
 }
 
 
@@ -905,7 +904,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             {
                 if(pObj->ISA(SdrCaptionObj))
                 {
-                    sal_Bool bIsVertical(SID_DRAW_CAPTION_VERTICAL == nID);
+                    bool bIsVertical(SID_DRAW_CAPTION_VERTICAL == nID);
 
                     ((SdrTextObj*)pObj)->SetVerticalWriting(bIsVertical);
 

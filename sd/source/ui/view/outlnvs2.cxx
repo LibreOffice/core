@@ -573,10 +573,10 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                         //pOLV->DeleteSelected(); <-- unfortunately missing!
                         // select field, so it gets deleted on Insert
                         ESelection aSel = pOutlinerView->GetSelection();
-                        sal_Bool bSel = sal_True;
+                        bool bSel = true;
                         if( aSel.nStartPos == aSel.nEndPos )
                         {
-                            bSel = sal_False;
+                            bSel = false;
                             aSel.nEndPos++;
                         }
                         pOutlinerView->SetSelection( aSel );

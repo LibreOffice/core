@@ -225,7 +225,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
 
             if( !mpView->InsertData( aDataHelper,
                                     mpWindow->PixelToLogic( Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
-                                    nAction, sal_False, nFormatId ) &&
+                                    nAction, false, nFormatId ) &&
                 ( mpViewShell && mpViewShell->ISA( DrawViewShell ) ) )
             {
                 DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(mpViewShell);
@@ -412,7 +412,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
     {
         // insert object
         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-        sal_Bool bCreateNew = sal_False;
+        bool bCreateNew = false;
         uno::Reference < embed::XEmbeddedObject > xObj;
         uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
         SvObjectServerList aServerLst;
@@ -520,7 +520,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 //if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->getStatus( nAspect ) )
                 //    aIPObj->OnDocumentPrinterChanged( mpDocSh->GetPrinter(sal_False) );
 
-                sal_Bool bInsertNewObject = sal_True;
+                bool bInsertNewObject = true;
 
                 Size aSize;
                 MapUnit aMapUnit = MAP_100TH_MM;
@@ -571,7 +571,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                             if ( !( (SdrOle2Obj*) pObj)->GetObjRef().is() )
                             {
                                 // the empty OLE object gets a new IPObj
-                                bInsertNewObject = sal_False;
+                                bInsertNewObject = false;
                                 pObj->SetEmptyPresObj(false);
                                 ( (SdrOle2Obj*) pObj)->SetOutlinerParaObject(NULL);
                                 ( (SdrOle2Obj*) pObj)->SetObjRef(xObj);

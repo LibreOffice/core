@@ -285,7 +285,7 @@ void UndoAutoLayoutPosAndSize::Redo()
 {
     SdPage* pPage = static_cast< SdPage* >( mxPage.get() );
     if( pPage )
-        pPage->SetAutoLayout( pPage->GetAutoLayout(), sal_False, sal_False );
+        pPage->SetAutoLayout( pPage->GetAutoLayout(), false, false );
 }
 
 UndoGeoObject::UndoGeoObject( SdrObject& rNewObj )

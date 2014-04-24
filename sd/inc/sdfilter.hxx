@@ -37,13 +37,13 @@ namespace osl { class Module; }
 class SdFilter
 {
 public:
-    SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress );
+    SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress );
     virtual ~SdFilter();
 
-    sal_Bool                    IsProgress() const { return mbShowProgress; }
-    sal_Bool                    IsDraw() const { return mbIsDraw; }
-    sal_Bool                    IsImpress() const { return !mbIsDraw; }
-    virtual sal_Bool            Export() = 0;
+    bool                    IsProgress() const { return mbShowProgress; }
+    bool                    IsDraw() const { return mbIsDraw; }
+    bool                    IsImpress() const { return !mbIsDraw; }
+    virtual bool            Export() = 0;
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >             mxModel;
@@ -52,8 +52,8 @@ protected:
     SfxMedium&                  mrMedium;
     ::sd::DrawDocShell&         mrDocShell;
     SdDrawDocument&             mrDocument;
-    sal_Bool                    mbIsDraw : 1;
-    sal_Bool                    mbShowProgress : 1;
+    bool                    mbIsDraw : 1;
+    bool                    mbShowProgress : 1;
 #ifndef DISABLE_DYNLOADING
     ::osl::Module*              OpenLibrary( const OUString& rLibraryName ) const;
 #endif

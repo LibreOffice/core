@@ -23,7 +23,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <list>
 
-typedef sal_Bool (*weakref_searchfunc)( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > xRef, void* pSearchData );
+typedef bool (*weakref_searchfunc)( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > xRef, void* pSearchData );
 
 typedef ::std::list< ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >* > WeakRefList;
 
@@ -42,7 +42,7 @@ public:
     /** searches the container for a ref that returns true on the given
         search function
     */
-    sal_Bool findRef( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >& rRef, void* pSearchData, weakref_searchfunc pSearchFunc );
+    bool findRef( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >& rRef, void* pSearchData, weakref_searchfunc pSearchFunc );
 
     void dispose();
 };

@@ -72,7 +72,7 @@ SdUnoDrawView::~SdUnoDrawView() throw()
 
 
 
-sal_Bool SdUnoDrawView::getMasterPageMode(void) const throw()
+bool SdUnoDrawView::getMasterPageMode(void) const throw()
 {
     return (mrDrawViewShell.GetEditMode() == EM_MASTERPAGE);
 }
@@ -93,7 +93,7 @@ void SdUnoDrawView::setMasterPageMode (bool bMasterPageMode) throw()
 
 
 
-sal_Bool SdUnoDrawView::getLayerMode(void) const throw()
+bool SdUnoDrawView::getLayerMode(void) const throw()
 {
     return mrDrawViewShell.IsLayerModeActive();
 }
@@ -101,9 +101,9 @@ sal_Bool SdUnoDrawView::getLayerMode(void) const throw()
 
 
 
-void SdUnoDrawView::setLayerMode (sal_Bool bLayerMode) throw()
+void SdUnoDrawView::setLayerMode (bool bLayerMode) throw()
 {
-    if (mrDrawViewShell.IsLayerModeActive() != (bLayerMode==sal_True))
+    if (mrDrawViewShell.IsLayerModeActive() != bLayerMode)
     {
         mrDrawViewShell.ChangeEditMode (
             mrDrawViewShell.GetEditMode(),
@@ -368,7 +368,7 @@ void SdUnoDrawView::setFastPropertyValue (
 
         case DrawController::PROPERTY_MASTERPAGEMODE:
             {
-                sal_Bool bValue = sal_False;
+                bool bValue = false;
                 rValue >>= bValue;
                 setMasterPageMode( bValue );
             }
@@ -376,7 +376,7 @@ void SdUnoDrawView::setFastPropertyValue (
 
         case DrawController::PROPERTY_LAYERMODE:
             {
-                sal_Bool bValue = sal_False;
+                bool bValue = false;
                 rValue >>= bValue;
                 setLayerMode( bValue );
             }

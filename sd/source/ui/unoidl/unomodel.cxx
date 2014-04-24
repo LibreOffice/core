@@ -439,7 +439,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 /******************************************************************************
 *                                                                             *
 ******************************************************************************/
-SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate ) throw()
+SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate ) throw()
 {
     sal_uInt16 nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
     SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
@@ -462,8 +462,8 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         // here we determine the page after which we should insert
         SdPage* pPreviousStandardPage = mpDoc->GetSdPage( std::min( (sal_uInt16)(nPageCount - 1), nPage ), PK_STANDARD );
         SetOfByte aVisibleLayers = pPreviousStandardPage->TRG_GetMasterPageVisibleLayers();
-        sal_Bool bIsPageBack = aVisibleLayers.IsSet( aBckgrnd );
-        sal_Bool bIsPageObj = aVisibleLayers.IsSet( aBckgrndObj );
+        bool bIsPageBack = aVisibleLayers.IsSet( aBckgrnd );
+        bool bIsPageObj = aVisibleLayers.IsSet( aBckgrndObj );
 
         // AutoLayouts must be ready
         mpDoc->StopWorkStartupDelay();
@@ -502,7 +502,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
             // use MasterPage of the current page
             pStandardPage->TRG_SetMasterPage(pPreviousStandardPage->TRG_GetMasterPage());
             pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
-            pStandardPage->SetAutoLayout(AUTOLAYOUT_NONE, sal_True );
+            pStandardPage->SetAutoLayout(AUTOLAYOUT_NONE, true );
         }
 
         aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false);
@@ -538,7 +538,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
             // use MasterPage of the current page
             pNotesPage->TRG_SetMasterPage(pPreviousNotesPage->TRG_GetMasterPage());
             pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
-            pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True );
+            pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, true );
         }
     }
 
@@ -547,7 +547,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
     return( pStandardPage );
 }
 
-void SdXImpressDocument::SetModified( sal_Bool bModified /* = sal_True */ ) throw()
+void SdXImpressDocument::SetModified( bool bModified /* = sal_True */ ) throw()
 {
     if( mpDoc )
         mpDoc->SetChanged( bModified );
@@ -680,7 +680,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::duplicate( con
         SdPage* pPage = (SdPage*) pSvxPage->GetSdrPage();
         sal_uInt16 nPos = pPage->GetPageNum();
         nPos = ( nPos - 1 ) / 2;
-        pPage = InsertSdPage( nPos, sal_True );
+        pPage = InsertSdPage( nPos, true );
         if( pPage )
         {
             uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
@@ -1245,7 +1245,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
             break;
         case WID_MODEL_CONTFOCUS:
             {
-                sal_Bool bFocus = sal_False;
+                bool bFocus = false;
                 if( !(aValue >>= bFocus ) )
                     throw lang::IllegalArgumentException();
                 mpDoc->SetAutoControlFocus( bFocus );
@@ -1253,7 +1253,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
             break;
         case WID_MODEL_DSGNMODE:
             {
-                sal_Bool bMode = sal_False;
+                bool bMode = false;
                 if( !(aValue >>= bMode ) )
                     throw lang::IllegalArgumentException();
                 mpDoc->SetOpenInDesignMode( bMode );
@@ -1328,7 +1328,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
         }
         break;
         case WID_MODEL_CONTFOCUS:
-            aAny <<= (sal_Bool)mpDoc->GetAutoControlFocus();
+            aAny <<= mpDoc->GetAutoControlFocus();
             break;
         case WID_MODEL_DSGNMODE:
             aAny <<= mpDoc->GetOpenInDesignMode();
@@ -1484,7 +1484,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
     if( NULL == mpDoc )
         throw lang::DisposedException();
 
-    sal_Bool bExportNotesPages = sal_False;
+    bool bExportNotesPages = false;
     for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
         if ( rxOptions[ nProperty ].Name == "ExportNotesPages" )
@@ -1521,8 +1521,8 @@ class ImplRenderPaintProc : public ::sdr::contact::ViewObjectContactRedirector
     vcl::PDFWriter::StructElement ImplBegStructureTag( SdrObject& rObject );
 
 public:
-    sal_Bool IsVisible  ( const SdrObject* pObj ) const;
-    sal_Bool IsPrintable( const SdrObject* pObj ) const;
+    bool IsVisible  ( const SdrObject* pObj ) const;
+    bool IsPrintable( const SdrObject* pObj ) const;
 
     ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView, vcl::PDFExtOutDevData* pData );
     virtual ~ImplRenderPaintProc();
@@ -1559,8 +1559,8 @@ sal_Int32 ImplPDFGetBookmarkPage( const OUString& rBookmark, SdDrawDocument& rDo
         aBookmark = rBookmark.copy( 1 );
 
     // is the bookmark a page ?
-    sal_Bool        bIsMasterPage;
-    sal_uInt16      nPgNum = rDoc.GetPageByName( aBookmark, bIsMasterPage );
+    bool        bIsMasterPage;
+    sal_uInt16  nPgNum = rDoc.GetPageByName( aBookmark, bIsMasterPage );
     SdrObject*  pObj = NULL;
 
     if ( nPgNum == SDRPAGE_NOTFOUND )
@@ -1743,7 +1743,7 @@ vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( SdrObjec
     {
         sal_uInt32 nInventor   = rObject.GetObjInventor();
         sal_uInt16 nIdentifier = rObject.GetObjIdentifier();
-        sal_Bool   bIsTextObj  = rObject.ISA( SdrTextObj );
+        bool   bIsTextObj  = rObject.ISA( SdrTextObj );
 
         if ( nInventor == SdrInventor )
         {
@@ -1802,9 +1802,9 @@ drawinglayer::primitive2d::Primitive2DSequence ImplRenderPaintProc::createRedire
     }
 }
 
-sal_Bool ImplRenderPaintProc::IsVisible( const SdrObject* pObj ) const
+bool ImplRenderPaintProc::IsVisible( const SdrObject* pObj ) const
 {
-    sal_Bool bVisible = sal_True;
+    bool bVisible = true;
     SdrLayerID nLayerId = pObj->GetLayer();
     if( pSdrPageView )
     {
@@ -1817,9 +1817,9 @@ sal_Bool ImplRenderPaintProc::IsVisible( const SdrObject* pObj ) const
     }
     return bVisible;
 }
-sal_Bool ImplRenderPaintProc::IsPrintable( const SdrObject* pObj ) const
+bool ImplRenderPaintProc::IsPrintable( const SdrObject* pObj ) const
 {
-    sal_Bool bPrintable = sal_True;
+    bool bPrintable = true;
     SdrLayerID nLayerId = pObj->GetLayer();
     if( pSdrPageView )
     {
@@ -1847,7 +1847,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
         uno::Reference< awt::XDevice >  xRenderDevice;
         const sal_Int32                 nPageNumber = nRenderer + 1;
         PageKind                        ePageKind = PK_STANDARD;
-        sal_Bool                        bExportNotesPages = sal_False;
+        bool                        bExportNotesPages = false;
 
         for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
         {
@@ -1958,7 +1958,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                         // exporting object interactions to pdf
 
                                         // if necessary, the master page interactions will be exported first
-                                        sal_Bool bIsBackgroundObjectsVisible = sal_False;   // #i39428# IsBackgroundObjectsVisible not available for Draw
+                                        bool bIsBackgroundObjectsVisible = false;   // #i39428# IsBackgroundObjectsVisible not available for Draw
                                         if ( mbImpressDoc && xPagePropSet->getPropertySetInfo()->hasPropertyByName( "IsBackgroundObjectsVisible" ) )
                                             xPagePropSet->getPropertyValue( "IsBackgroundObjectsVisible" ) >>= bIsBackgroundObjectsVisible;
                                         if ( bIsBackgroundObjectsVisible && !pPDFExtOutDevData->GetIsExportNotesPages() )
@@ -2687,17 +2687,17 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         const OUString aStdPrefix( SdResId(STR_LAYOUT_DEFAULT_NAME) );
         OUString aPrefix( aStdPrefix );
 
-        sal_Bool bUnique = sal_True;
+        bool bUnique = true;
         sal_Int32 i = 0;
         do
         {
-            bUnique = sal_True;
+            bUnique = true;
             for( sal_Int32 nMaster = 1; nMaster < nMPageCount; nMaster++ )
             {
                 SdPage* pPage = (SdPage*)mpDoc->GetMasterPage((sal_uInt16)nMaster);
                 if( pPage && pPage->GetName() == aPrefix )
                 {
-                    bUnique = sal_False;
+                    bUnique = false;
                     break;
                 }
             }
@@ -2748,7 +2748,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                                 pRefNotesPage->GetLwrBorder() );
         pMNotesPage->SetLayoutName( aLayoutName );
         mpDoc->InsertMasterPage(pMNotesPage,  (sal_uInt16)nInsertPos + 1);
-        pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
+        pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, true, true);
         mpModel->SetModified();
     }
 

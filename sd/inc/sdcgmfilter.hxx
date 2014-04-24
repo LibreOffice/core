@@ -29,11 +29,11 @@ public:
     SdCGMFilter (
         SfxMedium& rMedium,
         ::sd::DrawDocShell& rDocShell,
-        sal_Bool bShowProgress );
+        bool bShowProgress );
     virtual ~SdCGMFilter (void);
 
-    sal_Bool        Import();
-    sal_Bool        Export() SAL_OVERRIDE;
+    bool        Import();
+    bool        Export() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SD_INC_SDCGMFILTER_HXX

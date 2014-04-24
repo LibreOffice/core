@@ -69,8 +69,8 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags ) :
     PPTWriterBase           ( rXModel, rXStatInd ),
     mnCnvrtFlags            ( nCnvrtFlags ),
-    mbStatus                ( sal_False ),
-    mbUseNewAnimations      ( sal_True ),
+    mbStatus                ( false ),
+    mbUseNewAnimations      ( true ),
     mnStatMaxValue          ( 0 ),
     mnLatestStatValue       ( 0 ),
     mnTextStyle( 0 ),
@@ -105,7 +105,7 @@ void PPTWriter::exportPPTPre( const std::vector< com::sun::star::beans::Property
 
     if ( mXStatusIndicator.is() )
     {
-        mbStatusIndicator = sal_True;
+        mbStatusIndicator = true;
         mnStatMaxValue = ( mnPages + mnMasterPages ) * 5;
         mXStatusIndicator->start( OUString( "PowerPoint Export" ), mnStatMaxValue + ( mnStatMaxValue >> 3 ) );
     }
@@ -161,13 +161,13 @@ void PPTWriter::exportPPTPost( )
     if ( !ImplCreateDocumentSummaryInformation() )
         return;
 
-    mbStatus = sal_True;
+    mbStatus = true;
 };
 
 void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStream& rBinaryTagData10Atom );
 
 void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,
-                                sal_Bool bHasBackground, Reference< XPropertySet > aXBackgroundPropSet )
+                                bool bHasBackground, Reference< XPropertySet > aXBackgroundPropSet )
 {
     Any aAny;
 
@@ -183,7 +183,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
            .WriteUInt16( (sal_uInt16)0 );                       // padword
 
     mnDiaMode = 0;
-    sal_Bool bVisible = sal_True;
+    bool bVisible = true;
     ::com::sun::star::presentation::FadeEffect eFe = ::com::sun::star::presentation::FadeEffect_NONE;
 
     if ( GetPropertyValue( aAny, mXPagePropSet, OUString( "Visible" ) ) )
@@ -205,9 +205,9 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         aAny >>= eFe;
 
     sal_uInt32  nSoundRef = 0;
-    sal_Bool    bIsSound = sal_False;
-    sal_Bool    bStopSound = sal_False;
-    sal_Bool    bLoopSound = sal_False;
+    bool    bIsSound = false;
+    bool    bStopSound = false;
+    bool    bLoopSound = false;
 
     if ( GetPropertyValue( aAny, mXPagePropSet, OUString( "Sound" ) ) )
     {
@@ -215,7 +215,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         if ( aAny >>= aSoundURL )
         {
             nSoundRef = maSoundCollection.GetId( aSoundURL );
-            bIsSound = sal_True;
+            bIsSound = true;
         }
         else
             aAny >>= bStopSound;
@@ -223,11 +223,11 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     if ( GetPropertyValue( aAny, mXPagePropSet, OUString( "LoopSound" ) ) )
         aAny >>= bLoopSound;
 
-    sal_Bool bNeedsSSSlideInfoAtom = ( bVisible == sal_False )
-                                    || ( mnDiaMode == 2 )
-                                    || ( bIsSound )
-                                    || ( bStopSound )
-                                    || ( eFe != ::com::sun::star::presentation::FadeEffect_NONE );
+    bool bNeedsSSSlideInfoAtom = ( bVisible == false )
+                                || ( mnDiaMode == 2 )
+                                || ( bIsSound )
+                                || ( bStopSound )
+                                || ( eFe != ::com::sun::star::presentation::FadeEffect_NONE );
     if ( bNeedsSSSlideInfoAtom )
     {
         sal_uInt8   nDirection = 0;
@@ -256,7 +256,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
             nTransitionType = GetTransition( eFe, nDirection );
         if ( mnDiaMode == 2 )                                   // automatic ?
             nBuildFlags |= 0x400;
-        if ( bVisible == sal_False )
+        if ( bVisible == false )
             nBuildFlags |= 4;
         if ( bIsSound )
             nBuildFlags |= 16;
@@ -284,7 +284,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup(0,0);
-    ImplWritePage( rLayout, aSolverContainer, NORMAL, sal_False, nPageNum );    // the shapes of the pages are created in the PPT document
+    ImplWritePage( rLayout, aSolverContainer, NORMAL, false, nPageNum );    // the shapes of the pages are created in the PPT document
     mpPptEscherEx->LeaveGroup();
 
     if ( bHasBackground )
@@ -396,8 +396,8 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
 
         mpPptEscherEx->BeginAtom();
 
-        sal_Bool bFirst = sal_True;
-        sal_Bool bSimpleText = sal_False;
+        bool bFirst = true;
+        bool bSimpleText = false;
 
         mpStrm->WriteUInt16( (sal_uInt16)5 );                           // paragraph count
 
@@ -405,13 +405,13 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
         {
             if ( nInstance >= EPP_TEXTTYPE_CenterBody )
             {
-                bFirst = sal_False;
-                bSimpleText = sal_True;
+                bFirst = false;
+                bSimpleText = true;
                 mpStrm->WriteUInt16( nLev );
             }
             mpStyleSheet->mpParaSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
             mpStyleSheet->mpCharSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
-            bFirst = sal_False;
+            bFirst = false;
         }
         mpPptEscherEx->EndAtom( EPP_TxMasterStyleAtom, 0, nInstance );
     }
@@ -423,7 +423,7 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
 
     mpPptEscherEx->EnterGroup(0,0);
-    ImplWritePage( GetLayout( 0 ), aSolverContainer, MASTER, sal_True );    // the shapes of the pages are created in the PPT document
+    ImplWritePage( GetLayout( 0 ), aSolverContainer, MASTER, true );    // the shapes of the pages are created in the PPT document
     mpPptEscherEx->LeaveGroup();
 
     ImplWriteBackground( aXBackgroundPropSet );
@@ -461,11 +461,11 @@ PPTWriter::~PPTWriter()
         mXStatusIndicator->end();
 }
 
-sal_Bool PPTWriter::ImplCreateCurrentUserStream()
+bool PPTWriter::ImplCreateCurrentUserStream()
 {
     mpCurUserStrm = mrStg->OpenSotStream( OUString( "Current User" ) );
     if ( !mpCurUserStrm )
-        return sal_False;
+        return false;
     char pUserName[] = "Current User";
     sal_uInt32 nLenOfUserName = strlen( pUserName );
     sal_uInt32 nSizeOfRecord = 0x14 + ( ( nLenOfUserName + 4 ) & ~ 3 );
@@ -488,10 +488,10 @@ sal_Bool PPTWriter::ImplCreateCurrentUserStream()
         mpCurUserStrm->WriteUChar( (sal_uInt8)0 );                 // pad bytes
     };
     mpCurUserStrm->Seek( nEditPos );
-    return sal_True;
+    return true;
 };
 
-sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation()
+bool PPTWriter::ImplCreateDocumentSummaryInformation()
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
         mXModel, uno::UNO_QUERY_THROW);
@@ -539,7 +539,7 @@ sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation()
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 void PPTWriter::ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sal_uInt32 nInstance, sal_uInt32 nSlideId )
@@ -561,17 +561,17 @@ void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, ::com::sun::star
     {
         OUString aString;
         ::com::sun::star::uno::Any aAny;
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "HeaderText" ), sal_True ) )
+        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "HeaderText" ), true ) )
         {
             if ( aAny >>= aString )
                 PPTWriter::WriteCString( rStrm, aString, 1 );
         }
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "FooterText" ), sal_True ) )
+        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "FooterText" ), true ) )
         {
             if ( aAny >>= aString )
                 PPTWriter::WriteCString( rStrm, aString, 2 );
         }
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "DateTimeText" ), sal_True ) )
+        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "DateTimeText" ), true ) )
         {
             if ( aAny >>= aString )
                 PPTWriter::WriteCString( rStrm, aString, 0 );
@@ -583,37 +583,37 @@ void PPTWriter::ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com
 {
     if ( rXPagePropSet.is() )
     {
-        sal_Bool bVal = sal_False;
+        bool bVal = false;
         sal_uInt32 nVal = 0;
         ::com::sun::star::uno::Any aAny;
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "IsHeaderVisible" ), sal_True ) )
+        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "IsHeaderVisible" ), true ) )
         {
             if ( ( aAny >>= bVal ) && bVal )
                 nVal |= 0x100000;
         }
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "IsFooterVisible" ), sal_True ) )
+        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "IsFooterVisible" ), true ) )
         {
             if ( ( aAny >>= bVal ) && bVal )
                 nVal |= 0x200000;
         }
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "IsDateTimeVisible" ), sal_True ) )
+        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "IsDateTimeVisible" ), true ) )
         {
             if ( ( aAny >>= bVal ) && bVal )
                 nVal |= 0x010000;
         }
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "IsPageNumberVisible" ), sal_True ) )
+        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "IsPageNumberVisible" ), true ) )
         {
             if ( ( aAny >>= bVal ) && bVal )
                 nVal |= 0x080000;
         }
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "IsDateTimeFixed" ), sal_True ) )
+        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "IsDateTimeFixed" ), true ) )
         {
             if ( ( aAny >>= bVal ) && !bVal )
                 nVal |= 0x20000;
             else
                 nVal |= 0x40000;
         }
-        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "DateTimeFormat" ), sal_True ) )
+        if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "DateTimeFormat" ), true ) )
         {
             sal_Int32 nFormat = *(sal_Int32*)aAny.getValue();
             SvxDateFormat eDateFormat = (SvxDateFormat)( nFormat & 0xf );
@@ -661,7 +661,7 @@ void PPTWriter::ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com
     }
 }
 
-sal_Bool PPTWriter::ImplCreateDocument()
+bool PPTWriter::ImplCreateDocument()
 {
     sal_uInt32 i;
     sal_uInt16 nSlideType = EPP_SLIDESIZE_TYPECUSTOM;
@@ -724,7 +724,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                .WriteUInt32( (sal_uInt32)0 );                               // reserved, usually 0
 
         if ( !GetPageByIndex( i, NORMAL ) )                     // very exciting: once again through all pages
-            return sal_False;
+            return false;
         SetCurrentStyleSheet( GetMasterIndex( NORMAL ) );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >
@@ -805,7 +805,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
 
                 if ( ImplGetPropertyValue( OUString("IsAutomatic" ) ) )
                 {
-                    sal_Bool bBool = sal_False;
+                    bool bBool = false;
                     mAny >>= bBool;
                     if ( !bBool )
                         nFlags |= 1;
@@ -813,14 +813,14 @@ sal_Bool PPTWriter::ImplCreateDocument()
 
                 if ( ImplGetPropertyValue( OUString( "IsEndless" ) ) ) // the correct name would be IsNotEndless: WTF?
                 {
-                    sal_Bool bBool = sal_False;
+                    bool bBool = false;
                     mAny >>= bBool;
                     if ( bBool )
                         nFlags |= 0x80;
                 }
                 if ( ImplGetPropertyValue( OUString( "IsFullScreen" ) ) )
                 {
-                    sal_Bool bBool = sal_False;
+                    bool bBool = false;
                     mAny >>= bBool;
                     if ( !bBool )
                         nFlags |= 0x11;
@@ -922,10 +922,10 @@ sal_Bool PPTWriter::ImplCreateDocument()
     }
     mpPptEscherEx->AddAtom( 0, EPP_EndDocument );
     mpPptEscherEx->CloseContainer();    // EPP_Document
-    return sal_True;
+    return true;
 };
 
-sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
+bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
 {
     sal_uInt32 nCurrentOfs, nParaOfs, nParaCount = 0;
 
@@ -1003,10 +1003,10 @@ sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
     rStrm.WriteUInt32( (sal_uInt32)( nCurrentOfs - ( nParaOfs + 4 ) ) );
     rStrm.WriteUInt32( nParaCount );
     rStrm.Seek( nCurrentOfs );
-    return sal_True;
+    return true;
 }
 
-sal_Bool PPTWriter::ImplCreateMainNotes()
+bool PPTWriter::ImplCreateMainNotes()
 {
     EscherSolverContainer aSolverContainer;
 
@@ -1019,7 +1019,7 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup(0,0);
 
-    ImplWritePage( GetLayout( 20 ), aSolverContainer, NOTICE, sal_True );
+    ImplWritePage( GetLayout( 20 ), aSolverContainer, NOTICE, true );
 
     mpPptEscherEx->LeaveGroup();
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -1043,7 +1043,7 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
     mpStrm->WriteUInt32( (sal_uInt32)0xffffff ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x808080 ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x99cc00 ).WriteUInt32( (sal_uInt32)0xcc3333 ).WriteUInt32( (sal_uInt32)0xffcccc ).WriteUInt32( (sal_uInt32)0xb2b2b2 );
     mpPptEscherEx->CloseContainer();    // EPP_Notes
-    return sal_True;
+    return true;
 }
 
 static OUString getInitials( const OUString& rName )
@@ -1148,7 +1148,7 @@ void PPTWriter::ImplWriteNotes( sal_uInt32 nPageNum )
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup(0,0);
 
-    ImplWritePage( GetLayout( 20 ), aSolverContainer, NOTICE, sal_False );  // the shapes of the pages are created in the PPT document
+    ImplWritePage( GetLayout( 20 ), aSolverContainer, NOTICE, false );  // the shapes of the pages are created in the PPT document
 
     mpPptEscherEx->LeaveGroup();
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -1308,7 +1308,7 @@ void PPTWriter::ImplWriteOLE( )
                     //Initialize the graphic size which will be used on export
                     ::com::sun::star::awt::Size  aSize( pPtr->xShape->getSize() );
                     SvStorageRef xDest( new SvStorage( new SvMemoryStream(), true ) );
-                    sal_Bool bOk = oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xDest, pPtr->xControlModel, aSize, aName );
+                    bool bOk = oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xDest, pPtr->xControlModel, aSize, aName );
                     if ( bOk )
                         pStrm = xDest->CreateMemoryStream();
                 }
@@ -1334,7 +1334,7 @@ void PPTWriter::ImplWriteOLE( )
 
 // write PersistantTable and UserEditAtom
 
-sal_Bool PPTWriter::ImplWriteAtomEnding()
+bool PPTWriter::ImplWriteAtomEnding()
 {
 
 #define EPP_LastViewTypeSlideView   1
@@ -1439,31 +1439,31 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
            .WriteInt16( (sal_Int16)EPP_LastViewTypeSlideView ) // last view type
            .WriteInt16( (sal_Int16)0x12 );                     // padword
 
-    return sal_True;
+    return true;
 }
 
 // - exported function -
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ExportPPT( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData, SvStorageRef& rSvStorage,
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL ExportPPT( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData, SvStorageRef& rSvStorage,
                     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
                         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
                             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags )
 {
     PPTWriter*  pPPTWriter;
-    sal_Bool bStatus = sal_False;
+    bool bStatus = false;
 
     pPPTWriter = new PPTWriter( rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags );
     if ( pPPTWriter )
     {
         pPPTWriter->exportPPT(rMediaData);
-        bStatus = ( pPPTWriter->IsValid() == sal_True );
+        bStatus = pPPTWriter->IsValid();
         delete pPPTWriter;
     }
 
     return bStatus;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas )
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas )
 {
     SvStorageRef xDest( new SvStorage( new SvMemoryStream(), true ) );
     SvxImportMSVBasic aMSVBas( rDocShell, *xDest );
@@ -1488,14 +1488,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL SaveVBA( SfxObjectShell& rDocS
                         xTemp->Read( pTemp, nLen );
                         pBas = new SvMemoryStream( pTemp, nLen, STREAM_READ );
                         pBas->ObjectOwnsMemory( true );
-                        return sal_True;
+                        return true;
                     }
                 }
             }
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

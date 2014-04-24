@@ -527,7 +527,7 @@ void AccessibleSlideSorterObject::ThrowIfDisposed (void)
 
 
 
-sal_Bool AccessibleSlideSorterObject::IsDisposed (void)
+bool AccessibleSlideSorterObject::IsDisposed (void)
 {
     return (rBHelper.bDisposed || rBHelper.bInDispose);
 }

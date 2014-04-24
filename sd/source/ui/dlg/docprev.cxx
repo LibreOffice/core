@@ -61,7 +61,7 @@ void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage
 }
 
 SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
-: Control(pParent, rResId), pMetaFile( 0 ), bInEffect(sal_False), mpObj(NULL), mnShowPage(0)
+: Control(pParent, rResId), pMetaFile( 0 ), bInEffect(false), mpObj(NULL), mnShowPage(0)
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
     svtools::ColorConfig aColorConfig;

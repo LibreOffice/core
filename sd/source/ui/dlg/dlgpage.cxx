@@ -33,7 +33,7 @@
 /**
  * Constructor of tab dialog: appends pages to the dialog
  */
-SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, sal_Bool bAreaPage ) :
+SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, bool bAreaPage ) :
         SfxTabDialog ( pParent
                       ,"DrawPageDialog"
                       ,"modules/sdraw/ui/drawpagedialog.ui"

@@ -132,7 +132,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     // use MasterPage of the current page
                     pSummaryPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
                     pSummaryPage->SetLayoutName(pActualPage->GetLayoutName());
-                    pSummaryPage->SetAutoLayout(AUTOLAYOUT_ENUM, sal_True);
+                    pSummaryPage->SetAutoLayout(AUTOLAYOUT_ENUM, true);
                     pSummaryPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                     pSummaryPage->setHeaderFooterSettings(pActualPage->getHeaderFooterSettings());
 
@@ -154,7 +154,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     // use MasterPage of the current page
                     pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
                     pNotesPage->SetLayoutName(pActualNotesPage->GetLayoutName());
-                    pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), sal_True);
+                    pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), true);
                     pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                     pNotesPage->setHeaderFooterSettings(pActualNotesPage->getHeaderFooterSettings());
 

@@ -354,7 +354,7 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
     const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
     const SdrObject*    pObj = NULL;
     sal_uInt16              nId = SvxBmpMaskChildWindow::GetChildWindowId();
-    sal_Bool                bEnable = sal_False;
+    bool                bEnable = false;
 
     if ( GetViewFrame()->HasChildWindow( nId ) )
     {
@@ -372,7 +372,7 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
         !((SdrGrafObj*) pObj)->IsEPS() &&
         !mpDrawView->IsTextEdit() )
     {
-        bEnable = sal_True;
+        bEnable = true;
     }
 
     // put value

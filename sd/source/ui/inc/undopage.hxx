@@ -41,17 +41,17 @@ class SdPageFormatUndoAction : public SdUndoAction
     sal_Int32       mnOldLower;
     Orientation meOldOrientation;
     sal_uInt16      mnOldPaperBin;
-    sal_Bool        mbOldFullSize;
+    bool        mbOldFullSize;
 
     Size        maNewSize;
     sal_Int32       mnNewLeft;
     sal_Int32       mnNewRight;
     sal_Int32       mnNewUpper;
     sal_Int32       mnNewLower;
-    sal_Bool        mbNewScale;
+    bool        mbNewScale;
     Orientation meNewOrientation;
     sal_uInt16      mnNewPaperBin;
-    sal_Bool        mbNewFullSize;
+    bool        mbNewFullSize;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -64,17 +64,17 @@ public:
                             sal_Int32           nOldLwr,
                             Orientation     eOldOrient,
                             sal_uInt16          nOPaperBin,
-                            sal_Bool            bOFullSize,
+                            bool            bOFullSize,
 
                             const Size&     rNewSz,
                             sal_Int32           nNewLft,
                             sal_Int32           nNewRgt,
                             sal_Int32           nNewUpr,
                             sal_Int32           nNewLwr,
-                            sal_Bool            bNewScl,
+                            bool            bNewScl,
                             Orientation     eNewOrient,
                             sal_uInt16          nNPaperBin,
-                            sal_Bool            bNFullSize
+                            bool            bNFullSize
                             ) :
         SdUndoAction(pDoc),
         mpPage      (pThePage),

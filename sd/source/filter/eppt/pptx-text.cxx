@@ -59,17 +59,17 @@ PortionObj::PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star
     mnFont              ( 0 ),
     mnAsianOrComplexFont( 0xffff ),
     mnTextSize          ( 0 ),
-    mbLastPortion       ( sal_True ),
+    mbLastPortion       ( true ),
     mpText              ( NULL ),
     mpFieldEntry        ( NULL )
 {
     mXPropSet = rXPropSet;
 
-    ImplGetPortionValues( rFontCollection, sal_False );
+    ImplGetPortionValues( rFontCollection, false );
 }
 
 PortionObj::PortionObj(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRange,
-                           sal_Bool bLast, FontCollection& rFontCollection)
+                           bool bLast, FontCollection& rFontCollection)
     : meCharColor(css::beans::PropertyState_AMBIGUOUS_VALUE)
     , meCharHeight(css::beans::PropertyState_AMBIGUOUS_VALUE)
     , meFontName(css::beans::PropertyState_AMBIGUOUS_VALUE)
@@ -88,7 +88,7 @@ PortionObj::PortionObj(::com::sun::star::uno::Reference< ::com::sun::star::text:
 {
     OUString aString( rXTextRange->getString() );
     OUString aURL;
-    sal_Bool bRTL_endingParen = sal_False;
+    bool bRTL_endingParen = false;
 
     mnTextSize = aString.getLength();
     if ( bLast )
@@ -106,7 +106,7 @@ PortionObj::PortionObj(::com::sun::star::uno::Reference< ::com::sun::star::text:
             ::com::sun::star::beans::XPropertyState >
                 ( rXTextRange, ::com::sun::star::uno::UNO_QUERY );
 
-        sal_Bool bPropSetsValid = ( mXPropSet.is() && mXPropState.is() );
+        bool bPropSetsValid = ( mXPropSet.is() && mXPropState.is() );
         if ( bPropSetsValid )
             nFieldType = ImplGetTextField( rXTextRange, mXPropSet, aURL );
         if ( nFieldType )
@@ -118,14 +118,14 @@ PortionObj::PortionObj(::com::sun::star::uno::Reference< ::com::sun::star::text:
                 mpFieldEntry->aFieldUrl = aURL;
             }
         }
-        sal_Bool bSymbol = sal_False;
+        bool bSymbol = false;
 
-        if ( bPropSetsValid && ImplGetPropertyValue( OUString( "CharFontCharSet" ), sal_False ) )
+        if ( bPropSetsValid && ImplGetPropertyValue( OUString( "CharFontCharSet" ), false ) )
         {
             sal_Int16 nCharset = 0;
             mAny >>= nCharset;
             if ( nCharset == ::com::sun::star::awt::CharSet::SYMBOL )
-                bSymbol = sal_True;
+                bSymbol = true;
         }
         if ( mpFieldEntry && ( nFieldType & 0x800000 ) )    // placeholder ?
         {
@@ -144,7 +144,7 @@ PortionObj::PortionObj(::com::sun::star::uno::Reference< ::com::sun::star::text:
                 && rFontCollection.GetScriptDirection(aString) == com::sun::star::i18n::ScriptDirection::RIGHT_TO_LEFT)
             {
                 mnTextSize++;
-                bRTL_endingParen = sal_True;
+                bRTL_endingParen = true;
             }
             mpText = new sal_uInt16[ mnTextSize ];
             sal_uInt16 nChar;
@@ -203,7 +203,7 @@ PortionObj::PortionObj(::com::sun::star::uno::Reference< ::com::sun::star::text:
             mpText[ mnTextSize - 1 ] = 0xd;
 
         if ( bPropSetsValid )
-            ImplGetPortionValues( rFontCollection, sal_True );
+            ImplGetPortionValues( rFontCollection, true );
     }
 }
 
@@ -218,7 +218,7 @@ PortionObj::~PortionObj()
     ImplClear();
 }
 
-void PortionObj::Write( SvStream* pStrm, sal_Bool bLast )
+void PortionObj::Write( SvStream* pStrm, bool bLast )
 {
     sal_uInt32 nCount = mnTextSize;
     if ( bLast && mbLastPortion )
@@ -227,10 +227,10 @@ void PortionObj::Write( SvStream* pStrm, sal_Bool bLast )
         pStrm->WriteUInt16( (sal_uInt16)mpText[ i ] );
 }
 
-void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool bGetPropStateValue )
+void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGetPropStateValue )
 {
 
-    sal_Bool bOk = ImplGetPropertyValue( OUString( "CharFontName" ), bGetPropStateValue );
+    bool bOk = ImplGetPropertyValue( OUString( "CharFontName" ), bGetPropStateValue );
     meFontName = ePropState;
     if ( bOk )
     {
@@ -240,11 +240,11 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
         if ( mnFont == nCount )
         {
             FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
-            if ( ImplGetPropertyValue( OUString( "CharFontCharSet" ), sal_False ) )
+            if ( ImplGetPropertyValue( OUString( "CharFontCharSet" ), false ) )
                 mAny >>= rFontDesc.CharSet;
-            if ( ImplGetPropertyValue( OUString( "CharFontFamily" ), sal_False ) )
+            if ( ImplGetPropertyValue( OUString( "CharFontFamily" ), false ) )
                 mAny >>= rFontDesc.Family;
-            if ( ImplGetPropertyValue( OUString( "CharFontPitch" ), sal_False ) )
+            if ( ImplGetPropertyValue( OUString( "CharFontPitch" ), false ) )
                 mAny >>= rFontDesc.Pitch;
         }
     }
@@ -267,11 +267,11 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
             if ( mnAsianOrComplexFont == nCount )
             {
                 FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
-                if ( ImplGetPropertyValue( OUString( "CharFontCharSetAsian" ), sal_False ) )
+                if ( ImplGetPropertyValue( OUString( "CharFontCharSetAsian" ), false ) )
                     mAny >>= rFontDesc.CharSet;
-                if ( ImplGetPropertyValue( OUString( "CharFontFamilyAsian" ), sal_False ) )
+                if ( ImplGetPropertyValue( OUString( "CharFontFamilyAsian" ), false ) )
                     mAny >>= rFontDesc.Family;
-                if ( ImplGetPropertyValue( OUString( "CharFontPitchAsian" ), sal_False ) )
+                if ( ImplGetPropertyValue( OUString( "CharFontPitchAsian" ), false ) )
                     mAny >>= rFontDesc.Pitch;
             }
         }
@@ -288,11 +288,11 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
             if ( mnAsianOrComplexFont == nCount )
             {
                 FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
-                if ( ImplGetPropertyValue( OUString( "CharFontCharSetComplex" ), sal_False ) )
+                if ( ImplGetPropertyValue( OUString( "CharFontCharSetComplex" ), false ) )
                     mAny >>= rFontDesc.CharSet;
-                if ( ImplGetPropertyValue( OUString( "CharFontFamilyComplex" ), sal_False ) )
+                if ( ImplGetPropertyValue( OUString( "CharFontFamilyComplex" ), false ) )
                     mAny >>= rFontDesc.Family;
-                if ( ImplGetPropertyValue( OUString( "CharFontPitchComplex" ), sal_False ) )
+                if ( ImplGetPropertyValue( OUString( "CharFontPitchComplex" ), false ) )
                     mAny >>= rFontDesc.Pitch;
             }
         }
@@ -328,7 +328,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     }
 
     mnCharHeight = 24;
-    if ( GetPropertyValue( mAny, mXPropSet, aCharHeightName, sal_False ) )
+    if ( GetPropertyValue( mAny, mXPropSet, aCharHeightName, false ) )
     {
         float fVal(0.0);
         if ( mAny >>= fVal )
@@ -337,7 +337,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
             meCharHeight = GetPropertyState( mXPropSet, aCharHeightName );
         }
     }
-    if ( GetPropertyValue( mAny, mXPropSet, aCharWeightName, sal_False ) )
+    if ( GetPropertyValue( mAny, mXPropSet, aCharWeightName, false ) )
     {
         float fFloat(0.0);
         if ( mAny >>= fFloat )
@@ -348,13 +348,13 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
                 mnCharAttrHard |= 1;
         }
     }
-    if ( GetPropertyValue( mAny, mXPropSet, aCharLocaleName, sal_False ) )
+    if ( GetPropertyValue( mAny, mXPropSet, aCharLocaleName, false ) )
     {
         com::sun::star::lang::Locale eLocale;
         if ( mAny >>= eLocale )
             meCharLocale = eLocale;
     }
-    if ( GetPropertyValue( mAny, mXPropSet, aCharPostureName, sal_False ) )
+    if ( GetPropertyValue( mAny, mXPropSet, aCharPostureName, false ) )
     {
         ::com::sun::star::awt::FontSlant aFS;
         if ( mAny >>= aFS )
@@ -390,7 +390,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
 
     if ( ImplGetPropertyValue( OUString( "CharShadowed" ), bGetPropStateValue ) )
     {
-        sal_Bool bBool(sal_False);
+        bool bBool(false);
         mAny >>= bBool;
         if ( bBool )
             mnCharAttr |= 0x10;
@@ -496,12 +496,12 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
     sal_uInt32 nRetValue = 0;
     sal_Int32 nFormat;
     ::com::sun::star::uno::Any aAny;
-    if ( GetPropertyValue( aAny, rXPropSet, OUString( "TextPortionType" ), sal_True ) )
+    if ( GetPropertyValue( aAny, rXPropSet, OUString( "TextPortionType" ), true ) )
     {
         OUString  aTextFieldType( *(OUString*)aAny.getValue() );
         if ( aTextFieldType == "TextField" )
         {
-            if ( GetPropertyValue( aAny, rXPropSet, aTextFieldType, sal_True ) )
+            if ( GetPropertyValue( aAny, rXPropSet, aTextFieldType, true ) )
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField > aXTextField;
                 if ( aAny >>= aXTextField )
@@ -517,7 +517,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             {
                                 if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ) ), sal_True )
                                 {
-                                    sal_Bool bBool = sal_False;
+                                    bool bBool = false;
                                     aAny >>= bBool;
                                     if ( !bBool )  // Fixed DateFields does not exist in PPT
                                     {
@@ -559,7 +559,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             {
                                 if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ) ), sal_True )
                                 {
-                                    sal_Bool bBool = sal_False;
+                                    bool bBool = false;
                                     aAny >>= bBool;
                                     if ( !bBool )
                                     {
@@ -583,7 +583,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             {
                                 if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ) ), sal_True )
                                 {
-                                    sal_Bool bBool = sal_False;
+                                    bool bBool = false;
                                     aAny >>= bBool;
                                     if ( !bBool )
                                     {
@@ -664,13 +664,13 @@ ParagraphObj::ParagraphObj(const ::com::sun::star::uno::Reference< ::com::sun::s
 {
     mXPropSet = rXPropSet;
 
-    bExtendedParameters = sal_False;
+    bExtendedParameters = false;
 
     nDepth = 0;
     nBulletFlags = 0;
     nParaFlags = 0;
 
-    ImplGetParagraphValues( rProv, sal_False );
+    ImplGetParagraphValues( rProv, false );
 }
 
 ParagraphObj::ParagraphObj(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContent,
@@ -698,7 +698,7 @@ ParagraphObj::ParagraphObj(::com::sun::star::uno::Reference< ::com::sun::star::t
     , mbParagraphPunctation(false)
     , mnBiDi(0)
 {
-    bExtendedParameters = sal_False;
+    bExtendedParameters = false;
 
     nDepth = 0;
     nBulletFlags = 0;
@@ -737,7 +737,7 @@ ParagraphObj::ParagraphObj(::com::sun::star::uno::Reference< ::com::sun::star::t
                 }
             }
         }
-        ImplGetParagraphValues( rProv, sal_True );
+        ImplGetParagraphValues( rProv, true );
     }
 }
 
@@ -784,7 +784,7 @@ void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
     }
 }
 
-void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nNumberingDepth, sal_Bool bIsBullet, sal_Bool bGetPropStateValue )
+void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nNumberingDepth, bool bIsBullet, bool bGetPropStateValue )
 {
     ::com::sun::star::uno::Any aAny;
     if ( GetPropertyValue( aAny, mXPropSet, OUString( "ParaLeftMargin" ) ) )
@@ -816,7 +816,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
             sal_Int32 nPropertyCount = aPropertySequence.getLength();
             if ( nPropertyCount )
             {
-                bExtendedParameters = sal_True;
+                bExtendedParameters = true;
                 nBulletRealSize = 100;
                 nMappedNumType = 0;
 
@@ -911,7 +911,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 {
                                     nBulletId = rBuProv.GetId( aUniqueId, aBuGraSize );
                                     if ( nBulletId != 0xffff )
-                                        bExtendedBulletsUsed = sal_True;
+                                        bExtendedBulletsUsed = true;
                                 }
                             }
                         }
@@ -960,7 +960,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                     {
                         if ( nNumberingType != SVX_NUM_CHAR_SPECIAL )
                         {
-                            bExtendedBulletsUsed = sal_True;
+                            bExtendedBulletsUsed = true;
                             if ( nNumberingDepth & 1 )
                                 cBulletId = 0x2013;         // defaulting bullet characters for ppt97
                             else if ( nNumberingDepth == 4 )
@@ -1099,10 +1099,10 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
         nBulletOfs = 0;
 }
 
-void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Bool bGetPropStateValue )
+void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, bool bGetPropStateValue )
 {
     ::com::sun::star::uno::Any aAny;
-    if ( GetPropertyValue( aAny, mXPropSet, "NumberingLevel", sal_True ) )
+    if ( GetPropertyValue( aAny, mXPropSet, "NumberingLevel", true ) )
     {
         if ( bGetPropStateValue )
             meBullet = GetPropertyState( mXPropSet, "NumberingLevel" );
@@ -1110,20 +1110,20 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
 
         if ( nDepth < 0 )
         {
-            mbIsBullet = sal_False;
+            mbIsBullet = false;
             nDepth = 0;
         }
         else
         {
             if ( nDepth > 4 )
                 nDepth = 4;
-            mbIsBullet = sal_True;
+            mbIsBullet = true;
         }
     }
     else
     {
         nDepth = 0;
-        mbIsBullet = sal_False;
+        mbIsBullet = false;
     }
     ImplGetNumberingLevel( rBuProv, nDepth, mbIsBullet, bGetPropStateValue );
 
@@ -1158,12 +1158,12 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
         {
             case ::com::sun::star::style::LineSpacingMode::FIX :
                 mnLineSpacing = (sal_Int16)(-( aLineSpacing.Height ) );
-                mbFixedLineSpacing = sal_True;
+                mbFixedLineSpacing = true;
                 break;
             case ::com::sun::star::style::LineSpacingMode::MINIMUM :
             case ::com::sun::star::style::LineSpacingMode::LEADING :
                 mnLineSpacing = (sal_Int16)(-( aLineSpacing.Height ) );
-                mbFixedLineSpacing = sal_False;
+                mbFixedLineSpacing = false;
            break;
 
             case ::com::sun::star::style::LineSpacingMode::PROP :
@@ -1284,8 +1284,8 @@ struct ImplTextObj
     sal_uInt32      mnTextSize;
     int             mnInstance;
     std::vector<ParagraphObj*> maList;
-    sal_Bool        mbHasExtendedBullets;
-    sal_Bool        mbFixedCellHeightUsed;
+    bool        mbHasExtendedBullets;
+    bool        mbFixedCellHeightUsed;
 
     ImplTextObj( int nInstance );
     ~ImplTextObj();
@@ -1296,8 +1296,8 @@ ImplTextObj::ImplTextObj( int nInstance )
 {
     mnTextSize = 0;
     mnInstance = nInstance;
-    mbHasExtendedBullets = sal_False;
-    mbFixedCellHeightUsed = sal_False;
+    mbHasExtendedBullets = false;
+    mbFixedCellHeightUsed = false;
 }
 
 ImplTextObj::~ImplTextObj()
@@ -1327,11 +1327,11 @@ TextObj::TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSim
                 if ( aAny >>= aXParagraph )
                 {
                     if ( !aXTextParagraphE->hasMoreElements() )
-                        aParaFlags.bLastParagraph = sal_True;
+                        aParaFlags.bLastParagraph = true;
                     ParagraphObj* pPara = new ParagraphObj( aXParagraph, aParaFlags, rFontCollection, rProv );
                     mpImplTextObj->mbHasExtendedBullets |= pPara->bExtendedBulletsUsed;
                     mpImplTextObj->maList.push_back( pPara );
-                    aParaFlags.bFirstParagraph = sal_False;
+                    aParaFlags.bFirstParagraph = false;
                 }
             }
         }
@@ -1366,7 +1366,7 @@ int TextObj::GetInstance() const
     return mpImplTextObj->mnInstance;
 }
 
-sal_Bool TextObj::HasExtendedBullets()
+bool TextObj::HasExtendedBullets()
 {
     return mpImplTextObj->mbHasExtendedBullets;
 }
@@ -1381,12 +1381,12 @@ void FontCollectionEntry::ImplInit( const OUString& rName )
     if ( !aSubstName.isEmpty() )
     {
         Name = aSubstName;
-        bIsConverted = sal_True;
+        bIsConverted = true;
     }
     else
     {
         Name = rName;
-        bIsConverted = sal_False;
+        bIsConverted = false;
     }
 }
 

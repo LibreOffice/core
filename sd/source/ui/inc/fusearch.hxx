@@ -45,7 +45,7 @@ protected:
     virtual ~FuSearch (void);
 
     ::sd::Outliner* pSdOutliner;
-    sal_Bool bOwnOutliner;
+    bool bOwnOutliner;
 
 private:
     FuSearch (

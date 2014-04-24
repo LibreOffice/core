@@ -128,7 +128,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
         SdrGrafObj* pGrafObj = NULL;
 
-        sal_Bool bInsertNewObject = sal_True;
+        bool bInsertNewObject = true;
 
         if ( mpDrawView->AreObjectsMarked() )
         {
@@ -147,7 +147,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                     if( pGrafObj->IsEmptyPresObj() )
                     {
                         // the empty graphic object gets a new graphic
-                        bInsertNewObject = sal_False;
+                        bInsertNewObject = false;
 
                         SdrGrafObj* pNewGrafObj = (SdrGrafObj*) pGrafObj->Clone();
                         pNewGrafObj->SetEmptyPresObj(false);

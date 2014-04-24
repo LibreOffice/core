@@ -65,8 +65,8 @@ class GroupTable
         sal_uInt32              GetGroupsClosed();
         void                    ResetGroupTable( sal_uInt32 nCount );
         void                    ClearGroupTable();
-        sal_Bool                EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & rIndex );
-        sal_Bool                GetNextGroupEntry();
+        bool                EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & rIndex );
+        bool                GetNextGroupEntry();
                                 GroupTable();
                                 ~GroupTable();
 };

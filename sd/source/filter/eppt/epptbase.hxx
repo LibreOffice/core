@@ -71,9 +71,9 @@ struct PHLayout
     sal_uInt8   nTypeOfTitle;
     sal_uInt8   nTypeOfOutliner;
 
-    sal_Bool    bTitlePossible;
-    sal_Bool    bOutlinerPossible;
-    sal_Bool    bSecOutlinerPossible;
+    bool    bTitlePossible;
+    bool    bOutlinerPossible;
+    bool    bSecOutlinerPossible;
 };
 
 enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3, LAYOUT = 4 };
@@ -87,8 +87,8 @@ class PropValue
         ::com::sun::star::uno::Reference
             < ::com::sun::star::beans::XPropertySet >           mXPropSet;
 
-        sal_Bool    ImplGetPropertyValue( const OUString& rString );
-        sal_Bool    ImplGetPropertyValue( const ::com::sun::star::uno::Reference
+        bool    ImplGetPropertyValue( const OUString& rString );
+        bool    ImplGetPropertyValue( const ::com::sun::star::uno::Reference
                         < ::com::sun::star::beans::XPropertySet > &, const OUString& );
 
     public :
@@ -101,11 +101,11 @@ class PropValue
 
         ::com::sun::star::uno::Any GetAny() { return mAny; }
 
-        static sal_Bool GetPropertyValue(
+        static bool GetPropertyValue(
             ::com::sun::star::uno::Any& rAny,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
             const OUString& rPropertyName,
-            sal_Bool bTestPropertyAvailability = sal_False );
+            bool bTestPropertyAvailability = false );
 
         static ::com::sun::star::beans::PropertyState GetPropertyState(
             const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > &,
@@ -142,7 +142,7 @@ struct FontCollectionEntry
         sal_Int16               CharSet;
 
         OUString                Original;
-        sal_Bool                bIsConverted;
+        bool                bIsConverted;
 
         FontCollectionEntry( const OUString& rName, sal_Int16 nFamily, sal_Int16 nPitch, sal_Int16 nCharSet ) :
                             Scaling ( 1.0 ),
@@ -252,14 +252,14 @@ struct PPTExCharSheet
 
                 void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                         FontCollection& rFontCollection, int nLevel );
-                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText,
+                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, bool bFirst, bool bSimpleText,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet );
 
 };
 
 struct PPTExParaLevel
 {
-    sal_Bool        mbIsBullet;
+    bool        mbIsBullet;
     sal_uInt16      mnBulletChar;
     sal_uInt16      mnBulletFont;
     sal_uInt16      mnBulletHeight;
@@ -274,7 +274,7 @@ struct PPTExParaLevel
     sal_uInt16      mnBulletOfs;
     sal_uInt16      mnDefaultTab;
 
-    sal_Bool        mbExtendedBulletsUsed;
+    bool        mbExtendedBulletsUsed;
     sal_uInt16      mnBulletId;
     sal_uInt16      mnBulletStart;
     sal_uInt32      mnMappedNumType;
@@ -294,7 +294,7 @@ struct PPTExParaSheet
 
                 void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                         FontCollection& rFontCollection, int nLevel, const PPTExCharLevel& rCharLevel );
-                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText,
+                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, bool bFirst, bool bSimpleText,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet );
 };
 
@@ -314,7 +314,7 @@ class PPTExStyleSheet
 
                 void            SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                                 FontCollection& rFontCollection, int nInstance, int nLevel );
-                sal_Bool        IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue );
+                bool        IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue );
 
                 sal_uInt32      SizeOfTxCFStyleAtom() const;
                 void            WriteTxCFStyleAtom( SvStream& rSt );
@@ -326,7 +326,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 mXModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >        mXStatusIndicator;
 
-    sal_Bool            mbStatusIndicator;
+    bool            mbStatusIndicator;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPagesSupplier >   mXDrawPagesSupplier;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XMasterPagesSupplier > mXMasterPagesSupplier;
@@ -340,8 +340,8 @@ protected:
     ::com::sun::star::awt::Point        maPosition;
     Rectangle           maRect;
     OString        mType;
-    sal_Bool            mbPresObj;
-    sal_Bool            mbEmptyPresObj;
+    bool            mbPresObj;
+    bool            mbEmptyPresObj;
     sal_Int32           mnAngle;
 
     sal_uInt32          mnPages;            ///< number of Slides ( w/o master pages & notes & handout )
@@ -361,7 +361,7 @@ protected:
     FontCollection      maFontCollection;
 
     virtual void ImplWriteSlide( sal_uInt32 /* nPageNum */, sal_uInt32 /* nMasterNum */, sal_uInt16 /* nMode */,
-                                 sal_Bool /* bHasBackground */, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > /* aXBackgroundPropSet */ ) {}
+                                 bool /* bHasBackground */, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > /* aXBackgroundPropSet */ ) {}
     virtual void ImplWriteNotes( sal_uInt32 nPageNum ) = 0;
     virtual void ImplWriteSlideMaster( sal_uInt32 /* nPageNum */, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > /* aXBackgroundPropSet */ ) {}
     virtual void ImplWriteLayout( sal_Int32 /* nOffset */, sal_uInt32 /* nMasterNum */ ) {}
@@ -369,19 +369,19 @@ protected:
     virtual void exportPPTPre( const std::vector< com::sun::star::beans::PropertyValue >& ) {}
     virtual void exportPPTPost() {}
 
-    virtual sal_Bool ImplCreateDocument()=0;
-    virtual sal_Bool ImplCreateMainNotes()=0;
+    virtual bool ImplCreateDocument()=0;
+    virtual bool ImplCreateMainNotes()=0;
 
-    sal_Bool GetStyleSheets();
-    sal_Bool GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup = sal_False );
+    bool GetStyleSheets();
+    bool GetShapeByIndex( sal_uInt32 nIndex, bool bGroup = false );
 
-    sal_Bool CreateMainNotes();
+    bool CreateMainNotes();
 
     ::com::sun::star::awt::Size   MapSize( const ::com::sun::star::awt::Size& );
     ::com::sun::star::awt::Point  MapPoint( const ::com::sun::star::awt::Point& );
     Rectangle                     MapRectangle( const ::com::sun::star::awt::Rectangle& );
 
-    sal_Bool ContainsOtherShapeThanPlaceholders( sal_Bool bForOOMLX );
+    bool ContainsOtherShapeThanPlaceholders( bool bForOOMLX );
 
 public:
     PPTWriterBase();
@@ -392,21 +392,21 @@ public:
 
     void exportPPT(const std::vector< com::sun::star::beans::PropertyValue >&);
 
-    sal_Bool InitSOIface();
-    sal_Bool GetPageByIndex( sal_uInt32 nIndex, PageType );
+    bool InitSOIface();
+    bool GetPageByIndex( sal_uInt32 nIndex, PageType );
     sal_uInt32 GetMasterIndex( PageType ePageType );
-    sal_Bool SetCurrentStyleSheet( sal_uInt32 nPageNum );
+    bool SetCurrentStyleSheet( sal_uInt32 nPageNum );
 
-    sal_Bool GetPresObj() { return mbPresObj; }
+    bool GetPresObj() { return mbPresObj; }
 
     PHLayout& GetLayout( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const;
     PHLayout& GetLayout( sal_Int32 nOffset ) const;
     sal_Int32 GetLayoutOffset( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const;
     sal_Int32 GetLayoutOffsetFixed( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const;
 
-    sal_Bool CreateSlide( sal_uInt32 nPageNum );
-    sal_Bool CreateSlideMaster( sal_uInt32 nPageNum );
-    sal_Bool CreateNotes( sal_uInt32 nPageNum );
+    bool CreateSlide( sal_uInt32 nPageNum );
+    bool CreateSlideMaster( sal_uInt32 nPageNum );
+    bool CreateNotes( sal_uInt32 nPageNum );
 
     static sal_Int8 GetTransition( sal_Int16 nTransitionType, sal_Int16 nTransitionSubtype, ::com::sun::star::presentation::FadeEffect eEffect, sal_uInt8& nDirection );
     static sal_Int8 GetTransition( ::com::sun::star::presentation::FadeEffect eEffect, sal_uInt8& nDirection );

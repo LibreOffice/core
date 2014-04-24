@@ -228,7 +228,7 @@ namespace {
             const sal_Char* pName,
             const bool bDefaultValue = false) const
         {
-            sal_Bool bValue = mrProperties.getBoolValue( pName, bDefaultValue );
+            bool bValue = mrProperties.getBoolValue( pName, bDefaultValue );
             return bValue;
         }
 
@@ -1137,7 +1137,7 @@ namespace {
             const Rectangle aOutRect (rPrinter.GetPageOffset(), rPrinter.GetOutputSize());
             Outliner* pOutliner = rDocument.GetInternalOutliner();
             const sal_uInt16 nSavedOutlMode (pOutliner->GetMode());
-            const sal_Bool bSavedUpdateMode (pOutliner->GetUpdateMode());
+            const bool bSavedUpdateMode (pOutliner->GetUpdateMode());
             const Size aSavedPaperSize (pOutliner->GetPaperSize());
 
             pOutliner->Init(OUTLINERMODE_OUTLINEVIEW);
@@ -1472,7 +1472,7 @@ private:
 
             // When in outline view then apply all pending changes to the model.
             if (pShell->ISA(OutlineViewShell))
-                static_cast<OutlineViewShell*>(pShell)->PrepareClose (sal_False);
+                static_cast<OutlineViewShell*>(pShell)->PrepareClose (false);
 
             // Collect some frequently used data.
             if (mpOptions->IsDate())
@@ -1659,7 +1659,7 @@ private:
         Outliner* pOutliner = mrBase.GetDocument()->GetInternalOutliner();
         pOutliner->Init(OUTLINERMODE_OUTLINEVIEW);
         const sal_uInt16 nSavedOutlMode (pOutliner->GetMode());
-        const sal_Bool bSavedUpdateMode (pOutliner->GetUpdateMode());
+        const bool bSavedUpdateMode (pOutliner->GetUpdateMode());
         const Size aSavedPaperSize (pOutliner->GetPaperSize());
         const MapMode aSavedMapMode (pOutliner->GetRefMapMode());
         pOutliner->SetPaperSize(aOutRect.GetSize());

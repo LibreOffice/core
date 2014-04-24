@@ -52,9 +52,9 @@ private:
     OUString        aFile;          ///< chosen file name
 
     void            InsTextOrRTFinOlMode(SfxMedium* pMedium);
-    sal_Bool            InsSDDinOlMode(SfxMedium* pMedium);
+    bool            InsSDDinOlMode(SfxMedium* pMedium);
     void            InsTextOrRTFinDrMode(SfxMedium* pMedium);
-    sal_Bool            InsSDDinDrMode(SfxMedium* pMedium);
+    bool            InsSDDinDrMode(SfxMedium* pMedium);
 };
 
 } // end of namespace sd

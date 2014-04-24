@@ -319,8 +319,8 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
             return pTmpItem;
         else
         {
-            sal_Bool bOutliner = sal_False;
-            sal_Bool bTitle = sal_False;
+            bool bOutliner = false;
+            bool bTitle = false;
 
             if( mpView )
             {
@@ -335,10 +335,10 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
                         switch(pObj->GetObjIdentifier())
                         {
                         case OBJ_TITLETEXT:
-                            bTitle = sal_True;
+                            bTitle = true;
                             break;
                         case OBJ_OUTLINETEXT:
-                            bOutliner = sal_True;
+                            bOutliner = true;
                             break;
                         }
                     }

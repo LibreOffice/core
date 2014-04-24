@@ -814,7 +814,7 @@ sal_Bool SAL_CALL DrawController::isFormDesignMode(  ) throw (uno::RuntimeExcept
 {
     SolarMutexGuard aGuard;
 
-    sal_Bool bIsDesignMode = sal_True;
+    bool bIsDesignMode = true;
 
     FmFormShell* pFormShell = mpBase->GetFormShellManager()->GetFormShell();
     if ( pFormShell )
@@ -857,7 +857,7 @@ sal_Bool DrawController::convertFastPropertyValue (
     const Any& rValue)
     throw ( com::sun::star::lang::IllegalArgumentException)
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if (nHandle == PROPERTY_SUB_CONTROLLER)
     {

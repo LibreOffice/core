@@ -124,8 +124,8 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     aCbxChangePage->Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_CHANGE_PAGE ) ).GetValue() );
     aCbxAlwaysOnTop->Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ALWAYS_ON_TOP ) ).GetValue() );
 
-    const sal_Bool  bEndless = ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ENDLESS ) ).GetValue();
-    const sal_Bool  bWindow = !( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_FULLSCREEN ) ).GetValue();
+    const bool  bEndless = ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ENDLESS ) ).GetValue();
+    const bool  bWindow = !( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_FULLSCREEN ) ).GetValue();
     const long  nPause = ( ( const SfxUInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_PAUSE_TIMEOUT ) ).GetValue();
 
     aTmfPause->SetTime( Time( 0, 0, nPause ) );
@@ -201,7 +201,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
         }
         else
         {
-            sal_Bool bUnifiedDisplay = Application::IsUnifiedDisplay();
+            bool bUnifiedDisplay = Application::IsUnifiedDisplay();
             sal_Int32 nExternalIndex = Application::GetDisplayExternalScreen();
 
             sal_Int32 nSelectedIndex (-1);

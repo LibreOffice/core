@@ -26,7 +26,7 @@ old_SdrDownCompat::old_SdrDownCompat(SvStream& rNewStream, sal_uInt16 nNewMode)
     nSubRecSiz(0),
     nSubRecPos(0),
     nMode(nNewMode),
-    bOpen(sal_False)
+    bOpen(false)
 {
     OpenSubRecord();
 }
@@ -63,7 +63,7 @@ void old_SdrDownCompat::OpenSubRecord()
         Write();
     }
 
-    bOpen = sal_True;
+    bOpen = true;
 }
 
 void old_SdrDownCompat::CloseSubRecord()
@@ -89,7 +89,7 @@ void old_SdrDownCompat::CloseSubRecord()
         rStream.Seek(nAktPos);
     }
 
-    bOpen = sal_False;
+    bOpen = false;
 }
 
 /*************************************************************************

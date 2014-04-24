@@ -41,8 +41,8 @@ ModifyPageUndoAction::ModifyPageUndoAction(
     SdPage* pThePage,
     const OUString& aTheNewName,
     AutoLayout  eTheNewAutoLayout,
-    sal_Bool bTheNewBckgrndVisible,
-    sal_Bool bTheNewBckgrndObjsVisible)
+    bool bTheNewBckgrndVisible,
+    bool bTheNewBckgrndObjsVisible)
 :   SdUndoAction(pTheDoc)
 {
     DBG_ASSERT(pThePage, "Undo without a page???");

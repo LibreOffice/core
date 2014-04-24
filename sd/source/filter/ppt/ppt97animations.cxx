@@ -640,7 +640,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
     // set after effect
     if( this->HasAfterEffect() )
     {
-        pEffect->setHasAfterEffect( sal_True );
+        pEffect->setHasAfterEffect( true );
         if( this->HasAfterEffect_ChangeColor() )
             pEffect->setDimColor( uno::makeAny( this->GetDimColor() ) );
         else
@@ -679,8 +679,8 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
     {
         sal_Int32 nParagraphLevel = this->GetParagraphLevel();
         double fDelaySeconds = this->GetDelayTimeInSeconds();
-        sal_Bool bAnimateAssociatedShape = this->HasAnimateAssociatedShape();//or only text
-        sal_Bool bTextReverse = this->HasReverseOrder();
+        bool bAnimateAssociatedShape = this->HasAnimateAssociatedShape();//or only text
+        bool bTextReverse = this->HasReverseOrder();
 
         // now create effects for each paragraph
         ::sd::CustomAnimationTextGroupPtr pGroup = pMainSequence->

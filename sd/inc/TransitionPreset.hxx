@@ -50,7 +50,7 @@ public:
 
     sal_Int16 getTransition() const { return mnTransition; }
     sal_Int16 getSubtype() const { return mnSubtype; }
-    sal_Bool getDirection() const { return mbDirection; }
+    bool getDirection() const { return mbDirection; }
     sal_Int32 getFadeColor() const { return mnFadeColor; }
 
     const OUString& getUIName() const { return maUIName; }
@@ -61,7 +61,7 @@ private:
 
     sal_Int16 mnTransition;
     sal_Int16 mnSubtype;
-    sal_Bool mbDirection;
+    bool mbDirection;
     sal_Int32 mnFadeColor;
     OUString maPresetId;
     OUString maUIName;

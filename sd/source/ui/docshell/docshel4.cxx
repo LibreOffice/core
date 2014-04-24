@@ -86,7 +86,7 @@ namespace sd {
 /**
  * Creates (if necessary) and returns a SfxPrinter
  */
-SfxPrinter* DrawDocShell::GetPrinter(sal_Bool bCreate)
+SfxPrinter* DrawDocShell::GetPrinter(bool bCreate)
 {
     if (bCreate && !mpPrinter)
     {
@@ -111,7 +111,7 @@ SfxPrinter* DrawDocShell::GetPrinter(sal_Bool bCreate)
         pSet->Put( aFlagItem );
 
         mpPrinter = new SfxPrinter(pSet);
-        mbOwnPrinter = sal_True;
+        mbOwnPrinter = true;
 
         // set output quality
         sal_uInt16 nQuality = aPrintItem.GetOptionsPrint().GetOutputQuality();
@@ -151,7 +151,7 @@ void DrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
     }
 
     mpPrinter = pNewPrinter;
-    mbOwnPrinter = sal_True;
+    mbOwnPrinter = true;
     if ( mpDoc->GetPrinterIndependentLayout() == ::com::sun::star::document::PrinterIndependentLayout::DISABLED )
         UpdateFontList();
     UpdateRefDevice();
@@ -162,7 +162,7 @@ void DrawDocShell::UpdateFontList()
     delete mpFontList;
     OutputDevice* pRefDevice = NULL;
     if ( mpDoc->GetPrinterIndependentLayout() == ::com::sun::star::document::PrinterIndependentLayout::DISABLED )
-        pRefDevice = GetPrinter(sal_True);
+        pRefDevice = GetPrinter(true);
     else
         pRefDevice = SD_MOD()->GetVirtualRefDevice();
     mpFontList = new FontList( pRefDevice, NULL, false );
@@ -172,7 +172,7 @@ void DrawDocShell::UpdateFontList()
 
 Printer* DrawDocShell::GetDocumentPrinter()
 {
-    return GetPrinter(sal_False);
+    return GetPrinter(false);
 }
 
 void DrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
@@ -196,7 +196,7 @@ void DrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
         SetPrinter((SfxPrinter*) pNewPrinter);
 
         // container owns printer
-        mbOwnPrinter = sal_False;
+        mbOwnPrinter = false;
     }
 }
 
@@ -227,12 +227,12 @@ void DrawDocShell::UpdateRefDevice()
         }
         mpDoc->SetRefDevice( pRefDevice );
 
-        ::sd::Outliner* pOutl = mpDoc->GetOutliner( sal_False );
+        ::sd::Outliner* pOutl = mpDoc->GetOutliner( false );
 
         if( pOutl )
             pOutl->SetRefDevice( pRefDevice );
 
-        ::sd::Outliner* pInternalOutl = mpDoc->GetInternalOutliner( sal_False );
+        ::sd::Outliner* pInternalOutl = mpDoc->GetInternalOutliner( false );
 
         if( pInternalOutl )
             pInternalOutl->SetRefDevice( pRefDevice );
@@ -264,9 +264,9 @@ bool DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::sun::
  */
 bool DrawDocShell::Load( SfxMedium& rMedium )
 {
-    mbNewDocument = sal_False;
+    mbNewDocument = false;
 
-    sal_Bool    bRet = sal_False;
+    bool       bRet = false;
     bool       bStartPresentation = false;
     ErrCode nError = ERRCODE_NONE;
 
@@ -291,7 +291,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
     bRet = SfxObjectShell::Load( rMedium );
     if( bRet )
     {
-        bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
+        bRet = SdXMLFilter( rMedium, *this, true, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
     }
 
     if( bRet )
@@ -343,7 +343,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
  */
 bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 {
-    mbNewDocument = sal_False;
+    mbNewDocument = false;
 
     WaitObject* pWait = NULL;
     if( mpViewShell )
@@ -355,7 +355,7 @@ bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 
     // TODO/LATER: nobody is interested in the error code?!
     ErrCode nError = ERRCODE_NONE;
-    bool bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Organizer, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
+    bool bRet = SdXMLFilter( rMedium, *this, true, SDXMLMODE_Organizer, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
 
 
     // tell SFX to change viewshell when in preview mode
@@ -378,7 +378,7 @@ bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         uno::Reference<text::XTextRange> const& xInsertPosition)
 {
-    const sal_Bool bRet = SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
+    const bool bRet = SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
 
     SfxItemSet* pSet = rMedium.GetItemSet();
     if( pSet )
@@ -406,7 +406,7 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
  */
 bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
 {
-    mbNewDocument = sal_False;
+    mbNewDocument = false;
 
     const OUString  aFilterName( rMedium.GetFilter()->GetFilterName() );
     bool            bRet = false;
@@ -435,7 +435,7 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         || aFilterName == pFilterPowerPoint97AutoPlay)
     {
         mpDoc->StopWorkStartupDelay();
-        bRet = SdPPTFilter( rMedium, *this, sal_True ).Import();
+        bRet = SdPPTFilter( rMedium, *this, true ).Import();
     }
     else if (aFilterName.indexOf("impress8") >= 0 ||
              aFilterName.indexOf("draw8") >= 0)
@@ -444,7 +444,7 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         mpDoc->CreateFirstPages();
         mpDoc->StopWorkStartupDelay();
         ErrCode nError = ERRCODE_NONE;
-        bRet = SdXMLFilter( rMedium, *this, sal_True ).Import( nError );
+        bRet = SdXMLFilter( rMedium, *this, true ).Import( nError );
 
     }
     else if (aFilterName.indexOf("StarOffice XML (Draw)") >= 0 ||
@@ -454,13 +454,13 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         mpDoc->CreateFirstPages();
         mpDoc->StopWorkStartupDelay();
         ErrCode nError = ERRCODE_NONE;
-        bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 ).Import( nError );
+        bRet = SdXMLFilter( rMedium, *this, true, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 ).Import( nError );
     }
     else if( aFilterName.equals( "CGM - Computer Graphics Metafile" ) )
     {
         mpDoc->CreateFirstPages();
         mpDoc->StopWorkStartupDelay();
-        bRet = SdCGMFilter( rMedium, *this, sal_True ).Import();
+        bRet = SdCGMFilter( rMedium, *this, true ).Import();
     }
     else
     {
@@ -510,7 +510,7 @@ bool DrawDocShell::Save()
         // Call UpdateDocInfoForSave() before export
         UpdateDocInfoForSave();
 
-        bRet = SdXMLFilter( *GetMedium(), *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( GetMedium()->GetStorage() ) ).Export();
+        bRet = SdXMLFilter( *GetMedium(), *this, true, SDXMLMODE_Normal, SotStorage::GetVersion( GetMedium()->GetStorage() ) ).Export();
     }
 
     return bRet;
@@ -548,7 +548,7 @@ bool DrawDocShell::SaveAs( SfxMedium& rMedium )
     {
         // Call UpdateDocInfoForSave() before export
         UpdateDocInfoForSave();
-        bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Export();
+        bRet = SdXMLFilter( rMedium, *this, true, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Export();
     }
 
     if( GetError() == ERRCODE_NONE )
@@ -572,27 +572,27 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
 
         if( aTypeName.indexOf( "graphic_HTML" ) >= 0 )
         {
-            pFilter = new SdHTMLFilter( rMedium, *this, sal_True );
+            pFilter = new SdHTMLFilter( rMedium, *this, true );
         }
         else if( aTypeName.indexOf( "MS_PowerPoint_97" ) >= 0 )
         {
-            pFilter = new SdPPTFilter( rMedium, *this, sal_True );
+            pFilter = new SdPPTFilter( rMedium, *this, true );
             ((SdPPTFilter*)pFilter)->PreSaveBasic();
         }
         else if ( aTypeName.indexOf( "CGM_Computer_Graphics_Metafile" ) >= 0 )
         {
-            pFilter = new SdCGMFilter( rMedium, *this, sal_True );
+            pFilter = new SdCGMFilter( rMedium, *this, true );
         }
         else if( aTypeName.indexOf( "draw8" ) >= 0 ||
                  aTypeName.indexOf( "impress8" ) >= 0 )
         {
-            pFilter = new SdXMLFilter( rMedium, *this, sal_True );
+            pFilter = new SdXMLFilter( rMedium, *this, true );
             UpdateDocInfoForSave();
         }
         else if( aTypeName.indexOf( "StarOffice_XML_Impress" ) >= 0 ||
                  aTypeName.indexOf( "StarOffice_XML_Draw" ) >= 0 )
         {
-            pFilter = new SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 );
+            pFilter = new SdXMLFilter( rMedium, *this, true, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 );
             UpdateDocInfoForSave();
         }
         else
@@ -627,7 +627,7 @@ bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com:
 
     if( SfxObjectShell::SaveCompleted(xStorage) )
     {
-        mpDoc->NbcSetChanged( sal_False );
+        mpDoc->NbcSetChanged( false );
 
         if( mpViewShell )
         {
@@ -668,16 +668,16 @@ SfxStyleSheetBasePool* DrawDocShell::GetStyleSheetPool()
     return( (SfxStyleSheetBasePool*) mpDoc->GetStyleSheetPool() );
 }
 
-sal_Bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
+bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
 {
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     if (mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
         DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(mpViewShell);
         ViewShellBase& rBase (mpViewShell->GetViewShellBase());
 
-        sal_Bool bIsMasterPage = sal_False;
+        bool bIsMasterPage = false;
         sal_uInt16 nPageNumber = SDRPAGE_NOTFOUND;
         SdrObject* pObj = NULL;
 
@@ -734,7 +734,7 @@ sal_Bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
         {
             // Jump to the bookmarked page.  This is done in three steps.
 
-            bFound = sal_True;
+            bFound = true;
             SdPage* pPage;
             if (bIsMasterPage)
                 pPage = (SdPage*) mpDoc->GetMasterPage(nPageNumber);
@@ -746,7 +746,7 @@ sal_Bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
             PageKind eNewPageKind = pPage->GetPageKind();
 
             if( (eNewPageKind != PK_STANDARD) && (mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW) )
-                return sal_False;
+                return false;
 
             if (eNewPageKind != pDrawViewShell->GetPageKind())
             {
@@ -846,11 +846,11 @@ sal_Bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
 }
 
 //If  object  is marked , return true , else return false .
-sal_Bool DrawDocShell::IsMarked(  SdrObject* pObject  )
+bool DrawDocShell::IsMarked(  SdrObject* pObject  )
 {
-       sal_Bool bisMarked =sal_False;
+    bool bisMarked =false;
 
-     if (mpViewShell && mpViewShell->ISA(DrawViewShell))
+    if (mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
         DrawViewShell* pDrViewSh = (DrawViewShell*) mpViewShell;
         if (pObject )
@@ -860,12 +860,13 @@ sal_Bool DrawDocShell::IsMarked(  SdrObject* pObject  )
      }
     return  bisMarked;
 }
+
 //If  object  is marked , return true , else return false .
-sal_Bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
+bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
 {
     OSL_TRACE("GotoBookmark %s",
         OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
-     sal_Bool bUnMark = sal_False;
+    bool bUnMark = false;
 
     if (mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
@@ -877,8 +878,8 @@ sal_Bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
             aBookmark = rBookmark.copy( 1 );
 
         // Ist das Bookmark eine Seite?
-        sal_Bool        bIsMasterPage;
-        sal_uInt16      nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
+        bool        bIsMasterPage;
+        sal_uInt16  nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
         SdrObject*  pObj = NULL;
 
         if (nPgNum == SDRPAGE_NOTFOUND)
@@ -967,11 +968,11 @@ sal_Bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
     return ( bUnMark);
 }
 //realize multi-selection of objects
-sal_Bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
+bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
 {
     OSL_TRACE("GotoBookmark %s",
         OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     if (mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
@@ -983,8 +984,8 @@ sal_Bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
             aBookmark = rBookmark.copy( 1 );
 
         // Ist das Bookmark eine Seite?
-        sal_Bool        bIsMasterPage;
-        sal_uInt16      nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
+        bool        bIsMasterPage;
+        sal_uInt16  nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
         SdrObject*  pObj = NULL;
 
         if (nPgNum == SDRPAGE_NOTFOUND)
@@ -1003,7 +1004,7 @@ sal_Bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
             /**********************************************************
             * Zur Seite springen
             **********************************************************/
-            bFound = sal_True;
+            bFound = true;
             SdPage* pPage = (SdPage*) mpDoc->GetPage(nPgNum);
 
             PageKind eNewPageKind = pPage->GetPageKind();
@@ -1062,7 +1063,7 @@ sal_Bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
                 // Objekt einblenden und selektieren
                 pDrViewSh->MakeVisible(pObj->GetLogicRect(),
                                        *pDrViewSh->GetActiveWindow());
-                      sal_Bool bUnMark = pDrViewSh->GetView()->IsObjMarked(pObj);
+                bool bUnMark = pDrViewSh->GetView()->IsObjMarked(pObj);
                 pDrViewSh->GetView()->MarkObj(pObj, pDrViewSh->GetView()->GetSdrPageView(), bUnMark);
             }
         }
@@ -1222,7 +1223,7 @@ const OUString DrawDocShell::getDocAccTitle() const
     return sRet;
 }
 
-void DrawDocShell::setDocReadOnly( sal_Bool bReadOnly)
+void DrawDocShell::setDocReadOnly( bool bReadOnly)
 {
     if (mpDoc )
     {
@@ -1230,14 +1231,14 @@ void DrawDocShell::setDocReadOnly( sal_Bool bReadOnly)
     }
 }
 
-sal_Bool DrawDocShell::getDocReadOnly() const
+bool DrawDocShell::getDocReadOnly() const
 {
     if  (mpDoc)
     {
         return mpDoc->getDocReadOnly();
     }
 
-    return sal_False;
+    return false;
 }
 } // end of namespace sd
 

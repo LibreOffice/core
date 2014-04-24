@@ -60,7 +60,7 @@ void SvUnoWeakContainer::insert( uno::WeakReference< uno::XInterface > xRef ) th
 /** searches the container for a ref that returns true on the given
     search function
 */
-sal_Bool SvUnoWeakContainer::findRef(
+bool SvUnoWeakContainer::findRef(
     uno::WeakReference< uno::XInterface >& rRef,
     void* pSearchData,
     weakref_searchfunc pSearchFunc
@@ -80,12 +80,12 @@ sal_Bool SvUnoWeakContainer::findRef(
             if( (*pSearchFunc)( *pRef, pSearchData ) )
             {
                 rRef = *pRef;
-                return sal_True;
+                return true;
             }
             ++it;
         }
     }
-    return sal_False;
+    return false;
 }
 
 void SvUnoWeakContainer::dispose()

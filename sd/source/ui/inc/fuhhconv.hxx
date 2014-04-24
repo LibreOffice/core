@@ -35,7 +35,7 @@ class FuHangulHanjaConversion : public FuPoor
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
     void StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
-                          const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive );
+                          const Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive );
 
     void StartChineseConversion();
 
@@ -47,7 +47,7 @@ class FuHangulHanjaConversion : public FuPoor
     virtual ~FuHangulHanjaConversion();
 
     Outliner*   pSdOutliner;
-    sal_Bool            bOwnOutliner;
+    bool            bOwnOutliner;
 
 private:
     FuHangulHanjaConversion (

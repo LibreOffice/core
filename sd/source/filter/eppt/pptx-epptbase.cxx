@@ -100,31 +100,31 @@ using ::com::sun::star::uno::UNO_QUERY;
 
 static PHLayout pPHLayout[] =
 {
-    { EPP_LAYOUT_TITLESLIDE,            { 0x0d, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x10, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, sal_True, sal_True, sal_True },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_BLANCSLIDE,            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, sal_False, sal_False, sal_False },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x16, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x14, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x15, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x15, 0x0d, 0x0e, sal_True, sal_False, sal_False },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x16, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_False, sal_False },
-    { EPP_LAYOUT_RIGHTCOLUMN2ROWS,      { 0x0d, 0x0e, 0x13, 0x13, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_2ROWSANDTITLE,         { 0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_LEFTCOLUMN2ROWS,       { 0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_TOPROW2COLUMN,         { 0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_2ROWSANDTITLE,         { 0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_4OBJECTS,              { 0x0d, 0x13, 0x13, 0x13, 0x13, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_False, sal_False },
-    { EPP_LAYOUT_ONLYTITLE,             { 0x0d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, sal_True, sal_False, sal_False },
-    { EPP_LAYOUT_BLANCSLIDE,            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, sal_False, sal_False, sal_False },
-    { EPP_LAYOUT_TITLERIGHT2BODIESLEFT, { 0x11, 0x12, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x11, 0x12, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_TITLERIGHTBODYLEFT,    { 0x11, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x11, 0x12, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x12, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x16, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x12, sal_True, sal_True, sal_False }
+    { EPP_LAYOUT_TITLESLIDE,            { 0x0d, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x10, true, true, false },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, true, true, false },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, true, true, false },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, true, true, true },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, true, true, false },
+    { EPP_LAYOUT_BLANCSLIDE,            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, false, false, false },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x16, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x0e, true, true, false },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x14, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, true, true, false },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x15, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x15, 0x0d, 0x0e, true, false, false },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x16, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x0e, true, true, false },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, true, true, false },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, true, false, false },
+    { EPP_LAYOUT_RIGHTCOLUMN2ROWS,      { 0x0d, 0x0e, 0x13, 0x13, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, true, true, false },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, true, true, false },
+    { EPP_LAYOUT_2ROWSANDTITLE,         { 0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, true, true, false },
+    { EPP_LAYOUT_LEFTCOLUMN2ROWS,       { 0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, true, true, false },
+    { EPP_LAYOUT_TOPROW2COLUMN,         { 0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, true, true, false },
+    { EPP_LAYOUT_2ROWSANDTITLE,         { 0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, true, true, false },
+    { EPP_LAYOUT_4OBJECTS,              { 0x0d, 0x13, 0x13, 0x13, 0x13, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, true, false, false },
+    { EPP_LAYOUT_ONLYTITLE,             { 0x0d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, true, false, false },
+    { EPP_LAYOUT_BLANCSLIDE,            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, false, false, false },
+    { EPP_LAYOUT_TITLERIGHT2BODIESLEFT, { 0x11, 0x12, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x11, 0x12, true, true, false },
+    { EPP_LAYOUT_TITLERIGHTBODYLEFT,    { 0x11, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x11, 0x12, true, true, false },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x12, true, true, false },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x16, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x12, true, true, false }
 };
 
 PPTWriterBase::PPTWriterBase()
@@ -252,7 +252,7 @@ void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::Propert
     exportPPTPost();
 }
 
-sal_Bool PPTWriterBase::InitSOIface()
+bool PPTWriterBase::InitSOIface()
 {
     while( true )
     {
@@ -274,12 +274,12 @@ sal_Bool PPTWriterBase::InitSOIface()
         if ( !GetPageByIndex( 0, NORMAL ) )
             break;
 
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
+bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
 {
     while( true )
     {
@@ -292,7 +292,7 @@ sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
                 {
                     mXDrawPages = mXDrawPagesSupplier->getDrawPages();
                     if( !mXDrawPages.is() )
-                        return sal_False;
+                        return false;
                 }
                 break;
 
@@ -300,7 +300,7 @@ sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
                 {
                     mXDrawPages = mXMasterPagesSupplier->getMasterPages();
                     if( !mXDrawPages.is() )
-                        return sal_False;
+                        return false;
                 }
                 break;
                 default:
@@ -331,7 +331,7 @@ sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
 
         /* try to get the "real" background PropertySet. If the normal page is not supporting this property, it is
            taken the property from the master */
-        sal_Bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, OUString( "Background" ), sal_True );
+        bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, OUString( "Background" ), true );
         if ( bHasBackground )
             bHasBackground = ( aAny >>= mXBackgroundPropSet );
         if ( !bHasBackground )
@@ -348,7 +348,7 @@ sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
                         ( aXMasterDrawPage, UNO_QUERY );
                     if ( aXMasterPagePropSet.is() )
                     {
-                        sal_Bool bBackground = GetPropertyValue( aAny, aXMasterPagePropSet, OUString( "Background" ) );
+                        bool bBackground = GetPropertyValue( aAny, aXMasterPagePropSet, OUString( "Background" ) );
                         if ( bBackground )
                         {
                             aAny >>= mXBackgroundPropSet;
@@ -357,23 +357,23 @@ sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
                 }
             }
         }
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
+bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
 {
     Any aAny;
 
     if ( !GetPageByIndex( nPageNum, NORMAL ) )
-        return sal_False;
+        return false;
 
     sal_uInt32 nMasterNum = GetMasterIndex( NORMAL );
     SetCurrentStyleSheet( nMasterNum );
 
     Reference< XPropertySet > aXBackgroundPropSet;
-    sal_Bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, OUString( "Background" ) );
+    bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, OUString( "Background" ) );
     if ( bHasBackground )
         bHasBackground = ( aAny >>= aXBackgroundPropSet );
 
@@ -384,7 +384,7 @@ sal_Bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
 /* sj: Don't know what's IsBackgroundVisible for, have to ask cl
     if ( GetPropertyValue( aAny, mXPagePropSet, OUString( "IsBackgroundVisible" ) ) )
     {
-        sal_Bool bBackgroundVisible;
+        bool bBackgroundVisible;
         if ( aAny >>= bBackgroundVisible )
         {
             if ( bBackgroundVisible )
@@ -394,7 +394,7 @@ sal_Bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
 */
     if ( GetPropertyValue( aAny, mXPagePropSet, OUString( "IsBackgroundObjectsVisible" ) ) )
     {
-        sal_Bool bBackgroundObjectsVisible = sal_False;
+        bool bBackgroundObjectsVisible = false;
         if ( aAny >>= bBackgroundObjectsVisible )
         {
             if ( !bBackgroundObjectsVisible )
@@ -404,35 +404,35 @@ sal_Bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
 
     ImplWriteSlide( nPageNum, nMasterNum, nMode, bHasBackground, aXBackgroundPropSet );
 
-    return sal_True;
+    return true;
 };
 
-sal_Bool PPTWriterBase::CreateNotes( sal_uInt32 nPageNum )
+bool PPTWriterBase::CreateNotes( sal_uInt32 nPageNum )
 {
     if ( !GetPageByIndex( nPageNum, NOTICE ) )
-        return sal_False;
+        return false;
     SetCurrentStyleSheet( GetMasterIndex( NORMAL ) );
 
     ImplWriteNotes( nPageNum );
 
-    return sal_True;
+    return true;
 };
 
-sal_Bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
+bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
 {
     if ( !GetPageByIndex( nPageNum, MASTER ) )
-        return sal_False;
+        return false;
     SetCurrentStyleSheet( nPageNum );
 
     if ( !ImplGetPropertyValue( mXPagePropSet, OUString( "Background" ) ) )                // load background shape
-        return sal_False;
+        return false;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet;
     if ( !( mAny >>= aXBackgroundPropSet ) )
-        return sal_False;
+        return false;
 
     ImplWriteSlideMaster( nPageNum, aXBackgroundPropSet );
 
-    return sal_True;
+    return true;
 };
 
 sal_Int32 PPTWriterBase::GetLayoutOffset( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const
@@ -505,21 +505,21 @@ sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
     return nRetValue;
 }
 
-sal_Bool PPTWriterBase::SetCurrentStyleSheet( sal_uInt32 nPageNum )
+bool PPTWriterBase::SetCurrentStyleSheet( sal_uInt32 nPageNum )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( nPageNum >= maStyleSheetList.size() )
         nPageNum = 0;
     else
-        bRet = sal_True;
+        bRet = true;
     mpStyleSheet = maStyleSheetList[ nPageNum ];
     return bRet;
 }
 
-sal_Bool PPTWriterBase::GetStyleSheets()
+bool PPTWriterBase::GetStyleSheets()
 {
     int             nInstance, nLevel;
-    sal_Bool        bRetValue = sal_False;
+    bool            bRetValue = false;
     sal_uInt32      nPageNum;
 
     for ( nPageNum = 0; nPageNum < mnMasterPages; nPageNum++ )
@@ -653,33 +653,33 @@ sal_Bool PPTWriterBase::GetStyleSheets()
     return bRetValue;
 }
 
-sal_Bool PPTWriterBase::CreateMainNotes()
+bool PPTWriterBase::CreateMainNotes()
 {
     if ( !GetPageByIndex( 0, NOTICE ) )
-        return sal_False;
+        return false;
     SetCurrentStyleSheet( 0 );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XMasterPageTarget >
         aXMasterPageTarget( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
 
     if ( !aXMasterPageTarget.is() )
-        return sal_False;
+        return false;
 
     mXDrawPage = aXMasterPageTarget->getMasterPage();
     if ( !mXDrawPage.is() )
-        return sal_False;
+        return false;
 
     mXPropSet = ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >
             ( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
     if ( !mXPropSet.is() )
-        return sal_False;
+        return false;
 
     mXShapes = ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShapes >
             ( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
     if ( !mXShapes.is() )
-        return sal_False;
+        return false;
 
     return ImplCreateMainNotes();
 }
@@ -710,11 +710,11 @@ Rectangle PPTWriterBase::MapRectangle( const awt::Rectangle& rRect )
     return Rectangle( Point( aP.X, aP.Y ), Size( aS.Width, aS.Height ) );
 }
 
-sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
+bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, bool bGroup )
 {
     while(true)
     {
-        if (  ( bGroup == sal_False ) || ( GetCurrentGroupLevel() == 0 ) )
+        if ( ( bGroup == false ) || ( GetCurrentGroupLevel() == 0 ) )
         {
             Any aAny( mXShapes->getByIndex( nIndex ) );
             aAny >>= mXShape;
@@ -745,7 +745,7 @@ sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
         aTypeBuffer.remove(nPos, RTL_CONSTASCII_LENGTH("Shape"));
         mType = aTypeBuffer.makeStringAndClear();
 
-        mbPresObj = mbEmptyPresObj = sal_False;
+        mbPresObj = mbEmptyPresObj = false;
         if ( ImplGetPropertyValue( OUString( "IsPresentationObject" ) ) )
             mAny >>= mbPresObj;
 
@@ -753,13 +753,13 @@ sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
             mAny >>= mbEmptyPresObj;
 
         mnAngle = ( PropValue::GetPropertyValue( aAny,
-            mXPropSet, OUString( "RotateAngle" ), sal_True ) )
+            mXPropSet, OUString( "RotateAngle" ), true ) )
                 ? *((sal_Int32*)aAny.getValue() )
                 : 0;
 
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 sal_Int8 PPTWriterBase::GetTransition( sal_Int16 nTransitionType, sal_Int16 nTransitionSubtype, FadeEffect eEffect, sal_uInt8& nDirection )
@@ -966,13 +966,13 @@ sal_Int8 PPTWriterBase::GetTransition( FadeEffect eEffect, sal_uInt8& nDirection
     return nPPTTransitionType;
 }
 
-sal_Bool PPTWriterBase::ContainsOtherShapeThanPlaceholders( sal_Bool bForOOMLX )
+bool PPTWriterBase::ContainsOtherShapeThanPlaceholders( bool bForOOMLX )
 {
     sal_uInt32 nShapes = mXShapes->getCount();
-    sal_Bool bOtherThanPlaceHolders = sal_False;
+    bool bOtherThanPlaceHolders = false;
 
     if ( nShapes )
-        for ( sal_uInt32 nIndex = 0; ( nIndex < nShapes ) && ( bOtherThanPlaceHolders == sal_False ); nIndex++ )
+        for ( sal_uInt32 nIndex = 0; ( nIndex < nShapes ) && ( bOtherThanPlaceHolders == false ); nIndex++ )
         {
             if ( GetShapeByIndex( nIndex ) && mType != "drawing.Page" )
             {
@@ -982,10 +982,10 @@ sal_Bool PPTWriterBase::ContainsOtherShapeThanPlaceholders( sal_Bool bForOOMLX )
                     Reference< XSimpleText > rXText( mXShape, UNO_QUERY );
 
                 if( rXText.is() && !rXText->getString().isEmpty() )
-                    bOtherThanPlaceHolders = sal_True;
+                    bOtherThanPlaceHolders = true;
             }
             else
-                bOtherThanPlaceHolders = sal_True;
+                bOtherThanPlaceHolders = true;
         }
         DBG(printf("mType == %s\n", mType.getStr()));
     }

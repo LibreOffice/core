@@ -63,19 +63,19 @@ void FuConstruct::DoExecute( SfxRequest& rReq )
 }
 
 
-sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuDraw::MouseButtonDown(rMEvt);
+    bool bReturn = FuDraw::MouseButtonDown(rMEvt);
 
-    bMBDown = sal_True;
+    bMBDown = true;
     bSelectionChanged = false;
 
     if ( mpView->IsAction() )
     {
-        return sal_True;
+        return true;
     }
 
-    bFirstMouseMove = sal_True;
+    bFirstMouseMove = true;
     aDragTimer.Start();
 
     aMDPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
@@ -91,12 +91,12 @@ sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
         {
             sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
             mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
-            bReturn = sal_True;
+            bReturn = true;
         }
         else if ( mpView->AreObjectsMarked() )
         {
             mpView->UnmarkAll();
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
 
@@ -104,14 +104,14 @@ sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 }
 
 
-sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
+bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 {
     FuDraw::MouseMove(rMEvt);
 
     if (aDragTimer.IsActive() )
     {
         if( bFirstMouseMove )
-            bFirstMouseMove = sal_False;
+            bFirstMouseMove = false;
         else
             aDragTimer.Stop();
     }
@@ -125,18 +125,18 @@ sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
         mpView->MovAction(aPnt);
     }
 
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_True;
+    bool bReturn = true;
 
     if (aDragTimer.IsActive() )
     {
         aDragTimer.Stop();
-        bIsInDragMode = sal_False;
+        bIsInDragMode = false;
     }
 
     FuDraw::MouseButtonUp(rMEvt);
@@ -146,11 +146,11 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     if ( mpView && mpView->IsDragObj() )
     {
         FrameView* pFrameView = mpViewShell->GetFrameView();
-        sal_Bool bDragWithCopy = (rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
+        bool bDragWithCopy = (rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
 
         if (bDragWithCopy)
         {
-            bDragWithCopy = !mpView->IsPresObjSelected(sal_False, sal_True);
+            bDragWithCopy = !mpView->IsPresObjSelected(false, true);
         }
 
         mpView->SetDragWithCopy(bDragWithCopy);
@@ -162,7 +162,7 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     }
     else
     {
-        bReturn = sal_False;
+        bReturn = false;
     }
 
     if ( mpView &&  !mpView->IsAction() )
@@ -217,7 +217,7 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     {
         DoubleClick(rMEvt);
     }
-    bMBDown = sal_False;
+    bMBDown = false;
 
     return bReturn;
 }
@@ -226,9 +226,9 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
  * Process keyboard input
  * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
  */
-sal_Bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
+bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if ( !bReturn )
         bReturn = FuDraw::KeyInput(rKEvt);
@@ -255,8 +255,8 @@ void FuConstruct::Deactivate()
  */
 void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
 {
-    sal_Bool bUseFillStyle, bUseNoFillStyle;
-    bUseFillStyle = bUseNoFillStyle = sal_False;
+    bool bUseFillStyle, bUseNoFillStyle;
+    bUseFillStyle = bUseNoFillStyle = false;
 
     switch( nSlotId )
     {
@@ -275,7 +275,7 @@ void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
     case SID_DRAW_FREELINE:
     case SID_DRAW_BEZIER_FILL:
     {
-        bUseFillStyle = sal_True;
+        bUseFillStyle = true;
         break;
     }
     case  SID_DRAW_RECT_NOFILL:
@@ -323,7 +323,7 @@ void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
     case SID_DRAW_BEZIER_NOFILL:
     case SID_LINE_ARROW_END:
     {
-        bUseNoFillStyle = sal_True;
+        bUseNoFillStyle = true;
         break;
     }
     }
@@ -331,7 +331,7 @@ void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
 }
 
 void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
-        const sal_Bool bForceFillStyle, const sal_Bool bForceNoFillStyle )
+        const bool bForceFillStyle, const bool bForceNoFillStyle )
 {
     SdPage* pPage = (SdPage*)mpView->GetSdrPageView()->GetPage();
     if ( pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD &&

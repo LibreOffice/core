@@ -98,18 +98,18 @@ void FuLineEnd::DoExecute( SfxRequest& )
 
         long nCount = pLineEndList->Count();
         long j = 1;
-        sal_Bool bDifferent = sal_False;
+        bool bDifferent = false;
 
         while( !bDifferent )
         {
             aName = aNewName;
             aName += " ";
             aName += OUString::number(j++);
-            bDifferent = sal_True;
+            bDifferent = true;
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                    bDifferent = sal_False;
+                    bDifferent = false;
             }
         }
 
@@ -123,12 +123,12 @@ void FuLineEnd::DoExecute( SfxRequest& )
             if( pDlg->Execute() == RET_OK )
             {
                 pDlg->GetName( aName );
-                bDifferent = sal_True;
+                bDifferent = true;
 
                 for( long i = 0; i < nCount && bDifferent; i++ )
                 {
                     if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                        bDifferent = sal_False;
+                        bDifferent = false;
                 }
 
                 if( bDifferent )

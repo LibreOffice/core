@@ -257,7 +257,7 @@ void DrawViewShell::SelectionHasChanged (void)
     // Invalidate for every subshell
     GetViewShellBase().GetViewShellManager()->InvalidateAllSubShells(this);
 
-    mpDrawView->UpdateSelectionClipboard( sal_False );
+    mpDrawView->UpdateSelectionClipboard( false );
 
     GetViewShellBase().GetDrawController().FireSelectionChangeListener();
 }
@@ -269,7 +269,7 @@ void DrawViewShell::SetZoom( long nZoom )
 {
     // Make sure that the zoom factor will not be recalculated on
     // following window resizings.
-    mbZoomOnPage = sal_False;
+    mbZoomOnPage = false;
     ViewShell::SetZoom( nZoom );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
@@ -293,7 +293,7 @@ void DrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
  * discover an refreshed text objext.
  */
 
-bool DrawViewShell::PrepareClose( sal_Bool bUI )
+bool DrawViewShell::PrepareClose( bool bUI )
 {
     if ( !ViewShell::PrepareClose(bUI) )
         return false;
@@ -481,7 +481,7 @@ bool DrawViewShell::IsLayerModeActive (void) const
  * Generate horizontal ruler
  */
 
-SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, sal_Bool bIsFirst)
+SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, bool bIsFirst)
 {
     Ruler* pRuler;
     WinBits  aWBits;
@@ -733,9 +733,9 @@ ErrCode DrawViewShell::DoVerb(long nVerb)
  * Activate OLE-object
  */
 
-sal_Bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
+bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 {
-    sal_Bool bActivated = sal_False;
+    bool bActivated = false;
 
     if ( !GetDocSh()->IsUIActive() )
     {
@@ -759,7 +759,7 @@ sal_Bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
 void LclResetFlag (bool& rbFlag) {rbFlag = false;}
 
-sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
+bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 {
     /** Under some circumstances there are nested calls to SwitchPage() and
         may crash the application (activation of form controls when the
@@ -768,7 +768,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         would jump to the wrong page anyway.)
     */
     if (mbIsInSwitchPage)
-        return sal_False;
+        return false;
     mbIsInSwitchPage = true;
     comphelper::ScopeGuard aGuard (::boost::bind(LclResetFlag, ::boost::ref(mbIsInSwitchPage)));
 
@@ -780,10 +780,10 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             ::std::mem_fun(&DrawViewShell::SwitchPage),
             this,
             nSelectedPage));
-        return sal_False;
+        return false;
     }
 
-    sal_Bool bOK = sal_False;
+    bool bOK = false;
 
     // With the current implementation of FuSlideShow there is a problem
     // when it dsplays the show in a window: When the show is stopped it
@@ -812,7 +812,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
     {
         ModifyGuard aGuard2( GetDoc() );
 
-        bOK = sal_True;
+        bOK = true;
 
         if (mpActualPage)
         {
@@ -835,7 +835,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                         && sPageText == maTabControl.GetPageText(nSelectedPage+1))
                     {
                         // this slide is already visible
-                        return sal_True;
+                        return true;
                     }
                 }
             }
@@ -857,7 +857,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                         && maTabControl.GetPageText(nSelectedPage+1).equals(pNewPage->GetName()))
                     {
                         // this slide is already visible
-                        return sal_True;
+                        return true;
                     }
                 }
             }
@@ -906,7 +906,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         for (sal_uInt16 i = 0; i < GetDoc()->GetSdPageCount(mePageKind); i++)
         {
             // deselect all pages
-            GetDoc()->SetSelected( GetDoc()->GetSdPage(i, mePageKind), sal_False);
+            GetDoc()->SetSelected( GetDoc()->GetSdPage(i, mePageKind), false);
         }
 
         if (!mpActualPage)
@@ -917,7 +917,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
         // also select this page (mpActualPage always points at a drawing page,
         // never at a masterpage)
-        GetDoc()->SetSelected(mpActualPage, sal_True);
+        GetDoc()->SetSelected(mpActualPage, true);
 
         rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );
         if( !xSlideshow.is() || !xSlideshow->isRunning() || ( xSlideshow->getAnimationMode() != ANIMATIONMODE_SHOW ) )
@@ -934,7 +934,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             /**********************************************************************
             * PAGEMODE
             **********************************************************************/
-            GetDoc()->SetSelected(mpActualPage, sal_True);
+            GetDoc()->SetSelected(mpActualPage, true);
 
             SdrPageView* pPageView = mpDrawView->GetSdrPageView();
 
@@ -1110,7 +1110,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
  * Check if page change is allowed
  */
 
-sal_Bool DrawViewShell::IsSwitchPageAllowed() const
+bool DrawViewShell::IsSwitchPageAllowed() const
 {
     bool bOK = true;
 

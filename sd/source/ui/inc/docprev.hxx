@@ -41,7 +41,7 @@ class SD_DLLPUBLIC SdDocPreviewWin : public Control, public SfxListener
 {
 protected:
     GDIMetaFile*    pMetaFile;
-    sal_Bool            bInEffect;
+    bool            bInEffect;
     Link            aClickHdl;
     SfxObjectShell* mpObj;
     sal_uInt16      mnShowPage;

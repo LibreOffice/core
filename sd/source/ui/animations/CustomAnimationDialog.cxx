@@ -1130,7 +1130,7 @@ private:
 
 private:
     ::std::vector< OUString > maSoundList;
-    sal_Bool mbHasText;
+    bool mbHasText;
     const STLPropertySet* mpSet;
 
     VclFrame*       mpSettings;
@@ -1156,7 +1156,7 @@ private:
 };
 
 CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, const STLPropertySet* pSet )
-: TabPage( pParent, "EffectTab", "modules/simpress/ui/customanimationeffecttab.ui" ), mbHasText( sal_False ), mpSet(pSet )
+: TabPage( pParent, "EffectTab", "modules/simpress/ui/customanimationeffecttab.ui" ), mbHasText( false ), mpSet(pSet )
 {
     get(mpSettings, "settings" );
     get(mpFTProperty1, "prop_label1" );
@@ -1271,7 +1271,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
         (pSet->getPropertyState( nHandleAfterEffectOnNextEffect ) != STLPropertyState_AMBIGUOUS) &&
         (pSet->getPropertyState( nHandleDimColor ) != STLPropertyState_AMBIGUOUS))
     {
-        sal_Bool bHasAfterEffect = sal_False;
+        bool bHasAfterEffect = false;
         pSet->getPropertyValue( nHandleHasAfterEffect ) >>= bHasAfterEffect;
 
         sal_Int32 nPos = 0;
@@ -1279,7 +1279,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
         {
             nPos++;
 
-            sal_Bool bAfterEffectOnNextClick = sal_False;
+            bool bAfterEffectOnNextClick = false;
             pSet->getPropertyValue( nHandleAfterEffectOnNextEffect ) >>= bAfterEffectOnNextClick;
             Any aDimColor( pSet->getPropertyValue( nHandleDimColor ) );
 
@@ -1487,9 +1487,9 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
     sal_Int32 nPos = mpLBAfterEffect->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        sal_Bool bAfterEffect = nPos != 0;
+        bool bAfterEffect = nPos != 0;
 
-        sal_Bool bOldAfterEffect = sal_False;
+        bool bOldAfterEffect = false;
 
         if(mpSet->getPropertyState( nHandleHasAfterEffect ) != STLPropertyState_AMBIGUOUS)
             mpSet->getPropertyValue( nHandleHasAfterEffect ) >>= bOldAfterEffect;
@@ -1513,8 +1513,8 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             (mpSet->getPropertyValue( nHandleDimColor ) != aDimColor) )
             pSet->setPropertyValue( nHandleDimColor, makeAny( aDimColor ) );
 
-        sal_Bool bAfterEffectOnNextEffect = nPos != 2 ? sal_True : sal_False;
-        sal_Bool bOldAfterEffectOnNextEffect = !bAfterEffectOnNextEffect;
+        bool bAfterEffectOnNextEffect = nPos != 2 ? sal_True : sal_False;
+        bool bOldAfterEffectOnNextEffect = !bAfterEffectOnNextEffect;
 
         if( mpSet->getPropertyState( nHandleAfterEffectOnNextEffect ) != STLPropertyState_AMBIGUOUS)
             mpSet->getPropertyValue( nHandleAfterEffectOnNextEffect ) >>= bOldAfterEffectOnNextEffect;
@@ -1572,7 +1572,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
         else if( nPos == 1 )
         {
             // this means stop sound
-            aNewSoundURL = makeAny( (sal_Bool)sal_True );
+            aNewSoundURL = makeAny( true );
         }
         else
         {
@@ -1876,7 +1876,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
             Reference< XPropertySet > xSet( xShape, UNO_QUERY );
             if( xSet.is() && xSet->getPropertySetInfo()->hasPropertyByName( aStrIsEmptyPresObj ) )
             {
-                sal_Bool bIsEmpty = sal_False;
+                bool bIsEmpty = false;
                 xSet->getPropertyValue( aStrIsEmptyPresObj ) >>= bIsEmpty;
                 if( bIsEmpty )
                     continue;
@@ -2132,7 +2132,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
     maCBXAnimateForm->SetState( TRISTATE_INDET );
     if( pSet->getPropertyState( nHandleAnimateForm ) != STLPropertyState_AMBIGUOUS )
     {
-        sal_Bool bAnimateForm = sal_False;
+        bool bAnimateForm = false;
         if( pSet->getPropertyValue( nHandleAnimateForm ) >>= bAnimateForm )
         {
             maCBXAnimateForm->Check( bAnimateForm );
@@ -2146,7 +2146,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
     maCBXReverse->SetState( TRISTATE_INDET );
     if( pSet->getPropertyState( nHandleTextReverse ) != STLPropertyState_AMBIGUOUS )
     {
-        sal_Bool bTextReverse = sal_False;
+        bool bTextReverse = false;
         if( pSet->getPropertyValue( nHandleTextReverse ) >>= bTextReverse )
         {
             maCBXReverse->Check( bTextReverse );
@@ -2187,8 +2187,8 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
 
     if( nPos > 0 )
     {
-        sal_Bool bTextReverse = maCBXReverse->IsChecked();
-        sal_Bool bOldTextReverse = !bTextReverse;
+        bool bTextReverse = maCBXReverse->IsChecked();
+        bool bOldTextReverse = !bTextReverse;
 
         if(mpSet->getPropertyState( nHandleTextReverse ) != STLPropertyState_AMBIGUOUS)
             mpSet->getPropertyValue( nHandleTextReverse ) >>= bOldTextReverse;
@@ -2213,8 +2213,8 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
     //If this control is disabled, we should ignore its value
     if (maCBXAnimateForm->IsEnabled())
     {
-        sal_Bool bAnimateForm = maCBXAnimateForm->IsChecked();
-        sal_Bool bOldAnimateForm = !bAnimateForm;
+        bool bAnimateForm = maCBXAnimateForm->IsChecked();
+        bool bOldAnimateForm = !bAnimateForm;
 
         if(mpSet->getPropertyState( nHandleAnimateForm ) != STLPropertyState_AMBIGUOUS)
             mpSet->getPropertyValue( nHandleAnimateForm ) >>= bOldAnimateForm;
@@ -2267,7 +2267,7 @@ CustomAnimationDialog::CustomAnimationDialog(Window* pParent, STLPropertySet* pS
     mpDurationTabPage = new CustomAnimationDurationTabPage( mpTabControl, mpSet );
     mpTabControl->SetTabPage( mnTimingId, mpDurationTabPage );
 
-    sal_Bool bHasText = sal_False;
+    bool bHasText = false;
     if( pSet->getPropertyState( nHandleHasText ) != STLPropertyState_AMBIGUOUS )
         pSet->getPropertyValue( nHandleHasText ) >>= bHasText;
 
@@ -2318,8 +2318,8 @@ STLPropertySet* CustomAnimationDialog::createDefaultSet()
     STLPropertySet* pSet = new STLPropertySet();
     pSet->setPropertyDefaultValue( nHandleMaxParaDepth, makeAny( (sal_Int32)-1 ) );
 
-    pSet->setPropertyDefaultValue( nHandleHasAfterEffect, makeAny( (sal_Bool)sal_False ) );
-    pSet->setPropertyDefaultValue( nHandleAfterEffectOnNextEffect, makeAny( (sal_Bool)sal_False ) );
+    pSet->setPropertyDefaultValue( nHandleHasAfterEffect, makeAny( false ) );
+    pSet->setPropertyDefaultValue( nHandleAfterEffectOnNextEffect, makeAny( false ) );
     pSet->setPropertyDefaultValue( nHandleDimColor, aEmpty );
     pSet->setPropertyDefaultValue( nHandleIterateType, makeAny( (sal_Int16)0 ) );
     pSet->setPropertyDefaultValue( nHandleIterateInterval, makeAny( (double)0.0 ) );

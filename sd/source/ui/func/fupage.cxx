@@ -225,7 +225,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
     bool bScale = mpDoc->GetDocumentType() != DOCUMENT_TYPE_DRAW;
     aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT1, bScale ? sal_True : sal_False ) );
 
-    sal_Bool bFullSize = mpPage->IsMasterPage() ?
+    bool bFullSize = mpPage->IsMasterPage() ?
         mpPage->IsBackgroundFullSize() : ((SdPage&)mpPage->TRG_GetMasterPage()).IsBackgroundFullSize();
 
     aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT2, bFullSize ) );
@@ -325,7 +325,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
         {
             // if some fillstyle-items are not set in the dialog, then
             // try to use the items before
-            sal_Bool bChanges = sal_False;
+            bool bChanges = false;
             for( sal_uInt16 i=XATTR_FILL_FIRST; i<XATTR_FILL_LAST; i++ )
             {
                 if( aMergedAttr.GetItemState( i ) != SFX_ITEM_DEFAULT )
@@ -334,7 +334,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                         pTempSet->Put( aMergedAttr.Get( i ) );
                     else
                         if( aMergedAttr.GetItem( i ) != pTempSet->GetItem( i ) )
-                            bChanges = sal_True;
+                            bChanges = true;
                 }
             }
 
@@ -489,13 +489,13 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     // Set new page-attributes
     PageKind ePageKind = mpDrawViewShell->GetPageKind();
     const SfxPoolItem*  pPoolItem;
-    sal_Bool                bSetPageSizeAndBorder = sal_False;
+    bool                bSetPageSizeAndBorder = false;
     Size                aNewSize(maSize);
     sal_Int32               nLeft  = -1, nRight = -1, nUpper = -1, nLower = -1;
-    sal_Bool                bScaleAll = sal_True;
+    bool                bScaleAll = true;
     Orientation         eOrientation = mpPage->GetOrientation();
     SdPage*             pMasterPage = mpPage->IsMasterPage() ? mpPage : &(SdPage&)(mpPage->TRG_GetMasterPage());
-    sal_Bool                bFullSize = pMasterPage->IsBackgroundFullSize();
+    bool                bFullSize = pMasterPage->IsBackgroundFullSize();
     sal_uInt16              nPaperBin = mpPage->GetPaperBin();
 
     if( pArgs->GetItemState(SID_ATTR_PAGE, true, &pPoolItem) == SFX_ITEM_SET )
@@ -506,7 +506,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
             ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT;
 
         if( mpPage->GetOrientation() != eOrientation )
-            bSetPageSizeAndBorder = sal_True;
+            bSetPageSizeAndBorder = true;
 
         mpDrawViewShell->ResetActualPage();
     }
@@ -516,7 +516,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         aNewSize = ((const SvxSizeItem*) pPoolItem)->GetSize();
 
         if( mpPage->GetSize() != aNewSize )
-            bSetPageSizeAndBorder = sal_True;
+            bSetPageSizeAndBorder = true;
     }
 
     if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE),
@@ -526,7 +526,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         nRight = ((const SvxLRSpaceItem*) pPoolItem)->GetRight();
 
         if( mpPage->GetLftBorder() != nLeft || mpPage->GetRgtBorder() != nRight )
-            bSetPageSizeAndBorder = sal_True;
+            bSetPageSizeAndBorder = true;
 
     }
 
@@ -537,7 +537,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         nLower = ((const SvxULSpaceItem*) pPoolItem)->GetLower();
 
         if( mpPage->GetUppBorder() != nUpper || mpPage->GetLwrBorder() != nLower )
-            bSetPageSizeAndBorder = sal_True;
+            bSetPageSizeAndBorder = true;
     }
 
     if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT1), true, &pPoolItem) == SFX_ITEM_SET )
@@ -550,7 +550,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         bFullSize = ((const SfxBoolItem*) pPoolItem)->GetValue();
 
         if(pMasterPage->IsBackgroundFullSize() != bFullSize )
-            bSetPageSizeAndBorder = sal_True;
+            bSetPageSizeAndBorder = true;
     }
 
     // Paper Bin
@@ -559,18 +559,18 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         nPaperBin = ((const SvxPaperBinItem*) pPoolItem)->GetValue();
 
         if( mpPage->GetPaperBin() != nPaperBin )
-            bSetPageSizeAndBorder = sal_True;
+            bSetPageSizeAndBorder = true;
     }
 
     if (nLeft == -1 && nUpper != -1)
     {
-        bSetPageSizeAndBorder = sal_True;
+        bSetPageSizeAndBorder = true;
         nLeft  = mpPage->GetLftBorder();
         nRight = mpPage->GetRgtBorder();
     }
     else if (nLeft != -1 && nUpper == -1)
     {
-        bSetPageSizeAndBorder = sal_True;
+        bSetPageSizeAndBorder = true;
         nUpper = mpPage->GetUppBorder();
         nLower = mpPage->GetLwrBorder();
     }

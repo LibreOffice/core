@@ -161,8 +161,8 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
         pWin                ( pParent ),
         m_nCurrentFrame     ( EMPTY_FRAMELIST ),
 
-        bMovie              ( sal_False ),
-        bAllObjects         ( sal_False ),
+        bMovie              ( false ),
+        bAllObjects         ( false ),
 
         pBindings           ( pInBindings )
 {
@@ -248,7 +248,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl)
 
 IMPL_LINK_NOARG(AnimationWindow, ClickStopHdl)
 {
-    bMovie = sal_False;
+    bMovie = false;
     return( 0L );
 }
 
@@ -258,15 +258,15 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
 {
     ScopeLockGuard aGuard( maPlayLock );
 
-    bMovie = sal_True;
-    sal_Bool bDisableCtrls = sal_False;
+    bMovie = true;
+    bool bDisableCtrls = false;
     size_t const nCount = m_FrameList.size();
-    sal_Bool bReverse = p == &aBtnReverse;
+    bool bReverse = p == &aBtnReverse;
 
     // it is difficult to find it later on
-    sal_Bool bRbtGroupEnabled = aRbtGroup.IsEnabled();
-    sal_Bool bBtnGetAllObjectsEnabled = aBtnGetAllObjects.IsEnabled();
-    sal_Bool bBtnGetOneObjectEnabled = aBtnGetOneObject.IsEnabled();
+    bool bRbtGroupEnabled = aRbtGroup.IsEnabled();
+    bool bBtnGetAllObjectsEnabled = aBtnGetAllObjects.IsEnabled();
+    bool bBtnGetOneObjectEnabled = aBtnGetOneObject.IsEnabled();
 
     // calculate overall time
     Time aTime( 0 );
@@ -289,7 +289,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     SfxProgress* pProgress = NULL;
     if( nFullTime >= 1000 )
     {
-        bDisableCtrls = sal_True;
+        bDisableCtrls = true;
         aBtnStop.Enable();
         aBtnStop.Update();
         OUString aStr("Animator:"); // here we should think about something smart
@@ -298,7 +298,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
 
     sal_uLong nTmpTime = 0;
     size_t i = 0;
-    sal_Bool bCount = i < nCount;
+    bool bCount = i < nCount;
     if( bReverse )
     {
         i = nCount - 1;
@@ -353,7 +353,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     }
 
     // to re-enable the controls
-    bMovie = sal_False;
+    bMovie = false;
     if (nCount > 0)
     {
         assert(i == m_nCurrentFrame);
@@ -854,7 +854,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
     {
         // If it is ONE animation object or one group object, which was
         // 'individually taken', we insert the objects separately
-        sal_Bool bAnimObj = sal_False;
+        bool bAnimObj = false;
         if( nMarkCount == 1 )
         {
             SdrMark*            pMark = rMarkList.GetMark(0);
@@ -907,7 +907,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     // if a animated GIF is taken, only such one can be created
                     aRbtBitmap.Check();
                     aRbtGroup.Enable( false );
-                    bAnimObj = sal_True;
+                    bAnimObj = true;
                 }
             }
             else if( bAllObjects || ( pAnimInfo && pAnimInfo->mbIsMovie ) )
@@ -935,7 +935,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     // Clone
                     pPage->InsertObject(pSnapShot->Clone(), m_nCurrentFrame);
                 }
-                bAnimObj = sal_True;
+                bAnimObj = true;
             }
         }
         // also one single animated object
@@ -985,7 +985,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
                     pPage->InsertObject(pObject->Clone(), m_nCurrentFrame);
                 }
-                bAnimObj = sal_True; // that we don't change again
+                bAnimObj = true; // that we don't change again
             }
             else
             {

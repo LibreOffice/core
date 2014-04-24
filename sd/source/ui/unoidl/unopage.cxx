@@ -101,7 +101,7 @@ enum WID_PAGE
 static sal_Char const sEmptyPageName[sizeof("page")] = "page";
 
 // this function stores the property maps for draw pages in impress and draw
-const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKind ePageKind )
+const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind ePageKind )
 {
     static const SfxItemPropertyMapEntry aDrawPagePropertyMap_Impl[] =
     {
@@ -503,7 +503,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
     }
     else
     {
-        pPresObj = GetPage()->CreatePresObj( eObjKind, sal_False, aRect, sal_True );
+        pPresObj = GetPage()->CreatePresObj( eObjKind, false, aRect, true );
     }
 
     if( pPresObj )
@@ -604,7 +604,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 GetPage()->SetPresChange( (PresChange)nValue );
                 break;
             case WID_PAGE_LAYOUT:
-                GetPage()->SetAutoLayout( (AutoLayout)nValue, sal_True );
+                GetPage()->SetAutoLayout( (AutoLayout)nValue, true );
                 break;
             case WID_PAGE_DURATION:
                 GetPage()->SetTime((sal_Int32)nValue);
@@ -692,10 +692,10 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
         case WID_PAGE_VISIBLE :
         {
-            sal_Bool    bVisible = sal_False;
+            bool    bVisible = false;
             if( ! ( aValue >>= bVisible ) )
                 throw lang::IllegalArgumentException();
-            GetPage()->SetExcluded( bVisible == sal_False );
+            GetPage()->SetExcluded( bVisible == false );
             break;
         }
         case WID_PAGE_SOUNDFILE :
@@ -709,7 +709,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             }
             else
             {
-                sal_Bool bStopSound = sal_False;
+                bool bStopSound = false;
                 if( aValue >>= bStopSound )
                 {
                     GetPage()->SetStopSound( bStopSound ? true : false );
@@ -722,7 +722,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
         case WID_LOOP_SOUND:
         {
-            sal_Bool bLoop = sal_False;
+            bool bLoop = false;
             if( ! (aValue >>= bLoop) )
                 throw lang::IllegalArgumentException();
 
@@ -731,7 +731,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
         case WID_PAGE_BACKFULL:
         {
-            sal_Bool    bFullSize = sal_False;
+            bool    bFullSize = false;
             if( ! ( aValue >>= bFullSize ) )
                 throw lang::IllegalArgumentException();
             GetPage()->SetBackgroundFullSize( bFullSize );
@@ -739,7 +739,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
         case WID_PAGE_BACKVIS:
         {
-            sal_Bool bVisible = sal_False;
+            bool bVisible = false;
             if( ! ( aValue >>= bVisible ) )
                 throw lang::IllegalArgumentException();
 
@@ -759,7 +759,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
         case WID_PAGE_BACKOBJVIS:
         {
-            sal_Bool bVisible = sal_False;
+            bool bVisible = false;
             if( ! ( aValue >>= bVisible ) )
                 throw lang::IllegalArgumentException();
 
@@ -810,7 +810,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             {
             case WID_PAGE_HEADERVISIBLE:
             {
-                sal_Bool bVisible = sal_False;
+                bool bVisible = false;
                 if( ! ( aValue >>= bVisible ) )
                     throw lang::IllegalArgumentException();
 
@@ -828,7 +828,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             }
             case WID_PAGE_FOOTERVISIBLE:
             {
-                sal_Bool bVisible = sal_False;
+                bool bVisible = false;
                 if( ! ( aValue >>= bVisible ) )
                     throw lang::IllegalArgumentException();
 
@@ -846,7 +846,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             }
             case WID_PAGE_PAGENUMBERVISIBLE:
             {
-                sal_Bool bVisible = sal_False;
+                bool bVisible = false;
                 if( ! ( aValue >>= bVisible ) )
                     throw lang::IllegalArgumentException();
 
@@ -855,7 +855,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             }
             case WID_PAGE_DATETIMEVISIBLE:
             {
-                sal_Bool bVisible = sal_False;
+                bool bVisible = false;
                 if( ! ( aValue >>= bVisible ) )
                     throw lang::IllegalArgumentException();
 
@@ -864,7 +864,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             }
             case WID_PAGE_DATETIMEFIXED:
             {
-                sal_Bool bVisible = sal_False;
+                bool bVisible = false;
                 if( ! ( aValue >>= bVisible ) )
                     throw lang::IllegalArgumentException();
 
@@ -934,7 +934,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
         case WID_TRANSITION_DIRECTION:
         {
-            sal_Bool bValue = sal_False;
+            bool bValue = false;
             if( ! ( aValue >>= bValue ) )
                 throw lang::IllegalArgumentException();
 
@@ -1128,8 +1128,8 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
 
     case WID_PAGE_VISIBLE :
     {
-        sal_Bool bVisible = GetPage()->IsExcluded() == sal_False;
-        aAny <<= Any( &bVisible, ::getBooleanCppuType() );
+        bool bVisible = GetPage()->IsExcluded() == false;
+        aAny <<= bVisible;
         break;
     }
 
@@ -1137,7 +1137,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     {
         if( GetPage()->IsStopSound() )
         {
-            aAny <<= sal_True;
+            aAny <<= true;
         }
         else
         {
@@ -1150,13 +1150,13 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     }
     case WID_LOOP_SOUND:
     {
-        aAny <<= (sal_Bool)GetPage()->IsLoopSound();
+        aAny <<= GetPage()->IsLoopSound();
         break;
     }
     case WID_PAGE_BACKFULL:
     {
-        sal_Bool bFullSize = GetPage()->IsBackgroundFullSize();
-        aAny = Any( &bFullSize, ::getBooleanCppuType() );
+        bool bFullSize = GetPage()->IsBackgroundFullSize();
+        aAny <<= bFullSize;
         break;
     }
     case WID_PAGE_BACKVIS:
@@ -1169,11 +1169,11 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                 SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false));
+                aAny <<= aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false));
             }
             else
             {
-                aAny <<= (sal_Bool)sal_False;
+                aAny <<= false;
             }
         }
         break;
@@ -1188,11 +1188,11 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                 SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false));
+                aAny <<= aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false));
             }
             else
             {
-                aAny <<= (sal_Bool)sal_False;
+                aAny <<= false;
             }
         }
         break;
@@ -1209,11 +1209,11 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     }
     case WID_PAGE_ISDARK:
     {
-        aAny <<= (sal_Bool)GetPage()->GetPageBackgroundColor().IsDark();
+        aAny <<= GetPage()->GetPageBackgroundColor().IsDark();
         break;
     }
     case WID_PAGE_HEADERVISIBLE:
-        aAny <<= (sal_Bool)GetPage()->getHeaderFooterSettings().mbHeaderVisible;
+        aAny <<= GetPage()->getHeaderFooterSettings().mbHeaderVisible;
         break;
     case WID_PAGE_HEADERTEXT:
         {
@@ -1222,7 +1222,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         }
         break;
     case WID_PAGE_FOOTERVISIBLE:
-        aAny <<= (sal_Bool)GetPage()->getHeaderFooterSettings().mbFooterVisible;
+        aAny <<= GetPage()->getHeaderFooterSettings().mbFooterVisible;
         break;
     case WID_PAGE_FOOTERTEXT:
         {
@@ -1231,13 +1231,13 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         }
         break;
     case WID_PAGE_PAGENUMBERVISIBLE:
-        aAny <<= (sal_Bool)GetPage()->getHeaderFooterSettings().mbSlideNumberVisible;
+        aAny <<= GetPage()->getHeaderFooterSettings().mbSlideNumberVisible;
         break;
     case WID_PAGE_DATETIMEVISIBLE:
-        aAny <<= (sal_Bool)GetPage()->getHeaderFooterSettings().mbDateTimeVisible;
+        aAny <<= GetPage()->getHeaderFooterSettings().mbDateTimeVisible;
         break;
     case WID_PAGE_DATETIMEFIXED:
-        aAny <<= (sal_Bool)GetPage()->getHeaderFooterSettings().mbDateTimeIsFixed;
+        aAny <<= GetPage()->getHeaderFooterSettings().mbDateTimeIsFixed;
         break;
     case WID_PAGE_DATETIMETEXT:
         {
@@ -1770,7 +1770,7 @@ static void refreshpage( SdDrawDocument* pDoc, const PageKind ePageKind )
 
             pDoc->SetMaxObjSize(aViewSize);
 
-            pViewSh->InitWindows(aPageOrg, aViewSize, Point(-1, -1), sal_True);
+            pViewSh->InitWindows(aPageOrg, aViewSize, Point(-1, -1), true);
 
             pViewSh->UpdateScrollBars();
         }
@@ -2076,7 +2076,7 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExceptio
     if( maTypeSequence.getLength() == 0 )
     {
         const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PK_STANDARD;
-        sal_Bool bPresPage = mbIsImpressDocument && ePageKind != PK_HANDOUT;
+        bool bPresPage = mbIsImpressDocument && ePageKind != PK_HANDOUT;
 
         // Collect the types of this class.
         ::std::vector<uno::Type> aTypes;
@@ -2310,7 +2310,7 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
             EditMode eMode = pDrawViewSh->GetEditMode();
             if( eMode == EM_PAGE )
             {
-                sal_Bool bLayer = pDrawViewSh->IsLayerModeActive();
+                bool bLayer = pDrawViewSh->IsLayerModeActive();
 
                 pDrawViewSh->ChangeEditMode( eMode, !bLayer );
                 pDrawViewSh->ChangeEditMode( eMode, bLayer );
@@ -2722,7 +2722,7 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeExcept
     if( maTypeSequence.getLength() == 0 )
     {
         const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PK_STANDARD;
-        sal_Bool bPresPage = mbIsImpressDocument && SvxFmDrawPage::mpPage && ePageKind != PK_HANDOUT;
+        bool bPresPage = mbIsImpressDocument && SvxFmDrawPage::mpPage && ePageKind != PK_HANDOUT;
 
         // Collect the types of this class.
         ::std::vector<uno::Type> aTypes;
@@ -3006,7 +3006,7 @@ void SAL_CALL SdMasterPage::setName( const OUString& rName )
     if(SvxFmDrawPage::mpPage && GetPage()->GetPageKind() != PK_NOTES)
     {
         SdDrawDocument* pDoc = GetModel()->GetDoc();
-        sal_Bool bOutDummy;
+        bool bOutDummy;
         OUString aNewName( rName );
 
         // Slide Name has to be unique
@@ -3029,7 +3029,7 @@ void SAL_CALL SdMasterPage::setName( const OUString& rName )
             EditMode eMode = pDrawViewSh->GetEditMode();
             if( eMode == EM_MASTERPAGE )
             {
-                sal_Bool bLayer = pDrawViewSh->IsLayerModeActive();
+                bool bLayer = pDrawViewSh->IsLayerModeActive();
 
                 pDrawViewSh->ChangeEditMode( eMode, !bLayer );
                 pDrawViewSh->ChangeEditMode( eMode, bLayer );

@@ -129,13 +129,13 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_UNDO))
     {
         ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
-        sal_Bool bActivate(sal_False);
+        bool bActivate(false);
 
         if(pUndoManager)
         {
             if(pUndoManager->GetUndoActionCount() != 0)
             {
-                bActivate = sal_True;
+                bActivate = true;
             }
         }
 
@@ -156,13 +156,13 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_REDO))
     {
         ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
-        sal_Bool bActivate(sal_False);
+        bool bActivate(false);
 
         if(pUndoManager)
         {
             if(pUndoManager->GetRedoActionCount() != 0)
             {
-                bActivate = sal_True;
+                bActivate = true;
             }
         }
 
@@ -216,8 +216,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     OUString aNotesPageName;
     AutoLayout eStandardLayout (AUTOLAYOUT_NONE);
     AutoLayout eNotesLayout (AUTOLAYOUT_NOTES);
-    sal_Bool bIsPageBack = aVisibleLayers.IsSet(aBckgrnd);
-    sal_Bool bIsPageObj = aVisibleLayers.IsSet(aBckgrndObj);
+    bool bIsPageBack = aVisibleLayers.IsSet(aBckgrnd);
+    bool bIsPageObj = aVisibleLayers.IsSet(aBckgrndObj);
 
     // 1. Process the arguments.
     const SfxItemSet* pArgs = rRequest.GetArgs();

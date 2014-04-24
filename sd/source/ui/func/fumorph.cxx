@@ -330,7 +330,7 @@ void FuMorph::ImpAddPolys(
  */
 void FuMorph::ImpInsertPolygons(
     B2DPolyPolygonList_impl& rPolyPolyList3D,
-    sal_Bool bAttributeFade,
+    bool bAttributeFade,
     const SdrObject* pObj1,
     const SdrObject* pObj2
 )
@@ -345,11 +345,11 @@ void FuMorph::ImpInsertPolygons(
     SfxItemPool*        pPool = pObj1->GetObjectItemPool();
     SfxItemSet          aSet1( *pPool,SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END,0 );
     SfxItemSet          aSet2( aSet1 );
-    sal_Bool            bLineColor = sal_False;
-    sal_Bool            bFillColor = sal_False;
-    sal_Bool            bLineWidth = sal_False;
-    sal_Bool            bIgnoreLine = sal_False;
-    sal_Bool            bIgnoreFill = sal_False;
+    bool            bLineColor = false;
+    bool            bFillColor = false;
+    bool            bLineWidth = false;
+    bool            bIgnoreLine = false;
+    bool            bIgnoreFill = false;
 
     aSet1.Put(pObj1->GetMergedItemSet());
     aSet2.Put(pObj2->GetMergedItemSet());
@@ -363,7 +363,7 @@ void FuMorph::ImpInsertPolygons(
     {
         if ( ( eLineStyle1 != XLINE_NONE ) && ( eLineStyle2 != XLINE_NONE ) )
         {
-            bLineWidth = bLineColor = sal_True;
+            bLineWidth = bLineColor = true;
 
             aStartLineCol = static_cast< XLineColorItem const & >(
                 aSet1.Get(XATTR_LINECOLOR)).GetColorValue();
@@ -374,18 +374,18 @@ void FuMorph::ImpInsertPolygons(
             nEndLineWidth = ITEMVALUE( aSet2, XATTR_LINEWIDTH, XLineWidthItem );
         }
         else if ( ( eLineStyle1 == XLINE_NONE ) && ( eLineStyle2 == XLINE_NONE ) )
-            bIgnoreLine = sal_True;
+            bIgnoreLine = true;
 
         if ( ( eFillStyle1 == XFILL_SOLID ) && ( eFillStyle2 == XFILL_SOLID ) )
         {
-            bFillColor = sal_True;
+            bFillColor = true;
             aStartFillCol = static_cast< XFillColorItem const & >(
                 aSet1.Get(XATTR_FILLCOLOR)).GetColorValue();
             aEndFillCol = static_cast< XFillColorItem const & >(
                 aSet2.Get(XATTR_FILLCOLOR)).GetColorValue();
         }
         else if ( ( eFillStyle1 == XFILL_NONE ) && ( eFillStyle2 == XFILL_NONE ) )
-            bIgnoreFill = sal_True;
+            bIgnoreFill = true;
     }
 
     if ( pPageView )
@@ -479,7 +479,7 @@ void FuMorph::ImpInsertPolygons(
 /**
  * create morphed PolyPolygons
  */
-sal_Bool FuMorph::ImpMorphPolygons(
+bool FuMorph::ImpMorphPolygons(
     const ::basegfx::B2DPolyPolygon& rPolyPoly1,
     const ::basegfx::B2DPolyPolygon& rPolyPoly2,
     const sal_uInt16 nSteps,
@@ -510,7 +510,7 @@ sal_Bool FuMorph::ImpMorphPolygons(
             rPolyPolyList3D.push_back( pNewPolyPoly2D );
         }
     }
-    return sal_True;
+    return true;
 }
 
 } // end of namespace sd

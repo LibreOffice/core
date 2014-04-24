@@ -264,7 +264,7 @@ void DrawViewShell::MapSlot( sal_uInt16 nSId )
 /**
  * Allows a ImageMapping via SlotArray
  */
-void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, sal_Bool bPermanent )
+void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, bool bPermanent )
 {
     if( !bPermanent )
     {

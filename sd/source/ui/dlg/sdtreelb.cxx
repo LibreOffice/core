@@ -73,9 +73,9 @@ public:
 };
 
 
-sal_Bool SdPageObjsTLB::bIsInDrag = sal_False;
+bool SdPageObjsTLB::bIsInDrag = false;
 
-sal_Bool SdPageObjsTLB::IsInDrag()
+bool SdPageObjsTLB::IsInDrag()
 {
     return bIsInDrag;
 }
@@ -92,7 +92,7 @@ SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable(
     ::sd::DrawDocShell& rDocShell,
     NavigatorDragType eDragType,
     const ::com::sun::star::uno::Any& rTreeListBoxData )
-    : SdTransferable(rDocShell.GetDoc(), NULL, sal_True),
+    : SdTransferable(rDocShell.GetDoc(), NULL, true),
       mrParent( rParent ),
       maBookmark( rBookmark ),
       mrDocShell( rDocShell ),
@@ -223,7 +223,7 @@ sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId (void)
 
 SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
 :   SvTreeListBox       ( pParentWin, rSdResId )
-,   bisInSdNavigatorWin  ( sal_False )
+,   bisInSdNavigatorWin  ( false )
 ,   mpParent            ( pParentWin )
 ,   mpDoc               ( NULL )
 ,   mpBookmarkDoc       ( NULL )
@@ -231,7 +231,7 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
 ,   mpOwnMedium         ( NULL )
 ,   maImgOle             ( BitmapEx( SdResId( BMP_OLE ) ) )
 ,   maImgGraphic         ( BitmapEx( SdResId( BMP_GRAPHIC ) ) )
-,   mbLinkableSelected  ( sal_False )
+,   mbLinkableSelected  ( false )
 ,   mpDropNavWin        ( NULL )
 ,   mpFrame             ( NULL )
 ,   mbSaveTreeItemState ( false )
@@ -262,7 +262,7 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, WinBits nStyle )
 ,   mpOwnMedium         ( NULL )
 ,   maImgOle             ( BitmapEx( SdResId( BMP_OLE ) ) )
 ,   maImgGraphic         ( BitmapEx( SdResId( BMP_GRAPHIC ) ) )
-,   mbLinkableSelected  ( sal_False )
+,   mbLinkableSelected  ( false )
 ,   mpDropNavWin        ( NULL )
 ,   mpFrame             ( NULL )
 ,   mbSaveTreeItemState ( false )
@@ -294,7 +294,7 @@ SdPageObjsTLB::~SdPageObjsTLB()
 }
 
 // helper function for  GetEntryAltText and GetEntryLongDescription
-OUString SdPageObjsTLB::getAltLongDescText(SvTreeListEntry* pEntry , sal_Bool isAltText) const
+OUString SdPageObjsTLB::getAltLongDescText(SvTreeListEntry* pEntry , bool isAltText) const
 {
     sal_uInt16 maxPages = mpDoc->GetPageCount();
     sal_uInt16 pageNo;
@@ -328,12 +328,12 @@ OUString SdPageObjsTLB::getAltLongDescText(SvTreeListEntry* pEntry , sal_Bool is
 
 OUString SdPageObjsTLB::GetEntryAltText( SvTreeListEntry* pEntry ) const
 {
-    return getAltLongDescText( pEntry, sal_True );
+    return getAltLongDescText( pEntry, true );
 }
 
 OUString SdPageObjsTLB::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
 {
-    return getAltLongDescText( pEntry, sal_False);
+    return getAltLongDescText( pEntry, false);
 }
 
 void  SdPageObjsTLB::MarkCurEntry( const OUString& rName )
@@ -462,9 +462,9 @@ OUString SdPageObjsTLB::GetObjectName(
 /**
  * select a entry in TreeLB
  */
-sal_Bool SdPageObjsTLB::SelectEntry( const OUString& rName )
+bool SdPageObjsTLB::SelectEntry( const OUString& rName )
 {
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     if( !rName.isEmpty() )
     {
@@ -476,7 +476,7 @@ sal_Bool SdPageObjsTLB::SelectEntry( const OUString& rName )
             aTmp = GetEntryText( pEntry );
             if( aTmp == rName )
             {
-                bFound = sal_True;
+                bFound = true;
                 SetCurEntry( pEntry );
             }
         }
@@ -487,10 +487,10 @@ sal_Bool SdPageObjsTLB::SelectEntry( const OUString& rName )
 /**
  * @return true if children of the specified string are selected
  */
-sal_Bool SdPageObjsTLB::HasSelectedChildren( const OUString& rName )
+bool SdPageObjsTLB::HasSelectedChildren( const OUString& rName )
 {
-    sal_Bool bFound  = sal_False;
-    sal_Bool bChildren = sal_False;
+    bool bFound  = false;
+    bool bChildren = false;
 
     if( !rName.isEmpty() )
     {
@@ -502,11 +502,11 @@ sal_Bool SdPageObjsTLB::HasSelectedChildren( const OUString& rName )
             aTmp = GetEntryText( pEntry );
             if( aTmp == rName )
             {
-                bFound = sal_True;
-                sal_Bool bExpanded = IsExpanded( pEntry );
+                bFound = true;
+                bool bExpanded = IsExpanded( pEntry );
                 long nCount = GetChildSelectionCount( pEntry );
                 if( bExpanded && nCount > 0 )
-                    bChildren = sal_True;
+                    bChildren = true;
             }
         }
     }
@@ -517,7 +517,7 @@ sal_Bool SdPageObjsTLB::HasSelectedChildren( const OUString& rName )
 /**
  * Fill TreeLB with pages and objects
  */
-void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, sal_Bool bAllPages,
+void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, bool bAllPages,
                           const OUString& rDocName)
 {
     OUString aSelection;
@@ -529,7 +529,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, sal_Bool bAllPages,
 
     mpDoc = pInDoc;
     maDocName = rDocName;
-    mbShowAllPages = (bAllPages == sal_True);
+    mbShowAllPages = bAllPages;
     mpMedium = NULL;
 
     SdPage*      pPage = NULL;
@@ -634,7 +634,7 @@ void SdPageObjsTLB::AddShapeList (
         IM_FLAT,
         false /*not reverse*/);
 
-    sal_Bool  bMarked=sal_False;
+    bool  bMarked=false;
     if(bisInSdNavigatorWin)
     {
         Window* pWindow=NULL;
@@ -851,13 +851,13 @@ bool SdPageObjsTLB::GetShowAllShapes (void) const
  * If a doc is provided, this will be the used doc (important by more than
  * one document).
  */
-sal_Bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
+bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
 {
     if( pInDoc )
         mpDoc = pInDoc;
 
     if( !mpDoc )
-        return( sal_False );
+        return false;
 
     SdrObject*   pObj = NULL;
     SdPage*      pPage = NULL;
@@ -874,11 +874,11 @@ sal_Bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
         if( pPage->GetPageKind() == PK_STANDARD )
         {
             if( !pEntry )
-                return( sal_False );
+                return false;
             aName = GetEntryText( pEntry );
 
             if( pPage->GetName() != aName )
-                return( sal_False );
+                return false;
 
             pEntry = Next( pEntry );
 
@@ -896,12 +896,12 @@ sal_Bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
                 if( !aObjectName.isEmpty() )
                 {
                     if( !pEntry )
-                        return( sal_False );
+                        return false;
 
                     aName = GetEntryText( pEntry );
 
                     if( aObjectName != aName )
-                        return( sal_False );
+                        return false;
 
                     pEntry = Next( pEntry );
                 }
@@ -1045,7 +1045,7 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
         if( pMed )
         {
             // in this mode the document is also owned and controlled by this instance
-            mxBookmarkDocShRef = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD, sal_True);
+            mxBookmarkDocShRef = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD, true);
             if (mxBookmarkDocShRef->DoLoad(pMed))
                 mpBookmarkDoc = mxBookmarkDocShRef->GetDoc();
             else
@@ -1105,12 +1105,12 @@ void SdPageObjsTLB::SelectHdl()
 {
     SvTreeListEntry* pEntry = FirstSelected();
 
-    mbLinkableSelected = sal_True;
+    mbLinkableSelected = true;
 
     while( pEntry && mbLinkableSelected )
     {
         if( NULL == pEntry->GetUserData() )
-            mbLinkableSelected = sal_False;
+            mbLinkableSelected = false;
 
         pEntry = NextSelected( pEntry );
     }
@@ -1141,7 +1141,7 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
     {
         if(bisInSdNavigatorWin)
         {
-            sal_Bool bMarked=sal_False;
+            bool bMarked=false;
             SvTreeListEntry* pNewEntry = GetCurEntry();
             if (!pNewEntry)
                 return;
@@ -1247,7 +1247,7 @@ void SdPageObjsTLB::DoDrag()
 
         SvTreeListBox::ReleaseMouse();
 
-        bIsInDrag = sal_True;
+        bIsInDrag = true;
 
         SvLBoxDDInfo aDDInfo;
         memset(&aDDInfo,0,sizeof(SvLBoxDDInfo));
@@ -1324,7 +1324,7 @@ void SdPageObjsTLB::OnDragFinished( sal_uInt8 )
     }
 
     mpDropNavWin = NULL;
-    bIsInDrag = sal_False;
+    bIsInDrag = false;
 }
 
 /**

@@ -140,7 +140,7 @@ CustomAnimationEffect::CustomAnimationEffect( const ::com::sun::star::uno::Refer
     mnIterateType(0),
     mfIterateInterval(0.0),
     mnParaDepth( -1 ),
-    mbHasText(sal_False),
+    mbHasText(false),
     mfAcceleration( 1.0 ),
     mfDecelerate( 1.0 ),
     mbAutoReverse(false),
@@ -555,7 +555,7 @@ bool CustomAnimationEffect::checkForText()
                 Reference< XEnumeration > xEnumeration( xEA->createEnumeration(), UNO_QUERY );
                 if( xEnumeration.is() )
                 {
-                    sal_Bool bHasText = xEnumeration->hasMoreElements();
+                    bool bHasText = xEnumeration->hasMoreElements();
                     bChange |= bHasText != mbHasText;
                     mbHasText = bHasText;
 
@@ -584,7 +584,7 @@ bool CustomAnimationEffect::checkForText()
     else
     {
         maTarget >>= xText;
-        sal_Bool bHasText = xText.is() && !xText->getString().isEmpty();
+        bool bHasText = xText.is() && !xText->getString().isEmpty();
         bChange |= bHasText != mbHasText;
         mbHasText = bHasText;
     }
@@ -805,7 +805,7 @@ void CustomAnimationEffect::setDecelerate( double fDecelerate )
     }
 }
 
-void CustomAnimationEffect::setAutoReverse( sal_Bool bAutoReverse )
+void CustomAnimationEffect::setAutoReverse( bool bAutoReverse )
 {
     if( mxNode.is() ) try
     {
@@ -827,7 +827,7 @@ void CustomAnimationEffect::replaceNode( const ::com::sun::star::uno::Reference<
     double fDuration = mfDuration;
     double fAcceleration = mfAcceleration;
     double fDecelerate = mfDecelerate ;
-    sal_Bool bAutoReverse = mbAutoReverse;
+    bool bAutoReverse = mbAutoReverse;
     Reference< XAudio > xAudio( mxAudio );
     sal_Int16 nIterateType = mnIterateType;
     double fIterateInterval = mfIterateInterval;
@@ -946,7 +946,7 @@ Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const
     }
     else
     {
-        aTo = makeAny( (sal_Bool)sal_False );
+        aTo = makeAny( false );
         aAttributeName = "Visibility";
     }
 
@@ -2393,7 +2393,7 @@ void EffectSequenceHelper::updateTextGroups()
     }
 }
 
-CustomAnimationTextGroupPtr EffectSequenceHelper::createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, sal_Bool bAnimateForm, sal_Bool bTextReverse )
+CustomAnimationTextGroupPtr EffectSequenceHelper::createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, bool bAnimateForm, bool bTextReverse )
 {
     // first finde a free group-id
     sal_Int32 nGroupId = 0;
@@ -2456,7 +2456,7 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
 
     sal_Int32 nTextGrouping = pTextGroup->mnTextGrouping;
     double fTextGroupingAuto = pTextGroup->mfGroupingAuto;
-    sal_Bool bTextReverse = pTextGroup->mbTextReverse;
+    bool bTextReverse = pTextGroup->mbTextReverse;
 
     // now add an effect for each paragraph
     if( nTextGrouping >= 0 ) try
@@ -2623,7 +2623,7 @@ void EffectSequenceHelper::setTextGrouping( CustomAnimationTextGroupPtr pTextGro
     }
 }
 
-void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGroup, sal_Bool bAnimateForm )
+void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGroup, bool bAnimateForm )
 {
     if( pTextGroup->mbAnimateForm == bAnimateForm )
     {
@@ -2772,7 +2772,7 @@ bool ImplStlTextGroupSortHelper::operator()( const CustomAnimationEffectPtr& p1,
     }
 }
 
-void EffectSequenceHelper::setTextReverse( CustomAnimationTextGroupPtr pTextGroup, sal_Bool bTextReverse )
+void EffectSequenceHelper::setTextReverse( CustomAnimationTextGroupPtr pTextGroup, bool bTextReverse )
 {
     if( pTextGroup->mbTextReverse == bTextReverse )
     {

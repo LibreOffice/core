@@ -276,7 +276,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
     SfxWhichIter    aIter( rSet );
     sal_uInt16          nWhich = aIter.FirstWhich();
 
-    sal_Bool    bAttr = sal_False;
+    bool    bAttr = false;
     SfxAllItemSet aAllSet( *rSet.GetPool() );
 
     while ( nWhich )
@@ -298,7 +298,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, true ) );
                 }
 
-                bAttr = sal_True;
+                bAttr = true;
 
                 Invalidate(nSlotId);
             }
@@ -315,7 +315,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, true ) );
                 }
 
-                bAttr = sal_True;
+                bAttr = true;
 
                 Invalidate(nSlotId);
             }
@@ -332,7 +332,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, true ) );
                 }
 
-                bAttr = sal_True;
+                bAttr = true;
 
                 Invalidate(nSlotId);
             }
@@ -349,7 +349,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true ) );
                 }
 
-                bAttr = sal_True;
+                bAttr = true;
 
                 Invalidate(nSlotId);
             }
@@ -361,7 +361,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SvxLRSpaceItem aLRSpace = ( (const SvxLRSpaceItem&) aAttrs.Get( EE_PARA_LRSPACE ) );
                 aLRSpace.SetWhich(SID_ATTR_PARA_LRSPACE);
                 rSet.Put(aLRSpace);
-                bAttr = sal_True;
+                bAttr = true;
                 Invalidate(SID_ATTR_PARA_LRSPACE);
             }
             break;
@@ -371,7 +371,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 mpDrawView->GetAttributes( aAttrs );
                 SvxLineSpacingItem aLineLR = ( (const SvxLineSpacingItem&) aAttrs.Get( EE_PARA_SBL ) );
                 rSet.Put(aLineLR);
-                bAttr = sal_True;
+                bAttr = true;
                 Invalidate(SID_ATTR_PARA_LINESPACE);
             }
             break;
@@ -382,7 +382,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SvxULSpaceItem aULSP = ( (const SvxULSpaceItem&) aAttrs.Get( EE_PARA_ULSPACE ) );
                 aULSP.SetWhich(SID_ATTR_PARA_ULSPACE);
                 rSet.Put(aULSP);
-                bAttr = sal_True;
+                bAttr = true;
                 Invalidate(SID_ATTR_PARA_ULSPACE);
             }
             break;
@@ -414,7 +414,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case SID_SET_SUB_SCRIPT:
             case SID_SET_SUPER_SCRIPT:
             {
-                bAttr = sal_True;
+                bAttr = true;
             }
             break;
 
@@ -424,7 +424,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 mpDrawView->GetAttributes( aAttrs );
                 if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_AVAILABLE )
                 {
-                    sal_Bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
+                    bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
                     rSet.Put( SfxBoolItem( SID_HYPHENATION, bValue ) );
                 }
             }
@@ -590,7 +590,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     }
                     if ( nCount == 1 )
                     {
-                        sal_Bool bBullets = sal_False;
+                        bool bBullets = false;
                         const SvxNumberFormat* pNumFmt = pNumRule->Get(nCurLevel);
                         if ( pNumFmt )
                         {
@@ -598,11 +598,11 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                             {
                                 case SVX_NUM_CHAR_SPECIAL:
                                 case SVX_NUM_BITMAP:
-                                    bBullets = sal_True;
+                                    bBullets = true;
                                     break;
 
                                 default:
-                                    bBullets = sal_False;
+                                    bBullets = false;
                             }
 
                             rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,(sal_uInt16)0xFFFF));
@@ -635,7 +635,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case FN_NUM_BULLET_ON:
             case FN_NUM_NUMBERING_ON:
             {
-                sal_Bool bEnable = sal_False;
+                bool bEnable = false;
                 const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
                 const sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
                 for (sal_uInt32 nIndex = 0; nIndex < nMarkCount; nIndex++)
@@ -645,7 +645,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     {
                         if (pTextObj->GetObjIdentifier() != OBJ_OLE2)
                         {
-                            bEnable = sal_True;
+                            bEnable = true;
                             break;
                         }
                     }
@@ -766,9 +766,9 @@ OUString DrawViewShell::GetSelectionText(bool bCompleteWords)
 }
 
 
-sal_Bool DrawViewShell::HasSelection(sal_Bool bText) const
+bool DrawViewShell::HasSelection(bool bText) const
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if (bText)
     {
@@ -776,12 +776,12 @@ sal_Bool DrawViewShell::HasSelection(sal_Bool bText) const
 
         if (pOlView && !pOlView->GetSelected().isEmpty())
         {
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
     else if (mpDrawView->GetMarkedObjectList().GetMarkCount() != 0)
     {
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     return bReturn;

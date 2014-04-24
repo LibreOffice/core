@@ -90,9 +90,9 @@ private:
     css::uno::Reference<css::uno::XInterface> create(
         OUString const & aServiceSpecifier, OUString const & referer);
 
-    SdPage* InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate = sal_False ) throw();
+    SdPage* InsertSdPage( sal_uInt16 nPage, bool bDuplicate = false ) throw();
 
-    const sal_Bool mbImpressDoc;
+    const bool mbImpressDoc;
     bool mbClipBoard;
 
     ::com::sun::star::uno::WeakReference< ::com::sun::star::drawing::XDrawPages > mxDrawPagesAccess;
@@ -132,9 +132,9 @@ public:
 
     ::sd::DrawDocShell* GetDocShell() const { return mpDocShell; }
     SdDrawDocument* GetDoc() const { return mpDoc; }
-    sal_Bool IsImpressDocument() const { return mbImpressDoc; }
+    bool IsImpressDocument() const { return mbImpressDoc; }
 
-    void SetModified( sal_Bool bModified = sal_True ) throw();
+    void SetModified( bool bModified = true ) throw();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XForbiddenCharacters > getForbiddenCharsTable();
 

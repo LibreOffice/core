@@ -191,7 +191,7 @@ void EffectMigration::SetFadeEffect( SdPage* pPage, ::com::sun::star::presentati
     {
         pPage->setTransitionType( 0 );
         pPage->setTransitionSubtype( 0 );
-        pPage->setTransitionDirection( 0 );
+        pPage->setTransitionDirection( false );
         pPage->setTransitionFadeColor( 0 );
     }
 }
@@ -501,7 +501,7 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
                     {
                         // special case for outline text, effects are always mapped to text group effect
                         pMainSequence->
-                            createTextGroup( pEffect, 10, bManual ? -1 : 0.0, sal_False, sal_False );
+                            createTextGroup( pEffect, 10, bManual ? -1 : 0.0, false, false );
                     }
                 }
             }
@@ -676,7 +676,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
                 // now create effects for each paragraph
                 pGroup =
                     pMainSequence->
-                        createTextGroup( pShapeEffect, 10, bManual ? -1 : 0.0, sal_True, sal_False );
+                        createTextGroup( pShapeEffect, 10, bManual ? -1 : 0.0, true, false );
             }
         }
 
@@ -967,7 +967,7 @@ sal_Int32 EffectMigration::GetDimColor( SvxShape* pShape )
 
 
 
-void EffectMigration::SetDimHide( SvxShape* pShape, sal_Bool bDimHide )
+void EffectMigration::SetDimHide( SvxShape* pShape, bool bDimHide )
 {
     DBG_ASSERT( pShape && pShape->GetSdrObject() && pShape->GetSdrObject()->GetPage(),
                 "sd::EffectMigration::SetAnimationEffect(), invalid argument!" );
@@ -1006,9 +1006,9 @@ void EffectMigration::SetDimHide( SvxShape* pShape, sal_Bool bDimHide )
 
 
 
-sal_Bool EffectMigration::GetDimHide( SvxShape* pShape )
+bool EffectMigration::GetDimHide( SvxShape* pShape )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( pShape )
     {
         SdrObject* pObj = pShape->GetSdrObject();
@@ -1038,7 +1038,7 @@ sal_Bool EffectMigration::GetDimHide( SvxShape* pShape )
 
 
 
-void EffectMigration::SetDimPrevious( SvxShape* pShape, sal_Bool bDimPrevious )
+void EffectMigration::SetDimPrevious( SvxShape* pShape, bool bDimPrevious )
 {
     DBG_ASSERT( pShape && pShape->GetSdrObject() && pShape->GetSdrObject()->GetPage(),
                 "sd::EffectMigration::SetAnimationEffect(), invalid argument!" );
@@ -1080,9 +1080,9 @@ void EffectMigration::SetDimPrevious( SvxShape* pShape, sal_Bool bDimPrevious )
 
 
 
-sal_Bool EffectMigration::GetDimPrevious( SvxShape* pShape )
+bool EffectMigration::GetDimPrevious( SvxShape* pShape )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( pShape )
     {
         SdrObject* pObj = pShape->GetSdrObject();
@@ -1317,7 +1317,7 @@ OUString EffectMigration::GetSoundFile( SvxShape* pShape )
 
 
 
-sal_Bool EffectMigration::GetSoundOn( SvxShape* pShape )
+bool EffectMigration::GetSoundOn( SvxShape* pShape )
 {
     return !GetSoundFile( pShape ).isEmpty();
 }

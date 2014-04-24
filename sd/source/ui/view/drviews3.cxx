@@ -894,7 +894,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
     maMarkRect = mpDrawView->GetAllMarkedRect();
 
-    const sal_Bool bRTL = GetDoc() && GetDoc()->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB;
+    const bool bRTL = GetDoc() && GetDoc()->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB;
     rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, bRTL));
 
     if( mpDrawView->AreObjectsMarked() )
