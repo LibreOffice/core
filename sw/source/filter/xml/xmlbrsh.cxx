@@ -78,7 +78,7 @@ void SwXMLBrushItemImportContext::ProcessAttrs(
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        sal_uInt16 nPrefix =
+        const sal_uInt16 nPrefix =
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
         const OUString& rValue = xAttrList->getValueByIndex( i );
@@ -145,7 +145,7 @@ void SwXMLBrushItemImportContext::EndElement()
 {
     if( xBase64Stream.is() )
     {
-        OUString sURL( GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream ) );
+        const OUString sURL( GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream ) );
         xBase64Stream = 0;
         SvXMLImportItemMapper::PutXMLValue( *pItem, sURL, MID_GRAPHIC_LINK, GetImport().GetMM100UnitConverter() );
     }
@@ -201,12 +201,12 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
 {
     GetExport().CheckAttrList();
 
-    OUString sValue, sURL;
+    OUString sURL;
     const SvXMLUnitConverter& rUnitConv = GetExport().GetTwipUnitConverter();
     if( SvXMLExportItemMapper::QueryXMLValue(
             rItem, sURL, MID_GRAPHIC_LINK, rUnitConv ) )
     {
-        sValue = GetExport().AddEmbeddedGraphicObject( sURL );
+        OUString sValue = GetExport().AddEmbeddedGraphicObject( sURL );
         if( !sValue.isEmpty() )
         {
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sValue );
