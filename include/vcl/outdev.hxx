@@ -469,7 +469,7 @@ protected:
     virtual Region              GetActiveClipRegion() const;
 
 private:
-    SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
+    SAL_DLLPRIVATE void         SetDeviceClipRegion( const Region* pRegion );
     SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
 
     ///@}

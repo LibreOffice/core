@@ -106,7 +106,7 @@ bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGr
     return bClipRegion;
 }
 
-void OutputDevice::ImplSetClipRegion( const Region* pRegion )
+void OutputDevice::SetDeviceClipRegion( const Region* pRegion )
 {
     DBG_TESTSOLARMUTEX();
 
@@ -133,7 +133,7 @@ void OutputDevice::SetClipRegion()
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaClipRegionAction( Region(), false ) );
 
-    ImplSetClipRegion( NULL );
+    SetDeviceClipRegion( NULL );
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetClipRegion();
@@ -147,12 +147,12 @@ void OutputDevice::SetClipRegion( const Region& rRegion )
 
     if ( rRegion.IsNull() )
     {
-        ImplSetClipRegion( NULL );
+        SetDeviceClipRegion( NULL );
     }
     else
     {
         Region aRegion = LogicToPixel( rRegion );
-        ImplSetClipRegion( &aRegion );
+        SetDeviceClipRegion( &aRegion );
     }
 
     if( mpAlphaVDev )

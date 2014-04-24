@@ -1189,7 +1189,7 @@ void OutputDevice::Pop()
         mbMap = pData->mbMapActive;
     }
     if ( pData->mnFlags & PUSH_CLIPREGION )
-        ImplSetClipRegion( pData->mpClipRegion );
+        SetDeviceClipRegion( pData->mpClipRegion );
     if ( pData->mnFlags & PUSH_REFPOINT )
     {
         if ( pData->mpRefPoint )
