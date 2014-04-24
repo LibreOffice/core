@@ -133,7 +133,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                 OUStringBuffer aOut;
                 const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
                 OSL_ENSURE( pSplit != NULL, "Wrong Which-ID" );
-                sal_uInt16 eEnum = pSplit->GetValue() ? 1 : 0;
+                const unsigned int eEnum = pSplit->GetValue() ? 1 : 0;
                 rUnitConverter.convertEnum( aOut, eEnum, aXML_KeepTogetherType );
                 aValue = aOut.makeStringAndClear();
             }
@@ -152,7 +152,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
             const SvXMLAttrContainerItem *pUnknown =
                 PTR_CAST( SvXMLAttrContainerItem, &rItem );
 
-            sal_uInt16 nCount = pUnknown->GetAttrCount();
+            const sal_uInt16 nCount = pUnknown->GetAttrCount();
             OUStringBuffer sName;
             for( sal_uInt16 i=0; i < nCount; i++ )
             {
@@ -163,7 +163,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
 
                     // if the prefix isn't defined yet or has another meaning,
                     // we have to redefine it now.
-                    sal_uInt16 nIdx =   pNamespaceMap->GetIndexByPrefix( sPrefix );
+                    const sal_uInt16 nIdx = pNamespaceMap->GetIndexByPrefix( sPrefix );
                     if( USHRT_MAX == nIdx ||
                         pNamespaceMap->GetNameByIndex( nIdx ) != sNamespace )
                     {
@@ -222,10 +222,10 @@ void SvXMLExportItemMapper::exportElementItems(
                           sal_uInt16 nFlags,
                           const std::vector<sal_uInt16> &rIndexArray ) const
 {
-    const sal_uInt16 nCount = rIndexArray.size();
+    const size_t nCount = rIndexArray.size();
 
     bool bItemsExported = false;
-    for( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
+    for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
     {
         const sal_uInt16 nElement = rIndexArray[ nIndex ];
         SvXMLItemMapEntry* pEntry = mrMapEntries->getByIndex( nElement );
@@ -563,10 +563,10 @@ bool SvXMLExportItemMapper::QueryXMLValue(
             const SvxBorderLine* pRight   = pBox->GetRight();
             const SvxBorderLine* pTop     = pBox->GetTop();
             const SvxBorderLine* pBottom  = pBox->GetBottom();
-            sal_uInt16 nTopDist     = pBox->GetDistance( BOX_LINE_TOP );
-            sal_uInt16 nBottomDist  = pBox->GetDistance( BOX_LINE_BOTTOM );
-            sal_uInt16 nLeftDist    = pBox->GetDistance( BOX_LINE_LEFT );
-            sal_uInt16 nRightDist   = pBox->GetDistance( BOX_LINE_RIGHT );
+            const sal_uInt16 nTopDist     = pBox->GetDistance( BOX_LINE_TOP );
+            const sal_uInt16 nBottomDist  = pBox->GetDistance( BOX_LINE_BOTTOM );
+            const sal_uInt16 nLeftDist    = pBox->GetDistance( BOX_LINE_LEFT );
+            const sal_uInt16 nRightDist   = pBox->GetDistance( BOX_LINE_RIGHT );
 
             // check if we need to export it
             switch( nMemberId )
@@ -626,7 +626,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                         const sal_uInt16 nDistance = pTop->GetDistance();
                         const sal_uInt16 nInWidth  = pTop->GetInWidth();
                         const sal_uInt16 nOutWidth = pTop->GetOutWidth();
-                        const sal_uInt16 nWidth = pTop->GetWidth();
+                        const long nWidth = pTop->GetWidth();
 
                         bEqual = nDistance == pLeft->GetDistance() &&
                                  nInWidth  == pLeft->GetInWidth()  &&
@@ -827,7 +827,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
             const SvxFmtBreakItem* pFmtBreak = PTR_CAST(SvxFmtBreakItem, &rItem);
             OSL_ENSURE( pFmtBreak != NULL, "Wrong Which-ID" );
 
-            sal_uInt16 eEnum = 0;
+            unsigned int eEnum = 0;
 
             switch( nMemberId )
             {
