@@ -472,7 +472,8 @@ namespace x11 {
         virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
 
         // XEventHandler
-        virtual sal_Bool    SAL_CALL handleEvent( const Any& event ) throw(std::exception) SAL_OVERRIDE;
+        virtual sal_Bool    SAL_CALL handleEvent(const Any& event)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XDragSource
         virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception) SAL_OVERRIDE;

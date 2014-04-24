@@ -3775,7 +3775,8 @@ void SelectionManager::shutdown() throw()
     m_xDropTransferable.clear();
 }
 
-sal_Bool SelectionManager::handleEvent( const Any& event ) throw(std::exception)
+sal_Bool SelectionManager::handleEvent(const Any& event)
+    throw (css::uno::RuntimeException, std::exception)
 {
     Sequence< sal_Int8 > aSeq;
     if( (event >>= aSeq) )
