@@ -25,7 +25,6 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 
 void OutputDevice::DrawPolyLine( const Polygon& rPoly )
