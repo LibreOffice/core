@@ -153,6 +153,14 @@ public:
     bool run() const
     {
 #ifdef DISABLE_DYNLOADING
+
+        // NOTE: Running cppunit unit tests on iOS was something I did
+        // only very early (several years ago) when starting porting
+        // this stuff to iOS. The complicated mechanisms to do build
+        // such unit test single executables have surely largely
+        // bit-rotted or been semi-intentionally broken since. This
+        // stuff here left for information only. --tml 2014.
+
         // For iOS cppunit plugins aren't really "plugins" (shared
         // libraries), but just static archives. In the real main
         // program of a cppunit app, which calls the lo_main() that
