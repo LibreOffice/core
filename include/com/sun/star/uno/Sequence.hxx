@@ -156,7 +156,8 @@ template<class E> E const * Sequence<E>::end() const
 template< class E >
 inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )
 {
-    assert( nIndex >= 0 && nIndex < getLength() );
+    // silence spurious -Werror=strict-overflow warnings from GCC 4.8.2
+    assert(nIndex >= 0 && static_cast<sal_uInt32>(nIndex) < getLength());
     return getArray()[ nIndex ];
 }
 
@@ -164,7 +165,8 @@ template< class E >
 inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
     SAL_THROW(())
 {
-    assert( nIndex >= 0 && nIndex < getLength() );
+    // silence spurious -Werror=strict-overflow warnings from GCC 4.8.2
+    assert(nIndex >= 0 && static_cast<sal_uInt32>(nIndex) < getLength());
     return reinterpret_cast< const E * >( _pSequence->elements )[ nIndex ];
 }
 
