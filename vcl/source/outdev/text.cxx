@@ -17,78 +17,43 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "i18nlangtag/mslangid.hxx"
-#include "i18nlangtag/languagetag.hxx"
+#include <sal/types.h>
 
-#include "rtl/tencinfo.h"
-#include "rtl/logfile.hxx"
+#include <algorithm>
+#include <cmath>
+#include <cstring>
+#include <memory>
 
-#include "tools/debug.hxx"
-#include "tools/poly.hxx"
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+#include <comphelper/processfactory.hxx>
+#include <rtl/logfile.hxx>
+#include <tools/debug.hxx>
 
-#include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/polygon/b2dpolypolygon.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
-
-#include "vcl/metric.hxx"
-#include "vcl/metaact.hxx"
-#include "vcl/gdimtf.hxx"
-#include "vcl/virdev.hxx"
-#include "vcl/print.hxx"
-#include "vcl/event.hxx"
-#include "vcl/window.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/bmpacc.hxx"
-#include "vcl/outdev.hxx"
-#include "vcl/edit.hxx"
+#include <vcl/virdev.hxx>
+#include <vcl/bmpacc.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
-// declare system types in sysdata.hxx
-#include <svsys.h>
-#include "vcl/sysdata.hxx"
-#include "vcl/unohelp.hxx"
-#include "vcl/controllayout.hxx"
+#include <vcl/sysdata.hxx>
+#include <vcl/unohelp.hxx>
+#include <vcl/controllayout.hxx>
 
+#include "outdata.hxx"
+#include "outdev.h"
 #include "salgdi.hxx"
 #include "sallayout.hxx"
 #include "svdata.hxx"
-#include "impfont.hxx"
-#include "outdata.hxx"
-#include "outfont.hxx"
-#include "outdev.h"
-#include "PhysicalFontCollection.hxx"
-#include "PhysicalFontFace.hxx"
-#include "PhysicalFontFamily.hxx"
-
 #include "textlayout.hxx"
-#include "svids.hrc"
-#include "window.h"
-
-#include "unotools/fontcvt.hxx"
-#include "unotools/fontcfg.hxx"
-
-#include "osl/file.h"
 
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
 #include "graphite_features.hxx"
 #endif
-
-#include "../gdi/pdfwriter_impl.hxx"
-
-#include "com/sun/star/beans/PropertyValues.hpp"
-#include "com/sun/star/i18n/XBreakIterator.hpp"
-#include "com/sun/star/i18n/WordType.hpp"
-#include "com/sun/star/linguistic2/LinguServiceManager.hpp"
-#include <comphelper/processfactory.hxx>
-
-#include "sal/alloca.h"
-
-#include <cmath>
-#include <cstring>
-
-#include <memory>
-#include <algorithm>
-
 
 #define TEXT_DRAW_ELLIPSIS  (TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_PATHELLIPSIS | TEXT_DRAW_NEWSELLIPSIS)
 
