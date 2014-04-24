@@ -17,27 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/debug.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/window.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/gdimtf.hxx>
+
+#include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/image.hxx>
-#include <bmpfast.hxx>
-#include <salbmp.hxx>
+
 #include <salgdi.hxx>
-#include <impbmp.hxx>
-#include <sallayout.hxx>
-#include <image.h>
-#include <outdev.h>
-#include <window.h>
-#include <outdata.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
+
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 #include <boost/scoped_array.hpp>
 
 
