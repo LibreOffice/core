@@ -1230,7 +1230,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const uno::Sequence< beans::Property >& rProperties,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw ( uno::Exception )
+    throw ( uno::Exception, std::exception )
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ContentProperties > xProps;
