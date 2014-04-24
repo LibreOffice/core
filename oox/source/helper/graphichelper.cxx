@@ -275,7 +275,7 @@ Reference< XGraphic > GraphicHelper::importGraphic( const StreamDataSequence& rG
     return xGraphic;
 }
 
-Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStreamName ) const
+Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStreamName, const WMF_EXTERNALHEADER* pExtHeader ) const
 {
     Reference< XGraphic > xGraphic;
     OSL_ENSURE( !rStreamName.isEmpty(), "GraphicHelper::importEmbeddedGraphic - empty stream name" );
@@ -284,7 +284,7 @@ Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStr
         EmbeddedGraphicMap::const_iterator aIt = maEmbeddedGraphics.find( rStreamName );
         if( aIt == maEmbeddedGraphics.end() )
         {
-            xGraphic = importGraphic( mxStorage->openInputStream( rStreamName ) );
+            xGraphic = importGraphic(mxStorage->openInputStream(rStreamName), pExtHeader);
             if( xGraphic.is() )
                 maEmbeddedGraphics[ rStreamName ] = xGraphic;
         }

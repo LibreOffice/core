@@ -67,6 +67,8 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 
+#include <vcl/wmf.hxx>
+
 using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -822,7 +824,13 @@ OUString Shape::finalizeServiceName( XmlFilterBase& rFilter, const OUString& rSe
             // import and store the graphic
             if( !aGraphicPath.isEmpty() )
             {
-                Reference< graphic::XGraphic > xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic( aGraphicPath );
+                // Transfer shape's width and heightto graphicsfilter (can be used by WMF/EMF)
+                WMF_EXTERNALHEADER aExtHeader;
+                aExtHeader.mapMode = 8; // MM_ANISOTROPIC
+                aExtHeader.xExt = rShapeRect.Width;
+                aExtHeader.yExt = rShapeRect.Height;
+
+                Reference< graphic::XGraphic > xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic( aGraphicPath, &aExtHeader );
                 if( xGraphic.is() )
                     maShapeProperties[ PROP_Graphic ] <<= xGraphic;
             }

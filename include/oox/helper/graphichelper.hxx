@@ -115,7 +115,9 @@ public:
 
     /** Imports a graphic from the storage stream with the passed path and name. */
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
-                        importEmbeddedGraphic( const OUString& rStreamName ) const;
+                        importEmbeddedGraphic(
+                            const OUString& rStreamName,
+                            const WMF_EXTERNALHEADER* pExtHeader = NULL ) const;
 
     /** Creates a persistent graphic object from the passed graphic.
         @return  The URL of the created and internally cached graphic object. */
