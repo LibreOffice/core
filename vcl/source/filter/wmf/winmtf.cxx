@@ -236,28 +236,15 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
         aVDev.SetFont( aFont );
         FontMetric aMetric( aVDev.GetFontMetric() );
         long nHeight = aMetric.GetAscent() + aMetric.GetDescent();
-        if ( nHeight )
+        if (nHeight)
         {
             double fHeight = ((double)aFontSize.Height() * rFont.lfHeight ) / nHeight;
             aFontSize.Height() = (sal_Int32)( fHeight + 0.5 );
         }
     }
-    else if ( rFont.lfHeight < 0 )
-    {
-        aFontSize.Height() = std::abs(rFont.lfHeight);
-    }
 
-    if ( !rFont.lfWidth )
-    {
-        // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
-        SolarMutexGuard aGuard;
-        VirtualDevice aVDev;
-
-        aFont.SetSize( aFontSize );
-        aVDev.SetFont( aFont );
-        FontMetric aMetric( aVDev.GetFontMetric() );
-        aFontSize.Width() = aMetric.GetWidth();
-    }
+    // Convert height to positive
+    aFontSize.Height() = std::abs(aFontSize.Height());
 
     aFont.SetSize( aFontSize );
 };
