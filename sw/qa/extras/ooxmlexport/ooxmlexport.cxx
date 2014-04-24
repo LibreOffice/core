@@ -2906,6 +2906,14 @@ DECLARE_OOXMLEXPORT_TEST(testlvlPicBulletId, "lvlPicBulletId.docx")
     assertXPath(pXmlDoc, "/w:numbering[1]/w:abstractNum[1]/w:lvl[1]/w:lvlPicBulletId[1]", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testSdtContent, "SdtContent.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    if (!pXmlDoc)
+       return;
+    assertXPath(pXmlDoc, "/w:hdr[1]/w:p[1]/w:sdt[1]/w:sdtContent[1]/w:del[1]");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testCitation,"FDO74775.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();

@@ -836,6 +836,9 @@ void DocxAttributeOutput::EndRun()
     // append the actual run end
     m_pSerializer->endElementNS( XML_w, XML_r );
 
+    // if there is some redlining in the document, output it
+    EndRedline( m_pRedlineData );
+
     // enclose in a sdt block, if necessary
     WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs );
     m_pSerializer->mergeTopMarks();
@@ -847,9 +850,6 @@ void DocxAttributeOutput::EndRun()
     m_aPostponedFormControls.clear();
 
     WritePendingPlaceholder();
-
-    // if there is some redlining in the document, output it
-    EndRedline( m_pRedlineData );
 
     m_pRedlineData = NULL;
 
