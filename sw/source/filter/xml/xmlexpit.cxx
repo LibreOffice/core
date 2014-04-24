@@ -153,7 +153,6 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                 PTR_CAST( SvXMLAttrContainerItem, &rItem );
 
             const sal_uInt16 nCount = pUnknown->GetAttrCount();
-            OUStringBuffer sName;
             for( sal_uInt16 i=0; i < nCount; i++ )
             {
                 const OUString sPrefix( pUnknown->GetAttrPrefix( i ) );
@@ -175,20 +174,18 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                         }
                         pNewNamespaceMap->Add( sPrefix, sNamespace );
 
-                        sName.append( GetXMLToken(XML_XMLNS) );
-                        sName.append( ':' );
-                        sName.append( sPrefix );
-                        rAttrList.AddAttribute( sName.makeStringAndClear(),
+                        rAttrList.AddAttribute( GetXMLToken(XML_XMLNS) + ":" + sPrefix,
                                                 sNamespace );
                     }
 
-                    sName.append( sPrefix );
-                    sName.append( ':' );
+                    rAttrList.AddAttribute( sPrefix + ":" + pUnknown->GetAttrLName(i),
+                                            pUnknown->GetAttrValue(i) );
                 }
-
-                sName.append( pUnknown->GetAttrLName( i ) );
-                rAttrList.AddAttribute( sName.makeStringAndClear(),
-                                        pUnknown->GetAttrValue(i) );
+                else
+                {
+                    rAttrList.AddAttribute( pUnknown->GetAttrLName(i),
+                                            pUnknown->GetAttrValue(i) );
+                }
             }
 
             delete pNewNamespaceMap;
