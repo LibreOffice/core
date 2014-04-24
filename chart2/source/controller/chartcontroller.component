@@ -19,7 +19,8 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="chartcontroller" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.chart.ElementSelectorToolbarController">
+  <implementation name="com.sun.star.comp.chart.ElementSelectorToolbarController"
+      constructor="com_sun_star_comp_chart_ElementSelectorToolbarController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
   <implementation name="com.sun.star.comp.chart2.ChartController">
