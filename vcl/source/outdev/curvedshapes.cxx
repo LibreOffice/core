@@ -17,18 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/debug.hxx>
-#include <tools/poly.hxx>
-
-#include <vcl/metaact.hxx>
-#include <vcl/gdimtf.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
 #include <salgdi.hxx>
-#include <svdata.hxx>
-#include <outdata.hxx>
-#include <outdev.h>
 
 void OutputDevice::DrawEllipse( const Rectangle& rRect )
 {
