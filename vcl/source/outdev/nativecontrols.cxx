@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vcl/outdev.hxx"
-#include "vcl/window.hxx"
-#include "vcl/salnativewidgets.hxx"
-#include "vcl/pdfextoutdevdata.hxx"
+#include <vcl/outdev.hxx>
+#include <vcl/window.hxx>
 
-#include "salgdi.hxx"
+#include <vcl/salnativewidgets.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
+
+#include <salgdi.hxx>
 
 static bool EnableNativeWidget( const OutputDevice& i_rDevice )
 {
