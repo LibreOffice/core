@@ -49,8 +49,9 @@ class XMLSignature_NssImpl : public ::cppu::WeakImplHelper2<
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLSignatureTemplate > SAL_CALL generate(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLSignatureTemplate >& aTemplate ,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >& aEnvironment
-        ) throw( com::sun::star::xml::crypto::XMLSignatureException,
-                 com::sun::star::uno::SecurityException, std::exception) SAL_OVERRIDE ;
+        ) throw (com::sun::star::xml::crypto::XMLSignatureException,
+                 com::sun::star::uno::SecurityException,
+                 com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLSignatureTemplate > SAL_CALL validate(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLSignatureTemplate >& aTemplate ,

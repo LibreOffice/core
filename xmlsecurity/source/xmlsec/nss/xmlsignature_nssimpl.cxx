@@ -59,7 +59,8 @@ SAL_CALL XMLSignature_NssImpl :: generate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
 ) throw( com::sun::star::xml::crypto::XMLSignatureException,
-         com::sun::star::uno::SecurityException, std::exception )
+         com::sun::star::uno::SecurityException,
+         com::sun::star::uno::RuntimeException, std::exception )
 {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecDSigCtxPtr pDsigCtx = NULL ;
