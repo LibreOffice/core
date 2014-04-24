@@ -199,7 +199,7 @@ uno::Any makeAnyOfGconfValue( GConfValue *pGconfValue )
     switch( pGconfValue->type )
     {
         case GCONF_VALUE_BOOL:
-            return uno::makeAny( (sal_Bool) gconf_value_get_bool( pGconfValue ) );
+            return uno::makeAny( (bool) gconf_value_get_bool( pGconfValue ) );
 
         case GCONF_VALUE_INT:
             return uno::makeAny( (sal_Int32) gconf_value_get_int( pGconfValue ) );
@@ -301,10 +301,10 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
         case SETTING_DISABLE_PRINTING:
 #endif // ENABLE_LOCKDOWN
         {
-            sal_Bool bBooleanValue = false;
+            bool bBooleanValue = false;
             uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
             aOriginalValue >>= bBooleanValue;
-            return uno::makeAny( OUString::boolean( (sal_Bool) bBooleanValue ) );
+            return uno::makeAny( OUString::boolean( bBooleanValue ) );
         }
 
         case SETTING_WORK_DIRECTORY:
@@ -372,7 +372,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
 
 
 
-sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const ConfigurationValue &rValue )
+bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const ConfigurationValue &rValue )
 {
     switch( rValue.nDependsOn )
     {
@@ -384,7 +384,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
             {
                 bool bOk = g_ascii_strcasecmp( "manual", gconf_value_get_string( pGconfValue ) ) == 0;
                 gconf_value_free( pGconfValue );
-                if (bOk) return sal_True;
+                if (bOk) return true;
             }
         }
             break;
@@ -395,7 +395,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
             osl::Directory aDocumentsDir( aDocumentsDirURL );
 
             if( osl::FileBase::E_None == aDocumentsDir.open() )
-                return sal_True;
+                return true;
         }
             break;
 
@@ -405,7 +405,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
             osl::Directory aTemplatesDir( aTemplatesDirURL );
 
             if( osl::FileBase::E_None == aTemplatesDir.open() )
-                return sal_True;
+                return true;
         }
             break;
 
@@ -414,7 +414,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
             OUString aCompleteName( OStringToOUString(
                 g_get_real_name(), osl_getThreadTextEncoding() ) );
             if( aCompleteName != "Unknown" )
-                return sal_True;
+                return true;
         }
             break;
 
@@ -425,7 +425,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
             if( aCompleteName != "Unknown" )
             {
                 if( aCompleteName.trim().indexOf( ' ' ) != -1 )
-                    return sal_True;
+                    return true;
             }
         }
             break;
@@ -439,7 +439,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
             {
                 bool bOk = gconf_value_get_bool( pGconfValue );
                 gconf_value_free( pGconfValue );
-                if (bOk) return sal_True;
+                if (bOk) return true;
             }
         }
             break;
@@ -451,7 +451,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
             {
                 bool bOk = gconf_value_get_bool( pGconfValue );
                 gconf_value_free( pGconfValue );
-                if (bOk) return sal_True;
+                if (bOk) return true;
             }
         }
             break;
@@ -462,7 +462,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
             break;
     }
 
-    return sal_False;
+    return false;
 }
 
 }
@@ -473,7 +473,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_ENABLE_ACCESSIBILITY,
         "/desktop/gnome/interface/accessibility",
         RTL_CONSTASCII_STRINGPARAM("EnableATToolSupport"),
-        sal_True,
+        true,
         SETTINGS_LAST
     },
 
@@ -481,7 +481,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_PROXY_MODE,
         GCONF_PROXY_MODE_KEY,
         RTL_CONSTASCII_STRINGPARAM("ooInetProxyType"),
-        sal_True,
+        true,
         SETTINGS_LAST
     },
 
@@ -489,7 +489,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_PROXY_HTTP_HOST,
         "/system/http_proxy/host",
         RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyName"),
-        sal_False,
+        false,
         SETTING_PROXY_MODE
     },
 
@@ -497,7 +497,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_PROXY_HTTP_PORT,
         "/system/http_proxy/port",
         RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyPort"),
-        sal_False,
+        false,
         SETTING_PROXY_MODE
     },
 
@@ -505,7 +505,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_PROXY_HTTPS_HOST,
         "/system/proxy/secure_host",
         RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyName"),
-        sal_False,
+        false,
         SETTING_PROXY_MODE
     },
 
@@ -513,7 +513,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_PROXY_HTTPS_PORT,
         "/system/proxy/secure_port",
         RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyPort"),
-        sal_False,
+        false,
         SETTING_PROXY_MODE
     },
 
@@ -521,7 +521,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_PROXY_FTP_HOST,
         "/system/proxy/ftp_host",
         RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyName"),
-        sal_False,
+        false,
         SETTING_PROXY_MODE
     },
 
@@ -529,7 +529,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_PROXY_FTP_PORT,
         "/system/proxy/ftp_port",
         RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyPort"),
-        sal_False,
+        false,
         SETTING_PROXY_MODE
     },
 
@@ -537,7 +537,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_NO_PROXY_FOR,
         "/system/http_proxy/ignore_hosts",
         RTL_CONSTASCII_STRINGPARAM("ooInetNoProxy"),
-        sal_True,
+        true,
         SETTING_PROXY_MODE
     },
 
@@ -545,21 +545,21 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_MAILER_PROGRAM,
         "/desktop/gnome/url-handlers/mailto/command",
         RTL_CONSTASCII_STRINGPARAM("ExternalMailer"),
-        sal_True,
+        true,
         SETTINGS_LAST
     },
     {
         SETTING_SOURCEVIEWFONT_NAME,
         "/desktop/gnome/interface/monospace_font_name",
         RTL_CONSTASCII_STRINGPARAM("SourceViewFontName"),
-        sal_True,
+        true,
         SETTINGS_LAST
     },
     {
         SETTING_SOURCEVIEWFONT_HEIGHT,
         "/desktop/gnome/interface/monospace_font_name",
         RTL_CONSTASCII_STRINGPARAM("SourceViewFontHeight"),
-        sal_True,
+        true,
         SETTINGS_LAST
     },
 
@@ -567,7 +567,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_WORK_DIRECTORY,
         "/desktop/gnome/url-handlers/mailto/command", // dummy
         RTL_CONSTASCII_STRINGPARAM("WorkPathVariable"),
-        sal_True,
+        true,
         SETTING_WORK_DIRECTORY, // so that the existence of the dir can be checked
     },
 
@@ -575,7 +575,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_TEMPLATE_DIRECTORY,
         "/desktop/gnome/url-handlers/mailto/command", // dummy
         RTL_CONSTASCII_STRINGPARAM("TemplatePathVariable"),
-        sal_True,
+        true,
         SETTING_TEMPLATE_DIRECTORY, // so that the existence of the dir can be checked
     },
 
@@ -583,7 +583,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_USER_GIVENNAME,
         "/desktop/gnome/url-handlers/mailto/command", // dummy
         RTL_CONSTASCII_STRINGPARAM("givenname"),
-        sal_True,
+        true,
         SETTING_USER_GIVENNAME
     },
 
@@ -591,7 +591,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_USER_SURNAME,
         "/desktop/gnome/url-handlers/mailto/command", // dummy
         RTL_CONSTASCII_STRINGPARAM("sn"),
-        sal_True,
+        true,
         SETTING_USER_SURNAME
     },
 
@@ -600,7 +600,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_WRITER_DEFAULT_DOC_FORMAT,
         "/apps/openoffice/writer_default_document_format",
         RTL_CONSTASCII_STRINGPARAM("TextDocumentSetupFactoryDefaultFilter"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -608,7 +608,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_IMPRESS_DEFAULT_DOC_FORMAT,
         "/apps/openoffice/impress_default_document_format",
         RTL_CONSTASCII_STRINGPARAM("PresentationDocumentSetupFactoryDefaultFilter"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -616,7 +616,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_CALC_DEFAULT_DOC_FORMAT,
         "/apps/openoffice/calc_default_document_format",
         RTL_CONSTASCII_STRINGPARAM("SpreadsheetDocumentSetupFactoryDefaultFilter"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -624,7 +624,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_AUTO_SAVE,
         GCONF_AUTO_SAVE_KEY,
         RTL_CONSTASCII_STRINGPARAM("AutoSaveEnabled"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -632,7 +632,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_USER_AUTO_SAVE,
         GCONF_USER_AUTO_SAVE_KEY,
         RTL_CONSTASCII_STRINGPARAM("UserAutoSaveEnabled"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -640,7 +640,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_AUTO_SAVE_INTERVAL,
         "/apps/openoffice/auto_save_interval",
         RTL_CONSTASCII_STRINGPARAM("AutoSaveTimeIntervall"),
-        sal_False,
+        false,
         SETTING_AUTO_SAVE
     },
 
@@ -648,7 +648,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_DISABLE_PRINTING,
         "/desktop/gnome/lockdown/disable_printing",
         RTL_CONSTASCII_STRINGPARAM("DisablePrinting"),
-        sal_True,
+        true,
         SETTINGS_LAST
     },
 
@@ -656,7 +656,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_USE_SYSTEM_FILE_DIALOG,
         "/apps/openoffice/use_system_file_dialog",
         RTL_CONSTASCII_STRINGPARAM("UseSystemFileDialog"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -664,7 +664,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_PRINTING_MODIFIES_DOCUMENT,
         "/apps/openoffice/printing_modifies_doc",
         RTL_CONSTASCII_STRINGPARAM("PrintingModifiesDocument"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -672,7 +672,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_SHOW_ICONS_IN_MENUS,
         "/apps/openoffice/show_menu_icons",
         RTL_CONSTASCII_STRINGPARAM("ShowIconsInMenues"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -680,7 +680,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_SHOW_INACTIVE_MENUITEMS,
         "/apps/openoffice/show_menu_inactive_items",
         RTL_CONSTASCII_STRINGPARAM("DontHideDisabledEntry"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -688,7 +688,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_SHOW_FONT_PREVIEW,
         "/apps/openoffice/show_font_preview",
         RTL_CONSTASCII_STRINGPARAM("ShowFontBoxWYSIWYG"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -696,7 +696,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_SHOW_FONT_HISTORY,
         "/apps/openoffice/show_font_history",
         RTL_CONSTASCII_STRINGPARAM("FontViewHistory"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -704,7 +704,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_ENABLE_OPENGL,
         "/apps/openoffice/use_opengl",
         RTL_CONSTASCII_STRINGPARAM("OpenGL"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -712,7 +712,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_OPTIMIZE_OPENGL,
         "/apps/openoffice/optimize_opengl",
         RTL_CONSTASCII_STRINGPARAM("OpenGL_Faster"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -720,7 +720,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_USE_SYSTEM_FONT,
         "/apps/openoffice/use_system_font",
         RTL_CONSTASCII_STRINGPARAM("AccessibilityIsSystemFont"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -728,7 +728,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_USE_FONT_ANTI_ALIASING,
         "/apps/openoffice/use_font_anti_aliasing",
         RTL_CONSTASCII_STRINGPARAM("FontAntiAliasingEnabled"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -736,7 +736,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_FONT_ANTI_ALIASING_MIN_PIXEL,
         "/apps/openoffice/font_anti_aliasing_min_pixel",
         RTL_CONSTASCII_STRINGPARAM("FontAntiAliasingMinPixelHeight"),
-        sal_True,
+        true,
         SETTINGS_LAST
     },
 
@@ -744,7 +744,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_WARN_CREATE_PDF,
         "/apps/openoffice/lockdown/warn_info_create_pdf",
         RTL_CONSTASCII_STRINGPARAM("WarnCreatePDF"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -752,7 +752,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_WARN_PRINT_DOC,
         "/apps/openoffice/lockdown/warn_info_printing",
         RTL_CONSTASCII_STRINGPARAM("WarnPrintDoc"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -760,7 +760,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_WARN_SAVEORSEND_DOC,
         "/apps/openoffice/lockdown/warn_info_saving",
         RTL_CONSTASCII_STRINGPARAM("WarnSaveOrSendDoc"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -768,7 +768,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_WARN_SIGN_DOC,
         "/apps/openoffice/lockdown/warn_info_signing",
         RTL_CONSTASCII_STRINGPARAM("WarnSignDoc"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -776,7 +776,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_REMOVE_PERSONAL_INFO,
         "/apps/openoffice/lockdown/remove_personal_info_on_save",
         RTL_CONSTASCII_STRINGPARAM("RemovePersonalInfoOnSaving"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -784,7 +784,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_RECOMMEND_PASSWORD,
         "/apps/openoffice/lockdown/recommend_password_on_save",
         RTL_CONSTASCII_STRINGPARAM("RecommendPasswordProtection"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -792,7 +792,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_UNDO_STEPS,
         "/apps/openoffice/undo_steps",
         RTL_CONSTASCII_STRINGPARAM("UndoSteps"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -800,7 +800,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_SYMBOL_SET,
         "/apps/openoffice/icon_size",
         RTL_CONSTASCII_STRINGPARAM("SymbolSet"),
-        sal_True,
+        true,
         SETTINGS_LAST
     },
 
@@ -808,7 +808,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_MACRO_SECURITY_LEVEL,
         "/apps/openoffice/lockdown/macro_security_level",
         RTL_CONSTASCII_STRINGPARAM("MacroSecurityLevel"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -816,7 +816,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_CREATE_BACKUP,
         "/apps/openoffice/create_backup",
         RTL_CONSTASCII_STRINGPARAM("CreateBackup"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 
@@ -824,7 +824,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_WARN_ALIEN_FORMAT,
         "/apps/openoffice/warn_alien_format",
         RTL_CONSTASCII_STRINGPARAM("WarnAlienFormat"),
-        sal_False,
+        false,
         SETTINGS_LAST
     },
 

@@ -98,7 +98,7 @@ struct ConfigurationValue
     const gchar *GconfItem;
     const char *OOoConfItem;
     const sal_Int32 nOOoConfItemLen;
-    const sal_Bool bNeedsTranslation;
+    const bool bNeedsTranslation;
     const ConfigurationSetting nDependsOn;
 };
 
