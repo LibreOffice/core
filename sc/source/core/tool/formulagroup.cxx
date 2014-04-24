@@ -511,6 +511,7 @@ public:
 
 #endif
 
+#if HAVE_FEATURE_OPENCL
 #ifndef DISABLE_DYNLOADING
 
 class FormulaGroupInterpreterOpenCLMissing : public FormulaGroupInterpreter
@@ -552,6 +553,7 @@ osl::Module* getOpenCLModule()
     return bLoaded ? &aModule : NULL;
 }
 
+#endif
 #endif
 
 /// load and/or configure the correct formula group interpreter
