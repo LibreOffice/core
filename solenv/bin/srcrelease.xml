@@ -27,7 +27,7 @@
   <property name="out.dir" value="."/>
   <property name="aoo.name" value="apache-openoffice"/>
   <property name="aoo.short.name" value="aoo"/>
-  <property name="aoo.ver" value="4.1.0"/>
+  <property name="aoo.ver" value="4.2.0"/>
 
   <property name="excludes.list" value="configure, moz/zipped/*.zip, **/.svn **/.gitignore, **/.git, warn, set_soenv, solver/**, makefile.mk, config.log, config.parms, config.status, bootstrap, autom4te.cache/**, MacOSXX86Env.*, external/unowinreg/unowinreg.dll" />
   <property name="excludes.executables" value="solenv/bin/macosx-create-bundle, solenv/bin/linkoo, solenv/bin/localize, solenv/bin/createpdbrelocators, solenv/bin/langwrap, solenv/bin/makedepn, solenv/bin/packmodule, solenv/bin/rpm-wrapper, solenv/bin/relocate, solenv/bin/receditor, solenv/bin/subsequenttests, **/*.sh, **/*.bat, **/*.exe, configure.cmd, oowintool, config.sub, config.guess, **/*.pl"/>
@@ -46,8 +46,6 @@
     <property name="release.name" value="${aoo.name}-${aoo.ver}"/>
     <property name="release.file.name" value="${release.name}-r${scm.revision}-src"/>
     <property name="release.zip" value="${out.dir}/${release.file.name}.zip"/>
-    <property name="release.tar" value="${out.dir}/${release.file.name}.tar"/>
-    <property name="release.tar.gz" value="${out.dir}/${release.file.name}.tar.gz"/>
     <property name="release.tar.bz2" value="${out.dir}/${release.file.name}.tar.bz2"/>
   </target>
 
@@ -79,9 +77,9 @@
     <echo level="verbose" message="   ... DONE"/>
   </target>
 
-  <target name="source.tar" depends="declarenames">
-    <echo level="verbose" message="### creating intermediate ${release.tar} ..."/>
-    <tar destfile="${release.tar}" longfile="gnu">
+  <target name="source.tar.bz2" depends="declarenames">
+    <echo level="verbose" message="### creating ${release.tar.bz2} ..."/>
+    <tar destfile="${release.tar.bz2}" compression="bzip2" longfile="gnu">
       <tarfileset file="main/NOTICE" fullpath="${release.dir.name}/NOTICE"/>
       <tarfileset file="main/LICENSE" fullpath="${release.dir.name}/LICENSE"/>
       <tarfileset file="main/README" fullpath="${release.dir.name}/README"/>
@@ -95,19 +93,7 @@
     <echo level="verbose" message="   ... DONE"/>
   </target>
 
-  <target name="source.tar.gz" depends="source.tar">
-    <echo level="verbose" message="### creating ${release.tar.gz} ..."/>
-    <gzip destfile="${release.tar.gz}" src="${release.tar}"/>
-    <echo level="verbose" message="   ... DONE"/>
-  </target>
-
-  <target name="source.tar.bz2" depends="source.tar">
-    <echo level="verbose" message="### creating ${release.tar.bz2} ..."/>
-    <bzip2 destfile="${release.tar.bz2}" src="${release.tar}"/>
-    <echo level="verbose" message="   ... DONE"/>
-  </target>
-
-  <target name="pack" depends="clean,source.zip,source.tar.gz,source.tar.bz2">
+  <target name="pack" depends="clean,source.zip,source.tar.bz2">
     <echo level="info" message="### Create source release files for Apache OpenOffice ${aoo.ver} ..."/>
   </target>
 
