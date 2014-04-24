@@ -67,10 +67,10 @@ public:
     virtual void SAL_CALL setAlternativeText( const OUString& _name ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setHeight(double _height)
-        throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setWidth(double _width)
-        throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual double SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setLeft( double _left ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual double SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -90,10 +90,10 @@ public:
     virtual void SAL_CALL setLockAnchor( sal_Bool _lockanchor ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::sal_Int32 SAL_CALL getRelativeHorizontalPosition() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setRelativeHorizontalPosition(::sal_Int32 _relativehorizontalposition)
-        throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::sal_Int32 SAL_CALL getRelativeVerticalPosition() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setRelativeVerticalPosition(::sal_Int32 _relativeverticalposition)
-        throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods
     virtual css::uno::Any SAL_CALL SAL_CALL TextFrame(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

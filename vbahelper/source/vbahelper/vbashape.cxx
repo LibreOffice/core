@@ -193,7 +193,7 @@ ScVbaShape::getHeight() throw (uno::RuntimeException, std::exception)
 
 void SAL_CALL
 ScVbaShape::setHeight(double _height)
-    throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+    throw (uno::RuntimeException, std::exception)
 {
     m_pShapeHelper->setHeight( _height );
 }
@@ -206,7 +206,7 @@ ScVbaShape::getWidth() throw (uno::RuntimeException, std::exception)
 
 void SAL_CALL
 ScVbaShape::setWidth(double _width)
-    throw (css::script::BasicErrorException, uno::RuntimeException, std::exception)
+    throw (uno::RuntimeException, std::exception)
 {
     m_pShapeHelper->setWidth( _width );
 }
@@ -577,7 +577,7 @@ ScVbaShape::getRelativeHorizontalPosition() throw (uno::RuntimeException, std::e
 
 void SAL_CALL
 ScVbaShape::setRelativeHorizontalPosition(::sal_Int32 _relativehorizontalposition)
-    throw (css::script::BasicErrorException, uno::RuntimeException, std::exception)
+    throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nType = text::RelOrientation::PAGE_FRAME;
     switch( _relativehorizontalposition )
@@ -649,7 +649,7 @@ ScVbaShape::getRelativeVerticalPosition() throw (uno::RuntimeException, std::exc
 
 void SAL_CALL
 ScVbaShape::setRelativeVerticalPosition(::sal_Int32 _relativeverticalposition)
-    throw (css::script::BasicErrorException, uno::RuntimeException, std::exception)
+    throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nType = text::RelOrientation::PAGE_FRAME;
     switch( _relativeverticalposition )
