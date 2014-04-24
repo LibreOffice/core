@@ -37,6 +37,8 @@
 #include "sal/main.h"
 
 #include "cppunit/CompilerOutputter.h"
+#include "cppunit/Exception.h"
+#include "cppunit/TestFailure.h"
 #include "cppunit/TestResult.h"
 #include "cppunit/TestResultCollector.h"
 #include "cppunit/TestRunner.h"
@@ -130,6 +132,37 @@ public:
 };
 #endif
 
+class LogFailuresAsTheyHappen : public CppUnit::TestListener
+{
+public:
+    virtual void addFailure( const CppUnit::TestFailure &failure ) SAL_OVERRIDE
+    {
+        printFailureLocation( failure.sourceLine() );
+        printFailedTestName( failure );
+        printFailureMessage( failure );
+    }
+
+private:
+    void printFailureLocation( const CppUnit::SourceLine &sourceLine )
+    {
+        if ( !sourceLine.isValid() )
+            std::cerr << "unknown:0:";
+        else
+            std::cerr << sourceLine.fileName() << ":" << sourceLine.lineNumber() << ":";
+    }
+
+    void printFailedTestName( const CppUnit::TestFailure &failure )
+    {
+        std::cerr << failure.failedTestName() << std::endl;
+    }
+
+    void printFailureMessage( const CppUnit::TestFailure &failure )
+    {
+        std::cerr << failure.thrownException()->message().shortDescription() << std::endl;
+        std::cerr << failure.thrownException()->message().details() << std::endl;
+    }
+};
+
 //Allow the whole uniting testing framework to be run inside a "Protector"
 //which knows about uno exceptions, so it can print the content of the
 //exception before falling over and dying
@@ -182,6 +215,9 @@ public:
         CppUnit::TestResultCollector collector;
         result.addListener(&collector);
 
+        LogFailuresAsTheyHappen logger;
+        result.addListener(&logger);
+
 #ifdef TIMETESTS
         TimingListener timer;
         result.addListener(&timer);
@@ -199,7 +235,10 @@ public:
         for (size_t i = 0; i < protectors.size(); ++i)
             result.popProtector();
 
-        CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).write();
+        if (collector.wasSuccessful())
+            CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).printSuccess();
+        else
+            CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).printStatistics();
         return collector.wasSuccessful();
     }
     virtual bool operator()() const SAL_OVERRIDE
