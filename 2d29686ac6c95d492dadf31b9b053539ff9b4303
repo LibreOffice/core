@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_0b63411b",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-24T16:18:40Z",
+      "side": 1,
+      "message": "You\u0027re right, I forgot to remove this line and to rename bFormulaChar to mbFormulaChar.\nDone.",
+      "parentUuid": "5a72e520_ab506d5f",
+      "revId": "2d29686ac6c95d492dadf31b9b053539ff9b4303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_ebe1859b",
         "filename": "sc/source/ui/inc/inputhdl.hxx",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2014-04-24T15:32:12Z",
       "side": 1,
       "message": "Let\u0027s name this mbFormulaChar, to make it clear it\u0027s a member variable.",
+      "revId": "2d29686ac6c95d492dadf31b9b053539ff9b4303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_2b68fdf4",
+        "filename": "sc/source/ui/inc/inputhdl.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-24T16:18:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_ebe1859b",
       "revId": "2d29686ac6c95d492dadf31b9b053539ff9b4303",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
