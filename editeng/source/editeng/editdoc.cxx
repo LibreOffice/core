@@ -546,10 +546,14 @@ ExtraPortionInfo::~ExtraPortionInfo()
 void ExtraPortionInfo::SaveOrgDXArray( const sal_Int32* pDXArray, sal_Int32 nLen )
 {
     delete[] pOrgDXArray;
-    pOrgDXArray = new sal_Int32[nLen];
-    memcpy( pOrgDXArray, pDXArray, nLen*sizeof(sal_Int32) );
+    if (pDXArray)
+    {
+        pOrgDXArray = new sal_Int32[nLen];
+        memcpy( pOrgDXArray, pDXArray, nLen*sizeof(sal_Int32) );
+    }
+    else
+        pOrgDXArray = NULL;
 }
-
 
 ParaPortion::ParaPortion( ContentNode* pN )
 {
