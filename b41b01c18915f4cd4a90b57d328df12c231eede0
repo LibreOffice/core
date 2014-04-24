@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_ab214db6",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 6671,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-24T18:49:48Z",
+      "side": 1,
+      "message": "As we return here from the function this must be a PushError() instead.",
+      "revId": "b41b01c18915f4cd4a90b57d328df12c231eede0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_cb2e89a5",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 4223,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-24T18:49:48Z",
+      "side": 1,
+      "message": "As this function isn\u0027t readily implemented yet I suggest to hide it in the FunctionWizard by setting this value to 1. This way the function isn\u0027t offered in the UI but still recognized by the compiler and interpreter.",
+      "revId": "b41b01c18915f4cd4a90b57d328df12c231eede0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
