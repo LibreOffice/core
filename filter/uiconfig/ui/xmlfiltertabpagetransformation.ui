@@ -36,9 +36,9 @@
           <object class="GtkEntry" id="doc">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="halign">start</property>
+            <property name="hexpand">True</property>
             <property name="invisible_char">●</property>
-            <property name="width_chars">24</property>
+            <property name="width_chars">32</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -143,6 +143,7 @@
           <object class="svtlo-SvtURLBox" id="tempimport">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="entry_text_column">0</property>
             <property name="id_column">1</property>
             <property name="max_width_chars">2</property>
@@ -158,6 +159,7 @@
           <object class="svtlo-SvtURLBox" id="xsltimport">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="entry_text_column">0</property>
             <property name="id_column">1</property>
             <property name="max_width_chars">2</property>
@@ -173,6 +175,7 @@
           <object class="svtlo-SvtURLBox" id="xsltexport">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="entry_text_column">0</property>
             <property name="id_column">1</property>
             <property name="max_width_chars">2</property>
