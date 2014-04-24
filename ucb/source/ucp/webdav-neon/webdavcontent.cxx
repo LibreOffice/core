@@ -3178,7 +3178,7 @@ Content::ResourceType Content::getResourceType(
                     const uno::Reference< ucb::XCommandEnvironment >& xEnv,
                     const std::auto_ptr< DAVResourceAccess > & rResAccess,
                     bool * networkAccessAllowed)
-    throw ( uno::Exception )
+    throw ( uno::Exception, std::exception )
 {
     {
         osl::MutexGuard g(m_aMutex);

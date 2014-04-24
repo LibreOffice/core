@@ -146,7 +146,7 @@ private:
                           ::com::sun::star::ucb::XCommandEnvironment >& xEnv,
                      const std::auto_ptr< DAVResourceAccess > & rResAccess,
                      bool * networkAccessAllowed = 0)
-        throw ( ::com::sun::star::uno::Exception );
+        throw ( ::com::sun::star::uno::Exception, std::exception );
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // Command "open"
