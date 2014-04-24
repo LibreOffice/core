@@ -39,10 +39,6 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_stream,\
 	writerperfect \
 ))
 
-$(eval $(call gb_CppunitTest_use_static_libraries,writerperfect_stream,\
-	writerperfect \
-))
-
 $(eval $(call gb_CppunitTest_use_configuration,writerperfect_stream))
 
 $(eval $(call gb_CppunitTest_use_components,writerperfect_stream,\
