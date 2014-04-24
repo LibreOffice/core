@@ -21,6 +21,7 @@
 #include <boost/optional.hpp>
 
 #include "oox/vml/vmlshape.hxx"
+#include <vcl/wmf.hxx>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -997,8 +998,13 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                 // set the replacement graphic
                 if( !aGraphicPath.isEmpty() )
                 {
-                    Reference< XGraphic > xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic( aGraphicPath );
-                    if( xGraphic.is() )
+                    WMF_EXTERNALHEADER aExtHeader;
+                    aExtHeader.mapMode = 8;
+                    aExtHeader.xExt = rShapeRect.Width;
+                    aExtHeader.yExt = rShapeRect.Height;
+
+                    Reference< XGraphic > xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic(aGraphicPath, &aExtHeader);
+                    if (xGraphic.is())
                         aOleProps.setProperty( PROP_Graphic, xGraphic);
                 }
 
