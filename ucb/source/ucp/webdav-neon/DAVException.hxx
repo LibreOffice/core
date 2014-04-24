@@ -156,7 +156,6 @@ class DAVException : std::exception
                        sal_uInt16 nStatusCode ) :
             mExceptionCode( inExceptionCode ), mData( rData ),
             mStatusCode( nStatusCode ) {};
-        ~DAVException( ) {};
 
     const ExceptionCode & getError() const { return mExceptionCode; }
     const OUString & getData() const  { return mData; }
