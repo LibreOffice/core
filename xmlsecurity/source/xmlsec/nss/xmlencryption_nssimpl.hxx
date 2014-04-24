@@ -57,8 +57,9 @@ class XMLEncryption_NssImpl : public ::cppu::WeakImplHelper2<
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLEncryptionTemplate > SAL_CALL decrypt(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLEncryptionTemplate >& aTemplate ,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLSecurityContext >& aContext
-        ) throw( com::sun::star::xml::crypto::XMLEncryptionException ,
-                    com::sun::star::uno::SecurityException, std::exception) SAL_OVERRIDE ;
+        ) throw (com::sun::star::xml::crypto::XMLEncryptionException ,
+                 com::sun::star::uno::SecurityException,
+                 com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         //Methods from XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
