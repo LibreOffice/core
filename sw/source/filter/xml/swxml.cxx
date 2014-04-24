@@ -396,7 +396,7 @@ static void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     // determine, which outline level has already a style assigned and
     // which of the default outline styles is created.
     const SwTxtFmtColls& rColls = *(_rDoc.GetTxtFmtColls());
-    for ( sal_uInt16 n = 1; n < rColls.size(); ++n )
+    for ( size_t n = 1; n < rColls.size(); ++n )
     {
         SwTxtFmtColl* pColl = rColls[ n ];
         if ( pColl->IsAssignedToListLevelOfOutlineStyle() )
