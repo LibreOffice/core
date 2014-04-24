@@ -205,7 +205,8 @@ ScVbaShape::getWidth() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaShape::setWidth( double _width ) throw (uno::RuntimeException, std::exception)
+ScVbaShape::setWidth(double _width)
+    throw (css::script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     m_pShapeHelper->setWidth( _width );
 }
