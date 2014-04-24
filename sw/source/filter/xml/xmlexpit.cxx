@@ -139,7 +139,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
             }
             if( bAddAttribute )
             {
-                OUString sName( rNamespaceMap.GetQNameByKey( rEntry.nNameSpace,
+                const OUString sName( rNamespaceMap.GetQNameByKey( rEntry.nNameSpace,
                                 GetXMLToken(rEntry.eLocalName) ) );
                 rAttrList.AddAttribute( sName, aValue );
             }
@@ -156,10 +156,10 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
             OUStringBuffer sName;
             for( sal_uInt16 i=0; i < nCount; i++ )
             {
-                OUString sPrefix( pUnknown->GetAttrPrefix( i ) );
+                const OUString sPrefix( pUnknown->GetAttrPrefix( i ) );
                 if( !sPrefix.isEmpty() )
                 {
-                    OUString sNamespace( pUnknown->GetAttrNamespace( i ) );
+                    const OUString sNamespace( pUnknown->GetAttrNamespace( i ) );
 
                     // if the prefix isn't defined yet or has another meaning,
                     // we have to redefine it now.
@@ -207,7 +207,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                                           rEntry.nMemberId & MID_SW_FLAG_MASK ),
                              rUnitConverter ) )
         {
-            OUString sName(
+            const OUString sName(
                 rNamespaceMap.GetQNameByKey( rEntry.nNameSpace,
                                              GetXMLToken(rEntry.eLocalName)));
             rAttrList.AddAttribute( sName, aValue );
