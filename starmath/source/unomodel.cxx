@@ -699,7 +699,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if ( (*pValues).getValueType() != ::getBooleanCppuType() )
                     throw IllegalArgumentException();
-                sal_Bool bReadonly = sal_False;
+                bool bReadonly = false;
                 if ( *pValues >>= bReadonly )
                     pDocSh->SetLoadReadonly( bReadonly );
                 break;

@@ -71,7 +71,7 @@ public:
     }
 };
 
-sal_Bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion );
+bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion );
 
 #endif
 

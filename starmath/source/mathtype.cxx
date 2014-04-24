@@ -73,7 +73,7 @@ void MathType::Init()
  between math symbols and ordinary text e.g. 1=2 rather
  than 1 = 2
  */
-sal_Bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
+bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
     sal_uInt8 nTypeFace)
 {
     bool bRet=false;
@@ -1830,7 +1830,7 @@ void MathType::HandleAlign(sal_uInt8 nHorAlign, sal_uInt8 /*nVAlign*/, int &rSet
 
 /* set size of text, complexity due to overuse of signedness as a flag
  * indicator by mathtype file format*/
-sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
+bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
 {
     bool bRet=false;
     if (nLstSize < 0)
@@ -2175,7 +2175,7 @@ void MathType::HandleRoot(SmNode *pNode,int nLevel)
 }
 
 sal_uInt8 MathType::HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
-    sal_uLong *pPos,sal_Bool bTest)
+    sal_uLong *pPos,bool bTest)
 {
     sal_uInt8 nVariation2=0xff;
 
@@ -2362,7 +2362,7 @@ void MathType::HandleBrace(SmNode *pNode,int nLevel)
     SmNode *pRight=pNode->GetSubNode(2);
 
     pS->WriteUChar( sal_uInt8(TMPL) ); //Template
-    bIsReInterpBrace=0;
+    bIsReInterpBrace=false;
     sal_uInt8 nBSpec=0x10;
     sal_uLong nLoc = pS->Tell();
     if (pLeft)
@@ -2429,7 +2429,7 @@ void MathType::HandleBrace(SmNode *pNode,int nLevel)
         pS->WriteUChar( sal_uInt8(CHAR) );
         pS->WriteUChar( sal_uInt8(0x96) );
         pS->WriteUInt16( sal_uInt16(0xEC07) );
-        bIsReInterpBrace=0;
+        bIsReInterpBrace=false;
     }
     if (pRight)
         HandleNodes(pRight,nLevel+1);
@@ -2481,7 +2481,7 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
         case TLLINT:
         case TLLLINT:
             nVariation=HandleCScript(pNode->GetSubNode(0),
-                pNode->GetSubNode(1),nLevel,&nPos,0);
+                pNode->GetSubNode(1),nLevel,&nPos,false);
             break;
         default:
             nVariation=HandleCScript(pNode->GetSubNode(0),
@@ -2857,7 +2857,7 @@ void MathType::HandleSetSize()
 }
 
 int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
-    sal_uInt8 nTag,sal_uInt8 nSelector,sal_uInt8 nVariation, sal_Bool bSilent)
+    sal_uInt8 nTag,sal_uInt8 nSelector,sal_uInt8 nVariation, bool bSilent)
 {
     sal_Unicode nChar;
     int nRet=1;
@@ -2964,7 +2964,7 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
     return nRet;
 }
 
-sal_Bool MathType::HandleLim(SmNode *pNode,int nLevel)
+bool MathType::HandleLim(SmNode *pNode,int nLevel)
 {
     bool bRet=false;
     //Special case for the "lim" option in StarMath
@@ -3069,7 +3069,7 @@ void MathType::HandleMath(SmNode *pNode, int /*nLevel*/)
     {
         pS->WriteUChar( sal_uInt8(END) );
         pS->WriteUChar( sal_uInt8(LINE) );
-        bIsReInterpBrace=1;
+        bIsReInterpBrace=true;
         return;
     }
     SmMathSymbolNode *pTemp=(SmMathSymbolNode *)pNode;

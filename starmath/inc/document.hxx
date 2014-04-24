@@ -125,7 +125,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
                                   sal_Int32 nFileFormat,
                                   bool bTemplate = false ) const SAL_OVERRIDE;
 
-    virtual sal_Bool        SetData( const OUString& rData );
+    virtual bool        SetData( const OUString& rData );
     virtual sal_uLong       GetMiscStatus() const SAL_OVERRIDE;
     virtual void        OnDocumentPrinterChanged( Printer * ) SAL_OVERRIDE;
     virtual bool        InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) SAL_OVERRIDE;
@@ -183,7 +183,7 @@ public:
     const OUString GetComment() const;
 
     // to replace chars that can not be saved with the document...
-    sal_Bool    ReplaceBadChars();
+    bool    ReplaceBadChars();
 
     void        UpdateText();
     void        SetText(const OUString& rBuffer);

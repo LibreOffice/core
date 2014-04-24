@@ -758,7 +758,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
     throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if (!pWin)
         throw RuntimeException();
@@ -779,7 +779,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
 
             Application::AcquireSolarMutex( nRef );
 
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
 
@@ -1156,7 +1156,7 @@ static sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESel
         {
             OSL_ENSURE( i->pAttr, "GetCharAttribs gives corrupt data" );
 
-            const sal_Bool bEmptyPortion = (i->nStart == i->nEnd);
+            const bool bEmptyPortion = (i->nStart == i->nEnd);
             if( (!bEmptyPortion && (i->nStart >= nEndPos)) || (bEmptyPortion && (i->nStart > nEndPos)) )
                 break;  // break if we are already behind our selection
 

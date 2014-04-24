@@ -253,7 +253,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     Reference<uno::XComponentContext> & rxContext,
     Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pFilterName,
-    sal_Bool bEncrypted )
+    bool bEncrypted )
 {
     sal_uLong nError = ERRCODE_SFX_DOLOADFAILED;
     OSL_ENSURE(xInputStream.is(), "input stream missing");
@@ -376,7 +376,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
         // determine if stream is encrypted or not
         uno::Reference < beans::XPropertySet > xProps( xEventsStream, uno::UNO_QUERY );
         Any aAny = xProps->getPropertyValue( "Encrypted" );
-        sal_Bool bEncrypted = sal_False;
+        bool bEncrypted = false;
         if ( aAny.getValueType() == ::getBooleanCppuType() )
             aAny >>= bEncrypted;
 
@@ -421,7 +421,7 @@ SmXMLImport::SmXMLImport(
     pPresScriptEmptyElemTokenMap(0),
     pPresTableElemTokenMap(0),
     pColorTokenMap(0),
-    bSuccess(sal_False)
+    bSuccess(false)
 {
 }
 
@@ -549,7 +549,7 @@ void SmXMLImport::endDocument(void)
         }
         OSL_ENSURE(pModel,"So there *was* a uno problem after all");
 
-        bSuccess = sal_True;
+        bSuccess = true;
     }
 
     SvXMLImport::endDocument();

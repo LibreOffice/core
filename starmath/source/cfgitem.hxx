@@ -167,7 +167,7 @@ public:
     void            SetPrintFrame( bool bVal );
     SmPrintSize     GetPrintSize() const;
     void            SetPrintSize( SmPrintSize eSize );
-    sal_uInt16          GetPrintZoomFactor() const;
+    sal_uInt16      GetPrintZoomFactor() const;
     void            SetPrintZoomFactor( sal_uInt16 nVal );
 
     bool            IsSaveOnlyUsedSymbols() const;
@@ -178,7 +178,6 @@ public:
     void            SetAutoRedraw( bool bVal );
     bool            IsShowFormulaCursor() const;
     void            SetShowFormulaCursor( bool bVal );
-    void            SetAutoRedraw( sal_Bool bVal );
 };
 
 #endif

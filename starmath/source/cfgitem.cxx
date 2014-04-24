@@ -611,7 +611,7 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
         // Predefined
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
-        pVal->Value <<= (sal_Bool) rSymbol.IsPredefined();
+        pVal->Value <<= rSymbol.IsPredefined();
         pVal++;
         // FontFormatId
         SmFontFormat aFntFmt( rSymbol.GetFace() );
@@ -917,25 +917,25 @@ void SmMathConfig::SaveOther()
     Any *pValue  = pValues;
 
     // Print/Title
-    *pValue++ <<= (sal_Bool) pOther->bPrintTitle;
+    *pValue++ <<= pOther->bPrintTitle;
     // Print/FormulaText
-    *pValue++ <<= (sal_Bool) pOther->bPrintFormulaText;
+    *pValue++ <<= pOther->bPrintFormulaText;
     // Print/Frame
-    *pValue++ <<= (sal_Bool) pOther->bPrintFrame;
+    *pValue++ <<= pOther->bPrintFrame;
     // Print/Size
     *pValue++ <<= (sal_Int16) pOther->ePrintSize;
     // Print/ZoomFactor
     *pValue++ <<= (sal_Int16) pOther->nPrintZoomFactor;
     // LoadSave/IsSaveOnlyUsedSymbols
-    *pValue++ <<= (sal_Bool) pOther->bIsSaveOnlyUsedSymbols;
+    *pValue++ <<= pOther->bIsSaveOnlyUsedSymbols;
     // Misc/IgnoreSpacesRight
-    *pValue++ <<= (sal_Bool) pOther->bIgnoreSpacesRight;
+    *pValue++ <<= pOther->bIgnoreSpacesRight;
     // View/ToolboxVisible
-    *pValue++ <<= (sal_Bool) pOther->bToolboxVisible;
+    *pValue++ <<= pOther->bToolboxVisible;
     // View/AutoRedraw
-    *pValue++ <<= (sal_Bool) pOther->bAutoRedraw;
+    *pValue++ <<= pOther->bAutoRedraw;
     // View/FormulaCursor
-    *pValue++ <<= (sal_Bool) pOther->bFormulaCursor;
+    *pValue++ <<= pOther->bFormulaCursor;
 
     OSL_ENSURE( pValue - pValues == nProps, "property mismatch" );
     PutProperties( aNames , aValues );
@@ -1044,11 +1044,11 @@ void SmMathConfig::SaveFormat()
     Any *pValue  = pValues;
 
     // StandardFormat/Textmode
-    *pValue++ <<= (sal_Bool) pFormat->IsTextmode();
+    *pValue++ <<= pFormat->IsTextmode();
     // StandardFormat/GreekCharStyle
     *pValue++ <<= (sal_Int16) pFormat->GetGreekCharStyle();
     // StandardFormat/ScaleNormalBracket
-    *pValue++ <<= (sal_Bool) pFormat->IsScaleNormalBrackets();
+    *pValue++ <<= pFormat->IsScaleNormalBrackets();
     // StandardFormat/HorizontalAlignment
     *pValue++ <<= (sal_Int16) pFormat->GetHorAlign();
     // StandardFormat/BaseSize

@@ -54,7 +54,7 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & rPropSet,
         const sal_Char* pFilterName,
-        sal_Bool bEncrypted );
+        bool bEncrypted );
 
     sal_uLong ReadThroughComponent(
          const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
@@ -82,7 +82,7 @@ class SmXMLImport : public SvXMLImport
         SvXMLTokenMap *pColorTokenMap;
 
         SmNodeStack aNodeStack;
-        sal_Bool bSuccess;
+        bool bSuccess;
         OUString aText;
 
 public:
@@ -252,7 +252,7 @@ public:
         return result;
     }
 
-    sal_Bool GetSuccess()              { return bSuccess; }
+    bool GetSuccess()              { return bSuccess; }
     SAL_WARN_UNUSED_RESULT OUString GetText() { return aText; }
     void SetText(const OUString &rStr) { aText = rStr; }
 

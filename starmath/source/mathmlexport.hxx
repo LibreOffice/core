@@ -41,16 +41,16 @@ namespace com { namespace sun { namespace star {
 class SmXMLExportWrapper
 {
     com::sun::star::uno::Reference<com::sun::star::frame::XModel> xModel;
-    sal_Bool bFlat;     //set true for export to flat .mml, set false for
+    bool bFlat;     //set true for export to flat .mml, set false for
                         //export to a .sxm (or whatever) package
 public:
     SmXMLExportWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef)
-        : xModel(rRef), bFlat(sal_True) {}
+        : xModel(rRef), bFlat(true) {}
 
-    sal_Bool Export(SfxMedium &rMedium);
-    void SetFlat(sal_Bool bIn) {bFlat = bIn;}
+    bool Export(SfxMedium &rMedium);
+    void SetFlat(bool bIn) {bFlat = bIn;}
 
-    sal_Bool WriteThroughComponent(
+    bool WriteThroughComponent(
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
             xOutputStream,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
@@ -61,7 +61,7 @@ public:
             ::com::sun::star::beans::XPropertySet > & rPropSet,
         const sal_Char* pComponentName );
 
-    sal_Bool WriteThroughComponent(
+    bool WriteThroughComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent,
         const sal_Char* pStreamName,
@@ -78,7 +78,7 @@ class SmXMLExport : public SvXMLExport
 {
     const SmNode *  pTree;
     OUString        aText;
-    sal_Bool        bSuccess;
+    bool        bSuccess;
 
 protected:
     void ExportNodes(const SmNode *pNode, int nLevel);
@@ -121,7 +121,7 @@ public:
     virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) SAL_OVERRIDE;
     virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) SAL_OVERRIDE;
 
-    sal_Bool GetSuccess() {return bSuccess;}
+    bool GetSuccess() {return bSuccess;}
 };
 
 

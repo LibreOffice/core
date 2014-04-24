@@ -24,10 +24,10 @@
 
 
 
-sal_Bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
+bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
 {
     sal_uInt8 nVer = 0;
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
 
 
     // code snippet copied from MathType::Parse
@@ -47,7 +47,7 @@ sal_Bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
     if (!pS->GetError())
     {
         nVersion = nVer;
-        bSuccess = sal_True;
+        bSuccess = true;
     }
     return bSuccess;
 }

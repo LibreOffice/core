@@ -41,7 +41,7 @@ public:
 
 struct LessMathTypeFont
 {
-    sal_Bool operator() (const MathTypeFont &rValue1,
+    bool operator() (const MathTypeFont &rValue1,
         const MathTypeFont &rValue2) const
     {
         return rValue1.nTface < rValue2.nTface;
@@ -72,8 +72,8 @@ public:
         , nCurSize(0)
         , nLastSize(0)
         , nSpec(0)
-        , bIsSilent(sal_False)
-        , bIsReInterpBrace(sal_False)
+        , bIsSilent(false)
+        , bIsReInterpBrace(false)
         , nPostSup(0)
         , nPostlSup(0)
         , nTypeFace(0)
@@ -100,8 +100,8 @@ public:
         , nCurSize(0)
         , nLastSize(0)
         , nSpec(0)
-        , bIsSilent(sal_False)
-        , bIsReInterpBrace(sal_False)
+        , bIsSilent(false)
+        , bIsReInterpBrace(false)
         , nPostSup(0)
         , nPostlSup(0)
         , nTypeFace(0)
@@ -126,7 +126,7 @@ private:
 
     int HandleRecords(int nLevel=0,sal_uInt8 nSelector=0xFF,
         sal_uInt8 nVariation=0xFF,int nRows=0,int nCols=0);
-    sal_Bool HandleSize(sal_Int16 nLSize,sal_Int16 nDSize, int &rSetSize);
+    bool HandleSize(sal_Int16 nLSize,sal_Int16 nDSize, int &rSetSize);
     void HandleAlign(sal_uInt8 nHAlign,sal_uInt8 nVAlign, int &rSetAlign);
     int HandlePile(int &rSetAlign,int nLevel,sal_uInt8 nSelector,
         sal_uInt8 nVariation);
@@ -139,7 +139,7 @@ private:
     void HandleSetSize();
     int HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
         sal_uInt8 nTag,sal_uInt8 nSelector,sal_uInt8 nVariation,
-        sal_Bool bSilent);
+        bool bSilent);
     void HandleNudge();
     int xfLMOVE(sal_uInt8 nTest) const {return nTest&0x80;}
     int xfAUTO(sal_uInt8 nTest) const {return nTest&0x10;}
@@ -156,12 +156,12 @@ private:
     void HandleRoot(SmNode *pNode,int nLevel);
     void HandleSubSupScript(SmNode *pNode,int nLevel);
     sal_uInt8 HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
-        sal_uLong *pPos=NULL,sal_Bool bTest=sal_True);
+        sal_uLong *pPos=NULL,bool bTest=true);
     void HandleFractions(SmNode *pNode,int nLevel);
     void HandleBrace(SmNode *pNode,int nLevel);
     void HandleVerticalBrace(SmNode *pNode,int nLevel);
     void HandleOperator(SmNode *pNode,int nLevel);
-    sal_Bool HandleLim(SmNode *pNode,int nLevel);
+    bool HandleLim(SmNode *pNode,int nLevel);
     void HandleMAlign(SmNode *pNode,int nLevel);
     void HandleMath(SmNode *pNode,int nLevel);
     void HandleText(SmNode *pNode,int nLevel);
@@ -184,7 +184,7 @@ private:
     sal_Int16 nCurSize;
     sal_Int16 nLastSize;
     sal_uInt8 nSpec;
-    sal_Bool  bIsSilent, bIsReInterpBrace;
+    bool  bIsSilent, bIsReInterpBrace;
     OUString  sPost;
     sal_Int32 nPostSup;
     sal_Int32 nPostlSup;
@@ -200,7 +200,7 @@ private:
         tmDSINT,tmTSINT,tmUHBRACE,tmLHBRACE,tmSUM,tmTINTD
     };
 public:
-    static sal_Bool LookupChar(sal_Unicode nChar,OUString &rRet,
+    static bool LookupChar(sal_Unicode nChar,OUString &rRet,
         sal_uInt8 nVersion=3,sal_uInt8 nTypeFace=0);
 };
 

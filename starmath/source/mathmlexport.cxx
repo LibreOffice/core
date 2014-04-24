@@ -93,15 +93,15 @@ sal_Unicode ConvertMathToMathML( sal_Unicode cChar )
     return cRes;
 }
 
-sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
+bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
 {
-    sal_Bool bRet=sal_True;
+    bool bRet=true;
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
 
     //Get model
     uno::Reference< lang::XComponent > xModelComp(xModel, uno::UNO_QUERY );
 
-    sal_Bool bEmbedded = sal_False;
+    bool bEmbedded = false;
     uno::Reference <lang::XUnoTunnel> xTunnel;
     xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
     SmModel *pModel = reinterpret_cast<SmModel *>
@@ -111,7 +111,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
             static_cast<SmDocShell*>(pModel->GetObjectShell()) : 0;
     if ( pDocShell &&
         SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
-        bEmbedded = sal_True;
+        bEmbedded = true;
 
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
     if (!bEmbedded)
@@ -179,7 +179,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
     if (!bFlat) //Storage (Package) of Stream
     {
         uno::Reference < embed::XStorage > xStg = rMedium.GetOutputStorage();
-        sal_Bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
+        bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
 
         // TODO/LATER: handle the case of embedded links gracefully
         if ( bEmbedded ) //&& !pStg->IsRoot() )
@@ -253,7 +253,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
 
 
 /// export through an XML exporter component (output stream version)
-sal_Bool SmXMLExportWrapper::WriteThroughComponent(
+bool SmXMLExportWrapper::WriteThroughComponent(
     Reference<io::XOutputStream> xOutputStream,
     Reference<XComponent> xComponent,
     Reference<uno::XComponentContext> & rxContext,
@@ -284,7 +284,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     OSL_ENSURE( xExporter.is(),
             "can't instantiate export filter component" );
     if ( !xExporter.is() )
-        return sal_False;
+        return false;
 
 
     // connect model and filter
@@ -306,7 +306,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
 
 
 /// export through an XML exporter component (storage version)
-sal_Bool SmXMLExportWrapper::WriteThroughComponent(
+bool SmXMLExportWrapper::WriteThroughComponent(
     const Reference < embed::XStorage >& xStorage,
     Reference<XComponent> xComponent,
     const sal_Char* pStreamName,
@@ -329,7 +329,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     catch ( uno::Exception& rEx )
     {
         SAL_WARN("starmath", "Can't create output stream in package: " << rEx.Message );
-        return sal_False;
+        return false;
     }
 
     OUString aPropName( "MediaType" );
@@ -354,7 +354,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     }
 
     // write the stuff
-    sal_Bool bRet = WriteThroughComponent( xStream->getOutputStream(), xComponent, rxContext,
+    bool bRet = WriteThroughComponent( xStream->getOutputStream(), xComponent, rxContext,
         rPropSet, pComponentName );
 
     return bRet;
@@ -366,7 +366,7 @@ SmXMLExport::SmXMLExport(
 :   SvXMLExport(util::MeasureUnit::INCH, xContext, implementationName, XML_MATH,
                 nExportFlags)
 ,   pTree(0) ,
-    bSuccess(sal_False)
+    bSuccess(false)
 {
 }
 
@@ -558,7 +558,7 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
         GetDocHandler()->endDocument();
     }
 
-    bSuccess=sal_True;
+    bSuccess=true;
     return 0;
 }
 
@@ -936,7 +936,7 @@ void SmXMLExport::ExportText(const SmNode *pNode, int /*nLevel*/)
         {
             //Note that we change the fontstyle to italic for strings that
             //are italic and longer than a single character.
-            sal_Bool bIsItalic = IsItalic( pTemp->GetFont() );
+            bool bIsItalic = IsItalic( pTemp->GetFont() );
             if ((pTemp->GetText().getLength() > 1) && bIsItalic)
                 AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, XML_ITALIC);
             else if ((pTemp->GetText().getLength() == 1) && !bIsItalic)
@@ -1555,7 +1555,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
                     //operator dictionary, we will generate MathML with explicit
                     //stretchiness for now.
                     sal_Int16 nLength = GetAttrList().getLength();
-                    sal_Bool bAddStretch=sal_True;
+                    bool bAddStretch=true;
                     for ( sal_Int16 i = 0; i < nLength; i++ )
                     {
                         OUString sLocalName;
@@ -1565,7 +1565,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
                         if ( ( XML_NAMESPACE_MATH == nPrefix ) &&
                             IsXMLToken(sLocalName, XML_STRETCHY) )
                         {
-                            bAddStretch = sal_False;
+                            bAddStretch = false;
                             break;
                         }
                     }

@@ -730,7 +730,7 @@ SmDocShell::~SmDocShell()
 }
 
 
-sal_Bool SmDocShell::SetData( const OUString& rData )
+bool SmDocShell::SetData( const OUString& rData )
 {
     SAL_INFO( "starmath", "SmDocShell::SetData" );
 
@@ -861,7 +861,7 @@ bool SmDocShell::Save()
 
         Reference<com::sun::star::frame::XModel> xModel(GetModel());
         SmXMLExportWrapper aEquation(xModel);
-        aEquation.SetFlat(sal_False);
+        aEquation.SetFlat(false);
         return aEquation.Export(*GetMedium());
     }
 
@@ -871,9 +871,9 @@ bool SmDocShell::Save()
 /*
  * replace bad characters that can not be saved. (#i74144)
  * */
-sal_Bool SmDocShell::ReplaceBadChars()
+bool SmDocShell::ReplaceBadChars()
 {
-    sal_Bool bReplace = sal_False;
+    bool bReplace = false;
 
     if (pEditEngine)
     {
@@ -884,7 +884,7 @@ sal_Bool SmDocShell::ReplaceBadChars()
             if (aBuf[i] < ' ' && aBuf[i] != '\r' && aBuf[i] != '\n' && aBuf[i] != '\t')
             {
                 aBuf[i] = ' ';
-                bReplace = sal_True;
+                bReplace = true;
             }
         }
 
@@ -927,7 +927,7 @@ bool SmDocShell::SaveAs( SfxMedium& rMedium )
 
         Reference<com::sun::star::frame::XModel> xModel(GetModel());
         SmXMLExportWrapper aEquation(xModel);
-        aEquation.SetFlat(sal_False);
+        aEquation.SetFlat(false);
         bRet = aEquation.Export(rMedium);
     }
     return bRet;
@@ -951,14 +951,14 @@ bool SmDocShell::ConvertTo( SfxMedium &rMedium )
         {
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
             SmXMLExportWrapper aEquation(xModel);
-            aEquation.SetFlat(sal_False);
+            aEquation.SetFlat(false);
             bRet = aEquation.Export(rMedium);
         }
         else if(rFltName.equals( MATHML_XML ))
         {
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
             SmXMLExportWrapper aEquation(xModel);
-            aEquation.SetFlat(sal_True);
+            aEquation.SetFlat(true);
             bRet = aEquation.Export(rMedium);
         }
         else if (pFlt->GetFilterName().equalsAscii("MathType 3.x"))
