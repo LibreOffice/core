@@ -2105,7 +2105,7 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
                     FSNS( XML_a, XML_outerShdw ) :
                     FSNS( XML_a, XML_innerShdw );
             uno::Sequence< beans::PropertyValue > aOuterShdwProps;
-            aEffectProps[0].Value >>= aOuterShdwProps;
+            aEffectProps[i].Value >>= aOuterShdwProps;
             for( sal_Int32 j=0; j < aOuterShdwProps.getLength(); ++j )
             {
                 if( aOuterShdwProps[j].Name == "algn" )
