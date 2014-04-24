@@ -454,12 +454,23 @@ public:
     /** @name Clipping functions
      */
     ///@{
+public:
+    Region                      GetClipRegion() const;
+    void                        SetClipRegion();
+    void                        SetClipRegion( const Region& rRegion );
+    bool                        IsClipRegion() const { return mbClipRegion; }
 
-    SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
-    SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
+    void                        MoveClipRegion( long nHorzMove, long nVertMove );
+    void                        IntersectClipRegion( const Rectangle& rRect );
+    void                        IntersectClipRegion( const Region& rRegion );
 
 protected:
     virtual void                InitClipRegion();
+    virtual Region              GetActiveClipRegion() const;
+
+private:
+    SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
+    SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
 
     ///@}
 
@@ -1521,16 +1532,6 @@ public:
     bool                        IsDeviceOutput() const { return mbDevOutput; }
     bool                        IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
     bool                        IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
-
-    void                        SetClipRegion();
-    void                        SetClipRegion( const Region& rRegion );
-    Region                      GetClipRegion() const;
-    bool                        IsClipRegion() const { return mbClipRegion; }
-    Region                      GetActiveClipRegion() const;
-
-    void                        MoveClipRegion( long nHorzMove, long nVertMove );
-    void                        IntersectClipRegion( const Rectangle& rRect );
-    void                        IntersectClipRegion( const Region& rRegion );
 
     void                        SetAntialiasing( sal_uInt16 nMode =  0 );
     sal_uInt16                  GetAntialiasing() const { return mnAntialiasing; }
