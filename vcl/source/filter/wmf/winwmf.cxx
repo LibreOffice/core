@@ -1132,19 +1132,22 @@ sal_Bool WMFReader::ReadHeader()
     else
     {
         nUnitsPerInch = 96;
-        pWMF->Seek( nStrmPos + 18 );    // set the streampos to the start of the metaactions
-        GetPlaceableBound( aPlaceableBound, pWMF );
-        pWMF->Seek( nStrmPos );
-        if ( pExternalHeader != NULL && ( pExternalHeader->mapMode == MM_ISOTROPIC
-                                        || pExternalHeader->mapMode == MM_ANISOTROPIC ) )
+        if ( pExternalHeader != NULL && ( pExternalHeader->mapMode == MM_ISOTROPIC || pExternalHeader->mapMode == MM_ANISOTROPIC ) )
         {
             // #n417818#: If we have an external header then overwrite the bounds!
             Rectangle aExtRect(0, 0,
-                          pExternalHeader->xExt*567*nUnitsPerInch/1440/1000,
-                          pExternalHeader->yExt*567*nUnitsPerInch/1440/1000);
-            GetWinExtMax( aExtRect, aPlaceableBound, pExternalHeader->mapMode );
+                          (double) pExternalHeader->xExt * 567 * nUnitsPerInch / 1440000,
+                          (double) pExternalHeader->yExt * 567 * nUnitsPerInch / 1440000);
+            aPlaceableBound = aExtRect;
             pOut->SetMapMode( pExternalHeader->mapMode );
         }
+        else
+        {
+            pWMF->Seek( nStrmPos + 18 );    // set the streampos to the start of the metaactions
+            GetPlaceableBound( aPlaceableBound, pWMF );
+        }
+
+        pWMF->Seek( nStrmPos );
     }
 
     pOut->SetWinOrg( aPlaceableBound.TopLeft() );
@@ -1357,6 +1360,22 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                 }
                 break;
 
+                case W_META_SETVIEWPORTORG:
+                {
+                    Point aWinOrg;
+                    aWinOrg = ReadYX();
+                    rPlaceableBound.SetPos( aWinOrg );
+                }
+                break;
+
+                case W_META_SETVIEWPORTEXT:
+                {
+                    sal_Int16 nWidth(0), nHeight(0);
+                    *pStm >>  nHeight >>  nWidth;
+                    rPlaceableBound.SetSize( Size( nWidth, nHeight ) );
+                }
+                break;
+
                 case W_META_SETMAPMODE :
                     *pStm >> nMapMode;
                 break;
@@ -1414,7 +1433,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
                     SAL_WARN_IF(!bRecordOk, "vcl.filter", "polypolygon record has more polygons than we can handle");
 
-                    bRecordOk &= pStm->good();
+                    bRecordOk = bRecordOk && pStm->good();
 
                     if (!bRecordOk)
                     {
