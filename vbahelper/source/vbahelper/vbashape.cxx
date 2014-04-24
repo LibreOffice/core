@@ -648,7 +648,8 @@ ScVbaShape::getRelativeVerticalPosition() throw (uno::RuntimeException, std::exc
 }
 
 void SAL_CALL
-ScVbaShape::setRelativeVerticalPosition( ::sal_Int32 _relativeverticalposition ) throw (uno::RuntimeException, std::exception)
+ScVbaShape::setRelativeVerticalPosition(::sal_Int32 _relativeverticalposition)
+    throw (css::script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Int16 nType = text::RelOrientation::PAGE_FRAME;
     switch( _relativeverticalposition )

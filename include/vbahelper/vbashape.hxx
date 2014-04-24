@@ -92,7 +92,8 @@ public:
     virtual void SAL_CALL setRelativeHorizontalPosition(::sal_Int32 _relativehorizontalposition)
         throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::sal_Int32 SAL_CALL getRelativeVerticalPosition() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setRelativeVerticalPosition( ::sal_Int32 _relativeverticalposition ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setRelativeVerticalPosition(::sal_Int32 _relativeverticalposition)
+        throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods
     virtual css::uno::Any SAL_CALL SAL_CALL TextFrame(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
