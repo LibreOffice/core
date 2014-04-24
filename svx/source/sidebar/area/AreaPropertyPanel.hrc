@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -72,4 +73,4 @@
 #define LEFT_RIGHT_X2    POPUPPANEL_MARGIN_HORIZONTAL+CONTROL_WIDTH+CONTROL_SPACING_HORIZONTAL + ROTATE_BUTTON_SPACING
 #define LEFT_RIGHT_Y2    POPUPPANEL_MARGIN_VERTICAL + 2*(FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL)+MBOX_HEIGHT+CONTROL_SPACING_VERTICAL - 2
 
-// eof
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

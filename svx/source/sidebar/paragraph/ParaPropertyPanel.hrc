@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -138,3 +139,5 @@
 #define FT_2_Y               EDIT_1_Y + CONTROL_HEIGHT + CONTROL_SPACING_VERTICAL - 3
 #define EDIT_2_X             FT_1_X
 #define EDIT_2_Y             FT_2_Y + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

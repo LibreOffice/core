@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -110,3 +111,5 @@
 #define HID_UNDERLINE_BTN               "SVX_HID_UNDERLINE_BTN"
 #define HID_SPACING_CB_KERN             "SVX_HID_SPACING_CB_KERN"
 #define HID_SPACING_MB_KERN             "SVX_HID_SPACING_MB_KERN"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
