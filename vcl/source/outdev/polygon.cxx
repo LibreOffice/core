@@ -19,13 +19,11 @@
 
 #include <tools/poly.hxx>
 
-#include <vcl/hatch.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/outdev.hxx>
 
 #include "salgdi.hxx"
 
-#include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
