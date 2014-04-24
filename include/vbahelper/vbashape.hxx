@@ -66,7 +66,8 @@ public:
     virtual OUString SAL_CALL getAlternativeText() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setAlternativeText( const OUString& _name ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setHeight(double _height)
+        throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setWidth( double _width ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual double SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

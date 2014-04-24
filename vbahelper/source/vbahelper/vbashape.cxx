@@ -192,7 +192,8 @@ ScVbaShape::getHeight() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaShape::setHeight( double _height ) throw (uno::RuntimeException, std::exception)
+ScVbaShape::setHeight(double _height)
+    throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     m_pShapeHelper->setHeight( _height );
 }
