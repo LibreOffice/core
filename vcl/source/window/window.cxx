@@ -439,6 +439,22 @@ void Window::InitClipRegion()
     mbInitClipRegion = false;
 }
 
+Region Window::GetActiveClipRegion() const
+{
+    Region aRegion(true);
+
+    if ( mpWindowImpl->mbInPaint )
+    {
+        aRegion = *(mpWindowImpl->mpPaintRegion);
+        aRegion.Move( -mnOutOffX, -mnOutOffY );
+    }
+
+    if ( mbClipRegion )
+        aRegion.Intersect( maRegion );
+
+    return PixelToLogic( aRegion );
+}
+
 void Window::EnableRTL ( bool bEnable )
 {
     StateChanged( STATE_CHANGE_MIRRORING );

@@ -167,22 +167,7 @@ Region OutputDevice::GetClipRegion() const
 
 Region OutputDevice::GetActiveClipRegion() const
 {
-
-    if ( GetOutDevType() == OUTDEV_WINDOW )
-    {
-        Region aRegion(true);
-        Window* pWindow = (Window*)this;
-        if ( pWindow->mpWindowImpl->mbInPaint )
-        {
-            aRegion = *(pWindow->mpWindowImpl->mpPaintRegion);
-            aRegion.Move( -mnOutOffX, -mnOutOffY );
-        }
-        if ( mbClipRegion )
-            aRegion.Intersect( maRegion );
-        return PixelToLogic( aRegion );
-    }
-    else
-        return GetClipRegion();
+    return GetClipRegion();
 }
 
 void OutputDevice::MoveClipRegion( long nHorzMove, long nVertMove )
