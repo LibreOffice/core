@@ -1108,7 +1108,7 @@ void ScDocument::FillInfo(
 
             if( pTLBR )
                 rArray.SetCellStyleTLBR( nFirstCol, nFirstRow, svx::frame::Style( pTLBR->GetLine(), fRowScale ) );
-            if( rInfo.mpBLTRLine )
+            if( pBLTR )
                 rArray.SetCellStyleBLTR( nFirstCol, nFirstRow, svx::frame::Style( pBLTR->GetLine(), fRowScale ) );
         }
     }
