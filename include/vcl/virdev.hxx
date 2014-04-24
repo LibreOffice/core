@@ -60,9 +60,10 @@ private:
     #define REFDEV_FORCE_ZERO_EXTLEAD 0x80
     SAL_DLLPRIVATE bool ForceZeroExtleadBug() const
         { return ((meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD) != 0); }
-public:
-    bool AcquireGraphics() const SAL_OVERRIDE;
-    void ImplReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
+
+protected:
+    virtual bool AcquireGraphics() const SAL_OVERRIDE;
+    virtual void ImplReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
 
 public:
     /** Create a virtual device of size 1x1

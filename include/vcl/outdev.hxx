@@ -22,22 +22,27 @@
 
 #include <tools/gen.hxx>
 #include <tools/solar.h>
-#include <vcl/dllapi.h>
 #include <tools/rc.hxx>
 #include <tools/color.hxx>
+#include <tools/poly.hxx>
+
+#include <vcl/dllapi.h>
 #include <vcl/font.hxx>
 #include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <tools/poly.hxx>
+
 #include <basegfx/vector/b2enums.hxx>
-#include <com/sun/star/uno/Reference.h>
-#include <unotools/fontdefs.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+
+#include <unotools/fontdefs.hxx>
+
 #include <boost/scoped_ptr.hpp>
+
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/uno/Reference.h>
 
 #include <vector>
 
@@ -388,6 +393,7 @@ public:
     SAL_DLLPRIVATE SalGraphics const *GetGraphics() const;
     SAL_DLLPRIVATE SalGraphics*       GetGraphics();
 
+protected:
     /** Acquire a graphics device that the output device uses to draw on.
 
      There is an LRU of OutputDevices that is used to get the graphics. The
@@ -417,6 +423,7 @@ public:
      */
     virtual void                ImplReleaseGraphics( bool bRelease = true ) = 0;
 
+public:
     /** Initialize the graphics device's data structures.
      */
     SAL_DLLPRIVATE void         ImplInitOutDevData();
