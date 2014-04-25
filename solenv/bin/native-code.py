@@ -50,6 +50,8 @@ core_factory_list = [
     ]
 
 core_constructor_list = [
+# chart2/source/controller/chartcontroller.component
+    "com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation",
 # framework/util/fwk.component
     "com_sun_star_comp_framework_AutoRecovery_get_implementation",
     "com_sun_star_comp_framework_Desktop_get_implementation",
