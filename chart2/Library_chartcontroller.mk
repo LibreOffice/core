@@ -182,7 +182,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/main/ObjectHierarchy \
     chart2/source/controller/main/PositionAndSizeHelper \
     chart2/source/controller/main/SelectionHelper \
-    chart2/source/controller/main/_serviceregistration_controller \
     chart2/source/controller/main/ShapeController \
     chart2/source/controller/main/ShapeToolbarController \
     chart2/source/controller/main/StatusBarCommandDispatch \

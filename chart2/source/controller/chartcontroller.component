@@ -18,7 +18,7 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="chartcontroller" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.chart.ElementSelectorToolbarController"
       constructor="com_sun_star_comp_chart_ElementSelectorToolbarController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
@@ -47,7 +47,8 @@
       constructor="com_sun_star_comp_chart2_ShapeToolbarController_get_implementation">
     <service name="com.sun.star.chart2.ShapeToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.WizardDialog">
+  <implementation name="com.sun.star.comp.chart2.WizardDialog"
+      constructor="com_sun_star_comp_chart2_WizardDialog_get_implementation">
     <service name="com.sun.star.chart2.WizardDialog"/>
   </implementation>
 </component>
