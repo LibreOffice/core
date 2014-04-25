@@ -181,6 +181,9 @@ public:
 
     static sal_Int32 GetDisplay();
 
+    bool IsExitAfterPresenting() const;
+    void SetExitAfterPresenting(bool bExit);
+
 private:
     SlideShow( SdDrawDocument* pDoc );
 
@@ -190,7 +193,7 @@ private:
     void StartInPlacePresentation();
     void StartFullscreenPresentation();
 
-    void ThrowIfDisposed() throw (::com::sun::star::uno::RuntimeException);
+    void ThrowIfDisposed() const throw (css::uno::RuntimeException);
 
     void CreateController( ViewShell* pViewSh, ::sd::View* pView, ::Window* pParentWindow );
     WorkWindow *GetWorkWindow();
