@@ -66,10 +66,15 @@ uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
     uno::Reference< drawing::XShapes > xRet( ShapeFactory::getChartRootShape( xDrawPage ) );
     if( !xRet.is()  )
     {
-        //create the root shape
-        xRet = this->createGroup2D(
-            uno::Reference<drawing::XShapes>( xDrawPage, uno::UNO_QUERY )
-            , "com.sun.star.chart2.shapes" );
+        uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance(
+                    "com.sun.star.drawing.GroupShape" ), uno::UNO_QUERY );
+        uno::Reference< drawing::XShapes2 > xShapes2(xDrawPage, uno::UNO_QUERY_THROW);
+        xShapes2->addBottom(xShape);
+
+        setShapeName( xShape, "com.sun.star.chart2.shapes" );
+        xShape->setSize(awt::Size(0,0));
+
+        xRet = uno::Reference<drawing::XShapes>( xShape, uno::UNO_QUERY );
     }
     return xRet;
 }
