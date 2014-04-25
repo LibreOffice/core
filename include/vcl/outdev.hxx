@@ -556,8 +556,6 @@ public:
 protected:
                                 OutputDevice();
 
-    virtual bool                UsePolyPolygonForComplexGradient() = 0;
-
     virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     void                        DrawInvisiblePolygon( const PolyPolygon& rPolyPoly );
 
@@ -967,6 +965,8 @@ public:
                                     GDIMetaFile& rMtf );
 
 protected:
+    virtual bool                UsePolyPolygonForComplexGradient() = 0;
+
     virtual long                GetGradientStepCount( long nMinRect );
 
 private:
