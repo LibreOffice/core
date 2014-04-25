@@ -96,10 +96,11 @@ void ScTable::PreprocessRangeNameUpdate(
         aCol[i].PreprocessRangeNameUpdate(rEndListenCxt, rCompileCxt);
 }
 
-void ScTable::PostprocessRangeNameUpdate( sc::CompileFormulaContext& rCompileCxt )
+void ScTable::PostprocessRangeNameUpdate(
+    sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt )
 {
     for (SCCOL i = 0; i <= MAXCOL; ++i)
-        aCol[i].PostprocessRangeNameUpdate(rCompileCxt);
+        aCol[i].PostprocessRangeNameUpdate(rStartListenCxt, rCompileCxt);
 }
 
 void ScTable::UpdateScriptTypes( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
