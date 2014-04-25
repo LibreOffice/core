@@ -516,13 +516,6 @@ public:
     void                        SetTextAlign( TextAlign eAlign );
     TextAlign                   GetTextAlign() const { return maFont.GetAlign(); }
 
-protected:
-    virtual void                InitFont() const;
-    virtual void                ImplReleaseFonts();
-    virtual void                SetFontOrientation( ImplFontEntry* const pFontEntry ) const;
-    virtual long                GetFontExtLeading() const;
-
-public:
     void                        DrawTextLine( const Point& rPos, long nWidth,
                                               FontStrikeout eStrikeout,
                                               FontUnderline eUnderline,
@@ -609,6 +602,54 @@ public:
 
     bool                        GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
                                                     int nLen, int nBase, MetricVector& rVector );
+
+    bool                        AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
+
+    int                         GetDevFontCount() const;
+    FontInfo                    GetDevFont( int nDevFontIndex ) const;
+    int                         GetDevFontSizeCount( const Font& ) const;
+    Size                        GetDevFontSize( const Font& rFont, int nSizeIndex ) const;
+    bool                        IsFontAvailable( const OUString& rFontName ) const;
+
+    FontMetric                  GetFontMetric() const;
+    FontMetric                  GetFontMetric( const Font& rFont ) const;
+    bool                        GetFontCharMap( FontCharMap& rFontCharMap ) const;
+    bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
+
+    sal_Int32                   HasGlyphs( const Font& rFont, const OUString& rStr,
+                                           sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
+
+    long                        GetMinKashida() const;
+
+    // i60594
+    // validate kashida positions against the current font
+    // returns count of invalid kashida positions
+    sal_Int32                   ValidateKashidas( const OUString& rTxt, sal_Int32 nIdx, sal_Int32 nLen,
+                                                  sal_Int32 nKashCount, // number of suggested kashida positions (in)
+                                                  const sal_Int32* pKashidaPos, // suggested kashida positions (in)
+                                                  sal_Int32* pKashidaPosDropped // invalid kashida positions (out)
+                                                ) const;
+
+    static void                 BeginFontSubstitution();
+    static void                 EndFontSubstitution();
+    static void                 AddFontSubstitute( const OUString& rFontName,
+                                                   const OUString& rReplaceFontName,
+                                                   sal_uInt16 nFlags = 0 );
+    static void                 RemoveFontSubstitute( sal_uInt16 n );
+    static sal_uInt16           GetFontSubstituteCount();
+
+    static Font                 GetDefaultFont( sal_uInt16 nType,
+                                                LanguageType eLang,
+                                                sal_uLong nFlags,
+                                                const OutputDevice* pOutDev = NULL );
+
+protected:
+    virtual void                InitFont() const;
+    virtual void                ImplReleaseFonts();
+    virtual void                SetFontOrientation( ImplFontEntry* const pFontEntry ) const;
+    virtual long                GetFontExtLeading() const;
+
+
 private:
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
 
@@ -1589,32 +1630,6 @@ public:
     virtual void                Erase();
     virtual void                Erase( const Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
 
-    bool                        AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
-    int                         GetDevFontCount() const;
-    FontInfo                    GetDevFont( int nDevFontIndex ) const;
-    int                         GetDevFontSizeCount( const Font& ) const;
-    Size                        GetDevFontSize( const Font& rFont, int nSizeIndex ) const;
-    bool                        IsFontAvailable( const OUString& rFontName ) const;
-
-    FontMetric                  GetFontMetric() const;
-    FontMetric                  GetFontMetric( const Font& rFont ) const;
-    bool                        GetFontCharMap( FontCharMap& rFontCharMap ) const;
-    bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
-
-    sal_Int32                   HasGlyphs( const Font& rFont, const OUString& rStr,
-                                           sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
-
-    long                        GetMinKashida() const;
-
-    // i60594
-    // validate kashida positions against the current font
-    // returns count of invalid kashida positions
-    sal_Int32                   ValidateKashidas( const OUString& rTxt, sal_Int32 nIdx, sal_Int32 nLen,
-                                                  sal_Int32 nKashCount, // number of suggested kashida positions (in)
-                                                  const sal_Int32* pKashidaPos, // suggested kashida positions (in)
-                                                  sal_Int32* pKashidaPosDropped // invalid kashida positions (out)
-                                                ) const;
-
     virtual sal_uInt16          GetBitCount() const;
 
     bool                        GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
@@ -1653,18 +1668,6 @@ public:
                                         return mpUnoGraphicsList;
                                     }
 
-    static void                 BeginFontSubstitution();
-    static void                 EndFontSubstitution();
-    static void                 AddFontSubstitute( const OUString& rFontName,
-                                                   const OUString& rReplaceFontName,
-                                                   sal_uInt16 nFlags = 0 );
-    static void                 RemoveFontSubstitute( sal_uInt16 n );
-    static sal_uInt16           GetFontSubstituteCount();
-
-    static Font                 GetDefaultFont( sal_uInt16 nType,
-                                                LanguageType eLang,
-                                                sal_uLong nFlags,
-                                                const OutputDevice* pOutDev = NULL );
 
     /** helper method removing transparencies from a metafile (e.g. for printing)
 
