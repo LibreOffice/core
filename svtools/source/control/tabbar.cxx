@@ -1692,7 +1692,6 @@ void TabBar::Select()
 
 void TabBar::DoubleClick()
 {
-    maDoubleClickHdl.Call( this );
 }
 
 
@@ -1715,7 +1714,6 @@ void TabBar::ImplActivatePage()
 
 void TabBar::ActivatePage()
 {
-    maActivatePageHdl.Call( this );
 }
 
 
@@ -1809,37 +1807,27 @@ Rectangle TabBar::ImplGetInsertTabRect(ImplTabBarItem* pItem) const
 
 bool TabBar::DeactivatePage()
 {
-    if ( maDeactivatePageHdl.IsSet() )
-        return maDeactivatePageHdl.Call( this );
-    else
-        return true;
+    return true;
 }
 
 
 
 bool TabBar::StartRenaming()
 {
-    if ( maStartRenamingHdl.IsSet() )
-        return maStartRenamingHdl.Call( this );
-    else
-        return true;
+    return true;
 }
 
 
 
 TabBarAllowRenamingReturnCode TabBar::AllowRenaming()
 {
-    if ( maAllowRenamingHdl.IsSet() )
-        return (TabBarAllowRenamingReturnCode) maAllowRenamingHdl.Call( this );
-    else
-        return TABBAR_RENAMING_YES;
+    return TABBAR_RENAMING_YES;
 }
 
 
 
 void TabBar::EndRenaming()
 {
-    maEndRenamingHdl.Call( this );
 }
 
 
