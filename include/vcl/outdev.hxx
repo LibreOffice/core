@@ -33,8 +33,8 @@
 #include <vcl/wall.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/salnativewidgets.hxx>
-
 #include <vcl/outdevstate.hxx>
+#include <vcl/outdevmap.hxx>
 
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -121,26 +121,6 @@ namespace vcl
     class ITextLayout;
     struct FontCapabilities;
 }
-
-// OutputDevice-Data
-
-struct ImplMapRes
-{
-    long                mnMapOfsX;          // Offset in X direction
-    long                mnMapOfsY;          // Offset in Y direction
-    long                mnMapScNumX;        // Scaling factor - numerator in X direction
-    long                mnMapScNumY;        // Scaling factor - numerator in Y direction
-    long                mnMapScDenomX;      // Scaling factor - denominator in X direction
-    long                mnMapScDenomY;      // Scaling factor - denominator in Y direction
-};
-
-struct ImplThresholdRes
-{
-    long                mnThresLogToPixX;   // Thresholds for calculation
-    long                mnThresLogToPixY;   // with BigInts
-    long                mnThresPixToLogX;   // ""
-    long                mnThresPixToLogY;   // ""
-};
 
 // OutputDevice-Types
 
