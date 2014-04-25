@@ -347,7 +347,6 @@ void OutputDevice::Pop()
         mpMetaFile->AddAction( new MetaPopAction() );
 
     GDIMetaFile* pOldMetaFile = mpMetaFile;
-    OutDevState* pState = new OutDevState;
     mpMetaFile = NULL;
 
     if ( mpOutDevStateStack->empty() )
@@ -355,6 +354,7 @@ void OutputDevice::Pop()
         SAL_WARN( "vcl.gdi", "OutputDevice::Pop() without OutputDevice::Push()" );
         return;
     }
+    OutDevState* pState = mpOutDevStateStack->top();
 
     if( mpAlphaVDev )
         mpAlphaVDev->Pop();
