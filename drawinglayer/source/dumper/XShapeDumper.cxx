@@ -1938,7 +1938,6 @@ void dumpXShapes( uno::Reference< drawing::XShapes > xShapes, xmlTextWriterPtr x
 
 OUString XShapeDumper::dump(uno::Reference<drawing::XShapes> xPageShapes, bool bDumpInteropProperties)
 {
-
     OStringBuffer aString;
     xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO( writeCallback, closeCallback, &aString, NULL );
     xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
@@ -1949,6 +1948,30 @@ OUString XShapeDumper::dump(uno::Reference<drawing::XShapes> xPageShapes, bool b
     try
     {
         dumpXShapes( xPageShapes, xmlWriter, bDumpInteropProperties );
+    }
+    catch (const beans::UnknownPropertyException& e)
+    {
+        std::cout << "Exception caught in XShapeDumper: " << e.Message << std::endl;
+    }
+
+    xmlTextWriterEndDocument( xmlWriter );
+    xmlFreeTextWriter( xmlWriter );
+
+    return OStringToOUString(aString.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
+}
+
+OUString XShapeDumper::dump(uno::Reference<drawing::XShape> xPageShapes, bool bDumpInteropProperties)
+{
+    OStringBuffer aString;
+    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO( writeCallback, closeCallback, &aString, NULL );
+    xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
+    xmlTextWriterSetIndent( xmlWriter, 1 );
+
+    xmlTextWriterStartDocument( xmlWriter, NULL, NULL, NULL );
+
+    try
+    {
+        dumpXShape( xPageShapes, xmlWriter, bDumpInteropProperties );
     }
     catch (const beans::UnknownPropertyException& e)
     {
