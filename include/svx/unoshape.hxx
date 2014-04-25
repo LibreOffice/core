@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/PolygonKind.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XShapes2.hpp>
 #include <com/sun/star/drawing/XShapeGroup.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -385,7 +386,8 @@ public:
 ***********************************************************************/
 class SvxShapeGroup : public SvxShape,
                       public ::com::sun::star::drawing::XShapeGroup,
-                      public ::com::sun::star::drawing::XShapes2
+                      public ::com::sun::star::drawing::XShapes2,
+                      public ::com::sun::star::drawing::XShapes
 {
 private:
     rtl::Reference< SvxDrawPage> mxPage;
