@@ -192,9 +192,9 @@ void KDEXLib::Init()
     // that will release SolarMutex when waiting for more events.
     // Moreover there are bugs in Qt event loop code that allow QClipboard recursing because the event
     // loop processes also events that it should not at that point, so no dialogs in that case either.
+    // https://bugreports.qt-project.org/browse/QTBUG-37380
+    // https://bugreports.qt-project.org/browse/QTBUG-34614
     if (m_isGlibEventLoopType && (0 == tst_processEventsExcludeSocket()) && tst_excludePostedEvents() == 0 )
-        // See http://bugreports.qt.nokia.com/browse/QTBUG-37380
-        // https://bugreports.qt-project.org/browse/QTBUG-34614
         m_allowKdeDialogs = true;
 #endif
 
