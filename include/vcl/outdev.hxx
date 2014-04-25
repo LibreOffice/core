@@ -357,6 +357,9 @@ private:
 public:
     virtual                     ~OutputDevice();
 
+private:
+    SAL_DLLPRIVATE OutputDevice& operator =( const OutputDevice& rOutDev );
+
 public:
 
     /** Get the graphic context that the output device uses to draw on.
@@ -580,6 +583,12 @@ public:
 
     bool                        GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
                                                     int nLen, int nBase, MetricVector& rVector );
+private:
+    typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
+
+    SAL_DLLPRIVATE void         ImplClearFontData( bool bNewFontLists );
+    SAL_DLLPRIVATE void         ImplRefreshFontData( bool bNewFontLists );
+    SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
     ///@}
 
     SAL_DLLPRIVATE void         ImplInitFillColor();
@@ -656,14 +665,6 @@ protected:
     virtual void                DrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
 
 private:
-    typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
-
-    SAL_DLLPRIVATE OutputDevice& operator =( const OutputDevice& rOutDev );
-
-    SAL_DLLPRIVATE void         ImplClearFontData( bool bNewFontLists );
-    SAL_DLLPRIVATE void         ImplRefreshFontData( bool bNewFontLists );
-    SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
-
     // not implemented; to detect misuses of DrawOutDev(...OutputDevice&);
     void                        DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&);
 
