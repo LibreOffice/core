@@ -2119,9 +2119,9 @@ namespace
 
                                 // for sub-Mteafile contents, do start with new, default render state
                                 // #i124686# ...but copy font, this is already set accordingly
-                                const Font& rTargetFont = rPropertyHolders.Current().getFont();
+                                Font aTargetFont = rPropertyHolders.Current().getFont();
                                 rPropertyHolders.PushDefault();
-                                rPropertyHolders.Current().setFont(rTargetFont);
+                                rPropertyHolders.Current().setFont(aTargetFont);
 
                                 interpretMetafile(aGDIMetaFile, rTargetHolders, rPropertyHolders, rViewInformation);
                                 xSubContent = rTargetHolders.Current().getPrimitive2DSequence(rPropertyHolders.Current());
