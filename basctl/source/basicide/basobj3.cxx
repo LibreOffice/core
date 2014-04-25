@@ -162,7 +162,7 @@ bool RenameDialog (
     OUString const& rOldName,
     OUString const& rNewName
 )
-    throw(ElementExistException, NoSuchElementException)
+    throw (ElementExistException, NoSuchElementException, RuntimeException)
 {
     if ( !rDocument.hasDialog( rLibName, rOldName ) )
     {
