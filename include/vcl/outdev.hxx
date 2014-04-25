@@ -265,8 +265,6 @@ class VCLXGraphics;
 
 typedef ::std::vector< VCLXGraphics* > VCLXGraphicsList_impl;
 
-const char* ImplDbgCheckOutputDevice( const void* pObj );
-
 sal_uLong AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
 void AdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect );
 
@@ -290,7 +288,6 @@ class VCL_DLLPUBLIC OutputDevice
     friend class Window;
     friend class WorkWindow;
     friend class vcl::PDFWriterImpl;
-    friend const char* ImplDbgCheckOutputDevice( const void* pObj );
     friend void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight );
 
 private:
