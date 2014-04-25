@@ -668,13 +668,13 @@ sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32
 {
     CollatorWrapper& rCaseColl = ::GetAppCaseCollator();
     const sal_Int32 nCount = rToFill.GetEntryCount();
-    while ( nOffset < nCount )
+    while (nOffset < nCount)
     {
         if( 0 < rCaseColl.compareString( rToFill.GetEntry(nOffset), rEntry ))
-            return rToFill.InsertEntry(rEntry, nOffset);
+            break;
         ++nOffset;
     }
-    return nCount;
+    return rToFill.InsertEntry(rEntry, nOffset);
 }
 
 void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bool bWithDefault)
