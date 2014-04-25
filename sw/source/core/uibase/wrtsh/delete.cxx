@@ -462,7 +462,10 @@ long SwWrtShell::DelToEndOfSentence()
         if (SwCrsrShell::Right(1,CRSR_SKIP_CHARS))
         {
             SetMark();
-            SwCrsrShell::MovePara(fnParaCurr, fnParaEnd);
+            if (!IsEndPara()) // can only be at the end if it's empty
+            {   // for an empty paragraph this would actually select the _next_
+                SwCrsrShell::MovePara(fnParaCurr, fnParaEnd);
+            }
             if (!IsEndOfDoc()) // do not delete last paragraph in body text
             {
                 nRet = DelFullPara() ? 1 : 0;
