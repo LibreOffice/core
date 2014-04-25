@@ -378,7 +378,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
 }
 
 Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName )
-    throw(NoSuchElementException )
+    throw (NoSuchElementException, RuntimeException)
 {
     Sequence< OUString > aSeqMethods;
 
