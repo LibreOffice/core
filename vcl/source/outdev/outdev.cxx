@@ -31,9 +31,11 @@
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/settings.hxx>
-#include <svsys.h>
 #include <vcl/sysdata.hxx>
 
+#include <vcl/outdevstate.hxx>
+
+#include <svsys.h>
 #include <salgdi.hxx>
 #include <sallayout.hxx>
 #include <salframe.hxx>
@@ -43,6 +45,7 @@
 #include <window.h>
 #include <outdev.h>
 #include <outdata.hxx>
+
 #include "PhysicalFontCollection.hxx"
 
 #include <basegfx/point/b2dpoint.hxx>
@@ -62,6 +65,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <numeric>
+#include <stack>
 
 #ifdef DISABLE_DYNLOADING
 // Linking all needed LO code into one .so/executable, these already
@@ -73,76 +77,6 @@ namespace {
 }
 #endif
 
-struct ImplObjStack
-{
-    ImplObjStack*   mpPrev;
-    MapMode*        mpMapMode;
-    bool            mbMapActive;
-    Region*         mpClipRegion;
-    Color*          mpLineColor;
-    Color*          mpFillColor;
-    Font*           mpFont;
-    Color*          mpTextColor;
-    Color*          mpTextFillColor;
-    Color*          mpTextLineColor;
-    Color*          mpOverlineColor;
-    Point*          mpRefPoint;
-    TextAlign       meTextAlign;
-    RasterOp        meRasterOp;
-    sal_uLong           mnTextLayoutMode;
-    LanguageType    meTextLanguage;
-    sal_uInt16          mnFlags;
-};
-
-static void ImplDeleteObjStack( ImplObjStack* pObjStack )
-{
-    if ( pObjStack->mnFlags & PUSH_LINECOLOR )
-    {
-        if ( pObjStack->mpLineColor )
-            delete pObjStack->mpLineColor;
-    }
-    if ( pObjStack->mnFlags & PUSH_FILLCOLOR )
-    {
-        if ( pObjStack->mpFillColor )
-            delete pObjStack->mpFillColor;
-    }
-    if ( pObjStack->mnFlags & PUSH_FONT )
-        delete pObjStack->mpFont;
-    if ( pObjStack->mnFlags & PUSH_TEXTCOLOR )
-        delete pObjStack->mpTextColor;
-    if ( pObjStack->mnFlags & PUSH_TEXTFILLCOLOR )
-    {
-        if ( pObjStack->mpTextFillColor )
-            delete pObjStack->mpTextFillColor;
-    }
-    if ( pObjStack->mnFlags & PUSH_TEXTLINECOLOR )
-    {
-        if ( pObjStack->mpTextLineColor )
-            delete pObjStack->mpTextLineColor;
-    }
-    if ( pObjStack->mnFlags & PUSH_OVERLINECOLOR )
-    {
-        if ( pObjStack->mpOverlineColor )
-            delete pObjStack->mpOverlineColor;
-    }
-    if ( pObjStack->mnFlags & PUSH_MAPMODE )
-    {
-        if ( pObjStack->mpMapMode )
-            delete pObjStack->mpMapMode;
-    }
-    if ( pObjStack->mnFlags & PUSH_CLIPREGION )
-    {
-        if ( pObjStack->mpClipRegion )
-            delete pObjStack->mpClipRegion;
-    }
-    if ( pObjStack->mnFlags & PUSH_REFPOINT )
-    {
-        if ( pObjStack->mpRefPoint )
-            delete pObjStack->mpRefPoint;
-    }
-
-    delete pObjStack;
-}
 
 bool OutputDevice::ImplIsAntiparallel() const
 {
@@ -175,7 +109,7 @@ OutputDevice::OutputDevice() :
     mpFontCollection                = NULL;
     mpGetDevFontList                = NULL;
     mpGetDevSizeList                = NULL;
-    mpObjStack                      = NULL;
+    mpOutDevStateStack              = new std::stack< OutDevState* >();
     mpOutDevData                    = NULL;
     mpPDFWriter                     = NULL;
     mpAlphaVDev                     = NULL;
@@ -277,25 +211,25 @@ OutputDevice::~OutputDevice()
         delete mpOutDevData;
     }
 
-    ImplObjStack* pData = mpObjStack;
-    if ( pData )
+    // for some reason, we haven't removed state from the stack properly
+    if ( !mpOutDevStateStack->empty() )
     {
         SAL_WARN( "vcl.gdi", "OutputDevice::~OutputDevice(): OutputDevice::Push() calls != OutputDevice::Pop() calls" );
-        while ( pData )
+        while ( !mpOutDevStateStack->empty() )
         {
-            ImplObjStack* pTemp = pData;
-            pData = pData->mpPrev;
-            ImplDeleteObjStack( pTemp );
+            mpOutDevStateStack->pop();
         }
     }
 
     // release the active font instance
     if( mpFontEntry )
         mpFontCache->Release( mpFontEntry );
+
     // remove cached results of GetDevFontList/GetDevSizeList
     // TODO: use smart pointers for them
     if( mpGetDevFontList )
         delete mpGetDevFontList;
+
     if( mpGetDevSizeList )
         delete mpGetDevSizeList;
 
@@ -321,6 +255,191 @@ OutputDevice::~OutputDevice()
     }
 
     delete mpAlphaVDev;
+}
+
+void OutputDevice::Push( sal_uInt16 nFlags )
+{
+
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaPushAction( nFlags ) );
+
+    OutDevState* pState = new OutDevState;
+
+    pState->mnFlags = nFlags;
+
+    if ( nFlags & PUSH_LINECOLOR )
+    {
+        if ( mbLineColor )
+            pState->mpLineColor = new Color( maLineColor );
+        else
+            pState->mpLineColor = NULL;
+    }
+    if ( nFlags & PUSH_FILLCOLOR )
+    {
+        if ( mbFillColor )
+            pState->mpFillColor = new Color( maFillColor );
+        else
+            pState->mpFillColor = NULL;
+    }
+    if ( nFlags & PUSH_FONT )
+        pState->mpFont = new Font( maFont );
+    if ( nFlags & PUSH_TEXTCOLOR )
+        pState->mpTextColor = new Color( GetTextColor() );
+    if ( nFlags & PUSH_TEXTFILLCOLOR )
+    {
+        if ( IsTextFillColor() )
+            pState->mpTextFillColor = new Color( GetTextFillColor() );
+        else
+            pState->mpTextFillColor = NULL;
+    }
+    if ( nFlags & PUSH_TEXTLINECOLOR )
+    {
+        if ( IsTextLineColor() )
+            pState->mpTextLineColor = new Color( GetTextLineColor() );
+        else
+            pState->mpTextLineColor = NULL;
+    }
+    if ( nFlags & PUSH_OVERLINECOLOR )
+    {
+        if ( IsOverlineColor() )
+            pState->mpOverlineColor = new Color( GetOverlineColor() );
+        else
+            pState->mpOverlineColor = NULL;
+    }
+    if ( nFlags & PUSH_TEXTALIGN )
+        pState->meTextAlign = GetTextAlign();
+    if( nFlags & PUSH_TEXTLAYOUTMODE )
+        pState->mnTextLayoutMode = GetLayoutMode();
+    if( nFlags & PUSH_TEXTLANGUAGE )
+        pState->meTextLanguage = GetDigitLanguage();
+    if ( nFlags & PUSH_RASTEROP )
+        pState->meRasterOp = GetRasterOp();
+    if ( nFlags & PUSH_MAPMODE )
+    {
+        pState->mpMapMode = new MapMode( maMapMode );
+        pState->mbMapActive = mbMap;
+    }
+    if ( nFlags & PUSH_CLIPREGION )
+    {
+        if ( mbClipRegion )
+            pState->mpClipRegion = new Region( maRegion );
+        else
+            pState->mpClipRegion = NULL;
+    }
+    if ( nFlags & PUSH_REFPOINT )
+    {
+        if ( mbRefPoint )
+            pState->mpRefPoint = new Point( maRefPoint );
+        else
+            pState->mpRefPoint = NULL;
+    }
+
+    mpOutDevStateStack->push( pState );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->Push();
+}
+
+void OutputDevice::Pop()
+{
+
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaPopAction() );
+
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    OutDevState* pState = new OutDevState;
+    mpMetaFile = NULL;
+
+    if ( mpOutDevStateStack->empty() )
+    {
+        SAL_WARN( "vcl.gdi", "OutputDevice::Pop() without OutputDevice::Push()" );
+        return;
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->Pop();
+
+    if ( pState->mnFlags & PUSH_LINECOLOR )
+    {
+        if ( pState->mpLineColor )
+            SetLineColor( *pState->mpLineColor );
+        else
+            SetLineColor();
+    }
+
+    if ( pState->mnFlags & PUSH_FILLCOLOR )
+    {
+        if ( pState->mpFillColor )
+            SetFillColor( *pState->mpFillColor );
+        else
+            SetFillColor();
+    }
+
+    if ( pState->mnFlags & PUSH_FONT )
+        SetFont( *pState->mpFont );
+
+    if ( pState->mnFlags & PUSH_TEXTCOLOR )
+        SetTextColor( *pState->mpTextColor );
+
+    if ( pState->mnFlags & PUSH_TEXTFILLCOLOR )
+    {
+        if ( pState->mpTextFillColor )
+            SetTextFillColor( *pState->mpTextFillColor );
+        else
+            SetTextFillColor();
+    }
+
+    if ( pState->mnFlags & PUSH_TEXTLINECOLOR )
+    {
+        if ( pState->mpTextLineColor )
+            SetTextLineColor( *pState->mpTextLineColor );
+        else
+            SetTextLineColor();
+    }
+
+    if ( pState->mnFlags & PUSH_OVERLINECOLOR )
+    {
+        if ( pState->mpOverlineColor )
+            SetOverlineColor( *pState->mpOverlineColor );
+        else
+            SetOverlineColor();
+    }
+
+    if ( pState->mnFlags & PUSH_TEXTALIGN )
+        SetTextAlign( pState->meTextAlign );
+
+    if( pState->mnFlags & PUSH_TEXTLAYOUTMODE )
+        SetLayoutMode( pState->mnTextLayoutMode );
+
+    if( pState->mnFlags & PUSH_TEXTLANGUAGE )
+        SetDigitLanguage( pState->meTextLanguage );
+
+    if ( pState->mnFlags & PUSH_RASTEROP )
+        SetRasterOp( pState->meRasterOp );
+
+    if ( pState->mnFlags & PUSH_MAPMODE )
+    {
+        if ( pState->mpMapMode )
+            SetMapMode( *pState->mpMapMode );
+        else
+            SetMapMode();
+        mbMap = pState->mbMapActive;
+    }
+
+    if ( pState->mnFlags & PUSH_CLIPREGION )
+        SetDeviceClipRegion( pState->mpClipRegion );
+
+    if ( pState->mnFlags & PUSH_REFPOINT )
+    {
+        if ( pState->mpRefPoint )
+            SetRefPoint( *pState->mpRefPoint );
+        else
+            SetRefPoint();
+    }
+
+    mpOutDevStateStack->pop();
+
+    mpMetaFile = pOldMetaFile;
 }
 
 bool OutputDevice::supportsOperation( OutDevSupportType eType ) const
@@ -993,188 +1112,7 @@ void OutputDevice::SetRefPoint( const Point& rRefPoint )
 
 sal_uInt32 OutputDevice::GetGCStackDepth() const
 {
-    const ImplObjStack* pData = mpObjStack;
-    sal_uInt32 nDepth = 0;
-    while( pData )
-    {
-        nDepth++;
-        pData = pData->mpPrev;
-    }
-    return nDepth;
-}
-
-void OutputDevice::Push( sal_uInt16 nFlags )
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaPushAction( nFlags ) );
-
-    ImplObjStack* pData = new ImplObjStack;
-    pData->mpPrev = mpObjStack;
-    mpObjStack = pData;
-
-    pData->mnFlags = nFlags;
-
-    if ( nFlags & PUSH_LINECOLOR )
-    {
-        if ( mbLineColor )
-            pData->mpLineColor = new Color( maLineColor );
-        else
-            pData->mpLineColor = NULL;
-    }
-    if ( nFlags & PUSH_FILLCOLOR )
-    {
-        if ( mbFillColor )
-            pData->mpFillColor = new Color( maFillColor );
-        else
-            pData->mpFillColor = NULL;
-    }
-    if ( nFlags & PUSH_FONT )
-        pData->mpFont = new Font( maFont );
-    if ( nFlags & PUSH_TEXTCOLOR )
-        pData->mpTextColor = new Color( GetTextColor() );
-    if ( nFlags & PUSH_TEXTFILLCOLOR )
-    {
-        if ( IsTextFillColor() )
-            pData->mpTextFillColor = new Color( GetTextFillColor() );
-        else
-            pData->mpTextFillColor = NULL;
-    }
-    if ( nFlags & PUSH_TEXTLINECOLOR )
-    {
-        if ( IsTextLineColor() )
-            pData->mpTextLineColor = new Color( GetTextLineColor() );
-        else
-            pData->mpTextLineColor = NULL;
-    }
-    if ( nFlags & PUSH_OVERLINECOLOR )
-    {
-        if ( IsOverlineColor() )
-            pData->mpOverlineColor = new Color( GetOverlineColor() );
-        else
-            pData->mpOverlineColor = NULL;
-    }
-    if ( nFlags & PUSH_TEXTALIGN )
-        pData->meTextAlign = GetTextAlign();
-    if( nFlags & PUSH_TEXTLAYOUTMODE )
-        pData->mnTextLayoutMode = GetLayoutMode();
-    if( nFlags & PUSH_TEXTLANGUAGE )
-        pData->meTextLanguage = GetDigitLanguage();
-    if ( nFlags & PUSH_RASTEROP )
-        pData->meRasterOp = GetRasterOp();
-    if ( nFlags & PUSH_MAPMODE )
-    {
-        pData->mpMapMode = new MapMode( maMapMode );
-        pData->mbMapActive = mbMap;
-    }
-    if ( nFlags & PUSH_CLIPREGION )
-    {
-        if ( mbClipRegion )
-            pData->mpClipRegion = new Region( maRegion );
-        else
-            pData->mpClipRegion = NULL;
-    }
-    if ( nFlags & PUSH_REFPOINT )
-    {
-        if ( mbRefPoint )
-            pData->mpRefPoint = new Point( maRefPoint );
-        else
-            pData->mpRefPoint = NULL;
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->Push();
-}
-
-void OutputDevice::Pop()
-{
-
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaPopAction() );
-
-    GDIMetaFile*    pOldMetaFile = mpMetaFile;
-    ImplObjStack*   pData = mpObjStack;
-    mpMetaFile = NULL;
-
-    if ( !pData )
-    {
-        SAL_WARN( "vcl.gdi", "OutputDevice::Pop() without OutputDevice::Push()" );
-        return;
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->Pop();
-
-    mpObjStack = pData->mpPrev;
-
-    if ( pData->mnFlags & PUSH_LINECOLOR )
-    {
-        if ( pData->mpLineColor )
-            SetLineColor( *pData->mpLineColor );
-        else
-            SetLineColor();
-    }
-    if ( pData->mnFlags & PUSH_FILLCOLOR )
-    {
-        if ( pData->mpFillColor )
-            SetFillColor( *pData->mpFillColor );
-        else
-            SetFillColor();
-    }
-    if ( pData->mnFlags & PUSH_FONT )
-        SetFont( *pData->mpFont );
-    if ( pData->mnFlags & PUSH_TEXTCOLOR )
-        SetTextColor( *pData->mpTextColor );
-    if ( pData->mnFlags & PUSH_TEXTFILLCOLOR )
-    {
-        if ( pData->mpTextFillColor )
-            SetTextFillColor( *pData->mpTextFillColor );
-        else
-            SetTextFillColor();
-    }
-    if ( pData->mnFlags & PUSH_TEXTLINECOLOR )
-    {
-        if ( pData->mpTextLineColor )
-            SetTextLineColor( *pData->mpTextLineColor );
-        else
-            SetTextLineColor();
-    }
-    if ( pData->mnFlags & PUSH_OVERLINECOLOR )
-    {
-        if ( pData->mpOverlineColor )
-            SetOverlineColor( *pData->mpOverlineColor );
-        else
-            SetOverlineColor();
-    }
-    if ( pData->mnFlags & PUSH_TEXTALIGN )
-        SetTextAlign( pData->meTextAlign );
-    if( pData->mnFlags & PUSH_TEXTLAYOUTMODE )
-        SetLayoutMode( pData->mnTextLayoutMode );
-    if( pData->mnFlags & PUSH_TEXTLANGUAGE )
-        SetDigitLanguage( pData->meTextLanguage );
-    if ( pData->mnFlags & PUSH_RASTEROP )
-        SetRasterOp( pData->meRasterOp );
-    if ( pData->mnFlags & PUSH_MAPMODE )
-    {
-        if ( pData->mpMapMode )
-            SetMapMode( *pData->mpMapMode );
-        else
-            SetMapMode();
-        mbMap = pData->mbMapActive;
-    }
-    if ( pData->mnFlags & PUSH_CLIPREGION )
-        SetDeviceClipRegion( pData->mpClipRegion );
-    if ( pData->mnFlags & PUSH_REFPOINT )
-    {
-        if ( pData->mpRefPoint )
-            SetRefPoint( *pData->mpRefPoint );
-        else
-            SetRefPoint();
-    }
-
-    ImplDeleteObjStack( pData );
-
-    mpMetaFile = pOldMetaFile;
+    return mpOutDevStateStack->size();
 }
 
 void OutputDevice::SetConnectMetaFile( GDIMetaFile* pMtf )
