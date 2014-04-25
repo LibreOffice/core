@@ -83,7 +83,10 @@ IMPL_LINK_NOARG(SlideShowRestarter, EndPresentation)
     {
         if (mnDisplayCount != (sal_Int32)Application::GetScreenCount())
         {
+            bool bIsExitAfterPresenting = mpSlideShow->IsExitAfterPresenting();
+            mpSlideShow->SetExitAfterPresenting(false);
             mpSlideShow->end();
+            mpSlideShow->SetExitAfterPresenting(bIsExitAfterPresenting);
 
             // The following piece of code should not be here because the
             // slide show should be aware of the existence of the presenter
