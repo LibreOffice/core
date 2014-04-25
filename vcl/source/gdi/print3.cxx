@@ -1074,7 +1074,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
             o_rMtf.WindStart();
             long nDX = (aPaperSize.Width() - aPageSize.aSize.Width()) / 2;
             long nDY = (aPaperSize.Height() - aPageSize.aSize.Height()) / 2;
-            o_rMtf.Move( nDX, nDY, mpImplData->mpPrinter->ImplGetDPIX(), mpImplData->mpPrinter->ImplGetDPIY() );
+            o_rMtf.Move( nDX, nDY, mpImplData->mpPrinter->GetDPIX(), mpImplData->mpPrinter->GetDPIY() );
             o_rMtf.WindStart();
             o_rMtf.SetPrefSize( aPaperSize );
             aPageSize.aSize = aPaperSize;
@@ -1161,7 +1161,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
                 long nOffY = (aSubPageSize.Height() - long(double(aPageSize.aSize.Height()) * fScale)) / 2;
                 long nX = rMPS.nLeftMargin + nOffX + nAdvX * nCellX;
                 long nY = rMPS.nTopMargin + nOffY + nAdvY * nCellY;
-                aPageFile.Move( nX, nY, mpImplData->mpPrinter->ImplGetDPIX(), mpImplData->mpPrinter->ImplGetDPIY() );
+                aPageFile.Move( nX, nY, mpImplData->mpPrinter->GetDPIX(), mpImplData->mpPrinter->GetDPIY() );
                 aPageFile.WindStart();
                 // calculate border rectangle
                 Rectangle aSubPageRect( Point( nX, nY ),
@@ -1193,8 +1193,8 @@ int PrinterController::getFilteredPageCount()
 sal_uLong PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut )
 {
     sal_uLong nRestoreDrawMode = mpImplData->mpPrinter->GetDrawMode();
-    sal_Int32 nMaxBmpDPIX = mpImplData->mpPrinter->ImplGetDPIX();
-    sal_Int32 nMaxBmpDPIY = mpImplData->mpPrinter->ImplGetDPIY();
+    sal_Int32 nMaxBmpDPIX = mpImplData->mpPrinter->GetDPIX();
+    sal_Int32 nMaxBmpDPIY = mpImplData->mpPrinter->GetDPIY();
 
     const PrinterOptions&   rPrinterOptions = mpImplData->mpPrinter->GetPrinterOptions();
 
@@ -1290,7 +1290,7 @@ void PrinterController::printFilteredPage( int i_nPage )
     {
         Point aPageOffset( mpImplData->mpPrinter->GetPageOffset() );
         aPageFile.WindStart();
-        aPageFile.Move( -aPageOffset.X(), -aPageOffset.Y(), mpImplData->mpPrinter->ImplGetDPIX(), mpImplData->mpPrinter->ImplGetDPIY() );
+        aPageFile.Move( -aPageOffset.X(), -aPageOffset.Y(), mpImplData->mpPrinter->GetDPIX(), mpImplData->mpPrinter->GetDPIY() );
     }
 
     GDIMetaFile aCleanedFile;

@@ -9256,10 +9256,10 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     mbDevOutput = true;
 
     const OutputDevice *pOutDev = GetOutDev();
-    long nOldDPIX = pOutDev->ImplGetDPIX();
-    long nOldDPIY = pOutDev->ImplGetDPIY();
-    mnDPIX = i_pTargetOutDev->ImplGetDPIX();
-    mnDPIY = i_pTargetOutDev->ImplGetDPIY();
+    long nOldDPIX = pOutDev->GetDPIX();
+    long nOldDPIY = pOutDev->GetDPIY();
+    mnDPIX = i_pTargetOutDev->GetDPIX();
+    mnDPIY = i_pTargetOutDev->GetDPIY();
     bool bOutput = IsOutputEnabled();
     EnableOutput();
 

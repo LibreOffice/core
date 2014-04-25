@@ -421,8 +421,8 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
 void ImplDrawDPILineRect( OutputDevice *const pDev, Rectangle& rRect,
                           const Color *const pColor, const bool bRound = false )
 {
-    long nLineWidth = pDev->ImplGetDPIX()/300;
-    long nLineHeight = pDev->ImplGetDPIY()/300;
+    long nLineWidth = pDev->GetDPIX()/300;
+    long nLineHeight = pDev->GetDPIY()/300;
     if ( !nLineWidth )
         nLineWidth = 1;
     if ( !nLineHeight )

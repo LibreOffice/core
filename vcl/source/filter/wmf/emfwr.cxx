@@ -319,7 +319,7 @@ bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilterConf
     ImplEndRecord();
 
     ImplBeginRecord( WIN_EMR_SETVIEWPORTEXTEX );
-    m_rStm.WriteInt32( (sal_Int32) maVDev.ImplGetDPIX() ).WriteInt32( (sal_Int32) maVDev.ImplGetDPIY() );
+    m_rStm.WriteInt32( (sal_Int32) maVDev.GetDPIX() ).WriteInt32( (sal_Int32) maVDev.GetDPIY() );
     ImplEndRecord();
 
     ImplBeginRecord( WIN_EMR_SETWINDOWEXTEX );

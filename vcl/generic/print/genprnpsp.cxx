@@ -1069,8 +1069,8 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     bool bAborted = false;
     PDFNewJobParameters aLastParm;
 
-    aContext.DPIx = pPrinter->ImplGetDPIX();
-    aContext.DPIy = pPrinter->ImplGetDPIY();
+    aContext.DPIx = pPrinter->GetDPIX();
+    aContext.DPIy = pPrinter->GetDPIY();
     for( int nPage = 0; nPage < nAllPages && ! bAborted; nPage++ )
     {
         if( nPage == nAllPages-1 )

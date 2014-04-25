@@ -434,13 +434,13 @@ public:
 
      @returns x-axis DPI value
      */
-    SAL_DLLPRIVATE sal_Int32    ImplGetDPIX() const { return mnDPIX; }
+    SAL_DLLPRIVATE sal_Int32    GetDPIX() const { return mnDPIX; }
 
     /** Get the output device's DPI y-axis value.
 
      @returns y-axis DPI value
      */
-    SAL_DLLPRIVATE sal_Int32    ImplGetDPIY() const { return mnDPIY; }
+    SAL_DLLPRIVATE sal_Int32    GetDPIY() const { return mnDPIY; }
     ///@}
 
     /** @name Clipping functions

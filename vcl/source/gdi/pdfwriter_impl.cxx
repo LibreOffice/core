@@ -1654,7 +1654,7 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
     else if( rInfo.GetWidth() == 0 )
     {
         // "pixel" line
-        appendDouble( 72.0/double(m_pWriter->getReferenceDevice()->ImplGetDPIX()), rBuffer );
+        appendDouble( 72.0/double(m_pWriter->getReferenceDevice()->GetDPIX()), rBuffer );
         rBuffer.append( " w\n" );
     }
 
@@ -2271,7 +2271,7 @@ sal_Int32 PDFWriterImpl::newPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, P
     // setup global graphics state
     // linewidth is "1 pixel" by default
     OStringBuffer aBuf( 16 );
-    appendDouble( 72.0/double(getReferenceDevice()->ImplGetDPIX()), aBuf );
+    appendDouble( 72.0/double(getReferenceDevice()->GetDPIX()), aBuf );
     aBuf.append( " w\n" );
     writeBuffer( aBuf.getStr(), aBuf.getLength() );
 
@@ -4745,7 +4745,7 @@ Font PDFWriterImpl::drawFieldBorder( PDFWidget& rIntern,
     {
         if( rWidget.Border && rWidget.BorderColor == Color( COL_TRANSPARENT ) )
         {
-            sal_Int32 nDelta = getReferenceDevice()->ImplGetDPIX() / 500;
+            sal_Int32 nDelta = getReferenceDevice()->GetDPIX() / 500;
             if( nDelta < 1 )
                 nDelta = 1;
             setLineColor( Color( COL_TRANSPARENT ) );
@@ -9301,9 +9301,9 @@ void PDFWriterImpl::drawPixel( const Point& rPoint, const Color& rColor )
     OStringBuffer aLine( 20 );
     m_aPages.back().appendPoint( rPoint, aLine );
     aLine.append( ' ' );
-    appendDouble( 1.0/double(getReferenceDevice()->ImplGetDPIX()), aLine );
+    appendDouble( 1.0/double(getReferenceDevice()->GetDPIX()), aLine );
     aLine.append( ' ' );
-    appendDouble( 1.0/double(getReferenceDevice()->ImplGetDPIY()), aLine );
+    appendDouble( 1.0/double(getReferenceDevice()->GetDPIY()), aLine );
     aLine.append( " re f\n" );
     writeBuffer( aLine.getStr(), aLine.getLength() );
 

@@ -542,7 +542,7 @@ sal_Bool SwViewShell::PrintOrPDFExport(
         long nShiftY = (nOrigHeight-nNewHeight)/2;
         pRecorder->Scale(fScale, fScale);
         pRecorder->WindStart();
-        pRecorder->Move(0, nShiftY, pOutDev->ImplGetDPIX(), pOutDev->ImplGetDPIY());
+        pRecorder->Move(0, nShiftY, pOutDev->GetDPIX(), pOutDev->GetDPIY());
         pRecorder->WindStart();
     }
 

@@ -1431,7 +1431,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
      /* #117909#
       * add some pixels to minimum double line distance on higher resolution devices
       */
-    long nMin2LineDY = 1 + pDev->ImplGetDPIY()/150;
+    long nMin2LineDY = 1 + pDev->GetDPIY()/150;
     if ( n2LineDY < nMin2LineDY )
         n2LineDY = nMin2LineDY;
     long n2LineDY2 = n2LineDY/2;
