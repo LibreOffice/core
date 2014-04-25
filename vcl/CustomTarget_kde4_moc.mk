@@ -12,7 +12,8 @@ $(eval $(call gb_CustomTarget_CustomTarget,vcl/unx/kde4))
 $(call gb_CustomTarget_get_target,vcl/unx/kde4) : \
 	$(call gb_CustomTarget_get_workdir,vcl/unx/kde4)/KDEXLib.moc \
 	$(call gb_CustomTarget_get_workdir,vcl/unx/kde4)/KDE4FilePicker.moc \
-	$(call gb_CustomTarget_get_workdir,vcl/unx/kde4)/tst_exclude_socket_notifiers.moc
+	$(call gb_CustomTarget_get_workdir,vcl/unx/kde4)/tst_exclude_socket_notifiers.moc \
+	$(call gb_CustomTarget_get_workdir,vcl/unx/kde4)/tst_exclude_posted_events.moc
 
 $(call gb_CustomTarget_get_workdir,vcl/unx/kde4)/%.moc : \
 		$(SRCDIR)/vcl/unx/kde4/%.hxx \

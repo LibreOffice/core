@@ -35,7 +35,7 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
     const uno::Reference< uno::XComponentContext >& xMSF )
 {
     KDEXLib* kdeXLib = static_cast<KDEXLib*>( mpXLib );
-    if (kdeXLib->haveQt4SocketExcludeFix())
+    if (kdeXLib->allowKdeDialogs())
         return uno::Reference< ui::dialogs::XFilePicker2 >(
             kdeXLib->createFilePicker(xMSF) );
     else
