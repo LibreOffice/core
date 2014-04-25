@@ -450,7 +450,7 @@ void DlgEdObj::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
     SetRectFromProps();
 }
 
-void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
+void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (css::container::NoSuchElementException, css::uno::RuntimeException)
 {
     // get old name
     OUString aOldName;

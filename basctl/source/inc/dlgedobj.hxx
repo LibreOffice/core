@@ -117,7 +117,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > GetControl() const;
 
     virtual void PositionAndSizeChange( const ::com::sun::star::beans::PropertyChangeEvent& evt );
-    virtual void SAL_CALL NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(css::container::NoSuchElementException, css::uno::RuntimeException);
     virtual void SAL_CALL TabIndexChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
 
     // PropertyChangeListener
