@@ -28,7 +28,8 @@
     <service name="com.sun.star.chart2.ChartController"/>
     <service name="com.sun.star.frame.Controller"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.ChartDocumentWrapper">
+  <implementation name="com.sun.star.comp.chart2.ChartDocumentWrapper"
+      constructor="com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart.ChartDocument"/>
     <service name="com.sun.star.chart2.ChartDocumentWrapper"/>

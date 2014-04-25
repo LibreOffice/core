@@ -1564,4 +1564,11 @@ APPHELPER_XSERVICEINFO_IMPL( ChartDocumentWrapper, CHART_CHARTAPIWRAPPER_IMPLEME
 } //  namespace wrapper
 } //  namespace chart
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation(css::uno::XComponentContext *context,
+                                                                css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ::chart::wrapper::ChartDocumentWrapper(context));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
