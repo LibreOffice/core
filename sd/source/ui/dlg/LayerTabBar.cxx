@@ -174,7 +174,7 @@ void  LayerTabBar::Command(const CommandEvent& rCEvt)
     }
 }
 
-long LayerTabBar::StartRenaming()
+bool LayerTabBar::StartRenaming()
 {
     bool bOK = true;
     OUString aLayerName = GetPageText( GetEditPageId() );
@@ -204,7 +204,7 @@ long LayerTabBar::StartRenaming()
     return bOK ? 1 : 0;
 }
 
-long LayerTabBar::AllowRenaming()
+TabBarAllowRenamingReturnCode LayerTabBar::AllowRenaming()
 {
     bool bOK = true;
 
@@ -242,7 +242,7 @@ long LayerTabBar::AllowRenaming()
         }
     }
 
-    return bOK ? 1 : 0;
+    return bOK ? TABBAR_RENAMING_YES : TABBAR_RENAMING_NO;
 }
 
 void LayerTabBar::EndRenaming()

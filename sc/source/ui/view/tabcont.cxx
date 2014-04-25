@@ -579,20 +579,20 @@ sal_Int8 ScTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
     return 0;
 }
 
-long ScTabControl::StartRenaming()
+bool ScTabControl::StartRenaming()
 {
     if ( pViewData->GetDocument()->IsDocEditable() )
-        return TABBAR_RENAMING_YES;
+        return true;
     else
-        return TABBAR_RENAMING_NO;
+        return false;
 }
 
-long ScTabControl::AllowRenaming()
+TabBarAllowRenamingReturnCode ScTabControl::AllowRenaming()
 {
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
     OSL_ENSURE( pViewSh, "pViewData->GetViewShell()" );
 
-    long nRet = TABBAR_RENAMING_CANCEL;
+    TabBarAllowRenamingReturnCode nRet = TABBAR_RENAMING_CANCEL;
     sal_uInt16 nId = GetEditPageId();
     if ( nId )
     {

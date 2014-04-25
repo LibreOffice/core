@@ -313,12 +313,13 @@ typedef sal_uInt16 TabBarPageBits;
 #define TPB_SPECIAL         ((TabBarPageBits)0x0001)
 
 
-// - TabBar-Types -
+// - TabBar-Types - used in TabBar::AllowRenaming
 
-
-#define TABBAR_RENAMING_YES    ((long)sal_True)
-#define TABBAR_RENAMING_NO     ((long)sal_False)
-#define TABBAR_RENAMING_CANCEL ((long)2)
+enum TabBarAllowRenamingReturnCode {
+   TABBAR_RENAMING_NO,
+   TABBAR_RENAMING_YES,
+   TABBAR_RENAMING_CANCEL
+};
 
 
 // - TabBar -
@@ -425,9 +426,9 @@ public:
     virtual void    DoubleClick();
     virtual void    Split();
     virtual void    ActivatePage();
-    virtual long    DeactivatePage();
-    virtual long    StartRenaming();
-    virtual long    AllowRenaming();
+    virtual bool    DeactivatePage();
+    virtual bool    StartRenaming();
+    virtual TabBarAllowRenamingReturnCode    AllowRenaming();
     virtual void    EndRenaming();
     virtual void    Mirror();
 

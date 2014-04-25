@@ -122,7 +122,7 @@ protected:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
-    virtual long    AllowRenaming() SAL_OVERRIDE;
+    virtual TabBarAllowRenamingReturnCode  AllowRenaming() SAL_OVERRIDE;
     virtual void    EndRenaming() SAL_OVERRIDE;
 
 public:

@@ -1807,32 +1807,32 @@ Rectangle TabBar::ImplGetInsertTabRect(ImplTabBarItem* pItem) const
 
 
 
-long TabBar::DeactivatePage()
+bool TabBar::DeactivatePage()
 {
     if ( maDeactivatePageHdl.IsSet() )
         return maDeactivatePageHdl.Call( this );
     else
-        return sal_True;
+        return true;
 }
 
 
 
-long TabBar::StartRenaming()
+bool TabBar::StartRenaming()
 {
     if ( maStartRenamingHdl.IsSet() )
         return maStartRenamingHdl.Call( this );
     else
-        return sal_True;
+        return true;
 }
 
 
 
-long TabBar::AllowRenaming()
+TabBarAllowRenamingReturnCode TabBar::AllowRenaming()
 {
     if ( maAllowRenamingHdl.IsSet() )
-        return maAllowRenamingHdl.Call( this );
+        return (TabBarAllowRenamingReturnCode) maAllowRenamingHdl.Call( this );
     else
-        return sal_True;
+        return TABBAR_RENAMING_YES;
 }
 
 
@@ -2407,7 +2407,7 @@ void TabBar::EndEditMode( bool bCancel )
         mpEdit->SetPostEvent();
         if ( !bCancel )
         {
-            long nAllowRenaming = AllowRenaming();
+            TabBarAllowRenamingReturnCode nAllowRenaming = AllowRenaming();
             if ( nAllowRenaming == TABBAR_RENAMING_YES )
                 SetPageText( mnEditId, maEditText );
             else if ( nAllowRenaming == TABBAR_RENAMING_NO )

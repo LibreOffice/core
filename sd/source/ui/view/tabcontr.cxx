@@ -307,7 +307,7 @@ void TabControl::Command(const CommandEvent& rCEvt)
     }
 }
 
-long TabControl::StartRenaming()
+bool TabControl::StartRenaming()
 {
     bool bOK = false;
 
@@ -321,10 +321,10 @@ long TabControl::StartRenaming()
             pView->SdrEndTextEdit();
     }
 
-    return bOK ? 1 : 0;
+    return bOK;
 }
 
-long TabControl::AllowRenaming()
+TabBarAllowRenamingReturnCode TabControl::AllowRenaming()
 {
     bool bOK = true;
 
@@ -344,7 +344,7 @@ long TabControl::AllowRenaming()
             bOK = false;
         }
     }
-    return bOK ? 1 : 0;
+    return bOK ? TABBAR_RENAMING_YES : TABBAR_RENAMING_NO;
 }
 
 void TabControl::EndRenaming()
@@ -363,9 +363,9 @@ void TabControl::ActivatePage()
     }
 }
 
-long TabControl::DeactivatePage()
+bool TabControl::DeactivatePage()
 {
-    return pDrViewSh->IsSwitchPageAllowed() ? 1 : 0;
+    return pDrViewSh->IsSwitchPageAllowed();
 }
 
 

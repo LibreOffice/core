@@ -543,7 +543,7 @@ void TabBar::Command( const CommandEvent& rCEvt )
     }
 }
 
-long TabBar::AllowRenaming()
+TabBarAllowRenamingReturnCode TabBar::AllowRenaming()
 {
     bool const bValid = IsValidSbxName(GetEditText());
 
