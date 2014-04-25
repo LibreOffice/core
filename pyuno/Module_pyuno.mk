@@ -60,9 +60,11 @@ endif
 
 endif # SYSTEM_PYTHON
 
+ifneq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_check_targets,pyuno, \
     PythonTest_pyuno_pytests_ssl \
 ))
+endif
 
 ifneq (,$(filter PythonTest_pytests,$(MAKECMDGOALS)))
 $(eval $(call gb_Module_add_targets,pyuno, \
