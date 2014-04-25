@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,hunspell,\
 	external/hunspell/hunspell-1.3.2-compound.patch \
 	external/hunspell/hunspell.rhbz918938.patch \
 	external/hunspell/hunspell-wundef.patch.1 \
+	external/hunspell/hunspell-fdo48017-wfopen.patch \
 ))
 
 ifeq ($(COM),MSC)
