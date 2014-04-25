@@ -379,10 +379,10 @@ private:
     mutable bool                    mbRefPoint : 1;
     mutable bool                    mbEnableRTL : 1;
 
-public:
     /** @name Initialization and accessor functions
      */
     ///@{
+public:
 
     /** Get the graphic context that the output device uses to draw on.
 
@@ -422,20 +422,12 @@ protected:
                                 physically released graphics device.
      */
     virtual void                ReleaseGraphics( bool bRelease = true ) = 0;
-
-public:
-    /** Initialize the graphics device's data structures.
-     */
-    SAL_DLLPRIVATE void         ImplInitOutDevData();
-
-    /** De-initialize the graphics device's data structures.
-     */
-    SAL_DLLPRIVATE void         ImplDeInitOutDevData();
     ///@}
 
 
     /** @name Helper functions
      */
+public:
     ///@{
 
     /** Get the output device's DPI x-axis value.

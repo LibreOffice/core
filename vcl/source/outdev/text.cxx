@@ -226,8 +226,6 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     }
 
     // cache virtual device for rotation
-    if ( !mpOutDevData )
-        ImplInitOutDevData();
     if ( !mpOutDevData->mpRotateDev )
         mpOutDevData->mpRotateDev = new VirtualDevice( *this, 1 );
     VirtualDevice* pVDev = mpOutDevData->mpRotateDev;

@@ -8787,11 +8787,6 @@ void Window::SetAccessibilityEventsSuppressed(bool bSuppressed)
 
 void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle& rRect )
 {
-    if( ! mpOutDevData )
-    {
-        OutputDevice *pOutDev = GetOutDev();
-        pOutDev->ImplInitOutDevData();
-    }
     assert(mpOutDevData);
     mpOutDevData->mpRecordLayout = pLayout;
     mpOutDevData->maRecordRect = rRect;

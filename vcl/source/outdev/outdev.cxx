@@ -182,82 +182,93 @@ OutputDevice::OutputDevice() :
     mxSettings( new AllSettings(Application::GetSettings()) )
 {
 
-    mpGraphics          = NULL;
-    mpUnoGraphicsList   = NULL;
-    mpPrevGraphics      = NULL;
-    mpNextGraphics      = NULL;
-    mpMetaFile          = NULL;
-    mpFontEntry         = NULL;
-    mpFontCache         = NULL;
-    mpFontCollection   = NULL;
-    mpGetDevFontList    = NULL;
-    mpGetDevSizeList    = NULL;
-    mpObjStack          = NULL;
-    mpOutDevData        = NULL;
-    mpPDFWriter         = NULL;
-    mpAlphaVDev         = NULL;
-    mpExtOutDevData     = NULL;
-    mnOutOffX           = 0;
-    mnOutOffY           = 0;
-    mnOutWidth          = 0;
-    mnOutHeight         = 0;
-    mnDPIX              = 0;
-    mnDPIY              = 0;
-    mnDPIScaleFactor    = 1;
-    mnTextOffX          = 0;
-    mnTextOffY          = 0;
-    mnOutOffOrigX       = 0;
-    mnOutOffLogicX      = 0;
-    mnOutOffOrigY       = 0;
-    mnOutOffLogicY      = 0;
-    mnEmphasisAscent    = 0;
-    mnEmphasisDescent   = 0;
-    mnDrawMode          = 0;
-    mnTextLayoutMode        = TEXT_LAYOUT_DEFAULT;
+    mpGraphics                      = NULL;
+    mpUnoGraphicsList               = NULL;
+    mpPrevGraphics                  = NULL;
+    mpNextGraphics                  = NULL;
+    mpMetaFile                      = NULL;
+    mpFontEntry                     = NULL;
+    mpFontCache                     = NULL;
+    mpFontCollection                = NULL;
+    mpGetDevFontList                = NULL;
+    mpGetDevSizeList                = NULL;
+    mpObjStack                      = NULL;
+    mpOutDevData                    = NULL;
+    mpPDFWriter                     = NULL;
+    mpAlphaVDev                     = NULL;
+    mpExtOutDevData                 = NULL;
+    mnOutOffX                       = 0;
+    mnOutOffY                       = 0;
+    mnOutWidth                      = 0;
+    mnOutHeight                     = 0;
+    mnDPIX                          = 0;
+    mnDPIY                          = 0;
+    mnDPIScaleFactor                = 1;
+    mnTextOffX                      = 0;
+    mnTextOffY                      = 0;
+    mnOutOffOrigX                   = 0;
+    mnOutOffLogicX                  = 0;
+    mnOutOffOrigY                   = 0;
+    mnOutOffLogicY                  = 0;
+    mnEmphasisAscent                = 0;
+    mnEmphasisDescent               = 0;
+    mnDrawMode                      = 0;
+    mnTextLayoutMode                = TEXT_LAYOUT_DEFAULT;
+
     if( Application::GetSettings().GetLayoutRTL() ) //#i84553# tip BiDi preference to RTL
-        mnTextLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
-    meOutDevType        = OUTDEV_DONTKNOW;
-    meOutDevViewType    = OUTDEV_VIEWTYPE_DONTKNOW;
-    mbMap               = false;
-    mbMapIsDefault      = true;
-    mbClipRegion        = false;
-    mbBackground        = false;
-    mbOutput            = true;
-    mbDevOutput         = false;
-    mbOutputClipped     = false;
-    maTextColor         = Color( COL_BLACK );
-    maOverlineColor     = Color( COL_TRANSPARENT );
-    meTextAlign         = maFont.GetAlign();
-    meRasterOp          = ROP_OVERPAINT;
-    mnAntialiasing      = 0;
-    meTextLanguage      = 0;  // TODO: get default from configuration?
-    mbLineColor         = true;
-    mbFillColor         = true;
-    mbInitLineColor     = true;
-    mbInitFillColor     = true;
-    mbInitFont          = true;
-    mbInitTextColor     = true;
-    mbInitClipRegion    = true;
-    mbClipRegionSet     = false;
-    mbKerning           = false;
-    mbNewFont           = true;
-    mbTextLines         = false;
-    mbTextSpecial       = false;
-    mbRefPoint          = false;
-    mbEnableRTL         = false;    // mirroring must be explicitly allowed (typically for windows only)
+        mnTextLayoutMode            = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
+
+    meOutDevType                    = OUTDEV_DONTKNOW;
+    meOutDevViewType                = OUTDEV_VIEWTYPE_DONTKNOW;
+    mbMap                           = false;
+    mbMapIsDefault                  = true;
+    mbClipRegion                    = false;
+    mbBackground                    = false;
+    mbOutput                        = true;
+    mbDevOutput                     = false;
+    mbOutputClipped                 = false;
+    maTextColor                     = Color( COL_BLACK );
+    maOverlineColor                 = Color( COL_TRANSPARENT );
+    meTextAlign                     = maFont.GetAlign();
+    meRasterOp                      = ROP_OVERPAINT;
+    mnAntialiasing                  = 0;
+    meTextLanguage                  = 0;  // TODO: get default from configuration?
+    mbLineColor                     = true;
+    mbFillColor                     = true;
+    mbInitLineColor                 = true;
+    mbInitFillColor                 = true;
+    mbInitFont                      = true;
+    mbInitTextColor                 = true;
+    mbInitClipRegion                = true;
+    mbClipRegionSet                 = false;
+    mbKerning                       = false;
+    mbNewFont                       = true;
+    mbTextLines                     = false;
+    mbTextSpecial                   = false;
+    mbRefPoint                      = false;
+    mbEnableRTL                     = false;    // mirroring must be explicitly allowed (typically for windows only)
 
     // struct ImplMapRes
-    maMapRes.mnMapOfsX          = 0;
-    maMapRes.mnMapOfsY          = 0;
-    maMapRes.mnMapScNumX        = 1;
-    maMapRes.mnMapScNumY        = 1;
-    maMapRes.mnMapScDenomX      = 1;
-    maMapRes.mnMapScDenomY      = 1;
+    maMapRes.mnMapOfsX              = 0;
+    maMapRes.mnMapOfsY              = 0;
+    maMapRes.mnMapScNumX            = 1;
+    maMapRes.mnMapScNumY            = 1;
+    maMapRes.mnMapScDenomX          = 1;
+    maMapRes.mnMapScDenomY          = 1;
     // struct ImplThresholdRes
-    maThresRes.mnThresLogToPixX = 0;
-    maThresRes.mnThresLogToPixY = 0;
-    maThresRes.mnThresPixToLogX = 0;
-    maThresRes.mnThresPixToLogY = 0;
+    maThresRes.mnThresLogToPixX     = 0;
+    maThresRes.mnThresLogToPixY     = 0;
+    maThresRes.mnThresPixToLogX     = 0;
+    maThresRes.mnThresPixToLogY     = 0;
+
+    // struct ImplOutDevData- see #i82615#
+    mpOutDevData                    = new ImplOutDevData;
+    mpOutDevData->mpRotateDev       = NULL;
+    mpOutDevData->mpRecordLayout    = NULL;
+
+    // #i75163#
+    mpOutDevData->mpViewTransform   = NULL;
+    mpOutDevData->mpInverseViewTransform = NULL;
 }
 
 OutputDevice::~OutputDevice()
@@ -273,7 +284,15 @@ OutputDevice::~OutputDevice()
     }
 
     if ( mpOutDevData )
-        ImplDeInitOutDevData();
+    {
+        if ( mpOutDevData->mpRotateDev )
+            delete mpOutDevData->mpRotateDev;
+
+        // #i75163#
+        ImplInvalidateViewTransform();
+
+        delete mpOutDevData;
+    }
 
     ImplObjStack* pData = mpObjStack;
     if ( pData )
@@ -406,20 +425,6 @@ SalGraphics const *OutputDevice::GetGraphics() const
     return mpGraphics;
 }
 
-void OutputDevice::ImplInitOutDevData()
-{
-    if ( !mpOutDevData )
-    {
-        mpOutDevData = new ImplOutDevData;
-        mpOutDevData->mpRotateDev = NULL;
-        mpOutDevData->mpRecordLayout = NULL;
-
-        // #i75163#
-        mpOutDevData->mpViewTransform = NULL;
-        mpOutDevData->mpInverseViewTransform = NULL;
-    }
-}
-
 void OutputDevice::ImplReleaseFonts()
 {
     mpGraphics->ReleaseFonts();
@@ -467,20 +472,6 @@ void OutputDevice::ImplInvalidateViewTransform()
 bool OutputDevice::ImplIsRecordLayout() const
 {
     return mpOutDevData && mpOutDevData->mpRecordLayout;
-}
-
-void OutputDevice::ImplDeInitOutDevData()
-{
-    if ( mpOutDevData )
-    {
-        if ( mpOutDevData->mpRotateDev )
-            delete mpOutDevData->mpRotateDev;
-
-        // #i75163#
-        ImplInvalidateViewTransform();
-
-        delete mpOutDevData;
-    }
 }
 
 void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rPosAry )

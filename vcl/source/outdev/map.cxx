@@ -837,12 +837,6 @@ basegfx::B2DHomMatrix OutputDevice::GetViewTransformation() const
 {
     if(mbMap)
     {
-        // #i82615#
-        if(!mpOutDevData)
-        {
-            const_cast< OutputDevice* >(this)->ImplInitOutDevData();
-        }
-
         if(!mpOutDevData->mpViewTransform)
         {
             mpOutDevData->mpViewTransform = new basegfx::B2DHomMatrix;
@@ -871,12 +865,6 @@ basegfx::B2DHomMatrix OutputDevice::GetInverseViewTransformation() const
 {
     if(mbMap)
     {
-        // #i82615#
-        if(!mpOutDevData)
-        {
-            const_cast< OutputDevice* >(this)->ImplInitOutDevData();
-        }
-
         if(!mpOutDevData->mpInverseViewTransform)
         {
             GetViewTransformation();
