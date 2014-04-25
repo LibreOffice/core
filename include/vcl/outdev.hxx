@@ -419,6 +419,71 @@ public:
      @returns y-axis DPI value
      */
     SAL_DLLPRIVATE sal_Int32    GetDPIY() const { return mnDPIY; }
+
+    sal_Int32                   GetDPIScaleFactor() const { return mnDPIScaleFactor; }
+
+    OutDevType                  GetOutDevType() const { return meOutDevType; }
+
+    /** Query an OutputDevice to see whether it supports a specific operation
+
+    @return true if operation supported, else false
+    */
+    bool                        supportsOperation( OutDevSupportType ) const;
+
+    vcl::PDFWriterImpl*         GetPDFWriter() const { return mpPDFWriter; }
+
+    void                        SetExtOutDevData( vcl::ExtOutDevData* pExtOutDevData ) { mpExtOutDevData = pExtOutDevData; }
+    vcl::ExtOutDevData*         GetExtOutDevData() const { return mpExtOutDevData; }
+
+    ///@}
+
+    /** @name OutputDevice state functions
+     */
+    ///@{
+public:
+    SAL_DLLPRIVATE void         ImplInitFillColor();
+
+    void                        EnableOutput( bool bEnable = true );
+    bool                        IsOutputEnabled() const { return mbOutput; }
+    bool                        IsDeviceOutput() const { return mbDevOutput; }
+    bool                        IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
+    bool                        IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
+
+    void                        SetAntialiasing( sal_uInt16 nMode =  0 );
+    sal_uInt16                  GetAntialiasing() const { return mnAntialiasing; }
+
+    void                        SetDrawMode( sal_uLong nDrawMode );
+    sal_uLong                   GetDrawMode() const { return mnDrawMode; }
+
+    void                        SetLayoutMode( sal_uLong nTextLayoutMode );
+    sal_uLong                   GetLayoutMode() const { return mnTextLayoutMode; }
+
+    void                        SetDigitLanguage( LanguageType );
+    LanguageType                GetDigitLanguage() const { return meTextLanguage; }
+
+    void                        SetRasterOp( RasterOp eRasterOp );
+    RasterOp                    GetRasterOp() const { return meRasterOp; }
+
+    /**
+    If this OutputDevice is used for displaying a Print Preview
+    the OutDevViewType should be set to 'OUTDEV_VIEWTYPE_PRINTPREVIEW'.
+
+    A View can then make painting decisions dependent on this OutDevViewType.
+    E.g. text colors need to be handled differently, dependent on whether it's a PrintPreview or not. (see #106611# for more)
+    */
+    void                        SetOutDevViewType( OutDevViewType eOutDevViewType ) { meOutDevViewType=eOutDevViewType; }
+    OutDevViewType              GetOutDevViewType() const { return meOutDevViewType; }
+
+    void                        SetFillColor();
+    void                        SetFillColor( const Color& rColor );
+    const Color&                GetFillColor() const { return maFillColor; }
+    bool                        IsFillColor() const { return mbFillColor; }
+
+    void                        SetBackground();
+    void                        SetBackground( const Wallpaper& rBackground );
+
+    const Wallpaper&            GetBackground() const { return maBackground; }
+    bool                        IsBackground() const { return mbBackground; }
     ///@}
 
     /** @name Clipping functions
@@ -658,8 +723,6 @@ private:
     SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
     ///@}
 
-    SAL_DLLPRIVATE void         ImplInitFillColor();
-
     /** @name Polygon functions
      */
     ///@{
@@ -677,6 +740,9 @@ private:
     ///@{
 public:
     void                        DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
+
+protected:
+    virtual void                DrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
 
 private:
     SAL_DLLPRIVATE void         DrawWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
@@ -729,8 +795,6 @@ protected:
     virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     void                        DrawInvisiblePolygon( const PolyPolygon& rPolyPoly );
 
-    virtual void                DrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
-
 private:
     // not implemented; to detect misuses of DrawOutDev(...OutputDevice&);
     void                        DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&);
@@ -738,21 +802,6 @@ private:
     bool                        DrawTransparentNatively( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
 
 public:
-    OutDevType                  GetOutDevType() const { return meOutDevType; }
-
-    /** Query an OutputDevice to see whether it supports a specific operation
-
-    @return true if operation supported, else false
-    */
-    bool                        supportsOperation( OutDevSupportType ) const;
-
-    sal_Int32                   GetDPIScaleFactor() const { return mnDPIScaleFactor; }
-
-    vcl::PDFWriterImpl*         GetPDFWriter() const { return mpPDFWriter; }
-
-    void                        SetExtOutDevData( vcl::ExtOutDevData* pExtOutDevData ) { mpExtOutDevData = pExtOutDevData; }
-    vcl::ExtOutDevData*         GetExtOutDevData() const { return mpExtOutDevData; }
-
     void                        DrawPixel( const Point& rPt );
     void                        DrawPixel( const Point& rPt, const Color& rColor );
     void                        DrawPixel( const Polygon& rPts, const Color* pColors = NULL );
@@ -1562,48 +1611,6 @@ public:
 
     void                        SetConnectMetaFile( GDIMetaFile* pMtf );
     GDIMetaFile*                GetConnectMetaFile() const { return mpMetaFile; }
-
-    void                        EnableOutput( bool bEnable = true );
-    bool                        IsOutputEnabled() const { return mbOutput; }
-    bool                        IsDeviceOutput() const { return mbDevOutput; }
-    bool                        IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
-    bool                        IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
-
-    void                        SetAntialiasing( sal_uInt16 nMode =  0 );
-    sal_uInt16                  GetAntialiasing() const { return mnAntialiasing; }
-
-    void                        SetDrawMode( sal_uLong nDrawMode );
-    sal_uLong                   GetDrawMode() const { return mnDrawMode; }
-
-    void                        SetLayoutMode( sal_uLong nTextLayoutMode );
-    sal_uLong                   GetLayoutMode() const { return mnTextLayoutMode; }
-
-    void                        SetDigitLanguage( LanguageType );
-    LanguageType                GetDigitLanguage() const { return meTextLanguage; }
-
-    void                        SetRasterOp( RasterOp eRasterOp );
-    RasterOp                    GetRasterOp() const { return meRasterOp; }
-
-    /**
-    If this OutputDevice is used for displaying a Print Preview
-    the OutDevViewType should be set to 'OUTDEV_VIEWTYPE_PRINTPREVIEW'.
-
-    A View can then make painting decisions dependent on this OutDevViewType.
-    E.g. text colors need to be handled differently, dependent on whether it's a PrintPreview or not. (see #106611# for more)
-    */
-    void                        SetOutDevViewType( OutDevViewType eOutDevViewType ) { meOutDevViewType=eOutDevViewType; }
-    OutDevViewType              GetOutDevViewType() const { return meOutDevViewType; }
-
-    void                        SetFillColor();
-    void                        SetFillColor( const Color& rColor );
-    const Color&                GetFillColor() const { return maFillColor; }
-    bool                        IsFillColor() const { return mbFillColor; }
-
-    void                        SetBackground();
-    void                        SetBackground( const Wallpaper& rBackground );
-
-    const Wallpaper&            GetBackground() const { return maBackground; }
-    bool                        IsBackground() const { return mbBackground; }
 
 
     virtual void                SetSettings( const AllSettings& rSettings );
