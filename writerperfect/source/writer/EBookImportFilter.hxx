@@ -10,58 +10,19 @@
 #ifndef EBOOKIMPORTFILTER_HXX
 #define EBOOKIMPORTFILTER_HXX
 
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/document/XExtendedFilterDetection.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <cppuhelper/implbase5.hxx>
+
+#include "ImportFilterBase.hxx"
 
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
-class EBookImportFilter : public cppu::WeakImplHelper5
-    <
-    com::sun::star::document::XFilter,
-    com::sun::star::document::XImporter,
-    com::sun::star::document::XExtendedFilterDetection,
-    com::sun::star::lang::XInitialization,
-    com::sun::star::lang::XServiceInfo
-    >
+class EBookImportFilter : public writerperfect::writer::ImportFilterBase
 {
-protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxDoc;
-    OUString msFilterName;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
-
-    sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-    throw (::com::sun::star::uno::RuntimeException);
-
 public:
     EBookImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext )
-        : mxContext( rxContext ) {}
-    virtual ~EBookImportFilter() {}
-
-    // XFilter
-    virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL cancel(  )
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // XImporter
-    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    //XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& Descriptor )
-    throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
-    // XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        : writerperfect::writer::ImportFilterBase( rxContext ) {}
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
@@ -71,6 +32,9 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
     throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+private:
+    virtual bool doDetectFormat( WPXInputStream &rInput, OUString &rTypeName ) SAL_OVERRIDE;
+    virtual bool doImportDocument( WPXInputStream &rInput, const rtl::OUString &rFilterName, WPXDocumentInterface &rGenerator ) SAL_OVERRIDE;
 };
 
 OUString EBookImportFilter_getImplementationName()

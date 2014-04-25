@@ -9,48 +9,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <writerperfect/DocumentHandler.hxx>
-#include <writerperfect/WPXSvInputStream.hxx>
-
-#include <xmloff/attrlist.hxx>
-#include <ucbhelper/content.hxx>
-
 #include <libmwaw/libmwaw.hxx>
-#include <libodfgen/libodfgen.hxx>
 
 #include "MWAWImportFilter.hxx"
 
-using namespace ::com::sun::star::uno;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
-using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
-using com::sun::star::beans::PropertyValue;
-using com::sun::star::document::XFilter;
-using com::sun::star::document::XExtendedFilterDetection;
-using com::sun::star::ucb::XCommandEnvironment;
-
-using com::sun::star::io::XInputStream;
-using com::sun::star::document::XImporter;
-using com::sun::star::xml::sax::InputSource;
-using com::sun::star::xml::sax::XAttributeList;
-using com::sun::star::xml::sax::XDocumentHandler;
-using com::sun::star::xml::sax::XParser;
-
-using writerperfect::DocumentHandler;
-using writerperfect::WPXSvInputStream;
+using com::sun::star::uno::XComponentContext;
 
 static bool handleEmbeddedMWAWObject(const WPXBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
 {
@@ -58,96 +30,18 @@ static bool handleEmbeddedMWAWObject(const WPXBinaryData &data, OdfDocumentHandl
     return MWAWDocument::decodeGraphic(data, &exporter);
 }
 
-sal_Bool SAL_CALL MWAWImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor )
-throw (RuntimeException)
+bool MWAWImportFilter::doImportDocument( WPXInputStream &rInput, const rtl::OUString &, WPXDocumentInterface &rGenerator )
 {
-    SAL_INFO("writerperfect", "MWAWImportFilter::importImpl");
-
-    sal_Int32 nLength = aDescriptor.getLength();
-    const PropertyValue *pValue = aDescriptor.getConstArray();
-    Reference < XInputStream > xInputStream;
-    for ( sal_Int32 i = 0 ; i < nLength; i++)
-    {
-        if ( pValue[i].Name == "InputStream" )
-            pValue[i].Value >>= xInputStream;
-    }
-    if ( !xInputStream.is() )
-    {
-        OSL_ASSERT( false );
-        return sal_False;
-    }
-
-    // An XML import service: what we push sax messages to..
-    Reference < XDocumentHandler > xInternalHandler(
-        mxContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.comp.Writer.XMLOasisImporter", mxContext),
-        css::uno::UNO_QUERY_THROW);
-
-    // The XImporter sets up an empty target document for XDocumentHandler to write to..
-    Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
-    xImporter->setTargetDocument(mxDoc);
-
-    // OO Document Handler: abstract class to handle document SAX messages, concrete implementation here
-    // writes to in-memory target doc
-    DocumentHandler xHandler(xInternalHandler);
-
-    WPXSvInputStream input( xInputStream );
-
-    OdtGenerator collector(&xHandler, ODF_FLAT_XML);
-    collector.registerEmbeddedObjectHandler("image/mwaw-odg", &handleEmbeddedMWAWObject);
-    if (MWAWDocument::MWAW_R_OK == MWAWDocument::parse(&input, &collector))
-        return sal_True;
-    return sal_False;
+    return MWAWDocument::MWAW_R_OK == MWAWDocument::parse(&rInput, &rGenerator);
 }
 
-sal_Bool SAL_CALL MWAWImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor )
-throw (RuntimeException, std::exception)
+bool MWAWImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
 {
-    SAL_INFO("writerperfect", "MWAWImportFilter::filter");
-    return importImpl ( aDescriptor );
-}
-void SAL_CALL MWAWImportFilter::cancel(  )
-throw (RuntimeException, std::exception)
-{
-    SAL_INFO("writerperfect", "MWAWImportFilter::cancel");
-}
+    rTypeName = "";
 
-// XImporter
-void SAL_CALL MWAWImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent > &xDoc )
-throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
-{
-    SAL_INFO("writerperfect", "MWAWImportFilter::getTargetDocument");
-    mxDoc = xDoc;
-}
-
-// XExtendedFilterDetection
-OUString SAL_CALL MWAWImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue > &Descriptor )
-throw( com::sun::star::uno::RuntimeException, std::exception )
-{
-    SAL_INFO("writerperfect", "MWAWImportFilter::detect");
-
-    MWAWDocument::Confidence confidence = MWAWDocument::MWAW_C_NONE;
     MWAWDocument::Type docType = MWAWDocument::MWAW_T_UNKNOWN;
     MWAWDocument::Kind docKind = MWAWDocument::MWAW_K_UNKNOWN;
-    OUString sTypeName;
-    sal_Int32 nLength = Descriptor.getLength();
-    sal_Int32 location = nLength;
-    const PropertyValue *pValue = Descriptor.getConstArray();
-    Reference < XInputStream > xInputStream;
-    for ( sal_Int32 i = 0 ; i < nLength; i++)
-    {
-        if ( pValue[i].Name == "TypeName" )
-            location=i;
-        else if ( pValue[i].Name == "InputStream" )
-            pValue[i].Value >>= xInputStream;
-    }
-
-    if (!xInputStream.is())
-        return OUString();
-
-    WPXSvInputStream input( xInputStream );
-
-    confidence = MWAWDocument::isFileFormatSupported(&input, docType, docKind);
+    const MWAWDocument::Confidence confidence = MWAWDocument::isFileFormatSupported(&rInput, docType, docKind);
 
     if (confidence == MWAWDocument::MWAW_C_EXCELLENT)
     {
@@ -156,76 +50,76 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
             switch (docType)
             {
             case MWAWDocument::MWAW_T_ACTA:
-                sTypeName = "writer_Mac_Acta";
+                rTypeName = "writer_Mac_Acta";
                 break;
             case MWAWDocument::MWAW_T_BEAGLEWORKS:
-                sTypeName = "writer_Beagle_Works";
+                rTypeName = "writer_Beagle_Works";
                 break;
             case MWAWDocument::MWAW_T_CLARISWORKS:
-                sTypeName = "writer_ClarisWorks";
+                rTypeName = "writer_ClarisWorks";
                 break;
             case MWAWDocument::MWAW_T_DOCMAKER:
-                sTypeName = "writer_DocMaker";
+                rTypeName = "writer_DocMaker";
                 break;
             case MWAWDocument::MWAW_T_EDOC:
-                sTypeName = "writer_eDoc_Document";
+                rTypeName = "writer_eDoc_Document";
                 break;
             case MWAWDocument::MWAW_T_GREATWORKS:
-                sTypeName = "writer_Great_Works";
+                rTypeName = "writer_Great_Works";
                 break;
             case MWAWDocument::MWAW_T_FULLWRITE:
-                sTypeName = "writer_FullWrite_Professional";
+                rTypeName = "writer_FullWrite_Professional";
                 break;
             case MWAWDocument::MWAW_T_HANMACWORDJ:
-                sTypeName = "writer_HanMac_Word_J";
+                rTypeName = "writer_HanMac_Word_J";
                 break;
             case MWAWDocument::MWAW_T_HANMACWORDK:
-                sTypeName = "writer_HanMac_Word_K";
+                rTypeName = "writer_HanMac_Word_K";
                 break;
             case MWAWDocument::MWAW_T_LIGHTWAYTEXT:
-                sTypeName = "writer_LightWayText";
+                rTypeName = "writer_LightWayText";
                 break;
             case MWAWDocument::MWAW_T_MACDOC:
-                sTypeName = "writer_MacDoc";
+                rTypeName = "writer_MacDoc";
                 break;
             case MWAWDocument::MWAW_T_MARINERWRITE:
-                sTypeName = "writer_Mariner_Write";
+                rTypeName = "writer_Mariner_Write";
                 break;
             case MWAWDocument::MWAW_T_MINDWRITE:
-                sTypeName = "writer_MindWrite";
+                rTypeName = "writer_MindWrite";
                 break;
             case MWAWDocument::MWAW_T_MACWRITE:
-                sTypeName = "writer_MacWrite";
+                rTypeName = "writer_MacWrite";
                 break;
             case MWAWDocument::MWAW_T_MACWRITEPRO:
-                sTypeName = "writer_MacWritePro";
+                rTypeName = "writer_MacWritePro";
                 break;
             case MWAWDocument::MWAW_T_MICROSOFTWORD:
-                sTypeName = "writer_Mac_Word";
+                rTypeName = "writer_Mac_Word";
                 break;
             case MWAWDocument::MWAW_T_MICROSOFTWORKS:
-                sTypeName = "writer_Mac_Works";
+                rTypeName = "writer_Mac_Works";
                 break;
             case MWAWDocument::MWAW_T_MORE:
-                sTypeName = "writer_Mac_More";
+                rTypeName = "writer_Mac_More";
                 break;
             case MWAWDocument::MWAW_T_NISUSWRITER:
-                sTypeName = "writer_Nisus_Writer";
+                rTypeName = "writer_Nisus_Writer";
                 break;
             case MWAWDocument::MWAW_T_TEACHTEXT:
-                sTypeName = "writer_TeachText";
+                rTypeName = "writer_TeachText";
                 break;
             case MWAWDocument::MWAW_T_TEXEDIT:
-                sTypeName = "writer_TexEdit";
+                rTypeName = "writer_TexEdit";
                 break;
             case MWAWDocument::MWAW_T_WRITENOW:
-                sTypeName = "writer_WriteNow";
+                rTypeName = "writer_WriteNow";
                 break;
             case MWAWDocument::MWAW_T_WRITERPLUS:
-                sTypeName = "writer_WriterPlus";
+                rTypeName = "writer_WriterPlus";
                 break;
             case MWAWDocument::MWAW_T_ZWRITE:
-                sTypeName = "writer_ZWrite";
+                rTypeName = "writer_ZWrite";
                 break;
 
             case MWAWDocument::MWAW_T_FRAMEMAKER:
@@ -251,42 +145,14 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
         }
     }
 
-    if (!sTypeName.isEmpty())
-    {
-        if ( location == nLength )
-        {
-            Descriptor.realloc(nLength+1);
-            Descriptor[location].Name = "TypeName";
-        }
-
-        Descriptor[location].Value <<=sTypeName;
-    }
-
-    return sTypeName;
+    return !rTypeName.isEmpty();
 }
 
-
-// XInitialization
-void SAL_CALL MWAWImportFilter::initialize( const Sequence< Any > &aArguments )
-throw (Exception, RuntimeException, std::exception)
+void MWAWImportFilter::doRegisterHandlers( OdtGenerator &rGenerator )
 {
-    SAL_INFO("writerperfect", "MWAWImportFilter::initialize");
-    Sequence < PropertyValue > aAnySeq;
-    sal_Int32 nLength = aArguments.getLength();
-    if ( nLength && ( aArguments[0] >>= aAnySeq ) )
-    {
-        const PropertyValue *pValue = aAnySeq.getConstArray();
-        nLength = aAnySeq.getLength();
-        for ( sal_Int32 i = 0 ; i < nLength; i++)
-        {
-            if ( pValue[i].Name == "Type" )
-            {
-                pValue[i].Value >>= msFilterName;
-                break;
-            }
-        }
-    }
+    rGenerator.registerEmbeddedObjectHandler("image/mwaw-odg", &handleEmbeddedMWAWObject);
 }
+
 OUString MWAWImportFilter_getImplementationName ()
 throw (RuntimeException)
 {

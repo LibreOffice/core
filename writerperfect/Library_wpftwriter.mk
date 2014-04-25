@@ -58,6 +58,7 @@ $(eval $(call gb_Library_use_externals,wpftwriter,\
 $(eval $(call gb_Library_add_exception_objects,wpftwriter,\
 	writerperfect/source/writer/AbiWordImportFilter \
 	writerperfect/source/writer/EBookImportFilter \
+	writerperfect/source/writer/ImportFilterBase \
 	writerperfect/source/writer/MSWorksImportFilter \
 	writerperfect/source/writer/MWAWImportFilter \
 	writerperfect/source/writer/WordPerfectImportFilter \
