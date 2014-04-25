@@ -17,7 +17,7 @@ sub HELP_MESSAGE {
   print <<EOS
 This program parses a linker map file, especially one produced when linking an iOS executable.
 
-Input is read from a command-line argument or from standard input.
+Input is read from a map file provided as command-line argument
 
 By default a list of libraries used and the size of code and data
 linked in from each library is printed, in reverse order of size.
@@ -31,14 +31,20 @@ The following options are available:
 EOS
 }
 
-die "The -f switch makes sense only if -s is also used" if (defined($args{'f'}) && !defined($args{'s'}));
+die "The -f switch makes sense only if -s is also used\n" if defined($args{'f'}) && !defined($args{'s'});
+
+die "Please provide one map file name\n" if !defined($ARGV[0]);
+
+die "Just one argument please\n" if defined($ARGV[1]);
 
 my $state = 0;
 my %libofnumber;
 my %sizeoflib;
 my %sizeofsym;
 
-while (<>) {
+open(INPUT, '<', $ARGV[0]) || die "Could not open $ARGV[0]: $!\n";
+
+while (<INPUT>) {
   if ($state == 0 && m!^# Object files:!) {
     $state = 1;
   } elsif ($state == 1 && m!^\[ *([0-9]+)\] .*/([-_a-z0-9]+\.a)\(.*!i) {
