@@ -34,6 +34,8 @@
 #include <vcl/metaact.hxx>
 #include <vcl/salnativewidgets.hxx>
 
+#include <vcl/outdevstate.hxx>
+
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
@@ -45,6 +47,7 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <vector>
+#include <stack>
 
 #if defined UNX
 #define GLYPH_FONT_HEIGHT   128
@@ -57,7 +60,7 @@
 
 struct ImplOutDevData;
 class ImplFontEntry;
-struct ImplObjStack;
+class OutDevState;
 struct SystemGraphicsData;
 struct SystemFontData;
 struct SystemTextLayoutData;
@@ -140,25 +143,6 @@ struct ImplThresholdRes
 };
 
 // OutputDevice-Types
-
-// Flags for Push()
-#define PUSH_LINECOLOR                  ((sal_uInt16)0x0001)
-#define PUSH_FILLCOLOR                  ((sal_uInt16)0x0002)
-#define PUSH_FONT                       ((sal_uInt16)0x0004)
-#define PUSH_TEXTCOLOR                  ((sal_uInt16)0x0008)
-#define PUSH_MAPMODE                    ((sal_uInt16)0x0010)
-#define PUSH_CLIPREGION                 ((sal_uInt16)0x0020)
-#define PUSH_RASTEROP                   ((sal_uInt16)0x0040)
-#define PUSH_TEXTFILLCOLOR              ((sal_uInt16)0x0080)
-#define PUSH_TEXTALIGN                  ((sal_uInt16)0x0100)
-#define PUSH_REFPOINT                   ((sal_uInt16)0x0200)
-#define PUSH_TEXTLINECOLOR              ((sal_uInt16)0x0400)
-#define PUSH_TEXTLAYOUTMODE             ((sal_uInt16)0x0800)
-#define PUSH_TEXTLANGUAGE               ((sal_uInt16)0x1000)
-#define PUSH_OVERLINECOLOR              ((sal_uInt16)0x2000)
-#define PUSH_ALLTEXT                    (PUSH_TEXTCOLOR | PUSH_TEXTFILLCOLOR | PUSH_TEXTLINECOLOR | PUSH_OVERLINECOLOR | PUSH_TEXTALIGN | PUSH_TEXTLAYOUTMODE | PUSH_TEXTLANGUAGE)
-#define PUSH_ALLFONT                    (PUSH_ALLTEXT | PUSH_FONT)
-#define PUSH_ALL                        ((sal_uInt16)0xFFFF)
 
 // Flags for DrawText()
 #define TEXT_DRAW_DISABLE               ((sal_uInt16)0x0001)
@@ -300,7 +284,7 @@ private:
     mutable PhysicalFontCollection* mpFontCollection;
     mutable ImplGetDevFontList*     mpGetDevFontList;
     mutable ImplGetDevSizeList*     mpGetDevSizeList;
-    ImplObjStack*                   mpObjStack;
+    std::stack < OutDevState* >*     mpOutDevStateStack;
     ImplOutDevData*                 mpOutDevData;
     VCLXGraphicsList_impl*          mpUnoGraphicsList;
     vcl::PDFWriterImpl*             mpPDFWriter;

@@ -33,13 +33,13 @@
 #include <vcl/IconThemeScanner.hxx>
 #include <vcl/IconThemeSelector.hxx>
 #include <vcl/IconThemeInfo.hxx>
-#include "vcl/svapp.hxx"
-#include "vcl/event.hxx"
-#include "vcl/settings.hxx"
-#include "vcl/i18nhelp.hxx"
-#include "vcl/configsettings.hxx"
-#include "vcl/gradient.hxx"
-#include "vcl/outdev.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/event.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/i18nhelp.hxx>
+#include <vcl/configsettings.hxx>
+#include <vcl/gradient.hxx>
+#include <vcl/outdev.hxx>
 
 #include "unotools/fontcfg.hxx"
 #include "unotools/localedatawrapper.hxx"
