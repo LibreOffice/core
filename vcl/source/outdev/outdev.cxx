@@ -73,23 +73,6 @@ namespace {
 }
 #endif
 
-#ifdef DBG_UTIL
-const char* ImplDbgCheckOutputDevice( const void* pObj )
-{
-    DBG_TESTSOLARMUTEX();
-
-    const OutputDevice* pOutDev = (OutputDevice*)pObj;
-
-    if ( (pOutDev->GetOutDevType() != OUTDEV_DONTKNOW) &&
-         (pOutDev->GetOutDevType() != OUTDEV_WINDOW) &&
-         (pOutDev->GetOutDevType() != OUTDEV_PRINTER) &&
-         (pOutDev->GetOutDevType() != OUTDEV_VIRDEV) )
-        return "OutputDevice data overwrite";
-
-    return NULL;
-}
-#endif
-
 struct ImplObjStack
 {
     ImplObjStack*   mpPrev;
