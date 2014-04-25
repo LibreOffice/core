@@ -15,11 +15,11 @@
 module com {  module sun {  module star { module drawing {
 
 /**
- * Extend XShapes to allow insertion of shapes at different positions.
+ * Allows insertion of shapes at different positions.
  *
  * @since LibreOffice 4.2
  */
-interface XShapes2 : com::sun::star::drawing::XShapes
+interface XShapes2
 {
     /**
      * Insert a new shape to the top of the stack.
