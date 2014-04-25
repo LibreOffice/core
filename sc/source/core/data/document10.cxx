@@ -59,12 +59,13 @@ void ScDocument::PreprocessRangeNameUpdate()
 
 void ScDocument::PostprocessRangeNameUpdate()
 {
+    sc::StartListeningContext aStartListenCxt(*this);
     sc::CompileFormulaContext aCompileCxt(this);
     TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
     for (; it != itEnd; ++it)
     {
         ScTable* p = *it;
-        p->PostprocessRangeNameUpdate(aCompileCxt);
+        p->PostprocessRangeNameUpdate(aStartListenCxt, aCompileCxt);
     }
 }
 
