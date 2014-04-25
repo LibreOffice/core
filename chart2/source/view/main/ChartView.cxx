@@ -3055,6 +3055,9 @@ uno::Sequence< OUString > ChartView::getAvailableServiceNames() throw (uno::Runt
 
 OUString ChartView::dump() throw (uno::RuntimeException, std::exception)
 {
+#if HAVE_FEATURE_DESKTOP
+    // Used for unit tests only, no need to drag in this when cross-compiling
+    // for non-desktop
     impl_updateView();
     if(!mxRootShape.is())
         mxRootShape = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)
@@ -3067,7 +3070,9 @@ OUString ChartView::dump() throw (uno::RuntimeException, std::exception)
         XShapeDumper dumper;
         return dumper.dump(mxRootShape);
     }
-
+#else
+    return OUString();
+#endif
 }
 
 void ChartView::setViewDirty()
