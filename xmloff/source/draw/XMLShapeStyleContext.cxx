@@ -259,7 +259,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
             }
         }
 
-        m_bIsFillStyleAlreadyConverted = sal_True;
+        m_bIsFillStyleAlreadyConverted = true;
     }
 
     struct _ContextID_Index_Pair aContextIDs[] =
