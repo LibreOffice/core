@@ -2,9 +2,16 @@
 
 use strict;
 
+use Getopt::Std;
+
+my %args;
+
+getopts('s', \%args);
+
 my $state = 0;
 my %libofnumber;
 my %sizeoflib;
+my %sizeofsym;
 
 while (<>) {
   if ($state == 0 && m!^# Object files:!) {
@@ -19,9 +26,18 @@ while (<>) {
     if (defined($libofnumber{$2})) {
       $sizeoflib{$libofnumber{$2}} += hex($1);
     }
+    $sizeofsym{$3} = hex($1);
   }
 }
 
-foreach (sort keys(%sizeoflib)) {
-  print $_, ": ", $sizeoflib{$_}, "\n";
+if ($args{'s'}) {
+  # Print symbols in reverse size order
+  foreach (sort { $sizeofsym{$b} <=> $sizeofsym{$a} } keys(%sizeofsym)) {
+    print $_, ": ", $sizeofsym{$_}, "\n";
+  }
+} else {
+  # Print libraries in reverse size order
+  foreach (sort { $sizeoflib{$b} <=> $sizeoflib{$a} } keys(%sizeoflib)) {
+    print $_, ": ", $sizeoflib{$_}, "\n";
+  }
 }
