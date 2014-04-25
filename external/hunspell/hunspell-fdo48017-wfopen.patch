@@ -1,11 +1,12 @@
 diff -ru hunspell/src/hunspell/csutil.cxx build/hunspell/src/hunspell/csutil.cxx
 --- hunspell/src/hunspell/csutil.cxx	2011-02-02 11:35:43.000000000 +0100
 +++ build/hunspell/src/hunspell/csutil.cxx	2014-04-24 19:42:01.373285409 +0200
-@@ -17,6 +17,10 @@
+@@ -17,6 +17,11 @@
    unsigned short clower;
  };
  
 +#ifdef _WIN32
++#include <windows.h>
 +#include <wchar.h>
 +#endif
 +
