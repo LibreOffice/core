@@ -1914,6 +1914,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
             {
                 sal_uInt16 nId = pMenu->GetCurItemId();
                 if(( nId > 0 ) && ( nId < TOOLBOX_MENUITEM_START ))
+                // Items in the "enable/disable" sub-menu
                 {
                     // toggle toolbar button visibility
                     OUString aCommand = pMenu->GetItemCommand( nId );
@@ -1975,6 +1976,14 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                             }
                         }
                     }
+                }
+                else
+                // The list of "hidden items", i.e. items which are disabled on
+                // the toolbar hence shown in the context menu for easier access,
+                // which are managed by the owning toolbar.
+                {
+                    m_pToolBar->TriggerItem( pMenu->GetCurItemId()
+                                             - TOOLBOX_MENUITEM_START );
                 }
                 break;
             }
