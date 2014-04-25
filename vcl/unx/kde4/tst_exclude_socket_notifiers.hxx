@@ -28,6 +28,11 @@
 #include <QtNetwork/qtcpserver.h>
 #include <QtNetwork/qtcpsocket.h>
 
+// This is also used by a configure check.
+#ifndef SAL_OVERRIDE
+#define SAL_OVERRIDE
+#endif
+
 class SocketEventsTester: public QObject
 {
     Q_OBJECT
