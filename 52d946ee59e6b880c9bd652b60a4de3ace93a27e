@@ -194,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_6e5cc326",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-25T09:41:00Z",
+      "side": 1,
+      "message": "I must work from end to start as the user could be entering a composed formula, e.g. \u003dCOS(DAYS(...)). The current code first suggests toward COS and then suggests toward DAYS.\nIt also means I must use mbFormulaChar and I can\u0027t traverse pFormulaData.",
+      "parentUuid": "5a72e520_2e2bab83",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_6b403557",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 4
