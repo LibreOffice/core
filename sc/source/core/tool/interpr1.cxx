@@ -6663,7 +6663,7 @@ void ScInterpreter::ScAggregate()
                     break;
                 default :
                     PushIllegalArgument();
-                    break;
+                    return;
             }
             // TODO: implement filter options
             if ( nAggrFlags != 0x00 )
