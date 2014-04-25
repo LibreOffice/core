@@ -263,7 +263,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
 }
 
 Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< OUString >& aPropertyNames )
-    throw(RuntimeException, std::exception)
+    throw (UnknownPropertyException, RuntimeException, std::exception)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard;
