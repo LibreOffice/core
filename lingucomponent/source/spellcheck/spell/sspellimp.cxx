@@ -300,16 +300,17 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
                     OUString aff;
                     osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
                     osl::FileBase::getSystemPathFromFileURL(affpath,aff);
-                    OString aTmpaff(OU2ENC(aff,osl_getThreadTextEncoding()));
-                    OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));
-
 #if defined(WNT)
                     // workaround for Windows specific problem that the
                     // path length in calls to 'fopen' is limted to somewhat
                     // about 120+ characters which will usually be exceed when
-                    // using dictionaries as extensions.
-                    aTmpaff = Win_GetShortPathName( aff );
-                    aTmpdict = Win_GetShortPathName( dict );
+                    // using dictionaries as extensions. (Hunspell waits UTF-8 encoded
+                    // path with \\?\ long path prefix.)
+                    OString aTmpaff = OUStringToOString(aff, RTL_TEXTENCODING_UTF8));
+                    OString aTmpdict = OUStringToOString(dict, RTL_TEXTENCODING_UTF8));
+#else
+                    OString aTmpaff(OU2ENC(aff,osl_getThreadTextEncoding()));
+                    OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));
 #endif
 
                     aDicts[i] = new Hunspell(aTmpaff.getStr(),aTmpdict.getStr());
