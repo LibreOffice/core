@@ -231,6 +231,50 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
     mpModel->SetChanged();
 }
 
+void SAL_CALL SvxDrawPage::addTop( const uno::Reference< drawing::XShape >& xShape )
+    throw( uno::RuntimeException, std::exception )
+{
+    add(xShape);
+}
+
+void SAL_CALL SvxDrawPage::addBottom( const uno::Reference< drawing::XShape >& xShape )
+    throw( uno::RuntimeException, std::exception )
+{
+    SolarMutexGuard aGuard;
+
+    if ( ( mpModel == NULL ) || ( mpPage == NULL ) )
+        throw lang::DisposedException();
+
+    SvxShape* pShape = SvxShape::getImplementation( xShape );
+
+    if( NULL == pShape )
+        return;
+
+    SdrObject *pObj = pShape->GetSdrObject();
+
+    if(!pObj)
+    {
+        pObj = CreateSdrObject( xShape, true );
+        ENSURE_OR_RETURN_VOID( pObj != NULL, "SvxDrawPage::add: no SdrObject was created!" );
+    }
+    else if ( !pObj->IsInserted() )
+    {
+        pObj->SetModel(mpModel);
+        mpPage->InsertObject( pObj, 0 );
+    }
+
+    pShape->Create( pObj, this );
+    OSL_ENSURE( pShape->GetSdrObject() == pObj, "SvxDrawPage::add: shape does not know about its newly created SdrObject!" );
+
+    if ( !pObj->IsInserted() )
+    {
+        pObj->SetModel(mpModel);
+        mpPage->InsertObject( pObj, 0 );
+    }
+
+    mpModel->SetChanged();
+}
+
 void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
     throw (uno::RuntimeException, std::exception)
 {
@@ -802,14 +846,19 @@ Reference< drawing::XShape >  SvxDrawPage::_CreateShape( SdrObject *pObj ) const
     return xShape;
 }
 
-SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xShape ) throw()
+SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xShape, bool bBeginning ) throw()
 {
     SdrObject* pObj = _CreateSdrObject( xShape );
     if( pObj)
     {
         pObj->SetModel(mpModel);
         if ( !pObj->IsInserted() && !pObj->IsDoNotInsertIntoPageAutomatically() )
-            mpPage->InsertObject( pObj );
+        {
+            if(bBeginning)
+                mpPage->InsertObject( pObj, 0 );
+            else
+                mpPage->InsertObject( pObj );
+        }
     }
 
     return pObj;

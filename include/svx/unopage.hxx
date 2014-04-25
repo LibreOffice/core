@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XShapes2.hpp>
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/drawing/XShapeCombiner.hpp>
 #include <com/sun/star/drawing/XShapeBinder.hpp>
@@ -35,7 +36,7 @@
 #include <editeng/mutxhelp.hxx>
 #include <svx/svxdllapi.h>
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase6.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <svx/unoprov.hxx>
@@ -55,8 +56,9 @@ class SvxShapeConnector;
 #define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
 #define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
 
-class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper5< ::com::sun::star::drawing::XDrawPage,
+class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< ::com::sun::star::drawing::XDrawPage,
                                                ::com::sun::star::drawing::XShapeGrouper,
+                                               ::com::sun::star::drawing::XShapes2,
                                                ::com::sun::star::lang::XServiceInfo,
                                                ::com::sun::star::lang::XUnoTunnel,
                                                ::com::sun::star::lang::XComponent>,
@@ -84,7 +86,7 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper5< ::com::sun:
     void ChangeModel( SdrModel* pNewModel );
 
     // Creation of a SdrObject and insertion into the SdrPage
-    SdrObject *CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw();
+    SdrObject *CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, bool bBeginning = false ) throw();
 
     // Determine Type and Inventor
     void GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, const OUString& aName ) const throw();
@@ -114,6 +116,10 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper5< ::com::sun:
     virtual void SAL_CALL remove( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape )
         throw (::com::sun::star::uno::RuntimeException,
                std::exception) SAL_OVERRIDE;
+
+    // XShapes2
+    virtual void SAL_CALL addTop( const ::com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addBottom( const ::com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
