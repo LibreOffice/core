@@ -1295,6 +1295,12 @@ void Test::testSharedFormulaUpdateOnNamedRangeChange()
     CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(ScAddress(1,7,0)));
     CPPUNIT_ASSERT_EQUAL(2.5, m_pDoc->GetValue(ScAddress(2,0,0)));
 
+    // Change the value of A4 and make sure the value change gets propagated.
+    m_pDoc->SetValue(ScAddress(0,3,0), 0.0);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
