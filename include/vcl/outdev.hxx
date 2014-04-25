@@ -834,12 +834,17 @@ private:
     // not implemented; to detect misuses of DrawOutDev(...OutputDevice&);
     void                        DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&);
 
+    /** @name Pixel functions
+     */
+    ///@{
 public:
     void                        DrawPixel( const Point& rPt );
     void                        DrawPixel( const Point& rPt, const Color& rColor );
     void                        DrawPixel( const Polygon& rPts, const Color* pColors = NULL );
     void                        DrawPixel( const Polygon& rPts, const Color& rColor );
+    ///@}
 
+public:
     void                        DrawRect( const Rectangle& rRect );
     void                        DrawRect( const Rectangle& rRect,
                                           sal_uLong nHorzRount, sal_uLong nVertRound );
