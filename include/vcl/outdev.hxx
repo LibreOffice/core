@@ -490,6 +490,32 @@ public:
     SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
 
+    void                        SetFont( const Font& rNewFont );
+    const Font&                 GetFont() const { return maFont; }
+
+    SystemFontData              GetSysFontData( int nFallbacklevel ) const;
+    SystemTextLayoutData        GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
+                                                      sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                                      const sal_Int32* pDXAry = NULL ) const;
+
+    void                        SetTextColor( const Color& rColor );
+    const Color&                GetTextColor() const { return maTextColor; }
+    void                        SetTextFillColor();
+    void                        SetTextFillColor( const Color& rColor );
+
+    Color                       GetTextFillColor() const;
+    bool                        IsTextFillColor() const { return !maFont.IsTransparent(); }
+    void                        SetTextLineColor();
+    void                        SetTextLineColor( const Color& rColor );
+    const Color&                GetTextLineColor() const { return maTextLineColor; }
+    bool                        IsTextLineColor() const { return (maTextLineColor.GetTransparency() == 0); }
+    void                        SetOverlineColor();
+    void                        SetOverlineColor( const Color& rColor );
+    const Color&                GetOverlineColor() const { return maOverlineColor; }
+    bool                        IsOverlineColor() const { return (maOverlineColor.GetTransparency() == 0); }
+    void                        SetTextAlign( TextAlign eAlign );
+    TextAlign                   GetTextAlign() const { return maFont.GetAlign(); }
+
 protected:
     virtual void                InitFont() const;
     virtual void                ImplReleaseFonts();
@@ -1538,31 +1564,6 @@ public:
     const Wallpaper&            GetBackground() const { return maBackground; }
     bool                        IsBackground() const { return mbBackground; }
 
-    void                        SetFont( const Font& rNewFont );
-    const Font&                 GetFont() const { return maFont; }
-
-    SystemFontData              GetSysFontData( int nFallbacklevel ) const;
-    SystemTextLayoutData        GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
-                                                      sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                                      const sal_Int32* pDXAry = NULL ) const;
-
-    void                        SetTextColor( const Color& rColor );
-    const Color&                GetTextColor() const { return maTextColor; }
-    void                        SetTextFillColor();
-    void                        SetTextFillColor( const Color& rColor );
-
-    Color                       GetTextFillColor() const;
-    bool                        IsTextFillColor() const { return !maFont.IsTransparent(); }
-    void                        SetTextLineColor();
-    void                        SetTextLineColor( const Color& rColor );
-    const Color&                GetTextLineColor() const { return maTextLineColor; }
-    bool                        IsTextLineColor() const { return (maTextLineColor.GetTransparency() == 0); }
-    void                        SetOverlineColor();
-    void                        SetOverlineColor( const Color& rColor );
-    const Color&                GetOverlineColor() const { return maOverlineColor; }
-    bool                        IsOverlineColor() const { return (maOverlineColor.GetTransparency() == 0); }
-    void                        SetTextAlign( TextAlign eAlign );
-    TextAlign                   GetTextAlign() const { return maFont.GetAlign(); }
 
     virtual void                SetSettings( const AllSettings& rSettings );
     const AllSettings&          GetSettings() const { return *mxSettings; }
