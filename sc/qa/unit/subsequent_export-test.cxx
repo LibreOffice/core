@@ -97,6 +97,11 @@ public:
     void testSharedFormulaExportXLSX();
     void testSharedFormulaStringResultExportXLSX();
 
+    void testFunctionsExcel2010( sal_uLong nFormatType );
+    void testFunctionsExcel2010XLSX();
+    void testFunctionsExcel2010XLS();
+    void testFunctionsExcel2010ODS();
+
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
 #if !defined(MACOSX) && !defined(DRAGONFLY)
@@ -126,6 +131,9 @@ public:
     CPPUNIT_TEST(testSharedFormulaExportXLS);
     CPPUNIT_TEST(testSharedFormulaExportXLSX);
     CPPUNIT_TEST(testSharedFormulaStringResultExportXLSX);
+    CPPUNIT_TEST(testFunctionsExcel2010XLSX);
+    CPPUNIT_TEST(testFunctionsExcel2010XLS);
+    CPPUNIT_TEST(testFunctionsExcel2010ODS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1404,6 +1412,36 @@ void ScExportTest::testSharedFormulaStringResultExportXLSX()
     CPPUNIT_ASSERT_MESSAGE("Content check on the reloaded document failed.", bRes);
 
     xDocSh2->DoClose();
+}
+
+void ScExportTest::testFunctionsExcel2010( sal_uLong nFormatType )
+{
+    ScDocShellRef xShell = loadDoc("functions-excel-2010.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell, nFormatType);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    pDoc->CalcAll(); // perform hard re-calculation.
+
+    testFunctionsExcel2010_Impl(pDoc);
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testFunctionsExcel2010XLSX()
+{
+    testFunctionsExcel2010(XLSX);
+}
+
+void ScExportTest::testFunctionsExcel2010XLS()
+{
+    testFunctionsExcel2010(XLS);
+}
+
+void ScExportTest::testFunctionsExcel2010ODS()
+{
+    testFunctionsExcel2010(ODS);
 }
 
 ScExportTest::ScExportTest()
