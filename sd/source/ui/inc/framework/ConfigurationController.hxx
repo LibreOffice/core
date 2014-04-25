@@ -208,8 +208,8 @@ private:
     /** When the called object has already been disposed this method throws
         an exception and does not return.
     */
-    void ThrowIfDisposed (void) const
-        throw (css::lang::DisposedException);
+    void ThrowIfDisposed () const
+        throw (css::lang::DisposedException, css::uno::RuntimeException);
 };
 
 } } // end of namespace sd::framework

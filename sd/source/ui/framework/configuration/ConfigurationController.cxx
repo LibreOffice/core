@@ -625,13 +625,8 @@ void SAL_CALL ConfigurationController::initialize (const Sequence<Any>& aArgumen
     }
 }
 
-
-
-
-
-
-void ConfigurationController::ThrowIfDisposed (void) const
-    throw (::com::sun::star::lang::DisposedException)
+void ConfigurationController::ThrowIfDisposed () const
+    throw (css::lang::DisposedException, css::uno::RuntimeException)
 {
     if (mbIsDisposed)
     {
@@ -646,9 +641,6 @@ void ConfigurationController::ThrowIfDisposed (void) const
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
-
-
-
 
 //===== ConfigurationController::Implementation ===============================
 
