@@ -102,8 +102,8 @@ class ScHTMLExport : public ScExportBase
     static const sal_uInt16 nCellSpacing;
     static const sal_Char sIndentSource[];
 
-    typedef boost::scoped_ptr<std::map<OUString, OUString>> FileNameMapPtr;
-    typedef boost::ptr_vector< ScHTMLGraphEntry > GraphEntryList;
+    typedef boost::scoped_ptr<std::map<OUString, OUString> > FileNameMapPtr;
+    typedef boost::ptr_vector<ScHTMLGraphEntry> GraphEntryList;
 
     GraphEntryList   aGraphList;
     ScHTMLStyle      aHTMLStyle;
