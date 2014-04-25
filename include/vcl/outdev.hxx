@@ -726,6 +726,34 @@ private:
     /** @name Polygon functions
      */
     ///@{
+public:
+    /** Render the given polygon
+
+        The given polygon is stroked with the current LineColor, and
+        filled with the current FillColor. If one of these colors are
+        transparent, the corresponding stroke or fill stays
+        invisible. Start and end point of the polygon are
+        automatically connected.
+
+        @see DrawPolyLine
+     */
+    void                        DrawPolygon( const Polygon& rPoly );
+    void                        DrawPolygon( const basegfx::B2DPolygon& );
+
+    /** Render the given poly-polygon
+
+        The given poly-polygon is stroked with the current LineColor,
+        and filled with the current FillColor. If one of these colors
+        are transparent, the corresponding stroke or fill stays
+        invisible. Start and end points of the contained polygons are
+        automatically connected.
+
+        @see DrawPolyLine
+     */
+    void                        DrawPolyPolygon( const PolyPolygon& rPolyPoly );
+    void                        DrawPolyPolygon( const basegfx::B2DPolyPolygon& );
+
+private:
     SAL_DLLPRIVATE void         ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pClipPolyPoly = NULL );
     SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const PolyPolygon* pClipPolyPoly = NULL );
     SAL_DLLPRIVATE void         ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPolyPoly );
@@ -791,47 +819,26 @@ public:
 
     ///@}
 
+    /** @name Transparency functions
+     */
+    ///@{
 protected:
     virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     void                        DrawInvisiblePolygon( const PolyPolygon& rPolyPoly );
 
 private:
+    bool                        DrawTransparentNatively( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
+    ///@}
+
+private:
     // not implemented; to detect misuses of DrawOutDev(...OutputDevice&);
     void                        DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&);
-
-    bool                        DrawTransparentNatively( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
 
 public:
     void                        DrawPixel( const Point& rPt );
     void                        DrawPixel( const Point& rPt, const Color& rColor );
     void                        DrawPixel( const Polygon& rPts, const Color* pColors = NULL );
     void                        DrawPixel( const Polygon& rPts, const Color& rColor );
-
-    /** Render the given polygon
-
-        The given polygon is stroked with the current LineColor, and
-        filled with the current FillColor. If one of these colors are
-        transparent, the corresponding stroke or fill stays
-        invisible. Start and end point of the polygon are
-        automatically connected.
-
-        @see DrawPolyLine
-     */
-    void                        DrawPolygon( const Polygon& rPoly );
-    void                        DrawPolygon( const basegfx::B2DPolygon& );
-
-    /** Render the given poly-polygon
-
-        The given poly-polygon is stroked with the current LineColor,
-        and filled with the current FillColor. If one of these colors
-        are transparent, the corresponding stroke or fill stays
-        invisible. Start and end points of the contained polygons are
-        automatically connected.
-
-        @see DrawPolyLine
-     */
-    void                        DrawPolyPolygon( const PolyPolygon& rPolyPoly );
-    void                        DrawPolyPolygon( const basegfx::B2DPolyPolygon& );
 
     void                        DrawRect( const Rectangle& rRect );
     void                        DrawRect( const Rectangle& rRect,
