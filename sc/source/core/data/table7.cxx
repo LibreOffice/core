@@ -48,10 +48,11 @@ void ScTable::PreprocessRangeNameUpdate(
         aCol[i].PreprocessRangeNameUpdate(rEndListenCxt, rCompileCxt);
 }
 
-void ScTable::PostprocessRangeNameUpdate( sc::CompileFormulaContext& rCompileCxt )
+void ScTable::PostprocessRangeNameUpdate(
+    sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt )
 {
     for (SCCOL i = 0; i <= MAXCOL; ++i)
-        aCol[i].PostprocessRangeNameUpdate(rCompileCxt);
+        aCol[i].PostprocessRangeNameUpdate(rStartListenCxt, rCompileCxt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

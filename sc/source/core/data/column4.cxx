@@ -199,11 +199,13 @@ public:
 class PostRangeNameUpdateHandler
 {
     ScDocument* mpDoc;
+    sc::StartListeningContext& mrStartListenCxt;
     sc::CompileFormulaContext& mrCompileFormulaCxt;
 
 public:
-    PostRangeNameUpdateHandler( ScDocument* pDoc, sc::CompileFormulaContext& rCompileCxt ) :
+    PostRangeNameUpdateHandler( ScDocument* pDoc, sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt ) :
         mpDoc(pDoc),
+        mrStartListenCxt(rStartListenCxt),
         mrCompileFormulaCxt(rCompileCxt) {}
 
     void operator() ( sc::FormulaGroupEntry& rEntry )
@@ -231,6 +233,7 @@ public:
                 {
                     ScFormulaCell* p = *pp;
                     p->SyncSharedCode();
+                    p->StartListeningTo(mrStartListenCxt);
                     p->SetDirty();
                 }
             }
@@ -251,6 +254,7 @@ public:
                 aComp2.CompileTokenArray();
 
                 pCell->SetCode(pNewCode);
+                pCell->StartListeningTo(mrStartListenCxt);
                 pCell->SetDirty();
             }
         }
@@ -269,12 +273,13 @@ void ScColumn::PreprocessRangeNameUpdate(
     std::for_each(aGroups.begin(), aGroups.end(), aFunc);
 }
 
-void ScColumn::PostprocessRangeNameUpdate( sc::CompileFormulaContext& rCompileCxt )
+void ScColumn::PostprocessRangeNameUpdate(
+    sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt )
 {
     // Collect all formula groups.
     std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
 
-    PostRangeNameUpdateHandler aFunc(pDocument, rCompileCxt);
+    PostRangeNameUpdateHandler aFunc(pDocument, rStartListenCxt, rCompileCxt);
     std::for_each(aGroups.begin(), aGroups.end(), aFunc);
 }
 

@@ -852,7 +852,8 @@ public:
     void PreprocessRangeNameUpdate(
         sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt );
 
-    void PostprocessRangeNameUpdate( sc::CompileFormulaContext& rCompileCxt );
+    void PostprocessRangeNameUpdate(
+        sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt );
 
     ScConditionalFormatList* GetCondFormList();
     const ScConditionalFormatList* GetCondFormList() const;
