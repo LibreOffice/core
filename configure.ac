@@ -1960,13 +1960,24 @@ AC_ARG_WITH(lang,
 AC_ARG_WITH(locales,
     AS_HELP_STRING([--with-locales],
         [Use this option to limit the locale information built in.
-         By default all the locales available is included.
-         This option is completely unrelated to --with-lang.
          Separate multiple locales with space.
-         For the default, all locales, don't use this switch at all.
-         Specifying just the language part of a locale means all matching
-         locales will be included.])
+         Very experimental and might well break stuff.
+         Just a desperate measure to shrink code and data size.
+         By default all the locales available is included.
+         This option is completely unrelated to --with-lang.])
     [
+                          Affects also our character encoding conversion
+                          tables for encodings mainly targeted for a
+                          particular locale, like EUC-CN and EUC-TW for
+                          zh, ISO-2022-JP for ja.
+
+                          Affects also our add-on break iterator data for
+                          some languages.
+
+                          For the default, all locales, don't use this switch at all.
+                          Specifying just the language part of a locale means all matching
+                          locales will be included.
+
                           Usage:     --with-locales="en es pt fr zh kr ja"
     ],
 ,)
