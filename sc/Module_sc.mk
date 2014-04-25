@@ -22,6 +22,12 @@ $(eval $(call gb_Module_add_l10n_targets,sc,\
 	UIConfig_scalc \
 ))
 
+ifneq (,$(ENABLE_OPENCL))
+$(eval $(call gb_Module_add_targets,sc,\
+	Library_scopencl \
+))
+endif
+
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,sc,\
 	Library_scqahelper \
@@ -53,6 +59,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
     CppunitTest_sc_subsequent_filters_test \
     CppunitTest_sc_subsequent_export_test \
+    CppunitTest_sc_opencl_test \
 ))
 
 # Disabled to allow the check tinderbox execute the sd tests
