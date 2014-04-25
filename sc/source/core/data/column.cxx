@@ -2113,6 +2113,16 @@ class UpdateRefOnNonCopy : std::unary_function<sc::FormulaGroupEntry, void>
     ScDocument* mpUndoDoc;
     bool mbUpdated;
 
+    void recompileTokenArray( ScFormulaCell& rTopCell )
+    {
+        // We need to re-compile the token array when a range name is
+        // modified, to correctly reflect the new references in the
+        // name.
+        ScCompiler aComp(&mpCxt->mrDoc, rTopCell.aPos, *rTopCell.GetCode());
+        aComp.SetGrammar(mpCxt->mrDoc.GetGrammar());
+        aComp.CompileTokenArray();
+    }
+
     void updateRefOnShift( sc::FormulaGroupEntry& rGroup )
     {
         if (!rGroup.mbShared)
@@ -2146,7 +2156,10 @@ class UpdateRefOnNonCopy : std::unary_function<sc::FormulaGroupEntry, void>
                 aRes.mbValueChanged = true;
         }
 
-        if (aRes.mbReferenceModified)
+        if (aRes.mbNameModified)
+            recompileTokenArray(*pTop);
+
+        if (aRes.mbReferenceModified || aRes.mbNameModified)
         {
             sc::StartListeningContext aStartCxt(mpCxt->mrDoc);
             sc::EndListeningContext aEndCxt(mpCxt->mrDoc, pOldCode.get());
@@ -2218,14 +2231,7 @@ class UpdateRefOnNonCopy : std::unary_function<sc::FormulaGroupEntry, void>
             sc::AutoCalcSwitch(mpCxt->mrDoc, false);
 
             if (aRes.mbNameModified)
-            {
-                // We need to re-compile the token array when a range name is
-                // modified, to correctly reflect the new references in the
-                // name.
-                ScCompiler aComp(&mpCxt->mrDoc, aPos, *pCode);
-                aComp.SetGrammar(mpCxt->mrDoc.GetGrammar());
-                aComp.CompileTokenArray();
-            }
+                recompileTokenArray(*pTop);
 
             // Perform end-listening, start-listening, and dirtying on all
             // formula cells in the group.
