@@ -22,8 +22,6 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 
-#undef CGM_USER_BREAKPOINT
-
 #define CGM_IMPORT_CGM      0x00000001
 #define CGM_EXPORT_IMPRESS  0x00000100
 #define CGM_EXPORT_META     0x00000200
@@ -61,7 +59,7 @@ class CGM
         double              mnYFraction;
         bool                mbAngReverse;           // AngularDirection
 
-        Graphic*            mpGraphic;              // ifdef CGM_EXPORT_META
+        Graphic*            mpGraphic;
 
         bool                mbStatus;
         bool                mbMetaFile;
@@ -139,10 +137,8 @@ class CGM
                             ~CGM();
 
                             CGM( sal_uInt32 nMode, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel );
-#ifdef CGM_EXPORT_META
         VirtualDevice*      mpVirDev;
         GDIMetaFile*        mpGDIMetaFile;
-#endif
         sal_uInt32              GetBackGroundColor();
         bool                IsValid() const { return mbStatus; };
         bool                IsFinished() const { return mbIsFinished; };
