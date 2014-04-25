@@ -348,6 +348,15 @@ private:
     /** @name Initialization and accessor functions
      */
     ///@{
+protected:
+                                OutputDevice();
+
+private:
+    SAL_DLLPRIVATE              OutputDevice( const OutputDevice& rOutDev );
+
+public:
+    virtual                     ~OutputDevice();
+
 public:
 
     /** Get the graphic context that the output device uses to draw on.
@@ -554,8 +563,6 @@ public:
     ///@}
 
 protected:
-                                OutputDevice();
-
     virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     void                        DrawInvisiblePolygon( const PolyPolygon& rPolyPoly );
 
@@ -564,7 +571,6 @@ protected:
 private:
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
 
-    SAL_DLLPRIVATE              OutputDevice( const OutputDevice& rOutDev );
     SAL_DLLPRIVATE OutputDevice& operator =( const OutputDevice& rOutDev );
 
     SAL_DLLPRIVATE void         ImplClearFontData( bool bNewFontLists );
@@ -577,8 +583,6 @@ private:
     bool                        DrawTransparentNatively( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
 
 public:
-    virtual                     ~OutputDevice();
-
     OutDevType                  GetOutDevType() const { return meOutDevType; }
 
     /** Query an OutputDevice to see whether it supports a specific operation
