@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_ae0f9b2d",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-25T07:54:59Z",
+      "side": 1,
+      "message": "An array of bool is too much memory, I agree. As in my reply to your comment in inputhdl.hxx, I intend to change that to an \u0027array\u0027 of bits.\nAn alternative solution could be to traverse pFormulaData to find the first possible match (or all possible matches when a lis of suggestions is to be shown).",
+      "parentUuid": "5a72e520_4b445974",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_8b5d714b",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2014-04-24T17:50:03Z",
       "side": 1,
       "message": "Bail out early if aStart is empty, because then all the following using nPos doesn\u0027t work.",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_ce1cd76d",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-25T07:54:59Z",
+      "side": 1,
+      "message": "Yes, I should do that and not purely rely on the function to be called only when aStart is not empty (as I think is the case).",
+      "parentUuid": "5a72e520_8b5d714b",
       "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_ee19937a",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-25T07:54:59Z",
+      "side": 1,
+      "message": "I will change this.",
+      "parentUuid": "5a72e520_6b49158b",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_2b4f1d94",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 4
@@ -64,6 +118,24 @@
       "writtenOn": "2014-04-24T17:50:03Z",
       "side": 1,
       "message": "toupper() / tolower() don\u0027t work on sal_Unicode but only unsigned char instead (even if the type is declared as int, but only for the EOF value). These functions further should not be used because in some environments they may be localized and in some they are not. Instead, if upper/lower are really to be used, use the CharClass methods, for example with ScGlobal::pCharClass-\u003euppercase()",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_0e26efba",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1021,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-25T07:54:59Z",
+      "side": 1,
+      "message": "I had my doubts here, but as I only tested with Dutch and English function names, which have simple ASCII characters only, I couldn\u0027t fault my code. That\u0027s why I asked for your expertise.\nI need to change entered characters to the same case as used in ScFuncDesc, so I will change to CharClass methods.",
+      "parentUuid": "5a72e520_2b4f1d94",
       "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -104,6 +176,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_2e2bab83",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-25T07:54:59Z",
+      "side": 1,
+      "message": "I use this construction (work from end to start) to detect non-valid characters (e.g. \u0027(\u0027) asap. But later changes (by me) destroyed the original purpose, i.e. returning 0 when a non-valid character was found.\nI will simplify the code and make that 0 is returned when non-valid characters are entered.",
+      "parentUuid": "5a72e520_0b31810b",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_6b403557",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 4
@@ -121,6 +211,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_4e20e79b",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-25T07:54:59Z",
+      "side": 1,
+      "message": "See my previous comment, I destroyed my own code.",
+      "parentUuid": "5a72e520_6b403557",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_eb7d05b3",
         "filename": "sc/source/ui/inc/inputhdl.hxx",
         "patchSetId": 4
@@ -132,6 +240,24 @@
       "writtenOn": "2014-04-24T17:50:03Z",
       "side": 1,
       "message": "?? this is a bool array of size 2, probably not what was intended?",
+      "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_4e09c72b",
+        "filename": "sc/source/ui/inc/inputhdl.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-25T07:54:59Z",
+      "side": 1,
+      "message": "This is a serious error indeed, and noticed by Kohei too.\nI intend to change this variable (mbFormulaChar or mbitFormulaChar or mnFormulaChar?) to one with as many bits as there are unicode values to be used as mask when testing if a character is a valid formula character.",
+      "parentUuid": "5a72e520_eb7d05b3",
       "revId": "52d946ee59e6b880c9bd652b60a4de3ace93a27e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false

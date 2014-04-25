@@ -16,6 +16,24 @@
       "revId": "880e7587f704bf96c26388198ca32168735f2d0f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_8e12df56",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-25T07:54:59Z",
+      "side": 0,
+      "message": "The intention of this patch is to suggest function names based on the characters entered so far; no lists (with possible matches) are shown as there is no way to select from that list (in version 4 anyway).\n\nCurrently tips are shown inconsistently (as seen by the user) until the function name is entered fully (i.e. \u0027(\u0027 has been added). \n\nThis patch could be extended to showing a list of all possible matches that will shorten as more characters are entered. However, as the user cannot select from this list, the list will be long at first and may hide too much of the sheet and this could slow down calc, I\u0027m reluctant to include that.",
+      "parentUuid": "5a72e520_0b4a6183",
+      "revId": "880e7587f704bf96c26388198ca32168735f2d0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
