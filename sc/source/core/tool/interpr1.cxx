@@ -6703,8 +6703,7 @@ void ScInterpreter::ScAggregate()
         // Get rid of the 1st and 2nd (fished) parameters.
         Pop();
         Pop();
-        if ( !nGlobalError )
-            PushDouble( nVal );
+        PushDouble( nVal );
     }
 }
 
