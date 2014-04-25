@@ -3056,7 +3056,7 @@ uno::Sequence< OUString > ChartView::getAvailableServiceNames() throw (uno::Runt
 OUString ChartView::dump() throw (uno::RuntimeException, std::exception)
 {
 #if HAVE_FEATURE_DESKTOP
-    // Used for unit tests only, no need to drag in this when cross-compiling
+    // Used for unit tests and in chartcontroller only, no need to drag in this when cross-compiling
     // for non-desktop
     impl_updateView();
     uno::Reference< drawing::XShapes > xShapes( m_xDrawPage, uno::UNO_QUERY_THROW );
