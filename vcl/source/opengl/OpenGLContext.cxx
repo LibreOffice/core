@@ -544,8 +544,7 @@ bool OpenGLContext::initWindow()
 {
     const SystemEnvData* sysData(mpWindow->GetSystemData());
     m_aGLWin.hWnd = sysData->hWnd;
-    SystemWindowData winData;
-    winData.nSize = sizeof(winData);
+    SystemWindowData winData = generateWinData(mpWindow);
     m_pChildWindow.reset(new SystemChildWindow(mpWindow, 0, &winData, sal_False));
 
     if( m_pChildWindow )
@@ -571,95 +570,14 @@ bool OpenGLContext::initWindow()
 
 #elif defined( UNX )
 
-namespace {
-
-// we need them before glew can initialize them
-// glew needs an OpenGL context so we need to get the address manually
-void initOpenGLFunctionPointers()
-{
-    glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
-    glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");    // try to find a visual for the current set of attributes
-    glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
-}
-
-}
-
 bool OpenGLContext::initWindow()
 {
-    const SystemEnvData* sysData(mpWindow->GetSystemData());
-
-    m_aGLWin.dpy = reinterpret_cast<Display*>(sysData->pDisplay);
-
-    if( !glXQueryExtension( m_aGLWin.dpy, NULL, NULL ) )
-        return false;
-
-    m_aGLWin.win = sysData->aWindow;
-
-    SAL_INFO("vcl.opengl", "parent window: " << m_aGLWin.win);
-
-    XWindowAttributes xattr;
-    XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &xattr );
-
-    m_aGLWin.screen = XScreenNumberOfScreen( xattr.screen );
-
-    static int visual_attribs[] =
-    {
-        GLX_RED_SIZE,           8,
-        GLX_GREEN_SIZE,         8,
-        GLX_BLUE_SIZE,          8,
-        GLX_ALPHA_SIZE,         8,
-        GLX_DEPTH_SIZE,         24,
-        GLX_X_VISUAL_TYPE,      GLX_TRUE_COLOR,
-        None
-    };
-
-    const SystemEnvData* pChildSysData = NULL;
     m_pChildWindow.reset();
 
-    initOpenGLFunctionPointers();
-
-    int fbCount = 0;
-    GLXFBConfig* pFBC = glXChooseFBConfig( m_aGLWin.dpy,
-            m_aGLWin.screen,
-            visual_attribs, &fbCount );
-
-    if(!pFBC)
+    const SystemEnvData* pChildSysData = 0;
+    SystemWindowData winData = generateWinData(mpWindow);
+    if( winData.pVisual )
     {
-        SAL_WARN("vcl.opengl", "no suitable fb format found");
-        return false;
-    }
-
-    int best_fbc = -1, best_num_samp = -1;
-    for(int i = 0; i < fbCount; ++i)
-    {
-        XVisualInfo* pVi = glXGetVisualFromFBConfig( m_aGLWin.dpy, pFBC[i] );
-        if(pVi)
-        {
-            // pick the one with the most samples per pixel
-            int nSampleBuf = 0;
-            int nSamples = 0;
-            glXGetFBConfigAttrib( m_aGLWin.dpy, pFBC[i], GLX_SAMPLE_BUFFERS, &nSampleBuf );
-            glXGetFBConfigAttrib( m_aGLWin.dpy, pFBC[i], GLX_SAMPLES       , &nSamples  );
-
-            if ( best_fbc < 0 || (nSampleBuf && ( nSamples > best_num_samp )) )
-            {
-                best_fbc = i;
-                best_num_samp = nSamples;
-            }
-        }
-        XFree( pVi );
-    }
-
-    if(best_num_samp > 0)
-        m_aGLWin.bMultiSampleSupported = true;
-
-    XVisualInfo* vi = glXGetVisualFromFBConfig( m_aGLWin.dpy, pFBC[best_fbc] );
-    if( vi )
-    {
-        SystemWindowData winData;
-        winData.nSize = sizeof(winData);
-        SAL_INFO("vcl.opengl", "using VisualID " << vi->visualid);
-        winData.pVisual = (void*)(vi->visual);
         m_pChildWindow.reset(new SystemChildWindow(mpWindow, 0, &winData, false));
         pChildSysData = m_pChildWindow->GetSystemData();
     }
@@ -675,7 +593,26 @@ bool OpenGLContext::initWindow()
 
     m_aGLWin.dpy = reinterpret_cast<Display*>(pChildSysData->pDisplay);
     m_aGLWin.win = pChildSysData->aWindow;
-    m_aGLWin.vi = vi;
+    m_aGLWin.screen = pChildSysData->nScreen;
+
+    // Get visual info
+    {
+        Visual* pVisual = (Visual*)pChildSysData->pVisual;
+        XVisualInfo aTemplate;
+        aTemplate.visualid = XVisualIDFromVisual( pVisual );;
+        int nVisuals = 0;
+        XVisualInfo* pInfos = XGetVisualInfo( m_aGLWin.dpy, VisualIDMask, &aTemplate, &nVisuals );
+        if( nVisuals != 1 )
+            SAL_WARN( "vcl.opengl", "match count for visual id is not 1" );
+        m_aGLWin.vi = pInfos;
+    }
+
+    // Check multi sample support
+    int nSamples = 0;
+    glXGetConfig(m_aGLWin.dpy, m_aGLWin.vi, GLX_SAMPLES, &nSamples);
+    if( nSamples > 0 )
+        m_aGLWin.bMultiSampleSupported = true;
+
     m_aGLWin.GLXExtensions = glXQueryExtensionsString( m_aGLWin.dpy, m_aGLWin.screen );
     SAL_INFO("vcl.opengl", "available GLX extensions: " << m_aGLWin.GLXExtensions);
 
@@ -694,6 +631,19 @@ SystemWindowData OpenGLContext::generateWinData(Window* /*pParent*/)
 }
 
 #elif defined( UNX )
+
+namespace {
+
+// we need them before glew can initialize them
+// glew needs an OpenGL context so we need to get the address manually
+void initOpenGLFunctionPointers()
+{
+    glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
+    glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");    // try to find a visual for the current set of attributes
+    glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
+}
+
+}
 
 SystemWindowData OpenGLContext::generateWinData(Window* pParent)
 {
