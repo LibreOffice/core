@@ -38,19 +38,26 @@ $(i18npool_BIDIR)/dict_%.cxx : \
 
 endif
 
+# Do we want the char_in.brk data? It's for languages in India (and bn_BD)
+ifeq ($(WITH_LOCALES),)
+i18npool_breakiterator_want_in=TRUE
+else ifneq ($(filter bn bn_% gu gu_% hi hi_% kn kn_% ml ml_% or or_% pa pa_% ta ta_% te te_%,$(WITH_LOCALES)),)
+i18npool_breakiterator_want_in=TRUE
+endif
+
 i18npool_BRKTXTS := \
-    char_in.brk \
+    $(if $(i18npool_breakiterator_want_in),char_in.brk) \
     char.brk \
-    count_word_fi.brk \
+    $(call gb_Helper_optional_locale,fi,count_word_fi.brk) \
     count_word.brk \
-    dict_word_fi.brk \
-    dict_word_he.brk \
-    dict_word_hu.brk \
+    $(call gb_Helper_optional_locale,fi,dict_word_fi.brk) \
+    $(call gb_Helper_optional_locale,he,dict_word_he.brk) \
+    $(call gb_Helper_optional_locale,hu,dict_word_hu.brk) \
     dict_word_nodash.brk \
     dict_word_prepostdash.brk \
     dict_word.brk \
-    edit_word_he.brk \
-    edit_word_hu.brk \
+    $(call gb_Helper_optional_locale,he,edit_word_he.brk) \
+    $(call gb_Helper_optional_locale,hu,edit_word_hu.brk) \
     edit_word.brk \
     line.brk \
     sent.brk
