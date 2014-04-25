@@ -3,10 +3,33 @@
 use strict;
 
 use Getopt::Std;
+$Getopt::Std::STANDARD_HELP_VERSION++;
 
 my %args;
 
 getopts('f:s', \%args);
+
+sub VERSION_MESSAGE {
+  # Nothing
+}
+
+sub HELP_MESSAGE {
+  print <<EOS
+This program parses a linker map file, especially one produced when linking an iOS executable.
+
+Input is read from a command-line argument or from standard input.
+
+By default a list of libraries used and the size of code and data
+linked in from each library is printed, in reverse order of size.
+
+The following options are available:
+-s                Print a list of symbols instead.
+-f 'filter'       Filter which libraries are handled. The filter can be
+                  a regular expression, typically several library names
+                  combined with the '|' operator. Makes sense only when
+                  -s is used too.
+EOS
+}
 
 die "The -f switch makes sense only if -s is also used" if (defined($args{'f'}) && !defined($args{'s'}));
 
@@ -46,3 +69,4 @@ if ($args{'s'}) {
     print $_, ": ", $sizeoflib{$_}, "\n";
   }
 }
+
