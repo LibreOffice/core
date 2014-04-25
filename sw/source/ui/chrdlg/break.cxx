@@ -106,19 +106,19 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl)
         const SwPageDesc *pPageDesc;
         if ( 0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos )
             pPageDesc = rSh.FindPageDescByName( m_pPageCollBox->GetSelectEntry(),
-                                                sal_True );
+                                                true );
         else
             pPageDesc = &rSh.GetPageDesc(rSh.GetCurPageDesc());
 
         OSL_ENSURE(pPageDesc, "Page description not found.");
         const sal_uInt16 nUserPage = sal_uInt16(m_pPageNumEdit->GetValue());
-        sal_Bool bOk = sal_True;
+        bool bOk = true;
         switch(pPageDesc->GetUseOn())
         {
             case nsUseOnPage::PD_MIRROR:
             case nsUseOnPage::PD_ALL: break;
             case nsUseOnPage::PD_LEFT: bOk = 0 == nUserPage % 2; break;
-            case nsUseOnPage::PD_RIGHT: bOk = static_cast< sal_Bool >(nUserPage % 2); break;
+            case nsUseOnPage::PD_RIGHT: bOk = 1 == nUserPage % 2; break;
             default:; //prevent warning
         }
         if(!bOk) {
@@ -182,22 +182,22 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS )
 
 void SwBreakDlg::CheckEnable()
 {
-    sal_Bool bEnable = sal_True;
+    bool bEnable = true;
     if ( bHtmlMode )
     {
         m_pColumnBtn->Enable(false);
         m_pPageCollBox->Enable(false);
-        bEnable = sal_False;
+        bEnable = false;
     }
-    else if(rSh.GetFrmType(0,sal_True)
+    else if(rSh.GetFrmType(0,true)
         & (FRMTYPE_FLY_ANY | FRMTYPE_HEADER | FRMTYPE_FOOTER  | FRMTYPE_FOOTNOTE))
     {
         m_pPageBtn->Enable(false);
         if(m_pPageBtn->IsChecked())
             m_pLineBtn->Check(true);
-        bEnable = sal_False;
+        bEnable = false;
     }
-    const sal_Bool bPage = m_pPageBtn->IsChecked();
+    const bool bPage = m_pPageBtn->IsChecked();
     m_pPageCollText->Enable( bPage );
     m_pPageCollBox->Enable ( bPage );
 
@@ -207,7 +207,7 @@ void SwBreakDlg::CheckEnable()
         // position 0 says 'Without' page template.
         const sal_Int32 nPos = m_pPageCollBox->GetSelectEntryPos();
         if ( 0 == nPos || LISTBOX_ENTRY_NOTFOUND == nPos )
-            bEnable = sal_False;
+            bEnable = false;
     }
     m_pPageNumBox->Enable(bEnable);
     m_pPageNumEdit->Enable(bEnable);

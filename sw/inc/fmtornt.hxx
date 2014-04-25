@@ -69,11 +69,11 @@ class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
     SwTwips         nXPos;              ///< Contains *always* the current RelPos.
     sal_Int16       eOrient;
     sal_Int16       eRelation;
-    sal_Bool            bPosToggle : 1; ///< Flip position on even pages.
+    bool            bPosToggle : 1; ///< Flip position on even pages.
 public:
     TYPEINFO_OVERRIDE();
     SwFmtHoriOrient( SwTwips nX = 0, sal_Int16 eHori = com::sun::star::text::HoriOrientation::NONE,
-        sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA, sal_Bool bPos = sal_False );
+        sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA, bool bPos = false );
     inline SwFmtHoriOrient &operator=( const SwFmtHoriOrient &rCpy );
 
     /// "Pure virtual methods" of SfxPoolItem.
@@ -95,8 +95,8 @@ public:
     SwTwips GetPos() const { return nXPos; }
     void    SetPos( SwTwips nNew ) { nXPos = nNew; }
 
-    sal_Bool IsPosToggle() const { return bPosToggle; }
-    void SetPosToggle( sal_Bool bNew ) { bPosToggle = bNew; }
+    bool IsPosToggle() const { return bPosToggle; }
+    void SetPosToggle( bool bNew ) { bPosToggle = bNew; }
 };
 
 inline SwFmtVertOrient &SwFmtVertOrient::operator=( const SwFmtVertOrient &rCpy )
@@ -115,14 +115,14 @@ inline SwFmtHoriOrient &SwFmtHoriOrient::operator=( const SwFmtHoriOrient &rCpy 
     return *this;
 }
 
-inline const SwFmtVertOrient &SwAttrSet::GetVertOrient(sal_Bool bInP) const
+inline const SwFmtVertOrient &SwAttrSet::GetVertOrient(bool bInP) const
     { return (const SwFmtVertOrient&)Get( RES_VERT_ORIENT,bInP); }
-inline const SwFmtHoriOrient &SwAttrSet::GetHoriOrient(sal_Bool bInP) const
+inline const SwFmtHoriOrient &SwAttrSet::GetHoriOrient(bool bInP) const
     { return (const SwFmtHoriOrient&)Get( RES_HORI_ORIENT,bInP); }
 
-inline const SwFmtVertOrient &SwFmt::GetVertOrient(sal_Bool bInP) const
+inline const SwFmtVertOrient &SwFmt::GetVertOrient(bool bInP) const
     { return aSet.GetVertOrient(bInP); }
-inline const SwFmtHoriOrient &SwFmt::GetHoriOrient(sal_Bool bInP) const
+inline const SwFmtHoriOrient &SwFmt::GetHoriOrient(bool bInP) const
     { return aSet.GetHoriOrient(bInP); }
 
 #endif

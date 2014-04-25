@@ -214,8 +214,8 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     SwMailMergeConfigItem& rConfigItem = m_pAddressPage->GetWizard()->GetConfigItem();
     const SwDBData& rCurrentData = rConfigItem.GetCurrentDBData();
 
-    sal_Bool bEnableEdit = sal_False;
-    sal_Bool bEnableOK = sal_True;
+    bool bEnableEdit = false;
+    bool bEnableOK = true;
     m_pListLB->SelectAll( false );
 
     SwDBConfig aDb;
@@ -251,7 +251,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
             }
             catch (const uno::Exception&)
             {
-                bEnableOK = sal_False;
+                bEnableOK = false;
             }
             m_aDBData = rCurrentData;
         }

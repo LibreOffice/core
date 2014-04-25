@@ -363,9 +363,9 @@ SwTableNode* SwNode::FindTableNode()
 }
 
 /// Is the node located in the visible area of the Shell?
-sal_Bool SwNode::IsInVisibleArea( SwViewShell* pSh ) const
+bool SwNode::IsInVisibleArea( SwViewShell* pSh ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwCntntNode* pNd;
 
     if( ND_STARTNODE & nNodeType )
@@ -400,7 +400,7 @@ sal_Bool SwNode::IsInVisibleArea( SwViewShell* pSh ) const
                 } while ( pFrm && !pFrm->IsValid() );
 
             if( !pFrm || pSh->VisArea().IsOver( pFrm->Frm() ) )
-                bRet = sal_True;
+                bRet = true;
         }
     }
 
@@ -417,12 +417,12 @@ bool SwNode::IsInProtectSect() const
 /// Does the node contain anything protected?
 /// I.e.: Area/Frame/Table rows/... including the Anchor for
 /// Frames/Footnotes/...
-sal_Bool SwNode::IsProtect() const
+bool SwNode::IsProtect() const
 {
     const SwNode* pNd = ND_SECTIONNODE == nNodeType ? pStartOfSection : this;
     const SwStartNode* pSttNd = pNd->FindSectionNode();
     if( pSttNd && ((SwSectionNode*)pSttNd)->GetSection().IsProtectFlag() )
-        return sal_True;
+        return true;
 
     if( 0 != ( pSttNd = FindTableBoxStartNode() ) )
     {
@@ -434,14 +434,14 @@ sal_Bool SwNode::IsProtect() const
                                         GetTblBox( pSttNd->GetIndex() );
         //Robust #149568
         if( pBox && pBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
-            return sal_True;
+            return true;
     }
 
     SwFrmFmt* pFlyFmt = GetFlyFmt();
     if( pFlyFmt )
     {
         if( pFlyFmt->GetProtect().IsCntntProtected() )
-            return sal_True;
+            return true;
         const SwFmtAnchor& rAnchor = pFlyFmt->GetAnchor();
         return rAnchor.GetCntntAnchor()
                 ? rAnchor.GetCntntAnchor()->nNode.GetNode().IsProtect()
@@ -456,12 +456,12 @@ sal_Bool SwNode::IsProtect() const
             return pTFtn->GetTxtNode().IsProtect();
     }
 
-    return sal_False;
+    return false;
 }
 
 /// Find the PageDesc that is used to format this node. If the Layout is available,
 /// we search through that. Else we can only do it the hard way by searching onwards through the nodes.
-const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
+const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
                                         sal_uInt32* pPgDescNdIdx ) const
 {
     if ( !GetNodes().IsDocNodes() )
@@ -912,7 +912,7 @@ SwCntntNode::~SwCntntNode()
     // The base class SwClient of SwFrm excludes itself from the dependency list!
     // Thus, we need to delete all Frames in the dependency list.
     if( GetDepends() )
-        DelFrms(sal_True, sal_False);
+        DelFrms(true, false);
 
     delete pCondColl;
 
@@ -1001,17 +1001,17 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
     NotifyClients( pOldValue, pNewValue );
 }
 
-sal_Bool SwCntntNode::InvalidateNumRule()
+bool SwCntntNode::InvalidateNumRule()
 {
     SwNumRule* pRule = 0;
     const SfxPoolItem* pItem;
     if( GetNodes().IsDocNodes() &&
-        0 != ( pItem = GetNoCondAttr( RES_PARATR_NUMRULE, sal_True )) &&
+        0 != ( pItem = GetNoCondAttr( RES_PARATR_NUMRULE, true )) &&
         !((SwNumRuleItem*)pItem)->GetValue().isEmpty() &&
         0 != (pRule = GetDoc()->FindNumRulePtr(
                                 ((SwNumRuleItem*)pItem)->GetValue() ) ) )
     {
-        pRule->SetInvalidRule( sal_True );
+        pRule->SetInvalidRule( true );
     }
     return 0 != pRule;
 }
@@ -1023,8 +1023,8 @@ SwCntntFrm *SwCntntNode::getLayoutFrm( const SwRootFrm* _pRoot,
                                             pPoint, pPos, bCalcFrm );
 }
 
-SwRect SwCntntNode::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
-                                    const sal_Bool bCalcFrm ) const
+SwRect SwCntntNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
+                                    const bool bCalcFrm ) const
 {
     SwRect aRet;
     SwCntntFrm* pFrm = (SwCntntFrm*)::GetFrmOfModify( 0, *(SwModify*)this,
@@ -1034,8 +1034,8 @@ SwRect SwCntntNode::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint
     return aRet;
 }
 
-SwRect SwCntntNode::FindPageFrmRect( const sal_Bool bPrtArea, const Point* pPoint,
-                                    const sal_Bool bCalcFrm ) const
+SwRect SwCntntNode::FindPageFrmRect( const bool bPrtArea, const Point* pPoint,
+                                    const bool bCalcFrm ) const
 {
     SwRect aRet;
     SwFrm* pFrm = ::GetFrmOfModify( 0, *(SwModify*)this,
@@ -1078,14 +1078,14 @@ SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( false );
     }
     return pOldColl;
 }
 
-sal_Bool SwCntntNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
+bool SwCntntNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     if( pIdx->GetIndex() < Len() )
     {
         if( !IsTxtNode() )
@@ -1117,22 +1117,22 @@ sal_Bool SwCntntNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
                 if( 1 == nDone )
                     *pIdx = nPos;
                 else
-                    bRet = sal_False;
+                    bRet = false;
             }
             else if (nPos < rTNd.GetTxt().getLength())
                 ++(*pIdx);
             else
-                bRet = sal_False;
+                bRet = false;
         }
     }
     else
-        bRet = sal_False;
+        bRet = false;
     return bRet;
 }
 
-sal_Bool SwCntntNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
+bool SwCntntNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     if( pIdx->GetIndex() > 0 )
     {
         if( !IsTxtNode() )
@@ -1164,16 +1164,16 @@ sal_Bool SwCntntNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
                 if( 1 == nDone )
                     *pIdx = nPos;
                 else
-                    bRet = sal_False;
+                    bRet = false;
             }
             else if( nPos )
                 (*pIdx)--;
             else
-                bRet = sal_False;
+                bRet = false;
         }
     }
     else
-        bRet = sal_False;
+        bRet = false;
     return bRet;
 }
 
@@ -1227,7 +1227,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
  * flag(bNeedDel) to indicate whether to del corresponding frm even in doc
  * loading process,
  */
-void SwCntntNode::DelFrms( sal_Bool /*bNeedDel*/, sal_Bool bIsDisposeAccTable )
+void SwCntntNode::DelFrms( bool /*bNeedDel*/, bool bIsDisposeAccTable )
 {
     if( !GetDepends() )
         return;
@@ -1342,7 +1342,7 @@ bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
 }
 
 /// @param rAttr the attribute to set
-sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
+bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
 {
     if( !GetpSwAttrSet() ) // Have the Nodes created by the corresponding AttrSets
         NewAttrSet( GetDoc()->GetAttrPool() );
@@ -1352,10 +1352,10 @@ sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( false );
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     // If Modify is locked, we do not send any Modifys
     if( IsModifyLocked() ||
         ( !GetDepends() &&  RES_PARATR_NUMRULE != rAttr.Which() ))
@@ -1366,7 +1366,7 @@ sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
     {
         SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
                   aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
-        if( 0 != ( bRet = AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rAttr, &aOld, &aNew ) ))
+        if( ( bRet = AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rAttr, &aOld, &aNew ) ) )
         {
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
@@ -1378,12 +1378,12 @@ sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
 
 #include <svl/itemiter.hxx>
 
-sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
+bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
 {
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( false );
     }
 
     const SfxPoolItem* pFnd = 0;
@@ -1423,13 +1423,13 @@ sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
                 const_cast<SfxItemSet*>(mpAttrSet.get())->SetParent( &GetFmtColl()->GetAttrSet() );
         }
 
-        return sal_True;
+        return true;
     }
 
     if( !GetpSwAttrSet() ) // Have the AttrsSets created by the corresponding Nodes
         NewAttrSet( GetDoc()->GetAttrPool() );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     // If Modify is locked, do not send any Modifys
     if ( IsModifyLocked() ||
          ( !GetDepends() &&
@@ -1442,7 +1442,7 @@ sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
     {
         SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
                   aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
-        if( 0 != (bRet = AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rSet, &aOld, &aNew )) )
+        if( (bRet = AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rSet, &aOld, &aNew )) )
         {
             // Some special treatment for Attributes
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
@@ -1454,15 +1454,15 @@ sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
 }
 
 // With nWhich it takes the Hint from the Delta array
-sal_Bool SwCntntNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
+bool SwCntntNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 {
     if( !GetpSwAttrSet() )
-        return sal_False;
+        return false;
 
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( false );
     }
 
     // If Modify is locked, do not send out any Modifys
@@ -1489,7 +1489,7 @@ sal_Bool SwCntntNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 
     SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
               aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
-    sal_Bool bRet = 0 != AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, nWhich1, nWhich2, &aOld, &aNew );
+    bool bRet = 0 != AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, nWhich1, nWhich2, &aOld, &aNew );
 
     if( bRet )
     {
@@ -1503,15 +1503,15 @@ sal_Bool SwCntntNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
     return bRet;
 }
 
-sal_Bool SwCntntNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
+bool SwCntntNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
 {
     if( !GetpSwAttrSet() )
-        return sal_False;
+        return false;
 
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( false );
     }
 
     // If Modify is locked, do not send out any Modifys
@@ -1551,7 +1551,7 @@ sal_uInt16 SwCntntNode::ResetAllAttr()
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( false );
     }
 
     // If Modify is locked, do not send out any Modifys
@@ -1567,7 +1567,7 @@ sal_uInt16 SwCntntNode::ResetAllAttr()
 
     SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
               aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
-    sal_Bool bRet = 0 != AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, 0, &aOld, &aNew );
+    bool bRet = 0 != AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, 0, &aOld, &aNew );
 
     if( bRet )
     {
@@ -1581,7 +1581,7 @@ sal_uInt16 SwCntntNode::ResetAllAttr()
     return aNew.Count();
 }
 
-sal_Bool SwCntntNode::GetAttr( SfxItemSet& rSet, sal_Bool bInParent ) const
+bool SwCntntNode::GetAttr( SfxItemSet& rSet, bool bInParent ) const
 {
     if( rSet.Count() )
         rSet.ClearItem();
@@ -1615,7 +1615,7 @@ sal_uInt16 SwCntntNode::ClearItemsFromAttrSet( const std::vector<sal_uInt16>& rW
 }
 
 const SfxPoolItem* SwCntntNode::GetNoCondAttr( sal_uInt16 nWhich,
-                                                sal_Bool bInParents ) const
+                                               bool bInParents ) const
 {
     const SfxPoolItem* pFnd = 0;
     if( pCondColl && pCondColl->GetRegisteredIn() )
@@ -1725,12 +1725,12 @@ void SwCntntNode::SetCondFmtColl( SwFmtColl* pColl )
         if( IsInCache() )
         {
             SwFrm::GetCache().Delete( this );
-            SetInCache( sal_False );
+            SetInCache( false );
         }
     }
 }
 
-sal_Bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
+bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
 {
     const SwNodes& rNds = GetNodes();
     {
@@ -1784,7 +1784,7 @@ sal_Bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
             if( nCond )
             {
                 rTmp.SetCondition( (Master_CollConditions)nCond, 0 );
-                return sal_True;
+                return true;
             }
             pSttNd = pSttNd->GetIndex()
                         ? pSttNd->StartOfSectionNode()
@@ -1807,13 +1807,13 @@ sal_Bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
                 if( pOutlNd->IsOutline())
                 {
                     rTmp.SetCondition( PARA_IN_OUTLINE, pOutlNd->GetAttrOutlineLevel() - 1 );
-                    return sal_True;
+                    return true;
                 }
             }
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 void SwCntntNode::ChkCondColl()
@@ -1932,10 +1932,10 @@ IDocumentListItems& SwNode::getIDocumentListItems() { return *GetDoc(); } // #i8
 const IDocumentMarkAccess* SwNode::getIDocumentMarkAccess() const { return GetDoc()->getIDocumentMarkAccess(); }
 IStyleAccess& SwNode::getIDocumentStyleAccess() { return GetDoc()->GetIStyleAccess(); }
 
-sal_Bool SwNode::IsInRedlines() const
+bool SwNode::IsInRedlines() const
 {
     const SwDoc * pDoc = GetDoc();
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if (pDoc != NULL)
         bResult = pDoc->IsInRedlines(*this);

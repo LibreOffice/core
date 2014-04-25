@@ -57,7 +57,7 @@ SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bD
 {
     // create TabPage
     SwWrapTabPage* pNewPage = (SwWrapTabPage*) SwWrapTabPage::Create(get_content_area(), rSet);
-    pNewPage->SetFormatUsed(sal_False, bDrawMode);
+    pNewPage->SetFormatUsed(false, bDrawMode);
     pNewPage->SetShell(pWrtShell);
     SetTabPage(pNewPage);
 }
@@ -149,14 +149,14 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     }
     else
     {
-        sal_Bool bShowCB = bFormat;
+        bool bShowCB = bFormat;
         if( !bFormat )
         {
             int nSelType = pWrtSh->GetSelectionType();
             if( ( nSelType & nsSelectionType::SEL_GRF ) ||
                 ( nSelType & nsSelectionType::SEL_OLE && GRAPHIC_NONE !=
                             pWrtSh->GetIMapGraphic().GetType() ))
-                bShowCB = sal_True;
+                bShowCB = true;
         }
         if( bShowCB )
         {
@@ -190,7 +190,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
         m_pWrapAnchorOnlyCB->Enable( false );
     }
 
-    sal_Bool bContour = rSurround.IsContour();
+    bool bContour = rSurround.IsContour();
     m_pWrapOutlineCB->Check( bContour );
     m_pWrapOutsideCB->Check( rSurround.IsOutside() );
     m_pWrapThroughRB->Enable(!m_pWrapOutlineCB->IsChecked());
@@ -302,7 +302,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
         aSur.SetSurround(SURROUND_IDEAL);
 
     aSur.SetAnchorOnly( m_pWrapAnchorOnlyCB->IsChecked() );
-    sal_Bool bContour = m_pWrapOutlineCB->IsChecked() && m_pWrapOutlineCB->IsEnabled();
+    bool bContour = m_pWrapOutlineCB->IsChecked() && m_pWrapOutlineCB->IsEnabled();
     aSur.SetContour( bContour );
 
     if ( bContour )
@@ -325,8 +325,8 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
         }
     }
 
-    sal_Bool bTopMod = m_pTopMarginED->IsValueModified();
-    sal_Bool bBottomMod = m_pBottomMarginED->IsValueModified();
+    bool bTopMod = m_pTopMarginED->IsValueModified();
+    bool bBottomMod = m_pBottomMarginED->IsValueModified();
 
     SvxULSpaceItem aUL( RES_UL_SPACE );
     aUL.SetUpper((sal_uInt16)m_pTopMarginED->Denormalize(m_pTopMarginED->GetValue(FUNIT_TWIP)));
@@ -342,8 +342,8 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
         }
     }
 
-    sal_Bool bLeftMod = m_pLeftMarginED->IsValueModified();
-    sal_Bool bRightMod = m_pRightMarginED->IsValueModified();
+    bool bLeftMod = m_pLeftMarginED->IsValueModified();
+    bool bRightMod = m_pRightMarginED->IsValueModified();
 
     SvxLRSpaceItem aLR( RES_LR_SPACE );
     aLR.SetLeft((sal_uInt16)m_pLeftMarginED->Denormalize(m_pLeftMarginED->GetValue(FUNIT_TWIP)));
@@ -361,8 +361,8 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 
     if ( bDrawMode )
     {
-        sal_Bool bChecked = m_pWrapTransparentCB->IsChecked() && m_pWrapTransparentCB->IsEnabled();
-        if (m_pWrapTransparentCB->GetSavedValue() != bChecked)
+        bool bChecked = m_pWrapTransparentCB->IsChecked() && m_pWrapTransparentCB->IsEnabled();
+        if ((m_pWrapTransparentCB->GetSavedValue() == 1) != bChecked)
             bModified |= 0 != rSet.Put(SfxInt16Item(FN_DRAW_WRAP_DLG, bChecked ? 0 : 1));
     }
 
@@ -377,7 +377,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
     // anchor
     const SwFmtAnchor &rAnch = (const SwFmtAnchor&)rSet.Get(RES_ANCHOR);
     nAnchorId = rAnch.GetAnchorId();
-    sal_Bool bEnable = (nAnchorId != FLY_AS_CHAR);
+    bool bEnable = (nAnchorId != FLY_AS_CHAR);
 
     if (!bDrawMode)
     {
@@ -612,7 +612,7 @@ IMPL_LINK( SwWrapTabPage, WrapTypeHdl, RadioButton *, pBtn )
 
 IMPL_LINK_NOARG(SwWrapTabPage, ContourHdl)
 {
-    sal_Bool bEnable = !(m_pWrapOutlineCB->IsChecked() && m_pWrapOutlineCB->IsEnabled());
+    bool bEnable = !(m_pWrapOutlineCB->IsChecked() && m_pWrapOutlineCB->IsEnabled());
 
     m_pWrapOutsideCB->Enable(!bEnable);
 
@@ -643,7 +643,7 @@ void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 void SwWrapTabPage::ApplyImageList()
 {
     m_pWrapThroughRB->SetModeRadioImage(get<FixedImage>("imgthrough")->GetImage());
-    sal_Bool bWrapOutline =  !m_pWrapOutlineCB->IsChecked();
+    bool bWrapOutline =  !m_pWrapOutlineCB->IsChecked();
     if(bWrapOutline)
     {
         m_pNoWrapRB->SetModeRadioImage(get<FixedImage>("imgnone")->GetImage());

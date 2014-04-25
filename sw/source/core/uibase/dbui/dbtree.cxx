@@ -86,7 +86,7 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
     virtual void SAL_CALL elementReplaced( const ContainerEvent& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
-    sal_Bool                        HasContext();
+    bool                        HasContext();
     SwWrtShell*                 GetWrtShell() { return pWrtSh;}
     void                        SetWrtShell(SwWrtShell& rSh) { pWrtSh = &rSh;}
     Reference<XDatabaseContext>    GetContext() const {return xDBContext;}
@@ -137,7 +137,7 @@ void SwDBTreeList_Impl::elementReplaced( const ContainerEvent& rEvent ) throw (R
     elementRemoved(rEvent);
 }
 
-sal_Bool SwDBTreeList_Impl::HasContext()
+bool SwDBTreeList_Impl::HasContext()
 {
     if(!xDBContext.is())
     {
@@ -239,7 +239,7 @@ void    SwDBTreeList::AddDataSource(const OUString& rSource)
     SvTreeListBox::Select(pEntry);
 }
 
-void SwDBTreeList::ShowColumns(sal_Bool bShowCol)
+void SwDBTreeList::ShowColumns(bool bShowCol)
 {
     if (bShowCol != bShowColumns)
     {

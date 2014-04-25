@@ -152,11 +152,11 @@ public:
 
 class SwHyphIter : public SwLinguIter
 {
-    sal_Bool bOldIdle;
+    bool bOldIdle;
     void DelSoftHyph( SwPaM &rPam );
 
 public:
-    SwHyphIter() : bOldIdle(sal_False) {}
+    SwHyphIter() : bOldIdle(false) {}
 
     void Start( SwEditShell *pSh, SwDocPositions eStart, SwDocPositions eEnd );
     void End();
@@ -165,7 +165,7 @@ public:
 
     uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
-    sal_Bool IsAuto();
+    bool IsAuto();
     void InsertSoftHyph( const sal_Int32 nHyphPos );
     void ShowSelection();
 };
@@ -221,7 +221,7 @@ void SwLinguIter::_Start( SwEditShell *pShell, SwDocPositions eStart,
             pSh->Push();
             pSh->DestroyCrsr();
         }
-        pSh->Pop( sal_False );
+        pSh->Pop( false );
     }
     else
     {
@@ -260,7 +260,7 @@ void SwLinguIter::_End(bool bRestoreSelection)
     if(bRestoreSelection)
     {
         while( nCrsrCnt-- )
-            pSh->Pop( sal_False );
+            pSh->Pop( false );
 
         pSh->KillPams();
         pSh->ClearMark();
@@ -323,7 +323,7 @@ uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         }
         if( bGoOn )
         {
-            pMySh->Pop( sal_False );
+            pMySh->Pop( false );
             pCrsr = pMySh->GetCrsr();
             if ( *pCrsr->GetPoint() > *pCrsr->GetMark() )
                 pCrsr->Exchange();
@@ -391,7 +391,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         }
         if( bGoOn )
         {
-            pMySh->Pop( sal_False );
+            pMySh->Pop( false );
             pCrsr = pMySh->GetCrsr();
             if ( *pCrsr->GetPoint() > *pCrsr->GetMark() )
                 pCrsr->Exchange();
@@ -410,7 +410,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
     return makeAny( aConvText );
 }
 
-sal_Bool SwHyphIter::IsAuto()
+bool SwHyphIter::IsAuto()
 {
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
     return xProp.is() ? *(sal_Bool*)xProp->getPropertyValue(
@@ -441,7 +441,7 @@ void SwHyphIter::Start( SwEditShell *pShell, SwDocPositions eStart, SwDocPositio
 
     // nothing to do (at least not in the way as in the "else" part)
     bOldIdle = pShell->GetViewOptions()->IsIdle();
-    ((SwViewOption*)pShell->GetViewOptions())->SetIdle( sal_False );
+    ((SwViewOption*)pShell->GetViewOptions())->SetIdle( false );
     _Start( pShell, eStart, eEnd );
 }
 
@@ -496,7 +496,7 @@ uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 
         if( bGoOn )
         {
-            pMySh->Pop( sal_False );
+            pMySh->Pop( false );
             pCrsr = pMySh->GetCrsr();
             if ( *pCrsr->GetPoint() > *pCrsr->GetMark() )
                 pCrsr->Exchange();
@@ -588,12 +588,12 @@ bool SwEditShell::HasLastSentenceGotGrammarChecked() const
     return bTextWasGrammarChecked;
 }
 
-sal_Bool SwEditShell::HasConvIter() const
+bool SwEditShell::HasConvIter() const
 {
     return 0 != pConvIter;
 }
 
-sal_Bool SwEditShell::HasHyphIter() const
+bool SwEditShell::HasHyphIter() const
 {
     return 0 != pHyphIter;
 }
@@ -879,7 +879,7 @@ uno::Reference< XSpellAlternatives >
                 const sal_Int32 nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
                 RightMargin();
                 const sal_Int32 nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
-                Pop(sal_False);
+                Pop(false);
 
                 // make sure the selection build later from the data below does
                 // not "in word" character to the left and right in order to
@@ -898,7 +898,7 @@ uno::Reference< XSpellAlternatives >
                 pCrsr = GetCrsr();
                 *pCrsr->GetPoint() = aPos;
                 pCrsr->SetMark();
-                ExtendSelection( sal_True, nLen - nLeft - nRight );
+                ExtendSelection( true, nLen - nLeft - nRight );
                 // don't determine the rectangle in the current line
                 const sal_Int32 nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
                 // take one less than the line end - otherwise the next line would be calculated
@@ -910,7 +910,7 @@ uno::Reference< XSpellAlternatives >
                 rContent = nWordStart;
                 SwRect aStartRect;
                 SwCrsrMoveState aState;
-                aState.bRealWidth = sal_True;
+                aState.bRealWidth = true;
                 SwCntntNode* pCntntNode = pCrsr->GetCntntNode();
                 SwCntntFrm *pCntntFrame = pCntntNode->getLayoutFrm( GetLayout(), pPt, pCrsr->GetPoint(), false);
 
@@ -919,7 +919,7 @@ uno::Reference< XSpellAlternatives >
                 SwRect aEndRect;
                 pCntntFrame->GetCharRect( aEndRect, *pCrsr->GetPoint(),&aState );
                 rSelectRect = aStartRect.Union( aEndRect );
-                Pop(sal_False);
+                Pop(false);
             }
         }
     }
@@ -1003,7 +1003,7 @@ bool SwEditShell::GetGrammarCorrection(
                 const sal_Int32 nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
                 RightMargin();
                 const sal_Int32 nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
-                Pop(sal_False);
+                Pop(false);
 
                 // make sure the selection build later from the data below does
                 // not include "in word" character to the left and right in
@@ -1022,7 +1022,7 @@ bool SwEditShell::GetGrammarCorrection(
                 pCrsr = GetCrsr();
                 *pCrsr->GetPoint() = aPos;
                 pCrsr->SetMark();
-                ExtendSelection( sal_True, nLen - nLeft - nRight );
+                ExtendSelection( true, nLen - nLeft - nRight );
                 // don't determine the rectangle in the current line
                 const sal_Int32 nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
                 // take one less than the line end - otherwise the next line would be calculated
@@ -1034,7 +1034,7 @@ bool SwEditShell::GetGrammarCorrection(
                 rContent = nWordStart;
                 SwRect aStartRect;
                 SwCrsrMoveState aState;
-                aState.bRealWidth = sal_True;
+                aState.bRealWidth = true;
                 SwCntntNode* pCntntNode = pCrsr->GetCntntNode();
                 SwCntntFrm *pCntntFrame = pCntntNode->getLayoutFrm( GetLayout(), pPt, pCrsr->GetPoint(), false);
 
@@ -1043,7 +1043,7 @@ bool SwEditShell::GetGrammarCorrection(
                 SwRect aEndRect;
                 pCntntFrame->GetCharRect( aEndRect, *pCrsr->GetPoint(),&aState );
                 rSelectRect = aStartRect.Union( aEndRect );
-                Pop(sal_False);
+                Pop(false);
             }
         }
     }
@@ -1232,7 +1232,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         // restore cursor to the end of the sentence
         // (will work also if the sentence length has changed,
         // since cursors get updated automatically!)
-        Pop( sal_False );
+        Pop( false );
 
         // collapse cursor to the end of the modified sentence
         *pCrsr->Start() = *pCrsr->End();
@@ -1373,7 +1373,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
         }
         if( bGoOn )
         {
-            pMySh->Pop( sal_False );
+            pMySh->Pop( false );
             pCrsr = pMySh->GetCrsr();
             if ( *pCrsr->GetPoint() > *pCrsr->GetMark() )
                 pCrsr->Exchange();
@@ -1401,7 +1401,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
         // the cursor has to be collapsed on the left to go to the start of the sentence - if sentence ends inside of the error
         pCrsr->DeleteMark();
         pCrsr->SetMark();
-        bool bStartSent = 0 != pMySh->GoStartSentence();
+        bool bStartSent = pMySh->GoStartSentence();
         SpellContentPositions aDeletedRedlines = lcl_CollectDeletedRedlines(pMySh);
         if(bStartSent)
         {

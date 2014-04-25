@@ -44,7 +44,7 @@ void SwView::Activate(bool bMDIActivate)
 {
     // fdo#40438 Update the layout to make sure everything is correct before showing the content
     m_pWrtShell->StartAction();
-    m_pWrtShell->EndAction( sal_True );
+    m_pWrtShell->EndAction( true );
 
     // Register the current View at the DocShell.
     // The view remains active at the DocShell until it will
@@ -63,14 +63,14 @@ void SwView::Activate(bool bMDIActivate)
     if(m_bMakeSelectionVisible)
     {
         m_pWrtShell->MakeSelVisible();
-        m_bMakeSelectionVisible = sal_False;
+        m_bMakeSelectionVisible = false;
     }
     m_pHRuler->SetActive( true );
     m_pVRuler->SetActive( true );
 
     if ( bMDIActivate )
     {
-        m_pWrtShell->ShGetFcs(sal_False);     // Selections visible
+        m_pWrtShell->ShGetFcs(false);     // Selections visible
 
         if( !m_sSwViewData.isEmpty() )
         {

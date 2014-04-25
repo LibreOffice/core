@@ -40,9 +40,9 @@
 #include <tblsel.hxx>
 #include <sfx2/request.hxx>
 
-static sal_Bool bCheck1 = sal_True;
-static sal_Bool bCheck2 = sal_False;
-static sal_Bool bCheck3 = sal_False;
+static bool bCheck1 = true;
+static bool bCheck2 = false;
+static bool bCheck3 = false;
 
 static sal_uInt16 nCol1 = 1;
 static sal_uInt16 nCol2 = 1;
@@ -54,11 +54,11 @@ static sal_uInt16 nType3 = 0;
 
 static sal_uInt16 nLang = LANGUAGE_NONE;
 
-static sal_Bool   bAsc1  = sal_True;
-static sal_Bool   bAsc2  = sal_True;
-static sal_Bool   bAsc3  = sal_True;
-static sal_Bool   bCol   = sal_False;
-static sal_Bool   bCsSens= sal_False;
+static bool   bAsc1  = true;
+static bool   bAsc2  = true;
+static bool   bAsc3  = true;
+static bool   bCol   = false;
+static bool   bCsSens= false;
 
 static sal_Unicode    cDeli  = '\t';
 
@@ -346,11 +346,11 @@ void SwSortDlg::Apply()
     aOptions.bTable = rSh.IsTableMode();
     aOptions.bIgnoreCase = !bCsSens;
 
-    sal_Bool bRet;
+    bool bRet;
     {
         SwWait aWait( *rSh.GetView().GetDocShell(), true );
         rSh.StartAllAction();
-        if( 0 != (bRet = rSh.Sort( aOptions )))
+        if( (bRet = rSh.Sort( aOptions )))
             rSh.SetModified();
         rSh.EndAllAction();
     }
@@ -361,7 +361,7 @@ void SwSortDlg::Apply()
 
 IMPL_LINK( SwSortDlg, DelimHdl, RadioButton*, pButton )
 {
-    sal_Bool bEnable = pButton == m_pDelimFreeRB && m_pDelimFreeRB->IsEnabled();
+    bool bEnable = pButton == m_pDelimFreeRB && m_pDelimFreeRB->IsEnabled();
     m_pDelimEdt->Enable( bEnable );
     m_pDelimPB->Enable( bEnable );
     return 0;

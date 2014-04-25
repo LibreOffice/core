@@ -102,7 +102,7 @@ public:
 
     void RegisterToFieldType( SwFieldType& );
     bool IsFldInDoc() const;
-    sal_Bool IsProtect() const;
+    bool IsProtect() const;
 
     SAL_DLLPRIVATE ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextField> const& GetXTextField() const

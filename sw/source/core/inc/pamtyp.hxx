@@ -44,24 +44,24 @@ bool GoInCntntCellsSkipHidden( SwPaM&, SwMoveFn);
 const SwTxtAttr* GetFrwrdTxtHint( const SwpHints&, sal_uInt16&, sal_Int32 );
 const SwTxtAttr* GetBkwrdTxtHint( const SwpHints&, sal_uInt16&, sal_Int32 );
 
-sal_Bool GoNext(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
-sal_Bool GoPrevious(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
-SW_DLLPUBLIC SwCntntNode* GoNextNds( SwNodeIndex * pIdx, sal_Bool );
-SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, sal_Bool );
+bool GoNext(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
+bool GoPrevious(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
+SW_DLLPUBLIC SwCntntNode* GoNextNds( SwNodeIndex * pIdx, bool );
+SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, bool );
 
 // --------- Funktionsdefinitionen fuer die SwCrsrShell --------------
 
-sal_Bool GoPrevPara( SwPaM&, SwPosPara);
-sal_Bool GoCurrPara( SwPaM&, SwPosPara);
-sal_Bool GoNextPara( SwPaM&, SwPosPara);
-sal_Bool GoPrevSection( SwPaM&, SwPosSection);
-sal_Bool GoCurrSection( SwPaM&, SwPosSection);
-sal_Bool GoNextSection( SwPaM&, SwPosSection);
+bool GoPrevPara( SwPaM&, SwPosPara);
+bool GoCurrPara( SwPaM&, SwPosPara);
+bool GoNextPara( SwPaM&, SwPosPara);
+bool GoPrevSection( SwPaM&, SwPosSection);
+bool GoCurrSection( SwPaM&, SwPosSection);
+bool GoNextSection( SwPaM&, SwPosSection);
 
 // ------------ Typedefiniton fuer Funktionen ----------------------
 
-typedef sal_Bool (*GoNd)( SwNode*, SwIndex*, sal_uInt16 );
-typedef SwCntntNode* (*GoNds)( SwNodeIndex*, sal_Bool );
+typedef bool (*GoNd)( SwNode*, SwIndex*, sal_uInt16 );
+typedef SwCntntNode* (*GoNds)( SwNodeIndex*, bool );
 typedef void (*GoDoc)( SwPosition* );
 typedef void (*GoSection)( SwPosition* );
 typedef bool (SwPosition:: *CmpOp)( const SwPosition& ) const;
@@ -83,7 +83,7 @@ struct SwMoveFnCollection
 };
 
 // --------- Funktionsdefinitionen fuers Suchen --------------
-SwCntntNode* GetNode( SwPaM&, sal_Bool&, SwMoveFn, sal_Bool bInReadOnly = sal_False );
+SwCntntNode* GetNode( SwPaM&, bool&, SwMoveFn, bool bInReadOnly = false );
 
 #endif
 

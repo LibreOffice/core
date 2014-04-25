@@ -54,19 +54,19 @@ class SwPageFrm: public SwFtnBossFrm
 
     sal_uInt16  nPhyPageNum;        //Physikalische Seitennummer.
 
-    sal_Bool bInvalidCntnt      :1;
-    sal_Bool bInvalidLayout     :1;
-    sal_Bool bInvalidFlyCntnt   :1;
-    sal_Bool bInvalidFlyLayout  :1;
-    sal_Bool bInvalidFlyInCnt   :1;
-    sal_Bool bFtnPage           :1; //Diese Seite ist fuer Dokumentende-Fussnoten.
-    sal_Bool bEmptyPage         :1; //Dies ist eine explizite Leerseite
-    sal_Bool bEndNotePage       :1; //'Fussnotenseite' fuer Endnoten
-    sal_Bool bInvalidSpelling   :1; //Das Online-Spelling ist gefordert
-    sal_Bool bInvalidSmartTags :1;  //checking for smarttags is needed
-    sal_Bool bInvalidAutoCmplWrds :1; //Auto-Complete Wordliste aktualisieren
-    sal_Bool bInvalidWordCount  :1;
-    sal_Bool bHasGrid           :1; // Grid for Asian layout
+    bool bInvalidCntnt      :1;
+    bool bInvalidLayout     :1;
+    bool bInvalidFlyCntnt   :1;
+    bool bInvalidFlyLayout  :1;
+    bool bInvalidFlyInCnt   :1;
+    bool bFtnPage           :1; //Diese Seite ist fuer Dokumentende-Fussnoten.
+    bool bEmptyPage         :1; //Dies ist eine explizite Leerseite
+    bool bEndNotePage       :1; //'Fussnotenseite' fuer Endnoten
+    bool bInvalidSpelling   :1; //Das Online-Spelling ist gefordert
+    bool bInvalidSmartTags :1;  //checking for smarttags is needed
+    bool bInvalidAutoCmplWrds :1; //Auto-Complete Wordliste aktualisieren
+    bool bInvalidWordCount  :1;
+    bool bHasGrid           :1; // Grid for Asian layout
 
     static const sal_Int8 mnShadowPxWidth;
 
@@ -141,13 +141,13 @@ public:
     //Spezialisiertes GetCntntPos() fuer Felder in Rahmen.
     void GetCntntPosition( const Point &rPt, SwPosition &rPos ) const;
 
-    sal_Bool IsEmptyPage() const { return bEmptyPage; } //explizite Leerseite.
+    bool IsEmptyPage() const { return bEmptyPage; } //explizite Leerseite.
 
     void    UpdateFtnNum();
 
     //Immer nach dem Paste rufen. Erzeugt die Seitengeb. Rahmen und Formatiert
     //generischen Inhalt.
-    void PreparePage( sal_Bool bFtn );
+    void PreparePage( bool bFtn );
 
     //Schickt an alle ContentFrames ein Prepare wg. geaenderter Registervorlage
     void PrepareRegisterChg();
@@ -168,9 +168,9 @@ public:
     virtual void Cut() SAL_OVERRIDE;
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
     virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;
-    void CheckGrid( sal_Bool bInvalidate );
+    void CheckGrid( bool bInvalidate );
     void PaintGrid( OutputDevice* pOut, SwRect &rRect ) const;
-    sal_Bool HasGrid() const { return bHasGrid; }
+    bool HasGrid() const { return bHasGrid; }
 
     void PaintDecorators( ) const;
     virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
@@ -183,10 +183,10 @@ public:
     void RefreshSubsidiary( const SwRect& ) const;
 
     //Fussnotenschnittstelle
-    sal_Bool IsFtnPage() const                                  { return bFtnPage; }
-    sal_Bool IsEndNotePage() const                              { return bEndNotePage; }
-    void SetFtnPage( sal_Bool b )                               { bFtnPage = b; }
-    void SetEndNotePage( sal_Bool b )                           { bEndNotePage = b; }
+    bool IsFtnPage() const                                  { return bFtnPage; }
+    bool IsEndNotePage() const                              { return bEndNotePage; }
+    void SetFtnPage( bool b )                               { bFtnPage = b; }
+    void SetEndNotePage( bool b )                           { bEndNotePage = b; }
 
     inline  sal_uInt16 GetPhyPageNum() const        { return nPhyPageNum;}
     inline  void SetPhyPageNum( sal_uInt16 nNum )   { nPhyPageNum = nNum;}
@@ -213,19 +213,19 @@ public:
     inline void ValidateSmartTags() const;
     inline void ValidateAutoCompleteWords() const;
     inline void ValidateWordCount() const;
-    inline sal_Bool IsInvalid() const;
-    inline sal_Bool IsInvalidFly() const;
-    sal_Bool IsRightShadowNeeded() const;
-    sal_Bool IsLeftShadowNeeded() const;
-    sal_Bool IsInvalidFlyLayout() const { return bInvalidFlyLayout; }
-    sal_Bool IsInvalidFlyCntnt() const { return bInvalidFlyCntnt; }
-    sal_Bool IsInvalidFlyInCnt() const { return bInvalidFlyInCnt; }
-    sal_Bool IsInvalidLayout() const { return bInvalidLayout; }
-    sal_Bool IsInvalidCntnt() const { return (bInvalidCntnt || bInvalidFlyInCnt); }
-    sal_Bool IsInvalidSpelling() const { return bInvalidSpelling; }
-    sal_Bool IsInvalidSmartTags() const { return bInvalidSmartTags; }
-    sal_Bool IsInvalidAutoCompleteWords() const { return bInvalidAutoCmplWrds; }
-    sal_Bool IsInvalidWordCount() const { return bInvalidWordCount; }
+    inline bool IsInvalid() const;
+    inline bool IsInvalidFly() const;
+    bool IsRightShadowNeeded() const;
+    bool IsLeftShadowNeeded() const;
+    bool IsInvalidFlyLayout() const { return bInvalidFlyLayout; }
+    bool IsInvalidFlyCntnt() const { return bInvalidFlyCntnt; }
+    bool IsInvalidFlyInCnt() const { return bInvalidFlyInCnt; }
+    bool IsInvalidLayout() const { return bInvalidLayout; }
+    bool IsInvalidCntnt() const { return (bInvalidCntnt || bInvalidFlyInCnt); }
+    bool IsInvalidSpelling() const { return bInvalidSpelling; }
+    bool IsInvalidSmartTags() const { return bInvalidSmartTags; }
+    bool IsInvalidAutoCompleteWords() const { return bInvalidAutoCmplWrds; }
+    bool IsInvalidWordCount() const { return bInvalidWordCount; }
 
     /** SwPageFrm::GetDrawBackgrdColor
 
@@ -348,84 +348,84 @@ inline const SwCntntFrm *SwPageFrm::FindLastBodyCntnt() const
 }
 inline void SwPageFrm::InvalidateFlyLayout() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyLayout = sal_True;
+    ((SwPageFrm*)this)->bInvalidFlyLayout = true;
 }
 inline void SwPageFrm::InvalidateFlyCntnt() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyCntnt = sal_True;
+    ((SwPageFrm*)this)->bInvalidFlyCntnt = true;
 }
 inline void SwPageFrm::InvalidateFlyInCnt() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyInCnt = sal_True;
+    ((SwPageFrm*)this)->bInvalidFlyInCnt = true;
 }
 inline void SwPageFrm::InvalidateLayout() const
 {
-    ((SwPageFrm*)this)->bInvalidLayout = sal_True;
+    ((SwPageFrm*)this)->bInvalidLayout = true;
 }
 inline void SwPageFrm::InvalidateCntnt() const
 {
-    ((SwPageFrm*)this)->bInvalidCntnt = sal_True;
+    ((SwPageFrm*)this)->bInvalidCntnt = true;
 }
 inline void SwPageFrm::InvalidateSpelling() const
 {
-    ((SwPageFrm*)this)->bInvalidSpelling = sal_True;
+    ((SwPageFrm*)this)->bInvalidSpelling = true;
 }
 
 inline void SwPageFrm::InvalidateSmartTags() const
 {
-   ((SwPageFrm*)this)->bInvalidSmartTags = sal_True;
+   ((SwPageFrm*)this)->bInvalidSmartTags = true;
 }
 inline void SwPageFrm::InvalidateAutoCompleteWords() const
 {
-    ((SwPageFrm*)this)->bInvalidAutoCmplWrds = sal_True;
+    ((SwPageFrm*)this)->bInvalidAutoCmplWrds = true;
 }
 inline void SwPageFrm::InvalidateWordCount() const
 {
-    ((SwPageFrm*)this)->bInvalidWordCount = sal_True;
+    ((SwPageFrm*)this)->bInvalidWordCount = true;
 }
 inline void SwPageFrm::ValidateFlyLayout() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyLayout = sal_False;
+    ((SwPageFrm*)this)->bInvalidFlyLayout = false;
 }
 inline void SwPageFrm::ValidateFlyCntnt() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyCntnt = sal_False;
+    ((SwPageFrm*)this)->bInvalidFlyCntnt = false;
 }
 inline void SwPageFrm::ValidateFlyInCnt() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyInCnt = sal_False;
+    ((SwPageFrm*)this)->bInvalidFlyInCnt = false;
 }
 inline void SwPageFrm::ValidateLayout() const
 {
-    ((SwPageFrm*)this)->bInvalidLayout = sal_False;
+    ((SwPageFrm*)this)->bInvalidLayout = false;
 }
 inline void SwPageFrm::ValidateCntnt() const
 {
-    ((SwPageFrm*)this)->bInvalidCntnt = sal_False;
+    ((SwPageFrm*)this)->bInvalidCntnt = false;
 }
 inline void SwPageFrm::ValidateSpelling() const
 {
-    ((SwPageFrm*)this)->bInvalidSpelling = sal_False;
+    ((SwPageFrm*)this)->bInvalidSpelling = false;
 }
 
 inline void SwPageFrm::ValidateSmartTags() const
 {
-   ((SwPageFrm*)this)->bInvalidSmartTags = sal_False;
+   ((SwPageFrm*)this)->bInvalidSmartTags = false;
 }
 inline void SwPageFrm::ValidateAutoCompleteWords() const
 {
-    ((SwPageFrm*)this)->bInvalidAutoCmplWrds = sal_False;
+    ((SwPageFrm*)this)->bInvalidAutoCmplWrds = false;
 }
 inline void SwPageFrm::ValidateWordCount() const
 {
-    ((SwPageFrm*)this)->bInvalidWordCount = sal_False;
+    ((SwPageFrm*)this)->bInvalidWordCount = false;
 }
 
-inline sal_Bool SwPageFrm::IsInvalid() const
+inline bool SwPageFrm::IsInvalid() const
 {
     return (bInvalidCntnt || bInvalidLayout || bInvalidFlyInCnt);
 }
-inline sal_Bool SwPageFrm::IsInvalidFly() const
+inline bool SwPageFrm::IsInvalidFly() const
 {
     return bInvalidFlyLayout || bInvalidFlyCntnt;
 }

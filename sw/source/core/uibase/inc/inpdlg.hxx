@@ -55,7 +55,7 @@ class SwFldInputDlg: public SvxStandardDialog
     DECL_LINK(NextHdl, void *);
 public:
     SwFldInputDlg(  Window *pParent, SwWrtShell &rSh,
-                    SwField* pField, sal_Bool bNextButton = sal_False );
+                    SwField* pField, bool bNextButton = false );
 };
 
 #endif

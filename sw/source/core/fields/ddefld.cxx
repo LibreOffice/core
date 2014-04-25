@@ -74,7 +74,7 @@ public:
             if( n && 0x0d == sStr[ n-1 ] )
                 --n;
 
-            sal_Bool bDel = n != sStr.getLength();
+            bool bDel = n != sStr.getLength();
             if( bDel )
                 sStr = sStr.copy( 0, n );
 
@@ -232,7 +232,7 @@ SwDDEFieldType::SwDDEFieldType(const OUString& rName,
     : SwFieldType( RES_DDEFLD ),
     aName( rName ), pDoc( 0 ), nRefCnt( 0 )
 {
-    bCRLFFlag = bDeleted = sal_False;
+    bCRLFFlag = bDeleted = false;
     refLink = new SwIntrnlRefLink( *this, nUpdateType, FORMAT_STRING );
     SetCmd( rCmd );
 }

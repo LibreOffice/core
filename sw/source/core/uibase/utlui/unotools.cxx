@@ -70,8 +70,8 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
     aMenuRes(SW_RES(RES_FRMEX_MENU)),
     pModuleView(SW_MOD()->GetView()),
     nStyleFlags(nFlags),
-    bIsInitialized(sal_False),
-    bServiceAvailable(sal_False)
+    bIsInitialized(false),
+    bServiceAvailable(false)
 {
     if (pURL && !pURL->isEmpty())
         sArgumentURL = *pURL;
@@ -154,7 +154,7 @@ void SwOneExampleFrame::CreateControl()
         xPrSet->setPropertyValue("ComponentURL", aURL);
 
         aLoadedTimer.Start();
-        bServiceAvailable = sal_True;
+        bServiceAvailable = true;
     }
 }
 
@@ -273,7 +273,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 
             // set onlinelayout property after setting the zoom
             disableScrollBars(xViewProps, (nStyleFlags&EX_SHOW_ONLINE_LAYOUT) != 0);
-            bIsInitialized = sal_True;
+            bIsInitialized = true;
         }
 
         uno::Reference< text::XTextDocument >  xDoc(_xModel, uno::UNO_QUERY);
@@ -329,7 +329,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
                   else
                   {;}
                 }
-                while(pSh->Right(sal_uInt16(1), sal_uInt16(1), sal_True) == sal_True);
+                while(pSh->Right(sal_uInt16(1), sal_uInt16(1), true));
             }
         }
 
@@ -403,7 +403,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
     return 0;
 }
 
-void SwOneExampleFrame::ClearDocument( sal_Bool bStartUpdateTimer )
+void SwOneExampleFrame::ClearDocument( bool bStartUpdateTimer )
 {
     uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
     if( xTunnel.is() )

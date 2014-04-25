@@ -934,7 +934,7 @@ sal_Bool SwXTextTables::hasByName(const OUString& rName)
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Bool bRet= sal_False;
+    bool bRet= false;
     if(IsValid())
     {
         sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(true);
@@ -943,7 +943,7 @@ sal_Bool SwXTextTables::hasByName(const OUString& rName)
             SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(i, true);
             if (rName == rFmt.GetName())
             {
-                bRet = sal_True;
+                bRet = true;
                 break;
             }
         }
@@ -1525,7 +1525,7 @@ sal_Bool SwXTextSections::hasByName(const OUString& rName)
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if(IsValid())
     {
         SwSectionFmts& rFmts = GetDoc()->GetSections();
@@ -1534,7 +1534,7 @@ sal_Bool SwXTextSections::hasByName(const OUString& rName)
             const SwSectionFmt* pFmt = rFmts[i];
             if (rName == pFmt->GetSection()->GetSectionName())
             {
-                bRet = sal_True;
+                bRet = true;
                 break;
             }
         }
@@ -1799,7 +1799,7 @@ Sequence< OUString > SwXFootnotes::getSupportedServiceNames(void) throw( Runtime
     return aRet;
 }
 
-SwXFootnotes::SwXFootnotes(sal_Bool bEnd, SwDoc* _pDoc)
+SwXFootnotes::SwXFootnotes(bool bEnd, SwDoc* _pDoc)
     : SwUnoCollection(_pDoc)
     , m_bEndnote(bEnd)
 {
@@ -2006,7 +2006,7 @@ SwXReferenceMark* SwXReferenceMarks::GetObject( SwDoc* pDoc, const SwFmtRefMark*
 
 void SwUnoCollection::Invalidate()
 {
-    bObjectValid = sal_False;
+    bObjectValid = false;
     pDoc = 0;
 }
 

@@ -121,10 +121,10 @@ class SW_DLLPUBLIC SwModify: public SwClient
 {
     SwClient* pRoot;                // the start of the linked list of clients
     bool bModifyLocked : 1;         // don't broadcast changes now
-    sal_Bool bLockClientList : 1;       // may be set when this instance notifies its clients
-    sal_Bool bInDocDTOR : 1;            // workaround for problems when a lot of objects are destroyed
-    sal_Bool bInCache   : 1;
-    sal_Bool bInSwFntCache : 1;
+    bool bLockClientList : 1;       // may be set when this instance notifies its clients
+    bool bInDocDTOR : 1;            // workaround for problems when a lot of objects are destroyed
+    bool bInCache   : 1;
+    bool bInSwFntCache : 1;
 
     // mba: IMHO this method should be pure virtual
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
@@ -156,13 +156,13 @@ public:
 
     void LockModify()                   { bModifyLocked = true;  }
     void UnlockModify()                 { bModifyLocked = false; }
-    void SetInCache( sal_Bool bNew )        { bInCache = bNew;       }
-    void SetInSwFntCache( sal_Bool bNew )   { bInSwFntCache = bNew;  }
-    void SetInDocDTOR()                 { bInDocDTOR = sal_True; }
+    void SetInCache( bool bNew )        { bInCache = bNew;       }
+    void SetInSwFntCache( bool bNew )   { bInSwFntCache = bNew;  }
+    void SetInDocDTOR()                 { bInDocDTOR = true; }
     bool IsModifyLocked() const     { return bModifyLocked;  }
-    sal_Bool IsInDocDTOR()    const     { return bInDocDTOR;     }
-    sal_Bool IsInCache()      const     { return bInCache;       }
-    sal_Bool IsInSwFntCache() const     { return bInSwFntCache;  }
+    bool IsInDocDTOR()    const     { return bInDocDTOR;     }
+    bool IsInCache()      const     { return bInCache;       }
+    bool IsInSwFntCache() const     { return bInSwFntCache;  }
 
     void CheckCaching( const sal_uInt16 nWhich );
     bool IsLastDepend() { return pRoot && pRoot->IsLast(); }

@@ -99,10 +99,10 @@ public:
     void    SetWidthPercentRelation ( sal_Int16 n ) { m_eWidthPercentRelation  = n; }
 };
 
-inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(sal_Bool bInP) const
+inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(bool bInP) const
     { return (const SwFmtFrmSize&)Get( RES_FRM_SIZE,bInP); }
 
-inline const SwFmtFrmSize &SwFmt::GetFrmSize(sal_Bool bInP) const
+inline const SwFmtFrmSize &SwFmt::GetFrmSize(bool bInP) const
     { return aSet.GetFrmSize(bInP); }
 
 #endif

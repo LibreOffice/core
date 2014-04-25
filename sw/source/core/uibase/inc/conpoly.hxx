@@ -30,9 +30,9 @@ public:
     ConstPolygon(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
     // Mouse- & Key-Events
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
     virtual void Activate(const sal_uInt16 nSlotId) SAL_OVERRIDE;    // activate function
 };

@@ -69,7 +69,7 @@ long SwFntObj::nPixWidth;
 MapMode* SwFntObj::pPixMap = NULL;
 OutputDevice* SwFntObj::pPixOut = NULL;
 
-extern sal_uInt16 UnMapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat );
+extern sal_uInt16 UnMapDirection( sal_uInt16 nDir, const bool bVertFormat );
 sal_uInt16 GetDefaultFontHeight( SwDrawTextInfo &rInf )
 {
     SwDocShell* pDocShell = rInf.GetShell()->GetDoc()->GetDocShell();
@@ -171,15 +171,15 @@ struct CalcLinePosData
     SwDrawTextInfo& rInf;
     Font& rFont;
     sal_Int32 nCnt;
-    const sal_Bool bSwitchH2V;
-    const sal_Bool bSwitchL2R;
+    const bool bSwitchH2V;
+    const bool bSwitchL2R;
     long nHalfSpace;
     sal_Int32* pKernArray;
-    const sal_Bool bBidiPor;
+    const bool bBidiPor;
 
     CalcLinePosData( SwDrawTextInfo& _rInf, Font& _rFont,
-                      sal_Int32 _nCnt, const sal_Bool _bSwitchH2V, const sal_Bool _bSwitchL2R,
-                      long _nHalfSpace, sal_Int32* _pKernArray, const sal_Bool _bBidiPor) :
+                      sal_Int32 _nCnt, const bool _bSwitchH2V, const bool _bSwitchL2R,
+                      long _nHalfSpace, sal_Int32* _pKernArray, const bool _bBidiPor) :
         rInf( _rInf ),
         rFont( _rFont ),
         nCnt( _nCnt ),
@@ -855,11 +855,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     // HACK: UNDERLINE_WAVE must not be abused any more, hence the grey wave
     // line of the ExtendedAttributeSets will appear in the font color first
 
-    const sal_Bool bSwitchH2V = rInf.GetFrm() && rInf.GetFrm()->IsVertical();
+    const bool bSwitchH2V = rInf.GetFrm() && rInf.GetFrm()->IsVertical();
     const bool bSwitchL2R = rInf.GetFrm() && rInf.GetFrm()->IsRightToLeft() &&
                             ! rInf.IsIgnoreFrmRTL();
     const sal_uLong nMode = rInf.GetOut().GetLayoutMode();
-    const sal_Bool bBidiPor = ( bSwitchL2R !=
+    const bool bBidiPor = ( bSwitchL2R !=
                             ( 0 != ( TEXT_LAYOUT_BIDI_RTL & nMode ) ) );
 
     // be sure to have the correct layout mode at the printer
@@ -884,7 +884,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     }
 
     Color aOldColor( pTmpFont->GetColor() );
-    sal_Bool bChgColor = rInf.ApplyAutoColor( pTmpFont );
+    bool bChgColor = rInf.ApplyAutoColor( pTmpFont );
     if( !pTmpFont->IsSameInstance( rInf.GetOut().GetFont() ) )
         rInf.GetOut().SetFont( *pTmpFont );
     if ( bChgColor )
@@ -1330,7 +1330,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             const long nTmpWidth = GetTextSize( rInf ).Width();
 
             const Color aSaveColor( pTmpFont->GetColor() );
-            const sal_Bool bColorChanged = rInf.ApplyAutoColor( pTmpFont );
+            const bool bColorChanged = rInf.ApplyAutoColor( pTmpFont );
 
             if( bColorChanged )
             {
@@ -1354,9 +1354,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         const OUString* pStr = &rInf.GetText();
         OUString aStr;
         OUString aBulletOverlay;
-        sal_Bool bBullet = rInf.GetBullet();
+        bool bBullet = rInf.GetBullet();
         if( bSymbol )
-            bBullet = sal_False;
+            bBullet = false;
         sal_Int32 *pKernArray = new sal_Int32[ rInf.GetLen() ];
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         long nScrPos;
@@ -2171,7 +2171,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
 SwFntAccess::SwFntAccess( const void* &rMagic,
                 sal_uInt16 &rIndex, const void *pOwn, SwViewShell *pSh,
-                sal_Bool bCheck ) :
+                bool bCheck ) :
   SwCacheAccess( *pFntCache, rMagic, rIndex ),
   pShell( pSh )
 {
@@ -2186,7 +2186,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
     }
     else
     {   // Font not known, must be searched
-        bCheck = sal_False;
+        bCheck = false;
     }
 
     {
@@ -2479,7 +2479,7 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 
 extern Color aGlobalRetoucheColor;
 
-sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
+bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
 {
     const Font& rFnt = pFont ? *pFont : GetOut().GetFont();
     bool bPrt = GetShell() && ! GetShell()->GetWin();
@@ -2526,7 +2526,7 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
                 /// OD 21.08.2002 #99657#
                 ///     There is a user defined setting for the background, if there
                 ///     is a background brush and its color is *not* "no fill"/"auto fill".
-                if( GetFrm()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, sal_False ) )
+                if( GetFrm()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false ) )
                 {
                     if ( !pCol )
                     {
@@ -2598,10 +2598,10 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
                 GetOut().SetOverlineColor( aNewColor );
         }
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

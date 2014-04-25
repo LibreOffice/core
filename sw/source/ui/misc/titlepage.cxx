@@ -104,16 +104,16 @@ namespace
 
     void lcl_PushCursor(SwWrtShell *pSh)
     {
-        pSh->LockView( sal_True );
+        pSh->LockView( true );
         pSh->StartAllAction();
         pSh->SwCrsrShell::Push();
     }
 
     void lcl_PopCursor(SwWrtShell *pSh)
     {
-        pSh->SwCrsrShell::Pop( sal_False );
+        pSh->SwCrsrShell::Pop( false );
         pSh->EndAllAction();
-        pSh->LockView( sal_False );
+        pSh->LockView( false );
     }
 
     sal_uInt16 lcl_GetCurrentPage(SwWrtShell *pSh)

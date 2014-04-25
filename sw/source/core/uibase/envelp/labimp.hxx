@@ -97,7 +97,7 @@ public:
     long            lPHeight;
     sal_Int32       nCols;
     sal_Int32       nRows;
-    sal_Bool        bCont;
+    bool        bCont;
 };
 
 class SwLabRecs : public std::vector<SwLabRec*> {

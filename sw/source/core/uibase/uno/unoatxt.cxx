@@ -268,7 +268,7 @@ uno::Sequence< OUString > SwXAutoTextGroup::getTitles(void) throw( uno::RuntimeE
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nCount = 0;
-    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
+    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0;
     if(pGlosGroup && !pGlosGroup->GetError())
         nCount = pGlosGroup->GetCount();
     else
@@ -292,7 +292,7 @@ void SwXAutoTextGroup::renameByName(const OUString& aElementName,
     // throw exception only if the programmatic name is to be changed into an existing name
     if(aNewElementName != aElementName && hasByName(aNewElementName))
         throw container::ElementExistException();
-    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
+    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0;
     if(pGlosGroup && !pGlosGroup->GetError())
     {
         sal_uInt16 nIdx = pGlosGroup->GetIndex( aElementName);
@@ -365,7 +365,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
     if(!xTextRange.is())
         throw uno::RuntimeException();
 
-    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
+    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0;
     OUString sShortName(aName);
     OUString sLongName(aTitle);
     if(pGlosGroup && !pGlosGroup->GetError())
@@ -439,7 +439,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
 void SwXAutoTextGroup::removeByName(const OUString& aEntryName) throw( container::NoSuchElementException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
+    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0;
     if(pGlosGroup && !pGlosGroup->GetError())
     {
         sal_uInt16 nIdx = pGlosGroup->GetIndex(aEntryName);
@@ -506,7 +506,7 @@ sal_Int32 SwXAutoTextGroup::getCount(void) throw( uno::RuntimeException, std::ex
 {
     SolarMutexGuard aGuard;
     int nCount = 0;
-    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
+    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0;
     if(pGlosGroup && !pGlosGroup->GetError())
         nCount = pGlosGroup->GetCount();
     else
@@ -521,7 +521,7 @@ uno::Any SwXAutoTextGroup::getByIndex(sal_Int32 nIndex)
     SolarMutexGuard aGuard;
     uno::Any aRet;
     sal_uInt16 nCount = 0;
-    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
+    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0;
     if(pGlosGroup && !pGlosGroup->GetError())
         nCount = pGlosGroup->GetCount();
     else
@@ -543,7 +543,7 @@ uno::Type SwXAutoTextGroup::getElementType(void) throw( uno::RuntimeException, s
 sal_Bool SwXAutoTextGroup::hasElements(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
+    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0;
     sal_uInt16 nCount = 0;
     if(pGlosGroup && !pGlosGroup->GetError())
         nCount = pGlosGroup->GetCount();
@@ -569,7 +569,7 @@ uno::Sequence< OUString > SwXAutoTextGroup::getElementNames(void)
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nCount = 0;
-    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
+    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0;
     if(pGlosGroup && !pGlosGroup->GetError())
         nCount = pGlosGroup->GetCount();
     else
@@ -588,9 +588,9 @@ sal_Bool SwXAutoTextGroup::hasByName(const OUString& rName)
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_uInt16 nCount = 0;
-    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
+    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0;
     if(pGlosGroup && !pGlosGroup->GetError())
         nCount = pGlosGroup->GetCount();
     else
@@ -627,7 +627,7 @@ void SwXAutoTextGroup::setPropertyValue(
     if(!pEntry)
         throw beans::UnknownPropertyException();
 
-    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
+    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0;
     if(!pGlosGroup || pGlosGroup->GetError())
         throw uno::RuntimeException();
     switch(pEntry->nWID)
@@ -656,7 +656,7 @@ uno::Any SwXAutoTextGroup::getPropertyValue(const OUString& rPropertyName)
 
     if(!pEntry)
         throw beans::UnknownPropertyException();
-    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
+    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0;
     if(!pGlosGroup  || pGlosGroup->GetError())
         throw uno::RuntimeException();
 
@@ -819,7 +819,7 @@ void SwXAutoTextEntry::GetBodyText ()
 {
     SolarMutexGuard aGuard;
 
-    xDocSh = pGlossaries->EditGroupDoc ( sGroupName, sEntryName, sal_False );
+    xDocSh = pGlossaries->EditGroupDoc ( sGroupName, sEntryName, false );
     OSL_ENSURE( xDocSh.Is(), "SwXAutoTextEntry::GetBodyText: unexpected: no doc returned by EditGroupDoc!" );
 
     // start listening at the document

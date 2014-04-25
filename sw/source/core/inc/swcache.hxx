@@ -103,12 +103,12 @@ public:
     void Flush( const sal_uInt8 nPercent = 100 );
 
     //bToTop == sal_False -> Keine LRU-Umsortierung!
-    SwCacheObj *Get( const void *pOwner, const sal_Bool bToTop = sal_True );
+    SwCacheObj *Get( const void *pOwner, const bool bToTop = true );
     SwCacheObj *Get( const void *pOwner, const sal_uInt16 nIndex,
-                     const sal_Bool bToTop = sal_True );
+                     const bool bToTop = true );
     void ToTop( SwCacheObj *pObj );
 
-    sal_Bool Insert( SwCacheObj *pNew );
+    bool Insert( SwCacheObj *pNew );
     void Delete( const void *pOwner );
 //  void Delete( const void *pOwner, const sal_uInt16 nIndex );
 
@@ -168,12 +168,12 @@ public:
     virtual ~SwCacheObj();
 
     inline const void *GetOwner() const { return pOwner; }
-    inline sal_Bool IsOwner( const void *pNew ) const;
+    inline bool IsOwner( const void *pNew ) const;
 
     inline sal_uInt16 GetCachePos() const { return nCachePos; }
     inline void Invalidate()          { pOwner = 0; }
 
-    inline sal_Bool IsLocked() const { return 0 != nLock; }
+    inline bool IsLocked() const { return 0 != nLock; }
 
 #ifdef DBG_UTIL
     void Lock();
@@ -211,7 +211,7 @@ protected:
 
     inline SwCacheObj *Get();
 
-    inline SwCacheAccess( SwCache &rCache, const void *pOwner, sal_Bool bSeek = sal_True );
+    inline SwCacheAccess( SwCache &rCache, const void *pOwner, bool bSeek = true );
     inline SwCacheAccess( SwCache &rCache, const void *pOwner, const sal_uInt16 nIndex );
 
 public:
@@ -240,7 +240,7 @@ inline void SwCache::DecreaseMax( const sal_uInt16 nSub )
 #endif
 }
 
-inline sal_Bool SwCacheObj::IsOwner( const void *pNew ) const
+inline bool SwCacheObj::IsOwner( const void *pNew ) const
 {
     return pOwner && pOwner == pNew;
 }
@@ -253,7 +253,7 @@ inline SwCacheObj *SwCache::Next( SwCacheObj *pCacheObj)
         return NULL;
 }
 
-inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn, sal_Bool bSeek ) :
+inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn, bool bSeek ) :
     rCache( rC ),
     pObj( 0 ),
     pOwner( pOwn )

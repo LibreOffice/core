@@ -34,7 +34,7 @@
 
 using namespace com::sun::star;
 
-sal_Bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) const
+bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) const
 {
     const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
     const sal_uInt16 nSize = pFldTypes->size();
@@ -65,7 +65,7 @@ sal_Bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) cons
                             catch(uno::Exception const &)
                             {
                                 rUsedDataSource = rData.sDataSource;
-                                return sal_False;
+                                return false;
                             }
                         }
                         pFmtFld = aIter.Next();
@@ -75,7 +75,7 @@ sal_Bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) cons
             }
         }
     }
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

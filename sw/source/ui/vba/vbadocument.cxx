@@ -77,7 +77,7 @@ SwVbaDocument::getContent() throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< text::XTextRange > xStart = mxTextDocument->getText()->getStart();
     uno::Reference< text::XTextRange > xEnd;
-    return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, xStart, xEnd, sal_True ) );
+    return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, xStart, xEnd, true ) );
 }
 
 uno::Reference< word::XRange > SAL_CALL
@@ -325,7 +325,7 @@ void SAL_CALL SwVbaDocument::setUpdateStylesOnOpen( sal_Bool /*_updatestylesonop
 sal_Bool SAL_CALL SwVbaDocument::getAutoHyphenation() throw (uno::RuntimeException, std::exception)
 {
     // check this property only in default paragraph style
-    sal_Bool IsAutoHyphenation = sal_False;
+    bool IsAutoHyphenation = false;
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
     xParaProps->getPropertyValue("ParaIsHyphenation") >>= IsAutoHyphenation;
     return IsAutoHyphenation;

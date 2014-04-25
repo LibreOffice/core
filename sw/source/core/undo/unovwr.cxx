@@ -42,7 +42,7 @@ using namespace ::com::sun::star::uno;
 SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
     : SwUndo(UNDO_OVERWRITE),
-      pRedlSaveData( 0 ), bGroup( sal_False )
+      pRedlSaveData( 0 ), bGroup( false )
 {
     if( !pDoc->IsIgnoreRedline() && !pDoc->GetRedlineTbl().empty() )
     {
@@ -59,7 +59,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     OSL_ENSURE( pTxtNd, "Overwrite not in a TextNode?" );
 
-    bInsChar = sal_True;
+    bInsChar = true;
     sal_Int32 nTxtNdLen = pTxtNd->GetTxt().getLength();
     if( nSttCntnt < nTxtNdLen )     // no pure insert?
     {
@@ -70,7 +70,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode, 0,
                             nTxtNdLen, false );
         rPos.nContent++;
-        bInsChar = sal_False;
+        bInsChar = false;
     }
 
     bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
@@ -95,7 +95,7 @@ SwUndoOverwrite::~SwUndoOverwrite()
     delete pRedlSaveData;
 }
 
-sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
+bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
 {
 // What is with only inserted characters?
@@ -103,14 +103,14 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     // Only deletion of single chars can be combined.
     if( rPos.nNode != nSttNode || aInsStr.isEmpty()  ||
         ( !bGroup && aInsStr.getLength() != 1 ))
-        return sal_False;
+        return false;
 
     // Is the node a TextNode at all?
     SwTxtNode * pDelTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( !pDelTxtNd ||
         (pDelTxtNd->GetTxt().getLength() != rPos.nContent.GetIndex() &&
             rPos.nContent.GetIndex() != ( nSttCntnt + aInsStr.getLength() )))
-        return sal_False;
+        return false;
 
     CharClass& rCC = GetAppCharClass();
 
@@ -118,7 +118,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     if (( CH_TXTATR_BREAKWORD == cIns || CH_TXTATR_INWORD == cIns ) ||
         rCC.isLetterNumeric( OUString( cIns ), 0 ) !=
         rCC.isLetterNumeric( aInsStr, aInsStr.getLength()-1 ) )
-        return sal_False;
+        return false;
 
     {
         SwRedlineSaveDatas aTmpSav;
@@ -133,7 +133,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
                             nSttCntnt > rPos.nContent.GetIndex() ));
         // aTmpSav.DeleteAndDestroyAll();
         if( !bOk )
-            return sal_False;
+            return false;
 
         pDoc->DeleteRedline( aPam, false, USHRT_MAX );
     }
@@ -147,7 +147,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
             rPos.nContent++;
         }
         else
-            bInsChar = sal_True;
+            bInsChar = true;
     }
 
     bool bOldExpFlg = pDelTxtNd->IsIgnoreDontExpand();
@@ -166,8 +166,8 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     }
     pDelTxtNd->SetIgnoreDontExpand( bOldExpFlg );
 
-    bGroup = sal_True;
-    return sal_True;
+    bGroup = true;
+    return true;
 }
 
 void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)

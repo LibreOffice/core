@@ -179,9 +179,9 @@ public:
     void SetValueFormat( const OUString& rFmt, LanguageType eLng, LanguageType eSys )
         { sNumFmtString = rFmt; eNumFmtLanguage = eLng; eSysLanguage = eSys; }
 
-    sal_Bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
-    sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
-    sal_Bool SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const;
+    bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
+    bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
+    bool SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const;
 };
 
 /*
@@ -237,14 +237,14 @@ class SW_DLLPUBLIC SwTableAutoFmt
     sal_uInt16 nStrResId;
 
     // Common flags of Calc and Writer.
-    sal_Bool bInclFont : 1;
-    sal_Bool bInclJustify : 1;
-    sal_Bool bInclFrame : 1;
-    sal_Bool bInclBackground : 1;
-    sal_Bool bInclValueFormat : 1;
+    bool bInclFont : 1;
+    bool bInclJustify : 1;
+    bool bInclFrame : 1;
+    bool bInclBackground : 1;
+    bool bInclValueFormat : 1;
 
     // Calc specific flags.
-    sal_Bool bInclWidthHeight : 1;
+    bool bInclWidthHeight : 1;
 
     SwBoxAutoFmt* aBoxAutoFmt[ 16 ];
 
@@ -253,9 +253,9 @@ class SW_DLLPUBLIC SwTableAutoFmt
     SwFmtPageDesc m_aPageDesc;
     SvxFmtKeepItem m_aKeepWithNextPara;
     sal_uInt16 m_aRepeatHeading;
-    sal_Bool m_bLayoutSplit;
-    sal_Bool m_bRowSplit;
-    sal_Bool m_bCollapsingBorders;
+    bool m_bLayoutSplit;
+    bool m_bRowSplit;
+    bool m_bCollapsingBorders;
     SvxShadowItem m_aShadow;
 
 public:
@@ -280,21 +280,21 @@ public:
     void RestoreTableProperties(SwTable &table) const;
     void StoreTableProperties(const SwTable &table);
 
-    sal_Bool IsFont() const         { return bInclFont; }
-    sal_Bool IsJustify() const      { return bInclJustify; }
-    sal_Bool IsFrame() const        { return bInclFrame; }
-    sal_Bool IsBackground() const   { return bInclBackground; }
-    sal_Bool IsValueFormat() const  { return bInclValueFormat; }
+    bool IsFont() const         { return bInclFont; }
+    bool IsJustify() const      { return bInclJustify; }
+    bool IsFrame() const        { return bInclFrame; }
+    bool IsBackground() const   { return bInclBackground; }
+    bool IsValueFormat() const  { return bInclValueFormat; }
 
-    void SetFont( const sal_Bool bNew )         { bInclFont = bNew; }
-    void SetJustify( const  sal_Bool bNew )     { bInclJustify = bNew; }
-    void SetFrame( const sal_Bool bNew )        { bInclFrame = bNew; }
-    void SetBackground( const sal_Bool bNew )   { bInclBackground = bNew; }
-    void SetValueFormat( const sal_Bool bNew )  { bInclValueFormat = bNew; }
-    void SetWidthHeight( const sal_Bool bNew )  { bInclWidthHeight = bNew; }
+    void SetFont( const bool bNew )         { bInclFont = bNew; }
+    void SetJustify( const  bool bNew )     { bInclJustify = bNew; }
+    void SetFrame( const bool bNew )        { bInclFrame = bNew; }
+    void SetBackground( const bool bNew )   { bInclBackground = bNew; }
+    void SetValueFormat( const bool bNew )  { bInclValueFormat = bNew; }
+    void SetWidthHeight( const bool bNew )  { bInclWidthHeight = bNew; }
 
-    sal_Bool Load( SvStream& rStream, const SwAfVersions& );
-    sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
+    bool Load( SvStream& rStream, const SwAfVersions& );
+    bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
 };
 
 class SW_DLLPUBLIC SwTableAutoFmtTbl
@@ -302,8 +302,8 @@ class SW_DLLPUBLIC SwTableAutoFmtTbl
     struct Impl;
     ::boost::scoped_ptr<Impl> m_pImpl;
 
-    SAL_DLLPRIVATE sal_Bool Load( SvStream& rStream );
-    SAL_DLLPRIVATE sal_Bool Save( SvStream& rStream ) const;
+    SAL_DLLPRIVATE bool Load( SvStream& rStream );
+    SAL_DLLPRIVATE bool Save( SvStream& rStream ) const;
 
 public:
     explicit SwTableAutoFmtTbl();
@@ -316,8 +316,8 @@ public:
     void EraseAutoFmt(size_t i);
     SwTableAutoFmt* ReleaseAutoFmt(size_t i);
 
-    sal_Bool Load();
-    sal_Bool Save() const;
+    bool Load();
+    bool Save() const;
 };
 
 #endif

@@ -121,14 +121,14 @@ public:
                         GetSavedDocuments() const;
     void                AddSavedDocument(const OUString& rName);
 
-    sal_Bool            IsOutputToLetter()const;
-    void                SetOutputToLetter(sal_Bool bSet);
+    bool            IsOutputToLetter()const;
+    void                SetOutputToLetter(bool bSet);
 
     bool                IsAddressBlock()const;
-    void                SetAddressBlock(sal_Bool bSet);
+    void                SetAddressBlock(bool bSet);
 
-    sal_Bool            IsHideEmptyParagraphs() const;
-    void                SetHideEmptyParagraphs(sal_Bool bSet);
+    bool            IsHideEmptyParagraphs() const;
+    void                SetHideEmptyParagraphs(bool bSet);
 
     const com::sun::star::uno::Sequence< OUString>
                         GetAddressBlocks() const;
@@ -137,15 +137,15 @@ public:
     void                SetCurrentAddressBlockIndex( sal_Int32 nSet );
     sal_Int32           GetCurrentAddressBlockIndex() const;
 
-    sal_Bool            IsIncludeCountry() const;
+    bool            IsIncludeCountry() const;
     OUString&      GetExcludeCountry() const;
-    void                SetCountrySettings(sal_Bool bSet, const OUString& sCountry);
+    void                SetCountrySettings(bool bSet, const OUString& sCountry);
 
-    sal_Bool            IsIndividualGreeting(sal_Bool bInEMail) const;
-    void                SetIndividualGreeting(sal_Bool bSet, sal_Bool bInEMail);
+    bool            IsIndividualGreeting(bool bInEMail) const;
+    void                SetIndividualGreeting(bool bSet, bool bInEMail);
 
-    sal_Bool            IsGreetingLine(sal_Bool bInEMail) const;
-    void                SetGreetingLine(sal_Bool bSet, sal_Bool bInEMail);
+    bool            IsGreetingLine(bool bInEMail) const;
+    void                SetGreetingLine(bool bSet, bool bInEMail);
 
     const com::sun::star::uno::Sequence< OUString>
                         GetGreetings(Gender eType) const;
@@ -175,8 +175,8 @@ public:
     OUString     GetMailAddress() const;
     void                SetMailAddress(const OUString& rAddress);
 
-    sal_Bool            IsMailReplyTo() const;
-    void                SetMailReplyTo(sal_Bool bSet);
+    bool            IsMailReplyTo() const;
+    void                SetMailReplyTo(bool bSet);
 
     OUString     GetMailReplyTo() const;
     void                SetMailReplyTo(const OUString& rReplyTo);
@@ -187,11 +187,11 @@ public:
     sal_Int16           GetMailPort() const;
     void                SetMailPort(sal_Int16 nSet);
 
-    sal_Bool            IsSecureConnection() const;
-    void                SetSecureConnection(sal_Bool bSet);
+    bool            IsSecureConnection() const;
+    void                SetSecureConnection(bool bSet);
 
-    sal_Bool            IsAuthentication() const;
-    void                SetAuthentication(sal_Bool bSet);
+    bool            IsAuthentication() const;
+    void                SetAuthentication(bool bSet);
 
     OUString     GetMailUserName() const;
     void                SetMailUserName(const OUString& rName);
@@ -199,8 +199,8 @@ public:
     OUString     GetMailPassword() const;
     void                SetMailPassword(const OUString& rPassword);
 
-    sal_Bool            IsSMTPAfterPOP() const;
-    void                SetSMTPAfterPOP(sal_Bool bSet);
+    bool            IsSMTPAfterPOP() const;
+    void                SetSMTPAfterPOP(bool bSet);
 
     OUString     GetInServerName() const;
     void                SetInServerName(const OUString& rServer);
@@ -208,8 +208,8 @@ public:
     sal_Int16           GetInServerPort() const;
     void                SetInServerPort(sal_Int16 nSet);
 
-    sal_Bool            IsInServerPOP() const;
-    void                SetInServerPOP(sal_Bool bSet);
+    bool            IsInServerPOP() const;
+    void                SetInServerPOP(bool bSet);
 
     OUString     GetInServerUserName() const;
     void                SetInServerUserName(const OUString& rName);

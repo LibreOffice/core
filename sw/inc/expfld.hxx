@@ -152,7 +152,7 @@ class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
     OUString      sDelim;
     sal_uInt16      nType;
     sal_uInt8       nLevel;
-    sal_Bool        bDeleted;
+    bool        bDeleted;
 
 protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) SAL_OVERRIDE;
@@ -169,8 +169,8 @@ public:
     void                    SetSeqFormat(sal_uLong nFormat);
     sal_uLong               GetSeqFormat();
 
-    sal_Bool                IsDeleted() const       { return bDeleted; }
-    void                    SetDeleted( sal_Bool b )    { bDeleted = b; }
+    bool                IsDeleted() const       { return bDeleted; }
+    void                    SetDeleted( bool b )    { bDeleted = b; }
 
     /// Overlay, because set-field takes care for its being updated by itself.
     inline OUString         GetSetRefName() const;
@@ -213,7 +213,7 @@ class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
     OUString        sExpand;
     OUString        aPText;
     OUString        aSeqText;
-    sal_Bool            bInput;
+    bool            bInput;
     sal_uInt16          nSeqNo;
     sal_uInt16          nSubType;
 
@@ -232,15 +232,15 @@ public:
     inline void                 SetPromptText(const OUString& rStr);
     inline OUString             GetPromptText() const;
 
-    inline void                 SetInputFlag(sal_Bool bInp);
-    inline sal_Bool                 GetInputFlag() const;
+    inline void                 SetInputFlag(bool bInp);
+    inline bool                 GetInputFlag() const;
 
     virtual OUString            GetFieldName() const SAL_OVERRIDE;
 
     virtual sal_uInt16              GetSubType() const SAL_OVERRIDE;
     virtual void                SetSubType(sal_uInt16 nType) SAL_OVERRIDE;
 
-    inline sal_Bool                 IsSequenceFld() const;
+    inline bool                 IsSequenceFld() const;
 
     /// Logical number, sequence fields.
     inline void                 SetSeqNumber( sal_uInt16 n )    { nSeqNo = n; }
@@ -268,13 +268,13 @@ inline void  SwSetExpField::SetPromptText(const OUString& rStr)
 inline OUString SwSetExpField::GetPromptText() const
     { return aPText;        }
 
-inline void SwSetExpField::SetInputFlag(sal_Bool bInp)
+inline void SwSetExpField::SetInputFlag(bool bInp)
     { bInput = bInp; }
 
-inline sal_Bool SwSetExpField::GetInputFlag() const
+inline bool SwSetExpField::GetInputFlag() const
     { return bInput; }
 
-inline sal_Bool SwSetExpField::IsSequenceFld() const
+inline bool SwSetExpField::IsSequenceFld() const
     { return 0 != (nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType*)GetTyp())->GetType()); }
 
 class SwInputFieldType : public SwFieldType
@@ -357,7 +357,7 @@ public:
 class SwInputFieldList
 {
 public:
-    SwInputFieldList( SwEditShell* pShell, sal_Bool bBuildTmpLst = sal_False );
+    SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst = false );
     ~SwInputFieldList();
 
     sal_uInt16      Count() const;

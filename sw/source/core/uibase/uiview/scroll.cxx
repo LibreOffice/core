@@ -23,13 +23,13 @@
 
 #define SCROLL_LINE_SIZE 250
 
-SwScrollbar::SwScrollbar( Window *pWin, sal_Bool bHoriz ) :
+SwScrollbar::SwScrollbar( Window *pWin, bool bHoriz ) :
     ScrollBar( pWin,
     WinBits( WB_3DLOOK | WB_HIDE | ( bHoriz ? WB_HSCROLL : WB_VSCROLL)  ) ),
     bHori( bHoriz ),
-    bAuto( sal_False ),
-    bVisible(sal_False),
-    bSizeSet(sal_False)
+    bAuto( false ),
+    bVisible(false),
+    bSizeSet(false)
 {
     // SSA: --- RTL --- no mirroring for horizontal scrollbars
     if( bHoriz )
@@ -73,7 +73,7 @@ void SwScrollbar::ViewPortChgd( const Rectangle &rRect )
         AutoShow();
 }
 
-void SwScrollbar::ExtendedShow( sal_Bool bSet )
+void SwScrollbar::ExtendedShow( bool bSet )
 {
     bVisible = bSet;
     if( (!bSet ||  !bAuto) && IsUpdateMode() && bSizeSet)
@@ -83,13 +83,13 @@ void SwScrollbar::ExtendedShow( sal_Bool bSet )
 void SwScrollbar::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 {
     ScrollBar::SetPosSizePixel(rNewPos, rNewSize);
-    bSizeSet = sal_True;
+    bSizeSet = true;
     if(bVisible)
         ExtendedShow();
 
 }
 
-void SwScrollbar::SetAuto(sal_Bool bSet)
+void SwScrollbar::SetAuto(bool bSet)
 {
     if(bAuto != bSet)
     {
@@ -97,7 +97,7 @@ void SwScrollbar::SetAuto(sal_Bool bSet)
 
         // hide autmatically - automatisch versteckt - then show
         if(!bAuto && bVisible && !ScrollBar::IsVisible())
-            ExtendedShow(sal_True);
+            ExtendedShow(true);
         else if(bAuto)
             AutoShow(); // or hide automatically
     }

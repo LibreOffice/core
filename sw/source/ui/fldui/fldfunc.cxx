@@ -220,12 +220,12 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
                 m_pFormatLB->SelectEntryPos(0);
         }
 
-        sal_Bool bValue = sal_False, bName = sal_False, bMacro = sal_False, bInsert = sal_True;
-        sal_Bool bFormat = nSize != 0;
+        bool bValue = false, bName = false, bMacro = false, bInsert = true;
+        bool bFormat = nSize != 0;
 
         // two controls for conditional text
-        sal_Bool bDropDown = TYP_DROPDOWN == nTypeId;
-        sal_Bool bCondTxtFld = TYP_CONDTXTFLD == nTypeId;
+        bool bDropDown = TYP_DROPDOWN == nTypeId;
+        bool bCondTxtFld = TYP_CONDTXTFLD == nTypeId;
 
         m_pCond1FT->Show(!bDropDown && bCondTxtFld);
         m_pCond1ED->Show(!bDropDown && bCondTxtFld);
@@ -277,11 +277,11 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
         switch (nTypeId)
         {
             case TYP_MACROFLD:
-                bMacro = sal_True;
+                bMacro = true;
                 if (!GetFldMgr().GetMacroPath().isEmpty())
-                    bValue = sal_True;
+                    bValue = true;
                 else
-                    bInsert = sal_False;
+                    bInsert = false;
 
                 m_pNameFT->SetText(SW_RESSTR(STR_MACNAME));
                 m_pValueFT->SetText(SW_RESSTR(STR_PROMPT));
@@ -293,7 +293,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
             case TYP_HIDDENPARAFLD:
                 m_pNameFT->SetText(SW_RESSTR(STR_COND));
                 m_pNameED->SetDropEnable(true);
-                bName = sal_True;
+                bName = true;
                 m_pNameED->SetAccessibleName(m_pNameFT->GetText());
                 m_pValueED->SetAccessibleName(m_pValueFT->GetText());
                 break;
@@ -306,7 +306,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
                 SwWrtShell* pSh = GetActiveWrtShell();
                 if (!IsFldEdit() && pSh )
                     m_pValueED->SetText(pSh->GetSelTxt());
-                bName = bValue = sal_True;
+                bName = bValue = true;
                 m_pNameED->SetAccessibleName(m_pNameFT->GetText());
                 m_pValueED->SetAccessibleName(m_pValueFT->GetText());
             }
@@ -321,7 +321,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
                     m_pCond2ED->SetText(GetCurField()->GetPar2().getToken(1, '|'));
                 }
 
-                bName = bValue = sal_True;
+                bName = bValue = true;
                 m_pNameED->SetAccessibleName(m_pNameFT->GetText());
                 m_pValueED->SetAccessibleName(m_pValueFT->GetText());
                 break;
@@ -329,14 +329,14 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
             case TYP_JUMPEDITFLD:
                 m_pNameFT->SetText(SW_RESSTR(STR_JUMPEDITFLD));
                 m_pValueFT->SetText(SW_RESSTR(STR_PROMPT));
-                bName = bValue = sal_True;
+                bName = bValue = true;
                 m_pNameED->SetAccessibleName(m_pNameFT->GetText());
                 m_pValueED->SetAccessibleName(m_pValueFT->GetText());
                 break;
 
             case TYP_INPUTFLD:
                 m_pValueFT->SetText(SW_RESSTR(STR_PROMPT));
-                bValue = sal_True;
+                bValue = true;
                 m_pNameED->SetAccessibleName(m_pNameFT->GetText());
                 m_pValueED->SetAccessibleName(m_pValueFT->GetText());
                 break;
@@ -345,11 +345,11 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
                 {
                     m_pNameFT->SetText(SW_RESSTR(STR_COMBCHRS_FT));
                     m_pNameED->SetDropEnable(true);
-                    bName = sal_True;
+                    bName = true;
 
                     const sal_Int32 nLen = m_pNameED->GetText().getLength();
                     if( !nLen || nLen > MAX_COMBINED_CHARACTERS )
-                        bInsert = sal_False;
+                        bInsert = false;
                     m_pNameED->SetAccessibleName(m_pNameFT->GetText());
                     m_pValueED->SetAccessibleName(m_pValueFT->GetText());
                 }
@@ -444,7 +444,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, ListEnableHdl)
     //enable "Add" button when text is in the Edit that's not already member of the box
     m_pListAddPB->Enable(!m_pListItemED->GetText().isEmpty() &&
                 LISTBOX_ENTRY_NOTFOUND == m_pListItemsLB->GetEntryPos(m_pListItemED->GetText()));
-    sal_Bool bEnableButtons = m_pListItemsLB->GetSelectEntryCount() > 0;
+    bool bEnableButtons = m_pListItemsLB->GetSelectEntryCount() > 0;
     m_pListRemovePB->Enable(bEnableButtons);
     m_pListUpPB->Enable(bEnableButtons && (m_pListItemsLB->GetSelectEntryPos() > 0));
     m_pListDownPB->Enable(bEnableButtons &&
@@ -474,7 +474,7 @@ void SwFldFuncPage::UpdateSubType()
         m_pSelectionLB->SetEntryData(nPos, reinterpret_cast<void*>(i));
     }
 
-    sal_Bool bEnable = nCount != 0;
+    bool bEnable = nCount != 0;
 
     m_pSelectionLB->Enable( bEnable );
 
@@ -627,12 +627,12 @@ IMPL_LINK_NOARG(SwFldFuncPage, ModifyHdl)
 {
     const sal_Int32 nLen = m_pNameED->GetText().getLength();
 
-    sal_Bool bEnable = sal_True;
+    bool bEnable = true;
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     if( TYP_COMBINED_CHARS == nTypeId &&
         (!nLen || nLen > MAX_COMBINED_CHARACTERS ))
-        bEnable = sal_False;
+        bEnable = false;
 
     EnableInsert( bEnable );
 

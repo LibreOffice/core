@@ -56,10 +56,10 @@ public:
     const Size &GetGrfSize() const  { return GetSize(); }
     void GetGrfArea( SwRect &rRect, SwRect * = 0, bool bMirror = true ) const;
 
-    sal_Bool IsTransparent() const;
+    bool IsTransparent() const;
 
     void StopAnimation( OutputDevice* = 0 ) const;
-    sal_Bool HasAnimation()  const;
+    bool HasAnimation()  const;
 
     // Routine for the graphics cache
     sal_uInt16 GetWeight() { return nWeight; }

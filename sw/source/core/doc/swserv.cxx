@@ -87,7 +87,7 @@ bool SwServerObject::GetData( uno::Any & rData,
         {
             // Create stream
             SvMemoryStream aMemStm( 65535, 65535 );
-            SwWriter aWrt( aMemStm, *pPam, sal_False );
+            SwWriter aWrt( aMemStm, *pPam, false );
             if( !IsError( aWrt.Write( xWrt )) )
             {
                 aMemStm.WriteChar( '\0' );        // append a zero char
@@ -102,11 +102,11 @@ bool SwServerObject::GetData( uno::Any & rData,
     return bRet;
 }
 
-sal_Bool SwServerObject::SetData( const OUString & ,
+bool SwServerObject::SetData( const OUString & ,
                     const uno::Any& )
 {
     // set new data into the "server" -> at first nothing to do
-    return sal_False;
+    return false;
 }
 
 void SwServerObject::SendDataChanged( const SwPosition& rPos )
@@ -183,7 +183,7 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
     }
 }
 
-sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
+bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 {
     sal_uLong nSttNd = 0, nEndNd = 0;
     sal_Int32 nStt = 0;
@@ -211,7 +211,7 @@ sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
     case SECTION_SERVER:    pNd = CNTNT_TYPE.pSectNd;   break;
 
     case SECTION_SERVER+1:
-        return sal_True;
+        return true;
     }
 
     if( pNd )
@@ -244,7 +244,7 @@ sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
                         {
                             if( pLnk == pChkLnk ||
                                 ((SwBaseLink*)pLnk)->IsRecursion( pChkLnk ) )
-                                return sal_True;
+                                return true;
                         }
                         else if( ((SwBaseLink*)pLnk)->IsRecursion( (SwBaseLink*)pLnk ) )
                             ((SwBaseLink*)pLnk)->SetNoDataFlag();
@@ -254,7 +254,7 @@ sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
             ((SwServerObject*)this)->eType = eSave;
     }
 
-    return sal_False;
+    return false;
 }
 
 void SwServerObject::SetNoServer()

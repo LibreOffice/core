@@ -52,10 +52,10 @@ inline SwFmtFillOrder &SwFmtFillOrder::operator=( const SwFmtFillOrder &rCpy )
     return *this;
 }
 
-inline const SwFmtFillOrder &SwAttrSet::GetFillOrder(sal_Bool bInP) const
+inline const SwFmtFillOrder &SwAttrSet::GetFillOrder(bool bInP) const
     { return (const SwFmtFillOrder&)Get( RES_FILL_ORDER,bInP); }
 
-inline const SwFmtFillOrder &SwFmt::GetFillOrder(sal_Bool bInP) const
+inline const SwFmtFillOrder &SwFmt::GetFillOrder(bool bInP) const
     { return aSet.GetFillOrder(bInP); }
 
 #endif

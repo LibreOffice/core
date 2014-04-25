@@ -73,7 +73,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if(nIndex != 0)
         throw lang::IndexOutOfBoundsException();
@@ -96,7 +96,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
                     const_cast<SwTxtINetFmt*>(pTxtAttr2)->SetVisited(true);
                     const_cast<SwTxtINetFmt*>(pTxtAttr2)->SetVisitedValid(true);
                 }
-                bRet = sal_True;
+                bRet = true;
             }
         }
     }

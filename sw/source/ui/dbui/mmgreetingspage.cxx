@@ -82,7 +82,7 @@ static void lcl_StoreGreetingsBox(ComboBox& rBox,
 
 IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl)
 {
-    sal_Bool bIndividual = m_pPersonalizedCB->IsEnabled() && m_pPersonalizedCB->IsChecked();
+    bool bIndividual = m_pPersonalizedCB->IsEnabled() && m_pPersonalizedCB->IsChecked();
     m_pFemaleFT->Enable(bIndividual);
     m_pFemaleLB->Enable(bIndividual);
     m_pFemalePB->Enable(bIndividual);
@@ -97,7 +97,7 @@ IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl)
 
     if( m_bIsTabPage )
     {
-        m_pWizard->GetConfigItem().SetIndividualGreeting(bIndividual, sal_False);
+        m_pWizard->GetConfigItem().SetIndividualGreeting(bIndividual, false);
         m_pWizard->UpdateRoadmap();
         m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
     }
@@ -204,10 +204,10 @@ void SwMailMergeGreetingsPage::UpdatePreview()
     m_pPreviewWIN->SetAddress(sPreview);
 }
 
-void    SwGreetingsHandler::Contains(sal_Bool bContainsGreeting)
+void    SwGreetingsHandler::Contains(bool bContainsGreeting)
 {
     m_pPersonalizedCB->Enable(bContainsGreeting);
-    sal_Bool bEnablePersonal = bContainsGreeting && m_pPersonalizedCB->IsChecked();
+    bool bEnablePersonal = bContainsGreeting && m_pPersonalizedCB->IsChecked();
     m_pFemaleFT->Enable(bEnablePersonal);
     m_pFemaleLB->Enable(bEnablePersonal);
     m_pFemalePB->Enable(bEnablePersonal);
@@ -279,8 +279,8 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
     m_pNextSetIB->SetClickHdl(aDataLink);
 
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
-    m_pGreetingLineCB->Check(rConfig.IsGreetingLine(sal_False));
-    m_pPersonalizedCB->Check(rConfig.IsIndividualGreeting(sal_False));
+    m_pGreetingLineCB->Check(rConfig.IsGreetingLine(false));
+    m_pPersonalizedCB->Check(rConfig.IsIndividualGreeting(false));
     ContainsHdl_Impl(m_pGreetingLineCB);
     aIndividualLink.Call(0);
 
@@ -347,14 +347,14 @@ bool SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPageReason 
         m_pNeutralCB->SelectEntryPos(nCount);
     }
     lcl_StoreGreetingsBox(*m_pNeutralCB, rConfig, SwMailMergeConfigItem::NEUTRAL);
-    rConfig.SetGreetingLine(m_pGreetingLineCB->IsChecked(), sal_False);
-    rConfig.SetIndividualGreeting(m_pPersonalizedCB->IsChecked(), sal_False);
+    rConfig.SetGreetingLine(m_pGreetingLineCB->IsChecked(), false);
+    rConfig.SetIndividualGreeting(m_pPersonalizedCB->IsChecked(), false);
     return true;
 }
 
 IMPL_LINK(SwMailMergeGreetingsPage, ContainsHdl_Impl, CheckBox*, pBox)
 {
-    sal_Bool bContainsGreeting = pBox->IsChecked();
+    bool bContainsGreeting = pBox->IsChecked();
     SwGreetingsHandler::Contains(bContainsGreeting);
     m_pPreviewFI-> Enable(bContainsGreeting);
     m_pPreviewWIN->Enable(bContainsGreeting);
@@ -363,7 +363,7 @@ IMPL_LINK(SwMailMergeGreetingsPage, ContainsHdl_Impl, CheckBox*, pBox)
     m_pPrevSetIB->Enable(bContainsGreeting);
     m_pNextSetIB->Enable(bContainsGreeting);
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
-    rConfig.SetGreetingLine(m_pGreetingLineCB->IsChecked(), sal_False);
+    rConfig.SetGreetingLine(m_pGreetingLineCB->IsChecked(), false);
     m_pWizard->UpdateRoadmap();
     return 0;
 }
@@ -383,10 +383,10 @@ IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, ImageButton*, pButton)
         rConfig.MoveResultSet( bNext ? ++nPos : --nPos);
     }
     sal_Int32 nPos = rConfig.GetResultSetPosition();
-    sal_Bool bEnable = sal_True;
+    bool bEnable = true;
     if(nPos < 1)
     {
-        bEnable = sal_False;
+        bEnable = false;
         nPos = 1;
     }
     else
@@ -459,8 +459,8 @@ SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard)
     m_aOK.SetClickHdl(LINK(this, SwMailBodyDialog, OKHdl));
 
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
-    m_aGreetingLineCB.Check(rConfig.IsGreetingLine(sal_True));
-    m_aPersonalizedCB.Check(rConfig.IsIndividualGreeting(sal_True));
+    m_aGreetingLineCB.Check(rConfig.IsGreetingLine(true));
+    m_aPersonalizedCB.Check(rConfig.IsIndividualGreeting(true));
     ContainsHdl_Impl(&m_aGreetingLineCB);
     aIndividualLink.Call(0);
 
@@ -493,7 +493,7 @@ SwMailBodyDialog::~SwMailBodyDialog()
 IMPL_LINK(SwMailBodyDialog, ContainsHdl_Impl, CheckBox*, pBox)
 {
     SwGreetingsHandler::Contains(pBox->IsChecked());
-    m_pWizard->GetConfigItem().SetGreetingLine(pBox->IsChecked(), sal_True);
+    m_pWizard->GetConfigItem().SetGreetingLine(pBox->IsChecked(), true);
     return 0;
 }
 
@@ -501,9 +501,9 @@ IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     rConfigItem.SetGreetingLine(
-                m_aGreetingLineCB.IsChecked(), sal_False);
+                m_aGreetingLineCB.IsChecked(), false);
     rConfigItem.SetIndividualGreeting(
-                m_aPersonalizedCB.IsChecked(), sal_False);
+                m_aPersonalizedCB.IsChecked(), false);
 
     if(m_aFemaleColumnLB.GetSelectEntryPos() != m_aFemaleColumnLB.GetSavedValue())
     {

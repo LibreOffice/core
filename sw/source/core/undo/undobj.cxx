@@ -47,7 +47,7 @@ public:
         const SwPosition& rSttPos,
         const SwPosition& rEndPos,
         SwRangeRedline& rRedl,
-        sal_Bool bCopyNext );
+        bool bCopyNext );
 
     ~SwRedlineSaveData();
 
@@ -136,7 +136,7 @@ void SwUndo::RemoveIdxFromSection( SwDoc& rDoc, sal_uLong nSttIdx,
     SwNodeIndex aEndIdx( rDoc.GetNodes(), pEndIdx ? *pEndIdx
                                     : aIdx.GetNode().EndOfSectionIndex() );
     SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
-    rDoc.CorrAbs( aIdx, aEndIdx, aPos, sal_True );
+    rDoc.CorrAbs( aIdx, aEndIdx, aPos, true );
 }
 
 void SwUndo::RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext )
@@ -160,10 +160,10 @@ void SwUndo::RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext )
             }
         }
 
-        rPam.GetDoc()->CorrAbs( aStt, aEnd, *rPam.GetPoint(), sal_True );
+        rPam.GetDoc()->CorrAbs( aStt, aEnd, *rPam.GetPoint(), true );
     }
     else
-        rPam.GetDoc()->CorrAbs( rPam, *pEnd, sal_True );
+        rPam.GetDoc()->CorrAbs( rPam, *pEnd, true );
 }
 
 void SwUndo::RemoveIdxRel( sal_uLong nIdx, const SwPosition& rPos )
@@ -348,7 +348,7 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     if( pCpyNd || pEndNdIdx )
     {
         SwNodeRange aRg( pStt->nNode, 0, pEnd->nNode, 1 );
-        rDoc.GetNodes()._MoveNodes( aRg, rNds, aPos.nNode, sal_False );
+        rDoc.GetNodes()._MoveNodes( aRg, rNds, aPos.nNode, false );
         aPos.nContent = 0;
         aPos.nNode--;
     }
@@ -845,7 +845,7 @@ void SwUndoSaveSection::SaveSection(
         SwNodeIndex aSttIdx( aPam.Start()->nNode.GetNode() );
         SwNodeIndex aEndIdx( aPam.End()->nNode.GetNode() );
         SwNodeIndex aMvStt( aEndIdx, 1 );
-        pDoc->CorrAbs( aSttIdx, aEndIdx, SwPosition( aMvStt ), sal_True );
+        pDoc->CorrAbs( aSttIdx, aEndIdx, SwPosition( aMvStt ), true );
     }
 
     pRedlSaveData = new SwRedlineSaveDatas;
@@ -915,7 +915,7 @@ SwRedlineSaveData::SwRedlineSaveData(
     const SwPosition& rSttPos,
     const SwPosition& rEndPos,
     SwRangeRedline& rRedl,
-    sal_Bool bCopyNext )
+    bool bCopyNext )
     : SwUndRng( rRedl )
     , SwRedlineData( rRedl.GetRedlineData(), bCopyNext )
 {

@@ -92,7 +92,7 @@ bool SwTabCols::operator==( const SwTabCols& rCmp ) const
 }
 
 void SwTabCols::Insert( long nValue, long nMin, long nMax,
-                        sal_Bool bValue, size_t nPos )
+                        bool bValue, size_t nPos )
 {
     SwTabColsEntry aEntry;
     aEntry.nPos = nValue;
@@ -102,7 +102,7 @@ void SwTabCols::Insert( long nValue, long nMin, long nMax,
     aData.insert( aData.begin() + nPos, aEntry );
 }
 
-void SwTabCols::Insert( long nValue, sal_Bool bValue, size_t nPos )
+void SwTabCols::Insert( long nValue, bool bValue, size_t nPos )
 {
     SwTabColsEntry aEntry;
     aEntry.nPos = nValue;

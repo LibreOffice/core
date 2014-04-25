@@ -88,15 +88,15 @@ class SwIndexMarkPane
     PushButton*     m_pNextBT;
 
     OUString        aOrgStr;
-    sal_Bool            bDel;
-    sal_Bool            bNewMark;
-    sal_Bool            bSelected;
+    bool            bDel;
+    bool            bNewMark;
+    bool            bSelected;
 
-    sal_Bool            bPhoneticED0_ChangedByUser;
-    sal_Bool            bPhoneticED1_ChangedByUser;
-    sal_Bool            bPhoneticED2_ChangedByUser;
+    bool            bPhoneticED0_ChangedByUser;
+    bool            bPhoneticED1_ChangedByUser;
+    bool            bPhoneticED2_ChangedByUser;
     LanguageType    nLangForPhoneticReading; //Language of current text used for phonetic reading proposal
-    sal_Bool            bIsPhoneticReadingEnabled; //this value states whether phonetic reading is enabled in principle dependent of global cjk settings and language of current entry
+    bool            bIsPhoneticReadingEnabled; //this value states whether phonetic reading is enabled in principle dependent of global cjk settings and language of current entry
     com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier >
                     xExtendedIndexEntrySupplier;
 
@@ -137,7 +137,7 @@ class SwIndexMarkPane
 public:
 
     SwIndexMarkPane(Dialog &rDialog,
-                    sal_Bool bNewDlg,
+                    bool bNewDlg,
                     SwWrtShell& rWrtShell);
 
     Dialog &GetDialog() { return m_rDialog; }
@@ -145,7 +145,7 @@ public:
     ~SwIndexMarkPane();
 
     void    ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark = 0);
-    sal_Bool    IsTOXType(const OUString& rName)
+    bool    IsTOXType(const OUString& rName)
                 {return LISTBOX_ENTRY_NOTFOUND != m_pTypeDCB->GetEntryPos(rName);}
 };
 
@@ -154,11 +154,11 @@ class SwIndexMarkFloatDlg : public SfxModelessDialog
     SwIndexMarkPane m_aContent;
     virtual void    Activate() SAL_OVERRIDE;
     public:
-        SwIndexMarkFloatDlg(    SfxBindings* pBindings,
+        SwIndexMarkFloatDlg(       SfxBindings* pBindings,
                                    SfxChildWindow* pChild,
                                    Window *pParent,
-                                SfxChildWinInfo* pInfo,
-                                   sal_Bool bNew=sal_True);
+                                   SfxChildWinInfo* pInfo,
+                                   bool bNew=true);
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
@@ -178,7 +178,7 @@ class SwAuthorMarkPane
 {
     Dialog& m_rDialog;
 
-    static sal_Bool     bIsFromComponent;
+    static bool     bIsFromComponent;
 
     friend class SwAuthMarkModalDlg;
     friend class SwAuthMarkFloatDlg;
@@ -195,8 +195,8 @@ class SwAuthorMarkPane
     PushButton*     m_pCreateEntryPB;
     PushButton*     m_pEditEntryPB;
 
-    sal_Bool        bNewEntry;
-    sal_Bool        bBibAccessInitialized;
+    bool        bNewEntry;
+    bool        bBibAccessInitialized;
 
     SwWrtShell*     pSh;
 
@@ -220,7 +220,7 @@ class SwAuthorMarkPane
 public:
 
     SwAuthorMarkPane( Dialog &rDialog,
-                       sal_Bool bNew=sal_True);
+                       bool bNew=true);
 
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
@@ -230,11 +230,11 @@ class SwAuthMarkFloatDlg : public SfxModelessDialog
     SwAuthorMarkPane m_aContent;
     virtual void    Activate() SAL_OVERRIDE;
     public:
-        SwAuthMarkFloatDlg(     SfxBindings* pBindings,
+        SwAuthMarkFloatDlg(        SfxBindings* pBindings,
                                    SfxChildWindow* pChild,
                                    Window *pParent,
-                                SfxChildWinInfo* pInfo,
-                                   sal_Bool bNew=sal_True);
+                                   SfxChildWinInfo* pInfo,
+                                   bool bNew=true);
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 

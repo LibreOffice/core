@@ -133,7 +133,7 @@ double SwDateTimeField::GetValue() const
         return GetDateTime(GetDoc(), DateTime( DateTime::SYSTEM ));
 }
 
-Date SwDateTimeField::GetDate(sal_Bool bUseOffset) const
+Date SwDateTimeField::GetDate(bool bUseOffset) const
 {
     SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
     Date* pNullDate = pFormatter->GetNullDate();
@@ -148,7 +148,7 @@ Date SwDateTimeField::GetDate(sal_Bool bUseOffset) const
     return aDate;
 }
 
-Time SwDateTimeField::GetTime(sal_Bool bUseOffset) const
+Time SwDateTimeField::GetTime(bool bUseOffset) const
 {
     double fDummy;
     double fFract = modf(GetValue(), &fDummy);

@@ -52,7 +52,7 @@ class SwAccessibleTable :
     /** get the SwTableBox* for the given child */
     const SwTableBox* GetTableBox( sal_Int32 ) const;
 
-    sal_Bool IsChildSelected( sal_Int32 nChildIndex ) const;
+    bool IsChildSelected( sal_Int32 nChildIndex ) const;
 
     sal_Int32 GetIndexOfSelectedChild( sal_Int32 nSelectedChildIndex ) const;
 
@@ -81,7 +81,7 @@ protected:
     inline SwAccessibleTableData_Impl& GetTableData();
 
     // Is table data evailable?
-    sal_Bool HasTableData() const { return (mpTableData != 0); }
+    bool HasTableData() const { return (mpTableData != 0); }
 
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
@@ -224,10 +224,10 @@ public:
     virtual void InvalidatePosOrSize( const SwRect& rOldBox ) SAL_OVERRIDE;
 
     // The object is not visible an longer and should be destroyed
-    virtual void Dispose( sal_Bool bRecursive = sal_False ) SAL_OVERRIDE;
+    virtual void Dispose( bool bRecursive = false ) SAL_OVERRIDE;
 
     virtual void DisposeChild( const sw::access::SwAccessibleChild& rFrmOrObj,
-                               sal_Bool bRecursive ) SAL_OVERRIDE;
+                               bool bRecursive ) SAL_OVERRIDE;
     virtual void InvalidateChildPosOrSize( const sw::access::SwAccessibleChild& rFrmOrObj,
                                            const SwRect& rFrm ) SAL_OVERRIDE;
 
@@ -270,7 +270,7 @@ public:
     VEC_CELL m_vecCellAdd;
     VEC_CELL m_vecCellRemove;
     void FireSelectionEvent( );
-    void AddSelectionCell(const SwAccessibleContext* ,sal_Bool bAddOrRemove);
+    void AddSelectionCell(const SwAccessibleContext* , bool bAddOrRemove);
 };
 
 inline SwAccessibleTableData_Impl& SwAccessibleTable::GetTableData()

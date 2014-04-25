@@ -43,7 +43,7 @@ void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const OUString& rStr 
 
 /// convert current selection into text block and add to the text block document, incl. templates
 sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const OUString& rName, const OUString& rShortName,
-                                    sal_Bool bSaveRelFile, const OUString* pOnlyTxt )
+                                    bool bSaveRelFile, const OUString* pOnlyTxt )
 {
     SwDoc* pGDoc = rBlks.GetDoc();
 
@@ -79,8 +79,8 @@ sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const OUString& rName
 sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
                                     const OUString& rName,
                                     const OUString& rShortName,
-                                    sal_Bool bSaveRelFile,
-                                    sal_Bool bOnlyTxt )
+                                    bool bSaveRelFile,
+                                    bool bOnlyTxt )
 {
     StartAllAction();
 
@@ -153,7 +153,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
 }
 
 /// copy all selections to the doc
-sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
+bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 {
     OSL_ENSURE( pInsDoc, "no Ins.Document"  );
 
@@ -170,7 +170,7 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
         (*pSttNd)--;
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SET_CURR_SHELL( this );
 
     pInsDoc->LockExpFlds();
@@ -188,7 +188,7 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
             ->GetSttNd()->FindTableNode() ))
         {
             // check if the table name can be copied
-            sal_Bool bCpyTblNm = aBoxes.size() == pTblNd->GetTable().GetTabSortBoxes().size();
+            bool bCpyTblNm = aBoxes.size() == pTblNd->GetTable().GetTabSortBoxes().size();
             if( bCpyTblNm )
             {
                 const OUString rTblName = pTblNd->GetTable().GetFrmFmt()->GetName();
@@ -196,14 +196,14 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
                 for( sal_uInt16 n = rTblFmts.size(); n; )
                     if( rTblFmts[ --n ]->GetName() == rTblName )
                     {
-                        bCpyTblNm = sal_False;
+                        bCpyTblNm = false;
                         break;
                     }
             }
-            bRet = pInsDoc->InsCopyOfTbl( aPos, aBoxes, 0, bCpyTblNm, sal_False );
+            bRet = pInsDoc->InsCopyOfTbl( aPos, aBoxes, 0, bCpyTblNm, false );
         }
         else
-            bRet = sal_False;
+            bRet = false;
     }
     else
     {
@@ -260,7 +260,7 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
  *
  * @return sal_False if the selected area is too big for being copied into the string buffer
  */
-sal_Bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
+bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
 {
     GetCrsr();  // creates all cursors if needed
     if( IsSelOnePara() )
@@ -294,18 +294,18 @@ sal_Bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
         {
             // write selected areas into a ASCII document
             SwWriter aWriter( aStream, *this);
-            xWrt->SetShowProgress( sal_False );
+            xWrt->SetShowProgress( false );
 
             switch( nHndlParaBrk )
             {
             case GETSELTXT_PARABRK_TO_BLANK:
-                xWrt->bASCII_ParaAsBlanc = sal_True;
-                xWrt->bASCII_NoLastLineEnd = sal_True;
+                xWrt->bASCII_ParaAsBlanc = true;
+                xWrt->bASCII_NoLastLineEnd = true;
                 break;
 
             case GETSELTXT_PARABRK_TO_ONLYCR:
-                xWrt->bASCII_ParaAsCR = sal_True;
-                xWrt->bASCII_NoLastLineEnd = sal_True;
+                xWrt->bASCII_ParaAsCR = true;
+                xWrt->bASCII_NoLastLineEnd = true;
                 break;
             }
 
@@ -336,7 +336,7 @@ sal_Bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

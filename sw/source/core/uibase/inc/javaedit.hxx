@@ -49,8 +49,8 @@ private:
     OUString       aText;
     OUString       aType;
 
-    sal_Bool                bNew;
-    sal_Bool                bIsUrl;
+    bool                bNew;
+    bool                bIsUrl;
 
     SwScriptField*          pFld;
     SwFldMgr*               pMgr;
@@ -78,8 +78,8 @@ public:
 
     OUString GetScriptType() const { return aType; }
 
-    sal_Bool IsUrl() const { return bIsUrl; }
-    sal_Bool IsNew() const { return bNew; }
+    bool IsUrl() const { return bIsUrl; }
+    bool IsNew() const { return bNew; }
     bool IsUpdate() const;
 };
 

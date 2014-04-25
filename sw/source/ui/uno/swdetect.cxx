@@ -89,11 +89,11 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
     // there is no parameter that forbids to open as template
-    sal_Bool bOpenAsTemplate = sal_False;
-    sal_Bool bWasReadOnly = sal_False, bReadOnly = sal_False;
+    bool bOpenAsTemplate = false;
+    bool bWasReadOnly = false, bReadOnly = false;
 
-    sal_Bool bRepairPackage = sal_False;
-    sal_Bool bRepairAllowed = sal_False;
+    bool bRepairPackage = false;
+    bool bRepairAllowed = false;
     bool bDeepDetection = false;
 
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
@@ -188,7 +188,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                 xContent = aMedium.GetContent();
                 bReadOnly = aMedium.IsReadOnly();
 
-                sal_Bool bIsStorage = aMedium.IsStorage();
+                bool bIsStorage = aMedium.IsStorage();
                 if ( bIsStorage )
                 {
                     Reference< embed::XStorage > xStorage = aMedium.GetStorage( false );
@@ -384,7 +384,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         lDescriptor[nPropertyCount].Name = "RepairPackage";
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
-        bOpenAsTemplate = sal_True;
+        bOpenAsTemplate = true;
         // TODO/LATER: set progress bar that should be used
     }
 
@@ -427,7 +427,7 @@ sal_uLong SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** pp
         OUString aPrefFlt = (*ppFilter)->GetUserData();
 
         // detection for TextFilter needs an additional checking
-        sal_Bool bDetected = SwIoSystem::IsFileFilter(rMedium, aPrefFlt);
+        bool bDetected = SwIoSystem::IsFileFilter(rMedium, aPrefFlt);
         return bDetected ? nRet : ERRCODE_ABORT;
     }
 

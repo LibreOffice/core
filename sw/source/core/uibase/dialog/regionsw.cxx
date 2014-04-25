@@ -127,16 +127,13 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             aSet.Put(*pItem);
         }
 
-        const sal_Bool bHidden = SFX_ITEM_SET ==
-            pSet->GetItemState(FN_PARAM_REGION_HIDDEN, true, &pItem)?
-            (sal_Bool)((const SfxBoolItem *)pItem)->GetValue():sal_False;
-        const sal_Bool bProtect = SFX_ITEM_SET ==
-            pSet->GetItemState(FN_PARAM_REGION_PROTECT, true, &pItem)?
-            (sal_Bool)((const SfxBoolItem *)pItem)->GetValue():sal_False;
+        const bool bHidden = SFX_ITEM_SET == pSet->GetItemState(FN_PARAM_REGION_HIDDEN, true, &pItem) &&
+                             ((const SfxBoolItem *)pItem)->GetValue();
+        const bool bProtect = SFX_ITEM_SET == pSet->GetItemState(FN_PARAM_REGION_PROTECT, true, &pItem) &&
+                              ((const SfxBoolItem *)pItem)->GetValue();
         // #114856# edit in readonly sections
-        const sal_Bool bEditInReadonly = SFX_ITEM_SET ==
-            pSet->GetItemState(FN_PARAM_REGION_EDIT_IN_READONLY, true, &pItem)?
-            (sal_Bool)((const SfxBoolItem *)pItem)->GetValue():sal_False;
+        const bool bEditInReadonly = SFX_ITEM_SET == pSet->GetItemState(FN_PARAM_REGION_EDIT_IN_READONLY, true, &pItem) &&
+                                     ((const SfxBoolItem *)pItem)->GetValue();
 
         aSection.SetProtectFlag(bProtect);
         aSection.SetHidden(bHidden);

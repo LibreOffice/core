@@ -53,17 +53,17 @@ SwEditShell::InsertSection(
     return pRet;
 }
 
-sal_Bool SwEditShell::IsInsRegionAvailable() const
+bool SwEditShell::IsInsRegionAvailable() const
 {
     if( IsTableMode() )
-        return sal_False;
+        return false;
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )
-        return sal_False;
+        return false;
     if( pCrsr->HasMark() )
         return 0 != GetDoc()->IsInsRegionAvailable( *pCrsr );
 
-    return sal_True;
+    return true;
 }
 
 const SwSection* SwEditShell::GetCurrSection() const
@@ -78,7 +78,7 @@ const SwSection* SwEditShell::GetCurrSection() const
  *
  * In footnotes it may not be the area within the footnote.
  */
-const SwSection* SwEditShell::GetAnySection( sal_Bool bOutOfTab, const Point* pPt ) const
+const SwSection* SwEditShell::GetAnySection( bool bOutOfTab, const Point* pPt ) const
 {
     SwFrm *pFrm;
     if ( pPt )
@@ -90,7 +90,7 @@ const SwSection* SwEditShell::GetAnySection( sal_Bool bOutOfTab, const Point* pP
         pFrm = pNd->getLayoutFrm( GetLayout(), pPt );
     }
     else
-        pFrm = GetCurrFrm( sal_False );
+        pFrm = GetCurrFrm( false );
 
     if( bOutOfTab && pFrm )
         pFrm = pFrm->FindTabFrm();
@@ -113,7 +113,7 @@ sal_uInt16 SwEditShell::GetSectionFmtCount() const
     return GetDoc()->GetSections().size();
 }
 
-sal_Bool SwEditShell::IsAnySectionInDoc( sal_Bool bChkReadOnly, sal_Bool bChkHidden, sal_Bool bChkTOX ) const
+bool SwEditShell::IsAnySectionInDoc( bool bChkReadOnly, bool bChkHidden, bool bChkTOX ) const
 {
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     sal_uInt16 nCnt = rFmts.size();

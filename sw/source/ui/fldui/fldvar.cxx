@@ -81,7 +81,7 @@ SwFldVarPage::SwFldVarPage(Window* pParent, const SfxItemSet& rCoreSet )
 
     m_pChapterLevelLB->SelectEntryPos(0);
     //enable 'active' language selection
-    m_pNumFormatLB->SetShowLanguageControl(sal_True);
+    m_pNumFormatLB->SetShowLanguageControl(true);
 }
 
 SwFldVarPage::~SwFldVarPage()
@@ -198,7 +198,7 @@ IMPL_LINK_NOARG(SwFldVarPage, TypeHdl)
 
     if (nOld != GetTypeSel() || nOld == LISTBOX_ENTRY_NOTFOUND)
     {
-        bInit = sal_True;
+        bInit = true;
         if (nOld != LISTBOX_ENTRY_NOTFOUND)
         {
             m_pNameED->SetText(OUString());
@@ -209,7 +209,7 @@ IMPL_LINK_NOARG(SwFldVarPage, TypeHdl)
         UpdateSubType();    // initialise selection-listboxes
     }
 
-    bInit = sal_False;
+    bInit = false;
 
     return 0;
 }
@@ -242,9 +242,9 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
     sal_Int32 nSize = m_pFormatLB->GetEntryCount();
 
-    sal_Bool bValue = sal_False, bName = sal_False, bNumFmt = sal_False,
-            bInvisible = sal_False, bShowChapterFrame = sal_False;
-    sal_Bool bFormat = nSize != 0;
+    bool bValue = false, bName = false, bNumFmt = false,
+            bInvisible = false, bShowChapterFrame = false;
+    bool bFormat = nSize != 0;
 
     switch (nTypeId)
     {
@@ -282,19 +282,19 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                     m_pValueED->SetText(OUString());
                 }
             }
-            bValue = bName = bNumFmt = bInvisible = sal_True;
+            bValue = bName = bNumFmt = bInvisible = true;
 
             m_pValueED->SetDropEnable(true);
             break;
         }
 
         case TYP_SETFLD:
-            bValue = sal_True;
+            bValue = true;
 
-            bNumFmt = bInvisible = sal_True;
+            bNumFmt = bInvisible = true;
 
             if (!IsFldDlgHtmlMode())
-                bName = sal_True;
+                bName = true;
             else
             {
                 m_pNumFormatLB->Clear();
@@ -340,8 +340,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
         case TYP_FORMELFLD:
             {
-                bValue = sal_True;
-                bNumFmt = sal_True;
+                bValue = true;
+                bNumFmt = true;
                 m_pValueFT->SetText(SW_RESSTR(STR_FORMULA));
                 m_pValueED->SetDropEnable(true);
             }
@@ -373,16 +373,16 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         if(pSetTyp)
                         {
                             if (pSetTyp->GetType() & nsSwGetSetExpType::GSE_STRING)    // textual?
-                                bFormat = sal_True;
+                                bFormat = true;
                             else                    // numeric
-                                bNumFmt = sal_True;
+                                bNumFmt = true;
                         }
                     }
                 }
                 else
-                    bFormat = sal_False;
+                    bFormat = false;
 
-                EnableInsert(bFormat|bNumFmt);
+                EnableInsert(bFormat || bNumFmt);
             }
             break;
 
@@ -391,7 +391,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
             if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
             {
-                bValue = bNumFmt = sal_True;
+                bValue = bNumFmt = true;
 
                 OUString sName;
 
@@ -423,7 +423,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         m_pValueED->SetText(((SwSetExpField*)GetCurField())->GetPromptText());
                 }
                 else    // USERFLD
-                    bFormat = bNumFmt = sal_False;
+                    bFormat = bNumFmt = false;
             }
             break;
 
@@ -453,7 +453,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                     }
                 }
             }
-            bName = bValue = sal_True;
+            bName = bValue = true;
             break;
 
         case TYP_SEQFLD:
@@ -496,7 +496,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
         case TYP_SETREFPAGEFLD:
             {
-                bValue = sal_False;
+                bValue = false;
                 m_pValueFT->SetText( SW_RESSTR( STR_OFFSET ));
 
                 if (IsFldEdit() || pBox)    // only when interacting via mouse
@@ -504,7 +504,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
                 if (nSelPos != 0 && nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
-                    bValue = sal_True;      // SubType OFF - knows no Offset
+                    bValue = true;      // SubType OFF - knows no Offset
                     if (IsFldEdit())
                         m_pValueED->SetText(OUString::number(((SwRefPageSetField*)GetCurField())->GetOffset()));
                 }
@@ -521,9 +521,9 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
     m_pFormatLB->Show(!bNumFmt);
 
     if (IsFldEdit())
-        bName = sal_False;
+        bName = false;
 
-    m_pFormat->Enable(bFormat|bNumFmt);
+    m_pFormat->Enable(bFormat || bNumFmt);
     m_pNameFT->Enable(bName);
     m_pNameED->Enable(bName);
     m_pValueFT->Enable(bValue);
@@ -598,29 +598,29 @@ void SwFldVarPage::UpdateSubType()
             }
             else
             {
-                sal_Bool bInsert = sal_False;
+                bool bInsert = false;
 
                 switch (nTypeId)
                 {
                     case TYP_INPUTFLD:
                         if (aList[i] == GetCurField()->GetPar1())
-                            bInsert = sal_True;
+                            bInsert = true;
                         break;
 
                     case TYP_FORMELFLD:
-                        bInsert = sal_True;
+                        bInsert = true;
                         break;
 
                     case TYP_GETFLD:
                         if (aList[i].equals(((const SwFormulaField*)GetCurField())->GetFormula()))
-                            bInsert = sal_True;
+                            bInsert = true;
                         break;
 
                     case TYP_SETFLD:
                     case TYP_USERFLD:
                         if (aList[i] == GetCurField()->GetTyp()->GetName())
                         {
-                            bInsert = sal_True;
+                            bInsert = true;
                             if (GetCurField()->GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE)
                                 m_pInvisibleCB->Check();
                         }
@@ -638,7 +638,7 @@ void SwFldVarPage::UpdateSubType()
 
                     default:
                         if (aList[i] == GetCurField()->GetPar1())
-                            bInsert = sal_True;
+                            bInsert = true;
                         break;
                 }
                 if (bInsert)
@@ -652,7 +652,7 @@ void SwFldVarPage::UpdateSubType()
         }
     }
 
-    sal_Bool bEnable = m_pSelectionLB->GetEntryCount() != 0;
+    bool bEnable = m_pSelectionLB->GetEntryCount() != 0;
     ListBox *pLB = 0;
 
     if (bEnable)
@@ -690,7 +690,7 @@ sal_Int32 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
     // fill Format-Listbox
     m_pFormatLB->Clear();
     m_pNumFormatLB->Clear();
-    sal_Bool bSpecialFmt = sal_False;
+    bool bSpecialFmt = false;
 
     if( TYP_GETREFPAGEFLD != nTypeId )
     {
@@ -806,7 +806,7 @@ sal_Int32 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
 {
     OUString sValue(m_pValueED->GetText());
-    sal_Bool bHasValue = !sValue.isEmpty();
+    bool bHasValue = !sValue.isEmpty();
     const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
     bool bInsert = false, bApply = false, bDelete = false;
 
@@ -1076,7 +1076,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
 
 IMPL_LINK_NOARG(SwFldVarPage, ChapterHdl)
 {
-    sal_Bool bEnable = m_pChapterLevelLB->GetSelectEntryPos() != 0;
+    bool bEnable = m_pChapterLevelLB->GetSelectEntryPos() != 0;
 
     m_pSeparatorED->Enable(bEnable);
     m_pSeparatorFT->Enable(bEnable);
@@ -1087,7 +1087,7 @@ IMPL_LINK_NOARG(SwFldVarPage, ChapterHdl)
 
 IMPL_LINK_NOARG(SwFldVarPage, SeparatorHdl)
 {
-    sal_Bool bEnable = !m_pSeparatorED->GetText().isEmpty() ||
+    bool bEnable = !m_pSeparatorED->GetText().isEmpty() ||
                     m_pChapterLevelLB->GetSelectEntryPos() == 0;
     EnableInsert(bEnable);
 

@@ -49,15 +49,15 @@ class SwApplet_Impl
     OUString   sAlt;
 
 public:
-    static sal_uInt16 GetOptionType( const OUString& rName, sal_Bool bApplet );
+    static sal_uInt16 GetOptionType( const OUString& rName, bool bApplet );
     SwApplet_Impl( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
     SwApplet_Impl( SfxItemSet& rSet ): aItemSet ( rSet) {}
     ~SwApplet_Impl();
     void CreateApplet( const OUString& rCode, const OUString& rName,
-                       sal_Bool bMayScript, const OUString& rCodeBase,
+                       bool bMayScript, const OUString& rCodeBase,
                        const OUString& rBaseURL );
 #if HAVE_FEATURE_JAVA
-    sal_Bool CreateApplet( const OUString& rBaseURL );
+    bool CreateApplet( const OUString& rBaseURL );
     void AppendParam( const OUString& rName, const OUString& rValue );
 #endif
     void FinishApplet();

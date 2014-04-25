@@ -53,8 +53,8 @@ class SwParagraphNumTabPage : public SfxTabPage
     // --> OD 2008-04-14 #outlinelevel#
     const OUString msOutlineNumbering;
 
-    sal_Bool                    bModified : 1;
-    sal_Bool                    bCurNumrule : 1;
+    bool                    bModified : 1;
+    bool                    bCurNumrule : 1;
 
     DECL_LINK(NewStartHdl_Impl, void *);
     DECL_LINK( StyleHdl_Impl, ListBox* );

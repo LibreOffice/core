@@ -209,13 +209,13 @@ SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pSwTbl,
     , bColTags( bColTgs )
     , bPrcWidthOption( bPrcWdth )
     , bUseRelWidth( false )
-    , bMustResize( sal_True )
-    , bExportable( sal_True )
-    , bBordersChanged( sal_False )
-    , bMayBeInFlyFrame( sal_False )
-    , bDelayedResizeRecalc( sal_False)
-    , bMustNotResize( sal_False )
-    , bMustNotRecalc( sal_False )
+    , bMustResize( true )
+    , bExportable( true )
+    , bBordersChanged( false )
+    , bMayBeInFlyFrame( false )
+    , bDelayedResizeRecalc( false)
+    , bMustNotResize( false )
+    , bMustNotRecalc( false )
 {
     aResizeTimer.SetTimeoutHdl( STATIC_LINK( this, SwHTMLTableLayout,
                                              DelayedResize_Impl ) );
@@ -243,7 +243,7 @@ SwHTMLTableLayout::~SwHTMLTableLayout()
 /// We also need to respect the distance to the content. Even if
 /// only the opposite side has a border.
 sal_uInt16 SwHTMLTableLayout::GetLeftCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan,
-                                            sal_Bool bSwBorders ) const
+                                            bool bSwBorders ) const
 {
     sal_uInt16 nSpace = nCellSpacing + nCellPadding;
 
@@ -276,7 +276,7 @@ sal_uInt16 SwHTMLTableLayout::GetLeftCellSpace( sal_uInt16 nCol, sal_uInt16 nCol
 }
 
 sal_uInt16 SwHTMLTableLayout::GetRightCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan,
-                                             sal_Bool bSwBorders ) const
+                                             bool bSwBorders ) const
 {
     sal_uInt16 nSpace = nCellPadding;
 
@@ -302,7 +302,7 @@ sal_uInt16 SwHTMLTableLayout::GetRightCellSpace( sal_uInt16 nCol, sal_uInt16 nCo
 void SwHTMLTableLayout::AddBorderWidth( sal_uLong &rMin, sal_uLong &rMax,
                                         sal_uLong &rAbsMin,
                                         sal_uInt16 nCol, sal_uInt16 nColSpan,
-                                        sal_Bool bSwBorders ) const
+                                        bool bSwBorders ) const
 {
     sal_uLong nAdd = GetLeftCellSpace( nCol, nColSpan, bSwBorders ) +
                  GetRightCellSpace( nCol, nColSpan, bSwBorders );
@@ -626,7 +626,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                 }
 // This code previously came after AddBorderWidth
 
-                sal_Bool bRelWidth = pCell->IsPrcWidthOption();
+                bool bRelWidth = pCell->IsPrcWidthOption();
                 sal_uInt16 nWidth = pCell->GetWidthOption();
 
                 // A NOWRAP option applies to text and tables, but is
@@ -681,7 +681,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                     {
                         sal_uLong nAbsWidth = nWidth, nDummy = 0, nDummy2 = 0;
                         AddBorderWidth( nAbsWidth, nDummy, nDummy2,
-                                        i, nColSpan, sal_False );
+                                        i, nColSpan, false );
 
                         if( nAbsWidth >= nMinNoAlignCell )
                         {
@@ -749,7 +749,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                 // Take over absolute widths as minimal and maximal widths.
                 sal_uLong nAbsWidth = pColumn->GetWidthOption();
                 sal_uLong nDummy = 0, nDummy2 = 0;
-                AddBorderWidth( nAbsWidth, nDummy, nDummy2, i, 1, sal_False );
+                AddBorderWidth( nAbsWidth, nDummy, nDummy2, i, 1, false );
 
                 if( nAbsWidth >= pColumn->GetMinNoAlign() )
                 {
@@ -1572,7 +1572,7 @@ static void lcl_ResizeLine( const SwTableLine* pLine, sal_uInt16 *pWidth )
                  "A box's rows have all a different length" );
 }
 
-void SwHTMLTableLayout::SetWidths( sal_Bool bCallPass2, sal_uInt16 nAbsAvail,
+void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
                                    sal_uInt16 nRelAvail, sal_uInt16 nAbsLeftSpace,
                                    sal_uInt16 nAbsRightSpace,
                                    sal_uInt16 nParentInhAbsSpace )
@@ -1705,7 +1705,7 @@ void SwHTMLTableLayout::SetWidths( sal_Bool bCallPass2, sal_uInt16 nAbsAvail,
     }
 }
 
-void SwHTMLTableLayout::_Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc )
+void SwHTMLTableLayout::_Resize( sal_uInt16 nAbsAvail, bool bRecalc )
 {
     // If bRecalc is set, the table's content changed.
     // We need to execute pass 1 again.
@@ -1717,10 +1717,10 @@ void SwHTMLTableLayout::_Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc )
         pRoot->StartAllAction();
 
     // Else we can set the widths, in which we have to run Pass 2 in each case.
-    SetWidths( sal_True, nAbsAvail );
+    SetWidths( true, nAbsAvail );
 
     if ( pRoot && pRoot->IsCallbackActionEnabled() )
-        pRoot->EndAllAction( sal_True );    //True per VirDev (browsing is calmer)
+        pRoot->EndAllAction( true );    //True per VirDev (browsing is calmer)
 }
 
 IMPL_STATIC_LINK( SwHTMLTableLayout, DelayedResize_Impl, void*, EMPTYARG )
@@ -1732,20 +1732,20 @@ IMPL_STATIC_LINK( SwHTMLTableLayout, DelayedResize_Impl, void*, EMPTYARG )
     return 0;
 }
 
-sal_Bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc,
-                                sal_Bool bForce, sal_uLong nDelay )
+bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, bool bRecalc,
+                                bool bForce, sal_uLong nDelay )
 {
     if( 0 == nAbsAvail )
-        return sal_False;
+        return false;
     OSL_ENSURE( IsTopTable(), "Resize must only be called for top tables!" );
 
     // May the table be resized at all? Or is it forced?
     if( bMustNotResize && !bForce )
-        return sal_False;
+        return false;
 
     // May the table be recalculated? Or is it forced?
     if( bMustNotRecalc && !bForce )
-        bRecalc = sal_False;
+        bRecalc = false;
 
     const SwDoc *pDoc = GetDoc();
 
@@ -1766,7 +1766,7 @@ sal_Bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc,
         // a synchronous resize, we only take over the new values.
         bRecalc |= bDelayedResizeRecalc;
         nDelayedResizeAbsAvail = nAbsAvail;
-        return sal_False;
+        return false;
     }
 
     // Optimisation:
@@ -1782,7 +1782,7 @@ sal_Bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc,
                       (nLastResizeAbsAvail==nAbsAvail) ||
                       (nAbsAvail<=nMin && nRelTabWidth==nMin) ||
                       (!bPrcWidthOption && nAbsAvail>=nMax && nRelTabWidth==nMax) ) )
-        return sal_False;
+        return false;
 
     if( nDelay==HTMLTABLE_RESIZE_NOW )
     {
@@ -1802,12 +1802,12 @@ sal_Bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc,
         _Resize( nAbsAvail, bRecalc );
     }
 
-    return sal_True;
+    return true;
 }
 
-void SwHTMLTableLayout::BordersChanged( sal_uInt16 nAbsAvail, sal_Bool bRecalc )
+void SwHTMLTableLayout::BordersChanged( sal_uInt16 nAbsAvail, bool bRecalc )
 {
-    bBordersChanged = sal_True;
+    bBordersChanged = true;
 
     Resize( nAbsAvail, bRecalc );
 }

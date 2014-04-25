@@ -126,12 +126,12 @@ struct AutoMarkEntry
     OUString sPrimKey;
     OUString sSecKey;
     OUString sComment;
-    sal_Bool    bCase;
-    sal_Bool    bWord;
+    bool     bCase;
+    bool     bWord;
 
     AutoMarkEntry() :
-        bCase(sal_False),
-        bWord(sal_False){}
+        bCase(false),
+        bWord(false){}
 };
 typedef boost::ptr_vector<AutoMarkEntry> AutoMarkEntryArr;
 
@@ -213,7 +213,7 @@ sal_uInt16 CurTOXType::GetFlatIndex() const
 SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet,
                     SwWrtShell &rShell,
                     SwTOXBase* pCurTOX,
-                    sal_uInt16 nToxType, sal_Bool bGlobal)
+                    sal_uInt16 nToxType, bool bGlobal)
     : SfxTabDialog(pParent, "TocDialog",
         "modules/swriter/ui/tocdialog.ui", &rSet)
     , pMgr( new SwTOXMgr( &rShell ) )
@@ -245,7 +245,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
     //all user user indexes follow after position TOX_AUTHORITIES
     if(pCurTOX)
     {
-        bEditTOX = sal_True;
+        bEditTOX = true;
     }
     for(int i = nTypeCount - 1; i > -1; i--)
     {
@@ -468,7 +468,7 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
     {
         if(!pExampleFrame && !bExampleCreated)
         {
-            bExampleCreated = sal_True;
+            bExampleCreated = true;
             OUString sTemplate("internal/idxexample.odt");
 
             SvtPathOptions aOpt;
@@ -496,7 +496,7 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
             m_pShowExampleCB->Show(pExampleFrame && pExampleFrame->IsServiceAvailable());
         }
     }
-    sal_Bool bSetViewWindow = m_pShowExampleCB->IsChecked()
+    bool bSetViewWindow = m_pShowExampleCB->IsChecked()
         && pExampleFrame && pExampleFrame->IsServiceAvailable();
 
     m_pExampleContainerWIN->Show( bSetViewWindow );
@@ -507,19 +507,19 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
     return 0;
 }
 
-sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const OUString& rName)
+bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const OUString& rName)
 {
     SwTxtFmtColl* pColl = rSh.GetParaStyle(rName);
     if(pColl && ! pColl->IsAssignedToListLevelOfOutlineStyle())
-        return sal_True;
+        return true;
 
     const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
         rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
     if(nId != USHRT_MAX &&
         ! rSh.GetTxtCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle())
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 class SwIndexTreeLB : public SvSimpleTable
@@ -559,7 +559,7 @@ void SwIndexTreeLB::KeyInput( const KeyEvent& rKEvt )
 {
     SvTreeListEntry* pEntry = FirstSelected();
     KeyCode aCode = rKEvt.GetKeyCode();
-    sal_Bool bChanged = sal_False;
+    bool bChanged = false;
     if(pEntry)
     {
         sal_IntPtr nLevel = (sal_IntPtr)pEntry->GetUserData();
@@ -569,7 +569,7 @@ void SwIndexTreeLB::KeyInput( const KeyEvent& rKEvt )
                 nLevel++;
             else if(nLevel == USHRT_MAX)
                 nLevel = 0;
-            bChanged = sal_True;
+            bChanged = true;
         }
         else if(aCode.GetCode() == KEY_SUBTRACT)
         {
@@ -577,7 +577,7 @@ void SwIndexTreeLB::KeyInput( const KeyEvent& rKEvt )
                 nLevel = USHRT_MAX;
             else if(nLevel != USHRT_MAX)
                 nLevel--;
-            bChanged = sal_True;
+            bChanged = true;
         }
         if(bChanged)
         {
@@ -740,7 +740,7 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, HeaderDragHdl)
 
 IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
 {
-    sal_Bool bLeft = pBtn == m_pLeftPB;
+    bool bLeft = pBtn == m_pLeftPB;
     SvTreeListEntry* pEntry = m_pHeaderTree->FirstSelected();
     if(pEntry)
     {
@@ -987,12 +987,12 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     sal_uInt16 nCreateType = rDesc.GetContentOptions();
 
     //user + content
-    sal_Bool bHasStyleNames = sal_False;
+    bool bHasStyleNames = false;
 
     for( sal_uInt16 i = 0; i < MAXLEVEL; i++)
         if(!rDesc.GetStyleNames(i).isEmpty())
         {
-            bHasStyleNames = sal_True;
+            bHasStyleNames = true;
             break;
         }
     m_pAddStylesCB->Check(bHasStyleNames && (nCreateType & nsSwTOXElement::TOX_TEMPLATE));
@@ -1360,7 +1360,7 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
 
 IMPL_LINK_NOARG(SwTOXSelectTabPage, RadioButtonHdl)
 {
-    sal_Bool bEnable = m_pFromCaptionsRB->IsChecked();
+    bool bEnable = m_pFromCaptionsRB->IsChecked();
     m_pCaptionSequenceFT->Enable(bEnable);
     m_pCaptionSequenceLB->Enable(bEnable);
     m_pDisplayTypeFT->Enable(bEnable);
@@ -1646,7 +1646,7 @@ void SwTOXButton::KeyInput( const KeyEvent& rKEvt )
     }
     else if(aCode.GetCode() == KEY_DELETE)
     {
-        m_pParent->RemoveControl(this, sal_True);
+        m_pParent->RemoveControl(this, true);
         //this is invalid here
         return;
     }
@@ -1832,7 +1832,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     m_pCommaSeparatedCB->SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
     m_pRelToStyleCB->SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
 
-    FieldUnit aMetric = ::GetDfltMetric(sal_False);
+    FieldUnit aMetric = ::GetDfltMetric(false);
     SetMetric(*m_pTabPosMF, aMetric);
 
     m_pSortDocPosRB->Check();
@@ -1933,10 +1933,10 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
     m_pCurrentForm = pTOXDlg->GetForm(aCurType);
     if( !( aLastTOXType == aCurType ))
     {
-        sal_Bool bToxIsAuthorities = TOX_AUTHORITIES == aCurType.eType;
-        sal_Bool bToxIsIndex =       TOX_INDEX == aCurType.eType;
-        sal_Bool bToxIsContent =     TOX_CONTENT == aCurType.eType;
-        sal_Bool bToxIsSequence =    TOX_ILLUSTRATIONS == aCurType.eType;
+        bool bToxIsAuthorities = TOX_AUTHORITIES == aCurType.eType;
+        bool bToxIsIndex =       TOX_INDEX == aCurType.eType;
+        bool bToxIsContent =     TOX_CONTENT == aCurType.eType;
+        bool bToxIsSequence =    TOX_ILLUSTRATIONS == aCurType.eType;
 
         m_pLevelLB->Clear();
         for(sal_uInt16 i = 1; i < m_pCurrentForm->GetFormMax(); i++)
@@ -2336,7 +2336,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
         m_pNumberFormatLB->SelectEntryPos(nFormat);
     }
 
-    sal_Bool bTabStop = TOKEN_TAB_STOP == pToken->eTokenType;
+    bool bTabStop = TOKEN_TAB_STOP == pToken->eTokenType;
     m_pFillCharFT->Show(bTabStop);
     m_pFillCharCB->Show(bTabStop);
     m_pTabPosFT->Show(bTabStop);
@@ -2356,8 +2356,8 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
         m_pTabPosMF->Enable(false);
     }
 
-    sal_Bool bIsChapterInfo = pToken->eTokenType == TOKEN_CHAPTER_INFO;
-    sal_Bool bIsEntryNumber = pToken->eTokenType == TOKEN_ENTRY_NO;
+    bool bIsChapterInfo = pToken->eTokenType == TOKEN_CHAPTER_INFO;
+    bool bIsEntryNumber = pToken->eTokenType == TOKEN_ENTRY_NO;
     m_pChapterEntryFT->Show( bIsChapterInfo );
     m_pChapterEntryLB->Show( bIsChapterInfo );
     m_pEntryOutlineLevelFT->Show( bIsChapterInfo || bIsEntryNumber );
@@ -2519,7 +2519,7 @@ IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
             "no style::TabStop selected!");
 
     const SwFormToken& rToken = ((SwTOXButton*)pCurCtrl)->GetFormToken();
-    sal_Bool bChecked = pBox->IsChecked();
+    bool bChecked = pBox->IsChecked();
     if(rToken.eTokenType == TOKEN_TAB_STOP)
         ((SwTOXButton*)pCurCtrl)->SetTabAlign(
             bChecked ? SVX_TAB_ADJUST_END : SVX_TAB_ADJUST_LEFT);
@@ -3024,7 +3024,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
     AdjustPositions();
 }
 
-void SwTokenWindow::RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall )
+void SwTokenWindow::RemoveControl(SwTOXButton* pDel, bool bInternalCall )
 {
     if(bInternalCall && TOX_AUTHORITIES == pForm->GetTOXType())
         m_pParent->PreTokenButtonRemoved(pDel->GetFormToken());
@@ -3265,7 +3265,7 @@ OUString SwTokenWindow::GetPattern() const
 }
 
 // Check if a control of the specified TokenType is already contained in the list
-sal_Bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
+bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
 {
     bool bRet = false;
 
@@ -3287,14 +3287,14 @@ sal_Bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
     return bRet;
 }
 
-sal_Bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
+bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
             const SwFormToken& rToken,
             const HelpEvent& rHEvt)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( rHEvt.GetMode() & HELPMODE_QUICK )
     {
-        sal_Bool bBalloon = Help::IsBalloonHelpEnabled();
+        bool bBalloon = Help::IsBalloonHelpEnabled();
         OUString sEntry;
         if(bBalloon || rToken.eTokenType != TOKEN_AUTHORITY)
             sEntry = (aButtonHelpTexts[rToken.eTokenType]);
@@ -3321,7 +3321,7 @@ sal_Bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
         else
             Help::ShowQuickHelp( this, aItemRect, sEntry,
                 QUICKHELP_LEFT|QUICKHELP_VCENTER );
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
@@ -3857,7 +3857,7 @@ bool SwEntryBrowseBox::SaveModified()
     const sal_uInt16 nCol = GetCurColumnId();
 
     OUString sNew;
-    sal_Bool bVal = sal_False;
+    bool bVal = false;
     ::svt::CellController* pController = 0;
     if(nCol < ITEM_CASE)
     {

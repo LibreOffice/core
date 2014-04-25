@@ -818,7 +818,7 @@ void SwAnchoredDrawObject::NotifyBackground( SwPageFrm* _pPageFrm,
                                              const SwRect& _rRect,
                                              PrepareHint _eHint )
 {
-    ::Notify_Background( GetDrawObj(), _pPageFrm, _rRect, _eHint, sal_True );
+    ::Notify_Background( GetDrawObj(), _pPageFrm, _rRect, _eHint, true );
 }
 
 /** method to assure that anchored object is registered at the correct

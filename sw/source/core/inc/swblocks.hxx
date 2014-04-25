@@ -36,9 +36,9 @@ public:
     OUString aShort;                    // Short name
     OUString aLong;                     // Long name
     OUString aPackageName;         // Package name
-    sal_Bool bIsOnlyTxtFlagInit : 1;        // ist das Flag gueltig?
-    sal_Bool bIsOnlyTxt : 1;                // unformatted text
-    sal_Bool bInPutMuchBlocks : 1;          // put serveral block entries
+    bool bIsOnlyTxtFlagInit : 1;        // ist das Flag gueltig?
+    bool bIsOnlyTxt : 1;                // unformatted text
+    bool bInPutMuchBlocks : 1;          // put serveral block entries
 
     SwBlockName( const OUString& rShort, const OUString& rLong );
     SwBlockName( const OUString& rShort, const OUString& rLong, const OUString& rPackageName );
@@ -64,11 +64,11 @@ protected:
     Time aTimeModified;
     SwDoc* pDoc;                        // Austauschdokument
     sal_uInt16 nCur;                        // aktueller Index
-    sal_Bool bReadOnly : 1;
-    sal_Bool bInPutMuchBlocks : 1;          // put serveral block entries
-    sal_Bool bInfoChanged : 1;              // any Info of TextBlock is changed
+    bool bReadOnly : 1;
+    bool bInPutMuchBlocks : 1;          // put serveral block entries
+    bool bInfoChanged : 1;              // any Info of TextBlock is changed
 
-    SwImpBlocks( const OUString&, sal_Bool = sal_False );
+    SwImpBlocks( const OUString&, bool = false );
     virtual ~SwImpBlocks();
 
     static short GetFileType( const OUString& );
@@ -81,8 +81,8 @@ protected:
 
     virtual void   ClearDoc();                  // Doc-Inhalt loeschen
     SwPaM* MakePaM();                   // PaM ueber Doc aufspannen
-    virtual void   AddName( const OUString&, const OUString&, sal_Bool bOnlyTxt = sal_False );
-    sal_Bool   IsFileChanged() const;
+    virtual void   AddName( const OUString&, const OUString&, bool bOnlyTxt = false );
+    bool   IsFileChanged() const;
     void   Touch();
 
 public:
@@ -96,7 +96,7 @@ public:
 
     OUString GetFileName() const {return aFile;}   // phys. Dateinamen liefern
     void SetName( const OUString& rName )          // logic name
-        { aName = rName; bInfoChanged = sal_True; }
+        { aName = rName; bInfoChanged = true; }
     OUString GetName( void )
         { return aName; }
 
@@ -113,17 +113,17 @@ public:
     virtual sal_uLong PutText( const OUString&, const OUString&, const OUString& ) = 0;
     virtual sal_uLong MakeBlockList() = 0;
 
-    virtual sal_uLong OpenFile( sal_Bool bReadOnly = sal_True ) = 0;
+    virtual sal_uLong OpenFile( bool bReadOnly = true ) = 0;
     virtual void  CloseFile() = 0;
 
-    virtual sal_Bool IsOnlyTextBlock( const OUString& rShort ) const;
+    virtual bool IsOnlyTextBlock( const OUString& rShort ) const;
 
     virtual sal_uLong GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTbl,
-                                 sal_Bool bFileAlreadyOpen = sal_False );
+                                 bool bFileAlreadyOpen = false );
     virtual sal_uLong SetMacroTable( sal_uInt16 nIdx,
                                  const SvxMacroTableDtor& rMacroTbl,
-                                 sal_Bool bFileAlreadyOpen = sal_False );
-    virtual sal_Bool PutMuchEntries( sal_Bool bOn );
+                                 bool bFileAlreadyOpen = false );
+    virtual bool PutMuchEntries( bool bOn );
 };
 
 #endif

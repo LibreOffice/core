@@ -61,8 +61,8 @@ struct SwInsDBColumn
     sal_uInt32 nUsrNumFmt;
     LanguageType eUsrNumFmtLng;
     sal_uInt16 nCol;
-    sal_Bool bHasFmt : 1;
-    sal_Bool bIsDBFmt : 1;
+    bool bHasFmt : 1;
+    bool bIsDBFmt : 1;
 
     SwInsDBColumn( const OUString& rStr, sal_uInt16 nColumn )
         : sColumn( rStr ),
@@ -70,8 +70,8 @@ struct SwInsDBColumn
         nUsrNumFmt( 0 ),
         eUsrNumFmtLng( LANGUAGE_SYSTEM ),
         nCol( nColumn ),
-        bHasFmt(sal_False),
-        bIsDBFmt(sal_True)
+        bHasFmt(false),
+        bIsDBFmt(true)
     {}
 
     bool operator==( const SwInsDBColumn& rCmp ) const
@@ -142,7 +142,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     DECL_LINK( DblClickHdl, ListBox* );
     DECL_LINK( HeaderHdl, Button* );
 
-    bool SplitTextToColArr( const OUString& rTxt, _DB_Columns& rColArr, sal_Bool bInsField );
+    bool SplitTextToColArr( const OUString& rTxt, _DB_Columns& rColArr, bool bInsField );
         using SfxModalDialog::Notify;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     virtual void            Commit() SAL_OVERRIDE;

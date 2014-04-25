@@ -39,7 +39,7 @@ using uno::Sequence;
 const sal_Char sServiceName[] = "com.sun.star.text.AccessiblePageView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessiblePageView";
 
-sal_Bool SwAccessiblePage::IsSelected()
+bool SwAccessiblePage::IsSelected()
 {
     return GetMap()->IsPageSelected( static_cast < const SwPageFrm * >( GetFrm() ) );
 }
@@ -67,8 +67,8 @@ void SwAccessiblePage::GetStates(
 
 void SwAccessiblePage::_InvalidateCursorPos()
 {
-    sal_Bool bNewSelected = IsSelected();
-    sal_Bool bOldSelected;
+    bool bNewSelected = IsSelected();
+    bool bOldSelected;
 
     {
         osl::MutexGuard aGuard( aMutex );
@@ -97,7 +97,7 @@ void SwAccessiblePage::_InvalidateFocus()
     Window *pWin = GetWindow();
     if( pWin )
     {
-        sal_Bool bSelected;
+        bool bSelected;
 
         {
             osl::MutexGuard aGuard( aMutex );
@@ -113,7 +113,7 @@ void SwAccessiblePage::_InvalidateFocus()
 SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pInitMap,
                                     const SwFrm* pFrame )
     : SwAccessibleContext( pInitMap, AccessibleRole::PANEL, pFrame )
-    , bIsSelected( sal_False )
+    , bIsSelected( false )
 {
     OSL_ENSURE( pFrame != NULL, "need frame" );
     OSL_ENSURE( pInitMap != NULL, "need map" );
@@ -130,7 +130,7 @@ SwAccessiblePage::~SwAccessiblePage()
 {
 }
 
-sal_Bool SwAccessiblePage::HasCursor()
+bool SwAccessiblePage::HasCursor()
 {
     osl::MutexGuard aGuard( aMutex );
     return bIsSelected;

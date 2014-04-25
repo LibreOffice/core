@@ -892,7 +892,7 @@ void SwSidebarWin::SetSidebarPosition(sw::sidebarwindows::SidebarPosition eSideb
     meSidebarPosition = eSidebarPosition;
 }
 
-void SwSidebarWin::SetReadonly(sal_Bool bSet)
+void SwSidebarWin::SetReadonly(bool bSet)
 {
     mbReadonly = bSet;
     GetOutlinerView()->SetReadOnly(bSet);
@@ -1129,8 +1129,8 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclSimpleEvent*, pEvent )
         else if ( pWinEvent->GetId() == VCLEVENT_WINDOW_ACTIVATE &&
                   pWinEvent->GetWindow() == mpSidebarTxtControl )
         {
-            const sal_Bool bLockView = mrView.GetWrtShell().IsViewLocked();
-            mrView.GetWrtShell().LockView( sal_True );
+            const bool bLockView = mrView.GetWrtShell().IsViewLocked();
+            mrView.GetWrtShell().LockView( true );
 
             if ( !IsPreview() )
             {
@@ -1331,7 +1331,7 @@ void SwSidebarWin::SwitchToFieldPos()
     GotoPos();
     sal_uInt32 aCount = MoveCaret();
     if (aCount)
-        mrView.GetDocShell()->GetWrtShell()->SwCrsrShell::Right(aCount, 0, sal_False);
+        mrView.GetDocShell()->GetWrtShell()->SwCrsrShell::Right(aCount, 0, false);
     GrabFocusToDocument();
 }
 

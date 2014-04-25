@@ -53,9 +53,9 @@ using namespace sw::access;
 const sal_Char sServiceName[] = "com.sun.star.table.AccessibleCellView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleCellView";
 
-sal_Bool SwAccessibleCell::IsSelected()
+bool SwAccessibleCell::IsSelected()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     OSL_ENSURE( GetMap(), "no map?" );
     const SwViewShell *pVSh = GetMap()->GetShell();
@@ -103,7 +103,7 @@ SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
                                     const SwCellFrm *pCellFrm )
     : SwAccessibleContext( pInitMap, AccessibleRole::TABLE_CELL, pCellFrm )
     , aSelectionHelper( *this )
-    , bIsSelected( sal_False )
+    , bIsSelected( false )
 {
     SolarMutexGuard aGuard;
     OUString sBoxName( pCellFrm->GetTabBox()->GetName() );
@@ -122,10 +122,10 @@ SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
     m_pAccTable = static_cast<SwAccessibleTable *>(xTableReference.get());
 }
 
-sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
+bool SwAccessibleCell::_InvalidateMyCursorPos()
 {
-    sal_Bool bNew = IsSelected();
-    sal_Bool bOld;
+    bool bNew = IsSelected();
+    bool bOld;
     {
         osl::MutexGuard aGuard( aMutex );
         bOld = bIsSelected;
@@ -139,7 +139,7 @@ sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
         GetMap()->SetCursorContext( xThis );
     }
 
-    sal_Bool bChanged = bOld != bNew;
+    bool bChanged = bOld != bNew;
     if( bChanged )
     {
         FireStateChangedEvent( AccessibleStateType::SELECTED, bNew );
@@ -151,9 +151,9 @@ sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
     return bChanged;
 }
 
-sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
+bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
 {
-    sal_Bool bChanged = sal_False;
+    bool bChanged = false;
 
     const SwAccessibleChildSList aVisList( GetVisArea(), *pFrm, *GetMap() );
     SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
@@ -166,7 +166,7 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
             if( rLower.IsAccessible( GetMap()->GetShell()->IsPreview() )  )
             {
                 ::rtl::Reference< SwAccessibleContext > xAccImpl(
-                    GetMap()->GetContextImpl( pLower, sal_False ) );
+                    GetMap()->GetContextImpl( pLower, false ) );
                 if( xAccImpl.is() )
                 {
                     OSL_ENSURE( xAccImpl->GetFrm()->IsCellFrm(),
@@ -175,7 +175,7 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
                             xAccImpl.get() )->_InvalidateMyCursorPos();
                 }
                 else
-                    bChanged = sal_True; // If the context is not know we
+                    bChanged = true; // If the context is not know we
                                          // don't know whether the selection
                                          // changed or not.
             }
@@ -226,7 +226,7 @@ void SwAccessibleCell::_InvalidateCursorPos()
     }
 }
 
-sal_Bool SwAccessibleCell::HasCursor()
+bool SwAccessibleCell::HasCursor()
 {
     osl::MutexGuard aGuard( aMutex );
     return bIsSelected;
@@ -264,11 +264,11 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
     return aRet;
 }
 
-void SwAccessibleCell::Dispose( sal_Bool bRecursive )
+void SwAccessibleCell::Dispose( bool bRecursive )
 {
     const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
     ::rtl::Reference< SwAccessibleContext > xAccImpl(
-            GetMap()->GetContextImpl( pParent, sal_False ) );
+            GetMap()->GetContextImpl( pParent, false ) );
     if( xAccImpl.is() )
         xAccImpl->DisposeChild( SwAccessibleChild(GetFrm()), bRecursive );
     SwAccessibleContext::Dispose( bRecursive );
@@ -278,7 +278,7 @@ void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
 {
     const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
     ::rtl::Reference< SwAccessibleContext > xAccImpl(
-            GetMap()->GetContextImpl( pParent, sal_False ) );
+            GetMap()->GetContextImpl( pParent, false ) );
     if( xAccImpl.is() )
         xAccImpl->InvalidateChildPosOrSize( SwAccessibleChild(GetFrm()), rOldBox );
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
@@ -366,7 +366,7 @@ sal_Bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
     CHECK_FOR_DEFUNC( XAccessibleValue );
 
     double fValue = 0;
-    sal_Bool bValid = (aNumber >>= fValue);
+    bool bValid = (aNumber >>= fValue);
     if( bValid )
     {
         SwTblBoxValue aValue( fValue );

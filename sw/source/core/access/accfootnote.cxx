@@ -44,7 +44,7 @@ const sal_Char sImplementationNameEndnote[] = "com.sun.star.comp.Writer.SwAccess
 
 SwAccessibleFootnote::SwAccessibleFootnote(
         SwAccessibleMap* pInitMap,
-        sal_Bool bIsEndnote,
+        bool bIsEndnote,
         const SwFtnFrm *pFtnFrm ) :
     SwAccessibleContext( pInitMap,
         bIsEndnote ? AccessibleRole::END_NOTE : AccessibleRole::FOOTNOTE,
@@ -128,7 +128,7 @@ Sequence< sal_Int8 > SAL_CALL SwAccessibleFootnote::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-sal_Bool SwAccessibleFootnote::IsEndnote( const SwFtnFrm *pFtnFrm )
+bool SwAccessibleFootnote::IsEndnote( const SwFtnFrm *pFtnFrm )
 {
     const SwTxtFtn *pTxtFtn = pFtnFrm ->GetAttr();
     return pTxtFtn && pTxtFtn->GetFtn().IsEndNote() ;

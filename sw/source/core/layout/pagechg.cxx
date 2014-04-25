@@ -161,7 +161,7 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
         Prt().Height( Frm().Height() );
         Prt().Width( Frm().Width() );
     }
-    mbValidSize = mbValidPrtArea = sal_True;
+    mbValidSize = mbValidPrtArea = true;
 }
 
 SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
@@ -170,22 +170,22 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
     pDesc( pPgDsc ),
     nPhyPageNum( 0 )
 {
-    SetDerivedVert( sal_False );
-    SetDerivedR2L( sal_False );
+    SetDerivedVert( false );
+    SetDerivedR2L( false );
     if( pDesc )
     {
-        bHasGrid = sal_True;
+        bHasGrid = true;
         SwTextGridItem const*const pGrid(GetGridItem(this));
         if( !pGrid )
-            bHasGrid = sal_False;
+            bHasGrid = false;
     }
     else
-        bHasGrid = sal_False;
+        bHasGrid = false;
     SetMaxFtnHeight( pPgDsc->GetFtnInfo().GetHeight() ?
                      pPgDsc->GetFtnInfo().GetHeight() : LONG_MAX ),
     mnType = FRMC_PAGE;
-    bInvalidLayout = bInvalidCntnt = bInvalidSpelling = bInvalidSmartTags = bInvalidAutoCmplWrds = bInvalidWordCount = sal_True;
-    bInvalidFlyLayout = bInvalidFlyCntnt = bInvalidFlyInCnt = bFtnPage = bEndNotePage = sal_False;
+    bInvalidLayout = bInvalidCntnt = bInvalidSpelling = bInvalidSmartTags = bInvalidAutoCmplWrds = bInvalidWordCount = true;
+    bInvalidFlyLayout = bInvalidFlyCntnt = bInvalidFlyInCnt = bFtnPage = bEndNotePage = false;
 
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
@@ -202,9 +202,9 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
 
     // create and insert body area if it is not a blank page
     SwDoc *pDoc = pFmt->GetDoc();
-    if ( sal_False == (bEmptyPage = (pFmt == pDoc->GetEmptyPageFmt())) )
+    if ( false == (bEmptyPage = (pFmt == pDoc->GetEmptyPageFmt())) )
     {
-        bEmptyPage = sal_False;
+        bEmptyPage = false;
         Calc();                     // so that the PrtArea is correct
         SwBodyFrm *pBodyFrm = new SwBodyFrm( pDoc->GetDfltFrmFmt(), this );
         pBodyFrm->ChgSize( Prt().SSize() );
@@ -278,10 +278,10 @@ SwPageFrm::~SwPageFrm()
     }
 }
 
-void SwPageFrm::CheckGrid( sal_Bool bInvalidate )
+void SwPageFrm::CheckGrid( bool bInvalidate )
 {
-    sal_Bool bOld = bHasGrid;
-    bHasGrid = sal_True;
+    bool bOld = bHasGrid;
+    bHasGrid = true;
     SwTextGridItem const*const pGrid(GetGridItem(this));
     bHasGrid = 0 != pGrid;
     if( bInvalidate || bOld != bHasGrid )
@@ -309,38 +309,38 @@ void SwPageFrm::CheckDirection( bool bVert )
     {
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir )
         {
-            mbVertLR = 0;
-            mbVertical = 0;
+            mbVertLR = false;
+            mbVertical = false;
         }
         else
         {
             const SwViewShell *pSh = getRootFrm()->GetCurrShell();
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             {
-                mbVertLR = 0;
-                mbVertical = 0;
+                mbVertLR = false;
+                mbVertical = false;
             }
             else
             {
-                mbVertical = 1;
+                mbVertical = true;
 
                 if(FRMDIR_VERT_TOP_RIGHT == nDir)
-                    mbVertLR = 0;
+                    mbVertLR = false;
                     else if(FRMDIR_VERT_TOP_LEFT==nDir)
-                       mbVertLR = 1;
+                       mbVertLR = true;
             }
         }
 
-        mbReverse = 0;
-        mbInvalidVert = 0;
+        mbReverse = false;
+        mbInvalidVert = false;
     }
     else
     {
         if( FRMDIR_HORI_RIGHT_TOP == nDir )
-            mbRightToLeft = 1;
+            mbRightToLeft = true;
         else
-            mbRightToLeft = 0;
-        mbInvalidR2L = 0;
+            mbRightToLeft = false;
+        mbInvalidR2L = false;
     }
 }
 
@@ -440,7 +440,7 @@ static void lcl_MakeObjs( const SwFrmFmts &rTbl, SwPageFrm *pPage )
     }
 }
 
-void SwPageFrm::PreparePage( sal_Bool bFtn )
+void SwPageFrm::PreparePage( bool bFtn )
 {
     SetFtnPage( bFtn );
 
@@ -583,7 +583,7 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             SwViewShell *pSh = getRootFrm()->GetCurrShell();
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             {
-                mbValidSize = sal_False;
+                mbValidSize = false;
                 // OD 28.10.2002 #97265# - Don't call <SwPageFrm::MakeAll()>
                 // Calculation of the page is not necessary, because its size is
                 // is invalidated here and further invalidation is done in the
@@ -654,7 +654,7 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 SetMaxFtnHeight( LONG_MAX );
             SetColMaxFtnHeight();
             // here, the page might be destroyed:
-            ((SwRootFrm*)GetUpper())->RemoveFtns( 0, sal_False, sal_True );
+            ((SwRootFrm*)GetUpper())->RemoveFtns( 0, false, true );
             break;
         case RES_FRAMEDIR :
             CheckDirChange();
@@ -773,8 +773,8 @@ SwPageDesc *SwPageFrm::FindPageDesc()
 // Notify if the RootFrm changes its size
 void AdjustSizeChgNotify( SwRootFrm *pRoot )
 {
-    const sal_Bool bOld = pRoot->IsSuperfluous();
-    pRoot->bCheckSuperfluous = sal_False;
+    const bool bOld = pRoot->IsSuperfluous();
+    pRoot->bCheckSuperfluous = false;
     SwViewShell *pSh = pRoot->GetCurrShell();
     if ( pSh )
     {
@@ -963,7 +963,7 @@ void SwPageFrm::PrepareRegisterChg()
  * @param bNotifyFields
  * @param ppPrev
  */
-void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields, SwPageFrm** ppPrev )
+void SwFrm::CheckPageDescs( SwPageFrm *pStart, bool bNotifyFields, SwPageFrm** ppPrev )
 {
     OSL_ENSURE( pStart, "no starting page." );
 
@@ -991,9 +991,9 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields, SwPageFrm
     {
         // obtain PageDesc and FrmFmt
         SwPageDesc *pDesc = pPage->FindPageDesc();
-        sal_Bool bCheckEmpty = pPage->IsEmptyPage();
-        sal_Bool bActOdd = pPage->OnRightPage();
-        sal_Bool bOdd = pPage->WannaRightPage();
+        bool bCheckEmpty = pPage->IsEmptyPage();
+        bool bActOdd = pPage->OnRightPage();
+        bool bOdd = pPage->WannaRightPage();
         bool bFirst = pPage->OnFirstPage();
         SwFrmFmt *pFmtWish = (bOdd)
             ? pDesc->GetRightFmt(bFirst) : pDesc->GetLeftFmt(bFirst);
@@ -1056,7 +1056,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields, SwPageFrm
                     pDesc = ((SwPageFrm*)pPage->GetPrev())->GetPageDesc();
                 SwPageFrm *pTmp = new SwPageFrm( pDoc->GetEmptyPageFmt(),pRoot,pDesc);
                 pTmp->Paste( pRoot, pPage );
-                pTmp->PreparePage( sal_False );
+                pTmp->PreparePage( false );
                 pPage = pTmp;
             }
             else if ( pPage->GetPageDesc() != pDesc )           //4.
@@ -1151,7 +1151,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields, SwPageFrm
 #endif
 }
 
-SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
+SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, bool bFtn )
 {
     SwRootFrm *pRoot = (SwRootFrm*)pPrevPage->GetUpper();
     SwPageFrm *pSibling = (SwPageFrm*)pPrevPage->GetNext();
@@ -1172,7 +1172,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
             ::boost::optional<sal_uInt16> oNumOffset = rDesc.GetNumOffset();
             bWishedOdd = ((oNumOffset ? oNumOffset.get() : 0) % 2) ? true : false;
             // use the opportunity to set the flag at root
-            pRoot->SetVirtPageNum( sal_True );
+            pRoot->SetVirtPageNum( true );
         }
     }
     if ( !pDesc )
@@ -1200,7 +1200,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
             SwPageFrm *pDel = pSibling;
             pSibling = (SwPageFrm*)pSibling->GetNext();
             if ( !pDoc->GetFtnIdxs().empty() )
-                pRoot->RemoveFtns( pDel, sal_True );
+                pRoot->RemoveFtns( pDel, true );
             pDel->Cut();
             delete pDel;
         }
@@ -1221,7 +1221,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
         SwPageFrm *pDel = pSibling;
         pSibling = (SwPageFrm*)pSibling->GetNext();
         if ( !pDoc->GetFtnIdxs().empty() )
-            pRoot->RemoveFtns( pDel, sal_True );
+            pRoot->RemoveFtns( pDel, true );
         pDel->Cut();
         delete pDel;
     }
@@ -1232,7 +1232,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
     {
         if ( bCheckPages )
         {
-            CheckPageDescs( pSibling, sal_False );
+            CheckPageDescs( pSibling, false );
             SwViewShell *pSh = getRootFrm()->GetCurrShell();
             SwViewImp *pImp = pSh ? pSh->Imp() : 0;
             if ( pImp && pImp->IsAction() && !pImp->GetLayAction().IsCheckPages() )
@@ -1278,14 +1278,14 @@ sw::sidebarwindows::SidebarPosition SwPageFrm::SidebarPosition() const
     }
 }
 
-SwTwips SwRootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
+SwTwips SwRootFrm::GrowFrm( SwTwips nDist, bool bTst, bool )
 {
     if ( !bTst )
         Frm().SSize().Height() += nDist;
     return nDist;
 }
 
-SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
+SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool )
 {
     OSL_ENSURE( nDist >= 0, "nDist < 0." );
     OSL_ENSURE( nDist <= Frm().Height(), "nDist > als aktuelle Groesse." );
@@ -1304,7 +1304,7 @@ void SwRootFrm::RemoveSuperfluous()
 
     if ( !IsSuperfluous() )
         return;
-    bCheckSuperfluous = sal_False;
+    bCheckSuperfluous = false;
 
     SwPageFrm *pPage = GetLastPage();
     long nDocPos = LONG_MAX;
@@ -1369,7 +1369,7 @@ void SwRootFrm::RemoveSuperfluous()
             SwPageFrm *pEmpty = pPage;
             pPage = (SwPageFrm*)pPage->GetPrev();
             if ( !GetFmt()->GetDoc()->GetFtnIdxs().empty() )
-                RemoveFtns( pEmpty, sal_True );
+                RemoveFtns( pEmpty, true );
             pEmpty->Cut();
             delete pEmpty;
             nDocPos = pPage ? pPage->Frm().Top() : 0;
@@ -1390,7 +1390,7 @@ void SwRootFrm::AssertFlyPages()
 {
     if ( !IsAssertFlyPages() )
         return;
-    bAssertFlyPages = sal_False;
+    bAssertFlyPages = false;
 
     SwDoc *pDoc = GetFmt()->GetDoc();
     const SwFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
@@ -1416,7 +1416,7 @@ void SwRootFrm::AssertFlyPages()
     if ( nMaxPg > pPage->GetPhyPageNum() )
     {
         // Continue pages based on the rules of the PageDesc after the last page.
-        sal_Bool bOdd = (pPage->GetPhyPageNum() % 2) ? sal_True : sal_False;
+        bool bOdd = (pPage->GetPhyPageNum() % 2) ? sal_True : sal_False;
         SwPageDesc *pDesc = pPage->GetPageDesc();
         SwFrm *pSibling = pPage->GetNext();
         for ( i = pPage->GetPhyPageNum(); i < nMaxPg; ++i  )
@@ -1426,7 +1426,7 @@ void SwRootFrm::AssertFlyPages()
                 // Insert empty page (but Flys will be stored in the next page)
                 pPage = new SwPageFrm( pDoc->GetEmptyPageFmt(), this, pDesc );
                 pPage->Paste( this, pSibling );
-                pPage->PreparePage( sal_False );
+                pPage->PreparePage( false );
                 bOdd = bOdd ? sal_False : sal_True;
                 ++i;
             }
@@ -1434,7 +1434,7 @@ void SwRootFrm::AssertFlyPages()
                     SwPageFrm( (bOdd ? pDesc->GetRightFmt() :
                                        pDesc->GetLeftFmt()), this, pDesc );
             pPage->Paste( this, pSibling );
-            pPage->PreparePage( sal_False );
+            pPage->PreparePage( false );
             bOdd = bOdd ? sal_False : sal_True;
             pDesc = pDesc->GetFollow();
         }
@@ -1451,7 +1451,7 @@ void SwRootFrm::AssertFlyPages()
                 bOdd = pPage->OnRightPage();
                 if ( pPage->GetFmt() !=
                      (bOdd ? pTmpDesc->GetRightFmt() : pTmpDesc->GetLeftFmt()) )
-                    RemoveFtns( pPage, sal_False, sal_True );
+                    RemoveFtns( pPage, false, true );
             }
         }
     }
@@ -1503,31 +1503,31 @@ Size SwRootFrm::ChgSize( const Size& aNewSize )
 {
     Frm().SSize() = aNewSize;
     _InvalidatePrt();
-    mbFixSize = sal_False;
+    mbFixSize = false;
     return Frm().SSize();
 }
 
 void SwRootFrm::MakeAll()
 {
     if ( !mbValidPos )
-    {   mbValidPos = sal_True;
+    {   mbValidPos = true;
         maFrm.Pos().setX(DOCUMENTBORDER);
         maFrm.Pos().setY(DOCUMENTBORDER);
     }
     if ( !mbValidPrtArea )
-    {   mbValidPrtArea = sal_True;
+    {   mbValidPrtArea = true;
         maPrt.Pos().setX(0);
         maPrt.Pos().setY(0);
         maPrt.SSize( maFrm.SSize() );
     }
     if ( !mbValidSize )
         // SSize is set by the pages (Cut/Paste).
-        mbValidSize = sal_True;
+        mbValidSize = true;
 }
 
 void SwRootFrm::ImplInvalidateBrowseWidth()
 {
-    bBrowseWidthValid = sal_False;
+    bBrowseWidthValid = false;
     SwFrm *pPg = Lower();
     while ( pPg )
     {
@@ -1553,7 +1553,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
     if ( !pFrm )
         return;
 
-    bBrowseWidthValid = sal_True;
+    bBrowseWidthValid = true;
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
     nBrowseWidth = pSh
                     ? MINLAY + 2 * pSh->GetOut()->
@@ -1602,7 +1602,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
                 const SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
-                const sal_Bool bFly = pAnchoredObj->ISA(SwFlyFrm);
+                const bool bFly = pAnchoredObj->ISA(SwFlyFrm);
                 if ((bFly && (FAR_AWAY == pAnchoredObj->GetObjRect().Width()))
                     || rFmt.GetFrmSize().GetWidthPercent())
                 {
@@ -1671,13 +1671,13 @@ void SwRootFrm::StartAllAction()
         } while ( pSh != GetCurrShell() );
 }
 
-void SwRootFrm::EndAllAction( sal_Bool bVirDev )
+void SwRootFrm::EndAllAction( bool bVirDev )
 {
     SwViewShell *pSh = GetCurrShell();
     if ( pSh )
         do
         {
-            const sal_Bool bOldEndActionByVirDev = pSh->IsEndActionByVirDev();
+            const bool bOldEndActionByVirDev = pSh->IsEndActionByVirDev();
             pSh->SetEndActionByVirDev( bVirDev );
             if ( pSh->ISA( SwCrsrShell ) )
             {
@@ -1706,8 +1706,8 @@ void SwRootFrm::UnoRemoveAllActions()
             if ( !pSh->IsInEndAction() )
             {
                 OSL_ENSURE(!pSh->GetRestoreActions(), "Restore action count is already set!");
-                sal_Bool bCrsr = pSh->ISA( SwCrsrShell );
-                sal_Bool bFE = pSh->ISA( SwFEShell );
+                bool bCrsr = pSh->ISA( SwCrsrShell );
+                bool bFE = pSh->ISA( SwFEShell );
                 sal_uInt16 nRestore = 0;
                 while( pSh->ActionCount() )
                 {
@@ -1724,7 +1724,7 @@ void SwRootFrm::UnoRemoveAllActions()
                 }
                 pSh->SetRestoreActions(nRestore);
             }
-            pSh->LockView(sal_True);
+            pSh->LockView(true);
             pSh = (SwViewShell*)pSh->GetNext();
 
         } while ( pSh != GetCurrShell() );
@@ -1745,7 +1745,7 @@ void SwRootFrm::UnoRestoreAllActions()
                     pSh->StartAction();
             }
             pSh->SetRestoreActions(0);
-            pSh->LockView(sal_False);
+            pSh->LockView(false);
             pSh = (SwViewShell*)pSh->GetNext();
 
         } while ( pSh != GetCurrShell() );
@@ -1914,8 +1914,8 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 
     Calc();
 
-    const sal_Bool bOldCallbackActionEnabled = IsCallbackActionEnabled();
-    SetCallbackActionEnabled( sal_False );
+    const bool bOldCallbackActionEnabled = IsCallbackActionEnabled();
+    SetCallbackActionEnabled( false );
 
     maPageRects.clear();
 

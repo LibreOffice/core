@@ -735,7 +735,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
         pTmpFrm = GetFlyFrm();
     const bool bVertX = pTmpFrm->IsVertical();
 
-    const sal_Bool bRTL = pTmpFrm->IsRightToLeft();
+    const bool bRTL = pTmpFrm->IsRightToLeft();
 
     const bool bVertL2RX = pTmpFrm->IsVertLR();
     const Point aNewPos( ( bVertX && !bVertL2RX ) || bRTL ?

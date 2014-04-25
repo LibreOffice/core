@@ -76,13 +76,13 @@ private:
     sal_Int16 nRole;        // immutable outside constructor
 
     // The current states (protected by mutex)
-    sal_Bool bIsShowingState : 1;
-    sal_Bool bIsEditableState : 1;
-    sal_Bool bIsOpaqueState : 1;
-    sal_Bool bIsDefuncState : 1;
+    bool bIsShowingState : 1;
+    bool bIsEditableState : 1;
+    bool bIsOpaqueState : 1;
+    bool bIsDefuncState : 1;
 
     // Are we currently disposing that object (protected by solar mutex)?
-    sal_Bool bDisposing : 1;
+    bool bDisposing : 1;
 
     // #i85634# - boolean, indicating if the accessible context is
     // in general registered at the accessible map.
@@ -90,7 +90,7 @@ private:
 
     void InitStates();
     //Add a member to identify the first time that document load
-    sal_Bool bBeginDocumentLoad;
+    bool bBeginDocumentLoad;
 
 protected:
     void SetName( const OUString& rName ) { sName = rName; }
@@ -99,13 +99,13 @@ protected:
         return nRole;
     }
     //Add a member to identify if the document is Asyn load.
-    sal_Bool isIfAsynLoad;
+    bool isIfAsynLoad;
     //This flag is used to mark the object's selected state.
-    sal_Bool   bIsSeletedInDoc;
+    bool   bIsSeletedInDoc;
     void SetParent( SwAccessibleContext *pParent );
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> GetWeakParent() const;
 
-    sal_Bool IsDisposing() const { return bDisposing; }
+    bool IsDisposing() const { return bDisposing; }
 
     Window *GetWindow();
     SwAccessibleMap *GetMap() { return pMap; }
@@ -153,14 +153,14 @@ protected:
     // Dispose children of the specified SwFrm. The SwFrm might belong to
     // the current object or to any other child or grandchild.
     void DisposeChildren( const SwFrm *pFrm,
-                                       sal_Bool bRecursive );
+                          bool bRecursive );
 
     void DisposeShape( const SdrObject *pObj,
                                 ::accessibility::AccessibleShape *pAccImpl );
     void ScrolledInShape( const SdrObject *pObj,
                                 ::accessibility::AccessibleShape *pAccImpl );
 
-    virtual void _InvalidateContent( sal_Bool bVisibleDataFired );
+    virtual void _InvalidateContent( bool bVisibleDataFired );
 
     virtual void _InvalidateCursorPos();
     virtual void _InvalidateFocus();
@@ -174,17 +174,17 @@ protected:
     void FireVisibleDataEvent();
 
     // broadcast state change event
-    void FireStateChangedEvent( sal_Int16 nState, sal_Bool bNewState );
+    void FireStateChangedEvent( sal_Int16 nState, bool bNewState );
 
     // Set states for getAccessibleStateSet.
     // This base class sets DEFUNC(0/1), EDITABLE(0/1), ENABLED(1),
     // SHOWING(0/1), OPAQUE(0/1) and VISIBLE(1).
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
-     sal_Bool IsEditableState();
+     bool IsEditableState();
 
     virtual ::com::sun::star::awt::Rectangle SAL_CALL
-        getBoundsImpl(sal_Bool bRelative)
+        getBoundsImpl(bool bRelative)
         throw (::com::sun::star::uno::RuntimeException);
 
     // #i85634#
@@ -325,10 +325,10 @@ public:
     // thread safe C++ interface
 
     // The object is not visible an longer and should be destroyed
-    virtual void Dispose( sal_Bool bRecursive = sal_False );
+    virtual void Dispose( bool bRecursive = false );
 
     // The child object is not visible an longer and should be destroyed
-    virtual void DisposeChild( const sw::access::SwAccessibleChild& rFrmOrObj, sal_Bool bRecursive );
+    virtual void DisposeChild( const sw::access::SwAccessibleChild& rFrmOrObj, bool bRecursive );
 
     // The object has been moved by the layout
     virtual void InvalidatePosOrSize( const SwRect& rFrm );
@@ -366,21 +366,21 @@ public:
 
     const OUString& GetName() const { return sName; }
 
-    virtual sal_Bool HasCursor();   // required by map to remember that object
+    virtual bool HasCursor();   // required by map to remember that object
 
-    sal_Bool Select( SwPaM *pPaM, SdrObject *pObj, sal_Bool bAdd );
-    inline sal_Bool Select( SwPaM& rPaM )
+    bool Select( SwPaM *pPaM, SdrObject *pObj, bool bAdd );
+    inline bool Select( SwPaM& rPaM )
     {
-        return Select( &rPaM, 0, sal_False );
+        return Select( &rPaM, 0, false );
     }
-    inline sal_Bool Select( SdrObject *pObj, sal_Bool bAdd )
+    inline bool Select( SdrObject *pObj, bool bAdd )
     {
         return Select( 0, pObj, bAdd );
     }
 
     //This method is used to updated the selected state and fire the selected state changed event.
-    virtual sal_Bool SetSelectedState(sal_Bool bSeleted);
-    sal_Bool  IsSeletedInDoc(){  return bIsSeletedInDoc; }
+    virtual bool SetSelectedState(bool bSeleted);
+    bool  IsSeletedInDoc(){  return bIsSeletedInDoc; }
 
     static OUString GetResource( sal_uInt16 nResId,
                                         const OUString *pArg1 = 0,

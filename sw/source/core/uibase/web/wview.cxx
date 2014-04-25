@@ -283,7 +283,7 @@ void SwWebView::SelectShell()
 
     //Opportune time for the communication with OLE objects?
     if ( GetDocShell()->GetDoc()->IsOLEPrtNotifyPending() )
-        GetDocShell()->GetDoc()->PrtOLENotify( sal_False );
+        GetDocShell()->GetDoc()->PrtOLENotify( false );
 
     //now the table update
     if(bUpdateTable)

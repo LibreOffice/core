@@ -47,14 +47,14 @@ using namespace ::com::sun::star;
 
 SwHyphWrapper::SwHyphWrapper( SwView* pVw,
             uno::Reference< linguistic2::XHyphenator >  &rxHyph,
-            sal_Bool bStart, sal_Bool bOther, sal_Bool bSelect ) :
+            bool bStart, bool bOther, bool bSelect ) :
     SvxSpellWrapper( &pVw->GetEditWin(), rxHyph, bStart, bOther ),
     pView( pVw ),
     xHyph( rxHyph ),
     nPageCount( 0 ),
     nPageStart( 0 ),
     bInSelection( bSelect ),
-    bInfoBox( sal_False )
+    bInfoBox( false )
 {
     uno::Reference< linguistic2::XLinguProperties >  xProp( GetLinguPropertySet() );
     bAutomatic = xProp.is() ? xProp->getIsHyphAuto() : sal_False;
@@ -106,7 +106,7 @@ void SwHyphWrapper::SpellEnd()
 bool SwHyphWrapper::SpellMore()
 {
     PSH->Push();
-    bInfoBox = sal_True;
+    bInfoBox = true;
     PSH->Combine();
     return false;
 }

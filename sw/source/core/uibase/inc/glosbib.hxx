@@ -92,7 +92,7 @@ class SwGlossaryGroupDlg : public SvxStandardDialog
 
     OUString        sCreatedGroup;
 
-    sal_Bool            IsDeleteAllowed(const OUString &rGroup);
+    bool            IsDeleteAllowed(const OUString &rGroup);
 
 protected:
     virtual void Apply() SAL_OVERRIDE;

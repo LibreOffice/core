@@ -109,7 +109,7 @@ sal_uInt16 SwGlossaries::GetGroupCnt()
 /*------------------------------------------------------------------------
     Description: supplies the group's name
 ------------------------------------------------------------------------*/
-sal_Bool SwGlossaries::FindGroupName(OUString& rGroup)
+bool SwGlossaries::FindGroupName(OUString& rGroup)
 {
     // if the group name doesn't contain a path, a suitable group entry
     // can the searched for here;
@@ -121,7 +121,7 @@ sal_Bool SwGlossaries::FindGroupName(OUString& rGroup)
         if (rGroup==sTemp.getToken(0, GLOS_DELIM))
         {
             rGroup = sTemp;
-            return sal_True;
+            return true;
         }
     }
     // you can search two times because for more directories the case sensitive
@@ -136,10 +136,10 @@ sal_Bool SwGlossaries::FindGroupName(OUString& rGroup)
              && rSCmp.isEqual( rGroup, sTemp.getToken( 0, GLOS_DELIM) ) )
         {
             rGroup = sTemp;
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 OUString SwGlossaries::GetGroupName(sal_uInt16 nGroupId)
@@ -155,7 +155,7 @@ OUString SwGlossaries::GetGroupTitle( const OUString& rGroupName )
     OUString sGroup(rGroupName);
     if (sGroup.indexOf(GLOS_DELIM)<0)
         FindGroupName(sGroup);
-    SwTextBlocks* pGroup = GetGroupDoc(sGroup, sal_False);
+    SwTextBlocks* pGroup = GetGroupDoc(sGroup, false);
     if(pGroup)
     {
         sRet = pGroup->GetName();
@@ -168,7 +168,7 @@ OUString SwGlossaries::GetGroupTitle( const OUString& rGroupName )
     Description: supplies the group rName's text block document
 ------------------------------------------------------------------------*/
 SwTextBlocks* SwGlossaries::GetGroupDoc(const OUString &rName,
-                                        sal_Bool bCreate)
+                                        bool bCreate)
 {
     // insert to the list of text blocks if applicable
     if(bCreate && !m_GlosArr.empty())
@@ -199,12 +199,12 @@ void SwGlossaries::PutGroupDoc(SwTextBlocks *pBlock) {
                    also created as file so that groups remain there later
                    (without access).
 ------------------------------------------------------------------------*/
-sal_Bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
+bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
 {
     const OUString sNewPath(rGroupName.getToken(1, GLOS_DELIM));
     sal_uInt16 nNewPath = (sal_uInt16)sNewPath.toInt32();
     if (static_cast<size_t>(nNewPath) >= m_PathArr.size())
-        return sal_False;
+        return false;
     const OUString sNewFilePath(m_PathArr[nNewPath]);
     const OUString sNewGroup = lcl_CheckFileName(sNewFilePath, rGroupName.getToken(0, GLOS_DELIM))
         + OUString(GLOS_DELIM) + sNewPath;
@@ -215,17 +215,17 @@ sal_Bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
         pBlock->SetName(rTitle);
         PutGroupDoc(pBlock);
         rGroupName = sNewGroup;
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool    SwGlossaries::RenameGroupDoc(
+bool    SwGlossaries::RenameGroupDoc(
     const OUString& rOldGroup, OUString& rNewGroup, const OUString& rNewTitle )
 {
     sal_uInt16 nOldPath = (sal_uInt16)rOldGroup.getToken(1, GLOS_DELIM).toInt32();
     if (static_cast<size_t>(nOldPath) >= m_PathArr.size())
-        return sal_False;
+        return false;
 
     const OUString sOldFileURL =
         lcl_FullPathName(m_PathArr[nOldPath], rOldGroup.getToken(0, GLOS_DELIM));
@@ -233,12 +233,12 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
     if (!FStatHelper::IsDocument( sOldFileURL ))
     {
         OSL_FAIL("group doesn't exist!");
-        return sal_False;
+        return false;
     }
 
     sal_uInt16 nNewPath = (sal_uInt16)rNewGroup.getToken(1, GLOS_DELIM).toInt32();
     if (static_cast<size_t>(nNewPath) >= m_PathArr.size())
-        return sal_False;
+        return false;
 
     const OUString sNewFileName = lcl_CheckFileName(m_PathArr[nNewPath],
                                                     rNewGroup.getToken(0, GLOS_DELIM));
@@ -247,11 +247,11 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
     if (FStatHelper::IsDocument( sNewFileURL ))
     {
         OSL_FAIL("group already exists!");
-        return sal_False;
+        return false;
     }
 
-    if (!SWUnoHelper::UCB_CopyFile(sOldFileURL, sNewFileURL, sal_True ))
-        return sal_False;
+    if (!SWUnoHelper::UCB_CopyFile(sOldFileURL, sNewFileURL, true ))
+        return false;
 
     RemoveFileFromList( rOldGroup );
 
@@ -269,24 +269,24 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
     pNewBlock->SetName(rNewTitle);
     delete pNewBlock;
 
-    return sal_True;
+    return true;
 }
 
 /*------------------------------------------------------------------------
     Description: Deletes a text block group
 ------------------------------------------------------------------------*/
-sal_Bool SwGlossaries::DelGroupDoc(const OUString &rName)
+bool SwGlossaries::DelGroupDoc(const OUString &rName)
 {
     sal_uInt16 nPath = (sal_uInt16)rName.getToken(1, GLOS_DELIM).toInt32();
     if (static_cast<size_t>(nPath) >= m_PathArr.size())
-        return sal_False;
+        return false;
     const OUString sBaseName(rName.getToken(0, GLOS_DELIM));
     const OUString sFileURL = lcl_FullPathName(m_PathArr[nPath], sBaseName);
     const OUString aName = sBaseName + OUString(GLOS_DELIM) + OUString::number(nPath);
     // Even if the file doesn't exist it has to be deleted from
     // the list of text block regions
     // no && because of CFfront
-    sal_Bool bRemoved = SWUnoHelper::UCB_DeleteFile( sFileURL );
+    bool bRemoved = SWUnoHelper::UCB_DeleteFile( sFileURL );
     OSL_ENSURE(bRemoved, "file has not been removed");
     RemoveFileFromList( aName );
     return bRemoved;
@@ -300,7 +300,7 @@ SwGlossaries::~SwGlossaries()
 /*------------------------------------------------------------------------
     Description: read a block document
 ------------------------------------------------------------------------*/
-SwTextBlocks* SwGlossaries::GetGlosDoc( const OUString &rName, sal_Bool bCreate ) const
+SwTextBlocks* SwGlossaries::GetGlosDoc( const OUString &rName, bool bCreate ) const
 {
     sal_uInt16 nPath = (sal_uInt16)rName.getToken(1, GLOS_DELIM).toInt32();
     SwTextBlocks *pTmp = 0;
@@ -309,7 +309,7 @@ SwTextBlocks* SwGlossaries::GetGlosDoc( const OUString &rName, sal_Bool bCreate 
         const OUString sFileURL =
             lcl_FullPathName(m_PathArr[nPath], rName.getToken(0, GLOS_DELIM));
 
-        sal_Bool bExist = sal_False;
+        bool bExist = false;
         if(!bCreate)
             bExist = FStatHelper::IsDocument( sFileURL );
 
@@ -364,7 +364,7 @@ std::vector<OUString> & SwGlossaries::GetNameList()
 
 SwGlossaries::SwGlossaries()
 {
-    UpdateGlosPath(sal_True);
+    UpdateGlosPath(true);
 }
 
 /*------------------------------------------------------------------------
@@ -385,7 +385,7 @@ rtl::OUString lcl_makePath(const std::vector<rtl::OUString>& rPaths)
     return aPath.getStr();
 }
 
-void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
+void SwGlossaries::UpdateGlosPath(bool bFull)
 {
     SvtPathOptions aPathOpt;
     OUString aNewPath( aPathOpt.GetAutoTextPath() );
@@ -433,13 +433,13 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
                 ErrorHandler::HandleError( *new StringErrorInfo(
                                         ERR_AUTOPATH_ERROR, lcl_makePath(m_aInvalidPaths),
                                         ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ));
-                m_bError = sal_True;
+                m_bError = true;
             }
             else
-                m_bError = sal_False;
+                m_bError = false;
         }
         else
-            m_bError = sal_False;
+            m_bError = false;
 
         if (!m_GlosArr.empty())
         {
@@ -639,7 +639,7 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry(
     bool _bCreate )
 {
     //standard must be created
-    sal_Bool bCreate = ( rCompleteGroupName == GetDefName() );
+    bool bCreate = ( rCompleteGroupName == GetDefName() );
     boost::scoped_ptr< SwTextBlocks > pGlosGroup( GetGroupDoc( rCompleteGroupName, bCreate ) );
 
     if ( pGlosGroup.get() && !pGlosGroup->GetError() )

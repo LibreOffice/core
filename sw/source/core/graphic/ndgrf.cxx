@@ -429,7 +429,7 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
                                 const Graphic* pGraphic,
                                 SwGrfFmtColl* pGrfColl,
                                 SwAttrSet* pAutoAttr,
-                                sal_Bool bDelayed )
+                                bool bDelayed )
 {
     OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer ist 0." );
     SwGrfNode *pNode;

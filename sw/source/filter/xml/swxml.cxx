@@ -285,7 +285,7 @@ sal_Int32 ReadThroughComponent(
 
     // open stream (and set parser input)
     OUString sStreamName = OUString::createFromAscii(pStreamName);
-    sal_Bool bContainsStream = sal_False;
+    bool bContainsStream = false;
     try
     {
         bContainsStream = xStorage->isStreamElement(sStreamName);
@@ -432,7 +432,7 @@ static void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 
             // apply outline numbering rule, if none is set.
             const SfxPoolItem& rItem =
-                aCreatedDefaultOutlineStyles[ i ]->GetFmtAttr( RES_PARATR_NUMRULE, sal_False );
+                aCreatedDefaultOutlineStyles[ i ]->GetFmtAttr( RES_PARATR_NUMRULE, false );
             if ( static_cast<const SwNumRuleItem&>(rItem).GetValue().isEmpty() )
             {
                 SwNumRuleItem aItem( pOutlineRule->GetName() );
@@ -791,16 +791,16 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     // force redline mode to "none"
     rDoc.SetRedlineMode_intern( nsRedlineMode_t::REDLINE_NONE );
 
-    const sal_Bool bOASIS = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
+    const bool bOASIS = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
     // #i28749# - set property <ShapePositionInHoriL2R>
     {
-        const sal_Bool bShapePositionInHoriL2R = !bOASIS;
+        const bool bShapePositionInHoriL2R = !bOASIS;
         xInfoSet->setPropertyValue(
                 "ShapePositionInHoriL2R",
                 makeAny( bShapePositionInHoriL2R ) );
     }
     {
-        const sal_Bool bTextDocInOOoFileFormat = !bOASIS;
+        const bool bTextDocInOOoFileFormat = !bOASIS;
         xInfoSet->setPropertyValue(
                 "TextDocInOOoFileFormat",
                 makeAny( bTextDocInOOoFileFormat ) );
@@ -892,9 +892,9 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
 
     // Notify math objects
     if( bInsertMode )
-        rDoc.PrtOLENotify( sal_False );
+        rDoc.PrtOLENotify( false );
     else if ( rDoc.IsOLEPrtNotifyPending() )
-        rDoc.PrtOLENotify( sal_True );
+        rDoc.PrtOLENotify( true );
 
     nRet = nRet ? nRet : (nWarn ? nWarn : (nWarn2 ? nWarn2 : nWarnRDF ) );
 

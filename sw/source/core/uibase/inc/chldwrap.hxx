@@ -36,7 +36,7 @@ protected:
     SwChildWinWrapper(Window *pParentWindow, sal_uInt16 nId);
 
 public:
-    virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
+    virtual bool    ReInitDlg(SwDocShell *pDocSh);
 
     inline SwDocShell*  GetOldDocShell()                    { return m_pDocSh; }
     inline void         SetOldDocShell(SwDocShell *pDcSh)   { m_pDocSh = pDcSh; }

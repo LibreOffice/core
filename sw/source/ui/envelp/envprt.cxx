@@ -42,7 +42,7 @@ SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet)
     SetExchangeSupport();
 
     // Metrics
-    FieldUnit eUnit = ::GetDfltMetric(sal_False);
+    FieldUnit eUnit = ::GetDfltMetric(false);
     SetMetric(*m_pRightField, eUnit);
     SetMetric(*m_pDownField, eUnit);
 

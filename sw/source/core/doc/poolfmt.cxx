@@ -485,7 +485,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         case RES_POOLCOLL_SIGNATURE:            // Signatures
         case RES_POOLCOLL_TABLE:                // Tabele content
             {
-                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                SwFmtLineNumber aLN; aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -575,7 +575,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         case RES_POOLCOLL_FOOTERL:
         case RES_POOLCOLL_FOOTERR:
             {
-                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                SwFmtLineNumber aLN; aLN.SetCountLines( false );
                 aSet.Put( aLN );
 
                 long nRightMargin = lcl_GetRightMargin( *this );
@@ -592,7 +592,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             {
                 SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
                 aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
-                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                SwFmtLineNumber aLN; aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -605,7 +605,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
                 aLR.SetTxtLeft( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) );
                 SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
                 aSet.Put( aLR );
-                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                SwFmtLineNumber aLN; aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -616,7 +616,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
                 aSet.Put( aUL );
                 SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE ) );
                 SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
-                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                SwFmtLineNumber aLN; aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -632,7 +632,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             {
                 SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetLower( PT_3 );
                 aSet.Put( aUL );
-                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                SwFmtLineNumber aLN; aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -646,7 +646,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
                     SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetLower( PT_3 );
                     aSet.Put( aUL );
                 }
-                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                SwFmtLineNumber aLN; aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -655,7 +655,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         case RES_POOLCOLL_TOX_USERH:            // Header
             lcl_SetRegister( this, aSet, 0, true, false );
             {
-                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                SwFmtLineNumber aLN; aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -694,7 +694,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         case RES_POOLCOLL_TOX_IDXH:         // Header
             lcl_SetRegister( this, aSet, 0, true, false );
             {
-                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                SwFmtLineNumber aLN; aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -715,7 +715,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         case RES_POOLCOLL_TOX_CNTNTH:       // Header
             lcl_SetRegister( this, aSet, 0, true, false );
             {
-                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                SwFmtLineNumber aLN; aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -756,7 +756,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         case RES_POOLCOLL_TOX_AUTHORITIESH:
             lcl_SetRegister( this, aSet, 0, true, false );
             {
-                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                SwFmtLineNumber aLN; aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -1020,7 +1020,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
                 aBox.SetLine( &aNew, BOX_LINE_BOTTOM );
 
                 aSet.Put( aBox );
-                aSet.Put( SwParaConnectBorderItem( sal_False ) );
+                aSet.Put( SwParaConnectBorderItem( false ) );
                 SetAllScriptItem( aSet, SvxFontHeightItem(120, 100, RES_CHRATR_FONTSIZE) );
 
                 SvxULSpaceItem aUL( RES_UL_SPACE );
@@ -1031,7 +1031,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
                 }
                 aUL.SetLower( HTML_PARSPACE );
                 aSet.Put( aUL);
-                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                SwFmtLineNumber aLN; aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -1367,7 +1367,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             aProtect.SetPosProtect( true );
             aSet.Put( aProtect );
 
-            pNewFmt->SetAutoUpdateFmt( sal_True );
+            pNewFmt->SetAutoUpdateFmt( true );
         }
         break;
     }
@@ -1563,7 +1563,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aUL );
 
             pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
-            pNewPgDsc->SetLandscape( sal_True );
+            pNewPgDsc->SetLandscape( true );
         }
         break;
 
@@ -1609,7 +1609,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aLR );
             aSet.Put( aUL );
             pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
-            pNewPgDsc->SetLandscape( sal_True );
+            pNewPgDsc->SetLandscape( true );
         }
         break;
 
@@ -1663,7 +1663,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
 
         pNewRule = GetNumRuleTbl()[ n ];
         pNewRule->SetPoolFmtId( nId );
-        pNewRule->SetAutoRule( sal_False );
+        pNewRule->SetAutoRule( false );
 
         if( RES_POOLNUMRULE_NUM1 <= nId && nId <= RES_POOLNUMRULE_NUM5 )
             pNumCFmt = GetCharFmtFromPool( RES_POOLCHR_NUM_LEVEL );

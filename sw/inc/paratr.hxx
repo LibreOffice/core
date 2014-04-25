@@ -45,7 +45,7 @@ class SW_DLLPUBLIC SwFmtDrop: public SfxPoolItem, public SwClient
     sal_uInt16 nReadFmt;        ///< For Sw3-Reader: CharFormat-Id (load Pool!).
     sal_uInt8  nLines;          ///< Line count.
     sal_uInt8  nChars;          ///< Character count.
-    sal_Bool   bWholeWord;      ///< First word with initials.
+    bool   bWholeWord;      ///< First word with initials.
 public:
     TYPEINFO_OVERRIDE(); ///< Already in base class SwClient.
 
@@ -80,8 +80,8 @@ public:
     inline sal_uInt8 GetChars() const { return nChars; }
     inline sal_uInt8 &GetChars() { return nChars; }
 
-    inline sal_Bool GetWholeWord() const { return bWholeWord; }
-    inline sal_uInt8 &GetWholeWord() { return bWholeWord; }
+    inline bool GetWholeWord() const { return bWholeWord; }
+    inline bool &GetWholeWord() { return bWholeWord; }
 
     inline sal_uInt16 GetDistance() const { return nDistance; }
     inline sal_uInt16 &GetDistance() { return nDistance; }
@@ -103,7 +103,7 @@ class SwRegisterItem : public SfxBoolItem
 public:
     TYPEINFO_OVERRIDE();
 
-    inline SwRegisterItem( const sal_Bool bRegister = sal_False );
+    inline SwRegisterItem( const bool bRegister = false );
 
     /// @@@ public copy assignment, but no copy ctor?
     inline SwRegisterItem& operator=( const SwRegisterItem& rRegister );
@@ -117,7 +117,7 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 };
 
-inline SwRegisterItem::SwRegisterItem( const sal_Bool bRegister ) :
+inline SwRegisterItem::SwRegisterItem( const bool bRegister ) :
     SfxBoolItem( RES_PARATR_REGISTER, bRegister )
 {}
 
@@ -163,7 +163,7 @@ class SwParaConnectBorderItem : public SfxBoolItem
 public:
     TYPEINFO_OVERRIDE();
 
-    inline SwParaConnectBorderItem( const sal_Bool bConnect = sal_True );
+    inline SwParaConnectBorderItem( const bool bConnect = true );
 
     /// @@@ public copy assignment, but no copy ctor?
     inline SwParaConnectBorderItem& operator=( const SwParaConnectBorderItem& rConnect );
@@ -177,7 +177,7 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 };
 
-inline SwParaConnectBorderItem::SwParaConnectBorderItem( const sal_Bool bConnect ) :
+inline SwParaConnectBorderItem::SwParaConnectBorderItem( const bool bConnect ) :
     SfxBoolItem( RES_PARATR_CONNECT_BORDER, bConnect )
 {}
 
@@ -189,71 +189,71 @@ inline SwParaConnectBorderItem& SwParaConnectBorderItem::operator=(
 }
 
 //  Implementation of paragraph-attributes methods of SwAttrSet
-inline const SvxLineSpacingItem &SwAttrSet::GetLineSpacing(sal_Bool bInP) const
+inline const SvxLineSpacingItem &SwAttrSet::GetLineSpacing(bool bInP) const
     {   return (const SvxLineSpacingItem&)Get( RES_PARATR_LINESPACING,bInP); }
-inline const SvxAdjustItem &SwAttrSet::GetAdjust(sal_Bool bInP) const
+inline const SvxAdjustItem &SwAttrSet::GetAdjust(bool bInP) const
     {   return (const SvxAdjustItem&)Get( RES_PARATR_ADJUST,bInP); }
-inline const SvxFmtSplitItem &SwAttrSet::GetSplit(sal_Bool bInP) const
+inline const SvxFmtSplitItem &SwAttrSet::GetSplit(bool bInP) const
     {   return (const SvxFmtSplitItem&)Get( RES_PARATR_SPLIT,bInP); }
-inline const SwRegisterItem &SwAttrSet::GetRegister(sal_Bool bInP) const
+inline const SwRegisterItem &SwAttrSet::GetRegister(bool bInP) const
     {   return (const SwRegisterItem&)Get( RES_PARATR_REGISTER,bInP); }
-inline const SvxWidowsItem &SwAttrSet::GetWidows(sal_Bool bInP) const
+inline const SvxWidowsItem &SwAttrSet::GetWidows(bool bInP) const
     {   return (const SvxWidowsItem&)Get( RES_PARATR_WIDOWS,bInP); }
-inline const SvxOrphansItem &SwAttrSet::GetOrphans(sal_Bool bInP) const
+inline const SvxOrphansItem &SwAttrSet::GetOrphans(bool bInP) const
     {   return (const SvxOrphansItem&)Get( RES_PARATR_ORPHANS,bInP); }
-inline const SvxTabStopItem &SwAttrSet::GetTabStops(sal_Bool bInP) const
+inline const SvxTabStopItem &SwAttrSet::GetTabStops(bool bInP) const
     {   return (const SvxTabStopItem&)Get( RES_PARATR_TABSTOP,bInP); }
-inline const SvxHyphenZoneItem &SwAttrSet::GetHyphenZone(sal_Bool bInP) const
+inline const SvxHyphenZoneItem &SwAttrSet::GetHyphenZone(bool bInP) const
     {   return (const SvxHyphenZoneItem&)Get(RES_PARATR_HYPHENZONE,bInP); }
-inline const SwFmtDrop &SwAttrSet::GetDrop(sal_Bool bInP) const
+inline const SwFmtDrop &SwAttrSet::GetDrop(bool bInP) const
     {   return (const SwFmtDrop&)Get(RES_PARATR_DROP,bInP); }
-inline const SwNumRuleItem &SwAttrSet::GetNumRule(sal_Bool bInP) const
+inline const SwNumRuleItem &SwAttrSet::GetNumRule(bool bInP) const
     {   return (const SwNumRuleItem&)Get(RES_PARATR_NUMRULE,bInP); }
-inline const SvxScriptSpaceItem& SwAttrSet::GetScriptSpace(sal_Bool bInP) const
+inline const SvxScriptSpaceItem& SwAttrSet::GetScriptSpace(bool bInP) const
     {   return (const SvxScriptSpaceItem&)Get(RES_PARATR_SCRIPTSPACE,bInP); }
-inline const SvxHangingPunctuationItem &SwAttrSet::GetHangingPunctuation(sal_Bool bInP) const
+inline const SvxHangingPunctuationItem &SwAttrSet::GetHangingPunctuation(bool bInP) const
     {   return (const SvxHangingPunctuationItem&)Get(RES_PARATR_HANGINGPUNCTUATION,bInP); }
-inline const SvxForbiddenRuleItem &SwAttrSet::GetForbiddenRule(sal_Bool bInP) const
+inline const SvxForbiddenRuleItem &SwAttrSet::GetForbiddenRule(bool bInP) const
     {   return (const SvxForbiddenRuleItem&)Get(RES_PARATR_FORBIDDEN_RULES, bInP); }
-inline const SvxParaVertAlignItem &SwAttrSet::GetParaVertAlign(sal_Bool bInP) const
+inline const SvxParaVertAlignItem &SwAttrSet::GetParaVertAlign(bool bInP) const
     {   return (const SvxParaVertAlignItem&)Get( RES_PARATR_VERTALIGN, bInP ); }
-inline const SvxParaGridItem &SwAttrSet::GetParaGrid(sal_Bool bInP) const
+inline const SvxParaGridItem &SwAttrSet::GetParaGrid(bool bInP) const
     {   return (const SvxParaGridItem&)Get( RES_PARATR_SNAPTOGRID, bInP ); }
-inline const SwParaConnectBorderItem &SwAttrSet::GetParaConnectBorder(sal_Bool bInP) const
+inline const SwParaConnectBorderItem &SwAttrSet::GetParaConnectBorder(bool bInP) const
     {   return (const SwParaConnectBorderItem&)Get( RES_PARATR_CONNECT_BORDER, bInP ); }
 
 // Implementation of paragraph-attributes methods of SwFmt
-inline const SvxLineSpacingItem &SwFmt::GetLineSpacing(sal_Bool bInP) const
+inline const SvxLineSpacingItem &SwFmt::GetLineSpacing(bool bInP) const
     {   return aSet.GetLineSpacing(bInP); }
-inline const SvxAdjustItem &SwFmt::GetAdjust(sal_Bool bInP) const
+inline const SvxAdjustItem &SwFmt::GetAdjust(bool bInP) const
     {   return aSet.GetAdjust(bInP); }
-inline const SvxFmtSplitItem &SwFmt::GetSplit(sal_Bool bInP) const
+inline const SvxFmtSplitItem &SwFmt::GetSplit(bool bInP) const
     {   return aSet.GetSplit(bInP); }
-inline const SwRegisterItem &SwFmt::GetRegister(sal_Bool bInP) const
+inline const SwRegisterItem &SwFmt::GetRegister(bool bInP) const
     {   return aSet.GetRegister(bInP); }
-inline const SvxWidowsItem &SwFmt::GetWidows(sal_Bool bInP) const
+inline const SvxWidowsItem &SwFmt::GetWidows(bool bInP) const
     {   return aSet.GetWidows(bInP); }
-inline const SvxOrphansItem &SwFmt::GetOrphans(sal_Bool bInP) const
+inline const SvxOrphansItem &SwFmt::GetOrphans(bool bInP) const
     {   return aSet.GetOrphans(bInP); }
-inline const SvxTabStopItem &SwFmt::GetTabStops(sal_Bool bInP) const
+inline const SvxTabStopItem &SwFmt::GetTabStops(bool bInP) const
     {   return aSet.GetTabStops(bInP); }
-inline const SvxHyphenZoneItem &SwFmt::GetHyphenZone(sal_Bool bInP) const
+inline const SvxHyphenZoneItem &SwFmt::GetHyphenZone(bool bInP) const
     {   return aSet.GetHyphenZone(bInP); }
-inline const SwFmtDrop &SwFmt::GetDrop(sal_Bool bInP) const
+inline const SwFmtDrop &SwFmt::GetDrop(bool bInP) const
     {   return aSet.GetDrop(bInP); }
-inline const SwNumRuleItem &SwFmt::GetNumRule(sal_Bool bInP) const
+inline const SwNumRuleItem &SwFmt::GetNumRule(bool bInP) const
     {   return aSet.GetNumRule(bInP); }
-inline const SvxScriptSpaceItem& SwFmt::GetScriptSpace(sal_Bool bInP) const
+inline const SvxScriptSpaceItem& SwFmt::GetScriptSpace(bool bInP) const
     {   return aSet.GetScriptSpace(bInP) ; }
-inline const SvxHangingPunctuationItem &SwFmt::GetHangingPunctuation(sal_Bool bInP) const
+inline const SvxHangingPunctuationItem &SwFmt::GetHangingPunctuation(bool bInP) const
     {   return aSet.GetHangingPunctuation(bInP) ; }
-inline const SvxForbiddenRuleItem &SwFmt::GetForbiddenRule(sal_Bool bInP) const
+inline const SvxForbiddenRuleItem &SwFmt::GetForbiddenRule(bool bInP) const
     {   return (const SvxForbiddenRuleItem&)aSet.Get(RES_PARATR_FORBIDDEN_RULES, bInP); }
-inline const SvxParaVertAlignItem &SwFmt::GetParaVertAlign(sal_Bool bInP) const
+inline const SvxParaVertAlignItem &SwFmt::GetParaVertAlign(bool bInP) const
     {   return (const SvxParaVertAlignItem&)aSet.Get( RES_PARATR_VERTALIGN, bInP ); }
-inline const SvxParaGridItem &SwFmt::GetParaGrid(sal_Bool bInP) const
+inline const SvxParaGridItem &SwFmt::GetParaGrid(bool bInP) const
     {   return (const SvxParaGridItem&)aSet.Get( RES_PARATR_SNAPTOGRID, bInP ); }
-inline const SwParaConnectBorderItem &SwFmt::GetParaConnectBorder(sal_Bool bInP) const
+inline const SwParaConnectBorderItem &SwFmt::GetParaConnectBorder(bool bInP) const
     {   return (const SwParaConnectBorderItem&)aSet.Get( RES_PARATR_CONNECT_BORDER, bInP ); }
 
 #endif

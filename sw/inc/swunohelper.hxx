@@ -43,17 +43,17 @@ sal_Int32 GetEnumAsInt32( const com::sun::star::uno::Any& rVal );
 
 // methods for UCB actions:
     // delete the file under this URL
-SW_DLLPUBLIC sal_Bool UCB_DeleteFile( const OUString& rURL );
+SW_DLLPUBLIC bool UCB_DeleteFile( const OUString& rURL );
 
     // copy/move the file to a new location
-sal_Bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL,
-                    sal_Bool bCopyIsMove = sal_False );
+bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL,
+                    bool bCopyIsMove = false );
 
     // is the URL on the current system case sentive?
-SW_DLLPUBLIC sal_Bool UCB_IsCaseSensitiveFileName( const OUString& rURL );
+SW_DLLPUBLIC bool UCB_IsCaseSensitiveFileName( const OUString& rURL );
 
     // is the URL readonly?
-SW_DLLPUBLIC sal_Bool UCB_IsReadOnlyFileName( const OUString& rURL );
+SW_DLLPUBLIC bool UCB_IsReadOnlyFileName( const OUString& rURL );
 
     // get a list of files from the folder of the URL
     // options: pExtension = 0 -> all, else this specific extension
@@ -66,10 +66,10 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
                                 std::vector<DateTime*>* pDateTimeList = 0 );
 
     // is the URL an existing file?
-SW_DLLPUBLIC sal_Bool UCB_IsFile( const OUString& rURL );
+SW_DLLPUBLIC bool UCB_IsFile( const OUString& rURL );
 
     // is the URL a existing directory?
-sal_Bool UCB_IsDirectory( const OUString& rURL );
+bool UCB_IsDirectory( const OUString& rURL );
 }
 
 #endif

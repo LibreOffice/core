@@ -131,7 +131,7 @@ sal_uInt16 SwViewOption::GetPostItsWidth( const OutputDevice *pOut ) const
     return sal_uInt16(pOut->GetTextWidth( OUString(aPostItStr )));
 }
 
-void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bool bIsScript ) const
+void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool bIsScript ) const
 {
     if( pOut && bIsScript )
     {
@@ -156,15 +156,15 @@ SwViewOption::SwViewOption() :
     nPagePrevRow( 1 ),
     nPagePrevCol( 2 ),
     nShdwCrsrFillMode( FILL_TAB ),
-    bReadonly(sal_False),
-    bStarOneSetting(sal_False),
-    bIsPagePreview(sal_False),
-    bSelectionInReadonly(sal_False),
-    mbFormView(sal_False),
-    mbBrowseMode(sal_False),
-    mbBookView(sal_False),
-    mbViewLayoutBookMode(sal_False),
-    bShowPlaceHolderFields( sal_True ),
+    bReadonly(false),
+    bStarOneSetting(false),
+    bIsPagePreview(false),
+    bSelectionInReadonly(false),
+    mbFormView(false),
+    mbBrowseMode(false),
+    mbBookView(false),
+    mbViewLayoutBookMode(false),
+    bShowPlaceHolderFields( true ),
     nZoom( 100 ),
     eZoom( SVX_ZOOM_PERCENT ),
     nTblDest(TBL_DEST_CELL)
@@ -210,8 +210,8 @@ SwViewOption::SwViewOption() :
 
 SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 {
-    bReadonly = sal_False;
-    bSelectionInReadonly = sal_False;
+    bReadonly = false;
+    bSelectionInReadonly = false;
     // #114856# Formular view
     mbFormView       = rVOpt.mbFormView;
     nZoom           = rVOpt.nZoom       ;
@@ -303,7 +303,7 @@ void SwViewOption::Init( Window *pWin )
     }
 }
 
-sal_Bool SwViewOption::IsAutoCompleteWords() const
+bool SwViewOption::IsAutoCompleteWords() const
 {
     const SvxSwAutoFmtFlags& rFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
     return rFlags.bAutoCmpltCollectWords;
@@ -500,7 +500,7 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
     aScriptIndicatorColor.SetColor(rConfig.GetColorValue(svtools::WRITERSCRIPTINDICATOR).nColor);
 }
 
-void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, sal_Bool bSet, sal_Bool bSaveInConfig )
+void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, bool bSet, bool bSaveInConfig )
 {
     if(bSet)
         nAppearanceFlags |= nFlag;
@@ -542,7 +542,7 @@ void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, sal_Bool bSet, sal_Bool bS
     }
 }
 
-sal_Bool SwViewOption::IsAppearanceFlag(sal_Int32 nFlag)
+bool SwViewOption::IsAppearanceFlag(sal_Int32 nFlag)
 {
     return 0 != (nAppearanceFlags & nFlag);
 }

@@ -42,7 +42,7 @@ public:
     virtual ~SwTxtFtn();
 
     inline SwNodeIndex *GetStartNode() const { return m_pStartNode; }
-    void SetStartNode( const SwNodeIndex *pNode, sal_Bool bDelNodes = sal_True );
+    void SetStartNode( const SwNodeIndex *pNode, bool bDelNodes = true );
     void SetNumber( const sal_uInt16 nNumber, const OUString &sNumStr );
     void CopyFtn(SwTxtFtn & rDest, SwTxtNode & rDestNode) const;
 

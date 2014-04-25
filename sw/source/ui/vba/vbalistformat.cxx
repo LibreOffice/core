@@ -39,7 +39,7 @@ SwVbaListFormat::~SwVbaListFormat()
 
 void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< word::XListTemplate >& ListTemplate, const css::uno::Any& ContinuePreviousList, const css::uno::Any& ApplyTo, const css::uno::Any& DefaultListBehavior ) throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool bContinuePreviousList = sal_True;
+    bool bContinuePreviousList = true;
     if( ContinuePreviousList.hasValue() )
         ContinuePreviousList >>= bContinuePreviousList;
 
@@ -61,20 +61,20 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
 
     uno::Reference< container::XEnumerationAccess > xEnumAccess( mxTextRange, uno::UNO_QUERY_THROW );
     uno::Reference< container::XEnumeration > xEnum = xEnumAccess->createEnumeration();
-    sal_Bool isFirstElement = sal_True;
+    bool isFirstElement = true;
     while( xEnum->hasMoreElements() )
     {
         uno::Reference< beans::XPropertySet > xProps( xEnum->nextElement(), uno::UNO_QUERY_THROW );
         if( isFirstElement )
         {
-            sal_Bool isNumberingRestart = !bContinuePreviousList;
+            bool isNumberingRestart = !bContinuePreviousList;
             xProps->setPropertyValue("ParaIsNumberingRestart", uno::makeAny( isNumberingRestart ) );
             if( isNumberingRestart )
             {
                 sal_Int16 nStartValue = 1;
                 xProps->setPropertyValue("NumberingStartValue", uno::makeAny( nStartValue ) );
             }
-            isFirstElement = sal_False;
+            isFirstElement = false;
         }
         else
         {

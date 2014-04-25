@@ -442,23 +442,23 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nTypeId)
     {
-        ((SwFrmPage&)rPage).SetNewFrame( sal_True );
-        ((SwFrmPage&)rPage).SetFormatUsed( sal_True );
+        ((SwFrmPage&)rPage).SetNewFrame( true );
+        ((SwFrmPage&)rPage).SetFormatUsed( true );
     }
     else if (nId == m_nOptionsId)
     {
-        ((SwFrmAddPage&)rPage).SetFormatUsed(sal_True);
-        ((SwFrmAddPage&)rPage).SetNewFrame(sal_True);
+        ((SwFrmAddPage&)rPage).SetFormatUsed(true);
+        ((SwFrmAddPage&)rPage).SetNewFrame(true);
     }
     else if (nId == m_nWrapId)
     {
-        ((SwWrapTabPage&)rPage).SetFormatUsed( sal_True, sal_False );
+        ((SwWrapTabPage&)rPage).SetFormatUsed( true, false );
     }
     else if (nId == m_nColumnId)
     {
         if( nType == SFX_STYLE_FAMILY_FRAME )
-            ((SwColumnPage&)rPage).SetFrmMode(sal_True);
-        ((SwColumnPage&)rPage).SetFormatUsed( sal_True );
+            ((SwColumnPage&)rPage).SetFrmMode(true);
+        ((SwColumnPage&)rPage).SetFormatUsed( true );
     }
     //UUUU do not remove; many other style dialog combinations still use the SfxTabPage
     // for the SvxBrushItem (see RID_SVXPAGE_BACKGROUND)

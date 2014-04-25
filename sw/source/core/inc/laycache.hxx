@@ -50,7 +50,7 @@ public:
     void Write( SvStream &rStream, const SwDoc& rDoc );
 
     void ClearImpl();
-    sal_Bool IsLocked() const { return nLockCount > 0; }
+    bool IsLocked() const { return nLockCount > 0; }
     sal_uInt16& GetLockCount() { return nLockCount; }
     SwLayCacheImpl *LockImpl()
         { if( nLockCount & 0x8000 ) return NULL;
@@ -60,7 +60,7 @@ public:
     void UnlockImpl() { --nLockCount; }
 
 #ifdef DBG_UTIL
-    sal_Bool CompareLayout( const SwDoc& rDoc ) const;
+    bool CompareLayout( const SwDoc& rDoc ) const;
 #endif
 };
 #endif

@@ -200,12 +200,12 @@ class AbstractSwFldDlg_Impl : public AbstractSwFldDlg
     virtual void                SetCurPageId( sal_uInt16 nId ) SAL_OVERRIDE;
     virtual void                SetCurPageId( const OString &rName ) SAL_OVERRIDE;
     virtual const SfxItemSet*   GetOutputItemSet() const SAL_OVERRIDE;
-    virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem ) SAL_OVERRIDE;
+    virtual const sal_uInt16*   GetInputRanges( const SfxItemPool& pItem ) SAL_OVERRIDE;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) SAL_OVERRIDE;
         //From class Window.
-    virtual void        SetText( const OUString& rStr ) SAL_OVERRIDE;
-    virtual OUString    GetText() const SAL_OVERRIDE;
-    virtual void                Start( sal_Bool bShow = sal_True ) SAL_OVERRIDE;  //this method from SfxTabDialog
+    virtual void                SetText( const OUString& rStr ) SAL_OVERRIDE;
+    virtual OUString            GetText() const SAL_OVERRIDE;
+    virtual void                Start( bool bShow = true ) SAL_OVERRIDE;  //this method from SfxTabDialog
     virtual void                ShowReferencePage() SAL_OVERRIDE;
     virtual void                Initialize(SfxChildWinInfo *pInfo) SAL_OVERRIDE;
     virtual void                ReInitDlg() SAL_OVERRIDE;
@@ -225,7 +225,7 @@ class AbstractSwRenameXNamedDlg_Impl : public AbstractSwRenameXNamedDlg
 class AbstractSwModalRedlineAcceptDlg_Impl : public AbstractSwModalRedlineAcceptDlg
 {
     DECL_ABSTDLG_BASE(AbstractSwModalRedlineAcceptDlg_Impl,SwModalRedlineAcceptDlg )
-    virtual void            AcceptAll( sal_Bool bAccept ) SAL_OVERRIDE;
+    virtual void            AcceptAll( bool bAccept ) SAL_OVERRIDE;
 };
 
 class SwGlossaryDlg;
@@ -251,7 +251,7 @@ class AbstractInsFootNoteDlg_Impl : public AbstractInsFootNoteDlg
 {
     DECL_ABSTDLG_BASE(AbstractInsFootNoteDlg_Impl,SwInsFootNoteDlg)
     virtual OUString        GetFontName() SAL_OVERRIDE;
-    virtual sal_Bool        IsEndNote() SAL_OVERRIDE;
+    virtual bool            IsEndNote() SAL_OVERRIDE;
     virtual OUString        GetStr() SAL_OVERRIDE;
     //from class Window
     virtual void    SetHelpId( const OString& sHelpId ) SAL_OVERRIDE;
@@ -273,8 +273,8 @@ class AbstractJavaEditDialog_Impl : public AbstractJavaEditDialog
     DECL_ABSTDLG_BASE(AbstractJavaEditDialog_Impl,SwJavaEditDialog)
     virtual OUString            GetScriptText() const SAL_OVERRIDE;
     virtual OUString            GetScriptType() const SAL_OVERRIDE;
-    virtual sal_Bool            IsUrl() const SAL_OVERRIDE;
-    virtual sal_Bool            IsNew() const SAL_OVERRIDE;
+    virtual bool                IsUrl() const SAL_OVERRIDE;
+    virtual bool                IsNew() const SAL_OVERRIDE;
     virtual bool                IsUpdate() const SAL_OVERRIDE;
 };
 
@@ -296,14 +296,14 @@ class SwMailMergeCreateFromDlg;
 class AbstractMailMergeCreateFromDlg_Impl : public AbstractMailMergeCreateFromDlg
 {
     DECL_ABSTDLG_BASE(AbstractMailMergeCreateFromDlg_Impl,SwMailMergeCreateFromDlg)
-    virtual sal_Bool    IsThisDocument() const SAL_OVERRIDE ;
+    virtual bool    IsThisDocument() const SAL_OVERRIDE ;
 };
 
 class SwMailMergeFieldConnectionsDlg;
 class AbstractMailMergeFieldConnectionsDlg_Impl : public AbstractMailMergeFieldConnectionsDlg
 {
     DECL_ABSTDLG_BASE(AbstractMailMergeFieldConnectionsDlg_Impl,SwMailMergeFieldConnectionsDlg)
-    virtual sal_Bool    IsUseExistingConnections() const SAL_OVERRIDE ;
+    virtual bool    IsUseExistingConnections() const SAL_OVERRIDE ;
 };
 
 class SwMultiTOXTabDialog;
@@ -364,7 +364,7 @@ public:
 
     virtual void                SetReloadDocument(const OUString& rURL) SAL_OVERRIDE;
     virtual OUString            GetReloadDocument() const SAL_OVERRIDE;
-    virtual sal_Bool            ShowPage( sal_uInt16 nLevel ) SAL_OVERRIDE;
+    virtual bool                ShowPage( sal_uInt16 nLevel ) SAL_OVERRIDE;
     virtual sal_uInt16          GetRestartPage() const SAL_OVERRIDE;
 };
 
@@ -400,8 +400,8 @@ public:
     virtual SfxAbstractTabDialog * CreateSwFootNoteOptionDlg(Window *pParent, SwWrtShell &rSh) SAL_OVERRIDE;
 
     virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog (Window *pParent, SwWrtShell &rSh,
-        SwField* pField, sal_Bool bNextButton = sal_False) SAL_OVERRIDE;
-    virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert ) SAL_OVERRIDE;
+        SwField* pField, bool bNextButton = false) SAL_OVERRIDE;
+    virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert ) SAL_OVERRIDE;
     virtual AbstractSwLabDlg* CreateSwLabDlg(Window* pParent, const SfxItemSet& rSet,
                                                      SwDBMgr* pDBMgr, bool bLabel) SAL_OVERRIDE;
 
@@ -411,7 +411,7 @@ public:
                                                     const SfxItemSet& rCoreSet,
                                                     sal_uInt8 nDialogMode,
                                                     const OUString *pCollName = 0,
-                                                    sal_Bool bDraw = sal_False,
+                                                    bool bDraw = false,
                                                     const OString& sDefPage = OString() ) SAL_OVERRIDE;
 
     virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg(Window * pParent, const OUString &rShortName) SAL_OVERRIDE;
@@ -419,11 +419,11 @@ public:
     virtual AbstractSplitTableDialog * CreateSplitTblDialog ( Window * pParent, SwWrtShell &rSh ) SAL_OVERRIDE;
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell,
-                                                            sal_Bool bSetAutoFmt = sal_True,
+                                                            bool bSetAutoFmt = true,
                                                             const SwTableAutoFmt* pSelFmt = 0 ) SAL_OVERRIDE;
     virtual SfxAbstractDialog * CreateSwBorderDlg (Window* pParent, SfxItemSet& rSet, sal_uInt16 nType, int nResId ) SAL_OVERRIDE;
 
-    virtual SfxAbstractDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode, int nResId ) SAL_OVERRIDE;
+    virtual SfxAbstractDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode, int nResId ) SAL_OVERRIDE;
     virtual VclAbstractDialog * CreateSwTableWidthDlg(Window *pParent, SwTableFUNC &rFnc) SAL_OVERRIDE;
     virtual SfxAbstractTabDialog* CreateSwTableTabDlg(Window* pParent, SfxItemPool& Pool,
         const SfxItemSet* pItemSet, SwWrtShell* pSh) SAL_OVERRIDE;
@@ -434,7 +434,7 @@ public:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess) SAL_OVERRIDE;
     virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg(Window *pParent) SAL_OVERRIDE;
 
-    virtual VclAbstractDialog*          CreateTblMergeDialog(Window* pParent, sal_Bool& rWithPrev) SAL_OVERRIDE;
+    virtual VclAbstractDialog*          CreateTblMergeDialog(Window* pParent, bool& rWithPrev) SAL_OVERRIDE;
     virtual SfxAbstractTabDialog*       CreateFrmTabDialog( const OString &rDialogType,
                                                 SfxViewFrame *pFrame, Window *pParent,
                                                 const SfxItemSet& rCoreSet,
@@ -455,7 +455,7 @@ public:
     virtual AbstractFldInputDlg*        CreateFldInputDlg(Window *pParent,
         SwWrtShell &rSh, SwField* pField, bool bNextButton = false) SAL_OVERRIDE;
     virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg(
-        Window * pParent, SwWrtShell &rSh, sal_Bool bEd = sal_False) SAL_OVERRIDE;
+        Window * pParent, SwWrtShell &rSh, bool bEd = false) SAL_OVERRIDE;
     virtual VclAbstractDialog *         CreateTitlePageDlg ( Window * pParent ) SAL_OVERRIDE;
     virtual VclAbstractDialog *         CreateVclSwViewDialog(SwView& rView) SAL_OVERRIDE;
     virtual AbstractInsTableDlg*        CreateInsTableDlg(SwView& rView) SAL_OVERRIDE;
@@ -479,22 +479,22 @@ public:
                                                 Window* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
                                                 SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,
-                                                sal_Bool bGlobal = sal_False) SAL_OVERRIDE;
+                                                bool bGlobal = false) SAL_OVERRIDE;
     virtual AbstractEditRegionDlg*      CreateEditRegionDlg(Window* pParent, SwWrtShell& rWrtSh) SAL_OVERRIDE;
     virtual AbstractInsertSectionTabDialog*     CreateInsertSectionTabDialog(
         Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh) SAL_OVERRIDE;
     virtual AbstractMarkFloatDlg*       CreateIndexMarkFloatDlg(
-                                                    SfxBindings* pBindings,
+                                                       SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        Window *pParent,
-                                                    SfxChildWinInfo* pInfo,
-                                                       sal_Bool bNew=sal_True) SAL_OVERRIDE;
+                                                       SfxChildWinInfo* pInfo,
+                                                       bool bNew=true) SAL_OVERRIDE;
     virtual AbstractMarkFloatDlg*       CreateAuthMarkFloatDlg(
-                                                    SfxBindings* pBindings,
+                                                       SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        Window *pParent,
-                                                    SfxChildWinInfo* pInfo,
-                                                       sal_Bool bNew=sal_True) SAL_OVERRIDE;
+                                                       SfxChildWinInfo* pInfo,
+                                                       bool bNew=true) SAL_OVERRIDE;
     virtual VclAbstractDialog *         CreateIndexMarkModalDlg(
                                                 Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark ) SAL_OVERRIDE;
 

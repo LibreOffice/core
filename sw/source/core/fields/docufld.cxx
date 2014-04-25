@@ -137,7 +137,7 @@ SwFieldType* SwPageNumberFieldType::Copy() const
 }
 
 void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
-                                            sal_Bool bVirt,
+                                            bool bVirt,
                                             const sal_Int16* pNumFmt )
 {
     if( pNumFmt )
@@ -552,7 +552,7 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             //              here only a int16
             sal_Int32 nType = 0;
             rAny >>= nType;
-            sal_Bool bFixed = IsFixed();
+            bool bFixed = IsFixed();
             switch( nType )
             {
                 case text::FilenameDisplayFormat::PATH:
@@ -1283,7 +1283,7 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 // SwHiddenTxtFieldType
 
-SwHiddenTxtFieldType::SwHiddenTxtFieldType( sal_Bool bSetHidden )
+SwHiddenTxtFieldType::SwHiddenTxtFieldType( bool bSetHidden )
     : SwFieldType( RES_HIDDENTXTFLD ), bHidden( bSetHidden )
 {
 }
@@ -1293,7 +1293,7 @@ SwFieldType* SwHiddenTxtFieldType::Copy() const
     return new SwHiddenTxtFieldType( bHidden );
 }
 
-void SwHiddenTxtFieldType::SetHiddenFlag( sal_Bool bSetHidden )
+void SwHiddenTxtFieldType::SetHiddenFlag( bool bSetHidden )
 {
     if( bHidden != bSetHidden )
     {
@@ -1303,13 +1303,13 @@ void SwHiddenTxtFieldType::SetHiddenFlag( sal_Bool bSetHidden )
 }
 
 SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
-                                    sal_Bool    bConditional,
+                                    bool    bConditional,
                                     const OUString& rCond,
                                     const OUString& rStr,
-                                    sal_Bool    bHidden,
+                                    bool    bHidden,
                                     sal_uInt16  nSub) :
     SwField( pFldType ), aCond(rCond), nSubType(nSub),
-    bCanToggle(bConditional), bIsHidden(bHidden), bValid(sal_False)
+    bCanToggle(bConditional), bIsHidden(bHidden), bValid(false)
 {
     if(nSubType == TYP_CONDTXTFLD)
     {
@@ -1322,7 +1322,7 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
             if(nPos != -1)
             {
                 aContent = rStr.getToken(0, '|', nPos);
-                bValid = sal_True;
+                bValid = true;
             }
         }
     }
@@ -1336,7 +1336,7 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
                                     const OUString& rFalse,
                                     sal_uInt16 nSub)
     : SwField( pFldType ), aTRUETxt(rTrue), aFALSETxt(rFalse), aCond(rCond), nSubType(nSub),
-      bIsHidden(sal_True), bValid(sal_False)
+      bIsHidden(true), bValid(false)
 {
     bCanToggle = !aCond.isEmpty();
 }
@@ -1373,7 +1373,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
 #else
         SwDBMgr* pMgr = pDoc->GetDBMgr();
 #endif
-        bValid = sal_False;
+        bValid = false;
         OUString sTmpName = (bCanToggle && !bIsHidden) ? aTRUETxt : aFALSETxt;
 
         // Database expressions need to be different from normal text. Therefore, normal text is set
@@ -1384,7 +1384,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
             sTmpName.endsWith("\""))
         {
             aContent = sTmpName.copy(1, sTmpName.getLength() - 2);
-            bValid = sal_True;
+            bValid = true;
         }
         else if(sTmpName.indexOf('\"')<0 &&
             comphelper::string::getTokenCount(sTmpName, '.') > 2)
@@ -1402,17 +1402,17 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
                 OUString sDataTableOrQuery(sDBName.getToken(1, DB_DELIM));
                 if( pMgr->IsInMerge() && !sDBName.isEmpty() &&
                     pMgr->IsDataSourceOpen( sDataSource,
-                                                sDataTableOrQuery, sal_False))
+                                                sDataTableOrQuery, false))
                 {
                     double fNumber;
                     sal_uInt32 nTmpFormat;
                     pMgr->GetMergeColumnCnt(GetColumnName( sTmpName ),
                         GetLanguage(), aContent, &fNumber, &nTmpFormat );
-                    bValid = sal_True;
+                    bValid = true;
                 }
                 else if( !sDBName.isEmpty() && !sDataSource.isEmpty() &&
                          !sDataTableOrQuery.isEmpty() )
-                    bValid = sal_True;
+                    bValid = true;
             }
 #endif
         }
@@ -1539,7 +1539,7 @@ bool SwHiddenTxtField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_PAR4:
         rAny >>= aContent;
-        bValid = sal_True;
+        bValid = true;
     break;
     default:
         OSL_FAIL("illegal property");
@@ -1593,7 +1593,7 @@ SwFieldType* SwHiddenParaFieldType::Copy() const
 SwHiddenParaField::SwHiddenParaField(SwHiddenParaFieldType* pTyp, const OUString& rStr)
     : SwField(pTyp), aCond(rStr)
 {
-    bIsHidden = sal_False;
+    bIsHidden = false;
 }
 
 OUString SwHiddenParaField::Expand() const
@@ -2047,7 +2047,7 @@ void SwRefPageSetFieldType::Modify( const SfxPoolItem*, const SfxPoolItem * )
 // field for relative page numbers
 
 SwRefPageSetField::SwRefPageSetField( SwRefPageSetFieldType* pTyp,
-                    short nOff, sal_Bool bFlag )
+                    short nOff, bool bFlag )
     : SwField( pTyp ), nOffset( nOff ), bOn( bFlag )
 {
 }

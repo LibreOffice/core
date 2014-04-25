@@ -192,7 +192,7 @@ SwVbaView::setSplitSpecial( ::sal_Int32/* _splitspecial */) throw (css::uno::Run
 sal_Bool SAL_CALL
 SwVbaView::getTableGridLines() throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool bShowTableGridLine = sal_False;
+    bool bShowTableGridLine = false;
     mxViewSettings->getPropertyValue("ShowTableBoundaries") >>= bShowTableGridLine;
     return bShowTableGridLine;
 }
@@ -207,7 +207,7 @@ SwVbaView::setTableGridLines( sal_Bool _tablegridlines ) throw (css::uno::Runtim
 SwVbaView::getType() throw (css::uno::RuntimeException, std::exception)
 {
     // FIXME: handle wdPrintPreview type
-    sal_Bool bOnlineLayout = sal_False;
+    bool bOnlineLayout = false;
     mxViewSettings->getPropertyValue("ShowOnlineLayout") >>= bOnlineLayout;
     return bOnlineLayout ? word::WdViewType::wdWebView : word::WdViewType::wdPrintView;
 }
@@ -307,7 +307,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
             if ( aPageStyleName == "First Page" )
             {
                 // go to the beginning of where the next style is used
-                sal_Bool hasNextPage = sal_False;
+                bool hasNextPage = false;
                 xStyle = word::getCurrentPageStyle( mxModel );
                 do
                 {
@@ -328,9 +328,9 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
 
     xStyle = word::getCurrentPageStyle( mxModel );
     uno::Reference< beans::XPropertySet > xPageProps( xStyle, uno::UNO_QUERY_THROW );
-    sal_Bool isOn = sal_False;
+    bool isOn = false;
     xPageProps->getPropertyValue( aPropIsOn ) >>= isOn;
-    sal_Bool isShared =  sal_False;
+    bool isShared =  false;
     xPageProps->getPropertyValue( aPropIsShared ) >>= isShared;
     if( !isOn )
     {

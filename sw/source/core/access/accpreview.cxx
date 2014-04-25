@@ -84,7 +84,7 @@ OUString SAL_CALL SwAccessiblePreview::getAccessibleName (void) throw (::com::su
 
 void SwAccessiblePreview::_InvalidateFocus()
 {
-    FireStateChangedEvent( ::com::sun::star::accessibility::AccessibleStateType::FOCUSED, sal_True );
+    FireStateChangedEvent( ::com::sun::star::accessibility::AccessibleStateType::FOCUSED, true );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

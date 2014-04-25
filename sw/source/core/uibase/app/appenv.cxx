@@ -266,7 +266,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             // Here it goes (insert)
             pSh->StartUndo(UNDO_UI_INSERT_ENVELOPE, NULL);
             pSh->StartAllAction();
-            pSh->SttEndDoc(sal_True);
+            pSh->SttEndDoc(true);
 
             if (bEnvChange)
             {
@@ -274,8 +274,8 @@ void SwModule::InsertEnv( SfxRequest& rReq )
                 pFollow = pSh->GetPageDesc(pSh->GetCurPageDesc()).GetFollow();
 
                 // Delete text from the first page
-                if ( !pSh->SttNxtPg(sal_True) )
-                    pSh->EndPg(sal_True);
+                if ( !pSh->SttNxtPg(true) )
+                    pSh->EndPg(true);
                 pSh->DelRight();
                 // Delete frame of the first page
                 if ( pSh->GotoFly(sSendMark) )
@@ -288,7 +288,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
                     pSh->EnterSelFrmMode();
                     pSh->DelRight();
                 }
-                pSh->SttEndDoc(sal_True);
+                pSh->SttEndDoc(true);
             }
             else
                 // Followup template: page 1
@@ -298,21 +298,21 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             if ( pSh->IsCrsrInTbl() )
             {
                 pSh->SplitNode();
-                pSh->Right( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+                pSh->Right( CRSR_SKIP_CHARS, false, 1, false );
                 SfxItemSet aBreakSet( pSh->GetAttrPool(), RES_BREAK, RES_BREAK, 0 );
                 aBreakSet.Put( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
                 pSh->SetTblAttr( aBreakSet );
             }
             else
                 pSh->InsertPageBreak(0, boost::none);
-            pSh->SttEndDoc(sal_True);
+            pSh->SttEndDoc(true);
         }
         else
         {
             pFollow = &pSh->GetPageDesc(pSh->GetCurPageDesc());
             // Let's go (print)
             pSh->StartAllAction();
-            pSh->DoUndo(sal_False);
+            pSh->DoUndo(false);
 
             // Again, copy the new collections "Sender" and "Receiver" to
             // a new document
@@ -374,10 +374,10 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         rFmt.SetFmtAttr(aULMargin);
 
         // Header and footer
-        rFmt.SetFmtAttr(SwFmtHeader(sal_False));
-        pDesc->ChgHeaderShare(sal_False);
-        rFmt.SetFmtAttr(SwFmtFooter(sal_False));
-        pDesc->ChgFooterShare(sal_False);
+        rFmt.SetFmtAttr(SwFmtHeader(false));
+        pDesc->ChgHeaderShare(false);
+        rFmt.SetFmtAttr(SwFmtFooter(false));
+        pDesc->ChgFooterShare(false);
 
         // Page numbering
         pDesc->SetUseOn(nsUseOnPage::PD_ALL);
@@ -403,14 +403,14 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
         sal_uInt16 nPos;
         pSh->FindPageDescByName( pDesc->GetName(),
-                                    sal_False,
+                                    false,
                                     &nPos );
 
         pSh->ChgPageDesc( nPos, *pDesc);
         pSh->ChgCurPageDesc(*pDesc);
 
         // Insert Frame
-        SwFlyFrmAttrMgr aMgr(sal_False, pSh, FRMMGR_TYPE_ENVELP);
+        SwFlyFrmAttrMgr aMgr(false, pSh, FRMMGR_TYPE_ENVELP);
         SwFldMgr aFldMgr;
         aMgr.SetHeightSizeType(ATT_VAR_SIZE);
 
@@ -422,7 +422,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         // Sender
         if (rItem.bSend)
         {
-            pSh->SttEndDoc(sal_True);
+            pSh->SttEndDoc(true);
             aMgr.InsertFlyFrm(FLY_AT_PAGE,
                 Point(rItem.lSendFromLeft + lLeft, rItem.lSendFromTop  + lUpper),
                 Size (rItem.lAddrFromLeft - rItem.lSendFromLeft, 0));
@@ -437,7 +437,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         }
 
         // Addressee
-        pSh->SttEndDoc(sal_True);
+        pSh->SttEndDoc(true);
 
         aMgr.InsertFlyFrm(FLY_AT_PAGE,
             Point(rItem.lAddrFromLeft + lLeft, rItem.lAddrFromTop  + lUpper),
@@ -454,12 +454,12 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             pSh->SetPageObjsNewPage(aFlyArr, 1);
 
         // Finished
-        pSh->SttEndDoc(sal_True);
+        pSh->SttEndDoc(true);
 
         pSh->EndAllAction();
 
         if (nMode == ENV_NEWDOC)
-            pSh->DoUndo(sal_True);
+            pSh->DoUndo(true);
         else
             pSh->EndUndo(UNDO_UI_INSERT_ENVELOPE);
 

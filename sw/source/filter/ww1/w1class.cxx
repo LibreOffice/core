@@ -212,7 +212,7 @@ sal_uInt16 Ww1Style::ReadEstcp(sal_uInt8*&p, sal_uInt16& rnCountBytes)
 Ww1StyleSheet::Ww1StyleSheet(Ww1Fib& _rFib)
     : cstcStd(0),
     rFib(_rFib),
-    bOK(sal_False)
+    bOK(false)
 {
     sal_uInt16 cbStshf = rFib.GetFIB().cbStshfGet();
     OSL_ENSURE(cbStshf>=17, "Ww1StyleSheet");
@@ -365,7 +365,7 @@ Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, sal_uLong nFieldFlgs)
                     pFontA = 0; // no entries -> no Array
             }
     }
-    bOK = sal_True;
+    bOK = true;
 }
 
 W1_FFN* Ww1Fonts::GetFFN(sal_uInt16 nNum)
@@ -414,25 +414,25 @@ Ww1Picture::Ww1Picture(SvStream& rStream, sal_uLong ulFilePos)
 Ww1Sprm::Ww1Sprm(sal_uInt8* x, sal_uInt16 _nCountBytes)
     : p(NULL),
     nCountBytes(_nCountBytes),
-    bOK(sal_False),
+    bOK(false),
     pArr(NULL),
     count(0)
 {
     if (nCountBytes == 0)
-        bOK = sal_True;
+        bOK = true;
     else
         if ((p = new sal_uInt8[nCountBytes]) != NULL)
         {
             memcpy(p, x, nCountBytes);
             if (ReCalc())
-                bOK = sal_True;
+                bOK = true;
         }
 }
 
 Ww1Sprm::Ww1Sprm(SvStream& rStream, sal_uLong ulFilePos)
     : p(NULL),
     nCountBytes(0),
-    bOK(sal_False),
+    bOK(false),
     pArr(NULL),
     count(0)
 {
@@ -446,7 +446,7 @@ Ww1Sprm::Ww1Sprm(SvStream& rStream, sal_uLong ulFilePos)
                  || !nCountBytes
                  || rStream.Read(p, nCountBytes) == (sal_uLong)nCountBytes)
                     if (ReCalc())
-                        bOK = sal_True;
+                        bOK = true;
 }
 
 Ww1Sprm::~Ww1Sprm()
@@ -509,19 +509,19 @@ sal_uInt16 Ww1Sprm::GetSize(sal_uInt8 nId, sal_uInt8* pSprm)
     return nL;
 }
 
-sal_Bool Ww1Sprm::Fill(sal_uInt16 index, sal_uInt8& nId, sal_uInt16& nL, sal_uInt8*& pSprm)
+bool Ww1Sprm::Fill(sal_uInt16 index, sal_uInt8& nId, sal_uInt16& nL, sal_uInt8*& pSprm)
 {
     OSL_ENSURE(index < Count(), "Ww1Sprm");
     pSprm = p + pArr[index];
     nId = *pSprm;
     pSprm++;
     nL = GetTab(nId).Size(pSprm);
-    return sal_True;
+    return true;
 }
 
-sal_Bool Ww1Sprm::ReCalc()
+bool Ww1Sprm::ReCalc()
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     delete[] pArr;
     pArr = NULL;
     count = 0;
@@ -854,10 +854,10 @@ Ww1Bookmarks::Ww1Bookmarks(Ww1Fib& rInFib)
     : aNames(rInFib), rFib(rInFib), nIsEnd(0)
 {
     pPos[0] = new Ww1PlcBookmarkPos(rFib, rFib.GetFIB().fcPlcfbkfGet(),
-                                    rFib.GetFIB().cbPlcfbkfGet(), sal_False);
+                                    rFib.GetFIB().cbPlcfbkfGet(), false);
     nPlcIdx[0] = 0;
     pPos[1] = new Ww1PlcBookmarkPos(rFib, rFib.GetFIB().fcPlcfbklGet(),
-                                    rFib.GetFIB().cbPlcfbklGet(), sal_True);
+                                    rFib.GetFIB().cbPlcfbklGet(), true);
     nPlcIdx[1] = 0;
     bOK = !aNames.GetError() && !pPos[0]->GetError() && !pPos[1]->GetError();
 }
@@ -924,11 +924,11 @@ const OUString Ww1Bookmarks::GetName() const
 // Fkp
 Ww1Fkp::Ww1Fkp(SvStream& rStream, sal_uLong ulFilePos, sal_uInt16 _nItemSize) :
     nItemSize(_nItemSize),
-    bOK(sal_False)
+    bOK(false)
 {
     if (rStream.Seek(ulFilePos) == (sal_uLong)ulFilePos)
         if (rStream.Read(aFkp, sizeof(aFkp)) == sizeof(aFkp))
-            bOK = sal_True;
+            bOK = true;
 }
 
 sal_uLong Ww1Fkp::Where(sal_uInt16 nIndex)
@@ -951,7 +951,7 @@ sal_uInt8* Ww1Fkp::GetData(sal_uInt16 nIndex)
 }
 
 // FkpPap
-sal_Bool Ww1FkpPap::Fill(sal_uInt16 nIndex, sal_uInt8*& p, sal_uInt16& rnCountBytes)
+bool Ww1FkpPap::Fill(sal_uInt16 nIndex, sal_uInt8*& p, sal_uInt16& rnCountBytes)
 {
     OSL_ENSURE( nIndex < Count(), "Ww1FkpPap::Fill() Index out of Range" );
     sal_uInt16 nOffset = *GetData(nIndex) * 2;
@@ -973,11 +973,11 @@ sal_Bool Ww1FkpPap::Fill(sal_uInt16 nIndex, sal_uInt8*& p, sal_uInt16& rnCountBy
         p = NULL;
         rnCountBytes = 0;
     }
-    return sal_True;
+    return true;
 }
 
 // FkpChp
-sal_Bool Ww1FkpChp::Fill(sal_uInt16 nIndex, W1_CHP& aChp)
+bool Ww1FkpChp::Fill(sal_uInt16 nIndex, W1_CHP& aChp)
 {
     OSL_ENSURE( nIndex < Count(), "Ww1FkpChp::Fill() Index out of Range" );
     memset(&aChp, 0, sizeof(aChp));
@@ -991,12 +991,12 @@ sal_Bool Ww1FkpChp::Fill(sal_uInt16 nIndex, W1_CHP& aChp)
         OSL_ENSURE(nCountBytes <= sizeof(aChp), "calc error");
         memcpy(&aChp, aFkp+nOffset, nCountBytes);
     }
-    return sal_True;
+    return true;
 }
 
 // Assoc
 Ww1Assoc::Ww1Assoc(Ww1Fib& _rFib)
-    : rFib(_rFib), pBuffer(NULL), bOK(sal_False)
+    : rFib(_rFib), pBuffer(NULL), bOK(false)
 {
     sal_uInt16 cb = rFib.GetFIB().cbSttbfAssocGet();
     sal_uInt16 i;
@@ -1015,7 +1015,7 @@ Ww1Assoc::Ww1Assoc(Ww1Fib& _rFib)
             pStrTbl[i] = pBuffer+j;
             j += (*pBuffer + j) + 1;
         }
-        bOK = sal_True;
+        bOK = true;
     }
 }
 
@@ -1046,7 +1046,7 @@ void Ww1Pap::Seek(sal_uLong ulSeek)
 // SH: Where has been passed a parameter which determines if the index should be set
 // to 0 upon constructing a new Fkp (must not happen for Push/Pop)
 // Can't think of an elegant way for now
-sal_uLong Ww1Pap::Where( sal_Bool bSetIndex )
+sal_uLong Ww1Pap::Where( bool bSetIndex )
 {
     sal_uLong ulRet = 0xffffffff;
     if (pPap == NULL)
@@ -1076,7 +1076,7 @@ void Ww1Pap::operator++()
 
 // SH: FindSprm looks for Sprm nId in grpprl
 // Return value: pointer or 0
-sal_Bool Ww1Pap::FindSprm(sal_uInt16 nId, sal_uInt8* pStart, sal_uInt8* pEnd)
+bool Ww1Pap::FindSprm(sal_uInt16 nId, sal_uInt8* pStart, sal_uInt8* pEnd)
 {
     Ww1Sprm aSprm( pStart, static_cast< sal_uInt16 >(pEnd-pStart) );
     sal_uInt16 nC = aSprm.Count();
@@ -1087,19 +1087,19 @@ sal_Bool Ww1Pap::FindSprm(sal_uInt16 nId, sal_uInt8* pStart, sal_uInt8* pEnd)
     for( i = 0; i < nC; i++ ){
         aSprm.Fill( i, nI, nLen, pData );
         if( nI == nId )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool Ww1Pap::HasId0(sal_uInt16 nId)
+bool Ww1Pap::HasId0(sal_uInt16 nId)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     UpdateIdx();
 
     if( !pPap ){
         OSL_ENSURE( false, "Ww1Pap::HasId():: cannot create a pPap" );
-        return sal_False;
+        return false;
     }
 
     sal_uInt8* pByte;
@@ -1111,11 +1111,11 @@ sal_Bool Ww1Pap::HasId0(sal_uInt16 nId)
     return bRet;
 }
 
-sal_Bool Ww1Pap::HasId(sal_uInt16 nId)
+bool Ww1Pap::HasId(sal_uInt16 nId)
 {
     sal_uInt16 nPushedPlcIndex2 = nPlcIndex;
     sal_uInt16 nPushedFkpIndex2 = nFkpIndex;
-    sal_Bool bRet = HasId0( nId );
+    bool bRet = HasId0( nId );
     if (nPlcIndex != nPushedPlcIndex2)
     {
         delete pPap;
@@ -1123,7 +1123,7 @@ sal_Bool Ww1Pap::HasId(sal_uInt16 nId)
     }
     nPlcIndex = nPushedPlcIndex2;
     nFkpIndex = nPushedFkpIndex2;
-    Where( sal_False );
+    Where( false );
     return bRet;
 }
 
@@ -1143,7 +1143,7 @@ void Ww1Chp::Seek(sal_uLong ulSeek)
 // SH: Where has been passed a parameter which determines if the index should be set
 // to 0 upon constructing a new Fkp (must not happen for Push/Pop)
 // Can't think of an elegant way for now
-sal_uLong Ww1Chp::Where( sal_Bool bSetIndex )
+sal_uLong Ww1Chp::Where( bool bSetIndex )
 {
     sal_uLong ulRet = 0xffffffff;
     if (pChp == NULL)
@@ -1174,7 +1174,7 @@ void Ww1Chp::operator++()
 
 // Manager
 Ww1Manager::Ww1Manager(SvStream& rStrm, sal_uLong nFieldFlgs)
-    : bOK(sal_False), bInTtp(false), bInStyle(false), bStopAll(false), aFib(rStrm),
+    : bOK(false), bInTtp(false), bInStyle(false), bStopAll(false), aFib(rStrm),
     aDop(aFib), aFonts(aFib, nFieldFlgs), aDoc(aFib), pDoc(&aDoc),
     ulDocSeek(0), pSeek(&ulDocSeek), aFld(aFib), pFld(&aFld), aChp(aFib),
     aPap(aFib), aFtn(aFib), aBooks(aFib),
@@ -1191,22 +1191,22 @@ Ww1Manager::Ww1Manager(SvStream& rStrm, sal_uLong nFieldFlgs)
         && !aBooks.GetError();
 }
 
-sal_Bool Ww1Manager::HasInTable()
+bool Ww1Manager::HasInTable()
 {
     return aPap.HasId(24); // Ww1SingleSprmPFInTable
 }
 
-sal_Bool Ww1Manager::HasTtp()
+bool Ww1Manager::HasTtp()
 {
     return aPap.HasId(25); // Ww1SingleSprmPTtp
 }
 
-sal_Bool Ww1Manager::HasPPc()
+bool Ww1Manager::HasPPc()
 {
     return aPap.HasId(29); // Ww1SingleSprmPPc
 }
 
-sal_Bool Ww1Manager::HasPDxaAbs()
+bool Ww1Manager::HasPDxaAbs()
 {
     return aPap.HasId(26); // Ww1SingleSprmPDxaAbs
 }

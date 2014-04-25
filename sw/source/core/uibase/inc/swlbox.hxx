@@ -36,8 +36,8 @@ class SW_DLLPUBLIC SwBoxEntry
 {
     friend class SwComboBox;
 
-    sal_Bool    bModified : 1;
-    sal_Bool    bNew : 1;
+    bool    bModified : 1;
+    bool    bNew : 1;
 
     OUString    aName;
     sal_Int32   nId;

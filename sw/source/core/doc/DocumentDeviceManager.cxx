@@ -349,7 +349,7 @@ void DocumentDeviceManager::PrtDataChanged()
             m_rSwdoc.GetDrawModel()->SetRefDevice( pOutDev );
     }
 
-    m_rSwdoc.PrtOLENotify( sal_True );
+    m_rSwdoc.PrtOLENotify( true );
 
     if ( bEndAction )
         pTmpRoot->EndAllAction();

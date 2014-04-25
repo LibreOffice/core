@@ -82,9 +82,9 @@ private:
     long            nCurTextWidth;
     sal_uInt16          nStartLine;
     rtl_TextEncoding eSourceEncoding;
-    sal_Bool            bReadonly;
-    sal_Bool            bDoSyntaxHighlight;
-    sal_Bool            bHighlighting;
+    bool            bReadonly;
+    bool            bDoSyntaxHighlight;
+    bool            bHighlighting;
 
     Timer           aSyntaxIdleTimer;
     SyntaxLineSet   aSyntaxLineTable;
@@ -135,12 +135,12 @@ public:
 
     void            ClearModifyFlag()
                         { pTextEngine->SetModified(false); }
-    sal_Bool            IsModified() const
+    bool            IsModified() const
                         { return pTextEngine->IsModified();}
     void            CreateScrollbars();
 
-    void            SetReadonly(sal_Bool bSet){bReadonly = bSet;}
-    sal_Bool            IsReadonly(){return bReadonly;}
+    void            SetReadonly(bool bSet){bReadonly = bSet;}
+    bool            IsReadonly(){return bReadonly;}
 
     void            DoDelayedSyntaxHighlight( sal_uInt16 nPara );
 

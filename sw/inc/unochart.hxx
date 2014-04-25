@@ -82,9 +82,9 @@ class SwChartLockController_Helper
     SwChartLockController_Helper( const SwChartLockController_Helper & );
     SwChartLockController_Helper & operator = ( const SwChartLockController_Helper & );
 
-    void LockUnlockAllCharts( sal_Bool bLock );
-    void LockAllCharts()    { LockUnlockAllCharts( sal_True ); };
-    void UnlockAllCharts()  { LockUnlockAllCharts( sal_False ); };
+    void LockUnlockAllCharts( bool bLock );
+    void LockAllCharts()    { LockUnlockAllCharts( true ); };
+    void UnlockAllCharts()  { LockUnlockAllCharts( false ); };
 
 public:
     SwChartLockController_Helper( SwDoc *pDocument );
@@ -139,17 +139,17 @@ class SwChartDataProvider :
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     const SwDoc *                           pDoc;
-    sal_Bool                                bDisposed;
+    bool                                bDisposed;
 
     // disallow use of c-tor and assignment operator
     SwChartDataProvider( const SwChartDataProvider & );
     SwChartDataProvider & operator = ( const SwChartDataProvider & );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > SAL_CALL Impl_createDataSource( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments, sal_Bool bTestOnly = sal_False )
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > SAL_CALL Impl_createDataSource( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments, bool bTestOnly = false )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException,
                std::exception);
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > SAL_CALL Impl_createDataSequenceByRangeRepresentation( const OUString& aRangeRepresentation, sal_Bool bTestOnly = sal_False )
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > SAL_CALL Impl_createDataSequenceByRangeRepresentation( const OUString& aRangeRepresentation, bool bTestOnly = false )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException,
                std::exception);
@@ -196,11 +196,11 @@ public:
 
     // will send modifdied events for all data-sequences of the table
     void        InvalidateTable( const SwTable *pTable );
-    sal_Bool    DeleteBox( const SwTable *pTable, const SwTableBox &rBox );
+    bool    DeleteBox( const SwTable *pTable, const SwTableBox &rBox );
     void        DisposeAllDataSequences( const SwTable *pTable );
 
     // functionality needed to get notified about new added rows/cols
-    void        AddRowCols( const SwTable &rTable, const SwSelBoxes& rBoxes, sal_uInt16 nLines, sal_Bool bBehind );
+    void        AddRowCols( const SwTable &rTable, const SwSelBoxes& rBoxes, sal_uInt16 nLines, bool bBehind );
 };
 
 typedef cppu::WeakImplHelper2
@@ -270,7 +270,7 @@ class SwChartDataSequence :
 
     const SfxItemPropertySet*   _pPropSet;
 
-    sal_Bool    bDisposed;
+    bool    bDisposed;
 
     // disallow use of c-tor and assignment operator
     SwChartDataSequence( const SwChartDataSequence &rObj );
@@ -347,7 +347,7 @@ public:
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     SwFrmFmt*   GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
-    sal_Bool    DeleteBox( const SwTableBox &rBox );
+    bool    DeleteBox( const SwTableBox &rBox );
 
     void        FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const;
     bool        ExtendTo( bool bExtendCol, sal_Int32 nFirstNew, sal_Int32 nCount );
@@ -373,7 +373,7 @@ class SwChartLabeledDataSequence :
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence >     xLabels;
 
-    sal_Bool    bDisposed;
+    bool    bDisposed;
 
     // disallow use of c-tor and assignment operator
     SwChartLabeledDataSequence( const SwChartLabeledDataSequence & );

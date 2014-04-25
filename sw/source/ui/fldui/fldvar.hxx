@@ -74,7 +74,7 @@ class SwFldVarPage : public SwFldPage
     OUString            sOldNameFT;
 
     sal_uLong           nOldFormat;
-    sal_Bool                bInit;
+    bool                bInit;
 
     DECL_LINK(TypeHdl, void *);
     DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );

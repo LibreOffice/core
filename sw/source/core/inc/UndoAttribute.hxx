@@ -56,7 +56,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
-    void SaveRedlineData( const SwPaM& rPam, sal_Bool bInsCntnt );
+    void SaveRedlineData( const SwPaM& rPam, bool bInsCntnt );
 
     SwHistory& GetHistory() { return *m_pHistory; }
 };
@@ -192,7 +192,7 @@ class SwUndoMoveLeftMargin : public SwUndo, private SwUndRng
     const bool m_bModulus;
 
 public:
-    SwUndoMoveLeftMargin( const SwPaM&, sal_Bool bRight, bool bModulus );
+    SwUndoMoveLeftMargin( const SwPaM&, bool bRight, bool bModulus );
 
     virtual ~SwUndoMoveLeftMargin();
 

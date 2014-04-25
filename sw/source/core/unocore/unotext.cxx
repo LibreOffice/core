@@ -474,7 +474,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
         SwCursor aCrsr(*aTmp.GetPoint(),0,false);
         SwUnoCursorHelper::SelectPam(aCrsr, true);
-        aCrsr.Left(1, CRSR_SKIP_CHARS, sal_False, sal_False);
+        aCrsr.Left(1, CRSR_SKIP_CHARS, false, false);
         //hier muss der uebergebene PaM umgesetzt werden:
         if (pRange)
         {
@@ -638,7 +638,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         throw lang::IllegalArgumentException();
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const uno::Reference<lang::XUnoTunnel> xSuccTunnel(xSuccessor,
             uno::UNO_QUERY);
     SwXTextSection *const pXSection =
@@ -704,7 +704,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     SwXTextTable *const pXTable =
             ::sw::UnoTunnelGetImplementation<SwXTextTable>(xPredTunnel);
     SwFrmFmt *const pTableFmt = (pXTable) ? pXTable->GetFrmFmt() : 0;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwTxtNode * pTxtNode = 0;
     if(pTableFmt && pTableFmt->GetDoc() == GetDoc())
     {
@@ -747,7 +747,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         throw aRuntime;
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const uno::Reference<lang::XUnoTunnel> xSuccTunnel(xSuccessor,
             uno::UNO_QUERY);
     SwXTextSection *const pXSection =
@@ -800,7 +800,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         throw aRuntime;
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const uno::Reference<lang::XUnoTunnel> xPredTunnel(xPredecessor,
             uno::UNO_QUERY);
     SwXTextSection *const pXSection =
@@ -1169,7 +1169,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     if (nOwnIndex == nRedNode.GetIndex())
                     {
                         aRet <<= SwXRedlinePortion::CreateRedlineProperties(
-                                *pRedline, sal_True);
+                                *pRedline, true);
                         break;
                     }
                 }
@@ -2057,7 +2057,7 @@ lcl_ApplyCellProperties(
         {
             // determine left border position
             // add the cell to a queue of merged cells
-            sal_Bool bMerge = sal_False;
+            bool bMerge = false;
             rValue >>= bMerge;
             sal_Int32 nLeftPos = -1;
             if (!nCell)

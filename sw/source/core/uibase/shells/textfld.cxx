@@ -166,7 +166,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         case FN_GOTO_NEXT_INPUTFLD:
         case FN_GOTO_PREV_INPUTFLD:
             {
-                sal_Bool bRet = sal_False;
+                bool bRet = false;
                 SwFieldType* pFld = rSh.GetFldType( 0, RES_INPUTFLD );
                 const bool bAddSetExpressionFlds = !( rSh.GetViewOptions()->IsReadonly() );
                 if ( pFld != NULL
@@ -186,9 +186,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     }
                     else
                     {
-                        rSh.StartInputFldDlg( rSh.GetCurFld( true ), sal_False );
+                        rSh.StartInputFldDlg( rSh.GetCurFld( true ), false );
                     }
-                    bRet = sal_True;
+                    bRet = true;
                 }
 
                 rReq.SetReturnValue( SfxBoolItem( nSlot, bRet ));
@@ -206,7 +206,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         {
             case FN_INSERT_DBFIELD:
             {
-                sal_Bool bRes = sal_False;
+                bool bRes = false;
                 if( pItem )
                 {
                     sal_uLong  nFormat = 0;
@@ -252,7 +252,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             case FN_INSERT_FIELD_CTRL:
             case FN_INSERT_FIELD:
             {
-                sal_Bool bRes = sal_False;
+                bool bRes = false;
                 if( pItem && nSlot != FN_INSERT_FIELD_CTRL)
                 {
                     sal_uLong  nFormat = 0;
@@ -381,9 +381,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     aFldMgr.InsertFld( aData );
 
                     rSh.Push();
-                    rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, sal_False);
+                    rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, false);
                     pPostIt = (SwPostItField*)aFldMgr.GetCurFld();
-                    rSh.Pop(sal_False); // Restore cursor position
+                    rSh.Pop(false); // Restore cursor position
                  }
 
                 if (pPostIt)
@@ -425,7 +425,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 {
                     OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
 
-                    sal_Bool bTravel = sal_False;
+                    bool bTravel = false;
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -452,8 +452,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         pActRed = rSh.SelPrevRedline();
                     }
 
-                    sal_Bool bPrev = pActRed != 0;
-                    rSh.Pop(sal_False);
+                    bool bPrev = pActRed != 0;
+                    rSh.Pop(false);
                     rSh.EndAction();
 
                     rSh.ClearMark();
@@ -462,15 +462,15 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     rSh.StartAction();
                     rSh.Push();
                     pActRed = rSh.SelNextRedline();
-                    sal_Bool bNext = pActRed != 0;
-                    rSh.Pop(sal_False); // Restore cursor position
+                    bool bNext = pActRed != 0;
+                    rSh.Pop(false); // Restore cursor position
 
                     if( rSh.IsCrsrPtAtEnd() )
                         rSh.SwapPam();
 
                     rSh.EndAction();
 
-                    bTravel |= bNext|bPrev;
+                    bTravel |= bNext || bPrev;
 
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact2, "Dialogdiet fail!");
@@ -514,8 +514,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             case FN_JAVAEDIT:
             {
                 OUString aType, aText;
-                sal_Bool bIsUrl=sal_False;
-                sal_Bool bNew=sal_False;
+                bool bIsUrl=false;
+                bool bNew=false;
                 bool bUpdate = false;
                 SwFldMgr aMgr;
                 if ( pItem )
@@ -530,7 +530,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     SwScriptField* pFld = (SwScriptField*)aMgr.GetCurFld();
                     bNew = !pFld || !(pFld->GetTyp()->Which() == RES_SCRIPTFLD);
-                    bUpdate = pFld && ( bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
+                    bUpdate = pFld && ( bIsUrl != (bool)pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
                 }
                 else
                 {
@@ -555,13 +555,13 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                 if( bNew )
                 {
-                    SwInsertFld_Data aData(TYP_SCRIPTFLD, 0, aType, aText, bIsUrl);
+                    SwInsertFld_Data aData(TYP_SCRIPTFLD, 0, aType, aText, bIsUrl ? 1 : 0);
                     aMgr.InsertFld(aData);
                     rReq.Done();
                 }
                 else if( bUpdate )
                 {
-                    aMgr.UpdateCurFld( bIsUrl, aType, aText );
+                    aMgr.UpdateCurFld( bIsUrl ? 1 : 0, aType, aText );
                     rSh.SetUndoNoResetModified();
                     rReq.Done();
                 }
@@ -734,7 +734,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
         case FN_POSTIT :
         case FN_JAVAEDIT :
             {
-                sal_Bool bCurField = sal_False;
+                bool bCurField = false;
                 pField = rSh.GetCurFld();
                 if(nWhich == FN_POSTIT)
                     bCurField = pField && pField->GetTyp()->Which() == RES_POSTITFLD;
@@ -793,7 +793,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
         if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, false, &pItem))
         {
             // Select links
-            rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT, sal_False);
+            rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT, false);
         }
         switch (nType)
         {
@@ -815,13 +815,13 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
                         aINetFmt.SetMacro(SFX_EVENT_MOUSEOUT_OBJECT, *pMacro);
                 }
                 rSh.SttSelect();
-                rSh.InsertURL( aINetFmt, rName, sal_True );
+                rSh.InsertURL( aINetFmt, rName, true );
                 rSh.EndSelect();
             }
             break;
 
         case HLINK_BUTTON:
-            sal_Bool bSel = rSh.HasSelection();
+            bool bSel = rSh.HasSelection();
             if(bSel)
                 rSh.DelRight();
             InsertURLButton( rURL, rTarget, rName );
@@ -852,14 +852,14 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
         const SwRangeRedline *pActRed = pSh->SelNextRedline();
         pSh->Pop(pActRed != 0);
 
-        sal_Bool bEnable = sal_False;
+        bool bEnable = false;
 
         if (pActRed)
         {
             pSh->StartAction();
             pSh->Push();
             bEnable = pSh->SelNextRedline() != 0;
-            pSh->Pop(sal_False);
+            pSh->Pop(false);
             pSh->EndAction();
         }
 
@@ -902,14 +902,14 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
         const SwRangeRedline *pActRed = pSh->SelPrevRedline();
         pSh->Pop(pActRed != 0);
 
-        sal_Bool bEnable = sal_False;
+        bool bEnable = false;
 
         if (pActRed)
         {
             pSh->StartAction();
             pSh->Push();
             bEnable = pSh->SelPrevRedline() != 0;
-            pSh->Pop(sal_False);
+            pSh->Pop(false);
             pSh->EndAction();
         }
 

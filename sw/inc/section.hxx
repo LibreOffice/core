@@ -200,7 +200,7 @@ public:
     void SetCondHidden(bool const bFlag = true);
     bool IsCondHidden() const { return m_Data.IsCondHidden(); }
     // Query (also for parents) if this section is to be hidden.
-    sal_Bool CalcHiddenFlag() const;
+    bool CalcHiddenFlag() const;
 
     inline SwSection* GetParent() const;
 
@@ -261,7 +261,7 @@ public:
 class SwSectionFrmMoveAndDeleteHint : public SfxSimpleHint
 {
     public:
-        SwSectionFrmMoveAndDeleteHint( const sal_Bool bSaveCntnt )
+        SwSectionFrmMoveAndDeleteHint( const bool bSaveCntnt )
             : SfxSimpleHint( SFX_HINT_DYING )
             , mbSaveCntnt( bSaveCntnt )
         {}
@@ -269,13 +269,13 @@ class SwSectionFrmMoveAndDeleteHint : public SfxSimpleHint
         virtual ~SwSectionFrmMoveAndDeleteHint()
         {}
 
-        sal_Bool IsSaveCntnt() const
+        bool IsSaveCntnt() const
         {
             return mbSaveCntnt;
         }
 
     private:
-        const sal_Bool mbSaveCntnt;
+        const bool mbSaveCntnt;
 };
 
 enum SectionSort { SORTSECT_NOT, SORTSECT_NAME, SORTSECT_POS };
@@ -321,10 +321,10 @@ public:
     //  - all of them or only those that are in the normal Nodes-array.
     sal_uInt16 GetChildSections( SwSections& rArr,
                             SectionSort eSort = SORTSECT_NOT,
-                            sal_Bool bAllSections = sal_True ) const;
+                            bool bAllSections = true ) const;
 
     // Query whether section is in Nodes-array or in UndoNodes-array.
-    sal_Bool IsInNodesArr() const;
+    bool IsInNodesArr() const;
 
           SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false);
     const SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false) const

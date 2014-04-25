@@ -59,7 +59,7 @@ void SAL_CALL SwVbaTableOfContents::setTabLeader( ::sal_Int32 /*_tableader*/ ) t
 
 sal_Bool SAL_CALL SwVbaTableOfContents::getUseFields() throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool bUseFields = sal_False;
+    bool bUseFields = false;
     mxTocProps->getPropertyValue("CreateFromMarks") >>= bUseFields;
     return bUseFields;
 }
@@ -71,7 +71,7 @@ void SAL_CALL SwVbaTableOfContents::setUseFields( sal_Bool _useFields ) throw (c
 
 sal_Bool SAL_CALL SwVbaTableOfContents::getUseOutlineLevels() throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool bUseOutlineLevels = sal_False;
+    bool bUseOutlineLevels = false;
     mxTocProps->getPropertyValue("CreateFromOutline") >>= bUseOutlineLevels;
     return bUseOutlineLevels;
 }

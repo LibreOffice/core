@@ -62,7 +62,7 @@ SwAccessibleChildSList_const_iterator::SwAccessibleChildSList_const_iterator(
             if ( !aCurr.IsValid() )
             {
                 ::rtl::Reference < SwAccessibleContext > xAccImpl =
-                                    rAccMap.GetContextImpl( &rFrm, sal_False );
+                                    rAccMap.GetContextImpl( &rFrm, false );
                 if( xAccImpl.is() )
                 {
                     SwAccessibleContext* pAccImpl = xAccImpl.get();
@@ -128,7 +128,7 @@ SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::ne
             if ( !aCurr.IsValid() )
             {
                 ::rtl::Reference < SwAccessibleContext > xAccImpl =
-                                    rList.GetAccMap().GetContextImpl( &rFrm, sal_False );
+                                    rList.GetAccMap().GetContextImpl( &rFrm, false );
                 if( xAccImpl.is() )
                 {
                     SwAccessibleContext* pAccImpl = xAccImpl.get();

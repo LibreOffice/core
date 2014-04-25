@@ -33,7 +33,7 @@ protected:
 
 public:
     SwAccessibleFootnote( SwAccessibleMap* pInitMap,
-                          sal_Bool bIsEndnote,
+                          bool bIsEndnote,
                           const SwFtnFrm *pFtnFrm );
 
     // XAccessibleContext
@@ -64,7 +64,7 @@ public:
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    static sal_Bool IsEndnote( const SwFtnFrm *pFrm );
+    static bool IsEndnote( const SwFtnFrm *pFrm );
 };
 
 #endif

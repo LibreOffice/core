@@ -51,12 +51,12 @@ SwAuthEntry::SwAuthEntry(const SwAuthEntry& rCopy)
         aAuthFields[i] = rCopy.aAuthFields[i];
 }
 
-sal_Bool    SwAuthEntry::operator==(const SwAuthEntry& rComp)
+bool    SwAuthEntry::operator==(const SwAuthEntry& rComp)
 {
     for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
         if(aAuthFields[i] != rComp.aAuthFields[i])
-            return sal_False;
-    return sal_True;
+            return false;
+    return true;
 }
 
 SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
@@ -66,8 +66,8 @@ SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
     m_SortKeyArr(3),
     m_cPrefix('['),
     m_cSuffix(']'),
-    m_bIsSequence(sal_False),
-    m_bSortByDocument(sal_True),
+    m_bIsSequence(false),
+    m_bSortByDocument(true),
     m_eLanguage(::GetAppLanguage())
 {
 }
@@ -140,16 +140,16 @@ sal_IntPtr SwAuthorityFieldType::AddField(const OUString& rFieldContents)
     return nRet;
 }
 
-sal_Bool SwAuthorityFieldType::AddField(sal_IntPtr nHandle)
+bool SwAuthorityFieldType::AddField(sal_IntPtr nHandle)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     for( sal_uInt16 j = 0; j < m_DataArr.size(); j++ )
     {
         SwAuthEntry* pTemp = &m_DataArr[j];
         sal_IntPtr nTmp = (sal_IntPtr)(void*)pTemp;
         if( nTmp == nHandle )
         {
-            bRet = sal_True;
+            bRet = true;
             pTemp->AddRef();
             //re-generate positions of the fields
             DelSequenceArray();

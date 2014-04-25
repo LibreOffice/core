@@ -156,7 +156,7 @@ static void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
             if( (  bPage && RES_HEADER_FOOTER_EAT_SPACING != nId ) ||
                 ( !bPage && RES_COL != nId && RES_PAPER_BIN != nId ))
             {
-                if( SFX_ITEM_SET == rSource.GetItemState( nId, sal_False, &pItem ))
+                if( SFX_ITEM_SET == rSource.GetItemState( nId, false, &pItem ))
                     rDest.SetFmtAttr( *pItem );
                 else
                     rDest.ResetFmtAttr( nId );
@@ -233,7 +233,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
                 SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
                             *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
                 aTmp = *pSttNd->EndOfSectionNode();
-                GetNodes()._Copy( aRange, aTmp, sal_False );
+                GetNodes()._Copy( aRange, aTmp, false );
                 aTmp = *pSttNd;
                 CopyFlyInFlyImpl(aRange, 0, aTmp);
 
@@ -309,7 +309,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
                 SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
                             *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
                 aTmp = *pSttNd->EndOfSectionNode();
-                GetNodes()._Copy( aRange, aTmp, sal_False );
+                GetNodes()._Copy( aRange, aTmp, false );
                 aTmp = *pSttNd;
                 CopyFlyInFlyImpl(aRange, 0, aTmp);
 
@@ -654,7 +654,7 @@ SwPageDesc* SwDoc::FindPageDescByName( const OUString& rName, sal_uInt16* pPos )
 // Initialisation and deinitialisation can be found in init.cxx
 extern std::vector<SvGlobalName*> *pGlobalOLEExcludeList;
 
-void SwDoc::PrtOLENotify( sal_Bool bAll )
+void SwDoc::PrtOLENotify( bool bAll )
 {
     SwFEShell *pShell = 0;
     if ( GetCurrentViewShell() )
@@ -683,7 +683,7 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
     else
     {
         if ( mbAllOLENotify )
-            bAll = sal_True;
+            bAll = true;
 
         mbOLEPrtNotifyPending = mbAllOLENotify = false;
 
@@ -699,7 +699,7 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
                 ::SetProgressState( i, GetDocShell() );
 
                 SwOLENode* pOLENd = (*pNodes)[i];
-                pOLENd->SetOLESizeInvalid( sal_False );
+                pOLENd->SetOLESizeInvalid( false );
 
                 // At first load the Infos and see if it's not already in the exclude list.
                 SvGlobalName aName;
@@ -757,7 +757,7 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
                 ::SetProgressState( i, GetDocShell() );
 
                 SwOLENode* pOLENd = (*pNodes)[i];
-                pOLENd->SetOLESizeInvalid( sal_False );
+                pOLENd->SetOLESizeInvalid( false );
 
                 // We don't know it, so the object has to be loaded.
                 // If it doesn't want to be informed
@@ -872,7 +872,7 @@ void SwDoc::SetDefaultPageMode(bool bSquaredPageMode)
     }
 }
 
-sal_Bool SwDoc::IsSquaredPageMode() const
+bool SwDoc::IsSquaredPageMode() const
 {
     const SwTextGridItem& rGrid =
                         (const SwTextGridItem&)GetDefault( RES_TEXTGRID );

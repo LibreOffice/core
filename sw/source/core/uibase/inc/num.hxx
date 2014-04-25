@@ -89,9 +89,9 @@ class SwNumPositionTabPage : public SfxTabPage
     SwOutlineTabDialog* pOutlineDlg;
     sal_uInt16              nActNumLvl;
 
-    sal_Bool                bModified           : 1;
-    sal_Bool                bPreset             : 1;
-    sal_Bool                bInInintControl     : 1;  // work around modify-error; should be resolved from 391 on
+    bool                bModified           : 1;
+    bool                bPreset             : 1;
+    bool                bInInintControl     : 1;  // work around modify-error; should be resolved from 391 on
     bool                bLabelAlignmentPosAndSpaceModeActive;
 
     void                InitControls();
@@ -130,7 +130,7 @@ public:
     void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}
     void                SetWrtShell(SwWrtShell* pSh);
 #ifdef DBG_UTIL
-    void                SetModified(sal_Bool bRepaint = sal_True);
+    void                SetModified(bool bRepaint = true);
 #else
     void                SetModified(sal_Bool bRepaint = sal_True)
                             {   bModified = sal_True;

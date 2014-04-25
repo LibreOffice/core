@@ -28,7 +28,7 @@ class DrawSelection : public SwDrawBase
     DrawSelection(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
                                        // mouse- & key events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
 
     virtual void Activate(const sal_uInt16 nSlotId) SAL_OVERRIDE;    // activate function
 };

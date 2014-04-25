@@ -149,7 +149,7 @@ SwContent::SwContent(const SwContentType* pCnt, const OUString& rName, long nYPo
     pParent(pCnt),
     sContentName(rName),
     nYPosition(nYPos),
-    bInvisible(sal_False)
+    bInvisible(false)
 {
 }
 
@@ -162,12 +162,12 @@ SwTypeNumber::~SwTypeNumber()
 {
 }
 
-sal_Bool SwContent::IsProtect() const
+bool SwContent::IsProtect() const
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwPostItContent::IsProtect() const
+bool SwPostItContent::IsProtect() const
 {
     if (mbPostIt)
         return pFld->IsProtect();
@@ -175,7 +175,7 @@ sal_Bool SwPostItContent::IsProtect() const
         return false;
 }
 
-sal_Bool SwURLFieldContent::IsProtect() const
+bool SwURLFieldContent::IsProtect() const
 {
     return pINetAttr->IsProtect();
 }
@@ -208,7 +208,7 @@ SwContentType::SwContentType(SwWrtShell* pShell, sal_uInt16 nType, sal_uInt8 nLe
 
 // Init
 
-void SwContentType::Init(sal_Bool* pbInvalidateWindow)
+void SwContentType::Init(bool* pbInvalidateWindow)
 {
     // if the MemberCount is changing ...
     sal_uInt16 nOldMemberCount = nMemberCount;
@@ -304,7 +304,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
 
                     SwContent* pCnt = new SwRegionContent(this, rSectionName,
                             nLevel,
-                            pFmt->FindLayoutRect( sal_False, &aNullPt ).Top());
+                            pFmt->FindLayoutRect( false, &aNullPt ).Top());
 
                     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, 0 );
                     if( !pFmt->GetInfo( aAskItem ) &&
@@ -328,7 +328,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 pOldMember->DeleteAndDestroyAll();
                 delete pOldMember;
                 if(pbInvalidateWindow && bInvalidate)
-                    *pbInvalidateWindow = sal_True;
+                    *pbInvalidateWindow = true;
             }
         }
         break;
@@ -466,7 +466,7 @@ void    SwContentType::Invalidate()
 
 // Fill the List of contents
 
-void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
+void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 {
     SwContentArr*   pOldMember = 0;
     int nOldMemberCount = -1;
@@ -476,7 +476,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
         pOldMember = pMember;
         nOldMemberCount = pOldMember->size();
         pMember = new SwContentArr;
-        *pbLevelOrVisibilityChanged = sal_False;
+        *pbLevelOrVisibilityChanged = false;
     }
     else if(!pMember)
         pMember = new SwContentArr;
@@ -508,7 +508,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                     // cast for Win16
                     if(nOldMemberCount > (int)nPos &&
                         ((SwOutlineContent*)(*pOldMember)[nPos])->GetOutlineLevel() != nLevel)
-                        *pbLevelOrVisibilityChanged = sal_True;
+                        *pbLevelOrVisibilityChanged = true;
 
                     nPos++;
                 }
@@ -529,7 +529,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                 const OUString sTblName( rTblFmt.GetName() );
 
                 SwContent* pCnt = new SwContent(this, sTblName,
-                        rTblFmt.FindLayoutRect(sal_False, &aNullPt).Top() );
+                        rTblFmt.FindLayoutRect(false, &aNullPt).Top() );
                 if( !rTblFmt.GetInfo( aAskItem ) &&
                     !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
@@ -538,7 +538,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
 
                 if(nOldMemberCount > (int)i &&
                     (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible())
-                        *pbLevelOrVisibilityChanged = sal_True;
+                        *pbLevelOrVisibilityChanged = true;
             }
         }
         break;
@@ -569,12 +569,12 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                                 INetURLObject::decode( sLink, '%',
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ),
-                                pFrmFmt->FindLayoutRect(sal_False, &aNullPt).Top());
+                                pFrmFmt->FindLayoutRect(false, &aNullPt).Top());
                 }
                 else
                 {
                     pCnt = new SwContent(this, sFrmName,
-                            pFrmFmt->FindLayoutRect(sal_False, &aNullPt).Top() );
+                            pFrmFmt->FindLayoutRect(false, &aNullPt).Top() );
                 }
                 if( !pFrmFmt->GetInfo( aAskItem ) &&
                     !aAskItem.pObject )     // not visible
@@ -582,7 +582,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                 pMember->insert(pCnt);
                 if(nOldMemberCount > (int)i &&
                     (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible())
-                        *pbLevelOrVisibilityChanged = sal_True;
+                        *pbLevelOrVisibilityChanged = true;
             }
         }
         break;
@@ -627,7 +627,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
 
                     SwContent* pCnt = new SwRegionContent(this, sSectionName,
                             nLevel,
-                            pFmt->FindLayoutRect( sal_False, &aNullPt ).Top());
+                            pFmt->FindLayoutRect( false, &aNullPt ).Top());
                     if( !pFmt->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
@@ -637,7 +637,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                     if(nOldMemberCount > nPos &&
                         (*pOldMember)[nPos]->IsInvisible()
                                 != pCnt->IsInvisible())
-                            *pbLevelOrVisibilityChanged = sal_True;
+                            *pbLevelOrVisibilityChanged = true;
                 }
             }
             nMemberCount = pMember->size();
@@ -698,7 +698,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                 if(nOldMemberCount > nPos &&
                     (*pOldMember)[nPos]->IsInvisible()
                             != pCnt->IsInvisible())
-                        *pbLevelOrVisibilityChanged = sal_True;
+                        *pbLevelOrVisibilityChanged = true;
             }
         }
         break;
@@ -759,7 +759,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                         long nYPos = 0;
                         const Point aNullPt;
                         if(pContact && pContact->GetFmt())
-                            nYPos = pContact->GetFmt()->FindLayoutRect(sal_False, &aNullPt).Top();
+                            nYPos = pContact->GetFmt()->FindLayoutRect(false, &aNullPt).Top();
                         SwContent* pCnt = new SwContent(
                                             this,
                                             pTemp->GetName(),
@@ -770,7 +770,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                         nMemberCount++;
                         if(nOldMemberCount > (int)i &&
                             (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible() )
-                                *pbLevelOrVisibilityChanged = sal_True;
+                                *pbLevelOrVisibilityChanged = true;
                     }
                 }
             }
@@ -819,7 +819,7 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
         bIsInternalDrag(false),
         bIsRoot(false),
         bIsIdleClear(false),
-        bIsLastReadOnly(sal_False),
+        bIsLastReadOnly(false),
         bIsOutlineMoveable(true),
         bViewHasChanged(false),
         bIsImageListInitialized(false),
@@ -1187,9 +1187,9 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
     {
         const SwContentType* pContType = ((SwContent*)pEntry->GetUserData())->GetParent();
         const sal_uInt16 nContentType = pContType->GetType();
-        sal_Bool bReadonly = pActiveShell->GetView().GetDocShell()->IsReadOnly();
+        bool bReadonly = pActiveShell->GetView().GetDocShell()->IsReadOnly();
         bool bVisible = !((SwContent*)pEntry->GetUserData())->IsInvisible();
-        sal_Bool bProtected = ((SwContent*)pEntry->GetUserData())->IsProtect();
+        bool bProtected = ((SwContent*)pEntry->GetUserData())->IsProtect();
         bool bEditable = pContType->IsEditable() &&
             ((bVisible && !bProtected) ||CONTENT_TYPE_REGION == nContentType);
         bool bDeletable = pContType->IsDeletable() &&
@@ -1225,9 +1225,9 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
                 bSubPop4 = true;
                 pSubPop4->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
                 pSubPop4->InsertItem(404, sUnprotTbl);
-                sal_Bool bFull = sal_False;
+                bool bFull = false;
                 OUString sTblName = ((SwContent*)pEntry->GetUserData())->GetName();
-                sal_Bool bProt =pActiveShell->HasTblAnyProtection( &sTblName, &bFull );
+                bool bProt = pActiveShell->HasTblAnyProtection( &sTblName, &bFull );
                 pSubPop4->EnableItem(403, !bFull );
                 pSubPop4->EnableItem(404, bProt );
                 pSubPop4->InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
@@ -1383,7 +1383,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                             SdrPageView* pPV = pDrawView->/*GetPageViewPvNum*/GetSdrPageView(/*0*/);
                             if( pPV )
                             {
-                                sal_Bool Marked = pDrawView->IsObjMarked(pObj);
+                                bool Marked = pDrawView->IsObjMarked(pObj);
                                 if(Marked)
                                 {
                                     //sEntry += String::CreateFromAscii(" *");
@@ -1435,7 +1435,7 @@ SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
 
 // Expand - Remember the state for content types.
 
-sal_Bool  SwContentTree::Expand( SvTreeListEntry* pParent )
+bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 {
     if(!bIsRoot || (((SwContentType*)pParent->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE) ||
             (nRootType == CONTENT_TYPE_OUTLINE))
@@ -1456,7 +1456,7 @@ sal_Bool  SwContentTree::Expand( SvTreeListEntry* pParent )
                 std::map< void*, bool > mCurrOutLineNodeMap;
 
                 SwWrtShell* pShell = GetWrtShell();
-                sal_Bool bBool = SvTreeListBox::Expand(pParent);
+                bool bBool = SvTreeListBox::Expand(pParent);
                 SvTreeListEntry* pChild = Next(pParent);
                 while(pChild && lcl_IsContent(pChild) && pParent->HasChildren())
                 {
@@ -1492,16 +1492,16 @@ sal_Bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 
 // Collapse - Remember the state for content types.
 
-sal_Bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
+bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
 {
-    sal_Bool bRet;
+    bool bRet;
     if(!bIsRoot || (((SwContentType*)pParent->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE) ||
             (nRootType == CONTENT_TYPE_OUTLINE))
     {
         if(lcl_IsContentType(pParent))
         {
             if(bIsRoot)
-                return bRet = sal_False;
+                return bRet = false;
             SwContentType* pCntType = (SwContentType*)pParent->GetUserData();
             sal_uInt16 nAnd = 1 << pCntType->GetType();
             nAnd = ~nAnd;
@@ -1606,7 +1606,7 @@ void SwContentTree::Display( bool bActive )
         bIsActive = bActive;
     bIsHidden = !bActive;
     SwWrtShell* pShell = GetWrtShell();
-    sal_Bool bReadOnly = pShell ? pShell->GetView().GetDocShell()->IsReadOnly() : sal_True;
+    bool bReadOnly = pShell ? pShell->GetView().GetDocShell()->IsReadOnly() : sal_True;
     if(bReadOnly != bIsLastReadOnly)
     {
         bIsLastReadOnly = bReadOnly;
@@ -1635,7 +1635,7 @@ void SwContentTree::Display( bool bActive )
                 OUString sEntry = (*ppContentT)->GetName();
                 SvTreeListEntry* pEntry;
                 const Image& rImage = aEntryImages.GetImage(SID_SW_START + nCntType);
-                sal_Bool bChOnDemand = 0 != (*ppContentT)->GetMemberCount();
+                bool bChOnDemand = 0 != (*ppContentT)->GetMemberCount();
                 pEntry = InsertEntry(sEntry, rImage, rImage,
                                 0, bChOnDemand, TREELIST_APPEND, (*ppContentT));
                 if(nCntType == nLastSelType)
@@ -1967,7 +1967,7 @@ bool SwContentTree::HasContentChanged()
 //  no longer checked. Finally, the box is filled again.
 
     bool bRepaint = false;
-    sal_Bool bInvalidate = sal_False;
+    bool bInvalidate = false;
 
     if(!bIsActive && ! bIsConstant)
     {
@@ -2070,7 +2070,7 @@ bool SwContentTree::HasContentChanged()
                 pEntry->SetUserData((void*)pArrType);
                 if(IsExpanded(pEntry))
                 {
-                    sal_Bool bLevelOrVisibiblityChanged = sal_False;
+                    bool bLevelOrVisibiblityChanged = false;
                     // bLevelOrVisibiblityChanged is set if outlines have changed their level
                     // or if the visibility of objects (frames, sections, tables) has changed
                     // i.e. in header/footer
@@ -2079,7 +2079,7 @@ bool SwContentTree::HasContentChanged()
                     if((nType == CONTENT_TYPE_OUTLINE) && bLevelOrVisibiblityChanged)
                         bRepaint = true;
                     if(bLevelOrVisibiblityChanged)
-                        bInvalidate = sal_True;
+                        bInvalidate = true;
 
                     if(nChildCount != pArrType->GetMemberCount())
                         bRepaint = true;
@@ -2104,16 +2104,16 @@ bool SwContentTree::HasContentChanged()
                     // was the entry once opened, then must also the
                     // invisible records be examined.
                     // At least the user data must be updated.
-                    sal_Bool bLevelOrVisibiblityChanged = sal_False;
+                    bool bLevelOrVisibiblityChanged = false;
                     // bLevelOrVisibiblityChanged is set if outlines have changed their level
                     // or if the visibility of objects (frames, sections, tables) has changed
                     // i.e. in header/footer
                     pArrType->FillMemberList(&bLevelOrVisibiblityChanged);
-                    sal_Bool bRemoveChildren = sal_False;
+                    bool bRemoveChildren = false;
                     sal_uInt16 nChildCount = (sal_uInt16)GetChildCount(pEntry);
                     if( nChildCount != pArrType->GetMemberCount() )
                     {
-                        bRemoveChildren = sal_True;
+                        bRemoveChildren = true;
                     }
                     else
                     {
@@ -2125,7 +2125,7 @@ bool SwContentTree::HasContentChanged()
                             OUString sEntryText = GetEntryText(pChild);
                             if( sEntryText != pCnt->GetName() &&
                                 !(sEntryText == sSpace && pCnt->GetName().isEmpty()))
-                                bRemoveChildren = sal_True;
+                                bRemoveChildren = true;
                             pChild = Next(pChild);
                         }
                     }
@@ -2261,7 +2261,7 @@ void SwContentTree::SetConstantShell(SwWrtShell* pSh)
 
 // Execute commands of the Navigator
 
-void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
+void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
 {
     bool nMove = false;
     switch( nCmd )
@@ -2386,7 +2386,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
                 }
 
                 pShell->ClearMark();
-                pShell->Pop(sal_False); // Cursor is now back at the current superscription.
+                pShell->Pop(false); // Cursor is now back at the current superscription.
                 pShell->EndAllAction();
                 if(aActiveContentArr[CONTENT_TYPE_OUTLINE])
                     aActiveContentArr[CONTENT_TYPE_OUTLINE]->Invalidate();
@@ -2681,7 +2681,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                             SdrModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
                             SdrPage* pPage = pDrawModel->GetPage(0);
                             sal_uInt32 nCount = pPage->GetObjCount();
-                            sal_Bool hasObjectMarked = sal_False;
+                            bool hasObjectMarked = false;
 
                             SdrObject* pObject = NULL;
                             pObject = GetDrawingObjectsByContent( pCnt );
@@ -2690,7 +2690,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                                 SdrPageView* pPV = pDrawView->GetSdrPageView/*GetPageViewPvNum*/(/*0*/);
                                 if( pPV )
                                 {
-                                    sal_Bool bUnMark = pDrawView->IsObjMarked(pObject);
+                                    bool bUnMark = pDrawView->IsObjMarked(pObject);
                                     pDrawView->MarkObj( pObject, pPV, bUnMark);
 
                                 }
@@ -2698,7 +2698,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                             for( sal_uInt32 i=0; i< nCount; i++ )
                             {
                                 SdrObject* pTemp = pPage->GetObj(i);
-                                sal_Bool bMark = pDrawView->IsObjMarked(pTemp);
+                                bool bMark = pDrawView->IsObjMarked(pTemp);
                                 switch( pTemp->GetObjIdentifier() )
                                 {
                                     case OBJ_GRUP:
@@ -2722,7 +2722,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                                     case OBJ_CAPTION:
                                     case OBJ_CUSTOMSHAPE:
                                         if( bMark )
-                                            hasObjectMarked = sal_True;
+                                            hasObjectMarked = true;
                                         break;
                                     default:
                                         if ( bMark )
@@ -3011,7 +3011,7 @@ bool SwContentTree::Select( SvTreeListEntry* pEntry, bool bSelect )
 {
     if(!pEntry)
         return false;
-    sal_Bool bEnable = sal_False;
+    bool bEnable = false;
     SvTreeListEntry* pParentEntry = GetParent(pEntry);
     while(pParentEntry && (!lcl_IsContentType(pParentEntry)))
     {
@@ -3020,14 +3020,14 @@ bool SwContentTree::Select( SvTreeListEntry* pEntry, bool bSelect )
     if (!bIsLastReadOnly)
     {
         if (!IsVisible())
-            bEnable = sal_True;
+            bEnable = true;
         else if (pParentEntry)
         {
             if ((bIsRoot && nRootType == CONTENT_TYPE_OUTLINE) ||
                 (lcl_IsContent(pEntry) &&
                     ((SwContentType*)pParentEntry->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE))
             {
-                bEnable = sal_True;
+                bEnable = true;
             }
         }
     }
@@ -3323,8 +3323,8 @@ void SwContentTree::GotoContent(SwContent* pCnt)
             if(pActiveShell->GotoINetAttr(
                             *((SwURLFieldContent*)pCnt)->GetINetAttr() ))
             {
-                pActiveShell->Right( CRSR_SKIP_CHARS, sal_True, 1, sal_False);
-                pActiveShell->SwCrsrShell::SelectTxtAttr( RES_TXTATR_INETFMT, sal_True );
+                pActiveShell->Right( CRSR_SKIP_CHARS, true, 1, false);
+                pActiveShell->SwCrsrShell::SelectTxtAttr( RES_TXTATR_INETFMT, true );
             }
 
         }
@@ -3420,10 +3420,10 @@ void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
     rData.CopyByteString(SOT_FORMATSTR_ID_SONLK, sStrBuf);
 }
 
-sal_Bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
+bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
 {
     OUString sStr;
-    sal_Bool bRet = rData.GetString( SOT_FORMATSTR_ID_SONLK, sStr );
+    bool bRet = rData.GetString( SOT_FORMATSTR_ID_SONLK, sStr );
     if( bRet )
     {
         sal_Int32 nPos = 0;

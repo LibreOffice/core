@@ -96,7 +96,7 @@ public:
         : SwContent( pCnt, rName, nYPos ), sURL( rURL ), pINetAttr( pAttr )
     {}
 
-    virtual sal_Bool    IsProtect() const SAL_OVERRIDE;
+    virtual bool        IsProtect() const SAL_OVERRIDE;
     const OUString&     GetURL()            { return sURL; }
     const SwTxtINetFmt* GetINetAttr()       { return pINetAttr; }
 };
@@ -128,7 +128,7 @@ public:
 
     const SwFmtFld* GetPostIt()     { return pFld; }
     SwRangeRedline* GetRedline() { return pRedline; }
-    virtual sal_Bool    IsProtect()     const SAL_OVERRIDE;
+    virtual bool    IsProtect()     const SAL_OVERRIDE;
     bool            IsPostIt()      {return mbPostIt; }
 };
 
@@ -181,11 +181,11 @@ public:
         SwContentType(SwWrtShell* pParent, sal_uInt16 nType, sal_uInt8 nLevel );
         virtual ~SwContentType();
 
-        void                Init(sal_Bool* pbInvalidateWindow = 0);
-        void                FillMemberList(sal_Bool* pbLevelChanged = NULL);
-        sal_uInt16              GetMemberCount() const
+        void                Init(bool* pbInvalidateWindow = 0);
+        void                FillMemberList(bool* pbLevelChanged = NULL);
+        sal_uInt16          GetMemberCount() const
                                 {return nMemberCount;};
-        sal_uInt16              GetType() const {return nContentType;}
+        sal_uInt16          GetType() const {return nContentType;}
         const SwContent*    GetMember(sal_uInt16 nIndex);
         const OUString&     GetName() {return sContentTypeName;}
         const OUString&     GetSingleName() const {return sSingleContentTypeName;}

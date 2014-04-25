@@ -76,11 +76,11 @@ class SwWrapTabPage: public SfxTabPage
     Size aFrmSize;
     SwWrtShell*         pWrtSh;
 
-    sal_Bool bFormat;
-    sal_Bool bNew;
-    sal_Bool bHtmlMode;
-    sal_Bool bDrawMode;
-    sal_Bool bContourImage;
+    bool bFormat;
+    bool bNew;
+    bool bHtmlMode;
+    bool bDrawMode;
+    bool bContourImage;
 
     SwWrapTabPage(Window *pParent, const SfxItemSet &rSet);
     virtual ~SwWrapTabPage();
@@ -106,8 +106,8 @@ public:
     virtual void    Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
 
     static const sal_uInt16*  GetRanges();
-    inline void     SetNewFrame(sal_Bool bNewFrame) { bNew = bNewFrame; }
-    inline void     SetFormatUsed(sal_Bool bFmt, sal_Bool bDrw) { bFormat = bFmt;
+    inline void     SetNewFrame(bool bNewFrame) { bNew = bNewFrame; }
+    inline void     SetFormatUsed(bool bFmt, bool bDrw) { bFormat = bFmt;
                                                             bDrawMode = bDrw; }
     inline void     SetShell(SwWrtShell* pSh) { pWrtSh = pSh; }
 };

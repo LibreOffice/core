@@ -142,7 +142,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_pTopMF->SetDownHdl(aFrameHdl);
     m_pTopMF->SetLoseFocusHdl(aFrameHdl);
 
-    FieldUnit eFieldUnit = ::GetDfltMetric(sal_False);
+    FieldUnit eFieldUnit = ::GetDfltMetric(false);
     ::SetFieldUnit( *m_pLeftMF, eFieldUnit );
     ::SetFieldUnit( *m_pTopMF, eFieldUnit );
 
@@ -163,8 +163,8 @@ SwMailMergeLayoutPage::~SwMailMergeLayoutPage()
 void SwMailMergeLayoutPage::ActivatePage()
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    sal_Bool bGreetingLine = rConfigItem.IsGreetingLine(sal_False) && !rConfigItem.IsGreetingInserted();
-    sal_Bool bAddressBlock = rConfigItem.IsAddressBlock() && !rConfigItem.IsAddressInserted();
+    bool bGreetingLine = rConfigItem.IsGreetingLine(false) && !rConfigItem.IsGreetingInserted();
+    bool bAddressBlock = rConfigItem.IsAddressBlock() && !rConfigItem.IsAddressInserted();
 
     m_pPosition->Enable(bAddressBlock);
     AlignToTextHdl_Impl(m_pAlignToBodyCB);
@@ -175,7 +175,7 @@ void SwMailMergeLayoutPage::ActivatePage()
     if(m_pExampleWrtShell) // initially there's nothing to check
     {
         if(!rConfigItem.IsGreetingInserted() &&
-                m_bIsGreetingInserted != (0 != bGreetingLine) )
+                m_bIsGreetingInserted != bGreetingLine )
         {
             if( m_bIsGreetingInserted )
             {
@@ -197,7 +197,7 @@ void SwMailMergeLayoutPage::ActivatePage()
                 m_pExampleWrtShell->GotoFly( m_pAddressBlockFormat->GetName() );
                 m_pExampleWrtShell->DelRight();
                 m_pAddressBlockFormat = 0;
-                m_pExampleWrtShell->Pop(sal_False);
+                m_pExampleWrtShell->Pop(false);
             }
             else
             {
@@ -249,7 +249,7 @@ SwFrmFmt*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView* pView,
         rConfigItem.SetAddressInserted(pAddressBlockFormat->GetName());
     }
     //now the greeting
-    if(rConfigItem.IsGreetingLine(sal_False) && !rConfigItem.IsGreetingInserted())
+    if(rConfigItem.IsGreetingLine(false) && !rConfigItem.IsGreetingInserted())
     {
         InsertGreeting( pView->GetWrtShell(), rConfigItem, false);
         rConfigItem.SetGreetingInserted();
@@ -285,7 +285,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
         aSet.Put(SvxBoxItem( RES_BOX ));
     aSet.Put(SwFmtSurround( SURROUND_NONE ));
 
-    rShell.NewFlyFrm(aSet, sal_True );
+    rShell.NewFlyFrm(aSet, true );
     SwFrmFmt* pRet = rShell.GetFlyFrmFmt();
     OSL_ENSURE( pRet, "Fly not inserted" );
 
@@ -310,8 +310,8 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
         // paragraph has to be hidden depending on the
         // IsIncludeCountry()/GetExcludeCountry() settings
 
-        sal_Bool bIncludeCountry = rConfigItem.IsIncludeCountry();
-        sal_Bool bHideEmptyParagraphs = rConfigItem.IsHideEmptyParagraphs();
+        bool bIncludeCountry = rConfigItem.IsIncludeCountry();
+        bool bHideEmptyParagraphs = rConfigItem.IsHideEmptyParagraphs();
         const OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
         bool bSpecialReplacementForCountry = (!bIncludeCountry || !rExcludeCountry.isEmpty());
 
@@ -406,13 +406,13 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     const SwRect& rPageRect = rShell.GetAnyCurRect(RECT_PAGE);
     const Point aGreetingPos( DEFAULT_LEFT_DISTANCE + rPageRect.Left(), GREETING_TOP_DISTANCE );
 
-    const sal_Bool bRet = rShell.SetShadowCrsrPos( aGreetingPos, FILL_SPACE );
+    const bool bRet = rShell.SetShadowCrsrPos( aGreetingPos, FILL_SPACE );
 
     if(!bRet)
     {
         //there's already text at the desired position
         //go to start of the doc, directly!
-        rShell.SttEndDoc(sal_True);
+        rShell.SttEndDoc(true);
         //and go by paragraph until the position is reached
         long nYPos = rShell.GetCharRect().Top();
         while(nYPos < GREETING_TOP_DISTANCE)
@@ -455,7 +455,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             }
     }
     //now insert the greeting text - if we have any?
-    const sal_Bool bIndividual = rConfigItem.IsIndividualGreeting(sal_False);
+    const bool bIndividual = rConfigItem.IsIndividualGreeting(false);
     if(bIndividual)
     {
         //lock expression fields - prevents hiding of the paragraph to insert into
@@ -487,7 +487,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             const OUString sNameColumn = rConfigItem.GetAssignedColumn(MM_PART_LASTNAME);
 
             const OUString& rFemaleGenderValue = rConfigItem.GetFemaleGenderValue();
-            sal_Bool bHideEmptyParagraphs = rConfigItem.IsHideEmptyParagraphs();
+            bool bHideEmptyParagraphs = rConfigItem.IsHideEmptyParagraphs();
             const SwDBData& rData = rConfigItem.GetCurrentDBData();
             const OUString sCommonBase(rData.sDataSource + "." + rData.sCommand + ".");
             const OUString sConditionBase("[" + sCommonBase + sGenderColumn + "]");
@@ -595,7 +595,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     {
         rShell.Push();
         rShell.SplitNode();
-        rShell.Pop(sal_False);
+        rShell.Pop(false);
     }
     //put the cursor to the start of the paragraph
     rShell.SttPara();
@@ -627,7 +627,7 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl)
                 Point(DEFAULT_LEFT_DISTANCE, DEFAULT_TOP_DISTANCE),
                 m_pAlignToBodyCB->IsChecked(), true);
     }
-    if(rConfigItem.IsGreetingLine(sal_False))
+    if(rConfigItem.IsGreetingLine(false))
     {
         InsertGreeting(*m_pExampleWrtShell, rConfigItem, true);
         m_bIsGreetingInserted = true;
@@ -705,7 +705,7 @@ IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, PushButton*, pButton)
 
 IMPL_LINK(SwMailMergeLayoutPage, AlignToTextHdl_Impl, CheckBox*, pBox)
 {
-    sal_Bool bCheck = pBox->IsChecked() && pBox->IsEnabled();
+    bool bCheck = pBox->IsChecked() && pBox->IsEnabled();
     m_pLeftFT->Enable(!bCheck);
     m_pLeftMF->Enable(!bCheck);
     ChangeAddressHdl_Impl( 0 );

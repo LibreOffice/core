@@ -28,12 +28,12 @@ class SwUndoSplitNode: public SwUndo
     SwRedlineData* pRedlData;
     sal_uLong nNode;
     sal_Int32 nCntnt;
-    sal_Bool bTblFlag : 1;
-    sal_Bool bChkTblStt : 1;
+    bool bTblFlag : 1;
+    bool bChkTblStt : 1;
     sal_uInt32 nParRsid;
 
 public:
-    SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos, sal_Bool bChkTbl );
+    SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos, bool bChkTbl );
 
     virtual ~SwUndoSplitNode();
 
@@ -41,7 +41,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
-    void SetTblFlag()       { bTblFlag = sal_True; }
+    void SetTblFlag()       { bTblFlag = true; }
 };
 
 class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveCntnt
@@ -54,7 +54,7 @@ class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveCntnt
 
     sal_uInt16 nFtnStt; // StartPos of Footnotes in History
 
-    sal_Bool bJoinNext : 1,
+    bool bJoinNext : 1,
          bJoinPrev : 1,
          bMoveRange : 1;
 
@@ -70,11 +70,11 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
     /// set the destination range after the move
-    void SetDestRange( const SwPaM&, const SwPosition&, sal_Bool, sal_Bool );
+    void SetDestRange( const SwPaM&, const SwPosition&, bool, bool );
     void SetDestRange( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
                         const SwNodeIndex& rInsPos );
 
-    sal_Bool IsMoveRange() const        { return bMoveRange; }
+    bool IsMoveRange() const        { return bMoveRange; }
     sal_uLong GetEndNode() const        { return nEndNode; }
     sal_uLong GetDestSttNode() const    { return nDestSttNode; }
     sal_Int32 GetDestSttCntnt() const  { return nDestSttCntnt; }

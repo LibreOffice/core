@@ -138,8 +138,8 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
                         SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,   SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
                         0 );
     rWrtSh.GetCurAttr( aCoreSet );
-    sal_Bool bSel = rWrtSh.HasSelection();
-    sal_Bool bSelectionPut = sal_False;
+    bool bSel = rWrtSh.HasSelection();
+    bool bSelectionPut = false;
     if(bSel || rWrtSh.IsInWord())
     {
         if(!bSel)
@@ -150,10 +150,10 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
                 rWrtSh.SelWrd();
         }
         aCoreSet.Put(SfxStringItem(FN_PARAM_SELECTION, rWrtSh.GetSelTxt()));
-        bSelectionPut = sal_True;
+        bSelectionPut = true;
         if(!bSel)
         {
-            rWrtSh.Pop(sal_False);
+            rWrtSh.Pop(false);
             rWrtSh.EndAction();
         }
     }
@@ -200,7 +200,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         ::ConvertAttrGenToChar(aTmpSet, CONV_ATTR_STD);
 
         const SfxPoolItem* pSelectionItem;
-        sal_Bool bInsert = sal_False;
+        bool bInsert = false;
         sal_Int32 nInsert = 0;
 
         // The old item is for unknown reasons back in the set again.
@@ -214,7 +214,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
                 rWrtSh.StartAction();
                 rWrtSh.Insert( sInsert );
                 rWrtSh.SetMark();
-                rWrtSh.ExtendSelection(sal_False, sInsert.getLength());
+                rWrtSh.ExtendSelection(false, sInsert.getLength());
                 SfxRequest aReq( rWrtSh.GetView().GetViewFrame(), FN_INSERT_STRING );
                 aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sInsert ) );
                 aReq.Done();
@@ -315,7 +315,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 //!! due to the selection changes coming below.
                 rWrtSh.StartAction();
                 // prevent view from jumping because of (temporary) selection changes
-                rWrtSh.LockView( sal_True );
+                rWrtSh.LockView( true );
 
                 // setting the new language...
                 if (!aNewLangTxt.isEmpty())
@@ -385,7 +385,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     }
                 }
 
-                rWrtSh.LockView( sal_False );
+                rWrtSh.LockView( false );
                 rWrtSh.EndAction();
             }
 
@@ -431,14 +431,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rWrtSh.InsertFootnote( aStr, nSlot == FN_INSERT_ENDNOTE, !bFont );
             if ( bFont )
             {
-                rWrtSh.Left( CRSR_SKIP_CHARS, sal_True, 1, sal_False );
+                rWrtSh.Left( CRSR_SKIP_CHARS, true, 1, false );
                 SfxItemSet aSet( rWrtSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
                 rWrtSh.GetCurAttr( aSet );
                 SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
                 SvxFontItem aFont( rFont.GetFamily(), pFont->GetValue(),
                                     rFont.GetStyleName(), rFont.GetPitch(), RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
                 rWrtSh.SetAttrSet( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
-                rWrtSh.ResetSelect(0, sal_False);
+                rWrtSh.ResetSelect(0, false);
                 rWrtSh.EndSelect();
                 rWrtSh.GotoFtnTxt();
             }
@@ -451,7 +451,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg(
-                GetView().GetWindow(), rWrtSh, sal_False);
+                GetView().GetWindow(), rWrtSh, false);
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(nSlot)->GetCommand());
             if ( pDlg->Execute() == RET_OK )
@@ -547,12 +547,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     aTemplateName = pDlg->GetTemplateName();
                     oPageNumber = pDlg->GetPageNumber();
 
-                    sal_Bool bIsNumberFilled = sal_False;
+                    bool bIsNumberFilled = false;
                     sal_uInt16 nPageNumber = 0;
 
                     if (oPageNumber)
                     {
-                        bIsNumberFilled = sal_True;
+                        bIsNumberFilled = true;
                         nPageNumber = oPageNumber.get();
                     }
 
@@ -638,7 +638,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 case RET_OK:
                 {
-                    pDlg->AcceptAll(sal_True);
+                    pDlg->AcceptAll(true);
                     SfxRequest aReq( pVFrame, FN_AUTOFORMAT_APPLY );
                     aReq.Done();
                     rReq.Ignore();
@@ -646,7 +646,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
 
                 case RET_CANCEL:
-                    pDlg->AcceptAll(sal_False);
+                    pDlg->AcceptAll(false);
                     rReq.Ignore();
                     break;
 
@@ -756,8 +756,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 OUString sFormula(((const SfxStringItem*)pItem)->GetValue());
                 SwFldMgr aFldMgr;
                 rWrtSh.StartAllAction();
-                sal_Bool bDelSel;
-                if( 0 != (bDelSel = rWrtSh.HasSelection()) )
+                bool bDelSel;
+                if( (bDelSel = rWrtSh.HasSelection()) )
                 {
                     rWrtSh.StartUndo( UNDO_START );
                     rWrtSh.DelRight();
@@ -813,7 +813,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case FN_REMOVE_HYPERLINK:
         {
-            sal_Bool bSel = rWrtSh.HasSelection();
+            bool bSel = rWrtSh.HasSelection();
             if(!bSel)
             {
                 rWrtSh.StartAction();
@@ -827,7 +827,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rWrtSh.ResetAttr( aAttribs );
             if(!bSel)
             {
-                rWrtSh.Pop(sal_False);
+                rWrtSh.Pop(false);
                 rWrtSh.EndAction();
             }
         }
@@ -854,7 +854,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rWrtSh.Push();          //save current cursor
             SwLangHelper::SelectCurrentPara( rWrtSh );
             sw_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
-            rWrtSh.Pop( sal_False );    //restore old cursor
+            rWrtSh.Pop( false );    //restore old cursor
         }
         break;
         case SID_ATTR_LRSPACE :
@@ -895,7 +895,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
 
-            sal_Bool bApplyCharUnit = ::HasCharUnit(0 != PTR_CAST(SwWebView, &GetView()));
+            bool bApplyCharUnit = ::HasCharUnit(0 != PTR_CAST(SwWebView, &GetView()));
             SW_MOD()->PutItem(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bApplyCharUnit));
 
             SfxItemSet aCoreSet( GetPool(),
@@ -963,7 +963,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, DLG_STD, NULL, sal_False, sDefPage );
+                pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, DLG_STD, NULL, false, sDefPage );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
             }
             SfxItemSet* pSet = NULL;
@@ -1047,7 +1047,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     //otherwise the SetNodeNumStart() value determines the start
                     //if it's set to something different than (sal_uInt16)0xFFFF
 
-                    sal_Bool bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
+                    bool bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
 
                     // Default value for restart value has to be (sal_uInt16)0xFFFF
                     // in order to indicate that the restart value of the list
@@ -1064,7 +1064,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 {
                     sal_uInt16 nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
                     rWrtSh.SetNodeNumStart(nNumStart);
-                    rWrtSh.SetNumRuleStart(sal_False, pPaM);
+                    rWrtSh.SetNumRuleStart(false, pPaM);
                 }
                 // #i56253#
                 if ( bUndoNeeded )
@@ -1097,10 +1097,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_SELECT_PARA:
         {
             if ( !rWrtSh.IsSttOfPara() )
-                rWrtSh.SttPara( sal_False );
+                rWrtSh.SttPara( false );
             else
                 rWrtSh.EnterStdMode();
-            rWrtSh.EndPara( sal_True );
+            rWrtSh.EndPara( true );
         }
         break;
 
@@ -1196,7 +1196,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwEditWin& rEdtWin = GetView().GetEditWin();
             SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
             SwApplyTemplate aTempl;
-            sal_Bool bSelection = rWrtSh.HasSelection();
+            bool bSelection = rWrtSh.HasSelection();
             if(bSelection)
             {
 
@@ -1246,7 +1246,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         OUString sStyleName;
         if(pItem)
             sStyleName = ((const SfxStringItem*)pItem)->GetValue();
-        sal_Bool bOn = sal_True;
+        bool bOn = true;
         if( SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_1, false, &pItem))
             bOn = ((const SfxBoolItem*)pItem)->GetValue();
         rWrtSh.ChangeHeaderOrFooter(sStyleName, FN_INSERT_PAGEHEADER == nSlot, bOn, !rReq.IsAPI());
@@ -1455,7 +1455,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             {
                 const sal_uInt16 nNoType =
                     FRMTYPE_FLY_ANY | FRMTYPE_HEADER | FRMTYPE_FOOTER | FRMTYPE_FOOTNOTE;
-                if ( (rSh.GetFrmType(0,sal_True) & nNoType) )
+                if ( (rSh.GetFrmType(0,true) & nNoType) )
                     rSet.DisableItem(nWhich);
 
                 if ( rSh.CrsrInsideInputFld() )
@@ -1478,7 +1478,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_INSERT_TABLE:
             if ( rSh.CrsrInsideInputFld()
                  || rSh.GetTableFmt()
-                 || (rSh.GetFrmType(0,sal_True) & FRMTYPE_FOOTNOTE) )
+                 || (rSh.GetFrmType(0,true) & FRMTYPE_FOOTNOTE) )
             {
                 rSet.DisableItem( nWhich );
             }
@@ -1803,7 +1803,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case SID_INSERT_ZWSP:
             {
                 SvtCTLOptions aCTLOptions;
-                sal_Bool bEnabled = aCTLOptions.IsCTLFontEnabled();
+                bool bEnabled = aCTLOptions.IsCTLFontEnabled();
                 GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, bEnabled );
                 if(!bEnabled)
                     rSet.DisableItem(nWhich);

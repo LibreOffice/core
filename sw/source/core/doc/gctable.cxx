@@ -35,7 +35,7 @@ bool _SwGCBorder_BoxBrd::CheckLeftBorderOfFormat( const SwFrmFmt& rFmt )
 {
     const SvxBorderLine* pBrd;
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rFmt.GetItemState( RES_BOX, sal_True, &pItem ) &&
+    if( SFX_ITEM_SET == rFmt.GetItemState( RES_BOX, true, &pItem ) &&
         0 != ( pBrd = ((SvxBoxItem*)pItem)->GetLeft() ) )
     {
         if( *pBrdLn == *pBrd )
@@ -104,7 +104,7 @@ static sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTblLineBoxes& rCollTLB,
         const SvxBorderLine* pBrd;
         const SwTableBox& rBox = rCollTLB.GetBox( rStt, &nPos );
 
-        if( SFX_ITEM_SET != rBox.GetFrmFmt()->GetItemState(RES_BOX,sal_True, &pItem )
+        if( SFX_ITEM_SET != rBox.GetFrmFmt()->GetItemState(RES_BOX,true, &pItem )
             || 0 == ( pBrd = GetLineTB( (SvxBoxItem*)pItem, bTop ))
             || !( *pBrd == rBrdLn ))
             break;
@@ -117,7 +117,7 @@ static inline const SvxBorderLine* lcl_GCBorder_GetBorder( const SwTableBox& rBo
                                                 bool bTop,
                                                 const SfxPoolItem** ppItem )
 {
-    return SFX_ITEM_SET == rBox.GetFrmFmt()->GetItemState( RES_BOX, sal_True, ppItem )
+    return SFX_ITEM_SET == rBox.GetFrmFmt()->GetItemState( RES_BOX, true, ppItem )
             ? GetLineTB( (SvxBoxItem*)*ppItem, bTop )
             : 0;
 }
@@ -184,7 +184,7 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
             SwTableBox* pBox;
             for( sal_uInt16 i = aBoxes.size(); i; )
                 if( SFX_ITEM_SET == (pBox = aBoxes[ --i ])->GetFrmFmt()->
-                    GetItemState( RES_BOX, sal_True, &pItem ) &&
+                    GetItemState( RES_BOX, true, &pItem ) &&
                     0 != ( pBrd = ((SvxBoxItem*)pItem)->GetRight() ) )
                 {
                     aBPara.SetBorder( *pBrd );
@@ -395,12 +395,12 @@ static bool lcl_MergeGCLine(SwTableLine* pLn, _GCLinePara* pGCPara)
             // Pass the attributes of the to-be-deleted Lines to the "inserted" one
             const SfxPoolItem* pItem;
             if( SFX_ITEM_SET == pLn->GetFrmFmt()->GetItemState(
-                                    RES_BACKGROUND, sal_True, &pItem ))
+                                    RES_BACKGROUND, true, &pItem ))
             {
                 SwTableLines& rBoxLns = pBox->GetTabLines();
                 for( sal_uInt16 nLns = 0; nLns < nLen; ++nLns )
                     if( SFX_ITEM_SET != rBoxLns[ nLns ]->GetFrmFmt()->
-                            GetItemState( RES_BACKGROUND, sal_True ))
+                            GetItemState( RES_BACKGROUND, true ))
                         pGCPara->pShareFmts->SetAttr( *rBoxLns[ nLns ], *pItem );
             }
 

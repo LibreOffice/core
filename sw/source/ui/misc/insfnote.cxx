@@ -40,7 +40,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
-static sal_Bool bFootnote = sal_True;
+static bool bFootnote = true;
 
 /*------------------------------------------------------------------------
  Description:   inserting a footnote with OK
@@ -56,14 +56,14 @@ void SwInsFootNoteDlg::Apply()
     if ( bEdit )
     {
         rSh.StartAction();
-        rSh.Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+        rSh.Left(CRSR_SKIP_CHARS, false, 1, false );
         rSh.StartUndo( UNDO_START );
         SwFmtFtn aNote( m_pEndNoteBtn->IsChecked() );
         aNote.SetNumStr( aStr );
 
         if( rSh.SetCurFtn( aNote ) && bExtCharAvailable )
         {
-            rSh.Right(CRSR_SKIP_CHARS, sal_True, 1, sal_False );
+            rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
             SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
             rSh.GetCurAttr( aSet );
             SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
@@ -72,8 +72,8 @@ void SwInsFootNoteDlg::Apply()
                                eCharSet, RES_CHRATR_FONT );
             aSet.Put( aFont );
             rSh.SetAttrSet( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
-            rSh.ResetSelect(0, sal_False);
-            rSh.Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+            rSh.ResetSelect(0, false);
+            rSh.Left(CRSR_SKIP_CHARS, false, 1, false );
         }
         rSh.EndUndo( UNDO_END );
         rSh.EndAction();
@@ -143,7 +143,7 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl)
                 m_pNumberCharEdit->SetFont( aFont  );
             }
 
-            bExtCharAvailable = sal_True;
+            bExtCharAvailable = true;
             m_pOkBtn->Enable(!m_pNumberCharEdit->GetText().isEmpty());
         }
     }
@@ -156,7 +156,7 @@ IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn )
     Apply();
 
     // go to the next foot/endnote here
-    rSh.ResetSelect(0, sal_False);
+    rSh.ResetSelect(0, false);
     if (pBtn == m_pNextBT)
         rSh.GotoNextFtnAnchor();
     else
@@ -167,10 +167,10 @@ IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn )
     return 0;
 }
 
-SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, sal_Bool bEd) :
+SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, bool bEd) :
     SvxStandardDialog(pParent, "InsertFootnoteDialog", "modules/swriter/ui/insertfootnote.ui"),
     rSh(rShell),
-    bExtCharAvailable(sal_False),
+    bExtCharAvailable(false),
     bEdit(bEd)
 {
     get(m_pNumberFrame, "numberingframe");
@@ -210,7 +210,7 @@ SwInsFootNoteDlg::~SwInsFootNoteDlg()
     rSh.SetCareWin(0);
 
     if (bEdit)
-        rSh.ResetSelect(0, sal_False);
+        rSh.ResetSelect(0, false);
 }
 
 void SwInsFootNoteDlg::Init()
@@ -218,7 +218,7 @@ void SwInsFootNoteDlg::Init()
     SwFmtFtn aFtnNote;
     OUString sNumStr;
     Font aFont;
-    bExtCharAvailable = sal_False;
+    bExtCharAvailable = false;
 
     rSh.StartAction();
 
@@ -228,7 +228,7 @@ void SwInsFootNoteDlg::Init()
         {
             sNumStr = aFtnNote.GetNumStr();
 
-            rSh.Right(CRSR_SKIP_CHARS, sal_True, 1, sal_False );
+            rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
             SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
             rSh.GetCurAttr( aSet );
             const SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
@@ -238,8 +238,8 @@ void SwInsFootNoteDlg::Init()
             eCharSet = rFont.GetCharSet();
             aFont.SetName(m_aFontName);
             aFont.SetCharSet(eCharSet);
-            bExtCharAvailable = sal_True;
-            rSh.Left( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+            bExtCharAvailable = true;
+            rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
         }
         bFootnote = !aFtnNote.IsEndNote();
     }
@@ -258,12 +258,12 @@ void SwInsFootNoteDlg::Init()
     else
         m_pEndNoteBtn->Check();
 
-    sal_Bool bNext = rSh.GotoNextFtnAnchor();
+    bool bNext = rSh.GotoNextFtnAnchor();
 
     if (bNext)
         rSh.GotoPrevFtnAnchor();
 
-    sal_Bool bPrev = rSh.GotoPrevFtnAnchor();
+    bool bPrev = rSh.GotoPrevFtnAnchor();
 
     if (bPrev)
         rSh.GotoNextFtnAnchor();
@@ -271,7 +271,7 @@ void SwInsFootNoteDlg::Init()
     m_pPrevBT->Enable(bPrev);
     m_pNextBT->Enable(bNext);
 
-    rSh.Right(CRSR_SKIP_CHARS, sal_True, 1, sal_False );
+    rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
 
     rSh.EndAction();
 }

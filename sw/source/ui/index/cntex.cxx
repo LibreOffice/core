@@ -88,7 +88,7 @@ static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
 static void lcl_SetBOOLProp(
                 uno::Reference< beans::XPropertySetInfo > & xInfo,
                 uno::Reference< beans::XPropertySet > & xProps,
-                OUString const & aPropName, sal_Bool bValue )
+                OUString const & aPropName, bool bValue )
 {
     if(xInfo->hasPropertyByName(aPropName))
     {
@@ -107,7 +107,7 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl)
         SwXTextDocument* pDoc = reinterpret_cast<SwXTextDocument*>(xDocTunnel->getSomething(SwXTextDocument::getUnoTunnelId()));
 
         if( pDoc )
-            pDoc->GetDocShell()->_LoadStyles( *rSh.GetView().GetDocShell(), sal_True );
+            pDoc->GetDocShell()->_LoadStyles( *rSh.GetView().GetDocShell(), true );
 
          uno::Reference< lang::XMultiServiceFactory >  xFact(
                                              xModel, uno::UNO_QUERY);
@@ -167,10 +167,10 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         pxIndexSectionsArr[nTOXIndex]->xContainerSection.is(),
                             "Section not created");
          uno::Reference< frame::XModel > & xModel = pExampleFrame->GetModel();
-        sal_Bool bInitialCreate = sal_True;
+        bool bInitialCreate = true;
         if(!pxIndexSectionsArr[nTOXIndex]->xDocumentIndex.is())
         {
-            bInitialCreate = sal_True;
+            bInitialCreate = true;
             if(!pxIndexSectionsArr[nTOXIndex]->xContainerSection.is())
                 throw uno::RuntimeException();
             uno::Reference< text::XTextRange >  xAnchor = pxIndexSectionsArr[nTOXIndex]->xContainerSection->getAnchor();
@@ -214,7 +214,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             sal_uInt16  nContentOptions = rDesc.GetContentOptions();
             if(xInfo->hasPropertyByName(UNO_NAME_LEVEL_PARAGRAPH_STYLES))
             {
-                sal_Bool bOn = 0!=(nContentOptions&nsSwTOXElement::TOX_TEMPLATE    );
+                bool bOn = 0!=(nContentOptions&nsSwTOXElement::TOX_TEMPLATE    );
                 uno::Any aStyleNames(xIdxProps->getPropertyValue(UNO_NAME_LEVEL_PARAGRAPH_STYLES));
                 uno::Reference< container::XIndexReplace >  xAcc;
                 aStyleNames >>= xAcc;

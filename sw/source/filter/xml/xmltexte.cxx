@@ -286,7 +286,7 @@ static void lcl_addFrameProperties(
     aAny = xSet->getPropertyValue("FrameName");
     aAny >>= aName;
 
-    sal_Bool bIsAutoScroll = sal_False, bIsScrollingMode;
+    bool bIsAutoScroll = false, bIsScrollingMode;
     aAny = xSet->getPropertyValue("FrameIsAutoScroll");
     aAny >>= bIsAutoScroll;
     if ( !bIsAutoScroll )
@@ -295,7 +295,7 @@ static void lcl_addFrameProperties(
         aAny >>= bIsScrollingMode;
     }
 
-    sal_Bool bIsBorderSet, bIsAutoBorder = sal_False;
+    bool bIsBorderSet, bIsAutoBorder = false;
     aAny = xSet->getPropertyValue("FrameIsAutoBorder");
     aAny >>= bIsAutoBorder;
     if ( !bIsAutoBorder )
@@ -541,7 +541,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 aAny2 >>= aStr;
                 rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CODE, aStr );
 
-                sal_Bool bScript = sal_False;
+                bool bScript = false;
                 aAny2 = xSet->getPropertyValue("AppletIsScript");
                 aAny2 >>= bScript;
                 rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MAY_SCRIPT, bScript ? XML_TRUE : XML_FALSE );
@@ -554,7 +554,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 while ( i > 0 )
                 {
                     beans::PropertyValue& aProp = aProps[--i];
-                    const sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_True );
+                    const sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, true );
                     if ( nType2 == SWHTML_OPTTYPE_TAG)
                     {
                         OUString aStr2;
@@ -649,7 +649,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     while ( i > 0 )
                     {
                         beans::PropertyValue& aProp = aProps[--i];
-                        const sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_True );
+                        const sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, true );
                         if (SWHTML_OPTTYPE_PARAM == nType2 || SWHTML_OPTTYPE_SIZE == nType2 )
                         {
                             OUString aStr;
@@ -675,7 +675,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     while ( i > 0 )
                     {
                         beans::PropertyValue& aProp = aProps[--i];
-                        const sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_False );
+                        const sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, false );
                         if ( nType2 == SWHTML_OPTTYPE_TAG)
                         {
                             OUString aStr;

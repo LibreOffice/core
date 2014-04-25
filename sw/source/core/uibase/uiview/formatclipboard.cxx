@@ -290,7 +290,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         // on the last (sort by there creation time) selection
         SwPaM* pCrsr = rWrtShell.GetCrsr();
 
-        sal_Bool bHasSelection = pCrsr->HasMark();
+        bool bHasSelection = pCrsr->HasMark();
         bool bForwardSelection = false;
 
         if(!bHasSelection && pCrsr->GetPrev() != pCrsr && pCrsr->GetPrev() != 0)
@@ -359,7 +359,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         SdrView* pDrawView = rWrtShell.GetDrawView();
         if(pDrawView)
         {
-            sal_Bool bOnlyHardAttr = sal_True;
+            bool bOnlyHardAttr = true;
             if( pDrawView->AreObjectsMarked() )
             {
                 pItemSet_TxtAttr = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
@@ -408,7 +408,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             m_aParaStyle = pFmt->GetName();
     }
 
-    rWrtShell.Pop(sal_False);
+    rWrtShell.Pop(false);
     rWrtShell.EndAction();
 }
 
@@ -537,7 +537,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             SdrView* pDrawView = rWrtShell.GetDrawView();
             if(pDrawView)
             {
-                sal_Bool bReplaceAll = sal_True;
+                bool bReplaceAll = true;
                 pDrawView->SetAttrToMarked(*m_pItemSet_TxtAttr, bReplaceAll);
             }
         }

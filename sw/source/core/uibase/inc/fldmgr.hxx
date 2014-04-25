@@ -75,14 +75,14 @@ struct SwInsertFld_Data
     sal_uLong nFormatId;
     SwWrtShell* pSh;
     sal_Unicode cSeparator;
-    sal_Bool bIsAutomaticLanguage;
+    bool bIsAutomaticLanguage;
     ::com::sun::star::uno::Any aDBDataSource;
     ::com::sun::star::uno::Any aDBConnection;
     ::com::sun::star::uno::Any aDBColumn;
     Window* pParent; // parent dialog used for SwWrtShell::StartInputFldDlg()
 
     SwInsertFld_Data(sal_uInt16 nType, sal_uInt16 nSub, const OUString& rPar1, const OUString& rPar2,
-                    sal_uLong nFmtId, SwWrtShell* pShell = NULL, sal_Unicode cSep = ' ', sal_Bool bIsAutoLanguage = sal_True) :
+                    sal_uLong nFmtId, SwWrtShell* pShell = NULL, sal_Unicode cSep = ' ', bool bIsAutoLanguage = true) :
         nTypeId(nType),
         nSubType(nSub),
         sPar1(rPar1),
@@ -96,7 +96,7 @@ struct SwInsertFld_Data
     SwInsertFld_Data() :
         pSh(0),
         cSeparator(' '),
-        bIsAutomaticLanguage(sal_True){}
+        bIsAutomaticLanguage(true){}
 
 };
 
@@ -115,7 +115,7 @@ private:
     OUString          sMacroName;
 
     sal_uLong           nCurFmt;
-    sal_Bool            bEvalExp;
+    bool            bEvalExp;
 
     SAL_DLLPRIVATE sal_uInt16            GetCurrLanguage() const;
 
@@ -131,7 +131,7 @@ public:
                         {   pWrtShell = pShell;     }
 
      // insert field using TypeID (TYP_ ...)
-    sal_Bool InsertFld( const SwInsertFld_Data& rData );
+    bool InsertFld( const SwInsertFld_Data& rData );
 
     // change the current field directly
     void            UpdateCurFld(sal_uLong nFormat,
@@ -148,21 +148,21 @@ public:
 
     void            InsertFldType(SwFieldType& rType);
 
-    sal_Bool            ChooseMacro(const OUString &rSelMacro = OUString());
+    bool            ChooseMacro(const OUString &rSelMacro = OUString());
     void            SetMacroPath(const OUString& rPath);
     inline OUString GetMacroPath() const         { return sMacroPath; }
     inline OUString GetMacroName() const         { return sMacroName; }
     inline void     SetMacroModule(SbModule* pMod)    { pModule = pMod; }
 
     // previous and next of the same type
-    sal_Bool GoNextPrev( sal_Bool bNext = sal_True, SwFieldType* pTyp = 0 );
-    sal_Bool GoNext( SwFieldType* pTyp = 0 )    { return GoNextPrev( sal_True, pTyp ); }
-    sal_Bool GoPrev( SwFieldType* pTyp = 0 )    { return GoNextPrev( sal_False, pTyp ); }
+    bool GoNextPrev( bool bNext = true, SwFieldType* pTyp = 0 );
+    bool GoNext( SwFieldType* pTyp = 0 )    { return GoNextPrev( true, pTyp ); }
+    bool GoPrev( SwFieldType* pTyp = 0 )    { return GoNextPrev( false, pTyp ); }
 
     // query values from database fields (BASIC )
 //  String          GetDataBaseFieldValue(const String &rDBName, const String &rFieldName, SwWrtShell* pSh);
-    sal_Bool            IsDBNumeric(const OUString& rDBName, const OUString& rTblQryName,
-                                    sal_Bool bIsTable, const OUString& rFldName);
+    bool            IsDBNumeric(const OUString& rDBName, const OUString& rTblQryName,
+                                    bool bIsTable, const OUString& rFldName);
 
     // organise RefMark with names
     bool            CanInsertRefMark( const OUString& rStr );
@@ -176,8 +176,8 @@ public:
 
     // access via TypeId from the dialog
     // Ids for a range of fields
-    const SwFldGroupRgn& GetGroupRange(sal_Bool bHtmlMode, sal_uInt16 nGrpId) const;
-    sal_uInt16          GetGroup(sal_Bool bHtmlMode, sal_uInt16 nTypeId, sal_uInt16 nSubType = 0) const;
+    const SwFldGroupRgn& GetGroupRange(bool bHtmlMode, sal_uInt16 nGrpId) const;
+    sal_uInt16          GetGroup(bool bHtmlMode, sal_uInt16 nTypeId, sal_uInt16 nSubType = 0) const;
 
     // the current field's TypeId
     sal_uInt16          GetCurTypeId() const;
@@ -194,7 +194,7 @@ public:
     bool            GetSubTypes(sal_uInt16 nId, std::vector<OUString>& rToFill);
 
     // format to a type
-    sal_uInt16          GetFormatCount(sal_uInt16 nTypeId, bool bIsText, sal_Bool bHtmlMode = sal_False) const;
+    sal_uInt16          GetFormatCount(sal_uInt16 nTypeId, bool bIsText, bool bHtmlMode = false) const;
     OUString            GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
     sal_uInt16          GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
     sal_uLong           GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter, double* pVal = 0L);
@@ -202,11 +202,11 @@ public:
     // turn off evaluation of expression fields for insertation
     // of many expressino fields (see labels)
 
-    inline void     SetEvalExpFlds(sal_Bool bEval);
+    inline void     SetEvalExpFlds(bool bEval);
     void            EvalExpFlds(SwWrtShell* pSh = NULL);
 };
 
-inline void SwFldMgr::SetEvalExpFlds(sal_Bool bEval)
+inline void SwFldMgr::SetEvalExpFlds(bool bEval)
     { bEvalExp = bEval; }
 
 inline sal_uLong SwFldMgr::GetCurFldFmt() const

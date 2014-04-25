@@ -56,10 +56,10 @@ protected:
     SwFrm           *pLower;
     std::vector<SwAnchoredObject*> aVertPosOrientFrmsFor;
 
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
+    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
 
-    long CalcRel( const SwFmtFrmSize &rSz, sal_Bool bWidth ) const;
+    long CalcRel( const SwFmtFrmSize &rSz, bool bWidth ) const;
 
 public:
     // --> #i28701#
@@ -72,10 +72,10 @@ public:
         //Proportionale Groessenanpassung der untergeordneten.
     void ChgLowersProp( const Size& rOldSize );
 
-    void AdjustColumns( const SwFmtCol *pCol, sal_Bool bAdjustAttributes );
+    void AdjustColumns( const SwFmtCol *pCol, bool bAdjustAttributes );
 
     void ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
-        const sal_Bool bChgFtn = sal_False );
+        const bool bChgFtn = false );
 
         //Painted die Column-Trennlinien fuer die innenliegenden Columns.
     void PaintColLines( const SwRect &, const SwFmtCol &,
@@ -91,11 +91,11 @@ public:
 
         //sucht den dichtesten Cntnt zum SPoint, wird bei Seiten, Flys und Cells
         //benutzt wenn GetCrsrOfst versagt hat.
-    const SwCntntFrm* GetCntntPos( Point &rPoint, const sal_Bool bDontLeave,
-                                   const sal_Bool bBodyOnly = sal_False,
-                                   const sal_Bool bCalc = sal_False,
+    const SwCntntFrm* GetCntntPos( Point &rPoint, const bool bDontLeave,
+                                   const bool bBodyOnly = false,
+                                   const bool bCalc = false,
                                    const SwCrsrMoveState *pCMS = 0,
-                                   const sal_Bool bDefaultExpand = sal_True ) const;
+                                   const bool bDefaultExpand = true ) const;
 
     SwLayoutFrm( SwFrmFmt*, SwFrm* );
     virtual ~SwLayoutFrm();
@@ -115,7 +115,7 @@ public:
     // investigated for sections.
     const SwFrm *ContainsAny( const bool _bInvestigateFtnForSections = false ) const;
     inline SwFrm *ContainsAny( const bool _bInvestigateFtnForSections = false );
-    sal_Bool IsAnLower( const SwFrm * ) const;
+    bool IsAnLower( const SwFrm * ) const;
 
     virtual const SwFrmFmt *GetFmt() const;
     virtual       SwFrmFmt *GetFmt();
@@ -124,8 +124,8 @@ public:
     //Verschieben der Ftns aller Lower - ab dem StartCntnt.
     //sal_True wenn mindestens eine Ftn verschoben wurde.
     //Ruft das Update der Seitennummer wenn bFtnNums gesetzt ist.
-    sal_Bool MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
-                        SwFtnBossFrm *pNewBoss, const sal_Bool bFtnNums );
+    bool MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
+                        SwFtnBossFrm *pNewBoss, const bool bFtnNums );
 
     // --> #i28701# - change purpose of method and its name
     // --> #i44016# - add parameter <_bUnlockPosOfObjs> to

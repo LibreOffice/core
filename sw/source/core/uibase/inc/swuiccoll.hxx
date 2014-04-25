@@ -45,7 +45,7 @@ class SwCondCollPage : public SfxTabPage
     const CommandStruct*pCmds;
     SwFmt*              pFmt;
 
-    sal_Bool                bNewTemplate;
+    bool                bNewTemplate;
 
     SwCondCollPage(Window *pParent, const SfxItemSet &rSet);
     virtual ~SwCondCollPage();
@@ -67,7 +67,7 @@ public:
     virtual bool FillItemSet(      SfxItemSet &rSet) SAL_OVERRIDE;
     virtual void Reset      (const SfxItemSet &rSet) SAL_OVERRIDE;
 
-    void SetCollection( SwFmt* pFormat, sal_Bool bNew );
+    void SetCollection( SwFmt* pFormat, bool bNew );
 };
 
 #endif

@@ -387,7 +387,7 @@ long SwWriteTable::GetAbsHeight(long nRawHeight, size_t const nRow,
     return nRawHeight > 0 ? nRawHeight : 0;
 }
 
-sal_Bool SwWriteTable::ShouldExpandSub(const SwTableBox *pBox, sal_Bool /*bExpandedBefore*/,
+bool SwWriteTable::ShouldExpandSub(const SwTableBox *pBox, bool /*bExpandedBefore*/,
     sal_uInt16 nDepth) const
 {
     return !pBox->GetSttNd() && nDepth > 0;
@@ -404,7 +404,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
                                            const SwTableLines& rLines,
                                            sal_uInt16 nDepth )
 {
-    sal_Bool bSubExpanded = sal_False;
+    bool bSubExpanded = false;
     sal_uInt16 nLines = rLines.size();
 
 #if OSL_DEBUG_LEVEL > 0
@@ -515,7 +515,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
                                         nCPos - nOldCPos,
                                         pBox->GetTabLines(),
                                         nDepth-1 );
-                bSubExpanded = sal_True;
+                bSubExpanded = true;
             }
         }
     }
@@ -531,7 +531,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
                                         sal_uInt16 nNumOfHeaderRows )
 {
     sal_uInt16 nLines = rLines.size();
-    sal_Bool bSubExpanded = sal_False;
+    bool bSubExpanded = false;
 
     // Specifying the border
     long nRPos = nStartRPos;
@@ -601,7 +601,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
             // If the row spans the entire table, we can
             // print out the background to the row. Otherwise
             // we have to print out into the cell.
-            sal_Bool bOutAtRow = !nParentLineWidth;
+            bool bOutAtRow = !nParentLineWidth;
             if( !bOutAtRow && nStartCPos==0 )
             {
                 SwWriteTableCol aCol( nParentLineWidth );
@@ -716,7 +716,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
                                     pBox->GetTabLines(),
                                     pLineBrush, nDepth-1,
                                     nNumOfHeaderRows );
-                bSubExpanded = sal_True;
+                bSubExpanded = true;
             }
 
             nCol++; // The next cell begins in the next column
@@ -814,7 +814,7 @@ SwWriteTable::SwWriteTable( const SwHTMLTableLayout *pLayoutInfo )
     {
         SwWriteTableRow *pRow = aRows[nRow];
 
-        sal_Bool bHeightExported = sal_False;
+        bool bHeightExported = false;
         for( nCol=0; nCol<nCols; nCol++ )
         {
             const SwHTMLTableLayoutCell *pLayoutCell =
@@ -869,7 +869,7 @@ SwWriteTable::SwWriteTable( const SwHTMLTableLayout *pLayoutInfo )
 
             // The height requires only to be written once
             if( nHeight )
-                bHeightExported = sal_True;
+                bHeightExported = true;
         }
     }
 

@@ -56,9 +56,9 @@ class SwAccessibleChild
         const SdrObject* GetDrawObject() const;
         Window* GetWindow() const;
 
-        const SwFrm* GetParent( const sal_Bool bInPagePreview ) const;
+        const SwFrm* GetParent( const bool bInPagePreview ) const;
 
-        bool IsAccessible( sal_Bool bPagePreview ) const;
+        bool IsAccessible( bool bPagePreview ) const;
         bool IsBoundAsChar() const;
 
         bool IsVisibleChildrenOnly() const;

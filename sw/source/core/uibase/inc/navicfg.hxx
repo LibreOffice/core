@@ -28,8 +28,8 @@ class SwNavigationConfig : public utl::ConfigItem
     sal_Int32   nOutlineLevel;  //OutlineLevel
     sal_Int32   nRegionMode;    //InsertMode
     sal_Int32   nActiveBlock;   //ActiveBlock//Expand/CollapsState
-    sal_Bool    bIsSmall;       //ShowListBox
-    sal_Bool    bIsGlobalActive; //GlobalDocMode// global view for GlobalDoc valid?
+    bool    bIsSmall;       //ShowListBox
+    bool    bIsGlobalActive; //GlobalDocMode// global view for GlobalDoc valid?
 
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
@@ -85,8 +85,8 @@ public:
                         }
                     }
 
-    sal_Bool    IsSmall() const {return bIsSmall;}
-    void        SetSmall(sal_Bool bSet){
+    bool    IsSmall() const {return bIsSmall;}
+    void        SetSmall(bool bSet){
                         if(bIsSmall != bSet)
                         {
                             SetModified();
@@ -94,8 +94,8 @@ public:
                         }
                     }
 
-    sal_Bool    IsGlobalActive() const {return bIsGlobalActive;}
-    void        SetGlobalActive(sal_Bool bSet){
+    bool    IsGlobalActive() const {return bIsGlobalActive;}
+    void        SetGlobalActive(bool bSet){
                         if(bIsGlobalActive != bSet)
                         {
                             SetModified();

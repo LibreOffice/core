@@ -51,7 +51,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 //Added for bug #i119954# Application crashed if undo/redo covert nest table to text
-sal_Bool ConvertTableToText( const SwTableNode *pTableNode, sal_Unicode cCh );
+bool ConvertTableToText( const SwTableNode *pTableNode, sal_Unicode cCh );
 
 void    ConvertNestedTablesToText( const SwTableLines &rTableLines, sal_Unicode cCh )
 {
@@ -79,7 +79,7 @@ void    ConvertNestedTablesToText( const SwTableLines &rTableLines, sal_Unicode 
     }
 }
 
-sal_Bool ConvertTableToText( const SwTableNode *pConstTableNode, sal_Unicode cCh )
+bool ConvertTableToText( const SwTableNode *pConstTableNode, sal_Unicode cCh )
 {
     SwTableNode *pTableNode = const_cast< SwTableNode* >( pConstTableNode );
     ConvertNestedTablesToText( pTableNode->GetTable().GetTabLines(), cCh );
@@ -107,7 +107,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts
     const SwTable *pTable = GetDoc()->InsertTable( rInsTblOpts, *pPos,
                                                    nRows, nCols,
                                                    eAdj, pTAFmt,
-                                                   0, sal_True );
+                                                   0, true );
     if( bEndUndo )
         EndUndo( UNDO_END );
 
@@ -115,7 +115,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts
     return *pTable;
 }
 
-sal_Bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
+bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
                                sal_Unicode cCh,
                                sal_Int16 eAdj,
                                const SwTableAutoFmt* pTAFmt )
@@ -132,10 +132,10 @@ sal_Bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     return bRet;
 }
 
-sal_Bool SwEditShell::TableToText( sal_Unicode cCh )
+bool SwEditShell::TableToText( sal_Unicode cCh )
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwPaM* pCrsr = GetCrsr();
     const SwTableNode* pTblNd =
             GetDoc()->IsIdxInTbl( pCrsr->GetPoint()->nNode );
@@ -179,13 +179,13 @@ sal_Bool SwEditShell::TableToText( sal_Unicode cCh )
     return bRet;
 }
 
-sal_Bool SwEditShell::IsTextToTableAvailable() const
+bool SwEditShell::IsTextToTableAvailable() const
 {
-    sal_Bool bOnlyText = sal_False;
+    bool bOnlyText = false;
     FOREACHPAM_START(GetCrsr())
         if( PCURCRSR->HasMark() && *PCURCRSR->GetPoint() != *PCURCRSR->GetMark() )
         {
-            bOnlyText = sal_True;
+            bOnlyText = true;
 
             // check if selection is in listing
             sal_uLong nStt = PCURCRSR->GetMark()->nNode.GetIndex(),
@@ -195,7 +195,7 @@ sal_Bool SwEditShell::IsTextToTableAvailable() const
             for( ; nStt <= nEnd; ++nStt )
                 if( !GetDoc()->GetNodes()[ nStt ]->IsTxtNode() )
                 {
-                    bOnlyText = sal_False;
+                    bOnlyText = false;
                     break;
                 }
 
@@ -287,7 +287,7 @@ void SwEditShell::SetTblChgMode( TblChgMode eMode )
     }
 }
 
-sal_Bool SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
+bool SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
 {
     SwSelBoxes aBoxes;
     if( IsTableMode() )
@@ -363,10 +363,10 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
     EndAllAction();
 }
 
-sal_Bool SwEditShell::IsTableBoxTextFormat() const
+bool SwEditShell::IsTableBoxTextFormat() const
 {
     if( IsTableMode() )
-        return sal_False;
+        return false;
 
     SwTableBox *pBox = 0;
     {
@@ -379,7 +379,7 @@ sal_Bool SwEditShell::IsTableBoxTextFormat() const
     }
 
     if( !pBox )
-        return sal_False;
+        return false;
 
     sal_uInt32 nFmt = 0;
     const SfxPoolItem* pItem;
@@ -393,11 +393,11 @@ sal_Bool SwEditShell::IsTableBoxTextFormat() const
 
     sal_uLong nNd = pBox->IsValidNumTxtNd();
     if( ULONG_MAX == nNd )
-        return sal_True;
+        return true;
 
     const OUString& rTxt = GetDoc()->GetNodes()[ nNd ]->GetTxtNode()->GetTxt();
     if( rTxt.isEmpty() )
-        return sal_False;
+        return false;
 
     double fVal;
     return !GetDoc()->GetNumberFormatter()->IsNumberFormat( rTxt, nFmt, fVal );
@@ -425,16 +425,16 @@ OUString SwEditShell::GetTableBoxText() const
     return sRet;
 }
 
-sal_Bool SwEditShell::SplitTable( sal_uInt16 eMode )
+bool SwEditShell::SplitTable( sal_uInt16 eMode )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwPaM *pCrsr = GetCrsr();
     if( pCrsr->GetNode()->FindTableNode() )
     {
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
-        bRet = GetDoc()->SplitTable( *pCrsr->GetPoint(), eMode, sal_True );
+        bRet = GetDoc()->SplitTable( *pCrsr->GetPoint(), eMode, true );
 
         GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
         ClearFEShellTabCols();
@@ -443,9 +443,9 @@ sal_Bool SwEditShell::SplitTable( sal_uInt16 eMode )
     return bRet;
 }
 
-sal_Bool SwEditShell::MergeTable( sal_Bool bWithPrev, sal_uInt16 nMode )
+bool SwEditShell::MergeTable( bool bWithPrev, sal_uInt16 nMode )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwPaM *pCrsr = GetCrsr();
     if( pCrsr->GetNode()->FindTableNode() )
     {
@@ -461,14 +461,14 @@ sal_Bool SwEditShell::MergeTable( sal_Bool bWithPrev, sal_uInt16 nMode )
     return bRet;
 }
 
-sal_Bool SwEditShell::CanMergeTable( sal_Bool bWithPrev, sal_Bool* pChkNxtPrv ) const
+bool SwEditShell::CanMergeTable( bool bWithPrev, bool* pChkNxtPrv ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwPaM *pCrsr = GetCrsr();
     const SwTableNode* pTblNd = pCrsr->GetNode()->FindTableNode();
     if( pTblNd && !pTblNd->GetTable().ISA( SwDDETable ))
     {
-        sal_Bool bNew = pTblNd->GetTable().IsNewModel();
+        bool bNew = pTblNd->GetTable().IsNewModel();
         const SwNodes& rNds = GetDoc()->GetNodes();
         if( pChkNxtPrv )
         {
@@ -477,13 +477,13 @@ sal_Bool SwEditShell::CanMergeTable( sal_Bool bWithPrev, sal_Bool* pChkNxtPrv ) 
                 bNew == pChkNd->GetTable().IsNewModel() &&
                 // Consider table in table case
                 pChkNd->EndOfSectionIndex() == pTblNd->GetIndex() - 1 )
-                *pChkNxtPrv = sal_True, bRet = sal_True;        // using Prev is possible
+                *pChkNxtPrv = true, bRet = true;        // using Prev is possible
             else
             {
                 pChkNd = rNds[ pTblNd->EndOfSectionIndex() + 1 ]->GetTableNode();
                 if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) &&
                     bNew == pChkNd->GetTable().IsNewModel() )
-                    *pChkNxtPrv = sal_False, bRet = sal_True;   // using Next is possible
+                    *pChkNxtPrv = false, bRet = true;   // using Next is possible
             }
         }
         else
@@ -508,7 +508,7 @@ sal_Bool SwEditShell::CanMergeTable( sal_Bool bWithPrev, sal_Bool* pChkNxtPrv ) 
 }
 
 /** create InsertDB as table Undo */
-void SwEditShell::AppendUndoForInsertFromDB( sal_Bool bIsTable )
+void SwEditShell::AppendUndoForInsertFromDB( bool bIsTable )
 {
     GetDoc()->AppendUndoForInsertFromDB( *GetCrsr(), bIsTable );
 }

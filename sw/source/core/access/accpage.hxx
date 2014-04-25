@@ -31,9 +31,9 @@
  */
 class SwAccessiblePage : public SwAccessibleContext
 {
-    sal_Bool    bIsSelected;    // protected by base class mutex
+    bool    bIsSelected;    // protected by base class mutex
 
-    sal_Bool    IsSelected();
+    bool    IsSelected();
 
     using SwAccessibleFrame::GetBounds;
 
@@ -75,7 +75,7 @@ public:
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Bool HasCursor() SAL_OVERRIDE;   // required by map to remember that object
+    virtual bool HasCursor() SAL_OVERRIDE;   // required by map to remember that object
 };
 
 #endif

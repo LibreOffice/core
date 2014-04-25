@@ -57,7 +57,7 @@ public:
         const SvxLongULSpaceItem& aPageULMargin,
         const bool bMirrored,
         const Size aPageSize,
-        const sal_Bool bLandscape,
+        const bool bLandscape,
         const FieldUnit eFUnit,
         const SfxMapUnit eUnit );
     virtual ~PageMarginControl(void);

@@ -120,7 +120,7 @@ void SwAccessibleChild::Init( Window* pWindow )
     mpDrawObj = 0;
 }
 
-bool SwAccessibleChild::IsAccessible( sal_Bool bPagePreview ) const
+bool SwAccessibleChild::IsAccessible( bool bPagePreview ) const
 {
     bool bRet( false );
 
@@ -324,7 +324,7 @@ bool SwAccessibleChild::AlwaysIncludeAsChild() const
     return bAlwaysIncludedAsChild;
 }
 
-const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const
+const SwFrm* SwAccessibleChild::GetParent( const bool bInPagePreview ) const
 {
     const SwFrm* pParent( 0 );
 

@@ -63,11 +63,11 @@ protected:
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
 public:
-    sal_Bool bTextOnly;
+    bool bTextOnly;
     OUString &m_rText;
     SwXMLTextBlockImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-        SwXMLTextBlocks &rBlocks, OUString &rNewText, sal_Bool bNewTextOnly );
+        SwXMLTextBlocks &rBlocks, OUString &rNewText, bool bNewTextOnly );
 
     SwXMLTextBlocks& getBlockList ( void )
     {

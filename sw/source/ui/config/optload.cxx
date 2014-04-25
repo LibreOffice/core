@@ -129,7 +129,7 @@ SfxTabPage* SwLoadOptPage::Create( Window* pParent,
 
 bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwModule* pMod = SW_MOD();
 
     sal_Int32 nNewLinkMode = AUTOMATIC;
@@ -161,7 +161,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
             m_pWrtShell->SetModified();
         }
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     const sal_Int32 nMPos = m_pMetricLB->GetSelectEntryPos();
@@ -170,23 +170,23 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
         // Double-Cast for VA3.0
         const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
-        bRet = sal_True;
+        bRet = true;
     }
 
     if(m_pTabMF->IsVisible() && m_pTabMF->GetText() != m_pTabMF->GetSavedValue())
     {
         rSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
                     (sal_uInt16)m_pTabMF->Denormalize(m_pTabMF->GetValue(FUNIT_TWIP))));
-        bRet = sal_True;
+        bRet = true;
     }
 
-    sal_Bool bIsUseCharUnitFlag = m_pUseCharUnit->IsChecked();
+    bool bIsUseCharUnitFlag = m_pUseCharUnit->IsChecked();
     SvtCJKOptions aCJKOptions;
         bIsUseCharUnitFlag = bIsUseCharUnitFlag && aCJKOptions.IsAsianTypographyEnabled();
-    if( bIsUseCharUnitFlag != m_pUseCharUnit->GetSavedValue())
+    if( (bIsUseCharUnitFlag ? 1 : 0) != m_pUseCharUnit->GetSavedValue())
     {
         rSet.Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bIsUseCharUnitFlag ));
-        bRet = sal_True;
+        bRet = true;
     }
 
     if (m_pWordCountED->GetText() != m_pWordCountED->GetSavedValue())
@@ -195,11 +195,11 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Writer::WordCount::AdditionalSeparators::set(m_pWordCountED->GetText(), batch);
         batch->commit();
-        bRet = sal_True;
+        bRet = true;
     }
 
-    sal_Bool bIsSquaredPageModeFlag = m_pUseSquaredPageMode->IsChecked();
-    if ( bIsSquaredPageModeFlag != m_pUseSquaredPageMode->GetSavedValue() )
+    bool bIsSquaredPageModeFlag = m_pUseSquaredPageMode->IsChecked();
+    if ( (bIsSquaredPageModeFlag ? 1 : 0) != m_pUseSquaredPageMode->GetSavedValue() )
     {
         pMod->ApplyDefaultPageMode( bIsSquaredPageModeFlag );
         if ( m_pWrtShell )
@@ -208,7 +208,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
             pDoc->SetDefaultPageMode( bIsSquaredPageModeFlag );
             m_pWrtShell->SetModified();
         }
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -216,7 +216,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 
 void SwLoadOptPage::Reset( const SfxItemSet& rSet)
 {
-    const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref(sal_False);
+    const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref(false);
     const SfxPoolItem* pItem;
 
     if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
@@ -226,8 +226,8 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
     m_nOldLinkMode = GLOBALSETTING;
     if (m_pWrtShell)
     {
-        eFldFlags = m_pWrtShell->GetFldUpdateFlags(sal_True);
-        m_nOldLinkMode = m_pWrtShell->GetLinkUpdMode(sal_True);
+        eFldFlags = m_pWrtShell->GetFldUpdateFlags(true);
+        m_nOldLinkMode = m_pWrtShell->GetLinkUpdMode(true);
     }
     if(GLOBALSETTING == m_nOldLinkMode)
         m_nOldLinkMode = pUsrPref->GetUpdateLinkMode();
@@ -300,7 +300,7 @@ IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl)
     {
         // Double-Cast for VA3.0
         FieldUnit eFieldUnit = (FieldUnit)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
-        sal_Bool bModified = m_pTabMF->IsModified();
+        bool bModified = m_pTabMF->IsModified();
         long nVal = bModified ?
             sal::static_int_cast<sal_Int32, sal_Int64 >( m_pTabMF->Denormalize( m_pTabMF->GetValue( FUNIT_TWIP ) )) :
                 m_nLastTab;
@@ -493,7 +493,7 @@ SfxTabPage* SwCaptionOptPage::Create( Window* pParent,
 
 bool SwCaptionOptPage::FillItemSet( SfxItemSet&  )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
     SaveEntry(m_pCheckLB->FirstSelected());    // apply current entry
@@ -597,7 +597,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
 
     if (pSelEntry)
     {
-        sal_Bool bChecked = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pSelEntry));
+        bool bChecked = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pSelEntry));
 
         m_pSettingsGroup->Enable(bChecked);
         bool bNumSep = bChecked && m_pLbCaptionOrder->GetSelectEntryPos() == 1;
@@ -771,7 +771,7 @@ IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox*, pBox )
     DrawSample();
 
     SvTreeListEntry* pSelEntry = m_pCheckLB->FirstSelected();
-    sal_Bool bChecked = sal_False;
+    bool bChecked = false;
     if (pSelEntry)
     {
         bChecked = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pSelEntry));
@@ -816,7 +816,7 @@ void SwCaptionOptPage::DrawSample()
                         aNumVector.push_back(1);
 
                     const OUString sNumber( pSh->GetOutlineNumRule()->MakeNumString(
-                                                            aNumVector, sal_False ));
+                                                            aNumVector, false ));
                     if( !sNumber.isEmpty() )
                         aStr += sNumber + pFldType->GetDelimiter();
                 }

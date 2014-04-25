@@ -54,9 +54,9 @@ sal_Int32 GetEnumAsInt32( const ::com::sun::star::uno::Any& rVal )
 }
 
 // methods for UCB actions
-sal_Bool UCB_DeleteFile( const OUString& rURL )
+bool UCB_DeleteFile( const OUString& rURL )
 {
-    sal_Bool bRemoved;
+    bool bRemoved;
     try
     {
         ucbhelper::Content aTempContent( rURL,
@@ -64,19 +64,19 @@ sal_Bool UCB_DeleteFile( const OUString& rURL )
                                 comphelper::getProcessComponentContext() );
         aTempContent.executeCommand(OUString("delete"),
                         ::com::sun::star::uno::makeAny( sal_True ) );
-        bRemoved = sal_True;
+        bRemoved = true;
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        bRemoved = sal_False;
+        bRemoved = false;
         OSL_FAIL( "Exeception from executeCommand( delete )" );
     }
     return bRemoved;
 }
 
-sal_Bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL, sal_Bool bCopyIsMove )
+bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL, bool bCopyIsMove )
 {
-    sal_Bool bCopyCompleted = sal_True;
+    bool bCopyCompleted = true;
     try
     {
         INetURLObject aURL( rNewURL );
@@ -101,14 +101,14 @@ sal_Bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL, sal_Bool b
     catch( ::com::sun::star::uno::Exception& )
     {
         OSL_FAIL( "Exeception from executeCommand( transfer )" );
-        bCopyCompleted = sal_False;
+        bCopyCompleted = false;
     }
     return bCopyCompleted;
 }
 
-sal_Bool UCB_IsCaseSensitiveFileName( const OUString& rURL )
+bool UCB_IsCaseSensitiveFileName( const OUString& rURL )
 {
-    sal_Bool bCaseSensitive;
+    bool bCaseSensitive;
     try
     {
         INetURLObject aTempObj( rURL );
@@ -128,15 +128,15 @@ sal_Bool UCB_IsCaseSensitiveFileName( const OUString& rURL )
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        bCaseSensitive = sal_False;
+        bCaseSensitive = false;
         OSL_FAIL( "Exeception from compareContentIds()" );
     }
     return bCaseSensitive;
 }
 
-sal_Bool UCB_IsReadOnlyFileName( const OUString& rURL )
+bool UCB_IsReadOnlyFileName( const OUString& rURL )
 {
-    sal_Bool bIsReadOnly = sal_False;
+    bool bIsReadOnly = false;
     try
     {
         ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
@@ -147,14 +147,14 @@ sal_Bool UCB_IsReadOnlyFileName( const OUString& rURL )
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        bIsReadOnly = sal_False;
+        bIsReadOnly = false;
     }
     return bIsReadOnly;
 }
 
-sal_Bool UCB_IsFile( const OUString& rURL )
+bool UCB_IsFile( const OUString& rURL )
 {
-    sal_Bool bExists = sal_False;
+    bool bExists = false;
     try
     {
         ::ucbhelper::Content aContent( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
@@ -166,9 +166,9 @@ sal_Bool UCB_IsFile( const OUString& rURL )
     return bExists;
 }
 
-sal_Bool UCB_IsDirectory( const OUString& rURL )
+bool UCB_IsDirectory( const OUString& rURL )
 {
-    sal_Bool bExists = sal_False;
+    bool bExists = false;
     try
     {
         ::ucbhelper::Content aContent( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );

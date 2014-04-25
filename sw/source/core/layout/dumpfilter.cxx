@@ -98,7 +98,7 @@ namespace sw
     sal_Bool LayoutDumpFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
         throw (uno::RuntimeException, std::exception)
     {
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
 
         utl::MediaDescriptor aMediaDesc = aDescriptor;
 
@@ -136,7 +136,7 @@ namespace sw
             xmlTextWriterEndDocument( writer );
             xmlFreeTextWriter( writer );
 
-            bRet = sal_True;
+            bRet = true;
         }
 
         return bRet;

@@ -32,7 +32,7 @@ class SwDPage : public FmFormPage, public SdrObjUserCall
     SwDoc&                  rDoc;
 
 public:
-    SwDPage(SwDrawDocument& rNewModel, sal_Bool bMasterPage=sal_False);
+    SwDPage(SwDrawDocument& rNewModel, bool bMasterPage=false);
     virtual ~SwDPage();
 
     // #i3694#
@@ -43,7 +43,7 @@ public:
     virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV,
                                     const Rectangle *pRect) const SAL_OVERRIDE;
 
-    sal_Bool RequestHelp( Window* pWindow, SdrView* pView, const HelpEvent& rEvt );
+    bool RequestHelp( Window* pWindow, SdrView* pView, const HelpEvent& rEvt );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage() SAL_OVERRIDE;
 };

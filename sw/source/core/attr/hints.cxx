@@ -73,7 +73,7 @@ SwTableFmlUpdate::SwTableFmlUpdate( const SwTable* pNewTbl )
     eFlags( TBL_CALC )
 {
     DATA.pDelTbl = 0;
-    bModified = bBehindSplitLine = sal_False;
+    bModified = bBehindSplitLine = false;
     OSL_ENSURE( pTbl, "No Table pointer" );
 }
 
@@ -84,7 +84,7 @@ SwAutoFmtGetDocNode::SwAutoFmtGetDocNode( const SwNodes* pNds )
 
 SwAttrSetChg::SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet )
     : SwMsgPoolItem( RES_ATTRSET_CHG ),
-    bDelSet( sal_False ),
+    bDelSet( false ),
     pChgSet( &rSet ),
     pTheChgdSet( &rTheSet )
 {
@@ -92,7 +92,7 @@ SwAttrSetChg::SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet )
 
 SwAttrSetChg::SwAttrSetChg( const SwAttrSetChg& rChgSet )
     : SwMsgPoolItem( RES_ATTRSET_CHG ),
-    bDelSet( sal_True ),
+    bDelSet( true ),
     pTheChgdSet( rChgSet.pTheChgdSet )
 {
     pChgSet = new SwAttrSet( *rChgSet.pChgSet );

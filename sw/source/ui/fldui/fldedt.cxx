@@ -121,12 +121,12 @@ void SwFldEditDlg::Init()
         pSh->StartAction();
         pSh->CreateCrsr();
 
-        sal_Bool bMove = rMgr.GoNext();
+        bool bMove = rMgr.GoNext();
         if( bMove )
             rMgr.GoPrev();
         m_pNextBT->Enable(bMove);
 
-        if( 0 != ( bMove = rMgr.GoPrev() ) )
+        if( ( bMove = rMgr.GoPrev() ) )
             rMgr.GoNext();
         m_pPrevBT->Enable( bMove );
 
@@ -200,10 +200,10 @@ SwFldEditDlg::~SwFldEditDlg()
     pSh->EnterStdMode();
 }
 
-void SwFldEditDlg::EnableInsert(sal_Bool bEnable)
+void SwFldEditDlg::EnableInsert(bool bEnable)
 {
     if( bEnable && pSh->IsReadOnlyAvailable() && pSh->HasReadonlySel() )
-        bEnable = sal_False;
+        bEnable = false;
     GetOKButton()->Enable( bEnable );
 }
 
@@ -265,11 +265,11 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     /* #108536# Only create selection if there is none
         already. Normalize PaM instead of swapping. */
     if ( ! pSh->HasSelection() )
-        pSh->Right(CRSR_SKIP_CHARS, sal_True, 1, sal_False );
+        pSh->Right(CRSR_SKIP_CHARS, true, 1, false );
 
     pSh->NormalizePam();
 
-    sal_uInt16 nGroup = rMgr.GetGroup(sal_False, pCurFld->GetTypeId(), pCurFld->GetSubType());
+    sal_uInt16 nGroup = rMgr.GetGroup(false, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
     if (nGroup != pTabPage->GetGroup())
         pTabPage = (SwFldPage*)CreatePage(nGroup);

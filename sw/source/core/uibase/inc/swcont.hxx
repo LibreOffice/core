@@ -68,11 +68,11 @@ class SwContent : public SwTypeNumber
     const SwContentType*    pParent;
     OUString                sContentName;
     long                    nYPosition;
-    sal_Bool                    bInvisible;
+    bool                    bInvisible;
 public:
         SwContent(const SwContentType* pCnt, const OUString& rName, long nYPos );
 
-    virtual sal_Bool            IsProtect() const;
+    virtual bool            IsProtect() const;
     const SwContentType*    GetParent() const {return pParent;}
     const OUString&         GetName()   const {return sContentName;}
     int                     operator==(const SwContent& /*rCont*/) const
@@ -90,8 +90,8 @@ public:
 
     long        GetYPos() const {return nYPosition;}
 
-    sal_Bool        IsInvisible() const {return bInvisible;}
-    void        SetInvisible(){ bInvisible = sal_True;}
+    bool        IsInvisible() const {return bInvisible;}
+    void        SetInvisible(){ bInvisible = true;}
 };
 
 #endif

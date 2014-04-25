@@ -46,11 +46,11 @@ ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
 {
 }
 
-sal_Bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
+bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn;
+    bool bReturn;
 
-    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)) == sal_True
+    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt))
                                     && m_pWin->GetSdrDrawMode() == OBJ_CAPTION)
     {
         m_pView->NoRotate();
@@ -63,9 +63,9 @@ sal_Bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
     return (bReturn);
 }
 
-sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
+bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bRet = SwDrawBase::MouseButtonUp(rMEvt);
+    bool bRet = SwDrawBase::MouseButtonUp(rMEvt);
     if( bRet )
     {
         SdrView *pSdrView = m_pSh->GetDrawView();

@@ -2326,7 +2326,7 @@ void WW8TabDesc::CreateSwTable()
     // rows of a band can be duplicated easy.
     pTable = pIo->rDoc.InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
-            *pTmpPos, nBands, nDefaultSwCols, eOri, 0, 0, sal_False, sal_True );
+            *pTmpPos, nBands, nDefaultSwCols, eOri, 0, 0, false, true );
 
     OSL_ENSURE(pTable && pTable->GetFrmFmt(), "insert table failed");
     if (!pTable || !pTable->GetFrmFmt())
@@ -3363,7 +3363,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             }
             // #i33818# - The nested table doesn't have to leave
             // the table cell. Thus, the Writer fly frame has to follow the text flow.
-            pTableDesc->pFlyFmt->SetFmtAttr( SwFmtFollowTextFlow( sal_True ) );
+            pTableDesc->pFlyFmt->SetFmtAttr( SwFmtFollowTextFlow( true ) );
         }
         else
             pTableDesc->SetSizePosition(0);

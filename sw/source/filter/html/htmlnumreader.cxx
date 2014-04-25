@@ -57,9 +57,9 @@ void SwHTMLParser::NewNumBulList( int nToken )
     SwHTMLNumRuleInfo& rInfo = GetNumInfo();
 
     // Erstmal einen neuen Absatz aufmachen
-    sal_Bool bSpace = (rInfo.GetDepth() + nDefListDeep) == 0;
+    bool bSpace = (rInfo.GetDepth() + nDefListDeep) == 0;
     if( pPam->GetPoint()->nContent.GetIndex() )
-        AppendTxtNode( bSpace ? AM_SPACE : AM_NOSPACE, sal_False );
+        AppendTxtNode( bSpace ? AM_SPACE : AM_NOSPACE, false );
     else if( bSpace )
         AddParSpace();
 
@@ -77,8 +77,8 @@ void SwHTMLParser::NewNumBulList( int nToken )
 
     // das Format anpassen, falls es fuer den Level noch nicht
     // geschehen ist!
-    sal_Bool bNewNumFmt = rInfo.GetNumRule()->GetNumFmt( nLevel ) == 0;
-    sal_Bool bChangeNumFmt = sal_False;
+    bool bNewNumFmt = rInfo.GetNumRule()->GetNumFmt( nLevel ) == 0;
+    bool bChangeNumFmt = false;
 
     // das default Numerierungsformat erstellen
     SwNumFmt aNumFmt( rInfo.GetNumRule()->Get(nLevel) );
@@ -120,7 +120,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         aNumFmt.SetFirstLineOffset( nFirstLineIndent );
         aNumFmt.SetCharFmt( pCSS1Parser->GetCharFmtFromPool(nChrFmtPoolId) );
 
-        bChangeNumFmt = sal_True;
+        bChangeNumFmt = true;
     }
     else if( 1 != aNumFmt.GetStart() )
     {
@@ -149,21 +149,21 @@ void SwHTMLParser::NewNumBulList( int nToken )
                 switch( nToken )
                 {
                 case HTML_ORDERLIST_ON:
-                    bChangeNumFmt = sal_True;
+                    bChangeNumFmt = true;
                     switch( rOption.GetString()[0] )
                     {
                     case 'A':   aNumFmt.SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER); break;
                     case 'a':   aNumFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER); break;
                     case 'I':   aNumFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER);        break;
                     case 'i':   aNumFmt.SetNumberingType(SVX_NUM_ROMAN_LOWER);        break;
-                    default:    bChangeNumFmt = sal_False;
+                    default:    bChangeNumFmt = false;
                     }
                     break;
 
                 case HTML_UNORDERLIST_ON:
                     aNumFmt.SetBulletChar( (sal_Unicode)rOption.GetEnum(
                                     aHTMLULTypeTable,aNumFmt.GetBulletChar() ) );
-                    bChangeNumFmt = sal_True;
+                    bChangeNumFmt = true;
                     break;
                 }
             }
@@ -174,7 +174,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
                 if( bNewNumFmt )
                 {
                     aNumFmt.SetStart( nStart );
-                    bChangeNumFmt = sal_True;
+                    bChangeNumFmt = true;
                 }
                 else
                 {
@@ -244,7 +244,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         // Und noch die Grafik merken, um sie in den Absaetzen nicht
         // einzufuegen
         aBulletGrfs[nLevel] = aBulletSrc;
-        bChangeNumFmt = sal_True;
+        bChangeNumFmt = true;
     }
     else
         aBulletGrfs[nLevel] = "";
@@ -284,7 +284,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
                         nAbsLSpace = nAbsLSpace + (sal_uInt16)aPropInfo.nLeftMargin;
 
                     aNumFmt.SetAbsLSpace( nAbsLSpace );
-                    bChangeNumFmt = sal_True;
+                    bChangeNumFmt = true;
                 }
                 if( aPropInfo.bTextIndent )
                 {
@@ -292,10 +292,10 @@ void SwHTMLParser::NewNumBulList( int nToken )
                         ((const SvxLRSpaceItem &)aItemSet.Get( RES_LR_SPACE ))
                                                         .GetTxtFirstLineOfst();
                     aNumFmt.SetFirstLineOffset( nTextIndent );
-                    bChangeNumFmt = sal_True;
+                    bChangeNumFmt = true;
                 }
             }
-            aPropInfo.bLeftMargin = aPropInfo.bTextIndent = sal_False;
+            aPropInfo.bLeftMargin = aPropInfo.bTextIndent = false;
             if( !aPropInfo.bRightMargin )
                 aItemSet.ClearItem( RES_LR_SPACE );
 
@@ -306,7 +306,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
             {
                 rInfo.GetNumRule()->Set( nLevel, aNumFmt );
                 pDoc->ChgNumRuleFmts( *rInfo.GetNumRule() );
-                bChangeNumFmt = sal_False;
+                bChangeNumFmt = false;
             }
 
             DoPositioning( aItemSet, aPropInfo, pCntxt );
@@ -335,7 +335,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
     // - der aktuelle nicht leer ist, also Text oder absatzgebundene Objekte
     //   enthaelt.
     // - der aktuelle Absatz numeriert ist.
-    sal_Bool bAppend = pPam->GetPoint()->nContent.GetIndex() > 0;
+    bool bAppend = pPam->GetPoint()->nContent.GetIndex() > 0;
     if( !bAppend )
     {
         SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
@@ -345,9 +345,9 @@ void SwHTMLParser::EndNumBulList( int nToken )
             HasCurrentParaFlys();
     }
 
-    sal_Bool bSpace = (rInfo.GetDepth() + nDefListDeep) == 1;
+    bool bSpace = (rInfo.GetDepth() + nDefListDeep) == 1;
     if( bAppend )
-        AppendTxtNode( bSpace ? AM_SPACE : AM_NOSPACE, sal_False );
+        AppendTxtNode( bSpace ? AM_SPACE : AM_NOSPACE, false );
     else if( bSpace )
         AddParSpace();
 
@@ -364,7 +364,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
             // Die noch nicht angepassten Formate werden jetzt noch
             // angepasst, damit es sich besser Editieren laesst.
             const SwNumFmt *pRefNumFmt = 0;
-            sal_Bool bChanged = sal_False;
+            bool bChanged = false;
             for( sal_uInt16 i=0; i<MAXLEVEL; i++ )
             {
                 const SwNumFmt *pNumFmt = rInfo.GetNumRule()->GetNumFmt(i);
@@ -390,7 +390,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
                     aNumFmt.SetFirstLineOffset( HTML_NUMBUL_INDENT );
                     aNumFmt.SetCharFmt( pRefNumFmt->GetCharFmt() );
                     rInfo.GetNumRule()->Set( i, aNumFmt );
-                    bChanged = sal_True;
+                    bChanged = true;
                 }
             }
             if( bChanged )
@@ -411,12 +411,12 @@ void SwHTMLParser::EndNumBulList( int nToken )
     }
 
     // und noch Attribute beenden
-    sal_Bool bSetAttrs = sal_False;
+    bool bSetAttrs = false;
     if( pCntxt )
     {
         EndContext( pCntxt );
         delete pCntxt;
-        bSetAttrs = sal_True;
+        bSetAttrs = true;
     }
 
     if( nToken )
@@ -466,7 +466,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
 
     // einen neuen Absatz aufmachen
     if( pPam->GetPoint()->nContent.GetIndex() )
-        AppendTxtNode( AM_NOSPACE, sal_False );
+        AppendTxtNode( AM_NOSPACE, false );
     bNoParSpace = false;    // In <LI> wird kein Abstand eingefuegt!
 
     const bool bCountedInList( HTML_LISTHEADER_ON==nToken ? false : true );
@@ -527,7 +527,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     }
 
     if( GetNumInfo().GetNumRule() )
-        GetNumInfo().GetNumRule()->SetInvalidRule( sal_True );
+        GetNumInfo().GetNumRule()->SetInvalidRule( true );
 
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -551,8 +551,8 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     ShowStatline();
 }
 
-void SwHTMLParser::EndNumBulListItem( int nToken, sal_Bool bSetColl,
-                                      sal_Bool /*bLastPara*/ )
+void SwHTMLParser::EndNumBulListItem( int nToken, bool bSetColl,
+                                      bool /*bLastPara*/ )
 {
     // einen neuen Absatz aufmachen
     if( !nToken && pPam->GetPoint()->nContent.GetIndex() )
@@ -612,7 +612,7 @@ void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel, bool bCountedInList )
 
     // NumRule invalidieren, weil sie durch ein EndAction bereits
     // auf valid geschaltet worden sein kann.
-    GetNumInfo().GetNumRule()->SetInvalidRule( sal_False );
+    GetNumInfo().GetNumRule()->SetInvalidRule( false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -160,7 +160,7 @@ static void lcl_SetSpecialProperty(SwFrmFmt* pFmt,
                 UnoActionContext aAction(pFmt->GetDoc());
                 if( pEntry->nWID == FN_TABLE_HEADLINE_REPEAT)
                 {
-                    sal_Bool bVal = *(sal_Bool*)aValue.getValue();
+                    bool bVal = *(sal_Bool*)aValue.getValue();
                     pFmt->GetDoc()->SetRowsToRepeat( *pTable, bVal ? 1 : 0 );
                 }
                 else
@@ -195,7 +195,7 @@ static void lcl_SetSpecialProperty(SwFrmFmt* pFmt,
             }
             else if(FN_TABLE_IS_RELATIVE_WIDTH == pEntry->nWID)
             {
-                sal_Bool bPercent = *(sal_Bool*)aValue.getValue();
+                bool bPercent = *(sal_Bool*)aValue.getValue();
                 if(!bPercent)
                     aSz.SetWidthPercent(0);
                 else
@@ -323,7 +323,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
                 {
                     const SwNode* pStartOfRedline = SwNodeIndex(*pRedPointNode) <= SwNodeIndex(*pRedMarkNode) ?
                         pRedPointNode : pRedMarkNode;
-                    sal_Bool bIsStart = pStartOfRedline == pTblNode;
+                    bool bIsStart = pStartOfRedline == pTblNode;
                     aRet <<= SwXRedlinePortion::CreateRedlineProperties(*pRedline, bIsStart);
                     break;
                 }
@@ -455,7 +455,7 @@ int sw_CompareCellsByColFirst( const OUString &rCellName1, const OUString &rCell
 int sw_CompareCellRanges(
         const OUString &rRange1StartCell, const OUString &rRange1EndCell,
         const OUString &rRange2StartCell, const OUString &rRange2EndCell,
-        sal_Bool bCmpColsFirst )
+        bool bCmpColsFirst )
 {
     int (*pCompareCells)( const OUString &, const OUString & ) =
             bCmpColsFirst ? &sw_CompareCellsByColFirst : &sw_CompareCellsByRowFirst;
@@ -621,7 +621,7 @@ static void lcl_FormatTable(SwFrmFmt* pTblFmt)
     }
 }
 
-static void lcl_CrsrSelect(SwPaM* pCrsr, sal_Bool bExpand)
+static void lcl_CrsrSelect(SwPaM* pCrsr, bool bExpand)
 {
     if(bExpand)
     {
@@ -633,7 +633,7 @@ static void lcl_CrsrSelect(SwPaM* pCrsr, sal_Bool bExpand)
 
 }
 
-static void lcl_GetTblSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* pBox, sal_Bool bRow)
+static void lcl_GetTblSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* pBox, bool bRow)
 {
     SwTabCols aCols;
     aCols.SetLeftMin ( 0 );
@@ -641,7 +641,7 @@ static void lcl_GetTblSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* pB
     aCols.SetRight   ( UNO_TABLE_COLUMN_SUM );
     aCols.SetRightMax( UNO_TABLE_COLUMN_SUM );
 
-    pTable->GetTabCols( aCols, pBox, sal_False, bRow );
+    pTable->GetTabCols( aCols, pBox, false, bRow );
 
     const size_t nSepCount = aCols.Count();
     uno::Sequence< text::TableColumnSeparator> aColSeq(nSepCount);
@@ -662,7 +662,7 @@ static void lcl_GetTblSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* pB
 
 }
 
-static void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox* pBox, sal_Bool bRow, SwDoc* pDoc)
+static void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox* pBox, bool bRow, SwDoc* pDoc)
 {
     SwTabCols aOldCols;
 
@@ -671,7 +671,7 @@ static void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableB
     aOldCols.SetRight   ( UNO_TABLE_COLUMN_SUM );
     aOldCols.SetRightMax( UNO_TABLE_COLUMN_SUM );
 
-    pTable->GetTabCols( aOldCols, pBox, sal_False, bRow );
+    pTable->GetTabCols( aOldCols, pBox, false, bRow );
     const size_t nOldCount = aOldCols.Count();
     // there is no use in setting tab cols if there is only one column
     if( !nOldCount )
@@ -682,19 +682,19 @@ static void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableB
     if(pSepSeq && static_cast<size_t>(pSepSeq->getLength()) == nOldCount)
     {
         SwTabCols aCols(aOldCols);
-        sal_Bool bError = sal_False;
+        bool bError = false;
         const text::TableColumnSeparator* pArray = pSepSeq->getConstArray();
         long nLastValue = 0;
         //sal_Int32 nTblWidth = aCols.GetRight() - aCols.GetLeft();
         for(size_t i = 0; i < nOldCount; ++i)
         {
             aCols[i] = pArray[i].Position;
-            if(pArray[i].IsVisible == aCols.IsHidden(i) ||
+            if(pArray[i].IsVisible == (aCols.IsHidden(i) ? 1 : 0) ||
                 (!bRow && aCols.IsHidden(i)) ||
                 aCols[i] < nLastValue ||
                 UNO_TABLE_COLUMN_SUM < aCols[i] )
             {
-                bError = sal_True;
+                bError = true;
                 break;
             }
             nLastValue = aCols[i];
@@ -714,7 +714,7 @@ static inline OUString lcl_getString( SwXCell &rCell )
 
 /* non UNO function call to set string in SwXCell */
 void sw_setString( SwXCell &rCell, const OUString &rTxt,
-        sal_Bool bKeepNumberFmt = sal_False )
+        bool bKeepNumberFmt = false )
 {
     if(rCell.IsValid())
     {
@@ -746,9 +746,9 @@ void sw_setValue( SwXCell &rCell, double nVal )
     if(rCell.IsValid())
     {
         // first this text (maybe) needs to be deleted
-        sal_uLong nNdPos = rCell.pBox->IsValidNumTxtNd( sal_True );
+        sal_uLong nNdPos = rCell.pBox->IsValidNumTxtNd( true );
         if(ULONG_MAX != nNdPos)
-            sw_setString( rCell, OUString(), sal_True );   // sal_True == keep number format
+            sw_setString( rCell, OUString(), true );   // sal_True == keep number format
         SwDoc* pDoc = rCell.GetDoc();
         UnoActionContext aAction(pDoc);
         SwFrmFmt* pBoxFmt = rCell.pBox->ClaimFrmFmt();
@@ -929,9 +929,9 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException,
     if(IsValid())
     {
         // first this text (maybe) needs to be deleted
-        sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( sal_True );
+        sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( true );
         if(USHRT_MAX == nNdPos)
-            sw_setString( *this, OUString(), sal_True );
+            sw_setString( *this, OUString(), true );
         OUString sFml(comphelper::string::stripStart(rFormula, ' '));
         if( !sFml.isEmpty() && '=' == sFml[0] )
                     sFml = sFml.copy( 1 );
@@ -1410,7 +1410,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
                         SwFmtFrmSize aFrmSize(pLn->GetFrmFmt()->GetFrmSize());
                         if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
                         {
-                            sal_Bool bSet = *(sal_Bool*)aValue.getValue();
+                            bool bSet = *(sal_Bool*)aValue.getValue();
                             aFrmSize.SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
                         }
                         else
@@ -1429,7 +1429,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
                     {
                         UnoActionContext aContext(pDoc);
                         SwTable* pTable2 = SwTable::FindTable( pFmt );
-                        lcl_SetTblSeparators(aValue, pTable2, pLine->GetTabBoxes()[0], sal_True, pDoc);
+                        lcl_SetTblSeparators(aValue, pTable2, pLine->GetTabBoxes()[0], true, pDoc);
                     }
                     break;
 
@@ -1480,7 +1480,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
 
                 case FN_UNO_TABLE_COLUMN_SEPARATORS:
                 {
-                    lcl_GetTblSeparators(aRet, pTable, pLine->GetTabBoxes()[0], sal_True);
+                    lcl_GetTblSeparators(aRet, pTable, pLine->GetTabBoxes()[0], true);
                 }
                 break;
 
@@ -1650,7 +1650,7 @@ sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& CellName, sal_Bool E
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
@@ -1665,13 +1665,13 @@ sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& CellName, sal_Bool E
 sal_Bool SwXTextTableCursor::goLeft(sal_Int16 Count, sal_Bool Expand) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->Left( Count,CRSR_SKIP_CHARS, sal_False, sal_False);
+        bRet = pTblCrsr->Left( Count,CRSR_SKIP_CHARS, false, false);
     }
     return bRet;
 }
@@ -1679,13 +1679,13 @@ sal_Bool SwXTextTableCursor::goLeft(sal_Int16 Count, sal_Bool Expand) throw( uno
 sal_Bool SwXTextTableCursor::goRight(sal_Int16 Count, sal_Bool Expand) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->Right( Count, CRSR_SKIP_CHARS, sal_False, sal_False);
+        bRet = pTblCrsr->Right( Count, CRSR_SKIP_CHARS, false, false);
     }
     return bRet;
 }
@@ -1693,7 +1693,7 @@ sal_Bool SwXTextTableCursor::goRight(sal_Int16 Count, sal_Bool Expand) throw( un
 sal_Bool SwXTextTableCursor::goUp(sal_Int16 Count, sal_Bool Expand) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
@@ -1707,7 +1707,7 @@ sal_Bool SwXTextTableCursor::goUp(sal_Int16 Count, sal_Bool Expand) throw( uno::
 sal_Bool SwXTextTableCursor::goDown(sal_Int16 Count, sal_Bool Expand) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
@@ -1746,7 +1746,7 @@ sal_Bool SwXTextTableCursor::mergeRange()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
@@ -1780,7 +1780,7 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal)
     SolarMutexGuard aGuard;
     if (Count <= 0)
         throw uno::RuntimeException("Illegal first argument: needs to be > 0", static_cast < cppu::OWeakObject * > ( this ) );
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
@@ -1983,7 +1983,7 @@ public:
     ~SwTableProperties_Impl();
 
     void        SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& aVal);
-    sal_Bool    GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny);
+    bool    GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny);
 
     void        ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc);
 };
@@ -2001,7 +2001,7 @@ void SwTableProperties_Impl::SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMember
     aAnyMap.SetValue( nWhichId, nMemberId, rVal );
 }
 
-sal_Bool SwTableProperties_Impl::GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny )
+bool SwTableProperties_Impl::GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny )
 {
     return aAnyMap.FillValue( nWhichId, nMemberId, rpAny );
 }
@@ -2023,7 +2023,7 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     const SwFrmFmt &rFrmFmt = *rTbl.GetFrmFmt();
     if(GetProperty(FN_TABLE_HEADLINE_REPEAT, 0xff, pRepHead ))
     {
-        sal_Bool bVal = *(sal_Bool*)pRepHead->getValue();
+        bool bVal = *(sal_Bool*)pRepHead->getValue();
         ((SwTable&)rTbl).SetRowsToRepeat( bVal ? 1 : 0 );  // TODO MULTIHEADER
     }
 
@@ -2124,7 +2124,7 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         ((SfxPoolItem&)aSz).PutValue(*pWidth, MID_FRMSIZE_WIDTH);
         bPutSize = true;
     }
-    sal_Bool bTemp = pSzRel ? *(sal_Bool*)pSzRel->getValue() : sal_False;
+    bool bTemp = pSzRel ? *(sal_Bool*)pSzRel->getValue() : sal_False;
     if(pSzRel && bTemp && pRelWidth)
     {
         ((SfxPoolItem&)aSz).PutValue(*pRelWidth, MID_FRMSIZE_REL_WIDTH|CONVERT_TWIPS);
@@ -2165,7 +2165,7 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     const::uno::Any* pSplit;
     if(GetProperty(RES_LAYOUT_SPLIT, 0, pSplit ))
     {
-        sal_Bool bTmp = *(sal_Bool*)pSplit->getValue();
+        bool bTmp = *(sal_Bool*)pSplit->getValue();
         SwFmtLayoutSplit aSp(bTmp);
         aSet.Put(aSp);
     }
@@ -2205,11 +2205,11 @@ SwXTextTable::SwXTextTable()
     ,
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE)),
     pTableProps(new SwTableProperties_Impl),
-    bIsDescriptor(sal_True),
+    bIsDescriptor(true),
     nRows(2),
     nColumns(2),
-    bFirstRowAsLabel(sal_False),
-    bFirstColumnAsLabel(sal_False)
+    bFirstRowAsLabel(false),
+    bFirstColumnAsLabel(false)
 {
 }
 
@@ -2219,11 +2219,11 @@ SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt)
     ,
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE)),
     pTableProps(0),
-    bIsDescriptor(sal_False),
+    bIsDescriptor(false),
     nRows(0),
     nColumns(0),
-    bFirstRowAsLabel(sal_False),
-    bFirstColumnAsLabel(sal_False)
+    bFirstRowAsLabel(false),
+    bFirstColumnAsLabel(false)
 {
 }
 
@@ -2396,7 +2396,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
                     sal_uInt16 nIndex = 1;
                     const OUString sTmpName(m_sTableName);
                     OUString sTmpNameIndex(sTmpName);
-                    while(pDoc->FindTblFmtByName( sTmpNameIndex, sal_True ) && nIndex < USHRT_MAX)
+                    while(pDoc->FindTblFmtByName( sTmpNameIndex, true ) && nIndex < USHRT_MAX)
                     {
                         sTmpNameIndex = sTmpName + OUString::number(nIndex++);
                     }
@@ -2410,7 +2410,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
                     (*pName) >>= sTmp;
                     setName(sTmp);
                 }
-                bIsDescriptor = sal_False;
+                bIsDescriptor = false;
                 DELETEZ(pTableProps);
             }
             pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
@@ -2509,7 +2509,7 @@ uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt
         // set cursor to the upper-left cell of the range
         SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, true);
         pUnoCrsr->Move( fnMoveForward, fnGoNode );
-        pUnoCrsr->SetRemainInSection( sal_False );
+        pUnoCrsr->SetRemainInSection( false );
         const SwTableBox* pBRBox = pTable->GetTblBox( sBRName );
         if(pBRBox)
         {
@@ -2637,7 +2637,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
                 {
                     // check if table box value item is set
                     SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-                    bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
+                    bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, false ) == SFX_ITEM_SET;
                     if(!bIsNum)
                         pColArray[nCol] <<= lcl_getString(*pXCell);
                     else
@@ -2711,7 +2711,7 @@ void SAL_CALL SwXTextTable::setDataArray(
                         if( (rAny >>= d) )
                             sw_setValue( *pXCell, d );
                         else
-                            sw_setString( *pXCell, OUString(), sal_True );
+                            sw_setString( *pXCell, OUString(), true );
 
                     }
                 }
@@ -2944,7 +2944,7 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence< OUString >& rColum
     if(pFmt)
     {
         const OUString* pArray = rColumnDesc.getConstArray();
-        if(bFirstRowAsLabel && rColumnDesc.getLength() >= nColCount - bFirstColumnAsLabel ? 1 : 0)
+        if(bFirstRowAsLabel && rColumnDesc.getLength() >= nColCount - (bFirstColumnAsLabel ? 1 : 0))
         {
             sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
             for(sal_uInt16 i = nStart; i < nColCount; i++)
@@ -3106,7 +3106,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
 
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
-                    sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
+                    bool bTmp = *(sal_Bool*)aValue.getValue();
                     if(bFirstRowAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
@@ -3117,7 +3117,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
 
                 case FN_UNO_RANGE_COL_LABEL:
                 {
-                    sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
+                    bool bTmp = *(sal_Bool*)aValue.getValue();
                     if(bFirstColumnAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
@@ -3198,7 +3198,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     // set cursor to top left cell
                     SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, true);
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                    pUnoCrsr->SetRemainInSection( sal_False );
+                    pUnoCrsr->SetRemainInSection( false );
 
                     const SwTableBox* pBRBox = lcl_FindCornerTableBox(rLines, false);
                     pUnoCrsr->SetMark();
@@ -3299,7 +3299,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                 {
                     UnoActionContext aContext(pFmt->GetDoc());
                     SwTable* pTable = SwTable::FindTable( pFmt );
-                    lcl_SetTblSeparators(aValue, pTable, pTable->GetTabLines()[0]->GetTabBoxes()[0], sal_False, pFmt->GetDoc());
+                    lcl_SetTblSeparators(aValue, pTable, pTable->GetTabLines()[0]->GetTabBoxes()[0], false, pFmt->GetDoc());
                 }
                 break;
 
@@ -3396,7 +3396,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                     // set cursor to top left cell
                     SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, true);
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                    pUnoCrsr->SetRemainInSection( sal_False );
+                    pUnoCrsr->SetRemainInSection( false );
 
                     const SwTableBox* pBRBox = lcl_FindCornerTableBox(rLines, false);
                     pUnoCrsr->SetMark();
@@ -3526,7 +3526,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 case FN_UNO_TABLE_COLUMN_SEPARATORS:
                 {
                     SwTable* pTable = SwTable::FindTable( pFmt );
-                    lcl_GetTblSeparators(aRet, pTable, pTable->GetTabLines()[0]->GetTabBoxes()[0], sal_False);
+                    lcl_GetTblSeparators(aRet, pTable, pTable->GetTabLines()[0]->GetTabBoxes()[0], false);
                 }
                 break;
 
@@ -3787,8 +3787,8 @@ SwXCellRange::SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt,
     aRgDesc(rDesc),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_RANGE)),
     pTblCrsr(pCrsr),
-    bFirstRowAsLabel(sal_False),
-    bFirstColumnAsLabel(sal_False)
+    bFirstRowAsLabel(false),
+    bFirstColumnAsLabel(false)
 {
     aRgDesc.Normalize();
 }
@@ -3854,7 +3854,7 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
                 // set cursor in the upper-left cell of the range
                 SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                pUnoCrsr->SetRemainInSection( sal_False );
+                pUnoCrsr->SetRemainInSection( false );
                 const SwTableBox* pBRBox = pTable->GetTblBox( sBRName );
                 if(pBRBox)
                 {
@@ -3981,7 +3981,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                 break;
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
-                    sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
+                    bool bTmp = *(sal_Bool*)aValue.getValue();
                     if(bFirstRowAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_ChartListeners);
@@ -3991,7 +3991,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                 break;
                 case FN_UNO_RANGE_COL_LABEL:
                 {
-                    sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
+                    bool bTmp = *(sal_Bool*)aValue.getValue();
                     if(bFirstColumnAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_ChartListeners);
@@ -4127,7 +4127,7 @@ void SwXCellRange::GetDataSequence(
         uno::Sequence< uno::Any >   *pAnySeq,   //-> first pointer != 0 is used
         uno::Sequence< OUString >   *pTxtSeq,   //-> as output sequence
         uno::Sequence< double >     *pDblSeq,   //-> (previous data gets overwritten)
-        sal_Bool bForceNumberResults )          //-> when 'true' requires to make an
+        bool bForceNumberResults )              //-> when 'true' requires to make an
                                                 // extra effort to return a value different
                                                 // from 0 even if the cell is formatted to text
     throw (uno::RuntimeException)
@@ -4190,7 +4190,7 @@ void SwXCellRange::GetDataSequence(
                     if (pAnyData)
                     {
                         // check if table box value item is set
-                        bool bIsNum = pBox->GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
+                        bool bIsNum = pBox->GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, false ) == SFX_ITEM_SET;
                         if (!bIsNum)
                             pAnyData[nDtaCnt++] <<= lcl_getString(*pXCell);
                         else
@@ -4308,7 +4308,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
                 {
                     // check if table box value item is set
                     SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-                    bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
+                    bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, false ) == SFX_ITEM_SET;
                     if(!bIsNum)
                         pColArray[nCol] <<= lcl_getString(*pXCell);
                     else
@@ -4378,7 +4378,7 @@ void SAL_CALL SwXCellRange::setDataArray(
                         if( (rAny >>= d) )
                             sw_setValue( *pXCell, d );
                         else
-                            sw_setString( *pXCell, OUString(), sal_True );
+                            sw_setString( *pXCell, OUString(), true );
                     }
                 }
             }
@@ -4518,7 +4518,7 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
     if(pFmt)
     {
         sal_Int16 nRowCount = getRowCount();
-        if(!nRowCount || rRowDesc.getLength() < bFirstRowAsLabel ? nRowCount - 1 : nRowCount)
+        if(!nRowCount || rRowDesc.getLength() < (bFirstRowAsLabel ? nRowCount - 1 : nRowCount))
         {
             throw uno::RuntimeException();
         }
@@ -4595,7 +4595,7 @@ void SwXCellRange::setColumnDescriptions(const uno::Sequence< OUString >& Column
     if(pFmt)
     {
         const OUString* pArray = ColumnDesc.getConstArray();
-        if(bFirstRowAsLabel && ColumnDesc.getLength() >= nColCount - bFirstColumnAsLabel ? 1 : 0)
+        if(bFirstRowAsLabel && ColumnDesc.getLength() >= nColCount - (bFirstColumnAsLabel ? 1 : 0))
         {
             sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
             for(sal_uInt16 i = nStart; i < nColCount; i++)
@@ -4889,7 +4889,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
                 // set cursor to the upper-left cell of the range
                 SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                pUnoCrsr->SetRemainInSection( sal_False );
+                pUnoCrsr->SetRemainInSection( false );
                 OUString sBLName = sw_GetCellName(0, nIndex + nCount - 1);
                 const SwTableBox* pBLBox = pTable->GetTblBox( sBLName );
                 if(pBLBox)
@@ -5101,7 +5101,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
                 // set cursor to the upper-left cell of the range
                 SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                pUnoCrsr->SetRemainInSection( sal_False );
+                pUnoCrsr->SetRemainInSection( false );
                 OUString sTRName = sw_GetCellName(nIndex + nCount - 1, 0);
                 const SwTableBox* pTRBox = pTable->GetTblBox( sTRName );
                 if(pTRBox)

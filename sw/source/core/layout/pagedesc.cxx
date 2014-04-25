@@ -48,8 +48,8 @@ SwPageDesc::SwPageDesc( const OUString& rName, SwFrmFmt *pFmt, SwDoc *pDc ) :
     nRegHeight( 0 ),
     nRegAscent( 0 ),
     eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_FIRSTSHARE ) ),
-    bLandscape( sal_False ),
-    bHidden( sal_False ),
+    bLandscape( false ),
+    bHidden( false ),
     aFtnInfo()
 {
 }
@@ -122,7 +122,7 @@ void SwPageDesc::Mirror()
     aLeft.SetFmtAttr( aSet );
 }
 
-void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
+void SwPageDesc::ResetAllAttr( bool bLeft )
 {
     SwFrmFmt& rFmt = bLeft ? GetLeft() : GetMaster();
 
@@ -248,7 +248,7 @@ static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
         pMod = 0;
 
     Point aNullPt;
-    return pMod ? ::GetFrmOfModify( 0, *pMod, nFrmType, &aNullPt, 0, sal_False )
+    return pMod ? ::GetFrmOfModify( 0, *pMod, nFrmType, &aNullPt, 0, false )
                 : 0;
 }
 
@@ -262,7 +262,7 @@ const SwPageDesc* SwPageDesc::GetPageDescOfNode(const SwNode& rNd)
 }
 
 const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
-                                              sal_Bool bCheckForThisPgDc ) const
+                                              bool bCheckForThisPgDc ) const
 {
     // which PageDescFormat is valid for this node?
     const SwFrmFmt* pRet;
@@ -286,9 +286,9 @@ const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
     return pRet;
 }
 
-sal_Bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
+bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( GetFollow() && this != GetFollow() )
     {
         const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
@@ -297,7 +297,7 @@ sal_Bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
             ( !pChkFrm->GetNext() || GetFollow() ==
                         ((SwPageFrm*)pChkFrm->GetNext())->GetPageDesc() ))
             // the page on which the follow points was found
-            bRet = sal_True;
+            bRet = true;
     }
     return bRet;
 }
@@ -316,12 +316,12 @@ SwFrmFmt *SwPageDesc::GetRightFmt(bool const bFirst)
             : 0;
 }
 
-sal_Bool SwPageDesc::IsFirstShared() const
+bool SwPageDesc::IsFirstShared() const
 {
     return eUse & nsUseOnPage::PD_FIRSTSHARE ? sal_True : sal_False;
 }
 
-void SwPageDesc::ChgFirstShare( sal_Bool bNew )
+void SwPageDesc::ChgFirstShare( bool bNew )
 {
     if ( bNew )
         eUse = (UseOnPage) (eUse | nsUseOnPage::PD_FIRSTSHARE);
@@ -392,7 +392,7 @@ SwPageFtnInfo &SwPageFtnInfo::operator=( const SwPageFtnInfo& rCpy )
     return *this;
 }
 
-sal_Bool SwPageFtnInfo::operator==( const SwPageFtnInfo& rCmp ) const
+bool SwPageFtnInfo::operator==( const SwPageFtnInfo& rCmp ) const
 {
     return ( nMaxHeight == rCmp.GetHeight() &&
              nLineWidth == rCmp.nLineWidth &&

@@ -73,8 +73,8 @@ class SwCompareConfig : public utl::ConfigItem
     friend class SwModuleOptions;
 
     sal_uInt16      eCmpMode;		//Compare/CompareDocuments;
-    sal_Bool        bUseRsid;		//Compare/Settings/Use RSID
-    sal_Bool        bIgnorePieces;	//Compare/Settings/Ignore pieces of length
+    bool            bUseRsid;       //Compare/Settings/Use RSID
+    bool            bIgnorePieces;  //Compare/Settings/Ignore pieces of length
     sal_uInt16      nPieceLen;		//Compare/Settings/Ignore pieces of length
 
     const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
@@ -97,15 +97,15 @@ class SwInsertConfig : public utl::ConfigItem
 
     SvGlobalName        aGlobalNames[5];
 
-    sal_Bool            bInsWithCaption;       //Insert/Caption/Automatic
-    sal_Bool            bCaptionOrderNumberingFirst; //#i61007# caption order starting with numbering
+    bool            bInsWithCaption;       //Insert/Caption/Automatic
+    bool            bCaptionOrderNumberingFirst; //#i61007# caption order starting with numbering
 
     SwInsertTableOptions    aInsTblOpts;
-    sal_Bool            bIsWeb;
+    bool            bIsWeb;
 
     const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     public:
-        SwInsertConfig(sal_Bool bWeb);
+        SwInsertConfig(bool bWeb);
         virtual ~SwInsertConfig();
 
     virtual void            Commit() SAL_OVERRIDE;
@@ -124,13 +124,13 @@ class SwTableConfig : public utl::ConfigItem
     sal_uInt16      nTblVInsert;        //int Table/Insert/Column
     TblChgMode  eTblChgMode;        //int Table/Change/Effect
 
-    sal_Bool    bInsTblFormatNum;       // Table/Input/NumberRecognition        // Automatic recognition of numbers.
-    sal_Bool    bInsTblChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatic recognition of number formats.
-    sal_Bool    bInsTblAlignNum;        // Table/Input/Alignment                // Align numbers.
+    bool    bInsTblFormatNum;       // Table/Input/NumberRecognition        // Automatic recognition of numbers.
+    bool    bInsTblChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatic recognition of number formats.
+    bool    bInsTblAlignNum;        // Table/Input/Alignment                // Align numbers.
 
     const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     public:
-        SwTableConfig(sal_Bool bWeb);
+        SwTableConfig(bool bWeb);
         virtual ~SwTableConfig();
 
     virtual void            Commit() SAL_OVERRIDE;
@@ -144,13 +144,13 @@ class SwMiscConfig : public utl::ConfigItem
     friend class SwModuleOptions;
 
     OUString    sWordDelimiter;             // Statistics/WordNumber/Delimiter
-    sal_Bool        bDefaultFontsInCurrDocOnly; // DefaultFont/Document
-    sal_Bool        bShowIndexPreview;          // Index/ShowPreview
-    sal_Bool        bGrfToGalleryAsLnk;         // Misc/GraphicToGalleryAsLink
-    sal_Bool        bNumAlignSize;              // Numbering/Graphic/KeepRatio
-    sal_Bool        bSinglePrintJob;            // FormLetter/PrintOutput/SinglePrintJobs
-    sal_Bool        bIsNameFromColumn;          // FormLetter/FileOutput/FileName/Generation
-    sal_Bool        bAskForMailMergeInPrint;    // Ask if documents containing fields should be 'mailmerged'
+    bool        bDefaultFontsInCurrDocOnly; // DefaultFont/Document
+    bool        bShowIndexPreview;          // Index/ShowPreview
+    bool        bGrfToGalleryAsLnk;         // Misc/GraphicToGalleryAsLink
+    bool        bNumAlignSize;              // Numbering/Graphic/KeepRatio
+    bool        bSinglePrintJob;            // FormLetter/PrintOutput/SinglePrintJobs
+    bool        bIsNameFromColumn;          // FormLetter/FileOutput/FileName/Generation
+    bool        bAskForMailMergeInPrint;    // Ask if documents containing fields should be 'mailmerged'
     sal_Int16   nMailingFormats;            // FormLetter/MailingOutput/Formats
     OUString    sNameFromColumn;            // FormLetter/FileOutput/FileName/FromDatabaseField (string!)
     OUString    sMailingPath;               // FormLetter/FileOutput/Path
@@ -181,7 +181,7 @@ class SW_DLLPUBLIC SwModuleOptions
     SwCompareConfig                 aCompareConfig;
 
     //fiscus: don't show tips of text fields - it's not part of the configuration!
-    sal_Bool        bHideFieldTips : 1;
+    bool        bHideFieldTips : 1;
 
 public:
     SwModuleOptions();
@@ -226,15 +226,15 @@ public:
     void            SetMarkAlignColor(const Color &rColor)  { aRevisionConfig.aMarkColor = rColor;
                                                               aRevisionConfig.SetModified();}
 
-    sal_Bool        IsInsWithCaption(sal_Bool bHTML) const
+    bool        IsInsWithCaption(bool bHTML) const
                         { return bHTML ? sal_False : aInsertConfig.bInsWithCaption; }
-    void        SetInsWithCaption( sal_Bool bHTML, sal_Bool b )
+    void        SetInsWithCaption( bool bHTML, bool b )
                     {   if(!bHTML)
                             aInsertConfig.bInsWithCaption = b;
                         aInsertConfig.SetModified();}
 
-    sal_Bool    IsCaptionOrderNumberingFirst() const { return aInsertConfig.bCaptionOrderNumberingFirst; }
-    void        SetCaptionOrderNumberingFirst( sal_Bool bSet )
+    bool    IsCaptionOrderNumberingFirst() const { return aInsertConfig.bCaptionOrderNumberingFirst; }
+    void        SetCaptionOrderNumberingFirst( bool bSet )
                 {
                     if(aInsertConfig.bCaptionOrderNumberingFirst != bSet)
                     {
@@ -243,58 +243,58 @@ public:
                     }
                 }
 
-    sal_Bool        IsInsTblFormatNum(sal_Bool bHTML) const
+    bool        IsInsTblFormatNum(bool bHTML) const
                     { return bHTML ? aWebTableConfig.bInsTblFormatNum : aTableConfig.bInsTblFormatNum; }
-    void        SetInsTblFormatNum( sal_Bool bHTML, sal_Bool b )
+    void        SetInsTblFormatNum( bool bHTML, bool b )
                     { bHTML ? (aWebTableConfig.bInsTblFormatNum = b) : (aTableConfig.bInsTblFormatNum = b);
                       bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();}
 
-    sal_Bool        IsInsTblChangeNumFormat(sal_Bool bHTML) const
+    bool        IsInsTblChangeNumFormat(bool bHTML) const
                     { return bHTML ? aWebTableConfig.bInsTblChangeNumFormat : aTableConfig.bInsTblChangeNumFormat; }
-    void        SetInsTblChangeNumFormat( sal_Bool bHTML, sal_Bool b )
+    void        SetInsTblChangeNumFormat( bool bHTML, bool b )
                     { bHTML ? (aWebTableConfig.bInsTblChangeNumFormat = b) : (aTableConfig.bInsTblChangeNumFormat = b);
                       bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();}
 
-    sal_Bool        IsInsTblAlignNum(sal_Bool bHTML) const
+    bool        IsInsTblAlignNum(bool bHTML) const
                     { return bHTML ? aWebTableConfig.bInsTblAlignNum : aTableConfig.bInsTblAlignNum; }
-    void        SetInsTblAlignNum( sal_Bool bHTML, sal_Bool b )
+    void        SetInsTblAlignNum( bool bHTML, bool b )
                     { bHTML ? (aWebTableConfig.bInsTblAlignNum = b) : (aTableConfig.bInsTblAlignNum = b);
                         bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();}
 
-    SwInsertTableOptions GetInsTblFlags(sal_Bool bHTML) const
+    SwInsertTableOptions GetInsTblFlags(bool bHTML) const
                     { return bHTML ? aWebInsertConfig.aInsTblOpts : aInsertConfig.aInsTblOpts;}
-    void        SetInsTblFlags( sal_Bool bHTML, const SwInsertTableOptions& rOpts ) {
+    void        SetInsTblFlags( bool bHTML, const SwInsertTableOptions& rOpts ) {
                     bHTML ? (aWebInsertConfig.aInsTblOpts = rOpts) : (aInsertConfig.aInsTblOpts = rOpts);
                     bHTML ? aWebInsertConfig.SetModified() : aInsertConfig.SetModified();}
 
-    const InsCaptionOpt* GetCapOption(sal_Bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId);
-    sal_Bool        SetCapOption(sal_Bool bHTML, const InsCaptionOpt* pOpt);
+    const InsCaptionOpt* GetCapOption(bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId);
+    bool        SetCapOption(bool bHTML, const InsCaptionOpt* pOpt);
 
-    sal_Bool        IsGrfToGalleryAsLnk() const     { return aMiscConfig.bGrfToGalleryAsLnk; }
-    void        SetGrfToGalleryAsLnk( sal_Bool b )  { aMiscConfig.bGrfToGalleryAsLnk = b;
+    bool        IsGrfToGalleryAsLnk() const     { return aMiscConfig.bGrfToGalleryAsLnk; }
+    void        SetGrfToGalleryAsLnk( bool b )  { aMiscConfig.bGrfToGalleryAsLnk = b;
                                                   aMiscConfig.SetModified();}
 
     sal_Int16   GetMailingFormats() const       { return aMiscConfig.nMailingFormats;}
     void        SetMailingFormats( sal_Int16 nSet ) { aMiscConfig.nMailingFormats = nSet;
                                                   aMiscConfig.SetModified();}
 
-    sal_Bool        IsSinglePrintJob() const        { return aMiscConfig.bSinglePrintJob; }
-    void        SetSinglePrintJob( sal_Bool b )     { aMiscConfig.bSinglePrintJob = b;
+    bool        IsSinglePrintJob() const        { return aMiscConfig.bSinglePrintJob; }
+    void        SetSinglePrintJob( bool b )     { aMiscConfig.bSinglePrintJob = b;
                                                   aMiscConfig.SetModified();}
 
-    sal_Bool        IsNumAlignSize() const          { return aMiscConfig.bNumAlignSize; }
-    void        SetNumAlignSize( sal_Bool b )       { aMiscConfig.bNumAlignSize = b;
+    bool        IsNumAlignSize() const          { return aMiscConfig.bNumAlignSize; }
+    void        SetNumAlignSize( bool b )       { aMiscConfig.bNumAlignSize = b;
                                                   aMiscConfig.SetModified();}
 
-    sal_Bool        IsNameFromColumn() const        { return aMiscConfig.bIsNameFromColumn; }
-    void        SetIsNameFromColumn( sal_Bool bSet )
+    bool        IsNameFromColumn() const        { return aMiscConfig.bIsNameFromColumn; }
+    void        SetIsNameFromColumn( bool bSet )
                         {
                             aMiscConfig.SetModified();
                             aMiscConfig.bIsNameFromColumn = bSet;
                         }
 
-    sal_Bool        IsAskForMailMerge() const       { return aMiscConfig.bAskForMailMergeInPrint;}
-    void        SetAskForMailMerge(sal_Bool bSet)
+    bool        IsAskForMailMerge() const       { return aMiscConfig.bAskForMailMergeInPrint;}
+    void        SetAskForMailMerge(bool bSet)
                     {
                         aMiscConfig.SetModified();
                         aMiscConfig.bAskForMailMergeInPrint = bSet;
@@ -317,33 +317,33 @@ public:
                                                           aMiscConfig.SetModified();}
 
     //convert word delimiter from or to user interface
-    static OUString ConvertWordDelimiter(const OUString& rDelim, sal_Bool bFromUI);
+    static OUString ConvertWordDelimiter(const OUString& rDelim, bool bFromUI);
 
-    sal_Bool    IsShowIndexPreview() const {return  aMiscConfig.bShowIndexPreview;}
-    void        SetShowIndexPreview(sal_Bool bSet)
+    bool    IsShowIndexPreview() const {return  aMiscConfig.bShowIndexPreview;}
+    void        SetShowIndexPreview(bool bSet)
                     {aMiscConfig.bShowIndexPreview = bSet;
                     aMiscConfig.SetModified();}
 
-    sal_Bool    IsDefaultFontInCurrDocOnly() const { return aMiscConfig.bDefaultFontsInCurrDocOnly;}
-    void        SetDefaultFontInCurrDocOnly(sal_Bool bSet)
+    bool    IsDefaultFontInCurrDocOnly() const { return aMiscConfig.bDefaultFontsInCurrDocOnly;}
+    void        SetDefaultFontInCurrDocOnly(bool bSet)
                     {
                         aMiscConfig.bDefaultFontsInCurrDocOnly = bSet;
                         aMiscConfig.SetModified();
                     }
 
-    sal_Bool    IsHideFieldTips() const {return bHideFieldTips;}
-    void        SetHideFieldTips(sal_Bool bSet) {bHideFieldTips = bSet;}
+    bool    IsHideFieldTips() const {return bHideFieldTips;}
+    void        SetHideFieldTips(bool bSet) {bHideFieldTips = bSet;}
 
     SvxCompareMode  GetCompareMode() const { return (SvxCompareMode)aCompareConfig.eCmpMode; }
     void            SetCompareMode( SvxCompareMode eMode ) { aCompareConfig.eCmpMode = eMode;
                                                              aCompareConfig.SetModified(); }
 
-    sal_Bool    IsUseRsid() const { return aCompareConfig.bUseRsid; }
-    void        SetUseRsid( sal_Bool b ) { aCompareConfig.bUseRsid = b;
+    bool    IsUseRsid() const { return aCompareConfig.bUseRsid; }
+    void        SetUseRsid( bool b ) { aCompareConfig.bUseRsid = b;
                                                             aCompareConfig.SetModified(); }
 
-    sal_Bool    IsIgnorePieces() const { return aCompareConfig.bIgnorePieces; }
-    void        SetIgnorePieces( sal_Bool b ) { aCompareConfig.bIgnorePieces = b;
+    bool    IsIgnorePieces() const { return aCompareConfig.bIgnorePieces; }
+    void        SetIgnorePieces( bool b ) { aCompareConfig.bIgnorePieces = b;
                                                 aCompareConfig.SetModified(); }
 
     sal_uInt16  GetPieceLen() const { return aCompareConfig.nPieceLen; }

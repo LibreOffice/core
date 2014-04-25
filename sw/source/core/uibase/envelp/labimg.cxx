@@ -44,8 +44,8 @@ SwLabItem::SwLabItem() :
 {
     bAddr     =
     bCont     =
-    bSynchron = sal_False;
-    bPage  = sal_True;
+    bSynchron = false;
+    bPage  = true;
     lHDist   =
     lVDist   =
     lWidth   =
@@ -264,7 +264,7 @@ Sequence<OUString> SwLabCfgItem::GetPropertyNames()
     return aNames;
 }
 
-SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
+SwLabCfgItem::SwLabCfgItem(bool bLabel) :
     ConfigItem(bLabel ? OUString("Office.Writer/Label") : OUString("Office.Writer/BusinessCard")),
     bIsLabel(bLabel)
 {
@@ -390,7 +390,7 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
         aItem.aCompFax = aItem.aPrivFax = rUserOpt.GetFax();
         aItem.aCompMail = aItem.aPrivMail = rUserOpt.GetEmail();
         aItem.aCompState = aItem.aPrivState = rUserOpt.GetState();
-        aItem.bSynchron = sal_True;
+        aItem.bSynchron = true;
         SetModified();
     }
 }

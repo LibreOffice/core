@@ -38,8 +38,8 @@ struct SwHTMLFootEndNote_Impl
 
     OUString sName;
     OUString sContent;            // Infos fuer die letzte Fussnote
-    sal_Bool bEndNote;
-    sal_Bool bFixed;
+    bool bEndNote;
+    bool bFixed;
 };
 
 sal_Int32 lcl_html_getNextPart( OUString& rPart, const OUString& rContent,
@@ -53,7 +53,7 @@ sal_Int32 lcl_html_getNextPart( OUString& rPart, const OUString& rContent,
     }
     else
     {
-        sal_Bool bQuoted = sal_False, bDone = sal_False;
+        bool bQuoted = false, bDone = false;
         for( ; nPos < nLen && !bDone; nPos++ )
         {
             sal_Unicode c = rContent[nPos];
@@ -69,13 +69,13 @@ sal_Int32 lcl_html_getNextPart( OUString& rPart, const OUString& rContent,
                 if( bQuoted )
                     rPart += OUString( c );
                 else
-                    bDone = sal_True;
-                bQuoted = sal_False;
+                    bDone = true;
+                bQuoted = false;
                 break;
 
             default:
                 rPart += OUString( c );
-                bQuoted = sal_False;
+                bQuoted = false;
                 break;
             }
         }
@@ -86,7 +86,7 @@ sal_Int32 lcl_html_getNextPart( OUString& rPart, const OUString& rContent,
 
 sal_Int32 lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
                                     const OUString& rContent,
-                                    sal_Bool bEndNote )
+                                    bool bEndNote )
 {
     sal_Int32 nStrPos = 0;
     for( sal_uInt16 nPart = 0; nPart < 4; nPart++ )
@@ -124,7 +124,7 @@ sal_Int32 lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
 void SwHTMLParser::FillEndNoteInfo( const OUString& rContent )
 {
     SwEndNoteInfo aInfo( pDoc->GetEndNoteInfo() );
-    lcl_html_getEndNoteInfo( aInfo, rContent, sal_True );
+    lcl_html_getEndNoteInfo( aInfo, rContent, true );
     pDoc->SetEndNoteInfo( aInfo );
 }
 
@@ -132,7 +132,7 @@ void SwHTMLParser::FillFootNoteInfo( const OUString& rContent )
 {
     SwFtnInfo aInfo( pDoc->GetFtnInfo() );
 
-    sal_Int32 nStrPos = lcl_html_getEndNoteInfo( aInfo, rContent, sal_False );
+    sal_Int32 nStrPos = lcl_html_getEndNoteInfo( aInfo, rContent, false );
 
     for( sal_uInt16 nPart = 4; nPart < 8; nPart++ )
     {
@@ -180,8 +180,8 @@ void SwHTMLParser::FillFootNoteInfo( const OUString& rContent )
     pDoc->SetFtnInfo( aInfo );
 }
 
-void SwHTMLParser::InsertFootEndNote( const OUString& rName, sal_Bool bEndNote,
-                                      sal_Bool bFixed )
+void SwHTMLParser::InsertFootEndNote( const OUString& rName, bool bEndNote,
+                                      bool bFixed )
 {
     if( !pFootEndNoteImpl )
         pFootEndNoteImpl = new SwHTMLFootEndNote_Impl;
@@ -216,7 +216,7 @@ void SwHTMLParser::FinishFootEndNote()
     }
     pFootEndNoteImpl->sName = aEmptyOUStr;
     pFootEndNoteImpl->sContent = aEmptyOUStr;
-    pFootEndNoteImpl->bFixed = sal_False;
+    pFootEndNoteImpl->bFixed = false;
 }
 
 void SwHTMLParser::InsertFootEndNoteText()
@@ -358,7 +358,7 @@ void SwHTMLWriter::OutFootEndNotes()
         HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc, &aNonConvertableCharacters );
         Strm().WriteCharPtr( "\">" );
 
-        bLFPossible = sal_True;
+        bLFPossible = true;
         IncIndentLevel();   // Inhalt von <DIV> einruecken
 
         OSL_ENSURE( pTxtFtn, "SwHTMLWriter::OutFootEndNotes: SwTxtFtn fehlt" );
@@ -368,7 +368,7 @@ void SwHTMLWriter::OutFootEndNotes()
         if( pSttNdIdx )
         {
             HTMLSaveData aSaveData( *this, pSttNdIdx->GetIndex()+1,
-                pSttNdIdx->GetNode().EndOfSectionIndex(), sal_False );
+                pSttNdIdx->GetNode().EndOfSectionIndex(), false );
             Out_SwDoc( pCurPam );
         }
 
@@ -376,7 +376,7 @@ void SwHTMLWriter::OutFootEndNotes()
         if( bLFPossible )
             OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
-        bLFPossible = sal_True;
+        bLFPossible = true;
 
         OSL_ENSURE( !pFmtFtn,
                 "SwHTMLWriter::OutFootEndNotes: Ftn wurde nicht ausgegeben" );
@@ -480,7 +480,7 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
 
 static sal_uInt16 lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
                                  OUString *pParts,
-                                 sal_Bool bEndNote  )
+                                 bool bEndNote  )
 {
     sal_uInt16 nParts = 0;
     sal_Int16 eFmt = rInfo.aFmt.GetNumberingType();
@@ -552,7 +552,7 @@ void SwHTMLWriter::OutFootEndNoteInfo()
     {
         const SwFtnInfo& rInfo = pDoc->GetFtnInfo();
         OUString aParts[8];
-        sal_uInt16 nParts = lcl_html_fillEndNoteInfo( rInfo, aParts, sal_False );
+        sal_uInt16 nParts = lcl_html_fillEndNoteInfo( rInfo, aParts, false );
         if( rInfo.eNum != FTNNUM_DOC )
         {
             aParts[4] = rInfo.eNum == FTNNUM_CHAPTER ? OUString( "C" ) : OUString( "P" );
@@ -581,7 +581,7 @@ void SwHTMLWriter::OutFootEndNoteInfo()
     {
         const SwEndNoteInfo& rInfo = pDoc->GetEndNoteInfo();
         OUString aParts[4];
-        sal_uInt16 nParts = lcl_html_fillEndNoteInfo( rInfo, aParts, sal_True );
+        sal_uInt16 nParts = lcl_html_fillEndNoteInfo( rInfo, aParts, true );
         if( nParts > 0 )
             lcl_html_outFootEndNoteInfo( *this, aParts, nParts,
                                          OOO_STRING_SVTOOLS_HTML_META_sdendnote );

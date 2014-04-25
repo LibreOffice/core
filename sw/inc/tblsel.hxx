@@ -84,18 +84,18 @@ void GetTblSelCrs( const SwCrsrShell& rShell, SwSelBoxes& rBoxes );
 void GetTblSelCrs( const SwTableCursor& rTblCrsr, SwSelBoxes& rBoxes );
 
 // Collect boxes relevant for auto sum.
-sal_Bool GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
+bool GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
 
 // Check if the SelBoxes contains protected Boxes.
-sal_Bool HasProtectedCells( const SwSelBoxes& rBoxes );
+bool HasProtectedCells( const SwSelBoxes& rBoxes );
 
 // Check if selection is balanced.
-sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd);
+bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd);
 
 // Check if cell is part of SSelection.
 // (Became a function, in order to make sure that GetTblSel() and MakeTblCrsr()
 // have always the same concept of the selection.
-sal_Bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell );
+bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell );
 
 // Determine boxes to be merged.
 // In this process the rectangle gets "adapted" on the base of the layout,
@@ -108,12 +108,12 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 sal_uInt16 CheckMergeSel( const SwPaM& rPam );
 sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes );
 
-sal_Bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam );
+bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam );
 
 // Check if Split or InsertCol lead to a box becoming smaller than MINLAY.
-sal_Bool CheckSplitCells( const SwCrsrShell& rShell, sal_uInt16 nDiv,
+bool CheckSplitCells( const SwCrsrShell& rShell, sal_uInt16 nDiv,
                         const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
-sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
+bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
                         const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 
 // For working on tab selection also for split tables.
@@ -176,11 +176,11 @@ public:
     void SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable );
     void SetTableLines( const SwTable &rTable );
     //Add an input param to identify if acc table should be disposed
-    void DelFrms ( SwTable &rTable,sal_Bool bAccTableDispose = sal_False );
+    void DelFrms ( SwTable &rTable, bool bAccTableDispose = false );
     void MakeFrms( SwTable &rTable );
     void MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
-                                       const sal_Bool bBehind );
-    sal_Bool AreLinesToRestore( const SwTable &rTable ) const;
+                                       const bool bBehind );
+    bool AreLinesToRestore( const SwTable &rTable ) const;
 
     void ClearLineBehind() { pLineBehind = 0; }
 };

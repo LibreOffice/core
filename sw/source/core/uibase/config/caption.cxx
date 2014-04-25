@@ -23,7 +23,7 @@
 #include "caption.hxx"
 
 InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleId) :
-    bUseCaption(sal_False),
+    bUseCaption(false),
     eObjType(eType),
     nNumType(SVX_NUM_ARABIC),
     sNumberSeparator((". ")),
@@ -31,7 +31,7 @@ InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleI
     nLevel(0),
     sSeparator( OUString(": ") ),
     bIgnoreSeqOpts(false),
-    bCopyAttributes(sal_False)
+    bCopyAttributes(false)
 {
     if (pOleId)
         aOleId = *pOleId;

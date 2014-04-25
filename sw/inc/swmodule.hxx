@@ -104,8 +104,8 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLanguageGuessing >  m_xLanguageGuesser;
 
-    sal_Bool                bAuthorInitialised : 1;
-    sal_Bool                bEmbeddedLoadSave : 1;
+    bool                bAuthorInitialised : 1;
+    bool                bEmbeddedLoadSave : 1;
 
     // Catch hint for DocInfo.
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
@@ -115,7 +115,7 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
 protected:
     // Envelopes, labels.
     void                InsertEnv(SfxRequest&);
-    void                InsertLab(SfxRequest&, sal_Bool bLabel);
+    void                InsertLab(SfxRequest&, bool bLabel);
 
 public:
     // public Data - used for internal Clipboard / Drag & Drop / XSelection
@@ -146,23 +146,23 @@ public:
     void                ExecOther(SfxRequest &);    // Fields, formula...
 
     // Modify user settings.
-    const SwMasterUsrPref *GetUsrPref(sal_Bool bWeb) const;
-    const SwViewOption* GetViewOption(sal_Bool bWeb);
+    const SwMasterUsrPref *GetUsrPref(bool bWeb) const;
+    const SwViewOption* GetViewOption(bool bWeb);
     void                ApplyUsrPref(const SwViewOption &, SwView*,
                                      sal_uInt16 nDest = VIEWOPT_DEST_VIEW );
     void ApplyUserMetric( FieldUnit eMetric, bool bWeb );
-    void ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, bool bWeb );
+    void ApplyRulerMetric( FieldUnit eMetric, bool bHorizontal, bool bWeb );
     void ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags);
     void ApplyLinkMode(sal_Int32 nNewLinkMode);
 
     // Default page mode for text grid.
-    void ApplyDefaultPageMode(sal_Bool bIsSquaredPageMode);
+    void ApplyDefaultPageMode(bool bIsSquaredPageMode);
 
-    void ApplyUserCharUnit(sal_Bool bApplyChar, bool bWeb);  // apply_char_unit
+    void ApplyUserCharUnit(bool bApplyChar, bool bWeb);  // apply_char_unit
 
     // Create ConfigItems.
     SwModuleOptions*    GetModuleConfig()       { return pModuleConfig;}
-    SwPrintOptions*     GetPrtOptions(sal_Bool bWeb);
+    SwPrintOptions*     GetPrtOptions(bool bWeb);
     SwChapterNumRules*  GetChapterNumRules();
     SwStdFontConfig*    GetStdFontConfig()      { return pStdFontConfig; }
     SwNavigationConfig* GetNavigationConfig();
@@ -178,15 +178,15 @@ public:
     static SwView*      GetFirstView();
     static SwView*      GetNextView(SwView*);
 
-    sal_Bool IsEmbeddedLoadSave() const         { return bEmbeddedLoadSave; }
-    void SetEmbeddedLoadSave( sal_Bool bFlag )  { bEmbeddedLoadSave = bFlag; }
+    bool IsEmbeddedLoadSave() const         { return bEmbeddedLoadSave; }
+    void SetEmbeddedLoadSave( bool bFlag )  { bEmbeddedLoadSave = bFlag; }
 
-    void ShowDBObj( SwView& rView, const SwDBData& rData, sal_Bool bOnlyIfAvailable = sal_False);
+    void ShowDBObj( SwView& rView, const SwDBData& rData, bool bOnlyIfAvailable = false);
 
     // Table modi.
-    sal_Bool            IsInsTblFormatNum(sal_Bool bHTML) const;
-    sal_Bool            IsInsTblChangeNumFormat(sal_Bool bHTML) const;
-    sal_Bool            IsInsTblAlignNum(sal_Bool bHTML) const;
+    bool            IsInsTblFormatNum(bool bHTML) const;
+    bool            IsInsTblChangeNumFormat(bool bHTML) const;
+    bool            IsInsTblAlignNum(bool bHTML) const;
 
     // Redlining.
     sal_uInt16          GetRedlineAuthor();
@@ -202,19 +202,19 @@ public:
     const Color&            GetRedlineMarkColor();
 
     SvxCompareMode      GetCompareMode() const;
-    sal_Bool            IsUseRsid() const;
-    sal_Bool            IsIgnorePieces() const;
+    bool            IsUseRsid() const;
+    bool            IsIgnorePieces() const;
     sal_uInt16          GetPieceLen() const;
 
     // Return defined DocStat - WordDelimiter.
     OUString            GetDocStatWordDelim() const;
 
     // Pass metric of ModuleConfig (for HTML-export).
-    sal_uInt16 GetMetric( sal_Bool bWeb ) const;
+    sal_uInt16 GetMetric( bool bWeb ) const;
 
     // Pass update-statuses.
-    sal_uInt16 GetLinkUpdMode( sal_Bool bWeb ) const;
-    SwFldUpdateFlags GetFldUpdateFlags( sal_Bool bWeb ) const;
+    sal_uInt16 GetLinkUpdMode( bool bWeb ) const;
+    SwFldUpdateFlags GetFldUpdateFlags( bool bWeb ) const;
 
     // Virtual methods for options dialog.
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) SAL_OVERRIDE;

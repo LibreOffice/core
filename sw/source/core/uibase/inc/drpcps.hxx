@@ -64,9 +64,9 @@ friend class SwDropCapsPict;
 
     SwDropCapsPict*  m_pPict;
 
-    sal_Bool          bModified;
-    sal_Bool          bFormat;
-    sal_Bool          bHtmlMode;
+    bool          bModified;
+    bool          bFormat;
+    bool          bHtmlMode;
 
     SwWrtShell &rSh;
 
@@ -92,9 +92,9 @@ public:
     virtual bool FillItemSet(      SfxItemSet &rSet) SAL_OVERRIDE;
     virtual void Reset      (const SfxItemSet &rSet) SAL_OVERRIDE;
 
-    void    SetFormat(sal_Bool bSet){bFormat = bSet;}
+    void    SetFormat(bool bSet){bFormat = bSet;}
 protected:
-    void aSwitchText(sal_Bool bChecked);
+    void aSwitchText(bool bChecked);
     //void SW_RES(int arg1);
 };
 

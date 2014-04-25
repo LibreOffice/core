@@ -190,7 +190,7 @@ SwAddRenameEntryDialog::SwAddRenameEntryDialog(
 IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit*, pEdit)
 {
     OUString sEntry = pEdit->GetText();
-    sal_Bool bFound = sEntry.isEmpty();
+    bool bFound = sEntry.isEmpty();
 
     if(!bFound)
     {
@@ -200,7 +200,7 @@ IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit*, pEdit)
                     ++aHeaderIter)
             if(*aHeaderIter == sEntry)
             {
-                bFound = sal_True;
+                bFound = true;
                 break;
             }
     }

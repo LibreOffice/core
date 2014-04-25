@@ -148,7 +148,7 @@ class SwXFlatParagraphIterator:
     public SwClient     // to get notified when doc is closed...
 {
 public:
-    SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType, sal_Bool bAutomatic );
+    SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType, bool bAutomatic );
     virtual ~SwXFlatParagraphIterator();
 
     // text::XFlatParagraphIterator:
@@ -171,12 +171,12 @@ private:
 
     SwDoc* mpDoc;
     const sal_Int32 mnType;
-    const sal_Bool mbAutomatic;
+    const bool mbAutomatic;
 
     sal_uLong mnCurrentNode;    // used for non-automatic mode
     sal_uLong mnStartNode;      // used for non-automatic mode
     sal_uLong mnEndNode;        // used for non-automatic mode
-    sal_Bool mbWrapped;     // used for non-automatic mode
+    bool mbWrapped;     // used for non-automatic mode
 };
 
 #endif

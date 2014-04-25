@@ -52,7 +52,7 @@ class SdrTextObj;
 SW_DLLPUBLIC SwFrmFmt *FindFrmFmt( SdrObject *pObj );
 inline const SwFrmFmt *FindFrmFmt( const SdrObject *pObj )
 {   return ::FindFrmFmt( (SdrObject*)pObj ); }
-sal_Bool HasWrap( const SdrObject* pObj );
+bool HasWrap( const SdrObject* pObj );
 
 void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor );
 
@@ -67,7 +67,7 @@ SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj );
 SwContact* GetUserCall( const SdrObject* );
 
 /// @return TRUE if the SrdObject is a Marquee object.
-sal_Bool IsMarqueeTextObj( const SdrObject& rObj );
+bool IsMarqueeTextObj( const SdrObject& rObj );
 
 /// Base class for the following contact objects (frame + draw objects).
 class SwContact : public SdrObjUserCall, public SwClient

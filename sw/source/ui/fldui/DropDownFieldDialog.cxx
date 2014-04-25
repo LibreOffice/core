@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
     Description: edit insert-field
  --------------------------------------------------------------------*/
 sw::DropDownFieldDialog::DropDownFieldDialog(Window *pParent, SwWrtShell &rS,
-                              SwField* pField, sal_Bool bNextButton)
+                              SwField* pField, bool bNextButton)
     : SvxStandardDialog(pParent, "DropdownFieldDialog",
         "modules/swriter/ui/dropdownfielddialog.ui")
     , rSh( rS )
@@ -67,7 +67,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog(Window *pParent, SwWrtShell &rS,
         m_pListItemsLB->SelectEntry(pDropField->GetSelectedItem());
     }
 
-    sal_Bool bEnable = !rSh.IsCrsrReadonly();
+    bool bEnable = !rSh.IsCrsrReadonly();
     m_pOKPB->Enable( bEnable );
 
     m_pListItemsLB->GrabFocus();

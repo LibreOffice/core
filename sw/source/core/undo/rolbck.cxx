@@ -431,7 +431,7 @@ SwHistorySetFootnote::SwHistorySetFootnote( SwTxtFtn* pTxtFtn, sal_uLong nNodePo
     // keep pointer to StartNode of FtnSection and reset its attribute for now
     // (as a result, its/all Frms will be deleted automatically)
     SwNodeIndex aSttIdx( *pTxtFtn->GetStartNode() );
-    pTxtFtn->SetStartNode( 0, sal_False );
+    pTxtFtn->SetStartNode( 0, false );
 
     m_pUndo->SaveSection( pDoc, aSttIdx );
     m_nNodeIndex = pSaveNd->GetIndex();
@@ -1083,7 +1083,7 @@ void SwHistory::Add( SwFlyFrmFmt& rFmt, sal_uInt16& rSetPos )
         m_SwpHstry.push_back( pHint );
 
         const SwFmtChain* pChainItem;
-        if( SFX_ITEM_SET == rFmt.GetItemState( RES_CHAIN, sal_False,
+        if( SFX_ITEM_SET == rFmt.GetItemState( RES_CHAIN, false,
             (const SfxPoolItem**)&pChainItem ))
         {
             if( pChainItem->GetNext() || pChainItem->GetPrev() )

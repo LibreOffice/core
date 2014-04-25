@@ -63,7 +63,7 @@ protected:
     DECL_LINK(IndividualHdl_Impl, void *);
     DECL_LINK(GreetingHdl_Impl, PushButton*);
 
-    void    Contains(sal_Bool bContainsGreeting);
+    void    Contains(bool bContainsGreeting);
     virtual void    UpdatePreview();
 };
 

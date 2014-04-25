@@ -94,17 +94,17 @@ class SwFrmPage: public SfxTabPage
     //'string provider'
     SvxSwFramePosString aFramePosString;
 
-    sal_Bool            bAtHorzPosModified;
-    sal_Bool            bAtVertPosModified;
+    bool            bAtHorzPosModified;
+    bool            bAtVertPosModified;
 
-    sal_Bool            bFormat;
-    sal_Bool            bNew;
-    sal_Bool            bNoModifyHdl;
+    bool            bFormat;
+    bool            bNew;
+    bool            bNoModifyHdl;
     bool            bIsVerticalFrame;  //current frame is in vertical environment - strings are exchanged
     // --> OD 2009-08-31 #mongolianlayou#
-    sal_Bool            bIsVerticalL2R;
-    sal_Bool            bIsInRightToLeft; // current frame is in right-to-left environment - strings are exchanged
-    sal_Bool            bHtmlMode;
+    bool            bIsVerticalL2R;
+    bool            bIsInRightToLeft; // current frame is in right-to-left environment - strings are exchanged
+    bool            bHtmlMode;
     sal_uInt16          nHtmlMode;
     OString         sDlgType;
     Size            aGrfSize;
@@ -152,7 +152,7 @@ class SwFrmPage: public SfxTabPage
     void            UpdateExample();
     DECL_LINK( ModifyHdl, Edit * );
 
-    void            Init(const SfxItemSet& rSet, sal_Bool bReset = sal_False);
+    void            Init(const SfxItemSet& rSet, bool bReset = false);
     // OD 12.11.2003 #i22341# - adjustment to handle maps, that are ambigous
     //                          in the alignment.
     sal_Int32       FillPosLB( const FrmMap* _pMap,
@@ -193,10 +193,10 @@ public:
     virtual bool FillItemSet(SfxItemSet &rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
 
-    void            SetNewFrame(sal_Bool bNewFrame) { bNew      = bNewFrame; }
-    void            SetFormatUsed(sal_Bool bFmt);
+    void            SetNewFrame(bool bNewFrame) { bNew      = bNewFrame; }
+    void            SetFormatUsed(bool bFmt);
     void            SetFrmType(const OString &rType) { sDlgType  = rType; }
-    inline sal_Bool     IsInGraficMode( void ) { return sDlgType == "PictureDialog" || sDlgType == "ObjectDialog"; }
+    inline bool     IsInGraficMode( void ) { return sDlgType == "PictureDialog" || sDlgType == "ObjectDialog"; }
     void            EnableVerticalPositioning( bool bEnable );
 };
 
@@ -219,7 +219,7 @@ class SwGrfExtPage: public SfxTabPage
 
     ::sfx2::FileDialogHelper*     pGrfDlg;
 
-    sal_Bool            bHtmlMode;
+    bool            bHtmlMode;
 
     // handler for mirroring
     DECL_LINK(MirrorHdl, void *);
@@ -298,9 +298,9 @@ class SwFrmAddPage : public SfxTabPage
     SwWrtShell*   pWrtSh;
 
     OString       sDlgType;
-    sal_Bool      bHtmlMode;
-    sal_Bool      bFormat;
-    sal_Bool      bNew;
+    bool      bHtmlMode;
+    bool      bFormat;
+    bool      bNew;
 
     DECL_LINK(EditModifyHdl, void *);
     DECL_LINK(ChainModifyHdl, ListBox*);
@@ -316,9 +316,9 @@ public:
     virtual bool FillItemSet(SfxItemSet &rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
 
-    void            SetFormatUsed(sal_Bool bFmt);
+    void            SetFormatUsed(bool bFmt);
     void            SetFrmType(const OString &rType) { sDlgType = rType; }
-    void            SetNewFrame(sal_Bool bNewFrame) { bNew  = bNewFrame; }
+    void            SetNewFrame(bool bNewFrame) { bNew  = bNewFrame; }
     void            SetShell(SwWrtShell* pSh) { pWrtSh  = pSh; }
 
 };

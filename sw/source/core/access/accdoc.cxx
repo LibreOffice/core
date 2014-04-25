@@ -381,7 +381,7 @@ SwAccessibleDocument::~SwAccessibleDocument()
         pWin->RemoveChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
 }
 
-void SwAccessibleDocument::Dispose( sal_Bool bRecursive )
+void SwAccessibleDocument::Dispose( bool bRecursive )
 {
     OSL_ENSURE( GetFrm() && GetMap(), "already disposed" );
 
@@ -572,24 +572,24 @@ void SAL_CALL SwAccessibleDocument::notifyEvent( const ::com::sun::star::documen
 
     if ( Event.EventName.equalsAscii( "FirstPageShows" ) )
     {
-        FireStateChangedEvent( AccessibleStateType::FOCUSED,sal_True );
+        FireStateChangedEvent( AccessibleStateType::FOCUSED,true );
     }
     else if ( Event.EventName.equalsAscii( "LoadFinished" ) )
     {
         // IA2 CWS. MT: OFFSCREEN == !SHOWING, should stay consistent
         // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,sal_True );
         // MT: LoadFinished => Why not SHOWING == TRUE?
-        FireStateChangedEvent( AccessibleStateType::SHOWING,sal_False );
+        FireStateChangedEvent( AccessibleStateType::SHOWING,false );
     }
     else if ( Event.EventName.equalsAscii( "FormatFinished" ) )
     {
-        FireStateChangedEvent( AccessibleStateType::BUSY,sal_False );
+        FireStateChangedEvent( AccessibleStateType::BUSY,false );
         // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,sal_False );
-        FireStateChangedEvent( AccessibleStateType::SHOWING,sal_True );
+        FireStateChangedEvent( AccessibleStateType::SHOWING,true );
     }
     else
     {
-        isIfAsynLoad = sal_False;
+        isIfAsynLoad = false;
     }
 }
 
@@ -624,7 +624,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 
     if( pFEShell )
     {
-        pFEShell->GetPageNumber(-1,sal_True,nPage,nLogPage,sDisplay);
+        pFEShell->GetPageNumber(-1,true,nPage,nLogPage,sDisplay);
         sAttrName = "page-name:";
 
         sValue = sAttrName + sDisplay ;
@@ -863,7 +863,7 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
             SdrObject* pObj = GetSdrObjectFromXShape(xShape);
             if( pObj )
             {
-                uno::Reference<XAccessible> xAcc = pAccMap->GetContext(pObj, this, sal_False);
+                uno::Reference<XAccessible> xAcc = pAccMap->GetContext(pObj, this, false);
                 uno::Reference < XAccessibleSelection > xAccSelection( xAcc, uno::UNO_QUERY );
                 if ( xAccSelection.is() )
                 {
@@ -943,7 +943,7 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
                 std::vector<SwFrm*>::iterator aIter = vFrmList.begin();
                 for ( sal_Int32 nIndex = 0; aIter != vFrmList.end(); ++aIter, nIndex++ )
                 {
-                    uno::Reference< XAccessible > xAcc = pAccMap->GetContext(*aIter, sal_False);
+                    uno::Reference< XAccessible > xAcc = pAccMap->GetContext(*aIter, false);
                     if ( xAcc.is() )
                     {
                         SwAccessibleContext *pAccImpl = static_cast< SwAccessibleContext *>( xAcc.get() );

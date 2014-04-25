@@ -137,7 +137,7 @@
 #include <svx/xfltrit.hxx>
 
 // from fefly1.cxx
-extern sal_Bool sw_ChkAndSetNewAnchor( SwEditShell& rEditShell, const SwFlyFrm& rFly, SfxItemSet& rSet );
+extern bool sw_ChkAndSetNewAnchor( SwEditShell& rEditShell, const SwFlyFrm& rFly, SfxItemSet& rSet );
 
 using namespace ::com::sun::star;
 

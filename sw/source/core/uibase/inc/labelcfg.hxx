@@ -49,7 +49,7 @@ public:
     void    FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr);
     const std::vector<OUString>& GetManufacturers() const {return m_aManufacturers;}
 
-    sal_Bool    HasLabel(const OUString& rManufacturer, const OUString& rType);
+    bool    HasLabel(const OUString& rManufacturer, const OUString& rType);
     bool        IsPredefinedLabel(const OUString& rManufacturer, const OUString& rType)
                   { return m_aLabels[rManufacturer][rType].m_bPredefined; };
     void        SaveLabel(const OUString& rManufacturer, const OUString& rType,

@@ -148,9 +148,9 @@ bool SwEditShell::NoNum()
     return bRet;
 }
 
-sal_Bool SwEditShell::SelectionHasNumber() const
+bool SwEditShell::SelectionHasNumber() const
 {
-    sal_Bool bResult = HasNumber();
+    bool bResult = HasNumber();
     const SwTxtNode * pTxtNd =
         GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
     if (!bResult && pTxtNd && pTxtNd->Len()==0 && !pTxtNd->GetNumRule()) {
@@ -178,9 +178,9 @@ sal_Bool SwEditShell::SelectionHasNumber() const
                             pTxtNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
                             !pTxtNd->IsCountedInList() )
                         {
-                            bResult = sal_False;
+                            bResult = false;
                         }
-                        if (bResult==sal_False) {
+                        if (bResult==false) {
                             break;
                         }
                     }
@@ -194,9 +194,9 @@ sal_Bool SwEditShell::SelectionHasNumber() const
 }
 
 // add a new function to determine number on/off status
-sal_Bool SwEditShell::SelectionHasBullet() const
+bool SwEditShell::SelectionHasBullet() const
 {
-    sal_Bool bResult = HasBullet();
+    bool bResult = HasBullet();
     const SwTxtNode * pTxtNd =
         GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
     if (!bResult && pTxtNd && pTxtNd->Len()==0 && !pTxtNd->GetNumRule()) {
@@ -219,7 +219,7 @@ sal_Bool SwEditShell::SelectionHasBullet() const
                     {
                         bResult = pTxtNd->HasBullet();
 
-                        if (bResult==sal_False) {
+                        if (bResult==false) {
                             break;
                         }
                     }
@@ -232,9 +232,9 @@ sal_Bool SwEditShell::SelectionHasBullet() const
 }
 
 // -> #i29560#
-sal_Bool SwEditShell::HasNumber() const
+bool SwEditShell::HasNumber() const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     const SwTxtNode * pTxtNd =
         GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
@@ -248,16 +248,16 @@ sal_Bool SwEditShell::HasNumber() const
              pTxtNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
              !pTxtNd->IsCountedInList() )
         {
-            bResult = sal_False;
+            bResult = false;
         }
     }
 
     return bResult;
 }
 
-sal_Bool SwEditShell::HasBullet() const
+bool SwEditShell::HasBullet() const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     const SwTxtNode * pTxtNd =
         GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
@@ -442,7 +442,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
     if( pCrsr->HasMark() )
         *aCrsr.GetPoint() = *pCrsr->End();
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_uInt8 nUpperLevel, nLowerLevel;
     if( GetDoc()->GotoNextNum( *aCrsr.GetPoint(), false,
                                 &nUpperLevel, &nLowerLevel ))
@@ -555,9 +555,9 @@ bool SwEditShell::MoveOutlinePara( short nOffset )
 }
 
 // Outlines and SubOutline are ReadOnly?
-sal_Bool SwEditShell::IsProtectedOutlinePara() const
+bool SwEditShell::IsProtectedOutlinePara() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwNode& rNd = GetCrsr()->Start()->nNode.GetNode();
     if( rNd.IsTxtNode() )
     {
@@ -588,7 +588,7 @@ sal_Bool SwEditShell::IsProtectedOutlinePara() const
 
             if( pTmpNd->IsProtect() )
             {
-                bRet = sal_True;
+                bRet = true;
                 break;
             }
         }
@@ -609,7 +609,7 @@ sal_Bool SwEditShell::IsProtectedOutlinePara() const
  * 2) outline must not be within table
  * 3) if bCopy is set, outline must not be write protected
  */
-static sal_Bool lcl_IsOutlineMoveAndCopyable( const SwDoc* pDoc, sal_uInt16 nIdx, bool bCopy )
+static bool lcl_IsOutlineMoveAndCopyable( const SwDoc* pDoc, sal_uInt16 nIdx, bool bCopy )
 {
     const SwNodes& rNds = pDoc->GetNodes();
     const SwNode* pNd = rNds.GetOutLineNds()[ nIdx ];
@@ -618,12 +618,12 @@ static sal_Bool lcl_IsOutlineMoveAndCopyable( const SwDoc* pDoc, sal_uInt16 nIdx
             ( bCopy || !pNd->IsProtect() );                         // 3) write
 }
 
-sal_Bool SwEditShell::IsOutlineMovable( sal_uInt16 nIdx ) const
+bool SwEditShell::IsOutlineMovable( sal_uInt16 nIdx ) const
 {
     return lcl_IsOutlineMoveAndCopyable( GetDoc(), nIdx, false );
 }
 
-sal_Bool SwEditShell::IsOutlineCopyable( sal_uInt16 nIdx ) const
+bool SwEditShell::IsOutlineCopyable( sal_uInt16 nIdx ) const
 {
     return lcl_IsOutlineMoveAndCopyable( GetDoc(), nIdx, true );
 }
@@ -645,10 +645,10 @@ bool SwEditShell::NumOrNoNum(
     return bRet;
 }
 
-sal_Bool SwEditShell::IsNoNum( sal_Bool bChkStart ) const
+bool SwEditShell::IsNoNum( bool bChkStart ) const
 {
     // a Backspace in the paragraph without number becomes a Delete
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if ( !IsMultiSelection()
          && !HasSelection()
@@ -788,7 +788,7 @@ bool SwEditShell::ReplaceNumRule( const OUString& rOldRule, const OUString& rNew
     return bRet;
 }
 
-void SwEditShell::SetNumRuleStart( sal_Bool bFlag, SwPaM* pPaM )
+void SwEditShell::SetNumRuleStart( bool bFlag, SwPaM* pPaM )
 {
     StartAllAction();
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
@@ -807,9 +807,9 @@ void SwEditShell::SetNumRuleStart( sal_Bool bFlag, SwPaM* pPaM )
     EndAllAction();
 }
 
-sal_Bool SwEditShell::IsNumRuleStart( SwPaM* pPaM ) const
+bool SwEditShell::IsNumRuleStart( SwPaM* pPaM ) const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr( );
     const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
     if( pTxtNd )

@@ -82,9 +82,9 @@ SwXMLExport::SwXMLExport(
         nExportFlags ),
     pTableItemMapper( 0 ),
     pTableLines( 0 ),
-    bBlock( sal_False ),
-    bShowProgress( sal_True ),
-    bSavedShowChanges( sal_False ),
+    bBlock( false ),
+    bShowProgress( true ),
+    bSavedShowChanges( false ),
     doc( NULL ),
     sNumberFormat("NumberFormat"),
     sIsProtected("IsProtected"),
@@ -95,7 +95,7 @@ SwXMLExport::SwXMLExport(
 
 void SwXMLExport::setBlockMode()
 {
-    bBlock = sal_True;
+    bBlock = true;
 
 }
 
@@ -127,7 +127,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
     SwDoc *pDoc = getDoc();
 
-    sal_Bool bExtended = sal_False;
+    bool bExtended = false;
     if( (getExportFlags() & (EXPORT_FONTDECLS|EXPORT_STYLES|
                              EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
     {
@@ -171,7 +171,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                                                 XML_NAMESPACE_UNKNOWN );
                             nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
                         }
-                        bExtended = sal_True;
+                        bExtended = true;
                     }
                 }
             }
@@ -272,7 +272,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
     // set redline mode if we export STYLES or CONTENT, unless redline
     // mode is taken care of outside (through info XPropertySet)
-    sal_Bool bSaveRedline =
+    bool bSaveRedline =
         ( (getExportFlags() & (EXPORT_CONTENT|EXPORT_STYLES)) != 0 );
     if( bSaveRedline )
     {
@@ -359,7 +359,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     SwDoc *pDoc = getDoc();
     const Rectangle rRect =
         pDoc->GetDocShell()->GetVisArea( ASPECT_CONTENT );
-    sal_Bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MAP_TWIP;
+    bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MAP_TWIP;
 
    OSL_ENSURE( bTwip, "Map unit for visible area is not in TWIPS!" );
 

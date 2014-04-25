@@ -111,16 +111,16 @@ class SwGlossaryDlg : public SvxStandardDialog
 
     OUString        sResumeGroup;
     OUString        sResumeShortName;
-    sal_Bool            bResume;
+    bool            bResume;
 
-    const sal_Bool      bSelection : 1;
-    sal_Bool            bReadOnly : 1;
-    sal_Bool            bIsOld : 1;
-    sal_Bool            bIsDocReadOnly:1;
+    const bool      bSelection : 1;
+    bool            bReadOnly : 1;
+    bool            bIsOld : 1;
+    bool            bIsDocReadOnly:1;
 
     SwWrtShell*     pSh;
 
-    void EnableShortName(sal_Bool bOn = sal_True);
+    void EnableShortName(bool bOn = true);
     void ShowPreview();
 
     DECL_LINK( NameModify, Edit * );
@@ -141,11 +141,11 @@ class SwGlossaryDlg : public SvxStandardDialog
     void            ShowAutoText(const OUString& rGroup, const OUString& rShortName);
     void            ResumeShowAutoText();
 
-    sal_Bool            GetResumeData(OUString& rGroup, OUString& rShortName)
+    bool            GetResumeData(OUString& rGroup, OUString& rShortName)
                         {rGroup = sResumeGroup; rShortName = sResumeShortName; return bResume;}
     void            SetResumeData(const OUString& rGroup, const OUString& rShortName)
-                        {sResumeGroup = rGroup; sResumeShortName = rShortName; bResume = sal_True;}
-    void            ResetResumeData() {bResume = sal_False;}
+                        {sResumeGroup = rGroup; sResumeShortName = rShortName; bResume = true;}
+    void            ResetResumeData() {bResume = false;}
 public:
     SwGlossaryDlg(SfxViewFrame* pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
     virtual ~SwGlossaryDlg();

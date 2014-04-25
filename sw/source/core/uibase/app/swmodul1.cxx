@@ -143,10 +143,10 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     SwView* pCurrView = pActView;
     SwViewShell* pSh = pCurrView ? &pCurrView->GetWrtShell() : 0;
 
-    SwMasterUsrPref* pPref = (SwMasterUsrPref*)GetUsrPref( static_cast< sal_Bool >(
-                                         VIEWOPT_DEST_WEB == nDest ? sal_True  :
-                                         VIEWOPT_DEST_TEXT== nDest ? sal_False :
-                                         pCurrView && pCurrView->ISA(SwWebView) ));
+    SwMasterUsrPref* pPref = (SwMasterUsrPref*)GetUsrPref(
+                                         VIEWOPT_DEST_WEB == nDest ? true  :
+                                         VIEWOPT_DEST_TEXT== nDest ? false :
+                                         pCurrView && pCurrView->ISA(SwWebView) );
 
     // with Uno, only sdbcx::View, but not the Module should be changed
     bool bViewOnly = VIEWOPT_DEST_VIEW_ONLY == nDest;
@@ -176,7 +176,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
         return;
 
     // Passing on to CORE
-    sal_Bool bReadonly;
+    bool bReadonly;
     const SwDocShell* pDocSh = pCurrView->GetDocShell();
     if (pDocSh)
         bReadonly = pDocSh->IsReadOnly();
@@ -202,7 +202,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     lcl_SetUIPrefs(*xViewOpt, pCurrView, pSh);
 
     // in the end the Idle-Flag is set again
-    pPref->SetIdle(sal_True);
+    pPref->SetIdle(true);
 }
 
 void SwModule::ApplyUserMetric( FieldUnit eMetric, bool bWeb )
@@ -211,13 +211,13 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, bool bWeb )
         if(bWeb)
         {
             if(!pWebUsrPref)
-                GetUsrPref(sal_True);
+                GetUsrPref(true);
             pPref = pWebUsrPref;
         }
         else
         {
             if(!pUsrPref)
-                GetUsrPref(sal_False);
+                GetUsrPref(false);
             pPref = pUsrPref;
         }
         FieldUnit eOldMetric = pPref->GetMetric();
@@ -241,19 +241,19 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, bool bWeb )
         }
 }
 
-void SwModule::ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, bool bWeb )
+void SwModule::ApplyRulerMetric( FieldUnit eMetric, bool bHorizontal, bool bWeb )
 {
     SwMasterUsrPref* pPref;
     if(bWeb)
     {
         if(!pWebUsrPref)
-            GetUsrPref(sal_True);
+            GetUsrPref(true);
         pPref = pWebUsrPref;
     }
     else
     {
         if(!pUsrPref)
-            GetUsrPref(sal_False);
+            GetUsrPref(false);
         pPref = pUsrPref;
     }
     if( bHorizontal )
@@ -277,22 +277,22 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, bool b
 }
 
 //set the usrpref 's char unit attribute and set rulers unit as char if the "apply char unit" is checked
-void SwModule::ApplyUserCharUnit(sal_Bool bApplyChar, bool bWeb)
+void SwModule::ApplyUserCharUnit(bool bApplyChar, bool bWeb)
 {
     SwMasterUsrPref* pPref;
     if(bWeb)
     {
         if(!pWebUsrPref)
-            GetUsrPref(sal_True);
+            GetUsrPref(true);
         pPref = pWebUsrPref;
     }
     else
     {
         if(!pUsrPref)
-            GetUsrPref(sal_False);
+            GetUsrPref(false);
         pPref = pUsrPref;
     }
-    sal_Bool bOldApplyCharUnit = pPref->IsApplyCharUnit();
+    bool bOldApplyCharUnit = pPref->IsApplyCharUnit();
     bool bHasChanged = false;
     if(bOldApplyCharUnit != bApplyChar)
     {
@@ -345,15 +345,15 @@ SwNavigationConfig*  SwModule::GetNavigationConfig()
     return pNavigationConfig;
 }
 
-SwPrintOptions*     SwModule::GetPrtOptions(sal_Bool bWeb)
+SwPrintOptions*     SwModule::GetPrtOptions(bool bWeb)
 {
     if(bWeb && !pWebPrtOpt)
     {
-        pWebPrtOpt = new SwPrintOptions(sal_True);
+        pWebPrtOpt = new SwPrintOptions(true);
     }
     else if(!bWeb && !pPrtOpt)
     {
-        pPrtOpt = new SwPrintOptions(sal_False);
+        pPrtOpt = new SwPrintOptions(false);
     }
 
     return bWeb ? pWebPrtOpt : pPrtOpt;
@@ -366,7 +366,7 @@ SwChapterNumRules*  SwModule::GetChapterNumRules()
     return pChapterNumRules;
 }
 
-void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, sal_Bool /*bOnlyIfAvailable*/)
+void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, bool /*bOnlyIfAvailable*/)
 {
     Reference<XFrame> xFrame = rView.GetViewFrame()->GetFrame().GetFrameInterface();
     Reference<XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
@@ -403,14 +403,14 @@ sal_uInt16 SwModule::GetRedlineAuthor()
             if (sActAuthor.isEmpty())
                 sActAuthor = SW_RESSTR( STR_REDLINE_UNKNOWN_AUTHOR );
         }
-        bAuthorInitialised = sal_True;
+        bAuthorInitialised = true;
     }
     return InsertRedlineAuthor( sActAuthor );
 }
 
 void SwModule::SetRedlineAuthor(const OUString &rAuthor)
 {
-    bAuthorInitialised = sal_True;
+    bAuthorInitialised = true;
     sActAuthor = rAuthor;
     InsertRedlineAuthor( sActAuthor );
 }
@@ -526,17 +526,17 @@ sal_uInt16 SwModule::GetRedlineMarkPos()
     return pModuleConfig->GetMarkAlignMode();
 }
 
-sal_Bool SwModule::IsInsTblFormatNum(sal_Bool bHTML) const
+bool SwModule::IsInsTblFormatNum(bool bHTML) const
 {
     return pModuleConfig->IsInsTblFormatNum(bHTML);
 }
 
-sal_Bool SwModule::IsInsTblChangeNumFormat(sal_Bool bHTML) const
+bool SwModule::IsInsTblChangeNumFormat(bool bHTML) const
 {
     return pModuleConfig->IsInsTblChangeNumFormat(bHTML);
 }
 
-sal_Bool SwModule::IsInsTblAlignNum(sal_Bool bHTML) const
+bool SwModule::IsInsTblAlignNum(bool bHTML) const
 {
     return pModuleConfig->IsInsTblAlignNum(bHTML);
 }
@@ -546,7 +546,7 @@ const Color &SwModule::GetRedlineMarkColor()
     return pModuleConfig->GetMarkAlignColor();
 }
 
-const SwViewOption* SwModule::GetViewOption(sal_Bool bWeb)
+const SwViewOption* SwModule::GetViewOption(bool bWeb)
 {
     return GetUsrPref( bWeb );
 }
@@ -557,50 +557,50 @@ OUString SwModule::GetDocStatWordDelim() const
 }
 
 // Passing-through of the ModuleConfig's Metric (for HTML-Export)
-sal_uInt16 SwModule::GetMetric( sal_Bool bWeb ) const
+sal_uInt16 SwModule::GetMetric( bool bWeb ) const
 {
     SwMasterUsrPref* pPref;
     if(bWeb)
     {
         if(!pWebUsrPref)
-            GetUsrPref(sal_True);
+            GetUsrPref(true);
         pPref = pWebUsrPref;
     }
     else
     {
         if(!pUsrPref)
-            GetUsrPref(sal_False);
+            GetUsrPref(false);
         pPref = pUsrPref;
     }
     return static_cast< sal_uInt16 >(pPref->GetMetric());
 }
 
 // Pass-through Update-Status
-sal_uInt16 SwModule::GetLinkUpdMode( sal_Bool ) const
+sal_uInt16 SwModule::GetLinkUpdMode( bool ) const
 {
     if(!pUsrPref)
-        GetUsrPref(sal_False);
+        GetUsrPref(false);
     return (sal_uInt16)pUsrPref->GetUpdateLinkMode();
 }
 
-SwFldUpdateFlags SwModule::GetFldUpdateFlags( sal_Bool ) const
+SwFldUpdateFlags SwModule::GetFldUpdateFlags( bool ) const
 {
     if(!pUsrPref)
-        GetUsrPref(sal_False);
+        GetUsrPref(false);
     return pUsrPref->GetFldUpdateFlags();
 }
 
 void SwModule::ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags)
 {
     if(!pUsrPref)
-        GetUsrPref(sal_False);
+        GetUsrPref(false);
     pUsrPref->SetFldUpdateFlags(eFldFlags);
 }
 
 void SwModule::ApplyLinkMode(sal_Int32 nNewLinkMode)
 {
     if(!pUsrPref)
-        GetUsrPref(sal_False);
+        GetUsrPref(false);
     pUsrPref->SetUpdateLinkMode(nNewLinkMode);
 }
 
@@ -629,10 +629,10 @@ void SwModule::CheckSpellChanges( bool bOnlineSpelling,
     }
 }
 
-void SwModule::ApplyDefaultPageMode(sal_Bool bIsSquaredPageMode)
+void SwModule::ApplyDefaultPageMode(bool bIsSquaredPageMode)
 {
     if(!pUsrPref)
-        GetUsrPref(sal_False);
+        GetUsrPref(false);
     pUsrPref->SetDefaultPageMode(bIsSquaredPageMode);
 }
 
@@ -641,12 +641,12 @@ SvxCompareMode SwModule::GetCompareMode() const
     return pModuleConfig->GetCompareMode();
 }
 
-sal_Bool SwModule::IsUseRsid() const
+bool SwModule::IsUseRsid() const
 {
     return pModuleConfig->IsUseRsid();
 }
 
-sal_Bool SwModule::IsIgnorePieces() const
+bool SwModule::IsIgnorePieces() const
 {
     return pModuleConfig->IsIgnorePieces();
 }

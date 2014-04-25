@@ -112,8 +112,8 @@ class SwAddPrinterTabPage : public SfxTabPage
 
     OUString        sNone;
 
-    sal_Bool        bAttrModified;
-    sal_Bool        bPreview;
+    bool        bAttrModified;
+    bool        bPreview;
 
     void        Init();
                 DECL_LINK(AutoClickHdl, void *);
@@ -130,7 +130,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
     void                SetFax( const std::vector<OUString>& );
     void                SelectFax( const OUString& );
-    void                SetPreview(sal_Bool bPrev);
+    void                SetPreview(bool bPrev);
     virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 
 };
@@ -164,20 +164,20 @@ class SwStdFontTabPage : public SfxTabPage
     SwWrtShell*         pWrtShell;
     LanguageType        eLanguage;
     // only defaults were there? they were signed with the boxes
-    sal_Bool    bListDefault    :1;
-    sal_Bool    bSetListDefault :1;
-    sal_Bool    bLabelDefault   :1;
-    sal_Bool    bSetLabelDefault :1;
-    sal_Bool    bIdxDefault     :1;
-    sal_Bool    bSetIdxDefault  :1;
-    sal_Bool    bDeletePrinter :1;
+    bool    bListDefault    :1;
+    bool    bSetListDefault :1;
+    bool    bLabelDefault   :1;
+    bool    bSetLabelDefault :1;
+    bool    bIdxDefault     :1;
+    bool    bSetIdxDefault  :1;
+    bool    bDeletePrinter :1;
 
-    sal_Bool    bListHeightDefault    :1;
-    sal_Bool    bSetListHeightDefault :1;
-    sal_Bool    bLabelHeightDefault   :1;
-    sal_Bool    bSetLabelHeightDefault :1;
-    sal_Bool    bIndexHeightDefault     :1;
-    sal_Bool    bSetIndexHeightDefault  :1;
+    bool    bListHeightDefault    :1;
+    bool    bSetListHeightDefault :1;
+    bool    bLabelHeightDefault   :1;
+    bool    bSetLabelHeightDefault :1;
+    bool    bIndexHeightDefault     :1;
+    bool    bSetIndexHeightDefault  :1;
 
     sal_uInt8 nFontGroup; //fontcfg.hxx: FONT_GROUP_[STANDARD|CJK|CTL]
 
@@ -227,7 +227,7 @@ class SwTableOptionsTabPage : public SfxTabPage
     RadioButton* pVarRB;
 
     SwWrtShell* pWrtShell;
-    sal_Bool        bHTMLMode;
+    bool        bHTMLMode;
 
     DECL_LINK(CheckBoxHdl, void *);
 
@@ -404,7 +404,7 @@ private:
     CheckBox* m_pTest9CBox;
     CheckBox* m_pTest10CBox;
 
-    sal_Bool        bAttrModified;
+    bool        bAttrModified;
 
     void        Init();
     DECL_LINK(AutoClickHdl, void *);

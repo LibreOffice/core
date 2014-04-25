@@ -33,7 +33,7 @@ protected:
     SwRedlineData* mpRedlData;
     SwRedlineSaveDatas* mpRedlSaveData;
     SwUndoId mnUserId;
-    sal_Bool mbHiddenRedlines;
+    bool mbHiddenRedlines;
 
     virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
@@ -52,9 +52,9 @@ public:
 
 class SwUndoRedlineDelete : public SwUndoRedline
 {
-    sal_Bool bCanGroup : 1;
-    sal_Bool bIsDelim : 1;
-    sal_Bool bIsBackspace : 1;
+    bool bCanGroup : 1;
+    bool bIsDelim : 1;
+    bool bIsBackspace : 1;
 
     virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) SAL_OVERRIDE;
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) SAL_OVERRIDE;
@@ -62,7 +62,7 @@ class SwUndoRedlineDelete : public SwUndoRedline
 public:
     SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUserId = UNDO_EMPTY );
 
-    sal_Bool CanGrouping( const SwUndoRedlineDelete& rPrev );
+    bool CanGrouping( const SwUndoRedlineDelete& rPrev );
 
     // SwUndoTblCpyTbl needs this information:
     long NodeDiff() const { return nSttNode - nEndNode; }
@@ -116,10 +116,10 @@ class SwUndoCompDoc : public SwUndo, public SwUndRng
     SwRedlineData* pRedlData;
     SwUndoDelete* pUnDel, *pUnDel2;
     SwRedlineSaveDatas* pRedlSaveData;
-    sal_Bool bInsert;
+    bool bInsert;
 
 public:
-    SwUndoCompDoc( const SwPaM& rRg, sal_Bool bIns );
+    SwUndoCompDoc( const SwPaM& rRg, bool bIns );
     SwUndoCompDoc( const SwRangeRedline& rRedl );
 
     virtual ~SwUndoCompDoc();

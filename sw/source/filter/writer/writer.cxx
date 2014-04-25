@@ -123,7 +123,7 @@ Writer::Writer()
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
         bWriteClipboardDoc = bWriteOnlyFirstTable = bBlock =
         bOrganizerMode = false;
-    bExportPargraphNumbering = sal_True;
+    bExportPargraphNumbering = true;
 }
 
 Writer::~Writer()
@@ -153,18 +153,18 @@ void Writer::ResetWriter()
     pOrigFileName = 0;
     pDoc = 0;
 
-    bShowProgress = bUCS2_WithStartChar = sal_True;
+    bShowProgress = bUCS2_WithStartChar = true;
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
         bWriteClipboardDoc = bWriteOnlyFirstTable = bBlock =
-        bOrganizerMode = sal_False;
+        bOrganizerMode = false;
 }
 
-sal_Bool Writer::CopyNextPam( SwPaM ** ppPam )
+bool Writer::CopyNextPam( SwPaM ** ppPam )
 {
     if( (*ppPam)->GetNext() == pOrigPam )
     {
         *ppPam = pOrigPam;          // set back to the beginning pam
-        return sal_False;           // end of the ring
+        return false;           // end of the ring
     }
 
     // otherwise copy the next value from the next Pam
@@ -173,7 +173,7 @@ sal_Bool Writer::CopyNextPam( SwPaM ** ppPam )
     *pCurPam->GetPoint() = *(*ppPam)->Start();
     *pCurPam->GetMark() = *(*ppPam)->End();
 
-    return sal_True;
+    return true;
 }
 
 // search the next Bookmark-Position from the Bookmark-Table

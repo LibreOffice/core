@@ -115,7 +115,7 @@ void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  ) throw (Runtime
     if(rParent.pImpl->xSelSupp.is())
         rParent.pImpl->xSelSupp->getSelection() >>= aSelection;
 
-    sal_Bool bEnable = aSelection.getLength() > 0;
+    bool bEnable = aSelection.getLength() > 0;
     rParent.aMarkedRB.Enable(bEnable);
     if(bEnable)
         rParent.aMarkedRB.Check();
@@ -386,7 +386,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     if (aColumnLB.GetSelectEntryCount() == 0)
         aColumnLB.SelectEntryPos(0);
 
-    const sal_Bool bEnable = m_aSelection.getLength() != 0;
+    const bool bEnable = m_aSelection.getLength() != 0;
     aMarkedRB.Enable(bEnable);
     if (bEnable)
         aMarkedRB.Check();
@@ -574,7 +574,7 @@ IMPL_LINK( SwMailMergeDlg, ButtonHdl, Button *, pBtn )
 
 IMPL_LINK( SwMailMergeDlg, OutputTypeHdl, RadioButton *, pBtn )
 {
-    sal_Bool bPrint = pBtn == &aPrinterRB;
+    bool bPrint = pBtn == &aPrinterRB;
     aSingleJobsCB.Enable(bPrint);
 
     aSaveMergedDocumentFL.Enable( !bPrint );
@@ -624,7 +624,7 @@ IMPL_LINK( SwMailMergeDlg, SaveTypeHdl, RadioButton*,  pBtn )
 
 IMPL_LINK( SwMailMergeDlg, FilenameHdl, CheckBox*, pBox )
 {
-    sal_Bool bEnable = pBox->IsChecked();
+    bool bEnable = pBox->IsChecked();
     aColumnFT.Enable( bEnable );
     aColumnLB.Enable(bEnable);
     aPathFT.Enable( bEnable );

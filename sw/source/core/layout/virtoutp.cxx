@@ -57,21 +57,21 @@ inline DbgRect::DbgRect( OutputDevice *pOutDev, const Rectangle &rRect,
  * and destroyed in _FrmFinit.
  * */
 
-sal_Bool SwRootFrm::FlushVout()
+bool SwRootFrm::FlushVout()
 {
     if( SwRootFrm::pVout->IsFlushable() )
     {
         SwRootFrm::pVout->_Flush();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwRootFrm::HasSameRect( const SwRect& rRect )
+bool SwRootFrm::HasSameRect( const SwRect& rRect )
 {
     if( SwRootFrm::pVout->IsFlushable() )
         return ( rRect == SwRootFrm::pVout->GetOrgRect() );
-    return sal_False;
+    return false;
 }
 
 /** method to set mapping/pixel offset for virtual output device
@@ -114,14 +114,14 @@ void SetMappingForVirtDev(  const Point&    _rNewOrigin,
 }
 
 // rSize must be pixel coordinates!
-sal_Bool SwLayVout::DoesFit( const Size &rNew )
+bool SwLayVout::DoesFit( const Size &rNew )
 {
     if( rNew.Height() > VIRTUALHEIGHT )
-        return sal_False;
+        return false;
     if( rNew.Width() <= 0 || rNew.Height() <= 0 )
-        return sal_False;
+        return false;
     if( rNew.Width() <= aSize.Width() )
-        return sal_True;
+        return true;
     if( !pVirDev )
     {
         pVirDev = new VirtualDevice();
@@ -141,10 +141,10 @@ sal_Bool SwLayVout::DoesFit( const Size &rNew )
             delete pVirDev;
             pVirDev = NULL;
             aSize.Width() = 0;
-            return sal_False;
+            return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
 /// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
@@ -152,7 +152,7 @@ sal_Bool SwLayVout::DoesFit( const Size &rNew )
 ///     output is used.
 ///     <aRect> contains the rectangle that represents the area the virtual
 ///     output device is used for and that is flushed at the end.
-void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, sal_Bool bOn )
+void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, bool bOn )
 {
     Flush();
 

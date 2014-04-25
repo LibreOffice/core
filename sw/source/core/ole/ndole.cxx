@@ -214,7 +214,7 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
     SwNoTxtNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
     aOLEObj( xObj ),
     pGraphic(0),
-    bOLESizeInvalid( sal_False ),
+    bOLESizeInvalid( false ),
     mpObjectLink( NULL )
 {
     aOLEObj.SetNode( this );
@@ -228,7 +228,7 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
     SwNoTxtNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
     aOLEObj( rString, nAspect ),
     pGraphic(0),
-    bOLESizeInvalid( sal_False ),
+    bOLESizeInvalid( false ),
     mpObjectLink( NULL )
 {
     aOLEObj.SetNode( this );
@@ -450,13 +450,13 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     pOLENd->SetContour( HasContour(), HasAutomaticContour() );
     pOLENd->SetAspect( GetAspect() ); // the replacement image must be already copied
 
-    pOLENd->SetOLESizeInvalid( sal_True );
+    pOLENd->SetOLESizeInvalid( true );
     pDoc->SetOLEPrtNotifyPending();
 
     return pOLENd;
 }
 
-sal_Bool SwOLENode::IsInGlobalDocSection() const
+bool SwOLENode::IsInGlobalDocSection() const
 {
     // suche den "Body Anchor"
     sal_uLong nEndExtraIdx = GetNodes().GetEndOfExtras().GetIndex();
@@ -464,18 +464,18 @@ sal_Bool SwOLENode::IsInGlobalDocSection() const
     do {
         SwFrmFmt* pFlyFmt = pAnchorNd->GetFlyFmt();
         if( !pFlyFmt )
-            return sal_False;
+            return false;
 
         const SwFmtAnchor& rAnchor = pFlyFmt->GetAnchor();
         if( !rAnchor.GetCntntAnchor() )
-            return sal_False;
+            return false;
 
         pAnchorNd = &rAnchor.GetCntntAnchor()->nNode.GetNode();
     } while( pAnchorNd->GetIndex() < nEndExtraIdx );
 
     const SwSectionNode* pSectNd = pAnchorNd->FindSectionNode();
     if( !pSectNd )
-        return sal_False;
+        return false;
 
     while( pSectNd )
     {
@@ -490,9 +490,9 @@ sal_Bool SwOLENode::IsInGlobalDocSection() const
             pSectNd->GetIndex() > nEndExtraIdx;
 }
 
-sal_Bool SwOLENode::IsOLEObjectDeleted() const
+bool SwOLENode::IsOLEObjectDeleted() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( aOLEObj.xOLERef.is() )
     {
         SfxObjectShell* p = GetDoc()->GetPersist();
@@ -510,9 +510,9 @@ void SwOLENode::GetNewReplacement()
         aOLEObj.xOLERef.UpdateReplacement();
 }
 
-sal_Bool SwOLENode::UpdateLinkURL_Impl()
+bool SwOLENode::UpdateLinkURL_Impl()
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if ( mpObjectLink )
     {
@@ -541,7 +541,7 @@ sal_Bool SwOLENode::UpdateLinkURL_Impl()
                     xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
 
                     maLinkURL = aNewLinkURL;
-                    bResult = sal_True;
+                    bResult = true;
 
                     if ( nCurState != embed::EmbedStates::LOADED )
                         xObj->changeState( nCurState );
@@ -759,7 +759,7 @@ OUString SwOLEObj::GetStyleString()
     return strStyle;
 }
 
-sal_Bool SwOLEObj::IsOleRef() const
+bool SwOLEObj::IsOleRef() const
 {
     return xOLERef.is();
 }
@@ -822,9 +822,9 @@ svt::EmbeddedObjectRef& SwOLEObj::GetObject()
     return xOLERef;
 }
 
-sal_Bool SwOLEObj::UnloadObject()
+bool SwOLEObj::UnloadObject()
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     if ( pOLENd )
     {
         const SwDoc* pDoc = pOLENd->GetDoc();
@@ -834,12 +834,12 @@ sal_Bool SwOLEObj::UnloadObject()
     return bRet;
 }
 
-sal_Bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, const SwDoc* pDoc, sal_Int64 nAspect )
+bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, const SwDoc* pDoc, sal_Int64 nAspect )
 {
     if ( !pDoc )
-        return sal_False;
+        return false;
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
        sal_Int32 nState = xObj.is() ? xObj->getCurrentState() : embed::EmbedStates::LOADED;
        bool bIsActive = ( nState != embed::EmbedStates::LOADED && nState != embed::EmbedStates::RUNNING );
     sal_Int64 nMiscStatus = xObj->getStatus( nAspect );
@@ -871,11 +871,11 @@ sal_Bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, 
                 }
                 catch ( uno::Exception& )
                 {
-                    bRet = sal_False;
+                    bRet = false;
                 }
             }
             else
-                bRet = sal_False;
+                bRet = false;
         }
     }
 

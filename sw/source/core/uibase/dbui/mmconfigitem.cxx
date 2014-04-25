@@ -93,15 +93,15 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
     ::std::vector<DBAddressDataAssignment>  aAddressDataAssignments;
     ::std::vector< OUString>         aAddressBlocks;
     sal_Int32                               nCurrentAddressBlock;
-    sal_Bool                                bIsAddressBlock;
-    sal_Bool                                bIsHideEmptyParagraphs;
+    bool                                bIsAddressBlock;
+    bool                                bIsHideEmptyParagraphs;
 
-    sal_Bool                                bIsOutputToLetter;
-    sal_Bool                                bIncludeCountry;
+    bool                                bIsOutputToLetter;
+    bool                                bIncludeCountry;
     OUString                         sExcludeCountry;
 
-    sal_Bool                                bIsGreetingLine;
-    sal_Bool                                bIsIndividualGreetingLine;
+    bool                                bIsGreetingLine;
+    bool                                bIsIndividualGreetingLine;
     ::std::vector< OUString>         aFemaleGreetingLines;
     sal_Int32                               nCurrentFemaleGreeting;
     ::std::vector< OUString>         aMaleGreetingLines;
@@ -111,8 +111,8 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
     OUString                         sFemaleGenderValue;
     uno::Sequence< OUString>         aSavedDocuments;
 
-    sal_Bool                                bIsGreetingLineInMail;
-    sal_Bool                                bIsIndividualGreetingLineInMail;
+    bool                                bIsGreetingLineInMail;
+    bool                                bIsIndividualGreetingLineInMail;
 
     //mail settings
     OUString                         sMailDisplayName;
@@ -122,20 +122,20 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
     OUString                         sMailUserName;
     OUString                         sMailPassword;
 
-    sal_Bool                                bIsSMPTAfterPOP;
+    bool                                bIsSMPTAfterPOP;
     OUString                         sInServerName;
     sal_Int16                               nInServerPort;
-    sal_Bool                                bInServerPOP;
+    bool                                bInServerPOP;
     OUString                         sInServerUserName;
     OUString                         sInServerPassword;
 
     sal_Int16                               nMailPort;
-    sal_Bool                                bIsMailReplyTo;
-    sal_Bool                                bIsDefaultPort;
-    sal_Bool                                bIsSecureConnection;
-    sal_Bool                                bIsAuthentication;
+    bool                                bIsMailReplyTo;
+    bool                                bIsDefaultPort;
+    bool                                bIsSecureConnection;
+    bool                                bIsAuthentication;
 
-    sal_Bool                                bIsEMailSupported;
+    bool                                bIsEMailSupported;
 
     ResStringArray                          m_AddressHeaderSA;
 
@@ -144,10 +144,10 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
 
     //we do overwrite the usersettings in a special case
     //than we do remind the usersettings here
-    sal_Bool                                bUserSettingWereOverwritten;
-    sal_Bool                                bIsAddressBlock_LastUserSetting;
-    sal_Bool                                bIsGreetingLineInMail_LastUserSetting;
-    sal_Bool                                bIsGreetingLine_LastUserSetting;
+    bool                                bUserSettingWereOverwritten;
+    bool                                bIsAddressBlock_LastUserSetting;
+    bool                                bIsGreetingLineInMail_LastUserSetting;
+    bool                                bIsGreetingLine_LastUserSetting;
 
     const Sequence< OUString>&       GetPropertyNames();
 
@@ -158,16 +158,16 @@ public:
     virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     const           Sequence< OUString>
-                        GetAddressBlocks(sal_Bool bConvertToConfig = sal_False) const;
+                        GetAddressBlocks(bool bConvertToConfig = false) const;
     void                SetAddressBlocks(
                                 const Sequence< OUString>& rBlocks,
-                                sal_Bool bConvertFromConfig = sal_False);
+                                bool bConvertFromConfig = false);
     const uno::Sequence< OUString>
                         GetGreetings(SwMailMergeConfigItem::Gender eType,
-                                        sal_Bool bConvertToConfig = sal_False) const;
+                                        bool bConvertToConfig = false) const;
     void                SetGreetings(SwMailMergeConfigItem::Gender eType,
                                     const uno::Sequence< OUString>& rBlocks,
-                                    sal_Bool bConvertFromConfig = sal_False);
+                                    bool bConvertFromConfig = false);
 
     void                SetCurrentAddressBlockIndex( sal_Int32 nSet );
     sal_Int32           GetCurrentAddressBlockIndex() const
@@ -181,30 +181,30 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
     ConfigItem("Office.Writer/MailMergeWizard", 0),
         nResultSetCursorPos(-1),
         nCurrentAddressBlock(0),
-        bIsAddressBlock(sal_True),
-        bIsHideEmptyParagraphs(sal_False),
-        bIsOutputToLetter(sal_True),
-        bIncludeCountry(sal_False),
-        bIsGreetingLine(sal_True),
+        bIsAddressBlock(true),
+        bIsHideEmptyParagraphs(false),
+        bIsOutputToLetter(true),
+        bIncludeCountry(false),
+        bIsGreetingLine(true),
         nCurrentFemaleGreeting(0),
         nCurrentMaleGreeting(0),
         nCurrentNeutralGreeting(0),
 
-        bIsSMPTAfterPOP(sal_False),
+        bIsSMPTAfterPOP(false),
         nInServerPort( POP_PORT ),
-        bInServerPOP( sal_True ),
+        bInServerPOP( true ),
         nMailPort(0),
-        bIsMailReplyTo(sal_False),
-        bIsDefaultPort(sal_False),
-        bIsSecureConnection(sal_False),
-        bIsAuthentication(sal_False),
+        bIsMailReplyTo(false),
+        bIsDefaultPort(false),
+        bIsSecureConnection(false),
+        bIsAuthentication(false),
 
-        bIsEMailSupported(sal_False),
+        bIsEMailSupported(false),
         m_AddressHeaderSA( SW_RES( SA_ADDRESS_HEADER )),
-        bUserSettingWereOverwritten(sal_False),
-        bIsAddressBlock_LastUserSetting(sal_False),
-        bIsGreetingLineInMail_LastUserSetting(sal_False),
-        bIsGreetingLine_LastUserSetting(sal_False)
+        bUserSettingWereOverwritten(false),
+        bIsAddressBlock_LastUserSetting(false),
+        bIsGreetingLineInMail_LastUserSetting(false),
+        bIsGreetingLine_LastUserSetting(false)
 {
     const Sequence<OUString>& rNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(rNames);
@@ -223,7 +223,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
                 {
                     Sequence< OUString> aBlocks;
                     pValues[nProp] >>= aBlocks;
-                    SetAddressBlocks(aBlocks, sal_True);
+                    SetAddressBlocks(aBlocks, true);
                 }
                 break;
                 case 4: pValues[nProp] >>= bIsAddressBlock; break;
@@ -236,7 +236,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
                     Sequence< OUString> aGreetings;
                     pValues[nProp] >>= aGreetings;
                     SetGreetings(SwMailMergeConfigItem::Gender(
-                            SwMailMergeConfigItem::FEMALE + nProp - 7), aGreetings, sal_True);
+                            SwMailMergeConfigItem::FEMALE + nProp - 7), aGreetings, true);
                 }
                 break;
 
@@ -505,10 +505,10 @@ void  SwMailMergeConfigItem_Impl::Commit()
             case 0: pValues[nProp] <<= bIsOutputToLetter; break;
             case 1: pValues[nProp] <<= bIncludeCountry; break;
             case 2: pValues[nProp] <<= sExcludeCountry; break;
-            case 3: pValues[nProp] <<= GetAddressBlocks(sal_True); break;
+            case 3: pValues[nProp] <<= GetAddressBlocks(true); break;
             case 4:
                 {
-                    if( bUserSettingWereOverwritten == sal_True )
+                    if( bUserSettingWereOverwritten)
                         pValues[nProp] <<= bIsAddressBlock_LastUserSetting;
                     else
                         pValues[nProp] <<= bIsAddressBlock;
@@ -516,7 +516,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
                 }
             case 5:
                 {
-                    if( bUserSettingWereOverwritten == sal_True )
+                    if( bUserSettingWereOverwritten)
                         pValues[nProp] <<= bIsGreetingLine_LastUserSetting;
                     else
                         pValues[nProp] <<= bIsGreetingLine;
@@ -528,7 +528,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
             case 9:
                 pValues[nProp] <<= GetGreetings(
                         SwMailMergeConfigItem::Gender(
-                            SwMailMergeConfigItem::FEMALE + nProp - 7), sal_True);
+                            SwMailMergeConfigItem::FEMALE + nProp - 7), true);
             break;
             case 10: pValues[nProp] <<= nCurrentFemaleGreeting;     break;
             case 11: pValues[nProp] <<= nCurrentMaleGreeting;       break;
@@ -554,7 +554,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
             case 29: pValues[nProp] <<= bIsEMailSupported; break;
             case 30:
                 {
-                    if( bUserSettingWereOverwritten == sal_True )
+                    if( bUserSettingWereOverwritten)
                         pValues[nProp] <<= bIsGreetingLineInMail_LastUserSetting;
                     else
                         pValues[nProp] <<= bIsGreetingLineInMail;
@@ -612,11 +612,11 @@ void  SwMailMergeConfigItem_Impl::Commit()
         }
     }
 
-    bUserSettingWereOverwritten = sal_False;
+    bUserSettingWereOverwritten = false;
 }
 
 const Sequence< OUString> SwMailMergeConfigItem_Impl::GetAddressBlocks(
-        sal_Bool bConvertToConfig) const
+        bool bConvertToConfig) const
 {
     Sequence< OUString> aRet(aAddressBlocks.size());
     OUString* pRet = aRet.getArray();
@@ -631,7 +631,7 @@ const Sequence< OUString> SwMailMergeConfigItem_Impl::GetAddressBlocks(
 
 void SwMailMergeConfigItem_Impl::SetAddressBlocks(
         const Sequence< OUString>& rBlocks,
-        sal_Bool bConvertFromConfig)
+        bool bConvertFromConfig)
 {
     aAddressBlocks.clear();
     for(sal_Int32 nBlock = 0; nBlock < rBlocks.getLength(); nBlock++)
@@ -646,7 +646,7 @@ void SwMailMergeConfigItem_Impl::SetAddressBlocks(
 }
 
 const Sequence< OUString>   SwMailMergeConfigItem_Impl::GetGreetings(
-        SwMailMergeConfigItem::Gender eType, sal_Bool bConvertToConfig) const
+        SwMailMergeConfigItem::Gender eType, bool bConvertToConfig) const
 {
     const ::std::vector< OUString>& rGreetings =
             eType == SwMailMergeConfigItem::FEMALE ? aFemaleGreetingLines :
@@ -666,7 +666,7 @@ const Sequence< OUString>   SwMailMergeConfigItem_Impl::GetGreetings(
 void  SwMailMergeConfigItem_Impl::SetGreetings(
         SwMailMergeConfigItem::Gender eType,
         const Sequence< OUString>& rSetGreetings,
-        sal_Bool bConvertFromConfig)
+        bool bConvertFromConfig)
 {
     ::std::vector< OUString>& rGreetings =
             eType == SwMailMergeConfigItem::FEMALE ? aFemaleGreetingLines :
@@ -782,9 +782,9 @@ bool SwMailMergeConfigItem::IsAddressBlock()const
     return m_pImpl->bIsAddressBlock && IsOutputToLetter();
 }
 
-void     SwMailMergeConfigItem::SetAddressBlock(sal_Bool bSet)
+void     SwMailMergeConfigItem::SetAddressBlock(bool bSet)
 {
-    m_pImpl->bUserSettingWereOverwritten = sal_False;
+    m_pImpl->bUserSettingWereOverwritten = false;
     if(m_pImpl->bIsAddressBlock != bSet)
     {
         m_pImpl->bIsAddressBlock = bSet;
@@ -792,12 +792,12 @@ void     SwMailMergeConfigItem::SetAddressBlock(sal_Bool bSet)
     }
 }
 
-sal_Bool SwMailMergeConfigItem::IsHideEmptyParagraphs() const
+bool SwMailMergeConfigItem::IsHideEmptyParagraphs() const
 {
     return m_pImpl->bIsHideEmptyParagraphs;
 }
 
-void SwMailMergeConfigItem::SetHideEmptyParagraphs(sal_Bool bSet)
+void SwMailMergeConfigItem::SetHideEmptyParagraphs(bool bSet)
 {
     if(m_pImpl->bIsHideEmptyParagraphs != bSet)
     {
@@ -806,7 +806,7 @@ void SwMailMergeConfigItem::SetHideEmptyParagraphs(sal_Bool bSet)
     }
 }
 
-sal_Bool SwMailMergeConfigItem::IsIncludeCountry() const
+bool SwMailMergeConfigItem::IsIncludeCountry() const
 {
     return m_pImpl->bIncludeCountry;
 }
@@ -816,7 +816,7 @@ OUString& SwMailMergeConfigItem::GetExcludeCountry() const
     return m_pImpl->sExcludeCountry;
 }
 
-void SwMailMergeConfigItem::SetCountrySettings(sal_Bool bSet, const OUString& rCountry)
+void SwMailMergeConfigItem::SetCountrySettings(bool bSet, const OUString& rCountry)
 {
     if(m_pImpl->sExcludeCountry != rCountry ||
         m_pImpl->bIncludeCountry != bSet)
@@ -976,7 +976,7 @@ sal_Int32 SwMailMergeConfigItem::MoveResultSet(sal_Int32 nTarget)
             {
                 if(nTarget > 0)
                 {
-                    sal_Bool bMoved = m_pImpl->xResultSet->absolute(nTarget);
+                    bool bMoved = m_pImpl->xResultSet->absolute(nTarget);
                     if(!bMoved)
                     {
                         if(nTarget > 1)
@@ -1116,12 +1116,12 @@ void SwMailMergeConfigItem::AddSavedDocument(const OUString& rName)
     }
 }
 
-sal_Bool SwMailMergeConfigItem::IsOutputToLetter()const
+bool SwMailMergeConfigItem::IsOutputToLetter()const
 {
     return m_pImpl->bIsOutputToLetter || !IsMailAvailable();
 }
 
-void SwMailMergeConfigItem::SetOutputToLetter(sal_Bool bSet)
+void SwMailMergeConfigItem::SetOutputToLetter(bool bSet)
 {
     if(m_pImpl->bIsOutputToLetter != bSet)
     {
@@ -1130,7 +1130,7 @@ void SwMailMergeConfigItem::SetOutputToLetter(sal_Bool bSet)
     }
 }
 
-sal_Bool SwMailMergeConfigItem::IsIndividualGreeting(sal_Bool bInEMail) const
+bool SwMailMergeConfigItem::IsIndividualGreeting(bool bInEMail) const
 {
     return bInEMail ?
             m_pImpl->bIsIndividualGreetingLineInMail :
@@ -1138,7 +1138,7 @@ sal_Bool SwMailMergeConfigItem::IsIndividualGreeting(sal_Bool bInEMail) const
 }
 
 void     SwMailMergeConfigItem::SetIndividualGreeting(
-                                        sal_Bool bSet, sal_Bool bInEMail)
+                                        bool bSet, bool bInEMail)
 {
     if(bInEMail)
     {
@@ -1158,14 +1158,14 @@ void     SwMailMergeConfigItem::SetIndividualGreeting(
     }
 }
 
-sal_Bool SwMailMergeConfigItem::IsGreetingLine(sal_Bool bInEMail) const
+bool SwMailMergeConfigItem::IsGreetingLine(bool bInEMail) const
 {
     return bInEMail ? m_pImpl->bIsGreetingLineInMail : m_pImpl->bIsGreetingLine;
 }
 
-void     SwMailMergeConfigItem::SetGreetingLine(sal_Bool bSet, sal_Bool bInEMail)
+void     SwMailMergeConfigItem::SetGreetingLine(bool bSet, bool bInEMail)
 {
-    m_pImpl->bUserSettingWereOverwritten = sal_False;
+    m_pImpl->bUserSettingWereOverwritten = false;
     if(bInEMail)
     {
         if(m_pImpl->bIsGreetingLineInMail != bSet)
@@ -1330,7 +1330,7 @@ bool SwMailMergeConfigItem::IsGreetingFieldsAssigned() const
 {
     bool bResult = true;
 
-    if(!IsIndividualGreeting(sal_False))
+    if(!IsIndividualGreeting(false))
         return true;
 
     Reference< XResultSet> xResultSet = GetResultSet();
@@ -1413,12 +1413,12 @@ void SwMailMergeConfigItem::SetMailAddress(const OUString& rAddress)
     }
 }
 
-sal_Bool SwMailMergeConfigItem::IsMailReplyTo() const
+bool SwMailMergeConfigItem::IsMailReplyTo() const
 {
     return m_pImpl->bIsMailReplyTo;
 }
 
-void  SwMailMergeConfigItem::SetMailReplyTo(sal_Bool bSet)
+void  SwMailMergeConfigItem::SetMailReplyTo(bool bSet)
 {
     if(m_pImpl->bIsMailReplyTo != bSet)
     {
@@ -1467,17 +1467,17 @@ void     SwMailMergeConfigItem::SetMailPort(sal_Int16 nSet)
     if(m_pImpl->nMailPort != nSet || m_pImpl->bIsDefaultPort)
     {
         m_pImpl->nMailPort = nSet;
-        m_pImpl->bIsDefaultPort = sal_False;
+        m_pImpl->bIsDefaultPort = false;
         m_pImpl->SetModified();
     }
 }
 
-sal_Bool SwMailMergeConfigItem::IsSecureConnection() const
+bool SwMailMergeConfigItem::IsSecureConnection() const
 {
     return m_pImpl->bIsSecureConnection;
 }
 
-void     SwMailMergeConfigItem::SetSecureConnection(sal_Bool bSet)
+void     SwMailMergeConfigItem::SetSecureConnection(bool bSet)
 {
     if(m_pImpl->bIsSecureConnection != bSet)
     {
@@ -1486,12 +1486,12 @@ void     SwMailMergeConfigItem::SetSecureConnection(sal_Bool bSet)
     }
 }
 
-sal_Bool SwMailMergeConfigItem::IsAuthentication() const
+bool SwMailMergeConfigItem::IsAuthentication() const
 {
     return m_pImpl->bIsAuthentication;
 }
 
-void SwMailMergeConfigItem::SetAuthentication(sal_Bool bSet)
+void SwMailMergeConfigItem::SetAuthentication(bool bSet)
 {
     if(m_pImpl->bIsAuthentication != bSet)
     {
@@ -1528,12 +1528,12 @@ void SwMailMergeConfigItem::SetMailPassword(const OUString& rPassword)
     }
 }
 
-sal_Bool SwMailMergeConfigItem::IsSMTPAfterPOP() const
+bool SwMailMergeConfigItem::IsSMTPAfterPOP() const
 {
     return m_pImpl->bIsSMPTAfterPOP;
 }
 
-void SwMailMergeConfigItem::SetSMTPAfterPOP(sal_Bool bSet)
+void SwMailMergeConfigItem::SetSMTPAfterPOP(bool bSet)
 {
     if( m_pImpl->bIsSMPTAfterPOP != bSet)
     {
@@ -1570,12 +1570,12 @@ void SwMailMergeConfigItem::SetInServerPort(sal_Int16 nSet)
     }
 }
 
-sal_Bool SwMailMergeConfigItem::IsInServerPOP() const
+bool SwMailMergeConfigItem::IsInServerPOP() const
 {
     return m_pImpl->bInServerPOP;
 }
 
-void SwMailMergeConfigItem::SetInServerPOP(sal_Bool bSet)
+void SwMailMergeConfigItem::SetInServerPOP(bool bSet)
 {
     if( m_pImpl->bInServerPOP != bSet)
     {
@@ -1695,20 +1695,20 @@ void SwMailMergeConfigItem::SetSourceView(SwView* pView)
             // if fields are available there is usually no need of an addressblock and greeting
             if(!m_pImpl->bUserSettingWereOverwritten)
             {
-                if( m_pImpl->bIsAddressBlock == sal_True
-                    || m_pImpl->bIsGreetingLineInMail == sal_True
-                    || m_pImpl->bIsGreetingLine == sal_True )
+                if( m_pImpl->bIsAddressBlock
+                    || m_pImpl->bIsGreetingLineInMail
+                    || m_pImpl->bIsGreetingLine )
                 {
                     //store user settings
-                    m_pImpl->bUserSettingWereOverwritten = sal_True;
+                    m_pImpl->bUserSettingWereOverwritten = true;
                     m_pImpl->bIsAddressBlock_LastUserSetting = m_pImpl->bIsAddressBlock;
                     m_pImpl->bIsGreetingLineInMail_LastUserSetting = m_pImpl->bIsGreetingLineInMail;
                     m_pImpl->bIsGreetingLine_LastUserSetting = m_pImpl->bIsGreetingLine;
 
                     //set all to false
-                    m_pImpl->bIsAddressBlock = sal_False;
-                    m_pImpl->bIsGreetingLineInMail = sal_False;
-                    m_pImpl->bIsGreetingLine = sal_False;
+                    m_pImpl->bIsAddressBlock = false;
+                    m_pImpl->bIsGreetingLineInMail = false;
+                    m_pImpl->bIsGreetingLine = false;
 
                     m_pImpl->SetModified();
                 }
@@ -1721,7 +1721,7 @@ void SwMailMergeConfigItem::SetSourceView(SwView* pView)
             m_pImpl->bIsGreetingLineInMail = m_pImpl->bIsGreetingLineInMail_LastUserSetting;
             m_pImpl->bIsGreetingLine = m_pImpl->bIsGreetingLine_LastUserSetting;
 
-            m_pImpl->bUserSettingWereOverwritten = sal_False;
+            m_pImpl->bUserSettingWereOverwritten = false;
         }
     }
 }

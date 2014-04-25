@@ -70,17 +70,17 @@ Reader* GetWW8Reader();
 // ReaderWriterEnum and aFilterDetect in shellio.hxx
 SwReaderWriterEntry aReaderWriter[] =
 {
-    SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  sal_True  ),
-    SwReaderWriterEntry( 0,               &::GetASCWriter,  sal_False ),
-    SwReaderWriterEntry( &::GetWW8Reader, &::GetWW8Writer,  sal_True  ),
-    SwReaderWriterEntry( &::GetWW8Reader, &::GetWW8Writer,  sal_True  ),
-    SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  sal_True  ),
-    SwReaderWriterEntry( 0,               &::GetHTMLWriter, sal_True  ),
-    SwReaderWriterEntry( 0,               0,                sal_True  ),
-    SwReaderWriterEntry( &::GetWW8Reader, 0,                sal_True  ),
-    SwReaderWriterEntry( 0,               &::GetXMLWriter,  sal_True  ),
-    SwReaderWriterEntry( 0,               &::GetASCWriter,  sal_False ),
-    SwReaderWriterEntry( 0,               &::GetASCWriter,  sal_True  )
+    SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  true  ),
+    SwReaderWriterEntry( 0,               &::GetASCWriter,  false ),
+    SwReaderWriterEntry( &::GetWW8Reader, &::GetWW8Writer,  true  ),
+    SwReaderWriterEntry( &::GetWW8Reader, &::GetWW8Writer,  true  ),
+    SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  true  ),
+    SwReaderWriterEntry( 0,               &::GetHTMLWriter, true  ),
+    SwReaderWriterEntry( 0,               0,                true  ),
+    SwReaderWriterEntry( &::GetWW8Reader, 0,                true  ),
+    SwReaderWriterEntry( 0,               &::GetXMLWriter,  true  ),
+    SwReaderWriterEntry( 0,               &::GetASCWriter,  false ),
+    SwReaderWriterEntry( 0,               &::GetASCWriter,  true  )
 };
 
 Reader* SwReaderWriterEntry::GetReader()
@@ -200,18 +200,18 @@ SwRead GetReader( const OUString& rFltName )
 
 void Writer::SetVersion( const OUString&, long ) {}
 
-sal_Bool Writer::IsStgWriter() const { return sal_False; }
+bool Writer::IsStgWriter() const { return false; }
 
-sal_Bool StgWriter::IsStgWriter() const { return sal_True; }
+bool StgWriter::IsStgWriter() const { return true; }
 
-sal_Bool SwReader::NeedsPasswd( const Reader& /*rOptions*/ )
+bool SwReader::NeedsPasswd( const Reader& /*rOptions*/ )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwReader::CheckPasswd( const OUString& /*rPasswd*/, const Reader& /*rOptions*/ )
+bool SwReader::CheckPasswd( const OUString& /*rPasswd*/, const Reader& /*rOptions*/ )
 {
-    return sal_True;
+    return true;
 }
 
 // Read Filter Flags; used by WW8 / W4W / EXCEL / LOTUS
@@ -293,7 +293,7 @@ void StgReader::SetFltName( const OUString& rFltNm )
                 aFltName = rFltNm;
 }
 
-SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc& rDoc, sal_Bool bNDoc )
+SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc& rDoc, bool bNDoc )
 {
         pNumRuleTbl = new SwNumRuleTbl();
         pNumRuleTbl->reserve(8);
@@ -726,7 +726,7 @@ void GetWW8Writer( const OUString& rFltName, const OUString& rBaseURL, WriterRef
 typedef sal_uLong ( SAL_CALL *SaveOrDel )( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
 typedef sal_uLong ( SAL_CALL *GetSaveWarning )( SfxObjectShell& );
 
-sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, sal_Bool bSaveInto, const OUString& rStorageName )
+sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, bool bSaveInto, const OUString& rStorageName )
 {
 #ifndef DISABLE_DYNLOADING
     SaveOrDel pFunction = reinterpret_cast<SaveOrDel>( SwGlobals::getFilters().GetMswordLibSymbol( "SaveOrDelMSVBAStorage_ww8" ) );

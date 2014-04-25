@@ -99,7 +99,7 @@ void SwVbaWrapFormat::makeWrap() throw (uno::RuntimeException)
         }
         case text::WrapTextMode_PARALLEL:
         {
-            sal_Bool bContour = sal_False;
+            bool bContour = false;
             m_xPropertySet->getPropertyValue("SurroundContour") >>= bContour;
             if( bContour )
                 nType = word::WdWrapType::wdWrapTight;

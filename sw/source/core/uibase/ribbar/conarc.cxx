@@ -30,11 +30,11 @@ ConstArc::ConstArc(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView)
 {
 }
 
-sal_Bool ConstArc::MouseButtonDown( const MouseEvent& rMEvt )
+bool ConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    sal_Bool bReturn;
+    bool bReturn;
 
-    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)) == sal_True)
+    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)))
     {
         if (!nAnzButUp)
             aStartPnt = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
@@ -42,9 +42,9 @@ sal_Bool ConstArc::MouseButtonDown( const MouseEvent& rMEvt )
     return (bReturn);
 }
 
-sal_Bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
+bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if ((m_pSh->IsDrawCreate() || m_pWin->IsDrawAction()) && rMEvt.IsLeft())
     {
@@ -52,7 +52,7 @@ sal_Bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
         if (!nAnzButUp && aPnt == aStartPnt)
         {
             SwDrawBase::MouseButtonUp(rMEvt);
-            bReturn = sal_True;
+            bReturn = true;
         }
         else
         {   nAnzButUp++;
@@ -61,7 +61,7 @@ sal_Bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
             {
                 SwDrawBase::MouseButtonUp(rMEvt);
                 nAnzButUp = 0;
-                bReturn = sal_True;
+                bReturn = true;
             }
             else
                 m_pSh->EndCreate(SDRCREATE_NEXTPOINT);

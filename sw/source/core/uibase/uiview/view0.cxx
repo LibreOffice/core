@@ -141,7 +141,7 @@ void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOpt
 #if HAVE_FEATURE_DBCONNECTIVITY
 
 void SwView::SetMailMergeConfigItem(SwMailMergeConfigItem*  pConfigItem,
-                sal_uInt16 nRestart, sal_Bool bIsSource)
+                sal_uInt16 nRestart, bool bIsSource)
 {
     m_pViewImpl->SetMailMergeConfigItem(pConfigItem, nRestart, bIsSource);
     UIFeatureChanged();
@@ -157,28 +157,28 @@ sal_uInt16 SwView::GetMailMergeRestartPage() const
     return m_pViewImpl->GetMailMergeRestartPage();
 }
 
-sal_Bool SwView::IsMailMergeSourceView() const
+bool SwView::IsMailMergeSourceView() const
 {
     return m_pViewImpl->IsMailMergeSourceView();
 }
 
 #endif
 
-static sal_Bool lcl_IsViewMarks( const SwViewOption& rVOpt )
+static bool lcl_IsViewMarks( const SwViewOption& rVOpt )
 {
     return  rVOpt.IsHardBlank() &&
             rVOpt.IsSoftHyph() &&
             SwViewOption::IsFieldShadings();
 }
-static void lcl_SetViewMarks(SwViewOption& rVOpt, sal_Bool bOn )
+static void lcl_SetViewMarks(SwViewOption& rVOpt, bool bOn )
 {
     rVOpt.SetHardBlank(bOn);
     rVOpt.SetSoftHyph(bOn);
     SwViewOption::SetAppearanceFlag(
-            VIEWOPT_FIELD_SHADINGS, bOn, sal_True);
+            VIEWOPT_FIELD_SHADINGS, bOn, true);
 }
 
-static void lcl_SetViewMetaChars( SwViewOption& rVOpt, sal_Bool bOn)
+static void lcl_SetViewMetaChars( SwViewOption& rVOpt, bool bOn)
 {
     rVOpt.SetViewMetaChars( bOn );
     if(bOn && !(rVOpt.IsParagraph()     ||
@@ -247,7 +247,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
 
     while(nWhich)
     {
-        sal_Bool bReadonly = GetDocShell()->IsReadOnly();
+        bool bReadonly = GetDocShell()->IsReadOnly();
         if ( bReadonly && nWhich != FN_VIEW_GRAPHIC )
         {
             rSet.DisableItem(nWhich);
@@ -257,7 +257,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
         {
             case FN_RULER:
             {
-                if(!pOpt->IsViewHRuler(sal_True) && !pOpt->IsViewVRuler(sal_True))
+                if(!pOpt->IsViewHRuler(true) && !pOpt->IsViewVRuler(true))
                 {
                     rSet.DisableItem(nWhich);
                     nWhich = 0;
@@ -269,7 +269,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case SID_BROWSER_MODE:
             case FN_PRINT_LAYOUT:
             {
-                sal_Bool bState = pOpt->getBrowseMode();
+                bool bState = pOpt->getBrowseMode();
                 if(FN_PRINT_LAYOUT == nWhich)
                     bState = !bState;
                 aBool.SetValue( bState );
@@ -352,7 +352,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
 void SwView::ExecViewOptions(SfxRequest &rReq)
 {
     SwViewOption* pOpt = new SwViewOption( *GetWrtShell().GetViewOptions() );
-    sal_Bool bModified = GetWrtShell().IsModified();
+    bool bModified = GetWrtShell().IsModified();
 
     int eState = STATE_TOGGLE;
     sal_Bool bSet = sal_False;
@@ -368,7 +368,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         eState = bSet ? STATE_ON : STATE_OFF;
     }
 
-    sal_Bool bFlag = STATE_ON == eState;
+    bool bFlag = STATE_ON == eState;
     uno::Reference< linguistic2::XLinguProperties >  xLngProp( ::GetLinguPropertySet() );
 
     switch ( nSlot )
@@ -382,13 +382,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     case FN_VIEW_FIELDS:
         if( STATE_TOGGLE == eState )
             bFlag = !SwViewOption::IsFieldShadings() ;
-        SwViewOption::SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bFlag, sal_True );
+        SwViewOption::SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bFlag, true );
         break;
 
     case FN_VIEW_BOUNDS:
         if( STATE_TOGGLE == eState )
             bFlag = !SwViewOption::IsDocBoundaries();
-        SwViewOption::SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bFlag, sal_True );
+        SwViewOption::SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bFlag, true );
         break;
 
     case SID_GRID_VISIBLE:
@@ -480,7 +480,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     case FN_VIEW_TABLEGRID:
         if( STATE_TOGGLE == eState )
             bFlag = !SwViewOption::IsTableBoundaries();
-        SwViewOption::SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bFlag, sal_True );
+        SwViewOption::SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bFlag, true );
         break;
 
     case FN_VIEW_FIELDNAME:
@@ -527,7 +527,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                 SwDoc *pDoc = pDocSh? pDocSh->GetDoc() : NULL;
 
                 // right now we don't have view options for automatic grammar checking. Thus...
-                sal_Bool bIsAutoGrammar = sal_False;
+                bool bIsAutoGrammar = false;
                 aCfg.GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bIsAutoGrammar;
 
                 if (pDoc && bIsAutoGrammar)
@@ -550,7 +550,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     }
 
     // Set UserPrefs, mark request as modified
-    sal_Bool bWebView =  0 != dynamic_cast<const SwWebView*>(this);
+    bool bWebView =  0 != dynamic_cast<const SwWebView*>(this);
     SwWrtShell &rSh = GetWrtShell();
     rSh.StartAction();
     SwModule* pModule = SW_MOD();
@@ -578,8 +578,8 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     if ( nSlot == SID_AUTOSPELL_CHECK )
         GetPostItMgr()->SetSpellChecking();
 
-    const sal_Bool bLockedView = rSh.IsViewLocked();
-    rSh.LockView( sal_True );    //lock visible section
+    const bool bLockedView = rSh.IsViewLocked();
+    rSh.LockView( true );    //lock visible section
     GetWrtShell().EndAction();
     if( bBrowseModeChanged && !bFlag )
         CalcVisArea( GetEditWin().GetOutputSizePixel() );
@@ -588,7 +588,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     delete pOpt;
     Invalidate(rReq.GetSlot());
     if(!pArgs)
-        rReq.AppendItem(SfxBoolItem(nSlot, (sal_Bool)bFlag));
+        rReq.AppendItem(SfxBoolItem(nSlot, bFlag));
     rReq.Done();
 }
 

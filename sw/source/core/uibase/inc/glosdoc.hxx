@@ -53,9 +53,9 @@ class SW_DLLPUBLIC SwGlossaries
     std::vector<OUString>   m_aInvalidPaths;
     std::vector<OUString>   m_PathArr;
     std::vector<OUString>   m_GlosArr;
-    sal_Bool                m_bError;
+    bool                m_bError;
 
-    SAL_DLLPRIVATE SwTextBlocks* GetGlosDoc(const OUString &rName, sal_Bool bCreate = sal_True) const;
+    SAL_DLLPRIVATE SwTextBlocks* GetGlosDoc(const OUString &rName, bool bCreate = true) const;
     SAL_DLLPRIVATE std::vector<OUString> & GetNameList();
 
     // implementation in unoatxt.cxx
@@ -108,10 +108,10 @@ public:
     OUString        GetGroupName(sal_uInt16 );
     OUString        GetGroupTitle( const OUString& rGroupName );
 
-    sal_Bool            FindGroupName(OUString& rGroup);
+    bool            FindGroupName(OUString& rGroup);
 
     SwTextBlocks*   GetGroupDoc(const OUString &rName,
-                                sal_Bool bCreate = sal_False);
+                                bool bCreate = false);
     SwTextBlocks*   GetDefGroupDoc() { return GetGroupDoc(GetDefName()); }
     void            PutGroupDoc(SwTextBlocks *pBlock);
     static OUString GetDefName();
@@ -119,14 +119,14 @@ public:
 
     OUString        GetCompleteGroupName( const OUString& GroupName );
 
-    sal_Bool            NewGroupDoc(OUString &rGroupName, const OUString& rTitle);
-    sal_Bool            RenameGroupDoc(const OUString& sOldGroup, OUString& sNewGroup, const OUString& rNewTitle);
-    sal_Bool        DelGroupDoc(const OUString &);
-    SwDocShellRef   EditGroupDoc(const OUString &rGrpName, const OUString& rShortName, sal_Bool bShow = sal_True );
+    bool            NewGroupDoc(OUString &rGroupName, const OUString& rTitle);
+    bool            RenameGroupDoc(const OUString& sOldGroup, OUString& sNewGroup, const OUString& rNewTitle);
+    bool            DelGroupDoc(const OUString &);
+    SwDocShellRef   EditGroupDoc(const OUString &rGrpName, const OUString& rShortName, bool bShow = true );
     void            SaveGroupDoc(const OUString &rGrpName, const OUString& rLongName );
-    void            UpdateGlosPath(sal_Bool bFull);
+    void            UpdateGlosPath(bool bFull);
     void            ShowError();
-    inline sal_uLong            IsGlosPathErr() { return m_bError; }
+    bool            IsGlosPathErr() { return m_bError; }
     std::vector<OUString> const& GetPathArray() const { return m_PathArr; }
 };
 

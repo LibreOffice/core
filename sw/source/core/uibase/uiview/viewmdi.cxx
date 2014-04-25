@@ -59,7 +59,7 @@ sal_Int32 SwView::m_nActMark = 0;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
-void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, sal_Bool bViewOnly )
+void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, bool bViewOnly )
 {
     bool const bCrsrIsVisible(m_pWrtShell->IsCrsrVisible());
     _SetZoom( GetEditWin().GetOutputSizePixel(), eZoomType, nFactor, bViewOnly );
@@ -69,10 +69,10 @@ void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, sal_Bool bViewOnly )
 }
 
 void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
-                        short nFactor, sal_Bool bViewOnly )
+                        short nFactor, bool bViewOnly )
 {
-    sal_Bool bUnLockView = !m_pWrtShell->IsViewLocked();
-    m_pWrtShell->LockView( sal_True );
+    bool bUnLockView = !m_pWrtShell->IsViewLocked();
+    m_pWrtShell->LockView( true );
     m_pWrtShell->LockPaint();
 
     {
@@ -80,7 +80,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
 
     long nFac = nFactor;
 
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    bool bWeb = 0 != PTR_CAST(SwWebView, this);
     SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
 
     const SwPageDesc &rDesc = m_pWrtShell->GetPageDesc( m_pWrtShell->GetCurPageDesc() );
@@ -202,13 +202,13 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     }
     m_pWrtShell->UnlockPaint();
     if( bUnLockView )
-        m_pWrtShell->LockView( sal_False );
+        m_pWrtShell->LockView( false );
 }
 
-void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewOnly )
+void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly )
 {
-    const sal_Bool bUnLockView = !m_pWrtShell->IsViewLocked();
-    m_pWrtShell->LockView( sal_True );
+    const bool bUnLockView = !m_pWrtShell->IsViewLocked();
+    m_pWrtShell->LockView( true );
     m_pWrtShell->LockPaint();
 
     {
@@ -217,7 +217,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewO
 
     if ( !GetViewFrame()->GetFrame().IsInPlace() && !bViewOnly )
     {
-        const sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+        const bool bWeb = 0 != PTR_CAST(SwWebView, this);
         SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
 
         // Update MasterUsrPrefs and after that update the ViewOptions of the current View.
@@ -251,7 +251,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewO
 
     m_pWrtShell->UnlockPaint();
     if( bUnLockView )
-        m_pWrtShell->LockView( sal_False );
+        m_pWrtShell->LockView( false );
 
     SfxBindings& rBnd = GetViewFrame()->GetBindings();
     rBnd.Invalidate( SID_ATTR_VIEWLAYOUT );
@@ -273,15 +273,15 @@ IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
         {
             case VCLEVENT_WINDOW_HIDE:
                 if( pChildWin == m_pHScrollbar )
-                    ShowHScrollbar( sal_False );
+                    ShowHScrollbar( false );
                 else if( pChildWin == m_pVScrollbar )
-                    ShowVScrollbar( sal_False );
+                    ShowVScrollbar( false );
                 break;
             case VCLEVENT_WINDOW_SHOW:
                 if( pChildWin == m_pHScrollbar )
-                    ShowHScrollbar( sal_True );
+                    ShowHScrollbar( true );
                 else if( pChildWin == m_pVScrollbar )
-                    ShowVScrollbar( sal_True );
+                    ShowVScrollbar( true );
                 break;
         }
     }
@@ -289,7 +289,7 @@ IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
     return 0;
 }
 
-int SwView::_CreateScrollbar( sal_Bool bHori )
+int SwView::_CreateScrollbar( bool bHori )
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
     SwScrollbar** ppScrollbar = bHori ? &m_pHScrollbar : &m_pVScrollbar;
@@ -344,7 +344,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
                 eType = GOTOOBJ_FLY_GRF;
             else if(m_nMoveType == NID_OLE)
                 eType = GOTOOBJ_FLY_OLE;
-            sal_Bool bSuccess = bNext ?
+            bool bSuccess = bNext ?
                     rSh.GotoNextFly(eType) :
                         rSh.GotoPrevFly(eType);
             if(bSuccess)
@@ -442,7 +442,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         case NID_SRCH_REP:
         if(m_pSrchItem)
         {
-            sal_Bool bBackward = m_pSrchItem->GetBackward();
+            bool bBackward = m_pSrchItem->GetBackward();
             if(rSh.HasSelection() && !bNext == rSh.IsCrsrPtAtEnd())
                 rSh.SwapPam();
             m_pSrchItem->SetBackward(!bNext);
@@ -460,7 +460,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
             break;
 
         case NID_TABLE_FORMULA_ERROR:
-            rSh.GotoNxtPrvTblFormula( bNext, sal_True );
+            rSh.GotoNxtPrvTblFormula( bNext, true );
             break;
     }
     pThis->m_pEditWin->GrabFocus();
@@ -569,28 +569,28 @@ void SwView::SetActMark(sal_Int32 nSet)
     m_nActMark = nSet;
 }
 
-void SwView::ShowHScrollbar(sal_Bool bShow)
+void SwView::ShowHScrollbar(bool bShow)
 {
     OSL_ENSURE(m_pHScrollbar, "Scrollbar invalid");
     m_pHScrollbar->ExtendedShow(bShow);
 }
 
-sal_Bool SwView::IsHScrollbarVisible()const
+bool SwView::IsHScrollbarVisible()const
 {
     OSL_ENSURE(m_pHScrollbar, "Scrollbar invalid");
-    return m_pHScrollbar->IsVisible( sal_False ) || m_pHScrollbar->IsAuto();
+    return m_pHScrollbar->IsVisible( false ) || m_pHScrollbar->IsAuto();
 }
 
-void SwView::ShowVScrollbar(sal_Bool bShow)
+void SwView::ShowVScrollbar(bool bShow)
 {
     OSL_ENSURE(m_pVScrollbar, "Scrollbar invalid");
     m_pVScrollbar->ExtendedShow(bShow);
 }
 
-sal_Bool SwView::IsVScrollbarVisible()const
+bool SwView::IsVScrollbarVisible()const
 {
     OSL_ENSURE(m_pVScrollbar, "Scrollbar invalid");
-    return m_pVScrollbar->IsVisible( sal_False );
+    return m_pVScrollbar->IsVisible( false );
 }
 
 void SwView::EnableHScrollbar(bool bEnable)

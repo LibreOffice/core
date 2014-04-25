@@ -470,7 +470,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         if ( IsInCache() )
         {
             SwFrm::GetCache().Delete( this );
-            SetInCache( sal_False );
+            SetInCache( false );
         }
 
         UnlockModify(); // Benachrichtigungen wieder freischalten
@@ -687,7 +687,7 @@ SwCntntNode *SwTxtNode::JoinNext()
         if( pTxtNode->HasAnyIndex() )
         {
             // alle Crsr/StkCrsr/UnoCrsr aus dem Loeschbereich verschieben
-            pDoc->CorrAbs( aIdx, SwPosition( *this ), nOldLen, sal_True );
+            pDoc->CorrAbs( aIdx, SwPosition( *this ), nOldLen, true );
         }
         rNds.Delete(aIdx);
         SetWrong( pList, false );
@@ -781,7 +781,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
         if( pTxtNode->HasAnyIndex() )
         {
             // alle Crsr/StkCrsr/UnoCrsr aus dem Loeschbereich verschieben
-            pDoc->CorrAbs( aIdx, SwPosition( *this ), nLen, sal_True );
+            pDoc->CorrAbs( aIdx, SwPosition( *this ), nLen, true );
         }
         rNds.Delete(aIdx);
         SetWrong( pList, false );
@@ -892,8 +892,8 @@ void SwTxtNode::Update(
             const sal_uInt16 coArrSz =
                 static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) - static_cast<sal_uInt16>(RES_CHRATR_BEGIN);
 
-            sal_Bool aDontExp[ coArrSz ];
-            memset( &aDontExp, 0, coArrSz * sizeof(sal_Bool) );
+            bool aDontExp[ coArrSz ];
+            memset( &aDontExp, 0, coArrSz * sizeof(bool) );
 
             for ( sal_uInt16 n = 0; n < m_pSwpHints->Count(); ++n )
             {
@@ -946,12 +946,12 @@ void SwTxtNode::Update(
                             {
                                 bNoExp = true;
                                 aDontExp[ static_cast<sal_uInt16>(RES_TXTATR_CHARFMT) - static_cast<sal_uInt16>(RES_CHRATR_BEGIN) ]
-                                    = sal_True;
+                                    = true;
                                 aDontExp[ static_cast<sal_uInt16>(RES_TXTATR_INETFMT) - static_cast<sal_uInt16>(RES_CHRATR_BEGIN) ]
-                                    = sal_True;
+                                    = true;
                             }
                             else
-                                aDontExp[ nWhPos ] = sal_True;
+                                aDontExp[ nWhPos ] = true;
                         }
                         else if( bNoExp )
                         {
@@ -2440,7 +2440,7 @@ SwNumRule* SwTxtNode::_GetNumRule(bool bInParent) const
             SwTxtFmtColl* pColl = GetTxtColl();
             if ( pColl )
             {
-                const SwNumRuleItem& rDirectItem = pColl->GetNumRule( sal_False );
+                const SwNumRuleItem& rDirectItem = pColl->GetNumRule( false );
                 if ( rDirectItem.GetValue().isEmpty() )
                 {
                     pRet = 0L;
@@ -2471,9 +2471,9 @@ void SwTxtNode::NumRuleChgd()
     if( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( false );
     }
-    SetInSwFntCache( sal_False );
+    SetInSwFntCache( false );
 
     // Sending "noop" modify in order to cause invalidations of registered
     // <SwTxtFrm> instances to get the list style change respectively the change
@@ -2580,7 +2580,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, bool bNext,
         if( !bNext && bRemoveFromCache && IsInCache() )
         {
             SwFrm::GetCache().Delete( this );
-            SetInCache( sal_False );
+            SetInCache( false );
         }
     }
     SwNodes& rNds = GetNodes();
@@ -2625,7 +2625,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, bool bNext,
             if ( ClearItemsFromAttrSet( aClearWhichIds ) != 0 && IsInCache() )
             {
                 SwFrm::GetCache().Delete( this );
-                SetInCache( sal_False );
+                SetInCache( false );
             }
         }
     }
@@ -2764,7 +2764,7 @@ OUString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
         {
             return pRule->MakeNumString( GetNum()->GetNumberVector(),
                                      _bInclPrefixAndSuffixStrings ? sal_True : sal_False,
-                                     sal_False,
+                                     false,
                                      _nRestrictToThisLevel );
         }
     }
@@ -2991,8 +2991,8 @@ static void Replace0xFF(
     OUStringBuffer & rTxt,
     sal_Int32 & rTxtStt,
     sal_Int32 nEndPos,
-    sal_Bool const bExpandFlds,
-    sal_Bool const bExpandFtn = sal_True )
+    bool const bExpandFlds,
+    bool const bExpandFtn = true )
 {
     if (rNode.GetpSwpHints())
     {
@@ -3589,7 +3589,7 @@ namespace {
                 {
                     lcl_ResetParAttrs(rTxtNode);
                     // #i70748#
-                    if ( dynamic_cast<const SfxUInt16Item &>(rTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, sal_False )).GetValue() > 0 )
+                    if ( dynamic_cast<const SfxUInt16Item &>(rTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, false )).GetValue() > 0 )
                     {
                         rTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
                     }
@@ -4540,28 +4540,28 @@ namespace {
     // End of class <HandleSetAttrAtTxtNode>
 }
 
-sal_Bool SwTxtNode::SetAttr( const SfxPoolItem& pItem )
+bool SwTxtNode::SetAttr( const SfxPoolItem& pItem )
 {
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
     HandleSetAttrAtTxtNode aHandleSetAttr( *this, pItem );
 
-    sal_Bool bRet = SwCntntNode::SetAttr( pItem );
+    bool bRet = SwCntntNode::SetAttr( pItem );
 
     mbInSetOrResetAttr = bOldIsSetOrResetAttr;
 
     return bRet;
 }
 
-sal_Bool SwTxtNode::SetAttr( const SfxItemSet& rSet )
+bool SwTxtNode::SetAttr( const SfxItemSet& rSet )
 {
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
     HandleSetAttrAtTxtNode aHandleSetAttr( *this, rSet );
 
-    sal_Bool bRet = SwCntntNode::SetAttr( rSet );
+    bool bRet = SwCntntNode::SetAttr( rSet );
 
     mbInSetOrResetAttr = bOldIsSetOrResetAttr;
 
@@ -4809,7 +4809,7 @@ namespace {
             // #i70748#
             // #i105562#
             else if ( mrTxtNode.GetpSwAttrSet() &&
-                      dynamic_cast<const SfxUInt16Item &>(mrTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, sal_False )).GetValue() > 0 )
+                      dynamic_cast<const SfxUInt16Item &>(mrTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, false )).GetValue() > 0 )
             {
                 mrTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
             }
@@ -4840,28 +4840,28 @@ namespace {
     // End of class <HandleResetAttrAtTxtNode>
 }
 
-sal_Bool SwTxtNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
+bool SwTxtNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 {
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
     HandleResetAttrAtTxtNode aHandleResetAttr( *this, nWhich1, nWhich2 );
 
-    sal_Bool bRet = SwCntntNode::ResetAttr( nWhich1, nWhich2 );
+    bool bRet = SwCntntNode::ResetAttr( nWhich1, nWhich2 );
 
     mbInSetOrResetAttr = bOldIsSetOrResetAttr;
 
     return bRet;
 }
 
-sal_Bool SwTxtNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
+bool SwTxtNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
 {
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
     HandleResetAttrAtTxtNode aHandleResetAttr( *this, rWhichArr );
 
-    sal_Bool bRet = SwCntntNode::ResetAttr( rWhichArr );
+    bool bRet = SwCntntNode::ResetAttr( rWhichArr );
 
     mbInSetOrResetAttr = bOldIsSetOrResetAttr;
 

@@ -156,7 +156,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                         nMask = SWSTYLEBIT_HTML;
                     else
                     {
-                        const int nSelection = pShell->GetFrmType(0,sal_True);
+                        const int nSelection = pShell->GetFrmType(0,true);
                         if(pShell->GetCurTOX())
                             nMask = SWSTYLEBIT_IDX  ;
                         else if(nSelection & FRMTYPE_HEADER     ||
@@ -198,7 +198,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    sal_uInt16 n = pShell->GetCurPageDesc( sal_False );
+                    sal_uInt16 n = pShell->GetCurPageDesc( false );
                     if( n < pShell->GetPageDescCnt() )
                         aName = pShell->GetPageDesc( n ).GetName();
 
@@ -281,7 +281,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 false, &pItem ))
                 sParent = ((const SfxStringItem*)pItem)->GetValue();
 
-            nRet = Edit( sName, sParent, nFamily, nMask, sal_True, OString(), 0, rReq.IsAPI() );
+            nRet = Edit( sName, sParent, nFamily, nMask, true, OString(), 0, rReq.IsAPI() );
         }
         break;
 
@@ -441,7 +441,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 switch(nSlot)
                 {
                     case SID_STYLE_EDIT:
-                        nRet = Edit(aParam, aEmptyOUStr, nFamily, nMask, sal_False, OString(), pActShell );
+                        nRet = Edit(aParam, aEmptyOUStr, nFamily, nMask, false, OString(), pActShell );
                         break;
                     case SID_STYLE_DELETE:
                         nRet = Delete(aParam, nFamily);
@@ -608,16 +608,16 @@ sal_uInt16 SwDocShell::Edit(
     const OUString &rParent,
     const sal_uInt16 nFamily,
     sal_uInt16 nMask,
-    const sal_Bool bNew,
+    const bool bNew,
     const OString& sPage,
     SwWrtShell* pActShell,
-    const sal_Bool bBasic )
+    const bool bBasic )
 {
     assert( GetWrtShell() );
     SfxStyleSheetBase *pStyle = 0;
 
     sal_uInt16 nRet = nMask;
-    sal_Bool bModified = pDoc->IsModified();
+    bool bModified = pDoc->IsModified();
 
     if( bNew )
     {
@@ -1215,7 +1215,7 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
 
 void  SwDocShell::LoadStyles( SfxObjectShell& rSource )
 {
-    _LoadStyles(rSource, sal_False);
+    _LoadStyles(rSource, false);
 }
 /* --------------------------------------------------
     bPreserveCurrentDocument determines whether SetFixFields() is called
@@ -1224,7 +1224,7 @@ void  SwDocShell::LoadStyles( SfxObjectShell& rSource )
     Calls of ::LoadStyles() normally use files especially loaded for the purpose
     of importing styles.
  --------------------------------------------------*/
-void SwDocShell::_LoadStyles( SfxObjectShell& rSource, sal_Bool bPreserveCurrentDocument )
+void SwDocShell::_LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocument )
 {
 /*  [Description]
 
@@ -1256,7 +1256,7 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, sal_Bool bPreserveCurrent
         }
         else
         {
-            sal_Bool bModified = pDoc->IsModified();
+            bool bModified = pDoc->IsModified();
             pDoc->ReplaceStyles( *((SwDocShell&)rSource).pDoc );
             if( !bModified && pDoc->IsModified() && !pView )
             {
@@ -1275,7 +1275,7 @@ void SwDocShell::FormatPage(
     const OString& rPageId,
     SwWrtShell& rActShell )
 {
-    Edit( rPage, aEmptyOUStr, SFX_STYLE_FAMILY_PAGE, 0, sal_False, rPageId, &rActShell);
+    Edit( rPage, aEmptyOUStr, SFX_STYLE_FAMILY_PAGE, 0, false, rPageId, &rActShell);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

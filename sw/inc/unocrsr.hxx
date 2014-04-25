@@ -23,9 +23,9 @@
 
 class SwUnoCrsr : public virtual SwCursor, public SwModify
 {
-    sal_Bool bRemainInSection : 1;
-    sal_Bool bSkipOverHiddenSections : 1;
-    sal_Bool bSkipOverProtectSections : 1;
+    bool bRemainInSection : 1;
+    bool bSkipOverHiddenSections : 1;
+    bool bSkipOverProtectSections : 1;
 
 public:
     SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing = 0 );
@@ -34,31 +34,31 @@ public:
 protected:
 
     virtual const SwCntntFrm* DoSetBidiLevelLeftRight(
-        sal_Bool & io_rbLeft, sal_Bool bVisualAllowed, sal_Bool bInsertCrsr) SAL_OVERRIDE;
+        bool & io_rbLeft, bool bVisualAllowed, bool bInsertCrsr) SAL_OVERRIDE;
     virtual void DoSetBidiLevelUpDown() SAL_OVERRIDE;
 
 public:
 
     // Does a selection of content exist in table?
     // Return value indicates if the cursor remains at its old position.
-    virtual sal_Bool IsSelOvr( int eFlags =
+    virtual bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS )) SAL_OVERRIDE;
 
     virtual bool IsReadOnlyAvailable() const SAL_OVERRIDE;
 
-    sal_Bool IsRemainInSection() const          { return bRemainInSection; }
-    void SetRemainInSection( sal_Bool bFlag )   { bRemainInSection = bFlag; }
+    bool IsRemainInSection() const          { return bRemainInSection; }
+    void SetRemainInSection( bool bFlag )   { bRemainInSection = bFlag; }
 
-    virtual sal_Bool IsSkipOverProtectSections() const SAL_OVERRIDE
+    virtual bool IsSkipOverProtectSections() const SAL_OVERRIDE
                                     { return bSkipOverProtectSections; }
-    void SetSkipOverProtectSections( sal_Bool bFlag )
+    void SetSkipOverProtectSections( bool bFlag )
                                     { bSkipOverProtectSections = bFlag; }
 
-    virtual sal_Bool IsSkipOverHiddenSections() const SAL_OVERRIDE
+    virtual bool IsSkipOverHiddenSections() const SAL_OVERRIDE
                                     { return bSkipOverHiddenSections; }
-    void SetSkipOverHiddenSections( sal_Bool bFlag )
+    void SetSkipOverHiddenSections( bool bFlag )
                                     { bSkipOverHiddenSections = bFlag; }
 
     // make copy of cursor
@@ -82,7 +82,7 @@ public:
 
     // Does a selection of content exist in table?
     // Return value indicates if the cursor remains at its old position.
-    virtual sal_Bool IsSelOvr( int eFlags =
+    virtual bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS )) SAL_OVERRIDE;

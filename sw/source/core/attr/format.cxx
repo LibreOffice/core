@@ -46,7 +46,7 @@ SwFmt::SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
     nPoolHelpId( USHRT_MAX ),
     nPoolHlpFileId( UCHAR_MAX )
 {
-    bAutoUpdateFmt = sal_False; // LAYER_IMPL
+    bAutoUpdateFmt = false; // LAYER_IMPL
     bAutoFmt = true;
     bWritten = bFmtInDTOR = bHidden = false;
 
@@ -65,7 +65,7 @@ SwFmt::SwFmt( SwAttrPool& rPool, const OUString& rFmtNm,
     nPoolHelpId( USHRT_MAX ),
     nPoolHlpFileId( UCHAR_MAX )
 {
-    bAutoUpdateFmt = sal_False; // LAYER_IMPL
+    bAutoUpdateFmt = false; // LAYER_IMPL
     bAutoFmt = true;
     bWritten = bFmtInDTOR = bHidden = false;
 
@@ -103,9 +103,9 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( false );
     }
-    SetInSwFntCache( sal_False );
+    SetInSwFntCache( false );
 
     // copy only array with attributes delta
     SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
@@ -144,7 +144,7 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
     return *this;
 }
 
-void SwFmt::SetName( const OUString& rNewName, sal_Bool bBroadcast )
+void SwFmt::SetName( const OUString& rNewName, bool bBroadcast )
 {
     OSL_ENSURE( !IsDefault(), "SetName: Defaultformat" );
     if( bBroadcast )
@@ -171,15 +171,15 @@ void SwFmt::SetName( const OUString& rNewName, sal_Bool bBroadcast )
     in which <this> is defined. Currently this is important for DropCaps
     because that contains data that needs to be copied deeply.
 */
-void SwFmt::CopyAttrs( const SwFmt& rFmt, sal_Bool bReplace )
+void SwFmt::CopyAttrs( const SwFmt& rFmt, bool bReplace )
 {
     // copy only array with attributes delta
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( false );
     }
-    SetInSwFntCache( sal_False );
+    SetInSwFntCache( false );
 
     // special treatments for some attributes
     SwAttrSet* pChgSet = (SwAttrSet*)&rFmt.aSet;
@@ -339,7 +339,7 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
     }
 }
 
-sal_Bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
+bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
 {
     if ( pDerFrom )
     {
@@ -347,7 +347,7 @@ sal_Bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
         while ( pFmt != 0 )
         {
             if ( pFmt == this )
-                return sal_False;
+                return false;
 
             pFmt=pFmt->DerivedFrom();
         }
@@ -360,7 +360,7 @@ sal_Bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
             pDerFrom = pDerFrom->DerivedFrom();
     }
     if ( (pDerFrom == DerivedFrom()) || (pDerFrom == this) )
-        return sal_False;
+        return false;
 
     OSL_ENSURE( Which()==pDerFrom->Which()
             || ( Which()==RES_CONDTXTFMTCOLL && pDerFrom->Which()==RES_TXTFMTCOLL)
@@ -371,9 +371,9 @@ sal_Bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( false );
     }
-    SetInSwFntCache( sal_False );
+    SetInSwFntCache( false );
 
     pDerFrom->Add( this );
     aSet.SetParent( &pDerFrom->aSet );
@@ -382,10 +382,10 @@ sal_Bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
     SwFmtChg aNewFmt( this );
     ModifyNotification( &aOldFmt, &aNewFmt );
 
-    return sal_True;
+    return true;
 }
 
-const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, sal_Bool bInParents ) const
+const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
 {
     if(RES_BACKGROUND == nWhich && RES_FLYFRMFMT == Which())
     {
@@ -405,7 +405,7 @@ const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, sal_Bool bInParents ) c
 }
 
 
-SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent, const SfxPoolItem **ppItem ) const
+SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem ) const
 {
     if(RES_BACKGROUND == nWhich && RES_FLYFRMFMT == Which())
     {
@@ -532,9 +532,9 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( false );
     }
-    SetInSwFntCache( sal_False );
+    SetInSwFntCache( false );
 
     bool bRet = false;
 
@@ -669,9 +669,9 @@ sal_uInt16 SwFmt::ResetAllFmtAttr()
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( false );
     }
-    SetInSwFntCache( sal_False );
+    SetInSwFntCache( false );
 
     // if Modify is locked then no modifications will be sent
     if( IsModifyLocked() )
@@ -702,9 +702,9 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( false );
     }
-    SetInSwFntCache( sal_False );
+    SetInSwFntCache( false );
 
     // if Modify is locked then no modifications will be sent
     if( IsModifyLocked() )
@@ -782,7 +782,7 @@ void SwFmt::SetGrabBagItem(const uno::Any& rVal)
 }
 
 //UUUU
-const SvxBrushItem& SwFmt::GetBackground(sal_Bool bInP) const
+const SvxBrushItem& SwFmt::GetBackground(bool bInP) const
 {
     if(RES_FLYFRMFMT == Which())
     {

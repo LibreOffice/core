@@ -140,11 +140,11 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             break;
 
         case FN_FRAME_UP:
-            rSh.SelectionToTop( sal_False );
+            rSh.SelectionToTop( false );
             break;
 
         case FN_FRAME_DOWN:
-            rSh.SelectionToBottom( sal_False );
+            rSh.SelectionToBottom( false );
             break;
         case FN_INSERT_FRAME:
             if (!pArgs)
@@ -292,7 +292,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         return;
     }
 
-    SwFlyFrmAttrMgr aMgr( sal_False, &rSh, FRMMGR_TYPE_NONE );
+    SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
     bool bUpdateMgr = true;
     bool bCopyToFmt = false;
     switch ( nSlot )
@@ -632,7 +632,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         case FN_FRAME_MIRROR_ON_EVEN_PAGES:
         {
             SwFmtHoriOrient aHori(aMgr.GetHoriOrient());
-            sal_Bool bMirror = !aHori.IsPosToggle();
+            bool bMirror = !aHori.IsPosToggle();
             aHori.SetPosToggle(bMirror);
             SfxItemSet aSet(GetPool(), RES_HORI_ORIENT, RES_HORI_ORIENT);
             aSet.Put(aHori);
@@ -706,13 +706,13 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                             0 );
         rSh.GetFlyFrmAttr( aSet );
 
-        sal_Bool bProtect = rSh.IsSelObjProtected(FLYPROTECT_POS);
-        sal_Bool bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
+        bool bProtect = rSh.IsSelObjProtected(FLYPROTECT_POS);
+        bool bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
         bProtect |= bParentCntProt;
 
-        const sal_uInt16 eFrmType = rSh.GetFrmType(0,sal_True);
-        SwFlyFrmAttrMgr aMgr( sal_False, &rSh, FRMMGR_TYPE_NONE );
+        const sal_uInt16 eFrmType = rSh.GetFrmType(0,true);
+        SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
 
         SfxWhichIter aIter( rSet );
         sal_uInt16 nWhich = aIter.FirstWhich();
@@ -868,7 +868,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                         }
                         else
                         {
-                            sal_Bool bChainMode = rSh.GetView().GetEditWin().IsChainMode();
+                            bool bChainMode = rSh.GetView().GetEditWin().IsChainMode();
                             rSet.Put( SfxBoolItem( FN_FRAME_CHAIN, bChainMode ) );
                         }
                     }

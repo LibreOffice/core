@@ -30,10 +30,10 @@ class SwVbaHeadersFooters : public SwVbaHeadersFooters_BASE
 private:
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::beans::XPropertySet > mxPageStyleProps;
-    sal_Bool mbHeader;
+    bool mbHeader;
 
 public:
-    SwVbaHeadersFooters( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps, sal_Bool isHeader );
+    SwVbaHeadersFooters( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps, bool isHeader );
     virtual ~SwVbaHeadersFooters() {}
 
     virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException) SAL_OVERRIDE;

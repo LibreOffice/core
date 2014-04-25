@@ -246,7 +246,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
 void SwCaptionDialog::Apply()
 {
     InsCaptionOpt aOpt;
-    aOpt.UseCaption() = sal_True;
+    aOpt.UseCaption() = true;
     OUString aName( m_pCategoryBox->GetText() );
     if ( aName == m_sNone )
     {
@@ -366,7 +366,7 @@ void SwCaptionDialog::DrawSample()
                     aNumVector.push_back(1);
 
                 OUString sNumber( rSh.GetOutlineNumRule()->
-                                MakeNumString(aNumVector, sal_False ));
+                                MakeNumString(aNumVector, false ));
                 if( !sNumber.isEmpty() )
                     aStr += sNumber + pFldType->GetDelimiter();
             }

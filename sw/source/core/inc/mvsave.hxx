@@ -107,7 +107,7 @@ void _RestFlyInRange( _SaveFlyArr& rArr, const SwNodeIndex& rSttIdx,
                       const SwNodeIndex* pInsPos );
 void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr );
 void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
-                       _SaveFlyArr& rArr, sal_Bool bMoveAllFlys );
+                       _SaveFlyArr& rArr, bool bMoveAllFlys );
 
 void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     const SwNodeIndex& rPtNdIdx );

@@ -262,21 +262,21 @@ bool CheckNodesRange( const SwNodeIndex& rStt,
     return false; // somewhere in between => error
 }
 
-sal_Bool GoNext(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode )
+bool GoNext(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode )
 {
     if( pNd->IsCntntNode() )
         return ((SwCntntNode*)pNd)->GoNext( pIdx, nMode );
-    return sal_False;
+    return false;
 }
 
-sal_Bool GoPrevious( SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode )
+bool GoPrevious( SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode )
 {
     if( pNd->IsCntntNode() )
         return ((SwCntntNode*)pNd)->GoPrevious( pIdx, nMode );
-    return sal_False;
+    return false;
 }
 
-SwCntntNode* GoNextNds( SwNodeIndex* pIdx, sal_Bool bChk )
+SwCntntNode* GoNextNds( SwNodeIndex* pIdx, bool bChk )
 {
     SwNodeIndex aIdx( *pIdx );
     SwCntntNode* pNd = aIdx.GetNodes().GoNext( &aIdx );
@@ -291,7 +291,7 @@ SwCntntNode* GoNextNds( SwNodeIndex* pIdx, sal_Bool bChk )
     return pNd;
 }
 
-SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, sal_Bool bChk )
+SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, bool bChk )
 {
     SwNodeIndex aIdx( *pIdx );
     SwCntntNode* pNd = aIdx.GetNodes().GoPrevious( &aIdx );
@@ -663,7 +663,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
                     const SwSectionFmt* pFmt = rFmts[ --n ];
                     if( pFmt->GetProtect().IsCntntProtected() )
                     {
-                        const SwFmtCntnt& rCntnt = pFmt->GetCntnt(sal_False);
+                        const SwFmtCntnt& rCntnt = pFmt->GetCntnt(false);
                         OSL_ENSURE( rCntnt.GetCntntIdx(), "where is the SectionNode?" );
                         sal_uLong nIdx = rCntnt.GetCntntIdx()->GetIndex();
                         if( nSttIdx <= nIdx && nEndIdx >= nIdx &&
@@ -735,8 +735,8 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
 /// left or the next is out of the area, then a null-pointer is returned.
 /// @param rbFirst If <true> than first time request. If so than the position of
 ///        the PaM must not be changed!
-SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
-                        sal_Bool bInReadOnly )
+SwCntntNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFn fnMove,
+                      bool bInReadOnly )
 {
     SwCntntNode * pNd = 0;
     SwCntntFrm* pFrm;
@@ -745,7 +745,7 @@ SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
     {
         if( rbFirst )
         {
-            rbFirst = sal_False;
+            rbFirst = false;
             pNd = rPam.GetCntntNode();
             if( pNd )
             {
@@ -768,7 +768,7 @@ SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
         if( !pNd ) // is the cursor not on a CntntNode?
         {
             SwPosition aPos( *rPam.GetPoint() );
-            sal_Bool bSrchForward = fnMove == fnMoveForward;
+            bool bSrchForward = fnMove == fnMoveForward;
             SwNodes& rNodes = aPos.nNode.GetNodes();
 
             // go to next/previous CntntNode
@@ -819,7 +819,7 @@ void GoEndDoc( SwPosition * pPos )
 {
     SwNodes& rNodes = pPos->nNode.GetNodes();
     pPos->nNode = rNodes.GetEndOfContent();
-    SwCntntNode* pCNd = GoPreviousNds( &pPos->nNode, sal_True );
+    SwCntntNode* pCNd = GoPreviousNds( &pPos->nNode, true );
     if( pCNd )
         pCNd->MakeEndIndex( &pPos->nContent );
 }
@@ -848,7 +848,7 @@ void GoEndSection( SwPosition * pPos )
     do { rNodes.GoEndOfSection( &pPos->nNode ); } while( nLevel-- );
 
     // now on a EndNode, thus to the previous CntntNode
-    if( GoPreviousNds( &pPos->nNode, sal_True ) )
+    if( GoPreviousNds( &pPos->nNode, true ) )
         pPos->nNode.GetNode().GetCntntNode()->MakeEndIndex( &pPos->nContent );
 }
 
@@ -866,7 +866,7 @@ bool GoInSection( SwPaM & rPam, SwMoveFn fnMove )
 
 bool GoInNode( SwPaM & rPam, SwMoveFn fnMove )
 {
-    SwCntntNode *pNd = (*fnMove->fnNds)( &rPam.GetPoint()->nNode, sal_True );
+    SwCntntNode *pNd = (*fnMove->fnNds)( &rPam.GetPoint()->nNode, true );
     if( pNd )
         rPam.GetPoint()->nContent.Assign( pNd,
                         ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ) );
@@ -905,7 +905,7 @@ bool GoInCntntCellsSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
     return GoInNode( rPam, fnMove );
 }
 
-sal_Bool GoPrevPara( SwPaM & rPam, SwPosPara aPosPara )
+bool GoPrevPara( SwPaM & rPam, SwPosPara aPosPara )
 {
     if( rPam.Move( fnMoveBackward, fnGoNode ) )
     {
@@ -914,12 +914,12 @@ sal_Bool GoPrevPara( SwPaM & rPam, SwPosPara aPosPara )
         SwCntntNode * pNd = rPos.nNode.GetNode().GetCntntNode();
         rPos.nContent.Assign( pNd,
                             ::GetSttOrEnd( aPosPara == fnMoveForward, *pNd ) );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool GoCurrPara( SwPaM & rPam, SwPosPara aPosPara )
+bool GoCurrPara( SwPaM & rPam, SwPosPara aPosPara )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwCntntNode * pNd = rPos.nNode.GetNode().GetCntntNode();
@@ -931,23 +931,23 @@ sal_Bool GoCurrPara( SwPaM & rPam, SwPosPara aPosPara )
         if( nOld != nNew )
         {
             rPos.nContent.Assign( pNd, nNew );
-            return sal_True;
+            return true;
         }
     }
     // move node to next/previous CntntNode
     if( ( aPosPara==fnParaStart && 0 != ( pNd =
-            GoPreviousNds( &rPos.nNode, sal_True ))) ||
+            GoPreviousNds( &rPos.nNode, true ))) ||
         ( aPosPara==fnParaEnd && 0 != ( pNd =
-            GoNextNds( &rPos.nNode, sal_True ))) )
+            GoNextNds( &rPos.nNode, true ))) )
     {
         rPos.nContent.Assign( pNd,
                         ::GetSttOrEnd( aPosPara == fnMoveForward, *pNd ));
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
+bool GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
 {
     if( rPam.Move( fnMoveForward, fnGoNode ) )
     {
@@ -956,12 +956,12 @@ sal_Bool GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
         SwCntntNode * pNd = rPos.nNode.GetNode().GetCntntNode();
         rPos.nContent.Assign( pNd,
                         ::GetSttOrEnd( aPosPara == fnMoveForward, *pNd ) );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
+bool GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwPosition aSavePos( rPos ); // position for comparison
@@ -969,10 +969,10 @@ sal_Bool GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
     (rNds.*fnMove->fnSection)( &rPos.nNode );
     SwCntntNode *pNd;
     if( 0 == ( pNd = rPos.nNode.GetNode().GetCntntNode()) &&
-        0 == ( pNd = (*fnMove->fnNds)( &rPos.nNode, sal_True )) )
+        0 == ( pNd = (*fnMove->fnNds)( &rPos.nNode, true )) )
     {
         rPos = aSavePos; // do not change cursor
-        return sal_False;
+        return false;
     }
 
     rPos.nContent.Assign( pNd,
@@ -980,7 +980,7 @@ sal_Bool GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
     return aSavePos != rPos;
 }
 
-sal_Bool GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
+bool GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwPosition aSavePos( rPos ); // position for comparison
@@ -991,16 +991,16 @@ sal_Bool GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
     if( !GoInCntnt( rPam, fnMoveForward ) )
     {
         rPos = aSavePos; // do not change cursor
-        return sal_False;
+        return false;
     }
     (rNds.*fnMove->fnSection)( &rPos.nNode );
     SwCntntNode *pNd = rPos.nNode.GetNode().GetCntntNode();
     rPos.nContent.Assign( pNd,
                         ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ) );
-    return sal_True;
+    return true;
 }
 
-sal_Bool GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
+bool GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwPosition aSavePos( rPos ); // position for comparison
@@ -1011,13 +1011,13 @@ sal_Bool GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
     if( !GoInCntnt( rPam, fnMoveBackward ))
     {
         rPos = aSavePos; // do not change cursor
-        return sal_False;
+        return false;
     }
     (rNds.*fnMove->fnSection)( &rPos.nNode );
     SwCntntNode *pNd = rPos.nNode.GetNode().GetCntntNode();
     rPos.nContent.Assign( pNd,
                             ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ));
-    return sal_True;
+    return true;
 }
 
 OUString SwPaM::GetTxt() const

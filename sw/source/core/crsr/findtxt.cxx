@@ -226,7 +226,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
     // If bFound is true then the string was found and is between nStart and nEnd
     bool bFound = false;
     // start position in text or initial position
-    sal_Bool bFirst = sal_True;
+    bool bFirst = true;
     SwCntntNode * pNode;
 
     const bool bRegSearch = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
@@ -543,13 +543,13 @@ struct SwFindParaText : public SwFindParas
     const SearchOptions& rSearchOpt;
     SwCursor& rCursor;
     utl::TextSearch aSTxt;
-    sal_Bool bReplace;
-    sal_Bool bSearchInNotes;
+    bool bReplace;
+    bool bSearchInNotes;
 
-    SwFindParaText( const SearchOptions& rOpt, sal_Bool bSearchNotes, int bRepl, SwCursor& rCrsr )
-        : rSearchOpt( rOpt ), rCursor( rCrsr ), aSTxt( rOpt ), bReplace( 0 != bRepl ), bSearchInNotes( bSearchNotes )
+    SwFindParaText( const SearchOptions& rOpt, bool bSearchNotes, bool bRepl, SwCursor& rCrsr )
+        : rSearchOpt( rOpt ), rCursor( rCrsr ), aSTxt( rOpt ), bReplace( bRepl ), bSearchInNotes( bSearchNotes )
     {}
-    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly ) SAL_OVERRIDE;
+    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, bool bInReadOnly ) SAL_OVERRIDE;
     virtual bool IsReplaceMode() const SAL_OVERRIDE;
     virtual ~SwFindParaText();
 };
@@ -559,10 +559,10 @@ SwFindParaText::~SwFindParaText()
 }
 
 int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
-                            const SwPaM* pRegion, sal_Bool bInReadOnly )
+                          const SwPaM* pRegion, bool bInReadOnly )
 {
     if( bInReadOnly && bReplace )
-        bInReadOnly = sal_False;
+        bInReadOnly = false;
 
     const bool bFnd = pCrsr->Find( rSearchOpt, bSearchInNotes, aSTxt, fnMove, pRegion, bInReadOnly );
 
@@ -608,9 +608,9 @@ bool SwFindParaText::IsReplaceMode() const
     return bReplace;
 }
 
-sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes,
+sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes,
                           SwDocPositions nStart, SwDocPositions nEnd,
-                          sal_Bool& bCancel, FindRanges eFndRngs, int bReplace )
+                          bool& bCancel, FindRanges eFndRngs, bool bReplace )
 {
     // switch off OLE-notifications
     SwDoc* pDoc = GetDoc();

@@ -86,7 +86,7 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
                 -1,
                 utl::OConfigurationTreeRoot::CM_READONLY);
 
-        sal_Bool bDatabaseFields = sal_True;
+        bool bDatabaseFields = true;
         aCfgRoot.getNodeValue(
             OUString("DatabaseFields")) >>= bDatabaseFields;
 
@@ -212,7 +212,7 @@ IMPL_LINK_NOARG(SwFldDlg, CancelHdl)
 void SwFldDlg::ReInitDlg()
 {
     SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
-    sal_Bool bNewMode = (::GetHtmlMode(pDocSh) & HTMLMODE_ON) != 0;
+    bool bNewMode = (::GetHtmlMode(pDocSh) & HTMLMODE_ON) != 0;
 
     if (bNewMode != m_bHtmlMode)
     {
@@ -246,7 +246,7 @@ void SwFldDlg::ReInitDlg()
     Description: newly initialise TabPage after Doc-Switch
  --------------------------------------------------------------------*/
 
-void SwFldDlg::ReInitTabPage( sal_uInt16 nPageId, sal_Bool bOnlyActivate )
+void SwFldDlg::ReInitTabPage( sal_uInt16 nPageId, bool bOnlyActivate )
 {
     SwFldPage* pPage = (SwFldPage* )GetTabPage(nPageId);
 
@@ -278,7 +278,7 @@ void SwFldDlg::Activate()
     }
 }
 
-void SwFldDlg::EnableInsert(sal_Bool bEnable)
+void SwFldDlg::EnableInsert(bool bEnable)
 {
     if( bEnable )
     {
@@ -287,7 +287,7 @@ void SwFldDlg::EnableInsert(sal_Bool bEnable)
         if( !pView ||
                 (pView->GetWrtShell().IsReadOnlyAvailable() &&
                     pView->GetWrtShell().HasReadonlySel()) )
-            bEnable = sal_False;
+            bEnable = false;
     }
     GetOKButton().Enable(bEnable);
 }
@@ -299,7 +299,7 @@ void SwFldDlg::InsertHdl()
 
 void SwFldDlg::ActivateDatabasePage()
 {
-    m_bDataBaseMode = sal_True;
+    m_bDataBaseMode = true;
     ShowPage(m_nDbId);
     SfxTabPage* pDBPage = GetTabPage(m_nDbId);
     if( pDBPage )

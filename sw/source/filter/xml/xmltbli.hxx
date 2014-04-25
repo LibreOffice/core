@@ -125,9 +125,9 @@ class SwXMLTableContext : public XMLTextTableContext
         SwTableBox* pBox,   /// the table box
         const OUString& rStyleName, /// XML style name
         sal_Int32 nColumnWidth,     /// width of column
-        sal_Bool bProtected,        /// is cell protected?
-        sal_Bool bMayShare, /// may the format be shared (no value, formula...)
-        sal_Bool& bNew,     /// true, if the format it not from the cache
+        bool bProtected,        /// is cell protected?
+        bool bMayShare, /// may the format be shared (no value, formula...)
+        bool& bNew,     /// true, if the format it not from the cache
         bool* pModifyLocked );  /// if set, call pBox->LockModify() and return old lock status
 
 public:
@@ -171,9 +171,9 @@ public:
                      const SwStartNode *pStNd=0,
                      const OUString & i_rXmlId = OUString(),
                      SwXMLTableContext *pTable=0,
-                     sal_Bool bIsProtected = sal_False,
+                     bool bIsProtected = false,
                      const OUString *pFormula=0,
-                     sal_Bool bHasValue = sal_False,
+                     bool bHasValue = false,
                      double fValue = 0.0,
                      OUString const*const pStringValue = 0);
     void InsertRow( const OUString& rStyleName,

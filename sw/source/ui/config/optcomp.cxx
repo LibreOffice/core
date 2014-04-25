@@ -362,7 +362,7 @@ void SwCompatibilityOptPage::SetCurrentOptions( sal_uLong nOptions )
     OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
     for ( sal_uLong i = 0; i < nCount; ++i )
     {
-        sal_Bool bChecked = ( ( nOptions & 0x00000001 ) == 0x00000001 );
+        bool bChecked = ( ( nOptions & 0x00000001 ) == 0x00000001 );
         m_pOptionsLB->CheckEntryPos( i, bChecked );
         nOptions = nOptions >> 1;
     }
@@ -411,7 +411,7 @@ SfxTabPage* SwCompatibilityOptPage::Create( Window* pParent, const SfxItemSet& r
 
 bool SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     if ( m_pWrtShell )
     {
         sal_uLong nSavedOptions = m_nSavedOptions;
@@ -423,56 +423,56 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
         for ( sal_uLong i = 0; i < nCount; ++i )
         {
             CompatibilityOptions nOption = static_cast< CompatibilityOptions >(i);
-            sal_Bool bChecked = m_pOptionsLB->IsChecked(i);
-            sal_Bool bSavedChecked = ( ( nSavedOptions & 0x00000001 ) == 0x00000001 );
+            bool bChecked = m_pOptionsLB->IsChecked(i);
+            bool bSavedChecked = ( ( nSavedOptions & 0x00000001 ) == 0x00000001 );
             if ( bChecked != bSavedChecked )
             {
                 if ( COPT_USE_PRINTERDEVICE == nOption )
                 {
                     m_pWrtShell->SetUseVirDev( !bChecked );
-                    bModified = sal_True;
+                    bModified = true;
                 }
                 else if ( ( COPT_ADD_SPACING == nOption || COPT_ADD_SPACING_AT_PAGES == nOption ) && !bSetParaSpaceMax )
                     bSetParaSpaceMax = true;
                 else if ( COPT_USE_OUR_TABSTOPS == nOption )
                 {
                     m_pWrtShell->SetTabCompat( !bChecked );
-                    bModified = sal_True;
+                    bModified = true;
                 }
                 else if ( COPT_NO_EXTLEADING == nOption )
                 {
                     m_pWrtShell->SetAddExtLeading( !bChecked );
-                    bModified = sal_True;
+                    bModified = true;
                 }
                 else if ( COPT_USE_LINESPACING == nOption )
                 {
                        m_pWrtShell->SetUseFormerLineSpacing( bChecked );
-                    bModified = sal_True;
+                    bModified = true;
                 }
                 else if ( COPT_ADD_TABLESPACING == nOption )
                 {
                     m_pWrtShell->SetAddParaSpacingToTableCells( bChecked );
-                    bModified = sal_True;
+                    bModified = true;
                 }
                 else if ( COPT_USE_OBJECTPOSITIONING == nOption )
                 {
                     m_pWrtShell->SetUseFormerObjectPositioning( bChecked );
-                    bModified = sal_True;
+                    bModified = true;
                 }
                 else if ( COPT_USE_OUR_TEXTWRAPPING == nOption )
                 {
                     m_pWrtShell->SetUseFormerTextWrapping( bChecked );
-                    bModified = sal_True;
+                    bModified = true;
                 }
                 else if ( COPT_CONSIDER_WRAPPINGSTYLE == nOption )
                 {
                     m_pWrtShell->SetConsiderWrapOnObjPos( bChecked );
-                    bModified = sal_True;
+                    bModified = true;
                 }
                 else if ( COPT_EXPAND_WORDSPACE == nOption )
                 {
                     m_pWrtShell->SetDoNotJustifyLinesWithManualBreak( !bChecked );
-                    bModified = sal_True;
+                    bModified = true;
                 }
             }
 
@@ -483,7 +483,7 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
         {
             m_pWrtShell->SetParaSpaceMax( m_pOptionsLB->IsChecked( (sal_uLong)COPT_ADD_SPACING ) );
             m_pWrtShell->SetParaSpaceMaxAtPages( m_pOptionsLB->IsChecked( (sal_uLong)COPT_ADD_SPACING_AT_PAGES ) );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 

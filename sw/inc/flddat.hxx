@@ -108,14 +108,14 @@ public:
         virtual void            SetPar2(const OUString& rStr) SAL_OVERRIDE;
         virtual OUString   GetPar2() const SAL_OVERRIDE;
 
-        inline sal_Bool             IsDate() const
+        inline bool             IsDate() const
                                 { return (nSubType & DATEFLD) != 0; }
 
         inline void             SetOffset(long nMinutes)    { nOffset = nMinutes; }
         inline long             GetOffset() const           { return nOffset; }
 
-        Date                    GetDate(sal_Bool bUseOffset = sal_False) const;
-        Time                    GetTime(sal_Bool bUseOffset = sal_False) const;
+        Date                    GetDate(bool bUseOffset = false) const;
+        Time                    GetTime(bool bUseOffset = false) const;
         void                    SetDateTime(const DateTime& rDT);
         static double           GetDateTime(SwDoc* pDoc, const DateTime& rDT);
 

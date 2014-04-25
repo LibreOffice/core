@@ -32,9 +32,9 @@ class SwViewShell;
 class Window;
 
 // The following functions are available in viewprt.cxx
-void SetPrinter( IDocumentDeviceAccess*, SfxPrinter*, sal_Bool bWeb );
+void SetPrinter( IDocumentDeviceAccess*, SfxPrinter*, bool bWeb );
 SfxTabPage* CreatePrintOptionsPage( Window*, const SfxItemSet& );
-void SetAppPrintOptions( SwViewShell* pSh, sal_Bool bWeb );
+void SetAppPrintOptions( SwViewShell* pSh, bool bWeb );
 
 // The following functions are available in viewport.cxx
 void ViewResizePixel( const Window &rRef,
@@ -46,7 +46,7 @@ void ViewResizePixel( const Window &rRef,
                     Window& rScrollBarBox,
                     SvxRuler* pVRuler = 0,
                     SvxRuler* pHRuler = 0,
-                    sal_Bool bVRulerRight = sal_False );
+                    bool bVRulerRight = false );
 
 #endif
 

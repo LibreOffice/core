@@ -114,12 +114,12 @@ void SwTableFUNC::SetColWidth(sal_uInt16 nNum, SwTwips nNewWidth )
 {
     // set current width
     // move all of the following
-    sal_Bool bCurrentOnly = sal_False;
+    bool bCurrentOnly = false;
 
     if ( aCols.Count() > 0 )
     {
         if(aCols.Count() != GetColCount())
-            bCurrentOnly = sal_True;
+            bCurrentOnly = true;
         SwTwips nWidth = GetColWidth(nNum);
 
         int nDiff = (int)(nNewWidth - nWidth);
@@ -155,7 +155,7 @@ void SwTableFUNC::InitTabCols()
         pSh->GetTabCols( aCols );
 }
 
-SwTableFUNC::SwTableFUNC(SwWrtShell *pShell, sal_Bool bCopyFmt)
+SwTableFUNC::SwTableFUNC(SwWrtShell *pShell, bool bCopyFmt)
     : pFmt(pShell->GetTableFmt()),
       pSh(pShell),
       bCopy(bCopyFmt)
@@ -186,7 +186,7 @@ void SwTableFUNC::UpdateChart()
 
 uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         uno::Reference< chart2::data::XDataProvider > &rxDataProvider,
-        sal_Bool bFillWithData,
+        bool bFillWithData,
         const OUString &rCellRange,
         SwFlyFrmFmt** ppFlyFrmFmt )
 {
@@ -245,7 +245,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         if ( !pClient )
         {
             pClient = new SwOleClient( &pSh->GetView(), &pSh->GetView().GetEditWin(), aEmbObjRef );
-            pSh->SetCheckForOLEInCaption( sal_True );
+            pSh->SetCheckForOLEInCaption( true );
         }
         pSh->CalcAndSetScale( aEmbObjRef );
         //#50270# We don't need to handle errors,

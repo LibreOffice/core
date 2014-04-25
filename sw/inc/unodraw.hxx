@@ -146,7 +146,7 @@ class SwXShape : public SwXShapeBaseClass,
 
     SwShapeDescriptor_Impl*     pImpl;
 
-    sal_Bool                        m_bDescriptor;
+    bool                        m_bDescriptor;
 
     SvxShape*               GetSvxShape();
 

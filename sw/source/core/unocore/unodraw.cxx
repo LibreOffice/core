@@ -72,7 +72,7 @@ class SwShapeDescriptor_Impl
     SwFmtSurround*      pSurround;
     SvxULSpaceItem*     pULSpace;
     SvxLRSpaceItem*     pLRSpace;
-    sal_Bool            bOpaque;
+    bool            bOpaque;
     uno::Reference< text::XTextRange > xTextRange;
     // #i26791#
     SwFmtFollowTextFlow* mpFollowTextFlow;
@@ -94,9 +94,9 @@ public:
      pSurround(0),
      pULSpace(0),
      pLRSpace(0),
-     bOpaque(sal_False),
+     bOpaque(false),
      // #i26791#
-     mpFollowTextFlow( new SwFmtFollowTextFlow( sal_False ) ),
+     mpFollowTextFlow( new SwFmtFollowTextFlow( false ) ),
      // #i28701# #i35017#
      pWrapInfluenceOnObjPos( new SwFmtWrapInfluenceOnObjPos(
                             text::WrapInfluenceOnPosition::ONCE_CONCURRENT ) ),
@@ -167,11 +167,11 @@ public:
     {
         return xTextRange;
     }
-    sal_Bool    IsOpaque() const
+    bool    IsOpaque() const
         {
             return bOpaque;
         }
-    const sal_Bool&    GetOpaque() const
+    const bool&    GetOpaque() const
         {
             return bOpaque;
         }
@@ -181,13 +181,13 @@ public:
     void RemoveSurround(){DELETEZ(pSurround);}
     void RemoveULSpace(){DELETEZ(pULSpace);}
     void RemoveLRSpace(){DELETEZ(pLRSpace);}
-    void SetOpaque(sal_Bool bSet){bOpaque = bSet;}
+    void SetOpaque(bool bSet){bOpaque = bSet;}
 
     // #i26791#
     SwFmtFollowTextFlow* GetFollowTextFlow( bool _bCreate = false )
     {
         if ( _bCreate && !mpFollowTextFlow )
-            mpFollowTextFlow = new SwFmtFollowTextFlow( sal_False );
+            mpFollowTextFlow = new SwFmtFollowTextFlow( false );
         return mpFollowTextFlow;
     }
     void RemoveFollowTextFlow()
@@ -597,7 +597,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     SfxItemSet aSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
                                         RES_FRMATR_END-1 );
     SwFmtAnchor aAnchor( FLY_AS_CHAR );
-    sal_Bool bOpaque = sal_False;
+    bool bOpaque = false;
     if( pDesc )
     {
         if(pDesc->GetSurround())
@@ -712,7 +712,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     SwFrmFmt* pFmt = ::FindFrmFmt( pObj );
     if(pFmt)
         pFmt->Add(pShape);
-    pShape->m_bDescriptor = sal_False;
+    pShape->m_bDescriptor = false;
 
     delete pPam;
     delete pInternalPam;
@@ -885,7 +885,7 @@ SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE)),
     m_pPropertyMapEntries(aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_TEXT_SHAPE)),
     pImpl(new SwShapeDescriptor_Impl()),
-    m_bDescriptor(sal_True)
+    m_bDescriptor(true)
 {
     if(xShape.is())  // default Ctor
     {
@@ -950,7 +950,7 @@ void SwXShape::AddExistingShapeToFmt( SdrObject& _rObj )
                 SwFrmFmt* pFmt = ::FindFrmFmt( const_cast< SdrObject* >( pCurrent ) );
                 if ( pFmt )
                     pFmt->Add( pSwShape );
-                pSwShape->m_bDescriptor = sal_False;
+                pSwShape->m_bDescriptor = false;
             }
 
             if ( !pSwShape->pImpl->bInitializedPropertyNotifier )
@@ -1841,7 +1841,7 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
                     case  RES_LR_SPACE:     pImpl->RemoveLRSpace(); break;
                     case  RES_UL_SPACE:     pImpl->RemoveULSpace(); break;
                     case  RES_SURROUND:     pImpl->RemoveSurround();break;
-                    case RES_OPAQUE :       pImpl->SetOpaque(sal_False);  break;
+                    case RES_OPAQUE :       pImpl->SetOpaque(false);  break;
                     case FN_TEXT_RANGE :
                     break;
                     // #i26791#
@@ -2749,7 +2749,7 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape ) throw (uno::Ru
                     }
                 }
             }
-            pSwShape->m_bDescriptor = sal_False;
+            pSwShape->m_bDescriptor = false;
             //add the group member to the format of the group
             SwFrmFmt* pShapeFmt = ::FindFrmFmt( pSvxShape->GetSdrObject() );
             if(pShapeFmt)

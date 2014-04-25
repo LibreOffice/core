@@ -25,7 +25,7 @@ class SwParaDlg: public SfxTabDialog
     SwView& rView;
     sal_uInt16 nHtmlMode;
     sal_uInt8 nDlgMode;
-    sal_Bool bDrawParaDlg;
+    bool bDrawParaDlg;
 
     sal_uInt16 m_nParaStd;
     sal_uInt16 m_nParaAlign;
@@ -43,7 +43,7 @@ public:
                 const SfxItemSet&,
                 sal_uInt8 nDialogMode,
                 const OUString *pCollName = 0,
-                sal_Bool bDraw = sal_False,
+                bool bDraw = false,
                 const OString& sDefPage = OString());
     virtual ~SwParaDlg();
 };

@@ -38,7 +38,7 @@ protected:
     mutable OUString sNewName;
     SfxItemSet * pNewSet;
     sal_uInt16 nId;     // FmtId related
-    sal_Bool bAuto;
+    bool bAuto;
 
 public:
     SwUndoFmtCreate(SwUndoId nUndoId, SwFmt * pNew, SwFmt * pDerivedFrom,
@@ -63,7 +63,7 @@ protected:
     OUString sOldName;
     SfxItemSet aOldSet;
     sal_uInt16 nId;     // FmtId related
-    sal_Bool bAuto;
+    bool bAuto;
 
 public:
     SwUndoFmtDelete(SwUndoId nUndoId, SwFmt * pOld, SwDoc * pDoc);
@@ -163,7 +163,7 @@ public:
 
 class SwUndoFrmFmtCreate : public SwUndoFmtCreate
 {
-    sal_Bool bAuto;
+    bool bAuto;
 
 public:
     SwUndoFrmFmtCreate(SwFrmFmt * pNew, SwFrmFmt * pDerivedFrom,

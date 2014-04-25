@@ -228,7 +228,7 @@ void SwNumFmt::NotifyGraphicArrived()
 }
 
 // #i22362#
-sal_Bool SwNumFmt::IsEnumeration() const
+bool SwNumFmt::IsEnumeration() const
 {
     // #i30655# native numbering did not work any longer
     // using this code. Therefore HBRINKM and I agreed upon defining
@@ -236,20 +236,20 @@ sal_Bool SwNumFmt::IsEnumeration() const
     return !IsItemize();
 }
 
-sal_Bool SwNumFmt::IsItemize() const
+bool SwNumFmt::IsItemize() const
 {
-    sal_Bool bResult;
+    bool bResult;
 
     switch(GetNumberingType())
     {
     case SVX_NUM_CHAR_SPECIAL:
     case SVX_NUM_BITMAP:
-        bResult = sal_True;
+        bResult = true;
 
         break;
 
     default:
-        bResult = sal_False;
+        bResult = false;
     }
 
     return bResult;
@@ -268,9 +268,9 @@ SwNumFmt& SwNumFmt::operator=( const SwNumFmt& rNumFmt)
     return *this;
 }
 
-sal_Bool SwNumFmt::operator==( const SwNumFmt& rNumFmt) const
+bool SwNumFmt::operator==( const SwNumFmt& rNumFmt) const
 {
-    sal_Bool bRet = SvxNumberFormat::operator==(rNumFmt) &&
+    bool bRet = SvxNumberFormat::operator==(rNumFmt) &&
         GetRegisteredIn() == rNumFmt.GetRegisteredIn();
     return bRet;
 }
@@ -336,7 +336,7 @@ sal_Int16   SwNumFmt::GetVertOrient() const
 
 void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
 {
-    sal_Bool bDocIsModified = pDoc->IsModified();
+    bool bDocIsModified = pDoc->IsModified();
     bool bFnd = false;
     const SwNumRule* pRule;
     for( sal_uInt16 n = pDoc->GetNumRuleTbl().size(); !bFnd && n; )
@@ -376,7 +376,7 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
 SwNumRule::SwNumRule( const OUString& rNm,
                       const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                       SwNumRuleType eType,
-                      sal_Bool bAutoFlg )
+                      bool bAutoFlg )
   : maTxtNodeList(),
     maParagraphStyleList(),
     mpNumRuleMap(0),
@@ -386,10 +386,10 @@ SwNumRule::SwNumRule( const OUString& rNm,
     mnPoolHelpId( USHRT_MAX ),
     mnPoolHlpFileId( UCHAR_MAX ),
     mbAutoRuleFlag( bAutoFlg ),
-    mbInvalidRuleFlag( sal_True ),
-    mbContinusNum( sal_False ),
-    mbAbsSpaces( sal_False ),
-    mbHidden( sal_False ),
+    mbInvalidRuleFlag( true ),
+    mbContinusNum( false ),
+    mbAbsSpaces( false ),
+    mbHidden( false ),
     mbCountPhantoms( true ),
     meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
     msDefaultListId()
@@ -485,7 +485,7 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
       mnPoolHelpId( rNumRule.GetPoolHelpId() ),
       mnPoolHlpFileId( rNumRule.GetPoolHlpFileId() ),
       mbAutoRuleFlag( rNumRule.mbAutoRuleFlag ),
-      mbInvalidRuleFlag( sal_True ),
+      mbInvalidRuleFlag( true ),
       mbContinusNum( rNumRule.mbContinusNum ),
       mbAbsSpaces( rNumRule.mbAbsSpaces ),
       mbHidden( rNumRule.mbHidden ),
@@ -559,7 +559,7 @@ SwNumRule& SwNumRule::operator=( const SwNumRule& rNumRule )
         meRuleType = rNumRule.meRuleType;
         msName = rNumRule.msName;
         mbAutoRuleFlag = rNumRule.mbAutoRuleFlag;
-        mbInvalidRuleFlag = sal_True;
+        mbInvalidRuleFlag = true;
         mbContinusNum = rNumRule.mbContinusNum;
         mbAbsSpaces = rNumRule.mbAbsSpaces;
         mbHidden = rNumRule.mbHidden;
@@ -570,9 +570,9 @@ SwNumRule& SwNumRule::operator=( const SwNumRule& rNumRule )
     return *this;
 }
 
-sal_Bool SwNumRule::operator==( const SwNumRule& rRule ) const
+bool SwNumRule::operator==( const SwNumRule& rRule ) const
 {
-    sal_Bool bRet = meRuleType == rRule.meRuleType &&
+    bool bRet = meRuleType == rRule.meRuleType &&
                 msName == rRule.msName &&
                 mbAutoRuleFlag == rRule.mbAutoRuleFlag &&
                 mbContinusNum == rRule.mbContinusNum &&
@@ -585,7 +585,7 @@ sal_Bool SwNumRule::operator==( const SwNumRule& rRule ) const
         for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
             if( !( rRule.Get( n ) == Get( n ) ))
             {
-                bRet = sal_False;
+                bRet = false;
                 break;
             }
     }
@@ -601,7 +601,7 @@ void SwNumRule::Set( sal_uInt16 i, const SwNumFmt& rNumFmt )
         {
             delete maFmts[ i ];
             maFmts[ i ] = new SwNumFmt( rNumFmt );
-            mbInvalidRuleFlag = sal_True;
+            mbInvalidRuleFlag = true;
         }
     }
 }
@@ -617,17 +617,17 @@ void SwNumRule::Set( sal_uInt16 i, const SwNumFmt* pNumFmt )
         if( pNumFmt )
         {
             maFmts[ i ] = new SwNumFmt( *pNumFmt );
-            mbInvalidRuleFlag = sal_True;
+            mbInvalidRuleFlag = true;
         }
     }
     else if( !pNumFmt )
-        delete pOld, maFmts[ i ] = 0, mbInvalidRuleFlag = sal_True;
+        delete pOld, maFmts[ i ] = 0, mbInvalidRuleFlag = true;
     else if( *pOld != *pNumFmt )
-        *pOld = *pNumFmt, mbInvalidRuleFlag = sal_True;
+        *pOld = *pNumFmt, mbInvalidRuleFlag = true;
 }
 
-OUString SwNumRule::MakeNumString( const SwNodeNum& rNum, sal_Bool bInclStrings,
-                                sal_Bool bOnlyArabic ) const
+OUString SwNumRule::MakeNumString( const SwNodeNum& rNum, bool bInclStrings,
+                                bool bOnlyArabic ) const
 {
     if (rNum.IsCounted())
         return MakeNumString(rNum.GetNumberVector(),
@@ -637,8 +637,8 @@ OUString SwNumRule::MakeNumString( const SwNodeNum& rNum, sal_Bool bInclStrings,
 }
 
 OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
-                                 const sal_Bool bInclStrings,
-                                 const sal_Bool bOnlyArabic,
+                                 const bool bInclStrings,
+                                 const bool bOnlyArabic,
                                  const unsigned int _nRestrictToThisLevel,
                                  SwNumRule::Extremities* pExtremities ) const
 {
@@ -758,7 +758,7 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
             {
                 Extremities aExtremities;
                 OUString aPrevStr = MakeNumString( pWorkingNodeNum->GetNumberVector(),
-                                                 sal_True, sal_False, MAXLEVEL,
+                                                 true, false, MAXLEVEL,
                                                  &aExtremities);
                 sal_Int32 nStrip = 0;
                 while ( nStrip < aExtremities.nPrefixChars )
@@ -835,7 +835,7 @@ SwNumRule& SwNumRule::CopyNumRule( SwDoc* pDoc, const SwNumRule& rNumRule )
     mnPoolFmtId = rNumRule.GetPoolFmtId();
     mnPoolHelpId = rNumRule.GetPoolHelpId();
     mnPoolHlpFileId = rNumRule.GetPoolHlpFileId();
-    mbInvalidRuleFlag = sal_True;
+    mbInvalidRuleFlag = true;
     return *this;
 }
 
@@ -848,7 +848,7 @@ void SwNumRule::SetSvxRule(const SvxNumRule& rNumRule, SwDoc* pDoc)
         maFmts[n] = pSvxFmt ? new SwNumFmt(*pSvxFmt, pDoc) : 0;
     }
 
-    mbInvalidRuleFlag = sal_True;
+    mbInvalidRuleFlag = true;
     mbContinusNum = rNumRule.IsContinuousNumbering();
 }
 
@@ -871,7 +871,7 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
     return aRule;
 }
 
-void SwNumRule::SetInvalidRule(sal_Bool bFlag)
+void SwNumRule::SetInvalidRule(bool bFlag)
 {
     if (bFlag)
     {
@@ -931,7 +931,7 @@ void SwNumRule::ChangeIndent( const short nDiff )
         Set( i, aTmpNumFmt );
     }
 
-    SetInvalidRule( sal_True );
+    SetInvalidRule( true );
 }
 
 /// set indent of certain list level to given value
@@ -959,7 +959,7 @@ void SwNumRule::SetIndent( const short nNewIndent,
         aTmpNumFmt.SetIndentAt( nNewIndent );
     }
 
-    SetInvalidRule( sal_True );
+    SetInvalidRule( true );
 }
 
 /// set indent of first list level to given value and change other list level's
@@ -1000,7 +1000,7 @@ void SwNumRule::Validate()
     std::for_each( aLists.begin(), aLists.end(),
                    std::mem_fun( &SwList::ValidateListTree ) );
 
-    SetInvalidRule(sal_False);
+    SetInvalidRule(false);
 }
 
 bool SwNumRule::IsCountPhantoms() const
@@ -1306,7 +1306,7 @@ namespace numfunc
         public:
             static SwNumberingUIBehaviorConfig& getInstance();
 
-            inline sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem() const
+            inline bool ChangeIndentOnTabAtFirstPosOfFirstListItem() const
             {
                 return mbChangeIndentOnTabAtFirstPosOfFirstListItem;
             }
@@ -1329,7 +1329,7 @@ namespace numfunc
             virtual void Commit() SAL_OVERRIDE;
 
             // configuration data
-            sal_Bool mbChangeIndentOnTabAtFirstPosOfFirstListItem;
+            bool mbChangeIndentOnTabAtFirstPosOfFirstListItem;
     };
 
     namespace
@@ -1344,7 +1344,7 @@ namespace numfunc
 
     SwNumberingUIBehaviorConfig::SwNumberingUIBehaviorConfig()
         : ConfigItem( OUString("Office.Writer/Numbering/UserInterfaceBehavior") ),
-          mbChangeIndentOnTabAtFirstPosOfFirstListItem( sal_True )
+          mbChangeIndentOnTabAtFirstPosOfFirstListItem( true )
     {
         SetToDefault();
         LoadConfig();
@@ -1355,7 +1355,7 @@ namespace numfunc
 
     void SwNumberingUIBehaviorConfig::SetToDefault()
     {
-        mbChangeIndentOnTabAtFirstPosOfFirstListItem = sal_True;
+        mbChangeIndentOnTabAtFirstPosOfFirstListItem = true;
     }
 
     com::sun::star::uno::Sequence<OUString> SwNumberingUIBehaviorConfig::GetPropNames() const
@@ -1407,7 +1407,7 @@ namespace numfunc
         LoadConfig();
     }
 
-    sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem()
+    bool ChangeIndentOnTabAtFirstPosOfFirstListItem()
     {
         return SwNumberingUIBehaviorConfig::getInstance().ChangeIndentOnTabAtFirstPosOfFirstListItem();
     }

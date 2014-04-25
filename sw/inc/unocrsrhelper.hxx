@@ -88,9 +88,9 @@ namespace SwUnoCursorHelper
 
     void                        GetCurPageStyle(SwPaM& rPaM, OUString &rString);
 
-    inline sal_Bool             IsStartOfPara(SwPaM& rUnoCrsr)
+    inline bool             IsStartOfPara(SwPaM& rUnoCrsr)
                                         { return rUnoCrsr.GetPoint()->nContent == 0;}
-    inline sal_Bool             IsEndOfPara(SwPaM& rUnoCrsr)
+    inline bool             IsEndOfPara(SwPaM& rUnoCrsr)
                                         { return rUnoCrsr.GetCntntNode() &&
                                             rUnoCrsr.GetPoint()->nContent == rUnoCrsr.GetCntntNode()->Len();}
 
@@ -146,7 +146,7 @@ namespace SwUnoCursorHelper
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
            CreateSortDescriptor(const bool bFromTable);
-    sal_Bool ConvertSortProperties(
+    bool ConvertSortProperties(
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::PropertyValue >& rDescriptor,
             SwSortOptions & rSortOpt);

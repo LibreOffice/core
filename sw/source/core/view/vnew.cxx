@@ -38,7 +38,7 @@
 
 void SwViewShell::Init( const SwViewOption *pNewOpt )
 {
-    mbDocSizeChgd = sal_False;
+    mbDocSizeChgd = false;
 
     // We play it save: Remove old font information whenever the printer
     // resolution or the zoom factor changes. For that, Init() and Reformat()
@@ -74,7 +74,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
     //                          one would have to reformat again.
 
     if( pDShell && pDShell->IsReadOnly() )
-        mpOpt->SetReadonly( sal_True );
+        mpOpt->SetReadonly( true );
 
     SAL_INFO( "sw.core", "View::Init - before InitPrt" );
     // --> FME 2007-11-06 #i82967#
@@ -172,8 +172,8 @@ SwViewShell::SwViewShell( SwDoc& rDocument, Window *pWindow,
     mbInConstructor = true;
 
     mbPaintInProgress = mbViewLocked = mbInEndAction = mbFrameView =
-    mbEndActionByVirDev = sal_False;
-    mbPaintWorks = mbEnableSmooth = sal_True;
+    mbEndActionByVirDev = false;
+    mbPaintWorks = mbEnableSmooth = true;
     mbPreview = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
 
     // --> OD 2005-02-11 #i38810# - Do not reset modified state of document,
@@ -247,9 +247,9 @@ SwViewShell::SwViewShell( SwViewShell& rShell, Window *pWindow,
     // <SwDrawContact::Changed> during contruction of <SwViewShell> instance
     mbInConstructor = true;
 
-    mbPaintWorks = mbEnableSmooth = sal_True;
+    mbPaintWorks = mbEnableSmooth = true;
     mbPaintInProgress = mbViewLocked = mbInEndAction = mbFrameView =
-    mbEndActionByVirDev = sal_False;
+    mbEndActionByVirDev = false;
     mbPreview = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
     // OD 12.12.2002 #103492#
     if( nFlags & VSHELLFLAG_SHARELAYOUT )
@@ -258,7 +258,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, Window *pWindow,
     SET_CURR_SHELL( this );
 
     mpDoc->acquire();
-    sal_Bool bModified = mpDoc->IsModified();
+    bool bModified = mpDoc->IsModified();
 
     pOutput = mpOut;
     Init( rShell.GetViewOptions() ); // might change Outdev (InitPrt())
@@ -292,7 +292,7 @@ SwViewShell::~SwViewShell()
 {
     {
         SET_CURR_SHELL( this );
-        mbPaintWorks = sal_False;
+        mbPaintWorks = false;
 
         // FME 2004-06-21 #i9684# Stopping the animated graphics is not
         // necessary during printing or pdf export, because the animation
@@ -360,9 +360,9 @@ SwViewShell::~SwViewShell()
     delete mpAccOptions;
 }
 
-sal_Bool SwViewShell::HasDrawView() const
+bool SwViewShell::HasDrawView() const
 {
-    return (Imp() && Imp()->HasDrawView()) ? 1 : 0;
+    return Imp() && Imp()->HasDrawView();
 }
 
 void SwViewShell::MakeDrawView()

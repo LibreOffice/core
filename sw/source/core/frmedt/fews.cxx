@@ -68,7 +68,7 @@ void SwFEShell::EndAllActionAndCall()
 }
 
 // Determine the Cntnt's nearest to the point
-Point SwFEShell::GetCntntPos( const Point& rPoint, sal_Bool bNext ) const
+Point SwFEShell::GetCntntPos( const Point& rPoint, bool bNext ) const
 {
     SET_CURR_SHELL( (SwViewShell*)this );
     return GetLayout()->GetNextPrevCntntPos( rPoint, bNext );
@@ -96,10 +96,10 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
         {
             const bool bOldCallbackActionEnabled = GetLayout()->IsCallbackActionEnabled();
             if( bOldCallbackActionEnabled )
-                GetLayout()->SetCallbackActionEnabled( sal_False );
+                GetLayout()->SetCallbackActionEnabled( false );
             pFrm = GetCurrFrm();
             if( bOldCallbackActionEnabled )
-                GetLayout()->SetCallbackActionEnabled( sal_True );
+                GetLayout()->SetCallbackActionEnabled( true );
         }
     }
 
@@ -167,13 +167,13 @@ sal_uInt16 SwFEShell::GetPageNumber( const Point &rPoint ) const
         return 0;
 }
 
-sal_Bool SwFEShell::GetPageNumber( long nYPos, sal_Bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay) const
+bool SwFEShell::GetPageNumber( long nYPos, bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay) const
 {
     const SwFrm *pPage;
 
     if ( bAtCrsrPos )                   // get page of Crsr
     {
-        pPage = GetCurrFrm( sal_False );
+        pPage = GetCurrFrm( false );
         if ( pPage )
             pPage = pPage->FindPageFrm();
     }
@@ -204,11 +204,11 @@ sal_Bool SwFEShell::GetPageNumber( long nYPos, sal_Bool bAtCrsrPos, sal_uInt16& 
 
 bool SwFEShell::IsDirectlyInSection() const
 {
-    SwFrm* pFrm = GetCurrFrm( sal_False );
+    SwFrm* pFrm = GetCurrFrm( false );
     return pFrm && pFrm->GetUpper() && pFrm->GetUpper()->IsSctFrm();
 }
 
-sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const
+sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, bool bStopAtFly ) const
 {
     sal_uInt16 nReturn = FRMTYPE_NONE;
     const SwFrm *pFrm;
@@ -221,7 +221,7 @@ sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const
         pFrm = pNd->getLayoutFrm( GetLayout(), pPt );
     }
     else
-        pFrm = GetCurrFrm( sal_False );
+        pFrm = GetCurrFrm( false );
     while ( pFrm )
     {
         switch ( pFrm->GetType() )
@@ -275,7 +275,7 @@ sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const
     return nReturn;
 }
 
-void SwFEShell::ShGetFcs( sal_Bool bUpdate )
+void SwFEShell::ShGetFcs( bool bUpdate )
 {
     ::SetShell( this );
     SwCrsrShell::ShGetFcs( bUpdate );
@@ -307,7 +307,7 @@ sal_uInt16 SwFEShell::GetPhyPageNum()
     return 0;
 }
 
-sal_uInt16 SwFEShell::GetVirtPageNum( const sal_Bool bCalcFrm )
+sal_uInt16 SwFEShell::GetVirtPageNum( const bool bCalcFrm )
 {
     SwFrm *pFrm = GetCurrFrm( bCalcFrm );
     if ( pFrm )
@@ -324,7 +324,7 @@ static void lcl_SetAPageOffset( sal_uInt16 nOffset, SwPageFrm* pPage, SwFEShell*
     SwFmtPageDesc aDesc( pPage->GetPageDesc() );
     aDesc.SetNumOffset( nOffset );
 
-    SwFrm *pFrm = pThis->GetCurrFrm( sal_False );
+    SwFrm *pFrm = pThis->GetCurrFrm( false );
     if ( pFrm->IsInTab() )
         pThis->GetDoc()->SetAttr( aDesc, *pFrm->FindTabFrm()->GetFmt() );
     else
@@ -337,14 +337,14 @@ static void lcl_SetAPageOffset( sal_uInt16 nOffset, SwPageFrm* pPage, SwFEShell*
 
 void SwFEShell::SetNewPageOffset( sal_uInt16 nOffset )
 {
-    GetLayout()->SetVirtPageNum( sal_True );
-    const SwPageFrm *pPage = GetCurrFrm( sal_False )->FindPageFrm();
+    GetLayout()->SetVirtPageNum( true );
+    const SwPageFrm *pPage = GetCurrFrm( false )->FindPageFrm();
     lcl_SetAPageOffset( nOffset, (SwPageFrm*)pPage, this );
 }
 
 void SwFEShell::SetPageOffset( sal_uInt16 nOffset )
 {
-    const SwPageFrm *pPage = GetCurrFrm( sal_False )->FindPageFrm();
+    const SwPageFrm *pPage = GetCurrFrm( false )->FindPageFrm();
     const SwRootFrm* pDocLayout = GetLayout();
     while ( pPage )
     {
@@ -356,7 +356,7 @@ void SwFEShell::SetPageOffset( sal_uInt16 nOffset )
             const SwFmtPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
             if ( rPgDesc.GetNumOffset() )
             {
-                pDocLayout->SetVirtPageNum( sal_True );
+                pDocLayout->SetVirtPageNum( true );
                 lcl_SetAPageOffset( nOffset, (SwPageFrm*)pPage, this );
                 break;
             }
@@ -386,12 +386,12 @@ sal_uInt16 SwFEShell::GetPageOffset() const
 
 void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rTxt, const OUString& rSeparator,
                              const OUString& rNumberSeparator,
-                             const sal_Bool bBefore, const sal_uInt16 nId,
+                             const bool bBefore, const sal_uInt16 nId,
                              const OUString& rCharacterStyle,
-                             const sal_Bool bCpyBrd )
+                             const bool bCpyBrd )
 {
     // get node index of cursor position, SwDoc can do everything else itself
-    SwCntntFrm *pCnt = LTYPE_DRAW==eType ? 0 : GetCurrFrm( sal_False );
+    SwCntntFrm *pCnt = LTYPE_DRAW==eType ? 0 : GetCurrFrm( false );
     if( LTYPE_DRAW==eType || pCnt )
     {
         StartAllAction();
@@ -466,25 +466,25 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rTxt, cons
         SwFlyFrm* pFrm;
         const Point aPt( GetCrsrDocPos() );
         if( pFlyFmt && 0 != ( pFrm = pFlyFmt->GetFrm( &aPt )))
-            SelectFlyFrm( *pFrm, sal_True );
+            SelectFlyFrm( *pFrm, true );
 
         EndAllActionAndCall();
     }
 }
 
-sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
+bool SwFEShell::Sort(const SwSortOptions& rOpt)
 {
     if( !HasSelection() )
-        return sal_False;
+        return false;
 
     SET_CURR_SHELL( this );
-    sal_Bool bRet;
+    bool bRet;
     StartAllAction();
     if(IsTableMode())
     {
         // Sort table
         // check if Point/Mark of current Crsr are in one table
-        SwFrm *pFrm = GetCurrFrm( sal_False );
+        SwFrm *pFrm = GetCurrFrm( false );
         OSL_ENSURE( pFrm->FindTabFrm(), "Crsr not in table." );
 
         // search boxes via the layout
@@ -609,13 +609,13 @@ sal_uInt16 SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
 
 SwFEShell::SwFEShell( SwDoc& rDoc, Window *pWindow, const SwViewOption *pOptions )
     : SwEditShell( rDoc, pWindow, pOptions ),
-    pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( sal_False )
+    pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( false )
 {
 }
 
 SwFEShell::SwFEShell( SwEditShell& rShell, Window *pWindow )
     : SwEditShell( rShell, pWindow ),
-    pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( sal_False )
+    pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( false )
 {
 }
 
@@ -656,7 +656,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         pFrm = pFly ? pFly->GetAnchorFrm() : GetCurrFrm();
     }
 
-    sal_Bool bWrapThrough = sal_False;
+    bool bWrapThrough = false;
     if ( pFly )
     {
         SwFlyFrmFmt* pFmt = (SwFlyFrmFmt*)pFly->GetFmt();
@@ -669,7 +669,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
 
     Point aPos;
     bool bVertic = false;
-    sal_Bool bRTL = sal_False;
+    bool bRTL = false;
     bool bVerticalL2R = false;
 
     if ((FLY_AT_PAGE == _nAnchorId) || (FLY_AT_FLY == _nAnchorId)) // LAYER_IMPL
@@ -1197,11 +1197,11 @@ Size SwFEShell::GetGraphicDefaultSize() const
     return aRet;
 }
 
-sal_Bool SwFEShell::IsFrmVertical(const sal_Bool bEnvironment, sal_Bool& bRTL, sal_Bool& bVertL2R) const
+bool SwFEShell::IsFrmVertical(const bool bEnvironment, bool& bRTL, bool& bVertL2R) const
 {
-    sal_Bool bVert = sal_False;
-    bRTL = sal_False;
-    bVertL2R = sal_False;
+    bool bVert = false;
+    bRTL = false;
+    bVertL2R = false;
 
     if ( Imp()->HasDrawView() )
     {

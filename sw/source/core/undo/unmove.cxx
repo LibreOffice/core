@@ -102,8 +102,8 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
     , nMvDestNode(rMvPos.GetIndex())
     , bMoveRedlines(false)
 {
-    bMoveRange = sal_True;
-    bJoinNext = bJoinPrev = sal_False;
+    bMoveRange = true;
+    bJoinNext = bJoinPrev = false;
 
     nSttCntnt = nEndCntnt = nMvDestCntnt = COMPLETE_STRING;
 
@@ -137,7 +137,7 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
 
 void SwUndoMove::SetDestRange( const SwPaM& rRange,
                                 const SwPosition& rInsPos,
-                                sal_Bool bJoin, sal_Bool bCorrPam )
+                                bool bJoin, bool bCorrPam )
 {
     const SwPosition *pStt = rRange.Start(),
                     *pEnd = rRange.GetPoint() == pStt
@@ -300,7 +300,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
         RemoveIdxFromRange( aPam, false );
 
         aIdx = aPam.Start()->nNode;
-        sal_Bool bJoinTxt = aIdx.GetNode().IsTxtNode();
+        bool bJoinTxt = aIdx.GetNode().IsTxtNode();
 
         aIdx--;
         rDoc.MoveRange( aPam, aMvPos,

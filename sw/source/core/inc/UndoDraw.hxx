@@ -52,7 +52,7 @@ class SwUndoDrawGroup : public SwUndo
 {
     SwUndoGroupObjImpl* pObjArr;
     sal_uInt16 nSize;
-    sal_Bool bDelFmt;
+    bool bDelFmt;
 
 public:
     SwUndoDrawGroup( sal_uInt16 nCnt );
@@ -81,7 +81,7 @@ class SwUndoDrawUnGroup : public SwUndo
 {
     SwUndoGroupObjImpl* pObjArr;
     sal_uInt16 nSize;
-    sal_Bool bDelFmt;
+    bool bDelFmt;
 
 public:
     SwUndoDrawUnGroup( SdrObjGroup* );
@@ -116,7 +116,7 @@ class SwUndoDrawDelete : public SwUndo
     SwUndoGroupObjImpl* pObjArr;
     SdrMarkList* pMarkLst;  // MarkList for all selected SdrObjects
     sal_uInt16 nSize;
-    sal_Bool bDelFmt;
+    bool bDelFmt;
 
 public:
     SwUndoDrawDelete( sal_uInt16 nCnt );

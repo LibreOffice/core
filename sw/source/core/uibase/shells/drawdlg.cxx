@@ -39,7 +39,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
     SwWrtShell*     pSh     = &GetShell();
     SdrView*        pView   = pSh->GetDrawView();
     SdrModel*       pDoc    = pView->GetModel();
-    sal_Bool            bChanged = pDoc->IsChanged();
+    bool            bChanged = pDoc->IsChanged();
     pDoc->SetChanged(false);
 
     SfxItemSet aNewAttr( pDoc->GetItemPool() );
@@ -75,7 +75,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
         case SID_ATTRIBUTES_AREA:
         {
-            sal_Bool bHasMarked = pView->AreObjectsMarked();
+            bool bHasMarked = pView->AreObjectsMarked();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( NULL,
@@ -112,7 +112,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
         case SID_ATTRIBUTES_LINE:
         {
-            sal_Bool bHasMarked = pView->AreObjectsMarked();
+            bool bHasMarked = pView->AreObjectsMarked();
 
             const SdrObject* pObj = NULL;
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -172,7 +172,7 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
     SwWrtShell* pSh   = &GetShell();
     SdrView*    pView = pSh->GetDrawView();
     const SfxItemSet* pArgs = rReq.GetArgs();
-    sal_Bool        bChanged = pView->GetModel()->IsChanged();
+    bool        bChanged = pView->GetModel()->IsChanged();
     pView->GetModel()->SetChanged(false);
 
     GetView().NoRotate();
@@ -222,7 +222,7 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
 
     if (pSdrView->AreObjectsMarked())
     {
-        sal_Bool bDisable = Disable( rSet );
+        bool bDisable = Disable( rSet );
 
         if( !bDisable )
             pSdrView->GetAttributes( rSet );

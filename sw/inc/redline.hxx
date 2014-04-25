@@ -116,7 +116,7 @@ class SW_DLLPUBLIC SwRedlineData
 
 public:
     SwRedlineData( RedlineType_t eT, sal_uInt16 nAut );
-    SwRedlineData( const SwRedlineData& rCpy, sal_Bool bCpyNext = sal_True );
+    SwRedlineData( const SwRedlineData& rCpy, bool bCpyNext = true );
 
     // For sw3io: pNext/pExtraData are taken over.
     SwRedlineData( RedlineType_t eT, sal_uInt16 nAut, const DateTime& rDT,
@@ -184,9 +184,9 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
 {
     SwRedlineData* pRedlineData;
     SwNodeIndex* pCntntSect;
-    sal_Bool bDelLastPara : 1;
-    sal_Bool bIsLastParaDelete : 1;
-    sal_Bool bIsVisible : 1;
+    bool bDelLastPara : 1;
+    bool bIsLastParaDelete : 1;
+    bool bIsVisible : 1;
 
     void MoveToSection();
     void CopyToSection();
@@ -198,8 +198,8 @@ public:
     SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam );
     SwRangeRedline( const SwRedlineData& rData, const SwPosition& rPos );
     // For sw3io: pData is taken over!
-    SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos, sal_Bool bVsbl,
-               sal_Bool bDelLP, sal_Bool bIsPD) :
+    SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos, bool bVsbl,
+               bool bDelLP, bool bIsPD) :
         SwPaM( rPos ), pRedlineData( pData ), pCntntSect( 0 ),
         bDelLastPara( bDelLP ), bIsLastParaDelete( bIsPD ), bIsVisible( bVsbl )
     {}
@@ -210,8 +210,8 @@ public:
     // For Undo.
     void SetContentIdx( const SwNodeIndex* );
 
-    sal_Bool IsVisible() const { return bIsVisible; }
-    sal_Bool IsDelLastPara() const { return bDelLastPara; }
+    bool IsVisible() const { return bIsVisible; }
+    bool IsDelLastPara() const { return bDelLastPara; }
 
     // sal_Bool indicates whether after setting of Pos no range is spanned.
     // -> sal-True else range and sal-False.
@@ -226,7 +226,7 @@ public:
         *pEndPtr = rPos;
     }
     /// Do we have a valid selection?
-    sal_Bool HasValidRange() const;
+    bool HasValidRange() const;
 
     const SwRedlineData& GetRedlineData(sal_uInt16 nPos = 0) const;
     bool operator==( const SwRedlineData& rCmp ) const
@@ -274,12 +274,12 @@ public:
     /// Initiate the layout.
     void InvalidateRange();
 
-    sal_Bool IsOwnRedline( const SwRangeRedline& rRedl ) const
+    bool IsOwnRedline( const SwRangeRedline& rRedl ) const
         { return GetAuthor() == rRedl.GetAuthor(); }
-    sal_Bool CanCombine( const SwRangeRedline& rRedl ) const;
+    bool CanCombine( const SwRangeRedline& rRedl ) const;
 
-    void PushData( const SwRangeRedline& rRedl, sal_Bool bOwnAsNext = sal_True );
-    sal_Bool PopData();
+    void PushData( const SwRangeRedline& rRedl, bool bOwnAsNext = true );
+    bool PopData();
 
     /**
        Returns textual description of this a redline data element of

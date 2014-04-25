@@ -147,7 +147,7 @@ class SW_DLLPUBLIC SwCrsrShell
     friend class SwSelPaintRects;
 
     // requires the Crsr as InternalCrsr
-    friend sal_Bool GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
+    friend bool GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
 
 public:
 
@@ -206,27 +206,27 @@ private:
     OUString m_sMarkedListId;
     int m_nMarkedListLevel;
 
-    sal_Bool m_bHasFocus : 1;         ///< Shell is "active" in a window
-    sal_Bool m_bSVCrsrVis : 1;        ///< SV-Cursor visible/invisible
-    sal_Bool m_bChgCallFlag : 1;      ///< attribute change inside Start- and EndAction
-    sal_Bool m_bVisPortChgd : 1;      ///< in VisPortChg-Call
+    bool m_bHasFocus : 1;         ///< Shell is "active" in a window
+    bool m_bSVCrsrVis : 1;        ///< SV-Cursor visible/invisible
+    bool m_bChgCallFlag : 1;      ///< attribute change inside Start- and EndAction
+    bool m_bVisPortChgd : 1;      ///< in VisPortChg-Call
                                 // (used in Invalidate by the Cursor)
 
-    sal_Bool m_bCallChgLnk : 1;       ///< flag for derived classes
+    bool m_bCallChgLnk : 1;       ///< flag for derived classes
                                 // TRUE -> call ChgLnk
                                 // access only via SwChgLinkFlag
-    sal_Bool m_bAllProtect : 1;       ///< Flag for areas
+    bool m_bAllProtect : 1;       ///< Flag for areas
                                 // TRUE -> everything protected / hidden
-    sal_Bool m_bInCMvVisportChgd : 1; ///< Flag for CrsrMoves
+    bool m_bInCMvVisportChgd : 1; ///< Flag for CrsrMoves
                                 // TRUE -> view was moved
-    sal_Bool m_bGCAttr : 1;           // TRUE -> non expanded attributes exist.
-    sal_Bool m_bIgnoreReadonly : 1;   // TRUE -> make the cursor visible on next
+    bool m_bGCAttr : 1;           // TRUE -> non expanded attributes exist.
+    bool m_bIgnoreReadonly : 1;   // TRUE -> make the cursor visible on next
                                 // EndAction in spite of Readonly
-    sal_Bool m_bSelTblCells : 1;      // TRUE -> select cells over the InputWin
-    sal_Bool m_bAutoUpdateCells : 1;  // TRUE -> autoformat cells
-    sal_Bool m_bBasicHideCrsr : 1;    // TRUE -> HideCrsr from Basic
-    sal_Bool m_bSetCrsrInReadOnly : 1;// TRUE -> Cursor is allowed in ReadOnly-Areas
-    sal_Bool m_bOverwriteCrsr : 1;    // sal_True -> show Overwrite Crsr
+    bool m_bSelTblCells : 1;      // TRUE -> select cells over the InputWin
+    bool m_bAutoUpdateCells : 1;  // TRUE -> autoformat cells
+    bool m_bBasicHideCrsr : 1;    // TRUE -> HideCrsr from Basic
+    bool m_bSetCrsrInReadOnly : 1;// TRUE -> Cursor is allowed in ReadOnly-Areas
+    bool m_bOverwriteCrsr : 1;    // sal_True -> show Overwrite Crsr
 
     bool m_bMacroExecAllowed : 1;
 
@@ -234,7 +234,7 @@ private:
 
     SAL_DLLPRIVATE void UpdateCrsr(
         sal_uInt16 eFlags = SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE,
-        sal_Bool bIdleEnd = sal_False );
+        bool bIdleEnd = false );
 
     SAL_DLLPRIVATE void MoveCrsrToNum();
 
@@ -253,19 +253,19 @@ private:
                                       const int nLevel );
 
     // private method(s) accessed from public inline method(s) must be exported.
-                  sal_Bool LeftRight( sal_Bool, sal_uInt16, sal_uInt16, sal_Bool );
+                   bool LeftRight( bool, sal_uInt16, sal_uInt16, bool );
     SAL_DLLPRIVATE bool UpDown( bool, sal_uInt16 );
-    SAL_DLLPRIVATE sal_Bool LRMargin( sal_Bool, sal_Bool bAPI = sal_False );
-    SAL_DLLPRIVATE sal_Bool IsAtLRMargin( sal_Bool, sal_Bool bAPI = sal_False ) const;
+    SAL_DLLPRIVATE bool LRMargin( bool, bool bAPI = false );
+    SAL_DLLPRIVATE bool IsAtLRMargin( bool, bool bAPI = false ) const;
 
     SAL_DLLPRIVATE short GetTextDirection( const Point* pPt = 0 ) const;
 
     SAL_DLLPRIVATE bool isInHiddenTxtFrm(SwShellCrsr* pShellCrsr);
 
-typedef sal_Bool (SwCursor:: *FNCrsr)();
-    SAL_DLLPRIVATE sal_Bool CallCrsrFN( FNCrsr );
+typedef bool (SwCursor:: *FNCrsr)();
+    SAL_DLLPRIVATE bool CallCrsrFN( FNCrsr );
 
-    SAL_DLLPRIVATE const SwRangeRedline* _GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect );
+    SAL_DLLPRIVATE const SwRangeRedline* _GotoRedline( sal_uInt16 nArrPos, bool bSelect );
 
 protected:
 
@@ -333,8 +333,8 @@ public:
     /// If document body starts with a table.
     bool StartsWithTable();
 
-    SwPaM* GetCrsr( sal_Bool bMakeTblCrsr = sal_True ) const;
-    inline SwCursor* GetSwCrsr( sal_Bool bMakeTblCrsr = sal_True ) const;
+    SwPaM* GetCrsr( bool bMakeTblCrsr = true ) const;
+    inline SwCursor* GetSwCrsr( bool bMakeTblCrsr = true ) const;
     // return only the current cursor
           SwShellCrsr* _GetCrsr()                       { return m_pCurCrsr; }
     const SwShellCrsr* _GetCrsr() const                 { return m_pCurCrsr; }
@@ -352,42 +352,42 @@ public:
     // start parenthesing, hide SV-Cursor and selected areas
     void StartAction();
     // end parenthesing, show SV-Cursor and selected areas
-    void EndAction( const sal_Bool bIdleEnd = sal_False );
+    void EndAction( const bool bIdleEnd = false );
 
     // basic cursor travelling
     long GetUpDownX() const             { return m_nUpDownX; }
 
-    sal_Bool Left( sal_uInt16 nCnt, sal_uInt16 nMode, sal_Bool bAllowVisual = sal_False )
-        { return LeftRight( sal_True, nCnt, nMode, bAllowVisual ); }
-    sal_Bool Right( sal_uInt16 nCnt, sal_uInt16 nMode, sal_Bool bAllowVisual = sal_False )
-        { return LeftRight( sal_False, nCnt, nMode, bAllowVisual ); }
+    bool Left( sal_uInt16 nCnt, sal_uInt16 nMode, bool bAllowVisual = false )
+        { return LeftRight( true, nCnt, nMode, bAllowVisual ); }
+    bool Right( sal_uInt16 nCnt, sal_uInt16 nMode, bool bAllowVisual = false )
+        { return LeftRight( false, nCnt, nMode, bAllowVisual ); }
     bool Up( sal_uInt16 nCnt = 1 )      { return UpDown( true, nCnt ); }
     bool Down( sal_uInt16 nCnt = 1 )    { return UpDown( false, nCnt ); }
-    sal_Bool LeftMargin()               { return LRMargin( sal_True ); }
-    sal_Bool RightMargin(sal_Bool bAPI = sal_False) { return LRMargin( sal_False, bAPI ); }
-    sal_Bool SttEndDoc( sal_Bool bStt );
+    bool LeftMargin()               { return LRMargin( true ); }
+    bool RightMargin(bool bAPI = false) { return LRMargin( false, bAPI ); }
+    bool SttEndDoc( bool bStt );
 
-    sal_Bool MovePage( SwWhichPage, SwPosPage );
-    sal_Bool MovePara( SwWhichPara, SwPosPara );
-    sal_Bool MoveSection( SwWhichSection, SwPosSection );
-    sal_Bool MoveTable( SwWhichTable, SwPosTable );
-    sal_Bool MoveColumn( SwWhichColumn, SwPosColumn );
-    sal_Bool MoveRegion( SwWhichRegion, SwPosRegion );
+    bool MovePage( SwWhichPage, SwPosPage );
+    bool MovePara( SwWhichPara, SwPosPara );
+    bool MoveSection( SwWhichSection, SwPosSection );
+    bool MoveTable( SwWhichTable, SwPosTable );
+    bool MoveColumn( SwWhichColumn, SwPosColumn );
+    bool MoveRegion( SwWhichRegion, SwPosRegion );
 
     sal_uLong Find( const com::sun::star::util::SearchOptions& rSearchOpt,
-                sal_Bool bSearchInNotes,
+                bool bSearchInNotes,
                 SwDocPositions eStart, SwDocPositions eEnde,
-                sal_Bool& bCancel,
-                FindRanges eRng, int bReplace = sal_False );
+                bool& bCancel,
+                FindRanges eRng, bool bReplace = false );
 
     sal_uLong Find( const SwTxtFmtColl& rFmtColl,
                 SwDocPositions eStart, SwDocPositions eEnde,
-                sal_Bool& bCancel,
+                bool& bCancel,
                 FindRanges eRng, const SwTxtFmtColl* pReplFmt = 0 );
 
-    sal_uLong Find( const SfxItemSet& rSet, sal_Bool bNoCollections,
+    sal_uLong Find( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions eStart, SwDocPositions eEnde,
-                sal_Bool& bCancel,
+                bool& bCancel,
                 FindRanges eRng,
                 const com::sun::star::util::SearchOptions* pSearchOpt = 0,
                 const SfxItemSet* rReplSet = 0 );
@@ -396,7 +396,7 @@ public:
     //  return values:
     //      CRSR_POSCHG: when cursor was corrected from SPoint by the layout
     //      CRSR_POSOLD: when the cursor was not changed
-    int SetCrsr( const Point &rPt, sal_Bool bOnlyText = sal_False, bool bBlock = true );
+    int SetCrsr( const Point &rPt, bool bOnlyText = false, bool bBlock = true );
 
     /*
      * Notification that the visible area was changed. m_aVisArea is reset, then
@@ -412,7 +412,7 @@ public:
 
     // Areas
     inline void SetMark();
-    inline sal_Bool HasMark();
+    inline bool HasMark();
 
     void ClearMark();
 
@@ -423,12 +423,12 @@ public:
        swap the PaM. FALSE: If the mark is behind the point then swap
        the PaM.
     */
-    void NormalizePam(sal_Bool bPointFirst = sal_True);
+    void NormalizePam(bool bPointFirst = true);
 
     void SwapPam();
-    sal_Bool ChgCurrPam( const Point & rPt,
-                     sal_Bool bTstOnly = sal_True,      // test only, don't set
-                     sal_Bool bTstHit  = sal_False );   // only exact matches
+    bool ChgCurrPam( const Point & rPt,
+                     bool bTstOnly = true,      // test only, don't set
+                     bool bTstHit  = false );   // only exact matches
     void KillPams();
 
     // story a copy of the cursor in the stack
@@ -440,7 +440,7 @@ public:
      *      stack
      * Return: whether there was one left one the stack
      */
-    sal_Bool Pop( sal_Bool bOldCrsr = sal_True );
+    bool Pop( bool bOldCrsr = true );
     /*
      * Combine 2 Cursors.
      * Delete the topmost from the stack and move its Mark into the current.
@@ -449,10 +449,10 @@ public:
 
 #ifdef DBG_UTIL
     void SttCrsrMove();
-    void EndCrsrMove( const sal_Bool bIdleEnd = sal_False );
+    void EndCrsrMove( const bool bIdleEnd = false );
 #else
     void SttCrsrMove() { ++m_nCrsrMove; StartAction(); }
-    void EndCrsrMove( const sal_Bool bIdleEnd = sal_False )
+    void EndCrsrMove( const bool bIdleEnd = sal_False )
             { EndAction( bIdleEnd ); --m_nCrsrMove; }
 #endif
 
@@ -461,35 +461,35 @@ public:
      * On the other hand, on receiving the focus all selected ranges are displayed again
      * (ranges must be recalculated!).
      */
-    sal_Bool HasShFcs() const { return m_bHasFocus; }
+    bool HasShFcs() const { return m_bHasFocus; }
     void ShLooseFcs();
-    void ShGetFcs( sal_Bool bUpdate = sal_True );
+    void ShGetFcs( bool bUpdate = true );
 
     // Methods for displaying or hiding the visible text cursor.
     void ShowCrsr();
     void HideCrsr();
     // Methods for displaying or hiding the selected ranges with visible cursor.
-    void ShowCrsrs( sal_Bool bCrsrVis );
+    void ShowCrsrs( bool bCrsrVis );
     void HideCrsrs();
 
-    sal_Bool IsOverwriteCrsr() const { return m_bOverwriteCrsr; }
-    void SetOverwriteCrsr( sal_Bool bFlag ) { m_bOverwriteCrsr = bFlag; }
+    bool IsOverwriteCrsr() const { return m_bOverwriteCrsr; }
+    void SetOverwriteCrsr( bool bFlag ) { m_bOverwriteCrsr = bFlag; }
 
     // Return current frame in which the cursor is placed.
-    SwCntntFrm *GetCurrFrm( const sal_Bool bCalcFrm = sal_True ) const;
+    SwCntntFrm *GetCurrFrm( const bool bCalcFrm = true ) const;
 
     //TRUE if cursor is hidden because of readonly.
     //FALSE if it is working despite readonly.
-    sal_Bool IsCrsrReadonly() const;
+    bool IsCrsrReadonly() const;
 
     // Cursor is placed in something that is protected or selection contains
     // something that is protected.
-    sal_Bool HasReadonlySel(bool bAnnotationMode = false) const;
+    bool HasReadonlySel(bool bAnnotationMode = false) const;
 
     // Can the cursor be set to read only ranges?
-    sal_Bool IsReadOnlyAvailable() const { return m_bSetCrsrInReadOnly; }
-    void SetReadOnlyAvailable( sal_Bool bFlag );
-    sal_Bool IsOverReadOnlyPos( const Point& rPt ) const;
+    bool IsReadOnlyAvailable() const { return m_bSetCrsrInReadOnly; }
+    void SetReadOnlyAvailable( bool bFlag );
+    bool IsOverReadOnlyPos( const Point& rPt ) const;
 
     // Methods for aFlyMacroLnk.
     void        SetFlyMacroLnk( const Link& rLnk ) { m_aFlyMacroLnk = rLnk; }
@@ -508,15 +508,15 @@ public:
 
     // Check if the current cursor contains a selection, i.e.
     // if Mark is set and SPoint and Mark are different.
-    sal_Bool HasSelection() const;
+    bool HasSelection() const;
 
     // Check if a selection exists, i.e. if the current cursor comprises a selection.
-    inline sal_Bool IsSelection() const;
+    inline bool IsSelection() const;
     // returns if multiple cursors are available
-    inline sal_Bool IsMultiSelection() const;
+    inline bool IsMultiSelection() const;
 
     // Check if a complete paragraph was selected.
-    sal_Bool IsSelFullPara() const;
+    bool IsSelFullPara() const;
 
     // Check if selection is within one paragraph.
 
@@ -524,7 +524,7 @@ public:
     bool ShouldWait() const;
 
     // Check if selection is within one paragraph.
-    inline sal_Bool IsSelOnePara() const;
+    inline bool IsSelOnePara() const;
 
     /*
      * Returns SRectangle, at which the cursor is located.
@@ -533,29 +533,29 @@ public:
     /*
      * Returns if cursor is wholly or partly within visible range.
      */
-    sal_Bool IsCrsrVisible() const { return VisArea().IsOver( GetCharRect() ); }
+    bool IsCrsrVisible() const { return VisArea().IsOver( GetCharRect() ); }
     /*
      * Returns SwRect, at which the character is located.
      */
-    sal_Bool GetCharRectAt(SwRect& rRect, const SwPosition* pPos);
+    bool GetCharRectAt(SwRect& rRect, const SwPosition* pPos);
 
     // Return current page number:
     // TRUE:  in which cursor is located.
     // FALSE: which is visible at the upper margin.
     void GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,
-                     sal_Bool bAtCrsrPos = sal_True, const sal_Bool bCalcFrm = sal_True );
+                     bool bAtCrsrPos = true, const bool bCalcFrm = true );
     // Determine how "empty pages" are handled
     // (used in PhyPage).
-    sal_uInt16 GetNextPrevPageNum( sal_Bool bNext = sal_True );
+    sal_uInt16 GetNextPrevPageNum( bool bNext = true );
 
     // Move cursor at the bginning of page "nPage".
-    sal_Bool GotoPage( sal_uInt16 nPage );
+    bool GotoPage( sal_uInt16 nPage );
 
     sal_uInt16 GetPageCnt();
 
-    sal_Bool GoNextCrsr();
+    bool GoNextCrsr();
 
-    sal_Bool GoPrevCrsr();
+    bool GoPrevCrsr();
 
     // at CurCrsr.SPoint
     ::sw::mark::IMark* SetBookmark(
@@ -586,9 +586,9 @@ public:
     OUString GetText() const;
 
     // Check of SPoint or Mark of current cursor are placed within a table.
-    inline const SwTableNode* IsCrsrInTbl( sal_Bool bIsPtInTbl = sal_True ) const;
+    inline const SwTableNode* IsCrsrInTbl( bool bIsPtInTbl = true ) const;
 
-    inline Point& GetCrsrDocPos( sal_Bool bPoint = sal_True ) const;
+    inline Point& GetCrsrDocPos( bool bPoint = true ) const;
     inline bool IsCrsrPtAtEnd() const;
 
     inline const  SwPaM* GetTblCrs() const;
@@ -599,17 +599,17 @@ public:
     OUString GetBoxNms() const;
 
     // set Crsr to the next/previous cell
-    sal_Bool GoNextCell( sal_Bool bAppendLine = sal_True );
-    sal_Bool GoPrevCell();
+    bool GoNextCell( bool bAppendLine = true );
+    bool GoPrevCell();
     // go to this box (if available and inside of table)
     bool GotoTable( const OUString& rName );
 
     // select a table row, column or box (based on the current cursor)
-    sal_Bool SelTblRow() { return _SelTblRowOrCol( true  ); }
-    sal_Bool SelTblCol() { return _SelTblRowOrCol( false ); }
-    sal_Bool SelTblBox();
+    bool SelTblRow() { return _SelTblRowOrCol( true  ); }
+    bool SelTblCol() { return _SelTblRowOrCol( false ); }
+    bool SelTblBox();
 
-    sal_Bool SelTbl();
+    bool SelTbl();
 
     bool GotoNextNum();
     bool GotoPrevNum();
@@ -621,11 +621,11 @@ public:
     sal_uInt16 GetOutlinePos( sal_uInt8 nLevel = UCHAR_MAX );
     // select the given range of OutlineNodes. Optionally including the children
     // the sal_uInt16s are the positions in OutlineNodes-Array (EditShell)
-    sal_Bool MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
-                        sal_Bool bWithChildren = sal_False );
+    bool MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
+                         bool bWithChildren = false );
 
-    sal_Bool GotoNextOutline();
-    sal_Bool GotoPrevOutline();
+    bool GotoNextOutline();
+    bool GotoPrevOutline();
 
     /** Delivers the current shell cursor
 
@@ -650,64 +650,64 @@ public:
     IBlockCursor* GetBlockCrsr() { return m_pBlockCrsr; }
 
     // is the Crsr in a table and is the selection over 2 columns
-    sal_Bool IsTableMode() const { return 0 != m_pTblCrsr; }
+    bool IsTableMode() const { return 0 != m_pTblCrsr; }
 
     const SwShellTableCrsr* GetTableCrsr() const { return m_pTblCrsr; }
     SwShellTableCrsr* GetTableCrsr() { return m_pTblCrsr; }
     size_t UpdateTblSelBoxes();
 
-    sal_Bool GotoFtnTxt();      ///< jump from content to footnote
-    sal_Bool GotoFtnAnchor();   ///< jump from footnote to anchor
-    sal_Bool GotoPrevFtnAnchor();
-    sal_Bool GotoNextFtnAnchor();
+    bool GotoFtnTxt();      ///< jump from content to footnote
+    bool GotoFtnAnchor();   ///< jump from footnote to anchor
+    bool GotoPrevFtnAnchor();
+    bool GotoNextFtnAnchor();
 
-    sal_Bool GotoFlyAnchor();       ///< jump from the frame to the anchor
-    sal_Bool GotoHeaderTxt();       ///< jump from the content to the header
-    sal_Bool GotoFooterTxt();       ///< jump from the content to the footer
+    bool GotoFlyAnchor();       ///< jump from the frame to the anchor
+    bool GotoHeaderTxt();       ///< jump from the content to the header
+    bool GotoFooterTxt();       ///< jump from the content to the footer
     // jump to the header/footer of the given or current PageDesc
-    sal_Bool SetCrsrInHdFt( sal_uInt16 nDescNo = USHRT_MAX,
-                            sal_Bool bInHeader = sal_True );
+    bool SetCrsrInHdFt( sal_uInt16 nDescNo = USHRT_MAX,
+                        bool bInHeader = true );
     // is point of cursor in header/footer. pbInHeader return sal_True if it is
     // in a headerframe otherwise in a footerframe
-    bool IsInHeaderFooter( sal_Bool* pbInHeader = 0 ) const;
+    bool IsInHeaderFooter( bool* pbInHeader = 0 ) const;
 
-    sal_Bool GotoNextTOXBase( const OUString* = 0 );
-    sal_Bool GotoPrevTOXBase( const OUString* = 0 );
-    sal_Bool GotoTOXMarkBase();
+    bool GotoNextTOXBase( const OUString* = 0 );
+    bool GotoPrevTOXBase( const OUString* = 0 );
+    bool GotoTOXMarkBase();
     // jump to the next or previous index entry
-    sal_Bool GotoNxtPrvTOXMark( sal_Bool bNext = sal_True );
+    bool GotoNxtPrvTOXMark( bool bNext = true );
     // jump to the next/previous index mark of this type
     const SwTOXMark& GotoTOXMark( const SwTOXMark& rStart, SwTOXSearch eDir );
 
     // jump to the next or previous table formula
     // optionally only to broken formulas
-    sal_Bool GotoNxtPrvTblFormula( sal_Bool bNext = sal_True,
-                                    sal_Bool bOnlyErrors = sal_False );
+    bool GotoNxtPrvTblFormula( bool bNext = true,
+                               bool bOnlyErrors = false );
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
     bool SelectNxtPrvHyperlink( bool bNext = true );
 
-    sal_Bool GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType = 0,
+    bool GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType = 0,
                             sal_uInt16 nSeqNo = 0 );
 
     // get the nth character from the start or end of the  current selection
-    sal_Unicode GetChar( sal_Bool bEnd = sal_True, long nOffset = 0 );
-    sal_Bool ExtendSelection( sal_Bool bEnd = sal_True, sal_Int32 nCount = 1 );
+    sal_Unicode GetChar( bool bEnd = true, long nOffset = 0 );
+    bool ExtendSelection( bool bEnd = true, sal_Int32 nCount = 1 );
 
     // Place only the visible cursor at the given position in the document.
     // Return FALSE if SPoint was corrected by layout.
     // (This is needed for displaying the Drag&Drop/Copy-Cursor.)
-    sal_Bool SetVisCrsr( const Point &rPt );
+    bool SetVisCrsr( const Point &rPt );
     inline void UnSetVisCrsr();
 
     // jump to the next or previous field of the corresponding type
-    sal_Bool MoveFldType(
+    bool MoveFldType(
         const SwFieldType* pFldType,
         const bool bNext,
         const sal_uInt16 nResType = USHRT_MAX,
         const bool bAddSetExpressionFldsToInputFlds = true );
 
-    sal_Bool GotoFld( const SwFmtFld& rFld );
+    bool GotoFld( const SwFmtFld& rFld );
 
     SwTxtFld* GetTxtFldAtPos(
         const SwPosition* pPos,
@@ -724,49 +724,49 @@ public:
 
     // Return number of cursors in ring (The flag indicates whether
     // only cursors containing selections are requested).
-    sal_uInt16 GetCrsrCnt( sal_Bool bAll = sal_True ) const;
+    sal_uInt16 GetCrsrCnt( bool bAll = true ) const;
 
     // Char Travelling - methods (in crstrvl1.cxx)
-    sal_Bool GoStartWord();
-    sal_Bool GoEndWord();
-    sal_Bool GoNextWord();
-    sal_Bool GoPrevWord();
-    sal_Bool GoNextSentence();
-    sal_Bool GoStartSentence();
-    sal_Bool GoEndSentence();
-    sal_Bool SelectWord( const Point* pPt = 0 );
-    sal_Bool ExpandToSentenceBorders();
+    bool GoStartWord();
+    bool GoEndWord();
+    bool GoNextWord();
+    bool GoPrevWord();
+    bool GoNextSentence();
+    bool GoStartSentence();
+    bool GoEndSentence();
+    bool SelectWord( const Point* pPt = 0 );
+    bool ExpandToSentenceBorders();
 
     // get position from current cursor
-    sal_Bool IsStartWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES )const;
-    sal_Bool IsEndWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
-    sal_Bool IsInWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
-    sal_Bool IsStartSentence() const;
-    sal_Bool IsEndSentence() const;
+    bool IsStartWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES )const;
+    bool IsEndWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
+    bool IsInWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
+    bool IsStartSentence() const;
+    bool IsEndSentence() const;
     bool IsSttPara() const;
     bool IsEndPara() const;
     bool IsEndOfTable() const; ///< at the very last SwPosition inside a table
-    sal_Bool IsStartOfDoc() const;
-    sal_Bool IsEndOfDoc() const;
+    bool IsStartOfDoc() const;
+    bool IsEndOfDoc() const;
     bool IsInFrontOfLabel() const;
-    sal_Bool IsAtLeftMargin()   const       { return IsAtLRMargin( sal_True ); }
-    sal_Bool IsAtRightMargin(sal_Bool bAPI = sal_False) const   { return IsAtLRMargin( sal_False, bAPI ); }
+    bool IsAtLeftMargin()   const       { return IsAtLRMargin( true ); }
+    bool IsAtRightMargin(bool bAPI = false) const   { return IsAtLRMargin( false, bAPI ); }
 
     // delete all created cursors, set the table cursor and the last cursor to
     // its TextNode (or StartNode?)
     // They all get created on the next ::GetCrsr again
     // Used for Drag&Drop/Clipboard-Paste in tables
-    sal_Bool ParkTblCrsr();
+    bool ParkTblCrsr();
 
     // Non expanded attributes?
-    sal_Bool IsGCAttr() const { return m_bGCAttr; }
-    void ClearGCAttr() { m_bGCAttr = sal_False; }
-    void    UpdateAttr() {  m_bGCAttr = sal_True; }
+    bool IsGCAttr() const { return m_bGCAttr; }
+    void ClearGCAttr() { m_bGCAttr = false; }
+    void    UpdateAttr() {  m_bGCAttr = true; }
 
     // is the whole document protected/hidden (for UI...)
-    sal_Bool IsAllProtect() const { return m_bAllProtect; }
+    bool IsAllProtect() const { return m_bAllProtect; }
 
-    sal_Bool BasicActionPend() const    { return m_nBasicActionCnt != mnStartAction; }
+    bool BasicActionPend() const    { return m_nBasicActionCnt != mnStartAction; }
 
     bool GotoRegion( const OUString& rName );
 
@@ -774,12 +774,12 @@ public:
     virtual void MakeSelVisible();
 
     // set the cursor to a NOT protected/hidden node
-    sal_Bool FindValidCntntNode( sal_Bool bOnlyText = sal_False );
+    bool FindValidCntntNode( bool bOnlyText = false );
 
-    sal_Bool GetContentAtPos( const Point& rPt,
-                            SwContentAtPos& rCntntAtPos,
-                            sal_Bool bSetCrsr = sal_False,
-                            SwRect* pFldRect = 0 );
+    bool GetContentAtPos( const Point& rPt,
+                          SwContentAtPos& rCntntAtPos,
+                          bool bSetCrsr = false,
+                          SwRect* pFldRect = 0 );
 
     const SwPostItField* GetPostItFieldAtCursor() const;
 
@@ -795,38 +795,38 @@ public:
                           ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
                           ::com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rRange ) const;
 
-    sal_Bool IsPageAtPos( const Point &rPt ) const;
+    bool IsPageAtPos( const Point &rPt ) const;
 
-    sal_Bool SelectTxtAttr( sal_uInt16 nWhich, sal_Bool bExpand, const SwTxtAttr* pAttr = 0 );
+    bool SelectTxtAttr( sal_uInt16 nWhich, bool bExpand, const SwTxtAttr* pAttr = 0 );
     bool GotoINetAttr( const SwTxtINetFmt& rAttr );
     const SwFmtINetFmt* FindINetAttr( const OUString& rName ) const;
 
-    sal_Bool SelectTxt( const sal_Int32 nStart,
+    bool SelectTxt( const sal_Int32 nStart,
                         const sal_Int32 nEnd );
 
-    sal_Bool CheckTblBoxCntnt( const SwPosition* pPos = 0 );
+    bool CheckTblBoxCntnt( const SwPosition* pPos = 0 );
     void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
     void ClearTblBoxCntnt();
-    sal_Bool EndAllTblBoxEdit();
+    bool EndAllTblBoxEdit();
 
-    void SetSelTblCells( sal_Bool bFlag )           { m_bSelTblCells = bFlag; }
-    sal_Bool IsSelTblCells() const                  { return m_bSelTblCells; }
+    void SetSelTblCells( bool bFlag )           { m_bSelTblCells = bFlag; }
+    bool IsSelTblCells() const                  { return m_bSelTblCells; }
 
-    sal_Bool IsAutoUpdateCells() const              { return m_bAutoUpdateCells; }
-    void SetAutoUpdateCells( sal_Bool bFlag )       { m_bAutoUpdateCells = bFlag; }
+    bool IsAutoUpdateCells() const              { return m_bAutoUpdateCells; }
+    void SetAutoUpdateCells( bool bFlag )       { m_bAutoUpdateCells = bFlag; }
 
-    sal_Bool GetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode,
+    bool GetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode,
                             SwRect& rRect, short& rOrient );
-    sal_Bool SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode );
+    bool SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode );
 
     const SwRangeRedline* SelNextRedline();
     const SwRangeRedline* SelPrevRedline();
-    const SwRangeRedline* GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect = sal_False );
+    const SwRangeRedline* GotoRedline( sal_uInt16 nArrPos, bool bSelect = false );
 
     // is cursor or the point in/over a vertical formatted text?
     bool IsInVerticalText( const Point* pPt = 0 ) const;
     // is cursor or the point in/over a right to left formatted text?
-    sal_Bool IsInRightToLeftText( const Point* pPt = 0 ) const;
+    bool IsInRightToLeftText( const Point* pPt = 0 ) const;
 
     void FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage);
     bool   bColumnChange();
@@ -867,7 +867,7 @@ inline SwMoveFnCollection* SwCrsrShell::MakeFindRange(
     return m_pCurCrsr->MakeFindRange( (SwDocPositions)nStt, (SwDocPositions)nEnd, pPam );
 }
 
-inline SwCursor* SwCrsrShell::GetSwCrsr( sal_Bool bMakeTblCrsr ) const
+inline SwCursor* SwCrsrShell::GetSwCrsr( bool bMakeTblCrsr ) const
 {
     return (SwCursor*)GetCrsr( bMakeTblCrsr );
 }
@@ -876,25 +876,25 @@ inline SwPaM* SwCrsrShell::GetStkCrsr() const { return m_pCrsrStk; }
 
 inline void SwCrsrShell::SetMark() { m_pCurCrsr->SetMark(); }
 
-inline sal_Bool SwCrsrShell::HasMark() { return( m_pCurCrsr->HasMark() ); }
+inline bool SwCrsrShell::HasMark() { return( m_pCurCrsr->HasMark() ); }
 
-inline sal_Bool SwCrsrShell::IsSelection() const
+inline bool SwCrsrShell::IsSelection() const
 {
     return IsTableMode() || m_pCurCrsr->HasMark() ||
             m_pCurCrsr->GetNext() != m_pCurCrsr;
 }
-inline sal_Bool SwCrsrShell::IsMultiSelection() const
+inline bool SwCrsrShell::IsMultiSelection() const
 {
     return m_pCurCrsr->GetNext() != m_pCurCrsr;
 }
 
-inline sal_Bool SwCrsrShell::IsSelOnePara() const
+inline bool SwCrsrShell::IsSelOnePara() const
 {
     return m_pCurCrsr == m_pCurCrsr->GetNext() &&
            m_pCurCrsr->GetPoint()->nNode == m_pCurCrsr->GetMark()->nNode;
 }
 
-inline const SwTableNode* SwCrsrShell::IsCrsrInTbl( sal_Bool bIsPtInTbl ) const
+inline const SwTableNode* SwCrsrShell::IsCrsrInTbl( bool bIsPtInTbl ) const
 {
     return m_pCurCrsr->GetNode( bIsPtInTbl )->FindTableNode();
 }
@@ -904,7 +904,7 @@ inline bool SwCrsrShell::IsCrsrPtAtEnd() const
     return m_pCurCrsr->End() == m_pCurCrsr->GetPoint();
 }
 
-inline Point& SwCrsrShell::GetCrsrDocPos( sal_Bool bPoint ) const
+inline Point& SwCrsrShell::GetCrsrDocPos( bool bPoint ) const
 {
     return bPoint ? m_pCurCrsr->GetPtPos() : m_pCurCrsr->GetMkPos();
 }

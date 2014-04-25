@@ -199,7 +199,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     const SfxItemSet    *pArgs = rReq.GetArgs();
     SfxBindings         &rBnd  = GetView().GetViewFrame()->GetBindings();
     sal_uInt16               nSlotId = rReq.GetSlot();
-    sal_Bool                 bChanged = pSdrView->GetModel()->IsChanged();
+    bool                 bChanged = pSdrView->GetModel()->IsChanged();
 
     pSdrView->GetModel()->SetChanged(false);
 
@@ -439,7 +439,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
 
             case SID_OBJECT_ROTATE:
             {
-                const sal_Bool bIsRotate = GetView().IsDrawRotate();
+                const bool bIsRotate = GetView().IsDrawRotate();
                 if ( (!bIsRotate && !pSdrView->IsRotateAllowed()) || bProtected )
                     rSet.DisableItem( nWhich );
                 else
@@ -524,7 +524,7 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
     SdrView*    pDrView = rSh.GetDrawView();
-    sal_Bool        bChanged = pDrView->GetModel()->IsChanged();
+    bool        bChanged = pDrView->GetModel()->IsChanged();
     pDrView->GetModel()->SetChanged(false);
 
     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();

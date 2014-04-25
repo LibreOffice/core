@@ -1409,7 +1409,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     if( bFieldInfo && ( nWidth30 < nX || bRightOver || bLeftOver ||
         ( pPor->InNumberGrp() && !pPor->IsFtnNumPortion() ) ||
         ( pPor->IsMarginPortion() && nWidth > nX + 30 ) ) )
-        ((SwCrsrMoveState*)pCMS)->bPosCorr = sal_True;
+        ((SwCrsrMoveState*)pCMS)->bPosCorr = true;
 
     // #i27615#
     if (pCMS)
@@ -1418,7 +1418,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         {
             if (! (2 * nX < nWidth && pPor->InNumberGrp() &&
                    !pPor->IsFtnNumPortion()))
-                pCMS->bInFrontOfLabel = sal_False;
+                pCMS->bInFrontOfLabel = false;
         }
     }
 
@@ -1430,16 +1430,16 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         if( pCMS )
         {
             if( pPor->IsFlyPortion() && bFieldInfo )
-                ((SwCrsrMoveState*)pCMS)->bPosCorr = sal_True;
+                ((SwCrsrMoveState*)pCMS)->bPosCorr = true;
 
             if (!bRightOver && nX)
             {
                 if( pPor->IsFtnNumPortion())
-                    ((SwCrsrMoveState*)pCMS)->bFtnNoInfo = sal_True;
+                    ((SwCrsrMoveState*)pCMS)->bFtnNoInfo = true;
                 else if (pPor->InNumberGrp() ) // #i23726#
                 {
                     ((SwCrsrMoveState*)pCMS)->nInNumPostionOffset = nX;
-                    ((SwCrsrMoveState*)pCMS)->bInNumPortion = sal_True;
+                    ((SwCrsrMoveState*)pCMS)->bInNumPortion = true;
                 }
             }
         }

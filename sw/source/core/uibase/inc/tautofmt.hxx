@@ -64,11 +64,11 @@ class SwAutoFormatDlg : public SfxModalDialog
     SwTableAutoFmtTbl*      pTableTbl;
     sal_uInt8                   nIndex;
     sal_uInt8                   nDfltStylePos;
-    sal_Bool                    bCoreDataChanged : 1;
-    sal_Bool                    bSetAutoFmt : 1;
+    bool                    bCoreDataChanged : 1;
+    bool                    bSetAutoFmt : 1;
 
     void Init( const SwTableAutoFmt* pSelFmt );
-    void UpdateChecks( const SwTableAutoFmt&, sal_Bool bEnableBtn );
+    void UpdateChecks( const SwTableAutoFmt&, bool bEnableBtn );
 
     DECL_LINK( CheckHdl, Button * );
     DECL_LINK(OkHdl, void *);
@@ -79,7 +79,7 @@ class SwAutoFormatDlg : public SfxModalDialog
 
 public:
     SwAutoFormatDlg( Window* pParent, SwWrtShell* pShell,
-                        sal_Bool bSetAutoFmt = sal_True,
+                        bool bSetAutoFmt = true,
                         const SwTableAutoFmt* pSelFmt = 0 );
     virtual ~SwAutoFormatDlg();
 

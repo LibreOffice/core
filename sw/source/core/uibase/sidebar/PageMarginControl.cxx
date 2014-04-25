@@ -45,7 +45,7 @@ PageMarginControl::PageMarginControl(
     const SvxLongULSpaceItem& aPageULMargin,
     const bool bMirrored,
     const Size aPageSize,
-    const sal_Bool bLandscape,
+    const bool bLandscape,
     const FieldUnit eFUnit,
     const SfxMapUnit eUnit )
     : ::svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_MARGIN) )

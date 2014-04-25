@@ -108,7 +108,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     mpOutlineRule->SetName(SwNumRule::GetOutlineRuleName(), *this);
 
     // assure that the outline numbering rule is an automatic rule
-    mpOutlineRule->SetAutoRule( sal_True );
+    mpOutlineRule->SetAutoRule( true );
 
     // test whether the optional CharFormats are defined in this Document
     mpOutlineRule->CheckCharFmts( this );
@@ -132,7 +132,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     }
 
     PropagateOutlineRule();
-    mpOutlineRule->SetInvalidRule(sal_True);
+    mpOutlineRule->SetInvalidRule(true);
     UpdateNumRule();
 
     // update if we have foot notes && numbering by chapter
@@ -153,7 +153,7 @@ void SwDoc::PropagateOutlineRule()
         if(pColl->IsAssignedToListLevelOfOutlineStyle())
         {
             // Check only the list style, which is set at the paragraph style
-            const SwNumRuleItem & rCollRuleItem = pColl->GetNumRule( sal_False );
+            const SwNumRuleItem & rCollRuleItem = pColl->GetNumRule( false );
 
             // Check on document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE no longer needed.
             if ( rCollRuleItem.GetValue().isEmpty() )
@@ -786,7 +786,7 @@ static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 
         if ( bInvalidateNumRule )
         {
-            pOld->SetInvalidRule(sal_True);
+            pOld->SetInvalidRule(true);
         }
 
         return ;
@@ -815,7 +815,7 @@ static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
             pOld->Set( n, rRule.GetNumFmt( n ) );
 
     pOld->CheckCharFmts( &rDoc );
-    pOld->SetInvalidRule( sal_True );
+    pOld->SetInvalidRule( true );
     pOld->SetContinusNum( rRule.IsContinusNum() );
 
     rDoc.UpdateNumRule();
@@ -955,7 +955,7 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
     }
 }
 
-void SwDoc::SetNumRuleStart( const SwPosition& rPos, sal_Bool bFlag )
+void SwDoc::SetNumRuleStart( const SwPosition& rPos, bool bFlag )
 {
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
 
@@ -1330,7 +1330,7 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
             aRegH.RegisterInModify( pTNd, *pTNd );
 
             if( pUndo )
-                pUndo->AddNode( *pTNd, sal_False );
+                pUndo->AddNode( *pTNd, false );
 
             // directly set list style attribute is reset, otherwise empty
             // list style is applied
@@ -1369,7 +1369,7 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
 void SwDoc::InvalidateNumRules()
 {
     for (sal_uInt16 n = 0; n < mpNumRuleTbl->size(); ++n)
-        (*mpNumRuleTbl)[n]->SetInvalidRule(sal_True);
+        (*mpNumRuleTbl)[n]->SetInvalidRule(true);
 }
 
 // To the next/preceding Bullet at the same Level
@@ -1562,7 +1562,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                 const SwNumRule * pNumRule = pTxtNd->GetNumRule();
                 if (pNumRule)
                 {
-                    if ( ( pNumRule->IsOutlineRule() == ( bOutline ? sal_True : sal_False ) ) &&
+                    if ( ( pNumRule->IsOutlineRule() == bOutline ) &&
                          ( ( bNum && pNumRule->Get(0).IsEnumeration()) ||
                            ( !bNum && pNumRule->Get(0).IsItemize() ) ) ) // #i22362#, #i29560#
                     {
@@ -1961,7 +1961,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                         pPos->nContent.Assign( pPos->nNode.GetNode().GetCntntNode(),0);
                     }
                 }
-                CorrRel( aIdx, aInsPos, 0, sal_False );
+                CorrRel( aIdx, aInsPos, 0, false );
 
                 pCNd->JoinNext();
             }
@@ -2054,7 +2054,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
     return true;
 }
 
-bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )
+bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, bool bDel )
 {
     bool bResult = false;
     SwTxtNode * pTxtNd = rIdx.GetNode().GetTxtNode();
@@ -2064,8 +2064,8 @@ bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )
     {
         if ( !pTxtNd->IsCountedInList() == !bDel)
         {
-            sal_Bool bOldNum = bDel;
-            sal_Bool bNewNum = bDel ? sal_False : sal_True;
+            bool bOldNum = bDel;
+            bool bNewNum = bDel ? sal_False : sal_True;
             pTxtNd->SetCountedInList(bNewNum ? true : false);
 
             SetModified();

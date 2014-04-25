@@ -54,17 +54,17 @@ class SwXBookmark;
 class SwUnoCollection
 {
     SwDoc*      pDoc;
-    sal_Bool    bObjectValid;
+    bool    bObjectValid;
 
     public:
         SwUnoCollection(SwDoc* p) :
             pDoc(p),
-            bObjectValid(sal_True){}
+            bObjectValid(true){}
 
     virtual ~SwUnoCollection() {}
 
     virtual void                Invalidate();
-    sal_Bool                        IsValid() const {return bObjectValid;}
+    bool                        IsValid() const {return bObjectValid;}
 
     SwDoc*          GetDoc() const {return pDoc;}
 };
@@ -475,7 +475,7 @@ class SwXFootnotes : public SwSimpleIndexAccessBaseClass,
 protected:
     virtual ~SwXFootnotes();
 public:
-    SwXFootnotes(sal_Bool bEnd, SwDoc* pDoc);
+    SwXFootnotes(bool bEnd, SwDoc* pDoc);
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

@@ -63,10 +63,10 @@ class SwXMLConditionParser_Impl
     sal_Int32 nPos;
     sal_Int32 nLength;
 
-    inline sal_Bool SkipWS();
-    inline sal_Bool MatchChar( sal_Unicode c );
-    inline sal_Bool MatchName( OUString& rName );
-    inline sal_Bool MatchNumber( sal_uInt32& rNumber );
+    inline bool SkipWS();
+    inline bool MatchChar( sal_Unicode c );
+    inline bool MatchName( OUString& rName );
+    inline bool MatchNumber( sal_uInt32& rNumber );
 
 public:
 
@@ -78,25 +78,25 @@ public:
     sal_uInt32 GetSubCondition() const { return nSubCondition; }
 };
 
-inline sal_Bool SwXMLConditionParser_Impl::SkipWS()
+inline bool SwXMLConditionParser_Impl::SkipWS()
 {
     while( nPos < nLength && ' ' == sInput[nPos] )
         nPos++;
-    return sal_True;
+    return true;
 }
 
-inline sal_Bool SwXMLConditionParser_Impl::MatchChar( sal_Unicode c )
+inline bool SwXMLConditionParser_Impl::MatchChar( sal_Unicode c )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( nPos < nLength && c == sInput[nPos] )
     {
         nPos++;
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
 
-inline sal_Bool SwXMLConditionParser_Impl::MatchName( OUString& rName )
+inline bool SwXMLConditionParser_Impl::MatchName( OUString& rName )
 {
     OUStringBuffer sBuffer( nLength );
     while( nPos < nLength &&
@@ -110,7 +110,7 @@ inline sal_Bool SwXMLConditionParser_Impl::MatchName( OUString& rName )
     return !rName.isEmpty();
 }
 
-inline sal_Bool SwXMLConditionParser_Impl::MatchNumber( sal_uInt32& rNumber )
+inline bool SwXMLConditionParser_Impl::MatchNumber( sal_uInt32& rNumber )
 {
     OUStringBuffer sBuffer( nLength );
     while( nPos < nLength && '0' <= sInput[nPos] && sInput[nPos] <= '9' )
@@ -735,7 +735,7 @@ public:
             SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
-            sal_Bool bAuto );
+            bool bAuto );
     virtual ~SwXMLStylesContext_Impl();
 
     virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const SAL_OVERRIDE;
@@ -815,7 +815,7 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
 SwXMLStylesContext_Impl::SwXMLStylesContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
-        sal_Bool bAuto ) :
+        bool bAuto ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList, bAuto )
 {
 }
@@ -958,7 +958,7 @@ void SwXMLMasterStylesContext_Impl::EndElement()
 SvXMLImportContext *SwXMLImport::CreateStylesContext(
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
-        sal_Bool bAuto )
+        bool bAuto )
 {
     SvXMLStylesContext *pContext =
         new SwXMLStylesContext_Impl( *this, XML_NAMESPACE_OFFICE, rLocalName,
@@ -983,7 +983,7 @@ SvXMLImportContext *SwXMLImport::CreateMasterStylesContext(
     return pContext;
 }
 
-void SwXMLImport::InsertStyles( sal_Bool bAuto )
+void SwXMLImport::InsertStyles( bool bAuto )
 {
     if( bAuto && GetAutoStyles() )
         GetAutoStyles()->CopyAutoStylesToDoc();

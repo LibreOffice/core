@@ -34,7 +34,7 @@ TYPEINIT1( SwDDETable, SwTable );
 
 /// Ctor moves all lines/boxes from a SwTable into itself.
 /// Afterwards the SwTable is empty and must be deleted.
-SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, sal_Bool bUpdate )
+SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, bool bUpdate )
     : SwTable( rTable ), aDepend( this, pDDEType )
 {
     // copy the table data
@@ -140,7 +140,7 @@ SwDDEFieldType* SwDDETable::GetDDEFldType()
     return (SwDDEFieldType*)aDepend.GetRegisteredIn();
 }
 
-sal_Bool SwDDETable::NoDDETable()
+bool SwDDETable::NoDDETable()
 {
     // search table node
     OSL_ENSURE( GetFrmFmt(), "No FrameFormat" );
@@ -148,11 +148,11 @@ sal_Bool SwDDETable::NoDDETable()
 
     // Is this the correct NodesArray? (because of UNDO)
     if( aLines.empty() )
-        return sal_False;
+        return false;
     OSL_ENSURE( !GetTabSortBoxes().empty(), "Table without content?" );
     SwNode* pNd = (SwNode*)GetTabSortBoxes()[0]->GetSttNd();
     if( !pNd->GetNodes().IsDocNodes() )
-        return sal_False;
+        return false;
 
     SwTableNode* pTblNd = pNd->FindTableNode();
     OSL_ENSURE( pTblNd, "Where is the table?");
@@ -172,7 +172,7 @@ sal_Bool SwDDETable::NoDDETable()
 
     pTblNd->SetNewTable( pNewTbl );       // replace table
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

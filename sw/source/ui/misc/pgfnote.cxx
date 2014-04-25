@@ -125,7 +125,7 @@ SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet)
     get(m_pLineDistEdit, "spacingtocontents");
 
     SetExchangeSupport();
-    FieldUnit aMetric = ::GetDfltMetric(sal_False);
+    FieldUnit aMetric = ::GetDfltMetric(false);
     SetMetric(*m_pMaxHeightEdit, aMetric);
     SetMetric(*m_pDistEdit, aMetric);
     SetMetric(*m_pLineDistEdit, aMetric);

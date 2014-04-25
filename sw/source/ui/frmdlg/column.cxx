@@ -276,10 +276,10 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
         break;
     }
 
-    sal_Bool bIsSection = pSet == pSectionSet || pSet == pSelectionSet;
+    bool bIsSection = pSet == pSectionSet || pSet == pSelectionSet;
     pTabPage->ShowBalance(bIsSection);
     pTabPage->SetInSection(bIsSection);
-    pTabPage->SetFrmMode(sal_True);
+    pTabPage->SetFrmMode(true);
     pTabPage->SetPageWidth(nWidth);
     if( pSet )
         pTabPage->Reset(*pSet);
@@ -404,9 +404,9 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     , nFirstVis(0)
     , nMinWidth(MINLAY)
     , pModifiedField(0)
-    , bFormat(sal_False)
-    , bFrm(sal_False)
-    , bHtmlMode(sal_False)
+    , bFormat(false)
+    , bFrm(false)
+    , bHtmlMode(false)
     , bLockUpdate(false)
 {
     get(m_pCLNrEdt, "colsnf");
@@ -576,7 +576,7 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
         ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
     if(nHtmlMode & HTMLMODE_ON)
     {
-        bHtmlMode = sal_True;
+        bHtmlMode = true;
         m_pAutoWidthBox->Enable(false);
     }
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
@@ -681,10 +681,10 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
         for( sal_uInt16 i = 1; i < nCols; ++i )
             nMin = std::min(nMin, nColWidth[i]);
 
-        sal_Bool bAutoWidth = m_pAutoWidthBox->IsChecked();
+        bool bAutoWidth = m_pAutoWidthBox->IsChecked();
         if(!bAutoWidth)
         {
-            pColMgr->SetAutoWidth(sal_False);
+            pColMgr->SetAutoWidth(false);
                 // when the user didn't allocate the whole width,
                 // add the missing amount to the last column.
             long nSum = 0;
@@ -780,7 +780,7 @@ void SwColumnPage::Init()
 {
     m_pCLNrEdt->SetValue(nCols);
 
-    sal_Bool bAutoWidth = pColMgr->IsAutoWidth() || bHtmlMode;
+    bool bAutoWidth = pColMgr->IsAutoWidth() || bHtmlMode;
     m_pAutoWidthBox->Check( bAutoWidth );
 
     sal_Int32 nColumnWidthSum = 0;
@@ -856,10 +856,10 @@ bool SwColumnPage::isLineNotNone() const
 ------------------------------------------------------------------------*/
 void SwColumnPage::UpdateCols()
 {
-    sal_Bool bEnableBtns= sal_False;
-    sal_Bool bEnable12  = sal_False;
-    sal_Bool bEnable3   = sal_False;
-    const sal_Bool bEdit = !m_pAutoWidthBox->IsChecked();
+    bool bEnableBtns= false;
+    bool bEnable12  = false;
+    bool bEnable3   = false;
+    const bool bEdit = !m_pAutoWidthBox->IsChecked();
     if ( nCols > nVisCols )
     {
         bEnableBtns = true && !bHtmlMode;
@@ -870,8 +870,8 @@ void SwColumnPage::UpdateCols()
         // here are purposely hardly any breaks
         switch(nCols)
         {
-            case 3: bEnable3 = sal_True;
-            case 2: bEnable12= sal_True; break;
+            case 3: bEnable3 = true;
+            case 2: bEnable12= true; break;
             default: /* do nothing */;
         }
     }
@@ -1231,7 +1231,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             pColMgr->SetActualWidth(nTotalWish);
             Init();
         }
-        sal_Bool bPercent;
+        bool bPercent;
         // only relative data in frame format
         if ( bFormat || (rSize.GetWidthPercent() && rSize.GetWidthPercent() != 0xff) )
         {
@@ -1243,10 +1243,10 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             aDistEd2.SetRefValue(nTotalWish);
 
             // switch to %-view
-            bPercent = sal_True;
+            bPercent = true;
         }
         else
-            bPercent = sal_False;
+            bPercent = false;
 
         aEd1.ShowPercent(bPercent);
         aEd2.ShowPercent(bPercent);
@@ -1308,12 +1308,12 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
     return 0;
 }
 
-void SwColumnPage::SetFrmMode(sal_Bool bMod)
+void SwColumnPage::SetFrmMode(bool bMod)
 {
     bFrm = bMod;
 }
 
-void SwColumnPage::SetInSection(sal_Bool bSet)
+void SwColumnPage::SetInSection(bool bSet)
 {
     if(!SW_MOD()->GetCTLOptions().IsCTLFontEnabled())
         return;

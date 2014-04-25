@@ -70,8 +70,8 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     , m_bResetUndo(false)
     , m_bCallUndo(false)
 {
-    bFirst = sal_True;
-    bActive = bIsTable = bDelSel = sal_False;
+    bFirst = true;
+    bActive = bIsTable = bDelSel = false;
 
     FreeResource();
 
@@ -189,7 +189,7 @@ void SwInputWindow::Resize()
 
 void SwInputWindow::ShowWin()
 {
-    bIsTable = sal_False;
+    bIsTable = false;
     // stop rulers
     if(pView)
     {
@@ -238,7 +238,7 @@ void SwInputWindow::ShowWin()
                 m_bDoesUndo = pWrtShell->DoesUndo();
                 if( !m_bDoesUndo )
                 {
-                    pWrtShell->DoUndo( sal_True );
+                    pWrtShell->DoUndo( true );
                 }
 
                 if( !pWrtShell->SwCrsrShell::HasSelection() )
@@ -271,7 +271,7 @@ void SwInputWindow::ShowWin()
             pWrtShell->EndSelect();
         }
 
-        bFirst = sal_False;
+        bFirst = false;
 
         aEdit.SetModifyHdl( LINK( this, SwInputWindow, ModifyHdl ));
 
@@ -284,7 +284,7 @@ void SwInputWindow::ShowWin()
         aEdit.GrabFocus();
         // For input cut the UserInterface
 
-        pView->GetEditWin().LockKeyInput(sal_True);
+        pView->GetEditWin().LockKeyInput(true);
         pView->GetViewFrame()->GetDispatcher()->Lock(true);
         pWrtShell->Push();
     }
@@ -371,9 +371,9 @@ void SwInputWindow::Click( )
 void  SwInputWindow::ApplyFormula()
 {
     pView->GetViewFrame()->GetDispatcher()->Lock(false);
-    pView->GetEditWin().LockKeyInput(sal_False);
+    pView->GetEditWin().LockKeyInput(false);
     CleanupUglyHackWithUndo();
-    pWrtShell->Pop( sal_False );
+    pWrtShell->Pop( false );
 
     // Formular should always begin with "=", so remove it here again
     OUString sEdit(comphelper::string::strip(aEdit.GetText(), ' '));
@@ -394,9 +394,9 @@ void  SwInputWindow::CancelFormula()
     if(pView)
     {
         pView->GetViewFrame()->GetDispatcher()->Lock( false );
-        pView->GetEditWin().LockKeyInput(sal_False);
+        pView->GetEditWin().LockKeyInput(false);
         CleanupUglyHackWithUndo();
-        pWrtShell->Pop( sal_False );
+        pWrtShell->Pop( false );
 
         if( bDelSel )
             pWrtShell->EnterStdMode();
@@ -453,7 +453,7 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
     return 0;
 }
 
-void SwInputWindow::SetFormula( const OUString& rFormula, sal_Bool bDelFlag )
+void SwInputWindow::SetFormula( const OUString& rFormula, bool bDelFlag )
 {
     OUString sEdit('=');
     if( !rFormula.isEmpty() )
@@ -492,7 +492,7 @@ void SwInputWindow::DelBoxCntnt()
     {
         pWrtShell->StartAllAction();
         pWrtShell->ClearMark();
-        pWrtShell->Pop( sal_False );
+        pWrtShell->Pop( false );
         pWrtShell->Push();
         pWrtShell->MoveSection( fnSectionCurr, fnSectionStart );
         pWrtShell->SetMark();

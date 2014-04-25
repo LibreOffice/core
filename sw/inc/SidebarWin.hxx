@@ -123,8 +123,8 @@ class SwSidebarWin : public Window
         void            ResetAttributes();
 
         void            SetSidebarPosition(sw::sidebarwindows::SidebarPosition eSidebarPosition);
-        void            SetReadonly(sal_Bool bSet);
-        sal_Bool        IsReadOnly()
+        void            SetReadonly(bool bSet);
+        bool        IsReadOnly()
         {
             return mbReadonly;
         }

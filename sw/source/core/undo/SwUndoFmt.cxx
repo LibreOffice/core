@@ -34,7 +34,7 @@
 SwUndoFmtCreate::SwUndoFmtCreate
 (SwUndoId nUndoId, SwFmt * _pNew, SwFmt * _pDerivedFrom, SwDoc * _pDoc)
     : SwUndo(nUndoId), pNew(_pNew),
-      pDoc(_pDoc), pNewSet(NULL), nId(0), bAuto(sal_False)
+      pDoc(_pDoc), pNewSet(NULL), nId(0), bAuto(false)
 {
     if (_pDerivedFrom)
         sDerivedFrom = _pDerivedFrom->GetName();

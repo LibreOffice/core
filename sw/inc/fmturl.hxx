@@ -73,10 +73,10 @@ public:
     void SetName( const OUString& rNm )     { sName = rNm; }
 };
 
-inline const SwFmtURL &SwAttrSet::GetURL(sal_Bool bInP) const
+inline const SwFmtURL &SwAttrSet::GetURL(bool bInP) const
     { return (const SwFmtURL&)Get( RES_URL,bInP); }
 
-inline const SwFmtURL &SwFmt::GetURL(sal_Bool bInP) const
+inline const SwFmtURL &SwFmt::GetURL(bool bInP) const
     { return aSet.GetURL(bInP); }
 
 #endif

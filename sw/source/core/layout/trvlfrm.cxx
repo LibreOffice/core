@@ -429,7 +429,7 @@ bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                              SwCrsrMoveState* pCMS, bool bTestBackground ) const
 {
     const bool bOldAction = IsCallbackActionEnabled();
-    ((SwRootFrm*)this)->SetCallbackActionEnabled( sal_False );
+    ((SwRootFrm*)this)->SetCallbackActionEnabled( false );
     OSL_ENSURE( (Lower() && Lower()->IsPageFrm()), "No PageFrm found." );
     if( pCMS && pCMS->pFill )
         ((SwCrsrMoveState*)pCMS)->bFillRet = false;
@@ -659,14 +659,14 @@ static bool lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
 //MA 1998-01-26: Chg also skip other protected areas
 //FME: Skip follow flow cells
 static const SwCntntFrm * lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
-                                                       GetNxtPrvCnt fnNxtPrv,
-                                                       sal_Bool bMissHeadline,
-                                                       sal_Bool bInReadOnly,
-                                                       sal_Bool bMissFollowFlowLine )
+                                                   GetNxtPrvCnt fnNxtPrv,
+                                                   bool bMissHeadline,
+                                                   bool bInReadOnly,
+                                                   bool bMissFollowFlowLine )
 {
     if ( pCnt && pCnt->IsInTab() )
     {
-        sal_Bool bProtect = sal_True;
+        bool bProtect = true;
         while ( pCnt && bProtect )
         {
             const SwLayoutFrm *pCell = pCnt->GetUpper();
@@ -677,7 +677,7 @@ static const SwCntntFrm * lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
                       ( !bMissHeadline || !lcl_IsInRepeatedHeadline( pCell ) ) &&
                       ( !bMissFollowFlowLine || !pCell->IsInFollowFlowRow() ) &&
                        !pCell->IsCoveredCell()) ) )
-                bProtect = sal_False;
+                bProtect = false;
             else
                 pCnt = (*fnNxtPrv)( pCnt );
         }
@@ -989,7 +989,7 @@ sal_uInt16 SwRootFrm::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
     OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "No page available." );
 
     SwPageFrm *pPage = (SwPageFrm*)Lower();
-    sal_Bool bEnd =sal_False;
+    bool bEnd =false;
     while ( !bEnd && pPage->GetPhyPageNum() != nPageNum )
     {   if ( pPage->GetNext() )
             pPage = (SwPageFrm*)pPage->GetNext();
@@ -1006,7 +1006,7 @@ sal_uInt16 SwRootFrm::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
             if ( pPage->GetNext() )
                 pPage = (SwPageFrm*)pPage->GetNext();
             else
-                bEnd = sal_True;
+                bEnd = true;
         }
     }
     //pPage now points to the 'requested' page. Now we have to create the PaM
@@ -1089,18 +1089,18 @@ SwWhichPage fnPageNext = GetNextFrm;
  * Returns the first/last Contentframe (controlled using the parameter fnPosPage)
  * of the current/previous/next page (controlled using the parameter fnWhichPage).
  */
-sal_Bool GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
+bool GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
                    SwPosPage fnPosPage, SwPaM *pPam )
 {
     //First find the requested page, at first the current, then the one which
     //was requests through fnWichPage.
     const SwLayoutFrm *pLayoutFrm = pCnt->FindPageFrm();
     if ( !pLayoutFrm || (0 == (pLayoutFrm = (*fnWhichPage)(pLayoutFrm))) )
-        return sal_False;
+        return false;
 
     //Now the desired CntntFrm below the page
     if( 0 == (pCnt = (*fnPosPage)(pLayoutFrm)) )
-        return sal_False;
+        return false;
     else
     {
         // repeated headlines in tables
@@ -1120,7 +1120,7 @@ sal_Bool GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
                         // of the next row
                         pCnt = pRow->ContainsCntnt();
                         if ( ! pCnt )
-                            return sal_False;
+                            return false;
                     }
                 }
             }
@@ -1135,7 +1135,7 @@ sal_Bool GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
             nIdx = pCnt->GetFollow() ?
                     ((SwTxtFrm*)pCnt)->GetFollow()->GetOfst()-1 : pCNd->Len();
         pPam->GetPoint()->nContent.Assign( pCNd, nIdx );
-        return sal_True;
+        return true;
     }
 }
 
@@ -1182,11 +1182,11 @@ static const SwLayoutFrm* lcl_Inside( const SwCntntFrm *pCnt, Point& rPt )
  * @return The 'semantically correct' position inside the PrtArea of the found CntntFrm.
  */
 const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
-                                            const sal_Bool bDontLeave,
-                                            const sal_Bool bBodyOnly,
-                                            const sal_Bool bCalc,
+                                            const bool bDontLeave,
+                                            const bool bBodyOnly,
+                                            const bool bCalc,
                                             const SwCrsrMoveState *pCMS,
-                                            const sal_Bool bDefaultExpand ) const
+                                            const bool bDefaultExpand ) const
 {
     //Determine the first CntntFrm.
     const SwLayoutFrm *pStart = (!bDontLeave && bDefaultExpand && GetPrev()) ?
@@ -1218,8 +1218,8 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
                 //If the Cntnt lies in a protected area (cell, Ftn, section),
                 //we search the next Cntnt which is not protected.
                 const SwCntntFrm *pComp = pCntnt;
-                pCntnt = ::lcl_MissProtectedFrames( pCntnt, lcl_GetNxtCnt, sal_False,
-                                        pCMS ? pCMS->bSetInReadOnly : sal_False, sal_False );
+                pCntnt = ::lcl_MissProtectedFrames( pCntnt, lcl_GetNxtCnt, false,
+                                        pCMS && pCMS->bSetInReadOnly, false );
                 if ( pComp != pCntnt )
                     continue;
 
@@ -1258,12 +1258,12 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
                         ( !pCntnt->IsInFtn() || pInside->IsFtnContFrm() ) ) )
                     {
                         const sal_uInt64 nDiff = ::CalcDiff(aCntntPoint, rPoint);
-                        sal_Bool bBetter = nDiff < nDistance;  // This one is nearer
+                        bool bBetter = nDiff < nDistance;  // This one is nearer
                         if( !pInside )
                         {
                             pInside = lcl_Inside( pCntnt, rPoint );
                             if( pInside )  // In the "right" page area
-                                bBetter = sal_True;
+                                bBetter = true;
                         }
                         if( bBetter )
                         {
@@ -1333,7 +1333,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
         const SwTabFrm *pTab = pActual->FindTabFrm();
         if ( pTab->IsFollow() && pTab->IsInHeadline( *pActual ) )
         {
-            ((SwCrsrMoveState*)pCMS)->bStop = sal_True;
+            ((SwCrsrMoveState*)pCMS)->bStop = true;
             return 0;
         }
     }
@@ -1476,14 +1476,14 @@ class DisableCallbackAction
 {
     private:
         SwRootFrm& mrRootFrm;
-        sal_Bool mbOldCallbackActionState;
+        bool mbOldCallbackActionState;
 
     public:
         DisableCallbackAction( const SwRootFrm& _rRootFrm ) :
             mrRootFrm( const_cast<SwRootFrm&>(_rRootFrm) ),
             mbOldCallbackActionState( _rRootFrm.IsCallbackActionEnabled() )
         {
-            mrRootFrm.SetCallbackActionEnabled( sal_False );
+            mrRootFrm.SetCallbackActionEnabled( false );
         }
 
         ~DisableCallbackAction()
@@ -1498,7 +1498,7 @@ class DisableCallbackAction
  * @note Only the nearest vertically one will be searched.
  * @note JP 11.10.2001: only in tables we try to find the right column - Bug 72294
  */
-Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, sal_Bool bNext ) const
+Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, bool bNext ) const
 {
     // #123110# - disable creation of an action by a callback
     // event during processing of this method. Needed because formatting is
@@ -1625,10 +1625,10 @@ SwPageFrm* SwRootFrm::GetPageByPageNum( sal_uInt16 _nPageNum ) const
 /**
  * @return sal_True, when the given physical pagenumber does't exist or this page is an empty page.
  */
-sal_Bool SwRootFrm::IsDummyPage( sal_uInt16 nPageNum ) const
+bool SwRootFrm::IsDummyPage( sal_uInt16 nPageNum ) const
 {
     if( !Lower() || !nPageNum || nPageNum > GetPageNum() )
-        return sal_True;
+        return true;
 
     const SwPageFrm *pPage = (const SwPageFrm*)Lower();
     while( pPage && nPageNum < pPage->GetPhyPageNum() )
@@ -1640,7 +1640,7 @@ sal_Bool SwRootFrm::IsDummyPage( sal_uInt16 nPageNum ) const
  *
  * Also Fly in Fly in ... and Footnotes
  */
-sal_Bool SwFrm::IsProtected() const
+bool SwFrm::IsProtected() const
 {
     if (this->IsCntntFrm() && ((SwCntntFrm*)this)->GetNode())
     {
@@ -1648,7 +1648,7 @@ sal_Bool SwFrm::IsProtected() const
         bool isFormProtected=pDoc->get(IDocumentSettingAccess::PROTECT_FORM );
         if (isFormProtected)
         {
-            return sal_False; // TODO a hack for now, well deal with it later, I we return true here we have a "double" locking
+            return false; // TODO a hack for now, well deal with it later, I we return true here we have a "double" locking
         }
     }
     //The Frm can be protected in borders, cells or sections.
@@ -1660,16 +1660,16 @@ sal_Bool SwFrm::IsProtected() const
         {
             if ( ((SwCntntFrm*)pFrm)->GetNode() &&
                  ((SwCntntFrm*)pFrm)->GetNode()->IsInProtectSect() )
-                return sal_True;
+                return true;
         }
         else
         {
             if ( ((SwLayoutFrm*)pFrm)->GetFmt() &&
                  ((SwLayoutFrm*)pFrm)->GetFmt()->
                  GetProtect().IsCntntProtected() )
-                return sal_True;
+                return true;
             if ( pFrm->IsCoveredCell() )
-                return sal_True;
+                return true;
         }
         if ( pFrm->IsFlyFrm() )
         {
@@ -1682,7 +1682,7 @@ sal_Bool SwFrm::IsProtected() const
                 {   pMaster = pMaster->GetPrevLink();
                 } while ( pMaster->GetPrevLink() );
                 if ( pMaster->IsProtected() )
-                    return sal_True;
+                    return true;
             }
             pFrm = ((SwFlyFrm*)pFrm)->GetAnchorFrm();
         }
@@ -1693,7 +1693,7 @@ sal_Bool SwFrm::IsProtected() const
 
     } while ( pFrm );
 
-    return sal_False;
+    return false;
 }
 
 /** @return the physical page number */
@@ -1714,11 +1714,11 @@ sal_uInt16 SwFrm::GetPhyPageNum() const
  * If there is no number offset, we take the physical page number instead,
  * but a previous empty page don't count.
  */
-sal_Bool SwFrm::WannaRightPage() const
+bool SwFrm::WannaRightPage() const
 {
     const SwPageFrm *pPage = FindPageFrm();
     if ( !pPage || !pPage->GetUpper() )
-        return sal_True;
+        return true;
 
     const SwFrm *pFlow = pPage->FindFirstBodyCntnt();
     const SwPageDesc *pDesc = 0;
@@ -1749,7 +1749,7 @@ sal_Bool SwFrm::WannaRightPage() const
         }
     }
     OSL_ENSURE( pDesc, "No pagedescriptor" );
-    sal_Bool bOdd;
+    bool bOdd;
     if( oPgNum )
         bOdd = (oPgNum.get() % 2) ? sal_True : sal_False;
     else
@@ -1761,9 +1761,9 @@ sal_Bool SwFrm::WannaRightPage() const
     if( !pPage->IsEmptyPage() )
     {
         if( !pDesc->GetRightFmt() )
-            bOdd = sal_False;
+            bOdd = false;
         else if( !pDesc->GetLeftFmt() )
-            bOdd = sal_True;
+            bOdd = true;
     }
     return bOdd;
 }
@@ -1890,7 +1890,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 
         SwSelBoxes aNew;
 
-        const sal_Bool bReadOnlyAvailable = rTblCrsr.IsReadOnlyAvailable();
+        const bool bReadOnlyAvailable = rTblCrsr.IsReadOnlyAvailable();
 
         for ( sal_uInt16 i = 0; i < aUnions.size(); ++i )
         {
@@ -1989,7 +1989,7 @@ inline void Sub( SwRegionRects& rRegion, const SwRect& rRect )
  */
 void SwRootFrm::CalcFrmRects(
     SwShellCrsr &rCrsr,
-    const sal_Bool bIsTblMode)
+    const bool bIsTblMode)
 {
     SwPosition *pStartPos = rCrsr.Start(),
                *pEndPos   = rCrsr.GetPoint() == pStartPos ? rCrsr.GetMark() : rCrsr.GetPoint();
@@ -2104,8 +2104,8 @@ void SwRootFrm::CalcFrmRects(
         } while( false );
 
         SwCrsrMoveState aTmpState( MV_NONE );
-        aTmpState.b2Lines = sal_True;
-        aTmpState.bNoScroll = sal_True;
+        aTmpState.b2Lines = true;
+        aTmpState.bNoScroll = true;
         aTmpState.nCursorBidiLevel = pStartFrm->IsRightToLeft() ? 1 : 0;
 
         //CntntRects to Start- and EndFrms.
@@ -2118,16 +2118,16 @@ void SwRootFrm::CalcFrmRects(
         pEndFrm->GetCharRect( aEndRect, *pEndPos, &aTmpState );
         Sw2LinesPos *pEnd2Pos = aTmpState.p2Lines;
 
-        SwRect aStFrm ( pStartFrm->UnionFrm( sal_True ) );
+        SwRect aStFrm ( pStartFrm->UnionFrm( true ) );
         aStFrm.Intersection( pStartFrm->PaintArea() );
-        SwRect aEndFrm( pStartFrm == pEndFrm ? aStFrm : pEndFrm->UnionFrm( sal_True ) );
+        SwRect aEndFrm( pStartFrm == pEndFrm ? aStFrm : pEndFrm->UnionFrm( true ) );
         if( pStartFrm != pEndFrm )
         {
             aEndFrm.Intersection( pEndFrm->PaintArea() );
         }
         SWRECTFN( pStartFrm )
-        const sal_Bool bR2L = pStartFrm->IsRightToLeft();
-        const sal_Bool bEndR2L = pEndFrm->IsRightToLeft();
+        const bool bR2L = pStartFrm->IsRightToLeft();
+        const bool bEndR2L = pEndFrm->IsRightToLeft();
 
         // If there's no doubleline portion involved or start and end are both
         // in the same doubleline portion, all works fine, but otherwise
@@ -2144,7 +2144,7 @@ void SwRootFrm::CalcFrmRects(
                 SwRect aTmp( aStRect );
 
                 // BiDi-Portions are swimming against the current.
-                const sal_Bool bPorR2L = ( MT_BIDI == pSt2Pos->nMultiType ) ?
+                const bool bPorR2L = ( MT_BIDI == pSt2Pos->nMultiType ) ?
                     ! bR2L :
                 bR2L;
 
@@ -2220,7 +2220,7 @@ void SwRootFrm::CalcFrmRects(
                 SwRect aTmp( aEndRect );
 
                 // BiDi-Portions are swimming against the current.
-                const sal_Bool bPorR2L = ( MT_BIDI == pEnd2Pos->nMultiType ) ?
+                const bool bPorR2L = ( MT_BIDI == pEnd2Pos->nMultiType ) ?
                                            ! bEndR2L :
                                              bEndR2L;
 
@@ -2361,7 +2361,7 @@ void SwRootFrm::CalcFrmRects(
 
         if( pStartFrm == pEndFrm )
         {
-            sal_Bool bSameRotatedOrBidi = pSt2Pos && pEnd2Pos &&
+            bool bSameRotatedOrBidi = pSt2Pos && pEnd2Pos &&
                 ( MT_BIDI & pSt2Pos->nMultiType ) &&
                 pSt2Pos->aPortion == pEnd2Pos->aPortion;
             //case 1: (Same frame and same row)
@@ -2500,7 +2500,7 @@ void SwRootFrm::CalcFrmRects(
                 if ( bBody == pCntnt->IsInDocBody() &&
                     ( !pCellBox || pCellBox == pTmpCellBox ) )
                 {
-                    SwRect aCRect( pCntnt->UnionFrm( sal_True ) );
+                    SwRect aCRect( pCntnt->UnionFrm( true ) );
                     aCRect.Intersection( pCntnt->PaintArea() );
                     if( aCRect.IsOver( aRegion.GetOrigin() ))
                     {
@@ -2580,7 +2580,7 @@ void SwRootFrm::CalcFrmRects(
                     if ( aSortObjs.Contains( *pAnchoredObj ) )
                         continue;
 
-                    sal_Bool bSub = sal_True;
+                    bool bSub = true;
                     const sal_uInt32 nPos = pObj->GetOrdNum();
                     for ( sal_uInt16 k = 0; bSub && k < aSortObjs.Count(); ++k )
                     {
@@ -2591,7 +2591,7 @@ void SwRootFrm::CalcFrmRects(
                         {
                             if ( nPos < pTmp->GetVirtDrawObj()->GetOrdNumDirect() )
                             {
-                                bSub = sal_False;
+                                bSub = false;
                             }
                             else
                             {

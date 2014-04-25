@@ -285,7 +285,7 @@ private:
     bool m_bUseFieldValueCache; /// control the usage of the cached field value
 
     sal_uInt16              nLang;   ///< Always change via SetLanguage!
-    sal_Bool                bIsAutomaticLanguage;
+    bool                bIsAutomaticLanguage;
     sal_uInt32          nFormat;
 
     SwFieldType*        pType;
@@ -356,11 +356,11 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
 
     /// Does the field possess an action on its ClickHandler? (e.g. INetFields, ...).
-    sal_Bool            HasClickHdl() const;
-    sal_Bool            IsFixed() const;
+    bool            HasClickHdl() const;
+    bool            IsFixed() const;
 
-    sal_Bool                IsAutomaticLanguage() const { return bIsAutomaticLanguage;}
-    void                SetAutomaticLanguage(sal_Bool bSet){bIsAutomaticLanguage = bSet;}
+    bool                IsAutomaticLanguage() const { return bIsAutomaticLanguage;}
+    void                SetAutomaticLanguage(bool bSet){bIsAutomaticLanguage = bSet;}
 
     virtual OUString    GetDescription() const;
     /// Is this field clickable?
@@ -380,7 +380,7 @@ inline sal_uInt16 SwField::GetLanguage() const
 class SwValueFieldType : public SwFieldType
 {
     SwDoc*  pDoc;
-    sal_Bool    bUseFormat; ///< Use number formatter.
+    bool    bUseFormat; ///< Use number formatter.
 
 protected:
     SwValueFieldType( SwDoc* pDocPtr, sal_uInt16 nWhichId );
@@ -390,8 +390,8 @@ public:
     inline SwDoc*   GetDoc() const                      { return pDoc; }
     inline void     SetDoc(SwDoc* pNewDoc)              { pDoc = pNewDoc; }
 
-    inline sal_Bool     UseFormat() const                   { return bUseFormat; }
-    inline void     EnableFormat(sal_Bool bFormat = sal_True)   { bUseFormat = bFormat; }
+    inline bool     UseFormat() const                   { return bUseFormat; }
+    inline void     EnableFormat(bool bFormat = true)   { bUseFormat = bFormat; }
 
     OUString        ExpandValue(const double& rVal, sal_uInt32 nFmt, sal_uInt16 nLng=0) const;
     OUString        DoubleToString(const double &rVal, LanguageType eLng) const;

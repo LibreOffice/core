@@ -42,7 +42,7 @@ using namespace ::com::sun::star::lang;
 #define FILTER_OPTIONS_NAME             "FilterOptions"
 
 SwXFilterOptions::SwXFilterOptions() :
-    bExport( sal_False )
+    bExport( false )
 {
 }
 
@@ -140,14 +140,14 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException, std::excepti
 void   SwXFilterOptions::setTargetDocument( const uno::Reference< XComponent >& xDoc )
     throw (IllegalArgumentException, uno::RuntimeException, std::exception)
 {
-    bExport = sal_False;
+    bExport = false;
     xModel = xDoc;
 }
 
 void   SwXFilterOptions::setSourceDocument( const uno::Reference<XComponent >& xDoc )
         throw (IllegalArgumentException,uno::RuntimeException, std::exception)
 {
-    bExport = sal_True;
+    bExport = true;
     xModel = xDoc;
 }
 

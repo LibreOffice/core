@@ -37,14 +37,14 @@ private:
     sal_uInt16 m_nBaseHeight;
     sal_uInt16 m_nRubyHeight;
     SwTextGrid m_eGridType;
-    sal_Bool m_bRubyTextBelow;
-    sal_Bool m_bPrintGrid;
-    sal_Bool m_bDisplayGrid;
+    bool m_bRubyTextBelow;
+    bool m_bPrintGrid;
+    bool m_bDisplayGrid;
 
     //for textgrid enhancement
     sal_uInt16 m_nBaseWidth;
-    sal_Bool m_bSnapToChars;
-    sal_Bool m_bSquaredMode;
+    bool m_bSnapToChars;
+    bool m_bSquaredMode;
 
 public:
     SwTextGridItem();
@@ -78,37 +78,37 @@ public:
     SwTextGrid GetGridType() const { return m_eGridType; }
     void SetGridType( SwTextGrid eNew ) { m_eGridType = eNew; }
 
-    sal_Bool IsRubyTextBelow() const { return m_bRubyTextBelow; }
-    sal_Bool GetRubyTextBelow() const { return m_bRubyTextBelow; }
-    void SetRubyTextBelow( sal_Bool bNew ) { m_bRubyTextBelow = bNew; }
+    bool IsRubyTextBelow() const { return m_bRubyTextBelow; }
+    bool GetRubyTextBelow() const { return m_bRubyTextBelow; }
+    void SetRubyTextBelow( bool bNew ) { m_bRubyTextBelow = bNew; }
 
-    sal_Bool IsPrintGrid() const { return m_bPrintGrid; }
-    sal_Bool GetPrintGrid() const { return m_bPrintGrid; }
-    void SetPrintGrid( sal_Bool bNew ) { m_bPrintGrid = bNew; }
+    bool IsPrintGrid() const { return m_bPrintGrid; }
+    bool GetPrintGrid() const { return m_bPrintGrid; }
+    void SetPrintGrid( bool bNew ) { m_bPrintGrid = bNew; }
 
-    sal_Bool IsDisplayGrid() const { return m_bDisplayGrid; }
-    sal_Bool GetDisplayGrid() const { return m_bDisplayGrid; }
-    void SetDisplayGrid( sal_Bool bNew ) { m_bDisplayGrid = bNew; }
+    bool IsDisplayGrid() const { return m_bDisplayGrid; }
+    bool GetDisplayGrid() const { return m_bDisplayGrid; }
+    void SetDisplayGrid( bool bNew ) { m_bDisplayGrid = bNew; }
 
     //for textgrid enhancement
     sal_uInt16 GetBaseWidth() const { return m_nBaseWidth;}
     void SetBaseWidth( sal_uInt16 nNew ) { m_nBaseWidth = nNew; }
 
-    sal_Bool IsSnapToChars() const { return m_bSnapToChars; }
-    sal_Bool GetSnapToChars() const { return m_bSnapToChars; }
-    void SetSnapToChars( sal_Bool bNew ) { m_bSnapToChars = bNew; }
+    bool IsSnapToChars() const { return m_bSnapToChars; }
+    bool GetSnapToChars() const { return m_bSnapToChars; }
+    void SetSnapToChars( bool bNew ) { m_bSnapToChars = bNew; }
 
-    sal_Bool IsSquaredMode() const { return m_bSquaredMode; }
-    sal_Bool GetSquaredMode() const { return m_bSquaredMode; }
-    void SetSquaredMode( sal_Bool bNew ) { m_bSquaredMode = bNew; }
-    void SwitchPaperMode(sal_Bool bNew );
+    bool IsSquaredMode() const { return m_bSquaredMode; }
+    bool GetSquaredMode() const { return m_bSquaredMode; }
+    void SetSquaredMode( bool bNew ) { m_bSquaredMode = bNew; }
+    void SwitchPaperMode(bool bNew );
 
     void Init();
 };
 
-inline const SwTextGridItem &SwAttrSet::GetTextGrid(sal_Bool bInP) const
+inline const SwTextGridItem &SwAttrSet::GetTextGrid(bool bInP) const
     {   return (const SwTextGridItem&)Get( RES_TEXTGRID, bInP ); }
-inline const SwTextGridItem &SwFmt::GetTextGrid(sal_Bool bInP) const
+inline const SwTextGridItem &SwFmt::GetTextGrid(bool bInP) const
     {   return (const SwTextGridItem&)aSet.Get( RES_TEXTGRID, bInP ); }
 
 #endif

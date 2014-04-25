@@ -7100,10 +7100,10 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
     const std::map< OUString, com::sun::star::uno::Any >& rMap = rItem.GetGrabBag();
 
     // get original values of theme-derived properties to check if they have changed during the edition
-    sal_Bool bWriteCSTheme = sal_True;
-    sal_Bool bWriteAsciiTheme = sal_True;
-    sal_Bool bWriteEastAsiaTheme = sal_True;
-    sal_Bool bWriteThemeFontColor = sal_True;
+    bool bWriteCSTheme = true;
+    bool bWriteAsciiTheme = true;
+    bool bWriteEastAsiaTheme = true;
+    bool bWriteThemeFontColor = true;
     OUString sOriginalValue;
     for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); ++i )
     {

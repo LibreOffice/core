@@ -108,13 +108,13 @@ void SwFEShell::MakeObjVisible( const uno::Reference < embed::XEmbeddedObject >&
     }
 }
 
-sal_Bool SwFEShell::FinishOLEObj()                      // Server is terminated
+bool SwFEShell::FinishOLEObj()                      // Server is terminated
 {
     SfxInPlaceClient* pIPClient = GetSfxViewShell()->GetIPClient();
     if ( !pIPClient )
-        return sal_False;
+        return false;
 
-    sal_Bool bRet = pIPClient->IsObjectInPlaceActive();
+    bool bRet = pIPClient->IsObjectInPlaceActive();
     if( bRet )
     {
         uno::Reference < embed::XEmbeddedObject > xObj = pIPClient->GetObject();

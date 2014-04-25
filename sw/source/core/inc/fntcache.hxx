@@ -73,16 +73,16 @@ class SwFntObj : public SwCacheObj
     sal_uInt16 nPrtHeight;
     sal_uInt16 nPropWidth;
     sal_uInt16 nZoom;
-    sal_Bool bSymbol : 1;
-    sal_Bool bPaintBlank : 1;
+    bool bSymbol : 1;
+    bool bPaintBlank : 1;
 
     static long nPixWidth;
     static MapMode *pPixMap;
     static OutputDevice *pPixOut;
 
     void calcLinePos(SwDrawTextInfo& rInf, Point& aStart, Point& aEnd, sal_Int32 nStart,
-       sal_Int32 nWrLen, sal_Int32 nCnt, const sal_Bool bSwitchH2V, const sal_Bool bSwitchL2R,
-       long nHalfSpace, long* pKernArray, const sal_Bool bBidiPor);
+       sal_Int32 nWrLen, sal_Int32 nCnt, const bool bSwitchH2V, const bool bSwitchL2R,
+       long nHalfSpace, long* pKernArray, const bool bBidiPor);
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFntObj)
@@ -109,7 +109,7 @@ public:
     inline OutputDevice* GetPrt() const { return pPrinter; }
     inline sal_uInt16   GetZoom() const { return nZoom; }
     inline sal_uInt16   GetPropWidth() const { return nPropWidth; }
-    inline sal_Bool     IsSymbol() const { return bSymbol; }
+    inline bool     IsSymbol() const { return bSymbol; }
 
     void   DrawText( SwDrawTextInfo &rInf );
     /// determine the TextSize (of the printer)
@@ -129,7 +129,7 @@ protected:
 public:
     SwFntAccess( const void * &rMagic, sal_uInt16 &rIndex, const void *pOwner,
                  SwViewShell *pShell,
-                 sal_Bool bCheck = sal_False  );
+                 bool bCheck = false  );
     inline SwFntObj* Get() { return (SwFntObj*) SwCacheAccess::Get(); };
 };
 

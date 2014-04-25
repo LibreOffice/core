@@ -404,7 +404,7 @@ SwSbxValue SwCalc::Calculate( const OUString& rStr )
                 Now this parameter is ignored.
   @return ???
 */
-OUString SwCalc::GetStrResult( const SwSbxValue& rVal, sal_Bool bRound )
+OUString SwCalc::GetStrResult( const SwSbxValue& rVal, bool bRound )
 {
     if( !rVal.IsDouble() )
     {
@@ -413,7 +413,7 @@ OUString SwCalc::GetStrResult( const SwSbxValue& rVal, sal_Bool bRound )
     return GetStrResult( rVal.GetDouble(), bRound );
 }
 
-OUString SwCalc::GetStrResult( double nValue, sal_Bool )
+OUString SwCalc::GetStrResult( double nValue, bool )
 {
     if( nValue >= DBL_MAX )
         switch( eError )
@@ -1087,22 +1087,22 @@ SwSbxValue SwCalc::Term()
         case CALC_AND:
             {
                 GetToken();
-                sal_Bool bB = Prim().GetBool();
+                bool bB = Prim().GetBool();
                 left.PutBool( left.GetBool() && bB );
             }
             break;
         case CALC_OR:
             {
                 GetToken();
-                sal_Bool bB = Prim().GetBool();
+                bool bB = Prim().GetBool();
                 left.PutBool( left.GetBool() || bB );
             }
             break;
         case CALC_XOR:
             {
                 GetToken();
-                sal_Bool bR = Prim().GetBool();
-                sal_Bool bL = left.GetBool();
+                bool bR = Prim().GetBool();
+                bool bL = left.GetBool();
                 left.PutBool( (bL && !bR) || (!bL && bR) );
             }
             break;
@@ -1541,9 +1541,9 @@ bool SwCalc::Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
     return bRet;
 }
 
-sal_Bool SwCalc::IsValidVarName( const OUString& rStr, OUString* pValidName )
+bool SwCalc::IsValidVarName( const OUString& rStr, OUString* pValidName )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     using namespace ::com::sun::star::i18n;
     {
         // Parse any token.
@@ -1596,7 +1596,7 @@ SwSbxValue::~SwSbxValue()
 {
 }
 
-sal_Bool SwSbxValue::GetBool() const
+bool SwSbxValue::GetBool() const
 {
     return SbxSTRING == GetType() ? !GetOUString().isEmpty()
                                   : SbxValue::GetBool();
@@ -1612,7 +1612,7 @@ double SwSbxValue::GetDouble() const
     }
     else if (IsBool())
     {
-        nRet = 0 != GetBool() ? 1.0 : 0.0;
+        nRet = GetBool() ? 1.0 : 0.0;
     }
     else
     {

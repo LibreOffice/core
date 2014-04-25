@@ -31,13 +31,13 @@
 #include <docary.hxx>
 #include <sortopt.hxx>
 
-extern void sw_JoinText( SwPaM& rPam, sal_Bool bJoinPrev );
-extern void sw_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev );
+extern void sw_JoinText( SwPaM& rPam, bool bJoinPrev );
+extern void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinTxt, bool& rJoinPrev );
 
 SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
     : SwUndo( UNDO_REDLINE ), SwUndRng( rRange ),
     mpRedlData( 0 ), mpRedlSaveData( 0 ), mnUserId( nUsrId ),
-    mbHiddenRedlines( sal_False )
+    mbHiddenRedlines( false )
 {
     // consider Redline
     SwDoc& rDoc = *rRange.GetDoc();
@@ -141,7 +141,7 @@ void SwUndoRedline::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 
 SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
     : SwUndoRedline( nUsrId ? nUsrId : UNDO_DELETE, rRange ),
-    bCanGroup( sal_False ), bIsDelim( sal_False ), bIsBackspace( sal_False )
+    bCanGroup( false ), bIsDelim( false ), bIsBackspace( false )
 {
     const SwTxtNode* pTNd;
     if( UNDO_DELETE == mnUserId &&
@@ -151,7 +151,7 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
         sal_Unicode const cCh = pTNd->GetTxt()[nSttCntnt];
         if( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
         {
-            bCanGroup = sal_True;
+            bCanGroup = true;
             bIsDelim = !GetAppCharClass().isLetterNumeric( pTNd->GetTxt(),
                                                             nSttCntnt );
             bIsBackspace = nSttCntnt == rRange.GetPoint()->nContent.GetIndex();
@@ -174,9 +174,9 @@ void SwUndoRedlineDelete::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     }
 }
 
-sal_Bool SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )
+bool SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( UNDO_DELETE == mnUserId && mnUserId == rNext.mnUserId &&
         bCanGroup == rNext.bCanGroup &&
         bIsDelim == rNext.bIsDelim &&
@@ -202,7 +202,7 @@ sal_Bool SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )
                 nEndCntnt = rNext.nEndCntnt;
             else
                 nSttCntnt = rNext.nSttCntnt;
-            bRet = sal_True;
+            bRet = true;
         }
     }
     return bRet;
@@ -352,7 +352,7 @@ void SwUndoRejectRedline::RepeatImpl(::sw::RepeatContext & rContext)
     rContext.GetDoc().RejectRedline(rContext.GetRepeatPaM(), true);
 }
 
-SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, sal_Bool bIns )
+SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, bool bIns )
     : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRg ), pRedlData( 0 ),
     pUnDel( 0 ), pUnDel2( 0 ), pRedlSaveData( 0 ), bInsert( bIns )
 {
@@ -417,10 +417,10 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
         if( !nSttCntnt && !nEndCntnt )
             pPam->Exchange();
 
-        sal_Bool bJoinTxt, bJoinPrev;
+        bool bJoinTxt, bJoinPrev;
         sw_GetJoinFlags( *pPam, bJoinTxt, bJoinPrev );
 
-        pUnDel = new SwUndoDelete( *pPam, sal_False );
+        pUnDel = new SwUndoDelete( *pPam, false );
 
         if( bJoinTxt )
             sw_JoinText( *pPam, bJoinPrev );
@@ -439,7 +439,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
                     pPam->GetPoint()->nNode++;
                     pPam->GetBound( true ).nContent.Assign( 0, 0 );
                     pPam->GetBound( false ).nContent.Assign( 0, 0 );
-                    pUnDel2 = new SwUndoDelete( *pPam, sal_True );
+                    pUnDel2 = new SwUndoDelete( *pPam, true );
                 }
             }
         }

@@ -28,15 +28,15 @@ class SwHeadFootFrm : public SwLayoutFrm
 protected:
     void FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs);
     void FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs);
-    inline sal_Bool GetEatSpacing() const; // in hffrm.cxx
+    inline bool GetEatSpacing() const; // in hffrm.cxx
 
 public:
     SwHeadFootFrm(SwFrmFmt * pFrm, SwFrm*, sal_uInt16 aType);
     virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     virtual SwTwips GrowFrm( SwTwips,
-                             sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+                             bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
     virtual SwTwips ShrinkFrm( SwTwips,
-                               sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+                               bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
     virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
 };
 

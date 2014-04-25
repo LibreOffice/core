@@ -2092,7 +2092,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     OSL_ENSURE(pRecord || pFSPA, "give me something! to work with for anchoring");
     if (!pRecord && !pFSPA)
         return FLY_AT_PAGE;
-    sal_Bool bCurSectionVertical = maSectionManager.CurrentSectionIsVertical();
+    bool bCurSectionVertical = maSectionManager.CurrentSectionIsVertical();
 
     SvxMSDffImportRec aRecordFromFSPA;
     if (!pRecord)
@@ -2540,7 +2540,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     // inside table cell and its wrapping isn't 'SURROUND_THROUGH'
     if (bLayoutInTableCell && eSurround != SURROUND_THROUGHT)
     {
-        SwFmtFollowTextFlow aFollowTextFlow( sal_True );
+        SwFmtFollowTextFlow aFollowTextFlow( true );
         aFlySet.Put( aFollowTextFlow );
     }
 

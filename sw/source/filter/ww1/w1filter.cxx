@@ -206,7 +206,7 @@ void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
 // character is pending.
 
     bool bLIsTtp = false;
-    sal_Bool bLHasTtp = sal_False;
+    bool bLHasTtp = false;
     if( cUnknown == 0x07 )
     {
         bLIsTtp = IsInTtp();
@@ -358,7 +358,7 @@ void Ww1Footnotes::Start(Ww1Shell& rOut, Ww1Manager& rMan)
             OSL_ENSURE(c==0x02, "Ww1Footnotes");
             count--; // for the just read marker byte
             rOut.BeginFootnote();
-            bStarted = sal_True;
+            bStarted = true;
             rMan.Push0(pText, pText->Offset(rMan.GetFib()),
              new Ww1FootnoteFields(rMan.GetFib()));
             rOut << rMan;
@@ -472,33 +472,33 @@ static WWDateTime GetTimeDatePara( const OUString& rForm,
                        rForm.indexOf('d') != -1 ||
                        rForm.indexOf('D') != -1;
 
-        sal_Bool bLongDayOfWeek = rForm.indexOf("tttt") != -1 ||
+        bool bLongDayOfWeek = rForm.indexOf("tttt") != -1 ||
                                   rForm.indexOf("TTTT") != -1 ||
                                   rForm.indexOf("dddd") != -1 ||
                                   rForm.indexOf("DDDD") != -1;
 
-        sal_Bool bDayOfWeek = rForm.indexOf("ttt") != -1 ||
+        bool bDayOfWeek = rForm.indexOf("ttt") != -1 ||
                               rForm.indexOf("TTT") != -1 ||
                               rForm.indexOf("ddd") != -1 ||
                               rForm.indexOf("DDD") != -1;
 
                     //  M, MM -> numeric month
                     //  MMM, MMMM -> text. month
-        sal_Bool bLitMonth = rForm.indexOf("MMM") != -1;
+        bool bLitMonth = rForm.indexOf("MMM") != -1;
                     //  MMMM -> full month
-        sal_Bool bFullMonth = rForm.indexOf("MMMM") != -1;
+        bool bFullMonth = rForm.indexOf("MMMM") != -1;
                     //  jj, JJ -> 2-col-year
                     //  jjjj, JJJJ -> 4-col-year
-        sal_Bool bFullYear = rForm.indexOf("jjj") != -1 ||
+        bool bFullYear = rForm.indexOf("jjj") != -1 ||
                              rForm.indexOf("JJJ") != -1 ||
                              rForm.indexOf("yyy") != -1 ||
                              rForm.indexOf("YYY") != -1;
 
-        sal_uInt16 i = ( bLitMonth & 1 )
-                   | ( ( bFullYear & 1 ) << 1 )
-                   | ( ( bFullMonth & 1 ) << 2 )
-                   | ( ( bDayOfWeek & 1 ) << 3 )
-                   | ( ( bLongDayOfWeek & 1 ) << 4 );
+        sal_uInt16 i = (sal_uInt16) bLitMonth
+                   | ( (sal_uInt16)bFullYear  << 1 )
+                   | ( (sal_uInt16)bFullMonth << 2 )
+                   | ( (sal_uInt16)bDayOfWeek << 3 )
+                   | ( (sal_uInt16)bLongDayOfWeek << 4 );
         if( pDate )
         {
             if( !bHasDay && !bFullMonth )
@@ -887,7 +887,7 @@ oncemore:
             SwFieldType* pFT = rOut.GetDoc().InsertFldType(
                 SwSetExpFieldType( &rOut.GetDoc(), aName, nsSwGetSetExpType::GSE_STRING ) );
             pField = new SwSetExpField((SwSetExpFieldType*)pFT, aStr );
-            ((SwSetExpField*)pField)->SetInputFlag( sal_True );
+            ((SwSetExpField*)pField)->SetInputFlag( true );
             ((SwSetExpField*)pField)->SetSubType(nsSwExtendedSubType::SUB_INVISIBLE);
         }
         case 39: // filling command

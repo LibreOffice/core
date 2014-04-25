@@ -78,7 +78,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     const SfxAllEnumItem* pEItem = 0;
     const SfxStringItem* pStringItem = 0;
     SdrView *pSdrView = m_pWrtShell->GetDrawView();
-    sal_Bool bDeselect = sal_False;
+    bool bDeselect = false;
 
     sal_uInt16 nSlotId = rReq.GetSlot();
     if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(GetPool().GetWhich(nSlotId), false, &pItem))
@@ -109,7 +109,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
     if (nSlotId == SID_OBJECT_SELECT && m_nFormSfxId == nSlotId)
     {
-        bDeselect = sal_True;
+        bDeselect = true;
     }
     else if (nSlotId == SID_FM_CREATE_CONTROL)
     {
@@ -119,7 +119,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             sal_uInt16 nNewId = pIdentifierItem->GetValue();
             if (nNewId == m_nFormSfxId)
             {
-                bDeselect = sal_True;
+                bDeselect = true;
                 GetViewFrame()->GetDispatcher()->Execute(SID_FM_LEAVE_CREATE);  // Button should popping out
             }
         }
@@ -340,7 +340,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     };
     GetViewFrame()->GetBindings().Invalidate(aInval);
 
-    sal_Bool bEndTextEdit = sal_True;
+    bool bEndTextEdit = true;
     if (pFuncPtr)
     {
         if (GetDrawFuncPtr())
@@ -358,7 +358,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         {
             if(SID_OBJECT_SELECT == m_nDrawSfxId )
             {
-                m_pWrtShell->GotoObj(sal_True);
+                m_pWrtShell->GotoObj(true);
             }
             else
             {
@@ -375,7 +375,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
                 {
                     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                     BeginTextEdit(pObj);
-                    bEndTextEdit = sal_False;
+                    bEndTextEdit = false;
                 }
             }
         }
@@ -458,7 +458,7 @@ void SwView::NoRotate()
 
 // Enable DrawTextEditMode
 
-sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
+bool SwView::EnterDrawTextMode(const Point& aDocPos)
 {
     SdrObject* pObj;
     SdrPageView* pPV;
@@ -466,7 +466,7 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
     SdrView *pSdrView = pSh->GetDrawView();
     OSL_ENSURE( pSdrView, "EnterDrawTextMode without DrawView?" );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     sal_uInt16 nOld = pSdrView->GetHitTolerancePixel();
     pSdrView->SetHitTolerancePixel( 2 );
@@ -492,7 +492,7 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 
 // Enable DrawTextEditMode
 
-sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
+bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
         bool bIsNewObj, bool bSetSelectionToStart)
 {
     SwWrtShell *pSh = &GetWrtShell();
@@ -667,9 +667,9 @@ bool SwView::AreOnlyFormsSelected() const
     return bForm;
 }
 
-sal_Bool SwView::HasDrwObj(SdrObject *pSdrObj) const
+bool SwView::HasDrwObj(SdrObject *pSdrObj) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if (pSdrObj->IsGroupObject())
     {
@@ -677,18 +677,18 @@ sal_Bool SwView::HasDrwObj(SdrObject *pSdrObj) const
         sal_uInt32 nCnt = pList->GetObjCount();
 
         for (sal_uInt32 i = 0; i < nCnt; i++)
-            if ((bRet = HasDrwObj(pList->GetObj(i))) == sal_True)
+            if ((bRet = HasDrwObj(pList->GetObj(i))))
                 break;
     }
     else if (SdrInventor == pSdrObj->GetObjInventor() || pSdrObj->Is3DObj())
-        return sal_True;
+        return true;
 
     return bRet;
 }
 
-sal_Bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
+bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if (pSdrObj->IsGroupObject())
     {
@@ -696,11 +696,11 @@ sal_Bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
         sal_uInt32 nCnt = pList->GetObjCount();
 
         for (sal_uInt32 i = 0; i < nCnt; i++)
-            if ((bRet = HasOnlyObj(pList->GetObj(i), eObjInventor)) == sal_False)
+            if ((bRet = HasOnlyObj(pList->GetObj(i), eObjInventor)) == false)
                 break;
     }
     else if (eObjInventor == pSdrObj->GetObjInventor())
-        return sal_True;
+        return true;
 
     return bRet;
 }
@@ -713,26 +713,26 @@ IMPL_LINK(SwView, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
     return 0;
 }
 
-sal_Bool SwView::ExecDrwTxtSpellPopup(const Point& rPt)
+bool SwView::ExecDrwTxtSpellPopup(const Point& rPt)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SdrView *pSdrView = m_pWrtShell->GetDrawView();
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     Point aPos( GetEditWin().LogicToPixel( rPt ) );
 
     if (pOLV->IsWrongSpelledWordAtPos( aPos ))
     {
-        bRet = sal_True;
+        bRet = true;
         Link aLink = LINK(this, SwView, OnlineSpellCallback);
         pOLV->ExecuteSpellPopup( aPos,&aLink );
     }
     return bRet;
 }
 
-sal_Bool SwView::IsDrawTextHyphenate()
+bool SwView::IsDrawTextHyphenate()
 {
     SdrView *pSdrView = m_pWrtShell->GetDrawView();
-    sal_Bool bHyphenate = sal_False;
+    bool bHyphenate = false;
 
     SfxItemSet aNewAttr( pSdrView->GetModel()->GetItemPool(),
                             EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
@@ -747,7 +747,7 @@ sal_Bool SwView::IsDrawTextHyphenate()
 void SwView::HyphenateDrawText()
 {
     SdrView *pSdrView = m_pWrtShell->GetDrawView();
-    sal_Bool bHyphenate = IsDrawTextHyphenate();
+    bool bHyphenate = IsDrawTextHyphenate();
 
     SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
     aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, !bHyphenate ) );

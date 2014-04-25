@@ -231,7 +231,7 @@ SwFldMgr::SwFldMgr(SwWrtShell* pSh ) :
     pModule(0),
     pMacroItem(0),
     pWrtShell(pSh),
-    bEvalExp(sal_True)
+    bEvalExp(true)
 {
     // determine current field if existing
     GetCurFld();
@@ -341,7 +341,7 @@ SwField* SwFldMgr::GetCurFld()
     Description: provide group range
  --------------------------------------------------------------------*/
 
-const SwFldGroupRgn& SwFldMgr::GetGroupRange(sal_Bool bHtmlMode, sal_uInt16 nGrpId) const
+const SwFldGroupRgn& SwFldMgr::GetGroupRange(bool bHtmlMode, sal_uInt16 nGrpId) const
 {
 static SwFldGroupRgn const aRanges[] =
 {
@@ -372,7 +372,7 @@ static SwFldGroupRgn const aWebRanges[] =
     Description: determine GroupId
  --------------------------------------------------------------------*/
 
-sal_uInt16 SwFldMgr::GetGroup(sal_Bool bHtmlMode, sal_uInt16 nTypeId, sal_uInt16 nSubType) const
+sal_uInt16 SwFldMgr::GetGroup(bool bHtmlMode, sal_uInt16 nTypeId, sal_uInt16 nSubType) const
 {
     if (nTypeId == TYP_SETINPFLD)
         nTypeId = TYP_SETFLD;
@@ -564,7 +564,7 @@ bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
                   ACCESS over TYP_....
  --------------------------------------------------------------------*/
 
-sal_uInt16 SwFldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bIsText, sal_Bool bHtmlMode) const
+sal_uInt16 SwFldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bIsText, bool bHtmlMode) const
 {
     OSL_ENSURE(nTypeId < TYP_END, "forbidden TypeId");
 
@@ -762,11 +762,11 @@ sal_uInt16 SwFldMgr::GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) const
     Description: Traveling
  --------------------------------------------------------------------*/
 
-sal_Bool SwFldMgr::GoNextPrev( sal_Bool bNext, SwFieldType* pTyp )
+bool SwFldMgr::GoNextPrev( bool bNext, SwFieldType* pTyp )
 {
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
     if(!pSh)
-        return sal_False;
+        return false;
 
     if( !pTyp && pCurFld )
     {
@@ -813,7 +813,7 @@ sal_uInt16 SwFldMgr::GetCurTypeId() const
     Description: Over string  insert field or update
  --------------------------------------------------------------------*/
 
-sal_Bool SwFldMgr::InsertFld(
+bool SwFldMgr::InsertFld(
     const SwInsertFld_Data& rData)
 {
     SwField* pFld   = 0;
@@ -828,7 +828,7 @@ sal_Bool SwFldMgr::InsertFld(
         pCurShell = pWrtShell ? pWrtShell : ::lcl_GetShell();
     OSL_ENSURE(pCurShell, "no SwWrtShell found");
     if(!pCurShell)
-        return sal_False;
+        return false;
 
     switch(rData.nTypeId)
     {   // ATTENTION this field is inserted by a separate dialog
@@ -850,7 +850,7 @@ sal_Bool SwFldMgr::InsertFld(
         {
             SwScriptFieldType* pType =
                 (SwScriptFieldType*)pCurShell->GetFldType(0, RES_SCRIPTFLD);
-            pFld = new SwScriptField(pType, rData.sPar1, rData.sPar2, (sal_Bool)nFormatId);
+            pFld = new SwScriptField(pType, rData.sPar1, rData.sPar2, (bool)nFormatId);
             break;
         }
 
@@ -974,7 +974,7 @@ sal_Bool SwFldMgr::InsertFld(
         {
             SwHiddenTxtFieldType* pTyp =
                 (SwHiddenTxtFieldType*)pCurShell->GetFldType(0, RES_HIDDENTXTFLD);
-            pFld = new SwHiddenTxtField(pTyp, sal_True, rData.sPar1, rData.sPar2, sal_False, rData.nTypeId);
+            pFld = new SwHiddenTxtField(pTyp, true, rData.sPar1, rData.sPar2, false, rData.nTypeId);
             bExp = true;
             break;
         }
@@ -993,9 +993,9 @@ sal_Bool SwFldMgr::InsertFld(
             if( !rData.sPar1.isEmpty() && CanInsertRefMark( rData.sPar1 ) )
             {
                 pCurShell->SetAttrItem( SwFmtRefMark( rData.sPar1 ) );
-                return sal_True;
+                return true;
             }
-            return sal_False;
+            return false;
         }
 
     case TYP_GETREFFLD:
@@ -1236,12 +1236,12 @@ sal_Bool SwFldMgr::InsertFld(
                     pExpFld->SetSubType(nOldSubType | (nSubType & 0xff00));
 
                     pExpFld->SetPromptText(rData.sPar2);
-                    pExpFld->SetInputFlag(sal_True) ;
+                    pExpFld->SetInputFlag(true) ;
                     bExp = true;
                     pFld = pExpFld;
                 }
                 else
-                    return sal_False;
+                    return false;
             }
             else
             {
@@ -1254,14 +1254,14 @@ sal_Bool SwFldMgr::InsertFld(
             }
 
             // start dialog
-            pCurShell->StartInputFldDlg(pFld, sal_False, rData.pParent);
+            pCurShell->StartInputFldDlg(pFld, false, rData.pParent);
             break;
         }
 
     case TYP_SETFLD:
         {
             if (rData.sPar2.isEmpty())   // empty variables are not allowed
-                return sal_False;
+                return false;
 
             SwSetExpFieldType* pTyp = (SwSetExpFieldType*)pCurShell->InsertFldType(
                 SwSetExpFieldType(pCurShell->GetDoc(), rData.sPar1) );
@@ -1308,13 +1308,13 @@ sal_Bool SwFldMgr::InsertFld(
                 bExp = true;
             }
             else
-                return sal_False;
+                return false;
             break;
         }
 
     case TYP_FORMELFLD:
         {
-            if(pCurShell->GetFrmType(0,sal_False) & FRMTYPE_TABLE)
+            if(pCurShell->GetFrmType(0,false) & FRMTYPE_TABLE)
             {
                 pCurShell->StartAllAction();
 
@@ -1342,7 +1342,7 @@ sal_Bool SwFldMgr::InsertFld(
                 pCurShell->UpdateTable();
 
                 pCurShell->EndAllAction();
-                return sal_True;
+                return true;
 
             }
             else
@@ -1381,7 +1381,7 @@ sal_Bool SwFldMgr::InsertFld(
         break;
         default:
         {   OSL_ENSURE(!this, "wrong field type");
-            return sal_False;
+            return false;
         }
     }
     OSL_ENSURE(pFld, "field not available");
@@ -1397,13 +1397,13 @@ sal_Bool SwFldMgr::InsertFld(
     pCurShell->Insert( *pFld );
 
     if(bExp && bEvalExp)
-        pCurShell->UpdateExpFlds(sal_True);
+        pCurShell->UpdateExpFlds(true);
 
     if(bTbl)
     {
-        pCurShell->Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+        pCurShell->Left(CRSR_SKIP_CHARS, false, 1, false );
         pCurShell->UpdateFlds(*pFld);
-        pCurShell->Right(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+        pCurShell->Right(CRSR_SKIP_CHARS, false, 1, false );
     }
     else if( bPageVar )
         ((SwRefPageGetFieldType*)pCurShell->GetFldType( 0, RES_REFPAGEGETFLD ))->UpdateFlds();
@@ -1414,7 +1414,7 @@ sal_Bool SwFldMgr::InsertFld(
     delete pFld;
 
     pCurShell->EndAllAction();
-    return sal_True;
+    return true;
 }
 
 /*--------------------------------------------------------------------
@@ -1483,7 +1483,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
         }
 
         case TYP_SCRIPTFLD:
-            ((SwScriptField*)pTmpFld)->SetCodeURL((sal_Bool)nFormat);
+            ((SwScriptField*)pTmpFld)->SetCodeURL((bool)nFormat);
             break;
 
         case TYP_NEXTPAGEFLD:
@@ -1608,7 +1608,7 @@ void SwFldMgr::EvalExpFlds(SwWrtShell* pSh)
     if(pSh)
     {
         pSh->StartAllAction();
-        pSh->UpdateExpFlds(sal_True);
+        pSh->UpdateExpFlds(true);
         pSh->EndAllAction();
     }
 }
@@ -1679,9 +1679,9 @@ void SwFieldType::_GetFldName()
     }
 }
 
-sal_Bool SwFldMgr::ChooseMacro(const OUString&)
+bool SwFldMgr::ChooseMacro(const OUString&)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // choose script dialog
     OUString aScriptURL = SfxApplication::ChooseScript();
@@ -1690,7 +1690,7 @@ sal_Bool SwFldMgr::ChooseMacro(const OUString&)
     if ( !aScriptURL.isEmpty() )
     {
         SetMacroPath( aScriptURL );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

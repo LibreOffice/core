@@ -75,7 +75,7 @@ Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, co
         Rectangle aDesktop = pParentWin->GetDesktopRectPixel();
         Size aSpace = pParentWin->LogicToPixel( Size( 8, 12 ), MAP_APPFONT );
 
-        sal_Bool bLayoutRTL = ::GetActiveView()->GetWrtShell().IsTableRightToLeft();
+        bool bLayoutRTL = ::GetActiveView()->GetWrtShell().IsTableRightToLeft();
         bool bCenterHor = false;
 
         if ( aDesktop.Bottom() - aObjAbs.Bottom() >= rDialogSize.Height() + aSpace.Height() )
@@ -162,7 +162,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
     }
 
     SwFlyFrmFmt *pFlyFrmFmt = 0;
-    xChartModel.set( SwTableFUNC( &rWrtShell, sal_False ).InsertChart( xDataProvider, xDataProvider.is(), aRangeString, &pFlyFrmFmt ));
+    xChartModel.set( SwTableFUNC( &rWrtShell, false ).InsertChart( xDataProvider, xDataProvider.is(), aRangeString, &pFlyFrmFmt ));
 
     //open wizard
     //@todo get context from writer if that has one

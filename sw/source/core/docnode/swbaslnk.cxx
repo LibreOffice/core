@@ -270,7 +270,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         if( pESh )
         {
             const bool bEndActionByVirDev = pESh->IsEndActionByVirDev();
-            pESh->SetEndActionByVirDev( sal_True );
+            pESh->SetEndActionByVirDev( true );
             pESh->EndAllAction();
             pESh->SetEndActionByVirDev( bEndActionByVirDev );
         }
@@ -348,7 +348,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pG
                                     pLayout->GetBrowseWidthByTable( *pDoc );
                         if ( nBrowseWidth )
                         {
-                            pLayout->Resize( nBrowseWidth, sal_True, sal_True,
+                            pLayout->Resize( nBrowseWidth, true, true,
                                              bLastGrf ? HTMLTABLE_RESIZE_NOW
                                                       : 500 );
                         }

@@ -46,7 +46,7 @@ public:
 
     virtual short   Execute() SAL_OVERRIDE;
 
-    void            EnableInsert(sal_Bool bEnable);
+    void            EnableInsert(bool bEnable);
     void            InsertHdl();
 };
 

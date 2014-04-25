@@ -82,10 +82,10 @@ protected:
     SwNumRulesWithName   *pNumRules[ MAX_NUM_RULES ];
     OUString              sFileName;
     sal_uInt16            nVersion;
-    sal_Bool              bModified;
+    bool              bModified;
 
     virtual int         Load(SvStream&);
-    virtual sal_Bool        Store(SvStream&);
+    virtual bool        Store(SvStream&);
 
     void                Init();
 

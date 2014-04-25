@@ -153,8 +153,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         break;
 
     case FN_INSERT_SOFT_HYPHEN:
-        if( CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( sal_True, 0 ) &&
-            CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( sal_True, -1 ))
+        if( CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( true, 0 ) &&
+            CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( true, -1 ))
             rSh.Insert( OUString( CHAR_SOFTHYPHEN ) );
         break;
 
@@ -269,7 +269,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     }
                 }
 
-                rSh.InsertObject( xObj, 0, sal_True, nSlot);
+                rSh.InsertObject( xObj, 0, true, nSlot);
             }
         }
     }
@@ -342,7 +342,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         else
         {
             OSL_ENSURE( !pNameItem || nSlot == SID_INSERT_OBJECT, "Superfluous argument!" );
-            rSh.InsertObject( xObj, pName, sal_True, nSlot);
+            rSh.InsertObject( xObj, pName, true, nSlot);
             rReq.Done();
         }
         break;
@@ -386,11 +386,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                             uno::makeAny( sal_True ) );
                     else
                         xSet->setPropertyValue("FrameIsScrollingMode",
-                            uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
+                            uno::makeAny( eScroll == ScrollingYes ) );
 
                     if ( pBorderItem )
                         xSet->setPropertyValue("FrameIsBorder",
-                            uno::makeAny( (sal_Bool) pBorderItem->GetValue() ) );
+                            uno::makeAny( pBorderItem->GetValue() ) );
 
                     if ( pMarginItem )
                     {
@@ -410,7 +410,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         else
         {
-            rSh.InsertObject( xObj, 0, sal_True, nSlot);
+            rSh.InsertObject( xObj, 0, true, nSlot);
             rReq.Done();
         }
     }
@@ -428,7 +428,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             else
             {
                 uno::Reference< chart2::data::XDataProvider > xDataProvider;
-                sal_Bool bFillWithData = sal_True;
+                bool bFillWithData = true;
                 OUString aRangeString;
                 if (!GetShell().IsTblComplexForChart())
                 {
@@ -441,9 +441,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     xDataProvider.set( GetView().GetDocShell()->getIDocumentChartDataProviderAccess()->GetChartDataProvider() );
                 }
                 else
-                    bFillWithData = sal_False;  // will create chart with only it's default image
+                    bFillWithData = false;  // will create chart with only it's default image
 
-                SwTableFUNC( &rSh, sal_False ).InsertChart( xDataProvider, bFillWithData, aRangeString );
+                SwTableFUNC( &rSh, false ).InsertChart( xDataProvider, bFillWithData, aRangeString );
                 rSh.LaunchOLEObj();
 
                 svt::EmbeddedObjectRef& xObj = rSh.GetOLEObject();
@@ -471,7 +471,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             // the suggestion has to be removed before
             GetView().GetEditWin().StopQuickHelp();
             SvGlobalName aGlobalName( SO3_SM_CLASSID );
-            rSh.InsertObject( svt::EmbeddedObjectRef(), &aGlobalName, sal_True, 0 );
+            rSh.InsertObject( svt::EmbeddedObjectRef(), &aGlobalName, true, 0 );
         }
         break;
 
@@ -503,7 +503,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             Size aSize(16 * MM50, 8 * MM50);
             GetShell().LockPaint();
             GetShell().StartAllAction();
-            SwFlyFrmAttrMgr aMgr( sal_True, GetShellPtr(), FRMMGR_TYPE_TEXT );
+            SwFlyFrmAttrMgr aMgr( true, GetShellPtr(), FRMMGR_TYPE_TEXT );
             if(nCols > 1)
             {
                 SwFmtCol aCol;
@@ -535,7 +535,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
         }
         // Create new border
-        SwFlyFrmAttrMgr aMgr( sal_True, GetShellPtr(), FRMMGR_TYPE_TEXT );
+        SwFlyFrmAttrMgr aMgr( true, GetShellPtr(), FRMMGR_TYPE_TEXT );
         if(pArgs)
         {
             Size aSize(aMgr.GetSize());
@@ -694,7 +694,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                         GetView().GetDocShell()->GetCreateMode();
 
     rSh.Push();
-    const sal_Bool bCrsrInHidden = rSh.SelectHiddenRange();
+    const bool bCrsrInHidden = rSh.SelectHiddenRange();
     rSh.Pop();
 
     while ( nWhich )
@@ -794,7 +794,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                         // Get the text of the Link.
                         rSh.StartAction();
                         rSh.CreateCrsr();
-                        rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT,sal_True);
+                        rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT,true);
                         OUString sLinkName = rSh.GetSelTxt();
                         aHLinkItem.SetName(sLinkName);
                         aHLinkItem.SetInsertMode(HLINK_FIELD);
@@ -1106,7 +1106,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             }
 
             rSh.SetMark();
-            rSh.ExtendSelection( sal_False, aChars.getLength() );
+            rSh.ExtendSelection( false, aChars.getLength() );
             rSh.SetAttrSet( aSet, nsSetAttrMode::SETATTR_DONTEXPAND | nsSetAttrMode::SETATTR_NOFORMATATTR );
             if( !rSh.IsCrsrPtAtEnd() )
                 rSh.SwapPam();

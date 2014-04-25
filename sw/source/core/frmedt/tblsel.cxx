@@ -413,11 +413,11 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
     OSL_ENSURE( nLoopMax, "Table layout is still invalid!" );
 }
 
-sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
+bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
 {
     const SwTableNode* pTNd = rSttNd.FindTableNode();
     if( !pTNd )
-        return sal_False;
+        return false;
 
     Point aNullPos;
     SwNodeIndex aIdx( rSttNd );
@@ -432,7 +432,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
     //                          invisible - e.g. in a hidden section
     // Robust: check, if content was found (e.g. empty table cells)
     if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) == NULL )
-            return sal_False;
+            return false;
 
     const SwLayoutFrm *pStart = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper();
     OSL_ENSURE( pStart, "without frame nothing works" );
@@ -445,7 +445,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
     // #i22135# - Robust: check, if content was found and if it's visible
     if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) == NULL )
     {
-        return sal_False;
+        return false;
     }
 
     const SwLayoutFrm *pEnd = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper();
@@ -474,7 +474,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
             const SwTabFrm *pTable = pUnion->GetTable();
 
             SWRECTFN( pTable )
-            sal_Bool bRTL = pTable->IsRightToLeft();
+            bool bRTL = pTable->IsRightToLeft();
 
             if( !pTable->IsValid() && nLoopMax  )
             {
@@ -645,7 +645,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
     return bValidChartSel ? sal_True : sal_False;
 }
 
-sal_Bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
+bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
 {
     OSL_ENSURE( pCell->IsCellFrm(), "Frame without Gazelle" );
 
@@ -668,7 +668,7 @@ sal_Bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
            rUnion.Right() < pCell->Frm().Right() )) ? sal_True : sal_False );
 }
 
-sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
+bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
 {
     SwShellCrsr* pCrsr = rShell.m_pCurCrsr;
     if ( rShell.IsTableMode() )
@@ -825,14 +825,14 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
     return bFound ? sal_True : sal_False;
 }
 
-sal_Bool HasProtectedCells( const SwSelBoxes& rBoxes )
+bool HasProtectedCells( const SwSelBoxes& rBoxes )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     for (size_t n = 0; n < rBoxes.size(); ++n)
     {
         if( rBoxes[ n ]->GetFrmFmt()->GetProtect().IsCntntProtected() )
         {
-            bRet = sal_True;
+            bRet = true;
             break;
         }
     }
@@ -862,14 +862,14 @@ static void lcl_InsTblBox( SwTableNode* pTblNd, SwDoc* pDoc, SwTableBox* pBox,
                 nInsPos, nCnt );
 }
 
-sal_Bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
+bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
 {
     rPam.GetPoint()->nNode = *rBox.GetSttNd()->EndOfSectionNode();
     rPam.Move( fnMoveBackward, fnGoCntnt );
     rPam.SetMark();
     rPam.GetPoint()->nNode = *rBox.GetSttNd();
     rPam.Move( fnMoveForward, fnGoCntnt );
-    sal_Bool bRet = *rPam.GetMark() == *rPam.GetPoint()
+    bool bRet = *rPam.GetMark() == *rPam.GetPoint()
         && ( rBox.GetSttNd()->GetIndex() + 1 == rPam.GetPoint()->nNode.GetIndex() );
 
     if( bRet )
@@ -890,7 +890,7 @@ sal_Bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
                 nSttIdx <= ( nIdx = pAPos->nNode.GetIndex() ) &&
                 nIdx < nEndIdx )
             {
-                bRet = sal_False;
+                bRet = false;
                 break;
             }
         }
@@ -1136,7 +1136,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
 #if defined( DEL_ONLY_EMPTY_LINES )
         nWidth = pFirstBox->GetFrmFmt()->GetFrmSize().GetWidth();
-        sal_Bool bEmptyLine = sal_True;
+        bool bEmptyLine = sal_True;
         sal_uInt16 n, nSttPos = 0;
 
         for( n = 0; n < aPosArr.Count(); ++n )
@@ -1188,7 +1188,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             const _CmpLPt& rPt = aPosArr[ n ];
             if( n && aPosArr[ n - 1 ].Y() == rPt.Y() )  // same Y level?
             {
-                sal_Bool bEmptyBox = IsEmptyBox( *rPt.pSelBox, aPam );
+                bool bEmptyBox = IsEmptyBox( *rPt.pSelBox, aPam );
                 if( bEmptyBox )
                 {
                     if( nSEndPos == n )     // beginning is empty
@@ -1499,7 +1499,7 @@ static SwTwips lcl_CalcWish( const SwLayoutFrm *pCell, long nWish,
     if ( !nWish )
         nWish = 1;
 
-    const sal_Bool bRTL = pCell->IsRightToLeft();
+    const bool bRTL = pCell->IsRightToLeft();
     SwTwips nRet = bRTL ?
         nAct - pCell->Frm().Width() :
         0;
@@ -1602,7 +1602,7 @@ static void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
 
     SWRECTFN( pTab )
 
-    sal_Bool bRTL = pTab->IsRightToLeft();
+    bool bRTL = pTab->IsRightToLeft();
     const long nTmpWish = pOrg->GetFmt()->GetFrmSize().GetWidth();
     const long nWish = ( nTmpWish > 0 ) ? nTmpWish : 1;
 
@@ -1936,7 +1936,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     }
 }
 
-sal_Bool CheckSplitCells( const SwCrsrShell& rShell, sal_uInt16 nDiv,
+bool CheckSplitCells( const SwCrsrShell& rShell, sal_uInt16 nDiv,
                         const SwTblSearchType eSearchType )
 {
     if( !rShell.IsTableMode() )
@@ -1945,11 +1945,11 @@ sal_Bool CheckSplitCells( const SwCrsrShell& rShell, sal_uInt16 nDiv,
     return CheckSplitCells( *rShell.getShellCrsr(false), nDiv, eSearchType );
 }
 
-sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
+bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
                         const SwTblSearchType eSearchType )
 {
     if( 1 >= nDiv )
-        return sal_False;
+        return false;
 
     sal_uInt16 nMinValue = nDiv * MINLAY;
 
@@ -1999,7 +1999,7 @@ sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
                     if( ::IsFrmInTblSel( pUnion->GetUnion(), pCell ) )
                     {
                         if( (pCell->Frm().*fnRect->fnGetWidth)() < nMinValue )
-                            return sal_False;
+                            return false;
                     }
 
                     if ( pCell->GetNext() )
@@ -2015,7 +2015,7 @@ sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
             pRow = (const SwLayoutFrm*)pRow->GetNext();
         }
     }
-    return sal_True;
+    return true;
 }
 
 // These Classes copy the current table selections (rBoxes),
@@ -2149,7 +2149,7 @@ inline void UnsetFollow( SwFlowFrm *pTab )
 
 //When bAccTableDispose is FALSE,the acc table should not be disposed.
 //void _FndBox::DelFrms( SwTable &rTable )
-void _FndBox::DelFrms( SwTable &rTable,sal_Bool bAccTableDispose )
+void _FndBox::DelFrms( SwTable &rTable, bool bAccTableDispose )
 {
     // All lines between pLineBefore and pLineBehind should be cut
     // from the layout and erased.
@@ -2225,7 +2225,7 @@ void _FndBox::DelFrms( SwTable &rTable,sal_Bool bAccTableDispose )
                             // flag from pUp to pPrev. pUp may still have the
                             // flag set although there is not more follow flow
                             // line associated with pUp.
-                            pPrev->SetFollowFlowLine( sal_False );
+                            pPrev->SetFollowFlowLine( false );
                         }
                         else if ( pFollow )
                             ::UnsetFollow( pFollow );
@@ -2263,7 +2263,7 @@ void _FndBox::DelFrms( SwTable &rTable,sal_Bool bAccTableDispose )
                             // We do not delete the follow flow line,
                             // this will be done automatically in the
                             // next turn.
-                            ((SwTabFrm*)pTabFrm)->SetFollowFlowLine( sal_False );
+                            ((SwTabFrm*)pTabFrm)->SetFollowFlowLine( false );
                         }
                         //Set acc table dispose state
                         pFrm->SetAccTableDispose( bAccTableDispose );
@@ -2390,7 +2390,7 @@ void _FndBox::MakeFrms( SwTable &rTable )
 }
 
 void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
-                                            const sal_Bool bBehind )
+                                            const bool bBehind )
 {
     // Create Frms for newly inserted lines
     // bBehind == sal_True:  before  pLineBehind
@@ -2529,12 +2529,12 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
     }
 }
 
-sal_Bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
+bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
 {
     // Should we call MakeFrms here?
 
     if ( !pLineBefore && !pLineBehind && rTable.GetTabLines().size() )
-        return sal_True;
+        return true;
 
     sal_uInt16 nBfPos;
     if(pLineBefore)
@@ -2557,7 +2557,7 @@ sal_Bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
     if ( nBfPos == nBhPos ) // Should never occur.
     {
         OSL_FAIL( "Table, erase but not on any area !?!" );
-        return sal_False;
+        return false;
     }
 
     if ( rTable.GetRowsToRepeat() > 0 )
@@ -2576,19 +2576,19 @@ sal_Bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
 
     // Some adjacent lines at the beginning of the table have been deleted:
     if ( nBfPos == USHRT_MAX && nBhPos == 0 )
-        return sal_False;
+        return false;
 
     // Some adjacent lines at the end of the table have been deleted:
     if ( nBhPos == USHRT_MAX && nBfPos == (rTable.GetTabLines().size() - 1) )
-        return sal_False;
+        return false;
 
     // Some adjacent lines in the middle of the table have been deleted:
     if ( nBfPos != USHRT_MAX && nBhPos != USHRT_MAX && (nBfPos + 1) == nBhPos )
-        return sal_False;
+        return false;
 
     // The structure of the deleted lines is more complex due to split lines.
     // A call of MakeFrms() is necessary.
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

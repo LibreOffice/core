@@ -37,10 +37,10 @@ class SwFldPage : public SfxTabPage
     sal_Int32           m_nTypeSel;
     sal_Int32           m_nSelectionSel;
     bool                m_bFldEdit;
-    sal_Bool                m_bInsert;
-    sal_Bool                m_bFldDlgHtmlMode;
-    sal_Bool                m_bRefresh;
-    sal_Bool                m_bFirstHTMLInit;
+    bool                m_bInsert;
+    bool                m_bFldDlgHtmlMode;
+    bool                m_bRefresh;
+    bool                m_bFirstHTMLInit;
 
 protected:
 
@@ -48,8 +48,8 @@ protected:
     void                SetTypeSel(sal_Int32  nSet)     { m_nTypeSel = nSet;}
     sal_Int32           GetSelectionSel() const     { return m_nSelectionSel;}
     void                SetSelectionSel(sal_Int32  nSet){ m_nSelectionSel = nSet;}
-    sal_Bool                IsFldDlgHtmlMode() const    { return m_bFldDlgHtmlMode;}
-    sal_Bool                IsRefresh() const           { return m_bRefresh;}
+    bool                IsFldDlgHtmlMode() const    { return m_bFldDlgHtmlMode;}
+    bool                IsRefresh() const           { return m_bRefresh;}
     SwField*            GetCurField()               { return m_pCurFld;}
     SwWrtShell*         GetWrtShell() { return m_pWrtShell;}
 
@@ -62,17 +62,17 @@ protected:
                                  const ListBox* pLst3 = 0);
     void                RestorePos( ListBox* pLst1, ListBox* pLst2 = 0,
                                     ListBox* pLst3 = 0 );
-    void                EnableInsert(sal_Bool bEnable = sal_True);
+    void                EnableInsert(bool bEnable = true);
     inline bool         IsFldEdit() const   { return m_bFldEdit; }
 
     // insert field
-    sal_Bool                InsertFld(  sal_uInt16 nTypeId,
+    bool                InsertFld(  sal_uInt16 nTypeId,
                                     sal_uInt16 nSubType,
                                     const OUString& rPar1,
                                     const OUString& rPar2,
                                     sal_uLong nFormatId,
                                     sal_Unicode cDelim = ' ',
-                                    sal_Bool bIsAutomaticLanguage = sal_True);
+                                    bool bIsAutomaticLanguage = true);
 
     using SfxTabPage::ActivatePage;
 
@@ -86,7 +86,7 @@ public:
 
     inline SwFldMgr&    GetFldMgr()         { return m_aMgr; }
     void                SetWrtShell( SwWrtShell* m_pWrtShell );
-    void                EditNewField( sal_Bool bOnlyActivate = sal_False );
+    void                EditNewField( bool bOnlyActivate = false );
     virtual sal_uInt16      GetGroup() = 0;
 };
 

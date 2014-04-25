@@ -48,12 +48,12 @@ public:
     OUString GetIndexKey( const OUString& rTxt, const OUString& rTxtReading,
                         const ::com::sun::star::lang::Locale& rLocale ) const;
 
-    OUString GetFollowingText( sal_Bool bMorePages ) const;
+    OUString GetFollowingText( bool bMorePages ) const;
 
     ::com::sun::star::uno::Sequence< OUString >
     GetAlgorithmList( const ::com::sun::star::lang::Locale& rLcl ) const;
 
-    sal_Bool LoadAlgorithm( const ::com::sun::star::lang::Locale& rLcl,
+    bool LoadAlgorithm( const ::com::sun::star::lang::Locale& rLcl,
                             const OUString& sSortAlgorithm, long nOptions ) const;
 
     sal_Int16 CompareIndexEntry( const OUString& rTxt1, const OUString& rTxtReading1,

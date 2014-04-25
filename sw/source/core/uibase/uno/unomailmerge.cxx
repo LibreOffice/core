@@ -140,7 +140,7 @@ static bool LoadFromURL_impl(
     Reference< frame::XModel > xTmpModel;
     Sequence < PropertyValue > aArgs( 1 );
     aArgs[0].Name = "Hidden";
-    sal_Bool bVal = sal_True;
+    bool bVal = true;
     aArgs[0].Value <<= bVal;
     try
     {
@@ -247,7 +247,7 @@ namespace
         bool bSuccess = false;
         try
         {
-            sal_Bool bDeliverOwnership = ( 0 == m_nPendingDeleteAttempts );
+            bool bDeliverOwnership = ( 0 == m_nPendingDeleteAttempts );
                 // if this is our last attemt, then anybody which vetoes this has to take the consequences
                 // (means take the ownership)
             m_xDocument->close( bDeliverOwnership );
@@ -374,13 +374,13 @@ SwXMailMerge::SwXMailMerge() :
     pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_MAILMERGE ) ),
     nDataCommandType(sdb::CommandType::TABLE),
     nOutputType(MailMergeType::PRINTER),
-    bEscapeProcessing(sal_True),     //!! allow to process properties like "Filter", "Order", ...
-    bSinglePrintJobs(sal_False),
-    bFileNameFromColumn(sal_False),
-    bSendAsHTML(sal_False),
-    bSendAsAttachment(sal_False),
-    bSaveAsSingleFile(sal_False),
-    bDisposing(sal_False),
+    bEscapeProcessing(true),     //!! allow to process properties like "Filter", "Order", ...
+    bSinglePrintJobs(false),
+    bFileNameFromColumn(false),
+    bSendAsHTML(false),
+    bSendAsAttachment(false),
+    bSaveAsSingleFile(false),
+    bDisposing(false),
     m_pMgr(0)
 {
     // create empty document
@@ -452,9 +452,9 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     OUString   aCurFileNamePrefix       = aFileNamePrefix;
     sal_Int32  nCurDataCommandType      = nDataCommandType;
     sal_Int16  nCurOutputType           = nOutputType;
-    sal_Bool   bCurEscapeProcessing     = bEscapeProcessing;
-    sal_Bool   bCurSinglePrintJobs      = bSinglePrintJobs;
-    sal_Bool   bCurFileNameFromColumn   = bFileNameFromColumn;
+    bool   bCurEscapeProcessing     = bEscapeProcessing;
+    bool   bCurSinglePrintJobs      = bSinglePrintJobs;
+    bool   bCurFileNameFromColumn   = bFileNameFromColumn;
 
     SfxObjectShellRef xCurDocSh = xDocSh;   // the document
 
@@ -465,7 +465,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         const OUString &rName   = pArguments[i].Name;
         const Any &rValue       = pArguments[i].Value;
 
-        sal_Bool bOK = sal_True;
+        bool bOK = true;
         if (rName == UNO_NAME_SELECTION)
             bOK = rValue >>= aCurSelection;
         else if (rName == UNO_NAME_RESULT_SET)
@@ -687,7 +687,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         pIDDA->setPrintData( aPrtData );
         // #i25686# printing should not be done asynchronously to prevent dangling offices
         // when mail merge is called as command line macro
-        aMergeDesc.bPrintAsync = sal_False;
+        aMergeDesc.bPrintAsync = false;
         aMergeDesc.aPrintOptions = aPrintSettings;
         aMergeDesc.bCreateSingleFile = true;
     }
@@ -750,7 +750,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             aMergeDesc.bSendAsHTML       = bSendAsHTML;
             aMergeDesc.bSendAsAttachment = bSendAsAttachment;
 
-            aMergeDesc.bCreateSingleFile = sal_False;
+            aMergeDesc.bCreateSingleFile = false;
             pMMConfigItem.reset(new SwMailMergeConfigItem);
             aMergeDesc.pMailMergeConfigItem = pMMConfigItem.get();
             aMergeDesc.xSmtpServer = SwMailMergeHelper::ConnectToSmtpServer(
@@ -786,13 +786,13 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     if ( !bStoredAsTemporary )
         throw RuntimeException("Failed to save temporary file.", static_cast < cppu::OWeakObject * > ( this ) );
 
-    pMgr->SetMergeSilent( sal_True );       // suppress dialogs, message boxes, etc.
+    pMgr->SetMergeSilent( true );       // suppress dialogs, message boxes, etc.
     const SwXMailMerge *pOldSrc = pMgr->GetMailMergeEvtSrc();
     OSL_ENSURE( !pOldSrc || pOldSrc == this, "Ooops... different event source already set." );
     pMgr->SetMailMergeEvtSrc( this );   // launch events for listeners
 
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), xCurDocSh));
-    sal_Bool bSucc = pMgr->MergeNew( aMergeDesc );
+    bool bSucc = pMgr->MergeNew( aMergeDesc );
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), xCurDocSh));
 
     pMgr->SetMailMergeEvtSrc( pOldSrc );
@@ -913,7 +913,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
         Any aOld( pData, pCur->aType );
 
         bool bChanged = false;
-        sal_Bool bOK = sal_True;
+        bool bOK = true;
         if (aOld != rValue)
         {
             if (pData == &aSelection)
@@ -1125,7 +1125,7 @@ void SAL_CALL SwXMailMerge::dispose()
 
     if (!bDisposing)
     {
-        bDisposing = sal_True;
+        bDisposing = true;
 
         EventObject aEvtObj( (XPropertySet *) this );
         aEvtListeners.disposeAndClear( aEvtObj );

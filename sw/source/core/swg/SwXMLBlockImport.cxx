@@ -65,7 +65,7 @@ SwXMLTextBlockImport::SwXMLTextBlockImport(
     const uno::Reference< uno::XComponentContext > xContext,
     SwXMLTextBlocks &rBlocks,
     OUString & rNewText,
-    sal_Bool bNewTextOnly )
+    bool bNewTextOnly )
 :   SvXMLImport(xContext, "", IMPORT_ALL ),
     rBlockList ( rBlocks ),
     bTextOnly ( bNewTextOnly ),

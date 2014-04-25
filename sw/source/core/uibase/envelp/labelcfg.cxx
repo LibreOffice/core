@@ -259,7 +259,7 @@ void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLab
         rLabArr.push_back( lcl_CreateSwLabRec(it->first, it->second.m_aMeasure, rManufacturer) );
 }
 
-sal_Bool    SwLabelConfig::HasLabel(const OUString& rManufacturer, const OUString& rType)
+bool    SwLabelConfig::HasLabel(const OUString& rManufacturer, const OUString& rType)
 {
     return ( ( m_aLabels.find(rManufacturer) != m_aLabels.end() ) &&
              ( m_aLabels[rManufacturer].find(rType) != m_aLabels[rManufacturer].end() ) );

@@ -32,7 +32,7 @@ class SwAuthEntry
 public:
     SwAuthEntry() : nRefCount(0){}
     SwAuthEntry( const SwAuthEntry& rCopy );
-    sal_Bool            operator==(const SwAuthEntry& rComp);
+    bool            operator==(const SwAuthEntry& rComp);
 
     inline OUString         GetAuthorField(ToxAuthorityField ePos) const;
     inline void             SetAuthorField(ToxAuthorityField ePos,
@@ -64,8 +64,8 @@ class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
     SortKeyArr              m_SortKeyArr;
     sal_Unicode             m_cPrefix;
     sal_Unicode             m_cSuffix;
-    sal_Bool                m_bIsSequence :1;
-    sal_Bool                m_bSortByDocument :1;
+    bool                m_bIsSequence :1;
+    bool                m_bSortByDocument :1;
     LanguageType            m_eLanguage;
     OUString                m_sSortAlgorithm;
 
@@ -85,7 +85,7 @@ public:
     SwDoc*              GetDoc(){ return m_pDoc; }
     void                RemoveField(sal_IntPtr nHandle);
     sal_IntPtr          AddField(const OUString& rFieldContents);
-    sal_Bool            AddField(sal_IntPtr nHandle);
+    bool            AddField(sal_IntPtr nHandle);
     void                DelSequenceArray()
                         {
                             m_SequArr.clear();
@@ -103,8 +103,8 @@ public:
 
     sal_uInt16          GetSequencePos(sal_IntPtr nHandle);
 
-    sal_Bool            IsSequence() const      {return m_bIsSequence;}
-    void                SetSequence(sal_Bool bSet)
+    bool            IsSequence() const      {return m_bIsSequence;}
+    void                SetSequence(bool bSet)
                             {
                                 DelSequenceArray();
                                 m_bIsSequence = bSet;
@@ -118,8 +118,8 @@ public:
     sal_Unicode         GetPrefix() const { return m_cPrefix;}
     sal_Unicode         GetSuffix() const { return m_cSuffix;}
 
-    sal_Bool            IsSortByDocument() const {return m_bSortByDocument;}
-    void                SetSortByDocument(sal_Bool bSet)
+    bool            IsSortByDocument() const {return m_bSortByDocument;}
+    void                SetSortByDocument(bool bSet)
                             {
                                 DelSequenceArray();
                                 m_bSortByDocument = bSet;

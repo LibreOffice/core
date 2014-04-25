@@ -117,9 +117,9 @@ uno::Reference< text::XTextRange > SwVbaFind::FindOneElement() throw ( uno::Runt
     return xFoundOne;
 }
 
-sal_Bool SwVbaFind::SearchReplace() throw (uno::RuntimeException)
+bool SwVbaFind::SearchReplace() throw (uno::RuntimeException)
 {
-    sal_Bool result = sal_False;
+    bool result = false;
 
     // TODO: map wildcards in area to OOo wildcards
 
@@ -129,7 +129,7 @@ sal_Bool SwVbaFind::SearchReplace() throw (uno::RuntimeException)
         {
             case word::WdReplace::wdReplaceNone:
             {
-                result = sal_True;
+                result = true;
                 break;
             }
             case word::WdReplace::wdReplaceOne:
@@ -153,7 +153,7 @@ sal_Bool SwVbaFind::SearchReplace() throw (uno::RuntimeException)
                         if( mnWrap == word::WdFindWrap::wdFindContinue || mnWrap == word::WdFindWrap::wdFindAsk || InRange( xTextRange ) )
                         {
                             xTextRange->setString( GetReplaceWith() );
-                            result = sal_True;
+                            result = true;
                         }
                     }
                 }
@@ -161,7 +161,7 @@ sal_Bool SwVbaFind::SearchReplace() throw (uno::RuntimeException)
             }
             default:
             {
-                result = sal_False;
+                result = false;
             }
         }
     }
@@ -197,14 +197,14 @@ void SAL_CALL SwVbaFind::setReplacement( const uno::Any& /*_replacement */ ) thr
 
 sal_Bool SAL_CALL SwVbaFind::getForward() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bBackward = sal_False;
+    bool bBackward = false;
     mxPropertyReplace->getPropertyValue("SearchBackwards") >>= bBackward;
     return !bBackward;
 }
 
 void SAL_CALL SwVbaFind::setForward( sal_Bool _forward ) throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bBackward = !_forward;
+    bool bBackward = !_forward;
     mxPropertyReplace->setPropertyValue("SearchBackwards", uno::makeAny( bBackward ) );
 }
 
@@ -232,7 +232,7 @@ void SAL_CALL SwVbaFind::setFormat( sal_Bool _format ) throw (uno::RuntimeExcept
 
 sal_Bool SAL_CALL SwVbaFind::getMatchCase() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool value = sal_False;
+    bool value = false;
     mxPropertyReplace->getPropertyValue("SearchCaseSensitive") >>= value;
     return value;
 }
@@ -244,7 +244,7 @@ void SAL_CALL SwVbaFind::setMatchCase( sal_Bool _matchcase ) throw (uno::Runtime
 
 sal_Bool SAL_CALL SwVbaFind::getMatchWholeWord() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool value = sal_False;
+    bool value = false;
     mxPropertyReplace->getPropertyValue("SearchWords") >>= value;
     return value;
 }
@@ -256,7 +256,7 @@ void SAL_CALL SwVbaFind::setMatchWholeWord( sal_Bool _matchwholeword ) throw (un
 
 sal_Bool SAL_CALL SwVbaFind::getMatchWildcards() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool value = sal_False;
+    bool value = false;
     mxPropertyReplace->getPropertyValue("SearchRegularExpression") >>= value;
     return value;
 }
@@ -268,7 +268,7 @@ void SAL_CALL SwVbaFind::setMatchWildcards( sal_Bool _matchwildcards ) throw (un
 
 sal_Bool SAL_CALL SwVbaFind::getMatchSoundsLike() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool value = sal_False;
+    bool value = false;
     mxPropertyReplace->getPropertyValue("SearchSimilarity") >>= value;
     return value;
 }
@@ -281,7 +281,7 @@ void SAL_CALL SwVbaFind::setMatchSoundsLike( sal_Bool _matchsoundslike ) throw (
 
 sal_Bool SAL_CALL SwVbaFind::getMatchAllWordForms() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool value = sal_False;
+    bool value = false;
     mxPropertyReplace->getPropertyValue("SearchSimilarity") >>= value;
     if( value )
         mxPropertyReplace->getPropertyValue("SearchSimilarityRelax") >>= value;
@@ -308,7 +308,7 @@ void SAL_CALL SwVbaFind::setStyle( const uno::Any& /*_style */ ) throw (uno::Run
 sal_Bool SAL_CALL
 SwVbaFind::Execute( const uno::Any& FindText, const uno::Any& MatchCase, const uno::Any& MatchWholeWord, const uno::Any& MatchWildcards, const uno::Any& MatchSoundsLike, const uno::Any& MatchAllWordForms, const uno::Any& Forward, const uno::Any& Wrap, const uno::Any& Format, const uno::Any& ReplaceWith, const uno::Any& Replace, const uno::Any& /*MatchKashida*/, const uno::Any& /*MatchDiacritics*/, const uno::Any& /*MatchAlefHamza*/, const uno::Any& /*MatchControl*/, const uno::Any& /*MatchPrefix*/, const uno::Any& /*MatchSuffix*/, const uno::Any& /*MatchPhrase*/, const uno::Any& /*IgnoreSpace*/, const uno::Any& /*IgnorePunct*/ ) throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool result = sal_False;
+    bool result = false;
     if( FindText.hasValue() )
     {
         OUString sText;
@@ -316,7 +316,7 @@ SwVbaFind::Execute( const uno::Any& FindText, const uno::Any& MatchCase, const u
         setText( sText );
     }
 
-    sal_Bool bValue = sal_False;
+    bool bValue = false;
     if( MatchCase.hasValue() )
     {
         MatchCase >>= bValue;

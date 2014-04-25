@@ -71,7 +71,7 @@ bool SwSdrHdl::IsFocusHdl() const
     return SdrHdl::IsFocusHdl();
 }
 
-static const SwFrm *lcl_FindAnchor( const SdrObject *pObj, sal_Bool bAll )
+static const SwFrm *lcl_FindAnchor( const SdrObject *pObj, bool bAll )
 {
     const SwVirtFlyDrawObj *pVirt = pObj->ISA(SwVirtFlyDrawObj) ?
                                             (SwVirtFlyDrawObj*)pObj : 0;
@@ -120,7 +120,7 @@ SwDrawView::SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
 }
 
 // #i99665#
-sal_Bool SwDrawView::IsAntiAliasing() const
+bool SwDrawView::IsAntiAliasing() const
 {
     return getOptionsDrawinglayer().IsAntiAliasing();
 }
@@ -246,7 +246,7 @@ SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
 {
     if ( GetUserCall(pObj) )
     {
-        const SwFrm *pAnch = ::lcl_FindAnchor( pObj, sal_False );
+        const SwFrm *pAnch = ::lcl_FindAnchor( pObj, false );
         if ( pAnch )
         {
             //The topmost Obj within the anchor must not be overtaken.
@@ -264,7 +264,7 @@ SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
 
                         if ( pO->GetOrdNumDirect() > nOrdNum )
                         {
-                            const SwFrm *pTmpAnch = ::lcl_FindAnchor( pO, sal_False );
+                            const SwFrm *pTmpAnch = ::lcl_FindAnchor( pO, false );
                             if ( pFly->IsAnLower( pTmpAnch ) )
                             {
                                 nOrdNum = pO->GetOrdNumDirect();
@@ -291,7 +291,7 @@ SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
 {
     if ( GetUserCall(pObj) )
     {
-        const SwFrm *pAnch = ::lcl_FindAnchor( pObj, sal_False );
+        const SwFrm *pAnch = ::lcl_FindAnchor( pObj, false );
         if ( pAnch )
         {
             //The Fly of the anchor must not be "flying under".
@@ -328,7 +328,7 @@ sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
         }
 
         if ( pObj->GetOrdNum() > nMaxChildOrdNum &&
-             _rParentObj.IsAnLower( lcl_FindAnchor( pObj, sal_True ) ) )
+             _rParentObj.IsAnLower( lcl_FindAnchor( pObj, true ) ) )
         {
             nMaxChildOrdNum = pObj->GetOrdNum();
             break;
@@ -547,7 +547,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
             // If object is anchored inside a invisible part of the document
             // (e.g. page header, whose page style isn't applied, or hidden
             // section), no anchor frame exists.
-            const SwFrm* pTmpAnchorFrm = lcl_FindAnchor( pTmpObj, sal_True );
+            const SwFrm* pTmpAnchorFrm = lcl_FindAnchor( pTmpObj, true );
             const SwFlyFrm* pTmpParentObj = pTmpAnchorFrm
                                             ? pTmpAnchorFrm->FindFlyFrm() : 0L;
             if ( pTmpParentObj &&
@@ -600,7 +600,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
             // If object is anchored inside a invisible part of the document
             // (e.g. page header, whose page style isn't applied, or hidden
             // section), no anchor frame exists.
-            const SwFrm* pTmpAnchorFrm = lcl_FindAnchor( pTmpObj, sal_True );
+            const SwFrm* pTmpAnchorFrm = lcl_FindAnchor( pTmpObj, true );
             const SwFlyFrm* pTmpParentObj = pTmpAnchorFrm
                                             ? pTmpAnchorFrm->FindFlyFrm() : 0L;
             if ( pTmpParentObj &&
@@ -678,7 +678,7 @@ const SwFrm* SwDrawView::CalcAnchor()
     //current anchor. Search only if we currently drag.
     const SwFrm* pAnch;
     Rectangle aMyRect;
-    const sal_Bool bFly = pObj->ISA(SwVirtFlyDrawObj);
+    const bool bFly = pObj->ISA(SwVirtFlyDrawObj);
     if ( bFly )
     {
         pAnch = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetAnchorFrm();
@@ -700,7 +700,7 @@ const SwFrm* SwDrawView::CalcAnchor()
         aMyRect = pObj->GetSnapRect();
     }
 
-    const sal_Bool bTopRight = pAnch && ( ( pAnch->IsVertical() &&
+    const bool bTopRight = pAnch && ( ( pAnch->IsVertical() &&
                                             !pAnch->IsVertLR() ) ||
                                              pAnch->IsRightToLeft() );
     const Point aMyPt = bTopRight ? aMyRect.TopRight() : aMyRect.TopLeft();

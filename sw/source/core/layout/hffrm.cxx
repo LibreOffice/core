@@ -100,7 +100,7 @@ SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, SwFrm* pSib, sal_uInt16 nTypeIn)
     : SwLayoutFrm( pFmt, pSib )
 {
     mnType = nTypeIn;
-    SetDerivedVert( sal_False );
+    SetDerivedVert( false );
 
     const SwFmtCntnt &rCnt = pFmt->GetCntnt();
 
@@ -210,7 +210,7 @@ void SwHeadFootFrm::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
 
     }
 
-    mbValidPrtArea = sal_True;
+    mbValidPrtArea = true;
 }
 
 void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
@@ -219,7 +219,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
     {
         if( !IsColLocked() )
         {
-            mbValidSize = mbValidPrtArea = sal_True;
+            mbValidSize = mbValidPrtArea = true;
 
             const SwTwips nBorder = nUL;
             SwTwips nMinHeight = lcl_GetFrmMinHeight(*this);
@@ -372,11 +372,11 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                         Prt().SSize().Height() = Frm().Height() - nBorder;
                     }
                 }
-                mbValidSize = mbValidPrtArea = sal_True;
+                mbValidSize = mbValidPrtArea = true;
             } while( nRemaining<=nMaxHeight && nOldHeight!=Prt().Height() );
             ColUnlock();
         }
-        mbValidSize = mbValidPrtArea = sal_True;
+        mbValidSize = mbValidPrtArea = true;
     }
     else //if ( GetType() & 0x0018 )
     {
@@ -384,7 +384,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
         {
             if ( Frm().Height() != pAttrs->GetSize().Height() )
                 ChgSize( Size( Frm().Width(), pAttrs->GetSize().Height()));
-            mbValidSize = sal_True;
+            mbValidSize = true;
             MakePos();
         } while ( !mbValidSize );
     }
@@ -415,7 +415,7 @@ void SwHeadFootFrm::Format(const SwBorderAttrs * pAttrs)
     }
 }
 
-SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst,  sal_Bool bInfo )
+SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
 {
     SwTwips nResult;
 
@@ -470,7 +470,7 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst,  sal_Bool bInfo )
         // OD 10.04.2003 #108719# - Notify fly frame, if header frame
         // grows. Consider, that 'normal' grow of layout frame already notifys
         // the fly frames.
-        sal_Bool bNotifyFlys = sal_False;
+        bool bNotifyFlys = false;
         if (nEat > 0)
         {
             if ( ! bTst)
@@ -488,7 +488,7 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst,  sal_Bool bInfo )
             // OD 14.04.2003 #108719# - trigger fly frame notify.
             if ( IsHeaderFrm() )
             {
-                bNotifyFlys = sal_True;
+                bNotifyFlys = true;
             }
         }
 
@@ -500,7 +500,7 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst,  sal_Bool bInfo )
             nResult += nFrmGrow;
             if ( nFrmGrow > 0 )
             {
-                bNotifyFlys = sal_False;
+                bNotifyFlys = false;
             }
         }
 
@@ -517,7 +517,7 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst,  sal_Bool bInfo )
     return nResult;
 }
 
-SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
+SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
 {
     SwTwips nResult;
 
@@ -560,7 +560,7 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         // OD 10.04.2003 #108719# - Notify fly frame, if header/footer frame
         // shrinks. Consider, that 'normal' shrink of layout frame already notifys
         // the fly frames.
-        sal_Bool bNotifyFlys = sal_False;
+        bool bNotifyFlys = false;
         if (nRest > 0)
         {
 
@@ -607,7 +607,7 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             // OD 14.04.2003 #108719# - trigger fly frame notify.
             if ( IsHeaderFrm() )
             {
-                bNotifyFlys = sal_True;
+                bNotifyFlys = true;
             }
         }
 
@@ -619,7 +619,7 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             nResult += nShrinkAmount;
             if ( nShrinkAmount > 0 )
             {
-                bNotifyFlys = sal_False;
+                bNotifyFlys = false;
             }
         }
 
@@ -633,15 +633,15 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     return nResult;
 }
 
-sal_Bool SwHeadFootFrm::GetEatSpacing() const
+bool SwHeadFootFrm::GetEatSpacing() const
 {
     const SwFrmFmt * pFmt = GetFmt();
     OSL_ENSURE(pFmt, "SwHeadFootFrm: no format?");
 
     if (pFmt->GetHeaderAndFooterEatSpacing().GetValue())
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 void DelFlys( SwLayoutFrm *pFrm, SwPageFrm *pPage )
@@ -673,7 +673,7 @@ void SwPageFrm::PrepareHeader()
     const SwFmtHeader &rH = ((SwFrmFmt*)GetRegisteredIn())->GetHeader();
 
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
-    const sal_Bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
+    const bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rH.IsActive() )
     {   //Implant header, but remove first, if already present
@@ -715,7 +715,7 @@ void SwPageFrm::PrepareFooter()
         pLay = (SwLayoutFrm*)pLay->GetNext();
 
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
-    const sal_Bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
+    const bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rF.IsActive() )
     {   //Implant footer, but remove first, if already present

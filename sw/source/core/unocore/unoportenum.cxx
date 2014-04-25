@@ -415,7 +415,7 @@ lcl_ExportFieldMark(
     OSL_ENSURE(pUnoCrsr->End()->nContent.GetIndex() == start,
                "hmm --- why is this different");
 
-    pUnoCrsr->Right(1, CRSR_SKIP_CHARS, sal_False, sal_False);
+    pUnoCrsr->Right(1, CRSR_SKIP_CHARS, false, false);
     if ( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
     {
         OSL_FAIL("cannot move cursor?");
@@ -508,7 +508,7 @@ lcl_InsertRubyPortion(
     TextRangeList_t & rPortions,
     Reference<XText> const& xParent,
     const SwUnoCrsr * const pUnoCrsr,
-    const SwTxtAttr & rAttr, const sal_Bool bEnd)
+    const SwTxtAttr & rAttr, const bool bEnd)
 {
     SwXTextPortion* pPortion = new SwXTextPortion(pUnoCrsr,
             static_cast<const SwTxtRuby&>(rAttr), xParent, bEnd);
@@ -728,10 +728,10 @@ lcl_ExportHints(
                         if( *pAttr->GetEnd() == *pAttr->GetStart())
                         {
                             lcl_InsertRubyPortion( *rPortionStack.top().first,
-                                    xParent, pUnoCrsr, *pAttr, sal_False);
+                                    xParent, pUnoCrsr, *pAttr, false);
                         }
                         lcl_InsertRubyPortion( *rPortionStack.top().first,
-                                xParent, pUnoCrsr, *pAttr, sal_True);
+                                xParent, pUnoCrsr, *pAttr, true);
                     break;
                     case RES_TXTATR_META:
                     case RES_TXTATR_METAFIELD:
@@ -792,7 +792,7 @@ lcl_ExportHints(
                 case RES_TXTATR_FIELD:
                    if(!bRightMoveForbidden)
                     {
-                        pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
+                        pUnoCrsr->Right(1,CRSR_SKIP_CHARS,false,false);
                         if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
                             break;
                         SwXTextPortion* pPortion;
@@ -808,7 +808,7 @@ lcl_ExportHints(
                 case RES_TXTATR_ANNOTATION:
                     if(!bRightMoveForbidden)
                     {
-                        pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
+                        pUnoCrsr->Right(1,CRSR_SKIP_CHARS,false,false);
                         if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
                             break;
 
@@ -838,8 +838,8 @@ lcl_ExportHints(
                         pUnoCrsr->Right(
                             pAttr->GetFmtFld().GetField()->ExpandField( true ).getLength() + 2,
                             CRSR_SKIP_CHARS,
-                            sal_False,
-                            sal_False );
+                            false,
+                            false );
                         if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
                             break;
                         SwXTextPortion* pPortion =
@@ -854,7 +854,7 @@ lcl_ExportHints(
                 case RES_TXTATR_FLYCNT:
                     if(!bRightMoveForbidden)
                     {
-                        pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
+                        pUnoCrsr->Right(1,CRSR_SKIP_CHARS,false,false);
                         if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
                             break; // Robust #i81708 content in covered cells
                         pUnoCrsr->Exchange();
@@ -866,7 +866,7 @@ lcl_ExportHints(
                     {
                         if(!bRightMoveForbidden)
                         {
-                            pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
+                            pUnoCrsr->Right(1,CRSR_SKIP_CHARS,false,false);
                             if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
                                 break;
                             SwXTextPortion* pPortion;
@@ -887,7 +887,7 @@ lcl_ExportHints(
                     {
                         if (bIsPoint)
                         {
-                            pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
+                            pUnoCrsr->Right(1,CRSR_SKIP_CHARS,false,false);
                         }
                         Reference<XTextRange> xTmp =
                                 (RES_TXTATR_REFMARK == nAttrWhich)
@@ -913,7 +913,7 @@ lcl_ExportHints(
                     if(pAttr->GetEnd() && (*pAttr->GetEnd() != *pAttr->GetStart()))
                     {
                         lcl_InsertRubyPortion( *rPortionStack.top().first,
-                            xParent, pUnoCrsr, *pAttr, sal_False);
+                            xParent, pUnoCrsr, *pAttr, false);
                     }
                 break;
                 case RES_TXTATR_META:
@@ -922,7 +922,7 @@ lcl_ExportHints(
                     {
                         if (!bRightMoveForbidden)
                         {
-                            pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
+                            pUnoCrsr->Right(1,CRSR_SKIP_CHARS,false,false);
                             o_rbCursorMoved = true;
                             // only if the end is included in selection!
                             if ((i_nEndPos < 0) ||
@@ -1212,7 +1212,7 @@ static void lcl_CreatePortions(
                         GetTxt().getLength()), "Incorrect start position" );
         // ??? should this be i_nStartPos - current position ?
         pUnoCrsr->Right(static_cast<sal_Int32>(i_nStartPos),
-                CRSR_SKIP_CHARS, sal_False, sal_False);
+                CRSR_SKIP_CHARS, false, false);
     }
 
     SwDoc * const pDoc = pUnoCrsr->GetDoc();

@@ -98,9 +98,9 @@ class SwXMailMerge :
     OUString   aFileNamePrefix;
     sal_Int32       nDataCommandType;
     sal_Int16       nOutputType;
-    sal_Bool        bEscapeProcessing;
-    sal_Bool        bSinglePrintJobs;
-    sal_Bool        bFileNameFromColumn;
+    bool        bEscapeProcessing;
+    bool        bSinglePrintJobs;
+    bool        bFileNameFromColumn;
 
     OUString                                         sInServerPassword;
     OUString                                         sOutServerPassword;
@@ -111,17 +111,17 @@ class SwXMailMerge :
     OUString                                         sAttachmentFilter;
     com::sun::star::uno::Sequence< OUString >        aCopiesTo;
     com::sun::star::uno::Sequence< OUString >        aBlindCopiesTo;
-    sal_Bool                                                bSendAsHTML;
-    sal_Bool                                                bSendAsAttachment;
+    bool                                                bSendAsHTML;
+    bool                                                bSendAsAttachment;
 
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aPrintSettings;
 
-    sal_Bool                                                bSaveAsSingleFile;
+    bool                                                bSaveAsSingleFile;
     OUString                                         sSaveFilter;
     OUString                                         sSaveFilterOptions;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSaveFilterData;
 
-    sal_Bool        bDisposing;
+    bool        bDisposing;
     SwDBMgr     *m_pMgr;
 
     void    launchEvent( const com::sun::star::beans::PropertyChangeEvent &rEvt ) const;

@@ -621,7 +621,7 @@ static bool lcl_InsAttr(
                                 pStt->nNode, pStt->nContent.GetIndex() );
 
                     if( pUndo )
-                        pUndo->SaveRedlineData( aPam, sal_True );
+                        pUndo->SaveRedlineData( aPam, true );
 
                     if( pDoc->IsRedlineOn() )
                         pDoc->AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
@@ -658,7 +658,7 @@ static bool lcl_InsAttr(
                                 && !pDoc->GetRedlineTbl().empty())))
                 {
                     // Was text content inserted? (RefMark/TOXMarks without an end)
-                    sal_Bool bTxtIns = nInsCnt != rSt.GetIndex();
+                    bool bTxtIns = nInsCnt != rSt.GetIndex();
                     // Was content inserted or set over the selection?
                     SwPaM aPam( pStt->nNode, bTxtIns ? nInsCnt + 1 : nEnd,
                                 pStt->nNode, nInsCnt );
@@ -842,7 +842,7 @@ static bool lcl_InsAttr(
                 SwPaM aPam( *pNode, nMkPos, *pNode, nPtPos );
 
                 if( pUndo )
-                    pUndo->SaveRedlineData( aPam, sal_False );
+                    pUndo->SaveRedlineData( aPam, false );
                 pDoc->AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_FORMAT, aPam ), true);
             }
         }
@@ -859,7 +859,7 @@ static bool lcl_InsAttr(
     if( pDoc->IsRedlineOn() && pCharSet && pCharSet->Count() )
     {
         if( pUndo )
-            pUndo->SaveRedlineData( rRg, sal_False );
+            pUndo->SaveRedlineData( rRg, false );
         pDoc->AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_FORMAT, rRg ), true);
     }
 
@@ -1181,7 +1181,7 @@ void SwDoc::ResetAttrAtFormat( const sal_uInt16 nWhichId,
         ?   new SwUndoFmtResetAttr( rChangedFormat, nWhichId )
         :   0;
 
-    const sal_Bool bAttrReset = rChangedFormat.ResetFmtAttr( nWhichId );
+    const bool bAttrReset = rChangedFormat.ResetFmtAttr( nWhichId );
 
     if ( bAttrReset )
     {
@@ -1802,7 +1802,7 @@ SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
     // #i40550#
     SwFmt* pNewFmt = (this->*fnCopyFmt)( rFmt.GetName(), pParent, false, true );
     pNewFmt->SetAuto( rFmt.IsAuto() );
-    pNewFmt->CopyAttrs( rFmt, sal_True );           // copy the attributes
+    pNewFmt->CopyAttrs( rFmt, true );           // copy the attributes
 
     pNewFmt->SetPoolFmtId( rFmt.GetPoolFmtId() );
     pNewFmt->SetPoolHelpId( rFmt.GetPoolHelpId() );
@@ -1859,7 +1859,7 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
         pNewColl = MakeTxtFmtColl( rColl.GetName(), pParent );
 
     // copy the auto formats or the attributes
-    pNewColl->CopyAttrs( rColl, sal_True );
+    pNewColl->CopyAttrs( rColl, true );
 
     if(rColl.IsAssignedToListLevelOfOutlineStyle())
         pNewColl->AssignToListLevelOfOutlineStyle(rColl.GetAssignedOutlineStyleLevel());
@@ -1877,7 +1877,7 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     {
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == pNewColl->GetItemState( RES_PARATR_NUMRULE,
-            sal_False, &pItem ))
+            false, &pItem ))
         {
             const SwNumRule* pRule;
             const OUString& rName = ((SwNumRuleItem*)pItem)->GetValue();
@@ -1887,7 +1887,7 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
             {
                 SwNumRule* pDestRule = FindNumRulePtr( rName );
                 if( pDestRule )
-                    pDestRule->SetInvalidRule( sal_True );
+                    pDestRule->SetInvalidRule( true );
                 else
                     MakeNumRule( rName, pRule );
             }
@@ -2048,7 +2048,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
     {
         SwFrmFmt* pNewFmt = new SwFrmFmt( GetAttrPool(), "CpyDesc",
                                             GetDfltFrmFmt() );
-        pNewFmt->CopyAttrs( *pOldFmt, sal_True );
+        pNewFmt->CopyAttrs( *pOldFmt, true );
 
         if( SFX_ITEM_SET == pNewFmt->GetAttrSet().GetItemState(
             RES_CNTNT, false, &pItem ))
@@ -2389,8 +2389,8 @@ SwTblNumFmtMerge::SwTblNumFmtMerge( const SwDoc& rSrc, SwDoc& rDest )
 {
     // a different Doc -> Number formatter needs to be merged
     SvNumberFormatter* pN;
-    if( &rSrc != &rDest && 0 != ( pN = ((SwDoc&)rSrc).GetNumberFormatter( sal_False ) ))
-        ( pNFmt = rDest.GetNumberFormatter( sal_True ))->MergeFormatter( *pN );
+    if( &rSrc != &rDest && 0 != ( pN = ((SwDoc&)rSrc).GetNumberFormatter( false ) ))
+        ( pNFmt = rDest.GetNumberFormatter( true ))->MergeFormatter( *pN );
 
     if( &rSrc != &rDest )
         ((SwGetRefFieldType*)rSrc.GetSysFldType( RES_GETREFFLD ))->

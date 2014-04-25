@@ -184,7 +184,7 @@ static SwRect lcl_CalculateRepaintRect( SwTxtFrm& rTxtFrm, sal_Int32 nChgStart, 
     SwNodeIndex aNdIdx( *pNode );
     SwPosition aPos( aNdIdx, SwIndex( pNode, nChgEnd ) );
     SwCrsrMoveState aTmpState( MV_NONE );
-    aTmpState.b2Lines = sal_True;
+    aTmpState.b2Lines = true;
     rTxtFrm.GetCharRect( aRect, aPos, &aTmpState );
     // information about end of repaint area
     Sw2LinesPos* pEnd2Pos = aTmpState.p2Lines;
@@ -697,7 +697,7 @@ OUString SwTxtNode::GetCurWord( sal_Int32 nPos ) const
 
 SwScanner::SwScanner( const SwTxtNode& rNd, const OUString& rTxt,
     const LanguageType* pLang, const ModelToViewHelper& rConvMap,
-    sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnde, sal_Bool bClp )
+    sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnde, bool bClp )
     : rNode( rNd )
     , aPreDashReplacementText(rTxt)
     , pLanguage( pLang )
@@ -786,7 +786,7 @@ namespace
     }
 }
 
-sal_Bool SwScanner::NextWord()
+bool SwScanner::NextWord()
 {
     nBegin = nBegin + nLen;
     Boundary aBound;
@@ -822,7 +822,7 @@ sal_Bool SwScanner::NextWord()
         }
 
         if ( nBegin >= aText.getLength() || nBegin >= nEndPos )
-            return sal_False;
+            return false;
 
         // get the word boundaries
         aBound = g_pBreakIt->GetBreakIter()->getWordBoundary( aText, nBegin,
@@ -838,7 +838,7 @@ sal_Bool SwScanner::NextWord()
 
         //no word boundaries could be found
         if(aBound.endPos == aBound.startPos)
-            return sal_False;
+            return false;
 
         //if a word before is found it has to be searched for the next
         if(aBound.endPos == nBegin)
@@ -909,14 +909,14 @@ sal_Bool SwScanner::NextWord()
     }
 
     if( ! nLen )
-        return sal_False;
+        return false;
 
     if ( nWordType == i18n::WordType::WORD_COUNT )
         nLen = forceEachAsianCodePointToWord(aText, nBegin, nLen);
 
     aWord = aPreDashReplacementText.copy( nBegin, nLen );
 
-    return sal_True;
+    return true;
 }
 
 sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
@@ -1164,7 +1164,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
                 pEditShell->Push();             // save current cursor on stack
                 pEditShell->SetSelection( aCurPaM );
                 bool bIsAsianScript = (SCRIPTTYPE_ASIAN == pEditShell->GetScriptType());
-                pEditShell->Pop( sal_False );   // restore cursor from stack
+                pEditShell->Pop( false );   // restore cursor from stack
 
                 if (!bIsAsianScript && rArgs.bAllowImplicitChangesForNotConvertibleText)
                 {
@@ -1316,7 +1316,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
             // within the word
             LanguageType eActLang = aScanner.GetCurrentLanguage();
 
-            sal_Bool bSpell = xSpell.is() ? xSpell->hasLanguage( eActLang ) : sal_False;
+            bool bSpell = xSpell.is() ? xSpell->hasLanguage( eActLang ) : sal_False;
             if( bSpell && !rWord.isEmpty() )
             {
                 // check for: bAlter => xHyphWord.is()

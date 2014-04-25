@@ -49,7 +49,7 @@ class DropDownFieldDialog : public SvxStandardDialog
     virtual void    Apply() SAL_OVERRIDE;
 public:
     DropDownFieldDialog(   Window *pParent, SwWrtShell &rSh,
-                                SwField* pField, sal_Bool bNextButton = sal_False );
+                                SwField* pField, bool bNextButton = false );
 };
 } //namespace sw
 

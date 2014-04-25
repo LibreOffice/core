@@ -68,7 +68,7 @@ class SwXCell : public SwXCellBaseClass,
     public SwClient
 {
     friend void   sw_setString( SwXCell &rCell, const OUString &rTxt,
-                                 sal_Bool bKeepNumberFmt );
+                                bool bKeepNumberFmt );
     friend double sw_getValue( SwXCell &rCell );
     friend void   sw_setValue( SwXCell &rCell, double nVal );
 
@@ -312,12 +312,12 @@ private:
     // Descriptor-interface
     SwTableProperties_Impl*     pTableProps;
     OUString                    m_sTableName;
-    sal_Bool                    bIsDescriptor;
+    bool                    bIsDescriptor;
     unsigned short              nRows;
     unsigned short              nColumns;
 
-    sal_Bool                        bFirstRowAsLabel    :1;
-    sal_Bool                        bFirstColumnAsLabel :1;
+    bool                        bFirstRowAsLabel    :1;
+    bool                        bFirstColumnAsLabel :1;
 protected:
     virtual ~SwXTextTable();
 public:
@@ -453,8 +453,8 @@ class SwXCellRange : public cppu::WeakImplHelper7
 
     SwUnoCrsr*                  pTblCrsr;
 
-    sal_Bool                        bFirstRowAsLabel    :1;
-    sal_Bool                        bFirstColumnAsLabel :1;
+    bool                        bFirstRowAsLabel    :1;
+    bool                        bFirstColumnAsLabel :1;
 
 public:
     SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt, SwRangeDescriptor& rDesc);
@@ -537,7 +537,7 @@ public:
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > *pAnySeq,
             ::com::sun::star::uno::Sequence< OUString > *pTxtSeq,
             ::com::sun::star::uno::Sequence< double > *pDblSeq,
-            sal_Bool bForceNumberResults = sal_False ) throw (::com::sun::star::uno::RuntimeException);
+            bool bForceNumberResults = false ) throw (::com::sun::star::uno::RuntimeException);
 
 };
 
@@ -626,7 +626,7 @@ public:
 int sw_CompareCellRanges(
         const OUString &rRange1StartCell, const OUString &rRange1EndCell,
         const OUString &rRange2StartCell, const OUString &rRange2EndCell,
-        sal_Bool bCmpColsFirst );
+        bool bCmpColsFirst );
 
 void sw_NormalizeRange( OUString &rCell1, OUString &rCell2 );
 

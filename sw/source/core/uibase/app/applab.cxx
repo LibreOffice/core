@@ -98,7 +98,7 @@ static const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem
                                text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
     aSet.Put( SwFmtVertOrient( rItem.lUpper + nRow * rItem.lVDist,
                                text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
-    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Insert Fly
+    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, true,  &rFmt );  // Insert Fly
     OSL_ENSURE( pFmt, "Fly not inserted" );
 
     rSh.UnSelectFrm();  //Frame was selected automatically
@@ -113,7 +113,7 @@ static const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem
         if ( fnSetActGroup )
             (*fnSetActGroup)( rItem.sGlossaryGroup );
         SwGlossaryHdl* pGlosHdl = rSh.GetView().GetGlosHdl();
-        pGlosHdl->SetCurGroup(rItem.sGlossaryGroup, sal_True);
+        pGlosHdl->SetCurGroup(rItem.sGlossaryGroup, true);
         pGlosHdl->InsertGlossary( rItem.sGlossaryBlockName );
     }
 
@@ -122,7 +122,7 @@ static const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem
 
 static const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
                         SwFrmFmt &rFmt, SwFldMgr& rFldMgr,
-                        sal_uInt16 nCol, sal_uInt16 nRow, sal_Bool bLast )
+                        sal_uInt16 nCol, sal_uInt16 nRow, bool bLast )
 {
     SfxItemSet aSet(rSh.GetAttrPool(), RES_ANCHOR, RES_ANCHOR,
                         RES_VERT_ORIENT, RES_VERT_ORIENT, RES_HORI_ORIENT, RES_HORI_ORIENT, 0 );
@@ -135,7 +135,7 @@ static const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rIte
                                text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
     aSet.Put( SwFmtVertOrient( rItem.lUpper + nRow * rItem.lVDist,
                                text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
-    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Insert Fly
+    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, true,  &rFmt );  // Insert Fly
     OSL_ENSURE( pFmt, "Fly not inserted" );
 
     rSh.UnSelectFrm();  //Frame was selected automatically
@@ -154,7 +154,7 @@ static const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rIte
     return pFmt;
 }
 
-void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
+void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 {
     static sal_uInt16 nLabelTitleNo = 0;
     static sal_uInt16 nBCTitleNo = 0;
@@ -234,7 +234,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
 
             SET_CURR_SHELL(pSh);
             pSh->SetLabelDoc(rItem.bSynchron);
-            pSh->DoUndo( sal_False );
+            pSh->DoUndo( false );
             pSh->StartAllAction();
 
             pSh->SetNewDoc();       // Avoid performance problems
@@ -253,10 +253,10 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
             rFmt.SetFmtAttr(aULMargin);
 
             // Header and footer
-            rFmt.SetFmtAttr(SwFmtHeader(sal_Bool(sal_False)));
-            aDesc.ChgHeaderShare(sal_False);
-            rFmt.SetFmtAttr(SwFmtFooter(sal_Bool(sal_False)));
-            aDesc.ChgFooterShare(sal_False);
+            rFmt.SetFmtAttr(SwFmtHeader(false));
+            aDesc.ChgHeaderShare(false);
+            rFmt.SetFmtAttr(SwFmtFooter(false));
+            aDesc.ChgFooterShare(false);
 
             aDesc.SetUseOn(nsUseOnPage::PD_ALL);                // Site numbering
 
@@ -286,7 +286,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
 
             // Insert frame
             boost::scoped_ptr<SwFldMgr> pFldMgr(new SwFldMgr);
-            pFldMgr->SetEvalExpFlds(sal_False);
+            pFldMgr->SetEvalExpFlds(false);
 
             // Prepare border template
             SwFrmFmt* pFmt = pSh->GetFrmFmtFromPool( RES_POOLFRM_LABEL );
@@ -329,11 +329,11 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                                 // dont leave the fly!!!
                                 pSh->Push();
                                 pSh->SttDoc();
-                                sal_Bool bInFly = 0 != pSh->WizzardGetFly();
+                                bool bInFly = 0 != pSh->WizzardGetFly();
                                 pSh->Pop( bInFly );
 
                                 if( bInFly )
-                                    pSh->EndDoc(sal_True);  // select all content
+                                    pSh->EndDoc(true);  // select all content
                                                         // in the fly
                                 else
                                     pSh->SetMark();     // set only the mark
@@ -355,10 +355,10 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                             aSect.SetProtectFlag(true);
                             pSh->Insert(".");   // Dummytext to allocate the Section
                             pSh->SttDoc();
-                            pSh->EndDoc(sal_True);  // Select everything in the frame
+                            pSh->EndDoc(true);  // Select everything in the frame
                             pSh->InsertSection(aSect);
                         }
-                        pSh->Pop( sal_False );
+                        pSh->Pop( false );
                     }
                 }
             }
@@ -367,7 +367,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                 pFirstFlyFmt = bLabel ?
                     lcl_InsertLabText( *pSh, rItem, *pFmt, *pFldMgr,
                             static_cast< sal_uInt16 >(rItem.nCol - 1),
-                            static_cast< sal_uInt16 >(rItem.nRow - 1), sal_True ) :
+                            static_cast< sal_uInt16 >(rItem.nRow - 1), true ) :
                     lcl_InsertBCText(*pSh, rItem, *pFmt,
                             static_cast< sal_uInt16 >(rItem.nCol - 1),
                             static_cast< sal_uInt16 >(rItem.nRow - 1));
@@ -382,16 +382,16 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                 SwLabDlgUpdateFieldInformation(xModel, rItem);
             }
 
-            pFldMgr->SetEvalExpFlds(sal_True);
+            pFldMgr->SetEvalExpFlds(true);
             pFldMgr->EvalExpFlds(pSh);
 
             pFldMgr.reset();
 
             if (pFirstFlyFmt)
-                pSh->GotoFly(pFirstFlyFmt->GetName(), FLYCNTTYPE_ALL, sal_False);
+                pSh->GotoFly(pFirstFlyFmt->GetName(), FLYCNTTYPE_ALL, false);
 
             pSh->EndAllAction();
-            pSh->DoUndo( sal_True );
+            pSh->DoUndo( true );
         }
 
         if( rItem.aWriting.indexOf( '<' ) >= 0 )

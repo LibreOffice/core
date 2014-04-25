@@ -240,13 +240,13 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH:
         {
-            sal_Bool bTmp = 0xFF == GetHeightPercent();
+            bool bTmp = 0xFF == GetHeightPercent();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
         case MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT:
         {
-            sal_Bool bTmp = 0xFF == GetWidthPercent();
+            bool bTmp = 0xFF == GetWidthPercent();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -265,7 +265,7 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_FRMSIZE_IS_AUTO_HEIGHT:
         {
-            sal_Bool bTmp = ATT_FIX_SIZE != GetHeightSizeType();
+            bool bTmp = ATT_FIX_SIZE != GetHeightSizeType();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -339,7 +339,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH:
         {
-            sal_Bool bSet = *(sal_Bool*)rVal.getValue();
+            bool bSet = *(sal_Bool*)rVal.getValue();
             if(bSet)
                 SetHeightPercent(0xff);
             else if( 0xff == GetHeightPercent() )
@@ -348,7 +348,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT:
         {
-            sal_Bool bSet = *(sal_Bool*)rVal.getValue();
+            bool bSet = *(sal_Bool*)rVal.getValue();
             if(bSet)
                 SetWidthPercent(0xff);
             else if( 0xff == GetWidthPercent() )
@@ -398,7 +398,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_FRMSIZE_IS_AUTO_HEIGHT:
         {
-            sal_Bool bSet = *(sal_Bool*)rVal.getValue();
+            bool bSet = *(sal_Bool*)rVal.getValue();
             SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
         }
         break;
@@ -453,7 +453,7 @@ SwFmtHeader::SwFmtHeader( const SwFmtHeader &rCpy )
 {
 }
 
-SwFmtHeader::SwFmtHeader( sal_Bool bOn )
+SwFmtHeader::SwFmtHeader( bool bOn )
     : SfxPoolItem( RES_HEADER ),
     SwClient( 0 ),
     bActive( bOn )
@@ -500,7 +500,7 @@ SwFmtFooter::SwFmtFooter( const SwFmtFooter &rCpy )
 {
 }
 
-SwFmtFooter::SwFmtFooter( sal_Bool bOn )
+SwFmtFooter::SwFmtFooter( bool bOn )
     : SfxPoolItem( RES_FOOTER ),
     SwClient( 0 ),
     bActive( bOn )
@@ -773,7 +773,7 @@ SwColumn::SwColumn() :
 {
 }
 
-sal_Bool SwColumn::operator==( const SwColumn &rCmp ) const
+bool SwColumn::operator==( const SwColumn &rCmp ) const
 {
     return (nWish    == rCmp.GetWishWidth() &&
             GetLeft()  == rCmp.GetLeft() &&
@@ -833,7 +833,7 @@ SwFmtCol::SwFmtCol()
     eAdj( COLADJ_NONE ),
     nWidth( USHRT_MAX ),
     aWidthAdjustValue( 0 ),
-    bOrtho( sal_True )
+    bOrtho( true )
 {
 }
 
@@ -865,7 +865,7 @@ SfxPoolItem*  SwFmtCol::Clone( SfxItemPool* ) const
     return new SwFmtCol( *this );
 }
 
-sal_uInt16 SwFmtCol::GetGutterWidth( sal_Bool bMin ) const
+sal_uInt16 SwFmtCol::GetGutterWidth( bool bMin ) const
 {
     sal_uInt16 nRet = 0;
     if ( aColumns.size() == 2 )
@@ -924,13 +924,13 @@ void SwFmtCol::Init( sal_uInt16 nNumCols, sal_uInt16 nGutterWidth, sal_uInt16 nA
     {   SwColumn *pCol = new SwColumn;
         aColumns.push_back( pCol );
     }
-    bOrtho = sal_True;
+    bOrtho = true;
     nWidth = USHRT_MAX;
     if( nNumCols )
         Calc( nGutterWidth, nAct );
 }
 
-void SwFmtCol::SetOrtho( sal_Bool bNew, sal_uInt16 nGutterWidth, sal_uInt16 nAct )
+void SwFmtCol::SetOrtho( bool bNew, sal_uInt16 nGutterWidth, sal_uInt16 nAct )
 {
     bOrtho = bNew;
     if ( bNew && !aColumns.empty() )
@@ -1066,7 +1066,7 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 }
             bRet = true;
             nWidth = nWidthSum;
-            bOrtho = sal_False;
+            bOrtho = false;
 
             uno::Reference<lang::XUnoTunnel> xNumTunnel(xCols, uno::UNO_QUERY);
             SwXTextColumns* pSwColums = 0;
@@ -1111,7 +1111,7 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 SwFmtSurround::SwFmtSurround( SwSurround eFly ) :
     SfxEnumItem( RES_SURROUND, sal_uInt16( eFly ) )
 {
-    bAnchorOnly = bContour = bOutside = sal_False;
+    bAnchorOnly = bContour = bOutside = false;
 }
 
 SwFmtSurround::SwFmtSurround( const SwFmtSurround &rCpy ) :
@@ -1153,19 +1153,19 @@ bool SwFmtSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_SURROUND_ANCHORONLY:
         {
-            sal_Bool bTmp = IsAnchorOnly();
+            bool bTmp = IsAnchorOnly();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
                 break;
         case MID_SURROUND_CONTOUR:
         {
-            sal_Bool bTmp = IsContour();
+            bool bTmp = IsContour();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
                 break;
         case MID_SURROUND_CONTOUROUTSIDE:
         {
-            sal_Bool bTmp = IsOutside();
+            bool bTmp = IsOutside();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
                 break;
@@ -1329,7 +1329,7 @@ bool SwFmtVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 //  Partially implemented inline in hxx
 
 SwFmtHoriOrient::SwFmtHoriOrient( SwTwips nX, sal_Int16 eHori,
-                              sal_Int16 eRel, sal_Bool bPos )
+                              sal_Int16 eRel, bool bPos )
     : SfxPoolItem( RES_HORI_ORIENT ),
     nXPos( nX ),
     eOrient( eHori ),
@@ -1371,7 +1371,7 @@ bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 break;
         case MID_HORIORIENT_PAGETOGGLE:
         {
-            sal_Bool bTmp = IsPosToggle();
+            bool bTmp = IsPosToggle();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
                 break;
@@ -1724,7 +1724,7 @@ bool SwFmtURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_URL_SERVERMAP:
         {
-            sal_Bool bTmp = IsServerMap();
+            bool bTmp = IsServerMap();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
             break;
@@ -1851,20 +1851,20 @@ bool SwFmtFtnEndAtTxtEnd::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) cons
     {
         case MID_COLLECT     :
         {
-            sal_Bool bVal = GetValue() >= FTNEND_ATTXTEND;
+            bool bVal = GetValue() >= FTNEND_ATTXTEND;
             rVal.setValue(&bVal, ::getBooleanCppuType());
         }
         break;
         case MID_RESTART_NUM :
         {
-            sal_Bool bVal = GetValue() >= FTNEND_ATTXTEND_OWNNUMSEQ;
+            bool bVal = GetValue() >= FTNEND_ATTXTEND_OWNNUMSEQ;
             rVal.setValue(&bVal, ::getBooleanCppuType());
         }
         break;
         case MID_NUM_START_AT: rVal <<= (sal_Int16) nOffset; break;
         case MID_OWN_NUM     :
         {
-            sal_Bool bVal = GetValue() >= FTNEND_ATTXTEND_OWNNUMANDFMT;
+            bool bVal = GetValue() >= FTNEND_ATTXTEND_OWNNUMANDFMT;
             rVal.setValue(&bVal, ::getBooleanCppuType());
         }
         break;
@@ -1884,7 +1884,7 @@ bool SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case MID_COLLECT     :
         {
-            sal_Bool bVal = *(sal_Bool*)rVal.getValue();
+            bool bVal = *(sal_Bool*)rVal.getValue();
             if(!bVal && GetValue() >= FTNEND_ATTXTEND)
                 SetValue(FTNEND_ATPGORDOCEND);
             else if(bVal && GetValue() < FTNEND_ATTXTEND)
@@ -1893,7 +1893,7 @@ bool SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_RESTART_NUM :
         {
-            sal_Bool bVal = *(sal_Bool*)rVal.getValue();
+            bool bVal = *(sal_Bool*)rVal.getValue();
             if(!bVal && GetValue() >= FTNEND_ATTXTEND_OWNNUMSEQ)
                 SetValue(FTNEND_ATTXTEND);
             else if(bVal && GetValue() < FTNEND_ATTXTEND_OWNNUMSEQ)
@@ -1912,7 +1912,7 @@ bool SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_OWN_NUM     :
         {
-            sal_Bool bVal = *(sal_Bool*)rVal.getValue();
+            bool bVal = *(sal_Bool*)rVal.getValue();
             if(!bVal && GetValue() >= FTNEND_ATTXTEND_OWNNUMANDFMT)
                 SetValue(FTNEND_ATTXTEND_OWNNUMSEQ);
             else if(bVal && GetValue() < FTNEND_ATTXTEND_OWNNUMANDFMT)
@@ -2038,7 +2038,7 @@ SwFmtLineNumber::SwFmtLineNumber() :
     SfxPoolItem( RES_LINENUMBER )
 {
     nStartValue = 0;
-    bCountLines = sal_True;
+    bCountLines = true;
 }
 
 SwFmtLineNumber::~SwFmtLineNumber()
@@ -2067,7 +2067,7 @@ bool SwFmtLineNumber::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_LINENUMBER_COUNT:
         {
-            sal_Bool bTmp = IsCount();
+            bool bTmp = IsCount();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -2112,8 +2112,8 @@ bool SwFmtLineNumber::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 SwTextGridItem::SwTextGridItem()
     : SfxPoolItem( RES_TEXTGRID ), m_aColor( COL_LIGHTGRAY ), m_nLines( 20 )
     , m_nBaseHeight( 400 ), m_nRubyHeight( 200 ), m_eGridType( GRID_NONE )
-    , m_bRubyTextBelow( 0 ), m_bPrintGrid( 1 ), m_bDisplayGrid( 1 )
-    , m_nBaseWidth(400), m_bSnapToChars( 1 ), m_bSquaredMode(1)
+    , m_bRubyTextBelow( false ), m_bPrintGrid( true ), m_bDisplayGrid( true )
+    , m_nBaseWidth(400), m_bSnapToChars( true ), m_bSquaredMode(true)
 {
 }
 
@@ -2219,7 +2219,7 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             break;
         case MID_GRID_STANDARD_MODE:
             {
-                sal_Bool bStandardMode = !m_bSquaredMode;
+                bool bStandardMode = !m_bSquaredMode;
                 rVal.setValue( &bStandardMode, ::getBooleanCppuType() );
             }
             break;
@@ -2325,7 +2325,7 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             break;
         case MID_GRID_STANDARD_MODE:
         {
-            sal_Bool bStandard = *(sal_Bool*)rVal.getValue();
+            bool bStandard = *(sal_Bool*)rVal.getValue();
                SetSquaredMode( !bStandard );
             break;
         }
@@ -2337,7 +2337,7 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-void SwTextGridItem::SwitchPaperMode(sal_Bool bNew)
+void SwTextGridItem::SwitchPaperMode(bool bNew)
 {
     if (bNew == m_bSquaredMode)
     {
@@ -2378,10 +2378,10 @@ void SwTextGridItem::Init()
         m_nBaseHeight = 400;
         m_nRubyHeight = 200;
         m_eGridType = GRID_NONE;
-        m_bRubyTextBelow = 0;
-        m_bPrintGrid = 1;
-        m_bDisplayGrid = 1;
-        m_bSnapToChars = 1;
+        m_bRubyTextBelow = false;
+        m_bPrintGrid = true;
+        m_bDisplayGrid = true;
+        m_bSnapToChars = true;
         m_nBaseWidth = 400;
     }
     else
@@ -2390,11 +2390,11 @@ void SwTextGridItem::Init()
         m_nBaseHeight = 312;
         m_nRubyHeight = 0;
         m_eGridType = GRID_NONE;
-        m_bRubyTextBelow = 0;
-        m_bPrintGrid = 1;
-        m_bDisplayGrid = 1;
+        m_bRubyTextBelow = false;
+        m_bPrintGrid = true;
+        m_bDisplayGrid = true;
         m_nBaseWidth = 210;
-        m_bSnapToChars = 1;
+        m_bSnapToChars = true;
     }
 }
 
@@ -2549,8 +2549,8 @@ void SwFrmFmt::MakeFrms()
     OSL_ENSURE( !this, "Sorry not implemented." );
 }
 
-SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
-                                 const sal_Bool bCalcFrm ) const
+SwRect SwFrmFmt::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
+                                 const bool bCalcFrm ) const
 {
     SwRect aRet;
     SwFrm *pFrm = 0;
@@ -2617,13 +2617,13 @@ SdrObject* SwFrmFmt::FindRealSdrObject()
     {
         Point aNullPt;
         SwFlyFrm* pFly = (SwFlyFrm*)::GetFrmOfModify( 0, *this, FRM_FLY,
-                                                    &aNullPt, 0, sal_False );
+                                                    &aNullPt, 0, false );
         return pFly ? pFly->GetVirtDrawObj() : 0;
     }
     return FindSdrObject();
 }
 
-sal_Bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
+bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
 {
     //Also linking from inside to outside or from outside to inside is not
     //allowed.
@@ -2653,13 +2653,13 @@ sal_Bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
                 if( pIdx && pFlyNd == &pIdx->GetNode() )
                 {
                     if( pFmt == this )
-                        return sal_True;
+                        return true;
 
                     pAnchor = &pFmt->GetAnchor();
                     if ((FLY_AT_PAGE == pAnchor->GetAnchorId()) ||
                         !pAnchor->GetCntntAnchor() )
                     {
-                        return sal_False;
+                        return false;
                     }
 
                     pFlyNd = pAnchor->GetCntntAnchor()->nNode.GetNode().
@@ -2670,11 +2670,11 @@ sal_Bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
             if( n >= rFmts.size() )
             {
                 OSL_ENSURE( !this, "Fly section but no format found" );
-                return sal_False;
+                return false;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 // #i31698#
@@ -2899,13 +2899,13 @@ void SwFlyFrmFmt::MakeFrms()
     }
 }
 
-SwFlyFrm* SwFlyFrmFmt::GetFrm( const Point* pPoint, const sal_Bool bCalcFrm ) const
+SwFlyFrm* SwFlyFrmFmt::GetFrm( const Point* pPoint, const bool bCalcFrm ) const
 {
     return (SwFlyFrm*)::GetFrmOfModify( 0, *(SwModify*)this, FRM_FLY,
                                             pPoint, 0, bCalcFrm );
 }
 
-SwAnchoredObject* SwFlyFrmFmt::GetAnchoredObj( const Point* pPoint, const sal_Bool bCalcFrm ) const
+SwAnchoredObject* SwFlyFrmFmt::GetAnchoredObj( const Point* pPoint, const bool bCalcFrm ) const
 {
     SwFlyFrm* pFlyFrm( GetFrm( pPoint, bCalcFrm ) );
     if ( pFlyFrm )

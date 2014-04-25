@@ -587,7 +587,7 @@ SwUndoFmtResetAttr::SwUndoFmtResetAttr( SwFmt& rChangedFormat,
     , m_pOldItem( 0 )
 {
     const SfxPoolItem* pItem = 0;
-    if (rChangedFormat.GetItemState( nWhichId, sal_False, &pItem ) == SFX_ITEM_SET)
+    if (rChangedFormat.GetItemState( nWhichId, false, &pItem ) == SFX_ITEM_SET)
     {
         m_pOldItem.reset( pItem->Clone() );
     }
@@ -768,7 +768,7 @@ SwUndoAttr::~SwUndoAttr()
 {
 }
 
-void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, sal_Bool bIsCntnt )
+void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, bool bIsCntnt )
 {
     SwDoc* pDoc = rPam.GetDoc();
     if ( pDoc->IsRedlineOn() )
@@ -1011,7 +1011,7 @@ void SwUndoDefaultAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoMoveLeftMargin::SwUndoMoveLeftMargin(
-            const SwPaM& rPam, sal_Bool bFlag, bool bMod )
+            const SwPaM& rPam, bool bFlag, bool bMod )
     : SwUndo( bFlag ? UNDO_INC_LEFTMARGIN : UNDO_DEC_LEFTMARGIN )
     , SwUndRng( rPam )
     , m_pHistory( new SwHistory )

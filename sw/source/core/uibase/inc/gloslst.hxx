@@ -58,9 +58,9 @@ public:
         SwGlossaryList();
         virtual ~SwGlossaryList();
 
-    bool HasLongName(const OUString& rBegin, std::vector<OUString> *pLongNames);
-    sal_Bool            GetShortName(const OUString& rLongName,
-                                        OUString& rShortName, OUString& rGroupName );
+    bool            HasLongName(const OUString& rBegin, std::vector<OUString> *pLongNames);
+    bool            GetShortName(const OUString& rLongName,
+                                       OUString& rShortName, OUString& rGroupName );
 
     sal_uInt16      GetGroupCount();
     OUString        GetGroupName(sal_uInt16 nPos, bool bNoPath = true);

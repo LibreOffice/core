@@ -244,7 +244,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
             {
                 Point aPt( pLayout->Frm().Pos() );
                 aPt.Y()++;      // aus dem Header raus
-                pCntFrm = pPgFrm->GetCntntPos( aPt, sal_False, sal_True, sal_False );
+                pCntFrm = pPgFrm->GetCntntPos( aPt, false, true, false );
                 pTxtNode = GetFirstTxtNode( rDoc, rPos, pCntFrm, aPt );
             }
         }
@@ -492,10 +492,10 @@ SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const OUString& rName, sal_uIn
     pOutlChgNd( 0 ),
     sDelim( "." ),
     nType(nTyp), nLevel( UCHAR_MAX ),
-    bDeleted( sal_False )
+    bDeleted( false )
 {
     if( ( nsSwGetSetExpType::GSE_SEQ | nsSwGetSetExpType::GSE_STRING ) & nType )
-        EnableFormat(sal_False);    // do not use Numberformatter
+        EnableFormat(false);    // do not use Numberformatter
 }
 
 SwFieldType* SwSetExpFieldType::Copy() const
@@ -610,7 +610,7 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
                 const SwNodeNum & aNum = *(pTxtNd->GetNum());
 
                 // only get the number, without pre-/post-fixstrings
-                OUString sNumber( pRule->MakeNumString(aNum, sal_False ));
+                OUString sNumber( pRule->MakeNumString(aNum, false ));
 
                 if( !sNumber.isEmpty() )
                     rFld.ChgExpStr( sNumber + sDelim + rFld.GetExpStr() );
@@ -718,7 +718,7 @@ bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP ) const
         const OUString rTmp2 = rNew.sDlgEntry;
         sal_Int32 nFndPos2 = 0;
         const OUString sNum2( rTmp2.getToken( 0, ' ', nFndPos2 ));
-        sal_Bool bIsNum2IsNumeric = rCC.isAsciiNumeric( sNum2 );
+        bool bIsNum2IsNumeric = rCC.isAsciiNumeric( sNum2 );
         sal_Int32 nNum2 = bIsNum2IsNumeric ? sNum2.toInt32() : 0;
 
         nO--;
@@ -767,7 +767,7 @@ SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const OUString& rFormel,
 {
     SetFormula(rFormel);
     // ignore SubType
-    bInput = sal_False;
+    bInput = false;
     if( IsSequenceFld() )
     {
         SwValueField::SetValue(1.0);
@@ -904,7 +904,7 @@ sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc,
             LanguageTag aLanguageTag( eLang);
             CharClass aCC( aLanguageTag);
             sal_Unicode c0 = sNodeText[0];
-            sal_Bool bIsAlphaNum = aCC.isAlphaNumeric( sNodeText, 0 );
+            bool bIsAlphaNum = aCC.isAlphaNumeric( sNodeText, 0 );
             if( !bIsAlphaNum ||
                 (c0 == ' ' || c0 == '\t'))
             {
@@ -994,7 +994,7 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             //I18N - if the formula contains only "TypeName+1"
             //and it's one of the initially created sequence fields
             //then the localized names has to be replaced by a programmatic name
-            OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, uTmp, sal_False);
+            OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, uTmp, false);
             SetFormula( sMyFormula );
         }
         break;
@@ -1062,7 +1062,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             //I18N - if the formula contains only "TypeName+1"
             //and it's one of the initially created sequence fields
             //then the localized names has to be replaced by a programmatic name
-            OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, GetFormula(), sal_True);
+            OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, GetFormula(), true);
             rAny <<= OUString( sMyFormula );
         }
         break;

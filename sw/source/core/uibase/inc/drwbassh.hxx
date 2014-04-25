@@ -52,7 +52,7 @@ public:
     void        GetState(SfxItemSet &);
     void        GetDrawAttrStateForIFBX( SfxItemSet& rSet );
     void        DisableState(SfxItemSet &rSet)               { Disable(rSet);}
-    sal_Bool    Disable(SfxItemSet& rSet, sal_uInt16 nWhich = 0);
+    bool    Disable(SfxItemSet& rSet, sal_uInt16 nWhich = 0);
 
     void        StateStatusline(SfxItemSet &rSet);
 };

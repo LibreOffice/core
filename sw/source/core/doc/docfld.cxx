@@ -191,13 +191,13 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
     switch( nFldWhich )
     {
     case RES_SETEXPFLD:
-        ((SwSetExpFieldType&)rFldTyp).SetDeleted( sal_False );
+        ((SwSetExpFieldType&)rFldTyp).SetDeleted( false );
         break;
     case RES_USERFLD:
         ((SwUserFieldType&)rFldTyp).SetDeleted( false );
         break;
     case RES_DDEFLD:
-        ((SwDDEFieldType&)rFldTyp).SetDeleted( sal_False );
+        ((SwDDEFieldType&)rFldTyp).SetDeleted( false );
         break;
     }
 }
@@ -226,11 +226,11 @@ void SwDoc::RemoveFldType(sal_uInt16 nFld)
             if( pTmp->GetDepends() && !IsUsed( *pTmp ) )
             {
                 if( RES_SETEXPFLD == nWhich )
-                    ((SwSetExpFieldType*)pTmp)->SetDeleted( sal_True );
+                    ((SwSetExpFieldType*)pTmp)->SetDeleted( true );
                 else if( RES_USERFLD == nWhich )
                     ((SwUserFieldType*)pTmp)->SetDeleted( true );
                 else
-                    ((SwDDEFieldType*)pTmp)->SetDeleted( sal_True );
+                    ((SwDDEFieldType*)pTmp)->SetDeleted( true );
                 nWhich = 0;
             }
             break;
@@ -1094,7 +1094,7 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
     SwDBMgr* pMgr = NULL;
 #else
     SwDBMgr* pMgr = GetDBMgr();
-    pMgr->CloseAll(sal_False);
+    pMgr->CloseAll(false);
 #endif
 
     if( !mpUpdtFlds->GetSortLst()->empty() )
@@ -1106,7 +1106,7 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
             lcl_CalcFld( *this, rCalc, **it, pMgr );
     }
 #if HAVE_FEATURE_DBCONNECTIVITY
-    pMgr->CloseAll(sal_False);
+    pMgr->CloseAll(false);
 #endif
 }
 
@@ -1120,7 +1120,7 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt )
     SwDBMgr* pMgr = NULL;
 #else
     SwDBMgr* pMgr = GetDBMgr();
-    pMgr->CloseAll(sal_False);
+    pMgr->CloseAll(false);
 #endif
 
     for( _SetGetExpFlds::const_iterator it = mpUpdtFlds->GetSortLst()->begin();
@@ -1134,7 +1134,7 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt )
     }
 
 #if HAVE_FEATURE_DBCONNECTIVITY
-    pMgr->CloseAll(sal_False);
+    pMgr->CloseAll(false);
 #endif
 }
 
@@ -1284,7 +1284,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
     // already set the current record number
     SwDBMgr* pMgr = GetDBMgr();
-    pMgr->CloseAll(sal_False);
+    pMgr->CloseAll(false);
 #endif
 
     // Make sure we don't hide all sections, which would lead to a crash. First, count how many of them do we have.
@@ -1348,7 +1348,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         {
             SwHiddenTxtField* pHFld = (SwHiddenTxtField*)pFld;
             SwSbxValue aValue = aCalc.Calculate( pHFld->GetPar1() );
-            sal_Bool bValue = !aValue.GetBool();
+            bool bValue = !aValue.GetBool();
             if(!aValue.IsVoidValue())
             {
                 pHFld->SetValue( bValue );
@@ -1361,7 +1361,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         {
             SwHiddenParaField* pHPFld = (SwHiddenParaField*)pFld;
             SwSbxValue aValue = aCalc.Calculate( pHPFld->GetPar1() );
-            sal_Bool bValue = aValue.GetBool();
+            bool bValue = aValue.GetBool();
             if(!aValue.IsVoidValue())
                 pHPFld->SetHidden( bValue );
         }
@@ -1390,7 +1390,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
             SwDBData aTmpDBData(((SwDBField*)pFld)->GetDBData());
 
-            if( pMgr->IsDataSourceOpen(aTmpDBData.sDataSource, aTmpDBData.sCommand, sal_False))
+            if( pMgr->IsDataSourceOpen(aTmpDBData.sDataSource, aTmpDBData.sCommand, false))
                 aCalc.VarChange( sDBNumNm, pMgr->GetSelectedRecordId(aTmpDBData.sDataSource, aTmpDBData.sCommand, aTmpDBData.nCommandType));
 
             const OUString& rName = pFld->GetTyp()->GetName();
@@ -1537,7 +1537,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     }
 
 #if HAVE_FEATURE_DBCONNECTIVITY
-    pMgr->CloseAll(sal_False);
+    pMgr->CloseAll(false);
 #endif
     // delete hash table
     ::DeleteHashTable( pHashStrTbl, nStrFmtCnt );
@@ -1560,7 +1560,7 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
 
     sal_uInt16 nFldType = rDBFld.Which();
 
-    sal_Bool bPar1 = rCalc.Calculate( rDBFld.GetPar1() ).GetBool();
+    bool bPar1 = rCalc.Calculate( rDBFld.GetPar1() ).GetBool();
 
     if( RES_DBNEXTSETFLD == nFldType )
         ((SwDBNextSetField&)rDBFld).SetCondValid( bPar1 );
@@ -1690,7 +1690,7 @@ const SwDBData& SwDoc::GetDBDesc()
     return maDBData;
 }
 
-void SwDoc::SetInitDBFields( sal_Bool b )
+void SwDoc::SetInitDBFields( bool b )
 {
 #if !HAVE_FEATURE_DBCONNECTIVITY
     (void) b;
@@ -2045,7 +2045,7 @@ bool SwDoc::IsNameInArray( const std::vector<OUString>& rArr, const OUString& rN
 
 void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
 {
-    sal_Bool bIsModified = IsModified();
+    bool bIsModified = IsModified();
 
     sal_Int32 nDate;
     sal_Int64 nTime;
@@ -2374,9 +2374,9 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 {
                     sFormula = pFld->GetPar1();
                     if (sFormula.isEmpty() || sFormula==sFalse)
-                        ((SwHiddenParaField*)pFld)->SetHidden( sal_False );
+                        ((SwHiddenParaField*)pFld)->SetHidden( false );
                     else if (sFormula==sTrue)
-                        ((SwHiddenParaField*)pFld)->SetHidden( sal_True );
+                        ((SwHiddenParaField*)pFld)->SetHidden( true );
                     else
                         break;
 
@@ -2391,9 +2391,9 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 {
                     sFormula = pFld->GetPar1();
                     if (sFormula.isEmpty() || sFormula==sFalse)
-                        ((SwHiddenTxtField*)pFld)->SetValue( sal_True );
+                        ((SwHiddenTxtField*)pFld)->SetValue( true );
                     else if (sFormula==sTrue)
-                        ((SwHiddenTxtField*)pFld)->SetValue( sal_False );
+                        ((SwHiddenTxtField*)pFld)->SetValue( false );
                     else
                         break;
 
@@ -2455,7 +2455,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
     const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rDoc.GetCurrentLayout(), &aPt, 0, false );
 
     _SetGetExpFld* pNew = NULL;
-    sal_Bool bIsInBody = sal_False;
+    bool bIsInBody = false;
 
     if( !pFrm || pFrm->IsInDocBody() )
     {

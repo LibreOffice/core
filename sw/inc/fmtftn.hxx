@@ -68,7 +68,7 @@ public:
     void GetFtnText( OUString& rStr ) const;
 
     /// Returns string to be displayed of footnote / endnote.
-    OUString GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrs = sal_False ) const;
+    OUString GetViewNumStr( const SwDoc& rDoc, bool bInclStrs = false ) const;
 };
 
 #endif

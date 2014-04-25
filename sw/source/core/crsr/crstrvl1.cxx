@@ -21,67 +21,67 @@
 #include <viscrs.hxx>
 #include <callnk.hxx>
 
-sal_Bool SwCrsrShell::IsStartWord( sal_Int16 nWordType ) const
+bool SwCrsrShell::IsStartWord( sal_Int16 nWordType ) const
 {
     return m_pCurCrsr->IsStartWord( nWordType );
 }
-sal_Bool SwCrsrShell::IsEndWord( sal_Int16 nWordType ) const
+bool SwCrsrShell::IsEndWord( sal_Int16 nWordType ) const
 {
     return m_pCurCrsr->IsEndWord( nWordType );
 }
 
-sal_Bool SwCrsrShell::IsInWord( sal_Int16 nWordType ) const
+bool SwCrsrShell::IsInWord( sal_Int16 nWordType ) const
 {
     return m_pCurCrsr->IsInWord( nWordType );
 }
 
-sal_Bool SwCrsrShell::IsStartSentence() const
+bool SwCrsrShell::IsStartSentence() const
 {
     return m_pCurCrsr->IsStartEndSentence( false );
 }
-sal_Bool SwCrsrShell::IsEndSentence() const
+bool SwCrsrShell::IsEndSentence() const
 {
     return m_pCurCrsr->IsStartEndSentence( true );
 }
 
-sal_Bool SwCrsrShell::GoStartWord()
+bool SwCrsrShell::GoStartWord()
 {
     return CallCrsrFN( &SwCursor::GoStartWord );
 }
-sal_Bool SwCrsrShell::GoEndWord()
+bool SwCrsrShell::GoEndWord()
 {
     return CallCrsrFN( &SwCursor::GoEndWord );
 }
 
-sal_Bool SwCrsrShell::GoNextWord()
+bool SwCrsrShell::GoNextWord()
 {
     return CallCrsrFN( &SwCursor::GoNextWord );
 }
-sal_Bool SwCrsrShell::GoPrevWord()
+bool SwCrsrShell::GoPrevWord()
 {
     return CallCrsrFN( &SwCursor::GoPrevWord );
 }
 
-sal_Bool SwCrsrShell::GoNextSentence()
+bool SwCrsrShell::GoNextSentence()
 {
     return CallCrsrFN( &SwCursor::GoNextSentence );
 }
 
-sal_Bool SwCrsrShell::GoEndSentence()
+bool SwCrsrShell::GoEndSentence()
 {
     return CallCrsrFN( &SwCursor::GoEndSentence );
 }
-sal_Bool SwCrsrShell::GoStartSentence()
+bool SwCrsrShell::GoStartSentence()
 {
     return CallCrsrFN( &SwCursor::GoStartSentence );
 }
 
-sal_Bool SwCrsrShell::SelectWord( const Point* pPt )
+bool SwCrsrShell::SelectWord( const Point* pPt )
 {
     return m_pCurCrsr->SelectWord( this, pPt );
 }
 
-sal_Bool SwCrsrShell::ExpandToSentenceBorders()
+bool SwCrsrShell::ExpandToSentenceBorders()
 {
     return m_pCurCrsr->ExpandToSentenceBorders();
 }

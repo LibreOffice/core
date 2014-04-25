@@ -43,7 +43,7 @@ class SW_DLLPUBLIC SwEnvItem : public SfxPoolItem
 public:
 
     OUString   aAddrText;       // text for receiver
-    sal_Bool        bSend;           // sender?
+    bool        bSend;           // sender?
     OUString   aSendText;       // text for sender
     sal_Int32       lAddrFromLeft;   // left gap for receiver (twips)
     sal_Int32       lAddrFromTop;    // upper gap for receiver (twips)
@@ -52,7 +52,7 @@ public:
     sal_Int32       lWidth;          // envelope's width (twips)
     sal_Int32       lHeight;         // envelope's height (twips)
     SwEnvAlign      eAlign;          // alignment at indent
-    sal_Bool        bPrintFromAbove; // print from above?
+    bool        bPrintFromAbove; // print from above?
     sal_Int32       lShiftRight;     // shift to right (twips)
     sal_Int32       lShiftDown;      // shift down (twips)
 

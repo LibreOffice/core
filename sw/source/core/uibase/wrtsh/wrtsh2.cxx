@@ -96,7 +96,7 @@ void SwWrtShell::Insert(SwField &rFld)
             }
             else
             {
-                NormalizePam( sal_False );
+                NormalizePam( false );
                 const SwPaM& rCurrPaM = GetCurrentShellCursor();
                 pAnnotationTextRange = new SwPaM( *rCurrPaM.GetPoint(), *rCurrPaM.GetMark() );
                 ClearMark();
@@ -138,16 +138,16 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst )
     {
         pTmp->PushCrsr();
 
-        sal_Bool bCancel = sal_False;
+        bool bCancel = false;
         OString aDlgPos;
         for( sal_uInt16 i = 0; i < nCnt && !bCancel; ++i )
         {
             pTmp->GotoFieldPos( i );
             SwField* pField = pTmp->GetField( i );
             if(pField->GetTyp()->Which() == RES_DROPDOWN)
-                bCancel = StartDropDownFldDlg( pField, sal_True, &aDlgPos );
+                bCancel = StartDropDownFldDlg( pField, true, &aDlgPos );
             else
-                bCancel = StartInputFldDlg( pField, sal_True, 0, &aDlgPos);
+                bCancel = StartInputFldDlg( pField, true, 0, &aDlgPos);
 
             if (!bCancel)
             {
@@ -186,8 +186,8 @@ class FieldDeletionModify : public SwModify
 
 // Start input dialog for a specific field
 
-sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
-                                    Window* pParentWin, OString* pWindowState )
+bool SwWrtShell::StartInputFldDlg( SwField* pFld, bool bNextButton,
+                                   Window* pParentWin, OString* pWindowState )
 {
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -201,7 +201,7 @@ sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
     FieldDeletionModify aModify(pDlg);
     GetDoc()->GetUnoCallBack()->Add(&aModify);
 
-    sal_Bool bRet = RET_CANCEL == pDlg->Execute();
+    bool bRet = RET_CANCEL == pDlg->Execute();
 
     // Dialog closed, remove modification listener
     GetDoc()->GetUnoCallBack()->Remove(&aModify);
@@ -214,7 +214,7 @@ sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
     return bRet;
 }
 
-sal_Bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, sal_Bool bNextButton, OString* pWindowState)
+bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, bool bNextButton, OString* pWindowState)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
@@ -227,7 +227,7 @@ sal_Bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, sal_Bool bNextButton, OS
     if(pWindowState)
         *pWindowState = pDlg->GetWindowState();
     delete pDlg;
-    sal_Bool bRet = RET_CANCEL == nRet;
+    bool bRet = RET_CANCEL == nRet;
     GetWin()->Update();
     if(RET_YES == nRet)
     {
@@ -251,9 +251,9 @@ void SwWrtShell::InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 
 // Update directory - remove selection
 
-sal_Bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
+bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if(CanInsert())
     {
@@ -350,17 +350,17 @@ void SwWrtShell::ClickToField( const SwField& rFld )
             const SwInputField* pInputField = dynamic_cast<const SwInputField*>(&rFld);
             if ( pInputField == NULL )
             {
-                StartInputFldDlg( (SwField*)&rFld, sal_False );
+                StartInputFldDlg( (SwField*)&rFld, false );
             }
         }
         break;
 
     case RES_SETEXPFLD:
         if( ((SwSetExpField&)rFld).GetInputFlag() )
-            StartInputFldDlg( (SwField*)&rFld, sal_False );
+            StartInputFldDlg( (SwField*)&rFld, false );
         break;
     case RES_DROPDOWN :
-        StartDropDownFldDlg( (SwField*)&rFld, sal_False );
+        StartDropDownFldDlg( (SwField*)&rFld, false );
     break;
     default:
         SAL_WARN_IF(rFld.IsClickable(), "sw", "unhandled clickable field!");
@@ -524,7 +524,7 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
             // the update of content from linked section at time delete
             // the undostack. Then the change of the section dont create
             // any undoobject. -  BUG 69145
-            sal_Bool bDoesUndo = DoesUndo();
+            bool bDoesUndo = DoesUndo();
             SwUndoId nLastUndoId(UNDO_EMPTY);
             if (GetLastUndoInfo(0, & nLastUndoId))
             {

@@ -173,7 +173,7 @@ namespace SwLangHelper
                 if (!bForSelection) // document language to be changed...
                 {
                     rSh.StartAction();
-                    rSh.LockView( sal_True );
+                    rSh.LockView( true );
                     rSh.Push();
 
                     // prepare to apply new language to all text in document
@@ -212,8 +212,8 @@ namespace SwLangHelper
                 if (!bForSelection)
                 {
                     // need to release view and restore selection...
-                    rSh.Pop( sal_False );
-                    rSh.LockView( sal_False );
+                    rSh.Pop( false );
+                    rSh.LockView( false );
                     rSh.EndAction();
                 }
             }

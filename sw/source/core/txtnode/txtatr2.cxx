@@ -185,7 +185,7 @@ bool SwTxtINetFmt::GetInfo( SfxPoolItem& rInfo ) const
     return false;
 }
 
-sal_Bool SwTxtINetFmt::IsProtect( ) const
+bool SwTxtINetFmt::IsProtect( ) const
 {
     return m_pTxtNode && m_pTxtNode->IsProtect();
 }

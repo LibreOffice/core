@@ -990,7 +990,7 @@ public:
     SwCompareData( SwDoc& rD ) : rDoc( rD ), pInsRing(0), pDelRing(0) {}
     virtual ~SwCompareData();
 
-    void SetRedlinesToDoc( sal_Bool bUseDocInfo );
+    void SetRedlinesToDoc( bool bUseDocInfo );
 };
 
 SwCompareLine::SwCompareLine( const SwNode& rNd )
@@ -1365,7 +1365,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
 
             if ( nSrcFrom < nSrcTo )
             {
-                sal_Bool bUndo = pDstDoc->GetIDocumentUndoRedo().DoesUndo();
+                bool bUndo = pDstDoc->GetIDocumentUndoRedo().DoesUndo();
                 pDstDoc->GetIDocumentUndoRedo().DoUndo( false );
                 SwPaM aCpyPam( rSrcNd, nSrcFrom );
                 aCpyPam.SetMark();
@@ -1622,7 +1622,7 @@ void SwCompareData::CheckForChangesInLine( const CompareData& rData,
     }
 }
 
-void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
+void SwCompareData::SetRedlinesToDoc( bool bUseDocInfo )
 {
     SwPaM* pTmp = pDelRing;
 
@@ -1683,7 +1683,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
 
             if (rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                SwUndo *const pUndo(new SwUndoCompDoc( *pTmp, sal_False )) ;
+                SwUndo *const pUndo(new SwUndoCompDoc( *pTmp, false )) ;
                 rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
             rDoc.AppendRedline( new SwRangeRedline( aRedlnData, *pTmp ), true );
@@ -1750,7 +1750,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
             if( rDoc.AppendRedline( new SwRangeRedline( aRedlnData, *pTmp ), true) &&
                 rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                SwUndo *const pUndo(new SwUndoCompDoc( *pTmp, sal_True ));
+                SwUndo *const pUndo(new SwUndoCompDoc( *pTmp, true ));
                 rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
         } while( pInsRing != ( pTmp = (SwPaM*)pTmp->GetNext() ));
@@ -1789,9 +1789,9 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
     }
 
     GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
-    sal_Bool bDocWasModified = IsModified();
+    bool bDocWasModified = IsModified();
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
-    sal_Bool bSrcModified = rSrcDoc.IsModified();
+    bool bSrcModified = rSrcDoc.IsModified();
 
     RedlineMode_t eSrcRedlMode = rSrcDoc.GetRedlineMode();
     rSrcDoc.SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_INSERT );
@@ -2007,7 +2007,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
     GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
-    sal_Bool bSrcModified = rSrcDoc.IsModified();
+    bool bSrcModified = rSrcDoc.IsModified();
 
     RedlineMode_t eSrcRedlMode = rSrcDoc.GetRedlineMode();
     rSrcDoc.SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_DELETE );

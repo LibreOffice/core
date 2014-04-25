@@ -44,10 +44,10 @@ class SW_DLLPUBLIC SwLineNumberInfo : public SwClient /**< purpose of derivation
     sal_uInt16              nDividerCountBy;    /**< Interval for display of an user defined
                                                    string every n lines */
     LineNumberPosition  ePos;                   ///< Where should the display occur (number and divicer)
-    sal_Bool                bPaintLineNumbers;  ///< Should anything be displayed?
-    sal_Bool                bCountBlankLines;   ///< Count empty lines?
-    sal_Bool                bCountInFlys;       ///< Count also within FlyFrames?
-    sal_Bool                bRestartEachPage;   /**< Restart counting at the first paragraph of each page
+    bool                bPaintLineNumbers;  ///< Should anything be displayed?
+    bool                bCountBlankLines;   ///< Count empty lines?
+    bool                bCountInFlys;       ///< Count also within FlyFrames?
+    bool                bRestartEachPage;   /**< Restart counting at the first paragraph of each page
                                                     (even on follows when paragraphs are splitted) */
 protected:
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
@@ -79,17 +79,17 @@ public:
     LineNumberPosition GetPos() const   { return ePos; }
     void SetPos( LineNumberPosition eP ){ ePos = eP;   }
 
-    sal_Bool   IsPaintLineNumbers() const   { return bPaintLineNumbers; }
-    void   SetPaintLineNumbers( sal_Bool b ){ bPaintLineNumbers = b;    }
+    bool   IsPaintLineNumbers() const   { return bPaintLineNumbers; }
+    void   SetPaintLineNumbers( bool b ){ bPaintLineNumbers = b;    }
 
-    sal_Bool   IsCountBlankLines() const    { return bCountBlankLines;  }
-    void   SetCountBlankLines( sal_Bool b ) { bCountBlankLines = b;     }
+    bool   IsCountBlankLines() const    { return bCountBlankLines;  }
+    void   SetCountBlankLines( bool b ) { bCountBlankLines = b;     }
 
-    sal_Bool   IsCountInFlys() const        { return bCountInFlys;      }
-    void   SetCountInFlys( sal_Bool b )     { bCountInFlys = b;         }
+    bool   IsCountInFlys() const        { return bCountInFlys;      }
+    void   SetCountInFlys( bool b )     { bCountInFlys = b;         }
 
-    sal_Bool   IsRestartEachPage() const    { return bRestartEachPage;  }
-    void   SetRestartEachPage( sal_Bool b ) { bRestartEachPage = b;     }
+    bool   IsRestartEachPage() const    { return bRestartEachPage;  }
+    void   SetRestartEachPage( bool b ) { bRestartEachPage = b;     }
 
     bool   HasCharFormat() const { return GetRegisteredIn() != 0; }
 };

@@ -82,11 +82,11 @@ SW_DLLPUBLIC sal_uInt16     GetTabDist(const SvxTabStopItem& rTabs);
 void SwToSfxPageDescAttr( SfxItemSet& rSet );
 void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet );
 
-SW_DLLPUBLIC FieldUnit  GetDfltMetric(sal_Bool bWeb);
-void        SetDfltMetric(FieldUnit eMetric, sal_Bool bWeb);
+SW_DLLPUBLIC FieldUnit  GetDfltMetric(bool bWeb);
+void        SetDfltMetric(FieldUnit eMetric, bool bWeb);
 
-SW_DLLPUBLIC sal_Bool HasCharUnit( sal_Bool bWeb );
-void SetApplyCharUnit(sal_Bool bApplyChar, sal_Bool bWeb);
+SW_DLLPUBLIC bool HasCharUnit( bool bWeb );
+void SetApplyCharUnit(bool bApplyChar, bool bWeb);
 
 // ListBox mit allen Zeichenvorlagen fuellen - ausser Standard!
 SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted = false, bool bWithDefault = false);

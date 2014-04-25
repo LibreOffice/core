@@ -71,7 +71,7 @@ void SwFont::SetBackColor( Color* pNewColor )
 {
     delete pBackColor;
     pBackColor = pNewColor;
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
@@ -84,7 +84,7 @@ void SwFont::SetTopBorder( const editeng::SvxBorderLine* pTopBorder )
         m_aTopBorder = boost::none;
         m_nTopBorderDist = 0;
     }
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
@@ -97,7 +97,7 @@ void SwFont::SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder )
         m_aBottomBorder = boost::none;
         m_nBottomBorderDist = 0;
     }
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
@@ -110,7 +110,7 @@ void SwFont::SetRightBorder( const editeng::SvxBorderLine* pRightBorder )
         m_aRightBorder = boost::none;
         m_nRightBorderDist = 0;
     }
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
@@ -123,7 +123,7 @@ void SwFont::SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder )
         m_aLeftBorder = boost::none;
         m_nLeftBorderDist = 0;
     }
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
@@ -366,7 +366,7 @@ sal_uInt16 SwFont::CalcShadowSpace(
 }
 
 // maps directions for vertical layout
-sal_uInt16 MapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
+sal_uInt16 MapDirection( sal_uInt16 nDir, const bool bVertFormat )
 {
     if ( bVertFormat )
     {
@@ -393,7 +393,7 @@ sal_uInt16 MapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
 
 // maps the absolute direction set at the font to its logical conterpart
 // in the rotated environment
-sal_uInt16 UnMapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
+sal_uInt16 UnMapDirection( sal_uInt16 nDir, const bool bVertFormat )
 {
     if ( bVertFormat )
     {
@@ -418,19 +418,19 @@ sal_uInt16 UnMapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
     return nDir;
 }
 
-sal_uInt16 SwFont::GetOrientation( const sal_Bool bVertFormat ) const
+sal_uInt16 SwFont::GetOrientation( const bool bVertFormat ) const
 {
     return UnMapDirection( aSub[nActual].GetOrientation(), bVertFormat );
 }
 
-void SwFont::SetVertical( sal_uInt16 nDir, const sal_Bool bVertFormat )
+void SwFont::SetVertical( sal_uInt16 nDir, const bool bVertFormat )
 {
     // map direction if frame has vertical layout
     nDir = MapDirection( nDir, bVertFormat );
 
     if( nDir != aSub[0].GetOrientation() )
     {
-        bFntChg = sal_True;
+        bFntChg = true;
         aSub[0].SetVertical( nDir, bVertFormat );
         aSub[1].SetVertical( nDir, bVertFormat || nDir > 1000 );
         aSub[2].SetVertical( nDir, bVertFormat );
@@ -605,7 +605,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             true, &pItem ))
             SetEmphasisMark( ((SvxEmphasisMarkItem*)pItem)->GetEmphasisMark() );
 
-        SetTransparent( sal_True );
+        SetTransparent( true );
         SetAlign( ALIGN_BASELINE );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CONTOUR,
             true, &pItem ))
@@ -695,11 +695,11 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
     else
     {
         Invalidate();
-        bNoHyph = sal_False;
-        bBlink = sal_False;
+        bNoHyph = false;
+        bBlink = false;
     }
-    bPaintBlank = sal_False;
-    bPaintWrong = sal_False;
+    bPaintBlank = false;
+    bPaintWrong = false;
     OSL_ENSURE( aSub[SW_LATIN].IsTransparent(), "SwFont: Transparent revolution" );
 }
 
@@ -731,7 +731,7 @@ SwFont::SwFont( const SwFont &rFont )
     bFntChg = rFont.bFntChg;
     bOrgChg = rFont.bOrgChg;
     bPaintBlank = rFont.bPaintBlank;
-    bPaintWrong = sal_False;
+    bPaintWrong = false;
     bURL = rFont.bURL;
     bGreyWave = rFont.bGreyWave;
     bNoColReplace = rFont.bNoColReplace;
@@ -747,14 +747,14 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     nRefCnt = 0;
     m_nMetaCount = 0;
     m_nInputFieldCount = 0;
-    bPaintBlank = sal_False;
-    bPaintWrong = sal_False;
-    bURL = sal_False;
-    bGreyWave = sal_False;
-    bNoColReplace = sal_False;
+    bPaintBlank = false;
+    bPaintWrong = false;
+    bURL = false;
+    bGreyWave = false;
+    bNoColReplace = false;
     bNoHyph = pAttrSet->GetNoHyphenHere().GetValue();
     bBlink = pAttrSet->GetBlink().GetValue();
-    bOrgChg = sal_True;
+    bOrgChg = true;
     {
         const SvxFontItem& rFont = pAttrSet->GetFont();
         aSub[SW_LATIN].SetFamily( rFont.GetFamily() );
@@ -816,7 +816,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     SetEmphasisMark( pAttrSet->GetEmphasisMark().GetEmphasisMark() );
     SetStrikeout( pAttrSet->GetCrossedOut().GetStrikeout() );
     SetColor( pAttrSet->GetColor().GetValue() );
-    SetTransparent( sal_True );
+    SetTransparent( true );
     SetAlign( ALIGN_BASELINE );
     SetOutline( pAttrSet->GetContour().GetValue() );
     SetShadow( pAttrSet->GetShadowed().GetValue() );
@@ -949,7 +949,7 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     bFntChg = rFont.bFntChg;
     bOrgChg = rFont.bOrgChg;
     bPaintBlank = rFont.bPaintBlank;
-    bPaintWrong = sal_False;
+    bPaintWrong = false;
     bURL = rFont.bURL;
     bGreyWave = rFont.bGreyWave;
     bNoColReplace = rFont.bNoColReplace;
@@ -961,20 +961,20 @@ SwFont& SwFont::operator=( const SwFont &rFont )
 void SwFont::GoMagic( SwViewShell *pSh, sal_uInt8 nWhich )
 {
     SwFntAccess aFntAccess( aSub[nWhich].pMagic, aSub[nWhich].nFntIndex,
-                            &aSub[nWhich], pSh, sal_True );
+                            &aSub[nWhich], pSh, true );
 }
 
-sal_Bool SwSubFont::IsSymbol( SwViewShell *pSh )
+bool SwSubFont::IsSymbol( SwViewShell *pSh )
 {
-    SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh, sal_False );
+    SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh, false );
     return aFntAccess.Get()->IsSymbol();
 }
 
-sal_Bool SwSubFont::ChgFnt( SwViewShell *pSh, OutputDevice& rOut )
+bool SwSubFont::ChgFnt( SwViewShell *pSh, OutputDevice& rOut )
 {
     if ( pLastFont )
         pLastFont->Unlock();
-    SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh, sal_True );
+    SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh, true );
     SV_STAT( nChangeFont );
 
     pLastFont = aFntAccess.Get();
@@ -999,7 +999,7 @@ void SwFont::ChgPhysFnt( SwViewShell *pSh, OutputDevice& rOut )
         aSub[nActual].nOrgHeight = aFntAccess.Get()->GetFontHeight( pSh, rOut );
         aSub[nActual].nOrgAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
         SetProportion( nOldProp );
-        bOrgChg = sal_False;
+        bOrgChg = false;
     }
 
     if( bFntChg )
@@ -1163,7 +1163,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
     return aTxtSize;
 }
 
-void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
+void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const bool bGrey )
 {
     rInf.SetGreyWave( bGrey );
     sal_Int32 nLn = rInf.GetText().getLength();

@@ -57,7 +57,7 @@ OUString IndexEntrySupplierWrapper::GetIndexKey( const OUString& rTxt,
     return sRet;
 }
 
-OUString IndexEntrySupplierWrapper::GetFollowingText( sal_Bool bMorePages ) const
+OUString IndexEntrySupplierWrapper::GetFollowingText( bool bMorePages ) const
 {
     OUString sRet;
     try {
@@ -85,11 +85,11 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const ::com::sun::star::lang::Local
     return sRet;
 }
 
-sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
+bool IndexEntrySupplierWrapper::LoadAlgorithm(
         const ::com::sun::star::lang::Locale& rLcl,
         const OUString& sSortAlgorithm, long nOptions ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     try {
         bRet = xIES->loadAlgorithm( rLcl, sSortAlgorithm, nOptions );
     }

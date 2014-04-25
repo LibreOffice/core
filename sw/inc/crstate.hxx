@@ -130,30 +130,30 @@ struct SwCrsrMoveState
     Point aRealHeight;          ///< contains then the position/height of the cursor
     CrsrMoveState eState;
     sal_uInt8            nCursorBidiLevel;
-    sal_Bool bStop;
-    sal_Bool bRealHeight;           ///< should the real height be calculated?
-    sal_Bool bFieldInfo;            ///< should be fields recognized?
-    sal_Bool bPosCorr;              ///< Point had to be corrected
-    sal_Bool bFtnNoInfo;            ///< recognized footnote numbering
-    sal_Bool bExactOnly;            /**< let GetCrsrOfst look for exact matches only,
+    bool bStop;
+    bool bRealHeight;           ///< should the real height be calculated?
+    bool bFieldInfo;            ///< should be fields recognized?
+    bool bPosCorr;              ///< Point had to be corrected
+    bool bFtnNoInfo;            ///< recognized footnote numbering
+    bool bExactOnly;            /**< let GetCrsrOfst look for exact matches only,
                                          i.e. never let it run into GetCntntPos */
-    sal_Bool bFillRet;              ///< only used temporary in FillMode
-    sal_Bool bSetInReadOnly;        ///< ReadOnly areas may be entered
-    sal_Bool bRealWidth;            ///< Calculation of the width required
-    sal_Bool b2Lines;               ///< Check 2line portions and fill p2Lines
-    sal_Bool bNoScroll;             ///< No scrolling of undersized textframes
+    bool bFillRet;              ///< only used temporary in FillMode
+    bool bSetInReadOnly;        ///< ReadOnly areas may be entered
+    bool bRealWidth;            ///< Calculation of the width required
+    bool b2Lines;               ///< Check 2line portions and fill p2Lines
+    bool bNoScroll;             ///< No scrolling of undersized textframes
     bool bPosMatchesBounds;         /**< GetCrsrOfst should not return the next
                                        position if screen position is inside second
                                        have of bound rect */
 
-    sal_Bool bCntntCheck;           // #i43742# Cursor position over content?
+    bool bCntntCheck;           // #i43742# Cursor position over content?
 
     // #i27615#
     /**
        cursor in front of label
      */
-    sal_Bool bInFrontOfLabel;
-    sal_Bool bInNumPortion;         ///< point is in number portion #i23726#
+    bool bInFrontOfLabel;
+    bool bInNumPortion;         ///< point is in number portion #i23726#
     int nInNumPostionOffset;        ///< distance from number portion's start
 
     SwCrsrMoveState( CrsrMoveState eSt = MV_NONE ) :
@@ -162,21 +162,21 @@ struct SwCrsrMoveState
         pSpecialPos( NULL ),
         eState( eSt ),
         nCursorBidiLevel( 0 ),
-        bStop( sal_False ),
-        bRealHeight( sal_False ),
-        bFieldInfo( sal_False ),
-        bPosCorr( sal_False ),
-        bFtnNoInfo( sal_False ),
-        bExactOnly( sal_False ),
-        bFillRet( sal_False ),
-        bSetInReadOnly( sal_False ),
-        bRealWidth( sal_False ),
-        b2Lines( sal_False ),
-        bNoScroll( sal_False ),
+        bStop( false ),
+        bRealHeight( false ),
+        bFieldInfo( false ),
+        bPosCorr( false ),
+        bFtnNoInfo( false ),
+        bExactOnly( false ),
+        bFillRet( false ),
+        bSetInReadOnly( false ),
+        bRealWidth( false ),
+        b2Lines( false ),
+        bNoScroll( false ),
         bPosMatchesBounds( false ),
-        bCntntCheck( sal_False ), // #i43742#
-        bInFrontOfLabel( sal_False ), // #i27615#
-        bInNumPortion(sal_False), // #i26726#
+        bCntntCheck( false ), // #i43742#
+        bInFrontOfLabel( false ), // #i27615#
+        bInNumPortion(false), // #i26726#
         nInNumPostionOffset(0) // #i26726#
     {}
     SwCrsrMoveState( SwFillCrsrPos *pInitFill ) :
@@ -185,21 +185,21 @@ struct SwCrsrMoveState
         pSpecialPos( NULL ),
         eState( MV_SETONLYTEXT ),
         nCursorBidiLevel( 0 ),
-        bStop( sal_False ),
-        bRealHeight( sal_False ),
-        bFieldInfo( sal_False ),
-        bPosCorr( sal_False ),
-        bFtnNoInfo( sal_False ),
-        bExactOnly( sal_False ),
-        bFillRet( sal_False ),
-        bSetInReadOnly( sal_False ),
-        bRealWidth( sal_False ),
-        b2Lines( sal_False ),
-        bNoScroll( sal_False ),
+        bStop( false ),
+        bRealHeight( false ),
+        bFieldInfo( false ),
+        bPosCorr( false ),
+        bFtnNoInfo( false ),
+        bExactOnly( false ),
+        bFillRet( false ),
+        bSetInReadOnly( false ),
+        bRealWidth( false ),
+        b2Lines( false ),
+        bNoScroll( false ),
         bPosMatchesBounds( false ),
-        bCntntCheck( sal_False ), // #i43742#
-        bInFrontOfLabel( sal_False ), // #i27615#
-        bInNumPortion(sal_False), // #i23726#
+        bCntntCheck( false ), // #i43742#
+        bInFrontOfLabel( false ), // #i27615#
+        bInNumPortion(false), // #i23726#
         nInNumPostionOffset(0) // #i23726#
     {}
 };

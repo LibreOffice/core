@@ -35,9 +35,9 @@ ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, S
     m_bInsForm = true;
 }
 
-sal_Bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
+bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     SdrView *pSdrView = m_pSh->GetDrawView();
 
@@ -71,7 +71,7 @@ sal_Bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
         bReturn = m_pSh->BeginCreate( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), FmFormInventor, m_aStartPos);
 
         if (bReturn)
-            m_pWin->SetDrawAction(sal_True);
+            m_pWin->SetDrawAction(true);
     }
     else
         bReturn = SwDrawBase::MouseButtonDown(rMEvt);

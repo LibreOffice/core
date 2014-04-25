@@ -474,7 +474,7 @@ OUString SwAddressPreview::FillData(
     OUString sAddress(rAddress);
     OUString sNotAssigned = "<" + OUString(SW_RES(STR_NOTASSIGNED)) + ">";
 
-    sal_Bool bIncludeCountry = rConfigItem.IsIncludeCountry();
+    bool bIncludeCountry = rConfigItem.IsIncludeCountry();
     const OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
     bool bSpecialReplacementForCountry = (!bIncludeCountry || !rExcludeCountry.isEmpty());
     OUString sCountryColumn;

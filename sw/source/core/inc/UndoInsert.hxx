@@ -40,14 +40,14 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
     sal_uLong nNode;
     sal_Int32 nCntnt, nLen;
     bool bIsWordDelim : 1;
-    sal_Bool bIsAppend : 1;
-    sal_Bool m_bWithRsid : 1;
+    bool bIsAppend : 1;
+    bool m_bWithRsid : 1;
 
     const IDocumentContentOperations::InsertFlags m_nInsertFlags;
 
     friend class SwDoc;     // actually only SwDoc::Insert( String )
-    sal_Bool CanGrouping( sal_Unicode cIns );
-    sal_Bool CanGrouping( const SwPosition& rPos );
+    bool CanGrouping( sal_Unicode cIns );
+    bool CanGrouping( const SwPosition& rPos );
 
     SwDoc * pDoc;
 
@@ -57,7 +57,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
 public:
     SwUndoInsert( const SwNodeIndex& rNode, sal_Int32 nCntnt, sal_Int32 nLen,
                   const IDocumentContentOperations::InsertFlags nInsertFlags,
-                  sal_Bool bWDelim = sal_True );
+                  bool bWDelim = true );
     SwUndoInsert( const SwNodeIndex& rNode );
     virtual ~SwUndoInsert();
 
@@ -171,18 +171,18 @@ class SwUndoInsertLabel : public SwUndo
     sal_uInt16 nFldId;
     SwLabelType eType;
     sal_uInt8 nLayerId;              // for character objects
-    sal_Bool bBefore        :1;
-    sal_Bool bUndoKeep      :1;
-    sal_Bool bCpyBrd        :1;
+    bool bBefore        :1;
+    bool bUndoKeep      :1;
+    bool bCpyBrd        :1;
 
 public:
     SwUndoInsertLabel( const SwLabelType eTyp, const OUString &rText,
     // #i39983# the separator is drawn with a character style
                         const OUString& rSeparator,
                         const OUString& rNumberSeparator, //#i61007# order of captions
-                        const sal_Bool bBefore, const sal_uInt16 nId,
+                        const bool bBefore, const sal_uInt16 nId,
                         const OUString& rCharacterStyle,
-                        const sal_Bool bCpyBrd );
+                        const bool bCpyBrd );
     virtual ~SwUndoInsertLabel();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
@@ -206,7 +206,7 @@ public:
     void SetNodePos( sal_uLong nNd )
         { if( LTYPE_OBJECT != eType ) NODE.nNode = nNd; }
 
-    void SetUndoKeep()  { bUndoKeep = sal_True; }
+    void SetUndoKeep()  { bUndoKeep = true; }
     void SetFlys( SwFrmFmt& rOldFly, SfxItemSet& rChgSet, SwFrmFmt& rNewFly );
     void SetDrawObj( sal_uInt8 nLayerId );
 };

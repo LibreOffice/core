@@ -77,12 +77,12 @@ SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib ):
 {
     bComplete = bCalcLowers = bONECalcLowers = bLowersFormatted = bLockBackMove =
     bResizeHTMLTable = bHasFollowFlowLine = bIsRebuildLastLine =
-    bRestrictTableGrowth = bRemoveFollowFlowLinePending = sal_False;
+    bRestrictTableGrowth = bRemoveFollowFlowLinePending = false;
     // #i26945#
-    bConsiderObjsForMinCellHeight = sal_True;
-    bObjsDoesFit = sal_True;
+    bConsiderObjsForMinCellHeight = true;
+    bObjsDoesFit = true;
     mbInRecalcLowerRow = false;
-    mbFixSize = sal_False;     //Don't fall for import filter again.
+    mbFixSize = false;     //Don't fall for import filter again.
     mnType = FRMC_TAB;
 
     //Create the lines and insert them.
@@ -109,12 +109,12 @@ SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :
 {
     bComplete = bONECalcLowers = bCalcLowers = bLowersFormatted = bLockBackMove =
     bResizeHTMLTable = bHasFollowFlowLine = bIsRebuildLastLine =
-    bRestrictTableGrowth = bRemoveFollowFlowLinePending = sal_False;
+    bRestrictTableGrowth = bRemoveFollowFlowLinePending = false;
     // #i26945#
-    bConsiderObjsForMinCellHeight = sal_True;
-    bObjsDoesFit = sal_True;
+    bConsiderObjsForMinCellHeight = true;
+    bObjsDoesFit = true;
     mbInRecalcLowerRow = false;
-    mbFixSize = sal_False;     //Don't fall for import filter again.
+    mbFixSize = false;     //Don't fall for import filter again.
     mnType = FRMC_TAB;
 
     SetFollow( rTab.GetFollow() );
@@ -204,7 +204,7 @@ static bool lcl_InnerCalcLayout( SwFrm *pFrm,
 // control, if floating screen objects have to be considered for the minimal
 // cell height.
 static SwTwips lcl_CalcMinRowHeight( const SwRowFrm *pRow,
-                                          const sal_Bool _bConsiderObjs );
+                                     const bool _bConsiderObjs );
 static SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm&, const SwBorderAttrs& );
 
 static SwTwips lcl_GetHeightOfRows( const SwFrm* pStart, long nCount )
@@ -230,7 +230,7 @@ static SwRowFrm* lcl_InsertNewFollowFlowLine( SwTabFrm& rTab, const SwFrm& rTmpR
     OSL_ENSURE( rTmpRow.IsRowFrm(), "No row frame to copy for FollowFlowLine" );
     const SwRowFrm& rRow = (SwRowFrm&)rTmpRow;
 
-    rTab.SetFollowFlowLine( sal_True );
+    rTab.SetFollowFlowLine( true );
     SwRowFrm *pFollowFlowLine = new SwRowFrm(*rRow.GetTabLine(), &rTab, false );
     pFollowFlowLine->SetRowSpanLine( bRowSpanLine );
     SwFrm* pFirstRow = rTab.GetFollow()->GetFirstNonHeadlineRow();
@@ -452,9 +452,9 @@ static void lcl_MoveFootnotes( SwTabFrm& rSource, SwTabFrm& rDest, SwLayoutFrm& 
 {
     if ( !rSource.GetFmt()->GetDoc()->GetFtnIdxs().empty() )
     {
-        SwFtnBossFrm* pOldBoss = rSource.FindFtnBossFrm( sal_True );
-        SwFtnBossFrm* pNewBoss = rDest.FindFtnBossFrm( sal_True );
-        rRowFrm.MoveLowerFtns( 0, pOldBoss, pNewBoss, sal_True );
+        SwFtnBossFrm* pOldBoss = rSource.FindFtnBossFrm( true );
+        SwFtnBossFrm* pNewBoss = rDest.FindFtnBossFrm( true );
+        rRowFrm.MoveLowerFtns( 0, pOldBoss, pNewBoss, true );
     }
 }
 
@@ -614,9 +614,9 @@ static bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
     lcl_PreprocessRowsInCells( rTab, rLastLine, rFollowLine, nRemainingSpaceForLastRow );
 
     // Here the recalculation process starts:
-    rTab.SetRebuildLastLine( sal_True );
+    rTab.SetRebuildLastLine( true );
     // #i26945#
-    rTab.SetDoesObjsFit( sal_True );
+    rTab.SetDoesObjsFit( true );
     SWRECTFN( rTab.GetUpper() )
 
     // #i26945# - invalidate and move floating screen
@@ -627,9 +627,9 @@ static bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
 
     // #i26945# - Do *not* consider floating screen objects
     // for the minimal cell height.
-    rTab.SetConsiderObjsForMinCellHeight( sal_False );
+    rTab.SetConsiderObjsForMinCellHeight( false );
     ::lcl_ShrinkCellsAndAllContent( rLastLine );
-    rTab.SetConsiderObjsForMinCellHeight( sal_True );
+    rTab.SetConsiderObjsForMinCellHeight( true );
 
     // invalidate last line
     ::SwInvalidateAll( &rLastLine, LONG_MAX );
@@ -731,9 +731,9 @@ static bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
         ::SwInvalidateAll( &rLastLine, LONG_MAX );
     }
 
-    rTab.SetRebuildLastLine( sal_False );
+    rTab.SetRebuildLastLine( false );
     // #i26945#
-    rTab.SetDoesObjsFit( sal_True );
+    rTab.SetDoesObjsFit( true );
 
     return bRet;
 }
@@ -808,7 +808,7 @@ bool SwTabFrm::RemoveFollowFlowLine()
     // We have to reset the flag here, because lcl_MoveRowContent
     // calls a GrowFrm(), which has a different bahavior if
     // this flag is set.
-    SetFollowFlowLine( sal_False );
+    SetFollowFlowLine( false );
 
     // #140081# Make code robust.
     if ( !pFollowFlowLine || !pLastLine )
@@ -1575,7 +1575,7 @@ static void lcl_RecalcTable( SwTabFrm& rTab,
         if ( !pFirstRow )
         {
             pFirstRow = (SwLayoutFrm*)rTab.Lower();
-            rNotify.SetLowersComplete( sal_True );
+            rNotify.SetLowersComplete( true );
         }
         ::SwInvalidatePositions( pFirstRow, LONG_MAX );
         lcl_RecalcRow( static_cast<SwRowFrm&>(*pFirstRow), LONG_MAX );
@@ -1708,7 +1708,7 @@ void SwTabFrm::MakeAll()
     SwLayNotify aNotify( this );    //does the notification in the DTor
     // If pos is invalid, we have to call a SetInvaKeep at aNotify.
     // Otherwise the keep attribute would not work in front of a table.
-    const sal_Bool bOldValidPos = GetValidPosFlag();
+    const bool bOldValidPos = GetValidPosFlag();
 
     //If my neighbour is my Follow at the same time, I'll swallow it up.
     // OD 09.04.2003 #108698# - join all follows, which are placed on the
@@ -1731,16 +1731,16 @@ void SwTabFrm::MakeAll()
     {
         if ( RemoveFollowFlowLine() )
             Join();
-        SetRemoveFollowFlowLinePending( sal_False );
+        SetRemoveFollowFlowLinePending( false );
     }
 
     if ( bResizeHTMLTable ) //Optimized interplay with grow/shrink of the content
     {
-        bResizeHTMLTable = sal_False;
+        bResizeHTMLTable = false;
         SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
         if ( pLayout )
             bCalcLowers = pLayout->Resize(
-                            pLayout->GetBrowseWidthByTabFrm( *this ), sal_False );
+                            pLayout->GetBrowseWidthByTabFrm( *this ), false );
     }
 
     // as long as bMakePage is true, a new page can be created (exactly once)
@@ -1754,7 +1754,7 @@ void SwTabFrm::MakeAll()
     bool bSplit = false;
     const bool bFtnsInDoc = !GetFmt()->GetDoc()->GetFtnIdxs().empty();
     bool bMoveable;
-    const sal_Bool bFly     = IsInFly();
+    const bool bFly     = IsInFly();
 
     SwBorderAttrAccess  *pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
     const SwBorderAttrs *pAttrs = pAccess->Get();
@@ -1828,7 +1828,7 @@ void SwTabFrm::MakeAll()
         SwFrm *pPre = GetPrev();
         if ( pPre && pPre->IsTabFrm() && ((SwTabFrm*)pPre)->GetFollow() == this)
         {
-            if ( !MoveFwd( bMakePage, sal_False ) )
+            if ( !MoveFwd( bMakePage, false ) )
                 bMakePage = false;
             bMovedFwd = true;
         }
@@ -1842,7 +1842,7 @@ void SwTabFrm::MakeAll()
             if ( CheckMoveFwd( bMakePage, bKeep && KEEPTAB, bMovedBwd ) )
             {
                 bMovedFwd = true;
-                bCalcLowers = sal_True;
+                bCalcLowers = true;
                 // #i99267#
                 // reset <bSplit> after forward move to assure that follows
                 // can be joined, if further space is available.
@@ -1861,19 +1861,19 @@ void SwTabFrm::MakeAll()
                 {
                     delete pAccess;
                     bCalcLowers |= pLayout->Resize(
-                        pLayout->GetBrowseWidthByTabFrm( *this ), sal_False );
+                        pLayout->GetBrowseWidthByTabFrm( *this ), false );
                     pAccess = new SwBorderAttrAccess( SwFrm::GetCache(), this );
                     pAttrs = pAccess->Get();
                 }
 
-                mbValidPrtArea = sal_False;
-                aNotify.SetLowersComplete( sal_False );
+                mbValidPrtArea = false;
+                aNotify.SetLowersComplete( false );
             }
             SwFrm *pPre;
             if ( bKeep || (0 != (pPre = FindPrev()) &&
                 pPre->GetAttrSet()->GetKeep().GetValue()) )
             {
-                bCalcLowers = sal_True;
+                bCalcLowers = true;
                 // #i99267#
                 // reset <bSplit> after forward move to assure that follows
                 // can be joined, if further space is available.
@@ -1905,12 +1905,12 @@ void SwTabFrm::MakeAll()
             {
                 delete pAccess;
                 bCalcLowers |= pLayout->Resize(
-                    pLayout->GetBrowseWidthByTabFrm( *this ), sal_False );
+                    pLayout->GetBrowseWidthByTabFrm( *this ), false );
                 pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                 pAttrs = pAccess->Get();
             }
             if ( aOldPrtPos != (Prt().*fnRect->fnGetPos)() )
-                aNotify.SetLowersComplete( sal_False );
+                aNotify.SetLowersComplete( false );
         }
 
         // If this is the first one in a chain, check if this can flow
@@ -1933,15 +1933,15 @@ void SwTabFrm::MakeAll()
                         pMaster->InvalidatePos();
                 }
             }
-            SwFtnBossFrm *pOldBoss = bFtnsInDoc ? FindFtnBossFrm( sal_True ) : 0;
+            SwFtnBossFrm *pOldBoss = bFtnsInDoc ? FindFtnBossFrm( true ) : 0;
             bool bReformat;
             if ( MoveBwd( bReformat ) )
             {
                 SWREFRESHFN( this )
                 bMovedBwd = true;
-                aNotify.SetLowersComplete( sal_False );
+                aNotify.SetLowersComplete( false );
                 if ( bFtnsInDoc )
-                    MoveLowerFtns( 0, pOldBoss, 0, sal_True );
+                    MoveLowerFtns( 0, pOldBoss, 0, true );
                 if ( bReformat || bKeep )
                 {
                     long nOldTop = (Frm().*fnRect->fnGetTop)();
@@ -1955,17 +1955,17 @@ void SwTabFrm::MakeAll()
                             delete pAccess;
                             bCalcLowers |= pHTMLLayout->Resize(
                                 pHTMLLayout->GetBrowseWidthByTabFrm( *this ),
-                                sal_False );
+                                false );
 
                             pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                             pAttrs = pAccess->Get();
                         }
 
-                        mbValidPrtArea = sal_False;
+                        mbValidPrtArea = false;
                         Format( pAttrs );
                     }
                     lcl_RecalcTable( *this, 0, aNotify );
-                    bLowersFormatted = sal_True;
+                    bLowersFormatted = true;
                     if ( bKeep && KEEPTAB )
                     {
 
@@ -1977,7 +1977,7 @@ void SwTabFrm::MakeAll()
                         // content.
                         if ( 0 != sw_FormatNextCntntForKeep( this ) && !GetNext() )
                         {
-                            mbValidPos = sal_False;
+                            mbValidPos = false;
                         }
                     }
                 }
@@ -2025,7 +2025,7 @@ void SwTabFrm::MakeAll()
                     SwFrm *pTmp = GetUpper();
                     SwTwips nDeadLine = (pTmp->*fnRect->fnGetPrtBottom)();
                     if ( bBrowseMode )
-                        nDeadLine += pTmp->Grow( LONG_MAX, sal_True );
+                        nDeadLine += pTmp->Grow( LONG_MAX, true );
                     if( (Frm().*fnRect->fnBottomDist)( nDeadLine ) > 0 )
                     {
                         // First, we remove an existing follow flow line.
@@ -2037,9 +2037,9 @@ void SwTabFrm::MakeAll()
                             if ( pLastLine )
                             {
                                 ::SwInvalidateAll( pLastLine, LONG_MAX );
-                                SetRebuildLastLine( sal_True );
+                                SetRebuildLastLine( true );
                                 lcl_RecalcRow( static_cast<SwRowFrm&>(*pLastLine), LONG_MAX );
-                                SetRebuildLastLine( sal_False );
+                                SetRebuildLastLine( false );
                             }
 
                             SwFrm* pRow = GetFollow()->GetFirstNonHeadlineRow();
@@ -2072,7 +2072,7 @@ void SwTabFrm::MakeAll()
 
                             SwFtnBossFrm *pOldBoss = 0;
                             if ( bMoveFtns )
-                                pOldBoss = pRowToMove->FindFtnBossFrm( sal_True );
+                                pOldBoss = pRowToMove->FindFtnBossFrm( true );
 
                             SwFrm* pNextRow = pRowToMove->GetNext();
 
@@ -2089,7 +2089,7 @@ void SwTabFrm::MakeAll()
 
                             //Displace the footnotes!
                             if ( bMoveFtns )
-                                if ( ((SwLayoutFrm*)pRowToMove)->MoveLowerFtns( 0, pOldBoss, FindFtnBossFrm( sal_True ), sal_True ) )
+                                if ( ((SwLayoutFrm*)pRowToMove)->MoveLowerFtns( 0, pOldBoss, FindFtnBossFrm( true ), true ) )
                                     GetUpper()->Calc();
 
                             pRowToMove = pNextRow;
@@ -2145,7 +2145,7 @@ void SwTabFrm::MakeAll()
                     // In this case we do a magic trick:
                     if ( !bKeep && !GetNext() && pTmpNxt && pTmpNxt->IsValid() )
                     {
-                        mbValidPos = sal_False;
+                        mbValidPos = false;
                         bLastRowHasToMoveToFollow = true;
                     }
                 }
@@ -2156,13 +2156,13 @@ void SwTabFrm::MakeAll()
                 if ( bCalcLowers )
                 {
                     lcl_RecalcTable( *this, 0, aNotify );
-                    bLowersFormatted = sal_True;
-                    bCalcLowers = sal_False;
+                    bLowersFormatted = true;
+                    bCalcLowers = false;
                 }
                 else if ( bONECalcLowers )
                 {
                     lcl_RecalcRow( static_cast<SwRowFrm&>(*Lower()), LONG_MAX );
-                    bONECalcLowers = sal_False;
+                    bONECalcLowers = false;
                 }
             }
             continue;
@@ -2179,13 +2179,13 @@ void SwTabFrm::MakeAll()
             if ( bCalcLowers && IsValid() )
             {
                 lcl_RecalcTable( *this, 0, aNotify );
-                bLowersFormatted = sal_True;
-                bCalcLowers = sal_False;
+                bLowersFormatted = true;
+                bCalcLowers = false;
             }
             else if ( bONECalcLowers )
             {
                 lcl_RecalcRow( static_cast<SwRowFrm&>(*Lower()), LONG_MAX );
-                bONECalcLowers = sal_False;
+                bONECalcLowers = false;
             }
 
             // It does not make sense to cut off the last line if we are
@@ -2198,8 +2198,8 @@ void SwTabFrm::MakeAll()
         if ( bCalcLowers && IsValid() )
         {
             lcl_RecalcTable( *this, 0, aNotify );
-            bLowersFormatted = sal_True;
-            bCalcLowers = sal_False;
+            bLowersFormatted = true;
+            bCalcLowers = false;
             if( !IsValid() )
                 continue;
         }
@@ -2240,15 +2240,15 @@ void SwTabFrm::MakeAll()
                 SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
                 if( IsInSct() || GetUpper()->IsInTab() ) // TABLE IN TABLE)
                     nDeadLine = (*fnRect->fnYInc)( nDeadLine,
-                                        GetUpper()->Grow( LONG_MAX, sal_True ) );
+                                        GetUpper()->Grow( LONG_MAX, true ) );
 
                 {
                     SetInRecalcLowerRow( true );
                     ::lcl_RecalcRow( static_cast<SwRowFrm&>(*Lower()), nDeadLine );
                     SetInRecalcLowerRow( false );
                 }
-                bLowersFormatted = sal_True;
-                aNotify.SetLowersComplete( sal_True );
+                bLowersFormatted = true;
+                aNotify.SetLowersComplete( true );
 
                 // One more check if its really necessary to split the table.
                 // 1. The table either has to exceed the deadline or
@@ -2299,7 +2299,7 @@ void SwTabFrm::MakeAll()
                 // if we do not have an (in)direkt Prev, we split anyway.
                 if( (*fnRect->fnYDiff)(nDeadLine, nBreakLine) >=0 || !pIndPrev )
                 {
-                    aNotify.SetLowersComplete( sal_False );
+                    aNotify.SetLowersComplete( false );
                     bSplit = true;
 
                     // An existing follow flow line has to be removed.
@@ -2336,7 +2336,7 @@ void SwTabFrm::MakeAll()
                     if ( bSplitError && bTryToSplit ) // no restart if we did not try to split: i72847, i79426
                     {
                         lcl_RecalcRow( static_cast<SwRowFrm&>(*Lower()), LONG_MAX );
-                        mbValidPos = sal_False;
+                        mbValidPos = false;
                         bTryToSplit = false;
                         continue;
                     }
@@ -2370,7 +2370,7 @@ void SwTabFrm::MakeAll()
                             pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                             pAttrs = pAccess->Get();
 
-                            ((SwTabFrm*)GetFollow())->SetLowersFormatted(sal_False);
+                            ((SwTabFrm*)GetFollow())->SetLowersFormatted(false);
                             // #i43913# - lock follow table
                             // to avoid its formatting during the format of
                             // its content.
@@ -2412,7 +2412,7 @@ void SwTabFrm::MakeAll()
                             --nStack;
                         }
                         else if ( GetFollow() == GetNext() )
-                            ((SwTabFrm*)GetFollow())->MoveFwd( sal_True, sal_False );
+                            ((SwTabFrm*)GetFollow())->MoveFwd( true, false );
                     }
                     continue;
                 }
@@ -2434,7 +2434,7 @@ void SwTabFrm::MakeAll()
         const SwFrm* pOldUpper = GetUpper();
 
         //Let's see if we find some place anywhere...
-        if ( !bMovedFwd && !MoveFwd( bMakePage, sal_False ) )
+        if ( !bMovedFwd && !MoveFwd( bMakePage, false ) )
             bMakePage = false;
 
         // #i29771# Reset bSplitError flag on change of upper
@@ -2445,9 +2445,9 @@ void SwTabFrm::MakeAll()
         }
 
         SWREFRESHFN( this )
-        bCalcLowers = sal_True;
+        bCalcLowers = true;
         bMovedFwd = true;
-        aNotify.SetLowersComplete( sal_False );
+        aNotify.SetLowersComplete( false );
         if ( IsFollow() )
         {
             //To avoid oscillations now invalid master should drop behind.
@@ -2455,7 +2455,7 @@ void SwTabFrm::MakeAll()
             if ( pTab->GetUpper() )
                 pTab->GetUpper()->Calc();
             pTab->Calc();
-            pTab->SetLowersFormatted( sal_False );
+            pTab->SetLowersFormatted( false );
         }
 
         //If my neighbour is my Follow at the same time, I'll swallow it up.
@@ -2484,8 +2484,8 @@ void SwTabFrm::MakeAll()
             if ( nDistToUpperPrtBottom >= 0 || bTryToSplit )
             {
                 lcl_RecalcTable( *this, 0, aNotify );
-                bLowersFormatted = sal_True;
-                bCalcLowers = sal_False;
+                bLowersFormatted = true;
+                bCalcLowers = false;
             }
 #if OSL_DEBUG_LEVEL > 0
             else
@@ -2506,7 +2506,7 @@ void SwTabFrm::MakeAll()
             pPre->InvalidatePos();
     }
 
-    bCalcLowers = bONECalcLowers = sal_False;
+    bCalcLowers = bONECalcLowers = false;
     delete pAccess;
     UnlockJoin();
     if ( bMovedFwd || bMovedBwd || !bOldValidPos )
@@ -2514,11 +2514,11 @@ void SwTabFrm::MakeAll()
 }
 
 /// Calculate the offsets arising because of FlyFrames
-sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
+bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                                long& rLeftOffset,
                                long& rRightOffset ) const
 {
-    sal_Bool bInvalidatePrtArea = sal_False;
+    bool bInvalidatePrtArea = false;
     const SwPageFrm *pPage = FindPageFrm();
     const SwFlyFrm* pMyFly = FindFlyFrm();
 
@@ -2615,7 +2615,7 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                         long nBottom = (aFlyRect.*fnRect->fnGetBottom)();
                         if( (*fnRect->fnYDiff)( nPrtPos, nBottom ) < 0 )
                             nPrtPos = nBottom;
-                        bInvalidatePrtArea = sal_True;
+                        bInvalidatePrtArea = true;
                     }
                     if ( (SURROUND_RIGHT    == rSur.GetSurround() ||
                           SURROUND_PARALLEL == rSur.GetSurround())&&
@@ -2625,7 +2625,7 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                             (aFlyRect.*fnRect->fnGetRight)(),
                             (pFly->GetAnchorFrm()->Frm().*fnRect->fnGetLeft)() );
                         rLeftOffset = std::max( rLeftOffset, nWidth );
-                        bInvalidatePrtArea = sal_True;
+                        bInvalidatePrtArea = true;
                     }
                     if ( (SURROUND_LEFT     == rSur.GetSurround() ||
                           SURROUND_PARALLEL == rSur.GetSurround())&&
@@ -2635,7 +2635,7 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                             (pFly->GetAnchorFrm()->Frm().*fnRect->fnGetRight)(),
                             (aFlyRect.*fnRect->fnGetLeft)() );
                         rRightOffset = std::max( rRightOffset, nWidth );
-                        bInvalidatePrtArea = sal_True;
+                        bInvalidatePrtArea = true;
                     }
                 }
             }
@@ -2674,7 +2674,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
     long nTmpRight = -1000000,
          nLeftOffset  = 0;
     if( CalcFlyOffsets( nUpper, nLeftOffset, nTmpRight ) )
-        mbValidPrtArea = sal_False;
+        mbValidPrtArea = false;
     long nRightOffset = std::max( 0L, nTmpRight );
 
     SwTwips nLower = pAttrs->CalcBottomLine();
@@ -2683,7 +2683,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
         nLower += GetBottomLineSize();
 
     if ( !mbValidPrtArea )
-    {   mbValidPrtArea = sal_True;
+    {   mbValidPrtArea = true;
 
         //The width of the PrtArea is given by the FrmFmt, the borders have to
         //be set accordingly.
@@ -2705,7 +2705,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
         //the value applies to the screen width in the BrowseView.
         const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
         // OD 14.03.2003 #i9040# - adjust variable name.
-        const SwTwips nWishedTableWidth = CalcRel( rSz, sal_True );
+        const SwTwips nWishedTableWidth = CalcRel( rSz, true );
 
         bool bCheckBrowseWidth = false;
 
@@ -2880,12 +2880,12 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
         }
 
         if ( nOldHeight != (Prt().*fnRect->fnGetHeight)() )
-            mbValidSize = sal_False;
+            mbValidSize = false;
     }
 
     if ( !mbValidSize )
     {
-        mbValidSize = sal_True;
+        mbValidSize = true;
 
         //The size is defined by the content plus the borders.
         SwTwips nRemaining = 0, nDiff;
@@ -2906,7 +2906,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
     }
 }
 
-SwTwips SwTabFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
+SwTwips SwTabFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
 {
     SWRECTFN( this )
     SwTwips nHeight =(Frm().*fnRect->fnGetHeight)();
@@ -3093,7 +3093,7 @@ void SwTabFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 if ( !GetPrev() )
                     CheckPageDescs( pPage );
                 if ( pPage && GetFmt()->GetPageDesc().GetNumOffset() )
-                    ((SwRootFrm*)pPage->GetUpper())->SetVirtPageNum( sal_True );
+                    ((SwRootFrm*)pPage->GetUpper())->SetVirtPageNum( true );
                 SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
                 GetFmt()->GetDoc()->UpdatePageFlds( &aMsgHnt );
             }
@@ -3108,7 +3108,7 @@ void SwTabFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 rInvFlags |= 0x40;
             break;
         case RES_FRAMEDIR :
-            SetDerivedR2L( sal_False );
+            SetDerivedR2L( false );
             CheckDirChange();
             break;
         case RES_COLLAPSING_BORDERS :
@@ -3291,7 +3291,7 @@ bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool &rReformat )
 
                     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
                     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
-                        nSpace += pNewUpper->Grow( LONG_MAX, sal_True );
+                        nSpace += pNewUpper->Grow( LONG_MAX, true );
                 }
             }
             else if( !bLockBackMove )
@@ -3401,7 +3401,7 @@ void SwTabFrm::Cut()
         {
             if ( pUp->GetUpper() )
             {
-                pSct->DelEmpty( sal_False );
+                pSct->DelEmpty( false );
                 pSct->_InvalidateSize();
             }
         }
@@ -3473,7 +3473,7 @@ void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
             const SwPageDesc *pDesc = GetFmt()->GetPageDesc().GetPageDesc();
             if ( (pDesc && pDesc != pPage->GetPageDesc()) ||
                  (!pDesc && pPage->GetPageDesc() != &GetFmt()->GetDoc()->GetPageDesc(0)) )
-                CheckPageDescs( pPage, sal_True );
+                CheckPageDescs( pPage, true );
         }
     }
 }
@@ -3566,7 +3566,7 @@ void SwRowFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 void SwRowFrm::MakeAll()
 {
     if ( !GetNext() )
-        mbValidSize = sal_False;
+        mbValidSize = false;
     SwLayoutFrm::MakeAll();
 }
 
@@ -3705,8 +3705,8 @@ static SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm& rCell, const SwBor
 // control, if floating screen objects have to be considered for the minimal
 // cell height.
 static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrm *_pCell,
-                                           const sal_Bool _bConsiderObjs,
-                                           const SwBorderAttrs *pAttrs = 0 )
+                                      const bool _bConsiderObjs,
+                                      const SwBorderAttrs *pAttrs = 0 )
 {
     SWRECTFN( _pCell )
     SwTwips nHeight = 0;
@@ -3762,7 +3762,7 @@ static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrm *_pCell,
 // #i26945# - add parameter <_bConsiderObjs> in order to control,
 // if floating screen objects have to be considered for the minimal cell height
 static SwTwips lcl_CalcMinRowHeight( const SwRowFrm* _pRow,
-                                          const sal_Bool _bConsiderObjs )
+                                     const bool _bConsiderObjs )
 {
     SWRECTFN( _pRow )
 
@@ -3914,13 +3914,13 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
     SWRECTFN( this )
     OSL_ENSURE( pAttrs, "SwRowFrm::Format without Attrs." );
 
-    const sal_Bool bFix = mbFixSize;
+    const bool bFix = mbFixSize;
 
     if ( !mbValidPrtArea )
     {
         //RowFrms don't have borders and so on therefore the PrtArea always
         //matches the Frm.
-        mbValidPrtArea = sal_True;
+        mbValidPrtArea = true;
         maPrt.Left( 0 );
         maPrt.Top( 0 );
         maPrt.Width ( maFrm.Width() );
@@ -4028,7 +4028,7 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
 
     while ( !mbValidSize )
     {
-        mbValidSize = sal_True;
+        mbValidSize = true;
 
 #if OSL_DEBUG_LEVEL > 0
         if ( HasFixSize() )
@@ -4045,9 +4045,9 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
                                     FindTabFrm()->IsConsiderObjsForMinCellHeight() ) );
         if ( nDiff )
         {
-            mbFixSize = sal_False;
+            mbFixSize = false;
             if ( nDiff > 0 )
-                Shrink( nDiff, sal_False, sal_True );
+                Shrink( nDiff, false, true );
             else if ( nDiff < 0 )
                 Grow( -nDiff );
             mbFixSize = bFix;
@@ -4066,15 +4066,15 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
         } while ( pSibling );
         if ( nDiff > 0 )
         {
-            mbFixSize = sal_False;
+            mbFixSize = false;
             Grow( nDiff );
             mbFixSize = bFix;
-            mbValidSize = sal_True;
+            mbValidSize = true;
         }
     }
 }
 
-void SwRowFrm::AdjustCells( const SwTwips nHeight, const sal_Bool bHeight )
+void SwRowFrm::AdjustCells( const SwTwips nHeight, const bool bHeight )
 {
     SwFrm *pFrm = Lower();
     if ( bHeight )
@@ -4203,7 +4203,7 @@ void SwRowFrm::Cut()
     SwLayoutFrm::Cut();
 }
 
-SwTwips SwRowFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
+SwTwips SwRowFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
 {
     SwTwips nReal = 0;
 
@@ -4238,7 +4238,7 @@ SwTwips SwRowFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     }
 
     if ( bRestrictTableGrowth )
-        pTab->SetRestrictTableGrowth( sal_True );
+        pTab->SetRestrictTableGrowth( true );
     else
     {
         // Ok, this looks like a hack, indeed, it is a hack.
@@ -4247,19 +4247,19 @@ SwTwips SwRowFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         // be allowed to grow. In fact, setting bRestrictTableGrowth
         // to 'false' does not work, because the surrounding RowFrm
         // would set this to 'true'.
-        pTab->SetFollowFlowLine( sal_False );
+        pTab->SetFollowFlowLine( false );
     }
 
     nReal += SwLayoutFrm::GrowFrm( nDist, bTst, bInfo);
 
-    pTab->SetRestrictTableGrowth( sal_False );
+    pTab->SetRestrictTableGrowth( false );
     pTab->SetFollowFlowLine( bHasFollowFlowLine );
 
     //Update the height of the cells to the newest value.
     if ( !bTst )
     {
         SWRECTFNX( this )
-        AdjustCells( (Prt().*fnRectX->fnGetHeight)() + nReal, sal_True );
+        AdjustCells( (Prt().*fnRectX->fnGetHeight)() + nReal, true );
         if ( nReal )
             SetCompletePaint();
     }
@@ -4267,18 +4267,18 @@ SwTwips SwRowFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     return nReal;
 }
 
-SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
+SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
 {
     SWRECTFN( this )
     if( HasFixSize() )
     {
-        AdjustCells( (Prt().*fnRect->fnGetHeight)(), sal_True );
+        AdjustCells( (Prt().*fnRect->fnGetHeight)(), true );
         return 0L;
     }
 
     // bInfo may be set to sal_True by SwRowFrm::Format; we need to hangle this
     // here accordingly
-    const sal_Bool bShrinkAnyway = bInfo;
+    const bool bShrinkAnyway = bInfo;
 
     //Only shrink as much as the content of the biggest cell allows.
     SwTwips nRealDist = nDist;
@@ -4355,7 +4355,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
                 pMasterTab->InvalidatePos();
             }
         }
-        AdjustCells( (Prt().*fnRect->fnGetHeight)() - nReal, sal_True );
+        AdjustCells( (Prt().*fnRect->fnGetHeight)() - nReal, true );
     }
     return nReal;
 }
@@ -4672,7 +4672,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
 
     if ( !mbValidPrtArea )
     {
-        mbValidPrtArea = sal_True;
+        mbValidPrtArea = true;
 
         //Adjust position.
         if ( Lower() )
@@ -4705,7 +4705,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                       0;
     if ( !mbValidSize )
     {
-        mbValidSize = sal_True;
+        mbValidSize = true;
 
         //The VarSize of the CellFrms is always the width.
         //The width is not variable though, it is defined by the format.
@@ -4800,14 +4800,14 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                 //Validate again if no growth happened. Invalidation is done
                 //through AdjustCells of the row.
                 if ( !Grow( nDiffHeight ) )
-                    mbValidSize = mbValidPrtArea = sal_True;
+                    mbValidSize = mbValidPrtArea = true;
             }
             else
             {
                 //Only keep invalidated if shrinking was done; this can be
                 //dismissed because all adjoined cells have to be the same size.
                 if ( !Shrink( -nDiffHeight ) )
-                    mbValidSize = mbValidPrtArea = sal_True;
+                    mbValidSize = mbValidPrtArea = true;
             }
         }
     }
@@ -4956,7 +4956,7 @@ void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     if ( bAttrSetChg &&
          SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_FRAMEDIR, false, &pItem ) )
     {
-        SetDerivedVert( sal_False );
+        SetDerivedVert( false );
         CheckDirChange();
     }
 
@@ -5317,7 +5317,7 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
                 {
                     if ( 1 == pLower2->GetTabBox()->getRowSpan() )
                     {
-                        const SwTwips nCellHeight = lcl_CalcMinCellHeight( pLower2, sal_True );
+                        const SwTwips nCellHeight = lcl_CalcMinCellHeight( pLower2, true );
                         nMaxHeight = std::max( nCellHeight, nMaxHeight );
                     }
                     pLower2 = static_cast<const SwCellFrm*>(pLower2->GetNext());

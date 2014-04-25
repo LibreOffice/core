@@ -54,18 +54,18 @@ class _HTMLAttrContext_SaveDoc
                                     // Untergrenze, wenn die Attribute
                                     // nicht beibehalten werden sollen.
 
-    sal_Bool bStripTrailingPara : 1;    // letzen Absatz entfernen?
-    sal_Bool bKeepNumRules : 1;         // Numerierung beibehalten?
-    sal_Bool bFixHeaderDist : 1;
-    sal_Bool bFixFooterDist : 1;
+    bool bStripTrailingPara : 1;    // letzen Absatz entfernen?
+    bool bKeepNumRules : 1;         // Numerierung beibehalten?
+    bool bFixHeaderDist : 1;
+    bool bFixFooterDist : 1;
 
 public:
 
     _HTMLAttrContext_SaveDoc() :
         pPos( 0 ), pAttrTab( 0 ),
         nContextStMin( USHRT_MAX ), nContextStAttrMin( USHRT_MAX ),
-        bStripTrailingPara( sal_False ), bKeepNumRules( sal_False ),
-        bFixHeaderDist( sal_False ), bFixFooterDist( sal_False )
+        bStripTrailingPara( false ), bKeepNumRules( false ),
+        bFixHeaderDist( false ), bFixFooterDist( false )
     {}
 
     ~_HTMLAttrContext_SaveDoc() { delete pPos; delete pAttrTab; }
@@ -78,7 +78,7 @@ public:
     void SetNumInfo( const SwHTMLNumRuleInfo& rInf ) { aNumRuleInfo.Set(rInf); }
     const SwHTMLNumRuleInfo& GetNumInfo() const { return aNumRuleInfo; }
 
-    _HTMLAttrTable *GetAttrTab( sal_Bool bCreate= sal_False );
+    _HTMLAttrTable *GetAttrTab( bool bCreate= false );
 
     void SetContextStMin( sal_uInt16 nMin ) { nContextStMin = nMin; }
     sal_uInt16 GetContextStMin() const { return nContextStMin; }
@@ -86,20 +86,20 @@ public:
     void SetContextStAttrMin( sal_uInt16 nMin ) { nContextStAttrMin = nMin; }
     sal_uInt16 GetContextStAttrMin() const { return nContextStAttrMin; }
 
-    void SetStripTrailingPara( sal_Bool bSet ) { bStripTrailingPara = bSet; }
-    sal_Bool GetStripTrailingPara() const { return bStripTrailingPara; }
+    void SetStripTrailingPara( bool bSet ) { bStripTrailingPara = bSet; }
+    bool GetStripTrailingPara() const { return bStripTrailingPara; }
 
-    void SetKeepNumRules( sal_Bool bSet ) { bKeepNumRules = bSet; }
-    sal_Bool GetKeepNumRules() const { return bKeepNumRules; }
+    void SetKeepNumRules( bool bSet ) { bKeepNumRules = bSet; }
+    bool GetKeepNumRules() const { return bKeepNumRules; }
 
-    void SetFixHeaderDist( sal_Bool bSet ) { bFixHeaderDist = bSet; }
-    sal_Bool GetFixHeaderDist() const { return bFixHeaderDist; }
+    void SetFixHeaderDist( bool bSet ) { bFixHeaderDist = bSet; }
+    bool GetFixHeaderDist() const { return bFixHeaderDist; }
 
-    void SetFixFooterDist( sal_Bool bSet ) { bFixFooterDist = bSet; }
-    sal_Bool GetFixFooterDist() const { return bFixFooterDist; }
+    void SetFixFooterDist( bool bSet ) { bFixFooterDist = bSet; }
+    bool GetFixFooterDist() const { return bFixFooterDist; }
 };
 
-_HTMLAttrTable *_HTMLAttrContext_SaveDoc::GetAttrTab( sal_Bool bCreate )
+_HTMLAttrTable *_HTMLAttrContext_SaveDoc::GetAttrTab( bool bCreate )
 {
     if( !pAttrTab && bCreate )
     {
@@ -109,7 +109,7 @@ _HTMLAttrTable *_HTMLAttrContext_SaveDoc::GetAttrTab( sal_Bool bCreate )
     return pAttrTab;
 }
 
-_HTMLAttrContext_SaveDoc *_HTMLAttrContext::GetSaveDocContext( sal_Bool bCreate )
+_HTMLAttrContext_SaveDoc *_HTMLAttrContext::GetSaveDocContext( bool bCreate )
 {
     if( !pSaveDocContext && bCreate )
         pSaveDocContext = new _HTMLAttrContext_SaveDoc;
@@ -138,7 +138,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
     const SwNodeIndex& rNewSttPara = rNewPos.nNode;
     sal_Int32 nNewSttCnt = rNewPos.nContent.GetIndex();
 
-    sal_Bool bMoveBack = sal_False;
+    bool bMoveBack = false;
 
     // alle noch offenen Attribute beenden und hinter der Tabelle
     // neu aufspannen
@@ -228,7 +228,7 @@ void SwHTMLParser::SaveDocContext( _HTMLAttrContext *pCntxt,
                                    sal_uInt16 nFlags,
                                    const SwPosition *pNewPos )
 {
-    _HTMLAttrContext_SaveDoc *pSave = pCntxt->GetSaveDocContext( sal_True );
+    _HTMLAttrContext_SaveDoc *pSave = pCntxt->GetSaveDocContext( true );
     pSave->SetStripTrailingPara( (HTML_CNTXT_STRIP_PARA & nFlags) != 0 );
     pSave->SetKeepNumRules( (HTML_CNTXT_KEEP_NUMRULE & nFlags) != 0 );
     pSave->SetFixHeaderDist( (HTML_CNTXT_HEADER_DIST & nFlags) != 0 );
@@ -254,7 +254,7 @@ void SwHTMLParser::SaveDocContext( _HTMLAttrContext *pCntxt,
         }
         else
         {
-            _HTMLAttrTable *pSaveAttrTab = pSave->GetAttrTab( sal_True );
+            _HTMLAttrTable *pSaveAttrTab = pSave->GetAttrTab( true );
             SaveAttrTab( *pSaveAttrTab );
         }
 
@@ -411,11 +411,11 @@ void SwHTMLParser::ClearContext( _HTMLAttrContext *pContext )
         StartListing();
 }
 
-sal_Bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
+bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
                                   SvxCSS1PropertyInfo &rPropInfo,
                                   _HTMLAttrContext *pContext )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // Unter folgenden Umstaenden wird jetzt ein Rahmen aufgemacht:
     // - das Tag wird absolut positioniert und left/top sind beide
@@ -446,20 +446,20 @@ sal_Bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
 
         InsertFlyFrame( aFrmItemSet, pContext, rPropInfo.aId,
                         CONTEXT_FLAGS_ABSPOS );
-        pContext->SetPopStack( sal_True );
+        pContext->SetPopStack( true );
         rPropInfo.aId = "";
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
 }
 
-sal_Bool SwHTMLParser::CreateContainer( const OUString& rClass,
+bool SwHTMLParser::CreateContainer( const OUString& rClass,
                                     SfxItemSet &rItemSet,
                                     SvxCSS1PropertyInfo &rPropInfo,
                                     _HTMLAttrContext *pContext )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( rClass.equalsIgnoreAsciiCase( "sd-abs-pos" ) &&
         pCSS1Parser->MayBePositioned( rPropInfo ) )
     {
@@ -471,13 +471,13 @@ sal_Bool SwHTMLParser::CreateContainer( const OUString& rClass,
         SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE,
                                 rItemSet, rPropInfo, *pFrmItemSet );
         Size aDummy(0,0);
-        SetFixSize( aDummy, aDummy, sal_False, sal_False, rItemSet, rPropInfo,
+        SetFixSize( aDummy, aDummy, false, false, rItemSet, rPropInfo,
                     *pFrmItemSet );
         SetSpace( aDummy, rItemSet, rPropInfo, *pFrmItemSet );
         SetFrmFmtAttrs( rItemSet, rPropInfo, HTML_FF_BOX|HTML_FF_BACKGROUND|HTML_FF_DIRECTION,
                         *pFrmItemSet );
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -486,7 +486,7 @@ sal_Bool SwHTMLParser::CreateContainer( const OUString& rClass,
 void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                                 SvxCSS1PropertyInfo &rPropInfo,
                                 _HTMLAttrContext *pContext,
-                                sal_Bool bCharLvl )
+                                bool bCharLvl )
 {
     // Ein DropCap-Attribut basteln, wenn auf Zeichen-Ebene vor dem
     // ersten Zeichen ein float: left vorkommt
@@ -542,7 +542,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 // obersten Kontext, denn den veraendern wir ja gerade) ...
                 sal_uInt16 nOldLeft = 0, nOldRight = 0;
                 short nOldIndent = 0;
-                sal_Bool bIgnoreTop = aContexts.size() > nContextStMin &&
+                bool bIgnoreTop = aContexts.size() > nContextStMin &&
                                   aContexts.back() == pContext;
                 GetMarginsFromContext( nOldLeft, nOldRight, nOldIndent,
                                        bIgnoreTop  );
@@ -592,7 +592,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 aLRItem.SetTxtLeft( nLeft );
                 aLRItem.SetRight( nRight );
                 NewAttr( &aAttrTab.pLRSpace, aLRItem );
-                EndAttr( aAttrTab.pLRSpace, 0, sal_False );
+                EndAttr( aAttrTab.pLRSpace, 0, false );
             }
             break;
 
@@ -719,15 +719,15 @@ void SwHTMLParser::InsertAttr( _HTMLAttr **ppAttr, const SfxPoolItem & rItem,
 void SwHTMLParser::SplitPREListingXMP( _HTMLAttrContext *pCntxt )
 {
     // PRE/Listing/XMP soll beim beenden des Kontexts beendet werden.
-    pCntxt->SetFinishPREListingXMP( sal_True );
+    pCntxt->SetFinishPREListingXMP( true );
 
     // Und die jetzt gueltigen Flags sollen wieder gesetzt werden.
     if( IsReadPRE() )
-        pCntxt->SetRestartPRE( sal_True );
+        pCntxt->SetRestartPRE( true );
     if( IsReadXMP() )
-        pCntxt->SetRestartXMP( sal_True );
+        pCntxt->SetRestartXMP( true );
     if( IsReadListing() )
-        pCntxt->SetRestartListing( sal_True );
+        pCntxt->SetRestartListing( true );
 
     // PRE/Listing/XMP wird auuserdem sofort beendet
     FinishPREListingXMP();

@@ -96,7 +96,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 {
                     // There are captions for graphics, OLE objects, frames and tables
                     if( !bGetFrmType )
-                        eFrmType = m_pWrtShell->GetFrmType(0,sal_True), bGetFrmType = sal_True;
+                        eFrmType = m_pWrtShell->GetFrmType(0,true), bGetFrmType = sal_True;
                     if (! ( ((eFrmType & FRMTYPE_FLY_ANY) && m_nSelectionType != nsSelectionType::SEL_DRW_TXT)||
                         m_nSelectionType & nsSelectionType::SEL_TBL ||
                         m_nSelectionType & nsSelectionType::SEL_DRW) )
@@ -126,7 +126,7 @@ void SwView::GetState(SfxItemSet &rSet)
 
             case FN_CHANGE_PAGENUM:
             {
-                sal_uInt16 nType = m_pWrtShell->GetFrmType(0,sal_True);
+                sal_uInt16 nType = m_pWrtShell->GetFrmType(0,true);
                 if( ( FRMTYPE_FLY_ANY | FRMTYPE_HEADER | FRMTYPE_FOOTER |
                       FRMTYPE_FOOTNOTE | FRMTYPE_DRAWOBJ ) & nType )
                     rSet.DisableItem(nWhich);
@@ -156,7 +156,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 const SwPageDesc& rDesc = m_pWrtShell->GetPageDesc( nCurIdx );
                 const SwFrmFmt& rMaster = rDesc.GetMaster();
                 const SvxBrushItem& rBrush = (const SvxBrushItem&)
-                                    rMaster.GetFmtAttr(RES_BACKGROUND, sal_True);
+                                    rMaster.GetFmtAttr(RES_BACKGROUND, true);
                 rSet.Put(rBrush);
             }
             break;

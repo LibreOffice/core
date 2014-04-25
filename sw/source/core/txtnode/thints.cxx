@@ -1276,7 +1276,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     // des Zeichens. Sonst muesste das immer  ausserhalb
                     // erfolgen (Fehleranfaellig !)
                     const SwFmtAnchor* pAnchor = 0;
-                    pFmt->GetItemState( RES_ANCHOR, sal_False,
+                    pFmt->GetItemState( RES_ANCHOR, false,
                         (const SfxPoolItem**)&pAnchor );
 
                     SwIndex aIdx( this, *pAttr->GetStart() );
@@ -1699,7 +1699,7 @@ void SwTxtNode::DeleteAttributes(
                 // Check if character format contains hidden attribute:
                 const SwCharFmt* pFmt = pTxtHt->GetCharFmt().GetCharFmt();
                 const SfxPoolItem* pItem;
-                if ( SFX_ITEM_SET == pFmt->GetItemState( RES_CHRATR_HIDDEN, sal_True, &pItem ) )
+                if ( SFX_ITEM_SET == pFmt->GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) )
                     SetCalcHiddenCharFlags();
             }
             // #i75430# Recalc hidden flags if necessary
@@ -2963,7 +2963,7 @@ bool SwpHints::TryInsertHint(
         // Check if character format contains hidden attribute:
         const SwCharFmt* pFmt = pHint->GetCharFmt().GetCharFmt();
         const SfxPoolItem* pItem;
-        if ( SFX_ITEM_SET == pFmt->GetItemState( RES_CHRATR_HIDDEN, sal_True, &pItem ) )
+        if ( SFX_ITEM_SET == pFmt->GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) )
             rNode.SetCalcHiddenCharFlags();
 
         ((SwTxtCharFmt*)pHint)->ChgTxtNode( &rNode );
@@ -3030,7 +3030,7 @@ bool SwpHints::TryInsertHint(
             // gehts ins normale Nodes-Array?
             if( rNode.GetNodes().IsDocNodes() )
             {
-                sal_Bool bInsFldType = sal_False;
+                bool bInsFldType = false;
                 switch( pFld->GetTyp()->Which() )
                 {
                 case RES_SETEXPFLD:

@@ -45,10 +45,10 @@ class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
-    void _Cut( sal_Bool bRemove );
+    void _Cut( bool bRemove );
     // Is there a FtnContainer?
     // An empty sectionfrm without FtnCont is superfluous
-    sal_Bool IsSuperfluous() const { return !ContainsAny() && !ContainsFtnCont(); }
+    bool IsSuperfluous() const { return !ContainsAny() && !ContainsFtnCont(); }
     void CalcFtnAtEndFlag();
     void CalcEndAtEndFlag();
     const SwSectionFmt* _GetEndSectFmt() const;
@@ -62,7 +62,7 @@ protected:
 
 public:
     SwSectionFrm( SwSection &, SwFrm* );                 //Inhalt wird nicht erzeugt!
-    SwSectionFrm( SwSectionFrm &, sal_Bool bMaster );//_Nur_ zum Erzeugen von Master/Follows
+    SwSectionFrm( SwSectionFrm &, bool bMaster );//_Nur_ zum Erzeugen von Master/Follows
     virtual ~SwSectionFrm();
 
     void Init();
@@ -81,49 +81,49 @@ public:
     inline const SwCntntFrm *FindLastCntnt( sal_uInt8 nMode = 0 ) const;
     inline SwSection* GetSection() { return pSection; }
     inline const SwSection* GetSection() const { return pSection; }
-    inline void ColLock()       { mbColLocked = sal_True; }
-    inline void ColUnlock()     { mbColLocked = sal_False; }
+    inline void ColLock()       { mbColLocked = true; }
+    inline void ColUnlock()     { mbColLocked = false; }
 
     void CalcFtnCntnt();
     void SimpleFormat();
-    sal_Bool IsDescendantFrom( const SwSectionFmt* pSect ) const;
-    sal_Bool HasToBreak( const SwFrm* pFrm ) const;
+    bool IsDescendantFrom( const SwSectionFmt* pSect ) const;
+    bool HasToBreak( const SwFrm* pFrm ) const;
     void MergeNext( SwSectionFrm* pNxt );
     //Zerlegt den pFrm umgebenden SectionFrm in zwei Teile,
     //pFrm an den Anfang des 2. Teils
-    sal_Bool SplitSect( SwFrm* pFrm, sal_Bool bApres );
-    void DelEmpty( sal_Bool bRemove );  // wie Cut(), Follow-Verkettung wird aber mitgepflegt
-    sal_Bool IsToIgnore() const         // Keine Groesse, kein Inhalt, muss ignoriert werden
+    bool SplitSect( SwFrm* pFrm, bool bApres );
+    void DelEmpty( bool bRemove );  // wie Cut(), Follow-Verkettung wird aber mitgepflegt
+    bool IsToIgnore() const         // Keine Groesse, kein Inhalt, muss ignoriert werden
     { return !Frm().Height() && !ContainsCntnt(); }
     SwFtnContFrm* ContainsFtnCont( const SwFtnContFrm* pCont = NULL ) const;
-    sal_Bool Growable() const;
-    SwTwips _Shrink( SwTwips, sal_Bool bTst );
-    SwTwips _Grow  ( SwTwips, sal_Bool bTst );
+    bool Growable() const;
+    SwTwips _Shrink( SwTwips, bool bTst );
+    SwTwips _Grow  ( SwTwips, bool bTst );
 
     // A sectionfrm has to maximize, if he has a follow or a ftncontainer at
     // the end of the page. A superfluous follow will be ignored,
     // if bCheckFollow is set.
-    sal_Bool ToMaximize( sal_Bool bCheckFollow ) const;
-    inline sal_Bool _ToMaximize() const
-        { if( !pSection ) return sal_False; return ToMaximize( sal_False ); }
-    sal_Bool MoveAllowed( const SwFrm* ) const;
-    sal_Bool CalcMinDiff( SwTwips& rMinDiff ) const;
+    bool ToMaximize( bool bCheckFollow ) const;
+    inline bool _ToMaximize() const
+        { if( !pSection ) return false; return ToMaximize( false ); }
+    bool MoveAllowed( const SwFrm* ) const;
+    bool CalcMinDiff( SwTwips& rMinDiff ) const;
     // Uebergibt man kein bOverSize bzw. sal_False, so ist der Returnwert
     // >0 fuer Undersized-Frames, ==0 sonst.
     // Uebergibt man sal_True, so kann es auch einen negativen Returnwert geben,
     // wenn der SectionFrm nicht vollstaendig ausgefuellt ist, was z.B. bei
     // SectionFrm mit Follow meist vorkommt. Benoetigt wird dies im
     // FormatWidthCols, um "Luft" aus den Spalten zu lassen.
-    long Undersize( sal_Bool bOverSize = sal_False );
+    long Undersize( bool bOverSize = false );
     // Groesse an die Umgebung anpassen
-    void _CheckClipping( sal_Bool bGrow, sal_Bool bMaximize );
+    void _CheckClipping( bool bGrow, bool bMaximize );
 
     void InvalidateFtnPos();
     void CollectEndnotes( SwLayouter* pLayouter );
     const SwSectionFmt* GetEndSectFmt() const
         { if( IsEndnAtEnd() ) return _GetEndSectFmt(); return NULL; }
 
-    static void MoveCntntAndDelete( SwSectionFrm* pDel, sal_Bool bSave );
+    static void MoveCntntAndDelete( SwSectionFrm* pDel, bool bSave );
 
     bool IsBalancedSection() const;
 

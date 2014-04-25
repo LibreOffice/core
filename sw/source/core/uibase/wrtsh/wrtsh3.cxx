@@ -40,12 +40,12 @@ using namespace ::com::sun::star;
 
 extern bool bNoInterrupt;       // in mainwn.cxx
 
-sal_Bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
+bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
 {
     addCurrentPosition();
-    (this->*fnKillSel)( 0, sal_False );
+    (this->*fnKillSel)( 0, false );
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch(eFuncId)
     {
         case BOOKMARK_INDEX:bRet = SwCrsrShell::GotoMark( pMark );break;
@@ -67,11 +67,11 @@ sal_Bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark
     return bRet;
 }
 
-sal_Bool SwWrtShell::GotoField( const SwFmtFld& rFld )
+bool SwWrtShell::GotoField( const SwFmtFld& rFld )
 {
-    (this->*fnKillSel)( 0, sal_False );
+    (this->*fnKillSel)( 0, false );
 
-    sal_Bool bRet = SwCrsrShell::GotoFld( rFld );
+    bool bRet = SwCrsrShell::GotoFld( rFld );
     if( bRet && IsSelFrmMode() )
     {
         UnSelectFrm();
@@ -89,7 +89,7 @@ sal_Bool SwWrtShell::GotoField( const SwFmtFld& rFld )
 
 bool SwWrtShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
 {
-    (this->*fnKillSel)( 0, sal_False );
+    (this->*fnKillSel)( 0, false );
     bool bRet = SwCrsrShell::GotoFieldmark(pMark);
     if( bRet && IsSelFrmMode() )
     {
@@ -127,24 +127,24 @@ void SwWrtShell::DrawSelChanged( )
     bNoInterrupt = bOldVal;
 }
 
-sal_Bool SwWrtShell::GotoMark( const OUString& rName )
+bool SwWrtShell::GotoMark( const OUString& rName )
 {
     IDocumentMarkAccess::const_iterator_t ppMark = getIDocumentMarkAccess()->findMark( rName );
     if(ppMark == getIDocumentMarkAccess()->getAllMarksEnd()) return false;
     return MoveBookMark( BOOKMARK_INDEX, ppMark->get() );
 }
 
-sal_Bool SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark )
+bool SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark )
 {
     return MoveBookMark( BOOKMARK_INDEX, pMark );
 }
 
-sal_Bool SwWrtShell::GoNextBookmark()
+bool SwWrtShell::GoNextBookmark()
 {
     return MoveBookMark( BOOKMARK_NEXT );
 }
 
-sal_Bool SwWrtShell::GoPrevBookmark()
+bool SwWrtShell::GoPrevBookmark()
 {
     return MoveBookMark( BOOKMARK_PREV );
 }

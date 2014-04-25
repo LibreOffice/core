@@ -35,12 +35,12 @@ class SwAccessibleCell : public SwAccessibleContext,
 {
     // Implementation for XAccessibleSelection interface
     SwAccessibleSelectionHelper aSelectionHelper;
-    sal_Bool    bIsSelected;    // protected by base class mutex
+    bool    bIsSelected;    // protected by base class mutex
 
-    sal_Bool    IsSelected();
+    bool    IsSelected();
 
-    sal_Bool _InvalidateMyCursorPos();
-    sal_Bool _InvalidateChildrenCursorPos( const SwFrm *pFrm );
+    bool _InvalidateMyCursorPos();
+    bool _InvalidateChildrenCursorPos( const SwFrm *pFrm );
 
     rtl::Reference<SwAccessibleTable> m_pAccTable;
 
@@ -56,7 +56,7 @@ protected:
 public:
     SwAccessibleCell( SwAccessibleMap* pInitMap, const SwCellFrm *pCellFrm );
 
-    virtual sal_Bool HasCursor() SAL_OVERRIDE;   // required by map to remember that object
+    virtual bool HasCursor() SAL_OVERRIDE;   // required by map to remember that object
 
     // XAccessibleContext
 
@@ -83,7 +83,7 @@ public:
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void Dispose( sal_Bool bRecursive = sal_False ) SAL_OVERRIDE;
+    virtual void Dispose( bool bRecursive = false ) SAL_OVERRIDE;
 
     virtual void InvalidatePosOrSize( const SwRect& rFrm ) SAL_OVERRIDE;
 

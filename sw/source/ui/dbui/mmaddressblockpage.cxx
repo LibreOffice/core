@@ -206,7 +206,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, PushButton*, pButton)
     return 0;
 }
 
-void SwMailMergeAddressBlockPage::EnableAddressBlock(sal_Bool bAll, sal_Bool bSelective)
+void SwMailMergeAddressBlockPage::EnableAddressBlock(bool bAll, bool bSelective)
 {
     m_pSettingsFI->Enable(bAll);
     m_pAddressCB->Enable(bAll);
@@ -264,10 +264,10 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
     }
     m_pWizard->LeaveWait();
     sal_Int32 nPos = rConfig.GetResultSetPosition();
-    sal_Bool bEnable = sal_True;
+    bool bEnable = true;
     if(nPos < 1)
     {
-        bEnable = sal_False;
+        bEnable = false;
         nPos = 1;
     }
     else
@@ -286,7 +286,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
     m_pDocumentIndexFI->SetText(m_sDocument.replaceFirst("%1", OUString::number(nPos)));
 
     GetWizard()->enableButtons(WZB_NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
-    sal_Bool bHasResultSet = rConfig.GetResultSet().is();
+    bool bHasResultSet = rConfig.GetResultSet().is();
     m_pCurrentAddressFI->Show(bHasResultSet);
     if(bHasResultSet)
     {
@@ -367,7 +367,7 @@ const uno::Sequence< OUString >&    SwSelectAddressBlockDialog::GetAddressBlocks
 }
 
 void SwSelectAddressBlockDialog::SetSettings(
-        sal_Bool bIsCountry, const OUString& rCountry)
+        bool bIsCountry, const OUString& rCountry)
 {
     RadioButton *pActive = m_pNeverRB;
     if(bIsCountry)

@@ -35,10 +35,10 @@
 // SPLITNODE
 
 SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
-                                    sal_Bool bChkTable )
+                                    bool bChkTable )
     : SwUndo( UNDO_SPLITNODE ), pHistory( 0 ), pRedlData( 0 ), nNode( rPos.nNode.GetIndex() ),
         nCntnt( rPos.nContent.GetIndex() ),
-        bTblFlag( sal_False ), bChkTblStt( bChkTable )
+        bTblFlag( false ), bChkTblStt( bChkTable )
 {
     SwTxtNode *const pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     OSL_ENSURE( pTxtNd, "only for TextNode" );

@@ -106,7 +106,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
             break;
         case SID_HANGUL_HANJA_CONVERSION:
             StartTextConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL,
-                    i18n::TextConversionOption::CHARACTER_BY_CHARACTER, sal_True );
+                    i18n::TextConversionOption::CHARACTER_BY_CHARACTER, true );
             break;
         case SID_CHINESE_CONVERSION:
         {
@@ -140,9 +140,9 @@ void SwView::ExecLingu(SfxRequest &rReq)
                         if( RET_OK == nDialogRet )
                         {
                             //get some parameters from the dialog
-                            sal_Bool bToSimplified = sal_True;
-                            sal_Bool bUseVariants = sal_True;
-                            sal_Bool bCommonTerms = sal_True;
+                            bool bToSimplified = true;
+                            bool bUseVariants = true;
+                            bool bCommonTerms = true;
                             Reference< beans::XPropertySet >  xProp( xDialog, UNO_QUERY );
                             if( xProp.is() )
                             {
@@ -174,7 +174,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
 
                             // remember cursor position data for later restoration of the cursor
                             const SwPosition *pPoint = m_pWrtShell->GetCrsr()->GetPoint();
-                            sal_Bool bRestoreCursor = pPoint->nNode.GetNode().IsTxtNode();
+                            bool bRestoreCursor = pPoint->nNode.GetNode().IsTxtNode();
                             const SwNodeIndex aPointNodeIndex( pPoint->nNode );
                             sal_Int32 nPointIndex = pPoint->nContent.GetIndex();
 
@@ -182,7 +182,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             // document should be undone in a single undo step.
                             m_pWrtShell->StartUndo( UNDO_OVERWRITE );
 
-                            StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, sal_False );
+                            StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, false );
 
                             m_pWrtShell->EndUndo( UNDO_OVERWRITE );
 
@@ -225,7 +225,7 @@ void SwView::StartTextConversion(
         LanguageType nTargetLang,
         const Font *pTargetFont,
         sal_Int32 nOptions,
-        sal_Bool bIsInteractive )
+        bool bIsInteractive )
 {
     // do not do text conversion if it is active elsewhere
     if (GetWrtShell().HasConvIter())
@@ -233,20 +233,20 @@ void SwView::StartTextConversion(
         return;
     }
 
-    SpellKontext(sal_True);
+    SpellKontext(true);
 
     const SwViewOption* pVOpt = m_pWrtShell->GetViewOptions();
-    const sal_Bool bOldIdle = pVOpt->IsIdle();
-    pVOpt->SetIdle( sal_False );
+    const bool bOldIdle = pVOpt->IsIdle();
+    pVOpt->SetIdle( false );
 
-    sal_Bool bOldIns = m_pWrtShell->IsInsMode();
-    m_pWrtShell->SetInsMode( sal_True );
+    bool bOldIns = m_pWrtShell->IsInsMode();
+    m_pWrtShell->SetInsMode( true );
 
     const bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection() ||
         m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
 
     const bool  bStart = bSelection || m_pWrtShell->IsStartOfDoc();
-    const bool  bOther = !bSelection && !(m_pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
+    const bool  bOther = !bSelection && !(m_pWrtShell->GetFrmType(0,true) & FRMTYPE_BODY);
 
     {
         const uno::Reference< uno::XComponentContext > xContext(
@@ -259,7 +259,7 @@ void SwView::StartTextConversion(
 
     m_pWrtShell->SetInsMode( bOldIns );
     pVOpt->SetIdle( bOldIdle );
-    SpellKontext(sal_False);
+    SpellKontext(false);
 }
 
 // spellcheck and text conversion related stuff
@@ -269,7 +269,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
         SwConversionArgs *pConvArgs )
 {
     Reference< XLinguProperties >  xProp = ::GetLinguPropertySet();
-    sal_Bool bIsWrapReverse = (!pConvArgs && xProp.is()) ? xProp->getIsWrapReverse() : sal_False;
+    bool bIsWrapReverse = (!pConvArgs && xProp.is()) ? xProp->getIsWrapReverse() : sal_False;
 
     SwDocPositions eStart = DOCPOS_START;
     SwDocPositions eEnde  = DOCPOS_END;
@@ -442,27 +442,27 @@ void SwView::HyphenateDocument()
     else
     {
         SwViewOption* pVOpt = (SwViewOption*)m_pWrtShell->GetViewOptions();
-        sal_Bool bOldIdle = pVOpt->IsIdle();
-        pVOpt->SetIdle( sal_False );
+        bool bOldIdle = pVOpt->IsIdle();
+        pVOpt->SetIdle( false );
 
         Reference< XLinguProperties >  xProp( ::GetLinguPropertySet() );
 
         m_pWrtShell->StartUndo(UNDO_INSATTR);         // valid later
 
-        sal_Bool bHyphSpecial = xProp.is() ? xProp->getIsHyphSpecial() : sal_False;
-        sal_Bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection() ||
+        bool bHyphSpecial = xProp.is() ? xProp->getIsHyphSpecial() : sal_False;
+        bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection() ||
             m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
-        sal_Bool bOther = m_pWrtShell->HasOtherCnt() && bHyphSpecial && !bSelection;
-        sal_Bool bStart = bSelection || ( !bOther && m_pWrtShell->IsStartOfDoc() );
+        bool bOther = m_pWrtShell->HasOtherCnt() && bHyphSpecial && !bSelection;
+        bool bStart = bSelection || ( !bOther && m_pWrtShell->IsStartOfDoc() );
         bool bStop = false;
-        if( !bOther && !(m_pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY) && !bSelection )
+        if( !bOther && !(m_pWrtShell->GetFrmType(0,true) & FRMTYPE_BODY) && !bSelection )
         // turned on no special area
         {
             // I want also in special areas hyphenation
             QueryBox aBox( &GetEditWin(), SW_RES( DLG_SPECIAL_FORCED ) );
             if( aBox.Execute() == RET_YES )
             {
-                bOther = sal_True;
+                bOther = true;
                 if (xProp.is())
                 {
                     xProp->setIsHyphSpecial( sal_True );
@@ -488,7 +488,7 @@ bool SwView::IsValidSelectionForThesaurus() const
     // to be within a single paragraph
 
     const bool bMultiSel = m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
-    const sal_Bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection();
+    const bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection();
     return !bMultiSel && (!bSelection || m_pWrtShell->IsSelOnePara() );
 }
 
@@ -499,8 +499,8 @@ OUString SwView::GetThesaurusLookUpText( bool bSelection ) const
 
 void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString &rLookUpText, bool bSelection )
 {
-    sal_Bool bOldIns = m_pWrtShell->IsInsMode();
-    m_pWrtShell->SetInsMode( sal_True );
+    bool bOldIns = m_pWrtShell->IsInsMode();
+    m_pWrtShell->SetInsMode( true );
 
     m_pWrtShell->StartAllAction();
     m_pWrtShell->StartUndo(UNDO_DELETE);
@@ -508,7 +508,7 @@ void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString
     if( !bSelection )
     {
         if(m_pWrtShell->IsEndWrd())
-            m_pWrtShell->Left(CRSR_SKIP_CELLS, sal_False, 1, sal_False );
+            m_pWrtShell->Left(CRSR_SKIP_CELLS, false, 1, false );
 
         m_pWrtShell->SelWrd();
 
@@ -561,11 +561,11 @@ void SwView::StartThesaurus()
     }
 
     SwViewOption* pVOpt = (SwViewOption*)m_pWrtShell->GetViewOptions();
-    sal_Bool bOldIdle = pVOpt->IsIdle();
-    pVOpt->SetIdle( sal_False );
+    bool bOldIdle = pVOpt->IsIdle();
+    pVOpt->SetIdle( false );
 
     // get initial LookUp text
-    const sal_Bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection();
+    const bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection();
     OUString aTmp = GetThesaurusLookUpText( bSelection );
 
     Reference< XThesaurus >  xThes( ::GetThesaurus() );
@@ -626,9 +626,9 @@ IMPL_STATIC_LINK_NOINSTANCE( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo*, pExecu
 }
 //!! End of extra code for context menu modifying extensions
 
-sal_Bool SwView::ExecSpellPopup(const Point& rPt)
+bool SwView::ExecSpellPopup(const Point& rPt)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwViewOption* pVOpt = m_pWrtShell->GetViewOptions();
     if( pVOpt->IsOnlineSpell() &&
         !m_pWrtShell->IsSelection())
@@ -637,8 +637,8 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
             bRet = ExecDrwTxtSpellPopup(rPt);
         else if (!m_pWrtShell->IsSelFrmMode())
         {
-            const sal_Bool bOldViewLock = m_pWrtShell->IsViewLocked();
-            m_pWrtShell->LockView( sal_True );
+            const bool bOldViewLock = m_pWrtShell->IsViewLocked();
+            m_pWrtShell->LockView( true );
             m_pWrtShell->Push();
             SwRect aToFill;
 
@@ -680,7 +680,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                     OSL_FAIL("text node expected but not found" );
                 }
 
-                bRet = sal_True;
+                bRet = true;
                 m_pWrtShell->SttSelect();
                 boost::scoped_ptr< SwSpellPopup > pPopup;
                 if (bUseGrammarContext)
@@ -756,7 +756,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 }
             }
 
-            m_pWrtShell->Pop( sal_False );
+            m_pWrtShell->Pop( false );
             m_pWrtShell->LockView( bOldViewLock );
         }
     }
@@ -768,11 +768,11 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
    This function shows the popup menu for smarttag
    actions.
 */
-sal_Bool SwView::ExecSmartTagPopup( const Point& rPt )
+bool SwView::ExecSmartTagPopup( const Point& rPt )
 {
-    sal_Bool bRet = sal_False;
-    const sal_Bool bOldViewLock = m_pWrtShell->IsViewLocked();
-    m_pWrtShell->LockView( sal_True );
+    bool bRet = false;
+    const bool bOldViewLock = m_pWrtShell->IsViewLocked();
+    m_pWrtShell->LockView( true );
     m_pWrtShell->Push();
 
     // get word that was clicked on
@@ -785,13 +785,13 @@ sal_Bool SwView::ExecSmartTagPopup( const Point& rPt )
     m_pWrtShell->GetSmartTagTerm( rPt, aToFill, aSmartTagTypes, aStringKeyMaps, xRange);
     if ( xRange.is() && aSmartTagTypes.getLength() )
     {
-        bRet = sal_True;
+        bRet = true;
         m_pWrtShell->SttSelect();
         SwSmartTagPopup aPopup( this, aSmartTagTypes, aStringKeyMaps, xRange );
         aPopup.Execute( aToFill.SVRect(), m_pEditWin );
     }
 
-    m_pWrtShell->Pop( sal_False );
+    m_pWrtShell->Pop( false );
     m_pWrtShell->LockView( bOldViewLock );
 
     return bRet;

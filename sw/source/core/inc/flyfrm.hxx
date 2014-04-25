@@ -45,10 +45,10 @@ class SwFmt;
     implemented in layout/flycnt.cxx
  */
 const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
-                              const sal_Bool bBody = sal_False );
+                              const bool bBody = false );
 
 /** calculate rectangle in that the object can be moved or rather be resized */
-sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove = sal_True );
+bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove = true );
 
 /** general base class for all free-flowing frames
 
@@ -61,7 +61,7 @@ class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
     friend void Notify( SwFlyFrm *, SwPageFrm *pOld, const SwRect &rOld,
                         const SwRect* pOldPrt );
 
-    void InitDrawObj( sal_Bool bNotify ); // these to methods are called in the
+    void InitDrawObj( bool bNotify ); // these to methods are called in the
     void FinitDrawObj();                  // constructors
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
@@ -83,38 +83,38 @@ private:
     // the constructor call of the root object since otherwise the anchor will
     // be formatted before the root is anchored correctly to a shell and
     // because too much would be formatted as a result.
-    sal_Bool bLocked :1;
+    bool bLocked :1;
     // sal_True if the background of NotifyDTor needs to be notified at the end
     // of a MakeAll() call.
-    sal_Bool bNotifyBack :1;
+    bool bNotifyBack :1;
 
 protected:
     // Pos, PrtArea or SSize have been invalidated - they will be evaluated
     // again immediately because they have to be valid _at all time_.
     // The invalidation is tracked here so that LayAction knows about it and
     // can handle it properly. Exceptions prove the rule.
-    sal_Bool bInvalid :1;
+    bool bInvalid :1;
 
     // sal_True if the proposed height of an attribute is a minimal height
     // (this means that the frame can grow higher if needed)
-    sal_Bool bMinHeight :1;
+    bool bMinHeight :1;
     // sal_True if the fly frame could not format position/size based on its
     // attributes, e.g. because there was not enough space.
-    sal_Bool bHeightClipped :1;
-    sal_Bool bWidthClipped :1;
+    bool bHeightClipped :1;
+    bool bWidthClipped :1;
     // If sal_True call only the format after adjusting the width (CheckClip);
     // but the width will not be re-evaluated based on the attributes.
-    sal_Bool bFormatHeightOnly :1;
+    bool bFormatHeightOnly :1;
 
-    sal_Bool bInCnt :1;        ///< FLY_AS_CHAR, anchored as character
-    sal_Bool bAtCnt :1;        ///< FLY_AT_PARA, anchored at paragraph
-    sal_Bool bLayout :1;       ///< FLY_AT_PAGE, FLY_AT_FLY, at page or at frame
-    sal_Bool bAutoPosition :1; ///< FLY_AT_CHAR, anchored at character
+    bool bInCnt :1;        ///< FLY_AS_CHAR, anchored as character
+    bool bAtCnt :1;        ///< FLY_AT_PARA, anchored at paragraph
+    bool bLayout :1;       ///< FLY_AT_PAGE, FLY_AT_FLY, at page or at frame
+    bool bAutoPosition :1; ///< FLY_AT_CHAR, anchored at character
 
-    sal_Bool bNoShrink :1;     ///< temporary forbid shrinking to avoid loops
+    bool bNoShrink :1;     ///< temporary forbid shrinking to avoid loops
     // If sal_True, the content of the fly frame will not be deleted when it
     // is moved to an invisible layer.
-    sal_Bool bLockDeleteContent :1;
+    bool bLockDeleteContent :1;
 
     friend class SwNoTxtFrm; // is allowed to call NotifyBackground
 
@@ -125,11 +125,11 @@ protected:
     void MakePrtArea( const SwBorderAttrs &rAttrs );
     void MakeContentPos( const SwBorderAttrs &rAttrs );
 
-    void Lock()         { bLocked = sal_True; }
-    void Unlock()       { bLocked = sal_False; }
+    void Lock()         { bLocked = true; }
+    void Unlock()       { bLocked = false; }
 
-    void SetMinHeight()  { bMinHeight = sal_True; }
-    void ResetMinHeight(){ bMinHeight = sal_False; }
+    void SetMinHeight()  { bMinHeight = true; }
+    void ResetMinHeight(){ bMinHeight = false; }
 
     Size CalcRel( const SwFmtFrmSize &rSz ) const;
     SwTwips CalcAutoWidth() const;
@@ -172,11 +172,11 @@ public:
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
 #endif
 
-    SwTwips _Shrink( SwTwips, sal_Bool bTst );
-    SwTwips _Grow  ( SwTwips, sal_Bool bTst );
+    SwTwips _Shrink( SwTwips, bool bTst );
+    SwTwips _Grow  ( SwTwips, bool bTst );
     void    _Invalidate( SwPageFrm *pPage = 0 );
 
-    sal_Bool FrmSizeChg( const SwFmtFrmSize & );
+    bool FrmSizeChg( const SwFmtFrmSize & );
 
     SwFlyFrm *GetPrevLink() const { return pPrevLink; }
     SwFlyFrm *GetNextLink() const { return pNextLink; }
@@ -192,32 +192,32 @@ public:
     void NotifyDrawObj();
 
     void ChgRelPos( const Point &rAbsPos );
-    sal_Bool IsInvalid() const { return bInvalid; }
-    void Invalidate() const { ((SwFlyFrm*)this)->bInvalid = sal_True; }
-    void Validate() const { ((SwFlyFrm*)this)->bInvalid = sal_False; }
+    bool IsInvalid() const { return bInvalid; }
+    void Invalidate() const { ((SwFlyFrm*)this)->bInvalid = true; }
+    void Validate() const { ((SwFlyFrm*)this)->bInvalid = false; }
 
-    sal_Bool IsMinHeight()  const { return bMinHeight; }
-    sal_Bool IsLocked()     const { return bLocked; }
-    sal_Bool IsAutoPos()    const { return bAutoPosition; }
-    sal_Bool IsFlyInCntFrm() const { return bInCnt; }
-    sal_Bool IsFlyFreeFrm() const { return bAtCnt || bLayout; }
-    sal_Bool IsFlyLayFrm() const { return bLayout; }
-    sal_Bool IsFlyAtCntFrm() const { return bAtCnt; }
+    bool IsMinHeight()  const { return bMinHeight; }
+    bool IsLocked()     const { return bLocked; }
+    bool IsAutoPos()    const { return bAutoPosition; }
+    bool IsFlyInCntFrm() const { return bInCnt; }
+    bool IsFlyFreeFrm() const { return bAtCnt || bLayout; }
+    bool IsFlyLayFrm() const { return bLayout; }
+    bool IsFlyAtCntFrm() const { return bAtCnt; }
 
-    sal_Bool IsNotifyBack() const { return bNotifyBack; }
-    void SetNotifyBack()      { bNotifyBack = sal_True; }
-    void ResetNotifyBack()    { bNotifyBack = sal_False; }
-    sal_Bool IsNoShrink()   const { return bNoShrink; }
-    void SetNoShrink( sal_Bool bNew ) { bNoShrink = bNew; }
-    sal_Bool IsLockDeleteContent()  const { return bLockDeleteContent; }
-    void SetLockDeleteContent( sal_Bool bNew ) { bLockDeleteContent = bNew; }
+    bool IsNotifyBack() const { return bNotifyBack; }
+    void SetNotifyBack()      { bNotifyBack = true; }
+    void ResetNotifyBack()    { bNotifyBack = false; }
+    bool IsNoShrink()   const { return bNoShrink; }
+    void SetNoShrink( bool bNew ) { bNoShrink = bNew; }
+    bool IsLockDeleteContent()  const { return bLockDeleteContent; }
+    void SetLockDeleteContent( bool bNew ) { bLockDeleteContent = bNew; }
 
-    sal_Bool IsClipped()        const   { return bHeightClipped || bWidthClipped; }
-    sal_Bool IsHeightClipped()  const   { return bHeightClipped; }
-    sal_Bool IsWidthClipped()   const   { return bWidthClipped;  }
+    bool IsClipped()        const   { return bHeightClipped || bWidthClipped; }
+    bool IsHeightClipped()  const   { return bHeightClipped; }
+    bool IsWidthClipped()   const   { return bWidthClipped;  }
 
-    sal_Bool IsLowerOf( const SwLayoutFrm* pUpper ) const;
-    inline sal_Bool IsUpperOf( const SwFlyFrm& _rLower ) const
+    bool IsLowerOf( const SwLayoutFrm* pUpper ) const;
+    inline bool IsUpperOf( const SwFlyFrm& _rLower ) const
     {
         return _rLower.IsLowerOf( this );
     }
@@ -226,11 +226,11 @@ public:
 
     // #i13147# - add parameter <_bForPaint> to avoid load of
     // the graphic during paint. Default value: sal_False
-    sal_Bool GetContour( PolyPolygon&   rContour,
-                     const sal_Bool _bForPaint = sal_False ) const;
+    bool GetContour( PolyPolygon&   rContour,
+                     const bool _bForPaint = false ) const;
 
     // Paint on this shell (consider Preview, print flag, etc. recursively)?
-    static sal_Bool IsPaint( SdrObject *pObj, const SwViewShell *pSh );
+    static bool IsPaint( SdrObject *pObj, const SwViewShell *pSh );
 
     /** SwFlyFrm::IsBackgroundTransparent
 

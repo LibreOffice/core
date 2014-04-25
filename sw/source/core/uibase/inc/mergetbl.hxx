@@ -28,12 +28,12 @@ class SwMergeTblDlg : public SvxStandardDialog
 {
     RadioButton* m_pMergePrevRB;
 
-    sal_Bool&    m_rMergePrev;
+    bool&        m_rMergePrev;
 protected:
     virtual void Apply() SAL_OVERRIDE;
 
 public:
-    SwMergeTblDlg( Window *pParent, sal_Bool& rWithPrev );
+    SwMergeTblDlg( Window *pParent, bool& rWithPrev );
 };
 
 #endif

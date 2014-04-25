@@ -44,9 +44,9 @@ public:
     SwTblCalcPara( SwCalc& rCalculator, const SwTable& rTable );
     ~SwTblCalcPara();
 
-    sal_Bool CalcWithStackOverflow();
-    sal_Bool IsStackOverflow() const        { return nMaxSize == nStackCnt; }
-    sal_Bool IncStackCnt()                  { return nMaxSize == ++nStackCnt; }
+    bool CalcWithStackOverflow();
+    bool IsStackOverflow() const        { return nMaxSize == nStackCnt; }
+    bool IncStackCnt()                  { return nMaxSize == ++nStackCnt; }
     void DecStackCnt()                  { if( nStackCnt ) --nStackCnt; }
     void SetLastTblBox( const SwTableBox* pBox )    { pLastTblBox = pBox; }
 };

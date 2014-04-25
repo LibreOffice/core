@@ -330,7 +330,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
 }
 
 uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties(
-    const SwRangeRedline& rRedline, sal_Bool bIsStart ) throw()
+    const SwRangeRedline& rRedline, bool bIsStart ) throw()
 {
     uno::Sequence< beans::PropertyValue > aRet(11);
     const SwRedlineData* pNext = rRedline.GetRedlineData().Next();
@@ -447,7 +447,7 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
     if(!pDoc)
         throw uno::RuntimeException();
     uno::Any aRet;
-    sal_Bool bStart = rPropertyName == UNO_NAME_REDLINE_START;
+    bool bStart = rPropertyName == UNO_NAME_REDLINE_START;
     if(bStart ||
         rPropertyName == UNO_NAME_REDLINE_END)
     {

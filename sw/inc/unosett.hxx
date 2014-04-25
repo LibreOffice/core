@@ -145,7 +145,7 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
     SwDocShell*                 pDocShell; // Only if used as chapter numbering.
     SwNumRule*                  pNumRule;
     const SfxItemPropertySet*   m_pPropertySet;
-    sal_Bool                    bOwnNumRuleCreated;
+    bool                    bOwnNumRuleCreated;
 protected:
     virtual ~SwXNumberingRules();
 
@@ -233,7 +233,7 @@ class SwXTextColumns : public cppu::WeakAggImplHelper4
 {
     sal_Int32                   nReference;
     ::com::sun::star::uno::Sequence< ::com::sun::star::text::TextColumn>    aTextColumns;
-    sal_Bool                    bIsAutomaticWidth;
+    bool                    bIsAutomaticWidth;
     sal_Int32                   nAutoDistance;
 
     const SfxItemPropertySet*   m_pPropSet;
@@ -243,7 +243,7 @@ class SwXTextColumns : public cppu::WeakAggImplHelper4
     sal_Int32                   nSepLineColor;
     sal_Int8                    nSepLineHeightRelative;
     sal_Int8                    nSepLineVertAlign;//style::VerticalAlignment
-    sal_Bool                    bSepLineIsOn;
+    bool                    bSepLineIsOn;
     sal_Int8                    nSepLineStyle;
 
 protected:
@@ -282,10 +282,10 @@ public:
     sal_Int32   GetSepLineColor() const {return     nSepLineColor;}
     sal_Int8    GetSepLineHeightRelative() const {return    nSepLineHeightRelative;}
     sal_Int8    GetSepLineVertAlign() const {return     nSepLineVertAlign;}
-    sal_Bool    GetSepLineIsOn() const {return  bSepLineIsOn;}
+    bool    GetSepLineIsOn() const {return  bSepLineIsOn;}
     sal_Int8    GetSepLineStyle() const {return nSepLineStyle;}
 
-    sal_Bool    IsAutomaticWidth() const {return bIsAutomaticWidth;}
+    bool    IsAutomaticWidth() const {return bIsAutomaticWidth;}
 };
 #endif
 

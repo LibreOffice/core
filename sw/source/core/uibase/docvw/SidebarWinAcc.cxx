@@ -63,7 +63,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
             if ( mpAnchorFrm &&
                  mrViewShell.GetAccessibleMap() )
             {
-                xAccParent = mrViewShell.GetAccessibleMap()->GetContext( mpAnchorFrm, sal_False );
+                xAccParent = mrViewShell.GetAccessibleMap()->GetContext( mpAnchorFrm, false );
             }
 
             return xAccParent;

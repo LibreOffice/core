@@ -51,23 +51,23 @@ class SwUndoDelete
     sal_uLong nReplaceDummy;     // diff. to a temporary dummy object
     sal_uInt16 nSetPos;
 
-    sal_Bool bGroup : 1;         // TRUE: is already Grouped; see CanGrouping()
-    sal_Bool bBackSp : 1;        // TRUE: if Grouped and preceding content deleted
-    sal_Bool bJoinNext: 1;       // TRUE: if range is selected forwards
-    sal_Bool bTblDelLastNd : 1;  // TRUE: TextNode following Table inserted/deleted
-    sal_Bool bDelFullPara : 1;   // TRUE: entire Nodes were deleted
-    sal_Bool bResetPgDesc : 1;   // TRUE: reset PgDsc on following node
-    sal_Bool bResetPgBrk : 1;    // TRUE: reset PgBreak on following node
-    sal_Bool bFromTableCopy : 1; // TRUE: called by SwUndoTblCpyTbl
+    bool bGroup : 1;         // TRUE: is already Grouped; see CanGrouping()
+    bool bBackSp : 1;        // TRUE: if Grouped and preceding content deleted
+    bool bJoinNext: 1;       // TRUE: if range is selected forwards
+    bool bTblDelLastNd : 1;  // TRUE: TextNode following Table inserted/deleted
+    bool bDelFullPara : 1;   // TRUE: entire Nodes were deleted
+    bool bResetPgDesc : 1;   // TRUE: reset PgDsc on following node
+    bool bResetPgBrk : 1;    // TRUE: reset PgBreak on following node
+    bool bFromTableCopy : 1; // TRUE: called by SwUndoTblCpyTbl
 
-    sal_Bool SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
+    bool SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTxtNode* pSttTxtNd, SwTxtNode* pEndTxtNd );
 
 public:
     SwUndoDelete(
         SwPaM&,
-        sal_Bool bFullPara = sal_False,
-        sal_Bool bCalledByTblCpy = sal_False );
+        bool bFullPara = false,
+        bool bCalledByTblCpy = false );
     virtual ~SwUndoDelete();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
@@ -86,18 +86,18 @@ public:
     */
     virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 
-    sal_Bool CanGrouping( SwDoc*, const SwPaM& );
+    bool CanGrouping( SwDoc*, const SwPaM& );
 
-    void SetTblDelLastNd()      { bTblDelLastNd = sal_True; }
+    void SetTblDelLastNd()      { bTblDelLastNd = true; }
 
     // for PageDesc/PageBreak Attributes of a table
-    void SetPgBrkFlags( sal_Bool bPageBreak, sal_Bool bPageDesc )
+    void SetPgBrkFlags( bool bPageBreak, bool bPageDesc )
         { bResetPgDesc = bPageDesc; bResetPgBrk = bPageBreak; }
 
     void SetTableName(const OUString & rName);
 
     // SwUndoTblCpyTbl needs this information:
-    sal_Bool IsDelFullPara() const { return bDelFullPara; }
+    bool IsDelFullPara() const { return bDelFullPara; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoDelete)
 };

@@ -71,7 +71,7 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
     if ( nActPos < USHRT_MAX && rSh.IsOutlineMovable( nActPos ) )
     {
         rSh.Push();
-        rSh.MakeOutlineSel( nActPos, nActPos, sal_True );
+        rSh.MakeOutlineSel( nActPos, nActPos, true );
 
         if ( bMove )
         {
@@ -127,7 +127,7 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
         }
 
         rSh.ClearMark();
-        rSh.Pop( sal_False );
+        rSh.Pop( false );
     }
 }
 
@@ -214,8 +214,8 @@ void SwListShell::Execute(SfxRequest &rReq)
 
         case FN_NUM_OR_NONUM:
         {
-            sal_Bool bApi = rReq.IsAPI();
-            sal_Bool bDelete = !rSh.IsNoNum(!bApi);
+            bool bApi = rReq.IsAPI();
+            bool bDelete = !rSh.IsNoNum(!bApi);
             if(pArgs )
                 bDelete = ((SfxBoolItem &)pArgs->Get(rReq.GetSlot())).GetValue();
             rSh.NumOrNoNum( bDelete, !bApi );
@@ -240,7 +240,7 @@ void SwListShell::GetState(SfxItemSet &rSet)
         switch( nWhich )
         {
             case FN_NUM_OR_NONUM:
-                rSet.Put(SfxBoolItem(nWhich, GetShell().IsNoNum(sal_False)));
+                rSet.Put(SfxBoolItem(nWhich, GetShell().IsNoNum(false)));
             break;
             case FN_NUM_BULLET_OUTLINE_UP:
             case FN_NUM_BULLET_UP:

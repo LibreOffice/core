@@ -45,7 +45,7 @@ public:
         Window* pParent,
         PagePropertyPanel& rPanel,
         const Paper ePaper,
-        const sal_Bool bLandscape,
+        const bool bLandscape,
         const FieldUnit eFUnit );
     virtual ~PageSizeControl(void);
 

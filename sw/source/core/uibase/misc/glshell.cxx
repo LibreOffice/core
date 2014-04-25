@@ -98,7 +98,7 @@ static void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
     }
 }
 
-static sal_Bool lcl_Save( SwWrtShell& rSh, const OUString& rGroupName,
+static bool lcl_Save( SwWrtShell& rSh, const OUString& rGroupName,
                 const OUString& rShortNm, const OUString& rLongNm )
 {
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
@@ -129,7 +129,7 @@ static sal_Bool lcl_Save( SwWrtShell& rSh, const OUString& rGroupName,
     return nRet != USHRT_MAX;
 }
 
-SwGlosDocShell::SwGlosDocShell(sal_Bool bNewShow)
+SwGlosDocShell::SwGlosDocShell(bool bNewShow)
     : SwDocShell( (bNewShow)
             ? SFX_CREATE_MODE_STANDARD : SFX_CREATE_MODE_INTERNAL )
 {
@@ -198,7 +198,7 @@ bool SwWebGlosDocShell::Save()
     }
 }
 
-SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString& rShortName, sal_Bool bShow )
+SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString& rShortName, bool bShow )
 {
     SwDocShellRef xDocSh;
 

@@ -162,12 +162,12 @@ void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     else if (nId == m_nWrapId)
     {
         ((SwWrapTabPage&)rPage).SetNewFrame(m_bNew);
-        ((SwWrapTabPage&)rPage).SetFormatUsed(m_bFormat, sal_False);
+        ((SwWrapTabPage&)rPage).SetFormatUsed(m_bFormat, false);
         ((SwWrapTabPage&)rPage).SetShell(m_pWrtShell);
     }
     else if (nId == m_nColumnId)
     {
-        ((SwColumnPage&)rPage).SetFrmMode(sal_True);
+        ((SwColumnPage&)rPage).SetFrmMode(true);
         ((SwColumnPage&)rPage).SetFormatUsed(m_bFormat);
 
         const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)

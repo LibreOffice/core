@@ -47,7 +47,7 @@ using namespace sw::access;
 sal_Int32 SwAccessibleFrame::GetChildCount( SwAccessibleMap& rAccMap,
                                             const SwRect& rVisArea,
                                             const SwFrm *pFrm,
-                                            sal_Bool bInPagePreview )
+                                            bool bInPagePreview )
 {
     sal_Int32 nCount = 0;
 
@@ -79,7 +79,7 @@ SwAccessibleChild SwAccessibleFrame::GetChild(
                                    const SwRect& rVisArea,
                                    const SwFrm& rFrm,
                                    sal_Int32& rPos,
-                                   sal_Bool bInPagePreview )
+                                   bool bInPagePreview )
 {
     SwAccessibleChild aRet;
 
@@ -141,15 +141,15 @@ SwAccessibleChild SwAccessibleFrame::GetChild(
     return aRet;
 }
 
-sal_Bool SwAccessibleFrame::GetChildIndex(
+bool SwAccessibleFrame::GetChildIndex(
                                    SwAccessibleMap& rAccMap,
                                    const SwRect& rVisArea,
                                    const SwFrm& rFrm,
                                    const SwAccessibleChild& rChild,
                                    sal_Int32& rPos,
-                                   sal_Bool bInPagePreview )
+                                   bool bInPagePreview )
 {
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     if( SwAccessibleChildMap::IsSortingRequired( rFrm ) )
     {
@@ -162,7 +162,7 @@ sal_Bool SwAccessibleFrame::GetChildIndex(
             if( rLower.IsAccessible( bInPagePreview ) )
             {
                 if( rChild == rLower )
-                    bFound = sal_True;
+                    bFound = true;
                 else
                     rPos++;
             }
@@ -189,7 +189,7 @@ sal_Bool SwAccessibleFrame::GetChildIndex(
             if( rLower.IsAccessible( bInPagePreview ) )
             {
                 if( rChild == rLower )
-                    bFound = sal_True;
+                    bFound = true;
                 else
                     rPos++;
             }
@@ -210,7 +210,7 @@ sal_Bool SwAccessibleFrame::GetChildIndex(
 SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
                                           const SwFrm& rFrm,
                                           const Point& rPixPos,
-                                          sal_Bool bInPagePreview,
+                                          bool bInPagePreview,
                                           SwAccessibleMap& rAccMap )
 {
     SwAccessibleChild aRet;
@@ -284,7 +284,7 @@ void SwAccessibleFrame::GetChildren( SwAccessibleMap& rAccMap,
                                      const SwRect& rVisArea,
                                      const SwFrm& rFrm,
                                      ::std::list< SwAccessibleChild >& rChildren,
-                                     sal_Bool bInPagePreview )
+                                     bool bInPagePreview )
 {
     if( SwAccessibleChildMap::IsSortingRequired( rFrm ) )
     {
@@ -342,47 +342,47 @@ SwRect SwAccessibleFrame::GetBounds( const SwAccessibleMap& rAccMap,
     return aBounds;
 }
 
-sal_Bool SwAccessibleFrame::IsEditable( SwViewShell *pVSh ) const
+bool SwAccessibleFrame::IsEditable( SwViewShell *pVSh ) const
 {
     const SwFrm *pFrm = GetFrm();
     if( !pFrm )
-        return sal_False;
+        return false;
 
     OSL_ENSURE( pVSh, "no view shell" );
     if( pVSh && (pVSh->GetViewOptions()->IsReadonly() ||
                  pVSh->IsPreview()) )
-        return sal_False;
+        return false;
 
     if( !pFrm->IsRootFrm() && pFrm->IsProtected() )
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwAccessibleFrame::IsOpaque( SwViewShell *pVSh ) const
+bool SwAccessibleFrame::IsOpaque( SwViewShell *pVSh ) const
 {
     SwAccessibleChild aFrm( GetFrm() );
     if( !aFrm.GetSwFrm() )
-        return sal_False;
+        return false;
 
     OSL_ENSURE( pVSh, "no view shell" );
     if( !pVSh )
-        return sal_False;
+        return false;
 
     const SwViewOption *pVOpt = pVSh->GetViewOptions();
     do
     {
         const SwFrm *pFrm = aFrm.GetSwFrm();
         if( pFrm->IsRootFrm() )
-            return sal_True;
+            return true;
 
         if( pFrm->IsPageFrm() && !pVOpt->IsPageBack() )
-            return sal_False;
+            return false;
 
         const SvxBrushItem &rBack = pFrm->GetAttrSet()->GetBackground();
         if( !rBack.GetColor().GetTransparency() ||
              rBack.GetGraphicPos() != GPOS_NONE )
-            return sal_True;
+            return true;
 
         // If a fly frame has a transparent background color, we have to consider the background.
         // But a background color "no fill"/"auto fill" should *not* be considered.
@@ -390,7 +390,7 @@ sal_Bool SwAccessibleFrame::IsOpaque( SwViewShell *pVSh ) const
             (rBack.GetColor().GetTransparency() != 0) &&
             (rBack.GetColor() != COL_TRANSPARENT)
           )
-            return sal_True;
+            return true;
 
         if( pFrm->IsSctFrm() )
         {
@@ -399,7 +399,7 @@ sal_Bool SwAccessibleFrame::IsOpaque( SwViewShell *pVSh ) const
                 TOX_CONTENT_SECTION == pSection->GetType() ) &&
                 !pVOpt->IsReadonly() &&
                 SwViewOption::IsIndexShadings() )
-                return sal_True;
+                return true;
         }
         if( pFrm->IsFlyFrm() )
             aFrm = static_cast<const SwFlyFrm*>(pFrm)->GetAnchorFrm();
@@ -407,16 +407,16 @@ sal_Bool SwAccessibleFrame::IsOpaque( SwViewShell *pVSh ) const
             aFrm = pFrm->GetUpper();
     } while( aFrm.GetSwFrm() && !aFrm.IsAccessible( IsInPagePreview() ) );
 
-    return sal_False;
+    return false;
 }
 
 SwAccessibleFrame::SwAccessibleFrame( const SwRect& rVisArea,
                                       const SwFrm *pF,
-                                      sal_Bool bIsPagePreview ) :
+                                      bool bIsPagePreview ) :
     maVisArea( rVisArea ),
     mpFrm( pF ),
     mbIsInPagePreview( bIsPagePreview ),
-    bIsAccDocUse( sal_False )
+    bIsAccDocUse( false )
 {
 }
 
@@ -425,7 +425,7 @@ SwAccessibleFrame::~SwAccessibleFrame()
 }
 
 const SwFrm* SwAccessibleFrame::GetParent( const SwAccessibleChild& rFrmOrObj,
-                                           sal_Bool bInPagePreview )
+                                           bool bInPagePreview )
 {
     return rFrmOrObj.GetParent( bInPagePreview );
 }
@@ -476,7 +476,7 @@ void SwAccessibleFrame::GetChildren( SwAccessibleMap& rAccMap,
     GetChildren( rAccMap, maVisArea, *mpFrm, rChildren, IsInPagePreview() );
 }
 
-sal_Bool SwAccessibleFrame::IsShowing( const SwAccessibleMap& rAccMap,
+bool SwAccessibleFrame::IsShowing( const SwAccessibleMap& rAccMap,
                                        const sw::access::SwAccessibleChild& rFrmOrObj ) const
 {
     return IsShowing( rFrmOrObj.GetBox( rAccMap ) );

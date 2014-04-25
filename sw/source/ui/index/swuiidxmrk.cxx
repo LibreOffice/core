@@ -79,17 +79,17 @@ using namespace ::com::sun::star;
 /*--------------------------------------------------------------------
      Description:   dialog to insert a directory selection
  --------------------------------------------------------------------*/
-SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, sal_Bool bNewDlg,
+SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
     SwWrtShell& rWrtShell)
     : m_rDialog(rDialog)
     , bDel(false)
     , bNewMark(bNewDlg)
-    , bSelected(sal_False)
-    , bPhoneticED0_ChangedByUser(sal_False)
-    , bPhoneticED1_ChangedByUser(sal_False)
-    , bPhoneticED2_ChangedByUser(sal_False)
+    , bSelected(false)
+    , bPhoneticED0_ChangedByUser(false)
+    , bPhoneticED1_ChangedByUser(false)
+    , bPhoneticED2_ChangedByUser(false)
     , nLangForPhoneticReading(LANGUAGE_CHINESE_SIMPLIFIED)
-    , bIsPhoneticReadingEnabled(sal_False)
+    , bIsPhoneticReadingEnabled(false)
     , xExtendedIndexEntrySupplier(NULL)
     , pTOXMgr(0)
     , pSh(&rWrtShell)
@@ -271,7 +271,7 @@ void SwIndexMarkPane::InitControls()
 
             //to include all equal entries may only be allowed in the body and even there
             //only when a simple selection exists
-            const sal_uInt16 nFrmType = pSh->GetFrmType(0,sal_True);
+            const sal_uInt16 nFrmType = pSh->GetFrmType(0,true);
             m_pApplyToAllCB->Show();
             m_pSearchCaseSensitiveCB->Show();
             m_pSearchCaseWordOnlyCB->Show();
@@ -295,10 +295,10 @@ void    SwIndexMarkPane::UpdateLanguageDependenciesForPhoneticReading()
     //no phonetic reading if no global cjk support
     if( !xExtendedIndexEntrySupplier.is() )
     {
-        bIsPhoneticReadingEnabled = sal_False;
+        bIsPhoneticReadingEnabled = false;
         return;
     }
-    bIsPhoneticReadingEnabled = sal_True;
+    bIsPhoneticReadingEnabled = true;
 
     //get the current language
     if(!bNewMark) //if dialog is opened to iterate existing marks
@@ -361,7 +361,7 @@ void    SwIndexMarkPane::Activate()
 
             //to include all equal entries may only be allowed in the body and even there
             //only when a simple selection exists
-            const sal_uInt16 nFrmType = pSh->GetFrmType(0,sal_True);
+            const sal_uInt16 nFrmType = pSh->GetFrmType(0,true);
             m_pApplyToAllCB->Show();
             m_pSearchCaseSensitiveCB->Show();
             m_pSearchCaseWordOnlyCB->Show();
@@ -380,7 +380,7 @@ void SwIndexMarkPane::Apply()
 {
     InsertUpdate();
     if(bSelected)
-        pSh->ResetSelect(0, sal_False);
+        pSh->ResetSelect(0, false);
 }
 
 /*--------------------------------------------------------------------
@@ -425,7 +425,7 @@ void SwIndexMarkPane::InsertUpdate()
 /*--------------------------------------------------------------------
      Description:   insert mark
  --------------------------------------------------------------------*/
-static void lcl_SelectSameStrings(SwWrtShell& rSh, sal_Bool bWordOnly, sal_Bool bCaseSensitive)
+static void lcl_SelectSameStrings(SwWrtShell& rSh, bool bWordOnly, bool bCaseSensitive)
 {
     rSh.Push();
 
@@ -440,12 +440,12 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, sal_Bool bWordOnly, sal_Bool 
                             : static_cast<int>(TransliterationModules_IGNORE_CASE)) );
 
     rSh.ClearMark();
-    sal_Bool bCancel;
+    bool bCancel;
 
     //todo/mba: assuming that notes should not be searched
-    sal_Bool bSearchInNotes = sal_False;
+    bool bSearchInNotes = false;
     rSh.Find( aSearchOpt,  bSearchInNotes, DOCPOS_START, DOCPOS_END, bCancel,
-                        (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), sal_False );
+                        (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), false );
 }
 
 void SwIndexMarkPane::InsertMark()
@@ -478,9 +478,9 @@ void SwIndexMarkPane::InsertMark()
     }
     if (aOrgStr != m_pEntryED->GetText())
         aDesc.SetAltStr(m_pEntryED->GetText());
-    sal_Bool bApplyAll = m_pApplyToAllCB->IsChecked();
-    sal_Bool bWordOnly = m_pSearchCaseWordOnlyCB->IsChecked();
-    sal_Bool bCaseSensitive = m_pSearchCaseSensitiveCB->IsChecked();
+    bool bApplyAll = m_pApplyToAllCB->IsChecked();
+    bool bWordOnly = m_pSearchCaseWordOnlyCB->IsChecked();
+    bool bCaseSensitive = m_pSearchCaseSensitiveCB->IsChecked();
 
     pSh->StartAllAction();
     // all equal strings have to be selected here so that the
@@ -493,7 +493,7 @@ void SwIndexMarkPane::InsertMark()
     SwTOXMgr aMgr(pSh);
     aMgr.InsertTOXMark(aDesc);
     if(bApplyAll)
-        pSh->Pop(sal_False);
+        pSh->Pop(false);
 
     pSh->EndAllAction();
 }
@@ -612,7 +612,7 @@ IMPL_LINK_NOARG(SwIndexMarkPane, NewUserIdxHdl)
 
 IMPL_LINK( SwIndexMarkPane, SearchTypeHdl, CheckBox*, pBox)
 {
-    sal_Bool bEnable = pBox->IsChecked() && pBox->IsEnabled();
+    bool bEnable = pBox->IsChecked() && pBox->IsEnabled();
     m_pSearchCaseWordOnlyCB->Enable(bEnable);
     m_pSearchCaseSensitiveCB->Enable(bEnable);
     return 0;
@@ -651,37 +651,37 @@ IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
     {
         // set index type
         sal_Int32 nPos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectEntry());
-        sal_Bool bLevelEnable = sal_False,
-             bKeyEnable   = sal_False,
-             bSetKey2     = sal_False,
-             bKey2Enable  = sal_False,
-            bEntryHasText   = sal_False,
-            bKey1HasText    = sal_False,
-            bKey2HasText    = sal_False;
+        bool bLevelEnable = false,
+             bKeyEnable   = false,
+             bSetKey2     = false,
+             bKey2Enable  = false,
+             bEntryHasText   = false,
+             bKey1HasText    = false,
+             bKey2HasText    = false;
         if(nPos == POS_INDEX)
         {
             if(!m_pEntryED->GetText().isEmpty())
-                bEntryHasText = sal_True;
+                bEntryHasText = true;
             m_pPhoneticED0->SetText(GetDefaultPhoneticReading(m_pEntryED->GetText()));
 
-            bKeyEnable = sal_True;
+            bKeyEnable = true;
             m_pKey1DCB->SetText(m_pKey1DCB->GetEntry(nKey1Pos));
             m_pPhoneticED1->SetText(GetDefaultPhoneticReading(m_pKey1DCB->GetText()));
             if(!m_pKey1DCB->GetText().isEmpty())
             {
-                bKey1HasText = bSetKey2 = bKey2Enable = sal_True;
+                bKey1HasText = bSetKey2 = bKey2Enable = true;
                 m_pKey2DCB->SetText(m_pKey2DCB->GetEntry(nKey2Pos));
                 m_pPhoneticED2->SetText(GetDefaultPhoneticReading(m_pKey2DCB->GetText()));
                 if(!m_pKey2DCB->GetText().isEmpty())
-                    bKey2HasText = sal_True;
+                    bKey2HasText = true;
             }
         }
         else
         {
-            bLevelEnable = sal_True;
+            bLevelEnable = true;
             m_pLevelNF->SetMax(MAXLEVEL);
             m_pLevelNF->SetValue(m_pLevelNF->Normalize(0));
-            bSetKey2 = sal_True;
+            bSetKey2 = true;
         }
         m_pLevelFT->Show(bLevelEnable);
         m_pLevelNF->Show(bLevelEnable);
@@ -707,7 +707,7 @@ IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
         if(!bHasText)
         {
             m_pPhoneticED0->SetText(OUString());
-            bPhoneticED0_ChangedByUser = sal_False;
+            bPhoneticED0_ChangedByUser = false;
         }
         else if(!bPhoneticED0_ChangedByUser)
             m_pPhoneticED0->SetText(GetDefaultPhoneticReading(m_pEntryED->GetText()));
@@ -716,7 +716,7 @@ IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
         m_pPhoneticED0->Enable(bHasText&&bIsPhoneticReadingEnabled);
     }
     m_pOKBT->Enable(!pSh->HasReadonlySel() &&
-        (!m_pEntryED->GetText().isEmpty() || pSh->GetCrsrCnt(sal_False)));
+        (!m_pEntryED->GetText().isEmpty() || pSh->GetCrsrCnt(false)));
     return 0;
 }
 
@@ -732,7 +732,7 @@ IMPL_LINK_NOARG_INLINE_END(SwIndexMarkPane, NextHdl)
 IMPL_LINK_NOARG_INLINE_START(SwIndexMarkPane, NextSameHdl)
 {
     InsertUpdate();
-    pTOXMgr->NextTOXMark(sal_True);
+    pTOXMgr->NextTOXMark(true);
     UpdateDialog();
     return 0;
 }
@@ -750,7 +750,7 @@ IMPL_LINK_NOARG_INLINE_END(SwIndexMarkPane, PrevHdl)
 IMPL_LINK_NOARG_INLINE_START(SwIndexMarkPane, PrevSameHdl)
 {
     InsertUpdate();
-    pTOXMgr->PrevTOXMark(sal_True);
+    pTOXMgr->PrevTOXMark(true);
     UpdateDialog();
 
     return 0;
@@ -759,9 +759,9 @@ IMPL_LINK_NOARG_INLINE_END(SwIndexMarkPane, PrevSameHdl)
 
 IMPL_LINK_NOARG(SwIndexMarkPane, DelHdl)
 {
-    bDel = sal_True;
+    bDel = true;
     InsertUpdate();
-    bDel = sal_False;
+    bDel = false;
 
     if(pTOXMgr->GetCurTOXMark())
         UpdateDialog();
@@ -790,18 +790,18 @@ void SwIndexMarkPane::UpdateDialog()
     m_pEntryED->SetText(aOrgStr);
 
     // set index type
-    sal_Bool bLevelEnable = sal_True,
-         bKeyEnable   = sal_False,
-         bKey2Enable  = sal_False,
-         bEntryHasText  = sal_False,
-         bKey1HasText   = sal_False,
-         bKey2HasText   = sal_False;
+    bool bLevelEnable = true,
+         bKeyEnable   = false,
+         bKey2Enable  = false,
+         bEntryHasText  = false,
+         bKey1HasText   = false,
+         bKey2HasText   = false;
 
     TOXTypes eCurType = pMark->GetTOXType()->GetType();
     if(TOX_INDEX == eCurType)
     {
-        bLevelEnable = sal_False;
-        bKeyEnable = sal_True;
+        bLevelEnable = false;
+        bKeyEnable = true;
         bKey1HasText = bKey2Enable = !pMark->GetPrimaryKey().isEmpty();
         bKey2HasText = !pMark->GetSecondaryKey().isEmpty();
         bEntryHasText = !pMark->GetText().isEmpty();
@@ -862,7 +862,7 @@ void SwIndexMarkPane::UpdateDialog()
         m_pNextSameBT->Enable( pMoveMark != pMark );
     }
 
-    sal_Bool bEnable = !pSh->HasReadonlySel();
+    bool bEnable = !pSh->HasReadonlySel();
     m_pOKBT->Enable( bEnable );
     m_pDelBT->Enable( bEnable );
     m_pEntryED->SetReadOnly( !bEnable );
@@ -904,21 +904,21 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
 {
     if (m_pKey1DCB == pBox)
     {
-        sal_Bool bEnable = !pBox->GetText().isEmpty();
+        bool bEnable = !pBox->GetText().isEmpty();
         if(!bEnable)
         {
             m_pKey2DCB->SetText(OUString());
             m_pPhoneticED1->SetText(OUString());
             m_pPhoneticED2->SetText(OUString());
-            bPhoneticED1_ChangedByUser = sal_False;
-            bPhoneticED2_ChangedByUser = sal_False;
+            bPhoneticED1_ChangedByUser = false;
+            bPhoneticED2_ChangedByUser = false;
         }
         else
         {
             if(pBox->IsInDropDown())
             {
                 //reset bPhoneticED1_ChangedByUser if a completely new string is selected
-                bPhoneticED1_ChangedByUser = sal_False;
+                bPhoneticED1_ChangedByUser = false;
             }
             if(!bPhoneticED1_ChangedByUser)
                 m_pPhoneticED1->SetText(GetDefaultPhoneticReading(pBox->GetText()));
@@ -931,14 +931,14 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
         if(pBox->GetText().isEmpty())
         {
             m_pPhoneticED2->SetText(OUString());
-            bPhoneticED2_ChangedByUser = sal_False;
+            bPhoneticED2_ChangedByUser = false;
         }
         else
         {
             if(pBox->IsInDropDown())
             {
                 //reset bPhoneticED1_ChangedByUser if a completely new string is selected
-                bPhoneticED2_ChangedByUser = sal_False;
+                bPhoneticED2_ChangedByUser = false;
             }
             if(!bPhoneticED2_ChangedByUser)
                 m_pPhoneticED2->SetText(GetDefaultPhoneticReading(pBox->GetText()));
@@ -983,7 +983,7 @@ void    SwIndexMarkPane::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark
 
 SwIndexMarkFloatDlg::SwIndexMarkFloatDlg(SfxBindings* _pBindings,
     SfxChildWindow* pChild, Window *pParent,
-    SfxChildWinInfo* pInfo, sal_Bool bNew)
+    SfxChildWinInfo* pInfo, bool bNew)
     : SfxModelessDialog(_pBindings, pChild, pParent, "IndexEntryDialog", "modules/swriter/ui/indexentry.ui")
     , m_aContent(*this, bNew, *::GetActiveWrtShell())
 {
@@ -1004,7 +1004,7 @@ void SwIndexMarkFloatDlg::ReInitDlg(SwWrtShell& rWrtShell)
 
 SwIndexMarkModalDlg::SwIndexMarkModalDlg(Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark)
     : SvxStandardDialog(pParent, "IndexEntryDialog", "modules/swriter/ui/indexentry.ui")
-    , m_aContent(*this, sal_False, rSh)
+    , m_aContent(*this, false, rSh)
 {
     m_aContent.ReInitDlg(rSh, pCurTOXMark);
 }
@@ -1027,8 +1027,8 @@ class SwCreateAuthEntryDlg_Impl : public ModalDialog
 
     SwWrtShell&     rWrtSh;
 
-    sal_Bool            m_bNewEntryMode;
-    sal_Bool            m_bNameAllowed;
+    bool            m_bNewEntryMode;
+    bool            m_bNameAllowed;
 
     DECL_LINK(IdentifierHdl, ComboBox*);
     DECL_LINK(ShortNameHdl, Edit*);
@@ -1038,7 +1038,7 @@ public:
     SwCreateAuthEntryDlg_Impl(Window* pParent,
                             const OUString pFields[],
                             SwWrtShell& rSh,
-                            sal_Bool bNewEntry,
+                            bool bNewEntry,
                             bool bCreate);
     virtual ~SwCreateAuthEntryDlg_Impl();
 
@@ -1089,12 +1089,12 @@ static const TextInfo aTextInfoArr[] =
     {AUTH_FIELD_CUSTOM5,         HID_AUTH_FIELD_CUSTOM5         }
 };
 
-sal_Bool SwAuthorMarkPane::bIsFromComponent = sal_True;
+bool SwAuthorMarkPane::bIsFromComponent = true;
 
-SwAuthorMarkPane::SwAuthorMarkPane(Dialog &rDialog, sal_Bool bNewDlg)
+SwAuthorMarkPane::SwAuthorMarkPane(Dialog &rDialog, bool bNewDlg)
     : m_rDialog(rDialog)
     , bNewEntry(bNewDlg)
-    , bBibAccessInitialized(sal_False)
+    , bBibAccessInitialized(false)
     , pSh(0)
 {
     m_rDialog.get(m_pFromComponentRB, "frombibliography");
@@ -1315,7 +1315,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
 
 IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
 {
-    sal_Bool bFromComp = (pButton == m_pFromComponentRB);
+    bool bFromComp = (pButton == m_pFromComponentRB);
     bIsFromComponent = bFromComp;
     m_pCreateEntryPB->Enable(!bIsFromComponent);
     m_pEntryLB->Clear();
@@ -1344,7 +1344,7 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
                     }
                 }
             }
-            bBibAccessInitialized = sal_True;
+            bBibAccessInitialized = true;
         }
         if(xBibAccess.is())
         {
@@ -1392,7 +1392,7 @@ IMPL_LINK(SwAuthorMarkPane, EditModifyHdl, Edit*, pEdit)
 IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit)
 {
     OUString sEntry = pEdit->GetText();
-    sal_Bool bAllowed = sal_False;
+    bool bAllowed = false;
     if(!sEntry.isEmpty())
     {
         if(m_pEntryLB->GetEntryPos(sEntry) != LISTBOX_ENTRY_NOTFOUND)
@@ -1408,7 +1408,7 @@ IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit)
             bAllowed = !xBibAccess.is() || !xBibAccess->hasByName(sEntry);
         }
     }
-    return bAllowed;
+    return bAllowed ? 1 : 0;
 }
 
 void SwAuthorMarkPane::InitControls()
@@ -1449,7 +1449,7 @@ void SwAuthorMarkPane::Activate()
 SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
         const OUString pFields[],
         SwWrtShell& rSh,
-        sal_Bool bNewEntry,
+        bool bNewEntry,
         bool bCreate)
     : ModalDialog(pParent, "CreateAuthorEntryDialog", "modules/swriter/ui/createauthorentry.ui")
 
@@ -1459,7 +1459,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
     pIdentifierBox(0),
     rWrtSh(rSh),
     m_bNewEntryMode(bNewEntry),
-    m_bNameAllowed(sal_True)
+    m_bNameAllowed(true)
 {
     get(m_pOKBT, "ok");
 
@@ -1619,7 +1619,7 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, Edit*, pEdit)
 {
     if(aShortNameCheckLink.IsSet())
     {
-        sal_Bool bEnable = 0 != aShortNameCheckLink.Call(pEdit);
+        bool bEnable = 0 != aShortNameCheckLink.Call(pEdit);
         m_bNameAllowed |= bEnable;
         m_pOKBT->Enable(pTypeListBox->GetSelectEntryCount() && bEnable);
     }
@@ -1635,8 +1635,8 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, ListBox*, pBox)
 SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
                                    SfxChildWindow* pChild,
                                    Window *pParent,
-                                SfxChildWinInfo* pInfo,
-                                   sal_Bool bNew)
+                                   SfxChildWinInfo* pInfo,
+                                   bool bNew)
     : SfxModelessDialog(_pBindings, pChild, pParent,
         "BibliographyEntryDialog", "modules/swriter/ui/bibliographyentry.ui")
     , m_aContent(*this, bNew)
@@ -1661,7 +1661,7 @@ void SwAuthMarkFloatDlg::ReInitDlg(SwWrtShell& rWrtShell)
 SwAuthMarkModalDlg::SwAuthMarkModalDlg(Window *pParent, SwWrtShell& rSh)
     : SvxStandardDialog(pParent, "BibliographyEntryDialog",
         "modules/swriter/ui/bibliographyentry.ui")
-    , m_aContent(*this, sal_False)
+    , m_aContent(*this, false)
 {
     m_aContent.ReInitDlg(rSh);
 }

@@ -41,7 +41,7 @@ class SwColumn
 public:
     SwColumn();
 
-    sal_Bool operator==( const SwColumn & ) const;
+    bool operator==( const SwColumn & ) const;
 
     void SetWishWidth( sal_uInt16 nNew ) { nWish  = nNew; }
     void SetUpper( sal_uInt16  nNew ) { nUpper = nNew; }
@@ -81,7 +81,7 @@ class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
     sal_uInt16  nWidth;                     ///< Total desired width of all columns.
     sal_Int16   aWidthAdjustValue;
 
-    sal_Bool bOrtho;            /**< Only if this flag is set, the setting of GutterWidth will
+    bool bOrtho;            /**< Only if this flag is set, the setting of GutterWidth will
                              be accompanied by a "visual rearrangement".
                              The flag must be reset if widths of columns or borders are changed.
                              When it is set (again) the visual arrangement is recalculated.
@@ -120,13 +120,13 @@ public:
     const Color&    GetLineColor() const { return aLineColor;}
 
     SwColLineAdj     GetLineAdj() const { return eAdj; }
-    sal_Bool             IsOrtho()    const { return bOrtho; }
+    bool             IsOrtho()    const { return bOrtho; }
     sal_uInt16           GetWishWidth() const { return nWidth; }
     sal_uInt8            GetLineHeight()const { return nLineHeight; }
 
     /** @return USHRT_MAX if ambiguous.
      @return smallest width if bMin is true. */
-    sal_uInt16 GetGutterWidth( sal_Bool bMin = sal_False ) const;
+    sal_uInt16 GetGutterWidth( bool bMin = false ) const;
 
     void SetLineStyle(editeng::SvxBorderStyle eStyle)        { eLineStyle = eStyle;}
     void SetLineWidth(sal_uLong nLWidth)        { nLineWidth = nLWidth;}
@@ -147,10 +147,10 @@ public:
 
     /** This too re-arranges columns automatically if flag is set.
      Only in this case the second parameter is needed and evaluated. */
-    void SetOrtho( sal_Bool bNew, sal_uInt16 nGutterWidth, sal_uInt16 nAct );
+    void SetOrtho( bool bNew, sal_uInt16 nGutterWidth, sal_uInt16 nAct );
 
     /// For the reader
-    void _SetOrtho( sal_Bool bNew ) { bOrtho = bNew; }
+    void _SetOrtho( bool bNew ) { bOrtho = bNew; }
 
     /** Calculates current width of column nCol.
      The ratio of desired width of this column to return value is
@@ -162,10 +162,10 @@ public:
     sal_uInt16 CalcPrtColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const;
 };
 
-inline const SwFmtCol &SwAttrSet::GetCol(sal_Bool bInP) const
+inline const SwFmtCol &SwAttrSet::GetCol(bool bInP) const
     { return (const SwFmtCol&)Get( RES_COL,bInP); }
 
-inline const SwFmtCol &SwFmt::GetCol(sal_Bool bInP) const
+inline const SwFmtCol &SwFmt::GetCol(bool bInP) const
     { return aSet.GetCol(bInP); }
 
 #endif

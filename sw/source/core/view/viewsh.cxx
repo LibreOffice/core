@@ -77,7 +77,7 @@
 #include <vcl/sysdata.hxx>
 #endif
 
-sal_Bool SwViewShell::mbLstAct = sal_False;
+bool SwViewShell::mbLstAct = false;
 ShellResource *SwViewShell::mpShellRes = 0;
 Window *SwViewShell::mpCareWindow = 0;
 BitmapEx* SwViewShell::mpErrorBmp = NULL;
@@ -202,26 +202,26 @@ void SwViewShell::DLPostPaint2(bool bPaintFormLayer)
 }
 // end of Pre/PostPaints
 
-void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
+void SwViewShell::ImplEndAction( const bool bIdleEnd )
 {
     // Nothing to do for the printer?
     if ( !GetWin() || IsPreview() )
     {
-        mbPaintWorks = sal_True;
+        mbPaintWorks = true;
         UISizeNotify();
         return;
     }
 
-    mbInEndAction = sal_True;
+    mbInEndAction = true;
     //will this put the EndAction of the last shell in the sequence?
 
-    SwViewShell::mbLstAct = sal_True;
+    SwViewShell::mbLstAct = true;
     SwViewShell *pSh = (SwViewShell*)this->GetNext();
     while ( pSh != this )
     {
         if ( pSh->ActionPend() )
         {
-            SwViewShell::mbLstAct = sal_False;
+            SwViewShell::mbLstAct = false;
             pSh = this;
         }
         else
@@ -242,9 +242,9 @@ void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
     if ( !bIdleEnd )
     {
         SwLayAction aAction( GetLayout(), Imp() );
-        aAction.SetComplete( sal_False );
+        aAction.SetComplete( false );
         if ( mnLockPaint )
-            aAction.SetPaint( sal_False );
+            aAction.SetPaint( false );
         aAction.SetInputType( VCL_INPUT_KEYBOARD );
         aAction.Action();
     }
@@ -262,7 +262,7 @@ void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
         {
             SolarMutexGuard aGuard;
 
-            sal_Bool bPaintsFromSystem = maInvalidRect.HasArea();
+            bool bPaintsFromSystem = maInvalidRect.HasArea();
             GetWin()->Update();
             if ( maInvalidRect.HasArea() )
             {
@@ -270,9 +270,9 @@ void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
                     Imp()->AddPaintRect( maInvalidRect );
 
                 ResetInvalidRect();
-                bPaintsFromSystem = sal_True;
+                bPaintsFromSystem = true;
             }
-            mbPaintWorks = sal_True;
+            mbPaintWorks = true;
 
             SwRegionRects *pRegion = Imp()->GetRegion();
 
@@ -311,7 +311,7 @@ void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
                         MapMode aMapMode( GetOut()->GetMapMode() );
                         pVout->SetMapMode( aMapMode );
 
-                        sal_Bool bSizeOK = sal_True;
+                        bool bSizeOK = true;
 
                         Rectangle aTmp1( aRect.SVRect() );
                         aTmp1 = GetOut()->LogicToPixel( aTmp1 );
@@ -387,19 +387,19 @@ void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
                 Imp()->DelRegion();
             }
             if( bShowCrsr )
-                ((SwCrsrShell*)this)->ShowCrsrs( sal_True );
+                ((SwCrsrShell*)this)->ShowCrsrs( true );
         }
         else
         {
             Imp()->DelRegion();
-            mbPaintWorks =  sal_True;
+            mbPaintWorks =  true;
         }
     }
     else
-        mbPaintWorks = sal_True;
+        mbPaintWorks = true;
 
-    mbInEndAction = sal_False;
-    SwViewShell::mbLstAct = sal_False;
+    mbInEndAction = false;
+    SwViewShell::mbLstAct = false;
     Imp()->EndAction();
 
     //We artificially end the action here to enable the automatic scrollbars
@@ -416,7 +416,7 @@ void SwViewShell::ImplEndAction( const sal_Bool bIdleEnd )
 
 void SwViewShell::ImplStartAction()
 {
-    mbPaintWorks = sal_False;
+    mbPaintWorks = false;
     Imp()->StartAction();
 }
 
@@ -427,7 +427,7 @@ void SwViewShell::ImplLockPaint()
     Imp()->LockPaint();
 }
 
-void SwViewShell::ImplUnlockPaint( sal_Bool bVirDev )
+void SwViewShell::ImplUnlockPaint( bool bVirDev )
 {
     SET_CURR_SHELL( this );
     if ( GetWin() && GetWin()->IsVisible() )
@@ -484,7 +484,7 @@ void SwViewShell::ImplUnlockPaint( sal_Bool bVirDev )
         Imp()->UnlockPaint();
 }
 
-sal_Bool SwViewShell::AddPaintRect( const SwRect & rRect )
+bool SwViewShell::AddPaintRect( const SwRect & rRect )
 {
     bool bRet = false;
     SwViewShell *pSh = this;
@@ -580,9 +580,9 @@ sal_uInt16 SwViewShell::GetNumPages()
     return GetLayout() ? GetLayout()->GetPageNum() : 0;
 }
 
-sal_Bool SwViewShell::IsDummyPage( sal_uInt16 nPageNum ) const
+bool SwViewShell::IsDummyPage( sal_uInt16 nPageNum ) const
 {
-    return GetLayout() ? GetLayout()->IsDummyPage( nPageNum ) : 0;
+    return GetLayout() && GetLayout()->IsDummyPage( nPageNum );
 }
 
 /**
@@ -591,11 +591,11 @@ sal_Bool SwViewShell::IsDummyPage( sal_uInt16 nPageNum ) const
  * type is sent (???).
  * @param[in] bCloseDB Passed in to GetDoc()->UpdateFlds. [TODO] Purpose???
  */
-void SwViewShell::UpdateFlds(sal_Bool bCloseDB)
+void SwViewShell::UpdateFlds(bool bCloseDB)
 {
     SET_CURR_SHELL( this );
 
-    sal_Bool bCrsr = ISA(SwCrsrShell);
+    bool bCrsr = ISA(SwCrsrShell);
     if ( bCrsr )
         ((SwCrsrShell*)this)->StartAction();
     else
@@ -617,9 +617,9 @@ void SwViewShell::UpdateAllCharts()
     GetDoc()->UpdateAllCharts();
 }
 
-sal_Bool SwViewShell::HasCharts() const
+bool SwViewShell::HasCharts() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwNodeIndex aIdx( *GetDoc()->GetNodes().GetEndOfAutotext().
                         StartOfSectionNode(), 1 );
     while (aIdx.GetNode().GetStartNode())
@@ -628,7 +628,7 @@ sal_Bool SwViewShell::HasCharts() const
         const SwOLENode *pNd = aIdx.GetNode().GetOLENode();
         if( pNd && !pNd->GetChartTblName().isEmpty() )
         {
-            bRet = sal_True;
+            bRet = true;
             break;
         }
     }
@@ -674,7 +674,7 @@ void SwViewShell::LayoutIdle()
 
 static void lcl_InvalidateAllCntnt( SwViewShell& rSh, sal_uInt8 nInv )
 {
-    sal_Bool bCrsr = rSh.ISA(SwCrsrShell);
+    bool bCrsr = rSh.ISA(SwCrsrShell);
     if ( bCrsr )
         ((SwCrsrShell&)rSh).StartAction();
     else
@@ -904,10 +904,10 @@ void SwViewShell::CalcLayout()
     }
 
     SwLayAction aAction( GetLayout(), Imp() );
-    aAction.SetPaint( sal_False );
-    aAction.SetStatBar( sal_True );
-    aAction.SetCalcLayout( sal_True );
-    aAction.SetReschedule( sal_True );
+    aAction.SetPaint( false );
+    aAction.SetStatBar( true );
+    aAction.SetCalcLayout( true );
+    aAction.SetReschedule( true );
     GetDoc()->LockExpFlds();
     aAction.Action();
     GetDoc()->UnlockExpFlds();
@@ -917,9 +917,9 @@ void SwViewShell::CalcLayout()
     if ( aAction.IsExpFlds() )
     {
         aAction.Reset();
-        aAction.SetPaint( sal_False );
-        aAction.SetStatBar( sal_True );
-        aAction.SetReschedule( sal_True );
+        aAction.SetPaint( false );
+        aAction.SetStatBar( true );
+        aAction.SetReschedule( true );
 
         SwDocPosUpdate aMsgHnt( 0 );
         GetDoc()->UpdatePageFlds( &aMsgHnt );
@@ -949,14 +949,14 @@ void SwViewShell::SetFirstVisPageInvalid()
 void SwViewShell::SizeChgNotify()
 {
     if ( !mpWin )
-        mbDocSizeChgd = sal_True;
+        mbDocSizeChgd = true;
     else if( ActionPend() || Imp()->IsCalcLayoutProgress() || mbPaintInProgress )
     {
-        mbDocSizeChgd = sal_True;
+        mbDocSizeChgd = true;
 
         if ( !Imp()->IsCalcLayoutProgress() && ISA( SwCrsrShell ) )
         {
-            const SwFrm *pCnt = ((SwCrsrShell*)this)->GetCurrFrm( sal_False );
+            const SwFrm *pCnt = ((SwCrsrShell*)this)->GetCurrFrm( false );
             const SwPageFrm *pPage;
             if ( pCnt && 0 != (pPage = pCnt->FindPageFrm()) )
             {
@@ -969,7 +969,7 @@ void SwViewShell::SizeChgNotify()
     }
     else
     {
-        mbDocSizeChgd = sal_False;
+        mbDocSizeChgd = false;
         ::SizeNotify( this, GetDocSize() );
     }
 }
@@ -994,7 +994,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
     const SwFrm *pOldPage = Imp()->GetFirstVisPage();
 
     const SwRect aPrevArea( VisArea() );
-    const sal_Bool bFull = aPrevArea.IsEmpty();
+    const bool bFull = aPrevArea.IsEmpty();
     maVisArea = rRect;
     SetFirstVisPageInvalid();
 
@@ -1144,7 +1144,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
         Imp()->UpdateAccessible();
 }
 
-sal_Bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
+bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
 {
 #if !defined(MACOSX) && !defined(ANDROID) && !defined(IOS)
     // #i98766# - disable smooth scrolling for Mac
@@ -1237,9 +1237,9 @@ sal_Bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *p
 
                 // SW paint stuff
                 PaintDesktop( aRect );
-                SwViewShell::mbLstAct = sal_True;
+                SwViewShell::mbLstAct = true;
                 GetLayout()->Paint( aRect );
-                SwViewShell::mbLstAct = sal_False;
+                SwViewShell::mbLstAct = false;
 
                 // end paint and destroy ObjectContact again
                 DLPostPaint2(true);
@@ -1362,7 +1362,7 @@ sal_Bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *p
             if ( !Imp()->bStopSmooth )
                 --mnLockPaint;
             SetFirstVisPageInvalid();
-            return sal_True;
+            return true;
         }
         delete pVout;
     }
@@ -1374,7 +1374,7 @@ sal_Bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *p
         GetWin()->Scroll( lXDiff, lYDiff, *pRect, SCROLL_CHILDREN);
     else
         GetWin()->Scroll( lXDiff, lYDiff, SCROLL_CHILDREN);
-    return sal_False;
+    return false;
 }
 
 void SwViewShell::PaintDesktop( const SwRect &rRect )
@@ -1510,20 +1510,20 @@ void SwViewShell::_PaintDesktop( const SwRegionRects &rRegion )
     GetOut()->Pop();
 }
 
-sal_Bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
+bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
 {
     if ( !GetWin() )
-        return sal_False;
+        return false;
 
     const SwPageFrm *pPage = Imp()->GetFirstVisPage();
     const SwTwips nBottom = VisArea().Bottom();
     const SwTwips nRight  = VisArea().Right();
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     while ( !bRet && pPage && !((pPage->Frm().Top()  > nBottom) ||
                                    (pPage->Frm().Left() > nRight)))
     {
         if ( pPage->IsInvalid() || pPage->IsInvalidFly() )
-            bRet = sal_True;
+            bRet = true;
         pPage = (SwPageFrm*)pPage->GetNext();
     }
 
@@ -1536,7 +1536,7 @@ sal_Bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
              Imp()->DelRegion();
 
         SwLayAction aAction( GetLayout(), Imp() );
-        aAction.SetComplete( sal_False );
+        aAction.SetComplete( false );
         // We increment the action counter to avoid a recursive call of actions
         // e.g. from a SwFEShell::RequestObjectResize(..) in bug 95829.
         // A recursive call of actions is no good idea because the inner action
@@ -1550,11 +1550,11 @@ sal_Bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
         if ( pRegion && aAction.IsBrowseActionStop() )
         {
             //only of interest when something has changed in the visible range
-            sal_Bool bStop = sal_True;
+            bool bStop = true;
             for ( sal_uInt16 i = 0; i < pRegion->size(); ++i )
             {
                 const SwRect &rTmp = (*pRegion)[i];
-                if ( sal_False == (bStop = rTmp.IsOver( VisArea() )) )
+                if ( false == (bStop = rTmp.IsOver( VisArea() )) )
                     break;
             }
             if ( bStop )
@@ -1569,7 +1569,7 @@ sal_Bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
             //First Invert then Compress, never the other way round!
             pRegion->Invert();
             pRegion->Compress();
-            bRet = sal_False;
+            bRet = false;
             if ( !pRegion->empty() )
             {
                 SwRegionRects aRegion( rRect );
@@ -1580,7 +1580,7 @@ sal_Bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
                         InvalidateWindows( rTmp );
                         if ( rTmp.IsOver( VisArea() ) )
                         {   aRegion -= rTmp;
-                            bRet = sal_True;
+                            bRet = true;
                         }
                     }
                 }
@@ -1602,11 +1602,11 @@ sal_Bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
                 }
             }
             else
-                bRet = sal_False;
+                bRet = false;
             Imp()->DelRegion();
         }
         else
-            bRet = sal_False;
+            bRet = false;
     }
     return bRet;
 }
@@ -1650,9 +1650,9 @@ void SwViewShell::Paint(const Rectangle &rRect)
                 return;
             }
 
-            mbPaintInProgress = sal_True;
+            mbPaintInProgress = true;
             SET_CURR_SHELL( this );
-            SwRootFrm::SetNoVirDev( sal_True );
+            SwRootFrm::SetNoVirDev( true );
 
             //We don't want to Clip to and fro, we trust that all are limited
             //to the rectangle and only need to calculate the clipping once.
@@ -1667,9 +1667,9 @@ void SwViewShell::Paint(const Rectangle &rRect)
                 //When useful, process or destroy the old InvalidRect.
                 if ( aRect.IsInside( maInvalidRect ) )
                     ResetInvalidRect();
-                SwViewShell::mbLstAct = sal_True;
+                SwViewShell::mbLstAct = true;
                 GetLayout()->Paint( aRect );
-                SwViewShell::mbLstAct = sal_False;
+                SwViewShell::mbLstAct = false;
             }
             else
             {
@@ -1688,17 +1688,17 @@ void SwViewShell::Paint(const Rectangle &rRect)
                     //When useful, process or destroy the old InvalidRect.
                     if ( aRect.IsInside( maInvalidRect ) )
                         ResetInvalidRect();
-                    SwViewShell::mbLstAct = sal_True;
+                    SwViewShell::mbLstAct = true;
                     GetLayout()->Paint( aRect );
-                    SwViewShell::mbLstAct = sal_False;
+                    SwViewShell::mbLstAct = false;
                     // --> OD 2009-08-12 #i101192#
                     // end Pre/PostPaint encapsulation
                     DLPostPaint2(true);
                     // <--
                 }
             }
-            SwRootFrm::SetNoVirDev( sal_False );
-            mbPaintInProgress = sal_False;
+            SwRootFrm::SetNoVirDev( false );
+            mbPaintInProgress = false;
             UISizeNotify();
         }
     }
@@ -1901,7 +1901,7 @@ void SwViewShell::SetBrowseBorder( const Size& rNew )
     {
         maBrowseBorder = rNew;
         if ( maVisArea.HasArea() )
-            CheckBrowseView( sal_False );
+            CheckBrowseView( false );
     }
 }
 
@@ -1924,7 +1924,7 @@ sal_Int32 SwViewShell::GetBrowseWidth() const
         return maVisArea.Width() - 2 * GetOut()->PixelToLogic(maBrowseBorder).Width();
 }
 
-void SwViewShell::CheckBrowseView( sal_Bool bBrowseChgd )
+void SwViewShell::CheckBrowseView( bool bBrowseChgd )
 {
     if ( !bBrowseChgd && !GetViewOptions()->getBrowseMode() )
         return;
@@ -2077,13 +2077,13 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
     SET_CURR_SHELL( this );
 
-    sal_Bool bReformat   = sal_False;
+    bool bReformat   = false;
 
     if( mpOpt->IsShowHiddenField() != rOpt.IsShowHiddenField() )
     {
         ((SwHiddenTxtFieldType*)mpDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
                                             SetHiddenFlag( !rOpt.IsShowHiddenField() );
-        bReformat = sal_True;
+        bReformat = true;
     }
     if ( mpOpt->IsShowHiddenPara() != rOpt.IsShowHiddenPara() )
     {
@@ -2094,7 +2094,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
             SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
             pFldType->ModifyNotification( &aHnt, 0);
         }
-        bReformat = sal_True;
+        bReformat = true;
     }
     if ( !bReformat && mpOpt->IsShowHiddenChar() != rOpt.IsShowHiddenChar() )
     {
@@ -2118,17 +2118,17 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         // if not a reference device (printer) is used for formatting,
         // but the screen, new formatting is needed for zoomfactor changes.
         if( mpOpt->getBrowseMode() )
-            bReformat = sal_True;
+            bReformat = true;
     }
 
     bool bBrowseModeChanged = false;
     if( mpOpt->getBrowseMode() != rOpt.getBrowseMode() )
     {
         bBrowseModeChanged = true;
-        bReformat = sal_True;
+        bReformat = true;
     }
     else if( mpOpt->getBrowseMode() && mpOpt->IsPrtFormat() != rOpt.IsPrtFormat() )
-        bReformat = sal_True;
+        bReformat = true;
 
     if ( HasDrawView() || rOpt.IsGridVisible() )
     {
@@ -2136,13 +2136,13 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
             MakeDrawView();
 
         SwDrawView *pDView = Imp()->GetDrawView();
-        if ( (pDView->IsDragStripes() ? 1 : 0) != rOpt.IsCrossHair() )
+        if ( pDView->IsDragStripes() != rOpt.IsCrossHair() )
             pDView->SetDragStripes( rOpt.IsCrossHair() );
 
-        if ( (pDView->IsGridSnap() ? 1 : 0) != rOpt.IsSnap() )
+        if ( pDView->IsGridSnap() != rOpt.IsSnap() )
             pDView->SetGridSnap( rOpt.IsSnap() );
 
-        if ( (pDView->IsGridVisible() ? 1 : 0) != rOpt.IsGridVisible() )
+        if ( pDView->IsGridVisible() != rOpt.IsGridVisible() )
             pDView->SetGridVisible( rOpt.IsGridVisible() );
 
         const Size &rSz = rOpt.GetSnapSize();
@@ -2172,7 +2172,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         // #i44963# Good occasion to check if page sizes in
         // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
         mpDoc->CheckDefaultPageFmt();
-        CheckBrowseView( sal_True );
+        CheckBrowseView( true );
     }
 
     pMyWin->Invalidate();
@@ -2188,7 +2188,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     if( bOnlineSpellChgd )
     {
         SwViewShell *pSh = (SwViewShell*)this->GetNext();
-        sal_Bool bOnlineSpl = rOpt.IsOnlineSpell();
+        bool bOnlineSpl = rOpt.IsOnlineSpell();
         while( pSh != this )
         {   pSh->mpOpt->SetOnlineSpell( bOnlineSpl );
             Window *pTmpWin = pSh->GetWin();
@@ -2206,12 +2206,12 @@ void SwViewShell::SetUIOptions( const SwViewOption &rOpt )
     //the API-Flag of the view options is set but never reset
     //it is required to set scroll bars in readonly documents
     if(rOpt.IsStarOneSetting())
-        mpOpt->SetStarOneSetting(sal_True);
+        mpOpt->SetStarOneSetting(true);
 
     mpOpt->SetSymbolFont(rOpt.GetSymbolFont());
 }
 
-void SwViewShell::SetReadonlyOption(sal_Bool bSet)
+void SwViewShell::SetReadonlyOption(bool bSet)
 {
     //JP 01.02.99: at readonly flag query properly
     //              and if need be format; Bug 61335
@@ -2220,9 +2220,9 @@ void SwViewShell::SetReadonlyOption(sal_Bool bSet)
     if( bSet != mpOpt->IsReadonly() )
     {
         // so that the flags can be queried properly.
-        mpOpt->SetReadonly( sal_False );
+        mpOpt->SetReadonly( false );
 
-        sal_Bool bReformat = mpOpt->IsFldName();
+        bool bReformat = mpOpt->IsFldName();
 
         mpOpt->SetReadonly( bSet );
 
@@ -2241,17 +2241,17 @@ void SwViewShell::SetReadonlyOption(sal_Bool bSet)
     }
 }
 
-void  SwViewShell::SetPDFExportOption(sal_Bool bSet)
+void  SwViewShell::SetPDFExportOption(bool bSet)
 {
     if( bSet != mpOpt->IsPDFExport() )
     {
         if( bSet && mpOpt->getBrowseMode() )
-            mpOpt->SetPrtFormat( sal_True );
+            mpOpt->SetPrtFormat( true );
         mpOpt->SetPDFExport(bSet);
     }
 }
 
-void  SwViewShell::SetReadonlySelectionOption(sal_Bool bSet)
+void  SwViewShell::SetReadonlySelectionOption(bool bSet)
 {
     if( bSet != mpOpt->IsSelectionInReadonly() )
     {
@@ -2259,7 +2259,7 @@ void  SwViewShell::SetReadonlySelectionOption(sal_Bool bSet)
     }
 }
 
-void SwViewShell::SetPrtFormatOption( sal_Bool bSet )
+void SwViewShell::SetPrtFormatOption( bool bSet )
 {
     mpOpt->SetPrtFormat( bSet );
 }
@@ -2268,7 +2268,7 @@ void SwViewShell::UISizeNotify()
 {
     if ( mbDocSizeChgd )
     {
-        mbDocSizeChgd = sal_False;
+        mbDocSizeChgd = false;
         bool bOld = bInSizeNotify;
         bInSizeNotify = true;
         ::SizeNotify( this, GetDocSize() );
@@ -2286,7 +2286,7 @@ sal_uInt16  SwViewShell::GetRestoreActions() const
     return Imp()->GetRestoreActions();
 }
 
-sal_Bool SwViewShell::IsNewLayout() const
+bool SwViewShell::IsNewLayout() const
 {
     return GetLayout()->IsNewLayout();
 }
@@ -2380,9 +2380,9 @@ void SwViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibili
 {
     if(mpOpt->IsPagePreview() && !rAccessibilityOptions.GetIsForPagePreviews())
     {
-        mpAccOptions->SetAlwaysAutoColor(sal_False);
-        mpAccOptions->SetStopAnimatedGraphics(sal_False);
-        mpAccOptions->SetStopAnimatedText(sal_False);
+        mpAccOptions->SetAlwaysAutoColor(false);
+        mpAccOptions->SetStopAnimatedGraphics(false);
+        mpAccOptions->SetStopAnimatedText(false);
     }
     else
     {

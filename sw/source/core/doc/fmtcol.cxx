@@ -58,7 +58,7 @@ namespace TxtFmtCollFunc
         {
             if ( !pNewNumRuleItem )
             {
-                pTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, sal_False, (const SfxPoolItem**)&pNewNumRuleItem );
+                pTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, false, (const SfxPoolItem**)&pNewNumRuleItem );
             }
             if ( pNewNumRuleItem )
             {
@@ -78,7 +78,7 @@ namespace TxtFmtCollFunc
         SwNumRule* pNumRule( 0 );
 
         const SwNumRuleItem* pNumRuleItem( 0 );
-        rTxtFmtColl.GetItemState( RES_PARATR_NUMRULE, sal_False, (const SfxPoolItem**)&pNumRuleItem );
+        rTxtFmtColl.GetItemState( RES_PARATR_NUMRULE, false, (const SfxPoolItem**)&pNumRuleItem );
         if ( pNumRuleItem )
         {
             const OUString sNumRuleName = pNumRuleItem->GetValue();
@@ -206,7 +206,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     bool bContinue = true;
 
     // Check against the own attributes
-    if( pNewLRSpace && SFX_ITEM_SET == GetItemState( RES_LR_SPACE, sal_False,
+    if( pNewLRSpace && SFX_ITEM_SET == GetItemState( RES_LR_SPACE, false,
                                         (const SfxPoolItem**)&pOldLRSpace ))
     {
         bool bChg = false;
@@ -248,7 +248,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 
     if( pNewULSpace && SFX_ITEM_SET == GetItemState(
-            RES_UL_SPACE, sal_False, (const SfxPoolItem**)&pOldULSpace ) &&
+            RES_UL_SPACE, false, (const SfxPoolItem**)&pOldULSpace ) &&
         pOldULSpace != pNewULSpace )    // Avoid recursion (SetAttr!)
     {
         SvxULSpaceItem aNew( *pOldULSpace );
@@ -283,7 +283,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     {
         SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
         if( pFSize && SFX_ITEM_SET == GetItemState(
-            pFSize->Which(), sal_False, (const SfxPoolItem**)&pOldFSize ) &&
+            pFSize->Which(), false, (const SfxPoolItem**)&pOldFSize ) &&
             // Avoid recursion (SetAttr!)
             pFSize != pOldFSize )
         {
@@ -419,12 +419,12 @@ bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
         // no list style applied to paragraph style
         bAreListLevelIndentsApplicable = false;
     }
-    else if ( GetItemState( RES_LR_SPACE, sal_False ) == SFX_ITEM_SET )
+    else if ( GetItemState( RES_LR_SPACE, false ) == SFX_ITEM_SET )
     {
         // paragraph style has hard-set indent attributes
         bAreListLevelIndentsApplicable = false;
     }
-    else if ( GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_SET )
+    else if ( GetItemState( RES_PARATR_NUMRULE, false ) == SFX_ITEM_SET )
     {
         // list style is directly applied to paragraph style and paragraph
         // style has no hard-set indent attributes
@@ -522,7 +522,7 @@ bool SwCollCondition::operator==( const SwCollCondition& rCmp ) const
                 if( pColl )
                 {
                     SwCalc aCalc( *pColl->GetDoc() );
-                    nRet = 0 != aCalc.Calculate( *pTmp ).GetBool();
+                    nRet = aCalc.Calculate( *pTmp ).GetBool();
                 }
             }
         }
@@ -638,12 +638,12 @@ void SwTxtFmtColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
     {
         if ( !pDerivedTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_DEFAULT )
+            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, false ) == SFX_ITEM_DEFAULT )
             {
                 SwNumRuleItem aItem(aEmptyOUStr);
                 pDerivedTxtFmtColl->SetFmtAttr( aItem );
             }
-            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_OUTLINELEVEL, sal_False ) == SFX_ITEM_DEFAULT )
+            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_OUTLINELEVEL, false ) == SFX_ITEM_DEFAULT )
             {
                 pDerivedTxtFmtColl->SetAttrOutlineLevel( 0 );
             }

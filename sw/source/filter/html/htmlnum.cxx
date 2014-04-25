@@ -41,7 +41,7 @@ void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
     {
         pNumRule = 0;
         nDeep = 0;
-        bNumbered = bRestart = sal_False;
+        bNumbered = bRestart = false;
     }
 }
 

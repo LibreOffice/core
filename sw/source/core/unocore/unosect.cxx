@@ -248,7 +248,7 @@ SwXTextSection::getChildSections() throw (uno::RuntimeException, std::exception)
     SwSectionFmt & rSectionFmt( m_pImpl->GetSectionFmtOrThrow() );
 
     SwSections aChildren;
-    rSectionFmt.GetChildSections(aChildren, SORTSECT_NOT, sal_False);
+    rSectionFmt.GetChildSections(aChildren, SORTSECT_NOT, false);
     uno::Sequence<uno::Reference<text::XTextSection> > aSeq(aChildren.size());
     uno::Reference< text::XTextSection > * pArray = aSeq.getArray();
     for (sal_uInt16 i = 0; i < aChildren.size(); i++)
@@ -573,7 +573,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     ::std::auto_ptr<SfxItemSet> pItemSet;
     SAL_WNODEPRECATED_DECLARATIONS_POP
     bool bLinkModeChanged = false;
-    sal_Bool bLinkMode = sal_False;
+    bool bLinkMode = false;
 
     for (sal_Int32 nProperty = 0; nProperty < rPropertyNames.getLength();
          nProperty++)
@@ -648,7 +648,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             break;
             case WID_SECT_DDE_AUTOUPDATE:
             {
-                sal_Bool bVal(sal_False);
+                bool bVal(false);
                 if (!(pValues[nProperty] >>= bVal))
                 {
                     throw lang::IllegalArgumentException();
@@ -740,7 +740,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             break;
             case WID_SECT_VISIBLE:
             {
-                sal_Bool bVal(sal_False);
+                bool bVal(false);
                 if (!(pValues[nProperty] >>= bVal))
                 {
                     throw lang::IllegalArgumentException();
@@ -757,7 +757,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             break;
             case WID_SECT_CURRENTLY_VISIBLE:
             {
-                sal_Bool bVal(sal_False);
+                bool bVal(false);
                 if (!(pValues[nProperty] >>= bVal))
                 {
                     throw lang::IllegalArgumentException();
@@ -777,7 +777,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             break;
             case WID_SECT_PROTECTED:
             {
-                sal_Bool bVal(sal_False);
+                bool bVal(false);
                 if (!(pValues[nProperty] >>= bVal))
                 {
                     throw lang::IllegalArgumentException();
@@ -794,7 +794,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             break;
             case WID_SECT_EDIT_IN_READONLY:
             {
-                sal_Bool bVal(sal_False);
+                bool bVal(false);
                 if (!(pValues[nProperty] >>= bVal))
                 {
                     throw lang::IllegalArgumentException();
@@ -884,7 +884,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                         if (!m_pProps->m_pNoBalanceItem.get())
                         {
                             m_pProps->m_pNoBalanceItem.reset(
-                                new SwFmtNoBalancedColumns(RES_COLUMNBALANCE));
+                                new SwFmtNoBalancedColumns(true));
                         }
                         pPutItem = m_pProps->m_pNoBalanceItem.get();
                     }
@@ -1026,7 +1026,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 // GetUpdateType() returns .._ALWAYS or .._ONCALL
                 if (pSect && pSect->IsLinkType() && pSect->IsConnected())  // #i73247#
                 {
-                    const sal_Bool bTemp =
+                    const bool bTemp =
                         (pSect->GetUpdateType() == sfx2::LINKUPDATE_ALWAYS);
                     pRet[nProperty] <<= bTemp;
                 }
@@ -1072,28 +1072,28 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_SECT_VISIBLE   :
             {
-                const sal_Bool bTemp = (m_bIsDescriptor)
+                const bool bTemp = (m_bIsDescriptor)
                     ? !m_pProps->m_bHidden : !pSect->IsHidden();
                 pRet[nProperty] <<= bTemp;
             }
             break;
             case WID_SECT_CURRENTLY_VISIBLE:
             {
-                const sal_Bool bTemp = (m_bIsDescriptor)
+                const bool bTemp = (m_bIsDescriptor)
                     ? !m_pProps->m_bCondHidden : !pSect->IsCondHidden();
                 pRet[nProperty] <<= bTemp;
             }
             break;
             case WID_SECT_PROTECTED:
             {
-                const sal_Bool bTemp = (m_bIsDescriptor)
+                const bool bTemp = (m_bIsDescriptor)
                     ? m_pProps->m_bProtect : pSect->IsProtect();
                 pRet[nProperty] <<= bTemp;
             }
             break;
             case WID_SECT_EDIT_IN_READONLY:
             {
-                const sal_Bool bTemp = (m_bIsDescriptor)
+                const bool bTemp = (m_bIsDescriptor)
                     ? m_pProps->m_bEditInReadonly : pSect->IsEditInReadonly();
                 pRet[nProperty] <<= bTemp;
             }
@@ -1131,8 +1131,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_SECT_IS_GLOBAL_DOC_SECTION:
             {
-                const sal_Bool bRet = (NULL == pFmt) ? sal_False :
-                    static_cast<sal_Bool>(NULL != pFmt->GetGlobalDocSection());
+                const bool bRet = pFmt && (NULL != pFmt->GetGlobalDocSection());
                 pRet[nProperty] <<= bRet;
             }
             break;

@@ -60,9 +60,9 @@ SwTableRep::SwTableRep( const SwTabCols& rTabCol )
     nRightSpace(0),
     nAlign(0),
     nWidthPercent(0),
-    bLineSelected(sal_False),
-    bWidthChanged(sal_False),
-    bColsChanged(sal_False)
+    bLineSelected(false),
+    bWidthChanged(false),
+    bColsChanged(false)
 {
     nAllCols = nColCount = rTabCol.Count();
     pTColumns = new TColumn[ nColCount + 1 ];
@@ -78,7 +78,7 @@ SwTableRep::SwTableRep( const SwTabCols& rTabCol )
         nStart = nEnd;
     }
     pTColumns[ nAllCols ].nWidth = rTabCol.GetRight() - rTabCol.GetLeft() - nStart;
-    pTColumns[ nAllCols ].bVisible = sal_True;
+    pTColumns[ nAllCols ].bVisible = true;
     nColCount++;
     nAllCols++;
 }
@@ -88,17 +88,17 @@ SwTableRep::~SwTableRep()
     delete[] pTColumns;
 }
 
-sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
+bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
 {
     long nOldLeft = rTabCols.GetLeft(),
          nOldRight = rTabCols.GetRight();
 
-    sal_Bool bSingleLine = sal_False;
+    bool bSingleLine = false;
 
     for ( size_t i = 0; i < rTabCols.Count(); ++i )
         if(!pTColumns[i].bVisible)
         {
-            bSingleLine = sal_True;
+            bSingleLine = true;
             break;
         }
 
@@ -121,13 +121,13 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
             nStart = nEnd;
         }
         pOldTColumns[nAllCols - 1].nWidth = rTabCols.GetRight() - rTabCols.GetLeft() - nStart;
-        pOldTColumns[nAllCols - 1].bVisible = sal_True;
+        pOldTColumns[nAllCols - 1].bVisible = true;
 
         sal_uInt16 nOldPos = 0;
         sal_uInt16 nNewPos = 0;
         SwTwips nOld = 0;
         SwTwips nNew = 0;
-        sal_Bool bOld = sal_False;
+        bool bOld = false;
         bool bFirst = true;
         i = 0;
 

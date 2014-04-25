@@ -94,7 +94,7 @@ SwEnvItem::SwEnvItem() :
     SfxPoolItem(FN_ENVELOP)
 {
     aAddrText       = aEmptyOUStr;
-    bSend           = sal_True;
+    bSend           = true;
     aSendText       = MakeSender();
     lSendFromLeft   = 566; // 1 cm
     lSendFromTop    = 566; // 1 cm
@@ -102,7 +102,7 @@ SwEnvItem::SwEnvItem() :
     lWidth          = aEnvSz.Width();
     lHeight         = aEnvSz.Height();
     eAlign          = ENV_HOR_LEFT;
-    bPrintFromAbove = sal_True;
+    bPrintFromAbove = true;
     lShiftRight     = 0;
     lShiftDown      = 0;
 

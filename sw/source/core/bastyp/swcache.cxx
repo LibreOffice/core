@@ -224,7 +224,7 @@ void SwCache::ToTop( SwCacheObj *pObj )
 }
 
 SwCacheObj *SwCache::Get( const void *pOwner, const sal_uInt16 nIndex,
-                          const sal_Bool bToTop )
+                          const bool bToTop )
 {
     SwCacheObj *pRet;
     if ( 0 != (pRet = (nIndex < m_aCacheObjects.size()) ? m_aCacheObjects[ nIndex ] : 0) )
@@ -245,7 +245,7 @@ SwCacheObj *SwCache::Get( const void *pOwner, const sal_uInt16 nIndex,
     return pRet;
 }
 
-SwCacheObj *SwCache::Get( const void *pOwner, const sal_Bool bToTop )
+SwCacheObj *SwCache::Get( const void *pOwner, const bool bToTop )
 {
     SwCacheObj *pRet = pRealFirst;
     while ( pRet && !pRet->IsOwner( pOwner ) )
@@ -322,11 +322,11 @@ void SwCache::Delete( const void *pOwner )
 {
     INCREMENT( m_nDelete );
     SwCacheObj *pObj;
-    if ( 0 != (pObj = Get( pOwner, sal_Bool(sal_False) )) )
+    if ( 0 != (pObj = Get( pOwner, false )) )
         DeleteObj( pObj );
 }
 
-sal_Bool SwCache::Insert( SwCacheObj *pNew )
+bool SwCache::Insert( SwCacheObj *pNew )
 {
     CHECK;
     OSL_ENSURE( !pNew->GetPrev() && !pNew->GetNext(), "New but not new." );
@@ -359,7 +359,7 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
         if ( !pObj )
         {
             OSL_FAIL( "Cache overflow." );
-            return sal_False;
+            return false;
         }
 
         nPos = pObj->GetCachePos();
@@ -398,7 +398,7 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
     pFirst = pNew;
 
     CHECK;
-    return sal_True;
+    return true;
 }
 
 void SwCache::SetLRUOfst( const sal_uInt16 nOfst )

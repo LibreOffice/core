@@ -44,7 +44,7 @@ class SwLabPage : public SfxTabPage
     ListBox*          m_pHiddenSortTypeBox;
     FixedText*        m_pFormatInfo;
 
-    sal_Bool        m_bLabel;
+    bool        m_bLabel;
 
     SwLabPage(Window* pParent, const SfxItemSet& rSet);
 

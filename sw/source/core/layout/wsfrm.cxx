@@ -77,19 +77,19 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     mpPrev( 0 ),
     mpDrawObjs( 0 ),
     mnType(0),
-    mbInfBody( sal_False ),
-    mbInfTab ( sal_False ),
-    mbInfFly ( sal_False ),
-    mbInfFtn ( sal_False ),
-    mbInfSct ( sal_False )
+    mbInfBody( false ),
+    mbInfTab ( false ),
+    mbInfFly ( false ),
+    mbInfFtn ( false ),
+    mbInfSct ( false )
 {
     OSL_ENSURE( pMod, "No frame format given." );
-    mbInvalidR2L = mbInvalidVert = 1;
-    mbDerivedR2L = mbDerivedVert = mbRightToLeft = mbVertical = mbReverse = mbVertLR = 0;
+    mbInvalidR2L = mbInvalidVert = true;
+    mbDerivedR2L = mbDerivedVert = mbRightToLeft = mbVertical = mbReverse = mbVertLR = false;
 
     mbValidPos = mbValidPrtArea = mbValidSize = mbValidLineNum = mbRetouche =
-    mbFixSize = mbColLocked = sal_False;
-    mbCompletePaint = mbInfInvalid = sal_True;
+    mbFixSize = mbColLocked = false;
+    mbCompletePaint = mbInfInvalid = true;
 }
 
 const IDocumentDrawModelAccess* SwFrm::getIDocumentDrawModelAccess()
@@ -107,40 +107,40 @@ void SwFrm::RegisterToFormat( SwFmt& rFmt )
     rFmt.Add( this );
 }
 
-void SwFrm::CheckDir( sal_uInt16 nDir, sal_Bool bVert, sal_Bool bOnlyBiDi, sal_Bool bBrowse )
+void SwFrm::CheckDir( sal_uInt16 nDir, bool bVert, bool bOnlyBiDi, bool bBrowse )
 {
     if( FRMDIR_ENVIRONMENT == nDir || ( bVert && bOnlyBiDi ) )
     {
-        mbDerivedVert = 1;
+        mbDerivedVert = true;
         if( FRMDIR_ENVIRONMENT == nDir )
-            mbDerivedR2L = 1;
+            mbDerivedR2L = true;
         SetDirFlags( bVert );
     }
     else if( bVert )
     {
-        mbInvalidVert = 0;
+        mbInvalidVert = false;
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir
             || bBrowse )
         {
-            mbVertical = 0;
-            mbVertLR = 0;
+            mbVertical = false;
+            mbVertLR = false;
         }
         else
            {
-            mbVertical = 1;
+            mbVertical = true;
             if(FRMDIR_VERT_TOP_RIGHT == nDir)
-                mbVertLR = 0;
+                mbVertLR = false;
                else if(FRMDIR_VERT_TOP_LEFT==nDir)
-                       mbVertLR = 1;
+                       mbVertLR = true;
         }
     }
     else
     {
-        mbInvalidR2L = 0;
+        mbInvalidR2L = false;
         if( FRMDIR_HORI_RIGHT_TOP == nDir )
-            mbRightToLeft = 1;
+            mbRightToLeft = true;
         else
-            mbRightToLeft = 0;
+            mbRightToLeft = false;
     }
 }
 
@@ -150,13 +150,13 @@ void SwFrm::CheckDirection( bool bVert )
     {
         if( !IsHeaderFrm() && !IsFooterFrm() )
         {
-            mbDerivedVert = 1;
+            mbDerivedVert = true;
             SetDirFlags( bVert );
         }
     }
     else
     {
-        mbDerivedR2L = 1;
+        mbDerivedR2L = true;
         SetDirFlags( bVert );
     }
 }
@@ -210,7 +210,7 @@ void SwCellFrm::CheckDirection( bool bVert )
     // Check if the item is set, before actually
     // using it. Otherwise the dynamic pool default is used, which may be set
     // to LTR in case of OOo 1.0 documents.
-    if( pFmt && SFX_ITEM_SET == pFmt->GetItemState( RES_FRAMEDIR, sal_True, &pItem ) )
+    if( pFmt && SFX_ITEM_SET == pFmt->GetItemState( RES_FRAMEDIR, true, &pItem ) )
     {
         const SvxFrameDirectionItem* pFrmDirItem = static_cast<const SvxFrameDirectionItem*>(pItem);
         const SwViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -324,7 +324,7 @@ void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                     SwTabFrm* pTab = FindTabFrm();
                     if ( bInFollowFlowRow )
                         pTab = pTab->FindMaster();
-                    pTab->SetRemoveFollowFlowLinePending( sal_True );
+                    pTab->SetRemoveFollowFlowLinePending( true );
                 }
             }
             break;
@@ -460,7 +460,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
 
 Size SwFrm::ChgSize( const Size& aNewSize )
 {
-    mbFixSize = sal_True;
+    mbFixSize = true;
     const Size aOldSize( Frm().SSize() );
     if ( aNewSize == aOldSize )
         return aOldSize;
@@ -938,7 +938,7 @@ void SwCntntFrm::Cut()
                 if ( pMasterTab )
                 {
                     pMasterTab->_InvalidatePos();
-                    pMasterTab->SetRemoveFollowFlowLinePending( sal_True );
+                    pMasterTab->SetRemoveFollowFlowLinePending( true );
                 }
             }
         }
@@ -983,7 +983,7 @@ void SwCntntFrm::Cut()
                     if ( pSct->IsColLocked() || !pSct->IsInFtn() ||
                          ( pUp->IsFtnFrm() && pUp->IsColLocked() ) )
                     {
-                        pSct->DelEmpty( sal_False );
+                        pSct->DelEmpty( false );
                         // If a locked section may not be deleted then at least
                         // its size became invalid after removing its last
                         // content.
@@ -991,7 +991,7 @@ void SwCntntFrm::Cut()
                     }
                     else
                     {
-                        pSct->DelEmpty( sal_True );
+                        pSct->DelEmpty( true );
                         delete pSct;
                     }
                 }
@@ -1161,7 +1161,7 @@ void SwLayoutFrm::Cut()
     }
 }
 
-SwTwips SwFrm::Grow( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
+SwTwips SwFrm::Grow( SwTwips nDist, bool bTst, bool bInfo )
 {
     OSL_ENSURE( nDist >= 0, "Negative growth?" );
 
@@ -1205,7 +1205,7 @@ SwTwips SwFrm::Grow( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     return 0L;
 }
 
-SwTwips SwFrm::Shrink( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
+SwTwips SwFrm::Shrink( SwTwips nDist, bool bTst, bool bInfo )
 {
     OSL_ENSURE( nDist >= 0, "Negative reduction?" );
 
@@ -1266,7 +1266,7 @@ SwTwips SwFrm::Shrink( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
  *
  * @param nDiff the value around which the space has to be allocated
  */
-SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
+SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
 {
     PROTOCOL_ENTER( this, PROT_ADJUSTN, 0, &nDiff );
 
@@ -1390,7 +1390,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
                 //Prt.
                 const long nOldFrmHeight = Frm().Height();
                 const long nOldPrtHeight = Prt().Height();
-                const sal_Bool bOldComplete = IsCompletePaint();
+                const bool bOldComplete = IsCompletePaint();
                 if ( IsBodyFrm() )
                     Prt().SSize().Height() = nOldFrmHeight;
 
@@ -1574,7 +1574,7 @@ void SwFrm::ImplInvalidateSize()
 {
     if ( _InvalidationAllowed( INVALID_SIZE ) )
     {
-        mbValidSize = sal_False;
+        mbValidSize = false;
         if ( IsFlyFrm() )
             ((SwFlyFrm*)this)->_Invalidate();
         else
@@ -1589,7 +1589,7 @@ void SwFrm::ImplInvalidatePrt()
 {
     if ( _InvalidationAllowed( INVALID_PRTAREA ) )
     {
-        mbValidPrtArea = sal_False;
+        mbValidPrtArea = false;
         if ( IsFlyFrm() )
             ((SwFlyFrm*)this)->_Invalidate();
         else
@@ -1604,7 +1604,7 @@ void SwFrm::ImplInvalidatePos()
 {
     if ( _InvalidationAllowed( INVALID_POS ) )
     {
-        mbValidPos = sal_False;
+        mbValidPos = false;
         if ( IsFlyFrm() )
         {
             ((SwFlyFrm*)this)->_Invalidate();
@@ -1623,7 +1623,7 @@ void SwFrm::ImplInvalidateLineNum()
 {
     if ( _InvalidationAllowed( INVALID_LINENUM ) )
     {
-        mbValidLineNum = sal_False;
+        mbValidLineNum = false;
         OSL_ENSURE( IsTxtFrm(), "line numbers are implemented for text only" );
         InvalidatePage();
 
@@ -1638,7 +1638,7 @@ void SwFrm::ReinitializeFrmSizeAttrFlags()
     if ( ATT_VAR_SIZE == rFmtSize.GetHeightSizeType() ||
          ATT_MIN_SIZE == rFmtSize.GetHeightSizeType())
     {
-        mbFixSize = sal_False;
+        mbFixSize = false;
         if ( GetType() & (FRM_HEADER | FRM_FOOTER | FRM_ROW) )
         {
             SwFrm *pFrm = ((SwLayoutFrm*)this)->Lower();
@@ -1682,9 +1682,9 @@ void SwFrm::ValidateThisAndAllLowers( const sal_uInt16 nStage )
 
     if ( !bOnlyObject || ISA(SwFlyFrm) )
     {
-        mbValidSize = sal_True;
-        mbValidPrtArea = sal_True;
-        mbValidPos = sal_True;
+        mbValidSize = true;
+        mbValidPrtArea = true;
+        mbValidPos = true;
     }
 
     if ( bIncludeObjects )
@@ -1715,7 +1715,7 @@ void SwFrm::ValidateThisAndAllLowers( const sal_uInt16 nStage )
     }
 }
 
-SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
+SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
 {
     SWRECTFN( this )
 
@@ -1818,7 +1818,7 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     return nReal;
 }
 
-SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
+SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
 {
     SWRECTFN( this )
     OSL_ENSURE( nDist >= 0, "nDist < 0" );
@@ -2024,7 +2024,7 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
                 if ( !GetPrev() )
                     CheckPageDescs( pPage );
                 if ( GetAttrSet()->GetPageDesc().GetNumOffset() )
-                    ((SwRootFrm*)pPage->GetUpper())->SetVirtPageNum( sal_True );
+                    ((SwRootFrm*)pPage->GetUpper())->SetVirtPageNum( true );
                 SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
                 pPage->GetFmt()->GetDoc()->UpdatePageFlds( &aMsgHnt );
             }
@@ -2160,7 +2160,7 @@ SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt, SwFrm* pSib ):
 {
     const SwFmtFrmSize &rFmtSize = pFmt->GetFrmSize();
     if ( rFmtSize.GetHeightSizeType() == ATT_FIX_SIZE )
-        mbFixSize = sal_True;
+        mbFixSize = true;
 }
 
 // #i28701#
@@ -2204,7 +2204,7 @@ SwTwips SwLayoutFrm::InnerHeight() const
     return nRet;
 }
 
-SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
+SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
 {
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
@@ -2363,7 +2363,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     return nReal;
 }
 
-SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
+SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
 {
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
@@ -2524,7 +2524,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             if ( pCnt->IsFollow() )
             {   // If we are in an other column/page than the frame with the
                 // reference, we don't need to invalidate its master.
-                SwFrm *pTmp = pCnt->FindFtnBossFrm(sal_True) == FindFtnBossFrm(sal_True)
+                SwFrm *pTmp = pCnt->FindFtnBossFrm(true) == FindFtnBossFrm(true)
                               ?  pCnt->FindMaster()->GetFrm() : pCnt;
                 pTmp->Prepare( PREP_ADJUST_FRM );
                 pTmp->InvalidateSize();
@@ -2598,7 +2598,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         //      contains invalid section frames.
         if( pLowerFrm->IsSctFrm() )
             pLowerFrm = ((SwSectionFrm*)pLowerFrm)->GetSection() &&
-                   !((SwSectionFrm*)pLowerFrm)->ToMaximize( sal_False ) ?
+                   !((SwSectionFrm*)pLowerFrm)->ToMaximize( false ) ?
                    ((SwSectionFrm*)pLowerFrm)->FindLastCntnt() : NULL;
 
         // continue with found last lower, probably the last content of a section
@@ -2629,7 +2629,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                 pLowerFrm->InvalidatePage( pPage );
                 if( !pLowerFrm->IsFlowFrm() ||
                     !SwFlowFrm::CastFlowFrm( pLowerFrm )->HasFollow() )
-                    pLowerFrm->InvalidateNextPos( sal_True );
+                    pLowerFrm->InvalidateNextPos( true );
                 if ( pLowerFrm->IsTxtFrm() )
                     ((SwCntntFrm*)pLowerFrm)->Prepare( PREP_ADJUST_FRM );
             }
@@ -2926,7 +2926,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         }
 
         if ( pColAttr->IsOrtho() && pColAttr->GetNumCols() > 1 )
-            AdjustColumns( pColAttr, sal_False );
+            AdjustColumns( pColAttr, false );
     }
 }
 
@@ -2950,7 +2950,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
     if ( !mbValidPrtArea )
     {
-        mbValidPrtArea = sal_True;
+        mbValidPrtArea = true;
         (this->*fnRect->fnSetXMargins)( nLeft, nRight );
         (this->*fnRect->fnSetYMargins)( nUpper, nLower );
     }
@@ -2963,7 +2963,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
             const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
             SwTwips nMinHeight = rSz.GetHeightSizeType() == ATT_MIN_SIZE ? rSz.GetHeight() : 0;
             do
-            {   mbValidSize = sal_True;
+            {   mbValidSize = true;
 
                 //The size in VarSize is calculated using the content plus the
                 // borders.
@@ -3000,7 +3000,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
                     if( (this->*fnRect->fnSetLimit)( nLimit ) &&
                         nOldLeft == (Frm().*fnRect->fnGetLeft)() &&
                         nOldTop  == (Frm().*fnRect->fnGetTop)() )
-                        mbValidSize = mbValidPrtArea = sal_True;
+                        mbValidSize = mbValidPrtArea = true;
                 }
             } while ( !mbValidSize );
         }
@@ -3009,12 +3009,12 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
             do
             {   if ( Frm().Height() != pAttrs->GetSize().Height() )
                     ChgSize( Size( Frm().Width(), pAttrs->GetSize().Height()));
-                mbValidSize = sal_True;
+                mbValidSize = true;
                 MakePos();
             } while ( !mbValidSize );
         }
         else
-            mbValidSize = sal_True;
+            mbValidSize = true;
     }
 }
 
@@ -3083,7 +3083,7 @@ void SwLayoutFrm::InvaPercentLowers( SwTwips nDiff )
         } while ( pFrm && IsAnLower( pFrm ) ) ;
 }
 
-long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, sal_Bool ) const
+long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, bool ) const
 {
     long nRet     = rSz.GetWidth(),
          nPercent = rSz.GetWidthPercent();
@@ -3220,14 +3220,14 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
 
         long nMinimum = nMinHeight;
         long nMaximum;
-        sal_Bool bNoBalance = sal_False;
+        bool bNoBalance = false;
         SWRECTFN( this )
         if( IsSctFrm() )
         {
             nMaximum = (Frm().*fnRect->fnGetHeight)() - nBorder +
                        (Frm().*fnRect->fnBottomDist)(
                                         (GetUpper()->*fnRect->fnGetPrtBottom)() );
-            nMaximum += GetUpper()->Grow( LONG_MAX, sal_True );
+            nMaximum += GetUpper()->Grow( LONG_MAX, true );
             if( nMaximum < nMinimum )
             {
                 if( nMaximum < 0 )
@@ -3293,7 +3293,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             if ( pImp )
                 pImp->CheckWaitCrsr();
 
-            mbValidSize = sal_True;
+            mbValidSize = true;
             //First format the column as this will relieve the stack a bit.
             //Also set width and height of the column (if they are wrong)
             //while we are at it.
@@ -3302,7 +3302,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             // #i27399#
             // Simply setting the column width based on the values returned by
             // CalcColWidth does not work for automatic column width.
-            AdjustColumns( &rCol, sal_False );
+            AdjustColumns( &rCol, false );
 
             for ( sal_uInt16 i = 0; i < nNumCols; ++i )
             {

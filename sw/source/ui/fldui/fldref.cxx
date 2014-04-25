@@ -342,7 +342,7 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
         // fill selection-ListBox
         UpdateSubType();
 
-        sal_Bool bName = sal_False;
+        bool bName = false;
         nFldDlgFmtSel = 0;
 
         if ( ( !IsFldEdit() || m_pSelectionLB->GetEntryCount() ) &&
@@ -358,15 +358,15 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
                 if (REFFLDFLAG & (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(nOld))
                     // the old one stays
                     nFldDlgFmtSel = m_pFormatLB->GetSelectEntryPos();
-                bName = sal_True;
+                bName = true;
                 break;
 
             case TYP_SETREFFLD:
-                bName = sal_True;
+                bName = true;
                 break;
 
             case REFFLDFLAG_BOOKMARK:
-                bName = sal_True;
+                bName = true;
                 // no break!!!
             default:
                 if( REFFLDFLAG & nTypeId )
@@ -747,13 +747,13 @@ IMPL_LINK_NOARG(SwFldRefPage, ModifyHdl)
     OUString aName(m_pNameED->GetText());
     const bool bEmptyName = aName.isEmpty();
 
-    sal_Bool bEnable = sal_True;
+    bool bEnable = true;
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     if ((nTypeId == TYP_SETREFFLD && !GetFldMgr().CanInsertRefMark(aName)) ||
         (bEmptyName && (nTypeId == TYP_GETREFFLD || nTypeId == TYP_SETREFFLD ||
                        nTypeId == REFFLDFLAG_BOOKMARK)))
-        bEnable = sal_False;
+        bEnable = false;
 
     EnableInsert(bEnable);
 
@@ -764,7 +764,7 @@ IMPL_LINK_NOARG(SwFldRefPage, ModifyHdl)
 
 bool SwFldRefPage::FillItemSet(SfxItemSet& )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     sal_uInt16 nSubType = 0;
@@ -825,7 +825,7 @@ bool SwFldRefPage::FillItemSet(SfxItemSet& )
                 aVal = OUString::number( aArr[nPos]->nSeqNo );
 
                 if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
-                    bModified = sal_True; // can happen with fields of which the references were deleted
+                    bModified = true; // can happen with fields of which the references were deleted
             }
             else if (IsFldEdit())
                 aVal = OUString::number( pRefFld->GetSeqNo() );
@@ -846,7 +846,7 @@ bool SwFldRefPage::FillItemSet(SfxItemSet& )
                 aVal = OUString::number( aArr[nPos]->nSeqNo );
 
                 if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
-                    bModified = sal_True; // can happen with fields of which the reference was deleted
+                    bModified = true; // can happen with fields of which the reference was deleted
             }
             else if (IsFldEdit())
                 aVal = OUString::number( pRefFld->GetSeqNo() );
@@ -915,7 +915,7 @@ bool SwFldRefPage::FillItemSet(SfxItemSet& )
                     aVal = OUString::number( aArr[nPos]->nSeqNo );
 
                     if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
-                        bModified = sal_True; // can happen with fields of which the reference was deleted
+                        bModified = true; // can happen with fields of which the reference was deleted
                 }
                 else if (IsFldEdit())
                     aVal = OUString::number( pRefFld->GetSeqNo() );

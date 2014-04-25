@@ -336,7 +336,7 @@ short SwOutlineTabDialog::Ok()
         if( !rTxtColl.IsDefault() )
         {
             const SfxPoolItem & rItem =
-                rTxtColl.GetFmtAttr(RES_PARATR_NUMRULE, sal_False);
+                rTxtColl.GetFmtAttr(RES_PARATR_NUMRULE, false);
 
            if ((sal_uInt8)GetLevel(rTxtColl.GetName()) == MAXLEVEL)
             {

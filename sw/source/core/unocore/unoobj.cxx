@@ -176,15 +176,15 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
     if( xWrt.Is() )
     {
         SwWriter aWriter( aStream, rPam );
-        xWrt->bASCII_NoLastLineEnd = sal_True;
-        xWrt->bExportPargraphNumbering = sal_False;
+        xWrt->bASCII_NoLastLineEnd = true;
+        xWrt->bExportPargraphNumbering = false;
         SwAsciiOptions aOpt = xWrt->GetAsciiOptions();
         aOpt.SetCharSet( RTL_TEXTENCODING_UNICODE );
         xWrt->SetAsciiOptions( aOpt );
-        xWrt->bUCS2_WithStartChar = sal_False;
+        xWrt->bUCS2_WithStartChar = false;
         // #i68522#
-        const sal_Bool bOldShowProgress = xWrt->bShowProgress;
-        xWrt->bShowProgress = sal_False;
+        const bool bOldShowProgress = xWrt->bShowProgress;
+        xWrt->bShowProgress = false;
 
         long lLen;
         if( !IsError( aWriter.Write( xWrt ) ) &&
@@ -547,7 +547,7 @@ throw (lang::IllegalArgumentException)
             }
             else if (FN_UNO_IS_NUMBER == rEntry.nWID)
             {
-                sal_Bool bIsNumber(sal_False);
+                bool bIsNumber(false);
                 if (rValue >>= bIsNumber)
                 {
                     if (!bIsNumber)
@@ -561,7 +561,7 @@ throw (lang::IllegalArgumentException)
         break;
         case FN_NUMBER_NEWSTART:
         {
-            sal_Bool bVal = sal_False;
+            bool bVal = false;
             if (!(rValue >>= bVal))
             {
                 throw lang::IllegalArgumentException();
@@ -809,7 +809,7 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
 
                 SwUnoCursorHelper::SelectPam(*pUnoCrsr, true);
                 pCurrent->Left(rText.getLength(),
-                        CRSR_SKIP_CHARS, sal_False, sal_False);
+                        CRSR_SKIP_CHARS, false, false);
             }
             pCurrent = static_cast<SwCursor *>(pCurrent->GetNext());
         } while (pCurrent != pUnoCrsr);
@@ -819,12 +819,12 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
 
 enum ForceIntoMetaMode { META_CHECK_BOTH, META_INIT_START, META_INIT_END };
 
-static sal_Bool
+static bool
 lcl_ForceIntoMeta(SwPaM & rCursor,
         uno::Reference<text::XText> const & xParentText,
         const enum ForceIntoMetaMode eMode)
 {
-    sal_Bool bRet( sal_True ); // means not forced in META_CHECK_BOTH
+    bool bRet( true ); // means not forced in META_CHECK_BOTH
     SwXMeta const * const pXMeta( dynamic_cast<SwXMeta*>(xParentText.get()) );
     OSL_ENSURE(pXMeta, "no parent?");
     if (!pXMeta)
@@ -851,12 +851,12 @@ lcl_ForceIntoMeta(SwPaM & rCursor,
             if (*rCursor.Start() < start)
             {
                 *rCursor.Start() = start;
-                bRet = sal_False;
+                bRet = false;
             }
             if (*rCursor.End() > end)
             {
                 *rCursor.End() = end;
-                bRet = sal_False;
+                bRet = false;
             }
             break;
     }
@@ -980,7 +980,7 @@ sal_Bool SAL_CALL SwXTextCursor::isCollapsed() throw (uno::RuntimeException, std
 {
     SolarMutexGuard aGuard;
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     SwUnoCrsr *const pUnoCrsr = m_pImpl->GetCursor();
     if(pUnoCrsr && pUnoCrsr->GetMark())
     {
@@ -998,7 +998,7 @@ throw (uno::RuntimeException, std::exception)
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    sal_Bool bRet = rUnoCursor.Left( nCount, CRSR_SKIP_CHARS, sal_False, sal_False);
+    bool bRet = rUnoCursor.Left( nCount, CRSR_SKIP_CHARS, false, false);
     if (CURSOR_META == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
@@ -1017,7 +1017,7 @@ throw (uno::RuntimeException, std::exception)
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    sal_Bool bRet = rUnoCursor.Right(nCount, CRSR_SKIP_CHARS, sal_False, sal_False);
+    bool bRet = rUnoCursor.Right(nCount, CRSR_SKIP_CHARS, false, false);
     if (CURSOR_META == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
@@ -1262,7 +1262,7 @@ sal_Bool SAL_CALL SwXTextCursor::isStartOfWord() throw (uno::RuntimeException, s
 
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    const sal_Bool bRet =
+    const bool bRet =
         rUnoCursor.IsStartWordWT( i18n::WordType::DICTIONARY_WORD );
     return bRet;
 }
@@ -1273,7 +1273,7 @@ sal_Bool SAL_CALL SwXTextCursor::isEndOfWord() throw (uno::RuntimeException, std
 
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    const sal_Bool bRet =
+    const bool bRet =
         rUnoCursor.IsEndWordWT( i18n::WordType::DICTIONARY_WORD );
     return bRet;
 }
@@ -1286,7 +1286,7 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand) throw (uno::RuntimeException, std::
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     // problems arise when a paragraph starts with something other than a word
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     // remember old position to check if cursor has moved
     // since the called functions are sometimes a bit unreliable
     // in specific cases...
@@ -1299,7 +1299,7 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand) throw (uno::RuntimeException, std::
     if (rUnoCursor.GetCntntNode() &&
             (pPoint->nContent == rUnoCursor.GetCntntNode()->Len()))
     {
-        rUnoCursor.Right(1, CRSR_SKIP_CHARS, sal_False, sal_False);
+        rUnoCursor.Right(1, CRSR_SKIP_CHARS, false, false);
     }
     else
     {
@@ -1333,7 +1333,7 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand) throw (uno::RuntimeException, s
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     // white spaces create problems on the paragraph start
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
     SwNode      *const pOldNode   = &pPoint->nNode.GetNode();
     sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
@@ -1342,14 +1342,14 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand) throw (uno::RuntimeException, s
     // start of paragraph?
     if (pPoint->nContent == 0)
     {
-        rUnoCursor.Left(1, CRSR_SKIP_CHARS, sal_False, sal_False);
+        rUnoCursor.Left(1, CRSR_SKIP_CHARS, false, false);
     }
     else
     {
         rUnoCursor.GoPrevWordWT( i18n::WordType::DICTIONARY_WORD );
         if (pPoint->nContent == 0)
         {
-            rUnoCursor.Left(1, CRSR_SKIP_CHARS, sal_False, sal_False);
+            rUnoCursor.Left(1, CRSR_SKIP_CHARS, false, false);
         }
     }
 
@@ -1372,7 +1372,7 @@ SwXTextCursor::gotoEndOfWord(sal_Bool Expand) throw (uno::RuntimeException, std:
 
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
     SwNode      &      rOldNode   = pPoint->nNode.GetNode();
     sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
@@ -1408,7 +1408,7 @@ SwXTextCursor::gotoStartOfWord(sal_Bool Expand) throw (uno::RuntimeException, st
 
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
     SwNode      &      rOldNode   = pPoint->nNode.GetNode();
     sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
@@ -1445,7 +1445,7 @@ SwXTextCursor::isStartOfSentence() throw (uno::RuntimeException, std::exception)
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     // start of paragraph?
-    sal_Bool bRet = rUnoCursor.GetPoint()->nContent == 0;
+    bool bRet = rUnoCursor.GetPoint()->nContent == 0;
     // with mark ->no sentence start
     // (check if cursor is no selection, i.e. it does not have
     // a mark or else point and mark are identical)
@@ -1468,7 +1468,7 @@ SwXTextCursor::isEndOfSentence() throw (uno::RuntimeException, std::exception)
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     // end of paragraph?
-    sal_Bool bRet = rUnoCursor.GetCntntNode() &&
+    bool bRet = rUnoCursor.GetCntntNode() &&
         (rUnoCursor.GetPoint()->nContent == rUnoCursor.GetCntntNode()->Len());
     // with mark->no sentence end
     // (check if cursor is no selection, i.e. it does not have
@@ -1493,7 +1493,7 @@ SwXTextCursor::gotoNextSentence(sal_Bool Expand) throw (uno::RuntimeException, s
 
     const bool bWasEOS = isEndOfSentence();
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    sal_Bool bRet = rUnoCursor.GoSentence(SwCursor::NEXT_SENT);
+    bool bRet = rUnoCursor.GoSentence(SwCursor::NEXT_SENT);
     if (!bRet)
     {
         bRet = rUnoCursor.MovePara(fnParaNext, fnParaStart);
@@ -1507,7 +1507,7 @@ SwXTextCursor::gotoNextSentence(sal_Bool Expand) throw (uno::RuntimeException, s
         const bool bNextWord = rUnoCursor.GoNextWord();
         if (bWasEOS && !bNextWord)
         {
-            bRet = sal_False;
+            bRet = false;
         }
     }
     if (CURSOR_META == m_pImpl->m_eType)
@@ -1528,7 +1528,7 @@ throw (uno::RuntimeException, std::exception)
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    sal_Bool bRet = rUnoCursor.GoSentence(SwCursor::PREV_SENT);
+    bool bRet = rUnoCursor.GoSentence(SwCursor::PREV_SENT);
     if (!bRet)
     {
         bRet = rUnoCursor.MovePara(fnParaPrev, fnParaStart);
@@ -1560,7 +1560,7 @@ throw (uno::RuntimeException, std::exception)
     // if we're at the para start then we wont move
     // but bRet is also true if GoSentence failed but
     // the start of the sentence is reached
-    sal_Bool bRet = SwUnoCursorHelper::IsStartOfPara(rUnoCursor)
+    bool bRet = SwUnoCursorHelper::IsStartOfPara(rUnoCursor)
         || rUnoCursor.GoSentence(SwCursor::START_SENT)
         || SwUnoCursorHelper::IsStartOfPara(rUnoCursor);
     if (CURSOR_META == m_pImpl->m_eType)
@@ -1583,8 +1583,8 @@ SwXTextCursor::gotoEndOfSentence(sal_Bool Expand) throw (uno::RuntimeException, 
     // bRet is true if GoSentence() succeeded or if the
     // MovePara() succeeded while the end of the para is
     // not reached already
-    sal_Bool bAlreadyParaEnd = SwUnoCursorHelper::IsEndOfPara(rUnoCursor);
-    sal_Bool bRet = !bAlreadyParaEnd
+    bool bAlreadyParaEnd = SwUnoCursorHelper::IsEndOfPara(rUnoCursor);
+    bool bRet = !bAlreadyParaEnd
             &&  (rUnoCursor.GoSentence(SwCursor::END_SENT)
                  || rUnoCursor.MovePara(fnParaCurr, fnParaEnd));
     if (CURSOR_META == m_pImpl->m_eType)
@@ -1603,7 +1603,7 @@ SwXTextCursor::isStartOfParagraph() throw (uno::RuntimeException, std::exception
 
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    const sal_Bool bRet = SwUnoCursorHelper::IsStartOfPara(rUnoCursor);
+    const bool bRet = SwUnoCursorHelper::IsStartOfPara(rUnoCursor);
     return bRet;
 }
 
@@ -1614,7 +1614,7 @@ SwXTextCursor::isEndOfParagraph() throw (uno::RuntimeException, std::exception)
 
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    const sal_Bool bRet = SwUnoCursorHelper::IsEndOfPara(rUnoCursor);
+    const bool bRet = SwUnoCursorHelper::IsEndOfPara(rUnoCursor);
     return bRet;
 }
 
@@ -1631,7 +1631,7 @@ throw (uno::RuntimeException, std::exception)
         return sal_False;
     }
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    sal_Bool bRet = SwUnoCursorHelper::IsStartOfPara(rUnoCursor);
+    bool bRet = SwUnoCursorHelper::IsStartOfPara(rUnoCursor);
     if (!bRet)
     {
         bRet = rUnoCursor.MovePara(fnParaCurr, fnParaStart);
@@ -1656,7 +1656,7 @@ SwXTextCursor::gotoEndOfParagraph(sal_Bool Expand) throw (uno::RuntimeException,
         return sal_False;
     }
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    sal_Bool bRet = SwUnoCursorHelper::IsEndOfPara(rUnoCursor);
+    bool bRet = SwUnoCursorHelper::IsEndOfPara(rUnoCursor);
     if (!bRet)
     {
         bRet = rUnoCursor.MovePara(fnParaCurr, fnParaEnd);
@@ -1681,7 +1681,7 @@ SwXTextCursor::gotoNextParagraph(sal_Bool Expand) throw (uno::RuntimeException, 
         return sal_False;
     }
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    const sal_Bool bRet = rUnoCursor.MovePara(fnParaNext, fnParaStart);
+    const bool bRet = rUnoCursor.MovePara(fnParaNext, fnParaStart);
     return bRet;
 }
 
@@ -1698,7 +1698,7 @@ throw (uno::RuntimeException, std::exception)
         return sal_False;
     }
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    const sal_Bool bRet = rUnoCursor.MovePara(fnParaPrev, fnParaStart);
+    const bool bRet = rUnoCursor.MovePara(fnParaPrev, fnParaStart);
     return bRet;
 }
 
@@ -2186,7 +2186,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 
     if (rPropertyName == UNO_NAME_IS_SKIP_HIDDEN_TEXT)
     {
-        sal_Bool bSet(sal_False);
+        bool bSet(false);
         if (!(rValue >>= bSet))
         {
             throw lang::IllegalArgumentException();
@@ -2195,7 +2195,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     }
     else if (rPropertyName == UNO_NAME_IS_SKIP_PROTECTED_TEXT)
     {
-        sal_Bool bSet(sal_False);
+        bool bSet(false);
         if (!(rValue >>= bSet))
         {
             throw lang::IllegalArgumentException();
@@ -2221,12 +2221,12 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::Any aAny;
     if (rPropertyName == UNO_NAME_IS_SKIP_HIDDEN_TEXT)
     {
-        const sal_Bool bSet = rUnoCursor.IsSkipOverHiddenSections();
+        const bool bSet = rUnoCursor.IsSkipOverHiddenSections();
         aAny <<= bSet;
     }
     else if (rPropertyName == UNO_NAME_IS_SKIP_PROTECTED_TEXT)
     {
-        const sal_Bool bSet = rUnoCursor.IsSkipOverProtectSections();
+        const bool bSet = rUnoCursor.IsSkipOverProtectSections();
         aAny <<= bSet;
     }
     else
@@ -2638,7 +2638,7 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
     pArray[1] = beans::PropertyValue("Delimiter", -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
-    aVal <<= (sal_Bool) sal_False;
+    aVal <<= false;
     pArray[2] = beans::PropertyValue("IsSortColumns", -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
@@ -2702,11 +2702,11 @@ SwXTextCursor::createSortDescriptor() throw (uno::RuntimeException, std::excepti
     return SwUnoCursorHelper::CreateSortDescriptor(false);
 }
 
-sal_Bool SwUnoCursorHelper::ConvertSortProperties(
+bool SwUnoCursorHelper::ConvertSortProperties(
     const uno::Sequence< beans::PropertyValue >& rDescriptor,
     SwSortOptions& rSortOpt)
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     const beans::PropertyValue* pProperties = rDescriptor.getConstArray();
 
     rSortOpt.bTable = false;
@@ -2729,8 +2729,8 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
     pKey3->eSortOrder = SRT_ASCENDING;
     SwSortKey* aKeys[3] = {pKey1, pKey2, pKey3};
 
-    sal_Bool bOldSortdescriptor(sal_False);
-    sal_Bool bNewSortdescriptor(sal_False);
+    bool bOldSortdescriptor(false);
+    bool bNewSortdescriptor(false);
 
     for (sal_Int32 n = 0; n < rDescriptor.getLength(); ++n)
     {
@@ -2747,7 +2747,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
             }
             else
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
         else if ( rPropName == "Delimiter" )
@@ -2759,39 +2759,39 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
             }
             else
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
         // old sortdescriptor
         else if ( rPropName == "SortColumns" )
         {
-            bOldSortdescriptor = sal_True;
-            sal_Bool bTemp(sal_False);
+            bOldSortdescriptor = true;
+            bool bTemp(false);
             if (aValue >>= bTemp)
             {
                 rSortOpt.eDirection = bTemp ? SRT_COLUMNS : SRT_ROWS;
             }
             else
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
         else if ( rPropName == "IsCaseSensitive" )
         {
-            bOldSortdescriptor = sal_True;
-            sal_Bool bTemp(sal_False);
+            bOldSortdescriptor = true;
+            bool bTemp(false);
             if (aValue >>= bTemp)
             {
                 rSortOpt.bIgnoreCase = !bTemp;
             }
             else
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
         else if ( rPropName == "CollatorLocale" )
         {
-            bOldSortdescriptor = sal_True;
+            bOldSortdescriptor = true;
             lang::Locale aLocale;
             if (aValue >>= aLocale)
             {
@@ -2799,14 +2799,14 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
             }
             else
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
         else if (rPropName.startsWith("CollatorAlgorithm") &&
             rPropName.getLength() == 18 &&
             (rPropName[17] >= '0' && rPropName[17] <= '9'))
         {
-            bOldSortdescriptor = sal_True;
+            bOldSortdescriptor = true;
             sal_uInt16 nIndex = rPropName[17];
             nIndex -= '0';
             OUString aTxt;
@@ -2816,14 +2816,14 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
             }
             else
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
         else if (rPropName.startsWith("SortRowOrColumnNo") &&
             rPropName.getLength() == 18 &&
             (rPropName[17] >= '0' && rPropName[17] <= '9'))
         {
-            bOldSortdescriptor = sal_True;
+            bOldSortdescriptor = true;
             sal_uInt16 nIndex = rPropName[17];
             nIndex -= '0';
             sal_Int16 nCol = -1;
@@ -2838,61 +2838,61 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
             }
             else
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
         else if (rPropName.startsWith("IsSortNumeric") &&
             rPropName.getLength() == 14 &&
             (rPropName[13] >= '0' && rPropName[13] <= '9'))
         {
-            bOldSortdescriptor = sal_True;
+            bOldSortdescriptor = true;
             sal_uInt16 nIndex = rPropName[13];
             nIndex = nIndex - '0';
             if (aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3)
             {
-                sal_Bool bTemp = *(sal_Bool*)aValue.getValue();
+                bool bTemp = *(sal_Bool*)aValue.getValue();
                 aKeys[nIndex]->bIsNumeric = bTemp;
             }
             else
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
         else if (rPropName.startsWith("IsSortAscending") &&
             rPropName.getLength() == 16 &&
             (rPropName[15] >= '0' && rPropName[15] <= '9'))
         {
-            bOldSortdescriptor = sal_True;
+            bOldSortdescriptor = true;
             sal_uInt16 nIndex = rPropName[15];
             nIndex -= '0';
             if (aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3)
             {
-                sal_Bool bTemp = *(sal_Bool*)aValue.getValue();
+                bool bTemp = *(sal_Bool*)aValue.getValue();
                 aKeys[nIndex]->eSortOrder = (bTemp)
                     ? SRT_ASCENDING : SRT_DESCENDING;
             }
             else
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
         // new sortdescriptor
         else if ( rPropName == "IsSortColumns" )
         {
-            bNewSortdescriptor = sal_True;
+            bNewSortdescriptor = true;
             if (aValue.getValueType() == ::getBooleanCppuType())
             {
-                sal_Bool bTemp = *(sal_Bool*)aValue.getValue();
+                bool bTemp = *(sal_Bool*)aValue.getValue();
                 rSortOpt.eDirection = bTemp ? SRT_COLUMNS : SRT_ROWS;
             }
             else
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
         else if ( rPropName == "SortFields" )
         {
-            bNewSortdescriptor = sal_True;
+            bNewSortdescriptor = true;
             uno::Sequence < table::TableSortField > aFields;
             if (aValue >>= aFields)
             {
@@ -2916,12 +2916,12 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 }
                 else
                 {
-                    bRet = sal_False;
+                    bRet = false;
                 }
             }
             else
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
     }
@@ -2930,7 +2930,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
     {
         OSL_FAIL("someone tried to set the old deprecated and "
             "the new sortdescriptor");
-        bRet = sal_False;
+        bRet = false;
     }
 
     if (pKey1->nColumnId != USHRT_MAX)

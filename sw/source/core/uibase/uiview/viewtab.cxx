@@ -142,7 +142,7 @@ static void lcl_ConvertToCols(const SvxColumnItem& rColItem,
     // calculated columns and margins should result in the width of the last column.
     rArr[rColItem.Count()-1].SetWishWidth( rCols.GetWishWidth() - (sal_uInt16)nSumAll );
 
-    rCols.SetOrtho(sal_False, 0, 0 );
+    rCols.SetOrtho(false, 0, 0 );
 }
 
 // Delete tabs
@@ -221,7 +221,7 @@ void ResizeFrameCols(SwFmtCol& rCol,
     else
         rArr.back().SetWishWidth(rArr.back().GetWishWidth() + (sal_uInt16)nWishDiff);
     // Reset auto width
-    rCol.SetOrtho(sal_False, 0, 0 );
+    rCol.SetOrtho(false, 0, 0 );
 }
 
 // Here all changes to the tab bar will be shot again into the model.
@@ -230,9 +230,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     SwWrtShell &rSh         = GetWrtShell();
     const sal_uInt16 nFrmType   = rSh.IsObjSelected() ?
                                     FRMTYPE_DRAWOBJ :
-                                        rSh.GetFrmType(0,sal_True);
-    const sal_Bool bFrmSelection = rSh.IsFrmSelected();
-    const sal_Bool bBrowse = rSh.GetViewOptions()->getBrowseMode();
+                                        rSh.GetFrmType(0,true);
+    const bool bFrmSelection = rSh.IsFrmSelected();
+    const bool bBrowse = rSh.GetViewOptions()->getBrowseMode();
 
     const sal_uInt16 nSlot      = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
@@ -271,10 +271,10 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
                 bool bVerticalFrame(false);
                 {
-                    sal_Bool bRTL;
-                    sal_Bool bVertL2R;
+                    bool bRTL;
+                    bool bVertL2R;
                     bVerticalFrame = ( bFrmSelection &&
-                                       rSh.IsFrmVertical(sal_True, bRTL, bVertL2R) ) ||
+                                       rSh.IsFrmVertical(true, bRTL, bVertL2R) ) ||
                                      ( !bFrmSelection && bVerticalWriting);
                 }
                 long nDeltaX = bVerticalFrame ?
@@ -433,10 +433,10 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 SfxItemSet aSet( GetPool(), RES_FRM_SIZE, RES_FRM_SIZE,
                                             RES_VERT_ORIENT, RES_HORI_ORIENT, 0 );
                 //which of the orientation attributes is to be put depends on the frame's environment
-                sal_Bool bRTL;
-                sal_Bool bVertL2R;
+                bool bRTL;
+                bool bVertL2R;
                 if ( ( bFrmSelection &&
-                       rSh.IsFrmVertical(sal_True, bRTL, bVertL2R ) ) ||
+                       rSh.IsFrmVertical(true, bRTL, bVertL2R ) ) ||
                      ( !bFrmSelection && bVerticalWriting ) )
                 {
                     SwFmtHoriOrient aHoriOrient(pFmt->GetHoriOrient());
@@ -592,7 +592,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             aCols.Init( nCount, nGutterWidth, nWidth );
             aCols.SetWishWidth( nWidth );
             aCols.SetGutterWidth( nGutterWidth, nWidth );
-            aCols.SetOrtho( sal_False, nGutterWidth, nWidth );
+            aCols.SetOrtho( false, nGutterWidth, nWidth );
 
             long nColumnLeft = 0;
             long nColumnRight = 0;
@@ -769,7 +769,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             {
                 OSL_ENSURE(aColItem.Count(), "ColDesc is empty!!");
 
-                const sal_Bool bSingleLine = ((const SfxBoolItem&)rReq.
+                const bool bSingleLine = ((const SfxBoolItem&)rReq.
                                 GetArgs()->Get(SID_RULER_ACT_LINE_ONLY)).GetValue();
 
                 SwTabCols aTabCols;
@@ -790,7 +790,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 // Tabcols sequentially
                 // The last column is defined by the edge.
                 // Columns in right-to-left tables need to be mirrored
-                sal_Bool bIsTableRTL =
+                bool bIsTableRTL =
                     IsTabColFromDoc() ?
                           rSh.IsMouseTableRightToLeft(m_aTabColFromDocPos)
                         : rSh.IsTableRightToLeft();
@@ -819,7 +819,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     if( !rSh.IsViewLocked() )
                     {
                         bUnlockView = true;
-                        rSh.LockView( sal_True );
+                        rSh.LockView( true );
                     }
                     rSh.SetMouseTabCols( aTabCols, bSingleLine,
                                                    m_aTabColFromDocPos );
@@ -930,7 +930,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                         aTabCols.SetHidden( i, !rCol.bVisible );
                     }
                 }
-                sal_Bool bSingleLine = sal_False;
+                bool bSingleLine = false;
                 const SfxPoolItem* pSingleLine;
                 if( SFX_ITEM_SET == rReq.GetArgs()->GetItemState(SID_RULER_ACT_LINE_ONLY, false, &pSingleLine))
                     bSingleLine = ((const SfxBoolItem*)pSingleLine)->GetValue();
@@ -939,7 +939,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     if( !rSh.IsViewLocked() )
                     {
                         bUnlockView = true;
-                        rSh.LockView( sal_True );
+                        rSh.LockView( true );
                     }
                     rSh.SetMouseTabRows( aTabCols, bSingleLine, m_aTabColFromDocPos );
                 }
@@ -955,9 +955,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     rSh.EndAllAction();
 
     if( bUnlockView )
-        rSh.LockView( sal_False );
+        rSh.LockView( false );
 
-    m_bSetTabColFromDoc = m_bSetTabRowFromDoc = m_bTabColFromDoc = m_bTabRowFromDoc = sal_False;
+    m_bSetTabColFromDoc = m_bSetTabRowFromDoc = m_bTabColFromDoc = m_bTabRowFromDoc = false;
     SetNumRuleNodeFromDoc(NULL);
 }
 
@@ -971,10 +971,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     const Point* pPt = IsTabColFromDoc() || IsTabRowFromDoc() ? &m_aTabColFromDocPos : 0;
     const sal_uInt16 nFrmType   = rSh.IsObjSelected()
                 ? FRMTYPE_DRAWOBJ
-                : rSh.GetFrmType( pPt, sal_True );
+                : rSh.GetFrmType( pPt, true );
 
-    const sal_Bool  bFrmSelection = rSh.IsFrmSelected();
-    const sal_Bool bBrowse = rSh.GetViewOptions()->getBrowseMode();
+    const bool  bFrmSelection = rSh.IsFrmSelected();
+    const bool bBrowse = rSh.GetViewOptions()->getBrowseMode();
     // PageOffset/limiter
     const SwRect& rPageRect = rSh.GetAnyCurRect( RECT_PAGE, pPt );
     const SwRect& rPagePrtRect = rSh.GetAnyCurRect( RECT_PAGE_PRT, pPt );
@@ -1397,7 +1397,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 rSet.DisableItem(nWhich);
             else
             {
-                sal_Bool bFlag = rSh.IsInRightToLeftText();
+                bool bFlag = rSh.IsInRightToLeftText();
                 rSet.Put(SfxBoolItem(nWhich, bFlag));
             }
         }
@@ -1408,9 +1408,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         {
             bool bFrameHasVerticalColumns(false);
             {
-                sal_Bool bFrameRTL;
-                sal_Bool bFrameVertL2R;
-                bFrameHasVerticalColumns = rSh.IsFrmVertical(sal_False, bFrameRTL, bFrameVertL2R) &&
+                bool bFrameRTL;
+                bool bFrameVertL2R;
+                bFrameHasVerticalColumns = rSh.IsFrmVertical(false, bFrameRTL, bFrameVertL2R) &&
                                            bFrmSelection;
             }
             bool bHasTable = ( IsTabColFromDoc() ||
@@ -1431,7 +1431,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             {
                 SwTabCols aTabCols;
                 size_t nNum = 0;
-                if ( 0 != ( m_bSetTabColFromDoc = IsTabColFromDoc() ) )
+                if ( ( m_bSetTabColFromDoc = IsTabColFromDoc() ) )
                 {
                     rSh.GetMouseTabCols( aTabCols, m_aTabColFromDocPos );
                     nNum = rSh.GetCurMouseTabColNum( m_aTabColFromDocPos );
@@ -1458,7 +1458,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                        nEnd;
 
                 //columns in right-to-left tables need to be mirrored
-                sal_Bool bIsTableRTL =
+                bool bIsTableRTL =
                     IsTabColFromDoc() ?
                           rSh.IsMouseTableRightToLeft(m_aTabColFromDocPos)
                         : rSh.IsTableRightToLeft();
@@ -1517,7 +1517,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     !bFrmSelection &&
                      nFrmType & FRMTYPE_COLSECT )
                 {
-                    const SwSection *pSect = rSh.GetAnySection(sal_False, pPt);
+                    const SwSection *pSect = rSh.GetAnySection(false, pPt);
                     OSL_ENSURE( pSect, "Which section?");
                     if( pSect )
                     {
@@ -1656,9 +1656,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         {
             bool bFrameHasVerticalColumns(false);
             {
-                sal_Bool bFrameRTL;
-                sal_Bool bFrameVertL2R;
-                bFrameHasVerticalColumns = rSh.IsFrmVertical(sal_False, bFrameRTL, bFrameVertL2R) &&
+                bool bFrameRTL;
+                bool bFrameVertL2R;
+                bFrameHasVerticalColumns = rSh.IsFrmVertical(false, bFrameRTL, bFrameVertL2R) &&
                                            bFrmSelection;
             }
 
@@ -1674,7 +1674,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 SwTabCols aTabCols;
                 //no current value necessary
                 sal_uInt16    nNum = 0;
-                if ( 0 != ( m_bSetTabRowFromDoc = IsTabRowFromDoc() ) )
+                if ( ( m_bSetTabRowFromDoc = IsTabRowFromDoc() ) )
                 {
                     rSh.GetMouseTabRows( aTabCols, m_aTabColFromDocPos );
                 }
@@ -1875,7 +1875,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 }
                 else
                 {   // Here only for table in multi-column pages and borders.
-                    sal_Bool bSectOutTbl = (nFrmType & FRMTYPE_TABLE) ? sal_True : sal_False;
+                    bool bSectOutTbl = (nFrmType & FRMTYPE_TABLE) ? sal_True : sal_False;
                     bool bFrame = (nFrmType & FRMTYPE_FLY_ANY);
                     bool bColSct =  (nFrmType & ( bSectOutTbl
                                                     ? FRMTYPE_COLSECTOUTTAB

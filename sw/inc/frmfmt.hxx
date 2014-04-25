@@ -84,9 +84,9 @@ public:
     /** @return the real size of the frame - or an empty rectangle
        if no layout exists.
        If pPoint is given, look for the frame closest to it. */
-    SwRect FindLayoutRect( const sal_Bool bPrtArea = sal_False,
-                            const Point* pPoint = 0,
-                            const sal_Bool bCalcFrm = sal_False ) const;
+    SwRect FindLayoutRect( const bool bPrtArea = false,
+                           const Point* pPoint = 0,
+                           const bool bCalcFrm = false ) const;
 
     /** Searches SdrObject. SdrObjUserCall is client of the format.
        The UserCall knows its SdrObject. */
@@ -106,7 +106,7 @@ public:
     const SdrObject *FindRealSdrObject() const
         { return ((SwFrmFmt*)this)->FindRealSdrObject(); }
 
-    sal_Bool IsLowerOf( const SwFrmFmt& rFmt ) const;
+    bool IsLowerOf( const SwFrmFmt& rFmt ) const;
 
     enum tLayoutDir
     {
@@ -173,10 +173,10 @@ public:
     virtual void MakeFrms() SAL_OVERRIDE;
 
     SwFlyFrm* GetFrm( const Point* pDocPos = 0,
-                        const sal_Bool bCalcFrm = sal_False ) const;
+                      const bool bCalcFrm = false ) const;
 
     SwAnchoredObject* GetAnchoredObj( const Point* pDocPos = 0,
-                                      const sal_Bool bCalcFrm = sal_False ) const;
+                                      const bool bCalcFrm = false ) const;
 
     virtual Graphic MakeGraphic( ImageMap* pMap = NULL ) SAL_OVERRIDE;
 

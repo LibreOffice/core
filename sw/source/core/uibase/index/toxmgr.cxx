@@ -211,7 +211,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
     {
         // JP 26.08.96: Bug 30344 - either the text of a Doc or an alternative test,
         //                          not both!
-        sal_Bool bReplace = pCurTOXMark->IsAlternativeText();
+        bool bReplace = pCurTOXMark->IsAlternativeText();
         if( bReplace )
             pCurTOXMark->SetAlternativeText( *rDesc.GetAltStr() );
         else
@@ -229,7 +229,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
     // Bug 36207 pCurTOXMark points nowhere here!
     if(!pCurTOXMark)
     {
-        pSh->Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+        pSh->Left(CRSR_SKIP_CHARS, false, 1, false );
         pSh->GetCurTOXMarks(aCurMarks);
         SetCurTOXMark(0);
     }
@@ -257,7 +257,7 @@ sal_uInt16 SwTOXMgr::GetUserTypeID(const OUString& rStr)
     Description: traveling between TOXMarks
  --------------------------------------------------------------------*/
 
-void SwTOXMgr::NextTOXMark(sal_Bool bSame)
+void SwTOXMgr::NextTOXMark(bool bSame)
 {
     OSL_ENSURE(pCurTOXMark, "no current TOXMark");
     if( pCurTOXMark )
@@ -267,7 +267,7 @@ void SwTOXMgr::NextTOXMark(sal_Bool bSame)
     }
 }
 
-void SwTOXMgr::PrevTOXMark(sal_Bool bSame)
+void SwTOXMgr::PrevTOXMark(bool bSame)
 {
     OSL_ENSURE(pCurTOXMark, "no current TOXMark");
     if( pCurTOXMark )
@@ -295,12 +295,12 @@ void SwTOXMgr::SetCurTOXMark(sal_uInt16 nId)
     pCurTOXMark = (nId < aCurMarks.size()) ? aCurMarks[nId] : 0;
 }
 
-sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
+bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                                     SwTOXBase** ppBase,
                                     const SfxItemSet* pSet)
 {
     SwWait aWait( *pSh->GetView().GetDocShell(), true );
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     const SwTOXBase* pCurTOX = ppBase && *ppBase ? *ppBase : GetCurTOX();
     SwTOXBase* pTOX = (SwTOXBase*)pCurTOX;
 
@@ -422,7 +422,7 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
     OSL_ENSURE(pNewTOX, "no TOXBase created!" );
     if(!pNewTOX)
-        return sal_False;
+        return false;
 
     pNewTOX->SetFromChapter(rDesc.IsFromChapter());
     pNewTOX->SetSequenceName(rDesc.GetSequenceName());

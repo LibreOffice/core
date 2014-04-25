@@ -34,31 +34,31 @@ using namespace ::ooo::vba;
 #define FIRST_PAGE 1
 
 // Class HeaderFooterHelper
-sal_Bool HeaderFooterHelper::isHeaderFooter( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
+bool HeaderFooterHelper::isHeaderFooter( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
 {
     return isHeaderFooter( word::getCurrentXText( xModel ) );
 }
 
-sal_Bool HeaderFooterHelper::isHeaderFooter( const uno::Reference< text::XText >& xText ) throw (uno::RuntimeException)
+bool HeaderFooterHelper::isHeaderFooter( const uno::Reference< text::XText >& xText ) throw (uno::RuntimeException)
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( xText, uno::UNO_QUERY_THROW );
     OUString aImplName = xServiceInfo->getImplementationName();
     if ( aImplName == "SwXHeadFootText" )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
-sal_Bool HeaderFooterHelper::isHeader( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
+bool HeaderFooterHelper::isHeader( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
 {
     const uno::Reference< text::XText > xCurrentText = word::getCurrentXText( xModel );
     if( !isHeaderFooter( xCurrentText ) )
-        return sal_False;
+        return false;
 
     OUString aPropIsShared = "HeaderIsShared";
     OUString aPropText = "HeaderText";
     uno::Reference< style::XStyle > xPageStyle = word::getCurrentPageStyle( xModel );
     uno::Reference< beans::XPropertySet > xPageProps( xPageStyle, uno::UNO_QUERY_THROW );
-    sal_Bool isShared = sal_True;
+    bool isShared = true;
     xPageProps->getPropertyValue( aPropIsShared ) >>= isShared;
     if( !isShared )
     {
@@ -76,17 +76,17 @@ sal_Bool HeaderFooterHelper::isHeader( const uno::Reference< frame::XModel >& xM
     try
     {
         if( xTRC->compareRegionStarts( xTR1, xTR2 ) == 0 )
-            return sal_True;
+            return true;
     }
     catch (const lang::IllegalArgumentException&)
     {
-        return sal_False;
+        return false;
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool HeaderFooterHelper::isFirstPageHeader( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
+bool HeaderFooterHelper::isFirstPageHeader( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
 {
     if( isHeader( xModel ) )
     {
@@ -95,15 +95,15 @@ sal_Bool HeaderFooterHelper::isFirstPageHeader( const uno::Reference< frame::XMo
         sal_Int32 nPage = xPageCursor->getPage();
         return nPage == FIRST_PAGE;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool HeaderFooterHelper::isEvenPagesHeader( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
+bool HeaderFooterHelper::isEvenPagesHeader( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
 {
     if( isHeader( xModel ) )
     {
         uno::Reference< beans::XPropertySet > xStyleProps( word::getCurrentPageStyle( xModel ), uno::UNO_QUERY_THROW );
-        sal_Bool isShared = sal_False;
+        bool isShared = false;
         xStyleProps->getPropertyValue("HeaderIsShared") >>= isShared;
         if( !isShared )
         {
@@ -111,20 +111,20 @@ sal_Bool HeaderFooterHelper::isEvenPagesHeader( const uno::Reference< frame::XMo
             return ( 0 == xPageCursor->getPage() % 2 );
         }
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool HeaderFooterHelper::isFooter( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
+bool HeaderFooterHelper::isFooter( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
 {
     const uno::Reference< text::XText > xCurrentText = word::getCurrentXText( xModel );
     if( !isHeaderFooter( xCurrentText ) )
-        return sal_False;
+        return false;
 
     OUString aPropIsShared = "FooterIsShared";
     OUString aPropText = "FooterText";
     uno::Reference< style::XStyle > xPageStyle = word::getCurrentPageStyle( xModel );
     uno::Reference< beans::XPropertySet > xPageProps( xPageStyle, uno::UNO_QUERY_THROW );
-    sal_Bool isShared = sal_True;
+    bool isShared = true;
     xPageProps->getPropertyValue( aPropIsShared ) >>= isShared;
     if( !isShared )
     {
@@ -142,17 +142,17 @@ sal_Bool HeaderFooterHelper::isFooter( const uno::Reference< frame::XModel >& xM
     try
     {
         if( xTRC->compareRegionStarts( xTR1, xTR2 ) == 0 )
-            return sal_True;
+            return true;
     }
     catch (const lang::IllegalArgumentException&)
     {
-        return sal_False;
+        return false;
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool HeaderFooterHelper::isFirstPageFooter( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
+bool HeaderFooterHelper::isFirstPageFooter( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
 {
     if( isFooter( xModel ) )
     {
@@ -160,15 +160,15 @@ sal_Bool HeaderFooterHelper::isFirstPageFooter( const uno::Reference< frame::XMo
         sal_Int32 nPage = xPageCursor->getPage();
         return nPage == FIRST_PAGE;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool HeaderFooterHelper::isEvenPagesFooter( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
+bool HeaderFooterHelper::isEvenPagesFooter( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
 {
     if( isFooter( xModel ) )
     {
         uno::Reference< beans::XPropertySet > xStyleProps( word::getCurrentPageStyle( xModel ), uno::UNO_QUERY_THROW );
-        sal_Bool isShared = sal_False;
+        bool isShared = false;
         xStyleProps->getPropertyValue("FooterIsShared") >>= isShared;
         if( !isShared )
         {
@@ -176,7 +176,7 @@ sal_Bool HeaderFooterHelper::isEvenPagesFooter( const uno::Reference< frame::XMo
             return ( 0 == xPageCursor->getPage() % 2 );
         }
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

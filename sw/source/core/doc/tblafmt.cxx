@@ -393,7 +393,7 @@ SwBoxAutoFmt& SwBoxAutoFmt::operator=( const SwBoxAutoFmt& rNew )
     aItem = *(aItemType*)pNew; \
     delete pNew;
 
-sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer )
+bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer )
 {
     SfxPoolItem* pNew;
     SvxOrientationItem aOrientation( SVX_ORIENTATION_STANDARD, 0);
@@ -488,7 +488,7 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
     return 0 == rStream.GetError();
 }
 
-sal_Bool SwBoxAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
+bool SwBoxAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
     SvxOrientationItem aOrientation( aRotateAngle.GetValue(), aStacked.GetValue(), 0 );
 
@@ -541,7 +541,7 @@ sal_Bool SwBoxAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     return 0 == rStream.GetError();
 }
 
-sal_Bool SwBoxAutoFmt::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const
+bool SwBoxAutoFmt::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
     rStream.WriteUInt16( aFont.GetVersion( fileVersion ) );
     rStream.WriteUInt16( aHeight.GetVersion( fileVersion ) );
@@ -586,17 +586,17 @@ SwTableAutoFmt::SwTableAutoFmt( const OUString& rName )
     , m_aBreak( SVX_BREAK_NONE, RES_BREAK )
     , m_aKeepWithNextPara( false, RES_KEEP )
     , m_aRepeatHeading( 0 )
-    , m_bLayoutSplit( sal_True )
-    , m_bRowSplit( sal_True )
-    , m_bCollapsingBorders(sal_True)
+    , m_bLayoutSplit( true )
+    , m_bRowSplit( true )
+    , m_bCollapsingBorders(true)
     , m_aShadow( RES_SHADOW )
 {
-    bInclFont = sal_True;
-    bInclJustify = sal_True;
-    bInclFrame = sal_True;
-    bInclBackground = sal_True;
-    bInclValueFormat = sal_True;
-    bInclWidthHeight = sal_True;
+    bInclFont = true;
+    bInclJustify = true;
+    bInclFrame = true;
+    bInclBackground = true;
+    bInclValueFormat = true;
+    bInclWidthHeight = true;
 
     memset( aBoxAutoFmt, 0, sizeof( aBoxAutoFmt ) );
 }
@@ -897,16 +897,16 @@ void SwTableAutoFmt::StoreTableProperties(const SwTable &table)
     m_aShadow = static_cast<const SvxShadowItem&>(rSet.Get(RES_SHADOW));
 }
 
-sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions )
+bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions )
 {
     sal_uInt16  nVal = 0;
     rStream.ReadUInt16( nVal );
-    sal_Bool bRet = 0 == rStream.GetError();
+    bool bRet = 0 == rStream.GetError();
 
     if( bRet && (nVal == AUTOFORMAT_DATA_ID_X ||
             (AUTOFORMAT_DATA_ID_504 <= nVal && nVal <= AUTOFORMAT_DATA_ID)) )
     {
-        sal_Bool b;
+        bool b;
         // --- from 680/dr25 on: store strings as UTF-8
         rtl_TextEncoding eCharSet = (nVal >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         m_aName = rStream.ReadUniOrByteString( eCharSet );
@@ -922,12 +922,12 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
             else
                 nStrResId = USHRT_MAX;
         }
-        rStream.ReadUChar( b ); bInclFont = b;
-        rStream.ReadUChar( b ); bInclJustify = b;
-        rStream.ReadUChar( b ); bInclFrame = b;
-        rStream.ReadUChar( b ); bInclBackground = b;
-        rStream.ReadUChar( b ); bInclValueFormat = b;
-        rStream.ReadUChar( b ); bInclWidthHeight = b;
+        rStream.ReadCharAsBool( b ); bInclFont = b;
+        rStream.ReadCharAsBool( b ); bInclJustify = b;
+        rStream.ReadCharAsBool( b ); bInclFrame = b;
+        rStream.ReadCharAsBool( b ); bInclBackground = b;
+        rStream.ReadCharAsBool( b ); bInclValueFormat = b;
+        rStream.ReadCharAsBool( b ); bInclWidthHeight = b;
 
         if (nVal >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
         {
@@ -937,7 +937,7 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
             READ(m_aPageDesc, SwFmtPageDesc, AUTOFORMAT_FILE_VERSION);
             READ(m_aKeepWithNextPara, SvxFmtKeepItem, AUTOFORMAT_FILE_VERSION);
 
-            rStream.ReadUInt16( m_aRepeatHeading ).ReadUChar( m_bLayoutSplit ).ReadUChar( m_bRowSplit ).ReadUChar( m_bCollapsingBorders );
+            rStream.ReadUInt16( m_aRepeatHeading ).ReadCharAsBool( m_bLayoutSplit ).ReadCharAsBool( m_bRowSplit ).ReadCharAsBool( m_bCollapsingBorders );
 
             READ(m_aShadow, SvxShadowItem, AUTOFORMAT_FILE_VERSION);
         }
@@ -960,10 +960,10 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
     return bRet;
 }
 
-sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
+bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
     sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
-    sal_Bool b;
+    bool b;
     rStream.WriteUInt16( nVal );
     // --- from 680/dr25 on: store strings as UTF-8
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, m_aName,
@@ -986,7 +986,7 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
         m_aShadow.Store(rStream, m_aShadow.GetVersion(fileVersion));
     }
 
-    sal_Bool bRet = 0 == rStream.GetError();
+    bool bRet = 0 == rStream.GetError();
 
     for( int i = 0; bRet && i < 16; ++i )
     {
@@ -1100,9 +1100,9 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl()
     m_pImpl->m_AutoFormats.push_back(pNew);
 }
 
-sal_Bool SwTableAutoFmtTbl::Load()
+bool SwTableAutoFmtTbl::Load()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     OUString sNm(AUTOTABLE_FORMAT_NAME);
     SvtPathOptions aOpt;
     if( aOpt.SearchFile( sNm, SvtPathOptions::PATH_USERCONFIG ))
@@ -1111,11 +1111,11 @@ sal_Bool SwTableAutoFmtTbl::Load()
         bRet = Load( *aStream.GetInStream() );
     }
     else
-        bRet = sal_False;
+        bRet = false;
     return bRet;
 }
 
-sal_Bool SwTableAutoFmtTbl::Save() const
+bool SwTableAutoFmtTbl::Save() const
 {
     SvtPathOptions aPathOpt;
     const OUString sNm( aPathOpt.GetUserConfigPath() + "/" + AUTOTABLE_FORMAT_NAME );
@@ -1123,9 +1123,9 @@ sal_Bool SwTableAutoFmtTbl::Save() const
     return Save( *aStream.GetOutStream() ) && aStream.Commit();
 }
 
-sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
+bool SwTableAutoFmtTbl::Load( SvStream& rStream )
 {
-    sal_Bool bRet = 0 == rStream.GetError();
+    bool bRet = 0 == rStream.GetError();
     if (bRet)
     {
         // Attention: We need to read a general Header here
@@ -1192,9 +1192,9 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
     return bRet;
 }
 
-sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
+bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
 {
-    sal_Bool bRet = 0 == rStream.GetError();
+    bool bRet = 0 == rStream.GetError();
     if (bRet)
     {
         rStream.SetVersion(AUTOFORMAT_FILE_VERSION);
@@ -1207,7 +1207,7 @@ sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
 
         bRet = 0 == rStream.GetError();
         if (!bRet)
-            return sal_False;
+            return false;
 
         // Write this version number for all attributes
         m_pImpl->m_AutoFormats[0].GetBoxFmt(0).SaveVersionNo(

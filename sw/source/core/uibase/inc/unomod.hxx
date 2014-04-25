@@ -121,12 +121,12 @@ protected:
     SwView*                     pView;
     SwViewOption*       mpViewOption;
     const SwViewOption*         mpConstViewOption;
-    sal_Bool                    bObjectValid:1, bWeb:1, mbApplyZoom;
+    bool                    bObjectValid:1, bWeb:1, mbApplyZoom;
 
     sal_Int32   eHRulerUnit;
-    sal_Bool    mbApplyHRulerMetric;
+    bool    mbApplyHRulerMetric;
     sal_Int32   eVRulerUnit;
-    sal_Bool    mbApplyVRulerMetric;
+    bool    mbApplyVRulerMetric;
 
     virtual void _preSetValues ()
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException ) SAL_OVERRIDE;
@@ -145,15 +145,15 @@ protected:
     virtual ~SwXViewSettings()
         throw();
 public:
-    SwXViewSettings(sal_Bool bWeb, SwView*  pView);
+    SwXViewSettings(bool bWeb, SwView*  pView);
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    sal_Bool    IsValid() const {return bObjectValid;}
-    void    Invalidate() {bObjectValid = sal_False;}
+    bool    IsValid() const {return bObjectValid;}
+    void    Invalidate() {bObjectValid = false;}
 };
 
 #endif

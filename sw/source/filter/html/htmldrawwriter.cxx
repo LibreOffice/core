@@ -70,7 +70,7 @@ const SdrObject *SwHTMLWriter::GetMarqueeTextObj( const SwDrawFrmFmt& rFmt )
 
 void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
                                          const SdrObject *pObj,
-                                         sal_Bool bSetDefaults )
+                                         bool bSetDefaults )
 {
     // die Edit script::Engine-Attribute aus dem Objekt holen
     SfxItemSet rObjItemSet = pObj->GetMergedItemSet();
@@ -82,7 +82,7 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
     while( nEEWhich )
     {
         const SfxPoolItem *pEEItem;
-        sal_Bool bSet = SFX_ITEM_SET == rObjItemSet.GetItemState( nEEWhich, false,
+        bool bSet = SFX_ITEM_SET == rObjItemSet.GetItemState( nEEWhich, false,
                                                               &pEEItem );
 
         if( bSet || bSetDefaults )

@@ -57,9 +57,9 @@ class SwXMLExport : public SvXMLExport
     SvXMLItemMapEntriesRef      xTableCellItemMap;
     UniReference < XMLPropertySetMapper > xParaPropMapper;
 
-    sal_Bool                    bBlock : 1;         // export text block?
-    sal_Bool                    bShowProgress : 1;
-    sal_Bool                    bSavedShowChanges : 1;
+    bool                    bBlock : 1;         // export text block?
+    bool                    bShowProgress : 1;
+    bool                    bSavedShowChanges : 1;
 
     SwDoc*                      doc; // cached for getDoc()
 
@@ -73,7 +73,7 @@ class SwXMLExport : public SvXMLExport
                                  SwXMLTableFrmFmtsSort_Impl& rExpRows,
                                  SwXMLTableFrmFmtsSort_Impl& rExpCells,
                                  SwXMLTableInfo_Impl& rTblInfo,
-                                 sal_Bool bTop=sal_False );
+                                 bool bTop=false );
 
     void ExportFmt( const SwFmt& rFmt,  enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
     void ExportTableFmt( const SwFrmFmt& rFmt, sal_uInt32 nAbsWidth );
@@ -135,9 +135,9 @@ public:
         return xParaPropMapper;
     }
 
-    sal_Bool IsShowProgress() const { return bShowProgress; }
-    void SetShowProgress( sal_Bool b ) { bShowProgress = b; }
-    sal_Bool IsBlockMode() const { return bBlock; }
+    bool IsShowProgress() const { return bShowProgress; }
+    void SetShowProgress( bool b ) { bShowProgress = b; }
+    bool IsBlockMode() const { return bBlock; }
 
     // XUnoTunnel
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();

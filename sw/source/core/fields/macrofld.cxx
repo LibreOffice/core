@@ -42,7 +42,7 @@ SwFieldType* SwMacroFieldType::Copy() const
 
 SwMacroField::SwMacroField(SwMacroFieldType* pInitType,
                            const OUString& rLibAndName, const OUString& rTxt) :
-    SwField(pInitType), aMacro(rLibAndName), aText(rTxt), bIsScriptURL(sal_False)
+    SwField(pInitType), aMacro(rLibAndName), aText(rTxt), bIsScriptURL(false)
 {
     bIsScriptURL = isScriptURL(aMacro);
 }
@@ -206,7 +206,7 @@ void SwMacroField::CreateMacroString(
     rMacro += rMacroName;
 }
 
-sal_Bool SwMacroField::isScriptURL( const OUString& str )
+bool SwMacroField::isScriptURL( const OUString& str )
 {
     uno::Reference< uno::XComponentContext > xContext =
         ::comphelper::getProcessComponentContext();
@@ -219,9 +219,9 @@ sal_Bool SwMacroField::isScriptURL( const OUString& str )
 
     if ( xUrl.is() )
     {
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

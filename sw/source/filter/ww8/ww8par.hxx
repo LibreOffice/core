@@ -145,8 +145,8 @@ class WW8Reader : public StgReader
 public:
     virtual int GetReaderType() SAL_OVERRIDE;
 
-    virtual sal_Bool HasGlossaries() const SAL_OVERRIDE;
-    virtual sal_Bool ReadGlossaries( SwTextBlocks&, sal_Bool bSaveRelFiles ) const SAL_OVERRIDE;
+    virtual bool HasGlossaries() const SAL_OVERRIDE;
+    virtual bool ReadGlossaries( SwTextBlocks&, bool bSaveRelFiles ) const SAL_OVERRIDE;
 };
 
 class SwWW8ImplReader;
@@ -349,7 +349,7 @@ public:
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr);
 
-    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, sal_Bool bTstEnde=sal_True, long nHand=LONG_MAX, sal_Bool consumedByField=sal_False) SAL_OVERRIDE;
+    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, bool bTstEnde=true, long nHand=LONG_MAX, bool consumedByField=false) SAL_OVERRIDE;
 
     void SetToggleAttr(sal_uInt8 nId, bool bOn)
     {
@@ -641,7 +641,7 @@ public:
     std::vector<OUString> maListEntries;
     virtual ~WW8FormulaControl() {}
     void FormulaRead(SwWw8ControlType nWhich,SvStream *pD);
-    virtual sal_Bool Import(const com::sun::star::uno::Reference <
+    virtual bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <
         com::sun::star::form::XFormComponent> &rFComp,
@@ -659,7 +659,7 @@ private:
 public:
     WW8FormulaCheckBox(SwWW8ImplReader &rR);
 
-    virtual sal_Bool Import(const com::sun::star::uno::Reference <
+    virtual bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <
         com::sun::star::form::XFormComponent> &rFComp,
@@ -676,7 +676,7 @@ private:
 public:
     WW8FormulaListBox(SwWW8ImplReader &rR);
 
-    virtual sal_Bool Import(const com::sun::star::uno::Reference <
+    virtual bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <
         com::sun::star::form::XFormComponent> &rFComp,
@@ -692,28 +692,28 @@ private:
 public:
     WW8FormulaEditBox(SwWW8ImplReader &rR);
     //no real implementation, return false
-    virtual sal_Bool Import(const com::sun::star::uno::Reference <
+    virtual bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> & /* rServiceFactory */,
         com::sun::star::uno::Reference <
         com::sun::star::form::XFormComponent> & /* rFComp */,
-        com::sun::star::awt::Size & /* rSz */) SAL_OVERRIDE { return sal_False; }
+        com::sun::star::awt::Size & /* rSz */) SAL_OVERRIDE { return false; }
 };
 
 class SwMSConvertControls: public oox::ole::MSConvertOCXControls
 {
 public:
     SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP );
-    virtual sal_Bool InsertFormula( WW8FormulaControl &rFormula);
+    virtual bool InsertFormula( WW8FormulaControl &rFormula);
     virtual bool InsertControl(const com::sun::star::uno::Reference<
         com::sun::star::form::XFormComponent >& rFComp,
         const ::com::sun::star::awt::Size& rSize,
         com::sun::star::uno::Reference <
         com::sun::star::drawing::XShape > *pShape, bool bFloatingCtrl) SAL_OVERRIDE;
     bool ExportControl(WW8Export &rWrt, const SdrObject *pObj);
-    virtual sal_Bool ReadOCXStream( SotStorageRef& rSrc1,
+    virtual bool ReadOCXStream( SotStorageRef& rSrc1,
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > *pShapeRef=0,
-        sal_Bool bFloatingCtrl=false );
+        bool bFloatingCtrl=false );
 private:
     sal_uInt32 GenerateObjectID();
     SwPaM *pPaM;

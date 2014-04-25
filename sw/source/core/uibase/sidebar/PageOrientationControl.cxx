@@ -31,7 +31,7 @@ namespace sw { namespace sidebar {
 PageOrientationControl::PageOrientationControl(
     Window* pParent,
     PagePropertyPanel& rPanel,
-    const sal_Bool bLandscape )
+    const bool bLandscape )
     : ::svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_ORIENTATION) )
     , mpOrientationValueSet( new ::svx::sidebar::ValueSetWithTextControl( ::svx::sidebar::ValueSetWithTextControl::IMAGE_TEXT, this, SW_RES(VS_ORIENTATION) ) )
     , mbLandscape( bLandscape )
@@ -53,7 +53,7 @@ PageOrientationControl::PageOrientationControl(
     mpOrientationValueSet->SetNoSelection();
     mpOrientationValueSet->StartSelection();
     mpOrientationValueSet->Show();
-    mpOrientationValueSet->SelectItem( (mbLandscape == sal_True) ? 2 : 1 );
+    mpOrientationValueSet->SelectItem( mbLandscape ? 2 : 1 );
     mpOrientationValueSet->GrabFocus();
     mpOrientationValueSet->Format();
     mpOrientationValueSet->StartSelection();

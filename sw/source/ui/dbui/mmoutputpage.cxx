@@ -484,7 +484,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
 
 IMPL_LINK(SwMailMergeOutputPage, DocumentSelectionHdl_Impl, RadioButton*, pButton)
 {
-    sal_Bool bEnableFromTo = pButton == m_pFromRB;
+    bool bEnableFromTo = pButton == m_pFromRB;
     m_pFromNF->Enable(bEnableFromTo);
     m_pToFT->Enable(bEnableFromTo);
     m_pToNF->Enable(bEnableFromTo);
@@ -672,13 +672,13 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
             pTargetView->GetWrtShell().StartAction();
             SwgReaderOption aOpt;
-            aOpt.SetTxtFmts( sal_True );
-            aOpt.SetFrmFmts( sal_True );
-            aOpt.SetPageDescs( sal_True );
-            aOpt.SetNumRules( sal_True );
-            aOpt.SetMerge( sal_False );
+            aOpt.SetTxtFmts( true );
+            aOpt.SetFrmFmts( true );
+            aOpt.SetPageDescs( true );
+            aOpt.SetNumRules( true );
+            aOpt.SetMerge( false );
             pTempView->GetDocShell()->LoadStylesFromFile(
-                    sTargetTempURL, aOpt, sal_True );
+                    sTargetTempURL, aOpt, true );
 
             pTargetView->GetWrtShell().PastePages(pTempView->GetWrtShell(),
                     (sal_uInt16)rInfo.nStartPageInTarget, (sal_uInt16)rInfo.nEndPageInTarget );
@@ -803,7 +803,7 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
     sPages += " - ";
     sPages += OUString::number(  rEndInfo.nEndPageInTarget );
 
-    pTargetView->SetMailMergeConfigItem(&rConfigItem, 0, sal_False);
+    pTargetView->SetMailMergeConfigItem(&rConfigItem, 0, false);
     if(m_pTempPrinter)
     {
         SfxPrinter *const pDocumentPrinter = pTargetView->GetWrtShell()
@@ -827,7 +827,7 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
     pTargetView->ExecPrint( aProps, false, true );
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));
 
-    pTargetView->SetMailMergeConfigItem(0, 0, sal_False);
+    pTargetView->SetMailMergeConfigItem(0, 0, false);
     m_pWizard->enableButtons(WZB_CANCEL, true);
     m_pWizard->enableButtons(WZB_FINISH, true);
     return 0;
@@ -845,7 +845,7 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterSetupHdl_Impl, PushButton*, pButton)
 IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
 {
     sal_uLong nDocType = (sal_uLong)pBox->GetEntryData(pBox->GetSelectEntryPos());
-    sal_Bool bEnable = MM_DOCTYPE_HTML != nDocType && MM_DOCTYPE_TEXT != nDocType;
+    bool bEnable = MM_DOCTYPE_HTML != nDocType && MM_DOCTYPE_TEXT != nDocType;
     m_pSendAsPB->Enable( bEnable );
     m_pAttachmentGroup->Enable( bEnable );
     if(bEnable)
@@ -1079,13 +1079,13 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
         pTargetView->GetWrtShell().StartAction();
         SwgReaderOption aOpt;
-        aOpt.SetTxtFmts( sal_True );
-        aOpt.SetFrmFmts( sal_True );
-        aOpt.SetPageDescs( sal_True );
-        aOpt.SetNumRules( sal_True );
-        aOpt.SetMerge( sal_False );
+        aOpt.SetTxtFmts( true );
+        aOpt.SetFrmFmts( true );
+        aOpt.SetPageDescs( true );
+        aOpt.SetNumRules( true );
+        aOpt.SetMerge( false );
         pTempView->GetDocShell()->LoadStylesFromFile(
-                sTargetTempURL, aOpt, sal_True );
+                sTargetTempURL, aOpt, true );
         pTargetView->GetWrtShell().PastePages(pTempView->GetWrtShell(),
                 (sal_uInt16)rInfo.nStartPageInTarget, (sal_uInt16)rInfo.nEndPageInTarget );
         pTargetView->GetWrtShell().EndAction();
@@ -1134,7 +1134,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                     continue;
                 }
                 OString sLine;
-                sal_Bool bDone = pInStream->ReadLine( sLine );
+                bool bDone = pInStream->ReadLine( sLine );
                 while ( bDone )
                 {
                     sBody += OStringToOUString(sLine, eEncoding);
@@ -1161,12 +1161,12 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             aDesc.sAttachmentName = sAttachment;
             aDesc.sMimeType = sMimeType;
 
-            if(rConfigItem.IsGreetingLine(sal_True))
+            if(rConfigItem.IsGreetingLine(true))
             {
                 OUString sNameColumn = rConfigItem.GetAssignedColumn(MM_PART_LASTNAME);
                 OUString sName = lcl_GetColumnValueOf(sNameColumn, xColAccess);
                 OUString sGreeting;
-                if(!sName.isEmpty() && rConfigItem.IsIndividualGreeting(sal_True))
+                if(!sName.isEmpty() && rConfigItem.IsIndividualGreeting(true))
                 {
                     OUString sGenderColumn = rConfigItem.GetAssignedColumn(MM_PART_GENDER);
                     const OUString& sFemaleValue = rConfigItem.GetFemaleGenderValue();

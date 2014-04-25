@@ -73,10 +73,10 @@ public:
     SwHTMLTableLayoutCnts *GetNext() const { return pNext; }
 
     void SetWidthSet( sal_uInt8 nRef ) { nWidthSet = nRef; }
-    sal_Bool IsWidthSet( sal_uInt8 nRef ) const { return nRef==nWidthSet; }
+    bool IsWidthSet( sal_uInt8 nRef ) const { return nRef==nWidthSet; }
 
     void SetPass1Done( sal_uInt8 nRef ) { nPass1Done = nRef; }
-    sal_Bool IsPass1Done( sal_uInt8 nRef ) const { return nRef==nPass1Done; }
+    bool IsPass1Done( sal_uInt8 nRef ) const { return nRef==nPass1Done; }
 
     bool HasNoBreakTag() const { return bNoBreakTag; }
 };
@@ -224,18 +224,18 @@ class SwHTMLTableLayout
     bool bPrcWidthOption : 1;       ///< Width is given in percent.
     bool bUseRelWidth : 1;          ///< SwTable gets relative width.
 
-    sal_Bool bMustResize : 1;           ///< Table width must be defined.
-    sal_Bool bExportable : 1;           ///< Layout may be used for export.
-    sal_Bool bBordersChanged : 1;       ///< Borders have been changed.
-    sal_Bool bMayBeInFlyFrame : 1;      ///< Table could be within frame.
+    bool bMustResize : 1;           ///< Table width must be defined.
+    bool bExportable : 1;           ///< Layout may be used for export.
+    bool bBordersChanged : 1;       ///< Borders have been changed.
+    bool bMayBeInFlyFrame : 1;      ///< Table could be within frame.
 
-    sal_Bool bDelayedResizeRecalc : 1;  ///< Param for delayed Resize.
-    sal_Bool bMustNotResize : 1;        ///< Table may not be resized.
-    sal_Bool bMustNotRecalc : 1;        ///< Table may not be adapted to its contents.
+    bool bDelayedResizeRecalc : 1;  ///< Param for delayed Resize.
+    bool bMustNotResize : 1;        ///< Table may not be resized.
+    bool bMustNotRecalc : 1;        ///< Table may not be adapted to its contents.
 
     void AddBorderWidth( sal_uLong &rMin, sal_uLong &rMax, sal_uLong& rAbsMin,
                          sal_uInt16 nCol, sal_uInt16 nColSpan,
-                         sal_Bool bSwBorders=sal_True ) const;
+                         bool bSwBorders=true ) const;
     void SetBoxWidth( SwTableBox *pBox, sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
 
     const SwStartNode *GetAnyBoxStartNode() const;
@@ -244,7 +244,7 @@ class SwHTMLTableLayout
 
     void ClearPass1Info() { nMin = nMax = 0; }
 
-    void _Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc=sal_False );
+    void _Resize( sal_uInt16 nAbsAvail, bool bRecalc=false );
 
     DECL_STATIC_LINK( SwHTMLTableLayout, DelayedResize_Impl, void* );
 
@@ -262,9 +262,9 @@ public:
     ~SwHTMLTableLayout();
 
     sal_uInt16 GetLeftCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan,
-                             sal_Bool bSwBorders=sal_True ) const;
+                             bool bSwBorders=true ) const;
     sal_uInt16 GetRightCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan,
-                              sal_Bool bSwBorders=sal_True ) const;
+                              bool bSwBorders=true ) const;
     inline sal_uInt16 GetInhCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
 
     inline void SetInhBorderWidths( sal_uInt16 nLeft, sal_uInt16 nRight );
@@ -276,7 +276,7 @@ public:
     void AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAvail,
                           sal_uInt16 nAbsLeftSpace, sal_uInt16 nAbsRightSpace,
                           sal_uInt16 nParentInhSpace );
-    void SetWidths( sal_Bool bCallPass2=sal_False, sal_uInt16 nAbsAvail=0,
+    void SetWidths( bool bCallPass2=false, sal_uInt16 nAbsAvail=0,
                     sal_uInt16 nRelAvail=0, sal_uInt16 nAbsLeftSpace=0,
                     sal_uInt16 nAbsRightSpace=0,
                     sal_uInt16 nParentInhSpace=0 );
@@ -302,9 +302,9 @@ public:
 
     bool IsTopTable() const  { return pSwTable != 0; }
 
-    void SetMustResize( sal_Bool bSet ) { bMustResize = bSet; }
-    void SetMustNotResize( sal_Bool bSet ) { bMustNotResize = bSet; }
-    void SetMustNotRecalc( sal_Bool bSet ) { bMustNotRecalc = bSet; }
+    void SetMustResize( bool bSet ) { bMustResize = bSet; }
+    void SetMustNotResize( bool bSet ) { bMustNotResize = bSet; }
+    void SetMustNotRecalc( bool bSet ) { bMustNotRecalc = bSet; }
 
     /** Recalculation of table widths for available width that has been passed.
      - If bRecalc is set, contents of boxes are included into calculation.
@@ -316,10 +316,10 @@ public:
      - If nDelay == HTMLTABLE_RESIZE_NOW, resize immediately and do not
        consider any resize-calls that might possibly be in order.
      - The return value indicates whether the table has been changed. */
-    sal_Bool Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc=sal_False, sal_Bool bForce=sal_False,
+    bool Resize( sal_uInt16 nAbsAvail, bool bRecalc=false, bool bForce=false,
                  sal_uLong nDelay=0 );
 
-    void BordersChanged( sal_uInt16 nAbsAvail, sal_Bool bRecalc=sal_False );
+    void BordersChanged( sal_uInt16 nAbsAvail, bool bRecalc=false );
 
     /** Calculate available width. This works only if a layout or a
      SwViewShell exists. Otherwise returns 0.
@@ -344,13 +344,13 @@ public:
     sal_uInt16 GetRowCount() const { return nRows; }
     sal_uInt16 GetColCount() const { return nCols; }
 
-    void SetExportable( sal_Bool bSet ) { bExportable = bSet; }
-    sal_Bool IsExportable() const { return bExportable; }
+    void SetExportable( bool bSet ) { bExportable = bSet; }
+    bool IsExportable() const { return bExportable; }
 
-    sal_Bool HaveBordersChanged() const { return bBordersChanged; }
+    bool HaveBordersChanged() const { return bBordersChanged; }
 
-    void SetMayBeInFlyFrame( sal_Bool bSet ) { bMayBeInFlyFrame = bSet; }
-    sal_Bool MayBeInFlyFrame() const { return bMayBeInFlyFrame; }
+    void SetMayBeInFlyFrame( bool bSet ) { bMayBeInFlyFrame = bSet; }
+    bool MayBeInFlyFrame() const { return bMayBeInFlyFrame; }
 };
 
 inline void SwHTMLTableLayoutCell::SetProtected()

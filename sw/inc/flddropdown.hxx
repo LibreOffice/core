@@ -215,7 +215,7 @@ public:
        @retval sal_True the selected item was successfully set
        @retval sal_True failure (empty selection)
     */
-    sal_Bool SetSelectedItem(const OUString & rItem);
+    bool SetSelectedItem(const OUString & rItem);
 
     /**
        Sets the name of the field.

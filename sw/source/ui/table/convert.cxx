@@ -42,7 +42,7 @@ namespace swui
 
 //keep the state of the buttons on runtime
 static int nSaveButtonState = -1; // 0: tab, 1: semicolon, 2: paragraph, 3: other, -1: not yet used
-static sal_Bool bIsKeepColumn = sal_True;
+static bool bIsKeepColumn = true;
 static sal_Unicode uOther = ',';
 
 void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
@@ -159,7 +159,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
 
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    sal_Bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
+    bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
 
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTblFlags(bHTMLMode);
     sal_uInt16 nInsTblFlags = aInsOpts.mnInsMode;
@@ -185,7 +185,7 @@ IMPL_LINK( SwConvertTableDlg, AutoFmtHdl, PushButton*, pButton )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pShell, sal_False, pTAutoFmt);
+    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pShell, false, pTAutoFmt);
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFmtOfIndex( pTAutoFmt );

@@ -85,10 +85,10 @@ lcl_AnyToInt16(uno::Any const& rVal) throw (lang::IllegalArgumentException)
     return nRet;
 }
 
-static sal_Bool
+static bool
 lcl_AnyToBool(uno::Any const& rVal) throw (lang::IllegalArgumentException)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if(!(rVal >>= bRet))
     {
         throw lang::IllegalArgumentException();
@@ -110,7 +110,7 @@ static void
 lcl_BitMaskToAny(uno::Any & o_rValue,
         const sal_uInt16 nBitMask, const sal_uInt16 nBit)
 {
-    const sal_Bool bRet = 0 != (nBitMask & nBit);
+    const bool bRet = 0 != (nBitMask & nBit);
     o_rValue <<= bRet;
 }
 
@@ -688,7 +688,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         break;
         case WID_PROTECTED:
         {
-            sal_Bool bSet = lcl_AnyToBool(rValue);
+            bool bSet = lcl_AnyToBool(rValue);
             rTOXBase.SetProtected(bSet);
             if (pSectionFmt)
             {
@@ -929,7 +929,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 {
                     SwSections aSectArr;
                     pSectionFmt->GetChildSections(aSectArr,
-                            SORTSECT_NOT, sal_False);
+                            SORTSECT_NOT, false);
                     for(sal_uInt16 i = 0; i < aSectArr.size(); i++)
                     {
                         SwSection* pSect = aSectArr[i];
@@ -993,19 +993,19 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_CREATE_FROM_CHAPTER:
             {
-                const sal_Bool bRet = pTOXBase->IsFromChapter();
+                const bool bRet = pTOXBase->IsFromChapter();
                 aRet <<= bRet;
             }
             break;
             case WID_CREATE_FROM_LABELS:
             {
-                const sal_Bool bRet = ! pTOXBase->IsFromObjectNames();
+                const bool bRet = ! pTOXBase->IsFromObjectNames();
                 aRet <<= bRet;
             }
             break;
             case WID_PROTECTED:
             {
-                const sal_Bool bRet = pTOXBase->IsProtected();
+                const bool bRet = pTOXBase->IsProtected();
                 aRet <<= bRet;
             }
             break;
@@ -1037,7 +1037,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_IS_COMMA_SEPARATED:
             {
-                const sal_Bool bRet = rForm.IsCommaSeparated();
+                const bool bRet = rForm.IsCommaSeparated();
                 aRet <<= bRet;
             }
             break;
@@ -1071,7 +1071,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_USE_LEVEL_FROM_SOURCE:
             {
-                const sal_Bool bRet = pTOXBase->IsLevelFromChapter();
+                const bool bRet = pTOXBase->IsLevelFromChapter();
                 aRet <<= bRet;
             }
             break;
@@ -1185,7 +1185,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_IS_RELATIVE_TABSTOPS:
             {
-                const sal_Bool bRet = rForm.IsRelTabPos();
+                const bool bRet = rForm.IsRelTabPos();
                 aRet <<= bRet;
             }
             break;
@@ -1548,7 +1548,7 @@ public:
     const SwTOXMark *           m_pTOXMark;
     SwDoc *                     m_pDoc;
 
-    sal_Bool                    m_bMainEntry;
+    bool                    m_bMainEntry;
     sal_uInt16                  m_nLevel;
     OUString                    m_aBookmarkName;
     OUString                    m_aEntryTypeName;
@@ -1578,7 +1578,7 @@ public:
         , m_TypeDepend(this, pType)
         , m_pTOXMark(pMark)
         , m_pDoc(pDoc)
-        , m_bMainEntry(sal_False)
+        , m_bMainEntry(false)
         , m_nLevel(0)
     {
     }
@@ -2330,7 +2330,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_MAIN_ENTRY:
             {
-                const sal_Bool bTemp = m_pImpl->m_pTOXMark->IsMainEntry();
+                const bool bTemp = m_pImpl->m_pTOXMark->IsMainEntry();
                 aRet <<= bTemp;
             }
             break;
@@ -2371,9 +2371,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 aRet <<= m_pImpl->m_sUserIndexName;
             break;
             case WID_MAIN_ENTRY:
-            {
-                aRet <<= static_cast<sal_Bool>(m_pImpl->m_bMainEntry);
-            }
+                aRet <<= m_pImpl->m_bMainEntry;
             break;
         }
     }
@@ -2862,7 +2860,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
             }
             else if ( pProperties[j].Name == "TabStopRightAligned" )
             {
-                const sal_Bool bRight = lcl_AnyToBool(pProperties[j].Value);
+                const bool bRight = lcl_AnyToBool(pProperties[j].Value);
                 aToken.eTabAlign = bRight ?
                                     SVX_TAB_ADJUST_END : SVX_TAB_ADJUST_LEFT;
             }
@@ -3129,7 +3127,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 pArr[3].Value <<= aProgCharStyle;
                 // #i21237#
                 pArr[4].Name = "WithTab";
-                pArr[4].Value <<= static_cast<sal_Bool>(aToken.bWithTab);
+                pArr[4].Value <<= aToken.bWithTab;
             }
             break;
             case TOKEN_TEXT:

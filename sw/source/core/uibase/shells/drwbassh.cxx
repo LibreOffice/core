@@ -87,7 +87,7 @@ SwDrawBaseShell::SwDrawBaseShell(SwView &_rView)
     rWin.SetBezierMode(SID_BEZIER_MOVE);
 
     if ( !_rView.GetDrawFuncPtr() )
-        _rView.GetEditWin().StdDrawMode( OBJ_NONE, sal_True );
+        _rView.GetEditWin().StdDrawMode( OBJ_NONE, true );
 
     SwTransferable::CreateSelection( GetShell() );
 }
@@ -105,7 +105,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     SdrView*    pSdrView = pSh->GetDrawView();
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16      nSlotId = rReq.GetSlot();
-    sal_Bool        bChanged = pSdrView->GetModel()->IsChanged();
+    bool        bChanged = pSdrView->GetModel()->IsChanged();
     pSdrView->GetModel()->SetChanged(false);
     const SfxPoolItem* pItem = 0;
     if(pArgs)
@@ -119,9 +119,9 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         nSlotId++;
     }
 
-    sal_Bool bAlignPossible = pSh->IsAlignPossible();
+    bool bAlignPossible = pSh->IsAlignPossible();
 
-    sal_Bool bTopParam = sal_True, bBottomParam = sal_True;
+    bool bTopParam = true, bBottomParam = true;
     bool bDone = false;
     SfxBindings& rBind = GetView().GetViewFrame()->GetBindings();
 
@@ -152,7 +152,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                        SfxAbstractDialog* pDlg = pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh, sal_True, RC_DLG_SWWRAPDLG );
+                        SfxAbstractDialog* pDlg = pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh, true, RC_DLG_SWWRAPDLG );
                         OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                         if (pDlg->Execute() == RET_OK)
@@ -230,9 +230,9 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             pSdrView->GetAttributes( aSet );
 
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, nAnchor));
-                        sal_Bool bRTL;
-                        sal_Bool bVertL2R;
-                        aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT, pSh->IsFrmVertical(sal_True, bRTL, bVertL2R)));
+                        bool bRTL;
+                        bool bVertL2R;
+                        aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT, pSh->IsFrmVertical(true, bRTL, bVertL2R)));
                         aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_RTL_TEXT, bRTL));
 
                         SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
@@ -503,14 +503,14 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         break;
 
         case FN_FRAME_UP:
-            bTopParam = sal_False;
+            bTopParam = false;
             /* no break */
         case SID_FRAME_TO_TOP:
             pSh->SelectionToTop( bTopParam );
             break;
 
         case FN_FRAME_DOWN:
-            bBottomParam = sal_False;
+            bBottomParam = false;
             /* no break */
         case SID_FRAME_TO_BOTTOM:
             pSh->SelectionToBottom( bBottomParam );
@@ -733,9 +733,9 @@ void SwDrawBaseShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
     }
 }
 
-sal_Bool SwDrawBaseShell::Disable(SfxItemSet& rSet, sal_uInt16 nWhich)
+bool SwDrawBaseShell::Disable(SfxItemSet& rSet, sal_uInt16 nWhich)
 {
-    sal_Bool bDisable = GetShell().IsSelObjProtected(FLYPROTECT_CONTENT);
+    bool bDisable = GetShell().IsSelObjProtected(FLYPROTECT_CONTENT);
 
     if (bDisable)
     {
@@ -786,11 +786,11 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
                            pValidation->bFollowTextFlow,
                            pValidation->bMirror, NULL, &pValidation->aPercentSize);
 
-    sal_Bool bIsInVertical( sal_False );
+    bool bIsInVertical( false );
     {
-        sal_Bool bRTL;
-        sal_Bool bVertL2R;
-        bIsInVertical = pSh->IsFrmVertical(sal_True, bRTL, bVertL2R);
+        bool bRTL;
+        bool bVertL2R;
+        bIsInVertical = pSh->IsFrmVertical(true, bRTL, bVertL2R);
     }
     if(bIsInVertical)
     {

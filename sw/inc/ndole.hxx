@@ -51,8 +51,8 @@ public:
     SwOLEObj( const OUString &rName, sal_Int64 nAspect );
     ~SwOLEObj();
 
-    sal_Bool UnloadObject();
-    static sal_Bool UnloadObject( ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > xObj,
+    bool UnloadObject();
+    static bool UnloadObject( ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > xObj,
                                 const SwDoc* pDoc,
                                 sal_Int64 nAspect );
 
@@ -62,7 +62,7 @@ public:
     svt::EmbeddedObjectRef& GetObject();
     OUString GetCurrentPersistName() const { return aName; }
     OUString GetStyleString();
-    sal_Bool IsOleRef() const;  ///< To avoid unnecessary loading of object.
+    bool IsOleRef() const;  ///< To avoid unnecessary loading of object.
 };
 
 // SwOLENode
@@ -73,7 +73,7 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTxtNode
     mutable SwOLEObj aOLEObj;
     Graphic*    pGraphic;
     OUString sChartTblName;     ///< with chart objects: name of referenced table.
-    sal_Bool   bOLESizeInvalid; /**< Should be considered at SwDoc::PrtOLENotify
+    bool   bOLESizeInvalid; /**< Should be considered at SwDoc::PrtOLENotify
                                    (e.g. copied). Is not persistent. */
 
     SwEmbedObjectLink*  mpObjectLink;
@@ -114,11 +114,11 @@ public:
     virtual bool SavePersistentData() SAL_OVERRIDE;
     virtual bool RestorePersistentData() SAL_OVERRIDE;
 
-    sal_Bool IsInGlobalDocSection() const;
-    sal_Bool IsOLEObjectDeleted() const;
+    bool IsInGlobalDocSection() const;
+    bool IsOLEObjectDeleted() const;
 
-    sal_Bool IsOLESizeInvalid() const   { return bOLESizeInvalid; }
-    void SetOLESizeInvalid( sal_Bool b ){ bOLESizeInvalid = b; }
+    bool IsOLESizeInvalid() const   { return bOLESizeInvalid; }
+    void SetOLESizeInvalid( bool b ){ bOLESizeInvalid = b; }
 
     sal_Int64 GetAspect() const { return aOLEObj.GetObject().GetViewAspect(); }
     void SetAspect( sal_Int64 nAspect) { aOLEObj.GetObject().SetViewAspect( nAspect ); }
@@ -127,7 +127,7 @@ public:
        inline void Unload() { aOLEObj.Unload(); } */
     OUString GetDescription() const { return aOLEObj.GetDescription(); }
 
-    sal_Bool UpdateLinkURL_Impl();
+    bool UpdateLinkURL_Impl();
     void BreakFileLink_Impl();
     void DisconnectFileLink_Impl();
 

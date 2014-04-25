@@ -51,10 +51,10 @@ public:
     inline bool  IsCreateObj() const { return m_bCreateObj; }
 
     // mouse- & key events; return value=sal_True: event was edited
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual bool KeyInput(const KeyEvent& rKEvt);
+    virtual bool MouseMove(const MouseEvent& rMEvt);
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt);
 
     void         BreakCreate();
     void         SetSlotId(sal_uInt16 nSlot) {m_nSlotId = nSlot;}

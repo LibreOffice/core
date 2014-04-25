@@ -46,7 +46,7 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent)
     : SfxModalDialog(pParent,
         "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui")
 {
-    pImplDlg = new SwRedlineAcceptDlg(this, sal_True);
+    pImplDlg = new SwRedlineAcceptDlg(this, true);
 
     pImplDlg->Initialize(GetExtraData());
     pImplDlg->Activate();   // for data's initialisation
@@ -54,7 +54,7 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent)
 
 SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
 {
-    AcceptAll(sal_False);   // refuse everything remaining
+    AcceptAll(false);   // refuse everything remaining
     pImplDlg->FillInfo(GetExtraData());
 
     delete pImplDlg;
@@ -64,7 +64,7 @@ void SwModalRedlineAcceptDlg::Activate()
 {
 }
 
-void SwModalRedlineAcceptDlg::AcceptAll( sal_Bool bAccept )
+void SwModalRedlineAcceptDlg::AcceptAll( bool bAccept )
 {
     SvxTPFilter* pFilterTP = pImplDlg->GetChgCtrl()->GetFilterPage();
 
@@ -78,7 +78,7 @@ void SwModalRedlineAcceptDlg::AcceptAll( sal_Bool bAccept )
         pImplDlg->FilterChangedHdl();
     }
 
-    pImplDlg->CallAcceptReject( sal_False, bAccept );
+    pImplDlg->CallAcceptReject( false, bAccept );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

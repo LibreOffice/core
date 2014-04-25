@@ -80,7 +80,7 @@ const sal_uInt32 HTML_FRMOPTS_IMG_CONTROL_CSS1 =
 
 static void lcl_html_outEvents( SvStream& rStrm,
                          const uno::Reference< form::XFormComponent > rFormComp,
-                         sal_Bool bCfgStarBasic,
+                         bool bCfgStarBasic,
                          rtl_TextEncoding eDestEnc,
                          OUString *pNonConvertableChars )
 {
@@ -190,9 +190,9 @@ static void lcl_html_outEvents( SvStream& rStrm,
     }
 }
 
-static sal_Bool lcl_html_isHTMLControl( sal_Int16 nClassId )
+static bool lcl_html_isHTMLControl( sal_Int16 nClassId )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     switch( nClassId )
     {
@@ -203,14 +203,14 @@ static sal_Bool lcl_html_isHTMLControl( sal_Int16 nClassId )
     case form::FormComponentType::LISTBOX:
     case form::FormComponentType::IMAGEBUTTON:
     case form::FormComponentType::FILECONTROL:
-        bRet = sal_True;
+        bRet = true;
         break;
     }
 
     return bRet;
 }
 
-sal_Bool SwHTMLWriter::HasControls() const
+bool SwHTMLWriter::HasControls() const
 {
     sal_uInt32 nStartIdx = pCurPam->GetPoint()->nNode.GetIndex();
     sal_uInt16 i;
@@ -223,7 +223,7 @@ sal_Bool SwHTMLWriter::HasControls() const
     return i < aHTMLControls.size() && aHTMLControls[i]->nNdIdx == nStartIdx;
 }
 
-void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
+void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
 {
     if( bPreserveForm )     // wir sind in einer Tabelle oder einem Bereich
         return;             // ueber dem eine Form aufgespannt wurde
@@ -234,7 +234,7 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
         if( pxFormComps && pxFormComps->is() &&
             (*pxFormComps)->getCount() == nFormCntrlCnt )
         {
-            OutForm( sal_False, *pxFormComps );
+            OutForm( false, *pxFormComps );
             (*pxFormComps) = 0;
         }
         return;
@@ -329,7 +329,7 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
             // .. es ist aber noch eine Form offen: Das ist in
             // jedem Fall eine Fehler, aber wir schliessen die alte
             // Form trotzdem
-            OutForm( sal_False, *pxFormComps );
+            OutForm( false, *pxFormComps );
 
             //!!!nWarn = 1; // Control wird falscher Form zugeordnet
         }
@@ -338,7 +338,7 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
             pxFormComps = new uno::Reference< container::XIndexContainer > ;
         *pxFormComps = xNewFormComps;
 
-        OutForm( sal_True, *pxFormComps );
+        OutForm( true, *pxFormComps );
         uno::Reference< beans::XPropertySet >  xTmp;
         OutHiddenControls( *pxFormComps, xTmp );
     }
@@ -394,7 +394,7 @@ void SwHTMLWriter::OutHiddenForm( const uno::Reference< form::XForm > & rForm )
         return;
 
     sal_Int32 nCount = xFormComps->getCount();
-    sal_Bool bHiddenOnly = nCount > 0, bHidden = sal_False;
+    bool bHiddenOnly = nCount > 0, bHidden = false;
     for( sal_Int32 i=0; i<nCount; i++ )
     {
         uno::Any aTmp = xFormComps->getByIndex( i );
@@ -422,10 +422,10 @@ void SwHTMLWriter::OutHiddenForm( const uno::Reference< form::XForm > & rForm )
                 {
                     if( form::FormComponentType::HIDDENCONTROL ==
                                                 *(sal_Int16*)aAny2.getValue() )
-                        bHidden = sal_True;
+                        bHidden = true;
                     else if( lcl_html_isHTMLControl(
                                             *(sal_Int16*)aAny2.getValue() ) )
-                        bHiddenOnly = sal_False;
+                        bHiddenOnly = false;
                 }
             }
         }
@@ -433,14 +433,14 @@ void SwHTMLWriter::OutHiddenForm( const uno::Reference< form::XForm > & rForm )
 
     if( bHidden && bHiddenOnly )
     {
-        OutForm( sal_True, xFormComps );
+        OutForm( true, xFormComps );
         uno::Reference< beans::XPropertySet > xTmp;
         OutHiddenControls( xFormComps, xTmp );
-        OutForm( sal_False, xFormComps );
+        OutForm( false, xFormComps );
     }
 }
 
-void SwHTMLWriter::OutForm( sal_Bool bOn,
+void SwHTMLWriter::OutForm( bool bOn,
                 const uno::Reference< container::XIndexContainer > & rFormComps )
 {
     nFormCntrlCnt = 0;
@@ -451,7 +451,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
         if( bLFPossible )
             OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_form, false );
-        bLFPossible = sal_True;
+        bLFPossible = true;
 
         return;
     }
@@ -544,7 +544,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
     Strm().WriteChar( '>' );
 
     IncIndentLevel(); // Inhalt der Form einruecken
-    bLFPossible = sal_True;
+    bLFPossible = true;
 }
 
 void SwHTMLWriter::OutHiddenControls(
@@ -553,7 +553,7 @@ void SwHTMLWriter::OutHiddenControls(
 {
     sal_Int32 nCount = rFormComps->getCount();
     sal_Int32 nPos = 0;
-    sal_Bool bDone = sal_False;
+    bool bDone = false;
     if( rPropSet.is() )
     {
         uno::Reference< form::XFormComponent > xFC( rPropSet, uno::UNO_QUERY );
@@ -595,7 +595,7 @@ void SwHTMLWriter::OutHiddenControls(
                                             *(sal_Int16*) aTmp.getValue() )
         {
             if( bLFPossible )
-                OutNewLine( sal_True );
+                OutNewLine( true );
             OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_input) + " " +
                 OString(OOO_STRING_SVTOOLS_HTML_O_type) + "=\"" +
                 OString(OOO_STRING_SVTOOLS_HTML_IT_hidden) + "\"";
@@ -699,7 +699,7 @@ static void GetControlSize( const SdrObject& rSdrObj, Size& rSz,
 Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                                      const SwDrawFrmFmt& rFmt,
                                      const SdrObject& rSdrObject,
-                                     sal_Bool bInCntnr )
+                                     bool bInCntnr )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -734,7 +734,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     Type eType = TYPE_NONE;
     OUString sValue;
     OString sOptions;
-    sal_Bool bEmptyValue = sal_False;
+    bool bEmptyValue = false;
     uno::Any aTmp = xPropSet->getPropertyValue(
                     OUString("ClassId") );
     sal_Int16 nClassId = *(sal_Int16*) aTmp.getValue();
@@ -760,7 +760,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         {
             const OUString& rVal = *(OUString*)aTmp.getValue();
             if( rVal.isEmpty() )
-                bEmptyValue = sal_True;
+                bEmptyValue = true;
             else if( rVal.compareToAscii( OOO_STRING_SVTOOLS_HTML_on ) != 0 )
                 sValue = rVal;
         }
@@ -800,7 +800,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
     case form::FormComponentType::LISTBOX:
         if( rHTMLWrt.bLFPossible )
-            rHTMLWrt.OutNewLine( sal_True );
+            rHTMLWrt.OutNewLine( true );
         eTag = TAG_SELECT;
         aTmp = xPropSet->getPropertyValue(
                         OUString("Dropdown") );
@@ -832,7 +832,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             Size aSz( 0, 0 );
             GetControlSize( rSdrObject, aSz, rWrt.pDoc );
 
-            sal_Bool bMultiLine = sal_False;
+            bool bMultiLine = false;
             OUString sMultiLine("MultiLine");
             if( xPropSetInfo->hasPropertyByName( sMultiLine ) )
             {
@@ -844,7 +844,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             if( bMultiLine )
             {
                 if( rHTMLWrt.bLFPossible )
-                    rHTMLWrt.OutNewLine( sal_True );
+                    rHTMLWrt.OutNewLine( true );
                 eTag = TAG_TEXTAREA;
 
                 if( aSz.Height() )
@@ -1056,7 +1056,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
     if( rHTMLWrt.bCfgOutStyles )
     {
-        sal_Bool bEdit = TAG_TEXTAREA == eTag || TYPE_FILE == eType ||
+        bool bEdit = TAG_TEXTAREA == eTag || TYPE_FILE == eType ||
                      TYPE_TEXT == eType;
 
         SfxItemSet aItemSet( rHTMLWrt.pDoc->GetAttrPool(), RES_CHRATR_BEGIN,
@@ -1219,12 +1219,12 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             for( sal_Int32 i = 0; i < nCnt; i++ )
             {
                 OUString sVal;
-                sal_Bool bSelected = sal_False, bEmptyVal = sal_False;
+                bool bSelected = false, bEmptyVal = false;
                 if( i < nValCnt )
                 {
                     const OUString& rVal = pValues[i];
                     if( rVal.equalsAscii( "$$$empty$$$" ) )
-                        bEmptyVal = sal_True;
+                        bEmptyVal = true;
                     else
                         sVal = rVal;
                 }
@@ -1302,7 +1302,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
 
     // Controls sind nicht absatz-gebunden, deshalb kein LF mehr ausgeben!
-    rHTMLWrt.bLFPossible = sal_False;
+    rHTMLWrt.bLFPossible = false;
 
     if( rHTMLWrt.pxFormComps && rHTMLWrt.pxFormComps->is() )
         rHTMLWrt.OutHiddenControls( *rHTMLWrt.pxFormComps, xPropSet );

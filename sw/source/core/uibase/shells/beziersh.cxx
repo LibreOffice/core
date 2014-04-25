@@ -73,7 +73,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
     SdrView*    pSdrView = pSh->GetDrawView();
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16      nSlotId = rReq.GetSlot();
-    sal_Bool        bChanged = pSdrView->GetModel()->IsChanged();
+    bool        bChanged = pSdrView->GetModel()->IsChanged();
     pSdrView->GetModel()->SetChanged(false);
     const SfxPoolItem* pItem;
     if(pArgs)
@@ -282,7 +282,7 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
                 else
                 {
                     SdrPathSmoothKind eSmooth = pSdrView->GetMarkedPointsSmooth();
-                    sal_Bool bEnable = sal_False;
+                    bool bEnable = false;
                     switch (eSmooth)
                     {
                         case SDRPATHSMOOTH_DONTCARE  :

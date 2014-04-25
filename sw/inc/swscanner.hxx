@@ -42,19 +42,19 @@ class SwScanner
     sal_Int32 nOverriddenDashCount;
     LanguageType aCurrLang;
     sal_uInt16 nWordType;
-    sal_Bool bClip;
+    bool bClip;
 
 public:
     SwScanner( const SwTxtNode& rNd, const OUString& rTxt,
                const LanguageType* pLang,
                const ModelToViewHelper& rConvMap,
                sal_uInt16 nWordType,
-               sal_Int32 nStart, sal_Int32 nEnde, sal_Bool bClip = sal_False );
+               sal_Int32 nStart, sal_Int32 nEnde, bool bClip = false );
 
     // This next word function tries to find the language for the next word
     // It should currently _not_ be used for spell checking, and works only for
     // ! bReverse
-    sal_Bool NextWord();
+    bool NextWord();
 
     const OUString& GetWord() const    { return aWord; }
 

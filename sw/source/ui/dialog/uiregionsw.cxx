@@ -391,14 +391,14 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     if( !m_pTree->FirstSelected() && m_pTree->First() )
         m_pTree->Select( m_pTree->First() );
     m_pTree->Show();
-    bDontCheckPasswd = sal_False;
+    bDontCheckPasswd = false;
 }
 
-sal_Bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
+bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
 {
     if(bDontCheckPasswd)
-        return sal_True;
-    sal_Bool bRet = sal_True;
+        return true;
+    bool bRet = true;
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     while( pEntry )
     {
@@ -407,7 +407,7 @@ sal_Bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
             && pRepr->GetSectionData().GetPassword().getLength())
         {
             SfxPasswordDialog aPasswdDlg(this);
-            bRet = sal_False;
+            bRet = false;
             if (aPasswdDlg.Execute())
             {
                 const OUString sNewPasswd( aPasswdDlg.GetPassword() );
@@ -417,7 +417,7 @@ sal_Bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
                         pRepr->GetSectionData().GetPassword(), sNewPasswd))
                 {
                     pRepr->SetTempPasswd(aNewPasswd);
-                    bRet = sal_True;
+                    bRet = true;
                 }
                 else
                 {
@@ -713,7 +713,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         m_pPasswdCB->Enable(bPasswdEnabled);
         m_pPasswdPB->Enable(bPasswdEnabled);
     }
-    bDontCheckPasswd = sal_False;
+    bDontCheckPasswd = false;
     return 0;
 }
 
@@ -758,7 +758,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
 
     rSh.StartAllAction();
     rSh.StartUndo();
-    rSh.ResetSelect( 0,sal_False );
+    rSh.ResetSelect( 0,false );
     SvTreeListEntry* pEntry = m_pTree->First();
 
     while( pEntry )
@@ -776,13 +776,13 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
             if( pFmt->GetCol() != pRepr->GetCol() )
                 pSet->Put( pRepr->GetCol() );
 
-            if( pFmt->GetBackground(sal_False) != pRepr->GetBackground() )
+            if( pFmt->GetBackground(false) != pRepr->GetBackground() )
                 pSet->Put( pRepr->GetBackground() );
 
-            if( pFmt->GetFtnAtTxtEnd(sal_False) != pRepr->GetFtnNtAtEnd() )
+            if( pFmt->GetFtnAtTxtEnd(false) != pRepr->GetFtnNtAtEnd() )
                 pSet->Put( pRepr->GetFtnNtAtEnd() );
 
-            if( pFmt->GetEndAtTxtEnd(sal_False) != pRepr->GetEndNtAtEnd() )
+            if( pFmt->GetEndAtTxtEnd(false) != pRepr->GetEndNtAtEnd() )
                 pSet->Put( pRepr->GetEndNtAtEnd() );
 
             if( pFmt->GetBalancedColumns() != pRepr->GetBalance() )
@@ -831,7 +831,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
     pBox->EnableTriState(false);
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
-    sal_Bool bCheck = TRISTATE_TRUE == pBox->GetState();
+    bool bCheck = TRISTATE_TRUE == pBox->GetState();
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
@@ -973,14 +973,14 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
         return 0;
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     pBox->EnableTriState(false);
-    sal_Bool bMulti = 1 < m_pTree->GetSelectionCount();
-    sal_Bool bFile = pBox->IsChecked();
+    bool bMulti = 1 < m_pTree->GetSelectionCount();
+    bool bFile = pBox->IsChecked();
     if(pEntry)
     {
         while(pEntry)
         {
             const SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
-            sal_Bool bContent = pSectRepr->IsContent();
+            bool bContent = pSectRepr->IsContent();
             if( pBox->IsChecked() && bContent && rSh.HasSelection() )
             {
                 if( RET_NO == QueryBox( this, SW_RES(QB_CONNECT) ).Execute() )
@@ -1203,7 +1203,7 @@ IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
         bool bFile = m_pFileCB->IsChecked();
         SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
         SwSectionData & rData( pSectRepr->GetSectionData() );
-        sal_Bool bDDE = pBox->IsChecked();
+        bool bDDE = pBox->IsChecked();
         if(bDDE)
         {
             m_pFileNameFT->Hide();
@@ -1396,10 +1396,10 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
     return 0;
 }
 
-Image SwEditRegionDlg::BuildBitmap( sal_Bool bProtect, sal_Bool bHidden )
+Image SwEditRegionDlg::BuildBitmap( bool bProtect, bool bHidden )
 {
     ImageList& rImgLst = aImageIL;
-    return rImgLst.GetImage((int(!bHidden)+(bProtect<<1)) + 1);
+    return rImgLst.GetImage((int(!bHidden)+((bProtect ? 1 : 0)<<1)) + 1);
 }
 
 /*--------------------------------------------------------------------
@@ -1471,8 +1471,8 @@ void SwInsertSectionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
         const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)GetInputSetImpl()->Get(RES_FRM_SIZE);
         ((SwColumnPage&)rPage).SetPageWidth(rSize.GetWidth());
-        ((SwColumnPage&)rPage).ShowBalance(sal_True);
-        ((SwColumnPage&)rPage).SetInSection(sal_True);
+        ((SwColumnPage&)rPage).ShowBalance(true);
+        ((SwColumnPage&)rPage).SetInSection(true);
     }
     else if (nId == m_nIndentPage)
         ((SwSectionIndentTabPage&)rPage).SetWrtShell(rWrtSh);
@@ -1612,7 +1612,7 @@ bool SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
 {
     SwSectionData aSection(CONTENT_SECTION, m_pCurName->GetText());
     aSection.SetCondition(m_pConditionED->GetText());
-    sal_Bool bProtected = m_pProtectCB->IsChecked();
+    bool bProtected = m_pProtectCB->IsChecked();
     aSection.SetProtectFlag(bProtected);
     aSection.SetHidden(m_pHideCB->IsChecked());
     // edit in readonly sections
@@ -1624,7 +1624,7 @@ bool SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
     }
     const OUString sFileName = m_pFileNameED->GetText();
     const OUString sSubRegion = m_pSubRegionED->GetText();
-    sal_Bool bDDe = m_pDDECB->IsChecked();
+    bool bDDe = m_pDDECB->IsChecked();
     if(m_pFileCB->IsChecked() && (!sFileName.isEmpty() || !sSubRegion.isEmpty() || bDDe))
     {
         OUString aLinkFile;
@@ -1679,7 +1679,7 @@ SfxTabPage* SwInsertSectionTabPage::Create( Window* pParent,
 
 IMPL_LINK( SwInsertSectionTabPage, ChangeHideHdl, CheckBox *, pBox )
 {
-    sal_Bool bHide = pBox->IsChecked();
+    bool bHide = pBox->IsChecked();
     m_pConditionED->Enable(bHide);
     m_pConditionFT->Enable(bHide);
     return 0;
@@ -1692,7 +1692,7 @@ IMPL_LINK_NOARG(SwInsertSectionTabPage, ChangeEditInReadonlyHdl)
 
 IMPL_LINK( SwInsertSectionTabPage, ChangeProtectHdl, CheckBox *, pBox )
 {
-    sal_Bool bCheck = pBox->IsChecked();
+    bool bCheck = pBox->IsChecked();
     m_pPasswdCB->Enable(bCheck);
     m_pPasswdPB->Enable(bCheck);
     return 0;
@@ -1700,8 +1700,8 @@ IMPL_LINK( SwInsertSectionTabPage, ChangeProtectHdl, CheckBox *, pBox )
 
 IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
 {
-    sal_Bool bChange = pButton == m_pPasswdPB;
-    sal_Bool bSet = bChange ? bChange : m_pPasswdCB->IsChecked();
+    bool bChange = pButton == m_pPasswdPB;
+    bool bSet = bChange ? bChange : m_pPasswdCB->IsChecked();
     if(bSet)
     {
         if(!m_aNewPasswd.getLength() || bChange)
@@ -1746,7 +1746,7 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
             pBox->Check( false );
     }
 
-    sal_Bool bFile = pBox->IsChecked();
+    bool bFile = pBox->IsChecked();
     m_pFileNameFT->Enable(bFile);
     m_pFileNameED->Enable(bFile);
     m_pFilePB->Enable(bFile);
@@ -1779,8 +1779,8 @@ IMPL_LINK_NOARG(SwInsertSectionTabPage, FileSearchHdl)
 
 IMPL_LINK( SwInsertSectionTabPage, DDEHdl, CheckBox*, pBox )
 {
-    sal_Bool bDDE = pBox->IsChecked();
-    sal_Bool bFile = m_pFileCB->IsChecked();
+    bool bDDE = pBox->IsChecked();
+    bool bFile = m_pFileCB->IsChecked();
     m_pFilePB->Enable(!bDDE && bFile);
     if(bDDE)
     {
@@ -1923,8 +1923,8 @@ bool SwSectionFtnEndTabPage::FillItemSet( SfxItemSet& rSet )
     return true;
 }
 
-void SwSectionFtnEndTabPage::ResetState( sal_Bool bFtn,
-                                    const SwFmtFtnEndAtTxtEnd& rAttr )
+void SwSectionFtnEndTabPage::ResetState( bool bFtn,
+                                         const SwFmtFtnEndAtTxtEnd& rAttr )
 {
     CheckBox *pNtAtTextEndCB, *pNtNumCB, *pNtNumFmtCB;
     FixedText*pPrefixFT, *pSuffixFT;
@@ -2005,9 +2005,9 @@ void SwSectionFtnEndTabPage::ResetState( sal_Bool bFtn,
 
 void SwSectionFtnEndTabPage::Reset( const SfxItemSet& rSet )
 {
-    ResetState( sal_True, (const SwFmtFtnAtTxtEnd&)rSet.Get(
+    ResetState( true, (const SwFmtFtnAtTxtEnd&)rSet.Get(
                                     RES_FTN_AT_TXTEND, false ));
-    ResetState( sal_False, (const SwFmtEndAtTxtEnd&)rSet.Get(
+    ResetState( false, (const SwFmtEndAtTxtEnd&)rSet.Get(
                                     RES_END_AT_TXTEND, false ));
 }
 
@@ -2019,7 +2019,7 @@ SfxTabPage* SwSectionFtnEndTabPage::Create( Window* pParent,
 
 IMPL_LINK( SwSectionFtnEndTabPage, FootEndHdl, CheckBox *, pBox )
 {
-    sal_Bool bFoot = pFtnNtAtTextEndCB == pBox || pFtnNtNumCB == pBox ||
+    bool bFoot = pFtnNtAtTextEndCB == pBox || pFtnNtNumCB == pBox ||
                     pFtnNtNumFmtCB == pBox ;
 
     CheckBox *pNumBox, *pNumFmtBox, *pEndBox;
@@ -2056,9 +2056,9 @@ IMPL_LINK( SwSectionFtnEndTabPage, FootEndHdl, CheckBox *, pBox )
         pSuffixED = pEndSuffixED;
     }
 
-    sal_Bool bEnableAtEnd = TRISTATE_TRUE == pEndBox->GetState();
-    sal_Bool bEnableNum = bEnableAtEnd && TRISTATE_TRUE == pNumBox->GetState();
-    sal_Bool bEnableNumFmt = bEnableNum && TRISTATE_TRUE == pNumFmtBox->GetState();
+    bool bEnableAtEnd = TRISTATE_TRUE == pEndBox->GetState();
+    bool bEnableNum = bEnableAtEnd && TRISTATE_TRUE == pNumBox->GetState();
+    bool bEnableNumFmt = bEnableNum && TRISTATE_TRUE == pNumFmtBox->GetState();
 
     pNumBox->Enable( bEnableAtEnd );
     pOffsetTxt->Enable( bEnableNum );
@@ -2112,8 +2112,8 @@ void SwSectionPropertyTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage 
     }
     else if (nId == m_nColumnPageId)
     {
-        ((SwColumnPage&)rPage).ShowBalance(sal_True);
-        ((SwColumnPage&)rPage).SetInSection(sal_True);
+        ((SwColumnPage&)rPage).ShowBalance(true);
+        ((SwColumnPage&)rPage).SetInSection(true);
     }
     else if (nId == m_nIndentPage)
         ((SwSectionIndentTabPage&)rPage).SetWrtShell(rWrtSh);
@@ -2150,7 +2150,7 @@ bool SwSectionIndentTabPage::FillItemSet( SfxItemSet& rSet)
 void SwSectionIndentTabPage::Reset( const SfxItemSet& rSet)
 {
     //this page doesn't show up in HTML mode
-    FieldUnit aMetric = ::GetDfltMetric(sal_False);
+    FieldUnit aMetric = ::GetDfltMetric(false);
     SetMetric(*m_pBeforeMF, aMetric);
     SetMetric(*m_pAfterMF , aMetric);
 

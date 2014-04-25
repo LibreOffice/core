@@ -56,7 +56,7 @@ void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, 
     //!! Otherwise the grammar checker might process it and crash if we later on
     //!! simply delete this document while he is still at it.
     SwViewOption  aViewOpt( *pViewOpt );
-    aViewOpt.SetOnlineSpell( sal_False );
+    aViewOpt.SetOnlineSpell( false );
 
     m_pPostItShell.reset(new SwViewShell(*new SwDoc, 0, &aViewOpt, pOutDev));
 }
@@ -126,7 +126,7 @@ void SwRenderData::MakeSwPrtOptions(
 
     // get default print options
     const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
-    sal_Bool bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
+    bool bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
     ::sw::InitPrintOptionsFromApplication(rOptions, bWeb);
 
     // get print options to use from provided properties
@@ -299,7 +299,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1";
     aWidgetIds[1] = "printpages";
     aChoices[2] = aLocalizedStrings.GetString( 29 );
-    aChoicesDisabled[2] = sal_Bool(! bHasSelection);
+    aChoicesDisabled[2] = ! bHasSelection;
     aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2";
     aWidgetIds[2] = "printselection";
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),

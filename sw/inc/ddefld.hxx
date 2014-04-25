@@ -38,8 +38,8 @@ class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
     SwDoc* pDoc;
 
     sal_uInt16 nRefCnt;
-    sal_Bool bCRLFFlag : 1;
-    sal_Bool bDeleted : 1;
+    bool bCRLFFlag : 1;
+    bool bDeleted : 1;
 
     SAL_DLLPRIVATE void _RefCntChgd();
 
@@ -50,7 +50,7 @@ public:
 
     OUString GetExpansion() const               { return aExpansion; }
     void SetExpansion( const OUString& rStr )   { aExpansion = rStr;
-                                                  bCRLFFlag = sal_False; }
+                                                  bCRLFFlag = false; }
 
     virtual SwFieldType* Copy() const SAL_OVERRIDE;
     virtual OUString GetName() const SAL_OVERRIDE;
@@ -64,8 +64,8 @@ public:
     sal_uInt16 GetType() const          { return refLink->GetUpdateMode();  }
     void SetType( sal_uInt16 nType )    { refLink->SetUpdateMode( nType );  }
 
-    sal_Bool IsDeleted() const          { return bDeleted; }
-    void SetDeleted( sal_Bool b )       { bDeleted = b; }
+    bool IsDeleted() const          { return bDeleted; }
+    void SetDeleted( bool b )       { bDeleted = b; }
 
     void UpdateNow()                { refLink->Update(); }
     void Disconnect()               { refLink->Disconnect(); }
@@ -80,7 +80,7 @@ public:
     void IncRefCnt() {  if( !nRefCnt++ && pDoc ) _RefCntChgd(); }
     void DecRefCnt() {  if( !--nRefCnt && pDoc ) _RefCntChgd(); }
 
-    void SetCRLFDelFlag( sal_Bool bFlag = sal_True )    { bCRLFFlag = bFlag; }
+    void SetCRLFDelFlag( bool bFlag = true )    { bCRLFFlag = bFlag; }
 };
 
 /*--------------------------------------------------------------------

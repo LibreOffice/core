@@ -105,7 +105,7 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
     void InvalidateCursorPosition(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rAcc );
-    void DoInvalidateShapeSelection(sal_Bool bInvalidateFocusMode = sal_False);
+    void DoInvalidateShapeSelection(bool bInvalidateFocusMode = false);
 
     void InvalidateShapeSelection();
 
@@ -146,27 +146,27 @@ public:
 
     ::rtl::Reference < SwAccessibleContext > GetContextImpl(
                                                  const SwFrm *pFrm,
-                                                sal_Bool bCreate = sal_True );
+                                                bool bCreate = true );
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> GetContext(
                                                  const SwFrm *pFrm,
-                                                sal_Bool bCreate = sal_True );
+                                                bool bCreate = true );
 
     ::rtl::Reference < ::accessibility::AccessibleShape > GetContextImpl(
                                         const SdrObject *pObj,
                                         SwAccessibleContext *pParentImpl,
-                                        sal_Bool bCreate = sal_True );
+                                        bool bCreate = true );
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> GetContext(
                                         const SdrObject *pObj,
                                         SwAccessibleContext *pParentImpl,
-                                        sal_Bool bCreate = sal_True );
+                                        bool bCreate = true );
 
     inline SwViewShell* GetShell() const
     {
         return mpVSh;
     }
-    sal_Bool IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFESh);
+    bool IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFESh);
     void AddShapeContext(const SdrObject *pObj,
                              ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccShape);
 
@@ -194,7 +194,7 @@ public:
     void Dispose( const SwFrm* pFrm,
                   const SdrObject* pObj,
                   Window* pWindow,
-                  sal_Bool bRecursive = sal_False );
+                  bool bRecursive = false );
 
     void InvalidatePosOrSize( const SwFrm* pFrm,
                               const SdrObject* pObj,

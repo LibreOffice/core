@@ -58,7 +58,7 @@
 SFX_IMPL_MODELESSDIALOG_WITHID( SwRedlineAcceptChild, FN_REDLINE_ACCEPT )
 
 static sal_uInt16 nSortMode = 0xffff;
-static sal_Bool   bSortDir = sal_True;
+static bool       bSortDir = true;
 
 SwRedlineAcceptChild::SwRedlineAcceptChild( Window* _pParent,
                                             sal_uInt16 nId,
@@ -74,11 +74,11 @@ SwRedlineAcceptChild::SwRedlineAcceptChild( Window* _pParent,
 /*--------------------------------------------------------------------
     Description: newly initialise dialog after document switch
  --------------------------------------------------------------------*/
-sal_Bool SwRedlineAcceptChild::ReInitDlg(SwDocShell *pDocSh)
+bool SwRedlineAcceptChild::ReInitDlg(SwDocShell *pDocSh)
 {
-    sal_Bool bRet;
+    bool bRet;
 
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == sal_True)  // update immediately, doc switch!
+    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)))  // update immediately, doc switch!
         ((SwModelessRedlineAcceptDlg*)GetWindow())->Activate();
 
     return bRet;
@@ -109,7 +109,7 @@ void SwModelessRedlineAcceptDlg::Activate()
 
         pChildWin->SetOldDocShell(pDocSh);  // avoid recursion (using modified-Hdl)
 
-        sal_Bool bMod = pSh->IsModified();
+        bool bMod = pSh->IsModified();
         SfxBoolItem aShow(FN_REDLINE_SHOW, true);
         pSh->GetView().GetViewFrame()->GetDispatcher()->Execute(
             FN_REDLINE_SHOW, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aShow, 0L);
@@ -142,7 +142,7 @@ SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
     delete pImplDlg;
 }
 
-SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, sal_Bool bAutoFmt) :
+SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, bool bAutoFmt) :
     pParentDlg      (pParent),
     aTabPagesCTRL   (pParent->get_content_area()),
     aPopup          (SW_RES(MN_REDLINE_POPUP)),
@@ -152,8 +152,8 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, sal_Bool bAutoFmt) :
     sTableChgd      (SW_RES(STR_REDLINE_TABLECHG)),
     sFmtCollSet     (SW_RES(STR_REDLINE_FMTCOLLSET)),
     sAutoFormat     (SW_RES(STR_REDLINE_AUTOFMT)),
-    bOnlyFormatedRedlines( sal_False ),
-    bHasReadonlySel ( sal_False ),
+    bOnlyFormatedRedlines( false ),
+    bHasReadonlySel ( false ),
     bRedlnAutoFmt   (bAutoFmt),
     bInhibitActivate( false )
 {
@@ -257,8 +257,8 @@ void SwRedlineAcceptDlg::InitAuthors()
 
     sal_uInt16 nCount = pSh->GetRedlineCount();
 
-    bOnlyFormatedRedlines = sal_True;
-    bHasReadonlySel = sal_False;
+    bOnlyFormatedRedlines = true;
+    bHasReadonlySel = false;
     bool bIsNotFormated = false;
     sal_uInt16 i;
 
@@ -268,7 +268,7 @@ void SwRedlineAcceptDlg::InitAuthors()
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
 
         if( bOnlyFormatedRedlines && nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType() )
-            bOnlyFormatedRedlines = sal_False;
+            bOnlyFormatedRedlines = false;
 
         aStrings.push_back(rRedln.GetAuthorString());
 
@@ -387,7 +387,7 @@ void SwRedlineAcceptDlg::Activate()
         if (&rRedln.GetRedlineData() != pParent->pData)
         {
             // Redline-Parents were inserted, changed or deleted
-            if ((i = CalcDiff(i, sal_False)) == USHRT_MAX)
+            if ((i = CalcDiff(i, false)) == USHRT_MAX)
                 return;
             continue;
         }
@@ -398,7 +398,7 @@ void SwRedlineAcceptDlg::Activate()
         if (!pRedlineData && pBackupData)
         {
             // Redline-Children were deleted
-            if ((i = CalcDiff(i, sal_True)) == USHRT_MAX)
+            if ((i = CalcDiff(i, true)) == USHRT_MAX)
                 return;
             continue;
         }
@@ -409,7 +409,7 @@ void SwRedlineAcceptDlg::Activate()
                 if (pRedlineData != pBackupData->pChild)
                 {
                     // Redline-Children were inserted, changed or deleted
-                    if ((i = CalcDiff(i, sal_True)) == USHRT_MAX)
+                    if ((i = CalcDiff(i, true)) == USHRT_MAX)
                         return;
                     continue;
                 }
@@ -447,7 +447,7 @@ void SwRedlineAcceptDlg::Activate()
     InitAuthors();
 }
 
-sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
+sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
 {
     if (!nStart)
     {
@@ -534,7 +534,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
     bool bAutoFmt = (rRedln.GetRealType() & nAutoFmt) != 0;
 
     OUString sAction = GetActionText(rRedln);
-    sal_Bool bValidParent = sFilterAction.isEmpty() || sFilterAction == sAction;
+    bool bValidParent = sFilterAction.isEmpty() || sFilterAction == sAction;
     bValidParent = bValidParent && pTable->IsValidEntry(rRedln.GetAuthorString(), rRedln.GetTimeStamp(), rRedln.GetComment());
     if (nAutoFmt)
     {
@@ -557,7 +557,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
         }
         bValidParent = bValidParent && bAutoFmt;
     }
-    sal_Bool bValidTree = bValidParent;
+    bool bValidTree = bValidParent;
 
     for (sal_uInt16 nStack = 1; nStack < rRedln.GetStackCount(); nStack++)
     {
@@ -573,7 +573,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
             pParent->pNext = pRedlineChild;
 
         sAction = GetActionText(rRedln, nStack);
-        sal_Bool bValidChild = sFilterAction.isEmpty() || sFilterAction == sAction;
+        bool bValidChild = sFilterAction.isEmpty() || sFilterAction == sAction;
         bValidChild = bValidChild && pTable->IsValidEntry(rRedln.GetAuthorString(nStack), rRedln.GetTimeStamp(nStack), rRedln.GetComment());
         if (nAutoFmt)
             bValidChild = bValidChild && bAutoFmt;
@@ -709,7 +709,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
             pSh->SwCrsrShell::Push();
             if( 0 == (pCurrRedline = pSh->SelNextRedline()))
                 pCurrRedline = pSh->SelPrevRedline();
-            pSh->SwCrsrShell::Pop( sal_False );
+            pSh->SwCrsrShell::Pop( false );
         }
     }
     else
@@ -746,7 +746,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     }
 }
 
-void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
+void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
     SvTreeListEntry* pEntry = bSelect ? pTable->FirstSelected() : pTable->First();
@@ -777,7 +777,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
         pEntry = bSelect ? pTable->NextSelected(pEntry) : pTable->Next(pEntry);
     }
 
-    sal_Bool (SwEditShell:: *FnAccRej)( sal_uInt16 ) = &SwEditShell::AcceptRedline;
+    bool (SwEditShell:: *FnAccRej)( sal_uInt16 ) = &SwEditShell::AcceptRedline;
     if( !bAccept )
         FnAccRej = &SwEditShell::RejectRedline;
 
@@ -854,25 +854,25 @@ sal_uInt16 SwRedlineAcceptDlg::GetRedlinePos( const SvTreeListEntry& rEntry ) co
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, AcceptHdl)
 {
-    CallAcceptReject( sal_True, sal_True );
+    CallAcceptReject( true, true );
     return 0;
 }
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, AcceptAllHdl)
 {
-    CallAcceptReject( sal_False, sal_True );
+    CallAcceptReject( false, true );
     return 0;
 }
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, RejectHdl)
 {
-    CallAcceptReject( sal_True, sal_False );
+    CallAcceptReject( true, false );
     return 0;
 }
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, RejectAllHdl)
 {
-    CallAcceptReject( sal_False, sal_False );
+    CallAcceptReject( false, false );
     return 0;
 }
 
@@ -965,7 +965,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl)
                 const SwRangeRedline& rRedln = pSh->GetRedline( nPos );
                 bIsNotFormated |= nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType();
 
-                if (pSh->GotoRedline(nPos, sal_True))
+                if (pSh->GotoRedline(nPos, true))
                 {
                     pSh->SetInSelect();
                     pSh->EnterAddMode();
@@ -1009,7 +1009,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                 sal_uInt16 nPos = GetRedlinePos(*pTopEntry);
 
                 // disable commenting for protected areas
-                if (nPos != USHRT_MAX && (pRed = pSh->GotoRedline(nPos, sal_True)) != 0)
+                if (nPos != USHRT_MAX && (pRed = pSh->GotoRedline(nPos, true)) != 0)
                 {
                     if( pSh->IsCrsrPtAtEnd() )
                         pSh->SwapPam();
@@ -1129,7 +1129,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
             case MN_SORT_COMMENT:
             case MN_SORT_POSITION:
                 {
-                    bSortDir = sal_True;
+                    bSortDir = true;
                     if (nRet - MN_SORT_ACTION == 4 && pTable->GetSortedCol() == 0xffff)
                         break;  // we already have it
 

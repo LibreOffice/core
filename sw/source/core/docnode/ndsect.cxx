@@ -343,7 +343,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         rNewSect.SetCondHidden( aCalc.Calculate( rNewSect.GetCondition() ).GetBool() );
     }
 
-    sal_Bool bUpdateFtn = sal_False;
+    bool bUpdateFtn = false;
     if( GetFtnIdxs().size() && pAttr )
     {
         sal_uInt16 nVal = ((SwFmtFtnAtTxtEnd&)pAttr->Get(
@@ -354,7 +354,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                             pAttr->Get( RES_END_AT_TXTEND )).GetValue() ) ||
               FTNEND_ATTXTEND_OWNNUMANDFMT == nVal ))
         {
-            bUpdateFtn = sal_True;
+            bUpdateFtn = true;
         }
     }
 
@@ -517,12 +517,12 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes )
 
     if( mpSectionFmtTbl->end() != itFmtPos )
     {
-        const SwNodeIndex* pIdx = pFmt->GetCntnt( sal_False ).GetCntntIdx();
+        const SwNodeIndex* pIdx = pFmt->GetCntnt( false ).GetCntntIdx();
         const SfxPoolItem* pFtnEndAtTxtEnd;
         if( SFX_ITEM_SET != pFmt->GetItemState(
-                            RES_FTN_AT_TXTEND, sal_True, &pFtnEndAtTxtEnd ) ||
+                            RES_FTN_AT_TXTEND, true, &pFtnEndAtTxtEnd ) ||
             SFX_ITEM_SET != pFmt->GetItemState(
-                            RES_END_AT_TXTEND, sal_True, &pFtnEndAtTxtEnd ))
+                            RES_END_AT_TXTEND, true, &pFtnEndAtTxtEnd ))
             pFtnEndAtTxtEnd = 0;
 
         const SwSectionNode* pSectNd;
@@ -1029,7 +1029,7 @@ SwSectionNode::~SwSectionNode()
 {
     // mba: test if iteration works as clients will be removed in callback
     // use hint which allows to specify, if the content shall be saved or not
-    m_pSection->GetFmt()->CallSwClientNotify( SwSectionFrmMoveAndDeleteHint( sal_True ) );
+    m_pSection->GetFmt()->CallSwClientNotify( SwSectionFrmMoveAndDeleteHint( true ) );
     SwSectionFmt* pFmt = m_pSection->GetFmt();
     if( pFmt )
     {
@@ -1267,7 +1267,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
         pNewSect->SetEditInReadonly( true );
 
     SwNodeRange aRg( *this, +1, *EndOfSectionNode() ); // Where am I?
-    rNds._Copy( aRg, aInsPos, sal_False );
+    rNds._Copy( aRg, aInsPos, false );
 
     // Delete all Frames from the copied Area. They are created when creating
     // the SectionFrames.
@@ -1291,7 +1291,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     return pSectNd;
 }
 
-sal_Bool SwSectionNode::IsCntntHidden() const
+bool SwSectionNode::IsCntntHidden() const
 {
     OSL_ENSURE( !m_pSection->IsHidden(),
             "That's simple: Hidden Section => Hidden Content" );
@@ -1309,12 +1309,12 @@ sal_Bool SwSectionNode::IsCntntHidden() const
         else
         {
             if( aTmp.GetNode().IsCntntNode() || aTmp.GetNode().IsTableNode() )
-                return sal_False; // We found non-hidden content
+                return false; // We found non-hidden content
             OSL_ENSURE( aTmp.GetNode().IsEndNode(), "EndNode expected" );
         }
         ++aTmp;
     }
-    return sal_True; // Hide everything
+    return true; // Hide everything
 }
 
 void SwSectionNode::NodesArrChgd()

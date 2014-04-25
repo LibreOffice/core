@@ -114,7 +114,7 @@ static bool lcl_IsItemSet(const SwCntntNode & rNode, sal_uInt16 which)
 SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 {
     SwFrmFmt *pFmt = 0;
-    const sal_Bool bMod = IsModified();
+    const bool bMod = IsModified();
     bool bHeader = false;
 
     switch ( eRequest )
@@ -443,7 +443,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt(
         //contact object itself. They should be managed by SwUndoInsLayFmt.
         const ::sw::DrawUndoGuard drawUndoGuard(GetIDocumentUndoRedo());
 
-        pSrcDoc->CopyWithFlyInFly( aRg, 0, aIdx, NULL, sal_False, sal_True, sal_True );
+        pSrcDoc->CopyWithFlyInFly( aRg, 0, aIdx, NULL, false, true, true );
     }
     else
     {
@@ -605,7 +605,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
         else
         {
             if( eRequestId != aAnch.GetAnchorId() &&
-                SFX_ITEM_SET != pFmt->GetItemState( RES_ANCHOR, sal_True ) )
+                SFX_ITEM_SET != pFmt->GetItemState( RES_ANCHOR, true ) )
             {
                 aAnch.SetType( eRequestId );
             }
@@ -691,7 +691,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
         if( (pFlySet && SFX_ITEM_SET == pFlySet->GetItemState(
                 RES_ANCHOR, false, (const SfxPoolItem**)&pAnch )) ||
             ( pFrmFmt && SFX_ITEM_SET == pFrmFmt->GetItemState(
-                RES_ANCHOR, sal_True, (const SfxPoolItem**)&pAnch )) )
+                RES_ANCHOR, true, (const SfxPoolItem**)&pAnch )) )
         {
             if ( (FLY_AT_PAGE != pAnch->GetAnchorId()) )
             {
@@ -1134,9 +1134,9 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         SwUndoInsertLabel *const pUndo,
         SwLabelType const eType, OUString const& rTxt, OUString const& rSeparator,
             const OUString& rNumberingSeparator,
-            const sal_Bool bBefore, const sal_uInt16 nId, const sal_uLong nNdIdx,
+            const bool bBefore, const sal_uInt16 nId, const sal_uLong nNdIdx,
             const OUString& rCharacterStyle,
-            const sal_Bool bCpyBrd )
+            const bool bCpyBrd )
 {
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
@@ -1372,7 +1372,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     if( pNew )
     {
         // #i61007# order of captions
-        sal_Bool bOrderNumberingFirst = SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst();
+        bool bOrderNumberingFirst = SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst();
         // Work up OUString
         OUString aTxt;
         if( bOrderNumberingFirst )
@@ -1450,9 +1450,9 @@ SwFlyFrmFmt *
 SwDoc::InsertLabel(
         SwLabelType const eType, OUString const& rTxt, OUString const& rSeparator,
         OUString const& rNumberingSeparator,
-        sal_Bool const bBefore, sal_uInt16 const nId, sal_uLong const nNdIdx,
+        bool const bBefore, sal_uInt16 const nId, sal_uLong const nNdIdx,
         OUString const& rCharacterStyle,
-        sal_Bool const bCpyBrd )
+        bool const bCpyBrd )
 {
     SwUndoInsertLabel * pUndo(0);
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -1666,7 +1666,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     if( pNew )
     {
         //#i61007# order of captions
-        sal_Bool bOrderNumberingFirst = SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst();
+        bool bOrderNumberingFirst = SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst();
 
         // prepare string
         OUString aTxt;
@@ -1742,8 +1742,8 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel(
     {
         GetIDocumentUndoRedo().ClearRedo();
         pUndo = new SwUndoInsertLabel(
-            LTYPE_DRAW, rTxt, rSeparator, rNumberSeparator, sal_False,
-            nId, rCharacterStyle, sal_False );
+            LTYPE_DRAW, rTxt, rSeparator, rNumberSeparator, false,
+            nId, rCharacterStyle, false );
     }
 
     SwFlyFrmFmt *const pNewFmt = lcl_InsertDrawLabel(
@@ -1820,8 +1820,8 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 
         if( pTmpRoot->IsNeedGrammarCheck() )
         {
-            sal_Bool bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
-            sal_Bool bIsAutoGrammar = sal_False;
+            bool bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
+            bool bIsAutoGrammar = false;
             SvtLinguConfig().GetProperty( OUString(
                         UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
 
@@ -1863,8 +1863,8 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             pTmpRoot->StartAllAction();
 
             // no jump on update of fields #i85168#
-            const sal_Bool bOldLockView = pStartSh->IsViewLocked();
-            pStartSh->LockView( sal_True );
+            const bool bOldLockView = pStartSh->IsViewLocked();
+            pStartSh->LockView( true );
 
             GetSysFldType( RES_CHAPTERFLD )->ModifyNotification( 0, 0 );    // ChapterField
             UpdateExpFlds( 0, false );      // Updates ExpressionFields
@@ -1896,7 +1896,7 @@ IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
             {
                 // Make sure to repaint with virtual device
                 pSh->LockPaint();
-                pSh->UnlockPaint( sal_True );
+                pSh->UnlockPaint( true );
             }
             pSh = (SwViewShell*)pSh->GetNext();
         } while( pSh != pStartSh );
@@ -2003,7 +2003,7 @@ void SwDoc::SetFlyName( SwFlyFrmFmt& rFmt, const OUString& rName )
             }
         sName = lcl_GetUniqueFlyName( this, nTyp );
     }
-    rFmt.SetName( sName, sal_True );
+    rFmt.SetName( sName, true );
     SetModified();
 }
 
@@ -2222,7 +2222,7 @@ short SwDoc::GetTextDirection( const SwPosition& rPos,
 
             if( !pItem )
             {
-                const SwPageDesc* pPgDsc = pNd->FindPageDesc( sal_False );
+                const SwPageDesc* pPgDsc = pNd->FindPageDesc( false );
                 if( pPgDsc )
                     pItem = &pPgDsc->GetMaster().GetFrmDir();
             }

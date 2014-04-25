@@ -258,7 +258,7 @@ IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
     ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
     if ( fnSetActGroup )
         (*fnSetActGroup)( sGroup );
-    pGlosHdl->SetCurGroup(sGroup, sal_True);
+    pGlosHdl->SetCurGroup(sGroup, true);
     pGlosHdl->InsertGlossary(sShortName);
 
     return 0;
@@ -585,13 +585,13 @@ void SwScrollNaviToolBox::MouseButtonUp( const MouseEvent& rMEvt )
 
 void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )
 {
-    SetItemText(NID_NEXT, SwScrollNaviPopup::GetQuickHelpText(sal_True));
-    SetItemText(NID_PREV, SwScrollNaviPopup::GetQuickHelpText(sal_False));
+    SetItemText(NID_NEXT, SwScrollNaviPopup::GetQuickHelpText(true));
+    SetItemText(NID_PREV, SwScrollNaviPopup::GetQuickHelpText(false));
     ToolBox::RequestHelp( rHEvt );
 
 }
 
-OUString SwScrollNaviPopup::GetQuickHelpText(sal_Bool bNext)
+OUString SwScrollNaviPopup::GetQuickHelpText(bool bNext)
 {
     sal_uInt16 nResId = STR_IMGBTN_START;
     nResId += SwView::GetMoveType() - NID_START;

@@ -123,7 +123,7 @@ OUString SwVbaTableHelper::getColumnStr( sal_Int32 nCol )
 sal_Int32 SwVbaTableHelper::getTableWidth( ) throw (uno::RuntimeException)
 {
     sal_Int32 nWidth = 0;
-    sal_Bool isWidthRelatvie = sal_False;
+    bool isWidthRelatvie = false;
     uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
     xTableProps->getPropertyValue("IsWidthRelative") >>= isWidthRelatvie;
     if( isWidthRelatvie )
@@ -163,7 +163,7 @@ void SwVbaTableHelper::InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, 
     rCols.SetLeft    ( 0 );
     rCols.SetRight   ( UNO_TABLE_COLUMN_SUM );
     rCols.SetRightMax( UNO_TABLE_COLUMN_SUM );
-    pTable->GetTabCols( rCols, pStart, sal_False, sal_False );
+    pTable->GetTabCols( rCols, pStart, false, false );
 }
 
 sal_Int32 SwVbaTableHelper::GetColCount( SwTabCols& rCols ) const

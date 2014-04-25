@@ -38,7 +38,7 @@
 #include <fieldhint.hxx>
 
 /// count field types with a ResId, if 0 count all
-sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, sal_Bool bUsed ) const
+sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, bool bUsed ) const
 {
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
     const sal_uInt16 nSize = pFldTypes->size();
@@ -71,7 +71,7 @@ sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, sal_Bool bUsed ) cons
 }
 
 /// get field types with a ResId, if 0 get all
-SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, sal_Bool bUsed ) const
+SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, bool bUsed ) const
 {
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
     const sal_uInt16 nSize = pFldTypes->size();
@@ -184,7 +184,7 @@ void SwEditShell::FieldToText( SwFieldType* pType )
         pClient->SwClientNotifyCall( *pType, aHint );
      }
 
-    Pop( sal_False );
+    Pop( false );
     EndAllAction();
     EndUndo( UNDO_DELETE );
 }
@@ -275,7 +275,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         // 1) if only one PaM has more than one field or
         // 2) if there are mixed field types
         bool bOkay = true;
-        sal_Bool bTblSelBreak = sal_False;
+        bool bTblSelBreak = false;
 
         SwMsgPoolItem aFldHint( RES_TXTATR_FIELD );  // Search-Hint
         SwMsgPoolItem aAnnotationFldHint( RES_TXTATR_ANNOTATION );
@@ -361,7 +361,7 @@ void SwEditShell::ChangeDBFields( const std::vector<OUString>& rOldNames,
 }
 
 /// Update all expression fields
-void SwEditShell::UpdateExpFlds(sal_Bool bCloseDB)
+void SwEditShell::UpdateExpFlds(bool bCloseDB)
 {
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -405,17 +405,17 @@ void SwEditShell::SetFldUpdateFlags( SwFldUpdateFlags eFlags )
     getIDocumentSettingAccess()->setFieldUpdateFlags( eFlags );
 }
 
-SwFldUpdateFlags SwEditShell::GetFldUpdateFlags(sal_Bool bDocSettings) const
+SwFldUpdateFlags SwEditShell::GetFldUpdateFlags(bool bDocSettings) const
 {
     return getIDocumentSettingAccess()->getFieldUpdateFlags( !bDocSettings );
 }
 
-void SwEditShell::SetLabelDoc( sal_Bool bFlag )
+void SwEditShell::SetLabelDoc( bool bFlag )
 {
     GetDoc()->set(IDocumentSettingAccess::LABEL_DOCUMENT, bFlag );
 }
 
-sal_Bool SwEditShell::IsLabelDoc() const
+bool SwEditShell::IsLabelDoc() const
 {
     return getIDocumentSettingAccess()->get(IDocumentSettingAccess::LABEL_DOCUMENT);
 }
@@ -425,7 +425,7 @@ void SwEditShell::ChangeAuthorityData(const SwAuthEntry* pNewData)
     GetDoc()->ChangeAuthorityData(pNewData);
 }
 
-sal_Bool SwEditShell::IsAnyDatabaseFieldInDoc()const
+bool SwEditShell::IsAnyDatabaseFieldInDoc()const
 {
     const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
     const sal_uInt16 nSize = pFldTypes->size();
@@ -447,7 +447,7 @@ sal_Bool SwEditShell::IsAnyDatabaseFieldInDoc()const
                     while(pFld)
                     {
                         if(pFld->IsFldInDoc())
-                            return sal_True;
+                            return true;
                         pFld = aIter.Next();
                     }
                 }
@@ -455,7 +455,7 @@ sal_Bool SwEditShell::IsAnyDatabaseFieldInDoc()const
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

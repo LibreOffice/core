@@ -106,10 +106,10 @@ void SwUndoInsert::Init(const SwNodeIndex & rNd)
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
             sal_Int32 nL,
             const IDocumentContentOperations::InsertFlags nInsertFlags,
-            sal_Bool bWDelim )
+            bool bWDelim )
     : SwUndo(UNDO_TYPING), pTxt( 0 ), pRedlData( 0 ),
         nNode( rNd.GetIndex() ), nCntnt(nCnt), nLen(nL),
-        bIsWordDelim( bWDelim ), bIsAppend( sal_False )
+        bIsWordDelim( bWDelim ), bIsAppend( false )
     , m_bWithRsid(false)
     , m_nInsertFlags(nInsertFlags)
 {
@@ -120,7 +120,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
     : SwUndo(UNDO_SPLITNODE), pTxt( 0 ),
         pRedlData( 0 ), nNode( rNd.GetIndex() ), nCntnt(0), nLen(1),
-        bIsWordDelim( false ), bIsAppend( sal_True )
+        bIsWordDelim( false ), bIsAppend( true )
     , m_bWithRsid(false)
     , m_nInsertFlags(IDocumentContentOperations::INS_EMPTYEXPAND)
 {
@@ -131,7 +131,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
 // change the length and InsPos. As a result, SwDoc::Inser will not add a
 // new object into the Undo list.
 
-sal_Bool SwUndoInsert::CanGrouping( sal_Unicode cIns )
+bool SwUndoInsert::CanGrouping( sal_Unicode cIns )
 {
     if( !bIsAppend && bIsWordDelim ==
         !GetAppCharClass().isLetterNumeric( OUString( cIns )) )
@@ -142,14 +142,14 @@ sal_Bool SwUndoInsert::CanGrouping( sal_Unicode cIns )
         if (pUndoTxt)
             (*pUndoTxt) += OUString(cIns);
 
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
+bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( nNode == rPos.nNode.GetIndex() &&
         nCntnt == rPos.nContent.GetIndex() )
     {
@@ -158,7 +158,7 @@ sal_Bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
         if( ( ~nsRedlineMode_t::REDLINE_SHOW_MASK & rDoc.GetRedlineMode() ) ==
             ( ~nsRedlineMode_t::REDLINE_SHOW_MASK & GetRedlineMode() ) )
         {
-            bRet = sal_True;
+            bRet = true;
 
             // than there is or was still an active Redline:
             // Check if there is another Redline at the InsPosition. If the
@@ -178,7 +178,7 @@ sal_Bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
                         if( !pRedl->HasMark() || !pRedlData ||
                             *pRedl != *pRedlData || *pRedl != aRData )
                         {
-                            bRet = sal_False;
+                            bRet = false;
                             break;
                         }
                     }
@@ -863,10 +863,10 @@ SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
                                       const OUString &rTxt,
                                       const OUString& rSeparator,
                                       const OUString& rNumberSeparator,
-                                      const sal_Bool bBef,
+                                      const bool bBef,
                                       const sal_uInt16 nInitId,
                                       const OUString& rCharacterStyle,
-                                      const sal_Bool bCpyBorder )
+                                      const bool bCpyBorder )
     : SwUndo( UNDO_INSERTLABEL ),
       sText( rTxt ),
       sSeparator( rSeparator ),
@@ -878,7 +878,7 @@ SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
       bBefore( bBef ),
       bCpyBrd( bCpyBorder )
 {
-    bUndoKeep = sal_False;
+    bUndoKeep = false;
     OBJECT.pUndoFly = 0;
     OBJECT.pUndoAttr = 0;
 }
@@ -929,7 +929,7 @@ void SwUndoInsertLabel::UndoImpl(::sw::UndoRedoContext & rContext)
         aPam.GetPoint()->nNode = NODE.nNode;
         aPam.SetMark();
         aPam.GetPoint()->nNode = NODE.nNode + 1;
-        NODE.pUndoInsNd = new SwUndoDelete( aPam, sal_True );
+        NODE.pUndoInsNd = new SwUndoDelete( aPam, true );
     }
 }
 

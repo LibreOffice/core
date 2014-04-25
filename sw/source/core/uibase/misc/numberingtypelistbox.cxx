@@ -154,7 +154,7 @@ sal_Int16   SwNumberingTypeListBox::GetSelectedNumberingType()
     return nRet;
 }
 
-sal_Bool    SwNumberingTypeListBox::SelectNumberingType(sal_Int16 nType)
+bool    SwNumberingTypeListBox::SelectNumberingType(sal_Int16 nType)
 {
     sal_Int32 nPos = GetEntryPos((void*)(sal_uLong)nType);
     SelectEntryPos( nPos );

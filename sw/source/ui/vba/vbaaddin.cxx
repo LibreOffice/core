@@ -25,7 +25,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaAddin::SwVbaAddin( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const OUString& rFileURL, sal_Bool bAutoload ) throw ( uno::RuntimeException ) :
+SwVbaAddin::SwVbaAddin( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const OUString& rFileURL, bool bAutoload ) throw ( uno::RuntimeException ) :
     SwVbaAddin_BASE( rParent, rContext ), msFileURL( rFileURL ), mbAutoload( bAutoload ), mbInstalled( bAutoload )
 {
 }
@@ -67,7 +67,7 @@ sal_Bool SAL_CALL SwVbaAddin::getInstalled() throw (uno::RuntimeException, std::
 
 void SAL_CALL SwVbaAddin::setInstalled( sal_Bool _installed ) throw (uno::RuntimeException, std::exception)
 {
-    if( _installed != mbInstalled )
+    if( _installed != (mbInstalled ? 1 : 0) )
     {
         mbInstalled = _installed;
         // TODO: should call AutoExec and AutoExit etc.

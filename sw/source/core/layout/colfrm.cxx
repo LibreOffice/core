@@ -30,7 +30,7 @@
 #include "switerator.hxx"
 
 // ftnfrm.cxx:
-void sw_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes );
+void sw_RemoveFtns( SwFtnBossFrm* pBoss, bool bPageOnly, bool bEndNotes );
 
 SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwFtnBossFrm( pFmt, pSib )
@@ -60,7 +60,7 @@ static void lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
             "no columns to remove." );
 
     SwColumnFrm *pColumn = (SwColumnFrm*)pCont->Lower();
-    sw_RemoveFtns( pColumn, sal_True, sal_True );
+    sw_RemoveFtns( pColumn, true, true );
     while ( pColumn->GetNext() )
     {
         OSL_ENSURE( pColumn->GetNext()->IsColumnFrm(),
@@ -93,10 +93,10 @@ static SwLayoutFrm * lcl_FindColumns( SwLayoutFrm *pLay, sal_uInt16 nCount )
     return 0;
 }
 
-static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
+static bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
 {
     SwDoc *pDoc = pCont->GetFmt()->GetDoc();
-    const sal_Bool bMod = pDoc->IsModified();
+    const bool bMod = pDoc->IsModified();
 
     //Formats should be shared whenever possible. If a neighbour already has
     //the same column settings we can add them to the same format.
@@ -123,12 +123,12 @@ static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
         pNeighbour = aIter.Next();
     }
 
-    sal_Bool bRet;
+    bool bRet;
     SwTwips nMax = pCont->IsPageBodyFrm() ?
                    pCont->FindPageFrm()->GetMaxFtnHeight() : LONG_MAX;
     if ( pNeighbourCol )
     {
-        bRet = sal_False;
+        bRet = false;
         SwFrm *pTmp = pCont->Lower();
         while ( pTmp )
         {
@@ -145,7 +145,7 @@ static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
     }
     else
     {
-        bRet = sal_True;
+        bRet = true;
         for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
             SwFrmFmt *pFmt = pDoc->MakeFrmFmt( aEmptyOUStr, pDoc->GetDfltFrmFmt());
@@ -171,7 +171,7 @@ static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
  * @param bChgFtn if true, the columnframe will be inserted or removed, if necessary.
  */
 void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
-    const sal_Bool bChgFtn )
+    const bool bChgFtn )
 {
     if ( rOld.GetNumCols() <= 1 && rNew.GetNumCols() <= 1 && !bChgFtn )
         return;
@@ -193,14 +193,14 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
     nNewNum = rNew.GetNumCols();
     if( !nNewNum )
         ++nNewNum;
-    sal_Bool bAtEnd;
+    bool bAtEnd;
     if( IsSctFrm() )
         bAtEnd = ((SwSectionFrm*)this)->IsAnyNoteAtEnd();
     else
-        bAtEnd = sal_False;
+        bAtEnd = false;
 
     //Setting the column width is only needed for new formats.
-    sal_Bool bAdjustAttributes = nOldNum != rOld.GetNumCols();
+    bool bAdjustAttributes = nOldNum != rOld.GetNumCols();
 
     //The content is saved and restored if the column count is different.
     SwFrm *pSave = 0;
@@ -211,7 +211,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         // SaveCntnt would also suck up the content of the footnote container
         // and store it within the normal text flow.
         if( IsPageBodyFrm() )
-            pDoc->GetCurrentLayout()->RemoveFtns( (SwPageFrm*)GetUpper(), sal_True, sal_False );
+            pDoc->GetCurrentLayout()->RemoveFtns( (SwPageFrm*)GetUpper(), true, false );
         pSave = ::SaveCntnt( this );
 
         //If columns exist, they get deleted if a column count of 0 or 1 is requested.
@@ -238,7 +238,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         if ( nOldNum > nNewNum )
         {
             ::lcl_RemoveColumns( this, nOldNum - nNewNum );
-            bAdjustAttributes = sal_True;
+            bAdjustAttributes = true;
         }
         else if( nOldNum < nNewNum )
         {
@@ -252,14 +252,14 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         if ( rOld.GetLineWidth()    != rNew.GetLineWidth() ||
              rOld.GetWishWidth()    != rNew.GetWishWidth() ||
              rOld.IsOrtho()         != rNew.IsOrtho() )
-            bAdjustAttributes = sal_True;
+            bAdjustAttributes = true;
         else
         {
             sal_uInt16 nCount = std::min( rNew.GetColumns().size(), rOld.GetColumns().size() );
             for ( sal_uInt16 i = 0; i < nCount; ++i )
                 if ( !(rOld.GetColumns()[i] == rNew.GetColumns()[i]) )
                 {
-                    bAdjustAttributes = sal_True;
+                    bAdjustAttributes = true;
                     break;
                 }
         }
@@ -280,7 +280,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
     }
 }
 
-void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttributes )
+void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, bool bAdjustAttributes )
 {
     if( !Lower()->GetNext() )
     {
@@ -288,7 +288,7 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
         return;
     }
 
-    const sal_Bool bVert = IsVertical();
+    const bool bVert = IsVertical();
 
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
 
@@ -312,16 +312,16 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
     //The columns can now be easily adjusted.
     //The widths get counted so we can give the reminder to the last one.
     SwTwips nAvail = (Prt().*fnRect->fnGetWidth)();
-    const sal_Bool bLine = pAttr->GetLineAdj() != COLADJ_NONE;
+    const bool bLine = pAttr->GetLineAdj() != COLADJ_NONE;
     const sal_uInt16 nMin = bLine ? sal_uInt16( 20 + ( pAttr->GetLineWidth() / 2) ) : 0;
 
-    const sal_Bool bR2L = IsRightToLeft();
+    const bool bR2L = IsRightToLeft();
     SwFrm *pCol = bR2L ? GetLastLower() : Lower();
 
     // #i27399#
     // bOrtho means we have to adjust the column frames manually. Otherwise
     // we may use the values returned by CalcColWidth:
-    const sal_Bool bOrtho = pAttr->IsOrtho() && pAttr->GetNumCols() > 0;
+    const bool bOrtho = pAttr->IsOrtho() && pAttr->GetNumCols() > 0;
     long nGutter = 0;
 
     for ( sal_uInt16 i = 0; i < pAttr->GetNumCols() && pCol; ++i ) //i118878, value returned by GetNumCols() can't be trusted

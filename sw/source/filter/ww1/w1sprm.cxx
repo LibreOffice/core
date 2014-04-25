@@ -489,7 +489,7 @@ void Ww1SingleSprmTDefTable10::Start(
     for( i = 0; i < nCount; i++ ){
 // Collect info
         W1_TC* pTc = (W1_TC*)pTc0;
-        sal_Bool bMerged = (pTc) ? pTc->fMergedGet() : sal_False;
+        bool bMerged = (pTc) ? pTc->fMergedGet() : sal_False;
 
 // set cell widths
         sal_uInt16 nPos1 = SVBT16ToShort( pEndPos );
@@ -503,7 +503,7 @@ void Ww1SingleSprmTDefTable10::Start(
 
         if( pTc0 ){                     // are there actually TCs ?
             W1_TC* pTc2 = (W1_TC*)pTc0;
-            sal_Bool bMerged2 = pTc2->fMergedGet();
+            bool bMerged2 = pTc2->fMergedGet();
             if( !bMerged2 ){
 // and now the borders
                 SvxBoxItem aBox( (SvxBoxItem&)rOut.GetCellAttr( RES_BOX ));

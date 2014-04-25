@@ -64,13 +64,13 @@ public:
                             const OUString & rMimeType,
                             bool bSynchron = false ) SAL_OVERRIDE;
 
-    sal_Bool SetData( const OUString & rMimeType,
+    bool SetData( const OUString & rMimeType,
                     const ::com::sun::star::uno::Any& rData );
 
     virtual void SendDataChanged( const SwPosition& rPos );
     virtual void SendDataChanged( const SwPaM& rRange );
 
-    sal_Bool IsLinkInServer( const SwBaseLink* ) const;
+    bool IsLinkInServer( const SwBaseLink* ) const;
 
     void SetNoServer();
     void SetDdeBookmark( ::sw::mark::IMark& rBookmark);

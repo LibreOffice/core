@@ -166,19 +166,19 @@ SwFrm* SwFrm::GetLower()
     return IsLayoutFrm() ? ((SwLayoutFrm*)this)->Lower() : 0;
 }
 
-sal_Bool SwLayoutFrm::IsAnLower( const SwFrm *pAssumed ) const
+bool SwLayoutFrm::IsAnLower( const SwFrm *pAssumed ) const
 {
     const SwFrm *pUp = pAssumed;
     while ( pUp )
     {
         if ( pUp == this )
-            return sal_True;
+            return true;
         if ( pUp->IsFlyFrm() )
             pUp = ((SwFlyFrm*)pUp)->GetAnchorFrm();
         else
             pUp = pUp->GetUpper();
     }
-    return sal_False;
+    return false;
 }
 
 /** method to check relative position of layout frame to
@@ -383,7 +383,7 @@ SwPageFrm* SwFrm::FindPageFrm()
     return (SwPageFrm*)pRet;
 }
 
-SwFtnBossFrm* SwFrm::FindFtnBossFrm( sal_Bool bFootnotes )
+SwFtnBossFrm* SwFrm::FindFtnBossFrm( bool bFootnotes )
 {
     SwFrm *pRet = this;
     // Footnote bosses can't exist inside a table; also sections with columns
@@ -411,7 +411,7 @@ SwFtnBossFrm* SwFrm::FindFtnBossFrm( sal_Bool bFootnotes )
         SwSectionFrm* pSct = pRet->FindSctFrm();
         OSL_ENSURE( pSct, "FindFtnBossFrm: Single column outside section?" );
         if( !pSct->IsFtnAtEnd() )
-            return pSct->FindFtnBossFrm( sal_True );
+            return pSct->FindFtnBossFrm( true );
     }
     return (SwFtnBossFrm*)pRet;
 }
@@ -648,7 +648,7 @@ SwFrm *SwFrm::_FindNext()
         return NULL;
 
     SwFrm* pRet = NULL;
-    const sal_Bool bFtn  = pThis->IsInFtn();
+    const bool bFtn  = pThis->IsInFtn();
     if ( !bIgnoreTab && pThis->IsInTab() )
     {
         SwLayoutFrm *pUp = pThis->GetUpper();
@@ -769,7 +769,7 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
     if ( pThis->IsCntntFrm() )
     {
         const bool bBody = pThis->IsInDocBody();
-        const sal_Bool bFtn  = pThis->IsInFtn();
+        const bool bFtn  = pThis->IsInFtn();
         SwCntntFrm *pNxtCnt = ((SwCntntFrm*)pThis)->GetNextCntntFrm();
         if ( pNxtCnt )
         {
@@ -1021,7 +1021,7 @@ SwFrm *SwFrm::_FindPrev()
         {
             SwFrm* pRet;
             const bool bBody = pThis->IsInDocBody();
-            const sal_Bool bFtn  = bBody ? sal_False : pThis->IsInFtn();
+            const bool bFtn  = bBody ? sal_False : pThis->IsInFtn();
             if ( bBody || bFtn )
             {
                 while ( pPrvCnt )
@@ -1063,7 +1063,7 @@ SwFrm *SwFrm::_FindPrev()
     return 0;
 }
 
-void SwFrm::ImplInvalidateNextPos( sal_Bool bNoFtn )
+void SwFrm::ImplInvalidateNextPos( bool bNoFtn )
 {
     SwFrm *pFrm;
     if ( 0 != (pFrm = _FindNext()) )
@@ -1250,27 +1250,27 @@ void SwFrm::SetInfFlags()
     if ( !IsFlyFrm() && !GetUpper() ) //not yet pasted, no information available
         return;
 
-    mbInfInvalid = mbInfBody = mbInfTab = mbInfFly = mbInfFtn = mbInfSct = sal_False;
+    mbInfInvalid = mbInfBody = mbInfTab = mbInfFly = mbInfFtn = mbInfSct = false;
 
     SwFrm *pFrm = this;
     if( IsFtnContFrm() )
-        mbInfFtn = sal_True;
+        mbInfFtn = true;
     do
     {
         // mbInfBody is only set in the page body, but not in the column body
         if ( pFrm->IsBodyFrm() && !mbInfFtn && pFrm->GetUpper()
              && pFrm->GetUpper()->IsPageFrm() )
-            mbInfBody = sal_True;
+            mbInfBody = true;
         else if ( pFrm->IsTabFrm() || pFrm->IsCellFrm() )
         {
-            mbInfTab = sal_True;
+            mbInfTab = true;
         }
         else if ( pFrm->IsFlyFrm() )
-            mbInfFly = sal_True;
+            mbInfFly = true;
         else if ( pFrm->IsSctFrm() )
-            mbInfSct = sal_True;
+            mbInfSct = true;
         else if ( pFrm->IsFtnFrm() )
-            mbInfFtn = sal_True;
+            mbInfFtn = true;
 
         pFrm = pFrm->GetUpper();
 
@@ -1282,7 +1282,7 @@ void SwFrm::SetInfFlags()
  * If the property is derived, it's from the upper or (for fly frames) from
  * the anchor. Otherwise we've to call a virtual method to check the property.
  */
-void SwFrm::SetDirFlags( sal_Bool bVert )
+void SwFrm::SetDirFlags( bool bVert )
 {
     if( bVert )
     {
@@ -1303,7 +1303,7 @@ void SwFrm::SetDirFlags( sal_Bool bVert )
                 mbVertLR  = pAsk->IsVertLR() ? 1 : 0;
 
                 if ( !pAsk->mbInvalidVert )
-                    mbInvalidVert = sal_False;
+                    mbInvalidVert = false;
             }
         }
         else
@@ -1311,7 +1311,7 @@ void SwFrm::SetDirFlags( sal_Bool bVert )
     }
     else
     {
-        sal_Bool bInv = 0;
+        bool bInv = false;
         if( !mbDerivedR2L ) // CheckDirection is able to set bDerivedR2L!
             CheckDirection( bVert );
         if( mbDerivedR2L )

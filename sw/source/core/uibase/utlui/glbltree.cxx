@@ -451,7 +451,7 @@ sal_uInt16  SwGlobalTree::GetEnableFlags() const
 void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
 {
     bool bParent = true;
-    Update(sal_True);
+    Update(true);
     Display(true);
     if( rHEvt.GetMode() & HELPMODE_QUICK )
     {
@@ -545,7 +545,7 @@ TriState SwGlobalTree::NotifyMoving(   SvTreeListEntry*  pTarget,
 
     if( pActiveShell->MoveGlobalDocContent(
             *pSwGlblDocContents, nSource, nSource + 1, nDest ) &&
-            Update( sal_False ))
+            Update( false ))
         Display();
 
     return TRISTATE_FALSE;
@@ -592,7 +592,7 @@ void  SwGlobalTree::MouseButtonDown( const MouseEvent& rMEvt )
 
 void     SwGlobalTree::GetFocus()
 {
-    if(Update( sal_False ))
+    if(Update( false ))
         Display();
     SvTreeListBox::GetFocus();
 }
@@ -652,7 +652,7 @@ void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
         }
         Clear();
         if(!pSwGlblDocContents)
-            Update( sal_False );
+            Update( false );
 
         SvTreeListEntry* pSelEntry = 0;
         for( size_t i = 0; i < nCount; i++)
@@ -757,7 +757,7 @@ void    SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
     if(nSlot)
     {
         pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(nSlot);
-        if(Update( sal_False ))
+        if(Update( false ))
             Display();
     }
 }
@@ -883,7 +883,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                                                         *pActiveShell,
                                                         0,
                                                         USHRT_MAX,
-                                                        sal_True);
+                                                        true);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if(RET_OK == pDlg->Execute())
                 {
@@ -940,7 +940,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                     // Due to the update the entries are invalid
                     if(nEntryPos != (sal_uLong)-1)
                     {
-                        Update( sal_False );
+                        Update( false );
                         Display();
                         Select(GetModel()->GetEntryAtAbsPos(nEntryPos));
                         pEntry = FirstSelected();
@@ -990,7 +990,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
         GotoContent(pCont);
     if(nSlot)
         rDispatch.Execute(nSlot);
-    if(Update( sal_False ))
+    if(Update( false ))
         Display();
     if ( bDeleteContentCopy )
         delete pContCopy;
@@ -1000,7 +1000,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
 
 IMPL_LINK_NOARG(SwGlobalTree, Timeout)
 {
-    if(!HasFocus() && Update( sal_False ))
+    if(!HasFocus() && Update( false ))
         Display();
     return 0;
 }
@@ -1075,16 +1075,16 @@ void    SwGlobalTree::ExecCommand(sal_uInt16 nCmd)
             }
             if( bMove && pActiveShell->MoveGlobalDocContent(
                 *pSwGlblDocContents, nSource, nSource + 1, nDest ) &&
-                    Update( sal_False ))
+                    Update( false ))
                 Display();
         }
     }
 }
 
-sal_Bool    SwGlobalTree::Update(sal_Bool bHard)
+bool    SwGlobalTree::Update(bool bHard)
 {
     SwView* pActView = GetParentWindow()->GetCreateView();
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if(pActView && pActView->GetWrtShellPtr())
     {
         const SwWrtShell* pOldShell = pActiveShell;
@@ -1097,19 +1097,19 @@ sal_Bool    SwGlobalTree::Update(sal_Bool bHard)
         if(!pSwGlblDocContents)
         {
             pSwGlblDocContents = new SwGlblDocContents;
-            bRet = sal_True;
+            bRet = true;
             pActiveShell->GetGlobalDocContent(*pSwGlblDocContents);
         }
         else
         {
-            sal_Bool bCopy = sal_False;
+            bool bCopy = false;
             SwGlblDocContents* pTempContents  = new SwGlblDocContents;
             pActiveShell->GetGlobalDocContent(*pTempContents);
             if(pTempContents->size() != pSwGlblDocContents->size() ||
                     pTempContents->size() != GetEntryCount())
             {
-                bRet = sal_True;
-                bCopy = sal_True;
+                bRet = true;
+                bCopy = true;
             }
             else
             {
@@ -1132,7 +1132,7 @@ sal_Bool    SwGlobalTree::Update(sal_Bool bHard)
                          )
                        )
                     {
-                        bCopy = bRet = sal_True;
+                        bCopy = bRet = true;
                     }
                 }
             }
@@ -1250,7 +1250,7 @@ void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
-        Update(sal_True);
+        Update(true);
     }
     SvTreeListBox::DataChanged( rDCEvt );
 }
@@ -1337,12 +1337,12 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
         }
         if ( bMove )
         {
-            Update( sal_False );
+            Update( false );
             rSh.MoveGlobalDocContent(
                 *pSwGlblDocContents, nEntryCount, nEntryCount + nFiles, nEntryCount - nFiles );
         }
         rSh.EndAction();
-        Update( sal_False );
+        Update( false );
         Display();
     }
 }

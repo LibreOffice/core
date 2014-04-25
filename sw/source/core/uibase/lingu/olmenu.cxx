@@ -288,7 +288,7 @@ SwSpellPopup::SwSpellPopup(
 
     PopupMenu *pMenu = GetPopupMenu(MN_AUTOCORR);
     pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
-    sal_Bool bEnable = sal_False;
+    bool bEnable = false;
     if( nStringCount )
     {
         Image aImage;
@@ -305,7 +305,7 @@ SwSpellPopup::SwSpellPopup(
         }
 
         InsertSeparator(OString(), 0);
-        bEnable = sal_True;
+        bEnable = true;
         sal_uInt16 nAutoCorrItemId  = MN_AUTOCORR_START;
         sal_uInt16 nItemId          = MN_SUGGESTION_START;
         for (sal_uInt16 i = 0; i < nStringCount; ++i)
@@ -653,8 +653,8 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         OSL_ENSURE( 0 <= nAltIdx && nAltIdx < m_aSuggestions.getLength(), "index out of range" );
         if (0 <= nAltIdx && nAltIdx < m_aSuggestions.getLength() && (m_bGrammarResults || m_xSpellAlt.is()))
         {
-            sal_Bool bOldIns = m_pSh->IsInsMode();
-            m_pSh->SetInsMode( sal_True );
+            bool bOldIns = m_pSh->IsInsMode();
+            m_pSh->SetInsMode( true );
 
             OUString aTmp( m_aSuggestions[ nAltIdx ] );
             OUString aOrig( m_bGrammarResults ? OUString() : m_xSpellAlt->getWord() );
@@ -714,7 +714,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         {
             SvtLinguConfig().SetProperty( UPN_IS_GRAMMAR_INTERACTIVE, uno::makeAny( sal_True ));
         }
-        m_pSh->Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+        m_pSh->Left(CRSR_SKIP_CHARS, false, 1, false );
         {
             uno::Reference<linguistic2::XSearchableDictionaryList> xDictionaryList( SvxGetDictionaryList() );
             SvxDicListChgClamp aClamp( xDictionaryList );
@@ -853,7 +853,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             m_pSh->Push();        // save cursor
             SwLangHelper::SelectCurrentPara( *m_pSh );
             SwLangHelper::SetLanguage( *m_pSh, aNewLangTxt, true, aCoreSet );
-            m_pSh->Pop( sal_False );  // restore cursor
+            m_pSh->Pop( false );  // restore cursor
         }
         else if (nId == MN_SET_PARA_NONE)
         {
@@ -861,7 +861,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             m_pSh->Push();        // save cursor
             SwLangHelper::SelectCurrentPara( *m_pSh );
             SwLangHelper::SetLanguage_None( *m_pSh, true, aCoreSet );
-            m_pSh->Pop( sal_False );  // restore cursor
+            m_pSh->Pop( false );  // restore cursor
         }
         else if (nId == MN_SET_PARA_RESET)
         {
@@ -869,7 +869,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             m_pSh->Push();        // save cursor
             SwLangHelper::SelectCurrentPara( *m_pSh );
             SwLangHelper::ResetLanguages( *m_pSh, true );
-            m_pSh->Pop( sal_False );  // restore cursor
+            m_pSh->Pop( false );  // restore cursor
         }
         else if (nId == MN_SET_PARA_MORE)
         {
@@ -877,7 +877,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             SwLangHelper::SelectCurrentPara( *m_pSh );
             //Open Format/Character Dialog
             sw_CharDialog( *m_pSh, true, SID_ATTR_CHAR_FONT, 0, 0 );
-            m_pSh->Pop( sal_False );  // restore cursor
+            m_pSh->Pop( false );  // restore cursor
         }
     }
 

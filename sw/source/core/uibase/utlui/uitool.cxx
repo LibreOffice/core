@@ -287,7 +287,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         {
             // Take over values
             if(!rMaster.GetHeader().IsActive())
-                rMaster.SetFmtAttr(SwFmtHeader(sal_True));
+                rMaster.SetFmtAttr(SwFmtHeader(true));
 
             // Pick out everything and adapt the header format
             SwFmtHeader aHeaderFmt(rMaster.GetHeader());
@@ -302,7 +302,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             {
                 rPageDesc.ChgFirstShare(((const SfxBoolItem&)
                             rHeaderSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
-                nFirstShare = rPageDesc.IsFirstShared();
+                nFirstShare = rPageDesc.IsFirstShared() ? 1 : 0;
             }
         }
         else
@@ -310,8 +310,8 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             // Disable header
             if(rMaster.GetHeader().IsActive())
             {
-                rMaster.SetFmtAttr(SwFmtHeader(sal_Bool(sal_False)));
-                rPageDesc.ChgHeaderShare(sal_False);
+                rMaster.SetFmtAttr(SwFmtHeader(false));
+                rPageDesc.ChgHeaderShare(false);
             }
         }
     }
@@ -327,7 +327,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         {
             // Take over values
             if(!rMaster.GetFooter().IsActive())
-                rMaster.SetFmtAttr(SwFmtFooter(sal_True));
+                rMaster.SetFmtAttr(SwFmtFooter(true));
 
             // Pick out everything and adapt the footer format
             SwFmtFooter aFooterFmt(rMaster.GetFooter());
@@ -342,7 +342,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             {
                 rPageDesc.ChgFirstShare(((const SfxBoolItem&)
                             rFooterSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
-                nFirstShare = rPageDesc.IsFirstShared();
+                nFirstShare = rPageDesc.IsFirstShared() ? 1 : 0;
             }
         }
         else
@@ -350,8 +350,8 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             // Disable footer
             if(rMaster.GetFooter().IsActive())
             {
-                rMaster.SetFmtAttr(SwFmtFooter(sal_Bool(sal_False)));
-                rPageDesc.ChgFooterShare(sal_False);
+                rMaster.SetFmtAttr(SwFmtFooter(false));
+                rPageDesc.ChgFooterShare(false);
             }
         }
     }
@@ -369,7 +369,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     if(SFX_ITEM_SET == rSet.GetItemState(
                             SID_SWREGISTER_MODE, false, &pItem))
     {
-        sal_Bool bSet = ((const SfxBoolItem*)pItem)->GetValue();
+        bool bSet = ((const SfxBoolItem*)pItem)->GetValue();
         if(!bSet)
             rPageDesc.SetRegisterFmtColl(0);
         else if(SFX_ITEM_SET == rSet.GetItemState(
@@ -388,7 +388,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
                                 (SwTxtFmtColl*)rDoc.GetDfltTxtFmtColl() );
             }
             if( pColl )
-                pColl->SetFmtAttr( SwRegisterItem ( sal_True ));
+                pColl->SetFmtAttr( SwRegisterItem ( true ));
             rPageDesc.SetRegisterFmtColl( pColl );
         }
     }
@@ -587,7 +587,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
             // Delete only, if PageDesc will be enabled!
             rSet.ClearItem( RES_BREAK );
             SwPageDesc* pDesc = ((SwWrtShell&)rShell).FindPageDescByName(
-                                                    rDescName, sal_True );
+                                                    rDescName, true );
             if( pDesc )
                 aPgDesc.RegisterToPageDesc( *pDesc );
         }
@@ -652,14 +652,14 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
 
 // Determine metric
 
-FieldUnit   GetDfltMetric(sal_Bool bWeb)
+FieldUnit   GetDfltMetric(bool bWeb)
 {
     return SW_MOD()->GetUsrPref(bWeb)->GetMetric();
 }
 
 // Determine metric
 
-void    SetDfltMetric( FieldUnit eMetric, sal_Bool bWeb )
+void    SetDfltMetric( FieldUnit eMetric, bool bWeb )
 {
     SW_MOD()->ApplyUserMetric(eMetric, bWeb);
 }
@@ -768,12 +768,12 @@ OUString GetAppLangDateTimeString( const DateTime& rDT )
 
 // Add a new function which can get and set the current "SID_ATTR_APPLYCHARUNIT" value
 
-sal_Bool HasCharUnit( sal_Bool bWeb)
+bool HasCharUnit( bool bWeb)
 {
     return SW_MOD()->GetUsrPref(bWeb)->IsApplyCharUnit();
 }
 
-void SetApplyCharUnit(sal_Bool bApplyChar, sal_Bool bWeb)
+void SetApplyCharUnit(bool bApplyChar, bool bWeb)
 {
     SW_MOD()->ApplyUserCharUnit(bApplyChar, bWeb);
 }

@@ -49,8 +49,8 @@ public:
         throw( beans::UnknownPropertyException, lang::IllegalArgumentException, uno::RuntimeException );
     const uno::Sequence< beans::PropertyValue > GetProperties() const;
 
-    void    FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSearch) const;
-    sal_Bool    HasAttributes() const;
+    void    FillItemSet(SfxItemSet& rSet, bool bIsValueSearch) const;
+    bool    HasAttributes() const;
 };
 
 SwSearchProperties_Impl::SwSearchProperties_Impl() :
@@ -120,7 +120,7 @@ const uno::Sequence< beans::PropertyValue > SwSearchProperties_Impl::GetProperti
     return aRet;
 }
 
-void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSearch) const
+void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch) const
 {
 
     SfxPoolItem* pBoxItem = 0,
@@ -466,30 +466,30 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
     delete pShadowItem;
 }
 
-sal_Bool    SwSearchProperties_Impl::HasAttributes() const
+bool    SwSearchProperties_Impl::HasAttributes() const
 {
     for(sal_uInt32 i = 0; i < nArrLen; i++)
         if(pValueArr[i])
-            return sal_True;
-    return sal_False;
+            return true;
+    return false;
 }
 
 SwXTextSearch::SwXTextSearch() :
     pSearchProperties( new SwSearchProperties_Impl),
     pReplaceProperties( new SwSearchProperties_Impl),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SEARCH)),
-    bAll(sal_False),
-    bWord(sal_False),
-    bBack(sal_False),
-    bExpr(sal_False),
-    bCase(sal_False),
-    bStyles(sal_False),
-    bSimilarity(sal_False),
-    bLevRelax(sal_False),
+    bAll(false),
+    bWord(false),
+    bBack(false),
+    bExpr(false),
+    bCase(false),
+    bStyles(false),
+    bSimilarity(false),
+    bLevRelax(false),
     nLevExchange(2),
     nLevAdd(2),
     nLevRemove(2),
-    bIsValueSearch(sal_True)
+    bIsValueSearch(true)
 {
 }
 
@@ -562,7 +562,7 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
     {
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw beans::PropertyVetoException ("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-        sal_Bool bVal = sal_False;
+        bool bVal = false;
         if(aValue.getValueType() == ::getBooleanCppuType())
             bVal = *(sal_Bool*)aValue.getValue();
         switch(pEntry->nWID)
@@ -687,12 +687,12 @@ void    SwXTextSearch::FillReplaceItemSet(SfxItemSet& rSet) const
     pReplaceProperties->FillItemSet(rSet, bIsValueSearch);
 }
 
-sal_Bool    SwXTextSearch::HasSearchAttributes() const
+bool    SwXTextSearch::HasSearchAttributes() const
 {
     return pSearchProperties->HasAttributes();
 }
 
-sal_Bool    SwXTextSearch::HasReplaceAttributes() const
+bool    SwXTextSearch::HasReplaceAttributes() const
 {
     return pReplaceProperties->HasAttributes();
 }

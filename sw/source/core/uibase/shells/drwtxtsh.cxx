@@ -173,7 +173,7 @@ void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
     }
 }
 
-sal_Bool SwDrawTextShell::IsTextEdit()
+bool SwDrawTextShell::IsTextEdit()
 {
     return pSdrView->IsTextEdit();
 }
@@ -328,9 +328,9 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                             if( RET_OK == nDialogRet )
                             {
                                 //get some parameters from the dialog
-                                sal_Bool bToSimplified = sal_True;
-                                sal_Bool bUseVariants = sal_True;
-                                sal_Bool bCommonTerms = sal_True;
+                                bool bToSimplified = true;
+                                bool bUseVariants = true;
+                                bool bCommonTerms = true;
                                 Reference< beans::XPropertySet >  xProp( xDialog, UNO_QUERY );
                                 if( xProp.is() )
                                 {
@@ -849,7 +849,7 @@ void SwDrawTextShell::GetStatePropPanelAttr(SfxItemSet &rSet)
             case SID_TABLE_VERT_NONE:
             case SID_TABLE_VERT_CENTER:
             case SID_TABLE_VERT_BOTTOM:
-                sal_Bool bContour = sal_False;
+                bool bContour = false;
                 SfxItemState eConState = aAttrs.GetItemState( SDRATTR_TEXT_CONTOURFRAME );
                 if( eConState != SFX_ITEM_DONTCARE )
                 {
@@ -864,7 +864,7 @@ void SwDrawTextShell::GetStatePropPanelAttr(SfxItemSet &rSet)
                 if(SFX_ITEM_DONTCARE != eVState)
                 {
                     SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)aAttrs.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
-                    sal_Bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||
+                    bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||
                             (nSlotId == SID_TABLE_VERT_CENTER && eTVA == SDRTEXTVERTADJUST_CENTER) ||
                             (nSlotId == SID_TABLE_VERT_BOTTOM && eTVA == SDRTEXTVERTADJUST_BOTTOM);
                     rSet.Put(SfxBoolItem(nSlotId, bSet));

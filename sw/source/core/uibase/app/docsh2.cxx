@@ -146,7 +146,7 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
 
 // Disable "multiple layout"
 
-void SwDocShell::ToggleBrowserMode(sal_Bool bSet, SwView* _pView )
+void SwDocShell::ToggleBrowserMode(bool bSet, SwView* _pView )
 {
     GetDoc()->set(IDocumentSettingAccess::BROWSE_MODE, bSet );
     UpdateFontList();
@@ -169,7 +169,7 @@ void SwDocShell::ToggleBrowserMode(sal_Bool bSet, SwView* _pView )
                 pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, false);
         }
         const SwViewOption& rViewOptions = *pTempView->GetWrtShell().GetViewOptions();
-        pTempView->GetWrtShell().CheckBrowseView( sal_True );
+        pTempView->GetWrtShell().CheckBrowseView( true );
         pTempView->CheckVisArea();
         if( bSet )
         {
@@ -191,7 +191,7 @@ void SwDocShell::DoFlushDocInfo()
     bool bUnlockView(true);
     if ( pWrtShell ) {
         bUnlockView = !pWrtShell->IsViewLocked();
-        pWrtShell->LockView( sal_True );    // lock visible section
+        pWrtShell->LockView( true );    // lock visible section
         pWrtShell->StartAllAction();
     }
 
@@ -200,7 +200,7 @@ void SwDocShell::DoFlushDocInfo()
     if ( pWrtShell ) {
         pWrtShell->EndAllAction();
         if ( bUnlockView ) {
-            pWrtShell->LockView( sal_False );
+            pWrtShell->LockView( false );
         }
     }
 }
@@ -261,7 +261,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         if( pWrtShell )
         {
             bUnlockView = !pWrtShell->IsViewLocked();
-            pWrtShell->LockView( sal_True );    //lock visible section
+            pWrtShell->LockView( true );    //lock visible section
             pWrtShell->StartAllAction();
         }
         switch( nAction )
@@ -297,7 +297,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             pWrtShell->EndAllAction();
             if( bUnlockView )
-                pWrtShell->LockView( sal_False );
+                pWrtShell->LockView( false );
         }
     }
 }
@@ -328,7 +328,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
     sal_uInt16 nWhich = rReq.GetSlot();
-    sal_Bool bDone = sal_False;
+    bool bDone = false;
     switch ( nWhich )
     {
         case SID_AUTO_CORRECT_DLG:
@@ -397,12 +397,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
         case SID_PRINTPREVIEW:
             {
-                sal_Bool bSet = sal_False;
+                bool bSet = false;
                 bool bFound = false, bOnly = true;
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
                 SfxViewShell* pViewShell = SfxViewShell::Current();
                 SwView* pCurrView = dynamic_cast< SwView *> ( pViewShell );
-                sal_Bool bCurrent = IS_TYPE( SwPagePreview, pViewShell );
+                bool bCurrent = IS_TYPE( SwPagePreview, pViewShell );
 
                 while( pTmpFrm )    // search Preview
                 {
@@ -452,11 +452,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case SID_TEMPLATE_LOAD:
             {
                 OUString aFileName;
-                static sal_Bool bText = sal_True;
-                static sal_Bool bFrame = sal_False;
-                static sal_Bool bPage =  sal_False;
-                static sal_Bool bNum =   sal_False;
-                static sal_Bool bMerge = sal_False;
+                static bool bText = true;
+                static bool bFrame = false;
+                static bool bPage =  false;
+                static bool bNum =   false;
+                static bool bMerge = false;
                 sal_uInt16 nRet = USHRT_MAX;
 
                 sal_uInt16 nFlags = bFrame ? SFX_LOAD_FRAME_STYLES : 0;
@@ -563,7 +563,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     bMerge = 0 != (nFlags&SFX_MERGE_STYLES);
                     aOpt.SetMerge( !bMerge );
 
-                    SetError( LoadStylesFromFile( aFileName, aOpt, sal_False ), OUString( OSL_LOG_PREFIX ));
+                    SetError( LoadStylesFromFile( aFileName, aOpt, false ), OUString( OSL_LOG_PREFIX ));
                     if ( !GetError() )
                         rReq.Done();
                 }
@@ -586,7 +586,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                     SwIoSystem::GetFilterOfFormat(
                                         OUString("HTML"),
                                         SwWebDocShell::Factory().GetFilterContainer() );
-                    sal_Bool bLocalHasName = HasName();
+                    bool bLocalHasName = HasName();
                     if(bLocalHasName)
                     {
                         //check for filter type
@@ -597,7 +597,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 "SaveAsHTMLDialog", "modules/swriter/ui/saveashtmldialog.ui");
 
                             if(RET_YES == aQuery.Execute())
-                                bLocalHasName = sal_False;
+                                bLocalHasName = false;
                             else
                                 break;
                         }
@@ -640,7 +640,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         utl::TempFile aTempFile;
                         aTempFile.EnableKillingFile();
                         pSrcView->SaveContent(aTempFile.GetURL());
-                        bDone = sal_True;
+                        bDone = true;
                         SvxMacro aMac(aEmptyOUStr, aEmptyOUStr, STARBASIC);
                         SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_OPENDOC ), aMac, this);
                         SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEDOC ), aMac, this);
@@ -754,7 +754,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case FN_OUTLINE_TO_CLIPBOARD:
         case FN_OUTLINE_TO_IMPRESS:
             {
-                sal_Bool bEnable = IsEnableSetModified();
+                bool bEnable = IsEnableSetModified();
                 EnableSetModified( false );
                 WriterRef xWrt;
                 // mba: looks as if relative URLs don't make sense here
@@ -845,7 +845,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case FN_NEW_HTML_DOC:
         case FN_NEW_GLOBAL_DOC:
             {
-                bDone = sal_False;
+                bDone = false;
                 bool bCreateHtml = FN_NEW_HTML_DOC == nWhich;
 
                 bool bCreateByOutlineLevel = false;
@@ -1109,7 +1109,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     pViewShell = pVFrame ? pVFrame->GetViewShell() : 0;
                     pCurrView = dynamic_cast<SwView*>( pViewShell );
                 }
-                pDoc->GetNumberFormatter(sal_True)->SetYear2000(nYear2K);
+                pDoc->GetNumberFormatter(true)->SetYear2000(nYear2K);
             }
         break;
         case FN_OPEN_FILE:
@@ -1227,7 +1227,7 @@ void SwDocShell::SetModified( bool bSet )
             EnableSetModified( false );
             if( bSet )
             {
-                sal_Bool bOld = pDoc->IsModified();
+                bool bOld = pDoc->IsModified();
                 pDoc->SetModified();
                 if( !bOld )
                 {
@@ -1278,7 +1278,7 @@ class SwReloadFromHtmlReader : public SwReader
 
 void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcView )
 {
-    sal_Bool bModified = IsModified();
+    bool bModified = IsModified();
 
     // The HTTP-Header fields have to be removed, otherwise
     // there are some from Meta-Tags dublicated or triplicated afterwards.
@@ -1326,7 +1326,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
         }
     }
 #endif
-    sal_Bool bWasBrowseMode = pDoc->get(IDocumentSettingAccess::BROWSE_MODE);
+    bool bWasBrowseMode = pDoc->get(IDocumentSettingAccess::BROWSE_MODE);
     RemoveLink();
 
     // now also the UNO-Model has to be informed about the new Doc #51535#
@@ -1368,7 +1368,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     {
         SwWrtShell& rWrtSh = pCurrView->GetWrtShell();
         if( rWrtSh.GetLayout())
-            rWrtSh.CheckBrowseView( sal_True );
+            rWrtSh.CheckBrowseView( true );
     }
 
     // Take HTTP-Header-Attibutes over into the DokInfo again.
@@ -1383,7 +1383,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
 }
 
 sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
-                    SwgReaderOption& rOpt, sal_Bool bUnoCall )
+                    SwgReaderOption& rOpt, bool bUnoCall )
 {
     sal_uLong nErr = 0;
 

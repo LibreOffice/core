@@ -39,20 +39,20 @@ private:
     Size            aSize;
     sal_uInt16          nCount;
 
-    sal_Bool DoesFit( const Size &rOut );
+    bool DoesFit( const Size &rOut );
 
 public:
     SwLayVout() : pSh(0), pOut(0), pVirDev(0), aSize(0, VIRTUALHEIGHT), nCount(0) {}
     ~SwLayVout() { delete pVirDev; }
 
     /// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
-    void Enter( SwViewShell *pShell, SwRect &rRect, sal_Bool bOn );
+    void Enter( SwViewShell *pShell, SwRect &rRect, bool bOn );
     void Leave() { --nCount; Flush(); }
 
     void SetOrgRect( SwRect &rRect ) { aOrgRect = rRect; }
     const SwRect& GetOrgRect() const { return aOrgRect; }
 
-    sal_Bool IsFlushable() const { return 0 != pOut; }
+    bool IsFlushable() const { return 0 != pOut; }
     void _Flush();
     void Flush() { if( pOut ) _Flush(); }
 };

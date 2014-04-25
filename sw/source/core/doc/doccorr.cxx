@@ -93,12 +93,12 @@ namespace
         const sal_Int32 nCntIdx)
     {
         for(int nb = 0; nb < 2; ++nb)
-            if(&((pPam)->GetBound(sal_Bool(nb)).nNode.GetNode()) == pOldNode)
+            if(&((pPam)->GetBound(bool(nb)).nNode.GetNode()) == pOldNode)
             {
-                (pPam)->GetBound(sal_Bool(nb)).nNode = rNewPos.nNode;
-                (pPam)->GetBound(sal_Bool(nb)).nContent.Assign(
+                (pPam)->GetBound(bool(nb)).nNode = rNewPos.nNode;
+                (pPam)->GetBound(bool(nb)).nContent.Assign(
                     const_cast<SwIndexReg*>(rNewPos.nContent.GetIdxReg()),
-                    nCntIdx + (pPam)->GetBound(sal_Bool(nb)).nContent.GetIndex());
+                    nCntIdx + (pPam)->GetBound(bool(nb)).nContent.GetIndex());
             }
     }
 }
@@ -177,7 +177,7 @@ void PaMCorrAbs( const SwPaM& rRange,
 void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
     const SwPosition& rNewPos,
     const sal_Int32 nOffset,
-    sal_Bool bMoveCrsr)
+    bool bMoveCrsr)
 {
     SwCntntNode *const pCntntNode( rOldNode.GetNode().GetCntntNode() );
     SwPaM const aPam(rOldNode, 0,
@@ -219,7 +219,7 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
 void SwDoc::CorrAbs(
     const SwPaM& rRange,
     const SwPosition& rNewPos,
-    sal_Bool bMoveCrsr )
+    bool bMoveCrsr )
 {
     SwPosition aStart(*rRange.Start());
     SwPosition aEnd(*rRange.End());
@@ -235,7 +235,7 @@ void SwDoc::CorrAbs(
     const SwNodeIndex& rStartNode,
     const SwNodeIndex& rEndNode,
     const SwPosition& rNewPos,
-    sal_Bool bMoveCrsr )
+    bool bMoveCrsr )
 {
     _DelBookmarks( rStartNode, rEndNode );
 
@@ -301,7 +301,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
 void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
     const SwPosition& rNewPos,
     const sal_Int32 nOffset,
-    sal_Bool bMoveCrsr)
+    bool bMoveCrsr)
 {
     getIDocumentMarkAccess()->correctMarksRelative(rOldNode, rNewPos, nOffset);
 

@@ -55,7 +55,7 @@ SwFmtDrop::SwFmtDrop()
     nReadFmt( USHRT_MAX ),
     nLines( 0 ),
     nChars( 0 ),
-    bWholeWord( sal_False )
+    bWholeWord( false )
 {
 }
 

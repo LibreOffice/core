@@ -50,10 +50,10 @@ using namespace ::com::sun::star::beans;
      remark: in case of error sal_True is returned
  --------------------------------------------------------------------*/
 
-sal_Bool SwFldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTblQryName,
-                            sal_Bool bIsTable, const OUString& rFldName)
+bool SwFldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTblQryName,
+                            bool bIsTable, const OUString& rFldName)
 {
-    sal_Bool bNumeric = sal_True;
+    bool bNumeric = true;
 
     SwDBMgr* pDBMgr = pWrtShell ? pWrtShell->GetDBMgr() :
                             ::GetActiveView()->GetWrtShell().GetDBMgr();
@@ -158,7 +158,7 @@ sal_Bool SwFldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTblQry
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
                 default:
-                    bNumeric = sal_False;
+                    bNumeric = false;
             }
         }
     }

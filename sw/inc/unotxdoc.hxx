@@ -172,7 +172,7 @@ private:
     const SfxItemPropertySet* pPropSet;
 
     SwDocShell*             pDocShell;
-    sal_Bool                    bObjectValid;
+    bool                    bObjectValid;
 
     SwXDrawPage*            pDrawPage;
     css::uno::Reference< css::drawing::XDrawPage > *            pxXDrawPage;
@@ -231,7 +231,7 @@ private:
     // set in XPagePrintable::printPages(..) to indicate that the PagePrintSettings
     // has to be applied in XRenderable::getRenderer(..) through which the printing
     // is implemented.
-    sal_Bool bApplyPagePrintSettingsFromXPagePrintable;
+    bool bApplyPagePrintSettingsFromXPagePrintable;
 
     using SfxBaseModel::addEventListener;
     using SfxBaseModel::removeEventListener;
@@ -431,13 +431,13 @@ public:
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
     SwXDocumentPropertyHelper * GetPropertyHelper ();
-    sal_Bool                    IsValid() const {return bObjectValid;}
+    bool                    IsValid() const {return bObjectValid;}
 
     void                        InitNewDoc();
 
     SwUnoCrsr*                  CreateCursorForSearch(css::uno::Reference< css::text::XTextCursor > & xCrsr);
     SwUnoCrsr*                  FindAny(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc,
-                                            css::uno::Reference< css::text::XTextCursor > & xCrsr, sal_Bool bAll,
+                                            css::uno::Reference< css::text::XTextCursor > & xCrsr, bool bAll,
                                             sal_Int32& nResult,
                                             css::uno::Reference< css::uno::XInterface >  xLastResult);
 

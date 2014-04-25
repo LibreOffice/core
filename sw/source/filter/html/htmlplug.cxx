@@ -121,7 +121,7 @@ const sal_uLong HTML_FRMOPTS_OLE_CSS1       =
 
 void SwHTMLParser::SetFixSize( const Size& rPixSize,
                                const Size& rTwipDfltSize,
-                               sal_Bool bPrcWidth, sal_Bool bPrcHeight,
+                               bool bPrcWidth, bool bPrcHeight,
                                SfxItemSet& /*rCSS1ItemSet*/,
                                SvxCSS1PropertyInfo& rCSS1PropInfo,
                                SfxItemSet& rFlyItemSet )
@@ -226,12 +226,12 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         if( rCSS1PropInfo.bLeftMargin )
         {
             nLeftSpace = aLRItem.GetLeft();
-            rCSS1PropInfo.bLeftMargin = sal_False;
+            rCSS1PropInfo.bLeftMargin = false;
         }
         if( rCSS1PropInfo.bRightMargin )
         {
             nRightSpace = aLRItem.GetRight();
-            rCSS1PropInfo.bRightMargin = sal_False;
+            rCSS1PropInfo.bRightMargin = false;
         }
         rCSS1ItemSet.ClearItem( RES_LR_SPACE );
     }
@@ -262,12 +262,12 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         if( rCSS1PropInfo.bTopMargin )
         {
             nUpperSpace = pULItem->GetUpper();
-            rCSS1PropInfo.bTopMargin = sal_False;
+            rCSS1PropInfo.bTopMargin = false;
         }
         if( rCSS1PropInfo.bBottomMargin )
         {
             nLowerSpace = pULItem->GetLower();
-            rCSS1PropInfo.bBottomMargin = sal_False;
+            rCSS1PropInfo.bBottomMargin = false;
         }
         rCSS1ItemSet.ClearItem( RES_UL_SPACE );
     }
@@ -296,7 +296,7 @@ void SwHTMLParser::InsertEmbed()
     OUString aURL, aType, aName, aAlt, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( USHRT_MAX, USHRT_MAX );
-    sal_Bool bPrcWidth = sal_False, bPrcHeight = sal_False, bHidden = sal_False;
+    bool bPrcWidth = false, bPrcHeight = false, bHidden = false;
     sal_Int16 eVertOri = text::VertOrientation::NONE;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     SvCommandList aCmdLst;
@@ -394,7 +394,7 @@ void SwHTMLParser::InsertEmbed()
         // Size (0,0) wird in SetFrmSize auf (MINFLY, MINFLY) umgebogen
         aSize.Width() = 0; aSize.Height() = 0;
         aSpace.Width() = 0; aSpace.Height() = 0;
-        bPrcWidth = bPrcHeight = sal_False;
+        bPrcWidth = bPrcHeight = false;
     }
 
     // die URL aufbereiten
@@ -493,8 +493,8 @@ void SwHTMLParser::NewObject()
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
-    sal_Bool bPrcWidth = sal_False, bPrcHeight = sal_False,
-             bDeclare = sal_False;
+    bool bPrcWidth = false, bPrcHeight = false,
+             bDeclare = false;
     // Eine neue Command-List anlegen
     delete pAppletImpl;
     pAppletImpl = new SwApplet_Impl( pDoc->GetAttrPool(),
@@ -516,7 +516,7 @@ void SwHTMLParser::NewObject()
             aClass = rOption.GetString();
             break;
         case HTML_O_DECLARE:
-            bDeclare = sal_True;
+            bDeclare = true;
             break;
         case HTML_O_CLASSID:
             aClassID = rOption.GetString();
@@ -577,7 +577,7 @@ void SwHTMLParser::NewObject()
 
     // Objects that are declared only are not evaluated. Moreover, only
     // Java applets are supported.
-    sal_Bool bIsApplet = sal_False;
+    bool bIsApplet = false;
 
     if( !bDeclare && aClassID.getLength() == 42 &&
         aClassID.startsWith("clsid:") )
@@ -660,7 +660,7 @@ void SwHTMLParser::InsertApplet()
     OUString aCodeBase, aCode, aName, aAlt, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
-    sal_Bool bPrcWidth = sal_False, bPrcHeight = sal_False, bMayScript = sal_False;
+    bool bPrcWidth = false, bPrcHeight = false, bMayScript = false;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
@@ -714,7 +714,7 @@ void SwHTMLParser::InsertApplet()
             aSpace.Height() = (long)rOption.GetNumber();
             break;
         case HTML_O_MAYSCRIPT:
-            bMayScript = sal_True;
+            bMayScript = true;
             break;
         }
 
@@ -820,7 +820,7 @@ void SwHTMLParser::InsertFloatingFrame()
     OUString aAlt, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
-    sal_Bool bPrcWidth = sal_False, bPrcHeight = sal_False;
+    bool bPrcWidth = false, bPrcHeight = false;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
@@ -885,7 +885,7 @@ void SwHTMLParser::InsertFloatingFrame()
             {
                 OUString aName = aFrameDesc.GetName();
                 ScrollingMode eScroll = aFrameDesc.GetScrollingMode();
-                sal_Bool bHasBorder = aFrameDesc.HasFrameBorder();
+                bool bHasBorder = aFrameDesc.HasFrameBorder();
                 Size aMargin = aFrameDesc.GetMargin();
 
                 xSet->setPropertyValue("FrameURL", uno::makeAny( OUString( aFrameDesc.GetURL().GetMainURL( INetURLObject::NO_DECODE ) ) ) );
@@ -893,10 +893,10 @@ void SwHTMLParser::InsertFloatingFrame()
 
                 if ( eScroll == ScrollingAuto )
                     xSet->setPropertyValue("FrameIsAutoScroll",
-                        uno::makeAny( sal_True ) );
+                        uno::makeAny( true ) );
                 else
                     xSet->setPropertyValue("FrameIsScrollingMode",
-                        uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
+                        uno::makeAny( eScroll == ScrollingYes ) );
 
                 xSet->setPropertyValue("FrameIsBorder",
                         uno::makeAny( bHasBorder ) );
@@ -976,7 +976,7 @@ sal_uInt16 SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
 }
 
 Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
-                               sal_Bool bInCntnr )
+                               bool bInCntnr )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -995,7 +995,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         return rWrt;
 
     uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-    sal_Bool bHiddenEmbed = sal_False;
+    bool bHiddenEmbed = false;
 
     if( !xSet.is() )
     {
@@ -1007,7 +1007,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     // wenn meoglich vor dem "Objekt" einen Zeilen-Umbruch ausgeben
     if( rHTMLWrt.bLFPossible )
-        rHTMLWrt.OutNewLine( sal_True );
+        rHTMLWrt.OutNewLine( true );
 
     if( !rFrmFmt.GetName().isEmpty() )
         rHTMLWrt.OutImplicitMark( rFrmFmt.GetName(),
@@ -1056,7 +1056,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             // Das Plugin ist HIDDEN
             sOut.append(' ').append(OOO_STRING_SW_HTML_O_Hidden);
             nFrmOpts = HTML_FRMOPTS_HIDDEN_EMBED;
-            bHiddenEmbed = sal_True;
+            bHiddenEmbed = true;
         }
         else
         {
@@ -1109,7 +1109,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             sOut.append('\"');
         }
 
-        sal_Bool bScript = sal_False;
+        bool bScript = false;
         aAny = xSet->getPropertyValue("AppletIsScript");
         aAny >>= bScript;
         if( bScript )
@@ -1160,7 +1160,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         {
             const SvCommand& rCommand = aCommands[ --i ];
             const OUString& rName = rCommand.GetCommand();
-            sal_uInt16 nType = SwApplet_Impl::GetOptionType( rName, sal_True );
+            sal_uInt16 nType = SwApplet_Impl::GetOptionType( rName, true );
             if( SWHTML_OPTTYPE_TAG == nType )
             {
                 const OUString& rValue = rCommand.GetArgument();
@@ -1218,7 +1218,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             const SvCommand& rCommand = aCommands[ i ];
             const OUString& rName = rCommand.GetCommand();
 
-            if( SwApplet_Impl::GetOptionType( rName, sal_False ) == SWHTML_OPTTYPE_TAG )
+            if( SwApplet_Impl::GetOptionType( rName, false ) == SWHTML_OPTTYPE_TAG )
             {
                 const OUString& rValue = rCommand.GetArgument();
                 rWrt.Strm().WriteChar( ' ' );
@@ -1245,7 +1245,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 }
 
 Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
-                                  sal_Bool bInCntnr )
+                                  bool bInCntnr )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 

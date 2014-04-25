@@ -44,8 +44,8 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent, const SfxItemSet& 
     SfxTabPage(pParent, "NumParaPage", "modules/swriter/ui/numparapage.ui", rAttr),
 
     msOutlineNumbering( SW_RES( STR_OUTLINE_NUMBERING ) ),
-    bModified(sal_False),
-    bCurNumrule(sal_False)
+    bModified(false),
+    bCurNumrule(false)
 {
     get(m_pOutlineStartBX,         "boxOUTLINE");
     get(m_pOutlineLvLB,            "comboLB_OUTLINE_LEVEL");
@@ -113,7 +113,7 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
         pOutlineLv->SetValue( aOutlineLv );
         rSet.Put(*pOutlineLv);
         delete pOutlineLv;
-        bModified = sal_True;
+        bModified = true;
     }
 
     if( m_pNumberStyleLB->GetSelectEntryPos() != m_pNumberStyleLB->GetSavedValue())
@@ -128,14 +128,14 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
             pRule->SetValue(aStyle);
             rSet.Put(*pRule);
             delete pRule;
-            bModified = sal_True;
+            bModified = true;
         }
     }
     if(m_pNewStartCB->GetState() != m_pNewStartCB->GetSavedValue() ||
         m_pNewStartNumberCB->GetState() != m_pNewStartNumberCB->GetSavedValue()||
        m_pNewStartNF->GetText() != m_pNewStartNF->GetSavedValue())
     {
-        bModified = sal_True;
+        bModified = true;
         bool bNewStartChecked = TRISTATE_TRUE == m_pNewStartCB->GetState();
         bool bNumberNewStartChecked = TRISTATE_TRUE == m_pNewStartNumberCB->GetState();
         rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART, bNewStartChecked));
@@ -152,7 +152,7 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
                                 m_pRestartNF->GetValue() : 0 ));
         aFmt.SetCountLines( m_pCountParaCB->IsChecked() );
         rSet.Put(aFmt);
-        bModified = sal_True;
+        bModified = true;
     }
     return bModified;
 }
@@ -205,7 +205,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     eItemState = rSet.GetItemState( FN_NUMBER_NEWSTART );
     if(eItemState > SFX_ITEM_AVAILABLE )
     {
-        bCurNumrule = sal_True;
+        bCurNumrule = true;
         const SfxBoolItem& rStart = (const SfxBoolItem&)rSet.Get(FN_NUMBER_NEWSTART);
 
         m_pNewStartCB->SetState(rStart.GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
@@ -253,7 +253,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     m_pRestartParaCountCB->SaveValue();
     m_pRestartNF->SaveValue();
 
-    bModified = sal_False;
+    bModified = false;
 }
 
 void SwParagraphNumTabPage::DisableOutline()

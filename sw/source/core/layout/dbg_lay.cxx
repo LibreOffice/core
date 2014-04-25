@@ -528,7 +528,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
 
     if( 1 == nTestMode && nFunction != PROT_TESTFORMAT )
         return; // we may only log inside a test formatting
-    sal_Bool bTmp = sal_False;
+    bool bTmp = false;
     OStringBuffer aOut(aLayer);
     aOut.append(static_cast<sal_Int64>(lcl_GetFrameId(pFrm)));
     aOut.append(' ');
@@ -542,9 +542,9 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             if( nAct == ACT_START )
                                 lcl_Flags( aOut, pFrm );
                             break;
-        case PROT_MOVE_FWD: bTmp = sal_True; // NoBreak
+        case PROT_MOVE_FWD: bTmp = true; // NoBreak
         case PROT_MOVE_BWD:
-                            if (nFunction == bTmp)
+                            if (nFunction == (bTmp ? 1 : 0))
                                 aOut.append("Fwd");
                             else
                                 aOut.append("Bwd");
@@ -564,7 +564,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             aOut.append("TestShrink");
                             break;
         case PROT_ADJUSTN :
-        case PROT_SHRINK:   bTmp = sal_True; // NoBreak
+        case PROT_SHRINK:   bTmp = true; // NoBreak
         case PROT_GROW:
                             if (!bTmp)
                                 aOut.append("Grow");
@@ -605,7 +605,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             break;
         case PROT_SECTION:  SectFunc(aOut, pFrm, nAct, pParam);
                             break;
-        case PROT_CUT:      bTmp = sal_True; // NoBreak
+        case PROT_CUT:      bTmp = true; // NoBreak
         case PROT_PASTE:
                             if (bTmp)
                                 aOut.append("Cut from ");

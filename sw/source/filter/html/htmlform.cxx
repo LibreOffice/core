@@ -363,14 +363,14 @@ class SwHTMLImageWatcher :
     uno::Reference< drawing::XShape >       xShape;     // das control
     uno::Reference< XImageProducerSupplier >    xSrc;
     uno::Reference< awt::XImageConsumer >   xThis;      // man selbst
-    sal_Bool                            bSetWidth;
-    sal_Bool                            bSetHeight;
+    bool                            bSetWidth;
+    bool                            bSetHeight;
 
     void clear();
 
 public:
     SwHTMLImageWatcher( const uno::Reference< drawing::XShape > & rShape,
-                        sal_Bool bWidth, sal_Bool bHeight );
+                        bool bWidth, bool bHeight );
     virtual ~SwHTMLImageWatcher();
 
     // startProduction darf nicht im Konstruktor gerufen werden, weil
@@ -408,7 +408,7 @@ public:
 
 SwHTMLImageWatcher::SwHTMLImageWatcher(
         const uno::Reference< drawing::XShape >& rShape,
-        sal_Bool bWidth, sal_Bool bHeight ) :
+        bool bWidth, bool bHeight ) :
     xShape( rShape ),
     bSetWidth( bWidth ), bSetHeight( bHeight )
 {
@@ -525,7 +525,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
                 0 != (pANd = & pAPos->nNode.GetNode()) &&
                 0 != (pTblNd = pANd->FindTableNode()) )
             {
-                const sal_Bool bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
+                const bool bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
                 SwHTMLTableLayout *pLayout =
                     pTblNd->GetTable().GetHTMLTableLayout();
                 if( pLayout )
@@ -535,7 +535,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
 
                     if ( nBrowseWidth )
                     {
-                        pLayout->Resize( nBrowseWidth, sal_True, sal_True,
+                        pLayout->Resize( nBrowseWidth, true, true,
                                          bLastGrf ? HTMLTABLE_RESIZE_NOW
                                                   : 500 );
                     }
@@ -635,8 +635,8 @@ static void lcl_html_setFixedFontProperty(
 
 void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rShape,
                                    const Size& rTextSz,
-                                   sal_Bool bMinWidth,
-                                   sal_Bool bMinHeight )
+                                   bool bMinWidth,
+                                   bool bMinHeight )
 {
     if( !rTextSz.Width() && !rTextSz.Height() && !bMinWidth  && !bMinHeight )
         return;
@@ -870,8 +870,8 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         const Size& rSize, sal_Int16 eVertOri, sal_Int16 eHoriOri,
         SfxItemSet& rCSS1ItemSet, SvxCSS1PropertyInfo& rCSS1PropInfo,
         const SvxMacroTableDtor& rMacroTbl, const std::vector<OUString>& rUnoMacroTbl,
-        const std::vector<OUString>& rUnoMacroParamTbl, sal_Bool bSetFCompPropSet,
-        sal_Bool bHidden )
+        const std::vector<OUString>& rUnoMacroParamTbl, bool bSetFCompPropSet,
+        bool bHidden )
 {
     uno::Reference< drawing::XShape >  xShape;
 
@@ -919,12 +919,12 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             if( rCSS1PropInfo.bLeftMargin )
             {
                 nLeftSpace = static_cast< sal_uInt16 >(convertTwipToMm100( aLRItem.GetLeft() ));
-                rCSS1PropInfo.bLeftMargin = sal_False;
+                rCSS1PropInfo.bLeftMargin = false;
             }
             if( rCSS1PropInfo.bRightMargin )
             {
                 nRightSpace = static_cast< sal_uInt16 >(convertTwipToMm100( aLRItem.GetRight() ));
-                rCSS1PropInfo.bRightMargin = sal_False;
+                rCSS1PropInfo.bRightMargin = false;
             }
             rCSS1ItemSet.ClearItem( RES_LR_SPACE );
         }
@@ -949,12 +949,12 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             if( rCSS1PropInfo.bTopMargin )
             {
                 nUpperSpace = convertTwipToMm100( pULItem->GetUpper() );
-                rCSS1PropInfo.bTopMargin = sal_False;
+                rCSS1PropInfo.bTopMargin = false;
             }
             if( rCSS1PropInfo.bBottomMargin )
             {
                 nLowerSpace = convertTwipToMm100( pULItem->GetLower() );
-                rCSS1PropInfo.bBottomMargin = sal_False;
+                rCSS1PropInfo.bBottomMargin = false;
             }
 
             rCSS1ItemSet.ClearItem( RES_UL_SPACE );
@@ -1086,7 +1086,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         uno::Reference< text::XTextRange >  xTxtRg;
         sal_Int16 nAnchorType = text::TextContentAnchorType_AS_CHARACTER;
-        sal_Bool bSetPos = sal_False, bSetSurround = sal_False;
+        bool bSetPos = false, bSetSurround = false;
         sal_Int32 nXPos = 0, nYPos = 0;
         sal_Int16 nSurround = text::WrapTextMode_NONE;
         if( SVX_CSS1_POS_ABSOLUTE == rCSS1PropInfo.ePosition &&
@@ -1110,10 +1110,10 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             }
             nXPos = convertTwipToMm100( rCSS1PropInfo.nLeft ) + nLeftSpace;
             nYPos = convertTwipToMm100( rCSS1PropInfo.nTop ) + nUpperSpace;
-            bSetPos = sal_True;
+            bSetPos = true;
 
             nSurround = text::WrapTextMode_THROUGHT;
-            bSetSurround = sal_True;
+            bSetSurround = true;
         }
         else if( SVX_ADJUST_LEFT == rCSS1PropInfo.eFloat ||
                  text::HoriOrientation::LEFT == eHoriOri )
@@ -1121,9 +1121,9 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             nAnchorType = text::TextContentAnchorType_AT_PARAGRAPH;
             nXPos = nLeftSpace;
             nYPos = nUpperSpace;
-            bSetPos = sal_True;
+            bSetPos = true;
             nSurround = text::WrapTextMode_RIGHT;
-            bSetSurround = sal_True;
+            bSetSurround = true;
         }
         else if( text::VertOrientation::NONE != eVertOri )
         {
@@ -1241,7 +1241,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
     return xShape;
 }
 
-void SwHTMLParser::NewForm( sal_Bool bAppend )
+void SwHTMLParser::NewForm( bool bAppend )
 {
     // Gibt es schon eine Form?
     if( pFormImpl && pFormImpl->GetFormComps().is() )
@@ -1275,7 +1275,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
         const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         sal_uInt16 nEvent = 0;
-        sal_Bool bSetEvent = sal_False;
+        bool bSetEvent = false;
 
         switch( rOption.GetToken() )
         {
@@ -1300,7 +1300,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
             //fallthrough
         case HTML_O_ONSUBMIT:
             nEvent = HTML_ET_ONSUBMITFORM;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         case HTML_O_SDONRESET:
@@ -1308,7 +1308,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
             //fallthrough
         case HTML_O_ONRESET:
             nEvent = HTML_ET_ONRESETFORM;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         default:
@@ -1395,7 +1395,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
                             rDfltScriptType );
 }
 
-void SwHTMLParser::EndForm( sal_Bool bAppend )
+void SwHTMLParser::EndForm( bool bAppend )
 {
     if( pFormImpl && pFormImpl->GetFormComps().is() )
     {
@@ -1428,9 +1428,9 @@ void SwHTMLParser::InsertInput()
     sal_Int16 nChecked = TRISTATE_FALSE;
     sal_Int32 nTabIndex = TABINDEX_MAX + 1;
     HTMLInputType eType = HTML_IT_TEXT;
-    sal_Bool bDisabled = sal_False, bValue = sal_False;
-    sal_Bool bSetGrfWidth = sal_False, bSetGrfHeight = sal_False;
-    sal_Bool bHidden = sal_False;
+    bool bDisabled = false, bValue = false;
+    bool bSetGrfWidth = false, bSetGrfHeight = false;
+    bool bHidden = false;
     long nWidth=0, nHeight=0;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
@@ -1445,7 +1445,7 @@ void SwHTMLParser::InsertInput()
         const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         sal_uInt16 nEvent = 0;
-        sal_Bool bSetEvent = sal_False;
+        bool bSetEvent = false;
 
         switch( rOption.GetToken() )
         {
@@ -1466,13 +1466,13 @@ void SwHTMLParser::InsertInput()
             break;
         case HTML_O_VALUE:
             sText = rOption.GetString();
-            bValue = sal_True;
+            bValue = true;
             break;
         case HTML_O_CHECKED:
             nChecked = TRISTATE_TRUE;
             break;
         case HTML_O_DISABLED:
-            bDisabled = sal_True;
+            bDisabled = true;
             break;
         case HTML_O_MAXLENGTH:
             nMaxLen = (sal_Int16)rOption.GetNumber();
@@ -1507,7 +1507,7 @@ void SwHTMLParser::InsertInput()
             //fallthrough
         case HTML_O_ONFOCUS:
             nEvent = HTML_ET_ONGETFOCUS;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         case HTML_O_SDONBLUR:               // eigtl. nur EDIT
@@ -1515,7 +1515,7 @@ void SwHTMLParser::InsertInput()
             //fallthrough
         case HTML_O_ONBLUR:
             nEvent = HTML_ET_ONLOSEFOCUS;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         case HTML_O_SDONCLICK:
@@ -1523,7 +1523,7 @@ void SwHTMLParser::InsertInput()
             //fallthrough
         case HTML_O_ONCLICK:
             nEvent = HTML_ET_ONCLICK;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         case HTML_O_SDONCHANGE:             // eigtl. nur EDIT
@@ -1531,7 +1531,7 @@ void SwHTMLParser::InsertInput()
             //fallthrough
         case HTML_O_ONCHANGE:
             nEvent = HTML_ET_ONCHANGE;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         case HTML_O_SDONSELECT:             // eigtl. nur EDIT
@@ -1539,7 +1539,7 @@ void SwHTMLParser::InsertInput()
             //fallthrough
         case HTML_O_ONSELECT:
             nEvent = HTML_ET_ONSELECT;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         default:
@@ -1580,25 +1580,25 @@ void SwHTMLParser::InsertInput()
 
     // Defaults entsprechen HTML_IT_TEXT
     const sal_Char *pType = "TextField";
-    sal_Bool bKeepCRLFInValue = sal_False;
+    bool bKeepCRLFInValue = false;
     switch( eType )
     {
     case HTML_IT_CHECKBOX:
         pType = "CheckBox";
-        bKeepCRLFInValue = sal_True;
+        bKeepCRLFInValue = true;
         break;
 
     case HTML_IT_RADIO:
         pType = "RadioButton";
-        bKeepCRLFInValue = sal_True;
+        bKeepCRLFInValue = true;
         break;
 
     case HTML_IT_PASSWORD:
-        bKeepCRLFInValue = sal_True;
+        bKeepCRLFInValue = true;
         break;
 
     case HTML_IT_BUTTON:
-        bKeepCRLFInValue = sal_True;
+        bKeepCRLFInValue = true;
     case HTML_IT_SUBMIT:
     case HTML_IT_RESET:
         pType = "CommandButton";
@@ -1614,7 +1614,7 @@ void SwHTMLParser::InsertInput()
 
     case HTML_IT_HIDDEN:
         pType = "HiddenControl";
-        bKeepCRLFInValue = sal_True;
+        bKeepCRLFInValue = true;
         break;
     default:
         ;
@@ -1670,8 +1670,8 @@ void SwHTMLParser::InsertInput()
 
     Size aSz( 0, 0 );       // defaults
     Size aTextSz( 0, 0 );   // Text-Size
-    sal_Bool bMinWidth = sal_False, bMinHeight = sal_False;
-    sal_Bool bUseSize = sal_False;
+    bool bMinWidth = false, bMinHeight = false;
+    bool bUseSize = false;
     switch( eType )
     {
     case HTML_IT_CHECKBOX:
@@ -1702,7 +1702,7 @@ void SwHTMLParser::InsertInput()
                 aMacroTbl.Erase( HTML_ET_ONCLICK );
             }
             // SIZE auszuwerten duerfte hier keinen Sinn machen???
-            bMinWidth = bMinHeight = sal_True;
+            bMinWidth = bMinHeight = true;
         }
         break;
 
@@ -1761,8 +1761,8 @@ void SwHTMLParser::InsertInput()
             xPropSet->setPropertyValue(
                 OUString("ButtonType"), aTmp );
 
-            bMinWidth = bMinHeight = sal_True;
-            bUseSize = sal_True;
+            bMinWidth = bMinHeight = true;
+            bUseSize = true;
         }
         break;
 
@@ -1794,13 +1794,13 @@ void SwHTMLParser::InsertInput()
         if( !nSize )
             nSize = 20;
         aTextSz.Width() = nSize;
-        bMinHeight = sal_True;
+        bMinHeight = true;
         break;
 
     case HTML_IT_HIDDEN:
         xPropSet->setPropertyValue("HiddenValue",
                                     aTmp );
-        bHidden = sal_True;
+        bHidden = true;
         break;
     default:
         ;
@@ -1815,7 +1815,7 @@ void SwHTMLParser::InsertInput()
                         ->PixelToLogic( aNewSz, MapMode( MAP_100TH_MM ) );
             aSz.Width() = aNewSz.Width();
             OSL_ENSURE( !aTextSz.Width(), "Text-Breite ist gegeben" );
-            bMinWidth = sal_False;
+            bMinWidth = false;
         }
     }
 
@@ -1832,13 +1832,13 @@ void SwHTMLParser::InsertInput()
     {
         aSz.Width() = convertTwipToMm100( aCSS1PropInfo.nWidth );
         aTextSz.Width() = 0;
-        bMinWidth = sal_False;
+        bMinWidth = false;
     }
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.eHeightType )
     {
         aSz.Height() = convertTwipToMm100( aCSS1PropInfo.nHeight );
         aTextSz.Height() = 0;
-        bMinHeight = sal_False;
+        bMinHeight = false;
     }
 
     // Beim Image-Button bei nicht gegebern Groesse einen sinnvollen Default
@@ -1848,14 +1848,14 @@ void SwHTMLParser::InsertInput()
         if( !aSz.Width() )
         {
             aSz.Width() = HTML_DFLT_IMG_WIDTH;
-            bSetGrfWidth = sal_True;
+            bSetGrfWidth = true;
             if( pTable != 0 )
                 IncGrfsThatResizeTable();
         }
         if( !aSz.Height() )
         {
             aSz.Height() = HTML_DFLT_IMG_HEIGHT;
-            bSetGrfHeight = sal_True;
+            bSetGrfHeight = true;
         }
     }
     if( aSz.Width() < MINFLY )
@@ -1868,7 +1868,7 @@ void SwHTMLParser::InsertInput()
                                              eVertOri, eHoriOri,
                                              aCSS1ItemSet, aCSS1PropInfo,
                                              aMacroTbl, aUnoMacroTbl,
-                                             aUnoMacroParamTbl, sal_False,
+                                             aUnoMacroParamTbl, false,
                                              bHidden );
     if( aTextSz.Width() || aTextSz.Height() || bMinWidth || bMinHeight )
     {
@@ -1924,7 +1924,7 @@ void SwHTMLParser::NewTextArea()
     std::vector<OUString> aUnoMacroParamTbl;
     sal_uInt16 nRows = 0, nCols = 0;
     sal_uInt16 nWrap = HTML_WM_OFF;
-    sal_Bool bDisabled = sal_False;
+    bool bDisabled = false;
     SvKeyValueIterator *pHeaderAttrs = pFormImpl->GetHeaderAttrs();
     ScriptType eDfltScriptType = GetScriptType( pHeaderAttrs );
     const OUString& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
@@ -1935,7 +1935,7 @@ void SwHTMLParser::NewTextArea()
         const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         sal_uInt16 nEvent = 0;
-        sal_Bool bSetEvent = sal_False;
+        bool bSetEvent = false;
 
         switch( rOption.GetToken() )
         {
@@ -1952,7 +1952,7 @@ void SwHTMLParser::NewTextArea()
             sName = rOption.GetString();
             break;
         case HTML_O_DISABLED:
-            bDisabled = sal_True;
+            bDisabled = true;
             break;
         case HTML_O_ROWS:
             nRows = (sal_uInt16)rOption.GetNumber();
@@ -1973,7 +1973,7 @@ void SwHTMLParser::NewTextArea()
             //fallthrough
         case HTML_O_ONFOCUS:
             nEvent = HTML_ET_ONGETFOCUS;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         case HTML_O_SDONBLUR:
@@ -1981,7 +1981,7 @@ void SwHTMLParser::NewTextArea()
             //fallthrough
         case HTML_O_ONBLUR:
             nEvent = HTML_ET_ONLOSEFOCUS;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         case HTML_O_SDONCLICK:
@@ -1989,7 +1989,7 @@ void SwHTMLParser::NewTextArea()
             //fallthrough
         case HTML_O_ONCLICK:
             nEvent = HTML_ET_ONCLICK;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         case HTML_O_SDONCHANGE:
@@ -1997,7 +1997,7 @@ void SwHTMLParser::NewTextArea()
             //fallthrough
         case HTML_O_ONCHANGE:
             nEvent = HTML_ET_ONCHANGE;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         case HTML_O_SDONSELECT:
@@ -2005,7 +2005,7 @@ void SwHTMLParser::NewTextArea()
             //fallthrough
         case HTML_O_ONSELECT:
             nEvent = HTML_ET_ONSELECT;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         default:
@@ -2121,7 +2121,7 @@ void SwHTMLParser::NewTextArea()
                                       aMacroTbl, aUnoMacroTbl,
                                       aUnoMacroParamTbl );
     if( aTextSz.Width() || aTextSz.Height() )
-        SetControlSize( xShape, aTextSz, sal_False, sal_False );
+        SetControlSize( xShape, aTextSz, false, false );
 
     // einen neuen Kontext anlegen
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_TEXTAREA_ON );
@@ -2210,8 +2210,8 @@ void SwHTMLParser::NewSelect()
     SvxMacroTableDtor aMacroTbl;
     std::vector<OUString> aUnoMacroTbl;
     std::vector<OUString> aUnoMacroParamTbl;
-    sal_Bool bMultiple = sal_False;
-    sal_Bool bDisabled = sal_False;
+    bool bMultiple = false;
+    bool bDisabled = false;
     nSelectEntryCnt = 1;
     SvKeyValueIterator *pHeaderAttrs = pFormImpl->GetHeaderAttrs();
     ScriptType eDfltScriptType = GetScriptType( pHeaderAttrs );
@@ -2223,7 +2223,7 @@ void SwHTMLParser::NewSelect()
         const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         sal_uInt16 nEvent = 0;
-        sal_Bool bSetEvent = sal_False;
+        bool bSetEvent = false;
 
         switch( rOption.GetToken() )
         {
@@ -2240,10 +2240,10 @@ void SwHTMLParser::NewSelect()
             sName = rOption.GetString();
             break;
         case HTML_O_MULTIPLE:
-            bMultiple = sal_True;
+            bMultiple = true;
             break;
         case HTML_O_DISABLED:
-            bDisabled = sal_True;
+            bDisabled = true;
             break;
         case HTML_O_SIZE:
             nSelectEntryCnt = (sal_uInt16)rOption.GetNumber();
@@ -2257,28 +2257,28 @@ void SwHTMLParser::NewSelect()
             eScriptType2 = STARBASIC;
         case HTML_O_ONFOCUS:
             nEvent = HTML_ET_ONGETFOCUS;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         case HTML_O_SDONBLUR:
             eScriptType2 = STARBASIC;
         case HTML_O_ONBLUR:
             nEvent = HTML_ET_ONLOSEFOCUS;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         case HTML_O_SDONCLICK:
             eScriptType2 = STARBASIC;
         case HTML_O_ONCLICK:
             nEvent = HTML_ET_ONCLICK;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         case HTML_O_SDONCHANGE:
             eScriptType2 = STARBASIC;
         case HTML_O_ONCHANGE:
             nEvent = HTML_ET_ONCHANGE;
-            bSetEvent = sal_True;
+            bSetEvent = true;
             break;
 
         default:
@@ -2341,7 +2341,7 @@ void SwHTMLParser::NewSelect()
     }
 
     Size aTextSz( 0, 0 );
-    sal_Bool bMinWidth = sal_True, bMinHeight = sal_True;
+    bool bMinWidth = true, bMinHeight = true;
     if( !bMultiple && 1==nSelectEntryCnt )
     {
         sal_Bool bTrue = sal_True;
@@ -2362,7 +2362,7 @@ void SwHTMLParser::NewSelect()
                 OUString("MultiSelection"), aTmp );
         }
         aTextSz.Height() = nSelectEntryCnt;
-        bMinHeight = sal_False;
+        bMinHeight = false;
     }
 
     SfxItemSet aCSS1ItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
@@ -2380,13 +2380,13 @@ void SwHTMLParser::NewSelect()
     {
         aSz.Width() = convertTwipToMm100( aCSS1PropInfo.nWidth );
         bFixSelectWidth = false;
-        bMinWidth = sal_False;
+        bMinWidth = false;
     }
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.eHeightType )
     {
         aSz.Height() = convertTwipToMm100( aCSS1PropInfo.nHeight );
         aTextSz.Height() = sal_False;
-        bMinHeight = sal_False;
+        bMinHeight = false;
     }
     if( aSz.Width() < MINFLY )
         aSz.Width() = MINFLY;
@@ -2486,7 +2486,7 @@ void SwHTMLParser::EndSelect()
     {
         OSL_ENSURE( pFormImpl->GetShape().is(), "Kein Shape gemerkt" );
         Size aTextSz( -1, 0 );
-        SetControlSize( pFormImpl->GetShape(), aTextSz, sal_False, sal_False );
+        SetControlSize( pFormImpl->GetShape(), aTextSz, false, false );
     }
 
     pFormImpl->ReleaseFCompPropSet();

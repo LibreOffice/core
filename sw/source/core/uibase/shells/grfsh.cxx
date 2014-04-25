@@ -203,7 +203,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         case FN_FORMAT_GRAFIC_DLG:
         case FN_DRAW_WRAP_DLG:
         {
-            SwFlyFrmAttrMgr aMgr( sal_False, &rSh, rSh.IsFrmSelected() ?
+            SwFlyFrmAttrMgr aMgr( false, &rSh, rSh.IsFrmSelected() ?
                                                FRMMGR_TYPE_NONE : FRMMGR_TYPE_GRF);
             const SwViewOption* pVOpt = rSh.GetViewOptions();
             SwViewOption aUsrPref( *pVOpt );
@@ -783,11 +783,11 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                     const sal_uInt16 eGraphicType( rSh.GetGraphicType() );
                     if ( ( eGraphicType == GRAPHIC_NONE ||
                            eGraphicType == GRAPHIC_DEFAULT ) &&
-                         rSh.IsGrfSwapOut( sal_True ) )
+                         rSh.IsGrfSwapOut( true ) )
                     {
                         rSet.DisableItem( nWhich );
                         if( AddGrfUpdateSlot( nWhich ))
-                            rSh.GetGraphic(sal_False);  // start the loading
+                            rSh.GetGraphic(false);  // start the loading
                     }
                     else
                     {

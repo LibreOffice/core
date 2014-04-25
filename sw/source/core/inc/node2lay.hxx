@@ -67,7 +67,7 @@ public:
 
     SwFrm *GetFrm( const Point* pDocPos = 0,
                     const SwPosition *pPos = 0,
-                    const sal_Bool bCalcFrm = sal_True ) const;
+                    const bool bCalcFrm = true ) const;
 };
 
 #endif

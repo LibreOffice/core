@@ -61,10 +61,10 @@ public:
     sal_Int32       nRow;    // row for single print
     sal_Int32       lPHeight; // paper height
     sal_Int32       lPWidth;  // paper width
-    sal_Bool        bAddr;// address as label?
-    sal_Bool        bCont;// continuous paper?
-    sal_Bool        bPage;// whole page or single labels?
-    sal_Bool        bSynchron;// synchronise all labels
+    bool        bAddr;// address as label?
+    bool        bCont;// continuous paper?
+    bool        bPage;// whole page or single labels?
+    bool        bSynchron;// synchronise all labels
 
     //parts of the business card
     OUString   aPrivFirstName;
@@ -108,11 +108,11 @@ public:
 class SwLabCfgItem : public utl::ConfigItem
 {
     SwLabItem   aItem;
-    sal_Bool    bIsLabel;
+    bool    bIsLabel;
 
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 public:
-    SwLabCfgItem(sal_Bool bLabel);
+    SwLabCfgItem(bool bLabel);
 
     SwLabItem&              GetItem() {return aItem;}
 

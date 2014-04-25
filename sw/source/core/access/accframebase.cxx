@@ -43,9 +43,9 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-sal_Bool SwAccessibleFrameBase::IsSelected()
+bool SwAccessibleFrameBase::IsSelected()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     OSL_ENSURE( GetMap(), "no map?" );
     const SwViewShell *pVSh = GetMap()->GetShell();
@@ -55,7 +55,7 @@ sal_Bool SwAccessibleFrameBase::IsSelected()
         const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
         const SwFrm *pFlyFrm = pFESh->GetCurrFlyFrm();
         if( pFlyFrm == GetFrm() )
-            bRet = sal_True;
+            bRet = true;
     }
 
     return bRet;
@@ -68,7 +68,7 @@ void SwAccessibleFrameBase::GetStates(
 
     const SwViewShell *pVSh = GetMap()->GetShell();
     OSL_ENSURE( pVSh, "no shell?" );
-    sal_Bool bSelectable =  pVSh->ISA( SwFEShell );
+    bool bSelectable =  pVSh->ISA( SwFEShell );
 
     // SELECTABLE
     if( bSelectable )
@@ -128,7 +128,7 @@ SwAccessibleFrameBase::SwAccessibleFrameBase(
         sal_Int16 nInitRole,
         const SwFlyFrm* pFlyFrm  ) :
     SwAccessibleContext( pInitMap, nInitRole, pFlyFrm ),
-    bIsSelected( sal_False )
+    bIsSelected( false )
 {
     SolarMutexGuard aGuard;
 
@@ -142,8 +142,8 @@ SwAccessibleFrameBase::SwAccessibleFrameBase(
 
 void SwAccessibleFrameBase::_InvalidateCursorPos()
 {
-    sal_Bool bNewSelected = IsSelected();
-    sal_Bool bOldSelected;
+    bool bNewSelected = IsSelected();
+    bool bOldSelected;
 
     {
         osl::MutexGuard aGuard( aMutex );
@@ -189,7 +189,7 @@ void SwAccessibleFrameBase::_InvalidateFocus()
     Window *pWin = GetWindow();
     if( pWin )
     {
-        sal_Bool bSelected;
+        bool bSelected;
 
         {
             osl::MutexGuard aGuard( aMutex );
@@ -202,7 +202,7 @@ void SwAccessibleFrameBase::_InvalidateFocus()
     }
 }
 
-sal_Bool SwAccessibleFrameBase::HasCursor()
+bool SwAccessibleFrameBase::HasCursor()
 {
     osl::MutexGuard aGuard( aMutex );
     return bIsSelected;
@@ -263,7 +263,7 @@ void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
     }
 }
 
-void SwAccessibleFrameBase::Dispose( sal_Bool bRecursive )
+void SwAccessibleFrameBase::Dispose( bool bRecursive )
 {
     SolarMutexGuard aGuard;
 
@@ -288,7 +288,7 @@ SwPaM* SwAccessibleFrameBase::GetCrsr()
             !(pFESh->IsFrmSelected() || pFESh->IsObjSelected() > 0) )
         {
             // get the selection, and test whether it affects our text node
-            pCrsr = pCrsrShell->GetCrsr( sal_False /* ??? */ );
+            pCrsr = pCrsrShell->GetCrsr( false /* ??? */ );
         }
     }
 
@@ -297,13 +297,13 @@ SwPaM* SwAccessibleFrameBase::GetCrsr()
 
 //Return the selected state of the object.
 //when the object's anchor are in the selection cursor, we should return true.
-sal_Bool SwAccessibleFrameBase::GetSelectedState( )
+bool SwAccessibleFrameBase::GetSelectedState( )
 {
     SolarMutexGuard aGuard;
 
     if(GetMap()->IsDocumentSelAll())
     {
-        return sal_True;
+        return true;
     }
 
     // SELETED.
@@ -312,7 +312,7 @@ sal_Bool SwAccessibleFrameBase::GetSelectedState( )
     const SwFmtAnchor& pAnchor = pFrmFmt->GetAnchor();
     const SwPosition *pPos = pAnchor.GetCntntAnchor();
     if( !pPos )
-        return sal_False;
+        return false;
     int pIndex = pPos->nContent.GetIndex();
     if( pPos->nNode.GetNode().GetTxtNode() )
     {
@@ -340,13 +340,13 @@ sal_Bool SwAccessibleFrameBase::GetSelectedState( )
                         {
                             if( ((nHere == nStartIndex) && (pIndex >= pStart->nContent.GetIndex())) || (nHere > nStartIndex) )
                                 if( ((nHere == nEndIndex) && (pIndex < pEnd->nContent.GetIndex())) || (nHere < nEndIndex) )
-                                    return sal_True;
+                                    return true;
                         }
                         else if( pAnchor.GetAnchorId() == FLY_AT_PARA )
                         {
                             if( ((nHere > nStartIndex) || pStart->nContent.GetIndex() ==0 )
                                 && (nHere < nEndIndex ) )
-                                return sal_True;
+                                return true;
                         }
                         break;
                     }
@@ -360,7 +360,7 @@ sal_Bool SwAccessibleFrameBase::GetSelectedState( )
             while( pCrsr != pRingStart );
         }
     }
-    return sal_False;
+    return false;
 }
 
 SwFlyFrm* SwAccessibleFrameBase::getFlyFrm() const
@@ -377,17 +377,17 @@ SwFlyFrm* SwAccessibleFrameBase::getFlyFrm() const
     return pFlyFrm;
 }
 
-sal_Bool SwAccessibleFrameBase::SetSelectedState( sal_Bool )
+bool SwAccessibleFrameBase::SetSelectedState( bool )
 {
-    sal_Bool bParaSeleted = GetSelectedState() || IsSelected();
+    bool bParaSeleted = GetSelectedState() || IsSelected();
 
     if(bIsSeletedInDoc != bParaSeleted)
     {
         bIsSeletedInDoc = bParaSeleted;
         FireStateChangedEvent( AccessibleStateType::SELECTED, bParaSeleted );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

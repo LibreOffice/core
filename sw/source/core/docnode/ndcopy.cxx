@@ -327,7 +327,7 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
     if( pBoxFmt == pBox->GetFrmFmt() ) // Create a new one?
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pBoxFmt->GetItemState( RES_BOXATR_FORMULA, sal_False,
+        if( SFX_ITEM_SET == pBoxFmt->GetItemState( RES_BOXATR_FORMULA, false,
             &pItem ) && ((SwTblBoxFormula*)pItem)->IsIntrnlName() )
         {
             ((SwTblBoxFormula*)pItem)->PtrToBoxNm( pCT->pOldTable );
@@ -338,9 +338,9 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
 
         if( pBox->GetSttIdx() )
         {
-            SvNumberFormatter* pN = pCT->pDoc->GetNumberFormatter( sal_False );
+            SvNumberFormatter* pN = pCT->pDoc->GetNumberFormatter( false );
             if( pN && pN->HasMergeFmtTbl() && SFX_ITEM_SET == pBoxFmt->
-                GetItemState( RES_BOXATR_FORMAT, sal_False, &pItem ) )
+                GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
             {
                 sal_uLong nOldIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();
                 sal_uLong nNewIdx = pN->GetMergeFmtIndex( nOldIdx );
@@ -460,7 +460,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
         // Swap the table pointers in the node
         SwDDETable* pNewTable = new SwDDETable( pTblNd->GetTable(), pDDEType );
-        pTblNd->SetNewTable( pNewTable, sal_False );
+        pTblNd->SetNewTable( pNewTable, false );
     }
     // First copy the content of the tables, we will later assign the
     // boxes/lines and create the frames
@@ -472,7 +472,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // We have to make sure that the table node of the SwTable is accessible, even
     // without any content in m_TabSortContentBoxes. #i26629#
     pTblNd->GetTable().SetTableNode( pTblNd );
-    rNds._Copy( aRg, aInsPos, sal_False );
+    rNds._Copy( aRg, aInsPos, false );
     pTblNd->GetTable().SetTableNode( 0 );
 
     // Special case for a single box
@@ -529,7 +529,7 @@ void SwTxtNode::CopyCollFmt( SwTxtNode& rDestNd )
 
 // Copy method from SwDoc
 // Prevent copying in Flys that are anchored in the area
-static sal_Bool lcl_ChkFlyFly( SwDoc* pDoc, sal_uLong nSttNd, sal_uLong nEndNd,
+static bool lcl_ChkFlyFly( SwDoc* pDoc, sal_uLong nSttNd, sal_uLong nEndNd,
                         sal_uLong nInsNd )
 {
     const SwFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
@@ -556,16 +556,16 @@ static sal_Bool lcl_ChkFlyFly( SwDoc* pDoc, sal_uLong nSttNd, sal_uLong nEndNd,
             if( pSNd->GetIndex() < nInsNd &&
                 nInsNd < pSNd->EndOfSectionIndex() )
                 // Do not copy !
-                return sal_True;
+                return true;
 
             if( lcl_ChkFlyFly( pDoc, pSNd->GetIndex(),
                         pSNd->EndOfSectionIndex(), nInsNd ) )
                 // Do not copy !
-                return sal_True;
+                return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 static void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
@@ -1230,13 +1230,13 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             if( aInsPos == pEnd->nNode )
             {
                 SwNodeIndex aSaveIdx( aInsPos, -1 );
-                CopyWithFlyInFly( aRg, 0,aInsPos, &rPam, bMakeNewFrms, sal_False );
+                CopyWithFlyInFly( aRg, 0,aInsPos, &rPam, bMakeNewFrms, false );
                 ++aSaveIdx;
                 pEnd->nNode = aSaveIdx;
                 pEnd->nContent.Assign( aSaveIdx.GetNode().GetTxtNode(), 0 );
             }
             else
-                CopyWithFlyInFly( aRg, pEnd->nContent.GetIndex(), aInsPos, &rPam, bMakeNewFrms, sal_False );
+                CopyWithFlyInFly( aRg, pEnd->nContent.GetIndex(), aInsPos, &rPam, bMakeNewFrms, false );
 
             bCopyBookmarks = false;
 
@@ -1323,9 +1323,9 @@ void SwDoc::CopyWithFlyInFly(
     const sal_Int32 nEndContentIndex,
     const SwNodeIndex& rInsPos,
     const SwPaM* pCopiedPaM,
-    const sal_Bool bMakeNewFrms,
-    const sal_Bool bDelRedlines,
-    const sal_Bool bCopyFlyAtFly ) const
+    const bool bMakeNewFrms,
+    const bool bDelRedlines,
+    const bool bCopyFlyAtFly ) const
 {
     SwDoc* pDest = rInsPos.GetNode().GetDoc();
 
@@ -1333,7 +1333,7 @@ void SwDoc::CopyWithFlyInFly(
 
     SwNodeIndex aSavePos( rInsPos, -1 );
     bool bEndIsEqualEndPos = rInsPos == rRg.aEnd;
-    GetNodes()._CopyNodes( rRg, rInsPos, bMakeNewFrms, sal_True );
+    GetNodes()._CopyNodes( rRg, rInsPos, bMakeNewFrms, true );
     ++aSavePos;
     if( bEndIsEqualEndPos )
         ((SwNodeIndex&)rRg.aEnd) = aSavePos;

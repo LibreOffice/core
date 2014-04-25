@@ -97,10 +97,10 @@ class SwEditRegionDlg : public SfxModalDialog
     sfx2::DocumentInserter* m_pDocInserter;
     Window*                 m_pOldDefDlgParent;
 
-    sal_Bool            bDontCheckPasswd :1;
-    sal_Bool            bWeb            :1;
+    bool            bDontCheckPasswd :1;
+    bool            bWeb            :1;
 
-    Image  BuildBitmap(sal_Bool bProtect,sal_Bool bHidden);
+    Image  BuildBitmap(bool bProtect, bool bHidden);
 
     void    RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pEntry);
     sal_uInt16  FindArrPos(const SwSectionFmt* pFmt);
@@ -126,7 +126,7 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
     DECL_LINK( SubRegionEventHdl, VclWindowEvent * );
 
-    sal_Bool CheckPasswd(CheckBox* pBox = 0);
+    bool CheckPasswd(CheckBox* pBox = 0);
 
 public:
     SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh );
@@ -223,7 +223,7 @@ class SwSectionFtnEndTabPage : public SfxTabPage
     Edit*            pEndSuffixED;
 
     DECL_LINK( FootEndHdl, CheckBox * );
-    void ResetState( sal_Bool bFtn, const SwFmtFtnEndAtTxtEnd& );
+    void ResetState( bool bFtn, const SwFmtFtnEndAtTxtEnd& );
 
 public:
     SwSectionFtnEndTabPage( Window *pParent, const SfxItemSet &rAttrSet );

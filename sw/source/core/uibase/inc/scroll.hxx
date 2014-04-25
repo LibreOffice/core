@@ -23,10 +23,10 @@
 class SwScrollbar: public ScrollBar
 {
     Size    aDocSz;
-    sal_Bool    bHori       :1;     // horizontal = salTrue, otherwise vertical
-    sal_Bool    bAuto       :1;     // for scrolling mode
-    sal_Bool    bVisible    :1;     // show/hide should only set this flag
-    sal_Bool    bSizeSet    :1;     // was the size already set?
+    bool    bHori       :1;     // horizontal = salTrue, otherwise vertical
+    bool    bAuto       :1;     // for scrolling mode
+    bool    bVisible    :1;     // show/hide should only set this flag
+    bool    bSizeSet    :1;     // was the size already set?
 
     void    AutoShow();
 
@@ -35,22 +35,22 @@ class SwScrollbar: public ScrollBar
 
 public:
 
-    void    ExtendedShow( sal_Bool bVisible = sal_True );
+    void    ExtendedShow( bool bVisible = true );
     void    Hide() { Show( false ); }
     void    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE;
-    sal_Bool    IsVisible(sal_Bool bReal) const { return bReal ? ScrollBar::IsVisible() : bVisible; }
+    bool    IsVisible(bool bReal) const { return bReal ? ScrollBar::IsVisible() : bVisible; }
 
         // changing of document size
     void    DocSzChgd(const Size &rNewSize);
         // changing of visible region
     void    ViewPortChgd(const Rectangle &rRectangle);
         // what is it??
-    sal_Bool    IsHoriScroll() const { return bHori; }
+    bool    IsHoriScroll() const { return bHori; }
 
-    void    SetAuto(sal_Bool bSet);
-    sal_Bool    IsAuto() { return bAuto;}
+    void    SetAuto(bool bSet);
+    bool    IsAuto() { return bAuto;}
 
-    SwScrollbar(Window *pParent, sal_Bool bHori = sal_True );
+    SwScrollbar(Window *pParent, bool bHori = true );
     virtual ~SwScrollbar();
 };
 

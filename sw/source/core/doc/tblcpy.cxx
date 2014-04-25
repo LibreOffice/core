@@ -533,7 +533,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
 
     SwNodeIndex aSavePos( aInsIdx, -1 );
     if( pRg.get() )
-        pCpyDoc->CopyWithFlyInFly( *pRg, 0, aInsIdx, NULL, sal_False );
+        pCpyDoc->CopyWithFlyInFly( *pRg, 0, aInsIdx, NULL, false );
     else
         pDoc->GetNodes().MakeTxtNode( aInsIdx, (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
     ++aSavePos;
@@ -553,7 +553,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
             SwPosition aMvPos( aInsIdx );
             SwCntntNode* pCNd = pDoc->GetNodes().GoPrevious( &aMvPos.nNode );
             aMvPos.nContent.Assign( pCNd, pCNd->Len() );
-            pDoc->CorrAbs( aInsIdx, aEndNdIdx, aMvPos, /*sal_True*/sal_False );
+            pDoc->CorrAbs( aInsIdx, aEndNdIdx, aMvPos, /*sal_True*/false );
         }
 
         // If we still have FlyFrames hanging around, delete them too
@@ -640,7 +640,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
             if( aBoxAttrSet.Count() )
             {
                 const SfxPoolItem* pItem;
-                SvNumberFormatter* pN = pDoc->GetNumberFormatter( sal_False );
+                SvNumberFormatter* pN = pDoc->GetNumberFormatter( false );
                 if( pN && pN->HasMergeFmtTbl() && SFX_ITEM_SET == aBoxAttrSet.
                     GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
                 {
@@ -655,7 +655,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
     }
 }
 
-sal_Bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
+bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                         SwUndoTblCpyTbl* pUndo )
 {
     SwDoc* pDoc = GetFrmFmt()->GetDoc();
@@ -712,7 +712,7 @@ sal_Bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBox
     // make frames
     aFndBox.MakeFrms( *this );
 
-    return sal_True;
+    return true;
 }
 
 /** Copy Table into this Box.
@@ -720,7 +720,7 @@ sal_Bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBox
     deleted by doing this.
     If no Box is left the remaining content goes to the Box of a "BaseLine".
     If there's no Line anymore, put it also into the last Box of a "BaseLine". */
-sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
+bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
                         SwUndoTblCpyTbl* pUndo )
 {
     SetHTMLTableLayout( 0 );    // Delete HTML Layout
@@ -797,10 +797,10 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
     }
 
     aFndBox.MakeFrms( pTblNd->GetTable() );     // Create the Frames anew
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
+bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                         SwUndoTblCpyTbl* pUndo )
 {
     OSL_ENSURE( !rSelBoxes.empty(), "Missing selection" );
@@ -838,7 +838,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 
         sal_uInt16 nFndCnt = aFndBox.GetLines().size();
         if( !nFndCnt )
-            return sal_False;
+            return false;
 
         // Check if we have enough space for all Lines and Boxes
         sal_uInt16 nTstLns = 0;
@@ -856,7 +856,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 // new ones to reach our goal. But only if the SSelection
                 // contains a Box!
                 if( 1 < rSelBoxes.size() )
-                    return sal_False;
+                    return false;
 
                 sal_uInt16 nNewLns = rCpyTbl.GetTabLines().size() -
                                 (GetTabLines().size() - nSttLine );
@@ -874,13 +874,13 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                     if( pLastLn->GetTabBoxes().size() < nSttBox ||
                         ( pLastLn->GetTabBoxes().size() - nSttBox ) <
                             pCpyLn->GetTabBoxes().size() )
-                        return sal_False;
+                        return false;
 
                     // Test for nesting
                     for( nBx = 0; nBx < pCpyLn->GetTabBoxes().size(); ++nBx )
                         if( !( pTmpBox = pLastLn->GetTabBoxes()[ nSttBox + nBx ])
                                     ->GetSttNd() )
-                            return sal_False;
+                            return false;
                 }
                 // We have enough space for the to-be-copied, so insert new
                 // rows accordingly.
@@ -894,7 +894,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                                 aBoxes, true ), nNewLns )
                     : !InsertRow( pDoc, SelLineFromBox( pInsBox,
                                 aBoxes, true ), nNewLns, true ) )
-                    return sal_False;
+                    return false;
             }
 
             nTstLns = rCpyTbl.GetTabLines().size();        // copy this many
@@ -902,7 +902,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
         else if( 0 == (nFndCnt % rCpyTbl.GetTabLines().size()) )
             nTstLns = nFndCnt;
         else
-            return sal_False;       // not enough space for the rows
+            return false;       // not enough space for the rows
 
         for( nLn = 0; nLn < nTstLns; ++nLn )
         {
@@ -931,7 +931,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                     pFLine->GetBoxes().size() )
                 {
                     delete pInsFLine;
-                    return sal_False;
+                    return false;
                 }
 
                 // Test for nesting
@@ -941,7 +941,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                         ->GetSttNd() )
                     {
                         delete pInsFLine;
-                        return sal_False;
+                        return false;
                     }
                     // if Ok, insert the Box into the FndLine
                     pFndBox = new _FndBox( pTmpBox, pInsFLine );
@@ -954,14 +954,14 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 if( pLine->GetTabBoxes().size() < nSttBox  ||
                     ( pLine->GetTabBoxes().size() - nSttBox ) <
                     pCpyLn->GetTabBoxes().size() )
-                    return sal_False;
+                    return false;
 
                 // Test for nesting
                 for( nBx = 0; nBx < pCpyLn->GetTabBoxes().size(); ++nBx )
                 {
                     if( !( pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ])
                         ->GetSttNd() )
-                        return sal_False;
+                        return false;
                     // if Ok, insert the Box into the FndLine
                     if( nBx == pFLine->GetBoxes().size() )
                     {
@@ -976,17 +976,17 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 // (n times)
                 if( 0 != ( pFLine->GetBoxes().size() %
                             pCpyLn->GetTabBoxes().size() ))
-                    return sal_False;
+                    return false;
 
                 // Test for nesting
                 for( nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
                     if (!pFLine->GetBoxes()[nBx].GetBox()->GetSttNd())
-                        return sal_False;
+                        return false;
             }
         }
 
         if( aFndBox.GetLines().empty() )
-            return sal_False;
+            return false;
     }
 
     {
@@ -999,7 +999,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
     // Delete the Frames
     aFndBox.SetTableLines( *this );
     //Not dispose accessible table
-    aFndBox.DelFrms( *this,sal_False );
+    aFndBox.DelFrms( *this,false );
 
     if( 1 == rCpyTbl.GetTabSortBoxes().size() )
     {
@@ -1026,7 +1026,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
         }
 
     aFndBox.MakeFrms( *this );
-    return sal_True;
+    return true;
 }
 
 static void _FndCntntLine( const SwTableLine* pLine, SwSelBoxes* pPara );

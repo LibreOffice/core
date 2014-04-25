@@ -195,10 +195,10 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
     return nRet;
 }
 
-sal_Bool SwAccessibleParagraph::GetSelection(
+bool SwAccessibleParagraph::GetSelection(
     sal_Int32& nStart, sal_Int32& nEnd)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     nStart = -1;
     nEnd = -1;
 
@@ -305,7 +305,7 @@ sal_Bool SwAccessibleParagraph::GetSelection(
                     {
                         nStart = nLocalStart;
                         nEnd = nLocalEnd;
-                        bRet = sal_True;
+                        bRet = true;
                     }
                 }
                 // else: this PaM doesn't point to this paragraph
@@ -340,14 +340,14 @@ SwPaM* SwAccessibleParagraph::GetCursor( const bool _bForSelection )
             !(pFESh->IsFrmSelected() || pFESh->IsObjSelected() > 0) )
         {
             // get the selection, and test whether it affects our text node
-            pCrsr = pCrsrShell->GetCrsr( sal_False /* ??? */ );
+            pCrsr = pCrsrShell->GetCrsr( false /* ??? */ );
         }
     }
 
     return pCrsr;
 }
 
-sal_Bool SwAccessibleParagraph::IsHeading() const
+bool SwAccessibleParagraph::IsHeading() const
 {
     const SwTxtNode *pTxtNd = GetTxtNode();
     return pTxtNd->IsOutline();
@@ -385,7 +385,7 @@ void SwAccessibleParagraph::GetStates(
     }
 }
 
-void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
+void SwAccessibleParagraph::_InvalidateContent( bool bVisibleDataFired )
 {
     OUString sOldText( GetString() );
 
@@ -423,10 +423,10 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
         FireVisibleDataEvent();
     }
 
-    sal_Bool bNewIsHeading = IsHeading();
+    bool bNewIsHeading = IsHeading();
     //Get the real heading level, Heading1 ~ Heading10
     nHeadingLevel = GetRealHeadingLevel();
-    sal_Bool bOldIsHeading;
+    bool bOldIsHeading;
     {
         osl::MutexGuard aGuard( aMutex );
         bOldIsHeading = bIsHeading;
@@ -490,7 +490,7 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
     {
         // The cursor's node position is simulated by the focus!
         if( pWin && pWin->HasFocus() && -1 == nOld )
-            FireStateChangedEvent( AccessibleStateType::FOCUSED, sal_True );
+            FireStateChangedEvent( AccessibleStateType::FOCUSED, true );
 
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::CARET_CHANGED;
@@ -500,11 +500,11 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
         FireAccessibleEvent( aEvent );
 
         if( pWin && pWin->HasFocus() && -1 == nNew )
-            FireStateChangedEvent( AccessibleStateType::FOCUSED, sal_False );
+            FireStateChangedEvent( AccessibleStateType::FOCUSED, false );
         //To send TEXT_SELECTION_CHANGED event
         sal_Int32 nStart=0;
         sal_Int32 nEnd  =0;
-        sal_Bool bCurSelection=GetSelection(nStart,nEnd);
+        bool bCurSelection=GetSelection(nStart,nEnd);
         if(m_bLastHasSelection || bCurSelection )
         {
             aEvent.EventId = AccessibleEventId::TEXT_SELECTION_CHANGED;
@@ -542,7 +542,7 @@ SwAccessibleParagraph::SwAccessibleParagraph(
     , pPortionData( NULL )
     , pHyperTextData( NULL )
     , nOldCaretPos( -1 )
-    , bIsHeading( sal_False )
+    , bIsHeading( false )
     //Get the real heading level, Heading1 ~ Heading10
     , nHeadingLevel (-1)
     , aSelectionHelper( *this )
@@ -566,7 +566,7 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
     delete mpParaChangeTrackInfo; // #i108125#
 }
 
-sal_Bool SwAccessibleParagraph::HasCursor()
+bool SwAccessibleParagraph::HasCursor()
 {
     osl::MutexGuard aGuard( aMutex );
     return nOldCaretPos != -1;
@@ -655,19 +655,19 @@ SwXTextPortion* SwAccessibleParagraph::CreateUnoPortion(
 
 // range checking for parameter
 
-sal_Bool SwAccessibleParagraph::IsValidChar(
+bool SwAccessibleParagraph::IsValidChar(
     sal_Int32 nPos, sal_Int32 nLength)
 {
     return (nPos >= 0) && (nPos < nLength);
 }
 
-sal_Bool SwAccessibleParagraph::IsValidPosition(
+bool SwAccessibleParagraph::IsValidPosition(
     sal_Int32 nPos, sal_Int32 nLength)
 {
     return (nPos >= 0) && (nPos <= nLength);
 }
 
-sal_Bool SwAccessibleParagraph::IsValidRange(
+bool SwAccessibleParagraph::IsValidRange(
     sal_Int32 nBegin, sal_Int32 nEnd, sal_Int32 nLength)
 {
     return IsValidPosition(nBegin, nLength) && IsValidPosition(nEnd, nLength);
@@ -729,25 +729,25 @@ const SwRangeRedline* SwAccessibleParagraph::GetRedlineAtIndex( sal_Int32 )
 
 // text boundaries
 
-sal_Bool SwAccessibleParagraph::GetCharBoundary(
+bool SwAccessibleParagraph::GetCharBoundary(
     i18n::Boundary& rBound,
     const OUString&,
     sal_Int32 nPos )
 {
     if( GetPortionData().FillBoundaryIFDateField( rBound,  nPos) )
-        return sal_True;
+        return true;
 
     rBound.startPos = nPos;
     rBound.endPos = nPos+1;
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwAccessibleParagraph::GetWordBoundary(
+bool SwAccessibleParagraph::GetWordBoundary(
     i18n::Boundary& rBound,
     const OUString& rText,
     sal_Int32 nPos )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // now ask the Break-Iterator for the word
     OSL_ENSURE( g_pBreakIt != NULL, "We always need a break." );
@@ -781,7 +781,7 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
     return bRet;
 }
 
-sal_Bool SwAccessibleParagraph::GetSentenceBoundary(
+bool SwAccessibleParagraph::GetSentenceBoundary(
     i18n::Boundary& rBound,
     const OUString& rText,
     sal_Int32 nPos )
@@ -794,10 +794,10 @@ sal_Bool SwAccessibleParagraph::GetSentenceBoundary(
     }
 
     GetPortionData().GetSentenceBoundary( rBound, nPos );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwAccessibleParagraph::GetLineBoundary(
+bool SwAccessibleParagraph::GetLineBoundary(
     i18n::Boundary& rBound,
     const OUString& rText,
     sal_Int32 nPos )
@@ -806,34 +806,34 @@ sal_Bool SwAccessibleParagraph::GetLineBoundary(
         GetPortionData().GetLastLineBoundary( rBound );
     else
         GetPortionData().GetLineBoundary( rBound, nPos );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwAccessibleParagraph::GetParagraphBoundary(
+bool SwAccessibleParagraph::GetParagraphBoundary(
     i18n::Boundary& rBound,
     const OUString& rText,
     sal_Int32 )
 {
     rBound.startPos = 0;
     rBound.endPos = rText.getLength();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwAccessibleParagraph::GetAttributeBoundary(
+bool SwAccessibleParagraph::GetAttributeBoundary(
     i18n::Boundary& rBound,
     const OUString&,
     sal_Int32 nPos )
 {
     GetPortionData().GetAttributeBoundary( rBound, nPos );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
+bool SwAccessibleParagraph::GetGlyphBoundary(
     i18n::Boundary& rBound,
     const OUString& rText,
     sal_Int32 nPos )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // ask the Break-Iterator for the glyph by moving one cell
     // forward, and then one cell back
@@ -867,7 +867,7 @@ sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
     return bRet;
 }
 
-sal_Bool SwAccessibleParagraph::GetTextBoundary(
+bool SwAccessibleParagraph::GetTextBoundary(
     i18n::Boundary& rBound,
     const OUString& rText,
     sal_Int32 nPos,
@@ -883,7 +883,7 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
                 : IsValidChar( nPos, rText.getLength() ) ) )
         throw lang::IndexOutOfBoundsException();
 
-    sal_Bool bRet;
+    bool bRet;
 
     switch( nTextType )
     {
@@ -1318,7 +1318,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // get cursor shell
     SwCrsrShell* pCrsrShell = GetCrsrShell();
@@ -1368,14 +1368,14 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwAccessiblePa
         throw lang::IndexOutOfBoundsException();
 
     /*  #i12332#  */
-    sal_Bool bBehindText = sal_False;
+    bool bBehindText = false;
     if ( nIndex == GetString().getLength() )
-        bBehindText = sal_True;
+        bBehindText = true;
 
     // get model position & prepare GetCharRect() arguments
     SwCrsrMoveState aMoveState;
-    aMoveState.bRealHeight = sal_True;
-    aMoveState.bRealWidth = sal_True;
+    aMoveState.bRealHeight = true;
+    aMoveState.bRealWidth = true;
     SwSpecialPos aSpecialPos;
     SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
 
@@ -1566,7 +1566,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
             case RES_REFPAGESETFLD:
                 {
                     SwRefPageSetField* pRPld = (SwRefPageSetField*)pField;
-                    sal_Bool bOn = pRPld->IsOn();
+                    bool bOn = pRPld->IsOn();
                     strTypeName += "-";
                     if (bOn)
                         strTypeName += "on";
@@ -2125,7 +2125,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
 
     if ( pTxtNode->HasBullet() || pTxtNode->HasNumber() )
     {
-        pSet->Put( pTxtNode->GetAttr(RES_PARATR_LIST_LEVEL, RES_PARATR_LIST_LEVEL) );
+        pSet->Put( pTxtNode->GetAttr(RES_PARATR_LIST_LEVEL, true) );
     }
     pSet->Put( pTxtNode->SwCntntNode::GetAttr(RES_UL_SPACE) );
     pSet->Put( pTxtNode->SwCntntNode::GetAttr(RES_LR_SPACE) );
@@ -2417,14 +2417,14 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
         throw lang::IndexOutOfBoundsException();
 
     // #i12332#
-    sal_Bool bBehindText = sal_False;
+    bool bBehindText = false;
     if ( nIndex == GetString().getLength() )
-        bBehindText = sal_True;
+        bBehindText = true;
 
     // get model position & prepare GetCharRect() arguments
     SwCrsrMoveState aMoveState;
-    aMoveState.bRealHeight = sal_True;
-    aMoveState.bRealWidth = sal_True;
+    aMoveState.bRealHeight = true;
+    aMoveState.bRealWidth = true;
     SwSpecialPos aSpecialPos;
     SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
 
@@ -2559,7 +2559,7 @@ OUString SwAccessibleParagraph::getSelectedText()
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     sal_Int32 nStart, nEnd;
-    sal_Bool bSelected = GetSelection( nStart, nEnd );
+    bool bSelected = GetSelection( nStart, nEnd );
     return bSelected
            ? GetString().copy( nStart, nEnd - nStart )
            : OUString();
@@ -2603,7 +2603,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
         throw lang::IndexOutOfBoundsException();
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // get cursor shell
     SwCrsrShell* pCrsrShell = GetCrsrShell();
@@ -2674,7 +2674,7 @@ OUString SwAccessibleParagraph::getTextRange(
 
     // with error checking
     i18n::Boundary aBound;
-    sal_Bool bWord = GetTextBoundary( aBound, rText, nIndex, nTextType );
+    bool bWord = GetTextBoundary( aBound, rText, nIndex, nTextType );
 
     OSL_ENSURE( aBound.startPos >= 0,               "illegal boundary" );
     OSL_ENSURE( aBound.startPos <= aBound.endPos,   "illegal boundary" );
@@ -2712,7 +2712,7 @@ OUString SwAccessibleParagraph::getTextRange(
         aBound.startPos = aBound.endPos = nIndex;
     else
     {
-        sal_Bool bTmp = GetTextBoundary( aBound, rText, nIndex, nTextType );
+        bool bTmp = GetTextBoundary( aBound, rText, nIndex, nTextType );
 
         if ( ! bTmp )
             aBound.startPos = aBound.endPos = nIndex;
@@ -2739,7 +2739,7 @@ OUString SwAccessibleParagraph::getTextRange(
     }
     else
     {
-        sal_Bool bWord = sal_False;
+        bool bWord = false;
         while( !bWord )
         {
             nIndex = min( nIndex, aBound.startPos ) - 1;
@@ -2781,7 +2781,7 @@ OUString SwAccessibleParagraph::getTextRange(
     // get first word, then skip to next word
     i18n::Boundary aBound;
     GetTextBoundary( aBound, rText, nIndex, nTextType );
-    sal_Bool bWord = sal_False;
+    bool bWord = false;
     while( !bWord )
     {
         nIndex = max( sal_Int32(nIndex+1), aBound.endPos );
@@ -2935,7 +2935,7 @@ sal_Bool SwAccessibleParagraph::replaceText(
         // translate positions
         sal_Int32 nStart;
         sal_Int32 nEnd;
-        sal_Bool bSuccess = GetPortionData().GetEditableRange(
+        bool bSuccess = GetPortionData().GetEditableRange(
                                         nStartIndex, nEndIndex, nStart, nEnd );
 
         // edit only if the range is editable
@@ -3010,7 +3010,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     delete[] pIndices;
 
     // now set the values
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     try
     {
         xPortion->setPropertyValues( aNames, aValues );
@@ -3018,7 +3018,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     catch (const UnknownPropertyException&)
     {
         // error handling through return code!
-        bRet = sal_False;
+        bRet = false;
     }
 
     return bRet;
@@ -3185,22 +3185,22 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
     while( (nLinkIndex < getHyperLinkCount()) && nTIndex < nLinkIndex)
     {
         sal_Int32 nHStt = -1;
-        sal_Bool bH = sal_False;
+        bool bH = false;
 
         if( pHt )
             nHStt = *pHt->GetStart();
-        sal_Bool bTOC = sal_False;
+        bool bTOC = false;
         // Inside TOC & get the first link
         if( pTBase && nTIndex == -1 )
         {
             nTIndex++;
-            bTOC = sal_True;
+            bTOC = true;
         }
         else if( nHStt >= 0 )
         {
               // only hyperlink available
             nTIndex++;
-            bH = sal_True;
+            bH = true;
         }
 
         if( nTIndex == nLinkIndex )
@@ -3411,7 +3411,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
 
     if(selectionIndex < 0) return sal_False;
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int32 nSelected = selectionIndex;
 
     // get the selection, and test whether it affects our text node
@@ -3442,7 +3442,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
                     {
                         pCrsr->MoveTo((Ring*)0);
                         delete pCrsr;
-                        bRet = sal_True;
+                        bRet = true;
                     }
                     else
                     {
@@ -3479,7 +3479,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
     for ( sal_Int32 i = nSelectedCount ; i >= 0 ; i--)
     {
         sal_Int32 nStart, nEnd;
-        sal_Bool bSelected = GetSelectionAtIndex(i, nStart, nEnd );
+        bool bSelected = GetSelectionAtIndex(i, nStart, nEnd );
         if(bSelected)
         {
             if(nStart <= nEnd )
@@ -3508,7 +3508,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
 
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // get cursor shell
     SwCrsrShell* pCrsrShell = GetCrsrShell();
@@ -3526,7 +3526,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
         //bRet = Select( aPaM );
     }
 
-    return bRet;
+    return bRet ? 1 : 0;
 }
 
 /*accessibility::*/TextSegment SAL_CALL
@@ -3708,12 +3708,12 @@ void SwAccessibleParagraph::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
     CheckRegistration( pOld, pNew );
 }
 
-sal_Bool SwAccessibleParagraph::GetSelectionAtIndex(
+bool SwAccessibleParagraph::GetSelectionAtIndex(
     sal_Int32& nIndex, sal_Int32& nStart, sal_Int32& nEnd)
 {
-        if(nIndex < 0) return sal_False;
+        if(nIndex < 0) return false;
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     nStart = -1;
     nEnd = -1;
     sal_Int32 nSelected = nIndex;
@@ -3823,7 +3823,7 @@ sal_Bool SwAccessibleParagraph::GetSelectionAtIndex(
                         {
                             nStart = nLocalStart;
                             nEnd = nLocalEnd;
-                            bRet = sal_True;
+                            bRet = true;
                         }
                     } // if hit the index
                     else

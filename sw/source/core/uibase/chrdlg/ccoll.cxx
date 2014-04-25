@@ -150,12 +150,12 @@ SfxPoolItem*   SwCondCollItem::Clone( SfxItemPool * /*pPool*/ ) const
 bool SwCondCollItem::operator==( const SfxPoolItem& rItem) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rItem), "different types" );
-    sal_Bool bReturn = sal_True;
+    bool bReturn = true;
     for(sal_uInt16 i = 0; i < COND_COMMAND_COUNT; i++)
         if (m_sStyles[i] !=
                 static_cast<SwCondCollItem const&>(rItem).m_sStyles[i])
         {
-            bReturn = sal_False;
+            bReturn = false;
             break;
         }
 

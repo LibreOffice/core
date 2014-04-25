@@ -67,7 +67,7 @@ SwFldPage::~SwFldPage()
 void SwFldPage::Init()
 {
     SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
-    sal_Bool bNewMode = 0 != (::GetHtmlMode(pDocSh) & HTMLMODE_ON);
+    bool bNewMode = 0 != (::GetHtmlMode(pDocSh) & HTMLMODE_ON);
 
     m_bFldEdit = 0 == GetTabDialog();
 
@@ -82,7 +82,7 @@ void SwFldPage::Init()
         // initialise Rangelistbox
         if( m_bFldDlgHtmlMode && m_bFirstHTMLInit )
         {
-            m_bFirstHTMLInit = sal_False;
+            m_bFirstHTMLInit = false;
             SwWrtShell *pSh = m_pWrtShell;
             if(! pSh)
                 pSh = ::GetActiveWrtShell();
@@ -111,27 +111,27 @@ void SwFldPage::ActivatePage()
      Description: complete reset; edit new field
  --------------------------------------------------------------------*/
 
-void SwFldPage::EditNewField( sal_Bool bOnlyActivate )
+void SwFldPage::EditNewField( bool bOnlyActivate )
 {
     if( !bOnlyActivate )
     {
         m_nTypeSel = LISTBOX_ENTRY_NOTFOUND;
     }
     m_nSelectionSel = LISTBOX_ENTRY_NOTFOUND;
-    m_bRefresh = sal_True;
+    m_bRefresh = true;
     Reset(*(SfxItemSet*)0);
-    m_bRefresh = sal_False;
+    m_bRefresh = false;
 }
 
 /*--------------------------------------------------------------------
      Description: insert field
  --------------------------------------------------------------------*/
 
-sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUString& rPar1,
+bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUString& rPar1,
                             const OUString& rPar2, sal_uLong nFormatId,
-                            sal_Unicode cSeparator, sal_Bool bIsAutomaticLanguage)
+                            sal_Unicode cSeparator, bool bIsAutomaticLanguage)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwView* pView = GetActiveView();
     SwWrtShell *pSh = m_pWrtShell ? m_pWrtShell : pView->GetWrtShellPtr();
 
@@ -346,7 +346,7 @@ IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
      Description: enable/disable "Insert"-Button
  --------------------------------------------------------------------*/
 
-void SwFldPage::EnableInsert(sal_Bool bEnable)
+void SwFldPage::EnableInsert(bool bEnable)
 {
     SwFldDlg *pDlg = (SwFldDlg*)GetTabDialog();
 

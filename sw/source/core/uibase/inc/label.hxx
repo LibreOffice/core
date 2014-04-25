@@ -56,10 +56,10 @@ class SwLabDlg : public SfxTabDialog
 public:
 
      SwLabDlg( Window* pParent, const SfxItemSet& rSet,
-                 SwDBMgr* pDBMgr, sal_Bool bLabel);
+                 SwDBMgr* pDBMgr, bool bLabel);
     virtual ~SwLabDlg();
 
-    SwLabRec*   GetRecord(const OUString &rRecName, sal_Bool bCont);
+    SwLabRec*   GetRecord(const OUString &rRecName, bool bCont);
     void        GetLabItem(SwLabItem &rItem);
 
           SwLabRecs &Recs()           { return *pRecs;   }

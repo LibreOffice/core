@@ -38,7 +38,7 @@ static char const sHTML_O_Object[] = "OBJECT";
 
 }
 
-sal_uInt16 SwApplet_Impl::GetOptionType( const OUString& rName, sal_Bool bApplet )
+sal_uInt16 SwApplet_Impl::GetOptionType( const OUString& rName, bool bApplet )
 {
     sal_uInt16 nType = bApplet ? SWHTML_OPTTYPE_PARAM : SWHTML_OPTTYPE_TAG;
 
@@ -120,7 +120,7 @@ SwApplet_Impl::SwApplet_Impl( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16
 }
 
 void SwApplet_Impl::CreateApplet( const OUString& rCode, const OUString& rName,
-                                  sal_Bool bMayScript, const OUString& rCodeBase,
+                                  bool bMayScript, const OUString& rCodeBase,
                                   const OUString& rDocumentBaseURL )
 {
     comphelper::EmbeddedObjectContainer aCnt;
@@ -139,7 +139,7 @@ void SwApplet_Impl::CreateApplet( const OUString& rCode, const OUString& rName,
     {
         xSet->setPropertyValue("AppletCode", uno::makeAny( rCode ) );
         xSet->setPropertyValue("AppletName", uno::makeAny( rName ) );
-        xSet->setPropertyValue("AppletIsScript", uno::makeAny( sal_Bool(bMayScript) ) );
+        xSet->setPropertyValue("AppletIsScript", uno::makeAny( bMayScript ) );
         xSet->setPropertyValue("AppletDocBase", uno::makeAny( sDocBase ) );
         if ( !rCodeBase.isEmpty() )
             xSet->setPropertyValue("AppletCodeBase", uno::makeAny( rCodeBase ) );
@@ -148,10 +148,10 @@ void SwApplet_Impl::CreateApplet( const OUString& rCode, const OUString& rName,
     }
 }
 #if HAVE_FEATURE_JAVA
-sal_Bool SwApplet_Impl::CreateApplet( const OUString& rBaseURL )
+bool SwApplet_Impl::CreateApplet( const OUString& rBaseURL )
 {
     OUString aCode, aName, aCodeBase;
-    sal_Bool bMayScript = sal_False;
+    bool bMayScript = false;
 
     size_t nArgCount = aCommandList.size();
     for( size_t i = 0; i < nArgCount; i++ )
@@ -165,13 +165,13 @@ sal_Bool SwApplet_Impl::CreateApplet( const OUString& rBaseURL )
         else if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_name ) )
             aName = rArg.GetArgument();
         else if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
-            bMayScript = sal_True;
+            bMayScript = true;
     }
 
     if( aCode.isEmpty() )
-        return sal_False;
+        return false;
     CreateApplet( aCode, aName, bMayScript, aCodeBase, rBaseURL );
-    return sal_True;
+    return true;
 }
 #endif
 

@@ -808,7 +808,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             // Date field
             pInfo->SetRepresentation(
                 ((const SvxDateField*) pField)->GetFormatted(
-                        *GetNumberFormatter( sal_True ), LANGUAGE_SYSTEM) );
+                        *GetNumberFormatter( true ), LANGUAGE_SYSTEM) );
         }
         else if (pField && pField->ISA(SvxURLField))
         {
@@ -856,7 +856,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             // Time field
             pInfo->SetRepresentation(
                 ((const SvxExtTimeField*) pField)->GetFormatted(
-                        *GetNumberFormatter( sal_True ), LANGUAGE_SYSTEM) );
+                        *GetNumberFormatter( true ), LANGUAGE_SYSTEM) );
         }
         else
         {

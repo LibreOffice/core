@@ -64,7 +64,7 @@ void InsCaptionOptArr::Insert(InsCaptionOpt* pObj)
 }
 
 const InsCaptionOpt* SwModuleOptions::GetCapOption(
-    sal_Bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId)
+    bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId)
 {
     if(bHTML)
     {
@@ -85,9 +85,9 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
     }
 }
 
-sal_Bool SwModuleOptions::SetCapOption(sal_Bool bHTML, const InsCaptionOpt* pOpt)
+bool SwModuleOptions::SetCapOption(bool bHTML, const InsCaptionOpt* pOpt)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if(bHTML)
     {
@@ -120,22 +120,22 @@ sal_Bool SwModuleOptions::SetCapOption(sal_Bool bHTML, const InsCaptionOpt* pOpt
             rArr.Insert(new InsCaptionOpt(*pOpt));
 
         aInsertConfig.SetModified();
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
 }
 
 SwModuleOptions::SwModuleOptions() :
-    aInsertConfig(sal_False),
-    aWebInsertConfig(sal_True),
-    aTableConfig(sal_False),
-    aWebTableConfig(sal_True),
-    bHideFieldTips(sal_False)
+    aInsertConfig(false),
+    aWebInsertConfig(true),
+    aTableConfig(false),
+    aWebTableConfig(true),
+    bHideFieldTips(false)
 {
 }
 
-OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, sal_Bool bFromUI)
+OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, bool bFromUI)
 {
     OUString sReturn;
     const sal_Int32 nDelimLen = rDelim.getLength();
@@ -587,13 +587,13 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
     return bIsWeb ? aWebNames : aNames;
 }
 
-SwInsertConfig::SwInsertConfig(sal_Bool bWeb) :
+SwInsertConfig::SwInsertConfig(bool bWeb) :
     ConfigItem(bWeb ? OUString("Office.WriterWeb/Insert") : OUString("Office.Writer/Insert"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     pCapOptions(0),
     pOLEMiscOpt(0),
-    bInsWithCaption( sal_False ),
-    bCaptionOrderNumberingFirst( sal_False ),
+    bInsWithCaption( false ),
+    bCaptionOrderNumberingFirst( false ),
     aInsTblOpts(0,0),
     bIsWeb(bWeb)
 {
@@ -916,7 +916,7 @@ void SwInsertConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                sal_Bool bBool = nProp < INS_PROP_CAP_OBJECT_TABLE_ENABLE ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
+                bool bBool = nProp < INS_PROP_CAP_OBJECT_TABLE_ENABLE ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
                 switch(nProp)
                 {
                     case INS_PROP_TABLE_HEADER:
@@ -1133,7 +1133,7 @@ const Sequence<OUString>& SwTableConfig::GetPropertyNames()
     return aNames;
 }
 
-SwTableConfig::SwTableConfig(sal_Bool bWeb) :
+SwTableConfig::SwTableConfig(bool bWeb) :
     ConfigItem(bWeb ? OUString("Office.WriterWeb/Table") : OUString("Office.Writer/Table"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
 {
@@ -1202,13 +1202,13 @@ void SwTableConfig::Load()
 SwMiscConfig::SwMiscConfig() :
     ConfigItem("Office.Writer",
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
-    bDefaultFontsInCurrDocOnly(sal_False),
-    bShowIndexPreview(sal_False),
-    bGrfToGalleryAsLnk(sal_True),
-    bNumAlignSize(sal_True),
-    bSinglePrintJob(sal_False),
-    bIsNameFromColumn(sal_True),
-    bAskForMailMergeInPrint(sal_True),
+    bDefaultFontsInCurrDocOnly(false),
+    bShowIndexPreview(false),
+    bGrfToGalleryAsLnk(true),
+    bNumAlignSize(true),
+    bSinglePrintJob(false),
+    bIsNameFromColumn(true),
+    bAskForMailMergeInPrint(true),
     nMailingFormats(0)
 {
     Load();
@@ -1262,7 +1262,7 @@ void SwMiscConfig::Commit()
         {
             case 0 :
                 pValues[nProp] <<=
-                    SwModuleOptions::ConvertWordDelimiter(sWordDelimiter, sal_False);
+                    SwModuleOptions::ConvertWordDelimiter(sWordDelimiter, false);
             break;
             case 1 : pValues[nProp].setValue(&bDefaultFontsInCurrDocOnly, rType); break;
             case 2 : pValues[nProp].setValue(&bShowIndexPreview, rType) ;        break;
@@ -1296,7 +1296,7 @@ void SwMiscConfig::Load()
                 switch(nProp)
                 {
                     case 0 : pValues[nProp] >>= sTmp;
-                        sWordDelimiter = SwModuleOptions::ConvertWordDelimiter(sTmp, sal_True);
+                        sWordDelimiter = SwModuleOptions::ConvertWordDelimiter(sTmp, true);
                     break;
                     case 1 : bDefaultFontsInCurrDocOnly = *(sal_Bool*)pValues[nProp].getValue(); break;
                     case 2 : bShowIndexPreview = *(sal_Bool*)pValues[nProp].getValue(); break;
@@ -1341,8 +1341,8 @@ SwCompareConfig::SwCompareConfig() :
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
 {
     eCmpMode = SVX_CMP_AUTO;
-    bUseRsid = 0;
-    bIgnorePieces = 0;
+    bUseRsid = false;
+    bIgnorePieces = false;
     nPieceLen = 1;
 
     Load();

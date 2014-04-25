@@ -43,7 +43,7 @@ class SW_DLLPUBLIC SwTableFUNC
 {
     SwFrmFmt    *pFmt;
     SwWrtShell  *pSh;
-    sal_Bool        bCopy;
+    bool        bCopy;
     SwTabCols   aCols;
 
 private:
@@ -51,7 +51,7 @@ private:
 
 public:
     inline SwTableFUNC(SwFrmFmt &);
-           SwTableFUNC(SwWrtShell *pShell, sal_Bool bCopyFmt = sal_False);
+           SwTableFUNC(SwWrtShell *pShell, bool bCopyFmt = false);
            ~SwTableFUNC();
 
     void    InitTabCols();
@@ -62,7 +62,7 @@ public:
     sal_uInt16  GetColCount() const;
     sal_uInt16  GetCurColNum() const;
 
-    sal_Bool IsTableSelected() const { return pFmt != 0; }
+    bool IsTableSelected() const { return pFmt != 0; }
 
     const SwFrmFmt *GetTableFmt() const { return pFmt; }
 
@@ -73,13 +73,13 @@ public:
 
     /// @return the XModel of the newly inserted chart if successful
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-        InsertChart( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > &rxDataProvider, sal_Bool bFillWithData, const OUString &rCellRange, SwFlyFrmFmt** ppFlyFrmFmt = 0 );
+        InsertChart( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > &rxDataProvider, bool bFillWithData, const OUString &rCellRange, SwFlyFrmFmt** ppFlyFrmFmt = 0 );
 };
 
 inline SwTableFUNC::SwTableFUNC(SwFrmFmt &rFmt) :
     pFmt(&rFmt),
     pSh(0),
-    bCopy(sal_False)
+    bCopy(false)
 {
 }
 

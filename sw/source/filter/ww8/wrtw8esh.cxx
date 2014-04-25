@@ -3135,12 +3135,12 @@ sal_uInt32 SwMSConvertControls::GenerateObjectID()
 
 // in transitioning away old filter for ole/ocx controls, ReadOCXStream has been made pure virtual in
 // filter/source/msocximex.cxx, so.. we need an implementation here
-sal_Bool  SwMSConvertControls::ReadOCXStream( SotStorageRef& rSrc1,
+bool  SwMSConvertControls::ReadOCXStream( SotStorageRef& rSrc1,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShape > *pShapeRef,
-        sal_Bool bFloatingCtrl )
+        bool bFloatingCtrl )
 {
     uno::Reference< form::XFormComponent > xFComp;
-    sal_Bool bRes = oox::ole::MSConvertOCXControls::ReadOCXStorage( rSrc1, xFComp );
+    bool bRes = oox::ole::MSConvertOCXControls::ReadOCXStorage( rSrc1, xFComp );
     if ( bRes && xFComp.is() )
     {
         com::sun::star::awt::Size aSz;  // not used in import

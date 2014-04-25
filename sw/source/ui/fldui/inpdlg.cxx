@@ -35,7 +35,7 @@
  --------------------------------------------------------------------*/
 
 SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
-                              SwField* pField, sal_Bool bNextButton )
+                              SwField* pField, bool bNextButton )
     : SvxStandardDialog( pParent, "InputFieldDialog",
         "modules/swriter/ui/inputfielddialog.ui")
     , rSh( rS )
@@ -100,7 +100,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
 
     // JP 31.3.00: Inputfields in readonly regions must be allowed to
     //              input any content. - 74639
-    sal_Bool bEnable = !rSh.IsCrsrReadonly();
+    bool bEnable = !rSh.IsCrsrReadonly();
 
     m_pOKBT->Enable( bEnable );
     m_pEditED->SetReadOnly( !bEnable );

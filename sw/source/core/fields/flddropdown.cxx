@@ -152,7 +152,7 @@ OUString SwDropDownField::GetToolTip() const
     return aToolTip;
 }
 
-sal_Bool SwDropDownField::SetSelectedItem(const OUString & rItem)
+bool SwDropDownField::SetSelectedItem(const OUString & rItem)
 {
     vector<OUString>::const_iterator aIt =
         std::find(aValues.begin(), aValues.end(), rItem);

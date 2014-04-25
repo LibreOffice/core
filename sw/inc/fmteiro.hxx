@@ -30,7 +30,7 @@ class SW_DLLPUBLIC SwFmtEditInReadonly : public SfxBoolItem
 {
 public:
     SwFmtEditInReadonly( sal_uInt16 nId = RES_EDIT_IN_READONLY,
-                     sal_Bool bPrt = sal_False ) : SfxBoolItem( nId, bPrt ) {}
+                     bool bPrt = false ) : SfxBoolItem( nId, bPrt ) {}
 
     /// "pure virtual methos" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
@@ -41,10 +41,10 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 };
 
-inline const SwFmtEditInReadonly &SwAttrSet::GetEditInReadonly(sal_Bool bInP) const
+inline const SwFmtEditInReadonly &SwAttrSet::GetEditInReadonly(bool bInP) const
     { return (const SwFmtEditInReadonly&)Get( RES_EDIT_IN_READONLY,bInP); }
 
-inline const SwFmtEditInReadonly &SwFmt::GetEditInReadonly(sal_Bool bInP) const
+inline const SwFmtEditInReadonly &SwFmt::GetEditInReadonly(bool bInP) const
     { return aSet.GetEditInReadonly(bInP); }
 
 #endif

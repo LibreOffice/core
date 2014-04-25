@@ -43,7 +43,7 @@ class SwAccessiblePortionData : public SwPortionHandler
     // variables used while collecting the data
     OUStringBuffer aBuffer;
     sal_Int32 nModelPosition;
-    sal_Bool bFinished;
+    bool bFinished;
     const SwViewOption* pViewOptions;
 
     // the accessible string
@@ -67,7 +67,7 @@ class SwAccessiblePortionData : public SwPortionHandler
     Positions_t* pSentences;    /// positions of sentence breaks
 
     size_t nBeforePortions;     /// # of portions before first model character
-    sal_Bool bLastIsSpecial;    /// set if last portion was 'Special()'
+    bool bLastIsSpecial;    /// set if last portion was 'Special()'
 
     /// returns the index of the first position whose value is smaller
     /// or equal, and whose following value is equal or larger
@@ -82,10 +82,10 @@ class SwAccessiblePortionData : public SwPortionHandler
                       size_t nPos ) const;
 
     /// Access to portion attributes
-    sal_Bool IsPortionAttrSet( size_t nPortionNo, sal_uInt8 nAttr ) const;
-    sal_Bool IsSpecialPortion( size_t nPortionNo ) const;
-    sal_Bool IsReadOnlyPortion( size_t nPortionNo ) const;
-    sal_Bool IsGrayPortionType( sal_uInt16 nType ) const;
+    bool IsPortionAttrSet( size_t nPortionNo, sal_uInt8 nAttr ) const;
+    bool IsSpecialPortion( size_t nPortionNo ) const;
+    bool IsReadOnlyPortion( size_t nPortionNo ) const;
+    bool IsGrayPortionType( sal_uInt16 nType ) const;
 
     // helper method for GetEditableRange(...):
     void AdjustAndCheck( sal_Int32 nPos, size_t& nPortionNo,
@@ -104,12 +104,12 @@ public:
     virtual void Finish() SAL_OVERRIDE;
 
     virtual void SetAttrFieldType( sal_uInt16 nAttrFldType ) SAL_OVERRIDE;
-    sal_Bool FillBoundaryIFDateField( com::sun::star::i18n::Boundary& rBound, const sal_Int32 nPos );
-    sal_Bool IsIndexInFootnode(sal_Int32 nIndex);
-    sal_Bool IsInGrayPortion( sal_Int32 nPos );
+    bool FillBoundaryIFDateField( com::sun::star::i18n::Boundary& rBound, const sal_Int32 nPos );
+    bool IsIndexInFootnode(sal_Int32 nIndex);
+    bool IsInGrayPortion( sal_Int32 nPos );
     sal_Int32 GetFieldIndex(sal_Int32 nPos);
 
-    sal_Bool IsZeroCorePositionData();
+    bool IsZeroCorePositionData();
 
     // access to the portion data
 
@@ -128,7 +128,7 @@ public:
     ///  boundaries. In this case, only part of a paragraph is represented
     ///  through this object. This method determines whether one particular
     ///  position is valid for this object or not.)
-    sal_Bool IsValidCorePosition( sal_Int32 nPos ) const;
+    bool IsValidCorePosition( sal_Int32 nPos ) const;
     sal_Int32 GetFirstValidCorePosition() const;
     sal_Int32 GetLastValidCorePosition() const;
 
@@ -166,7 +166,7 @@ public:
     /// @returns true if 'special' portions are included either completely
     ///          or not at all. This can be used to test whether editing
     ///          that range would be legal
-    sal_Bool GetEditableRange( sal_Int32 nStart, sal_Int32 nEnd,
+    bool GetEditableRange( sal_Int32 nStart, sal_Int32 nEnd,
                                sal_Int32& nCoreStart, sal_Int32& nCoreEnd ) const;
 private:
     typedef std::pair<sal_Int32,sal_Int32> PAIR_POS;

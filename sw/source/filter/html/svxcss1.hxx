@@ -101,12 +101,12 @@ public:
 
     OUString aId;             // ID fuer Bookmarks, Rahmen etc.
 
-    sal_Bool bTopMargin : 1;
-    sal_Bool bBottomMargin : 1;
+    bool bTopMargin : 1;
+    bool bBottomMargin : 1;
 
-    sal_Bool bLeftMargin : 1;
-    sal_Bool bRightMargin : 1;
-    sal_Bool bTextIndent : 1;
+    bool bLeftMargin : 1;
+    bool bRightMargin : 1;
+    bool bTextIndent : 1;
 
     SvxAdjust eFloat;
 
@@ -141,7 +141,7 @@ public:
 
     void Clear();
 
-    SvxCSS1BorderInfo *GetBorderInfo( sal_uInt16 nLine, sal_Bool bCreate=sal_True );
+    SvxCSS1BorderInfo *GetBorderInfo( sal_uInt16 nLine, bool bCreate=true );
     void CopyBorderInfo( sal_uInt16 nSrcLine, sal_uInt16 nDstLine, sal_uInt16 nWhat );
     void CopyBorderInfo( sal_uInt16 nCount, sal_uInt16 nWhat );
 
@@ -174,18 +174,18 @@ public:
     const OUString& GetKey()  const { return aKey; }
     void SetKey( const OUString& rKey ) { aKey = rKey.toAsciiUpperCase(); }
 
-    friend sal_Bool operator==( const SvxCSS1MapEntry& rE1,
+    friend bool operator==( const SvxCSS1MapEntry& rE1,
                             const SvxCSS1MapEntry& rE2 );
-    friend sal_Bool operator<( const SvxCSS1MapEntry& rE1,
+    friend bool operator<( const SvxCSS1MapEntry& rE1,
                             const SvxCSS1MapEntry& rE2 );
 };
 
-inline sal_Bool operator==( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
+inline bool operator==( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
 {
     return  rE1.aKey==rE2.aKey;
 }
 
-inline sal_Bool operator<( const SvxCSS1MapEntry& rE1,  const SvxCSS1MapEntry& rE2 )
+inline bool operator<( const SvxCSS1MapEntry& rE1,  const SvxCSS1MapEntry& rE2 )
 {
     return  rE1.aKey<rE2.aKey;
 }
@@ -222,7 +222,7 @@ class SvxCSS1Parser : public CSS1Parser
     rtl_TextEncoding    eDfltEnc;
     sal_uInt16          nScriptFlags;
 
-    sal_Bool bIgnoreFontFamily;
+    bool bIgnoreFontFamily;
 
     void ParseProperty( const OUString& rProperty,
                         const CSS1Expression *pExpr );
@@ -242,7 +242,7 @@ protected:
     // Selektor nicht mehr gespeichert!
     // Der ItemSet darf entsprechend modifiziert werden!
     // Die Implementierung dieser Methode gibt sal_False zurueck.
-    virtual sal_Bool StyleParsed( const CSS1Selector *pSelector,
+    virtual bool StyleParsed( const CSS1Selector *pSelector,
                               SfxItemSet& rItemSet,
                               SvxCSS1PropertyInfo& rPropInfo );
 
@@ -256,7 +256,7 @@ protected:
     // Diese Methode wird fuer jede geparste Property aufgerufen
     // sie fuegt das Item in den ItemSet 'pItemSet' ein
     // Sie sollte in abgeleiteten Parsern nicht mehr ueberladen werden!
-    virtual sal_Bool DeclarationParsed( const OUString& rProperty,
+    virtual bool DeclarationParsed( const OUString& rProperty,
                                     const CSS1Expression *pExpr ) SAL_OVERRIDE;
 
 public:
@@ -267,20 +267,20 @@ public:
                    sal_uInt16 *pWhichIds=0, sal_uInt16 nWhichIds=0 );
     virtual ~SvxCSS1Parser();
 
-    sal_Bool IsIgnoreFontFamily() const { return bIgnoreFontFamily; }
-    void SetIgnoreFontFamily( sal_Bool bSet ) { bIgnoreFontFamily = bSet; }
+    bool IsIgnoreFontFamily() const { return bIgnoreFontFamily; }
+    void SetIgnoreFontFamily( bool bSet ) { bIgnoreFontFamily = bSet; }
 
     // Parsen eines Style-Sheets. Fuer jeden gefundenen Selektor
     // wird StyleParsed mit dem entsprechenem Item-Set aufgerufen
-    virtual sal_Bool ParseStyleSheet( const OUString& rIn );
+    virtual bool ParseStyleSheet( const OUString& rIn );
 
     // Parsen einer Style-Option. Hier wird einfach nur der Item-Set
     // gefuellt.
-    sal_Bool ParseStyleOption( const OUString& rIn, SfxItemSet& rItemSet,
+    bool ParseStyleOption( const OUString& rIn, SfxItemSet& rItemSet,
                            SvxCSS1PropertyInfo& rPropInfo );
 
     // Umwandeln eines Strings in den Wert eines Enums
-    static sal_Bool GetEnum( const CSS1PropertyEnum *pPropTable,
+    static bool GetEnum( const CSS1PropertyEnum *pPropTable,
                          const OUString& rValue, sal_uInt16 &rEnum );
 
     // Pixel in Twips wandeln
@@ -306,7 +306,7 @@ public:
 
     const SvxCSS1MapEntry* GetClass( const OUString& rClass ) const;
 
-    void InsertPage( const OUString& rPage, sal_Bool bPseudo,
+    void InsertPage( const OUString& rPage, bool bPseudo,
                             const SfxItemSet& rItemSet,
                             const SvxCSS1PropertyInfo& rProp );
 
@@ -321,7 +321,7 @@ public:
                       const SvxCSS1PropertyInfo& rSrcInfo,
                       SfxItemSet& rTargetSet,
                       SvxCSS1PropertyInfo& rTargetInfo,
-                      sal_Bool bSmart );
+                      bool bSmart );
 
     sal_uInt16 GetMinFixLineSpace() const { return nMinFixLineSpace; }
 

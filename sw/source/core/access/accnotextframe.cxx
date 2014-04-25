@@ -158,7 +158,7 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
     }
 }
 
-void SwAccessibleNoTextFrame::Dispose( sal_Bool bRecursive )
+void SwAccessibleNoTextFrame::Dispose( bool bRecursive )
 {
     SolarMutexGuard aGuard;
 

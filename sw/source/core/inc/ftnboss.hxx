@@ -76,16 +76,16 @@ public:
 
     // footnote interface
     void AppendFtn( SwCntntFrm *, SwTxtFtn * );
-    void RemoveFtn( const SwCntntFrm *, const SwTxtFtn *, sal_Bool bPrep = sal_True );
+    void RemoveFtn( const SwCntntFrm *, const SwTxtFtn *, bool bPrep = true );
     static       SwFtnFrm     *FindFtn( const SwCntntFrm *, const SwTxtFtn * );
                  SwFtnContFrm *FindFtnCont();
     inline const SwFtnContFrm *FindFtnCont() const;
            const SwFtnFrm     *FindFirstFtn( SwCntntFrm* ) const;
-                 SwFtnContFrm *FindNearestFtnCont( sal_Bool bDontLeave = sal_False );
+                 SwFtnContFrm *FindNearestFtnCont( bool bDontLeave = false );
 
     void ChangeFtnRef( const SwCntntFrm *pOld, const SwTxtFtn *,
                        SwCntntFrm *pNew );
-    void RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock = sal_False,
+    void RearrangeFtns( const SwTwips nDeadLine, const bool bLock = false,
                         const SwTxtFtn *pAttr = 0 );
 
     // Set DeadLine (in document coordinates) so that the text formatter can
@@ -105,7 +105,7 @@ public:
     static void _CollectFtns( const SwCntntFrm*   _pRef,
                               SwFtnFrm*           _pFtn,
                               SwFtnFrms&          _rFtnArr,
-                              const sal_Bool      _bCollectOnlyPreviousFtns = sal_False,
+                              const bool      _bCollectOnlyPreviousFtns = false,
                               const SwFtnBossFrm* _pRefFtnBossFrm = NULL);
     // The parameter <_bCollectOnlyPreviousFtns> controls if only footnotes
     // that are positioned before the footnote boss-frame <this> have to be
@@ -113,8 +113,8 @@ public:
     void    CollectFtns( const SwCntntFrm* _pRef,
                          SwFtnBossFrm*     _pOld,
                          SwFtnFrms&        _rFtnArr,
-                         const sal_Bool    _bCollectOnlyPreviousFtns = sal_False );
-    void    _MoveFtns( SwFtnFrms &rFtnArr, sal_Bool bCalc = sal_False );
+                         const bool    _bCollectOnlyPreviousFtns = false );
+    void    _MoveFtns( SwFtnFrms &rFtnArr, bool bCalc = false );
     void    MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
                       SwTxtFtn *pAttr );
 

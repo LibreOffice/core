@@ -72,7 +72,7 @@ SwAccessiblePortionData::SwAccessiblePortionData(
     pTxtNode( pTxtNd ),
     aBuffer(),
     nModelPosition( 0 ),
-    bFinished( sal_False ),
+    bFinished( false ),
     pViewOptions( pViewOpt ),
     sAccessibleString(),
     aLineBreaks(),
@@ -80,7 +80,7 @@ SwAccessiblePortionData::SwAccessiblePortionData(
     aAccessiblePositions(),
     pSentences( 0 ),
     nBeforePortions( 0 ),
-    bLastIsSpecial( sal_False )
+    bLastIsSpecial( false )
 {
     OSL_ENSURE( pTxtNode != NULL, "Text node is needed!" );
 
@@ -122,7 +122,7 @@ void SwAccessiblePortionData::Text(sal_uInt16 nLength, sal_uInt16 nType, sal_Int
         pTxtNode->GetTxt().copy(nModelPosition, nLength)) );
     nModelPosition += nLength;
 
-    bLastIsSpecial = sal_False;
+    bLastIsSpecial = false;
 }
 
 void SwAccessiblePortionData::SetAttrFieldType( sal_uInt16 nAttrFldType )
@@ -225,7 +225,7 @@ void SwAccessiblePortionData::Special(
     // remember 'last' special portion (unless it's our own 'closing'
     // portions from 'Finish()'
     if( nType != POR_TERMINATE )
-        bLastIsSpecial = sal_True;
+        bLastIsSpecial = true;
 }
 
 void SwAccessiblePortionData::LineBreak(KSHORT /*nWidth*/)
@@ -258,10 +258,10 @@ void SwAccessiblePortionData::Finish()
     LineBreak(0);
 
     sAccessibleString = aBuffer.makeStringAndClear();
-    bFinished = sal_True;
+    bFinished = true;
 }
 
-sal_Bool SwAccessiblePortionData::IsPortionAttrSet(
+bool SwAccessiblePortionData::IsPortionAttrSet(
     size_t nPortionNo, sal_uInt8 nAttr ) const
 {
     OSL_ENSURE( nPortionNo < aPortionAttrs.size(),
@@ -269,21 +269,21 @@ sal_Bool SwAccessiblePortionData::IsPortionAttrSet(
     return (aPortionAttrs[nPortionNo] & nAttr) != 0;
 }
 
-sal_Bool SwAccessiblePortionData::IsSpecialPortion( size_t nPortionNo ) const
+bool SwAccessiblePortionData::IsSpecialPortion( size_t nPortionNo ) const
 {
     return IsPortionAttrSet(nPortionNo, PORATTR_SPECIAL);
 }
 
-sal_Bool SwAccessiblePortionData::IsReadOnlyPortion( size_t nPortionNo ) const
+bool SwAccessiblePortionData::IsReadOnlyPortion( size_t nPortionNo ) const
 {
     return IsPortionAttrSet(nPortionNo, PORATTR_READONLY);
 }
 
-sal_Bool SwAccessiblePortionData::IsGrayPortionType( sal_uInt16 nType ) const
+bool SwAccessiblePortionData::IsGrayPortionType( sal_uInt16 nType ) const
 {
     // gray portions?
     // Compare with: inftxt.cxx, SwTxtPaintInfo::DrawViewOpt(...)
-    sal_Bool bGray = sal_False;
+    bool bGray = false;
     switch( nType )
     {
         case POR_FTN:
@@ -674,19 +674,19 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
     return static_cast<sal_uInt16>( nModelPos );
 }
 
-sal_Bool SwAccessiblePortionData::FillBoundaryIFDateField( com::sun::star::i18n::Boundary& rBound, const sal_Int32 nPos )
+bool SwAccessiblePortionData::FillBoundaryIFDateField( com::sun::star::i18n::Boundary& rBound, const sal_Int32 nPos )
 {
-    if( aFieldPosition.size() < 2 ) return sal_False;
+    if( aFieldPosition.size() < 2 ) return false;
     for( size_t i = 0; i < aFieldPosition.size() - 1; i += 2 )
     {
         if( nPos < aFieldPosition[ i + 1 ]  &&  nPos >= aFieldPosition[ i ] )
         {
             rBound.startPos = aFieldPosition[i];
             rBound.endPos =  aFieldPosition[i + 1];
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 void SwAccessiblePortionData::AdjustAndCheck(
@@ -707,7 +707,7 @@ void SwAccessiblePortionData::AdjustAndCheck(
         nCorePos += nPos - aAccessiblePositions[nPortionNo];
 }
 
-sal_Bool SwAccessiblePortionData::GetEditableRange(
+bool SwAccessiblePortionData::GetEditableRange(
     sal_Int32 nStart, sal_Int32 nEnd,
     sal_Int32& nCoreStart, sal_Int32& nCoreEnd ) const
 {
@@ -744,20 +744,20 @@ sal_Bool SwAccessiblePortionData::GetEditableRange(
     return bIsEditable;
 }
 
-sal_Bool SwAccessiblePortionData::IsValidCorePosition( sal_Int32 nPos ) const
+bool SwAccessiblePortionData::IsValidCorePosition( sal_Int32 nPos ) const
 {
     // a position is valid its within the model positions that we know
     return ( aModelPositions[0] <= nPos ) &&
            ( nPos <= aModelPositions[ aModelPositions.size()-1 ] );
 }
 
-sal_Bool SwAccessiblePortionData::IsZeroCorePositionData()
+bool SwAccessiblePortionData::IsZeroCorePositionData()
 {
-    if( aModelPositions.size() < 1  ) return sal_True;
+    if( aModelPositions.size() < 1  ) return true;
     return aModelPositions[0] == 0 &&  aModelPositions[aModelPositions.size()-1] == 0;
 }
 
-sal_Bool SwAccessiblePortionData::IsIndexInFootnode(sal_Int32 nIndex)
+bool SwAccessiblePortionData::IsIndexInFootnode(sal_Int32 nIndex)
 {
     VEC_PAIR_POS::iterator vi =m_vecPairPos.begin();
     for (;vi != m_vecPairPos.end() ; ++vi)
@@ -765,13 +765,13 @@ sal_Bool SwAccessiblePortionData::IsIndexInFootnode(sal_Int32 nIndex)
         const PAIR_POS &pairPos = *vi;
         if(nIndex >= pairPos.first && nIndex < pairPos.second )
         {
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwAccessiblePortionData::IsInGrayPortion( sal_Int32 nPos )
+bool SwAccessiblePortionData::IsInGrayPortion( sal_Int32 nPos )
 {
 //    return IsGrayPortion( FindBreak( aAccessiblePositions, nPos ) );
     return IsPortionAttrSet( FindBreak( aAccessiblePositions, nPos ),

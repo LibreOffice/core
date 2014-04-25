@@ -59,8 +59,8 @@ class XMLRedlineImportHelper
         ::com::sun::star::beans::XPropertySet> xModelPropertySet;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> xImportInfoPropertySet;
-    sal_Bool bShowChanges;
-    sal_Bool bRecordChanges;
+    bool bShowChanges;
+    bool bRecordChanges;
     ::com::sun::star::uno::Sequence<sal_Int8> aProtectionKey;
 
 public:
@@ -85,7 +85,7 @@ public:
         const OUString& rAuthor,     // name of the author
         const OUString& rComment,    // redline comment
         const ::com::sun::star::util::DateTime& rDateTime, // date+time
-        sal_Bool bMergeLastParagraph);      // merge last paragraph?
+        bool bMergeLastParagraph);      // merge last paragraph?
 
     // create a text section for the redline, and return an
     // XText/XTextCursor that may be used to write into it.
@@ -99,12 +99,12 @@ public:
     // Accepts XTextRange objects.
     void SetCursor(
         const OUString& rId,     // ID used in RedlineAdd() call
-        sal_Bool bStart,                // start or end Range
+        bool bStart,                // start or end Range
         ::com::sun::star::uno::Reference<   // the actual XTextRange
             ::com::sun::star::text::XTextRange> & rRange,
         // text range is (from an XML view) outside of a paragraph
         // (i.e. before a table)
-        sal_Bool bIsOusideOfParagraph);
+        bool bIsOusideOfParagraph);
 
     /**
      * Adjust the start (end) position for a redline that begins in a
@@ -116,16 +116,16 @@ public:
      * after the position given in a previous SetCursor */
     void AdjustStartNodeCursor(
          const OUString& rId,        // ID used in RedlineAdd() call
-        sal_Bool bStart,
+        bool bStart,
         // XTextRange _inside_ a table/section
         ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XTextRange> & rRange);
 
     // set redline mode: show changes
-    void SetShowChanges( sal_Bool bShowChanges );
+    void SetShowChanges( bool bShowChanges );
 
     // set redline mode: record changes
-    void SetRecordChanges( sal_Bool bRecordChanges );
+    void SetRecordChanges( bool bRecordChanges );
 
     // set redline protection key
     void SetProtectionKey(

@@ -187,7 +187,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                         {
                             /*  Open Paragraph Record */
                             aIo.OpenRec( SW_LAYCACHE_IO_REC_PARA );
-                            sal_Bool bFollow = ((SwTxtFrm*)pTmp)->IsFollow();
+                            bool bFollow = ((SwTxtFrm*)pTmp)->IsFollow();
                             aIo.OpenFlagRec( bFollow ? 0x01 : 0x00,
                                             bFollow ? 8 : 4 );
                             nNdIdx -= nStartOfContent;
@@ -314,10 +314,10 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
 }
 
 #ifdef DBG_UTIL
-sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
+bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
 {
     if( !pImpl )
-        return sal_True;
+        return true;
     const SwRootFrm *pRootFrm = rDoc.GetCurrentLayout();
     if( pRootFrm )
     {
@@ -330,7 +330,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
         while( pPage )
         {
             if( nIndex >= pImpl->size() )
-                return sal_False;
+                return false;
 
             SwLayoutFrm* pLay = pPage->FindBodyCont();
             SwFrm* pTmp = pLay ? pLay->ContainsAny() : NULL;
@@ -343,7 +343,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                     sal_uLong nNdIdx = ((SwTxtFrm*)pTmp)->GetNode()->GetIndex();
                     if( nNdIdx > nStartOfContent )
                     {
-                        sal_Bool bFollow = ((SwTxtFrm*)pTmp)->IsFollow();
+                        bool bFollow = ((SwTxtFrm*)pTmp)->IsFollow();
                         nNdIdx -= nStartOfContent;
                         if( pImpl->GetBreakIndex( nIndex ) != nNdIdx ||
                             SW_LAYCACHE_IO_REC_PARA !=
@@ -351,7 +351,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                             ( bFollow ? ((SwTxtFrm*)pTmp)->GetOfst()
                               : COMPLETE_STRING ) != pImpl->GetBreakOfst( nIndex ) )
                         {
-                            return sal_False;
+                            return false;
                         }
                         ++nIndex;
                     }
@@ -388,7 +388,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                                 pImpl->GetBreakType( nIndex ) ||
                                nOfst != pImpl->GetBreakOfst( nIndex ) )
                             {
-                                return sal_False;
+                                return false;
                             }
                             ++nIndex;
                         }
@@ -421,7 +421,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
             pPage = (SwPageFrm*)pPage->GetNext();
         }
     }
-    return sal_True;
+    return true;
 }
 #endif
 
@@ -462,7 +462,7 @@ SwActualSection::SwActualSection( SwActualSection *pUp,
  * a guess, but a guess with statistical background.
  */
 SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
-                          SwLayoutFrm* &rpL, SwActualSection* &rpA, sal_Bool &rB,
+                          SwLayoutFrm* &rpL, SwActualSection* &rpA, bool &rB,
                           sal_uLong nNodeIndex, bool bCache )
     : rpFrm( rpF )
     , rpPrv( rpP )
@@ -606,13 +606,13 @@ bool SwLayHelper::CheckInsertPage()
             SwFmtPageDesc aFollowDesc( pDesc );
             oPgNum = aFollowDesc.GetNumOffset();
             if ( oPgNum )
-                ((SwRootFrm*)rpPage->GetUpper())->SetVirtPageNum(sal_True);
+                ((SwRootFrm*)rpPage->GetUpper())->SetVirtPageNum(true);
         }
         else
         {
             oPgNum = rDesc.GetNumOffset();
             if ( oPgNum )
-                ((SwRootFrm*)rpPage->GetUpper())->SetVirtPageNum(sal_True);
+                ((SwRootFrm*)rpPage->GetUpper())->SetVirtPageNum(true);
         }
         bool bNextPageOdd = !rpPage->OnRightPage();
         bool bInsertEmpty = false;
@@ -624,7 +624,7 @@ bool SwLayHelper::CheckInsertPage()
         // If the page style is changing, we'll have a first page.
         bool bNextPageFirst = pDesc != rpPage->GetPageDesc();
         ::InsertNewPage( (SwPageDesc&)*pDesc, rpPage->GetUpper(),
-                         bNextPageOdd, bNextPageFirst, bInsertEmpty, sal_False, rpPage->GetNext() );
+                         bNextPageOdd, bNextPageFirst, bInsertEmpty, false, rpPage->GetNext() );
         if ( bEnd )
         {
             OSL_ENSURE( rpPage->GetNext(), "No new page?" );
@@ -735,7 +735,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                 sal_uInt16 nType = SW_LAYCACHE_IO_REC_PAGES;
                 if( bLongTab )
                 {
-                    rbBreakAfter = sal_True;
+                    rbBreakAfter = true;
                     nOfst = static_cast<sal_Int32>(nRowCount + nMaxRowPerPage);
                 }
                 else
@@ -748,7 +748,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     {
                         nType = pImpl->GetBreakType( nIndex );
                         nOfst = pImpl->GetBreakOfst( nIndex++ );
-                        rbBreakAfter = sal_True;
+                        rbBreakAfter = true;
                     }
                 }
 
@@ -862,7 +862,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     else
                     {
                         pSct = new SwSectionFrm(
-                            *rpActualSection->GetSectionFrm(), sal_False );
+                            *rpActualSection->GetSectionFrm(), false );
                         rpActualSection->GetSectionFrm()->SimpleFormat();
                         bInit = true;
                     }

@@ -675,7 +675,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     if ( PropertyName == "Checked" )
     {
         ::sw::mark::ICheckboxFieldmark* pCheckboxFm = getCheckboxFieldmark();
-        sal_Bool bChecked( sal_False );
+        bool bChecked( false );
         if ( pCheckboxFm && ( rValue >>= bChecked ) )
             pCheckboxFm->SetChecked( bChecked );
         else

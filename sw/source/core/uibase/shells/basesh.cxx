@@ -203,7 +203,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
             if( rSh.IsNoNum() )
             {
                 rSh.SttCrsrMove();
-                sal_Bool bLeft = rSh.Left( CRSR_SKIP_CHARS, sal_True, 1, sal_False  );
+                bool bLeft = rSh.Left( CRSR_SKIP_CHARS, true, 1, false  );
                 if( bLeft )
                 {
                     rSh.DelLeft();
@@ -229,7 +229,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
     rReq.Done();
 
     //#i42732# - notify the edit window that from now on we do not use the input language
-    rTmpEditWin.SetUseInputLanguage( sal_False );
+    rTmpEditWin.SetUseInputLanguage( false );
 }
 
 void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
@@ -254,8 +254,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     pTransfer->Cut();
                 else
                 {
-                    const sal_Bool bLockedView = rSh.IsViewLocked();
-                    rSh.LockView( sal_True );    //lock visible section
+                    const bool bLockedView = rSh.IsViewLocked();
+                    rSh.LockView( true );    //lock visible section
                     pTransfer->Copy();
                     rSh.LockView( bLockedView );
                 }
@@ -397,7 +397,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     SfxWhichIter aIter(rSet);
 
-    const sal_Bool bCopy = rSh.HasSelection();
+    const bool bCopy = rSh.HasSelection();
 
     sal_uInt16 nWhich = aIter.FirstWhich();
 
@@ -591,12 +591,12 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             {
                 rSh.UpdateDocStat();
                 rSh.EndAllTblBoxEdit();
-                rSh.SwViewShell::UpdateFlds(sal_True);
+                rSh.SwViewShell::UpdateFlds(true);
 
                 if( rSh.IsCrsrInTbl() )
                 {
                     if( !rSh.IsTblComplexForChart() )
-                        SwTableFUNC( &rSh, sal_False).UpdateChart();
+                        SwTableFUNC( &rSh, false).UpdateChart();
                     rSh.ClearTblBoxCntnt();
                     rSh.SaveTblBoxCntnt();
                 }
@@ -660,7 +660,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.ClearMark();
                     rSh.EndSelect();
                 }
-                sal_Bool bRet = rSh.MoveFldType( pFldType, nSlot == FN_GOTO_NEXT_MARK );
+                bool bRet = rSh.MoveFldType( pFldType, nSlot == FN_GOTO_NEXT_MARK );
                 SwField* pCurField = bRet ? rSh.GetCurFld() : 0;
                 if (pCurField)
                     rSh.ClickToField(*pCurField);
@@ -679,14 +679,14 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             }
             rSh.EnterStdMode();
             nSlot == FN_START_DOC_DIRECT ?
-                rSh.SttEndDoc(sal_True) :
-                    rSh.SttEndDoc(sal_False);
+                rSh.SttEndDoc(true) :
+                    rSh.SttEndDoc(false);
         }
         break;
         case FN_GOTO_PREV_OBJ:
         case FN_GOTO_NEXT_OBJ:
         {
-                sal_Bool bSuccess = rSh.GotoObj(
+                bool bSuccess = rSh.GotoObj(
                             nSlot == FN_GOTO_NEXT_OBJ ? sal_True : sal_False);
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bSuccess));
                 if (bSuccess && !rSh.IsSelFrmMode())
@@ -835,7 +835,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             {
                 //Shell change!
                 SwView& rSaveView = rView;
-                sal_Bool bInserted = sal_False;
+                bool bInserted = false;
                 //recording:
                 SfxViewFrame* pViewFrame = GetView().GetViewFrame();
                 if( SfxRequest::HasMacroRecorder(pViewFrame) )
@@ -885,8 +885,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 // oj #107754#
                 if ( SID_STYLE_WATERCAN == nSlot )
                 {
-                    const sal_Bool bLockedView = rSh.IsViewLocked();
-                    rSh.LockView( sal_True );    //lock visible section
+                    const bool bLockedView = rSh.IsViewLocked();
+                    rSh.LockView( true );    //lock visible section
 
                     GetView().GetDocShell()->ExecStyleSheet(rReq);
 
@@ -961,7 +961,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     SwFmtSurround aSur( (SwFmtSurround&)aSet.Get( RES_SURROUND ) );
                     if ( !aSur.IsContour() )
                     {
-                        aSur.SetContour( sal_True );
+                        aSur.SetContour( true );
                         if ( aSur.GetSurround() == SURROUND_NONE )
                             aSur.SetSurround( SURROUND_PARALLEL );
                         aSet.Put( aSur );
@@ -1116,7 +1116,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 && pItem != NULL
                 && pItem->ISA( SfxBoolItem ) )
             {
-                sal_Bool bDesignMode =
+                bool bDesignMode =
                     static_cast<const SfxBoolItem*>( pItem )->GetValue();
 
                 // set form design mode
@@ -1162,7 +1162,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             else if ( rSh.IsFrmSelected() )
             {
                 // Set border attributes via Frame-Manager.
-                SwFlyFrmAttrMgr aMgr( sal_False, &rSh, FRMMGR_TYPE_NONE );
+                SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
                 aMgr.SetAttrSet( *pArgs );
                 aMgr.UpdateFlyFrm();
             }
@@ -1194,7 +1194,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             else if ( rSh.IsFrmSelected() )
             {
                 // Set border attributes via Frame-Manager.
-                SwFlyFrmAttrMgr aMgr( sal_False, &rSh, FRMMGR_TYPE_NONE );
+                SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
                 aMgr.SetAttrSet(*pArgs);
                 aMgr.UpdateFlyFrm();
             }
@@ -1229,8 +1229,8 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
         std::set<sal_uInt16>::iterator it;
         for( it = aGrfUpdateSlots.begin(); it != aGrfUpdateSlots.end(); ++it )
         {
-            sal_Bool bSetState = sal_False;
-            sal_Bool bState = sal_False;
+            bool bSetState = false;
+            bool bState = false;
             switch( nSlot = *it )
             {
             case SID_IMAP:
@@ -1247,7 +1247,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
                             lcl_UpdateIMapDlg( rSh );
 
                     if( !bProtect && SID_IMAP == nSlot )
-                        bSetState = sal_True, bState = 0 != pDlg;
+                        bSetState = true, bState = 0 != pDlg;
                 }
                 break;
 
@@ -1262,7 +1262,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
                                 rSh.GetIMapInventor() )
                         lcl_UpdateContourDlg( rSh, nsSelectionType::SEL_GRF );
 
-                    bSetState = sal_True;
+                    bSetState = true;
                     bState = 0 != pDlg;
                 }
                 break;
@@ -1273,7 +1273,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
                     SfxItemSet aSet(GetPool(), RES_SURROUND, RES_SURROUND);
                     rSh.GetFlyFrmAttr(aSet);
                     const SwFmtSurround& rWrap = (const SwFmtSurround&)aSet.Get(RES_SURROUND);
-                    bSetState = sal_True;
+                    bSetState = true;
                     bState = rWrap.IsContour();
                 }
                 break;
@@ -1345,7 +1345,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 
             case FN_CONVERT_TABLE_TO_TEXT:
             {
-                sal_uInt16 eFrmType = rSh.GetFrmType(0,sal_True);
+                sal_uInt16 eFrmType = rSh.GetFrmType(0,true);
                 if( (eFrmType & FRMTYPE_FOOTNOTE) ||
                     !rSh.GetTableFmt() )
                     rSet.DisableItem( nWhich );
@@ -1353,7 +1353,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             break;
             case FN_CONVERT_TEXT_TO_TABLE:
             {
-                sal_uInt16 eFrmType = rSh.GetFrmType(0,sal_True);
+                sal_uInt16 eFrmType = rSh.GetFrmType(0,true);
                 if( (eFrmType & FRMTYPE_FOOTNOTE) ||
                     !rSh.IsTextToTableAvailable()  )
                     rSet.DisableItem( nWhich );
@@ -1361,7 +1361,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             break;
             case FN_CONVERT_TEXT_TABLE:
             {
-                sal_uInt16 eFrmType = rSh.GetFrmType(0,sal_True);
+                sal_uInt16 eFrmType = rSh.GetFrmType(0,true);
                 if( (eFrmType & FRMTYPE_FOOTNOTE) ||
                     (!rSh.GetTableFmt() && !rSh.IsTextToTableAvailable() ) )
                     rSet.DisableItem( nWhich );
@@ -1376,11 +1376,11 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 if ( rSh.IsTableMode() )
                 {
                     SwFrmFmt *pFmt = rSh.GetTableFmt();
-                    aSet.Put(pFmt->GetFmtAttr( nWhich, sal_True ));
+                    aSet.Put(pFmt->GetFmtAttr( nWhich, true ));
                 }
                 else if( rSh.IsFrmSelected() )
                 {
-                    SwFlyFrmAttrMgr aMgr( sal_False, &rSh, FRMMGR_TYPE_NONE );
+                    SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
                     aSet.Put( aMgr.GetAttrSet() );
                 }
                 else
@@ -1403,8 +1403,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 else
                 {
                     const sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();
-                    const sal_Bool bHas = pVFrame->HasChildWindow( nId );
-                    const sal_Bool bFrmSel = rSh.IsFrmSelected();
+                    const bool bHas = pVFrame->HasChildWindow( nId );
+                    const bool bFrmSel = rSh.IsFrmSelected();
                     const bool bIsGraphicSelection =
                                 rSh.GetSelectionType() == nsSelectionType::SEL_GRF;
 
@@ -1414,10 +1414,10 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     // If the swapping of the graphic is finished, the status
                     // must be determined asynchronously, until this the slot
                     // will be disabled.
-                    if ( bHas && bIsGraphicSelection && rSh.IsGrfSwapOut( sal_True ) )
+                    if ( bHas && bIsGraphicSelection && rSh.IsGrfSwapOut( true ) )
                     {
                         if( AddGrfUpdateSlot( nWhich ))
-                            rSh.GetGraphic(sal_False);  // start the loading
+                            rSh.GetGraphic(false);  // start the loading
                     }
                     else
                     {
@@ -1441,17 +1441,17 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             break;
             case SID_IMAP_EXEC:
             {
-                sal_Bool bDisable = sal_False;
+                bool bDisable = false;
                 if( !rSh.IsFrmSelected())
-                    bDisable = sal_True;
+                    bDisable = true;
                 sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();
                 if(!bDisable && pVFrame->HasChildWindow( nId ))
                 {
                     if(rSh.GetSelectionType() == nsSelectionType::SEL_GRF
-                                    && rSh.IsGrfSwapOut(sal_True))
+                                    && rSh.IsGrfSwapOut(true))
                     {
                         if( AddGrfUpdateSlot( nWhich ))
-                            rSh.GetGraphic(sal_False);  // start the loading
+                            rSh.GetGraphic(false);  // start the loading
                     }
                     else
                     {
@@ -1475,7 +1475,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 
             case SID_CONTOUR_DLG:
             {
-                sal_Bool bParentCntProt = 0 != rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
+                bool bParentCntProt = 0 != rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
 
                 if( bParentCntProt || 0 != (HTMLMODE_ON & ::GetHtmlMode(
                                             GetView().GetDocShell() )) )
@@ -1483,9 +1483,9 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 else
                 {
                     sal_uInt16 nId = SvxContourDlgChildWindow::GetChildWindowId();
-                    sal_Bool bHas = GetView().GetViewFrame()->HasChildWindow( nId );
+                    bool bHas = GetView().GetViewFrame()->HasChildWindow( nId );
                     int nSel = rSh.GetSelectionType();
-                    sal_Bool bOk = 0 != (nSel & (nsSelectionType::SEL_GRF|nsSelectionType::SEL_OLE));
+                    bool bOk = 0 != (nSel & (nsSelectionType::SEL_GRF|nsSelectionType::SEL_OLE));
 
                     bool bDisable = false;
                     if( !bHas && !bOk )
@@ -1497,10 +1497,10 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     // must be determined asynchronously, until this the slot
                     // will be disabled.
                     else if ( bHas && (nSel & nsSelectionType::SEL_GRF) &&
-                              rSh.IsGrfSwapOut(sal_True) )
+                              rSh.IsGrfSwapOut(true) )
                     {
                         if( AddGrfUpdateSlot( nWhich ))
-                            rSh.GetGraphic(sal_False);  // start the loading
+                            rSh.GetGraphic(false);  // start the loading
                         // #i75481#
                         bDisable = true;
                     }
@@ -1525,16 +1525,16 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             break;
             case SID_CONTOUR_EXEC:
             {
-                sal_Bool bDisable = sal_False;
+                bool bDisable = false;
                 int nSel = rSh.GetSelectionType();
                 if( !(nSel & (nsSelectionType::SEL_GRF|nsSelectionType::SEL_OLE)) )
-                    bDisable = sal_True;
+                    bDisable = true;
                 sal_uInt16 nId = SvxContourDlgChildWindow::GetChildWindowId();
                 if( !bDisable && GetView().GetViewFrame()->HasChildWindow( nId ))
                 {
                     SvxContourDlg *pDlg = SWCONTOURDLG(GetView());
                     if( pDlg->GetEditingObject() != rSh.GetIMapInventor() )
-                        bDisable = sal_True;
+                        bDisable = true;
                 }
                 rSet.Put(SfxBoolItem(nWhich, bDisable));
             }
@@ -1547,8 +1547,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case FN_TOOL_ANCHOR_AT_CHAR:
             case FN_TOOL_ANCHOR_FRAME:
             {
-                sal_Bool bObj = 0 != rSh.IsObjSelected();
-                sal_Bool bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
+                bool bObj = 0 != rSh.IsObjSelected();
+                bool bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
                 if( !bParentCntProt && (bObj || rSh.IsFrmSelected()))
                 {
@@ -1558,7 +1558,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     else
                         rSh.GetFlyFrmAttr(aSet);
                     RndStdIds eSet = ((SwFmtAnchor&)aSet.Get(RES_ANCHOR)).GetAnchorId();
-                    const sal_Bool bSet =
+                    const bool bSet =
                            ((nWhich == FN_TOOL_ANCHOR_PAGE) &&
                             (eSet == FLY_AT_PAGE))
                         || ((nWhich == FN_TOOL_ANCHOR_PARAGRAPH) &&
@@ -1617,8 +1617,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case FN_FRAME_WRAP_LEFT:
             case FN_FRAME_WRAP_RIGHT:
             {
-                sal_Bool bObj = 0 != rSh.IsObjSelected();
-                sal_Bool bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
+                bool bObj = 0 != rSh.IsObjSelected();
+                bool bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
                 if( !bParentCntProt && (bObj || rSh.IsFrmSelected()))
                 {
@@ -1637,9 +1637,9 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     const SwFmtSurround& rWrap = (const SwFmtSurround&)aSet.Get(RES_SURROUND);
 
                     const SvxOpaqueItem& rOpaque = (const SvxOpaqueItem&)aSet.Get(RES_OPAQUE);
-                    sal_Bool bOpaque = rOpaque.GetValue();
+                    bool bOpaque = rOpaque.GetValue();
                     SwSurround nSurround = rWrap.GetSurround();
-                    sal_Bool bSet = sal_False;
+                    bool bSet = false;
 
                     bool bDisable =
                         (nAnchorType == - 1) || (nAnchorType == FLY_AS_CHAR);
@@ -1689,10 +1689,10 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                             {
                                 int nSel = rSh.GetSelectionType();
                                 if( (nSel & nsSelectionType::SEL_GRF) &&
-                                            rSh.IsGrfSwapOut(sal_True))
+                                            rSh.IsGrfSwapOut(true))
                                 {
                                     if( AddGrfUpdateSlot( nWhich ))
-                                        rSh.GetGraphic(sal_False);  // start the loading
+                                        rSh.GetGraphic(false);  // start the loading
                                 }
                                 else if( rSh.IsFrmSelected() )
                                 {
@@ -1740,7 +1740,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 if( rSh.GetDoc()->isXForms() )
                 {
                     // determine current state from view options
-                    sal_Bool bValue = ! rSh.GetViewOptions()->IsFormView();
+                    bool bValue = ! rSh.GetViewOptions()->IsFormView();
                     rSet.Put( SfxBoolItem( nWhich, bValue ) );
                 }
                 else
@@ -1812,7 +1812,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
             case FN_FRAME_NOWRAP:
                 nSurround = SURROUND_NONE;
                 if (aWrap.IsContour())
-                    aWrap.SetContour(sal_False);
+                    aWrap.SetContour(false);
                 break;
             case FN_FRAME_WRAP_IDEAL:
                 nSurround = SURROUND_IDEAL;
@@ -1833,7 +1833,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
                 break;
             case FN_FRAME_WRAPTHRU_TRANSP:
                 if (aWrap.IsContour())
-                    aWrap.SetContour(sal_False);
+                    aWrap.SetContour(false);
                 // No break!!!
             case FN_FRAME_WRAPTHRU:
                 nSurround = SURROUND_THROUGHT;
@@ -1858,7 +1858,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
             if (bObj && nOldSurround != nSurround &&
                 (nOldSurround == SURROUND_NONE || nOldSurround == SURROUND_THROUGHT))
             {
-                aWrap.SetContour(sal_True);
+                aWrap.SetContour(true);
             }
         }
 
@@ -2366,7 +2366,7 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     // Tabele cell(s) selected?
     bool bPrepare = true;
-    sal_Bool bTableMode = rSh.IsTableMode();
+    bool bTableMode = rSh.IsTableMode();
     if ( bTableMode )
     {
         SfxItemSet aCoreSet( GetPool(),
@@ -2379,7 +2379,7 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
     }
     else if ( rSh.IsFrmSelected() )
     {
-        SwFlyFrmAttrMgr aMgr( sal_False, &rSh, FRMMGR_TYPE_NONE );
+        SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
         rSet.Put( aMgr.GetAttrSet() );
         bPrepare = false;
     }
@@ -2473,7 +2473,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             else if ( rSh.IsFrmSelected() )
             {
                 // Set border attributes via Frame-Manager
-                SwFlyFrmAttrMgr aMgr( sal_False, &rSh, FRMMGR_TYPE_NONE );
+                SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
                 aSet.Put( aMgr.GetAttrSet() );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -2601,10 +2601,10 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
     const SfxItemSet* pArgs = _rRequest.GetArgs();
     SwWrtShell& rSh = GetShell();
 
-    if ( !( rSh.GetFrmType( 0, sal_True ) & FRMTYPE_FOOTNOTE ) )
+    if ( !( rSh.GetFrmType( 0, true ) & FRMTYPE_FOOTNOTE ) )
     {
         SwView &rTempView = GetView(); // Because GetView() does not work after the shell exchange
-        sal_Bool bHTMLMode = 0 != (::GetHtmlMode(rTempView.GetDocShell())&HTMLMODE_ON);
+        bool bHTMLMode = 0 != (::GetHtmlMode(rTempView.GetDocShell())&HTMLMODE_ON);
         bool bCallEndUndo = false;
 
         if( !pArgs && rSh.IsSelection() && !rSh.IsInClickToEdit() &&
@@ -2616,7 +2616,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             rSh.StartUndo(UNDO_INSTABLE);
             bCallEndUndo = true;
 
-            sal_Bool bInserted = rSh.TextToTable( aInsTblOpts, '\t', text::HoriOrientation::FULL );
+            bool bInserted = rSh.TextToTable( aInsTblOpts, '\t', text::HoriOrientation::FULL );
             rSh.EnterStdMode();
             if (bInserted)
                 rTempView.AutoCaption(TABLE_CAP);
@@ -2792,7 +2792,7 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
                     rLst.push_back( SW_RESSTR( STR_SWBG_OLE ) );
                     nOlePos = nPos++;
                 }
-                const sal_uInt16 nType = rSh.GetFrmType(0,sal_True);
+                const sal_uInt16 nType = rSh.GetFrmType(0,true);
                 if ( nType & FRMTYPE_HEADER )
                 {
                     rLst.push_back( SW_RESSTR( STR_SWBG_HEADER ) );

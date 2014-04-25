@@ -42,7 +42,7 @@ void SwEditShell::SetRedlineMode( sal_uInt16 eMode )
     }
 }
 
-sal_Bool SwEditShell::IsRedlineOn() const
+bool SwEditShell::IsRedlineOn() const
 {
     return GetDoc()->IsRedlineOn();
 }
@@ -69,22 +69,22 @@ static void lcl_InvalidateAll( SwViewShell* pSh )
     } while ( pSh != pStop );
 }
 
-sal_Bool SwEditShell::AcceptRedline( sal_uInt16 nPos )
+bool SwEditShell::AcceptRedline( sal_uInt16 nPos )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    sal_Bool bRet = GetDoc()->AcceptRedline( nPos, true );
+    bool bRet = GetDoc()->AcceptRedline( nPos, true );
     if( !nPos && !::IsExtraData( GetDoc() ) )
         lcl_InvalidateAll( this );
     EndAllAction();
     return bRet;
 }
 
-sal_Bool SwEditShell::RejectRedline( sal_uInt16 nPos )
+bool SwEditShell::RejectRedline( sal_uInt16 nPos )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    sal_Bool bRet = GetDoc()->RejectRedline( nPos, true );
+    bool bRet = GetDoc()->RejectRedline( nPos, true );
     if( !nPos && !::IsExtraData( GetDoc() ) )
         lcl_InvalidateAll( this );
     EndAllAction();
@@ -110,9 +110,9 @@ bool SwEditShell::RejectRedlinesInSelection()
 }
 
 // Set the comment at the Redline
-sal_Bool SwEditShell::SetRedlineComment( const OUString& rS )
+bool SwEditShell::SetRedlineComment( const OUString& rS )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     FOREACHPAM_START(GetCrsr())
         bRet = bRet || GetDoc()->SetRedlineComment( *PCURCRSR, rS );
     FOREACHPAM_END()

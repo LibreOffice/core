@@ -36,16 +36,16 @@ struct SwFindParaFmtColl : public SwFindParas
         : pFmtColl( &rFmtColl ), pReplColl( pRpColl ), rCursor( rCrsr )
     {}
     virtual ~SwFindParaFmtColl() {}
-    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly ) SAL_OVERRIDE;
+    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, bool bInReadOnly ) SAL_OVERRIDE;
     virtual bool IsReplaceMode() const SAL_OVERRIDE;
 };
 
 int SwFindParaFmtColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
-                            sal_Bool bInReadOnly )
+                             bool bInReadOnly )
 {
     int nRet = FIND_FOUND;
     if( bInReadOnly && pReplColl )
-        bInReadOnly = sal_False;
+        bInReadOnly = false;
 
     if( !pCrsr->Find( *pFmtColl, fnMove, pRegion, bInReadOnly ) )
         nRet = FIND_NOT_FOUND;
@@ -64,7 +64,7 @@ bool SwFindParaFmtColl::IsReplaceMode() const
 
 /// search for Format-Collections
 sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl, SwDocPositions nStart,
-                          SwDocPositions nEnd, sal_Bool& bCancel,
+                          SwDocPositions nEnd, bool& bCancel,
                           FindRanges eFndRngs, const SwTxtFmtColl* pReplFmtColl )
 {
     // switch off OLE-notifications

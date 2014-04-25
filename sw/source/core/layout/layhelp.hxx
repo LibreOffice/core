@@ -98,7 +98,7 @@ class SwLayHelper
     SwPageFrm* &rpPage;
     SwLayoutFrm* &rpLay;
     SwActualSection* &rpActualSection;
-    sal_Bool &rbBreakAfter;
+    bool &rbBreakAfter;
     SwDoc* pDoc;
     SwLayCacheImpl* pImpl;
     sal_uLong nMaxParaPerPage;
@@ -110,7 +110,7 @@ class SwLayHelper
     void _CheckFlyCache( SwPageFrm* pPage );
 public:
     SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
-            SwLayoutFrm* &rpL, SwActualSection* &rpA, sal_Bool &rBrk,
+            SwLayoutFrm* &rpL, SwActualSection* &rpA, bool &rBrk,
             sal_uLong nNodeIndex, bool bCache );
     ~SwLayHelper();
     sal_uLong CalcPageCount();

@@ -60,7 +60,7 @@
 
 using namespace com::sun::star;
 
-void SwEditShell::Insert( sal_Unicode c, sal_Bool bOnlyCurrCrsr )
+void SwEditShell::Insert( sal_Unicode c, bool bOnlyCurrCrsr )
 {
     StartAllAction();
     FOREACHPAM_START(GetCrsr())
@@ -172,7 +172,7 @@ void SwEditShell::Overwrite(const OUString &rStr)
     EndAllAction();
 }
 
-long SwEditShell::SplitNode( sal_Bool bAutoFormat, sal_Bool bCheckTableStart )
+long SwEditShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
 {
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
@@ -194,9 +194,9 @@ long SwEditShell::SplitNode( sal_Bool bAutoFormat, sal_Bool bCheckTableStart )
     return(1L);
 }
 
-sal_Bool SwEditShell::AppendTxtNode()
+bool SwEditShell::AppendTxtNode()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
@@ -227,7 +227,7 @@ SwGrfNode * SwEditShell::_GetGrfNode() const
 
 // returns a Graphic pointer if CurCrsr->GetPoint() points to a SwGrfNode and
 // GetMark is not set or points to the same Graphic
-const Graphic* SwEditShell::GetGraphic( sal_Bool bWait ) const
+const Graphic* SwEditShell::GetGraphic( bool bWait ) const
 {
     SwGrfNode* pGrfNode = _GetGrfNode();
     const Graphic* pGrf( 0L );
@@ -259,7 +259,7 @@ const Graphic* SwEditShell::GetGraphic( sal_Bool bWait ) const
     return pGrf;
 }
 
-sal_Bool SwEditShell::IsGrfSwapOut( sal_Bool bOnlyLinked ) const
+bool SwEditShell::IsGrfSwapOut( bool bOnlyLinked ) const
 {
     SwGrfNode *pGrfNode = _GetGrfNode();
     return pGrfNode &&
@@ -283,7 +283,7 @@ sal_uInt16 SwEditShell::GetGraphicType() const
 
 // returns the size of a graphic in <rSz> if CurCrsr->GetPoint() points to a SwGrfNode and
 // GetMark is not set or points to the same graphic
-sal_Bool SwEditShell::GetGrfSize(Size& rSz) const
+bool SwEditShell::GetGrfSize(Size& rSz) const
 {
     SwNoTxtNode* pNoTxtNd;
     SwPaM* pCurrentCrsr = GetCrsr();
@@ -292,9 +292,9 @@ sal_Bool SwEditShell::GetGrfSize(Size& rSz) const
          && 0 != ( pNoTxtNd = pCurrentCrsr->GetNode()->GetNoTxtNode() ) )
     {
         rSz = pNoTxtNd->GetTwipSize();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 
 }
 
@@ -348,7 +348,7 @@ void SwEditShell::ClearAutomaticContour()
     if( pNd->HasAutomaticContour() )
     {
         StartAllAction();
-        pNd->SetContour( NULL, sal_False );
+        pNd->SetContour( NULL, false );
         SwFlyFrm *pFly = (SwFlyFrm*)pNd->getLayoutFrm(GetLayout())->GetUpper();
         const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
         pFly->GetFmt()->NotifyClients( (SwFmtSurround*)&rSur, (SwFmtSurround*)&rSur );
@@ -377,7 +377,7 @@ svt::EmbeddedObjectRef& SwEditShell::GetOLEObject() const
     return rOObj.GetObject();
 }
 
-sal_Bool SwEditShell::HasOLEObj( const OUString &rName ) const
+bool SwEditShell::HasOLEObj( const OUString &rName ) const
 {
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
@@ -388,11 +388,11 @@ sal_Bool SwEditShell::HasOLEObj( const OUString &rName ) const
         if( rNd.IsOLENode() &&
             rName == ((SwOLENode&)rNd).GetChartTblName() &&
             ((SwOLENode&)rNd).getLayoutFrm( GetLayout() ) )
-            return sal_True;
+            return true;
 
         aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
     }
-    return sal_False;
+    return false;
 }
 
 void SwEditShell::SetChartName( const OUString &rName )
@@ -630,11 +630,11 @@ Graphic SwEditShell::GetIMapGraphic() const
     return aRet;
 }
 
-sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const OUString& rStr, sal_Bool bKeepSelection )
+bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const OUString& rStr, bool bKeepSelection )
 {
     // URL and hint text (directly or via selection) necessary
     if( rFmt.GetValue().isEmpty() || ( rStr.isEmpty() && !HasSelection() ) )
-        return sal_False;
+        return false;
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_UI_INSERT_URLTXT, NULL);
     bool bInsTxt = true;
@@ -666,7 +666,7 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const OUString& rStr,
         {
             Insert2( rStr );
             SetMark();
-            ExtendSelection( sal_False, rStr.getLength() );
+            ExtendSelection( false, rStr.getLength() );
         }
     }
     else
@@ -681,7 +681,7 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const OUString& rStr,
         DontExpandFmt();
     GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_UI_INSERT_URLTXT, NULL );
     EndAllAction();
-    return sal_True;
+    return true;
 }
 
 sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
@@ -718,9 +718,9 @@ sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
 
 /// If the cursor is in a INetAttribute then it will be deleted completely (incl. hint text, the
 /// latter is needed for drag & drop)
-sal_Bool SwEditShell::DelINetAttrWithText()
+bool SwEditShell::DelINetAttrWithText()
 {
-    sal_Bool bRet = SelectTxtAttr( RES_TXTATR_INETFMT, sal_False );
+    bool bRet = SelectTxtAttr( RES_TXTATR_INETFMT, false );
     if( bRet )
         DeleteSel( *GetCrsr() );
     return bRet;
@@ -743,10 +743,10 @@ SvNumberFormatter* SwEditShell::GetNumberFormatter()
     return GetDoc()->GetNumberFormatter();
 }
 
-sal_Bool SwEditShell::RemoveInvisibleContent()
+bool SwEditShell::RemoveInvisibleContent()
 {
     StartAllAction();
-    sal_Bool bRet = GetDoc()->RemoveInvisibleContent();
+    bool bRet = GetDoc()->RemoveInvisibleContent();
     EndAllAction();
     return bRet;
 }
@@ -820,7 +820,7 @@ void SwEditShell::SetNumberingRestart()
                             {
                                 // now set a the start value as attribute
                                 SwPosition aCurrentNode(*pNd);
-                                GetDoc()->SetNumRuleStart( aCurrentNode, sal_True );
+                                GetDoc()->SetNumRuleStart( aCurrentNode, true );
                             }
                         }
                     }
@@ -842,11 +842,11 @@ void SwEditShell::SetNumberingRestart()
         }
     }
 
-    Pop(sal_False);
+    Pop(false);
     EndAllAction();
 }
 
-sal_uInt16 SwEditShell::GetLineCount( sal_Bool bActPos )
+sal_uInt16 SwEditShell::GetLineCount( bool bActPos )
 {
     sal_uInt16 nRet = 0;
     CalcLayout();
@@ -960,7 +960,7 @@ void SwEditShell::SetLineNumberInfo(const SwLineNumberInfo& rInfo)
     EndAllAction();
 }
 
-sal_uInt16 SwEditShell::GetLinkUpdMode(sal_Bool bDocSettings) const
+sal_uInt16 SwEditShell::GetLinkUpdMode(bool bDocSettings) const
 {
     return getIDocumentSettingAccess()->getLinkUpdateMode( !bDocSettings );
 }
@@ -979,7 +979,7 @@ SwExtTextInput* SwEditShell::CreateExtTextInput(LanguageType eInputLanguage)
     return pRet;
 }
 
-OUString SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, sal_Bool bInsText )
+OUString SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, bool bInsText )
 {
     if( !pDel )
     {

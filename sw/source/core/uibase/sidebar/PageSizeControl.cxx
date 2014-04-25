@@ -39,7 +39,7 @@ PageSizeControl::PageSizeControl(
     Window* pParent,
     PagePropertyPanel& rPanel,
     const Paper ePaper,
-    const sal_Bool bLandscape,
+    const bool bLandscape,
     const FieldUnit eFUnit )
     : ::svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_SIZE) )
     , mpSizeValueSet( new ::svx::sidebar::ValueSetWithTextControl( ::svx::sidebar::ValueSetWithTextControl::TEXT_TEXT, this, SW_RES(VS_SIZE) ) )

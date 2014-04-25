@@ -205,7 +205,7 @@ public:
     // thread safe C++ interface
 
     // The object is not visible an longer and should be destroyed
-    virtual void Dispose( sal_Bool bRecursive = sal_False ) SAL_OVERRIDE;
+    virtual void Dispose( bool bRecursive = false ) SAL_OVERRIDE;
 
     // XAccessibleComponent
     sal_Int32 SAL_CALL getBackground()

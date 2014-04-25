@@ -78,7 +78,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
-    void AddNode( const SwTxtNode& rNd, sal_Bool bResetLRSpace );
+    void AddNode( const SwTxtNode& rNd, bool bResetLRSpace );
     SwHistory* GetHistory() { return pHistory; }
 };
 
@@ -112,11 +112,11 @@ public:
 class SwUndoNumOrNoNum : public SwUndo
 {
     sal_uLong nIdx;
-    sal_Bool mbNewNum, mbOldNum;
+    bool mbNewNum, mbOldNum;
 
 public:
-    SwUndoNumOrNoNum( const SwNodeIndex& rIdx, sal_Bool mbOldNum,
-                      sal_Bool mbNewNum );
+    SwUndoNumOrNoNum( const SwNodeIndex& rIdx, bool mbOldNum,
+                      bool mbNewNum );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
@@ -127,11 +127,11 @@ class SwUndoNumRuleStart : public SwUndo
 {
     sal_uLong nIdx;
     sal_uInt16 nOldStt, nNewStt;
-    sal_Bool bSetSttValue : 1;
-    sal_Bool bFlag : 1;
+    bool bSetSttValue : 1;
+    bool bFlag : 1;
 
 public:
-    SwUndoNumRuleStart( const SwPosition& rPos, sal_Bool bDelete );
+    SwUndoNumRuleStart( const SwPosition& rPos, bool bDelete );
     SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;

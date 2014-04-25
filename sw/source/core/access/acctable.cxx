@@ -83,7 +83,7 @@ class SwAccessibleTableData_Impl
     Int32PairList_Impl maExtents;   // cell extends for event processing only
     Point   maTabFrmPos;
     const SwTabFrm *mpTabFrm;
-    sal_Bool mbIsInPagePreview;
+    bool mbIsInPagePreview;
     bool mbOnlyTableColumnHeader;
 
     void CollectData( const SwFrm *pFrm );
@@ -91,13 +91,13 @@ class SwAccessibleTableData_Impl
     void CollectRowHeaderData( const SwFrm *pFrm );
     void CollectExtents( const SwFrm *pFrm );
 
-    sal_Bool FindCell( const Point& rPos, const SwFrm *pFrm ,
-                           sal_Bool bExact, const SwFrm *& rFrm ) const;
+    bool FindCell( const Point& rPos, const SwFrm *pFrm ,
+                           bool bExact, const SwFrm *& rFrm ) const;
 
     void GetSelection( const Point& rTabPos, const SwRect& rArea,
                        const SwSelBoxes& rSelBoxes, const SwFrm *pFrm,
                        SwAccTableSelHander_Impl& rSelHdl,
-                       sal_Bool bColumns ) const;
+                       bool bColumns ) const;
 
     // #i77106#
     inline bool IncludeRow( const SwFrm& rFrm ) const
@@ -109,7 +109,7 @@ public:
     // #i77106# - add third optional parameter <bOnlyTableColumnHeader>, default value <false>
     SwAccessibleTableData_Impl( SwAccessibleMap& rAccMap,
                                 const SwTabFrm *pTabFrm,
-                                sal_Bool bIsInPagePreview,
+                                bool bIsInPagePreview,
                                 bool bOnlyTableColumnHeader = false );
 
     const Int32Set_Impl& GetRows() const { return maRows; }
@@ -118,19 +118,19 @@ public:
     inline Int32Set_Impl::const_iterator GetRowIter( sal_Int32 nRow ) const;
     inline Int32Set_Impl::const_iterator GetColumnIter( sal_Int32 nCol ) const;
 
-    const SwFrm *GetCell( sal_Int32 nRow, sal_Int32 nColumn, sal_Bool bExact,
+    const SwFrm *GetCell( sal_Int32 nRow, sal_Int32 nColumn, bool bExact,
                           SwAccessibleTable *pThis ) const
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception);
     const SwFrm *GetCellAtPos( sal_Int32 nLeft, sal_Int32 nTop,
-                                         sal_Bool bExact ) const;
+                                         bool bExact ) const;
     inline sal_Int32 GetRowCount() const;
     inline sal_Int32 GetColumnCount() const;
-    sal_Bool CompareExtents( const SwAccessibleTableData_Impl& r ) const;
+    bool CompareExtents( const SwAccessibleTableData_Impl& r ) const;
 
     void GetSelection( sal_Int32 nStart, sal_Int32 nEnd,
                        const SwSelBoxes& rSelBoxes,
                           SwAccTableSelHander_Impl& rSelHdl,
-                       sal_Bool bColumns ) const;
+                       bool bColumns ) const;
 
     void CheckRowAndCol( sal_Int32 nRow, sal_Int32 nCol,
                          SwAccessibleTable *pThis ) const
@@ -304,11 +304,11 @@ void SwAccessibleTableData_Impl::CollectExtents( const SwFrm *pFrm )
     }
 }
 
-sal_Bool SwAccessibleTableData_Impl::FindCell(
-        const Point& rPos, const SwFrm *pFrm, sal_Bool bExact,
+bool SwAccessibleTableData_Impl::FindCell(
+        const Point& rPos, const SwFrm *pFrm, bool bExact,
         const SwFrm *& rRet ) const
 {
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     const SwAccessibleChildSList aList( *pFrm, mrAccMap );
     SwAccessibleChildSList::const_iterator aIter( aList.begin() );
@@ -329,7 +329,7 @@ sal_Bool SwAccessibleTableData_Impl::FindCell(
                     // We have found the cell
                     OSL_ENSURE( rFrm.Left() <= rPos.X() && rFrm.Top() <= rPos.Y(),
                             "find frame moved to far!" );
-                    bFound = sal_True;
+                    bFound = true;
                     if( !bExact ||
                         (rFrm.Top() == rPos.Y() && rFrm.Left() == rPos.Y() ) )
                     {
@@ -359,7 +359,7 @@ void SwAccessibleTableData_Impl::GetSelection(
             const SwSelBoxes& rSelBoxes,
             const SwFrm *pFrm,
             SwAccTableSelHander_Impl& rSelHdl,
-            sal_Bool bColumns ) const
+            bool bColumns ) const
 {
     const SwAccessibleChildSList aList( *pFrm, mrAccMap );
     SwAccessibleChildSList::const_iterator aIter( aList.begin() );
@@ -419,7 +419,7 @@ void SwAccessibleTableData_Impl::GetSelection(
 }
 
 const SwFrm *SwAccessibleTableData_Impl::GetCell(
-        sal_Int32 nRow, sal_Int32 nColumn, sal_Bool,
+        sal_Int32 nRow, sal_Int32 nColumn, bool,
         SwAccessibleTable *pThis ) const
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
@@ -427,7 +427,7 @@ const SwFrm *SwAccessibleTableData_Impl::GetCell(
 
     Int32Set_Impl::const_iterator aSttCol( GetColumnIter( nColumn ) );
     Int32Set_Impl::const_iterator aSttRow( GetRowIter( nRow ) );
-    const SwFrm *pCellFrm = GetCellAtPos( *aSttCol, *aSttRow, sal_False );
+    const SwFrm *pCellFrm = GetCellAtPos( *aSttCol, *aSttRow, false );
 
     return pCellFrm;
 }
@@ -436,7 +436,7 @@ void SwAccessibleTableData_Impl::GetSelection(
                        sal_Int32 nStart, sal_Int32 nEnd,
                        const SwSelBoxes& rSelBoxes,
                           SwAccTableSelHander_Impl& rSelHdl,
-                       sal_Bool bColumns ) const
+                       bool bColumns ) const
 {
     SwRect aArea( mpTabFrm->Frm() );
     Point aPos( aArea.Pos() );
@@ -467,7 +467,7 @@ void SwAccessibleTableData_Impl::GetSelection(
 }
 
 const SwFrm *SwAccessibleTableData_Impl::GetCellAtPos(
-        sal_Int32 nLeft, sal_Int32 nTop, sal_Bool bExact ) const
+        sal_Int32 nLeft, sal_Int32 nTop, bool bExact ) const
 {
     Point aPos( mpTabFrm->Frm().Pos() );
     aPos.Move( nLeft, nTop );
@@ -489,18 +489,18 @@ inline sal_Int32 SwAccessibleTableData_Impl::GetColumnCount() const
     return static_cast< sal_Int32 >( maColumns.size() );
 }
 
-sal_Bool SwAccessibleTableData_Impl::CompareExtents(
+bool SwAccessibleTableData_Impl::CompareExtents(
                                 const SwAccessibleTableData_Impl& rCmp ) const
 {
     if( maExtents.size() != rCmp.maExtents.size() )
-        return sal_False;
+        return false;
 
     return ::std::equal(maExtents.begin(), maExtents.end(), rCmp.maExtents.begin()) ? sal_True : sal_False;
 }
 
 SwAccessibleTableData_Impl::SwAccessibleTableData_Impl( SwAccessibleMap& rAccMap,
                                                         const SwTabFrm *pTabFrm,
-                                                        sal_Bool bIsInPagePreview,
+                                                        bool bIsInPagePreview,
                                                         bool bOnlyTableColumnHeader )
     : mrAccMap( rAccMap )
     , maTabFrmPos( pTabFrm->Frm().Pos() )
@@ -575,7 +575,7 @@ void SwAccessibleTableData_Impl::GetRowColumnAndExtent(
 
 class SwAccSingleTableSelHander_Impl : public SwAccTableSelHander_Impl
 {
-    sal_Bool bSelected;
+    bool bSelected;
 
 public:
 
@@ -583,19 +583,19 @@ public:
 
     virtual ~SwAccSingleTableSelHander_Impl() {}
 
-    inline sal_Bool IsSelected() const { return bSelected; }
+    inline bool IsSelected() const { return bSelected; }
 
     virtual void Unselect( sal_Int32, sal_Int32 ) SAL_OVERRIDE;
 };
 
 inline SwAccSingleTableSelHander_Impl::SwAccSingleTableSelHander_Impl() :
-    bSelected( sal_True )
+    bSelected( true )
 {
 }
 
 void SwAccSingleTableSelHander_Impl::Unselect( sal_Int32, sal_Int32 )
 {
-    bSelected = sal_False;
+    bSelected = false;
 }
 
 class SwAccAllTableSelHander_Impl : public SwAccTableSelHander_Impl
@@ -716,9 +716,9 @@ const SwTableBox* SwAccessibleTable::GetTableBox( sal_Int32 nChildIndex ) const
     return pBox;
 }
 
-sal_Bool SwAccessibleTable::IsChildSelected( sal_Int32 nChildIndex ) const
+bool SwAccessibleTable::IsChildSelected( sal_Int32 nChildIndex ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwSelBoxes* pSelBoxes = GetSelBoxes();
     if( pSelBoxes )
     {
@@ -1032,7 +1032,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowExtentAt(
     Int32Set_Impl::const_iterator aSttRow(
                                     GetTableData().GetRowIter( nRow ) );
     const SwFrm *pCellFrm = GetTableData().GetCellAtPos( *aSttCol, *aSttRow,
-                                                         sal_False );
+                                                         false );
     if( pCellFrm )
     {
         sal_Int32 nBottom = pCellFrm->Frm().Bottom();
@@ -1064,7 +1064,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumnExtentAt(
     Int32Set_Impl::const_iterator aSttRow(
                                     GetTableData().GetRowIter( nRow ) );
     const SwFrm *pCellFrm = GetTableData().GetCellAtPos( *aSttCol, *aSttRow,
-                                                         sal_False );
+                                                         false );
     if( pCellFrm )
     {
         sal_Int32 nRight = pCellFrm->Frm().Right();
@@ -1117,7 +1117,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleRows
         SwAccAllTableSelHander_Impl aSelRows( nRows  );
 
         GetTableData().GetSelection( 0, nRows, *pSelBoxes, aSelRows,
-                                      sal_False );
+                                      false );
 
         return aSelRows.GetSelSequence();
     }
@@ -1140,7 +1140,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleColu
         sal_Int32 nCols = GetTableData().GetColumnCount();
         SwAccAllTableSelHander_Impl aSelCols( nCols );
 
-        GetTableData().GetSelection( 0, nCols, *pSelBoxes, aSelCols, sal_True );
+        GetTableData().GetSelection( 0, nCols, *pSelBoxes, aSelCols, true );
 
         return aSelCols.GetSelSequence();
     }
@@ -1159,18 +1159,18 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleRowSelected( sal_Int32 nRow )
 
     GetTableData().CheckRowAndCol( nRow, 0, this );
 
-    sal_Bool bRet;
+    bool bRet;
     const SwSelBoxes *pSelBoxes = GetSelBoxes();
     if( pSelBoxes )
     {
         SwAccSingleTableSelHander_Impl aSelRow;
         GetTableData().GetSelection( nRow, nRow+1, *pSelBoxes, aSelRow,
-                                     sal_False );
+                                     false );
         bRet = aSelRow.IsSelected();
     }
     else
     {
-        bRet = sal_False;
+        bRet = false;
     }
 
     return bRet;
@@ -1186,19 +1186,19 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleColumnSelected(
 
     GetTableData().CheckRowAndCol( 0, nColumn, this );
 
-    sal_Bool bRet;
+    bool bRet;
     const SwSelBoxes *pSelBoxes = GetSelBoxes();
     if( pSelBoxes )
     {
         SwAccSingleTableSelHander_Impl aSelCol;
 
         GetTableData().GetSelection( nColumn, nColumn+1, *pSelBoxes, aSelCol,
-                                     sal_True );
+                                     true );
         bRet = aSelCol.IsSelected();
     }
     else
     {
-        bRet = sal_False;
+        bRet = false;
     }
 
     return bRet;
@@ -1215,9 +1215,9 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleCellAt(
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
     const SwFrm *pCellFrm =
-                    GetTableData().GetCell( nRow, nColumn, sal_False, this );
+                    GetTableData().GetCell( nRow, nColumn, false, this );
     if( pCellFrm )
-        xRet = GetMap()->GetContext( pCellFrm, sal_True );
+        xRet = GetMap()->GetContext( pCellFrm, true );
 
     return xRet;
 }
@@ -1240,14 +1240,14 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleSelected(
             sal_Int32 nRow, sal_Int32 nColumn )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
     const SwFrm *pFrm =
-                    GetTableData().GetCell( nRow, nColumn, sal_False, this );
+                    GetTableData().GetCell( nRow, nColumn, false, this );
     if( pFrm && pFrm->IsCellFrm() )
     {
         const SwSelBoxes *pSelBoxes = GetSelBoxes();
@@ -1273,7 +1273,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleIndex(
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
-    SwAccessibleChild aCell( GetTableData().GetCell( nRow, nColumn, sal_False, this ));
+    SwAccessibleChild aCell( GetTableData().GetCell( nRow, nColumn, false, this ));
     if ( aCell.IsValid() )
     {
         nRet = GetChildIndex( *(GetMap()), aCell );
@@ -1398,7 +1398,7 @@ void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
 }
 
-void SwAccessibleTable::Dispose( sal_Bool bRecursive )
+void SwAccessibleTable::Dispose( bool bRecursive )
 {
     SolarMutexGuard aGuard;
 
@@ -1409,7 +1409,7 @@ void SwAccessibleTable::Dispose( sal_Bool bRecursive )
 }
 
 void SwAccessibleTable::DisposeChild( const SwAccessibleChild& rChildFrmOrObj,
-                                      sal_Bool bRecursive )
+                                      bool bRecursive )
 {
     SolarMutexGuard aGuard;
 
@@ -1426,7 +1426,7 @@ void SwAccessibleTable::DisposeChild( const SwAccessibleChild& rChildFrmOrObj,
     // the map, and we have to call our superclass.
     // The other situation is that we have been call by a call to get notified
     // about its change. We then must not call the superclass
-    uno::Reference< XAccessible > xAcc( GetMap()->GetContext( pFrm, sal_False ) );
+    uno::Reference< XAccessible > xAcc( GetMap()->GetContext( pFrm, false ) );
     if( !xAcc.is() )
         SwAccessibleContext::DisposeChild( rChildFrmOrObj, bRecursive );
 }
@@ -1450,10 +1450,10 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
                 {
                     Int32Set_Impl::const_iterator aSttCol( GetTableData().GetColumnIter( 0 ) );
                     Int32Set_Impl::const_iterator aSttRow( GetTableData().GetRowIter( 1 ) );
-                    const SwFrm *pCellFrm = GetTableData().GetCellAtPos( *aSttCol, *aSttRow, sal_False );
+                    const SwFrm *pCellFrm = GetTableData().GetCellAtPos( *aSttCol, *aSttRow, false );
                     Int32Set_Impl::const_iterator aSttCol2( pNewTableData->GetColumnIter( 0 ) );
                     Int32Set_Impl::const_iterator aSttRow2( pNewTableData->GetRowIter( 0 ) );
-                    const SwFrm *pCellFrm2 = pNewTableData->GetCellAtPos( *aSttCol2, *aSttRow2, sal_False );
+                    const SwFrm *pCellFrm2 = pNewTableData->GetCellAtPos( *aSttCol2, *aSttRow2, false );
 
                     if(pCellFrm == pCellFrm2)
                     {
@@ -1682,7 +1682,7 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
     // reduce selection to mark.
     SwPaM *pPaM = pCrsrShell->GetTblCrs() ? pCrsrShell->GetTblCrs()
                                                 : pCrsrShell->GetCrsr();
-    sal_Bool bDeselectPoint =
+    bool bDeselectPoint =
         pBox->GetSttNd() ==
             pPaM->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
 
@@ -1760,7 +1760,7 @@ void SwAccessibleTable::FireSelectionEvent( )
     }
 }
 
-void SwAccessibleTable::AddSelectionCell(const SwAccessibleContext* pAccCell ,sal_Bool bAddOrRemove)
+void SwAccessibleTable::AddSelectionCell(const SwAccessibleContext* pAccCell, bool bAddOrRemove)
 {
     if (bAddOrRemove)
     {

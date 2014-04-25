@@ -183,7 +183,7 @@ static void lcl_ClearArea( const SwFrm &rFrm,
         //UUUU
         FillAttributesPtr aFillAttributes;
 
-        if ( rFrm.GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigRect, sal_False ) )
+        if ( rFrm.GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigRect, false ) )
         {
             const bool bDone(::DrawFillAttributes(aFillAttributes, aOrigRect, rPtArea, rOut));
 
@@ -252,7 +252,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     // for paint in order to avoid load of the intrinsic graphic.
     if ( ( !pOut->GetConnectMetaFile() ||
            !pSh->GetWin() ) &&
-         FindFlyFrm()->GetContour( aPoly, sal_True )
+         FindFlyFrm()->GetContour( aPoly, true )
        )
     {
         pOut->SetClipRegion(Region(aPoly));
@@ -472,7 +472,7 @@ void SwNoTxtFrm::MakeAll()
         MakePrtArea( rAttrs );
 
         if ( !mbValidSize )
-        {   mbValidSize = sal_True;
+        {   mbValidSize = true;
             Format();
         }
     }
@@ -792,7 +792,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
     SwOLENode* pOLENd = rNoTNd.GetOLENode();
 
-    const sal_Bool bPrn = pOut == rNoTNd.getIDocumentDeviceAccess()->getPrinter( false ) ||
+    const bool bPrn = pOut == rNoTNd.getIDocumentDeviceAccess()->getPrinter( false ) ||
                           pOut->GetConnectMetaFile();
 
     const bool bIsChart = pOLENd && ChartHelper::IsChart( pOLENd->GetOLEObj().GetObject() );
@@ -867,7 +867,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
         if( bContinue )
         {
-            const sal_Bool bSwapped = rGrfObj.IsSwappedOut();
+            const bool bSwapped = rGrfObj.IsSwappedOut();
             const bool bSwappedIn = pGrfNd->SwapIn( bPrn );
             if( bSwappedIn && rGrfObj.GetGraphic().IsSupportedGraphic())
             {
@@ -1022,18 +1022,18 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     }
 }
 
-sal_Bool SwNoTxtFrm::IsTransparent() const
+bool SwNoTxtFrm::IsTransparent() const
 {
     const SwViewShell* pSh = getRootFrm()->GetCurrShell();
     if ( !pSh || !pSh->GetViewOptions()->IsGraphic() )
-        return sal_True;
+        return true;
 
     const SwGrfNode *pNd;
     if( 0 != (pNd = GetNode()->GetGrfNode()) )
         return pNd->IsTransparent();
 
     //#29381# OLE are always transparent
-    return sal_True;
+    return true;
 }
 
 void SwNoTxtFrm::StopAnimation( OutputDevice* pOut ) const
@@ -1047,7 +1047,7 @@ void SwNoTxtFrm::StopAnimation( OutputDevice* pOut ) const
     }
 }
 
-sal_Bool SwNoTxtFrm::HasAnimation() const
+bool SwNoTxtFrm::HasAnimation() const
 {
     const SwGrfNode* pGrfNd = GetNode()->GetGrfNode();
     return pGrfNd && pGrfNd->IsAnimated();

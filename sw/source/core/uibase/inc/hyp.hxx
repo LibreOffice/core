@@ -34,9 +34,9 @@ private:
     Link            aOldLnk;
     sal_uInt16          nPageCount;     // page count for progress view
     sal_uInt16          nPageStart;     // 1st checked page
-    sal_Bool            bInSelection : 1; // separating selected text
-    sal_Bool            bAutomatic : 1; // insert separators without further inquiry
-    sal_Bool            bInfoBox : 1;   // display info-box when ending
+    bool            bInSelection : 1; // separating selected text
+    bool            bAutomatic : 1; // insert separators without further inquiry
+    bool            bInfoBox : 1;   // display info-box when ending
 
 protected:
     virtual void SpellStart( SvxSpellArea eSpell ) SAL_OVERRIDE;
@@ -49,7 +49,7 @@ public:
     SwHyphWrapper( SwView* pVw,
                    ::com::sun::star::uno::Reference<
                         ::com::sun::star::linguistic2::XHyphenator >  &rxHyph,
-                   sal_Bool bStart, sal_Bool bOther, sal_Bool bSelect );
+                   bool bStart, bool bOther, bool bSelect );
     virtual ~SwHyphWrapper();
 };
 

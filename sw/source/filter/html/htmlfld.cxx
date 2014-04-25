@@ -207,8 +207,8 @@ sal_uInt16 SwHTMLParser::GetNumType( const OUString& rStr, sal_uInt16 nDfltType 
 
 void SwHTMLParser::NewField()
 {
-    sal_Bool bKnownType = sal_False, bFixed = sal_False,
-         bHasNumFmt = sal_False, bHasNumValue = sal_False;
+    bool bKnownType = false, bFixed = false,
+         bHasNumFmt = false, bHasNumValue = false;
     sal_uInt16 nType = 0;
     OUString aValue, aNumFmt, aNumValue, aName;
     const HTMLOption *pSubOption=0, *pFmtOption=0;
@@ -238,14 +238,14 @@ void SwHTMLParser::NewField()
             break;
         case HTML_O_SDNUM:
             aNumFmt = rOption.GetString();
-            bHasNumFmt = sal_True;
+            bHasNumFmt = true;
             break;
         case HTML_O_SDVAL:
             aNumValue = rOption.GetString();
-            bHasNumValue = sal_True;
+            bHasNumValue = true;
             break;
         case HTML_O_SDFIXED:
-            bFixed = sal_True;
+            bFixed = true;
             break;
         }
     }
@@ -275,7 +275,7 @@ void SwHTMLParser::NewField()
             const OUString& rCreated = xDocProps->getAuthor();
             if( rUser.isEmpty() ||
                 (!rChanged.isEmpty() ? rUser != rChanged : rUser != rCreated) )
-                bFixed = sal_True;
+                bFixed = true;
         }
     }
 
@@ -285,7 +285,7 @@ void SwHTMLParser::NewField()
 
     SwFieldType* pType = pDoc->GetSysFldType( nWhich );
     SwField *pFld = 0;
-    sal_Bool bInsOnEndTag = sal_False;
+    bool bInsOnEndTag = false;
 
     switch( (RES_FIELDS)nType )
     {
@@ -297,7 +297,7 @@ void SwHTMLParser::NewField()
             if( bFixed )
             {
                 nFmt |= AF_FIXED;
-                bInsOnEndTag = sal_True;
+                bInsOnEndTag = true;
             }
             if( pSubOption->GetEnum( nSub, aHTMLExtUsrFldSubTable ) )
                 pFld = new SwExtUserField( (SwExtUserFieldType*)pType,
@@ -313,7 +313,7 @@ void SwHTMLParser::NewField()
             if( bFixed )
             {
                 nFmt |= AF_FIXED;
-                bInsOnEndTag = sal_True;
+                bInsOnEndTag = true;
             }
 
             pFld = new SwAuthorField( (SwAuthorFieldType *)pType, nFmt );
@@ -327,7 +327,7 @@ void SwHTMLParser::NewField()
             sal_Int64 nTime = Time( Time::SYSTEM ).GetTime();
             sal_Int32 nDate = Date( Date::SYSTEM ).GetDate();
             sal_uInt16 nSub = 0;
-            sal_Bool bValidFmt = sal_False;
+            bool bValidFmt = false;
             HTMLNumFmtTblEntry * pFmtTbl;
 
             if( RES_DATEFLD==nType )
@@ -357,7 +357,7 @@ void SwHTMLParser::NewField()
                     {
                         nNumFmt = pFormatter->GetFormatIndex(
                                         pFmtTbl[k].eFmt, LANGUAGE_SYSTEM);
-                        bValidFmt = sal_True;
+                        bValidFmt = true;
                         break;
                     }
                 }
@@ -462,7 +462,7 @@ void SwHTMLParser::NewField()
                     bFixed &= bHasNumValue;
                 }
                 else
-                    bHasNumValue = sal_False;
+                    bHasNumValue = false;
 
                 if( nSub >= DI_INFO1 && nSub <= DI_INFO4 && aName.isEmpty() )
                 {
@@ -475,7 +475,7 @@ void SwHTMLParser::NewField()
                 if( bFixed )
                 {
                     nSub |= DI_SUB_FIXED;
-                    bInsOnEndTag = sal_True;
+                    bInsOnEndTag = true;
                 }
 
                 pFld = new SwDocInfoField( (SwDocInfoFieldType *)pType,
@@ -510,7 +510,7 @@ void SwHTMLParser::NewField()
             if( bFixed )
             {
                 nFmt |= FF_FIXED;
-                bInsOnEndTag = sal_True;
+                bInsOnEndTag = true;
             }
 
             pFld = new SwFileNameField( (SwFileNameFieldType *)pType, nFmt );
@@ -586,7 +586,7 @@ void SwHTMLParser::InsertFieldText()
 
 void SwHTMLParser::InsertCommentText( const sal_Char *pTag )
 {
-    sal_Bool bEmpty = aContents.isEmpty();
+    bool bEmpty = aContents.isEmpty();
     if( !bEmpty )
         aContents += "\n";
 
@@ -613,10 +613,10 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
     // weniger Probleme beim Formatieren (bug #40483#)
     const sal_Int32 nPos = pPam->GetPoint()->nContent.GetIndex();
     SwTxtNode *pTxtNd = pPam->GetNode()->GetTxtNode();
-    sal_Bool bMoveFwd = sal_False;
+    bool bMoveFwd = false;
     if (nPos>0 && pTxtNd && (' ' == pTxtNd->GetTxt()[nPos-1]))
     {
-        bMoveFwd = sal_True;
+        bMoveFwd = true;
 
         sal_uLong nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
         const sal_Int32 nIdx = pPam->GetPoint()->nContent.GetIndex();
@@ -630,7 +630,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
             if( RES_TXTATR_FIELD == pAttr->pItem->Which() &&
                 RES_SCRIPTFLD == ((const SwFmtFld *)pAttr->pItem)->GetField()->GetTyp()->Which() )
             {
-                bMoveFwd = sal_False;
+                bMoveFwd = false;
                 break;
             }
         }

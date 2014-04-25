@@ -31,8 +31,8 @@ class SwRowFrm: public SwLayoutFrm
 {
     virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
         //Aendern nur die Framesize, nicht die PrtArea-SSize
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
+    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
 
     const SwTableLine *pTabLine;
     SwRowFrm* pFollowRow;
@@ -65,7 +65,7 @@ public:
 
     //Passt die Zellen auf die aktuelle Hoehe an, invalidiert die Zellen
     //wenn die Direction nicht der Hoehe entspricht.
-    void AdjustCells( const SwTwips nHeight, const sal_Bool bHeight );
+    void AdjustCells( const SwTwips nHeight, const bool bHeight );
 
     SwRowFrm* GetFollowRow() const { return pFollowRow; }
     void SetFollowRow( SwRowFrm* pNew ) { pFollowRow = pNew; }

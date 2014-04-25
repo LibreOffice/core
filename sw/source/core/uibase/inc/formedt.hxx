@@ -73,7 +73,7 @@ class SwIdxFormDlg : public SvxStandardDialog
     SwWrtShell     &rSh;
     SwForm         *pForm;
     sal_uInt16          nAktLevel;
-    sal_Bool            bLastLinkIsEnd;
+    bool            bLastLinkIsEnd;
 
 public:
     SwIdxFormDlg( Window* pParent, SwWrtShell &rShell, const SwForm& rForm );

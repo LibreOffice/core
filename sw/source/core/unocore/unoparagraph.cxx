@@ -90,7 +90,7 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             const SwTxtNode& rTxtNode,
                             const SwAttrSet** ppSet,
                             const SfxItemPropertySimpleEntry& rEntry,
-                            sal_Bool &rAttrSetFetched )
+                            bool &rAttrSetFetched )
     throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception);
 
 class SwXParagraph::Impl
@@ -694,7 +694,7 @@ throw (uno::RuntimeException)
             {
                 // get property state
                 // (compare to SwXParagraph::getPropertyState)
-                sal_Bool bAttrSetFetched = sal_True;
+                bool bAttrSetFetched = true;
                 beans::PropertyState eState = lcl_SwXParagraph_getPropertyState(
                             rTxtNode, &pAttrSet, *pEntry, bAttrSetFetched );
                 rResult.State  = eState;
@@ -843,7 +843,7 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             const SwTxtNode& rTxtNode,
                             const SwAttrSet** ppSet,
                             const SfxItemPropertySimpleEntry& rEntry,
-                            sal_Bool &rAttrSetFetched )
+                            bool &rAttrSetFetched )
     throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
@@ -851,7 +851,7 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
     if(!(*ppSet) && !rAttrSetFetched )
     {
         (*ppSet) = rTxtNode.GetpSwAttrSet();
-        rAttrSetFetched = sal_True;
+        rAttrSetFetched = true;
     }
     SwPosition aPos( rTxtNode );
     SwPaM aPam( aPos );
@@ -915,7 +915,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
                 + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
-    sal_Bool bDummy = sal_False;
+    bool bDummy = false;
     const beans::PropertyState eRet =
         lcl_SwXParagraph_getPropertyState(rTxtNode, &pSet, *pEntry, bDummy);
     return eRet;
@@ -935,7 +935,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
     beans::PropertyState* pStates = aRet.getArray();
     const SfxItemPropertyMap &rMap = m_pImpl->m_rPropSet.getPropertyMap();
     const SwAttrSet* pSet = 0;
-    sal_Bool bAttrSetFetched = sal_False;
+    bool bAttrSetFetched = false;
 
     for (sal_Int32 i = 0, nEnd = PropertyNames.getLength(); i < nEnd;
             ++i, ++pStates, ++pNames)

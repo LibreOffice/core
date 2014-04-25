@@ -434,7 +434,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
         // The Content and Protect items must persist
         const SfxPoolItem* pItem;
         m_pAttrSet->Put( pFmt->GetFmtAttr( RES_CNTNT ));
-        if( SFX_ITEM_SET == pFmt->GetItemState( RES_PROTECT, sal_True, &pItem ))
+        if( SFX_ITEM_SET == pFmt->GetItemState( RES_PROTECT, true, &pItem ))
         {
             m_pAttrSet->Put( *pItem );
         }

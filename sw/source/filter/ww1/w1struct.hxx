@@ -48,16 +48,16 @@ struct W1_FIB
     sal_uInt16 fFlagsGet() {
         return SVBT16ToShort(fFlags); }
     // SVBT16 fDot :1;// 0xa    0001
-    sal_Bool fDotGet() {
+    bool fDotGet() {
         return 0 != ((fFlagsGet() >> 0) & 1); }
     // SVBT16 fGlsy :1;//       0002
-    sal_Bool fGlsyGet() {
+    bool fGlsyGet() {
         return 0 != ((fFlagsGet() >> 1) & 1); }
     // SVBT16 fComplex :1;//        0004 when 1, file is in complex, fast-saved format.
-    sal_Bool fComplexGet() {
+    bool fComplexGet() {
         return 0 != ((fFlagsGet() >> 2) & 1); }
     // SVBT16 fHasPic :1;//     0008 file contains 1 or more pictures
-    sal_Bool fHasPicGet() {
+    bool fHasPicGet() {
         return 0 != ((fFlagsGet() >> 3) & 1); }
     // SVBT16 cQuickSaves :4;//     00F0 count of times file was quicksaved
     sal_uInt16 cQuickSavesGet() {
@@ -376,17 +376,17 @@ struct W1_DOP //Document Properties
     sal_uInt16 fFlagsGet() {
         return SVBT16ToShort(fFlags); }
     // SVBT16 fFacingPages : 1;// 1 when facing pages should be printed
-    sal_Bool fFacingPagesGet() {
+    bool fFacingPagesGet() {
         return 0 != ((fFlagsGet() >> 0) & 1); }
     // SVBT16 fWidowControl : 1;// 1 when widow control is in effect. 0 when widow control disabled.
-    sal_Bool fWidowControlGet() {
+    bool fWidowControlGet() {
         return 0 != ((fFlagsGet() >> 1) & 1); }
     // SVBT16 : 3;// unused
     // SVBT16 fpc : 2;// 1 footnote position code: 0 as endnotes, 1 at bottom of page, 2 immediately beneath text
     sal_uInt16 fpcGet() {
         return (sal_uInt16)((fFlagsGet() >> 5) & 3); }
     // SVBT16 fWide : 1;// Landscape
-    sal_Bool fWideGet() {
+    bool fWideGet() {
         return 0 != ((fFlagsGet() >> 7) & 1); }
     // SVBT16 grpfIhdt : 8;// 0 specification of document headers and footers. See explanation under Headers and Footers topic.
     sal_uInt16 grpfIhdtGet() {
@@ -395,7 +395,7 @@ struct W1_DOP //Document Properties
     sal_uInt16 fFtnFlagsGet() {
         return SVBT16ToShort(fFtnFlags); }
     // SVBT16 fFtnRestart : 1;
-    sal_Bool fFtnRestartGet() {
+    bool fFtnRestartGet() {
         return 0 != ((fFtnFlagsGet() >> 0) & 1); }
     // SVBT16 nFtn : 15;// 1 initial footnote number for document
     sal_uInt16 nFtnGet() {
@@ -410,28 +410,28 @@ struct W1_DOP //Document Properties
     sal_uInt16 irmPropsGet() {
         return (sal_uInt16)((fRvsFlagsGet() >> 8) & 0x7f); }
     // SVBT16 fRevMarking   : 1;//   when 1, Word will mark revisions as the document is edited
-    sal_Bool fRevMarkingGet() {
+    bool fRevMarkingGet() {
         return 0 != ((fRvsFlagsGet() >> 15) & 1); }
     SVBT16 fSveFlags;
     sal_uInt16 fSveFlagsGet() {
         return SVBT16ToShort(fSveFlags); }
     // SVBT16 fBackup : 1;//     always make backup when document saved when 1.
-    sal_Bool fBackupGet() {
+    bool fBackupGet() {
         return 0 != ((fSveFlagsGet() >> 0) & 1); }
     // SVBT16 fExactCWords : 1;
-    sal_Bool fExactCWordsGet() {
+    bool fExactCWordsGet() {
         return 0 != ((fSveFlagsGet() >> 1) & 1); }
     // SVBT16 fPagHidden : 1;
-    sal_Bool fPagHiddenGet() {
+    bool fPagHiddenGet() {
         return 0 != ((fSveFlagsGet() >> 2) & 1); }
     // SVBT16 fPagResults : 1;
-    sal_Bool fPagResultsGet() {
+    bool fPagResultsGet() {
         return 0 != ((fSveFlagsGet() >> 3) & 1); }
     // SVBT16 fLockAtn : 1;//    when 1, annotations are locked for editing
-    sal_Bool fLockAtnGet() {
+    bool fLockAtnGet() {
         return 0 != ((fSveFlagsGet() >> 4) & 1); }
     // SVBT16 fMirrorMargins : 1;//  swap margins on left/right pages when 1.
-    sal_Bool fMirrorMarginsGet() {
+    bool fMirrorMarginsGet() {
         return 0 != ((fSveFlagsGet() >> 5) & 1); }
     // SVBT16 : 10;// unused
     SVBT16 fSpares;
@@ -498,40 +498,40 @@ struct W1_DOP //Document Properties
 
 struct W1_CHP
 {
-    SVBT16  fChar;
-    SVBT16  ftc;// Font Code
-    sal_uInt8   hps;// Font size in half points
-    sal_uInt8   hpsPos;// Sub/Superscript ( signed number, 0 = normal )
-    SVBT16  fText;
-    SVBT32  fcPic;// not stored in File
-    sal_uInt8   fnPic;// internal
-    SVBT16  hpsLargeChp;// ???
+    SVBT16      fChar;
+    SVBT16      ftc;    // Font Code
+    sal_uInt8   hps;    // Font size in half points
+    sal_uInt8   hpsPos; // Sub/Superscript ( signed number, 0 = normal )
+    SVBT16      fText;
+    SVBT32      fcPic;  // not stored in File
+    sal_uInt8   fnPic;  // internal
+    SVBT16      hpsLargeChp; // ???
 
     W1_CHP() { memset( this, 0, sizeof( *this)); }
 
     sal_uInt16 fCharGet()       { return SVBT16ToShort(fChar); }
     void fCharSet(sal_uInt16 n) { ShortToSVBT16(n, fChar); }
-    sal_Bool fBoldGet()         { return 0 != ((fCharGet() >> 0) & 1); }
-    void fBoldSet(sal_Bool b)   { fCharSet( ( fCharGet() & 0xfffe ) | ( b << 0 ) ); }
-    sal_Bool fItalicGet()       { return 0 != ((fCharGet() >> 1) & 1); }
-    void fItalicSet(sal_Bool b) { fCharSet( ( fCharGet() & 0xfffd ) | ( b << 1 ) ); }
-    sal_Bool fStrikeGet()       { return 0 != ((fCharGet() >> 2) & 1); }
-    sal_Bool fOutlineGet()      { return 0 != ((fCharGet() >> 3) & 1); }
-    sal_Bool fFldVanishGet()    { return 0 != ((fCharGet() >> 4) & 1); }
-    sal_Bool fSmallCapsGet()    { return 0 != ((fCharGet() >> 5) & 1); }
-    sal_Bool fCapsGet()         { return 0 != ((fCharGet() >> 6) & 1); }
-    sal_Bool fVanishGet()       { return 0 != ((fCharGet() >> 7) & 1); }
-    sal_Bool fRMarkGet()        { return 0 != ((fCharGet() >> 8) & 1); }
-    sal_Bool fSpecGet()         { return 0 != ((fCharGet() >> 9) & 1); }
-    sal_Bool fsIcoGet()         { return 0 != ((fCharGet() >> 10) & 1); }
-    sal_Bool fsFtcGet()         { return 0 != ((fCharGet() >> 11) & 1); }
-    void fsFtcSet(sal_Bool b)   { fCharSet( ( fCharGet() & 0xf7ff ) | ( b << 11 ) ); }
-    sal_Bool fsHpsGet()         { return 0 != ((fCharGet() >> 12) & 1); }
-    void fsHpsSet(sal_Bool b)   { fCharSet( ( fCharGet() & 0xefff ) | ( b << 12 ) ); }
-    sal_Bool fsKulGet()         { return 0 != ((fCharGet() >> 13) & 1); }
-    void fsKulSet(sal_Bool b)   { fCharSet( ( fCharGet() & 0xdfff ) | ( b << 13 ) ); }
-    sal_Bool fsPosGet()         { return 0 != ((fCharGet() >> 14) & 1); }
-    sal_Bool fsSpaceGet()       { return 0 != ((fCharGet() >> 15) & 1); }
+    bool fBoldGet()         { return 0 != ((fCharGet() >> 0) & 1); }
+    void fBoldSet(bool b)   { fCharSet( ( fCharGet() & 0xfffe ) | ( (sal_uInt16)b << 0 ) ); }
+    bool fItalicGet()       { return 0 != ((fCharGet() >> 1) & 1); }
+    void fItalicSet(bool b) { fCharSet( ( fCharGet() & 0xfffd ) | ( (sal_uInt16)b << 1 ) ); }
+    bool fStrikeGet()       { return 0 != ((fCharGet() >> 2) & 1); }
+    bool fOutlineGet()      { return 0 != ((fCharGet() >> 3) & 1); }
+    bool fFldVanishGet()    { return 0 != ((fCharGet() >> 4) & 1); }
+    bool fSmallCapsGet()    { return 0 != ((fCharGet() >> 5) & 1); }
+    bool fCapsGet()         { return 0 != ((fCharGet() >> 6) & 1); }
+    bool fVanishGet()       { return 0 != ((fCharGet() >> 7) & 1); }
+    bool fRMarkGet()        { return 0 != ((fCharGet() >> 8) & 1); }
+    bool fSpecGet()         { return 0 != ((fCharGet() >> 9) & 1); }
+    bool fsIcoGet()         { return 0 != ((fCharGet() >> 10) & 1); }
+    bool fsFtcGet()         { return 0 != ((fCharGet() >> 11) & 1); }
+    void fsFtcSet(bool b)   { fCharSet( ( fCharGet() & 0xf7ff ) | ( (sal_uInt16)b << 11 ) ); }
+    bool fsHpsGet()         { return 0 != ((fCharGet() >> 12) & 1); }
+    void fsHpsSet(bool b)   { fCharSet( ( fCharGet() & 0xefff ) | ( (sal_uInt16)b << 12 ) ); }
+    bool fsKulGet()         { return 0 != ((fCharGet() >> 13) & 1); }
+    void fsKulSet(bool b)   { fCharSet( ( fCharGet() & 0xdfff ) | ( (sal_uInt16)b << 13 ) ); }
+    bool fsPosGet()         { return 0 != ((fCharGet() >> 14) & 1); }
+    bool fsSpaceGet()       { return 0 != ((fCharGet() >> 15) & 1); }
     // SVBT16 fBold :1;// 1 == opposite boldness of style
     // SVBT16 fItalic :1;// 1 == opposite of style
     // SVBT16 fStrike :1;// 1 == opposite of style
@@ -562,7 +562,7 @@ struct W1_CHP
     sal_uInt16 icoGet()         { return (sal_uInt16)((fTextGet() >> 8) & 0xf); }
     sal_uInt16 kulGet()         { return (sal_uInt16)((fTextGet() >> 12) & 7); }
     void kulSet(sal_uInt16 n)   { fTextSet( ( fTextGet() & 0x8fff ) | ( ( n & 7 ) << 12 ) ); }
-    sal_Bool fSysVanishGet()    { return 0 != ((fTextGet() >> 15) & 1); }
+    bool fSysVanishGet()    { return 0 != ((fTextGet() >> 15) & 1); }
     // SVBT16 qpsSpace :6;// Char Spacing, -7 .. 56; 57 = -7, 63 = -1
     // SVBT16 wSpare2 : 2;// reserved
     // SVBT16 ico :4;// color of Text: 0=black, 1=blue, 2=cyan, 3=green, 4=magenta, 5=red, 6=yellow, 7=white
@@ -588,7 +588,7 @@ struct W1_FFN ///////////////////////////////////////// Font Descriptor
     sal_uInt16 prgGet() {
         return (sal_uInt16)((fFlagsGet() >> 0) & 3); }
     // sal_uInt8 fTrueType : 1;//   0x1:04  when 1, font is a TrueType font
-    sal_Bool fTrueTypeGet() {
+    bool fTrueTypeGet() {
         return 0 != ((fFlagsGet() >> 2) & 1); }
     // sal_uInt8 : 1;// 0x1:08  reserved
     // sal_uInt8 ff : 3;//  0x1:70  font family id
@@ -608,11 +608,11 @@ struct W1_PHE // Paragraph Height
     SVBT16 fFlags;
     sal_uInt16 fFlagsGet() {
         return SVBT16ToShort(fFlags); }
-    sal_Bool fSpareGet() {
+    bool fSpareGet() {
         return 0 != (fFlagsGet() & 1); }
-    sal_Bool fUnkGet() {
+    bool fUnkGet() {
         return 0 != ((fFlagsGet() >> 1) & 1); }
-    sal_Bool fDiffLinesGet() {
+    bool fDiffLinesGet() {
         return 0 != ((fFlagsGet() >> 2) & 1); }
     sal_uInt8 clMacGet() {
         return sal::static_int_cast< sal_uInt8, sal_uInt16 >((fFlagsGet() >> 8) & 0xff); }
@@ -693,17 +693,17 @@ struct W1_FLD // FieldDescriptor
     sal_uInt8 flt; // field type / flags
     sal_uInt8 fltGet() { return flt; }
     // variant, when ch==21:
-    sal_Bool fDifferGet() {
+    bool fDifferGet() {
         return (fltGet() >> 0) & 1; }
-    sal_Bool fResultDirtyGet() {
+    bool fResultDirtyGet() {
         return (fltGet() >> 2) & 1; }
-    sal_Bool ResultEditedGet() {
+    bool ResultEditedGet() {
         return (fltGet() >> 3) & 1; }
-    sal_Bool fLockedGet() {
+    bool fLockedGet() {
         return (fltGet() >> 4) & 1; }
-    sal_Bool fPrivateResultGet() {
+    bool fPrivateResultGet() {
         return (fltGet() >> 5) & 1; }
-    sal_Bool fNestedGet() {
+    bool fNestedGet() {
         return (fltGet() >> 6) & 1; }
 };
 
@@ -764,7 +764,7 @@ struct W1_PIC // PictureStructure
     sal_uInt8 brclGet() {
         return sal::static_int_cast< sal_uInt8, sal_uInt16 >(flagsGet() & 0xf); }
 //  fFrameEmpty : 1;// 0010 picture consists of a single frame
-    sal_Bool fFrameEmptyGet() {
+    bool fFrameEmptyGet() {
         return sal::static_int_cast< sal_uInt8, sal_uInt16 >((flagsGet() >> 4) & 1); }
 // win6 stuff:
 //  fBitmap : 1;// 0020 ==1, when picture is just a bitmap

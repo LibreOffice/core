@@ -57,7 +57,7 @@ SwFontObj *SwFontAccess::Get( )
 
 SwCacheObj *SwFontAccess::NewObj( )
 {
-    ((SwTxtFmtColl*)pOwner)->SetInSwFntCache( sal_True );
+    ((SwTxtFmtColl*)pOwner)->SetInSwFntCache( true );
     return new SwFontObj( pOwner, pShell );
 }
 

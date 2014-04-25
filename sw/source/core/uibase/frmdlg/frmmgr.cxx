@@ -58,13 +58,13 @@ static sal_uInt16 aFrmMgrRange[] = {
 /*--------------------------------------------------------------------
      Description: determine frame attributes via Shell
  --------------------------------------------------------------------*/
-SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nType ) :
+SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( bool bNew, SwWrtShell* pSh, sal_uInt8 nType ) :
     m_aSet( (SwAttrPool&)pSh->GetAttrPool(), aFrmMgrRange ),
     m_pOwnSh( pSh ),
-    m_bAbsPos( sal_False ),
+    m_bAbsPos( false ),
     m_bNewFrm( bNew ),
-    m_bIsInVertical( sal_False ),
-    m_bIsInVerticalL2R( sal_False )
+    m_bIsInVertical( false ),
+    m_bIsInVerticalL2R( false )
 {
     if ( m_bNewFrm )
     {
@@ -84,24 +84,24 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nTyp
     else if ( nType == FRMMGR_TYPE_NONE )
     {
         m_pOwnSh->GetFlyFrmAttr( m_aSet );
-        sal_Bool bRightToLeft;
-        m_bIsInVertical = m_pOwnSh->IsFrmVertical(sal_True, bRightToLeft, m_bIsInVerticalL2R);
+        bool bRightToLeft;
+        m_bIsInVertical = m_pOwnSh->IsFrmVertical(true, bRightToLeft, m_bIsInVerticalL2R);
     }
     ::PrepareBoxInfo( m_aSet, *m_pOwnSh );
 }
 
-SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, const SfxItemSet &rSet ) :
+SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( bool bNew, SwWrtShell* pSh, const SfxItemSet &rSet ) :
     m_aSet( rSet ),
     m_pOwnSh( pSh ),
-    m_bAbsPos( sal_False ),
+    m_bAbsPos( false ),
     m_bNewFrm( bNew ),
-    m_bIsInVertical(sal_False),
-    m_bIsInVerticalL2R(sal_False)
+    m_bIsInVertical(false),
+    m_bIsInVerticalL2R(false)
 {
     if(!bNew)
     {
-        sal_Bool bRightToLeft;
-        m_bIsInVertical = pSh->IsFrmVertical(sal_True, bRightToLeft, m_bIsInVerticalL2R);
+        bool bRightToLeft;
+        m_bIsInVertical = pSh->IsFrmVertical(true, bRightToLeft, m_bIsInVerticalL2R);
     }
 }
 
@@ -127,7 +127,7 @@ void SwFlyFrmAttrMgr::_UpdateFlyFrm()
     if ( m_bAbsPos )
     {
         m_pOwnSh->SetFlyPos( m_aAbsPos );
-        m_bAbsPos = sal_False;
+        m_bAbsPos = false;
     }
 }
 
@@ -167,11 +167,11 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
 /*--------------------------------------------------------------------
      Description:   insert frame
  --------------------------------------------------------------------*/
-sal_Bool SwFlyFrmAttrMgr::InsertFlyFrm()
+bool SwFlyFrmAttrMgr::InsertFlyFrm()
 {
     m_pOwnSh->StartAllAction();
 
-    sal_Bool bRet = 0 != m_pOwnSh->NewFlyFrm( m_aSet );
+    bool bRet = 0 != m_pOwnSh->NewFlyFrm( m_aSet );
 
     // turn on the right mode at the shell, frame got selected automatically.
     if ( bRet )
@@ -192,7 +192,7 @@ sal_Bool SwFlyFrmAttrMgr::InsertFlyFrm()
 void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
                                    const Point  &rPos,
                                    const Size   &rSize,
-                                   sal_Bool bAbs )
+                                   bool bAbs )
 {
     OSL_ENSURE( eAnchorType == FLY_AT_PAGE ||
             eAnchorType == FLY_AT_PARA ||
@@ -244,7 +244,7 @@ void SwFlyFrmAttrMgr::SetCol( const SwFmtCol &rCol )
  --------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
 {
-    m_bAbsPos = sal_True;
+    m_bAbsPos = true;
     m_aAbsPos = rPoint;
 
     SwFmtVertOrient aVertOrient( GetVertOrient() );

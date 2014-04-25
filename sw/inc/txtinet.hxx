@@ -61,7 +61,7 @@ public:
     bool IsVisitedValid() const { return m_bVisitedValid; }
     void SetVisitedValid( bool bNew ) { m_bVisitedValid = bNew; }
 
-    sal_Bool IsProtect() const;
+    bool IsProtect() const;
 };
 
 inline const SwTxtNode& SwTxtINetFmt::GetTxtNode() const

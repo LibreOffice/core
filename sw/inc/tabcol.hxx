@@ -29,7 +29,7 @@ struct SwTabColsEntry
     long    nPos;
     long    nMin;
     long    nMax;
-    sal_Bool    bHidden; // For each entry a flag, hidden or not.
+    bool    bHidden; // For each entry a flag, hidden or not.
                          // If the flag bHidden is sal_True column separator
                          // is not in current line. It must maintained
                          // but it may not be displayed.
@@ -64,11 +64,11 @@ public:
     long operator[]( size_t nPos ) const { return aData[nPos].nPos; }
     size_t Count() const { return aData.size(); }
 
-    sal_Bool IsHidden( size_t nPos ) const         { return aData[nPos].bHidden; }
-    void SetHidden( size_t nPos, sal_Bool bValue ) { aData[nPos].bHidden = bValue; }
+    bool IsHidden( size_t nPos ) const         { return aData[nPos].bHidden; }
+    void SetHidden( size_t nPos, bool bValue ) { aData[nPos].bHidden = bValue; }
 
-    void Insert( long nValue, sal_Bool bValue, size_t nPos );
-    void Insert( long nValue, long nMin, long nMax, sal_Bool bValue, size_t nPos );
+    void Insert( long nValue, bool bValue, size_t nPos );
+    void Insert( long nValue, long nMin, long nMax, bool bValue, size_t nPos );
     void Remove( size_t nPos, size_t nAnz = 1 );
 
     const SwTabColsEntry& GetEntry( size_t nPos ) const { return aData[nPos]; }

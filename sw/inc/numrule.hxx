@@ -70,8 +70,8 @@ public:
 
     SwNumFmt& operator=( const SwNumFmt& );
 
-    sal_Bool operator==( const SwNumFmt& ) const;
-    sal_Bool operator!=( const SwNumFmt& r ) const { return !(*this == r); }
+    bool operator==( const SwNumFmt& ) const;
+    bool operator!=( const SwNumFmt& r ) const { return !(*this == r); }
 
     SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
     void SetCharFmt( SwCharFmt* );
@@ -89,8 +89,8 @@ public:
     virtual sal_Int16   GetVertOrient() const SAL_OVERRIDE;
     const SwFmtVertOrient*      GetGraphicOrientation() const;
 
-    sal_Bool IsEnumeration() const; // #i22362#
-    sal_Bool IsItemize() const; // #i29560#
+    bool IsEnumeration() const; // #i22362#
+    bool IsItemize() const; // #i29560#
 };
 
 class SwPaM;
@@ -133,11 +133,11 @@ private:
     sal_uInt16 mnPoolFmtId;      ///< Id-for NumRules created "automatically"
     sal_uInt16 mnPoolHelpId;     ///< HelpId for this Pool-style.
     sal_uInt8 mnPoolHlpFileId;   ///< FilePos at Doc on style helps.
-    sal_Bool mbAutoRuleFlag : 1;
-    sal_Bool mbInvalidRuleFlag : 1;
-    sal_Bool mbContinusNum : 1;  ///< Continuous numbering without levels.
-    sal_Bool mbAbsSpaces : 1;    ///< Levels represent absolute indents.
-    sal_Bool mbHidden : 1;       ///< Is the numering rule to be hidden in the UI?
+    bool mbAutoRuleFlag : 1;
+    bool mbInvalidRuleFlag : 1;
+    bool mbContinusNum : 1;  ///< Continuous numbering without levels.
+    bool mbAbsSpaces : 1;    ///< Levels represent absolute indents.
+    bool mbHidden : 1;       ///< Is the numering rule to be hidden in the UI?
     bool mbCountPhantoms;
 
     const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
@@ -149,30 +149,30 @@ public:
     SwNumRule( const OUString& rNm,
                const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                SwNumRuleType = NUM_RULE,
-               sal_Bool bAutoFlg = sal_True );
+               bool bAutoFlg = true );
 
     SwNumRule( const SwNumRule& );
     ~SwNumRule();
 
     SwNumRule& operator=( const SwNumRule& );
-    sal_Bool operator==( const SwNumRule& ) const;
-    sal_Bool operator!=( const SwNumRule& r ) const { return !(*this == r); }
+    bool operator==( const SwNumRule& ) const;
+    bool operator!=( const SwNumRule& r ) const { return !(*this == r); }
 
     const SwNumFmt* GetNumFmt( sal_uInt16 i ) const;
     const SwNumFmt& Get( sal_uInt16 i ) const;
 
-    sal_Bool IsHidden( ) const { return mbHidden; }
-    void SetHidden( sal_Bool bValue ) { mbHidden = bValue; }
+    bool IsHidden( ) const { return mbHidden; }
+    void SetHidden( bool bValue ) { mbHidden = bValue; }
 
     void Set( sal_uInt16 i, const SwNumFmt* );
     void Set( sal_uInt16 i, const SwNumFmt& );
-    OUString MakeNumString( const SwNodeNum&, sal_Bool bInclStrings = sal_True,
-                            sal_Bool bOnlyArabic = sal_False ) const;
+    OUString MakeNumString( const SwNodeNum&, bool bInclStrings = true,
+                            bool bOnlyArabic = false ) const;
     /** - add optional parameter <_nRestrictToThisLevel> in order to
          restrict returned string to this level. */
     OUString MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
-                          const sal_Bool bInclStrings = sal_True,
-                          const sal_Bool bOnlyArabic = sal_False,
+                          const bool bInclStrings = true,
+                          const bool bOnlyArabic = false,
                           const unsigned int _nRestrictToThisLevel = MAXLEVEL,
                           Extremities* pExtremities = 0 ) const;
     OUString MakeRefNumString( const SwNodeNum& rNodeNum,
@@ -216,7 +216,7 @@ public:
 
     SwNumRuleType GetRuleType() const           { return meRuleType; }
     void SetRuleType( SwNumRuleType eNew )      { meRuleType = eNew;
-                                                  mbInvalidRuleFlag = sal_True; }
+                                                  mbInvalidRuleFlag = true; }
 
     /** A kind of copy-constructor to make sure the num formats are
        attached to the correctCharFormats of a document!!
@@ -232,19 +232,19 @@ public:
     void SetName( const OUString& rNm,
                   IDocumentListsAccess& rDocListAccess );
 
-    sal_Bool IsAutoRule() const             { return mbAutoRuleFlag; }
-    void SetAutoRule( sal_Bool bFlag )      { mbAutoRuleFlag = bFlag; }
+    bool IsAutoRule() const             { return mbAutoRuleFlag; }
+    void SetAutoRule( bool bFlag )      { mbAutoRuleFlag = bFlag; }
 
-    sal_Bool IsInvalidRule() const          { return mbInvalidRuleFlag; }
-    void SetInvalidRule( sal_Bool bFlag );
+    bool IsInvalidRule() const          { return mbInvalidRuleFlag; }
+    void SetInvalidRule( bool bFlag );
 
-    sal_Bool IsContinusNum() const          { return mbContinusNum; }
-    void SetContinusNum( sal_Bool bFlag )   { mbContinusNum = bFlag; }
+    bool IsContinusNum() const          { return mbContinusNum; }
+    void SetContinusNum( bool bFlag )   { mbContinusNum = bFlag; }
 
-    sal_Bool IsAbsSpaces() const            { return mbAbsSpaces; }
-    void SetAbsSpaces( sal_Bool bFlag )     { mbAbsSpaces = bFlag; }
+    bool IsAbsSpaces() const            { return mbAbsSpaces; }
+    void SetAbsSpaces( bool bFlag )     { mbAbsSpaces = bFlag; }
 
-    sal_Bool IsOutlineRule() const { return meRuleType == OUTLINE_RULE; }
+    bool IsOutlineRule() const { return meRuleType == OUTLINE_RULE; }
 
     bool IsCountPhantoms() const;
     void SetCountPhantoms(bool bCountPhantoms);
@@ -313,7 +313,7 @@ namespace numfunc
 
         @author OD
     */
-    sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem();
+    bool ChangeIndentOnTabAtFirstPosOfFirstListItem();
 
     /**
         @author OD

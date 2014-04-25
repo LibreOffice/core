@@ -33,7 +33,7 @@ class SW_DLLPUBLIC SwNodeIndex
 {
     friend void SwNodes::RegisterIndex( SwNodeIndex& );
     friend void SwNodes::DeRegisterIndex( SwNodeIndex& );
-    friend void SwNodes::RemoveNode( sal_uLong, sal_uLong, sal_Bool );
+    friend void SwNodes::RemoveNode( sal_uLong, sal_uLong, bool );
 
     SwNode* pNd;
     SwNodeIndex *pNext, *pPrev;
@@ -60,19 +60,19 @@ public:
     inline sal_uLong operator+=( const  SwNodeIndex& );
     inline sal_uLong operator-=( const SwNodeIndex& );
 
-    inline sal_Bool operator< ( const SwNodeIndex& ) const;
-    inline sal_Bool operator<=( const SwNodeIndex& ) const;
-    inline sal_Bool operator> ( const SwNodeIndex& ) const;
-    inline sal_Bool operator>=( const SwNodeIndex& ) const;
-    inline sal_Bool operator==( const SwNodeIndex& ) const;
-    inline sal_Bool operator!=( const SwNodeIndex& ) const;
+    inline bool operator< ( const SwNodeIndex& ) const;
+    inline bool operator<=( const SwNodeIndex& ) const;
+    inline bool operator> ( const SwNodeIndex& ) const;
+    inline bool operator>=( const SwNodeIndex& ) const;
+    inline bool operator==( const SwNodeIndex& ) const;
+    inline bool operator!=( const SwNodeIndex& ) const;
 
-    inline sal_Bool operator< ( sal_uLong nWert ) const;
-    inline sal_Bool operator<=( sal_uLong nWert ) const;
-    inline sal_Bool operator> ( sal_uLong nWert ) const;
-    inline sal_Bool operator>=( sal_uLong nWert ) const;
-    inline sal_Bool operator==( sal_uLong nWert ) const;
-    inline sal_Bool operator!=( sal_uLong nWert ) const;
+    inline bool operator< ( sal_uLong nWert ) const;
+    inline bool operator<=( sal_uLong nWert ) const;
+    inline bool operator> ( sal_uLong nWert ) const;
+    inline bool operator>=( sal_uLong nWert ) const;
+    inline bool operator==( sal_uLong nWert ) const;
+    inline bool operator!=( sal_uLong nWert ) const;
 
     inline SwNodeIndex& operator=( sal_uLong );
            SwNodeIndex& operator=( const SwNodeIndex& );
@@ -125,51 +125,51 @@ inline SwNodes& SwNodeIndex::GetNodes()
 {
     return pNd->GetNodes();
 }
-inline sal_Bool SwNodeIndex::operator< ( sal_uLong nWert ) const
+inline bool SwNodeIndex::operator< ( sal_uLong nWert ) const
 {
     return pNd->GetIndex() < nWert;
 }
-inline sal_Bool SwNodeIndex::operator<=( sal_uLong nWert ) const
+inline bool SwNodeIndex::operator<=( sal_uLong nWert ) const
 {
     return pNd->GetIndex() <= nWert;
 }
-inline sal_Bool SwNodeIndex::operator> ( sal_uLong nWert ) const
+inline bool SwNodeIndex::operator> ( sal_uLong nWert ) const
 {
     return pNd->GetIndex() > nWert;
 }
-inline sal_Bool SwNodeIndex::operator>=( sal_uLong nWert ) const
+inline bool SwNodeIndex::operator>=( sal_uLong nWert ) const
 {
     return pNd->GetIndex() >= nWert;
 }
-inline sal_Bool SwNodeIndex::operator==( sal_uLong nWert ) const
+inline bool SwNodeIndex::operator==( sal_uLong nWert ) const
 {
     return pNd->GetIndex() == nWert;
 }
-inline sal_Bool SwNodeIndex::operator!=( sal_uLong nWert ) const
+inline bool SwNodeIndex::operator!=( sal_uLong nWert ) const
 {
     return pNd->GetIndex() != nWert;
 }
-inline sal_Bool SwNodeIndex::operator<( const SwNodeIndex& rIndex ) const
+inline bool SwNodeIndex::operator<( const SwNodeIndex& rIndex ) const
 {
     return pNd->GetIndex() < rIndex.GetIndex();
 }
-inline sal_Bool SwNodeIndex::operator<=( const SwNodeIndex& rIndex ) const
+inline bool SwNodeIndex::operator<=( const SwNodeIndex& rIndex ) const
 {
     return pNd->GetIndex() <= rIndex.GetIndex();
 }
-inline sal_Bool SwNodeIndex::operator>( const SwNodeIndex& rIndex ) const
+inline bool SwNodeIndex::operator>( const SwNodeIndex& rIndex ) const
 {
     return pNd->GetIndex() > rIndex.GetIndex();
 }
-inline sal_Bool SwNodeIndex::operator>=( const SwNodeIndex& rIndex ) const
+inline bool SwNodeIndex::operator>=( const SwNodeIndex& rIndex ) const
 {
     return pNd->GetIndex() >= rIndex.GetIndex();
 }
-inline sal_Bool SwNodeIndex::operator==( const SwNodeIndex& rIdx ) const
+inline bool SwNodeIndex::operator==( const SwNodeIndex& rIdx ) const
 {
     return pNd == rIdx.pNd;
 }
-inline sal_Bool SwNodeIndex::operator!=( const SwNodeIndex& rIdx ) const
+inline bool SwNodeIndex::operator!=( const SwNodeIndex& rIdx ) const
 {
     return pNd != rIdx.pNd;
 }

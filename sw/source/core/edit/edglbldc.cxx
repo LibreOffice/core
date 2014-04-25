@@ -29,12 +29,12 @@
 #include <doctxm.hxx>
 #include <edglbldc.hxx>
 
-sal_Bool SwEditShell::IsGlobalDoc() const
+bool SwEditShell::IsGlobalDoc() const
 {
     return getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT);
 }
 
-void SwEditShell::SetGlblDocSaveLinks( sal_Bool bFlag )
+void SwEditShell::SetGlblDocSaveLinks( bool bFlag )
 {
     getIDocumentSettingAccess()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, bFlag);
     if( !GetDoc()->IsModified() )   // Bug 57028
@@ -44,7 +44,7 @@ void SwEditShell::SetGlblDocSaveLinks( sal_Bool bFlag )
     GetDoc()->SetModified();
 }
 
-sal_Bool SwEditShell::IsGlblDocSaveLinks() const
+bool SwEditShell::IsGlblDocSaveLinks() const
 {
     return getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS);
 }
@@ -133,11 +133,11 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
     return rArr.size();
 }
 
-sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
+bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
         SwSectionData & rNew)
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
-        return sal_False;
+        return false;
 
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -171,14 +171,14 @@ sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     }
     EndAllAction();
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
+bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
                                             const SwTOXBase& rTOX )
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
-        return sal_False;
+        return false;
 
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -212,13 +212,13 @@ sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     }
     EndAllAction();
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos )
+bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos )
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
-        return sal_False;
+        return false;
 
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -234,14 +234,14 @@ sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos )
     SwDoc* pMyDoc = GetDoc();
     pMyDoc->AppendTxtNode( rPos );
     EndAllAction();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
+bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
                                             size_t nDelPos )
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
-        return sal_False;
+        return false;
 
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -299,10 +299,10 @@ sal_Bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
 
     EndUndo( UNDO_END );
     EndAllAction();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
+bool SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
                                         size_t nFromPos, size_t nToPos,
                                         size_t nInsPos )
 {
@@ -310,7 +310,7 @@ sal_Bool SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
         nFromPos >= rArr.size() || nToPos > rArr.size() ||
         nInsPos > rArr.size() || nFromPos >= nToPos ||
         ( nFromPos <= nInsPos && nInsPos <= nToPos ) )
-        return sal_False;
+        return false;
 
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -341,10 +341,10 @@ sal_Bool SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
     return bRet;
 }
 
-sal_Bool SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
+bool SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
-        return sal_False;
+        return false;
 
     SET_CURR_SHELL( this );
     SttCrsrMove();
@@ -364,7 +364,7 @@ sal_Bool SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
     rCrsrPos.nContent.Assign( pCNd, 0 );
 
     EndCrsrMove();
-    return sal_True;
+    return true;
 }
 
 SwGlblDocContent::SwGlblDocContent( sal_uLong nPos )

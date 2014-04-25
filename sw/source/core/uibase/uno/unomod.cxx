@@ -230,7 +230,7 @@ Reference< XPropertySet >  SwXModule::getViewSettings(void) throw( uno::RuntimeE
     {
         ((SwXModule*)this)->pxViewSettings = new Reference< XPropertySet > ;
         OSL_FAIL("Web or Text?");
-        *pxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( sal_False, 0 ) );
+        *pxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( false, 0 ) );
     }
     return *pxViewSettings;
 }
@@ -281,10 +281,10 @@ void SwXPrintSettings::_preSetValues ()
     switch (meType)
     {
         case PRINT_SETTINGS_MODULE:
-            mpPrtOpt = SW_MOD()->GetPrtOptions( sal_False );
+            mpPrtOpt = SW_MOD()->GetPrtOptions( false );
         break;
         case PRINT_SETTINGS_WEB:
-            mpPrtOpt = SW_MOD()->GetPrtOptions( sal_True );
+            mpPrtOpt = SW_MOD()->GetPrtOptions( true );
         break;
         case PRINT_SETTINGS_DOCUMENT:
         {
@@ -299,7 +299,7 @@ void SwXPrintSettings::_preSetValues ()
 void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    sal_Bool bVal;
+    bool bVal;
     if ( rInfo.mnHandle != HANDLE_PRINTSET_ANNOTATION_MODE &&
          rInfo.mnHandle != HANDLE_PRINTSET_FAX_NAME )
         bVal = *(sal_Bool*)rValue.getValue();
@@ -438,10 +438,10 @@ void SwXPrintSettings::_preGetValues ()
     switch (meType)
     {
         case PRINT_SETTINGS_MODULE:
-            mpPrtOpt = SW_MOD()->GetPrtOptions( sal_False );
+            mpPrtOpt = SW_MOD()->GetPrtOptions( false );
         break;
         case PRINT_SETTINGS_WEB:
-            mpPrtOpt = SW_MOD()->GetPrtOptions( sal_True );
+            mpPrtOpt = SW_MOD()->GetPrtOptions( true );
         break;
         case PRINT_SETTINGS_DOCUMENT:
         {
@@ -551,18 +551,18 @@ Sequence< OUString > SwXPrintSettings::getSupportedServiceNames(void) throw( Run
     return aRet;
 }
 
-SwXViewSettings::SwXViewSettings(sal_Bool bWebView, SwView* pVw)
+SwXViewSettings::SwXViewSettings(bool bWebView, SwView* pVw)
     : ChainableHelperNoState( lcl_createViewSettingsInfo (), &Application::GetSolarMutex() )
     , pView(pVw)
     , mpViewOption(NULL)
     , mpConstViewOption(NULL)
-    , bObjectValid(sal_True)
+    , bObjectValid(true)
     , bWeb(bWebView)
     , mbApplyZoom(false)
     , eHRulerUnit(FUNIT_CM)
-    , mbApplyHRulerMetric(sal_False)
+    , mbApplyHRulerMetric(false)
     , eVRulerUnit(FUNIT_CM)
-    , mbApplyVRulerMetric(sal_False)
+    , mbApplyVRulerMetric(false)
 {
     // This property only exists if we have a view (ie, not at the module )
     if ( !pView )
@@ -590,15 +590,15 @@ void SwXViewSettings::_preSetValues ()
         pVOpt = SW_MOD()->GetViewOption(bWeb);
 
     mpViewOption = new SwViewOption (*pVOpt);
-    mbApplyZoom = sal_False;
+    mbApplyZoom = false;
     if(pView)
-        mpViewOption->SetStarOneSetting(sal_True);
+        mpViewOption->SetStarOneSetting(true);
 }
 
 void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    sal_Bool bVal = HANDLE_VIEWSET_ZOOM != rInfo.mnHandle ?
+    bool bVal = HANDLE_VIEWSET_ZOOM != rInfo.mnHandle ?
         *(sal_Bool*)rValue.getValue() : sal_False;
     // the API flag should not be set to the application's view settings
     switch( rInfo.mnHandle )
@@ -614,10 +614,10 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_DRAWINGS              :   mpViewOption->SetDraw(bVal); break;
         case  HANDLE_VIEWSET_FIELD_COMMANDS        :   mpViewOption->SetFldName(bVal);  break;
         case  HANDLE_VIEWSET_ANNOTATIONS           :   mpViewOption->SetPostIts(bVal);  break;
-        case  HANDLE_VIEWSET_INDEX_MARK_BACKGROUND :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, sal_True);  break;
+        case  HANDLE_VIEWSET_INDEX_MARK_BACKGROUND :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, true);  break;
         case  HANDLE_VIEWSET_NONPRINTING_CHARACTERS:   mpViewOption->SetViewMetaChars( bVal ); break;
-        case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, sal_True); break;
-        case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, sal_True);    break;
+        case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, true); break;
+        case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, true);    break;
         case  HANDLE_VIEWSET_PARA_BREAKS           :   mpViewOption->SetParagraph(bVal);    break;
         case  HANDLE_VIEWSET_SOFT_HYPHENS          :   mpViewOption->SetSoftHyph(bVal); break;
         case  HANDLE_VIEWSET_SPACES                :   mpViewOption->SetBlank(bVal);    break;
@@ -627,7 +627,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_HIDDEN_TEXT           :   mpViewOption->SetShowHiddenField(bVal);  break;
         case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   mpViewOption->SetShowHiddenChar(bVal); break;
         case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   mpViewOption->SetShowHiddenPara(bVal);   break;
-        case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   mpViewOption->SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bVal, sal_True);    break;
+        case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   mpViewOption->SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bVal, true);    break;
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   mpViewOption->SetDocBoundaries(bVal);    break;
         case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   mpViewOption->SetSmoothScroll(bVal); break;
         case  HANDLE_VIEWSET_SHOW_CONTENT_TIPS     :   mpViewOption->SetShowContentTips(bVal); break;
@@ -676,7 +676,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             if(!(rValue >>= nZoom) || nZoom > 1000 || nZoom < 5)
                 throw lang::IllegalArgumentException();
             mpViewOption->SetZoom((sal_uInt16)nZoom);
-            mbApplyZoom = sal_True;
+            mbApplyZoom = true;
         }
         break;
         case HANDLE_VIEWSET_ZOOM_TYPE:
@@ -707,7 +707,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                         OUString( "SwXViewSettings: invalid zoom type"), 0, 0);
             }
             mpViewOption->SetZoomType( eZoom );
-            mbApplyZoom = sal_True;
+            mbApplyZoom = true;
         }
         break;
         case HANDLE_VIEWSET_ONLINE_LAYOUT :
@@ -761,12 +761,12 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 if( rInfo.mnHandle == HANDLE_VIEWSET_HORI_RULER_METRIC )
                 {
                     eHRulerUnit = nUnit;
-                    mbApplyHRulerMetric = sal_True;
+                    mbApplyHRulerMetric = true;
                 }
                 else
                 {
                     eVRulerUnit = nUnit;
-                    mbApplyVRulerMetric = sal_True;
+                    mbApplyVRulerMetric = true;
                 }
                 break;
                 default:
@@ -786,7 +786,7 @@ void SwXViewSettings::_postSetValues ()
     {
         if(mbApplyZoom )
             pView->SetZoom( (SvxZoomType)mpViewOption->GetZoomType(),
-                            mpViewOption->GetZoom(), sal_True );
+                            mpViewOption->GetZoom(), true );
         if(mbApplyHRulerMetric)
             pView->ChangeTabMetric((FieldUnit)eHRulerUnit);
         if(mbApplyVRulerMetric)
@@ -796,9 +796,9 @@ void SwXViewSettings::_postSetValues ()
     else
     {
         if(mbApplyHRulerMetric)
-            SW_MOD()->ApplyRulerMetric( (FieldUnit)eHRulerUnit, sal_True, bWeb );
+            SW_MOD()->ApplyRulerMetric( (FieldUnit)eHRulerUnit, true, bWeb );
         if(mbApplyVRulerMetric)
-            SW_MOD()->ApplyRulerMetric( (FieldUnit)eVRulerUnit, sal_False, bWeb );
+            SW_MOD()->ApplyRulerMetric( (FieldUnit)eVRulerUnit, false, bWeb );
     }
 
     SW_MOD()->ApplyUsrPref( *mpViewOption, pView, pView ? VIEWOPT_DEST_VIEW_ONLY
@@ -830,8 +830,8 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
     switch( rInfo.mnHandle )
     {
         case  HANDLE_VIEWSET_SHOW_RULER:                bBoolVal = mpConstViewOption->IsViewAnyRuler();   break;
-        case  HANDLE_VIEWSET_HRULER :                   bBoolVal = mpConstViewOption->IsViewHRuler(sal_True);   break;
-        case  HANDLE_VIEWSET_VRULER :                   bBoolVal = mpConstViewOption->IsViewVRuler(sal_True);break;
+        case  HANDLE_VIEWSET_HRULER :                   bBoolVal = mpConstViewOption->IsViewHRuler(true);   break;
+        case  HANDLE_VIEWSET_VRULER :                   bBoolVal = mpConstViewOption->IsViewVRuler(true);break;
         case  HANDLE_VIEWSET_VRULER_RIGHT          :   bBoolVal = mpConstViewOption->IsVRulerRight();break;
         case  HANDLE_VIEWSET_HSCROLL:                   bBoolVal = mpConstViewOption->IsViewHScrollBar();break;
         case  HANDLE_VIEWSET_VSCROLL:                   bBoolVal = mpConstViewOption->IsViewVScrollBar();break;
@@ -844,14 +844,14 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_NONPRINTING_CHARACTERS:   bBoolVal = mpConstViewOption->IsViewMetaChars(); break;
         case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   :   bBoolVal = SwViewOption::IsFieldShadings();  break;
         case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND :   bBoolVal = SwViewOption::IsFieldShadings(); break;
-        case  HANDLE_VIEWSET_PARA_BREAKS           :   bBoolVal = mpConstViewOption->IsParagraph(sal_True); break;
+        case  HANDLE_VIEWSET_PARA_BREAKS           :   bBoolVal = mpConstViewOption->IsParagraph(true); break;
         case  HANDLE_VIEWSET_SOFT_HYPHENS          :   bBoolVal = mpConstViewOption->IsSoftHyph();  break;
-        case  HANDLE_VIEWSET_SPACES                :   bBoolVal = mpConstViewOption->IsBlank(sal_True); break;
+        case  HANDLE_VIEWSET_SPACES                :   bBoolVal = mpConstViewOption->IsBlank(true); break;
         case  HANDLE_VIEWSET_PROTECTED_SPACES      :   bBoolVal = mpConstViewOption->IsHardBlank(); break;
-        case  HANDLE_VIEWSET_TABSTOPS              :   bBoolVal = mpConstViewOption->IsTab(sal_True);   break;
-        case  HANDLE_VIEWSET_BREAKS                :   bBoolVal = mpConstViewOption->IsLineBreak(sal_True); break;
+        case  HANDLE_VIEWSET_TABSTOPS              :   bBoolVal = mpConstViewOption->IsTab(true);   break;
+        case  HANDLE_VIEWSET_BREAKS                :   bBoolVal = mpConstViewOption->IsLineBreak(true); break;
         case  HANDLE_VIEWSET_HIDDEN_TEXT           :   bBoolVal = mpConstViewOption->IsShowHiddenField();   break;
-        case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   bBoolVal = mpConstViewOption->IsShowHiddenChar(sal_True); break;
+        case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   bBoolVal = mpConstViewOption->IsShowHiddenChar(true); break;
         case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   bBoolVal = mpConstViewOption->IsShowHiddenPara();    break;
         case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   bBoolVal = SwViewOption::IsTableBoundaries(); break;
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   bBoolVal = SwViewOption::IsDocBoundaries(); break;

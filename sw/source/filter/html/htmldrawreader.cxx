@@ -74,7 +74,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
                                      sal_Int16 eHoriOri,
                                      SfxItemSet& rCSS1ItemSet,
                                      SvxCSS1PropertyInfo& rCSS1PropInfo,
-                                     sal_Bool bHidden )
+                                     bool bHidden )
 {
     // always on top of text.
     // but in invisible layer. <ConnectToLayout> will move the object
@@ -108,12 +108,12 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         if( rCSS1PropInfo.bLeftMargin )
         {
             nLeftSpace = static_cast< sal_uInt16 >(aLRItem.GetLeft());
-            rCSS1PropInfo.bLeftMargin = sal_False;
+            rCSS1PropInfo.bLeftMargin = false;
         }
         if( rCSS1PropInfo.bRightMargin )
         {
             nRightSpace = static_cast< sal_uInt16 >(aLRItem.GetRight());
-            rCSS1PropInfo.bRightMargin = sal_False;
+            rCSS1PropInfo.bRightMargin = false;
         }
         rCSS1ItemSet.ClearItem( RES_LR_SPACE );
     }
@@ -133,12 +133,12 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         if( rCSS1PropInfo.bTopMargin )
         {
             nUpperSpace = pULItem->GetUpper();
-            rCSS1PropInfo.bTopMargin = sal_False;
+            rCSS1PropInfo.bTopMargin = false;
         }
         if( rCSS1PropInfo.bBottomMargin )
         {
             nLowerSpace = pULItem->GetLower();
-            rCSS1PropInfo.bBottomMargin = sal_False;
+            rCSS1PropInfo.bBottomMargin = false;
         }
 
         rCSS1ItemSet.ClearItem( RES_UL_SPACE );
@@ -255,7 +255,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     OUString aId, aStyle, aClass;
 
     long nWidth=0, nHeight=0;
-    sal_Bool bPrcWidth = sal_False, bDirection = sal_False, bBGColor = sal_False;
+    bool bPrcWidth = false, bDirection = false, bBGColor = false;
     Size aSpace( 0, 0 );
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
@@ -289,14 +289,14 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
             case HTML_O_BGCOLOR:
                 rOption.GetColor( aBGColor );
-                bBGColor = sal_True;
+                bBGColor = true;
                 break;
 
             case HTML_O_DIRECTION:
                 eAniDir =
                     (SdrTextAniDirection)rOption.GetEnum( aHTMLMarqDirectionTable,
                                                       static_cast< sal_uInt16 >(eAniDir) );
-                bDirection = sal_True;
+                bDirection = true;
                 break;
 
             case HTML_O_LOOP:
@@ -476,7 +476,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     {
         aTwipSz.Width() = aPropInfo.nWidth;
         nWidth = 1; // != 0;
-        bPrcWidth = sal_False;
+        bPrcWidth = false;
     }
     if( SVX_CSS1_LTYPE_TWIP== aPropInfo.eHeightType )
         aTwipSz.Height() = aPropInfo.nHeight;
@@ -500,7 +500,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 // koennen wir die Breite auch anpassen. Keine Breitenangabe
                 // wird wie 100% behandelt.
                 nWidth = 100;
-                bPrcWidth = sal_True;
+                bPrcWidth = true;
             }
             aTwipSz.Width() = MINLAY;
         }

@@ -48,9 +48,9 @@ struct SwRedlineDataParent
     SvTreeListEntry*            pTLBParent; // corresponding TreeListBox entry
     OUString                    sComment;   // redline comment
 
-    inline sal_Bool operator==( const SwRedlineDataParent& rObj ) const
+    inline bool operator==( const SwRedlineDataParent& rObj ) const
                         { return (pData && pData->GetSeqNo() == rObj.pData->GetSeqNo()); }
-    inline sal_Bool operator< ( const SwRedlineDataParent& rObj ) const
+    inline bool operator< ( const SwRedlineDataParent& rObj ) const
                         { return (pData && pData->GetSeqNo() <  rObj.pData->GetSeqNo()); }
 };
 
@@ -85,9 +85,9 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     SvxRedlinTable*         pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
     Link                    aOldSelectHdl;
     Link                    aOldDeselectHdl;
-    sal_Bool                    bOnlyFormatedRedlines;
-    sal_Bool                    bHasReadonlySel;
-    sal_Bool                    bRedlnAutoFmt;
+    bool                    bOnlyFormatedRedlines;
+    bool                    bHasReadonlySel;
+    bool                    bRedlnAutoFmt;
 
     // prevent update dialog data during longer operations (cf #102657#)
     bool                    bInhibitActivate;
@@ -102,7 +102,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     SAL_DLLPRIVATE DECL_LINK( GotoHdl,           void* );
     SAL_DLLPRIVATE DECL_LINK( CommandHdl,        void* );
 
-    SAL_DLLPRIVATE sal_uInt16            CalcDiff(sal_uInt16 nStart, sal_Bool bChild);
+    SAL_DLLPRIVATE sal_uInt16            CalcDiff(sal_uInt16 nStart, bool bChild);
     SAL_DLLPRIVATE void          InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFmt);
     SAL_DLLPRIVATE void          InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd = USHRT_MAX);
     SAL_DLLPRIVATE void          RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd);
@@ -113,16 +113,16 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     SAL_DLLPRIVATE sal_uInt16    GetRedlinePos( const SvTreeListEntry& rEntry) const;
 
 public:
-    SwRedlineAcceptDlg(Dialog *pParent, sal_Bool bAutoFmt = sal_False);
+    SwRedlineAcceptDlg(Dialog *pParent, bool bAutoFmt = false);
     virtual ~SwRedlineAcceptDlg();
 
     DECL_LINK( FilterChangedHdl, void *pDummy = 0 );
 
     inline SvxAcceptChgCtr* GetChgCtrl()        { return &aTabPagesCTRL; }
-    inline sal_Bool     HasRedlineAutoFmt() const   { return bRedlnAutoFmt; }
+    inline bool     HasRedlineAutoFmt() const   { return bRedlnAutoFmt; }
 
     void            Init(sal_uInt16 nStart = 0);
-    void            CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept );
+    void            CallAcceptReject( bool bSelect, bool bAccept );
 
     void            Initialize(const OUString &rExtraData);
     void            FillInfo(OUString &rExtraData) const;
@@ -154,7 +154,7 @@ public:
 
     SFX_DECL_CHILDWINDOW_WITHID( SwRedlineAcceptChild );
 
-    virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh) SAL_OVERRIDE;
+    virtual bool    ReInitDlg(SwDocShell *pDocSh) SAL_OVERRIDE;
 };
 
 #endif

@@ -39,7 +39,7 @@ class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
 {
     /** This "Doc"-function is made friend in order to be able
      to set the auto-flag after copying!! */
-    friend sal_Bool InsAttr( SwDoc*, const SwPaM &, const SfxItemSet&, sal_uInt16,
+    friend bool InsAttr( SwDoc*, const SwPaM &, const SfxItemSet&, sal_uInt16,
                         SwHistory* );
     ::boost::optional<sal_uInt16> oNumOffset;          ///< Offset page number.
     sal_uInt16 nDescNameIdx;        ///< SW3-Reader: stringpool-index of style name.
@@ -82,10 +82,10 @@ public:
     bool KnowsPageDesc() const;
 };
 
-inline const SwFmtPageDesc &SwAttrSet::GetPageDesc(sal_Bool bInP) const
+inline const SwFmtPageDesc &SwAttrSet::GetPageDesc(bool bInP) const
     { return (const SwFmtPageDesc&)Get( RES_PAGEDESC,bInP); }
 
-inline const SwFmtPageDesc &SwFmt::GetPageDesc(sal_Bool bInP) const
+inline const SwFmtPageDesc &SwFmt::GetPageDesc(bool bInP) const
     { return aSet.GetPageDesc(bInP); }
 
 #endif

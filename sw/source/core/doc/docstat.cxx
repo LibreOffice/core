@@ -30,7 +30,7 @@ SwDocStat::SwDocStat() :
     nAsianWord(0),
     nChar(0),
     nCharExcludingSpaces(0),
-    bModified(sal_True)
+    bModified(true)
 {}
 
 void SwDocStat::Reset()
@@ -45,7 +45,7 @@ void SwDocStat::Reset()
     nAsianWord = 0;
     nChar   = 0;
     nCharExcludingSpaces = 0;
-    bModified = sal_True;
+    bModified = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

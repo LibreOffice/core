@@ -175,7 +175,7 @@ public OTextCursorHelper
     SwView*                         m_pView;
     const SfxItemPropertySet*       m_pPropSet;
 protected:
-    sal_Bool    IsTextSelection( sal_Bool bAllowTables = sal_True ) const;
+    bool        IsTextSelection( bool bAllowTables = true ) const;
     virtual     ~SwXTextViewCursor();
 public:
     SwXTextViewCursor(SwView* pVw);

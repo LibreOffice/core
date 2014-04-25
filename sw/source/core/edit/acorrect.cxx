@@ -306,7 +306,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
     SwTxtNode* pTxtNd = rCrsr.GetNode()->GetTxtNode();
     OSL_ENSURE( pTxtNd, "where is the TextNode?" );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( nEndPos == rSttPos )
         return bRet;
 
@@ -335,7 +335,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
             {
                 // replace the selection
                 pDoc->ReplaceRange( aPam, pFnd->GetLong(), false);
-                bRet = sal_True;
+                bRet = true;
             }
         }
         else
@@ -383,7 +383,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                     ++(*pIdx);
                     pTxtNd = pIdx->GetNode().GetTxtNode();
                 }
-                bRet = sal_True;
+                bRet = true;
             }
             aTBlks.EndGetDoc();
         }
@@ -443,12 +443,12 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
     }
 }
 
-sal_Bool SwAutoCorrExceptWord::CheckDelChar( const SwPosition& rPos )
+bool SwAutoCorrExceptWord::CheckDelChar( const SwPosition& rPos )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( !bDeleted && rPos.nNode.GetIndex() == nNode &&
         rPos.nContent.GetIndex() == nCntnt )
-        bDeleted = bRet = sal_True;
+        bDeleted = bRet = true;
     return bRet;
 }
 

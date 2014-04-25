@@ -315,14 +315,14 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
 IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
 {
     OUString sEntry(m_pNameED->GetText());
-    sal_Bool bEnableNew = sal_True;
-    sal_Bool bEnableDel = sal_False;
+    bool bEnableNew = true;
+    bool bEnableDel = false;
     sal_uLong nCaseReadonly =
             (sal_uLong)m_pPathLB->GetEntryData(m_pPathLB->GetSelectEntryPos());
     bool bDirReadonly = 0 != (nCaseReadonly&PATH_READONLY);
 
     if(sEntry.isEmpty() || bDirReadonly)
-        bEnableNew = sal_False;
+        bEnableNew = false;
     else if(!sEntry.isEmpty())
     {
         sal_uLong nPos = m_pGroupTLB->GetEntryPos(sEntry, 0);
@@ -346,7 +346,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
         }
         if( 0xffffffff > nPos)
         {
-            bEnableNew = sal_False;
+            bEnableNew = false;
             m_pGroupTLB->Select(m_pGroupTLB->GetEntry( nPos ));
             m_pGroupTLB->MakeVisible(m_pGroupTLB->GetEntry( nPos ));
         }
@@ -364,9 +364,9 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
     return 0;
 }
 
-sal_Bool SwGlossaryGroupDlg::IsDeleteAllowed(const OUString &rGroup)
+bool SwGlossaryGroupDlg::IsDeleteAllowed(const OUString &rGroup)
 {
-    sal_Bool bDel = (!pGlosHdl->IsReadOnly(&rGroup));
+    bool bDel = (!pGlosHdl->IsReadOnly(&rGroup));
 
     // OM: if the name is among the new region name, it is deletable
     // as well! Because for non existing region names ReadOnly issues
@@ -377,7 +377,7 @@ sal_Bool SwGlossaryGroupDlg::IsDeleteAllowed(const OUString &rGroup)
     {
         if (*it == rGroup)
         {
-            bDel = sal_True;
+            bDel = true;
             break;
         }
     }

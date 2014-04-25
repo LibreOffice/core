@@ -140,8 +140,8 @@ public:
     SwHistory* pHistory;
     sal_uInt16 nSplitLine;       ///< Split: from this BaseLine on will be splitted
     TableFmlUpdtFlags eFlags;
-    sal_Bool bModified : 1;
-    sal_Bool bBehindSplitLine : 1;
+    bool bModified : 1;
+    bool bBehindSplitLine : 1;
 
     SwTableFmlUpdate( const SwTable* );
 };
@@ -161,7 +161,7 @@ public:
  */
 class SwAttrSetChg: public SwMsgPoolItem
 {
-    sal_Bool bDelSet;
+    bool bDelSet;
     SwAttrSet* pChgSet;           ///< what has changed
     const SwAttrSet* pTheChgdSet; ///< is only used to compare
 public:

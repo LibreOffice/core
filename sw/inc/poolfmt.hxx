@@ -82,7 +82,7 @@ const sal_uInt16 POOLGRP_NUMRULE        = (3 << 11) + POOLGRP_NOCOLLID;
 const sal_uInt16 POOL_IDUSER_FMT =
         USHRT_MAX & ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID);
 
-inline sal_Bool IsPoolUserFmt( sal_uInt16 nId )
+inline bool IsPoolUserFmt( sal_uInt16 nId )
 {
     return POOL_IDUSER_FMT ==
                 (nId & ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID))
@@ -403,7 +403,7 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId );
 
 SvxFrameDirection GetDefaultFrameDirection(sal_uLong nLanguage);
 
-inline sal_Bool IsConditionalByPoolId(sal_uInt16 nId)
+inline bool IsConditionalByPoolId(sal_uInt16 nId)
     {
         return RES_POOLCOLL_TEXT == nId;
     }

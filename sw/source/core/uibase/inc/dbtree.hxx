@@ -37,7 +37,7 @@ class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
 
     OUString        sDefDBName;
     bool            bInitialized;
-    sal_Bool            bShowColumns;
+    bool            bShowColumns;
 
     SwDBTreeList_Impl* pImpl;
 
@@ -61,7 +61,7 @@ public:
     void    Select( const OUString& rDBName, const OUString& rTableName,
                     const OUString& rColumnName );
 
-    void    ShowColumns(sal_Bool bShowCol);
+    void    ShowColumns(bool bShowCol);
     void    SetWrtShell(SwWrtShell& rSh);
 
     void    AddDataSource(const OUString& rSource);

@@ -59,9 +59,9 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
             xMedium = new SfxMedium( xRoot, GetBaseURL(), OUString( "writer8" ) );
             SwReader aReader( *xMedium, aFolderName, pDoc );
-            ReadXML->SetBlockMode( sal_True );
+            ReadXML->SetBlockMode( true );
             aReader.Read( *ReadXML );
-            ReadXML->SetBlockMode( sal_False );
+            ReadXML->SetBlockMode( false );
             // Ole objects fails to display when inserted into document
             // because the ObjectReplacement folder ( and contents are missing )
             OUString sObjReplacements( "ObjectReplacements" );
@@ -102,7 +102,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
 
             // get filter
             // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, aCur, sal_True );
-            uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, aCur, sal_True );
+            uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, aCur, true );
 
             // connect parser and filter
             uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
@@ -126,7 +126,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
                 // re throw ?
             }
 
-            bInfoChanged = sal_False;
+            bInfoChanged = false;
             MakeBlockText(aCur);
         }
         catch( uno::Exception& )
@@ -149,7 +149,7 @@ const struct SvEventDescription aAutotextEvents[] =
 
 sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
                                       SvxMacroTableDtor& rMacroTbl,
-                                      sal_Bool bFileAlreadyOpen )
+                                      bool bFileAlreadyOpen )
 {
     // set current auto text
 
@@ -163,7 +163,7 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
     if( !bFileAlreadyOpen )
     {
         CloseFile();
-        nRet = OpenFile ( sal_True );
+        nRet = OpenFile ( true );
     }
     if ( 0 == nRet )
     {
@@ -268,7 +268,7 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
 sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText )
 {
     sal_uLong n = 0;
-    sal_Bool bTextOnly = sal_True;
+    bool bTextOnly = true;
     OUString aFolderName = GeneratePackageName ( rShort );
     OUString aStreamName = aFolderName + ".xml";
     rText = "";
@@ -279,7 +279,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText
         uno::Reference < container::XNameAccess > xAccess( xRoot, uno::UNO_QUERY );
         if ( !xAccess->hasByName( aStreamName ) || !xRoot->isStreamElement( aStreamName ) )
         {
-            bTextOnly = sal_False;
+            bTextOnly = false;
             aStreamName = "content.xml";
         }
 
@@ -452,7 +452,7 @@ void SwXMLTextBlocks::ReadInfo( void )
 }
 void SwXMLTextBlocks::WriteInfo( void )
 {
-    if ( xBlkRoot.is() || 0 == OpenFile ( sal_False ) )
+    if ( xBlkRoot.is() || 0 == OpenFile ( false ) )
     {
         uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();
@@ -496,7 +496,7 @@ void SwXMLTextBlocks::WriteInfo( void )
         {
         }
 
-        bInfoChanged = sal_False;
+        bInfoChanged = false;
         return;
     }
 }
@@ -504,7 +504,7 @@ void SwXMLTextBlocks::WriteInfo( void )
 sal_uLong SwXMLTextBlocks::SetMacroTable(
     sal_uInt16 nIdx,
     const SvxMacroTableDtor& rMacroTbl,
-    sal_Bool bFileAlreadyOpen )
+    bool bFileAlreadyOpen )
 {
     // set current autotext
     aShort = aNames[nIdx]->aShort;
@@ -528,7 +528,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
     if( !bFileAlreadyOpen )
     {
         CloseFile();    // close (it may be open in read-only-mode)
-        nRes = OpenFile ( sal_False );
+        nRes = OpenFile ( false );
     }
 
     if ( 0 == nRes )

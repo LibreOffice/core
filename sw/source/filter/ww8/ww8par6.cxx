@@ -239,11 +239,11 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
             //fall-through
         case 3:
             eType = GRID_LINES_CHARS;
-            aGrid.SetSnapToChars(sal_True);
+            aGrid.SetSnapToChars(true);
             break;
         case 1:
             eType = GRID_LINES_CHARS;
-            aGrid.SetSnapToChars(sal_False);
+            aGrid.SetSnapToChars(false);
             break;
         case 2:
             eType = GRID_LINES_ONLY;
@@ -258,7 +258,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
         rDoc.set(IDocumentSettingAccess::ADD_EXT_LEADING, false);
 
     //force to set document as standard page mode
-    sal_Bool bSquaredMode = sal_False;
+    bool bSquaredMode = false;
     rDoc.SetDefaultPageMode( bSquaredMode );
     aGrid.SetSquaredMode( bSquaredMode );
 
@@ -2017,7 +2017,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     //we no longer need to hack around the header/footer problems
     SwFmtSurround aSurround(pFS->eSurround);
     if ( pFS->eSurround == SURROUND_IDEAL )
-        aSurround.SetAnchorOnly( sal_True );
+        aSurround.SetAnchorOnly( true );
     Put( aSurround );
 
     short aSizeArray[5]={0};
@@ -3306,7 +3306,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
     {
         if ( pAktColl ) //importing style
         {
-            if( SFX_ITEM_SET == pAktColl->GetItemState( RES_CHRATR_UNDERLINE, sal_False ) )
+            if( SFX_ITEM_SET == pAktColl->GetItemState( RES_CHRATR_UNDERLINE, false ) )
             {
                 const SwAttrSet& aSet = pAktColl->GetAttrSet();
                 SvxUnderlineItem *pUnderline

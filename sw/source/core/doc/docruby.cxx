@@ -179,7 +179,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
     return nListEntry;
 }
 
-sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt16 )
+bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt16 )
 {
     // Point must be the startposition, Mark is optional the end position
     SwPosition* pPos = rPam.GetPoint();
@@ -188,7 +188,7 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
     sal_Int32 nStart = pPos->nContent.GetIndex();
     sal_Int32 nEnd = rTxt.getLength();
 
-    sal_Bool bHasMark = rPam.HasMark();
+    bool bHasMark = rPam.HasMark();
     if( bHasMark )
     {
         // in the same node?

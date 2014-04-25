@@ -43,7 +43,7 @@ uno::Reference< text::XTextRange > SwVbaRangeHelper::getRangeByPosition( const u
         sal_Int32 nPos = 0;
         uno::Reference< text::XTextCursor > xCursor = rText->createTextCursor();
         xCursor->collapseToStart();
-        sal_Bool bCanGo = sal_True;
+        bool bCanGo = true;
         while( !xRange.is() && bCanGo )
         {
             if( _position == nPos )
@@ -60,7 +60,7 @@ uno::Reference< text::XTextRange > SwVbaRangeHelper::getRangeByPosition( const u
     return xRange;
 }
 
-void SwVbaRangeHelper::insertString( uno::Reference< text::XTextRange >& rTextRange, uno::Reference< text::XText >& rText, const OUString& rStr, sal_Bool _bAbsorb ) throw ( uno::RuntimeException )
+void SwVbaRangeHelper::insertString( uno::Reference< text::XTextRange >& rTextRange, uno::Reference< text::XText >& rText, const OUString& rStr, bool _bAbsorb ) throw ( uno::RuntimeException )
 {
     sal_Int32 nlastIndex = 0;
     sal_Int32 nIndex = 0;
@@ -143,7 +143,7 @@ sal_Int32 SwVbaRangeHelper::getPosition( const uno::Reference< text::XText >& rT
         uno::Reference< text::XTextRangeCompare > xCompare( rText, uno::UNO_QUERY_THROW );
         // compareValue is 0 if the ranges are equal
         sal_Int32 nCompareValue = xCompare->compareRegionStarts( xCursor->getStart(), rTextRange );
-        sal_Bool canGo = sal_True;
+        bool canGo = true;
 
         while( nCompareValue !=0 && canGo )
         {

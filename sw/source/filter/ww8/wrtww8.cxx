@@ -2552,7 +2552,7 @@ void MSWordExportBase::WriteText()
         {
             SwCntntNode* pCNd = (SwCntntNode*)pNd;
 
-            const SwPageDesc* pTemp = pNd->FindPageDesc(sal_False);
+            const SwPageDesc* pTemp = pNd->FindPageDesc(false);
             if ( pTemp )
                 pAktPageDesc = pTemp;
 
@@ -2582,7 +2582,7 @@ void MSWordExportBase::WriteText()
                 && (rSect.GetType() != TOX_CONTENT_SECTION && rSect.GetType() != TOX_HEADER_SECTION )) //No sections in table
             {
                 //#120140# Do not need to insert a page/section break after a section end. Check this case first
-                sal_Bool bNeedExportBreakHere = sal_True;
+                bool bNeedExportBreakHere = true;
                 if ( aIdx.GetNode().IsTxtNode() )
                 {
                     SwTxtNode *pTempNext = aIdx.GetNode().GetTxtNode();
@@ -2593,7 +2593,7 @@ void MSWordExportBase::WriteText()
                             && pTempItem && ((SwFmtPageDesc*)pTempItem)->GetRegisteredIn())
                         {
                             //Next node has a new page style which means this node is a section end. Do not insert another page/section break here
-                            bNeedExportBreakHere = sal_False;
+                            bNeedExportBreakHere = false;
                         }
                     }
                 }

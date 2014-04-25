@@ -285,7 +285,7 @@ void SwDropCapsPict::UpdatePaintSettings( void )
             // CTL
             GetFontSettings( *mpPage, maCTLFont, RES_CHRATR_CTL_FONT );
 
-            mpPage->rSh.Pop(sal_False);
+            mpPage->rSh.Pop(false);
             mpPage->rSh.EndCrsrMove();
         }
         else
@@ -633,12 +633,12 @@ void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
                         sal_uInt16( m_pDistanceField->Denormalize( m_pDistanceField->GetValue( FUNIT_TWIP ) ) ) );
 
     ClickHdl(m_pDropCapsBox);
-    bModified = sal_False;
+    bModified = false;
 }
 
 IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl)
 {
-    sal_Bool bChecked = m_pDropCapsBox->IsChecked();
+    bool bChecked = m_pDropCapsBox->IsChecked();
 
     m_pWholeWordCB->Enable( bChecked && !bHtmlMode );
 
@@ -661,7 +661,7 @@ IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl)
     else
         m_pPict->SetText("");
 
-    bModified = sal_True;
+    bModified = true;
 
     return 0;
 }
@@ -673,7 +673,7 @@ IMPL_LINK_NOARG(SwDropCapsPage, WholeWordHdl)
 
     ModifyHdl(m_pDropCapsField);
 
-    bModified = sal_True;
+    bModified = true;
 
     return 0;
 }
@@ -724,7 +724,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
     else
         m_pPict->SetDistance((sal_uInt16)m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FUNIT_TWIP)));
 
-    bModified = sal_True;
+    bModified = true;
 
     return 0;
 }
@@ -732,7 +732,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
 IMPL_LINK_NOARG_INLINE_START(SwDropCapsPage, SelectHdl)
 {
     m_pPict->UpdatePaintSettings();
-    bModified = sal_True;
+    bModified = true;
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwDropCapsPage, SelectHdl)
@@ -748,7 +748,7 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
     {
         SwFmtDrop aFmt;
 
-        sal_Bool bOn = m_pDropCapsBox->IsChecked();
+        bool bOn = m_pDropCapsBox->IsChecked();
         if(bOn)
         {
             // quantity, lines, gap

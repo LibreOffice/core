@@ -422,7 +422,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD, 0, sal_True );
+                SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD, 0, true );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet)
@@ -445,7 +445,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
             sal_uInt32 nCtrl = pOutliner->GetControlWord();
 
-            sal_Bool bSet = ((const SfxBoolItem&)rReq.GetArgs()->Get(
+            bool bSet = ((const SfxBoolItem&)rReq.GetArgs()->Get(
                                                     nSlot)).GetValue();
             if(bSet)
                 nCtrl |= EE_CNTRL_ONLINESPELLING|EE_CNTRL_ALLOWBIGOBJS;
@@ -618,7 +618,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
     while(nWhich)
     {
         sal_uInt16 nSlotId = GetPool().GetSlotId( nWhich );
-        sal_Bool bFlag = sal_False;
+        bool bFlag = false;
         switch( nSlotId )
         {
             case SID_LANGUAGE_STATUS://20412:
@@ -715,7 +715,7 @@ ASK_LINESPACE:
                     rSet.InvalidateItem( nSlotId ), nSlotId = 0;
                 else if( nLSpace == ((const SvxLineSpacingItem*)pLSpace)->
                                                 GetPropLineSpace() )
-                    bFlag = sal_True;
+                    bFlag = true;
                 else
                     nSlotId = 0;
             }
@@ -732,7 +732,7 @@ ASK_ESCAPE:
 
                 if( nEsc == ((const SvxEscapementItem*)
                                                 pEscItem)->GetEnumValue() )
-                    bFlag = sal_True;
+                    bFlag = true;
                 else
                     nSlotId = 0;
             }
@@ -847,7 +847,7 @@ ASK_ESCAPE:
         case SID_INSERT_ZWSP:
         {
             SvtCTLOptions aCTLOptions;
-            sal_Bool bEnabled = aCTLOptions.IsCTLFontEnabled();
+            bool bEnabled = aCTLOptions.IsCTLFontEnabled();
             GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, bEnabled );
             if(!bEnabled)
                 rSet.DisableItem(nWhich);

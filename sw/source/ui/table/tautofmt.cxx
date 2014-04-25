@@ -62,7 +62,7 @@ private:
     VirtualDevice           aVD;
     SvtScriptedTextHelper   aScriptedText;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
-    sal_Bool                    bFitWidth;
+    bool                    bFitWidth;
     bool                    mbRTL;
     Size                    aPrvSize;
     long                    nLabelColWidth;
@@ -82,7 +82,7 @@ private:
 
     void    Init            ();
     void    DoPaint         ( const Rectangle& rRect );
-    void    CalcCellArray   ( sal_Bool bFitWidth );
+    void    CalcCellArray   ( bool bFitWidth );
     void    CalcLineMap     ();
     void    PaintCells      ();
 
@@ -134,7 +134,7 @@ SwStringInputDlg::~SwStringInputDlg()
 // AutoFormat-Dialogue:
 
 SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
-                    sal_Bool bSetAutoFormat, const SwTableAutoFmt* pSelFmt )
+                    bool bSetAutoFormat, const SwTableAutoFmt* pSelFmt )
     : SfxModalDialog(pParent, "AutoFormatTableDialog", "modules/swriter/ui/autoformattable.ui")
     , aStrTitle(SW_RES(STR_ADD_AUTOFORMAT_TITLE))
     , aStrLabel(SW_RES(STR_ADD_AUTOFORMAT_LABEL))
@@ -146,7 +146,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
     , pShell(pWrtShell)
     , nIndex(0)
     , nDfltStylePos(0)
-    , bCoreDataChanged(sal_False)
+    , bCoreDataChanged(false)
     , bSetAutoFmt(bSetAutoFormat)
 {
     get(m_pLbFormat, "formatlb");
@@ -217,7 +217,7 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
     SelFmtHdl( 0 );
 }
 
-void SwAutoFormatDlg::UpdateChecks( const SwTableAutoFmt& rFmt, sal_Bool bEnable )
+void SwAutoFormatDlg::UpdateChecks( const SwTableAutoFmt& rFmt, bool bEnable )
 {
     m_pBtnNumFormat->Enable( bEnable );
     m_pBtnNumFormat->Check( rFmt.IsValueFormat() );
@@ -253,7 +253,7 @@ void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
 IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
     SwTableAutoFmt* pData  = &(*pTableTbl)[nIndex];
-    sal_Bool bCheck = ((CheckBox*)pBtn)->IsChecked(), bDataChgd = sal_True;
+    bool bCheck = ((CheckBox*)pBtn)->IsChecked(), bDataChgd = true;
 
     if( pBtn == m_pBtnNumFormat )
         pData->SetValueFormat( bCheck );
@@ -266,14 +266,14 @@ IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
     else if ( pBtn == m_pBtnAlignment )
         pData->SetJustify( bCheck );
     else
-        bDataChgd = sal_False;
+        bDataChgd = false;
 
     if( bDataChgd )
     {
         if( !bCoreDataChanged )
         {
             m_pBtnCancel->SetText( aStrClose );
-            bCoreDataChanged = sal_True;
+            bCoreDataChanged = true;
         }
 
         m_pWndPreview->NotifyChange( *pData );
@@ -321,7 +321,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
                     if ( !bCoreDataChanged )
                     {
                         m_pBtnCancel->SetText( aStrClose );
-                        bCoreDataChanged = sal_True;
+                        bCoreDataChanged = true;
                     }
 
                     SelFmtHdl( 0 );
@@ -369,7 +369,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
         if( !bCoreDataChanged )
         {
             m_pBtnCancel->SetText( aStrClose );
-            bCoreDataChanged = sal_True;
+            bCoreDataChanged = true;
         }
     }
     delete pBox;
@@ -422,7 +422,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
                     if ( !bCoreDataChanged )
                     {
                         m_pBtnCancel->SetText( aStrClose );
-                        bCoreDataChanged = sal_True;
+                        bCoreDataChanged = true;
                     }
 
                     SelFmtHdl( 0 );
@@ -446,30 +446,30 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
 
 IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
 {
-    sal_Bool bBtnEnable = sal_False;
+    bool bBtnEnable = false;
     sal_uInt8 nSelPos = (sal_uInt8) m_pLbFormat->GetSelectEntryPos(), nOldIdx = nIndex;
     if( nSelPos >= nDfltStylePos )
     {
         nIndex = nSelPos - nDfltStylePos;
         m_pWndPreview->NotifyChange( (*pTableTbl)[nIndex] );
         bBtnEnable = 0 != nIndex;
-        UpdateChecks( (*pTableTbl)[nIndex], sal_True );
+        UpdateChecks( (*pTableTbl)[nIndex], true );
     }
     else
     {
         nIndex = 255;
 
         SwTableAutoFmt aTmp( SwViewShell::GetShellRes()->aStrNone );
-        aTmp.SetFont( sal_False );
-        aTmp.SetJustify( sal_False );
-        aTmp.SetFrame( sal_False );
-        aTmp.SetBackground( sal_False );
-        aTmp.SetValueFormat( sal_False );
-        aTmp.SetWidthHeight( sal_False );
+        aTmp.SetFont( false );
+        aTmp.SetJustify( false );
+        aTmp.SetFrame( false );
+        aTmp.SetBackground( false );
+        aTmp.SetValueFormat( false );
+        aTmp.SetWidthHeight( false );
 
         if( nOldIdx != nIndex )
             m_pWndPreview->NotifyChange( aTmp );
-        UpdateChecks( aTmp, sal_False );
+        UpdateChecks( aTmp, false );
     }
 
     m_pBtnRemove->Enable( bBtnEnable );
@@ -494,7 +494,7 @@ AutoFmtPreview::AutoFmtPreview(Window* pParent) :
         aCurData        ( OUString() ),
         aVD             ( *this ),
         aScriptedText   ( aVD ),
-        bFitWidth       ( sal_False ),
+        bFitWidth       ( false ),
         mbRTL           ( false ),
         aStrJan         ( SW_RES( STR_JAN ) ),
         aStrFeb         ( SW_RES( STR_FEB ) ),
@@ -789,11 +789,11 @@ void AutoFmtPreview::Init()
     SetBorderStyle( GetBorderStyle() | WINDOW_BORDER_MONO );
     maArray.Initialize( 5, 5 );
     maArray.SetUseDiagDoubleClipping( false );
-    CalcCellArray( sal_False );
+    CalcCellArray( false );
     CalcLineMap();
 }
 
-void AutoFmtPreview::CalcCellArray( sal_Bool _bFitWidth )
+void AutoFmtPreview::CalcCellArray( bool _bFitWidth )
 {
     maArray.SetXOffset( 2 );
     maArray.SetAllColWidths( _bFitWidth ? nDataColWidth2 : nDataColWidth1 );

@@ -374,7 +374,7 @@ SET_LINESPACE:
                     SwNumRule aSetRule( pCurRule->GetName(),
                                         pCurRule->Get( 0 ).GetPositionAndSpaceMode() );
                     aSetRule.SetSvxRule( aRule, GetShell().GetDoc());
-                    aSetRule.SetAutoRule( sal_True );
+                    aSetRule.SetAutoRule( true );
                     // no start or continuation of a list - list style is only changed
                     GetShell().SetCurNumRule( aSetRule, false );
                 }
@@ -496,7 +496,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nSlot = aIter.FirstWhich();
-    sal_Bool bFlag = sal_False;
+    bool bFlag = false;
     SfxBoolItem aFlagItem;
     const SfxPoolItem* pItem = 0;
     int eAdjust = -1;   // Illegal value to recognize DONTCARE.

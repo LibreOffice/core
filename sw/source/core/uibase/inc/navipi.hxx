@@ -91,13 +91,13 @@ class SwNavigationPI : public Window,
     short   nZoomOutInit;
     short   nZoomOut;
 
-    sal_Bool    bSmallMode : 1;
-    sal_Bool    bIsZoomedIn : 1;
-    sal_Bool    bPageCtrlsVisible : 1;
-    sal_Bool    bGlobalMode : 1;
+    bool    bSmallMode : 1;
+    bool    bIsZoomedIn : 1;
+    bool    bPageCtrlsVisible : 1;
+    bool    bGlobalMode : 1;
 
     // --------- methods -----------------------------
-    sal_Bool _IsZoomedIn() const {return bIsZoomedIn;}
+    bool _IsZoomedIn() const {return bIsZoomedIn;}
     void _ZoomOut();
     void _ZoomIn();
 
@@ -129,7 +129,7 @@ class SwNavigationPI : public Window,
 
 protected:
 
-    virtual         sal_Bool Close();
+    virtual         bool Close();
     virtual         void Resize() SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
@@ -137,8 +137,8 @@ protected:
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     NumEditAction&  GetPageEdit();
-    sal_Bool            ToggleTree();
-    void            SetGlobalMode(sal_Bool bSet) {bGlobalMode = bSet;}
+    bool            ToggleTree();
+    void            SetGlobalMode(bool bSet) {bGlobalMode = bSet;}
 
 public:
 
@@ -163,8 +163,8 @@ public:
     sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
     sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
 
-    sal_Bool            IsGlobalDoc() const;
-    sal_Bool            IsGlobalMode() const {return    bGlobalMode;}
+    bool            IsGlobalDoc() const;
+    bool            IsGlobalMode() const {return    bGlobalMode;}
 
     SwView*         GetCreateView() const;
     void            CreateNavigationTool(const Rectangle& rRect, bool bSetFocus, Window *pParent);

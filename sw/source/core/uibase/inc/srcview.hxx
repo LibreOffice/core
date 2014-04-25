@@ -36,7 +36,7 @@ class SwSrcView: public SfxViewShell
 
     SvxSearchItem*      pSearchItem;
 
-    sal_Bool                bSourceSaved    :1;
+    bool                bSourceSaved    :1;
     rtl_TextEncoding    eLoadEncoding;
     void                Init();
 
@@ -45,9 +45,9 @@ class SwSrcView: public SfxViewShell
 
 protected:
     sal_uInt16              StartSearchAndReplace(const SvxSearchItem& rItem,
-                                                        sal_Bool bFromStart,
-                                                        sal_Bool bApi,
-                                                        sal_Bool bRecursive = sal_False);
+                                                  bool bFromStart,
+                                                  bool bApi,
+                                                  bool bRecursive = false);
 
 public:
     SFX_DECL_VIEWFACTORY(SwSrcView);
@@ -68,7 +68,7 @@ public:
     void                SaveContent(const OUString& rTmpFile);
     void                SaveContentTo(SfxMedium& rMed);
 
-    sal_Bool                IsModified() {return aEditWin.IsModified();}
+    bool                IsModified() {return aEditWin.IsModified();}
 
     void            Execute(SfxRequest&);
     void            GetState(SfxItemSet&);
@@ -83,8 +83,8 @@ public:
 
     sal_Int32       PrintSource( OutputDevice *pOutDev, sal_Int32 nPage, bool bCalcNumPagesOnly );
 
-    void            SourceSaved() {bSourceSaved = sal_True;}
-    sal_Bool            HasSourceSaved() const {return bSourceSaved;}
+    void            SourceSaved() {bSourceSaved = true;}
+    bool            HasSourceSaved() const {return bSourceSaved;}
 
 };
 

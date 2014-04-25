@@ -61,7 +61,7 @@ OUString SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_) const
         sal_uInt16 wIdentGet()  { return SVBT16ToShort(wIdent); }
         sal_uInt16 fFlagsGet()  { return SVBT16ToShort(fFlags); }
         // SVBT16 fComplex :1;// 0004 when 1, file is in complex, fast-saved format.
-        sal_Bool fComplexGet()  { return static_cast< sal_Bool >((fFlagsGet() >> 2) & 1); }
+        bool fComplexGet()      { return static_cast< bool >((fFlagsGet() >> 2) & 1); }
     };
 
     bool bRet = false;
@@ -81,7 +81,7 @@ OUString SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_) const
     {
         bRet = (( ((W1_FIB*)pHeader)->wIdentGet() == 0xA59C
                     && ((W1_FIB*)pHeader)->nFibGet() == 0x21)
-                && ((W1_FIB*)pHeader)->fComplexGet() == 0);
+                && ((W1_FIB*)pHeader)->fComplexGet() == false);
     }
     else if ( FILTER_TEXT == sName )
         bRet = SwIoSystem::IsDetectableText(pHeader, nLen_);
@@ -130,9 +130,9 @@ const SfxFilter* SwIoSystem::GetFilterOfFormat(const OUString& rFmtNm,
     return 0;
 }
 
-sal_Bool SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter)
+bool SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     try
     {
         sal_uLong nStgFmtId = SotStorage::GetFormatID( rStg );
@@ -147,14 +147,14 @@ sal_Bool SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < co
     return bRet;
 }
 
-sal_Bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
+bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
 {
     sal_uLong nStgFmtId = rStg.GetFormat();
     /*#i8409# We cannot trust the clipboard id anymore :-(*/
     if (rFilter.GetUserData() == FILTER_WW8 || rFilter.GetUserData() == sWW6)
         nStgFmtId = 0;
 
-    sal_Bool bRet = SVSTREAM_OK == rStg.GetError() &&
+    bool bRet = SVSTREAM_OK == rStg.GetError() &&
         ( !nStgFmtId || rFilter.GetFormat() == nStgFmtId ) &&
         ( rStg.IsContained( SwIoSystem::GetSubStorageName( rFilter )) );
     if( bRet )
@@ -197,9 +197,9 @@ void TerminateBuffer(sal_Char *pBuffer, sal_uLong nBytesRead, sal_uLong nBufferL
 
 // Check if the file fits the corresponding format
 // Currently we only support our own filters
-sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const OUString& rFmtName)
+bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const OUString& rFmtName)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     SfxFilterContainer aCntSw( OUString(sSWRITER) );
     SfxFilterContainer aCntSwWeb( OUString(sSWRITERWEB) );

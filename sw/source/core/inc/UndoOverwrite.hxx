@@ -37,8 +37,8 @@ class SwUndoOverwrite: public SwUndo, private SwUndoSaveCntnt
     SwRedlineSaveDatas* pRedlSaveData;
     sal_uLong nSttNode;
     sal_Int32 nSttCntnt;
-    sal_Bool bInsChar : 1;  // no Overwrite, but Insert
-    sal_Bool bGroup : 1;    // TRUE: is already grouped; evaluated in CanGrouping()
+    bool bInsChar : 1;  // no Overwrite, but Insert
+    bool bGroup : 1;    // TRUE: is already grouped; evaluated in CanGrouping()
 
 public:
     SwUndoOverwrite( SwDoc*, SwPosition&, sal_Unicode cIns );
@@ -62,7 +62,7 @@ public:
      */
     virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 
-    sal_Bool CanGrouping( SwDoc*, SwPosition&, sal_Unicode cIns );
+    bool CanGrouping( SwDoc*, SwPosition&, sal_Unicode cIns );
 };
 
 struct _UndoTransliterate_Data;
@@ -85,7 +85,7 @@ public:
 
     void AddChanges( SwTxtNode& rTNd, sal_Int32 nStart, sal_Int32 nLen,
                      ::com::sun::star::uno::Sequence <sal_Int32>& rOffsets );
-    sal_Bool HasData() const { return aChanges.size() > 0; }
+    bool HasData() const { return aChanges.size() > 0; }
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOOVERWRITE_HXX

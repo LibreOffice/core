@@ -147,7 +147,7 @@ protected:
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::GetDirectPropertyTolerantResult > SAL_CALL GetPropertyValuesTolerant_Impl(
         const ::com::sun::star::uno::Sequence< OUString >& rPropertyNames,
-        sal_Bool bDirectValuesOnly ) throw (::com::sun::star::uno::RuntimeException);
+        bool bDirectValuesOnly ) throw (::com::sun::star::uno::RuntimeException);
 
     virtual ~SwXTextPortion();
 
@@ -163,7 +163,7 @@ public:
         SwTxtRuby const& rAttr,
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
             const& xParent,
-        sal_Bool bIsEnd );
+        bool bIsEnd );
 
     //XTextRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  SAL_CALL getText() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -330,7 +330,7 @@ public:
             OUString const& PropertyName, SwRangeRedline const& rRedline) throw();
     static ::com::sun::star::uno::Sequence<
         ::com::sun::star::beans::PropertyValue > CreateRedlineProperties(
-                SwRangeRedline const& rRedline, sal_Bool const bIsStart) throw();
+                SwRangeRedline const& rRedline, bool const bIsStart) throw();
 
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

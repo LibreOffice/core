@@ -79,12 +79,12 @@ public:
            SwRect &_Intersection( const SwRect &rRect );
     inline SwRect  GetIntersection( const SwRect& rRect ) const;
 
-           sal_Bool IsInside( const Point& rPOINT ) const;
-           sal_Bool IsNear(const Point& rPoint, long nTolerance ) const;
-           sal_Bool IsInside( const SwRect& rRect ) const;
-           sal_Bool IsOver( const SwRect& rRect ) const;
-    inline sal_Bool HasArea() const;
-    inline sal_Bool IsEmpty() const;
+           bool IsInside( const Point& rPOINT ) const;
+           bool IsNear(const Point& rPoint, long nTolerance ) const;
+           bool IsInside( const SwRect& rRect ) const;
+           bool IsOver( const SwRect& rRect ) const;
+    inline bool HasArea() const;
+    inline bool IsEmpty() const;
     inline void Clear();
 
     inline SwRect &operator = ( const SwRect &rRect );
@@ -138,17 +138,17 @@ public:
     long GetBottomDistance( long ) const;
     long GetRightDistance( long ) const;
     long GetTopDistance( long ) const;
-    sal_Bool OverStepLeft( long ) const;
-    sal_Bool OverStepBottom( long ) const;
-    sal_Bool OverStepTop( long ) const;
-    sal_Bool OverStepRight( long ) const;
+    bool OverStepLeft( long ) const;
+    bool OverStepBottom( long ) const;
+    bool OverStepTop( long ) const;
+    bool OverStepRight( long ) const;
 };
 
 typedef void (SwRect:: *SwRectSet)( const long nNew );
 typedef long (SwRect:: *SwRectGet)() const;
 typedef const Point (SwRect:: *SwRectPoint)() const;
 typedef const Size (SwRect:: *SwRectSize)() const;
-typedef sal_Bool (SwRect:: *SwRectMax)( long ) const;
+typedef bool (SwRect:: *SwRectMax)( long ) const;
 typedef long (SwRect:: *SwRectDist)( long ) const;
 typedef void (SwRect:: *SwRectSetTwice)( long, long );
 typedef void (SwRect:: *SwRectSetPos)( const Point& );
@@ -300,11 +300,11 @@ inline SwRect SwRect::GetIntersection( const SwRect& rRect ) const
     return SwRect( *this ).Intersection( rRect );
 }
 
-inline sal_Bool SwRect::HasArea() const
+inline bool SwRect::HasArea() const
 {
     return !IsEmpty();
 }
-inline sal_Bool SwRect::IsEmpty() const
+inline bool SwRect::IsEmpty() const
 {
     return !(m_Size.getHeight() && m_Size.getWidth());
 }

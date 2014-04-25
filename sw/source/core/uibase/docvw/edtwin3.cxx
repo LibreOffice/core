@@ -45,12 +45,12 @@ void ScrollMDI( SwViewShell* pVwSh, const SwRect &rRect,
 }
 
 // Docmdi - movable
-sal_Bool IsScrollMDI( SwViewShell* pVwSh, const SwRect &rRect )
+bool IsScrollMDI( SwViewShell* pVwSh, const SwRect &rRect )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if (pSfxVwSh && pSfxVwSh->ISA(SwView))
         return (((SwView *)pSfxVwSh)->IsScroll(rRect.SVRect()));
-    return sal_False;
+    return false;
 }
 
 // Notify for size change
@@ -83,7 +83,7 @@ void FrameNotify( SwViewShell* pVwSh, FlyMode eMode )
 }
 
 // Notify for page number update
-sal_Bool SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, sal_Bool bVerticalMode)
+bool SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, bool bVerticalMode)
 {
     SvxRuler& rRuler = bVerticalMode ?  m_rView.GetVRuler() : m_rView.GetHRuler();
     return (!rRuler.StartDocDrag( rMEvt, RULER_TYPE_BORDER ) &&
@@ -94,7 +94,7 @@ sal_Bool SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, sal_Bool bVertical
 // #i23726#
 // #i42921# - add 3rd parameter <bVerticalMode> in order
 // to consider vertical layout
-sal_Bool SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
+bool SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
                                  const bool bVerticalMode )
 {
     SvxRuler& rRuler = bVerticalMode ?  m_rView.GetVRuler() : m_rView.GetHRuler();
@@ -131,8 +131,8 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     // the SwWrtShell
     if(!pSh)
         return;
-    sal_Bool bViewWasLocked = pSh->IsViewLocked(), bUnlockPaint = sal_False;
-    pSh->LockView( sal_True );
+    bool bViewWasLocked = pSh->IsViewLocked(), bUnlockPaint = false;
+    pSh->LockView( true );
     switch( rDCEvt.GetType() )
     {
     case DATACHANGED_SETTINGS:
@@ -143,7 +143,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
         if( rDCEvt.GetFlags() & SETTINGS_STYLE )
         {
             pSh->LockPaint();
-            bUnlockPaint = sal_True;
+            bUnlockPaint = true;
             SwViewShell::DeleteReplacementBitmaps();
             GetView().InvalidateBorder();               //Scrollbar work
         }
@@ -154,7 +154,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     case DATACHANGED_FONTS:
     case DATACHANGED_FONTSUBSTITUTION:
         pSh->LockPaint();
-        bUnlockPaint = sal_True;
+        bUnlockPaint = true;
         GetView().GetDocShell()->UpdateFontList();  //e.g. printer change
         break;
     }

@@ -46,7 +46,7 @@ SwEditShell::~SwEditShell() // USED
 {
 }
 
-sal_Bool SwEditShell::IsModified() const
+bool SwEditShell::IsModified() const
 {
     return GetDoc()->IsModified();
 }
@@ -129,24 +129,24 @@ sal_uInt16 SwEditShell::GetCntType() const
     return nRet;
 }
 
-sal_Bool SwEditShell::HasOtherCnt() const
+bool SwEditShell::HasOtherCnt() const
 
 {
     if ( !GetDoc()->GetSpzFrmFmts()->empty() )
-        return sal_True;
+        return true;
 
     const SwNodes &rNds = GetDoc()->GetNodes();
     const SwNode *pNd;
 
     pNd = &rNds.GetEndOfInserts();
     if ( 1 != (pNd->GetIndex() - pNd->StartOfSectionIndex()) )
-        return sal_True;
+        return true;
 
     pNd = &rNds.GetEndOfAutotext();
     if ( 1 != (pNd->GetIndex() - pNd->StartOfSectionIndex()) )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 // access controll functions for file name handling
@@ -190,16 +190,16 @@ void SwEditShell::InsertTOXType(const SwTOXType& rTyp)
     mpDoc->InsertTOXType(rTyp);
 }
 
-void SwEditShell::DoUndo( sal_Bool bOn )
+void SwEditShell::DoUndo( bool bOn )
 { GetDoc()->GetIDocumentUndoRedo().DoUndo( bOn ); }
 
-sal_Bool SwEditShell::DoesUndo() const
+bool SwEditShell::DoesUndo() const
 { return GetDoc()->GetIDocumentUndoRedo().DoesUndo(); }
 
-void SwEditShell::DoGroupUndo( sal_Bool bOn )
+void SwEditShell::DoGroupUndo( bool bOn )
 { GetDoc()->GetIDocumentUndoRedo().DoGroupUndo( bOn ); }
 
-sal_Bool SwEditShell::DoesGroupUndo() const
+bool SwEditShell::DoesGroupUndo() const
 { return GetDoc()->GetIDocumentUndoRedo().DoesGroupUndo(); }
 
 void SwEditShell::DelAllUndoObj()
@@ -238,7 +238,7 @@ SwUndoId SwEditShell::GetRepeatInfo(OUString *const o_pStr) const
 { return GetDoc()->GetIDocumentUndoRedo().GetRepeatInfo(o_pStr); }
 
 /** Auto correction */
-void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Bool bInsert,
+void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
                                 sal_Unicode cChar )
 {
     SET_CURR_SHELL( this );
@@ -259,16 +259,16 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Bool bInsert,
     EndAllAction();
 }
 
-void SwEditShell::SetNewDoc(sal_Bool bNew)
+void SwEditShell::SetNewDoc(bool bNew)
 {
     GetDoc()->SetNewDoc(bNew);
 }
 
-sal_Bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWord )
+bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWord )
 {
     SET_CURR_SHELL( this );
 
-    sal_Bool bRet;
+    bool bRet;
     SwPaM* pCrsr = getShellCrsr( true );
     const sal_Int32 nPos = pCrsr->GetPoint()->nContent.GetIndex();
     SwTxtNode* pTNd = pCrsr->GetNode()->GetTxtNode();
@@ -279,7 +279,7 @@ sal_Bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWo
                                             pTNd->GetTxt(), nPos, rWord );
     }
     else
-        bRet = sal_False;
+        bRet = false;
     return bRet;
 }
 

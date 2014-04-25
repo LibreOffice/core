@@ -187,7 +187,7 @@ static void lcl_RestoreAnchor( SwFrmFmt* pFmt, sal_uLong& rNodePos )
 }
 
 SwUndoDrawGroup::SwUndoDrawGroup( sal_uInt16 nCnt )
-    : SwUndo( UNDO_DRAWGROUP ), nSize( nCnt + 1 ), bDelFmt( sal_True )
+    : SwUndo( UNDO_DRAWGROUP ), nSize( nCnt + 1 ), bDelFmt( true )
 {
     pObjArr = new SwUndoGroupObjImpl[ nSize ];
 }
@@ -208,7 +208,7 @@ SwUndoDrawGroup::~SwUndoDrawGroup()
 
 void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
 {
-    bDelFmt = sal_False;
+    bDelFmt = false;
 
     // save group object
     SwDrawFrmFmt* pFmt = pObjArr->pFmt;
@@ -255,7 +255,7 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
 
 void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
 {
-    bDelFmt = sal_True;
+    bDelFmt = true;
 
     // remove from array
     SwDoc* pDoc = pObjArr->pFmt->GetDoc();
@@ -322,7 +322,7 @@ void SwUndoDrawGroup::SetGroupFmt( SwDrawFrmFmt* pFmt )
 }
 
 SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj )
-    : SwUndo( UNDO_DRAWUNGROUP ), bDelFmt( sal_False )
+    : SwUndo( UNDO_DRAWUNGROUP ), bDelFmt( false )
 {
     nSize = (sal_uInt16)pObj->GetSubList()->GetObjCount() + 1;
     pObjArr = new SwUndoGroupObjImpl[ nSize ];
@@ -363,7 +363,7 @@ SwUndoDrawUnGroup::~SwUndoDrawUnGroup()
 
 void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    bDelFmt = sal_True;
+    bDelFmt = true;
 
     SwDoc *const pDoc = & rContext.GetDoc();
     SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
@@ -400,7 +400,7 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
 {
-    bDelFmt = sal_False;
+    bDelFmt = false;
 
     // save group object
     SwDrawFrmFmt* pFmt = pObjArr->pFmt;
@@ -496,7 +496,7 @@ void SwUndoDrawUnGroupConnectToLayout::AddFmtAndObj( SwDrawFrmFmt* pDrawFrmFmt,
 }
 
 SwUndoDrawDelete::SwUndoDrawDelete( sal_uInt16 nCnt )
-    : SwUndo( UNDO_DRAWDELETE ), nSize( nCnt ), bDelFmt( sal_True )
+    : SwUndo( UNDO_DRAWDELETE ), nSize( nCnt ), bDelFmt( true )
 {
     pObjArr = new SwUndoGroupObjImpl[ nSize ];
     pMarkLst = new SdrMarkList();
@@ -516,7 +516,7 @@ SwUndoDrawDelete::~SwUndoDrawDelete()
 
 void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    bDelFmt = sal_False;
+    bDelFmt = false;
     SwFrmFmts & rFlyFmts = *rContext.GetDoc().GetSpzFrmFmts();
     for( sal_uInt16 n = 0; n < pMarkLst->GetMarkCount(); ++n )
     {
@@ -541,7 +541,7 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    bDelFmt = sal_True;
+    bDelFmt = true;
     SwFrmFmts & rFlyFmts = *rContext.GetDoc().GetSpzFrmFmts();
     for( sal_uInt16 n = 0; n < pMarkLst->GetMarkCount(); ++n )
     {

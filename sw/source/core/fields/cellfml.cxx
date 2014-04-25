@@ -103,7 +103,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
 
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == GetFrmFmt()->GetItemState(
-                                RES_BOXATR_FORMULA, sal_False, &pItem ) )
+                                RES_BOXATR_FORMULA, false, &pItem ) )
         {
             rCalcPara.rCalc.SetCalcError( CALC_NOERR ); // reset status
             if( !((SwTblBoxFormula*)pItem)->IsValid() )
@@ -130,7 +130,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
             break;
         }
         else if( SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
-                                RES_BOXATR_VALUE, sal_False, &pItem ) )
+                                RES_BOXATR_VALUE, false, &pItem ) )
         {
             rCalcPara.rCalc.SetCalcError( CALC_NOERR ); // reset status
             nRet = ((SwTblBoxValue*)pItem)->GetValue();
@@ -252,7 +252,7 @@ SwTblCalcPara::~SwTblCalcPara()
     delete pBoxStk;
 }
 
-sal_Bool SwTblCalcPara::CalcWithStackOverflow()
+bool SwTblCalcPara::CalcWithStackOverflow()
 {
     // If a stack overflow was detected, redo with last box.
     sal_uInt16 nSaveMaxSize = nMaxSize;
@@ -345,7 +345,7 @@ void SwTableFormula::_MakeFormula( const SwTable& rTbl, OUString& rNewStr,
                     rNewStr += OUString(cListDelim);
                 bDelim = true;
                 rNewStr += pCalcPara->rCalc.GetStrResult(
-                            pTblBox->GetValue( *pCalcPara ), sal_False );
+                            pTblBox->GetValue( *pCalcPara ), false );
             }
         }
         rNewStr += ")";
@@ -357,7 +357,7 @@ void SwTableFormula::_MakeFormula( const SwTable& rTbl, OUString& rNewStr,
         if ( pSttBox->getRowSpan() >= 1 )
         {
             rNewStr += pCalcPara->rCalc.GetStrResult(
-                            pSttBox->GetValue( *pCalcPara ), sal_False );
+                            pSttBox->GetValue( *pCalcPara ), false );
         }
     }
     else
@@ -839,8 +839,8 @@ static OUString lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
     // If the formula is spanning over a table then keep external presentation
     if( &rTbl == &rTblNd.GetTable() )
     {
-        long nBox = SwTable::_GetBoxNum( sTmp, sal_True );
-        nBox -= SwTable::_GetBoxNum( sRefBoxNm, sal_True );
+        long nBox = SwTable::_GetBoxNum( sTmp, true );
+        nBox -= SwTable::_GetBoxNum( sRefBoxNm, true );
         long nLine = SwTable::_GetBoxNum( sTmp );
         nLine -= SwTable::_GetBoxNum( sRefBoxNm );
 
@@ -1064,13 +1064,13 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, OUString& rNewStr,
                 {
                     if( rTblUpd.pTbl != &rTbl ) // not the current one
                         rNewStr += rTblUpd.pTbl->GetFrmFmt()->GetName() + "."; // set new table name
-                    rTblUpd.bModified = sal_True;
+                    rTblUpd.bModified = true;
                 }
                 else if( pFnd != rTblUpd.pTbl ||
                     ( rTblUpd.pTbl != &rTbl && &rTbl != rTblUpd.DATA.pDelTbl))
                     rNewStr += sTblNm + "."; // keep table name
                 else
-                    rTblUpd.bModified = sal_True;
+                    rTblUpd.bModified = true;
             }
             else
                 rNewStr += sTblNm + ".";     // keep table name
@@ -1133,7 +1133,7 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, OUString& rNewStr,
             else
             {
                 // this is definitely an invalid formula, also mark as modified for Undo
-                rTblUpd.bModified = sal_True;
+                rTblUpd.bModified = true;
                 if( pEndBox )
                     bInNewTbl = USHRT_MAX != nEndLnPos &&
                                     rTblUpd.nSplitLine <= nEndLnPos &&
@@ -1154,7 +1154,7 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, OUString& rNewStr,
         {
             if( !bInNewTbl )
             {
-                rTblUpd.bModified = sal_True;
+                rTblUpd.bModified = true;
                 rNewStr += rTblUpd.pTbl->GetFrmFmt()->GetName() + ".";
             }
             else if( !sTblNm.isEmpty() )
@@ -1162,7 +1162,7 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, OUString& rNewStr,
         }
         else if( bInNewTbl )
         {
-            rTblUpd.bModified = sal_True;
+            rTblUpd.bModified = true;
             rNewStr += *rTblUpd.DATA.pNewTblNm + ".";
         }
         else if( !sTblNm.isEmpty() )

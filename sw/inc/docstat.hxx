@@ -36,7 +36,7 @@ struct SW_DLLPUBLIC SwDocStat
     sal_uLong           nAsianWord;
     sal_uLong           nChar;
     sal_uLong           nCharExcludingSpaces;
-    sal_Bool            bModified;
+    bool            bModified;
 
     SwDocStat();
     void Reset();

@@ -212,7 +212,7 @@ public:
 };
 
 const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
-                                    SwTOXSearch eDir, sal_Bool bInReadOnly )
+                                    SwTOXSearch eDir, bool bInReadOnly )
 {
     const SwTxtTOXMark* pMark = rCurTOXMark.GetTxtTOXMark();
     OSL_ENSURE(pMark, "pMark==0 invalid TxtTOXMark");
@@ -566,7 +566,7 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
         if( !bDelNodes )
         {
             SwSections aArr( 0 );
-            sal_uInt16 nCnt = pFmt->GetChildSections( aArr, SORTSECT_NOT, sal_False );
+            sal_uInt16 nCnt = pFmt->GetChildSections( aArr, SORTSECT_NOT, false );
             for( sal_uInt16 n = 0; n < nCnt; ++n )
             {
                 SwSection* pSect = aArr[ n ];
@@ -697,7 +697,7 @@ static const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, sal_uInt8 nLvl =
         // then find the "Anchor" (Body) position
         Point aPt;
         SwNode2Layout aNode2Layout( *pNd, pNd->GetIndex() );
-        const SwFrm* pFrm = aNode2Layout.GetFrm( &aPt, 0, sal_False );
+        const SwFrm* pFrm = aNode2Layout.GetFrm( &aPt, 0, false );
 
         if( pFrm )
         {
@@ -786,7 +786,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             // determine page description of table-of-content
             sal_uInt32 nPgDescNdIdx = pSectNd->GetIndex() + 1;
             sal_uInt32* pPgDescNdIdx = &nPgDescNdIdx;
-            pDefaultPageDesc = pSectNd->FindPageDesc( sal_False, pPgDescNdIdx );
+            pDefaultPageDesc = pSectNd->FindPageDesc( false, pPgDescNdIdx );
             if ( nPgDescNdIdx < pSectNd->GetIndex() )
             {
                 pDefaultPageDesc = 0;
@@ -807,7 +807,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                     eBreak == SVX_BREAK_PAGE_BOTH )
                )
             {
-                pDefaultPageDesc = pNdAfterTOX->FindPageDesc( sal_False );
+                pDefaultPageDesc = pNdAfterTOX->FindPageDesc( false );
             }
         }
         // consider start node of content section in the node array.
@@ -819,7 +819,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             // determine page description of content before table-of-content
             SwNodeIndex aIdx( *pSectNd );
             pDefaultPageDesc =
-                pSectNd->GetNodes().GoPrevious( &aIdx )->FindPageDesc( sal_False );
+                pSectNd->GetNodes().GoPrevious( &aIdx )->FindPageDesc( false );
 
         }
         if ( !pDefaultPageDesc )
@@ -876,7 +876,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         }
         aEndIdx--;
         SwPosition aPos( aEndIdx, SwIndex( pFirstEmptyNd, 0 ));
-        pDoc->CorrAbs( aSttIdx, aEndIdx, aPos, sal_True );
+        pDoc->CorrAbs( aSttIdx, aEndIdx, aPos, true );
 
         // delete flys in whole range including start node which requires
         // giving the node before start node as Mark parameter, hence -1.
@@ -1001,7 +1001,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         if( !aCorPam.Move( fnMoveForward ) )
             aCorPam.Move( fnMoveBackward );
         SwNodeIndex aEndIdx( aInsPos, 1 );
-        pDoc->CorrAbs( aInsPos, aEndIdx, *aCorPam.GetPoint(), sal_True );
+        pDoc->CorrAbs( aInsPos, aEndIdx, *aCorPam.GetPoint(), true );
 
         // Task 70995 - save and restore PageDesc and Break Attributes
         if( pFirstEmptyNd->HasSwAttrSet() )
@@ -1651,7 +1651,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                 {
                     const SvxLRSpaceItem& rLR =
                         (SvxLRSpaceItem&)pTOXNd->
-                        SwCntntNode::GetAttr( RES_LR_SPACE, sal_True );
+                        SwCntntNode::GetAttr( RES_LR_SPACE, true );
 
                     long nTabPosition = aToken.nTabStopPosition;
                     if( !GetTOXForm().IsRelTabPos() && rLR.GetTxtLeft() )
@@ -1679,14 +1679,14 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
 
                     SwRect aNdRect;
                     if( bCallFindRect )
-                        aNdRect = pTOXNd->FindLayoutRect( sal_True );
+                        aNdRect = pTOXNd->FindLayoutRect( true );
 
                     if( aNdRect.IsEmpty() )
                     {
                         // Nothing helped so far, so we go via the PageDesc
                         sal_uInt32 nPgDescNdIdx = pTOXNd->GetIndex() + 1;
                         sal_uInt32* pPgDescNdIdx = &nPgDescNdIdx;
-                        pPageDesc = pTOXNd->FindPageDesc( sal_False, pPgDescNdIdx );
+                        pPageDesc = pTOXNd->FindPageDesc( false, pPgDescNdIdx );
                         if ( !pPageDesc ||
                              *pPgDescNdIdx < _nTOXSectNdIdx )
                         {
@@ -1761,7 +1761,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                             // #i53420#
                             aFld.ChangeExpansion( pFrm,
                                 dynamic_cast<const SwCntntNode*>(pTOXSource->pNd),
-                                sal_True );
+                                true );
                             //---> #i89791#
                             // continue to support CF_NUMBER
                             // and CF_NUM_TITLE in order to handle ODF 1.0/1.1

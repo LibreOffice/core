@@ -75,7 +75,7 @@ SfxPrinter* SwView::GetPrinter( bool bCreate )
     SfxPrinter *pPrt = pIDDA->getPrinter( bCreate );
     if ( pOld != pPrt )
     {
-        sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+        bool bWeb = 0 != PTR_CAST(SwWebView, this);
         ::SetAppPrintOptions( &GetWrtShell(), bWeb );
     }
     return pPrt;
@@ -83,7 +83,7 @@ SfxPrinter* SwView::GetPrinter( bool bCreate )
 
 // Propagate printer change
 
-void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, sal_Bool bWeb )
+void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, bool bWeb )
 {
     SwPrintOptions* pOpt = SW_MOD()->GetPrtOptions(bWeb);
     if( !pOpt)
@@ -116,12 +116,12 @@ sal_uInt16 SwView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, bool  )
         if ( nDiffFlags & SFX_PRINTER_PRINTER )
             rSh.SetModified();
     }
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    bool bWeb = 0 != PTR_CAST(SwWebView, this);
     if ( nDiffFlags & SFX_PRINTER_OPTIONS )
         ::SetPrinter( rSh.getIDocumentDeviceAccess(), pNew, bWeb );
 
-    const sal_Bool bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ? sal_True : sal_False;
-    const sal_Bool bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE ? sal_True : sal_False;
+    const bool bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ? sal_True : sal_False;
+    const bool bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE ? sal_True : sal_False;
     if ( bChgOri || bChgSize )
     {
         rSh.StartAllAction();
@@ -149,14 +149,14 @@ bool SwView::HasPrintOptionsPage() const
 SfxTabPage* SwView::CreatePrintOptionsPage(Window* pParent,
                                                     const SfxItemSet& rSet)
 {
-    return ::CreatePrintOptionsPage( pParent, rSet, sal_False );
+    return ::CreatePrintOptionsPage( pParent, rSet, false );
 }
 
 // Print dispatcher
 
 void SwView::ExecutePrint(SfxRequest& rReq)
 {
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    bool bWeb = 0 != PTR_CAST(SwWebView, this);
     ::SetAppPrintOptions( &GetWrtShell(), bWeb );
     switch (rReq.GetSlot())
     {
@@ -192,11 +192,11 @@ void SwView::ExecutePrint(SfxRequest& rReq)
         {
             SwWrtShell* pSh = &GetWrtShell();
             SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, false);
-            sal_Bool bSilent = pSilentItem ? pSilentItem->GetValue() : sal_False;
+            bool bSilent = pSilentItem ? pSilentItem->GetValue() : sal_False;
             SFX_REQUEST_ARG(rReq, pPrintFromMergeItem, SfxBoolItem, FN_QRY_MERGE, false);
             if(pPrintFromMergeItem)
                 rReq.RemoveItem(FN_QRY_MERGE);
-            sal_Bool bFromMerge = pPrintFromMergeItem ? pPrintFromMergeItem->GetValue() : sal_False;
+            bool bFromMerge = pPrintFromMergeItem ? pPrintFromMergeItem->GetValue() : sal_False;
             SwMiscConfig aMiscConfig;
             bool bPrintSelection = false;
             if(!bSilent && !bFromMerge &&
@@ -246,7 +246,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
 // Create page printer/additions for SwView and SwPagePreview
 
 SfxTabPage* CreatePrintOptionsPage( Window *pParent,
-                                const SfxItemSet &rOptions, sal_Bool bPreview )
+                                const SfxItemSet &rOptions, bool bPreview )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "No Print Dialog");
@@ -270,7 +270,7 @@ SfxTabPage* CreatePrintOptionsPage( Window *pParent,
     return pPage;
 }
 
-void SetAppPrintOptions( SwViewShell* pSh, sal_Bool bWeb )
+void SetAppPrintOptions( SwViewShell* pSh, bool bWeb )
 {
     const IDocumentDeviceAccess* pIDDA = pSh->getIDocumentDeviceAccess();
     SwPrintData aPrtData = pIDDA->getPrintData();

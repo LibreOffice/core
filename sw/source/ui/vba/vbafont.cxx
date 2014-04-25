@@ -163,7 +163,7 @@ SwVbaFont::getColorIndex() throw ( uno::RuntimeException, std::exception )
 uno::Any SAL_CALL
 SwVbaFont::getSubscript() throw ( uno::RuntimeException, std::exception )
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     SwVbaFont_BASE::getSubscript() >>= bRes;
     if ( bRes )
         return aLongAnyTrue;
@@ -173,7 +173,7 @@ SwVbaFont::getSubscript() throw ( uno::RuntimeException, std::exception )
 uno::Any SAL_CALL
 SwVbaFont::getSuperscript() throw ( uno::RuntimeException, std::exception )
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     SwVbaFont_BASE::getSuperscript() >>= bRes;
     if ( bRes )
         return aLongAnyTrue;
@@ -183,7 +183,7 @@ SwVbaFont::getSuperscript() throw ( uno::RuntimeException, std::exception )
 uno::Any SAL_CALL
 SwVbaFont::getBold() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     SwVbaFont_BASE::getBold() >>= bRes;
     if ( bRes )
         return aLongAnyTrue;
@@ -193,7 +193,7 @@ SwVbaFont::getBold() throw (uno::RuntimeException, std::exception)
 uno::Any SAL_CALL
 SwVbaFont::getItalic() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     SwVbaFont_BASE::getItalic() >>= bRes;
     if ( bRes )
         return aLongAnyTrue;
@@ -203,7 +203,7 @@ SwVbaFont::getItalic() throw (uno::RuntimeException, std::exception)
 uno::Any SAL_CALL
 SwVbaFont::getStrikethrough() throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     SwVbaFont_BASE::getStrikethrough() >>= bRes;
     if ( bRes )
         return aLongAnyTrue;
@@ -213,7 +213,7 @@ SwVbaFont::getStrikethrough() throw (css::uno::RuntimeException, std::exception)
 uno::Any SAL_CALL
 SwVbaFont::getShadow() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     SwVbaFont_BASE::getShadow() >>= bRes;
     if ( bRes )
         return aLongAnyTrue;

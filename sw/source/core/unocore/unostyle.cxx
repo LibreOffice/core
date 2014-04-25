@@ -186,7 +186,7 @@ class SwAutoStylesEnumImpl
     IStyleAccess::SwAutoStyleFamily eFamily;
 public:
     SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam );
-    sal_Bool hasMoreElements() { return aIter != mAutoStyles.end(); }
+    bool hasMoreElements() { return aIter != mAutoStyles.end(); }
     SfxItemSet_Pointer_t nextElement() { return *(aIter++); }
     IStyleAccess::SwAutoStyleFamily getFamily() const { return eFamily; }
     SwDoc* getDoc() const { return pDoc; }
@@ -375,11 +375,11 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
            std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Bool    bLoadStyleText = sal_True;
-    sal_Bool    bLoadStylePage = sal_True;
-    sal_Bool    bLoadStyleOverwrite = sal_True;
-    sal_Bool    bLoadStyleNumbering = sal_True;
-    sal_Bool    bLoadStyleFrame = sal_True;
+    bool    bLoadStyleText = true;
+    bool    bLoadStylePage = true;
+    bool    bLoadStyleOverwrite = true;
+    bool    bLoadStyleNumbering = true;
+    bool    bLoadStyleFrame = true;
     if(IsValid() && !rURL.isEmpty())
     {
         const uno::Any* pVal;
@@ -390,7 +390,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
                     ::getBooleanCppuType() )
             {
                 const OUString sName = pArray[i].Name;
-                sal_Bool bVal = *(sal_Bool*)pVal->getValue();
+                bool bVal = *(sal_Bool*)pVal->getValue();
                 if( sName == UNO_NAME_OVERWRITE_STYLES )
                     bLoadStyleOverwrite = bVal;
                 else if( sName == UNO_NAME_LOAD_NUMBERING_STYLES )
@@ -410,7 +410,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
         aOpt.SetNumRules( bLoadStyleNumbering );
         aOpt.SetMerge( !bLoadStyleOverwrite );
 
-        sal_uLong nErr = pDocShell->LoadStylesFromFile( rURL, aOpt, sal_True );
+        sal_uLong nErr = pDocShell->LoadStylesFromFile( rURL, aOpt, true );
         if( nErr )
             throw io::IOException();
     }
@@ -809,7 +809,7 @@ uno::Sequence< OUString > SwXStyleFamily::getElementNames(void) throw( uno::Runt
 sal_Bool SwXStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if(pBasePool)
     {
         OUString sStyleName;
@@ -1058,9 +1058,9 @@ public:
     SwStyleProperties_Impl(const SfxItemPropertyMap& rMap);
     ~SwStyleProperties_Impl();
 
-    sal_Bool    SetProperty(const OUString& rName, uno::Any aVal);
-    sal_Bool    GetProperty(const OUString& rName, uno::Any*& rpAny);
-    sal_Bool    ClearProperty( const OUString& rPropertyName );
+    bool    SetProperty(const OUString& rName, uno::Any aVal);
+    bool    GetProperty(const OUString& rName, uno::Any*& rpAny);
+    bool    ClearProperty( const OUString& rPropertyName );
     void    ClearAllProperties( );
     void        GetProperty(const OUString &rPropertyName, const uno::Reference < beans::XPropertySet > &rxPropertySet, uno::Any& rAny );
 
@@ -1086,10 +1086,10 @@ SwStyleProperties_Impl::~SwStyleProperties_Impl()
     delete[] pAnyArr;
 }
 
-sal_Bool SwStyleProperties_Impl::SetProperty(const OUString& rName, uno::Any aVal)
+bool SwStyleProperties_Impl::SetProperty(const OUString& rName, uno::Any aVal)
 {
     sal_uInt16 nPos = 0;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
     while( aIt != aPropertyEntries.end() )
     {
@@ -1097,7 +1097,7 @@ sal_Bool SwStyleProperties_Impl::SetProperty(const OUString& rName, uno::Any aVa
         {
             delete pAnyArr[nPos];
             pAnyArr[nPos] = new uno::Any ( aVal );
-            bRet = sal_True;
+            bRet = true;
             break;
         }
         ++nPos;
@@ -1106,9 +1106,9 @@ sal_Bool SwStyleProperties_Impl::SetProperty(const OUString& rName, uno::Any aVa
     return bRet;
 }
 
-sal_Bool SwStyleProperties_Impl::ClearProperty( const OUString& rName )
+bool SwStyleProperties_Impl::ClearProperty( const OUString& rName )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_uInt16 nPos = 0;
     PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
     while( aIt != aPropertyEntries.end() )
@@ -1117,7 +1117,7 @@ sal_Bool SwStyleProperties_Impl::ClearProperty( const OUString& rName )
         {
             delete pAnyArr[nPos];
             pAnyArr[ nPos ] = 0;
-            bRet = sal_True;
+            bRet = true;
             break;
         }
         ++nPos;
@@ -1135,9 +1135,9 @@ void SwStyleProperties_Impl::ClearAllProperties( )
     }
 }
 
-sal_Bool SwStyleProperties_Impl::GetProperty(const OUString& rName, uno::Any*& rpAny )
+bool SwStyleProperties_Impl::GetProperty(const OUString& rName, uno::Any*& rpAny )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_uInt16 nPos = 0;
     PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
     while( aIt != aPropertyEntries.end() )
@@ -1145,7 +1145,7 @@ sal_Bool SwStyleProperties_Impl::GetProperty(const OUString& rName, uno::Any*& r
         if( rName == aIt->sName )
         {
             rpAny = pAnyArr[nPos];
-            bRet = sal_True;
+            bRet = true;
             break;
         }
         ++nPos;
@@ -1237,11 +1237,11 @@ uno::Sequence< OUString > SwXStyle::getSupportedServiceNames(void) throw( uno::R
     return aRet;
 }
 
-SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, sal_Bool bConditional) :
+SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, bool bConditional) :
     m_pDoc( pDoc ),
     pBasePool(0),
     eFamily(eFam),
-    bIsDescriptor(sal_True),
+    bIsDescriptor(true),
     bIsConditional(bConditional)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
@@ -1309,8 +1309,8 @@ SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
     m_sStyleName(rStyleName),
     pBasePool(&rPool),
     eFamily(eFam),
-    bIsDescriptor(sal_False),
-    bIsConditional(sal_False),
+    bIsDescriptor(false),
+    bIsConditional(false),
     pPropImpl(0)
 {
     StartListening(rPool);
@@ -1391,7 +1391,7 @@ void SwXStyle::setName(const OUString& rName) throw( uno::RuntimeException, std:
 sal_Bool SwXStyle::isUserDefined(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if(pBasePool)
     {
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
@@ -1408,7 +1408,7 @@ sal_Bool SwXStyle::isUserDefined(void) throw( uno::RuntimeException, std::except
 sal_Bool SwXStyle::isInUse(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if(pBasePool)
     {
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_USED);
@@ -1488,7 +1488,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
         throw uno::RuntimeException();
 }
 
-static uno::Reference< beans::XPropertySetInfo > lcl_getPropertySetInfo( SfxStyleFamily eFamily, sal_Bool bIsConditional )
+static uno::Reference< beans::XPropertySetInfo > lcl_getPropertySetInfo( SfxStyleFamily eFamily, bool bIsConditional )
 {
     uno::Reference< beans::XPropertySetInfo >  xRet;
     switch( eFamily )
@@ -1562,7 +1562,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXStyle::getPropertySetInfo(void)
 
 void    SwXStyle::ApplyDescriptorProperties()
 {
-    bIsDescriptor = sal_False;
+    bIsDescriptor = false;
     mxStyleData.clear();
     mxStyleFamily.clear();
 
@@ -1598,7 +1598,7 @@ struct SwStyleBase_Impl
 
     ~SwStyleBase_Impl(){ delete pItemSet; }
 
-    sal_Bool HasItemSet() {return mxNewBase.is();}
+    bool HasItemSet() {return mxNewBase.is();}
     SfxItemSet& GetItemSet()
         {
             OSL_ENSURE(mxNewBase.is(), "no SwDocStyleSheet available");
@@ -1694,7 +1694,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
     {
         case FN_UNO_HIDDEN:
         {
-            sal_Bool bHidden = sal_False;
+            bool bHidden = false;
             if ( rValue >>= bHidden )
             {
                 //make it a 'real' style - necessary for pooled styles
@@ -1948,14 +1948,14 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             SwStyleNameMapper::FillUIName(uDescName, sDescName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
             if(!pNewDesc->GetPageDesc() || pNewDesc->GetPageDesc()->GetName() != sDescName)
             {
-                sal_Bool bPut = sal_False;
+                bool bPut = false;
                 if (!sDescName.isEmpty())
                 {
                     SwPageDesc* pPageDesc = SwPageDesc::GetByName(*pDoc, sDescName);
                     if(pPageDesc)
                     {
                         pNewDesc->RegisterToPageDesc( *pPageDesc );
-                        bPut = sal_True;
+                        bPut = true;
                     }
                     else
                     {
@@ -1977,7 +1977,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         }
         case FN_UNO_IS_AUTO_UPDATE:
         {
-            sal_Bool bAuto = *(sal_Bool*)aValue.getValue();
+            bool bAuto = *(sal_Bool*)aValue.getValue();
             if(SFX_STYLE_FAMILY_PARA == eFamily)
                 rBase.mxNewBase->GetCollection()->SetAutoUpdateFmt(bAuto);
             else if(SFX_STYLE_FAMILY_FRAME == eFamily)
@@ -1997,7 +1997,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             const beans::NamedValue *pSeq = aSeq.getConstArray();
             sal_Int32 nLen = aSeq.getLength();
 
-            sal_Bool bFailed = sal_False;
+            bool bFailed = false;
             SwCondCollItem aCondItem;
             for(sal_uInt16 i = 0; i < nLen; i++)
             {
@@ -2014,25 +2014,25 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     sal_Int16 nIdx = GetCommandContextIndex( pSeq[i].Name );
 
                     pBasePool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
-                    sal_Bool bStyleFound = sal_False;
+                    bool bStyleFound = false;
                     const SfxStyleSheetBase* pBase = pBasePool->First();
                     while (pBase && !bStyleFound)
                     {
                         if(pBase->GetName() == aStyleName)
-                            bStyleFound = sal_True;
+                            bStyleFound = true;
                         pBase = pBasePool->Next();
                     }
 
                     if (nIdx == -1 || !bStyleFound)
                     {
-                        bFailed = sal_True;
+                        bFailed = true;
                         break;
                     }
 
                     aCondItem.SetStyle(&aStyleName, nIdx);
                 }
                 else
-                    bFailed = sal_True;
+                    bFailed = true;
             }
             if (bFailed)
                 throw lang::IllegalArgumentException();
@@ -2849,7 +2849,7 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
                         (sPropName.startsWith("Header") || sPropName.startsWith("Footer")))
                 {
                     sal_uInt16 nResId = lcl_ConvertFNToRES(pEntry->nWID);
-                    sal_Bool bFooter = sPropName.startsWith("Footer");
+                    bool bFooter = sPropName.startsWith("Footer");
                     const SvxSetItem* pSetItem;
                     if(SFX_ITEM_SET == aSet.GetItemState(
                             bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
@@ -3375,7 +3375,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                     }
                     else if(SID_ATTR_PAGE_ON == nRes )
                     {
-                        sal_Bool bVal = *(sal_Bool*)pValues[nProp].getValue();
+                        bool bVal = *(sal_Bool*)pValues[nProp].getValue();
                         if(bVal)
                         {
                             SfxItemSet aTempSet(*aBaseImpl.GetItemSet().GetPool(),
@@ -3406,7 +3406,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                 {
                     const SfxPoolItem& rItem = aBaseImpl.GetItemSet().Get(FN_PARAM_FTN_INFO);
                     SfxPoolItem* pNewFtnItem = rItem.Clone();
-                    sal_Bool bPut = pNewFtnItem->PutValue(pValues[nProp], pEntry->nMemberId);
+                    bool bPut = pNewFtnItem->PutValue(pValues[nProp], pEntry->nMemberId);
                     aBaseImpl.GetItemSet().Put(*pNewFtnItem);
                     delete pNewFtnItem;
                     if(!bPut)
@@ -3756,7 +3756,7 @@ void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const uno::An
 }
 
 SwXFrameStyle::SwXFrameStyle ( SwDoc *pDoc )
-: SwXStyle ( pDoc, SFX_STYLE_FAMILY_FRAME, sal_False)
+: SwXStyle ( pDoc, SFX_STYLE_FAMILY_FRAME, false)
 {
 }
 

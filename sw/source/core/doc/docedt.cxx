@@ -695,7 +695,7 @@ void SwDoc::DeleteSection( SwNode *pNode )
     {
         // move all Crsr/StkCrsr/UnoCrsr out of the to-be-deleted area
         SwNodeIndex aMvStt( aSttIdx, 1 );
-        CorrAbs( aMvStt, aEndIdx, SwPosition( aSttIdx ), sal_True );
+        CorrAbs( aMvStt, aEndIdx, SwPosition( aSttIdx ), true );
     }
 
     GetNodes().DelNodes( aSttIdx, aEndIdx.GetIndex() - aSttIdx.GetIndex() + 1 );
@@ -811,8 +811,8 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const OUString &rStr )
 bool SwDoc::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 {
     SwNodeIndex aIdx( rPaM.Start()->nNode );
-    sal_Bool bJoinTxt = aIdx.GetNode().IsTxtNode();
-    sal_Bool bOneNode = rPaM.GetPoint()->nNode == rPaM.GetMark()->nNode;
+    bool bJoinTxt = aIdx.GetNode().IsTxtNode();
+    bool bOneNode = rPaM.GetPoint()->nNode == rPaM.GetMark()->nNode;
     aIdx--;             // in front of the move area!
 
     bool bRet = MoveRange( rPaM, rPos, eMvFlags );
@@ -826,7 +826,7 @@ bool SwDoc::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         {
             {   // Block so SwIndex into node is deleted before Join
                 CorrRel( aNxtIdx, SwPosition( aIdx, SwIndex(pTxtNd,
-                            pTxtNd->GetTxt().getLength()) ), 0, sal_True );
+                            pTxtNd->GetTxt().getLength()) ), 0, true );
             }
             pTxtNd->JoinNext();
         }
@@ -884,7 +884,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
                                     &pStt->nContent, &pEnd->nContent );
     }
 
-    sal_Bool bSplit = sal_False;
+    bool bSplit = false;
     SwPaM aSavePam( rPos, rPos );
 
     // Move the SPoint to the beginning of the range
@@ -893,7 +893,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 
     // If there is a TextNode before and after the Move, create a JoinNext in the EditShell.
     SwTxtNode* pSrcNd = rPaM.GetPoint()->nNode.GetNode().GetTxtNode();
-    sal_Bool bCorrSavePam = pSrcNd && pStt->nNode != pEnd->nNode;
+    bool bCorrSavePam = pSrcNd && pStt->nNode != pEnd->nNode;
 
     // If one ore more TextNodes are moved, SwNodes::Move will do a SplitNode.
     // However, this does not update the cursor. So we create a TextNode to keep
@@ -902,7 +902,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     if( pTNd && rPaM.GetPoint()->nNode != rPaM.GetMark()->nNode &&
         ( rPos.nContent.GetIndex() || ( pTNd->Len() && bCorrSavePam  )) )
     {
-        bSplit = sal_True;
+        bSplit = true;
         const sal_Int32 nMkCntnt = rPaM.GetMark()->nContent.GetIndex();
 
         std::vector<sal_uLong> aBkmkArr;
@@ -982,7 +982,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 
         // Is passed to SwUndoMove, which happens when subsequently calling Undo JoinNext.
         // If it's not possible to call Undo JoinNext here.
-        sal_Bool bJoin = bSplit && pTNd;
+        bool bJoin = bSplit && pTNd;
         bCorrSavePam = bCorrSavePam &&
                         0 != ( pPamTxtNd = rPaM.GetNode()->GetTxtNode() )
                         && pPamTxtNd->CanJoinNext()
@@ -999,7 +999,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
             {
                 aSavePam.GetPoint()->nContent += pPamTxtNd->Len();
             }
-            bJoin = sal_False;
+            bJoin = false;
         }
         else if ( !aSavePam.Move( fnMoveForward, fnGoCntnt ) )
         {
@@ -1140,7 +1140,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
         pSaveInsPos = new SwNodeIndex( rRange.aStart, -1 );
 
     // move the Nodes
-    sal_Bool bNoDelFrms = 0 != (DOC_NO_DELFRMS & eMvFlags);
+    bool bNoDelFrms = 0 != (DOC_NO_DELFRMS & eMvFlags);
     if( GetNodes()._MoveNodes( rRange, GetNodes(), rPos, !bNoDelFrms ) )
     {
         ++aIdx;     // again back to old position
@@ -1242,10 +1242,10 @@ static bool lcl_StrLenOverflow( const SwPaM& rPam )
     return false;
 }
 
-void sw_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
+void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinTxt, bool& rJoinPrev )
 {
-    rJoinTxt = sal_False;
-    rJoinPrev = sal_False;
+    rJoinTxt = false;
+    rJoinPrev = false;
     if( rPam.GetPoint()->nNode != rPam.GetMark()->nNode )
     {
         const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
@@ -1273,7 +1273,7 @@ void sw_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
     }
 }
 
-void sw_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
+void sw_JoinText( SwPaM& rPam, bool bJoinPrev )
 {
     SwNodeIndex aIdx( rPam.GetPoint()->nNode );
     SwTxtNode *pTxtNd = aIdx.GetNode().GetTxtNode();
@@ -1336,7 +1336,7 @@ void sw_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 pOldTxtNd->CutText( pTxtNd, aAlphaIdx, SwIndex(pOldTxtNd),
                                     pOldTxtNd->Len() );
                 SwPosition aAlphaPos( aIdx, aAlphaIdx );
-                pDoc->CorrRel( rPam.GetPoint()->nNode, aAlphaPos, 0, sal_True );
+                pDoc->CorrRel( rPam.GetPoint()->nNode, aAlphaPos, 0, true );
 
                 // move all Bookmarks/TOXMarks
                 if( !aBkmkArr.empty() )
@@ -1384,7 +1384,7 @@ void sw_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 }
             }
 
-            pDoc->CorrRel( aIdx, *rPam.GetPoint(), 0, sal_True );
+            pDoc->CorrRel( aIdx, *rPam.GetPoint(), 0, true );
             // #i100466# adjust given <rPam>, if it does not belong to the cursors
             if ( pDelNd == rPam.GetBound( true ).nContent.GetIdxReg() )
             {
@@ -1532,12 +1532,12 @@ bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
 bool SwDoc::DeleteAndJoinImpl( SwPaM & rPam,
                                const bool bForceJoinNext )
 {
-    sal_Bool bJoinTxt, bJoinPrev;
+    bool bJoinTxt, bJoinPrev;
     sw_GetJoinFlags( rPam, bJoinTxt, bJoinPrev );
     // #i100466#
     if ( bForceJoinNext )
     {
-        bJoinPrev = sal_False;
+        bJoinPrev = false;
     }
 
     {
@@ -1662,7 +1662,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
             if ( pStartTxtNode )
             {
                 // now move the Content to the new Node
-                sal_Bool bOneNd = pStt->nNode == pEnd->nNode;
+                bool bOneNd = pStt->nNode == pEnd->nNode;
                 const sal_Int32 nLen = ( bOneNd ? pEnd->nContent.GetIndex()
                                            : pCNd->Len() )
                                         - pStt->nContent.GetIndex();
@@ -2221,7 +2221,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const OUString& rStr,
     if( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark() )
         return false;
 
-    sal_Bool bJoinTxt, bJoinPrev;
+    bool bJoinTxt, bJoinPrev;
     sw_GetJoinFlags( rPam, bJoinTxt, bJoinPrev );
 
     {
@@ -2237,7 +2237,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const OUString& rStr,
                 ( pStt->nNode.GetIndex() + 1 == pEnd->nNode.GetIndex() &&
                     !pEnd->nContent.GetIndex() ),
                 "invalid range: Point and Mark on different nodes" );
-        sal_Bool bOneNode = pStt->nNode == pEnd->nNode;
+        bool bOneNode = pStt->nNode == pEnd->nNode;
 
         // Own Undo?
         OUString sRepl( rStr );
@@ -2365,7 +2365,7 @@ SetRedlineMode( eOld );
                     *rPam.GetMark() = pBkmk->GetOtherMarkPos();
                 getIDocumentMarkAccess()->deleteMark(pBkmk);
             }
-            bJoinTxt = sal_False;
+            bJoinTxt = false;
         }
         else
         {
@@ -2476,7 +2476,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
     }
 
     // Move hard page brakes to the following Node.
-    sal_Bool bSavePageBreak = sal_False, bSavePageDesc = sal_False;
+    bool bSavePageBreak = false, bSavePageDesc = false;
 
     /* #i9185# This whould lead to a segmentation fault if not caught above. */
     sal_uLong nNextNd = rEnd.nNode.GetIndex() + 1;
@@ -2493,14 +2493,14 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
                 false, &pItem ) )
             {
                 pTableFmt->SetFmtAttr( *pItem );
-                bSavePageDesc = sal_True;
+                bSavePageDesc = true;
             }
 
             if( pSet && SFX_ITEM_SET == pSet->GetItemState( RES_BREAK,
                 false, &pItem ) )
             {
                 pTableFmt->SetFmtAttr( *pItem );
-                bSavePageBreak = sal_True;
+                bSavePageBreak = true;
             }
         }
     }
@@ -2533,7 +2533,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             ::PaMCorrAbs( aDelPam, aTmpPos );
         }
 
-        SwUndoDelete* pUndo = new SwUndoDelete( aDelPam, sal_True );
+        SwUndoDelete* pUndo = new SwUndoDelete( aDelPam, true );
 
         *rPam.GetPoint() = *aDelPam.GetPoint();
         pUndo->SetPgBrkFlags( bSavePageBreak, bSavePageDesc );
@@ -2559,11 +2559,11 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
         // move bookmarks, redlines etc.
         if (aRg.aStart == aRg.aEnd) // only first CorrAbs variant handles this
         {
-            CorrAbs( aRg.aStart, *rPam.GetPoint(), 0, sal_True );
+            CorrAbs( aRg.aStart, *rPam.GetPoint(), 0, true );
         }
         else
         {
-            CorrAbs( aRg.aStart, aRg.aEnd, *rPam.GetPoint(), sal_True );
+            CorrAbs( aRg.aStart, aRg.aEnd, *rPam.GetPoint(), true );
         }
 
             // What's with Flys?

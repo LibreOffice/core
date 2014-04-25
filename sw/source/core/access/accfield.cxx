@@ -131,7 +131,7 @@ com::sun::star::lang::Locale SAL_CALL SwAccessibleField::getLocale (void)
     return aLoc;
 }
 
-static sal_Bool lcl_PointInRectangle(const awt::Point & aPoint,
+static bool lcl_PointInRectangle(const awt::Point & aPoint,
                                      const awt::Rectangle & aRect)
 {
     long nDiffX = aPoint.X - aRect.X;

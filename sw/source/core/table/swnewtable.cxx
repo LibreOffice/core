@@ -81,7 +81,7 @@ the undo object to notify, maybe empty
 @return sal_True for compatibility reasons with OldMerge(..)
 */
 
-sal_Bool SwTable::NewMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
+bool SwTable::NewMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
      const SwSelBoxes& rMerged, SwTableBox*, SwUndoTblMerge* pUndo )
 {
     if( pUndo )
@@ -89,7 +89,7 @@ sal_Bool SwTable::NewMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     DeleteSel( pDoc, rBoxes, &rMerged, 0, true, true );
 
     CHECK_TABLE( *this )
-    return sal_True;
+    return true;
 }
 
 /** lcl_CheckMinMax helps evaluating (horizontal) min/max of boxes
@@ -1086,7 +1086,7 @@ static void lcl_getAllMergedBoxes( const SwTable& rTable, SwSelBoxes& rBoxes, Sw
 */
 
 static void lcl_UnMerge( const SwTable& rTable, SwTableBox& rBox, size_t nCnt,
-    sal_Bool bSameHeight )
+    bool bSameHeight )
 {
     SwSelBoxes aBoxes;
     lcl_getAllMergedBoxes( rTable, aBoxes, rBox );
@@ -1397,8 +1397,8 @@ static sal_uInt16 lcl_LineIndex( const SwTable& rTable, const SwSelBoxes& rBoxes
 /** SwTable::NewSplitRow(..) splits all selected boxes horizontally.
 */
 
-sal_Bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
-    sal_Bool bSameHeight )
+bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
+                           bool bSameHeight )
 {
     CHECK_TABLE( *this )
     ++nCnt;
@@ -1446,7 +1446,7 @@ sal_Bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
     else
     {
         aFndBox.DelFrms( *this );
-        bSameHeight = sal_False;
+        bSameHeight = false;
     }
     if( !bSameHeight )
     {
@@ -1476,7 +1476,7 @@ sal_Bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
     //Layout updaten
     aFndBox.MakeFrms( *this );
 
-    return sal_True;
+    return true;
 }
 
 /** SwTable::InsertRow(..) inserts one or more rows before or behind the selected

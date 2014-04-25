@@ -74,7 +74,7 @@ public:
     SwPageFtnInfo( const SwPageFtnInfo& );
     SwPageFtnInfo& operator=( const SwPageFtnInfo& );
 
-    sal_Bool operator ==( const SwPageFtnInfo& ) const;
+    bool operator ==( const SwPageFtnInfo& ) const;
 };
 
 /*
@@ -143,8 +143,8 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
     sal_uInt16  nRegHeight; ///< Sentence spacing and fontascent of style.
     sal_uInt16  nRegAscent; ///< For grid alignment (Registerhaltigkeit).
     UseOnPage   eUse;
-    sal_Bool        bLandscape;
-    sal_Bool    bHidden;
+    bool        bLandscape;
+    bool    bHidden;
 
     /// Footnote information.
     SwPageFtnInfo aFtnInfo;
@@ -153,7 +153,7 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
        No adjustment at any other place. */
     SAL_DLLPRIVATE void Mirror();
 
-    SAL_DLLPRIVATE void ResetAllAttr( sal_Bool bLeft );
+    SAL_DLLPRIVATE void ResetAllAttr( bool bLeft );
 
     SAL_DLLPRIVATE SwPageDesc(const OUString&, SwFrmFmt*, SwDoc *pDc );
 
@@ -164,8 +164,8 @@ public:
     OUString GetName() const { return aDescName; }
     void SetName( const OUString& rNewName ) { aDescName = rNewName; }
 
-    sal_Bool GetLandscape() const { return bLandscape; }
-    void SetLandscape( sal_Bool bNew ) { bLandscape = bNew; }
+    bool GetLandscape() const { return bLandscape; }
+    void SetLandscape( bool bNew ) { bLandscape = bNew; }
 
     const SvxNumberType &GetNumType() const { return aNumType; }
           void          SetNumType( const SvxNumberType& rNew ) { aNumType = rNew; }
@@ -174,15 +174,15 @@ public:
           SwPageFtnInfo &GetFtnInfo()       { return aFtnInfo; }
     void  SetFtnInfo( const SwPageFtnInfo &rNew ) { aFtnInfo = rNew; }
 
-    inline sal_Bool IsHeaderShared() const;
-    inline sal_Bool IsFooterShared() const;
-    inline void ChgHeaderShare( sal_Bool bNew );
-    inline void ChgFooterShare( sal_Bool bNew );
-    sal_Bool IsFirstShared() const;
-    void ChgFirstShare( sal_Bool bNew );
+    inline bool IsHeaderShared() const;
+    inline bool IsFooterShared() const;
+    inline void ChgHeaderShare( bool bNew );
+    inline void ChgFooterShare( bool bNew );
+    bool IsFirstShared() const;
+    void ChgFirstShare( bool bNew );
 
-    sal_Bool IsHidden( ) const { return bHidden; }
-    void SetHidden( sal_Bool bValue ) { bHidden = bValue; }
+    bool IsHidden( ) const { return bHidden; }
+    void SetHidden( bool bValue ) { bHidden = bValue; }
 
     inline void      SetUseOn( UseOnPage eNew );
     inline UseOnPage GetUseOn() const;
@@ -236,8 +236,8 @@ public:
     virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
 
     const SwFrmFmt* GetPageFmtOfNode( const SwNode& rNd,
-                                    sal_Bool bCheckForThisPgDc = sal_True ) const;
-    sal_Bool IsFollowNextPageOfNode( const SwNode& rNd ) const;
+                                    bool bCheckForThisPgDc = true ) const;
+    bool IsFollowNextPageOfNode( const SwNode& rNd ) const;
 
     /// Given a SwNode return the pagedesc in use at that location.
     static const SwPageDesc* GetPageDescOfNode(const SwNode& rNd);
@@ -255,22 +255,22 @@ inline void SwPageDesc::SetFollow( const SwPageDesc* pNew )
     pFollow = pNew ? (SwPageDesc*)pNew : this;
 }
 
-inline sal_Bool SwPageDesc::IsHeaderShared() const
+inline bool SwPageDesc::IsHeaderShared() const
 {
     return eUse & nsUseOnPage::PD_HEADERSHARE ? sal_True : sal_False;
 }
-inline sal_Bool SwPageDesc::IsFooterShared() const
+inline bool SwPageDesc::IsFooterShared() const
 {
     return eUse & nsUseOnPage::PD_FOOTERSHARE ? sal_True : sal_False;
 }
-inline void SwPageDesc::ChgHeaderShare( sal_Bool bNew )
+inline void SwPageDesc::ChgHeaderShare( bool bNew )
 {
     if ( bNew )
         eUse = (UseOnPage) (eUse | nsUseOnPage::PD_HEADERSHARE);
     else
         eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOHEADERSHARE);
 }
-inline void SwPageDesc::ChgFooterShare( sal_Bool bNew )
+inline void SwPageDesc::ChgFooterShare( bool bNew )
 {
     if ( bNew )
         eUse = (UseOnPage) (eUse | nsUseOnPage::PD_FOOTERSHARE);
@@ -300,12 +300,12 @@ inline UseOnPage SwPageDesc::GetUseOn() const
 
 inline void SwPageDesc::ResetAllMasterAttr()
 {
-    ResetAllAttr( sal_False );
+    ResetAllAttr( false );
 }
 
 inline void SwPageDesc::ResetAllLeftAttr()
 {
-    ResetAllAttr( sal_True );
+    ResetAllAttr( true );
 }
 
 inline const SwFrmFmt *SwPageDesc::GetRightFmt(bool const bFirst) const

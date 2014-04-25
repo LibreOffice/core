@@ -98,7 +98,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     {
         AddLink();      // create pDoc / pIo if applicable
 
-        sal_Bool bWeb = ISA( SwWebDocShell );
+        bool bWeb = ISA( SwWebDocShell );
         if ( bWeb )
             bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );// Styles from HTML.vor
         else if( ISA( SwGlobalDocShell ) )
@@ -275,7 +275,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 nFontHeight = pStdFont->GetDefaultHeightFor( aFontIdPoolId[nIdx], eLanguage );
             if(!pColl)
                 pColl = pDoc->GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
-            SvxFontHeightItem aFontHeight( (const SvxFontHeightItem&)pColl->GetFmtAttr( nFontHeightWhich, sal_True ));
+            SvxFontHeightItem aFontHeight( (const SvxFontHeightItem&)pColl->GetFmtAttr( nFontHeightWhich, true ));
             if(aFontHeight.GetHeight() != sal::static_int_cast<sal_uInt32, sal_Int32>(nFontHeight))
             {
                 aFontHeight.SetHeight(nFontHeight);
@@ -496,10 +496,10 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                 {
                     if( ReadXML )
                     {
-                        ReadXML->SetOrganizerMode( sal_True );
+                        ReadXML->SetOrganizerMode( true );
                         SwReader aRdr( rMedium, aEmptyOUStr, pDoc );
                         nErr = aRdr.Read( *ReadXML );
-                        ReadXML->SetOrganizerMode( sal_False );
+                        ReadXML->SetOrganizerMode( false );
                     }
                 }
                 break;
@@ -511,7 +511,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                     SwTransferable::InitOle( this, *pDoc );
                 }
                 // suppress SfxProgress, when we are Embedded
-                SW_MOD()->SetEmbeddedLoadSave( sal_True );
+                SW_MOD()->SetEmbeddedLoadSave( true );
                 // no break;
 
             case SFX_CREATE_MODE_STANDARD:
@@ -560,7 +560,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         }
 
         // suppress SfxProgress, when we are Embedded
-        SW_MOD()->SetEmbeddedLoadSave( sal_False );
+        SW_MOD()->SetEmbeddedLoadSave( false );
     }
 
     return bRet;
@@ -587,10 +587,10 @@ bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
                 mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
                 if( ReadXML )
                 {
-                    ReadXML->SetOrganizerMode( sal_True );
+                    ReadXML->SetOrganizerMode( true );
                     SwReader aRdr( rMedium, aEmptyOUStr, pDoc );
                     nErr = aRdr.Read( *ReadXML );
-                    ReadXML->SetOrganizerMode( sal_False );
+                    ReadXML->SetOrganizerMode( false );
                 }
             }
         }
@@ -619,7 +619,7 @@ void SwDocShell::SubInitNew()
     pDoc->setLinkUpdateMode( GLOBALSETTING );
     pDoc->setFieldUpdateFlags( AUTOUPD_GLOBALSETTING );
 
-    sal_Bool bWeb = ISA(SwWebDocShell);
+    bool bWeb = ISA(SwWebDocShell);
 
     sal_uInt16 nRange[] =   {
         RES_PARATR_ADJUST, RES_PARATR_ADJUST,
@@ -656,7 +656,7 @@ void SwDocShell::SubInitNew()
 
         aDfltSet.Put( aHyp );
 
-        sal_uInt16 nNewPos = static_cast< sal_uInt16 >(SW_MOD()->GetUsrPref(sal_False)->GetDefTab());
+        sal_uInt16 nNewPos = static_cast< sal_uInt16 >(SW_MOD()->GetUsrPref(false)->GetDefTab());
         if( nNewPos )
             aDfltSet.Put( SvxTabStopItem( 1, nNewPos,
                                           SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP ) );
@@ -668,7 +668,7 @@ void SwDocShell::SubInitNew()
     //default page mode for text grid
     if(!bWeb)
     {
-        sal_Bool bSquaredPageMode = SW_MOD()->GetUsrPref(sal_False)->IsSquaredPageMode();
+        bool bSquaredPageMode = SW_MOD()->GetUsrPref(false)->IsSquaredPageMode();
         pDoc->SetDefaultPageMode( bSquaredPageMode );
     }
 

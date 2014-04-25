@@ -139,7 +139,7 @@ uno::Reference< word::XParagraphFormat > SAL_CALL SwVbaStyle::getParagraphFormat
 
 sal_Bool SAL_CALL SwVbaStyle::getAutomaticallyUpdate() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool isAutoUpdate = sal_False;
+    bool isAutoUpdate = false;
     mxStyleProps->getPropertyValue("IsAutoUpdate") >>= isAutoUpdate;
     return isAutoUpdate;
 }

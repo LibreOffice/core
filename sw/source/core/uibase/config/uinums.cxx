@@ -60,7 +60,7 @@ SwBaseNumRules::SwBaseNumRules( const OUString& rFileName )
     :
     sFileName( rFileName ),
     nVersion(0),
-    bModified( sal_False )
+    bModified( false )
 {
     Init();
 }
@@ -106,7 +106,7 @@ void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 n
 }
 
 // PROTECTED METHODS ----------------------------------------------------
-sal_Bool SwBaseNumRules::Store(SvStream &rStream)
+bool SwBaseNumRules::Store(SvStream &rStream)
 {
     rStream.WriteUInt16( ACT_NUM_VERSION );
         // Write, what positions are occupied by a rule
@@ -121,7 +121,7 @@ sal_Bool SwBaseNumRules::Store(SvStream &rStream)
         else
             rStream.WriteUChar( (unsigned char) sal_False );
     }
-    return sal_True;
+    return true;
 }
 
 int SwBaseNumRules::Load(SvStream &rStream)
@@ -166,7 +166,7 @@ SwChapterNumRules::SwChapterNumRules() :
 
 void SwChapterNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 nIdx)
 {
-    bModified = sal_True;
+    bModified = true;
     SwBaseNumRules::ApplyNumRules(rCopy, nIdx);
 }
 
@@ -243,7 +243,7 @@ void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
 {
     // #i89178#
     rChg = SwNumRule( maName, numfunc::GetDefaultPositionAndSpaceMode() );
-    rChg.SetAutoRule( sal_False );
+    rChg.SetAutoRule( false );
     _SwNumFmtGlobal* pFmt;
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
         if( 0 != ( pFmt = aFmts[ n ] ) )
@@ -318,20 +318,20 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         sal_uInt16 nUS;
         short nShort;
         sal_Char cChar;
-        sal_Bool bFlag;
+        bool bFlag;
         OUString sStr;
 
-        rStream.ReadUInt16( nUS );             aFmt.SetNumberingType((sal_Int16)nUS );
+        rStream.ReadUInt16( nUS );           aFmt.SetNumberingType((sal_Int16)nUS );
         if( VERSION_53A > nVersion )
         {
             rStream.ReadChar( cChar );       aFmt.SetBulletChar( cChar );
         }
         else
         {
-            rStream.ReadUInt16( nUS );         aFmt.SetBulletChar( nUS );
+            rStream.ReadUInt16( nUS );       aFmt.SetBulletChar( nUS );
         }
 
-        rStream.ReadUChar( bFlag );           aFmt.SetIncludeUpperLevels( bFlag );
+        rStream.ReadCharAsBool( bFlag );     aFmt.SetIncludeUpperLevels( bFlag );
 
         if( VERSION_30B == nVersion )
         {
@@ -342,7 +342,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
             aFmt.SetPrefix( sStr );
             sStr = rStream.ReadUniOrByteString(eEncoding);
             aFmt.SetSuffix( sStr );
-            rStream.ReadUInt16( nUS );         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
+            rStream.ReadUInt16( nUS );        aFmt.SetNumAdjust( SvxAdjust( nUS ) );
             rStream.ReadInt32( nL );          aFmt.SetLSpace( lNumIndent );
             rStream.ReadInt32( nL );          aFmt.SetFirstLineOffset( (short)nL );
         }
@@ -355,10 +355,10 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
             aFmt.SetSuffix( sStr );
             rStream.ReadUInt16( nUS );         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
             rStream.ReadUInt16( nUS );         aFmt.SetAbsLSpace( nUS );
-            rStream.ReadInt16( nShort );      aFmt.SetFirstLineOffset( nShort );
+            rStream.ReadInt16( nShort );       aFmt.SetFirstLineOffset( nShort );
             rStream.ReadUInt16( nUS );         aFmt.SetCharTextDistance( nUS );
-            rStream.ReadInt16( nShort );      aFmt.SetLSpace( nShort );
-            rStream.ReadUChar( bFlag );
+            rStream.ReadInt16( nShort );       aFmt.SetLSpace( nShort );
+            rStream.ReadCharAsBool( bFlag );
         }
 
         sal_uInt16  nFamily;
@@ -467,7 +467,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
 
         rStream.WriteUInt16( sal_uInt16(aFmt.GetNumberingType()) )
                .WriteUInt16( aFmt.GetBulletChar() )
-               .WriteUChar( static_cast<sal_Bool>(aFmt.GetIncludeUpperLevels() > 0) )
+               .WriteUChar( aFmt.GetIncludeUpperLevels() > 0 )
                .WriteUInt16( aFmt.GetStart() );
         rStream.WriteUniOrByteString( aFmt.GetPrefix(), eEncoding );
         rStream.WriteUniOrByteString( aFmt.GetSuffix(), eEncoding );

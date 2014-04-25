@@ -31,7 +31,7 @@ public:
     SwModalRedlineAcceptDlg(Window *pParent);
     virtual ~SwModalRedlineAcceptDlg();
 
-    void            AcceptAll( sal_Bool bAccept );
+    void            AcceptAll( bool bAccept );
     virtual void    Activate() SAL_OVERRIDE;
 };
 

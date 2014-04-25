@@ -51,16 +51,16 @@ class SwRetrievedInputStreamDataManager
         {
             boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
             com::sun::star::uno::Reference<com::sun::star::io::XInputStream> mxInputStream;
-            sal_Bool mbIsStreamReadOnly;
+            bool mbIsStreamReadOnly;
 
             tData()
                 : mpThreadConsumer(),
-                  mbIsStreamReadOnly( sal_False )
+                  mbIsStreamReadOnly( false )
             {};
 
             tData( boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > pThreadConsumer )
                 : mpThreadConsumer( pThreadConsumer ),
-                  mbIsStreamReadOnly( sal_False )
+                  mbIsStreamReadOnly( false )
             {};
         };
 
@@ -70,7 +70,7 @@ class SwRetrievedInputStreamDataManager
 
         void PushData( const tDataKey nDataKey,
                        com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
-                       const sal_Bool bIsStreamReadOnly );
+                       const bool bIsStreamReadOnly );
 
         bool PopData( const tDataKey nDataKey,
                       tData& rData );

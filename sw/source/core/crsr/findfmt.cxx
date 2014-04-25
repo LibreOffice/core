@@ -33,7 +33,7 @@ bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
         ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetCntntNode()->Len()
         : !pPam->GetPoint()->nContent.GetIndex() )
     {
-        if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, sal_False ))
+        if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, false ))
         {
             return false;
         }
@@ -41,7 +41,7 @@ bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
         pPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
     }
 
-    sal_Bool bFirst = sal_True;
+    bool bFirst = true;
     SwCntntNode* pNode;
     while( 0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly )))
     {

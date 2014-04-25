@@ -64,7 +64,7 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
     SwDoc&              rDoc;
     SfxItemSet          aCoreSet;
 
-    sal_Bool                bPhysical;
+    bool                bPhysical;
 
     /// Make empty shell a real StyleSheet (Core).
     SAL_DLLPRIVATE void              Create();
@@ -76,7 +76,7 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
         FillPhysical
     };
 
-    SAL_DLLPRIVATE sal_Bool FillStyleSheet( FillStyleType eFType );
+    SAL_DLLPRIVATE bool FillStyleSheet( FillStyleType eFType );
 
 protected:
     virtual ~SwDocStyleSheet();
@@ -95,8 +95,8 @@ public:
     void                    SetMask(sal_uInt16 nMsk)            { nMask = nMsk;     }
     void                    SetFamily(SfxStyleFamily eFam)  { nFamily = eFam;   }
 
-    sal_Bool                    IsPhysical() const              { return bPhysical; }
-    void                    SetPhysical(sal_Bool bPhys);
+    bool                    IsPhysical() const              { return bPhysical; }
+    void                    SetPhysical(bool bPhys);
 
     virtual void            SetHidden( bool bHidden ) SAL_OVERRIDE;
     virtual bool            IsHidden( ) const SAL_OVERRIDE;
@@ -157,14 +157,14 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
     rtl::Reference< SwDocStyleSheet > mxStyleSheet;
     SwPoolFmtList       aLst;
     sal_uInt16              nLastPos;
-    sal_Bool                bFirstCalled;
+    bool                bFirstCalled;
 
     void                AppendStyleList(const ::std::vector<OUString>& rLst,
-                                        sal_Bool    bUsed,
-                                        sal_Bool    bTestHidden,
+                                        bool        bUsed,
+                                        bool        bTestHidden,
                                         bool        bOnlyHidden,
                                         sal_uInt16  nSection,
-                                        char    cType);
+                                        char        cType);
 
 public:
     SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
@@ -186,7 +186,7 @@ class SwDocStyleSheetPool : public SfxStyleSheetBasePool
 {
     rtl::Reference< SwDocStyleSheet > mxStyleSheet;
     SwDoc&              rDoc;
-    sal_Bool                bOrganizer : 1;     ///< Organizer
+    bool                bOrganizer : 1;     ///< Organizer
 
     virtual SfxStyleSheetBase* Create( const OUString&, SfxStyleFamily, sal_uInt16 nMask) SAL_OVERRIDE;
     virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& ) SAL_OVERRIDE;
@@ -194,7 +194,7 @@ class SwDocStyleSheetPool : public SfxStyleSheetBasePool
     using SfxStyleSheetBasePool::Find;
 
 public:
-    SwDocStyleSheetPool( SwDoc&, sal_Bool bOrganizer = sal_False );
+    SwDocStyleSheetPool( SwDoc&, bool bOrganizer = false );
 
     virtual void Replace( SfxStyleSheetBase& rSource,
                           SfxStyleSheetBase& rTarget ) SAL_OVERRIDE;
@@ -209,8 +209,8 @@ public:
 
     virtual void Remove( SfxStyleSheetBase* pStyle) SAL_OVERRIDE;
 
-    void    SetOrganizerMode( sal_Bool bMode )  { bOrganizer = bMode; }
-    sal_Bool    IsOrganizerMode() const         { return bOrganizer; }
+    void    SetOrganizerMode( bool bMode )  { bOrganizer = bMode; }
+    bool    IsOrganizerMode() const         { return bOrganizer; }
 
     virtual SfxStyleSheetIteratorPtr CreateIterator( SfxStyleFamily, sal_uInt16 nMask ) SAL_OVERRIDE;
 

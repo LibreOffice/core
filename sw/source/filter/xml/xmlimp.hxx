@@ -77,7 +77,7 @@ class SwXMLImport: public SvXMLImport
     bool                bShowProgress : 1;
     bool                bOrganizerMode : 1;
     bool                bInititedXForms : 1;
-    sal_Bool                bPreserveRedlineMode;
+    bool                bPreserveRedlineMode;
 
     SwDoc*      doc; // cached for getDoc()
 
@@ -89,7 +89,7 @@ class SwXMLImport: public SvXMLImport
                      const ::com::sun::star::uno::Reference<
                         ::com::sun::star::text::XTextRange > & rInsertPos );
     void         setStyleInsertMode( sal_uInt16 nFamilies,
-                                     sal_Bool bOverwrite );
+                                     bool bOverwrite );
     void         setBlockMode();
     void         setOrganizerMode();
 
@@ -128,7 +128,7 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    void                    InsertStyles( sal_Bool bAuto );
+    void                    InsertStyles( bool bAuto );
     void                    FinishStyles();
 
     // namespace office
@@ -141,7 +141,7 @@ public:
                 const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-                sal_Bool bAuto );
+                bool bAuto );
     SvXMLImportContext *CreateMasterStylesContext(
                 const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<

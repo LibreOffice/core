@@ -165,7 +165,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
         case FN_QRY_MERGE_FIELD:
             {
                 // we don't get any cursor, so we must create our own
-                sal_Bool bDisposeResultSet = sal_False;
+                bool bDisposeResultSet = false;
                 if ( !xCursor.is() )
                 {
                     xCursor = SwDBMgr::createCursor(sSourceArg,sCommandArg,nCommandTypeArg,xConnection);

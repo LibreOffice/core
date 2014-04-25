@@ -1889,8 +1889,8 @@ void SwPostItMgr::AssureStdModeAtShell()
           SdrView* pSdrView = mpWrtShell->GetDrawView();
         if ( pSdrView && pSdrView->IsTextEdit() )
         {
-            sal_Bool bLockView = mpWrtShell->IsViewLocked();
-            mpWrtShell->LockView( sal_True );
+            bool bLockView = mpWrtShell->IsViewLocked();
+            mpWrtShell->LockView( true );
             mpWrtShell->EndTextEdit();
             mpWrtShell->LockView( bLockView );
         }

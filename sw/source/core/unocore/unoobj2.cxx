@@ -591,7 +591,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
         if ((CURSOR_TBLTEXT != m_eCursorType) &&
             (CURSOR_SELECTION_IN_TABLE != m_eCursorType))
         {
-            aNewCrsr->SetRemainInSection( sal_False );
+            aNewCrsr->SetRemainInSection( false );
         }
 
         // os 2005-01-14: This part is only necessary to detect movements out
@@ -616,7 +616,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
     bool bInTable = false;
     if (!m_bFirstParagraph)
     {
-        pUnoCrsr->SetRemainInSection( sal_False );
+        pUnoCrsr->SetRemainInSection( false );
         // what to do if already in a table?
         SwTableNode * pTblNode = pUnoCrsr->GetNode()->FindTableNode();
         pTblNode = lcl_FindTopLevelTable( pTblNode, m_pOwnTable );
@@ -843,7 +843,7 @@ throw (uno::RuntimeException)
                     m_pImpl->m_rDoc, aCursor, rText, bForceExpandHints);
 
             SwUnoCursorHelper::SelectPam(aCursor, true);
-            aCursor.Left(rText.getLength(), CRSR_SKIP_CHARS, sal_False, sal_False);
+            aCursor.Left(rText.getLength(), CRSR_SKIP_CHARS, false, false);
         }
         SetPositions(aCursor);
         m_pImpl->m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
@@ -1677,7 +1677,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
         OSL_ENSURE( bSuccess, "DocInsertStringSplitCR" );
         (void) bSuccess;
         SwUnoCursorHelper::SelectPam(rCursor, true);
-        rCursor.Left(rString.getLength(), CRSR_SKIP_CHARS, sal_False, sal_False);
+        rCursor.Left(rString.getLength(), CRSR_SKIP_CHARS, false, false);
     }
     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
 }
@@ -1738,13 +1738,13 @@ void SwXParaFrameEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPo
     }
 }
 
-static sal_Bool
+static bool
 lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
         uno::Reference<text::XTextContent> & o_rNextObject,
         FrameDependList_t & i_rFrames)
 {
     if (!i_rFrames.size())
-        return sal_False;
+        return false;
 
     SwFrmFmt *const pFormat = static_cast<SwFrmFmt*>(const_cast<SwModify*>(
                 i_rFrames.front()->GetRegisteredIn()));

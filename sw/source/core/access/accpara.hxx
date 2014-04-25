@@ -82,7 +82,7 @@ class SwAccessibleParagraph :
                             // as the cursor is inside this object (protected by
                             // mutex)
 
-    sal_Bool bIsHeading;    // protected by base classes mutex
+    bool bIsHeading;    // protected by base classes mutex
     sal_Int32 nHeadingLevel;
 
     // implementation for XAccessibleSelection
@@ -103,7 +103,7 @@ class SwAccessibleParagraph :
 
     // determine the current selection. Fill the values with
     // -1 if there is no selection in the this paragraph
-    sal_Bool GetSelection(sal_Int32& nStart, sal_Int32& nEnd);
+    bool GetSelection(sal_Int32& nStart, sal_Int32& nEnd);
 
     // helper for GetSelection and getCaretPosition
     // #i27301# - add parameter <_bForSelection>, which indicates,
@@ -121,13 +121,13 @@ class SwAccessibleParagraph :
     // methods for checking the parameter range:
 
     // does nPos point to a char?
-    sal_Bool IsValidChar(sal_Int32 nPos, sal_Int32 nLength);
+    bool IsValidChar(sal_Int32 nPos, sal_Int32 nLength);
 
     // does nPos point to a position? (may be behind the last character)
-    sal_Bool IsValidPosition(sal_Int32 nPos, sal_Int32 nLength);
+    bool IsValidPosition(sal_Int32 nPos, sal_Int32 nLength);
 
     // is nBegin...nEnd a valid range? (nEnd points past the last character)
-    sal_Bool IsValidRange(sal_Int32 nBegin, sal_Int32 nEnd, sal_Int32 nLength);
+    bool IsValidRange(sal_Int32 nBegin, sal_Int32 nEnd, sal_Int32 nLength);
 
     // Ensure ordered range (i.e. nBegin is smaller then nEnd)
     void OrderRange(sal_Int32& nBegin, sal_Int32& nEnd)
@@ -163,7 +163,7 @@ class SwAccessibleParagraph :
 public:
     SwTOXSortTabBase* GetTOXSortTabBase();
 
-    sal_Bool IsHeading() const;
+    bool IsHeading() const;
 
 protected:
 
@@ -172,7 +172,7 @@ protected:
     // FOCUSABLE(+) and FOCUSED(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) SAL_OVERRIDE;
 
-    virtual void _InvalidateContent( sal_Bool bVisibleDataFired ) SAL_OVERRIDE;
+    virtual void _InvalidateContent( bool bVisibleDataFired ) SAL_OVERRIDE;
 
     virtual void _InvalidateCursorPos() SAL_OVERRIDE;
     virtual void _InvalidateFocus() SAL_OVERRIDE;
@@ -198,35 +198,35 @@ protected:
     }
 
     // determine if portion data is currently available
-    sal_Bool HasPortionData()   { return (pPortionData != NULL); }
+    bool HasPortionData()   { return (pPortionData != NULL); }
 
     //helpers for word boundaries
 
-    sal_Bool GetCharBoundary( com::sun::star::i18n::Boundary& rBound,
+    bool GetCharBoundary( com::sun::star::i18n::Boundary& rBound,
                               const OUString& rText,
                               sal_Int32 nPos );
-    sal_Bool GetWordBoundary( com::sun::star::i18n::Boundary& rBound,
+    bool GetWordBoundary( com::sun::star::i18n::Boundary& rBound,
                               const OUString& rText,
                               sal_Int32 nPos );
-    sal_Bool GetSentenceBoundary( com::sun::star::i18n::Boundary& rBound,
+    bool GetSentenceBoundary( com::sun::star::i18n::Boundary& rBound,
                                   const OUString& rText,
                                   sal_Int32 nPos );
-    sal_Bool GetLineBoundary( com::sun::star::i18n::Boundary& rBound,
+    bool GetLineBoundary( com::sun::star::i18n::Boundary& rBound,
                               const OUString& rText,
                               sal_Int32 nPos );
-    sal_Bool GetParagraphBoundary( com::sun::star::i18n::Boundary& rBound,
+    bool GetParagraphBoundary( com::sun::star::i18n::Boundary& rBound,
                                    const OUString& rText,
                                    sal_Int32 nPos );
-    sal_Bool GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
+    bool GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
                                    const OUString& rText,
                                    sal_Int32 nPos );
-    sal_Bool GetGlyphBoundary( com::sun::star::i18n::Boundary& rBound,
+    bool GetGlyphBoundary( com::sun::star::i18n::Boundary& rBound,
                                const OUString& rText,
                                sal_Int32 nPos );
 
     // get boundaries of word/sentence/etc. for specified text type
     // Does all argument checking, and then delegates to helper methods above.
-    sal_Bool GetTextBoundary( com::sun::star::i18n::Boundary& rBound,
+    bool GetTextBoundary( com::sun::star::i18n::Boundary& rBound,
                               const OUString& rText,
                               sal_Int32 nPos,
                               sal_Int16 aTextType )
@@ -244,7 +244,7 @@ public:
 
     inline operator ::com::sun::star::accessibility::XAccessibleText *();
 
-    virtual sal_Bool HasCursor() SAL_OVERRIDE;   // required by map to remember that object
+    virtual bool HasCursor() SAL_OVERRIDE;   // required by map to remember that object
 
     com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > GetCurrentTabStop( sal_Int32 nIndex  );
     virtual sal_Int16 SAL_CALL getAccessibleRole (void)     throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -438,10 +438,10 @@ public:
     // XAccessibleExtendedAttributes
     virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
-    sal_Bool GetSelectionAtIndex(sal_Int32& nIndex, sal_Int32& nStart, sal_Int32& nEnd);
+    bool GetSelectionAtIndex(sal_Int32& nIndex, sal_Int32& nStart, sal_Int32& nEnd);
     sal_Int32 GetRealHeadingLevel();
     // XAccessibleComponent
-    sal_Bool m_bLastHasSelection;
+    bool m_bLastHasSelection;
 
     // #i89175#
     // XAccessibleMultiLineText

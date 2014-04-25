@@ -54,10 +54,10 @@ SwLineNumberInfo::SwLineNumberInfo() :
     nCountBy( 5 ),
     nDividerCountBy( 3 ),
     ePos( LINENUMBER_POS_LEFT ),
-    bPaintLineNumbers( sal_False ),
-    bCountBlankLines( sal_True ),
-    bCountInFlys( sal_False ),
-    bRestartEachPage( sal_False )
+    bPaintLineNumbers( false ),
+    bCountBlankLines( true ),
+    bCountInFlys( false ),
+    bRestartEachPage( false )
 {
 }
 

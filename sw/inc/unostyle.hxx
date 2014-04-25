@@ -171,8 +171,8 @@ class SwXStyle : public cppu::WeakImplHelper7
     SfxStyleSheetBasePool*  pBasePool;
     SfxStyleFamily          eFamily;    // for Notify
 
-    sal_Bool                    bIsDescriptor  : 1;
-    sal_Bool                    bIsConditional : 1;
+    bool                    bIsDescriptor  : 1;
+    bool                    bIsConditional : 1;
     OUString                m_sParentStyleName;
     SwStyleProperties_Impl* pPropImpl;
 
@@ -199,7 +199,7 @@ protected:
 
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 public:
-    SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam = SFX_STYLE_FAMILY_PARA, sal_Bool bConditional = sal_False);
+    SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam = SFX_STYLE_FAMILY_PARA, bool bConditional = false);
     SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
                                 SwDoc*  pDoc,
                                 const OUString& rStyleName);
@@ -261,12 +261,12 @@ public:
     OUString            GetStyleName() const { return m_sStyleName;}
     SfxStyleFamily      GetFamily() const {return eFamily;}
 
-    sal_Bool                IsDescriptor() const {return bIsDescriptor;}
-    sal_Bool                IsConditional() const { return bIsConditional;}
+    bool                IsDescriptor() const {return bIsDescriptor;}
+    bool                IsConditional() const { return bIsConditional;}
     OUString            GetParentStyleName() const { return m_sParentStyleName;}
     void                SetDoc(SwDoc* pDc, SfxStyleSheetBasePool*   pPool)
                             {
-                                bIsDescriptor = sal_False; m_pDoc = pDc;
+                                bIsDescriptor = false; m_pDoc = pDc;
                                 pBasePool = pPool;
                                 StartListening(*pBasePool);
                             }

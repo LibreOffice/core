@@ -402,7 +402,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
     //The hard formatting properties that affect the entire paragraph
     if (rNd.HasSwAttrSet())
     {
-        sal_Bool bDeep = sal_False;
+        bool bDeep = false;
         // only copy hard attributes - bDeep = false
         aExportSet.Set(rNd.GetSwAttrSet(), bDeep);
         // get the current font item. Use rNd.GetSwAttrSet instead of aExportSet:
@@ -2846,7 +2846,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
             {
                 /* Munge flys in fly into absolutely positioned elements for word 6 */
                 const SwTxtNode* pParTxtNode = rAnch.GetCntntAnchor()->nNode.GetNode().GetTxtNode();
-                const SwRect aPageRect = pParTxtNode->FindPageFrmRect( sal_False, 0, sal_False );
+                const SwRect aPageRect = pParTxtNode->FindPageFrmRect( false, 0, false );
 
                 aOffset = rFrmFmt.FindLayoutRect().Pos();
                 aOffset -= aPageRect.Pos();

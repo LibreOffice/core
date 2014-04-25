@@ -72,8 +72,8 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 
     TransferBufferType eBufferType;
 
-    sal_Bool bOldIdle   :1; //D&D Idle flag from the viewsettings
-    sal_Bool bCleanUp   :1; //D&D cleanup after Drop (not by internal Drop)
+    bool bOldIdle   :1; //D&D Idle flag from the viewsettings
+    bool bCleanUp   :1; //D&D cleanup after Drop (not by internal Drop)
 
     // helper methods for the copy
     css::uno::Reference < css::embed::XEmbeddedObject > FindOLEObj( sal_Int64& nAspect ) const;
@@ -82,21 +82,21 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 
     // helper methods for the paste
     static SwTransferable* GetSwTransferable( const TransferableDataHelper& rData );
-    static void SetSelInShell( SwWrtShell& , sal_Bool , const Point* );
-    static sal_Bool _CheckForURLOrLNKFile( TransferableDataHelper& rData,
+    static void SetSelInShell( SwWrtShell& , bool , const Point* );
+    static bool _CheckForURLOrLNKFile( TransferableDataHelper& rData,
                                 OUString& rFileName, OUString* pTitle = 0 );
     static bool _TestAllowedFormat( const TransferableDataHelper& rData,
                                         sal_uLong nFormat, sal_uInt16 nDestination );
 
     static bool _PasteFileContent( TransferableDataHelper&,
-                                    SwWrtShell& rSh, sal_uLong nFmt, sal_Bool bMsg );
+                                    SwWrtShell& rSh, sal_uLong nFmt, bool bMsg );
     static bool _PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
-                            sal_uLong nFmt, sal_uInt8 nActionFlags, sal_Bool bMsg );
+                            sal_uLong nFmt, sal_uInt8 nActionFlags, bool bMsg );
     static bool _PasteTargetURL( TransferableDataHelper& rData, SwWrtShell& rSh,
-                        sal_uInt16 nAction, const Point* pPt, sal_Bool bInsertGRF );
+                        sal_uInt16 nAction, const Point* pPt, bool bInsertGRF );
 
     static bool _PasteDDE( TransferableDataHelper& rData, SwWrtShell& rWrtShell,
-                            sal_Bool bReReadGrf, sal_Bool bMsg );
+                            bool bReReadGrf, bool bMsg );
 
     static bool _PasteSdrFormat(  TransferableDataHelper& rData,
                                     SwWrtShell& rSh, sal_uInt16 nAction,
@@ -114,18 +114,18 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 
     static bool _PasteFileName( TransferableDataHelper& rData,
                             SwWrtShell& rSh, sal_uLong nFmt, sal_uInt16 nAction,
-                            const Point* pPt, sal_uInt8 nActionFlags, sal_Bool bMsg, bool * graphicInserted );
+                            const Point* pPt, sal_uInt8 nActionFlags, bool bMsg, bool * graphicInserted );
 
     static bool _PasteDBData( TransferableDataHelper& rData, SwWrtShell& rSh,
-                            sal_uLong nFmt, sal_Bool bLink, const Point* pDragPt,
-                            sal_Bool bMsg );
+                            sal_uLong nFmt, bool bLink, const Point* pDragPt,
+                            bool bMsg );
 
     static bool _PasteFileList( TransferableDataHelper& rData,
-                                SwWrtShell& rSh, sal_Bool bLink,
-                                const Point* pPt, sal_Bool bMsg );
+                                SwWrtShell& rSh, bool bLink,
+                                const Point* pPt, bool bMsg );
 
-    bool PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, sal_Bool bMove,
-                        sal_Bool bIsXSelection );
+    bool PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, bool bMove,
+                        bool bIsXSelection );
     bool PrivatePaste( SwWrtShell& rShell );
 
     void SetDataForDragAndDrop( const Point& rSttPos );
@@ -159,8 +159,8 @@ public:
 
     // copy - methods and helper methods for the copy
     int  Cut();
-    int  Copy( sal_Bool bIsCut = sal_False );
-    int  PrepareForCopy( sal_Bool bIsCut = sal_False );
+    int  Copy( bool bIsCut = false );
+    int  PrepareForCopy( bool bIsCut = false );
     int  CalculateAndCopy();                // special for Calculator
     int  CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr );
 
@@ -168,16 +168,16 @@ public:
     void RemoveDDELinkFormat( const Window& rWin );
 
     // paste - methods and helper methods for the paste
-    static sal_Bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
+    static bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
     static bool Paste( SwWrtShell&, TransferableDataHelper& );
     static bool PasteData( TransferableDataHelper& rData,
                           SwWrtShell& rSh, sal_uInt16 nAction, sal_uLong nFormat,
-                          sal_uInt16 nDestination, sal_Bool bIsPasteFmt,
-                          sal_Bool bIsDefault,
+                          sal_uInt16 nDestination, bool bIsPasteFmt,
+                          bool bIsDefault,
                           const Point* pDDPos = 0, sal_Int8 nDropAction = 0,
-                          sal_Bool bPasteSelection = sal_False );
+                          bool bPasteSelection = false );
 
-    static sal_Bool IsPasteSpecial( const SwWrtShell& rWrtShell,
+    static bool IsPasteSpecial( const SwWrtShell& rWrtShell,
                                 const TransferableDataHelper& );
     static bool PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& );
     static bool PasteSpecial( SwWrtShell& rSh, TransferableDataHelper&, sal_uLong& rFormatUsed );
@@ -192,7 +192,7 @@ public:
     void StartDrag( Window* pWin, const Point& rPos );
 
     SwWrtShell* GetShell()              { return pWrtShell; }
-    void SetCleanUp( sal_Bool bFlag )       { bCleanUp = bFlag; }
+    void SetCleanUp( bool bFlag )       { bCleanUp = bFlag; }
 
     // Interfaces for Selection
     /* #96392# Added pCreator to distinguish SwFrameShell from SwWrtShell. */

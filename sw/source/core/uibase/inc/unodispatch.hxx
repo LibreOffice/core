@@ -102,8 +102,8 @@ class SwXDispatch : public cppu::WeakImplHelper2
 {
     SwView*             m_pView;
     StatusListenerList  m_aListenerList;
-    sal_Bool            m_bOldEnable;
-    sal_Bool            m_bListenerAdded;
+    bool            m_bOldEnable;
+    bool            m_bListenerAdded;
 public:
     SwXDispatch(SwView& rView);
     virtual ~SwXDispatch();

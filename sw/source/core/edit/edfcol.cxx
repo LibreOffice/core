@@ -84,7 +84,7 @@ SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const OUString& rFmtCollName,
 
 }
 
-void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
+void SwEditShell::FillByEx(SwTxtFmtColl* pColl, bool bReset)
 {
     if( bReset )
     {

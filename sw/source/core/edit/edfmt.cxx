@@ -51,7 +51,7 @@ SwCharFmt* SwEditShell::GetCurCharFmt() const
     return pFmt;
 }
 
-void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
+void SwEditShell::FillByEx(SwCharFmt* pCharFmt, bool bReset)
 {
     if ( bReset )
     {

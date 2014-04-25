@@ -97,7 +97,7 @@ SwRect& SwRect::_Intersection( const SwRect& rRect )
     return *this;
 }
 
-sal_Bool SwRect::IsInside( const SwRect& rRect ) const
+bool SwRect::IsInside( const SwRect& rRect ) const
 {
     const long nRight  = Right();
     const long nBottom = Bottom();
@@ -109,7 +109,7 @@ sal_Bool SwRect::IsInside( const SwRect& rRect ) const
            (Top()  <= nrBottom)     && (nrBottom    <= nBottom);
 }
 
-sal_Bool SwRect::IsInside( const Point& rPoint ) const
+bool SwRect::IsInside( const Point& rPoint ) const
 {
     return (Left()  <= rPoint.X()) &&
            (Top()   <= rPoint.Y()) &&
@@ -118,7 +118,7 @@ sal_Bool SwRect::IsInside( const Point& rPoint ) const
 }
 
 // mouse moving of table borders
-sal_Bool SwRect::IsNear( const Point& rPoint, long nTolerance ) const
+bool SwRect::IsNear( const Point& rPoint, long nTolerance ) const
 {
     bool bIsNearby = (((Left()   - nTolerance) <= rPoint.X()) &&
                       ((Top()    - nTolerance) <= rPoint.Y()) &&
@@ -127,7 +127,7 @@ sal_Bool SwRect::IsNear( const Point& rPoint, long nTolerance ) const
     return IsInside(rPoint) || bIsNearby;
 }
 
-sal_Bool SwRect::IsOver( const SwRect& rRect ) const
+bool SwRect::IsOver( const SwRect& rRect ) const
 {
     return (Top()   <= rRect.Bottom()) &&
            (Left()  <= rRect.Right())  &&
@@ -187,13 +187,13 @@ long SwRect::GetBottomDistance( long nLim ) const { return nLim - m_Point.getY()
 long SwRect::GetTopDistance( long nLimit ) const { return m_Point.getY() - nLimit; }
 long SwRect::GetRightDistance( long nLim ) const { return nLim - m_Point.getX() - m_Size.getWidth(); }
 
-sal_Bool SwRect::OverStepLeft( long nLimit ) const
+bool SwRect::OverStepLeft( long nLimit ) const
     { return nLimit > m_Point.getX() && m_Point.getX() + m_Size.getWidth() > nLimit; }
-sal_Bool SwRect::OverStepBottom( long nLimit ) const
+bool SwRect::OverStepBottom( long nLimit ) const
     { return nLimit > m_Point.getY() && m_Point.getY() + m_Size.getHeight() > nLimit; }
-sal_Bool SwRect::OverStepTop( long nLimit ) const
+bool SwRect::OverStepTop( long nLimit ) const
     { return nLimit > m_Point.getY() && m_Point.getY() + m_Size.getHeight() > nLimit; }
-sal_Bool SwRect::OverStepRight( long nLimit ) const
+bool SwRect::OverStepRight( long nLimit ) const
     { return nLimit > m_Point.getX() && m_Point.getX() + m_Size.getWidth() > nLimit; }
 
 void SwRect::SetLeftAndWidth( long nLeft, long nNew )

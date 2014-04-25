@@ -34,7 +34,7 @@ const OUString BookmarkCombo::aForbiddenChars("/\\@:*?\";,.#");
 
 IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 {
-    sal_Bool bSelEntries = pBox->GetSelectEntryCount() != 0;
+    bool bSelEntries = pBox->GetSelectEntryCount() != 0;
     // if a string has been pasted from the clipboard then
     // there may be illegal characters in the box
     if(!bSelEntries)

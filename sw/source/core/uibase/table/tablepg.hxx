@@ -32,7 +32,7 @@ class SwTableRep;
 struct TColumn
 {
     SwTwips nWidth;
-    sal_Bool    bVisible;
+    bool    bVisible;
 };
 
 class SwFormatTablePage : public SfxTabPage
@@ -64,9 +64,9 @@ class SwFormatTablePage : public SfxTabPage
     SwTwips         nSaveWidth;
     SwTwips         nMinTableWidth;
     sal_uInt16          nOldAlign;
-    sal_Bool            bModified;
-    sal_Bool            bFull:1;
-    sal_Bool            bHtmlMode : 1;
+    bool            bModified;
+    bool            bFull:1;
+    bool            bHtmlMode : 1;
 
     void        Init();
     void        ModifyHdl(const Edit* pEdit);
@@ -110,11 +110,11 @@ class SwTableColumnPage : public SfxTabPage
     sal_uInt16          nNoOfVisibleCols;
     // Remember the width, when switching to autoalign
     sal_uInt16          aValueTbl[MET_FIELDS];// primary assignment of the MetricFields
-    sal_Bool            bModified:1;
-    sal_Bool            bModifyTbl:1;
-    sal_Bool            bPercentMode:1;
+    bool            bModified:1;
+    bool            bModifyTbl:1;
+    bool            bPercentMode:1;
 
-    void        Init(sal_Bool bWeb);
+    void        Init(bool bWeb);
     DECL_LINK( AutoClickHdl, CheckBox * );
     void        ModifyHdl( MetricField* pEdit );
     DECL_LINK( UpHdl, MetricField * );
@@ -166,8 +166,8 @@ class SwTextFlowPage : public SfxTabPage
 
     SwWrtShell*     pShell;
 
-    sal_Bool            bPageBreak;
-    sal_Bool            bHtmlMode;
+    bool            bPageBreak;
+    bool            bHtmlMode;
 
     DECL_LINK(PageBreakHdl_Impl, void *);
     DECL_LINK(ApplyCollClickHdl_Impl, void *);

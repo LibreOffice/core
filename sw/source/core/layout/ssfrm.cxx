@@ -64,55 +64,55 @@ long SwFrm::GetPrtRight() const
 long SwFrm::GetPrtTop() const
     { return Frm().Top() + Prt().Top(); }
 
-sal_Bool SwFrm::SetMinLeft( long nDeadline )
+bool SwFrm::SetMinLeft( long nDeadline )
 {
     SwTwips nDiff = nDeadline - Frm().Left();
     if( nDiff > 0 )
     {
         Frm().Left( nDeadline );
         Prt().Width( Prt().Width() - nDiff );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwFrm::SetMaxBottom( long nDeadline )
+bool SwFrm::SetMaxBottom( long nDeadline )
 {
     SwTwips nDiff = Frm().Top() + Frm().Height() - nDeadline;
     if( nDiff > 0 )
     {
         Frm().Height( Frm().Height() - nDiff );
         Prt().Height( Prt().Height() - nDiff );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwFrm::SetMinTop( long nDeadline )
+bool SwFrm::SetMinTop( long nDeadline )
 {
     SwTwips nDiff = nDeadline - Frm().Top();
     if( nDiff > 0 )
     {
         Frm().Top( nDeadline );
         Prt().Height( Prt().Height() - nDiff );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwFrm::SetMaxRight( long nDeadline )
+bool SwFrm::SetMaxRight( long nDeadline )
 {
     SwTwips nDiff = Frm().Left() + Frm().Width() - nDeadline;
     if( nDiff > 0 )
     {
         Frm().Width( Frm().Width() - nDiff );
         Prt().Width( Prt().Width() - nDiff );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-void SwFrm::MakeBelowPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify )
+void SwFrm::MakeBelowPos( const SwFrm* pUp, const SwFrm* pPrv, bool bNotify )
 {
     if( pPrv )
     {
@@ -128,7 +128,7 @@ void SwFrm::MakeBelowPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify 
         maFrm.Pos().Y() += 1;
 }
 
-void SwFrm::MakeUpperPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify )
+void SwFrm::MakeUpperPos( const SwFrm* pUp, const SwFrm* pPrv, bool bNotify )
 {
     if( pPrv )
     {
@@ -145,7 +145,7 @@ void SwFrm::MakeUpperPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify 
         maFrm.Pos().Y() -= 1;
 }
 
-void SwFrm::MakeLeftPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify )
+void SwFrm::MakeLeftPos( const SwFrm* pUp, const SwFrm* pPrv, bool bNotify )
 {
     if( pPrv )
     {
@@ -162,7 +162,7 @@ void SwFrm::MakeLeftPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify )
         maFrm.Pos().X() -= 1;
 }
 
-void SwFrm::MakeRightPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify )
+void SwFrm::MakeRightPos( const SwFrm* pUp, const SwFrm* pPrv, bool bNotify )
 {
     if( pPrv )
     {
@@ -210,10 +210,10 @@ void SwFrm::CheckDirChange()
     bool bOldVert = GetVerticalFlag();
     bool bOldRev = IsReverse();
     bool bOldR2L = GetRightToLeftFlag();
-    SetInvalidVert( sal_True );
-    SetInvalidR2L( sal_True );
+    SetInvalidVert( true );
+    SetInvalidR2L( true );
     bool bChg = bOldR2L != IsRightToLeft();
-    sal_Bool bOldVertL2R = IsVertLR();
+    bool bOldVertL2R = IsVertLR();
     if( ( IsVertical() != bOldVert ) || bChg || IsReverse() != bOldRev || bOldVertL2R != IsVertLR() )
     {
         InvalidateAll();
@@ -264,7 +264,7 @@ void SwFrm::CheckDirChange()
                 pFrm = pFrm->GetNext();
             }
             if( pCol )
-                pBody->AdjustColumns( pCol, sal_True );
+                pBody->AdjustColumns( pCol, true );
         }
         else if( IsTxtFrm() )
             ((SwTxtFrm*)this)->Prepare( PREP_CLEAR );
@@ -301,7 +301,7 @@ void SwFrm::CheckDirChange()
 /// returns the position for anchors based on frame direction
 // OD 2004-03-10 #i11860# - consider lower space and line spacing of
 // previous frame according to new option 'Use former object positioning'
-Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
+Point SwFrm::GetFrmAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const
 {
     Point aAnchor = Frm().Pos();
 
@@ -572,7 +572,7 @@ const SwRect SwFrm::PaintArea() const
     // NEW TABLES
     // Cell frames may not leave their upper:
     SwRect aRect = IsRowFrm() ? GetUpper()->Frm() : Frm();
-    const sal_Bool bVert = IsVertical();
+    const bool bVert = IsVertical();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
     long nRight = (aRect.*fnRect->fnGetRight)();
     long nLeft  = (aRect.*fnRect->fnGetLeft)();
@@ -613,7 +613,7 @@ const SwRect SwFrm::PaintArea() const
         }
         else if( pTmp->IsColumnFrm() )  // nobody enters neightbour columns
         {
-            sal_Bool bR2L = pTmp->IsRightToLeft();
+            bool bR2L = pTmp->IsRightToLeft();
             // the first column has _no_ influence to the left range
             if( bR2L ? pTmp->GetNext() : pTmp->GetPrev() )
             {
@@ -661,9 +661,9 @@ const SwRect SwFrm::PaintArea() const
 |*  The unionframe is the framearea (Frm()) of a frame expanded by the
 |*  printarea, if there's a negative margin at the left or right side.
 |*/
-const SwRect SwFrm::UnionFrm( sal_Bool bBorder ) const
+const SwRect SwFrm::UnionFrm( bool bBorder ) const
 {
-    sal_Bool bVert = IsVertical();
+    bool bVert = IsVertical();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
     long nLeft = (Frm().*fnRect->fnGetLeft)();
     long nWidth = (Frm().*fnRect->fnGetWidth)();

@@ -147,7 +147,7 @@ public:
     OUString Expand( sal_uInt32 nFmt, short nOff, sal_uInt16 const nPageNumber,
                      sal_uInt16 const nMaxPage, const OUString& ) const;
     void ChangeExpansion( SwDoc* pDoc,
-                            sal_Bool bVirtPageNum, const sal_Int16* pNumFmt = 0 );
+                            bool bVirtPageNum, const sal_Int16* pNumFmt = 0 );
     virtual SwFieldType* Copy() const SAL_OVERRIDE;
 };
 
@@ -331,14 +331,14 @@ public:
 
 class SwHiddenTxtFieldType : public SwFieldType
 {
-    sal_Bool bHidden;
+    bool bHidden;
 public:
-    SwHiddenTxtFieldType(sal_Bool bSetHidden = sal_True);
+    SwHiddenTxtFieldType(bool bSetHidden = true);
 
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 
-    void                    SetHiddenFlag( sal_Bool bSetHidden = sal_True );
-    inline sal_Bool             GetHiddenFlag() const { return bHidden; }
+    void                    SetHiddenFlag( bool bSetHidden = true );
+    inline bool             GetHiddenFlag() const { return bHidden; }
 };
 
 /*--------------------------------------------------------------------
@@ -354,19 +354,19 @@ class SwHiddenTxtField : public SwField
     OUString aCond;            ///< Condition.
     sal_uInt16  nSubType;
 
-    sal_Bool    bCanToggle : 1;     ///< Can field be toggled alone?
-    sal_Bool    bIsHidden  : 1;     ///< Is it not visible?
-    sal_Bool    bValid     : 1;     ///< Is DB-field evaluated?
+    bool    bCanToggle : 1;     ///< Can field be toggled alone?
+    bool    bIsHidden  : 1;     ///< Is it not visible?
+    bool    bValid     : 1;     ///< Is DB-field evaluated?
 
     virtual OUString    Expand() const SAL_OVERRIDE;
     virtual SwField*    Copy() const SAL_OVERRIDE;
 
 public:
     SwHiddenTxtField( SwHiddenTxtFieldType*,
-                     sal_Bool   bConditional,
+                     bool   bConditional,
                      const OUString& rCond,
                      const OUString& rTxt,
-                     sal_Bool   bHidden  = sal_False,
+                     bool   bHidden  = false,
                      sal_uInt16 nSubType = TYP_HIDDENTXTFLD);
 
     SwHiddenTxtField( SwHiddenTxtFieldType*,
@@ -379,7 +379,7 @@ public:
 
     void                Evaluate(SwDoc*);
 
-    inline void         SetValue(sal_Bool bHidden)  { bIsHidden = bHidden; }
+    inline void         SetValue(bool bHidden)  { bIsHidden = bHidden; }
     OUString            GetColumnName(const OUString& rName);
     OUString            GetDBName(const OUString& rName, SwDoc *pDoc);
 
@@ -416,7 +416,7 @@ public:
 class SwHiddenParaField : public SwField
 {
     OUString           aCond;
-    sal_Bool                bIsHidden:1;
+    bool                bIsHidden:1;
 public:
     /// Direct input, delete old value.
     SwHiddenParaField(SwHiddenParaFieldType*, const OUString& rCond);
@@ -424,8 +424,8 @@ public:
     virtual OUString    Expand() const SAL_OVERRIDE;
     virtual SwField*    Copy() const SAL_OVERRIDE;
 
-    void                SetHidden(sal_Bool bHidden)     { bIsHidden = bHidden; }
-    sal_Bool                IsHidden() const            { return bIsHidden;    }
+    void                SetHidden(bool bHidden)     { bIsHidden = bHidden; }
+    bool                IsHidden() const            { return bIsHidden;    }
 
     /// Query, set condition.
     virtual OUString    GetPar1() const SAL_OVERRIDE;
@@ -456,7 +456,7 @@ class SW_DLLPUBLIC SwMacroField : public SwField
 {
     OUString aMacro;
     OUString aText;
-    sal_Bool      bIsScriptURL;
+    bool      bIsScriptURL;
 
     virtual OUString Expand() const SAL_OVERRIDE;
     virtual SwField* Copy() const SAL_OVERRIDE;
@@ -487,7 +487,7 @@ public:
                                    const OUString& rMacroName,
                                    const OUString& rLibraryName );
 
-    static sal_Bool isScriptURL( const OUString& str );
+    static bool isScriptURL( const OUString& str );
 };
 
 /*--------------------------------------------------------------------
@@ -657,11 +657,11 @@ protected:
 class SwRefPageSetField : public SwField
 {
     short   nOffset;
-    sal_Bool    bOn;
+    bool    bOn;
 
 public:
     SwRefPageSetField( SwRefPageSetFieldType*, short nOff = 0,
-                        sal_Bool bOn = sal_True );
+                        bool bOn = true );
 
     virtual OUString    Expand() const SAL_OVERRIDE;
     virtual SwField*    Copy() const SAL_OVERRIDE;
@@ -669,7 +669,7 @@ public:
     virtual OUString  GetPar2() const SAL_OVERRIDE;
     virtual void    SetPar2(const OUString& rStr) SAL_OVERRIDE;
 
-    sal_Bool IsOn() const               { return bOn; }
+    bool IsOn() const               { return bOn; }
 
     short GetOffset() const         { return nOffset; }
     void SetOffset( short nOff )    { nOffset = nOff; }
@@ -780,11 +780,11 @@ class SwScriptField : public SwField
     OUString sCode;  /**< Code as text.
                           Code as JavaCode ? */
 
-    sal_Bool    bCodeURL; ///< Code contains URL of a script.
+    bool    bCodeURL; ///< Code contains URL of a script.
 
 public:
     SwScriptField( SwScriptFieldType*, const OUString& rType,
-                   const OUString& rCode, sal_Bool bURL=sal_False );
+                   const OUString& rCode, bool bURL=false );
 
     virtual OUString        GetDescription() const SAL_OVERRIDE;
 
@@ -798,8 +798,8 @@ public:
     virtual OUString   GetPar2() const SAL_OVERRIDE;
     virtual void            SetPar2(const OUString& rStr) SAL_OVERRIDE;
 
-    sal_Bool                    IsCodeURL() const { return bCodeURL; }
-    void                    SetCodeURL( sal_Bool bURL ) { bCodeURL = bURL; }
+    bool                    IsCodeURL() const { return bCodeURL; }
+    void                    SetCodeURL( bool bURL ) { bCodeURL = bURL; }
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };

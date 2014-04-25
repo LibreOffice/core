@@ -86,13 +86,13 @@ class Ww1StyleSheet;
 class Ww1Fib
 {
     W1_FIB aFib;
-    sal_Bool bOK;
+    bool bOK;
     SvStream& rStream;
 public:
     Ww1Fib(SvStream&);
     friend std::ostream& operator <<(std::ostream&, Ww1Fib&);
     W1_FIB& GetFIB()        { return aFib; }
-    sal_Bool GetError()         { return !bOK; }
+    bool GetError()         { return !bOK; }
     SvStream& GetStream()   { return rStream; }
 };
 
@@ -101,10 +101,10 @@ class Ww1Dop
 {
     W1_DOP aDop;
     Ww1Fib& rFib;
-    sal_Bool bOK;
+    bool bOK;
 public:
     Ww1Dop(Ww1Fib&);
-    sal_Bool GetError() {
+    bool GetError() {
         return !bOK; }
     W1_DOP& GetDOP() {
         return aDop; }
@@ -121,7 +121,7 @@ protected:
     sal_uLong ulFilePos;
     sal_uLong ulCountBytes;
     sal_uLong ulSeek;
-    sal_Bool bOK;
+    bool bOK;
 public:
     Ww1PlainText(Ww1Fib& rWwFib, sal_uLong nFilePos, sal_uLong nCountBytes);
     // within the text
@@ -145,7 +145,7 @@ public:
         OSL_ENSURE(ulSeek+1<ulCountBytes, "Ww1PlainText");
         ulSeek++;
     }
-    sal_Bool GetError()                     { return !bOK; }
+    bool GetError()                     { return !bOK; }
     sal_Unicode Out( Ww1Shell&, sal_uLong& );
     sal_Unicode Out( OUString&, sal_uLong=0xffffffff);
     sal_Unicode Out( sal_Unicode& );
@@ -222,14 +222,14 @@ class Ww1Style
     Ww1StyleSheet* pParent;
     sal_uInt8 stcBase;
     sal_uInt8 stcNext;
-    sal_Bool bUsed;
+    bool bUsed;
 public:
     Ww1Style();
     ~Ww1Style();
     bool IsUsed() const                 { return bUsed; }
     void SetDefaults(sal_uInt8);
     void SetParent(Ww1StyleSheet* newParent)    { pParent = newParent; }
-    void SetName(const OUString& rName)   { bUsed = sal_True; aName = rName; }
+    void SetName(const OUString& rName)   { bUsed = true; aName = rName; }
     const OUString& GetName() const       { return aName; }
     Ww1Style& GetBase();
     sal_uInt16 GetnBase() const             { return stcBase; }
@@ -248,7 +248,7 @@ class Ww1StyleSheet
     Ww1Style aStyles[256];
     sal_uInt16 cstcStd; // count style code standard
     Ww1Fib& rFib;
-    sal_Bool bOK;
+    bool bOK;
     sal_uInt16 ReadNames(sal_uInt8*&, sal_uInt16&);
     sal_uInt16 ReadChpx(sal_uInt8*&, sal_uInt16&);
     sal_uInt16 ReadPapx(sal_uInt8*&, sal_uInt16&);
@@ -267,7 +267,7 @@ public:
     friend std::ostream& operator <<(std::ostream&, Ww1StyleSheet&);
     void Out(Ww1Shell&, Ww1Manager&);
     friend class Ww1Style;
-    sal_Bool GetError() {
+    bool GetError() {
         return !bOK; }
 };
 
@@ -281,7 +281,7 @@ protected:
     Ww1Fib& rFib;
     sal_uLong nFieldFlags;
     sal_uInt16 nMax; // Array size
-    sal_Bool bOK;
+    bool bOK;
 public:
     Ww1Fonts(Ww1Fib&, sal_uLong nFieldFlgs);
     ~Ww1Fonts() {
@@ -292,7 +292,7 @@ public:
     sal_uInt16 Count() {
         return nMax; }
     friend std::ostream& operator <<(std::ostream&, Ww1Fonts&);
-    sal_Bool GetError() {
+    bool GetError() {
         return !bOK; }
     SvxFontItem GetFont(sal_uInt16);
 };
@@ -666,7 +666,7 @@ public:
 // The data type Sprm actually appearing in the file
 class Ww1Sprm
 {
-    sal_Bool ReCalc();
+    bool ReCalc();
     static Ww1SingleSprm* aTab[256];
     static Ww1SingleSprm* pSingleSprm;
 protected:
@@ -680,7 +680,7 @@ protected:
 
     sal_uInt8* p;
     sal_uInt16 nCountBytes;
-    sal_Bool bOK;
+    bool bOK;
     sal_uInt16* pArr;
     sal_uInt16 count;
     // without token, with length byte/word
@@ -694,7 +694,7 @@ protected:
 public:
     // SH: I need it to be public
     // returns for the n-th element id, size & pointer to data:
-    sal_Bool Fill(sal_uInt16, sal_uInt8&, sal_uInt16&, sal_uInt8*&);
+    bool Fill(sal_uInt16, sal_uInt8&, sal_uInt16&, sal_uInt8*&);
 
     Ww1Sprm(sal_uInt8*, sal_uInt16);
     Ww1Sprm(SvStream&, sal_uLong);
@@ -707,7 +707,7 @@ public:
         return nCountBytes != 255; }
     sal_uInt16 Count() {
         return count; }
-    sal_Bool GetError() {
+    bool GetError() {
         return !bOK; }
     static void DeinitTab();
 };
@@ -716,13 +716,13 @@ public:
 // of a picture filename or an embedded picture
 class Ww1Picture
 {
-    sal_Bool bOK;
+    bool bOK;
     W1_PIC* pPic;
 public:
     Ww1Picture(SvStream&, sal_uLong);
     ~Ww1Picture() {
         }
-    sal_Bool GetError() {
+    bool GetError() {
         return !bOK; }
     friend std::ostream& operator <<(std::ostream&, Ww1Picture&);
     void Out(Ww1Shell&, Ww1Manager&);
@@ -737,7 +737,7 @@ class Ww1Plc
     sal_uInt16 nCountBytes;
     sal_uInt16 iMac;
     sal_uInt16 nItemSize;
-    sal_Bool bOK;
+    bool bOK;
 protected:
     Ww1Fib& rFib;
     sal_uInt8* GetData(sal_uInt16);
@@ -752,7 +752,7 @@ public:
         end = Where(nIndex+1); }
     sal_uInt16 Count() {
         return iMac; }
-    sal_Bool GetError() {
+    bool GetError() {
         return !bOK; }
 };
 
@@ -874,7 +874,7 @@ public:
         {   if( pIdxA ) { delete pIdxA[0]; delete pIdxA; } }
     const OUString GetStr( sal_uInt16 nNum ) const;
     sal_uInt16 Count() const    { return nMax; }
-    sal_Bool GetError() const   { return (nMax != 0) && !pIdxA; }
+    bool GetError() const   { return (nMax != 0) && !pIdxA; }
 };
 
 class Ww1PlcBookmarkTxt: public Ww1StringList
@@ -889,7 +889,7 @@ public:
 class Ww1PlcBookmarkPos : public Ww1Plc
 {
 public:
-    Ww1PlcBookmarkPos(Ww1Fib& _rFib, sal_uLong start, sal_uInt16 nBytes, sal_Bool bEnd)
+    Ww1PlcBookmarkPos(Ww1Fib& _rFib, sal_uLong start, sal_uInt16 nBytes, bool bEnd)
         : Ww1Plc(_rFib, start, nBytes, (bEnd) ? 0 : 2)
     {}
 
@@ -920,7 +920,7 @@ class Ww1Fkp
 protected:
     sal_uInt8 aFkp[512];
     sal_uInt16 nItemSize;
-    sal_Bool bOK;
+    bool bOK;
     sal_uInt8* GetData(sal_uInt16);
 public:
     Ww1Fkp(SvStream&, sal_uLong, sal_uInt16);
@@ -936,7 +936,7 @@ public:
         : Ww1Fkp(rStream, ulFilePos, 1)
     {}
     friend std::ostream& operator <<(std::ostream&, Ww1FkpPap&);
-    sal_Bool Fill(sal_uInt16,  sal_uInt8*&, sal_uInt16&);
+    bool Fill(sal_uInt16,  sal_uInt8*&, sal_uInt16&);
 };
 
 class Ww1FkpChp : public Ww1Fkp
@@ -954,7 +954,7 @@ public:
     {}
 
     friend std::ostream& operator <<(std::ostream&, Ww1FkpChp&);
-    sal_Bool Fill(sal_uInt16, W1_CHP&);
+    bool Fill(sal_uInt16, W1_CHP&);
 };
 
 class Ww1SprmPapx : public Ww1Sprm
@@ -987,14 +987,14 @@ class Ww1Assoc
     Ww1Fib& rFib;
     sal_Char* pBuffer;
     sal_Char* pStrTbl[ MaxFields ];
-    sal_Bool bOK;
+    bool bOK;
 
     OUString GetStr(sal_uInt16);
 
 public:
     Ww1Assoc(Ww1Fib&);
     ~Ww1Assoc()             { delete pBuffer; }
-    sal_Bool GetError() const   { return !bOK; }
+    bool GetError() const   { return !bOK; }
     friend std::ostream& operator <<(std::ostream&, Ww1Assoc&);
     void Out(Ww1Shell&);
 };
@@ -1058,79 +1058,79 @@ public:
         if (grpfIhdt & 0x0020) nFirstFootL = nextIhdd++;
         OSL_ENSURE(nextIhdd<=Count(), "Ww1HeaderFooter");
     }
-    sal_Bool operator++()
+    bool operator++()
     {
-        sal_Bool bRet = sal_True;
+        bool bRet = true;
         eHeaderFooterMode = (HeaderFooterMode)((short)eHeaderFooterMode + 1);
         if( eHeaderFooterMode == MaxHeaderFooterMode)
         {
             eHeaderFooterMode = None;
-            bRet = sal_False;
+            bRet = false;
         }
         return bRet;
     }
-    sal_Bool FillFtnSep(sal_uLong& begin, sal_uLong& end)
+    bool FillFtnSep(sal_uLong& begin, sal_uLong& end)
     {
         if (nFtnSep == 0xffff)
-            return sal_False;
+            return false;
         Fill(nFtnSep, begin, end);
-        return sal_True;
+        return true;
     }
-    sal_Bool FillFtnFollowSep(sal_uLong& begin, sal_uLong& end)
+    bool FillFtnFollowSep(sal_uLong& begin, sal_uLong& end)
     {
         if (nFtnFollowSep == 0xffff)
-            return sal_False;
+            return false;
         Fill(nFtnFollowSep, begin, end);
-        return sal_True;
+        return true;
     }
-    sal_Bool FillFtnNote(sal_uLong& begin, sal_uLong& end)
+    bool FillFtnNote(sal_uLong& begin, sal_uLong& end)
     {
         if (nFtnNote == 0xffff)
-            return sal_False;
+            return false;
         Fill(nFtnNote, begin, end);
-        return sal_True;
+        return true;
     }
-    sal_Bool FillEvenHeadL(sal_uLong& begin, sal_uLong& end)
+    bool FillEvenHeadL(sal_uLong& begin, sal_uLong& end)
     {
         if (nEvenHeadL == 0xffff)
-            return sal_False;
+            return false;
         Fill(nEvenHeadL, begin, end);
-        return sal_True;
+        return true;
     }
-    sal_Bool FillOddHeadL(sal_uLong& begin, sal_uLong& end)
+    bool FillOddHeadL(sal_uLong& begin, sal_uLong& end)
     {
         if (nOddHeadL == 0xffff)
-            return sal_False;
+            return false;
         Fill(nOddHeadL, begin, end);
-        return sal_True;
+        return true;
     }
-    sal_Bool FillEvenFootL(sal_uLong& begin, sal_uLong& end)
+    bool FillEvenFootL(sal_uLong& begin, sal_uLong& end)
     {
         if (nEvenFootL == 0xffff)
-            return sal_False;
+            return false;
         Fill(nEvenFootL, begin, end);
-        return sal_True;
+        return true;
     }
-    sal_Bool FillOddFootL(sal_uLong& begin, sal_uLong& end)
+    bool FillOddFootL(sal_uLong& begin, sal_uLong& end)
     {
         if (nOddFootL == 0xffff)
-            return sal_False;
+            return false;
         Fill(nOddFootL, begin, end);
-        return sal_True;
+        return true;
     }
-    sal_Bool FillFirstHeadL(sal_uLong& begin, sal_uLong& end)
+    bool FillFirstHeadL(sal_uLong& begin, sal_uLong& end)
     {
         if (nFirstHeadL == 0xffff)
-            return sal_False;
+            return false;
         Fill(nFirstHeadL, begin, end);
-        return sal_True;
+        return true;
     }
-    sal_Bool FillFirstFootL(sal_uLong& begin, sal_uLong& end)
+    bool FillFirstFootL(sal_uLong& begin, sal_uLong& end)
     {
         if (nFirstFootL == 0xffff)
-            return sal_False;
+            return false;
         Fill(nFirstFootL, begin, end);
-        return sal_True;
+        return true;
     }
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell&, Ww1Manager&, sal_Unicode&);
@@ -1212,7 +1212,7 @@ class Ww1Bookmarks
 
     sal_uInt16 nPlcIdx[2];
     sal_uInt16 nIsEnd;
-    sal_Bool bOK;
+    bool bOK;
 public:
     Ww1Bookmarks(Ww1Fib& rFib);
     ~Ww1Bookmarks()
@@ -1222,9 +1222,9 @@ public:
     }
     sal_uLong Where() const     { return pPos[nIsEnd]->WhereCP(nPlcIdx[nIsEnd]); }
     void operator++();
-    sal_Bool GetError() const   { return !bOK; }
+    bool GetError() const   { return !bOK; }
     long GetHandle() const;
-    sal_Bool GetIsEnd() const   { return ( nIsEnd ) ? sal_True : sal_False; }
+    bool GetIsEnd() const   { return ( nIsEnd ) ? sal_True : sal_False; }
     const OUString GetName() const;
     long Len() const;
     friend std::ostream& operator <<(std::ostream&, Ww1Bookmarks&);
@@ -1237,10 +1237,10 @@ class Ww1Footnotes : public Ww1PlcFootnoteRef
 {
     sal_uInt16 nPlcIndex;
     Ww1PlcFootnoteTxt aText;
-    sal_Bool bStarted;
+    bool bStarted;
 public:
     Ww1Footnotes(Ww1Fib& rFibL)
-        : Ww1PlcFootnoteRef(rFibL), nPlcIndex(0), aText(rFibL), bStarted(sal_False)
+        : Ww1PlcFootnoteRef(rFibL), nPlcIndex(0), aText(rFibL), bStarted(false)
     {}
     // within the text
     sal_uLong Where()
@@ -1290,7 +1290,7 @@ class Ww1Pap : public Ww1PlcPap
     sal_uLong ulOffset;
     Ww1FkpPap* pPap;
 
-    sal_Bool FindSprm(sal_uInt16 nId, sal_uInt8* pStart, sal_uInt8* pEnd);
+    bool FindSprm(sal_uInt16 nId, sal_uInt8* pStart, sal_uInt8* pEnd);
     void UpdateIdx()
     {
         if (pPap && nFkpIndex >= pPap->Count() )
@@ -1302,19 +1302,19 @@ class Ww1Pap : public Ww1PlcPap
         if( !pPap )
             Where();
     }
-    sal_Bool HasId0(sal_uInt16 nId);
+    bool HasId0(sal_uInt16 nId);
 
 public:
     Ww1Pap(Ww1Fib& rFib);
     ~Ww1Pap()   { delete pPap; }
-    sal_uLong Where( sal_Bool bSetIndex = sal_True ); // within the text
+    sal_uLong Where( bool bSetIndex = true ); // within the text
     void operator++();
-    sal_Bool FillStart(sal_uInt8*& pB, sal_uInt16& nSize)
+    bool FillStart(sal_uInt8*& pB, sal_uInt16& nSize)
     {
         UpdateIdx();
         return pPap->Fill(nFkpIndex, pB, nSize);
     }
-    sal_Bool FillStop(sal_uInt8*& pB, sal_uInt16& nSize)
+    bool FillStop(sal_uInt8*& pB, sal_uInt16& nSize)
     {
         return nFkpIndex ? pPap->Fill(nFkpIndex-1, pB, nSize) : sal_False;
     }
@@ -1331,7 +1331,7 @@ public:
         delete pPap;
         pPap = NULL;
     }
-    sal_Bool Pushed()
+    bool Pushed()
     {
         return nPushedPlcIndex != 0xffff;
     }
@@ -1345,9 +1345,9 @@ public:
         nPushedFkpIndex = 0xffff;
         delete pPap;
         pPap = NULL;
-        Where( sal_False );
+        Where( false );
     }
-    sal_Bool HasId(sal_uInt16 nId);
+    bool HasId(sal_uInt16 nId);
 };
 
 class Ww1Chp : public Ww1PlcChp
@@ -1373,14 +1373,14 @@ class Ww1Chp : public Ww1PlcChp
 public:
     Ww1Chp( Ww1Fib& rFib );
     ~Ww1Chp()   { delete pChp; }
-    sal_uLong Where( sal_Bool bSetIndex = sal_True ); // within the text
+    sal_uLong Where( bool bSetIndex = true ); // within the text
     void operator++();
-    sal_Bool FillStart(W1_CHP& rChp)
+    bool FillStart(W1_CHP& rChp)
     {
         UpdateIdx();
         return pChp->Fill(nFkpIndex, rChp);
     }
-    sal_Bool FillStop(W1_CHP& rChp)
+    bool FillStop(W1_CHP& rChp)
     { return nFkpIndex ? pChp->Fill(nFkpIndex-1, rChp) : sal_False;  }
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell&, Ww1Manager&, sal_Unicode&);
@@ -1395,7 +1395,7 @@ public:
         delete pChp;
         pChp = NULL;
     }
-    sal_Bool Pushed()               { return nPushedPlcIndex != 0xffff; }
+    bool Pushed()               { return nPushedPlcIndex != 0xffff; }
     void Pop()
     {
         OSL_ENSURE(Pushed(), "Ww1Chp");
@@ -1406,7 +1406,7 @@ public:
         nPushedFkpIndex = 0xffff;
         delete pChp;
         pChp = NULL;
-        Where( sal_False );
+        Where( false );
     }
 };
 
@@ -1415,7 +1415,7 @@ public:
 // for being piped into the shell (pm side).
 class Ww1Manager
 {
-    sal_Bool bOK;
+    bool bOK;
     bool bInTtp;
     bool bInStyle;
     bool bStopAll;
@@ -1443,7 +1443,7 @@ class Ww1Manager
 
 public:
     Ww1Manager(SvStream& rStrm, sal_uLong nFieldFlgs);
-    sal_Bool GetError() const       { return !bOK; }
+    bool GetError() const       { return !bOK; }
 
     // for tables
     void SetInTtp(bool bSet = true)     { bInTtp = bSet; }
@@ -1452,13 +1452,13 @@ public:
     bool IsInStyle() const              { return bInStyle; }
     void SetStopAll(bool bSet = true)   { bStopAll = bSet; }
     bool IsStopAll() const              { return bStopAll; }
-    sal_Bool HasInTable();
-    sal_Bool HasTtp();
-    sal_Bool LastHasTtp();
+    bool HasInTable();
+    bool HasTtp();
+    bool LastHasTtp();
 
     // for flys
-    sal_Bool HasPPc();
-    sal_Bool HasPDxaAbs();
+    bool HasPPc();
+    bool HasPDxaAbs();
 
     Ww1Fib& GetFib()                    { return aFib; }
     Ww1PlainText& GetText()             { return *pDoc; }
@@ -1475,7 +1475,7 @@ public:
     SvxFontItem GetFont(sal_uInt16 nFCode);
     friend Ww1Shell& operator <<(Ww1Shell&, Ww1Manager&);
     friend std::ostream& operator <<(std::ostream&, Ww1Manager&);
-    sal_Bool Pushed()                       { return pDoc != &aDoc; }
+    bool Pushed()                       { return pDoc != &aDoc; }
     void Pop();
     void Push0(Ww1PlainText* pDoc, sal_uLong, Ww1Fields* = 0);
     void Push1(Ww1PlainText* pDoc, sal_uLong ulSeek, sal_uLong ulSeek2 = 0,

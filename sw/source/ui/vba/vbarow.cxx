@@ -62,14 +62,14 @@ void SAL_CALL SwVbaRow::setHeight( const uno::Any& _height ) throw (css::uno::Ru
 
 ::sal_Int32 SAL_CALL SwVbaRow::getHeightRule() throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool isAutoHeight = sal_False;
+    bool isAutoHeight = false;
     mxRowProps->getPropertyValue("IsAutoHeight") >>= isAutoHeight;
     return isAutoHeight ? word::WdRowHeightRule::wdRowHeightAuto : word::WdRowHeightRule::wdRowHeightExactly;
 }
 
 void SAL_CALL SwVbaRow::setHeightRule( ::sal_Int32 _heightrule ) throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool isAutoHeight = ( _heightrule == word::WdRowHeightRule::wdRowHeightAuto );
+    bool isAutoHeight = ( _heightrule == word::WdRowHeightRule::wdRowHeightAuto );
     mxRowProps->setPropertyValue("IsAutoHeight", uno::makeAny( isAutoHeight ) );
 }
 

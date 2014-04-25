@@ -130,7 +130,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
 
     SwView* pActView = ::GetActiveView();
-    sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pActView);
+    bool bWebView = 0 != PTR_CAST(SwWebView, pActView);
 
     while(nWhich)
     {
@@ -300,7 +300,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
             nRestartPage = m_pView->GetMailMergeRestartPage();
             if(m_pView->IsMailMergeSourceView())
                 m_pMMConfig->SetSourceView( m_pView );
-            m_pView->SetMailMergeConfigItem(0, 0, sal_True);
+            m_pView->SetMailMergeConfigItem(0, 0, true);
             SfxViewFrame* pViewFrame = m_pView->GetViewFrame();
             pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, false);
             OSL_ENSURE(m_pMMConfig, "no MailMergeConfigItem available");
@@ -613,7 +613,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                 case FUNIT_POINT:
                 {
                     SwView* pActView = ::GetActiveView();
-                    sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pActView);
+                    bool bWebView = 0 != PTR_CAST(SwWebView, pActView);
                     ::SetDfltMetric(eUnit, bWebView);
                 }
                 break;
@@ -624,7 +624,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
 
         case FN_SET_MODOPT_TBLNUMFMT:
             {
-                sal_Bool bWebView = 0 != PTR_CAST(SwWebView, ::GetActiveView() ),
+                bool bWebView = 0 != PTR_CAST(SwWebView, ::GetActiveView() ),
                      bSet;
 
                 if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(
@@ -707,7 +707,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         if( SFX_ITEM_SET == ((SfxItemSetHint&)rHint).GetItemSet().GetItemState(SID_ATTR_PATHNAME))
         {
-            ::GetGlossaries()->UpdateGlosPath( sal_False );
+            ::GetGlossaries()->UpdateGlosPath( false );
             SwGlossaryList* pList = ::GetGlossaryList();
             if(pList->IsActive())
                 pList->Update();
@@ -758,7 +758,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
 {
     if( pBrdCst == pUserOptions )
     {
-        bAuthorInitialised = sal_False;
+        bAuthorInitialised = false;
     }
     else if ( pBrdCst == pColorConfig || pBrdCst == pAccessibilityOptions )
     {
@@ -861,18 +861,18 @@ SvtUserOptions& SwModule::GetUserOptions()
     return *pUserOptions;
 }
 
-const SwMasterUsrPref *SwModule::GetUsrPref(sal_Bool bWeb) const
+const SwMasterUsrPref *SwModule::GetUsrPref(bool bWeb) const
 {
     SwModule* pNonConstModule = (SwModule*)this;
     if(bWeb && !pWebUsrPref)
     {
         // The SpellChecker is needed in SwMasterUsrPref's Load, but it must not
         // be created there #58256#
-        pNonConstModule->pWebUsrPref = new SwMasterUsrPref(sal_True);
+        pNonConstModule->pWebUsrPref = new SwMasterUsrPref(true);
     }
     else if(!bWeb && !pUsrPref)
     {
-        pNonConstModule->pUsrPref = new SwMasterUsrPref(sal_False);
+        pNonConstModule->pUsrPref = new SwMasterUsrPref(false);
     }
     return  bWeb ? pWebUsrPref : pUsrPref;
 }

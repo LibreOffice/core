@@ -47,7 +47,7 @@ using namespace ::com::sun::star;
 SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFreeFrm( pFmt, pSib, pAnch )
 {
-    bAtCnt = sal_True;
+    bAtCnt = true;
     bAutoPosition = (FLY_AT_CHAR == pFmt->GetAnchor().GetAnchorId());
 }
 
@@ -596,7 +596,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
         {
             // <rPt> point is left of environment of given content frame
             // seems not to be correct for vertical layout!?
-            const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, sal_False, pCnt );
+            const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, false, pCnt );
             if( !pLay ||
                 (bVert && (pLay->Frm().Top() + pLay->Prt().Bottom()) <rPt.Y())||
                 (!bVert && (pLay->Frm().Left() + pLay->Prt().Right())<rPt.X()) )
@@ -626,7 +626,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                 : ( (pUp->Frm().Top() + pUp->Prt().Bottom()) - nTopForObjPos );
 
             const SwFrm *pPre = pCnt;
-            const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, sal_True, pCnt );
+            const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, true, pCnt );
             SwTwips nFrmTop = 0;
             SwTwips nPrtHeight = 0;
             bool bSct = false;
@@ -731,7 +731,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                     else
                         rRet.nMain += nPrtHeight;
                     pPre = pLay;
-                    pLay = pLay->GetLeaf( MAKEPAGE_NONE, sal_True, pCnt );
+                    pLay = pLay->GetLeaf( MAKEPAGE_NONE, true, pCnt );
                     if( pSect && !pSect->IsAnLower( pLay ) )
                     {   // If we're leaving a SwSectionFrm, the next Leaf-Frm
                         // is the part of the upper below the SectionFrm.
@@ -842,7 +842,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
 
 static sal_uInt64 lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
                           const SwCntntFrm *& rpCnt,
-                          const bool bBody, const sal_Bool bFtn )
+                          const bool bBody, const bool bFtn )
 {
     // Searches below pLay the nearest Cnt to the point. The reference point of
     //the Cntnts is always the left upper corner.
@@ -905,7 +905,7 @@ static sal_uInt64 lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
 }
 
 static const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
-                                  const bool bBody, const sal_Bool bFtn )
+                                  const bool bBody, const bool bFtn )
 {
     //Starting from pCnt searches the CntntFrm whose left upper corner is the
     //nearest to the point.
@@ -1008,7 +1008,7 @@ static void lcl_PointToPrt( Point &rPoint, const SwFrm *pFrm )
  *  when dragging paragraph bound objects.
  */
 const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
-                              const sal_Bool bBodyOnly )
+                              const bool bBodyOnly )
 {
     //Search the nearest Cnt around the given document position in the text
     //flow. The given anchor is the starting Frm.
@@ -1026,13 +1026,13 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
             SwRect aTmpRect( aTmp, Size(0,0) );
             pTmpLay = (SwLayoutFrm*)::FindPage( aTmpRect, pTmpLay->Lower() );
         }
-        pCnt = pTmpLay->GetCntntPos( aTmp, sal_False, bBodyOnly );
+        pCnt = pTmpLay->GetCntntPos( aTmp, false, bBodyOnly );
     }
 
     //Take care to use meaningful ranges during search. This means to not enter
     //or leave header/footer in this case.
     const bool bBody = pCnt->IsInDocBody() || bBodyOnly;
-    const sal_Bool bFtn  = !bBodyOnly && pCnt->IsInFtn();
+    const bool bFtn  = !bBodyOnly && pCnt->IsInFtn();
 
     Point aNew( rNew );
     if ( bBody )
@@ -1053,7 +1053,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
         // With this we won't run into problems with the columns.
         Point aTmp( aNew );
         const SwCntntFrm *pTmp = pCnt->FindPageFrm()->
-                                        GetCntntPos( aTmp, sal_False, sal_True, sal_False );
+                                        GetCntntPos( aTmp, false, true, false );
         if ( pTmp && pTmp->Frm().IsInside( aNew ) )
             return pTmp;
     }
@@ -1174,7 +1174,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     const bool bVert = pCnt->IsVertical();
 
     const bool bVertL2R = pCnt->IsVertLR();
-    const sal_Bool bRTL = pCnt->IsRightToLeft();
+    const bool bRTL = pCnt->IsRightToLeft();
 
     if( ( !bVert != !GetAnchorFrm()->IsVertical() ) ||
         ( !bRTL !=  !GetAnchorFrm()->IsRightToLeft() ) )
@@ -1298,7 +1298,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
     const SwFmtSurround& rSurround = pFmt->GetSurround();
-    const sal_Bool bWrapThrough =
+    const bool bWrapThrough =
         rSurround.GetSurround() == SURROUND_THROUGHT;
     SwTwips nBaseOfstForFly = 0;
     const SwFrm* pTmpFrm = pFrm ? pFrm : pCnt;
@@ -1393,7 +1393,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     GetFmt()->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
 
     if ( pOldPage != FindPageFrm() )
-        ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE, sal_False );
+        ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE, false );
 }
 
 /** method to assure that anchored object is registered at the correct
@@ -1428,7 +1428,7 @@ void SwFlyAtCntFrm::MakeObjPos()
     }
 
     // #i26791# - validate position flag here.
-    mbValidPos = sal_True;
+    mbValidPos = true;
 
     // #i35911# - no calculation of new position, if
     // anchored object is marked that it clears its environment and its

@@ -164,18 +164,18 @@ SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const OUString& aNam )
     aName = aNam;
 
     if (nType & nsSwGetSetExpType::GSE_STRING)
-        EnableFormat(sal_False);    // Do not use a Numberformatter
+        EnableFormat(false);    // Do not use a Numberformatter
 }
 
 OUString SwUserFieldType::Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng)
 {
     if((nType & nsSwGetSetExpType::GSE_EXPR) && !(nSubType & nsSwExtendedSubType::SUB_CMD))
     {
-        EnableFormat(sal_True);
+        EnableFormat(true);
         return ExpandValue(nValue, nFmt, nLng);
     }
 
-    EnableFormat(sal_False);    // Do not use a Numberformatter
+    EnableFormat(false);    // Do not use a Numberformatter
     return aContent;
 }
 
@@ -268,7 +268,7 @@ void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFmt )
             }
         }
 
-        sal_Bool bModified = GetDoc()->IsModified();
+        bool bModified = GetDoc()->IsModified();
         GetDoc()->SetModified();
         if( !bModified )    // Bug 57028
         {

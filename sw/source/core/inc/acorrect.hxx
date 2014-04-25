@@ -94,19 +94,19 @@ class SwAutoCorrExceptWord
     sal_Int32 nCntnt;
     sal_Unicode cChar;
     LanguageType eLanguage;
-    sal_Bool bDeleted;
+    bool bDeleted;
 
 public:
     SwAutoCorrExceptWord( sal_uLong nAFlags, sal_uLong nNd, sal_Int32 nContent,
                                         const OUString& rWord, sal_Unicode cChr,
                                         LanguageType eLang )
         : sWord(rWord), nFlags(nAFlags), nNode(nNd), nCntnt(nContent),
-        cChar(cChr), eLanguage(eLang), bDeleted(sal_False)
+        cChar(cChr), eLanguage(eLang), bDeleted(false)
     {}
 
-    sal_Bool IsDeleted() const                          { return bDeleted; }
+    bool IsDeleted() const                          { return bDeleted; }
     void CheckChar( const SwPosition& rPos, sal_Unicode cChar );
-    sal_Bool CheckDelChar( const SwPosition& rPos );
+    bool CheckDelChar( const SwPosition& rPos );
 };
 
 #endif

@@ -40,16 +40,16 @@
 #include <trvltbl.hxx>
 
 /// set cursor into next/previous cell
-sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
+bool SwCrsrShell::GoNextCell( bool bAppendLine )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwTableNode* pTblNd = 0;
 
     if( IsTableMode() || 0 != ( pTblNd = IsCrsrInTbl() ))
     {
         SwCursor* pCrsr = m_pTblCrsr ? m_pTblCrsr : m_pCurCrsr;
         SwCallLink aLk( *this ); // watch Crsr-Moves
-        bRet = sal_True;
+        bRet = true;
 
         // Check if we have to move the cursor to a covered cell before
         // proceeding:
@@ -76,7 +76,7 @@ sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
         if( !aCellStt.GetNode().IsStartNode() )
         {
             if( pCrsr->HasMark() || !bAppendLine )
-                bRet = sal_False;
+                bRet = false;
             else
             {
                 // if there is no list anymore then create new one
@@ -95,15 +95,15 @@ sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
                 ((SwEditShell*)this)->EndAllAction();
             }
         }
-        if( bRet && 0 != ( bRet = pCrsr->GoNextCell() ))
+        if( bRet && ( bRet = pCrsr->GoNextCell() ) )
             UpdateCrsr();
     }
     return bRet;
 }
 
-sal_Bool SwCrsrShell::GoPrevCell()
+bool SwCrsrShell::GoPrevCell()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( IsTableMode() || IsCrsrInTbl() )
     {
         SwCursor* pCrsr = m_pTblCrsr ? m_pTblCrsr : m_pCurCrsr;
@@ -248,12 +248,12 @@ bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
     return true;
 }
 
-sal_Bool SwCrsrShell::SelTbl()
+bool SwCrsrShell::SelTbl()
 {
     // check if the current cursor's SPoint/Mark are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm->IsInTab() )
-        return sal_False;
+        return false;
 
     const SwTabFrm *pTblFrm = pFrm->ImplFindTabFrm();
     const SwTabFrm* pMasterTabFrm = pTblFrm->IsFollow() ? pTblFrm->FindMaster( true ) : pTblFrm;
@@ -278,10 +278,10 @@ sal_Bool SwCrsrShell::SelTbl()
     m_pTblCrsr->GetPoint()->nNode = *pTblNd->EndOfSectionNode();
     m_pTblCrsr->Move( fnMoveBackward, fnGoCntnt );
     UpdateCrsr();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwCrsrShell::SelTblBox()
+bool SwCrsrShell::SelTblBox()
 {
     // if we're in a table, create a table cursor, and select the cell
     // that the current cursor's point resides in
@@ -299,7 +299,7 @@ sal_Bool SwCrsrShell::SelTblBox()
                 "Schroedinger's table: We're in a box, and also we aren't." );
 #endif
     if( pStartNode == NULL )
-        return sal_False;
+        return false;
 
     SET_CURR_SHELL( this );
 
@@ -329,7 +329,7 @@ sal_Bool SwCrsrShell::SelTblBox()
     // needs updating
     UpdateCrsr();
 
-    return sal_True;
+    return true;
 }
 
 // TODO: provide documentation
@@ -341,7 +341,7 @@ sal_Bool SwCrsrShell::SelTblBox()
     @return <false> if no suitable cell could be found, otherwise <rIdx> points
             to content in a suitable cell and <true> is returned.
 */
-static bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
+static bool lcl_FindNextCell( SwNodeIndex& rIdx, bool bInReadOnly )
 {
     // check protected cells
     SwNodeIndex aTmp( rIdx, 2 ); // TableNode + StartNode
@@ -419,7 +419,7 @@ static bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
 }
 
 /// see lcl_FindNextCell()
-static bool lcl_FindPrevCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly  )
+static bool lcl_FindPrevCell( SwNodeIndex& rIdx, bool bInReadOnly  )
 {
     SwNodeIndex aTmp( rIdx, -2 ); // TableNode + EndNode
 
@@ -477,8 +477,8 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly  )
     return true;
 }
 
-sal_Bool GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
-                        sal_Bool bInReadOnly )
+bool GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
+                    bool bInReadOnly )
 {
     SwNodeIndex aIdx( rCurCrsr.GetPoint()->nNode );
 
@@ -533,15 +533,15 @@ sal_Bool GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
                                                       pTxtNode->Len() :
                                                       0 );
             }
-            return sal_True;
+            return true;
         }
     } while( pTblNd );
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
-                        sal_Bool bInReadOnly )
+bool GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
+                    bool bInReadOnly )
 {
     SwNodeIndex aIdx( rCurCrsr.GetPoint()->nNode );
     SwTableNode* pTblNd = aIdx.GetNode().FindTableNode();
@@ -585,33 +585,33 @@ sal_Bool GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
                                                       pTxtNode->Len() :
                                                       0 );
             }
-            return sal_True;
+            return true;
         }
     } while( pTblNd );
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
-                        sal_Bool bInReadOnly )
+bool GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
+                    bool bInReadOnly )
 {
     SwTableNode* pTblNd = rCurCrsr.GetPoint()->nNode.GetNode().FindTableNode();
     if( !pTblNd )
-        return sal_False;
+        return false;
 
     SwTxtNode* pTxtNode = 0;
     if( fnPosTbl == fnMoveBackward ) // to the end of the table
     {
         SwNodeIndex aIdx( *pTblNd->EndOfSectionNode() );
         if( !lcl_FindPrevCell( aIdx, bInReadOnly ))
-            return sal_False;
+            return false;
         pTxtNode = aIdx.GetNode().GetTxtNode();
     }
     else
     {
         SwNodeIndex aIdx( *pTblNd );
         if( !lcl_FindNextCell( aIdx, bInReadOnly ))
-            return sal_False;
+            return false;
         pTxtNode = aIdx.GetNode().GetTxtNode();
     }
 
@@ -623,12 +623,12 @@ sal_Bool GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
                                                         0 );
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwCursor::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
+bool SwCursor::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwTableCursor* m_pTblCrsr = dynamic_cast<SwTableCursor*>(this);
 
     if( m_pTblCrsr || !HasMark() )
@@ -641,13 +641,13 @@ sal_Bool SwCursor::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
     return bRet;
 }
 
-sal_Bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
+bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
 
     SwShellCrsr* pCrsr = m_pTblCrsr ? m_pTblCrsr : m_pCurCrsr;
     bool bCheckPos;
-    sal_Bool bRet;
+    bool bRet;
     sal_uLong nPtNd = 0;
     sal_Int32 nPtCnt = 0;
 
@@ -680,7 +680,7 @@ sal_Bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
         if( bCheckPos &&
             pCrsr->GetPoint()->nNode.GetIndex() == nPtNd &&
             pCrsr->GetPoint()->nContent.GetIndex() == nPtCnt )
-            bRet = sal_False;
+            bRet = false;
     }
     return bRet;
 }
@@ -767,10 +767,10 @@ bool SwCrsrShell::GotoTable( const OUString& rName )
     return bRet;
 }
 
-sal_Bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
+bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
 {
     if( !m_pBoxIdx || !m_pBoxPtr || IsSelTblCells() || !IsAutoUpdateCells() )
-        return sal_False;
+        return false;
 
     // check if box content is consistent with given box format, reset if not
     SwTableBox* pChkBox = 0;
@@ -823,7 +823,7 @@ sal_Bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
         // destroy pointer before next action starts
         ClearTblBoxCntnt();
         StartAction();
-        GetDoc()->ChkBoxNumFmt( *pChkBox, sal_True );
+        GetDoc()->ChkBoxNumFmt( *pChkBox, true );
         EndAction();
     }
 
@@ -875,9 +875,9 @@ void SwCrsrShell::ClearTblBoxCntnt()
     m_pBoxPtr = 0;
 }
 
-sal_Bool SwCrsrShell::EndAllTblBoxEdit()
+bool SwCrsrShell::EndAllTblBoxEdit()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwViewShell *pSh = this;
     do {
         if( pSh->IsA( TYPE( SwCrsrShell ) ) )

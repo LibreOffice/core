@@ -970,11 +970,11 @@ namespace sw
             return nKey;
         }
 
-        sal_Bool IsPreviousAM(OUString& rParams, sal_Int32 nPos)
+        bool IsPreviousAM(OUString& rParams, sal_Int32 nPos)
         {
             return nPos>=2 && rParams.matchIgnoreAsciiCase("am", nPos-2);
         }
-        sal_Bool IsNextPM(OUString& rParams, sal_Int32 nPos)
+        bool IsNextPM(OUString& rParams, sal_Int32 nPos)
         {
             return nPos+2<rParams.getLength() && rParams.matchIgnoreAsciiCase("pm", nPos+1);
         }

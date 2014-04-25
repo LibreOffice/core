@@ -71,7 +71,7 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
     DECL_LINK(AddressBlockSelectHdl_Impl, void *);
     DECL_LINK(HideParagraphsHdl_Impl, CheckBox*);
 
-    void                EnableAddressBlock(sal_Bool bAll, sal_Bool bSelective);
+    void                EnableAddressBlock(bool bAll, bool bSelective);
 
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
@@ -111,8 +111,8 @@ public:
                                 sal_uInt16 nSelected);
     const com::sun::star::uno::Sequence< OUString>&    GetAddressBlocks();
 
-    void                SetSettings(sal_Bool bIsCountry, const OUString& sCountry);
-    sal_Bool            IsIncludeCountry() const {return !m_pNeverRB->IsChecked();}
+    void                SetSettings(bool bIsCountry, const OUString& sCountry);
+    bool            IsIncludeCountry() const {return !m_pNeverRB->IsChecked();}
     OUString     GetCountry() const;
 };
 

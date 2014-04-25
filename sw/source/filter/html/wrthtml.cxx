@@ -86,34 +86,34 @@ static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
-    : bCfgOutStyles( sal_False )
-    , bCfgPreferStyles( sal_False )
-    , bCfgFormFeed( sal_False )
-    , bCfgStarBasic( sal_False )
-    , bCfgCpyLinkedGrfs( sal_False )
-    , bFirstLine( sal_False )
-    , bTagOn( sal_False )
-    , bTxtAttr( sal_False )
-    , bOutOpts( sal_False )
-    , bOutTable( sal_False )
-    , bOutHeader( sal_False )
-    , bOutFooter( sal_False )
-    , bOutFlyFrame( sal_False )
-    , bFirstCSS1Rule( sal_False )
-    , bFirstCSS1Property( sal_False )
-    , bPoolCollTextModified( sal_False )
-    , bCSS1IgnoreFirstPageDesc( sal_False )
-    , bNoAlign( sal_False )
-    , bClearLeft( sal_False )
-    , bClearRight( sal_False )
-    , bLFPossible( sal_False )
-    , bPreserveForm( sal_False )
-    , bCfgNetscape4( sal_False )
+    : bCfgOutStyles( false )
+    , bCfgPreferStyles( false )
+    , bCfgFormFeed( false )
+    , bCfgStarBasic( false )
+    , bCfgCpyLinkedGrfs( false )
+    , bFirstLine( false )
+    , bTagOn( false )
+    , bTxtAttr( false )
+    , bOutOpts( false )
+    , bOutTable( false )
+    , bOutHeader( false )
+    , bOutFooter( false )
+    , bOutFlyFrame( false )
+    , bFirstCSS1Rule( false )
+    , bFirstCSS1Property( false )
+    , bPoolCollTextModified( false )
+    , bCSS1IgnoreFirstPageDesc( false )
+    , bNoAlign( false )
+    , bClearLeft( false )
+    , bClearRight( false )
+    , bLFPossible( false )
+    , bPreserveForm( false )
+    , bCfgNetscape4( false )
     , mbSkipImages(false)
 
 {
     SetBaseURL( rBaseURL );
-    bFirstLine = sal_True;
+    bFirstLine = true;
     nBkmkTabPos = -1;
     pDfltColor = 0;
     nImgMapCnt = 1;
@@ -207,7 +207,7 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     eCSS1Unit = (FieldUnit)SW_MOD()->GetMetric( pDoc->get(IDocumentSettingAccess::HTML_MODE) );
 
-    sal_Bool bWriteUTF8 = bWriteClipboardDoc;
+    bool bWriteUTF8 = bWriteClipboardDoc;
     eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8 : rHtmlOptions.GetTextEncoding();
     const sal_Char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
     eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
@@ -221,7 +221,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     bCfgCpyLinkedGrfs = rHtmlOptions.IsSaveGraphicsLocal();
 
     // die HTML-Vorlage holen
-    sal_Bool bOldHTMLMode = sal_False;
+    bool bOldHTMLMode = false;
     sal_uInt16 nOldTxtFmtCollCnt = 0, nOldCharFmtCnt = 0;
 
     OSL_ENSURE( !pTemplate, "Wo kommt denn die HTML-Vorlage hier her?" );
@@ -243,19 +243,19 @@ sal_uLong SwHTMLWriter::WriteStream()
     pDfltColor = 0;
     pFootEndNotes = 0;
     pFmtFtn = 0;
-    bOutTable = bOutHeader = bOutFooter = bOutFlyFrame = sal_False;
+    bOutTable = bOutHeader = bOutFooter = bOutFlyFrame = false;
     pxFormComps = 0;
     nFormCntrlCnt = 0;
-    bPreserveForm = sal_False;
-    bClearLeft = bClearRight = sal_False;
-    bLFPossible = sal_False;
+    bPreserveForm = false;
+    bClearLeft = bClearRight = false;
+    bLFPossible = false;
 
     nLeftMargin = nDfltLeftMargin = nDfltRightMargin = 0;
     nDfltTopMargin = nDfltBottomMargin = 0;
     nFirstLineIndent = nDfltFirstLineIndent = 0;
-    bPoolCollTextModified = sal_False;
-    bFirstCSS1Property = bFirstCSS1Rule = sal_False;
-    bCSS1IgnoreFirstPageDesc = sal_False;
+    bPoolCollTextModified = false;
+    bFirstCSS1Property = bFirstCSS1Rule = false;
+    bCSS1IgnoreFirstPageDesc = false;
     nIndentLvl = 0;
     nWhishLineLen = 70;
     nLastLFPos = 0;
@@ -346,7 +346,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     sal_uInt16 nHeaderAttrs = 0;
     pCurrPageDesc = MakeHeader( nHeaderAttrs );
 
-    bLFPossible = sal_True;
+    bLFPossible = true;
 
     // Formulare, die nur HiddenControls enthalten ausgeben.
     OutHiddenForms();
@@ -364,7 +364,7 @@ sal_uLong SwHTMLWriter::WriteStream()
         const SwFrmFmt *pHeaderFmt =
             ((const SwFmtHeader *)pItem)->GetHeaderFmt();
         if( pHeaderFmt )
-            OutHTML_HeaderFooter( *this, *pHeaderFmt, sal_True );
+            OutHTML_HeaderFooter( *this, *pHeaderFmt, true );
     }
 
     nTxtAttrsToIgnore = nHeaderAttrs;
@@ -372,7 +372,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     nTxtAttrsToIgnore = 0;
 
     if( pxFormComps && pxFormComps->is() )
-        OutForm( sal_False, *pxFormComps );
+        OutForm( false, *pxFormComps );
 
     if( pFootEndNotes )
         OutFootEndNotes();
@@ -384,7 +384,7 @@ sal_uLong SwHTMLWriter::WriteStream()
         const SwFrmFmt *pFooterFmt =
             ((const SwFmtFooter *)pItem)->GetFooterFmt();
         if( pFooterFmt )
-            OutHTML_HeaderFooter( *this, *pFooterFmt, sal_False );
+            OutHTML_HeaderFooter( *this, *pFooterFmt, false );
     }
 
     if( bLFPossible )
@@ -593,7 +593,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     else if( pCol )
     {
         // minumum gutter width
-        sal_uInt16 nGutter = pCol->GetGutterWidth( sal_True );
+        sal_uInt16 nGutter = pCol->GetGutterWidth( true );
         if( nGutter!=USHRT_MAX )
         {
             if( nGutter && Application::GetDefaultDevice() )
@@ -606,12 +606,12 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     }
 
     rHTMLWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-    if( rHTMLWrt.IsHTMLMode( rHTMLWrt.bCfgOutStyles ) )
+    if( rHTMLWrt.IsHTMLMode( rHTMLWrt.bCfgOutStyles ? HTMLMODE_ON : 0 ) )
         rHTMLWrt.OutCSS1_SectionFmtOptions( rFmt, pCol );
 
     rHTMLWrt.Strm().WriteChar( '>' );
 
-    rHTMLWrt.bLFPossible = sal_True;
+    rHTMLWrt.bLFPossible = true;
     if( !rName.isEmpty() && !bContinued )
         rHTMLWrt.OutImplicitMark( rName, "region" );
 
@@ -624,7 +624,7 @@ static void lcl_html_OutSectionEndTag( SwHTMLWriter& rHTMLWrt )
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( rHTMLWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
-    rHTMLWrt.bLFPossible = sal_True;
+    rHTMLWrt.bLFPossible = true;
 }
 
 static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
@@ -696,7 +696,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
         HTMLSaveData aSaveData( rHTMLWrt,
             rHTMLWrt.pCurPam->GetPoint()->nNode.GetIndex()+1,
             rSectNd.EndOfSectionIndex(),
-            sal_False, pFmt );
+            false, pFmt );
         rHTMLWrt.Out_SwDoc( rHTMLWrt.pCurPam );
     }
 
@@ -718,7 +718,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
 
 void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
 {
-    sal_Bool bSaveWriteAll = bWriteAll;     // sichern
+    bool bSaveWriteAll = bWriteAll;     // sichern
 
     // suche die naechste text::Bookmark-Position aus der text::Bookmark-Tabelle
     nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
@@ -726,7 +726,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
     // gebe alle Bereiche des Pams in das HTML-File aus.
     do {
         bWriteAll = bSaveWriteAll;
-        bFirstLine = sal_True;
+        bFirstLine = true;
 
         // suche den ersten am Pam-auszugebenen FlyFrame
         // fehlt noch:
@@ -774,8 +774,8 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
              */
             bWriteAll = bSaveWriteAll ||
                         nPos != pCurPam->GetMark()->nNode.GetIndex();
-            bFirstLine = sal_False;
-            bOutFooter = sal_False; // Nach einem Node keine Fusszeile mehr
+            bFirstLine = false;
+            bOutFooter = false; // Nach einem Node keine Fusszeile mehr
         }
 
         ChangeParaToken( 0 ); // MIB 8.7.97: Machen wir jetzt hier und nicht
@@ -1000,7 +1000,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
     const SfxItemSet& rItemSet = pPageDesc->GetMaster().GetAttrSet();
 
-    OutBackground( rItemSet, sal_True );
+    OutBackground( rItemSet, true );
 
     nDirection = GetHTMLDirection( rItemSet );
     OutDirection( nDirection );
@@ -1110,7 +1110,7 @@ void SwHTMLWriter::OutHyperlinkHRefValue( const OUString& rURL )
                               &aNonConvertableCharacters );
 }
 
-void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, sal_Bool bGraphic )
+void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic )
 {
     const Color &rBackColor = pBrushItem->GetColor();
     /// check, if background color is not "no fill"/"auto fill", instead of
@@ -1141,7 +1141,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, sal_Bool bGrap
     }
 }
 
-void SwHTMLWriter::OutBackground( const SfxItemSet& rItemSet, sal_Bool bGraphic )
+void SwHTMLWriter::OutBackground( const SfxItemSet& rItemSet, bool bGraphic )
 {
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, false,
@@ -1246,7 +1246,7 @@ OString SwHTMLWriter::GetIndentString(sal_uInt16 nIncLvl)
     return sRet;
 }
 
-void SwHTMLWriter::OutNewLine( sal_Bool bCheck )
+void SwHTMLWriter::OutNewLine( bool bCheck )
 {
     if( !bCheck || (Strm().Tell()-nLastLFPos) > nIndentLvl )
     {
@@ -1280,8 +1280,8 @@ sal_uInt16 SwHTMLWriter::GetHTMLFontSize( sal_uInt32 nHeight ) const
 // Struktur speichert die aktuellen Daten des Writers zwischen, um
 // einen anderen Dokument-Teil auszugeben, wie z.B. Header/Footer
 HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
-                            sal_uLong nEnd, sal_Bool bSaveNum,
-                                const SwFrmFmt *pFrmFmt)
+                           sal_uLong nEnd, bool bSaveNum,
+                           const SwFrmFmt *pFrmFmt)
     : rWrt(rWriter)
     , pOldPam(rWrt.pCurPam)
     , pOldEnd(rWrt.GetEndPaM())
@@ -1308,9 +1308,9 @@ HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
 
     rWrt.SetEndPaM( rWrt.pCurPam );
     rWrt.pCurPam->Exchange( );
-    rWrt.bWriteAll = sal_True;
+    rWrt.bWriteAll = true;
     rWrt.nDefListLvl = 0;
-    rWrt.bOutHeader = rWrt.bOutFooter = sal_False;
+    rWrt.bOutHeader = rWrt.bOutFooter = false;
 
     // Ggf. die aktuelle Numerierungs-Info merken, damit sie wieder
     // neu aufgenommen werden kann. Nur dann belibt auch die Numerierungs-

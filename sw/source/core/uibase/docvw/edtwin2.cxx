@@ -68,7 +68,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
 
-static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, sal_Bool bBalloon )
+static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
 {
     sal_uInt16 nResId = 0;
     switch( rRedl.GetType() )
@@ -104,7 +104,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
     SET_CURR_SHELL(&rSh);
     OUString sTxt;
     Point aPos( PixelToLogic( ScreenToOutputPixel( rEvt.GetMousePosPixel() ) ));
-    sal_Bool bBalloon = static_cast< sal_Bool >(rEvt.GetMode() & HELPMODE_BALLOON);
+    bool bBalloon = static_cast< bool >(rEvt.GetMode() & HELPMODE_BALLOON);
 
     SdrView *pSdrView = rSh.GetDrawView();
 
@@ -134,7 +134,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 #endif
                                     SwContentAtPos::SW_TABLEBOXFML );
 
-        if( rSh.GetContentAtPos( aPos, aCntntAtPos, sal_False, &aFldRect ) )
+        if( rSh.GetContentAtPos( aPos, aCntntAtPos, false, &aFldRect ) )
         {
             sal_uInt16 nStyle = 0; // style of quick help
             switch( aCntntAtPos.eCntntAtPos )
@@ -209,7 +209,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     }
                 }
                 // #i80029#
-                sal_Bool bExecHyperlinks = m_rView.GetDocShell()->IsReadOnly();
+                bool bExecHyperlinks = m_rView.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
                     SvtSecurityOptions aSecOpts;
@@ -242,7 +242,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     pFtn->GetFtnText( sTmp );
                     sTxt = SW_RESSTR( pFtn->IsEndNote()
                                     ? STR_ENDNOTE : STR_FTNNOTE ) + sTmp;
-                    bBalloon = sal_True;
+                    bBalloon = true;
                     if( aCntntAtPos.IsInRTLText() )
                         nStyle |= QUICKHELP_BIDI_RTL;
                 }
@@ -298,7 +298,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                 break;
                             }
                         case RES_INPUTFLD:  // BubbleHelp, because the suggestion could be quite long
-                            bBalloon = sal_True;
+                            bBalloon = true;
                             /* no break */
                         case RES_JUMPEDITFLD:
                             sTxt = pFld->GetPar2();
@@ -350,7 +350,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     if( sTxt.isEmpty() )
                     {
                         aCntntAtPos.eCntntAtPos = SwContentAtPos::SW_REDLINE;
-                        if( rSh.GetContentAtPos( aPos, aCntntAtPos, sal_False, &aFldRect ) )
+                        if( rSh.GetContentAtPos( aPos, aCntntAtPos, false, &aFldRect ) )
                             sTxt = lcl_GetRedlineHelp(*aCntntAtPos.aFnd.pRedl, bBalloon);
                     }
                 }

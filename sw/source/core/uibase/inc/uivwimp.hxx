@@ -83,7 +83,7 @@ public:
 
     void ViewDestroyed() { pView = 0; }
 
-    void AddRemoveListener( sal_Bool bAdd );
+    void AddRemoveListener( bool bAdd );
 };
 
 class SwMailMergeConfigItem;
@@ -108,7 +108,7 @@ class SwView_Impl
 #if HAVE_FEATURE_DBCONNECTIVITY
     SwMailMergeConfigItem*      pConfigItem;
     sal_uInt16                  nMailMergeRestartPage;
-    sal_Bool                    bMailMergeSourceView;
+    bool                    bMailMergeSourceView;
 #endif
 
     sfx2::DocumentInserter*     m_pDocInserter;
@@ -142,14 +142,14 @@ public:
 
 #if HAVE_FEATURE_DBCONNECTIVITY
     void   SetMailMergeConfigItem(SwMailMergeConfigItem*  pItem,
-                                                sal_uInt16 nRestart, sal_Bool bIsSource)
+                                                sal_uInt16 nRestart, bool bIsSource)
                             {   pConfigItem = pItem;
                                 nMailMergeRestartPage = nRestart;
                                 bMailMergeSourceView = bIsSource;
                             }
     SwMailMergeConfigItem*  GetMailMergeConfigItem() {return pConfigItem;}
     sal_uInt16              GetMailMergeRestartPage() const {return nMailMergeRestartPage;}
-    sal_Bool                IsMailMergeSourceView() const { return bMailMergeSourceView;  }
+    bool                IsMailMergeSourceView() const { return bMailMergeSourceView;  }
 #endif
 
     //#i33307# restore editing position

@@ -140,7 +140,7 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
     // SwXTextRange -> PaM
     SwUnoInternalPaM aPaM(*pDoc);
 #if OSL_DEBUG_LEVEL > 0
-    sal_Bool bSuccess =
+    bool bSuccess =
 #endif
         ::sw::XTextRangeToSwPaM(aPaM, rRange);
     OSL_ENSURE(bSuccess, "illegal range");
@@ -159,7 +159,7 @@ XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos, SwDoc & rDoc)
     {
         SwUnoInternalPaM aUnoPaM(rDoc);
 #if OSL_DEBUG_LEVEL > 0
-        sal_Bool bSuccess =
+        bool bSuccess =
 #endif
             ::sw::XTextRangeToSwPaM(aUnoPaM, xRange);
         OSL_ENSURE(bSuccess, "illegal range");
@@ -200,7 +200,7 @@ public:
     OUString sAuthor;               // change author string
     OUString sComment;              // change comment string
     util::DateTime aDateTime;       // change DateTime
-    sal_Bool bMergeLastParagraph;   // the SwRangeRedline::IsDelLastPara flag
+    bool bMergeLastParagraph;   // the SwRangeRedline::IsDelLastPara flag
 
     // each position can may be either empty, an XTextRange, or an SwNodeIndex
 
@@ -225,7 +225,7 @@ RedlineInfo::RedlineInfo() :
     sAuthor(),
     sComment(),
     aDateTime(),
-    bMergeLastParagraph( sal_False ),
+    bMergeLastParagraph( false ),
     aAnchorStart(),
     aAnchorEnd(),
     pContentIndex(NULL),
@@ -383,7 +383,7 @@ void XMLRedlineImportHelper::Add(
     const OUString& rAuthor,
     const OUString& rComment,
     const util::DateTime& rDateTime,
-    sal_Bool bMergeLastPara)
+    bool bMergeLastPara)
 {
     // we need to do the following:
     // 1) parse type string
@@ -499,9 +499,9 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
 
 void XMLRedlineImportHelper::SetCursor(
     const OUString& rId,
-    sal_Bool bStart,
+    bool bStart,
     Reference<XTextRange> & rRange,
-    sal_Bool bIsOutsideOfParagraph)
+    bool bIsOutsideOfParagraph)
 {
     RedlineMapType::iterator aFind = aRedlineMap.find(rId);
     if (aRedlineMap.end() != aFind)
@@ -547,7 +547,7 @@ void XMLRedlineImportHelper::SetCursor(
 
 void XMLRedlineImportHelper::AdjustStartNodeCursor(
     const OUString& rId,        /// ID used in RedlineAdd() call
-    sal_Bool /*bStart*/,
+    bool /*bStart*/,
     Reference<XTextRange> & /*rRange*/)
 {
     // this method will modify the document directly -> lock SolarMutex
@@ -661,8 +661,8 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         // create redline (using pRedlineData which gets copied in SwRangeRedline())
         SwRedlineData* pRedlineData = ConvertRedline(pRedlineInfo, pDoc);
         SwRangeRedline* pRedline =
-            new SwRangeRedline( pRedlineData, *aPaM.GetPoint(), sal_True,
-                           !pRedlineInfo->bMergeLastParagraph, sal_False );
+            new SwRangeRedline( pRedlineData, *aPaM.GetPoint(), true,
+                           !pRedlineInfo->bMergeLastParagraph, false );
 
         // set mark
         if( aPaM.HasMark() )
@@ -730,12 +730,12 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
     return pData;
 }
 
-void XMLRedlineImportHelper::SetShowChanges( sal_Bool bShow )
+void XMLRedlineImportHelper::SetShowChanges( bool bShow )
 {
     bShowChanges = bShow;
 }
 
-void XMLRedlineImportHelper::SetRecordChanges( sal_Bool bRecord )
+void XMLRedlineImportHelper::SetRecordChanges( bool bRecord )
 {
     bRecordChanges = bRecord;
 }

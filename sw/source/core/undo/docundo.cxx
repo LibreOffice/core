@@ -439,7 +439,7 @@ public:
     {
         if (m_bSaveCursor)
         {
-            m_rShell.Pop( sal_False );
+            m_rShell.Pop( false );
         }
     }
 private:

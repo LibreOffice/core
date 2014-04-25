@@ -61,16 +61,16 @@ bool SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
             ((SwMirrorGrf&)rItem).IsGrfToggle() == IsGrfToggle();
 }
 
-static sal_Bool lcl_IsHoriOnEvenPages(int nEnum, sal_Bool bToggle)
+static bool lcl_IsHoriOnEvenPages(int nEnum, bool bToggle)
 {
-    sal_Bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
+    bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
                    nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum != bToggle;
 }
 
-static sal_Bool lcl_IsHoriOnOddPages(int nEnum)
+static bool lcl_IsHoriOnOddPages(int nEnum)
 {
-    sal_Bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
+    bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
                    nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum;
 }
@@ -104,7 +104,7 @@ bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bRet = true;
-    sal_Bool bVal = *(sal_Bool*)rVal.getValue();
+    bool bVal = *(sal_Bool*)rVal.getValue();
     // vertical and horizontal were swapped at some point
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -112,16 +112,16 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_MIRROR_HORZ_EVEN_PAGES:
         case MID_MIRROR_HORZ_ODD_PAGES:
         {
-            sal_Bool bIsVert = GetValue() == RES_MIRROR_GRAPH_HOR ||
+            bool bIsVert = GetValue() == RES_MIRROR_GRAPH_HOR ||
                                 GetValue() == RES_MIRROR_GRAPH_BOTH;
-            sal_Bool bOnOddPages = nMemberId == MID_MIRROR_HORZ_EVEN_PAGES ?
+            bool bOnOddPages = nMemberId == MID_MIRROR_HORZ_EVEN_PAGES ?
                                     lcl_IsHoriOnOddPages(GetValue()) : bVal;
-            sal_Bool bOnEvenPages = nMemberId == MID_MIRROR_HORZ_ODD_PAGES ?
+            bool bOnEvenPages = nMemberId == MID_MIRROR_HORZ_ODD_PAGES ?
                                        lcl_IsHoriOnEvenPages(GetValue(), IsGrfToggle()) : bVal;
             MirrorGraph nEnum = bOnOddPages ?
                     bIsVert ? RES_MIRROR_GRAPH_BOTH : RES_MIRROR_GRAPH_VERT :
                         bIsVert ? RES_MIRROR_GRAPH_HOR : RES_MIRROR_GRAPH_DONT;
-            sal_Bool bToggle = bOnOddPages != bOnEvenPages;
+            bool bToggle = bOnOddPages != bOnEvenPages;
             SetValue(static_cast<sal_uInt16>(nEnum));
             SetGrfToggle( bToggle );
         }

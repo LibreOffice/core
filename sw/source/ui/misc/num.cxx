@@ -54,7 +54,7 @@
 #include <svl/aeitem.hxx>
 #include <svl/slstitm.hxx>
 
-static sal_Bool bLastRelative = sal_False;
+static bool bLastRelative = false;
 
 //See cui/uiconfig/ui/numberingpositionpage.ui for effectively a duplicate
 //dialog to this one, except with a different preview window impl.
@@ -68,8 +68,8 @@ SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
     , pSaveNum(0)
     , pWrtSh(0)
     , pOutlineDlg(0)
-    , bPreset( sal_False )
-    , bInInintControl(sal_False)
+    , bPreset( false )
+    , bInInintControl(false)
     , bLabelAlignmentPosAndSpaceModeActive( false )
 {
     get(m_pLevelLB, "levellb");
@@ -166,7 +166,7 @@ SwNumPositionTabPage::~SwNumPositionTabPage()
 
 void SwNumPositionTabPage::InitControls()
 {
-    bInInintControl = sal_True;
+    bInInintControl = true;
     const bool bRelative = !bLabelAlignmentPosAndSpaceModeActive &&
                            m_pRelativeCB->IsEnabled() && m_pRelativeCB->IsChecked();
     const bool bSingleSelection = m_pLevelLB->GetSelectEntryCount() == 1 &&
@@ -355,7 +355,7 @@ void SwNumPositionTabPage::InitControls()
     if(bSetDistEmpty)
         m_pDistBorderMF->SetText(aEmptyOUStr);
 
-    bInInintControl = sal_False;
+    bInInintControl = false;
 }
 
 void SwNumPositionTabPage::ActivatePage(const SfxItemSet& )
@@ -454,7 +454,7 @@ void SwNumPositionTabPage::Reset( const SfxItemSet& rSet )
     InitPosAndSpaceMode();
     ShowControlsDependingOnPosAndSpaceMode();
     InitControls();
-    bModified = sal_False;
+    bModified = false;
 }
 
 void SwNumPositionTabPage::InitPosAndSpaceMode()
@@ -690,7 +690,7 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pFld )
 
 IMPL_LINK( SwNumPositionTabPage, RelativeHdl, CheckBox *, pBox )
 {
-    sal_Bool bOn = pBox->IsChecked();
+    bool bOn = pBox->IsChecked();
     bool bSingleSelection = m_pLevelLB->GetSelectEntryCount() == 1 && USHRT_MAX != nActNumLvl;
     bool bSetValue = false;
     long nValue = 0;
@@ -900,9 +900,9 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, StandardHdl)
 }
 
 #ifdef DBG_UTIL
-void SwNumPositionTabPage::SetModified(sal_Bool bRepaint)
+void SwNumPositionTabPage::SetModified(bool bRepaint)
 {
-    bModified = sal_True;
+    bModified = true;
     if(bRepaint)
     {
         m_pPreviewWIN->SetLevel(nActNumLvl);

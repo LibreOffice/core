@@ -37,8 +37,8 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     // everything for the character(s)
     OUString        m_aFontName;
     rtl_TextEncoding eCharSet;
-    sal_Bool        bExtCharAvailable;
-    sal_Bool        bEdit;
+    bool        bExtCharAvailable;
+    bool        bEdit;
 
     VclFrame*       m_pNumberFrame;
     RadioButton*    m_pNumberAutoBtn;
@@ -65,13 +65,13 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     void            Init();
 
 public:
-    SwInsFootNoteDlg(Window * pParent, SwWrtShell &rSh, sal_Bool bEd = sal_False);
+    SwInsFootNoteDlg(Window * pParent, SwWrtShell &rSh, bool bEd = false);
     virtual ~SwInsFootNoteDlg();
 
     rtl_TextEncoding GetCharSet() { return eCharSet; }
-    sal_Bool        IsExtCharAvailable() { return bExtCharAvailable; }
+    bool        IsExtCharAvailable() { return bExtCharAvailable; }
     OUString        GetFontName() { return m_aFontName; }
-    sal_Bool        IsEndNote() { return m_pEndNoteBtn->IsChecked(); }
+    bool        IsEndNote() { return m_pEndNoteBtn->IsChecked(); }
     OUString        GetStr()
                     {
                         if ( m_pNumberCharBtn->IsChecked() )

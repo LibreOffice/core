@@ -27,9 +27,9 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr )
 
 SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
     : SwCursor( rPos, pRing, false ), SwModify( 0 ),
-    bRemainInSection( sal_True ),
-    bSkipOverHiddenSections( sal_False ),
-    bSkipOverProtectSections( sal_False )
+    bRemainInSection( true ),
+    bSkipOverHiddenSections( false ),
+    bSkipOverProtectSections( false )
 {}
 
 SwUnoCrsr::~SwUnoCrsr()
@@ -85,7 +85,7 @@ bool SwUnoCrsr::IsReadOnlyAvailable() const
 }
 
 const SwCntntFrm*
-SwUnoCrsr::DoSetBidiLevelLeftRight( sal_Bool &, sal_Bool, sal_Bool )
+SwUnoCrsr::DoSetBidiLevelLeftRight( bool &, bool, bool )
 {
     return 0; // not for uno cursor
 }
@@ -95,7 +95,7 @@ void SwUnoCrsr::DoSetBidiLevelUpDown()
     return; // not for uno cursor
 }
 
-sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
+bool SwUnoCrsr::IsSelOvr( int eFlags )
 {
     if( bRemainInSection )
     {
@@ -174,7 +174,7 @@ sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
             {
                 rPtIdx = GetSavePos()->nNode;
                 GetPoint()->nContent.Assign( GetCntntNode(), GetSavePos()->nCntnt );
-                return sal_True;
+                return true;
             }
         }
     }
@@ -184,7 +184,7 @@ sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
 SwUnoTableCrsr::SwUnoTableCrsr(const SwPosition& rPos)
     : SwCursor(rPos,0,false), SwUnoCrsr(rPos), SwTableCursor(rPos), aTblSel(rPos,0,false)
 {
-    SetRemainInSection(sal_False);
+    SetRemainInSection(false);
 }
 
 SwUnoTableCrsr::~SwUnoTableCrsr()
@@ -193,9 +193,9 @@ SwUnoTableCrsr::~SwUnoTableCrsr()
         delete aTblSel.GetNext();
 }
 
-sal_Bool SwUnoTableCrsr::IsSelOvr( int eFlags )
+bool SwUnoTableCrsr::IsSelOvr( int eFlags )
 {
-    sal_Bool bRet = SwUnoCrsr::IsSelOvr( eFlags );
+    bool bRet = SwUnoCrsr::IsSelOvr( eFlags );
     if( !bRet )
     {
         const SwTableNode* pTNd = GetPoint()->nNode.GetNode().FindTableNode();

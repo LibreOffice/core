@@ -628,7 +628,7 @@ public:
     void OutputItem( const SfxPoolItem& rHt );
 
     /// Use OutputItem() on an item set - for styles.
-    void OutputStyleItemSet( const SfxItemSet& rSet, sal_Bool bDeep, sal_Bool bTestForDefault );
+    void OutputStyleItemSet( const SfxItemSet& rSet, bool bDeep, bool bTestForDefault );
 
     /// Output frames.
     void OutputFlyFrame( const sw::Frame& rFmt );

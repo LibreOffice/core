@@ -73,7 +73,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
                             pESh->StartAllAction();
                             bAction = true;
                             bUnLockView = !pESh->IsViewLocked();
-                            pESh->LockView( sal_True );
+                            pESh->LockView( true );
                         }
                         const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( false );
                         const SwTxtAttr* pAttr = pTxtAttr;
@@ -89,7 +89,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
         if( bAction )
             pESh->EndAllAction();
         if( bUnLockView )
-            pESh->LockView( sal_False );
+            pESh->LockView( false );
     }
 }
 

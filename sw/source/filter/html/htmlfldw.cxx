@@ -73,10 +73,10 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                       *pSubStr=0,   // SUBTYPE
                    *pFmtStr=0;  // FORMAT (SW)
     OUString aValue;              // VALUE (SW)
-    sal_Bool bNumFmt=sal_False;         // SDNUM (Number-Formatter-Format)
-    sal_Bool bNumValue=sal_False;       // SDVAL (Number-Formatter-Value)
+    bool bNumFmt=false;         // SDNUM (Number-Formatter-Format)
+    bool bNumValue=false;       // SDVAL (Number-Formatter-Value)
     double dNumValue = 0.0;     // SDVAL (Number-Formatter-Value)
-    sal_Bool bFixed=sal_False;          // SDFIXED
+    bool bFixed=false;          // SDFIXED
     OUString aName;               // NAME (CUSTOM)
 
     switch( nField )
@@ -120,10 +120,10 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
 
         case RES_DATETIMEFLD:
             pTypeStr = OOO_STRING_SW_HTML_FT_datetime;
-            bNumFmt = sal_True;
+            bNumFmt = true;
             if( ((SwDateTimeField*)pFld)->IsFixed() )
             {
-                bNumValue = sal_True;
+                bNumValue = true;
                 dNumValue = ((SwDateTimeField*)pFld)->GetValue();
             }
             break;
@@ -190,11 +190,11 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                             break;
                         case DI_SUB_TIME:
                             pFmtStr = OOO_STRING_SW_HTML_FF_time;
-                            bNumFmt = sal_True;
+                            bNumFmt = true;
                             break;
                         case DI_SUB_DATE:
                             pFmtStr = OOO_STRING_SW_HTML_FF_date;
-                            bNumFmt = sal_True;
+                            bNumFmt = true;
                             break;
                     }
                 }
@@ -207,13 +207,13 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                         // Fixe Felder ohne Zahlenformate sollte es
                         // eigentlich nicht geben. OSL_ENSURE(ist unten.
                         dNumValue = ((const SwDocInfoField*)pFld)->GetValue();
-                        bNumValue = sal_True;
+                        bNumValue = true;
                     }
                     else if( !nFmt  )
                     {
                         // Nicht fixe Felder muessen kein Zahlenformat haben,
                         // wenn sie aus 4.0-Dokumenten stammen.
-                        bNumFmt = sal_False;
+                        bNumFmt = false;
                     }
                 }
             }
@@ -306,7 +306,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
 
     // Inhalt des Feldes ausgeben
     OUString const sExpand( pFld->ExpandField(true) );
-    sal_Bool bNeedsCJKProcessing = sal_False;
+    bool bNeedsCJKProcessing = false;
     if( !sExpand.isEmpty() )
     {
         sal_uInt16 nScriptType = g_pBreakIt->GetBreakIter()->getScriptType( sExpand, 0 );
@@ -317,7 +317,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
             SwHTMLWriter::GetCSS1ScriptForScriptType( nScriptType );
         if( (nPos < sExpand.getLength() && nPos >= 0) || nScript != rHTMLWrt.nCSS1Script )
         {
-            bNeedsCJKProcessing = sal_True;
+            bNeedsCJKProcessing = true;
         }
     }
 
@@ -377,7 +377,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                 case CSS1_OUTMODE_CTL:      pWhichIds = aCTLWhichIds; break;
                 }
 
-                rHTMLWrt.bTagOn = sal_True;
+                rHTMLWrt.bTagOn = true;
 
                 const SfxPoolItem *aItems[5];
                 sal_uInt16 nItems = 0;
@@ -404,7 +404,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                 HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.copy( nPos, nChunkLen ),
                     rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
-                rHTMLWrt.bTagOn = sal_False;
+                rHTMLWrt.bTagOn = false;
                 while( nItems )
                     Out( aHTMLAttrFnTab, *aItems[--nItems], rHTMLWrt );
 
@@ -512,9 +512,9 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
     {
         SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
         if( rHTMLWrt.bLFPossible )
-            rHTMLWrt.OutNewLine( sal_True );
+            rHTMLWrt.OutNewLine( true );
 
-        sal_Bool bURL = ((const SwScriptField *)pFld)->IsCodeURL();
+        bool bURL = ((const SwScriptField *)pFld)->IsCodeURL();
         const OUString& rType = pFld->GetPar1();
         OUString aContents, aURL;
         if(bURL)
@@ -528,7 +528,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
                                  aURL, 0, 0, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
         if( rHTMLWrt.bLFPossible )
-            rHTMLWrt.OutNewLine( sal_True );
+            rHTMLWrt.OutNewLine( true );
     }
     else
     {

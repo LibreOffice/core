@@ -35,7 +35,7 @@ public:
 
     AuthorCharAttr();
 
-    inline sal_Bool operator == ( const AuthorCharAttr& rAttr ) const
+    inline bool operator == ( const AuthorCharAttr& rAttr ) const
     {
         return  nItemId == rAttr.nItemId && nAttr == rAttr.nAttr &&
                 nColor == rAttr.nColor;

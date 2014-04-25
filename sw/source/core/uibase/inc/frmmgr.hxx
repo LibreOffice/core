@@ -53,11 +53,11 @@ class SW_DLLPUBLIC SwFlyFrmAttrMgr
     Point       m_aAbsPos;
     SwWrtShell* m_pOwnSh;
 
-    sal_Bool    m_bAbsPos,
+    bool    m_bAbsPos,
                 m_bNewFrm;
-    sal_Bool    m_bIsInVertical;
+    bool    m_bIsInVertical;
     // --> OD 2009-09-01 #mongolianlayout#
-    sal_Bool    m_bIsInVerticalL2R;
+    bool    m_bIsInVerticalL2R;
 
     // internal calculation for borders
     SAL_DLLPRIVATE SwTwips           CalcTopSpace();
@@ -68,10 +68,10 @@ class SW_DLLPUBLIC SwFlyFrmAttrMgr
     SAL_DLLPRIVATE void _UpdateFlyFrm(); // post-treatment after insert or update
 
 public:
-    SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nType );
+    SwFlyFrmAttrMgr( bool bNew, SwWrtShell* pSh, sal_uInt8 nType );
 
     //CopyCtor for dialogs to check the metrics
-    SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell *pSh, const SfxItemSet &rSet );
+    SwFlyFrmAttrMgr( bool bNew, SwWrtShell *pSh, const SfxItemSet &rSet );
 
     inline SwWrtShell*  GetShell() { return m_pOwnSh; }
 
@@ -109,11 +109,11 @@ public:
     void                UpdateFlyFrm();
 
     // create new frame
-    sal_Bool                InsertFlyFrm();
+    bool                InsertFlyFrm();
     void                InsertFlyFrm(RndStdIds      eAnchorType,
                                    const Point    &rPos,
                                    const Size     &rSize,
-                                   sal_Bool           bAbsPos = sal_False);
+                                   bool           bAbsPos = false);
 
     // check and change metrics
     void                ValidateMetrics(SvxSwFrameValidation& rVal,

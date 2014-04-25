@@ -92,7 +92,7 @@ void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 }
 
 SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
-                                SwDBMgr* pDBMgr_, sal_Bool bLabel)
+                                SwDBMgr* pDBMgr_, bool bLabel)
     : SfxTabDialog(pParent, "LabelDialog",
         "modules/swriter/ui/labeldialog.ui", &rSet)
     , pDBMgr(pDBMgr_)
@@ -196,7 +196,7 @@ void SwLabDlg::GetLabItem(SwLabItem &rItem)
     }
 }
 
-SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, sal_Bool bCont)
+SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, bool bCont)
 {
     SwLabRec* pRec = NULL;
     bool bFound = false;
@@ -294,7 +294,7 @@ void SwLabPage::SetToBusinessCard()
     m_pSheetButton->SetHelpId(HID_BUSINESS_FMT_PAGE_SHEET);
     m_pMakeBox->SetHelpId(HID_BUSINESS_FMT_PAGE_BRAND);
     m_pTypeBox->SetHelpId(HID_BUSINESS_FMT_PAGE_TYPE);
-    m_bLabel = sal_False;
+    m_bLabel = false;
     m_pAddressFrame->Hide();
 };
 
@@ -355,7 +355,7 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
     GetParentSwLabDlg()->ReplaceGroup( aMake );
     aItem.aLstMake = aMake;
 
-    const sal_Bool   bCont    = m_pContButton->IsChecked();
+    const bool   bCont    = m_pContButton->IsChecked();
     const size_t nCount   = GetParentSwLabDlg()->Recs().size();
     size_t nLstType = 0;
 
@@ -408,7 +408,7 @@ IMPL_LINK_NOARG_INLINE_END(SwLabPage, TypeHdl)
 void SwLabPage::DisplayFormat()
 {
     MetricField aField(this, WinBits(0));
-    FieldUnit aMetric = ::GetDfltMetric(sal_False);
+    FieldUnit aMetric = ::GetDfltMetric(false);
     SetMetric(aField, aMetric);
     aField.SetDecimalDigits(2);
     aField.SetMin         (0);

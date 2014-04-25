@@ -42,20 +42,20 @@ class SW_DLLPUBLIC SwGlossaryHdl
                        const SvxMacro *pStart,
                        const SvxMacro *pEnd);
 
-    SAL_DLLPRIVATE sal_Bool  Expand( const OUString& rShortName,
+    SAL_DLLPRIVATE bool  Expand( const OUString& rShortName,
                     SwGlossaries* pGlossaries,
                     SwTextBlocks *pGlossary );
 
 public:
-    sal_Bool    ConvertToNew(SwTextBlocks& rOld);
+    bool    ConvertToNew(SwTextBlocks& rOld);
     void    GlossaryDlg();
 
     sal_uInt16  GetGroupCnt() const;
     OUString    GetGroupName( sal_uInt16, OUString* pTitle = 0 );
-    sal_Bool    NewGroup(OUString & rGroupName, const OUString& rTitle);
-    sal_Bool    DelGroup(const OUString &);
-    sal_Bool    RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle);
-    void        SetCurGroup(const OUString &aGrp, sal_Bool bApi = sal_False, sal_Bool bAlwaysCreateNew = sal_False);
+    bool        NewGroup(OUString & rGroupName, const OUString& rTitle);
+    bool        DelGroup(const OUString &);
+    bool        RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle);
+    void        SetCurGroup(const OUString &aGrp, bool bApi = false, bool bAlwaysCreateNew = false);
 
     OUString GetCurGroup() const { return aCurGrp; }
 
@@ -64,19 +64,19 @@ public:
     OUString  GetGlossaryShortName(const OUString &rName);
     OUString  GetGlossaryShortName(sal_uInt16);
 
-    sal_Bool    Rename( const OUString& rOldShortName, const OUString& rNewShortName,
+    bool    Rename( const OUString& rOldShortName, const OUString& rNewShortName,
                         const OUString& rNewName);
-    sal_Bool    CopyOrMove( const OUString& rSourceGroupName, OUString& rSourceShortName,
-                        const OUString& rDestGroupName, const OUString& rLongName, sal_Bool bMove );
-    sal_Bool    HasShortName(const OUString &rShortName) const;
+    bool    CopyOrMove( const OUString& rSourceGroupName, OUString& rSourceShortName,
+                        const OUString& rDestGroupName, const OUString& rLongName, bool bMove );
+    bool    HasShortName(const OUString &rShortName) const;
     // when NewGlossary is called from Basic then the previously set group should
     // be newly created if applicable.
-    sal_Bool    NewGlossary(const OUString &rName, const OUString &rShortName,
-                sal_Bool bApiCall = sal_False, sal_Bool bNoAttr = sal_False );
-    sal_Bool    DelGlossary(const OUString&);
-    sal_Bool    CopyToClipboard(SwWrtShell& rSh, const OUString& rShortName);
+    bool    NewGlossary(const OUString &rName, const OUString &rShortName,
+                bool bApiCall = false, bool bNoAttr = false );
+    bool    DelGlossary(const OUString&);
+    bool    CopyToClipboard(SwWrtShell& rSh, const OUString& rShortName);
 
-    sal_Bool    ExpandGlossary();
+    bool    ExpandGlossary();
     bool    InsertGlossary(const OUString &rName);
 
     void    SetMacros(const OUString& rName,
@@ -88,12 +88,12 @@ public:
                       SvxMacro& rEnd,
                       SwTextBlocks* pGlossary = 0 );
 
-    sal_Bool    IsReadOnly( const OUString* = 0 ) const;
-    sal_Bool    IsOld() const;
+    bool    IsReadOnly( const OUString* = 0 ) const;
+    bool    IsOld() const;
 
-    sal_Bool    FindGroupName(OUString& rGroup); // find group without path index
+    bool    FindGroupName(OUString& rGroup); // find group without path index
 
-    sal_Bool    ImportGlossaries( const OUString& rName );
+    bool    ImportGlossaries( const OUString& rName );
 
             SwGlossaryHdl(SfxViewFrame* pViewFrame, SwWrtShell *);
             ~SwGlossaryHdl();

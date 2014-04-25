@@ -112,10 +112,10 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
         const OUString& rParent,
         const sal_uInt16 nFamily,
         sal_uInt16 nMask,
-        const sal_Bool bNew,
+        const bool bNew,
         const OString& sPageId = OString(),
         SwWrtShell* pActShell = 0,
-        const sal_Bool bBasic = sal_False );
+        const bool bBasic = false );
 
     SAL_DLLPRIVATE sal_uInt16            Delete(const OUString &rName, sal_uInt16 nFamily);
     SAL_DLLPRIVATE sal_uInt16            Hide(const OUString &rName, sal_uInt16 nFamily, bool bHidden);
@@ -240,7 +240,7 @@ public:
 
     virtual void LoadStyles( SfxObjectShell& rSource ) SAL_OVERRIDE;
 
-    void _LoadStyles( SfxObjectShell& rSource, sal_Bool bPreserveCurrentDocument );
+    void _LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocument );
 
     // Show page style format dialog
     // @param nSlot
@@ -265,10 +265,10 @@ public:
 
     sal_Int16   GetUpdateDocMode() const {return nUpdateDocMode;}
 
-    void ToggleBrowserMode(sal_Bool bOn, SwView* pView);
+    void ToggleBrowserMode(bool bOn, SwView* pView);
 
     sal_uLong LoadStylesFromFile( const OUString& rURL, SwgReaderOption& rOpt,
-                                sal_Bool bUnoCall );
+                                  bool bUnoCall );
     void InvalidateModel();
     void ReactivateModel();
 
@@ -289,7 +289,7 @@ public:
                                 GetController();
 
     SfxInPlaceClient* GetIPClient( const ::svt::EmbeddedObjectRef& xObjRef );
-    SAL_DLLPRIVATE sal_Bool IsTemplate() { return bIsATemplate; }
+    SAL_DLLPRIVATE bool IsTemplate() { return bIsATemplate; }
     SAL_DLLPRIVATE void SetIsTemplate( bool bValue ) { bIsATemplate = bValue; }
 
     virtual const ::sfx2::IXmlIdRegistry* GetXmlIdRegistry() const SAL_OVERRIDE;

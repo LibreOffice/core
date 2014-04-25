@@ -50,19 +50,19 @@ class SwXTextSearch : public cppu::WeakImplHelper3
     SwSearchProperties_Impl*    pReplaceProperties;
 
     const SfxItemPropertySet*   m_pPropSet;
-    sal_Bool                    bAll  : 1;
-    sal_Bool                    bWord : 1;
-    sal_Bool                    bBack : 1;
-    sal_Bool                    bExpr : 1;
-    sal_Bool                    bCase : 1;
-    sal_Bool                    bStyles:1;
-    sal_Bool                    bSimilarity : 1;
-    sal_Bool                    bLevRelax       :1;
+    bool                    bAll  : 1;
+    bool                    bWord : 1;
+    bool                    bBack : 1;
+    bool                    bExpr : 1;
+    bool                    bCase : 1;
+    bool                    bStyles:1;
+    bool                    bSimilarity : 1;
+    bool                    bLevRelax       :1;
     sal_Int16                   nLevExchange;
     sal_Int16                   nLevAdd;
     sal_Int16                   nLevRemove;
 
-    sal_Bool                    bIsValueSearch :1;
+    bool                    bIsValueSearch :1;
 protected:
     virtual ~SwXTextSearch();
 public:
@@ -106,8 +106,8 @@ public:
     void    FillSearchItemSet(SfxItemSet& rSet) const;
     void    FillReplaceItemSet(SfxItemSet& rSet) const;
 
-    sal_Bool    HasSearchAttributes() const;
-    sal_Bool    HasReplaceAttributes() const;
+    bool    HasSearchAttributes() const;
+    bool    HasReplaceAttributes() const;
 
     void    FillSearchOptions( ::com::sun::star::util::SearchOptions&
                                         rSearchOpt ) const;

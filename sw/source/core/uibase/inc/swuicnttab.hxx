@@ -86,9 +86,9 @@ class SwMultiTOXTabDialog : public SfxTabDialog
     sal_uInt16              nTypeCount;
     sal_uInt16              nInitialTOXType;
 
-    sal_Bool                bEditTOX;
-    sal_Bool                bExampleCreated;
-    sal_Bool                bGlobalFlag;
+    bool                bEditTOX;
+    bool                bExampleCreated;
+    bool                bGlobalFlag;
 
     virtual short       Ok() SAL_OVERRIDE;
     SwTOXDescription*   CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
@@ -100,7 +100,7 @@ public:
     SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet,
                         SwWrtShell &rShell,
                         SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,
-                        sal_Bool bGlobal = sal_False);
+                        bool bGlobal = false);
     virtual ~SwMultiTOXTabDialog();
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
@@ -114,7 +114,7 @@ public:
                                 }
 
     void                UpdateExample();
-    sal_Bool                IsTOXEditMode() const { return bEditTOX;}
+    bool                IsTOXEditMode() const { return bEditTOX;}
 
     SwWrtShell&         GetWrtShell() {return rSh;}
 
@@ -122,7 +122,7 @@ public:
     void                CreateOrUpdateExample(
                             TOXTypes nTOXIndex, sal_uInt16 nPage = 0, sal_uInt16 nCurLevel = USHRT_MAX);
 
-    static sal_Bool IsNoNum(SwWrtShell& rSh, const OUString& rName);
+    static bool IsNoNum(SwWrtShell& rSh, const OUString& rName);
 };
 
 class IndexEntryResource;
@@ -289,7 +289,7 @@ public:
     void        SetForm(SwForm& rForm, sal_uInt16 nLevel);
     sal_uInt16      GetLastLevel()const {return nLevel;};
 
-    sal_Bool        IsValid() const {return bValid;}
+    bool        IsValid() const {return bValid;}
 
     void        SetInvalid() {bValid = false;}
 
@@ -304,14 +304,14 @@ public:
                     { return pActiveCtrl;}
 
     void        InsertAtSelection(const OUString& rText, const SwFormToken& aToken);
-    void        RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall = sal_False);
+    void        RemoveControl(SwTOXButton* pDel, bool bInternalCall = false);
 
-    sal_Bool        Contains(FormTokenType) const;
+    bool        Contains(FormTokenType) const;
 
-    sal_Bool        DetermineLinkStart();
+    bool        DetermineLinkStart();
 
     //helper for pattern buttons and edits
-    sal_Bool        CreateQuickHelp(Control* pCtrl,
+    bool        CreateQuickHelp(Control* pCtrl,
                     const SwFormToken& rToken, const HelpEvent& );
 
     virtual void    GetFocus() SAL_OVERRIDE;

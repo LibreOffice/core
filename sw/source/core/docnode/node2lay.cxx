@@ -54,7 +54,7 @@ public:
 
     SwFrm* GetFrm( const Point* pDocPos = 0,
                     const SwPosition *pPos = 0,
-                    const sal_Bool bCalcFrm = sal_True ) const;
+                    const bool bCalcFrm = true ) const;
 };
 
 SwNode* GoNextWithFrm(const SwNodes& rNodes, SwNodeIndex *pIdx)
@@ -389,7 +389,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
                     ((SwSectionFrm*)pNxt)->UnlockJoin();
                 pUp = (SwLayoutFrm*)(*pUpperFrms)[x++];
                 OSL_ENSURE( pUp->GetUpper() || pUp->IsFlyFrm(), "Lost Upper" );
-                ::_InsertCnt( pUp, pDoc, pNd->GetIndex(), sal_False, nStt+1, pNxt );
+                ::_InsertCnt( pUp, pDoc, pNd->GetIndex(), false, nStt+1, pNxt );
                 pNxt = pUp->GetLastLower();
                 (*pUpperFrms)[x-2] = pNxt;
             }
@@ -415,7 +415,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
 
 SwFrm* SwNode2LayImpl::GetFrm( const Point* pDocPos,
                                 const SwPosition *pPos,
-                                const sal_Bool bCalcFrm ) const
+                                const bool bCalcFrm ) const
 {
     // test if change of member pIter -> pMod broke anything
     return pMod ? ::GetFrmOfModify( 0, *pMod, USHRT_MAX, pDocPos, pPos, bCalcFrm ) : 0;
@@ -454,8 +454,8 @@ SwNode2Layout::~SwNode2Layout()
 }
 
 SwFrm* SwNode2Layout::GetFrm( const Point* pDocPos,
-                                const SwPosition *pPos,
-                                const sal_Bool bCalcFrm ) const
+                              const SwPosition *pPos,
+                              const bool bCalcFrm ) const
 {
     return pImpl->GetFrm( pDocPos, pPos, bCalcFrm );
 }

@@ -65,14 +65,14 @@ bool SwWrtShell::_EndWrd()
     return true;
 }
 
-sal_Bool SwWrtShell::_NxtWrd()
+bool SwWrtShell::_NxtWrd()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     while( IsEndPara() )               // If already at the end, then the next???
     {
         if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))  // Document - end ??
         {
-            Pop( sal_False );
+            Pop( false );
             return bRet;
         }
         bRet = IsStartWord();
@@ -89,21 +89,21 @@ sal_Bool SwWrtShell::_NxtWrd()
             bRet = IsStartWord();
         }
         else
-            bRet = sal_True;
+            bRet = true;
     }
     ClearMark();
     Combine();
     return bRet;
 }
 
-sal_Bool SwWrtShell::_PrvWrd()
+bool SwWrtShell::_PrvWrd()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     while( IsSttPara() )
     {                            // if already at the beginning, then the next???
         if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
         {                        // Document - beginning ??
-            Pop( sal_False );
+            Pop( false );
             return bRet;
         }
         bRet = IsStartWord();
@@ -120,7 +120,7 @@ sal_Bool SwWrtShell::_PrvWrd()
             bRet = IsStartWord();
         }
         else
-            bRet = sal_True;
+            bRet = true;
     }
     ClearMark();
     Combine();
@@ -129,16 +129,16 @@ sal_Bool SwWrtShell::_PrvWrd()
 
 // #i92468#
 // method code of <SwWrtShell::_NxtWrd()> before fix for issue i72162
-sal_Bool SwWrtShell::_NxtWrdForDelete()
+bool SwWrtShell::_NxtWrdForDelete()
 {
     if ( IsEndPara() )
     {
         if ( !SwCrsrShell::Right(1,CRSR_SKIP_CHARS) )
         {
-            Pop( sal_False );
-            return sal_False;
+            Pop( false );
+            return false;
         }
-        return sal_True;
+        return true;
     }
     Push();
     ClearMark();
@@ -148,20 +148,20 @@ sal_Bool SwWrtShell::_NxtWrdForDelete()
     }
     ClearMark();
     Combine();
-    return sal_True;
+    return true;
 }
 
 // method code of <SwWrtShell::_PrvWrd()> before fix for issue i72162
-sal_Bool SwWrtShell::_PrvWrdForDelete()
+bool SwWrtShell::_PrvWrdForDelete()
 {
     if ( IsSttPara() )
     {
         if ( !SwCrsrShell::Left(1,CRSR_SKIP_CHARS) )
         {
-            Pop( sal_False );
-            return sal_False;
+            Pop( false );
+            return false;
         }
-        return sal_True;
+        return true;
     }
     Push();
     ClearMark();
@@ -171,60 +171,60 @@ sal_Bool SwWrtShell::_PrvWrdForDelete()
     }
     ClearMark();
     Combine();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwWrtShell::_FwdSentence()
+bool SwWrtShell::_FwdSentence()
 {
     Push();
     ClearMark();
     if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))
     {
-        Pop(sal_False);
-        return 0;
+        Pop(false);
+        return false;
     }
     if( !GoNextSentence() && !IsEndPara() )
         SwCrsrShell::MovePara(fnParaCurr, fnParaEnd);
 
     ClearMark();
     Combine();
-    return 1;
+    return true;
 }
 
-sal_Bool SwWrtShell::_BwdSentence()
+bool SwWrtShell::_BwdSentence()
 {
     Push();
     ClearMark();
     if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
     {
-        Pop(sal_False);
-        return 0;
+        Pop(false);
+        return false;
     }
     if( !GoStartSentence()  && !IsSttPara() )
             // not found --> go to the beginning of the paragraph
         SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
     ClearMark();
     Combine();
-    return 1;
+    return true;
 }
 
-sal_Bool SwWrtShell::_FwdPara()
+bool SwWrtShell::_FwdPara()
 {
     Push();
     ClearMark();
-    sal_Bool bRet = SwCrsrShell::MovePara(fnParaNext, fnParaStart);
+    bool bRet = SwCrsrShell::MovePara(fnParaNext, fnParaStart);
 
     ClearMark();
     Combine();
     return bRet;
 }
 
-sal_Bool SwWrtShell::_BwdPara()
+bool SwWrtShell::_BwdPara()
 {
     Push();
     ClearMark();
 
-    sal_Bool bRet = SwCrsrShell::MovePara(fnParaPrev, fnParaStart);
+    bool bRet = SwCrsrShell::MovePara(fnParaPrev, fnParaStart);
     if ( !bRet && !IsSttOfPara() )
     {
         SttPara();

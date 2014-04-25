@@ -35,7 +35,7 @@ SwFieldType* SwScriptFieldType::Copy() const
 
 SwScriptField::SwScriptField( SwScriptFieldType* pInitType,
                                 const OUString& rType, const OUString& rCode,
-                                sal_Bool bURL )
+                                bool bURL )
     : SwField( pInitType ), sType( rType ), sCode( rCode ), bCodeURL( bURL )
 {
 }

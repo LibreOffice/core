@@ -173,17 +173,17 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     Window                  *pScrollFill;
 
     sal_uInt16                  mnPageCount;
-    sal_Bool                    bNormalPrint;
+    bool                    bNormalPrint;
 
     // New members to reset design mode at draw view for form shell on switching
     // back from writer page preview to normal view.
-    sal_Bool                mbResetFormDesignMode:1;
-    sal_Bool                mbFormDesignModeToReset:1;
+    bool                mbResetFormDesignMode:1;
+    bool                mbFormDesignModeToReset:1;
 
     SAL_DLLPRIVATE void            Init(const SwViewOption* = 0);
     SAL_DLLPRIVATE Point           AlignToPixel(const Point& rPt) const;
 
-    SAL_DLLPRIVATE int             _CreateScrollbar( sal_Bool bHori );
+    SAL_DLLPRIVATE int             _CreateScrollbar( bool bHori );
     SAL_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
     SAL_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
     SAL_DLLPRIVATE DECL_LINK( BtnPage, Button * );
@@ -195,7 +195,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     SAL_DLLPRIVATE virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent,
                                                 const SfxItemSet &rOptions ) SAL_OVERRIDE;
 
-    SAL_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool bInner );
+    SAL_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, bool bInner );
 
     /** Helper method to execute SfxRequest FN_PAGE_UP and FN_PAGE_DOWN
 
@@ -241,15 +241,15 @@ public:
 
     void            ScrollViewSzChg();
     void            ScrollDocSzChg();
-    void            ShowHScrollbar(sal_Bool bShow);
-    void            ShowVScrollbar(sal_Bool bShow);
+    void            ShowHScrollbar(bool bShow);
+    void            ShowVScrollbar(bool bShow);
     void            EnableHScrollbar(bool bEnable);
     void            EnableVScrollbar(bool bEnable);
 
     sal_uInt16      GetPageCount() const        { return mnPageCount; }
     sal_uInt16      GetSelectedPage() const {return pViewWin->SelectedPage();}
 
-    sal_Bool            HandleWheelCommands( const CommandEvent& );
+    bool            HandleWheelCommands( const CommandEvent& );
 
     OUString        GetPrevSwViewData() const       { return sSwViewData; }
     void            SetNewCrsrPos( const OUString& rStr ) { sNewCrsrPos = rStr; }
@@ -270,12 +270,12 @@ public:
 
     // Inline method to request values of new members
     // <mbResetFormDesignMode> and <mbFormDesignModeToReset>
-    inline sal_Bool ResetFormDesignMode() const
+    inline bool ResetFormDesignMode() const
     {
         return mbResetFormDesignMode;
     }
 
-    inline sal_Bool FormDesignModeToReset() const
+    inline bool FormDesignModeToReset() const
     {
         return mbFormDesignModeToReset;
     }

@@ -33,7 +33,7 @@
 
 // SwTblBoxNumFormat
 
-SwTblBoxNumFormat::SwTblBoxNumFormat( sal_uInt32 nFormat, sal_Bool bFlag )
+SwTblBoxNumFormat::SwTblBoxNumFormat( sal_uInt32 nFormat, bool bFlag )
     : SfxUInt32Item( RES_BOXATR_FORMAT, nFormat ), bAuto( bFlag )
 {
 }
@@ -152,14 +152,14 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
                                             pUpdtFld->nSplitLine <= nLnPos;
             }
             else
-                pUpdtFld->bBehindSplitLine = sal_False;
+                pUpdtFld->bBehindSplitLine = false;
             // no break
         case TBL_MERGETBL:
             if( pUpdtFld->pHistory )
             {
                 // for a history record the unchanged formula is needed
                 SwTblBoxFormula aCopy( *this );
-                pUpdtFld->bModified = sal_False;
+                pUpdtFld->bModified = false;
                 ToSplitMergeBoxNm( *pUpdtFld );
 
                 if( pUpdtFld->bModified )

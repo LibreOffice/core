@@ -136,7 +136,7 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet)
     SetExchangeSupport();
 
     // Metrics
-    FieldUnit aMetric = ::GetDfltMetric(sal_False);
+    FieldUnit aMetric = ::GetDfltMetric(false);
     SetMetric(*m_pAddrLeftField, aMetric);
     SetMetric(*m_pAddrTopField, aMetric);
     SetMetric(*m_pSendLeftField, aMetric);

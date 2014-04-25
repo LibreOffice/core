@@ -146,7 +146,7 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
         const uno::Reference<XPropertySet> & rInfoSet,
         bool bInsertM, bool bStylesOnlyM, bool _bProgress,
         bool bBlockM, bool bOrganizerM,
-        sal_Bool /*bPreserveRedlineMode*/ ) :
+        bool /*bPreserveRedlineMode*/ ) :
     XMLTextImportHelper( rModel, rImport, bInsertM, bStylesOnlyM, _bProgress,
                          bBlockM, bOrganizerM ),
     pRedlineHelper( NULL )
@@ -352,7 +352,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         if( !pOLENd )
             pOLENd = lcl_GetOLENode( pFrmFmt );
         if( pOLENd )
-            pOLENd->SetOLESizeInvalid( sal_True );
+            pOLENd->SetOLESizeInvalid( true );
     }
 
     SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
@@ -758,7 +758,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
     ScrollingMode eScrollMode = ScrollingAuto;
-    sal_Bool bHasBorder = sal_False;
+    bool bHasBorder = false;
     bool bIsBorderSet = false;
     Size aMargin( SIZE_NOT_SET, SIZE_NOT_SET );
     const XMLPropStyleContext *pStyle = 0;
@@ -788,7 +788,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                     {
                     case CTF_FRAME_DISPLAY_SCROLLBAR:
                         {
-                            sal_Bool bYes = *(sal_Bool *)rProp.maValue.getValue();
+                            bool bYes = *(sal_Bool *)rProp.maValue.getValue();
                             eScrollMode = bYes ? ScrollingYes : ScrollingNo;
                         }
                         break;
@@ -850,17 +850,17 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
 
                 if ( eScrollMode == ScrollingAuto )
                     xSet->setPropertyValue("FrameIsAutoScroll",
-                        makeAny( sal_True ) );
+                        makeAny( true ) );
                 else
                     xSet->setPropertyValue("FrameIsScrollingMode",
-                        makeAny( (sal_Bool) (eScrollMode == ScrollingYes) ) );
+                        makeAny( eScrollMode == ScrollingYes ) );
 
                 if ( bIsBorderSet )
                     xSet->setPropertyValue("FrameIsBorder",
                         makeAny( bHasBorder ) );
                 else
                     xSet->setPropertyValue("FrameIsAutoBorder",
-                        makeAny( sal_True ) );
+                        makeAny( true ) );
 
                 xSet->setPropertyValue("FrameMarginWidth",
                     makeAny( sal_Int32( aMargin.Width() ) ) );

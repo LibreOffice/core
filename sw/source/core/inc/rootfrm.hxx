@@ -75,16 +75,16 @@ class SwRootFrm: public SwLayoutFrm
 
     static SwLayVout     *pVout;
     static bool           bInPaint;     //Schutz gegen doppelte Paints.
-    static sal_Bool           bNoVirDev;    //Bei SystemPaints kein virt. Device
+    static bool           bNoVirDev;    //Bei SystemPaints kein virt. Device
 
-    sal_Bool    bCheckSuperfluous   :1; //Leere Seiten suchen?
-    sal_Bool    bIdleFormat         :1; //Idle-Formatierer anwerfen?
-    sal_Bool    bBrowseWidthValid   :1; //Ist nBrowseWidth gueltig?
-    sal_Bool    bTurboAllowed       :1;
-    sal_Bool    bAssertFlyPages     :1; //Ggf. weitere Seiten fuer Flys einfuegen?
-    sal_Bool    bIsVirtPageNum      :1; //gibt es eine virtuelle Seitennummer ?
-    sal_Bool    bIsNewLayout        :1; //Layout geladen oder neu erzeugt.
-    sal_Bool    bCallbackActionEnabled:1; //Keine Action in Benachrichtung erwuenscht
+    bool    bCheckSuperfluous   :1; //Leere Seiten suchen?
+    bool    bIdleFormat         :1; //Idle-Formatierer anwerfen?
+    bool    bBrowseWidthValid   :1; //Ist nBrowseWidth gueltig?
+    bool    bTurboAllowed       :1;
+    bool    bAssertFlyPages     :1; //Ggf. weitere Seiten fuer Flys einfuegen?
+    bool    bIsVirtPageNum      :1; //gibt es eine virtuelle Seitennummer ?
+    bool    bIsNewLayout        :1; //Layout geladen oder neu erzeugt.
+    bool    bCallbackActionEnabled:1; //Keine Action in Benachrichtung erwuenscht
                                     //siehe dcontact.cxx, ::Changed()
     bool        bLayoutFreezed;
 
@@ -156,9 +156,9 @@ public:
     void AllRemoveFtns() ;
     void AllInvalidateSmartTagsOrSpelling(bool bSmartTags) const;
     //Virtuelles Device ausgeben (z.B. wenn Animationen ins Spiel kommen)
-    static sal_Bool FlushVout();
+    static bool FlushVout();
     //Clipping sparen, wenn im Vout eh genau das Cliprechteck ausgegeben wird
-    static sal_Bool HasSameRect( const SwRect& rRect );
+    static bool HasSameRect( const SwRect& rRect );
 
     SwRootFrm( SwFrmFmt*, SwViewShell* );
     virtual ~SwRootFrm();
@@ -173,7 +173,7 @@ public:
     //Der ChangeLinkd der CrsrShell (UI-Benachrichtigung) wird im EndAllAction
     //automatisch gecallt.
     void StartAllAction();
-    void EndAllAction( sal_Bool bVirDev = sal_False );
+    void EndAllAction( bool bVirDev = false );
 
     // fuer bestimmte UNO-Aktionen (Tabellencursor) ist es notwendig, dass alle Actions
     // kurzfristig zurueckgesetzt werden. Dazu muss sich jede SwViewShell ihren alten Action-zaehler
@@ -190,8 +190,8 @@ public:
 
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
+    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
 #ifdef DBG_UTIL
     virtual void Cut() SAL_OVERRIDE;
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
@@ -199,13 +199,13 @@ public:
 
     virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const SAL_OVERRIDE;
 
-    Point  GetNextPrevCntntPos( const Point &rPoint, sal_Bool bNext ) const;
+    Point  GetNextPrevCntntPos( const Point &rPoint, bool bNext ) const;
 
     virtual Size ChgSize( const Size& aNewSize ) SAL_OVERRIDE;
 
     void SetIdleFlags()
     {
-        bIdleFormat = sal_True;
+        bIdleFormat = true;
 
         SwViewShell* lcl_pCurrShell = GetCurrShell();
         // May be NULL if called from SfxBaseModel::dispose
@@ -213,8 +213,8 @@ public:
         if (lcl_pCurrShell != NULL)
             lcl_pCurrShell->GetDoc()->StartBackgroundJobs();
     }
-    sal_Bool IsIdleFormat()  const { return bIdleFormat; }
-    void ResetIdleFormat()     { bIdleFormat = sal_False; }
+    bool IsIdleFormat()  const { return bIdleFormat; }
+    void ResetIdleFormat()     { bIdleFormat = false; }
 
     bool IsNeedGrammarCheck() const         { return mbNeedGrammarCheck; }
     void SetNeedGrammarCheck( bool bVal )
@@ -232,9 +232,9 @@ public:
     }
 
     //Sorgt dafuer, dass alle gewuenschten Seitengebunden Flys eine Seite finden
-    void SetAssertFlyPages() { bAssertFlyPages = sal_True; }
+    void SetAssertFlyPages() { bAssertFlyPages = true; }
     void AssertFlyPages();
-    sal_Bool IsAssertFlyPages()  { return bAssertFlyPages; }
+    bool IsAssertFlyPages()  { return bAssertFlyPages; }
 
     //Stellt sicher, dass ab der uebergebenen Seite auf allen Seiten die
     //Seitengebundenen Rahmen auf der richtigen Seite (Seitennummer) stehen.
@@ -252,8 +252,8 @@ public:
     void InvalidateAllObjPos();
 
     //Ueberfluessige Seiten entfernen.
-    void SetSuperfluous()      { bCheckSuperfluous = sal_True; }
-    sal_Bool IsSuperfluous() const { return bCheckSuperfluous; }
+    void SetSuperfluous()      { bCheckSuperfluous = true; }
+    bool IsSuperfluous() const { return bCheckSuperfluous; }
     void RemoveSuperfluous();
 
     //abfragen/setzen der aktuellen Seite und der Gesamtzahl der Seiten.
@@ -264,9 +264,9 @@ public:
     sal_uInt16  GetPageNum() const      { return nPhyPageNums; }
     void    DecrPhyPageNums()       { --nPhyPageNums; }
     void    IncrPhyPageNums()       { ++nPhyPageNums; }
-    sal_Bool    IsVirtPageNum() const   { return bIsVirtPageNum; }
-    inline  void SetVirtPageNum( const sal_Bool bOf ) const;
-    sal_Bool    IsDummyPage( sal_uInt16 nPageNum ) const;
+    bool    IsVirtPageNum() const   { return bIsVirtPageNum; }
+    inline  void SetVirtPageNum( const bool bOf ) const;
+    bool    IsDummyPage( sal_uInt16 nPageNum ) const;
 
     // Point rPt: The point that should be used to find the page
     // Size pSize: If given, we return the (first) page that overlaps with the
@@ -277,16 +277,16 @@ public:
 
     void CalcFrmRects(
         SwShellCrsr&,
-        const sal_Bool bIsTblSel );
+        const bool bIsTblSel );
 
     // Calculates the cells included from the current selection
     // false: There was no result because of an invalid layout
     // true: Everything worked fine.
     bool MakeTblCrsrs( SwTableCursor& );
 
-    void DisallowTurbo()  const { ((SwRootFrm*)this)->bTurboAllowed = sal_False; }
-    void ResetTurboFlag() const { ((SwRootFrm*)this)->bTurboAllowed = sal_True; }
-    sal_Bool IsTurboAllowed() const { return bTurboAllowed; }
+    void DisallowTurbo()  const { ((SwRootFrm*)this)->bTurboAllowed = false; }
+    void ResetTurboFlag() const { ((SwRootFrm*)this)->bTurboAllowed = true; }
+    bool IsTurboAllowed() const { return bTurboAllowed; }
     void SetTurbo( const SwCntntFrm *pCntnt ) { pTurbo = pCntnt; }
     void ResetTurbo() { pTurbo = 0; }
     const SwCntntFrm *GetTurbo() { return pTurbo; }
@@ -295,23 +295,23 @@ public:
     void UpdateFtnNums();           //nur bei Seitenweiser Nummerierung!
 
     //Alle Fussnoten (nicht etwa die Referenzen) entfernen.
-    void RemoveFtns( SwPageFrm *pPage = 0, sal_Bool bPageOnly = sal_False,
-                     sal_Bool bEndNotes = sal_False );
-    void CheckFtnPageDescs( sal_Bool bEndNote );
+    void RemoveFtns( SwPageFrm *pPage = 0, bool bPageOnly = false,
+                     bool bEndNotes = false );
+    void CheckFtnPageDescs( bool bEndNote );
 
     const SwPageFrm *GetLastPage() const { return pLastPage; }
           SwPageFrm *GetLastPage()       { return pLastPage; }
 
     static bool IsInPaint() { return bInPaint; }
 
-    static void SetNoVirDev( const sal_Bool bNew ) { bNoVirDev = bNew; }
+    static void SetNoVirDev( const bool bNew ) { bNoVirDev = bNew; }
 
     inline long GetBrowseWidth() const;
-    void SetBrowseWidth( long n ) { bBrowseWidthValid = sal_True; nBrowseWidth = n;}
+    void SetBrowseWidth( long n ) { bBrowseWidthValid = true; nBrowseWidth = n;}
     inline void InvalidateBrowseWidth();
 
-    sal_Bool IsNewLayout() const { return bIsNewLayout; }
-    void ResetNewLayout()    { bIsNewLayout = sal_False;}
+    bool IsNewLayout() const { return bIsNewLayout; }
+    void ResetNewLayout()    { bIsNewLayout = false;}
 
     // Hier werden leere SwSectionFrms zur Zerstoerung angemeldet
     // und spaeter zerstoert oder wieder abgemeldet
@@ -322,10 +322,10 @@ public:
     bool IsInDelList( SwSectionFrm* pSct ) const;
 #endif
 
-    void SetCallbackActionEnabled( sal_Bool b ) { bCallbackActionEnabled = b; }
-    sal_Bool IsCallbackActionEnabled() const    { return bCallbackActionEnabled; }
+    void SetCallbackActionEnabled( bool b ) { bCallbackActionEnabled = b; }
+    bool IsCallbackActionEnabled() const    { return bCallbackActionEnabled; }
 
-    sal_Bool IsAnyShellAccessible() const { return nAccessibleShells > 0; }
+    bool IsAnyShellAccessible() const { return nAccessibleShells > 0; }
     void AddAccessibleShell() { ++nAccessibleShells; }
     void RemoveAccessibleShell() { --nAccessibleShells; }
 
@@ -367,7 +367,7 @@ inline void SwRootFrm::InvalidateBrowseWidth()
         ImplInvalidateBrowseWidth();
 }
 
-inline  void SwRootFrm::SetVirtPageNum( const sal_Bool bOf) const
+inline  void SwRootFrm::SetVirtPageNum( const bool bOf) const
 {
     ((SwRootFrm*)this)->bIsVirtPageNum = bOf;
 }

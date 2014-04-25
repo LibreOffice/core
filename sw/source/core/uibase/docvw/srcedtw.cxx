@@ -246,8 +246,8 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     nCurTextWidth(0),
     nStartLine(USHRT_MAX),
     eSourceEncoding(osl_getThreadTextEncoding()),
-    bDoSyntaxHighlight(sal_True),
-    bHighlighting(sal_False)
+    bDoSyntaxHighlight(true),
+    bHighlighting(false)
 {
     SetHelpId(HID_SOURCE_EDITWIN);
     CreateTextEngine();
@@ -437,7 +437,7 @@ void  TextViewOutWin::Command( const CommandEvent& rCEvt )
 
 void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
 {
-    sal_Bool bDone = sal_False;
+    bool bDone = false;
     SwSrcEditWindow* pSrcEditWin = (SwSrcEditWindow*)GetParent();
     bool bChange = !pSrcEditWin->IsReadonly() || !TextEngine::DoesKeyChangeText( rKEvt );
     if(bChange)
@@ -578,7 +578,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
     Time aSyntaxCheckStart( Time::SYSTEM );
     SAL_WARN_IF(pTextView == 0, "sw", "No View yet, but syntax highlighting?!");
 
-    bHighlighting = sal_True;
+    bHighlighting = true;
     sal_uInt16 nCount  = 0;
     // at first the region around the cursor is processed
     TextSelection aSel = pTextView->GetSelection();
@@ -627,7 +627,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
     nCurTextWidth = pTextEngine->CalcTextWidth() + 25;  // kleine Toleranz
     if ( nCurTextWidth != nPrevTextWidth )
         SetScrollBarRanges();
-    bHighlighting = sal_False;
+    bHighlighting = false;
 
     return 0;
 }
@@ -638,7 +638,7 @@ void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
     // that the line doesn't exist anymore!
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
-        sal_Bool bTempModified = IsModified();
+        bool bTempModified = IsModified();
         pTextEngine->RemoveAttribs( nPara, true );
         OUString aSource( pTextEngine->GetText( nPara ) );
         pTextEngine->SetUpdateMode( false );

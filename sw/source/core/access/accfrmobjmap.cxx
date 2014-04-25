@@ -95,7 +95,7 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
 
         {
             ::rtl::Reference < SwAccessibleContext > xAccImpl =
-                                rAccMap.GetContextImpl( &rFrm, sal_False );
+                                rAccMap.GetContextImpl( &rFrm, false );
             if( xAccImpl.is() )
             {
                 SwAccessibleContext* pAccImpl = xAccImpl.get();

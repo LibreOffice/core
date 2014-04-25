@@ -36,9 +36,9 @@ DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView*
 // If a KeyEvent is processed then the return value is sal_True, otherwise
 // Sal_False.
 
-sal_Bool DrawSelection::KeyInput(const KeyEvent& rKEvt)
+bool DrawSelection::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     switch (rKEvt.GetKeyCode().GetCode())
     {
@@ -49,7 +49,7 @@ sal_Bool DrawSelection::KeyInput(const KeyEvent& rKEvt)
                 m_pSh->BreakMark();
                 m_pWin->ReleaseMouse();
             }
-            bReturn = sal_True;
+            bReturn = true;
         }
         break;
     }
@@ -63,7 +63,7 @@ sal_Bool DrawSelection::KeyInput(const KeyEvent& rKEvt)
 void DrawSelection::Activate(const sal_uInt16 nSlotId)
 {
     m_pWin->SetSdrDrawMode(OBJ_NONE);
-    m_pWin->SetObjectSelect( sal_True );
+    m_pWin->SetObjectSelect( true );
     SwDrawBase::Activate(nSlotId);
 
     m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);

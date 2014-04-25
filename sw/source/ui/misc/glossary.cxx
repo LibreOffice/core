@@ -301,7 +301,7 @@ void SwGlossaryDlg::Apply()
     }
 }
 
-void SwGlossaryDlg::EnableShortName(sal_Bool bOn)
+void SwGlossaryDlg::EnableShortName(bool bOn)
 {
     m_pShortNameLbl->Enable(bOn);
     m_pShortNameEdit->Enable(bOn);
@@ -435,7 +435,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             m_pShortNameEdit->GrabFocus();
             return 1;
         }
-        if(pGlossaryHdl->NewGlossary(aStr, aShortName, sal_False, bNoAttr ))
+        if(pGlossaryHdl->NewGlossary(aStr, aShortName, false, bNoAttr ))
         {
             SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
             if(m_pCategoryBox->GetParent(pEntry))
@@ -698,7 +698,7 @@ void SwGlossaryDlg::Init()
 
         // fill entries for the groups
         {
-            pGlossaryHdl->SetCurGroup(sGroupName, sal_False, sal_True);
+            pGlossaryHdl->SetCurGroup(sGroupName, false, true);
             const sal_uInt16 nCount = pGlossaryHdl->GetGlossaryCnt();
             for(sal_uInt16 i = 0; i < nCount; ++i)
             {
@@ -761,7 +761,7 @@ IMPL_LINK_NOARG_INLINE_START(SwGlossaryDlg, EditHdl)
     if (m_pEditBtn->GetCurItemIdent() == "edit")
     {
         SwTextBlocks *pGroup = ::GetGlossaries()->GetGroupDoc (  GetCurrGrpName () );
-        sal_Bool bRet = pGlossaryHdl->ConvertToNew ( *pGroup );
+        bool bRet = pGlossaryHdl->ConvertToNew ( *pGroup );
         delete pGroup;
         if ( bRet )
             EndDialog(RET_EDIT);
@@ -781,7 +781,7 @@ IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
     if (pBox == m_pNewName)
         m_pNewShort->SetText( lcl_GetValidShortCut( aName ) );
 
-    sal_Bool bEnable = !aName.isEmpty() && !m_pNewShort->GetText().isEmpty() &&
+    bool bEnable = !aName.isEmpty() && !m_pNewShort->GetText().isEmpty() &&
         (!pDlg->DoesBlockExist(aName, m_pNewShort->GetText())
             || aName == m_pOldName->GetText());
     m_pOk->Enable(bEnable);
@@ -969,7 +969,7 @@ TriState SwGlTreeListBox::NotifyCopyingOrMoving(
     SvTreeListEntry* pSrcParent = GetParent(pEntry);
     SvTreeListEntry* pDestParent =
         GetParent(pTarget) ? GetParent(pTarget) : pTarget;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if(pDestParent != pSrcParent)
     {
         SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParentDialog();
@@ -1033,7 +1033,7 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
             if(sTmp != sGlosPath)
             {
                 aPathOpt.SetAutoTextPath( sTmp );
-                ::GetGlossaries()->UpdateGlosPath( sal_True );
+                ::GetGlossaries()->UpdateGlosPath( true );
                 Init();
             }
         }
@@ -1072,7 +1072,7 @@ void SwGlossaryDlg::ShowAutoText(const OUString& rGroup, const OUString& rShortN
     {
         SetResumeData(rGroup, rShortName);
         //try to make an Undo()
-        pExampleFrame->ClearDocument( sal_True );
+        pExampleFrame->ClearDocument( true );
     }
 }
 

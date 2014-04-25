@@ -33,7 +33,7 @@
 #include <comcore.hrc>
 #include <list>
 
-void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
+void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
 {
     bool bSelectAll = StartsWithTable() && ExtendedSelectedAll(/*bFootnotes =*/ false);
     // only for selections
@@ -53,7 +53,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
         if( pUndo && !*pUndo )
         {
             GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
-            *pUndo = sal_True;
+            *pUndo = true;
         }
         SwPaM aDelPam( *rPam.Start() );
         const SwPosition* pEndSelPos = rPam.End();
@@ -111,7 +111,7 @@ long SwEditShell::Delete()
     {
         StartAllAction();
 
-        sal_Bool bUndo = GetCrsr()->GetNext() != GetCrsr();
+        bool bUndo = GetCrsr()->GetNext() != GetCrsr();
         if( bUndo ) // more than one selection?
         {
             SwRewriter aRewriter;
@@ -190,7 +190,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
 
     pDestShell->StartAllAction();
     SwPosition *pPos = 0;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     bool bFirstMove = true;
     SwNodeIndex aSttNdIdx( pDestShell->GetDoc()->GetNodes() );
     sal_Int32 nSttCntIdx = 0;
@@ -242,7 +242,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
         SwPaM aInsertPaM(*pPos, SwPosition(aSttNdIdx));
         pDestShell->GetDoc()->MakeUniqueNumRules(aInsertPaM);
 
-        bRet = sal_True;
+        bRet = true;
     FOREACHPAM_END()
 
     // Maybe nothing has been moved?
@@ -291,11 +291,11 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
  * @param bRegExpRplc if <true> replace tabs (\\t) and replace with found string (not \&).
  *                    E.g. [Fnd: "zzz", Repl: "xx\t\\t..&..\&"] --> "xx\t<Tab>..zzz..&"
  */
-sal_Bool SwEditShell::Replace( const OUString& rNewStr, sal_Bool bRegExpRplc )
+bool SwEditShell::Replace( const OUString& rNewStr, bool bRegExpRplc )
 {
     SET_CURR_SHELL( this );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( !HasReadonlySel() )
     {
         StartAllAction();
@@ -318,9 +318,9 @@ sal_Bool SwEditShell::Replace( const OUString& rNewStr, sal_Bool bRegExpRplc )
 }
 
 /// special method for JOE's wizards
-sal_Bool SwEditShell::DelFullPara()
+bool SwEditShell::DelFullPara()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( !IsTableMode() )
     {
         SwPaM* pCrsr = GetCrsr();

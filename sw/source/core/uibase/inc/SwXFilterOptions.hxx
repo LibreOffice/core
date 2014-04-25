@@ -44,7 +44,7 @@ class SwXFilterOptions : public ::cppu::WeakImplHelper5<
         ::com::sun::star::io::XInputStream > xInputStream;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XComponent > xModel;
-    sal_Bool            bExport;
+    bool            bExport;
 
 public:
                             SwXFilterOptions();

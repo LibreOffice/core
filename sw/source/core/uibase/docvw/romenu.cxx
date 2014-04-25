@@ -93,7 +93,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     if ( sURL.isEmpty() )
     {
         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_INETATTR );
-        if( rSh.GetContentAtPos( rDocPos, aCntntAtPos, sal_False))
+        if( rSh.GetContentAtPos( rDocPos, aCntntAtPos, false))
         {
             SwFmtINetFmt &rIItem = *(SwFmtINetFmt*)aCntntAtPos.aFnd.pAttr;
             sURL = rIItem.GetValue();
@@ -102,7 +102,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         }
     }
 
-    sal_Bool bLink = sal_False;
+    bool bLink = false;
     const Graphic *pGrf;
     if ( 0 == (pGrf = rSh.GetGrfAtPos( rDocPos, sGrfName, bLink )) )
     {
@@ -115,7 +115,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         const SwFrmFmt* pGrfFmt = rSh.GetFmtFromObj( rDocPos );
         const SfxPoolItem* pURLItem;
         if( pGrfFmt && SFX_ITEM_SET == pGrfFmt->GetItemState(
-            RES_URL, sal_True, &pURLItem ))
+            RES_URL, true, &pURLItem ))
         {
             const SwFmtURL& rURL = *(SwFmtURL*)pURLItem;
             if( rURL.GetMap() )
@@ -150,12 +150,12 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     SfxDispatcher &rDis = *pVFrame->GetDispatcher();
     const SwPageDesc &rDesc = rSh.GetPageDesc( rSh.GetCurPageDesc() );
     pItem = &rDesc.GetMaster().GetBackground();
-    sal_Bool bEnableBackGallery = sal_False,
-         bEnableBack = sal_False;
+    bool bEnableBackGallery = false,
+         bEnableBack = false;
 
     if ( GPOS_NONE != pItem->GetGraphicPos() )
     {
-        bEnableBack = sal_True;
+        bEnableBack = true;
         if ( !pItem->GetGraphicLink().isEmpty() )
         {
             if ( aThemeList.empty() )
@@ -166,7 +166,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
                 PopupMenu *pMenu = GetPopupMenu(MN_READONLY_BACKGROUNDTOGALLERY);
                 pMenu->CheckItem( MN_READONLY_TOGALLERYLINK,  bGrfToGalleryAsLnk );
                 pMenu->CheckItem( MN_READONLY_TOGALLERYCOPY, !bGrfToGalleryAsLnk );
-                bEnableBackGallery = sal_True;
+                bEnableBackGallery = true;
 
                 for ( sal_uInt16 i=0; i < aThemeList.size(); ++i )
                     pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3, aThemeList[ i ] );
@@ -181,7 +181,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     else
         EnableItem( MN_READONLY_LOADGRAPHIC, false );
 
-    sal_Bool bReloadFrame = 0 != rSh.GetView().GetViewFrame()->GetFrame().GetParentFrame();
+    bool bReloadFrame = 0 != rSh.GetView().GetViewFrame()->GetFrame().GetParentFrame();
     EnableItem( MN_READONLY_RELOAD_FRAME,
             bReloadFrame );
     EnableItem( MN_READONLY_RELOAD, !bReloadFrame);
@@ -309,9 +309,9 @@ void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
 
         case MN_READONLY_LOADGRAPHIC:
             {
-                sal_Bool bModified = rSh.IsModified();
+                bool bModified = rSh.IsModified();
                 SwViewOption aOpt( *rSh.GetViewOptions() );
-                aOpt.SetGraphic( sal_True );
+                aOpt.SetGraphic( true );
                 rSh.ApplyViewOptions( aOpt );
                 if(!bModified)
                     rSh.ResetModified();
@@ -322,10 +322,10 @@ void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
         case MN_READONLY_PLUGINOFF:         nExecId = SID_PLUGINS_ACTIVE; break;
 #endif
         case MN_READONLY_TOGALLERYLINK:
-            SW_MOD()->GetModuleConfig()->SetGrfToGalleryAsLnk( sal_True );
+            SW_MOD()->GetModuleConfig()->SetGrfToGalleryAsLnk( true );
             break;
         case MN_READONLY_TOGALLERYCOPY:
-            SW_MOD()->GetModuleConfig()->SetGrfToGalleryAsLnk( sal_False );
+            SW_MOD()->GetModuleConfig()->SetGrfToGalleryAsLnk( false );
             break;
 
         default: //forward the id to the SfxBindings

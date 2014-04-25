@@ -51,7 +51,7 @@ private:
     void SetReplaceWith( const OUString& rText ) throw ( css::uno::RuntimeException );
     OUString GetReplaceWith() throw ( css::uno::RuntimeException );
     css::uno::Reference< css::text::XTextRange > FindOneElement() throw ( css::uno::RuntimeException );
-    sal_Bool SearchReplace() throw ( css::uno::RuntimeException );
+    bool SearchReplace() throw ( css::uno::RuntimeException );
 
 public:
     SwVbaFind( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextRange >& xTextRange ) throw ( css::uno::RuntimeException );

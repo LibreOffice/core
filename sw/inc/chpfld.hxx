@@ -63,8 +63,8 @@ public:
     // #i53420#
     void ChangeExpansion( const SwFrm*,
                           const SwCntntNode*,
-        sal_Bool bSrchNum = sal_False);
-    void ChangeExpansion(const SwTxtNode &rNd, sal_Bool bSrchNum);
+        bool bSrchNum = false);
+    void ChangeExpansion(const SwTxtNode &rNd, bool bSrchNum);
 
     inline sal_uInt8 GetLevel() const;
     inline void SetLevel(sal_uInt8);

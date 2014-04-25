@@ -38,8 +38,8 @@ class SwHTMLNumRuleInfo
     sal_uInt16      aNumStarts[MAXLEVEL];
     SwNumRule   *   pNumRule;       // Aktuelle Numerierung
     sal_uInt16      nDeep;          // aktuelle Num-Tiefe (1, 2, 3, ...)
-    sal_Bool        bRestart : 1;   // Export: Numerierung neu starten
-    sal_Bool        bNumbered : 1;  // Export: Absatz ist numeriert
+    bool        bRestart : 1;   // Export: Numerierung neu starten
+    bool        bNumbered : 1;  // Export: Absatz ist numeriert
 
 public:
 
@@ -48,7 +48,7 @@ public:
 
     SwHTMLNumRuleInfo() :
         pNumRule( 0 ), nDeep( 0 ),
-        bRestart( sal_False ), bNumbered( sal_False )
+        bRestart( false ), bNumbered( false )
     {
         memset( &aNumStarts, 0xff, sizeof( aNumStarts ) );
     }
@@ -75,11 +75,11 @@ public:
     sal_uInt16 DecDepth() { return nDeep==0 ? 0 : --nDeep; }
     inline sal_uInt8 GetLevel() const;
 
-    void SetRestart( sal_Bool bSet ) { bRestart = bSet; }
-    sal_Bool IsRestart() const { return bRestart; }
+    void SetRestart( bool bSet ) { bRestart = bSet; }
+    bool IsRestart() const { return bRestart; }
 
-    void SetNumbered( sal_Bool bSet ) { bNumbered = bSet; }
-    sal_Bool IsNumbered() const { return bNumbered; }
+    void SetNumbered( bool bSet ) { bNumbered = bSet; }
+    bool IsNumbered() const { return bNumbered; }
 
     inline void SetNodeStartValue( sal_uInt8 nLvl, sal_uInt16 nVal=USHRT_MAX );
     sal_uInt16 GetNodeStartValue( sal_uInt8 nLvl ) const { return aNumStarts[nLvl]; }
@@ -105,7 +105,7 @@ inline void SwHTMLNumRuleInfo::Clear()
 {
     pNumRule = 0;
     nDeep = 0;
-    bRestart = bNumbered = sal_False;
+    bRestart = bNumbered = false;
     memset( &aNumStarts, 0xff, sizeof( aNumStarts ) );
 }
 

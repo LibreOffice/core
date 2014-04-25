@@ -138,8 +138,8 @@ public:
     inline sal_Int32 GetSLength() const;
     sal_Unicode GetOp() const { return cOp; }
 
-    sal_Bool GetURL( OUString& rURL ) const;
-    sal_Bool GetColor( Color &rRGB ) const;
+    bool GetURL( OUString& rURL ) const;
+    bool GetColor( Color &rRGB ) const;
 
     void SetNext( CSS1Expression *pNxt ) { pNext = pNxt; }
     const CSS1Expression *GetNext() const { return pNext; }
@@ -176,8 +176,8 @@ inline sal_Int32 CSS1Expression::GetSLength() const
  */
 class CSS1Parser
 {
-    sal_Bool bWhiteSpace : 1; // read a whitespace?
-    sal_Bool bEOF : 1; // is end of "file"?
+    bool bWhiteSpace : 1; // read a whitespace?
+    bool bEOF : 1; // is end of "file"?
 
     sal_Unicode cNextCh; // next character
 
@@ -204,9 +204,9 @@ class CSS1Parser
     CSS1Token GetNextToken();
 
     /// Is the parser still working?
-    sal_Bool IsParserWorking() const { return CSS1_PAR_WORKING == eState; }
+    bool IsParserWorking() const { return CSS1_PAR_WORKING == eState; }
 
-    sal_Bool IsEOF() const { return bEOF; }
+    bool IsEOF() const { return bEOF; }
 
     sal_uInt32 IncLineNr() { return ++nlLineNr; }
     sal_uInt32 IncLinePos() { return ++nlLinePos; }
@@ -228,7 +228,7 @@ protected:
      * @param rIn the style element as string
      * @return true if ???
      */
-    sal_Bool ParseStyleSheet( const OUString& rIn );
+    bool ParseStyleSheet( const OUString& rIn );
 
     /** parse the content of a HTML style option
      *
@@ -238,7 +238,7 @@ protected:
      * @param rIn the style option as string
      * @return true if ???
      */
-    sal_Bool ParseStyleOption( const OUString& rIn );
+    bool ParseStyleOption( const OUString& rIn );
 
     /** Called after a selector was parsed.
      *
@@ -254,7 +254,7 @@ protected:
      * @param pExpr ???
      * @return If true, the declaration will be deleted. (Returns always true?)
      */
-    virtual sal_Bool DeclarationParsed( const OUString& rProperty,
+    virtual bool DeclarationParsed( const OUString& rProperty,
                                     const CSS1Expression *pExpr );
 
 public:

@@ -64,10 +64,10 @@ SwFmtChain &SwFmtChain::operator=( const SwFmtChain &rCpy )
     return *this;
 }
 
-inline const SwFmtChain &SwAttrSet::GetChain(sal_Bool bInP) const
+inline const SwFmtChain &SwAttrSet::GetChain(bool bInP) const
     { return (const SwFmtChain&)Get( RES_CHAIN,bInP); }
 
-inline const SwFmtChain &SwFmt::GetChain(sal_Bool bInP) const
+inline const SwFmtChain &SwFmt::GetChain(bool bInP) const
     { return aSet.GetChain(bInP); }
 
 #endif

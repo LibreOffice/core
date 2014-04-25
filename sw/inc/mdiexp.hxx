@@ -31,7 +31,7 @@ class SwDoc;
 class SwDocShell;
 
 extern void ScrollMDI(SwViewShell* pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY);
-extern sal_Bool IsScrollMDI(SwViewShell* pVwSh, const SwRect &);
+extern bool IsScrollMDI(SwViewShell* pVwSh, const SwRect &);
 extern void SizeNotify(SwViewShell* pVwSh, const Size &);
 
 // Update of status bar during an action.
@@ -49,7 +49,7 @@ SW_DLLPUBLIC void SetProgressState  ( long nPosition, SwDocShell *pDocShell );
 void SetProgressText   ( sal_uInt16 nMessId, SwDocShell *pDocShell );
 void RescheduleProgress( SwDocShell *pDocShell );
 
-void EnableCmdInterface(sal_Bool bEnable = sal_True);
+void EnableCmdInterface(bool bEnable = true);
 
 void RepaintPagePreview( SwViewShell* pVwSh, const SwRect& rRect );
 
@@ -62,7 +62,7 @@ TblChgMode GetTblChgDefaultMode();
 
 bool JumpToSwMark( SwViewShell* pVwSh, const OUString& rMark );
 
-extern void AccessibilityScrollMDI(SwViewShell* pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY, sal_Bool isLeftTop);
+extern void AccessibilityScrollMDI(SwViewShell* pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY, bool isLeftTop);
 
 #endif
 

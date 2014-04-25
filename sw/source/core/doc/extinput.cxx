@@ -42,8 +42,8 @@ SwExtTextInput::SwExtTextInput( const SwPaM& rPam, Ring* pRing )
     : SwPaM( *rPam.GetPoint(), (SwPaM*)pRing ),
     eInputLanguage(LANGUAGE_DONTKNOW)
 {
-    bIsOverwriteCursor = sal_False;
-    bInsText = sal_True;
+    bIsOverwriteCursor = false;
+    bInsText = true;
 }
 
 SwExtTextInput::~SwExtTextInput()
@@ -202,7 +202,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
     }
 }
 
-void SwExtTextInput::SetOverwriteCursor( sal_Bool bFlag )
+void SwExtTextInput::SetOverwriteCursor( bool bFlag )
 {
     bIsOverwriteCursor = bFlag;
     if (!bIsOverwriteCursor)

@@ -59,14 +59,14 @@ const sal_uInt16& getMaxLookup()
     return nMaxLookup;
 }
 
-sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
+bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                               const bool bMergeIndentValuesOfNumRule ) const
 {
     // ??? pPaM can be different from the Cursor ???
     if( GetCrsrCnt() > getMaxLookup() )
     {
         rSet.InvalidateAllItems();
-        return sal_False;
+        return false;
     }
 
     SfxItemSet aSet( *rSet.GetPool(), rSet.GetRanges() );
@@ -122,7 +122,7 @@ sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
         {
             rSet.ClearItem();
             rSet.InvalidateAllItems();
-            return sal_False;
+            return false;
         }
 
         // at first node the node enter his values into the GetSet (Initial)
@@ -166,21 +166,21 @@ sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
 
     } while ( ( pPaM = (SwPaM*)pPaM->GetNext() ) != pStartPaM );
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwEditShell::GetCurAttr( SfxItemSet& rSet,
+bool SwEditShell::GetCurAttr( SfxItemSet& rSet,
                               const bool bMergeIndentValuesOfNumRule ) const
 {
     return GetPaMAttr( GetCrsr(), rSet, bMergeIndentValuesOfNumRule );
 }
 
-sal_Bool SwEditShell::GetCurParAttr( SfxItemSet& rSet) const
+bool SwEditShell::GetCurParAttr( SfxItemSet& rSet) const
 {
     return GetPaMParAttr( GetCrsr(), rSet );
 }
 
-sal_Bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
+bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
 {
     // number of nodes the function has explored so far
     sal_uInt16 numberOfLookup = 0;
@@ -225,11 +225,11 @@ sal_Bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
 
             // if the maximum number of node that can be inspected has been reached
             if (numberOfLookup >= getMaxLookup())
-                return sal_False;
+                return false;
         }
     } while ( ( pPaM = static_cast<SwPaM*>(pPaM->GetNext()) ) != pStartPaM );
 
-    return sal_True;
+    return true;
 }
 
 SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl( ) const
@@ -281,13 +281,13 @@ SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
     return NULL;
 }
 
-sal_Bool SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
+bool SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
 {
     // The cursor must be positioned on the current footnotes anchor:
     SwPaM* pCrsr = GetCrsr();
     SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
     if( !pTxtNd )
-        return sal_False;
+        return false;
 
     SwTxtAttr *const pFtn = pTxtNd->GetTxtAttrForCharAt(
         pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);

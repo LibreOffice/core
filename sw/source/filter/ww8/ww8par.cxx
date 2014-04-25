@@ -145,7 +145,7 @@ using namespace nsHdFtFlags;
 /** Expands to the size of a STATIC data array. */
 //#define STATIC_TABLE_SIZE( array )  (sizeof(array)/sizeof(*(array)))
 
-SwMacroInfo* GetMacroInfo( SdrObject* pObj, sal_Bool bCreate )             // static
+SwMacroInfo* GetMacroInfo( SdrObject* pObj, bool bCreate )             // static
 {
     if ( pObj )
     {
@@ -1204,7 +1204,7 @@ void SwWW8FltControlStack::NewAttr(const SwPosition& rPos,
 }
 
 SwFltStackEntry* SwWW8FltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
-    sal_Bool bTstEnde, long nHand, sal_Bool )
+    bool bTstEnde, long nHand, bool )
 {
     SwFltStackEntry *pRet = NULL;
     // Doing a textbox, and using the control stack only as a temporary
@@ -1940,7 +1940,7 @@ void SwWW8ImplReader::ImportDop()
         {
             uno::Reference<beans::XPropertySetInfo> xInfo =
                 xDocProps->getPropertySetInfo();
-            sal_Bool bValue = false;
+            bool bValue = false;
             if (xInfo.is())
             {
                 if (xInfo->hasPropertyByName("ApplyFormDesignMode"))
@@ -4355,7 +4355,7 @@ bool wwSectionManager::IsNewDoc() const
 void wwSectionManager::InsertSegments()
 {
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    sal_Bool bUseEnhFields = rOpt.IsUseEnhancedFields();
+    bool bUseEnhFields = rOpt.IsUseEnhancedFields();
     mySegIter aEnd = maSegments.end();
     mySegIter aStart = maSegments.begin();
     for (mySegIter aIter = aStart; aIter != aEnd; ++aIter)
@@ -6156,12 +6156,12 @@ int WW8Reader::GetReaderType()
     return SW_STORAGE_READER | SW_STREAM_READER;
 }
 
-sal_Bool WW8Reader::HasGlossaries() const
+bool WW8Reader::HasGlossaries() const
 {
     return true;
 }
 
-sal_Bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, sal_Bool bSaveRelFiles) const
+bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, bool bSaveRelFiles) const
 {
     bool bRet=false;
 

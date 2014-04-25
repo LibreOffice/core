@@ -32,11 +32,11 @@ public:
     // Ctor moves all lines/boxes from SwTable to it.
     // After that SwTable is empty and has to be deleted.
     SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
-                sal_Bool bUpdate = sal_True );
+                bool bUpdate = true );
     virtual ~SwDDETable();
 
     void ChangeContent();
-    sal_Bool  NoDDETable();
+    bool  NoDDETable();
 
     SwDDEFieldType* GetDDEFldType();
     inline const SwDDEFieldType* GetDDEFldType() const;

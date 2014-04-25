@@ -230,10 +230,10 @@ public:
                         OutputDevice* pOut = 0 ) const;
 
     /// overriding to handle change of certain paragraph attributes
-    virtual sal_Bool SetAttr( const SfxPoolItem& ) SAL_OVERRIDE;
-    virtual sal_Bool SetAttr( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual sal_Bool ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 ) SAL_OVERRIDE;
-    virtual sal_Bool ResetAttr( const std::vector<sal_uInt16>& rWhichArr ) SAL_OVERRIDE;
+    virtual bool SetAttr( const SfxPoolItem& ) SAL_OVERRIDE;
+    virtual bool SetAttr( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 ) SAL_OVERRIDE;
+    virtual bool ResetAttr( const std::vector<sal_uInt16>& rWhichArr ) SAL_OVERRIDE;
     virtual sal_uInt16 ResetAllAttr() SAL_OVERRIDE;
 
     /// insert text content

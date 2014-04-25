@@ -200,7 +200,7 @@ SwVbaBookmarks::setShowHidden( sal_Bool /*_hidden*/ ) throw (css::uno::RuntimeEx
 sal_Bool SAL_CALL
 SwVbaBookmarks::Exists( const OUString& rName ) throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool bExist = m_xNameAccess->hasByName( rName );
+    bool bExist = m_xNameAccess->hasByName( rName );
     return bExist;
 }
 

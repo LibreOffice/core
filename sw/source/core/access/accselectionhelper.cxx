@@ -107,25 +107,25 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
 }
 
 //When the selected state of the SwFrmOrObj is setted, return true.
-static sal_Bool lcl_getSelectedState(const SwAccessibleChild& aChild,
+static bool lcl_getSelectedState(const SwAccessibleChild& aChild,
                                      SwAccessibleContext* pContext,
                                      SwAccessibleMap* pMap)
 {
     Reference< XAccessible > xAcc;
     if ( aChild.GetSwFrm() )
     {
-        xAcc = pMap->GetContext( aChild.GetSwFrm(), sal_False );
+        xAcc = pMap->GetContext( aChild.GetSwFrm(), false );
     }
     else if ( aChild.GetDrawObject() )
     {
-        xAcc = pMap->GetContext( aChild.GetDrawObject(), pContext, sal_False );
+        xAcc = pMap->GetContext( aChild.GetDrawObject(), pContext, false );
     }
 
     if( xAcc.is() )
     {
         Reference< XAccessibleContext > pRContext = xAcc->getAccessibleContext();
         if(!pRContext.is())
-            return sal_False;
+            return false;
         Reference<XAccessibleStateSet> pRStateSet = pRContext->getAccessibleStateSet();
         if( pRStateSet.is() )
         {
@@ -134,14 +134,14 @@ static sal_Bool lcl_getSelectedState(const SwAccessibleChild& aChild,
             for( int i = 0; i < count; i++ )
             {
                 if( pStates[i] == AccessibleStateType::SELECTED)
-                    return sal_True;
+                    return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
+bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException,
             RuntimeException )
@@ -155,7 +155,7 @@ sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
         throwIndexOutOfBoundsException();
 
     // ... and compare to the currently selected frame
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwFEShell* pFEShell = GetFEShell();
     if( pFEShell )
     {
@@ -170,8 +170,8 @@ sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
         //If the SwFrmOrObj is not selected directly in the UI, we should check whether it is selected in the selection cursor.
         if( !bRet )
         {
-            if( lcl_getSelectedState( aChild, &rContext, rContext.GetMap() ) == sal_True)
-                bRet = sal_True;
+            if( lcl_getSelectedState( aChild, &rContext, rContext.GetMap() ) )
+                bRet = true;
         }
     }
 
@@ -357,7 +357,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     {
         ::rtl::Reference < SwAccessibleContext > xChildImpl(
                 rContext.GetMap()->GetContextImpl( aChild.GetSwFrm(),
-                sal_True ) );
+                true ) );
         if( xChildImpl.is() )
         {
             xChildImpl->SetParent( &rContext );
@@ -368,7 +368,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     {
         ::rtl::Reference < ::accessibility::AccessibleShape > xChildImpl(
                 rContext.GetMap()->GetContextImpl( aChild.GetDrawObject(),
-                                          &rContext, sal_True )  );
+                                          &rContext, true )  );
         if( xChildImpl.is() )
             xChild = xChildImpl.get();
     }

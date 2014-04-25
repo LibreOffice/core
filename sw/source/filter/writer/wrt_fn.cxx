@@ -37,8 +37,8 @@ Writer& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, Writer & rWrt )
 }
 
 Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
-                        const SfxItemSet& rSet, sal_Bool bDeep,
-                        sal_Bool bTstForDefault )
+                        const SfxItemSet& rSet, bool bDeep,
+                        bool bTstForDefault )
 {
     // at first give the own attributes out
     const SfxItemPool& rPool = *rSet.GetPool();

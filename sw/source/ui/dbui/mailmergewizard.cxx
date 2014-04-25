@@ -133,7 +133,7 @@ void SwMailMergeWizard::enterState( WizardState _nState )
 */
     if(_nState > MM_LAYOUTPAGE && m_rConfigItem.GetSourceView() &&
             ((m_rConfigItem.IsAddressBlock() && !m_rConfigItem.IsAddressInserted()) ||
-             (m_rConfigItem.IsGreetingLine(sal_False) && !m_rConfigItem.IsGreetingInserted() )))
+             (m_rConfigItem.IsGreetingLine(false) && !m_rConfigItem.IsGreetingInserted() )))
     {
         SwMailMergeLayoutPage::InsertAddressAndGreeting(m_rConfigItem.GetSourceView(),
                                 m_rConfigItem, Point(-1, -1), true);
@@ -228,8 +228,8 @@ void SwMailMergeWizard::UpdateRoadmap()
     bool bAddressFieldsConfigured = !m_rConfigItem.IsOutputToLetter() ||
                 !m_rConfigItem.IsAddressBlock() ||
                 m_rConfigItem.IsAddressFieldsAssigned();
-    bool bGreetingFieldsConfigured = !m_rConfigItem.IsGreetingLine(sal_False) ||
-            !m_rConfigItem.IsIndividualGreeting(sal_False)||
+    bool bGreetingFieldsConfigured = !m_rConfigItem.IsGreetingLine(false) ||
+            !m_rConfigItem.IsIndividualGreeting(false)||
                     m_rConfigItem.IsGreetingFieldsAssigned();
     //#i97436# if a document has to be loaded then enable output type page only
     m_bDocumentLoad = false;
@@ -265,7 +265,7 @@ void SwMailMergeWizard::UpdateRoadmap()
                 if(MM_LAYOUTPAGE == nPage)
                     bEnable &=
                         ((m_rConfigItem.IsAddressBlock() && !m_rConfigItem.IsAddressInserted()) ||
-                            (m_rConfigItem.IsGreetingLine(sal_False) && !m_rConfigItem.IsGreetingInserted() ));
+                            (m_rConfigItem.IsGreetingLine(false) && !m_rConfigItem.IsGreetingInserted() ));
             break;
         }
         enableState( nPage, bEnable );

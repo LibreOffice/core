@@ -169,9 +169,9 @@ class SwXMLTableCell_Impl
     sal_uInt32 nRowSpan;
     sal_uInt32 nColSpan;
 
-    sal_Bool bProtected : 1;
-    sal_Bool bHasValue; // determines whether dValue attribute is valid
-    sal_Bool mbCovered;
+    bool bProtected : 1;
+    bool bHasValue; // determines whether dValue attribute is valid
+    bool mbCovered;
     bool m_bHasStringValue;
 
 public:
@@ -181,19 +181,19 @@ public:
         pStartNode( 0 ),
         nRowSpan( nRSpan ),
         nColSpan( nCSpan ),
-        bProtected( sal_False ),
-        bHasValue( sal_False ),
-        mbCovered( sal_False )
+        bProtected( false ),
+        bHasValue( false ),
+        mbCovered( false )
         , m_bHasStringValue(false)
         {}
 
     inline void Set( const OUString& rStyleName,
                       sal_uInt32 nRSpan, sal_uInt32 nCSpan,
                      const SwStartNode *pStNd, SwXMLTableContext *pTable,
-                     sal_Bool bProtect,
+                     bool bProtect,
                      const OUString* pFormula,
-                     sal_Bool bHasValue,
-                     sal_Bool bCovered,
+                     bool bHasValue,
+                     bool bCovered,
                      double dVal,
                      OUString const*const pStringValue,
                      OUString const& i_rXmlId);
@@ -207,9 +207,9 @@ public:
     const OUString& GetStyleName() const { return aStyleName; }
     const OUString& GetFormula() const { return sFormula; }
     double GetValue() const { return dValue; }
-    sal_Bool HasValue() const { return bHasValue; }
-    sal_Bool IsProtected() const { return bProtected; }
-    sal_Bool IsCovered() const { return mbCovered; }
+    bool HasValue() const { return bHasValue; }
+    bool IsProtected() const { return bProtected; }
+    bool IsCovered() const { return mbCovered; }
     bool HasStringValue() const { return m_bHasStringValue; }
     OUString const* GetStringValue() const {
         return (m_bHasStringValue) ? &m_StringValue : 0;
@@ -227,10 +227,10 @@ inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
                                       sal_uInt32 nRSpan, sal_uInt32 nCSpan,
                                       const SwStartNode *pStNd,
                                       SwXMLTableContext *pTable,
-                                      sal_Bool bProtect,
+                                      bool bProtect,
                                       const OUString* pFormula,
-                                      sal_Bool bHasVal,
-                                      sal_Bool bCov,
+                                      bool bHasVal,
+                                      bool bCov,
                                       double dVal,
                                       OUString const*const pStringValue,
                                       OUString const& i_rXmlId )
@@ -289,7 +289,7 @@ class SwXMLTableRow_Impl
 
     SwXMLTableCells_Impl aCells;
 
-    sal_Bool bSplitable;
+    bool bSplitable;
 
 public:
 
@@ -304,10 +304,10 @@ public:
                      const OUString& rDfltCellStyleName,
                      const OUString& i_rXmlId );
 
-    void Expand( sal_uInt32 nCells, sal_Bool bOneCell );
+    void Expand( sal_uInt32 nCells, bool bOneCell );
 
-    void SetSplitable( sal_Bool bSet ) { bSplitable = bSet; }
-    sal_Bool IsSplitable() const { return bSplitable; }
+    void SetSplitable( bool bSet ) { bSplitable = bSet; }
+    bool IsSplitable() const { return bSplitable; }
 
     const OUString& GetStyleName() const { return aStyleName; }
     const OUString& GetDefaultCellStyleName() const { return aDfltCellStyleName; }
@@ -321,7 +321,7 @@ SwXMLTableRow_Impl::SwXMLTableRow_Impl( const OUString& rStyleName,
                                         const OUString& i_rXmlId ) :
     aStyleName( rStyleName ),
     mXmlId( i_rXmlId ),
-    bSplitable( sal_False )
+    bSplitable( false )
 {
     if( pDfltCellStyleName  )
         aDfltCellStyleName = *pDfltCellStyleName;
@@ -346,7 +346,7 @@ inline SwXMLTableCell_Impl *SwXMLTableRow_Impl::GetCell( sal_uInt32 nCol )
     return nCol < aCells.size() ? &aCells[nCol] : 0;
 }
 
-void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, sal_Bool bOneCell )
+void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, bool bOneCell )
 {
     OSL_ENSURE( nCells <= USHRT_MAX,
             "SwXMLTableRow_Impl::Expand: too many cells" );
@@ -391,21 +391,21 @@ class SwXMLTableCellContext_Impl : public SvXMLImportContext
     SvXMLImportContextRef   xMyTable;
 
     double fValue;
-    sal_Bool bHasValue;
+    bool bHasValue;
     bool     m_bHasStringValue;
     bool     m_bValueTypeIsString;
-    sal_Bool bProtect;
+    bool bProtect;
 
     sal_uInt32                  nRowSpan;
     sal_uInt32                  nColSpan;
     sal_uInt32                  nColRepeat;
 
-    sal_Bool                    bHasTextContent : 1;
-    sal_Bool                    bHasTableContent : 1;
+    bool                    bHasTextContent : 1;
+    bool                    bHasTableContent : 1;
 
     SwXMLTableContext *GetTable() { return (SwXMLTableContext *)&xMyTable; }
 
-    sal_Bool HasContent() const { return bHasTextContent || bHasTableContent; }
+    bool HasContent() const { return bHasTextContent || bHasTableContent; }
     inline void _InsertContent();
     inline void InsertContent();
     inline void InsertContentIfNotThere();
@@ -436,15 +436,15 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
     sFormula(),
     xMyTable( pTable ),
     fValue( 0.0 ),
-    bHasValue( sal_False ),
+    bHasValue( false ),
     m_bHasStringValue(false),
     m_bValueTypeIsString(false),
-    bProtect( sal_False ),
+    bProtect( false ),
     nRowSpan( 1UL ),
     nColSpan( 1UL ),
     nColRepeat( 1UL ),
-    bHasTextContent( sal_False ),
-    bHasTableContent( sal_False )
+    bHasTextContent( false ),
+    bHasTableContent( false )
 {
     sSaveParaDefault = GetImport().GetTextImport()->GetCellParaStyleDefault();
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -497,7 +497,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                 if (::sax::Converter::convertDouble(fTmp, rValue))
                 {
                     fValue = fTmp;
-                    bHasValue = sal_True;
+                    bHasValue = true;
                 }
             }
             break;
@@ -507,7 +507,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                 if (::sax::Converter::convertDuration(fTmp, rValue))
                 {
                     fValue = fTmp;
-                    bHasValue = sal_True;
+                    bHasValue = true;
                 }
             }
             break;
@@ -518,7 +518,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                                                                       rValue))
                 {
                     fValue = fTmp;
-                    bHasValue = sal_True;
+                    bHasValue = true;
                 }
             }
             break;
@@ -528,7 +528,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                 if (::sax::Converter::convertBool(bTmp, rValue))
                 {
                     fValue = (bTmp ? 1.0 : 0.0);
-                    bHasValue = sal_True;
+                    bHasValue = true;
                 }
             }
             break;
@@ -581,7 +581,7 @@ inline void SwXMLTableCellContext_Impl::_InsertContent()
 inline void SwXMLTableCellContext_Impl::InsertContent()
 {
     OSL_ENSURE( !HasContent(), "content already there" );
-    bHasTextContent = sal_True;
+    bHasTextContent = true;
     _InsertContent();
 }
 
@@ -595,7 +595,7 @@ inline void SwXMLTableCellContext_Impl::InsertContent(
                                                 SwXMLTableContext *pTable )
 {
     GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan, 0, mXmlId, pTable, bProtect );
-    bHasTableContent = sal_True;
+    bHasTableContent = true;
 }
 
 SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
@@ -606,7 +606,7 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     OUString sXmlId;
-    sal_Bool bSubTable = sal_False;
+    bool bSubTable = false;
     if( XML_NAMESPACE_TABLE == nPrefix &&
         IsXMLToken( rLocalName, XML_TABLE ) )
     {
@@ -623,7 +623,7 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
                  IsXMLToken( aLocalName, XML_IS_SUB_TABLE ) &&
                  IsXMLToken( xAttrList->getValueByIndex( i ), XML_TRUE ) )
             {
-                bSubTable = sal_True;
+                bSubTable = true;
             }
             else if ( (XML_NAMESPACE_XML == nPrefix2) &&
                      IsXMLToken( aLocalName, XML_ID ) )
@@ -881,7 +881,7 @@ public:
     SwXMLTableRowContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
-            SwXMLTableContext *pTable, sal_Bool bInHead=sal_False );
+            SwXMLTableContext *pTable, bool bInHead=false );
 
     virtual ~SwXMLTableRowContext_Impl();
 
@@ -899,7 +899,7 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         SwXMLTableContext *pTable,
-        sal_Bool bInHead ) :
+        bool bInHead ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xMyTable( pTable ),
     nRowRepeat( 1 )
@@ -992,7 +992,7 @@ class SwXMLTableRowsContext_Impl : public SvXMLImportContext
 {
     SvXMLImportContextRef   xMyTable;
 
-    sal_Bool bHeader;
+    bool bHeader;
 
     SwXMLTableContext *GetTable() { return (SwXMLTableContext *)&xMyTable; }
 
@@ -1002,7 +1002,7 @@ public:
             const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable,
-            sal_Bool bHead );
+            bool bHead );
 
     virtual ~SwXMLTableRowsContext_Impl();
 
@@ -1018,7 +1018,7 @@ SwXMLTableRowsContext_Impl::SwXMLTableRowsContext_Impl( SwXMLImport& rImport,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > &,
         SwXMLTableContext *pTable,
-        sal_Bool bHead ) :
+        bool bHead ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xMyTable( pTable ),
     bHeader( bHead )
@@ -1056,7 +1056,7 @@ class SwXMLDDETableContext_Impl : public SvXMLImportContext
     OUString sDDEApplication;
     OUString sDDEItem;
     OUString sDDETopic;
-    sal_Bool bIsAutomaticUpdate;
+    bool bIsAutomaticUpdate;
 
 public:
 
@@ -1074,7 +1074,7 @@ public:
     OUString& GetDDEApplication()   { return sDDEApplication; }
     OUString& GetDDEItem()          { return sDDEItem; }
     OUString& GetDDETopic()         { return sDDETopic; }
-    sal_Bool GetIsAutomaticUpdate() { return bIsAutomaticUpdate; }
+    bool GetIsAutomaticUpdate() { return bIsAutomaticUpdate; }
 };
 
 TYPEINIT1( SwXMLDDETableContext_Impl, SvXMLImportContext );
@@ -1086,7 +1086,7 @@ SwXMLDDETableContext_Impl::SwXMLDDETableContext_Impl(
         sDDEApplication(),
         sDDEItem(),
         sDDETopic(),
-        bIsAutomaticUpdate(sal_False)
+        bIsAutomaticUpdate(false)
 {
 }
 
@@ -1230,10 +1230,10 @@ class TableBoxIndex
 public:
     OUString msName;
     sal_Int32 mnWidth;
-    sal_Bool mbProtected;
+    bool mbProtected;
 
     TableBoxIndex( const OUString& rName, sal_Int32 nWidth,
-                   sal_Bool bProtected ) :
+                   bool bProtected ) :
         msName( rName ),
         mnWidth( nWidth ),
         mbProtected( bProtected )
@@ -1252,7 +1252,7 @@ class TableBoxIndexHasher
 public:
     size_t operator() (const TableBoxIndex& rArg) const
     {
-        return rArg.msName.hashCode() + rArg.mnWidth + rArg.mbProtected;
+        return rArg.msName.hashCode() + rArg.mnWidth + (rArg.mbProtected ? 1 : 0);
     }
 };
 
@@ -1456,7 +1456,7 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     SvXMLImportContext *pContext = 0;
 
     const SvXMLTokenMap& rTokenMap = GetSwImport().GetTableElemTokenMap();
-    sal_Bool bHeader = sal_False;
+    bool bHeader = false;
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
     case XML_TOK_TABLE_HEADER_COLS:
@@ -1473,7 +1473,7 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
                                                       this );
         break;
     case XML_TOK_TABLE_HEADER_ROWS:
-        bHeader = sal_True;
+        bHeader = true;
         //fall-through
     case XML_TOK_TABLE_ROWS:
         pContext = new SwXMLTableRowsContext_Impl( GetSwImport(), nPrefix,
@@ -1566,9 +1566,9 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
                                     const SwStartNode *pStartNode,
                                     const OUString & i_rXmlId,
                                     SwXMLTableContext *pTable,
-                                    sal_Bool bProtect,
+                                    bool bProtect,
                                     const OUString* pFormula,
-                                    sal_Bool bHasValue,
+                                    bool bHasValue,
                                     double fValue,
                                     OUString const*const pStringValue )
 {
@@ -1853,9 +1853,9 @@ SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
     SwTableBox* pBox,
     const OUString& rStyleName,
     sal_Int32 nColumnWidth,
-    sal_Bool bProtected,
-    sal_Bool bMayShare,
-    sal_Bool& bNew,
+    bool bProtected,
+    bool bMayShare,
+    bool& bNew,
     bool* pModifyLocked )
 {
     if ( pSharedBoxFormats == NULL )
@@ -1875,7 +1875,7 @@ SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
         SwFmtFillOrder aFillOrder( pBoxFmt2->GetFillOrder() );
         pBoxFmt2->ResetAllFmtAttr(); // #i73790# - method renamed
         pBoxFmt2->SetFmtAttr( aFillOrder );
-        bNew = sal_True;    // it's a new format now
+        bNew = true;    // it's a new format now
 
         // share this format, if allowed
         if ( bMayShare )
@@ -1886,7 +1886,7 @@ SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
         // set the shared format
         pBoxFmt2 = aIter->second;
         pBox->ChgFrmFmt( pBoxFmt2 );
-        bNew = sal_False;   // copied from an existing format
+        bNew = false;   // copied from an existing format
 
         // claim it, if we are not allowed to share
         if ( !bMayShare )
@@ -1934,7 +1934,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
         for( i = nTopRow; i < nBottomRow; i++ )
         {
             // Could the table be splitted behind the current row?
-            sal_Bool bSplit = sal_True;
+            bool bSplit = true;
             SwXMLTableRow_Impl *pRow = &(*pRows)[(sal_uInt16)i];
             for( sal_uInt32 j=nLeftCol; j<nRightCol; j++ )
             {
@@ -2025,7 +2025,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     // Share formats!
     const OUString sStyleName = pCell->GetStyleName();
     bool bModifyLocked;
-    sal_Bool bNew;
+    bool bNew;
     SwTableBoxFmt *pBoxFmt2 = GetSharedBoxFormat(
         pBox, sStyleName, nColWidth, pCell->IsProtected(),
         pCell->GetStartNode() && pCell->GetFormula().isEmpty() &&
@@ -2076,7 +2076,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         {
             // default num format?
             const SfxPoolItem* pItem = NULL;
-            if( pBoxFmt2->GetItemState( RES_BOXATR_FORMAT, sal_False, &pItem )
+            if( pBoxFmt2->GetItemState( RES_BOXATR_FORMAT, false, &pItem )
                             == SFX_ITEM_SET )
             {
                 const SwTblBoxNumFormat* pNumFormat =
@@ -2131,7 +2131,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                 // Solution: the number format will be removed,
                 // the cell gets the default text format.
                 const SfxPoolItem* pItem = NULL;
-                if( pBoxFmt->GetItemState( RES_BOXATR_FORMAT, sal_False, &pItem )
+                if( pBoxFmt->GetItemState( RES_BOXATR_FORMAT, false, &pItem )
                     == SFX_ITEM_SET )
                 {
                     const SwDoc* pDoc = pBoxFmt->GetDoc();
@@ -2213,7 +2213,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
     while( nStartCol < nRightCol )
     {
         for( sal_uInt32 nRow=nTopRow; nRow<nBottomRow; nRow++ )
-            (*pRows)[nRow].SetSplitable( sal_True );
+            (*pRows)[nRow].SetSplitable( true );
 
         sal_uInt32 nCol = nStartCol;
         sal_uInt32 nSplitCol = nRightCol;
@@ -2795,10 +2795,10 @@ void SwXMLTableContext::MakeTable()
 
         // 3) create new DDE table, and
         SwDDETable* pDDETable = new SwDDETable( pTableNode->GetTable(),
-                                                pFldType, sal_False );
+                                                pFldType, false );
 
         // 4) set new (DDE)table at node.
-        pTableNode->SetNewTable(pDDETable, sal_False);
+        pTableNode->SetNewTable(pDDETable, false);
     }
 
     // ??? this is always false: root frame is only created in SwViewShell::Init

@@ -50,7 +50,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     {
         GetShell().StartAllAction();
         SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , false );
-        sal_Bool bMode = !GetShell().SelectionHasNumber(); // #i29560#
+        bool bMode = !GetShell().SelectionHasNumber(); // #i29560#
         if ( pItem )
             bMode = pItem->GetValue();
         else
@@ -64,7 +64,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             else
                 GetShell().NumOrBulletOff(); // #i29560#
         }
-        sal_Bool bNewResult = GetShell().SelectionHasNumber();
+        bool bNewResult = GetShell().SelectionHasNumber();
         if (bNewResult!=bMode) {
             SfxBindings& rBindings = GetView().GetViewFrame()->GetBindings();
             SfxBoolItem aItem(FN_NUM_NUMBERING_ON,!bNewResult);
@@ -79,7 +79,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     {
         GetShell().StartAllAction();
         SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , false );
-        sal_Bool bMode = !GetShell().SelectionHasBullet(); // #i29560#
+        bool bMode = !GetShell().SelectionHasBullet(); // #i29560#
         if ( pItem )
             bMode = pItem->GetValue();
         else
@@ -93,7 +93,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             else
                 GetShell().NumOrBulletOff(); // #i29560#
         }
-        sal_Bool bNewResult = GetShell().SelectionHasBullet();
+        bool bNewResult = GetShell().SelectionHasBullet();
         if (bNewResult!=bMode) {
             SfxBindings& rBindings = GetView().GetViewFrame()->GetBindings();
             SfxBoolItem aItem(FN_NUM_BULLET_ON,!bNewResult);
@@ -201,7 +201,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                                     : GetShell().GetUniqueNumRuleName(),
                     numfunc::GetDefaultPositionAndSpaceMode() );
                 aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc() );
-                aSetRule.SetAutoRule( sal_True );
+                aSetRule.SetAutoRule( true );
                 // No start of new list, if an existing list style is edited.
                 // Otherwise start a new list.
                 const bool bCreateList = ( pNumRuleAtCurrentSelection == NULL );
@@ -219,7 +219,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                     GetShell().GetUniqueNumRuleName(),
                     numfunc::GetDefaultPositionAndSpaceMode() );
                 aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc() );
-                aSetRule.SetAutoRule( sal_True );
+                aSetRule.SetAutoRule( true );
                 // start new list
                 GetShell().SetCurNumRule( aSetRule, true );
             }
@@ -285,7 +285,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
                         pNBOTypeMgr->ApplyNumRule( aNewSvxNumRule, nChoosenItemIdx - 1, nActNumLvl );
 
                         aNewNumRule.SetSvxRule( aNewSvxNumRule, GetShell().GetDoc() );
-                        aNewNumRule.SetAutoRule( sal_True );
+                        aNewNumRule.SetAutoRule( true );
                         const bool bCreateNewList = ( pNumRuleAtCurrentSelection == NULL );
                         GetShell().SetCurNumRule( aNewNumRule, bCreateNewList );
                     }

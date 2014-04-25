@@ -62,12 +62,12 @@ class SwTextGridPage: public SfxTabPage
     ColorListBox*    m_pColorLB;
 
     sal_Int32       m_nRubyUserValue;
-    sal_Bool        m_bRubyUserValue;
+    bool        m_bRubyUserValue;
     Size            m_aPageSize;
     bool            m_bVertical;
-    sal_Bool        m_bSquaredMode;
-    sal_Bool        m_bHRulerChanged;
-    sal_Bool        m_bVRulerChanged;
+    bool        m_bSquaredMode;
+    bool        m_bHRulerChanged;
+    bool        m_bVRulerChanged;
 
     SwTextGridPage(Window *pParent, const SfxItemSet &rSet);
     virtual ~SwTextGridPage();

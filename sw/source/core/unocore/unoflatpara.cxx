@@ -339,14 +339,14 @@ SwXFlatParagraph::getSomething(
     return sw::UnoTunnelImpl(rId, this);
 }
 
-SwXFlatParagraphIterator::SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType, sal_Bool bAutomatic )
+SwXFlatParagraphIterator::SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType, bool bAutomatic )
     : mpDoc( &rDoc ),
       mnType( nType ),
       mbAutomatic( bAutomatic ),
       mnCurrentNode( 0 ),
       mnStartNode( 0 ),
       mnEndNode( rDoc.GetNodes().Count() ),
-      mbWrapped( sal_False )
+      mbWrapped( false )
 {
     //mnStartNode = mnCurrentNode = get node from current cursor TODO!
 

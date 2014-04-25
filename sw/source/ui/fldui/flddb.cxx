@@ -233,7 +233,7 @@ bool SwFldDBPage::FillItemSet(SfxItemSet& )
         OUString sTempTableName;
         OUString sTempColumnName;
         OUString sTempDBName = m_pDatabaseTLB->GetDBName(sTempTableName, sTempColumnName);
-        sal_Bool bDBListBoxChanged = m_sOldDBName != sTempDBName ||
+        bool bDBListBoxChanged = m_sOldDBName != sTempDBName ||
             m_sOldTableName != sTempTableName || m_sOldColumnName != sTempColumnName;
         if (!IsFldEdit() ||
             m_pConditionED->GetSavedValue() != m_pConditionED->GetText() ||
@@ -278,7 +278,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
         SwWrtShell *pSh = GetWrtShell();
         if(!pSh)
             pSh = ::GetActiveWrtShell();
-        sal_Bool bCond = sal_False, bSetNo = sal_False, bFormat = sal_False, bDBFormat = sal_False;
+        bool bCond = false, bSetNo = false, bFormat = false, bDBFormat = false;
         const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
         m_pDatabaseTLB->ShowColumns(nTypeId == TYP_DBFLD);
@@ -302,8 +302,8 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
         switch (nTypeId)
         {
             case TYP_DBFLD:
-                bFormat = sal_True;
-                bDBFormat = sal_True;
+                bFormat = true;
+                bDBFormat = true;
                 m_pNumFormatLB->Show();
                 m_pFormatLB->Hide();
 
@@ -323,10 +323,10 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
                 break;
 
             case TYP_DBNUMSETFLD:
-                bSetNo = sal_True;
+                bSetNo = true;
                 // no break!
             case TYP_DBNEXTSETFLD:
-                bCond = sal_True;
+                bCond = true;
                 if (IsFldEdit())
                 {
                     m_pConditionED->SetText(GetCurField()->GetPar1());
@@ -338,7 +338,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
                 break;
 
             case TYP_DBSETNUMBERFLD:
-                bFormat = sal_True;
+                bFormat = true;
                 m_pNewFormatRB->Check();
                 m_pNumFormatLB->Hide();
                 m_pFormatLB->Show();
@@ -360,11 +360,11 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
         if (nTypeId != TYP_DBFLD)
         {
             m_pDBFormatRB->Enable(bDBFormat);
-            m_pNewFormatRB->Enable(bDBFormat|bFormat);
+            m_pNewFormatRB->Enable(bDBFormat || bFormat);
             m_pNumFormatLB->Enable(bDBFormat);
             m_pFormatLB->Enable(bFormat);
         }
-        m_pFormat->Enable(bDBFormat|bFormat);
+        m_pFormat->Enable(bDBFormat || bFormat);
 
         if (!IsFldEdit())
         {
@@ -434,7 +434,7 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
 
         if (nTypeId == TYP_DBFLD)
         {
-            sal_Bool bNumFormat = sal_False;
+            bool bNumFormat = false;
 
             if (pEntry != 0)
             {

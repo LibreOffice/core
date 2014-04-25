@@ -69,7 +69,7 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
             boost::scoped_ptr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
-                pMDI, *m_pWrtShell, sal_True));
+                pMDI, *m_pWrtShell, true));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(FN_EDIT_FOOTNOTE)->GetCommand());
@@ -84,11 +84,11 @@ void SwView::AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId)
 {
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    bool bWeb = 0 != PTR_CAST(SwWebView, this);
     if (pModOpt->IsInsWithCaption(bWeb))
     {
         const InsCaptionOpt *pOpt = pModOpt->GetCapOption(bWeb, (SwCapObjType)nType, pOleId);
-        if (pOpt && pOpt->UseCaption() == sal_True)
+        if (pOpt && pOpt->UseCaption())
             InsertCaption(pOpt);
     }
 }
@@ -176,7 +176,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     if(pType)
         ((SwSetExpFieldType*)pType)->SetSeqFormat(pOpt->GetNumType());
 
-    rSh.UpdateExpFlds( sal_True );
+    rSh.UpdateExpFlds( true );
 
     rSh.EndAllAction();
 

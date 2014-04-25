@@ -58,7 +58,7 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     pCmds( SwCondCollItem::GetCmds() ),
     pFmt(0),
 
-    bNewTemplate(sal_False)
+    bNewTemplate(false)
 {
     get(m_pConditionCB, "condstyle");
     get(m_pContextFT, "contextft");
@@ -144,7 +144,7 @@ SfxTabPage* SwCondCollPage::Create(Window *pParent, const SfxItemSet &rSet)
 
 bool SwCondCollPage::FillItemSet(SfxItemSet &rSet)
 {
-    sal_Bool bModified = sal_True;
+    bool bModified = true;
     SwCondCollItem aCondItem;
     for (size_t i = 0; i < m_aStrArr.size(); ++i)
     {
@@ -204,10 +204,10 @@ const sal_uInt16* SwCondCollPage::GetRanges()
 
 IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
 {
-    const sal_Bool bEnable = pBox->IsChecked();
+    const bool bEnable = pBox->IsChecked();
     m_pContextFT->Enable( bEnable );
     m_pUsedFT->Enable( bEnable );
-    m_pTbLinks->EnableList( bEnable != sal_False );
+    m_pTbLinks->EnableList( bEnable );
     m_pStyleFT->Enable( bEnable );
     m_pStyleLB->Enable( bEnable );
     m_pFilterLB->Enable( bEnable );
@@ -231,7 +231,7 @@ IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
 
     OUString sSel = m_aStrArr[nPos] + "\t";
 
-    const sal_Bool bAssEnabled = pBtn != m_pRemovePB && m_pAssignPB->IsEnabled();
+    const bool bAssEnabled = pBtn != m_pRemovePB && m_pAssignPB->IsEnabled();
     m_pAssignPB->Enable( !bAssEnabled );
     m_pRemovePB->Enable(  bAssEnabled );
     if ( bAssEnabled )
@@ -283,7 +283,7 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     return 0;
 }
 
-void SwCondCollPage::SetCollection( SwFmt* pFormat, sal_Bool bNew )
+void SwCondCollPage::SetCollection( SwFmt* pFormat, bool bNew )
 {
     pFmt = pFormat;
     bNewTemplate = bNew;

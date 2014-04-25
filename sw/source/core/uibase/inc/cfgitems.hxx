@@ -48,15 +48,15 @@ class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
     friend class SwShdwCrsrOptionsTabPage;
     friend class SwModule;
 
-    sal_Bool bParagraphEnd      :1;
-    sal_Bool bTab               :1;
-    sal_Bool bSpace             :1;
-    sal_Bool bNonbreakingSpace  :1;
-    sal_Bool bSoftHyphen        :1;
-    sal_Bool bCharHiddenText    :1;
-    sal_Bool bFldHiddenText     :1;
-    sal_Bool bManualBreak       :1;
-    sal_Bool bShowHiddenPara    :1;
+    bool bParagraphEnd      :1;
+    bool bTab               :1;
+    bool bSpace             :1;
+    bool bNonbreakingSpace  :1;
+    bool bSoftHyphen        :1;
+    bool bCharHiddenText    :1;
+    bool bFldHiddenText     :1;
+    bool bManualBreak       :1;
+    bool bShowHiddenPara    :1;
 
     Color aIndexBackgrndCol;
 
@@ -134,26 +134,26 @@ public:
     const OUString &GetFax() const              { return sFaxName; }
     void          SetFax( const OUString& rFax) { sFaxName = rFax; }
 
-    sal_Bool   IsPrintProspect() const      { return bPrintProspect; }
-    sal_Bool   IsPrintProspectRTL() const      { return bPrintProspectRTL; }
-    void   SetPrintProspect(sal_Bool bFlag ){ bPrintProspect = bFlag; }
-    void   SetPrintProspectRTL(sal_Bool bFlag ){ bPrintProspectRTL = bFlag; }
-    sal_Bool IsPrintGraphic () const { return bPrintGraphic; }
-    sal_Bool IsPrintTable () const { return bPrintTable; }
-    sal_Bool IsPrintDraw () const { return bPrintDraw; }
-    sal_Bool IsPrintControl () const { return bPrintControl; }
-    sal_Bool IsPrintLeftPage () const { return bPrintLeftPages; }
-    sal_Bool IsPrintRightPage() const { return bPrintRightPages; }
-    sal_Bool IsPrintReverse  () const { return bPrintReverse; }
-    sal_Bool IsPaperFromSetup() const { return bPaperFromSetup; }
-    sal_Bool IsPrintEmptyPages() const { return bPrintEmptyPages; }
-    sal_Bool IsPrintPageBackground() const { return bPrintPageBackground; }
-    sal_Bool IsPrintBlackFont() const { return bPrintBlackFont; }
+    bool   IsPrintProspect() const      { return bPrintProspect; }
+    bool   IsPrintProspectRTL() const      { return bPrintProspectRTL; }
+    void   SetPrintProspect(bool bFlag ){ bPrintProspect = bFlag; }
+    void   SetPrintProspectRTL(bool bFlag ){ bPrintProspectRTL = bFlag; }
+    bool IsPrintGraphic () const { return bPrintGraphic; }
+    bool IsPrintTable () const { return bPrintTable; }
+    bool IsPrintDraw () const { return bPrintDraw; }
+    bool IsPrintControl () const { return bPrintControl; }
+    bool IsPrintLeftPage () const { return bPrintLeftPages; }
+    bool IsPrintRightPage() const { return bPrintRightPages; }
+    bool IsPrintReverse  () const { return bPrintReverse; }
+    bool IsPaperFromSetup() const { return bPaperFromSetup; }
+    bool IsPrintEmptyPages() const { return bPrintEmptyPages; }
+    bool IsPrintPageBackground() const { return bPrintPageBackground; }
+    bool IsPrintBlackFont() const { return bPrintBlackFont; }
     //#i81434# - printing of hidden text
-    sal_Bool IsPrintHiddenText() const { return bPrintHiddenText; }
-    sal_Bool IsPrintTextPlaceholder() const { return bPrintTextPlaceholder; }
+    bool IsPrintHiddenText() const { return bPrintHiddenText; }
+    bool IsPrintTextPlaceholder() const { return bPrintTextPlaceholder; }
 
-    sal_Bool IsPrintSingleJobs() const { return bPrintSingleJobs; }
+    bool IsPrintSingleJobs() const { return bPrintSingleJobs; }
     sal_uLong GetPrintPostIts () const { return nPrintPostIts; }
 
 };
@@ -164,7 +164,7 @@ Item for settings dialog, ShadowCursorPage
 class SW_DLLPUBLIC SwShadowCursorItem : public SfxPoolItem
 {
     sal_uInt8 eMode;
-    sal_Bool bOn;
+    bool bOn;
 public:
     TYPEINFO_OVERRIDE();
     SwShadowCursorItem( sal_uInt16 nWhich = FN_PARAM_SHADOWCURSOR );
@@ -178,10 +178,10 @@ public:
     void FillViewOptions( SwViewOption& rVOpt) const;
 
     sal_uInt8 GetMode() const               { return eMode; }
-    sal_Bool IsOn() const                   { return bOn; }
+    bool IsOn() const                   { return bOn; }
 
     void SetMode( sal_uInt8 eM )            { eMode = eM; }
-    void SetOn( sal_Bool bFlag )            { bOn = bFlag; }
+    void SetOn( bool bFlag )            { bOn = bFlag; }
 };
 
 #ifdef DBG_UTIL

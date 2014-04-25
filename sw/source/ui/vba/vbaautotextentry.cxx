@@ -50,7 +50,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
         xTC->goRight( 1, sal_True );
         xTC->setString( OUString("") ); // remove marker
         // remove the blank paragraph if it is a rich text
-        sal_Bool bRich = sal_False;
+        bool bRich = false;
         _richtext >>= bRich;
         if( bRich )
         {

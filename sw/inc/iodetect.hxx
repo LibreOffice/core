@@ -101,10 +101,10 @@ public:
 
     /** Detect whether the given file is in the given format.
      For now, only our own filters are supported! */
-    static sal_Bool IsFileFilter(SfxMedium& rMedium, const OUString& rFmtName);
+    static bool IsFileFilter(SfxMedium& rMedium, const OUString& rFmtName);
 
-    static sal_Bool IsValidStgFilter( SotStorage& , const SfxFilter& );
-    static sal_Bool IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
+    static bool IsValidStgFilter( SotStorage& , const SfxFilter& );
+    static bool IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
 
     SWD_DLLPUBLIC static bool
         IsDetectableText( const sal_Char* pBuf, sal_uLong &rLen,

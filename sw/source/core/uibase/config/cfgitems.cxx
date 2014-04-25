@@ -46,7 +46,7 @@ SwDocDisplayItem::SwDocDisplayItem( sal_uInt16 _nWhich ) :
     bFldHiddenText      =
     bCharHiddenText     =
     bManualBreak        =
-    bShowHiddenPara     = sal_False;
+    bShowHiddenPara     = false;
 
 };
 
@@ -62,14 +62,14 @@ SwDocDisplayItem::SwDocDisplayItem( const SwDocDisplayItem& rDocDisplayItem ):
 SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt, sal_uInt16 _nWhich ) :
             SfxPoolItem( _nWhich )
 {
-    bParagraphEnd       = rVOpt.IsParagraph(sal_True);
-    bTab                = rVOpt.IsTab(sal_True);
-    bSpace              = rVOpt.IsBlank(sal_True);
+    bParagraphEnd       = rVOpt.IsParagraph(true);
+    bTab                = rVOpt.IsTab(true);
+    bSpace              = rVOpt.IsBlank(true);
     bNonbreakingSpace   = rVOpt.IsHardBlank();
     bSoftHyphen         = rVOpt.IsSoftHyph();
-    bCharHiddenText     = rVOpt.IsShowHiddenChar(sal_True);
+    bCharHiddenText     = rVOpt.IsShowHiddenChar(true);
     bFldHiddenText      = rVOpt.IsShowHiddenField();
-    bManualBreak        = rVOpt.IsLineBreak(sal_True);
+    bManualBreak        = rVOpt.IsLineBreak(true);
     bShowHiddenPara     = rVOpt.IsShowHiddenPara();
 }
 
@@ -151,8 +151,8 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt, sal_uInt16 _nWhich) :
     bHorzScrollbar  = rVOpt.IsViewHScrollBar();
     bVertScrollbar  = rVOpt.IsViewVScrollBar();
     bAnyRuler       = rVOpt.IsViewAnyRuler();
-    bHorzRuler      = rVOpt.IsViewHRuler(sal_True);
-    bVertRuler      = rVOpt.IsViewVRuler(sal_True);
+    bHorzRuler      = rVOpt.IsViewHRuler(true);
+    bVertRuler      = rVOpt.IsViewVRuler(true);
     bVertRulerRight = rVOpt.IsVRulerRight();
     bCrosshair      = rVOpt.IsCrossHair();
     bSmoothScroll   = rVOpt.IsSmoothScroll();
@@ -271,7 +271,7 @@ bool SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 SwShadowCursorItem::SwShadowCursorItem( sal_uInt16 _nWhich )
     : SfxPoolItem( _nWhich ),
     eMode( FILL_TAB )
-    ,bOn( sal_False )
+    ,bOn( false )
 {
 }
 

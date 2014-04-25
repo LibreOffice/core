@@ -36,7 +36,7 @@ class SwDrawTextShell: public SfxShell
 
     void        SetAttrToMarked(const SfxItemSet& rAttr);
     void        InsertSymbol(SfxRequest& rReq);
-    sal_Bool    IsTextEdit();
+    bool    IsTextEdit();
 
 public:
     SFX_DECL_INTERFACE(SW_DRWTXTSHELL)

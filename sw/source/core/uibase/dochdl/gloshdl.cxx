@@ -100,7 +100,7 @@ void SwGlossaryHdl::GlossaryDlg()
 
 // set the default group; if called from the dialog
 // the group is created temporarily for faster access
-void SwGlossaryHdl::SetCurGroup(const OUString &rGrp, sal_Bool bApi, sal_Bool bAlwaysCreateNew )
+void SwGlossaryHdl::SetCurGroup(const OUString &rGrp, bool bApi, bool bAlwaysCreateNew )
 {
     OUString sGroup(rGrp);
     if (sGroup.indexOf(GLOS_DELIM)<0 && !FindGroupName(sGroup))
@@ -145,7 +145,7 @@ void SwGlossaryHdl::SetCurGroup(const OUString &rGrp, sal_Bool bApi, sal_Bool bA
             rStatGlossaries.PutGroupDoc(pCurGrp);
             pCurGrp = 0;
         }
-        pCurGrp = rStatGlossaries.GetGroupDoc(aCurGrp, sal_True);
+        pCurGrp = rStatGlossaries.GetGroupDoc(aCurGrp, true);
     }
 }
 
@@ -159,7 +159,7 @@ OUString SwGlossaryHdl::GetGroupName( sal_uInt16 nId, OUString* pTitle )
     OUString sRet = rStatGlossaries.GetGroupName(nId);
     if(pTitle)
     {
-        SwTextBlocks* pGroup = rStatGlossaries.GetGroupDoc(sRet, sal_False);
+        SwTextBlocks* pGroup = rStatGlossaries.GetGroupDoc(sRet, false);
         if(pGroup && !pGroup->GetError())
         {
             *pTitle = pGroup->GetName();
@@ -176,27 +176,27 @@ OUString SwGlossaryHdl::GetGroupName( sal_uInt16 nId, OUString* pTitle )
     return sRet;
 }
 
-sal_Bool SwGlossaryHdl::NewGroup(OUString &rGrpName, const OUString& rTitle)
+bool SwGlossaryHdl::NewGroup(OUString &rGrpName, const OUString& rTitle)
 {
     if (rGrpName.indexOf(GLOS_DELIM)<0)
         FindGroupName(rGrpName);
     return rStatGlossaries.NewGroupDoc(rGrpName, rTitle);
 }
 
-sal_Bool SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle)
+bool SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     OUString sOldGroup(rOld);
     if (rOld.indexOf(GLOS_DELIM)<0)
         FindGroupName(sOldGroup);
     if(rOld == rNew)
     {
-        SwTextBlocks* pGroup = rStatGlossaries.GetGroupDoc(sOldGroup, sal_False);
+        SwTextBlocks* pGroup = rStatGlossaries.GetGroupDoc(sOldGroup, false);
         if(pGroup)
         {
             pGroup->SetName(rNewTitle);
             rStatGlossaries.PutGroupDoc( pGroup );
-            bRet = sal_True;
+            bRet = true;
         }
     }
     else
@@ -212,14 +212,14 @@ sal_Bool SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const 
     return bRet;
 }
 
-sal_Bool SwGlossaryHdl::CopyOrMove( const OUString& rSourceGroupName, OUString& rSourceShortName,
-                        const OUString& rDestGroupName, const OUString& rLongName, sal_Bool bMove )
+bool SwGlossaryHdl::CopyOrMove( const OUString& rSourceGroupName, OUString& rSourceShortName,
+                                const OUString& rDestGroupName, const OUString& rLongName, bool bMove )
 {
-    SwTextBlocks* pSourceGroup = rStatGlossaries.GetGroupDoc(rSourceGroupName, sal_False);
+    SwTextBlocks* pSourceGroup = rStatGlossaries.GetGroupDoc(rSourceGroupName, false);
 
-    SwTextBlocks* pDestGroup = rStatGlossaries.GetGroupDoc(rDestGroupName, sal_False);
+    SwTextBlocks* pDestGroup = rStatGlossaries.GetGroupDoc(rDestGroupName, false);
     if(pDestGroup->IsReadOnly() || (bMove && pSourceGroup->IsReadOnly()) )
-        return sal_False;
+        return false;
 
     //The index must be determined here because rSourceShortName maybe changed in CopyBlock
     sal_uInt16 nDeleteIdx = pSourceGroup->GetIndex( rSourceShortName );
@@ -236,7 +236,7 @@ sal_Bool SwGlossaryHdl::CopyOrMove( const OUString& rSourceGroupName, OUString& 
 }
 
 // delete a autotext-file-group
-sal_Bool SwGlossaryHdl::DelGroup(const OUString &rGrpName)
+bool SwGlossaryHdl::DelGroup(const OUString &rGrpName)
 {
     OUString sGroup(rGrpName);
     if (sGroup.indexOf(GLOS_DELIM)<0)
@@ -248,9 +248,9 @@ sal_Bool SwGlossaryHdl::DelGroup(const OUString &rGrpName)
             if (pCurGrp->GetName() == sGroup)
                 DELETEZ(pCurGrp);
         }
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 // ask for number of autotexts
@@ -276,7 +276,7 @@ OUString SwGlossaryHdl::GetGlossaryShortName(const OUString &rName)
 {
     OUString sReturn;
     SwTextBlocks *pTmp =
-        pCurGrp ? pCurGrp: rStatGlossaries.GetGroupDoc( aCurGrp, sal_False );
+        pCurGrp ? pCurGrp: rStatGlossaries.GetGroupDoc( aCurGrp, false );
     if(pTmp)
     {
         sal_uInt16 nIdx = pTmp->GetLongIndex( rName );
@@ -289,39 +289,39 @@ OUString SwGlossaryHdl::GetGlossaryShortName(const OUString &rName)
 }
 
 // short name for autotext already used?
-sal_Bool SwGlossaryHdl::HasShortName(const OUString& rShortName) const
+bool SwGlossaryHdl::HasShortName(const OUString& rShortName) const
 {
     SwTextBlocks *pBlock = pCurGrp ? pCurGrp
                                    : rStatGlossaries.GetGroupDoc( aCurGrp );
-    sal_Bool bRet = pBlock->GetIndex( rShortName ) != (sal_uInt16) -1;
+    bool bRet = pBlock->GetIndex( rShortName ) != (sal_uInt16) -1;
     if( !pCurGrp )
         rStatGlossaries.PutGroupDoc( pBlock );
     return bRet;
 }
 
-sal_Bool    SwGlossaryHdl::ConvertToNew(SwTextBlocks& /*rOld*/)
+bool SwGlossaryHdl::ConvertToNew(SwTextBlocks& /*rOld*/)
 {
-    return sal_True;
+    return true;
 }
 
 // Create autotext
-sal_Bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortName,
-                                sal_Bool bCreateGroup, sal_Bool bNoAttr)
+bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortName,
+                                bool bCreateGroup, bool bNoAttr)
 {
     SwTextBlocks *pTmp =
         pCurGrp ? pCurGrp: rStatGlossaries.GetGroupDoc( aCurGrp, bCreateGroup );
     //pTmp == 0 if the AutoText path setting is wrong
     if(!pTmp)
-        return sal_False;
+        return false;
     if(!ConvertToNew(*pTmp))
-        return sal_False;
+        return false;
 
     OUString sOnlyTxt;
     OUString* pOnlyTxt = 0;
     if( bNoAttr )
     {
         if( !pWrtShell->GetSelectedText( sOnlyTxt, GETSELTXT_PARABRK_TO_ONLYCR ))
-            return sal_False;
+            return false;
         pOnlyTxt = &sOnlyTxt;
     }
 
@@ -335,28 +335,28 @@ sal_Bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShor
     }
     if( !pCurGrp )
         rStatGlossaries.PutGroupDoc( pTmp );
-    return sal_Bool( nSuccess != (sal_uInt16) -1 );
+    return nSuccess != (sal_uInt16) -1;
 }
 
 // Delete a autotext
-sal_Bool SwGlossaryHdl::DelGlossary(const OUString &rShortName)
+bool SwGlossaryHdl::DelGlossary(const OUString &rShortName)
 {
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp
                                     : rStatGlossaries.GetGroupDoc(aCurGrp);
     //pTmp == 0 if the AutoText path setting is wrong
     if(!pGlossary || !ConvertToNew(*pGlossary))
-        return sal_False;
+        return false;
 
     sal_uInt16 nIdx = pGlossary->GetIndex( rShortName );
     if( nIdx != (sal_uInt16) -1 )
         pGlossary->Delete( nIdx );
     if( !pCurGrp )
         rStatGlossaries.PutGroupDoc( pGlossary );
-    return sal_True;
+    return true;
 }
 
 // expand short name
-sal_Bool SwGlossaryHdl::ExpandGlossary()
+bool SwGlossaryHdl::ExpandGlossary()
 {
     OSL_ENSURE(pWrtShell->CanInsert(), "illegal");
     SwTextBlocks *pGlossary;
@@ -393,13 +393,13 @@ sal_Bool SwGlossaryHdl::ExpandGlossary()
     return pGlossary ? Expand( aShortName, &rStatGlossaries, pGlossary ) : sal_False;
 }
 
-sal_Bool SwGlossaryHdl::Expand( const OUString& rShortName,
+bool SwGlossaryHdl::Expand( const OUString& rShortName,
                             SwGlossaries *pGlossaries,
                             SwTextBlocks *pGlossary  )
 {
     TextBlockInfoArr aFoundArr;
     OUString aShortName( rShortName );
-    sal_Bool bCancel = sal_False;
+    bool bCancel = false;
     // search for text block
     // - don't prefer current group depending on configuration setting
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
@@ -470,7 +470,7 @@ sal_Bool SwGlossaryHdl::Expand( const OUString& rShortName,
                 else
                 {
                     nFound = (sal_uInt16) -1;
-                    bCancel = sal_True;
+                    bCancel = true;
                 }
             }
         }
@@ -493,7 +493,7 @@ sal_Bool SwGlossaryHdl::Expand( const OUString& rShortName,
             InfoBox( pWrtShell->GetView().GetWindow(), aTmp ).Execute();
         }
 
-        return sal_False;
+        return false;
     }
     else
     {
@@ -513,7 +513,7 @@ sal_Bool SwGlossaryHdl::Expand( const OUString& rShortName,
         pWrtShell->StartAllAction();
 
         // cache all InputFields
-        SwInputFieldList aFldLst( pWrtShell, sal_True );
+        SwInputFieldList aFldLst( pWrtShell, true );
 
         pWrtShell->InsertGlossary(*pGlossary, aShortName);
         pWrtShell->EndAllAction();
@@ -528,7 +528,7 @@ sal_Bool SwGlossaryHdl::Expand( const OUString& rShortName,
             pWrtShell->UpdateInputFlds( &aFldLst );
     }
     pGlossaries->PutGroupDoc(pGlossary);
-    return sal_True;
+    return true;
 }
 
 // add autotext
@@ -557,7 +557,7 @@ bool SwGlossaryHdl::InsertGlossary(const OUString &rName)
     pWrtShell->StartAllAction();
 
     // cache all InputFields
-    SwInputFieldList aFldLst( pWrtShell, sal_True );
+    SwInputFieldList aFldLst( pWrtShell, true );
 
     pWrtShell->InsertGlossary(*pGlos, rName);
     pWrtShell->EndAllAction();
@@ -642,16 +642,16 @@ SwGlossaryHdl::~SwGlossaryHdl()
 }
 
 // rename an autotext
-sal_Bool SwGlossaryHdl::Rename(const OUString& rOldShort, const OUString& rNewShortName,
-                               const OUString& rNewName )
+bool SwGlossaryHdl::Rename(const OUString& rOldShort, const OUString& rNewShortName,
+                           const OUString& rNewName )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp
                                     : rStatGlossaries.GetGroupDoc(aCurGrp);
     if(pGlossary)
     {
         if(!ConvertToNew(*pGlossary))
-            return sal_False;
+            return false;
 
         sal_uInt16 nIdx = pGlossary->GetIndex( rOldShort );
         sal_uInt16 nOldLongIdx = pGlossary->GetLongIndex( rNewName );
@@ -670,7 +670,7 @@ sal_Bool SwGlossaryHdl::Rename(const OUString& rOldShort, const OUString& rNewSh
     return bRet;
 }
 
-sal_Bool SwGlossaryHdl::IsReadOnly( const OUString* pGrpNm ) const
+bool SwGlossaryHdl::IsReadOnly( const OUString* pGrpNm ) const
 {
     SwTextBlocks *pGlossary = 0;
 
@@ -681,29 +681,29 @@ sal_Bool SwGlossaryHdl::IsReadOnly( const OUString* pGrpNm ) const
     else
         pGlossary = rStatGlossaries.GetGroupDoc(aCurGrp);
 
-    sal_Bool bRet = pGlossary ? pGlossary->IsReadOnly() : sal_True;
+    bool bRet = pGlossary ? pGlossary->IsReadOnly() : sal_True;
     if( pGrpNm || !pCurGrp )
         delete pGlossary;
     return bRet;
 }
 
-sal_Bool SwGlossaryHdl::IsOld() const
+bool SwGlossaryHdl::IsOld() const
 {
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp
                                       : rStatGlossaries.GetGroupDoc(aCurGrp);
-    sal_Bool bRet = pGlossary ? pGlossary->IsOld() : sal_False;
+    bool bRet = pGlossary ? pGlossary->IsOld() : sal_False;
     if( !pCurGrp )
         delete pGlossary;
     return bRet;
 }
 
 // find group without path index
-sal_Bool SwGlossaryHdl::FindGroupName(OUString& rGroup)
+bool SwGlossaryHdl::FindGroupName(OUString& rGroup)
 {
     return rStatGlossaries.FindGroupName(rGroup);
 }
 
-sal_Bool SwGlossaryHdl::CopyToClipboard(SwWrtShell& rSh, const OUString& rShortName)
+bool SwGlossaryHdl::CopyToClipboard(SwWrtShell& rSh, const OUString& rShortName)
 {
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp
                                     : rStatGlossaries.GetGroupDoc(aCurGrp);
@@ -718,9 +718,9 @@ sal_Bool SwGlossaryHdl::CopyToClipboard(SwWrtShell& rSh, const OUString& rShortN
     return 0 != nRet;
 }
 
-sal_Bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
+bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( !rName.isEmpty() )
     {
         const SfxFilter* pFilter = 0;

@@ -56,14 +56,14 @@ IMPL_LINK_NOARG(SwChildWinWrapper, UpdateHdl)
 /*--------------------------------------------------------------------
     Description: newly initialise dialog after Doc switch
  --------------------------------------------------------------------*/
-sal_Bool SwChildWinWrapper::ReInitDlg(SwDocShell *)
+bool SwChildWinWrapper::ReInitDlg(SwDocShell *)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if (m_pDocSh != GetOldDocShell())
     {
         m_aUpdateTimer.Stop();
-        bRet = sal_True;            // immediate Update
+        bRet = true;            // immediate Update
     }
     else
         m_aUpdateTimer.Start();
@@ -97,11 +97,11 @@ SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, sal_uInt16 nId,
 /*--------------------------------------------------------------------
     Description: newly initialise dialog after Doc switch
  --------------------------------------------------------------------*/
-sal_Bool SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
+bool SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
-    sal_Bool bRet;
+    bool bRet;
 
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == sal_True)  // update immediately, Doc switch
+    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)))  // update immediately, Doc switch
     {
         pDlgInterface->ReInitDlg();
     }
@@ -147,10 +147,10 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, sal_uInt16 n
 /* --------------------------------------------------
  * re-init after doc activation
  * --------------------------------------------------*/
-sal_Bool SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
+bool SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
-    sal_Bool bRet;
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == sal_True)  // update immediately, Doc switch
+    bool bRet;
+    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)))  // update immediately, Doc switch
     {
         pDlgInterface->ReInitDlg();
     }

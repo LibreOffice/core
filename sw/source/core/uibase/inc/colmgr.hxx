@@ -39,8 +39,8 @@ public:
     sal_uInt16              GetColWidth(sal_uInt16 nIdx) const;
     void                SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWidth);
 
-    inline sal_Bool         IsAutoWidth() const;
-    void                SetAutoWidth(sal_Bool bOn = sal_True, sal_uInt16 lGutterWidth = 0);
+    inline bool         IsAutoWidth() const;
+    void                SetAutoWidth(bool bOn = true, sal_uInt16 lGutterWidth = 0);
 
     inline bool         HasLine() const;
     inline void         SetNoLine();
@@ -99,11 +99,11 @@ inline  void SwColMgr::SetAdjust(SwColLineAdj eAdj)
 {
     aFmtCol.SetLineAdj(eAdj);
 }
-inline sal_Bool SwColMgr::IsAutoWidth() const
+inline bool SwColMgr::IsAutoWidth() const
 {
     return aFmtCol.IsOrtho();
 }
-inline void SwColMgr::SetAutoWidth(sal_Bool bOn, sal_uInt16 nGutterWidth)
+inline void SwColMgr::SetAutoWidth(bool bOn, sal_uInt16 nGutterWidth)
 {
     aFmtCol.SetOrtho(bOn, nGutterWidth, nWidth);
 }

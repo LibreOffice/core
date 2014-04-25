@@ -275,7 +275,7 @@ void SwUndoInsLayFmt::UndoImpl(::sw::UndoRedoContext & rContext)
                         aIdx.GetNode().EndOfSectionIndex() );
                 SwIndex aIndex( pNode, mnCrsrSaveIndexPos );
                 SwPosition aPos( *pNode, aIndex );
-                rDoc.CorrAbs( aIdx, aEndIdx, aPos, sal_True );
+                rDoc.CorrAbs( aIdx, aEndIdx, aPos, true );
                 bRemoveIdx = false;
             }
         }

@@ -102,7 +102,7 @@ SwField* SwChapterField::Copy() const
 // #i53420#
 void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
                                       const SwCntntNode* pCntntNode,
-                                      sal_Bool bSrchNum )
+                                      bool bSrchNum )
 {
     OSL_ENSURE( pFrm, "In which frame am I?" );
     SwDoc* pDoc = (SwDoc*)pCntntNode->GetDoc();
@@ -120,7 +120,7 @@ void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
     }
 }
 
-void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
+void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, bool bSrchNum)
 {
     //i120759,this function is for both the reference chapter field and normal chapter field
     //bSrchNum can distinguish the two types,to the latter type,the outline num rule is must...
@@ -261,7 +261,7 @@ bool SwChapterField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 
 bool SwChapterField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch( nWhichId )
     {
     case FIELD_PROP_BYTE1:

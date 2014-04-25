@@ -65,7 +65,7 @@ public:
                                     OUString &rText,
                                     const IntlWrapper* pIntl = 0 ) const SAL_OVERRIDE;
 
-    inline sal_Bool IsAtEnd() const { return FTNEND_ATPGORDOCEND != GetValue(); }
+    inline bool IsAtEnd() const { return FTNEND_ATPGORDOCEND != GetValue(); }
 
     SwFmtFtnEndAtTxtEnd & operator=( const SwFmtFtnEndAtTxtEnd & rAttr );
 
@@ -106,14 +106,14 @@ public:
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 };
 
-inline const SwFmtFtnAtTxtEnd &SwAttrSet::GetFtnAtTxtEnd(sal_Bool bInP) const
+inline const SwFmtFtnAtTxtEnd &SwAttrSet::GetFtnAtTxtEnd(bool bInP) const
     { return (const SwFmtFtnAtTxtEnd&)Get( RES_FTN_AT_TXTEND, bInP); }
-inline const SwFmtEndAtTxtEnd &SwAttrSet::GetEndAtTxtEnd(sal_Bool bInP) const
+inline const SwFmtEndAtTxtEnd &SwAttrSet::GetEndAtTxtEnd(bool bInP) const
     { return (const SwFmtEndAtTxtEnd&)Get( RES_END_AT_TXTEND, bInP); }
 
-inline const SwFmtFtnAtTxtEnd &SwFmt::GetFtnAtTxtEnd(sal_Bool bInP) const
+inline const SwFmtFtnAtTxtEnd &SwFmt::GetFtnAtTxtEnd(bool bInP) const
     { return aSet.GetFtnAtTxtEnd(bInP); }
-inline const SwFmtEndAtTxtEnd &SwFmt::GetEndAtTxtEnd(sal_Bool bInP) const
+inline const SwFmtEndAtTxtEnd &SwFmt::GetEndAtTxtEnd(bool bInP) const
     { return aSet.GetEndAtTxtEnd(bInP); }
 
 #endif

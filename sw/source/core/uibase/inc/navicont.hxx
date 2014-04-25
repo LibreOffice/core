@@ -46,7 +46,7 @@ public:
     const OUString& GetDescription() const      { return aDescr; }
     sal_uInt16      GetDefaultDragType() const  { return nDefDrag; }
     void            Copy( TransferDataContainer& rData ) const;
-    sal_Bool            Paste( TransferableDataHelper& rData );
+    bool            Paste( TransferableDataHelper& rData );
 };
 
 #endif

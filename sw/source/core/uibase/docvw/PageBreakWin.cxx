@@ -222,8 +222,8 @@ void SwPageBreakWin::Select( )
                 if ( pBodyFrm )
                 {
                     SwWrtShell& rSh = pEditWin->GetView().GetWrtShell();
-                    sal_Bool bOldLock = rSh.IsViewLocked();
-                    rSh.LockView( sal_True );
+                    bool bOldLock = rSh.IsViewLocked();
+                    rSh.LockView( true );
 
                     if ( pBodyFrm->Lower()->IsTabFrm() )
                     {
@@ -238,7 +238,7 @@ void SwPageBreakWin::Select( )
                         pEditWin->GetView().GetViewFrame()->GetDispatcher()->Execute(
                                 FN_FORMAT_TABLE_DLG, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aItem, NULL );
 
-                        rSh.Pop( sal_False );
+                        rSh.Pop( false );
                     }
                     else
                     {

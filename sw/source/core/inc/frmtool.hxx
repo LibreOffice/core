@@ -59,7 +59,7 @@ void DrawGraphic(
     const SwRect &rOrg,
     const SwRect &rOut,
     const sal_uInt8 nGrfNum = GRFNUM_NO,
-    const sal_Bool bConsiderBackgroundTransparency = sal_False );
+    const bool bConsiderBackgroundTransparency = false );
 bool DrawFillAttributes(
     const boost::shared_ptr< FillAttributes >& rFillAttributes,
     const SwRect& rOriginalLayoutRect,
@@ -101,7 +101,7 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
 
 // Get CntntNodes, create CntntFrms, and add them to LayFrm.
 void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc, sal_uLong nIndex,
-                 sal_Bool bPages = sal_False, sal_uLong nEndIndex = 0,
+                 bool bPages = false, sal_uLong nEndIndex = 0,
                  SwFrm *pPrv = 0 );
 
 // Creation of frames for a specific section (uses _InsertCnt)
@@ -119,7 +119,7 @@ long CalcRowRstHeight( SwLayoutFrm *pRow );
 long CalcHeightWidthFlys( const SwFrm *pFrm );
 
 SwPageFrm *InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
-                          bool bOdd, bool bFirst, bool bInsertEmpty, sal_Bool bFtn,
+                          bool bOdd, bool bFirst, bool bInsertEmpty, bool bFtn,
                           SwFrm *pSibling );
 
 // connect Flys with page
@@ -133,7 +133,7 @@ void Notify_Background( const SdrObject* pObj,
                         SwPageFrm* pPage,
                         const SwRect& rRect,
                         const PrepareHint eHint,
-                        const sal_Bool bInva );
+                        const bool bInva );
 
 const SwFrm* GetVirtualUpper( const SwFrm* pFrm, const Point& rPos );
 
@@ -152,7 +152,7 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout,
                        sal_uInt16 const nFrmType,
                        const Point* = 0,
                        const SwPosition *pPos = 0,
-                       const sal_Bool bCalcFrm = sal_False );
+                       const bool bCalcFrm = false );
 
 // Should extra data (reline stroke, line numbers) be painted?
 bool IsExtraData( const SwDoc *pDoc );
@@ -172,9 +172,9 @@ protected:
     const SwRect aPrt;
     SwTwips mnFlyAnchorOfst;
     SwTwips mnFlyAnchorOfstNoWrap;
-    sal_Bool     bHadFollow;
-    sal_Bool     bInvaKeep;
-    sal_Bool     bValidSize;
+    bool     bHadFollow;
+    bool     bInvaKeep;
+    bool     bValidSize;
     // #i49383#
     bool mbFrmDeleted;
 
@@ -184,7 +184,7 @@ public:
 
     const SwRect &Frm() const { return aFrm; }
     const SwRect &Prt() const { return aPrt; }
-    void SetInvaKeep() { bInvaKeep = sal_True; }
+    void SetInvaKeep() { bInvaKeep = true; }
     // #i49383#
     void FrmDeleted()
     {
@@ -194,7 +194,7 @@ public:
 
 class SwLayNotify : public SwFrmNotify
 {
-    sal_Bool bLowersComplete;
+    bool bLowersComplete;
 
     SwLayoutFrm *GetLay() { return (SwLayoutFrm*)pFrm; }
 
@@ -202,8 +202,8 @@ public:
     SwLayNotify( SwLayoutFrm *pLayFrm );
     ~SwLayNotify();
 
-    void SetLowersComplete( sal_Bool b ) { bLowersComplete = b; }
-    sal_Bool IsLowersComplete()          { return bLowersComplete; }
+    void SetLowersComplete( bool b ) { bLowersComplete = b; }
+    bool IsLowersComplete()          { return bLowersComplete; }
 };
 
 class SwFlyNotify : public SwLayNotify
@@ -264,31 +264,31 @@ class SwBorderAttrs : public SwCacheObj
     const Size            aFrmSize;
 
     // Is it a frame that can have a margin without a border?
-    sal_Bool bBorderDist  : 1;
+    bool bBorderDist  : 1;
 
     // the following bool values set the cached values to INVALID - until they
     // are calculated for the first time
-    sal_Bool bTopLine     : 1;
-    sal_Bool bBottomLine  : 1;
-    sal_Bool bLeftLine    : 1;
-    sal_Bool bRightLine   : 1;
-    sal_Bool bTop         : 1;
-    sal_Bool bBottom      : 1;
-    sal_Bool bLine        : 1;
+    bool bTopLine     : 1;
+    bool bBottomLine  : 1;
+    bool bLeftLine    : 1;
+    bool bRightLine   : 1;
+    bool bTop         : 1;
+    bool bBottom      : 1;
+    bool bLine        : 1;
 
-    sal_Bool bIsLine      : 1; // border on at least one side?
+    bool bIsLine      : 1; // border on at least one side?
 
-    sal_Bool bCacheGetLine        : 1; // cache GetTopLine(), GetBottomLine()?
-    sal_Bool bCachedGetTopLine    : 1; // is GetTopLine() cached?
-    sal_Bool bCachedGetBottomLine : 1; // is GetBottomLine() cached?
+    bool bCacheGetLine        : 1; // cache GetTopLine(), GetBottomLine()?
+    bool bCachedGetTopLine    : 1; // is GetTopLine() cached?
+    bool bCachedGetBottomLine : 1; // is GetBottomLine() cached?
     // Booleans indicate that <bJoinedWithPrev> and <bJoinedWithNext> are
     // cached and valid.
     // Caching depends on value of <bCacheGetLine>.
-    mutable sal_Bool bCachedJoinedWithPrev : 1;
-    mutable sal_Bool bCachedJoinedWithNext : 1;
+    mutable bool bCachedJoinedWithPrev : 1;
+    mutable bool bCachedJoinedWithNext : 1;
     // Booleans indicate that borders are joined with previous/next frame.
-    sal_Bool bJoinedWithPrev :1;
-    sal_Bool bJoinedWithNext :1;
+    bool bJoinedWithPrev :1;
+    bool bJoinedWithNext :1;
 
     // The cached values (un-defined until calculated for the first time)
     sal_uInt16 nTopLine,
@@ -326,11 +326,11 @@ class SwBorderAttrs : public SwCacheObj
     void _CalcJoinedWithNext( const SwFrm& _rFrm );
 
     // internal helper method for _CalcJoinedWithPrev and _CalcJoinedWithNext
-    sal_Bool _JoinWithCmp( const SwFrm& _rCallerFrm,
+    bool _JoinWithCmp( const SwFrm& _rCallerFrm,
                        const SwFrm& _rCmpFrm ) const;
 
     // Are the left and right line and the LRSpace equal?
-    sal_Bool CmpLeftRight( const SwBorderAttrs &rCmpAttrs,
+    bool CmpLeftRight( const SwBorderAttrs &rCmpAttrs,
                        const SwFrm *pCaller,
                        const SwFrm *pCmp ) const;
 
@@ -355,11 +355,11 @@ public:
            long CalcLeft( const SwFrm *pCaller ) const;
            long CalcRight( const SwFrm *pCaller ) const;
 
-    inline sal_Bool IsLine() const;
+    inline bool IsLine() const;
 
     inline const Size &GetSize()     const { return aFrmSize; }
 
-    inline sal_Bool IsBorderDist() const { return bBorderDist; }
+    inline bool IsBorderDist() const { return bBorderDist; }
 
     // Should upper (or lower) border be evaluated for this frame?
     // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
@@ -367,14 +367,14 @@ public:
     inline sal_uInt16 GetTopLine   ( const SwFrm& _rFrm,
                                  const SwFrm* _pPrevFrm = 0L ) const;
     inline sal_uInt16 GetBottomLine( const SwFrm& _rFrm ) const;
-    inline void   SetGetCacheLine( sal_Bool bNew ) const;
+    inline void   SetGetCacheLine( bool bNew ) const;
 
     // Accessors for cached values <bJoinedWithPrev> and <bJoinedWithPrev>
     // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
-    sal_Bool JoinedWithPrev( const SwFrm& _rFrm,
+    bool JoinedWithPrev( const SwFrm& _rFrm,
                          const SwFrm* _pPrevFrm = 0L ) const;
-    sal_Bool JoinedWithNext( const SwFrm& _rFrm ) const;
+    bool JoinedWithNext( const SwFrm& _rFrm ) const;
 };
 
 class SwBorderAttrAccess : public SwCacheAccess
@@ -397,10 +397,10 @@ class SwOrderIter
 {
     const SwPageFrm *pPage;
     const SdrObject *pCurrent;
-    const sal_Bool bFlysOnly;
+    const bool bFlysOnly;
 
 public:
-    SwOrderIter( const SwPageFrm *pPage, sal_Bool bFlysOnly = sal_True );
+    SwOrderIter( const SwPageFrm *pPage, bool bFlysOnly = true );
 
     void             Current( const SdrObject *pNew ) { pCurrent = pNew; }
     const SdrObject *Current()    const { return pCurrent; }
@@ -414,21 +414,21 @@ public:
 class StackHack
 {
     static sal_uInt8 nCnt;
-    static sal_Bool bLocked;
+    static bool bLocked;
 
 public:
     StackHack()
     {
         if ( ++StackHack::nCnt > 50 )
-            StackHack::bLocked = sal_True;
+            StackHack::bLocked = true;
     }
     ~StackHack()
     {
         if ( --StackHack::nCnt < 5 )
-            StackHack::bLocked = sal_False;
+            StackHack::bLocked = false;
     }
 
-    static sal_Bool IsLocked()  { return StackHack::bLocked; }
+    static bool IsLocked()  { return StackHack::bLocked; }
     static sal_uInt8 Count()        { return StackHack::nCnt; }
 };
 
@@ -450,14 +450,14 @@ inline sal_uInt16 SwBorderAttrs::GetBottomLine( const SwFrm& _rFrm ) const
         const_cast<SwBorderAttrs*>(this)->_GetBottomLine( _rFrm );
     return nGetBottomLine;
 }
-inline void SwBorderAttrs::SetGetCacheLine( sal_Bool bNew ) const
+inline void SwBorderAttrs::SetGetCacheLine( bool bNew ) const
 {
     ((SwBorderAttrs*)this)->bCacheGetLine = bNew;
     ((SwBorderAttrs*)this)->bCachedGetBottomLine =
-    ((SwBorderAttrs*)this)->bCachedGetTopLine = sal_False;
+    ((SwBorderAttrs*)this)->bCachedGetTopLine = false;
     // invalidate cache for values <bJoinedWithPrev> and <bJoinedWithNext>
-    bCachedJoinedWithPrev = sal_False;
-    bCachedJoinedWithNext = sal_False;
+    bCachedJoinedWithPrev = false;
+    bCachedJoinedWithNext = false;
 }
 
 inline sal_uInt16 SwBorderAttrs::CalcTopLine() const
@@ -496,7 +496,7 @@ inline sal_uInt16 SwBorderAttrs::CalcBottom() const
         ((SwBorderAttrs*)this)->_CalcBottom();
     return nBottom;
 }
-inline sal_Bool SwBorderAttrs::IsLine() const
+inline bool SwBorderAttrs::IsLine() const
 {
     if ( bLine )
         ((SwBorderAttrs*)this)->_IsLine();

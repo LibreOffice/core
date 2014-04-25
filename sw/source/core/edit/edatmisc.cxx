@@ -103,7 +103,7 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, sal_uInt16 nFlags )
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )     // Ring of Cursors
     {
-        sal_Bool bIsTblMode = IsTableMode();
+        bool bIsTblMode = IsTableMode();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
         FOREACHPAM_START(GetCrsr())
@@ -133,7 +133,7 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, sal_uInt16 nFlags, SwPaM* 
     StartAllAction();
     if( pCrsr->GetNext() != pCrsr )     // Ring of Cursors
     {
-        sal_Bool bIsTblMode = IsTableMode();
+        bool bIsTblMode = IsTableMode();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
         SwPaM* pTmpCrsr = pCrsr;

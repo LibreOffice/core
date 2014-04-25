@@ -184,7 +184,7 @@ private:
 public:
     bool AddRow( SwFrmFmt& rFrmFmt, const OUString& rNamePrefix, sal_uInt32 nLine );
     bool AddCell( SwFrmFmt& rFrmFmt, const OUString& rNamePrefix,
-                  sal_uInt32 nCol, sal_uInt32 nRow, sal_Bool bTop );
+                  sal_uInt32 nCol, sal_uInt32 nRow, bool bTop );
 };
 
 bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
@@ -291,7 +291,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
 
 void sw_GetTblBoxColStr( sal_uInt16 nCol, OUString& rNm );
 static OUString lcl_xmltble_appendBoxPrefix(const OUString& rNamePrefix,
-                                  sal_uInt32 nCol, sal_uInt32 nRow, sal_Bool bTop )
+                                  sal_uInt32 nCol, sal_uInt32 nRow, bool bTop )
 {
     if( bTop )
     {
@@ -306,7 +306,7 @@ static OUString lcl_xmltble_appendBoxPrefix(const OUString& rNamePrefix,
 
 bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
                                          const OUString& rNamePrefix,
-                                            sal_uInt32 nCol, sal_uInt32 nRow, sal_Bool bTop )
+                                            sal_uInt32 nCol, sal_uInt32 nRow, bool bTop )
 {
     const SwFmtVertOrient *pVertOrient = 0;
     const SvxBrushItem *pBrush = 0;
@@ -537,7 +537,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                                     SwXMLTableFrmFmtsSort_Impl& rExpRows,
                                     SwXMLTableFrmFmtsSort_Impl& rExpCells,
                                     SwXMLTableInfo_Impl& rTblInfo,
-                                    sal_Bool bTop )
+                                    bool bTop )
 {
     // pass 1: calculate columns
     SwXMLTableLines_Impl *pLines = new SwXMLTableLines_Impl( rLines );
@@ -709,7 +709,7 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
         if( bFixAbsWidth )
         {
             nBaseWidth = nAbsWidth;
-            nAbsWidth = pTblFmt->FindLayoutRect(sal_True).Width();
+            nAbsWidth = pTblFmt->FindLayoutRect(true).Width();
             if( !nAbsWidth )
             {
                 // TODO?
@@ -723,7 +723,7 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
         SwXMLTableInfo_Impl aTblInfo( &rTbl );
         ExportTableLinesAutoStyles( rTbl.GetTabLines(), nAbsWidth, nBaseWidth,
                                     pTblFmt->GetName(), aExpCols, aExpRows, aExpCells,
-                                    aTblInfo, sal_True);
+                                    aTblInfo, true);
     }
 }
 
@@ -1114,7 +1114,7 @@ void SwXMLTextParagraphExport::exportTable(
         const Reference < XTextContent > & rTextContent,
         bool bAutoStyles, bool _bProgress )
 {
-    sal_Bool bOldShowProgress = ((SwXMLExport&)GetExport()).IsShowProgress();
+    bool bOldShowProgress = ((SwXMLExport&)GetExport()).IsShowProgress();
     ((SwXMLExport&)GetExport()).SetShowProgress( _bProgress );
 
     Reference < XTextTable > xTxtTbl( rTextContent, UNO_QUERY );

@@ -32,7 +32,7 @@ class SwAttrSetChg;
 class SwTxtFrm;
 
 // implemented in cntfrm.cxx, used in cntfrm.cxx and crsrsh.cxx
-extern sal_Bool GetFrmInPage( const SwCntntFrm*, SwWhichPage, SwPosPage, SwPaM* );
+extern bool GetFrmInPage( const SwCntntFrm*, SwWhichPage, SwPosPage, SwPaM* );
 
 class SwCntntFrm: public SwFrm, public SwFlowFrm
 {
@@ -40,9 +40,9 @@ class SwCntntFrm: public SwFrm, public SwFlowFrm
 
     // parameter <bObjsInNewUpper>  indicates that objects exist in remaining
     // area of new upper
-    sal_Bool _WouldFit( SwTwips nSpace,
+    bool _WouldFit( SwTwips nSpace,
                     SwLayoutFrm *pNewUpper,
-                    sal_Bool bTstMove,
+                    bool bTstMove,
                     const bool bObjsInNewUpper );
 
     virtual void MakeAll() SAL_OVERRIDE;
@@ -55,11 +55,11 @@ class SwCntntFrm: public SwFrm, public SwFlowFrm
     const SwCntntFrm* ImplGetNextCntntFrm( bool bFwd ) const;
 
 protected:
-    sal_Bool MakePrtArea( const SwBorderAttrs & );
+    bool MakePrtArea( const SwBorderAttrs & );
 
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
+    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
 
     SwCntntFrm( SwCntntNode * const, SwFrm* );
 
@@ -87,19 +87,19 @@ public:
                          bool bSetInReadOnly = false ) const;
     virtual bool UnitDown( SwPaM *, const SwTwips nOffset = 0,
                            bool bSetInReadOnly = false ) const;
-    inline  sal_Bool StartNextPage( SwPaM * ) const;
-    inline  sal_Bool StartPrevPage( SwPaM * ) const;
-    inline  sal_Bool StartCurrPage( SwPaM * ) const;
-    inline  sal_Bool EndCurrPage( SwPaM * ) const;
-    inline  sal_Bool EndNextPage( SwPaM * ) const;
-    inline  sal_Bool EndPrevPage( SwPaM * ) const;
+    inline  bool StartNextPage( SwPaM * ) const;
+    inline  bool StartPrevPage( SwPaM * ) const;
+    inline  bool StartCurrPage( SwPaM * ) const;
+    inline  bool EndCurrPage( SwPaM * ) const;
+    inline  bool EndNextPage( SwPaM * ) const;
+    inline  bool EndPrevPage( SwPaM * ) const;
 
     // nMaxHeight is the required height
     // bSplit indicates that the paragraph has to be split
     // bTst indicates that we are currently doing a test formatting
     virtual bool WouldFit( SwTwips &nMaxHeight, bool &bSplit, bool bTst );
 
-    sal_Bool MoveFtnCntFwd( sal_Bool, SwFtnBossFrm* ); // called by MoveFwd if content
+    bool MoveFtnCntFwd( bool, SwFtnBossFrm* ); // called by MoveFwd if content
 
     inline  SwCntntFrm* GetNextCntntFrm() const;
     inline  SwCntntFrm* GetPrevCntntFrm() const;

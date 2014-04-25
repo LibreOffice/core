@@ -64,19 +64,19 @@ class SwDrawTextInfo
     long nKern;
     sal_Int32 nNumberOfBlanks;
     sal_uInt8 nCursorBidiLevel;
-    sal_Bool bBullet : 1;
-    sal_Bool bUpper : 1;        // for small caps: upper case flag
-    sal_Bool bDrawSpace : 1;    // for small caps: underline/ line through
-    sal_Bool bGreyWave  : 1;    // grey wave line for extended text input
+    bool bBullet : 1;
+    bool bUpper : 1;        // for small caps: upper case flag
+    bool bDrawSpace : 1;    // for small caps: underline/ line through
+    bool bGreyWave  : 1;    // grey wave line for extended text input
     // For underlining we need to know, if a section is right in front of a
     // whole block or a fix margin section.
-    sal_Bool bSpaceStop : 1;
-    sal_Bool bSnapToGrid : 1;   // Does paragraph snap to grid?
+    bool bSpaceStop : 1;
+    bool bSnapToGrid : 1;   // Does paragraph snap to grid?
     // Paint text as if text has LTR direction, used for line numbering
-    sal_Bool bIgnoreFrmRTL : 1;
+    bool bIgnoreFrmRTL : 1;
     // GetCrsrOfst should not return the next position if screen position is
     // inside second half of bound rect, used for Accessibility
-    sal_Bool bPosMatchesBounds :1;
+    bool bPosMatchesBounds :1;
 
     SwDrawTextInfo();          // prohibited
 public:
@@ -104,7 +104,7 @@ public:
 
     SwDrawTextInfo( SwViewShell *pS, OutputDevice &rO, const SwScriptInfo* pSI,
                     const OUString &rSt, sal_Int32 nI, sal_Int32 nL,
-                    sal_uInt16 nW = 0, sal_Bool bB = sal_False )
+                    sal_uInt16 nW = 0, bool bB = false )
     {
         pFrm = NULL;
         pSh = pS;
@@ -120,11 +120,11 @@ public:
         nCursorBidiLevel = 0;
         bBullet = bB;
         pUnderFnt = 0;
-        bGreyWave = sal_False;
-        bSpaceStop = sal_False;
-        bSnapToGrid = sal_False;
-        bIgnoreFrmRTL = sal_False;
-        bPosMatchesBounds = sal_False;
+        bGreyWave = false;
+        bSpaceStop = false;
+        bSnapToGrid = false;
+        bIgnoreFrmRTL = false;
+        bPosMatchesBounds = false;
 
         // These values are initialized but have to be set explicitly via their
         // Set-function before they may be accessed by their Get-function:
@@ -140,8 +140,8 @@ public:
         nAscent = 0;
         nSperren = 0;
         nSpace = 0;
-        bUpper = sal_False;
-        bDrawSpace = sal_False;
+        bUpper = false;
+        bDrawSpace = false;
 
 #ifdef DBG_UTIL
         // these flags control whether the matching member variables have been
@@ -346,12 +346,12 @@ public:
         return nCursorBidiLevel;
     }
 
-    sal_Bool GetBullet() const
+    bool GetBullet() const
     {
         return bBullet;
     }
 
-    sal_Bool GetUpper() const
+    bool GetUpper() const
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bUppr, "DrawTextInfo: Undefined Upperflag" );
@@ -359,7 +359,7 @@ public:
         return bUpper;
     }
 
-    sal_Bool GetDrawSpace() const
+    bool GetDrawSpace() const
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bDrawSp, "DrawTextInfo: Undefined DrawSpaceflag" );
@@ -367,27 +367,27 @@ public:
         return bDrawSpace;
     }
 
-    sal_Bool GetGreyWave() const
+    bool GetGreyWave() const
     {
         return bGreyWave;
     }
 
-    sal_Bool IsSpaceStop() const
+    bool IsSpaceStop() const
     {
         return bSpaceStop;
     }
 
-    sal_Bool SnapToGrid() const
+    bool SnapToGrid() const
     {
         return bSnapToGrid;
     }
 
-    sal_Bool IsIgnoreFrmRTL() const
+    bool IsIgnoreFrmRTL() const
     {
         return bIgnoreFrmRTL;
     }
 
-    sal_Bool IsPosMatchesBounds() const
+    bool IsPosMatchesBounds() const
     {
         return bPosMatchesBounds;
     }
@@ -551,7 +551,7 @@ public:
         nCompress = nNew;
     }
 
-    void SetBullet( sal_Bool bNew )
+    void SetBullet( bool bNew )
     {
         bBullet = bNew;
     }
@@ -561,7 +561,7 @@ public:
         pUnderFnt = pULFnt;
     }
 
-    void SetUpper( sal_Bool bNew )
+    void SetUpper( bool bNew )
     {
         bUpper = bNew;
 #ifdef DBG_UTIL
@@ -569,7 +569,7 @@ public:
 #endif
     }
 
-    void SetDrawSpace( sal_Bool bNew )
+    void SetDrawSpace( bool bNew )
     {
         bDrawSpace = bNew;
 #ifdef DBG_UTIL
@@ -577,27 +577,27 @@ public:
 #endif
     }
 
-    void SetGreyWave( sal_Bool bNew )
+    void SetGreyWave( bool bNew )
     {
         bGreyWave = bNew;
     }
 
-    void SetSpaceStop( sal_Bool bNew )
+    void SetSpaceStop( bool bNew )
     {
         bSpaceStop = bNew;
     }
 
-    void SetSnapToGrid( sal_Bool bNew )
+    void SetSnapToGrid( bool bNew )
     {
         bSnapToGrid = bNew;
     }
 
-    void SetIgnoreFrmRTL( sal_Bool bNew )
+    void SetIgnoreFrmRTL( bool bNew )
     {
         bIgnoreFrmRTL = bNew;
     }
 
-    void SetPosMatchesBounds( sal_Bool bNew )
+    void SetPosMatchesBounds( bool bNew )
     {
         bPosMatchesBounds = bNew;
     }
@@ -607,7 +607,7 @@ public:
     // sets a new color at the output device if necessary if a font is passed
     // as argument, the change if made to the font otherwise the font at the
     // output device is changed returns if the font has been changed
-    sal_Bool ApplyAutoColor( Font* pFnt = 0 );
+    bool ApplyAutoColor( Font* pFnt = 0 );
 };
 
 #endif

@@ -83,8 +83,8 @@ class SW_DLLPUBLIC SwOneExampleFrame
 
     sal_uInt32          nStyleFlags;
 
-    sal_Bool            bIsInitialized;
-    sal_Bool            bServiceAvailable;
+    bool            bIsInitialized;
+    bool            bServiceAvailable;
 
     static  bool    bShowServiceNotAvailableMessage;
 
@@ -106,10 +106,10 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &  GetController() {return _xController;}
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > &   GetTextCursor() {return _xCursor;}
 
-    void ClearDocument( sal_Bool bStartTimer = sal_False );
+    void ClearDocument( bool bStartTimer = false );
 
-    sal_Bool IsInitialized() const {return bIsInitialized;}
-    sal_Bool IsServiceAvailable() const {return bServiceAvailable;}
+    bool IsInitialized() const {return bIsInitialized;}
+    bool IsServiceAvailable() const {return bServiceAvailable;}
 
     void CreatePopup(const Point& rPt);
 

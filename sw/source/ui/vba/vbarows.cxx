@@ -127,12 +127,12 @@ void SAL_CALL SwVbaRows::setAlignment( ::sal_Int32 _alignment ) throw (uno::Runt
 
 uno::Any SAL_CALL SwVbaRows::getAllowBreakAcrossPages() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bAllowBreak = sal_False;
+    bool bAllowBreak = false;
     uno::Reference< container::XIndexAccess > xRowsAccess( mxTableRows, uno::UNO_QUERY_THROW );
     for( sal_Int32 index = mnStartRowIndex; index <= mnEndRowIndex; ++index )
     {
         uno::Reference< beans::XPropertySet > xRowProps( xRowsAccess->getByIndex( index ), uno::UNO_QUERY_THROW );
-        sal_Bool bSplit = sal_False;
+        bool bSplit = false;
         xRowProps->getPropertyValue("IsSplitAllowed") >>= bSplit;
         if( index == 0 )
         {
@@ -149,7 +149,7 @@ uno::Any SAL_CALL SwVbaRows::getAllowBreakAcrossPages() throw (uno::RuntimeExcep
 
 void SAL_CALL SwVbaRows::setAllowBreakAcrossPages( const uno::Any& _allowbreakacrosspages ) throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bAllowBreak = sal_False;
+    bool bAllowBreak = false;
     _allowbreakacrosspages >>= bAllowBreak;
     uno::Reference< container::XIndexAccess > xRowsAccess( mxTableRows, uno::UNO_QUERY_THROW );
     for( sal_Int32 index = mnStartRowIndex; index <= mnEndRowIndex; ++index )

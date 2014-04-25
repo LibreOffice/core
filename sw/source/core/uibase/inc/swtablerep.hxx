@@ -37,15 +37,15 @@ class SW_DLLPUBLIC SwTableRep
     sal_uInt16      nColCount;
     sal_uInt16      nAllCols;
     sal_uInt16      nWidthPercent;
-    sal_Bool        bLineSelected : 1;
-    sal_Bool        bWidthChanged : 1;
-    sal_Bool        bColsChanged : 1;
+    bool        bLineSelected : 1;
+    bool        bWidthChanged : 1;
+    bool        bColsChanged : 1;
 
 public:
     SwTableRep( const SwTabCols& rTabCol );
     ~SwTableRep();
 
-    sal_Bool        FillTabCols( SwTabCols& rTabCol ) const;
+    bool        FillTabCols( SwTabCols& rTabCol ) const;
 
     SwTwips     GetLeftSpace() const            {return nLeftSpace;}
     void        SetLeftSpace(SwTwips nSet)      {nLeftSpace = nSet;}
@@ -65,14 +65,14 @@ public:
     sal_uInt16      GetColCount() const             {return nColCount;}
     sal_uInt16      GetAllColCount() const          {return nAllCols;}
 
-    sal_Bool        HasColsChanged() const          {return bColsChanged;}
-    void        SetColsChanged()                {bColsChanged = sal_True;}
+    bool        HasColsChanged() const          {return bColsChanged;}
+    void        SetColsChanged()                {bColsChanged = true;}
 
-    sal_Bool        HasWidthChanged() const         {return bWidthChanged;}
-    void        SetWidthChanged()               {bWidthChanged  = sal_True;}
+    bool        HasWidthChanged() const         {return bWidthChanged;}
+    void        SetWidthChanged()               {bWidthChanged  = true;}
 
-    sal_Bool        IsLineSelected() const          {return bLineSelected;}
-    void        SetLineSelected(sal_Bool bSet)      {bLineSelected = bSet;}
+    bool        IsLineSelected() const          {return bLineSelected;}
+    void        SetLineSelected(bool bSet)      {bLineSelected = bSet;}
 
     SwTwips     GetSpace() const                { return nSpace;}
     void        SetSpace(SwTwips nSet)          {nSpace = nSet;}

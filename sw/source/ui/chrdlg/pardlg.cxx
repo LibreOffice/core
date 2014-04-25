@@ -49,7 +49,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
                     const SfxItemSet& rCoreSet,
                     sal_uInt8 nDialogMode,
                     const OUString *pTitle,
-                    sal_Bool bDraw,
+                    bool bDraw,
                     const OString& sDefPage)
     : SfxTabDialog(pParent,
                  "ParagraphPropertiesDialog",
@@ -67,7 +67,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
     , m_nParaBorder(0)
 {
     nHtmlMode = ::GetHtmlMode(rVw.GetDocShell());
-    sal_Bool bHtmlMode = static_cast< sal_Bool >(nHtmlMode & HTMLMODE_ON);
+    bool bHtmlMode = (nHtmlMode & HTMLMODE_ON) == HTMLMODE_ON;
     if(pTitle)
     {
         // Update title
@@ -197,7 +197,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     else if( m_nParaExt == nId )
     {
         // pagebreak only when the cursor is in the body-area and not in a table
-        const sal_uInt16 eType = rSh.GetFrmType(0,sal_True);
+        const sal_uInt16 eType = rSh.GetFrmType(0,true);
         if( !(FRMTYPE_BODY & eType) ||
             rSh.GetSelectionType() & nsSelectionType::SEL_TBL )
         {
@@ -207,7 +207,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     }
     else if( m_nParaDrpCps == nId )
     {
-        ((SwDropCapsPage&)rPage).SetFormat(sal_False);
+        ((SwDropCapsPage&)rPage).SetFormat(false);
     }
     else if( m_nParaBckGrnd == nId )
     {

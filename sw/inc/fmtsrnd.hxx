@@ -30,9 +30,9 @@ class IntlWrapper;
 // SwFmtSurround: How document content under the frame shall behave.
 class SW_DLLPUBLIC SwFmtSurround: public SfxEnumItem
 {
-    sal_Bool    bAnchorOnly :1;
-    sal_Bool    bContour    :1;
-    sal_Bool    bOutside    :1;
+    bool    bAnchorOnly :1;
+    bool    bContour    :1;
+    bool    bOutside    :1;
 public:
     SwFmtSurround( SwSurround eNew = SURROUND_PARALLEL );
     SwFmtSurround( const SwFmtSurround & );
@@ -51,13 +51,13 @@ public:
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     SwSurround GetSurround()const { return SwSurround( GetValue() ); }
-    sal_Bool    IsAnchorOnly()  const { return bAnchorOnly; }
-    sal_Bool    IsContour()     const { return bContour; }
-    sal_Bool    IsOutside()     const { return bOutside; }
+    bool    IsAnchorOnly()  const { return bAnchorOnly; }
+    bool    IsContour()     const { return bContour; }
+    bool    IsOutside()     const { return bOutside; }
     void    SetSurround  ( SwSurround eNew ){ SfxEnumItem::SetValue( sal_uInt16( eNew ) ); }
-    void    SetAnchorOnly( sal_Bool bNew )      { bAnchorOnly = bNew; }
-    void    SetContour( sal_Bool bNew )         { bContour = bNew; }
-    void    SetOutside( sal_Bool bNew )         { bOutside = bNew; }
+    void    SetAnchorOnly( bool bNew )      { bAnchorOnly = bNew; }
+    void    SetContour( bool bNew )         { bContour = bNew; }
+    void    SetOutside( bool bNew )         { bOutside = bNew; }
 };
 
 inline SwFmtSurround &SwFmtSurround::operator=( const SwFmtSurround &rCpy )
@@ -69,10 +69,10 @@ inline SwFmtSurround &SwFmtSurround::operator=( const SwFmtSurround &rCpy )
     return *this;
 }
 
-inline const SwFmtSurround &SwAttrSet::GetSurround(sal_Bool bInP) const
+inline const SwFmtSurround &SwAttrSet::GetSurround(bool bInP) const
     { return (const SwFmtSurround&)Get( RES_SURROUND,bInP); }
 
-inline const SwFmtSurround &SwFmt::GetSurround(sal_Bool bInP) const
+inline const SwFmtSurround &SwFmt::GetSurround(bool bInP) const
     { return aSet.GetSurround(bInP); }
 
 #endif

@@ -31,7 +31,7 @@
 
 // sort input values
 
-SwInputFieldList::SwInputFieldList( SwEditShell* pShell, sal_Bool bBuildTmpLst )
+SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
     : pSh(pShell)
 {
     // create sorted list of all  input fields
@@ -105,7 +105,7 @@ void SwInputFieldList::PushCrsr()
 /// get cursor
 void SwInputFieldList::PopCrsr()
 {
-    pSh->Pop(sal_False);
+    pSh->Pop(false);
 }
 
 /// go to position of a field

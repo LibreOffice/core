@@ -86,7 +86,7 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
     {
         const SfxItemSet*   pArgs = rReq.GetArgs();
         sal_uInt16              nSlotId = rReq.GetSlot();
-        sal_Bool                bChanged = pSdrView->GetModel()->IsChanged();
+        bool                bChanged = pSdrView->GetModel()->IsChanged();
 
         pSdrView->GetModel()->SetChanged( false );
 

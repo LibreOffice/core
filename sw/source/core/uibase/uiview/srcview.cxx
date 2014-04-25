@@ -218,7 +218,7 @@ SwSrcView::SwSrcView(SfxViewFrame* pViewFrame, SfxViewShell*) :
     SfxViewShell( pViewFrame, SWSRCVIEWFLAGS ),
     aEditWin( &pViewFrame->GetWindow(), this ),
     pSearchItem(0),
-    bSourceSaved(sal_False),
+    bSourceSaved(false),
     eLoadEncoding(RTL_TEXTENCODING_DONTKNOW)
 {
     Init();
@@ -262,7 +262,7 @@ void SwSrcView::Init()
         Load(pDocShell);
     else
     {
-        aEditWin.SetReadonly(sal_True);
+        aEditWin.SetReadonly(true);
     }
 
     SetNewWindowAllowed( false );
@@ -367,7 +367,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             OSL_ENSURE( nWhich, "Which for SearchItem ?" );
             const SfxPoolItem& rItem = pTmpArgs->Get( nWhich );
             SetSearchItem( (const SvxSearchItem&)rItem);
-            StartSearchAndReplace( (const SvxSearchItem&)rItem, sal_False, rReq.IsAPI() );
+            StartSearchAndReplace( (const SvxSearchItem&)rItem, false, rReq.IsAPI() );
             if(aEditWin.IsModified())
                 GetDocShell()->GetDoc()->SetModified();
         }
@@ -377,7 +377,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             SvxSearchItem* pSrchItem = GetSearchItem();
             if(pSrchItem)
             {
-                StartSearchAndReplace( *pSrchItem, sal_False, rReq.IsAPI() );
+                StartSearchAndReplace( *pSrchItem, false, rReq.IsAPI() );
                 if(aEditWin.IsModified())
                     GetDocShell()->GetDoc()->SetModified();
             }
@@ -565,15 +565,15 @@ void SwSrcView::SetSearchItem( const SvxSearchItem& rItem )
 }
 
 sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
-                                                    sal_Bool bFromStart,
-                                                    sal_Bool bApi,
-                                                    sal_Bool bRecursive)
+                                                  bool bFromStart,
+                                                  bool bApi,
+                                                  bool bRecursive)
 {
     ExtTextView* pTextView = aEditWin.GetTextView();
     TextSelection aSel;
     TextPaM aPaM;
 
-    sal_Bool bForward = !rSearchItem.GetBackward();
+    bool bForward = !rSearchItem.GetBackward();
     bool bAtStart = pTextView->GetSelection() == TextSelection( aPaM, aPaM );
 
     if( !bForward )
@@ -589,7 +589,7 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     aSearchOpt.Locale = GetAppLanguageTag().getLocale();
 
     sal_uInt16 nFound;
-    sal_Bool bAll = sal_False;
+    bool bAll = false;
     switch( rSearchItem.GetCommand() )
     {
     case SVX_SEARCHCMD_FIND:
@@ -597,7 +597,7 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
         nFound = pTextView->Search( aSearchOpt, bForward ) ? 1 : 0;
         break;
 
-    case SVX_SEARCHCMD_REPLACE_ALL: bAll = sal_True;
+    case SVX_SEARCHCMD_REPLACE_ALL: bAll = true;
     case SVX_SEARCHCMD_REPLACE:
         nFound = pTextView->Replace( aSearchOpt, bAll, bForward );
         break;
@@ -651,7 +651,7 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
                 if (nRet == RET_YES)
                 {
                     pTextView->SetSelection( TextSelection( aPaM, aPaM ) );
-                    StartSearchAndReplace( rSearchItem, sal_False, sal_False, sal_True );
+                    StartSearchAndReplace( rSearchItem, false, false, true );
                 }
             }
         }
@@ -669,7 +669,7 @@ sal_uInt16 SwSrcView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, bool )
             pDocSh->SetModified();
     }
     if ( nDiffFlags & SFX_PRINTER_OPTIONS )
-        ::SetPrinter( pDocSh->getIDocumentDeviceAccess(), pNew, sal_True );
+        ::SetPrinter( pDocSh->getIDocumentDeviceAccess(), pNew, true );
 
     const bool bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION;
     const bool bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE;
@@ -777,7 +777,7 @@ void SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         // Broadcast only comes once!
         const SwDocShell* pDocSh = GetDocShell();
-        const sal_Bool bReadonly = pDocSh->IsReadOnly();
+        const bool bReadonly = pDocSh->IsReadOnly();
         aEditWin.SetReadonly(bReadonly);
     }
     SfxViewShell::Notify(rBC, rHint);
@@ -796,7 +796,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
 
     const SfxFilter* pFilter = pMedium->GetFilter();
     bool bHtml = pFilter && pFilter->GetUserData() == "HTML";
-    sal_Bool bDocModified = pDocShell->IsModified();
+    bool bDocModified = pDocShell->IsModified();
     if(bHtml && !bDocModified && pDocShell->HasName())
     {
         SvStream* pStream = pMedium->GetInStream();
@@ -849,7 +849,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
             if(nRes)
             {
                 ErrorHandler::HandleError(ErrCode(nRes));
-                aEditWin.SetReadonly(sal_True);
+                aEditWin.SetReadonly(true);
             }
             aMedium.Commit();
             SvStream* pInStream = aMedium.GetInStream();

@@ -24,15 +24,15 @@
 
 //     Description: ListboxElement
 SwBoxEntry::SwBoxEntry() :
-    bModified(sal_False),
-    bNew(sal_False),
+    bModified(false),
+    bNew(false),
     nId(COMBOBOX_APPEND)
 {
 }
 
 SwBoxEntry::SwBoxEntry(const OUString& aNam, sal_Int32 nIdx) :
-    bModified(sal_False),
-    bNew(sal_False),
+    bModified(false),
+    bNew(false),
     aName(aNam),
     nId(nIdx)
 {

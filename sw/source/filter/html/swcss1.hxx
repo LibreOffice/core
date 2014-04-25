@@ -43,42 +43,42 @@ class SwCSS1Parser : public SvxCSS1Parser
 
     sal_uInt16 nDropCapCnt;
 
-    sal_Bool bIsNewDoc : 1;
+    bool bIsNewDoc : 1;
 
-    sal_Bool bBodyBGColorSet : 1;
-    sal_Bool bBodyBackgroundSet : 1;
-    sal_Bool bBodyTextSet : 1;
-    sal_Bool bBodyLinkSet : 1;
-    sal_Bool bBodyVLinkSet : 1;
+    bool bBodyBGColorSet : 1;
+    bool bBodyBackgroundSet : 1;
+    bool bBodyTextSet : 1;
+    bool bBodyLinkSet : 1;
+    bool bBodyVLinkSet : 1;
 
-    sal_Bool bSetFirstPageDesc : 1;
-    sal_Bool bSetRightPageDesc : 1;
+    bool bSetFirstPageDesc : 1;
+    bool bSetRightPageDesc : 1;
 
-    sal_Bool bTableHeaderTxtCollSet : 1;
-    sal_Bool bTableTxtCollSet : 1;
+    bool bTableHeaderTxtCollSet : 1;
+    bool bTableTxtCollSet : 1;
 
-    sal_Bool bLinkCharFmtsSet : 1;
+    bool bLinkCharFmtsSet : 1;
 
     // die Vorlagen fuer DL anlegen
     SwTxtFmtColl* GetDefListTxtFmtColl( sal_uInt16 nCollId, sal_uInt16 nDeep );
 
-    const SwPageDesc* GetPageDesc( sal_uInt16 nPoolId, sal_Bool bCreate );
+    const SwPageDesc* GetPageDesc( sal_uInt16 nPoolId, bool bCreate );
 
-    void SetTableTxtColl( sal_Bool bHeader );
+    void SetTableTxtColl( bool bHeader );
     void SetLinkCharFmts();
 
 protected:
-    virtual sal_Bool StyleParsed( const CSS1Selector *pSelector,
+    virtual bool StyleParsed( const CSS1Selector *pSelector,
                               SfxItemSet& rItemSet,
                               SvxCSS1PropertyInfo& rPropInfo ) SAL_OVERRIDE;
 
     using CSS1Parser::ParseStyleSheet;
 
 public:
-    SwCSS1Parser( SwDoc *pDoc, sal_uInt32 aFHeight[7], const OUString& rBaseURL, sal_Bool bNewDoc );
+    SwCSS1Parser( SwDoc *pDoc, sal_uInt32 aFHeight[7], const OUString& rBaseURL, bool bNewDoc );
     virtual ~SwCSS1Parser();
 
-    virtual sal_Bool ParseStyleSheet( const OUString& rIn ) SAL_OVERRIDE;
+    virtual bool ParseStyleSheet( const OUString& rIn ) SAL_OVERRIDE;
 
     // Die Font-Hoehe fuer eine bestimmte Font-Groesse (0-6) ermitteln
     virtual sal_uInt32 GetFontHeight( sal_uInt16 nSize ) const SAL_OVERRIDE;
@@ -104,9 +104,9 @@ public:
     // eine Benutzter-Vorlage, die on-demand angelegt wird, wenn
     // bCreate gesetzt ist.
     SwPageDesc* GetMasterPageDesc();
-    inline const SwPageDesc* GetFirstPageDesc( sal_Bool bCreate=sal_False );
-    inline const SwPageDesc* GetRightPageDesc( sal_Bool bCreate=sal_False );
-    inline const SwPageDesc* GetLeftPageDesc( sal_Bool bCreate=sal_False );
+    inline const SwPageDesc* GetFirstPageDesc( bool bCreate=false );
+    inline const SwPageDesc* GetRightPageDesc( bool bCreate=false );
+    inline const SwPageDesc* GetLeftPageDesc( bool bCreate=false );
 
     // Attribute an der HTML-Seitenvorlage setzen (gesetzte Attribute
     // werden aus dem Item-Set geloescht ). Wird fuer's BODY-Tag
@@ -125,33 +125,33 @@ public:
     void FillDropCap( SwFmtDrop& rDrop, SfxItemSet& rItemSet,
                       const OUString *pName=0 );
 
-    sal_Bool SetFmtBreak( SfxItemSet& rItemSet,
+    bool SetFmtBreak( SfxItemSet& rItemSet,
                       const SvxCSS1PropertyInfo& rPropInfo );
 
     static void AddClassName( OUString& rFmtName, const OUString& rClass );
 
     static inline void AddFirstLetterExt( OUString& rFmtName );
 
-    static sal_Bool MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
-                                 sal_Bool bAutoWidth=sal_False );
+    static bool MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
+                                 bool bAutoWidth=false );
 
     static sal_uInt16 GetScriptFromClass( OUString& rClass,
-                                      sal_Bool bSubClassOnly = sal_True );
+                                      bool bSubClassOnly = true );
 
-    sal_Bool IsBodyBGColorSet() const { return bBodyBGColorSet; }
-    sal_Bool IsBodyBackgroundSet() const { return bBodyBackgroundSet; }
-    sal_Bool IsBodyTextSet() const { return bBodyTextSet; }
-    sal_Bool IsBodyLinkSet() const { return bBodyLinkSet; }
-    sal_Bool IsBodyVLinkSet() const { return bBodyVLinkSet; }
+    bool IsBodyBGColorSet() const { return bBodyBGColorSet; }
+    bool IsBodyBackgroundSet() const { return bBodyBackgroundSet; }
+    bool IsBodyTextSet() const { return bBodyTextSet; }
+    bool IsBodyLinkSet() const { return bBodyLinkSet; }
+    bool IsBodyVLinkSet() const { return bBodyVLinkSet; }
 
-    sal_Bool IsSetFirstPageDesc() const { return bSetFirstPageDesc; }
-    sal_Bool IsSetRightPageDesc() const { return bSetRightPageDesc; }
+    bool IsSetFirstPageDesc() const { return bSetFirstPageDesc; }
+    bool IsSetRightPageDesc() const { return bSetRightPageDesc; }
 
-    void SetBodyBGColorSet() { bBodyBGColorSet = sal_True; }
-    void SetBodyBackgroundSet() { bBodyBackgroundSet = sal_True; }
-    void SetBodyTextSet() { bBodyTextSet = sal_True; }
-    void SetBodyLinkSet() { bBodyLinkSet = sal_True; }
-    void SetBodyVLinkSet() { bBodyVLinkSet = sal_True; }
+    void SetBodyBGColorSet() { bBodyBGColorSet = true; }
+    void SetBodyBackgroundSet() { bBodyBackgroundSet = true; }
+    void SetBodyTextSet() { bBodyTextSet = true; }
+    void SetBodyLinkSet() { bBodyLinkSet = true; }
+    void SetBodyVLinkSet() { bBodyVLinkSet = true; }
 
     const SvxBrushItem& GetPageDescBackground() const;
 
@@ -168,17 +168,17 @@ inline void SwCSS1Parser::AddFirstLetterExt( OUString& rFmtName )
     rFmtName += ".FL";   // first letter
 }
 
-inline const SwPageDesc* SwCSS1Parser::GetFirstPageDesc( sal_Bool bCreate )
+inline const SwPageDesc* SwCSS1Parser::GetFirstPageDesc( bool bCreate )
 {
     return GetPageDesc( RES_POOLPAGE_FIRST, bCreate );
 }
 
-inline const SwPageDesc* SwCSS1Parser::GetRightPageDesc( sal_Bool bCreate )
+inline const SwPageDesc* SwCSS1Parser::GetRightPageDesc( bool bCreate )
 {
     return GetPageDesc( RES_POOLPAGE_RIGHT, bCreate );
 }
 
-inline const SwPageDesc* SwCSS1Parser::GetLeftPageDesc( sal_Bool bCreate )
+inline const SwPageDesc* SwCSS1Parser::GetLeftPageDesc( bool bCreate )
 {
     return GetPageDesc( RES_POOLPAGE_LEFT, bCreate );
 }
@@ -186,13 +186,13 @@ inline const SwPageDesc* SwCSS1Parser::GetLeftPageDesc( sal_Bool bCreate )
 inline void SwCSS1Parser::SetTHTagStyles()
 {
     if( !bTableHeaderTxtCollSet )
-        SetTableTxtColl( sal_True );
+        SetTableTxtColl( true );
 }
 
 inline void SwCSS1Parser::SetTDTagStyles()
 {
     if( !bTableTxtCollSet )
-        SetTableTxtColl( sal_False );
+        SetTableTxtColl( false );
 }
 
 inline void SwCSS1Parser::SetATagStyles()

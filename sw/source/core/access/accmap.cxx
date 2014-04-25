@@ -316,7 +316,7 @@ private:
 
 public:
     const SwFrm* mpParentFrm;   // The object that fires the event
-    sal_Bool IsNoXaccParentFrm() const
+    bool IsNoXaccParentFrm() const
     {
         return CHILD_POS_CHANGED == meType && mpParentFrm != 0;
     }
@@ -1075,7 +1075,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     const SwViewShell *pVSh = GetShell();
     const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
                             static_cast< const SwFEShell * >( pVSh ) : 0;
-    SwPaM* pCrsr = pFESh ? pFESh->GetCrsr( sal_False /* ??? */ ) : NULL;
+    SwPaM* pCrsr = pFESh ? pFESh->GetCrsr( false /* ??? */ ) : NULL;
 
     //sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
 
@@ -1085,7 +1085,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
             pShapes = mpShapeMap->Copy( nShapes, pFESh, &pSelShape );
     }
 
-    sal_Bool bIsSelAll =IsDocumentSelAll();
+    bool bIsSelAll =IsDocumentSelAll();
 
     if( mpShapeMap )
     {
@@ -1109,7 +1109,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         {
             while( aIter != aEndIter )
             {
-                sal_Bool bMarked = sal_False;
+                bool bMarked = false;
                 SwAccessibleChild pFrm( (*aIter).first );
 
                 const SwFrmFmt *pFrmFmt = (*aIter).first ? ::FindFrmFmt( (*aIter).first ) : 0;
@@ -1141,7 +1141,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             // ignore, if no mark
                             if( pTmpCrsr->HasMark() )
                             {
-                                bMarked = sal_True;
+                                bMarked = true;
                                 // check whether nHere is 'inside' pCrsr
                                 SwPosition* pStart = pTmpCrsr->Start();
                                 sal_uLong nStartIndex = pStart->nNode.GetIndex();
@@ -1220,13 +1220,13 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
             const SwFrm *pFrm = (*aIter).first;
             if(pFrm->IsFlyFrm())
             {
-                sal_Bool bFrmChanged = sal_False;
+                bool bFrmChanged = false;
                 uno::Reference < XAccessible > xAcc = (*aIter).second;
 
                 if(xAcc.is())
                 {
                     SwAccessibleFrameBase *pAccFrame = (static_cast< SwAccessibleFrameBase * >(xAcc.get()));
-                    bFrmChanged = pAccFrame->SetSelectedState( sal_True );
+                    bFrmChanged = pAccFrame->SetSelectedState( true );
                     if (bFrmChanged)
                     {
                         const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm * >( pFrm );
@@ -1267,7 +1267,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     VEC_PARA vecRemove;
     //Checked for Paras.
     SwPaM* pTmpCrsr = pCrsr;
-    sal_Bool bMarkChanged = sal_False;
+    bool bMarkChanged = false;
     SwAccessibleContextMap_Impl mapTemp;
     if( pTmpCrsr != NULL )
     {
@@ -1300,10 +1300,10 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                         if( aIter != mpFrmMap->end() )
                         {
                             uno::Reference < XAccessible > xAcc = (*aIter).second;
-                            sal_Bool isChanged = sal_False;
+                            bool isChanged = false;
                             if( xAcc.is() )
                             {
-                                isChanged = (static_cast< SwAccessibleContext * >(xAcc.get()))->SetSelectedState( sal_True );
+                                isChanged = (static_cast< SwAccessibleContext * >(xAcc.get()))->SetSelectedState( true );
                             }
                             if(!isChanged)
                             {
@@ -1313,7 +1313,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             }
                             else
                             {
-                                bMarkChanged = sal_True;
+                                bMarkChanged = true;
                                 vecAdd.push_back(static_cast< SwAccessibleContext * >(xAcc.get()));
                             }
 
@@ -1336,11 +1336,11 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         {
             uno::Reference < XAccessible > xAcc = (*aIter).second;
             if(xAcc.is())
-                (static_cast< SwAccessibleContext * >(xAcc.get()))->SetSelectedState( sal_False );
+                (static_cast< SwAccessibleContext * >(xAcc.get()))->SetSelectedState( false );
             ++aIter;
             vecRemove.push_back(static_cast< SwAccessibleContext * >(xAcc.get()));
         }
-        bMarkChanged = sal_True;
+        bMarkChanged = true;
         mpSeletedFrmMap->clear();
     }
 
@@ -1382,7 +1382,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
 }
 
 //Marge with DoInvalidateShapeFocus
-void SwAccessibleMap::DoInvalidateShapeSelection(sal_Bool bInvalidateFocusMode /*=sal_False*/)
+void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=sal_False*/)
 {
     SwAccessibleObjShape_Impl *pShapes = 0;
     SwAccessibleObjShape_Impl *pSelShape = 0;
@@ -1635,7 +1635,7 @@ SwAccessibleMap::~SwAccessibleMap()
     {
     SwAccessibleDocument *pAcc =
         static_cast< SwAccessibleDocument * >( xAcc.get() );
-    pAcc->Dispose( sal_True );
+    pAcc->Dispose( true );
     }
     if( mpFrmMap )
     {
@@ -1816,7 +1816,7 @@ uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
 }
 
 uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
-                                                     sal_Bool bCreate )
+                                                     bool bCreate )
 {
     uno::Reference < XAccessible > xAcc;
     uno::Reference < XAccessible > xOldCursorAcc;
@@ -1855,7 +1855,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                     {
                         const SwFtnFrm *pFtnFrm =
                             static_cast < const SwFtnFrm * >( pFrm );
-                        sal_Bool bIsEndnote =
+                        bool bIsEndnote =
                             SwAccessibleFootnote::IsEndnote( pFtnFrm );
                         pAcc = new SwAccessibleFootnote( this, bIsEndnote,
                                     /*(bIsEndnote ? mnEndnote++ : mnFootnote++),*/
@@ -1948,7 +1948,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
 
 ::rtl::Reference < SwAccessibleContext > SwAccessibleMap::GetContextImpl(
             const SwFrm *pFrm,
-            sal_Bool bCreate )
+            bool bCreate )
 {
     uno::Reference < XAccessible > xAcc( GetContext( pFrm, bCreate ) );
 
@@ -1961,7 +1961,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
 uno::Reference< XAccessible> SwAccessibleMap::GetContext(
         const SdrObject *pObj,
         SwAccessibleContext *pParentImpl,
-        sal_Bool bCreate )
+        bool bCreate )
 {
     uno::Reference < XAccessible > xAcc;
     uno::Reference < XAccessible > xOldCursorAcc;
@@ -2026,11 +2026,11 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
     return xAcc;
 }
 
-sal_Bool SwAccessibleMap::IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFESh)
+bool SwAccessibleMap::IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFESh)
 {
     if (pFESh)
         return pFESh->IsObjSameLevelWithMarked(pObj);
-    return sal_False;
+    return false;
 }
 
 void SwAccessibleMap::AddShapeContext(const SdrObject *pObj, uno::Reference < XAccessible > xAccShape)
@@ -2127,7 +2127,7 @@ void SwAccessibleMap::AddGroupContext(const SdrObject *pParentObj, uno::Referenc
 ::rtl::Reference < ::accessibility::AccessibleShape > SwAccessibleMap::GetContextImpl(
             const SdrObject *pObj,
             SwAccessibleContext *pParentImpl,
-            sal_Bool bCreate )
+            bool bCreate )
 {
     uno::Reference < XAccessible > xAcc( GetContext( pObj, pParentImpl, bCreate ) );
 
@@ -2203,7 +2203,7 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
 void SwAccessibleMap::Dispose( const SwFrm *pFrm,
                                const SdrObject *pObj,
                                Window* pWindow,
-                               sal_Bool bRecursive )
+                               bool bRecursive )
 {
     SwAccessibleChild aFrmOrObj( pFrm, pObj, pWindow );
 
@@ -2420,14 +2420,14 @@ but when add graphic SwFrm ,the accessible of the new Paragraph is not created y
 so the new graphic accessible 'parent is NULL,
 so run here: save the parent's SwFrm not the accessible object parent,
 */
-            sal_Bool bIsValidFrm = sal_False;
-            sal_Bool bIsTxtParent = sal_False;
+            bool bIsValidFrm = false;
+            bool bIsTxtParent = false;
             if (aFrmOrObj.GetSwFrm())
             {
                 int nType = pFrm->GetType();
                 if ( FRM_FLY == nType )
                 {
-                    bIsValidFrm =sal_True;
+                    bIsValidFrm =true;
                 }
             }
             else if(pObj)
@@ -2435,11 +2435,11 @@ so run here: save the parent's SwFrm not the accessible object parent,
                 int nType = pParent->GetType();
                 if (FRM_TXT == nType)
                 {
-                    bIsTxtParent =sal_True;
+                    bIsTxtParent =true;
                 }
             }
-//          sal_Bool bIsVisibleChildrenOnly =aFrmOrObj.IsVisibleChildrenOnly() ;
-//          sal_Bool bIsBoundAsChar =aFrmOrObj.IsBoundAsChar() ;//bIsVisibleChildrenOnly && bIsBoundAsChar &&
+//          bool bIsVisibleChildrenOnly =aFrmOrObj.IsVisibleChildrenOnly() ;
+//          bool bIsBoundAsChar =aFrmOrObj.IsBoundAsChar() ;//bIsVisibleChildrenOnly && bIsBoundAsChar &&
             if((bIsValidFrm || bIsTxtParent) )
             {
                 if( GetShell()->ActionPend() )
@@ -2632,7 +2632,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                         xAcc = xOldAcc; // make sure ate least one
                 }
                 if( !xAcc.is() )
-                    xAcc = GetContext( aFrmOrObj.GetSwFrm(), sal_True );
+                    xAcc = GetContext( aFrmOrObj.GetSwFrm(), true );
             }
         }
         else if (bShapeSelected)
@@ -2642,7 +2642,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
             if (pMarkList != NULL && pMarkList->GetMarkCount() == 1)
             {
                 SdrObject *pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
-                ::rtl::Reference < ::accessibility::AccessibleShape > pAccShapeImpl = GetContextImpl(pObj,NULL,sal_False);
+                ::rtl::Reference < ::accessibility::AccessibleShape > pAccShapeImpl = GetContextImpl(pObj,NULL,false);
                 if (!pAccShapeImpl.is())
                 {
                     while (pObj && pObj->GetUpGroup())
@@ -2654,19 +2654,19 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                         const SwFrm *pParent = SwAccessibleFrame::GetParent( SwAccessibleChild(pObj), GetShell()->IsPreview() );
                         if( pParent )
                         {
-                            ::rtl::Reference< SwAccessibleContext > xParentAccImpl = GetContextImpl(pParent,sal_False);
+                            ::rtl::Reference< SwAccessibleContext > xParentAccImpl = GetContextImpl(pParent,false);
                             if (!xParentAccImpl.is())
                             {
                                 const SwTabFrm* pTabFrm = pParent->FindTabFrm();
                                 if (pTabFrm)
                                 {
                                     //The Table should not add in acc.because the "pParent" is not add to acc .
-                                    uno::Reference< XAccessible>  xAccParentTab = GetContext(pTabFrm,sal_True);//Should Create.
+                                    uno::Reference< XAccessible>  xAccParentTab = GetContext(pTabFrm,true);//Should Create.
 
                                     const SwFrm *pParentRoot = SwAccessibleFrame::GetParent( SwAccessibleChild(pTabFrm), GetShell()->IsPreview() );
                                     if (pParentRoot)
                                     {
-                                        ::rtl::Reference< SwAccessibleContext > xParentAccImplRoot = GetContextImpl(pParentRoot,sal_False);
+                                        ::rtl::Reference< SwAccessibleContext > xParentAccImplRoot = GetContextImpl(pParentRoot,false);
                                         if(xParentAccImplRoot.is())
                                         {
                                             AccessibleEventObject aEvent;
@@ -2677,16 +2677,16 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                                     }
 
                                     //Get "pParent" acc again.
-                                    xParentAccImpl = GetContextImpl(pParent,sal_False);
+                                    xParentAccImpl = GetContextImpl(pParent,false);
                                 }
                                 else
                                 {
                                     //directly create this acc para .
-                                    xParentAccImpl = GetContextImpl(pParent,sal_True);//Should Create.
+                                    xParentAccImpl = GetContextImpl(pParent,true);//Should Create.
 
                                     const SwFrm *pParentRoot = SwAccessibleFrame::GetParent( SwAccessibleChild(pParent), GetShell()->IsPreview() );
 
-                                    ::rtl::Reference< SwAccessibleContext > xParentAccImplRoot = GetContextImpl(pParentRoot,sal_False);
+                                    ::rtl::Reference< SwAccessibleContext > xParentAccImplRoot = GetContextImpl(pParentRoot,false);
                                     if(xParentAccImplRoot.is())
                                     {
                                         AccessibleEventObject aEvent;
@@ -2699,7 +2699,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                             if (xParentAccImpl.is())
                             {
                                 uno::Reference< XAccessible>  xAccShape =
-                                    GetContext(pObj,xParentAccImpl.get(),sal_True);
+                                    GetContext(pObj,xParentAccImpl.get(),true);
 
                                 AccessibleEventObject aEvent;
                                 aEvent.EventId = AccessibleEventId::CHILD;
@@ -2730,7 +2730,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
         SwAccessibleParagraph* pAccPara = *si;
         if(pAccPara && pAccPara->getSelectedAccessibleChildCount() == 0 && pAccPara->getSelectedText().getLength() == 0)
         {
-            if(pAccPara->SetSelectedState(sal_False))
+            if(pAccPara->SetSelectedState(false))
             {
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_REMOVE;
@@ -2742,7 +2742,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
     for (; si != m_setParaAdd.end() ; ++si)
     {
         SwAccessibleParagraph* pAccPara = *si;
-        if(pAccPara && pAccPara->SetSelectedState(sal_True))
+        if(pAccPara && pAccPara->SetSelectedState(true))
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
@@ -2837,7 +2837,7 @@ void SwAccessibleMap::InvalidateFocus()
     }
     else
     {
-        DoInvalidateShapeSelection(sal_True);
+        DoInvalidateShapeSelection(true);
     }
 }
 
@@ -2860,7 +2860,7 @@ void SwAccessibleMap::InvalidateStates( tAccessibleStates _nStates,
     if( !aFrmOrObj.GetSwFrm() )
         aFrmOrObj = GetShell()->GetLayout();
 
-    uno::Reference< XAccessible > xAcc( GetContext( aFrmOrObj.GetSwFrm(), sal_True ) );
+    uno::Reference< XAccessible > xAcc( GetContext( aFrmOrObj.GetSwFrm(), true ) );
     SwAccessibleContext *pAccImpl =
         static_cast< SwAccessibleContext *>( xAcc.get() );
     if( GetShell()->ActionPend() )
@@ -3437,7 +3437,7 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
                    pFEShell->IsObjSelected() == 0 ) )
             {
                 // get cursor without updating an existing table cursor.
-                pCrsr = pCrsrShell->GetCrsr( sal_False );
+                pCrsr = pCrsrShell->GetCrsr( false );
             }
         }
     }

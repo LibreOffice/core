@@ -20,7 +20,7 @@
 #include <swtypes.hxx>
 #include <mergetbl.hxx>
 
-SwMergeTblDlg::SwMergeTblDlg( Window *pParent, sal_Bool& rWithPrev )
+SwMergeTblDlg::SwMergeTblDlg( Window *pParent, bool& rWithPrev )
     : SvxStandardDialog(pParent, "MergeTableDialog", "modules/swriter/ui/mergetabledialog.ui")
     , m_rMergePrev(rWithPrev)
 {

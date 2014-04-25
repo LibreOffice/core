@@ -159,11 +159,11 @@ class SwAutoFormat
         {   return rNd.GetTxt().isEmpty() ||
                 rNd.GetTxt().getLength() == GetLeadingBlanks( rNd.GetTxt() ); }
 
-    sal_Bool IsOneLine( const SwTxtNode& ) const;
-    sal_Bool IsFastFullLine( const SwTxtNode& ) const;
-    sal_Bool IsNoAlphaLine( const SwTxtNode&) const;
-    sal_Bool IsEnumericChar( const SwTxtNode&) const;
-    sal_Bool IsBlanksInString( const SwTxtNode&) const;
+    bool IsOneLine( const SwTxtNode& ) const;
+    bool IsFastFullLine( const SwTxtNode& ) const;
+    bool IsNoAlphaLine( const SwTxtNode&) const;
+    bool IsEnumericChar( const SwTxtNode&) const;
+    bool IsBlanksInString( const SwTxtNode&) const;
     sal_uInt16 CalcLevel( const SwTxtNode&, sal_uInt16 *pDigitLvl = 0 ) const;
     sal_Int32 GetBigIndent( sal_Int32& rAktSpacePos ) const;
 
@@ -363,15 +363,15 @@ const SwTxtNode* SwAutoFormat::GetNextNode() const
     return m_pDoc->GetNodes()[ m_aNdIdx.GetIndex() + 1 ]->GetTxtNode();
 }
 
-sal_Bool SwAutoFormat::IsOneLine( const SwTxtNode& rNd ) const
+bool SwAutoFormat::IsOneLine( const SwTxtNode& rNd ) const
 {
     SwTxtFrmInfo aFInfo( GetFrm( rNd ) );
     return aFInfo.IsOneLine();
 }
 
-sal_Bool SwAutoFormat::IsFastFullLine( const SwTxtNode& rNd ) const
+bool SwAutoFormat::IsFastFullLine( const SwTxtNode& rNd ) const
 {
-    sal_Bool bRet = m_aFlags.bRightMargin;
+    bool bRet = m_aFlags.bRightMargin;
     if( bRet )
     {
         SwTxtFrmInfo aFInfo( GetFrm( rNd ) );
@@ -380,30 +380,30 @@ sal_Bool SwAutoFormat::IsFastFullLine( const SwTxtNode& rNd ) const
     return bRet;
 }
 
-sal_Bool SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
+bool SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
 {
     const OUString& rTxt = rNd.GetTxt();
     sal_Int32 nBlnks = GetLeadingBlanks( rTxt );
     const sal_Int32 nLen = rTxt.getLength() - nBlnks;
     if( !nLen )
-        return sal_False;
+        return false;
 
     // -, +, * separated by blank ??
     if (2 < nLen && IsSpace(rTxt[nBlnks + 1]))
     {
         if (StrChr(pBulletChar, rTxt[nBlnks]))
-            return sal_True;
+            return true;
         // Should there be a symbol font at the position?
         SwTxtFrmInfo aFInfo( GetFrm( rNd ) );
         if( aFInfo.IsBullet( nBlnks ))
-            return sal_True;
+            return true;
     }
 
     // 1.) / 1. / 1.1.1 / (1). / (1) / ....
     return USHRT_MAX != GetDigitLevel( rNd, nBlnks );
 }
 
-sal_Bool SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
+bool SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
 {
     // Search more than 5 consecutive blanks/tabs in the string.
     OUString sTmp( DelLeadingBlanks(rNd.GetTxt()) );
@@ -414,15 +414,15 @@ sal_Bool SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
         // Skip non-blanks
         while (nIdx < nLen && !IsSpace(sTmp[nIdx])) ++nIdx;
         if (nIdx == nLen)
-            return sal_False;
+            return false;
         // Then count consecutive blanks
         const sal_Int32 nFirst = nIdx;
         while (nIdx < nLen && IsSpace(sTmp[nIdx])) ++nIdx;
         // And exit if enough consecutive blanks were found
         if (nIdx-nFirst > 5)
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 sal_uInt16 SwAutoFormat::CalcLevel( const SwTxtNode& rNd, sal_uInt16 *pDigitLvl ) const
@@ -480,11 +480,11 @@ sal_Int32 SwAutoFormat::GetBigIndent( sal_Int32& rAktSpacePos ) const
     return aFInfo.GetBigIndent( rAktSpacePos, pNxtFrm );
 }
 
-sal_Bool SwAutoFormat::IsNoAlphaLine( const SwTxtNode& rNd ) const
+bool SwAutoFormat::IsNoAlphaLine( const SwTxtNode& rNd ) const
 {
     const OUString& rStr = rNd.GetTxt();
     if( rStr.isEmpty() )
-        return sal_False;
+        return false;
     // or better: determine via number of AlphaNum and !AlphaNum characters
     sal_Int32 nANChar = 0, nBlnk = 0;
 
@@ -569,7 +569,7 @@ bool SwAutoFormat::DoUnderline()
                     RES_PARATR_CONNECT_BORDER, RES_PARATR_CONNECT_BORDER,
                     RES_BOX, RES_BOX,
                     0);
-        aSet.Put( SwParaConnectBorderItem( sal_False ) );
+        aSet.Put( SwParaConnectBorderItem( false ) );
         SvxBoxItem aBox( RES_BOX );
         aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
         aBox.SetDistance( 42 );     // ~0,75 mm
@@ -1373,7 +1373,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         bBreak = !IsFastFullLine( *m_pCurTxtNd ) ||
                     IsBlanksInString( *m_pCurTxtNd ) ||
                     IsSentenceAtEnd( *m_pCurTxtNd );
-    sal_Bool bRTL = m_pEditShell->IsInRightToLeftText();
+    bool bRTL = m_pEditShell->IsInRightToLeftText();
     DeleteCurrentParagraph( true, true );
 
     bool bChgBullet = false, bChgEnum = false;
@@ -1809,7 +1809,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
     SwTxtFrmInfo aFInfo( 0 );
 
     sal_Int32 nSttPos, nLastBlank = nPos;
-    sal_Bool bFirst = m_aFlags.bCptlSttSntnc, bFirstSent = bFirst;
+    bool bFirst = m_aFlags.bCptlSttSntnc, bFirstSent = bFirst;
     sal_Unicode cChar = 0;
 
     CharClass& rAppCC = GetAppCharClass();
@@ -1974,7 +1974,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
             case '!':
             case '?':
                 if( m_aFlags.bCptlSttSntnc )
-                    bFirstSent = sal_True;
+                    bFirstSent = true;
                 /* fallthrough */
             default:
                 if( !( rAppCC.isLetterNumeric( *pTxt, nPos )
@@ -2050,11 +2050,11 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                 {
                     SetRedlineTxt( STR_AUTOFMTREDL_CPTL_STT_SENT );
                     pATst->FnCptlSttSntnc( aACorrDoc, *pTxt, true, nSttPos, nPos, eLang);
-                    bFirst = sal_False;
+                    bFirst = false;
                 }
 
                 bFirst = bFirstSent;
-                bFirstSent = sal_False;
+                bFirstSent = false;
 
                 if( m_aFlags.bWithRedlining )
                 {
@@ -2091,7 +2091,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
 
     const SwTxtNode* pNxtNd = 0;
     bool bNxtEmpty = false;
-    sal_Bool bNxtAlpha = sal_False;
+    bool bNxtAlpha = false;
     sal_uInt16 nNxtLevel = 0;
 
     // set area for autoformatting
@@ -2183,7 +2183,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 if( m_aFlags.bAFmtByInput && m_aFlags.bCreateTable && DoTable() )
                 {
                     //JP 30.09.96: DoTable() builds on PopCrsr and MoveCrsr after AutoFormat!
-                    pEdShell->Pop( sal_False );
+                    pEdShell->Pop( false );
                     *pEdShell->GetCrsr() = m_aDelPam;
                     pEdShell->Push();
 
@@ -2291,7 +2291,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 else
                 {
                     bNxtEmpty = false;
-                    bNxtAlpha = sal_False;
+                    bNxtAlpha = false;
                     nNxtLevel = 0;
                 }
                 m_eStat = !m_bMoreLines ? IS_ONE_LINE : TST_ENUMERIC;
@@ -2593,7 +2593,7 @@ void SwEditShell::AutoFmtBySplitNode()
                                     &pCrsr->GetPoint()->nNode );
 
             //JP 30.09.96: DoTable() builds on PopCrsr and MoveCrsr!
-            Pop( sal_False );
+            Pop( false );
             pCrsr = GetCrsr();
         }
         pCrsr->DeleteMark();

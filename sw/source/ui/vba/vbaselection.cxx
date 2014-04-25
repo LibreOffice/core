@@ -131,7 +131,7 @@ SwVbaSelection::HomeKey( const uno::Any& _unit, const uno::Any& _extend ) throw 
     sal_Int32 nExtend = word::WdMovementType::wdMove;
     _unit >>= nUnit;
     _extend >>= nExtend;
-    sal_Bool bExtend = ( nExtend == word::WdMovementType::wdExtend ) ? sal_True : sal_False;
+    bool bExtend = ( nExtend == word::WdMovementType::wdExtend ) ? sal_True : sal_False;
 
     switch( nUnit )
     {
@@ -166,7 +166,7 @@ SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend ) throw (
     sal_Int32 nExtend = word::WdMovementType::wdMove;
     _unit >>= nUnit;
     _extend >>= nExtend;
-    sal_Bool bExtend = ( nExtend == word::WdMovementType::wdExtend ) ? sal_True : sal_False;
+    bool bExtend = ( nExtend == word::WdMovementType::wdExtend ) ? sal_True : sal_False;
 
     switch( nUnit )
     {
@@ -240,7 +240,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
     if( nCount == 0 )
         return;
 
-    sal_Bool bExpand = ( nExtend == word::WdMovementType::wdMove ) ? sal_False : sal_True;
+    bool bExpand = ( nExtend == word::WdMovementType::wdMove ) ? sal_False : sal_True;
 
     switch( nUnit )
     {
@@ -482,7 +482,7 @@ SwVbaSelection::TypeParagraph() throw ( uno::RuntimeException, std::exception )
 {
     // #FIXME: if the selection is an entire paragraph, it's replaced
     // by the new paragraph
-    sal_Bool isCollapsed = mxTextViewCursor->isCollapsed();
+    bool isCollapsed = mxTextViewCursor->isCollapsed();
     InsertParagraph();
     if( isCollapsed )
         mxTextViewCursor->collapseToStart();
@@ -840,7 +840,7 @@ SwVbaSelection::getHeaderFooter() throw ( uno::RuntimeException, std::exception 
     {
         uno::Reference< beans::XPropertySet > xPageStyleProps( word::getCurrentPageStyle( mxModel ), uno::UNO_QUERY_THROW );
         sal_Int32 nIndex = word::WdHeaderFooterIndex::wdHeaderFooterPrimary;
-        sal_Bool isHeader = HeaderFooterHelper::isHeader( mxModel );
+        bool isHeader = HeaderFooterHelper::isHeader( mxModel );
         if( HeaderFooterHelper::isEvenPagesHeader( mxModel ) || HeaderFooterHelper::isEvenPagesFooter( mxModel ) )
             nIndex = word::WdHeaderFooterIndex::wdHeaderFooterEvenPages;
         else if( HeaderFooterHelper::isFirstPageHeader( mxModel ) || HeaderFooterHelper::isFirstPageFooter( mxModel ) )

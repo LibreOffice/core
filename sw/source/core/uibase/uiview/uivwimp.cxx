@@ -63,7 +63,7 @@ SwView_Impl::SwView_Impl(SwView* pShell)
 #if HAVE_FEATURE_DBCONNECTIVITY
     , pConfigItem(0)
     , nMailMergeRestartPage(0)
-    , bMailMergeSourceView(sal_True)
+    , bMailMergeSourceView(true)
 #endif
     , m_pDocInserter(NULL)
     , m_pRequest(NULL)
@@ -93,7 +93,7 @@ SwView_Impl::~SwView_Impl()
            pScanEvtLstnr->ViewDestroyed();
     if( xClipEvtLstnr.is() )
     {
-        pClipEvtLstnr->AddRemoveListener( sal_False );
+        pClipEvtLstnr->AddRemoveListener( false );
         pClipEvtLstnr->ViewDestroyed();
     }
 #if HAVE_FEATURE_DBCONNECTIVITY
@@ -126,7 +126,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
     {
         case SID_TWAIN_SELECT:
         {
-            sal_Bool bDone = sal_False;
+            bool bDone = false;
             Reference< XScannerManager2 > xScanMgr = SW_MOD()->GetScannerManager();
 
             if( xScanMgr.is() )
@@ -210,7 +210,7 @@ void SwView_Impl::AddClipboardListener()
     if(!xClipEvtLstnr.is())
     {
         xClipEvtLstnr = pClipEvtLstnr = new SwClipboardChangeListener( *pView );
-        pClipEvtLstnr->AddRemoveListener( sal_True );
+        pClipEvtLstnr->AddRemoveListener( true );
     }
 }
 
@@ -305,7 +305,7 @@ void SAL_CALL SwClipboardChangeListener::changedContents( const ::com::sun::star
     }
 }
 
-void SwClipboardChangeListener::AddRemoveListener( sal_Bool bAdd )
+void SwClipboardChangeListener::AddRemoveListener( bool bAdd )
 {
     pView->AddRemoveClipboardListener( Reference< XClipboardListener >( this ), bAdd );
 }

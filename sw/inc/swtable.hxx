@@ -117,7 +117,7 @@ protected:
     sal_uInt16      nRowsToRepeat;      // Number of rows to repeat on every page.
 
     bool        bModifyLocked   :1;
-    sal_Bool        bNewModel       :1; // sal_False: old SubTableModel; sal_True: new RowSpanModel
+    bool        bNewModel       :1; // sal_False: old SubTableModel; sal_True: new RowSpanModel
 #ifdef DBG_UTIL
     /// This is set by functions (like Merge()) to forbid a late model change.
     bool m_bDontChangeModel;
@@ -150,9 +150,9 @@ private:
     SwTable();
     bool OldMerge( SwDoc*, const SwSelBoxes&, SwTableBox*, SwUndoTblMerge* );
     bool OldSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, bool );
-    sal_Bool NewMerge( SwDoc*, const SwSelBoxes&, const SwSelBoxes& rMerged,
+    bool NewMerge( SwDoc*, const SwSelBoxes&, const SwSelBoxes& rMerged,
                    SwTableBox*, SwUndoTblMerge* );
-    sal_Bool NewSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, sal_Bool );
+    bool NewSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, bool );
     SwBoxSelection* CollectBoxSelection( const SwPaM& rPam ) const;
     void InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nIdx, sal_uInt16 nCnt );
     bool _InsertRow( SwDoc*, const SwSelBoxes&, sal_uInt16 nCnt, bool bBehind );
@@ -160,7 +160,7 @@ private:
     void _FindSuperfluousRows( SwSelBoxes& rBoxes, SwTableLine*, SwTableLine* );
     void AdjustWidths( const long nOld, const long nNew );
     void NewSetTabCols( Parm &rP, const SwTabCols &rNew, const SwTabCols &rOld,
-                        const SwTableBox *pStart, sal_Bool bCurRowOnly );
+                        const SwTableBox *pStart, bool bCurRowOnly );
 
 public:
 
@@ -174,8 +174,8 @@ public:
     void LockModify()   { bModifyLocked = true; }   // Must be used always
     void UnlockModify() { bModifyLocked = false;}   // in pairs!
 
-    void SetTableModel( sal_Bool bNew ){ bNewModel = bNew; }
-    sal_Bool IsNewModel() const { return bNewModel; }
+    void SetTableModel( bool bNew ){ bNewModel = bNew; }
+    bool IsNewModel() const { return bNewModel; }
 
     sal_uInt16 GetRowsToRepeat() const { return std::min( (sal_uInt16)GetTabLines().size(), nRowsToRepeat ); }
     sal_uInt16 _GetRowsToRepeat() const { return nRowsToRepeat; }
@@ -191,9 +191,9 @@ public:
     SwTableFmt* GetTableFmt() const { return (SwTableFmt*)GetRegisteredIn(); }
 
     void GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
-                     sal_Bool bHidden = sal_False, sal_Bool bCurRowOnly = sal_False ) const;
+                     bool bHidden = false, bool bCurRowOnly = false ) const;
     void SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
-                     const SwTableBox *pStart, sal_Bool bCurRowOnly );
+                     const SwTableBox *pStart, bool bCurRowOnly );
 
 // The following functions are for new table model only...
     void CreateSelection(  const SwPaM& rPam, SwSelBoxes& rBoxes,
@@ -215,7 +215,7 @@ public:
 // The following functions are "pseudo-virtual", i.e. they are different for old and new table model
 // It's not allowed to change the table model after the first call of one of these functions.
 
-    sal_Bool Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
+    bool Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
                 SwTableBox* pMergeBox, SwUndoTblMerge* pUndo = 0 )
     {
 #ifdef DBG_UTIL
@@ -246,7 +246,7 @@ public:
     bool DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
         SwUndo* pUndo, const bool bDelMakeFrms, const bool bCorrBorder );
     bool SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1 );
-    sal_Bool Merge( const SwSelBoxes& rBoxes,
+    bool Merge( const SwSelBoxes& rBoxes,
                 SwTableBox* pMergeBox, SwUndoTblMerge* = 0 );
 
     void FindSuperfluousRows( SwSelBoxes& rBoxes )
@@ -261,7 +261,7 @@ public:
     // #i80314#
     // add 3rd parameter in order to control validation check on <rStr>
     static sal_uInt16 _GetBoxNum( OUString& rStr,
-                              sal_Bool bFirst = sal_False,
+                              bool bFirst = false,
                               const bool bPerformValidCheck = false );
 
     // Search content-bearing box with that name.
@@ -275,11 +275,11 @@ public:
     bool MakeCopy( SwDoc*, const SwPosition&, const SwSelBoxes&,
                     bool bCpyNds = true, bool bCpyName = false ) const;
     // Copy table in this
-    sal_Bool InsTable( const SwTable& rCpyTbl, const SwNodeIndex&,
+    bool InsTable( const SwTable& rCpyTbl, const SwNodeIndex&,
                     SwUndoTblCpyTbl* pUndo = 0 );
-    sal_Bool InsTable( const SwTable& rCpyTbl, const SwSelBoxes&,
+    bool InsTable( const SwTable& rCpyTbl, const SwSelBoxes&,
                     SwUndoTblCpyTbl* pUndo = 0 );
-    sal_Bool InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes&,
+    bool InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes&,
                       SwUndoTblCpyTbl* pUndo );
     // Copy headline of table (with content!) into an other one.
     bool CopyHeadlineIntoTable( SwTableNode& rTblNd );
@@ -437,15 +437,15 @@ public:
     // Return "value" of box (for calculating in table).
     double GetValue( SwTblCalcPara& rPara ) const;
 
-    sal_Bool IsInHeadline( const SwTable* pTbl = 0 ) const;
+    bool IsInHeadline( const SwTable* pTbl = 0 ) const;
 
     // Contains box contents, that can be formated as a number?
-    sal_Bool HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
-                    sal_Bool& rIsEmptyTxtNd ) const;
-    sal_uLong IsValidNumTxtNd( sal_Bool bCheckAttr = sal_True ) const;
+    bool HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
+                    bool& rIsEmptyTxtNd ) const;
+    sal_uLong IsValidNumTxtNd( bool bCheckAttr = true ) const;
     // If a table formula is set, test if box contents is congruent with number.
     // (For Redo of change of NumFormat!).
-    sal_Bool IsNumberChanged() const;
+    bool IsNumberChanged() const;
 
     // Is that a formula box or a box with numeric contents (AutoSum)?
     // What it is is indicated by the return value - the WhichId of the attribute.

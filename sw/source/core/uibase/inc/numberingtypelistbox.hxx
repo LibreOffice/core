@@ -43,7 +43,7 @@ public:
     void        Reload(sal_uInt16 nTypeFlags);
 
     sal_Int16   GetSelectedNumberingType();
-    sal_Bool    SelectNumberingType(sal_Int16 nType);
+    bool    SelectNumberingType(sal_Int16 nType);
 };
 
 #endif

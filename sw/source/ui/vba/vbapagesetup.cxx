@@ -58,7 +58,7 @@ void SAL_CALL SwVbaPageSetup::setGutter( double _gutter ) throw (uno::RuntimeExc
 
 double SAL_CALL SwVbaPageSetup::getHeaderDistance() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool isHeaderOn = sal_False;
+    bool isHeaderOn = false;
     mxPageProps->getPropertyValue("HeaderIsOn") >>= isHeaderOn;
     if( !isHeaderOn )
         mxPageProps->setPropertyValue("HeaderIsOn", uno::makeAny( sal_True ) );
@@ -77,7 +77,7 @@ double SAL_CALL SwVbaPageSetup::getHeaderDistance() throw (uno::RuntimeException
 void SAL_CALL SwVbaPageSetup::setHeaderDistance( double _headerdistance ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 newHeaderDistance = Millimeter::getInHundredthsOfOneMillimeter( _headerdistance );
-    sal_Bool isHeaderOn = sal_False;
+    bool isHeaderOn = false;
     sal_Int32 aktTopMargin = 0;
     sal_Int32 aktSpacing = 0;
     sal_Int32 aktHeaderHeight = 0;
@@ -101,7 +101,7 @@ void SAL_CALL SwVbaPageSetup::setHeaderDistance( double _headerdistance ) throw 
 
 double SAL_CALL SwVbaPageSetup::getFooterDistance() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool isFooterOn = sal_False;
+    bool isFooterOn = false;
     mxPageProps->getPropertyValue("FooterIsOn") >>= isFooterOn;
     if( !isFooterOn )
         mxPageProps->setPropertyValue("FooterIsOn", uno::makeAny( sal_True ) );
@@ -111,7 +111,7 @@ double SAL_CALL SwVbaPageSetup::getFooterDistance() throw (uno::RuntimeException
 void SAL_CALL SwVbaPageSetup::setFooterDistance( double _footerdistance ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 newFooterDistance = Millimeter::getInHundredthsOfOneMillimeter( _footerdistance );
-    sal_Bool isFooterOn = sal_False;
+    bool isFooterOn = false;
     sal_Int32 aktBottomMargin = 0;
     sal_Int32 aktSpacing = 0;
     sal_Int32 aktFooterHeight = 0;
@@ -167,7 +167,7 @@ void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( sal_Bool status
     sal_Int32 nFooterHeight = 0;
     xStyleProps->getPropertyValue("FooterHeight") >>= nFooterHeight;
 
-    sal_Bool isHeaderOn = sal_False;
+    bool isHeaderOn = false;
     xStyleProps->getPropertyValue("HeaderIsOn") >>= isHeaderOn;
     if( isHeaderOn )
     {

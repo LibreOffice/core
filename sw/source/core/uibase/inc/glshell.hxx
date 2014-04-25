@@ -40,7 +40,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    SwGlosDocShell( sal_Bool bNewShow = sal_True);
+    SwGlosDocShell( bool bNewShow = true);
     virtual ~SwGlosDocShell();
 
     void            Execute( SfxRequest& );

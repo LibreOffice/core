@@ -80,7 +80,7 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pParent, const SfxItemSet& rCoreSet)
 
     m_pTypeTLB->SetNodeDefaultImages();
     //enable 'active' language selection
-    m_pFormatLB->SetShowLanguageControl(sal_True);
+    m_pFormatLB->SetShowLanguageControl(true);
 
     SFX_ITEMSET_ARG( &rCoreSet, pItem, SfxUnoAnyItem, SID_DOCINFO, false );
     if ( pItem )
@@ -280,8 +280,8 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
         nExtSubType = DI_SUB_TIME;
 
     sal_uInt16 nOldType = 0;
-    sal_Bool bEnable = sal_False;
-    sal_Bool bOneArea = sal_False;
+    bool bEnable = false;
+    bool bOneArea = false;
 
     if (m_pFormatLB->IsEnabled())
         nOldType = m_pFormatLB->GetFormatType();
@@ -293,12 +293,12 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
 
         case DI_SUB_DATE:
             nNewType = NUMBERFORMAT_DATE;
-            bOneArea = sal_True;
+            bOneArea = true;
             break;
 
         case DI_SUB_TIME:
             nNewType = NUMBERFORMAT_TIME;
-            bOneArea = sal_True;
+            bOneArea = true;
             break;
     }
     if (!nNewType)
@@ -312,7 +312,7 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
             m_pFormatLB->SetFormatType(nNewType);
             m_pFormatLB->SetOneArea(bOneArea);
         }
-        bEnable = sal_True;
+        bEnable = true;
     }
 
     sal_uLong nFormat = IsFldEdit() ? ((SwDocInfoField*)GetCurField())->GetFormat() : 0;
@@ -399,14 +399,14 @@ sal_Int32 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
         }
     }
 
-    sal_Bool bEnable = nSize != 0;
+    bool bEnable = nSize != 0;
 
     if (nSize)
     {
         if (!m_pSelectionLB->GetSelectEntryCount())
             m_pSelectionLB->SelectEntryPos(nSelPos == USHRT_MAX ? 0 : nSelPos);
 
-        bEnable = sal_True;
+        bEnable = true;
     }
 
     m_pSelection->Enable(bEnable);

@@ -159,7 +159,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
         case FLY_AS_CHAR:
             if( pFlyFmt && rAnch.GetCntntAnchor() )
             {
-                const SwFrm* pOld = ((SwFlyFrmFmt*)pFlyFmt)->GetFrm( &aRet, sal_False );
+                const SwFrm* pOld = ((SwFlyFrmFmt*)pFlyFmt)->GetFrm( &aRet, false );
                 if( pOld )
                     aRet = pOld->Frm().Pos();
             }
@@ -182,7 +182,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
             {
                 const SwFlyFrmFmt* pFmt = (SwFlyFrmFmt*)rAnch.GetCntntAnchor()->
                                                 nNode.GetNode().GetFlyFmt();
-                const SwFrm* pOld = pFmt ? pFmt->GetFrm( &aRet, sal_False ) : 0;
+                const SwFrm* pOld = pFmt ? pFmt->GetFrm( &aRet, false ) : 0;
                 if( pOld )
                     aRet = pOld->Frm().Pos();
             }

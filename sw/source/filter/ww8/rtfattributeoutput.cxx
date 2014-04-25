@@ -360,7 +360,7 @@ void RtfAttributeOutput::SectionBreaks(const SwTxtNode& rNode)
         const SwTxtNode* pTxtNode = static_cast< SwTxtNode* >( &aNextIndex.GetNode() );
         m_rExport.OutputSectionBreaks( pTxtNode->GetpSwAttrSet(), *pTxtNode );
         // Save the current page description for now, so later we will be able to access the previous one.
-        m_pPrevPageDesc = pTxtNode->FindPageDesc(sal_False);
+        m_pPrevPageDesc = pTxtNode->FindPageDesc(false);
     }
     else if ( aNextIndex.GetNode().IsTableNode() )
     {
@@ -2941,7 +2941,7 @@ void RtfAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
     if ( m_rExport.bOutFlyFrmAttrs && !m_rExport.bRTFFlySyntax )
     {
         SwSurround eSurround = rSurround.GetSurround();
-        sal_Bool bGold = SURROUND_IDEAL == eSurround;
+        bool bGold = SURROUND_IDEAL == eSurround;
         if( bGold )
             eSurround = SURROUND_PARALLEL;
         RTFSurround aMC( bGold, static_cast< sal_uInt8 >(eSurround) );
@@ -3191,7 +3191,7 @@ void RtfAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol& r
     if( bEven )
     {
         m_rExport.Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_COLSX );
-        m_rExport.OutLong( rCol.GetGutterWidth( sal_True ) );
+        m_rExport.OutLong( rCol.GetGutterWidth( true ) );
     }
     else
     {

@@ -176,7 +176,7 @@ void SwFmtFtn::GetFtnText( OUString& rStr ) const
 }
 
     // returnt den anzuzeigenden String der Fuss-/Endnote
-OUString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrings ) const
+OUString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, bool bInclStrings ) const
 {
     OUString sRet( GetNumStr() );
     if( sRet.isEmpty() )
@@ -239,7 +239,7 @@ SwTxtFtn::~SwTxtFtn()
     SetStartNode( 0 );
 }
 
-void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, sal_Bool bDelNode )
+void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, bool bDelNode )
 {
     if( pNewNode )
     {
@@ -362,7 +362,7 @@ void SwTxtFtn::CopyFtn(
         SwNodeIndex aEnd( *aStart.GetNode().EndOfSectionNode() );
         sal_uLong  nDestLen = aEnd.GetIndex() - aStart.GetIndex() - 1;
 
-        m_pTxtNode->GetDoc()->CopyWithFlyInFly( aRg, 0, aEnd, NULL, sal_True );
+        m_pTxtNode->GetDoc()->CopyWithFlyInFly( aRg, 0, aEnd, NULL, true );
 
         // in case the destination section was not empty, delete the old nodes
         // before:   Src: SxxxE,  Dst: SnE

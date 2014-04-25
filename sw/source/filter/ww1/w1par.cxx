@@ -57,7 +57,7 @@ sal_uLong WW1Reader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, co
     OSL_ENSURE(pStrm!=NULL, "W1-Read without Stream");
     if (pStrm != NULL)
     {
-        sal_Bool bNew = !bInsertMode;           // New Doc ( no insert )
+        bool bNew = !bInsertMode;           // New Doc ( no insert )
 
         sal_uLong nFieldFlags = WW1_Read_FieldIniFlags();
         Ww1Shell* pRdr = new Ww1Shell( rDoc, rPam, rBaseURL, bNew, nFieldFlags );
@@ -97,7 +97,7 @@ sal_uLong WW1Reader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, co
 // SwFltShell is used in common with ww-filter. Information read from
 // the file gets 'piped' into the shell, like would be done for a
 // stream.
-Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, const OUString& rBaseURL, sal_Bool bNew, sal_uLong nFieldFlags)
+Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, const OUString& rBaseURL, bool bNew, sal_uLong nFieldFlags)
     : SwFltShell(&rD, rPam, rBaseURL, bNew, nFieldFlags)
 {
 }

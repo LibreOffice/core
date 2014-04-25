@@ -198,7 +198,7 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
     case XML_TOK_DOC_STYLES:
         GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
-                                                      sal_False );
+                                                      false );
         break;
     case XML_TOK_DOC_AUTOSTYLES:
         // don't use the autostyles from the styles-document for the progress
@@ -206,7 +206,7 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
             GetSwImport().GetProgressBarHelper()->Increment
                 ( PROGRESS_BAR_STEP );
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
-                                                      sal_True );
+                                                      true );
         break;
 
     case XML_TOK_DOC_MASTERSTYLES:
@@ -410,7 +410,7 @@ SwXMLImport::SwXMLImport(
     bShowProgress( true ),
     bOrganizerMode( false ),
     bInititedXForms( false ),
-    bPreserveRedlineMode( sal_True ),
+    bPreserveRedlineMode( true ),
     doc( NULL )
 {
     _InitItemImport();
@@ -437,7 +437,7 @@ void SwXMLImport::setTextInsertMode(
 }
 
 void SwXMLImport::setStyleInsertMode( sal_uInt16 nFamilies,
-                                      sal_Bool bOverwrite )
+                                      bool bOverwrite )
 {
     bInsert = !bOverwrite;
     nStyleFamilyMask = nFamilies;
@@ -536,14 +536,14 @@ void SwXMLImport::startDocument()
                         nFamilyMask |= SFX_STYLE_FAMILY_PSEUDO;
                 }
 
-                sal_Bool bOverwrite = sal_False;
+                bool bOverwrite = false;
                 const OUString sStyleInsertModeOverwrite("StyleInsertModeOverwrite");
                 if( xPropertySetInfo->hasPropertyByName(sStyleInsertModeOverwrite) )
                 {
                     aAny = xImportInfo->getPropertyValue(sStyleInsertModeOverwrite);
                     if( aAny.getValueType() == ::getBooleanCppuType() &&
                         *static_cast<const sal_Bool*>(aAny.getValue()) )
-                        bOverwrite = sal_True;
+                        bOverwrite = true;
                 }
 
                 setStyleInsertMode( nFamilyMask, bOverwrite );
@@ -863,9 +863,9 @@ void SwXMLImport::endDocument( void )
             // Notify math objects. If we are in the package filter this will
             // be done by the filter object itself
             if( IsInsertMode() )
-                pDoc->PrtOLENotify( sal_False );
+                pDoc->PrtOLENotify( false );
             else if ( pDoc->IsOLEPrtNotifyPending() )
-                pDoc->PrtOLENotify( sal_True );
+                pDoc->PrtOLENotify( true );
         }
 
         SdrModel* pDrawModel = pDoc->GetDrawModel();
@@ -999,11 +999,11 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     const PropertyValue *pValue = aViewProps.getConstArray();
 
     sal_Int64 nTmp = 0;
-    sal_Bool bShowRedlineChanges = sal_False, bBrowseMode = sal_False;
-    sal_Bool bChangeShowRedline = sal_False, bChangeBrowseMode = sal_False;
+    bool bShowRedlineChanges = false, bBrowseMode = false;
+    bool bChangeShowRedline = false, bChangeBrowseMode = false;
 
     //TODO/LATER: why that cast?!
-    sal_Bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MAP_TWIP;
+    bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MAP_TWIP;
     //sal_Bool bTwip = pDoc->GetDocShell()->SfxInPlaceObject::GetMapUnit ( ) == MAP_TWIP;
 
     for (sal_Int32 i = 0; i < nCount ; i++)
@@ -1035,13 +1035,13 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         else if ( pValue->Name == "ShowRedlineChanges" )
         {
             bShowRedlineChanges = *(sal_Bool *)(pValue->Value.getValue());
-            bChangeShowRedline = sal_True;
+            bChangeShowRedline = true;
         }
 // Headers and footers are not displayed in BrowseView anymore
         else if ( pValue->Name == "InBrowseMode" )
         {
             bBrowseMode = *(sal_Bool *)(pValue->Value.getValue());
-            bChangeBrowseMode = sal_True;
+            bChangeBrowseMode = true;
         }
         pValue++;
     }
@@ -1109,7 +1109,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     const PropertyValue* pValues = aConfigProps.getConstArray();
 
     SvtSaveOptions aSaveOpt;
-    sal_Bool bIsUserSetting = aSaveOpt.IsLoadUserSettings(),
+    bool bIsUserSetting = aSaveOpt.IsLoadUserSettings(),
          bSet = bIsUserSetting;
 
     // for some properties we don't want to use the application

@@ -65,12 +65,12 @@ class SwProtocol
 {
     static sal_uLong nRecord;
     static SwImplProtocol* pImpl;
-    static sal_Bool Start() { return 0 != ( PROT_INIT & nRecord ); }
+    static bool Start() { return 0 != ( PROT_INIT & nRecord ); }
 
 public:
     static sal_uLong Record() { return nRecord; }
     static void SetRecord( sal_uLong nNew ) { nRecord = nNew; }
-    static sal_Bool Record( sal_uLong nFunc ) { return 0 != (( nFunc | PROT_INIT ) & nRecord); }
+    static bool Record( sal_uLong nFunc ) { return 0 != (( nFunc | PROT_INIT ) & nRecord); }
     static void Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAction, void* pParam );
     static void Init();
     static void Stop();

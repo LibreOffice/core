@@ -251,8 +251,8 @@ protected:
     bool bLayoutExport : 1;
     bool bCollectBorderWidth : 1;
 
-    virtual sal_Bool ShouldExpandSub( const SwTableBox *pBox,
-                                sal_Bool bExpandedBefore, sal_uInt16 nDepth ) const;
+    virtual bool ShouldExpandSub( const SwTableBox *pBox,
+                                bool bExpandedBefore, sal_uInt16 nDepth ) const;
 
     void CollectTableRowsCols( long nStartRPos, sal_uInt32 nStartCPos,
                                long nParentLineHeight,

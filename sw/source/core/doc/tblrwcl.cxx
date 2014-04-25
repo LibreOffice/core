@@ -1157,7 +1157,7 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
                         SwNodeRange aRg( *pLastBox->GetSttNd(), +2, *pEndNd );
                         pLastBox = pNewLine->GetTabBoxes()[0];  // reset
                         SwNodeIndex aInsPos( *pLastBox->GetSttNd(), 1 );
-                        pDoc->GetNodes()._MoveNodes(aRg, pDoc->GetNodes(), aInsPos, sal_False);
+                        pDoc->GetNodes()._MoveNodes(aRg, pDoc->GetNodes(), aInsPos, false);
                         pDoc->GetNodes().Delete( aInsPos, 1 ); // delete the empty one
                     }
                 }
@@ -1968,7 +1968,7 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
                     if( aBoxAttrSet.Count() )
                     {
                         const SfxPoolItem* pItem;
-                        SvNumberFormatter* pN = pCpyPara->pDoc->GetNumberFormatter( sal_False );
+                        SvNumberFormatter* pN = pCpyPara->pDoc->GetNumberFormatter( false );
                         if( pN && pN->HasMergeFmtTbl() && SFX_ITEM_SET == aBoxAttrSet.
                             GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
                         {
@@ -1985,7 +1985,7 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
                         *rFndBox.GetBox()->GetSttNd()->EndOfSectionNode() );
                 SwNodeIndex aInsIdx( *pBox->GetSttNd(), 1 );
 
-                pFromDoc->CopyWithFlyInFly( aCpyRg, 0, aInsIdx, NULL, sal_False );
+                pFromDoc->CopyWithFlyInFly( aCpyRg, 0, aInsIdx, NULL, false );
                 // Delete the initial TextNode
                 pCpyPara->pDoc->GetNodes().Delete( aInsIdx, 1 );
             }
@@ -2142,7 +2142,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     SwTable* pNewTbl = (SwTable*)pInsDoc->InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
             rPos, 1, 1, GetFrmFmt()->GetHoriOrient().GetHoriOrient(),
-            0, 0, sal_False, IsNewModel() );
+            0, 0, false, IsNewModel() );
     if( !pNewTbl )
         return false;
 
@@ -2164,7 +2164,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         // Change the Table Pointer at the Node
         pNewTbl = new SwDDETable( *pNewTbl,
                                  (SwDDEFieldType*)pFldType );
-        pTblNd->SetNewTable( pNewTbl, sal_False );
+        pTblNd->SetNewTable( pNewTbl, false );
     }
 
     pNewTbl->GetFrmFmt()->CopyAttrs( *GetFrmFmt() );
@@ -3570,7 +3570,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                                                        : UNDO_TABLE_INSCOL );
                 }
                 else if( ppUndo )
-                    *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, sal_True );
+                    *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, true );
 
                 long nFrmWidth = LONG_MAX;
                 LockModify();
@@ -3765,7 +3765,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                                                        : UNDO_TABLE_INSCOL );
                 }
                 else if( ppUndo )
-                    *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, sal_True );
+                    *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, true );
 
                 if( bInsDel
                     ? ( TBLFIX_CHGABS == eTblChgMode ? bLeft : bLeft )
@@ -3878,7 +3878,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                                                        : UNDO_TABLE_INSCOL );
                 }
                 else if( ppUndo )
-                    *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, sal_True );
+                    *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, true );
 
                 if( bInsDel
                     ? ( TBLFIX_CHGABS == eTblChgMode ? (bBigger && bLeft) : bLeft )
@@ -4265,7 +4265,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                                                 : UNDO_ROW_DELETE );
                     }
                     else if( ppUndo )
-                        *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, sal_True );
+                        *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, true );
 
                     (*fnSelLine)( (*pLines)[ nBaseLinePos ], aParam,
                                     nAbsDiff, false );
@@ -4342,7 +4342,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                                                 : UNDO_ROW_DELETE );
                     }
                     else if( ppUndo )
-                        *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, sal_True );
+                        *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, true );
 
                     CR_SetLineHeight aParam1( aParam );
                     if( TBLFIX_CHGPROP == eTblChgMode && !bBigger &&
@@ -4432,11 +4432,11 @@ SwFrmFmt* SwShareBoxFmt::GetFormat( const SfxPoolItem& rItem ) const
     const SfxPoolItem* pItem;
     sal_uInt16 nWhich = rItem.Which();
     SwFrmFmt *pRet = 0, *pTmp;
-    const SfxPoolItem& rFrmSz = pOldFmt->GetFmtAttr( RES_FRM_SIZE, sal_False );
+    const SfxPoolItem& rFrmSz = pOldFmt->GetFmtAttr( RES_FRM_SIZE, false );
     for( sal_uInt16 n = aNewFmts.size(); n; )
         if( SFX_ITEM_SET == ( pTmp = aNewFmts[ --n ])->
-            GetItemState( nWhich, sal_False, &pItem ) && *pItem == rItem &&
-            pTmp->GetFmtAttr( RES_FRM_SIZE, sal_False ) == rFrmSz )
+            GetItemState( nWhich, false, &pItem ) && *pItem == rItem &&
+            pTmp->GetFmtAttr( RES_FRM_SIZE, false ) == rFrmSz )
         {
             pRet = pTmp;
             break;

@@ -109,13 +109,13 @@ static bool lcl_DoesVertPosFits( const SwTwips _nRelPosY,
         {
             SwSectionFrm* pSctFrm =
                     const_cast<SwSectionFrm*>(_pUpperOfOrientFrm->FindSctFrm());
-            bVertPosFits = pSctFrm->GetUpper()->Grow( _nRelPosY - _nAvail, sal_True ) > 0;
+            bVertPosFits = pSctFrm->GetUpper()->Grow( _nRelPosY - _nAvail, true ) > 0;
             // Note: do not provide a layout frame for a grow.
         }
         else
         {
             bVertPosFits = const_cast<SwLayoutFrm*>(_pUpperOfOrientFrm)->
-                                        Grow( _nRelPosY - _nAvail, sal_True ) > 0;
+                                        Grow( _nRelPosY - _nAvail, true ) > 0;
             if ( bVertPosFits )
                 _orpLayoutFrmToGrow = const_cast<SwLayoutFrm*>(_pUpperOfOrientFrm);
         }
@@ -125,7 +125,7 @@ static bool lcl_DoesVertPosFits( const SwTwips _nRelPosY,
         // #i45085# - check, if upper frame would grow the
         // excepted amount of twips.
         const SwTwips nTwipsGrown = const_cast<SwLayoutFrm*>(_pUpperOfOrientFrm)->
-                                        Grow( _nRelPosY - _nAvail, sal_True );
+                                        Grow( _nRelPosY - _nAvail, true );
         bVertPosFits = ( nTwipsGrown == ( _nRelPosY - _nAvail ) );
         if ( bVertPosFits )
             _orpLayoutFrmToGrow = const_cast<SwLayoutFrm*>(_pUpperOfOrientFrm);
@@ -657,7 +657,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                     eMakePage = MAKEPAGE_NOSECTION;
 
                                 const SwLayoutFrm* pTmp =
-                                    pUpperOfOrientFrm->GetLeaf( eMakePage, sal_True, &rAnchorTxtFrm );
+                                    pUpperOfOrientFrm->GetLeaf( eMakePage, true, &rAnchorTxtFrm );
                                 if ( pTmp &&
                                      ( !bInSct ||
                                        pUpperOfOrientFrm->FindSctFrm()->IsAnFollow( pTmp->FindSctFrm() ) ) )
@@ -814,7 +814,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                      !pOrientFrm->GetIndPrev() )
                 {
                     const_cast<SwTabFrm*>(pOrientFrm->FindTabFrm())
-                                                    ->SetDoesObjsFit( sal_False );
+                                                    ->SetDoesObjsFit( false );
                 }
                 else
                 {
@@ -859,7 +859,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                          pOrientFrm == &rAnchorTxtFrm && !pOrientFrm->GetIndPrev() )
                     {
                         const_cast<SwTabFrm*>(pOrientFrm->FindTabFrm())
-                                                        ->SetDoesObjsFit( sal_False );
+                                                        ->SetDoesObjsFit( false );
                     }
                 }
             }
@@ -895,7 +895,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                     ( bInSct
                                       ? MAKEPAGE_NOSECTION
                                       : ( bInFtn ? MAKEPAGE_NONE : MAKEPAGE_APPEND ) ),
-                                    sal_True, &rAnchorTxtFrm );
+                                    true, &rAnchorTxtFrm );
                     // correction:
                     // If anchor is in footnote and proposed next layout environment
                     // isn't a footnote frame, object can't follow the text flow

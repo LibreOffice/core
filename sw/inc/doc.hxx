@@ -597,7 +597,7 @@ private:
 
     void _CreateNumberFormatter();
 
-    sal_Bool _UnProtectTblCells( SwTable& rTbl );
+    bool _UnProtectTblCells( SwTable& rTbl );
 
     /** Create sub-documents according to the given collection.
      If no collection is given, take chapter style of the 1st level. */
@@ -607,7 +607,7 @@ private:
     // Update charts of given table.
     void _UpdateCharts( const SwTable& rTbl, SwViewShell& rVSh ) const;
 
-    sal_Bool _SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
+    bool _SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
                                 sal_uInt16 nMode );
 
     // Our own 'IdleTimer' calls the following method
@@ -621,7 +621,7 @@ private:
     SwFmt *_MakeTxtFmtColl(const OUString &, SwFmt *, bool, bool );
 
 private:
-    sal_Bool mbReadOnly;
+    bool mbReadOnly;
     OUString msDocAccTitle;
 
     void InitTOXTypes();
@@ -948,8 +948,8 @@ public:
                                  ::sw::tExternalDataPointer pPayload) SAL_OVERRIDE;
     virtual ::sw::tExternalDataPointer getExternalData(::sw::tExternalDataType eType) SAL_OVERRIDE;
 
-    virtual void setDocReadOnly( sal_Bool b) { mbReadOnly = b; }
-    virtual sal_Bool getDocReadOnly() const { return mbReadOnly; }
+    virtual void setDocReadOnly( bool b) { mbReadOnly = b; }
+    virtual bool getDocReadOnly() const { return mbReadOnly; }
     virtual void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
     virtual const OUString getDocAccTitle() const { return msDocAccTitle; }
 
@@ -960,7 +960,7 @@ public:
     // OLE ???
     bool IsOLEPrtNotifyPending() const  { return mbOLEPrtNotifyPending; }
     inline void SetOLEPrtNotifyPending( bool bSet = true );
-    void PrtOLENotify( sal_Bool bAll ); //All or only marked
+    void PrtOLENotify( bool bAll ); //All or only marked
 
 #ifdef DBG_UTIL
     bool InXMLExport() const            { return mbXMLExport; }
@@ -1021,9 +1021,9 @@ public:
                             const sal_Int32 nEndContentIndex,
                             const SwNodeIndex& rInsPos,
                             const SwPaM* pCopiedPaM = NULL,
-                            sal_Bool bMakeNewFrms = sal_True,
-                            sal_Bool bDelRedlines = sal_True,
-                            sal_Bool bCopyFlyAtFly = sal_False ) const;
+                            bool bMakeNewFrms = true,
+                            bool bDelRedlines = true,
+                            bool bCopyFlyAtFly = false ) const;
 
     //UUUU Helper that checks for unique items for DrawingLayer items of type NameOrIndex
     // and evtl. corrects that items to ensure unique names for that type. This call may
@@ -1090,7 +1090,7 @@ public:
     SwDBMgr* GetDBMgr() const             { return mpDBMgr; }
     void ChangeDBFields( const std::vector<OUString>& rOldNames,
                         const OUString& rNewName );
-    void SetInitDBFields(sal_Bool b);
+    void SetInitDBFields(bool b);
 
     // Find out which databases are used by fields.
     void GetAllUsedDB( std::vector<OUString>& rDBNameList,
@@ -1228,7 +1228,7 @@ public:
     SwFrmFmt& GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed ) const;
     SwTableFmt* MakeTblFrmFmt(const OUString &rFmtName, SwFrmFmt *pDerivedFrom);
     void        DelTblFrmFmt( SwTableFmt* pFmt );
-    SwTableFmt* FindTblFmtByName( const OUString& rName, sal_Bool bAll = sal_False ) const;
+    SwTableFmt* FindTblFmtByName( const OUString& rName, bool bAll = false ) const;
 
     /** Access to frames.
     Iterate over Flys - forr Basic-Collections. */
@@ -1331,7 +1331,7 @@ public:
     sal_uInt16 GetCurTOXMark( const SwPosition& rPos, SwTOXMarks& ) const;
     void DeleteTOXMark( const SwTOXMark* pTOXMark );
     const SwTOXMark& GotoTOXMark( const SwTOXMark& rCurTOXMark,
-                                SwTOXSearch eDir, sal_Bool bInReadOnly );
+                                SwTOXSearch eDir, bool bInReadOnly );
 
     // Insert/Renew table/indes
     const SwTOXBaseSection* InsertTableOf( const SwPosition& rPos,
@@ -1349,7 +1349,7 @@ public:
                                    const OUString& sChkStr ) const;
 
     bool SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName);
-    void SetTOXBaseProtection(const SwTOXBase& rTOXBase, sal_Bool bProtect);
+    void SetTOXBaseProtection(const SwTOXBase& rTOXBase, bool bProtect);
 
     // After reading file update all tables/indices
     void SetUpdateTOX( bool bFlag = true )     { mbUpdateTOX = bFlag; }
@@ -1375,7 +1375,7 @@ public:
     // Manage types of tables/indices
     sal_uInt16 GetTOXTypeCount( TOXTypes eTyp ) const;
     const SwTOXType* GetTOXType( TOXTypes eTyp, sal_uInt16 nId ) const;
-    sal_Bool DeleteTOXType( TOXTypes eTyp, sal_uInt16 nId );
+    bool DeleteTOXType( TOXTypes eTyp, sal_uInt16 nId );
     const SwTOXType* InsertTOXType( const SwTOXType& rTyp );
     const SwTOXTypes& GetTOXTypes() const { return *mpTOXTypes; }
 
@@ -1398,27 +1398,27 @@ public:
         const SwNodeIndex& rOldNode,
         const SwPosition& rNewPos,
         const sal_Int32 nOffset = 0,
-        sal_Bool bMoveCrsr = sal_False );
+        bool bMoveCrsr = false );
 
     // Set everything in the range of [rStartNode, rEndNode] to rNewPos.
     void CorrAbs(
         const SwNodeIndex& rStartNode,
         const SwNodeIndex& rEndNode,
         const SwPosition& rNewPos,
-        sal_Bool bMoveCrsr = sal_False );
+        bool bMoveCrsr = false );
 
     // Set everything in this range from rRange to rNewPos.
     void CorrAbs(
         const SwPaM& rRange,
         const SwPosition& rNewPos,
-        sal_Bool bMoveCrsr = sal_False );
+        bool bMoveCrsr = false );
 
     // Set everything in rOldNode to relative Pos.
     void CorrRel(
         const SwNodeIndex& rOldNode,
         const SwPosition& rNewPos,
         const sal_Int32 nOffset = 0,
-        sal_Bool bMoveCrsr = sal_False );
+        bool bMoveCrsr = false );
 
     // Query / set rules for Outline.
     inline SwNumRule* GetOutlineNumRule() const
@@ -1456,7 +1456,7 @@ public:
 
     void MakeUniqueNumRules(const SwPaM & rPaM);
 
-    void SetNumRuleStart( const SwPosition& rPos, sal_Bool bFlag = sal_True );
+    void SetNumRuleStart( const SwPosition& rPos, bool bFlag = true );
     void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt );
 
     SwNumRule* GetNumRuleAtPos( const SwPosition& rPos ) const;
@@ -1542,7 +1542,7 @@ public:
      according to offsets. (if negative: go to doc start). */
     bool MoveParagraph( const SwPaM&, long nOffset = 1, bool bIsOutlMv = false );
 
-    bool NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel = sal_False);
+    bool NumOrNoNum( const SwNodeIndex& rIdx, bool bDel = false);
 
     void StopNumRuleAnimations( OutputDevice* );
 
@@ -1561,8 +1561,8 @@ public:
                                 sal_uInt16 nCols, short eAdjust,
                                 const SwTableAutoFmt* pTAFmt = 0,
                                 const std::vector<sal_uInt16> *pColArr = 0,
-                                sal_Bool bCalledFromShell = sal_False,
-                                sal_Bool bNewModel = sal_True );
+                                bool bCalledFromShell = false,
+                                bool bNewModel = true );
 
     // If index is in a table, return TableNode, else 0.
                  SwTableNode* IsIdxInTbl( const SwNodeIndex& rIdx );
@@ -1577,7 +1577,7 @@ public:
     // text to table conversion - API support
     const SwTable* TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes );
 
-    sal_Bool TableToText( const SwTableNode* pTblNd, sal_Unicode cCh );
+    bool TableToText( const SwTableNode* pTblNd, sal_Unicode cCh );
 
     // Create columns / rows in table.
     bool InsertCol( const SwCursor& rCursor,
@@ -1590,74 +1590,74 @@ public:
                     sal_uInt16 nCnt = 1, bool bBehind = true );
 
     // Delete Columns/Rows in table.
-    sal_Bool DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn = false );
-    sal_Bool DeleteRow( const SwCursor& rCursor );
-    sal_Bool DeleteCol( const SwCursor& rCursor );
+    bool DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn = false );
+    bool DeleteRow( const SwCursor& rCursor );
+    bool DeleteCol( const SwCursor& rCursor );
 
     // Split / concatenate boxes in table.
-    sal_Bool SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert = sal_True,
-                       sal_uInt16 nCnt = 1, sal_Bool bSameHeight = sal_False );
+    bool SplitTbl( const SwSelBoxes& rBoxes, bool bVert = true,
+                       sal_uInt16 nCnt = 1, bool bSameHeight = false );
 
     // @return enum TableMergeErr.
     sal_uInt16 MergeTbl( SwPaM& rPam );
     OUString GetUniqueTblName() const;
-    sal_Bool IsInsTblFormatNum() const;
-    sal_Bool IsInsTblChangeNumFormat() const;
-    sal_Bool IsInsTblAlignNum() const;
+    bool IsInsTblFormatNum() const;
+    bool IsInsTblChangeNumFormat() const;
+    bool IsInsTblAlignNum() const;
 
     // From FEShell (for Undo and BModified).
     void GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
                     const SwCellFrm* pBoxFrm = 0 ) const;
-    void SetTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly,
+    void SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
                     const SwCursor* pCrsr, const SwCellFrm* pBoxFrm = 0 );
     void GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
                     const SwCellFrm* pBoxFrm = 0 ) const;
-    void SetTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly, const SwCursor* pCrsr,
+    void SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor* pCrsr,
                      const SwCellFrm* pBoxFrm = 0 );
 
     // Direct access for UNO.
     void SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rOld,
-                                    const SwTableBox *pStart, sal_Bool bCurRowOnly);
+                                    const SwTableBox *pStart, bool bCurRowOnly);
 
     void SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet );
 
     // AutoFormat for table/table selection.
-    sal_Bool SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNew );
+    bool SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNew );
 
     // Query attributes.
-    sal_Bool GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet );
+    bool GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet );
 
-    void AppendUndoForInsertFromDB( const SwPaM& rPam, sal_Bool bIsTable );
+    void AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable );
 
-    sal_Bool SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
+    bool SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                                 SwTwips nAbsDiff, SwTwips nRelDiff );
     SwTableBoxFmt* MakeTableBoxFmt();
     SwTableLineFmt* MakeTableLineFmt();
 
     // Check if box has numerical valule. Change format of box if required.
-    void ChkBoxNumFmt( SwTableBox& rAktBox, sal_Bool bCallUpdate );
+    void ChkBoxNumFmt( SwTableBox& rAktBox, bool bCallUpdate );
     void SetTblBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet );
     void ClearBoxNumAttrs( const SwNodeIndex& rNode );
     void ClearLineNumAttrs( SwPosition & rPos );
 
-    sal_Bool InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
-                        const SwTable* pCpyTbl = 0, sal_Bool bCpyName = sal_False,
-                        sal_Bool bCorrPos = sal_False );
+    bool InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
+                        const SwTable* pCpyTbl = 0, bool bCpyName = false,
+                        bool bCorrPos = false );
 
-    sal_Bool UnProtectCells( const OUString& rTblName );
-    sal_Bool UnProtectCells( const SwSelBoxes& rBoxes );
-    sal_Bool UnProtectTbls( const SwPaM& rPam );
-    sal_Bool HasTblAnyProtection( const SwPosition* pPos,
+    bool UnProtectCells( const OUString& rTblName );
+    bool UnProtectCells( const SwSelBoxes& rBoxes );
+    bool UnProtectTbls( const SwPaM& rPam );
+    bool HasTblAnyProtection( const SwPosition* pPos,
                               const OUString* pTblName = 0,
-                              sal_Bool* pFullTblProtection = 0 );
+                              bool* pFullTblProtection = 0 );
 
     // Split table at baseline position, i.e. create a new table.
-    sal_Bool SplitTable( const SwPosition& rPos, sal_uInt16 eMode = 0,
-                        sal_Bool bCalcNewSize = sal_False );
+    bool SplitTable( const SwPosition& rPos, sal_uInt16 eMode = 0,
+                        bool bCalcNewSize = false );
 
     /** And vice versa: rPos must be in the table that remains. The flag indicates
      whether the current table is merged with the one before or behind it. */
-    sal_Bool MergeTable( const SwPosition& rPos, sal_Bool bWithPrev = sal_True,
+    bool MergeTable( const SwPosition& rPos, bool bWithPrev = true,
                         sal_uInt16 nMode = 0 );
 
     // Make charts of given table update.
@@ -1682,9 +1682,9 @@ public:
     // Insert label. If a FlyFormat is created, return it.
     SwFlyFrmFmt* InsertLabel( const SwLabelType eType, const OUString &rTxt, const OUString& rSeparator,
                     const OUString& rNumberingSeparator,
-                    const sal_Bool bBefore, const sal_uInt16 nId, const sal_uLong nIdx,
+                    const bool bBefore, const sal_uInt16 nId, const sal_uLong nIdx,
                     const OUString& rCharacterStyle,
-                    const sal_Bool bCpyBrd = sal_True );
+                    const bool bCpyBrd = true );
     SwFlyFrmFmt* InsertDrawLabel(
         const OUString &rTxt, const OUString& rSeparator, const OUString& rNumberSeparator,
         const sal_uInt16 nId, const OUString& rCharacterStyle, SdrObject& rObj );
@@ -1784,8 +1784,8 @@ public:
                         bool bModulus = true );
 
     // Query NumberFormatter.
-    inline       SvNumberFormatter* GetNumberFormatter( sal_Bool bCreate = sal_True );
-    inline const SvNumberFormatter* GetNumberFormatter( sal_Bool bCreate = sal_True ) const;
+    inline       SvNumberFormatter* GetNumberFormatter( bool bCreate = true );
+    inline const SvNumberFormatter* GetNumberFormatter( bool bCreate = true ) const;
 
     bool HasInvisibleContent() const;
     // delete invisible content, like hidden sections and paragraphs
@@ -1797,12 +1797,12 @@ public:
 
     // Create sub-documents according to given collection.
     // If no collection is given, use chapter styles for 1st level.
-    sal_Bool GenerateGlobalDoc( const OUString& rPath,
+    bool GenerateGlobalDoc( const OUString& rPath,
                                 const SwTxtFmtColl* pSplitColl = 0 );
-    sal_Bool GenerateGlobalDoc( const OUString& rPath, int nOutlineLevel = 0 );
-    sal_Bool GenerateHTMLDoc( const OUString& rPath,
+    bool GenerateGlobalDoc( const OUString& rPath, int nOutlineLevel = 0 );
+    bool GenerateHTMLDoc( const OUString& rPath,
                                 const SwTxtFmtColl* pSplitColl = 0 );
-    sal_Bool GenerateHTMLDoc( const OUString& rPath, int nOutlineLevel = 0 );
+    bool GenerateHTMLDoc( const OUString& rPath, int nOutlineLevel = 0 );
 
     //  Compare two documents.
     long CompareDoc( const SwDoc& rDoc );
@@ -1854,12 +1854,12 @@ public:
     void GetRowHeight( const SwCursor& rCursor, SwFmtFrmSize *& rpSz ) const;
     void SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew );
     void GetRowSplit( const SwCursor& rCursor, SwFmtRowSplit *& rpSz ) const;
-    sal_Bool BalanceRowHeight( const SwCursor& rCursor, sal_Bool bTstOnly = sal_True );
+    bool BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly = true );
     void SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew );
-    sal_Bool GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill ) const;
+    bool GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill ) const;
     void SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet );
     void SetTabLineStyle( const SwCursor& rCursor,
-                          const Color* pColor, sal_Bool bSetLine,
+                          const Color* pColor, bool bSetLine,
                           const editeng::SvxBorderLine* pBorderLine );
     void GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const;
     void SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew );
@@ -1873,10 +1873,10 @@ public:
     the values of the same property over any other boxes in the selection; if any value is different from
     that of the first box, the property is unset (and sal_False is returned).
     */
-    sal_Bool GetBoxAttr( const SwCursor& rCursor, SfxPoolItem &rToFill ) const;
+    bool GetBoxAttr( const SwCursor& rCursor, SfxPoolItem &rToFill ) const;
     void SetBoxAlign( const SwCursor& rCursor, sal_uInt16 nAlign );
     sal_uInt16 GetBoxAlign( const SwCursor& rCursor ) const;
-    void AdjustCellWidth( const SwCursor& rCursor, sal_Bool bBalance = sal_False );
+    void AdjustCellWidth( const SwCursor& rCursor, bool bBalance = false );
 
     int Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest );
     int Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest );
@@ -1997,7 +1997,7 @@ public:
 
     //Update all the page masters
     void SetDefaultPageMode(bool bSquaredPageMode);
-    sal_Bool IsSquaredPageMode() const;
+    bool IsSquaredPageMode() const;
 
     void Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 )
     {
@@ -2058,14 +2058,14 @@ inline const SwTableNode* SwDoc::IsIdxInTbl( const SwNodeIndex& rIdx ) const
     return ((SwDoc*)this)->IsIdxInTbl( rIdx );
 }
 
-inline SvNumberFormatter* SwDoc::GetNumberFormatter( sal_Bool bCreate )
+inline SvNumberFormatter* SwDoc::GetNumberFormatter( bool bCreate )
 {
     if( bCreate && !mpNumberFormatter )
         _CreateNumberFormatter();
     return mpNumberFormatter;
 }
 
-inline const SvNumberFormatter* SwDoc::GetNumberFormatter( sal_Bool bCreate ) const
+inline const SvNumberFormatter* SwDoc::GetNumberFormatter( bool bCreate ) const
 {
     return ((SwDoc*)this)->GetNumberFormatter( bCreate );
 }

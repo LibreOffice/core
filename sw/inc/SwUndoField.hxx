@@ -45,14 +45,14 @@ class SwUndoFieldFromDoc : public SwUndoField
 {
     SwField * pOldField, * pNewField;
     SwMsgPoolItem * pHnt;
-    sal_Bool bUpdate;
+    bool bUpdate;
 
     void DoImpl();
 
 public:
     SwUndoFieldFromDoc(const SwPosition & rPos, const SwField & aOldField,
                        const SwField & aNewField,
-                       SwMsgPoolItem * pHnt, sal_Bool bUpdate,
+                       SwMsgPoolItem * pHnt, bool bUpdate,
                        SwUndoId nId = UNDO_FIELD );
 
     virtual ~SwUndoFieldFromDoc();

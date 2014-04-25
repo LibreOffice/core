@@ -45,8 +45,8 @@ using namespace ::com::sun::star;
 SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     SvxStandardDialog(pParent, "InsertScriptDialog", "modules/swriter/ui/insertscript.ui"),
 
-    bNew(sal_True),
-    bIsUrl(sal_False),
+    bNew(true),
+    bIsUrl(false),
 
     pSh(pWrtSh),
     pFileDlg(NULL),
@@ -134,8 +134,8 @@ void SwJavaEditDialog::Apply()
 
 void SwJavaEditDialog::CheckTravel()
 {
-    sal_Bool bTravel = sal_False;
-    sal_Bool bNext(sal_False), bPrev(sal_False);
+    bool bTravel = false;
+    bool bNext(false), bPrev(false);
 
     if(!bNew)
     {
@@ -147,9 +147,9 @@ void SwJavaEditDialog::CheckTravel()
         if( bNext )
             pMgr->GoPrev();
 
-        if( 0 != ( bPrev = pMgr->GoPrev() ) )
+        if( ( bPrev = pMgr->GoPrev() ) )
             pMgr->GoNext();
-        bTravel |= bNext|bPrev;
+        bTravel |= bNext || bPrev;
 
         pSh->DestroyCrsr();
         pSh->EndAction();
@@ -219,12 +219,12 @@ void SwJavaEditDialog::SetFld()
 
 bool SwJavaEditDialog::IsUpdate() const
 {
-    return pFld && ( bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
+    return pFld && ( (bIsUrl ? 1 : 0) != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
 }
 
 IMPL_LINK_NOARG(SwJavaEditDialog, RadioButtonHdl)
 {
-    sal_Bool bEnable = m_pUrlRB->IsChecked();
+    bool bEnable = m_pUrlRB->IsChecked();
     m_pUrlPB->Enable(bEnable);
     m_pUrlED->Enable(bEnable);
     m_pEditED->Enable(!bEnable);

@@ -147,7 +147,7 @@ public:
         SwScrollNaviPopup( sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window *pParent );
         virtual ~SwScrollNaviPopup();
 
-    static OUString         GetQuickHelpText(sal_Bool bNext);
+    static OUString         GetQuickHelpText(bool bNext);
 
     virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
     void                GrabFocus(){aToolBox.GrabFocus();}
@@ -157,9 +157,9 @@ public:
 
 class SwHlpImageButton : public ImageButton
 {
-    sal_Bool        bUp;
+    bool        bUp;
     public:
-        SwHlpImageButton(Window* pParent, const ResId& rResId, sal_Bool bUpBtn) :
+        SwHlpImageButton(Window* pParent, const ResId& rResId, bool bUpBtn) :
             ImageButton(pParent, rResId), bUp(bUpBtn){}
 
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;

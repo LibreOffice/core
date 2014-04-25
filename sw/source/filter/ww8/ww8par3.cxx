@@ -118,7 +118,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
     */
 
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    const sal_Bool bUseEnhFields = rOpt.IsUseEnhancedFields();
+    const bool bUseEnhFields = rOpt.IsUseEnhancedFields();
 
     if (!bUseEnhFields)
     {
@@ -179,7 +179,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
     if (rStr[pF->nLCode-1]==0x01)
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_CHECKBOX);
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    const sal_Bool bUseEnhFields = rOpt.IsUseEnhancedFields();
+    const bool bUseEnhFields = rOpt.IsUseEnhancedFields();
 
     if (!bUseEnhFields)
     {
@@ -236,7 +236,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_DROPDOWN);
 
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    sal_Bool bUseEnhFields = rOpt.IsUseEnhancedFields();
+    bool bUseEnhFields = rOpt.IsUseEnhancedFields();
 
     if (!bUseEnhFields)
     {
@@ -2123,23 +2123,23 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
     return(bRet);
 }
 
-sal_Bool SwMSConvertControls::InsertFormula(WW8FormulaControl &rFormula)
+bool SwMSConvertControls::InsertFormula(WW8FormulaControl &rFormula)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     const uno::Reference< lang::XMultiServiceFactory > & rServiceFactory =
         GetServiceFactory();
 
     if(!rServiceFactory.is())
-        return sal_False;
+        return false;
 
     awt::Size aSz;
     uno::Reference< form::XFormComponent> xFComp;
 
-    if (sal_True == (bRet = rFormula.Import(rServiceFactory, xFComp, aSz)))
+    if ((bRet = rFormula.Import(rServiceFactory, xFComp, aSz)))
     {
         uno::Reference <drawing::XShape> xShapeRef;
-        if (sal_True == (bRet = InsertControl(xFComp, aSz, &xShapeRef, false)))
+        if ((bRet = InsertControl(xFComp, aSz, &xShapeRef, false)))
             GetShapes()->add(xShapeRef);
     }
     return bRet;
@@ -2395,17 +2395,17 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
     return aRet;
 }
 
-sal_Bool WW8FormulaListBox::Import(const uno::Reference <
+bool WW8FormulaListBox::Import(const uno::Reference <
     lang::XMultiServiceFactory> &rServiceFactory,
     uno::Reference <form::XFormComponent> &rFComp,awt::Size &rSz )
 {
     uno::Reference<uno::XInterface> xCreate = rServiceFactory->createInstance("com.sun.star.form.component.ComboBox");
     if( !xCreate.is() )
-        return sal_False;
+        return false;
 
     rFComp = uno::Reference<form::XFormComponent>(xCreate, uno::UNO_QUERY);
     if( !rFComp.is() )
-        return sal_False;
+        return false;
 
     uno::Reference<beans::XPropertySet> xPropSet(xCreate, uno::UNO_QUERY);
 
@@ -2422,7 +2422,7 @@ sal_Bool WW8FormulaListBox::Import(const uno::Reference <
         xPropSet->setPropertyValue("HelpText", aTmp );
     }
 
-    sal_Bool bDropDown(sal_True);
+    bool bDropDown(true);
     xPropSet->setPropertyValue("Dropdown", css::uno::makeAny(bDropDown));
 
     if (!maListEntries.empty())
@@ -2456,7 +2456,7 @@ sal_Bool WW8FormulaListBox::Import(const uno::Reference <
         rSz = rRdr.MiserableDropDownFormHack(OUString(aBlank, SAL_N_ELEMENTS(aBlank)), xPropSet);
     }
 
-    return sal_True;
+    return true;
 }
 
 WW8FormulaCheckBox::WW8FormulaCheckBox(SwWW8ImplReader &rR)
@@ -2487,17 +2487,17 @@ static void lcl_AddToPropertyContainer
     xPropSet->setPropertyValue(rPropertyName, aAnyValue );
 }
 
-sal_Bool WW8FormulaCheckBox::Import(const uno::Reference <
+bool WW8FormulaCheckBox::Import(const uno::Reference <
     lang::XMultiServiceFactory> &rServiceFactory,
     uno::Reference <form::XFormComponent> &rFComp,awt::Size &rSz )
 {
     uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance("com.sun.star.form.component.CheckBox");
     if( !xCreate.is() )
-        return sal_False;
+        return false;
 
     rFComp = uno::Reference< form::XFormComponent >( xCreate, uno::UNO_QUERY );
     if( !rFComp.is() )
-        return sal_False;
+        return false;
 
     uno::Reference< beans::XPropertySet > xPropSet( xCreate, uno::UNO_QUERY );
 
@@ -2520,7 +2520,7 @@ sal_Bool WW8FormulaCheckBox::Import(const uno::Reference <
     if (!sHelp.isEmpty())
         lcl_AddToPropertyContainer(xPropSet, "HelpF1Text", sHelp);
 
-    return sal_True;
+    return true;
 
 }
 

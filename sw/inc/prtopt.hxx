@@ -24,16 +24,16 @@
 
 class SwPrintOptions : public SwPrintData, public utl::ConfigItem
 {
-    sal_Bool            bIsWeb;
+    bool            bIsWeb;
 
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 public:
-    SwPrintOptions(sal_Bool bWeb);
+    SwPrintOptions(bool bWeb);
     virtual ~SwPrintOptions();
 
     virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
-    virtual void            doSetModified( ) SAL_OVERRIDE { bModified = sal_True; SetModified();}
+    virtual void            doSetModified( ) SAL_OVERRIDE { bModified = true; SetModified();}
 
     SwPrintOptions& operator=(const SwPrintData& rData)
     {

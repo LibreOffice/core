@@ -56,7 +56,7 @@ class SwOutlineTabDialog : public SfxTabDialog
     SwNumRule*          pNumRule;
     SwChapterNumRules*  pChapterNumRules;
 
-    sal_Bool                bModified : 1;
+    bool                bModified : 1;
 
     protected:
     DECL_LINK(CancelHdl, void *);

@@ -278,7 +278,7 @@ IMPL_LINK( PagePropertyPanel, ClickOrientationHdl, ToolBox*, pToolBox )
     return 0L;
 }
 
-void PagePropertyPanel::ExecuteOrientationChange( const sal_Bool bLandscape )
+void PagePropertyPanel::ExecuteOrientationChange( const bool bLandscape )
 {
     StartUndo();
 

@@ -73,7 +73,7 @@ friend class SwEnvPreview;
     virtual short   Ok() SAL_OVERRIDE;
 
 public:
-     SwEnvDlg(Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert);
+     SwEnvDlg(Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert);
     virtual ~SwEnvDlg();
 };
 

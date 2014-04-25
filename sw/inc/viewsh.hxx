@@ -112,7 +112,7 @@ class SW_DLLPUBLIC SwViewShell : public Ring
     static BitmapEx*    mpReplaceBmp;    ///< replaced display of still loaded images
     static BitmapEx*    mpErrorBmp;      ///< error display of missed images
 
-    static sal_Bool mbLstAct;        // sal_True if EndAction of last Shell
+    static bool mbLstAct;        // sal_True if EndAction of last Shell
                                     // i.e. if the EndActions of the other
                                     // Shells on the document are through.
 
@@ -136,19 +136,19 @@ class SW_DLLPUBLIC SwViewShell : public Ring
     SwViewOption *mpOpt;
     SwAccessibilityOptions* mpAccOptions;
 
-    sal_Bool  mbDocSizeChgd     :1;  // For DocChgNotify(): Announce new DocSize
+    bool  mbDocSizeChgd     :1;  // For DocChgNotify(): Announce new DocSize
                                     // at EndAction to DocMDI.
-    sal_Bool  mbPaintWorks      :1;  // Normal Painting if sal_True,
+    bool  mbPaintWorks      :1;  // Normal Painting if sal_True,
                                     // remember Paint if sal_False.
-    sal_Bool  mbPaintInProgress :1;  // Block any double paint.
-    sal_Bool  mbViewLocked      :1;  // Lock visible range;
+    bool  mbPaintInProgress :1;  // Block any double paint.
+    bool  mbViewLocked      :1;  // Lock visible range;
                                     // in this case MakeVisible is ineffectual.
-    sal_Bool  mbInEndAction     :1;  // Avoid problems, cf. viewsh.cxx.
-    sal_Bool  mbPreview         :1;  // If sal_True it is a Preview-SwViewShell.
-    sal_Bool  mbFrameView       :1;  // If sal_True it is a  (HTML-)Frame.
-    sal_Bool  mbEnableSmooth    :1;  // Disable SmoothScroll, e.g. for drag
+    bool  mbInEndAction     :1;  // Avoid problems, cf. viewsh.cxx.
+    bool  mbPreview         :1;  // If sal_True it is a Preview-SwViewShell.
+    bool  mbFrameView       :1;  // If sal_True it is a  (HTML-)Frame.
+    bool  mbEnableSmooth    :1;  // Disable SmoothScroll, e.g. for drag
                                     // of scrollbars.
-    sal_Bool  mbEndActionByVirDev:1; // Paints from EndAction always via virtual device
+    bool  mbEndActionByVirDev:1; // Paints from EndAction always via virtual device
                                     // (e.g. when browsing).
     bool      mbShowHeaderSeparator:1; ///< Flag to say that we are showing the header control
     bool      mbShowFooterSeparator:1; ///< Flag to say that we are showing the footer control
@@ -175,7 +175,7 @@ class SW_DLLPUBLIC SwViewShell : public Ring
     // PaintDesktop split. This pars is also used by PreviewPage.
     SAL_DLLPRIVATE void _PaintDesktop( const SwRegionRects &rRegion );
 
-    SAL_DLLPRIVATE sal_Bool CheckInvalidForPaint( const SwRect & );  // Direct Paint or rather
+    SAL_DLLPRIVATE bool CheckInvalidForPaint( const SwRect & );  // Direct Paint or rather
                                                                     // trigger an action.
 
     SAL_DLLPRIVATE void PrepareForPrint( const SwPrintData &rOptions );
@@ -207,25 +207,25 @@ public:
     // Bracketing of actions belonging together.
     inline void StartAction();
            void ImplStartAction();
-    inline void EndAction( const sal_Bool bIdleEnd = sal_False );
-           void ImplEndAction( const sal_Bool bIdleEnd = sal_False );
+    inline void EndAction( const bool bIdleEnd = false );
+           void ImplEndAction( const bool bIdleEnd = false );
     sal_uInt16 ActionCount() const { return mnStartAction; }
-    sal_Bool ActionPend() const { return mnStartAction != 0; }
-    sal_Bool IsInEndAction() const { return mbInEndAction; }
+    bool ActionPend() const { return mnStartAction != 0; }
+    bool IsInEndAction() const { return mbInEndAction; }
 
-    void SetEndActionByVirDev( sal_Bool b ) { mbEndActionByVirDev = b; }
-    sal_Bool IsEndActionByVirDev()          { return mbEndActionByVirDev; }
+    void SetEndActionByVirDev( bool b ) { mbEndActionByVirDev = b; }
+    bool IsEndActionByVirDev()          { return mbEndActionByVirDev; }
 
     // The ActionCount for all Shells is temporarily set to zero and then
     // restored at the RootFrame via UNO.
     void    SetRestoreActions(sal_uInt16 nSet);
     sal_uInt16  GetRestoreActions() const;
 
-    inline sal_Bool HasInvalidRect() const { return maInvalidRect.HasArea(); }
+    inline bool HasInvalidRect() const { return maInvalidRect.HasArea(); }
     void ChgHyphenation() { Reformat(); }
     void ChgNumberDigits();
 
-    sal_Bool AddPaintRect( const SwRect &rRect );
+    bool AddPaintRect( const SwRect &rRect );
 
     void InvalidateWindows( const SwRect &rRect );
 
@@ -249,7 +249,7 @@ public:
     */
     void PaintTile(VirtualDevice &rDevice, int contextWidth, int contextHeight, int tilePosX, int tilePosY, long tileWidth, long tileHeight);
 
-    sal_Bool IsPaintInProgress() const { return mbPaintInProgress; }
+    bool IsPaintInProgress() const { return mbPaintInProgress; }
     bool IsDrawingLayerPaintInProgress() const { return !mPrePostPaintRegions.empty(); }
 
     // Notification that visible area has been changed.
@@ -257,8 +257,8 @@ public:
     // The passed rect is situated on pixel borders
     // in order to avoid pixel errors when scrolling.
     virtual void VisPortChgd( const SwRect & );
-    sal_Bool SmoothScroll( long lXDiff, long lYDiff, const Rectangle* );//Browser
-    void EnableSmooth( sal_Bool b ) { mbEnableSmooth = b; }
+    bool SmoothScroll( long lXDiff, long lYDiff, const Rectangle* );//Browser
+    void EnableSmooth( bool b ) { mbEnableSmooth = b; }
 
     const SwRect& VisArea() const { return maVisArea; }
 
@@ -272,13 +272,13 @@ public:
     Point GetPagePos( sal_uInt16 nPageNum ) const;
 
     sal_uInt16 GetNumPages();   // Ask count of current pages from layout.
-    sal_Bool   IsDummyPage( sal_uInt16 nPageNum ) const;  // An empty page?
+    bool   IsDummyPage( sal_uInt16 nPageNum ) const;  // An empty page?
 
     // Invalidate first visible page for all Shells in ring.
     void SetFirstVisPageInvalid();
 
     SwRootFrm   *GetLayout() const;
-    sal_Bool         IsNewLayout() const; // Has Layout been loaded or created?
+    bool         IsNewLayout() const; // Has Layout been loaded or created?
 
      Size GetDocSize() const;   // Get document size.
 
@@ -348,7 +348,7 @@ public:
     inline OutputDevice* GetOut()     const { return mpOut; }
 
     void SetWin(Window* win) { mpWin = win; }
-    static inline sal_Bool IsLstEndAction() { return SwViewShell::mbLstAct; }
+    static inline bool IsLstEndAction() { return SwViewShell::mbLstAct; }
 
     // Change of all page descriptors.
     void   ChgAllPageOrientation( sal_uInt16 eOri );
@@ -356,7 +356,7 @@ public:
 
     // Printing of one page.
     // bIsPDFExport == true is: do PDF Export (no printing!)
-    sal_Bool PrintOrPDFExport( OutputDevice *pOutDev,
+    bool PrintOrPDFExport( OutputDevice *pOutDev,
             SwPrintData const& rPrintData,
             sal_Int32 nRenderer /* offset in vector of pages to print */ );
 
@@ -375,11 +375,11 @@ public:
     void CalcPagesForPrint( sal_uInt16 nMax );
 
     // All about fields.
-    void UpdateFlds(sal_Bool bCloseDB = sal_False);
-    sal_Bool IsAnyFieldInDoc() const;
+    void UpdateFlds(bool bCloseDB = false);
+    bool IsAnyFieldInDoc() const;
     // Update all charts, for that exists any table.
     void UpdateAllCharts();
-    sal_Bool HasCharts() const;
+    bool HasCharts() const;
 
     // DOCUMENT COMPATIBILITY FLAGS START
 
@@ -423,10 +423,10 @@ public:
     inline const SwViewOption *GetViewOptions() const { return mpOpt; }
     virtual void  ApplyViewOptions( const SwViewOption &rOpt );
            void  SetUIOptions( const SwViewOption &rOpt );
-    virtual void  SetReadonlyOption(sal_Bool bSet);          // Set readonly-bit of ViewOptions.
-           void  SetPDFExportOption(sal_Bool bSet);         // Set/reset PDF export mode.
-           void  SetPrtFormatOption(sal_Bool bSet);         // Set PrtFormat-Bit of ViewOptions.
-           void  SetReadonlySelectionOption(sal_Bool bSet); // Change the selection mode in readonly docs.
+    virtual void  SetReadonlyOption(bool bSet);          // Set readonly-bit of ViewOptions.
+           void  SetPDFExportOption(bool bSet);         // Set/reset PDF export mode.
+           void  SetPrtFormatOption(bool bSet);         // Set PrtFormat-Bit of ViewOptions.
+           void  SetReadonlySelectionOption(bool bSet); // Change the selection mode in readonly docs.
 
     const SwAccessibilityOptions* GetAccessibilityOptions() const { return mpAccOptions;}
 
@@ -458,17 +458,17 @@ public:
     */
     void AdjustOptionsForPagePreview( SwPrintData const& rPrintOptions );
 
-    sal_Bool IsViewLocked() const { return mbViewLocked; }
-    void LockView( sal_Bool b )   { mbViewLocked = b;    }
+    bool IsViewLocked() const { return mbViewLocked; }
+    void LockView( bool b )   { mbViewLocked = b;    }
 
     inline void LockPaint();
            void ImplLockPaint();
-    inline void UnlockPaint( sal_Bool bVirDev = sal_False );
-           void ImplUnlockPaint( sal_Bool bVirDev );
-           sal_Bool IsPaintLocked() const { return mnLockPaint != 0; }
+    inline void UnlockPaint( bool bVirDev = false );
+           void ImplUnlockPaint( bool bVirDev );
+           bool IsPaintLocked() const { return mnLockPaint != 0; }
 
     // Get/set DrawView and PageView.
-    sal_Bool HasDrawView() const;
+    bool HasDrawView() const;
     void MakeDrawView();
 
     // DrawView may be used at UI.
@@ -482,17 +482,17 @@ public:
     inline const SfxItemPool& GetAttrPool() const;
                  SfxItemPool& GetAttrPool();
 
-    sal_Bool IsPreview() const { return mbPreview; }
+    bool IsPreview() const { return mbPreview; }
 
-    sal_Bool IsFrameView()  const { return mbFrameView; }
+    bool IsFrameView()  const { return mbFrameView; }
     void SetFrameView( const Size& rBrowseBorder )
-           { mbFrameView = sal_True; maBrowseBorder = rBrowseBorder; }
+           { mbFrameView = true; maBrowseBorder = rBrowseBorder; }
 
     // Makes the necessary invalidations:
     // If BrowseMode has changed bBrowseChgd == sal_True
     // or bBrowseChgd == sal_False in BrowseMode
     // if proportions have changed.
-    void CheckBrowseView( sal_Bool bBrowseChgd );
+    void CheckBrowseView( bool bBrowseChgd );
 
     const Size& GetBrowseBorder() const;
     sal_Int32 GetBrowseWidth() const;
@@ -594,7 +594,7 @@ inline void SwViewShell::StartAction()
     if ( !mnStartAction++ )
         ImplStartAction();
 }
-inline void SwViewShell::EndAction( const sal_Bool bIdleEnd )
+inline void SwViewShell::EndAction( const bool bIdleEnd )
 {
     if( 0 == (mnStartAction - 1) )
         ImplEndAction( bIdleEnd );
@@ -606,7 +606,7 @@ inline void SwViewShell::LockPaint()
     if ( !mnLockPaint++ )
         ImplLockPaint();
 }
-inline void SwViewShell::UnlockPaint( sal_Bool bVirDev )
+inline void SwViewShell::UnlockPaint( bool bVirDev )
 {
     if ( 0 == --mnLockPaint )
         ImplUnlockPaint( bVirDev );

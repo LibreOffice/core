@@ -186,8 +186,8 @@ void    SwXDispatchProviderInterceptor::Invalidate()
 
 SwXDispatch::SwXDispatch(SwView& rVw) :
     m_pView(&rVw),
-    m_bOldEnable(sal_False),
-    m_bListenerAdded(sal_False)
+    m_bOldEnable(false),
+    m_bListenerAdded(false)
 {
 }
 
@@ -275,7 +275,7 @@ void SwXDispatch::addStatusListener(
     if(!m_pView)
         throw uno::RuntimeException();
     ShellModes eMode = m_pView->GetShellMode();
-    sal_Bool bEnable = SHELL_MODE_TEXT == eMode  ||
+    bool bEnable = SHELL_MODE_TEXT == eMode  ||
                        SHELL_MODE_LIST_TEXT == eMode  ||
                        SHELL_MODE_TABLE_TEXT == eMode  ||
                        SHELL_MODE_TABLE_LIST_TEXT == eMode;
@@ -313,7 +313,7 @@ void SwXDispatch::addStatusListener(
         uno::Reference<view::XSelectionSupplier> xSupplier = m_pView->GetUNOObject();
         uno::Reference<view::XSelectionChangeListener> xThis = this;
         xSupplier->addSelectionChangeListener(xThis);
-        m_bListenerAdded = sal_True;
+        m_bListenerAdded = true;
     }
 }
 
@@ -335,14 +335,14 @@ void SwXDispatch::removeStatusListener(
         uno::Reference<view::XSelectionSupplier> xSupplier = m_pView->GetUNOObject();
         uno::Reference<view::XSelectionChangeListener> xThis = this;
         xSupplier->removeSelectionChangeListener(xThis);
-        m_bListenerAdded = sal_False;
+        m_bListenerAdded = false;
     }
 }
 
 void SwXDispatch::selectionChanged( const lang::EventObject&  ) throw(uno::RuntimeException, std::exception)
 {
     ShellModes eMode = m_pView->GetShellMode();
-    sal_Bool bEnable = SHELL_MODE_TEXT == eMode  ||
+    bool bEnable = SHELL_MODE_TEXT == eMode  ||
                        SHELL_MODE_LIST_TEXT == eMode  ||
                        SHELL_MODE_TABLE_TEXT == eMode  ||
                        SHELL_MODE_TABLE_LIST_TEXT == eMode;
@@ -370,7 +370,7 @@ void SwXDispatch::disposing( const lang::EventObject& rSource ) throw(uno::Runti
     uno::Reference<view::XSelectionSupplier> xSupplier(rSource.Source, uno::UNO_QUERY);
     uno::Reference<view::XSelectionChangeListener> xThis = this;
     xSupplier->removeSelectionChangeListener(xThis);
-    m_bListenerAdded = sal_False;
+    m_bListenerAdded = false;
 
     lang::EventObject aObject;
     aObject.Source = (cppu::OWeakObject*)this;

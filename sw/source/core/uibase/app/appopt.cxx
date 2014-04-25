@@ -263,12 +263,12 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 
         if(!aViewOpt.IsViewMetaChars())
         {
-            if(     (!aViewOpt.IsTab( sal_True ) &&  pDocDispItem->bTab) ||
-                    (!aViewOpt.IsBlank( sal_True ) && pDocDispItem->bSpace) ||
-                    (!aViewOpt.IsParagraph( sal_True ) && pDocDispItem->bParagraphEnd) ||
-                    (!aViewOpt.IsLineBreak( sal_True ) && pDocDispItem->bManualBreak) )
+            if(     (!aViewOpt.IsTab( true ) &&  pDocDispItem->bTab) ||
+                    (!aViewOpt.IsBlank( true ) && pDocDispItem->bSpace) ||
+                    (!aViewOpt.IsParagraph( true ) && pDocDispItem->bParagraphEnd) ||
+                    (!aViewOpt.IsLineBreak( true ) && pDocDispItem->bManualBreak) )
             {
-                aViewOpt.SetViewMetaChars(sal_True);
+                aViewOpt.SetViewMetaChars(true);
                 if(pBindings)
                     pBindings->Invalidate(FN_VIEW_META_CHARS);
             }
@@ -350,7 +350,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 
         aViewOpt.SetSnap( pGridItem->GetUseGridSnap() );
         aViewOpt.SetSynchronize(pGridItem->GetSynchronize());
-        if( aViewOpt.IsGridVisible() != (pGridItem->GetGridVisible() ? 1 : 0) )
+        if( aViewOpt.IsGridVisible() != pGridItem->GetGridVisible() )
             aViewOpt.SetGridVisible( pGridItem->GetGridVisible());
         Size aSize = Size( pGridItem->GetFldDrawX()  ,
                             pGridItem->GetFldDrawY()  );

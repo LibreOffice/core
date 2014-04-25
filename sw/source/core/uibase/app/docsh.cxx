@@ -146,7 +146,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
                                     SwCrsrShell *pCrsrShell,
                                     SwPaM* pPaM )
 {
-    sal_Bool bAPICall = sal_False;
+    bool bAPICall = false;
     const SfxPoolItem* pApiItem;
     const SfxItemSet* pMedSet;
     if( 0 != ( pMedSet = rMedium.GetItemSet() ) && SFX_ITEM_SET ==
@@ -283,7 +283,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
     delete pRdr;
 
-    SW_MOD()->SetEmbeddedLoadSave( sal_False );
+    SW_MOD()->SetEmbeddedLoadSave( false );
 
     SetError( nErr, OUString(  OSL_LOG_PREFIX  ) );
     bool bOk = !IsError( nErr );
@@ -329,16 +329,16 @@ bool SwDocShell::Save()
             {
                 WriterRef xWrt;
                 ::GetXMLWriter( aEmptyOUStr, GetMedium()->GetBaseURL( true ), xWrt );
-                xWrt->SetOrganizerMode( sal_True );
+                xWrt->SetOrganizerMode( true );
                 SwWriter aWrt( *GetMedium(), *pDoc );
                 nErr = aWrt.Write( xWrt );
-                xWrt->SetOrganizerMode( sal_False );
+                xWrt->SetOrganizerMode( false );
             }
             break;
 
         case SFX_CREATE_MODE_EMBEDDED:
             // Suppress SfxProgress, if we are Embedded
-            SW_MOD()->SetEmbeddedLoadSave( sal_True );
+            SW_MOD()->SetEmbeddedLoadSave( true );
             // no break;
 
         case SFX_CREATE_MODE_STANDARD:
@@ -359,11 +359,11 @@ bool SwDocShell::Save()
                 WriterRef xWrt;
                 ::GetXMLWriter( aEmptyOUStr, GetMedium()->GetBaseURL( true ), xWrt );
 
-                sal_Bool bLockedView(sal_False);
+                bool bLockedView(false);
                 if ( pWrtShell )
                 {
                     bLockedView = pWrtShell->IsViewLocked();
-                    pWrtShell->LockView( sal_True );    //lock visible section
+                    pWrtShell->LockView( true );    //lock visible section
                 }
 
                 SwWriter aWrt( *GetMedium(), *pDoc );
@@ -374,7 +374,7 @@ bool SwDocShell::Save()
             }
             break;
         }
-        SW_MOD()->SetEmbeddedLoadSave( sal_False );
+        SW_MOD()->SetEmbeddedLoadSave( false );
     }
     SetError( nErr ? nErr : nVBWarning, OUString(  OSL_LOG_PREFIX  ) );
 
@@ -470,7 +470,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         // Remember and preserve Modified-Flag without calling the Link
         // (for OLE; after Statement from MM)
-        sal_Bool bIsModified = pDoc->IsModified();
+        bool bIsModified = pDoc->IsModified();
         pDoc->GetIDocumentUndoRedo().LockUndoNoModifiedPosition();
         Link aOldOLELnk( pDoc->GetOle2Link() );
         pDoc->SetOle2Link( Link() );
@@ -482,11 +482,11 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         WriterRef xWrt;
         ::GetXMLWriter( aEmptyOUStr, rMedium.GetBaseURL( true ), xWrt );
 
-        sal_Bool bLockedView(sal_False);
+        bool bLockedView(false);
         if ( pWrtShell )
         {
             bLockedView = pWrtShell->IsViewLocked();
-            pWrtShell->LockView( sal_True );    //lock visible section
+            pWrtShell->LockView( true );    //lock visible section
         }
 
         SwWriter aWrt( rMedium, *pDoc );
@@ -502,7 +502,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         }
         pDoc->SetOle2Link( aOldOLELnk );
 
-        SW_MOD()->SetEmbeddedLoadSave( sal_False );
+        SW_MOD()->SetEmbeddedLoadSave( false );
 
         // Increase RSID
         pDoc->setRsid( pDoc->getRsid() );
@@ -552,7 +552,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 
     if( pDoc->ContainsMSVBasic() )
     {
-        sal_Bool bSave = pFlt->GetUserData() == "CWW8"
+        bool bSave = pFlt->GetUserData() == "CWW8"
              && SvtFilterOptions::Get().IsLoadWordBasicStorage();
 
         if ( bSave )
@@ -641,9 +641,9 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
             nSaveType = 2;
 
         // Change Flags of the Document accordingly
-        sal_Bool bIsHTMLModeSave = GetDoc()->get(IDocumentSettingAccess::HTML_MODE);
-        sal_Bool bIsGlobalDocSave = GetDoc()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT);
-        sal_Bool bIsGlblDocSaveLinksSave = GetDoc()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS);
+        bool bIsHTMLModeSave = GetDoc()->get(IDocumentSettingAccess::HTML_MODE);
+        bool bIsGlobalDocSave = GetDoc()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT);
+        bool bIsGlblDocSaveLinksSave = GetDoc()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS);
         if( nMyType != nSaveType )
         {
             GetDoc()->set(IDocumentSettingAccess::HTML_MODE, 1 == nSaveType);
@@ -714,16 +714,16 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     {
         SwWait aWait( *this, true );
         // #i106906#
-        const sal_Bool bFormerLockView = pWrtShell->IsViewLocked();
-        pWrtShell->LockView( sal_True );
+        const bool bFormerLockView = pWrtShell->IsViewLocked();
+        pWrtShell->LockView( true );
         pWrtShell->StartAllAction();
         pWrtShell->Push();
-        SwWriter aWrt( rMedium, *pWrtShell, sal_True );
+        SwWriter aWrt( rMedium, *pWrtShell, true );
         nErrno = aWrt.Write( xWriter, &aFileName );
         //JP 16.05.97: In case the SFX revokes the View while saving
         if( pWrtShell )
         {
-            pWrtShell->Pop(sal_False);
+            pWrtShell->Pop(false);
             pWrtShell->EndAllAction();
             // #i106906#
             pWrtShell->LockView( bFormerLockView );
@@ -745,7 +745,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         }
     }
 
-    SW_MOD()->SetEmbeddedLoadSave( sal_False );
+    SW_MOD()->SetEmbeddedLoadSave( false );
     SetError( nErrno ? nErrno : nVBWarning, OUString(  OSL_LOG_PREFIX  ) );
     if( !rMedium.IsStorage() )
         rMedium.CloseOutStream();
@@ -769,7 +769,7 @@ bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor 
 
     if( pOLEChildList )
     {
-        sal_Bool bResetModified = IsEnableSetModified();
+        bool bResetModified = IsEnableSetModified();
         if( bResetModified )
             EnableSetModified( false );
 
@@ -794,8 +794,8 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
                                sal_uInt16 nAspect )
 {
     //fix #25341# Draw should not affect the Modified
-    sal_Bool bResetModified;
-    if ( sal_True == (bResetModified = IsEnableSetModified()) )
+    bool bResetModified;
+    if ( (bResetModified = IsEnableSetModified()) )
         EnableSetModified( false );
 
     // When there is a JobSetup connected to the Document, we copy it to
@@ -818,7 +818,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     pDev->SetFillColor();
     pDev->SetLineColor();
     pDev->SetBackground();
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebDocShell, this);
+    bool bWeb = 0 != PTR_CAST(SwWebDocShell, this);
     SwPrintData aOpts;
     SwViewShell::PrtOle2( pDoc, SW_MOD()->GetUsrPref(bWeb), aOpts, pDev, aRect );
     pDev->Pop();
@@ -850,7 +850,7 @@ void SwDocShell::SetVisArea( const Rectangle &rRect )
         aRect.Move( nMoveX, nMoveY );
 
         // Calls SfxInPlaceObject::SetVisArea()!
-        pView->SetVisArea( aRect, sal_True );
+        pView->SetVisArea( aRect, true );
     }
     else
         SfxObjectShell::SetVisArea( aRect );
@@ -864,7 +864,7 @@ Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
         SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 1 );
         SwCntntNode* pNd = pDoc->GetNodes().GoNext( &aIdx );
 
-        const SwRect aPageRect = pNd->FindPageFrmRect( sal_False, 0, sal_False );
+        const SwRect aPageRect = pNd->FindPageFrmRect( false, 0, false );
         return aPageRect.SVRect();
     }
     return SfxObjectShell::GetVisArea( nAspect );
@@ -938,7 +938,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         {
         case SID_PRINTPREVIEW:
         {
-            sal_Bool bDisable = IsInPlaceActive();
+            bool bDisable = IsInPlaceActive();
             // Disable "multiple layout"
             if ( !bDisable )
             {
@@ -948,7 +948,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                     if ( PTR_CAST(SwView, pTmpFrm->GetViewShell()) &&
                          ((SwView*)pTmpFrm->GetViewShell())->GetWrtShell().GetViewOptions()->getBrowseMode() )
                     {
-                        bDisable = sal_True;
+                        bDisable = true;
                         break;
                     }
                     pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this);
@@ -970,7 +970,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         {
             SfxViewShell* pCurrView = GetView() ? (SfxViewShell*)GetView()
                                         : SfxViewShell::Current();
-            sal_Bool bSourceView = 0 != PTR_CAST(SwSrcView, pCurrView);
+            bool bSourceView = 0 != PTR_CAST(SwSrcView, pCurrView);
             rSet.Put(SfxBoolItem(SID_SOURCEVIEW, bSourceView));
         }
         break;
@@ -996,7 +996,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         case SID_BROWSER_MODE:
         case FN_PRINT_LAYOUT:
             {
-                sal_Bool bState = GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE);
+                bool bState = GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE);
                 if(FN_PRINT_LAYOUT == nWhich)
                     bState = !bState;
                 rSet.Put( SfxBoolItem( nWhich, bState));
@@ -1020,7 +1020,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
 
         case SID_ATTR_YEAR2000:
             {
-                const SvNumberFormatter* pFmtr = pDoc->GetNumberFormatter(sal_False);
+                const SvNumberFormatter* pFmtr = pDoc->GetNumberFormatter(false);
                 rSet.Put( SfxUInt16Item( nWhich,
                         static_cast< sal_uInt16 >(
                         pFmtr ? pFmtr->GetYear2000()
@@ -1038,9 +1038,9 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             //pDoc->UpdateFlds( NULL, false );
             sfx2::LinkManager& rLnkMgr = pDoc->GetLinkManager();
             const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
-            sal_Bool bRet = sal_False;
+            bool bRet = false;
             if( !rLnks.empty() )
-                bRet = sal_True;
+                bRet = true;
             else
             {
                 //sections with hidden flag, hidden character attribute, hidden paragraph/text or conditional text fields

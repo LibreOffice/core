@@ -104,27 +104,27 @@ class SW_DLLPUBLIC SwNodes
 
     mutable SwOutlineNodes* pOutlineNds;        ///< Array of all outline nodes.
 
-    sal_Bool bInNodesDel : 1;           /**< In Case of recursive calling.
+    bool bInNodesDel : 1;           /**< In Case of recursive calling.
                                            Do not update Num/Outline. */
-    sal_Bool bInDelUpdOutl : 1;         ///< Flag for updating of Outline.
-    sal_Bool bInDelUpdNum : 1;          ///< Flag for updating of Outline.
+    bool bInDelUpdOutl : 1;         ///< Flag for updating of Outline.
+    bool bInDelUpdNum : 1;          ///< Flag for updating of Outline.
 
     /// For administering indices.
     void RegisterIndex( SwNodeIndex& rIdx );
     void DeRegisterIndex( SwNodeIndex& rIdx );
-    void RemoveNode( sal_uLong nDelPos, sal_uLong nLen, sal_Bool bDel );
+    void RemoveNode( sal_uLong nDelPos, sal_uLong nLen, bool bDel );
 
     // Actions on the nodes.
     void SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEnd );
     void DelNodes( const SwNodeIndex& rStart, sal_uLong nCnt = 1 );
 
     void ChgNode( SwNodeIndex& rDelPos, sal_uLong nSize,
-                  SwNodeIndex& rInsPos, sal_Bool bNewFrms );
+                  SwNodeIndex& rInsPos, bool bNewFrms );
 
     void UpdtOutlineIdx( const SwNode& );   ///< Update all OutlineNodes starting from Node.
 
     void _CopyNodes( const SwNodeRange&, const SwNodeIndex&,
-                    sal_Bool bNewFrms = sal_True, sal_Bool bTblInsDummyNode = sal_False ) const;
+                    bool bNewFrms = true, bool bTblInsDummyNode = false ) const;
     void _DelDummyNodes( const SwNodeRange& rRg );
 
 protected:
@@ -168,23 +168,23 @@ public:
 
     /** Is the NodesArray the regular one of Doc? (and not the UndoNds, ...)
        Implementation in doc.hxx (because one needs to know Doc for it) ! */
-    sal_Bool IsDocNodes() const;
+    bool IsDocNodes() const;
 
     sal_uInt16 GetSectionLevel(const SwNodeIndex &rIndex) const;
     void Delete(const SwNodeIndex &rPos, sal_uLong nNodes = 1);
 
-    sal_Bool _MoveNodes( const SwNodeRange&, SwNodes& rNodes, const SwNodeIndex&,
-                sal_Bool bNewFrms = sal_True );
+    bool _MoveNodes( const SwNodeRange&, SwNodes& rNodes, const SwNodeIndex&,
+                bool bNewFrms = true );
     void MoveRange( SwPaM&, SwPosition&, SwNodes& rNodes );
 
     void _Copy( const SwNodeRange& rRg, const SwNodeIndex& rInsPos,
-                sal_Bool bNewFrms = sal_True ) const
+                bool bNewFrms = true ) const
         {   _CopyNodes( rRg, rInsPos, bNewFrms ); }
 
     void SectionUp( SwNodeRange *);
     void SectionDown( SwNodeRange *pRange, SwStartNodeType = SwNormalStartNode );
 
-    sal_Bool CheckNodesRange( const SwNodeIndex& rStt, const SwNodeIndex& rEnd ) const;
+    bool CheckNodesRange( const SwNodeIndex& rStt, const SwNodeIndex& rEnd ) const;
 
     void GoStartOfSection(SwNodeIndex *) const;
     void GoEndOfSection(SwNodeIndex *) const;
@@ -225,7 +225,7 @@ public:
                             const Graphic* pGraphic,
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0,
-                            sal_Bool bDelayed = sal_False );    ///< in ndgrf.cxx
+                            bool bDelayed = false );    ///< in ndgrf.cxx
 
     SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
                             const GraphicObject& rGrfObj,
@@ -281,7 +281,7 @@ public:
                                 /*, SwUndo... pUndo*/ );
 
     /// Create regular text from what was table.
-    sal_Bool TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
+    bool TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
                         SwUndoTblToTxt* = 0 );
     /// Is in untbl.cxx and may called only by Undo-object.
     SwTableNode* UndoTableToText( sal_uLong nStt, sal_uLong nEnd,
@@ -290,7 +290,7 @@ public:
     /** Insert a new box in the line before InsPos. Its format
        is taken from the following one (or from the previous one if we are
        at the end). In the line there must be a box already. */
-    sal_Bool InsBoxen( SwTableNode*, SwTableLine*, SwTableBoxFmt*,
+    bool InsBoxen( SwTableNode*, SwTableLine*, SwTableBoxFmt*,
                         /// Formats for TextNode of box.
                         SwTxtFmtColl*, const SfxItemSet* pAutoAttr,
                         sal_uInt16 nInsPos, sal_uInt16 nCnt = 1 );
@@ -300,10 +300,10 @@ public:
        tables is calculated from the Maximum of the boxes, provided
        SSize is set "absolute" (LONG_MAX).
        (Momentarily this is needed only for the RTF-parser.) */
-    SwTableNode* SplitTable( const SwNodeIndex& rPos, sal_Bool bAfter = sal_True,
-                                sal_Bool bCalcNewSize = sal_False );
+    SwTableNode* SplitTable( const SwNodeIndex& rPos, bool bAfter = true,
+                                bool bCalcNewSize = false );
     /// Two Tables that are following one another are merged.
-    sal_Bool MergeTable( const SwNodeIndex& rPos, sal_Bool bWithPrev = sal_True,
+    bool MergeTable( const SwNodeIndex& rPos, bool bWithPrev = true,
                     sal_uInt16 nMode = 0, SwHistory* pHistory = 0 );
 
     /// Insert a new SwSection.

@@ -75,7 +75,7 @@ TYPEINIT1( SwTableLineFmt, SwFrmFmt );
 #define COLFUZZY 20
 
 void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
-                    sal_Bool bChgAlign,sal_uLong nNdPos );
+                    bool bChgAlign, sal_uLong nNdPos );
 
 class SwTableBox_Impl
 {
@@ -249,7 +249,7 @@ SwTable::SwTable( SwTableFmt* pFmt )
     nGrfsThatResize( 0 ),
     nRowsToRepeat( 1 ),
     bModifyLocked( false ),
-    bNewModel( sal_True )
+    bNewModel( true )
 {
     // default value set in the options
     eTblChgMode = (TblChgMode)GetTblChgDefaultMode();
@@ -416,14 +416,14 @@ static void lcl_RefreshHidden( SwTabCols &rToFill, size_t nPos )
     {
         if ( std::abs(static_cast<long>(nPos) - rToFill[i]) <= COLFUZZY )
         {
-            rToFill.SetHidden( i, sal_False );
+            rToFill.SetHidden( i, false );
             break;
         }
     }
 }
 
 static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
-                   const SwFrmFmt *pTabFmt, const sal_Bool bHidden,
+                   const SwFrmFmt *pTabFmt, const bool bHidden,
                    const bool bRefreshHidden )
 {
     const long nWish = pTabFmt->GetFrmSize().GetWidth();
@@ -545,7 +545,7 @@ static void lcl_ProcessBoxGet( const SwTableBox *pBox, SwTabCols &rToFill,
         }
     }
     else
-        ::lcl_SortedTabColInsert( rToFill, pBox, pTabFmt, sal_False, bRefreshHidden );
+        ::lcl_SortedTabColInsert( rToFill, pBox, pTabFmt, false, bRefreshHidden );
 }
 
 static void lcl_ProcessLineGet( const SwTableLine *pLine, SwTabCols &rToFill,
@@ -555,7 +555,7 @@ static void lcl_ProcessLineGet( const SwTableLine *pLine, SwTabCols &rToFill,
     {
         const SwTableBox *pBox = pLine->GetTabBoxes()[i];
         if ( pBox->GetSttNd() )
-            ::lcl_SortedTabColInsert( rToFill, pBox, pTabFmt, sal_True, false );
+            ::lcl_SortedTabColInsert( rToFill, pBox, pTabFmt, true, false );
         else
             for ( sal_uInt16 j = 0; j < pBox->GetTabLines().size(); ++j )
                 ::lcl_ProcessLineGet( pBox->GetTabLines()[j], rToFill, pTabFmt );
@@ -563,7 +563,7 @@ static void lcl_ProcessLineGet( const SwTableLine *pLine, SwTabCols &rToFill,
 }
 
 void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
-              sal_Bool bRefreshHidden, sal_Bool bCurRowOnly ) const
+              bool bRefreshHidden, bool bCurRowOnly ) const
 {
     // Optimization: if bHidden is set, we only update the Hidden Array.
     if ( bRefreshHidden )
@@ -579,7 +579,7 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
 
         // All are hidden, so add the visible ones.
         for ( size_t i = 0; i < rToFill.Count(); ++i )
-            rToFill.SetHidden( i, sal_True );
+            rToFill.SetHidden( i, true );
     }
     else
     {
@@ -616,7 +616,7 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
         const SwTableBoxes &rBoxes2 = pLine->GetTabBoxes();
         for ( sal_uInt16 k = 0; k < rBoxes2.size(); ++k )
             ::lcl_SortedTabColInsert( rToFill, rBoxes2[k],
-                                      pTabFmt, sal_False, bRefreshHidden );
+                                      pTabFmt, false, bRefreshHidden );
         pLine = pLine->GetUpper() ? pLine->GetUpper()->GetUpper() : 0;
     }
 
@@ -862,7 +862,7 @@ static void lcl_AdjustBox( SwTableBox *pBox, const long nDiff, Parm &rParm )
 }
 
 void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
-                          const SwTableBox *pStart, sal_Bool bCurRowOnly )
+                          const SwTableBox *pStart, bool bCurRowOnly )
 {
     CHECK_TABLE( *this )
 
@@ -902,8 +902,8 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             SwFmtHoriOrient aOri( pFmt->GetHoriOrient() );
             if(text::HoriOrientation::NONE != aOri.GetHoriOrient())
             {
-                const sal_Bool bLeftDist = rNew.GetLeft() != nShLeft;
-                const sal_Bool bRightDist = rNew.GetRight() + nShRight != rNew.GetRightMax();
+                const bool bLeftDist = rNew.GetLeft() != nShLeft;
+                const bool bRightDist = rNew.GetRight() + nShRight != rNew.GetRightMax();
                 if(!bLeftDist && !bRightDist)
                     aOri.SetHoriOrient( text::HoriOrientation::FULL );
                 else if(!bRightDist && rNew.GetLeft() > nShLeft )
@@ -1206,7 +1206,7 @@ static void lcl_CalcNewWidths( std::list<sal_uInt16> &rSpanPos, ChangeList& rCha
 }
 
 void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
-    const SwTabCols &rOld, const SwTableBox *pStart, sal_Bool bCurRowOnly )
+    const SwTabCols &rOld, const SwTableBox *pStart, bool bCurRowOnly )
 {
 #if OSL_DEBUG_LEVEL > 1
     static int nCallCount = 0;
@@ -1327,7 +1327,7 @@ static bool lcl_IsValidRowName( const OUString& rStr )
 
 // #i80314#
 // add 3rd parameter and its handling
-sal_uInt16 SwTable::_GetBoxNum( OUString& rStr, sal_Bool bFirstPart,
+sal_uInt16 SwTable::_GetBoxNum( OUString& rStr, bool bFirstPart,
                             const bool bPerformValidCheck )
 {
     sal_uInt16 nRet = 0;
@@ -1403,7 +1403,7 @@ const SwTableBox* SwTable::GetTblBox( const OUString& rName,
                 --nBox;
         }
 
-        nLine = SwTable::_GetBoxNum( aNm, sal_False, bPerformValidCheck );
+        nLine = SwTable::_GetBoxNum( aNm, false, bPerformValidCheck );
 
         // determine line
         if( !nLine || nLine > pLines->size() )
@@ -1583,7 +1583,7 @@ void SwTableLine::ChgFrmFmt( SwTableLineFmt *pNewFmt )
                 if ( bInFirstNonHeadlineRow || bInFollowFlowRow )
                     pTab = pTab->FindMaster();
 
-                pTab->SetRemoveFollowFlowLinePending( sal_True );
+                pTab->SetRemoveFollowFlowLinePending( true );
                 pTab->InvalidatePos();
             }
         }
@@ -1719,8 +1719,8 @@ SwTableBoxFmt* SwTableBox::CheckBoxFmt( SwTableBoxFmt* pFmt )
 {
     // We might need to create a new format here, because the box must be
     // added to the format solely if pFmt has a value or formular.
-    if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_VALUE, sal_False ) ||
-        SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMULA, sal_False ) )
+    if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_VALUE, false ) ||
+        SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMULA, false ) )
     {
         SwTableBox* pOther = SwIterator<SwTableBox,SwFmt>::FirstElement( *pFmt );
         if( pOther )
@@ -1789,7 +1789,7 @@ void SwTableBox::ChgFrmFmt( SwTableBoxFmt* pNewFmt )
             pCell->InvalidateSize();
             pCell->_InvalidatePrt();
             pCell->SetCompletePaint();
-            pCell->SetDerivedVert( sal_False );
+            pCell->SetDerivedVert( false );
             pCell->CheckDirChange();
 
             // #i47489#
@@ -1869,10 +1869,10 @@ OUString SwTableBox::GetName() const
     return sNm;
 }
 
-sal_Bool SwTableBox::IsInHeadline( const SwTable* pTbl ) const
+bool SwTableBox::IsInHeadline( const SwTable* pTbl ) const
 {
     if( !GetUpper() )           // should only happen upon merge.
-        return sal_False;
+        return false;
 
     if( !pTbl )
         pTbl = &pSttNd->FindTableNode()->GetTable();
@@ -1957,13 +1957,13 @@ void SwTable::SetHTMLTableLayout( SwHTMLTableLayout *p )
 }
 
 void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
-                    sal_Bool bChgAlign )
+                    bool bChgAlign )
 {
-    sal_uLong nNdPos = rBox.IsValidNumTxtNd( sal_True );
+    sal_uLong nNdPos = rBox.IsValidNumTxtNd( true );
     ChgTextToNum( rBox,rTxt,pCol,bChgAlign,nNdPos);
 }
 void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
-                    sal_Bool bChgAlign,sal_uLong nNdPos )
+                    bool bChgAlign,sal_uLong nNdPos )
 {
 
     if( ULONG_MAX != nNdPos )
@@ -2064,7 +2064,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
         // assign vertical orientation
         if( bChgAlign &&
             ( SFX_ITEM_SET != rBox.GetFrmFmt()->GetItemState(
-                RES_VERT_ORIENT, sal_True, &pItem ) ||
+                RES_VERT_ORIENT, true, &pItem ) ||
                 text::VertOrientation::TOP == ((SwFmtVertOrient*)pItem)->GetVertOrient() ))
         {
             rBox.GetFrmFmt()->SetFmtAttr( SwFmtVertOrient( 0, text::VertOrientation::BOTTOM ));
@@ -2074,12 +2074,12 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
 
 void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
 {
-    sal_uLong nNdPos = rBox.IsValidNumTxtNd( sal_False );
+    sal_uLong nNdPos = rBox.IsValidNumTxtNd( false );
     if( ULONG_MAX != nNdPos )
     {
         SwDoc* pDoc = rBox.GetFrmFmt()->GetDoc();
         SwTxtNode* pTNd = pDoc->GetNodes()[ nNdPos ]->GetTxtNode();
-        sal_Bool bChgAlign = pDoc->IsInsTblAlignNum();
+        bool bChgAlign = pDoc->IsInsTblAlignNum();
         const SfxPoolItem* pItem;
 
         Color* pCol = 0;
@@ -2153,7 +2153,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
         // assign vertical orientation
         if( bChgAlign &&
             SFX_ITEM_SET == rBox.GetFrmFmt()->GetItemState(
-            RES_VERT_ORIENT, sal_False, &pItem ) &&
+            RES_VERT_ORIENT, false, &pItem ) &&
             text::VertOrientation::BOTTOM == ((SwFmtVertOrient*)pItem)->GetVertOrient() )
         {
             rBox.GetFrmFmt()->SetFmtAttr( SwFmtVertOrient( 0, text::VertOrientation::TOP ));
@@ -2204,9 +2204,9 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         {
             GetDoc()->SetFieldsDirty(true, NULL, 0);
 
-            if( SFX_ITEM_SET == GetItemState( RES_BOXATR_FORMAT, sal_False ) ||
-                SFX_ITEM_SET == GetItemState( RES_BOXATR_VALUE, sal_False ) ||
-                SFX_ITEM_SET == GetItemState( RES_BOXATR_FORMULA, sal_False ) )
+            if( SFX_ITEM_SET == GetItemState( RES_BOXATR_FORMAT, false ) ||
+                SFX_ITEM_SET == GetItemState( RES_BOXATR_VALUE, false ) ||
+                SFX_ITEM_SET == GetItemState( RES_BOXATR_FORMULA, false ) )
             {
                 // fetch the box
                 SwIterator<SwTableBox,SwFmt> aIter( *this );
@@ -2221,13 +2221,13 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                         nNewFmt = pNewFmt->GetValue();
                         // new formatting
                         // is it newer or has the current been removed?
-                        if( SFX_ITEM_SET != GetItemState( RES_BOXATR_VALUE, sal_False ))
+                        if( SFX_ITEM_SET != GetItemState( RES_BOXATR_VALUE, false ))
                             pNewFmt = 0;
                     }
                     else
                     {
                         // fetch the current Item
-                        GetItemState( RES_BOXATR_FORMAT, sal_False,
+                        GetItemState( RES_BOXATR_FORMAT, false,
                                             (const SfxPoolItem**)&pNewFmt );
                         nOldFmt = GetTblBoxNumFmt().GetValue();
                         nNewFmt = pNewFmt ? pNewFmt->GetValue() : nOldFmt;
@@ -2239,7 +2239,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                         if( NUMBERFORMAT_TEXT != nNewFmt )
                         {
                             if( SFX_ITEM_SET == GetItemState(
-                                                RES_BOXATR_VALUE, sal_False ))
+                                                RES_BOXATR_VALUE, false ))
                                 nOldFmt = NUMBERFORMAT_TEXT;
                             else
                                 nNewFmt = NUMBERFORMAT_TEXT;
@@ -2267,10 +2267,10 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                         bool bChgTxt = true;
                         double fVal = 0;
                         if( !pNewVal && SFX_ITEM_SET != GetItemState(
-                            RES_BOXATR_VALUE, sal_False, (const SfxPoolItem**)&pNewVal ))
+                            RES_BOXATR_VALUE, false, (const SfxPoolItem**)&pNewVal ))
                         {
                             // so far, no value has been set, so try to evaluate the content
-                            sal_uLong nNdPos = pBox->IsValidNumTxtNd( sal_True );
+                            sal_uLong nNdPos = pBox->IsValidNumTxtNd( true );
                             if( ULONG_MAX != nNdPos )
                             {
                                 sal_uInt32 nTmpFmtIdx = nNewFmt;
@@ -2285,7 +2285,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
                                     // JP 22.04.98: Bug 49659 -
                                     //  Special casing for percent
-                                    sal_Bool bIsNumFmt = sal_False;
+                                    bool bIsNumFmt = false;
                                     if( NUMBERFORMAT_PERCENT ==
                                         pNumFmtr->GetType( nNewFmt ))
                                     {
@@ -2354,11 +2354,11 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     SwFrmFmt::Modify( pOld, pNew );
 }
 
-sal_Bool SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
-                            sal_Bool& rIsEmptyTxtNd ) const
+bool SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
+                            bool& rIsEmptyTxtNd ) const
 {
-    sal_Bool bRet = sal_False;
-    sal_uLong nNdPos = IsValidNumTxtNd( sal_True );
+    bool bRet = false;
+    sal_uLong nNdPos = IsValidNumTxtNd( true );
     if( ULONG_MAX != nNdPos )
     {
         OUString aTxt( pSttNd->GetNodes()[ nNdPos ]->GetTxtNode()->
@@ -2370,7 +2370,7 @@ sal_Bool SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
 
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT,
-                sal_False, &pItem ))
+                false, &pItem ))
         {
             rFmtIndex = ((SwTblBoxNumFormat*)pItem)->GetValue();
             // Special casing for percent
@@ -2389,29 +2389,29 @@ sal_Bool SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
         bRet = pNumFmtr->IsNumberFormat( aTxt, rFmtIndex, rNum );
     }
     else
-        rIsEmptyTxtNd = sal_False;
+        rIsEmptyTxtNd = false;
     return bRet;
 }
 
-sal_Bool SwTableBox::IsNumberChanged() const
+bool SwTableBox::IsNumberChanged() const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
-    if( SFX_ITEM_SET == GetFrmFmt()->GetItemState( RES_BOXATR_FORMULA, sal_False ))
+    if( SFX_ITEM_SET == GetFrmFmt()->GetItemState( RES_BOXATR_FORMULA, false ))
     {
         const SwTblBoxNumFormat *pNumFmt;
         const SwTblBoxValue *pValue;
 
-        if( SFX_ITEM_SET != GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, sal_False,
+        if( SFX_ITEM_SET != GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, false,
             (const SfxPoolItem**)&pValue ))
             pValue = 0;
-        if( SFX_ITEM_SET != GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT, sal_False,
+        if( SFX_ITEM_SET != GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT, false,
             (const SfxPoolItem**)&pNumFmt ))
             pNumFmt = 0;
 
         sal_uLong nNdPos;
         if( pNumFmt && pValue &&
-            ULONG_MAX != ( nNdPos = IsValidNumTxtNd( sal_True ) ) )
+            ULONG_MAX != ( nNdPos = IsValidNumTxtNd( true ) ) )
         {
             OUString sNewTxt, sOldTxt( pSttNd->GetNodes()[ nNdPos ]->
                                     GetTxtNode()->GetRedlineTxt() );
@@ -2430,7 +2430,7 @@ sal_Bool SwTableBox::IsNumberChanged() const
     return bRet;
 }
 
-sal_uLong SwTableBox::IsValidNumTxtNd( sal_Bool bCheckAttr ) const
+sal_uLong SwTableBox::IsValidNumTxtNd( bool bCheckAttr ) const
 {
     sal_uLong nPos = ULONG_MAX;
     if( pSttNd )
@@ -2513,9 +2513,9 @@ sal_uInt16 SwTableBox::IsFormulaOrValueBox() const
     sal_uInt16 nWhich = 0;
     const SwTxtNode* pTNd;
     SwFrmFmt* pFmt = GetFrmFmt();
-    if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMULA, sal_False ))
+    if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMULA, false ))
         nWhich = RES_BOXATR_FORMULA;
-    else if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_VALUE, sal_False ) &&
+    else if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_VALUE, false ) &&
             !pFmt->GetDoc()->GetNumberFormatter()->IsTextFormat(
                 pFmt->GetTblBoxNumFmt().GetValue() ))
         nWhich = RES_BOXATR_VALUE;
@@ -2531,15 +2531,15 @@ void SwTableBox::ActualiseValueBox()
 {
     const SfxPoolItem *pFmtItem, *pValItem;
     SwFrmFmt* pFmt = GetFrmFmt();
-    if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMAT, sal_True, &pFmtItem )
-        && SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_VALUE, sal_True, &pValItem ))
+    if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMAT, true, &pFmtItem )
+        && SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_VALUE, true, &pValItem ))
     {
         const sal_uLong nFmtId = ((SwTblBoxNumFormat*)pFmtItem)->GetValue();
         sal_uLong nNdPos = ULONG_MAX;
         SvNumberFormatter* pNumFmtr = pFmt->GetDoc()->GetNumberFormatter();
 
         if( !pNumFmtr->IsTextFormat( nFmtId ) &&
-            ULONG_MAX != (nNdPos = IsValidNumTxtNd( sal_True )) )
+            ULONG_MAX != (nNdPos = IsValidNumTxtNd( true )) )
         {
             double fVal = ((SwTblBoxValue*)pValItem)->GetValue();
             Color* pCol = 0;
@@ -2548,7 +2548,7 @@ void SwTableBox::ActualiseValueBox()
 
             const OUString& rTxt = pSttNd->GetNodes()[ nNdPos ]->GetTxtNode()->GetTxt();
             if( rTxt != sNewTxt )
-                ChgTextToNum( *this, sNewTxt, pCol, sal_False ,nNdPos);
+                ChgTextToNum( *this, sNewTxt, pCol, false ,nNdPos);
         }
     }
 }

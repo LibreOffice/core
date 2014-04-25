@@ -75,7 +75,7 @@ SwFldDokPage::SwFldDokPage(Window* pParent, const SfxItemSet& rCoreSet )
     m_pDateOffsetED->SetMin(LONG_MIN);
     m_pDateOffsetED->SetMax(LONG_MAX);
     //enable 'active' language selection
-    m_pNumFormatLB->SetShowLanguageControl(sal_True);
+    m_pNumFormatLB->SetShowLanguageControl(true);
 }
 
 SwFldDokPage::~SwFldDokPage()
@@ -291,7 +291,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
             m_pSelectionLB->SetSelectHdl(LINK(this, SwFldDokPage, SubTypeHdl));
         }
 
-        sal_Bool bEnable = nCount != 0;
+        bool bEnable = nCount != 0;
 
         if (bEnable && !m_pSelectionLB->GetSelectEntryCount())
             m_pSelectionLB->SelectEntryPos(0);
@@ -301,16 +301,16 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
         // fill Format-Listbox
         sal_Int32 nSize = FillFormatLB(nTypeId);
 
-        sal_Bool bValue = sal_False, bLevel = sal_False, bNumFmt = sal_False, bOffset = sal_False;
-        sal_Bool bFormat = nSize != 0;
-        sal_Bool bOneArea = sal_False;
-        sal_Bool bFixed = sal_False;
+        bool bValue = false, bLevel = false, bNumFmt = false, bOffset = false;
+        bool bFormat = nSize != 0;
+        bool bOneArea = false;
+        bool bFixed = false;
         sal_uInt16 nFmtType = 0;
 
         switch (nTypeId)
         {
             case TYP_DATEFLD:
-                bFormat = bNumFmt = bOneArea = bOffset = sal_True;
+                bFormat = bNumFmt = bOneArea = bOffset = true;
 
                 nFmtType = NUMBERFORMAT_DATE;
 
@@ -324,7 +324,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
                 break;
 
             case TYP_TIMEFLD:
-                bFormat = bNumFmt = bOneArea = bOffset = sal_True;
+                bFormat = bNumFmt = bOneArea = bOffset = true;
 
                 nFmtType = NUMBERFORMAT_TIME;
 
@@ -359,27 +359,27 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
                     else
                         m_pValueED->SetText(((SwPageNumberField*)GetCurField())->GetUserString());
                 }
-                bValue = sal_True;
+                bValue = true;
                 break;
 
             case TYP_CHAPTERFLD:
                 m_pValueFT->SetText(SW_RESSTR(STR_LEVEL));
                 if (IsFldEdit())
                     m_pLevelED->SetText(OUString::number(((SwChapterField*)GetCurField())->GetLevel() + 1));
-                bLevel = sal_True;
+                bLevel = true;
                 break;
 
             case TYP_PAGENUMBERFLD:
                 m_pValueFT->SetText( SW_RESSTR( STR_OFFSET ));
                 if (IsFldEdit())
                     m_pValueED->SetText(GetCurField()->GetPar2());
-                bValue = sal_True;
+                bValue = true;
                 break;
 
             case TYP_EXTUSERFLD:
             case TYP_AUTHORFLD:
             case TYP_FILENAMEFLD:
-                bFixed = sal_True;
+                bFixed = true;
                 break;
 
             default:
@@ -426,7 +426,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 
         if (m_pNumFormatLB->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND)
             m_pNumFormatLB->SelectEntryPos(0);
-        m_pValueFT->Enable(bValue | bLevel | bOffset);
+        m_pValueFT->Enable(bValue || bLevel || bOffset);
         m_pValueED->Enable(bValue);
     }
 

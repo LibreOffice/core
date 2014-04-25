@@ -29,7 +29,7 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFmtLineNumber: public SfxPoolItem
 {
     sal_uLong nStartValue   :24; ///< Starting value for the paragraph. 0 == no starting value.
-    sal_uLong bCountLines   :1;  ///< Also count lines of paragraph.
+    bool      bCountLines   :1;  ///< Also count lines of paragraph.
 
 public:
     SwFmtLineNumber();
@@ -49,13 +49,13 @@ public:
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     sal_uLong GetStartValue() const { return nStartValue; }
-    sal_Bool  IsCount()       const { return bCountLines != 0; }
+    bool  IsCount()           const { return bCountLines; }
 
     void SetStartValue( sal_uLong nNew ) { nStartValue = nNew; }
-    void SetCountLines( sal_Bool b )     { bCountLines = b;    }
+    void SetCountLines( bool b )     { bCountLines = b;    }
 };
 
-inline const SwFmtLineNumber &SwAttrSet::GetLineNumber(sal_Bool bInP) const
+inline const SwFmtLineNumber &SwAttrSet::GetLineNumber(bool bInP) const
     { return (const SwFmtLineNumber&)Get( RES_LINENUMBER,bInP); }
 
 #endif

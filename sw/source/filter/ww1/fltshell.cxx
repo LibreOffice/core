@@ -84,9 +84,9 @@ SwFltStackEntry::SwFltStackEntry(const SwPosition& rStartPos, SfxPoolItem* pHt)
     , bIsParaEnd(false)
 {
     pAttr = pHt;            // store a copy of the attribute
-    bOld    = sal_False;    // used for marking Attributes *before* skipping field results
-    bOpen = sal_True;       // lock the attribute --> may first
-    bConsumedByField = sal_False;
+    bOld    = false;    // used for marking Attributes *before* skipping field results
+    bOpen = true;       // lock the attribute --> may first
+    bConsumedByField = false;
 }
 
 SwFltStackEntry::~SwFltStackEntry()
@@ -101,7 +101,7 @@ void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
     // Everything with sal_uInt16s, lest the inserting of new text at
     // the cursor position moves the attribute's range
     // That's not the desired behavior!
-    bOpen = sal_False;                  // release and remember END
+    bOpen = false;                  // release and remember END
     m_aPtPos.SetPos(rEndPos);
 }
 
@@ -206,7 +206,7 @@ void SwFltControlStack::MarkAllAttrsOld()
 {
     size_t nCnt = maEntries.size();
     for (sal_uInt16 i=0; i < nCnt; ++i)
-        maEntries[i].bOld = sal_True;
+        maEntries[i].bOld = true;
 }
 
 namespace
@@ -314,8 +314,8 @@ void SwFltControlStack::KillUnlockedAttrs(const SwPosition& rPos)
 // be applied to the document and removed from the stack.
 // Returns if there were any selected attributes on the stack
 SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
-    sal_uInt16 nAttrId, sal_Bool bTstEnde, long nHand,
-    sal_Bool consumedByField)
+    sal_uInt16 nAttrId, bool bTstEnde, long nHand,
+    bool consumedByField)
 {
     SwFltStackEntry *pRet = NULL;
 
@@ -419,7 +419,7 @@ static void MakePoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
 // it adheres to certain restrictions on bookmarks in tables (cannot
 // span more than one cell)
 static void MakeBookRegionOrPoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
-                    SwPaM& rRegion, sal_Bool bCheck )
+                    SwPaM& rRegion, bool bCheck )
 {
     if (rEntry.MakeRegion(pDoc, rRegion, bCheck )){
         // sal_Bool b1 = rNds[rRegion.GetPoint()->nNode]->FindTableNode() != 0;
@@ -571,7 +571,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             if ( ( !IsFlagSet(HYPO) || IsFlagSet(BOOK_AND_REF) ) &&
                  !rEntry.bConsumedByField )
             {
-                MakeBookRegionOrPoint(rEntry, pDoc, aRegion, sal_True);
+                MakeBookRegionOrPoint(rEntry, pDoc, aRegion, true);
                 // #i120879# - create a cross reference heading bookmark if appropriate.
                 const IDocumentMarkAccess::MarkType eBookmarkType =
                     ( pB->IsTOCBookmark() &&
@@ -967,7 +967,7 @@ SfxPoolItem* SwFltBookmark::Clone(SfxItemPool*) const
 // methods of SwFltTOX follow
 SwFltTOX::SwFltTOX(SwTOXBase* pBase, sal_uInt16 _nCols)
     : SfxPoolItem(RES_FLTR_TOX), pTOXBase(pBase), nCols( _nCols ),
-      bHadBreakItem( sal_False ), bHadPageDescItem( sal_False )
+      bHadBreakItem( false ), bHadPageDescItem( false )
 {
 }
 
@@ -1015,7 +1015,7 @@ SfxPoolItem* SwFltSection::Clone(SfxItemPool*) const
 // manage positions, styles & headers/footers etc.
 
 // SwFltShell
-SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const OUString& rBaseURL, sal_Bool bNew, sal_uLong nFieldFl) :
+SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const OUString& rBaseURL, bool bNew, sal_uLong nFieldFl) :
     pCurrentPageDesc(0),
     pSavedPos(0),
     eSubMode(None),
@@ -1027,8 +1027,8 @@ SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const OUString& rBaseURL, sal_B
     nPageDescOffset(GetDoc().GetPageDescCnt()),
     eSrcCharSet(RTL_TEXTENCODING_MS_1252),
     bNewDoc(bNew),
-    bStdPD(sal_False),
-    bProtect(sal_False)
+    bStdPD(false),
+    bProtect(false)
 {
     memset( pColls, 0, sizeof( pColls ) );
     pOutDoc = new SwFltOutDoc( *pDoc, pPaM, aStack, aEndStack );
@@ -1072,11 +1072,11 @@ SwFltShell::~SwFltShell()
         EndFly();
 
     GetDoc().SetUpdateExpFldStat(true);
-    GetDoc().SetInitDBFields(sal_True);
-    aStack.SetAttr(*pPaM->GetPoint(), 0, sal_False);
-    aStack.SetAttr(*pPaM->GetPoint(), 0, sal_False);
-    aEndStack.SetAttr(*pPaM->GetPoint(), 0, sal_False);
-    aEndStack.SetAttr(*pPaM->GetPoint(), 0, sal_False);
+    GetDoc().SetInitDBFields(true);
+    aStack.SetAttr(*pPaM->GetPoint(), 0, false);
+    aStack.SetAttr(*pPaM->GetPoint(), 0, false);
+    aEndStack.SetAttr(*pPaM->GetPoint(), 0, false);
+    aEndStack.SetAttr(*pPaM->GetPoint(), 0, false);
     if( bProtect ){     // The entire document is supposed to be protected
 
         SwDoc& rDoc = GetDoc();
@@ -1132,7 +1132,7 @@ OUString SwFltShell::ConvertUStr(const OUString& rInOut)
 OUString SwFltShell::QuoteStr( const OUString& rIn )
 {
     OUStringBuffer sOut( rIn );
-    sal_Bool bAllowCr = aStack.IsFlagSet( SwFltControlStack::ALLOW_FLD_CR );
+    bool bAllowCr = aStack.IsFlagSet( SwFltControlStack::ALLOW_FLD_CR );
 
     for( sal_Int32 n = 0; n < sOut.getLength(); ++n )
     {
@@ -1259,7 +1259,7 @@ SwFltShell& SwFltShell::operator << (SwFltBookmark& aBook)
 
 void SwFltShell::SetBookEnd(long nHandle)
 {
-    aEndStack.SetAttr( *pPaM->GetPoint(), RES_FLTR_BOOKMARK, sal_True, nHandle );
+    aEndStack.SetAttr( *pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nHandle );
 }
 
 SwFltShell& SwFltShell::EndItem( sal_uInt16 nAttrId )
@@ -1455,7 +1455,7 @@ void SwFltOutBase::EndTable()
     OSL_FAIL("EndTable outside of normal text");
 }
 
-/*virtual*/ sal_Bool SwFltOutDoc::IsInTable()
+/*virtual*/ bool SwFltOutDoc::IsInTable()
 {
     return pTable != 0;
 };
@@ -1471,21 +1471,21 @@ bool SwFltOutDoc::BeginTable()
     }
                             // Close all attributes, because otherwise
                             // attributes extending into Flys might be created
-    rStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
-    rEndStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
+    rStack.SetAttr( *pPaM->GetPoint(), 0, false );
+    rEndStack.SetAttr( *pPaM->GetPoint(), 0, false );
 
 // create table:
     OSL_ENSURE(pTabSavedPos == NULL, "SwFltOutDoc");
     pTabSavedPos = new SwPosition(*pPaM->GetPoint());
     pTable = GetDoc().InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
-            *pTabSavedPos, 1, 1, text::HoriOrientation::LEFT, 0, 0, sal_False, sal_False ); // TODO MULTIHEADER
+            *pTabSavedPos, 1, 1, text::HoriOrientation::LEFT, 0, 0, false, false ); // TODO MULTIHEADER
     nTableWidth = 0;
     ((SwTable*)pTable)->LockModify();   // Don't adjust anything automatically!
 // set pam in 1st table cell
     usTableX =
     usTableY = 0;
-    SeekCell(usTableY, usTableX, sal_True);
+    SeekCell(usTableY, usTableX, true);
     return true;
 }
 
@@ -1551,7 +1551,7 @@ void SwFltOutDoc::NextTableCell()
          GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ),
          0,
          pTableBoxes->size());
-    SeekCell(usTableY, usTableX, sal_True);
+    SeekCell(usTableY, usTableX, true);
     pTableBox = (*pTableBoxes)[usTableX];
     OSL_ENSURE(pTableBox != 0, "SwFltOutDoc:pTableBox");
     if(pTableBox)
@@ -1568,7 +1568,7 @@ void SwFltOutDoc::NextTableRow()
         aSelBoxes.insert( pTableBox );
         GetDoc().InsertRow(aSelBoxes);
         usTableX = 0;
-        SeekCell(++usTableY, usTableX, sal_True);
+        SeekCell(++usTableY, usTableX, true);
         GetDoc().SetTxtFmtColl(*pPaM,
             GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ));
     }
@@ -1711,8 +1711,8 @@ void SwFltOutDoc::EndTable()
     }
     // Close all attributes, because otherwise
     // attributes extending into Flys might be created
-    rStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
-    rEndStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
+    rStack.SetAttr( *pPaM->GetPoint(), 0, false );
+    rEndStack.SetAttr( *pPaM->GetPoint(), 0, false );
 
     if (GetDoc().GetCurrentViewShell()){
         SwTableNode* pTableNode = GetDoc().IsIdxInTbl(
@@ -1729,7 +1729,7 @@ void SwFltOutDoc::EndTable()
     nTableWidth = 0;
 }
 
-sal_Bool SwFltOutDoc::SeekCell(short nRow, short nCol, sal_Bool bPam)
+bool SwFltOutDoc::SeekCell(short nRow, short nCol, bool bPam)
 {
     // get structs to table cells
     const SwTableLines* pTableLines = &pTable->GetTabLines();
@@ -1740,17 +1740,17 @@ sal_Bool SwFltOutDoc::SeekCell(short nRow, short nCol, sal_Bool bPam)
     if ((sal_uInt16)nRow >= pTableLines->size())
     {
        OSL_ENSURE((sal_uInt16)nRow >= pTableLines->size(), "SwFltOutDoc");
-        return sal_False;
+        return false;
     }
     pTableLine = (*pTableLines)[nRow];
     pTableBoxes = &pTableLine->GetTabBoxes();
     if (nCol >= (short)pTableBoxes->size())
-        return sal_False;
+        return false;
     pTableBox = (*pTableBoxes)[nCol];
     if( !pTableBox->GetSttNd() )
     {
         OSL_ENSURE(pTableBox->GetSttNd(), "SwFltOutDoc");
-        return sal_False;
+        return false;
     }
     if(bPam)
     {
@@ -1759,7 +1759,7 @@ sal_Bool SwFltOutDoc::SeekCell(short nRow, short nCol, sal_Bool bPam)
         GetDoc().SetTxtFmtColl(*pPaM,
             GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ));
     }
-    return sal_True;
+    return true;
 }
 
 // Flys in SwFltOutBase
@@ -1778,8 +1778,8 @@ SfxItemSet* SwFltOutBase::NewFlyDefaults()
 }
 
 bool SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
-                           sal_Bool bAbsolutePos /*= sal_False*/,
-                           const SfxItemSet* pMoreAttrs /*= 0*/)
+                             bool bAbsolutePos /*= sal_False*/,
+                             const SfxItemSet* pMoreAttrs /*= 0*/)
 {
     (void) pMoreAttrs; // unused in non-debug
     OSL_ENSURE(!pMoreAttrs, "SwFltOutBase:BeginFly with pMoreAttrs" );
@@ -1824,8 +1824,8 @@ SwFrmFmt* SwFltOutDoc::MakeFly( RndStdIds eAnchor, SfxItemSet* pSet )
 }
 
 bool SwFltOutDoc::BeginFly( RndStdIds eAnchor,
-                           sal_Bool bAbsolutePos ,
-                           const SfxItemSet* pMoreAttrs)
+                            bool bAbsolutePos ,
+                            const SfxItemSet* pMoreAttrs)
 
 {
     SwFltOutBase::BeginFly( eAnchor, bAbsolutePos, 0 );
@@ -1833,8 +1833,8 @@ bool SwFltOutDoc::BeginFly( RndStdIds eAnchor,
 
     // Close all attributes, because otherwise attributes extending into Flys might
     // be created
-    rStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
-    rEndStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
+    rStack.SetAttr( *pPaM->GetPoint(), 0, false );
+    rEndStack.SetAttr( *pPaM->GetPoint(), 0, false );
 
     // create Fly:
     OSL_ENSURE(pFlySavedPos == NULL, "BeginFly in Fly");    // recursive doesn't work yet
@@ -1892,8 +1892,8 @@ void SwFltOutDoc::EndFly()
     }
     // Close all attributes, because otherwise
     // attributes extending into Flys might be created
-    rStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
-    rEndStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
+    rStack.SetAttr( *pPaM->GetPoint(), 0, false );
+    rEndStack.SetAttr( *pPaM->GetPoint(), 0, false );
 
     *pPaM->GetPoint() = *pFlySavedPos;              // restore Cursor
     delete pFlySavedPos;
@@ -1924,8 +1924,8 @@ void SwFltOutDoc::EndFly()
 }
 
 bool SwFltFormatCollection::BeginFly( RndStdIds eAnchor,
-                           sal_Bool bAbsolutePos,
-                           const SfxItemSet* pMoreAttrs)
+                                      bool bAbsolutePos,
+                                      const SfxItemSet* pMoreAttrs)
 
 {
     SwFltOutBase::BeginFly( eAnchor, bAbsolutePos, pMoreAttrs );
@@ -1948,7 +1948,7 @@ bool SwFltFormatCollection::BeginStyleFly( SwFltOutDoc* pOutDoc )
 }
 
 bool SwFltShell::BeginFly( RndStdIds eAnchor,
-                           sal_Bool bAbsolutePos)
+                           bool bAbsolutePos)
 {
     if (pOut->IsInFly()){
         OSL_FAIL("BeginFly in Fly");
@@ -2002,7 +2002,7 @@ void SwFltShell::BeginFootnote()
 
     // Close all attributes, because otherwise attributes extending into
     // footnotes might be created
-    aStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
+    aStack.SetAttr( *pPaM->GetPoint(), 0, false );
     //  Don't force-close EndStack for now, so bookmarks on footnotes can
     //  be applied to PMW
 
@@ -2032,7 +2032,7 @@ void SwFltShell::EndFootnote()
     // Close all attributes, because otherwise
     // attributes extending out of footnotes might
     // be created
-    aStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
+    aStack.SetAttr( *pPaM->GetPoint(), 0, false );
     //  Don't force-close EndStack for now, so bookmarks on footnotes can
     //  be applied to PMW
 
@@ -2045,7 +2045,7 @@ void SwFltShell::BeginHeader(SwPageDesc* /*pPD*/)
 {
     SwFrmFmt* pFmt = &pCurrentPageDesc->GetMaster();
     SwFrmFmt* pHdFtFmt;
-    pFmt->SetFmtAttr(SwFmtHeader(sal_True));
+    pFmt->SetFmtAttr(SwFmtHeader(true));
     pHdFtFmt = (SwFrmFmt*)pFmt->GetHeader().GetHeaderFmt();
     const SwNodeIndex* pStartIndex = pHdFtFmt->GetCntnt().GetCntntIdx();
     if (!pStartIndex)
@@ -2061,7 +2061,7 @@ void SwFltShell::BeginFooter(SwPageDesc* /*pPD*/)
 {
     SwFrmFmt* pFmt =  &pCurrentPageDesc->GetMaster();
     SwFrmFmt* pHdFtFmt;
-    pFmt->SetFmtAttr(SwFmtFooter(sal_True));
+    pFmt->SetFmtAttr(SwFmtFooter(true));
     pHdFtFmt = (SwFrmFmt*)pFmt->GetFooter().GetFooterFmt();
     const SwNodeIndex* pStartIndex = pHdFtFmt->GetCntnt().GetCntntIdx();
     if (!pStartIndex)

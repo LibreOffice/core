@@ -68,7 +68,7 @@ void SwHTMLParser::NewDivision( int nToken )
     SvxAdjust eAdjust = HTML_CENTER_ON==nToken ? SVX_ADJUST_CENTER
                                                : SVX_ADJUST_END;
 
-    sal_Bool bHeader=sal_False, bFooter=sal_False;
+    bool bHeader=false, bFooter=false;
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
@@ -102,24 +102,24 @@ void SwHTMLParser::NewDivision( int nToken )
             {
                 const OUString& rType = rOption.GetString();
                 if( rType.equalsIgnoreAsciiCase("header") )
-                    bHeader = sal_True;
+                    bHeader = true;
                 else if( rType.equalsIgnoreAsciiCase("footer") )
-                    bFooter = sal_True;
+                    bFooter = true;
             }
         }
     }
 
-    sal_Bool bAppended = sal_False;
+    bool bAppended = false;
     if( pPam->GetPoint()->nContent.GetIndex() )
     {
         AppendTxtNode( bHeader||bFooter||!aId.isEmpty()|| !aHRef.isEmpty() ? AM_NORMAL
                                                                 : AM_NOSPACE );
-        bAppended = sal_True;
+        bAppended = true;
     }
 
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
-    sal_Bool bStyleParsed = sal_False, bPositioned = sal_False;
+    bool bStyleParsed = false, bPositioned = false;
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -148,7 +148,7 @@ void SwHTMLParser::NewDivision( int nToken )
         SwFrmFmt& rPageFmt = pPageDesc->GetMaster();
 
         SwFrmFmt *pHdFtFmt;
-        sal_Bool bNew = sal_False;
+        bool bNew = false;
         sal_uInt16 nFlags = CONTEXT_FLAGS_HDRFTR;
         if( bHeader )
         {
@@ -156,9 +156,9 @@ void SwHTMLParser::NewDivision( int nToken )
             if( !pHdFtFmt )
             {
                 // noch keine Header, dann erzeuge einen.
-                rPageFmt.SetFmtAttr( SwFmtHeader( sal_True ));
+                rPageFmt.SetFmtAttr( SwFmtHeader( true ));
                 pHdFtFmt = (SwFrmFmt*)rPageFmt.GetHeader().GetHeaderFmt();
-                bNew = sal_True;
+                bNew = true;
             }
             nFlags |= HTML_CNTXT_HEADER_DIST;
         }
@@ -168,9 +168,9 @@ void SwHTMLParser::NewDivision( int nToken )
             if( !pHdFtFmt )
             {
                 // noch keine Footer, dann erzeuge einen.
-                rPageFmt.SetFmtAttr( SwFmtFooter( sal_True ));
+                rPageFmt.SetFmtAttr( SwFmtFooter( true ));
                 pHdFtFmt = (SwFrmFmt*)rPageFmt.GetFooter().GetFooterFmt();
-                bNew = sal_True;
+                bNew = true;
             }
             nFlags |= HTML_CNTXT_FOOTER_DIST;
         }
@@ -219,11 +219,11 @@ void SwHTMLParser::NewDivision( int nToken )
              (aId[0] == 's' || aId[0] == 'S' ) &&
              (aId[1] == 'd' || aId[1] == 'D' ) )
     {
-        sal_Bool bEndNote = sal_False, bFootNote = sal_False;
+        bool bEndNote = false, bFootNote = false;
         if( aId.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_sdendnote ) )
-            bEndNote = sal_True;
+            bEndNote = true;
         else if( aId.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_sdfootnote ) )
-            bFootNote = sal_True;
+            bFootNote = true;
         if( bFootNote || bEndNote )
         {
             SwNodeIndex *pStartNdIdx = GetFootEndNoteSection( aId );
@@ -255,11 +255,11 @@ void SwHTMLParser::NewDivision( int nToken )
             if (aPrvNdIdx.GetNode().IsSectionNode())
             {
                 AppendTxtNode();
-                bAppended = sal_True;
+                bAppended = true;
             }
         }
         _HTMLAttrs *pPostIts = bAppended ? 0 : new _HTMLAttrs;
-        SetAttr( sal_True, sal_True, pPostIts );
+        SetAttr( true, true, pPostIts );
 
         // Namen der Section eindeutig machen
         const OUString aName( pDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : 0 ) );
@@ -349,7 +349,7 @@ void SwHTMLParser::NewDivision( int nToken )
         // (ersten) Node des Bereich verschieben.
         if( pOldTxtNd )
             MovePageDescAttrs( pOldTxtNd, pPam->GetPoint()->nNode.GetIndex(),
-                               sal_True  );
+                               true  );
 
         if( pPostIts )
         {
@@ -360,7 +360,7 @@ void SwHTMLParser::NewDivision( int nToken )
             pPostIts = 0;
         }
 
-        pCntxt->SetSpansSection( sal_True );
+        pCntxt->SetSpansSection( true );
 
         // keine text::Bookmarks mit dem gleichen Namen wie Bereiche einfuegen
         if( !aPropInfo.aId.isEmpty() && aPropInfo.aId==aName )
@@ -378,7 +378,7 @@ void SwHTMLParser::NewDivision( int nToken )
 
     // Style parsen
     if( bStyleParsed )
-        InsertAttrs( aItemSet, aPropInfo, pCntxt, sal_True );
+        InsertAttrs( aItemSet, aPropInfo, pCntxt, true );
 
     PushContext( pCntxt );
 }
@@ -411,7 +411,7 @@ void SwHTMLParser::EndDivision( int /*nToken*/ )
     }
 }
 
-void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
+void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
                                             const SwPosition *pOldPos )
 {
     SwPageDesc *pPageDesc = pCSS1Parser->GetMasterPageDesc();
@@ -502,7 +502,7 @@ void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
     pHdFtFmt->SetFmtAttr( aULSpace );
 }
 
-sal_Bool SwHTMLParser::EndSection( sal_Bool bLFStripped )
+bool SwHTMLParser::EndSection( bool bLFStripped )
 {
     SwEndNode *pEndNd = pDoc->GetNodes()[pPam->GetPoint()->nNode.GetIndex()+1]
                             ->GetEndNode();
@@ -512,26 +512,26 @@ sal_Bool SwHTMLParser::EndSection( sal_Bool bLFStripped )
         if( !bLFStripped )
             StripTrailingPara();
         pPam->Move( fnMoveForward );
-        return sal_True;
+        return true;
     }
 
     OSL_ENSURE( !this, "Falsche PaM Position Beenden eines Bereichs" );
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwHTMLParser::EndSections( sal_Bool bLFStripped )
+bool SwHTMLParser::EndSections( bool bLFStripped )
 {
-    sal_Bool bSectionClosed = sal_False;
+    bool bSectionClosed = false;
     sal_uInt16 nPos = aContexts.size();
     while( nPos>nContextStMin )
     {
         _HTMLAttrContext *pCntxt = aContexts[--nPos];
         if( pCntxt->GetSpansSection() && EndSection( bLFStripped ) )
         {
-            bSectionClosed = sal_True;
-            pCntxt->SetSpansSection( sal_False );
-            bLFStripped = sal_False;
+            bSectionClosed = true;
+            pCntxt->SetSpansSection( false );
+            bLFStripped = false;
         }
     }
 
@@ -544,7 +544,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     OUString aStyle, aClass, aLang, aDir;
     long nWidth = 100;
     sal_uInt16 nCols = columnsFromCss, nGutter = 10;
-    sal_Bool bPrcWidth = sal_True;
+    bool bPrcWidth = true;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -587,13 +587,13 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
     //.is the multicol elememt contained in a container? That may be the
     // case for 5.0 documents.
-    sal_Bool bInCntnr = sal_False;
+    bool bInCntnr = false;
     sal_uInt16 i = aContexts.size();
     while( !bInCntnr && i > nContextStMin )
         bInCntnr = 0 != aContexts[--i]->GetFrmItemSet();
 
     // Parse style sheets, but don't position anything by now.
-    sal_Bool bStyleParsed = sal_False;
+    bool bStyleParsed = false;
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -614,8 +614,8 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         nTwipWidth = MINFLY;
 
     // Do positioning.
-    sal_Bool bPositioned = sal_False;
-    if( bInCntnr || pCSS1Parser->MayBePositioned( aPropInfo, sal_True ) )
+    bool bPositioned = false;
+    if( bInCntnr || pCSS1Parser->MayBePositioned( aPropInfo, true ) )
     {
         SfxItemSet aFrmItemSet( pDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
@@ -649,17 +649,17 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
         InsertFlyFrame( aFrmItemSet, pCntxt, aFlyName, CONTEXT_FLAGS_ABSPOS );
 
-        pCntxt->SetPopStack( sal_True );
-        bPositioned = sal_True;
+        pCntxt->SetPopStack( true );
+        bPositioned = true;
     }
 
-    sal_Bool bAppended = sal_False;
+    bool bAppended = false;
     if( !bPositioned )
     {
         if( pPam->GetPoint()->nContent.GetIndex() )
         {
             AppendTxtNode( AM_SPACE );
-            bAppended = sal_True;
+            bAppended = true;
         }
         else
         {
@@ -679,11 +679,11 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             if (aPrvNdIdx.GetNode().IsSectionNode())
             {
                 AppendTxtNode();
-                bAppended = sal_True;
+                bAppended = true;
             }
         }
         _HTMLAttrs *pPostIts = bAppended ? 0 : new _HTMLAttrs;
-        SetAttr( sal_True, sal_True, pPostIts );
+        SetAttr( true, true, pPostIts );
 
         // Make section name unique.
         OUString aName( pDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : 0 ) );
@@ -738,7 +738,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         // to the section's first node.
         if( pOldTxtNd )
             MovePageDescAttrs( pOldTxtNd, pPam->GetPoint()->nNode.GetIndex(),
-                               sal_True  );
+                               true  );
 
         if( pPostIts )
         {
@@ -748,7 +748,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             pPostIts = 0;
         }
 
-        pCntxt->SetSpansSection( sal_True );
+        pCntxt->SetSpansSection( true );
 
         // Insert a bookmark if its name differs from the section's name only.
         if( !aPropInfo.aId.isEmpty() && aPropInfo.aId==aName )
@@ -757,7 +757,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
     // Additional attributes must be set as hard ones.
     if( bStyleParsed )
-        InsertAttrs( aItemSet, aPropInfo, pCntxt, sal_True );
+        InsertAttrs( aItemSet, aPropInfo, pCntxt, true );
 
     PushContext( pCntxt );
 }
@@ -790,7 +790,7 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
 
 void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
                                       sal_uLong nDestIdx,
-                                      sal_Bool bFmtBreak )
+                                      bool bFmtBreak )
 {
     SwCntntNode* pDestCntntNd =
         pDoc->GetNodes()[nDestIdx]->GetCntntNode();

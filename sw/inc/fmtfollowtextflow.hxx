@@ -29,7 +29,7 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFmtFollowTextFlow : public SfxBoolItem
 {
 public:
-    SwFmtFollowTextFlow( sal_Bool bFlag = sal_False )
+    SwFmtFollowTextFlow( bool bFlag = false )
         : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag ) {}
 
     TYPEINFO_OVERRIDE();
@@ -43,10 +43,10 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 };
 
-inline const SwFmtFollowTextFlow &SwAttrSet::GetFollowTextFlow(sal_Bool bInP) const
+inline const SwFmtFollowTextFlow &SwAttrSet::GetFollowTextFlow(bool bInP) const
     { return (const SwFmtFollowTextFlow&)Get( RES_FOLLOW_TEXT_FLOW, bInP ); }
 
-inline const SwFmtFollowTextFlow &SwFmt::GetFollowTextFlow(sal_Bool bInP) const
+inline const SwFmtFollowTextFlow &SwFmt::GetFollowTextFlow(bool bInP) const
     { return aSet.GetFollowTextFlow( bInP ); }
 
 #endif

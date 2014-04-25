@@ -38,8 +38,8 @@ public:
 
     const SwFtnFrm* FindFootNote() const;
 
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
+    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
     virtual void    Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     virtual void    PaintBorder( const SwRect &, const SwPageFrm *pPage,
                                  const SwBorderAttrs & ) const SAL_OVERRIDE;
@@ -59,13 +59,13 @@ class SwFtnFrm: public SwLayoutFrm
     SwTxtFtn     *pAttr;        // footnote attribute (for recognition)
 
     // if true paragraphs in this footnote are NOT permitted to flow backwards
-    sal_Bool bBackMoveLocked : 1;
+    bool bBackMoveLocked : 1;
     // #i49383# - control unlock of position of lower anchored objects.
     bool mbUnlockPosOfLowerObjs : 1;
 #ifdef DBG_UTIL
 protected:
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
+    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
 #endif
 
 public:
@@ -76,7 +76,7 @@ public:
 
     virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
 
-    sal_Bool operator<( const SwTxtFtn* pTxtFtn ) const;
+    bool operator<( const SwTxtFtn* pTxtFtn ) const;
 
 #ifdef DBG_UTIL
     const SwCntntFrm *GetRef() const;
@@ -103,13 +103,13 @@ public:
 
     void InvalidateNxtFtnCnts( SwPageFrm* pPage );
 
-    void LockBackMove()     { bBackMoveLocked = sal_True; }
-    void UnlockBackMove()   { bBackMoveLocked = sal_False;}
-    sal_Bool IsBackMoveLocked() { return bBackMoveLocked; }
+    void LockBackMove()     { bBackMoveLocked = true; }
+    void UnlockBackMove()   { bBackMoveLocked = false;}
+    bool IsBackMoveLocked() { return bBackMoveLocked; }
 
     // prevents that the last content deletes the SwFtnFrm as well (Cut())
-    inline void ColLock()       { mbColLocked = sal_True; }
-    inline void ColUnlock()     { mbColLocked = sal_False; }
+    inline void ColLock()       { mbColLocked = true; }
+    inline void ColUnlock()     { mbColLocked = false; }
 
     // #i49383#
     inline void UnlockPosOfLowerObjs()

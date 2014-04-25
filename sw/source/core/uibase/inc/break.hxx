@@ -49,7 +49,7 @@ class SwBreakDlg: public SvxStandardDialog
     sal_uInt16      nKind;
     ::boost::optional<sal_uInt16>      oPgNum;
 
-    sal_Bool            bHtmlMode;
+    bool            bHtmlMode;
 
     DECL_LINK( ClickHdl, void * );
     DECL_LINK( PageNumHdl, CheckBox * );

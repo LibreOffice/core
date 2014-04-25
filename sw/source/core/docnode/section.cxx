@@ -333,15 +333,15 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
     }
 }
 
-sal_Bool SwSection::CalcHiddenFlag() const
+bool SwSection::CalcHiddenFlag() const
 {
     const SwSection* pSect = this;
     do {
         if( pSect->IsHidden() && pSect->IsCondHidden() )
-            return sal_True;
+            return true;
     } while( 0 != ( pSect = pSect->GetParent()) );
 
-    return sal_False;
+    return false;
 }
 
 bool SwSection::IsProtect() const
@@ -379,7 +379,7 @@ void SwSection::SetProtect(bool const bFlag)
     if (pFormat)
     {
         SvxProtectItem aItem( RES_PROTECT );
-        aItem.SetCntntProtect( (sal_Bool)bFlag );
+        aItem.SetCntntProtect( bFlag );
         pFormat->SetFmtAttr( aItem );
         // note: this will call m_Data.SetProtectFlag via Modify!
     }
@@ -397,7 +397,7 @@ void SwSection::SetEditInReadonly(bool const bFlag)
     if (pFormat)
     {
         SwFmtEditInReadonly aItem;
-        aItem.SetValue( (sal_Bool)bFlag );
+        aItem.SetValue( bFlag );
         pFormat->SetFmtAttr( aItem );
         // note: this will call m_Data.SetEditInReadonlyFlag via Modify!
     }
@@ -639,7 +639,7 @@ SwSectionFmt::~SwSectionFmt()
     if( !GetDoc()->IsInDtor() )
     {
         SwSectionNode* pSectNd;
-        const SwNodeIndex* pIdx = GetCntnt( sal_False ).GetCntntIdx();
+        const SwNodeIndex* pIdx = GetCntnt( false ).GetCntntIdx();
         if( pIdx && &GetDoc()->GetNodes() == &pIdx->GetNodes() &&
             0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
         {
@@ -661,7 +661,7 @@ SwSectionFmt::~SwSectionFmt()
             }
             // mba: test iteration; objects are removed while iterating
             // use hint which allows to specify, if the content shall be saved or not
-            CallSwClientNotify( SwSectionFrmMoveAndDeleteHint( sal_True ) );
+            CallSwClientNotify( SwSectionFrmMoveAndDeleteHint( true ) );
 
             // Raise the Section up
             SwNodeRange aRg( *pSectNd, 0, *pSectNd->EndOfSectionNode() );
@@ -684,14 +684,14 @@ extern void sw_DeleteFtn( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd );
 void SwSectionFmt::DelFrms()
 {
     SwSectionNode* pSectNd;
-    const SwNodeIndex* pIdx = GetCntnt(sal_False).GetCntntIdx();
+    const SwNodeIndex* pIdx = GetCntnt(false).GetCntntIdx();
     if( pIdx && &GetDoc()->GetNodes() == &pIdx->GetNodes() &&
         0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
     {
         // First delete the <SwSectionFrm> of the <SwSectionFmt> instance
         // mba: test iteration as objects are removed in iteration
         // use hint which allows to specify, if the content shall be saved or not
-        CallSwClientNotify( SwSectionFrmMoveAndDeleteHint( sal_False ) );
+        CallSwClientNotify( SwSectionFrmMoveAndDeleteHint( false ) );
 
         // Then delete frames of the nested <SwSectionFmt> instances
         SwIterator<SwSectionFmt,SwSectionFmt> aIter( *this );
@@ -725,7 +725,7 @@ void SwSectionFmt::DelFrms()
 void SwSectionFmt::MakeFrms()
 {
     SwSectionNode* pSectNd;
-    const SwNodeIndex* pIdx = GetCntnt(sal_False).GetCntntIdx();
+    const SwNodeIndex* pIdx = GetCntnt(false).GetCntntIdx();
 
     if( pIdx && &GetDoc()->GetNodes() == &pIdx->GetNodes() &&
         0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
@@ -880,11 +880,11 @@ static bool lcl_SectionCmpPos( const SwSection *pFirst, const SwSection *pSecond
     const SwSectionFmt* pFSectFmt = pFirst->GetFmt();
     const SwSectionFmt* pSSectFmt = pSecond->GetFmt();
     OSL_ENSURE( pFSectFmt && pSSectFmt &&
-            pFSectFmt->GetCntnt(sal_False).GetCntntIdx() &&
-            pSSectFmt->GetCntnt(sal_False).GetCntntIdx(),
+            pFSectFmt->GetCntnt(false).GetCntntIdx() &&
+            pSSectFmt->GetCntnt(false).GetCntntIdx(),
                 "ungueltige Sections" );
-    return pFSectFmt->GetCntnt(sal_False).GetCntntIdx()->GetIndex() <
-                  pSSectFmt->GetCntnt(sal_False).GetCntntIdx()->GetIndex();
+    return pFSectFmt->GetCntnt(false).GetCntntIdx()->GetIndex() <
+                  pSSectFmt->GetCntnt(false).GetCntntIdx()->GetIndex();
 }
 
 static bool lcl_SectionCmpNm( const SwSection *pFSect, const SwSection *pSSect)
@@ -896,7 +896,7 @@ static bool lcl_SectionCmpNm( const SwSection *pFSect, const SwSection *pSSect)
 // get all Sections that have been derived from this one
 sal_uInt16 SwSectionFmt::GetChildSections( SwSections& rArr,
                                         SectionSort eSort,
-                                        sal_Bool bAllSections ) const
+                                        bool bAllSections ) const
 {
     rArr.clear();
 
@@ -906,7 +906,7 @@ sal_uInt16 SwSectionFmt::GetChildSections( SwSections& rArr,
         const SwNodeIndex* pIdx;
         for( SwSectionFmt* pLast = aIter.First(); pLast; pLast = aIter.Next() )
             if( bAllSections ||
-                ( 0 != ( pIdx = pLast->GetCntnt(sal_False).
+                ( 0 != ( pIdx = pLast->GetCntnt(false).
                 GetCntntIdx()) && &pIdx->GetNodes() == &GetDoc()->GetNodes() ))
             {
                 SwSection* pDummy = pLast->GetSection();
@@ -931,9 +931,9 @@ sal_uInt16 SwSectionFmt::GetChildSections( SwSections& rArr,
 }
 
 // See whether the Section is within the Nodes or the UndoNodes array
-sal_Bool SwSectionFmt::IsInNodesArr() const
+bool SwSectionFmt::IsInNodesArr() const
 {
-    const SwNodeIndex* pIdx = GetCntnt(sal_False).GetCntntIdx();
+    const SwNodeIndex* pIdx = GetCntnt(false).GetCntntIdx();
     return pIdx && &pIdx->GetNodes() == &GetDoc()->GetNodes();
 }
 
@@ -1022,7 +1022,7 @@ void SwSectionFmt::UpdateParent()
 
 SwSectionNode* SwSectionFmt::GetSectionNode(bool const bAlways)
 {
-    const SwNodeIndex* pIdx = GetCntnt(sal_False).GetCntntIdx();
+    const SwNodeIndex* pIdx = GetCntnt(false).GetCntntIdx();
     if( pIdx && ( bAlways || &pIdx->GetNodes() == &GetDoc()->GetNodes() ))
         return pIdx->GetNode().GetSectionNode();
     return 0;
@@ -1060,7 +1060,7 @@ bool SwSectionFmt::IsInUndo() const
 
 bool SwSectionFmt::IsInContent() const
 {
-    SwNodeIndex const*const pIdx = GetCntnt(sal_False).GetCntntIdx();
+    SwNodeIndex const*const pIdx = GetCntnt(false).GetCntntIdx();
     OSL_ENSURE(pIdx, "SwSectionFmt::IsInContent: no index?");
     return (pIdx) ? !GetDoc()->IsInHeaderFooter(*pIdx) : true;
 }
@@ -1190,7 +1190,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     // Always switch off Undo
     bool const bWasUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
     pDoc->GetIDocumentUndoRedo().DoUndo(false);
-    sal_Bool bWasVisibleLinks = pDoc->IsVisibleLinks();
+    bool bWasVisibleLinks = pDoc->IsVisibleLinks();
     pDoc->SetVisibleLinks( false );
 
     SwPaM* pPam;
@@ -1211,7 +1211,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
         SwPosition aPos( aIdx, SwIndex( pNewNd, 0 ));
         aPos.nNode--;
-        pDoc->CorrAbs( aIdx, aEndIdx, aPos, sal_True );
+        pDoc->CorrAbs( aIdx, aEndIdx, aPos, true );
 
         pPam = new SwPaM( aPos );
 
@@ -1341,7 +1341,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                 if( pCpyRg )
                 {
                     SwNodeIndex& rInsPos = pPam->GetPoint()->nNode;
-                    sal_Bool bCreateFrm = rInsPos.GetIndex() <=
+                    bool bCreateFrm = rInsPos.GetIndex() <=
                                 pDoc->GetNodes().GetEndOfExtras().GetIndex() ||
                                 rInsPos.GetNode().FindTableNode();
 
@@ -1361,7 +1361,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                         pPam->Move( fnMoveBackward, fnGoNode );
                         pPam->SetMark(); // Rewire both SwPositions
 
-                        pDoc->CorrAbs( aSave, *pPam->GetPoint(), 0, sal_True );
+                        pDoc->CorrAbs( aSave, *pPam->GetPoint(), 0, true );
                         pDoc->GetNodes().Delete( aSave, 1 );
                     }
                     delete pCpyRg;
@@ -1411,7 +1411,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
         if( pESh )
         {
-            pESh->Pop( sal_False );
+            pESh->Pop( false );
             pPam = 0; // pam was deleted earlier
         }
     }

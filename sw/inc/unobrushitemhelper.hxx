@@ -27,7 +27,7 @@ namespace sw {
 
 //UUUU helper function definintions for UNO API fallbacks to replace SvxBrushItem
 void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxItemSet& rToSet);
-SW_DLLPUBLIC SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_Bool bSearchInParents = sal_True);
+SW_DLLPUBLIC SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, bool bSearchInParents = true);
 
 } // namespace sw
 

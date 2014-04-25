@@ -234,7 +234,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     aElem.bVertRulerRight       = m_pVRulerRightCBox->IsChecked();
     aElem.bSmoothScroll         = m_pSmoothCBox->IsChecked();
 
-    sal_Bool bRet = !pOldAttr || aElem != *pOldAttr;
+    bool bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)
         bRet = 0 != rSet.Put(aElem);
 
@@ -245,7 +245,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
         // Double-Cast for VA3.0
         const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
-        bRet = sal_True;
+        bRet = true;
     }
 
     nMPos = m_pHMetric->GetSelectEntryPos();
@@ -254,7 +254,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
         // Double-Cast for VA3.0
         const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pHMetric->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( FN_HSCROLL_METRIC, nFieldUnit ) );
-        bRet = sal_True;
+        bRet = true;
     }
     nMPos = m_pVMetric->GetSelectEntryPos();
     if ( nMPos != m_pVMetric->GetSavedValue() || nMPos != nGlobalMetricPos )
@@ -262,7 +262,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
         // Double-Cast for VA3.0
         const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pVMetric->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( FN_VSCROLL_METRIC, nFieldUnit ) );
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
@@ -275,7 +275,7 @@ IMPL_LINK(SwContentOptPage, VertRulerHdl, CheckBox*, pBox)
 
 IMPL_LINK( SwContentOptPage, AnyRulerHdl, CheckBox*, pBox)
 {
-    sal_Bool bChecked = pBox->IsChecked();
+    bool bChecked = pBox->IsChecked();
     m_pHRulerCBox->Enable(bChecked);
     m_pHMetric->Enable(bChecked);
     m_pVRulerCBox->Enable(bChecked);
@@ -291,8 +291,8 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(Window* pParent,
     : SfxTabPage(pParent, "PrintOptionsPage",
         "modules/swriter/ui/printoptionspage.ui", rCoreSet)
     , sNone(SW_RESSTR(SW_STR_NONE))
-    , bAttrModified(sal_False)
-    , bPreview(sal_False)
+    , bAttrModified(false)
+    , bPreview(false)
 {
     get(m_pGrfCB, "graphics");
     get(m_pCtrlFldCB, "formcontrols");
@@ -356,7 +356,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(Window* pParent,
     m_pProspectCB_RTL->Show(aCTLOptions.IsCTLFontEnabled());
 }
 
-void SwAddPrinterTabPage::SetPreview(sal_Bool bPrev)
+void SwAddPrinterTabPage::SetPreview(bool bPrev)
 {
     bPreview = bPrev;
     m_pCommentsFrame->Enable(!bPreview);
@@ -375,7 +375,7 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
     {
         SwAddPrinterItem aAddPrinterAttr (FN_PARAM_ADDPRINTER);
         aAddPrinterAttr.bPrintGraphic   = m_pGrfCB->IsChecked();
-        aAddPrinterAttr.bPrintTable     = sal_True; // always enabled since CWS printerpullgpages /*aTabCB.IsChecked();*/
+        aAddPrinterAttr.bPrintTable     = true; // always enabled since CWS printerpullgpages /*aTabCB.IsChecked();*/
         aAddPrinterAttr.bPrintDraw      = m_pGrfCB->IsChecked(); // UI merged with m_pGrfCB in CWS printerpullgpages
         aAddPrinterAttr.bPrintControl   = m_pCtrlFldCB->IsChecked();
         aAddPrinterAttr.bPrintPageBackground = m_pBackgroundCB->IsChecked();
@@ -385,12 +385,12 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
         aAddPrinterAttr.bPrintLeftPages     = m_pLeftPageCB->IsChecked();
         aAddPrinterAttr.bPrintRightPages    = m_pRightPageCB->IsChecked();
-        aAddPrinterAttr.bPrintReverse       = sal_False; // handled by vcl itself since CWS printerpullpages /*aReverseCB.IsChecked()*/;
+        aAddPrinterAttr.bPrintReverse       = false; // handled by vcl itself since CWS printerpullpages /*aReverseCB.IsChecked()*/;
         aAddPrinterAttr.bPrintProspect      = m_pProspectCB->IsChecked();
         aAddPrinterAttr.bPrintProspectRTL   = m_pProspectCB_RTL->IsChecked();
         aAddPrinterAttr.bPaperFromSetup     = m_pPaperFromSetupCB->IsChecked();
         aAddPrinterAttr.bPrintEmptyPages    = m_pPrintEmptyPagesCB->IsChecked();
-        aAddPrinterAttr.bPrintSingleJobs    = sal_True; // handled by vcl in new print dialog since CWS printerpullpages /*aSingleJobsCB.IsChecked()*/;
+        aAddPrinterAttr.bPrintSingleJobs    = true; // handled by vcl in new print dialog since CWS printerpullpages /*aSingleJobsCB.IsChecked()*/;
 
         if (m_pNoRB->IsChecked())  aAddPrinterAttr.nPrintPostIts =
                                                         POSTITS_NONE;
@@ -457,7 +457,7 @@ void    SwAddPrinterTabPage::Init()
 
 IMPL_LINK_NOARG_INLINE_START(SwAddPrinterTabPage, AutoClickHdl)
 {
-    bAttrModified = sal_True;
+    bAttrModified = true;
     bool bIsProspect = m_pProspectCB->IsChecked();
     if (!bIsProspect)
         m_pProspectCB_RTL->Check( false );
@@ -483,7 +483,7 @@ void  SwAddPrinterTabPage::SetFax( const std::vector<OUString>& rFaxLst )
 
 IMPL_LINK_NOARG_INLINE_START(SwAddPrinterTabPage, SelectHdl)
 {
-    bAttrModified=sal_True;
+    bAttrModified=true;
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwAddPrinterTabPage, SelectHdl)
@@ -519,20 +519,20 @@ SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
     pWrtShell(0),
     eLanguage( GetAppLanguage() ),
 
-    bListDefault(sal_False),
-    bSetListDefault(sal_True),
-    bLabelDefault(sal_False),
-    bSetLabelDefault(sal_True),
-    bIdxDefault(sal_False),
-    bSetIdxDefault(sal_True),
-    bDeletePrinter(sal_False),
+    bListDefault(false),
+    bSetListDefault(true),
+    bLabelDefault(false),
+    bSetLabelDefault(true),
+    bIdxDefault(false),
+    bSetIdxDefault(true),
+    bDeletePrinter(false),
 
-    bListHeightDefault    (sal_False),
-    bSetListHeightDefault (sal_False),
-    bLabelHeightDefault   (sal_False),
-    bSetLabelHeightDefault(sal_False),
-    bIndexHeightDefault     (sal_False),
-    bSetIndexHeightDefault  (sal_False),
+    bListHeightDefault    (false),
+    bSetListHeightDefault (false),
+    bLabelHeightDefault   (false),
+    bSetLabelHeightDefault(false),
+    bIndexHeightDefault     (false),
+    bSetIndexHeightDefault  (false),
 
     nFontGroup(FONT_GROUP_DEFAULT),
 
@@ -620,7 +620,7 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
 
 bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
 {
-    sal_Bool bNotDocOnly = !pDocOnlyCB->IsChecked();
+    bool bNotDocOnly = !pDocOnlyCB->IsChecked();
     SW_MOD()->GetModuleConfig()->SetDefaultFontInCurrDocOnly(!bNotDocOnly);
 
     const OUString sStandard    = pStandardBox->GetText();
@@ -872,7 +872,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
                 FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellTitle = sOutBackup = rFontHL.GetFamilyName();
 
-        const SvxFontHeightItem& rFontHeightTitle = (const SvxFontHeightItem&)pColl->GetFmtAttr( nFontHeightWhich, sal_True );
+        const SvxFontHeightItem& rFontHeightTitle = (const SvxFontHeightItem&)pColl->GetFmtAttr( nFontHeightWhich, true );
         nTitleHeight = (sal_Int32)rFontHeightTitle.GetHeight();
 
         const sal_uInt16 nFontWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
@@ -884,7 +884,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         bListDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
         sShellList = sListBackup = rFontLS.GetFamilyName();
 
-        const SvxFontHeightItem& rFontHeightList = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, sal_True);
+        const SvxFontHeightItem& rFontHeightList = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, true);
         nListHeight = (sal_Int32)rFontHeightList.GetHeight();
         bListHeightDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
 
@@ -893,7 +893,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         const SvxFontItem& rFontCP = !nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellLabel = sCapBackup = rFontCP.GetFamilyName();
-        const SvxFontHeightItem& rFontHeightLabel = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, sal_True);
+        const SvxFontHeightItem& rFontHeightLabel = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, true);
         nLabelHeight = (sal_Int32)rFontHeightLabel.GetHeight();
         bLabelHeightDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
 
@@ -902,7 +902,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         const SvxFontItem& rFontIDX = !nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellIndex = sIdxBackup = rFontIDX.GetFamilyName();
-        const SvxFontHeightItem& rFontHeightIndex = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, sal_True);
+        const SvxFontHeightItem& rFontHeightIndex = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, true);
         nIndexHeight = (sal_Int32)rFontHeightIndex.GetHeight();
         bIndexHeightDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
     }
@@ -989,15 +989,15 @@ IMPL_LINK( SwStdFontTabPage, ModifyHdl, ComboBox*, pBox )
     }
     else if(pBox == pListBox)
     {
-        bSetListDefault = sal_False;
+        bSetListDefault = false;
     }
     else if(pBox == pLabelBox)
     {
-        bSetLabelDefault = sal_False;
+        bSetLabelDefault = false;
     }
     else if(pBox == pIdxBox)
     {
-        bSetIdxDefault = sal_False;
+        bSetIdxDefault = false;
     }
     return 0;
 }
@@ -1016,15 +1016,15 @@ IMPL_LINK( SwStdFontTabPage, ModifyHeightHdl, FontSizeBox*, pBox )
     }
     else if(pBox == pListHeightLB)
     {
-        bSetListHeightDefault = sal_False;
+        bSetListHeightDefault = false;
     }
     else if(pBox == pLabelHeightLB)
     {
-        bSetLabelHeightDefault = sal_False;
+        bSetLabelHeightDefault = false;
     }
     else if(pBox == pIndexHeightLB)
     {
-        bSetIndexHeightDefault = sal_False;
+        bSetIndexHeightDefault = false;
     }
     return 0;
 }
@@ -1068,7 +1068,7 @@ void SwStdFontTabPage::PageCreated (SfxAllItemSet aSet)
 SwTableOptionsTabPage::SwTableOptionsTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, "OptTablePage", "modules/swriter/ui/opttablepage.ui", rSet),
     pWrtShell(0),
-    bHTMLMode(sal_False)
+    bHTMLMode(false)
 {
     get(pHeaderCB,"header");
     get(pRepeatHeaderCB,"repeatheader");
@@ -1103,7 +1103,7 @@ SfxTabPage* SwTableOptionsTabPage::Create( Window* pParent,
 
 bool SwTableOptionsTabPage::FillItemSet( SfxItemSet& )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
     if(pRowMoveMF->IsModified())
@@ -1142,7 +1142,7 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet& )
             pWrtShell->GetView().GetViewFrame()->GetBindings().Invalidate( aInva );
         }
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     SwInsertTableOptions aInsOpts( 0, 0 );
@@ -1170,19 +1170,19 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet& )
     if (pNumFormattingCB->GetSavedValue() != pNumFormattingCB->GetState())
     {
         pModOpt->SetInsTblFormatNum(bHTMLMode, pNumFormattingCB->IsChecked());
-        bRet = sal_True;
+        bRet = true;
     }
 
     if (pNumFmtFormattingCB->GetSavedValue() != pNumFmtFormattingCB->GetState())
     {
         pModOpt->SetInsTblChangeNumFormat(bHTMLMode, pNumFmtFormattingCB->IsChecked());
-        bRet = sal_True;
+        bRet = true;
     }
 
     if (pNumAlignmentCB->GetSavedValue() != pNumAlignmentCB->GetState())
     {
         pModOpt->SetInsTblAlignNum(bHTMLMode, pNumAlignmentCB->IsChecked());
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -1514,7 +1514,7 @@ void SwMarkPreview::InitColors( void )
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     m_aBgCol = Color( rSettings.GetWindowColor() );
 
-    sal_Bool bHC = rSettings.GetHighContrastMode();
+    bool bHC = rSettings.GetHighContrastMode();
     m_aLineCol = bHC? SwViewOption::GetFontColor() : Color( COL_BLACK );
     m_aShadowCol = bHC? m_aBgCol : rSettings.GetShadowColor();
     m_aTxtCol = bHC? SwViewOption::GetFontColor() : Color( COL_GRAY );
@@ -2243,7 +2243,7 @@ SfxTabPage* SwCompareOptionsTabPage::Create( Window* pParent, const SfxItemSet& 
 
 bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet& )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
 
     if( m_pAutoRB->IsChecked() != m_pAutoRB->GetSavedValue() ||
@@ -2257,25 +2257,25 @@ bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet& )
         if ( m_pCharRB->IsChecked() ) eCmpMode = SVX_CMP_BY_CHAR;
 
         pOpt->SetCompareMode( eCmpMode );
-        bRet = sal_True;
+        bRet = true;
     }
 
     if( TriState(m_pRsidCB->IsChecked()) != m_pRsidCB->GetSavedValue() )
     {
         pOpt->SetUseRsid( m_pRsidCB->IsChecked() );
-        bRet = sal_True;
+        bRet = true;
     }
 
     if( TriState(m_pIgnoreCB->IsChecked()) != m_pIgnoreCB->GetSavedValue() )
     {
         pOpt->SetIgnorePieces( m_pIgnoreCB->IsChecked() );
-        bRet = sal_True;
+        bRet = true;
     }
 
     if( m_pLenNF->IsModified() )
     {
         pOpt->SetPieceLen( m_pLenNF->GetValue() );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -2343,7 +2343,7 @@ IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl)
 
 SwTestTabPage::SwTestTabPage(Window* pParent, const SfxItemSet& rCoreSet)
     : SfxTabPage( pParent, "OptTestPage", "modules/swriter/ui/opttestpage.ui", rCoreSet)
-    , bAttrModified( sal_False )
+    , bAttrModified( false )
 {
     get(m_pTest1CBox, "unused");
     get(m_pTest2CBox, "dynamic");
@@ -2426,7 +2426,7 @@ void SwTestTabPage::Init()
 
 IMPL_LINK_NOARG_INLINE_START(SwTestTabPage, AutoClickHdl)
 {
-    bAttrModified = sal_True;
+    bAttrModified = true;
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwTestTabPage, AutoClickHdl)

@@ -65,16 +65,16 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames()
     return aNames;
 }
 
-SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
+SwPrintOptions::SwPrintOptions(bool bWeb) :
     ConfigItem(bWeb ? OUString("Office.WriterWeb/Print") : OUString("Office.Writer/Print"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     bIsWeb(bWeb)
 {
     bPrintPageBackground = !bWeb;
     bPrintBlackFont = bWeb;
-    bPrintTextPlaceholder = bPrintHiddenText = sal_False;
+    bPrintTextPlaceholder = bPrintHiddenText = false;
     if (bWeb)
-        bPrintEmptyPages = sal_False;
+        bPrintEmptyPages = false;
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);

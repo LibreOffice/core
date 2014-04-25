@@ -298,10 +298,10 @@ IMPL_LINK_NOARG(SwEndNoteOptionPage, PosPageHdl)
 
 IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl)
 {
-    sal_Bool bEnable = sal_True;
+    bool bEnable = true;
     if( m_pNumCountBox->GetEntryCount() - 1 != m_pNumCountBox->GetSelectEntryPos() )
     {
-        bEnable = sal_False;
+        bEnable = false;
         m_pOffsetFld->SetValue(1);
     }
     m_pOffsetLbl->Enable(bEnable);
@@ -380,7 +380,7 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
 
     // page template
     pInf->ChgPageDesc( pSh->FindPageDescByName(
-                                m_pPageTemplBox->GetSelectEntry(), sal_True ) );
+                                m_pPageTemplBox->GetSelectEntry(), true ) );
 
     if ( bEndNote )
     {

@@ -114,7 +114,7 @@ public:
         {}
     virtual ~SwSbxValue();
 
-    sal_Bool GetBool() const;
+    bool GetBool() const;
     double GetDouble() const;
     SwSbxValue& MakeDouble();
 
@@ -175,7 +175,7 @@ class SwCalc
     SwSbxValue  Term();
     SwSbxValue  Prim();
 
-    sal_Bool        ParseTime( sal_uInt16*, sal_uInt16*, sal_uInt16* );
+    bool        ParseTime( sal_uInt16*, sal_uInt16*, sal_uInt16* );
 
     OUString  GetColumnName( const OUString& rName );
     OUString  GetDBName( const OUString& rName );
@@ -189,8 +189,8 @@ public:
         ~SwCalc();
 
     SwSbxValue  Calculate( const OUString &rStr );
-    OUString    GetStrResult( const SwSbxValue& rValue, sal_Bool bRound = sal_True );
-    OUString    GetStrResult( double, sal_Bool bRound = sal_True );
+    OUString    GetStrResult( const SwSbxValue& rValue, bool bRound = true );
+    OUString    GetStrResult( double, bool bRound = true );
 
     SwCalcExp*  VarInsert( const OUString& r );
     SwCalcExp*  VarLook( const OUString &rStr, sal_uInt16 ins = 0 );
@@ -202,7 +202,7 @@ public:
     void        Pop();
 
     void        SetCalcError( SwCalcError eErr )    { eError = eErr; }
-    sal_Bool        IsCalcError() const                 { return 0 != eError; }
+    bool        IsCalcError() const                 { return 0 != eError; }
 
     static bool Str2Double( const OUString& rStr, sal_Int32& rPos,
                                 double& rVal,
@@ -210,7 +210,7 @@ public:
     static bool Str2Double( const OUString& rStr, sal_Int32& rPos,
                                 double& rVal, SwDoc *const pDoc );
 
-    SW_DLLPUBLIC static sal_Bool IsValidVarName( const OUString& rStr,
+    SW_DLLPUBLIC static bool IsValidVarName( const OUString& rStr,
                                     OUString* pValidName = 0 );
 };
 

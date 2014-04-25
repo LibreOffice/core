@@ -165,7 +165,7 @@ static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhi
         nWhichId == RES_CHRATR_CTL_LANGUAGE)
     {
         rWrtSh.StartAction();
-        rWrtSh.LockView( sal_True );
+        rWrtSh.LockView( true );
         rWrtSh.Push();
 
         // prepare to apply new language to all text in document
@@ -177,8 +177,8 @@ static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhi
         aAttribs.insert( nWhichId );
         rWrtSh.ResetAttr( aAttribs );
 
-        rWrtSh.Pop( sal_False );
-        rWrtSh.LockView( sal_False );
+        rWrtSh.Pop( false );
+        rWrtSh.LockView( false );
         rWrtSh.EndAction();
     }
 }
@@ -205,8 +205,8 @@ OUString SwView::GetPageStr( sal_uInt16 nPg, sal_uInt16 nLogPg,
 }
 
 int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
-                                sal_Bool bLink, GraphicFilter *pFilter,
-                                Graphic* pPreviewGrf, sal_Bool bRule )
+                                bool bLink, GraphicFilter *pFilter,
+                                Graphic* pPreviewGrf, bool bRule )
 {
     SwWait aWait( *GetDocShell(), true );
 
@@ -240,7 +240,7 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
             }
         }
 
-        SwFlyFrmAttrMgr aFrameManager( sal_True, GetWrtShellPtr(), FRMMGR_TYPE_GRF );
+        SwFlyFrmAttrMgr aFrameManager( true, GetWrtShellPtr(), FRMMGR_TYPE_GRF );
         SwWrtShell& rShell = GetWrtShell();
 
         // #i123922# determine if we really want to insert or replace the graphic at a selected object
@@ -283,9 +283,9 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
     return aResult;
 }
 
-sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
+bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
     SwDocShell* pDocShell = GetDocShell();
     sal_uInt16 nHtmlMode = ::GetHtmlMode(pDocShell);
     // when in HTML mode insert only as a link
@@ -298,7 +298,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     uno::Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
     if(nHtmlMode & HTMLMODE_ON)
     {
-        sal_Bool bTrue = sal_True;
+        bool bTrue = true;
         Any aVal(&bTrue, ::getBooleanCppuType());
         xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aVal);
         xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
@@ -355,7 +355,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     }
 
     SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , false );
-    sal_Bool bShowError = !pName;
+    bool bShowError = !pName;
     if( pName || ERRCODE_NONE == pFileDlg->Execute() )
     {
 
@@ -374,9 +374,9 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             rReq.AppendItem( SfxStringItem( SID_INSERT_GRAPHIC, aFileName ) );
             rReq.AppendItem( SfxStringItem( FN_PARAM_FILTER, aFilterName ) );
 
-            sal_Bool bAsLink = sal_False;
+            bool bAsLink = false;
             if(nHtmlMode & HTMLMODE_ON)
-                bAsLink = sal_True;
+                bAsLink = true;
             else
             {
                 try
@@ -402,9 +402,9 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         SFX_REQUEST_ARG( rReq, pAsLink, SfxBoolItem, FN_PARAM_1 , false );
         SFX_REQUEST_ARG( rReq, pStyle, SfxStringItem, FN_PARAM_2 , false );
 
-        sal_Bool bAsLink = sal_False;
+        bool bAsLink = false;
         if( nHtmlMode & HTMLMODE_ON )
-            bAsLink = sal_True;
+            bAsLink = true;
         else
         {
             if ( rReq.GetArgs() )
@@ -435,7 +435,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             {
                 SvxLinkWarningDialog aWarnDlg(GetWindow(),pFileDlg->GetPath());
                 if( aWarnDlg.Execute() != RET_OK )
-                    bAsLink=sal_False; // don't store as link
+                    bAsLink=false; // don't store as link
             }
         }
 
@@ -506,7 +506,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         else
         {
             // set the specific graphic attrbutes to the graphic
-            bReturn = sal_True;
+            bReturn = true;
             AutoCaption( GRAPHIC_CAP );
             rReq.Done();
         }
@@ -522,7 +522,7 @@ void SwView::Execute(SfxRequest &rReq)
     sal_uInt16 nSlot = rReq.GetSlot();
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
-    sal_Bool bIgnore = sal_False;
+    bool bIgnore = false;
     switch( nSlot )
     {
         case SID_CREATE_SW_DRAWVIEW:
@@ -559,7 +559,7 @@ void SwView::Execute(SfxRequest &rReq)
             rReq.SetReturnValue(SfxBoolItem(nSlot,
                                                 aVis != GetVisArea()));
             //#i42732# - notify the edit window that from now on we do not use the input language
-            rTmpWin.SetUseInputLanguage( sal_False );
+            rTmpWin.SetUseInputLanguage( false );
         }
         break;
         case FN_REDLINE_ON:
@@ -641,7 +641,7 @@ void SwView::Execute(SfxRequest &rReq)
                 rReq.AppendItem( SfxBoolItem( FN_REDLINE_PROTECT, ((nMode&nsRedlineMode_t::REDLINE_ON)==0) ) );
             }
             else
-                bIgnore = sal_True;
+                bIgnore = true;
         }
         break;
         case FN_REDLINE_SHOW:
@@ -786,7 +786,7 @@ void SwView::Execute(SfxRequest &rReq)
                     }
                 }
                 else
-                    bIgnore = sal_True;
+                    bIgnore = true;
             }
         break;
         case FN_SYNC_LABELS:
@@ -838,7 +838,7 @@ void SwView::Execute(SfxRequest &rReq)
             }
             else if ( GetEditWin().IsChainMode() )
             {
-                GetEditWin().SetChainMode( sal_False );
+                GetEditWin().SetChainMode( false );
             }
             else if( m_pWrtShell->GetFlyFrmFmt() )
             {
@@ -853,7 +853,7 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 SfxBoolItem aItem( SID_WIN_FULLSCREEN, false );
                 GetViewFrame()->GetDispatcher()->Execute( SID_WIN_FULLSCREEN, SFX_CALLMODE_RECORD, &aItem, 0L );
-                bIgnore = sal_True;
+                bIgnore = true;
             }
         }
         break;
@@ -917,8 +917,8 @@ void SwView::Execute(SfxRequest &rReq)
         {
             m_pWrtShell->StartAction();
             m_pWrtShell->EnterStdMode();
-            sal_Bool bOldCrsrInReadOnly = m_pWrtShell->IsReadOnlyAvailable();
-            m_pWrtShell->SetReadOnlyAvailable( sal_True );
+            bool bOldCrsrInReadOnly = m_pWrtShell->IsReadOnlyAvailable();
+            m_pWrtShell->SetReadOnlyAvailable( true );
 
             for( sal_uInt16 i = 0; i < 2; ++i )
             {
@@ -937,13 +937,13 @@ void SwView::Execute(SfxRequest &rReq)
                     pBase = m_pWrtShell->GetCurTOX();
                 }
 
-                sal_Bool bAutoMarkApplied = sal_False;
+                bool bAutoMarkApplied = false;
                 while( pBase )
                 {
                     if(TOX_INDEX == pBase->GetType() && !bAutoMarkApplied)
                     {
                         m_pWrtShell->ApplyAutoMark();
-                        bAutoMarkApplied = sal_True;
+                        bAutoMarkApplied = true;
                     }
                     // pBase is needed only for the interface. Should be changed in future! (JP 1996)
                     m_pWrtShell->UpdateTableOf( *pBase );
@@ -990,7 +990,7 @@ void SwView::Execute(SfxRequest &rReq)
                 {
                     case FN_INSERT_CTRL:
                     {
-                        sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+                        bool bWeb = 0 != PTR_CAST(SwWebView, this);
                         if(bWeb)
                             SwView::m_nWebInsertCtrlState = nValue;
                         else
@@ -1085,13 +1085,13 @@ void SwView::Execute(SfxRequest &rReq)
             if(pVFrame->HasChildWindow(SID_BROWSER))
             {
                 const SwDBData& rData = GetWrtShell().GetDBDesc();
-                SW_MOD()->ShowDBObj(*this, rData, sal_False);
+                SW_MOD()->ShowDBObj(*this, rData, false);
             }
         }
         break;
         case FN_INSERT_FIELD_DATA_ONLY :
         {
-            sal_Bool bShow = sal_False;
+            bool bShow = false;
             if( pArgs &&
                 SFX_ITEM_SET == pArgs->GetItemState(nSlot, false, &pItem ))
                 bShow = ((const SfxBoolItem*)pItem)->GetValue();
@@ -1119,7 +1119,7 @@ void SwView::Execute(SfxRequest &rReq)
                     pValues[0].Value <<= aData.sDataSource;
                     pValues[1].Value <<= aData.sCommand;
                     pValues[2].Value <<= aData.nCommandType;
-                    pDBMgr->ExecuteFormLetter(rSh, aProperties, sal_True);
+                    pDBMgr->ExecuteFormLetter(rSh, aProperties, true);
                 }
             }
 #endif
@@ -1129,8 +1129,8 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case FN_QRY_MERGE:
         {
-            sal_Bool bUseCurrentDocument = sal_True;
-            sal_Bool bQuery = !pArgs||SFX_ITEM_SET != pArgs->GetItemState(nSlot);
+            bool bUseCurrentDocument = true;
+            bool bQuery = !pArgs || SFX_ITEM_SET != pArgs->GetItemState(nSlot);
             if(bQuery)
             {
                 SfxViewFrame* pTmpFrame = GetViewFrame();
@@ -1364,7 +1364,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             case FN_STAT_TEMPLATE:
             {
                 rSet.Put(SfxStringItem( FN_STAT_TEMPLATE,
-                                        rShell.GetCurPageStyle(sal_False)));
+                                        rShell.GetCurPageStyle(false)));
 
             }
             break;
@@ -1531,7 +1531,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 }
 
                 const SwNumRule* pNumRule = rShell.GetNumRuleAtCurrCrsrPos();
-                const bool bOutlineNum = pNumRule ? pNumRule->IsOutlineRule() : 0;
+                const bool bOutlineNum = pNumRule && pNumRule->IsOutlineRule();
 
                 if (pNumRule && !bOutlineNum )  // cursor in numbering
                 {
@@ -1624,7 +1624,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
     SwWrtShell &rSh = GetWrtShell();
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem=NULL;
-    sal_Bool bUp = sal_False;
+    bool bUp = false;
     sal_uInt16 nWhich = rReq.GetSlot();
     switch( nWhich )
     {
@@ -1727,7 +1727,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     enum SvxZoomType eType = ((const SvxZoomItem *)pItem)->GetType();
                     SetZoom( eType, ((const SvxZoomItem *)pItem)->GetValue() );
                 }
-                bUp = sal_True;
+                bUp = true;
                 if ( pItem )
                     rReq.AppendItem( *pItem );
                 rReq.Done();
@@ -1750,7 +1750,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     SetViewLayout( nColumns, bBookMode );
                 }
 
-                bUp = sal_True;
+                bUp = true;
                 rReq.Done();
 
                 InvalidateRulerPos();
@@ -1768,7 +1768,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     SetZoom( SVX_ZOOM_PERCENT, nCurrentZoom );
                 }
 
-                bUp = sal_True;
+                bUp = true;
                 rReq.Done();
             }
         }
@@ -1840,23 +1840,23 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 else
                     rSh.ToggleBlockMode();
             }
-            bUp = sal_True;
+            bUp = true;
             break;
         }
         case FN_SET_ADD_MODE:
             rSh.ToggleAddMode();
             nWhich = FN_STAT_SELMODE;
-            bUp = sal_True;
+            bUp = true;
         break;
         case FN_SET_BLOCK_MODE:
             rSh.ToggleBlockMode();
             nWhich = FN_STAT_SELMODE;
-            bUp = sal_True;
+            bUp = true;
         break;
         case FN_SET_EXT_MODE:
             rSh.ToggleExtMode();
             nWhich = FN_STAT_SELMODE;
-            bUp = sal_True;
+            bUp = true;
         break;
         case SID_ATTR_INSERT:
             SwPostItMgr* pMgr = GetPostItMgr();
@@ -1866,7 +1866,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             }
             else
                 rSh.ToggleInsMode();
-            bUp = sal_True;
+            bUp = true;
         break;
 
     }
@@ -1882,7 +1882,7 @@ void SwView::InsFrmMode(sal_uInt16 nCols)
 {
     if ( m_pWrtShell->HasWholeTabSelection() )
     {
-        SwFlyFrmAttrMgr aMgr( sal_True, m_pWrtShell, FRMMGR_TYPE_TEXT );
+        SwFlyFrmAttrMgr aMgr( true, m_pWrtShell, FRMMGR_TYPE_TEXT );
 
         const SwFrmFmt &rPageFmt =
                 m_pWrtShell->GetPageDesc(m_pWrtShell->GetCurPageDesc()).GetMaster();
@@ -1905,7 +1905,7 @@ void SwView::InsFrmMode(sal_uInt16 nCols)
 /// show "edit link" dialog
 void SwView::EditLinkDlg()
 {
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    bool bWeb = 0 != PTR_CAST(SwWebView, this);
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     boost::scoped_ptr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( &GetViewFrame()->GetWindow(), &GetWrtShell().GetLinkManager(), bWeb ));
     if ( pDlg )
@@ -1920,14 +1920,14 @@ bool SwView::JumpToSwMark( const OUString& rMark )
     if( !rMark.isEmpty() )
     {
         // place bookmark at top-center
-        sal_Bool bSaveCC = IsCrsrAtCenter();
-        sal_Bool bSaveCT = IsCrsrAtTop();
-        SetCrsrAtTop( sal_True );
+        bool bSaveCC = IsCrsrAtCenter();
+        bool bSaveCT = IsCrsrAtTop();
+        SetCrsrAtTop( true );
 
         // For scrolling the FrameSet, the corresponding shell needs to have the focus.
-        sal_Bool bHasShFocus = m_pWrtShell->HasShFcs();
+        bool bHasShFocus = m_pWrtShell->HasShFcs();
         if( !bHasShFocus )
-            m_pWrtShell->ShGetFcs( sal_False );
+            m_pWrtShell->ShGetFcs( false );
 
         const SwFmtINetFmt* pINet;
         OUString sCmp;
@@ -1996,7 +1996,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
                                     TransliterationModules_IGNORE_CASE );
 
                 //todo/mba: assuming that notes shouldn't be searched
-                sal_Bool bSearchInNotes = sal_False;
+                bool bSearchInNotes = false;
                 if( m_pWrtShell->SearchPattern( aSearchOpt, bSearchInNotes, DOCPOS_START, DOCPOS_END ))
                 {
                     m_pWrtShell->EnterStdMode(); // remove the selection
@@ -2004,7 +2004,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
                 }
             }
             else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)) )
-                m_pWrtShell->GotoMark( ppMark->get(), sal_False, sal_True ), bRet = true;
+                m_pWrtShell->GotoMark( ppMark->get(), false, true ), bRet = true;
             else if( 0 != ( pINet = m_pWrtShell->FindINetAttr( sMark ) )) {
                 m_pWrtShell->addCurrentPosition();
                 bRet = m_pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );
@@ -2028,13 +2028,13 @@ bool SwView::JumpToSwMark( const OUString& rMark )
             }
         }
         else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)))
-            m_pWrtShell->GotoMark( ppMark->get(), sal_False, sal_True ), bRet = true;
+            m_pWrtShell->GotoMark( ppMark->get(), false, true ), bRet = true;
         else if( 0 != ( pINet = m_pWrtShell->FindINetAttr( sMark ) ))
             bRet = m_pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );
 
         // make selection visible later
         if ( m_aVisArea.IsEmpty() )
-            m_bMakeSelectionVisible = sal_True;
+            m_bMakeSelectionVisible = true;
 
         // reset ViewStatus
         SetCrsrAtTop( bSaveCT, bSaveCC );
@@ -2134,19 +2134,19 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUS
 
 long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVersion )
 {
-    sal_Bool bInsert = sal_False, bCompare = sal_False;
+    bool bInsert = false, bCompare = false;
     long nFound = 0;
     SwDocShell* pDocSh = GetDocShell();
 
     switch( nSlotId )
     {
         case SID_DOCUMENT_MERGE:                        break;
-        case SID_DOCUMENT_COMPARE: bCompare = sal_True; break;
-        case SID_INSERTDOC:        bInsert = sal_True;  break;
+        case SID_DOCUMENT_COMPARE: bCompare = true; break;
+        case SID_INSERTDOC:        bInsert = true;  break;
 
         default:
             OSL_ENSURE( !this, "unknown SlotId!" );
-            bInsert = sal_True;
+            bInsert = true;
             nSlotId = SID_INSERTDOC;
             break;
     }
@@ -2215,7 +2215,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                 {
                     SfxRequest aReq( FN_UPDATE_TOX, SFX_CALLMODE_SLOT, GetPool() );
                     Execute( aReq );
-                    m_pWrtShell->SetUpdateTOX( sal_False ); // reset
+                    m_pWrtShell->SetUpdateTOX( false ); // reset
                 }
 
                 if( pDoc )
@@ -2274,7 +2274,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
     return nFound;
 }
 
-void SwView::EnableMailMerge(sal_Bool bEnable )
+void SwView::EnableMailMerge(bool bEnable )
 {
     m_bInMailMerge = bEnable;
     SfxBindings& rBind = GetViewFrame()->GetBindings();
@@ -2286,7 +2286,7 @@ void SwView::EnableMailMerge(sal_Bool bEnable )
 
 namespace
 {
-    sal_Bool lcl_NeedAdditionalDataSource( const uno::Reference< XDatabaseContext >& _rDatasourceContext )
+    bool lcl_NeedAdditionalDataSource( const uno::Reference< XDatabaseContext >& _rDatasourceContext )
     {
         Sequence < OUString > aNames = _rDatasourceContext->getElementNames();
 
@@ -2300,7 +2300,7 @@ namespace
 
 #endif
 
-void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
+void SwView::GenerateFormLetter(bool bUseCurrentDocument)
 {
 #if !HAVE_FEATURE_DBCONNECTIVITY
     (void) bUseCurrentDocument;
@@ -2312,7 +2312,7 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
             //check availability of data sources (except biblio source)
             uno::Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
             uno::Reference<XDatabaseContext>  xDBContext = DatabaseContext::create(xContext);
-            sal_Bool bCallAddressPilot = sal_False;
+            bool bCallAddressPilot = false;
             if ( lcl_NeedAdditionalDataSource( xDBContext ) )
             {
                 // no data sources are available - create a new one
@@ -2322,7 +2322,7 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
                 // no cancel allowed
                 if (RET_OK != aQuery.Execute())
                     return;
-                bCallAddressPilot = sal_True;
+                bCallAddressPilot = true;
             }
             else
             {
@@ -2410,7 +2410,7 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
             pValues[0].Value <<= aData.sDataSource;
             pValues[1].Value <<= aData.sCommand;
             pValues[2].Value <<= aData.nCommandType;
-            pDBMgr->ExecuteFormLetter(GetWrtShell(), aProperties, sal_True);
+            pDBMgr->ExecuteFormLetter(GetWrtShell(), aProperties, true);
         }
     }
     else
@@ -2422,14 +2422,14 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
         pDocTemplDlg->SelectTemplateFolder();
 
         int nRet = pDocTemplDlg->Execute();
-        sal_Bool bNewWin = sal_False;
+        bool bNewWin = false;
         if ( nRet == RET_OK )
         {
             if ( pTopWin != pSfxApp->GetTopWindow() )
             {
                 // the dialogue opens a document -> a new TopWindow appears
                 pTopWin = pSfxApp->GetTopWindow();
-                bNewWin = sal_True;
+                bNewWin = true;
             }
         }
 

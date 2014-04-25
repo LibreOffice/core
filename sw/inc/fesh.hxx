@@ -168,7 +168,7 @@ class SdrDropMarkerOverlay;
 class SW_DLLPUBLIC SwFEShell : public SwEditShell
 {
     SdrDropMarkerOverlay *pChainFrom, *pChainTo;
-    sal_Bool bCheckForOLEInCaption;
+    bool bCheckForOLEInCaption;
 
     SAL_DLLPRIVATE SwFlyFrm *FindFlyFrm() const;
     SAL_DLLPRIVATE SwFlyFrm *FindFlyFrm( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&  ) const;
@@ -191,20 +191,20 @@ class SW_DLLPUBLIC SwFEShell : public SwEditShell
     SAL_DLLPRIVATE void _GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const;
     SAL_DLLPRIVATE void _GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const;
 
-    SAL_DLLPRIVATE sal_Bool ImpEndCreate();
+    SAL_DLLPRIVATE bool ImpEndCreate();
 
     SAL_DLLPRIVATE ObjCntType GetObjCntType( const SdrObject& rObj ) const;
 
     /// Methods for copying of draw objects.
-    SAL_DLLPRIVATE sal_Bool CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
-                                const Point& rInsPt, sal_Bool bIsMove,
-                                sal_Bool bSelectInsert );
+    SAL_DLLPRIVATE bool CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
+                                const Point& rInsPt, bool bIsMove,
+                                bool bSelectInsert );
 
     /// Get list of marked SdrObjects;
     /// helper method for GetSelFrmType, IsSelContainsControl.
     SAL_DLLPRIVATE const SdrMarkList* _GetMarkList() const;
 
-    SAL_DLLPRIVATE sal_Bool CheckHeadline( bool bRepeat ) const;
+    SAL_DLLPRIVATE bool CheckHeadline( bool bRepeat ) const;
 
     using SwEditShell::Copy;
 
@@ -218,31 +218,31 @@ public:
     virtual ~SwFEShell();
 
     /// Copy and Paste methods for internal clipboard.
-    sal_Bool Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt = 0 );
-    sal_Bool Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames = sal_False);
+    bool Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt = 0 );
+    bool Paste( SwDoc* pClpDoc, bool bIncludingPageFrames = false);
 
     /// Paste some pages into another doc - used in mailmerge.
-    sal_Bool PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage);
+    bool PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage);
 
     /// Copy-Method for Drag&Drop
-    sal_Bool Copy( SwFEShell*, const Point& rSttPt, const Point& rInsPt,
-                sal_Bool bIsMove = sal_False, sal_Bool bSelectInsert = sal_True );
+    bool Copy( SwFEShell*, const Point& rSttPt, const Point& rInsPt,
+               bool bIsMove = false, bool bSelectInsert = true );
 
-    void SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew = sal_False );
+    void SelectFlyFrm( SwFlyFrm& rFrm, bool bNew = false );
 
     /// Is selected frame within another frame?
     const SwFrmFmt* IsFlyInFly();
 
     /** If an object as been given, exactly this object is selected
      (instead of searching over position). */
-    sal_Bool SelectObj( const Point& rSelPt, sal_uInt8 nFlag = 0, SdrObject *pObj = 0 );
+    bool SelectObj( const Point& rSelPt, sal_uInt8 nFlag = 0, SdrObject *pObj = 0 );
     void DelSelectedObj();
 
     /** Move selection upwards or downwards (Z-Order).
      TRUE = to top or bottom.
      FALSE = run past one other. */
-    void SelectionToTop   ( sal_Bool bTop = sal_True );
-    void SelectionToBottom( sal_Bool bBottom = sal_True );
+    void SelectionToTop   ( bool bTop = true );
+    void SelectionToBottom( bool bBottom = true );
 
     short GetLayerId() const;   ///< 1 Heaven, 0 Hell, -1 Ambiguous.
     void  SelectionToHeaven();  ///< Above document.
@@ -257,9 +257,9 @@ public:
     /** Test if there is a draw object at that position and if it should be selected.
      The 'should' is aimed at Writer text fly frames which may be in front of
      the draw object. */
-    sal_Bool ShouldObjectBeSelected(const Point& rPt);
+    bool ShouldObjectBeSelected(const Point& rPt);
 
-    sal_Bool MoveAnchor( sal_uInt16 nDir );
+    bool MoveAnchor( sal_uInt16 nDir );
 
     /** @return if Upper of frame at current position is section frame
      Currently only used by the rules. To be replaced by something more
@@ -270,7 +270,7 @@ public:
      pPt: Cursr or DocPos respectively; bStopAtFly: Stop at flys or continue over anchor.
      Although (0,TRUE) is kind of a standard, the parameters are not defaulted here
      in order to force more conscious use especially of bStopAtFly. */
-    sal_uInt16 GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const;
+    sal_uInt16 GetFrmType( const Point *pPt, bool bStopAtFly ) const;
     sal_uInt16 GetSelFrmType() const;               //Selektion (Drawing)
 
     /** check whether selected frame contains a control;
@@ -304,9 +304,9 @@ public:
     /// Set size of draw objects.
     void SetObjRect( const SwRect& rRect );
 
-    long BeginDrag( const Point *pPt, sal_Bool bProp );
-    long Drag     ( const Point *pPt, sal_Bool bProp );
-    long EndDrag  ( const Point *pPt, sal_Bool bProp );
+    long BeginDrag( const Point *pPt, bool bProp );
+    long Drag     ( const Point *pPt, bool bProp );
+    long EndDrag  ( const Point *pPt, bool bProp );
     void BreakDrag();
 
     /// Methods for status line.
@@ -335,26 +335,26 @@ public:
     /** Deliver graphic in rName besides graphic name. If graphic is
      linked give name with path. rbLink is TRUE if graphic is linked. */
     const Graphic *GetGrfAtPos( const Point &rDocPos,
-                                OUString &rName, sal_Bool &rbLink ) const;
+                                OUString &rName, bool &rbLink ) const;
 
     OUString GetObjTitle() const;
     void SetObjTitle( const OUString& rTitle );
     OUString GetObjDescription() const;
     void SetObjDescription( const OUString& rDescription );
 
-    sal_Bool IsFrmSelected() const;
-    sal_Bool GetFlyFrmAttr( SfxItemSet &rSet ) const;
+    bool IsFrmSelected() const;
+    bool GetFlyFrmAttr( SfxItemSet &rSet ) const;
     bool SetFlyFrmAttr( SfxItemSet &rSet );
-    sal_Bool ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet = 0 );
-    const SwFrmFmt *NewFlyFrm( const SfxItemSet &rSet, sal_Bool bAnchValid = sal_False,
+    bool ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet = 0 );
+    const SwFrmFmt *NewFlyFrm( const SfxItemSet &rSet, bool bAnchValid = false,
                          SwFrmFmt *pParent = 0 );
     void SetFlyPos( const Point &rAbsPos);
-    Point FindAnchorPos( const Point &rAbsPos, sal_Bool bMoveIt = sal_False );
+    Point FindAnchorPos( const Point &rAbsPos, bool bMoveIt = false );
 
     /** Determines whether a frame or its environment is vertically formatted and right-to-left.
      also determines, if frame or its environmane is in mongolianlayout (vertical left-to-right)
      - add output parameter <bVertL2R> */
-    sal_Bool IsFrmVertical(const sal_Bool bEnvironment, sal_Bool& bRightToLeft, sal_Bool& bVertL2R) const;
+    bool IsFrmVertical(const bool bEnvironment, bool& bRightToLeft, bool& bVertL2R) const;
 
     SwFrmFmt* GetCurFrmFmt() const; ///< If frame then frame style, else 0.
     void SetFrmFmt( SwFrmFmt *pFmt, bool bKeepOrient = false, Point* pDocPos = 0 ); ///< If frame then set frame style.
@@ -364,10 +364,10 @@ public:
     SwFrmFmt* WizzardGetFly();
 
     /// Independent selecting of flys.
-    sal_Bool GotoNextFly( sal_uInt16 /*GOTOOBJ_...*/ eType = GOTOOBJ_FLY_ANY )
-                                { return GotoObj( sal_True, eType ); }
-    sal_Bool GotoPrevFly( sal_uInt16 /*GOTOOBJ_...*/ eType = GOTOOBJ_FLY_ANY)
-                                { return GotoObj( sal_False, eType); }
+    bool GotoNextFly( sal_uInt16 /*GOTOOBJ_...*/ eType = GOTOOBJ_FLY_ANY )
+                                { return GotoObj( true, eType ); }
+    bool GotoPrevFly( sal_uInt16 /*GOTOOBJ_...*/ eType = GOTOOBJ_FLY_ANY)
+                                { return GotoObj( false, eType); }
 
    /// Iterate over flys  - for Basic-collections.
     sal_uInt16 GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL ) const;
@@ -408,8 +408,8 @@ public:
     void MakeObjVisible( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& ) const;
 
     /// Check resize of OLE-Object.
-    sal_Bool IsCheckForOLEInCaption() const         { return bCheckForOLEInCaption; }
-    void SetCheckForOLEInCaption( sal_Bool bFlag )  { bCheckForOLEInCaption = bFlag; }
+    bool IsCheckForOLEInCaption() const         { return bCheckForOLEInCaption; }
+    void SetCheckForOLEInCaption( bool bFlag )  { bCheckForOLEInCaption = bFlag; }
 
     /// Set name at selected FlyFrame.
     void SetFlyName( const OUString& rName );
@@ -424,8 +424,8 @@ public:
     OUString GetUniqueFrameName() const;
 
     /// Jump to named Fly (graphic/OLE).
-    sal_Bool GotoFly( const OUString& rName, FlyCntType eType = FLYCNTTYPE_ALL,
-                    sal_Bool bSelFrame = sal_True );
+    bool GotoFly( const OUString& rName, FlyCntType eType = FLYCNTTYPE_ALL,
+                  bool bSelFrame = true );
 
     /// Position is a graphic with URL?
     const SwFrmFmt* IsURLGrfAtPos( const Point& rPt, OUString* pURL = 0,
@@ -447,18 +447,18 @@ public:
     void CheckUnboundObjects();
 
     /// Attention: Ambiguities if multiple selections.
-    sal_Bool GetObjAttr( SfxItemSet &rSet ) const;
-    sal_Bool SetObjAttr( const SfxItemSet &rSet );
+    bool GetObjAttr( SfxItemSet &rSet ) const;
+    bool SetObjAttr( const SfxItemSet &rSet );
 
-    const SdrObject* GetBestObject( sal_Bool bNext, sal_uInt16 eType = GOTOOBJ_DRAW_ANY, sal_Bool bFlat = sal_True, const ::svx::ISdrObjectFilter* pFilter = NULL );
-    sal_Bool GotoObj( sal_Bool bNext, sal_uInt16 /*GOTOOBJ_...*/ eType = GOTOOBJ_DRAW_ANY);
+    const SdrObject* GetBestObject( bool bNext, sal_uInt16 eType = GOTOOBJ_DRAW_ANY, bool bFlat = true, const ::svx::ISdrObjectFilter* pFilter = NULL );
+    bool GotoObj( bool bNext, sal_uInt16 /*GOTOOBJ_...*/ eType = GOTOOBJ_DRAW_ANY);
 
     /// Set DragMode (e.g. Rotae), but do nothing when frame is selected.
     void SetDragMode( sal_uInt16 eSdrDragMode );
 
     sal_uInt16 IsObjSelected() const;   ///< @return object count, but doesn't count the objects in groups.
-    sal_Bool IsObjSelected( const SdrObject& rObj ) const;
-    sal_Bool IsObjSameLevelWithMarked(const SdrObject* pObj) const;
+    bool IsObjSelected( const SdrObject& rObj ) const;
+    bool IsObjSameLevelWithMarked(const SdrObject* pObj) const;
     const SdrMarkList* GetMarkList() const{ return _GetMarkList(); };
 
     void EndTextEdit();             ///< Deletes object if required.
@@ -472,22 +472,22 @@ public:
      or SDRCREATE_NEXTPOINT for a polygon may be relevant.
      After RESTRAINTEND the object is created and selected.
      BreakCreate interrupts the process. In this case no object is selected. */
-    sal_Bool BeginCreate( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Point &rPos );
-    sal_Bool BeginCreate( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, sal_uInt32 eObjInventor, const Point &);
+    bool BeginCreate( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Point &rPos );
+    bool BeginCreate( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, sal_uInt32 eObjInventor, const Point &);
     void MoveCreate ( const Point &rPos );
-    sal_Bool EndCreate  ( sal_uInt16 eSdrCreateCmd );
+    bool EndCreate  ( sal_uInt16 eSdrCreateCmd );
     void BreakCreate();
     bool IsDrawCreate() const;
     void CreateDefaultShape( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect, sal_uInt16 nSlotId);
 
     /// Functions for Rubberbox, ti select Draw-Objects
-    sal_Bool BeginMark( const Point &rPos );
+    bool BeginMark( const Point &rPos );
     void MoveMark ( const Point &rPos );
-    sal_Bool EndMark  ();
+    bool EndMark  ();
     void BreakMark();
 
     /// Create and destroy group, don't when frame is selected.
-    sal_Bool IsGroupSelected();     ///< Can be a mixed selection!
+    bool IsGroupSelected();     ///< Can be a mixed selection!
     void GroupSelection();          ///< Afterwards the group is selected.
     void UnGroupSelection();        /**< The individual objects are selected, but
                                     it is possible that there are groups included. */
@@ -502,17 +502,17 @@ public:
     void ChgAnchor( int eAnchorId, bool bSameOnly = false,
                                    bool bPosCorr = true );
 
-    sal_Bool SetDrawingAttr( SfxItemSet &rSet );
+    bool SetDrawingAttr( SfxItemSet &rSet );
 
     /** Get selected DrawObj as graphics (MetaFile/Bitmap).
      Return value indicates if it was converted. */
-    sal_Bool GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const;
+    bool GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const;
 
     void Paste( SvStream& rStm, sal_uInt16 nAction, const Point* pPt = 0 );
     bool Paste( const Graphic &rGrf, const OUString& rURL );
-    sal_Bool Paste( SotDataObject& rObj, const Point& rPt );
+    bool Paste( SotDataObject& rObj, const Point& rPt );
 
-    sal_Bool IsAlignPossible() const;
+    bool IsAlignPossible() const;
     void SetCalcFieldValueHdl(Outliner* pOutliner);
 
     void Insert(const OUString& rGrfName,
@@ -526,7 +526,7 @@ public:
     void InsertDrawObj( SdrObject& rDrawObj,
                         const Point& rInsertPosition );
 
-    sal_Bool ReplaceSdrObj( const OUString& rGrfName, const OUString& rFltName,
+    bool ReplaceSdrObj( const OUString& rGrfName, const OUString& rFltName,
                         const Graphic* pGrf = 0 );
 
     // --> #i972#
@@ -538,22 +538,22 @@ public:
     void AlignAllFormulasToBaseline();
 
     /// Provide information about content situated closes to given Point.
-    Point GetCntntPos( const Point& rPoint, sal_Bool bNext ) const;
+    Point GetCntntPos( const Point& rPoint, bool bNext ) const;
 
     /// Convert document position into position relative to the current page.
     Point GetRelativePagePosition(const Point& rDocPos);
 
     /// Hide or show layout-selection and pass call to CrsrSh.
     void ShLooseFcs();
-    void ShGetFcs( sal_Bool bUpdate = sal_True );
+    void ShGetFcs( bool bUpdate = true );
 
     /// PageDescriptor-interface
     void   ChgCurPageDesc( const SwPageDesc& );
-    sal_uInt16 GetCurPageDesc( const sal_Bool bCalcFrm = sal_True ) const;
+    sal_uInt16 GetCurPageDesc( const bool bCalcFrm = true ) const;
     sal_uInt16 GetMousePageDesc( const Point &rPt ) const;
     sal_uInt16 GetPageDescCnt() const;
     SwPageDesc* FindPageDescByName( const OUString& rName,
-                                    sal_Bool bGetFromPool = sal_False,
+                                    bool bGetFromPool = false,
                                     sal_uInt16* pPos = 0 );
 
     const SwPageDesc& GetPageDesc( sal_uInt16 i ) const;
@@ -569,36 +569,36 @@ public:
 
     /// Page number of the page containing Point, O if no page.
     sal_uInt16 GetPageNumber( const Point &rPoint ) const;
-    sal_Bool GetPageNumber( long nYPos, sal_Bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay ) const;
+    bool GetPageNumber( long nYPos, bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay ) const;
 
     SwFlyFrmFmt* InsertObject( const svt::EmbeddedObjectRef&,
                 const SfxItemSet* pFlyAttrSet = 0,
                 const SfxItemSet* pGrfAttrSet = 0,
                 SwFrmFmt* = 0 );
-    sal_Bool    FinishOLEObj(); ///< Shutdown server.
+    bool    FinishOLEObj(); ///< Shutdown server.
 
     void GetTblAttr( SfxItemSet & ) const;
     void SetTblAttr( const SfxItemSet & );
 
-    sal_Bool HasWholeTabSelection() const;
+    bool HasWholeTabSelection() const;
 
     /// Is content of a table cell or at least a table cell completely selected?
-    sal_Bool HasBoxSelection() const;
+    bool HasBoxSelection() const;
 
     bool InsertRow( sal_uInt16 nCnt, bool bBehind );
     bool InsertCol( sal_uInt16 nCnt, bool bBehind );  // 0 == at the end.
-    sal_Bool DeleteCol();
-    sal_Bool DeleteTable();
-    sal_Bool DeleteRow(bool bCompleteTable = false);
+    bool DeleteCol();
+    bool DeleteTable();
+    bool DeleteRow(bool bCompleteTable = false);
 
-    sal_Bool DeleteTblSel();        ///< Current selection, may be whole table.
+    bool DeleteTblSel();        ///< Current selection, may be whole table.
 
     sal_uInt16 MergeTab();          /**< Merge selected parts of table.
                                       @return error via enum. */
 
     /// Split cell vertically or horizontally.
-    sal_Bool SplitTab( sal_Bool nVert = sal_True, sal_uInt16 nCnt = 1, sal_Bool bSameHeight = sal_False );
-    sal_Bool Sort(const SwSortOptions&);    //Sortieren.
+    bool SplitTab( bool nVert = true, sal_uInt16 nCnt = 1, bool bSameHeight = false );
+    bool Sort(const SwSortOptions&);    //Sortieren.
 
     void SetRowHeight( const SwFmtFrmSize &rSz );
 
@@ -612,77 +612,77 @@ public:
     sal_uInt16 GetBoxAlign() const;         ///< USHRT_MAX if ambiguous.
 
     /// Adjustment of Rowheights. Determine via bTstOnly if more than one row is selected.
-    sal_Bool BalanceRowHeight( sal_Bool bTstOnly );
+    bool BalanceRowHeight( bool bTstOnly );
 
     void SetTabBorders( const SfxItemSet& rSet );
     void GetTabBorders(       SfxItemSet& rSet) const;
-    void SetTabLineStyle(const Color* pColor, sal_Bool bSetLine = sal_False, const editeng::SvxBorderLine* pBorderLine = NULL);
+    void SetTabLineStyle(const Color* pColor, bool bSetLine = false, const editeng::SvxBorderLine* pBorderLine = NULL);
 
     void SetTabBackground( const SvxBrushItem &rNew );
     void GetTabBackground( SvxBrushItem &rToFill ) const;
 
     void SetBoxBackground( const SvxBrushItem &rNew );
-    sal_Bool GetBoxBackground( SvxBrushItem &rToFill ) const; ///< FALSE ambiguous.
+    bool GetBoxBackground( SvxBrushItem &rToFill ) const; ///< FALSE ambiguous.
 
     void SetBoxDirection( const SvxFrameDirectionItem& rNew );
-    sal_Bool GetBoxDirection( SvxFrameDirectionItem& rToFill ) const; ///< FALSE ambiguous.
+    bool GetBoxDirection( SvxFrameDirectionItem& rToFill ) const; ///< FALSE ambiguous.
 
     void SetRowBackground( const SvxBrushItem &rNew );
-    sal_Bool GetRowBackground( SvxBrushItem &rToFill ) const; ///< FALSE ambiguous.
+    bool GetRowBackground( SvxBrushItem &rToFill ) const; ///< FALSE ambiguous.
 
     sal_uInt8 WhichMouseTabCol( const Point &rPt ) const;
     void GetTabCols( SwTabCols &rToFill ) const; ///< Info about columns and margins.
-    void SetTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly = sal_True );
+    void SetTabCols( const SwTabCols &rNew, bool bCurRowOnly = true );
     void GetMouseTabCols( SwTabCols &rToFill, const Point &rPt ) const;
-    void SetMouseTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly,
+    void SetMouseTabCols( const SwTabCols &rNew, bool bCurRowOnly,
                           const Point &rPt );
 
     /// pEnd will be used during MouseMove
     bool SelTblRowCol( const Point& rPt, const Point* pEnd = 0, bool bRowDrag = false );
 
     void GetTabRows( SwTabCols &rToFill ) const;
-    void SetTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly );
+    void SetTabRows( const SwTabCols &rNew, bool bCurColOnly );
     void GetMouseTabRows( SwTabCols &rToFill, const Point &rPt ) const;
-    void SetMouseTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly, const Point &rPt );
+    void SetMouseTabRows( const SwTabCols &rNew, bool bCurColOnly, const Point &rPt );
 
     void ProtectCells();    /**< If a table selection exists it is destroyed in case
                              cursor is not allowed in readonly. */
     void UnProtectCells();  ///< Refers to table selection.
     void UnProtectTbls();   ///< Unprotect all tables in selection.
-    sal_Bool HasTblAnyProtection( const OUString* pTblName = 0,
-                                sal_Bool* pFullTblProtection = 0 );
-    sal_Bool CanUnProtectCells() const;
+    bool HasTblAnyProtection( const OUString* pTblName = 0,
+                              bool* pFullTblProtection = 0 );
+    bool CanUnProtectCells() const;
 
     sal_uInt16 GetRowsToRepeat() const;
     void SetRowsToRepeat( sal_uInt16 nNumOfRows );
-    sal_uInt16 GetVirtPageNum( const sal_Bool bCalcFrm = sal_True );
+    sal_uInt16 GetVirtPageNum( const bool bCalcFrm = true );
 
     /** @return the number of table rows currently selected
     if the selection start at the top of the table. */
     sal_uInt16    GetRowSelectionFromTop() const;
 
-    sal_Bool IsInRepeatedHeadline() const { return CheckHeadline( true ); }
-    sal_Bool IsInHeadline() const { return CheckHeadline( false ); }
+    bool IsInRepeatedHeadline() const { return CheckHeadline( true ); }
+    bool IsInHeadline() const { return CheckHeadline( false ); }
 
     /** Adjusts cell widths in such a way, that their content
      does not need to be wrapped (if possible).
      bBalance provides for adjustment of selected columns. */
-    void AdjustCellWidth( sal_Bool bBalance = sal_False );
+    void AdjustCellWidth( bool bBalance = false );
 
     /// Not allowed if only empty cells are selected.
-    sal_Bool IsAdjustCellWidthAllowed( sal_Bool bBalance = sal_False ) const;
+    bool IsAdjustCellWidthAllowed( bool bBalance = false ) const;
 
     /// Adjustment of cell-widths; determine via bTstOnly if more than one cell is selected.
-    sal_Bool BalanceCellWidth( sal_Bool bTstOnly );
+    bool BalanceCellWidth( bool bTstOnly );
 
     /// AutoFormat for table/ table selection.
-    sal_Bool SetTableAutoFmt( const SwTableAutoFmt& rNew );
+    bool SetTableAutoFmt( const SwTableAutoFmt& rNew );
 
-    sal_Bool GetTableAutoFmt( SwTableAutoFmt& rGet );
+    bool GetTableAutoFmt( SwTableAutoFmt& rGet );
 
-    sal_Bool SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff = 283 );
+    bool SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff = 283 );
 
-    sal_Bool GetAutoSum( OUString& rFml ) const;
+    bool GetAutoSum( OUString& rFml ) const;
 
     /** Phy: real page count.
      Virt: consider offset that may have been set by user. */
@@ -694,9 +694,9 @@ public:
 
     void InsertLabel( const SwLabelType eType, const OUString &rTxt, const OUString& rSeparator,
                       const OUString& rNumberSeparator,
-                      const sal_Bool bBefore, const sal_uInt16 nId,
+                      const bool bBefore, const sal_uInt16 nId,
                       const OUString& rCharacterStyle,
-                      const sal_Bool bCpyBrd = sal_True );
+                      const bool bCpyBrd = true );
 
     /// The ruler needs some information too.
     sal_uInt16 GetCurColNum( SwGetCurColNumPara* pPara = 0 ) const; //0 == not in any column.
@@ -706,17 +706,17 @@ public:
     size_t GetCurMouseTabColNum( const Point &rPt ) const;
     sal_uInt16 GetCurOutColNum( SwGetCurColNumPara* pPara = 0 ) const;  ///< Current outer column.
 
-    sal_Bool IsTableRightToLeft() const;
-    sal_Bool IsMouseTableRightToLeft( const Point &rPt ) const;
-    sal_Bool IsTableVertical() const;
+    bool IsTableRightToLeft() const;
+    bool IsMouseTableRightToLeft( const Point &rPt ) const;
+    bool IsTableVertical() const;
 
-    sal_Bool IsLastCellInRow() const;
+    bool IsLastCellInRow() const;
 
     /// Width of current range for column-dialog.
     long GetSectionWidth( SwFmt& rFmt ) const;
 
     void GetConnectableFrmFmts
-    (SwFrmFmt & rFmt, const OUString & rReference, sal_Bool bSuccessors,
+    (SwFrmFmt & rFmt, const OUString & rReference, bool bSuccessors,
      ::std::vector< OUString > & aPrevPageVec,
      ::std::vector< OUString > & aThisPageVec,
      ::std::vector< OUString > & aNextPageVec,
@@ -752,7 +752,7 @@ public:
     void ParkCursorInTab();
 
     SwTxtNode * GetNumRuleNodeAtPos(const Point &rPot);
-    sal_Bool IsNumLabel( const Point &rPt, int nMaxOffset = -1 );
+    bool IsNumLabel( const Point &rPt, int nMaxOffset = -1 );
 
     bool IsVerticalModeAtNdAndPos( const SwTxtNode& _rTxtNode,
                                    const Point& _rDocPos ) const;

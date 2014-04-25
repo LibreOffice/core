@@ -35,19 +35,19 @@
 void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
 {
     // #105332# save current state of DoesUndo()
-    sal_Bool bSaveDoesUndo = DoesUndo();
+    bool bSaveDoesUndo = DoesUndo();
 
     StartAllAction();
     switch (eDoType)
     {
         case UNDO:
-            DoUndo(sal_False); // #i21739#
+            DoUndo(false); // #i21739#
             // Reset modes
             EnterStdMode();
             SwEditShell::Undo(nCnt);
             break;
         case REDO:
-            DoUndo(sal_False); // #i21739#
+            DoUndo(false); // #i21739#
             // Reset modes
             EnterStdMode();
             SwEditShell::Redo( nCnt );

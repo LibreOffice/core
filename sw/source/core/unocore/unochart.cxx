@@ -119,7 +119,7 @@ void SwChartLockController_Helper::Disconnect()
     pDoc = 0;
 }
 
-void SwChartLockController_Helper::LockUnlockAllCharts( sal_Bool bLock )
+void SwChartLockController_Helper::LockUnlockAllCharts( bool bLock )
 {
     if (!pDoc)
         return;
@@ -273,7 +273,7 @@ static OUString GetCellRangeName( SwFrmFmt &rTblFmt, SwUnoCrsr &rTblCrsr )
 
 static OUString GetRangeRepFromTableAndCells( const OUString &rTableName,
         const OUString &rStartCell, const OUString &rEndCell,
-        sal_Bool bForceEndCellName )
+        bool bForceEndCellName )
 {
     OSL_ENSURE( !rTableName.isEmpty(), "table name missing" );
     OSL_ENSURE( !rStartCell.isEmpty(), "cell name missing" );
@@ -419,7 +419,7 @@ static void GetFormatAndCreateCursorFromRangeRep(
                 // set cursor to top left box of range
                 SwUnoCrsr* pUnoCrsr = pTblFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                pUnoCrsr->SetRemainInSection( sal_False );
+                pUnoCrsr->SetRemainInSection( false );
                 // #i80314#
                 // perform validation check. Thus, pass <true> as 2nd parameter to <SwTable::GetTblBox(..)>
                 const SwTableBox* pBRBox = pTable->GetTblBox( aEndCell, true );
@@ -473,7 +473,7 @@ static bool GetSubranges( const OUString &rRangeRepresentation,
                 {
                     sw_NormalizeRange( aStartCell, aEndCell );
                     pRanges[nCnt] = GetRangeRepFromTableAndCells( aTableName,
-                                    aStartCell, aEndCell, sal_True );
+                                    aStartCell, aEndCell, true );
                 }
 
                 // make sure to use only a single table
@@ -492,7 +492,7 @@ static bool GetSubranges( const OUString &rRangeRepresentation,
     return bRes;
 }
 
-static void SortSubranges( uno::Sequence< OUString > &rSubRanges, sal_Bool bCmpByColumn )
+static void SortSubranges( uno::Sequence< OUString > &rSubRanges, bool bCmpByColumn )
 {
     sal_Int32 nLen = rSubRanges.getLength();
     OUString *pSubRanges = rSubRanges.getArray();
@@ -542,7 +542,7 @@ SwChartDataProvider::SwChartDataProvider( const SwDoc* pSwDoc ) :
     aEvtListeners( GetChartMutex() ),
     pDoc( pSwDoc )
 {
-    bDisposed = sal_False;
+    bDisposed = false;
 }
 
 SwChartDataProvider::~SwChartDataProvider()
@@ -550,7 +550,7 @@ SwChartDataProvider::~SwChartDataProvider()
 }
 
 uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createDataSource(
-        const uno::Sequence< beans::PropertyValue >& rArguments, sal_Bool bTestOnly )
+        const uno::Sequence< beans::PropertyValue >& rArguments, bool bTestOnly )
     throw (lang::IllegalArgumentException, uno::RuntimeException,
            std::exception)
 {
@@ -566,8 +566,8 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     // get arguments
     OUString aRangeRepresentation;
     uno::Sequence< sal_Int32 > aSequenceMapping;
-    sal_Bool bFirstIsLabel      = sal_False;
-    sal_Bool bDtaSrcIsColumns   = sal_True; // true : DataSource will be sequence of columns
+    bool bFirstIsLabel      = false;
+    bool bDtaSrcIsColumns   = true; // true : DataSource will be sequence of columns
                                             // false: DataSource will be sequence of rows
     OUString aChartOleObjectName;//work around wrong writer ranges ( see Issue 58464 )
     sal_Int32 nArgs = rArguments.getLength();
@@ -613,7 +613,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
 
     uno::Sequence< OUString > aSubRanges;
     // get sub-ranges and check that they all are from the very same table
-    sal_Bool bOk = GetSubranges( aRangeRepresentation, aSubRanges, true );
+    bool bOk = GetSubranges( aRangeRepresentation, aSubRanges, true );
 
     if (!bOk && pDoc && !aChartOleObjectName.isEmpty() )
     {
@@ -657,7 +657,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             OUString aNewStartCell( sw_GetCellName( aDesc.nLeft, aDesc.nTop ) );
             OUString aNewEndCell( sw_GetCellName( aDesc.nRight, aDesc.nBottom ) );
             aRangeRepresentation = GetRangeRepFromTableAndCells(
-                        aChartTableName, aNewStartCell, aNewEndCell, sal_True );
+                        aChartTableName, aNewStartCell, aNewEndCell, true );
             bOk = GetSubranges( aRangeRepresentation, aSubRanges, true );
         }
     }
@@ -972,14 +972,14 @@ sal_Bool SAL_CALL SwChartDataProvider::createDataSourcePossible(
 {
     SolarMutexGuard aGuard;
 
-    sal_Bool bPossible = sal_True;
+    bool bPossible = true;
     try
     {
-        Impl_createDataSource( rArguments, sal_True );
+        Impl_createDataSource( rArguments, true );
     }
     catch (lang::IllegalArgumentException &)
     {
-        bPossible = sal_False;
+        bPossible = false;
     }
 
     return bPossible;
@@ -1025,7 +1025,7 @@ OUString SwChartDataProvider::GetBrokenCellRangeForExport(
         aEndCell   = sw_GetCellName( nEndCol, nEndRow );
 
         aRes = GetRangeRepFromTableAndCells( aTblName,
-                aStartCell, aEndCell, sal_False );
+                aStartCell, aEndCell, false );
     }
 
     return aRes;
@@ -1339,9 +1339,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
 
     OSL_ENSURE(nLabelSeqLen >= 0 || nLabelSeqLen == -2 /*not used*/,
             "unexpected value for 'nLabelSeqLen'" );
-    sal_Bool bFirstCellIsLabel = sal_False;     // default value if 'nLabelSeqLen' could not properly determined
+    bool bFirstCellIsLabel = false;     // default value if 'nLabelSeqLen' could not properly determined
     if (nLabelSeqLen > 0) // == 0 means no label sequence in use
-        bFirstCellIsLabel = sal_True;
+        bFirstCellIsLabel = true;
 
     OSL_ENSURE( !aSortedCellRanges.isEmpty(), "CellRangeRepresentation missing" );
     OUString aBrokenCellRangeForExport( GetBrokenCellRangeForExport( aSortedCellRanges ) );
@@ -1376,7 +1376,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
 }
 
 uno::Reference< chart2::data::XDataSequence > SwChartDataProvider::Impl_createDataSequenceByRangeRepresentation(
-        const OUString& rRangeRepresentation, sal_Bool bTestOnly )
+        const OUString& rRangeRepresentation, bool bTestOnly )
     throw (lang::IllegalArgumentException, uno::RuntimeException,
            std::exception)
 {
@@ -1411,14 +1411,14 @@ sal_Bool SAL_CALL SwChartDataProvider::createDataSequenceByRangeRepresentationPo
 {
     SolarMutexGuard aGuard;
 
-    sal_Bool bPossible = sal_True;
+    bool bPossible = true;
     try
     {
-        Impl_createDataSequenceByRangeRepresentation( rRangeRepresentation, sal_True );
+        Impl_createDataSequenceByRangeRepresentation( rRangeRepresentation, true );
     }
     catch (lang::IllegalArgumentException &)
     {
-        bPossible = sal_False;
+        bPossible = false;
     }
 
     return bPossible;
@@ -1447,7 +1447,7 @@ void SAL_CALL SwChartDataProvider::dispose(  )
         osl::MutexGuard  aGuard( GetChartMutex() );
         bMustDispose = !bDisposed;
         if (!bDisposed)
-            bDisposed = sal_True;
+            bDisposed = true;
     }
     if (bMustDispose)
     {
@@ -1546,9 +1546,9 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
     }
 }
 
-sal_Bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox &rBox )
+bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox &rBox )
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     OSL_ENSURE( pTable, "table pointer is NULL" );
     if (pTable)
     {
@@ -1564,8 +1564,8 @@ sal_Bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox
         while (aIt != aEndIt)
         {
             SwChartDataSequence *pDataSeq = 0;
-            sal_Bool bNowEmpty = sal_False;
-            sal_Bool bSeqDisposed = sal_False;
+            bool bNowEmpty = false;
+            bool bSeqDisposed = false;
 
             // check if weak reference is still valid...
             uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);  // temporary needed for g++ 3.3.5
@@ -1582,8 +1582,8 @@ sal_Bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox
                     }
                     catch (const lang::DisposedException&)
                     {
-                        bNowEmpty = sal_True;
-                        bSeqDisposed = sal_True;
+                        bNowEmpty = true;
+                        bSeqDisposed = true;
                     }
 
                     if (bNowEmpty)
@@ -1655,7 +1655,7 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
 void SwChartDataProvider::AddRowCols(
         const SwTable &rTable,
         const SwSelBoxes& rBoxes,
-        sal_uInt16 nLines, sal_Bool bBehind )
+        sal_uInt16 nLines, bool bBehind )
 {
     if (rTable.IsTblComplex())
         return;
@@ -1908,7 +1908,7 @@ SwChartDataSequence::SwChartDataSequence(
     aCursorDepend( this, pTableCursor ),
     _pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_CHART2_DATA_SEQUENCE ) )
 {
-    bDisposed = sal_False;
+    bDisposed = false;
 
     acquire();
     try
@@ -1956,7 +1956,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     aCursorDepend( this, pTblCrsr ),
     _pPropSet( rObj._pPropSet )
 {
-    bDisposed = sal_False;
+    bDisposed = false;
 
     acquire();
     try
@@ -2236,7 +2236,7 @@ uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
 
                 // get numerical values and make an effort to return the
                 // numerical value for text formatted cells
-                aRange.GetDataSequence( 0, 0, &aRes, sal_True );
+                aRange.GetDataSequence( 0, 0, &aRes, true );
             }
         }
     }
@@ -2427,11 +2427,11 @@ void SAL_CALL SwChartDataSequence::dispose(  )
         osl::MutexGuard  aGuard( GetChartMutex() );
         bMustDispose = !bDisposed;
         if (!bDisposed)
-            bDisposed = sal_True;
+            bDisposed = true;
     }
     if (bMustDispose)
     {
-        bDisposed = sal_True;
+        bDisposed = true;
         if (pDataProvider)
         {
             const SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
@@ -2493,7 +2493,7 @@ void SAL_CALL SwChartDataSequence::removeEventListener(
         aEvtListeners.removeInterface( rxListener );
 }
 
-sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
+bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
 {
     if (bDisposed)
         throw lang::DisposedException();
@@ -2503,7 +2503,7 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
 #endif
 
     // to be set if the last box of the data-sequence was removed here
-    sal_Bool bNowEmpty = sal_False;
+    bool bNowEmpty = false;
 
     // if the implementation cursor gets affected (i.e. thew box where it is located
     // in gets removed) we need to move it before that... (otherwise it does not need to change)
@@ -2513,7 +2513,7 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
 
     if (!pTblCrsr->HasMark() || (pPointStartNode == rBox.GetSttNd()  &&  pMarkStartNode == rBox.GetSttNd()))
     {
-        bNowEmpty = sal_True;
+        bNowEmpty = true;
     }
     else if (pPointStartNode == rBox.GetSttNd()  ||  pMarkStartNode == rBox.GetSttNd())
     {
@@ -2727,7 +2727,7 @@ SwChartLabeledDataSequence::SwChartLabeledDataSequence() :
     aEvtListeners( GetChartMutex() ),
     aModifyListeners( GetChartMutex() )
 {
-    bDisposed = sal_False;
+    bDisposed = false;
 }
 
 SwChartLabeledDataSequence::~SwChartLabeledDataSequence()
@@ -2910,11 +2910,11 @@ void SAL_CALL SwChartLabeledDataSequence::dispose(  )
         osl::MutexGuard  aGuard( GetChartMutex() );
         bMustDispose = !bDisposed;
         if (!bDisposed)
-            bDisposed = sal_True;
+            bDisposed = true;
     }
     if (bMustDispose)
     {
-        bDisposed = sal_True;
+        bDisposed = true;
 
         // require listeners to release references to this object
         lang::EventObject aEvtObj( dynamic_cast< chart2::data::XLabeledDataSequence * >(this) );

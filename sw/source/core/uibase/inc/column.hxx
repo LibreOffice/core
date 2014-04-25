@@ -135,9 +135,9 @@ class SwColumnPage : public SfxTabPage
 
     std::map<MetricField*, PercentField*> m_aPercentFieldsMap;
 
-    sal_Bool            bFormat;
-    sal_Bool            bFrm;
-    sal_Bool            bHtmlMode;
+    bool            bFormat;
+    bool            bFrm;
+    bool            bHtmlMode;
     bool            bLockUpdate;
 
     // Handler
@@ -180,20 +180,20 @@ public:
     virtual bool    FillItemSet(SfxItemSet &rSet) SAL_OVERRIDE;
     virtual void    Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
 
-    void SetFrmMode(sal_Bool bMod);
+    void SetFrmMode(bool bMod);
     void SetPageWidth(long nPageWidth);
 
-    void SetFormatUsed(sal_Bool bFmt)
+    void SetFormatUsed(bool bFmt)
     {
         bFormat = bFmt;
     }
 
-    void ShowBalance(sal_Bool bShow)
+    void ShowBalance(bool bShow)
     {
         m_pBalanceColsCB->Show(bShow);
     }
 
-    void SetInSection(sal_Bool bSet);
+    void SetInSection(bool bSet);
 
     void ActivateColumnControl()
     {

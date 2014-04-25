@@ -260,11 +260,11 @@ bool SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
 }
 
 //  Determines if the current cursor is in the last row of the table.
-sal_Bool SwFEShell::IsLastCellInRow() const
+bool SwFEShell::IsLastCellInRow() const
 {
     SwTabCols aTabCols;
     GetTabCols( aTabCols );
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if (IsTableRightToLeft())
         /* If the table is right-to-left the last row is the most left one. */
@@ -276,25 +276,25 @@ sal_Bool SwFEShell::IsLastCellInRow() const
     return bResult;
 }
 
-sal_Bool SwFEShell::DeleteCol()
+bool SwFEShell::DeleteCol()
 {
     // check if Point/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
-        return sal_False;
+        return false;
 
     if( pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
-        return sal_False;
+        return false;
     }
 
     SET_CURR_SHELL( this );
     StartAllAction();
 
     // search boxes via the layout
-    sal_Bool bRet;
+    bool bRet;
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
     if ( !aBoxes.empty() )
@@ -316,36 +316,36 @@ sal_Bool SwFEShell::DeleteCol()
 
     }
     else
-        bRet = sal_False;
+        bRet = false;
 
     EndAllActionAndCall();
     return bRet;
 }
 
-sal_Bool SwFEShell::DeleteTable()
+bool SwFEShell::DeleteTable()
 {
     return DeleteRow(true);
 }
 
-sal_Bool SwFEShell::DeleteRow(bool bCompleteTable)
+bool SwFEShell::DeleteRow(bool bCompleteTable)
 {
     // check if Point/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
-        return sal_False;
+        return false;
 
     if( pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
-        return sal_False;
+        return false;
     }
 
     SET_CURR_SHELL( this );
     StartAllAction();
 
     // search for boxes via the layout
-    sal_Bool bRet;
+    bool bRet;
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_ROW );
 
@@ -371,7 +371,7 @@ sal_Bool SwFEShell::DeleteRow(bool bCompleteTable)
             if( aFndBox.GetLines().empty() )
             {
                 EndAllActionAndCall();
-                return sal_False;
+                return false;
             }
 
             KillPams();
@@ -439,7 +439,7 @@ sal_Bool SwFEShell::DeleteRow(bool bCompleteTable)
         EndUndo(bCompleteTable ? UNDO_UI_TABLE_DELETE : UNDO_ROW_DELETE);
     }
     else
-        bRet = sal_False;
+        bRet = false;
 
     EndAllActionAndCall();
     return bRet;
@@ -477,18 +477,18 @@ sal_uInt16 SwFEShell::MergeTab()
     return nRet;
 }
 
-sal_Bool SwFEShell::SplitTab( sal_Bool bVert, sal_uInt16 nCnt, sal_Bool bSameHeight )
+bool SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
 {
     // check if Point/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
-        return sal_False;
+        return false;
 
     if( pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
-        return sal_False;
+        return false;
     }
 
     SET_CURR_SHELL( this );
@@ -497,11 +497,11 @@ sal_Bool SwFEShell::SplitTab( sal_Bool bVert, sal_uInt16 nCnt, sal_Bool bSameHei
     {
         ErrorHandler::HandleError( ERR_TBLSPLIT_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
-        return sal_False;
+        return false;
     }
     StartAllAction();
     // search boxes via the layout
-    sal_Bool bRet;
+    bool bRet;
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes );
     if( !aBoxes.empty() )
@@ -515,7 +515,7 @@ sal_Bool SwFEShell::SplitTab( sal_Bool bVert, sal_uInt16 nCnt, sal_Bool bSameHei
         DELETEZ( pLastRows );
     }
     else
-        bRet = sal_False;
+        bRet = false;
     EndAllActionAndCall();
     return bRet;
 }
@@ -562,7 +562,7 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                 if ( pColumnCacheLastCellFrm != pBox )
                 {
                     pTab->GetTable()->GetTabCols( *pLastCols,
-                                        ((SwCellFrm*)pBox)->GetTabBox(), sal_True);
+                                        ((SwCellFrm*)pBox)->GetTabBox(), true);
                     pColumnCacheLastCellFrm = pBox;
                 }
                 rToFill = *pLastCols;
@@ -640,7 +640,7 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
     }
 }
 
-void SwFEShell::SetTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly )
+void SwFEShell::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly )
 {
     SwFrm *pBox = GetCurrFrm();
     if( !pBox || !pBox->IsInTab() )
@@ -681,7 +681,7 @@ void SwFEShell::GetTabRows( SwTabCols &rToFill ) const
     _GetTabRows( rToFill, pFrm );
 }
 
-void SwFEShell::SetTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly )
+void SwFEShell::SetTabRows( const SwTabCols &rNew, bool bCurColOnly )
 {
     SwFrm *pBox = GetCurrFrm();
     if( !pBox || !pBox->IsInTab() )
@@ -705,7 +705,7 @@ void SwFEShell::GetMouseTabRows( SwTabCols &rToFill, const Point &rPt ) const
         _GetTabRows( rToFill, pBox );
 }
 
-void SwFEShell::SetMouseTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly, const Point &rPt )
+void SwFEShell::SetMouseTabRows( const SwTabCols &rNew, bool bCurColOnly, const Point &rPt )
 {
     const SwFrm *pBox = GetBox( rPt );
     if( pBox )
@@ -743,12 +743,12 @@ void SwFEShell::GetRowHeight( SwFmtFrmSize *& rpSz ) const
     GetDoc()->GetRowHeight( *getShellCrsr( false ), rpSz );
 }
 
-sal_Bool SwFEShell::BalanceRowHeight( sal_Bool bTstOnly )
+bool SwFEShell::BalanceRowHeight( bool bTstOnly )
 {
     SET_CURR_SHELL( this );
     if( !bTstOnly )
         StartAllAction();
-    sal_Bool bRet = GetDoc()->BalanceRowHeight( *getShellCrsr( false ), bTstOnly );
+    bool bRet = GetDoc()->BalanceRowHeight( *getShellCrsr( false ), bTstOnly );
     if( !bTstOnly )
         EndAllActionAndCall();
     return bRet;
@@ -762,7 +762,7 @@ void SwFEShell::SetRowBackground( const SvxBrushItem &rNew )
     EndAllActionAndCall();
 }
 
-sal_Bool SwFEShell::GetRowBackground( SvxBrushItem &rToFill ) const
+bool SwFEShell::GetRowBackground( SvxBrushItem &rToFill ) const
 {
     return GetDoc()->GetRowBackground( *getShellCrsr( false ), rToFill );
 }
@@ -775,7 +775,7 @@ void SwFEShell::SetTabBorders( const SfxItemSet& rSet )
     EndAllActionAndCall();
 }
 
-void SwFEShell::SetTabLineStyle( const Color* pColor, sal_Bool bSetLine,
+void SwFEShell::SetTabLineStyle( const Color* pColor, bool bSetLine,
                                  const editeng::SvxBorderLine* pBorderLine )
 {
     SET_CURR_SHELL( this );
@@ -798,7 +798,7 @@ void SwFEShell::SetBoxBackground( const SvxBrushItem &rNew )
     EndAllActionAndCall();
 }
 
-sal_Bool SwFEShell::GetBoxBackground( SvxBrushItem &rToFill ) const
+bool SwFEShell::GetBoxBackground( SvxBrushItem &rToFill ) const
 {
     return GetDoc()->GetBoxAttr( *getShellCrsr( false ), rToFill );
 }
@@ -811,7 +811,7 @@ void SwFEShell::SetBoxDirection( const SvxFrameDirectionItem& rNew )
     EndAllActionAndCall();
 }
 
-sal_Bool SwFEShell::GetBoxDirection( SvxFrameDirectionItem&  rToFill ) const
+bool SwFEShell::GetBoxDirection( SvxFrameDirectionItem&  rToFill ) const
 {
     return GetDoc()->GetBoxAttr( *getShellCrsr( false ), rToFill );
 }
@@ -849,7 +849,7 @@ void SwFEShell::GetTabBackground( SvxBrushItem &rToFill ) const
         rToFill = pFrm->ImplFindTabFrm()->GetFmt()->GetBackground();
 }
 
-sal_Bool SwFEShell::HasWholeTabSelection() const
+bool SwFEShell::HasWholeTabSelection() const
 {
     // whole table selected?
     if ( IsTableMode() )
@@ -864,16 +864,16 @@ sal_Bool SwFEShell::HasWholeTabSelection() const
                 aBoxes.back()->GetSttNd()->EndOfSectionIndex() + 1 == pTblNd->EndOfSectionIndex();
         }
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwFEShell::HasBoxSelection() const
+bool SwFEShell::HasBoxSelection() const
 {
     if(!IsCrsrInTbl())
-        return sal_False;
+        return false;
     // whole table selected?
     if( IsTableMode() )
-        return sal_True;
+        return true;
     SwPaM* pPam = GetCrsr();
         // empty boxes are also selected as the absence of selection
     bool bChg = false;
@@ -900,12 +900,12 @@ sal_Bool SwFEShell::HasBoxSelection() const
             {
                 if( bChg )
                     pPam->Exchange();
-                return sal_True;
+                return true;
             }
     }
     if( bChg )
         pPam->Exchange();
-    return sal_False;
+    return false;
 }
 
 void SwFEShell::ProtectCells()
@@ -963,16 +963,16 @@ void SwFEShell::UnProtectTbls()
     EndAllActionAndCall();
 }
 
-sal_Bool SwFEShell::HasTblAnyProtection( const OUString* pTblName,
-                                    sal_Bool* pFullTblProtection )
+bool SwFEShell::HasTblAnyProtection( const OUString* pTblName,
+                                     bool* pFullTblProtection )
 {
     return GetDoc()->HasTblAnyProtection( GetCrsr()->GetPoint(), pTblName,
                                         pFullTblProtection );
 }
 
-sal_Bool SwFEShell::CanUnProtectCells() const
+bool SwFEShell::CanUnProtectCells() const
 {
-    sal_Bool bUnProtectAvailable = sal_False;
+    bool bUnProtectAvailable = false;
     const SwTableNode *pTblNd = IsCrsrInTbl();
     if( pTblNd && !pTblNd->IsProtect() )
     {
@@ -1090,9 +1090,9 @@ sal_uInt16 SwFEShell::GetRowSelectionFromTop() const
  * returns true if the current frame is localed inside a table headline OR
  * inside the first line of a table!!!
  */
-sal_Bool SwFEShell::CheckHeadline( bool bRepeat ) const
+bool SwFEShell::CheckHeadline( bool bRepeat ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( !IsTableMode() )
     {
         SwFrm *pFrm = GetCurrFrm();  // DONE MULTIIHEADER
@@ -1113,7 +1113,7 @@ sal_Bool SwFEShell::CheckHeadline( bool bRepeat ) const
     return bRet;
 }
 
-void SwFEShell::AdjustCellWidth( sal_Bool bBalance )
+void SwFEShell::AdjustCellWidth( bool bBalance )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -1127,13 +1127,13 @@ void SwFEShell::AdjustCellWidth( sal_Bool bBalance )
     EndAllActionAndCall();
 }
 
-sal_Bool SwFEShell::IsAdjustCellWidthAllowed( sal_Bool bBalance ) const
+bool SwFEShell::IsAdjustCellWidthAllowed( bool bBalance ) const
 {
     // at least one row with content should be contained in the selection
 
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
-        return sal_False;
+        return false;
 
     SwSelBoxes aBoxes;
     ::GetTblSelCrs( *this, aBoxes );
@@ -1163,21 +1163,21 @@ sal_Bool SwFEShell::IsAdjustCellWidthAllowed( sal_Bool bBalance ) const
             while ( pCNd )
             {
                 if (!pCNd->GetTxt().isEmpty())
-                    return sal_True;
+                    return true;
                 ++aIdx;
                 pCNd = aIdx.GetNode().GetTxtNode();
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
     // AutoFormat for the table/table selection
-sal_Bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
+bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
 {
     SwTableNode *pTblNd = (SwTableNode*)IsCrsrInTbl();
     if( !pTblNd || pTblNd->GetTable().IsTblComplex() )
-        return sal_False;
+        return false;
 
     SwSelBoxes aBoxes;
 
@@ -1197,7 +1197,7 @@ sal_Bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
         }
     }
 
-    sal_Bool bRet;
+    bool bRet;
     if( !aBoxes.empty() )
     {
         SET_CURR_SHELL( this );
@@ -1208,15 +1208,15 @@ sal_Bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
         EndAllActionAndCall();
     }
     else
-        bRet = sal_False;
+        bRet = false;
     return bRet;
 }
 
-sal_Bool SwFEShell::GetTableAutoFmt( SwTableAutoFmt& rGet )
+bool SwFEShell::GetTableAutoFmt( SwTableAutoFmt& rGet )
 {
     const SwTableNode *pTblNd = IsCrsrInTbl();
     if( !pTblNd || pTblNd->GetTable().IsTblComplex() )
-        return sal_False;
+        return false;
 
     SwSelBoxes aBoxes;
 
@@ -1239,25 +1239,25 @@ sal_Bool SwFEShell::GetTableAutoFmt( SwTableAutoFmt& rGet )
     return GetDoc()->GetTableAutoFmt( aBoxes, rGet );
 }
 
-sal_Bool SwFEShell::DeleteTblSel()
+bool SwFEShell::DeleteTblSel()
 {
     // check if SPoint/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
-        return sal_False;
+        return false;
 
     if( pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
-        return sal_False;
+        return false;
     }
 
     SET_CURR_SHELL( this );
     StartAllAction();
 
     // search boxes via the layout
-    sal_Bool bRet;
+    bool bRet;
     SwSelBoxes aBoxes;
     GetTblSelCrs( *this, aBoxes );
     if( !aBoxes.empty() )
@@ -1277,7 +1277,7 @@ sal_Bool SwFEShell::DeleteTblSel()
         DELETEZ( pLastRows );
     }
     else
-        bRet = sal_False;
+        bRet = false;
     EndAllActionAndCall();
     return bRet;
 }
@@ -1797,7 +1797,7 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag
         *pCrsr->GetPoint() = *ppPos[0];
         pCrsr->GetPtPos() = paPt[0];
 
-        if ( !pCrsr->IsInProtectTable( sal_False, sal_True ) )
+        if ( !pCrsr->IsInProtectTable( false, true ) )
         {
             bool bNewSelection = true;
 
@@ -1811,7 +1811,7 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag
                     *pCrsr->GetPoint() = *ppPos[1];
                     pCrsr->GetPtPos() = paPt[1];
 
-                    if ( pCrsr->IsInProtectTable( sal_False, sal_False ) )
+                    if ( pCrsr->IsInProtectTable( false, false ) )
                     {
                         pCrsr->RestoreSavePos();
                         bNewSelection = false;
@@ -1941,9 +1941,9 @@ SwTxtNode * SwFEShell::GetNumRuleNodeAtPos( const Point &rPt)
     return pResult;
 }
 
-sal_Bool SwFEShell::IsNumLabel( const Point &rPt, int nMaxOffset )
+bool SwFEShell::IsNumLabel( const Point &rPt, int nMaxOffset )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     SwContentAtPos aCntntAtPos
         (SwContentAtPos::SW_NUMLABEL);
@@ -1952,7 +1952,7 @@ sal_Bool SwFEShell::IsNumLabel( const Point &rPt, int nMaxOffset )
     {
         if ((nMaxOffset >= 0 && aCntntAtPos.nDist <= nMaxOffset) ||
             (nMaxOffset < 0))
-            bResult = sal_True;
+            bResult = true;
     }
 
     return bResult;
@@ -1994,7 +1994,7 @@ void SwFEShell::GetMouseTabCols( SwTabCols &rToFill, const Point &rPt ) const
         _GetTabCols( rToFill, pBox );
 }
 
-void SwFEShell::SetMouseTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly,
+void SwFEShell::SetMouseTabCols( const SwTabCols &rNew, bool bCurRowOnly,
                                  const Point &rPt )
 {
     const SwFrm *pBox = GetBox( rPt );
@@ -2098,18 +2098,18 @@ static bool lcl_GoTableRow( SwCrsrShell* pShell, bool bUp )
 }
 
     // aender eine  Zellenbreite/-Hoehe/Spaltenbreite/Zeilenhoehe
-sal_Bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
+bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
 {
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
-        return sal_False;
+        return false;
 
     if( nsTblChgWidthHeightType::WH_FLAG_INSDEL & eType &&
         pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
-        return sal_False;
+        return false;
     }
 
     SET_CURR_SHELL( this );
@@ -2169,7 +2169,7 @@ sal_Bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
     nLogDiff /= nPrtWidth;
 
     /** The cells are destroyed in here */
-    sal_Bool bRet = GetDoc()->SetColRowWidthHeight(
+    bool bRet = GetDoc()->SetColRowWidthHeight(
                     *(SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox(),
                     eType, nDiff, nLogDiff );
 
@@ -2227,12 +2227,12 @@ static bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& r
 }
 
     // ask formula for auto-sum
-sal_Bool SwFEShell::GetAutoSum( OUString& rFml ) const
+bool SwFEShell::GetAutoSum( OUString& rFml ) const
 {
     SwFrm *pFrm = GetCurrFrm();
     SwTabFrm *pTab = pFrm ? pFrm->ImplFindTabFrm() : 0;
     if( !pTab )
-        return sal_False;
+        return false;
 
     SwCellFrms aCells;
     OUString sFields;
@@ -2322,19 +2322,19 @@ sal_Bool SwFEShell::GetAutoSum( OUString& rFml ) const
         rFml += "(" + sFields + ")";
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwFEShell::IsTableRightToLeft() const
+bool SwFEShell::IsTableRightToLeft() const
 {
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
-        return sal_False;
+        return false;
 
     return pFrm->ImplFindTabFrm()->IsRightToLeft();
 }
 
-sal_Bool SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
+bool SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
 {
     SwFrm *pFrm = (SwFrm *)GetBox( rPt );
     const SwTabFrm*  pTabFrm = pFrm ? pFrm->ImplFindTabFrm() : 0;
@@ -2342,11 +2342,11 @@ sal_Bool SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
     return pTabFrm ? pTabFrm->IsRightToLeft() : sal_False;
 }
 
-sal_Bool SwFEShell::IsTableVertical() const
+bool SwFEShell::IsTableVertical() const
 {
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
-        return sal_False;
+        return false;
 
     return pFrm->ImplFindTabFrm()->IsVertical();
 }

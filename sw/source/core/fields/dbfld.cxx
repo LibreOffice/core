@@ -272,7 +272,7 @@ void SwDBField::Evaluate()
     double nValue = DBL_MAX;
     const SwDBData& aTmpData = GetDBData();
 
-    if(!pMgr || !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, sal_True))
+    if(!pMgr || !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, true))
         return ;
 
     sal_uInt32 nFmt;
@@ -383,7 +383,7 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_BOOL2:
     {
         sal_uInt16 nSubTyp = GetSubType();
-        sal_Bool bVisible = sal_False;
+        bool bVisible = false;
         if(!(rAny >>= bVisible))
             return false;
         if(bVisible)
@@ -507,7 +507,7 @@ bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_BOOL2:
     {
         sal_uInt16 nSubTyp = GetSubType();
-        sal_Bool bVisible = sal_False;
+        bool bVisible = false;
         if(!(rAny >>= bVisible))
             return false;
         if(bVisible)
@@ -574,7 +574,7 @@ void SwDBNextSetField::Evaluate(SwDoc* pDoc)
     SwDBMgr* pMgr = pDoc->GetDBMgr();
     const SwDBData& rData = GetDBData();
     if( !bCondValid ||
-            !pMgr || !pMgr->IsDataSourceOpen(rData.sDataSource, rData.sCommand, sal_False))
+            !pMgr || !pMgr->IsDataSourceOpen(rData.sDataSource, rData.sCommand, false))
         return ;
     pMgr->ToNextRecord(rData.sDataSource, rData.sCommand);
 }
@@ -664,7 +664,7 @@ void SwDBNumSetField::Evaluate(SwDoc* pDoc)
     const SwDBData& aTmpData = GetDBData();
 
     if( bCondValid && pMgr && pMgr->IsInMerge() &&
-                        pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, sal_True))
+                        pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, true))
     {   // condition OK -> adjust current Set
         pMgr->ToRecordId(std::max((sal_uInt16)aPar2.toInt32(), sal_uInt16(1))-1);
     }
@@ -818,7 +818,7 @@ void SwDBSetNumberField::Evaluate(SwDoc* pDoc)
 
     const SwDBData& aTmpData = GetDBData();
     if (!pMgr || !pMgr->IsInMerge() ||
-        !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, sal_False))
+        !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, false))
         return;
     nNumber = pMgr->GetSelectedRecordId();
 }

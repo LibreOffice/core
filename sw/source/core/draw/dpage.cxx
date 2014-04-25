@@ -48,7 +48,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::frame;
 
-SwDPage::SwDPage(SwDrawDocument& rNewModel, sal_Bool bMasterPage) :
+SwDPage::SwDPage(SwDrawDocument& rNewModel, bool bMasterPage) :
     FmFormPage(rNewModel, bMasterPage),
     pGridLst( 0 ),
     rDoc(rNewModel.GetDoc())
@@ -121,10 +121,10 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
     return pGridLst;
 }
 
-sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
+bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                            const HelpEvent& rEvt )
 {
-    sal_Bool bContinue = sal_True;
+    bool bContinue = true;
 
     if( rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ))
     {
@@ -175,7 +175,7 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
             if ( !sTxt.isEmpty() )
             {
                 // #i80029#
-                sal_Bool bExecHyperlinks = rDoc.GetDocShell()->IsReadOnly();
+                bool bExecHyperlinks = rDoc.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
                     SvtSecurityOptions aSecOpts;
@@ -197,7 +197,7 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                     Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
                     Help::ShowQuickHelp( pWindow, aRect, sTxt );
                 }
-                bContinue = sal_False;
+                bContinue = false;
             }
         }
     }

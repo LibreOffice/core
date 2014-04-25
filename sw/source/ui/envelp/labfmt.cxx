@@ -311,7 +311,7 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet)
     get(m_pSavePB, "save");
 
     // Metrics
-    FieldUnit aMetric = ::GetDfltMetric(sal_False);
+    FieldUnit aMetric = ::GetDfltMetric(false);
     SetMetric(*m_pHDistField, aMetric);
     SetMetric(*m_pVDistField , aMetric);
     SetMetric(*m_pWidthField , aMetric);

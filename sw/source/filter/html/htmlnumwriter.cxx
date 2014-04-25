@@ -97,14 +97,14 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                                  const SwHTMLNumRuleInfo& rInfo )
 {
     SwHTMLNumRuleInfo& rPrevInfo = rWrt.GetNumInfo();
-    sal_Bool bSameRule = rPrevInfo.GetNumRule() == rInfo.GetNumRule();
+    bool bSameRule = rPrevInfo.GetNumRule() == rInfo.GetNumRule();
     if( bSameRule && rPrevInfo.GetDepth() >= rInfo.GetDepth() &&
         !rInfo.IsRestart() )
     {
         return rWrt;
     }
 
-    sal_Bool bStartValue = sal_False;
+    bool bStartValue = false;
     if( !bSameRule && rInfo.GetDepth() )
     {
         OUString aName( rInfo.GetNumRule()->GetName() );
@@ -118,7 +118,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                 // If it's a numbering rule, the current number should be
                 // exported as start value, but only if there are no nodes
                 // within the numbering that have a lower level
-                bStartValue = sal_True;
+                bStartValue = true;
                 if( rInfo.GetDepth() > 1 )
                 {
                     sal_uLong nPos =
@@ -143,7 +143,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                             {
                                 // node is numbered, but level is lower
                                 // => check completed
-                                bStartValue = sal_False;
+                                bStartValue = false;
                                 break;
                             }
                             nPos++;
@@ -278,7 +278,7 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
                                const SwHTMLNumRuleInfo& rNextInfo )
 {
     SwHTMLNumRuleInfo& rInfo = rWrt.GetNumInfo();
-    sal_Bool bSameRule = rNextInfo.GetNumRule() == rInfo.GetNumRule();
+    bool bSameRule = rNextInfo.GetNumRule() == rInfo.GetNumRule();
     if( bSameRule && rNextInfo.GetDepth() >= rInfo.GetDepth() &&
         !rNextInfo.IsRestart() )
     {
@@ -306,7 +306,7 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
         else
             pStr = OOO_STRING_SVTOOLS_HTML_orderlist;
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, false );
-        rWrt.bLFPossible = sal_True;
+        rWrt.bLFPossible = true;
     }
 
     return rWrt;

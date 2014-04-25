@@ -37,7 +37,7 @@
 
 SwLayVout     *SwRootFrm::pVout = 0;
 bool           SwRootFrm::bInPaint = false;
-sal_Bool           SwRootFrm::bNoVirDev = sal_False;
+bool           SwRootFrm::bNoVirDev = false;
 
 SwCache *SwFrm::mpCache = 0;
 
@@ -480,7 +480,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     pTimerAccess->StopIdling();
     // For creating the Flys by MakeFrms()
     pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );
-    bCallbackActionEnabled = sal_False; // needs to be set to sal_True before leaving!
+    bCallbackActionEnabled = false; // needs to be set to sal_True before leaving!
 
     SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMd )
@@ -524,14 +524,14 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
             bIsVirtPageNum = true;
     }
     else
-        bIsVirtPageNum = sal_False;
+        bIsVirtPageNum = false;
     if ( !pDesc )
         pDesc = &pDoc->GetPageDesc( 0 );
     const bool bOdd = !oPgNum || 0 != ( oPgNum.get() % 2 );
     bool bFirst = !oPgNum || 1 == oPgNum.get();
 
     // Create a page and put it in the layout
-    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, bFirst, false, sal_False, 0 );
+    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, bFirst, false, false, 0 );
 
     // Find the first page in the Bodytext section.
     SwLayoutFrm *pLay = pPage->FindBodyCont();
@@ -539,7 +539,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
         pLay = (SwLayoutFrm*)pLay->Lower();
 
     SwNodeIndex aTmp( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
-    ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), sal_True );
+    ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), true );
     //Remove masters that haven't been replaced yet from the list.
     RemoveMasterObjs( pDrawPage );
     if( pSettingAccess->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
@@ -552,7 +552,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     }
 
     pTimerAccess->StartIdling();
-    bCallbackActionEnabled = sal_True;
+    bCallbackActionEnabled = true;
 
     SwViewShell *pViewSh  = GetCurrShell();
     if (pViewSh)
@@ -561,7 +561,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
 
 SwRootFrm::~SwRootFrm()
 {
-    bTurboAllowed = sal_False;
+    bTurboAllowed = false;
     pTurbo = 0;
     // fdo#39510 crash on document close with footnotes
     // Object ownership in writer and esp. in layout are a mess: Before the

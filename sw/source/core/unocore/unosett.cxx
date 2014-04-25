@@ -410,7 +410,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                 break;
                 case WID_POSITION_END_OF_DOC:
                 {
-                    sal_Bool bVal = *(sal_Bool*)aValue.getValue();
+                    bool bVal = *(sal_Bool*)aValue.getValue();
                     aFtnInfo.ePos = bVal ? FTNPOS_CHAPTER : FTNPOS_PAGE;
                 }
                 break;
@@ -865,7 +865,7 @@ void SwXLineNumberingProperties::setPropertyValue(
             {
                 case WID_NUM_ON:
                 {
-                    sal_Bool bVal = *(sal_Bool*)aValue.getValue();
+                    bool bVal = *(sal_Bool*)aValue.getValue();
                     aInfo.SetPaintLineNumbers(bVal);
                 }
                 break;
@@ -941,19 +941,19 @@ void SwXLineNumberingProperties::setPropertyValue(
                 break;
                 case WID_COUNT_EMPTY_LINES :
                 {
-                    sal_Bool bVal = *(sal_Bool*)aValue.getValue();
+                    bool bVal = *(sal_Bool*)aValue.getValue();
                     aInfo.SetCountBlankLines(bVal);
                 }
                 break;
                 case WID_COUNT_LINES_IN_FRAMES :
                 {
-                    sal_Bool bVal = *(sal_Bool*)aValue.getValue();
+                    bool bVal = *(sal_Bool*)aValue.getValue();
                     aInfo.SetCountInFlys(bVal);
                 }
                 break;
                 case WID_RESTART_AT_EACH_PAGE :
                 {
-                    sal_Bool bVal = *(sal_Bool*)aValue.getValue();
+                    bool bVal = *(sal_Bool*)aValue.getValue();
                     aInfo.SetRestartEachPage(bVal);
                 }
                 break;
@@ -1144,7 +1144,7 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
     pDocShell(0),
     pNumRule(new SwNumRule(rRule)),
     m_pPropertySet(GetNumberingRulesSet()),
-    bOwnNumRuleCreated(sal_True)
+    bOwnNumRuleCreated(true)
 {
     sal_uInt16 i;
 
@@ -1174,7 +1174,7 @@ SwXNumberingRules::SwXNumberingRules(SwDocShell& rDocSh) :
     pDocShell(&rDocSh),
     pNumRule(0),
     m_pPropertySet(GetNumberingRulesSet()),
-    bOwnNumRuleCreated(sal_False)
+    bOwnNumRuleCreated(false)
 {
     pDocShell->GetDoc()->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
@@ -1184,7 +1184,7 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
     pDocShell(0),
     pNumRule(0),
     m_pPropertySet(GetNumberingRulesSet()),
-    bOwnNumRuleCreated(sal_False)
+    bOwnNumRuleCreated(false)
 {
     rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
     m_sCreatedNumRuleName = rDoc.GetUniqueNumRuleName();
@@ -2149,13 +2149,13 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
 
     if(rPropertyName == UNO_NAME_IS_AUTOMATIC)
     {
-        sal_Bool bVal = *(sal_Bool*)rValue.getValue();
+        bool bVal = *(sal_Bool*)rValue.getValue();
         if(!pCreatedRule)
             pDocRule ? pDocRule->SetAutoRule(bVal) : pNumRule->SetAutoRule(bVal);
     }
     else if(rPropertyName == UNO_NAME_IS_CONTINUOUS_NUMBERING)
     {
-        sal_Bool bVal = *(sal_Bool*)rValue.getValue();
+        bool bVal = *(sal_Bool*)rValue.getValue();
         pDocRule ? pDocRule->SetContinusNum(bVal) :
             pCreatedRule ? pCreatedRule->SetContinusNum(bVal) : pNumRule->SetContinusNum(bVal);
     }
@@ -2166,13 +2166,13 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     }
     else if(rPropertyName == UNO_NAME_IS_ABSOLUTE_MARGINS)
     {
-        sal_Bool bVal = *(sal_Bool*)rValue.getValue();
+        bool bVal = *(sal_Bool*)rValue.getValue();
         pDocRule ? pDocRule->SetAbsSpaces(bVal) :
             pCreatedRule ? pCreatedRule->SetAbsSpaces(bVal) : pNumRule->SetAbsSpaces(bVal);
     }
     else if(rPropertyName == UNO_NAME_NUMBERING_IS_OUTLINE)
     {
-        sal_Bool bVal = *(sal_Bool*)rValue.getValue();
+        bool bVal = *(sal_Bool*)rValue.getValue();
         SwNumRuleType eNumRuleType = bVal ? OUTLINE_RULE : NUM_RULE;
         pDocRule ? pDocRule->SetRuleType(eNumRuleType) :
             pCreatedRule ? pCreatedRule->SetRuleType(eNumRuleType) : pNumRule->SetRuleType(eNumRuleType);
@@ -2350,14 +2350,14 @@ Sequence< OUString > SwXTextColumns::getSupportedServiceNames(void) throw( Runti
 
 SwXTextColumns::SwXTextColumns(sal_uInt16 nColCount) :
     nReference(0),
-    bIsAutomaticWidth(sal_True),
+    bIsAutomaticWidth(true),
     nAutoDistance(0),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_COLUMS)),
     nSepLineWidth(0),
     nSepLineColor(0), //black
     nSepLineHeightRelative(100),//full height
     nSepLineVertAlign(style::VerticalAlignment_MIDDLE),
-    bSepLineIsOn(sal_False),
+    bSepLineIsOn(false),
     nSepLineStyle(API_COL_LINE_NONE) // None
 {
     if(nColCount)
@@ -2433,7 +2433,7 @@ void SwXTextColumns::setColumnCount(sal_Int16 nColumns) throw( uno::RuntimeExcep
     SolarMutexGuard aGuard;
     if(nColumns <= 0)
         throw uno::RuntimeException();
-    bIsAutomaticWidth = sal_True;
+    bIsAutomaticWidth = true;
     aTextColumns.realloc(nColumns);
      TextColumn* pCols = aTextColumns.getArray();
     nReference = USHRT_MAX;
@@ -2465,7 +2465,7 @@ void SwXTextColumns::setColumns(const uno::Sequence< TextColumn >& rColumns)
     {
         nReferenceTemp += prCols[i].Width;
     }
-    bIsAutomaticWidth = sal_False;
+    bIsAutomaticWidth = false;
     nReference = !nReferenceTemp ? USHRT_MAX : nReferenceTemp;
     aTextColumns = rColumns;
 }

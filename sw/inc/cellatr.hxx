@@ -30,10 +30,10 @@ namespace rtl { class OUString; }
 
 class SW_DLLPUBLIC SwTblBoxNumFormat : public SfxUInt32Item
 {
-    sal_Bool bAuto;     ///< automatically given flag
+    bool bAuto;     ///< automatically given flag
 public:
     SwTblBoxNumFormat( sal_uInt32 nFormat = NUMBERFORMAT_TEXT,
-                        sal_Bool bAuto = sal_False );
+                        bool bAuto = false );
 
     // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -46,8 +46,8 @@ public:
         return *this;
     }
 
-    sal_Bool GetAutoFlag() const                    { return bAuto; }
-    void SetAutoFlag( sal_Bool bFlag = sal_True )       { bAuto = bFlag; }
+    bool GetAutoFlag() const                    { return bAuto; }
+    void SetAutoFlag( bool bFlag = true )       { bAuto = bFlag; }
 };
 
 class SwTblBoxFormula : public SfxPoolItem, public SwTableFormula
@@ -97,18 +97,18 @@ public:
     double GetValue() const                     { return nValue; }
 };
 
-inline const SwTblBoxNumFormat      &SwAttrSet::GetTblBoxNumFmt(sal_Bool bInP) const
+inline const SwTblBoxNumFormat      &SwAttrSet::GetTblBoxNumFmt(bool bInP) const
     {   return (const SwTblBoxNumFormat&)Get( RES_BOXATR_FORMAT,bInP); }
-inline const SwTblBoxFormula        &SwAttrSet::GetTblBoxFormula(sal_Bool bInP) const
+inline const SwTblBoxFormula        &SwAttrSet::GetTblBoxFormula(bool bInP) const
     {   return (const SwTblBoxFormula&)Get( RES_BOXATR_FORMULA,bInP); }
-inline const SwTblBoxValue          &SwAttrSet::GetTblBoxValue(sal_Bool bInP) const
+inline const SwTblBoxValue          &SwAttrSet::GetTblBoxValue(bool bInP) const
     {   return (const SwTblBoxValue&)Get( RES_BOXATR_VALUE, bInP); }
 
-inline const SwTblBoxNumFormat      &SwFmt::GetTblBoxNumFmt(sal_Bool bInP) const
+inline const SwTblBoxNumFormat      &SwFmt::GetTblBoxNumFmt(bool bInP) const
     {   return aSet.GetTblBoxNumFmt(bInP); }
-inline const SwTblBoxFormula        &SwFmt::GetTblBoxFormula(sal_Bool bInP) const
+inline const SwTblBoxFormula        &SwFmt::GetTblBoxFormula(bool bInP) const
     {   return aSet.GetTblBoxFormula(bInP); }
-inline const SwTblBoxValue          &SwFmt::GetTblBoxValue(sal_Bool bInP) const
+inline const SwTblBoxValue          &SwFmt::GetTblBoxValue(bool bInP) const
     {   return aSet.GetTblBoxValue(bInP); }
 
 #endif

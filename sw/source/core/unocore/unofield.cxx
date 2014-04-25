@@ -408,7 +408,7 @@ public:
     OUString        m_sParam6;  // -    /DataBaseResource
     double          m_fParam1;  // Value / -
     sal_Int8        m_nParam1;  // ChapterNumberingLevel
-    sal_Bool        m_bParam1;  // IsExpression
+    bool        m_bParam1;  // IsExpression
     sal_Int32       m_nParam2;
 
     Impl(SwXFieldMaster & rThis, SwModify *const pModify,
@@ -421,7 +421,7 @@ public:
         , m_nResTypeId(nResId)
         , m_fParam1(0.0)
         , m_nParam1(-1)
-        , m_bParam1(sal_False)
+        , m_bParam1(false)
         , m_nParam2(0)
     { }
 
@@ -1046,7 +1046,7 @@ OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rD
 OUString SwXFieldMaster::LocalizeFormula(
     const SwSetExpField& rFld,
     const OUString& rFormula,
-    sal_Bool bQuery)
+    bool bQuery)
 {
     const OUString sTypeName(rFld.GetTyp()->GetName());
     OUString sProgName = SwStyleNameMapper::GetProgName(sTypeName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
@@ -1099,10 +1099,10 @@ struct SwFieldProperties_Impl
     sal_Int16       nSHORT1;
     sal_Int8        nByte1;
     bool            bFormatIsDefault;
-    sal_Bool        bBool1;
-    sal_Bool        bBool2;
-    sal_Bool        bBool3;
-    sal_Bool        bBool4;
+    bool        bBool1;
+    bool        bBool2;
+    bool        bBool3;
+    bool        bBool4;
 
     SwFieldProperties_Impl():
         aDate( Date::EMPTY ),
@@ -1115,10 +1115,10 @@ struct SwFieldProperties_Impl
         nSHORT1(0),
         nByte1(0),
         bFormatIsDefault(true),
-        bBool1(sal_False),
-        bBool2(sal_False),
-        bBool3(sal_False),
-        bBool4(sal_True) //Automatic language
+        bBool1(false),
+        bBool2(false),
+        bBool3(false),
+        bBool4(true) //Automatic language
         {}
     ~SwFieldProperties_Impl()
         {delete pDateTime;}
@@ -1209,11 +1209,11 @@ SwXTextField::SwXTextField(
          || SW_SERVICE_FIELDTYPE_DATABASE == nServiceId
          || SW_SERVICE_FIELDTYPE_DATABASE_NAME == nServiceId )
     {
-        m_pImpl->m_pProps->bBool2 = sal_True;
+        m_pImpl->m_pProps->bBool2 = true;
     }
     else if(SW_SERVICE_FIELDTYPE_TABLE_FORMULA == nServiceId)
     {
-        m_pImpl->m_pProps->bBool1 = sal_True;
+        m_pImpl->m_pProps->bBool1 = true;
     }
     if(SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId)
     {
@@ -2175,7 +2175,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     }
     else if (m_pImpl->m_pProps)
     {
-        sal_Bool* pBool = 0;
+        bool* pBool = 0;
         switch(pEntry->nWID)
         {
         case FIELD_PROP_PAR1:
@@ -2306,8 +2306,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             if (FIELD_PROP_IS_FIELD_USED      == pEntry->nWID ||
                 FIELD_PROP_IS_FIELD_DISPLAYED == pEntry->nWID)
             {
-                sal_Bool bIsFieldUsed       = sal_False;
-                sal_Bool bIsFieldDisplayed  = sal_False;
+                bool bIsFieldUsed       = false;
+                bool bIsFieldDisplayed  = false;
 
                 // in order to have the information about fields
                 // correctly evaluated the document needs a layout
@@ -2335,8 +2335,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 // e.g. fields in undo or redo array
                 if (rTxtNode.GetNodes().IsDocNodes())
                 {
-                    sal_Bool bFrame = 0 != rTxtNode.FindLayoutRect().Width(); // oder so
-                    sal_Bool bHidden = rTxtNode.IsHidden();
+                    bool bFrame = 0 != rTxtNode.FindLayoutRect().Width(); // oder so
+                    bool bHidden = rTxtNode.IsHidden();
                     if ( !bHidden )
                     {
                         sal_Int32 nHiddenStart;
@@ -2727,7 +2727,7 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
     return uno::makeAny(xRet);
 }
 
-sal_Bool SwXTextFieldMasters::getInstanceName(
+bool SwXTextFieldMasters::getInstanceName(
     const SwFieldType& rFldType, OUString& rName)
 {
     OUString sField;
@@ -2754,11 +2754,11 @@ sal_Bool SwXTextFieldMasters::getInstanceName(
         break;
 
     default:
-        return sal_False;
+        return false;
     }
 
     rName += COM_TEXT_FLDMASTER_CC + sField;
-    return sal_True;
+    return true;
 }
 
 uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
@@ -2801,7 +2801,7 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( uno::Runti
 
     OUString sName(rName), sTypeName;
     sal_uInt16 nResId = lcl_GetIdByName( sName, sTypeName );
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( USHRT_MAX != nResId )
     {
         sName = sName.copy(std::min(sTypeName.getLength()+1, sName.getLength()));

@@ -150,15 +150,15 @@ public:
     inline       SwSectionNode *GetSectionNode();
     inline const SwSectionNode *GetSectionNode() const;
 
-    inline sal_Bool IsStartNode() const;
-    inline sal_Bool IsCntntNode() const;
-    inline sal_Bool IsEndNode() const;
-    inline sal_Bool IsTxtNode() const;
-    inline sal_Bool IsTableNode() const;
-    inline sal_Bool IsSectionNode() const;
-    inline sal_Bool IsOLENode() const;
-    inline sal_Bool IsNoTxtNode() const;
-    inline sal_Bool IsGrfNode() const;
+    inline bool IsStartNode() const;
+    inline bool IsCntntNode() const;
+    inline bool IsEndNode() const;
+    inline bool IsTxtNode() const;
+    inline bool IsTableNode() const;
+    inline bool IsSectionNode() const;
+    inline bool IsOLENode() const;
+    inline bool IsNoTxtNode() const;
+    inline bool IsGrfNode() const;
 
     /**
        Checks if this node is in redlines.
@@ -166,7 +166,7 @@ public:
        @retval sal_True       this node is in redlines
        @retval sal_False      else
      */
-    sal_Bool IsInRedlines() const;
+    bool IsInRedlines() const;
 
     /** Search table node, in which it is. If it is in no table
        @return 0. */
@@ -256,17 +256,17 @@ public:
     IDocumentListItems& getIDocumentListItems();
 
     /// Is node in the visible area of the Shell?
-    sal_Bool IsInVisibleArea( SwViewShell* pSh = 0 ) const;
+    bool IsInVisibleArea( SwViewShell* pSh = 0 ) const;
     /// Is node in an protected area?
     bool IsInProtectSect() const;
     /**  Is node in something that is protected (range, frame,
         table cells ... including anchor in case of frames or footnotes)? */
-    sal_Bool IsProtect() const;
+    bool IsProtect() const;
 
     /** Search PageDesc with which this node is formated. If layout is existent
        search over layout, else only the hard way is left: search over the nodes
        to the front!! */
-    const SwPageDesc* FindPageDesc( sal_Bool bCalcLay, sal_uInt32* pPgDescNdIdx = 0 ) const;
+    const SwPageDesc* FindPageDesc( bool bCalcLay, sal_uInt32* pPgDescNdIdx = 0 ) const;
 
     /// If node is in a fly return the respective format.
     SwFrmFmt* GetFlyFmt() const;
@@ -395,8 +395,8 @@ public:
     void MakeStartIndex( SwIndex * pIdx )   { pIdx->Assign( this, 0 ); }
     void MakeEndIndex( SwIndex * pIdx )     { pIdx->Assign( this, Len() ); }
 
-    sal_Bool GoNext(SwIndex *, sal_uInt16 nMode ) const;
-    sal_Bool GoPrevious(SwIndex *, sal_uInt16 nMode ) const;
+    bool GoNext(SwIndex *, sal_uInt16 nMode ) const;
+    bool GoPrevious(SwIndex *, sal_uInt16 nMode ) const;
 
     /// Replacement for good old GetFrm(..):
     SwCntntFrm *getLayoutFrm( const SwRootFrm*,
@@ -405,12 +405,12 @@ public:
                         const bool bCalcFrm = true ) const;
     /** @return the real size of the frame or an empty rectangle if
        no layout exists. Needed for export filters. */
-    SwRect FindLayoutRect( const sal_Bool bPrtArea = sal_False,
+    SwRect FindLayoutRect( const bool bPrtArea = false,
                             const Point* pPoint = 0,
-                            const sal_Bool bCalcFrm = sal_False  ) const;
-    SwRect FindPageFrmRect( const sal_Bool bPrtArea = sal_False,
+                            const bool bCalcFrm = false  ) const;
+    SwRect FindPageFrmRect( const bool bPrtArea = false,
                             const Point* pPoint = 0,
-                            const sal_Bool bCalcFrm = sal_False  ) const;
+                            const bool bCalcFrm = false  ) const;
 
     /** Method creates all views of document for given node. The content
        frames that are created are put in the respective layout. */
@@ -421,7 +421,7 @@ public:
 
         Add an input param to identify if acc table should be disposed
     */
-    void DelFrms( sal_Bool bNeedDel = sal_False, sal_Bool bIsAccTableDispose = sal_True );
+    void DelFrms( bool bNeedDel = false, bool bIsAccTableDispose = true );
 
     /** @return count of elements of node content. Default is 1.
        There are differences between text node and formula node. */
@@ -435,23 +435,23 @@ public:
     /// SS for PoolItems: hard attributation.
 
     /// If bInParent is FALSE search for attribute only in this node.
-    const SfxPoolItem& GetAttr( sal_uInt16 nWhich, sal_Bool bInParent=sal_True ) const;
-    sal_Bool GetAttr( SfxItemSet& rSet, sal_Bool bInParent=sal_True ) const;
+    const SfxPoolItem& GetAttr( sal_uInt16 nWhich, bool bInParent=true ) const;
+    bool GetAttr( SfxItemSet& rSet, bool bInParent=true ) const;
     /// made virtual
-    virtual sal_Bool SetAttr( const SfxPoolItem& );
-    virtual sal_Bool SetAttr( const SfxItemSet& rSet );
-    virtual sal_Bool ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
-    virtual sal_Bool ResetAttr( const std::vector<sal_uInt16>& rWhichArr );
+    virtual bool SetAttr( const SfxPoolItem& );
+    virtual bool SetAttr( const SfxItemSet& rSet );
+    virtual bool ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
+    virtual bool ResetAttr( const std::vector<sal_uInt16>& rWhichArr );
     virtual sal_uInt16 ResetAllAttr();
 
     /// Obtains attribute that is not delivered via conditional style!
-    const SfxPoolItem* GetNoCondAttr( sal_uInt16 nWhich, sal_Bool bInParents ) const;
+    const SfxPoolItem* GetNoCondAttr( sal_uInt16 nWhich, bool bInParents ) const;
 
     /** Does node has already its own auto-attributes?
      Access to SwAttrSet. */
     inline const SwAttrSet &GetSwAttrSet() const;
     inline const SwAttrSet *GetpSwAttrSet() const { return static_cast<const SwAttrSet*>(mpAttrSet.get()); }
-    inline sal_Bool  HasSwAttrSet() const { return mpAttrSet ? sal_True : sal_False; }
+    inline bool  HasSwAttrSet() const { return mpAttrSet ? sal_True : sal_False; }
 
     virtual SwFmtColl* ChgFmtColl( SwFmtColl* );
     SwFmtColl* GetFmtColl() const { return (SwFmtColl*)GetRegisteredIn(); }
@@ -461,13 +461,13 @@ public:
     void SetCondFmtColl( SwFmtColl* );
     inline SwFmtColl* GetCondFmtColl() const;
 
-    sal_Bool IsAnyCondition( SwCollCondition& rTmp ) const;
+    bool IsAnyCondition( SwCollCondition& rTmp ) const;
     void ChkCondColl();
 //FEATURE::CONDCOLL
 
     /** Invalidates NumRule at the node. NumRule is updated
        on EndAction of a Shell at the latest. */
-    sal_Bool InvalidateNumRule();
+    bool InvalidateNumRule();
 
     /** determines the text direction for a certain
        position. @return -1, if text direction could *not* be determined. */
@@ -513,7 +513,7 @@ public:
     void MakeFrms( const SwNodeIndex & rIdx );
 
     SwTableNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
-    void SetNewTable( SwTable* , sal_Bool bNewFrames=sal_True );
+    void SetNewTable( SwTable* , bool bNewFrames=true );
 
     // Removes redline objects that relate to this table from the 'Extra Redlines' table
     void RemoveRedlines();
@@ -568,7 +568,7 @@ public:
 
     /** Check for not hidden areas whether there is content that is not in
        a hidden sub-area. */
-    sal_Bool IsCntntHidden() const;
+    bool IsCntntHidden() const;
 
 };
 
@@ -626,39 +626,39 @@ inline const SwCntntNode *SwNode::GetCntntNode() const
      return ND_CONTENTNODE & nNodeType ? (const SwCntntNode*)this : 0;
 }
 
-inline sal_Bool SwNode::IsStartNode() const
+inline bool SwNode::IsStartNode() const
 {
     return ND_STARTNODE & nNodeType  ? sal_True : sal_False;
 }
-inline sal_Bool SwNode::IsCntntNode() const
+inline bool SwNode::IsCntntNode() const
 {
     return ND_CONTENTNODE & nNodeType  ? sal_True : sal_False;
 }
-inline sal_Bool SwNode::IsEndNode() const
+inline bool SwNode::IsEndNode() const
 {
     return ND_ENDNODE == nNodeType  ? sal_True : sal_False;
 }
-inline sal_Bool SwNode::IsTxtNode() const
+inline bool SwNode::IsTxtNode() const
 {
     return ND_TEXTNODE == nNodeType  ? sal_True : sal_False;
 }
-inline sal_Bool SwNode::IsTableNode() const
+inline bool SwNode::IsTableNode() const
 {
     return ND_TABLENODE == nNodeType  ? sal_True : sal_False;
 }
-inline sal_Bool SwNode::IsSectionNode() const
+inline bool SwNode::IsSectionNode() const
 {
     return ND_SECTIONNODE == nNodeType  ? sal_True : sal_False;
 }
-inline sal_Bool SwNode::IsNoTxtNode() const
+inline bool SwNode::IsNoTxtNode() const
 {
     return ND_NOTXTNODE & nNodeType  ? sal_True : sal_False;
 }
-inline sal_Bool SwNode::IsOLENode() const
+inline bool SwNode::IsOLENode() const
 {
     return ND_OLENODE == nNodeType  ? sal_True : sal_False;
 }
-inline sal_Bool SwNode::IsGrfNode() const
+inline bool SwNode::IsGrfNode() const
 {
     return ND_GRFNODE == nNodeType  ? sal_True : sal_False;
 }
@@ -733,7 +733,7 @@ inline const SwAttrSet& SwCntntNode::GetSwAttrSet() const
 //FEATURE::CONDCOLL
 
 inline const SfxPoolItem& SwCntntNode::GetAttr( sal_uInt16 nWhich,
-                                                sal_Bool bInParents ) const
+                                                bool bInParents ) const
 {
     return GetSwAttrSet().Get( nWhich, bInParents );
 }

@@ -535,7 +535,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( rView.GetWindow(), rView, aDlgAttr,DLG_STD, 0, sal_True );
+                SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( rView.GetWindow(), rView, aDlgAttr,DLG_STD, 0, true );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet)
@@ -793,7 +793,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         rSet.DisableItem( nWhich );
                     else
                     {
-                        sal_Bool bFlag = sal_False;
+                        bool bFlag = false;
                         switch( ( ( (SvxFrameDirectionItem&) aEditAttr.Get( EE_PARA_WRITINGDIR ) ) ).GetValue() )
                         {
                             case FRMDIR_HORI_LEFT_TOP:
@@ -819,7 +819,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_INSERT_ZWSP:
             {
                 SvtCTLOptions aCTLOptions;
-                sal_Bool bEnabled = aCTLOptions.IsCTLFontEnabled();
+                bool bEnabled = aCTLOptions.IsCTLFontEnabled();
                 rView.GetViewFrame()->GetBindings().SetVisibleState( nWhich, bEnabled );
                 if(!bEnabled)
                     rSet.DisableItem(nWhich);
@@ -850,7 +850,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
     }
 }
 
-void SwAnnotationShell::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
+void SwAnnotationShell::ExecSearch(SfxRequest& rReq, bool bNoMessage)
 {
     rView.ExecSearch(rReq,bNoMessage);
 }
@@ -1252,9 +1252,9 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                             if( RET_OK == nDialogRet )
                             {
                                 //get some parameters from the dialog
-                                sal_Bool bToSimplified = sal_True;
-                                sal_Bool bUseVariants = sal_True;
-                                sal_Bool bCommonTerms = sal_True;
+                                bool bToSimplified = true;
+                                bool bUseVariants = true;
+                                bool bCommonTerms = true;
                                 Reference< beans::XPropertySet >  xProp( xDialog, UNO_QUERY );
                                 if( xProp.is() )
                                 {

@@ -72,14 +72,14 @@ void SAL_CALL SwVbaParagraphFormat::setFirstLineIndent( float _firstlineindent )
 
 uno::Any SAL_CALL SwVbaParagraphFormat::getKeepTogether() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bKeep = sal_False;
+    bool bKeep = false;
     mxParaProps->getPropertyValue("ParaKeepTogether") >>= bKeep;
     return uno::makeAny ( bKeep );
 }
 
 void SAL_CALL SwVbaParagraphFormat::setKeepTogether( const uno::Any& _keeptogether ) throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bKeep = sal_False;
+    bool bKeep = false;
     if( _keeptogether >>= bKeep )
     {
         mxParaProps->setPropertyValue("ParaKeepTogether", uno::makeAny( bKeep ) );
@@ -92,14 +92,14 @@ void SAL_CALL SwVbaParagraphFormat::setKeepTogether( const uno::Any& _keeptogeth
 
 uno::Any SAL_CALL SwVbaParagraphFormat::getKeepWithNext() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bKeep = sal_False;
+    bool bKeep = false;
     mxParaProps->getPropertyValue("ParaSplit") >>= bKeep;
     return uno::makeAny ( bKeep );
 }
 
 void SAL_CALL SwVbaParagraphFormat::setKeepWithNext( const uno::Any& _keepwithnext ) throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bKeep = sal_False;
+    bool bKeep = false;
     if( _keepwithnext >>= bKeep )
     {
         mxParaProps->setPropertyValue("ParaSplit", uno::makeAny( bKeep ) );
@@ -112,14 +112,14 @@ void SAL_CALL SwVbaParagraphFormat::setKeepWithNext( const uno::Any& _keepwithne
 
 uno::Any SAL_CALL SwVbaParagraphFormat::getHyphenation() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bHypn = sal_False;
+    bool bHypn = false;
     mxParaProps->getPropertyValue("ParaIsHyphenation") >>= bHypn;
     return uno::makeAny ( bHypn );
 }
 
 void SAL_CALL SwVbaParagraphFormat::setHyphenation( const uno::Any& _hyphenation ) throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bHypn = sal_False;
+    bool bHypn = false;
     if( _hyphenation >>= bHypn )
     {
         mxParaProps->setPropertyValue("ParaIsHyphenation", uno::makeAny( bHypn ) );
@@ -160,14 +160,14 @@ void SAL_CALL SwVbaParagraphFormat::setLineSpacingRule( sal_Int32 _linespacingru
 
 uno::Any SAL_CALL SwVbaParagraphFormat::getNoLineNumber() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool noLineNum = sal_False;
+    bool noLineNum = false;
     mxParaProps->getPropertyValue("ParaLineNumberCount") >>= noLineNum;
     return uno::makeAny ( noLineNum );
 }
 
 void SAL_CALL SwVbaParagraphFormat::setNoLineNumber( const uno::Any& _nolinenumber ) throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool noLineNum = sal_False;
+    bool noLineNum = false;
     if( _nolinenumber >>= noLineNum )
     {
         mxParaProps->setPropertyValue("ParaLineNumberCount", uno::makeAny( noLineNum ) );
@@ -204,13 +204,13 @@ uno::Any SAL_CALL SwVbaParagraphFormat::getPageBreakBefore() throw (uno::Runtime
 {
     style::BreakType aBreakType;
     mxParaProps->getPropertyValue("BreakType") >>= aBreakType;
-    sal_Bool bBreakBefore = ( aBreakType == style::BreakType_PAGE_BEFORE || aBreakType == style::BreakType_PAGE_BOTH );
+    bool bBreakBefore = ( aBreakType == style::BreakType_PAGE_BEFORE || aBreakType == style::BreakType_PAGE_BOTH );
     return uno::makeAny( bBreakBefore );
 }
 
 void SAL_CALL SwVbaParagraphFormat::setPageBreakBefore( const uno::Any& _breakbefore ) throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bBreakBefore = sal_False;
+    bool bBreakBefore = false;
     if( _breakbefore >>= bBreakBefore )
     {
         style::BreakType aBreakType;
@@ -307,7 +307,7 @@ uno::Any SAL_CALL SwVbaParagraphFormat::getWidowControl() throw (uno::RuntimeExc
     mxParaProps->getPropertyValue("ParaOrphans") >>= nOrphan;
     // if the amount of single lines on one page > 1 and the same of start and end of the paragraph,
     // true is retured.
-    sal_Bool bWidow = ( nWidow > 1 && nOrphan == nWidow );
+    bool bWidow = ( nWidow > 1 && nOrphan == nWidow );
     return uno::makeAny( bWidow );
 }
 
@@ -315,7 +315,7 @@ void SAL_CALL SwVbaParagraphFormat::setWidowControl( const uno::Any& _widowcontr
 {
     // if we get true, the part of the paragraph on one page has to be
     // at least two lines
-    sal_Bool bWidow = sal_False;
+    bool bWidow = false;
     if( _widowcontrol >>= bWidow )
     {
         sal_Int8 nControl = bWidow? 2:1;

@@ -203,7 +203,7 @@ void SwUndoDelNum::RepeatImpl(::sw::RepeatContext & rContext)
     rContext.GetDoc().DelNumRules(rContext.GetRepeatPaM());
 }
 
-void SwUndoDelNum::AddNode( const SwTxtNode& rNd, sal_Bool )
+void SwUndoDelNum::AddNode( const SwTxtNode& rNd, bool )
 {
     if( rNd.GetNumRule() )
     {
@@ -286,8 +286,8 @@ void SwUndoNumUpDown::RepeatImpl(::sw::RepeatContext & rContext)
 }
 
 // #115901#
-SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bOldNum,
-                                    sal_Bool bNewNum)
+SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx, bool bOldNum,
+                                    bool bNewNum)
     : SwUndo( UNDO_NUMORNONUM ), nIdx( rIdx.GetIndex() ), mbNewNum(bNewNum),
       mbOldNum(bOldNum)
 {
@@ -331,10 +331,10 @@ void SwUndoNumOrNoNum::RepeatImpl(::sw::RepeatContext & rContext)
     }
 }
 
-SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_Bool bFlg )
+SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, bool bFlg )
     : SwUndo( UNDO_SETNUMRULESTART ),
     nIdx( rPos.nNode.GetIndex() ), nOldStt( USHRT_MAX ),
-    nNewStt( USHRT_MAX ), bSetSttValue( sal_False ), bFlag( bFlg )
+    nNewStt( USHRT_MAX ), bSetSttValue( false ), bFlag( bFlg )
 {
 }
 

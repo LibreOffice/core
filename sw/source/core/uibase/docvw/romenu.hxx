@@ -40,7 +40,7 @@ class SwReadOnlyPopup : public PopupMenu
                 sDescription;
     OUString    sGrfName;
     std::vector<OUString> aThemeList;
-    sal_Bool        bGrfToGalleryAsLnk;
+    bool        bGrfToGalleryAsLnk;
     ImageMap*   pImageMap;
     INetImage*  pTargetURL;
 

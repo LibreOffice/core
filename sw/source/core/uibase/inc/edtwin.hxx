@@ -59,7 +59,7 @@ class SwEditWin: public Window,
 {
 friend void     ScrollMDI(SwViewShell* pVwSh, const SwRect&,
                           sal_uInt16 nRangeX, sal_uInt16 nRangeY);
-friend sal_Bool     IsScrollMDI(SwViewShell* pVwSh, const SwRect&);
+friend bool     IsScrollMDI(SwViewShell* pVwSh, const SwRect&);
 
 friend void     SizeNotify(SwViewShell* pVwSh, const Size &);
 
@@ -117,7 +117,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
     sal_uInt16      m_eBezierMode;
     sal_uInt16      m_nInsFrmColCount; // column number for interactive frame
     SdrObjKind      m_eDrawMode;
-    sal_Bool        m_bMBPressed      : 1,
+    bool        m_bMBPressed      : 1,
                     m_bInsDraw        : 1,
                     m_bInsFrm         : 1,
                     m_bIsInMove       : 1,
@@ -147,19 +147,19 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
 
     void            RstMBDownFlags();
 
-    void            ChangeFly( sal_uInt8 nDir, sal_Bool bWeb = sal_False );
+    void            ChangeFly( sal_uInt8 nDir, bool bWeb = false );
     void            ChangeDrawing( sal_uInt8 nDir );
 
-    sal_Bool            EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos);
-    sal_Bool            RulerColumnDrag( const MouseEvent& rMEvt, sal_Bool bVerticalMode);
+    bool            EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos);
+    bool            RulerColumnDrag( const MouseEvent& rMEvt, bool bVerticalMode);
 
     // helper function for D&D
     void            DropCleanup();
     void            CleanupDropUserMarker();
-    sal_uInt16          GetDropDestination( const Point& rPixPnt,
+    sal_uInt16      GetDropDestination( const Point& rPixPnt,
                                         SdrObject ** ppObj = 0 );
     //select the object/cursor at the mouse position of the context menu request
-    sal_Bool            SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos );
+    bool            SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos );
 
     /*
      * handler for scrolling on when the mousepointer
@@ -219,16 +219,16 @@ public:
 
     void            UpdatePointer(const Point &, sal_uInt16 nButtons = 0);
 
-    sal_Bool            IsDrawSelMode();
-    sal_Bool            IsDrawAction()                  { return (m_bInsDraw); }
-    void            SetDrawAction(sal_Bool bFlag)       { m_bInsDraw = bFlag; }
+    bool            IsDrawSelMode();
+    bool            IsDrawAction()                  { return (m_bInsDraw); }
+    void            SetDrawAction(bool bFlag)       { m_bInsDraw = bFlag; }
 
-    void            SetObjectSelect( sal_Bool bVal )    { m_bObjectSelect = bVal; }
-    sal_Bool            IsObjectSelect() const          { return m_bObjectSelect; }
+    void            SetObjectSelect( bool bVal )    { m_bObjectSelect = bVal; }
+    bool            IsObjectSelect() const          { return m_bObjectSelect; }
 
-    inline SdrObjKind   GetSdrDrawMode(/*sal_Bool bBuf = sal_False*/) const { return m_eDrawMode; }
-    inline void         SetSdrDrawMode( SdrObjKind eSdrObjectKind ) { m_eDrawMode = eSdrObjectKind; SetObjectSelect( sal_False ); }
-    void                StdDrawMode( SdrObjKind eSdrObjectKind, sal_Bool bObjSelect );
+    inline SdrObjKind   GetSdrDrawMode() const { return m_eDrawMode; }
+    inline void         SetSdrDrawMode( SdrObjKind eSdrObjectKind ) { m_eDrawMode = eSdrObjectKind; SetObjectSelect( false ); }
+    void                StdDrawMode( SdrObjKind eSdrObjectKind, bool bObjSelect );
 
     bool            IsFrmAction() const             { return (m_bInsFrm); }
     sal_uInt16      GetBezierMode() const           { return m_eBezierMode; }
@@ -238,11 +238,11 @@ public:
     void            StopInsFrm();
     sal_uInt16      GetFrmColCount() const {return m_nInsFrmColCount;} // column number for interactive frame
 
-    void            SetChainMode( sal_Bool bOn );
-    sal_Bool            IsChainMode() const             { return m_bChainMode; }
+    void            SetChainMode( bool bOn );
+    bool            IsChainMode() const             { return m_bChainMode; }
 
     void            FlushInBuffer();
-    sal_Bool            IsInputSequenceCheckingRequired( const OUString &rText, const SwPaM& rCrsr ) const;
+    bool            IsInputSequenceCheckingRequired( const OUString &rText, const SwPaM& rCrsr ) const;
 
     void             SetApplyTemplate(const SwApplyTemplate &);
     SwApplyTemplate* GetApplyTemplate() const { return m_pApplyTempl; }
@@ -264,7 +264,7 @@ public:
                                     { m_bTransparentBackColor = bSet; }
     bool            IsTextBackColorTransparent()
                                     { return m_bTransparentBackColor; }
-    void            LockKeyInput(sal_Bool bSet){m_bLockInput = bSet;}
+    void            LockKeyInput(bool bSet){m_bLockInput = bSet;}
 
     const SwView &GetView() const { return m_rView; }
           SwView &GetView()       { return m_rView; }
@@ -281,14 +281,14 @@ public:
     void StopQuickHelp();
 
     // #i42921# - add parameter <bVerticalMode>
-    sal_Bool RulerMarginDrag( const MouseEvent& rMEvt,
+    bool RulerMarginDrag( const MouseEvent& rMEvt,
                                      const bool bVerticalMode );
 
     /** #i42732# display status of font size/name depending on either the input
         language or the selection position depending on what has changed lately
      */
-    void        SetUseInputLanguage( sal_Bool bNew );
-    sal_Bool    IsUseInputLanguage() const { return m_bUseInputLanguage; }
+    void    SetUseInputLanguage( bool bNew );
+    bool    IsUseInputLanguage() const { return m_bUseInputLanguage; }
 
     SwFrameControlsManager& GetFrameControlsManager() { return m_aFrameControlsManager; }
 

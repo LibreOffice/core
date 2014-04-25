@@ -264,12 +264,12 @@ void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTxtFrm& rFrm )
     }
 }
 
-sal_Bool SwLayouter::StartLooping( SwPageFrm* pPage )
+bool SwLayouter::StartLooping( SwPageFrm* pPage )
 {
     if( pLooping )
-        return sal_False;
+        return false;
     pLooping = new SwLooping( pPage );
-    return sal_True;
+    return true;
 }
 
 void SwLayouter::EndLoopControl()
@@ -286,10 +286,10 @@ void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect )
     pDoc->GetLayouter()->_CollectEndnotes( pSect );
 }
 
-sal_Bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn )
+bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn )
 {
     if( !pDoc->GetLayouter() )
-        return sal_False;
+        return false;
     SwLayouter *pLayouter = pDoc->GetLayouter();
     if( pLayouter->pEndnoter && pLayouter->pEndnoter->GetSect() && pSect &&
         ( pLayouter->pEndnoter->GetSect()->IsAnFollow( pSect ) ||
@@ -297,12 +297,12 @@ sal_Bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFt
     {
         if( pFtn )
             pLayouter->CollectEndnote( pFtn );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
+bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
 {
     OSL_ENSURE( pDoc, "No doc, no fun" );
     if( !pDoc->GetLayouter() )

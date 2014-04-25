@@ -33,9 +33,9 @@ private:
     Graphic     aGraphic;
     BitmapEx    aBmp;
 
-    sal_Bool        bHorz : 1;
-    sal_Bool        bVert : 1;
-    sal_Bool        bGraphic : 1;
+    bool        bHorz : 1;
+    bool        bVert : 1;
+    bool        bGraphic : 1;
     bool        bLeftAlign : 1;
 
     virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
@@ -45,8 +45,8 @@ private:
 public:
     BmpWindow(Window* pPar, WinBits nStyle);
     virtual ~BmpWindow();
-    void MirrorVert(sal_Bool bMirror) { bVert = bMirror; Invalidate(); }
-    void MirrorHorz(sal_Bool bMirror) { bHorz = bMirror; Invalidate(); }
+    void MirrorVert(bool bMirror) { bVert = bMirror; Invalidate(); }
+    void MirrorHorz(bool bMirror) { bHorz = bMirror; Invalidate(); }
     void SetGraphic(const Graphic& rGrf);
     void SetBitmapEx(const BitmapEx& rGrf);
 };

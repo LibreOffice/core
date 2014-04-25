@@ -95,7 +95,7 @@ class SwDrawViewSave
 {
     OUString sLayerNm;
     SdrView* pDV;
-    sal_Bool bPrintControls;
+    bool bPrintControls;
 public:
     SwDrawViewSave( SdrView* pSdrView );
     ~SwDrawViewSave();
@@ -222,7 +222,7 @@ void SwViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
     SET_CURR_SHELL( this );
 
     sal_uInt16 nAll = GetDoc()->GetPageDescCnt();
-    sal_Bool bNewOri = Orientation(eOri) == ORIENTATION_PORTRAIT ? sal_False : sal_True;
+    bool bNewOri = Orientation(eOri) == ORIENTATION_PORTRAIT ? sal_False : sal_True;
 
     for( sal_uInt16 i = 0; i < nAll; ++ i )
     {
@@ -273,7 +273,7 @@ void SwViewShell::ChgAllPageSize( Size &rSz )
         }
         SwFrmFmt& rPgFmt = aNew.GetMaster();
         Size aSz( rSz );
-        const sal_Bool bOri = aNew.GetLandscape();
+        const bool bOri = aNew.GetLandscape();
         if( bOri  ? aSz.Height() > aSz.Width()
                   : aSz.Height() < aSz.Width() )
         {
@@ -306,9 +306,9 @@ void SwViewShell::CalcPagesForPrint( sal_uInt16 nMax )
         maVisArea = pPage->Frm();
         Imp()->SetFirstVisPageInvalid();
         aAction.Reset();
-        aAction.SetPaint( sal_False );
-        aAction.SetWaitAllowed( sal_False );
-        aAction.SetReschedule( sal_True );
+        aAction.SetPaint( false );
+        aAction.SetWaitAllowed( false );
+        aAction.SetReschedule( true );
 
         aAction.Action();
 
@@ -439,7 +439,7 @@ sw_getPage(SwRootFrm const& rLayout, sal_Int32 const nPage)
     return 0;
 }
 
-sal_Bool SwViewShell::PrintOrPDFExport(
+bool SwViewShell::PrintOrPDFExport(
     OutputDevice *pOutDev,
     SwPrintData const& rPrintData,
     sal_Int32 nRenderer     /* the index in the vector of pages to be printed */ )
@@ -449,7 +449,7 @@ sal_Bool SwViewShell::PrintOrPDFExport(
     const sal_Int32 nMaxRenderer = rPrintData.GetRenderData().GetPagesToPrint().size() - 1;
     OSL_ENSURE( 0 <= nRenderer && nRenderer <= nMaxRenderer, "nRenderer out of bounds");
     if (!pOutDev || nMaxRenderer < 0 || nRenderer < 0 || nRenderer > nMaxRenderer)
-        return sal_False;
+        return false;
 
     // save settings of OutputDevice (should be done always since the
     // output device is now provided by a call from outside the Writer)
@@ -478,7 +478,7 @@ sal_Bool SwViewShell::PrintOrPDFExport(
 
         //JP 01.02.99: Bug 61335 - the ReadOnly flag is never copied
         if( mpOpt->IsReadonly() )
-            pShell->mpOpt->SetReadonly( sal_True );
+            pShell->mpOpt->SetReadonly( true );
 
         // save options at draw view:
         SwDrawViewSave aDrawViewSave( pShell->GetDrawView() );
@@ -498,7 +498,7 @@ sal_Bool SwViewShell::PrintOrPDFExport(
         OSL_ENSURE( pStPage, "failed to get start page" );
         if (!pStPage)
         {
-            return sal_False;
+            return false;
         }
 
         //!! applying view options and formatting the document should now only be done in getRendererCount!
@@ -546,7 +546,7 @@ sal_Bool SwViewShell::PrintOrPDFExport(
         pRecorder->WindStart();
     }
 
-    return sal_True;
+    return true;
 }
 
 void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
@@ -563,7 +563,7 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
     {
         SET_CURR_SHELL( pSh );
         pSh->PrepareForPrint( rOptions );
-        pSh->SetPrtFormatOption( sal_True );
+        pSh->SetPrtFormatOption( true );
 
         SwRect aSwRect( rRect );
         pSh->maVisArea = aSwRect;
@@ -571,7 +571,7 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
         if ( pSh->GetViewOptions()->getBrowseMode() &&
              pSh->GetNext() == pSh )
         {
-            pSh->CheckBrowseView( sal_False );
+            pSh->CheckBrowseView( false );
             pSh->GetLayout()->Lower()->InvalidateSize();
         }
 
@@ -592,7 +592,7 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
 }
 
 /// Check if the DocNodesArray contains fields.
-sal_Bool SwViewShell::IsAnyFieldInDoc() const
+bool SwViewShell::IsAnyFieldInDoc() const
 {
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = mpDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
@@ -604,7 +604,7 @@ sal_Bool SwViewShell::IsAnyFieldInDoc() const
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
             if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             {
-                return sal_True;
+                return true;
             }
         }
     }
@@ -618,12 +618,12 @@ sal_Bool SwViewShell::IsAnyFieldInDoc() const
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
             if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             {
-                return sal_True;
+                return true;
             }
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 ///  Saves some settings at the draw view
@@ -648,13 +648,13 @@ SwDrawViewSave::~SwDrawViewSave()
 
 // OD 09.01.2003 #i6467# - method also called for page preview
 void SwViewShell::PrepareForPrint( const SwPrintData &rOptions )
-{
-    mpOpt->SetGraphic ( sal_True == rOptions.bPrintGraphic );
-    mpOpt->SetTable   ( sal_True == rOptions.bPrintTable );
-    mpOpt->SetDraw    ( sal_True == rOptions.bPrintDraw  );
-    mpOpt->SetControl ( sal_True == rOptions.bPrintControl );
-    mpOpt->SetPageBack( sal_True == rOptions.bPrintPageBackground );
-    mpOpt->SetBlackFont( sal_True == rOptions.bPrintBlackFont );
+ {
+    mpOpt->SetGraphic  ( rOptions.bPrintGraphic );
+    mpOpt->SetTable    ( rOptions.bPrintTable );
+    mpOpt->SetDraw     ( rOptions.bPrintDraw  );
+    mpOpt->SetControl  ( rOptions.bPrintControl );
+    mpOpt->SetPageBack ( rOptions.bPrintPageBackground );
+    mpOpt->SetBlackFont( rOptions.bPrintBlackFont );
 
     if ( HasDrawView() )
     {

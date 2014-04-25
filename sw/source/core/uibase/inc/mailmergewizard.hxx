@@ -84,7 +84,7 @@ public:
     sal_uInt16              GetRestartPage() const {return m_nRestartPage;}
     void                    SetRestartPage(sal_uInt16 nPage) { m_nRestartPage = nPage;}
 
-    sal_Bool                skipUntil( sal_uInt16 nPage)
+    bool                skipUntil( sal_uInt16 nPage)
                                 {return ::svt::RoadmapWizard::skipUntil(WizardState(nPage));}
 
     void                    updateRoadmapItemLabel( WizardState _nState );

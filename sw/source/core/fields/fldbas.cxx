@@ -160,7 +160,7 @@ SwField::SwField(
     : m_Cache()
     , m_bUseFieldValueCache( bUseFieldValueCache )
     , nLang( nLng )
-    , bIsAutomaticLanguage( sal_True )
+    , bIsAutomaticLanguage( true )
     , nFormat( nFmt )
     , pType( pTyp )
 {
@@ -295,7 +295,7 @@ bool SwField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     {
         case FIELD_PROP_BOOL4:
         {
-            sal_Bool bFixed = sal_False;
+            bool bFixed = false;
             if(rVal >>= bFixed)
                 bIsAutomaticLanguage = !bFixed;
         }
@@ -324,9 +324,9 @@ SwFieldType* SwField::ChgTyp( SwFieldType* pNewType )
 }
 
 /// Does the field have an action on a ClickHandler? (E.g. INetFields,...)
-sal_Bool SwField::HasClickHdl() const
+bool SwField::HasClickHdl() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     switch( pType->Which() )
     {
     case RES_INTERNETFLD:
@@ -335,7 +335,7 @@ sal_Bool SwField::HasClickHdl() const
     case RES_MACROFLD:
     case RES_INPUTFLD:
     case RES_DROPDOWN :
-        bRet = sal_True;
+        bRet = true;
         break;
 
     case RES_SETEXPFLD:
@@ -355,14 +355,14 @@ void SwField::ChangeFormat(sal_uInt32 n)
     nFormat = n;
 }
 
-sal_Bool SwField::IsFixed() const
+bool SwField::IsFixed() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     switch( pType->Which() )
     {
     case RES_FIXDATEFLD:
     case RES_FIXTIMEFLD:
-        bRet = sal_True;
+        bRet = true;
         break;
 
     case RES_DATETIMEFLD:
@@ -432,7 +432,7 @@ OUString FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat)
 SwValueFieldType::SwValueFieldType( SwDoc* pDocPtr, sal_uInt16 nWhichId )
     : SwFieldType(nWhichId),
     pDoc(pDocPtr),
-    bUseFormat(sal_True)
+    bUseFormat(true)
 {
 }
 

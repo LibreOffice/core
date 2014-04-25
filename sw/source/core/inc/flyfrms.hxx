@@ -174,8 +174,8 @@ class SwFlyInCntFrm : public SwFlyFrm
 {
     Point aRef;  // relative to this point AbsPos is being calculated
 
-    sal_Bool bInvalidLayout :1;
-    sal_Bool bInvalidCntnt  :1;
+    bool bInvalidLayout :1;
+    bool bInvalidCntnt  :1;
 
 protected:
     virtual void NotifyBackground( SwPageFrm *pPage,
@@ -201,9 +201,9 @@ public:
     inline void InvalidateCntnt() const;
     inline void ValidateLayout() const;
     inline void ValidateCntnt() const;
-    sal_Bool IsInvalid() const { return (bInvalidLayout || bInvalidCntnt); }
-    sal_Bool IsInvalidLayout() const { return bInvalidLayout; }
-    sal_Bool IsInvalidCntnt() const { return bInvalidCntnt; }
+    bool IsInvalid() const { return (bInvalidLayout || bInvalidCntnt); }
+    bool IsInvalidLayout() const { return bInvalidLayout; }
+    bool IsInvalidCntnt() const { return bInvalidCntnt; }
 
     // (26.11.93, see tabfrm.hxx, but might also be valid for others)
     // For creation of a Fly after a FlyCnt was created _and_ inserted.
@@ -225,20 +225,20 @@ public:
 
 inline void SwFlyInCntFrm::InvalidateLayout() const
 {
-    ((SwFlyInCntFrm*)this)->bInvalidLayout = sal_True;
+    ((SwFlyInCntFrm*)this)->bInvalidLayout = true;
 }
 inline void SwFlyInCntFrm::InvalidateCntnt() const
 {
-    ((SwFlyInCntFrm*)this)->bInvalidCntnt = sal_True;
+    ((SwFlyInCntFrm*)this)->bInvalidCntnt = true;
 }
 
 inline void SwFlyInCntFrm::ValidateLayout() const
 {
-    ((SwFlyInCntFrm*)this)->bInvalidLayout = sal_False;
+    ((SwFlyInCntFrm*)this)->bInvalidLayout = false;
 }
 inline void SwFlyInCntFrm::ValidateCntnt() const
 {
-    ((SwFlyInCntFrm*)this)->bInvalidCntnt = sal_False;
+    ((SwFlyInCntFrm*)this)->bInvalidCntnt = false;
 }
 
 #endif

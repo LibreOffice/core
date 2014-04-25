@@ -88,20 +88,20 @@ SwModify::SwModify()
     : SwClient(0), pRoot(0)
 {
     bModifyLocked = false;
-    bLockClientList = sal_False;
-    bInDocDTOR = sal_False;
-    bInCache = sal_False;
-    bInSwFntCache = sal_False;
+    bLockClientList = false;
+    bInDocDTOR = false;
+    bInCache = false;
+    bInSwFntCache = false;
 }
 
 SwModify::SwModify( SwModify* pToRegisterIn )
     : SwClient( pToRegisterIn ), pRoot( 0 )
 {
     bModifyLocked = false;
-    bLockClientList = sal_False;
-    bInDocDTOR = sal_False;
-    bInCache = sal_False;
-    bInSwFntCache = sal_False;
+    bLockClientList = false;
+    bInDocDTOR = false;
+    bInCache = false;
+    bInSwFntCache = false;
 }
 
 SwModify::~SwModify()
@@ -166,7 +166,7 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
     // mba: WTF?!
     if( !pOldValue )
     {
-        bLockClientList = sal_True;
+        bLockClientList = true;
     }
     else
     {
@@ -181,16 +181,16 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
         case RES_REFMARK_DELETED:
         case RES_TOXMARK_DELETED:
         case RES_FIELD_DELETED:
-            bLockClientList = sal_False;
+            bLockClientList = false;
             break;
 
         default:
-            bLockClientList = sal_True;
+            bLockClientList = true;
         }
     }
 
     ModifyBroadcast( pOldValue, pNewValue );
-    bLockClientList = sal_False;
+    bLockClientList = false;
     UnlockModify();
 }
 
@@ -305,7 +305,7 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
 {
     if( isCHRATR( nWhich ) )
     {
-        SetInSwFntCache( sal_False );
+        SetInSwFntCache( false );
     }
     else
     {
@@ -314,7 +314,7 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
         case RES_OBJECTDYING:
         case RES_FMT_CHG:
         case RES_ATTRSET_CHG:
-            SetInSwFntCache( sal_False );
+            SetInSwFntCache( false );
             // fall through
         case RES_UL_SPACE:
         case RES_LR_SPACE:
@@ -326,7 +326,7 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
             if( IsInCache() )
             {
                 SwFrm::GetCache().Delete( this );
-                SetInCache( sal_False );
+                SetInCache( false );
             }
             break;
         }

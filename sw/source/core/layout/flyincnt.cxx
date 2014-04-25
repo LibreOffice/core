@@ -28,7 +28,7 @@
 SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFrm( pFmt, pSib, pAnch )
 {
-    bInCnt = bInvalidLayout = bInvalidCntnt = sal_True;
+    bInCnt = bInvalidLayout = bInvalidCntnt = true;
     SwTwips nRel = pFmt->GetVertOrient().GetPos();
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
     Point aRelPos;
@@ -71,8 +71,8 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
     if( pNotify )
     {
         InvalidatePage();
-        mbValidPos = sal_False;
-        bInvalid  = sal_True;
+        mbValidPos = false;
+        bInvalid  = true;
         Calc();
         delete pNotify;
     }
@@ -143,7 +143,7 @@ void SwFlyInCntFrm::MakeObjPos()
 {
     if ( !mbValidPos )
     {
-        mbValidPos = sal_True;
+        mbValidPos = true;
         SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
         //Update the current values in the format if needed, during this we of
@@ -214,14 +214,14 @@ void SwFlyInCntFrm::MakeAll()
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
     if ( IsClipped() )
-        mbValidSize = bHeightClipped = bWidthClipped = sal_False;
+        mbValidSize = bHeightClipped = bWidthClipped = false;
 
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea || !m_bValidContentPos )
     {
         //Only stop, if the flag is set!!
         if ( !mbValidSize )
         {
-            mbValidPrtArea = sal_False;
+            mbValidPrtArea = false;
         }
 
         if ( !mbValidPrtArea )
@@ -251,8 +251,8 @@ void SwFlyInCntFrm::MakeAll()
                  Frm().Width() > pFrm->Prt().Width() )
             {
                 Frm().Width( pFrm->Prt().Width() );
-                mbValidPrtArea = sal_False;
-                bWidthClipped = sal_True;
+                mbValidPrtArea = false;
+                bWidthClipped = true;
             }
         }
     }

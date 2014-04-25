@@ -29,8 +29,8 @@ class SwExtTextInput : public SwPaM
 {
     std::vector<sal_uInt16> aAttrs;
     OUString sOverwriteText;
-    sal_Bool bInsText : 1;
-    sal_Bool bIsOverwriteCursor : 1;
+    bool bInsText : 1;
+    bool bIsOverwriteCursor : 1;
     LanguageType eInputLanguage;
 public:
     SwExtTextInput( const SwPaM& rPam, Ring* pRing = 0 );
@@ -38,9 +38,9 @@ public:
 
     void SetInputData( const CommandExtTextInputData& rData );
     const std::vector<sal_uInt16>& GetAttrs() const { return aAttrs; }
-    void SetInsText( sal_Bool bFlag )       { bInsText = bFlag; }
-    sal_Bool IsOverwriteCursor() const      { return bIsOverwriteCursor; }
-    void SetOverwriteCursor( sal_Bool bFlag );
+    void SetInsText( bool bFlag )       { bInsText = bFlag; }
+    bool IsOverwriteCursor() const      { return bIsOverwriteCursor; }
+    void SetOverwriteCursor( bool bFlag );
     void SetLanguage(LanguageType eSet) { eInputLanguage = eSet;}
 };
 

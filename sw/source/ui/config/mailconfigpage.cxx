@@ -190,7 +190,7 @@ void SwMailConfigPage::Reset( const SfxItemSet& /*rSet*/ )
 
 IMPL_LINK(SwMailConfigPage, ReplyToHdl, CheckBox*, pBox)
 {
-    sal_Bool bEnable = pBox->IsChecked();
+    bool bEnable = pBox->IsChecked();
     m_pReplyToFT->Enable(bEnable);
     m_pReplyToED->Enable(bEnable);
     return 0;
@@ -434,7 +434,7 @@ IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, OKHdl_Impl)
 
 IMPL_LINK( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, CheckBox*, pBox)
 {
-    sal_Bool bChecked = pBox->IsChecked();
+    bool bChecked = pBox->IsChecked();
     m_pSeparateAuthenticationRB->Enable(bChecked);
     m_pSMTPAfterPOPRB->Enable(bChecked);
     RadioButtonHdl_Impl( 0 );
@@ -444,9 +444,9 @@ IMPL_LINK( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, CheckBox*, pBox)
 
 IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl)
 {
-    sal_Bool bSeparate = m_pSeparateAuthenticationRB->IsChecked();
-    sal_Bool bIsEnabled = m_pSeparateAuthenticationRB->IsEnabled();
-    sal_Bool bNotSeparate = !bSeparate && bIsEnabled;
+    bool bSeparate = m_pSeparateAuthenticationRB->IsChecked();
+    bool bIsEnabled = m_pSeparateAuthenticationRB->IsEnabled();
+    bool bNotSeparate = !bSeparate && bIsEnabled;
     bSeparate &= bIsEnabled;
 
     m_pOutgoingServerFT->Enable(bSeparate);

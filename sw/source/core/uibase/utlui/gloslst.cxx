@@ -102,8 +102,8 @@ SwGlossaryList::~SwGlossaryList()
 // will be filled. Otherwise also rGroupName will be set and
 // on demand asked for the right group.
 
-sal_Bool SwGlossaryList::GetShortName(const OUString& rLongName,
-                                OUString& rShortName, OUString& rGroupName )
+bool SwGlossaryList::GetShortName(const OUString& rLongName,
+                                  OUString& rShortName, OUString& rGroupName )
 {
     if(!bFilled)
         Update();
@@ -133,14 +133,14 @@ sal_Bool SwGlossaryList::GetShortName(const OUString& rLongName,
         }
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     nCount = aTripleStrings.size();
     if(1 == nCount)
     {
         const TripleString& pTriple(aTripleStrings.front());
         rShortName = pTriple.sShort;
         rGroupName = pTriple.sGroup;
-        bRet = sal_True;
+        bRet = true;
     }
     else if(1 < nCount)
     {
@@ -159,10 +159,10 @@ sal_Bool SwGlossaryList::GetShortName(const OUString& rLongName,
             const TripleString& pTriple(aTripleStrings[rLB.GetSelectEntryPos()]);
             rShortName = pTriple.sShort;
             rGroupName = pTriple.sGroup;
-            bRet = sal_True;
+            bRet = true;
         }
         else
-            bRet = sal_False;
+            bRet = false;
     }
     return bRet;
 }

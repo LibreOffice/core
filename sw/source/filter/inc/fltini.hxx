@@ -72,7 +72,7 @@ class SW_DLLPUBLIC SwRelNumRuleSpaces
     SwNumRuleTbl* pNumRuleTbl;  // Liste aller benannten NumRules
 
 public:
-    SwRelNumRuleSpaces( SwDoc& rDoc, sal_Bool bNewDoc );
+    SwRelNumRuleSpaces( SwDoc& rDoc, bool bNewDoc );
     ~SwRelNumRuleSpaces();
 };
 

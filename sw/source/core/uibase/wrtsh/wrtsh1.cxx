@@ -109,7 +109,7 @@ using namespace com::sun::star;
 #define COMMON_INI_LIST \
         fnDrag(&SwWrtShell::BeginDrag),\
         fnSetCrsr(&SwWrtShell::SetCrsr),\
-        fnEndDrag(&SwWrtShell::EndDrag),\
+        fnEndDrag(&SwWrtShell::DefaultEndDrag),\
         fnKillSel(&SwWrtShell::Ignore),\
         pModeStack(0), \
         ePageMove(MV_NO),\
@@ -120,7 +120,7 @@ using namespace com::sun::star;
 
 #define BITFLD_INI_LIST \
         bClearMark = \
-        bIns = sal_True;\
+        bIns = true;\
         bAddMode = \
         bBlockMode = \
         bExtMode = \
@@ -129,7 +129,7 @@ using namespace com::sun::star;
         bLayoutMode = \
         bSelWrd = \
         bSelLn = \
-        mbRetainSelection = sal_False; \
+        mbRetainSelection = false; \
         bIsInClickToEdit = false;
 
 static SvxAutoCorrect* lcl_IsAutoCorr()
@@ -156,11 +156,11 @@ void SwWrtShell::Edit()
     }
 }
 
-sal_Bool SwWrtShell::IsEndWrd()
+bool SwWrtShell::IsEndWrd()
 {
     SwMvContext aMvContext(this);
     if(IsEndPara() && !IsSttPara())
-        return sal_True;
+        return true;
 
     return IsEndWord();
 }
@@ -170,11 +170,11 @@ void SwWrtShell::InsertByWord( const OUString & rStr)
 {
     if( !rStr.isEmpty() )
     {
-        sal_Bool bDelim = GetAppCharClass().isLetterNumeric( rStr, 0 );
+        bool bDelim = GetAppCharClass().isLetterNumeric( rStr, 0 );
         sal_Int32 nPos = 0, nStt = 0;
         for( ; nPos < rStr.getLength(); nPos++ )
            {
-            sal_Bool bTmpDelim = GetAppCharClass().isLetterNumeric( rStr, nPos );
+            bool bTmpDelim = GetAppCharClass().isLetterNumeric( rStr, nPos );
             if( bTmpDelim != bDelim )
             {
                 Insert( rStr.copy( nStt, nPos - nStt ));
@@ -193,8 +193,8 @@ void SwWrtShell::Insert( const OUString &rStr )
         return;
 
     bool bStarted = false;
-    sal_Bool bHasSel = HasSelection(),
-        bCallIns = bIns /*|| bHasSel*/;
+    bool bHasSel = HasSelection(),
+         bCallIns = bIns /*|| bHasSel*/;
     bool bDeleted = false;
 
     if( bHasSel || ( !bIns && SelectHiddenRange() ) )
@@ -237,7 +237,7 @@ void SwWrtShell::Insert( const OUString &rStr )
 
 void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
                          const Graphic &rGrf, SwFlyFrmAttrMgr *pFrmMgr,
-                         sal_Bool bRule )
+                         bool bRule )
 {
     ResetCursorStack();
     if ( !CanInsert() )
@@ -264,7 +264,7 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
     if ( !pFrmMgr )
     {
         bOwnMgr = true;
-        pFrmMgr = new SwFlyFrmAttrMgr( sal_True, this, FRMMGR_TYPE_GRF );
+        pFrmMgr = new SwFlyFrmAttrMgr( true, this, FRMMGR_TYPE_GRF );
 
         // CAUTION
         // GetAttrSet makes an adjustment
@@ -331,7 +331,7 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
 // if no object is transfered, then one will be created.
 
 void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName *pName,
-                            sal_Bool bActivate, sal_uInt16 nSlotId )
+                               bool bActivate, sal_uInt16 nSlotId )
 {
     ResetCursorStack();
     if( !CanInsert() )
@@ -342,7 +342,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
         // temporary storage
         svt::EmbeddedObjectRef xObj;
         uno::Reference < embed::XStorage > xStor = comphelper::OStorageHelper::GetTemporaryStorage();
-        sal_Bool bDoVerb = sal_True;
+        bool bDoVerb = true;
         if ( pName )
         {
             comphelper::EmbeddedObjectContainer aCnt( xStor );
@@ -403,7 +403,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 if ( !pClient )
                 {
                     pClient = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
-                    SetCheckForOLEInCaption( sal_True );
+                    SetCheckForOLEInCaption( true );
                 }
 
                 if ( xObj.GetViewAspect() == embed::Aspects::MSOLE_ICON )
@@ -438,7 +438,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 // Insert object into the Core.
 // From ClipBoard or Insert
 
-sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFmt **pFlyFrmFmt )
+bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFmt **pFlyFrmFmt )
 {
     ResetCursorStack();
     StartAllAction();
@@ -454,7 +454,7 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
     //3. If an selection is passed to a StarMath object, this object should
     //   not be activated. sal_False should be returned then.
     bool bStarMath = true;
-    sal_Bool bActivate = sal_True;
+    bool bActivate = true;
 
     // set parent to get correct VisArea(in case of object needing parent printer)
     uno::Reference < container::XChild > xChild( xRef.GetObject(), uno::UNO_QUERY );
@@ -478,7 +478,7 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
                     try
                     {
                         xSet->setPropertyValue("Formula", uno::makeAny( OUString( aMathData ) ) );
-                        bActivate = sal_False;
+                        bActivate = false;
                     }
                     catch (const uno::Exception&)
                     {
@@ -490,11 +490,11 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
     }
 
     if ( !bStarMath )
-        SwFEShell::SplitNode( sal_False, sal_False );
+        SwFEShell::SplitNode( false, false );
 
     EnterSelFrmMode();
 
-    SwFlyFrmAttrMgr aFrmMgr( sal_True, this, FRMMGR_TYPE_OLE );
+    SwFlyFrmAttrMgr aFrmMgr( true, this, FRMMGR_TYPE_OLE );
     aFrmMgr.SetHeightSizeType(ATT_FIX_SIZE);
 
     SwRect aBound;
@@ -579,12 +579,12 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
         if ( !pCli )
             pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xRef );
 
-        ((SwOleClient*)pCli)->SetInDoVerb( sal_True );
+        ((SwOleClient*)pCli)->SetInDoVerb( true );
 
         CalcAndSetScale( xRef );
         pCli->DoVerb( nVerb );
 
-        ((SwOleClient*)pCli)->SetInDoVerb( sal_False );
+        ((SwOleClient*)pCli)->SetInDoVerb( false );
         CalcAndSetScale( xRef );
     }
 }
@@ -841,7 +841,7 @@ void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, ::boost::optional<sa
         }
 
         const SwPageDesc *pDesc = pPageDesc
-                                ? FindPageDescByName( *pPageDesc, sal_True ) : 0;
+                                ? FindPageDescByName( *pPageDesc, true ) : 0;
         if( pDesc )
         {
             SwFmtPageDesc aDesc( pDesc );
@@ -889,7 +889,7 @@ void SwWrtShell::InsertColumnBreak()
         {
             if(HasSelection())
                 DelRight();
-            SwFEShell::SplitNode( sal_False, sal_False );
+            SwFEShell::SplitNode( false, false );
         }
         SetAttrItem(SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK));
 
@@ -900,7 +900,7 @@ void SwWrtShell::InsertColumnBreak()
 // Insert footnote
 // rStr - optional footnote mark
 
-void SwWrtShell::InsertFootnote(const OUString &rStr, sal_Bool bEndNote, sal_Bool bEdit )
+void SwWrtShell::InsertFootnote(const OUString &rStr, bool bEndNote, bool bEdit )
 {
     ResetCursorStack();
     if( CanInsert() )
@@ -922,7 +922,7 @@ void SwWrtShell::InsertFootnote(const OUString &rStr, sal_Bool bEndNote, sal_Boo
         if( bEdit )
         {
             // For editing the footnote text.
-            Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+            Left(CRSR_SKIP_CHARS, false, 1, false );
             GotoFtnTxt();
         }
         aNavigationMgr.addEntry(aPos);
@@ -933,7 +933,7 @@ void SwWrtShell::InsertFootnote(const OUString &rStr, sal_Bool bEndNote, sal_Boo
 //                  - of deleting selected content;
 //                  - of reset of the Cursorstack if necessary.
 
-void SwWrtShell::SplitNode( sal_Bool bAutoFmt, sal_Bool bCheckTableStart )
+void SwWrtShell::SplitNode( bool bAutoFmt, bool bCheckTableStart )
 {
     ResetCursorStack();
     if( CanInsert() )
@@ -941,7 +941,7 @@ void SwWrtShell::SplitNode( sal_Bool bAutoFmt, sal_Bool bCheckTableStart )
         SwActContext aActContext(this);
 
         rView.GetEditWin().FlushInBuffer();
-        sal_Bool bHasSel = HasSelection();
+        bool bHasSel = HasSelection();
         if( bHasSel )
         {
             StartUndo( UNDO_INSERT );
@@ -968,7 +968,7 @@ void SwWrtShell::SplitNode( sal_Bool bAutoFmt, sal_Bool bCheckTableStart )
 // - <SwEditShell::HasBullet()> is sal_False, if <bNum> is sal_False
 // Behavior of method is determined by the current situation at the current
 // cursor position in the document.
-void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
+void SwWrtShell::NumOrBulletOn(bool bNum)
 {
     // determine numbering rule found at current cursor position in the document.
     const SwNumRule* pCurRule = GetNumRuleAtCurrCrsrPos();
@@ -997,7 +997,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
         if ( pCollRule && pCollRule == GetDoc()->GetOutlineNumRule() )
         {
             const SwNumRule* pDirectCollRule =
-                    mpDoc->FindNumRulePtr(pColl->GetNumRule( sal_False ).GetValue());
+                    mpDoc->FindNumRulePtr(pColl->GetNumRule( false ).GetValue());
             if ( !pDirectCollRule )
             {
                 pCollRule = 0;
@@ -1277,7 +1277,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
 
 void SwWrtShell::NumOn()
 {
-    NumOrBulletOn(sal_True);
+    NumOrBulletOn(true);
 }
 
 void SwWrtShell::NumOrBulletOff()
@@ -1328,7 +1328,7 @@ void SwWrtShell::NumOrBulletOff()
 
 void SwWrtShell::BulletOn()
 {
-    NumOrBulletOn(sal_False);
+    NumOrBulletOn(false);
 }
 
 SelectionType SwWrtShell::GetSelectionType() const
@@ -1479,7 +1479,7 @@ void SwWrtShell::SetPageStyle(const OUString &rCollName)
 {
     if( !SwCrsrShell::HasSelection() && !IsSelFrmMode() && !IsObjSelected() )
     {
-        SwPageDesc* pDesc = FindPageDescByName( rCollName, sal_True );
+        SwPageDesc* pDesc = FindPageDescByName( rCollName, true );
         if( pDesc )
             ChgCurPageDesc( *pDesc );
     }
@@ -1487,7 +1487,7 @@ void SwWrtShell::SetPageStyle(const OUString &rCollName)
 
 // Access templates
 
-OUString SwWrtShell::GetCurPageStyle( const sal_Bool bCalcFrm ) const
+OUString SwWrtShell::GetCurPageStyle( const bool bCalcFrm ) const
 {
     return GetPageDesc(GetCurPageDesc( bCalcFrm )).GetName();
 }
@@ -1625,14 +1625,14 @@ SwWrtShell::~SwWrtShell()
     SET_CURR_SHELL( this );
     while(IsModePushed())
         PopMode();
-    while(PopCrsr(sal_False))
+    while(PopCrsr(false))
         ;
     SwTransferable::ClearSelection( *this );
 }
 
-sal_Bool SwWrtShell::Pop( sal_Bool bOldCrsr )
+bool SwWrtShell::Pop( bool bOldCrsr )
 {
-    sal_Bool bRet = SwCrsrShell::Pop( bOldCrsr );
+    bool bRet = SwCrsrShell::Pop( bOldCrsr );
     if( bRet && IsSelection() )
     {
         fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
@@ -1712,7 +1712,7 @@ void SwWrtShell::ApplyViewOptions( const SwViewOption &rOpt )
     GetView().GetViewFrame()->GetBindings().Invalidate( FN_VIEW_META_CHARS );
 }
 
-void SwWrtShell::SetReadonlyOption(sal_Bool bSet)
+void SwWrtShell::SetReadonlyOption(bool bSet)
 {
     GetView().GetEditWin().GetFrameControlsManager().SetReadonlyControls( bSet );
     SwViewShell::SetReadonlyOption( bSet );
@@ -1722,13 +1722,13 @@ void SwWrtShell::SetReadonlyOption(sal_Bool bSet)
 // given all styles are changed
 
 void SwWrtShell::ChangeHeaderOrFooter(
-    const OUString& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning)
+    const OUString& rStyleName, bool bHeader, bool bOn, bool bShowWarning)
 {
     addCurrentPosition();
     StartAllAction();
     StartUndo( UNDO_HEADER_FOOTER ); // #i7983#
     bool bExecute = true;
-    sal_Bool bCrsrSet = sal_False;
+    bool bCrsrSet = false;
     for( sal_uInt16 nFrom = 0, nTo = GetPageDescCnt();
             nFrom < nTo; ++nFrom )
     {
@@ -1741,7 +1741,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
                 ( (bHeader && aDesc.GetMaster().GetHeader().IsActive()) ||
                   (!bHeader && aDesc.GetMaster().GetFooter().IsActive()) ) )
             {
-                bShowWarning = sal_False;
+                bShowWarning = false;
                 //Actions have to be closed while the dialog is showing
                 EndAllAction();
 

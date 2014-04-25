@@ -118,7 +118,7 @@ SwXTextPortion::SwXTextPortion(
     const SwUnoCrsr* pPortionCrsr,
     SwTxtRuby const& rAttr,
     uno::Reference< text::XText > const& xParent,
-    sal_Bool bIsEnd )
+    bool bIsEnd )
     : m_pImpl(new Impl)
     , m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
@@ -346,7 +346,7 @@ void SwXTextPortion::GetPropertyValue(
             break;
             case FN_UNO_IS_START:
             {
-                sal_Bool bStart = sal_True, bPut = sal_True;
+                bool bStart = true, bPut = true;
                 switch (m_ePortionType)
                 {
                     case PORTION_REFMARK_START:
@@ -363,10 +363,10 @@ void SwXTextPortion::GetPropertyValue(
                     case PORTION_REDLINE_END:
                     case PORTION_RUBY_END:
                     case PORTION_FIELD_END:
-                        bStart = sal_False;
+                        bStart = false;
                     break;
                     default:
-                        bPut = sal_False;
+                        bPut = false;
                 }
                 if(bPut)
                     rVal.setValue(&bStart, ::getBooleanCppuType());
@@ -605,7 +605,7 @@ uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SwXTextPortion::getPr
     SolarMutexGuard aGuard;
 
     uno::Sequence< beans::GetDirectPropertyTolerantResult > aTmpRes(
-            GetPropertyValuesTolerant_Impl( rPropertyNames, sal_False ) );
+            GetPropertyValuesTolerant_Impl( rPropertyNames, false ) );
     const beans::GetDirectPropertyTolerantResult *pTmpRes = aTmpRes.getConstArray();
 
     // copy temporary result to final result type
@@ -622,12 +622,12 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return GetPropertyValuesTolerant_Impl( rPropertyNames, sal_True );
+    return GetPropertyValuesTolerant_Impl( rPropertyNames, true );
 }
 
 uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPropertyValuesTolerant_Impl(
         const uno::Sequence< OUString >& rPropertyNames,
-        sal_Bool bDirectValuesOnly )
+        bool bDirectValuesOnly )
     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;

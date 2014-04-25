@@ -31,11 +31,11 @@ class SW_DLLPUBLIC SwNoTxtNode : public SwCntntNode
     friend class SwNoTxtFrm;
 
     PolyPolygon *pContour;
-    sal_Bool bAutomaticContour : 1; // automatic contour polygon, not manipulated
-    sal_Bool bContourMapModeValid : 1; // contour map mode is not the graphics's
+    bool bAutomaticContour : 1; // automatic contour polygon, not manipulated
+    bool bContourMapModeValid : 1; // contour map mode is not the graphics's
                                    // preferred map mode, but either
                                       // MM100 or or pixel
-    sal_Bool bPixelContour : 1;     // contour map mode is invalid and pixel.
+    bool bPixelContour : 1;     // contour map mode is invalid and pixel.
 
     // Creates for all derivations an AttrSet with ranges for frame- and
     // graphics-attributes (only called by SwCntntNode).
@@ -66,25 +66,25 @@ public:
     void SetDescription( const OUString& rDescription, bool bBroadcast = false );
 
     void               SetContour( const PolyPolygon *pPoly,
-                                   sal_Bool bAutomatic = sal_False );
+                                   bool bAutomatic = false );
     const PolyPolygon *HasContour() const;
-    sal_Bool               _HasContour() const { return pContour!=0; };
+    bool               _HasContour() const { return pContour!=0; };
     void               GetContour( PolyPolygon &rPoly ) const;
     void               CreateContour();
 
-    void               SetAutomaticContour( sal_Bool bSet ) { bAutomaticContour = bSet; }
-    sal_Bool               HasAutomaticContour() const { return bAutomaticContour; }
+    void               SetAutomaticContour( bool bSet ) { bAutomaticContour = bSet; }
+    bool               HasAutomaticContour() const { return bAutomaticContour; }
 
     // set either a MM100 or pixel contour
     void               SetContourAPI( const PolyPolygon *pPoly );
 
     // get either a MM100 or pixel contour, return sal_False if no contour is set.
-    sal_Bool               GetContourAPI( PolyPolygon &rPoly ) const;
+    bool               GetContourAPI( PolyPolygon &rPoly ) const;
 
-    void               SetPixelContour( sal_Bool bSet ) { bPixelContour = bSet; }
-    sal_Bool               IsPixelContour() const;
+    void               SetPixelContour( bool bSet ) { bPixelContour = bSet; }
+    bool               IsPixelContour() const;
 
-    sal_Bool               IsContourMapModeValid() const { return bContourMapModeValid; }
+    bool               IsContourMapModeValid() const { return bContourMapModeValid; }
 
     // Obtains the graphic with SwapIn for GrfNode via GetData for OLE.
     Graphic GetGraphic() const;

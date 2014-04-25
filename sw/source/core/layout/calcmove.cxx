@@ -152,7 +152,7 @@ bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool & )
                    ( pNewUpper->IsColBodyFrm() &&
                      !pNewUpper->GetUpper()->GetPrev() &&
                      !pNewUpper->GetUpper()->GetNext() ) ) ) )
-                nSpace += pNewUpper->Grow( LONG_MAX, sal_True );
+                nSpace += pNewUpper->Grow( LONG_MAX, true );
 
             if ( nMoveAnyway < 3 )
             {
@@ -248,8 +248,8 @@ void SwFrm::PrepareMake()
 
         const bool bCnt = IsCntntFrm();
         const bool bTab = IsTabFrm();
-        sal_Bool bNoSect = IsInSct();
-        sal_Bool bOldTabLock = sal_False, bFoll = sal_False;
+        bool bNoSect = IsInSct();
+        bool bOldTabLock = false, bFoll = false;
         SwFlowFrm* pThis = bCnt ? (SwCntntFrm*)this : NULL;
 
         if ( bTab )
@@ -263,10 +263,9 @@ void SwFrm::PrepareMake()
         {
             pThis = (SwSectionFrm*)this;
             bFoll = pThis->IsFollow();
-            bNoSect = sal_False;
+            bNoSect = false;
         }
-        else if ( bCnt && sal_True == (bFoll = pThis->IsFollow()) &&
-             GetPrev() )
+        else if ( bCnt && (bFoll = pThis->IsFollow()) && GetPrev() )
         {
             //Do not follow the chain when we need only one instance
             const SwTxtFrm* pMaster = ((SwCntntFrm*)this)->FindMaster();
@@ -372,9 +371,9 @@ void SwFrm::PrepareCrsr()
 
         const bool bCnt = IsCntntFrm();
         const bool bTab = IsTabFrm();
-        sal_Bool bNoSect = IsInSct();
+        bool bNoSect = IsInSct();
 
-        sal_Bool bOldTabLock = sal_False, bFoll;
+        bool bOldTabLock = false, bFoll;
         SwFlowFrm* pThis = bCnt ? (SwCntntFrm*)this : NULL;
 
         if ( bTab )
@@ -386,7 +385,7 @@ void SwFrm::PrepareCrsr()
         else if( IsSctFrm() )
         {
             pThis = (SwSectionFrm*)this;
-            bNoSect = sal_False;
+            bNoSect = false;
         }
         bFoll = pThis && pThis->IsFollow();
 
@@ -462,7 +461,7 @@ void SwFrm::MakePos()
 {
     if ( !mbValidPos )
     {
-        mbValidPos = sal_True;
+        mbValidPos = true;
         bool bUseUpper = false;
         SwFrm* pPrv = lcl_Prev( this );
         if ( pPrv &&
@@ -492,7 +491,7 @@ void SwFrm::MakePos()
             maFrm.Pos( pPrv->Frm().Pos() );
             if( FRM_NEIGHBOUR & nMyType )
             {
-                sal_Bool bR2L = IsRightToLeft();
+                bool bR2L = IsRightToLeft();
                 if( bR2L )
                     (maFrm.*fnRect->fnSetPosX)( (maFrm.*fnRect->fnGetLeft)() -
                                                (maFrm.*fnRect->fnGetWidth)() );
@@ -546,7 +545,7 @@ void SwFrm::MakePos()
                 maFrm.Pos( pPrv->Frm().Pos() );
                 if( FRM_NEIGHBOUR & nMyType )
                 {
-                    sal_Bool bR2L = IsRightToLeft();
+                    bool bR2L = IsRightToLeft();
                     if( bR2L )
                         (maFrm.*fnRect->fnSetPosX)( (maFrm.*fnRect->fnGetLeft)() -
                                                  (maFrm.*fnRect->fnGetWidth)() );
@@ -597,7 +596,7 @@ void SwFrm::MakePos()
 
         if( IsBodyFrm() && bVert && !bVertL2R && !mbReverse && GetUpper() )
             maFrm.Pos().setX(maFrm.Pos().getX() + GetUpper()->Prt().Width() - maFrm.Width());
-        mbValidPos = sal_True;
+        mbValidPos = true;
     }
 }
 
@@ -645,7 +644,7 @@ void SwPageFrm::MakeAll()
     {
         if ( !mbValidPos )
         {
-            mbValidPos = sal_True; // positioning of the pages is taken care of by the root frame
+            mbValidPos = true; // positioning of the pages is taken care of by the root frame
         }
 
         if ( !mbValidSize || !mbValidPrtArea )
@@ -655,7 +654,7 @@ void SwPageFrm::MakeAll()
                 Frm().Width( 0 );  Prt().Width( 0 );
                 Frm().Height( 0 ); Prt().Height( 0 );
                 Prt().Left( 0 );   Prt().Top( 0 );
-                mbValidSize = mbValidPrtArea = sal_True;
+                mbValidSize = mbValidPrtArea = true;
             }
             else
             {
@@ -755,7 +754,7 @@ void SwPageFrm::MakeAll()
                     Prt().Width( Frm().Width() - ( Prt().Left()
                         + pAttrs->CalcRightLine() + aBorder.Width() ) );
                     Prt().Height( Frm().Height() - (nTop + nBottom) );
-                    mbValidSize = mbValidPrtArea = sal_True;
+                    mbValidSize = mbValidPrtArea = true;
                 }
                 else
                 {   // Set FixSize. For pages, this is not done from Upper, but from
@@ -799,14 +798,14 @@ void SwLayoutFrm::MakeAll()
             if ( IsLeaveUpperAllowed() )
             {
                 if ( !mbValidSize )
-                    mbValidPrtArea = sal_False;
+                    mbValidPrtArea = false;
             }
             else
             {
                 if ( !mbValidSize )
                 {
                     // Set FixSize; VarSize is set by Format() after calculating the PrtArea
-                    mbValidPrtArea = sal_False;
+                    mbValidPrtArea = false;
 
                     SwTwips nPrtWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
                     if( bVert && ( IsBodyFrm() || IsFtnContFrm() ) )
@@ -835,7 +834,7 @@ void SwLayoutFrm::MakeAll()
                     // Don't leave your upper
                     const SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
                     if( (Frm().*fnRect->fnOverStep)( nDeadLine ) )
-                        mbValidSize = sal_False;
+                        mbValidSize = false;
                 }
             }
         }
@@ -883,13 +882,13 @@ bool SwFrm::IsCollapse() const
     return pTxtNode && pTxtNode->IsCollapse();
 }
 
-sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
+bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 {
-    sal_Bool bSizeChgd = sal_False;
+    bool bSizeChgd = false;
 
     if ( !mbValidPrtArea )
     {
-        mbValidPrtArea = sal_True;
+        mbValidPrtArea = true;
 
         SWRECTFN( this )
         const bool bTxtFrm = IsTxtFrm();
@@ -934,7 +933,7 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                     // <SwSortedObjs> entries
                     SwAnchoredObject* pObj = (*GetDrawObjs())[i];
                     const SwFrmFmt& rFmt = pObj->GetFrmFmt();
-                    const sal_Bool bFly = pObj->ISA(SwFlyFrm);
+                    const bool bFly = pObj->ISA(SwFlyFrm);
                     if ((bFly && (FAR_AWAY == pObj->GetObjRect().Width()))
                         || rFmt.GetFrmSize().GetWidthPercent())
                     {
@@ -1003,7 +1002,7 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                 GrowFrm( nUpper );
             else
                 ShrinkFrm( -nUpper );
-            bSizeChgd = sal_True;
+            bSizeChgd = true;
         }
     }
     return bSizeChgd;
@@ -1017,8 +1016,8 @@ inline void ValidateSz( SwFrm *pFrm )
 {
     if ( pFrm )
     {
-        pFrm->mbValidSize = sal_True;
-        pFrm->mbValidPrtArea = sal_True;
+        pFrm->mbValidSize = true;
+        pFrm->mbValidPrtArea = true;
     }
 }
 
@@ -1086,10 +1085,10 @@ void SwCntntFrm::MakeAll()
                                             // didn't keep it's promise, we can act in a
                                             // controlled fashion.
     bool bMoveable;
-    const sal_Bool bFly = IsInFly();
-    const sal_Bool bTab = IsInTab();
-    const sal_Bool bFtn = IsInFtn();
-    const sal_Bool bSct = IsInSct();
+    const bool bFly = IsInFly();
+    const bool bTab = IsInTab();
+    const bool bFtn = IsInFtn();
+    const bool bSct = IsInSct();
     Point aOldFrmPos;               // This is so we can compare with the last pos
     Point aOldPrtPos;               // and determine whether it makes sense to Prepare
 
@@ -1102,7 +1101,7 @@ void SwCntntFrm::MakeAll()
         pNotify->SetBordersJoinedWithPrev();
     }
 
-    const sal_Bool bKeep = IsKeep( rAttrs.GetAttrSet() );
+    const bool bKeep = IsKeep( rAttrs.GetAttrSet() );
 
     SwSaveFtnHeight *pSaveFtn = 0;
     if ( bFtn )
@@ -1146,7 +1145,7 @@ void SwCntntFrm::MakeAll()
              IsMoveable() )
         {
             bMovedFwd = true;
-            MoveFwd( bMakePage, sal_False );
+            MoveFwd( bMakePage, false );
         }
     }
 
@@ -1162,7 +1161,7 @@ void SwCntntFrm::MakeAll()
         {
             lcl_Prev( this )->InvalidatePrt();
         }
-        MoveFwd( bMakePage, sal_False );
+        MoveFwd( bMakePage, false );
     }
 
     // OD 08.11.2002 #104840# - check footnote content for forward move.
@@ -1182,7 +1181,7 @@ void SwCntntFrm::MakeAll()
                  pFtnBossOfFtn->IsBefore( pFtnBossOfRef ) )
             {
                 bMovedFwd = true;
-                MoveFwd( bMakePage, sal_False );
+                MoveFwd( bMakePage, false );
             }
         }
     }
@@ -1242,7 +1241,7 @@ void SwCntntFrm::MakeAll()
                  (Frm().*fnRect->fnGetWidth)() == 0 &&
                  (Prt().*fnRect->fnGetWidth)() == 0 )
             {
-                mbValidPrtArea = sal_False;
+                mbValidPrtArea = false;
             }
 
             (Frm().*fnRect->fnSetWidth)( nNewFrmWidth );
@@ -1284,7 +1283,7 @@ void SwCntntFrm::MakeAll()
                 if ( !bNoPrepAdjustFrm )
                 {
                     Prepare( PREP_ADJUST_FRM );
-                    mbValidSize = sal_False;
+                    mbValidSize = false;
                 }
             }
         }
@@ -1295,13 +1294,13 @@ void SwCntntFrm::MakeAll()
         // - It needs to overlap with the lower edge of the PrtArea of the Upper
         if ( !bMustFit )
         {
-            sal_Bool bWidow = sal_True;
+            bool bWidow = true;
             const SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
             if ( bMoveable && !bFormatted && ( GetFollow() ||
                  ( (Frm().*fnRect->fnOverStep)( nDeadLine ) ) ) )
             {
                 Prepare( PREP_WIDOWS_ORPHANS, 0, false );
-                mbValidSize = bWidow = sal_False;
+                mbValidSize = bWidow = false;
             }
             if( (Frm().*fnRect->fnGetPos)() != aOldFrmPos ||
                 (Prt().*fnRect->fnGetPos)() != aOldPrtPos )
@@ -1312,7 +1311,7 @@ void SwCntntFrm::MakeAll()
                 if ( bWidow && GetFollow() )
                 {
                     Prepare( PREP_WIDOWS_ORPHANS, 0, false );
-                    mbValidSize = sal_False;
+                    mbValidSize = false;
                 }
             }
         }
@@ -1321,7 +1320,7 @@ void SwCntntFrm::MakeAll()
             mbValidSize = bFormatted = sal_True;
             ++nFormatCount;
             if( nFormatCount > STOP_FLY_FORMAT )
-                SetFlyLock( sal_True );
+                SetFlyLock( true );
             // - loop prevention
             // No format any longer, if <cnStopFormat> consequetive formats
             // without change occur.
@@ -1353,7 +1352,7 @@ void SwCntntFrm::MakeAll()
             bFormatted = sal_False;
             if ( bKeep && bMoveable )
             {
-                if( CheckMoveFwd( bMakePage, sal_False, bMovedBwd ) )
+                if( CheckMoveFwd( bMakePage, false, bMovedBwd ) )
                 {
                     bMovedFwd = true;
                     bMoveable = IsMoveable();
@@ -1405,10 +1404,10 @@ void SwCntntFrm::MakeAll()
                         {
                             SwSectionFrm* pNxtSct = pNxt->FindSctFrm();
                             if( pNxtSct && pSct->IsAnFollow( pNxtSct ) )
-                                mbValidPos = sal_False;
+                                mbValidPos = false;
                         }
                         else
-                            mbValidPos = sal_False;
+                            mbValidPos = false;
                     }
                 }
             }
@@ -1429,7 +1428,7 @@ void SwCntntFrm::MakeAll()
                  nFormatCount <= STOP_FLY_FORMAT &&
                  !GetDrawObjs() )
             {
-                mbValidPos = sal_False;
+                mbValidPos = false;
                 MakePos();
                 aOldFrmPos = (Frm().*fnRect->fnGetPos)();
                 aOldPrtPos = (Prt().*fnRect->fnGetPos)();
@@ -1559,7 +1558,7 @@ void SwCntntFrm::MakeAll()
                 if ( nTmp > 0 && WouldFit( nTmp, bSplit, false ) )
                 {
                     Prepare( PREP_WIDOWS_ORPHANS, 0, false );
-                    mbValidSize = sal_False;
+                    mbValidSize = false;
                     bFitPromise = true;
                     continue;
                 }
@@ -1603,10 +1602,10 @@ void SwCntntFrm::MakeAll()
             bMovedFwd = false;
         }
 
-        const sal_Bool bCheckForGrownBody = pOldUp->IsBodyFrm();
+        const bool bCheckForGrownBody = pOldUp->IsBodyFrm();
         const long nOldBodyHeight = (pOldUp->Frm().*fnRect->fnGetHeight)();
 
-        if ( !bMovedFwd && !MoveFwd( bMakePage, sal_False ) )
+        if ( !bMovedFwd && !MoveFwd( bMakePage, false ) )
             bMakePage = false;
         SWREFRESHFN( this )
 
@@ -1633,7 +1632,7 @@ void SwCntntFrm::MakeAll()
             if ( nConsequetiveFormatsWithoutChange <= cnStopFormat )
             {
                 Prepare( PREP_MUST_FIT, 0, false );
-                mbValidSize = sal_False;
+                mbValidSize = false;
                 bMustFit = true;
                 continue;
             }
@@ -1678,7 +1677,7 @@ void SwCntntFrm::MakeAll()
         pNotify->SetInvalidatePrevPrtArea();
     }
     delete pNotify;
-    SetFlyLock( sal_False );
+    SetFlyLock( false );
 }
 
 void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
@@ -1686,10 +1685,10 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
     // fix(25455): Validate, otherwise this leads to a recursion.
     // The first try, cancelling with pFrm = 0 if !Valid, leads to a problem, as
     // the Keep may not be considered properly anymore (27417).
-    const sal_Bool bOldPos = pFrm->GetValidPosFlag();
-    const sal_Bool bOldSz  = pFrm->GetValidSizeFlag();
-    const sal_Bool bOldPrt = pFrm->GetValidPrtAreaFlag();
-    pFrm->mbValidPos = pFrm->mbValidPrtArea = pFrm->mbValidSize = sal_True;
+    const bool bOldPos = pFrm->GetValidPosFlag();
+    const bool bOldSz  = pFrm->GetValidSizeFlag();
+    const bool bOldPrt = pFrm->GetValidPrtAreaFlag();
+    pFrm->mbValidPos = pFrm->mbValidPrtArea = pFrm->mbValidSize = true;
 
     // fix(29272): Don't call MakeAll - there, pFrm might be invalidated again, and
     // we recursively end up in here again.
@@ -1745,9 +1744,9 @@ static bool lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
     return pFrm && pNxt && pFrm->GetNext() == pNxt;
 }
 
-sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
+bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                             SwLayoutFrm *pNewUpper,
-                            sal_Bool bTstMove,
+                            bool bTstMove,
                             const bool bObjsInNewUpper )
 {
     // To have the footnote select it's place carefully, it needs
@@ -1757,11 +1756,11 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
     if ( IsInFtn() )
     {
         if( !lcl_IsNextFtnBoss( pNewUpper, this ) )
-            return sal_True;
+            return true;
         pFtnFrm = FindFtnFrm();
     }
 
-    sal_Bool bRet;
+    bool bRet;
     bool bSplit = !pNewUpper->Lower();
     SwCntntFrm *pFrm = this;
     const SwFrm *pTmpPrev = pNewUpper->Lower();
@@ -1805,7 +1804,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                  )
                )
             {
-                bTstMove = sal_True;
+                bTstMove = true;
                 bRet = ((SwTxtFrm*)pFrm)->TestFormat( pTmpPrev, nSpace, bSplit );
             }
             else
@@ -1835,7 +1834,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
 
                 // in balanced columned section frames we do not want the
                 // common border
-                sal_Bool bCommonBorder = sal_True;
+                bool bCommonBorder = true;
                 if ( pFrm->IsInSct() && pFrm->GetUpper()->IsColBodyFrm() )
                 {
                     const SwSectionFrm* pSct = pFrm->FindSctFrm();
@@ -1871,7 +1870,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
 
             if ( nSpace < 0 )
             {
-                bRet = sal_False;
+                bRet = false;
 
                 // #i46181#
                 if ( nSecondCheck > 0 )
@@ -1888,7 +1887,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                     const bool bSecondRet = nOldSpace >= 0 && pFrm->WouldFit( nOldSpace, bOldSplit, false );
                     if ( bSecondRet && bOldSplit && nOldSpace >= 0 )
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         bSplit = true;
                     }
                 }
@@ -1902,7 +1901,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
             nSpace -= rAttrs.GetULSpace().GetLower();
             if ( nSpace < 0 )
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
 
@@ -1920,7 +1919,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                 if ( IsAnFollow( pFrm ) && !pFrm->IsValid() )
                 {
                     OSL_FAIL( "Only a warning for task 108824:/n<SwCntntFrm::_WouldFit(..) - follow not valid!" );
-                    return sal_True;
+                    return true;
                 }
             }
             SwFrm *pNxt;
@@ -1935,7 +1934,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                 if ( bTstMove &&
                      ( pNxt->GetDrawObjs() || bObjsInNewUpper ) )
                 {
-                    return sal_True;
+                    return true;
                 }
 
                 if ( !pNxt->IsValid() )

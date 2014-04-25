@@ -36,13 +36,13 @@ public:
     PageOrientationControl(
         Window* pParent,
         PagePropertyPanel& rPanel,
-        const sal_Bool bLandscape );
+        const bool bLandscape );
     virtual ~PageOrientationControl(void);
 
 private:
     ::svx::sidebar::ValueSetWithTextControl* mpOrientationValueSet;
 
-    sal_Bool mbLandscape;
+    bool mbLandscape;
 
     PagePropertyPanel& mrPagePropPanel;
 

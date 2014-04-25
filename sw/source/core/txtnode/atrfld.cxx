@@ -115,7 +115,7 @@ SwFmtFld::~SwFmtFld()
     // bei einige FeldTypen muessen wir den FeldTypen noch loeschen
     if( pType && pType->IsLastDepend() )
     {
-        sal_Bool bDel = sal_False;
+        bool bDel = false;
         switch( pType->Which() )
         {
         case RES_USERFLD:
@@ -290,7 +290,7 @@ bool SwFmtFld::IsFldInDoc() const
            && mpTxtFld->IsFldInDoc();
 }
 
-sal_Bool SwFmtFld::IsProtect() const
+bool SwFmtFld::IsProtect() const
 {
     return mpTxtFld != NULL
            && mpTxtFld->GetpTxtNode() != NULL

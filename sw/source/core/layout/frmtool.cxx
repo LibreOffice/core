@@ -62,7 +62,7 @@
 #include <switerator.hxx>
 
 // ftnfrm.cxx:
-void sw_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes );
+void sw_RemoveFtns( SwFtnBossFrm* pBoss, bool bPageOnly, bool bEndNotes );
 
 using namespace ::com::sun::star;
 
@@ -71,13 +71,13 @@ bool bDontCreateObjects = false;
 bool bSetCompletePaintOnInvalidate = false;
 
 sal_uInt8 StackHack::nCnt = 0;
-sal_Bool StackHack::bLocked = sal_False;
+bool StackHack::bLocked = false;
 
 SwFrmNotify::SwFrmNotify( SwFrm *pF ) :
     pFrm( pF ),
     aFrm( pF->Frm() ),
     aPrt( pF->Prt() ),
-    bInvaKeep( sal_False ),
+    bInvaKeep( false ),
     bValidSize( pF->GetValidSizeFlag() ),
     mbFrmDeleted( false )     // #i49383#
 {
@@ -396,7 +396,7 @@ SwFrmNotify::~SwFrmNotify()
 
 SwLayNotify::SwLayNotify( SwLayoutFrm *pLayFrm ) :
     SwFrmNotify( pLayFrm ),
-    bLowersComplete( sal_False )
+    bLowersComplete( false )
 {
 }
 
@@ -451,10 +451,10 @@ SwLayNotify::~SwLayNotify()
                 bInvaPercent = true;
                 long nNew = (pLay->Prt().*fnRect->fnGetHeight)();
                 if( nNew != (aPrt.*fnRect->fnGetHeight)() )
-                     ((SwRowFrm*)pLay)->AdjustCells( nNew, sal_True);
+                     ((SwRowFrm*)pLay)->AdjustCells( nNew, true);
                 if( (pLay->Prt().*fnRect->fnGetWidth)()
                     != (aPrt.*fnRect->fnGetWidth)() )
-                     ((SwRowFrm*)pLay)->AdjustCells( 0, sal_False );
+                     ((SwRowFrm*)pLay)->AdjustCells( 0, false );
             }
             else
             {
@@ -865,7 +865,7 @@ SwCntntNotify::~SwCntntNotify()
 
                 if ( pFESh && pNd->IsOLESizeInvalid() )
                 {
-                    pNd->SetOLESizeInvalid( sal_False );
+                    pNd->SetOLESizeInvalid( false );
                     pFESh->CalcAndSetScale( xObj ); // create client
                 }
             }
@@ -1110,15 +1110,15 @@ void AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
         {
             SwFrmFmt *pFmt = (SwFrmFmt*)aCpy[ sal_uInt16(i) ];
             const SwFmtAnchor &rAnch = pFmt->GetAnchor();
-            sal_Bool bRemove = sal_False;
+            bool bRemove = false;
             if ((rAnch.GetAnchorId() == FLY_AT_PAGE) ||
                 (rAnch.GetAnchorId() == FLY_AS_CHAR))
             {
                 //Page bounded are already anchored, character bounded
                 //I don't want here.
-                bRemove = sal_True;
+                bRemove = true;
             }
-            else if ( sal_False == (bRemove = ::lcl_ObjConnected( pFmt, pSib )) ||
+            else if ( false == (bRemove = ::lcl_ObjConnected( pFmt, pSib )) ||
                       ::lcl_InHeaderOrFooter( *pFmt ) )
             {
             // OD 23.06.2003 #108784# - correction: for objects in header
@@ -1158,14 +1158,14 @@ static void lcl_SetPos( SwFrm&             _rNewFrm,
 }
 
 void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
-                             sal_uLong nIndex, sal_Bool bPages, sal_uLong nEndIndex,
+                             sal_uLong nIndex, bool bPages, sal_uLong nEndIndex,
                              SwFrm *pPrv )
 {
     pDoc->BlockIdling();
     SwRootFrm* pLayout = pLay->getRootFrm();
-    const sal_Bool bOldCallbackActionEnabled = pLayout ? pLayout->IsCallbackActionEnabled() : sal_False;
+    const bool bOldCallbackActionEnabled = pLayout ? pLayout->IsCallbackActionEnabled() : sal_False;
     if( bOldCallbackActionEnabled )
-        pLayout->SetCallbackActionEnabled( sal_False );
+        pLayout->SetCallbackActionEnabled( false );
 
     //In the generation of the Layout will be bPage with sal_True handed over.
     //Then will be new pages generated all x paragraphs already times in advance.
@@ -1186,7 +1186,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     SwPageFrm *pPage = pLay->FindPageFrm();
     const SwFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
     SwFrm       *pFrm = 0;
-    sal_Bool   bBreakAfter   = sal_False;
+    bool   bBreakAfter   = false;
 
     SwActualSection *pActualSection = 0;
     SwLayHelper *pPageMaker;
@@ -1475,7 +1475,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 if( ! pOuterSectionFrm->IsColLocked() &&
                     ! pOuterSectionFrm->ContainsCntnt() )
                 {
-                    pOuterSectionFrm->DelEmpty( sal_True );
+                    pOuterSectionFrm->DelEmpty( true );
                     delete pOuterSectionFrm;
                 }
                 pActualSection->SetSectionFrm( (SwSectionFrm*)pFrm );
@@ -1562,21 +1562,21 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                                             pDoc->GetNodes()[ nEndIdx-1 ]);
     if ( pNd )
     {
-        sal_Bool bApres = aTmp < rSttIdx;
+        bool bApres = aTmp < rSttIdx;
         SwNode2Layout aNode2Layout( *pNd, rSttIdx.GetIndex() );
         SwFrm* pFrm;
         while( 0 != (pFrm = aNode2Layout.NextFrm()) )
         {
             SwLayoutFrm *pUpper = pFrm->GetUpper();
             SwFtnFrm* pFtnFrm = pUpper->FindFtnFrm();
-            sal_Bool bOldLock, bOldFtn;
+            bool bOldLock, bOldFtn;
             if( pFtnFrm )
             {
                 bOldFtn = pFtnFrm->IsColLocked();
                 pFtnFrm->ColLock();
             }
             else
-                bOldFtn = sal_True;
+                bOldFtn = true;
             SwSectionFrm* pSct = pUpper->FindSctFrm();
             // Inside of footnotes only those areas are interesting that are inside of them. But
             // not the ones (e.g. column areas) in which are the footnote containers positioned.
@@ -1589,7 +1589,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 pSct->ColLock();
             }
             else
-                bOldLock = sal_True;
+                bOldLock = true;
 
             // If pFrm cannot be moved, it is not possible to move it to the next page. This applies
             // also for frames (in the first column of a frame pFrm is moveable) and column
@@ -1680,9 +1680,9 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                     SwFrm* pOldUp = pTmp->GetFrm()->GetUpper();
                     // MoveFwd==sal_True means that we are still on the same page.
                     // But since we want to move if possible!
-                    sal_Bool bTmpOldLock = pTmp->IsJoinLocked();
+                    bool bTmpOldLock = pTmp->IsJoinLocked();
                     pTmp->LockJoin();
-                    while( pTmp->MoveFwd( sal_True, sal_False, sal_True ) )
+                    while( pTmp->MoveFwd( true, false, true ) )
                     {
                         if( pOldUp == pTmp->GetFrm()->GetUpper() )
                             break;
@@ -1696,7 +1696,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
             }
             else
             {
-                sal_Bool bSplit;
+                bool bSplit;
                 SwFrm* pPrv = bApres ? pFrm : pFrm->GetPrev();
                 // If the section frame is inserted into another one, it must be split.
                 if( pSct && rSttIdx.GetNode().IsSectionNode() )
@@ -1709,9 +1709,9 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                     }
                 }
                 else
-                    bSplit = sal_False;
+                    bSplit = false;
 
-                ::_InsertCnt( pUpper, pDoc, rSttIdx.GetIndex(), sal_False,
+                ::_InsertCnt( pUpper, pDoc, rSttIdx.GetIndex(), false,
                               nEndIdx, pPrv );
                 // OD 23.06.2003 #108784# - correction: append objects doesn't
                 // depend on value of <bAllowMove>
@@ -1733,7 +1733,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
             }
 
             SwPageFrm *pPage = pUpper->FindPageFrm();
-            SwFrm::CheckPageDescs( pPage, sal_False );
+            SwFrm::CheckPageDescs( pPage, false );
             if( !bOldFtn )
                 pFtnFrm->ColUnlock();
             if( !bOldLock )
@@ -1743,7 +1743,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 // sections) and can be destroyed in such cases.
                 if( !pSct->ContainsCntnt() )
                 {
-                    pSct->DelEmpty( sal_True );
+                    pSct->DelEmpty( true );
                     pUpper->getRootFrm()->RemoveFromList( pSct );
                     delete pSct;
                 }
@@ -1782,20 +1782,20 @@ SwBorderAttrs::SwBorderAttrs( const SwModify *pMod, const SwFrm *pConstructor ) 
 
     // everything needs to be calculated at least once:
     bTopLine = bBottomLine = bLeftLine = bRightLine =
-    bTop     = bBottom     = bLine   = sal_True;
+    bTop     = bBottom     = bLine   = true;
 
-    bCacheGetLine = bCachedGetTopLine = bCachedGetBottomLine = sal_False;
+    bCacheGetLine = bCachedGetTopLine = bCachedGetBottomLine = false;
     // OD 21.05.2003 #108789# - init cache status for values <bJoinedWithPrev>
     // and <bJoinedWithNext>, which aren't initialized by default.
-    bCachedJoinedWithPrev = sal_False;
-    bCachedJoinedWithNext = sal_False;
+    bCachedJoinedWithPrev = false;
+    bCachedJoinedWithNext = false;
 
     bBorderDist = 0 != (pConstructor->GetType() & (FRM_CELL));
 }
 
 SwBorderAttrs::~SwBorderAttrs()
 {
-    ((SwModify*)pOwner)->SetInCache( sal_False );
+    ((SwModify*)pOwner)->SetInCache( false );
 }
 
 /* All calc methods calculate a safety distance in addition to the values given by the attributes.
@@ -1806,13 +1806,13 @@ SwBorderAttrs::~SwBorderAttrs()
 void SwBorderAttrs::_CalcTop()
 {
     nTop = CalcTopLine() + rUL.GetUpper();
-    bTop = sal_False;
+    bTop = false;
 }
 
 void SwBorderAttrs::_CalcBottom()
 {
     nBottom = CalcBottomLine() + rUL.GetLower();
-    bBottom = sal_False;
+    bBottom = false;
 }
 
 long SwBorderAttrs::CalcRight( const SwFrm* pCaller ) const
@@ -1919,7 +1919,7 @@ void SwBorderAttrs::_CalcTopLine()
                             ? rBox.GetDistance  (BOX_LINE_TOP)
                             : rBox.CalcLineSpace(BOX_LINE_TOP);
     nTopLine = nTopLine + rShadow.CalcShadowSpace(SHADOW_TOP);
-    bTopLine = sal_False;
+    bTopLine = false;
 }
 
 void SwBorderAttrs::_CalcBottomLine()
@@ -1928,7 +1928,7 @@ void SwBorderAttrs::_CalcBottomLine()
                             ? rBox.GetDistance  (BOX_LINE_BOTTOM)
                             : rBox.CalcLineSpace(BOX_LINE_BOTTOM);
     nBottomLine = nBottomLine + rShadow.CalcShadowSpace(SHADOW_BOTTOM);
-    bBottomLine = sal_False;
+    bBottomLine = false;
 }
 
 void SwBorderAttrs::_CalcLeftLine()
@@ -1937,7 +1937,7 @@ void SwBorderAttrs::_CalcLeftLine()
                             ? rBox.GetDistance  (BOX_LINE_LEFT)
                             : rBox.CalcLineSpace(BOX_LINE_LEFT);
     nLeftLine = nLeftLine + rShadow.CalcShadowSpace(SHADOW_LEFT);
-    bLeftLine = sal_False;
+    bLeftLine = false;
 }
 
 void SwBorderAttrs::_CalcRightLine()
@@ -1946,14 +1946,14 @@ void SwBorderAttrs::_CalcRightLine()
                             ? rBox.GetDistance  (BOX_LINE_RIGHT)
                             : rBox.CalcLineSpace(BOX_LINE_RIGHT);
     nRightLine = nRightLine + rShadow.CalcShadowSpace(SHADOW_RIGHT);
-    bRightLine = sal_False;
+    bRightLine = false;
 }
 
 void SwBorderAttrs::_IsLine()
 {
     bIsLine = rBox.GetTop() || rBox.GetBottom() ||
               rBox.GetLeft()|| rBox.GetRight();
-    bLine = sal_False;
+    bLine = false;
 }
 
 /* The borders of neighboring paragraphs are condensed by following algorithm:
@@ -1975,7 +1975,7 @@ inline bool CmpLines( const editeng::SvxBorderLine *pL1, const editeng::SvxBorde
 // OD 21.05.2003 #108789# - compare <CalcRight()> and <rCmpAttrs.CalcRight()>
 //          instead of only the right LR-spacing, because R2L-layout has to be
 //          considered.
-sal_Bool SwBorderAttrs::CmpLeftRight( const SwBorderAttrs &rCmpAttrs,
+bool SwBorderAttrs::CmpLeftRight( const SwBorderAttrs &rCmpAttrs,
                                   const SwFrm *pCaller,
                                   const SwFrm *pCmp ) const
 {
@@ -1986,10 +1986,10 @@ sal_Bool SwBorderAttrs::CmpLeftRight( const SwBorderAttrs &rCmpAttrs,
              CalcRight( pCaller ) == rCmpAttrs.CalcRight( pCmp ) );
 }
 
-sal_Bool SwBorderAttrs::_JoinWithCmp( const SwFrm& _rCallerFrm,
+bool SwBorderAttrs::_JoinWithCmp( const SwFrm& _rCallerFrm,
                                   const SwFrm& _rCmpFrm ) const
 {
-    sal_Bool bReturnVal = sal_False;
+    bool bReturnVal = false;
 
     SwBorderAttrAccess aCmpAccess( SwFrm::GetCache(), &_rCmpFrm );
     const SwBorderAttrs &rCmpAttrs = *aCmpAccess.Get();
@@ -1999,7 +1999,7 @@ sal_Bool SwBorderAttrs::_JoinWithCmp( const SwFrm& _rCallerFrm,
          CmpLeftRight( rCmpAttrs, &_rCallerFrm, &_rCmpFrm )
        )
     {
-        bReturnVal = sal_True;
+        bReturnVal = true;
     }
 
     return bReturnVal;
@@ -2012,7 +2012,7 @@ void SwBorderAttrs::_CalcJoinedWithPrev( const SwFrm& _rFrm,
                                          const SwFrm* _pPrevFrm )
 {
     // set default
-    bJoinedWithPrev = sal_False;
+    bJoinedWithPrev = false;
 
     if ( _rFrm.IsTxtFrm() )
     {
@@ -2046,7 +2046,7 @@ void SwBorderAttrs::_CalcJoinedWithPrev( const SwFrm& _rFrm,
 void SwBorderAttrs::_CalcJoinedWithNext( const SwFrm& _rFrm )
 {
     // set default
-    bJoinedWithNext = sal_False;
+    bJoinedWithNext = false;
 
     if ( _rFrm.IsTxtFrm() )
     {
@@ -2074,7 +2074,7 @@ void SwBorderAttrs::_CalcJoinedWithNext( const SwFrm& _rFrm )
 // OD 21.05.2003 #108789# - accessor for cached values <bJoinedWithPrev>
 // OD 2004-02-26 #i25029# - add 2nd parameter <_pPrevFrm>, which is passed to
 // method <_CalcJoindWithPrev(..)>.
-sal_Bool SwBorderAttrs::JoinedWithPrev( const SwFrm& _rFrm,
+bool SwBorderAttrs::JoinedWithPrev( const SwFrm& _rFrm,
                                     const SwFrm* _pPrevFrm ) const
 {
     if ( !bCachedJoinedWithPrev || _pPrevFrm )
@@ -2086,7 +2086,7 @@ sal_Bool SwBorderAttrs::JoinedWithPrev( const SwFrm& _rFrm,
     return bJoinedWithPrev;
 }
 
-sal_Bool SwBorderAttrs::JoinedWithNext( const SwFrm& _rFrm ) const
+bool SwBorderAttrs::JoinedWithNext( const SwFrm& _rFrm ) const
 {
     if ( !bCachedJoinedWithNext )
     {
@@ -2131,19 +2131,20 @@ void SwBorderAttrs::_GetBottomLine( const SwFrm& _rFrm )
 }
 
 SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrm *pFrm ) :
-    SwCacheAccess( rCach, (pFrm->IsCntntFrm() ?
-                                (void*)((SwCntntFrm*)pFrm)->GetNode() :
-                                (void*)((SwLayoutFrm*)pFrm)->GetFmt()),
-                           (sal_Bool)(pFrm->IsCntntFrm() ?
-                ((SwModify*)((SwCntntFrm*)pFrm)->GetNode())->IsInCache() :
-                ((SwModify*)((SwLayoutFrm*)pFrm)->GetFmt())->IsInCache()) ),
+    SwCacheAccess( rCach,
+                   (pFrm->IsCntntFrm() ?
+                      (void*)((SwCntntFrm*)pFrm)->GetNode() :
+                      (void*)((SwLayoutFrm*)pFrm)->GetFmt()),
+                   (pFrm->IsCntntFrm() ?
+                      ((SwModify*)((SwCntntFrm*)pFrm)->GetNode())->IsInCache() :
+                      ((SwModify*)((SwLayoutFrm*)pFrm)->GetFmt())->IsInCache()) ),
     pConstructor( pFrm )
 {
 }
 
 SwCacheObj *SwBorderAttrAccess::NewObj()
 {
-    ((SwModify*)pOwner)->SetInCache( sal_True );
+    ((SwModify*)pOwner)->SetInCache( true );
     return new SwBorderAttrs( (SwModify*)pOwner, pConstructor );
 }
 
@@ -2152,7 +2153,7 @@ SwBorderAttrs *SwBorderAttrAccess::Get()
     return (SwBorderAttrs*)SwCacheAccess::Get();
 }
 
-SwOrderIter::SwOrderIter( const SwPageFrm *pPg, sal_Bool bFlys ) :
+SwOrderIter::SwOrderIter( const SwPageFrm *pPg, bool bFlys ) :
     pPage( pPg ),
     pCurrent( 0 ),
     bFlysOnly( bFlys )
@@ -2332,7 +2333,7 @@ static void lcl_RemoveObjsFromPage( SwFrm* _pFrm )
 SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
 {
     if( pLay->IsSctFrm() && pLay->Lower() && pLay->Lower()->IsColumnFrm() )
-        sw_RemoveFtns( (SwColumnFrm*)pLay->Lower(), sal_True, sal_True );
+        sw_RemoveFtns( (SwColumnFrm*)pLay->Lower(), true, true );
 
     SwFrm *pSav;
     if ( 0 == (pSav = pLay->ContainsAny()) )
@@ -2583,7 +2584,7 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
 }
 
 SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
-                          bool bOdd, bool bFirst, bool bInsertEmpty, sal_Bool bFtn,
+                          bool bOdd, bool bFirst, bool bInsertEmpty, bool bFtn,
                           SwFrm *pSibling )
 {
     SwPageFrm *pRet;
@@ -2839,7 +2840,7 @@ void Notify_Background( const SdrObject* pObj,
                         SwPageFrm* pPage,
                         const SwRect& rRect,
                         const PrepareHint eHint,
-                        const sal_Bool bInva )
+                        const bool bInva )
 {
     // If the frame was positioned correctly for the first time, do not inform the old area
     if ( eHint == PREP_FLY_LEAVE && rRect.Top() == FAR_AWAY )
@@ -3201,7 +3202,7 @@ void SwFrmHolder::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 }
 
 SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt16 const nFrmType,
-        const Point* pPoint, const SwPosition *pPos, const sal_Bool bCalcFrm )
+        const Point* pPoint, const SwPosition *pPos, const bool bCalcFrm )
 {
     SwFrm *pMinFrm = 0, *pTmpFrm;
     SwFrmHolder aHolder;

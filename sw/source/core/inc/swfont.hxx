@@ -68,13 +68,13 @@ class SwSubFont : public SvxFont
 
     short _CheckKerning( );
 
-    sal_Bool ChgFnt( SwViewShell *pSh, OutputDevice& rOut );
-    sal_Bool IsSymbol( SwViewShell *pSh );
+    bool ChgFnt( SwViewShell *pSh, OutputDevice& rOut );
+    bool IsSymbol( SwViewShell *pSh );
     sal_uInt16 GetAscent( SwViewShell *pSh, const OutputDevice& rOut );
     sal_uInt16 GetHeight( SwViewShell *pSh, const OutputDevice& rOut );
     Size _GetTxtSize( SwDrawTextInfo& rInf );
     Size GetCapitalSize( SwDrawTextInfo& rInf );
-    void _DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey );
+    void _DrawText( SwDrawTextInfo &rInf, const bool bGrey );
     void DrawCapital( SwDrawTextInfo &rInf );
     void DrawStretchCapital( SwDrawTextInfo &rInf );
     void DoOnCapitals( SwDoCapitals &rDo );
@@ -91,11 +91,11 @@ class SwSubFont : public SvxFont
     inline void SetOverline( const FontUnderline eOverline );
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetItalic( const FontItalic eItalic );
-    inline void SetOutline( const sal_Bool bOutline );
-    inline void SetVertical( const sal_uInt16 nDir, const sal_Bool bVertFormat );
-    inline void SetShadow( const sal_Bool bShadow );
+    inline void SetOutline( const bool bOutline );
+    inline void SetVertical( const sal_uInt16 nDir, const bool bVertFormat );
+    inline void SetShadow( const bool bShadow );
     inline void SetAutoKern( const sal_uInt8 nAutoKern );
-    inline void SetWordLineMode( const sal_Bool bWordLineMode );
+    inline void SetWordLineMode( const bool bWordLineMode );
     inline void SetEmphasisMark( const FontEmphasisMark eValue );
     inline void SetRelief( const FontRelief eNew );
 
@@ -157,15 +157,15 @@ class SwFont
     sal_uInt8   nActual;        // actual font (Latin, CJK or CTL)
 
     // switch for the font-extensions
-    sal_Bool bNoHyph        :1;  // SwTxtNoHyphenHere: no separator
-    sal_Bool bBlink         :1;  // blinking font
-    sal_Bool bPaintBlank    :1;  // blanks not with DrawRect
-    sal_Bool bFntChg        :1;
-    sal_Bool bOrgChg        :1;  // nOrgHeight/Ascent are invalid
-    sal_Bool bURL           :1;
-    sal_Bool bPaintWrong    :1;  // flag for spelling mistakes
-    sal_Bool bGreyWave      :1;  // for the extended TextInput: gray waveline
-    sal_Bool bNoColReplace  :1;  // Replacement without colormanipulation
+    bool bNoHyph        :1;  // SwTxtNoHyphenHere: no separator
+    bool bBlink         :1;  // blinking font
+    bool bPaintBlank    :1;  // blanks not with DrawRect
+    bool bFntChg        :1;
+    bool bOrgChg        :1;  // nOrgHeight/Ascent are invalid
+    bool bURL           :1;
+    bool bPaintWrong    :1;  // flag for spelling mistakes
+    bool bGreyWave      :1;  // for the extended TextInput: gray waveline
+    bool bNoColReplace  :1;  // Replacement without colormanipulation
 
 public:
     SwFont( const SwAttrSet* pSet, const IDocumentSettingAccess* pIDocumentSettingAccess );
@@ -199,14 +199,14 @@ public:
         { rMagic = aSub[nWhich].pMagic; rIdx = aSub[nWhich].nFntIndex; }
     inline void SetMagic( const void* pNew, const sal_uInt16 nIdx, sal_uInt8 nWhich )
         { aSub[nWhich].pMagic = pNew; aSub[nWhich].nFntIndex = nIdx; }
-    inline sal_Bool DifferentMagic( const SwFont* pFnt, sal_uInt8 nWhich )
+    inline bool DifferentMagic( const SwFont* pFnt, sal_uInt8 nWhich )
         { return aSub[nWhich].pMagic != pFnt->aSub[nWhich].pMagic ||
           !aSub[nWhich].pMagic || !pFnt->aSub[nWhich].pMagic; }
 
     inline const Size &GetSize( sal_uInt8 nWhich ) const
         { return aSub[nWhich].aSize; }
-    inline sal_Bool IsFntChg() const { return bFntChg; }
-    inline void SetFntChg( const sal_Bool bNew ) { bFntChg = bNew; }
+    inline bool IsFntChg() const { return bFntChg; }
+    inline void SetFntChg( const bool bNew ) { bFntChg = bNew; }
 
     // the encapsulated SV-Font-methods (set bFntChg to sal_True)
     inline void SetColor( const Color& rColor );
@@ -217,12 +217,12 @@ public:
     inline void SetOverline( const FontUnderline eOverline );
     inline void SetOverColor( const Color &rColor ) { aOverColor = rColor; }
     inline void SetStrikeout( const FontStrikeout eStrikeout );
-    inline void SetOutline( const sal_Bool bOutline );
-           void SetVertical( sal_uInt16 nDir, const sal_Bool nVertLayout = sal_False );
-    inline void SetShadow( const sal_Bool bShadow );
+    inline void SetOutline( const bool bOutline );
+           void SetVertical( sal_uInt16 nDir, const bool nVertLayout = false );
+    inline void SetShadow( const bool bShadow );
     inline void SetAutoKern( sal_uInt8 nAutoKern );
-    inline void SetTransparent( const sal_Bool bTrans );
-    inline void SetWordLineMode( const sal_Bool bWordLineMode );
+    inline void SetTransparent( const bool bTrans );
+    inline void SetWordLineMode( const bool bWordLineMode );
     inline void SetFixKerning( const short nNewKern );
     inline void SetCaseMap( const SvxCaseMap eNew );
     inline void SetEmphasisMark( const FontEmphasisMark eValue );
@@ -245,33 +245,33 @@ public:
     inline void SetRelief( const FontRelief eNew );
 
     // Get/Set-methods for the current setting
-    inline void SetNoHyph( const sal_Bool bNew );
-    inline sal_Bool IsNoHyph() const { return bNoHyph; }
-    inline void SetBlink( const sal_Bool bBlink );
-    inline sal_Bool IsBlink() const { return bBlink; }
+    inline void SetNoHyph( const bool bNew );
+    inline bool IsNoHyph() const { return bNoHyph; }
+    inline void SetBlink( const bool bBlink );
+    inline bool IsBlink() const { return bBlink; }
     inline sal_uInt8 &GetTox() { return nToxCnt; }
     inline sal_uInt8 GetTox() const { return nToxCnt; }
-    inline sal_Bool IsTox() const { return ( 0 != nToxCnt ); }
+    inline bool IsTox() const { return ( 0 != nToxCnt ); }
     inline sal_uInt8 &GetRef() { return nRefCnt; }
     inline sal_uInt8 GetRef() const { return nRefCnt; }
-    inline sal_Bool IsRef() const { return ( 0 != nRefCnt ); }
+    inline bool IsRef() const { return ( 0 != nRefCnt ); }
     inline sal_uInt8 &GetMeta() { return m_nMetaCount; }
     inline sal_uInt8 GetMeta() const { return m_nMetaCount; }
     inline bool IsMeta() const { return (0 != m_nMetaCount); }
     inline sal_uInt8 &GetInputField() { return m_nInputFieldCount; }
     inline sal_uInt8 GetInputField() const { return m_nInputFieldCount; }
     inline bool IsInputField() const { return (0 != m_nInputFieldCount); }
-    inline void SetURL( const sal_Bool bURL );
-    inline sal_Bool IsURL() const { return bURL; }
-    inline void SetGreyWave( const sal_Bool bNew );
-    inline sal_Bool IsGreyWave() const { return bGreyWave; }
-    inline void SetNoCol( const sal_Bool bNew );
-    inline sal_Bool IsNoCol() const { return bNoColReplace; }
+    inline void SetURL( const bool bURL );
+    inline bool IsURL() const { return bURL; }
+    inline void SetGreyWave( const bool bNew );
+    inline bool IsGreyWave() const { return bGreyWave; }
+    inline void SetNoCol( const bool bNew );
+    inline bool IsNoCol() const { return bNoColReplace; }
 
-    inline void SetPaintBlank( const sal_Bool bNew );
-    inline sal_Bool IsPaintBlank() const { return bPaintBlank; }
-    inline void SetPaintWrong( const sal_Bool bNew );
-    inline sal_Bool IsPaintWrong() const { return bPaintWrong; }
+    inline void SetPaintBlank( const bool bNew );
+    inline bool IsPaintBlank() const { return bPaintBlank; }
+    inline void SetPaintWrong( const bool bNew );
+    inline bool IsPaintWrong() const { return bPaintWrong; }
 
     // setting of the base class font for SwTxtCharFmt
     void SetDiffFnt( const SfxItemSet* pSet,
@@ -280,7 +280,7 @@ public:
     inline const SvxFont &GetFnt( const sal_uInt8 nWhich ) const
         { return aSub[nWhich]; };
 
-    sal_Bool IsSymbol( SwViewShell *pSh )
+    bool IsSymbol( SwViewShell *pSh )
         { return aSub[nActual].IsSymbol( pSh ); }
     FontUnderline GetUnderline() const { return aSub[nActual].GetUnderline(); }
     const Color& GetUnderColor() const { return aUnderColor; }
@@ -289,10 +289,10 @@ public:
     short GetFixKerning() const { return aSub[nActual].GetFixKerning(); }
     FontStrikeout GetStrikeout() const { return aSub[nActual].GetStrikeout(); }
     const Color& GetColor() const { return aSub[nActual].GetColor(); }
-    sal_Bool IsShadow() const { return aSub[nActual].IsShadow(); }
-    sal_Bool IsWordLineMode() const { return aSub[nActual].IsWordLineMode(); }
-    sal_Bool IsOutline() const { return aSub[nActual].IsOutline(); }
-    sal_Bool IsKerning() const { return aSub[nActual].IsKerning(); }
+    bool IsShadow() const { return aSub[nActual].IsShadow(); }
+    bool IsWordLineMode() const { return aSub[nActual].IsWordLineMode(); }
+    bool IsOutline() const { return aSub[nActual].IsOutline(); }
+    bool IsKerning() const { return aSub[nActual].IsKerning(); }
     short GetEscapement() const { return aSub[nActual].GetEscapement(); }
     SvxCaseMap GetCaseMap() const { return aSub[nActual].GetCaseMap(); }
     sal_uInt8 GetPropr() const { return aSub[nActual].GetPropr(); }
@@ -309,7 +309,7 @@ public:
     FontEmphasisMark GetEmphasisMark() const
         { return aSub[nActual].GetEmphasisMark(); }
     sal_uInt16 GetPropWidth() const { return aSub[nActual].GetPropWidth(); }
-    sal_uInt16 GetOrientation( const sal_Bool nVertLayout = sal_False ) const;
+    sal_uInt16 GetOrientation( const bool nVertLayout = false ) const;
 
     inline const OUString& GetName( const sal_uInt8 nWhich ) const
         { return aSub[nWhich].GetName(); }
@@ -378,7 +378,7 @@ public:
         { return aSub[nActual].GetHeight( pSh, rOut ); }
 
     inline void Invalidate()
-        { bFntChg = bOrgChg = sal_True; }
+        { bFntChg = bOrgChg = true; }
 
     void SetTopBorder( const editeng::SvxBorderLine* pTopBorder );
     void SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder );
@@ -451,7 +451,7 @@ public:
 
 inline void SwFont::SetColor( const Color& rColor )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[0].SetColor( rColor );
     aSub[1].SetColor( rColor );
     aSub[2].SetColor( rColor );
@@ -473,7 +473,7 @@ inline void SwSubFont::SetFillColor( const Color& rColor )
 
 inline void SwFont::SetFillColor( const Color& rColor )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[0].SetFillColor( rColor );
     aSub[1].SetFillColor( rColor );
     aSub[2].SetFillColor( rColor );
@@ -488,7 +488,7 @@ inline void SwSubFont::SetFamily( const FontFamily eFamily )
 
 inline void SwFont::SetFamily( const FontFamily eFamily, const sal_uInt8 nWhich )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[nWhich].SetFamily( eFamily );
 }
 
@@ -501,7 +501,7 @@ inline void SwSubFont::SetName( const OUString& rName )
 
 inline void SwFont::SetName( const OUString& rName, const sal_uInt8 nWhich )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[nWhich].SetName( rName );
 }
 
@@ -514,7 +514,7 @@ inline void SwSubFont::SetStyleName( const OUString& rStyleName )
 
 inline void SwFont::SetStyleName( const OUString& rStyle, const sal_uInt8 nWhich )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[nWhich].SetStyleName( rStyle );
 }
 
@@ -527,7 +527,7 @@ inline void SwSubFont::SetCharSet( const rtl_TextEncoding eCharSet )
 
 inline void SwFont::SetCharSet( const rtl_TextEncoding eCharSet, const sal_uInt8 nWhich )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[nWhich].SetCharSet( eCharSet );
 }
 
@@ -541,7 +541,7 @@ inline void SwSubFont::SetPitch( const FontPitch ePitch )
 // encapsulated SV-Font-method
 inline void SwFont::SetPitch( const FontPitch ePitch, const sal_uInt8 nWhich )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[nWhich].SetPitch( ePitch );
 }
 
@@ -554,7 +554,7 @@ inline void SwSubFont::SetAlign( const FontAlign eAlign )
 
 inline void SwFont::SetAlign( const FontAlign eAlign )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[0].SetAlign( eAlign );
     aSub[1].SetAlign( eAlign );
     aSub[2].SetAlign( eAlign );
@@ -569,7 +569,7 @@ inline void SwSubFont::SetWeight( const FontWeight eWeight )
 
 inline void SwFont::SetWeight( const FontWeight eWeight, const sal_uInt8 nWhich )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[nWhich].SetWeight( eWeight );
 }
 
@@ -582,7 +582,7 @@ inline void SwSubFont::SetUnderline( const FontUnderline eUnderline )
 
 inline void SwFont::SetUnderline( const FontUnderline eUnderline )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[0].SetUnderline( eUnderline );
     aSub[1].SetUnderline( eUnderline );
     aSub[2].SetUnderline( eUnderline );
@@ -597,7 +597,7 @@ inline void SwSubFont::SetOverline( const FontUnderline eOverline )
 
 inline void SwFont::SetOverline( const FontUnderline eOverline )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[0].SetOverline( eOverline );
     aSub[1].SetOverline( eOverline );
     aSub[2].SetOverline( eOverline );
@@ -612,7 +612,7 @@ inline void SwSubFont::SetStrikeout( const FontStrikeout eStrikeout )
 
 inline void SwFont::SetStrikeout( const FontStrikeout eStrikeout )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[0].SetStrikeout( eStrikeout );
     aSub[1].SetStrikeout( eStrikeout );
     aSub[2].SetStrikeout( eStrikeout );
@@ -627,35 +627,35 @@ inline void SwSubFont::SetItalic( const FontItalic eItalic )
 
 inline void SwFont::SetItalic( const FontItalic eItalic, const sal_uInt8 nWhich )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[nWhich].SetItalic( eItalic );
 }
 
 // encapsulated SV-Font-method
-inline void SwSubFont::SetOutline( const sal_Bool bOutline )
+inline void SwSubFont::SetOutline( const bool bOutline )
 {
     pMagic = 0;
     Font::SetOutline( bOutline );
 }
 
-inline void SwFont::SetOutline( const sal_Bool bOutline )
+inline void SwFont::SetOutline( const bool bOutline )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[0].SetOutline( bOutline );
     aSub[1].SetOutline( bOutline );
     aSub[2].SetOutline( bOutline );
 }
 
 // encapsulated SV-Font-method
-inline void SwSubFont::SetShadow( const sal_Bool bShadow )
+inline void SwSubFont::SetShadow( const bool bShadow )
 {
     pMagic = 0;
     Font::SetShadow( bShadow );
 }
 
-inline void SwFont::SetShadow( const sal_Bool bShadow )
+inline void SwFont::SetShadow( const bool bShadow )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[0].SetShadow( bShadow );
     aSub[1].SetShadow( bShadow );
     aSub[2].SetShadow( bShadow );
@@ -670,7 +670,7 @@ inline void SwSubFont::SetAutoKern( const sal_uInt8 nAutoKern )
 
 inline void SwFont::SetAutoKern( sal_uInt8 nAutoKern )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[1].SetAutoKern( nAutoKern );
     if( nAutoKern )
         nAutoKern = KERNING_FONTSPECIFIC;
@@ -678,7 +678,7 @@ inline void SwFont::SetAutoKern( sal_uInt8 nAutoKern )
     aSub[2].SetAutoKern( nAutoKern );
 }
 
-inline void SwFont::SetTransparent( const sal_Bool bTrans )
+inline void SwFont::SetTransparent( const bool bTrans )
 {
     aSub[0].SetTransparent( bTrans );
     aSub[1].SetTransparent( bTrans );
@@ -700,15 +700,15 @@ inline void SwFont::SetCaseMap( const SvxCaseMap eNew )
 }
 
 // encapsulated SV-Font-method
-inline void SwSubFont::SetWordLineMode( const sal_Bool bWordLineMode )
+inline void SwSubFont::SetWordLineMode( const bool bWordLineMode )
 {
     pMagic = 0;
     Font::SetWordLineMode( bWordLineMode );
 }
 
-inline void SwFont::SetWordLineMode( const sal_Bool bWordLineMode )
+inline void SwFont::SetWordLineMode( const bool bWordLineMode )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[0].SetWordLineMode( bWordLineMode );
     aSub[1].SetWordLineMode( bWordLineMode );
     aSub[2].SetWordLineMode( bWordLineMode );
@@ -722,7 +722,7 @@ inline void SwSubFont::SetEmphasisMark( const FontEmphasisMark eValue )
 
 inline void SwFont::SetEmphasisMark( const FontEmphasisMark eValue )
 {
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[0].SetEmphasisMark( eValue );
     aSub[1].SetEmphasisMark( eValue );
     aSub[2].SetEmphasisMark( eValue );
@@ -732,7 +732,7 @@ inline void SwFont::SetPropWidth( const sal_uInt16 nNew )
 {
     if( nNew != aSub[0].GetPropWidth() )
     {
-        bFntChg = sal_True;
+        bFntChg = true;
         aSub[0].SetPropWidth( nNew );
         aSub[1].SetPropWidth( nNew );
         aSub[2].SetPropWidth( nNew );
@@ -750,7 +750,7 @@ inline void SwFont::SetRelief( const FontRelief eNew )
 {
     if( eNew != aSub[0].GetRelief() )
     {
-        bFntChg = sal_True;
+        bFntChg = true;
         aSub[0].SetRelief( eNew );
         aSub[1].SetRelief( eNew );
         aSub[2].SetRelief( eNew );
@@ -777,8 +777,8 @@ inline void SwFont::SetSize( const Size& rSize, const sal_uInt8 nWhich )
     if( aSub[nWhich].aSize != rSize )
     {
         aSub[nWhich].SetSize( rSize );
-        bFntChg = sal_True;
-        bOrgChg = sal_True;
+        bFntChg = true;
+        bOrgChg = true;
     }
 }
 
@@ -786,8 +786,8 @@ inline void SwFont::SetActual( sal_uInt8 nNew )
 {
      if ( nActual != nNew )
      {
-        bFntChg = sal_True;
-        bOrgChg = sal_True;
+        bFntChg = true;
+        bOrgChg = true;
         nActual = nNew;
      }
 }
@@ -804,8 +804,8 @@ inline void SwFont::SetProportion( const sal_uInt8 nNewPropr )
 {
     if( nNewPropr != aSub[0].GetPropr() )
     {
-        bFntChg = sal_True;
-        bOrgChg = sal_True;
+        bFntChg = true;
+        bOrgChg = true;
 
         aSub[0].SetProportion( nNewPropr );
         aSub[1].SetProportion( nNewPropr );
@@ -825,8 +825,8 @@ inline void SwFont::SetEscapement( const short nNewEsc )
     {
         // these have to be set, otherwise nOrgHeight and nOrgAscent will not
         // be calculated
-        bFntChg = sal_True;
-        bOrgChg = sal_True;
+        bFntChg = true;
+        bOrgChg = true;
 
         aSub[0].SetEscapement( nNewEsc );
         aSub[1].SetEscapement( nNewEsc );
@@ -853,42 +853,42 @@ inline void SwFont::SetLanguage( const LanguageType eNewLang, const sal_uInt8 nW
     }
 }
 
-inline void SwFont::SetPaintBlank( const sal_Bool bNew )
+inline void SwFont::SetPaintBlank( const bool bNew )
 {
     bPaintBlank = bNew;
 }
 
-inline void SwFont::SetPaintWrong( const sal_Bool bNew )
+inline void SwFont::SetPaintWrong( const bool bNew )
 {
     bPaintWrong = bNew;
 }
 
-inline void SwFont::SetNoHyph( const sal_Bool bNew )
+inline void SwFont::SetNoHyph( const bool bNew )
 {
     bNoHyph = bNew;
 }
 
-inline void SwFont::SetBlink( const sal_Bool bNew )
+inline void SwFont::SetBlink( const bool bNew )
 {
     bBlink = bNew;
 }
 
-inline void SwFont::SetURL( const sal_Bool bNew )
+inline void SwFont::SetURL( const bool bNew )
 {
     bURL = bNew;
 }
 
-inline void SwFont::SetGreyWave( const sal_Bool bNew )
+inline void SwFont::SetGreyWave( const bool bNew )
 {
     bGreyWave = bNew;
 }
 
-inline void SwFont::SetNoCol( const sal_Bool bNew )
+inline void SwFont::SetNoCol( const bool bNew )
 {
     bNoColReplace = bNew;
 }
 
-inline void SwSubFont::SetVertical( const sal_uInt16 nDir, const sal_Bool bVertFormat )
+inline void SwSubFont::SetVertical( const sal_uInt16 nDir, const bool bVertFormat )
 {
     pMagic = 0;
     Font::SetVertical( bVertFormat );
@@ -898,28 +898,28 @@ inline void SwSubFont::SetVertical( const sal_uInt16 nDir, const sal_Bool bVertF
 inline void SwFont::SetTopBorderDist( const sal_uInt16 nTopDist )
 {
     m_nTopBorderDist = nTopDist;
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
 inline void SwFont::SetBottomBorderDist( const sal_uInt16 nBottomDist )
 {
     m_nBottomBorderDist = nBottomDist;
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
 inline void SwFont::SetRightBorderDist( const sal_uInt16 nRightDist )
 {
     m_nRightBorderDist = nRightDist;
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
 inline void SwFont::SetLeftBorderDist( const sal_uInt16 nLeftDist )
 {
     m_nLeftBorderDist = nLeftDist;
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
@@ -991,28 +991,28 @@ inline bool SwFont::HasBorder() const
 inline void SwFont::SetShadowColor( const Color& rColor )
 {
     m_aShadowColor = rColor;
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
 inline void SwFont::SetShadowWidth( const sal_uInt16 nWidth )
 {
     m_nShadowWidth = nWidth;
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
 inline void SwFont::SetShadowLocation( const SvxShadowLocation aLocation )
 {
     m_aShadowLocation = aLocation;
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
 inline void SwFont::SetHighlightColor( const Color& aNewColor )
 {
     m_aHighlightColor = aNewColor;
-    bFntChg = sal_True;
+    bFntChg = true;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
@@ -1059,7 +1059,7 @@ public:
     inline SvStatistics() { Reset(); }
 
     inline void PrintOn( SvStream &rOS ) const; //$ ostream
-    inline sal_Bool IsEmpty() const
+    inline bool IsEmpty() const
     {
         return !( nGetTextSize || nDrawText ||
                   nDrawStretchText || nChangeFont || nGetFontMetric );

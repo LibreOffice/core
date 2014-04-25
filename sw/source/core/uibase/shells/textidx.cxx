@@ -124,11 +124,11 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             // Height = width for a more consistent preview (analogous to edit range)
             aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
             const SwTOXBase* pCurTOX = 0;
-            sal_Bool bGlobal = sal_False;
+            bool bGlobal = false;
             if(pItem)
             {
                 pCurTOX = (const SwTOXBase* )((SwPtrItem*)pItem)->GetValue();
-                bGlobal = sal_True;
+                bGlobal = true;
             }
             else
                 pCurTOX = rSh.GetCurTOX();
@@ -211,7 +211,7 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
     {
 
         bool bEnableEdit = true;
-        sal_Bool bInReadonly = rSh.HasReadonlySel();
+        bool bInReadonly = rSh.HasReadonlySel();
         if( rSh.HasSelection() || bInReadonly)
             bEnableEdit = false;
         else

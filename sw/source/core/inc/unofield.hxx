@@ -68,7 +68,7 @@ public:
         CreateXFieldMaster(SwDoc & rDoc, SwFieldType & rType);
 
     static OUString GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc);
-    static OUString LocalizeFormula(const SwSetExpField& rFld, const OUString& rFormula, sal_Bool bQuery);
+    static OUString LocalizeFormula(const SwSetExpField& rFld, const OUString& rFormula, bool bQuery);
 
     SwFieldType* GetFldType(bool bDontCreate = false) const;
 

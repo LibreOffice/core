@@ -107,8 +107,8 @@ bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
     ::lcl_GetLayTree( pMyFrm, aArr );
 
     size_t nRefCnt = aRefArr.size() - 1, nCnt = aArr.size() - 1;
-    sal_Bool bVert = sal_False;
-    sal_Bool bR2L = sal_False;
+    bool bVert = false;
+    bool bR2L = false;
 
     // Loop as long as a frame does not equal?
     while( nRefCnt && nCnt && aRefArr[ nRefCnt ] == aArr[ nCnt ] )
@@ -443,7 +443,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                 SwChapterFieldType aFldTyp;
                 SwChapterField aFld( &aFldTyp, 0 );
                 aFld.SetLevel( MAXLEVEL - 1 );
-                aFld.ChangeExpansion( pFrm, pTxtNd, sal_True );
+                aFld.ChangeExpansion( pFrm, pTxtNd, true );
                 sTxt = aFld.GetNumber();
             }
         }

@@ -27,12 +27,12 @@ class SwPagePreviewPrtData
     sal_uLong nLeftSpace, nRightSpace, nTopSpace, nBottomSpace,
             nHorzSpace, nVertSpace;
     sal_uInt8 nRow, nCol;
-    sal_Bool bLandscape : 1;
+    bool bLandscape : 1;
 public:
     SwPagePreviewPrtData()
         : nLeftSpace(0), nRightSpace(0), nTopSpace(0), nBottomSpace(0),
             nHorzSpace(0), nVertSpace(0), nRow(1), nCol(1),
-            bLandscape(0)
+            bLandscape(false)
     {}
 
     sal_uLong GetLeftSpace() const          { return nLeftSpace; }
@@ -60,7 +60,7 @@ public:
     void SetCol( sal_uInt8 n )              { nCol = n; }
 
     bool GetLandscape() const               { return bLandscape; }
-    void SetLandscape( sal_Bool b )         { bLandscape = b; }
+    void SetLandscape( bool b )         { bLandscape = b; }
 };
 
 #endif

@@ -56,23 +56,23 @@ enum SwSplitDocType
     SPLITDOC_TO_HTML
 };
 
-sal_Bool SwDoc::GenerateGlobalDoc( const OUString& rPath,
+bool SwDoc::GenerateGlobalDoc( const OUString& rPath,
                                    const SwTxtFmtColl* pSplitColl )
 {
     return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, false, pSplitColl, 0 );
 }
 
-sal_Bool SwDoc::GenerateGlobalDoc( const OUString& rPath, int nOutlineLevel )
+bool SwDoc::GenerateGlobalDoc( const OUString& rPath, int nOutlineLevel )
 {
     return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, true, 0, nOutlineLevel );
 }
 
-sal_Bool SwDoc::GenerateHTMLDoc( const OUString& rPath, int nOutlineLevel )
+bool SwDoc::GenerateHTMLDoc( const OUString& rPath, int nOutlineLevel )
 {
     return SplitDoc( SPLITDOC_TO_HTML, rPath, true, 0, nOutlineLevel );
 }
 
-sal_Bool SwDoc::GenerateHTMLDoc( const OUString& rPath,
+bool SwDoc::GenerateHTMLDoc( const OUString& rPath,
                                  const SwTxtFmtColl* pSplitColl )
 {
     return SplitDoc( SPLITDOC_TO_HTML, rPath, false, pSplitColl, 0 );
@@ -302,7 +302,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
                     SwNodeRange aRg( *pStartNd, 0, aEndIdx.GetNode() );
                     SwNodeIndex aTmpIdx( pDoc->GetNodes().GetEndOfContent() );
-                    GetNodes()._Copy( aRg, aTmpIdx, sal_False );
+                    GetNodes()._Copy( aRg, aTmpIdx, false );
 
                     // Delete the initial TextNode
                     SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
@@ -369,7 +369,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                                 }
                             }
                             // Move Bookmarks and so forth
-                            CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), sal_True);
+                            CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), true);
 
                             // If FlyFrames are still around, delete these too
                             for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->size(); ++n )

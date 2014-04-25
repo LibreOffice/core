@@ -29,19 +29,19 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
 {
     short               nCurrFormatType;
     sal_uInt16              nStdEntry;
-    sal_Bool                bOneArea;
+    bool                bOneArea;
     sal_uLong               nDefFormat;
     SwView*             pVw;
     SvNumberFormatter*  pOwnFormatter;
     LanguageType        eCurLanguage;
-    sal_Bool                bShowLanguageControl; //determine whether the language control has
+    bool                bShowLanguageControl; //determine whether the language control has
                                               //to be shown in the number format dialog
-    sal_Bool                bUseAutomaticLanguage;//determine whether language is automatically assigned
+    bool                bUseAutomaticLanguage;//determine whether language is automatically assigned
 
     SAL_DLLPRIVATE DECL_LINK( SelectHdl, ListBox * );
 
     SAL_DLLPRIVATE double          GetDefValue(const short nFormatType) const;
-    SAL_DLLPRIVATE void            Init(short nFormatType, sal_Bool bUsrFmts);
+    SAL_DLLPRIVATE void            Init(short nFormatType, bool bUsrFmts);
     SAL_DLLPRIVATE SwView*           GetView();
 
 public:
@@ -51,7 +51,7 @@ public:
 
     void            Clear();
 
-    inline void     SetOneArea(sal_Bool bOnlyOne = sal_True) { bOneArea = bOnlyOne; }
+    inline void     SetOneArea(bool bOnlyOne = true) { bOneArea = bOnlyOne; }
 
     void            SetFormatType(const short nFormatType);
     inline short    GetFormatType() const { return nCurrFormatType; }
@@ -61,10 +61,10 @@ public:
     inline LanguageType GetCurLanguage() const { return eCurLanguage;}
     void                SetLanguage(LanguageType eSet)  { eCurLanguage = eSet;}
 
-    void            SetAutomaticLanguage(sal_Bool bSet){bUseAutomaticLanguage = bSet;}
-    sal_Bool            IsAutomaticLanguage()const {return bUseAutomaticLanguage;}
+    void            SetAutomaticLanguage(bool bSet){bUseAutomaticLanguage = bSet;}
+    bool            IsAutomaticLanguage()const {return bUseAutomaticLanguage;}
 
-    void            SetShowLanguageControl(sal_Bool bSet){bShowLanguageControl = bSet;}
+    void            SetShowLanguageControl(bool bSet){bShowLanguageControl = bSet;}
 
 };
 

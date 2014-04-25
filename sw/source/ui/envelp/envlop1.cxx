@@ -135,7 +135,7 @@ void SwEnvPreview::Paint(const Rectangle &)
 }
 
 SwEnvDlg::SwEnvDlg(Window* pParent, const SfxItemSet& rSet,
-                    SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert)
+                    SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert)
     : SfxTabDialog(pParent, "EnvDialog",
         "modules/swriter/ui/envdialog.ui", &rSet)
     , aEnvItem((const SwEnvItem&) rSet.Get(FN_ENVELOP))
@@ -269,7 +269,7 @@ IMPL_LINK_NOARG(SwEnvPage, FieldHdl)
 
 IMPL_LINK_NOARG(SwEnvPage, SenderHdl)
 {
-    const sal_Bool bEnable = m_pSenderBox->IsChecked();
+    const bool bEnable = m_pSenderBox->IsChecked();
     GetParentSwEnvDlg()->aEnvItem.bSend = bEnable;
     m_pSenderEdit->Enable(bEnable);
     if ( bEnable )

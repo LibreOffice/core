@@ -68,9 +68,9 @@ OUString ConstCustomShape::GetShapeTypeFromRequest( SfxRequest& rReq )
     return aRet;
 }
 
-sal_Bool ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
+bool ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = SwDrawBase::MouseButtonDown(rMEvt);
+    bool bReturn = SwDrawBase::MouseButtonDown(rMEvt);
     if ( bReturn )
     {
         SdrView *pSdrView = m_pSh->GetDrawView();
@@ -94,7 +94,7 @@ sal_Bool ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-sal_Bool ConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
+bool ConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
     return SwDrawBase::MouseButtonUp(rMEvt);
 }

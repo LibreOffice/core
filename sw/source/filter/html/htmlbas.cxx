@@ -69,16 +69,16 @@ void SwHTMLParser::NewScript()
 
 void SwHTMLParser::EndScript()
 {
-    sal_Bool bInsIntoBasic = sal_False,
-         bInsSrcIntoFld = sal_False;
+    bool bInsIntoBasic = false,
+         bInsSrcIntoFld = false;
 
     switch( eScriptLang )
     {
     case HTML_SL_STARBASIC:
-        bInsIntoBasic = sal_True;
+        bInsIntoBasic = true;
         break;
     default:
-        bInsSrcIntoFld = sal_True;
+        bInsSrcIntoFld = true;
         break;
     }
 
@@ -136,7 +136,7 @@ void SwHTMLParser::EndScript()
                 if( aBasicModule.isEmpty() )
                 {
                     // create module name
-                    sal_Bool bFound = sal_True;
+                    bool bFound = true;
                     while( bFound )
                     {
                         aBasicModule = "Modul";

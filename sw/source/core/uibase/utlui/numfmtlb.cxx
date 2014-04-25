@@ -57,12 +57,12 @@ NumFormatListBox::NumFormatListBox(Window* pWin, WinBits nStyle) :
     ListBox             ( pWin, nStyle ),
     nCurrFormatType     (-1),
     nStdEntry           (0),
-    bOneArea            (sal_False),
+    bOneArea            (false),
     nDefFormat          (0),
     pVw                 (0),
     pOwnFormatter       (0),
-    bShowLanguageControl(sal_False),
-    bUseAutomaticLanguage(sal_True)
+    bShowLanguageControl(false),
+    bUseAutomaticLanguage(true)
 {
     Init(NUMBERFORMAT_NUMBER, true);
 }
@@ -86,7 +86,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNumFormatListBox(Window *pP
     return pListBox;
 }
 
-void NumFormatListBox::Init(short nFormatType, sal_Bool bUsrFmts)
+void NumFormatListBox::Init(short nFormatType, bool bUsrFmts)
 {
     SwView *pView = GetView();
 
@@ -95,7 +95,7 @@ void NumFormatListBox::Init(short nFormatType, sal_Bool bUsrFmts)
     else
         eCurLanguage = SvtSysLocale().GetLanguageTag().getLanguageType();
 
-    if (bUsrFmts == sal_False)
+    if (bUsrFmts == false)
     {
         pOwnFormatter = new SvNumberFormatter(comphelper::getProcessComponentContext(), eCurLanguage);
     }

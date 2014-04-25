@@ -43,12 +43,12 @@
 SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage(pParent, "TextGridPage", "modules/swriter/ui/textgridpage.ui", rSet),
     m_nRubyUserValue(0),
-    m_bRubyUserValue(sal_False),
+    m_bRubyUserValue(false),
     m_aPageSize(MM50, MM50),
     m_bVertical(false),
-    m_bSquaredMode(sal_False),
-    m_bHRulerChanged( sal_False ),
-    m_bVRulerChanged( sal_False )
+    m_bSquaredMode(false),
+    m_bHRulerChanged( false ),
+    m_bVRulerChanged( false )
 {
     get(m_pNoGridRB,"radioRB_NOGRID");
     get(m_pLinesGridRB,"radioRB_LINESGRID");
@@ -160,7 +160,7 @@ SfxTabPage *SwTextGridPage::Create(Window *pParent, const SfxItemSet &rSet)
 
 bool    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if(m_pNoGridRB->GetSavedValue() != m_pNoGridRB->IsChecked()||
         m_pLinesGridRB->GetSavedValue() != m_pLinesGridRB->IsChecked()||
         m_pLinesPerPageNF->GetSavedValue().toInt32()
@@ -177,7 +177,7 @@ bool    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
         m_pColorLB->GetSavedValue() != m_pColorLB->GetSelectEntryPos())
     {
         PutGridItem(rSet);
-        bRet = sal_True;
+        bRet = true;
     }
 
     // draw ticks of ruler
@@ -208,7 +208,7 @@ void    SwTextGridPage::Reset(const SfxItemSet &rSet)
         m_pLinesPerPageNF->SetValue(rGridItem.GetLines());
         SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
         m_nRubyUserValue = rGridItem.GetBaseHeight();
-        m_bRubyUserValue = sal_True;
+        m_bRubyUserValue = true;
         m_pTextSizeMF->SetValue(m_pTextSizeMF->Normalize(m_nRubyUserValue), FUNIT_TWIP);
         m_pRubySizeMF->SetValue(m_pRubySizeMF->Normalize(rGridItem.GetRubyHeight()), FUNIT_TWIP);
         m_pCharWidthMF->SetValue(m_pCharWidthMF->Normalize(rGridItem.GetBaseWidth()), FUNIT_TWIP);
@@ -270,9 +270,9 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
         {
             if ( aGridItem.GetGridType() == GRID_LINES_CHARS )
             {
-                m_bHRulerChanged = sal_True;
+                m_bHRulerChanged = true;
             }
-            m_bVRulerChanged = sal_True;
+            m_bVRulerChanged = true;
             pView->GetHRuler().SetCharWidth((long)(m_pCharWidthMF->GetValue(FUNIT_TWIP)/56.7));
             pView->GetVRuler().SetLineHeight((long)(m_pTextSizeMF->GetValue(FUNIT_TWIP)/56.7));
         }
@@ -372,7 +372,7 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
             m_pTextSizeMF->SetValue(m_pTextSizeMF->Normalize(nWidth), FUNIT_TWIP);
             //prevent rounding errors in the MetricField by saving the used value
             m_nRubyUserValue = nWidth;
-            m_bRubyUserValue = sal_True;
+            m_bRubyUserValue = true;
 
         }
         //set maximum line per page
@@ -395,7 +395,7 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
             SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
 
             m_nRubyUserValue = nHeight;
-            m_bRubyUserValue = sal_True;
+            m_bRubyUserValue = true;
         }
         else if (m_pCharsPerLineNF == pField)
         {
@@ -415,7 +415,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
     {
         if (m_pTextSizeMF == pField)
         {
-            m_bRubyUserValue = sal_False;
+            m_bRubyUserValue = false;
 
             // fdo#50941: set maximum characters per line
             sal_Int32 nTextSize = static_cast< sal_Int32 >(m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)));
@@ -442,7 +442,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
         {
             sal_Int32 nTextSize = static_cast< sal_Int32 >(m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)));
             m_pLinesPerPageNF->SetValue(m_aPageSize.Height() / nTextSize);
-            m_bRubyUserValue = sal_False;
+            m_bRubyUserValue = false;
             SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
         }
         else if (m_pCharWidthMF == pField)
@@ -462,7 +462,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
 
 IMPL_LINK(SwTextGridPage, GridTypeHdl, RadioButton*, pButton)
 {
-    sal_Bool bEnable = m_pNoGridRB != pButton;
+    bool bEnable = m_pNoGridRB != pButton;
     m_pLayoutFL->Enable(bEnable);
     m_pDisplayFL->Enable(bEnable);
 
@@ -489,7 +489,7 @@ IMPL_LINK(SwTextGridPage, GridTypeHdl, RadioButton*, pButton)
 
 IMPL_LINK_NOARG(SwTextGridPage, DisplayGridHdl)
 {
-    sal_Bool bChecked = m_pDisplayCB->IsChecked();
+    bool bChecked = m_pDisplayCB->IsChecked();
     m_pPrintCB->Enable(bChecked);
     m_pPrintCB->Check(bChecked);
     return 0;

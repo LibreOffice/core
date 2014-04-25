@@ -244,9 +244,9 @@ struct SwHTMLFmtInfo
 
     // Konstruktor zum Erstellen der Format-Info
     SwHTMLFmtInfo( const SwFmt *pFmt, SwDoc *pDoc, SwDoc *pTemlate,
-                   sal_Bool bOutStyles, LanguageType eDfltLang=LANGUAGE_DONTKNOW,
+                   bool bOutStyles, LanguageType eDfltLang=LANGUAGE_DONTKNOW,
                    sal_uInt16 nScript=CSS1_OUTMODE_ANY_SCRIPT,
-                   sal_Bool bHardDrop=sal_False );
+                   bool bHardDrop=false );
     ~SwHTMLFmtInfo();
 
     friend bool operator==( const SwHTMLFmtInfo& rInfo1,
@@ -348,16 +348,16 @@ public:
 
     // Beschreibung der Export-Konfiguration
     // 0
-    sal_Bool bCfgOutStyles : 1;         // Styles exportieren
-    sal_Bool bCfgPreferStyles : 1;      // Styles herkoemmlichen Tags vorziehen
-    sal_Bool bCfgFormFeed : 1;          // Form-Feeds exportieren
-    sal_Bool bCfgStarBasic : 1;         // StarBasic exportieren
-    sal_Bool bCfgCpyLinkedGrfs : 1;
+    bool bCfgOutStyles : 1;         // Styles exportieren
+    bool bCfgPreferStyles : 1;      // Styles herkoemmlichen Tags vorziehen
+    bool bCfgFormFeed : 1;          // Form-Feeds exportieren
+    bool bCfgStarBasic : 1;         // StarBasic exportieren
+    bool bCfgCpyLinkedGrfs : 1;
 
     // Beschreibung dessen, was exportiert wird
 
-    sal_Bool bFirstLine : 1;            // wird die 1. Zeile ausgegeben ?
-    sal_Bool bTagOn : 1;                // Tag an oder aus/Attr-Start oder -Ende
+    bool bFirstLine : 1;            // wird die 1. Zeile ausgegeben ?
+    bool bTagOn : 1;                // Tag an oder aus/Attr-Start oder -Ende
 
     // Die folgenden beiden Flags geben an, wir Attribute exportiert werden:
     // bTxtAttr bOutOpts
@@ -367,36 +367,36 @@ public:
     // 0        1           (Absatz-)Attribute: Das Attribut wird als Option
     //                          eines bereits geschrieben Tags exportiert. Es
     //                          gibt kein End-Tag.
-    sal_Bool bTxtAttr : 1;
+    bool bTxtAttr : 1;
     // 8
-    sal_Bool bOutOpts : 1;
+    bool bOutOpts : 1;
 
-    sal_Bool bOutTable : 1;             // wird der Tabelleninhalt geschrieben?
-    sal_Bool bOutHeader : 1;
-    sal_Bool bOutFooter : 1;
-    sal_Bool bOutFlyFrame : 1;
+    bool bOutTable : 1;             // wird der Tabelleninhalt geschrieben?
+    bool bOutHeader : 1;
+    bool bOutFooter : 1;
+    bool bOutFlyFrame : 1;
 
     // Flags fuer Style-Export
 
-    sal_Bool bFirstCSS1Rule : 1;        // wurde schon eine Property ausgegeben
-    sal_Bool bFirstCSS1Property : 1;    // wurde schon eine Property ausgegeben
-    sal_Bool bPoolCollTextModified : 1; // die Textkoerper-Vorlage wurde
+    bool bFirstCSS1Rule : 1;        // wurde schon eine Property ausgegeben
+    bool bFirstCSS1Property : 1;    // wurde schon eine Property ausgegeben
+    bool bPoolCollTextModified : 1; // die Textkoerper-Vorlage wurde
                                     // modifiziert.
     // 16
-    sal_Bool bCSS1IgnoreFirstPageDesc : 1;
+    bool bCSS1IgnoreFirstPageDesc : 1;
 
     // was muss/kann/darf nicht ausgegeben werden?
 
-    sal_Bool bNoAlign : 1;              // HTML-Tag erlaubt kein ALIGN=...
-    sal_Bool bClearLeft : 1;            // <BR CLEAR=LEFT> am Absatz-Ende ausg.
-    sal_Bool bClearRight : 1;           // <BR CLEAR=RIGHT> am Absatz-Ende ausg.
-    sal_Bool bLFPossible : 1;           // ein Zeilenumbruch darf eingef. werden
+    bool bNoAlign : 1;              // HTML-Tag erlaubt kein ALIGN=...
+    bool bClearLeft : 1;            // <BR CLEAR=LEFT> am Absatz-Ende ausg.
+    bool bClearRight : 1;           // <BR CLEAR=RIGHT> am Absatz-Ende ausg.
+    bool bLFPossible : 1;           // ein Zeilenumbruch darf eingef. werden
 
     // sonstiges
 
-    sal_Bool bPreserveForm : 1;         // die aktuelle Form beibehalten
+    bool bPreserveForm : 1;         // die aktuelle Form beibehalten
 
-    sal_Bool bCfgNetscape4 : 1;         // Netscape4 Hacks
+    bool bCfgNetscape4 : 1;         // Netscape4 Hacks
 
     bool mbSkipImages : 1;
 
@@ -414,19 +414,19 @@ public:
     void OutHyperlinkHRefValue( const OUString& rURL );
 
     // gebe die evt. an der akt. Position stehenden FlyFrame aus.
-    sal_Bool OutFlyFrm( sal_uLong nNdIdx, sal_Int32 nCntntIdx,
+    bool OutFlyFrm( sal_uLong nNdIdx, sal_Int32 nCntntIdx,
                         sal_uInt8 nPos, HTMLOutContext *pContext = 0 );
     void OutFrmFmt( sal_uInt8 nType, const SwFrmFmt& rFmt,
                     const SdrObject *pSdrObj );
 
-    void OutForm( sal_Bool bTagOn=sal_True, const SwStartNode *pStNd=0 );
+    void OutForm( bool bTagOn=true, const SwStartNode *pStNd=0 );
     void OutHiddenForms();
     void OutHiddenForm( const css::uno::Reference<css::form::XForm>& rForm );
 
-    void OutForm( sal_Bool bOn, const css::uno::Reference<css::container::XIndexContainer>& rFormComps );
+    void OutForm( bool bOn, const css::uno::Reference<css::container::XIndexContainer>& rFormComps );
     void OutHiddenControls( const css::uno::Reference<css::container::XIndexContainer>& rFormComps,
                             const css::uno::Reference<css::beans::XPropertySet>& rPropSet );
-    sal_Bool HasControls() const;
+    bool HasControls() const;
 
     void OutFootEndNoteInfo();
     void OutFootEndNotes();
@@ -438,7 +438,7 @@ public:
 
     void OutAndSetDefList( sal_uInt16 nNewLvl );
 
-    void OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed=sal_True );
+    void OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed=true );
 
     inline void OutCSS1_PropertyAscii( const sal_Char *pProp,
                                        const sal_Char *pVal );
@@ -448,15 +448,15 @@ public:
     void OutCSS1_Property( const sal_Char *pProp, const sal_Char *pVal,
                            const OUString *pSVal );
     void OutCSS1_UnitProperty( const sal_Char *pProp, long nVal );
-    void OutCSS1_PixelProperty( const sal_Char *pProp, long nVal, sal_Bool bVert );
-    void OutCSS1_SfxItemSet( const SfxItemSet& rItemSet, sal_Bool bDeep=sal_True );
+    void OutCSS1_PixelProperty( const sal_Char *pProp, long nVal, bool bVert );
+    void OutCSS1_SfxItemSet( const SfxItemSet& rItemSet, bool bDeep=true );
 
     // BODY-Tag-Events aus der SFX-Konfigaurion
     void OutBasicBodyEvents();
 
     // BACKGROUND/BGCOLOR-Option
-    void OutBackground( const SvxBrushItem *pBrushItem, sal_Bool bGraphic );
-    void OutBackground( const SfxItemSet& rItemSet, sal_Bool bGraphic );
+    void OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic );
+    void OutBackground( const SfxItemSet& rItemSet, bool bGraphic );
 
     void OutLanguage( LanguageType eLang );
     sal_uInt16 GetHTMLDirection( sal_uInt16 nDir ) const;
@@ -492,7 +492,7 @@ public:
     {
         return (sal_Int32)(Strm().Tell()-nLastLFPos);
     }
-    void OutNewLine( sal_Bool bCheck=sal_False );
+    void OutNewLine( bool bCheck=false );
 
     // fuer HTMLSaveData
     SwPaM* GetEndPaM() { return pOrigPam; }
@@ -535,15 +535,15 @@ public:
 
     static void SubtractItemSet( SfxItemSet& rItemSet,
                                  const SfxItemSet& rRefItemSet,
-                                 sal_Bool bSetDefaults,
-                                 sal_Bool bClearSame = sal_True,
+                                 bool bSetDefaults,
+                                 bool bClearSame = true,
                                    const SfxItemSet *pRefScriptItemSet=0 );
-    static sal_Bool HasScriptDependentItems( const SfxItemSet& rItemSet,
-                                               sal_Bool bCheckDropCap );
+    static bool HasScriptDependentItems( const SfxItemSet& rItemSet,
+                                               bool bCheckDropCap );
 
     static void GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
                                       const SdrObject *pObj,
-                                      sal_Bool bSetDefaults );
+                                      bool bSetDefaults );
 
     static sal_uInt16 GetDefListLvl( const OUString& rNm, sal_uInt16 nPoolId );
 
@@ -551,7 +551,7 @@ public:
     {
         return nHTMLMode;
     }
-    sal_Bool IsHTMLMode( sal_uInt32 nMode ) const
+    bool IsHTMLMode( sal_uInt32 nMode ) const
     {
         return (nHTMLMode & nMode) != 0;
     }
@@ -561,7 +561,7 @@ public:
 
     static const sal_Char *GetNumFormat( sal_uInt16 nFmt );
     static void PrepareFontList( const SvxFontItem& rFontItem, OUString& rNames,
-                                 sal_Unicode cQuote, sal_Bool bGeneric );
+                                 sal_Unicode cQuote, bool bGeneric );
     static sal_uInt16 GetCSS1ScriptForScriptType( sal_uInt16 nScriptType );
     static sal_uInt16 GetLangWhichIdFromScript( sal_uInt16 nScript );
 
@@ -612,35 +612,35 @@ struct HTMLSaveData
     SwHTMLNumRuleInfo *pOldNextNumRuleInfo; // Owner = HTML-Writer
     sal_uInt16 nOldDefListLvl;
     sal_uInt16 nOldDirection;
-    sal_Bool bOldWriteAll : 1;
-    sal_Bool bOldOutHeader : 1;
-    sal_Bool bOldOutFooter : 1;
-    sal_Bool bOldOutFlyFrame : 1;
+    bool bOldWriteAll : 1;
+    bool bOldOutHeader : 1;
+    bool bOldOutFooter : 1;
+    bool bOldOutFlyFrame : 1;
     const SwFlyFrmFmt* pOldFlyFmt;
 
     HTMLSaveData( SwHTMLWriter&, sal_uLong nStt, sal_uLong nEnd,
-                  sal_Bool bSaveNum=sal_True,
-                     const SwFrmFmt *pFrmFmt=0  );
+                  bool bSaveNum=true,
+                  const SwFrmFmt *pFrmFmt=0  );
     ~HTMLSaveData();
 };
 
 // einige Funktions-Deklarationen
 Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFmt,
-                               sal_Bool bInCntnr );
+                               bool bInCntnr );
 Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFmt,
-                                  sal_Bool bInCntnr );
+                                  bool bInCntnr );
 
 Writer& OutHTML_SwTxtNode( Writer&, const SwCntntNode& );
 Writer& OutHTML_SwTblNode( Writer& , SwTableNode &, const SwFrmFmt *,
-                           const OUString* pCaption=0, sal_Bool bTopCaption=sal_False );
+                           const OUString* pCaption=0, bool bTopCaption=false );
 
 Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt, const SwDrawFrmFmt& rFmt,
-                                     const SdrObject& rSdrObj, sal_Bool bInCntnr );
+                                     const SdrObject& rSdrObj, bool bInCntnr );
 Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt, const SwDrawFrmFmt& rFmt,
                                      const SdrObject& rSdrObj );
 
 Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
-                              sal_Bool bHeader );
+                              bool bHeader );
 
 Writer& OutHTML_Image( Writer&, const SwFrmFmt& rFmt,
                        Graphic& rGraphic, const OUString& rAlternateTxt,
@@ -653,7 +653,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt, const sal_Char *pTag,
 
 Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt );
-Writer& OutHTML_INetFmt( Writer&, const SwFmtINetFmt& rINetFmt, sal_Bool bOn );
+Writer& OutHTML_INetFmt( Writer&, const SwFmtINetFmt& rINetFmt, bool bOn );
 
 Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );
 Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );

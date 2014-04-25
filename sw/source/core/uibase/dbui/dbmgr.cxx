@@ -167,7 +167,7 @@ bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<XResultS
     {
         try
         {
-            sal_Bool bFinal = sal_False;
+            bool bFinal = false;
             Any aFinal = xPrSet->getPropertyValue("IsRowCountFinal");
             aFinal >>= bFinal;
             if(!bFinal)
@@ -255,9 +255,9 @@ static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSourc
     }
 }
 
-static sal_Bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
+static bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     try
     {
         if(pParam->bScrollable)
@@ -275,7 +275,7 @@ static sal_Bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
     return bRet;
 }
 
-static sal_Bool lcl_GetColumnCnt(SwDSParam* pParam,
+static bool lcl_GetColumnCnt(SwDSParam* pParam,
     const OUString& rColumnName, long nLanguage, OUString& rResult, double* pNumber)
 {
     uno::Reference< XColumnsSupplier > xColsSupp( pParam->xResultSet, UNO_QUERY );
@@ -288,7 +288,7 @@ static sal_Bool lcl_GetColumnCnt(SwDSParam* pParam,
     {
     }
     if(!xCols.is() || !xCols->hasByName(rColumnName))
-        return sal_False;
+        return false;
     Any aCol = xCols->getByName(rColumnName);
     uno::Reference< XPropertySet > xColumnProps;
     aCol >>= xColumnProps;
@@ -306,13 +306,13 @@ static sal_Bool lcl_GetColumnCnt(SwDSParam* pParam,
     aFormatData.aLocale = LanguageTag( (LanguageType)nLanguage ).getLocale();
 
     rResult = SwDBMgr::GetDBField( xColumnProps, aFormatData, pNumber);
-    return sal_True;
+    return true;
 };
 
 /*--------------------------------------------------------------------
     Description: import data
  --------------------------------------------------------------------*/
-sal_Bool SwDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
+bool SwDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 {
     OSL_ENSURE(!bInMerge && !pImpl->pMergeData, "merge already activated!");
 
@@ -335,11 +335,11 @@ sal_Bool SwDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 
     if(aData.sDataSource.isEmpty() || aData.sCommand.isEmpty() || !xResSet.is())
     {
-        return sal_False;
+        return false;
     }
 
     pImpl->pMergeData = new SwDSParam(aData, xResSet, aSelection);
-    SwDSParam*  pTemp = FindDSData(aData, sal_False);
+    SwDSParam*  pTemp = FindDSData(aData, false);
     if(pTemp)
         *pTemp = *pImpl->pMergeData;
     else
@@ -349,7 +349,7 @@ sal_Bool SwDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
         //DSData and set the correct CommandType
         SwDBData aTempData(aData);
         aData.nCommandType = -1;
-        pTemp = FindDSData(aData, sal_False);
+        pTemp = FindDSData(aData, false);
         if(pTemp)
             *pTemp = *pImpl->pMergeData;
         else
@@ -380,7 +380,7 @@ sal_Bool SwDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
             pImpl->pMergeData->bEndOfDB = !pImpl->pMergeData->xResultSet->absolute( nPos );
             pImpl->pMergeData->CheckEndOfDB();
             if(pImpl->pMergeData->nSelectionIndex >= pImpl->pMergeData->aSelection.getLength())
-                pImpl->pMergeData->bEndOfDB = sal_True;
+                pImpl->pMergeData->bEndOfDB = true;
         }
         else
         {
@@ -390,7 +390,7 @@ sal_Bool SwDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
     }
     catch(const Exception&)
     {
-        pImpl->pMergeData->bEndOfDB = sal_True;
+        pImpl->pMergeData->bEndOfDB = true;
         pImpl->pMergeData->CheckEndOfDB();
         OSL_FAIL("exception in MergeNew()");
     }
@@ -400,7 +400,7 @@ sal_Bool SwDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
     lcl_InitNumberFormatter(*pImpl->pMergeData, xSource);
 
     rMergeDesc.rSh.ChgDBData(aData);
-    bInMerge = sal_True;
+    bInMerge = true;
 
     if (IsInitDBFields())
     {
@@ -414,10 +414,10 @@ sal_Bool SwDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
         sDBName += OUString(DB_DELIM);
         sDBName += OUString::number(aInsertData.nCommandType);
         rMergeDesc.rSh.ChangeDBFields( aDBNames, sDBName);
-        SetInitDBFields(sal_False);
+        SetInitDBFields(false);
     }
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch(rMergeDesc.nMergeType)
     {
         case DBMGR_MERGE:
@@ -447,16 +447,16 @@ sal_Bool SwDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 /*--------------------------------------------------------------------
     Description: import data
  --------------------------------------------------------------------*/
-sal_Bool SwDBMgr::Merge(SwWrtShell* pSh)
+bool SwDBMgr::Merge(SwWrtShell* pSh)
 {
     pSh->StartAllAction();
 
-    pSh->SwViewShell::UpdateFlds(sal_True);
+    pSh->SwViewShell::UpdateFlds(true);
     pSh->SetModified();
 
     pSh->EndAllAction();
 
-    return sal_True;
+    return true;
 }
 
 void SwDBMgr::ImportFromConnection(  SwWrtShell* pSh )
@@ -466,8 +466,8 @@ void SwDBMgr::ImportFromConnection(  SwWrtShell* pSh )
         {
             pSh->StartAllAction();
             pSh->StartUndo(UNDO_EMPTY);
-            sal_Bool bGroupUndo(pSh->DoesGroupUndo());
-            pSh->DoGroupUndo(sal_False);
+            bool bGroupUndo(pSh->DoesGroupUndo());
+            pSh->DoGroupUndo(false);
 
             if( pSh->HasSelection() )
                 pSh->DelRight();
@@ -595,12 +595,12 @@ void SwDBMgr::ImportDBEntry(SwWrtShell* pSh)
 /*--------------------------------------------------------------------
     Description: fill Listbox with tablelist
  --------------------------------------------------------------------*/
-sal_Bool SwDBMgr::GetTableNames(ListBox* pListBox, const OUString& rDBName)
+bool SwDBMgr::GetTableNames(ListBox* pListBox, const OUString& rDBName)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     OUString sOldTableName(pListBox->GetSelectEntry());
     pListBox->Clear();
-    SwDSParam* pParam = FindDSConnection(rDBName, sal_False);
+    SwDSParam* pParam = FindDSConnection(rDBName, false);
     uno::Reference< XConnection> xConnection;
     if(pParam && pParam->xConnection.is())
         xConnection = pParam->xConnection;
@@ -638,7 +638,7 @@ sal_Bool SwDBMgr::GetTableNames(ListBox* pListBox, const OUString& rDBName)
         }
         if (!sOldTableName.isEmpty())
             pListBox->SelectEntry(sOldTableName);
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
@@ -646,8 +646,8 @@ sal_Bool SwDBMgr::GetTableNames(ListBox* pListBox, const OUString& rDBName)
 /*--------------------------------------------------------------------
     Description: fill Listbox with column names of a database
  --------------------------------------------------------------------*/
-sal_Bool SwDBMgr::GetColumnNames(ListBox* pListBox,
-            const OUString& rDBName, const OUString& rTableName, sal_Bool bAppend)
+void SwDBMgr::GetColumnNames(ListBox* pListBox,
+                             const OUString& rDBName, const OUString& rTableName, bool bAppend)
 {
     if (!bAppend)
         pListBox->Clear();
@@ -655,7 +655,7 @@ sal_Bool SwDBMgr::GetColumnNames(ListBox* pListBox,
     aData.sDataSource = rDBName;
     aData.sCommand = rTableName;
     aData.nCommandType = -1;
-    SwDSParam* pParam = FindDSData(aData, sal_False);
+    SwDSParam* pParam = FindDSData(aData, false);
     uno::Reference< XConnection> xConnection;
     if(pParam && pParam->xConnection.is())
         xConnection = pParam->xConnection;
@@ -676,12 +676,11 @@ sal_Bool SwDBMgr::GetColumnNames(ListBox* pListBox,
         }
         ::comphelper::disposeComponent( xColsSupp );
     }
-    return(sal_True);
 }
 
-sal_Bool SwDBMgr::GetColumnNames(ListBox* pListBox,
+void SwDBMgr::GetColumnNames(ListBox* pListBox,
         uno::Reference< XConnection> xConnection,
-        const OUString& rTableName, sal_Bool bAppend)
+        const OUString& rTableName, bool bAppend)
 {
     if (!bAppend)
         pListBox->Clear();
@@ -697,7 +696,6 @@ sal_Bool SwDBMgr::GetColumnNames(ListBox* pListBox,
         }
         ::comphelper::disposeComponent( xColsSupp );
     }
-    return(sal_True);
 }
 
 /*--------------------------------------------------------------------
@@ -818,15 +816,15 @@ static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
             rWorkShell.UpdateSection( nSection, aSectionData );
         }
     }
-    rWorkShell.SetLabelDoc( sal_False );
+    rWorkShell.SetLabelDoc( false );
 }
 
-sal_Bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
+bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
         const SwMergeDescriptor& rMergeDescriptor)
 {
     //check if the doc is synchronized and contains at least one linked section
     bool bSynchronizedDoc = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFmtCount() > 1;
-    sal_Bool bNoError = sal_True;
+    bool bNoError = true;
     bool bEMail = rMergeDescriptor.nMergeType == DBMGR_MERGE_MAILING;
     const bool bAsSingleFile = rMergeDescriptor.nMergeType == DBMGR_MERGE_SINGLE_FILE;
 
@@ -859,7 +857,7 @@ sal_Bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             uno::Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
             uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
             if(!xCols->hasByName(sEMailAddrFld))
-                return sal_False;
+                return false;
             Any aCol = xCols->getByName(sEMailAddrFld);
             aCol >>= xColumnProp;
         }
@@ -892,7 +890,7 @@ sal_Bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         pStoreToFilterOptions = &rMergeDescriptor.sSaveToFilterOptions;
                 }
             }
-            bCancel = sal_False;
+            bCancel = false;
 
             // in case of creating a single resulting file this has to be created here
             SwWrtShell* pTargetShell = 0;
@@ -920,9 +918,9 @@ sal_Bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 pTargetView->AttrChangedNotify( &pTargetView->GetWrtShell() );
                 pTargetShell = pTargetView->GetWrtShellPtr();
                 //copy the styles from the source to the target document
-                pTargetView->GetDocShell()->_LoadStyles( *pSourceDocSh, sal_True );
+                pTargetView->GetDocShell()->_LoadStyles( *pSourceDocSh, true );
                 //determine the page style and number used at the start of the source document
-                pSourceShell->SttEndDoc(sal_True);
+                pSourceShell->SttEndDoc(true);
                 nStartingPageNo = pSourceShell->GetVirtPageNum();
                 sStartingPageDesc = sModifiedStartingPageDesc = pSourceShell->GetPageDesc(
                                             pSourceShell->GetCurPageDesc()).GetName();
@@ -1001,8 +999,8 @@ sal_Bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     if( !aTempFile->IsValid() )
                     {
                         ErrorHandler::HandleError( ERRCODE_IO_NOTSUPPORTED );
-                        bNoError = sal_False;
-                        bCancel = sal_True;
+                        bNoError = false;
+                        bCancel = true;
                     }
                     else
                     {
@@ -1067,13 +1065,13 @@ sal_Bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 }
 
                                 // insert the document into the target document
-                                rWorkShell.SttEndDoc(sal_False);
-                                rWorkShell.SttEndDoc(sal_True);
+                                rWorkShell.SttEndDoc(false);
+                                rWorkShell.SttEndDoc(true);
                                 rWorkShell.SelAll();
-                                pTargetShell->SwCrsrShell::SttEndDoc( sal_False );
+                                pTargetShell->SwCrsrShell::SttEndDoc( false );
                                 //#i72517# the headers and footers are still those from the source - update in case of fields inside header/footer
                                 if( !nDocNo && bPageStylesWithHeaderFooter )
-                                    pTargetShell->GetView().GetDocShell()->_LoadStyles( *rWorkShell.GetView().GetDocShell(), sal_True );
+                                    pTargetShell->GetView().GetDocShell()->_LoadStyles( *rWorkShell.GetView().GetDocShell(), true );
                                 //#i72517# put the styles to the target document
                                 //if the source uses headers or footers each new copy need to copy a new page styles
                                 if(bPageStylesWithHeaderFooter)
@@ -1110,7 +1108,7 @@ sal_Bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                         pWorkDoc->AppendTxtNode( aTestPos );
                                     }
                                 }
-                                pTargetShell->Paste( rWorkShell.GetDoc(), sal_True );
+                                pTargetShell->Paste( rWorkShell.GetDoc(), true );
 
                                 //convert fields in page styles (header/footer - has to be done after the first document has been pasted
                                 if(1 == nDocNo)
@@ -1144,8 +1142,8 @@ sal_Bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 {
                                     // error message ??
                                     ErrorHandler::HandleError( xWorkDocSh->GetError() );
-                                    bCancel = sal_True;
-                                    bNoError = sal_False;
+                                    bCancel = true;
+                                    bNoError = false;
                                 }
                                 if( bEMail )
                                 {
@@ -1188,7 +1186,7 @@ sal_Bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                                 {
                                                     pInStream->SetStreamCharSet( eEncoding );
                                                     OString sLine;
-                                                    sal_Bool bDone = pInStream->ReadLine( sLine );
+                                                    bool bDone = pInStream->ReadLine( sLine );
                                                     while ( bDone )
                                                     {
                                                         sBody += OStringToOUString(sLine, eEncoding);
@@ -1282,14 +1280,14 @@ sal_Bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     {
                         // error message ??
                         ErrorHandler::HandleError( xTargetDocShell->GetError() );
-                        bNoError = sal_False;
+                        bNoError = false;
                     }
                 }
                 else if( pTargetView ) // must be available!
                 {
                     //print the target document
         #if OSL_DEBUG_LEVEL > 1
-                    sal_Bool  _bVal;
+                    bool  _bVal;
                     sal_Int16 _nVal;
                     OUString  _sVal;
                     const beans::PropertyValue* pDbgPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
@@ -1358,7 +1356,7 @@ sal_Bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
 void SwDBMgr::MergeCancel()
 {
-    bCancel = sal_True;
+    bCancel = true;
 }
 
 IMPL_LINK_INLINE_START( SwDBMgr, PrtCancelHdl, Button *, pButton )
@@ -1401,7 +1399,7 @@ sal_uLong SwDBMgr::GetColumnFmt( const OUString& rDBName,
             aData.sDataSource = rDBName;
             aData.sCommand = rTableName;
             aData.nCommandType = -1;
-            SwDSParam* pParam = FindDSData(aData, sal_False);
+            SwDSParam* pParam = FindDSData(aData, false);
             if(pParam && pParam->xConnection.is())
             {
                 xConnection = pParam->xConnection;
@@ -1544,7 +1542,7 @@ sal_Int32 SwDBMgr::GetColumnType( const OUString& rDBName,
     aData.sDataSource = rDBName;
     aData.sCommand = rTableName;
     aData.nCommandType = -1;
-    SwDSParam* pParam = FindDSData(aData, sal_False);
+    SwDSParam* pParam = FindDSData(aData, false);
     uno::Reference< XConnection> xConnection;
     uno::Reference< XColumnsSupplier > xColsSupp;
     bool bDispose = false;
@@ -1725,14 +1723,14 @@ OUString SwDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
 void    SwDBMgr::EndMerge()
 {
     OSL_ENSURE(bInMerge, "merge is not active");
-    bInMerge = sal_False;
+    bInMerge = false;
     delete pImpl->pMergeData;
     pImpl->pMergeData = 0;
 }
 
 // checks if a desired data source table or query is open
-sal_Bool    SwDBMgr::IsDataSourceOpen(const OUString& rDataSource,
-                                         const OUString& rTableOrQuery, sal_Bool bMergeOnly)
+bool    SwDBMgr::IsDataSourceOpen(const OUString& rDataSource,
+                                  const OUString& rTableOrQuery, bool bMergeOnly)
 {
     if(pImpl->pMergeData)
     {
@@ -1749,19 +1747,19 @@ sal_Bool    SwDBMgr::IsDataSourceOpen(const OUString& rDataSource,
         aData.sDataSource = rDataSource;
         aData.sCommand = rTableOrQuery;
         aData.nCommandType = -1;
-        SwDSParam* pFound = FindDSData(aData, sal_False);
+        SwDSParam* pFound = FindDSData(aData, false);
         return (pFound && pFound->xResultSet.is());
     }
-    return sal_False;
+    return false;
 }
 
 // read column data at a specified position
-sal_Bool SwDBMgr::GetColumnCnt(const OUString& rSourceName, const OUString& rTableName,
-                            const OUString& rColumnName, sal_uInt32 nAbsRecordId,
-                            long nLanguage,
-                            OUString& rResult, double* pNumber)
+bool SwDBMgr::GetColumnCnt(const OUString& rSourceName, const OUString& rTableName,
+                           const OUString& rColumnName, sal_uInt32 nAbsRecordId,
+                           long nLanguage,
+                           OUString& rResult, double* pNumber)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwDSParam* pFound = 0;
     //check if it's the merge data source
     if(pImpl->pMergeData &&
@@ -1776,10 +1774,10 @@ sal_Bool SwDBMgr::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
         aData.sDataSource = rSourceName;
         aData.sCommand = rTableName;
         aData.nCommandType = -1;
-        pFound = FindDSData(aData, sal_False);
+        pFound = FindDSData(aData, false);
     }
     if (!pFound)
-        return sal_False;
+        return false;
     //check validity of supplied record Id
     if(pFound->aSelection.getLength())
     {
@@ -1794,7 +1792,7 @@ sal_Bool SwDBMgr::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
                 bFound = true;
         }
         if(!bFound)
-            return sal_False;
+            return false;
     }
     if(pFound->xResultSet.is() && !pFound->bAfterSelection)
     {
@@ -1805,10 +1803,10 @@ sal_Bool SwDBMgr::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
         }
         catch(const Exception&)
         {
-            return sal_False;
+            return false;
         }
         //position to the desired index
-        sal_Bool bMove = sal_True;
+        bool bMove = true;
         if ( nOldRow != static_cast<sal_Int32>(nAbsRecordId) )
             bMove = lcl_MoveAbsolute(pFound, nAbsRecordId);
         if(bMove)
@@ -1822,26 +1820,26 @@ sal_Bool SwDBMgr::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
 }
 
 // reads the column data at the current position
-sal_Bool    SwDBMgr::GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
-                                OUString &rResult, double *pNumber, sal_uInt32 * /*pFormat*/)
+bool    SwDBMgr::GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
+                                   OUString &rResult, double *pNumber, sal_uInt32 * /*pFormat*/)
 {
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is() || pImpl->pMergeData->bAfterSelection )
     {
         rResult = "";
-        return sal_False;
+        return false;
     }
 
-    sal_Bool bRet = lcl_GetColumnCnt(pImpl->pMergeData, rColumnName, nLanguage, rResult, pNumber);
+    bool bRet = lcl_GetColumnCnt(pImpl->pMergeData, rColumnName, nLanguage, rResult, pNumber);
     return bRet;
 }
 
-sal_Bool SwDBMgr::ToNextMergeRecord()
+bool SwDBMgr::ToNextMergeRecord()
 {
     OSL_ENSURE(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
     return ToNextRecord(pImpl->pMergeData);
 }
 
-sal_Bool SwDBMgr::ToNextRecord(
+bool SwDBMgr::ToNextRecord(
     const OUString& rDataSource, const OUString& rCommand, sal_Int32 /*nCommandType*/)
 {
     SwDSParam* pFound = 0;
@@ -1855,20 +1853,20 @@ sal_Bool SwDBMgr::ToNextRecord(
         aData.sDataSource = rDataSource;
         aData.sCommand = rCommand;
         aData.nCommandType = -1;
-        pFound = FindDSData(aData, sal_False);
+        pFound = FindDSData(aData, false);
     }
     return ToNextRecord(pFound);
 }
 
-sal_Bool SwDBMgr::ToNextRecord(SwDSParam* pParam)
+bool SwDBMgr::ToNextRecord(SwDSParam* pParam)
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     if(!pParam || !pParam->xResultSet.is() || pParam->bEndOfDB ||
             (pParam->aSelection.getLength() && pParam->aSelection.getLength() <= pParam->nSelectionIndex))
     {
         if(pParam)
             pParam->CheckEndOfDB();
-        return sal_False;
+        return false;
     }
     try
     {
@@ -1880,7 +1878,7 @@ sal_Bool SwDBMgr::ToNextRecord(SwDSParam* pParam)
             pParam->CheckEndOfDB();
             bRet = !pParam->bEndOfDB;
             if(pParam->nSelectionIndex >= pParam->aSelection.getLength())
-                pParam->bEndOfDB = sal_True;
+                pParam->bEndOfDB = true;
         }
         else
         {
@@ -1889,7 +1887,7 @@ sal_Bool SwDBMgr::ToNextRecord(SwDSParam* pParam)
             if( !pParam->bEndOfDB && nBefore == pParam->xResultSet->getRow())
             {
                 //next returned true but it didn't move
-                pParam->bEndOfDB = sal_True;
+                pParam->bEndOfDB = true;
             }
 
             pParam->CheckEndOfDB();
@@ -1908,7 +1906,7 @@ sal_Bool SwDBMgr::ToNextRecord(SwDSParam* pParam)
     to assure that the next page can be created in mail merge
     the cursor position must be validated
  ---------------------------------------------------------------------------*/
-sal_Bool SwDBMgr::ExistsNextRecord() const
+bool SwDBMgr::ExistsNextRecord() const
 {
     return pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB;
 }
@@ -1929,12 +1927,12 @@ sal_uInt32  SwDBMgr::GetSelectedRecordId()
     return nRet;
 }
 
-sal_Bool SwDBMgr::ToRecordId(sal_Int32 nSet)
+bool SwDBMgr::ToRecordId(sal_Int32 nSet)
 {
     OSL_ENSURE(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is()|| nSet < 0)
-        return sal_False;
-    sal_Bool bRet = sal_False;
+        return false;
+    bool bRet = false;
     sal_Int32 nAbsPos = nSet;
 
     if(nAbsPos >= 0)
@@ -1946,7 +1944,7 @@ sal_Bool SwDBMgr::ToRecordId(sal_Int32 nSet)
     return bRet;
 }
 
-sal_Bool SwDBMgr::OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery,
+bool SwDBMgr::OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery,
             sal_Int32 nCommandType, bool bCreate)
 {
     SwDBData aData;
@@ -1954,11 +1952,11 @@ sal_Bool SwDBMgr::OpenDataSource(const OUString& rDataSource, const OUString& rT
     aData.sCommand = rTableOrQuery;
     aData.nCommandType = nCommandType;
 
-    SwDSParam* pFound = FindDSData(aData, sal_True);
+    SwDSParam* pFound = FindDSData(aData, true);
     uno::Reference< XDataSource> xSource;
     if(pFound->xResultSet.is())
-        return sal_True;
-    SwDSParam* pParam = FindDSConnection(rDataSource, sal_False);
+        return true;
+    SwDSParam* pParam = FindDSConnection(rDataSource, false);
     uno::Reference< XConnection> xConnection;
     if(pParam && pParam->xConnection.is())
         pFound->xConnection = pParam->xConnection;
@@ -1980,7 +1978,7 @@ sal_Bool SwDBMgr::OpenDataSource(const OUString& rDataSource, const OUString& rT
             catch(const Exception&)
             {
                 // DB driver may not be ODBC 3.0 compliant
-                pFound->bScrollable = sal_True;
+                pFound->bScrollable = true;
             }
             pFound->xStatement = pFound->xConnection->createStatement();
             OUString aQuoteChar = xMetaData->getIdentifierQuoteString();
@@ -1993,7 +1991,7 @@ sal_Bool SwDBMgr::OpenDataSource(const OUString& rDataSource, const OUString& rT
 
             //after executeQuery the cursor must be positioned
             pFound->bEndOfDB = !pFound->xResultSet->next();
-            pFound->bAfterSelection = sal_False;
+            pFound->bAfterSelection = false;
             pFound->CheckEndOfDB();
             ++pFound->nSelectionIndex;
         }
@@ -2009,7 +2007,7 @@ sal_Bool SwDBMgr::OpenDataSource(const OUString& rDataSource, const OUString& rT
 
 uno::Reference< XConnection> SwDBMgr::RegisterConnection(OUString& rDataSource)
 {
-    SwDSParam* pFound = SwDBMgr::FindDSConnection(rDataSource, sal_True);
+    SwDSParam* pFound = SwDBMgr::FindDSConnection(rDataSource, true);
     uno::Reference< XDataSource> xSource;
     if(!pFound->xConnection.is())
     {
@@ -2043,7 +2041,7 @@ sal_uInt32      SwDBMgr::GetSelectedRecordId(
         aData.sDataSource = rDataSource;
         aData.sCommand = rTableOrQuery;
         aData.nCommandType = nCommandType;
-        SwDSParam* pFound = FindDSData(aData, sal_False);
+        SwDSParam* pFound = FindDSData(aData, false);
         if(pFound && pFound->xResultSet.is())
         {
             try
@@ -2068,7 +2066,7 @@ sal_uInt32      SwDBMgr::GetSelectedRecordId(
 }
 
 // close all data sources - after fields were updated
-void    SwDBMgr::CloseAll(sal_Bool bIncludingMerge)
+void    SwDBMgr::CloseAll(bool bIncludingMerge)
 {
     //the only thing done here is to reset the selection index
     //all connections stay open
@@ -2078,8 +2076,8 @@ void    SwDBMgr::CloseAll(sal_Bool bIncludingMerge)
         if(bIncludingMerge || pParam != pImpl->pMergeData)
         {
             pParam->nSelectionIndex = 0;
-            pParam->bAfterSelection = sal_False;
-            pParam->bEndOfDB = sal_False;
+            pParam->bAfterSelection = false;
+            pParam->bEndOfDB = false;
             try
             {
                 if(!bInMerge && pParam->xResultSet.is())
@@ -2091,7 +2089,7 @@ void    SwDBMgr::CloseAll(sal_Bool bIncludingMerge)
     }
 }
 
-SwDSParam* SwDBMgr::FindDSData(const SwDBData& rData, sal_Bool bCreate)
+SwDSParam* SwDBMgr::FindDSData(const SwDBData& rData, bool bCreate)
 {
     //prefer merge data if available
     if(pImpl->pMergeData && rData.sDataSource == pImpl->pMergeData->sDataSource &&
@@ -2140,7 +2138,7 @@ SwDSParam* SwDBMgr::FindDSData(const SwDBData& rData, sal_Bool bCreate)
     return pFound;
 }
 
-SwDSParam*  SwDBMgr::FindDSConnection(const OUString& rDataSource, sal_Bool bCreate)
+SwDSParam*  SwDBMgr::FindDSConnection(const OUString& rDataSource, bool bCreate)
 {
     //prefer merge data if available
     if(pImpl->pMergeData && rDataSource == pImpl->pMergeData->sDataSource )
@@ -2375,7 +2373,7 @@ OUString SwDBMgr::LoadAndRegisterDataSource()
 
 void SwDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                         const Sequence<PropertyValue>& rProperties,
-                        sal_Bool bWithDataSourceBrowser)
+                        bool bWithDataSourceBrowser)
 {
     //prevent second call
     if(pImpl->pMergeDialog)
@@ -2407,7 +2405,7 @@ void SwDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     if(!xConnection.is())
     {
         xConnection = SwDBMgr::RegisterConnection(sDataSource);
-        pFound = FindDSConnection(sDataSource, sal_True);
+        pFound = FindDSConnection(sDataSource, true);
     }
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -2681,7 +2679,7 @@ sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     uno::Reference< XResultSet> xResultSet = rMMConfig.GetResultSet();
     if(!xResultSet.is())
         return 0;
-    bInMerge = sal_True;
+    bInMerge = true;
     sal_Int32 nRet  = 0;
     pImpl->pMergeData = new SwDSParam(
                 rMMConfig.GetCurrentDBData(), xResultSet, rMMConfig.GetSelection());
@@ -2695,7 +2693,7 @@ sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             pImpl->pMergeData->bEndOfDB = !pImpl->pMergeData->xResultSet->absolute( nPos );
             pImpl->pMergeData->CheckEndOfDB();
             if(pImpl->pMergeData->nSelectionIndex >= pImpl->pMergeData->aSelection.getLength())
-                pImpl->pMergeData->bEndOfDB = sal_True;
+                pImpl->pMergeData->bEndOfDB = true;
         }
         else
         {
@@ -2705,13 +2703,13 @@ sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     }
     catch(const Exception&)
     {
-        pImpl->pMergeData->bEndOfDB = sal_True;
+        pImpl->pMergeData->bEndOfDB = true;
         pImpl->pMergeData->CheckEndOfDB();
         OSL_FAIL("exception in MergeNew()");
     }
 
     //bCancel is set from the PrintMonitor
-    bCancel = sal_False;
+    bCancel = false;
 
     CreateMonitor aMonitorDlg(&rSourceView.GetEditWin());
     aMonitorDlg.SetCancelHdl(LINK(this, SwDBMgr, PrtCancelHdl));
@@ -2728,7 +2726,7 @@ sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     SwWrtShell& rSourceShell = rSourceView.GetWrtShell();
     bool bSynchronizedDoc = rSourceShell.IsLabelDoc() && rSourceShell.GetSectionFmtCount() > 1;
     //save the settings of the first
-    rSourceShell.SttEndDoc(sal_True);
+    rSourceShell.SttEndDoc(true);
     sal_uInt16 nStartingPageNo = rSourceShell.GetVirtPageNum();
     OUString sModifiedStartingPageDesc;
     OUString sStartingPageDesc = sModifiedStartingPageDesc = rSourceShell.GetPageDesc(
@@ -2832,10 +2830,10 @@ sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             }
 
             // insert the document into the target document
-            rWorkShell.SttEndDoc(sal_False);
-            rWorkShell.SttEndDoc(sal_True);
+            rWorkShell.SttEndDoc(false);
+            rWorkShell.SttEndDoc(true);
             rWorkShell.SelAll();
-            pTargetShell->SttEndDoc(sal_False);
+            pTargetShell->SttEndDoc(false);
 
             //#i63806# put the styles to the target document
             //if the source uses headers or footers each new copy need to copy a new page styles
@@ -2859,7 +2857,7 @@ sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             }
             if(nDocNo == 1 || bPageStylesWithHeaderFooter)
             {
-                pTargetView->GetDocShell()->_LoadStyles( *rSourceView.GetDocShell(), sal_True );
+                pTargetView->GetDocShell()->_LoadStyles( *rSourceView.GetDocShell(), true );
             }
             if(nDocNo > 1)
             {
@@ -2882,7 +2880,7 @@ sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                     pWorkDoc->AppendTxtNode( aTestPos );
                 }
             }
-            pTargetShell->Paste( rWorkShell.GetDoc(), sal_True );
+            pTargetShell->Paste( rWorkShell.GetDoc(), true );
             //convert fields in page styles (header/footer - has to be done after the first document has been pasted
             if(1 == nDocNo)
             {
@@ -2930,7 +2928,7 @@ sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         OSL_FAIL("exception caught in SwDBMgr::MergeDocuments");
     }
     DELETEZ(pImpl->pMergeData);
-    bInMerge = sal_False;
+    bInMerge = false;
     return nRet;
 }
 

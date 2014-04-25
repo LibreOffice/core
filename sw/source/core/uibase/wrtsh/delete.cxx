@@ -96,7 +96,7 @@ long SwWrtShell::DelLine()
     SwCrsrShell::RightMargin();
 
     long nRet = Delete();
-    Pop(sal_False);
+    Pop(false);
     if( nRet )
         UpdateAttr();
     return nRet;
@@ -287,7 +287,7 @@ long SwWrtShell::DelRight()
             }
 
             // restore cursor
-            SwCrsrShell::Pop( sal_False );
+            SwCrsrShell::Pop( false );
 
             if( bDelFull )
             {
@@ -326,14 +326,14 @@ long SwWrtShell::DelRight()
                             have moved to a different cell */
                         if (pSNdOld != pSNdNew)
                         {
-                            SwCrsrShell::Pop( sal_True );
+                            SwCrsrShell::Pop( true );
                             break;
                         }
                     }
                 }
 
                 // restore cursor
-                SwCrsrShell::Pop( sal_False );
+                SwCrsrShell::Pop( false );
             }
         }
 
@@ -405,11 +405,11 @@ long SwWrtShell::DelToEndOfPara()
     SetMark();
     if( !MovePara(fnParaCurr,fnParaEnd))
     {
-        Pop(sal_False);
+        Pop(false);
         return 0;
     }
     long nRet = Delete();
-    Pop(sal_False);
+    Pop(false);
     if( nRet )
         UpdateAttr();
     return nRet;
@@ -423,11 +423,11 @@ long SwWrtShell::DelToStartOfPara()
     SetMark();
     if( !MovePara(fnParaCurr,fnParaStart))
     {
-        Pop(sal_False);
+        Pop(false);
         return 0;
     }
     long nRet = Delete();
-    Pop(sal_False);
+    Pop(false);
     if( nRet )
         UpdateAttr();
     return nRet;
@@ -522,11 +522,11 @@ long SwWrtShell::DelPrvWord()
             {
                 // skip over all spaces
                 short n = 0;
-                while( ' ' == GetChar( sal_False, n ))
+                while( ' ' == GetChar( false, n ))
                     --n;
 
                 if( ++n )
-                    ExtendSelection( sal_False, -n );
+                    ExtendSelection( false, -n );
             }
         }
         else if( IsSttPara())

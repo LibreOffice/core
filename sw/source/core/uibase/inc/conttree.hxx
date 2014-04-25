@@ -81,7 +81,7 @@ class SwContentTree : public SvTreeListBox
     bool                bIsInternalDrag     :1;
     bool                bIsRoot             :1;
     bool                bIsIdleClear        :1;
-    sal_Bool                bIsLastReadOnly     :1;
+    bool                bIsLastReadOnly     :1;
     bool                bIsOutlineMoveable  :1;
     bool                bViewHasChanged     :1;
     bool                bIsImageListInitialized : 1;
@@ -170,11 +170,11 @@ public:
     sal_uInt8           GetOutlineLevel()const {return nOutlineLevel;}
     void            SetOutlineLevel(sal_uInt8 nSet);
 
-    sal_Bool            Expand( SvTreeListEntry* pParent );
+    bool            Expand( SvTreeListEntry* pParent );
 
-    sal_Bool            Collapse( SvTreeListEntry* pParent );
+    bool            Collapse( SvTreeListEntry* pParent );
 
-    void            ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier);
+    void            ExecCommand(sal_uInt16 nCmd, bool bModifier);
 
     void            ShowTree();
     void            HideTree();
@@ -321,7 +321,7 @@ public:
 
     void                Display(bool bOnlyUpdateUserData = false);
 
-    sal_Bool                Update(sal_Bool bHard);
+    bool                Update(bool bHard);
 };
 
 #endif

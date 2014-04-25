@@ -99,16 +99,16 @@ struct SwDSParam : public SwDBData
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>       xStatement;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       xResultSet;
     ::com::sun::star::uno::Sequence<  ::com::sun::star::uno::Any >              aSelection;
-    sal_Bool bScrollable;
-    sal_Bool bEndOfDB;
-    sal_Bool bAfterSelection;
+    bool bScrollable;
+    bool bEndOfDB;
+    bool bAfterSelection;
     long nSelectionIndex;
 
     SwDSParam(const SwDBData& rData) :
         SwDBData(rData),
-        bScrollable(sal_False),
-        bEndOfDB(sal_False),
-        bAfterSelection(sal_False),
+        bScrollable(false),
+        bEndOfDB(false),
+        bAfterSelection(false),
         nSelectionIndex(0)
         {}
 
@@ -118,16 +118,16 @@ struct SwDSParam : public SwDBData
         SwDBData(rData),
         xResultSet(xResSet),
         aSelection(rSelection),
-        bScrollable(sal_True),
-        bEndOfDB(sal_False),
-        bAfterSelection(sal_False),
+        bScrollable(true),
+        bEndOfDB(false),
+        bAfterSelection(false),
         nSelectionIndex(0)
         {}
 
         void CheckEndOfDB()
         {
             if(bEndOfDB)
-                bAfterSelection = sal_True;
+                bAfterSelection = true;
         }
 };
 typedef boost::ptr_vector<SwDSParam> SwDSParamArr;
@@ -150,11 +150,11 @@ struct SwMergeDescriptor
 
     ::css::uno::Reference< ::css::mail::XSmtpService >  xSmtpServer;
 
-    sal_Bool                                            bSendAsHTML;
-    sal_Bool                                            bSendAsAttachment;
+    bool                                            bSendAsHTML;
+    bool                                            bSendAsAttachment;
 
-    sal_Bool                                            bPrintAsync;
-    sal_Bool                                            bCreateSingleFile;
+    bool                                            bPrintAsync;
+    bool                                            bCreateSingleFile;
 
     SwMailMergeConfigItem*                              pMailMergeConfigItem;
 
@@ -164,10 +164,10 @@ struct SwMergeDescriptor
         nMergeType(nType),
         rSh(rShell),
         rDescriptor(rDesc),
-        bSendAsHTML( sal_True ),
-        bSendAsAttachment( sal_False ),
-        bPrintAsync( sal_False ),
-        bCreateSingleFile( sal_False ),
+        bSendAsHTML( true ),
+        bSendAsAttachment( false ),
+        bPrintAsync( false ),
+        bCreateSingleFile( false ),
         pMailMergeConfigItem(0)
         {}
 
@@ -186,19 +186,19 @@ friend class SwConnectionDisposedListener_Impl;
     OUString            sEMailAddrFld;      ///< Mailing: Column name of email address.
     OUString            sSubject;           ///< Mailing: Subject
     OUString            sAttached;          ///< Mailing: Attached Files.
-    sal_Bool            bCancel;            ///< Mail merge canceled.
-    sal_Bool            bInitDBFields : 1;
-    sal_Bool            bSingleJobs : 1;    ///< Printing job when called from Basic.
-    sal_Bool            bInMerge    : 1;    ///< merge process active
-    sal_Bool            bMergeSilent : 1;   ///< suppress display of dialogs/boxes (used when called over API)
-    sal_Bool            bMergeLock : 1;     /**< prevent update of database fields while document is
+    bool            bCancel;            ///< Mail merge canceled.
+    bool            bInitDBFields : 1;
+    bool            bSingleJobs : 1;    ///< Printing job when called from Basic.
+    bool            bInMerge    : 1;    ///< merge process active
+    bool            bMergeSilent : 1;   ///< suppress display of dialogs/boxes (used when called over API)
+    bool            bMergeLock : 1;     /**< prevent update of database fields while document is
                                              actually printed at the SwViewShell */
     SwDSParamArr        aDataSourceParams;
     SwDBMgr_Impl*    pImpl;
     const SwXMailMerge* pMergeEvtSrc;   ///< != 0 if mail merge events are to be send
 
-    SAL_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, sal_Bool bCreate);
-    SAL_DLLPRIVATE SwDSParam*          FindDSConnection(const OUString& rSource, sal_Bool bCreate);
+    SAL_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, bool bCreate);
+    SAL_DLLPRIVATE SwDSParam*          FindDSConnection(const OUString& rSource, bool bCreate);
 
     SAL_DLLPRIVATE DECL_LINK( PrtCancelHdl, Button * );
 
@@ -209,9 +209,9 @@ friend class SwConnectionDisposedListener_Impl;
     SAL_DLLPRIVATE void ImportDBEntry(SwWrtShell* pSh);
 
     /// merge to file _and_ merge to e-Mail
-    SAL_DLLPRIVATE sal_Bool          MergeMailFiles(SwWrtShell* pSh,
+    SAL_DLLPRIVATE bool          MergeMailFiles(SwWrtShell* pSh,
                                         const SwMergeDescriptor& rMergeDescriptor );
-    SAL_DLLPRIVATE sal_Bool          ToNextRecord(SwDSParam* pParam);
+    SAL_DLLPRIVATE bool          ToNextRecord(SwDSParam* pParam);
 
 public:
     SwDBMgr();
@@ -221,21 +221,21 @@ public:
     const SwXMailMerge *    GetMailMergeEvtSrc() const  { return pMergeEvtSrc; }
     void SetMailMergeEvtSrc( const SwXMailMerge *pSrc ) { pMergeEvtSrc = pSrc; }
 
-    inline sal_Bool     IsMergeSilent() const           { return bMergeSilent != 0; }
-    inline void     SetMergeSilent( sal_Bool bVal )     { bMergeSilent = bVal; }
+    inline bool     IsMergeSilent() const           { return bMergeSilent; }
+    inline void     SetMergeSilent( bool bVal )     { bMergeSilent = bVal; }
 
     /// Merging of data records into fields.
-    sal_Bool            MergeNew( const SwMergeDescriptor& rMergeDesc );
-    sal_Bool            Merge(SwWrtShell* pSh);
-    void                MergeCancel();
+    bool            MergeNew( const SwMergeDescriptor& rMergeDesc );
+    bool            Merge(SwWrtShell* pSh);
+    void            MergeCancel();
 
     /// Initialize data fields that lack name of database.
-    inline sal_Bool     IsInitDBFields() const  { return bInitDBFields; }
-    inline void     SetInitDBFields(sal_Bool b) { bInitDBFields = b;    }
+    inline bool     IsInitDBFields() const  { return bInitDBFields; }
+    inline void     SetInitDBFields(bool b) { bInitDBFields = b;    }
 
     /// Print / Save mail merge one by one or all together.
-    sal_Bool     IsSingleJobs() const    { return bSingleJobs;   }
-    void     SetSingleJobs(sal_Bool b)   { bSingleJobs = b;  }
+    bool     IsSingleJobs() const    { return bSingleJobs;   }
+    void     SetSingleJobs(bool b)   { bSingleJobs = b;  }
 
     /// Mailing: Set email data.
     inline void     SetEMailColumn(const OUString& sColName) { sEMailAddrFld = sColName; }
@@ -243,14 +243,14 @@ public:
     inline void     SetAttachment(const OUString& sAtt) { sAttached = sAtt; }
 
     /// Fill listbox with all table names of a database.
-    sal_Bool            GetTableNames(ListBox* pListBox, const OUString& rDBName );
+    bool            GetTableNames(ListBox* pListBox, const OUString& rDBName );
 
     /// Fill listbox with all column names of a database table.
-    sal_Bool            GetColumnNames(ListBox* pListBox,
-                            const OUString& rDBName, const OUString& rTableName, sal_Bool bAppend = sal_False);
-    sal_Bool            GetColumnNames(ListBox* pListBox,
+    void            GetColumnNames(ListBox* pListBox,
+                            const OUString& rDBName, const OUString& rTableName, bool bAppend = false);
+    void            GetColumnNames(ListBox* pListBox,
                             ::css::uno::Reference< ::css::sdbc::XConnection> xConnection,
-                            const OUString& rTableName, sal_Bool bAppend = sal_False);
+                            const OUString& rTableName, bool bAppend = false);
 
     sal_uLong GetColumnFmt( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> xSource,
                             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection,
@@ -267,25 +267,25 @@ public:
                           const OUString& rTableName,
                           const OUString& rColNm );
 
-    inline sal_Bool     IsInMerge() const   { return bInMerge; }
+    inline bool     IsInMerge() const   { return bInMerge; }
     void            EndMerge();
 
     void            ExecuteFormLetter(SwWrtShell& rSh,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties,
-                        sal_Bool bWithDataSourceBrowser = sal_False);
+                        bool bWithDataSourceBrowser = false);
 
     void            InsertText(SwWrtShell& rSh,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties);
 
     /// check if a data source is open
-    sal_Bool            IsDataSourceOpen(const OUString& rDataSource,
-                                    const OUString& rTableOrQuery, sal_Bool bMergeOnly);
+    bool            IsDataSourceOpen(const OUString& rDataSource,
+                                    const OUString& rTableOrQuery, bool bMergeOnly);
 
     /// open the source while fields are updated - for the calculator only!
-    sal_Bool            OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery,
+    bool            OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery,
                         sal_Int32 nCommandType = -1, bool bCreate = false);
     sal_uInt32      GetSelectedRecordId(const OUString& rDataSource, const OUString& rTableOrQuery, sal_Int32 nCommandType = -1);
-    sal_Bool            GetColumnCnt(const OUString& rSourceName, const OUString& rTableName,
+    bool            GetColumnCnt(const OUString& rSourceName, const OUString& rTableName,
                             const OUString& rColumnName, sal_uInt32 nAbsRecordId, long nLanguage,
                             OUString& rResult, double* pNumber);
     /** create and store or find an already stored connection to a data source for use
@@ -294,20 +294,20 @@ public:
                     RegisterConnection(OUString& rSource);
 
     const SwDSParam* CreateDSData(const SwDBData& rData)
-                        {return FindDSData(rData, sal_True);}
+                        {return FindDSData(rData, true);}
     const SwDSParamArr& GetDSParamArray() const {return aDataSourceParams;}
 
     /// close all data sources - after fields were updated
-    void            CloseAll(sal_Bool bIncludingMerge = sal_True);
+    void            CloseAll(bool bIncludingMerge = true);
 
-    sal_Bool            GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
+    bool            GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
                                 OUString &rResult, double *pNumber, sal_uInt32 *pFormat);
-    sal_Bool            ToNextMergeRecord();
-    sal_Bool            ToNextRecord(const OUString& rDataSource, const OUString& rTableOrQuery, sal_Int32 nCommandType = -1);
+    bool            ToNextMergeRecord();
+    bool            ToNextRecord(const OUString& rDataSource, const OUString& rTableOrQuery, sal_Int32 nCommandType = -1);
 
-    sal_Bool            ExistsNextRecord()const;
+    bool            ExistsNextRecord()const;
     sal_uInt32      GetSelectedRecordId();
-    sal_Bool        ToRecordId(sal_Int32 nSet);
+    bool            ToRecordId(sal_Int32 nSet);
 
     const SwDBData& GetAddressDBName();
 

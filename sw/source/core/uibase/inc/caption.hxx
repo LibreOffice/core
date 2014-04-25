@@ -27,7 +27,7 @@
 class SW_DLLPUBLIC InsCaptionOpt
 {
 private:
-    sal_Bool            bUseCaption;
+    bool            bUseCaption;
     SwCapObjType    eObjType;
     SvGlobalName    aOleId;
     OUString        sCategory;
@@ -40,15 +40,15 @@ private:
     OUString        sCharacterStyle;
 
     bool         bIgnoreSeqOpts;    // is not being saved
-    sal_Bool         bCopyAttributes;   //          -""-
+    bool         bCopyAttributes;   //          -""-
 
 public:
     InsCaptionOpt(const SwCapObjType eType = FRAME_CAP, const SvGlobalName* pOleId = 0);
     InsCaptionOpt(const InsCaptionOpt&);
     ~InsCaptionOpt();
 
-    inline sal_Bool&            UseCaption()                    { return bUseCaption; }
-    inline sal_Bool             UseCaption() const              { return bUseCaption; }
+    inline bool&            UseCaption()                    { return bUseCaption; }
+    inline bool             UseCaption() const              { return bUseCaption; }
 
     inline SwCapObjType     GetObjType() const              { return eObjType; }
     inline void             SetObjType(const SwCapObjType eType) { eObjType = eType; }
@@ -84,8 +84,8 @@ public:
     inline bool&            IgnoreSeqOpts()                 { return bIgnoreSeqOpts; }
     inline bool             IgnoreSeqOpts() const           { return bIgnoreSeqOpts; }
 
-    inline sal_Bool&            CopyAttributes()                { return bCopyAttributes; }
-    inline sal_Bool             CopyAttributes() const          { return bCopyAttributes; }
+    inline bool&            CopyAttributes()                { return bCopyAttributes; }
+    inline bool             CopyAttributes() const          { return bCopyAttributes; }
 
     bool                    operator==( const InsCaptionOpt& rOpt ) const;
     InsCaptionOpt&          operator= ( const InsCaptionOpt& rOpt );

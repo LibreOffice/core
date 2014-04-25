@@ -381,8 +381,8 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
                 {
                     // Only if the table has page breaks!
                     const SwFrmFmt* pFrmFmt = pTblNd->GetTable().GetFrmFmt();
-                    if( SFX_ITEM_SET != pFrmFmt->GetItemState(RES_PAGEDESC, sal_False) &&
-                        SFX_ITEM_SET != pFrmFmt->GetItemState( RES_BREAK, sal_False ) )
+                    if( SFX_ITEM_SET != pFrmFmt->GetItemState(RES_PAGEDESC, false) &&
+                        SFX_ITEM_SET != pFrmFmt->GetItemState( RES_BREAK, false ) )
                         pNd = 0;
                 }
             }
@@ -403,13 +403,13 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
                         SwFrmFmt* pFrmFmt = pTblNd->GetTable().GetFrmFmt();
                         const SfxPoolItem *pItem;
                         if( SFX_ITEM_SET == pFrmFmt->GetItemState( RES_PAGEDESC,
-                            sal_False, &pItem ) )
+                            false, &pItem ) )
                         {
                             pTxtNd->SetAttr( *pItem );
                             pFrmFmt->ResetFmtAttr( RES_PAGEDESC );
                         }
                         if( SFX_ITEM_SET == pFrmFmt->GetItemState( RES_BREAK,
-                            sal_False, &pItem ) )
+                            false, &pItem ) )
                         {
                             pTxtNd->SetAttr( *pItem );
                             pFrmFmt->ResetFmtAttr( RES_BREAK );
@@ -850,7 +850,7 @@ static sal_Int32 lcl_GetPaperBin( const SwPageFrm *pStartFrm )
 
     const SwFrmFmt &rFmt = pStartFrm->GetPageDesc()->GetMaster();
     const SfxPoolItem *pItem = NULL;
-    SfxItemState eState = rFmt.GetItemState( RES_PAPER_BIN, sal_False, &pItem );
+    SfxItemState eState = rFmt.GetItemState( RES_PAPER_BIN, false, &pItem );
     const SvxPaperBinItem *pPaperBinItem = dynamic_cast< const SvxPaperBinItem * >(pItem);
     if (eState > SFX_ITEM_DEFAULT && pPaperBinItem)
         nRes = pPaperBinItem->GetValue();
@@ -1301,7 +1301,7 @@ bool SwDoc::IncrementalDocStatCalculate(long nChars, bool bFields)
     }
 
     mpDocStat->nPage     = GetCurrentLayout() ? GetCurrentLayout()->GetPageNum() : 0;
-    mpDocStat->bModified = sal_False;
+    mpDocStat->bModified = false;
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( mpDocStat->nPage ? 8 : 7);
     sal_Int32 n=0;
@@ -1524,7 +1524,7 @@ void SwDoc::SetModified()
     //  Bit 1:  -> new state
     sal_IntPtr nCall = mbModified ? 3 : 2;
     mbModified = true;
-    mpDocStat->bModified = sal_True;
+    mpDocStat->bModified = true;
     if( maOle2Link.IsSet() )
     {
         mbInCallModified = true;
@@ -1579,7 +1579,7 @@ void SwDoc::ReRead( SwPaM& rPam, const OUString& rGrfName,
 static bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
-    sal_Bool bOnlyWrong = *(sal_Bool*)pArgs;
+    bool bOnlyWrong = *(sal_Bool*)pArgs;
     if( pTxtNode )
     {
         if( bOnlyWrong )
@@ -1699,7 +1699,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
             sal_uInt8 nWish = nPara;
             sal_uLong nNextOutNd = i + 1 < (sal_uInt16)rOutNds.size() ?
                 rOutNds[ i + 1 ]->GetIndex() : GetNodes().Count();
-            sal_Bool bKeep = sal_False;
+            bool bKeep = false;
             while( ( nWish || bKeep ) && nIndex + nEndOfs < nNextOutNd &&
                    GetNodes()[ nIndex + nEndOfs ]->IsTxtNode() )
             {
@@ -2140,23 +2140,23 @@ bool SwDoc::EmbedAllLinks()
     return bRet;
 }
 
-sal_Bool SwDoc::IsInsTblFormatNum() const
+bool SwDoc::IsInsTblFormatNum() const
 {
     return SW_MOD()->IsInsTblFormatNum(get(IDocumentSettingAccess::HTML_MODE));
 }
 
-sal_Bool SwDoc::IsInsTblChangeNumFormat() const
+bool SwDoc::IsInsTblChangeNumFormat() const
 {
     return SW_MOD()->IsInsTblChangeNumFormat(get(IDocumentSettingAccess::HTML_MODE));
 }
 
-sal_Bool SwDoc::IsInsTblAlignNum() const
+bool SwDoc::IsInsTblAlignNum() const
 {
     return SW_MOD()->IsInsTblAlignNum(get(IDocumentSettingAccess::HTML_MODE));
 }
 
 /// Set up the InsertDB as Undo table
-void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, sal_Bool bIsTable )
+void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable )
 {
     if( bIsTable )
     {

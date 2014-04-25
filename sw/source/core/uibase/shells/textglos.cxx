@@ -54,7 +54,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
             break;
         case FN_EXPAND_GLOSSARY:
         {
-            sal_Bool bReturn;
+            bool bReturn;
             bReturn = pGlosHdl->ExpandGlossary();
             rReq.SetReturnValue( SfxBoolItem( nSlot, bReturn ) );
             rReq.Done();
@@ -76,9 +76,9 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
-                pGlosHdl->SetCurGroup(aGroup, sal_True);
+                pGlosHdl->SetCurGroup(aGroup, true);
                 // Chosen group must be created in NewGlossary if necessary!
-                pGlosHdl->NewGlossary( aName, aShortName, sal_True );
+                pGlosHdl->NewGlossary( aName, aShortName, true );
                 rReq.Done();
             }
             bUpdateList = true;
@@ -108,7 +108,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
-                pGlosHdl->SetCurGroup(aGroup, sal_True);
+                pGlosHdl->SetCurGroup(aGroup, true);
                 rReq.SetReturnValue(SfxBoolItem(nSlot, pGlosHdl->InsertGlossary( aName ) ? sal_True : sal_False));
                 rReq.Done();
             }

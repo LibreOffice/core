@@ -70,7 +70,7 @@ sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::doAccessibleAction( sal_Int32 nIn
     if(nIndex < 0 || nIndex >= getAccessibleActionCount())
         throw lang::IndexOutOfBoundsException();
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwFmtURL aURL( GetFmt()->GetURL() );
     ImageMap* pMap = aURL.GetMap();
     if( pMap != NULL )
@@ -83,7 +83,7 @@ sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::doAccessibleAction( sal_Int32 nIn
             {
                 LoadURL( *pVSh, pMapObj->GetURL(), URLLOAD_NOFILTER,
                          pMapObj->GetTarget() );
-                bRet = sal_True;
+                bRet = true;
             }
         }
     }
@@ -94,7 +94,7 @@ sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::doAccessibleAction( sal_Int32 nIn
         {
             LoadURL( *pVSh, aURL.GetURL(), URLLOAD_NOFILTER,
                      aURL.GetTargetFrameName() );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -180,7 +180,7 @@ Any SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionAnchor(
 
     Any aRet;
     //SwFrm* pAnchor = ((SwFlyFrm*)mpFrm)->GetAnchor();
-    Reference< XAccessible > xAnchor = xFrame->GetAccessibleMap()->GetContext(mpFrm, sal_True);
+    Reference< XAccessible > xAnchor = xFrame->GetAccessibleMap()->GetContext(mpFrm, true);
     //SwAccessibleNoTextFrame* pFrame = xFrame.get();
     //Reference< XAccessible > xAnchor = (XAccessible*)pFrame;
     aRet <<= xAnchor;
