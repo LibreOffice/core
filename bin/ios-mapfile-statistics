@@ -6,7 +6,9 @@ use Getopt::Std;
 
 my %args;
 
-getopts('s', \%args);
+getopts('f:s', \%args);
+
+die "The -f switch makes sense only if -s is also used" if (defined($args{'f'}) && !defined($args{'s'}));
 
 my $state = 0;
 my %libofnumber;
@@ -23,10 +25,13 @@ while (<>) {
   } elsif ($state == 2 && m!^# Address\s+Size\s+File\s+Name!) {
     $state = 3;
   } elsif ($state == 3 && m!^0x[0-9A-F]+\s+(0x[0-9A-F]+)\s+\[ *([0-9]+)\] (.*)!) {
-    if (defined($libofnumber{$2})) {
-      $sizeoflib{$libofnumber{$2}} += hex($1);
+    my ($size,$libnum,$symbol) = ($1, $2, $3);
+    if (defined($libofnumber{$libnum})) {
+      $sizeoflib{$libofnumber{$libnum}} += hex($size);
+      if (!defined($args{'f'}) || $libofnumber{$libnum} =~ /$args{'f'}/) {
+	  $sizeofsym{$symbol} = hex($size);
+	}
     }
-    $sizeofsym{$3} = hex($1);
   }
 }
 
