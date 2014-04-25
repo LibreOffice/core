@@ -330,7 +330,7 @@ bool PowerPointExport::importDocument() throw()
     return false;
 }
 
-bool PowerPointExport::exportDocument() throw (std::exception)
+bool PowerPointExport::exportDocument() throw (css::uno::RuntimeException, std::exception)
 {
     DrawingML::ResetCounters();
     maShapeMap.clear ();
