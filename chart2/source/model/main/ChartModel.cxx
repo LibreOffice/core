@@ -1402,6 +1402,11 @@ void ChartModel::setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd)
     mbTimeBased = true;
 }
 
+uno::Reference< uno::XInterface > ChartModel::getChartView()
+{
+    return xChartView;
+}
+
 }  // namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

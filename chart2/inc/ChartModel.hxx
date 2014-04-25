@@ -581,12 +581,15 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
         getNumberFormatsSupplier();
 
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > getChartView();
+
     bool isTimeBased() const;
     void setTimeBased(bool bTimeBased);
 
     void getNextTimePoint();
     void setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd);
 
+private:
     sal_Int32 mnStart;
     sal_Int32 mnEnd;
     bool bSet;

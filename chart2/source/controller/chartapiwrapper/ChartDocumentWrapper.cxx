@@ -1147,6 +1147,24 @@ uno::Reference< drawing::XDrawPage > ChartDocumentWrapper::impl_getDrawPage() co
     return m_spChart2ModelContact->getDrawPage();
 }
 
+namespace {
+
+uno::Reference< lang::XMultiServiceFactory > getShapeFactory(uno::Reference<uno::XInterface> xChartView)
+{
+    Reference< lang::XUnoTunnel> xUnoTunnel(xChartView,uno::UNO_QUERY);
+    if(xUnoTunnel.is())
+    {
+        ExplicitValueProvider* pProvider = reinterpret_cast<ExplicitValueProvider*>(xUnoTunnel->getSomething(
+                    ExplicitValueProvider::getUnoTunnelId() ));
+        if( pProvider )
+            return pProvider->getDrawModelWrapper()->getShapeFactory();
+
+    }
+    return uno::Reference< lang::XMultiServiceFactory >();
+}
+
+}
+
 // ____ XMultiServiceFactory ____
 uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
     const OUString& aServiceSpecifier )
@@ -1385,15 +1403,18 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
         {
             if( !m_xShapeFactory.is() && m_xChartView.is() )
             {
-                Reference< lang::XUnoTunnel> xUnoTunnel(m_xChartView,uno::UNO_QUERY);
-                if(xUnoTunnel.is())
+                m_xShapeFactory = getShapeFactory( m_xChartView );
+            }
+            else
+            {
+                ChartModel* pModel = m_spChart2ModelContact->getModel();
+                if(pModel)
                 {
-                    ExplicitValueProvider* pProvider = reinterpret_cast<ExplicitValueProvider*>(xUnoTunnel->getSomething(
-                        ExplicitValueProvider::getUnoTunnelId() ));
-                    if( pProvider )
-                        m_xShapeFactory.set( pProvider->getDrawModelWrapper()->getShapeFactory() );
+                    m_xChartView = pModel->getChartView();
+                    m_xShapeFactory = getShapeFactory( m_xChartView );
                 }
             }
+
             if( m_xShapeFactory.is() )
             {
                 xResult = m_xShapeFactory->createInstance( aServiceSpecifier );
