@@ -553,26 +553,26 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt16Item( nSlotId, nTemp );
                 }
-                else if ( pType == ::getCppuType((const sal_uInt32*)0) )
+                else if ( pType == cppu::UnoType<const sal_uInt32>::get() )
                 {
                     sal_uInt32 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt32Item( nSlotId, nTemp );
                 }
-                else if ( pType == ::getCppuType((const OUString*)0) )
+                else if ( pType == cppu::UnoType<const OUString>::get() )
                 {
                     OUString sTemp ;
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotId, sTemp );
                 }
-                else if ( pType == ::getCppuType((const ::com::sun::star::frame::status::ItemStatus*)0) )
+                else if ( pType == cppu::UnoType<const ::com::sun::star::frame::status::ItemStatus>::get() )
                 {
                     ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
                     eState = aItemStatus.State;
                     pItem = new SfxVoidItem( nSlotId );
                 }
-                else if ( pType == ::getCppuType((const ::com::sun::star::frame::status::Visibility*)0) )
+                else if ( pType == cppu::UnoType<const ::com::sun::star::frame::status::Visibility>::get() )
                 {
                     Visibility aVisibilityStatus;
                     rEvent.State >>= aVisibilityStatus;
@@ -1099,26 +1099,26 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt16Item( nSlotId, nTemp );
                 }
-                else if ( pType == ::getCppuType((const sal_uInt32*)0) )
+                else if ( pType == cppu::UnoType<const sal_uInt32>::get() )
                 {
                     sal_uInt32 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt32Item( nSlotId, nTemp );
                 }
-                else if ( pType == ::getCppuType((const OUString*)0) )
+                else if ( pType == cppu::UnoType<const OUString>::get() )
                 {
                     OUString sTemp ;
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotId, sTemp );
                 }
-                else if ( pType == ::getCppuType((const ::com::sun::star::frame::status::ItemStatus*)0) )
+                else if ( pType == cppu::UnoType<const ::com::sun::star::frame::status::ItemStatus>::get() )
                 {
                     ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
                     eState = aItemStatus.State;
                     pItem = new SfxVoidItem( nSlotId );
                 }
-                else if ( pType == ::getCppuType((const ::com::sun::star::frame::status::Visibility*)0) )
+                else if ( pType == cppu::UnoType<const ::com::sun::star::frame::status::Visibility>::get() )
                 {
                     Visibility aVisibilityStatus;
                     rEvent.State >>= aVisibilityStatus;
