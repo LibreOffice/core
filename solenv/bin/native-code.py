@@ -20,7 +20,6 @@ core_factory_list = [
     ("libembobj.a", "embobj_component_getFactory"),
     ("libreflectionlo.a", "reflection_component_getFactory"),
     ("libstocserviceslo.a", "stocservices_component_getFactory"),
-    ("libchartcontrollerlo.a", "chartcontroller_component_getFactory"),
     ("libchartcorelo.a", "chartcore_component_getFactory"),
     ("libcomphelper.a", "comphelp_component_getFactory"),
     ("libconfigmgrlo.a", "configmgr_component_getFactory"),
