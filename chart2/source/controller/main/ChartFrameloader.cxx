@@ -187,4 +187,11 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
 
 } //namespace chart
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart2_ChartFrameLoader_get_implementation(css::uno::XComponentContext *context,
+                                                             css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new chart::ChartFrameLoader(context));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
