@@ -3059,17 +3059,31 @@ OUString ChartView::dump() throw (uno::RuntimeException, std::exception)
     // Used for unit tests only, no need to drag in this when cross-compiling
     // for non-desktop
     impl_updateView();
-    if(!mxRootShape.is())
-        mxRootShape = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)
-            ->getOrCreateChartRootShape( m_xDrawPage );
-
-    if (!mxRootShape.is())
-        return OUString();
-    else
+    uno::Reference< drawing::XShapes > xShapes( m_xDrawPage, uno::UNO_QUERY_THROW );
+    sal_Int32 n = xShapes->getCount();
+    OUStringBuffer aBuffer;
+    for(sal_Int32 i = 0; i < n; ++i)
     {
-        XShapeDumper dumper;
-        return dumper.dump(mxRootShape);
+        uno::Reference< drawing::XShapes > xShape(xShapes->getByIndex(i), uno::UNO_QUERY);
+        if(xShape.is())
+        {
+            XShapeDumper dumper;
+            OUString aString = dumper.dump(mxRootShape);
+            aBuffer.append(aString);
+        }
+        else
+        {
+            uno::Reference< drawing::XShape > xSingleShape(xShapes->getByIndex(i), uno::UNO_QUERY);
+            if(!xSingleShape.is())
+                continue;
+            XShapeDumper dumper;
+            OUString aString = dumper.dump(xSingleShape);
+            aBuffer.append(aString);
+        }
+        aBuffer.append("\n\n");
     }
+
+    return aBuffer.makeStringAndClear();
 #else
     return OUString();
 #endif
