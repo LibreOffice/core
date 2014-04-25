@@ -1555,4 +1555,12 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
 
 } //namespace chart
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart2_ChartController_get_implementation(css::uno::XComponentContext *context,
+                                                            css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new chart::ChartController(context));
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
