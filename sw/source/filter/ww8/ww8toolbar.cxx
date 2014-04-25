@@ -57,20 +57,18 @@ MSOWordCommandConvertor::MSOWordCommandConvertor()
 
 OUString MSOWordCommandConvertor::MSOCommandToOOCommand( sal_Int16 key )
 {
-    OUString sResult;
     IdToString::iterator it = msoToOOcmd.find( key );
     if ( it != msoToOOcmd.end() )
-        sResult = it->second;
-    return sResult;
+        return it->second;
+    return OUString();
 }
 
 OUString MSOWordCommandConvertor::MSOTCIDToOOCommand( sal_Int16 key )
 {
-    OUString sResult;
     IdToString::iterator it = tcidToOOcmd.find( key );
     if ( it != tcidToOOcmd.end() )
-        sResult = it->second;
-    return sResult;
+        return it->second;
+    return OUString();
 }
 
 SwCTBWrapper::SwCTBWrapper( bool bReadId ) : Tcg255SubStruct( bReadId )
@@ -101,7 +99,7 @@ SwCTB* SwCTBWrapper::GetCustomizationData( const OUString& sTBName )
     SwCTB* pCTB = NULL;
     for ( std::vector< Customization >::iterator it = rCustomizations.begin(); it != rCustomizations.end(); ++it )
     {
-        if ( it->GetCustomizationData() && it->GetCustomizationData()->GetName().equals( sTBName ) )
+        if ( it->GetCustomizationData() && it->GetCustomizationData()->GetName() == sTBName )
         {
             pCTB = it->GetCustomizationData();
             break;
@@ -327,15 +325,13 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                 if ( pCust )
                 {
                     // currently only support built-in menu
-                    OUString sMenuBar( "private:resource/menubar/" );
+                    const OUString sMenuBar( "private:resource/menubar/menubar" );
 
-                    sMenuBar = sMenuBar.concat( "menubar" );
                     // Get menu name
                     SwTBC* pTBC = pWrapper->GetTBCAtOffset( it->TBCStreamOffset() );
                     if ( !pTBC )
                         return false;
-                    OUString sMenuName = pTBC->GetCustomText();
-                    sMenuName = sMenuName.replace('&','~');
+                    const OUString sMenuName = pTBC->GetCustomText().replace('&','~');
 
                     // see if the document has already setting for the menubar
 
@@ -360,7 +356,7 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                     // create the popup menu
                     uno::Sequence< beans::PropertyValue > aPopupMenu( 4 );
                     aPopupMenu[0].Name = "CommandURL";
-                    aPopupMenu[0].Value = uno::makeAny( OUString( "vnd.openoffice.org:" ) + sMenuName );
+                    aPopupMenu[0].Value = uno::makeAny( "vnd.openoffice.org:" + sMenuName );
                     aPopupMenu[1].Name = "Label";
                     aPopupMenu[1].Value <<= sMenuName;
                     aPopupMenu[2].Name = "Type";
@@ -556,7 +552,6 @@ SwCTB::Print( FILE* fp )
 
 bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
-    static OUString sToolbarPrefix( "private:resource/toolbar/custom_" );
     bool bRes = false;
     try
     {
@@ -570,7 +565,7 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
         // set UI name for toolbar
         xProps->setPropertyValue( "UIName", uno::makeAny( name.getString() ) );
 
-        OUString sToolBarName = sToolbarPrefix.concat( name.getString() );
+        const OUString sToolBarName = "private:resource/toolbar/custom_" + name.getString();
         for ( std::vector< SwTBC >::iterator it =  rTBC.begin(); it != rTBC.end(); ++it )
         {
             // createToolBar item for control
@@ -699,7 +694,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
         std::vector< css::beans::PropertyValue > props;
         if ( bBuiltin )
         {
-            OUString sCommand = helper.MSOCommandToOOCommand( cmdId );
+            const OUString sCommand = helper.MSOCommandToOOCommand( cmdId );
             if ( !sCommand.isEmpty() )
             {
                 beans::PropertyValue aProp;
@@ -765,10 +760,9 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
 OUString
 SwTBC::GetCustomText()
 {
-    OUString sCustomText;
     if ( tbcd.get() )
-        sCustomText = tbcd->getGeneralInfo().CustomText();
-    return sCustomText;
+        return tbcd->getGeneralInfo().CustomText();
+    return OUString();
 }
 
 bool
