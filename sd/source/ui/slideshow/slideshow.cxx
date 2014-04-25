@@ -146,15 +146,11 @@ SlideShow::SlideShow( SdDrawDocument* pDoc )
 {
 }
 
-// --------------------------------------------------------------------
-
-void SlideShow::ThrowIfDisposed() throw (RuntimeException)
+void SlideShow::ThrowIfDisposed() const throw (RuntimeException)
 {
     if( mpDoc == 0 )
         throw DisposedException();
 }
-
-// --------------------------------------------------------------------
 
 /// used by the model to create a slideshow for it
 rtl::Reference< SlideShow > SlideShow::Create( SdDrawDocument* pDoc )
@@ -676,6 +672,20 @@ WorkWindow *SlideShow::GetWorkWindow()
         return NULL;
 
     return dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
+}
+
+bool SlideShow::IsExitAfterPresenting() const
+{
+    SolarMutexGuard aGuard;
+    ThrowIfDisposed();
+    return mpDoc->IsExitAfterPresenting();
+}
+
+void SlideShow::SetExitAfterPresenting(bool bExit)
+{
+    SolarMutexGuard aGuard;
+    ThrowIfDisposed();
+    mpDoc->SetExitAfterPresenting(bExit);
 }
 
 void SAL_CALL SlideShow::end() throw(RuntimeException)
