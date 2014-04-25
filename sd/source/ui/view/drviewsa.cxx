@@ -656,55 +656,59 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         }
     }
 
-    Point aPos = GetActiveWindow()->PixelToLogic(maMousePos);
-    mpDrawView->GetSdrPageView()->LogicToPagePos(aPos);
-    Fraction aUIScale(GetDoc()->GetUIScale());
-    aPos.X() = Fraction(aPos.X()) / aUIScale;
-    aPos.Y() = Fraction(aPos.Y()) / aUIScale;
-
-    // position- and size items
-    if ( mpDrawView->IsAction() )
+    SdrPageView* pPageView = mpDrawView->GetSdrPageView();
+    if (pPageView)
     {
-        Rectangle aRect;
-        mpDrawView->TakeActionRect( aRect );
+        Point aPos = GetActiveWindow()->PixelToLogic(maMousePos);
+        pPageView->LogicToPagePos(aPos);
+        Fraction aUIScale(GetDoc()->GetUIScale());
+        aPos.X() = Fraction(aPos.X()) / aUIScale;
+        aPos.Y() = Fraction(aPos.Y()) / aUIScale;
 
-        if ( aRect.IsEmpty() )
-            rSet.Put( SfxPointItem(SID_ATTR_POSITION, aPos) );
-        else
+        // position- and size items
+        if ( mpDrawView->IsAction() )
         {
-            mpDrawView->GetSdrPageView()->LogicToPagePos(aRect);
-            aPos = aRect.TopLeft();
-            aPos.X() = Fraction(aPos.X()) / aUIScale;
-            aPos.Y() = Fraction(aPos.Y()) / aUIScale;
-            rSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos) );
-            Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-            aSize.Height() = Fraction(aSize.Height()) / aUIScale;
-            aSize.Width()  = Fraction(aSize.Width())  / aUIScale;
-            rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
-        }
-    }
-    else
-    {
-        if ( mpDrawView->AreObjectsMarked() )
-        {
-            Rectangle aRect = mpDrawView->GetAllMarkedRect();
-            mpDrawView->GetSdrPageView()->LogicToPagePos(aRect);
+            Rectangle aRect;
+            mpDrawView->TakeActionRect( aRect );
 
-            // Show the position of the selected shape(s)
-            Point aShapePosition (aRect.TopLeft());
-            aShapePosition.X() = Fraction(aShapePosition.X()) / aUIScale;
-            aShapePosition.Y() = Fraction(aShapePosition.Y()) / aUIScale;
-            rSet.Put (SfxPointItem(SID_ATTR_POSITION, aShapePosition));
-
-            Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-            aSize.Height() = Fraction(aSize.Height()) / aUIScale;
-            aSize.Width()  = Fraction(aSize.Width())  / aUIScale;
-            rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
+            if ( aRect.IsEmpty() )
+                rSet.Put( SfxPointItem(SID_ATTR_POSITION, aPos) );
+            else
+            {
+                pPageView->LogicToPagePos(aRect);
+                aPos = aRect.TopLeft();
+                aPos.X() = Fraction(aPos.X()) / aUIScale;
+                aPos.Y() = Fraction(aPos.Y()) / aUIScale;
+                rSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos) );
+                Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
+                aSize.Height() = Fraction(aSize.Height()) / aUIScale;
+                aSize.Width()  = Fraction(aSize.Width())  / aUIScale;
+                rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
+            }
         }
         else
         {
-            rSet.Put( SfxPointItem(SID_ATTR_POSITION, aPos) );
-            rSet.Put( SvxSizeItem( SID_ATTR_SIZE, Size( 0, 0 ) ) );
+            if ( mpDrawView->AreObjectsMarked() )
+            {
+                Rectangle aRect = mpDrawView->GetAllMarkedRect();
+                pPageView->LogicToPagePos(aRect);
+
+                // Show the position of the selected shape(s)
+                Point aShapePosition (aRect.TopLeft());
+                aShapePosition.X() = Fraction(aShapePosition.X()) / aUIScale;
+                aShapePosition.Y() = Fraction(aShapePosition.Y()) / aUIScale;
+                rSet.Put (SfxPointItem(SID_ATTR_POSITION, aShapePosition));
+
+                Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
+                aSize.Height() = Fraction(aSize.Height()) / aUIScale;
+                aSize.Width()  = Fraction(aSize.Width())  / aUIScale;
+                rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
+            }
+            else
+            {
+                rSet.Put( SfxPointItem(SID_ATTR_POSITION, aPos) );
+                rSet.Put( SvxSizeItem( SID_ATTR_SIZE, Size( 0, 0 ) ) );
+            }
         }
     }
 
