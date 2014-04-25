@@ -585,6 +585,8 @@ public:
     // normal methods
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
         getNumberFormatsSupplier();
+
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > getChartView();
 };
 
 }  // namespace chart

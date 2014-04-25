@@ -1352,6 +1352,11 @@ OUString SAL_CALL ChartModel::dump()
     return OUString();
 }
 
+uno::Reference< uno::XInterface > ChartModel::getChartView()
+{
+    return xChartView;
+}
+
 }  // namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
