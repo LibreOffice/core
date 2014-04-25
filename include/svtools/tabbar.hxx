@@ -372,13 +372,7 @@ private:
     bool            mbHasInsertTab; // if true, the tab bar has an extra tab at the end.
     bool            mbScrollAlwaysEnabled;
     Link            maSelectHdl;
-    Link            maDoubleClickHdl;
     Link            maSplitHdl;
-    Link            maActivatePageHdl;
-    Link            maDeactivatePageHdl;
-    Link            maStartRenamingHdl;
-    Link            maAllowRenamingHdl;
-    Link            maEndRenamingHdl;
     Link            maScrollAreaContextHdl;
     size_t          maCurrentItemList;
 
@@ -537,23 +531,8 @@ public:
     Size            CalcWindowSizePixel() const;
 
     void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const { return maSelectHdl; }
-    void            SetDoubleClickHdl( const Link& rLink ) { maDoubleClickHdl = rLink; }
-    const Link&     GetDoubleClickHdl() const { return maDoubleClickHdl; }
     void            SetSplitHdl( const Link& rLink ) { maSplitHdl = rLink; }
-    const Link&     GetSplitHdl() const { return maSplitHdl; }
-    void            SetActivatePageHdl( const Link& rLink ) { maActivatePageHdl = rLink; }
-    const Link&     GetActivatePageHdl() const { return maActivatePageHdl; }
-    void            SetDeactivatePageHdl( const Link& rLink ) { maDeactivatePageHdl = rLink; }
-    const Link&     GetDeactivatePageHdl() const { return maDeactivatePageHdl; }
-    void            SetStartRenamingHdl( const Link& rLink ) { maStartRenamingHdl = rLink; }
-    const Link&     GetStartRenamingHdl() const { return maStartRenamingHdl; }
-    void            SetAllowRenamingHdl( const Link& rLink ) { maAllowRenamingHdl = rLink; }
-    const Link&     GetAllowRenamingHdl() const { return maAllowRenamingHdl; }
-    void            SetEndRenamingHdl( const Link& rLink ) { maEndRenamingHdl = rLink; }
-    const Link&     GetEndRenamingHdl() const { return maEndRenamingHdl; }
     void            SetScrollAreaContextHdl( const Link& rLink ) { maScrollAreaContextHdl = rLink; }
-    const Link&     GetScrollAreaContextHdl() const { return maScrollAreaContextHdl; }
 
     // accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
