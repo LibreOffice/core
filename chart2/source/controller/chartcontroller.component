@@ -43,7 +43,8 @@
       constructor="com_sun_star_comp_chart2_ChartTypeDialog_get_implementation">
     <service name="com.sun.star.chart2.ChartTypeDialog"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.ShapeToolbarController">
+  <implementation name="com.sun.star.comp.chart2.ShapeToolbarController"
+      constructor="com_sun_star_comp_chart2_ShapeToolbarController_get_implementation">
     <service name="com.sun.star.chart2.ShapeToolbarController"/>
   </implementation>
   <implementation name="com.sun.star.comp.chart2.WizardDialog">
