@@ -59,7 +59,6 @@ OConnection::OConnection(MorkDriver* _pDriver)
 
 OConnection::~OConnection()
 {
-    acquire();
     if(!isClosed())
         close();
     m_pDriver->release();
