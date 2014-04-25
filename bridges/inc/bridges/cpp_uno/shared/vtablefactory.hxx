@@ -93,6 +93,11 @@ public:
             snippets, after the vtable itself.</p>
          */
         Block * blocks;
+        Vtables()
+            : count(0)
+            , blocks(NULL)
+        {
+        }
     };
 
     VtableFactory();
