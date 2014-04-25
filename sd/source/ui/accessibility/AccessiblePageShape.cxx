@@ -87,7 +87,7 @@ sal_Int32 SAL_CALL
 */
 uno::Reference<XAccessible> SAL_CALL
     AccessiblePageShape::getAccessibleChild( sal_Int32 )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     throw lang::IndexOutOfBoundsException ("page shape has no children",
         static_cast<uno::XWeak*>(this));

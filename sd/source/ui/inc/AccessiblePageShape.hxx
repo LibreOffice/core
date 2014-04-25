@@ -94,7 +94,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     //=====  XAccessibleComponent  ============================================
