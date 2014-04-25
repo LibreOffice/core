@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_8e673fea",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-25T12:01:30Z",
+      "side": 1,
+      "message": "I was in doubt whether push_back plus sort would be better or\nstepping from begin() to *iterator \u003e c and inserting there.\nAs there are not so many different characters in the function names (for English names 26 alpha + 10 digit + 2 (._)), I opted for the simpler code.",
+      "revId": "1fb962caf0f934e86ccb8fcc4491fb0d311d84e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
