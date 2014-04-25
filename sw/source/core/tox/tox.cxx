@@ -402,17 +402,15 @@ sal_uInt16 SwForm::GetFormMaxLevel( TOXTypes eTOXType )
 
 void SwForm::AdjustTabStops( SwDoc& rDoc ) // #i21237#
 {
-    for(sal_uInt16 nLevel = 1; nLevel < GetFormMax(); nLevel++)
+    const sal_uInt16 nFormMaxLevel = GetFormMax();
+    for ( sal_uInt16 nLevel = 1; nLevel < nFormMaxLevel; ++nLevel )
     {
-        const OUString sTemplateName = GetTemplate(nLevel);
-
-        SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName( sTemplateName );
+        SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName( GetTemplate(nLevel) );
         if( pColl == NULL )
         {
-            const sal_uInt16 nId =
-                SwStyleNameMapper::GetPoolIdFromUIName( sTemplateName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-            if ( USHRT_MAX != nId )
-                pColl = rDoc.GetTxtCollFromPool( nId );
+            // Paragraph Style for this level has not been created.
+            // --> No need to propagate default values
+            continue;
         }
 
         const SvxTabStopItem* pTabStops = pColl != NULL ? &pColl->GetTabStops(sal_False) : 0;
@@ -427,6 +425,9 @@ void SwForm::AdjustTabStops( SwDoc& rDoc ) // #i21237#
             for(sal_uInt16 nTab = 0; nTab < nTabCount; ++nTab)
             {
                 const SvxTabStop& rTab = (*pTabStops)[nTab];
+
+                if ( rTab.GetAdjustment() == SVX_TAB_ADJUST_DEFAULT )
+                    continue; // ignore the default tab stop
 
                 aIt = find_if( aIt, aCurrentPattern.end(), SwFormTokenEqualToFormTokenType(TOKEN_TAB_STOP) );
                 if ( aIt != aCurrentPattern.end() )
