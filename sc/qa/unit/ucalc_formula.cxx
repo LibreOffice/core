@@ -1900,10 +1900,10 @@ void Test::testFormulaRefUpdateNamedExpressionMove()
 
 void Test::testFormulaRefUpdateNamedExpressionExpandRef()
 {
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
     m_pDoc->InsertTab(0, "Test");
     m_pDoc->SetExpandRefs(true); // turn on automatic range expansion.
-
-    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
     bool bInserted = m_pDoc->InsertNewRangeName("MyRange", ScAddress(0,0,0), "$A$1:$A$3");
     CPPUNIT_ASSERT(bInserted);
@@ -1956,6 +1956,51 @@ void Test::testFormulaRefUpdateNamedExpressionExpandRef()
 
     pName->GetSymbol(aSymbol, m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(OUString("$B$4:$B$9"), aSymbol);
+
+    // Clear the document and start over.
+    m_pDoc->GetRangeName()->clear();
+    clearSheet(m_pDoc, 0);
+
+    // Set values to A1:A3.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
+    m_pDoc->SetValue(ScAddress(0,1,0), 2.0);
+    m_pDoc->SetValue(ScAddress(0,2,0), 3.0);
+
+    // Name A1:A3 'MyData'.
+    bInserted = m_pDoc->InsertNewRangeName("MyData", ScAddress(0,0,0), "$A$1:$A$3");
+    CPPUNIT_ASSERT(bInserted);
+
+    // Set formulas to C1:C2 and E1.
+    m_pDoc->SetString(ScAddress(2,0,0), "=SUM(MyData)");
+    m_pDoc->SetString(ScAddress(2,1,0), "=SUM(MyData)");
+    m_pDoc->SetString(ScAddress(4,0,0), "=SUM(MyData)");
+
+    // C1:C2 should be shared.
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(2,0,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+
+    // E1 should not be shared.
+    pFC = m_pDoc->GetFormulaCell(ScAddress(4,0,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT(!pFC->IsShared());
+
+    // Check the results.
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(4,0,0)));
+
+    // Insert a new row at row 3.  This should expand MyData to A1:A4.
+    rFunc.InsertCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, INS_INSROWS, false, true, false);
+
+    // Set new value to A3.
+    m_pDoc->SetValue(ScAddress(0,2,0), 4.0);
+
+    // Check the results again.
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(4,0,0)));
 
     m_pDoc->DeleteTab(0);
 }
