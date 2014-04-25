@@ -32,8 +32,6 @@
 
 using namespace ::com::sun::star;
 
-#ifdef CGM_EXPORT_IMPRESS
-
 CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )
     : mnOutdx(28000)
     , mnOutdy(21000)
@@ -66,20 +64,16 @@ CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )
     , mnElementClass(0)
     , mnElementID(0)
     , mnElementSize(0)
-#ifdef CGM_EXPORT_META
     , mpVirDev(NULL)
     , mpGDIMetaFile(NULL)
-#endif
 {
     pElement = new CGMElements( *this );
     pCopyOfE = new CGMElements( *this );
 }
-#endif
 
 CGM::~CGM()
 {
 
-#ifdef CGM_EXPORT_META
     if ( mpGraphic )
     {
         mpGDIMetaFile->Stop();
@@ -88,7 +82,6 @@ CGM::~CGM()
         delete mpVirDev;
         *mpGraphic = Graphic( *mpGDIMetaFile );
     }
-#endif
     for( size_t i = 0, n = maDefRepList.size(); i < n; ++i )
         delete maDefRepList[ i ];
     maDefRepList.clear();
@@ -594,13 +587,6 @@ void CGM::ImplMapPoint( FloatPoint& rFloatPoint )
 
 void CGM::ImplDoClass()
 {
-#ifdef CGM_USER_BREAKPOINT
-#ifdef WNT
-#define CGM_BREAK_ACTION    0xffffffff
-    if ( mnActCount == CGM_BREAK_ACTION )
-        _asm int 0x3;
-#endif
-#endif
     switch ( mnElementClass )
     {
         case 0 : ImplDoClass0(); break;
@@ -695,14 +681,6 @@ bool CGM::Write( SvStream& rIStm )
         rIStm.SeekRel( 1 );
     ImplDoClass();
 
-
-#ifdef CGM_USER_BREAKPOINT
-#ifdef WNT
-    if ( !mbStatus || mnParaSize && ( mnElementSize != mnParaSize ) )
-        _asm int 0x3;
-#endif
-#endif
-
     return mbStatus;
 };
 
@@ -731,7 +709,6 @@ ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_u
                         sal_uInt64 const nInSize = pIn->remainingSize();
                         pIn->Seek( 0 );
 
-#ifdef CGM_EXPORT_IMPRESS
                         uno::Reference< task::XStatusIndicator >  aXStatInd;
                         sal_uInt32  nNext = 0;
                         sal_uInt32  nAdd = nInSize / 20;
@@ -740,14 +717,9 @@ ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_u
                         bProgressBar = aXStatInd.is();
                         if ( bProgressBar )
                             aXStatInd->start( "CGM Import" , nInSize );
-#endif
 
                         while ( pCGM->IsValid() && ( pIn->Tell() < nInSize ) && !pCGM->IsFinished() )
                         {
-
-#ifdef CGM_EXPORT_IMPRESS
-
-
                             if ( bProgressBar )
                             {
                                 sal_uInt32 nCurrentPos = pIn->Tell();
@@ -757,7 +729,6 @@ ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_u
                                     nNext = nCurrentPos + nAdd;
                                 }
                             }
-#endif
 
                             if ( pCGM->Write( *pIn ) == false )
                                 break;
@@ -766,10 +737,8 @@ ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_u
                         {
                             nStatus = pCGM->GetBackGroundColor() | 0xff000000;
                         }
-#ifdef CGM_EXPORT_IMPRESS
                         if ( bProgressBar )
                             aXStatInd->end();
-#endif
                     }
                 }
             }
