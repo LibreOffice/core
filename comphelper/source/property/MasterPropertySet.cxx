@@ -197,7 +197,7 @@ void SAL_CALL MasterPropertySet::removeVetoableChangeListener( const OUString&, 
 
 // XMultiPropertySet
 void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
-    throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
+    throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard;
@@ -263,7 +263,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
 }
 
 Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< OUString >& aPropertyNames )
-    throw (UnknownPropertyException, RuntimeException, std::exception)
+    throw(RuntimeException, std::exception)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard;
