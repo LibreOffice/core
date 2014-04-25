@@ -664,13 +664,13 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
     // cmtAllocated 0x3 Allocated command. See CidAllocated.
     // cmtNil       0x7 No command. See Cid.
     bool bBuiltin = false;
-    sal_uInt16 cmdId = 0;
+    sal_Int16 cmdId = 0;
     if  ( cid.get() )
     {
-        sal_uInt16 arg2 = ( *( cid.get() ) & 0xFFFF );
+        const sal_uInt32 nCid = ( *( cid.get() ) & 0xFFFF );
 
-        sal_uInt8 cmt = ( arg2 & 0x7 );
-        arg2 = ( arg2 >> 3 );
+        const sal_uInt8 cmt = static_cast<sal_uInt8>( nCid & 0x7 );
+        const sal_Int16 arg2 = static_cast<sal_Int16>( nCid >> 3 );
 
         switch ( cmt )
         {
