@@ -9446,7 +9446,7 @@ void Window::DrawGradientWallpaper( long nX, long nY,
         if( gradientWidth > 1024 )
             gradientWidth = 1024;
         if( mnOutOffX+nWidth > gradientWidth )
-            ImplDrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper.GetGradient().GetEndColor() );
+            DrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper.GetGradient().GetEndColor() );
         if( mnOutOffX > gradientWidth )
             bNeedGradient = false;
         else
@@ -9486,7 +9486,7 @@ void Window::Erase()
         RasterOp eRasterOp = GetRasterOp();
         if ( eRasterOp != ROP_OVERPAINT )
             SetRasterOp( ROP_OVERPAINT );
-        ImplDrawWallpaper( 0, 0, mnOutWidth, mnOutHeight, maBackground );
+        DrawWallpaper( 0, 0, mnOutWidth, mnOutHeight, maBackground );
         if ( eRasterOp != ROP_OVERPAINT )
             SetRasterOp( eRasterOp );
     }

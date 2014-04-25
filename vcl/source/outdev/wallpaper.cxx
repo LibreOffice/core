@@ -22,9 +22,46 @@
 
 #include <wall2.hxx>
 
-void OutputDevice::ImplDrawColorWallpaper( long nX, long nY,
-                                           long nWidth, long nHeight,
-                                           const Wallpaper& rWallpaper )
+void OutputDevice::DrawWallpaper( const Rectangle& rRect,
+                                  const Wallpaper& rWallpaper )
+{
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaWallpaperAction( rRect, rWallpaper ) );
+
+    if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
+        return;
+
+    if ( rWallpaper.GetStyle() != WALLPAPER_NULL )
+    {
+        Rectangle aRect = LogicToPixel( rRect );
+        aRect.Justify();
+
+        if ( !aRect.IsEmpty() )
+        {
+            DrawWallpaper( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
+                               rWallpaper );
+        }
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawWallpaper( rRect, rWallpaper );
+}
+
+void OutputDevice::DrawWallpaper( long nX, long nY,
+                                      long nWidth, long nHeight,
+                                      const Wallpaper& rWallpaper )
+{
+    if( rWallpaper.IsBitmap() )
+        DrawBitmapWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
+    else if( rWallpaper.IsGradient() )
+        DrawGradientWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
+    else
+        DrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper );
+}
+
+void OutputDevice::DrawColorWallpaper( long nX, long nY,
+                                       long nWidth, long nHeight,
+                                       const Wallpaper& rWallpaper )
 {
     // draw wallpaper without border
     Color aOldLineColor = GetLineColor();
@@ -39,7 +76,7 @@ void OutputDevice::ImplDrawColorWallpaper( long nX, long nY,
     EnableMapMode( bMap );
 }
 
-void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
+void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
                                             long nWidth, long nHeight,
                                             const Wallpaper& rWallpaper )
 {
@@ -95,7 +132,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
         DrawGradientWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
     else if( bDrawColorBackground && bTransparent )
     {
-        ImplDrawColorWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
+        DrawColorWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
         bDrawColorBackground = false;
     }
 
@@ -234,7 +271,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
             aWorkRect.Intersection( aColRect );
             if( !aWorkRect.IsEmpty() )
             {
-                ImplDrawColorWallpaper( aWorkRect.Left(), aWorkRect.Top(),
+                DrawColorWallpaper( aWorkRect.Left(), aWorkRect.Top(),
                                         aWorkRect.GetWidth(), aWorkRect.GetHeight(),
                                         rWallpaper );
             }
@@ -244,7 +281,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
             aWorkRect.Intersection( aColRect );
             if( !aWorkRect.IsEmpty() )
             {
-                ImplDrawColorWallpaper( aWorkRect.Left(), aWorkRect.Top(),
+                DrawColorWallpaper( aWorkRect.Left(), aWorkRect.Top(),
                                         aWorkRect.GetWidth(), aWorkRect.GetHeight(),
                                         rWallpaper );
             }
@@ -254,7 +291,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
             aWorkRect.Intersection( aColRect );
             if( !aWorkRect.IsEmpty() )
             {
-                ImplDrawColorWallpaper( aWorkRect.Left(), aWorkRect.Top(),
+                DrawColorWallpaper( aWorkRect.Left(), aWorkRect.Top(),
                                         aWorkRect.GetWidth(), aWorkRect.GetHeight(),
                                         rWallpaper );
             }
@@ -264,7 +301,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
             aWorkRect.Intersection( aColRect );
             if( !aWorkRect.IsEmpty() )
             {
-                ImplDrawColorWallpaper( aWorkRect.Left(), aWorkRect.Top(),
+                DrawColorWallpaper( aWorkRect.Left(), aWorkRect.Top(),
                                         aWorkRect.GetWidth(), aWorkRect.GetHeight(),
                                         rWallpaper );
             }
@@ -300,43 +337,6 @@ void OutputDevice::DrawGradientWallpaper( long nX, long nY,
     Pop();
     EnableMapMode( bOldMap );
     mpMetaFile = pOldMetaFile;
-}
-
-void OutputDevice::ImplDrawWallpaper( long nX, long nY,
-                                      long nWidth, long nHeight,
-                                      const Wallpaper& rWallpaper )
-{
-    if( rWallpaper.IsBitmap() )
-        ImplDrawBitmapWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
-    else if( rWallpaper.IsGradient() )
-        DrawGradientWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
-    else
-        ImplDrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper );
-}
-
-void OutputDevice::DrawWallpaper( const Rectangle& rRect,
-                                  const Wallpaper& rWallpaper )
-{
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaWallpaperAction( rRect, rWallpaper ) );
-
-    if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
-        return;
-
-    if ( rWallpaper.GetStyle() != WALLPAPER_NULL )
-    {
-        Rectangle aRect = LogicToPixel( rRect );
-        aRect.Justify();
-
-        if ( !aRect.IsEmpty() )
-        {
-            ImplDrawWallpaper( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
-                               rWallpaper );
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawWallpaper( rRect, rWallpaper );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

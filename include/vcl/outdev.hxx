@@ -534,15 +534,19 @@ protected:
     SAL_DLLPRIVATE void         ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
     ///@}
 
-public:
     /** @name Wallpaper functions
      */
     ///@{
-    SAL_DLLPRIVATE void         ImplDrawWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
-    SAL_DLLPRIVATE void         ImplDrawColorWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
-    SAL_DLLPRIVATE void         ImplDrawBitmapWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
+public:
+    void                        DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
+
+private:
+    SAL_DLLPRIVATE void         DrawWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
+    SAL_DLLPRIVATE void         DrawColorWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
+    SAL_DLLPRIVATE void         DrawBitmapWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
     ///@}
 
+private:
     SAL_DLLPRIVATE void         ImplDrawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
 
     SAL_DLLPRIVATE void         ImplPrintTransparent ( const Bitmap& rBmp, const Bitmap& rMask,
@@ -553,6 +557,7 @@ public:
     /** @name Frame functions
      */
     ///@{
+private:
     SAL_DLLPRIVATE void         ImplGetFrameDev     ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
                                                       OutputDevice& rOutDev );
     SAL_DLLPRIVATE void         ImplDrawFrameDev    ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
@@ -562,11 +567,13 @@ public:
     /** @name Layout functions
      */
     ///@{
-    SAL_DLLPRIVATE bool         ImplIsRecordLayout() const;
-    virtual bool                HasMirroredGraphics() const;
+public:
+    SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
     SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;
     SAL_DLLPRIVATE void         ReMirror( Rectangle &rRect ) const;
     SAL_DLLPRIVATE void         ReMirror( Region &rRegion ) const;
+    SAL_DLLPRIVATE bool         ImplIsRecordLayout() const;
+    virtual bool                HasMirroredGraphics() const;
     SAL_DLLPRIVATE SalLayout*   ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), long nLogicWidth=0,
                                             const sal_Int32* pLogicDXArray=NULL ) const;
@@ -574,7 +581,6 @@ public:
                                             long nPixelWidth, const sal_Int32* pPixelDXArray ) const;
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
-    SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
     SAL_DLLPRIVATE SalLayout*   getFallbackFont(ImplFontEntry &rFallbackFont,
                                     FontSelectPattern &rFontSelData, int nFallbackLevel,
                                     ImplLayoutArgs& rLayoutArgs) const;
@@ -1486,7 +1492,6 @@ public:
     ///@}
 
 public:
-    void                        DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
     void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos );
     void                        DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags );
 
