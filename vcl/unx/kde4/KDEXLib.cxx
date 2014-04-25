@@ -47,13 +47,14 @@
 #if KDE_HAVE_GLIB
 #include "KDE4FilePicker.hxx"
 #include "tst_exclude_socket_notifiers.moc"
+#include "tst_exclude_posted_events.moc"
 #endif
 
 KDEXLib::KDEXLib() :
     SalXLib(),  m_bStartupDone(false), m_pApplication(0),
     m_pFreeCmdLineArgs(0), m_pAppCmdLineArgs(0), m_nFakeCmdLineArgs( 0 ),
     m_frameWidth( -1 ), m_isGlibEventLoopType(false),
-    m_haveQt4SocketExcludeFix(false)
+    m_allowKdeDialogs(false)
 {
     // the timers created here means they belong to the main thread.
     // As the timeoutTimer runs the LO event queue, which may block on a dialog,
@@ -187,9 +188,14 @@ void KDEXLib::Init()
 
 #if KDE_HAVE_GLIB
     m_isGlibEventLoopType = QAbstractEventDispatcher::instance()->inherits( "QEventDispatcherGlib" );
-    if (m_isGlibEventLoopType && (0 == tst_processEventsExcludeSocket()))
+    // Using KDE dialogs (and their nested event loops) works only with a proper event loop integration
+    // that will release SolarMutex when waiting for more events.
+    // Moreover there are bugs in Qt event loop code that allow QClipboard recursing because the event
+    // loop processes also events that it should not at that point, so no dialogs in that case either.
+    if (m_isGlibEventLoopType && (0 == tst_processEventsExcludeSocket()) && tst_excludePostedEvents() == 0 )
         // See http://bugreports.qt.nokia.com/browse/QTBUG-37380
-        m_haveQt4SocketExcludeFix = true;
+        // https://bugreports.qt-project.org/browse/QTBUG-34614
+        m_allowKdeDialogs = true;
 #endif
 
     setupEventLoop();
@@ -238,7 +244,7 @@ void KDEXLib::setupEventLoop()
     {
         old_gpoll = g_main_context_get_poll_func( NULL );
         g_main_context_set_poll_func( NULL, gpoll_wrapper );
-        if( m_haveQt4SocketExcludeFix )
+        if( m_allowKdeDialogs )
             m_pApplication->clipboard()->setProperty( "useEventLoopWhenWaiting", true );
         return;
     }

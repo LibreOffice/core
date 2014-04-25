@@ -11275,6 +11275,33 @@ int main(int argc, char *argv[])
             # Remove meta object data
             rm -f "${TSTBASE}."*
 
+            AC_MSG_CHECKING([whether Qt avoids QClipboard recursion caused by posted events])
+
+            # Prepare meta object data
+            TSTBASE="tst_exclude_posted_events"
+            TSTMOC="${SRC_ROOT}/vcl/unx/kde4/${TSTBASE}"
+            ln -fs "${TSTMOC}.hxx"
+            $MOC4 "${TSTBASE}.hxx" -o "${TSTBASE}.moc"
+
+            AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#include "tst_exclude_posted_events.moc"
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication app(argc, argv);
+    exit(tst_excludePostedEvents());
+    return 0;
+}
+            ]])],[
+                AC_MSG_RESULT([yes])
+            ],[
+                AC_MSG_RESULT([no])
+                AC_MSG_WARN([native KDE4 file pickers will be disabled at runtime - fix your Qt4 library!])
+            ])
+
+            # Remove meta object data
+            rm -f "${TSTBASE}."*
+
             LIBS=$save_LIBS
             CXXFLAGS=$save_CXXFLAGS
             AC_LANG_POP([C++])
