@@ -39,7 +39,8 @@
       constructor="com_sun_star_comp_chart2_ChartFrameLoader_get_implementation">
     <service name="com.sun.star.frame.SynchronousFrameLoader"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.ChartTypeDialog">
+  <implementation name="com.sun.star.comp.chart2.ChartTypeDialog"
+      constructor="com_sun_star_comp_chart2_ChartTypeDialog_get_implementation">
     <service name="com.sun.star.chart2.ChartTypeDialog"/>
   </implementation>
   <implementation name="com.sun.star.comp.chart2.ShapeToolbarController">

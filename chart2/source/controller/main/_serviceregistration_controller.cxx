@@ -38,14 +38,6 @@ static const struct ::cppu::ImplementationEntry g_entries_chart2_controller[] =
         , 0
     }
     ,{
-          ::chart::ChartTypeUnoDlg::Create
-        , ::chart::ChartTypeUnoDlg::getImplementationName_Static
-        , ::chart::ChartTypeUnoDlg::getSupportedServiceNames_Static
-        , ::cppu::createSingleComponentFactory
-        , 0
-        , 0
-    }
-    ,{
           ::chart::ShapeToolbarController::create
         , ::chart::ShapeToolbarController::getImplementationName_Static
         , ::chart::ShapeToolbarController::getSupportedServiceNames_Static
