@@ -1,0 +1,109 @@
+diff -ru hunspell/src/hunspell/csutil.cxx build/hunspell/src/hunspell/csutil.cxx
+--- hunspell/src/hunspell/csutil.cxx	2011-02-02 11:35:43.000000000 +0100
++++ build/hunspell/src/hunspell/csutil.cxx	2014-04-24 19:42:01.373285409 +0200
+@@ -17,6 +17,10 @@
+   unsigned short clower;
+ };
+ 
++#ifdef _WIN32
++#include <wchar.h>
++#endif
++
+ #ifdef OPENOFFICEORG
+ #  include <unicode/uchar.h>
+ #else
+@@ -46,6 +50,21 @@
+ static struct unicode_info2 * utf_tbl = NULL;
+ static int utf_tbl_count = 0; // utf_tbl can be used by multiple Hunspell instances
+ 
++FILE * myfopen(const char * path, const char * mode) {
++#ifdef _WIN32
++#define WIN32_LONG_PATH_PREFIX "\\\\?\\"
++    if (strncmp(path, WIN32_LONG_PATH_PREFIX, 4) == 0) {
++        int len = MultiByteToWideChar(CP_UTF8, 0, path, -1, NULL, 0);
++        wchar_t *buff = (wchar_t *) malloc(len * sizeof(wchar_t));
++        MultiByteToWideChar(CP_UTF8, 0, path, -1, buff, len);
++        FILE * f = _wfopen(buff, (strcmp(mode, "r") == 0) ? L"r" : L"rb");
++        free(buff);
++        return f;
++    }
++#endif
++    return fopen(path, mode);
++}
++
+ /* only UTF-16 (BMP) implementation */
+ char * u16_u8(char * dest, int size, const w_char * src, int srclen) {
+     signed char * u8 = (signed char *)dest;
+diff -ru hunspell/src/hunspell/csutil.hxx build/hunspell/src/hunspell/csutil.hxx
+--- hunspell/src/hunspell/csutil.hxx	2010-09-06 09:58:53.000000000 +0200
++++ build/hunspell/src/hunspell/csutil.hxx	2014-04-24 19:42:01.373285409 +0200
+@@ -52,6 +52,9 @@
+ #define FORBIDDENWORD  65510
+ #define ONLYUPCASEFLAG 65511
+ 
++// fopen or optional _wfopen to fix long pathname problem of WIN32
++LIBHUNSPELL_DLL_EXPORTED FILE * myfopen(const char * path, const char * mode);
++
+ // convert UTF-16 characters to UTF-8
+ LIBHUNSPELL_DLL_EXPORTED char * u16_u8(char * dest, int size, const w_char * src, int srclen);
+ 
+diff -ru hunspell/src/hunspell/dictmgr.cxx build/hunspell/src/hunspell/dictmgr.cxx
+--- hunspell/src/hunspell/dictmgr.cxx	2010-06-02 21:33:59.000000000 +0200
++++ build/hunspell/src/hunspell/dictmgr.cxx	2014-04-24 19:42:01.381285408 +0200
+@@ -5,6 +5,7 @@
+ #include <stdio.h>
+ 
+ #include "dictmgr.hxx"
++#include "csutil.hxx"
+ 
+ DictMgr::DictMgr(const char * dictpath, const char * etype) : numdict(0)
+ {
+@@ -57,7 +58,7 @@
+ 
+     // open the dictionary list file
+     FILE * dictlst;
+-    dictlst = fopen(dictpath,"r");
++    dictlst = myfopen(dictpath,"r");
+     if (!dictlst) {
+       return 1;
+     }
+diff -ru hunspell/src/hunspell/filemgr.cxx build/hunspell/src/hunspell/filemgr.cxx
+--- hunspell/src/hunspell/filemgr.cxx	2010-04-14 11:42:03.000000000 +0200
++++ build/hunspell/src/hunspell/filemgr.cxx	2014-04-25 00:44:05.049789586 +0200
+@@ -6,6 +6,7 @@
+ #include <stdio.h>
+ 
+ #include "filemgr.hxx"
++#include "csutil.hxx"
+ 
+ int FileMgr::fail(const char * err, const char * par) {
+     fprintf(stderr, err, par);
+@@ -15,7 +16,7 @@
+ FileMgr::FileMgr(const char * file, const char * key) {
+     linenum = 0;
+     hin = NULL;
+-    fin = fopen(file, "r");
++    fin = myfopen(file, "r");
+     if (!fin) {
+         // check hzipped file
+         char * st = (char *) malloc(strlen(file) + strlen(HZIP_EXTENSION) + 1);
+diff -ru hunspell/src/hunspell/hunzip.cxx build/hunspell/src/hunspell/hunzip.cxx
+--- hunspell/src/hunspell/hunzip.cxx	2010-04-27 16:07:14.000000000 +0200
++++ build/hunspell/src/hunspell/hunzip.cxx	2014-04-24 19:42:01.381285408 +0200
+@@ -3,6 +3,7 @@
+ #include <stdio.h> 
+ 
+ #include "hunzip.hxx"
++#include "csutil.hxx"
+ 
+ #define CODELEN  65536
+ #define BASEBITREC 5000
+@@ -38,7 +38,7 @@
+ 
+     if (!filename) return -1;
+ 
+-    fin = fopen(filename, "rb");
++    fin = myfopen(filename, "rb");
+     if (!fin) return -1;
+ 
+     // read magic number
