@@ -103,7 +103,7 @@ const sal_uInt16 SC_INSUFFICIENT_STORAGE             = 507;
 
 
 
-class DAVException : std::exception
+class DAVException : public std::exception
 {
     public:
         enum ExceptionCode {
