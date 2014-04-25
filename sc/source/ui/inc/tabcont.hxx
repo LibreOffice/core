@@ -58,8 +58,8 @@ protected:
 
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
-    virtual long    StartRenaming() SAL_OVERRIDE;
-    virtual long    AllowRenaming() SAL_OVERRIDE;
+    virtual bool    StartRenaming() SAL_OVERRIDE;
+    virtual TabBarAllowRenamingReturnCode    AllowRenaming() SAL_OVERRIDE;
     virtual void    EndRenaming() SAL_OVERRIDE;
     virtual void    Mirror() SAL_OVERRIDE;
 
