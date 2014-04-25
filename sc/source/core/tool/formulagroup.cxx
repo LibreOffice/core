@@ -533,9 +533,11 @@ typedef bool (*__switchOpenClDevice)(const OUString*, bool, bool);
 typedef void (*__getOpenCLDeviceInfo)(size_t*, size_t*);
 
 #endif
+#endif
 
 FormulaGroupInterpreter *FormulaGroupInterpreter::msInstance = NULL;
 
+#if HAVE_FEATURE_OPENCL
 #ifndef DISABLE_DYNLOADING
 
 osl::Module* getOpenCLModule()
