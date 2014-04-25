@@ -35,7 +35,8 @@
     <service name="com.sun.star.chart2.ChartDocumentWrapper"/>
     <service name="com.sun.star.xml.UserDefinedAttributesSupplier"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.ChartFrameLoader">
+  <implementation name="com.sun.star.comp.chart2.ChartFrameLoader"
+      constructor="com_sun_star_comp_chart2_ChartFrameLoader_get_implementation">
     <service name="com.sun.star.frame.SynchronousFrameLoader"/>
   </implementation>
   <implementation name="com.sun.star.comp.chart2.ChartTypeDialog">

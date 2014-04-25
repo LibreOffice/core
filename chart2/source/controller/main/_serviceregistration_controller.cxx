@@ -30,14 +30,6 @@
 static const struct ::cppu::ImplementationEntry g_entries_chart2_controller[] =
 {
     {
-          ::chart::ChartFrameLoader::create
-        , ::chart::ChartFrameLoader::getImplementationName_Static
-        , ::chart::ChartFrameLoader::getSupportedServiceNames_Static
-        , ::cppu::createSingleComponentFactory
-        , 0
-        , 0
-    }
-    ,{
           ::chart::CreationWizardUnoDlg::create
         , ::chart::CreationWizardUnoDlg::getImplementationName_Static
         , ::chart::CreationWizardUnoDlg::getSupportedServiceNames_Static
