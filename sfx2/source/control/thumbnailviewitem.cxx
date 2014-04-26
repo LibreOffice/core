@@ -146,6 +146,29 @@ void ThumbnailViewItem::setHighlight (bool state)
     mbHover = state;
 }
 
+Rectangle ThumbnailViewItem::updateHighlight(bool bVisible, const Point& rPoint)
+{
+    bool bNeedsPaint = false;
+
+    if (bVisible && getDrawArea().IsInside(rPoint))
+    {
+        if (!isHighlighted())
+            bNeedsPaint = true;
+        setHighlight(true);
+    }
+    else
+    {
+        if (isHighlighted())
+            bNeedsPaint = true;
+        setHighlight(false);
+    }
+
+    if (bNeedsPaint)
+        return getDrawArea();
+
+    return Rectangle();
+}
+
 OUString ThumbnailViewItem::getHelpText() const
 {
     return maTitle;
@@ -265,7 +288,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
 
     sal_uInt32 nPrimitive = 0;
     aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonSelectionPrimitive2D(
-                                               B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
+                                               B2DPolyPolygon(Polygon(maDrawArea, THUMBNAILVIEW_ITEM_CORNER, THUMBNAILVIEW_ITEM_CORNER).getB2DPolygon()),
                                                aFillColor,
                                                fTransparence,
                                                0.0,

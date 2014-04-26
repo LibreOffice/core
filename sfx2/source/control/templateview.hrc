@@ -7,10 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#define BTN_ALL_TEMPLATES       256
-#define FT_NAME                 258
-#define STR_WELCOME_LINE1       259
-#define STR_WELCOME_LINE2       260
-#define IMG_WELCOME             261
+#define BTN_ALL_TEMPLATES                256
+#define FT_NAME                          258
+#define STR_WELCOME_LINE1                259
+#define STR_WELCOME_LINE2                260
+#define IMG_WELCOME                      261
+#define IMG_RECENTDOC_REMOVE             262
+#define IMG_RECENTDOC_REMOVE_HIGHLIGHTED 263
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

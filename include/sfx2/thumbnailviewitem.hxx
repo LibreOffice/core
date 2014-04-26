@@ -32,6 +32,8 @@
 
 #define THUMBNAILVIEW_ITEM_NONEITEM      0xFFFE
 
+const int THUMBNAILVIEW_ITEM_CORNER = 5;
+
 class CheckBox;
 class Font;
 class Window;
@@ -89,6 +91,12 @@ public:
 
     void setHighlight (bool state);
 
+    /** Updates own highlight status based on the aPoint position.
+
+        Returns rectangle that needs to be invalidated.
+    */
+    virtual Rectangle updateHighlight(bool bVisible, const Point& rPoint);
+
     /// Text to be used for the tooltip.
     virtual OUString getHelpText() const;
 
@@ -120,6 +128,8 @@ public:
 
     static drawinglayer::primitive2d::PolygonHairlinePrimitive2D*
         createBorderLine (const basegfx::B2DPolygon &rPolygon);
+
+    virtual void MouseButtonUp(const MouseEvent&) {}
 
 protected:
 

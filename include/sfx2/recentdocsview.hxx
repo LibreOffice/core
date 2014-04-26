@@ -38,15 +38,13 @@ enum ApplicationType
 };
 
 
-class SFX2_DLLPUBLIC RecentDocsView :   protected ::comphelper::OBaseMutex,
-                                        public ThumbnailView
+class SFX2_DLLPUBLIC RecentDocsView : public ThumbnailView
 {
 public:
     RecentDocsView( Window* pParent );
     virtual ~RecentDocsView();
 
     void insertItem(const OUString &rURL, const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId);
-    void loadRecentDocs();
 
     long GetThumbnailSize() const;
 
@@ -57,12 +55,18 @@ public:
 
     virtual void Clear() SAL_OVERRIDE;
 
+    /// Update the information in the view.
+    virtual void Reload() SAL_OVERRIDE;
+
     DECL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile* );
 
 protected:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) SAL_OVERRIDE;
-    void OpenItem( const ThumbnailViewItem *pItem );
+
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     virtual void LoseFocus() SAL_OVERRIDE;
@@ -74,7 +78,8 @@ protected:
     long    mnItemPadding;
     long    mnItemMaxTextLength;
 
-    Image   maWelcomeImage;
+    /// Image that appears when there is no recent document.
+    Image maWelcomeImage;
     OUString maWelcomeLine1;
     OUString maWelcomeLine2;
 };

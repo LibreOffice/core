@@ -87,26 +87,17 @@ void ThumbnailView::MouseMove(const MouseEvent& rMEvt)
 
     for (size_t i = 0; i < nItemCount; i++)
     {
-        bool bNeedsPaint = false;
         ThumbnailViewItem *pItem = mFilteredItemList[i];
 
         if (pItem->mbVisible && !rMEvt.IsLeaveWindow() && pItem->getDrawArea().IsInside(aPoint))
         {
             aHelp = pItem->getHelpText();
-
-            if (!pItem->isHighlighted())
-                bNeedsPaint = true;
-            pItem->setHighlight(true);
-        }
-        else
-        {
-            if (pItem->isHighlighted())
-                bNeedsPaint = true;
-            pItem->setHighlight(false);
         }
 
-        if (bNeedsPaint && IsReallyVisible() && IsUpdateMode())
-            Invalidate(pItem->getDrawArea());
+        Rectangle aToInvalidate(pItem->updateHighlight(pItem->mbVisible && !rMEvt.IsLeaveWindow(), aPoint));
+
+        if (!aToInvalidate.IsEmpty() && IsReallyVisible() && IsUpdateMode())
+            Invalidate(aToInvalidate);
     }
 
     if (mbShowTooltips)

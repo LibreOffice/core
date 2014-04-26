@@ -38,4 +38,14 @@ Image IMG_WELCOME
     ImageBitmap = Bitmap { File = "logo.png" ; };
 };
 
+Bitmap IMG_RECENTDOC_REMOVE
+{
+    File = "recentdoc_remove.png";
+};
+
+Bitmap IMG_RECENTDOC_REMOVE_HIGHLIGHTED
+{
+    File = "recentdoc_remove_highlighted.png";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

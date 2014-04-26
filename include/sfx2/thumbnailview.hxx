@@ -180,17 +180,20 @@ class SFX2_DLLPUBLIC ThumbnailView : public Control
 {
 public:
 
-    ThumbnailView ( Window* pParent, WinBits nWinStyle = WB_TABSTOP, bool bDisableTransientChildren = false );
+    ThumbnailView(Window* pParent, WinBits nWinStyle = WB_TABSTOP, bool bDisableTransientChildren = false);
 
-    virtual ~ThumbnailView ();
+    virtual ~ThumbnailView();
 
-    virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
-    void AppendItem (ThumbnailViewItem *pItem);
+    void AppendItem(ThumbnailViewItem *pItem);
 
-    void RemoveItem( sal_uInt16 nItemId );
+    void RemoveItem(sal_uInt16 nItemId);
 
     virtual void Clear();
+
+    /// Updates information in the view; used only in RecentDocsView ATM.
+    virtual void Reload() {}
 
     // Change current thumbnail item list with new one (invalidates all pointers to a thumbnail item)
     void updateItems(const std::vector<ThumbnailViewItem *> &items);

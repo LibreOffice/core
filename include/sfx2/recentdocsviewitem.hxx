@@ -19,13 +19,36 @@ public:
         const OUString &rTitle, const BitmapEx& rThumbnail, sal_uInt16 nId);
     virtual void setEditTitle (bool edit, bool bChangeFocus = true) SAL_OVERRIDE;
 
+    /** Updates own highlight status based on the aPoint position.
+
+        Calls the ancestor's updateHighlight, and then takes care of m_bRemoveIconHighlighted.
+
+        Returns rectangle that needs to be invalidated.
+    */
+    virtual Rectangle updateHighlight(bool bVisible, const Point& rPoint) SAL_OVERRIDE;
+
     /// Text to be used for the tooltip.
     virtual OUString getHelpText() const SAL_OVERRIDE;
 
-    OUString maURL;
+    virtual void Paint(drawinglayer::processor2d::BaseProcessor2D *pProcessor,
+                       const ThumbnailItemAttributes *pAttrs);
+
+    virtual void MouseButtonUp(const MouseEvent& rMEvt);
+
+    /// Called when the user clicks a document - it will open it.
+    void OpenDocument();
+
+protected:
+    /// Return area where is the icon to remove document from the recent documents.
+    Rectangle getRemoveIconArea() const;
 
 private:
+    OUString maURL;
+
     OUString m_sHelpText;
+
+    /// Is the icon that the user can click to remove the document from the recent documents highlighted?
+    bool m_bRemoveIconHighlighted;
 };
 
 #endif // INCLUDED_SFX2_RECENTDOCSVIEWITEM_HXX

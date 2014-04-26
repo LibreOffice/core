@@ -26,7 +26,6 @@
 #include <unotools/historyoptions.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/pngread.hxx>
-#include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -148,7 +147,7 @@ void RecentDocsView::insertItem(const OUString &rURL, const OUString &rTitle, co
     AppendItem(pChild);
 }
 
-void RecentDocsView::loadRecentDocs()
+void RecentDocsView::Reload()
 {
     Clear();
 
@@ -212,78 +211,33 @@ void RecentDocsView::loadRecentDocs()
 
 void RecentDocsView::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( rMEvt.IsLeft() )
+    if (rMEvt.IsLeft())
     {
-        if( rMEvt.GetClicks() > 1 )
-            return;
+        // ignore to avoid stuff done in ThumbnailView; we don't do selections etc.
+        return;
+    }
 
+    ThumbnailView::MouseButtonDown(rMEvt);
+}
+
+void RecentDocsView::MouseButtonUp(const MouseEvent& rMEvt)
+{
+    if (rMEvt.IsLeft())
+    {
         size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
 
         if (pItem)
         {
-            OpenItem(pItem);
+            pItem->MouseButtonUp(rMEvt);
             return;
         }
     }
-    ThumbnailView::MouseButtonDown( rMEvt );
+    ThumbnailView::MouseButtonUp(rMEvt);
 }
 
-void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *pItem)
+void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *)
 {
-    OpenItem( pItem );
-}
-
-void RecentDocsView::OpenItem( const ThumbnailViewItem *pItem )
-{
-    const RecentDocsViewItem* pRecentItem = dynamic_cast<const RecentDocsViewItem*>(pItem);
-    if (!pRecentItem)
-        return;
-
-    // show busy mouse pointer
-    SetPointer(Pointer(POINTER_WAIT));
-
-    Reference< XDispatch >            xDispatch;
-    Reference< XDispatchProvider >    xDispatchProvider;
-    css::util::URL                    aTargetURL;
-    Sequence< PropertyValue >         aArgsList;
-
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
-    uno::Reference< frame::XFrame > xActiveFrame = xDesktop->getActiveFrame();
-
-    osl::ClearableMutexGuard aLock( m_aMutex );
-    xDispatchProvider = Reference< XDispatchProvider >( xActiveFrame, UNO_QUERY );
-    aLock.clear();
-
-    aTargetURL.Complete = pRecentItem->maURL;
-    Reference< ::com::sun::star::util::XURLTransformer > xTrans(
-        ::com::sun::star::util::URLTransformer::create(
-            ::comphelper::getProcessComponentContext() ) );
-    xTrans->parseStrict( aTargetURL );
-
-    sal_Int32 nSize = 2;
-    aArgsList.realloc( nSize );
-    aArgsList[0].Name = "Referer";
-    aArgsList[0].Value = makeAny( OUString( "private:user" ) );
-
-    // documents will never be opened as templates
-    aArgsList[1].Name = "AsTemplate";
-    aArgsList[1].Value = makeAny( false );
-
-    xDispatch = xDispatchProvider->queryDispatch( aTargetURL, "_default", 0 );
-
-    if ( xDispatch.is() )
-    {
-        // Call dispatch asychronously as we can be destroyed while dispatch is
-        // executed. VCL is not able to survive this as it wants to call listeners
-        // after select!!!
-        LoadRecentFile* pLoadRecentFile = new LoadRecentFile;
-        pLoadRecentFile->xDispatch  = xDispatch;
-        pLoadRecentFile->aTargetURL = aTargetURL;
-        pLoadRecentFile->aArgSeq    = aArgsList;
-
-        Application::PostUserEvent( STATIC_LINK(0, RecentDocsView, ExecuteHdl_Impl), pLoadRecentFile );
-    }
 }
 
 void RecentDocsView::Paint( const Rectangle &aRect )

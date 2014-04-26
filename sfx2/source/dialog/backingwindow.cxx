@@ -224,7 +224,7 @@ void BackingWindow::initControls()
         mpAllRecentThumbnails->mnFileTypes |= TYPE_MATH;
 
     mpAllRecentThumbnails->mnFileTypes |= TYPE_OTHER;
-    mpAllRecentThumbnails->loadRecentDocs();
+    mpAllRecentThumbnails->Reload();
     mpAllRecentThumbnails->ShowTooltips( true );
 
     setupButton( mpOpenButton );
