@@ -379,16 +379,13 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
 
             for (sal_Int32 i=0; i<nLength; ++i)
             {
-                OUString sTmp;
+                OUString aItem;
                 xOrderList->getByName(OUString::number(i)) >>= xSet;
-                xSet->getPropertyValue(s_sHistoryItemRef) >>= sTmp;
+                xSet->getPropertyValue(s_sHistoryItemRef) >>= aItem;
 
-                if(sURL == sTmp)
+                if (aItem == sURL)
                 {
-                    OUString sFind;
-                    xOrderList->getByName(OUString::number(i)) >>= xSet;
-                    xSet->getPropertyValue(s_sHistoryItemRef) >>= sFind;
-                    for (sal_Int32 j=i-1; j>=0; --j)
+                    for (sal_Int32 j = i - 1; j >= 0; --j)
                     {
                         uno::Reference<beans::XPropertySet> xPrevSet;
                         uno::Reference<beans::XPropertySet> xNextSet;
@@ -400,7 +397,7 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
                         xPrevSet->setPropertyValue(s_sHistoryItemRef, uno::makeAny(sTemp));
                     }
                     xOrderList->getByName(OUString::number(0)) >>= xSet;
-                    xSet->setPropertyValue(s_sHistoryItemRef, uno::makeAny(sFind));
+                    xSet->setPropertyValue(s_sHistoryItemRef, uno::makeAny(aItem));
                     break;
                 }
             }
