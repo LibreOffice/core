@@ -128,7 +128,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-Wl$(COMMA)-Map$(COMMA)$(WORKDIR)/LinkTarget/$(2).map \
 		-Wl$(COMMA)--out-implib$(COMMA)$(ILIBTARGET) \
 		-o $(1) \
-		$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
+		$(if $(findstring s,$(MAKEFLAGS)),> /dev/null)))
 endef
 
 define gb_LinkTarget__command_staticlinklibrary
