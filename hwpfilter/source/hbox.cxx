@@ -289,9 +289,7 @@ hchar_string DateCode::GetString()
     return ret;
 }
 
-
 // tab(9)
-
 Tab::Tab()
     : HBox(CH_TAB)
     , width(0)
@@ -300,14 +298,34 @@ Tab::Tab()
 {
 }
 
-
 // floating box
-FBox::FBox(hchar hch):HBox(hch)
+FBox::FBox(hchar hch)
+    : HBox(hch)
+    , zorder(0)
+    , option(0)
+    , ctrl_ch(0)
+    , box_xs(0)
+    , box_ys(0)
+    , cap_xs(0)
+    , cap_ys(0)
+    , xs(0)
+    , ys(0)
+    , cap_margin(0)
+    , xpos_type(0)
+    , ypos_type(0)
+    , smart_linesp(0)
+    , boundsy(0)
+    , boundey(0)
+    , boundx(0)
+    , draw(0)
+    , pgx(0)
+    , pgy(0)
+    , pgno(0)
+    , showpg(0)
+    , prev(NULL)
+    , next(NULL)
 {
-    prev = next = 0;
-     zorder = 0;
 }
-
 
 FBox::~FBox()
 {
