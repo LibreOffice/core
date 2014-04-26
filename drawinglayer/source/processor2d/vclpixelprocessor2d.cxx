@@ -237,6 +237,16 @@ namespace drawinglayer
                 fLineWidth = aLineWidth.getLength();
             }
 
+            // draw simple hairline for small line widths
+            // see also RenderPolygonStrokePrimitive2D which is used if this try fails
+            bool bIsAntiAliasing = getOptionsDrawinglayer().IsAntiAliasing();
+            if (   (basegfx::fTools::lessOrEqual(fLineWidth, 1.0) && bIsAntiAliasing)
+                || (basegfx::fTools::lessOrEqual(fLineWidth, 1.5) && !bIsAntiAliasing))
+            {
+                // draw simple hairline
+                fLineWidth = 0.0;
+            }
+
             bool bHasPoints(false);
             bool bTryWorked(false);
 
