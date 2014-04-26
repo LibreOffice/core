@@ -99,7 +99,9 @@ public:
     sal_Int32 nStart;
     sal_Int32 nEnd;
     sal_uInt16 nWhichAttr;
+    std::vector<sal_uInt16> aWhichFmtAttr; // attributes changed inside RES_TXTATR_AUTOFMT
     SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW );
+    SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW, std::vector<sal_uInt16> aW );
 };
 
 /** SwRefMarkFldUpdate is sent when the referencemarks should be updated.

@@ -2955,6 +2955,7 @@ bool SwpHints::TryInsertHint(
 
     sal_Int32 *pHtEnd = pHint->GetEnd();
     sal_uInt16 nWhich = pHint->Which();
+    std::vector<sal_uInt16> aWhichSublist;
 
     switch( nWhich )
     {
@@ -2972,10 +2973,9 @@ bool SwpHints::TryInsertHint(
     // #i75430# Recalc hidden flags if necessary
     case RES_TXTATR_AUTOFMT:
     {
+        boost::shared_ptr<SfxItemSet> const pSet( pHint->GetAutoFmt().GetStyleHandle() );
         if (*pHint->GetStart() == *pHint->GetEnd())
         {
-            boost::shared_ptr<SfxItemSet> const pSet(
-                    pHint->GetAutoFmt().GetStyleHandle());
             if (pSet->Count() == 1 && pSet->GetItem(RES_CHRATR_RSID, false))
             {   // empty range RSID-only hints could cause trouble, there's no
                 rNode.DestroyAttr(pHint); // need for them so don't insert
@@ -2986,6 +2986,19 @@ bool SwpHints::TryInsertHint(
         const SfxPoolItem* pHiddenItem = CharFmt::GetItem( *pHint, RES_CHRATR_HIDDEN );
         if ( pHiddenItem )
             rNode.SetCalcHiddenCharFlags();
+
+        // fdo#71556: populate aWhichFmtAttr member of SwMsgPoolItem
+        const sal_uInt16 *pRanges = pSet->GetRanges();
+        while( (*pRanges) != 0 )
+        {
+            sal_uInt16 nBeg = (*pRanges);
+            ++pRanges;
+            sal_uInt16 nEnd = (*pRanges);
+            ++pRanges;
+            for( sal_uInt16 nSubElem = nBeg; nSubElem <= nEnd; ++nSubElem )
+                if( pSet->HasItem( nSubElem ) )
+                    aWhichSublist.push_back( nSubElem );
+        }
         break;
     }
     case RES_TXTATR_INETFMT:
@@ -3237,7 +3250,8 @@ bool SwpHints::TryInsertHint(
     // ... und die Abhaengigen benachrichtigen
     if ( rNode.GetDepends() )
     {
-        SwUpdateAttr aHint( nHtStart, nHtStart == nHintEnd ? nHintEnd + 1 : nHintEnd, nWhich );
+        SwUpdateAttr aHint( nHtStart, nHtStart == nHintEnd ? nHintEnd + 1 : nHintEnd,
+                nWhich, aWhichSublist );
         rNode.ModifyNotification( 0, &aHint );
     }
 

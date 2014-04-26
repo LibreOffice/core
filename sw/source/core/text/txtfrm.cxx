@@ -845,6 +845,16 @@ static bool isA11yRelevantAttribute(MSHORT nWhich)
     return nWhich != RES_CHRATR_RSID;
 }
 
+static bool hasA11yRelevantAttribute( const std::vector<MSHORT>& nWhich )
+{
+    for( std::vector<MSHORT>::const_iterator nItr = nWhich.begin();
+            nItr < nWhich.end(); ++nItr )
+        if ( isA11yRelevantAttribute( *nItr ) )
+            return true;
+
+    return false;
+}
+
 void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     const MSHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
@@ -967,11 +977,15 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 }
             }
 
-            // #i104008#
-            SwViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
-            if ( pViewSh  )
+            if( isA11yRelevantAttribute( ((SwUpdateAttr*)pNew)->nWhichAttr ) &&
+                    hasA11yRelevantAttribute( ((SwUpdateAttr*)pNew)->aWhichFmtAttr ) )
             {
-                pViewSh->InvalidateAccessibleParaAttrs( *this );
+                // #i104008#
+                SwViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+                if ( pViewSh  )
+                {
+                    pViewSh->InvalidateAccessibleParaAttrs( *this );
+                }
             }
         }
         break;
