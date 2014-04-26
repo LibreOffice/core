@@ -34,49 +34,25 @@
 OutDevState::~OutDevState()
 {
     if ( mnFlags & PUSH_LINECOLOR )
-    {
-        if ( mpLineColor )
-            delete mpLineColor;
-    }
+        delete mpLineColor;
     if ( mnFlags & PUSH_FILLCOLOR )
-    {
-        if ( mpFillColor )
-            delete mpFillColor;
-    }
+        delete mpFillColor;
     if ( mnFlags & PUSH_FONT )
         delete mpFont;
     if ( mnFlags & PUSH_TEXTCOLOR )
         delete mpTextColor;
     if ( mnFlags & PUSH_TEXTFILLCOLOR )
-    {
-        if ( mpTextFillColor )
-            delete mpTextFillColor;
-    }
+        delete mpTextFillColor;
     if ( mnFlags & PUSH_TEXTLINECOLOR )
-    {
-        if ( mpTextLineColor )
-            delete mpTextLineColor;
-    }
+        delete mpTextLineColor;
     if ( mnFlags & PUSH_OVERLINECOLOR )
-    {
-        if ( mpOverlineColor )
-            delete mpOverlineColor;
-    }
+        delete mpOverlineColor;
     if ( mnFlags & PUSH_MAPMODE )
-    {
-        if ( mpMapMode )
-            delete mpMapMode;
-    }
+        delete mpMapMode;
     if ( mnFlags & PUSH_CLIPREGION )
-    {
-        if ( mpClipRegion )
-            delete mpClipRegion;
-    }
+        delete mpClipRegion;
     if ( mnFlags & PUSH_REFPOINT )
-    {
-        if ( mpRefPoint )
-            delete mpRefPoint;
-    }
+        delete mpRefPoint;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
