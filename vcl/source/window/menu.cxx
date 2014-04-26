@@ -507,9 +507,11 @@ private:
 
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+
+    void            InitMenuClipRegion();
+
 protected:
     Region          ImplCalcClipRegion( bool bIncludeLogo = true ) const;
-    void    InitMenuClipRegion();
     void            ImplDrawScroller( bool bUp );
     using Window::ImplScroll;
     void            ImplScroll( const Point& rMousePos );
