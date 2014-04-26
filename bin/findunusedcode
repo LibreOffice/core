@@ -55,6 +55,7 @@ grep ::.*\( unusedcode.all \
 		  | grep -v ^cppu:: \
 		  | grep -v ^CppUnit:: \
 		  | grep -v ^Dde \
+		  | grep -v ^glTF:: \
 		  | grep -v ^graphite2:: \
 		  | grep -v ^jvmaccess:: \
 		  | grep -v ^libcdr:: \
