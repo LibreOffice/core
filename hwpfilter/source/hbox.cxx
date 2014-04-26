@@ -313,13 +313,28 @@ FBox::~FBox()
 {
 }
 
-
 // tbox(10) TABLE BOX MATH BUTTON HYPERTEXT
-
-TxtBox::TxtBox(void):FBox(CH_TEXT_BOX), cell(0), plists(0)
+TxtBox::TxtBox()
+    : FBox(CH_TEXT_BOX)
+    , dummy(0)
+    , dummy1(0)
+    , cap_len(0)
+    , next(0)
+    , dummy2(0)
+    , reserved1(0)
+    , cap_pos(0)
+    , num(0)
+    , dummy3(0)
+    , baseline(0)
+    , type(0)
+    , nCell(0)
+    , protect(0)
+    , cell(0)
+    , m_pTable(NULL)
+    , plists(NULL)
 {
+    reserved[0] = reserved[1] = 0;
 }
-
 
 TxtBox::~TxtBox(void)
 {
