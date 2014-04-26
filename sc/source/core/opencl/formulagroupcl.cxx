@@ -3416,7 +3416,7 @@ DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
 #else
-        free(pDynamicKernel);
+        delete pDynamicKernel;
         return NULL;
 #endif
     }
