@@ -333,6 +333,10 @@ define gb_Executable_get_filename
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Executable_FILENAMES)))
 endef
 
+define gb_Executable_get_filename_for_build
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Executable_FILENAMES_FOR_BUILD)))
+endef
+
 # Get dependencies needed for running the executable
 #
 # This is not strictly necessary, but it makes the use more similar to
@@ -361,7 +365,7 @@ endef
 ifneq ($(CROSS_COMPILING),)
 # Can we assume this is used only for executables registered for "NONE"?
 define gb_Executable_get_target_for_build
-$(call gb_Executable__get_dir_for_exe_for_build,$(1))/$(call gb_Executable_get_filename,$(1))
+$(call gb_Executable__get_dir_for_exe_for_build,$(1))/$(call gb_Executable_get_filename_for_build,$(1))
 endef
 else
 gb_Executable_get_target_for_build = $(gb_Executable_get_target)
