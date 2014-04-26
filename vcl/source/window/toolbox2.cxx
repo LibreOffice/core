@@ -2119,39 +2119,42 @@ void ToolBox::UpdateCustomMenu()
             i++;
     }
 
-    // add menu items, starting from the end and inserting at pos 0
+    // add menu items: first the overflow items, then hidden items, both in the
+    // order they would usually appear in the toolbar. Separators that would be
+    // in the toolbar are ignored as they would introduce too much clutter,
+    // instead we have a single separator to help distinguish between overflow
+    // and hidden items.
     if ( !mpData->m_aItems.empty() )
     {
         // nStartPos will hold the number of clipped items appended from first loop
-        sal_uInt16 nSepPos = 0;
-        for ( std::vector< ImplToolItem >::reverse_iterator it(mpData->m_aItems.rbegin());
-                it != mpData->m_aItems.rend(); ++it)
+        for ( std::vector< ImplToolItem >::iterator it(mpData->m_aItems.begin());
+                it != mpData->m_aItems.end(); ++it)
         {
             if( it->IsClipped() )
             {
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
-                pMenu->InsertItem( id, it->maText, it->maImage, 0, OString(), 0 );
+                pMenu->InsertItem( id, it->maText, it->maImage, 0, OString());
                 pMenu->EnableItem( id, it->mbEnabled );
                 pMenu->CheckItem ( id, it->meState == STATE_CHECK );
-                nSepPos++;
             }
         }
 
         // add a separator below the inserted clipped-items
-        pMenu->InsertSeparator( OString(), nSepPos );
+        pMenu->InsertSeparator();
 
         // now append the items that are explicitly disabled
-        for ( std::vector< ImplToolItem >::reverse_iterator it(mpData->m_aItems.rbegin());
-                it != mpData->m_aItems.rend(); ++it)
+        for ( std::vector< ImplToolItem >::iterator it(mpData->m_aItems.begin());
+                it != mpData->m_aItems.end(); ++it)
         {
             if( it->IsItemHidden() )
             {
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
-                pMenu->InsertItem( id, it->maText, it->maImage, 0, OString(), nSepPos+1 );
+                pMenu->InsertItem( id, it->maText, it->maImage, 0, OString() );
                 pMenu->EnableItem( id, it->mbEnabled );
                 pMenu->CheckItem( id, it->meState == STATE_CHECK );
             }
         }
+
     }
 }
 
