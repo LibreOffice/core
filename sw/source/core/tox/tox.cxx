@@ -402,8 +402,8 @@ sal_uInt16 SwForm::GetFormMaxLevel( TOXTypes eTOXType )
 
 void SwForm::AdjustTabStops( SwDoc& rDoc ) // #i21237#
 {
-    const sal_uInt16 nFormMaxLevel = GetFormMax();
-    for ( sal_uInt16 nLevel = 1; nLevel < nFormMaxLevel; ++nLevel )
+    const sal_uInt16 nFormMax = GetFormMax();
+    for ( sal_uInt16 nLevel = 1; nLevel < nFormMax; ++nLevel )
     {
         SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName( GetTemplate(nLevel) );
         if( pColl == NULL )
