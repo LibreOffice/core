@@ -89,6 +89,8 @@ public:
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
         const OUString& sPassword, const OUString& sThumbnail);
 
+    void DeleteItem(EHistoryType eHistory, const OUString& sURL);
+
 private:
     /// Return the appropriate list of recent documents (based on eHistory).
     uno::Reference<container::XNameAccess> GetListAccess(EHistoryType eHistory) const;
@@ -473,6 +475,70 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
     }
 }
 
+void SvtHistoryOptions_Impl::DeleteItem(EHistoryType eHistory, const OUString& sURL)
+{
+    uno::Reference<container::XNameAccess> xListAccess(GetListAccess(eHistory));
+    if (!xListAccess.is())
+        return;
+
+    uno::Reference<container::XNameContainer> xItemList;
+    uno::Reference<container::XNameContainer> xOrderList;
+    uno::Reference<beans::XPropertySet>       xSet;
+
+    try
+    {
+        xListAccess->getByName(s_sItemList)  >>= xItemList;
+        xListAccess->getByName(s_sOrderList) >>= xOrderList;
+        sal_Int32 nLength = xOrderList->getElementNames().getLength();
+
+        // if it does not exist, nothing to do
+        if (!xItemList->hasByName(sURL))
+            return;
+
+        // it's the last one, just clear the lists
+        if (nLength == 1)
+        {
+            Clear(eHistory);
+            return;
+        }
+
+        // find it in the OrderList
+        sal_Int32 nFromWhere = 0;
+        for (; nFromWhere < nLength - 1; ++nFromWhere)
+        {
+            OUString aItem;
+            xOrderList->getByName(OUString::number(nFromWhere)) >>= xSet;
+            xSet->getPropertyValue(s_sHistoryItemRef) >>= aItem;
+
+            if (aItem == sURL)
+                break;
+        }
+
+        // and shift the rest of the items in OrderList accordingly
+        for (sal_Int32 i = nFromWhere; i < nLength - 1; ++i)
+        {
+            uno::Reference<beans::XPropertySet> xPrevSet;
+            uno::Reference<beans::XPropertySet> xNextSet;
+            xOrderList->getByName(OUString::number(i))     >>= xPrevSet;
+            xOrderList->getByName(OUString::number(i + 1)) >>= xNextSet;
+
+            OUString sTemp;
+            xNextSet->getPropertyValue(s_sHistoryItemRef) >>= sTemp;
+            xPrevSet->setPropertyValue(s_sHistoryItemRef, uno::makeAny(sTemp));
+        }
+        xOrderList->removeByName(OUString::number(nLength - 1));
+
+        // and finally remove it from the ItemList
+        xItemList->removeByName(sURL);
+
+        ::comphelper::ConfigurationHelper::flush(m_xCfg);
+    }
+    catch (const uno::Exception& ex)
+    {
+        SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
+    }
+}
+
 // initialize static member
 // DON'T DO IT IN YOUR HEADER!
 // see definition for further information
@@ -542,6 +608,13 @@ void SvtHistoryOptions::AppendItem(EHistoryType eHistory,
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 
     m_pDataContainer->AppendItem(eHistory, sURL, sFilter, sTitle, sPassword, sThumbnail);
+}
+
+void SvtHistoryOptions::DeleteItem(EHistoryType eHistory, const OUString& sURL)
+{
+    MutexGuard aGuard(theHistoryOptionsMutex::get());
+
+    m_pDataContainer->DeleteItem(eHistory, sURL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

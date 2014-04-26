@@ -82,12 +82,9 @@ public:
     */
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > GetList(EHistoryType eHistory) const;
 
-    /** Append a new item to specified list
+    /** Append a new item to the specified list.
 
-        You can append items to a list only - removing isn't allowed for a special item.
-        The oldest entry is deleted automatically if max size arrived or you can call Clear() ...
-        It exist two different overload methods to do this.
-        One for user which have an complete history item and another one for uncompletly data sets!
+        The oldest entry is deleted automatically when the size reaches the maximum.
 
         @param eHistory  select right history.
         @param sURL      URL to save in history
@@ -98,6 +95,10 @@ public:
     void AppendItem(EHistoryType eHistory,
             const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
             const OUString& sPassword, const OUString& sThumbnail);
+
+    /** Delete item from the specified list.
+    */
+    void DeleteItem(EHistoryType eHistory, const OUString& sURL);
 
 private:
 
