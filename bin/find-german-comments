@@ -204,6 +204,17 @@ class Parser:
             for f in fnames:
                 print f
 
+    def first_elem(self, path):
+        lastElem = os.path.dirname(path);
+        done = False
+        while not done:
+            nextElem = os.path.split(lastElem)[0]
+            if nextElem is not '':
+                lastElem = nextElem
+            else:
+                done = True
+        return lastElem
+
     def check_source_files(self, dir):
         """
         checks each _tracked_ file in a directory recursively
@@ -211,8 +222,137 @@ class Parser:
         sock = os.popen(r"git ls-files '%s' |egrep '\.(c|h)xx$'" % dir)
         lines = sock.readlines()
         sock.close()
+
+        # Helps to speedup a global scan
+        directory_whitelist = {
+            "UnoControls" : 1,
+            "accessibility" : 1,
+            "android" : 1,
+            "animations" : 1,
+            "avmedia" : 1,
+            "basctl" : 1,
+            "basebmp" : 1,
+            "basctl" : 1,
+            "basegfx" : 1,
+            "basic" : 1,
+            "binaryurp" : 1,
+            "bridges" : 1,
+            "canvas" : 1,
+            "chart2" : 1,
+            "cli_ure" : 1,
+            "codemaker" : 1,
+            "comphelper" : 1,
+            "compilerplugins" : 1,
+            "configmgr" : 1,
+            "connectivity" : 1,
+            "cppcanvas" : 1,
+            "cppu" : 1,
+            "cppuhelper" : 1,
+            "cpputools" : 1,
+            "crashrep" : 1,
+            "cui" : 1,
+            "dbaccess" : 0, #
+            "desktop" : 1,
+            "drawinglayer" : 1,
+            "dtrans" : 1,
+            "editeng" : 1,
+            "embeddedobj" : 1,
+            "embedserv" : 1,
+            "eventattacher" : 1,
+            "extensions" : 1,
+            "external" : 1,
+            "filter" : 1,
+            "forms" : 0, #
+            "formula" : 1,
+            "fpicker" : 1,
+            "framework" : 1,
+            "helpcompiler" : 1,
+            "hwpfilter" : 1,
+            "i18npool" : 0, #
+            "i18nlangtag" : 1,
+            "i18nutil" : 1,
+            "idl" : 1,
+            "idlc" : 1,
+            "include" : 0, #
+            "io" : 1,
+            "javaunohelper" : 1,
+            "jvmaccess" : 1,
+            "jvmfwk" : 1,
+            "l10ntools" : 1,
+            "lingucomponent" : 1,
+            "linguistic" : 1,
+            "lotuswordpro" : 1,
+            "mysqlc" : 0, #
+            "o3tl" : 1,
+            "odk" : 1,
+            "officecfg" : 1,
+            "oox" : 1,
+            "package" : 1,
+            "postprocess" : 1,
+            "pyuno" : 1,
+            "registry" : 0, #
+            "remotebridges" : 1,
+            "reportdesign" : 0, #
+            "rsc" : 0, #
+            "sal" : 1,
+            "salhelper" : 1,
+            "sax" : 1,
+            "sc" : 0, #
+            "scaddins" : 0, #
+            "sccomp" : 1,
+            "scripting" : 1,
+            "sd" : 0, #
+            "sdext" : 1,
+            "sfx2" : 0, #
+            "shell" : 1,
+            "setup_native" : 1,
+            "sot" : 1,
+            "slideshow" : 1,
+            "smoketest" : 1,
+            "solenv" : 1,
+            "soltools" : 1,
+            "starmath" : 0, # - 1 line !
+            "stoc" : 0, #
+            "store" : 1,
+            "svgio" : 1,
+            "svl" : 0, #
+            "svtools" : 1,
+            "svx" : 0, #
+            "sw" : 0, #
+            "test" : 1,
+            "testtools" : 1,
+            "toolkit" : 1,
+            "tools" : 1,
+            "touch" : 1,
+            "tubes" : 1,
+            "sw" : 1,
+            "ucb" : 1,
+            "ucbhelper" : 1,
+            "unodevtools" : 1,
+            "unotest" : 1,
+            "unoidl" : 1,
+            "unotools" : 1,
+            "unoxml" : 1,
+            "uui" : 1,
+            "vbahelper" : 1,
+            "vcl" : 1,
+            "winaccessibility" : 1,
+            "writerfilter" : 1,
+            "writerperfect" : 1,
+            "xmlhelp" : 1,
+            "xmloff" : 1,
+            "xmlreader" : 1,
+            "xmlsecurity" : 1,
+            "xmlscript" : 1,
+        }
+
         for path in lines:
-            self.check_file(path.strip())
+            baseDir = self.first_elem(path)
+            if not baseDir in directory_whitelist:
+                print ("Missing path %s " % baseDir)
+            elif directory_whitelist[baseDir] is 0:
+#                print ("Scan path %s " % baseDir)
+                self.check_file(path.strip())
 
 try:
     Parser()
