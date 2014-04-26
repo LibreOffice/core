@@ -152,7 +152,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
 
         if ( !nDiffY )
         {
-            while ( nWidth )
+            while ( nWidth > 0 )
             {
                 ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                    mpGraphics, this,
@@ -165,9 +165,9 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         {
             nCurY += nDiffY;
             nFreq = nCount / (nDiffX+nDiffY);
-            while ( nFreq-- )
+            while ( nFreq-- > 0 )
             {
-                for( i = nDiffY; i; --i )
+                for( i = nDiffY; i > 0; --i )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                        mpGraphics, this,
@@ -175,7 +175,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
                     nCurX++;
                     nCurY += nOffY;
                 }
-                for( i = nDiffX; i; --i )
+                for( i = nDiffX; i > 0; --i )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                        mpGraphics, this,
@@ -185,7 +185,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
                 nOffY = -nOffY;
             }
             nFreq = nCount % (nDiffX+nDiffY);
-            if ( nFreq )
+            if ( nFreq > 0 )
             {
                 for( i = nDiffY; i && nFreq; --i, --nFreq )
                 {
@@ -999,6 +999,9 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
     ImplFontEntry* pFontEntry = mpFontEntry;
     if( nWaveHeight > pFontEntry->maMetric.mnWUnderlineSize )
         nWaveHeight = pFontEntry->maMetric.mnWUnderlineSize;
+
+    // force nWaveHeight=1 (WAVE_FLAT) for me
+    nWaveHeight = 1;
 
     ImplDrawWaveLine(nStartX, nStartY, 0, 0,
             nEndX-nStartX, nWaveHeight,
