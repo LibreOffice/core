@@ -9,9 +9,9 @@
 
 $(eval $(call gb_Package_Package,mingw_gccdlls,$(MINGW_SYSROOT)/bin))
 
-$(error FIXME do not deliver this stuff to OUTDIR)
+$(eval $(call gb_Package_set_outdir,mingw_gccdlls,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,mingw_gccdlls,bin,\
+$(eval $(call gb_Package_add_files,mingw_gccdlls,program,\
     $(if $(MINGW_SHARED_GCCLIB),$(MINGW_GCCDLL)) \
     $(if $(MINGW_SHARED_GXXLIB),$(MINGW_GXXDLL)) \
 ))
