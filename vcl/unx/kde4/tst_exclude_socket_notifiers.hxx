@@ -23,109 +23,62 @@
 
 #include <qcoreapplication.h>
 #include <qeventloop.h>
-#include <qthread.h>
-#include <qtimer.h>
-#include <QtNetwork/qtcpserver.h>
-#include <QtNetwork/qtcpsocket.h>
+#include <qsocketnotifier.h>
+#include <unistd.h>
 
-// This is also used by a configure check.
-#ifndef SAL_OVERRIDE
-#define SAL_OVERRIDE
-#endif
+namespace
+{
 
-class SocketEventsTester: public QObject
+class TestExcludeSocketNotifiers
+    : public QObject
 {
     Q_OBJECT
-public:
-    SocketEventsTester()
-    {
-        socket = 0;
-        server = 0;
-        dataSent = false;
-        testResult = false;
-        dataArrived = false;
-    }
-    ~SocketEventsTester()
-    {
-        delete socket;
-        delete server;
-    }
-    bool init()
-    {
-        bool ret = false;
-        server = new QTcpServer();
-        socket = new QTcpSocket();
-        connect(server, SIGNAL(newConnection()), this, SLOT(sendHello()));
-        connect(socket, SIGNAL(readyRead()), this, SLOT(sendAck()), Qt::DirectConnection);
-        if((ret = server->listen(QHostAddress::LocalHost, 0))) {
-            socket->connectToHost(server->serverAddress(), server->serverPort());
-            socket->waitForConnected();
-        }
-        return ret;
-    }
-
-    QTcpSocket *socket;
-    QTcpServer *server;
-    bool dataSent;
-    bool testResult;
-    bool dataArrived;
-public slots:
-    void sendAck()
-    {
-        dataArrived = true;
-    }
-    void sendHello()
-    {
-        char data[10] ="HELLO";
-        qint64 size = sizeof(data);
-
-        QTcpSocket *serverSocket = server->nextPendingConnection();
-        serverSocket->write(data, size);
-        dataSent = serverSocket->waitForBytesWritten(-1);
-        QEventLoop loop;
-        //allow the TCP/IP stack time to loopback the data, so our socket is ready to read
-        QTimer::singleShot(200, &loop, SLOT(quit()));
-        loop.exec(QEventLoop::ExcludeSocketNotifiers);
-        testResult = dataArrived;
-        //check the deferred event is processed
-        QTimer::singleShot(200, &loop, SLOT(quit()));
-        loop.exec();
-        serverSocket->close();
-        QThread::currentThread()->exit(0);
-    }
+    public:
+        TestExcludeSocketNotifiers( const int* pipes );
+        ~TestExcludeSocketNotifiers();
+        bool received;
+    public slots:
+        void slotReceived();
+    private:
+        const int* pipes;
 };
 
-class SocketTestThread : public QThread
+TestExcludeSocketNotifiers::TestExcludeSocketNotifiers( const int* pipes )
+    : received( false )
+    , pipes( pipes )
 {
-    Q_OBJECT
-public:
-    SocketTestThread():QThread(0),testResult(false){};
-    virtual void run() SAL_OVERRIDE
-    {
-        SocketEventsTester *tester = new SocketEventsTester();
-        if (tester->init())
-            exec();
-        dataSent = tester->dataSent;
-        testResult = tester->testResult;
-        dataArrived = tester->dataArrived;
-        delete tester;
-    }
-    bool dataSent;
-    bool testResult;
-    bool dataArrived;
-};
+}
+
+TestExcludeSocketNotifiers::~TestExcludeSocketNotifiers()
+{
+    close( pipes[ 0 ] );
+    close( pipes[ 1 ] );
+}
+
+void TestExcludeSocketNotifiers::slotReceived()
+{
+    received = true;
+}
+
+}
 
 #define QVERIFY(a) \
     if (!a) return 1;
 
 static int tst_processEventsExcludeSocket()
 {
-    SocketTestThread thread;
-    thread.start();
-    QVERIFY(thread.wait());
-    QVERIFY(thread.dataSent);
-    QVERIFY(!thread.testResult);
-    QVERIFY(thread.dataArrived);
+    int pipes[ 2 ];
+    if( pipe( pipes ) < 0 )
+        return 1;
+    TestExcludeSocketNotifiers test( pipes );
+    QSocketNotifier notifier( pipes[ 0 ], QSocketNotifier::Read );
+    QObject::connect( &notifier, SIGNAL( activated( int )), &test, SLOT( slotReceived()));
+    char dummy = 'a';
+    write( pipes[ 1 ], &dummy, 1 );
+    QEventLoop loop;
+    loop.processEvents( QEventLoop::ExcludeSocketNotifiers );
+    QVERIFY( !test.received );
+    loop.processEvents();
+    QVERIFY( test.received );
     return 0;
 }
-
