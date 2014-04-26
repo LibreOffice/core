@@ -439,11 +439,13 @@ sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable )
     sal_Bool bOld = bErrorReportingEnabled;
     bErrorReportingEnabled = bEnable;
 
+#if defined _MSC_VER
     if( !bEnable) // if the crash reporter is disabled
     {
         // fall back to handle Window's SEH events as C++ exceptions
         _set_se_translator( win_seh_translator);
     }
+#endif
 
     return bOld;
 }
