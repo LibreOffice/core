@@ -23,30 +23,34 @@
 
 #include <qcoreapplication.h>
 #include <qeventloop.h>
-#include <qtimer.h>
+
+namespace
+{
 
 const QEvent::Type eventType = QEvent::User;
 
-class Test
+class TestExcludePostedEvents
     : public QObject
 {
     Q_OBJECT
     public:
-        Test();
+        TestExcludePostedEvents();
         virtual bool event( QEvent* e );
         bool processed;
 };
 
-Test::Test()
+TestExcludePostedEvents::TestExcludePostedEvents()
     : processed( false )
 {
 }
 
-bool Test::event( QEvent* e )
+bool TestExcludePostedEvents::event( QEvent* e )
 {
     if( e->type() == eventType )
         processed = true;
     return QObject::event( e );
+}
+
 }
 
 #define QVERIFY(a) \
@@ -54,17 +58,15 @@ bool Test::event( QEvent* e )
 
 static int tst_excludePostedEvents()
 {
-    Test test;
+    TestExcludePostedEvents test;
     QCoreApplication::postEvent( &test, new QEvent( eventType ));
     QEventLoop loop;
-    QTimer::singleShot(200, &loop, SLOT(quit()));
     loop.processEvents(QEventLoop::ExcludeUserInputEvents
         | QEventLoop::ExcludeSocketNotifiers
 //        | QEventLoop::WaitForMoreEvents
         | QEventLoop::X11ExcludeTimers);
     QVERIFY( !test.processed );
-    QTimer::singleShot(200, &loop, SLOT(quit()));
-        loop.exec();
+    loop.processEvents();
     QVERIFY( test.processed );
     return 0;
 }
