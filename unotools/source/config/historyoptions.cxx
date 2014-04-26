@@ -41,6 +41,7 @@ using namespace ::std;
 using namespace ::utl;
 using namespace ::rtl;
 using namespace ::osl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
@@ -89,7 +90,10 @@ public:
         const OUString& sPassword, const OUString& sThumbnail);
 
 private:
-    void impl_truncateList (EHistoryType eHistory, sal_uInt32 nSize);
+    /// Return the appropriate list of recent documents (based on eHistory).
+    uno::Reference<container::XNameAccess> GetListAccess(EHistoryType eHistory) const;
+
+    void impl_truncateList(EHistoryType eHistory, sal_uInt32 nSize);
 
 private:
     css::uno::Reference< css::container::XNameAccess > m_xCfg;
@@ -160,34 +164,46 @@ sal_uInt32 SvtHistoryOptions_Impl::GetCapacity(EHistoryType eHistory)
     return nSize;
 }
 
-void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt32 nSize )
+uno::Reference<container::XNameAccess> SvtHistoryOptions_Impl::GetListAccess(EHistoryType eHistory) const
 {
-    css::uno::Reference< css::container::XNameAccess >    xList;
-    css::uno::Reference< css::container::XNameContainer > xItemList;
-    css::uno::Reference< css::container::XNameContainer > xOrderList;
-    css::uno::Reference< css::beans::XPropertySet >       xSet;
+    uno::Reference<container::XNameAccess> xListAccess;
 
     try
     {
         switch( eHistory )
         {
         case ePICKLIST:
-            m_xCfg->getByName(OUString(s_sPickList)) >>= xList;
+            m_xCfg->getByName(s_sPickList) >>= xListAccess;
             break;
 
         case eHELPBOOKMARKS:
-            m_xCfg->getByName(OUString(s_sHelpBookmarks)) >>= xList;
+            m_xCfg->getByName(s_sHelpBookmarks) >>= xListAccess;
             break;
 
         default:
             break;
         }
+    }
+    catch(const uno::Exception& ex)
+    {
+        SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
+    }
 
-        // If too much items in current list ...
-        // truncate the oldest items BEFORE you set the new one.
-        if ( ! xList.is())
-            return;
+    return xListAccess;
+}
 
+void SvtHistoryOptions_Impl::impl_truncateList(EHistoryType eHistory, sal_uInt32 nSize)
+{
+    uno::Reference<css::container::XNameAccess> xList(GetListAccess(eHistory));
+    if (!xList.is())
+        return;
+
+    css::uno::Reference< css::container::XNameContainer > xItemList;
+    css::uno::Reference< css::container::XNameContainer > xOrderList;
+    css::uno::Reference< css::beans::XPropertySet >       xSet;
+
+    try
+    {
         xList->getByName(OUString(s_sOrderList)) >>= xOrderList;
         xList->getByName(OUString(s_sItemList))  >>= xItemList;
 
@@ -215,47 +231,29 @@ void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt
 
 void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
 {
-    css::uno::Reference< css::container::XNameAccess >    xListAccess;
+    uno::Reference<css::container::XNameAccess> xListAccess(GetListAccess(eHistory));
+    if (!xListAccess.is())
+        return;
+
     css::uno::Reference< css::container::XNameContainer > xNode;
     Sequence< OUString >                           lOrders;
 
     try
     {
-        switch( eHistory )
-        {
-        case ePICKLIST:
-            {
-                m_xCfg->getByName(OUString(s_sPickList)) >>= xListAccess;
-                break;
-            }
+        // clear ItemList
+        xListAccess->getByName(OUString(s_sItemList))  >>= xNode;
+        lOrders = xNode->getElementNames();
+        const sal_Int32 nLength = lOrders.getLength();
+        for(sal_Int32 i=0; i<nLength; ++i)
+            xNode->removeByName(lOrders[i]);
 
-        case eHELPBOOKMARKS:
-            {
-                m_xCfg->getByName(OUString(s_sHelpBookmarks)) >>= xListAccess;
-                break;
-            }
+        // clear OrderList
+        xListAccess->getByName(OUString(s_sOrderList)) >>= xNode;
+        lOrders = xNode->getElementNames();
+        for(sal_Int32 j=0; j<nLength; ++j)
+            xNode->removeByName(lOrders[j]);
 
-        default:
-            break;
-        }
-
-        if (xListAccess.is())
-        {
-            // clear ItemList
-            xListAccess->getByName(OUString(s_sItemList))  >>= xNode;
-            lOrders = xNode->getElementNames();
-            const sal_Int32 nLength = lOrders.getLength();
-            for(sal_Int32 i=0; i<nLength; ++i)
-                xNode->removeByName(lOrders[i]);
-
-            // clear OrderList
-            xListAccess->getByName(OUString(s_sOrderList)) >>= xNode;
-            lOrders = xNode->getElementNames();
-            for(sal_Int32 j=0; j<nLength; ++j)
-                xNode->removeByName(lOrders[j]);
-
-            ::comphelper::ConfigurationHelper::flush(m_xCfg);
-        }
+        ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch(const css::uno::Exception& ex)
     {
@@ -277,12 +275,15 @@ static bool lcl_fileOpenable(const OUString &rURL)
 
 Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryType eHistory )
 {
+    uno::Reference<css::container::XNameAccess> xListAccess(GetListAccess(eHistory));
+    if (!xListAccess.is())
+        return Sequence< Sequence<PropertyValue> >();
+
     impl_truncateList(eHistory, GetCapacity(eHistory));
 
     Sequence< Sequence< PropertyValue > > seqReturn; // Set default return value.
     Sequence< PropertyValue >             seqProperties(5);
 
-    css::uno::Reference< css::container::XNameAccess > xListAccess;
     css::uno::Reference< css::container::XNameAccess > xItemList;
     css::uno::Reference< css::container::XNameAccess > xOrderList;
     css::uno::Reference< css::beans::XPropertySet >    xSet;
@@ -295,68 +296,47 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
 
     try
     {
-        switch( eHistory )
+        xListAccess->getByName(OUString(s_sItemList))  >>= xItemList;
+        xListAccess->getByName(OUString(s_sOrderList)) >>= xOrderList;
+
+        const sal_Int32 nLength = xOrderList->getElementNames().getLength();
+        Sequence< Sequence< PropertyValue > > aRet(nLength);
+        sal_Int32 nCount = 0;
+
+        for(sal_Int32 nItem=0; nItem<nLength; ++nItem)
         {
-        case ePICKLIST:
+            try
             {
-                m_xCfg->getByName(OUString(s_sPickList)) >>= xListAccess;
-                break;
-            }
+                OUString sUrl;
+                xOrderList->getByName(OUString::number(nItem)) >>= xSet;
+                xSet->getPropertyValue(OUString(s_sHistoryItemRef)) >>= sUrl;
 
-        case eHELPBOOKMARKS:
-            {
-                m_xCfg->getByName(OUString(s_sHelpBookmarks)) >>= xListAccess;
-                break;
-            }
-
-        default:
-            break;
-        }
-
-        if (xListAccess.is())
-        {
-            xListAccess->getByName(OUString(s_sItemList))  >>= xItemList;
-            xListAccess->getByName(OUString(s_sOrderList)) >>= xOrderList;
-
-            const sal_Int32 nLength = xOrderList->getElementNames().getLength();
-            Sequence< Sequence< PropertyValue > > aRet(nLength);
-            sal_Int32 nCount = 0;
-
-            for(sal_Int32 nItem=0; nItem<nLength; ++nItem)
-            {
-                try
+                if( !sUrl.startsWith("file://") || lcl_fileOpenable( sUrl ) )
                 {
-                    OUString sUrl;
-                    xOrderList->getByName(OUString::number(nItem)) >>= xSet;
-                    xSet->getPropertyValue(OUString(s_sHistoryItemRef)) >>= sUrl;
-
-                    if( !sUrl.startsWith("file://") || lcl_fileOpenable( sUrl ) )
-                    {
-                        xItemList->getByName(sUrl) >>= xSet;
-                        seqProperties[s_nOffsetURL  ].Value <<= sUrl;
-                        xSet->getPropertyValue(OUString(s_sFilter))   >>= seqProperties[s_nOffsetFilter   ].Value;
-                        xSet->getPropertyValue(OUString(s_sTitle))    >>= seqProperties[s_nOffsetTitle    ].Value;
-                        xSet->getPropertyValue(OUString(s_sPassword)) >>= seqProperties[s_nOffsetPassword ].Value;
-                        xSet->getPropertyValue(OUString(s_sThumbnail))>>= seqProperties[s_nOffsetThumbnail].Value;
-                        aRet[nCount++] = seqProperties;
-                    }
-                }
-                catch(const css::uno::Exception& ex)
-                {
-                    // <https://bugs.libreoffice.org/show_bug.cgi?id=46074>
-                    // "FILEOPEN: No Recent Documents..." discusses a problem
-                    // with corrupted /org.openoffice.Office/Histories/Histories
-                    // configuration items; to work around that problem, simply
-                    // ignore such corrupted individual items here, so that at
-                    // least newly added items are successfully reported back
-                    // from this function:
-                    SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
+                    xItemList->getByName(sUrl) >>= xSet;
+                    seqProperties[s_nOffsetURL  ].Value <<= sUrl;
+                    xSet->getPropertyValue(OUString(s_sFilter))   >>= seqProperties[s_nOffsetFilter   ].Value;
+                    xSet->getPropertyValue(OUString(s_sTitle))    >>= seqProperties[s_nOffsetTitle    ].Value;
+                    xSet->getPropertyValue(OUString(s_sPassword)) >>= seqProperties[s_nOffsetPassword ].Value;
+                    xSet->getPropertyValue(OUString(s_sThumbnail))>>= seqProperties[s_nOffsetThumbnail].Value;
+                    aRet[nCount++] = seqProperties;
                 }
             }
-            assert(nCount <= nLength);
-            aRet.realloc(nCount);
-            seqReturn = aRet;
+            catch(const css::uno::Exception& ex)
+            {
+                // <https://bugs.libreoffice.org/show_bug.cgi?id=46074>
+                // "FILEOPEN: No Recent Documents..." discusses a problem
+                // with corrupted /org.openoffice.Office/Histories/Histories
+                // configuration items; to work around that problem, simply
+                // ignore such corrupted individual items here, so that at
+                // least newly added items are successfully reported back
+                // from this function:
+                SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
+            }
         }
+        assert(nCount <= nLength);
+        aRet.realloc(nCount);
+        seqReturn = aRet;
     }
     catch(const css::uno::Exception& ex)
     {
@@ -370,28 +350,14 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
         const OUString& sPassword, const OUString& sThumbnail)
 {
+    uno::Reference<css::container::XNameAccess> xListAccess(GetListAccess(eHistory));
+    if (!xListAccess.is())
+        return;
+
     impl_truncateList(eHistory, GetCapacity(eHistory));
 
-    css::uno::Reference< css::container::XNameAccess > xListAccess;
     sal_Int32 nMaxSize = GetCapacity(eHistory);
-
-    switch(eHistory)
-    {
-    case ePICKLIST:
-        {
-            m_xCfg->getByName(OUString(s_sPickList)) >>= xListAccess;
-        }
-        break;
-    case eHELPBOOKMARKS:
-        {
-            m_xCfg->getByName(OUString(s_sHelpBookmarks)) >>= xListAccess;
-        }
-        break;
-    default:
-        break;
-    }
-
-    if (nMaxSize==0)
+    if (nMaxSize == 0)
         return;
 
     css::uno::Reference< css::container::XNameContainer > xItemList;
