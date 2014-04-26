@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_UNOTOOLS_HISTORYOPTIONS_HXX
 #define INCLUDED_UNOTOOLS_HISTORYOPTIONS_HXX
 
@@ -27,10 +28,8 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-/*-************************************************************************************************************
-    @descr          The method GetList() returns a list of property values.
-                    Use follow defines to separate values by names.
-*//*-*************************************************************************************************************/
+// The method GetList() returns a list of property values.
+// Use follow defines to separate values by names.
 
 #define HISTORY_PROPERTYNAME_URL            OUString("URL")
 #define HISTORY_PROPERTYNAME_FILTER         OUString("Filter")
@@ -38,129 +37,86 @@
 #define HISTORY_PROPERTYNAME_PASSWORD       OUString("Password")
 #define HISTORY_PROPERTYNAME_THUMBNAIL      OUString("Thumbnail")
 
-/*-************************************************************************************************************
-    @descr          You can use these enum values to specify right history if you call our interface methods.
-*//*-*************************************************************************************************************/
-
+/// You can use these enum values to specify right history if you call our interface methods.
 enum EHistoryType
 {
     ePICKLIST       = 0,
     eHELPBOOKMARKS  = 1
 };
 
-/*-************************************************************************************************************
-    @short          forward declaration to our private date container implementation
-    @descr          We use these class as internal member to support small memory requirements.
-                    You can create the container if it is necessary. The class which use these mechanism
-                    is faster and smaller then a complete implementation!
-*//*-*************************************************************************************************************/
-
 class SvtHistoryOptions_Impl;
 
-/*-************************************************************************************************************
-    @short          collect information about history features
-    @devstatus      ready to use
-*//*-*************************************************************************************************************/
+/** Collect information about history features.
 
+    Interface methods to get and set value of config key "org.openoffice.Office.Common/History/..."
+
+    key "PickList": The last used documents displayed in the file menu.
+    key "History":  The last opened documents general.
+*/
 class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail::Options
 {
-    public:
-        /*-****************************************************************************************************
-            @short      standard constructor and destructor
-            @descr      This will initialize an instance with default values.
-                        We implement these class with a refcount mechanism! Every instance of this class increase it
-                        at create and decrease it at delete time - but all instances use the same data container!
-                        He is implemented as a static member ...
+public:
+    SvtHistoryOptions();
+    virtual ~SvtHistoryOptions();
 
-            @seealso    member m_nRefCount
-            @seealso    member m_pDataContainer
-        *//*-*****************************************************************************************************/
+    /** Get max size of specified history.
 
-         SvtHistoryOptions();
-        virtual ~SvtHistoryOptions();
+        Call this methods to get information about max. size of specified list.
+        If a new one is add to it the oldest one is deleted automaticly.
 
-        /*-****************************************************************************************************
-            @short      interface methods to get and set value of config key "org.openoffice.Office.Common/History/..."
-            @descr      key "PickList"  : The last used documents displayed in the file menu.
-                        key "History"   : The last opened documents general.
-        *//*-*****************************************************************************************************/
+        @param  eHistory select right history.
+        @return Current max size of specified list.
+    */
+    sal_uInt32 GetSize(EHistoryType eHistory) const;
 
-        /*-****************************************************************************************************
-            @short      set/get max size of specified history
-            @descr      Call this methods to get information about max. size of specified list.
-                        These value lay down the max count of items in these history. If a new one
-                        is add to it the oldest one is deleted automaticly!
-            @param      "eHistory" select right history.
-            @param      "nSize" is the new max size of specified list. If new size smaller then the old one
-                        some oldest entries will be destroyed automaticly!
-            @return     Current max size of specified list.
-        *//*-*****************************************************************************************************/
+    /** Clear complete specified list.
 
-        sal_uInt32  GetSize( EHistoryType eHistory                      ) const;
+        @param      eHistory select right history.
+    */
+    void Clear(EHistoryType eHistory);
 
-        /*-****************************************************************************************************
-            @short      clear complete sepcified list
-            @descr      Call this methods to clear the whole list. After that GetItemCount() will return 0 ...
-                        but GetSize() will return the old value!
-            @param      "eHistory" select right history.
-        *//*-*****************************************************************************************************/
+    /** Return the complete specified history list.
 
-        void Clear( EHistoryType eHistory );
+        @param  eHistory select right history.
+        @return A list of history items is returned.
+    */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > GetList(EHistoryType eHistory) const;
 
-        /*-****************************************************************************************************
-            @short      return complete sepcified list
-            @descr      If you will show the whole list call this method to get it completely.
-            @param      "eHistory" select right history.
-            @return     A list of history items is returned.
-        *//*-*****************************************************************************************************/
+    /** Append a new item to specified list
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > GetList( EHistoryType eHistory ) const;
+        You can append items to a list only - removing isn't allowed for a special item.
+        The oldest entry is deleted automaticly if max size arrived or you can call Clear() ...
+        It exist two different overload methods to do this.
+        One for user which have an complete history item and another one for uncompletly data sets!
 
-        /*-****************************************************************************************************
-            @short      append a new item to specified list
-            @descr      You can append items to a list only - removing isn't allowed for a special item!
-                        The oldest entry is deleted automaticly if max size arrived or you can call Clear() ...
-                        It exist two different overload methods to do this.
-                        One for user which have an complete history item and another one for uncompletly data sets!
+        @param eHistory  select right history.
+        @param sURL      URL to save in history
+        @param sFilter   filter name to save in history
+        @param sTitle    document title to save in history
+        @param sPassword password to save in history
+    */
+    void AppendItem(EHistoryType eHistory,
+            const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
+            const OUString& sPassword, const OUString& sThumbnail);
 
-            @seealso    method SetSize()
-            @seealso    method Clear()
+private:
 
-            @param      "eHistory" select right history.
-            @param      "sURL" URL to save in history
-            @param      "sFilter" filter name to save in history
-            @param      "sTitle" document title to save in history
-            @param      "sPassword" password to save in history
-        *//*-*****************************************************************************************************/
+    /// Return a reference to a static mutex.
+    UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
-        void AppendItem(EHistoryType eHistory,
-                const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-                const OUString& sPassword, const OUString& sThumbnail);
+private:
 
-    private:
+    /* Attention
 
-        /*-****************************************************************************************************
-            @short      return a reference to a static mutex
-            @descr      Make these class threadsafe.
-            @return     A reference to a static mutex member.
-        *//*-*****************************************************************************************************/
+        Don't initialize these static member in these header!
+        a) Double dfined symbols will be detected ...
+        b) and unresolved externals exist at linking time.
+        Do it in your source only.
+     */
 
-        UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
-
-    private:
-
-        /*Attention
-
-            Don't initialize these static member in these header!
-            a) Double dfined symbols will be detected ...
-            b) and unresolved externals exist at linking time.
-            Do it in your source only.
-         */
-
-        static SvtHistoryOptions_Impl*  m_pDataContainer;
-        static sal_Int32                m_nRefCount;
-
-};      // class SvtHistoryOptions
+    static SvtHistoryOptions_Impl* m_pDataContainer;
+    static sal_Int32               m_nRefCount;
+};
 
 #endif // INCLUDED_UNOTOOLS_HISTORYOPTIONS_HXX
 
