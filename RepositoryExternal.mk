@@ -762,6 +762,8 @@ endef
 
 endif # SYSTEM_CMIS
 
+ifeq ($(ENABLE_JAVA),YES)
+
 ifeq ($(OS)$(COM),WNTGCC)
 
 define gb_LinkTarget__use_jawt
@@ -772,17 +774,27 @@ $(call gb_LinkTarget_add_ldflags,$(1),\
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
-	-ljawt \
+	$(JAWTLIB) \
 )
 
 endef
 
 else # $(OS)$(COM) != WNTGCC
 
-gb_LinkTarget__use_jawt :=
+define gb_LinkTarget__use_jawt
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(JAWTLIB) \
+)
+
+endef
 
 endif # $(OS)$(COM) = WNTGCC
 
+else # !ENABLE_JAVA
+
+gb_LinkTarget__use_jawt :=
+
+endif # ENABLE_JAVA
 
 ifneq ($(SYSTEM_LIBATOMIC_OPS),)
 

@@ -33,8 +33,4 @@ $(eval $(call gb_Library_use_libraries,officebean,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_libs,officebean,\
-	$(JAWTLIB) \
-))
-
 # vim: set noet sw=4 ts=4:

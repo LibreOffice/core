@@ -7074,7 +7074,7 @@ then
     AC_MSG_CHECKING([for JAWT lib])
     if test "$_os" = WINNT; then
         if test "$WITH_MINGW" = yes; then
-            # The path is presumably taken care of in gb_LinkTarget__use_jawt
+            # The path is taken care of in gb_LinkTarget__use_jawt
             # in RepositoryExternal.mk:
             JAWTLIB=-ljawt
         else
