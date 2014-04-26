@@ -765,8 +765,14 @@ endif # SYSTEM_CMIS
 ifeq ($(OS)$(COM),WNTGCC)
 
 define gb_LinkTarget__use_jawt
-$(call gb_LinkTarget_use_packages,$(1),\
-	jawt \
+$(call gb_LinkTarget_use_custom_headers,$(1),external/jawt)
+
+$(call gb_LinkTarget_add_ldflags,$(1),\
+	-L$(call gb_CustomTarget_get_workdir,external/jawt) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	-ljawt \
 )
 
 endef

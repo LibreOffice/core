@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,mingw-externals))
 ifeq ($(OS)$(COM),WNTGCC)
 $(eval $(call gb_Module_add_targets,mingw-externals,\
 	CustomTarget_jawt \
-	Package_jawt \
 	Package_mingw_dlls \
 	Package_mingw_gccdlls \
 ))
