@@ -238,6 +238,7 @@ SelectionManager::SelectionManager() :
         m_bLastDropAccepted( false ),
         m_bDropSuccess( false ),
         m_bDropSent( false ),
+        m_nDropTimeout( 0 ),
         m_bWaitingForPrimaryConversion( false ),
         m_nDragTimestamp( None ),
         m_aMoveCursor( None ),
@@ -272,7 +273,7 @@ SelectionManager::SelectionManager() :
         m_nXdndActionPrivate( None ),
         m_bShutDown( false )
 {
-    m_aDropEnterEvent.data.l[0] = None;
+    memset(&m_aDropEnterEvent, 0, sizeof(m_aDropEnterEvent));
     m_aDragRunning.reset();
 }
 
