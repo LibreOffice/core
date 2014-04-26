@@ -42,6 +42,7 @@
 #include "refupdatecontext.hxx"
 #include <svl/sharedstring.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace formula;
 
@@ -627,12 +628,12 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
 
     bool bDirty = false;        //! 1 und 2 getrennt ???
 
-    ScFormulaCell* pTemp1 = NULL;
+    boost::scoped_ptr<ScFormulaCell> pTemp1;
     ScFormulaCell* pEff1 = pFCell1;
     if ( bRelRef1 )
     {
-        pTemp1 = pFormula1 ? new ScFormulaCell(mpDoc, rPos, *pFormula1) : new ScFormulaCell(mpDoc, rPos);
-        pEff1 = pTemp1;
+        pTemp1.reset(pFormula1 ? new ScFormulaCell(mpDoc, rPos, *pFormula1) : new ScFormulaCell(mpDoc, rPos));
+        pEff1 = pTemp1.get();
     }
     if ( pEff1 )
     {
@@ -655,14 +656,14 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
             }
         }
     }
-    delete pTemp1;
+    pTemp1.reset();
 
-    ScFormulaCell* pTemp2 = NULL;
+    boost::scoped_ptr<ScFormulaCell> pTemp2;
     ScFormulaCell* pEff2 = pFCell2; //@ 1!=2
     if ( bRelRef2 )
     {
-        pTemp2 = pFormula2 ? new ScFormulaCell(mpDoc, rPos, *pFormula2) : new ScFormulaCell(mpDoc, rPos);
-        pEff2 = pTemp2;
+        pTemp2.reset(pFormula2 ? new ScFormulaCell(mpDoc, rPos, *pFormula2) : new ScFormulaCell(mpDoc, rPos));
+        pEff2 = pTemp2.get();
     }
     if ( pEff2 )
     {
@@ -684,7 +685,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
             }
         }
     }
-    delete pTemp2;
+    pTemp2.reset();
 
     //  wenn IsRunning, bleiben die letzten Werte erhalten
 

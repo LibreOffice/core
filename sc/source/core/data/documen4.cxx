@@ -45,6 +45,7 @@
 #include "tokenarray.hxx"
 #include "scmatrix.hxx"
 #include <tokenstringcontext.hxx>
+#include <boost/scoped_array.hpp>
 
 using namespace formula;
 
@@ -1099,7 +1100,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
 
     SCTAB nThisCount = GetTableCount();
     SCTAB nOtherCount = rOtherDoc.GetTableCount();
-    SCTAB* pOtherTabs = new SCTAB[nThisCount];
+    boost::scoped_array<SCTAB> pOtherTabs(new SCTAB[nThisCount]);
     SCTAB nThisTab;
 
     //  Tabellen mit gleichen Namen vergleichen
@@ -1356,11 +1357,6 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             delete[] pTempRows;
         }
     }
-
-    //! Inhalt von eingefuegten / geloeschten Tabellen ???
-    //! Aktionen fuer eingefuegte / geloeschte Tabellen ???
-
-    delete[] pOtherTabs;
 }
 
 

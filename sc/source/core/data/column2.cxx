@@ -344,10 +344,9 @@ long ScColumn::GetNeededSize(
         SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
         if ( ScStyleSheet* pPreviewStyle = pDocument->GetPreviewCellStyle( nCol, nRow, nTab ) )
         {
-            ScPatternAttr* pPreviewPattern = new ScPatternAttr( *pPattern );
+            boost::scoped_ptr<ScPatternAttr> pPreviewPattern(new ScPatternAttr( *pPattern ));
             pPreviewPattern->SetStyleSheet(pPreviewStyle);
             pPreviewPattern->FillEditItemSet( pSet, pCondSet );
-            delete pPreviewPattern;
         }
         else
         {

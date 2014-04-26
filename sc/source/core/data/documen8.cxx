@@ -1176,7 +1176,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
     bool bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();
     sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
 
-    ScEditEngineDefaulter* pEngine = NULL;        // not using pEditEngine member because of defaults
+    boost::scoped_ptr<ScEditEngineDefaulter> pEngine;        // not using pEditEngine member because of defaults
 
     SCTAB nCount = GetTableCount();
     ScMarkData::const_iterator itr = rMultiMark.begin(), itrEnd = rMultiMark.end();
@@ -1204,17 +1204,16 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                      ( nType == i18n::TransliterationModulesExtra::SENTENCE_CASE || nType == i18n::TransliterationModulesExtra::TITLE_CASE)))
                 {
                     if (!pEngine)
-                        pEngine = new ScFieldEditEngine(this, GetEnginePool(), GetEditPool());
+                        pEngine.reset(new ScFieldEditEngine(this, GetEnginePool(), GetEditPool()));
 
                     // defaults from cell attributes must be set so right language is used
                     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
                     SfxItemSet* pDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
                     if ( ScStyleSheet* pPreviewStyle = GetPreviewCellStyle( nCol, nRow, nTab ) )
                     {
-                        ScPatternAttr* pPreviewPattern = new ScPatternAttr( *pPattern );
+                        boost::scoped_ptr<ScPatternAttr> pPreviewPattern(new ScPatternAttr( *pPattern ));
                         pPreviewPattern->SetStyleSheet(pPreviewStyle);
                         pPreviewPattern->FillEditItemSet( pDefaults );
-                        delete pPreviewPattern;
                     }
                     else
                     {
@@ -1239,7 +1238,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
 
                     if ( pEngine->IsModified() )
                     {
-                        ScEditAttrTester aTester( pEngine );
+                        ScEditAttrTester aTester( pEngine.get() );
                         if ( aTester.NeedsObject() )
                         {
                             // remove defaults (paragraph attributes) before creating text object
@@ -1285,7 +1284,6 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                 bFound = GetNextMarkedCell( nCol, nRow, nTab, rMultiMark );
             }
         }
-    delete pEngine;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

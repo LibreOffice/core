@@ -77,6 +77,7 @@
 #include "basegfx/matrix/b2dhommatrix.hxx"
 
 #include <vcl/field.hxx>
+#include <boost/scoped_array.hpp>
 
 #define DET_ARROW_OFFSET    1000
 
@@ -1156,7 +1157,7 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
         long nDelCount = 0;
         Rectangle aDelRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
 
-        SdrObject** ppObj = new SdrObject*[nObjCount];
+        boost::scoped_array<SdrObject*> ppObj(new SdrObject*[nObjCount]);
 
         SdrObjListIter aIter( *pPage, IM_FLAT );
         SdrObject* pObject = aIter.Next();
@@ -1181,8 +1182,6 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
 
         for (i=1; i<=nDelCount; i++)
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
-
-        delete[] ppObj;
     }
 }
 
@@ -1216,7 +1215,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                             aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
                             aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(), nTab );
 
-                SdrObject** ppObj = new SdrObject*[nObjCount];
+                boost::scoped_array<SdrObject*> ppObj(new SdrObject*[nObjCount]);
 
                 SdrObjListIter aIter( *pPage, IM_FLAT );
                 SdrObject* pObject = aIter.Next();
@@ -1247,8 +1246,6 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
 
                 for (i=1; i<=nDelCount; i++)
                     pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
-
-                delete[] ppObj;
             }
         }
         else
