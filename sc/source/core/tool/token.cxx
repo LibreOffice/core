@@ -3737,6 +3737,52 @@ OUString ScTokenArray::CreateString( sc::TokenStringContext& rCxt, const ScAddre
     return aBuf.makeStringAndClear();
 }
 
+namespace {
+
+void wrapAddress( ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow )
+{
+    if (rPos.Col() > nMaxCol)
+        rPos.SetCol(rPos.Col() - nMaxCol - 1);
+    if (rPos.Row() > nMaxRow)
+        rPos.SetRow(rPos.Row() - nMaxRow - 1);
+}
+
+}
+
+void ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow )
+{
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                ScAddress aAbs = rRef.toAbs(rPos);
+                wrapAddress(aAbs, nMaxCol, nMaxRow);
+                rRef.SetAddress(aAbs, rPos);
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                ScRange aAbs = rRef.toAbs(rPos);
+                wrapAddress(aAbs.aStart, nMaxCol, nMaxRow);
+                wrapAddress(aAbs.aEnd, nMaxCol, nMaxRow);
+                aAbs.PutInOrder();
+                rRef.SetRange(aAbs, rPos);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+}
+
 #if DEBUG_FORMULA_COMPILER
 void ScTokenArray::Dump() const
 {
