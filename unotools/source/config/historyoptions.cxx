@@ -68,18 +68,22 @@ namespace {
     class theHistoryOptionsMutex : public rtl::Static<osl::Mutex, theHistoryOptionsMutex>{};
 }
 
-//  class SvtHistoryOptions_Impl
-//  redesigned
-
+/// Internal implementation of the SvtHistoryOptions.
 class SvtHistoryOptions_Impl
 {
 public:
     SvtHistoryOptions_Impl();
     ~SvtHistoryOptions_Impl();
 
-    sal_uInt32 GetSize( EHistoryType eHistory );
-    void Clear( EHistoryType eHistory );
-    Sequence< Sequence< PropertyValue > > GetList( EHistoryType eHistory );
+    /// Returns the maximum size of the internal lists, ie. the capacity not the size.
+    sal_uInt32 GetCapacity(EHistoryType eHistory);
+
+    /// Clear the specified history list.
+    void Clear(EHistoryType eHistory);
+
+    /// Get a sequence list from the items.
+    Sequence< Sequence<PropertyValue> > GetList(EHistoryType eHistory);
+
     void AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
         const OUString& sPassword, const OUString& sThumbnail);
@@ -91,8 +95,6 @@ private:
     css::uno::Reference< css::container::XNameAccess > m_xCfg;
     css::uno::Reference< css::container::XNameAccess > m_xCommonXCU;
 };
-
-//  constructor
 
 SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
 {
@@ -121,16 +123,11 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
     }
 }
 
-//  destructor
-
 SvtHistoryOptions_Impl::~SvtHistoryOptions_Impl()
 {
 }
 
-//  public method
-//  Attention: We return the max. size of our internal lists - That is the capacity not the size!
-
-sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
+sal_uInt32 SvtHistoryOptions_Impl::GetCapacity(EHistoryType eHistory)
 {
     css::uno::Reference< css::beans::XPropertySet >  xListAccess(m_xCommonXCU, css::uno::UNO_QUERY);
 
@@ -216,9 +213,6 @@ void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt
     }
 }
 
-//  public method
-//  Clear specified history list
-
 void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
 {
     css::uno::Reference< css::container::XNameAccess >    xListAccess;
@@ -281,12 +275,9 @@ static bool lcl_fileOpenable(const OUString &rURL)
         return false;
 }
 
-//  public method
-//  get a sequence list from the items
-
 Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryType eHistory )
 {
-    impl_truncateList (eHistory, GetSize (eHistory));
+    impl_truncateList(eHistory, GetCapacity(eHistory));
 
     Sequence< Sequence< PropertyValue > > seqReturn; // Set default return value.
     Sequence< PropertyValue >             seqProperties(5);
@@ -375,30 +366,25 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
     return seqReturn;
 }
 
-//  public method
-//  implements a deque in XML
-
 void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
         const OUString& sPassword, const OUString& sThumbnail)
 {
-    impl_truncateList (eHistory, GetSize (eHistory));
+    impl_truncateList(eHistory, GetCapacity(eHistory));
 
     css::uno::Reference< css::container::XNameAccess > xListAccess;
-    sal_Int32             nMaxSize = 0;
+    sal_Int32 nMaxSize = GetCapacity(eHistory);
 
     switch(eHistory)
     {
     case ePICKLIST:
         {
             m_xCfg->getByName(OUString(s_sPickList)) >>= xListAccess;
-            nMaxSize = GetSize(ePICKLIST);
         }
         break;
     case eHELPBOOKMARKS:
         {
             m_xCfg->getByName(OUString(s_sHelpBookmarks)) >>= xListAccess;
-            nMaxSize = GetSize(eHELPBOOKMARKS);
         }
         break;
     default:
@@ -568,16 +554,12 @@ SvtHistoryOptions::~SvtHistoryOptions()
     }
 }
 
-// public method
-
 sal_uInt32 SvtHistoryOptions::GetSize( EHistoryType eHistory ) const
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 
-    return m_pDataContainer->GetSize( eHistory );
+    return m_pDataContainer->GetCapacity(eHistory);
 }
-
-// public method
 
 void SvtHistoryOptions::Clear( EHistoryType eHistory )
 {
@@ -586,16 +568,12 @@ void SvtHistoryOptions::Clear( EHistoryType eHistory )
     m_pDataContainer->Clear( eHistory );
 }
 
-// public method
-
 Sequence< Sequence< PropertyValue > > SvtHistoryOptions::GetList( EHistoryType eHistory ) const
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 
     return m_pDataContainer->GetList( eHistory );
 }
-
-// public method
 
 void SvtHistoryOptions::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
