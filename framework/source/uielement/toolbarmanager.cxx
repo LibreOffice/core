@@ -1601,7 +1601,8 @@ void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
     sal_uInt16 i;
     for( i=0; i<pMenu->GetItemCount(); )
     {
-        if( pMenu->GetItemId( i ) < TOOLBOX_MENUITEM_START )
+        if( pMenu->GetItemId( i ) < TOOLBOX_MENUITEM_START
+            && pMenu->GetItemId( i ) != 0 ) // Don't remove separators (Id == 0)
             pMenu->RemoveItem( i );
         else
             i++;
