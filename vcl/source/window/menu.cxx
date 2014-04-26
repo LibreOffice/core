@@ -509,6 +509,7 @@ private:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 protected:
     Region          ImplCalcClipRegion( bool bIncludeLogo = true ) const;
+    void    InitMenuClipRegion();
     void            ImplDrawScroller( bool bUp );
     using Window::ImplScroll;
     void            ImplScroll( const Point& rMousePos );
@@ -3999,7 +4000,7 @@ MenuFloatingWindow::~MenuFloatingWindow()
 
 void MenuFloatingWindow::Resize()
 {
-    InitClipRegion();
+    InitMenuClipRegion();
 }
 
 long MenuFloatingWindow::ImplGetStartY() const
@@ -4029,6 +4030,18 @@ Region MenuFloatingWindow::ImplCalcClipRegion( bool bIncludeLogo ) const
         aRegion.Union( Rectangle( Point(), Size( pMenu->pLogo->aBitmap.GetSizePixel().Width(), aOutSz.Height() ) ) );
 
     return aRegion;
+}
+
+void MenuFloatingWindow::InitMenuClipRegion()
+{
+    if ( IsScrollMenu() )
+    {
+        SetClipRegion( ImplCalcClipRegion() );
+    }
+    else
+    {
+        SetClipRegion();
+    }
 }
 
 void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDown )
@@ -4255,7 +4268,7 @@ void MenuFloatingWindow::EnableScrollMenu( bool b )
     bScrollMenu = b;
     nScrollerHeight = b ? (sal_uInt16) GetSettings().GetStyleSettings().GetScrollBarSize() /2 : 0;
     bScrollDown = true;
-    InitClipRegion();
+    InitMenuClipRegion();
 }
 
 void MenuFloatingWindow::Execute()
@@ -5005,7 +5018,7 @@ void MenuFloatingWindow::Paint( const Rectangle& )
                            CTRL_STATE_ENABLED,
                            aVal,
                            OUString() );
-        InitClipRegion();
+        InitMenuClipRegion();
     }
     if ( IsScrollMenu() )
     {
@@ -5039,7 +5052,7 @@ void MenuFloatingWindow::ImplDrawScroller( bool bUp )
 
     aDecoView.DrawSymbol( aRect, eSymbol, GetSettings().GetStyleSettings().GetButtonTextColor(), nStyle );
 
-    InitClipRegion();
+    InitMenuClipRegion();
 }
 
 void MenuFloatingWindow::RequestHelp( const HelpEvent& rHEvt )
