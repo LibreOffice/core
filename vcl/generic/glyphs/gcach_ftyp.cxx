@@ -475,9 +475,13 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     mnPrioAntiAlias(nDefaultPrioAntiAlias),
     mnPrioAutoHint(nDefaultPrioAutoHint),
     mpFontInfo( pFI ),
+    mnLoadFlags( 0 ),
     maFaceFT( NULL ),
     maSizeFT( NULL ),
     mbFaceOk( false ),
+    mbArtItalic( false ),
+    mbArtBold( false ),
+    mbUseGamma( false ),
     mpLayoutEngine( NULL )
 {
     // TODO: move update of mpFontEntry into FontEntry class when
@@ -491,11 +495,6 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
         mnSin = static_cast<long>( 0x10000 * sin( dRad ) + 0.5 );
     }
 
-    maFaceFT = pFI->GetFaceFT();
-
-    if( !maFaceFT )
-        return;
-
     // set the pixel size of the font instance
     mnWidth = rFSD.mnWidth;
     if( !mnWidth )
@@ -503,6 +502,10 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     mfStretch = (double)mnWidth / rFSD.mnHeight;
     // sanity check (e.g. #i66394#, #i66244#, #66537#)
     if( (mnWidth < 0) || (mfStretch > +64.0) || (mfStretch < -64.0) )
+        return;
+
+    maFaceFT = pFI->GetFaceFT();
+    if( !maFaceFT )
         return;
 
     FT_New_Size( maFaceFT, &maSizeFT );
@@ -535,7 +538,6 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
 
     mbArtItalic = (rFSD.GetSlant() != ITALIC_NONE && pFI->GetFontAttributes().GetSlant() == ITALIC_NONE);
     mbArtBold = (rFSD.GetWeight() > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
-    mbUseGamma = false;
     if( mbArtBold )
     {
         //static const int TT_CODEPAGE_RANGE_874  = (1L << 16); // Thai
