@@ -169,6 +169,7 @@ public:
     void testColumnStyleXLSX();
 
     void testSharedFormulaHorizontalXLS();
+    void testSharedFormulaWrappedRefsXLS();
     void testExternalRefCacheXLSX();
     void testExternalRefCacheODS();
 
@@ -244,6 +245,7 @@ public:
     CPPUNIT_TEST(testOutlineODS);
     CPPUNIT_TEST(testColumnStyleXLSX);
     CPPUNIT_TEST(testSharedFormulaHorizontalXLS);
+    CPPUNIT_TEST(testSharedFormulaWrappedRefsXLS);
     CPPUNIT_TEST(testExternalRefCacheXLSX);
     CPPUNIT_TEST(testExternalRefCacheODS);
     CPPUNIT_TEST_SUITE_END();
@@ -2477,6 +2479,34 @@ void ScFiltersTest::testSharedFormulaHorizontalXLS()
     // J2 has a string of "MW".
     aPos.SetCol(9);
     CPPUNIT_ASSERT_EQUAL(OUString("MW"), pDoc->GetString(aPos));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testSharedFormulaWrappedRefsXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("shared-formula/wrapped-refs.", XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    pDoc->CalcAll();
+
+    // Check the values of H7:H10.
+    CPPUNIT_ASSERT_EQUAL(7.0, pDoc->GetValue(ScAddress(7,6,0)));
+    CPPUNIT_ASSERT_EQUAL(8.0, pDoc->GetValue(ScAddress(7,7,0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, pDoc->GetValue(ScAddress(7,8,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(7,9,0)));
+
+    // EM7:EM10 should reference H7:H10.
+    CPPUNIT_ASSERT_EQUAL(7.0, pDoc->GetValue(ScAddress(142,6,0)));
+    CPPUNIT_ASSERT_EQUAL(8.0, pDoc->GetValue(ScAddress(142,7,0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, pDoc->GetValue(ScAddress(142,8,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(142,9,0)));
+
+    // Make sure EM7:EM10 are grouped.
+    const ScFormulaCell *pFC = pDoc->GetFormulaCell(ScAddress(142,6,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
 
     xDocSh->DoClose();
 }
