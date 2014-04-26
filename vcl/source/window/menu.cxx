@@ -509,7 +509,6 @@ private:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 protected:
     Region          ImplCalcClipRegion( bool bIncludeLogo = true ) const;
-    void    InitMenuClipRegion();
     void            ImplDrawScroller( bool bUp );
     using Window::ImplScroll;
     void            ImplScroll( const Point& rMousePos );
@@ -4030,18 +4029,6 @@ Region MenuFloatingWindow::ImplCalcClipRegion( bool bIncludeLogo ) const
         aRegion.Union( Rectangle( Point(), Size( pMenu->pLogo->aBitmap.GetSizePixel().Width(), aOutSz.Height() ) ) );
 
     return aRegion;
-}
-
-void MenuFloatingWindow::InitMenuClipRegion()
-{
-    if ( IsScrollMenu() )
-    {
-        SetClipRegion( ImplCalcClipRegion() );
-    }
-    else
-    {
-        SetClipRegion();
-    }
 }
 
 void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDown )
