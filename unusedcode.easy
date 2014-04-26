@@ -26,7 +26,6 @@ MenuBar::GetMenuBarButtonRectPixel(unsigned short)
 MenuBar::RemoveMenuBarButton(unsigned short)
 MenuBar::SetMenuBarButtonHighlightHdl(unsigned short, Link const&)
 OpenGLContext::getOpenGLWindow()
-OutDevState::~OutDevState()
 OutputDevice::GetCanvas() const
 OutputDevice::HasAlpha()
 OutputDevice::LogicToLogic(basegfx::B2DPolyPolygon const&, MapMode const&, MapMode const&)

@@ -42,6 +42,7 @@
 #include <unotools/fontdefs.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/ptr_container/ptr_deque.hpp>
 
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -264,7 +265,7 @@ private:
     mutable PhysicalFontCollection* mpFontCollection;
     mutable ImplGetDevFontList*     mpGetDevFontList;
     mutable ImplGetDevSizeList*     mpGetDevSizeList;
-    std::stack < OutDevState* >*     mpOutDevStateStack;
+    boost::ptr_deque<OutDevState>*  mpOutDevStateStack;
     ImplOutDevData*                 mpOutDevData;
     VCLXGraphicsList_impl*          mpUnoGraphicsList;
     vcl::PDFWriterImpl*             mpPDFWriter;

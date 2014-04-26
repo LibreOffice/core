@@ -109,7 +109,7 @@ OutputDevice::OutputDevice() :
     mpFontCollection                = NULL;
     mpGetDevFontList                = NULL;
     mpGetDevSizeList                = NULL;
-    mpOutDevStateStack              = new std::stack< OutDevState* >();
+    mpOutDevStateStack              = new boost::ptr_deque<OutDevState>();
     mpOutDevData                    = NULL;
     mpPDFWriter                     = NULL;
     mpAlphaVDev                     = NULL;
@@ -217,7 +217,7 @@ OutputDevice::~OutputDevice()
         SAL_WARN( "vcl.gdi", "OutputDevice::~OutputDevice(): OutputDevice::Push() calls != OutputDevice::Pop() calls" );
         while ( !mpOutDevStateStack->empty() )
         {
-            mpOutDevStateStack->pop();
+            mpOutDevStateStack->pop_back();
         }
     }
 
@@ -334,7 +334,7 @@ void OutputDevice::Push( sal_uInt16 nFlags )
             pState->mpRefPoint = NULL;
     }
 
-    mpOutDevStateStack->push( pState );
+    mpOutDevStateStack->push_back( pState );
 
     if( mpAlphaVDev )
         mpAlphaVDev->Push();
@@ -354,90 +354,90 @@ void OutputDevice::Pop()
         SAL_WARN( "vcl.gdi", "OutputDevice::Pop() without OutputDevice::Push()" );
         return;
     }
-    OutDevState* pState = mpOutDevStateStack->top();
+    const OutDevState& rState = mpOutDevStateStack->back();
 
     if( mpAlphaVDev )
         mpAlphaVDev->Pop();
 
-    if ( pState->mnFlags & PUSH_LINECOLOR )
+    if ( rState.mnFlags & PUSH_LINECOLOR )
     {
-        if ( pState->mpLineColor )
-            SetLineColor( *pState->mpLineColor );
+        if ( rState.mpLineColor )
+            SetLineColor( *rState.mpLineColor );
         else
             SetLineColor();
     }
 
-    if ( pState->mnFlags & PUSH_FILLCOLOR )
+    if ( rState.mnFlags & PUSH_FILLCOLOR )
     {
-        if ( pState->mpFillColor )
-            SetFillColor( *pState->mpFillColor );
+        if ( rState.mpFillColor )
+            SetFillColor( *rState.mpFillColor );
         else
             SetFillColor();
     }
 
-    if ( pState->mnFlags & PUSH_FONT )
-        SetFont( *pState->mpFont );
+    if ( rState.mnFlags & PUSH_FONT )
+        SetFont( *rState.mpFont );
 
-    if ( pState->mnFlags & PUSH_TEXTCOLOR )
-        SetTextColor( *pState->mpTextColor );
+    if ( rState.mnFlags & PUSH_TEXTCOLOR )
+        SetTextColor( *rState.mpTextColor );
 
-    if ( pState->mnFlags & PUSH_TEXTFILLCOLOR )
+    if ( rState.mnFlags & PUSH_TEXTFILLCOLOR )
     {
-        if ( pState->mpTextFillColor )
-            SetTextFillColor( *pState->mpTextFillColor );
+        if ( rState.mpTextFillColor )
+            SetTextFillColor( *rState.mpTextFillColor );
         else
             SetTextFillColor();
     }
 
-    if ( pState->mnFlags & PUSH_TEXTLINECOLOR )
+    if ( rState.mnFlags & PUSH_TEXTLINECOLOR )
     {
-        if ( pState->mpTextLineColor )
-            SetTextLineColor( *pState->mpTextLineColor );
+        if ( rState.mpTextLineColor )
+            SetTextLineColor( *rState.mpTextLineColor );
         else
             SetTextLineColor();
     }
 
-    if ( pState->mnFlags & PUSH_OVERLINECOLOR )
+    if ( rState.mnFlags & PUSH_OVERLINECOLOR )
     {
-        if ( pState->mpOverlineColor )
-            SetOverlineColor( *pState->mpOverlineColor );
+        if ( rState.mpOverlineColor )
+            SetOverlineColor( *rState.mpOverlineColor );
         else
             SetOverlineColor();
     }
 
-    if ( pState->mnFlags & PUSH_TEXTALIGN )
-        SetTextAlign( pState->meTextAlign );
+    if ( rState.mnFlags & PUSH_TEXTALIGN )
+        SetTextAlign( rState.meTextAlign );
 
-    if( pState->mnFlags & PUSH_TEXTLAYOUTMODE )
-        SetLayoutMode( pState->mnTextLayoutMode );
+    if( rState.mnFlags & PUSH_TEXTLAYOUTMODE )
+        SetLayoutMode( rState.mnTextLayoutMode );
 
-    if( pState->mnFlags & PUSH_TEXTLANGUAGE )
-        SetDigitLanguage( pState->meTextLanguage );
+    if( rState.mnFlags & PUSH_TEXTLANGUAGE )
+        SetDigitLanguage( rState.meTextLanguage );
 
-    if ( pState->mnFlags & PUSH_RASTEROP )
-        SetRasterOp( pState->meRasterOp );
+    if ( rState.mnFlags & PUSH_RASTEROP )
+        SetRasterOp( rState.meRasterOp );
 
-    if ( pState->mnFlags & PUSH_MAPMODE )
+    if ( rState.mnFlags & PUSH_MAPMODE )
     {
-        if ( pState->mpMapMode )
-            SetMapMode( *pState->mpMapMode );
+        if ( rState.mpMapMode )
+            SetMapMode( *rState.mpMapMode );
         else
             SetMapMode();
-        mbMap = pState->mbMapActive;
+        mbMap = rState.mbMapActive;
     }
 
-    if ( pState->mnFlags & PUSH_CLIPREGION )
-        SetDeviceClipRegion( pState->mpClipRegion );
+    if ( rState.mnFlags & PUSH_CLIPREGION )
+        SetDeviceClipRegion( rState.mpClipRegion );
 
-    if ( pState->mnFlags & PUSH_REFPOINT )
+    if ( rState.mnFlags & PUSH_REFPOINT )
     {
-        if ( pState->mpRefPoint )
-            SetRefPoint( *pState->mpRefPoint );
+        if ( rState.mpRefPoint )
+            SetRefPoint( *rState.mpRefPoint );
         else
             SetRefPoint();
     }
 
-    mpOutDevStateStack->pop();
+    mpOutDevStateStack->pop_back();
 
     mpMetaFile = pOldMetaFile;
 }
