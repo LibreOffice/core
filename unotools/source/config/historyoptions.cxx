@@ -64,6 +64,8 @@ namespace {
     const char s_sTitle[] = "Title";
     const char s_sPassword[] = "Password";
     const char s_sThumbnail[] = "Thumbnail";
+
+    class theHistoryOptionsMutex : public rtl::Static<osl::Mutex, theHistoryOptionsMutex>{};
 }
 
 //  class SvtHistoryOptions_Impl
@@ -536,8 +538,8 @@ sal_Int32     SvtHistoryOptions::m_nRefCount  = 0;
 
 SvtHistoryOptions::SvtHistoryOptions()
 {
-    // Global access, must be guarded (multithreading!).
-    MutexGuard aGuard( GetOwnStaticMutex() );
+    MutexGuard aGuard(theHistoryOptionsMutex::get());
+
     // Increase our refcount ...
     ++m_nRefCount;
     // ... and initialize our data container only if it not already exist!
@@ -553,8 +555,8 @@ SvtHistoryOptions::SvtHistoryOptions()
 
 SvtHistoryOptions::~SvtHistoryOptions()
 {
-    // Global access, must be guarded (multithreading!)
-    MutexGuard aGuard( GetOwnStaticMutex() );
+    MutexGuard aGuard(theHistoryOptionsMutex::get());
+
     // Decrease our refcount.
     --m_nRefCount;
     // If last instance was deleted ...
@@ -570,7 +572,8 @@ SvtHistoryOptions::~SvtHistoryOptions()
 
 sal_uInt32 SvtHistoryOptions::GetSize( EHistoryType eHistory ) const
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
+    MutexGuard aGuard(theHistoryOptionsMutex::get());
+
     return m_pDataContainer->GetSize( eHistory );
 }
 
@@ -578,7 +581,8 @@ sal_uInt32 SvtHistoryOptions::GetSize( EHistoryType eHistory ) const
 
 void SvtHistoryOptions::Clear( EHistoryType eHistory )
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
+    MutexGuard aGuard(theHistoryOptionsMutex::get());
+
     m_pDataContainer->Clear( eHistory );
 }
 
@@ -586,7 +590,8 @@ void SvtHistoryOptions::Clear( EHistoryType eHistory )
 
 Sequence< Sequence< PropertyValue > > SvtHistoryOptions::GetList( EHistoryType eHistory ) const
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
+    MutexGuard aGuard(theHistoryOptionsMutex::get());
+
     return m_pDataContainer->GetList( eHistory );
 }
 
@@ -596,20 +601,9 @@ void SvtHistoryOptions::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
         const OUString& sPassword, const OUString& sThumbnail)
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
+    MutexGuard aGuard(theHistoryOptionsMutex::get());
+
     m_pDataContainer->AppendItem(eHistory, sURL, sFilter, sTitle, sPassword, sThumbnail);
-}
-
-namespace
-{
-    class theHistoryOptionsMutex : public rtl::Static<osl::Mutex, theHistoryOptionsMutex>{};
-}
-
-// private method
-
-Mutex& SvtHistoryOptions::GetOwnStaticMutex()
-{
-    return theHistoryOptionsMutex::get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

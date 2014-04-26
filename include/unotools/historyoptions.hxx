@@ -101,11 +101,6 @@ public:
 
 private:
 
-    /// Return a reference to a static mutex.
-    UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
-
-private:
-
     /* Attention
 
         Don't initialize these static member in these header!
