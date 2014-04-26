@@ -188,14 +188,6 @@ bool SdtHelper::hasElements()
     return m_bHasElements;
 }
 
-void SdtHelper::appendToInteropGrabBag(const OUString& rName, const css::uno::Any& rValue)
-{
-    sal_Int32 nLength = m_aGrabBag.getLength();
-    m_aGrabBag.realloc(nLength + 1);
-    m_aGrabBag[nLength].Name = rName;
-    m_aGrabBag[nLength].Value = rValue;
-}
-
 void SdtHelper::appendToInteropGrabBag(com::sun::star::beans::PropertyValue rValue)
 {
     sal_Int32 nLength = m_aGrabBag.getLength();
