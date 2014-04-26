@@ -10,17 +10,19 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFCHARSETS_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFCHARSETS_HXX
 
-namespace writerfilter {
-    namespace rtftok {
-        /// RTF legacy charsets
-        typedef struct
-        {
-            int charset;
-            int codepage;
-        } RTFEncoding;
-        extern RTFEncoding aRTFEncodings[];
-        extern int nRTFEncodings;
-    } // namespace rtftok
+namespace writerfilter
+{
+namespace rtftok
+{
+/// RTF legacy charsets
+typedef struct
+{
+    int charset;
+    int codepage;
+} RTFEncoding;
+extern RTFEncoding aRTFEncodings[];
+extern int nRTFEncodings;
+} // namespace rtftok
 } // namespace writerfilter
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFCHARSETS_HXX

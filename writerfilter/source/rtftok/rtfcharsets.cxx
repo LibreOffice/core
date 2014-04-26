@@ -10,11 +10,14 @@
 #include <rtfcharsets.hxx>
 #include <sal/macros.h>
 
-namespace writerfilter {
-namespace rtftok {
+namespace writerfilter
+{
+namespace rtftok
+{
 
 // See RTF spec v1.9.1, page 19
-RTFEncoding aRTFEncodings[] = {
+RTFEncoding aRTFEncodings[] =
+{
     // charset  codepage    Windows / Mac name
     {0, 1252}, // ANSI
     {1, 0}, // Default
