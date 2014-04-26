@@ -151,10 +151,10 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
 
         if ( bResize )
         {
-            // Alte Punkte kopieren
+            // Copy the old points
             if ( mnPoints < nNewSize )
             {
-                // Neue Punkte mit 0 initialisieren
+                // New points initialized to zero
                 memset( pNewAry+mnPoints, 0, (sal_uIntPtr)(nNewSize-mnPoints)*sizeof(Point) );
                 if ( mpPointAry )
                     memcpy( pNewAry, mpPointAry, mnPoints*sizeof(Point) );
@@ -183,10 +183,10 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
 
             if( bResize )
             {
-                // Alte Flags kopieren
+                // copy the old flags
                 if ( mnPoints < nNewSize )
                 {
-                    // Neue Punkte mit 0 initialisieren
+                    // initialize new flags to zero
                     memset( pNewFlagAry+mnPoints, 0, nNewSize-mnPoints );
                     memcpy( pNewFlagAry, mpFlagAry, mnPoints );
                 }

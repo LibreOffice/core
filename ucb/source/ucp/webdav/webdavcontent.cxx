@@ -986,7 +986,7 @@ throw( beans::UnknownPropertyException,
        uno::RuntimeException )
 {
 #if 0
-    // @@@ REMOVABLE z.Z. nicht richtig an der PropSetInfo gesetzt!!!
+    // @@@ REMOVABLE z.Z. hasn't been set correctly in the PropSetInfo
     try
     {
         beans::Property aProp
@@ -1006,10 +1006,7 @@ throw( beans::UnknownPropertyException,
     }
 #endif
 
-
     // Try to remove property from server.
-
-
     try
     {
         std::vector< ProppatchValue > aProppatchValues;

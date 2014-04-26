@@ -1026,7 +1026,7 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
     }
 
     if ( pTop->pClassRes )
-        // lokale Resource, nicht system Resource
+        // local Resource, not a system Resource
         pTop->pResource = (RSHEADER_TYPE *)pTop->pClassRes;
     else
     {

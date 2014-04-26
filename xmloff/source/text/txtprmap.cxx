@@ -411,10 +411,10 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
 
 XMLPropertyMapEntry aXMLAdditionalTextDefaultsMap[] =
 {
-    // RES_FOLLOW_TEXT_FLOW - DVO, OD 01.10.2003 #i18732#
+    // RES_FOLLOW_TEXT_FLOW - DVO #i18732#
     MG_ED( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
 
-    // OD 2004-05-05 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
+    // #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
     MG_ED( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
 
     M_END()
@@ -786,10 +786,10 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // RES_GRFATR_DRAWMODE
     MG_E( "GraphicColorMode", DRAW, COLOR_MODE,         XML_TYPE_COLOR_MODE, 0 ),
     MG_E( "WritingMode",      STYLE, WRITING_MODE,       XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
-    // RES_FOLLOW_TEXT_FLOW - DVO, OD 01.10.2003 #i18732#
+    // RES_FOLLOW_TEXT_FLOW - DVO #i18732#
     MG_E( "IsFollowingTextFlow", DRAW, FLOW_WITH_TEXT,      XML_TYPE_BOOL|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_OLD_FLOW_WITH_TEXT ),
     MG_E( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,     XML_TYPE_BOOL, 0 ),
-    // OD 2004-05-05 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
+    // #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
     MG_E( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
 
     // special entries for floating frames
