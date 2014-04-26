@@ -509,7 +509,7 @@ private:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 protected:
     Region          ImplCalcClipRegion( bool bIncludeLogo = true ) const;
-    virtual void    InitClipRegion() SAL_OVERRIDE;
+    void    InitMenuClipRegion();
     void            ImplDrawScroller( bool bUp );
     using Window::ImplScroll;
     void            ImplScroll( const Point& rMousePos );
@@ -4032,7 +4032,7 @@ Region MenuFloatingWindow::ImplCalcClipRegion( bool bIncludeLogo ) const
     return aRegion;
 }
 
-void MenuFloatingWindow::InitClipRegion()
+void MenuFloatingWindow::InitMenuClipRegion()
 {
     if ( IsScrollMenu() )
     {
