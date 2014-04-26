@@ -2083,7 +2083,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
                 pLastPortion->GetSize().Width()++;
 
             // Correct positions in array
-            // Even for kashidas just change positions, VCL will then draw the kashida automaticly
+            // Even for kashidas just change positions, VCL will then draw the kashida automatically
             sal_Int32 nPortionEnd = nPortionStart + pLastPortion->GetLen();
             for ( sal_Int32 _n = nChar; _n < nPortionEnd; _n++ )
             {

@@ -477,7 +477,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
         SfxPrinter* m_pPrinter;
         /// this describes the target location for the printed temp file
         OUString m_sTargetURL;
-        /// it holds the temp file alive, till the print job will finish and remove it from disk automaticly if the object die
+        /// it holds the temp file alive, till the print job will finish and remove it from disk automatically if the object die
         ::utl::TempFile* m_pTempFile;
 
     public:
@@ -507,7 +507,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
             // we truns alone by defenition. Nobody join for us nor use us ...
             moveAndDeleteTemp(&m_pTempFile,m_sTargetURL);
 
-            // finishing of this run() method will call onTerminate() automaticly
+            // finishing of this run() method will call onTerminate() automatically
             // kill this thread there!
         }
 
@@ -675,7 +675,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // it's an ucb target. So we must use a temp. file for vcl
                 // and move it after printing by using the ucb.
                 // Create a temp file on the heap (because it must delete the
-                // real file on disk automaticly if it die - bt we have to share it with
+                // real file on disk automatically if it die - bt we have to share it with
                 // some other sources ... e.g. the ImplUCBPrintWatcher).
                 // And we put the name of this temp file to the descriptor instead
                 // of the URL. The URL we save for later using separately.
@@ -784,7 +784,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         else
         {
             // Note: we create(d) some resource on the heap. (thread and tep file)
-            // They will be deleted by the thread automaticly if he finish his run() method.
+            // They will be deleted by the thread automatically if he finish his run() method.
             ImplUCBPrintWatcher* pWatcher = new ImplUCBPrintWatcher( pPrinter, pUCBPrintTempFile, sUcbUrl );
             pWatcher->create();
         }

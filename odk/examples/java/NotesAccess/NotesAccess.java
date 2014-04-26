@@ -151,7 +151,7 @@ public class NotesAccess implements Runnable {
                 xMCF.createInstanceWithContext(
                     "com.sun.star.frame.Desktop", xContext));
 
-            // Load a Writer document, which will be automaticly displayed
+            // Load a Writer document, which will be automatically displayed
             XComponent xComponent = xLoader.loadComponentFromURL(
                 "private:factory/scalc", "_blank", 0,
                 new PropertyValue[0] );

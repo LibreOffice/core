@@ -237,7 +237,7 @@ void SAL_CALL ProgressBar::setRange ( sal_Int32 nMin, sal_Int32 nMax ) throw( Ru
     }
     else
     {
-        // Change Min and Max automaticly
+        // Change Min and Max automatically
         m_nMinRange = nMax;
         m_nMaxRange = nMin;
     }

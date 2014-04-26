@@ -1664,7 +1664,7 @@ bool Outliner::ConvertNextDocument()
     mpDrawDocument->GetDocSh()->SetWaitCursor( false );
     ClearModifyFlag();
 
-    // for text conversion we automaticly wrap around one
+    // for text conversion we automatically wrap around one
     // time and stop at the start shape
     if( mpFirstObj )
     {

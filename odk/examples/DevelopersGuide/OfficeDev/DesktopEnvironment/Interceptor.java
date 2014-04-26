@@ -94,7 +94,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
     /**
      * ctor
      * Initialize the new interceptor. Given frame reference can be used to
-     * register this interceptor on it automaticly later.
+     * register this interceptor on it automatically later.
      *
      * @seealso startListening()
      *
@@ -555,7 +555,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
     /**
      * Implements (optional!) optimization for interceptor mechanism.
-     * Any interceptor which provides this special interface is called automaticly
+     * Any interceptor which provides this special interface is called automatically
      * at registration time on this method. Returned URL's will be used to
      * call this interceptor directly without calling his masters before, IF(!)
      * following rules will be true:

@@ -209,7 +209,7 @@ public class StatusView extends    JPanel
      * And because the environment of the frame can be changed - these
      * listener refresh himself internally for frame action events too.
      * So we register it as such frame action listener only here.
-     * Rest is done automaticly ...
+     * Rest is done automatically ...
      *
      * @param xFrame
      *          will be used as source of possible status events

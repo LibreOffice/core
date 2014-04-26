@@ -916,7 +916,7 @@ void LayoutManager::implts_backupProgressBarWrapper()
         return;
 
     // safe a backup copy of the current progress!
-    // This copy will be used automaticly inside createProgressBar() which is called
+    // This copy will be used automatically inside createProgressBar() which is called
     // implictly from implts_doLayout() .-)
     m_xProgressBarBackup = m_aProgressBarElement.m_xUIElement;
 

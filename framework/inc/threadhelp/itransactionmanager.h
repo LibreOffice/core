@@ -97,7 +97,7 @@ enum EExceptionMode
 /*-************************************************************************************************************
     @descr          How can you use the transaction manager?
                     Use it in combination with an TransactionGuard, which register your transaction in ctor
-                    and release in dtor automaticly! Follow interface class can be used to make using
+                    and release in dtor automatically! Follow interface class can be used to make using
                     of different manager implmentations possible by using same guard.
 *//*-*************************************************************************************************************/
 class ITransactionManager

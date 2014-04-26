@@ -135,7 +135,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
 
         /*-****************************************************************************************************
             @short      use it to get information about existing entries in configuration
-            @descr      The methods to set/get the position or size will create a new entry automaticly if
+            @descr      The methods to set/get the position or size will create a new entry automatically if
                         it not already exist and work with default values!
                         If this a problem for you - you MUST call these method before and
                         you must make up your own mind about that.

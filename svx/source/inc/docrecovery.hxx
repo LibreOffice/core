@@ -458,7 +458,7 @@ class SaveDialog : public IExtendedTabPage
             @param  pParent
                     can point to a parent window.
                     If its set to 0, the defmodal-dialog-parent
-                    is used automaticly.
+                    is used automatically.
 
             @param  pCore
                     provides access to the recovery core service
@@ -515,7 +515,7 @@ class SaveProgressDialog : public ModalDialog
             @param  pParent
                     can point to a parent window.
                     If its set to 0, the defmodal-dialog-parent
-                    is used automaticly.
+                    is used automatically.
 
             @param  pCore
                     used to start emegrency save.

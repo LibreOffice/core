@@ -113,7 +113,7 @@ class Gate : public  IGate
             @short      open gate for current waiting threads
             @descr      All current waiting threads stand in wait() at line "m_aPassage.wait()" ...
                         With this call you can open the passage for these waiting ones.
-                        The "gap" is closed by any new thread which call wait() automaticly!
+                        The "gap" is closed by any new thread which call wait() automatically!
 
             @seealso    method wait()
             @seealso    method open()

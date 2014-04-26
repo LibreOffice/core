@@ -68,7 +68,7 @@ public class DocumentPrinter {
             StringBuffer sUrl = new StringBuffer("file:///");
             sUrl.append(sourceFile.getCanonicalPath().replace('\\', '/'));
 
-            // Load a Writer document, which will be automaticly displayed
+            // Load a Writer document, which will be automatically displayed
             com.sun.star.lang.XComponent xComp = xCompLoader.loadComponentFromURL(
                 sUrl.toString(), "_blank", 0,
                 new com.sun.star.beans.PropertyValue[0] );

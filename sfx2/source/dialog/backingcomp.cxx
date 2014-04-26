@@ -559,7 +559,7 @@ sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )
     and inform us. We must release its reference only here. Of course we check the given reference
     here and reject callback from unknown sources.
 
-    Note: deregistration as listener isnt necessary here. The broadcaster do it automaticly.
+    Note: deregistration as listener isnt necessary here. The broadcaster do it automatically.
 
     @param  aEvent
                 describe the broadcaster of this callback

@@ -42,7 +42,7 @@ namespace framework{
 /**
     @short          protocol handler for "mailto:" URLs
     @descr          It's a special dispatch object which is used registered for "mailto:*" URLs and
-                    will be automaticly used from the framework dispatch mechanism if such URL occurred.
+                    will be automatically used from the framework dispatch mechanism if such URL occurred.
 
     @base           OWeakObject
                         provides XWeak and ref count mechanism

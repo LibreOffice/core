@@ -172,7 +172,7 @@ void OComponentHelper::dispose()
                 EventObject aEvt;
                 aEvt.Source = xSource;
                 // inform all listeners to release this object
-                // The listener container are automaticly cleared
+                // The listener container are automatically cleared
                 rBHelper.aLC.disposeAndClear( aEvt );
                 // notify subclasses to do their dispose
                 disposing();

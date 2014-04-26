@@ -395,7 +395,7 @@ void SAL_CALL BaseContainerControl::setVisible ( sal_Bool bVisible ) throw( Runt
     // is it a top window ?
     if ( !getContext().is() && bVisible )
     {
-        // then show it automaticly
+        // then show it automatically
         createPeer ( Reference< XToolkit > (), Reference< XWindowPeer > () );
     }
 }

@@ -246,7 +246,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             @descr  This base implementation checks, if the request could be intercepted
                     successfully. Then this method intercepted() is called.
                     The default implementation returns "NOT_INTERCEPTED" every time.
-                    So the method impl_interceptRequest() uses the right continuation automaticly.
+                    So the method impl_interceptRequest() uses the right continuation automatically.
 
                     If this method was overwritten and something different "NO_INTERCEPTED"
                     is returned, the method impl_interceptRequest() will return immediately with
@@ -266,7 +266,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
 
             @return The result of this operation.
                     Note: If E_NOT_INTERCEPTED is returned the default handling of the base class
-                    will be used automaticly for this request!
+                    will be used automatically for this request!
          */
         virtual EInterceptionState intercepted(const InterceptedRequest&                                                             rRequest   ,
                                                const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xOrgRequest);
@@ -282,13 +282,13 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             @descr  If no further class is derived from this one
                     -> the default implementation is used. Then the
                     internal list of requests is used to handle different
-                    interactions automaticly.
+                    interactions automatically.
                     (see impl_interceptRequest())
 
                     If this method was overwritten by a derived implementation
                     -> the new implementation has to do everything by itself.
                     Of course it can access all members/helpers and work with it.
-                    But the default implementation isnt used automaticly then.
+                    But the default implementation isnt used automatically then.
 
             @param  xRequest
                     the interaction request, which should be intercepted.

@@ -48,7 +48,7 @@ const char ARGUMENT_CONTAINERWINDOW[] = "ContainerWindow"; // XWindow
 const char ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE[] = "SupportPersistentWindowState"; // sal_Bool
 
 /** [sal_Bool] enable/disable special mode, where the title bar of our
-               the new created frame will be updated automaticly.
+               the new created frame will be updated automatically.
                Default = ON !
  */
 const char ARGUMENT_ENABLE_TITLEBARUPDATE[] = "EnableTitleBarUpdate"; // sal_Bool

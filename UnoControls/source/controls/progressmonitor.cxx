@@ -82,12 +82,12 @@ ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >
     addControl ( CONTROLNAME_BUTTON, xRef_Button            );
     addControl ( CONTROLNAME_PROGRESSBAR, m_xProgressBar.get() );
 
-    // FixedText make it automaticly visible by himself ... but not the progressbar !!!
+    // FixedText make it automatically visible by himself ... but not the progressbar !!!
     // it must be set explicitly
     m_xProgressBar->setVisible( sal_True );
 
     // Reset to defaults !!!
-    // (progressbar take automaticly its own defaults)
+    // (progressbar take automatically its own defaults)
     m_xButton->setLabel      ( DEFAULT_BUTTONLABEL );
     m_xTopic_Top->setText    ( PROGRESSMONITOR_DEFAULT_TOPIC );
     m_xText_Top->setText     ( PROGRESSMONITOR_DEFAULT_TEXT );
@@ -535,7 +535,7 @@ void SAL_CALL ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int3
         // calc new layout for controls
         impl_recalcLayout ();
         // clear background (!)
-        // [Children were repainted in "recalcLayout" by setPosSize() automaticly!]
+        // [Children were repainted in "recalcLayout" by setPosSize() automatically!]
         getPeer()->invalidate(2);
         // and repaint the control
         impl_paint ( 0, 0, impl_getGraphicsPeer() );

@@ -62,7 +62,7 @@ public:
     /** Get max size of specified history.
 
         Call this methods to get information about max. size of specified list.
-        If a new one is add to it the oldest one is deleted automaticly.
+        If a new one is add to it the oldest one is deleted automatically.
 
         @param  eHistory select right history.
         @return Current max size of specified list.
@@ -85,7 +85,7 @@ public:
     /** Append a new item to specified list
 
         You can append items to a list only - removing isn't allowed for a special item.
-        The oldest entry is deleted automaticly if max size arrived or you can call Clear() ...
+        The oldest entry is deleted automatically if max size arrived or you can call Clear() ...
         It exist two different overload methods to do this.
         One for user which have an complete history item and another one for uncompletly data sets!
 

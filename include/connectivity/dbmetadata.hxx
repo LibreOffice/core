@@ -134,7 +134,7 @@ namespace dbtools
         */
         bool shouldEscapeDateTime() const;
 
-        /** auto increment columns should be automaticly used as primary key.
+        /** auto increment columns should be automatically used as primary key.
         */
         bool isAutoIncrementPrimaryKey() const;
 

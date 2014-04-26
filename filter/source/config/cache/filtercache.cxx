@@ -368,7 +368,7 @@ CacheItem FilterCache::getItem(      EItemType        eType,
     {
         // ... or load it on demand from the
         // underlying configuration layer.
-        // Note: NoSuchElementException is thrown automaticly here if
+        // Note: NoSuchElementException is thrown automatically here if
         // item could not be loaded!
         pIt = impl_loadItemOnDemand(eType, sItem);
     }
@@ -547,8 +547,8 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
             May by the following reason exists:
                 -   The item does not exists inside the new configuration package org.openoffice.TypeDetection - but
                     we got it from the old package org.openoffice.Office/TypeDetection. We dont migrate such items
-                    automaticly to the new format. Because it will disturb e.g. the deinstallation of an external filter
-                    package. Because such external filter can remove the old file - but not the automaticly created new one ...
+                    automatically to the new format. Because it will disturb e.g. the deinstallation of an external filter
+                    package. Because such external filter can remove the old file - but not the automatically created new one ...
 
             => mark item as FINALIZED / MANDATORY, we dont support writing to the old format
         */
@@ -1322,7 +1322,7 @@ void FilterCache::impl_resolveItem4TypeRegistration(      CacheItemList*   pList
     throw(css::uno::Exception)
 {
     CacheItem& rItem = (*pList)[sItem];
-    // In case it's a new created entry (automaticly done by the boost::unordered_map index operator!)
+    // In case it's a new created entry (automatically done by the boost::unordered_map index operator!)
     // we must be sure, that this entry has its own name as property available.
     // Its needed later at our container interface!
     rItem[PROPNAME_NAME] <<= sItem;
@@ -1354,7 +1354,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
        )
     {
         // Attention! If config couldnt be opened successfully
-        // and exception os thrown automaticly and must be forwarded
+        // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         {
@@ -1371,7 +1371,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
        )
     {
         // Attention! If config couldnt be opened successfully
-        // and exception os thrown automaticly and must be forwarded
+        // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         {
@@ -1388,7 +1388,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
        )
     {
         // Attention! If config couldnt be opened successfully
-        // and exception os thrown automaticly and must be forwarded
+        // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xFilters(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
         {
@@ -1405,7 +1405,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
        )
     {
         // Attention! If config couldnt be opened successfully
-        // and exception os thrown automaticly and must be forwarded
+        // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xLoaders(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
         {
@@ -1422,7 +1422,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
        )
     {
         // Attention! If config couldnt be opened successfully
-        // and exception os thrown automaticly and must be forwarded
+        // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xHandlers(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
         {

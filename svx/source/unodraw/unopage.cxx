@@ -145,7 +145,7 @@ void SvxDrawPage::dispose()
             ::com::sun::star::document::EventObject aEvt;
             aEvt.Source = xSource;
             // inform all listeners to release this object
-            // The listener container are automaticly cleared
+            // The listener container are automatically cleared
             mrBHelper.aLC.disposeAndClear( aEvt );
             // notify subclasses to do their dispose
             disposing();

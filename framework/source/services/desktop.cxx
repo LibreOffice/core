@@ -136,7 +136,7 @@ void Desktop::constructorInit()
 
     @attention  a)  Don't use your own reference during an UNO-Service-ctor! There is no guarantee, that you
                     will get over this. (e.g. using of your reference as parameter to initialize some member)
-                    Do such things in DEFINE_INIT_SERVICE() method, which is called automaticly after your ctor!!!
+                    Do such things in DEFINE_INIT_SERVICE() method, which is called automatically after your ctor!!!
                 b)  Baseclass OBroadcastHelper is a typedef in namespace cppu!
                     The microsoft compiler has some problems to handle it right BY using namespace explicitly ::cppu::OBroadcastHelper.
                     If we write it without a namespace or expand the typedef to OBrodcastHelperVar<...> -> it will be OK!?
@@ -914,7 +914,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
 
     // I.I) "_blank"
     //  create a new task as child of this desktop instance
-    //  Note: Used helper TaskCreator use us automaticly ...
+    //  Note: Used helper TaskCreator use us automatically ...
 
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
@@ -995,7 +995,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
 
         // II.IV) CREATE
         //  If we haven't found any valid target frame by using normal flags - but user allowed us to create
-        //  a new one ... we should do that. Used TaskCreator use us automaticly as parent!
+        //  a new one ... we should do that. Used TaskCreator use us automatically as parent!
 
         if (
             ( ! xTarget.is()                                   )    &&
@@ -1360,7 +1360,7 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aCon
     @descr      This method is calling from helperclass "OPropertySetHelper".
                 Don't use this directly!
                 Handle and value are valid everyway! You must set the new value only.
-                After this, baseclass send messages to all listener automaticly.
+                After this, baseclass send messages to all listener automatically.
 
     @seealso    class OPropertySetHelper
 

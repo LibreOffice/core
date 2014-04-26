@@ -396,7 +396,7 @@ ATOM SAL_CALL CDIBPreview::RegisterDibPreviewWindowClass()
         wndClsEx.lpszClassName = PREVIEWWND_CLASS_NAME;
 
         // register the preview window class
-        // !!! Win95 -   the window class will be unregistered automaticly
+        // !!! Win95 -   the window class will be unregistered automatically
         //               if the dll is unloaded
         //     Win2000 - the window class must be unregistered manually
         //               if the dll is unloaded

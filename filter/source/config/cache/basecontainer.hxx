@@ -92,7 +92,7 @@ class BaseContainer : public BaseLock
 
                     m_pFlushCache and m_rCache must not be synchronized manually here.
                     m_rCache listen on the global configuration, where m_pFlushCache
-                    write its data. m_rCache update itself automaticly.
+                    write its data. m_rCache update itself automatically.
          */
         FilterCache* m_pFlushCache;
 
@@ -168,7 +168,7 @@ class BaseContainer : public BaseLock
 
 
         /** @short  check if the underlying configuration data was already loaded
-                    and do it if necessary automaticly.
+                    and do it if necessary automatically.
          */
         void impl_loadOnDemand();
 

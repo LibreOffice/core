@@ -40,7 +40,7 @@ namespace framework{
                     synchronization like e.g. mutex, rw-lock!
                     That protect your code against wrong calls at wrong time ... e.g. calls after disposing an object!
                     Use combination of EExceptionMode and ERejectReason to detect rejected requests
-                    and react for it. You can enable automaticly throwing of exceptions too.
+                    and react for it. You can enable automatically throwing of exceptions too.
 
     @implements     ITransactionManager
     @base           ITransactionManager

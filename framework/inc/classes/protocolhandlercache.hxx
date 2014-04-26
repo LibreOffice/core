@@ -82,7 +82,7 @@ typedef BaseHash< ProtocolHandler > HandlerHash;
                         - another one maps her registered pattern to her uno names to
                           perform search on such data
                     But this lists a static for all instances of this class. So it's possible to
-                    create new objects without opening configuration twice and free memory automaticly
+                    create new objects without opening configuration twice and free memory automatically
                     if last object will gone.
 
     @attention      We implement a singleton concept - so we don't need any mutex member here.

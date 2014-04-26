@@ -76,7 +76,7 @@ public class GraphicsInserter {
                 UnoRuntime.queryInterface(
                 com.sun.star.frame.XComponentLoader.class, xDesktop);
 
-            // Load a Writer document, which will be automaticly displayed
+            // Load a Writer document, which will be automatically displayed
             com.sun.star.lang.XComponent xComp = xCompLoader.loadComponentFromURL(
                 "private:factory/swriter", "_blank", 0,
                 new com.sun.star.beans.PropertyValue[0]);

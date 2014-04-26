@@ -54,7 +54,7 @@ import com.sun.star.uno.UnoRuntime;
  *
  * Further we are frame action listener too.
  * So we can update our status listener connections and
- * internal holded dispatch object automaticly.
+ * internal holded dispatch object automatically.
  *
  * Another reason for such extra class for listening:
  * Most listener callbacks are asynchronous [oneay] requests.
@@ -121,7 +121,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
      * start working as frame action listener really.
      * In case we get such frame action, it indicates that we should
      * update our internal saved dispatch object on which we listen
-     * for status events. So we can do it automaticly. The outside code
+     * for status events. So we can do it automatically. The outside code
      * mustn't check such things. We can work with one frame,
      * till it die. It doesn't matter if he will be used for different
      * load/save or any other requests. We will be up to date everytime.
@@ -384,7 +384,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
      * Our dispatch or frame object inform us about his following dead ...
      * So we must forget his reference. But it's not necessary to
      * remove listener connections here. Because the broadcaster
-     * forget us automaticly. The only thing we have to do: release
+     * forget us automatically. The only thing we have to do: release
      * his reference and let him die!
      *
      * @param aEvent

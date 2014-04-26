@@ -55,11 +55,11 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >
     // ... and add controls to basecontainercontrol!
     addControl( CONTROLNAME_TEXT, xTextControl    );
     addControl( CONTROLNAME_PROGRESSBAR, m_xProgressBar.get() );
-    // FixedText make it automaticly visible by himself ... but not the progressbar !!!
+    // FixedText make it automatically visible by himself ... but not the progressbar !!!
     // it must be set explicitly
     m_xProgressBar->setVisible( sal_True );
     // Reset to defaults !!!
-    // (progressbar take automaticly its own defaults)
+    // (progressbar take automatically its own defaults)
     m_xText->setText( STATUSINDICATOR_DEFAULT_TEXT );
 
     --m_refCount;
@@ -349,7 +349,7 @@ void SAL_CALL StatusIndicator::setPosSize (
         // calc new layout for controls
         impl_recalcLayout ( WindowEvent(static_cast< OWeakObject* >(this),0,0,nWidth,nHeight,0,0,0,0) );
         // clear background (!)
-        // [Children were repainted in "recalcLayout" by setPosSize() automaticly!]
+        // [Children were repainted in "recalcLayout" by setPosSize() automatically!]
         getPeer()->invalidate(2);
         // and repaint the control
         impl_paint ( 0, 0, impl_getGraphicsPeer() );

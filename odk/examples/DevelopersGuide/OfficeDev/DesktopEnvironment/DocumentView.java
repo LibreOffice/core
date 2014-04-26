@@ -341,7 +341,7 @@ public class DocumentView extends    JFrame
 
         // close the frame and his document
         // Relaesing of our listener connections for disposing()
-        // will be forced automaticly then. Because the frame
+        // will be forced automatically then. Because the frame
         // will call us back ...
         if (mxFrame!=null)
             FunctionHelper.closeFrame(mxFrame);
@@ -360,7 +360,7 @@ public class DocumentView extends    JFrame
     /**
      * callback from our internal saved frame
      * which wish to die. Its not necessary to remove listener connections
-     * here. Because the broadcaster do it automaticly.
+     * here. Because the broadcaster do it automatically.
      * We have to release all references to him only.
      *
      * @param aSource
@@ -418,7 +418,7 @@ public class DocumentView extends    JFrame
             if( sCommand.compareTo(COMMAND_EXIT) == 0 )
             {
                 // This will force deleting of this and
-                // all other currently opened views automaticly!
+                // all other currently opened views automatically!
                 System.exit(0);
             }
         }

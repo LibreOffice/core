@@ -285,7 +285,7 @@ class PresetHandler
                     and we use e.g. "/en-US/default.xml" internally.
 
                     If no localization exists for this preset set, this class
-                    will work in default mode - means "no locale" - automaticly.
+                    will work in default mode - means "no locale" - automatically.
                     e.g. "/default.xml"
 
             @throw  com::sun::star::uno::RuntimeException(!)
@@ -342,7 +342,7 @@ class PresetHandler
 
             @descr  Note: Targets resist inside the user
                     layer. Normaly they are opened in read/write mode.
-                    But it will be opened readonly automaticly if that isnt possible
+                    But it will be opened readonly automatically if that isnt possible
                     (may be the file is write protected on the system ...).
 
             @param  sTarget

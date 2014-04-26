@@ -67,7 +67,7 @@ class CheckedIterator
 
         /*-****************************************************************************************************
             @short      initialize instance with valid container
-            @descr      Set new container at an instance of this class. The other member will set automaticly!
+            @descr      Set new container at an instance of this class. The other member will set automatically!
                         m_pPosition = first element in container
                         m_eEndState = BEFOREEND
             @param      "rContainer", must be a valid reference to an existing container.

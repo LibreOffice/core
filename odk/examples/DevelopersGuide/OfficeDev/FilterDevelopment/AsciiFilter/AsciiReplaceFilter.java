@@ -159,7 +159,7 @@ public class AsciiReplaceFilter
         /**
         * used for initializing after creation
         * If an instance of this service is created by UNO we will be called
-        * automaticly after that to get optional parameters of this creation call.
+        * automatically after that to get optional parameters of this creation call.
         * E.g.: The service com.sun.star.document.FilterFactory use such mechanism
         * to pass our own configuration data to this instance.
         *

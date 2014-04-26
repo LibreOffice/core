@@ -183,7 +183,7 @@ void JobData::setService( const OUString& sService )
 
 /**
     @short      initialize this instance with new job values.
-    @descr      It reads automaticly all properties of the specified
+    @descr      It reads automatically all properties of the specified
                 job (using it's alias name) and "register it" for the
                 given event. This registration will not be validated against
                 the underlying configuration! (That must be done from outside.
@@ -233,7 +233,7 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
     if (m_eMode==E_ALIAS)
     {
         // It doesn't matter if this config object was already opened before.
-        // It doesn nothing here then ... or it change the mode automaticly, if
+        // It doesn nothing here then ... or it change the mode automatically, if
         // it was opened using another one before.
         ConfigAccess aConfig(
             m_xContext,
@@ -417,7 +417,7 @@ void JobData::disableJob()
 
     // update the configuration
     // It doesn't matter if this config object was already opened before.
-    // It doesn nothing here then ... or it change the mode automaticly, if
+    // It doesn nothing here then ... or it change the mode automatically, if
     // it was opened using another one before.
     ConfigAccess aConfig(
         m_xContext,

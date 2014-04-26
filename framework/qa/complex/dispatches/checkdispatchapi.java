@@ -278,7 +278,7 @@ public class checkdispatchapi
 
         if (bIsRegistered)
         {
-            fail("Interceptor was not deregistered automaticly on closing the corresponding frame.");
+            fail("Interceptor was not deregistered automatically on closing the corresponding frame.");
         }
 
         System.out.println("Destruction of interception chain works as designed .-)");

@@ -268,8 +268,8 @@ ________________________________________________________________________________
 //  implementation of XTypeProvider
 
 //  implementation of XTypeProvider without additional interface for getTypes()
-//  XTypeProvider is used as the only one interface automaticly.
-//  Following defines don't use XTypeProvider automaticly!!!!
+//  XTypeProvider is used as the only one interface automatically.
+//  Following defines don't use XTypeProvider automatically!!!!
 #define DEFINE_XTYPEPROVIDER_0( CLASS )                                                                             \
     PRIVATE_DEFINE_XTYPEPROVIDER_PURE(  CLASS )
 

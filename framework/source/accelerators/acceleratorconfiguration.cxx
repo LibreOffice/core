@@ -447,7 +447,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
     css::uno::Reference< css::io::XTruncate > xClearable(xStream, css::uno::UNO_QUERY_THROW);
     xClearable->truncate();
 
-    // TODO can be removed if seek(0) is done by truncate() automaticly!
+    // TODO can be removed if seek(0) is done by truncate() automatically!
     css::uno::Reference< css::io::XSeekable > xSeek(xStream, css::uno::UNO_QUERY);
     if (xSeek.is())
         xSeek->seek(0);

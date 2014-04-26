@@ -269,7 +269,7 @@ private:
     SdrObject* mpObj;
 
     /** this stores the first object that is used for text conversion.
-        Conversion automaticly wraps around the document and stops when it
+        Conversion automatically wraps around the document and stops when it
         finds this object again.
     */
     SdrObject* mpFirstObj;

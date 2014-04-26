@@ -412,7 +412,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     @descr  Note: Some results can be handled only, if this job has a valid configuration!
             For "not configured jobs" (means pure services) they can be ignored.
             But these cases are handled by our JobData member. We can call it everytime.
-            It does the right things automaticly. E.g. if the job has no configuration ...
+            It does the right things automatically. E.g. if the job has no configuration ...
             it does nothing during setJobConfig()!
 
     @param  aResult

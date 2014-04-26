@@ -307,7 +307,7 @@ public class FunctionHelper
                 // the systemw window handle. A possible reason can be an invisible
                 // java window. In this case it should be enough to set return
                 // values to null. All other resources (which was created before)
-                // will be freed automaticly if scope wil be leaved.
+                // will be freed automatically if scope wil be leaved.
                 System.out.println("May be the NativeView object wasn't really visible at calling time of getNativeWindow()?");
                 xPeer   = null;
                 xWindow = null;
@@ -389,7 +389,7 @@ public class FunctionHelper
             if(xFrame!=null)
             {
                 // Try to dispose the frame. He should deregister himself at the desktop object
-                // and free all internal used resources (e.g. the container window) automaticly.
+                // and free all internal used resources (e.g. the container window) automatically.
                 // It's possible to do that here - because frame has no component inside yet.
                 // So nobody can disagree with that.
                 // After the dispose() call forget all references to this frame and let him die.
@@ -437,7 +437,7 @@ public class FunctionHelper
      * @param   xFrame      frame which should be the target of this dispatch
      * @param   aURL        full parsed and converted office URL for dispatch
      * @param   lProperties optional arguments for dispatch
-     * @param   xListener   optional listener which is registered automaticly for status events
+     * @param   xListener   optional listener which is registered automatically for status events
      *                      (Note: Deregistration is part of this listener himself!)
      *
      * @return  [XDispatch] It's the used dispatch object and can be used for deregistration of an optional listener.
@@ -500,8 +500,8 @@ public class FunctionHelper
      * @param   xFrame      frame which should be the target of this dispatch
      * @param   aURL        full parsed and converted office URL for dispatch
      * @param   lProperties optional arguments for dispatch
-     * @param   xListener   optional listener which is registered automaticly for status events
-     *                      (Note: Deregistration is not supported. Dispatcher does it automaticly.)
+     * @param   xListener   optional listener which is registered automatically for status events
+     *                      (Note: Deregistration is not supported. Dispatcher does it automatically.)
      */
     public static void executeWithNotification(com.sun.star.frame.XFrame                  xFrame     ,
                                                com.sun.star.util.URL                      aURL       ,
@@ -681,7 +681,7 @@ public class FunctionHelper
      * It try to export given document in HTML format.
      * Current document will be converted to HTML and moved to new place on disk.
      * A "new" file will be created by given URL (may be overwritten
-     * if it already exist). Right filter will be used automaticly if factory of
+     * if it already exist). Right filter will be used automatically if factory of
      * this document support it. If no valid filter can be found for export,
      * nothing will be done here.
      *

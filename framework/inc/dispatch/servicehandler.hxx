@@ -42,7 +42,7 @@ namespace framework{
 /**
     @short          protocol handler for "service:*" URLs
     @descr          It's a special dispatch/provider object which is registered for such URL pattern and will
-                    be automaticly used by the framework dispatch mechanism if such URL occurred.
+                    be automatically used by the framework dispatch mechanism if such URL occurred.
                     His job is to create any registered uno components which must be coded inside
                     dispatched URL (may with some optional given parameters). After that such created
                     service must be hold his self alive. Such mechanism can be useful for UI components

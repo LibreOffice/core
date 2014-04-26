@@ -71,7 +71,7 @@ public class TestInspector {
             com.sun.star.frame.XComponentLoader xCmpLoader =  UnoRuntime.queryInterface( com.sun.star.frame.XComponentLoader.class,
                     xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", xContext));
 
-            // Load a new spreadsheet document, which will be automaticly
+            // Load a new spreadsheet document, which will be automatically
             // displayed and is used for inspection
             com.sun.star.lang.XComponent xComp = xCmpLoader.loadComponentFromURL("private:factory/scalc", "_blank", 0, new com.sun.star.beans.PropertyValue[0] );
             xInstInspector.inspect(xCmpLoader, "");

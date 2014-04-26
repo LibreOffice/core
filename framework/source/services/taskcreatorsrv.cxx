@@ -293,7 +293,7 @@ css::uno::Reference< css::frame::XFrame2 > TaskCreatorService::implts_createFram
     xNewFrame->initialize( xContainerWindow );
 
     // Put frame to the frame tree.
-    // Note: The property creator/parent will be set on the new putted frame automaticly ... by the parent container.
+    // Note: The property creator/parent will be set on the new putted frame automatically ... by the parent container.
     if (xParentFrame.is())
     {
         css::uno::Reference< css::frame::XFramesSupplier > xSupplier  (xParentFrame, css::uno::UNO_QUERY_THROW);

@@ -235,7 +235,7 @@ void SAL_CALL BaseContainer::removeByName(const OUString& sItem)
     impl_initFlushMode();
 
     FilterCache* pCache = impl_getWorkingCache();
-    pCache->removeItem(m_eType, sItem); // throw exceptions automaticly
+    pCache->removeItem(m_eType, sItem); // throw exceptions automatically
 
     aLock.clear();
     // <- SAFE ----------------------------------

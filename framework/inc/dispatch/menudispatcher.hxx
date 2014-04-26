@@ -92,7 +92,7 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
 
         /*-****************************************************************************************************
             @short      dispatch URL with arguments
-            @descr      Every dispatch create a new task. If load of URL failed task will deleted automaticly!
+            @descr      Every dispatch create a new task. If load of URL failed task will deleted automatically!
             @param      "aURL"          , URL to dispatch.
             @param      "seqArguments"  , list of optional arguments.
         *//*-*****************************************************************************************************/

@@ -68,7 +68,7 @@ SdPageLink::~SdPageLink()
     {
         /**********************************************************************
         * Only standard pages are allowed to be linked
-        * The corresponding note pages are updated automaticly
+        * The corresponding note pages are updated automatically
         **********************************************************************/
         OUString aFileName;
         OUString aBookmarkName;

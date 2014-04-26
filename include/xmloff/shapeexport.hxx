@@ -271,7 +271,7 @@ public:
     /** initializes some internal structures for fast access to the given XShapes collection
 
         <p>This method has to be called before you use exportShape or collectShapeAutoStyles.
-        It is automaticly called if you use collectShapesAutoStyles and exportShapes.
+        It is automatically called if you use collectShapesAutoStyles and exportShapes.
 
         @see collectShapeAutoStyles
         @see exportShape

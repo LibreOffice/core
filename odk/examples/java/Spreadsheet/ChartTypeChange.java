@@ -183,7 +183,7 @@ public class ChartTypeChange {
                 xMCF.createInstanceWithContext("com.sun.star.frame.Desktop",
                                                xCompContext ) );
 
-            // Load a Writer document, which will be automaticly displayed
+            // Load a Writer document, which will be automatically displayed
             XComponent xComponent = xComponentloader.loadComponentFromURL(
             "file:///" + stringFileName, "_blank", 0,
             new PropertyValue[0] );
@@ -226,7 +226,7 @@ public class ChartTypeChange {
                                            "com.sun.star.frame.Desktop",
                                            xCompContext ) );
 
-            // Create an empty calc document, which will be automaticly displayed
+            // Create an empty calc document, which will be automatically displayed
             XComponent xComponent = xcomponentloader.loadComponentFromURL(
             "private:factory/scalc", "_blank", 0,
             new PropertyValue[0] );

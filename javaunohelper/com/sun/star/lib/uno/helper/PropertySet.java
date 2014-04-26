@@ -398,7 +398,7 @@ XMultiPropertySet
 
     //XPropertySet ----------------------------------------------------
     synchronized public void removePropertyChangeListener(String propName, XPropertyChangeListener listener) throws UnknownPropertyException, WrappedTargetException
-    {   // all listeners are automaticly released in a dispose call
+    {   // all listeners are automatically released in a dispose call
         if (!bInDispose && !bDisposed)
         {
             if (propName.length() > 0)
@@ -415,7 +415,7 @@ XMultiPropertySet
 
     //XPropertySet ----------------------------------------------------
     synchronized public void removeVetoableChangeListener(String propName, XVetoableChangeListener listener) throws UnknownPropertyException, WrappedTargetException
-    {// all listeners are automaticly released in a dispose call
+    {// all listeners are automatically released in a dispose call
         if (!bInDispose && !bDisposed)
         {
             if (propName.length() > 0)

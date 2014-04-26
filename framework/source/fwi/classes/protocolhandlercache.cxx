@@ -73,7 +73,7 @@ HandlerCFGAccess* HandlerCache::m_pConfig = NULL;
 
 /**
     @short      ctor of the cache of all registered protoco handler
-    @descr      It tries to open the right configuration package automaticly
+    @descr      It tries to open the right configuration package automatically
                 and fill the internal structures. After that the cache can be
                 used for read access on this data and perform some search
                 operations on it.
@@ -170,7 +170,7 @@ void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
 
 /**
     @short      dtor of the config access class
-    @descr      It opens the configuration package automaticly by using base class mechanism.
+    @descr      It opens the configuration package automatically by using base class mechanism.
                 After that "read()" method of this class should be called to use it.
 
     @param      sPackage

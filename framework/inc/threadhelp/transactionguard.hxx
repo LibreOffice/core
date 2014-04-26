@@ -30,9 +30,9 @@ namespace framework{
     @descr          If you wish to support non breakable method calls without lockingf any mutex, rw-lock or
                     something like that - you should use this guard implementation.
                     Initialize it at first in your method and don't release it till end of your function!
-                    Your "transaction" is registered in ctor and automaticly released in dtor.
+                    Your "transaction" is registered in ctor and automatically released in dtor.
                     Use set/get of working mode to enable/disable further transactions.
-                    It's possible too, to enable automaticly throwing of some exceptions for illegal
+                    It's possible too, to enable automatically throwing of some exceptions for illegal
                     transaction requests ... e.g. interface call for already disposed objects.
 
     @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!

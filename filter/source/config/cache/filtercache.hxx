@@ -288,7 +288,7 @@ class FilterCache : public BaseLock
                     After its changed data was flushed to the configuration it can be
                     removed.
 
-                    The original container will get these new data automaticly
+                    The original container will get these new data automatically
                     because it listen for changes on the internal used configuration layer.
                     If the new data are needed immediately inside the original container,
                     the method takeOver() can be used to copy all changes back.
@@ -566,7 +566,7 @@ class FilterCache : public BaseLock
                         if an internal error occurred.
                         Note: If the item is missing inside the underlying configuration
                         no exception will be thrown. In such case the item is marked as
-                        finalized/mandatory automaticly
+                        finalized/mandatory automatically
                         Reason: May be the item cames from the old configuration package and
                         was not migrated to the new one. So we can't provide write access
                         to such items ...
@@ -742,8 +742,8 @@ class FilterCache : public BaseLock
         /** @short      validate the whole cache and create
                         structures for optimized items access.
 
-            @descr      Wrong cache items will be removed automaticly.
-                        Wrong dependencies will be corrected automaticly.
+            @descr      Wrong cache items will be removed automatically.
+                        Wrong dependencies will be corrected automatically.
                         If something could not be repaired - an exception
                         is thrown.
                         Further some optmized structures will be created.

@@ -118,7 +118,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
                     to open the stream (as e.g. URL, ReadOnly, PostData etcpp.).
                     It creates a seekable stream and put it into the descriptor.
 
-                    A might existing InteractionHandler will be used automaticly,
+                    A might existing InteractionHandler will be used automatically,
                     to solve problems!
 
                     In case of local file the system file locking is used.
@@ -135,7 +135,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
                     to open the stream (as e.g. URL, ReadOnly, PostData etcpp.).
                     It creates a seekable stream and put it into the descriptor.
 
-                    A might existing InteractionHandler will be used automaticly,
+                    A might existing InteractionHandler will be used automatically,
                     to solve problems!
 
                     In case of local file the system file locking is used based on
@@ -316,7 +316,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
                     to open the stream (as e.g. URL, ReadOnly, PostData etcpp.).
                     It creates a seekable stream and put it into the descriptor.
 
-                    A might existing InteractionHandler will be used automaticly,
+                    A might existing InteractionHandler will be used automatically,
                     to solve problems!
 
             @param  bLockFile

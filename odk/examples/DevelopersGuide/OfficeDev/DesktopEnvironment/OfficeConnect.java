@@ -122,7 +122,7 @@ public class OfficeConnect
      *
      * @param  aType  describe class type of created service
      *                Returned object can be casted directly to this one.
-     *                Uno query was done by this method automaticly.
+     *                Uno query was done by this method automatically.
      * @param  sServiceSpecifier  name of service which should be created
      * @return  the new created service object
      */

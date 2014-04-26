@@ -344,7 +344,7 @@ void OPropertySetHelper::removePropertyChangeListener(
 {
     MutexGuard aGuard( rBHelper.rMutex );
     OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
-    // all listeners are automaticly released in a dispose call
+    // all listeners are automatically released in a dispose call
     if( !rBHelper.bInDispose && !rBHelper.bDisposed )
     {
         if( !rPropertyName.isEmpty() )
@@ -424,7 +424,7 @@ void OPropertySetHelper::removeVetoableChangeListener(
 {
     MutexGuard aGuard( rBHelper.rMutex );
     OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
-    // all listeners are automaticly released in a dispose call
+    // all listeners are automatically released in a dispose call
     if( !rBHelper.bInDispose && !rBHelper.bDisposed )
     {
         if( !rPropertyName.isEmpty() )

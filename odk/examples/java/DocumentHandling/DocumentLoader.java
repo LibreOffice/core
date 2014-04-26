@@ -74,7 +74,7 @@ public class DocumentLoader {
                 sUrl = sbTmp.toString();
             }
 
-            // Load a Writer document, which will be automaticly displayed
+            // Load a Writer document, which will be automatically displayed
             com.sun.star.lang.XComponent xComp = xCompLoader.loadComponentFromURL(
                 sUrl, "_blank", 0, new com.sun.star.beans.PropertyValue[0]);
 

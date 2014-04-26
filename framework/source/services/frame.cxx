@@ -477,7 +477,7 @@ DEFINE_XTYPEPROVIDER_21             (   Frame                                   
 
     @attention  a)  Don't use your own reference during an UNO-Service-ctor! There is no guarantee, that you
                     will get over this. (e.g. using of your reference as parameter to initialize some member)
-                    Do such things in DEFINE_INIT_SERVICE() method, which is called automaticly after your ctor!!!
+                    Do such things in DEFINE_INIT_SERVICE() method, which is called automatically after your ctor!!!
                 b)  Baseclass OBroadcastHelper is a typedef in namespace cppu!
                     The microsoft compiler has some problems to handle it right BY using namespace explicitly ::cppu::OBroadcastHelper.
                     If we write it without a namespace or expand the typedef to OBrodcastHelperVar<...> -> it will be OK!?
@@ -1030,7 +1030,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
 
     // I.I) "_blank"
     //  Not allowed for a normal frame - but for the desktop.
-    //  Use helper class to do so. It use the desktop automaticly.
+    //  Use helper class to do so. It use the desktop automatically.
 
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
@@ -1224,7 +1224,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
 
         // II.IV) CREATE
         //  If we haven't found any valid target frame by using normal flags - but user allowed us to create
-        //  a new one ... we should do that. Used TaskCreator use Desktop instance automaticly as parent!
+        //  a new one ... we should do that. Used TaskCreator use Desktop instance automatically as parent!
 
         if (
             ( ! xTarget.is()                                   )    &&

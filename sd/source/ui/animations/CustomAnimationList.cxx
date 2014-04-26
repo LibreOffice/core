@@ -896,7 +896,7 @@ EffectSequence CustomAnimationList::getSelection() const
             aSelection.push_back( pEffect );
 
         // if the selected effect is not expanded and has children
-        // we say that the children are automaticly selected
+        // we say that the children are automatically selected
         if( !IsExpanded( pEntry ) )
         {
             CustomAnimationListEntry* pChild = dynamic_cast< CustomAnimationListEntry* >( FirstChild( pEntry ) );

@@ -42,7 +42,7 @@ AcceleratorCache::AcceleratorCache(const AcceleratorCache& rCopy)
 
 AcceleratorCache::~AcceleratorCache()
 {
-    // Dont save anything automaticly here.
+    // Dont save anything automatically here.
     // The user has to do that explicitly!
 }
 
