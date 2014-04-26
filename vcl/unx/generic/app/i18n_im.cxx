@@ -245,10 +245,13 @@ SalI18N_InputMethod::PosixLocale()
 
 // Constructor / Destructor / Initialisation
 
-SalI18N_InputMethod::SalI18N_InputMethod( ) : mbUseable( bUseInputMethodDefault ),
-                                              maMethod( (XIM)NULL ),
-                                                mpStyles( (XIMStyles*)NULL )
+SalI18N_InputMethod::SalI18N_InputMethod( )
+    : mbUseable( bUseInputMethodDefault )
+    , maMethod( (XIM)NULL )
+    , mpStyles( (XIMStyles*)NULL )
 {
+    maDestroyCallback.callback = (XIMProc)NULL;
+    maDestroyCallback.client_data = (XPointer)NULL;
     const char *pUseInputMethod = getenv( "SAL_USEINPUTMETHOD" );
     if ( pUseInputMethod != NULL )
         mbUseable = pUseInputMethod[0] != '\0' ;
