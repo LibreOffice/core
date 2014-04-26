@@ -836,8 +836,8 @@ void SvXMLExportPropertyMapper::_exportXML(
         {
             sal_uInt32 nEFlags = mpImpl->mxPropMapper->GetEntryFlags(nPropMapIdx);
             sal_uInt16 nEPType = GET_PROP_TYPE(nEFlags);
-            OSL_ENSURE( nEPType >= (XML_TYPE_PROP_START>>XML_TYPE_PROP_SHIFT),
-                        "no prop type sepcified" );
+            OSL_ENSURE(nEPType >= (XML_TYPE_PROP_START >> XML_TYPE_PROP_SHIFT),
+                       "no prop type specified");
             rPropTypeFlags |= (1 << nEPType);
             if( nEPType == nPropType )
             {
