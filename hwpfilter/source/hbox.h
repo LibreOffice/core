@@ -288,6 +288,18 @@ struct FBoxStyle
 
     void *cell;
 
+    FBoxStyle()
+        : anchor_type(0)
+        , txtflow(0)
+        , xpos(0)
+        , ypos(0)
+        , boxnum(0)
+        , boxtype(0)
+        , cap_len(0)
+        , cell(NULL)
+    {
+        memset(margin, 0, sizeof(margin));
+    }
 };
 
 /**
