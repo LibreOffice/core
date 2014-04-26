@@ -42,6 +42,10 @@
 #include <unotools/fontdefs.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#ifdef check
+#  //some problem with MacOSX and a check define
+#  undef check
+#endif
 #include <boost/ptr_container/ptr_deque.hpp>
 
 #include <com/sun/star/drawing/LineCap.hpp>
