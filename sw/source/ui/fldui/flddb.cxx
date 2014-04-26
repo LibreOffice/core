@@ -418,8 +418,7 @@ void SwFldDBPage::CheckInsert()
 
 IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
 {
-    SvTreeListEntry* pColEntry;
-    SvTreeListEntry* pEntry = pColEntry = pBox->GetCurEntry();
+    SvTreeListEntry* pEntry = pBox->GetCurEntry();
     if (pEntry)
     {
         const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
