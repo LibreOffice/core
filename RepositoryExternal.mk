@@ -762,7 +762,7 @@ endef
 
 endif # SYSTEM_CMIS
 
-ifeq ($(ENABLE_JAVA),YES)
+ifeq ($(ENABLE_JAVA),TRUE)
 
 ifeq ($(OS)$(COM),WNTGCC)
 
