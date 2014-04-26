@@ -57,28 +57,31 @@
 
 class SalPolyLine
 {
-            XPoint              Points_[STATIC_POINTS];
-            XPoint             *pFirst_;
+    XPoint Points_[STATIC_POINTS];
+    XPoint *pFirst_;
 public:
-    inline                      SalPolyLine( sal_uLong nPoints, const SalPoint *p );
-    inline                      ~SalPolyLine();
-    inline  XPoint             &operator [] ( sal_uLong n ) const
-                                { return pFirst_[n]; }
-};
-
-inline SalPolyLine::SalPolyLine( sal_uLong nPoints, const SalPoint *p )
-    : pFirst_( nPoints+1 > STATIC_POINTS ? new XPoint[nPoints+1] : Points_ )
-{
-    for( sal_uLong i = 0; i < nPoints; i++ )
+    SalPolyLine(sal_uLong nPoints, const SalPoint *p)
+        : pFirst_(nPoints+1 > STATIC_POINTS ? new XPoint[nPoints+1] : Points_)
     {
-        pFirst_[i].x = (short)p[i].mnX;
-        pFirst_[i].y = (short)p[i].mnY;
+        for( sal_uLong i = 0; i < nPoints; i++ )
+        {
+            pFirst_[i].x = (short)p[i].mnX;
+            pFirst_[i].y = (short)p[i].mnY;
+        }
+        pFirst_[nPoints] = pFirst_[0]; // close polyline
     }
-    pFirst_[nPoints] = pFirst_[0]; // close polyline
-}
 
-inline SalPolyLine::~SalPolyLine()
-{ if( pFirst_ != Points_ ) delete [] pFirst_; }
+    ~SalPolyLine()
+    {
+        if( pFirst_ != Points_ )
+            delete [] pFirst_;
+    }
+
+    XPoint &operator [] ( sal_uLong n ) const
+    {
+        return pFirst_[n];
+    }
+};
 
 #undef STATIC_POINTS
 
