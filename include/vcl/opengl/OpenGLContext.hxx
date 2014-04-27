@@ -157,6 +157,8 @@ public:
         return mbInitialized;
     }
 
+    static SystemWindowData generateWinData(Window* pParent);
+
 private:
     SAL_DLLPRIVATE bool initWindow();
 
