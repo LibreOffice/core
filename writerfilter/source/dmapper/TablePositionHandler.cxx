@@ -93,7 +93,7 @@ void TablePositionHandler::lcl_sprm(Sprm& /*rSprm*/)
 
 uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() const
 {
-    uno::Sequence< beans::PropertyValue > aFrameProperties(18);
+    uno::Sequence< beans::PropertyValue > aFrameProperties(19);
     beans::PropertyValue* pFrameProperties = aFrameProperties.getArray();
 
     pFrameProperties[0].Name = "LeftBorderDistance";
@@ -178,6 +178,8 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     pFrameProperties[16].Value <<= nVertOrientRelation;
     pFrameProperties[17].Name = "VertOrientPosition";
     pFrameProperties[17].Value <<= ConversionHelper::convertTwipToMM100(m_nY);
+    pFrameProperties[18].Name = "FillTransparence";
+    pFrameProperties[18].Value <<= sal_Int32(100);
 
     return aFrameProperties;
 }
