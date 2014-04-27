@@ -170,7 +170,7 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
     // paint the remove icon when highlighted
     if (isHighlighted())
     {
-        Primitive2DSequence aSeq(1);
+        drawinglayer::primitive2d::Primitive2DSequence aSeq(1);
 
         Point aIconPos(getRemoveIconArea().TopLeft());
 
