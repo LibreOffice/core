@@ -84,11 +84,11 @@ void XsltFilterTest::testXsltCopyNew()
     uno::Sequence<uno::Any> args(7);
     args[0] <<= beans::NamedValue("StylesheetURL",
         uno::makeAny(getURLFromSrc("/filter/qa/cppunit/data/xslt/copy.xslt")));
-    args[1] <<= beans::NamedValue("SourceURL", uno::makeAny(source));
-    args[2] <<= beans::NamedValue("TargetURL", uno::makeAny(tempURL));
-    args[3] <<= beans::NamedValue("SourceBaseURL",
+    args[1] <<= beans::NamedValue("TheSourceURL", uno::makeAny(source));
+    args[2] <<= beans::NamedValue("TheTargetURL", uno::makeAny(tempURL));
+    args[3] <<= beans::NamedValue("TheSourceBaseURL",
         uno::makeAny(getURLFromSrc("/filter/source/xsltfilter/")));
-    args[4] <<= beans::NamedValue("TargetBaseURL", uno::makeAny(tempDirURL));
+    args[4] <<= beans::NamedValue("TheTargetBaseURL", uno::makeAny(tempDirURL));
     args[5] <<= beans::NamedValue("SystemType", uno::makeAny(OUString()));
     args[6] <<= beans::NamedValue("PublicType", uno::makeAny(OUString()));
 
@@ -139,11 +139,11 @@ void XsltFilterTest::testXsltCopyOld()
     uno::Sequence<uno::Any> args(7);
     args[0] <<= beans::NamedValue("StylesheetURL",
         uno::makeAny(getURLFromSrc("/filter/qa/cppunit/data/xslt/copy.xslt")));
-    args[1] <<= beans::NamedValue("SourceURL", uno::makeAny(source));
-    args[2] <<= beans::NamedValue("TargetURL", uno::makeAny(tempURL));
-    args[3] <<= beans::NamedValue("SourceBaseURL",
+    args[1] <<= beans::NamedValue("TheSourceURL", uno::makeAny(source));
+    args[2] <<= beans::NamedValue("TheTargetURL", uno::makeAny(tempURL));
+    args[3] <<= beans::NamedValue("TheSourceBaseURL",
         uno::makeAny(getURLFromSrc("/filter/source/xsltfilter/")));
-    args[4] <<= beans::NamedValue("TargetBaseURL", uno::makeAny(tempDirURL));
+    args[4] <<= beans::NamedValue("TheTargetBaseURL", uno::makeAny(tempDirURL));
     args[5] <<= beans::NamedValue("SystemType", uno::makeAny(OUString()));
     args[6] <<= beans::NamedValue("PublicType", uno::makeAny(OUString()));
 
