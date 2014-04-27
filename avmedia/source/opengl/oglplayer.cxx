@@ -158,27 +158,23 @@ sal_Bool SAL_CALL OGLPlayer::isPlaybackLoop() throw ( uno::RuntimeException, std
 
 void SAL_CALL OGLPlayer::setVolumeDB( sal_Int16 /*nVolumDB*/ ) throw ( uno::RuntimeException, std::exception )
 {
-    osl::MutexGuard aGuard(m_aMutex);
-    // TODO: Set audio volume (see com::sun::star::media::XPlayer)
+    // OpenGL models have no sound.
 }
 
 sal_Int16 SAL_CALL OGLPlayer::getVolumeDB() throw ( uno::RuntimeException, std::exception )
 {
-    osl::MutexGuard aGuard(m_aMutex);
-    // TODO: Get audio volume (see com::sun::star::media::XPlayer)
+    // OpenGL models have no sound.
     return 0;
 }
 
 void SAL_CALL OGLPlayer::setMute( sal_Bool /*bSet*/ ) throw ( uno::RuntimeException, std::exception )
 {
-    osl::MutexGuard aGuard(m_aMutex);
-    // TODO: Set volume to 0 (see com::sun::star::media::XPlayer)
+    // OpenGL models have no sound.
 }
 
 sal_Bool SAL_CALL OGLPlayer::isMute() throw ( uno::RuntimeException, std::exception )
 {
-    osl::MutexGuard aGuard(m_aMutex);
-    // TODO: Get whether volume is set to 0 by setMute (see com::sun::star::media::XPlayer)
+    // OpenGL models have no sound.
     return false;
 }
 
