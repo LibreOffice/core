@@ -61,6 +61,430 @@ using namespace ::rtl;
 using namespace ::vcl;
 using namespace ::utl;
 
+FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
+{
+    FontInfo aFontInfo;
+
+    ImplInitFontList();
+
+    int nCount = GetDevFontCount();
+    if( nDevFontIndex < nCount )
+    {
+        const PhysicalFontFace& rData = *mpGetDevFontList->Get( nDevFontIndex );
+        aFontInfo.SetName( rData.GetFamilyName() );
+        aFontInfo.SetStyleName( rData.GetStyleName() );
+        aFontInfo.SetCharSet( rData.IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
+        aFontInfo.SetFamily( rData.GetFamilyType() );
+        aFontInfo.SetPitch( rData.GetPitch() );
+        aFontInfo.SetWeight( rData.GetWeight() );
+        aFontInfo.SetItalic( rData.GetSlant() );
+        aFontInfo.SetWidthType( rData.GetWidthType() );
+        if( rData.IsScalable() )
+            aFontInfo.mpImplMetric->mnMiscFlags |= ImplFontMetric::SCALABLE_FLAG;
+        if( rData.mbDevice )
+            aFontInfo.mpImplMetric->mnMiscFlags |= ImplFontMetric::DEVICE_FLAG;
+    }
+
+    return aFontInfo;
+}
+
+int OutputDevice::GetDevFontCount() const
+{
+    if( !mpGetDevFontList )
+        mpGetDevFontList = mpFontCollection->GetDevFontList();
+    return mpGetDevFontList->Count();
+}
+
+bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
+{
+    PhysicalFontFamily* pFound = mpFontCollection->FindFontFamily( rFontName );
+    return (pFound != NULL);
+}
+
+int OutputDevice::GetDevFontSizeCount( const Font& rFont ) const
+{
+    delete mpGetDevSizeList;
+
+    ImplInitFontList();
+    mpGetDevSizeList = mpFontCollection->GetDevSizeList( rFont.GetName() );
+    return mpGetDevSizeList->Count();
+}
+
+Size OutputDevice::GetDevFontSize( const Font& rFont, int nSizeIndex ) const
+{
+    // check range
+    int nCount = GetDevFontSizeCount( rFont );
+    if ( nSizeIndex >= nCount )
+        return Size();
+
+    // when mapping is enabled round to .5 points
+    Size aSize( 0, mpGetDevSizeList->Get( nSizeIndex ) );
+    if ( mbMap )
+    {
+        aSize.Height() *= 10;
+        MapMode aMap( MAP_10TH_INCH, Point(), Fraction( 1, 72 ), Fraction( 1, 72 ) );
+        aSize = PixelToLogic( aSize, aMap );
+        aSize.Height() += 5;
+        aSize.Height() /= 10;
+        long nRound = aSize.Height() % 5;
+        if ( nRound >= 3 )
+            aSize.Height() += (5-nRound);
+        else
+            aSize.Height() -= nRound;
+        aSize.Height() *= 10;
+        aSize = LogicToPixel( aSize, aMap );
+        aSize = PixelToLogic( aSize );
+        aSize.Height() += 5;
+        aSize.Height() /= 10;
+    }
+    return aSize;
+}
+
+bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFontName )
+{
+    ImplInitFontList();
+
+    if( !mpGraphics && !AcquireGraphics() )
+        return false;
+
+    bool bRC = mpGraphics->AddTempDevFont( mpFontCollection, rFileURL, rFontName );
+    if( !bRC )
+        return false;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->AddTempDevFont( rFileURL, rFontName );
+
+    mpFontCache->Invalidate();
+    return true;
+}
+
+FontMetric OutputDevice::GetFontMetric() const
+{
+    FontMetric aMetric;
+    if( mbNewFont && !ImplNewFont() )
+        return aMetric;
+
+    ImplFontEntry*      pEntry = mpFontEntry;
+    ImplFontMetricData* pMetric = &(pEntry->maMetric);
+
+    // prepare metric
+    aMetric.Font::operator=( maFont );
+
+    // set aMetric with info from font
+    aMetric.SetName( maFont.GetName() );
+    aMetric.SetStyleName( pMetric->GetStyleName() );
+    aMetric.SetSize( PixelToLogic( Size( pMetric->mnWidth, pMetric->mnAscent+pMetric->mnDescent-pMetric->mnIntLeading ) ) );
+    aMetric.SetCharSet( pMetric->IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
+    aMetric.SetFamily( pMetric->GetFamilyType() );
+    aMetric.SetPitch( pMetric->GetPitch() );
+    aMetric.SetWeight( pMetric->GetWeight() );
+    aMetric.SetItalic( pMetric->GetSlant() );
+    aMetric.SetWidthType( pMetric->GetWidthType() );
+    if ( pEntry->mnOwnOrientation )
+        aMetric.SetOrientation( pEntry->mnOwnOrientation );
+    else
+        aMetric.SetOrientation( pMetric->mnOrientation );
+    if( !pEntry->maMetric.mbKernableFont )
+         aMetric.SetKerning( maFont.GetKerning() & ~KERNING_FONTSPECIFIC );
+
+    // set remaining metric fields
+    aMetric.mpImplMetric->mnMiscFlags   = 0;
+    if( pMetric->mbDevice )
+            aMetric.mpImplMetric->mnMiscFlags |= ImplFontMetric::DEVICE_FLAG;
+    if( pMetric->mbScalableFont )
+            aMetric.mpImplMetric->mnMiscFlags |= ImplFontMetric::SCALABLE_FLAG;
+    aMetric.mpImplMetric->mnAscent      = ImplDevicePixelToLogicHeight( pMetric->mnAscent+mnEmphasisAscent );
+    aMetric.mpImplMetric->mnDescent     = ImplDevicePixelToLogicHeight( pMetric->mnDescent+mnEmphasisDescent );
+    aMetric.mpImplMetric->mnIntLeading  = ImplDevicePixelToLogicHeight( pMetric->mnIntLeading+mnEmphasisAscent );
+    aMetric.mpImplMetric->mnExtLeading  = ImplDevicePixelToLogicHeight( GetFontExtLeading() );
+    aMetric.mpImplMetric->mnExtLeading  = ImplDevicePixelToLogicHeight( pMetric->mnExtLeading );
+    aMetric.mpImplMetric->mnLineHeight  = ImplDevicePixelToLogicHeight( pMetric->mnAscent+pMetric->mnDescent+mnEmphasisAscent+mnEmphasisDescent );
+    aMetric.mpImplMetric->mnSlant       = ImplDevicePixelToLogicHeight( pMetric->mnSlant );
+
+    return aMetric;
+}
+
+FontMetric OutputDevice::GetFontMetric( const Font& rFont ) const
+{
+    // select font, query metrics, select original font again
+    Font aOldFont = GetFont();
+    const_cast<OutputDevice*>(this)->SetFont( rFont );
+    FontMetric aMetric( GetFontMetric() );
+    const_cast<OutputDevice*>(this)->SetFont( aOldFont );
+    return aMetric;
+}
+
+bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
+{
+    rFontCharMap.Reset();
+
+    // we need a graphics
+    if( !mpGraphics && !AcquireGraphics() )
+        return false;
+
+    if( mbNewFont )
+        ImplNewFont();
+    if( mbInitFont )
+        InitFont();
+    if( !mpFontEntry )
+        return false;
+
+#ifdef ENABLE_IFC_CACHE // a little font charmap cache helps considerably
+    static const int NMAXITEMS = 16;
+    static int nUsedItems = 0, nCurItem = 0;
+
+    struct CharMapCacheItem { const PhysicalFontFace* mpFontData; FontCharMap maCharMap; };
+    static CharMapCacheItem aCache[ NMAXITEMS ];
+
+    const PhysicalFontFace* pFontData = mpFontEntry->maFontSelData.mpFontData;
+
+    int i;
+    for( i = nUsedItems; --i >= 0; )
+        if( pFontData == aCache[i].mpFontData )
+            break;
+    if( i >= 0 ) // found in cache
+    {
+        rFontCharMap.Reset( aCache[i].maCharMap.mpImpl );
+    }
+    else // need to cache
+#endif // ENABLE_IFC_CACHE
+    {
+        const ImplFontCharMap* pNewMap = mpGraphics->GetImplFontCharMap();
+        rFontCharMap.Reset( pNewMap );
+
+#ifdef ENABLE_IFC_CACHE
+        // manage cache round-robin and insert data
+        CharMapCacheItem& rItem = aCache[ nCurItem ];
+        rItem.mpFontData = pFontData;
+        rItem.maCharMap.Reset( pNewMap );
+
+        if( ++nCurItem >= NMAXITEMS )
+            nCurItem = 0;
+
+        if( ++nUsedItems >= NMAXITEMS )
+            nUsedItems = NMAXITEMS;
+#endif // ENABLE_IFC_CACHE
+    }
+
+    if( rFontCharMap.IsDefaultMap() )
+        return false;
+    return true;
+}
+
+bool OutputDevice::GetFontCapabilities( FontCapabilities& rFontCapabilities ) const
+{
+    // we need a graphics
+    if( !mpGraphics && !AcquireGraphics() )
+        return false;
+
+    if( mbNewFont )
+        ImplNewFont();
+    if( mbInitFont )
+        InitFont();
+    if( !mpFontEntry )
+        return false;
+
+    return mpGraphics->GetImplFontCapabilities(rFontCapabilities);
+}
+
+SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
+{
+    SystemFontData aSysFontData;
+    aSysFontData.nSize = sizeof(aSysFontData);
+
+    if (!mpGraphics) AcquireGraphics();
+    if (mpGraphics) aSysFontData = mpGraphics->GetSysFontData(nFallbacklevel);
+
+    return aSysFontData;
+}
+
+void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine,
+                                        Rectangle& rRect1, Rectangle& rRect2,
+                                        long& rYOff, long& rWidth,
+                                        FontEmphasisMark eEmphasis,
+                                        long nHeight, short /*nOrient*/ )
+{
+    static const sal_uInt8 aAccentPolyFlags[24] =
+    {
+        0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 0, 2, 0, 2, 2
+    };
+
+    static const long aAccentPos[48] =
+    {
+         78,      0,
+        348,     79,
+        599,    235,
+        843,    469,
+        938,    574,
+        990,    669,
+        990,    773,
+        990,    843,
+        964,    895,
+        921,    947,
+        886,    982,
+        860,    999,
+        825,    999,
+        764,    999,
+        721,    964,
+        686,    895,
+        625,    791,
+        556,    660,
+        469,    504,
+        400,    400,
+        261,    252,
+         61,     61,
+          0,     27,
+          9,      0
+    };
+
+    rWidth      = 0;
+    rYOff       = 0;
+    rPolyLine   = false;
+
+    if ( !nHeight )
+        return;
+
+    FontEmphasisMark    nEmphasisStyle = eEmphasis & EMPHASISMARK_STYLE;
+    long                nDotSize = 0;
+    switch ( nEmphasisStyle )
+    {
+        case EMPHASISMARK_DOT:
+            // Dot has 55% of the height
+            nDotSize = (nHeight*550)/1000;
+            if ( !nDotSize )
+                nDotSize = 1;
+            if ( nDotSize <= 2 )
+                rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
+            else
+            {
+                long nRad = nDotSize/2;
+                Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
+                rPolyPoly.Insert( aPoly );
+            }
+            rYOff = ((nHeight*250)/1000)/2; // Center to the another EmphasisMarks
+            rWidth = nDotSize;
+            break;
+
+        case EMPHASISMARK_CIRCLE:
+            // Dot has 80% of the height
+            nDotSize = (nHeight*800)/1000;
+            if ( !nDotSize )
+                nDotSize = 1;
+            if ( nDotSize <= 2 )
+                rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
+            else
+            {
+                long nRad = nDotSize/2;
+                Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
+                rPolyPoly.Insert( aPoly );
+                // BorderWidth is 15%
+                long nBorder = (nDotSize*150)/1000;
+                if ( nBorder <= 1 )
+                    rPolyLine = true;
+                else
+                {
+                    Polygon aPoly2( Point( nRad, nRad ),
+                                    nRad-nBorder, nRad-nBorder );
+                    rPolyPoly.Insert( aPoly2 );
+                }
+            }
+            rWidth = nDotSize;
+            break;
+
+        case EMPHASISMARK_DISC:
+            // Dot has 80% of the height
+            nDotSize = (nHeight*800)/1000;
+            if ( !nDotSize )
+                nDotSize = 1;
+            if ( nDotSize <= 2 )
+                rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
+            else
+            {
+                long nRad = nDotSize/2;
+                Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
+                rPolyPoly.Insert( aPoly );
+            }
+            rWidth = nDotSize;
+            break;
+
+        case EMPHASISMARK_ACCENT:
+            // Dot has 80% of the height
+            nDotSize = (nHeight*800)/1000;
+            if ( !nDotSize )
+                nDotSize = 1;
+            if ( nDotSize <= 2 )
+            {
+                if ( nDotSize == 1 )
+                {
+                    rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
+                    rWidth = nDotSize;
+                }
+                else
+                {
+                    rRect1 = Rectangle( Point(), Size( 1, 1 ) );
+                    rRect2 = Rectangle( Point( 1, 1 ), Size( 1, 1 ) );
+                }
+            }
+            else
+            {
+                Polygon aPoly( sizeof( aAccentPos ) / sizeof( long ) / 2,
+                               (const Point*)aAccentPos,
+                               aAccentPolyFlags );
+                double dScale = ((double)nDotSize)/1000.0;
+                aPoly.Scale( dScale, dScale );
+                Polygon aTemp;
+                aPoly.AdaptiveSubdivide( aTemp );
+                Rectangle aBoundRect = aTemp.GetBoundRect();
+                rWidth = aBoundRect.GetWidth();
+                nDotSize = aBoundRect.GetHeight();
+                rPolyPoly.Insert( aTemp );
+            }
+            break;
+    }
+
+    // calculate position
+    long nOffY = 1+(mnDPIY/300); // one visible pixel space
+    long nSpaceY = nHeight-nDotSize;
+    if ( nSpaceY >= nOffY*2 )
+        rYOff += nOffY;
+    if ( !(eEmphasis & EMPHASISMARK_POS_BELOW) )
+        rYOff += nDotSize;
+}
+
+FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const Font& rFont )
+{
+    FontEmphasisMark nEmphasisMark = rFont.GetEmphasisMark();
+
+    // If no Position is set, then calculate the default position, which
+    // depends on the language
+    if ( !(nEmphasisMark & (EMPHASISMARK_POS_ABOVE | EMPHASISMARK_POS_BELOW)) )
+    {
+        LanguageType eLang = rFont.GetLanguage();
+        // In Chinese Simplified the EmphasisMarks are below/left
+        if (MsLangId::isSimplifiedChinese(eLang))
+            nEmphasisMark |= EMPHASISMARK_POS_BELOW;
+        else
+        {
+            eLang = rFont.GetCJKContextLanguage();
+            // In Chinese Simplified the EmphasisMarks are below/left
+            if (MsLangId::isSimplifiedChinese(eLang))
+                nEmphasisMark |= EMPHASISMARK_POS_BELOW;
+            else
+                nEmphasisMark |= EMPHASISMARK_POS_ABOVE;
+        }
+    }
+
+    return nEmphasisMark;
+}
+
+long OutputDevice::GetFontExtLeading() const
+{
+    ImplFontEntry*      pEntry = mpFontEntry;
+    ImplFontMetricData* pMetric = &(pEntry->maMetric);
+
+    return pMetric->mnExtLeading;
+}
+
 void OutputDevice::ImplClearFontData( const bool bNewFontLists )
 {
     // the currently selected logical font is no longer needed
@@ -1016,32 +1440,6 @@ void ImplFontCache::Invalidate()
     DBG_ASSERT( (mnRef0Count==0), "ImplFontCache::Invalidate() - mnRef0Count non-zero" );
 }
 
-FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const Font& rFont )
-{
-    FontEmphasisMark nEmphasisMark = rFont.GetEmphasisMark();
-
-    // If no Position is set, then calculate the default position, which
-    // depends on the language
-    if ( !(nEmphasisMark & (EMPHASISMARK_POS_ABOVE | EMPHASISMARK_POS_BELOW)) )
-    {
-        LanguageType eLang = rFont.GetLanguage();
-        // In Chinese Simplified the EmphasisMarks are below/left
-        if (MsLangId::isSimplifiedChinese(eLang))
-            nEmphasisMark |= EMPHASISMARK_POS_BELOW;
-        else
-        {
-            eLang = rFont.GetCJKContextLanguage();
-            // In Chinese Simplified the EmphasisMarks are below/left
-            if (MsLangId::isSimplifiedChinese(eLang))
-                nEmphasisMark |= EMPHASISMARK_POS_BELOW;
-            else
-                nEmphasisMark |= EMPHASISMARK_POS_ABOVE;
-        }
-    }
-
-    return nEmphasisMark;
-}
-
 void OutputDevice::ImplInitFontList() const
 {
     if( !mpFontCollection->Count() )
@@ -1477,159 +1875,6 @@ void ImplFontMetricData::ImplInitAboveTextLineSize()
     mnAboveWUnderlineOffset = nCeiling + (nIntLeading + 1) / 2;
 }
 
-void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine,
-                                        Rectangle& rRect1, Rectangle& rRect2,
-                                        long& rYOff, long& rWidth,
-                                        FontEmphasisMark eEmphasis,
-                                        long nHeight, short /*nOrient*/ )
-{
-    static const sal_uInt8 aAccentPolyFlags[24] =
-    {
-        0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 0, 2, 0, 2, 2
-    };
-
-    static const long aAccentPos[48] =
-    {
-         78,      0,
-        348,     79,
-        599,    235,
-        843,    469,
-        938,    574,
-        990,    669,
-        990,    773,
-        990,    843,
-        964,    895,
-        921,    947,
-        886,    982,
-        860,    999,
-        825,    999,
-        764,    999,
-        721,    964,
-        686,    895,
-        625,    791,
-        556,    660,
-        469,    504,
-        400,    400,
-        261,    252,
-         61,     61,
-          0,     27,
-          9,      0
-    };
-
-    rWidth      = 0;
-    rYOff       = 0;
-    rPolyLine   = false;
-
-    if ( !nHeight )
-        return;
-
-    FontEmphasisMark    nEmphasisStyle = eEmphasis & EMPHASISMARK_STYLE;
-    long                nDotSize = 0;
-    switch ( nEmphasisStyle )
-    {
-        case EMPHASISMARK_DOT:
-            // Dot has 55% of the height
-            nDotSize = (nHeight*550)/1000;
-            if ( !nDotSize )
-                nDotSize = 1;
-            if ( nDotSize <= 2 )
-                rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
-            else
-            {
-                long nRad = nDotSize/2;
-                Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
-                rPolyPoly.Insert( aPoly );
-            }
-            rYOff = ((nHeight*250)/1000)/2; // Center to the another EmphasisMarks
-            rWidth = nDotSize;
-            break;
-
-        case EMPHASISMARK_CIRCLE:
-            // Dot has 80% of the height
-            nDotSize = (nHeight*800)/1000;
-            if ( !nDotSize )
-                nDotSize = 1;
-            if ( nDotSize <= 2 )
-                rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
-            else
-            {
-                long nRad = nDotSize/2;
-                Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
-                rPolyPoly.Insert( aPoly );
-                // BorderWidth is 15%
-                long nBorder = (nDotSize*150)/1000;
-                if ( nBorder <= 1 )
-                    rPolyLine = true;
-                else
-                {
-                    Polygon aPoly2( Point( nRad, nRad ),
-                                    nRad-nBorder, nRad-nBorder );
-                    rPolyPoly.Insert( aPoly2 );
-                }
-            }
-            rWidth = nDotSize;
-            break;
-
-        case EMPHASISMARK_DISC:
-            // Dot has 80% of the height
-            nDotSize = (nHeight*800)/1000;
-            if ( !nDotSize )
-                nDotSize = 1;
-            if ( nDotSize <= 2 )
-                rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
-            else
-            {
-                long nRad = nDotSize/2;
-                Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
-                rPolyPoly.Insert( aPoly );
-            }
-            rWidth = nDotSize;
-            break;
-
-        case EMPHASISMARK_ACCENT:
-            // Dot has 80% of the height
-            nDotSize = (nHeight*800)/1000;
-            if ( !nDotSize )
-                nDotSize = 1;
-            if ( nDotSize <= 2 )
-            {
-                if ( nDotSize == 1 )
-                {
-                    rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
-                    rWidth = nDotSize;
-                }
-                else
-                {
-                    rRect1 = Rectangle( Point(), Size( 1, 1 ) );
-                    rRect2 = Rectangle( Point( 1, 1 ), Size( 1, 1 ) );
-                }
-            }
-            else
-            {
-                Polygon aPoly( sizeof( aAccentPos ) / sizeof( long ) / 2,
-                               (const Point*)aAccentPos,
-                               aAccentPolyFlags );
-                double dScale = ((double)nDotSize)/1000.0;
-                aPoly.Scale( dScale, dScale );
-                Polygon aTemp;
-                aPoly.AdaptiveSubdivide( aTemp );
-                Rectangle aBoundRect = aTemp.GetBoundRect();
-                rWidth = aBoundRect.GetWidth();
-                nDotSize = aBoundRect.GetHeight();
-                rPolyPoly.Insert( aTemp );
-            }
-            break;
-    }
-
-    // calculate position
-    long nOffY = 1+(mnDPIY/300); // one visible pixel space
-    long nSpaceY = nHeight-nDotSize;
-    if ( nSpaceY >= nOffY*2 )
-        rYOff += nOffY;
-    if ( !(eEmphasis & EMPHASISMARK_POS_BELOW) )
-        rYOff += nDotSize;
-}
-
 void OutputDevice::ImplDrawEmphasisMark( long nBaseX, long nX, long nY,
                                          const PolyPolygon& rPolyPoly, bool bPolyLine,
                                          const Rectangle& rRect1, const Rectangle& rRect2 )
@@ -1854,191 +2099,6 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     return pSalLayout;
 }
 
-int OutputDevice::GetDevFontCount() const
-{
-
-    if( !mpGetDevFontList )
-        mpGetDevFontList = mpFontCollection->GetDevFontList();
-    return mpGetDevFontList->Count();
-}
-
-FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
-{
-
-    FontInfo aFontInfo;
-
-    ImplInitFontList();
-
-    int nCount = GetDevFontCount();
-    if( nDevFontIndex < nCount )
-    {
-        const PhysicalFontFace& rData = *mpGetDevFontList->Get( nDevFontIndex );
-        aFontInfo.SetName( rData.GetFamilyName() );
-        aFontInfo.SetStyleName( rData.GetStyleName() );
-        aFontInfo.SetCharSet( rData.IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-        aFontInfo.SetFamily( rData.GetFamilyType() );
-        aFontInfo.SetPitch( rData.GetPitch() );
-        aFontInfo.SetWeight( rData.GetWeight() );
-        aFontInfo.SetItalic( rData.GetSlant() );
-        aFontInfo.SetWidthType( rData.GetWidthType() );
-        if( rData.IsScalable() )
-            aFontInfo.mpImplMetric->mnMiscFlags |= ImplFontMetric::SCALABLE_FLAG;
-        if( rData.mbDevice )
-            aFontInfo.mpImplMetric->mnMiscFlags |= ImplFontMetric::DEVICE_FLAG;
-    }
-
-    return aFontInfo;
-}
-
-bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFontName )
-{
-
-    ImplInitFontList();
-
-    if( !mpGraphics && !AcquireGraphics() )
-        return false;
-
-    bool bRC = mpGraphics->AddTempDevFont( mpFontCollection, rFileURL, rFontName );
-    if( !bRC )
-        return false;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->AddTempDevFont( rFileURL, rFontName );
-
-    mpFontCache->Invalidate();
-    return true;
-}
-
-int OutputDevice::GetDevFontSizeCount( const Font& rFont ) const
-{
-
-    delete mpGetDevSizeList;
-
-    ImplInitFontList();
-    mpGetDevSizeList = mpFontCollection->GetDevSizeList( rFont.GetName() );
-    return mpGetDevSizeList->Count();
-}
-
-Size OutputDevice::GetDevFontSize( const Font& rFont, int nSizeIndex ) const
-{
-
-    // check range
-    int nCount = GetDevFontSizeCount( rFont );
-    if ( nSizeIndex >= nCount )
-        return Size();
-
-    // when mapping is enabled round to .5 points
-    Size aSize( 0, mpGetDevSizeList->Get( nSizeIndex ) );
-    if ( mbMap )
-    {
-        aSize.Height() *= 10;
-        MapMode aMap( MAP_10TH_INCH, Point(), Fraction( 1, 72 ), Fraction( 1, 72 ) );
-        aSize = PixelToLogic( aSize, aMap );
-        aSize.Height() += 5;
-        aSize.Height() /= 10;
-        long nRound = aSize.Height() % 5;
-        if ( nRound >= 3 )
-            aSize.Height() += (5-nRound);
-        else
-            aSize.Height() -= nRound;
-        aSize.Height() *= 10;
-        aSize = LogicToPixel( aSize, aMap );
-        aSize = PixelToLogic( aSize );
-        aSize.Height() += 5;
-        aSize.Height() /= 10;
-    }
-    return aSize;
-}
-
-bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
-{
-    PhysicalFontFamily* pFound = mpFontCollection->FindFontFamily( rFontName );
-    return (pFound != NULL);
-}
-
-FontMetric OutputDevice::GetFontMetric() const
-{
-    FontMetric aMetric;
-    if( mbNewFont && !ImplNewFont() )
-        return aMetric;
-
-    ImplFontEntry*      pEntry = mpFontEntry;
-    ImplFontMetricData* pMetric = &(pEntry->maMetric);
-
-    // prepare metric
-    aMetric.Font::operator=( maFont );
-
-    // set aMetric with info from font
-    aMetric.SetName( maFont.GetName() );
-    aMetric.SetStyleName( pMetric->GetStyleName() );
-    aMetric.SetSize( PixelToLogic( Size( pMetric->mnWidth, pMetric->mnAscent+pMetric->mnDescent-pMetric->mnIntLeading ) ) );
-    aMetric.SetCharSet( pMetric->IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-    aMetric.SetFamily( pMetric->GetFamilyType() );
-    aMetric.SetPitch( pMetric->GetPitch() );
-    aMetric.SetWeight( pMetric->GetWeight() );
-    aMetric.SetItalic( pMetric->GetSlant() );
-    aMetric.SetWidthType( pMetric->GetWidthType() );
-    if ( pEntry->mnOwnOrientation )
-        aMetric.SetOrientation( pEntry->mnOwnOrientation );
-    else
-        aMetric.SetOrientation( pMetric->mnOrientation );
-    if( !pEntry->maMetric.mbKernableFont )
-         aMetric.SetKerning( maFont.GetKerning() & ~KERNING_FONTSPECIFIC );
-
-    // set remaining metric fields
-    aMetric.mpImplMetric->mnMiscFlags   = 0;
-    if( pMetric->mbDevice )
-            aMetric.mpImplMetric->mnMiscFlags |= ImplFontMetric::DEVICE_FLAG;
-    if( pMetric->mbScalableFont )
-            aMetric.mpImplMetric->mnMiscFlags |= ImplFontMetric::SCALABLE_FLAG;
-    aMetric.mpImplMetric->mnAscent      = ImplDevicePixelToLogicHeight( pMetric->mnAscent+mnEmphasisAscent );
-    aMetric.mpImplMetric->mnDescent     = ImplDevicePixelToLogicHeight( pMetric->mnDescent+mnEmphasisDescent );
-    aMetric.mpImplMetric->mnIntLeading  = ImplDevicePixelToLogicHeight( pMetric->mnIntLeading+mnEmphasisAscent );
-    aMetric.mpImplMetric->mnExtLeading  = ImplDevicePixelToLogicHeight( GetFontExtLeading() );
-    aMetric.mpImplMetric->mnExtLeading  = ImplDevicePixelToLogicHeight( pMetric->mnExtLeading );
-    aMetric.mpImplMetric->mnLineHeight  = ImplDevicePixelToLogicHeight( pMetric->mnAscent+pMetric->mnDescent+mnEmphasisAscent+mnEmphasisDescent );
-    aMetric.mpImplMetric->mnSlant       = ImplDevicePixelToLogicHeight( pMetric->mnSlant );
-
-    return aMetric;
-}
-
-long OutputDevice::GetFontExtLeading() const
-{
-    ImplFontEntry*      pEntry = mpFontEntry;
-    ImplFontMetricData* pMetric = &(pEntry->maMetric);
-
-    return pMetric->mnExtLeading;
-}
-
-FontMetric OutputDevice::GetFontMetric( const Font& rFont ) const
-{
-    // select font, query metrics, select original font again
-    Font aOldFont = GetFont();
-    const_cast<OutputDevice*>(this)->SetFont( rFont );
-    FontMetric aMetric( GetFontMetric() );
-    const_cast<OutputDevice*>(this)->SetFont( aOldFont );
-    return aMetric;
-}
-
-/** OutputDevice::GetSysFontData
- *
- * @param nFallbacklevel Fallback font level (0 = best matching font)
- *
- * Retrieve detailed font information in platform independent structure
- *
- * @return SystemFontData
- **/
-SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
-{
-    SystemFontData aSysFontData;
-    aSysFontData.nSize = sizeof(aSysFontData);
-
-    if (!mpGraphics) AcquireGraphics();
-    if (mpGraphics) aSysFontData = mpGraphics->GetSysFontData(nFallbacklevel);
-
-    return aSysFontData;
-}
-
 long OutputDevice::GetMinKashida() const
 {
     if( mbNewFont && !ImplNewFont() )
@@ -2102,79 +2162,6 @@ bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rSt
     }
 
     return (nLen == (int)rVector.size());
-}
-
-bool OutputDevice::GetFontCapabilities( FontCapabilities& rFontCapabilities ) const
-{
-    // we need a graphics
-    if( !mpGraphics && !AcquireGraphics() )
-        return false;
-
-    if( mbNewFont )
-        ImplNewFont();
-    if( mbInitFont )
-        InitFont();
-    if( !mpFontEntry )
-        return false;
-
-    return mpGraphics->GetImplFontCapabilities(rFontCapabilities);
-}
-
-bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
-{
-    rFontCharMap.Reset();
-
-    // we need a graphics
-    if( !mpGraphics && !AcquireGraphics() )
-        return false;
-
-    if( mbNewFont )
-        ImplNewFont();
-    if( mbInitFont )
-        InitFont();
-    if( !mpFontEntry )
-        return false;
-
-#ifdef ENABLE_IFC_CACHE // a little font charmap cache helps considerably
-    static const int NMAXITEMS = 16;
-    static int nUsedItems = 0, nCurItem = 0;
-
-    struct CharMapCacheItem { const PhysicalFontFace* mpFontData; FontCharMap maCharMap; };
-    static CharMapCacheItem aCache[ NMAXITEMS ];
-
-    const PhysicalFontFace* pFontData = mpFontEntry->maFontSelData.mpFontData;
-
-    int i;
-    for( i = nUsedItems; --i >= 0; )
-        if( pFontData == aCache[i].mpFontData )
-            break;
-    if( i >= 0 ) // found in cache
-    {
-        rFontCharMap.Reset( aCache[i].maCharMap.mpImpl );
-    }
-    else // need to cache
-#endif // ENABLE_IFC_CACHE
-    {
-        const ImplFontCharMap* pNewMap = mpGraphics->GetImplFontCharMap();
-        rFontCharMap.Reset( pNewMap );
-
-#ifdef ENABLE_IFC_CACHE
-        // manage cache round-robin and insert data
-        CharMapCacheItem& rItem = aCache[ nCurItem ];
-        rItem.mpFontData = pFontData;
-        rItem.maCharMap.Reset( pNewMap );
-
-        if( ++nCurItem >= NMAXITEMS )
-            nCurItem = 0;
-
-        if( ++nUsedItems >= NMAXITEMS )
-            nUsedItems = NMAXITEMS;
-#endif // ENABLE_IFC_CACHE
-    }
-
-    if( rFontCharMap.IsDefaultMap() )
-        return false;
-    return true;
 }
 
 sal_Int32 OutputDevice::HasGlyphs( const Font& rTempFont, const OUString& rStr,
