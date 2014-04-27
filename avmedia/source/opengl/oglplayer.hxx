@@ -58,7 +58,6 @@ private:
     OUString m_sURL;
     glTFHandle* m_pHandle;
     OpenGLContext m_aContext;
-    bool m_bIsPlaying;
 };
 
 } // namespace ogl

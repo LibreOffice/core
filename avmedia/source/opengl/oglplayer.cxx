@@ -24,12 +24,13 @@ namespace avmedia { namespace ogl {
 
 OGLPlayer::OGLPlayer()
     : Player_BASE(m_aMutex)
-    , m_bIsPlaying(false)
 {
 }
 
 OGLPlayer::~OGLPlayer()
 {
+    // Comment out while it causes segmentation fault
+    // gltf_renderer_release(m_pHandle);
 }
 
 static bool lcl_LoadFile( glTFFile* io_pFile, const OUString& rURL)
@@ -98,42 +99,37 @@ bool OGLPlayer::create( const OUString& rURL )
 void SAL_CALL OGLPlayer::start() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    // TODO: Start playing of gltf model (see com::sun::star::media::XPlayer)
-    m_bIsPlaying = true;
+    gltf_animation_start(m_pHandle);
 }
 
 void SAL_CALL OGLPlayer::stop() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    // TODO: Stop playing of gltf model (see com::sun::star::media::XPlayer)
-    m_bIsPlaying = false;
+    gltf_animation_stop(m_pHandle);
 }
 
 sal_Bool SAL_CALL OGLPlayer::isPlaying() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    // TODO: Check whether gltf model is played by now (see com::sun::star::media::XPlayer)
-    return m_bIsPlaying;
+    return (sal_Bool)gltf_animation_is_playing(m_pHandle);
 }
 
 double SAL_CALL OGLPlayer::getDuration() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    // TODO: Get gltf's duration (see com::sun::star::media::XPlayer)
-    return 0.0;
+    return gltf_animation_get_duration(m_pHandle);
 }
 
-void SAL_CALL OGLPlayer::setMediaTime( double /*fTime*/ ) throw ( uno::RuntimeException, std::exception )
+void SAL_CALL OGLPlayer::setMediaTime( double fTime ) throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    // TODO: Set player to the specified point (see com::sun::star::media::XPlayer)
+    gltf_animation_set_time(m_pHandle, fTime);
 }
 
 double SAL_CALL OGLPlayer::getMediaTime() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    // TODO: Get player current time position (see com::sun::star::media::XPlayer)
-    return 0.0;
+    return gltf_animation_get_time(m_pHandle);
 }
 
 double SAL_CALL OGLPlayer::getRate() throw ( uno::RuntimeException, std::exception )
@@ -143,17 +139,16 @@ double SAL_CALL OGLPlayer::getRate() throw ( uno::RuntimeException, std::excepti
     return 1.0;
 }
 
-void SAL_CALL OGLPlayer::setPlaybackLoop( sal_Bool /*bSet*/ ) throw ( uno::RuntimeException, std::exception )
+void SAL_CALL OGLPlayer::setPlaybackLoop( sal_Bool bSet ) throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    // TODO: Set the playes replay itself when it ends  (see com::sun::star::media::XPlayer)
+    gltf_animation_set_looping(m_pHandle, (int)bSet);
 }
 
 sal_Bool SAL_CALL OGLPlayer::isPlaybackLoop() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    // TODO: Check whether playing will restart after it ends  (see com::sun::star::media::XPlayer)
-    return false;
+    return (sal_Bool)gltf_animation_get_looping(m_pHandle);
 }
 
 void SAL_CALL OGLPlayer::setVolumeDB( sal_Int16 /*nVolumDB*/ ) throw ( uno::RuntimeException, std::exception )
