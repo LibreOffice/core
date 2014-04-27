@@ -345,6 +345,7 @@ private:
     /** @name Initialization and accessor functions
      */
     ///@{
+
 protected:
                                 OutputDevice();
 
@@ -411,6 +412,7 @@ public:
                                     }
 
 protected:
+
     /** Acquire a graphics device that the output device uses to draw on.
 
      There is an LRU of OutputDevices that is used to get the graphics. The
@@ -476,6 +478,7 @@ public:
     vcl::ExtOutDevData*         GetExtOutDevData() const { return mpExtOutDevData; }
 
 private:
+
     void                        ImplRotatePos( long nOriginX, long nOriginY, long& rX, long &rY,
                                                short nOrientation ) const;
     ///@}
@@ -484,7 +487,9 @@ private:
     /** @name Frame functions
      */
     ///@{
+
 private:
+
     SAL_DLLPRIVATE void         ImplGetFrameDev     ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
                                                       OutputDevice& rOutDev );
     SAL_DLLPRIVATE void         ImplDrawFrameDev    ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
@@ -495,7 +500,9 @@ private:
     /** @Name Direct OutputDevice drawing functions
      */
     ///@{
+
 public:
+
     virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                             const Point& rSrcPt,  const Size& rSrcSize );
     virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
@@ -506,9 +513,11 @@ public:
                                           sal_uInt16 nFlags = 0 );
 
 protected:
+
     virtual void                CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags);
 
 private:
+
     SAL_DLLPRIVATE void         ImplDrawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
 
     // not implemented; to detect misuses of DrawOutDev(...OutputDevice&);
@@ -575,14 +584,17 @@ public:
     const Font&                 GetFont() const { return maFont; }
 
 private:
-    void                        InitFillColor();
+
+    SAL_DLLPRIVATE void         InitFillColor();
     ///@}
 
 
     /** @name Clipping functions
      */
     ///@{
+
 public:
+
     Region                      GetClipRegion() const;
     void                        SetClipRegion();
     void                        SetClipRegion( const Region& rRegion );
@@ -597,10 +609,12 @@ public:
     virtual Region              GetActiveClipRegion() const;
 
 protected:
+
     virtual void                InitClipRegion();
     virtual void                ClipToPaintRegion    ( Rectangle& rDstRect );
 
 private:
+
     SAL_DLLPRIVATE void         SetDeviceClipRegion( const Region* pRegion );
     ///@}
 
@@ -608,7 +622,9 @@ private:
     /** @name Pixel functions
      */
     ///@{
+
 public:
+
     void                        DrawPixel( const Point& rPt );
     void                        DrawPixel( const Point& rPt, const Color& rColor );
     void                        DrawPixel( const Polygon& rPts, const Color* pColors = NULL );
@@ -644,7 +660,9 @@ public:
     /** @name Line functions
      */
     ///@{
+
 public:
+
     void                        DrawLine( const Point& rStartPt, const Point& rEndPt );
 
     void                        DrawLine( const Point& rStartPt, const Point& rEndPt,
@@ -667,6 +685,7 @@ private:
     /** @name Polyline functions
      */
     ///@{
+
 public:
 
     /** Render the given polygon as a line stroke
@@ -1020,6 +1039,7 @@ public:
     ///@{
 
 public:
+
     FontInfo                    GetDevFont( int nDevFontIndex ) const;
     int                         GetDevFontCount() const;
 
@@ -1080,6 +1100,7 @@ public:
                                                 const OutputDevice* pOutDev = NULL );
 
 protected:
+
     virtual void                InitFont() const;
     virtual void                ImplReleaseFonts();
     virtual void                SetFontOrientation( ImplFontEntry* const pFontEntry ) const;
@@ -1087,6 +1108,7 @@ protected:
 
 
 private:
+
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
 
     SAL_DLLPRIVATE void         ImplClearFontData( bool bNewFontLists );
@@ -1107,6 +1129,7 @@ private:
     ///@{
 
 public:
+
     SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
     SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;
     SAL_DLLPRIVATE void         ReMirror( Rectangle &rRect ) const;
@@ -1330,7 +1353,7 @@ private:
         @attention This method ignores negative rDstSz values, thus
         mirroring must happen outside this method (e.g. in DrawBitmap)
      */
-    Bitmap                      GetDownsampledBitmap(
+    SAL_DLLPRIVATE Bitmap       GetDownsampledBitmap(
                                     const Size& rDstSz,
                                     const Point& rSrcPt,
                                     const Size& rSrcSz,
@@ -1397,7 +1420,7 @@ protected:
 
 private:
 
-    bool                        DrawTransparentNatively( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
+    SAL_DLLPRIVATE bool         DrawTransparentNatively( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     ///@}
 
 
