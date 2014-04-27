@@ -383,15 +383,15 @@ namespace drawinglayer
         {
             const XFillStyle eStyle(((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue());
 
+            sal_uInt16 nTransparence(((const XFillTransparenceItem&)(rSet.Get(XATTR_FILLTRANSPARENCE))).GetValue());
+
+            if(nTransparence > 100)
+            {
+                nTransparence = 100;
+            }
+
             if(XFILL_NONE != eStyle)
             {
-                sal_uInt16 nTransparence(((const XFillTransparenceItem&)(rSet.Get(XATTR_FILLTRANSPARENCE))).GetValue());
-
-                if(nTransparence > 100)
-                {
-                    nTransparence = 100;
-                }
-
                 if(100 != nTransparence)
                 {
                     // need to check XFillFloatTransparence, object fill may still be completely transparent
@@ -492,6 +492,19 @@ namespace drawinglayer
                         aHatch,
                         aFillGraphic);
                 }
+            }
+
+            if(nTransparence == 100)
+            {
+                attribute::FillGradientAttribute aGradient;
+                attribute::FillHatchAttribute aHatch;
+                attribute::SdrFillGraphicAttribute aFillGraphic;
+                    return attribute::SdrFillAttribute(
+                        1,
+                        basegfx::BColor( 0, 0, 0 ),
+                        aGradient,
+                        aHatch,
+                        aFillGraphic);
             }
 
             return attribute::SdrFillAttribute();
