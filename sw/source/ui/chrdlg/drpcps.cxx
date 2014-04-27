@@ -782,7 +782,7 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 
             if (!m_pWholeWordCB->IsChecked())
             {
-                sText = sText.copy( 0, std::max<sal_Int32>(
+                sText = sText.copy( 0, std::min<sal_Int32>(
                     sText.getLength(), m_pDropCapsField->GetValue()) );
             }
 
