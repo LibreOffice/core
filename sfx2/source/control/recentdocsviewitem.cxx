@@ -174,7 +174,7 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
 
         Point aIconPos(getRemoveIconArea().TopLeft());
 
-        aSeq[0] = Primitive2DReference(new DiscreteBitmapPrimitive2D(
+        aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(new DiscreteBitmapPrimitive2D(
                     m_bRemoveIconHighlighted? theRemoveRecentBitmapHighlighted::get(): theRemoveRecentBitmap::get(),
                     B2DPoint(aIconPos.X(), aIconPos.Y())));
 
