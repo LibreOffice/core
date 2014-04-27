@@ -438,7 +438,7 @@ bool OutputDevice::supportsOperation( OutDevSupportType eType ) const
 }
 
 void OutputDevice::ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
-                                  int nOrientation )
+                                  short nOrientation ) const
 {
     if ( (nOrientation >= 0) && !(nOrientation % 900) )
     {

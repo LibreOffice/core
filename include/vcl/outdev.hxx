@@ -434,7 +434,7 @@ public:
 
 private:
     void                        ImplRotatePos( long nOriginX, long nOriginY, long& rX, long &rY,
-                                               int nOrientation );
+                                               short nOrientation ) const;
     ///@}
 
     /** @name OutputDevice state functions
