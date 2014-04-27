@@ -275,7 +275,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
     if ( mbInitLineColor )
         InitLineColor();
     if ( mbInitFillColor )
-        ImplInitFillColor();
+        InitFillColor();
 
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code

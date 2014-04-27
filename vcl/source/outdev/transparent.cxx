@@ -183,7 +183,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
         InitLineColor();
 
     if( mbInitFillColor )
-        ImplInitFillColor();
+        InitFillColor();
 
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
        mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
@@ -268,7 +268,7 @@ bool OutputDevice::DrawTransparentNatively ( const PolyPolygon& rPolyPoly,
             InitLineColor();
 
         if( mbInitFillColor )
-            ImplInitFillColor();
+            InitFillColor();
 
         // get the polygon in device coordinates
         basegfx::B2DPolyPolygon aB2DPolyPolygon( rPolyPoly.getB2DPolyPolygon() );
@@ -355,7 +355,7 @@ void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
                 InitLineColor();
 
             if ( mbInitFillColor )
-                ImplInitFillColor();
+                InitFillColor();
 
             Rectangle aLogicPolyRect( rPolyPoly.GetBoundRect() );
             Rectangle aPixelRect( ImplLogicToDevicePixel( aLogicPolyRect ) );

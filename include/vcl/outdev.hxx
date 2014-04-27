@@ -441,8 +441,6 @@ private:
      */
     ///@{
 public:
-    SAL_DLLPRIVATE void         ImplInitFillColor();
-
     void                        EnableOutput( bool bEnable = true );
     bool                        IsOutputEnabled() const { return mbOutput; }
     bool                        IsDeviceOutput() const { return mbDevOutput; }
@@ -487,6 +485,9 @@ public:
 
     void                        SetFont( const Font& rNewFont );
     const Font&                 GetFont() const { return maFont; }
+
+private:
+    void                        InitFillColor();
 
     ///@}
 

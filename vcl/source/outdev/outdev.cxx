@@ -938,7 +938,7 @@ void OutputDevice::ImplGetFrameDev( const Point& rPt, const Point& rDevPt, const
 }
 
 
-void OutputDevice::ImplInitFillColor()
+void OutputDevice::InitFillColor()
 {
     DBG_TESTSOLARMUTEX();
 

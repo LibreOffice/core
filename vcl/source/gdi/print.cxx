@@ -858,7 +858,7 @@ void Printer::ApplyMask( const Bitmap& rMask, const Color& rMaskColor,
         SetLineColor( rMaskColor );
         SetFillColor( rMaskColor );
         InitLineColor();
-        ImplInitFillColor();
+        InitFillColor();
 
         // create forward mapping tables
         for( nX = 0L; nX <= nSrcWidth; nX++ )

@@ -55,7 +55,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
         InitLineColor();
 
     if ( mbInitFillColor )
-        ImplInitFillColor();
+        InitFillColor();
 
     mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), this );
 
@@ -98,7 +98,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
         InitLineColor();
 
     if ( mbInitFillColor )
-        ImplInitFillColor();
+        InitFillColor();
 
     if ( !nHorzRound && !nVertRound )
     {

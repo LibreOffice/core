@@ -56,7 +56,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
         InitLineColor();
 
     if ( mbInitFillColor )
-        ImplInitFillColor();
+        InitFillColor();
 
     // use b2dpolygon drawing if possible
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
@@ -163,7 +163,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
         InitLineColor();
 
     if ( mbInitFillColor )
-        ImplInitFillColor();
+        InitFillColor();
 
     // use b2dpolygon drawing if possible
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
@@ -263,7 +263,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
         InitLineColor();
 
     if( mbInitFillColor )
-        ImplInitFillColor();
+        InitFillColor();
 
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
        mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
@@ -537,7 +537,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
         InitLineColor();
 
     if( mbInitFillColor )
-        ImplInitFillColor();
+        InitFillColor();
 
     const bool bOldMap = mbMap;
     EnableMapMode( false );

@@ -322,7 +322,7 @@ void OutputDevice::PaintLineGeometryWithEvtlExpand(
         SetLineColor();
         InitLineColor();
         SetFillColor( aOldLineColor );
-        ImplInitFillColor();
+        InitFillColor();
 
         bool bDone(false);
 
