@@ -376,7 +376,7 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     const SwPageDesc* pPageDesc = pPage ? pPrtDoc->FindPageDescByName(
         pPage->GetPageDesc()->GetName() ) : &pPrtDoc->GetPageDesc( (sal_uInt16)0 );
 
-    if( !pFESh->IsTableMode() && pActCrsr->HasMark() )
+    if( !pFESh->IsTableMode() && pActCrsr && pActCrsr->HasMark() )
     {   // Tweak paragraph attributes of last paragraph
         SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
         SwTxtNode* pTxtNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx )->GetTxtNode();
