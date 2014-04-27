@@ -24,6 +24,7 @@ namespace avmedia { namespace ogl {
 
 OGLPlayer::OGLPlayer()
     : Player_BASE(m_aMutex)
+    , m_bIsPlaying(false)
 {
 }
 
@@ -98,19 +99,21 @@ void SAL_CALL OGLPlayer::start() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     // TODO: Start playing of gltf model (see com::sun::star::media::XPlayer)
+    m_bIsPlaying = true;
 }
 
 void SAL_CALL OGLPlayer::stop() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     // TODO: Stop playing of gltf model (see com::sun::star::media::XPlayer)
+    m_bIsPlaying = false;
 }
 
 sal_Bool SAL_CALL OGLPlayer::isPlaying() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     // TODO: Check whether gltf model is played by now (see com::sun::star::media::XPlayer)
-    return false;
+    return m_bIsPlaying;
 }
 
 double SAL_CALL OGLPlayer::getDuration() throw ( uno::RuntimeException, std::exception )
@@ -184,11 +187,19 @@ awt::Size SAL_CALL OGLPlayer::getPreferredPlayerWindowSize() throw ( uno::Runtim
     return awt::Size( 480, 360 ); // TODO: It will be good for OpenGL too?
 }
 
-uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( const uno::Sequence< uno::Any >& /*aArguments*/ )
+uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( const uno::Sequence< uno::Any >& rArguments )
      throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    OGLWindow* pWindow = new OGLWindow(*this);
+
+    if( rArguments.getLength() > 2 )
+    {
+        sal_IntPtr pIntPtr = 0;
+        rArguments[ 2 ] >>= pIntPtr;
+        SystemChildWindow *pChildWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
+        m_aContext.init(pChildWindow);
+    }
+    OGLWindow* pWindow = new OGLWindow(m_pHandle, &m_aContext);
     return uno::Reference< media::XPlayerWindow >( pWindow );
 }
 
@@ -197,11 +208,10 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
 {
     osl::MutexGuard aGuard(m_aMutex);
     m_aContext.init();
-    //TODO: Use real values instead of constants.
     m_pHandle->viewport.x = 0;
     m_pHandle->viewport.y = 0;
-    m_pHandle->viewport.width = 800;
-    m_pHandle->viewport.height = 600;
+    m_pHandle->viewport.width = getPreferredPlayerWindowSize().Width;
+    m_pHandle->viewport.height = getPreferredPlayerWindowSize().Height;
     gltf_renderer_set_content(m_pHandle);
     OGLFrameGrabber *pFrameGrabber = new OGLFrameGrabber( m_pHandle );
     return uno::Reference< media::XFrameGrabber >( pFrameGrabber );;

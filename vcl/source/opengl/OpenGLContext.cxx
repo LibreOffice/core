@@ -331,8 +331,28 @@ bool OpenGLContext::init( Window* pParent )
 
     m_pWindow.reset(pParent ? NULL : new Window(0, WB_NOBORDER|WB_NODIALOGCONTROL));
     mpWindow = pParent ? pParent : m_pWindow.get();
-    SAL_INFO("vcl.opengl", "OpenGLContext::OpenGLContext----start");
+    m_pChildWindow = 0;
     initWindow();
+    return ImplInit();
+}
+
+bool OpenGLContext::init(SystemChildWindow* pChildWindow)
+{
+    if(mbInitialized)
+        return true;
+
+    if( !pChildWindow )
+        return false;
+
+    mpWindow = pChildWindow->GetParent();
+    m_pChildWindow = pChildWindow;
+    initWindow();
+    return ImplInit();
+}
+
+bool OpenGLContext::ImplInit()
+{
+    SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
     if(m_pWindow)
         m_pWindow->setPosSizePixel(0,0,0,0);
     m_aGLWin.Width = 0;
@@ -474,7 +494,7 @@ bool OpenGLContext::init( Window* pParent )
             bGlewInit = true;
     }
 
-    SAL_INFO("vcl.opengl", "OpenGLContext::init----end");
+    SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----end");
     mbInitialized = true;
     return true;
 }
@@ -483,7 +503,8 @@ void OpenGLContext::setWinSize(const Size& rSize)
 {
     if(m_pWindow)
         m_pWindow->SetSizePixel(rSize);
-    m_pChildWindow->SetSizePixel(rSize);
+    if( m_pChildWindow )
+        m_pChildWindow->SetSizePixel(rSize);
 
     m_aGLWin.Width = rSize.Width();
     m_aGLWin.Height = rSize.Height();
@@ -544,8 +565,12 @@ bool OpenGLContext::initWindow()
 {
     const SystemEnvData* sysData(mpWindow->GetSystemData());
     m_aGLWin.hWnd = sysData->hWnd;
-    SystemWindowData winData = generateWinData(mpWindow);
-    m_pChildWindow.reset(new SystemChildWindow(mpWindow, 0, &winData, sal_False));
+    if( !m_pChildWindow )
+    {
+        SystemWindowData winData = generateWinData(mpWindow);
+        m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, sal_False);
+        m_pChildWindowGC.reset(m_pChildWindow);
+    }
 
     if( m_pChildWindow )
     {
@@ -572,13 +597,15 @@ bool OpenGLContext::initWindow()
 
 bool OpenGLContext::initWindow()
 {
-    m_pChildWindow.reset();
-
     const SystemEnvData* pChildSysData = 0;
     SystemWindowData winData = generateWinData(mpWindow);
     if( winData.pVisual )
     {
-        m_pChildWindow.reset(new SystemChildWindow(mpWindow, 0, &winData, false));
+        if( !m_pChildWindow )
+        {
+            m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, sal_False);
+            m_pChildWindowGC.reset(m_pChildWindow);
+        }
         pChildSysData = m_pChildWindow->GetSystemData();
     }
 
@@ -722,5 +749,14 @@ SystemWindowData OpenGLContext::generateWinData(Window* pParent)
 }
 
 #endif
+
+void OpenGLContext::swapBuffers()
+{
+#if defined( _WIN32 )
+    SwapBuffers(m_aGLWin.hDC);
+#elif defined( UNX )
+    glXSwapBuffers(m_aGLWin.dpy, m_aGLWin.win);
+#endif
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

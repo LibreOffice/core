@@ -86,11 +86,6 @@ MediaChildWindow::MediaChildWindow( Window* pParent ) :
 MediaChildWindow::MediaChildWindow( Window* pParent, SystemWindowData* pData ) :
     SystemChildWindow( pParent, 0, pData )
 {
-    SetMouseTransparent( true );
-    SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-    EnableEraseBackground( false );
-    SetControlForeground();
-    SetControlBackground();
 }
 
 MediaChildWindow::~MediaChildWindow()
@@ -515,7 +510,6 @@ void MediaWindowImpl::onURLChanged()
     mpChildWindow->SetHelpId( HID_AVMEDIA_PLAYERWINDOW );
     mxEventsIf.set( static_cast< ::cppu::OWeakObject* >( mpEvents = new MediaEventListenersImpl( *mpChildWindow.get() ) ) );
 
-
     if( mxPlayer.is() )
     {
         uno::Sequence< uno::Any >              aArgs( 3 );
@@ -569,6 +563,8 @@ void MediaWindowImpl::onURLChanged()
 void MediaWindowImpl::setPosSize( const Rectangle& rRect )
 {
     SetPosSizePixel( rRect.TopLeft(), rRect.GetSize() );
+    if( mxPlayerWindow.is() )
+        mxPlayerWindow->setPosSize( 0, 0, rRect.GetSize().Width(), rRect.GetSize().Height(), 0 );
 }
 
 
@@ -614,9 +610,6 @@ void MediaWindowImpl::Resize()
         aPlayerWindowSize.Height() = ( nControlY - ( nOffset << 1 ) );
         mpMediaWindowControl->SetPosSizePixel( Point( nOffset, nControlY ), Size( aCurSize.Width() - ( nOffset << 1 ), nControlHeight ) );
     }
-
-    if( mxPlayerWindow.is() )
-        mxPlayerWindow->setPosSize( 0, 0, aPlayerWindowSize.Width(), aPlayerWindowSize.Height(), 0 );
 
     if( mpChildWindow )
         mpChildWindow->SetPosSizePixel( Point( 0, 0 ), aPlayerWindowSize );

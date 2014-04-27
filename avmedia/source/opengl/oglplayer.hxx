@@ -47,7 +47,7 @@ public:
     virtual void SAL_CALL setMute( sal_Bool bSet ) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL isMute() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual com::sun::star::awt::Size SAL_CALL getPreferredPlayerWindowSize() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual com::sun::star::uno::Reference< com::sun::star::media::XPlayerWindow > SAL_CALL createPlayerWindow( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments ) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual com::sun::star::uno::Reference< com::sun::star::media::XPlayerWindow > SAL_CALL createPlayerWindow( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rArguments ) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual com::sun::star::uno::Reference< com::sun::star::media::XFrameGrabber > SAL_CALL createFrameGrabber() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -58,6 +58,7 @@ private:
     OUString m_sURL;
     glTFHandle* m_pHandle;
     OpenGLContext m_aContext;
+    bool m_bIsPlaying;
 };
 
 } // namespace ogl

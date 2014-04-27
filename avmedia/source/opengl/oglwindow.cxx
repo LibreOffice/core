@@ -14,11 +14,12 @@ using namespace com::sun::star;
 
 namespace avmedia { namespace ogl {
 
-OGLWindow::OGLWindow( OGLPlayer& rPlayer )
-    : m_rPlayer( rPlayer )
+OGLWindow::OGLWindow( glTFHandle* pHandle, OpenGLContext* pContext  )
+    : m_pHandle( pHandle )
+    , m_pContext( pContext )
+    , m_bVisible ( false )
     , meZoomLevel( media::ZoomLevel_ORIGINAL )
 {
-    (void) m_rPlayer;
 }
 
 OGLWindow::~OGLWindow()
@@ -86,22 +87,37 @@ void SAL_CALL OGLWindow::removeEventListener( const uno::Reference< lang::XEvent
 {
 }
 
-void SAL_CALL OGLWindow::setPosSize( sal_Int32 /*X*/, sal_Int32 /*Y*/, sal_Int32 /*Width*/, sal_Int32 /*Height*/, sal_Int16 /* Flags */ )
+void SAL_CALL OGLWindow::setPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 /*nFlags*/ )
     throw (uno::RuntimeException, std::exception)
 {
-    // TODO: store size
+    if( !m_bVisible )
+        return;
+
+    if( m_pHandle->viewport.x != nX || m_pHandle->viewport.x != nY ||
+        m_pHandle->viewport.width != nWidth || m_pHandle->viewport.height != nHeight )
+    {
+        m_pContext->setWinSize(Size(nWidth,nHeight));
+        m_pHandle->viewport.x = nX;
+        m_pHandle->viewport.y = nY;
+        m_pHandle->viewport.width = nWidth;
+        m_pHandle->viewport.height = nHeight;
+        gltf_renderer_set_content(m_pHandle);
+        gltf_renderer(m_pHandle);
+        m_pContext->swapBuffers();
+    }
 }
 
 awt::Rectangle SAL_CALL OGLWindow::getPosSize()
     throw (uno::RuntimeException, std::exception)
 {
-    //  TODO: get size
-    return awt::Rectangle();
+    return awt::Rectangle(m_pHandle->viewport.x, m_pHandle->viewport.y,
+                          m_pHandle->viewport.width, m_pHandle->viewport.height);
 }
 
-void SAL_CALL OGLWindow::setVisible( sal_Bool )
+void SAL_CALL OGLWindow::setVisible( sal_Bool bSet )
     throw (uno::RuntimeException, std::exception)
 {
+    m_bVisible = bSet;
 }
 
 void SAL_CALL OGLWindow::setEnable( sal_Bool )

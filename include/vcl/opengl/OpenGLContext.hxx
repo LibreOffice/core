@@ -147,6 +147,10 @@ public:
     ~OpenGLContext();
 
     bool init(Window* pParent = 0);
+    bool init(SystemChildWindow* pChildWindow);
+
+    void swapBuffers();
+
     void setWinSize(const Size& rSize);
     GLWindow& getOpenGLWindow();
 
@@ -161,11 +165,13 @@ public:
 
 private:
     SAL_DLLPRIVATE bool initWindow();
+    SAL_DLLPRIVATE bool ImplInit();
 
     GLWindow m_aGLWin;
     boost::scoped_ptr<Window> m_pWindow;
     Window* mpWindow; //points to m_pWindow or the parent window, don't delete it
-    boost::scoped_ptr<SystemChildWindow> m_pChildWindow;
+    SystemChildWindow* m_pChildWindow;
+    boost::scoped_ptr<SystemChildWindow> m_pChildWindowGC;
     bool mbInitialized;
 };
 
