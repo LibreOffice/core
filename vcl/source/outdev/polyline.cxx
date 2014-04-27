@@ -60,7 +60,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
     // use b2dpolygon drawing if possible
     if(bTryAA)
     {
-        if ( TryDrawPolyLineDirectNoAA( rPoly.getB2DPolygon() ) )
+        if ( TryDrawPolyLineDirectNoAACheck( rPoly.getB2DPolygon() ) )
         {
             basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
             const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
@@ -170,7 +170,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
     // use b2dpolygon drawing if possible
     if(bTryAA)
     {
-        if ( TryDrawPolyLineDirectNoAA(rB2DPolygon, fLineWidth, 0.0, eLineJoin, eLineCap) )
+        if ( TryDrawPolyLineDirectNoAACheck(rB2DPolygon, fLineWidth, 0.0, eLineJoin, eLineCap) )
             return;
     }
 
@@ -214,7 +214,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
             // to avoid optical gaps
             for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
             {
-                TryDrawPolyLineDirectNoAA(aAreaPolyPolygon.getB2DPolygon(a));
+                TryDrawPolyLineDirectNoAACheck(aAreaPolyPolygon.getB2DPolygon(a));
             }
         }
     }
@@ -278,7 +278,7 @@ void OutputDevice::DrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo
         mpAlphaVDev->DrawPolyLine( rPoly, rLineInfo );
 }
 
-bool OutputDevice::TryDrawPolyLineDirectNoAA( const basegfx::B2DPolygon& rB2DPolygon,
+bool OutputDevice::TryDrawPolyLineDirectNoAACheck( const basegfx::B2DPolygon& rB2DPolygon,
                                               double fLineWidth,
                                               double fTransparency,
                                               basegfx::B2DLineJoin eLineJoin,
@@ -346,7 +346,7 @@ bool OutputDevice::TryDrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon
 
     if(bTryAA)
     {
-        if(TryDrawPolyLineDirectNoAA(rB2DPolygon, fLineWidth, fTransparency, eLineJoin, eLineCap))
+        if(TryDrawPolyLineDirectNoAACheck(rB2DPolygon, fLineWidth, fTransparency, eLineJoin, eLineCap))
         {
             // worked, add metafile action (if recorded) and return true
             if( mpMetaFile )
