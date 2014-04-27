@@ -586,7 +586,7 @@ bool OpenGLContext::initWindow()
     return true;
 }
 
-#elif defined( MACOSX ) || defined( IOS) || defined( ANDROID )
+#elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
 
 bool OpenGLContext::initWindow()
 {
@@ -648,7 +648,7 @@ bool OpenGLContext::initWindow()
 
 #endif
 
-#if defined( WNT ) || defined( MACOSX ) || defined( IOS) || defined( ANDROID )
+#if defined( WNT ) || defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
 
 SystemWindowData OpenGLContext::generateWinData(Window* /*pParent*/)
 {
@@ -752,8 +752,10 @@ SystemWindowData OpenGLContext::generateWinData(Window* pParent)
 
 void OpenGLContext::swapBuffers()
 {
-#if defined( _WIN32 )
+#if defined( WNT )
     SwapBuffers(m_aGLWin.hDC);
+#elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
+    // nothing
 #elif defined( UNX )
     glXSwapBuffers(m_aGLWin.dpy, m_aGLWin.win);
 #endif
