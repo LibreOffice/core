@@ -60,13 +60,13 @@ void OutputDevice::ImplInitAboveTextLineSize()
     mpFontEntry->maMetric.ImplInitAboveTextLineSize();
 }
 
-static void ImplDrawWavePixel( long nOriginX, long nOriginY,
-                               long nCurX, long nCurY,
-                               short nOrientation,
-                               SalGraphics* pGraphics,
-                               OutputDevice* pOutDev,
-                               bool bDrawPixAsRect,
-                               long nPixWidth, long nPixHeight )
+void OutputDevice::ImplDrawWavePixel( long nOriginX, long nOriginY,
+                                      long nCurX, long nCurY,
+                                      short nOrientation,
+                                      SalGraphics* pGraphics,
+                                      OutputDevice* pOutDev,
+                                      bool bDrawPixAsRect,
+                                      long nPixWidth, long nPixHeight )
 {
     if ( nOrientation )
         ImplRotatePos( nOriginX, nOriginY, nCurX, nCurY, nOrientation );

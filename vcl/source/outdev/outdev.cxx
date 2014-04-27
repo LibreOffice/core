@@ -78,20 +78,6 @@ namespace {
 #endif
 
 
-bool OutputDevice::ImplIsAntiparallel() const
-{
-    bool bRet = false;
-    if( AcquireGraphics() )
-    {
-        if( ( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) && ! IsRTLEnabled() ) ||
-            ( ! (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) && IsRTLEnabled() ) )
-        {
-            bRet = true;
-        }
-    }
-    return bRet;
-}
-
 OutputDevice::OutputDevice() :
     maRegion(true),
     maFillColor( COL_WHITE ),
@@ -451,6 +437,57 @@ bool OutputDevice::supportsOperation( OutDevSupportType eType ) const
     return bHasSupport;
 }
 
+void OutputDevice::ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
+                                  int nOrientation )
+{
+    if ( (nOrientation >= 0) && !(nOrientation % 900) )
+    {
+        if ( (nOrientation >= 3600) )
+            nOrientation %= 3600;
+
+        if ( nOrientation )
+        {
+            rX -= nOriginX;
+            rY -= nOriginY;
+
+            if ( nOrientation == 900 )
+            {
+                long nTemp = rX;
+                rX = rY;
+                rY = -nTemp;
+            }
+            else if ( nOrientation == 1800 )
+            {
+                rX = -rX;
+                rY = -rY;
+            }
+            else /* ( nOrientation == 2700 ) */
+            {
+                long nTemp = rX;
+                rX = -rY;
+                rY = nTemp;
+            }
+
+            rX += nOriginX;
+            rY += nOriginY;
+        }
+    }
+    else
+    {
+        double nRealOrientation = nOrientation*F_PI1800;
+        double nCos = cos( nRealOrientation );
+        double nSin = sin( nRealOrientation );
+
+        // Translation...
+        long nX = rX-nOriginX;
+        long nY = rY-nOriginY;
+
+        // Rotation...
+        rX = +((long)(nCos*nX + nSin*nY)) + nOriginX;
+        rY = -((long)(nSin*nX - nCos*nY)) + nOriginY;
+    }
+}
+
 void OutputDevice::EnableRTL( bool bEnable )
 {
     mbEnableRTL = bEnable;
@@ -462,6 +499,21 @@ void OutputDevice::EnableRTL( bool bEnable )
 bool OutputDevice::HasMirroredGraphics() const
 {
    return ( AcquireGraphics() && (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) );
+}
+
+
+bool OutputDevice::ImplIsAntiparallel() const
+{
+    bool bRet = false;
+    if( AcquireGraphics() )
+    {
+        if( ( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) && ! IsRTLEnabled() ) ||
+            ( ! (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) && IsRTLEnabled() ) )
+        {
+            bRet = true;
+        }
+    }
+    return bRet;
 }
 
 // note: the coordiantes to be remirrored are in frame coordiantes !

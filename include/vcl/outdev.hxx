@@ -237,9 +237,6 @@ typedef ::std::vector< VCLXGraphics* > VCLXGraphicsList_impl;
 sal_uLong AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
 void AdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect );
 
-void ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
-                    int nOrientation );
-
 extern const sal_uLong nVCLRLut[ 6 ];
 extern const sal_uLong nVCLGLut[ 6 ];
 extern const sal_uLong nVCLBLut[ 6 ];
@@ -435,6 +432,9 @@ public:
     void                        SetExtOutDevData( vcl::ExtOutDevData* pExtOutDevData ) { mpExtOutDevData = pExtOutDevData; }
     vcl::ExtOutDevData*         GetExtOutDevData() const { return mpExtOutDevData; }
 
+private:
+    void                        ImplRotatePos( long nOriginX, long nOriginY, long& rX, long &rY,
+                                               int nOrientation );
     ///@}
 
     /** @name OutputDevice state functions
@@ -484,6 +484,10 @@ public:
 
     const Wallpaper&            GetBackground() const { return maBackground; }
     bool                        IsBackground() const { return mbBackground; }
+
+    void                        SetFont( const Font& rNewFont );
+    const Font&                 GetFont() const { return maFont; }
+
     ///@}
 
     /** @name Clipping functions
@@ -511,10 +515,14 @@ private:
     SAL_DLLPRIVATE void         SetDeviceClipRegion( const Region* pRegion );
     ///@}
 
-    /** @name Text and font functions
+    /** @name Text functions
      */
     ///@{
 public:
+    SystemTextLayoutData        GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
+                                                      sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                                      const sal_Int32* pDXAry = NULL ) const;
+
     SAL_DLLPRIVATE bool         ImplNewFont() const;
     SAL_DLLPRIVATE void         ImplInitTextColor();
     static
@@ -528,15 +536,13 @@ public:
     SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawText( SalLayout& );
     SAL_DLLPRIVATE Rectangle    ImplGetTextBoundRect( const SalLayout& );
-    SAL_DLLPRIVATE void         ImplDrawEmphasisMarks( SalLayout& );
-    static
-    SAL_DLLPRIVATE OUString     ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rStr,
-                                                       long nMaxWidth, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
-
     SAL_DLLPRIVATE void         ImplDrawTextRect( long nBaseX, long nBaseY, long nX, long nY, long nWidth, long nHeight );
 
     SAL_DLLPRIVATE void         ImplInitTextLineSize();
     SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
+
+    SAL_DLLPRIVATE void         ImplDrawWavePixel( long nOriginX, long nOriginY, long nCurX, long nCurY, short nOrientation, SalGraphics* pGraphics, OutputDevice* pOutDev,
+                                                   bool bDrawPixAsRect, long nPixWidth, long nPixHeight );
     SAL_DLLPRIVATE void         ImplDrawWaveLine( long nBaseX, long nBaseY, long nStartX, long nStartY, long nWidth, long nHeight, long nLineWidth, short nOrientation, const Color& rColor );
     SAL_DLLPRIVATE void         ImplDrawWaveTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
     SAL_DLLPRIVATE void         ImplDrawStraightTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
@@ -546,22 +552,11 @@ public:
     SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
     SAL_DLLPRIVATE static bool  ImplIsUnderlineAbove( const Font& );
 
-    SAL_DLLPRIVATE static       FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont );
-    SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine, Rectangle& rRect1, Rectangle& rRect2, long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
-    SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const PolyPolygon& rPolyPoly, bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
     static
     SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
     SAL_DLLPRIVATE void         ImplInitFontList() const;
     SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
-
-    void                        SetFont( const Font& rNewFont );
-    const Font&                 GetFont() const { return maFont; }
-
-    SystemFontData              GetSysFontData( int nFallbacklevel ) const;
-    SystemTextLayoutData        GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
-                                                      sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                                      const sal_Int32* pDXAry = NULL ) const;
 
     void                        SetTextColor( const Color& rColor );
     const Color&                GetTextColor() const { return maTextColor; }
@@ -664,22 +659,36 @@ public:
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1, bool bOptimize = true,
                                                  sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+    ///@}
 
-    bool                        GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
-                                                    int nLen, int nBase, MetricVector& rVector );
+    /** @name Font functions
+     */
+    ///@{
+public:
+    FontInfo                    GetDevFont( int nDevFontIndex ) const;
+    int                         GetDevFontCount() const;
+
+    bool                        IsFontAvailable( const OUString& rFontName ) const;
+
+    Size                        GetDevFontSize( const Font& rFont, int nSizeIndex ) const;
+    int                         GetDevFontSizeCount( const Font& ) const;
 
     bool                        AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
 
-    int                         GetDevFontCount() const;
-    FontInfo                    GetDevFont( int nDevFontIndex ) const;
-    int                         GetDevFontSizeCount( const Font& ) const;
-    Size                        GetDevFontSize( const Font& rFont, int nSizeIndex ) const;
-    bool                        IsFontAvailable( const OUString& rFontName ) const;
-
     FontMetric                  GetFontMetric() const;
     FontMetric                  GetFontMetric( const Font& rFont ) const;
+
     bool                        GetFontCharMap( FontCharMap& rFontCharMap ) const;
     bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
+
+    SystemFontData              GetSysFontData( int nFallbacklevel ) const;
+
+    SAL_DLLPRIVATE static FontEmphasisMark
+                                ImplGetEmphasisMarkStyle( const Font& rFont );
+    SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine, Rectangle& rRect1, Rectangle& rRect2, long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
+
+    bool                        GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
+                                                    int nLen, int nBase, MetricVector& rVector );
 
     sal_Int32                   HasGlyphs( const Font& rFont, const OUString& rStr,
                                            sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
@@ -721,6 +730,13 @@ private:
     SAL_DLLPRIVATE void         ImplClearFontData( bool bNewFontLists );
     SAL_DLLPRIVATE void         ImplRefreshFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
+
+    static
+    SAL_DLLPRIVATE OUString     ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rStr,
+                                                       long nMaxWidth, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
+
+    SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const PolyPolygon& rPolyPoly, bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
+    SAL_DLLPRIVATE void         ImplDrawEmphasisMarks( SalLayout& );
     ///@}
 
     /** @name Polygon functions

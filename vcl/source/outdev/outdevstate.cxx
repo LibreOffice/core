@@ -19,6 +19,10 @@
 
 #include <sal/types.h>
 
+#include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/settings.hxx>
+
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
 #include <vcl/font.hxx>
@@ -53,6 +57,113 @@ OutDevState::~OutDevState()
         delete mpClipRegion;
     if ( mnFlags & PUSH_REFPOINT )
         delete mpRefPoint;
+}
+
+void OutputDevice::SetFont( const Font& rNewFont )
+{
+
+    Font aFont( rNewFont );
+    aFont.SetLanguage(rNewFont.GetLanguage());
+    if ( mnDrawMode & (DRAWMODE_BLACKTEXT | DRAWMODE_WHITETEXT | DRAWMODE_GRAYTEXT | DRAWMODE_GHOSTEDTEXT | DRAWMODE_SETTINGSTEXT |
+                       DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL | DRAWMODE_GRAYFILL | DRAWMODE_NOFILL |
+                       DRAWMODE_GHOSTEDFILL | DRAWMODE_SETTINGSFILL ) )
+    {
+        Color aTextColor( aFont.GetColor() );
+
+        if ( mnDrawMode & DRAWMODE_BLACKTEXT )
+            aTextColor = Color( COL_BLACK );
+        else if ( mnDrawMode & DRAWMODE_WHITETEXT )
+            aTextColor = Color( COL_WHITE );
+        else if ( mnDrawMode & DRAWMODE_GRAYTEXT )
+        {
+            const sal_uInt8 cLum = aTextColor.GetLuminance();
+            aTextColor = Color( cLum, cLum, cLum );
+        }
+        else if ( mnDrawMode & DRAWMODE_SETTINGSTEXT )
+            aTextColor = GetSettings().GetStyleSettings().GetFontColor();
+
+        if ( mnDrawMode & DRAWMODE_GHOSTEDTEXT )
+        {
+            aTextColor = Color( (aTextColor.GetRed() >> 1 ) | 0x80,
+                                (aTextColor.GetGreen() >> 1 ) | 0x80,
+                                (aTextColor.GetBlue() >> 1 ) | 0x80 );
+        }
+
+        aFont.SetColor( aTextColor );
+
+        bool bTransFill = aFont.IsTransparent();
+        if ( !bTransFill )
+        {
+            Color aTextFillColor( aFont.GetFillColor() );
+
+            if ( mnDrawMode & DRAWMODE_BLACKFILL )
+                aTextFillColor = Color( COL_BLACK );
+            else if ( mnDrawMode & DRAWMODE_WHITEFILL )
+                aTextFillColor = Color( COL_WHITE );
+            else if ( mnDrawMode & DRAWMODE_GRAYFILL )
+            {
+                const sal_uInt8 cLum = aTextFillColor.GetLuminance();
+                aTextFillColor = Color( cLum, cLum, cLum );
+            }
+            else if( mnDrawMode & DRAWMODE_SETTINGSFILL )
+                aTextFillColor = GetSettings().GetStyleSettings().GetWindowColor();
+            else if ( mnDrawMode & DRAWMODE_NOFILL )
+            {
+                aTextFillColor = Color( COL_TRANSPARENT );
+                bTransFill = true;
+            }
+
+            if ( !bTransFill && (mnDrawMode & DRAWMODE_GHOSTEDFILL) )
+            {
+                aTextFillColor = Color( (aTextFillColor.GetRed() >> 1) | 0x80,
+                                        (aTextFillColor.GetGreen() >> 1) | 0x80,
+                                        (aTextFillColor.GetBlue() >> 1) | 0x80 );
+            }
+
+            aFont.SetFillColor( aTextFillColor );
+        }
+    }
+
+    if ( mpMetaFile )
+    {
+        mpMetaFile->AddAction( new MetaFontAction( aFont ) );
+        // the color and alignment actions don't belong here
+        // TODO: get rid of them without breaking anything...
+        mpMetaFile->AddAction( new MetaTextAlignAction( aFont.GetAlign() ) );
+        mpMetaFile->AddAction( new MetaTextFillColorAction( aFont.GetFillColor(), !aFont.IsTransparent() ) );
+    }
+
+    if ( !maFont.IsSameInstance( aFont ) )
+    {
+        // Optimization MT/HDU: COL_TRANSPARENT means SetFont should ignore the font color,
+        // because SetTextColor() is used for this.
+        // #i28759# maTextColor might have been changed behind our back, commit then, too.
+        if( aFont.GetColor() != COL_TRANSPARENT
+        && (aFont.GetColor() != maFont.GetColor() || aFont.GetColor() != maTextColor ) )
+        {
+            maTextColor = aFont.GetColor();
+            mbInitTextColor = true;
+            if( mpMetaFile )
+                mpMetaFile->AddAction( new MetaTextColorAction( aFont.GetColor() ) );
+        }
+        maFont      = aFont;
+        mbNewFont   = true;
+
+        if( mpAlphaVDev )
+        {
+            // #i30463#
+            // Since SetFont might change the text color, apply that only
+            // selectively to alpha vdev (which normally paints opaque text
+            // with COL_BLACK)
+            if( aFont.GetColor() != COL_TRANSPARENT )
+            {
+                mpAlphaVDev->SetTextColor( COL_BLACK );
+                aFont.SetColor( COL_TRANSPARENT );
+            }
+
+            mpAlphaVDev->SetFont( aFont );
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
