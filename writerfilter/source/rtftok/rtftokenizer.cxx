@@ -20,8 +20,10 @@
 
 using namespace com::sun::star;
 
-namespace writerfilter {
-namespace rtftok {
+namespace writerfilter
+{
+namespace rtftok
+{
 
 std::vector<RTFSymbol> RTFTokenizer::m_aRTFControlWords;
 bool RTFTokenizer::m_bControlWordsSorted;
@@ -30,12 +32,12 @@ bool RTFTokenizer::m_bMathControlWordsSorted;
 
 RTFTokenizer::RTFTokenizer(RTFListener& rImport, SvStream* pInStream, uno::Reference<task::XStatusIndicator> const& xStatusIndicator)
     : m_rImport(rImport),
-    m_pInStream(pInStream),
-    m_xStatusIndicator(xStatusIndicator),
-    m_nGroup(0),
-    m_nLineNumber(0),
-    m_nLineStartPos(0),
-    m_nGroupStart(0)
+      m_pInStream(pInStream),
+      m_xStatusIndicator(xStatusIndicator),
+      m_nGroup(0),
+      m_nLineNumber(0),
+      m_nLineStartPos(0),
+      m_nGroupStart(0)
 {
     if (!RTFTokenizer::m_bControlWordsSorted)
     {
@@ -62,7 +64,7 @@ SvStream& RTFTokenizer::Strm()
 
 int RTFTokenizer::resolveParse()
 {
-    SAL_INFO( "writerfilter", OSL_THIS_FUNC );
+    SAL_INFO("writerfilter", OSL_THIS_FUNC);
     char ch;
     int ret;
     // for hex chars
@@ -83,7 +85,7 @@ int RTFTokenizer::resolveParse()
         m_xStatusIndicator->setValue(nLastPos = nCurrentPos);
     }
 
-    while ((Strm().ReadChar( ch ), !Strm().IsEof()))
+    while ((Strm().ReadChar(ch), !Strm().IsEof()))
     {
         //SAL_INFO("writerfilter", OSL_THIS_FUNC << ": parsing character '" << ch << "'");
 
@@ -103,63 +105,63 @@ int RTFTokenizer::resolveParse()
         {
             switch (ch)
             {
-                case '{':
-                    m_nGroupStart = Strm().Tell() - 1;
-                    ret = m_rImport.pushState();
+            case '{':
+                m_nGroupStart = Strm().Tell() - 1;
+                ret = m_rImport.pushState();
+                if (ret)
+                    return ret;
+                break;
+            case '}':
+                ret = m_rImport.popState();
+                if (ret)
+                    return ret;
+                if (m_nGroup == 0)
+                {
+                    if (m_rImport.isSubstream())
+                        m_rImport.finishSubstream();
+                    return 0;
+                }
+                break;
+            case '\\':
+                ret = resolveKeyword();
+                if (ret)
+                    return ret;
+                break;
+            case 0x0d:
+                break; // ignore this
+            case 0x0a:
+                m_nLineNumber++;
+                m_nLineStartPos = nCurrentPos;
+                break;
+            default:
+                if (m_nGroup == 0)
+                    return ERROR_CHAR_OVER;
+                if (m_rImport.getInternalState() == INTERNAL_NORMAL)
+                {
+                    ret = m_rImport.resolveChars(ch);
                     if (ret)
                         return ret;
-                    break;
-                case '}':
-                    ret = m_rImport.popState();
-                    if (ret)
-                        return ret;
-                    if (m_nGroup == 0)
+                }
+                else
+                {
+                    SAL_INFO("writerfilter", OSL_THIS_FUNC << ": hex internal state");
+                    b = b << 4;
+                    sal_Int8 parsed = asHex(ch);
+                    if (parsed == -1)
+                        return ERROR_HEX_INVALID;
+                    b += parsed;
+                    count--;
+                    if (!count)
                     {
-                        if (m_rImport.isSubstream())
-                            m_rImport.finishSubstream();
-                        return 0;
-                    }
-                    break;
-                case '\\':
-                    ret = resolveKeyword();
-                    if (ret)
-                        return ret;
-                    break;
-                case 0x0d:
-                    break; // ignore this
-                case 0x0a:
-                    m_nLineNumber++;
-                    m_nLineStartPos = nCurrentPos;
-                    break;
-                default:
-                    if (m_nGroup == 0)
-                        return ERROR_CHAR_OVER;
-                    if (m_rImport.getInternalState() == INTERNAL_NORMAL)
-                    {
-                        ret = m_rImport.resolveChars(ch);
+                        ret = m_rImport.resolveChars(b);
                         if (ret)
                             return ret;
+                        count = 2;
+                        b = 0;
+                        m_rImport.setInternalState(INTERNAL_NORMAL);
                     }
-                    else
-                    {
-                        SAL_INFO("writerfilter", OSL_THIS_FUNC << ": hex internal state");
-                        b = b << 4;
-                        sal_Int8 parsed = asHex(ch);
-                        if (parsed == -1)
-                            return ERROR_HEX_INVALID;
-                        b += parsed;
-                        count--;
-                        if (!count)
-                        {
-                            ret = m_rImport.resolveChars(b);
-                            if (ret)
-                                return ret;
-                            count = 2;
-                            b = 0;
-                            m_rImport.setInternalState(INTERNAL_NORMAL);
-                        }
-                    }
-                    break;
+                }
+                break;
             }
         }
     }
@@ -218,7 +220,7 @@ int RTFTokenizer::resolveKeyword()
     bool bParam = false;
     int nParam = 0;
 
-    Strm().ReadChar( ch );
+    Strm().ReadChar(ch);
     if (Strm().IsEof())
         return ERROR_EOF;
 
@@ -230,10 +232,10 @@ int RTFTokenizer::resolveKeyword()
         // without doing any SeekRel()
         return dispatchKeyword(aKeyword, bParam, nParam);
     }
-    while(isalpha(ch))
+    while (isalpha(ch))
     {
         aBuf.append(ch);
-        Strm().ReadChar( ch );
+        Strm().ReadChar(ch);
         if (Strm().IsEof())
         {
             ch = ' ';
@@ -249,7 +251,7 @@ int RTFTokenizer::resolveKeyword()
     {
         // in case we'll have a parameter, that will be negative
         bNeg = true;
-        Strm().ReadChar( ch );
+        Strm().ReadChar(ch);
         if (Strm().IsEof())
             return ERROR_EOF;
     }
@@ -259,10 +261,10 @@ int RTFTokenizer::resolveKeyword()
 
         // we have a parameter
         bParam = true;
-        while(isdigit(ch))
+        while (isdigit(ch))
         {
             aParameter.append(ch);
-            Strm().ReadChar( ch );
+            Strm().ReadChar(ch);
             if (Strm().IsEof())
             {
                 ch = ' ';
@@ -295,7 +297,7 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
         return 0;
 #if OSL_DEBUG_LEVEL > 1
     SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": keyword '\\" << rKeyword.getStr() <<
-               "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");
+             "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");
 #endif
     RTFSymbol aSymbol;
     aSymbol.sKeyword = rKeyword.getStr();
@@ -312,37 +314,38 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
     int ret;
     switch (m_aRTFControlWords[i].nControlType)
     {
-        case CONTROL_FLAG:
-            // flags ignore any parameter by definition
-            ret = m_rImport.dispatchFlag(m_aRTFControlWords[i].nIndex);
+    case CONTROL_FLAG:
+        // flags ignore any parameter by definition
+        ret = m_rImport.dispatchFlag(m_aRTFControlWords[i].nIndex);
+        if (ret)
+            return ret;
+        break;
+    case CONTROL_DESTINATION:
+        // same for destinations
+        ret = m_rImport.dispatchDestination(m_aRTFControlWords[i].nIndex);
+        if (ret)
+            return ret;
+        break;
+    case CONTROL_SYMBOL:
+        // and symbols
+        ret = m_rImport.dispatchSymbol(m_aRTFControlWords[i].nIndex);
+        if (ret)
+            return ret;
+        break;
+    case CONTROL_TOGGLE:
+        ret = m_rImport.dispatchToggle(m_aRTFControlWords[i].nIndex, bParam, nParam);
+        if (ret)
+            return ret;
+        break;
+    case CONTROL_VALUE:
+        // values require a parameter by definition
+        if (bParam)
+        {
+            ret = m_rImport.dispatchValue(m_aRTFControlWords[i].nIndex, nParam);
             if (ret)
                 return ret;
-            break;
-        case CONTROL_DESTINATION:
-            // same for destinations
-            ret = m_rImport.dispatchDestination(m_aRTFControlWords[i].nIndex);
-            if (ret)
-                return ret;
-            break;
-        case CONTROL_SYMBOL:
-            // and symbols
-            ret = m_rImport.dispatchSymbol(m_aRTFControlWords[i].nIndex);
-            if (ret)
-                return ret;
-            break;
-        case CONTROL_TOGGLE:
-            ret = m_rImport.dispatchToggle(m_aRTFControlWords[i].nIndex, bParam, nParam);
-            if (ret)
-                return ret;
-            break;
-        case CONTROL_VALUE:
-            // values require a parameter by definition
-            if (bParam) {
-                ret = m_rImport.dispatchValue(m_aRTFControlWords[i].nIndex, nParam);
-                if (ret)
-                    return ret;
-            }
-            break;
+        }
+        break;
     }
 
     return 0;
