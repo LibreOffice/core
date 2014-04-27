@@ -287,9 +287,15 @@ namespace cppcanvas
             float ix, iy, iw, ih;
 
             EMFPRegion ()
+                : parts(0)
+                , combineMode(NULL)
+                , initialState(0)
+                , initialPath(NULL)
+                , ix(0.0)
+                , iy(0.0)
+                , iw(0.0)
+                , ih(0.0)
             {
-                combineMode = NULL;
-                initialPath = NULL;
             }
 
             virtual ~EMFPRegion ()
