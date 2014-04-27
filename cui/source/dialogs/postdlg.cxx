@@ -141,9 +141,9 @@ void SvxPostItDialog::ShowLastAuthor(const OUString& rAuthor, const OUString& rD
 
 
 
-sal_uInt16* SvxPostItDialog::GetRanges()
+const sal_uInt16* SvxPostItDialog::GetRanges()
 {
-    static sal_uInt16 pRanges[] =
+    static const sal_uInt16 pRanges[] =
     {
         SID_ATTR_POSTIT_AUTHOR,
         SID_ATTR_POSTIT_TEXT,

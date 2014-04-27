@@ -51,7 +51,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 
 // static ----------------------------------------------------------------
 
-static sal_uInt16 pRanges[] =
+static const sal_uInt16 pRanges[] =
 {
     SID_ATTR_NUMBERFORMAT_VALUE,
     SID_ATTR_NUMBERFORMAT_INFO,
@@ -342,7 +342,7 @@ void SvxNumberFormatTabPage::Init_Impl()
 #*
 #************************************************************************/
 
-sal_uInt16* SvxNumberFormatTabPage::GetRanges()
+const sal_uInt16* SvxNumberFormatTabPage::GetRanges()
 {
     return pRanges;
 }

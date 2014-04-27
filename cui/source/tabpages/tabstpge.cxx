@@ -64,7 +64,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTabWin_Impl(Window *pParent
 }
 // static ----------------------------------------------------------------
 
-static sal_uInt16 pRanges[] =
+static const sal_uInt16 pRanges[] =
 {
     SID_ATTR_TABSTOP,
     SID_ATTR_TABSTOP_OFFSET,
@@ -194,7 +194,7 @@ SvxTabulatorTabPage::~SvxTabulatorTabPage()
 
 
 
-sal_uInt16* SvxTabulatorTabPage::GetRanges()
+const sal_uInt16* SvxTabulatorTabPage::GetRanges()
 {
     return pRanges;
 }

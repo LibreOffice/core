@@ -64,7 +64,7 @@ public:
     virtual ~SvxConnectionPage();
 
     static SfxTabPage*  Create( Window*, const SfxItemSet& );
-    static  sal_uInt16*     GetRanges();
+    static  const sal_uInt16*     GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet & ) SAL_OVERRIDE;

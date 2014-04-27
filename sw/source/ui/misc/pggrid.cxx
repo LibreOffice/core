@@ -353,9 +353,9 @@ void SwTextGridPage::SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 n
     rField.SetText( aFieldStr );
 }
 
-sal_uInt16* SwTextGridPage::GetRanges()
+const sal_uInt16* SwTextGridPage::GetRanges()
 {
-    static sal_uInt16 aPageRg[] = {
+    static const sal_uInt16 aPageRg[] = {
         RES_TEXTGRID, RES_TEXTGRID,
         0};
     return aPageRg;

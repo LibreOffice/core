@@ -35,7 +35,7 @@
 #include <svx/xlineit0.hxx>
 #include <sfx2/request.hxx>
 
-static sal_uInt16 pShadowRanges[] =
+static const sal_uInt16 pShadowRanges[] =
 {
     SDRATTR_SHADOWCOLOR,
     SDRATTR_SHADOWTRANSPARENCE,
@@ -464,7 +464,7 @@ SfxTabPage* SvxShadowTabPage::Create( Window* pWindow,
 
 
 
-sal_uInt16* SvxShadowTabPage::GetRanges()
+const sal_uInt16* SvxShadowTabPage::GetRanges()
 {
     return( pShadowRanges );
 }

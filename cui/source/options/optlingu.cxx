@@ -152,7 +152,7 @@ static void lcl_OpenURL( const OUString& _sURL )
     }
 }
 
-static sal_uInt16 pRanges[] =
+static const sal_uInt16 pRanges[] =
 {
     SID_ATTR_SPELL,
     SID_ATTR_SPELL,
@@ -1139,7 +1139,7 @@ SvxLinguTabPage::~SvxLinguTabPage()
 
 
 // don't throw away overloaded
-sal_uInt16* SvxLinguTabPage::GetRanges()
+const sal_uInt16* SvxLinguTabPage::GetRanges()
 {
     //TL???
     return pRanges;

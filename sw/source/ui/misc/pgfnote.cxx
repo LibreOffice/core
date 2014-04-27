@@ -43,7 +43,7 @@
 
 using namespace ::com::sun::star;
 
-static sal_uInt16 aPageRg[] = {
+static const sal_uInt16 aPageRg[] = {
     FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO,
     0
 };
@@ -362,7 +362,7 @@ int SwFootNotePage::DeactivatePage( SfxItemSet* _pSet)
     return sal_True;
 }
 
-sal_uInt16* SwFootNotePage::GetRanges()
+const sal_uInt16* SwFootNotePage::GetRanges()
 {
     return aPageRg;
 }

@@ -54,7 +54,7 @@ using namespace css;
 using namespace css::uno;
 using namespace css::lang;
 
-static sal_uInt16 aPageRg[] = {
+static const sal_uInt16 aPageRg[] = {
     RES_PARATR_DROP, RES_PARATR_DROP,
     0
 };
@@ -737,7 +737,7 @@ IMPL_LINK_NOARG_INLINE_START(SwDropCapsPage, SelectHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwDropCapsPage, SelectHdl)
 
-sal_uInt16*  SwDropCapsPage::GetRanges()
+const sal_uInt16*  SwDropCapsPage::GetRanges()
 {
     return aPageRg;
 }

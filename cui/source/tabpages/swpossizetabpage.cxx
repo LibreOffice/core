@@ -697,9 +697,9 @@ SfxTabPage* SvxSwPosSizeTabPage::Create( Window* pParent, const SfxItemSet& rSet
     return new SvxSwPosSizeTabPage(pParent, rSet);
 }
 
-sal_uInt16* SvxSwPosSizeTabPage::GetRanges()
+const sal_uInt16* SvxSwPosSizeTabPage::GetRanges()
 {
-    static sal_uInt16 pSwPosRanges[] =
+    static const sal_uInt16 pSwPosRanges[] =
     {
         SID_ATTR_TRANSFORM_POS_X,
         SID_ATTR_TRANSFORM_POS_Y,

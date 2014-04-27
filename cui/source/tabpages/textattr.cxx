@@ -40,7 +40,7 @@
 #include <svx/ofaitem.hxx>
 #include <editeng/writingmodeitem.hxx>
 
-static sal_uInt16 pRanges[] =
+static const sal_uInt16 pRanges[] =
 {
       SDRATTR_MISC_FIRST
     , SDRATTR_TEXT_HORZADJUST
@@ -525,7 +525,7 @@ SfxTabPage* SvxTextAttrPage::Create( Window* pWindow,
     return( new SvxTextAttrPage( pWindow, rAttrs ) );
 }
 
-sal_uInt16* SvxTextAttrPage::GetRanges()
+const sal_uInt16* SvxTextAttrPage::GetRanges()
 {
     return( pRanges );
 }

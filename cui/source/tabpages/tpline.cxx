@@ -65,7 +65,7 @@
 
 // static ----------------------------------------------------------------
 
-static sal_uInt16 pLineRanges[] =
+static const sal_uInt16 pLineRanges[] =
 {
     XATTR_LINETRANSPARENCE,
     XATTR_LINETRANSPARENCE,
@@ -1498,7 +1498,7 @@ SfxTabPage* SvxLineTabPage::Create( Window* pWindow,
 
 
 
-sal_uInt16* SvxLineTabPage::GetRanges()
+const sal_uInt16* SvxLineTabPage::GetRanges()
 {
     return pLineRanges;
 }

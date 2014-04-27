@@ -63,7 +63,7 @@ static const long MINBODY       = 284;  // 0,5 cm rounded up in twips
 //static const long PRINT_OFFSET    = 17;   // 0,03 cm rounded down in twips
 static const long PRINT_OFFSET  = 0;    // why was this ever set to 17 ? it led to wrong right and bottom margins.
 
-static sal_uInt16 pRanges[] =
+static const sal_uInt16 pRanges[] =
 {
     SID_ATTR_BORDER_OUTER,
     SID_ATTR_BORDER_SHADOW,
@@ -75,7 +75,7 @@ static sal_uInt16 pRanges[] =
 };
 // ------- Mapping page layout ------------------------------------------
 
-sal_uInt16 aArr[] =
+const sal_uInt16 aArr[] =
 {
     SVX_PAGE_ALL,
     SVX_PAGE_MIRROR,
@@ -158,7 +158,7 @@ struct SvxPage_Impl
 // class SvxPageDescPage --------------------------------------------------
 
 // returns the range of the Which values
-sal_uInt16* SvxPageDescPage::GetRanges()
+const sal_uInt16* SvxPageDescPage::GetRanges()
 {
     return pRanges;
 }

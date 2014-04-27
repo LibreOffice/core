@@ -87,7 +87,7 @@ friend class SwDropCapsPict;
 public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
-    static sal_uInt16* GetRanges();
+    static const sal_uInt16* GetRanges();
 
     virtual bool FillItemSet(      SfxItemSet &rSet) SAL_OVERRIDE;
     virtual void Reset      (const SfxItemSet &rSet) SAL_OVERRIDE;

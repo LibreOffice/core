@@ -41,7 +41,7 @@ public:
     virtual ~SdParagraphNumTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*  GetRanges();
+    static const sal_uInt16*  GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
@@ -79,9 +79,9 @@ SfxTabPage* SdParagraphNumTabPage::Create(Window *pParent, const SfxItemSet & rA
     return new SdParagraphNumTabPage( pParent, rAttrSet );
 }
 
-sal_uInt16* SdParagraphNumTabPage::GetRanges()
+const sal_uInt16* SdParagraphNumTabPage::GetRanges()
 {
-    static sal_uInt16 aRange[] =
+    static const sal_uInt16 aRange[] =
     {
         ATTR_PARANUMBERING_START, ATTR_PARANUMBERING_END,
         0

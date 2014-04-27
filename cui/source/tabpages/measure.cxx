@@ -48,7 +48,7 @@
 
 #include "measure.hxx"
 
-static sal_uInt16 pRanges[] =
+static const sal_uInt16 pRanges[] =
 {
     SDRATTR_MEASURE_FIRST,
     SDRATTR_MEASURE_LAST,
@@ -599,7 +599,7 @@ SfxTabPage* SvxMeasurePage::Create( Window* pWindow,
     return( new SvxMeasurePage( pWindow, rAttrs ) );
 }
 
-sal_uInt16* SvxMeasurePage::GetRanges()
+const sal_uInt16* SvxMeasurePage::GetRanges()
 {
     return( pRanges );
 }

@@ -64,7 +64,7 @@ class ScHeaderPage : public ScHFPage
 {
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static const sal_uInt16*      GetRanges();
 
 private:
     ScHeaderPage( Window* pParent, const SfxItemSet& rSet );
@@ -74,7 +74,7 @@ class ScFooterPage : public ScHFPage
 {
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static const sal_uInt16*      GetRanges();
 
 private:
     ScFooterPage( Window* pParent, const SfxItemSet& rSet );

@@ -1267,7 +1267,7 @@ int SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
     return sal_True;
 }
 
-sal_uInt16* SwColumnPage::GetRanges()
+const sal_uInt16* SwColumnPage::GetRanges()
 {
     return aPageRg;
 }

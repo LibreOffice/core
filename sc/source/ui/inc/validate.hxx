@@ -180,7 +180,7 @@ public:
     explicit                    ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet );
 
     static SfxTabPage*          Create( Window* pParent, const SfxItemSet& rArgSet );
-    static sal_uInt16*              GetRanges();
+    static const sal_uInt16*              GetRanges();
 
     virtual bool                FillItemSet( SfxItemSet& rArgSet ) SAL_OVERRIDE;
     virtual void                Reset( const SfxItemSet& rArgSet ) SAL_OVERRIDE;

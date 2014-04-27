@@ -66,7 +66,7 @@ using namespace ::editeng;
 
 // static ----------------------------------------------------------------
 
-static sal_uInt16 pRanges[] =
+static const sal_uInt16 pRanges[] =
 {
     SID_ATTR_BORDER_INNER,      SID_ATTR_BORDER_SHADOW,
     SID_ATTR_ALIGN_MARGIN,      SID_ATTR_ALIGN_MARGIN,
@@ -342,7 +342,7 @@ SvxBorderTabPage::~SvxBorderTabPage()
 
 
 
-sal_uInt16* SvxBorderTabPage::GetRanges()
+const sal_uInt16* SvxBorderTabPage::GetRanges()
 {
     return pRanges;
 }

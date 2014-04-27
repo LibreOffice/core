@@ -43,7 +43,7 @@ namespace linguistic2{
 
 class SvxSpellWrapper;
 typedef SfxTabPage* (*CreateSvxDistributePage)(Window *pParent, const SfxItemSet &rAttrSet, SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
-typedef sal_uInt16*     (*DialogGetRanges)();
+typedef const sal_uInt16*     (*DialogGetRanges)();
 
 struct ExchangeData;
 class INetURLObject;

@@ -85,7 +85,7 @@ using namespace ::com::sun::star;
 
 // static ----------------------------------------------------------------
 
-static sal_uInt16 pNameRanges[] =
+static const sal_uInt16 pNameRanges[] =
 {
     SID_ATTR_CHAR_FONT,
     SID_ATTR_CHAR_WEIGHT,
@@ -102,7 +102,7 @@ static sal_uInt16 pNameRanges[] =
     0
 };
 
-static sal_uInt16 pEffectsRanges[] =
+static const sal_uInt16 pEffectsRanges[] =
 {
     SID_ATTR_CHAR_SHADOWED,
     SID_ATTR_CHAR_UNDERLINE,
@@ -123,7 +123,7 @@ static sal_uInt16 pEffectsRanges[] =
     0
 };
 
-static sal_uInt16 pPositionRanges[] =
+static const sal_uInt16 pPositionRanges[] =
 {
     SID_ATTR_CHAR_KERNING,
     SID_ATTR_CHAR_KERNING,
@@ -138,7 +138,7 @@ static sal_uInt16 pPositionRanges[] =
     0
 };
 
-static sal_uInt16 pTwoLinesRanges[] =
+static const sal_uInt16 pTwoLinesRanges[] =
 {
     SID_ATTR_CHAR_TWO_LINES,
     SID_ATTR_CHAR_TWO_LINES,
@@ -1160,7 +1160,7 @@ SfxTabPage* SvxCharNamePage::Create( Window* pParent, const SfxItemSet& rSet )
 
 
 
-sal_uInt16* SvxCharNamePage::GetRanges()
+const sal_uInt16* SvxCharNamePage::GetRanges()
 {
     return pNameRanges;
 }
@@ -1707,7 +1707,7 @@ SfxTabPage* SvxCharEffectsPage::Create( Window* pParent, const SfxItemSet& rSet 
 
 
 
-sal_uInt16* SvxCharEffectsPage::GetRanges()
+const sal_uInt16* SvxCharEffectsPage::GetRanges()
 {
     return pEffectsRanges;
 }
@@ -2881,7 +2881,7 @@ SfxTabPage* SvxCharPositionPage::Create( Window* pParent, const SfxItemSet& rSet
 
 
 
-sal_uInt16* SvxCharPositionPage::GetRanges()
+const sal_uInt16* SvxCharPositionPage::GetRanges()
 {
     return pPositionRanges;
 }
@@ -3454,7 +3454,7 @@ SfxTabPage* SvxCharTwoLinesPage::Create( Window* pParent, const SfxItemSet& rSet
 
 
 
-sal_uInt16* SvxCharTwoLinesPage::GetRanges()
+const sal_uInt16* SvxCharTwoLinesPage::GetRanges()
 {
     return pTwoLinesRanges;
 }

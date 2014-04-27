@@ -260,7 +260,7 @@ SfxTabPage* ScHeaderPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     return ( new ScHeaderPage( pParent, rCoreSet ) );
 }
 
-sal_uInt16* ScHeaderPage::GetRanges()
+const sal_uInt16* ScHeaderPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }
@@ -279,7 +279,7 @@ SfxTabPage* ScFooterPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     return ( new ScFooterPage( pParent, rCoreSet ) );
 }
 
-sal_uInt16* ScFooterPage::GetRanges()
+const sal_uInt16* ScFooterPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }

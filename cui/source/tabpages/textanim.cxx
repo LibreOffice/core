@@ -29,7 +29,7 @@
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 
-static sal_uInt16 pRanges[] =
+static const sal_uInt16 pRanges[] =
 {
     SDRATTR_TEXT_ANIKIND,
     SDRATTR_TEXT_ANIAMOUNT,
@@ -440,7 +440,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     return( bModified );
 }
 
-sal_uInt16* SvxTextAnimationPage::GetRanges()
+const sal_uInt16* SvxTextAnimationPage::GetRanges()
 {
     return( pRanges );
 }

@@ -39,7 +39,7 @@
 
 #include "swuiccoll.hxx"
 
-static sal_uInt16 aPageRg[] = {
+static const sal_uInt16 aPageRg[] = {
     FN_COND_COLL, FN_COND_COLL,
     0
 };
@@ -197,7 +197,7 @@ void SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
 
 }
 
-sal_uInt16* SwCondCollPage::GetRanges()
+const sal_uInt16* SwCondCollPage::GetRanges()
 {
     return aPageRg;
 }

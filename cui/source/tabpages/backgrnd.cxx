@@ -58,7 +58,7 @@
 using namespace ::com::sun::star;
 // static ----------------------------------------------------------------
 
-static sal_uInt16 pRanges[] =
+static const sal_uInt16 pRanges[] =
 {
     SID_VIEW_FLD_PIC, SID_VIEW_FLD_PIC,
     SID_ATTR_BRUSH, SID_ATTR_BRUSH,
@@ -441,7 +441,7 @@ SvxBackgroundTabPage::~SvxBackgroundTabPage()
 
 
 
-sal_uInt16* SvxBackgroundTabPage::GetRanges()
+const sal_uInt16* SvxBackgroundTabPage::GetRanges()
 
 /*  [Description]
 

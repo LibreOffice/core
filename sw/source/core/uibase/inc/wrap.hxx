@@ -105,7 +105,7 @@ public:
     virtual bool    FillItemSet(SfxItemSet &rSet) SAL_OVERRIDE;
     virtual void    Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
 
-    static sal_uInt16*  GetRanges();
+    static const sal_uInt16*  GetRanges();
     inline void     SetNewFrame(sal_Bool bNewFrame) { bNew = bNewFrame; }
     inline void     SetFormatUsed(sal_Bool bFmt, sal_Bool bDrw) { bFormat = bFmt;
                                                             bDrawMode = bDrw; }

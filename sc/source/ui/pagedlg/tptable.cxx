@@ -33,7 +33,7 @@
 
 // Static Data
 
-static sal_uInt16 pPageTableRanges[] =
+static const sal_uInt16 pPageTableRanges[] =
 {
     ATTR_PAGE_NOTES, ATTR_PAGE_FIRSTPAGENO,
     0
@@ -130,7 +130,7 @@ ScTablePage::~ScTablePage()
 {
 }
 
-sal_uInt16* ScTablePage::GetRanges()
+const sal_uInt16* ScTablePage::GetRanges()
 {
     return pPageTableRanges;
 }

@@ -55,7 +55,7 @@ static const long MINBODY = 56;  // 1mm in twips rounded
 static const long DEF_DIST_WRITER = 500;    // 5mm (Writer)
 static const long DEF_DIST_CALC = 250;      // 2.5mm (Calc)
 
-static sal_uInt16 pRanges[] =
+static const sal_uInt16 pRanges[] =
 {
     SID_ATTR_BRUSH,          SID_ATTR_BRUSH,
     SID_ATTR_BORDER_OUTER,   SID_ATTR_BORDER_OUTER,
@@ -107,7 +107,7 @@ namespace svx {
 // returns the Which values to the range
 
 
-sal_uInt16* SvxHeaderPage::GetRanges()
+const sal_uInt16* SvxHeaderPage::GetRanges()
 {
     return pRanges;
 }
@@ -121,7 +121,7 @@ SfxTabPage* SvxHeaderPage::Create( Window* pParent, const SfxItemSet& rSet )
 
 
 
-sal_uInt16* SvxFooterPage::GetRanges()
+const sal_uInt16* SvxFooterPage::GetRanges()
 {
     return pRanges;
 }

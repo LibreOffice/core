@@ -401,10 +401,10 @@ IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit*, pEdit)
     return 0;
 }
 
-sal_uInt16* SvxAsianLayoutPage::GetRanges()
+const sal_uInt16* SvxAsianLayoutPage::GetRanges()
 {
     //no items are used
-    static sal_uInt16 pAsianLayoutRanges[] = { 0 };
+    static const sal_uInt16 pAsianLayoutRanges[] = { 0 };
     return pAsianLayoutRanges;
 }
 

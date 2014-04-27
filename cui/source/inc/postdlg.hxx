@@ -47,7 +47,7 @@ public:
                      bool bPrevNext = false);
     virtual ~SvxPostItDialog();
 
-    static sal_uInt16*      GetRanges();
+    static const sal_uInt16*      GetRanges();
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 
     Link                GetPrevHdl() const { return aPrevHdlLink; }

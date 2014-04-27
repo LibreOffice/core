@@ -102,7 +102,7 @@ class SVX_DLLPUBLIC SvxHeaderPage : public SvxHFPage
 {
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static const sal_uInt16*      GetRanges();
 
 private:
     SvxHeaderPage( Window* pParent, const SfxItemSet& rSet );
@@ -114,7 +114,7 @@ class SVX_DLLPUBLIC SvxFooterPage : public SvxHFPage
 {
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static const sal_uInt16*      GetRanges();
 
 private:
     SVX_DLLPRIVATE SvxFooterPage(   Window* pParent, const SfxItemSet& rSet );

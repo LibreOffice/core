@@ -52,7 +52,7 @@
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
 
-static sal_uInt16 pStdRanges[] =
+static const sal_uInt16 pStdRanges[] =
 {
     SID_ATTR_PARA_LINESPACE,        // 10033
     SID_ATTR_PARA_LINESPACE,
@@ -63,14 +63,14 @@ static sal_uInt16 pStdRanges[] =
     0
 };
 
-static sal_uInt16 pAlignRanges[] =
+static const sal_uInt16 pAlignRanges[] =
 {
     SID_ATTR_PARA_ADJUST,           // 10027
     SID_ATTR_PARA_ADJUST,
     0
 };
 
-static sal_uInt16 pExtRanges[] =
+static const sal_uInt16 pExtRanges[] =
 {
     SID_ATTR_PARA_PAGEBREAK,        // 10037 -
     SID_ATTR_PARA_WIDOWS,           // 10041
@@ -675,7 +675,7 @@ void SvxStdParagraphTabPage::EnableNegativeMode()
     bNegativeIndents = true;
 }
 
-sal_uInt16* SvxStdParagraphTabPage::GetRanges()
+const sal_uInt16* SvxStdParagraphTabPage::GetRanges()
 {
     return pStdRanges;
 }
@@ -1049,7 +1049,7 @@ SfxTabPage* SvxParaAlignTabPage::Create( Window* pParent, const SfxItemSet& rSet
     return new SvxParaAlignTabPage(pParent, rSet);
 }
 
-sal_uInt16* SvxParaAlignTabPage::GetRanges()
+const sal_uInt16* SvxParaAlignTabPage::GetRanges()
 {
     return pAlignRanges;
 }
@@ -1921,7 +1921,7 @@ SvxExtParagraphTabPage::~SvxExtParagraphTabPage()
 {
 }
 
-sal_uInt16* SvxExtParagraphTabPage::GetRanges()
+const sal_uInt16* SvxExtParagraphTabPage::GetRanges()
 {
     return pExtRanges;
 }
@@ -2137,9 +2137,9 @@ SfxTabPage* SvxAsianTabPage::Create(    Window* pParent, const SfxItemSet& rSet 
     return new SvxAsianTabPage(pParent, rSet);
 }
 
-sal_uInt16*     SvxAsianTabPage::GetRanges()
+const sal_uInt16*     SvxAsianTabPage::GetRanges()
 {
-    static sal_uInt16 pRanges[] =
+    static const sal_uInt16 pRanges[] =
     {
         SID_ATTR_PARA_SCRIPTSPACE, SID_ATTR_PARA_FORBIDDEN_RULES,
         0

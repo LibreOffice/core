@@ -41,7 +41,7 @@ class IconChoicePage;
 
 // Create-Function
 typedef IconChoicePage* (*CreatePage)(Window *pParent, const SfxItemSet &rAttrSet);
-typedef sal_uInt16*         (*GetPageRanges)(); // gives international Which-value
+typedef const sal_uInt16*         (*GetPageRanges)(); // gives international Which-value
 
 // position of iconchoicectrl
 enum EIconChoicePos { PosLeft, PosRight, PosTop, PosBottom };

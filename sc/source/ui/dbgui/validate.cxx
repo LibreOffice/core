@@ -73,7 +73,7 @@
 #define SC_VALIDDLG_DATA_INVALIDRANGE 7
 
 
-static sal_uInt16 pValueRanges[] =
+static const sal_uInt16 pValueRanges[] =
 {
     FID_VALID_MODE, FID_VALID_ERRTEXT,
     FID_VALID_LISTTYPE, FID_VALID_LISTTYPE,
@@ -379,7 +379,7 @@ SfxTabPage* ScTPValidationValue::Create( Window* pParent, const SfxItemSet& rArg
     return( new ScTPValidationValue( pParent, rArgSet ) );
 }
 
-sal_uInt16* ScTPValidationValue::GetRanges()
+const sal_uInt16* ScTPValidationValue::GetRanges()
 {
     return pValueRanges;
 }

@@ -47,7 +47,7 @@
 
 // static ----------------------------------------------------------------
 
-static sal_uInt16 pAreaRanges[] =
+static const sal_uInt16 pAreaRanges[] =
 {
     XATTR_GRADIENTSTEPCOUNT,
     XATTR_GRADIENTSTEPCOUNT,
@@ -56,7 +56,7 @@ static sal_uInt16 pAreaRanges[] =
     0
 };
 
-static sal_uInt16 pTransparenceRanges[] =
+static const sal_uInt16 pTransparenceRanges[] =
 {
     XATTR_FILLTRANSPARENCE,
     XATTR_FILLTRANSPARENCE,
@@ -292,7 +292,7 @@ SfxTabPage* SvxTransparenceTabPage::Create(Window* pWindow, const SfxItemSet& rA
     return(new SvxTransparenceTabPage(pWindow, rAttrs));
 }
 
-sal_uInt16* SvxTransparenceTabPage::GetRanges()
+const sal_uInt16* SvxTransparenceTabPage::GetRanges()
 {
     return(pTransparenceRanges);
 }
@@ -1762,7 +1762,7 @@ SfxTabPage* SvxAreaTabPage::Create( Window* pWindow,
 
 
 
-sal_uInt16* SvxAreaTabPage::GetRanges()
+const sal_uInt16* SvxAreaTabPage::GetRanges()
 {
     return( pAreaRanges );
 }

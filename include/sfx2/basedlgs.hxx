@@ -175,7 +175,7 @@ struct SingleTabDlgImpl
     }
 };
 
-typedef sal_uInt16* (*GetTabPageRanges)(); // liefert internationale Which-Werte
+typedef const sal_uInt16* (*GetTabPageRanges)(); // liefert internationale Which-Werte
 
 class SFX2_DLLPUBLIC SfxSingleTabDialog : public SfxModalDialog
 {

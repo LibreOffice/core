@@ -35,7 +35,7 @@
 
 // Globals ******************************************************************
 
-static sal_uInt16 aPageRg[] = {
+static const sal_uInt16 aPageRg[] = {
     FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT,
     0
 };
@@ -98,7 +98,7 @@ SfxTabPage* SwParagraphNumTabPage::Create(  Window* pParent,
     return new SwParagraphNumTabPage(pParent, rSet);
 }
 
-sal_uInt16* SwParagraphNumTabPage::GetRanges()
+const sal_uInt16* SwParagraphNumTabPage::GetRanges()
 {
     return aPageRg;
 }

@@ -94,7 +94,7 @@ static const RotateModeConnection::MapEntryType s_pRotateModeMap[] =
 
 
 
-static sal_uInt16 s_pRanges[] =
+static const sal_uInt16 s_pRanges[] =
 {
     SID_ATTR_ALIGN_HOR_JUSTIFY,SID_ATTR_ALIGN_VER_JUSTIFY,
     SID_ATTR_ALIGN_STACKED,SID_ATTR_ALIGN_LINEBREAK,
@@ -260,7 +260,7 @@ SfxTabPage* AlignmentTabPage::Create( Window* pParent, const SfxItemSet& rAttrSe
     return new AlignmentTabPage( pParent, rAttrSet );
 }
 
-sal_uInt16* AlignmentTabPage::GetRanges()
+const sal_uInt16* AlignmentTabPage::GetRanges()
 {
     return s_pRanges;
 }
