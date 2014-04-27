@@ -365,8 +365,50 @@ public:
 
      @returns SalGraphics instance.
      */
-    SAL_DLLPRIVATE SalGraphics const *GetGraphics() const;
-    SAL_DLLPRIVATE SalGraphics*       GetGraphics();
+    SalGraphics const           *GetGraphics() const;
+    SalGraphics*                GetGraphics();
+
+    void                        SetConnectMetaFile( GDIMetaFile* pMtf );
+    GDIMetaFile*                GetConnectMetaFile() const { return mpMetaFile; }
+
+    virtual void                SetSettings( const AllSettings& rSettings );
+    const AllSettings&          GetSettings() const { return *mxSettings; }
+
+    SystemGraphicsData          GetSystemGfxData() const;
+    css::uno::Any               GetSystemGfxDataAny() const;
+
+    void                        SetRefPoint();
+    void                        SetRefPoint( const Point& rRefPoint );
+    const Point&                GetRefPoint() const { return maRefPoint; }
+    bool                        IsRefPoint() const { return mbRefPoint; }
+
+    virtual sal_uInt16          GetBitCount() const;
+
+    Size                        GetOutputSizePixel() const
+                                    { return Size( mnOutWidth, mnOutHeight ); }
+    long                        GetOutputWidthPixel() const { return mnOutWidth; }
+    long                        GetOutputHeightPixel() const { return mnOutHeight; }
+    long                        GetOutOffXPixel() const { return mnOutOffX; }
+    long                        GetOutOffYPixel() const { return mnOutOffY; }
+
+    Size                        GetOutputSize() const
+                                    { return PixelToLogic( GetOutputSizePixel() ); }
+
+    sal_uLong                   GetColorCount() const;
+
+
+    /// request XCanvas render interface for this OutputDevice
+    css::uno::Reference< css::rendering::XCanvas >
+                                GetCanvas() const;
+
+    css::uno::Reference< css::awt::XGraphics >
+                                CreateUnoGraphics();
+    VCLXGraphicsList_impl*      GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
+    VCLXGraphicsList_impl*      CreateUnoGraphicsList()
+                                    {
+                                        mpUnoGraphicsList = new VCLXGraphicsList_impl();
+                                        return mpUnoGraphicsList;
+                                    }
 
 protected:
     /** Acquire a graphics device that the output device uses to draw on.
@@ -402,8 +444,9 @@ protected:
 
     /** @name Helper functions
      */
-public:
     ///@{
+
+public:
 
     /** Get the output device's DPI x-axis value.
 
@@ -437,10 +480,55 @@ private:
                                                short nOrientation ) const;
     ///@}
 
+
+    /** @name Frame functions
+     */
+    ///@{
+private:
+    SAL_DLLPRIVATE void         ImplGetFrameDev     ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
+                                                      OutputDevice& rOutDev );
+    SAL_DLLPRIVATE void         ImplDrawFrameDev    ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
+                                                      const OutputDevice& rOutDev, const Region& rRegion );
+    ///@}
+
+
+    /** @Name Direct OutputDevice drawing functions
+     */
+    ///@{
+public:
+    virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
+                                            const Point& rSrcPt,  const Size& rSrcSize );
+    virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
+                                            const Point& rSrcPt,  const Size& rSrcSize,
+                                            const OutputDevice& rOutDev );
+    virtual void                CopyArea( const Point& rDestPt,
+                                          const Point& rSrcPt,  const Size& rSrcSize,
+                                          sal_uInt16 nFlags = 0 );
+
+protected:
+    virtual void                CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags);
+
+private:
+    SAL_DLLPRIVATE void         ImplDrawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
+
+    // not implemented; to detect misuses of DrawOutDev(...OutputDevice&);
+    SAL_DLLPRIVATE void         DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&) SAL_DELETED_FUNCTION;
+    ///@}
+
+
     /** @name OutputDevice state functions
      */
     ///@{
 public:
+
+    void                        Push( sal_uInt16 nFlags = PUSH_ALL );
+    void                        Pop();
+
+    // returns the current stack depth; that is the number of Push() calls minus the number of Pop() calls
+    // this should not normally be used since Push and Pop must always be used symmetrically
+    // however this may be e.g. a help when debugging code in which this somehow is not the case
+    sal_uInt32                  GetGCStackDepth() const;
+
     void                        EnableOutput( bool bEnable = true );
     bool                        IsOutputEnabled() const { return mbOutput; }
     bool                        IsDeviceOutput() const { return mbDevOutput; }
@@ -488,8 +576,8 @@ public:
 
 private:
     void                        InitFillColor();
-
     ///@}
+
 
     /** @name Clipping functions
      */
@@ -516,9 +604,271 @@ private:
     SAL_DLLPRIVATE void         SetDeviceClipRegion( const Region* pRegion );
     ///@}
 
+
+    /** @name Pixel functions
+     */
+    ///@{
+public:
+    void                        DrawPixel( const Point& rPt );
+    void                        DrawPixel( const Point& rPt, const Color& rColor );
+    void                        DrawPixel( const Polygon& rPts, const Color* pColors = NULL );
+    void                        DrawPixel( const Polygon& rPts, const Color& rColor );
+
+    Color                       GetPixel( const Point& rPt ) const;
+    ///@}
+
+
+    /** @name Rectangle functions
+     */
+    ///@{
+
+public:
+
+    void                        DrawRect( const Rectangle& rRect );
+    void                        DrawRect( const Rectangle& rRect,
+                                          sal_uLong nHorzRount, sal_uLong nVertRound );
+
+    /// Fill the given rectangle with checkered rectangles of size nLen x nLen using the colors aStart and aEnd
+    void                        DrawCheckered(
+                                    const Point& rPos,
+                                    const Size& rSize,
+                                    sal_uInt32 nLen = 8,
+                                    Color aStart = Color(COL_WHITE),
+                                    Color aEnd = Color(COL_BLACK));
+
+    void                        DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags );
+
+    ///@}
+
+
+    /** @name Line functions
+     */
+    ///@{
+public:
+    void                        DrawLine( const Point& rStartPt, const Point& rEndPt );
+
+    void                        DrawLine( const Point& rStartPt, const Point& rEndPt,
+                                          const LineInfo& rLineInfo );
+
+    void                        SetLineColor();
+    void                        SetLineColor( const Color& rColor );
+    const Color&                GetLineColor() const { return maLineColor; }
+    bool                        IsLineColor() const { return mbLineColor; }
+
+private:
+    SAL_DLLPRIVATE void         InitLineColor();
+
+    /** Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
+     */
+    SAL_DLLPRIVATE void         PaintLineGeometryWithEvtlExpand( const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon );
+    ///@}
+
+
+    /** @name Polyline functions
+     */
+    ///@{
+public:
+
+    /** Render the given polygon as a line stroke
+
+        The given polygon is stroked with the current LineColor, start
+        and end point are not automatically connected
+
+        @see DrawPolygon
+        @see DrawPolyPolygon
+     */
+    void                        DrawPolyLine( const Polygon& rPoly );
+
+    void                        DrawPolyLine(
+                                    const basegfx::B2DPolygon&,
+                                    double fLineWidth = 0.0,
+                                    basegfx::B2DLineJoin = basegfx::B2DLINEJOIN_ROUND,
+                                    css::drawing::LineCap = css::drawing::LineCap_BUTT);
+
+    /** Render the given polygon as a line stroke
+
+        The given polygon is stroked with the current LineColor, start
+        and end point are not automatically connected. The line is
+        rendered according to the specified LineInfo, e.g. supplying a
+        dash pattern, or a line thickness.
+
+        @see DrawPolygon
+        @see DrawPolyPolygon
+     */
+    void                        DrawPolyLine( const Polygon& rPoly,
+                                              const LineInfo& rLineInfo );
+
+    bool                        TryDrawPolyLineDirect(
+                                    const basegfx::B2DPolygon& rB2DPolygon,
+                                    double fLineWidth = 0.0,
+                                    double fTransparency = 0.0,
+                                    basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
+                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
+private:
+
+    // #i101491#
+    // Helper which holds the old line geometry creation and is extended to use AA when
+    // switched on. Advantage is that line geometry is only temporarily used for paint
+    SAL_DLLPRIVATE void         DrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo);
+
+
+    // #i101491#
+    // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
+    SAL_DLLPRIVATE bool         TryDrawPolyLineDirectNoAA(
+                                    const basegfx::B2DPolygon& rB2DPolygon,
+                                    double fLineWidth = 0.0,
+                                    double fTransparency = 0.0,
+                                    basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
+                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
+    ///@}
+
+
+    /** @name Polygon functions
+     */
+    ///@{
+
+public:
+
+    /** Render the given polygon
+
+        The given polygon is stroked with the current LineColor, and
+        filled with the current FillColor. If one of these colors are
+        transparent, the corresponding stroke or fill stays
+        invisible. Start and end point of the polygon are
+        automatically connected.
+
+        @see DrawPolyLine
+     */
+    void                        DrawPolygon( const Polygon& rPoly );
+    void                        DrawPolygon( const basegfx::B2DPolygon& );
+
+    /** Render the given poly-polygon
+
+        The given poly-polygon is stroked with the current LineColor,
+        and filled with the current FillColor. If one of these colors
+        are transparent, the corresponding stroke or fill stays
+        invisible. Start and end points of the contained polygons are
+        automatically connected.
+
+        @see DrawPolyLine
+     */
+    void                        DrawPolyPolygon( const PolyPolygon& rPolyPoly );
+    void                        DrawPolyPolygon( const basegfx::B2DPolyPolygon& );
+
+private:
+
+    SAL_DLLPRIVATE void         ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pClipPolyPoly = NULL );
+    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const PolyPolygon* pClipPolyPoly = NULL );
+    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPolyPoly );
+    // #i101491#
+    // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
+    // without MetaFile processing
+    SAL_DLLPRIVATE void         ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
+    ///@}
+
+
+    /** @name Curved shape functions
+     */
+    ///@{
+
+public:
+
+    void                        DrawEllipse( const Rectangle& rRect );
+
+    void                        DrawArc( const Rectangle& rRect,
+                                         const Point& rStartPt, const Point& rEndPt );
+
+    void                        DrawPie( const Rectangle& rRect,
+                                         const Point& rStartPt, const Point& rEndPt );
+
+    void                        DrawChord( const Rectangle& rRect,
+                                           const Point& rStartPt, const Point& rEndPt );
+
+    ///@}
+
+
+    /** @name Gradient functions
+     */
+    ///@{
+
+public:
+    void                        DrawGradient( const Rectangle& rRect, const Gradient& rGradient );
+    void                        DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+
+    void                        AddGradientActions(
+                                    const Rectangle& rRect,
+                                    const Gradient& rGradient,
+                                    GDIMetaFile& rMtf );
+
+protected:
+
+    virtual bool                UsePolyPolygonForComplexGradient() = 0;
+
+    virtual long                GetGradientStepCount( long nMinRect );
+
+private:
+
+    SAL_DLLPRIVATE void         DrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         DrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
+
+    SAL_DLLPRIVATE long         GetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex=false );
+
+    SAL_DLLPRIVATE Color        GetSingleColorGradientFill();
+    SAL_DLLPRIVATE void         SetGrayscaleColors( Gradient &rGradient );
+    ///@}
+
+
+    /** @name Hatch functions
+     */
+    ///@{
+
+public:
+
+#ifdef _MSC_VER
+    void                        DrawHatch( const PolyPolygon& rPolyPoly, const ::Hatch& rHatch );
+    void                        AddHatchActions( const PolyPolygon& rPolyPoly,
+                                                 const ::Hatch& rHatch,
+                                                 GDIMetaFile& rMtf );
+#else
+    void                        DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch );
+    void                        AddHatchActions( const PolyPolygon& rPolyPoly,
+                                                 const Hatch& rHatch,
+                                                 GDIMetaFile& rMtf );
+#endif
+
+    void                        DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf );
+
+private:
+
+    SAL_DLLPRIVATE void         CalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt16 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
+    SAL_DLLPRIVATE void         DrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
+    ///@}
+
+
+    /** @name Wallpaper functions
+     */
+    ///@{
+
+public:
+    void                        DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
+
+    virtual void                Erase();
+    virtual void                Erase( const Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
+
+protected:
+    virtual void                DrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
+
+private:
+    SAL_DLLPRIVATE void         DrawWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
+    SAL_DLLPRIVATE void         DrawColorWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
+    SAL_DLLPRIVATE void         DrawBitmapWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
+    ///@}
+
+
     /** @name Text functions
      */
     ///@{
+
 public:
     SystemTextLayoutData        GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
                                                       sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
@@ -660,11 +1010,15 @@ public:
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1, bool bOptimize = true,
                                                  sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+
+    void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos );
     ///@}
+
 
     /** @name Font functions
      */
     ///@{
+
 public:
     FontInfo                    GetDevFont( int nDevFontIndex ) const;
     int                         GetDevFontCount() const;
@@ -682,12 +1036,12 @@ public:
     bool                        GetFontCharMap( FontCharMap& rFontCharMap ) const;
     bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 
-/** Retrieve detailed font information in platform independent structure
+    /** Retrieve detailed font information in platform independent structure
 
-    @param  nFallbacklevel      Fallback font level (0 = best matching font)
+        @param  nFallbacklevel      Fallback font level (0 = best matching font)
 
-    @return SystemFontData
- */
+        @return SystemFontData
+     */
     SystemFontData              GetSysFontData( int nFallbacklevel ) const;
 
     SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine, Rectangle& rRect1, Rectangle& rRect2,
@@ -747,82 +1101,11 @@ private:
     SAL_DLLPRIVATE void         ImplDrawEmphasisMarks( SalLayout& );
     ///@}
 
-    /** @name Polygon functions
-     */
-    ///@{
-public:
-    /** Render the given polygon
-
-        The given polygon is stroked with the current LineColor, and
-        filled with the current FillColor. If one of these colors are
-        transparent, the corresponding stroke or fill stays
-        invisible. Start and end point of the polygon are
-        automatically connected.
-
-        @see DrawPolyLine
-     */
-    void                        DrawPolygon( const Polygon& rPoly );
-    void                        DrawPolygon( const basegfx::B2DPolygon& );
-
-    /** Render the given poly-polygon
-
-        The given poly-polygon is stroked with the current LineColor,
-        and filled with the current FillColor. If one of these colors
-        are transparent, the corresponding stroke or fill stays
-        invisible. Start and end points of the contained polygons are
-        automatically connected.
-
-        @see DrawPolyLine
-     */
-    void                        DrawPolyPolygon( const PolyPolygon& rPolyPoly );
-    void                        DrawPolyPolygon( const basegfx::B2DPolyPolygon& );
-
-private:
-    SAL_DLLPRIVATE void         ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pClipPolyPoly = NULL );
-    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const PolyPolygon* pClipPolyPoly = NULL );
-    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPolyPoly );
-    // #i101491#
-    // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
-    // without MetaFile processing
-    SAL_DLLPRIVATE void         ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
-    ///@}
-
-    /** @name Wallpaper functions
-     */
-    ///@{
-public:
-    void                        DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
-
-protected:
-    virtual void                DrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
-
-private:
-    SAL_DLLPRIVATE void         DrawWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
-    SAL_DLLPRIVATE void         DrawColorWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
-    SAL_DLLPRIVATE void         DrawBitmapWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
-    ///@}
-
-private:
-    SAL_DLLPRIVATE void         ImplDrawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
-
-    SAL_DLLPRIVATE void         ImplPrintTransparent ( const Bitmap& rBmp, const Bitmap& rMask,
-                                                       const Point& rDestPt, const Size& rDestSize,
-                                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel );
-    SAL_DLLPRIVATE Color        ImplDrawModeToColor  ( const Color& rColor ) const;
-
-    /** @name Frame functions
-     */
-    ///@{
-private:
-    SAL_DLLPRIVATE void         ImplGetFrameDev     ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
-                                                      OutputDevice& rOutDev );
-    SAL_DLLPRIVATE void         ImplDrawFrameDev    ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
-                                                      const OutputDevice& rOutDev, const Region& rRegion );
-    ///@}
 
     /** @name Layout functions
      */
     ///@{
+
 public:
     SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
     SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;
@@ -841,48 +1124,14 @@ public:
                                     FontSelectPattern &rFontSelData, int nFallbackLevel,
                                     ImplLayoutArgs& rLayoutArgs) const;
 
+
+    // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphisLayout
+    virtual void                EnableRTL( bool bEnable = true);
+    bool                        IsRTLEnabled() const { return mbEnableRTL; }
+
+    bool                        GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
+
     ///@}
-
-    /** @name Transparency functions
-     */
-    ///@{
-protected:
-    virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
-    void                        DrawInvisiblePolygon( const PolyPolygon& rPolyPoly );
-
-private:
-    bool                        DrawTransparentNatively( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
-    ///@}
-
-private:
-    // not implemented; to detect misuses of DrawOutDev(...OutputDevice&);
-    void                        DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&);
-
-    /** @name Pixel functions
-     */
-    ///@{
-public:
-    void                        DrawPixel( const Point& rPt );
-    void                        DrawPixel( const Point& rPt, const Color& rColor );
-    void                        DrawPixel( const Polygon& rPts, const Color* pColors = NULL );
-    void                        DrawPixel( const Polygon& rPts, const Color& rColor );
-    ///@}
-
-public:
-    void                        DrawRect( const Rectangle& rRect );
-    void                        DrawRect( const Rectangle& rRect,
-                                          sal_uLong nHorzRount, sal_uLong nVertRound );
-
-    virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
-                                            const Point& rSrcPt,  const Size& rSrcSize );
-    virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
-                                            const Point& rSrcPt,  const Size& rSrcSize,
-                                            const OutputDevice& rOutDev );
-    virtual void                CopyArea( const Point& rDestPt,
-                                          const Point& rSrcPt,  const Size& rSrcSize,
-                                          sal_uInt16 nFlags = 0 );
-protected:
-    virtual void                CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags);
 
 
     /** @name Bitmap functions
@@ -890,6 +1139,7 @@ protected:
     ///@{
 
 public:
+
     /** @overload
         void DrawBitmap(
                 const Point& rDestPt,
@@ -1090,160 +1340,72 @@ private:
 
     ///@}
 
-    /** @name Curved shape functions
+
+    /** @name Transparency functions
      */
     ///@{
-public:
-
-    void                        DrawEllipse( const Rectangle& rRect );
-
-    void                        DrawArc( const Rectangle& rRect,
-                                         const Point& rStartPt, const Point& rEndPt );
-
-    void                        DrawPie( const Rectangle& rRect,
-                                         const Point& rStartPt, const Point& rEndPt );
-
-    void                        DrawChord( const Rectangle& rRect,
-                                           const Point& rStartPt, const Point& rEndPt );
-
-    ///@}
-
 
 public:
-    /** @name Gradient functions
+
+    /** Query availability of alpha channel
+
+        @return sal_True, if this device has an alpha channel.
      */
-    ///@{
-    void                        DrawGradient( const Rectangle& rRect, const Gradient& rGradient );
-    void                        DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    bool                        HasAlpha();
 
-    void                        AddGradientActions(
-                                    const Rectangle& rRect,
-                                    const Gradient& rGradient,
-                                    GDIMetaFile& rMtf );
+
+    /** helper method removing transparencies from a metafile (e.g. for printing)
+
+        @returns
+        true: transparencies were removed
+        false: output metafile is unchanged input metafile
+
+        @attention this is a member method, so current state can influence the result !
+        @attention the output metafile is prepared in pixel mode for the currentOutputDevice
+                   state. It can not be moved or rotated reliably anymore.
+    */
+    bool                        RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
+                                                                  long nMaxBmpDPIX, long nMaxBmpDPIY,
+                                                                  bool bReduceTransparency,
+                                                                  bool bTransparencyAutoMode,
+                                                                  bool bDownsampleBitmaps,
+                                                                  const Color& rBackground = Color( COL_TRANSPARENT )
+                                                                );
+
+    SAL_DLLPRIVATE void         ImplPrintTransparent ( const Bitmap& rBmp, const Bitmap& rMask,
+                                                       const Point& rDestPt, const Size& rDestSize,
+                                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel );
+    SAL_DLLPRIVATE Color        ImplDrawModeToColor  ( const Color& rColor ) const;
+
+
+    /** Query the existence and depth of the alpha channel
+
+        @return 0, if no alpha channel available, and the bit depth of
+        the alpha channel otherwise.
+     */
+    virtual sal_uInt16          GetAlphaBitCount() const;
+
+
+    void                        DrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
+    void                        DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency);
+    void                        DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
+                                         const Gradient& rTransparenceGradient );
 
 protected:
-    virtual bool                UsePolyPolygonForComplexGradient() = 0;
-
-    virtual long                GetGradientStepCount( long nMinRect );
-
-private:
-    SAL_DLLPRIVATE void         DrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
-    SAL_DLLPRIVATE void         DrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
-
-    SAL_DLLPRIVATE long         GetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex=false );
-
-    SAL_DLLPRIVATE Color        GetSingleColorGradientFill();
-    SAL_DLLPRIVATE void         SetGrayscaleColors( Gradient &rGradient );
-    ///@}
-
-public:
-    /** @name Hatch functions
-     */
-    ///@{
-#ifdef _MSC_VER
-    void                        DrawHatch( const PolyPolygon& rPolyPoly, const ::Hatch& rHatch );
-    void                        AddHatchActions( const PolyPolygon& rPolyPoly,
-                                                 const ::Hatch& rHatch,
-                                                 GDIMetaFile& rMtf );
-#else
-    void                        DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch );
-    void                        AddHatchActions( const PolyPolygon& rPolyPoly,
-                                                 const Hatch& rHatch,
-                                                 GDIMetaFile& rMtf );
-#endif
-
-    void                        DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf );
+    virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
+    void                        DrawInvisiblePolygon( const PolyPolygon& rPolyPoly );
 
 private:
-    SAL_DLLPRIVATE void         CalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt16 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
-    SAL_DLLPRIVATE void         DrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
-    ///@}
 
-public:
-    /** @name Line functions
-     */
-    ///@{
-
-    void                        DrawLine( const Point& rStartPt, const Point& rEndPt );
-
-    void                        DrawLine( const Point& rStartPt, const Point& rEndPt,
-                                          const LineInfo& rLineInfo );
-
-    void                        SetLineColor();
-    void                        SetLineColor( const Color& rColor );
-    const Color&                GetLineColor() const { return maLineColor; }
-    bool                        IsLineColor() const { return mbLineColor; }
-
-private:
-    SAL_DLLPRIVATE void         InitLineColor();
-
-    /** Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
-     */
-    SAL_DLLPRIVATE void         PaintLineGeometryWithEvtlExpand( const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon );
-    ///@}
-
-public:
-    /** @name Polyline functions
-     */
-    ///@{
-
-    /** Render the given polygon as a line stroke
-
-        The given polygon is stroked with the current LineColor, start
-        and end point are not automatically connected
-
-        @see DrawPolygon
-        @see DrawPolyPolygon
-     */
-    void                        DrawPolyLine( const Polygon& rPoly );
-
-    void                        DrawPolyLine(
-                                    const basegfx::B2DPolygon&,
-                                    double fLineWidth = 0.0,
-                                    basegfx::B2DLineJoin = basegfx::B2DLINEJOIN_ROUND,
-                                    css::drawing::LineCap = css::drawing::LineCap_BUTT);
-
-    /** Render the given polygon as a line stroke
-
-        The given polygon is stroked with the current LineColor, start
-        and end point are not automatically connected. The line is
-        rendered according to the specified LineInfo, e.g. supplying a
-        dash pattern, or a line thickness.
-
-        @see DrawPolygon
-        @see DrawPolyPolygon
-     */
-    void                        DrawPolyLine( const Polygon& rPoly,
-                                              const LineInfo& rLineInfo );
-
-    bool                        TryDrawPolyLineDirect(
-                                    const basegfx::B2DPolygon& rB2DPolygon,
-                                    double fLineWidth = 0.0,
-                                    double fTransparency = 0.0,
-                                    basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
-                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
-private:
-    // #i101491#
-    // Helper which holds the old line geometry creation and is extended to use AA when
-    // switched on. Advantage is that line geometry is only temporarily used for paint
-    SAL_DLLPRIVATE void         DrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo);
-
-
-    // #i101491#
-    // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
-    SAL_DLLPRIVATE bool         TryDrawPolyLineDirectNoAA(
-                                    const basegfx::B2DPolygon& rB2DPolygon,
-                                    double fLineWidth = 0.0,
-                                    double fTransparency = 0.0,
-                                    basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
-                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
+    bool                        DrawTransparentNatively( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     ///@}
 
 
-public:
     /** @name Mask functions
      */
     ///@{
+
+public:
 
     void                        DrawMask( const Point& rDestPt,
                                           const Bitmap& rBitmap, const Color& rMaskColor );
@@ -1257,15 +1419,19 @@ public:
                                           sal_uLong nAction );
 
 protected:
+
     virtual void                ApplyMask ( const Bitmap& rMask, const Color& rMaskColor,
                                             const Point& rDestPt, const Size& rDestSize,
                                             const Point& rSrcPtPixel, const Size& rSrcSizePixel );
     ///@}
 
-public:
+
     /** @name Map functions
      */
     ///@{
+
+public:
+
     void                        EnableMapMode( bool bEnable = true );
     bool                        IsMapModeEnabled() const { return mbMap; }
 
@@ -1426,6 +1592,7 @@ public:
     SAL_DLLPRIVATE long         ImplLogicWidthToDevicePixel( long nWidth ) const;
 
 private:
+
     /** Convert a logical X coordinate to a device pixel's X coordinate.
 
      To get the device's X coordinate, it must calculate the mapping offset
@@ -1574,12 +1741,14 @@ private:
     SAL_DLLPRIVATE basegfx::B2DHomMatrix ImplGetDeviceTransformation() const;
     ///@}
 
-public:
+
     /** @name Native Widget Rendering functions
 
         These all just call through to the private mpGraphics functions of the same name.
      */
     ///@{
+
+public:
 
     /** Query the platform layer for control support
      */
@@ -1614,14 +1783,11 @@ public:
                                                         Rectangle &rNativeContentRegion ) const;
     ///@}
 
-public:
-    void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos );
-    void                        DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags );
+    /** @name EPS functions
+     */
+    ///@{
 
-    void                        DrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
-    void                        DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency);
-    void                        DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
-                                         const Gradient& rTransparenceGradient );
+public:
 
     /** Added return value to see if EPS could be painted directly.
         Theoreticaly, handing over a matrix would be needed to handle
@@ -1630,105 +1796,8 @@ public:
         that's too much for now, wrote \#i107046# for this */
     bool                        DrawEPS( const Point& rPt, const Size& rSz,
                                          const GfxLink& rGfxLink, GDIMetaFile* pSubst = NULL );
+    ///@}
 
-    /// Fill the given rectangle with checkered rectangles of size nLen x nLen using the colors aStart and aEnd
-    void                        DrawCheckered(
-                                    const Point& rPos,
-                                    const Size& rSize,
-                                    sal_uInt32 nLen = 8,
-                                    Color aStart = Color(COL_WHITE),
-                                    Color aEnd = Color(COL_BLACK));
-
-    Color                       GetPixel( const Point& rPt ) const;
-
-    // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphisLayout
-    virtual void                EnableRTL( bool bEnable = true);
-    bool                        IsRTLEnabled() const { return mbEnableRTL; }
-
-    void                        SetConnectMetaFile( GDIMetaFile* pMtf );
-    GDIMetaFile*                GetConnectMetaFile() const { return mpMetaFile; }
-
-
-    virtual void                SetSettings( const AllSettings& rSettings );
-    const AllSettings&          GetSettings() const { return *mxSettings; }
-
-    SystemGraphicsData          GetSystemGfxData() const;
-    css::uno::Any               GetSystemGfxDataAny() const;
-
-    void                        SetRefPoint();
-    void                        SetRefPoint( const Point& rRefPoint );
-    const Point&                GetRefPoint() const { return maRefPoint; }
-    bool                        IsRefPoint() const { return mbRefPoint; }
-
-    Size                        GetOutputSizePixel() const
-                                    { return Size( mnOutWidth, mnOutHeight ); }
-    long                        GetOutputWidthPixel() const { return mnOutWidth; }
-    long                        GetOutputHeightPixel() const { return mnOutHeight; }
-    long                        GetOutOffXPixel() const { return mnOutOffX; }
-    long                        GetOutOffYPixel() const { return mnOutOffY; }
-
-    Size                        GetOutputSize() const
-                                    { return PixelToLogic( GetOutputSizePixel() ); }
-
-    virtual void                Erase();
-    virtual void                Erase( const Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
-
-    virtual sal_uInt16          GetBitCount() const;
-
-    bool                        GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
-
-    /** Query the existence and depth of the alpha channel
-
-        @return 0, if no alpha channel available, and the bit depth of
-        the alpha channel otherwise.
-     */
-    virtual sal_uInt16          GetAlphaBitCount() const;
-    sal_uLong                   GetColorCount() const;
-
-    void                        Push( sal_uInt16 nFlags = PUSH_ALL );
-    void                        Pop();
-    // returns the current stack depth; that is the number of Push() calls minus the number of Pop() calls
-    // this should not normally be used since Push and Pop must always be used symmetrically
-    // however this may be e.g. a help when debugging code in which this somehow is not the case
-    sal_uInt32                  GetGCStackDepth() const;
-
-    /** Query availability of alpha channel
-
-        @return sal_True, if this device has an alpha channel.
-     */
-    bool                        HasAlpha();
-
-    /// request XCanvas render interface for this OutputDevice
-    css::uno::Reference< css::rendering::XCanvas >
-                                GetCanvas() const;
-
-    css::uno::Reference< css::awt::XGraphics >
-                                CreateUnoGraphics();
-    VCLXGraphicsList_impl*      GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
-    VCLXGraphicsList_impl*      CreateUnoGraphicsList()
-                                    {
-                                        mpUnoGraphicsList = new VCLXGraphicsList_impl();
-                                        return mpUnoGraphicsList;
-                                    }
-
-
-    /** helper method removing transparencies from a metafile (e.g. for printing)
-
-        @returns
-        true: transparencies were removed
-        false: output metafile is unchanged input metafile
-
-        @attention this is a member method, so current state can influence the result !
-        @attention the output metafile is prepared in pixel mode for the currentOutputDevice
-                   state. It can not be moved or rotated reliably anymore.
-    */
-    bool                        RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
-                                                                  long nMaxBmpDPIX, long nMaxBmpDPIY,
-                                                                  bool bReduceTransparency,
-                                                                  bool bTransparencyAutoMode,
-                                                                  bool bDownsampleBitmaps,
-                                                                  const Color& rBackground = Color( COL_TRANSPARENT )
-                                                                );
 };
 
 #endif // INCLUDED_VCL_OUTDEV_HXX
