@@ -46,6 +46,7 @@ $(call gb_Postprocess_Postprocess,AllPackages,All packages,$(WORKDIR)/Package/)
 $(call gb_Postprocess_Postprocess,AllResources,All resources,$(WORKDIR)/AllLangRes/)
 $(call gb_Postprocess_Postprocess,AllUIConfigs,All UI configuration files,$(WORKDIR)/UIConfig/)
 $(call gb_Postprocess_Postprocess,AllModuleTests,All modules' tests,$(WORKDIR)/Module/check/)
+$(call gb_Postprocess_Postprocess,AllModuleSlowtests,All modules' slowtests,$(WORKDIR)/Module/slowcheck/)
 
 endef
 
