@@ -84,7 +84,7 @@ class SVT_DLLPUBLIC SvtToolPanelOptions: public utl::detail::Options
 
         /**
             \attention
-            Don't initialize these static member in these header!
+            Don't initialize these static members in these headers!
             \li Double defined symbols will be detected ...
             \li and unresolved externals exist at linking time.
             Do it in your source only.

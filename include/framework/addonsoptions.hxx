@@ -296,8 +296,8 @@ class FWE_DLLPUBLIC AddonsOptions
 
         /*Attention
 
-            Don't initialize these static member in these header!
-            a) Double dfined symbols will be detected ...
+            Don't initialize these static members in these headers!
+            a) Double defined symbols will be detected ...
             b) and unresolved externals exist at linking time.
             Do it in your source only.
          */

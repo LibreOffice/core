@@ -246,7 +246,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
 
         /*Attention
 
-            Don't initialize these static member in these header!
+            Don't initialize these static members in these headers!
             a) Double defined symbols will be detected ...
             b) and unresolved externals exist at linking time.
             Do it in your source only.
