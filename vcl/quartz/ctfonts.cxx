@@ -97,8 +97,11 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
 
     CTFontDescriptorRef pFontDesc = (CTFontDescriptorRef)mpFontData->GetFontId();
     CTFontRef pNewCTFont = CTFontCreateWithFontDescriptor( pFontDesc, fScaledFontHeight, &aMatrix );
-    CFDictionarySetValue( mpStyleDict, kCTFontAttributeName, pNewCTFont );
-    CFRelease( pNewCTFont);
+    if ( pNewCTFont )
+    {
+        CFDictionarySetValue( mpStyleDict, kCTFontAttributeName, pNewCTFont );
+        //CFRelease( pNewCTFont); // this CFRelease goes to the destructor
+    }
 
 #if 0 // LastResort is implicit in CoreText's font cascading
     const void* aGFBDescriptors[] = { CTFontDescriptorCreateWithNameAndSize( CFSTR("LastResort"), 0) }; // TODO: use the full GFB list
@@ -113,6 +116,8 @@ CoreTextStyle::~CoreTextStyle( void )
 {
     if( mpStyleDict )
         CFRelease( mpStyleDict );
+    //if( pNewCTFont )
+        //CFRelease( pNewCTFont );
 }
 
 void CoreTextStyle::GetFontMetric( ImplFontMetricData& rMetric ) const
