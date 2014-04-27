@@ -2659,7 +2659,7 @@ void SlideshowImpl::resize( const Size& rSize )
 {
     maPresSize = rSize;
 
-    if( mpShowWindow && (ANIMATIONMODE_VIEW != meAnimationMode) )
+    if(mpShowWindow)
     {
         mpShowWindow->SetSizePixel( maPresSize );
         mpShowWindow->Show();

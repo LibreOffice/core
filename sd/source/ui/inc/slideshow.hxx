@@ -72,7 +72,6 @@ class FrameView;
 enum AnimationMode
 {
     ANIMATIONMODE_SHOW,
-    ANIMATIONMODE_VIEW,
     ANIMATIONMODE_PREVIEW
 };
 
