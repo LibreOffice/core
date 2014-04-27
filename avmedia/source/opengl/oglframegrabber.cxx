@@ -15,6 +15,10 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
 
+#include <vcl/opengl/OpenGLHelper.hxx>
+
+#include <boost/scoped_array.hpp>
+
 using namespace com::sun::star;
 
 namespace avmedia { namespace ogl {
@@ -32,26 +36,9 @@ OGLFrameGrabber::~OGLFrameGrabber()
 uno::Reference< css::graphic::XGraphic > SAL_CALL OGLFrameGrabber::grabFrame( double fMediaTime )
         throw ( uno::RuntimeException, std::exception )
 {
-    // TODO: libgltf should provide an RGBA buffer, not just an RGB one. See: OpenGLRender::GetAsBitmap().
-    char* pBuffer = new char[m_pHandle->viewport.width * m_pHandle->viewport.height * 3];
-    gltf_renderer_get_bitmap(m_pHandle, fMediaTime, pBuffer, m_pHandle->viewport.width, m_pHandle->viewport.height);
-    Bitmap aBitmap( Size(m_pHandle->viewport.width, m_pHandle->viewport.height), 24 );
-    {
-        Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
-        size_t nCurPos = 0;
-        for( int y = 0; y < m_pHandle->viewport.height; ++y)
-        {
-            Scanline pScan = pWriteAccess->GetScanline(y);
-            for( int x = 0; x < m_pHandle->viewport.width; ++x )
-            {
-                *pScan++ = pBuffer[nCurPos];
-                *pScan++ = pBuffer[nCurPos+1];
-                *pScan++ = pBuffer[nCurPos+2];
-                nCurPos += 3;
-            }
-        }
-    }
-    delete [] pBuffer;
+    boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[m_pHandle->viewport.width * m_pHandle->viewport.height * 4]);
+    gltf_renderer_get_bitmap(m_pHandle, fMediaTime, (char*)pBuffer.get(), m_pHandle->viewport.width, m_pHandle->viewport.height, GL_BGRA);
+    BitmapEx aBitmap = OpenGLHelper::ConvertBGRABufferToBitmapEx(pBuffer.get(), m_pHandle->viewport.width, m_pHandle->viewport.height);
     return Graphic( aBitmap ).GetXGraphic();
 }
 

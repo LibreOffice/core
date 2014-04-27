@@ -1,0 +1,68 @@
+diff -ur libgltf.org/inc/libgltf.h libgltf/inc/libgltf.h
+--- libgltf.org/inc/libgltf.h	2014-04-27 14:10:06.191988313 +0200
++++ libgltf/inc/libgltf.h	2014-04-27 14:12:03.171983919 +0200
+@@ -47,7 +47,7 @@
+ /** Get a bitmap of the screen in the given point in time. */
+ extern "C"
+ void gltf_renderer_get_bitmap(glTFHandle *handle, double time,
+-    char* buffer, long width, long height);
++    char* buffer, long width, long height, GLenum format);
+ 
+ /** Start playing the glTF animation to the current openGLcontext. */
+ extern "C"
+@@ -80,4 +80,4 @@
+ /** Query where exactly the animation is, in seconds. */
+ extern "C"
+ double gltf_animation_get_time(glTFHandle *handle);
+-#endif
+\ No newline at end of file
++#endif
+diff -ur libgltf.org/src/libgltf.cpp libgltf/src/libgltf.cpp
+--- libgltf.org/src/libgltf.cpp	2014-04-27 14:10:06.192988313 +0200
++++ libgltf/src/libgltf.cpp	2014-04-27 14:12:06.648983788 +0200
+@@ -70,10 +70,10 @@
+    
+ extern "C"
+ void gltf_renderer_get_bitmap(glTFHandle *handle, double time,
+-    char* buffer, long width, long height)
++    char* buffer, long width, long height, GLenum format)
+ {
+     class RenderScene* renderScene = (RenderScene*)handle->renderer;
+-    renderScene->renderToBuffer(&(handle->viewport), (unsigned char*)buffer);
++    renderScene->renderToBuffer(&(handle->viewport), (unsigned char*)buffer, format);
+     return;
+ }
+ 
+diff -ur libgltf.org/src/RenderScene.cpp libgltf/src/RenderScene.cpp
+--- libgltf.org/src/RenderScene.cpp	2014-04-27 14:10:06.192988313 +0200
++++ libgltf/src/RenderScene.cpp	2014-04-27 14:11:03.199986172 +0200
+@@ -630,7 +630,7 @@
+     return pCamera;
+ }
+ 
+-void RenderScene::renderToBuffer(glTFViewport* pViewport, unsigned char * buffer)
++void RenderScene::renderToBuffer(glTFViewport* pViewport, unsigned char * buffer, GLenum format)
+ {
+     createRenderObj(pViewport->width, pViewport->height);
+     createTextureObj(pViewport->width, pViewport->height);
+@@ -647,7 +647,7 @@
+     GLenum fbResult = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+     if( fbResult != GL_FRAMEBUFFER_COMPLETE )
+         result = false;
+-    glReadPixels(0, 0, pViewport->width, pViewport->height, GL_BGR, 
++    glReadPixels(0, 0, pViewport->width, pViewport->height, format, 
+         GL_UNSIGNED_BYTE, buffer);
+     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+     glDeleteFramebuffers(1, &mFBOID);
+diff -ur libgltf.org/src/RenderScene.h libgltf/src/RenderScene.h
+--- libgltf.org/src/RenderScene.h	2014-04-27 14:10:06.192988313 +0200
++++ libgltf/src/RenderScene.h	2014-04-27 14:13:41.291980233 +0200
+@@ -91,7 +91,7 @@
+     void render(void* lpParam);
+     void releaseRender(void* lpParam);
+     CPhysicalCamera* getCamera();
+-    void renderToBuffer(glTFViewport* pViewpoit, unsigned char * buffer);
++    void renderToBuffer(glTFViewport* pViewpoit, unsigned char * buffer, GLenum format);
+     void renderRotateCamera(double horizontal, double vertical,
+         double planar, double time);
+     void renderMoveCamera(double x, double y, double z, double time);
