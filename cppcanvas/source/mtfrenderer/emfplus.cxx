@@ -769,15 +769,29 @@ namespace cppcanvas
             EMFPCustomLineCap *customEndCap;
 
         public:
-            EMFPPen () : EMFPBrush ()
+            EMFPPen ()
+                : EMFPBrush()
+                , width(0.0)
+                , startCap(0)
+                , endCap(0)
+                , lineJoin(0)
+                , mitterLimit(0.0)
+                , dashStyle(0)
+                , dashCap(0)
+                , dashOffset(0.0)
+                , dashPatternLen(0)
+                , dashPattern(NULL)
+                , alignment(0)
+                , compoundArrayLen(0)
+                , compoundArray(NULL)
+                , customStartCapLen(0)
+                , customStartCap(NULL)
+                , customEndCapLen(0)
+                , customEndCap(NULL)
             {
-                dashPattern = NULL;
-                compoundArray = NULL;
-                customStartCap = NULL;
-                customEndCap = NULL;
             }
 
-            virtual ~EMFPPen ()
+            virtual ~EMFPPen()
             {
                 delete[] dashPattern;
                 delete[] compoundArray;
