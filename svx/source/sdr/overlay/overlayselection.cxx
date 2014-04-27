@@ -82,7 +82,7 @@ namespace sdr
                         return  OVERLAY_INVERT;
                     }
 
-                    if(!pOut->supportsOperation(OutDevSupport_TransparentRect))
+                    if(!pOut->SupportsOperation(OutDevSupport_TransparentRect))
                     {
                         // not possible when no fast transparence paint is supported on the system
                         return OVERLAY_INVERT;

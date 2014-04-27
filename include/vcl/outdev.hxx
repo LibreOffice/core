@@ -470,7 +470,7 @@ public:
 
      @returns true if operation supported, else false
     */
-    bool                        supportsOperation( OutDevSupportType ) const;
+    bool                        SupportsOperation( OutDevSupportType ) const;
 
     vcl::PDFWriterImpl*         GetPDFWriter() const { return mpPDFWriter; }
 
@@ -734,7 +734,7 @@ private:
 
     // #i101491#
     // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
-    SAL_DLLPRIVATE bool         TryDrawPolyLineDirectNoAA(
+    SAL_DLLPRIVATE bool         TryDrawPolyLineDirectNoAACheck(
                                     const basegfx::B2DPolygon& rB2DPolygon,
                                     double fLineWidth = 0.0,
                                     double fTransparency = 0.0,
@@ -1342,7 +1342,7 @@ protected:
 
 private:
 
-    SAL_DLLPRIVATE void         DrawAlphaBitmap(
+    SAL_DLLPRIVATE void         DrawDeviceAlphaBitmap(
                                     const Bitmap& rBmp,
                                     const AlphaMask& rAlpha,
                                     const Point& rDestPt,

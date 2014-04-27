@@ -428,7 +428,7 @@ void OutputDevice::Pop()
     mpMetaFile = pOldMetaFile;
 }
 
-bool OutputDevice::supportsOperation( OutDevSupportType eType ) const
+bool OutputDevice::SupportsOperation( OutDevSupportType eType ) const
 {
     if( !mpGraphics )
         if( !AcquireGraphics() )

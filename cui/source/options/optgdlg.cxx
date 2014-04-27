@@ -935,7 +935,7 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
         // check if transparent selection is possible on this system
         const bool bTransparentSelectionPossible(
             !GetSettings().GetStyleSettings().GetHighContrastMode()
-            && supportsOperation(OutDevSupport_TransparentRect));
+            && SupportsOperation(OutDevSupport_TransparentRect));
 
         // enter values
         if(bTransparentSelectionPossible)
