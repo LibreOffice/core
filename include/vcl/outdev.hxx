@@ -468,7 +468,7 @@ public:
 
     /** Query an OutputDevice to see whether it supports a specific operation
 
-    @return true if operation supported, else false
+     @returns true if operation supported, else false
     */
     bool                        supportsOperation( OutDevSupportType ) const;
 
@@ -479,7 +479,7 @@ public:
 
 private:
 
-    void                        ImplRotatePos( long nOriginX, long nOriginY, long& rX, long &rY,
+    SAL_DLLPRIVATE void         ImplRotatePos( long nOriginX, long nOriginY, long& rX, long &rY,
                                                short nOrientation ) const;
     ///@}
 
@@ -528,6 +528,7 @@ private:
     /** @name OutputDevice state functions
      */
     ///@{
+
 public:
 
     void                        Push( sal_uInt16 nFlags = PUSH_ALL );
@@ -889,62 +890,27 @@ private:
     ///@{
 
 public:
-    SystemTextLayoutData        GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
-                                                      sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                                      const sal_Int32* pDXAry = NULL ) const;
 
-    SAL_DLLPRIVATE bool         ImplNewFont() const;
-    SAL_DLLPRIVATE void         ImplInitTextColor();
-    static
-    SAL_DLLPRIVATE void         ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
+    void                        DrawText( const Point& rStartPt, const OUString& rStr,
+                                          sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                          MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
+
+    void                        DrawText( const Rectangle& rRect,
+                                          const OUString& rStr, sal_uInt16 nStyle = 0,
+                                          MetricVector* pVector = NULL, OUString* pDisplayText = NULL,
+                                          ::vcl::ITextLayout* _pTextLayout = NULL );
+
+    void                        ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
                                               const OUString& rOrigStr, sal_uInt16 nStyle,
                                               MetricVector* pVector, OUString* pDisplayText, ::vcl::ITextLayout& _rLayout );
-    SAL_DLLPRIVATE void         ImplDrawTextBackground( const SalLayout& );
-    SAL_DLLPRIVATE void         ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bWordLine, bool bUnderlineAbove );
-    SAL_DLLPRIVATE bool         ImplDrawRotateText( SalLayout& );
-    SAL_DLLPRIVATE bool         ImplDrawTextDirect( SalLayout&, bool bTextLines, sal_uInt32 flags = 0 );
-    SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
-    SAL_DLLPRIVATE void         ImplDrawText( SalLayout& );
-    SAL_DLLPRIVATE Rectangle    ImplGetTextBoundRect( const SalLayout& );
-    SAL_DLLPRIVATE void         ImplDrawTextRect( long nBaseX, long nBaseY, long nX, long nY, long nWidth, long nHeight );
 
-    SAL_DLLPRIVATE void         ImplInitTextLineSize();
-    SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
+    void                        ImplDrawText( SalLayout& );
 
-    SAL_DLLPRIVATE void         ImplDrawWavePixel( long nOriginX, long nOriginY, long nCurX, long nCurY, short nOrientation, SalGraphics* pGraphics, OutputDevice* pOutDev,
-                                                   bool bDrawPixAsRect, long nPixWidth, long nPixHeight );
-    SAL_DLLPRIVATE void         ImplDrawWaveLine( long nBaseX, long nBaseY, long nStartX, long nStartY, long nWidth, long nHeight, long nLineWidth, short nOrientation, const Color& rColor );
-    SAL_DLLPRIVATE void         ImplDrawWaveTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
-    SAL_DLLPRIVATE void         ImplDrawStraightTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
-    SAL_DLLPRIVATE void         ImplDrawStrikeoutLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
-    SAL_DLLPRIVATE void         ImplDrawStrikeoutChar( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
-    SAL_DLLPRIVATE void         ImplDrawTextLine( long nBaseX, long nX, long nY, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bUnderlineAbove );
-    SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
-    SAL_DLLPRIVATE static bool  ImplIsUnderlineAbove( const Font& );
+    void                        ImplDrawTextBackground( const SalLayout& );
 
-    static
-    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
-    SAL_DLLPRIVATE void         ImplInitFontList() const;
-    SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
-    SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
-
-    void                        SetTextColor( const Color& rColor );
-    const Color&                GetTextColor() const { return maTextColor; }
-    void                        SetTextFillColor();
-    void                        SetTextFillColor( const Color& rColor );
-
-    Color                       GetTextFillColor() const;
-    bool                        IsTextFillColor() const { return !maFont.IsTransparent(); }
-    void                        SetTextLineColor();
-    void                        SetTextLineColor( const Color& rColor );
-    const Color&                GetTextLineColor() const { return maTextLineColor; }
-    bool                        IsTextLineColor() const { return (maTextLineColor.GetTransparency() == 0); }
-    void                        SetOverlineColor();
-    void                        SetOverlineColor( const Color& rColor );
-    const Color&                GetOverlineColor() const { return maOverlineColor; }
-    bool                        IsOverlineColor() const { return (maOverlineColor.GetTransparency() == 0); }
-    void                        SetTextAlign( TextAlign eAlign );
-    TextAlign                   GetTextAlign() const { return maFont.GetAlign(); }
+    void                        DrawCtrlText( const Point& rPos, const OUString& rStr,
+                                              sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                              sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC, MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
 
     void                        DrawTextLine( const Point& rPos, long nWidth,
                                               FontStrikeout eStrikeout,
@@ -952,68 +918,24 @@ public:
                                               FontUnderline eOverline,
                                               bool bUnderlineAbove = false );
 
-    void                        DrawText( const Point& rStartPt, const OUString& rStr,
-                                          sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                          MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
-    long                        GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
-    /// Height where any character of the current font fits; in logic coordinates.
-    long                        GetTextHeight() const;
-    float                       approximate_char_width() const;
-    void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                               const sal_Int32* pDXAry = NULL,
-                                               sal_Int32 nIndex = 0,
-                                               sal_Int32 nLen = -1 );
-    long                        GetTextArray( const OUString& rStr, sal_Int32* pDXAry = NULL,
-                                              sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
-    bool                        GetCaretPositions( const OUString&, sal_Int32* pCaretXArray,
-                                              sal_Int32 nIndex, sal_Int32 nLen,
-                                              sal_Int32* pDXAry = NULL, long nWidth = 0,
-                                              bool bCellBreaking = true ) const;
-    void                        DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
-                                                 const OUString& rStr,
-                                                 sal_Int32 nIndex = 0, sal_Int32 nLen = -1 );
-    sal_Int32                   GetTextBreak( const OUString& rStr, long nTextWidth,
-                                              sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                              long nCharExtra = 0 ) const;
-    sal_Int32                   GetTextBreak( const OUString& rStr, long nTextWidth,
-                                              sal_Unicode nExtraChar, sal_Int32& rExtraCharPos,
-                                              sal_Int32 nIndex, sal_Int32 nLen,
-                                              long nCharExtra = 0 ) const;
-    /** Generate MetaTextActions for the text rect
+    void                        ImplDrawTextLine( long nBaseX, long nX, long nY, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bUnderlineAbove );
 
-        This method splits up the text rect into multiple
-        MetaTextActions, one for each line of text. This is comparable
-        to AddGradientActions(), which splits up a gradient into its
-        constituent polygons. Parameter semantics fully compatible to
-        DrawText().
-     */
-    void                        AddTextRectActions( const Rectangle& rRect,
-                                                    const OUString&    rOrigStr,
-                                                    sal_uInt16           nStyle,
-                                                    GDIMetaFile&     rMtf );
-    void                        DrawText( const Rectangle& rRect,
-                                          const OUString& rStr, sal_uInt16 nStyle = 0,
-                                          MetricVector* pVector = NULL, OUString* pDisplayText = NULL,
-                                          ::vcl::ITextLayout* _pTextLayout = NULL );
+    void                        ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bWordLine, bool bUnderlineAbove );
+
+    void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos );
+
+    bool                        ImplDrawRotateText( SalLayout& );
+
     Rectangle                   GetTextRect( const Rectangle& rRect,
                                              const OUString& rStr, sal_uInt16 nStyle = TEXT_DRAW_WORDBREAK,
                                              TextRectInfo* pInfo = NULL,
                                              const ::vcl::ITextLayout* _pTextLayout = NULL ) const;
-    OUString                    GetEllipsisString( const OUString& rStr, long nMaxWidth,
-                                                   sal_uInt16 nStyle = TEXT_DRAW_ENDELLIPSIS ) const;
-    void                        DrawCtrlText( const Point& rPos, const OUString& rStr,
-                                              sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                              sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC, MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
-    long                        GetCtrlTextWidth( const OUString& rStr, sal_Int32 nIndex = 0,
-                                                  sal_Int32 nLen = -1,
-                                                  sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC ) const;
-    static OUString             GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos );
-    static OUString             GetNonMnemonicString( const OUString& rStr )
-                                            { sal_Int32 nDummy; return GetNonMnemonicString( rStr, nDummy ); }
 
     bool                        GetTextBoundRect( Rectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                                   sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+
+    Rectangle                   ImplGetTextBoundRect( const SalLayout& );
 
     bool                        GetTextOutline( PolyPolygon&,
                                                 const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
@@ -1030,7 +952,104 @@ public:
                                                  sal_Int32 nLen = -1, bool bOptimize = true,
                                                  sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
 
-    void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos );
+
+    OUString                    GetEllipsisString( const OUString& rStr, long nMaxWidth,
+                                                   sal_uInt16 nStyle = TEXT_DRAW_ENDELLIPSIS ) const;
+
+    long                        GetCtrlTextWidth( const OUString& rStr, sal_Int32 nIndex = 0,
+                                                  sal_Int32 nLen = -1,
+                                                  sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC ) const;
+
+    static OUString             GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos );
+
+    static OUString             GetNonMnemonicString( const OUString& rStr )
+                                            { sal_Int32 nDummy; return GetNonMnemonicString( rStr, nDummy ); }
+
+    /** Generate MetaTextActions for the text rect
+
+        This method splits up the text rect into multiple
+        MetaTextActions, one for each line of text. This is comparable
+        to AddGradientActions(), which splits up a gradient into its
+        constituent polygons. Parameter semantics fully compatible to
+        DrawText().
+     */
+    void                        AddTextRectActions( const Rectangle& rRect,
+                                                    const OUString&    rOrigStr,
+                                                    sal_uInt16           nStyle,
+                                                    GDIMetaFile&     rMtf );
+
+    void                        SetTextColor( const Color& rColor );
+    const Color&                GetTextColor() const { return maTextColor; }
+
+    void                        SetTextFillColor();
+    void                        SetTextFillColor( const Color& rColor );
+    Color                       GetTextFillColor() const;
+    bool                        IsTextFillColor() const { return !maFont.IsTransparent(); }
+
+    void                        SetTextLineColor();
+    void                        SetTextLineColor( const Color& rColor );
+    const Color&                GetTextLineColor() const { return maTextLineColor; }
+    bool                        IsTextLineColor() const { return (maTextLineColor.GetTransparency() == 0); }
+
+    void                        SetOverlineColor();
+    void                        SetOverlineColor( const Color& rColor );
+    const Color&                GetOverlineColor() const { return maOverlineColor; }
+    bool                        IsOverlineColor() const { return (maOverlineColor.GetTransparency() == 0); }
+
+    void                        SetTextAlign( TextAlign eAlign );
+    TextAlign                   GetTextAlign() const { return maFont.GetAlign(); }
+
+    long                        GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
+    /// Height where any character of the current font fits; in logic coordinates.
+    long                        GetTextHeight() const;
+    float                       approximate_char_width() const;
+
+    void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
+                                               const sal_Int32* pDXAry = NULL,
+                                               sal_Int32 nIndex = 0,
+                                               sal_Int32 nLen = -1 );
+    long                        GetTextArray( const OUString& rStr, sal_Int32* pDXAry = NULL,
+                                              sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
+
+    bool                        GetCaretPositions( const OUString&, sal_Int32* pCaretXArray,
+                                              sal_Int32 nIndex, sal_Int32 nLen,
+                                              sal_Int32* pDXAry = NULL, long nWidth = 0,
+                                              bool bCellBreaking = true ) const;
+    void                        DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
+                                                 const OUString& rStr,
+                                                 sal_Int32 nIndex = 0, sal_Int32 nLen = -1 );
+    sal_Int32                   GetTextBreak( const OUString& rStr, long nTextWidth,
+                                              sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                              long nCharExtra = 0 ) const;
+    sal_Int32                   GetTextBreak( const OUString& rStr, long nTextWidth,
+                                              sal_Unicode nExtraChar, sal_Int32& rExtraCharPos,
+                                              sal_Int32 nIndex, sal_Int32 nLen,
+                                              long nCharExtra = 0 ) const;
+
+private:
+    SAL_DLLPRIVATE void         ImplInitTextColor();
+
+    SAL_DLLPRIVATE void         ImplInitTextLineSize();
+    SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
+
+
+    SAL_DLLPRIVATE bool         ImplDrawTextDirect( SalLayout&, bool bTextLines, sal_uInt32 flags = 0 );
+    SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
+    SAL_DLLPRIVATE void         ImplDrawTextRect( long nBaseX, long nBaseY, long nX, long nY, long nWidth, long nHeight );
+
+    SAL_DLLPRIVATE void         ImplDrawWavePixel( long nOriginX, long nOriginY, long nCurX, long nCurY, short nOrientation, SalGraphics* pGraphics, OutputDevice* pOutDev,
+                                                   bool bDrawPixAsRect, long nPixWidth, long nPixHeight );
+    SAL_DLLPRIVATE void         ImplDrawWaveLine( long nBaseX, long nBaseY, long nStartX, long nStartY, long nWidth, long nHeight, long nLineWidth, short nOrientation, const Color& rColor );
+    SAL_DLLPRIVATE void         ImplDrawWaveTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
+    SAL_DLLPRIVATE void         ImplDrawStraightTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
+    SAL_DLLPRIVATE void         ImplDrawStrikeoutLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
+    SAL_DLLPRIVATE void         ImplDrawStrikeoutChar( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
+    SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
+
+    SAL_DLLPRIVATE static bool  ImplIsUnderlineAbove( const Font& );
+
+    static
+    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
     ///@}
 
 
@@ -1099,6 +1118,10 @@ public:
                                                 sal_uLong nFlags,
                                                 const OutputDevice* pOutDev = NULL );
 
+    SAL_DLLPRIVATE void         ImplInitFontList() const;
+    SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
+    SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
+
 protected:
 
     virtual void                InitFont() const;
@@ -1110,6 +1133,8 @@ protected:
 private:
 
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
+
+    SAL_DLLPRIVATE bool         ImplNewFont() const;
 
     SAL_DLLPRIVATE void         ImplClearFontData( bool bNewFontLists );
     SAL_DLLPRIVATE void         ImplRefreshFontData( bool bNewFontLists );
@@ -1129,6 +1154,10 @@ private:
     ///@{
 
 public:
+
+    SystemTextLayoutData        GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
+                                                      sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                                      const sal_Int32* pDXAry = NULL ) const;
 
     SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
     SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;

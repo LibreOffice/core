@@ -101,98 +101,26 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/app/brand \
-    vcl/source/app/dbggui \
-    vcl/source/app/dndhelp \
-    vcl/source/app/help \
-    vcl/source/app/i18nhelp \
-    vcl/source/app/idlemgr \
-    vcl/source/app/salvtables \
-    vcl/source/app/session \
-    vcl/source/app/settings \
-    vcl/source/app/IconThemeInfo \
-    vcl/source/app/IconThemeScanner \
-    vcl/source/app/IconThemeSelector \
-    vcl/source/app/sound \
-    vcl/source/app/stdtext \
-    vcl/source/app/svapp \
-    vcl/source/app/svdata \
-    vcl/source/app/svmain \
-    vcl/source/app/svmainhook \
-    vcl/source/app/timer \
-    vcl/source/app/unohelp2 \
-    vcl/source/app/unohelp \
-    vcl/source/app/vclevent \
-    vcl/source/components/dtranscomp \
-    vcl/source/components/factory \
-    vcl/source/components/fontident \
-    vcl/source/control/button \
-    vcl/source/control/combobox \
-    vcl/source/control/ctrl \
-    vcl/source/control/edit \
-    vcl/source/control/field2 \
-    vcl/source/control/field \
-    vcl/source/control/fixed \
-    vcl/source/control/fixedhyper \
-    vcl/source/control/group \
-    vcl/source/control/ilstbox \
-    vcl/source/control/imgctrl \
-    vcl/source/control/longcurr \
-    vcl/source/control/lstbox \
-    vcl/source/control/menubtn \
-    vcl/source/control/morebtn \
-    vcl/source/control/quickselectionengine \
-    vcl/source/control/prgsbar \
-    vcl/source/control/scrbar \
-    vcl/source/control/slider \
-    vcl/source/control/spinbtn \
-    vcl/source/control/spinfld \
-    vcl/source/control/tabctrl \
-    vcl/source/control/throbber \
-    vcl/source/edit/vclmedit \
-    vcl/source/edit/textdata \
-    vcl/source/edit/textdoc \
-    vcl/source/edit/texteng \
-    vcl/source/edit/textundo \
-    vcl/source/edit/textview \
-    vcl/source/edit/txtattr \
-    vcl/source/edit/xtextedt \
-    vcl/source/filter/FilterConfigCache \
-    vcl/source/filter/FilterConfigItem \
-    vcl/source/filter/graphicfilter \
-    vcl/source/filter/graphicfilter2 \
-    vcl/source/filter/GraphicNativeTransform \
-    vcl/source/filter/GraphicNativeMetadata \
-    vcl/source/filter/sgfbram \
-    vcl/source/filter/sgvmain \
-    vcl/source/filter/sgvspln \
-    vcl/source/filter/sgvtext \
-    vcl/source/filter/igif/decode \
-    vcl/source/filter/igif/gifread \
-    vcl/source/filter/ixbm/xbmread \
-    vcl/source/filter/ixpm/xpmread \
-    vcl/source/filter/jpeg/Exif \
-    vcl/source/filter/jpeg/jpeg \
-    vcl/source/filter/jpeg/jpegc \
-    vcl/source/filter/jpeg/JpegReader \
-    vcl/source/filter/jpeg/JpegWriter \
-    vcl/source/filter/jpeg/JpegTransform \
-    vcl/source/filter/wmf/emfwr \
-    vcl/source/filter/wmf/enhwmf \
-    vcl/source/filter/wmf/winmtf \
-    vcl/source/filter/wmf/winwmf \
-    vcl/source/filter/wmf/wmf \
-    vcl/source/filter/wmf/wmfwr \
-    vcl/source/font/PhysicalFontCollection \
-    vcl/source/font/PhysicalFontFace \
-    vcl/source/font/PhysicalFontFamily \
-    vcl/source/fontsubset/cff \
-    vcl/source/fontsubset/fontsubset \
-    vcl/source/fontsubset/gsub \
-    vcl/source/fontsubset/list \
-    vcl/source/fontsubset/sft \
-    vcl/source/fontsubset/ttcr \
-    vcl/source/fontsubset/xlat \
+    vcl/source/outdev/outdev \
+    vcl/source/outdev/outdevstate \
+    vcl/source/outdev/clipping \
+    vcl/source/outdev/polygon \
+    vcl/source/outdev/transparent \
+    vcl/source/outdev/mask \
+    vcl/source/outdev/bitmap \
+    vcl/source/outdev/font \
+    vcl/source/outdev/text \
+    vcl/source/outdev/textline \
+    vcl/source/outdev/pixel \
+    vcl/source/outdev/rect \
+    vcl/source/outdev/line \
+    vcl/source/outdev/polyline \
+    vcl/source/outdev/hatch \
+    vcl/source/outdev/gradient \
+    vcl/source/outdev/curvedshapes \
+    vcl/source/outdev/wallpaper \
+    vcl/source/outdev/nativecontrols \
+    vcl/source/outdev/map \
     vcl/source/gdi/alpha \
     vcl/source/gdi/animate \
     vcl/source/gdi/base14 \
@@ -234,26 +162,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/metric \
     vcl/source/gdi/octree \
     vcl/source/gdi/oldprintadaptor \
-    vcl/source/outdev/outdev \
-    vcl/source/outdev/outdevstate \
-    vcl/source/outdev/clipping \
-    vcl/source/outdev/polygon \
-    vcl/source/outdev/transparent \
-    vcl/source/outdev/mask \
-    vcl/source/outdev/bitmap \
-    vcl/source/outdev/font \
-    vcl/source/outdev/text \
-    vcl/source/outdev/textline \
-    vcl/source/outdev/pixel \
-    vcl/source/outdev/rect \
-    vcl/source/outdev/line \
-    vcl/source/outdev/polyline \
-    vcl/source/outdev/hatch \
-    vcl/source/outdev/gradient \
-    vcl/source/outdev/curvedshapes \
-    vcl/source/outdev/wallpaper \
-    vcl/source/outdev/nativecontrols \
-    vcl/source/outdev/map \
     vcl/source/gdi/pdfextoutdevdata \
     vcl/source/gdi/pdffontcache \
     vcl/source/gdi/pdfwriter \
@@ -275,13 +183,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/textlayout \
     vcl/source/gdi/virdev \
     vcl/source/gdi/wall \
-    vcl/source/helper/canvasbitmap \
-    vcl/source/helper/canvastools \
-    vcl/source/helper/evntpost \
-    vcl/source/helper/lazydelete \
-    vcl/source/helper/strhelper \
-    vcl/source/helper/threadex \
-    vcl/source/helper/xconnection \
     vcl/source/window/abstdlg \
     vcl/source/window/accel \
     vcl/source/window/accmgr \
@@ -327,6 +228,105 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/window \
     vcl/source/window/winproc \
     vcl/source/window/wrkwin \
+    vcl/source/control/button \
+    vcl/source/control/combobox \
+    vcl/source/control/ctrl \
+    vcl/source/control/edit \
+    vcl/source/control/field2 \
+    vcl/source/control/field \
+    vcl/source/control/fixed \
+    vcl/source/control/fixedhyper \
+    vcl/source/control/group \
+    vcl/source/control/ilstbox \
+    vcl/source/control/imgctrl \
+    vcl/source/control/longcurr \
+    vcl/source/control/lstbox \
+    vcl/source/control/menubtn \
+    vcl/source/control/morebtn \
+    vcl/source/control/quickselectionengine \
+    vcl/source/control/prgsbar \
+    vcl/source/control/scrbar \
+    vcl/source/control/slider \
+    vcl/source/control/spinbtn \
+    vcl/source/control/spinfld \
+    vcl/source/control/tabctrl \
+    vcl/source/control/throbber \
+    vcl/source/edit/vclmedit \
+    vcl/source/edit/textdata \
+    vcl/source/edit/textdoc \
+    vcl/source/edit/texteng \
+    vcl/source/edit/textundo \
+    vcl/source/edit/textview \
+    vcl/source/edit/txtattr \
+    vcl/source/edit/xtextedt \
+    vcl/source/helper/canvasbitmap \
+    vcl/source/helper/canvastools \
+    vcl/source/helper/evntpost \
+    vcl/source/helper/lazydelete \
+    vcl/source/helper/strhelper \
+    vcl/source/helper/threadex \
+    vcl/source/helper/xconnection \
+    vcl/source/app/brand \
+    vcl/source/app/dbggui \
+    vcl/source/app/dndhelp \
+    vcl/source/app/help \
+    vcl/source/app/i18nhelp \
+    vcl/source/app/idlemgr \
+    vcl/source/app/salvtables \
+    vcl/source/app/session \
+    vcl/source/app/settings \
+    vcl/source/app/IconThemeInfo \
+    vcl/source/app/IconThemeScanner \
+    vcl/source/app/IconThemeSelector \
+    vcl/source/app/sound \
+    vcl/source/app/stdtext \
+    vcl/source/app/svapp \
+    vcl/source/app/svdata \
+    vcl/source/app/svmain \
+    vcl/source/app/svmainhook \
+    vcl/source/app/timer \
+    vcl/source/app/unohelp2 \
+    vcl/source/app/unohelp \
+    vcl/source/app/vclevent \
+    vcl/source/components/dtranscomp \
+    vcl/source/components/factory \
+    vcl/source/components/fontident \
+    vcl/source/filter/FilterConfigCache \
+    vcl/source/filter/FilterConfigItem \
+    vcl/source/filter/graphicfilter \
+    vcl/source/filter/graphicfilter2 \
+    vcl/source/filter/GraphicNativeTransform \
+    vcl/source/filter/GraphicNativeMetadata \
+    vcl/source/filter/sgfbram \
+    vcl/source/filter/sgvmain \
+    vcl/source/filter/sgvspln \
+    vcl/source/filter/sgvtext \
+    vcl/source/filter/igif/decode \
+    vcl/source/filter/igif/gifread \
+    vcl/source/filter/ixbm/xbmread \
+    vcl/source/filter/ixpm/xpmread \
+    vcl/source/filter/jpeg/Exif \
+    vcl/source/filter/jpeg/jpeg \
+    vcl/source/filter/jpeg/jpegc \
+    vcl/source/filter/jpeg/JpegReader \
+    vcl/source/filter/jpeg/JpegWriter \
+    vcl/source/filter/jpeg/JpegTransform \
+    vcl/source/filter/wmf/emfwr \
+    vcl/source/filter/wmf/enhwmf \
+    vcl/source/filter/wmf/winmtf \
+    vcl/source/filter/wmf/winwmf \
+    vcl/source/filter/wmf/wmf \
+    vcl/source/filter/wmf/wmfwr \
+    vcl/source/font/PhysicalFontCollection \
+    vcl/source/font/PhysicalFontFace \
+    vcl/source/font/PhysicalFontFamily \
+    vcl/source/fontsubset/cff \
+    vcl/source/fontsubset/fontsubset \
+    vcl/source/fontsubset/gsub \
+    vcl/source/fontsubset/list \
+    vcl/source/fontsubset/sft \
+    vcl/source/fontsubset/ttcr \
+    vcl/source/fontsubset/xlat \
 ))
 
 $(eval $(call gb_Library_add_cobjects,vcl,\
