@@ -361,6 +361,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         if( pOwnData->GetDocShell() && pOwnData->IsPageTransferable() && ISA( View ) )
         {
             mpClipboard->HandlePageDrop (*pOwnData);
+            bReturn = true;
         }
         else if( pSourceView )
         {
@@ -1347,6 +1348,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 // add text color
                 pPickObj->SetMergedItemSetAndBroadcast( aSet );
             }
+            bReturn = true;
         }
     }
 
