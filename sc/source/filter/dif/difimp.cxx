@@ -32,6 +32,7 @@
 #include "scerrors.hxx"
 #include "scitems.hxx"
 #include "stringutil.hxx"
+#include <boost/scoped_ptr.hpp>
 
 const sal_Unicode pKeyTABLE[]   = { 'T', 'A', 'B', 'L', 'E', 0 };
 const sal_Unicode pKeyVECTORS[] = { 'V', 'E', 'C', 'T', 'O', 'R', 'S', 0 };
@@ -951,7 +952,7 @@ void DifAttrCache::Apply( ScDocument& rDoc, SCTAB nTab )
 {
     if( bPlain )
     {
-        ScPatternAttr*  pPatt = NULL;
+        boost::scoped_ptr<ScPatternAttr> pPatt;
 
         for( SCCOL nCol = 0 ; nCol <= MAXCOL ; nCol++ )
         {
@@ -959,7 +960,7 @@ void DifAttrCache::Apply( ScDocument& rDoc, SCTAB nTab )
             {
                 if( !pPatt )
                 {
-                    pPatt = new ScPatternAttr( rDoc.GetPool() );
+                    pPatt.reset(new ScPatternAttr( rDoc.GetPool() ));
                     pPatt->GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT,
                         rDoc.GetFormatTable()->GetStandardFormat( NUMBERFORMAT_LOGICAL ) ) );
                 }
@@ -967,9 +968,6 @@ void DifAttrCache::Apply( ScDocument& rDoc, SCTAB nTab )
                 ppCols[ nCol ]->Apply( rDoc, nCol, nTab, *pPatt );
             }
         }
-
-        if( pPatt )
-            delete pPatt;
     }
     else
     {

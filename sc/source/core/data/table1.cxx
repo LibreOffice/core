@@ -53,6 +53,7 @@
 #include "formula/vectortoken.hxx"
 
 #include <vector>
+#include <boost/scoped_array.hpp>
 
 using ::std::vector;
 
@@ -1299,7 +1300,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
 
         if ( !ValidNextPos(nCol, nRow, rMark, bMarked, bUnprotected) )
         {
-            SCsROW* pNextRows = new SCsROW[MAXCOL+1];
+            boost::scoped_array<SCsROW> pNextRows(new SCsROW[MAXCOL+1]);
             SCCOL i;
 
             if ( nMovX > 0 )                            //  vorwaerts
@@ -1368,8 +1369,6 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
                 }
                 while ( !ValidNextPos(nCol, nRow, rMark, bMarked, bUnprotected) );
             }
-
-            delete[] pNextRows;
         }
     }
 

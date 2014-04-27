@@ -72,6 +72,7 @@
 #include <basic/basmgr.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <memory>
+#include <boost/scoped_array.hpp>
 
 using namespace com::sun::star;
 using namespace formula;
@@ -2635,12 +2636,11 @@ void ScInterpreter::ScExternal()
                         break;
                         case PTR_STRING :
                         {
-                            sal_Char* pcErg = new sal_Char[ADDIN_MAXSTRLEN];
-                            ppParam[0] = pcErg;
+                            boost::scoped_array<sal_Char> pcErg(new sal_Char[ADDIN_MAXSTRLEN]);
+                            ppParam[0] = pcErg.get();
                             pFuncData->Call(ppParam);
-                            OUString aUni( pcErg, strlen(pcErg), osl_getThreadTextEncoding() );
+                            OUString aUni( pcErg.get(), strlen(pcErg.get()), osl_getThreadTextEncoding() );
                             PushString( aUni );
-                            delete[] pcErg;
                         }
                         break;
                         default:

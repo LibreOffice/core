@@ -43,6 +43,7 @@
 #include <sfx2/app.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <boost/scoped_ptr.hpp>
 
 IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionCellListEntry )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionLinkEntry )
@@ -1822,9 +1823,8 @@ void ScChangeActionContent::GetFormulaString(
     else
     {
         OSL_FAIL( "ScChangeActionContent::GetFormulaString: aPos != pCell->aPos" );
-        ScFormulaCell* pNew = new ScFormulaCell( *pCell, *pCell->GetDocument(), aPos );
+        boost::scoped_ptr<ScFormulaCell> pNew(new ScFormulaCell( *pCell, *pCell->GetDocument(), aPos ));
         pNew->GetFormula( rStr );
-        delete pNew;
     }
 }
 
@@ -4188,15 +4188,13 @@ bool ScChangeTrack::Reject( ScChangeAction* pAct, bool bShared )
     if ( !pAct->IsRejectable() )
         return false;
 
-    ScChangeActionMap* pMap = NULL;
+    boost::scoped_ptr<ScChangeActionMap> pMap;
     if ( pAct->HasDependent() )
     {
-        pMap = new ScChangeActionMap;
+        pMap.reset(new ScChangeActionMap);
         GetDependents( pAct, *pMap, false, true );
     }
-    bool bRejected = Reject( pAct, pMap, false );
-    if ( pMap )
-        delete pMap;
+    bool bRejected = Reject( pAct, pMap.get(), false );
     return bRejected;
 }
 
