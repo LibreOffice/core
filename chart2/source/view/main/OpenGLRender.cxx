@@ -10,7 +10,6 @@
 #include <GL/glew.h>
 #include <vector>
 #include "OpenGLRender.hxx"
-#include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -200,31 +199,7 @@ BitmapEx OpenGLRender::GetAsBitmap()
     boost::scoped_array<sal_uInt8> buf(new sal_uInt8[m_iWidth * m_iHeight * 4]);
     glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGRA, GL_UNSIGNED_BYTE, buf.get());
 
-    Bitmap aBitmap( Size(m_iWidth, m_iHeight), 24 );
-    AlphaMask aAlpha( Size(m_iWidth, m_iHeight) );
-
-    {
-        Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
-        AlphaMask::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
-
-        size_t nCurPos = 0;
-        for( int y = 0; y < m_iHeight; ++y)
-        {
-            Scanline pScan = pWriteAccess->GetScanline(y);
-            Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
-            for( int x = 0; x < m_iWidth; ++x )
-            {
-                *pScan++ = buf[nCurPos];
-                *pScan++ = buf[nCurPos+1];
-                *pScan++ = buf[nCurPos+2];
-
-                nCurPos += 3;
-                *pAlphaScan++ = static_cast<sal_uInt8>( 255 - buf[nCurPos++] );
-            }
-        }
-    }
-
-    BitmapEx aBmp(aBitmap, aAlpha);
+    BitmapEx aBmp = OpenGLHelper::ConvertBGRABufferToBitmapEx(buf.get(), m_iWidth, m_iHeight);
 
 #if DEBUG_PNG // debug PNG writing
     static int nIdx = 0;

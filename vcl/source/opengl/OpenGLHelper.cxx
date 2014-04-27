@@ -168,4 +168,33 @@ sal_uInt8* OpenGLHelper::ConvertBitmapExToRGBABuffer(const BitmapEx& rBitmapEx)
     return pBitmapBuf;
 }
 
+BitmapEx OpenGLHelper::ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight)
+{
+    assert(pBuffer);
+    Bitmap aBitmap( Size(nWidth, nHeight), 24 );
+    AlphaMask aAlpha( Size(nWidth, nHeight) );
+
+    {
+        Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+        AlphaMask::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
+
+        size_t nCurPos = 0;
+        for( int y = 0; y < nHeight; ++y)
+        {
+            Scanline pScan = pWriteAccess->GetScanline(y);
+            Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
+            for( int x = 0; x < nWidth; ++x )
+            {
+                *pScan++ = pBuffer[nCurPos];
+                *pScan++ = pBuffer[nCurPos+1];
+                *pScan++ = pBuffer[nCurPos+2];
+
+                nCurPos += 3;
+                *pAlphaScan++ = static_cast<sal_uInt8>( 255 - pBuffer[nCurPos++] );
+            }
+        }
+    }
+    return BitmapEx(aBitmap, aAlpha);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

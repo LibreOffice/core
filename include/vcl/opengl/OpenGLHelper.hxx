@@ -22,6 +22,7 @@ public:
     static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
 
     static sal_uInt8* ConvertBitmapExToRGBABuffer(const BitmapEx& rBitmapEx);
+    static BitmapEx ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight);
 };
 
 #endif
