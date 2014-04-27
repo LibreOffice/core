@@ -327,6 +327,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	sot \
 	spell \
 	$(if $(ENABLE_HEADLESS),,spl) \
+	storagefd \
 	$(if $(DISABLE_SCRIPTING),,stringresource) \
 	svgio \
 	svl \

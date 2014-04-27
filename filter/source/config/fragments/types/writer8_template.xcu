@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
     <node oor:name="writer8_template" oor:op="replace">
-        <prop oor:name="DetectService"><value>com.sun.star.text.FormatDetector</value></prop>
+        <prop oor:name="DetectService"><value>com.sun.star.comp.filters.StorageFilterDetect</value></prop>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>ott</value></prop>
         <prop oor:name="MediaType"><value>application/vnd.oasis.opendocument.text-template</value></prop>

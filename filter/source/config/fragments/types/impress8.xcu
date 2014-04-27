@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
     <node oor:name="impress8" oor:op="replace">
-        <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
+        <prop oor:name="DetectService"><value>com.sun.star.comp.filters.StorageFilterDetect</value></prop>
         <prop oor:name="URLPattern"><value>private:factory/simpress*</value></prop>
         <prop oor:name="Extensions"><value>odp</value></prop>
         <prop oor:name="MediaType"><value>application/vnd.oasis.opendocument.presentation</value></prop>
