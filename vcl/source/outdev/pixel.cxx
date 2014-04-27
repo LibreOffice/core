@@ -16,16 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <sal/types.h>
 
+#include <boost/scoped_array.hpp>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 
-#include <salgdi.hxx>
-
-#include <outdata.hxx>
-
-#include <boost/scoped_array.hpp>
+#include "outdata.hxx"
+#include "salgdi.hxx"
 
 extern const sal_uLong nVCLRLut[ 6 ];
 extern const sal_uLong nVCLGLut[ 6 ];
@@ -45,9 +44,9 @@ Color OutputDevice::GetPixel( const Point& rPt ) const
 
         if ( !mbOutputClipped )
         {
-            const long      nX = ImplLogicXToDevicePixel( rPt.X() );
-            const long      nY = ImplLogicYToDevicePixel( rPt.Y() );
-            const SalColor  aSalCol = mpGraphics->GetPixel( nX, nY, this );
+            const long nX = ImplLogicXToDevicePixel( rPt.X() );
+            const long nY = ImplLogicYToDevicePixel( rPt.Y() );
+            const SalColor aSalCol = mpGraphics->GetPixel( nX, nY, this );
             aColor.SetRed( SALCOLOR_RED( aSalCol ) );
             aColor.SetGreen( SALCOLOR_GREEN( aSalCol ) );
             aColor.SetBlue( SALCOLOR_BLUE( aSalCol ) );
@@ -67,14 +66,12 @@ void OutputDevice::DrawPixel( const Point& rPt )
 
     Point aPt = ImplLogicToDevicePixel( rPt );
 
-    if ( !mpGraphics )
-    {
-        if ( !AcquireGraphics() )
-            return;
-    }
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
 
     if ( mbInitClipRegion )
         InitClipRegion();
+
     if ( mbOutputClipped )
         return;
 
@@ -100,14 +97,12 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
 
     Point aPt = ImplLogicToDevicePixel( rPt );
 
-    if ( !mpGraphics )
-    {
-        if ( !AcquireGraphics() )
-            return;
-    }
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
 
     if ( mbInitClipRegion )
         InitClipRegion();
+
     if ( mbOutputClipped )
         return;
 
@@ -120,7 +115,9 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
 void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
 {
     if ( !pColors )
+    {
         DrawPixel( rPts, GetLineColor() );
+    }
     else
     {
         DBG_ASSERT( pColors, "OutputDevice::DrawPixel: No color array specified" );
@@ -130,9 +127,12 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
         if ( nSize )
         {
             if ( mpMetaFile )
+            {
                 for ( sal_uInt16 i = 0; i < nSize; i++ )
+                {
                     mpMetaFile->AddAction( new MetaPixelAction( rPts[ i ], pColors[ i ] ) );
-
+                }
+            }
             if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
                 return;
 
@@ -161,12 +161,13 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color& rColor )
 {
     if( rColor != COL_TRANSPARENT && ! ImplIsRecordLayout() )
     {
-        const sal_uInt16    nSize = rPts.GetSize();
+        const sal_uInt16 nSize = rPts.GetSize();
         boost::scoped_array<Color> pColArray(new Color[ nSize ]);
 
         for( sal_uInt16 i = 0; i < nSize; i++ )
+        {
             pColArray[ i ] = rColor;
-
+        }
         DrawPixel( rPts, pColArray.get() );
     }
 

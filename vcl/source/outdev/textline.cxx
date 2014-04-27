@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <sal/types.h>
 
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
@@ -32,12 +33,6 @@
 #include "graphite_features.hxx"
 #endif
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::rtl;
-using namespace ::vcl;
-using namespace ::utl;
-
 #define UNDERLINE_LAST      UNDERLINE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X
 
@@ -46,11 +41,12 @@ bool OutputDevice::ImplIsUnderlineAbove( const Font& rFont )
     if ( !rFont.IsVertical() )
         return false;
 
-    if( (LANGUAGE_JAPANESE == rFont.GetLanguage())
-    ||  (LANGUAGE_JAPANESE == rFont.GetCJKContextLanguage()) )
+    if( (LANGUAGE_JAPANESE == rFont.GetLanguage()) ||
+        (LANGUAGE_JAPANESE == rFont.GetCJKContextLanguage()) )
+    {
         // the underline is right for Japanese only
         return true;
-
+    }
     return false;
 }
 
@@ -70,7 +66,6 @@ static void ImplDrawWavePixel( long nOriginX, long nOriginY,
                                SalGraphics* pGraphics,
                                OutputDevice* pOutDev,
                                bool bDrawPixAsRect,
-
                                long nPixWidth, long nPixHeight )
 {
     if ( nOrientation )
@@ -205,7 +200,6 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
                 }
             }
         }
-
     }
 }
 
@@ -231,13 +225,17 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
     }
     if ( (eTextLine == UNDERLINE_SMALLWAVE) && (nLineHeight > 3) )
         nLineHeight = 3;
-    long nLineWidth = (mnDPIX/300);
+
+    long nLineWidth = (mnDPIX / 300);
     if ( !nLineWidth )
         nLineWidth = 1;
+
     if ( eTextLine == UNDERLINE_BOLDWAVE )
         nLineWidth *= 2;
+
     nLinePos += nDistY - (nLineHeight / 2);
-    long nLineWidthHeight = ((nLineWidth*mnDPIX)+(mnDPIY/2))/mnDPIY;
+
+    long nLineWidthHeight = ((nLineWidth * mnDPIX) + (mnDPIY / 2)) / mnDPIY;
     if ( eTextLine == UNDERLINE_DOUBLEWAVE )
     {
         long nOrgLineHeight = nLineHeight;
@@ -249,9 +247,11 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
             else
                 nLineHeight = 1;
         }
+
         long nLineDY = nOrgLineHeight-(nLineHeight*2);
         if ( nLineDY < nLineWidthHeight )
             nLineDY = nLineWidthHeight;
+
         long nLineDY2 = nLineDY/2;
         if ( !nLineDY2 )
             nLineDY2 = 1;
@@ -289,56 +289,56 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
 
     switch ( eTextLine )
     {
-        case UNDERLINE_SINGLE:
-        case UNDERLINE_DOTTED:
-        case UNDERLINE_DASH:
-        case UNDERLINE_LONGDASH:
-        case UNDERLINE_DASHDOT:
-        case UNDERLINE_DASHDOTDOT:
-            if ( bIsAbove )
-            {
-                nLineHeight = pFontEntry->maMetric.mnAboveUnderlineSize;
-                nLinePos    = nY + pFontEntry->maMetric.mnAboveUnderlineOffset;
-            }
-            else
-            {
-                nLineHeight = pFontEntry->maMetric.mnUnderlineSize;
-                nLinePos    = nY + pFontEntry->maMetric.mnUnderlineOffset;
-            }
-            break;
-        case UNDERLINE_BOLD:
-        case UNDERLINE_BOLDDOTTED:
-        case UNDERLINE_BOLDDASH:
-        case UNDERLINE_BOLDLONGDASH:
-        case UNDERLINE_BOLDDASHDOT:
-        case UNDERLINE_BOLDDASHDOTDOT:
-            if ( bIsAbove )
-            {
-                nLineHeight = pFontEntry->maMetric.mnAboveBUnderlineSize;
-                nLinePos    = nY + pFontEntry->maMetric.mnAboveBUnderlineOffset;
-            }
-            else
-            {
-                nLineHeight = pFontEntry->maMetric.mnBUnderlineSize;
-                nLinePos    = nY + pFontEntry->maMetric.mnBUnderlineOffset;
-            }
-            break;
-        case UNDERLINE_DOUBLE:
-            if ( bIsAbove )
-            {
-                nLineHeight = pFontEntry->maMetric.mnAboveDUnderlineSize;
-                nLinePos    = nY + pFontEntry->maMetric.mnAboveDUnderlineOffset1;
-                nLinePos2   = nY + pFontEntry->maMetric.mnAboveDUnderlineOffset2;
-            }
-            else
-            {
-                nLineHeight = pFontEntry->maMetric.mnDUnderlineSize;
-                nLinePos    = nY + pFontEntry->maMetric.mnDUnderlineOffset1;
-                nLinePos2   = nY + pFontEntry->maMetric.mnDUnderlineOffset2;
-            }
-            break;
-        default:
-            break;
+    case UNDERLINE_SINGLE:
+    case UNDERLINE_DOTTED:
+    case UNDERLINE_DASH:
+    case UNDERLINE_LONGDASH:
+    case UNDERLINE_DASHDOT:
+    case UNDERLINE_DASHDOTDOT:
+        if ( bIsAbove )
+        {
+            nLineHeight = pFontEntry->maMetric.mnAboveUnderlineSize;
+            nLinePos    = nY + pFontEntry->maMetric.mnAboveUnderlineOffset;
+        }
+        else
+        {
+            nLineHeight = pFontEntry->maMetric.mnUnderlineSize;
+            nLinePos    = nY + pFontEntry->maMetric.mnUnderlineOffset;
+        }
+        break;
+    case UNDERLINE_BOLD:
+    case UNDERLINE_BOLDDOTTED:
+    case UNDERLINE_BOLDDASH:
+    case UNDERLINE_BOLDLONGDASH:
+    case UNDERLINE_BOLDDASHDOT:
+    case UNDERLINE_BOLDDASHDOTDOT:
+        if ( bIsAbove )
+        {
+            nLineHeight = pFontEntry->maMetric.mnAboveBUnderlineSize;
+            nLinePos    = nY + pFontEntry->maMetric.mnAboveBUnderlineOffset;
+        }
+        else
+        {
+            nLineHeight = pFontEntry->maMetric.mnBUnderlineSize;
+            nLinePos    = nY + pFontEntry->maMetric.mnBUnderlineOffset;
+        }
+        break;
+    case UNDERLINE_DOUBLE:
+        if ( bIsAbove )
+        {
+            nLineHeight = pFontEntry->maMetric.mnAboveDUnderlineSize;
+            nLinePos    = nY + pFontEntry->maMetric.mnAboveDUnderlineOffset1;
+            nLinePos2   = nY + pFontEntry->maMetric.mnAboveDUnderlineOffset2;
+        }
+        else
+        {
+            nLineHeight = pFontEntry->maMetric.mnDUnderlineSize;
+            nLinePos    = nY + pFontEntry->maMetric.mnDUnderlineOffset1;
+            nLinePos2   = nY + pFontEntry->maMetric.mnDUnderlineOffset2;
+        }
+        break;
+    default:
+        break;
     }
 
     if ( nLineHeight )
@@ -355,145 +355,161 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
 
         switch ( eTextLine )
         {
-            case UNDERLINE_SINGLE:
-            case UNDERLINE_BOLD:
-                ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nWidth, nLineHeight );
-                break;
-            case UNDERLINE_DOUBLE:
-                ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos,  nWidth, nLineHeight );
-                ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos2, nWidth, nLineHeight );
-                break;
-            case UNDERLINE_DOTTED:
-            case UNDERLINE_BOLDDOTTED:
+        case UNDERLINE_SINGLE:
+        case UNDERLINE_BOLD:
+            ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nWidth, nLineHeight );
+            break;
+        case UNDERLINE_DOUBLE:
+            ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos,  nWidth, nLineHeight );
+            ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos2, nWidth, nLineHeight );
+            break;
+        case UNDERLINE_DOTTED:
+        case UNDERLINE_BOLDDOTTED:
+            {
+                long nDotWidth = nLineHeight*mnDPIY;
+                nDotWidth += mnDPIY/2;
+                nDotWidth /= mnDPIY;
+
+                long nTempWidth = nDotWidth;
+                long nEnd = nLeft+nWidth;
+                while ( nLeft < nEnd )
                 {
-                    long nDotWidth = nLineHeight*mnDPIY;
-                    nDotWidth += mnDPIY/2;
-                    nDotWidth /= mnDPIY;
-                    long nTempWidth = nDotWidth;
-                    long nEnd = nLeft+nWidth;
-                    while ( nLeft < nEnd )
-                    {
-                        if ( nLeft+nTempWidth > nEnd )
-                            nTempWidth = nEnd-nLeft;
-                        ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempWidth, nLineHeight );
-                        nLeft += nDotWidth*2;
-                    }
+                    if ( nLeft+nTempWidth > nEnd )
+                        nTempWidth = nEnd-nLeft;
+
+                    ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempWidth, nLineHeight );
+                    nLeft += nDotWidth*2;
                 }
-                break;
-            case UNDERLINE_DASH:
-            case UNDERLINE_LONGDASH:
-            case UNDERLINE_BOLDDASH:
-            case UNDERLINE_BOLDLONGDASH:
+            }
+            break;
+        case UNDERLINE_DASH:
+        case UNDERLINE_LONGDASH:
+        case UNDERLINE_BOLDDASH:
+        case UNDERLINE_BOLDLONGDASH:
+            {
+                long nDotWidth = nLineHeight*mnDPIY;
+                nDotWidth += mnDPIY/2;
+                nDotWidth /= mnDPIY;
+
+                long nMinDashWidth;
+                long nMinSpaceWidth;
+                long nSpaceWidth;
+                long nDashWidth;
+                if ( (eTextLine == UNDERLINE_LONGDASH) ||
+                     (eTextLine == UNDERLINE_BOLDLONGDASH) )
                 {
-                    long nDotWidth = nLineHeight*mnDPIY;
-                    nDotWidth += mnDPIY/2;
-                    nDotWidth /= mnDPIY;
-                    long nMinDashWidth;
-                    long nMinSpaceWidth;
-                    long nSpaceWidth;
-                    long nDashWidth;
-                    if ( (eTextLine == UNDERLINE_LONGDASH) ||
-                         (eTextLine == UNDERLINE_BOLDLONGDASH) )
-                    {
-                        nMinDashWidth = nDotWidth*6;
-                        nMinSpaceWidth = nDotWidth*2;
-                        nDashWidth = 200;
-                        nSpaceWidth = 100;
-                    }
-                    else
-                    {
-                        nMinDashWidth = nDotWidth*4;
-                        nMinSpaceWidth = (nDotWidth*150)/100;
-                        nDashWidth = 100;
-                        nSpaceWidth = 50;
-                    }
-                    nDashWidth = ((nDashWidth*mnDPIX)+1270)/2540;
-                    nSpaceWidth = ((nSpaceWidth*mnDPIX)+1270)/2540;
-                    // DashWidth will be increased if the line is getting too thick
-                    // in proportion to the line's length
-                    if ( nDashWidth < nMinDashWidth )
-                        nDashWidth = nMinDashWidth;
-                    if ( nSpaceWidth < nMinSpaceWidth )
-                        nSpaceWidth = nMinSpaceWidth;
-                    long nTempWidth = nDashWidth;
-                    long nEnd = nLeft+nWidth;
-                    while ( nLeft < nEnd )
-                    {
-                        if ( nLeft+nTempWidth > nEnd )
-                            nTempWidth = nEnd-nLeft;
-                        ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempWidth, nLineHeight );
-                        nLeft += nDashWidth+nSpaceWidth;
-                    }
+                    nMinDashWidth = nDotWidth*6;
+                    nMinSpaceWidth = nDotWidth*2;
+                    nDashWidth = 200;
+                    nSpaceWidth = 100;
                 }
-                break;
-            case UNDERLINE_DASHDOT:
-            case UNDERLINE_BOLDDASHDOT:
+                else
                 {
-                    long nDotWidth = nLineHeight*mnDPIY;
-                    nDotWidth += mnDPIY/2;
-                    nDotWidth /= mnDPIY;
-                    long nDashWidth = ((100*mnDPIX)+1270)/2540;
-                    long nMinDashWidth = nDotWidth*4;
-                    // DashWidth will be increased if the line is getting too thick
-                    // in proportion to the line's length
-                    if ( nDashWidth < nMinDashWidth )
-                        nDashWidth = nMinDashWidth;
-                    long nTempDotWidth = nDotWidth;
-                    long nTempDashWidth = nDashWidth;
-                    long nEnd = nLeft+nWidth;
-                    while ( nLeft < nEnd )
-                    {
-                        if ( nLeft+nTempDotWidth > nEnd )
-                            nTempDotWidth = nEnd-nLeft;
-                        ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDotWidth, nLineHeight );
-                        nLeft += nDotWidth*2;
-                        if ( nLeft > nEnd )
-                            break;
-                        if ( nLeft+nTempDashWidth > nEnd )
-                            nTempDashWidth = nEnd-nLeft;
-                        ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDashWidth, nLineHeight );
-                        nLeft += nDashWidth+nDotWidth;
-                    }
+                    nMinDashWidth = nDotWidth*4;
+                    nMinSpaceWidth = (nDotWidth*150)/100;
+                    nDashWidth = 100;
+                    nSpaceWidth = 50;
                 }
-                break;
-            case UNDERLINE_DASHDOTDOT:
-            case UNDERLINE_BOLDDASHDOTDOT:
+                nDashWidth = ((nDashWidth*mnDPIX)+1270)/2540;
+                nSpaceWidth = ((nSpaceWidth*mnDPIX)+1270)/2540;
+                // DashWidth will be increased if the line is getting too thick
+                // in proportion to the line's length
+                if ( nDashWidth < nMinDashWidth )
+                    nDashWidth = nMinDashWidth;
+                if ( nSpaceWidth < nMinSpaceWidth )
+                    nSpaceWidth = nMinSpaceWidth;
+
+                long nTempWidth = nDashWidth;
+                long nEnd = nLeft+nWidth;
+                while ( nLeft < nEnd )
                 {
-                    long nDotWidth = nLineHeight*mnDPIY;
-                    nDotWidth += mnDPIY/2;
-                    nDotWidth /= mnDPIY;
-                    long nDashWidth = ((100*mnDPIX)+1270)/2540;
-                    long nMinDashWidth = nDotWidth*4;
-                    // DashWidth will be increased if the line is getting too thick
-                    // in proportion to the line's length
-                    if ( nDashWidth < nMinDashWidth )
-                        nDashWidth = nMinDashWidth;
-                    long nTempDotWidth = nDotWidth;
-                    long nTempDashWidth = nDashWidth;
-                    long nEnd = nLeft+nWidth;
-                    while ( nLeft < nEnd )
-                    {
-                        if ( nLeft+nTempDotWidth > nEnd )
-                            nTempDotWidth = nEnd-nLeft;
-                        ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDotWidth, nLineHeight );
-                        nLeft += nDotWidth*2;
-                        if ( nLeft > nEnd )
-                            break;
-                        if ( nLeft+nTempDotWidth > nEnd )
-                            nTempDotWidth = nEnd-nLeft;
-                        ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDotWidth, nLineHeight );
-                        nLeft += nDotWidth*2;
-                        if ( nLeft > nEnd )
-                            break;
-                        if ( nLeft+nTempDashWidth > nEnd )
-                            nTempDashWidth = nEnd-nLeft;
-                        ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDashWidth, nLineHeight );
-                        nLeft += nDashWidth+nDotWidth;
-                    }
+                    if ( nLeft+nTempWidth > nEnd )
+                        nTempWidth = nEnd-nLeft;
+                    ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempWidth, nLineHeight );
+                    nLeft += nDashWidth+nSpaceWidth;
                 }
-                break;
-            default:
-                break;
+            }
+            break;
+        case UNDERLINE_DASHDOT:
+        case UNDERLINE_BOLDDASHDOT:
+            {
+                long nDotWidth = nLineHeight*mnDPIY;
+                nDotWidth += mnDPIY/2;
+                nDotWidth /= mnDPIY;
+
+                long nDashWidth = ((100*mnDPIX)+1270)/2540;
+                long nMinDashWidth = nDotWidth*4;
+                // DashWidth will be increased if the line is getting too thick
+                // in proportion to the line's length
+                if ( nDashWidth < nMinDashWidth )
+                    nDashWidth = nMinDashWidth;
+
+                long nTempDotWidth = nDotWidth;
+                long nTempDashWidth = nDashWidth;
+                long nEnd = nLeft+nWidth;
+                while ( nLeft < nEnd )
+                {
+                    if ( nLeft+nTempDotWidth > nEnd )
+                        nTempDotWidth = nEnd-nLeft;
+
+                    ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDotWidth, nLineHeight );
+                    nLeft += nDotWidth*2;
+                    if ( nLeft > nEnd )
+                        break;
+
+                    if ( nLeft+nTempDashWidth > nEnd )
+                        nTempDashWidth = nEnd-nLeft;
+
+                    ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDashWidth, nLineHeight );
+                    nLeft += nDashWidth+nDotWidth;
+                }
+            }
+            break;
+        case UNDERLINE_DASHDOTDOT:
+        case UNDERLINE_BOLDDASHDOTDOT:
+            {
+                long nDotWidth = nLineHeight*mnDPIY;
+                nDotWidth += mnDPIY/2;
+                nDotWidth /= mnDPIY;
+
+                long nDashWidth = ((100*mnDPIX)+1270)/2540;
+                long nMinDashWidth = nDotWidth*4;
+                // DashWidth will be increased if the line is getting too thick
+                // in proportion to the line's length
+                if ( nDashWidth < nMinDashWidth )
+                    nDashWidth = nMinDashWidth;
+
+                long nTempDotWidth = nDotWidth;
+                long nTempDashWidth = nDashWidth;
+                long nEnd = nLeft+nWidth;
+                while ( nLeft < nEnd )
+                {
+                    if ( nLeft+nTempDotWidth > nEnd )
+                        nTempDotWidth = nEnd-nLeft;
+
+                    ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDotWidth, nLineHeight );
+                    nLeft += nDotWidth*2;
+                    if ( nLeft > nEnd )
+                        break;
+
+                    if ( nLeft+nTempDotWidth > nEnd )
+                        nTempDotWidth = nEnd-nLeft;
+
+                    ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDotWidth, nLineHeight );
+                    nLeft += nDotWidth*2;
+                    if ( nLeft > nEnd )
+                        break;
+
+                    if ( nLeft+nTempDashWidth > nEnd )
+                        nTempDashWidth = nEnd-nLeft;
+
+                    ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDashWidth, nLineHeight );
+                    nLeft += nDashWidth+nDotWidth;
+                }
+            }
+            break;
+        default:
+            break;
         }
     }
 }
@@ -515,21 +531,21 @@ void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
 
     switch ( eStrikeout )
     {
-        case STRIKEOUT_SINGLE:
-            nLineHeight = pFontEntry->maMetric.mnStrikeoutSize;
-            nLinePos    = nY + pFontEntry->maMetric.mnStrikeoutOffset;
-            break;
-        case STRIKEOUT_BOLD:
-            nLineHeight = pFontEntry->maMetric.mnBStrikeoutSize;
-            nLinePos    = nY + pFontEntry->maMetric.mnBStrikeoutOffset;
-            break;
-        case STRIKEOUT_DOUBLE:
-            nLineHeight = pFontEntry->maMetric.mnDStrikeoutSize;
-            nLinePos    = nY + pFontEntry->maMetric.mnDStrikeoutOffset1;
-            nLinePos2   = nY + pFontEntry->maMetric.mnDStrikeoutOffset2;
-            break;
-        default:
-            break;
+    case STRIKEOUT_SINGLE:
+        nLineHeight = pFontEntry->maMetric.mnStrikeoutSize;
+        nLinePos    = nY + pFontEntry->maMetric.mnStrikeoutOffset;
+        break;
+    case STRIKEOUT_BOLD:
+        nLineHeight = pFontEntry->maMetric.mnBStrikeoutSize;
+        nLinePos    = nY + pFontEntry->maMetric.mnBStrikeoutOffset;
+        break;
+    case STRIKEOUT_DOUBLE:
+        nLineHeight = pFontEntry->maMetric.mnDStrikeoutSize;
+        nLinePos    = nY + pFontEntry->maMetric.mnDStrikeoutOffset1;
+        nLinePos2   = nY + pFontEntry->maMetric.mnDStrikeoutOffset2;
+        break;
+    default:
+        break;
     }
 
     if ( nLineHeight )
@@ -546,16 +562,16 @@ void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
 
         switch ( eStrikeout )
         {
-            case STRIKEOUT_SINGLE:
-            case STRIKEOUT_BOLD:
-                ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nWidth, nLineHeight );
-                break;
-            case STRIKEOUT_DOUBLE:
-                ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nWidth, nLineHeight );
-                ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos2, nWidth, nLineHeight );
-                break;
-            default:
-                break;
+        case STRIKEOUT_SINGLE:
+        case STRIKEOUT_BOLD:
+            ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nWidth, nLineHeight );
+            break;
+        case STRIKEOUT_DOUBLE:
+            ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nWidth, nLineHeight );
+            ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos2, nWidth, nLineHeight );
+            break;
+        default:
+            break;
         }
     }
 }
@@ -571,16 +587,14 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
         return;
 
     // prepare string for strikeout measurement
-    static char cStrikeoutChar;
-    if ( eStrikeout == STRIKEOUT_SLASH )
-        cStrikeoutChar = '/';
-    else // ( eStrikeout == STRIKEOUT_X )
-        cStrikeoutChar = 'X';
+    static char cStrikeoutChar =  eStrikeout == STRIKEOUT_SLASH ? '/' : 'X';
     static const int nTestStrLen = 4;
     static const int nMaxStrikeStrLen = 2048;
     sal_Unicode aChars[nMaxStrikeStrLen+1]; // +1 for valgrind...
+
     for( int i = 0; i < nTestStrLen; ++i)
         aChars[i] = cStrikeoutChar;
+
     const OUString aStrikeoutTest(aChars, nTestStrLen);
 
     // calculate approximation of strikeout atom size
@@ -601,10 +615,12 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     // build the strikeout string
     for( int i = nTestStrLen; i < nStrikeStrLen; ++i)
         aChars[i] = cStrikeoutChar;
+
     const OUString aStrikeoutText(aChars, nStrikeStrLen);
 
     if( mpFontEntry->mnOrientation )
         ImplRotatePos( 0, 0, nDistX, nDistY, mpFontEntry->mnOrientation );
+
     nBaseX += nDistX;
     nBaseY += nDistY;
 
@@ -661,12 +677,12 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
     if ( !nWidth )
         return;
 
-    Color           aStrikeoutColor = GetTextColor();
-    Color           aUnderlineColor = GetTextLineColor();
-    Color           aOverlineColor  = GetOverlineColor();
-    bool            bStrikeoutDone = false;
-    bool            bUnderlineDone = false;
-    bool            bOverlineDone  = false;
+    Color aStrikeoutColor = GetTextColor();
+    Color aUnderlineColor = GetTextLineColor();
+    Color aOverlineColor  = GetOverlineColor();
+    bool bStrikeoutDone = false;
+    bool bUnderlineDone = false;
+    bool bOverlineDone  = false;
 
     if ( IsRTLEnabled() )
     {
@@ -674,6 +690,7 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
         long nXAdd = nWidth - nDistX;
         if( mpFontEntry->mnOrientation )
             nXAdd = FRound( nXAdd * cos( mpFontEntry->mnOrientation * F_PI1800 ) );
+
         nX += nXAdd - 1;
     }
 
@@ -717,8 +734,9 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
         ImplDrawStrikeoutLine( nX, nY, nDistX, 0, nWidth, eStrikeout, aStrikeoutColor );
 }
 
-void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
-    FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bWordLine, bool bUnderlineAbove )
+void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStrikeout,
+                                      FontUnderline eUnderline, FontUnderline eOverline,
+                                      bool bWordLine, bool bUnderlineAbove )
 {
     if( bWordLine )
     {
@@ -757,7 +775,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
             {
                 // draw the textline for each word
                 ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), nDist, nWidth,
-                    eStrikeout, eUnderline, eOverline, bUnderlineAbove );
+                                  eStrikeout, eUnderline, eOverline, bUnderlineAbove );
                 nWidth = 0;
             }
         }
@@ -766,7 +784,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
         if( nWidth > 0 )
         {
             ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), nDist, nWidth,
-                eStrikeout, eUnderline, eOverline, bUnderlineAbove );
+                              eStrikeout, eUnderline, eOverline, bUnderlineAbove );
         }
     }
     else
@@ -774,7 +792,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
         Point aStartPt = rSalLayout.GetDrawPosition();
         int nWidth = rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel();
         ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), 0, nWidth,
-            eStrikeout, eUnderline, eOverline, bUnderlineAbove );
+                          eStrikeout, eUnderline, eOverline, bUnderlineAbove );
     }
 }
 
@@ -815,19 +833,25 @@ void OutputDevice::SetTextLineColor( const Color& rColor )
                         DRAWMODE_SETTINGSTEXT ) )
     {
         if ( mnDrawMode & DRAWMODE_BLACKTEXT )
+        {
             aColor = Color( COL_BLACK );
+        }
         else if ( mnDrawMode & DRAWMODE_WHITETEXT )
+        {
             aColor = Color( COL_WHITE );
+        }
         else if ( mnDrawMode & DRAWMODE_GRAYTEXT )
         {
             const sal_uInt8 cLum = aColor.GetLuminance();
             aColor = Color( cLum, cLum, cLum );
         }
         else if ( mnDrawMode & DRAWMODE_SETTINGSTEXT )
+        {
             aColor = GetSettings().GetStyleSettings().GetFontColor();
+        }
 
-        if( (mnDrawMode & DRAWMODE_GHOSTEDTEXT)
-        &&  (aColor.GetColor() != COL_TRANSPARENT) )
+        if( (mnDrawMode & DRAWMODE_GHOSTEDTEXT) &&
+            (aColor.GetColor() != COL_TRANSPARENT) )
         {
             aColor = Color( (aColor.GetRed() >> 1) | 0x80,
                             (aColor.GetGreen() >> 1) | 0x80,
@@ -866,19 +890,25 @@ void OutputDevice::SetOverlineColor( const Color& rColor )
                         DRAWMODE_SETTINGSTEXT ) )
     {
         if ( mnDrawMode & DRAWMODE_BLACKTEXT )
+        {
             aColor = Color( COL_BLACK );
+        }
         else if ( mnDrawMode & DRAWMODE_WHITETEXT )
+        {
             aColor = Color( COL_WHITE );
+        }
         else if ( mnDrawMode & DRAWMODE_GRAYTEXT )
         {
             const sal_uInt8 cLum = aColor.GetLuminance();
             aColor = Color( cLum, cLum, cLum );
         }
         else if ( mnDrawMode & DRAWMODE_SETTINGSTEXT )
+        {
             aColor = GetSettings().GetStyleSettings().GetFontColor();
+        }
 
-        if( (mnDrawMode & DRAWMODE_GHOSTEDTEXT)
-        &&  (aColor.GetColor() != COL_TRANSPARENT) )
+        if( (mnDrawMode & DRAWMODE_GHOSTEDTEXT) &&
+            (aColor.GetColor() != COL_TRANSPARENT) )
         {
             aColor = Color( (aColor.GetRed() >> 1) | 0x80,
                             (aColor.GetGreen() >> 1) | 0x80,
@@ -908,24 +938,27 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
     if ( ((eUnderline == UNDERLINE_NONE) || (eUnderline == UNDERLINE_DONTKNOW)) &&
          ((eOverline  == UNDERLINE_NONE) || (eOverline  == UNDERLINE_DONTKNOW)) &&
          ((eStrikeout == STRIKEOUT_NONE) || (eStrikeout == STRIKEOUT_DONTKNOW)) )
+    {
         return;
-
+    }
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
     // we need a graphics
     if( !mpGraphics && !AcquireGraphics() )
         return;
+
     if( mbInitClipRegion )
         InitClipRegion();
+
     if( mbOutputClipped )
         return;
 
     // initialize font if needed to get text offsets
     // TODO: only needed for mnTextOff!=(0,0)
-    if( mbNewFont )
-        if( !ImplNewFont() )
-            return;
+    if( mbNewFont && !ImplNewFont() )
+        return;
+
     if( mbInitFont )
         InitFont();
 
@@ -945,18 +978,17 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
         return;
 
     // we need a graphics
-    if( !mpGraphics )
-        if( !AcquireGraphics() )
-            return;
+    if( !mpGraphics && !AcquireGraphics() )
+        return;
 
     if ( mbInitClipRegion )
         InitClipRegion();
+
     if ( mbOutputClipped )
         return;
 
-    if( mbNewFont )
-        if( !ImplNewFont() )
-            return;
+    if( mbNewFont && !ImplNewFont() )
+        return;
 
     Point   aStartPt = ImplLogicToDevicePixel( rStartPos );
     Point   aEndPt = ImplLogicToDevicePixel( rEndPos );
@@ -998,11 +1030,12 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
     // #109280# make sure the waveline does not exceed the descent to avoid paint problems
     ImplFontEntry* pFontEntry = mpFontEntry;
     if( nWaveHeight > pFontEntry->maMetric.mnWUnderlineSize )
+    {
         nWaveHeight = pFontEntry->maMetric.mnWUnderlineSize;
-
+    }
     ImplDrawWaveLine(nStartX, nStartY, 0, 0,
-            nEndX-nStartX, nWaveHeight,
-            mnDPIScaleFactor, nOrientation, GetLineColor());
+                     nEndX-nStartX, nWaveHeight,
+                     mnDPIScaleFactor, nOrientation, GetLineColor());
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos );

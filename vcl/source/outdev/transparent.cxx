@@ -16,18 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <sal/types.h>
 
-
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <boost/scoped_array.hpp>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
 
-#include <salgdi.hxx>
-
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-
-#include <boost/scoped_array.hpp>
-
+#include "salgdi.hxx"
 
 namespace
 {
@@ -127,11 +124,11 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         }
 
         // do painting
-        const long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
-        long            nX, nY; // , nWorkX, nWorkY, nWorkWidth, nWorkHeight;
+        const long nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
+        long nX, nY; // , nWorkX, nWorkY, nWorkWidth, nWorkHeight;
         boost::scoped_array<long> pMapX(new long[ nSrcWidth + 1 ]);
         boost::scoped_array<long> pMapY(new long[ nSrcHeight + 1 ]);
-        const bool      bOldMap = mbMap;
+        const bool bOldMap = mbMap;
 
         mbMap = false;
 
@@ -150,9 +147,8 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
             const Point aMapPt(pMapX[aRectIter->Left()], pMapY[aRectIter->Top()]);
-            const Size aMapSz(
-                pMapX[aRectIter->Right() + 1] - aMapPt.X(),      // pMapX[L + W] -> L + ((R - L) + 1) -> R + 1
-                pMapY[aRectIter->Bottom() + 1] - aMapPt.Y());    // same for Y
+            const Size aMapSz( pMapX[aRectIter->Right() + 1] - aMapPt.X(),      // pMapX[L + W] -> L + ((R - L) + 1) -> R + 1
+                               pMapY[aRectIter->Bottom() + 1] - aMapPt.Y());    // same for Y
             Bitmap aBandBmp(aPaint);
 
             aBandBmp.Crop(*aRectIter);
@@ -174,23 +170,24 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
         return;
 
     // we need a graphics
-    if( !mpGraphics )
-        if( !AcquireGraphics() )
-            return;
+    if( !mpGraphics && !AcquireGraphics() )
+        return;
 
     if( mbInitClipRegion )
         InitClipRegion();
+
     if( mbOutputClipped )
         return;
 
     if( mbInitLineColor )
         InitLineColor();
+
     if( mbInitFillColor )
         ImplInitFillColor();
 
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
-        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
-        && ROP_OVERPAINT == GetRasterOp() )
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
+       mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
+       (ROP_OVERPAINT == GetRasterOp()) )
     {
         // b2dpolygon support not implemented yet on non-UNX platforms
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
@@ -203,6 +200,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
         bool bDrawnOk = true;
         if( IsFillColor() )
             bDrawnOk = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
+
         if( bDrawnOk && IsLineColor() )
         {
             const basegfx::B2DVector aHairlineWidth(1,1);
@@ -218,6 +216,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
         {
             if( mpMetaFile )
                 mpMetaFile->AddAction( new MetaTransparentAction( PolyPolygon( rB2DPolyPoly ), static_cast< sal_uInt16 >(fTransparency * 100.0)));
+
             return;
         }
     }
@@ -247,10 +246,10 @@ bool OutputDevice::DrawTransparentNatively ( const PolyPolygon& rPolyPoly,
     // debug helper:
     static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
 
-    if( !pDisableNative
-        && mpGraphics->supportsOperation( OutDevSupport_B2DDraw )
+    if( !pDisableNative &&
+        mpGraphics->supportsOperation( OutDevSupport_B2DDraw )
 #if defined UNX && ! defined MACOSX && ! defined IOS
-            && GetBitCount() > 8
+        && GetBitCount() > 8
 #endif
 #ifdef WIN32
         // workaround bad dithering on remote displaying when using GDI+ with toolbar button highlighting
@@ -261,10 +260,13 @@ bool OutputDevice::DrawTransparentNatively ( const PolyPolygon& rPolyPoly,
         // prepare the graphics device
         if( mbInitClipRegion )
             InitClipRegion();
+
         if( mbOutputClipped )
             return false;
+
         if( mbInitLineColor )
             InitLineColor();
+
         if( mbInitFillColor )
             ImplInitFillColor();
 
@@ -298,7 +300,8 @@ bool OutputDevice::DrawTransparentNatively ( const PolyPolygon& rPolyPoly,
             for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
             {
                 const ::basegfx::B2DPolygon& rPolygon = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
-                bDrawn = mpGraphics->DrawPolyLine( rPolygon, fTransparency, aLineWidths, ::basegfx::B2DLINEJOIN_NONE, com::sun::star::drawing::LineCap_BUTT, this );
+                bDrawn = mpGraphics->DrawPolyLine( rPolygon, fTransparency, aLineWidths,
+                                                   ::basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this );
             }
             // prepare to restore the fill color
             mbInitFillColor = mbFillColor;
@@ -312,7 +315,7 @@ void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
                                             sal_uInt16 nTransparencePercent )
 {
     // debug helper:
-    static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
+    static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA" );
 
     // #110958# Disable alpha VDev, we perform the necessary
     VirtualDevice* pOldAlphaVDev = mpAlphaVDev;
@@ -324,10 +327,10 @@ void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
     GDIMetaFile* pOldMetaFile = mpMetaFile;
     mpMetaFile = NULL;
 
-    PolyPolygon     aPolyPoly( LogicToPixel( rPolyPoly ) );
-    Rectangle       aPolyRect( aPolyPoly.GetBoundRect() );
-    Point           aPoint;
-    Rectangle       aDstRect( aPoint, GetOutputSizePixel() );
+    PolyPolygon aPolyPoly( LogicToPixel( rPolyPoly ) );
+    Rectangle aPolyRect( aPolyPoly.GetBoundRect() );
+    Point aPoint;
+    Rectangle aDstRect( aPoint, GetOutputSizePixel() );
 
     aDstRect.Intersection( aPolyRect );
 
@@ -347,8 +350,10 @@ void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
             // to basic OutDev methods)
             if ( mbInitClipRegion )
                 InitClipRegion();
+
             if ( mbInitLineColor )
                 InitLineColor();
+
             if ( mbInitFillColor )
                 ImplInitFillColor();
 
@@ -357,25 +362,26 @@ void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
 
             if( !mbOutputClipped )
             {
-                bDrawn = mpGraphics->DrawAlphaRect(
-                    aPixelRect.Left(), aPixelRect.Top(),
+                bDrawn = mpGraphics->DrawAlphaRect( aPixelRect.Left(), aPixelRect.Top(),
                     // #i98405# use methods with small g, else one pixel too much will be painted.
                     // This is because the source is a polygon which when painted would not paint
                     // the rightmost and lowest pixel line(s), so use one pixel less for the
                     // rectangle, too.
-                    aPixelRect.getWidth(), aPixelRect.getHeight(),
-                    sal::static_int_cast<sal_uInt8>(nTransparencePercent),
-                    this );
+                                                    aPixelRect.getWidth(), aPixelRect.getHeight(),
+                                                    sal::static_int_cast<sal_uInt8>(nTransparencePercent),
+                                                    this );
             }
             else
+            {
                 bDrawn = true;
+            }
         }
 
         if( !bDrawn )
         {
-            VirtualDevice   aVDev( *this, 1 );
-            const Size      aDstSz( aDstRect.GetSize() );
-            const sal_uInt8     cTrans = (sal_uInt8) MinMax( FRound( nTransparencePercent * 2.55 ), 0, 255 );
+            VirtualDevice aVDev( *this, 1 );
+            const Size aDstSz( aDstRect.GetSize() );
+            const sal_uInt8 cTrans = (sal_uInt8) MinMax( FRound( nTransparencePercent * 2.55 ), 0, 255 );
 
             if( aDstRect.Left() || aDstRect.Top() )
                 aPolyPoly.Move( -aDstRect.Left(), -aDstRect.Top() );
@@ -390,30 +396,33 @@ void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
                 aVDev.SetFillColor( COL_BLACK );
                 aVDev.DrawPolyPolygon( aPolyPoly );
 
-                Bitmap              aPaint( GetBitmap( aDstRect.TopLeft(), aDstSz ) );
-                Bitmap              aPolyMask( aVDev.GetBitmap( Point(), aDstSz ) );
+                Bitmap aPaint( GetBitmap( aDstRect.TopLeft(), aDstSz ) );
+                Bitmap aPolyMask( aVDev.GetBitmap( Point(), aDstSz ) );
 
                 // #107766# check for non-empty bitmaps before accessing them
                 if( !!aPaint && !!aPolyMask )
                 {
-                    BitmapWriteAccess*  pW = aPaint.AcquireWriteAccess();
-                    BitmapReadAccess*   pR = aPolyMask.AcquireReadAccess();
+                    BitmapWriteAccess* pW = aPaint.AcquireWriteAccess();
+                    BitmapReadAccess* pR = aPolyMask.AcquireReadAccess();
 
                     if( pW && pR )
                     {
-                        BitmapColor         aPixCol;
-                        const BitmapColor   aFillCol( GetFillColor() );
-                        const BitmapColor   aWhite( pR->GetBestMatchingColor( Color( COL_WHITE ) ) );
-                        const BitmapColor   aBlack( pR->GetBestMatchingColor( Color( COL_BLACK ) ) );
-                        const long          nWidth = pW->Width(), nHeight = pW->Height();
-                        const long          nR = aFillCol.GetRed(), nG = aFillCol.GetGreen(), nB = aFillCol.GetBlue();
-                        long                nX, nY;
+                        BitmapColor aPixCol;
+                        const BitmapColor aFillCol( GetFillColor() );
+                        const BitmapColor aWhite( pR->GetBestMatchingColor( Color( COL_WHITE ) ) );
+                        const BitmapColor aBlack( pR->GetBestMatchingColor( Color( COL_BLACK ) ) );
+                        const long nWidth = pW->Width();
+                        const long nHeight = pW->Height();
+                        const long nR = aFillCol.GetRed();
+                        const long nG = aFillCol.GetGreen();
+                        const long nB = aFillCol.GetBlue();
+                        long nX, nY;
 
                         if( aPaint.GetBitCount() <= 8 )
                         {
-                            const BitmapPalette&    rPal = pW->GetPalette();
-                            const sal_uInt16            nCount = rPal.GetEntryCount();
-                            BitmapColor*            pMap = (BitmapColor*) new sal_uInt8[ nCount * sizeof( BitmapColor ) ];
+                            const BitmapPalette& rPal = pW->GetPalette();
+                            const sal_uInt16 nCount = rPal.GetEntryCount();
+                            BitmapColor* pMap = (BitmapColor*) new sal_uInt8[ nCount * sizeof( BitmapColor ) ];
 
                             for( sal_uInt16 i = 0; i < nCount; i++ )
                             {
@@ -428,28 +437,37 @@ void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
 
                                 for( nY = 0; nY < nHeight; nY++ )
                                 {
-                                    Scanline    pWScan = pW->GetScanline( nY );
-                                    Scanline    pRScan = pR->GetScanline( nY );
-                                    sal_uInt8       cBit = 128;
+                                    Scanline pWScan = pW->GetScanline( nY );
+                                    Scanline pRScan = pR->GetScanline( nY );
+                                    sal_uInt8 cBit = 128;
 
                                     for( nX = 0; nX < nWidth; nX++, cBit >>= 1, pWScan++ )
                                     {
                                         if( !cBit )
-                                            cBit = 128, pRScan++;
-
+                                        {
+                                            cBit = 128;
+                                            pRScan += 1;
+                                        }
                                         if( ( *pRScan & cBit ) == cBlack )
+                                        {
                                             *pWScan = (sal_uInt8) pMap[ *pWScan ].GetIndex();
+                                        }
                                     }
                                 }
                             }
                             else
                             {
                                 for( nY = 0; nY < nHeight; nY++ )
+                                {
                                     for( nX = 0; nX < nWidth; nX++ )
+                                    {
                                         if( pR->GetPixel( nY, nX ) == aBlack )
+                                        {
                                             pW->SetPixel( nY, nX, pMap[ pW->GetPixel( nY, nX ).GetIndex() ] );
+                                        }
+                                    }
+                                }
                             }
-
                             delete[] (sal_uInt8*) pMap;
                         }
                         else
@@ -461,15 +479,17 @@ void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
 
                                 for( nY = 0; nY < nHeight; nY++ )
                                 {
-                                    Scanline    pWScan = pW->GetScanline( nY );
-                                    Scanline    pRScan = pR->GetScanline( nY );
-                                    sal_uInt8       cBit = 128;
+                                    Scanline pWScan = pW->GetScanline( nY );
+                                    Scanline pRScan = pR->GetScanline( nY );
+                                    sal_uInt8 cBit = 128;
 
                                     for( nX = 0; nX < nWidth; nX++, cBit >>= 1, pWScan += 3 )
                                     {
                                         if( !cBit )
-                                            cBit = 128, pRScan++;
-
+                                        {
+                                            cBit = 128;
+                                            pRScan += 1;
+                                        }
                                         if( ( *pRScan & cBit ) == cBlack )
                                         {
                                             pWScan[ 0 ] = COLOR_CHANNEL_MERGE( pWScan[ 0 ], nB, cTrans );
@@ -513,7 +533,9 @@ void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
                 }
             }
             else
+            {
                 DrawPolyPolygon( rPolyPoly );
+            }
         }
     }
 
@@ -548,9 +570,8 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         return;
 
     // get the device graphics as drawing target
-    if( !mpGraphics )
-        if( !AcquireGraphics() )
-            return;
+    if( !mpGraphics && !AcquireGraphics() )
+        return;
 
     // try hard to draw it directly, because the emulation layers are slower
     bDrawn = DrawTransparentNatively( rPolyPoly, nTransparencePercent );
@@ -597,10 +618,10 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
     }
     else
     {
-        GDIMetaFile*    pOldMetaFile = mpMetaFile;
-        Rectangle       aOutRect( LogicToPixel( rPos ), LogicToPixel( rSize ) );
-        Point           aPoint;
-        Rectangle       aDstRect( aPoint, GetOutputSizePixel() );
+        GDIMetaFile* pOldMetaFile = mpMetaFile;
+        Rectangle aOutRect( LogicToPixel( rPos ), LogicToPixel( rSize ) );
+        Point aPoint;
+        Rectangle aDstRect( aPoint, GetOutputSizePixel() );
 
         mpMetaFile = NULL;
         aDstRect.Intersection( aOutRect );
@@ -640,10 +661,9 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     pVDev->EnableMapMode(false);
 
                     // copy content from original to buffer
-                    pVDev->DrawOutDev(
-                        aPoint, pVDev->GetOutputSizePixel(), // dest
-                        aDstRect.TopLeft(), pVDev->GetOutputSizePixel(), // source
-                        *this);
+                    pVDev->DrawOutDev( aPoint, pVDev->GetOutputSizePixel(), // dest
+                                       aDstRect.TopLeft(), pVDev->GetOutputSizePixel(), // source
+                                       *this);
 
                     // draw MetaFile to buffer
                     pVDev->EnableMapMode(bBufferMapModeEnabled);
@@ -653,6 +673,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
                     // get content bitmap from buffer
                     pVDev->EnableMapMode(false);
+
                     const Bitmap aPaint(pVDev->GetBitmap(aPoint, pVDev->GetOutputSizePixel()));
 
                     // create alpha mask from gradient and get as Bitmap
@@ -661,6 +682,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     pVDev->DrawGradient(Rectangle(rPos, rSize), rTransparenceGradient);
                     pVDev->SetDrawMode(DRAWMODE_DEFAULT);
                     pVDev->EnableMapMode(false);
+
                     const AlphaMask aAlpha(pVDev->GetBitmap(aPoint, pVDev->GetOutputSizePixel()));
 
                     pVDev.reset();
@@ -671,15 +693,15 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                 }
                 else
                 {
-                    Bitmap      aPaint, aMask;
-                    AlphaMask   aAlpha;
-                    MapMode     aMap( GetMapMode() );
-                    Point       aOutPos( PixelToLogic( aDstRect.TopLeft() ) );
-                    const bool  bOldMap = mbMap;
+                    Bitmap aPaint, aMask;
+                    AlphaMask aAlpha;
+                    MapMode aMap( GetMapMode() );
+                    Point aOutPos( PixelToLogic( aDstRect.TopLeft() ) );
+                    const bool bOldMap = mbMap;
 
                     aMap.SetOrigin( Point( -aOutPos.X(), -aOutPos.Y() ) );
                     pVDev->SetMapMode( aMap );
-                    const bool  bVDevOldMap = pVDev->IsMapModeEnabled();
+                    const bool bVDevOldMap = pVDev->IsMapModeEnabled();
 
                     // create paint bitmap
                     ( (GDIMetaFile&) rMtf ).WindStart();

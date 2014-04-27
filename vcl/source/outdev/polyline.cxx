@@ -16,16 +16,17 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#include <vcl/virdev.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/settings.hxx>
-
-#include <salgdi.hxx>
+#include <sal/types.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
+
+#include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/settings.hxx>
+
+#include "salgdi.hxx"
 
 void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 {
@@ -39,22 +40,22 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         return;
 
     // we need a graphics
-    if ( !mpGraphics )
-        if ( !AcquireGraphics() )
-            return;
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
 
     if ( mbInitClipRegion )
         InitClipRegion();
+
     if ( mbOutputClipped )
         return;
 
     if ( mbInitLineColor )
         InitLineColor();
 
-    const bool bTryAA( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
-                    && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
-                    && ROP_OVERPAINT == GetRasterOp()
-                    && IsLineColor());
+    const bool bTryAA( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
+                       mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
+                       ROP_OVERPAINT == GetRasterOp() &&
+                       IsLineColor());
 
     // use b2dpolygon drawing if possible
     if(bTryAA)
@@ -73,7 +74,8 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
                 aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
             }
 
-            if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this))
+            if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth,
+                                         basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this))
             {
                 return;
             }
@@ -114,8 +116,8 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
 
     // #i101491#
     // Try direct Fallback to B2D-Version of DrawPolyLine
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
-        && LINE_SOLID == rLineInfo.GetStyle())
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
+       LINE_SOLID == rLineInfo.GetStyle())
     {
         DrawPolyLine( rPoly.getB2DPolygon(), (double)rLineInfo.GetWidth(), rLineInfo.GetLineJoin(), rLineInfo.GetLineCap());
         return;
@@ -127,11 +129,10 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
     DrawPolyLineWithLineInfo(rPoly, rLineInfo);
 }
 
-void OutputDevice::DrawPolyLine(
-    const basegfx::B2DPolygon& rB2DPolygon,
-    double fLineWidth,
-    basegfx::B2DLineJoin eLineJoin,
-    css::drawing::LineCap eLineCap)
+void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
+                                 double fLineWidth,
+                                 basegfx::B2DLineJoin eLineJoin,
+                                 css::drawing::LineCap eLineCap)
 {
 
     if( mpMetaFile )
@@ -139,6 +140,7 @@ void OutputDevice::DrawPolyLine(
         LineInfo aLineInfo;
         if( fLineWidth != 0.0 )
             aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+
         const Polygon aToolsPolygon( rB2DPolygon );
         mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
     }
@@ -148,22 +150,22 @@ void OutputDevice::DrawPolyLine(
         return;
 
     // we need a graphics
-    if( !mpGraphics )
-        if( !AcquireGraphics() )
-            return;
+    if( !mpGraphics && !AcquireGraphics() )
+        return;
 
     if( mbInitClipRegion )
         InitClipRegion();
+
     if( mbOutputClipped )
         return;
 
     if( mbInitLineColor )
         InitLineColor();
 
-    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
-        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
-        && ROP_OVERPAINT == GetRasterOp()
-        && IsLineColor());
+    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
+                      mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
+                      ROP_OVERPAINT == GetRasterOp() &&
+                      IsLineColor());
 
     // use b2dpolygon drawing if possible
     if(bTryAA)
@@ -176,17 +178,16 @@ void OutputDevice::DrawPolyLine(
     // no output yet; fallback to geometry decomposition and use filled polygon paint
     // when line is fat and not too complex. ImplDrawPolyPolygonWithB2DPolyPolygon
     // will do internal needed AA checks etc.
-    if(fLineWidth >= 2.5
-        && rB2DPolygon.count()
-        && rB2DPolygon.count() <= 1000)
+    if(fLineWidth >= 2.5 &&
+       rB2DPolygon.count() &&
+       rB2DPolygon.count() <= 1000)
     {
         const double fHalfLineWidth((fLineWidth * 0.5) + 0.5);
         const basegfx::B2DPolyPolygon aAreaPolyPolygon(
-            basegfx::tools::createAreaGeometry(
-                rB2DPolygon,
-                fHalfLineWidth,
-                eLineJoin,
-                eLineCap));
+                basegfx::tools::createAreaGeometry( rB2DPolygon,
+                                                    fHalfLineWidth,
+                                                    eLineJoin,
+                                                    eLineCap));
         const Color aOldLineColor(maLineColor);
         const Color aOldFillColor(maFillColor);
 
@@ -224,6 +225,7 @@ void OutputDevice::DrawPolyLine(
         LineInfo aLineInfo;
         if( fLineWidth != 0.0 )
             aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+
         DrawPolyLineWithLineInfo( aToolsPolygon, aLineInfo );
     }
 }
@@ -276,12 +278,11 @@ void OutputDevice::DrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo
         mpAlphaVDev->DrawPolyLine( rPoly, rLineInfo );
 }
 
-bool OutputDevice::TryDrawPolyLineDirectNoAA(
-            const basegfx::B2DPolygon& rB2DPolygon,
-            double fLineWidth,
-            double fTransparency,
-            basegfx::B2DLineJoin eLineJoin,
-            css::drawing::LineCap eLineCap)
+bool OutputDevice::TryDrawPolyLineDirectNoAA( const basegfx::B2DPolygon& rB2DPolygon,
+                                              double fLineWidth,
+                                              double fTransparency,
+                                              basegfx::B2DLineJoin eLineJoin,
+                                              css::drawing::LineCap eLineCap)
 {
     const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
     basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
@@ -296,8 +297,8 @@ bool OutputDevice::TryDrawPolyLineDirectNoAA(
     basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
     aB2DPolygon.transform(aTransform);
 
-    if((mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
-        && aB2DPolygon.count() < 1000)
+    if((mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE) &&
+       aB2DPolygon.count() < 1000)
     {
         // #i98289#, #i101491#
         // better to remove doubles on device coordinates. Also assume from a given amount
@@ -307,30 +308,27 @@ bool OutputDevice::TryDrawPolyLineDirectNoAA(
     }
 
     // draw the polyline
-    return mpGraphics->DrawPolyLine(
-        aB2DPolygon,
-        fTransparency,
-        aB2DLineWidth,
-        eLineJoin,
-        eLineCap,
-        this);
+    return mpGraphics->DrawPolyLine( aB2DPolygon,
+                                     fTransparency,
+                                     aB2DLineWidth,
+                                     eLineJoin,
+                                     eLineCap,
+                                     this);
 }
 
-bool OutputDevice::TryDrawPolyLineDirect(
-            const basegfx::B2DPolygon& rB2DPolygon,
-            double fLineWidth,
-            double fTransparency,
-            basegfx::B2DLineJoin eLineJoin,
-            css::drawing::LineCap eLineCap)
+bool OutputDevice::TryDrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
+                                          double fLineWidth,
+                                          double fTransparency,
+                                          basegfx::B2DLineJoin eLineJoin,
+                                          css::drawing::LineCap eLineCap)
 {
     // AW: Do NOT paint empty PolyPolygons
     if(!rB2DPolygon.count())
         return true;
 
     // we need a graphics
-    if( !mpGraphics )
-        if( !AcquireGraphics() )
-            return false;
+    if( !mpGraphics && !AcquireGraphics() )
+        return false;
 
     if( mbInitClipRegion )
         InitClipRegion();
@@ -341,10 +339,10 @@ bool OutputDevice::TryDrawPolyLineDirect(
     if( mbInitLineColor )
         InitLineColor();
 
-    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
-        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
-        && ROP_OVERPAINT == GetRasterOp()
-        && IsLineColor());
+    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
+                      mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
+                      ROP_OVERPAINT == GetRasterOp() &&
+                      IsLineColor());
 
     if(bTryAA)
     {
@@ -356,16 +354,14 @@ bool OutputDevice::TryDrawPolyLineDirect(
                 LineInfo aLineInfo;
                 if( fLineWidth != 0.0 )
                     aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+
                 const Polygon aToolsPolygon( rB2DPolygon );
                 mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
             }
-
             return true;
         }
     }
-
     return false;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

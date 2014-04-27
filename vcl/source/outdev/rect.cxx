@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <sal/types.h>
 
 #include <tools/poly.hxx>
 #include <tools/helpers.hxx>
@@ -23,7 +24,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/outdev.hxx>
 
-#include <salgdi.hxx>
+#include "salgdi.hxx"
 
 void OutputDevice::DrawRect( const Rectangle& rRect )
 {
@@ -38,21 +39,21 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
 
     if ( aRect.IsEmpty() )
         return;
+
     aRect.Justify();
 
-    if ( !mpGraphics )
-    {
-        if ( !AcquireGraphics() )
-            return;
-    }
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
 
     if ( mbInitClipRegion )
         InitClipRegion();
+
     if ( mbOutputClipped )
         return;
 
     if ( mbInitLineColor )
         InitLineColor();
+
     if ( mbInitFillColor )
         ImplInitFillColor();
 
@@ -89,16 +90,20 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
 
     if ( mbInitClipRegion )
         InitClipRegion();
+
     if ( mbOutputClipped )
         return;
 
     if ( mbInitLineColor )
         InitLineColor();
+
     if ( mbInitFillColor )
         ImplInitFillColor();
 
     if ( !nHorzRound && !nVertRound )
+    {
         mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), this );
+    }
     else
     {
         const Polygon aRoundRectPoly( aRect, nHorzRound, nVertRound );
@@ -145,16 +150,18 @@ sal_uLong AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix )
     {
         const Rectangle aSourceRect( Point( rTwoRect.mnSrcX, rTwoRect.mnSrcY ),
                                      Size( rTwoRect.mnSrcWidth, rTwoRect.mnSrcHeight ) );
-        Rectangle       aCropRect( aSourceRect );
+        Rectangle aCropRect( aSourceRect );
 
         aCropRect.Intersection( Rectangle( Point(), rSizePix ) );
 
         if( aCropRect.IsEmpty() )
+        {
             rTwoRect.mnSrcWidth = rTwoRect.mnSrcHeight = rTwoRect.mnDestWidth = rTwoRect.mnDestHeight = 0;
+        }
         else
         {
-            const double    fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? (double) ( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
-            const double    fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? (double) ( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
+            const double fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? (double) ( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
+            const double fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? (double) ( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
 
             const long nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
             const long nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
@@ -184,16 +191,18 @@ void AdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect )
     {
         const Rectangle aSourceRect( Point( rTwoRect.mnSrcX, rTwoRect.mnSrcY ),
                                      Size( rTwoRect.mnSrcWidth, rTwoRect.mnSrcHeight ) );
-        Rectangle       aCropRect( aSourceRect );
+        Rectangle aCropRect( aSourceRect );
 
         aCropRect.Intersection( rValidSrcRect );
 
         if( aCropRect.IsEmpty() )
+        {
             rTwoRect.mnSrcWidth = rTwoRect.mnSrcHeight = rTwoRect.mnDestWidth = rTwoRect.mnDestHeight = 0;
+        }
         else
         {
-            const double    fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? (double) ( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
-            const double    fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? (double) ( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
+            const double fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? (double) ( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
+            const double fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? (double) ( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
 
             const long nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
             const long nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
