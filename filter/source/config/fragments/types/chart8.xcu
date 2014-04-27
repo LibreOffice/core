@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
     <node oor:name="chart8" oor:op="replace">
-        <prop oor:name="DetectService"/>
+        <prop oor:name="DetectService"><value>com.sun.star.comp.filters.StorageFilterDetect</value></prop>
         <prop oor:name="URLPattern"><value>private:factory/schart*</value></prop>
         <prop oor:name="Extensions"><value>odc</value></prop>
         <prop oor:name="MediaType"><value>application/vnd.oasis.opendocument.chart</value></prop>
