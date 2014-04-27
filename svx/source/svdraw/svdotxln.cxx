@@ -166,7 +166,7 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
     if( pData )
     {
         DateTime                    aFileDT( DateTime::EMPTY );
-        bool                        bExists = true, bLoad = false;
+        bool                        bExists = true;
 
         try
         {
@@ -187,6 +187,7 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
 
         if( bExists )
         {
+            bool bLoad = false;
             if( bForceLoad )
                 bLoad = true;
             else
