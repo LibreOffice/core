@@ -23,7 +23,11 @@ $(eval $(call gb_Library_add_defs,avmedia,\
 	-DAVMEDIA_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_external,avmedia,boost_headers))
+$(eval $(call gb_Library_use_externals,avmedia,\
+	boost_headers \
+	glew \
+	mesa_headers \
+))
 
 $(eval $(call gb_Library_use_libraries,avmedia,\
 	comphelper \
@@ -38,6 +42,7 @@ $(eval $(call gb_Library_use_libraries,avmedia,\
 	tl \
 	utl \
 	vcl \
+	vclopengl \
 	$(gb_UWINAPI) \
 ))
 

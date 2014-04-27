@@ -35,6 +35,8 @@
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/media/XManager.hpp>
+#include <vcl/sysdata.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 
 using namespace ::com::sun::star;
 
@@ -81,7 +83,15 @@ MediaChildWindow::MediaChildWindow( Window* pParent ) :
 {
 }
 
-
+MediaChildWindow::MediaChildWindow( Window* pParent, SystemWindowData* pData ) :
+    SystemChildWindow( pParent, 0, pData )
+{
+    SetMouseTransparent( true );
+    SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+    EnableEraseBackground( false );
+    SetControlForeground();
+    SetControlBackground();
+}
 
 MediaChildWindow::~MediaChildWindow()
 {
@@ -156,16 +166,10 @@ MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bo
     DropTargetHelper( this ),
     DragSourceHelper( this ),
     mpMediaWindow( pMediaWindow ),
-    mxEventsIf( static_cast< ::cppu::OWeakObject* >( mpEvents = new MediaEventListenersImpl( maChildWindow ) ) ),
-    maChildWindow( this ),
     mpMediaWindowControl( bInternalMediaControl ? new MediaWindowControl( this ) : NULL ),
     mpEmptyBmpEx( NULL ),
     mpAudioBmpEx( NULL )
 {
-    maChildWindow.SetBackground( Color( COL_BLACK ) );
-    maChildWindow.SetHelpId( HID_AVMEDIA_PLAYERWINDOW );
-    maChildWindow.Hide();
-
     if( mpMediaWindowControl )
     {
         mpMediaWindowControl->SetSizePixel( mpMediaWindowControl->getMinSizePixel() );
@@ -497,17 +501,32 @@ void MediaWindowImpl::stopPlayingInternal( bool bStop )
 
 void MediaWindowImpl::onURLChanged()
 {
+    if( m_sMimeType == AVMEDIA_MIMETYPE_COMMON )
+    {
+        mpChildWindow.reset(new MediaChildWindow(this) );
+    }
+    else if ( m_sMimeType == AVMEDIA_MIMETYPE_JSON )
+    {
+        SystemWindowData aWinData = OpenGLContext::generateWinData(this);
+        mpChildWindow.reset(new MediaChildWindow(this,&aWinData));
+    }
+    if( !mpChildWindow )
+        return;
+    mpChildWindow->SetHelpId( HID_AVMEDIA_PLAYERWINDOW );
+    mxEventsIf.set( static_cast< ::cppu::OWeakObject* >( mpEvents = new MediaEventListenersImpl( *mpChildWindow.get() ) ) );
+
+
     if( mxPlayer.is() )
     {
         uno::Sequence< uno::Any >              aArgs( 3 );
         uno::Reference< media::XPlayerWindow > xPlayerWindow;
         const Point                            aPoint;
-        const Size                             aSize( maChildWindow.GetSizePixel() );
+        const Size                             aSize( mpChildWindow->GetSizePixel() );
         const sal_Int32                        nWndHandle = 0;
 
         aArgs[ 0 ] = uno::makeAny( nWndHandle );
         aArgs[ 1 ] = uno::makeAny( awt::Rectangle( aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height() ) );
-        aArgs[ 2 ] = uno::makeAny( reinterpret_cast< sal_IntPtr >( &maChildWindow ) );
+        aArgs[ 2 ] = uno::makeAny( reinterpret_cast< sal_IntPtr >( mpChildWindow.get() ) );
 
         try
         {
@@ -532,9 +551,9 @@ void MediaWindowImpl::onURLChanged()
         mxPlayerWindow.clear();
 
     if( mxPlayerWindow.is() )
-        maChildWindow.Show();
+        mpChildWindow->Show();
     else
-        maChildWindow.Hide();
+        mpChildWindow->Hide();
 
     if( mpMediaWindowControl )
     {
@@ -557,7 +576,8 @@ void MediaWindowImpl::setPosSize( const Rectangle& rRect )
 void MediaWindowImpl::setPointer( const Pointer& rPointer )
 {
     SetPointer( rPointer );
-    maChildWindow.SetPointer( rPointer );
+    if( mpChildWindow )
+        mpChildWindow->SetPointer( rPointer );
 
     if( mxPlayerWindow.is() )
     {
@@ -598,7 +618,8 @@ void MediaWindowImpl::Resize()
     if( mxPlayerWindow.is() )
         mxPlayerWindow->setPosSize( 0, 0, aPlayerWindowSize.Width(), aPlayerWindowSize.Height(), 0 );
 
-    maChildWindow.SetPosSizePixel( Point( 0, 0 ), aPlayerWindowSize );
+    if( mpChildWindow )
+        mpChildWindow->SetPosSizePixel( Point( 0, 0 ), aPlayerWindowSize );
 }
 
 
@@ -651,8 +672,10 @@ void MediaWindowImpl::Paint( const Rectangle& )
         pLogo = mpAudioBmpEx;
     }
 
-    const Point     aBasePos( maChildWindow.GetPosPixel() );
-    const Rectangle aVideoRect( aBasePos, maChildWindow.GetSizePixel() );
+    if( !mpChildWindow )
+        return;
+    const Point     aBasePos( mpChildWindow->GetPosPixel() );
+    const Rectangle aVideoRect( aBasePos, mpChildWindow->GetSizePixel() );
 
     if( pLogo && !pLogo->IsEmpty() && ( aVideoRect.GetWidth() > 0 ) && ( aVideoRect.GetHeight() > 0 ) )
     {

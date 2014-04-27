@@ -66,6 +66,7 @@ namespace avmedia
         public:
 
                             MediaChildWindow( Window* pParent );
+                            MediaChildWindow( Window* pParent, SystemWindowData* pData );
                             virtual ~MediaChildWindow();
 
         protected:
@@ -173,7 +174,7 @@ namespace avmedia
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   mxEventsIf;
             MediaEventListenersImpl*                                                mpEvents;
-            MediaChildWindow                                                        maChildWindow;
+            boost::scoped_ptr<MediaChildWindow>                                     mpChildWindow;
             MediaWindowControl*                                                     mpMediaWindowControl;
             BitmapEx*                                                               mpEmptyBmpEx;
             BitmapEx*                                                               mpAudioBmpEx;
