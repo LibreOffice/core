@@ -553,7 +553,7 @@ public abstract class BaseNLPSolver extends WeakBase
 
         if (days > 0)
             return String.format("%d %s, %d %s",
-                  days, resourceManager.getLocalizedString(String.format("Time.Day%", days == 1 ? "" : "s"), "Days"),
+                  days, resourceManager.getLocalizedString(String.format("Time.Day%s", days == 1 ? "" : "s"), "Days"),
                   hours, resourceManager.getLocalizedString(String.format("Time.Hour%s", hours == 1 ? "" : "s"), "Hours"));
 
         if (hours > 0)
