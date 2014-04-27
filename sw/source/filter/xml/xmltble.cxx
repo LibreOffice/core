@@ -546,8 +546,6 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
 
     pTableLines->push_back( pLines );
 
-    OUStringBuffer sBuffer( rNamePrefix.getLength() + 8L );
-
     // pass 2: export column styles
     {
         const SwXMLTableColumns_Impl& rCols = pLines->GetColumns();
