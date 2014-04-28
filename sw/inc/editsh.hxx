@@ -894,6 +894,8 @@ public:
     const SwRedline& GetRedline( sal_uInt16 nPos ) const;
     sal_Bool AcceptRedline( sal_uInt16 nPos );
     sal_Bool RejectRedline( sal_uInt16 nPos );
+    bool AcceptRedlinesInSelection();
+    bool RejectRedlinesInSelection();
 
 
     /** Search Redline for this Data and @return position in array.
