@@ -207,7 +207,11 @@ public:
         sal_Int32   m_nObject;
         bool        m_bDrawMask;
 
-        BitmapEmit() : m_bDrawMask( false ) {}
+        BitmapEmit()
+            : m_nObject(0)
+            , m_bDrawMask(false)
+        {
+        }
     };
 
     struct JPGEmit
