@@ -92,6 +92,7 @@ SFX_IMPL_INTERFACE(SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
 
 void SwView::InitInterface_Impl()
 {
+#if HAVE_FEATURE_DESKTOP
     GetStaticInterface()->RegisterChildWindow(SID_NAVIGATOR, true);
 
     GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
@@ -113,6 +114,7 @@ void SwView::InitInterface_Impl()
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                             SW_RES(RID_TOOLS_TOOLBOX));
+#endif
 }
 
 TYPEINIT1(SwView,SfxViewShell)
