@@ -371,29 +371,6 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
         mpAlphaVDev->SetBackground( rBackground );
 }
 
-
-void OutputDevice::InitFillColor()
-{
-    DBG_TESTSOLARMUTEX();
-
-    if( mbFillColor )
-    {
-        if( ROP_0 == meRasterOp )
-            mpGraphics->SetROPFillColor( SAL_ROP_0 );
-        else if( ROP_1 == meRasterOp )
-            mpGraphics->SetROPFillColor( SAL_ROP_1 );
-        else if( ROP_INVERT == meRasterOp )
-            mpGraphics->SetROPFillColor( SAL_ROP_INVERT );
-        else
-            mpGraphics->SetFillColor( ImplColorToSal( maFillColor ) );
-    }
-    else
-        mpGraphics->SetFillColor();
-
-    mbInitFillColor = false;
-}
-
-
 void OutputDevice::SetFont( const Font& rNewFont )
 {
 
@@ -499,6 +476,27 @@ void OutputDevice::SetFont( const Font& rNewFont )
             mpAlphaVDev->SetFont( aFont );
         }
     }
+}
+
+void OutputDevice::InitFillColor()
+{
+    DBG_TESTSOLARMUTEX();
+
+    if( mbFillColor )
+    {
+        if( ROP_0 == meRasterOp )
+            mpGraphics->SetROPFillColor( SAL_ROP_0 );
+        else if( ROP_1 == meRasterOp )
+            mpGraphics->SetROPFillColor( SAL_ROP_1 );
+        else if( ROP_INVERT == meRasterOp )
+            mpGraphics->SetROPFillColor( SAL_ROP_INVERT );
+        else
+            mpGraphics->SetFillColor( ImplColorToSal( maFillColor ) );
+    }
+    else
+        mpGraphics->SetFillColor();
+
+    mbInitFillColor = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
