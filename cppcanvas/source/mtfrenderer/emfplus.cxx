@@ -360,13 +360,24 @@ namespace cppcanvas
 
         public:
             EMFPBrush ()
+                : type(0)
+                , additionalFlags(0)
+                , wrapMode(0)
+                , areaX(0.0)
+                , areaY(0.0)
+                , areaWidth(0.0)
+                , areaHeight(0.0)
+                , hasTransformation(false)
+                , blendPoints(0)
+                , blendPositions(NULL)
+                , blendFactors(NULL)
+                , colorblendPoints(0)
+                , colorblendPositions(NULL)
+                , colorblendColors(NULL)
+                , surroundColorsNumber(0)
+                , surroundColors(NULL)
+                , path(NULL)
             {
-                blendPositions = NULL;
-                colorblendPositions = NULL;
-                colorblendColors = NULL;
-                surroundColors = NULL;
-                path = NULL;
-                hasTransformation = false;
             }
 
             virtual ~EMFPBrush ()
