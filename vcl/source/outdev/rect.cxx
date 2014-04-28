@@ -28,7 +28,6 @@
 
 void OutputDevice::DrawRect( const Rectangle& rRect )
 {
-
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRectAction( rRect ) );
 
@@ -66,7 +65,6 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
 void OutputDevice::DrawRect( const Rectangle& rRect,
                              sal_uLong nHorzRound, sal_uLong nVertRound )
 {
-
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRoundRectAction( rRect, nHorzRound, nVertRound ) );
 
