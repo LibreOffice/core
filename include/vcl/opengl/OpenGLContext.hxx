@@ -149,6 +149,7 @@ public:
     bool init(Window* pParent = 0);
     bool init(SystemChildWindow* pChildWindow);
 
+    void makeCurrent();
     void swapBuffers();
 
     void setWinSize(const Size& rSize);

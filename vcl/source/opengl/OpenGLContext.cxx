@@ -726,6 +726,17 @@ SystemWindowData OpenGLContext::generateWinData(Window* pParent)
 
 #endif
 
+void OpenGLContext::makeCurrent()
+{
+#if defined( WNT )
+    wglMakeCurrent(m_aGLWin.hDC,m_aGLWin.hRC);
+#elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
+    // nothing
+#elif defined( UNX )
+    glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx );
+#endif
+}
+
 void OpenGLContext::swapBuffers()
 {
 #if defined( WNT )
