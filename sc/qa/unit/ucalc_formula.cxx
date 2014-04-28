@@ -2257,6 +2257,44 @@ void Test::testFuncSUMPRODUCT()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncMIN()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto recalc.
+    m_pDoc->InsertTab(0, "Formula");
+
+    // A1:A2
+    m_pDoc->SetString(ScAddress(0,0,0), "a");
+    m_pDoc->SetString(ScAddress(0,1,0), "b");
+
+    // B1:B2
+    m_pDoc->SetValue(ScAddress(1,0,0), 1.0);
+    m_pDoc->SetValue(ScAddress(1,1,0), 2.0);
+
+    // Matrix in C1:C2.
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(2, 0, 2, 1, aMark, "=MIN(IF(A1:A2=\"c\";B1:B2))");
+
+    // Formula cell in C1:C2 should be a 1x2 matrix array.
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(2,0,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_MESSAGE("This formula should be an array.", pFC->GetMatrixFlag() == MM_FORMULA);
+
+    SCCOL nCols;
+    SCROW nRows;
+    pFC->GetMatColsRows(nCols, nRows);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), nCols);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), nRows);
+
+    CPPUNIT_ASSERT_MESSAGE("Formula in C1 is invalid.", m_pDoc->GetErrCode(ScAddress(2,0,0)) == 0);
+    CPPUNIT_ASSERT_MESSAGE("Formula in C2 is invalid.", m_pDoc->GetErrCode(ScAddress(2,1,0)) == 0);
+
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncN()
 {
     OUString aTabName("foo");
