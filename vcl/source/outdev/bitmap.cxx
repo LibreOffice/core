@@ -1160,7 +1160,10 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
                 }
                 else
                 {
-                    DrawBitmap( rPos, rSize, rBitmap );
+                    if ( bIsSizeValid )
+                        DrawBitmap( rPos, rSize, rBitmap );
+                    else
+                        DrawBitmap( rPos, rBitmap );
                 }
             }
             break;
