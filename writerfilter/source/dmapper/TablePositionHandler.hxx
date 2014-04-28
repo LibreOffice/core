@@ -38,6 +38,48 @@ class TablePositionHandler
     virtual void lcl_sprm(Sprm& sprm) SAL_OVERRIDE;
 
 public:
+    int getY()
+    {
+        return m_nY;
+    }
+    int getX()
+    {
+        return m_nX;
+    }
+    int getLeftFromText()
+    {
+        return m_nLeftFromText;
+    }
+    int getRightFromText()
+    {
+        return m_nRightFromText;
+    }
+    int getTopFromText()
+    {
+        return m_nTopFromText;
+    }
+    int getBottomFromText()
+    {
+        return m_nBottomFromText;
+    }
+
+    OUString getVertAnchor()
+    {
+        return m_aVertAnchor;
+    }
+    OUString getYSpec()
+    {
+        return m_aYSpec;
+    }
+    OUString getHorzAnchor()
+    {
+        return m_aHorzAnchor;
+    }
+    OUString getXSpec()
+    {
+        return m_aXSpec;
+    }
+
     TablePositionHandler();
     virtual ~TablePositionHandler();
 

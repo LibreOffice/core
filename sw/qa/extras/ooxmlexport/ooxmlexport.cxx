@@ -3174,6 +3174,23 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77117, "fdo77117.docx")
     CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xShape, "CharHeight"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFloatingTable, "fdo77887.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "horzAnchor", "margin");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "leftFromText", "141");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "rightFromText", "141");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "tblpXSpec", "center");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "tblpY", "2266");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "vertAnchor", "page");
+
+}
+
+
 DECLARE_OOXMLEXPORT_TEST(testFDO75431, "fdo75431.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
