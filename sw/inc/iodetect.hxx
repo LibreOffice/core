@@ -25,7 +25,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <swddllapi.h>
+#include <swdllapi.h>
 
 #define FILTER_RTF      "RTF"       ///< RTF filter
 #define sRtfWH          "WH_RTF"
@@ -76,7 +76,7 @@ enum ReaderWriterEnum {
     MAXFILTER
 };
 
-extern SWD_DLLPUBLIC SwIoDetect aFilterDetect[];
+extern SwIoDetect aFilterDetect[];
 
 /** The following class is a wrapper for basic i/o functions of Writer 3.0.
  Everything is static. All filter names mentioned are Writer-internal
@@ -87,33 +87,24 @@ class SwIoSystem
 {
 public:
     /// find for an internal format name the corresponding filter entry
-    SWD_DLLPUBLIC static const SfxFilter*
+    SW_DLLPUBLIC static const SfxFilter*
         GetFilterOfFormat( const OUString& rFormat,
             const SfxFilterContainer* pCnt = 0 );
 
     /** Detect for the given file which filter should be used. The filter name
      is returned. If no filter could be found, the name of the ASCII filter
      is returned! */
-    SWD_DLLPUBLIC static const SfxFilter*
-        GetFileFilter( const OUString& rFileName,
-            const OUString& rPrefFltName,
-            SfxMedium* pMedium = 0 );
-
-    /** Detect whether the given file is in the given format.
-     For now, only our own filters are supported! */
-    static bool IsFileFilter(SfxMedium& rMedium, const OUString& rFmtName);
+    static const SfxFilter* GetFileFilter( const OUString& rFileName, const OUString& rPrefFltName, SfxMedium* pMedium = 0 );
 
     static bool IsValidStgFilter( SotStorage& , const SfxFilter& );
     static bool IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
 
-    SWD_DLLPUBLIC static bool
-        IsDetectableText( const sal_Char* pBuf, sal_uLong &rLen,
+    static bool IsDetectableText( const sal_Char* pBuf, sal_uLong &rLen,
             rtl_TextEncoding *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0, bool bEncodedFilter = false );
 
     static const SfxFilter* GetTextFilter( const sal_Char* pBuf, sal_uLong nLen );
 
-    SWD_DLLPUBLIC static const OUString
-        GetSubStorageName( const SfxFilter& rFltr );
+    static const OUString GetSubStorageName( const SfxFilter& rFltr );
 };
 
 #endif
