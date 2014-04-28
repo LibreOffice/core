@@ -2865,10 +2865,27 @@ namespace cppcanvas
 
         ImplRenderer::ImplRenderer( const CanvasSharedPtr&  rCanvas,
                                     const GDIMetaFile&      rMtf,
-                                    const Parameters&       rParams ) :
-            CanvasGraphicHelper( rCanvas ),
-            maActions()
+                                    const Parameters&       rParams )
+            : CanvasGraphicHelper(rCanvas)
+            , maActions()
+            , fPageScale(0.0)
+            , nOriginX(0)
+            , nOriginY(0)
+            , nHDPI(0)
+            , nVDPI(0)
+            , nFrameLeft(0)
+            , nFrameTop(0)
+            , nFrameRight(0)
+            , nFrameBottom(0)
+            , nPixX(0)
+            , nPixY(0)
+            , nMmX(0)
+            , nMmY(0)
+            , mbMultipart(false)
+            , mMFlags(0)
         {
+            memset (aObjects, 0, sizeof (aObjects));
+
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::ImplRenderer::ImplRenderer(mtf)" );
 
             OSL_ENSURE( rCanvas.get() != NULL && rCanvas->getUNOCanvas().is(),
@@ -2970,9 +2987,6 @@ namespace cppcanvas
             }
 
             /* EMF+ */
-            memset (aObjects, 0, sizeof (aObjects));
-            mbMultipart = false;
-
             createActions( const_cast<GDIMetaFile&>(rMtf), // HACK(Q2):
                                                            // we're
                                                            // changing
