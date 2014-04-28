@@ -38,6 +38,7 @@ class SwUnoCrsr;
 class SwOLENode;
 class SwTxtFmtColl;
 class SwGrfFmtColl;
+class SwPosition;
 
 namespace com { namespace sun { namespace star { namespace i18n {
     struct ForbiddenCharacters;    ///< comes from the I18N UNO interface
@@ -171,6 +172,15 @@ public:
                             sal_uInt16 nLookahead = 20 ) const;
     sal_uInt16 FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
                             sal_uInt16 nLookahead = 20 ) const;
+
+    /**
+     Find the redline at the given position.
+
+     @param tableIndex position in SwRedlineTbl to start searching at, will be updated with the index of the returned
+                       redline (or the next redline after the given position if not found)
+     @param next true: redline starts at position and ends after, false: redline starts before position and ends at or after
+    */
+    const SwRedline* FindAtPosition( const SwPosition& startPosition, sal_uInt16& tableIndex, bool next = true ) const;
 
     using _SwRedlineTbl::size;
     using _SwRedlineTbl::operator[];

@@ -52,6 +52,8 @@
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svl/visitem.hxx>
+#include <redline.hxx>
+#include <docary.hxx>
 
 #include <cmdid.h>
 
@@ -266,12 +268,41 @@ void SwView::GetState(SfxItemSet &rSet)
             case FN_REDLINE_ACCEPT_DIRECT:
             case FN_REDLINE_REJECT_DIRECT:
             {
-                // If the selection/cursor start position isn't on a redline, disable
-                // accepting/rejecting changes.
                 SwDoc *pDoc = m_pWrtShell->GetDoc();
                 SwPaM *pCursor = m_pWrtShell->GetCrsr();
-                if (0 == pDoc->GetRedline(*pCursor->Start(), 0))
+                if (GetDocShell()->HasChangeRecordProtection())
                     rSet.DisableItem(nWhich);
+                else if (pCursor->HasMark())
+                { // If the selection does not contain redlines, disable accepting/rejecting changes.
+                    sal_uInt16 index = 0;
+                    const SwRedlineTbl& table = pDoc->GetRedlineTbl();
+                    const SwRedline* redline = table.FindAtPosition( *pCursor->Start(), index );
+                    if( redline != NULL && *redline->Start() == *pCursor->End())
+                        redline = NULL;
+                    if( redline == NULL )
+                    {
+                        for(; index < table.size(); ++index )
+                        {
+                            const SwRedline* tmp = table[ index ];
+                            if( *tmp->Start() >= *pCursor->End())
+                                break;
+                            if( tmp->HasMark() && tmp->IsVisible())
+                            {
+                                redline = tmp;
+                                break;
+                            }
+                        }
+                    }
+                    if( redline == NULL )
+                        rSet.DisableItem(nWhich);
+                }
+                else
+                {
+                    // If the cursor position isn't on a redline, disable
+                    // accepting/rejecting changes.
+                    if (0 == pDoc->GetRedline(*pCursor->Start(), 0))
+                        rSet.DisableItem(nWhich);
+                }
             }
             break;
 
