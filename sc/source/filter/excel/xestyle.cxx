@@ -1207,7 +1207,7 @@ XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
     {
         case EXC_BIFF5: mnXclOffset = EXC_FORMAT_OFFSET5;   break;
         case EXC_BIFF8: mnXclOffset = EXC_FORMAT_OFFSET8;   break;
-        default:        DBG_ERROR_BIFF();
+        default:        mnXclOffset = 0; DBG_ERROR_BIFF();
     }
 
     mxFormatter->FillKeywordTable( *mpKeywordTable, LANGUAGE_ENGLISH_US );
