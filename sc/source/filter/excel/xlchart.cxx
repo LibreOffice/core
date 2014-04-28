@@ -1219,11 +1219,13 @@ EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupp
 
 } // namespace
 
-XclChRootData::XclChRootData() :
-    mxTypeInfoProv( new XclChTypeInfoProvider ),
-    mxFmtInfoProv( new XclChFormatInfoProvider ),
-    mnBorderGapX( 0 ),
-    mnBorderGapY( 0 )
+XclChRootData::XclChRootData()
+    : mxTypeInfoProv(new XclChTypeInfoProvider)
+    , mxFmtInfoProv(new XclChFormatInfoProvider)
+    , mnBorderGapX(0)
+    , mnBorderGapY(0)
+    , mfUnitSizeX(0.0)
+    , mfUnitSizeY(0.0)
 {
     // remember some title shape getter functions
     maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_TITLE ) ] = lclGetMainTitleShape;
