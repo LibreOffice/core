@@ -62,13 +62,16 @@
 #include <svl/style.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/svdogrp.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/bmpacc.hxx>
 #include <svtools/sfxecode.hxx>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <tools/resmgr.hxx>
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <svx/svdotable.hxx>
 
 #include "drawdoc.hxx"
 #include "htmlpublishmode.hxx"
@@ -80,9 +83,6 @@
 #include "imapinfo.hxx"
 #include "sdresid.hxx"
 #include "buttonset.hxx"
-#include <basegfx/polygon/b2dpolygon.hxx>
-
-#include <svx/svdotable.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1218,6 +1218,23 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
 
         switch (eKind)
         {
+            case PRESOBJ_NONE:
+            {
+                if (pObject->GetObjIdentifier() == OBJ_GRUP)
+                {
+                    SdrObjGroup* pObjectGroup = (SdrObjGroup*) pObject;
+                    WriteObjectGroup(aStr, pObjectGroup, pOutliner, rBackgroundColor, false);
+                }
+                else
+                {
+                    if (pObject->GetOutlinerParaObject())
+                    {
+                        WriteOutlinerParagraph(aStr, pOutliner, pObject->GetOutlinerParaObject(), rBackgroundColor, false);
+                    }
+                }
+            }
+            break;
+
             case PRESOBJ_TABLE:
             {
                 SdrTableObj* pTableObject = (SdrTableObj*) pObject;
@@ -1248,6 +1265,7 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
                 aStr.append("</table>\r\n");
             }
             break;
+
             case PRESOBJ_TEXT:
             case PRESOBJ_OUTLINE:
             {
@@ -1257,11 +1275,35 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
                 WriteOutlinerParagraph(aStr, pOutliner, pTextObject->GetOutlinerParaObject(), rBackgroundColor, bHeadLine);
             }
             break;
+
             default:
                 break;
         }
     }
     return aStr.makeStringAndClear();
+}
+
+void HtmlExport::WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup* pObjectGroup, SdrOutliner* pOutliner,
+                                  const Color& rBackgroundColor, bool bHeadLine)
+{
+    SdrObjListIter aGroupIterator(*pObjectGroup->GetSubList(), IM_DEEPNOGROUPS);
+    while (aGroupIterator.IsMore())
+    {
+        SdrObject* pCurrentObject = aGroupIterator.Next();
+        if (pCurrentObject->GetObjIdentifier() == OBJ_GRUP)
+        {
+            SdrObjGroup* pCurrentGroupObject = (SdrObjGroup*) pCurrentObject;
+            WriteObjectGroup(aStr, pCurrentGroupObject, pOutliner, rBackgroundColor, bHeadLine);
+        }
+        else
+        {
+            OutlinerParaObject* pOutlinerParagraphObject = pCurrentObject->GetOutlinerParaObject();
+            if (pOutlinerParagraphObject != NULL)
+            {
+                WriteOutlinerParagraph(aStr, pOutliner, pOutlinerParagraphObject, rBackgroundColor, bHeadLine);
+            }
+        }
+    }
 }
 
 void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutliner,

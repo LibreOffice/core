@@ -55,6 +55,7 @@ class SdrOutliner;
 class SdPage;
 class HtmlState;
 class SdrTextObj;
+class SdrObjGroup;
 class SdrPage;
 class SdDrawDocument;
 class ButtonSet;
@@ -214,6 +215,9 @@ class HtmlExport
     void WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutliner,
                                 OutlinerParaObject* pOutlinerParagraphObject,
                                 const Color& rBackgroundColor, bool bHeadLine);
+
+    void WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup* pObjectGroup, SdrOutliner* pOutliner,
+                          const Color& rBackgroundColor, bool bHeadLine);
 
  public:
     HtmlExport(const OUString& aPath,
