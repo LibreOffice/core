@@ -121,6 +121,30 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
         mpAlphaVDev->DrawRect( rRect, nHorzRound, nVertRound );
 }
 
+void OutputDevice::DrawCheckered(const Point& rPos, const Size& rSize, sal_uInt32 nLen, Color aStart, Color aEnd)
+{
+    const sal_uInt32 nMaxX(rPos.X() + rSize.Width());
+    const sal_uInt32 nMaxY(rPos.Y() + rSize.Height());
+
+    Push(PUSH_LINECOLOR|PUSH_FILLCOLOR);
+    SetLineColor();
+
+    for(sal_uInt32 x(0), nX(rPos.X()); nX < nMaxX; x++, nX += nLen)
+    {
+        const sal_uInt32 nRight(std::min(nMaxX, nX + nLen));
+
+        for(sal_uInt32 y(0), nY(rPos.Y()); nY < nMaxY; y++, nY += nLen)
+        {
+            const sal_uInt32 nBottom(std::min(nMaxY, nY + nLen));
+
+            SetFillColor((x & 0x0001) ^ (y & 0x0001) ? aStart : aEnd);
+            DrawRect(Rectangle(nX, nY, nRight, nBottom));
+        }
+    }
+
+    Pop();
+}
+
 void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags )
 {
     Rectangle aDstRect( PixelToLogic( Point() ), GetOutputSize() );
