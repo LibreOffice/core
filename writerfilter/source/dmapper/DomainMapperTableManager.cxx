@@ -457,6 +457,14 @@ const uno::Sequence<beans::PropertyValue> DomainMapperTableManager::getCurrentTa
         return uno::Sequence< beans::PropertyValue >( 0 );
 }
 
+TablePositionHandler* DomainMapperTableManager::getCurrentTableRealPosition()
+{
+    if ( !m_aTablePositions.empty( ) && m_aTablePositions.back() )
+        return (m_aTablePositions.back( )).get();
+    else
+        return 0;
+}
+
 void DomainMapperTableManager::startLevel( )
 {
     DomainMapperTableManager_Base_t::startLevel( );

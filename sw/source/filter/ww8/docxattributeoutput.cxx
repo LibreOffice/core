@@ -2728,6 +2728,63 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             m_aTableStyleConf[ BOX_LINE_LEFT ] = aGrabBagElement->second.get<table::BorderLine2>();
         else if( aGrabBagElement->first == "TableStyleRightBorder" )
             m_aTableStyleConf[ BOX_LINE_RIGHT ] = aGrabBagElement->second.get<table::BorderLine2>();
+        else if (aGrabBagElement->first == "TablePosition" )
+        {
+            FastAttributeList *attrListTablePos = m_pSerializer->createAttrList( );
+            uno::Sequence<beans::PropertyValue> aTablePosition = aGrabBagElement->second.get<uno::Sequence<beans::PropertyValue> >();
+            for (sal_Int32 i = 0; i < aTablePosition.getLength(); ++i)
+            {
+                if (aTablePosition[i].Name == "vertAnchor")
+                {
+                    OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+                    attrListTablePos->add( FSNS( XML_w, XML_vertAnchor ), strTemp.getStr() );
+                }
+                else if (aTablePosition[i].Name == "tblpYSpec")
+                {
+                    OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+                    attrListTablePos->add( FSNS( XML_w, XML_tblpYSpec ), strTemp.getStr() );
+                }
+                else if (aTablePosition[i].Name == "horzAnchor")
+                {
+                    OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+                    attrListTablePos->add( FSNS( XML_w, XML_horzAnchor ), strTemp.getStr() );
+                }
+                else if (aTablePosition[i].Name == "tblpXSpec")
+                {
+                    OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+                    attrListTablePos->add( FSNS( XML_w, XML_tblpXSpec ), strTemp.getStr() );
+                }
+                else if (aTablePosition[i].Name == "bottomFromText")
+                {
+                    attrListTablePos->add( FSNS( XML_w, XML_bottomFromText ), OString::number( aTablePosition[i].Value.get<sal_Int32>() ) );
+                }
+                else if (aTablePosition[i].Name == "leftFromText")
+                {
+                    attrListTablePos->add( FSNS( XML_w, XML_leftFromText ), OString::number( aTablePosition[i].Value.get<sal_Int32>() ) );
+                }
+                else if (aTablePosition[i].Name == "rightFromText")
+                {
+                    attrListTablePos->add( FSNS( XML_w, XML_rightFromText ), OString::number( aTablePosition[i].Value.get<sal_Int32>() ) );
+                }
+                else if (aTablePosition[i].Name == "topFromText")
+                {
+                    attrListTablePos->add( FSNS( XML_w, XML_topFromText ), OString::number( aTablePosition[i].Value.get<sal_Int32>() ) );
+                }
+                else if (aTablePosition[i].Name == "tblpX")
+                {
+                    attrListTablePos->add( FSNS( XML_w, XML_tblpX ), OString::number( aTablePosition[i].Value.get<sal_Int32>() ) );
+                }
+                else if (aTablePosition[i].Name == "tblpY")
+                {
+                    attrListTablePos->add( FSNS( XML_w, XML_tblpY ), OString::number( aTablePosition[i].Value.get<sal_Int32>() ) );
+                }
+            }
+
+            XFastAttributeListRef xAttrListTablePosRef( attrListTablePos );
+
+            m_pSerializer->singleElementNS( XML_w, XML_tblpPr, xAttrListTablePosRef);
+            attrListTablePos = NULL;
+        }
     }
 
     // Output the table alignement
