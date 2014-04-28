@@ -188,9 +188,11 @@ sal_Size ExcBoolRecord::GetLen( void ) const
 
 //--------------------------------------------------------- class ExcBof_Base -
 
-ExcBof_Base::ExcBof_Base() :
-    nRupBuild( 0x096C ),    // copied from Excel
-    nRupYear( 0x07C9 )      // copied from Excel
+ExcBof_Base::ExcBof_Base()
+    : nDocType(0)
+    , nVers(0)
+    , nRupBuild(0x096C)    // copied from Excel
+    , nRupYear(0x07C9)      // copied from Excel
 {
 }
 
