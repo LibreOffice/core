@@ -133,6 +133,7 @@ public:
     void testFuncN();
     void testFuncCOUNTIF();
     void testFuncNUMBERVALUE();
+    void testFuncLEN();
     void testFuncLOOKUP();
     void testFuncVLOOKUP();
     void testFuncMATCH();
@@ -383,6 +384,7 @@ public:
     CPPUNIT_TEST(testFuncN);
     CPPUNIT_TEST(testFuncCOUNTIF);
     CPPUNIT_TEST(testFuncNUMBERVALUE);
+    CPPUNIT_TEST(testFuncLEN);
     CPPUNIT_TEST(testFuncLOOKUP);
     CPPUNIT_TEST(testFuncVLOOKUP);
     CPPUNIT_TEST(testFuncMATCH);

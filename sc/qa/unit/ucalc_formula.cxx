@@ -2635,6 +2635,39 @@ void Test::testFuncNUMBERVALUE()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncLEN()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "Formula");
+
+    // Leave A1:A3 empty, and insert an array of LEN in B1:B3 that references
+    // these empty cells.
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(1, 0, 1, 2, aMark, "=LEN(A1:A3)", NULL);
+
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_MESSAGE("This formulashould be a matrix origin.",
+                           pFC->GetMatrixFlag() == MM_FORMULA);
+
+    // This should be a 1x3 matrix.
+    SCCOL nCols = -1;
+    SCROW nRows = -1;
+    pFC->GetMatColsRows(nCols, nRows);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), nCols);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), nRows);
+
+    // LEN value should be 0 for an empty cell.
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncLOOKUP()
 {
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
