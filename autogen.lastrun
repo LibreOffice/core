@@ -1,0 +1,2 @@
+--enable-gstreamer
+--disable-gstreamer-0-10
