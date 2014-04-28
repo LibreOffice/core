@@ -784,6 +784,9 @@ public:
 
     void substream(Id rName, ::writerfilter::Reference<Stream>::Pointer_t const& ref);
 
+    /// If the document needs to split paragraph.
+    bool m_bIsSplitPara;
+
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
     std::vector<uno::Reference< drawing::XShape > > m_vTextFramesForChaining ;

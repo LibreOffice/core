@@ -198,6 +198,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIgnoreNextPara(false),
         m_bIgnoreNextTab(false),
         m_bFrameBtLr(false),
+        m_bIsSplitPara(false),
         m_vTextFramesForChaining()
 
 {
@@ -459,7 +460,15 @@ void    DomainMapper_Impl::PushProperties(ContextType eId)
                 pSectionContext_->SetStart( xTextAppend->getEnd() );
         }
     }
-    m_aPropertyStacks[eId].push( pInsert );
+    if(eId == CONTEXT_PARAGRAPH && m_bIsSplitPara)
+    {
+        m_aPropertyStacks[eId].push( GetTopContextOfType(eId));
+        m_bIsSplitPara = false;
+    }
+    else
+    {
+        m_aPropertyStacks[eId].push( pInsert );
+    }
     m_aContextStack.push(eId);
 
     m_pTopContext = m_aPropertyStacks[eId].top();

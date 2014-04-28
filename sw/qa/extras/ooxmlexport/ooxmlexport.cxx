@@ -3210,6 +3210,18 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeOLE, "fdo77759.docx")
                 "/word/embeddings/oleObject1.xlsx");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testPageBreakInFirstPara,"fdo77727.docx")
+{
+    /* Break to next page was not exported if it is in first paragraph of the section.
+     * Now after fix , LO writes Next Page Break and also preserves <w:br> tag.
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br","type","page");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
