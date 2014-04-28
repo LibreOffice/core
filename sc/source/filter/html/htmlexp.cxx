@@ -564,53 +564,56 @@ void ScHTMLExport::WriteBody()
     // default text color black
     rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body );
 
-    if ( bAll && GPOS_NONE != pBrushItem->GetGraphicPos() )
+    if (!mbSkipImages)
     {
-        OUString aLink = pBrushItem->GetGraphicLink();
-        OUString aGrfNm;
-
-        // Embedded graphic -> write using WriteGraphic
-        if( aLink.isEmpty() )
+        if ( bAll && GPOS_NONE != pBrushItem->GetGraphicPos() )
         {
-            const Graphic* pGrf = pBrushItem->GetGraphic();
-            if( pGrf )
+            OUString aLink = pBrushItem->GetGraphicLink();
+            OUString aGrfNm;
+
+            // Embedded graphic -> write using WriteGraphic
+            if( aLink.isEmpty() )
             {
-                // Save graphic as (JPG) file
-                aGrfNm = aStreamPath;
-                sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
-                    "JPG", XOUTBMP_USE_NATIVE_IF_POSSIBLE );
-                if( !nErr ) // Contains errors, as we have nothing to output
+                const Graphic* pGrf = pBrushItem->GetGraphic();
+                if( pGrf )
                 {
+                    // Save graphic as (JPG) file
+                    aGrfNm = aStreamPath;
+                    sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
+                        "JPG", XOUTBMP_USE_NATIVE_IF_POSSIBLE );
+                    if( !nErr ) // Contains errors, as we have nothing to output
+                    {
+                        aGrfNm = URIHelper::SmartRel2Abs(
+                                INetURLObject(aBaseURL),
+                                aGrfNm, URIHelper::GetMaybeFileHdl(), true, false);
+                        if ( HasCId() )
+                            MakeCIdURL( aGrfNm );
+                        aLink = aGrfNm;
+                    }
+                }
+            }
+            else
+            {
+                aGrfNm = aLink;
+                if( bCopyLocalFileToINet || HasCId() )
+                {
+                    CopyLocalFileToINet( aGrfNm, aStreamPath );
+                    if ( HasCId() )
+                        MakeCIdURL( aGrfNm );
+                }
+                else
                     aGrfNm = URIHelper::SmartRel2Abs(
                             INetURLObject(aBaseURL),
                             aGrfNm, URIHelper::GetMaybeFileHdl(), true, false);
-                    if ( HasCId() )
-                        MakeCIdURL( aGrfNm );
-                    aLink = aGrfNm;
-                }
+                aLink = aGrfNm;
             }
-        }
-        else
-        {
-            aGrfNm = aLink;
-            if( bCopyLocalFileToINet || HasCId() )
+            if( !aLink.isEmpty() )
             {
-                CopyLocalFileToINet( aGrfNm, aStreamPath );
-                if ( HasCId() )
-                    MakeCIdURL( aGrfNm );
+                rStrm.WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_background ).WriteCharPtr( "=\"" );
+                OUT_STR( URIHelper::simpleNormalizedMakeRelative(
+                            aBaseURL,
+                            aLink ) ).WriteChar( '\"' );
             }
-            else
-                aGrfNm = URIHelper::SmartRel2Abs(
-                        INetURLObject(aBaseURL),
-                        aGrfNm, URIHelper::GetMaybeFileHdl(), true, false);
-            aLink = aGrfNm;
-        }
-        if( !aLink.isEmpty() )
-        {
-            rStrm.WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_background ).WriteCharPtr( "=\"" );
-            OUT_STR( URIHelper::simpleNormalizedMakeRelative(
-                        aBaseURL,
-                        aLink ) ).WriteChar( '\"' );
         }
     }
     if ( !aHTMLStyle.aBackgroundColor.GetTransparency() )
@@ -805,7 +808,7 @@ void ScHTMLExport::WriteTables()
 
         IncIndent(-1); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_table );
 
-        if ( bTabHasGraphics && mbSkipImages )
+        if ( bTabHasGraphics && !mbSkipImages )
         {
             // the rest that is not in a cell
             size_t ListSize = aGraphList.size();
@@ -844,7 +847,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     ScAddress aPos( nCol, nRow, nTab );
     ScHTMLGraphEntry* pGraphEntry = NULL;
-    if ( bTabHasGraphics )
+    if ( bTabHasGraphics && !mbSkipImages )
     {
         size_t ListSize = aGraphList.size();
         for ( size_t i = 0; i < ListSize; ++i )
