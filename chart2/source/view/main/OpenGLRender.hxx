@@ -178,7 +178,7 @@ struct PackedVertex{
 class OpenGLRender
 {
 public:
-    OpenGLRender();
+    OpenGLRender(com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xTarget);
     ~OpenGLRender();
     int InitOpenGL();
     int MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale);
@@ -197,7 +197,7 @@ public:
     int RenderBubble2FBO(int wholeFlag);
 
     void prepareToRender();
-    Graphic renderToBitmap();
+    void renderToBitmap();
 
     int RenderRectangleShape(bool bBorder, bool bFill);
     int RectangleShapePoint(float x, float y, float directionX, float directionY);
@@ -239,44 +239,46 @@ public:
     void SetClickPos(Point aMPos);
     int RenderClickPos(Point aMPos);
 
-public:
+private:
+
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxTarget;
         //for performance
 
-        double m_dFreq;
+    double m_dFreq;
 
-        float m_fProcessXShape;
+    float m_fProcessXShape;
 
-        float m_fReadPixel;
+    float m_fReadPixel;
 
-        float m_fProcess2DLine;
+    float m_fProcess2DLine;
 
-        float m_fSet2DLineProp;
+    float m_fSet2DLineProp;
 
-        float m_fRender2DLine;
+    float m_fRender2DLine;
 
-        float m_fProcess2DBubble;
+    float m_fProcess2DBubble;
 
-        float m_fRender2DBubble;
+    float m_fRender2DBubble;
 
-        float m_fSet2DBubbleProp;
+    float m_fSet2DBubbleProp;
 
-        float m_fProcessText;
+    float m_fProcessText;
 
-        float m_fSetTextProp;
+    float m_fSetTextProp;
 
-        float m_fRenderText;
+    float m_fRenderText;
 
-        float m_fProcessRect;
+    float m_fProcessRect;
 
-        float m_fSetRectProp;
+    float m_fSetRectProp;
 
-        float m_fRenderRect;
+    float m_fRenderRect;
 
-        float m_fInterationShapes;
+    float m_fInterationShapes;
 
-        int m_iWidth;
+    int m_iWidth;
 
-        int m_iHeight;
+    int m_iHeight;
 
 private:
     int CreateTextureObj(int width, int height);

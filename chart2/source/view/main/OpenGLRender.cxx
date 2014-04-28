@@ -74,26 +74,11 @@ static GLfloat squareVertices[] = {
     -1.0f,  1.0f, -1.0
 };
 
-static GLfloat coordVertices[] = {
-    0.0f, 0.0f,
-    1.0f, 0.0f,
-    1.0f, 1.0f,
-    0.0f, 1.0f,
-};
-
 static GLfloat coordReverseVertices[] = {
     0.0f, 1.0f,
     1.0f, 1.0f,
     1.0f, 0.0f,
     0.0f, 0.0f,
-};
-
-
-static GLfloat square2DVertices[] = {
-    -1.0f, -1.0f,
-    1.0f, -1.0f,
-    1.0f,  1.0f,
-    -1.0f,  1.0f
 };
 
 int static checkGLError(const char *file, int line)
@@ -207,12 +192,11 @@ void OpenGLRender::CreateActualRoundedCube(float fRadius, int iSubDivY, int iSub
 
     vector<glm::vec3> vertices;
     vector<glm::vec3> normals;
-    int faceNum = GenerateRoundCornerBar(vertices, normals, fRadius, iSubDivY, iSubDivZ, width, height, depth);
+    GenerateRoundCornerBar(vertices, normals, fRadius, iSubDivY, iSubDivZ, width, height, depth);
     std::map<PackedVertex,unsigned short> VertexToOutIndex;
     glm::vec3 actualVerteices[3];
     glm::vec3 actualNormals[3];
     vector<unsigned short> indeices[5];
-    glm::vec3 externVertex[3];
     glm::vec3 externSurNormal;
     glm::mat4 corrctCoord = glm::translate(glm::vec3(width / 2.0f, height / 2.0f  - fRadius, depth / 2.0f));
     m_RoundBarMesh.topThreshold = topThreshold;
@@ -234,8 +218,10 @@ void OpenGLRender::CreateActualRoundedCube(float fRadius, int iSubDivY, int iSub
         int surfaceIndex = (minY >= topThreshold - 0.001) ? TOP_SURFACE : ((maxY <= bottomThreshold + 0.001) ? BOTTOM_SURFACE : MIDDLE_SURFACE);
         for (int k = 0; k < 3; k++)
         {
-            PackedVertex packed = {actualVerteices[k], actualNormals[k]};
-            SetVertex(packed, VertexToOutIndex, m_Vertices, m_Normals, indeices[surfaceIndex]);
+            {
+                PackedVertex packed = {actualVerteices[k], actualNormals[k]};
+                SetVertex(packed, VertexToOutIndex, m_Vertices, m_Normals, indeices[surfaceIndex]);
+            }
 
             //add extern
             if ((surfaceIndex == TOP_SURFACE) || (surfaceIndex == BOTTOM_SURFACE))
@@ -370,10 +356,10 @@ int OpenGLRender::GenerateRoundCornerBar(vector<glm::vec3> &vertices, vector<glm
                 normals.push_back(vNormals[index]);
             }
             iFacesAdded += 2; // Keep count of added faces
-            if ((fCurAngleY < 90.0) && (fNextAngleY >= 90.0) ||
-                (fCurAngleY < 180.0) && (fNextAngleY >= 180.0) ||
-                (fCurAngleY < 270.0) && (fNextAngleY >= 270.0) ||
-                (fCurAngleY < 360.0) && (fNextAngleY >= 360.0))
+            if (((fCurAngleY < 90.0) && (fNextAngleY >= 90.0)) ||
+                ((fCurAngleY < 180.0) && (fNextAngleY >= 180.0)) ||
+                ((fCurAngleY < 270.0) && (fNextAngleY >= 270.0)) ||
+                ((fCurAngleY < 360.0) && (fNextAngleY >= 360.0)))
             {
                 glm::vec3 vXZQuadNextPoints[] =
                 {
@@ -829,7 +815,7 @@ void OpenGLRender::prepareToRender()
     m_fZStep = 0;
 }
 
-Graphic OpenGLRender::renderToBitmap()
+void OpenGLRender::renderToBitmap()
 {
     if (mbArbMultisampleSupported)
     {
@@ -853,21 +839,27 @@ Graphic OpenGLRender::renderToBitmap()
     }
     glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[0]);
 
+    BitmapEx aBitmap = GetAsBitmap();
 #if RENDER_TO_FILE
-    char fileName[256] = {0};
-    sprintf(fileName, "D:\\shaderout_%d_%d.bmp", m_iWidth, m_iHeight);
-    sal_uInt8 *buf = (sal_uInt8 *)malloc(m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN);
-    CreateBMPHeader(buf, m_iWidth, m_iHeight);
-    glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGR, GL_UNSIGNED_BYTE, buf + BMP_HEADER_LEN);
-    FILE *pfile = fopen(fileName,"wb");
-    fwrite(buf,m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN, 1, pfile);
-    free(buf);
-    fclose(pfile);
+    static int nIdx = 0;
+    OUString aName = OUString( "file:///home/moggi/Documents/work/text" ) + OUString::number( nIdx++ ) + ".png";
+    try {
+        vcl::PNGWriter aWriter( aBitmap );
+        SvFileStream sOutput( aName, STREAM_WRITE );
+        aWriter.Write( sOutput );
+        sOutput.Close();
+    } catch (...) {
+        SAL_WARN("chart2.opengl", "Error writing png to " << aName);
+    }
 #else
-    Graphic aGraphic( GetAsBitmap() );
+    Graphic aGraphic(aBitmap);
+    uno::Reference< awt::XBitmap> xBmp( aGraphic.GetXGraphic(), uno::UNO_QUERY );
+    uno::Reference < beans::XPropertySet > xPropSet ( mxTarget, uno::UNO_QUERY );
+    xPropSet->setPropertyValue("Graphic", uno::makeAny(aGraphic.GetXGraphic()));
+    mxTarget->setSize(awt::Size(m_iWidth*OPENGL_SCALE_VALUE, m_iHeight*OPENGL_SCALE_VALUE));
+    mxTarget->setPosition(awt::Point(0,0));
 #endif
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-return aGraphic;
 }
 
 int OpenGLRender::CreateTextureObj(int width, int height)
@@ -914,22 +906,21 @@ int OpenGLRender::MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale)
 
 int OpenGLRender::CreateFrameBufferObj()
 {
-    GLenum status;
     // create a framebuffer object, you need to delete them when program exits.
     glGenFramebuffers(2, m_FboID);
-    status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    glCheckFramebufferStatus(GL_FRAMEBUFFER);
     for (int i = 0; i < 2; i++)
     {
         glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[i]);
         glBindTexture(GL_TEXTURE_2D, m_TextureObj[i]);
         // attach a texture to FBO color attachement point
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureObj[i], 0);
-        status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        glCheckFramebufferStatus(GL_FRAMEBUFFER);
         glBindTexture(GL_TEXTURE_2D, 0);
         // attach a renderbuffer to depth attachment point
         glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[i]);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RboID[i]);
-        status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        glCheckFramebufferStatus(GL_FRAMEBUFFER);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
@@ -953,10 +944,13 @@ void OpenGLRender::Release()
     glDeleteRenderbuffers(1, &m_renderBufferDepthMS);
 }
 
-OpenGLRender::OpenGLRender()
-    : m_Model(glm::mat4(1.0f))
-    , m_iWidth(0)
-    , m_iHeight(0)
+OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
+    mxTarget(xTarget)
+    , m_iWidth(1600)
+    , m_iHeight(900)
+    , m_Model(glm::mat4(1.0f))
+    , m_TranslationMatrix(glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f)))
+    , m_iPointNum(0)
     , m_fLineWidth(0.001f)
     , mbArbMultisampleSupported(false)
 #if defined( _WIN32 )
@@ -985,11 +979,9 @@ OpenGLRender::OpenGLRender()
     , m_SymbolMatrixID(0)
     , m_SymbolColorID(0)
     , m_SymbolShapeID(0)
+    , m_fZmax(-10000000.0f)
 {
     //TODO: moggi: use STL
-    m_Model = glm::mat4(1.0f);
-    m_TranslationMatrix = glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f));
-    m_iPointNum = 0;
     memset(&m_Line2DPointList, 0, sizeof(Line2DPointList));
     m_FboID[0] = 0;
     m_FboID[1] = 0;
@@ -997,10 +989,7 @@ OpenGLRender::OpenGLRender()
     m_TextureObj[1] = 0;
     m_RboID[0] = 0;
     m_RboID[1] = 0;
-    m_iWidth = 1600;
-    m_iHeight = 900;
 
-    m_fZmax = -10000000.0f;
 
 
     memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
@@ -1401,8 +1390,6 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, Font aFont, long 
     aM.rotate( -rotation*F_PI/180.0 );//#i78696#->#i80521#
     aM.translate( nXPos, nYPos );
     drawing::HomogenMatrix3 aTrans = chart::B2DHomMatrixToHomogenMatrix3(aM);
-    awt::Size asize = awt::Size(20*bmpWidth, 20*bmpHeight);
-    awt::Point aPoint = awt::Point(aTrans.Line1.Column3, aTrans.Line2.Column3);
     aTrans.Line1.Column1 = 20 * bmpWidth;
     aTrans.Line2.Column2 = 20 * bmpHeight;
     return CreateTextTexture(aBitmap,aPos,aSize,rotation,aTrans);
@@ -1818,7 +1805,7 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, float , float , sal_Int3
 
 void OpenGLRender::GetFreq()
 {
-#if _WIN32
+#if defined( _WIN32 )
     LARGE_INTEGER litmpold;
     QueryPerformanceFrequency(&litmpold);
     m_dFreq= litmpold.QuadPart;
@@ -1827,7 +1814,7 @@ void OpenGLRender::GetFreq()
 
 double OpenGLRender::GetTime()
 {
-#if _WIN32
+#if defined( _WIN32 )
     LARGE_INTEGER litmpold;
     QueryPerformanceCounter(&litmpold);
     return litmpold.QuadPart*1000000 / m_dFreq;
@@ -1897,7 +1884,7 @@ int OpenGLRender::RenderPolygon3D(Polygon3DInfo &polygon)
     glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
     glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(Material), &polygon.material);
     CHECK_GL_ERROR();
-    glBindBuffer(GL_UNIFORM_BUFFER, NULL);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
     glUseProgram(m_3DProID);
     glUniformMatrix4fv(m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
     glUniformMatrix4fv(m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
@@ -2213,18 +2200,18 @@ void OpenGLRender::EndAddExtrude3DObjectPoint()
 
 int OpenGLRender::Init3DUniformBlock()
 {
-    m_3DLightBlockIndex = glGetUniformBlockIndex(m_3DProID, "GlobalLights");
-    m_3DMaterialBlockIndex = glGetUniformBlockIndex(m_3DProID, "GlobalMaterialParameters");
+    GLuint a3DLightBlockIndex = glGetUniformBlockIndex(m_3DProID, "GlobalLights");
+    GLuint a3DMaterialBlockIndex = glGetUniformBlockIndex(m_3DProID, "GlobalMaterialParameters");
 
-    if ((GL_INVALID_INDEX == m_3DLightBlockIndex) || (GL_INVALID_INDEX == m_3DMaterialBlockIndex))
+    if ((GL_INVALID_INDEX == a3DLightBlockIndex) || (GL_INVALID_INDEX == a3DMaterialBlockIndex))
     {
         return -1;
     }
     int nUniformBufferAlignSize = 0;
     glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &nUniformBufferAlignSize);
     GLint nBlockDataSizeLight = 0, nBlockDataSizeMertrial = 0;
-    glGetActiveUniformBlockiv(m_3DProID, m_3DLightBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &nBlockDataSizeLight);
-    glGetActiveUniformBlockiv(m_3DProID, m_3DMaterialBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &nBlockDataSizeMertrial);
+    glGetActiveUniformBlockiv(m_3DProID, a3DLightBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &nBlockDataSizeLight);
+    glGetActiveUniformBlockiv(m_3DProID, a3DMaterialBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &nBlockDataSizeMertrial);
     CHECK_GL_ERROR();
     glGenBuffers(1, &m_3DUBOBuffer);
     glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
@@ -2235,10 +2222,10 @@ int OpenGLRender::Init3DUniformBlock()
     glBufferData(GL_UNIFORM_BUFFER, dataSize, NULL, GL_DYNAMIC_DRAW);
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, m_3DUBOBuffer, 0, nBlockDataSizeLight);
     CHECK_GL_ERROR();
-    glUniformBlockBinding(m_3DProID, m_3DLightBlockIndex, 0);
+    glUniformBlockBinding(m_3DProID, a3DLightBlockIndex, 0);
 
     glBindBufferRange(GL_UNIFORM_BUFFER, 1, m_3DUBOBuffer, ((nBlockDataSizeLight / nUniformBufferAlignSize) + min(nBlockDataSizeLight % nUniformBufferAlignSize, 1)) * nUniformBufferAlignSize, nBlockDataSizeMertrial);
-    glUniformBlockBinding(m_3DProID, m_3DMaterialBlockIndex, 1);
+    glUniformBlockBinding(m_3DProID, a3DMaterialBlockIndex, 1);
     //for the light source uniform, we must calc the offset of each element
     CHECK_GL_ERROR();
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -2256,7 +2243,7 @@ int OpenGLRender::Update3DUniformBlock()
     //current std140 alignment: 16
     glBufferSubData(GL_UNIFORM_BUFFER, 32, sizeof(LightSource) * MAX_LIGHT_NUM, &m_LightsInfo.light);
     CHECK_GL_ERROR();
-    glBindBuffer(GL_UNIFORM_BUFFER, NULL);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
     return 0;
 }
 int OpenGLRender::RenderExtrudeFlatSurface(Extrude3DInfo extrude3D, int surIndex)
@@ -2272,7 +2259,7 @@ int OpenGLRender::RenderExtrudeFlatSurface(Extrude3DInfo extrude3D, int surIndex
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
-    glDrawElements(GL_TRIANGLES, extrude3D.size[surIndex], GL_UNSIGNED_SHORT, (void *)extrude3D.startIndex[surIndex]);
+    glDrawElements(GL_TRIANGLES, extrude3D.size[surIndex], GL_UNSIGNED_SHORT, &extrude3D.startIndex[surIndex]);
     return 0;
 }
 
@@ -2295,7 +2282,6 @@ int OpenGLRender::RenderExtrudeBottomSurface(Extrude3DInfo extrude3D)
     }
     else
     {
-        PosVecf3 scale = {xzScale, xzScale, xzScale};
         glm::mat4 topTrans = glm::translate(glm::vec3(0.0, -actualYTrans, 0.0));
         glm::mat4 topScale = glm::scale(xzScale, xzScale, xzScale);
         m_TranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
@@ -2305,7 +2291,7 @@ int OpenGLRender::RenderExtrudeBottomSurface(Extrude3DInfo extrude3D)
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
-    glDrawElements(GL_TRIANGLES, extrude3D.size[BOTTOM_SURFACE], GL_UNSIGNED_SHORT, (void *)extrude3D.startIndex[BOTTOM_SURFACE]);
+    glDrawElements(GL_TRIANGLES, extrude3D.size[BOTTOM_SURFACE], GL_UNSIGNED_SHORT, &extrude3D.startIndex[BOTTOM_SURFACE]);
     return 0;
 }
 
@@ -2317,7 +2303,6 @@ int OpenGLRender::RenderExtrudeMiddleSurface(Extrude3DInfo extrude3D)
     PosVecf3 trans = {extrude3D.xTransform,//m_Extrude3DInfo.xTransform + 140,
                       -extrude3D.yTransform,
                       extrude3D.zTransform};
-    PosVecf3 angle = {0.0f, 0.0f, 0.0f};
     if (actualYScale < 0.0f)
     {
         // the height of rounded corner is higher than the cube than use the org scale matrix
@@ -2341,7 +2326,7 @@ int OpenGLRender::RenderExtrudeMiddleSurface(Extrude3DInfo extrude3D)
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
-    glDrawElements(GL_TRIANGLES, extrude3D.size[MIDDLE_SURFACE], GL_UNSIGNED_SHORT, (void *)extrude3D.startIndex[MIDDLE_SURFACE]);
+    glDrawElements(GL_TRIANGLES, extrude3D.size[MIDDLE_SURFACE], GL_UNSIGNED_SHORT, &extrude3D.startIndex[MIDDLE_SURFACE]);
     return 0;
 }
 
@@ -2353,7 +2338,6 @@ int OpenGLRender::RenderExtrudeTopSurface(Extrude3DInfo extrude3D)
     PosVecf3 trans = {extrude3D.xTransform,//m_Extrude3DInfo.xTransform + 140,
                       -extrude3D.yTransform,
                       extrude3D.zTransform};
-    PosVecf3 angle = {0.0f, 0.0f, 0.0f};
     if (actualYTrans < 0.0f)
     {
         // the height of rounded corner is higher than the cube than use the org scale matrix
@@ -2378,7 +2362,7 @@ int OpenGLRender::RenderExtrudeTopSurface(Extrude3DInfo extrude3D)
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
-    glDrawElements(GL_TRIANGLES, extrude3D.size[TOP_SURFACE], GL_UNSIGNED_SHORT, (void *)extrude3D.startIndex[TOP_SURFACE]);
+    glDrawElements(GL_TRIANGLES, extrude3D.size[TOP_SURFACE], GL_UNSIGNED_SHORT, &extrude3D.startIndex[TOP_SURFACE]);
     RenderExtrudeFlatSurface(extrude3D, FLAT_BOTTOM_SURFACE);
     return 0;
 }
@@ -2439,7 +2423,7 @@ int OpenGLRender::RenderExtrude3DObject()
         glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
         glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(Material), &extrude3DInfo.material);
         CHECK_GL_ERROR();
-        glBindBuffer(GL_UNIFORM_BUFFER, NULL);
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
         extrude3DInfo.reverse = -extrude3DInfo.yRange[0] > extrude3DInfo.yRange[1] ? 0 : 1;
         RenderExtrudeSurface(extrude3DInfo);
     }
@@ -2554,7 +2538,6 @@ int OpenGLRender::ProcessExtrude3DPickingBox()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //render the bounding box
-    int extrudeNum = m_Extrude3DList.size();
     Extrude3DInfo extrude3DInfo;
     glUseProgram(m_CommonProID);
 

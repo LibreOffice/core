@@ -1146,9 +1146,8 @@ void DummyXShapes::render()
 }
 
 DummyChart::DummyChart(uno::Reference< drawing::XShape > xTarget):
-    m_GLRender(),
-    maDrawPage(xTarget),
-    mbNotInit(true)
+    mbNotInit(true),
+    m_GLRender(xTarget)
 {
     SAL_INFO("chart2.opengl", "DummyXShape::DummyChart()-----test: ");
     setName("com.sun.star.chart2.shapes");
@@ -1190,12 +1189,7 @@ void DummyChart::render()
 #else
     DummyXShapes::render();
 #endif
-    Graphic aGraphic = m_GLRender.renderToBitmap();
-    uno::Reference< awt::XBitmap> xBmp( aGraphic.GetXGraphic(), uno::UNO_QUERY );
-    uno::Reference < beans::XPropertySet > xPropSet ( maDrawPage, uno::UNO_QUERY );
-    xPropSet->setPropertyValue("Graphic", uno::makeAny(aGraphic.GetXGraphic()));
-    maDrawPage->setSize(awt::Size(m_GLRender.m_iWidth*OPENGL_SCALE_VALUE, m_GLRender.m_iHeight*OPENGL_SCALE_VALUE));
-    maDrawPage->setPosition(awt::Point(0,0));
+    m_GLRender.renderToBitmap();
 }
 
 void DummyChart::clear()

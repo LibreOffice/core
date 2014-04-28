@@ -404,12 +404,11 @@ public:
 private:
 
     TextCache maTextCache;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > maDrawPage;
+    bool mbNotInit;
 
 public:
     OpenGLRender m_GLRender;
 
-    bool mbNotInit;
 };
 
 class DummyGroup2D : public DummyXShapes
