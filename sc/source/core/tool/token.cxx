@@ -3784,14 +3784,55 @@ void ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nM
 }
 
 #if DEBUG_FORMULA_COMPILER
+
+namespace {
+
+void dumpFormulaToken( const FormulaToken& rToken )
+{
+    cout << "-- FormulaToken" << endl;
+    cout << "  opcode: " << rToken.GetOpCode() << endl;
+    cout << "  type: " << static_cast<int>(rToken.GetType()) << endl;
+    switch (rToken.GetType())
+    {
+        case svDouble:
+            cout << "  value: " << rToken.GetDouble() << endl;
+        break;
+        case svString:
+            cout << "  string: "
+                << OUStringToOString(rToken.GetString().getString(), RTL_TEXTENCODING_UTF8).getStr()
+                << endl;
+        break;
+        default:
+            ;
+    }
+}
+
+}
+
 void ScTokenArray::Dump() const
 {
+    cout << "+++ Normal Tokens +++" << endl;
     for (sal_uInt16 i = 0; i < nLen; ++i)
     {
-        const ScToken* p = dynamic_cast<const ScToken*>(pCode[i]);
+        const FormulaToken* pToken = pCode[i];
+        const ScToken* p = dynamic_cast<const ScToken*>(pToken);
         if (!p)
         {
-            cout << "-- (non ScToken)" << endl;
+            dumpFormulaToken(*pToken);
+            continue;
+        }
+
+        p->Dump();
+    }
+
+    cout << "+++ RPN Tokens +++" << endl;
+    for (sal_uInt16 i = 0; i < nRPN; ++i)
+    {
+        const FormulaToken* pToken = pRPN[i];
+        const ScToken* p = dynamic_cast<const ScToken*>(pToken);
+        if (!p)
+        {
+            dumpFormulaToken(*pToken);
             continue;
         }
 
