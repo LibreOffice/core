@@ -499,6 +499,8 @@ PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
     mbTransitionEffects     ( true ),
     mbUseLosslessCompression( true ),
     mbReduceImageResolution ( false ),
+    mbExportFormFields      ( false ),
+    mbExportBookmarks       ( false ),
     mbExportHiddenSlides    ( false ),
     mbExportNDests          ( false ),
     mnFormsFormat           ( 0 ),
