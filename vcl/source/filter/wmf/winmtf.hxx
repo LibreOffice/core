@@ -775,7 +775,7 @@ protected:
 class EnhWMFReader : public WinMtf
 {
     bool        bRecordPath;
-    sal_Int32       nRecordCount;
+    sal_Int32   nRecordCount;
     bool        bEMFPlus;
 
     bool        ReadHeader();
@@ -783,18 +783,17 @@ class EnhWMFReader : public WinMtf
     Rectangle       ReadRectangle( sal_Int32, sal_Int32, sal_Int32, sal_Int32 );
 
 public:
-                    EnhWMFReader(
-                        SvStream& rStreamWMF,
-                        GDIMetaFile& rGDIMetaFile,
-                        FilterConfigItem* pConfigItem = NULL
-                    )
-                        : WinMtf( new WinMtfOutput( rGDIMetaFile )
-                        , rStreamWMF
-                        , pConfigItem )
-                        , bRecordPath( false )
-                        , bEMFPlus( false )
-                    {};
-                    ~EnhWMFReader();
+    EnhWMFReader(
+        SvStream& rStreamWMF,
+        GDIMetaFile& rGDIMetaFile,
+        FilterConfigItem* pConfigItem = NULL)
+        : WinMtf(new WinMtfOutput(rGDIMetaFile), rStreamWMF , pConfigItem)
+        , bRecordPath(false)
+        , nRecordCount(0)
+        , bEMFPlus(false)
+    {
+    }
+    ~EnhWMFReader();
 
     bool        ReadEnhWMF();
     void            ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC);
