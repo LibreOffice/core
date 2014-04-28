@@ -1718,9 +1718,9 @@ void TabBar::ActivatePage()
 
 
 
-long TabBar::ImplDeactivatePage()
+bool TabBar::ImplDeactivatePage()
 {
-    long nRet = DeactivatePage();
+    bool nRet = DeactivatePage();
 
     CallEventListeners( VCLEVENT_TABBAR_PAGEDEACTIVATED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(mnCurPageId)) );
 

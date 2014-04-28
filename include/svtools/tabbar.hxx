@@ -389,7 +389,7 @@ private:
     SVT_DLLPRIVATE void            ImplEnableControls();
     SVT_DLLPRIVATE void            ImplSelect();
     SVT_DLLPRIVATE void            ImplActivatePage();
-    SVT_DLLPRIVATE long            ImplDeactivatePage();
+    SVT_DLLPRIVATE bool            ImplDeactivatePage();
     SVT_DLLPRIVATE void            ImplPrePaint();
     SVT_DLLPRIVATE ImplTabBarItem* ImplGetLastTabBarItem( sal_uInt16 nItemCount );
     SVT_DLLPRIVATE Rectangle       ImplGetInsertTabRect(ImplTabBarItem* pItem) const;
