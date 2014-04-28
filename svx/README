@@ -6,9 +6,6 @@ this is where a lot of wht work would happen to move to the canvas. (what does t
 svdraw
 transparent gradient stuff.
 
-Lots of the draw and impress code is in this shared library.
-
-
 Drawing Layer Object diagram:
 
 .------- Model ------------.     .------- View -----------------------------------------.
