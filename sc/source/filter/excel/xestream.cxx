@@ -80,6 +80,7 @@ using namespace ::oox;
 XclExpStream::XclExpStream( SvStream& rOutStrm, const XclExpRoot& rRoot, sal_uInt16 nMaxRecSize ) :
     mrStrm( rOutStrm ),
     mrRoot( rRoot ),
+    mbUseEncrypter( false ),
     mnMaxRecSize( nMaxRecSize ),
     mnCurrMaxSize( 0 ),
     mnMaxSliceSize( 0 ),
