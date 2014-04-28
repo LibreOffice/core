@@ -62,7 +62,6 @@ $(eval $(call gb_Library_use_libraries,swui,\
     svx \
     svxcore \
     sw \
-    swd \
     tk \
     tl \
     ucbhelper \

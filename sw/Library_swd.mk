@@ -23,18 +23,11 @@ $(eval $(call gb_Library_set_componentfile,swd,sw/util/swd))
 
 $(eval $(call gb_Library_set_include,swd,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/sw/inc \
-    -I$(SRCDIR)/sw/source/core/inc \
-    -I$(SRCDIR)/sw/source/filter/inc \
 ))
 
 $(eval $(call gb_Library_use_external,swd,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,swd))
-
-$(eval $(call gb_Library_add_defs,swd,\
-    -DSWD_DLLIMPLEMENTATION \
-))
 
 $(eval $(call gb_Library_use_libraries,swd,\
     comphelper \
@@ -43,14 +36,12 @@ $(eval $(call gb_Library_use_libraries,swd,\
     sal \
     sfx \
     sot \
-    svt \
     tl \
     utl \
 	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,swd,\
-    sw/source/filter/basflt/iodetect \
     sw/source/ui/uno/detreg \
     sw/source/ui/uno/swdetect \
 ))
