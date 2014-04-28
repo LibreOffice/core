@@ -90,9 +90,6 @@ void SAL_CALL OGLWindow::removeEventListener( const uno::Reference< lang::XEvent
 void SAL_CALL OGLWindow::setPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 /*nFlags*/ )
     throw (uno::RuntimeException, std::exception)
 {
-    if( !m_bVisible )
-        return;
-
     if( m_pHandle->viewport.x != nX || m_pHandle->viewport.x != nY ||
         m_pHandle->viewport.width != nWidth || m_pHandle->viewport.height != nHeight )
     {
@@ -101,10 +98,13 @@ void SAL_CALL OGLWindow::setPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidt
         m_pHandle->viewport.y = nY;
         m_pHandle->viewport.width = nWidth;
         m_pHandle->viewport.height = nHeight;
-        m_pContext->makeCurrent();
-        gltf_renderer_set_content(m_pHandle);
-        gltf_renderer(m_pHandle);
-        m_pContext->swapBuffers();
+        if( m_bVisible )
+        {
+            m_pContext->makeCurrent();
+            gltf_renderer_set_content(m_pHandle);
+            gltf_renderer(m_pHandle);
+            m_pContext->swapBuffers();
+        }
     }
 }
 
