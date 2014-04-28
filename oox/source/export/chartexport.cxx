@@ -2009,12 +2009,12 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
             XML_val, I32S( ptCount ),
             FSEND );
 
-    sal_Bool bIsNumberValue = sal_True;
-    sal_Bool bXSeriesValue = sal_False;
+    bool bIsNumberValue = true;
+    bool bXSeriesValue = false;
     double Value = 1.0;
 
     if(nValueType == XML_xVal)
-        bXSeriesValue = sal_True;
+        bXSeriesValue = true;
 
     for( sal_Int32 i = 0; i < ptCount; i++ )
     {
@@ -2030,7 +2030,7 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
             //In Case aValues is not a number for X Values...We write X values as 1,2,3....MS Word does the same thing.
             pFS->write( Value );
             Value = Value + 1;
-            bIsNumberValue = sal_False;
+            bIsNumberValue = false;
         }
         pFS->endElement( FSNS( XML_c, XML_v ) );
         pFS->endElement( FSNS( XML_c, XML_pt ) );
