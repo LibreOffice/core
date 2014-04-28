@@ -206,6 +206,7 @@ OutputDevice::~OutputDevice()
             mpOutDevStateStack->pop_back();
         }
     }
+    delete mpOutDevStateStack;
 
     // release the active font instance
     if( mpFontEntry )
@@ -213,11 +214,9 @@ OutputDevice::~OutputDevice()
 
     // remove cached results of GetDevFontList/GetDevSizeList
     // TODO: use smart pointers for them
-    if( mpGetDevFontList )
-        delete mpGetDevFontList;
+    delete mpGetDevFontList;
 
-    if( mpGetDevSizeList )
-        delete mpGetDevSizeList;
+    delete mpGetDevSizeList;
 
     // release ImplFontCache specific to this OutputDevice
     // TODO: refcount ImplFontCache
