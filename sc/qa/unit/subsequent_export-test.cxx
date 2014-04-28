@@ -100,7 +100,9 @@ public:
     void testFunctionsExcel2010( sal_uLong nFormatType );
     void testFunctionsExcel2010XLSX();
     void testFunctionsExcel2010XLS();
+#if 0
     void testFunctionsExcel2010ODS();
+#endif
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -1446,10 +1448,12 @@ void ScExportTest::testFunctionsExcel2010XLS()
     testFunctionsExcel2010(XLS);
 }
 
+#if 0
 void ScExportTest::testFunctionsExcel2010ODS()
 {
     testFunctionsExcel2010(ODS);
 }
+#endif
 
 ScExportTest::ScExportTest()
       : ScBootstrapFixture("/sc/qa/unit/data")
