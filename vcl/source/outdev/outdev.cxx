@@ -753,34 +753,6 @@ void OutputDevice::ImplGetFrameDev( const Point& rPt, const Point& rDevPt, const
 }
 
 
-void OutputDevice::SetDrawMode( sal_uLong nDrawMode )
-{
-
-    mnDrawMode = nDrawMode;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetDrawMode( nDrawMode );
-}
-
-void OutputDevice::SetRasterOp( RasterOp eRasterOp )
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRasterOpAction( eRasterOp ) );
-
-    if ( meRasterOp != eRasterOp )
-    {
-        meRasterOp = eRasterOp;
-        mbInitLineColor = mbInitFillColor = true;
-
-        if( mpGraphics || AcquireGraphics() )
-            mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp), ROP_INVERT == meRasterOp );
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetRasterOp( eRasterOp );
-}
-
 Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
 {
     Color aColor( rColor );
