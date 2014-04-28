@@ -938,27 +938,6 @@ void OutputDevice::ImplGetFrameDev( const Point& rPt, const Point& rDevPt, const
 }
 
 
-void OutputDevice::InitFillColor()
-{
-    DBG_TESTSOLARMUTEX();
-
-    if( mbFillColor )
-    {
-        if( ROP_0 == meRasterOp )
-            mpGraphics->SetROPFillColor( SAL_ROP_0 );
-        else if( ROP_1 == meRasterOp )
-            mpGraphics->SetROPFillColor( SAL_ROP_1 );
-        else if( ROP_INVERT == meRasterOp )
-            mpGraphics->SetROPFillColor( SAL_ROP_INVERT );
-        else
-            mpGraphics->SetFillColor( ImplColorToSal( maFillColor ) );
-    }
-    else
-        mpGraphics->SetFillColor();
-
-    mbInitFillColor = false;
-}
-
 void OutputDevice::SetDrawMode( sal_uLong nDrawMode )
 {
 

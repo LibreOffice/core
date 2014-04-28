@@ -21,6 +21,7 @@
 
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+
 #include <vcl/settings.hxx>
 
 #include <vcl/mapmod.hxx>
@@ -33,6 +34,9 @@
 #include <tools/fontenum.hxx>
 
 #include <vcl/outdevstate.hxx>
+
+#include "outdata.hxx"
+#include "salgdi.hxx"
 #include "sallayout.hxx"
 
 OutDevState::~OutDevState()
@@ -58,6 +62,28 @@ OutDevState::~OutDevState()
     if ( mnFlags & PUSH_REFPOINT )
         delete mpRefPoint;
 }
+
+void OutputDevice::InitFillColor()
+{
+    DBG_TESTSOLARMUTEX();
+
+    if( mbFillColor )
+    {
+        if( ROP_0 == meRasterOp )
+            mpGraphics->SetROPFillColor( SAL_ROP_0 );
+        else if( ROP_1 == meRasterOp )
+            mpGraphics->SetROPFillColor( SAL_ROP_1 );
+        else if( ROP_INVERT == meRasterOp )
+            mpGraphics->SetROPFillColor( SAL_ROP_INVERT );
+        else
+            mpGraphics->SetFillColor( ImplColorToSal( maFillColor ) );
+    }
+    else
+        mpGraphics->SetFillColor();
+
+    mbInitFillColor = false;
+}
+
 
 void OutputDevice::SetFont( const Font& rNewFont )
 {
