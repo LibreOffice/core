@@ -192,6 +192,12 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
         rArguments[ 2 ] >>= pIntPtr;
         SystemChildWindow *pChildWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
         m_aContext.init(pChildWindow);
+        Size aSize = pChildWindow->GetSizePixel();
+        m_aContext.setWinSize(aSize);
+        m_pHandle->viewport.x = 0;
+        m_pHandle->viewport.y = 0;
+        m_pHandle->viewport.width = aSize.Width();
+        m_pHandle->viewport.height = aSize.Height();
     }
     OGLWindow* pWindow = new OGLWindow(m_pHandle, &m_aContext);
     return uno::Reference< media::XPlayerWindow >( pWindow );

@@ -27,7 +27,11 @@ endif
 
 $(eval $(call gb_Library_set_precompiled_header,slideshow,$(SRCDIR)/slideshow/inc/pch/precompiled_slideshow))
 
-$(eval $(call gb_Library_use_external,slideshow,boost_headers))
+$(eval $(call gb_Library_use_externals,slideshow,\
+	boost_headers \
+	glew \
+	mesa_headers \
+))
 
 $(eval $(call gb_Library_use_sdk_api,slideshow))
 
@@ -44,7 +48,8 @@ $(eval $(call gb_Library_use_libraries,slideshow,\
     tl \
     utl \
     vcl \
-	$(gb_UWINAPI) \
+    vclopengl \
+    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,slideshow,slideshow/util/slideshow))

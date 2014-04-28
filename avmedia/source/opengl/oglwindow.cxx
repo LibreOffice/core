@@ -119,6 +119,8 @@ awt::Rectangle SAL_CALL OGLWindow::getPosSize()
 void SAL_CALL OGLWindow::setVisible( sal_Bool bSet )
     throw (uno::RuntimeException, std::exception)
 {
+    if( bSet && !m_bVisible )
+        update();
     m_bVisible = bSet;
 }
 

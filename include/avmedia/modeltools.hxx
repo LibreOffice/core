@@ -17,6 +17,8 @@ bool AVMEDIA_DLLPUBLIC Embed3DModel(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& xModel,
     const OUString& rSourceURL, OUString& o_rEmbeddedURL);
 
+bool AVMEDIA_DLLPUBLIC IsModel(const OUString& rMimeType);
+
 } // namespace avemdia
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

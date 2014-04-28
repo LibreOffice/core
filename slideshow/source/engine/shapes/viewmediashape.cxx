@@ -30,6 +30,7 @@
 
 #include <vcl/canvastools.hxx>
 #include <vcl/syschild.hxx>
+#include <vcl/sysdata.hxx>
 #include <vcl/window.hxx>
 #include <vcl/graph.hxx>
 
@@ -45,6 +46,9 @@
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 #include <avmedia/mediawindow.hxx>
+#include <avmedia/modeltools.hxx>
+
+#include <vcl/opengl/OpenGLContext.hxx>
 
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
@@ -302,25 +306,26 @@ namespace slideshow
                 if( xCanvas.is() )
                 {
                     uno::Reference< beans::XPropertySet >   xPropSet;
-                    OUString                         aURL;
-
                     try
                     {
                         xPropSet.set( mxShape, uno::UNO_QUERY );
+                        OUString sMimeType;
 
                         // create Player
                         if (xPropSet.is())
                         {
+                            OUString aURL;
+                            xPropSet->getPropertyValue("MediaMimeType") >>= sMimeType;
                             if ((xPropSet->getPropertyValue(
                                   OUString( "PrivateTempFileURL")) >>= aURL)
                                 && !aURL.isEmpty())
                             {
-                                implInitializeMediaPlayer( aURL );
+                                implInitializeMediaPlayer( aURL, sMimeType );
                             }
                             else if (xPropSet->getPropertyValue(
                                   OUString( "MediaURL")) >>= aURL)
                             {
-                                implInitializeMediaPlayer( aURL );
+                                implInitializeMediaPlayer( aURL, sMimeType );
                             }
                         }
 
@@ -334,9 +339,10 @@ namespace slideshow
                             aDeviceParams[ 0 ] >>= aImplName;
 
                             if( aImplName.endsWithIgnoreAsciiCase( "VCL" ) ||
-                                aImplName.endsWithIgnoreAsciiCase( "Cairo" ) )
+                                aImplName.endsWithIgnoreAsciiCase( "Cairo" ) ||
+                                avmedia::IsModel(sMimeType))
                             {
-                                implInitializeVCLBasedPlayerWindow( rBounds, aDeviceParams );
+                                implInitializeVCLBasedPlayerWindow( rBounds, aDeviceParams, sMimeType );
                             }
                             else if( aImplName.endsWithIgnoreAsciiCase("DX") ||
                                      aImplName.endsWithIgnoreAsciiCase("DX9") )
@@ -406,7 +412,7 @@ namespace slideshow
 
 
 
-        void ViewMediaShape::implInitializeMediaPlayer( const OUString& rMediaURL )
+        void ViewMediaShape::implInitializeMediaPlayer( const OUString& rMediaURL, const OUString& rMimeType )
         {
 #if !HAVE_FEATURE_AVMEDIA
             (void) rMediaURL;
@@ -417,7 +423,7 @@ namespace slideshow
                 {
                     if( !rMediaURL.isEmpty() )
                     {
-                        mxPlayer.set( avmedia::MediaWindow::createPlayer( rMediaURL, ""/*TODO!*/ ),
+                        mxPlayer.set( avmedia::MediaWindow::createPlayer( rMediaURL, ""/*TODO!*/, &rMimeType ),
                             uno::UNO_QUERY );
                     }
                 }
@@ -438,7 +444,8 @@ namespace slideshow
 
 
         bool ViewMediaShape::implInitializeVCLBasedPlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
-                                                                 const uno::Sequence< uno::Any >& rVCLDeviceParams)
+                                                                 const uno::Sequence< uno::Any >& rVCLDeviceParams,
+                                                                 const OUString& rMimeType )
         {
                     OSL_TRACE( "ViewMediaShape::implInitializeVCLBasedPlayerWindow" );
             if( !mpMediaWindow.get() && !rBounds.isEmpty() )
@@ -467,9 +474,15 @@ namespace slideshow
                                                                   rRangePix.getMinY(),
                                                                     rRangePix.getMaxX() - rRangePix.getMinX(),
                                                                     rRangePix.getMaxY() - rRangePix.getMinY() );
-
-                            mpMediaWindow.reset( new
-                                                SystemChildWindow( pWindow, WB_CLIPCHILDREN ) );
+                            if( avmedia::IsModel(rMimeType) )
+                            {
+                                SystemWindowData aWinData = OpenGLContext::generateWinData(pWindow);
+                                mpMediaWindow.reset(new SystemChildWindow(pWindow, 0, &aWinData));
+                            }
+                            else
+                            {
+                                mpMediaWindow.reset( new SystemChildWindow( pWindow, WB_CLIPCHILDREN ) );
+                            }
                             mpMediaWindow->SetBackground( Color( COL_BLACK ) );
                             mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );

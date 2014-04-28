@@ -9,6 +9,7 @@
 
 #include <avmedia/modeltools.hxx>
 #include <avmedia/mediaitem.hxx>
+#include "mediamisc.hxx"
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -191,6 +192,11 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
         SAL_WARN("avmedia.model", "Exception while trying to embed model");
     }
     return false;
+}
+
+bool IsModel(const OUString& rMimeType)
+{
+    return rMimeType == AVMEDIA_MIMETYPE_JSON;
 }
 
 } // namespace avemdia
