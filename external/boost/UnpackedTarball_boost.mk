@@ -65,8 +65,6 @@ boost_patches += boost.ptr_container.Wextra.warnings.patch
 boost_patches += boost.ptr_container.Wunused-parameter.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9898
 boost_patches += boost.random.Wshadow.warnings.patch
-# https://svn.boost.org/trac/boost/ticket/9899
-boost_patches += boost.random.Wuninitialized.patch
 # fixed upstream
 boost_patches += boost.random.Wunused-local-typedefs.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9900
