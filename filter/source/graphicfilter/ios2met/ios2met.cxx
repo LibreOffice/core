@@ -249,7 +249,8 @@ struct OSBitmap {
     sal_uLong  nMapPos;
 };
 
-struct OSAttr {
+struct OSAttr
+{
     OSAttr *   pSucc;
     sal_uInt16 nPushOrder;
     sal_uInt8  nIvAttrA, nIvAttrP; // special variables for the Order "GOrdPIvAtr"
@@ -303,6 +304,37 @@ struct OSAttr {
 //  sal_uInt8     nTxtAlignHor,nTxtAlignVer;
 //  //...    aViewTransform;
 //  //...    aViewWindow;
+
+    OSAttr()
+        : pSucc(NULL)
+        , nPushOrder(0)
+        , nIvAttrA(0)
+        , nIvAttrP(0)
+        , eLinMix(ROP_OVERPAINT)
+        , eLinBgMix(ROP_OVERPAINT)
+        , eChrMix(ROP_OVERPAINT)
+        , eChrBgMix(ROP_OVERPAINT)
+        , eMrkMix(ROP_OVERPAINT)
+        , eMrkBgMix(ROP_OVERPAINT)
+        , ePatMix(ROP_OVERPAINT)
+        , ePatBgMix(ROP_OVERPAINT)
+        , eImgMix(ROP_OVERPAINT)
+        , eImgBgMix(ROP_OVERPAINT)
+        , nArcP(0)
+        , nArcQ(0)
+        , nArcR(0)
+        , nArcS(0)
+        , nChrAng(0)
+        , nChrSet(0)
+        , eLinStyle(PEN_NULL)
+        , nLinWidth(0)
+        , nMrkPrec(0)
+        , nMrkSet(0)
+        , nMrkSymbol(0)
+        , bFill(false)
+        , nStrLinWidth(0)
+    {
+    }
 };
 
 class OS2METReader {
