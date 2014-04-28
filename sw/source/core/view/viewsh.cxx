@@ -556,12 +556,14 @@ Window* SwViewShell::CareChildWin(SwViewShell& rVSh)
 {
     if(rVSh.mpSfxViewShell)
     {
+#if HAVE_FEATURE_DESKTOP
         const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
         SfxViewFrame* pVFrame = rVSh.mpSfxViewShell->GetViewFrame();
         const SfxChildWindow* pChWin = pVFrame->GetChildWindow( nId );
         Window *pWin = pChWin ? pChWin->GetWindow() : NULL;
         if ( pWin && pWin->IsVisible() )
             return pWin;
+#endif
     }
     return NULL;
 }

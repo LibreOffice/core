@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <string>
 
 #include <boost/scoped_ptr.hpp>
@@ -189,6 +191,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                 if( bRet )
                     Scroll(m_pWrtShell->GetCharRect().SVRect());
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
+#if HAVE_FEATURE_DESKTOP
                 {
                     const sal_uInt16 nChildId = SvxSearchDialogWrapper::GetChildWindowId();
                     SvxSearchDialogWrapper *pDlgWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nChildId);
@@ -199,6 +202,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         m_pSrchDlg->SetSrchFlag();
                     }
                 }
+#endif
             }
             break;
             case SVX_SEARCHCMD_FIND_ALL:
@@ -206,11 +210,14 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                 sal_Bool bRet = SearchAll();
                 if( !bRet )
                 {
+#if HAVE_FEATURE_DESKTOP
                     if( !bApi )
                         SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+#endif
                     m_bFound = sal_False;
                 }
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
+#if HAVE_FEATURE_DESKTOP
                 {
                     const sal_uInt16 nChildId = SvxSearchDialogWrapper::GetChildWindowId();
                     SvxSearchDialogWrapper *pDlgWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nChildId);
@@ -222,6 +229,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         m_pSrchDlg->SetSrchFlag();
                     }
                 }
+#endif
             }
             break;
             case SVX_SEARCHCMD_REPLACE:
@@ -270,6 +278,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     m_pSrchItem->SetCommand( nOldCmd );
                     rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
                 }
+#if HAVE_FEATURE_DESKTOP
                 {
                     const sal_uInt16 nChildId = SvxSearchDialogWrapper::GetChildWindowId();
                     SvxSearchDialogWrapper *pDlgWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nChildId);
@@ -281,6 +290,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         m_pSrchDlg->SetSrchFlag();
                     }
                 }
+#endif
                 break;
 
             case SVX_SEARCHCMD_REPLACE_ALL:
@@ -322,8 +332,10 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     rReq.SetReturnValue(SfxBoolItem(nSlot, nFound != 0 && ULONG_MAX != nFound));
                     if( !nFound )
                     {
+#if HAVE_FEATURE_DESKTOP
                         if( !bApi )
                             SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+#endif
                         m_bFound = sal_False;
                         return;
                     }
@@ -336,6 +348,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         InfoBox( pParentWindow, aText ).Execute();
                     }
                 }
+#if HAVE_FEATURE_DESKTOP
                 const sal_uInt16 nChildId = SvxSearchDialogWrapper::GetChildWindowId();
                 SvxSearchDialogWrapper *pDlgWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nChildId);
 
@@ -345,6 +358,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     m_pSrchDlg->SetDocWin( (Window*)m_pEditWin);
                     m_pSrchDlg->SetSrchFlag();
                 }
+#endif
                 break;
             }
 
@@ -494,7 +508,11 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
     {
         m_pWrtShell->EndAllAction();
         if( !bApi )
+        {
+#if HAVE_FEATURE_DESKTOP
             SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+#endif
+        }
         m_bFound = sal_False;
         m_pWrtShell->Pop();
         return sal_False;
@@ -523,11 +541,12 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
     m_bFound = bool(FUNC_Search( aOpts ));
     m_pWrtShell->EndAllAction();
     pWait.reset();
-
+#if HAVE_FEATURE_DESKTOP
     if (m_bFound)
         SvxSearchDialogWrapper::SetSearchLabel(SL_End);
     else if(!bApi)
         SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+#endif
     return m_bFound;
 }
 
@@ -669,8 +688,9 @@ SwSearchOptions::SwSearchOptions( SwWrtShell* pSh, sal_Bool bBackward )
 
 sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
 {
+#if HAVE_FEATURE_DESKTOP
     SvxSearchDialogWrapper::SetSearchLabel(SL_Empty);
-
+#endif
     sal_Bool bDoReplace = m_pSrchItem->GetCommand() == SVX_SEARCHCMD_REPLACE ||
                       m_pSrchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL;
 
@@ -756,10 +776,14 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
 
 SvxSearchDialog* SwView::GetSearchDialog()
 {
+#if HAVE_FEATURE_DESKTOP
     const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
     SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*) SfxViewFrame::Current()->GetChildWindow(nId);
     m_pSrchDlg = pWrp ? pWrp->getDialog () : 0;
     return m_pSrchDlg;
+#else
+    return NULL;
+#endif
 }
 
 void SwView::StateSearch(SfxItemSet &rSet)
