@@ -681,28 +681,6 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     return nMaxLineWidth;
 }
 
-void OutputDevice::SetLayoutMode( sal_uLong nTextLayoutMode )
-{
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLayoutModeAction( nTextLayoutMode ) );
-
-    mnTextLayoutMode = nTextLayoutMode;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLayoutMode( nTextLayoutMode );
-}
-
-void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
-{
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextLanguageAction( eTextLanguage ) );
-
-    meTextLanguage = eTextLanguage;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetDigitLanguage( eTextLanguage );
-}
-
 void OutputDevice::SetTextColor( const Color& rColor )
 {
 

@@ -288,6 +288,28 @@ void OutputDevice::SetDrawMode( sal_uLong nDrawMode )
         mpAlphaVDev->SetDrawMode( nDrawMode );
 }
 
+void OutputDevice::SetLayoutMode( sal_uLong nTextLayoutMode )
+{
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaLayoutModeAction( nTextLayoutMode ) );
+
+    mnTextLayoutMode = nTextLayoutMode;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetLayoutMode( nTextLayoutMode );
+}
+
+void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
+{
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaTextLanguageAction( eTextLanguage ) );
+
+    meTextLanguage = eTextLanguage;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetDigitLanguage( eTextLanguage );
+}
+
 void OutputDevice::SetRasterOp( RasterOp eRasterOp )
 {
 
