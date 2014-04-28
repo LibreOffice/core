@@ -270,7 +270,7 @@ protected:
 
     void                        SetSelfAsQueuePrinter( bool bQueuePrinter ) { mbIsQueuePrinter = bQueuePrinter; }
     bool                        IsQueuePrinter() const { return mbIsQueuePrinter; }
-    virtual void                ApplyMask ( const Bitmap& rMask, const Color& rMaskColor,
+    virtual void                DrawDeviceMask ( const Bitmap& rMask, const Color& rMaskColor,
                                             const Point& rDestPt, const Size& rDestSize,
                                             const Point& rSrcPtPixel, const Size& rSrcSizePixel ) SAL_OVERRIDE;
 

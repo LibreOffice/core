@@ -91,11 +91,11 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
     if ( mbOutputClipped )
         return;
 
-    ApplyMask( rBitmap, rMaskColor, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
+    DrawDeviceMask( rBitmap, rMaskColor, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
 
 }
 
-void OutputDevice::ApplyMask( const Bitmap& rMask, const Color& rMaskColor,
+void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
                               const Point& rDestPt, const Size& rDestSize,
                               const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
