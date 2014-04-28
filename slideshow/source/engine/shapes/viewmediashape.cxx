@@ -416,6 +416,7 @@ namespace slideshow
         {
 #if !HAVE_FEATURE_AVMEDIA
             (void) rMediaURL;
+            (void) rMimeType;
 #else
             if( !mxPlayer.is() )
             {
