@@ -821,30 +821,6 @@ Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
     return aColor;
 }
 
-void OutputDevice::SetBackground()
-{
-
-    maBackground = Wallpaper();
-    mbBackground = false;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetBackground();
-}
-
-void OutputDevice::SetBackground( const Wallpaper& rBackground )
-{
-
-    maBackground = rBackground;
-
-    if( rBackground.GetStyle() == WALLPAPER_NULL )
-        mbBackground = false;
-    else
-        mbBackground = true;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetBackground( rBackground );
-}
-
 void OutputDevice::SetRefPoint()
 {
 
