@@ -579,7 +579,7 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
         {
             if (!maMatFlag.get<bool>(nR, nC))
                 // not an empty path.
-                break;
+                return svl::SharedString::getEmptyString();
 
             // result of empty FALSE jump path
             sal_uLong nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_LOGICAL,
