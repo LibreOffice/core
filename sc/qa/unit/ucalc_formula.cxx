@@ -2292,6 +2292,18 @@ void Test::testFuncMIN()
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(2,0,0)));
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(2,1,0)));
 
+    // Inline array input (A4).
+    m_pDoc->SetString(ScAddress(0,3,0), "=MIN({-2;4;3})");
+    CPPUNIT_ASSERT_EQUAL(-2.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+
+    // Add more values to B3:B4.
+    m_pDoc->SetValue(ScAddress(1,2,0),  20.0);
+    m_pDoc->SetValue(ScAddress(1,3,0), -20.0);
+
+    // Get the MIN of B1:B4.
+    m_pDoc->SetString(ScAddress(2,4,0), "=MIN(B1:B4)");
+    CPPUNIT_ASSERT_EQUAL(-20.0, m_pDoc->GetValue(ScAddress(2,4,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
