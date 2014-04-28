@@ -95,9 +95,12 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
 
 SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
                         const SwNodeIndex& rMvPos )
-    : SwUndo( UNDO_MOVE ),
-    nMvDestNode( rMvPos.GetIndex() ),
-    bMoveRedlines( false )
+    : SwUndo(UNDO_MOVE)
+    , nDestSttNode(0)
+    , nDestEndNode(0)
+    , nInsPosNode(0)
+    , nMvDestNode(rMvPos.GetIndex())
+    , bMoveRedlines(false)
 {
     bMoveRange = sal_True;
     bJoinNext = bJoinPrev = sal_False;
