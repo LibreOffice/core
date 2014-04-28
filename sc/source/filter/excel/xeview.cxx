@@ -29,10 +29,10 @@ using namespace ::oox;
 
 // Workbook view settings records =============================================
 
-XclExpWindow1::XclExpWindow1( const XclExpRoot& rRoot ) :
-    XclExpRecord( EXC_ID_WINDOW1, 18 ),
-    mnFlags( 0 ),
-    mnTabBarSize( 600 )
+XclExpWindow1::XclExpWindow1( const XclExpRoot& rRoot )
+    : XclExpRecord(EXC_ID_WINDOW1, 18)
+    , mnFlags(0)
+    , mnTabBarSize(600)
 {
     const ScViewOptions& rViewOpt = rRoot.GetDoc().GetViewOptions();
     ::set_flag( mnFlags, EXC_WIN1_HOR_SCROLLBAR,    rViewOpt.GetOption( VOPT_HSCROLL ) );
