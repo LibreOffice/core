@@ -235,10 +235,7 @@ public:
         for (size_t i = 0; i < protectors.size(); ++i)
             result.popProtector();
 
-        if (collector.wasSuccessful())
-            CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).printSuccess();
-        else
-            CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).printStatistics();
+        CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).write();
         return collector.wasSuccessful();
     }
     virtual bool operator()() const SAL_OVERRIDE
