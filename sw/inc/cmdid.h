@@ -163,6 +163,8 @@
 #define FN_COPY_HYPERLINK_LOCATION   (FN_EDIT2 + 40)    /* copy hyperlink URL to clipboard */
 #define FN_REDLINE_NEXT_CHANGE       (FN_EDIT2 + 41)    /* Go to the next change */
 #define FN_REDLINE_PREV_CHANGE       (FN_EDIT2 + 42)    /* Go to the previous change */
+#define FN_REDLINE_ACCEPT_DIRECT_SELECTION (FN_EDIT2 + 43)    /* accept redlines in the selection */
+#define FN_REDLINE_REJECT_DIRECT_SELECTION (FN_EDIT2 + 44)    /* reject redlines in the selection */
 
 /*--------------------------------------------------------------------
     Region: Edit

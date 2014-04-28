@@ -684,6 +684,16 @@ void SwView::Execute(SfxRequest &rReq)
         }
         break;
 
+        case FN_REDLINE_ACCEPT_DIRECT_SELECTION:
+        case FN_REDLINE_REJECT_DIRECT_SELECTION:
+        {
+            if (FN_REDLINE_ACCEPT_DIRECT_SELECTION == nSlot)
+                m_pWrtShell->AcceptRedlinesInSelection();
+            else
+                m_pWrtShell->RejectRedlinesInSelection();
+        }
+        break;
+
         case FN_REDLINE_NEXT_CHANGE:
         {
             const SwRangeRedline *pCurrent = m_pWrtShell->GetCurrRedline();

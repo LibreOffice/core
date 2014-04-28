@@ -53,6 +53,8 @@
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svl/visitem.hxx>
+#include <redline.hxx>
+#include <docary.hxx>
 
 #include <cmdid.h>
 
@@ -295,6 +297,43 @@ void SwView::GetState(SfxItemSet &rSet)
                     rSet.DisableItem(nWhich);
                 if (GetDocShell()->HasChangeRecordProtection())
                     rSet.DisableItem(nWhich);
+            }
+            break;
+            case FN_REDLINE_ACCEPT_DIRECT_SELECTION:
+            case FN_REDLINE_REJECT_DIRECT_SELECTION:
+            {
+                // If the selection does not contain a redline, disable
+                // accepting/rejecting changes.
+                SwDoc *pDoc = m_pWrtShell->GetDoc();
+                SwPaM *pCursor = m_pWrtShell->GetCrsr();
+                if (GetDocShell()->HasChangeRecordProtection())
+                    rSet.DisableItem(nWhich);
+                else if (!pCursor->HasMark())
+                    rSet.DisableItem(nWhich);
+                else
+                {
+                    sal_uInt16 index = 0;
+                    const SwRedlineTbl& table = pDoc->GetRedlineTbl();
+                    const SwRangeRedline* redline = table.FindAtPosition( *pCursor->Start(), index );
+                    if( redline != NULL && *redline->Start() == *pCursor->End())
+                        redline = NULL;
+                    if( redline == NULL )
+                    {
+                        for(; index < table.size(); ++index )
+                        {
+                            const SwRangeRedline* tmp = table[ index ];
+                            if( *tmp->Start() >= *pCursor->End())
+                                break;
+                            if( tmp->HasMark() && tmp->IsVisible())
+                            {
+                                redline = tmp;
+                                break;
+                            }
+                        }
+                    }
+                    if( redline == NULL )
+                        rSet.DisableItem(nWhich);
+                }
             }
             break;
 

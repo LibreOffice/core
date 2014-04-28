@@ -610,10 +610,12 @@ void SwSpellPopup::checkRedline()
         FN_REDLINE_ACCEPT_DIRECT,
         FN_REDLINE_REJECT_DIRECT,
         FN_REDLINE_NEXT_CHANGE,
-        FN_REDLINE_PREV_CHANGE
+        FN_REDLINE_PREV_CHANGE,
+        FN_REDLINE_ACCEPT_DIRECT_SELECTION,
+        FN_REDLINE_REJECT_DIRECT_SELECTION
     };
     SwDoc *pDoc = m_pSh->GetDoc();
-    SfxItemSet aSet(pDoc->GetAttrPool(), FN_REDLINE_ACCEPT_DIRECT, FN_REDLINE_PREV_CHANGE);
+    SfxItemSet aSet(pDoc->GetAttrPool(), FN_REDLINE_ACCEPT_DIRECT, FN_REDLINE_REJECT_DIRECT_SELECTION);
     for (size_t i = 0; i < SAL_N_ELEMENTS(pRedlineIds); ++i)
     {
         const sal_uInt16 nWhich = pRedlineIds[i];
@@ -808,7 +810,9 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         }
     }
     else if (nId == FN_REDLINE_ACCEPT_DIRECT || nId == FN_REDLINE_REJECT_DIRECT
-            || nId == FN_REDLINE_NEXT_CHANGE || nId == FN_REDLINE_PREV_CHANGE)
+            || nId == FN_REDLINE_NEXT_CHANGE || nId == FN_REDLINE_PREV_CHANGE
+            || nId == FN_REDLINE_ACCEPT_DIRECT_SELECTION
+            || nId == FN_REDLINE_REJECT_DIRECT_SELECTION)
     {
         // Let SwView::Execute() handle the redline actions.
         SfxRequest aReq(m_pSh->GetView().GetViewFrame(), nId);
