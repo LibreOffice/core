@@ -50,7 +50,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	external \
 	extras \
 	filter \
-	forms \
+	$(call gb_Helper_optional,DBCONNECTIVITY,forms) \
 	formula \
 	fpicker \
 	framework \
