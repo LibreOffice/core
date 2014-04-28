@@ -986,7 +986,7 @@ throw( beans::UnknownPropertyException,
        uno::RuntimeException )
 {
 #if 0
-    // @@@ REMOVABLE z.Z. hasn't been set correctly in the PropSetInfo
+    // @@@ REMOVABLE at the moment not properly set in the PropSetInfo
     try
     {
         beans::Property aProp
