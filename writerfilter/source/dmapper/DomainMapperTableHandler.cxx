@@ -29,6 +29,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <dmapperLoggers.hxx>
+#include <TablePositionHandler.hxx>
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
 #include <PropertyMapHelper.hxx>
@@ -354,8 +355,50 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         PropertyMap::iterator aTableStyleIter =
         m_aTableProperties->find(META_PROP_TABLE_STYLE_NAME);
-        uno::Sequence< beans::PropertyValue > aGrabBag( 5 );
+        uno::Sequence< beans::PropertyValue > aGrabBag( 6 );
         sal_Int32 nGrabBagSize = 0;
+
+        if (0 != m_rDMapper_Impl.getTableManager().getCurrentTableRealPosition())
+        {
+            TablePositionHandler *pTablePositions = m_rDMapper_Impl.getTableManager().getCurrentTableRealPosition();
+
+            uno::Sequence< beans::PropertyValue  > aGrabBagTS( 10 );
+
+            aGrabBagTS[0].Name = "bottomFromText";
+            aGrabBagTS[0].Value = uno::makeAny(pTablePositions->getBottomFromText() );
+
+            aGrabBagTS[1].Name = "horzAnchor";
+            aGrabBagTS[1].Value = uno::makeAny( pTablePositions->getHorzAnchor() );
+
+            aGrabBagTS[2].Name = "leftFromText";
+            aGrabBagTS[2].Value = uno::makeAny( pTablePositions->getLeftFromText() );
+
+            aGrabBagTS[3].Name = "rightFromText";
+            aGrabBagTS[3].Value = uno::makeAny( pTablePositions->getRightFromText() );
+
+            aGrabBagTS[4].Name = "tblpX";
+            aGrabBagTS[4].Value = uno::makeAny( pTablePositions->getX() );
+
+            aGrabBagTS[5].Name = "tblpXSpec";
+            aGrabBagTS[5].Value = uno::makeAny( pTablePositions->getXSpec() );
+
+            aGrabBagTS[6].Name = "tblpY";
+            aGrabBagTS[6].Value = uno::makeAny( pTablePositions->getY() );
+
+            aGrabBagTS[7].Name = "tblpYSpec";
+            aGrabBagTS[7].Value = uno::makeAny( pTablePositions->getYSpec() );
+
+            aGrabBagTS[8].Name = "topFromText";
+            aGrabBagTS[8].Value = uno::makeAny( pTablePositions->getTopFromText() );
+
+            aGrabBagTS[9].Name = "vertAnchor";
+            aGrabBagTS[9].Value = uno::makeAny( pTablePositions->getVertAnchor() );
+
+            aGrabBag[nGrabBagSize].Name = "TablePosition";
+            aGrabBag[nGrabBagSize].Value = uno::makeAny( aGrabBagTS );
+            nGrabBagSize++;
+        }
+
         if(aTableStyleIter != m_aTableProperties->end())
         {
             // Apply table style properties recursively
@@ -366,8 +409,8 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             pTableStyle = dynamic_cast<TableStyleSheetEntry*>( pStyleSheet.get( ) );
             m_aTableProperties->erase( aTableStyleIter );
 
-            aGrabBag[0].Name = "TableStyleName";
-            aGrabBag[0].Value = uno::makeAny( sTableStyleName );
+            aGrabBag[nGrabBagSize].Name = "TableStyleName";
+            aGrabBag[nGrabBagSize].Value = uno::makeAny( sTableStyleName );
             nGrabBagSize++;
 
             if( pStyleSheet )
@@ -384,26 +427,26 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 TableInfo rStyleInfo;
                 if (lcl_extractTableBorderProperty(pMergedProperties, PROP_TOP_BORDER, rStyleInfo, aBorderLine))
                 {
-                    aGrabBag[1].Name = "TableStyleTopBorder";
-                    aGrabBag[1].Value = uno::makeAny( aBorderLine );
+                    aGrabBag[nGrabBagSize].Name = "TableStyleTopBorder";
+                    aGrabBag[nGrabBagSize].Value = uno::makeAny( aBorderLine );
                     nGrabBagSize++;
                 }
                 if (lcl_extractTableBorderProperty(pMergedProperties, PROP_BOTTOM_BORDER, rStyleInfo, aBorderLine))
                 {
-                    aGrabBag[2].Name = "TableStyleBottomBorder";
-                    aGrabBag[2].Value = uno::makeAny( aBorderLine );
+                    aGrabBag[nGrabBagSize].Name = "TableStyleBottomBorder";
+                    aGrabBag[nGrabBagSize].Value = uno::makeAny( aBorderLine );
                     nGrabBagSize++;
                 }
                 if (lcl_extractTableBorderProperty(pMergedProperties, PROP_LEFT_BORDER, rStyleInfo, aBorderLine))
                 {
-                    aGrabBag[3].Name = "TableStyleLeftBorder";
-                    aGrabBag[3].Value = uno::makeAny( aBorderLine );
+                    aGrabBag[nGrabBagSize].Name = "TableStyleLeftBorder";
+                    aGrabBag[nGrabBagSize].Value = uno::makeAny( aBorderLine );
                     nGrabBagSize++;
                 }
                 if (lcl_extractTableBorderProperty(pMergedProperties, PROP_RIGHT_BORDER, rStyleInfo, aBorderLine))
                 {
-                    aGrabBag[4].Name = "TableStyleRightBorder";
-                    aGrabBag[4].Value = uno::makeAny( aBorderLine );
+                    aGrabBag[nGrabBagSize].Name = "TableStyleRightBorder";
+                    aGrabBag[nGrabBagSize].Value = uno::makeAny( aBorderLine );
                     nGrabBagSize++;
                 }
 

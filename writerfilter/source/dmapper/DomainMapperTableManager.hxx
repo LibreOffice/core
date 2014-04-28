@@ -94,6 +94,7 @@ public:
 
     const OUString& getTableStyleName() const { return m_sTableStyleName; }
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getCurrentTablePosition();
+    TablePositionHandler* getCurrentTableRealPosition();
 
     virtual void cellProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
     {
