@@ -146,6 +146,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/window \
     vcl/source/window/winproc \
     vcl/source/window/wrkwin \
+    vcl/source/window/nativecontrols \
     vcl/source/control/button \
     vcl/source/control/combobox \
     vcl/source/control/ctrl \
@@ -195,7 +196,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/gradient \
     vcl/source/outdev/curvedshapes \
     vcl/source/outdev/wallpaper \
-    vcl/source/outdev/nativecontrols \
     vcl/source/outdev/map \
     vcl/source/gdi/alpha \
     vcl/source/gdi/animate \

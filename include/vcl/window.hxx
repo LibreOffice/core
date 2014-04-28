@@ -970,7 +970,7 @@ public:
     bool                HasChildPathFocus( bool bSystemWindow = false ) const;
     bool                IsActive() const;
     bool                HasActiveChildFrame();
-    sal_uInt16              GetGetFocusFlags() const;
+    sal_uInt16          GetGetFocusFlags() const;
     void                GrabFocusToDocument();
 
     /**
@@ -1033,7 +1033,7 @@ public:
 
     Window*             FindWindow( const Point& rPos ) const;
 
-    sal_uInt16              GetChildCount() const;
+    sal_uInt16          GetChildCount() const;
     Window*             GetChild( sal_uInt16 nChild ) const;
     Window*             GetWindow( sal_uInt16 nType ) const;
     bool                IsChild( const Window* pWindow, bool bSystemWindow = false ) const;
@@ -1075,6 +1075,51 @@ public:
 
     void                SaveBackground( const Point& rPos, const Size& rSize,
                                         const Point& rDestOff, VirtualDevice& rSaveDevice );
+
+
+    /** @name Native Widget Rendering functions
+
+        These all just call through to the private mpGraphics functions of the same name.
+     */
+    ///@{
+
+    /** Query the platform layer for control support
+     */
+    bool                        IsNativeControlSupported( ControlType nType, ControlPart nPart ) const;
+
+    /** @name EPS functions
+     */
+    ///@{
+
+
+    /** Query the native control to determine if it was acted upon
+     */
+    bool                        HitTestNativeControl(   ControlType nType,
+                                                        ControlPart nPart,
+                                                        const Rectangle& rControlRegion,
+                                                        const Point& aPos,
+                                                        bool& rIsInside ) const;
+
+    /** Request rendering of a particular control and/or part
+     */
+    bool                        DrawNativeControl(  ControlType nType,
+                                                    ControlPart nPart,
+                                                    const Rectangle& rControlRegion,
+                                                    ControlState nState,
+                                                    const ImplControlValue& aValue,
+                                                    const OUString& aCaption );
+
+    /** Query the native control's actual drawing region (including adornment)
+     */
+    bool                        GetNativeControlRegion( ControlType nType,
+                                                        ControlPart nPart,
+                                                        const Rectangle& rControlRegion,
+                                                        ControlState nState,
+                                                        const ImplControlValue& aValue,
+                                                        const OUString& aCaption,
+                                                        Rectangle &rNativeBoundingRegion,
+                                                        Rectangle &rNativeContentRegion ) const;
+    ///@}
 
     const SystemEnvData*                      GetSystemData() const;
     ::com::sun::star::uno::Any                GetSystemDataAny() const;
