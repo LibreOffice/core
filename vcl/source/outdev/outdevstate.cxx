@@ -254,6 +254,15 @@ sal_uInt32 OutputDevice::GetGCStackDepth() const
     return mpOutDevStateStack->size();
 }
 
+void OutputDevice::EnableOutput( bool bEnable )
+{
+    mbOutput = bEnable;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->EnableOutput( bEnable );
+}
+
+
 void OutputDevice::InitFillColor()
 {
     DBG_TESTSOLARMUTEX();

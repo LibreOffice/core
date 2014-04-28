@@ -961,14 +961,6 @@ void OutputDevice::SetConnectMetaFile( GDIMetaFile* pMtf )
     mpMetaFile = pMtf;
 }
 
-void OutputDevice::EnableOutput( bool bEnable )
-{
-    mbOutput = bEnable;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->EnableOutput( bEnable );
-}
-
 void OutputDevice::SetSettings( const AllSettings& rSettings )
 {
     *mxSettings = rSettings;
