@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_aeca3b6c",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3117,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-28T08:03:48Z",
+      "side": 1,
+      "message": "Please add new drawingML-related DOCX tests to the ooxmlsdrexport suite, not here. This is important, as the two runs in parallel, so new tests don\u0027t slow down a multi-threaded toplevel \u0027make\u0027.",
+      "revId": "89689392e6958afbfccc6ede5d7e11e4fa9659b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_8ecd7f89",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-28T08:03:48Z",
+      "side": 1,
+      "message": "This file had a consistent coding style (space after \"if\") so far, please keep it that way.",
+      "revId": "89689392e6958afbfccc6ede5d7e11e4fa9659b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
