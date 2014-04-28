@@ -956,11 +956,6 @@ void OutputDevice::SetRefPoint( const Point& rRefPoint )
         mpAlphaVDev->SetRefPoint( rRefPoint );
 }
 
-sal_uInt32 OutputDevice::GetGCStackDepth() const
-{
-    return mpOutDevStateStack->size();
-}
-
 void OutputDevice::SetConnectMetaFile( GDIMetaFile* pMtf )
 {
     mpMetaFile = pMtf;

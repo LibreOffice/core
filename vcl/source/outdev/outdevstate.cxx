@@ -249,6 +249,10 @@ void OutputDevice::Pop()
     mpMetaFile = pOldMetaFile;
 }
 
+sal_uInt32 OutputDevice::GetGCStackDepth() const
+{
+    return mpOutDevStateStack->size();
+}
 
 void OutputDevice::InitFillColor()
 {
