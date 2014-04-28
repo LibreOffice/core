@@ -53,10 +53,12 @@ public:
 
 inline void LotusRange::Copy( const LotusRange& rCpy )
 {
+    nHash = rCpy.nHash;
     nColStart = rCpy.nColStart;
     nRowStart = rCpy.nRowStart;
     nColEnd = rCpy.nColEnd;
     nRowEnd = rCpy.nRowEnd;
+    nId = rCpy.nId;
 }
 
 inline void LotusRange::SetId( LR_ID nNewId )
