@@ -27,6 +27,26 @@ OpenGLContext::OpenGLContext():
 
 OpenGLContext::~OpenGLContext()
 {
+#if defined( WNT )
+    if (m_aGLWin.hRC)
+    {
+        wglMakeCurrent( m_aGLWin.hDC, 0 );
+        wglDeleteContext( m_aGLWin.hRC );
+        ReleaseDC( m_aGLWin.hWnd, m_aGLWin.hDC );
+    }
+#elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
+    // nothing
+#elif defined( UNX )
+    if(m_aGLWin.ctx)
+    {
+        glXMakeCurrent(m_aGLWin.dpy, None, NULL);
+        if( glGetError() != GL_NO_ERROR )
+        {
+            SAL_WARN("vcl.opengl", "glError: " << (char *)gluErrorString(glGetError()));
+        }
+        glXDestroyContext(m_aGLWin.dpy, m_aGLWin.ctx);
+    }
+#endif
 }
 
 #if defined( _WIN32 )
