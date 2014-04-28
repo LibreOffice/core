@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
 #include <UndoManager.hxx>
@@ -318,7 +320,9 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
         maDBData = rNewData;
         SetModified();
     }
+#if HAVE_FEATURE_DBCONNECTIVITY
     GetSysFldType(RES_DBNAMEFLD)->UpdateFlds();
+#endif
 }
 
 bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
@@ -686,7 +690,7 @@ SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, const OUString& rObjName,
 SwFieldType *SwDoc::GetSysFldType( const sal_uInt16 eWhich ) const
 {
     for( sal_uInt16 i = 0; i < INIT_FLDTYPES; ++i )
-        if( eWhich == (*mpFldTypes)[i]->Which() )
+        if( (*mpFldTypes)[i] && eWhich == (*mpFldTypes)[i]->Which() )
             return (*mpFldTypes)[i];
     return 0;
 }
