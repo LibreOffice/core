@@ -145,6 +145,7 @@ public:
     //void fireSwitchCurrentPage( String pageName) throw();
     void fireSwitchCurrentPage( sal_Int32 pageIndex) throw();
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>* mpCurrentLayer;
+    bool IsDisposing() const { return mbDisposing; }
 
     /** Return a pointer to the ViewShellBase object that the DrawController
         is connected to.

@@ -18,12 +18,14 @@
  */
 
 
+#include "DrawController.hxx"
 #include "SlideShowRestarter.hxx"
 #include "framework/ConfigurationController.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/app.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/svapp.hxx>
 #include <boost/bind.hpp>
@@ -125,6 +127,13 @@ IMPL_LINK_NOARG(SlideShowRestarter, EndPresentation)
 
 void SlideShowRestarter::StartPresentation (void)
 {
+    //rhbz#1091117 crash because we're exiting the application, and this is
+    //being called during the configuration update event on exit. At this point
+    //newly created objects won't get disposed called on them, because the
+    //disposer is doing its last execution of that now.
+    if (mpViewShellBase && mpViewShellBase->GetDrawController().IsDisposing())
+        return;
+
     if (mpDispatcher == NULL && mpViewShellBase!=NULL)
         mpDispatcher = mpViewShellBase->GetViewFrame()->GetDispatcher();
 
