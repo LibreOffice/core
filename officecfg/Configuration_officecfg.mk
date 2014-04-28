@@ -51,7 +51,6 @@ $(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/Office/ReportDesign.xcu \
 	org/openoffice/Office/UI/Controller.xcu \
 	org/openoffice/Office/UI/Factories.xcu \
-	org/openoffice/Office/UI/ReportCommands.xcu \
 	org/openoffice/TypeDetection/UISort.xcu \
 	org/openoffice/ucb/Configuration.xcu \
 ))
@@ -171,6 +170,7 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	org/openoffice/Office/UI/DrawWindowState.xcu \
 	org/openoffice/Office/UI/ImpressWindowState.xcu \
 	org/openoffice/Office/UI/MathWindowState.xcu \
+	org/openoffice/Office/UI/ReportCommands.xcu \
 	org/openoffice/Office/UI/Sidebar.xcu \
 	org/openoffice/Office/UI/StartModuleWindowState.xcu \
 	org/openoffice/Office/UI/WriterWindowState.xcu \
