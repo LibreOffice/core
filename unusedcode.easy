@@ -41,7 +41,6 @@ ScBitMaskCompressedArray<int, unsigned char>::GetFirstForCondition(int, int, uns
 ScDocument::CreateFormatTable() const
 ScDocument::GetRowFlagsArray(short) const
 ScExtIButton::GetSelected() const
-ScFormulaCell::SwapWithinGroup(ScFormulaCell*)
 ScFormulaCellGroup::scheduleCompilation()
 ScTable::GetCellTextAttr(short, int) const
 ScTable::TransferCellValuesFrom(short, int, sc::CellValues&)
