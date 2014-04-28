@@ -262,6 +262,91 @@ void OutputDevice::EnableOutput( bool bEnable )
         mpAlphaVDev->EnableOutput( bEnable );
 }
 
+void OutputDevice::SetFillColor()
+{
+
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaFillColorAction( Color(), false ) );
+
+    if ( mbFillColor )
+    {
+        mbInitFillColor = true;
+        mbFillColor = false;
+        maFillColor = Color( COL_TRANSPARENT );
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetFillColor();
+}
+
+void OutputDevice::SetFillColor( const Color& rColor )
+{
+
+    Color aColor( rColor );
+
+    if( mnDrawMode & ( DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL |
+                       DRAWMODE_GRAYFILL | DRAWMODE_NOFILL |
+                       DRAWMODE_GHOSTEDFILL | DRAWMODE_SETTINGSFILL ) )
+    {
+        if( !ImplIsColorTransparent( aColor ) )
+        {
+            if( mnDrawMode & DRAWMODE_BLACKFILL )
+            {
+                aColor = Color( COL_BLACK );
+            }
+            else if( mnDrawMode & DRAWMODE_WHITEFILL )
+            {
+                aColor = Color( COL_WHITE );
+            }
+            else if( mnDrawMode & DRAWMODE_GRAYFILL )
+            {
+                const sal_uInt8 cLum = aColor.GetLuminance();
+                aColor = Color( cLum, cLum, cLum );
+            }
+            else if( mnDrawMode & DRAWMODE_NOFILL )
+            {
+                aColor = Color( COL_TRANSPARENT );
+            }
+            else if( mnDrawMode & DRAWMODE_SETTINGSFILL )
+            {
+                aColor = GetSettings().GetStyleSettings().GetWindowColor();
+            }
+
+            if( mnDrawMode & DRAWMODE_GHOSTEDFILL )
+            {
+                aColor = Color( (aColor.GetRed() >> 1) | 0x80,
+                                (aColor.GetGreen() >> 1) | 0x80,
+                                (aColor.GetBlue() >> 1) | 0x80);
+            }
+        }
+    }
+
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaFillColorAction( aColor, true ) );
+
+    if ( ImplIsColorTransparent( aColor ) )
+    {
+        if ( mbFillColor )
+        {
+            mbInitFillColor = true;
+            mbFillColor = false;
+            maFillColor = Color( COL_TRANSPARENT );
+        }
+    }
+    else
+    {
+        if ( maFillColor != aColor )
+        {
+            mbInitFillColor = true;
+            mbFillColor = true;
+            maFillColor = aColor;
+        }
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetFillColor( COL_BLACK );
+}
+
 
 void OutputDevice::InitFillColor()
 {
