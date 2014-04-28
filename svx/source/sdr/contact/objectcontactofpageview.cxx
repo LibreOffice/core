@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/viewobjectcontactofunocontrol.hxx>
 #include <svx/svdpagv.hxx>
@@ -231,6 +233,18 @@ namespace sdr
             updateViewInformation2D(aNewViewInformation2D);
 
             drawinglayer::primitive2d::Primitive2DSequence xPrimitiveSequence;
+#if HAVE_FEATURE_DESKTOP
+            // get whole Primitive2DSequence; this will already make use of updated ViewInformation2D
+            // and may use the MapMode from the Target OutDev in the DisplayInfo
+            xPrimitiveSequence = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo);
+#else
+            // HACK: this only works when we are drawing sdr shapes via
+            // drawinglayer; but it can happen that the hierarchy contains
+            // more than just the shapes, and then it fails.
+            //
+            // This is good enough for the tiled rendering for the moment, but
+            // we need to come up with with the real solution shortly.
+
             // Only get the expensive hierarchy if we can be sure that the
             // returned sequence won't be empty anyway.
             bool bGetHierarchy = rRedrawArea.IsEmpty();
@@ -254,6 +268,7 @@ namespace sdr
                 // get whole Primitive2DSequence; this will already make use of updated ViewInformation2D
                 // and may use the MapMode from the Target OutDev in the DisplayInfo
                 xPrimitiveSequence = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo);
+#endif
 
             // if there is something to show, use a primitive processor to render it. There
             // is a choice between VCL and Canvas processors currently. The decision is made in
