@@ -1295,7 +1295,7 @@ void SmParser::Blank()
         NextToken();
     }
 
-    // Blanks am Zeilenende ignorieren wenn die entsprechende Option gesetzt ist
+    // Ignore trailing spaces, if corresponding option is set
     if ( m_aCurToken.eType == TNEWLINE ||
              (m_aCurToken.eType == TEND && SM_MOD()->GetConfig()->IsIgnoreSpacesRight()) )
     {

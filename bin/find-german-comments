@@ -310,7 +310,7 @@ class Parser:
             "smoketest" : 1,
             "solenv" : 1,
             "soltools" : 1,
-            "starmath" : 0, # - 1 line !
+            "starmath" : 1,
             "stoc" : 0, #
             "store" : 1,
             "svgio" : 1,
