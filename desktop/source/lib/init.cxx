@@ -100,6 +100,24 @@ static const ExtensionMap aImpressExtensionMap[] =
     { NULL, NULL }
 };
 
+static const ExtensionMap aDrawExtensionMap[] =
+{
+    { "odg",   "draw8" },
+    { "fodg",  "draw_ODG_FlatXML" },
+    { "html",  "draw_html_Export" },
+    { "svg",   "draw_svg_Export" },
+    { "swf",   "draw_flash_Export" },
+    { "xhtml", "XHTML Draw File" },
+    { "vdx",   "draw_Visio_Document" },
+    { "vsd",   "draw_Visio_Document" },
+    { "vsdm",  "draw_Visio_Document" },
+    { "vsdx",  "draw_Visio_Document" },
+    { "pub",   "draw_Publisher_Document" },
+    { "cdr",   "draw_CorelDraw_Document" },
+    { "wpg",   "draw_WordPerfect_Graphics" },
+    { NULL, NULL }
+};
+
 static OUString getUString(const char* pString)
 {
     if (pString == NULL)
@@ -230,18 +248,24 @@ static int doc_saveAsWithOptions(LibreOfficeDocument* pThis, const char* sUrl, c
 
         if (aDocumentService.isEmpty())
         {
-            gImpl->maLastExceptionMsg = "Unknown document type";
+            gImpl->maLastExceptionMsg = "unknown document type";
             return false;
         }
 
         const ExtensionMap* pMap;
-
-        if( aDocumentService == "com.sun.star.sheet.SpreadsheetDocument" )
-            pMap = (const ExtensionMap *)aCalcExtensionMap;
-        else if( aDocumentService == "com.sun.star.presentation.PresentationDocument" )
-            pMap = (const ExtensionMap *)aImpressExtensionMap;
-        else // for the sake of argument only writer documents ...
-            pMap = (const ExtensionMap *)aWriterExtensionMap;
+        if (aDocumentService == "com.sun.star.sheet.SpreadsheetDocument")
+            pMap = (const ExtensionMap*) aCalcExtensionMap;
+        else if (aDocumentService == "com.sun.star.presentation.PresentationDocument")
+            pMap = (const ExtensionMap*) aImpressExtensionMap;
+        else if (aDocumentService == "com.sun.star.drawing.DrawingDocument")
+            pMap = (const ExtensionMap*) aDrawExtensionMap;
+        else if (aDocumentService == "com.sun.star.text.TextDocument")
+            pMap = (const ExtensionMap*) aWriterExtensionMap;
+        else
+        {
+            gImpl->maLastExceptionMsg = "unknown document mapping";
+            return false;
+        }
 
         if (pFormat == NULL)
         {
