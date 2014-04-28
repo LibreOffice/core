@@ -730,7 +730,7 @@ void SvxPositionSizeTabPage::Construct()
 
                 if(maAnchor != basegfx::B2DPoint(pObj->GetAnchorPos().X(), pObj->GetAnchorPos().Y()))
                 {
-                    // diferent anchor positions
+                    // different anchor positions
                     m_pMtrPosX->SetText( "" );
                     m_pMtrPosY->SetText( "" );
                     mbPageDisabled = true;
