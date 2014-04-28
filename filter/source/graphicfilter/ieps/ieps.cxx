@@ -235,14 +235,14 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
         osl_closeFile(pOut);
     }
     if (pErr) osl_closeFile(pErr);
+    osl_joinProcess(aProcess);
+    osl_freeProcessHandle(aProcess);
     if (nCount == nBytesRead && bEMFSupported)
     {
         SvFileStream aFile(output, STREAM_READ);
         if (GraphicConverter::Import(aFile, rGraphic, CVT_EMF) == ERRCODE_NONE)
             bRet = true;
     }
-    osl_joinProcess(aProcess);
-    osl_freeProcessHandle(aProcess);
     return bRet;
 }
 
