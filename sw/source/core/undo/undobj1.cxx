@@ -39,7 +39,12 @@
 #include <ndole.hxx>
 
 SwUndoFlyBase::SwUndoFlyBase( SwFrmFmt* pFormat, SwUndoId nUndoId )
-    : SwUndo( nUndoId ), pFrmFmt( pFormat )
+    : SwUndo(nUndoId)
+    , pFrmFmt(pFormat)
+    , nNdPgPos(0)
+    , nCntPos(0)
+    , nRndId(0)
+    , bDelFmt(false)
 {
 }
 
