@@ -246,36 +246,6 @@ private:
 
     double m_dFreq;
 
-    float m_fProcessXShape;
-
-    float m_fReadPixel;
-
-    float m_fProcess2DLine;
-
-    float m_fSet2DLineProp;
-
-    float m_fRender2DLine;
-
-    float m_fProcess2DBubble;
-
-    float m_fRender2DBubble;
-
-    float m_fSet2DBubbleProp;
-
-    float m_fProcessText;
-
-    float m_fSetTextProp;
-
-    float m_fRenderText;
-
-    float m_fProcessRect;
-
-    float m_fSetRectProp;
-
-    float m_fRenderRect;
-
-    float m_fInterationShapes;
-
     int m_iWidth;
 
     int m_iHeight;
