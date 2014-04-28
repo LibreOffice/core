@@ -325,7 +325,6 @@ class Parser:
             "tools" : 1,
             "touch" : 1,
             "tubes" : 1,
-            "sw" : 1,
             "ucb" : 1,
             "ucbhelper" : 1,
             "unodevtools" : 1,
