@@ -475,6 +475,7 @@ public:
                   m_nTextStyle( 0 ),
                   m_nFlags( 0 ),
                   m_nParent( 0 ),
+                  m_nTabOrder( 0 ),
                   m_nRadioGroup( -1 ),
                   m_nMaxLen( 0 ),
                   m_bSubmit( false ),
