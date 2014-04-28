@@ -91,6 +91,24 @@ sal_Bool SwEditShell::RejectRedline( sal_uInt16 nPos )
     return bRet;
 }
 
+bool SwEditShell::AcceptRedlinesInSelection()
+{
+    SET_CURR_SHELL( this );
+    StartAllAction();
+    sal_Bool bRet = GetDoc()->AcceptRedline( *GetCrsr(), true );
+    EndAllAction();
+    return bRet;
+}
+
+bool SwEditShell::RejectRedlinesInSelection()
+{
+    SET_CURR_SHELL( this );
+    StartAllAction();
+    sal_Bool bRet = GetDoc()->RejectRedline( *GetCrsr(), true );
+    EndAllAction();
+    return bRet;
+}
+
 // Set the comment at the Redline
 sal_Bool SwEditShell::SetRedlineComment( const OUString& rS )
 {
