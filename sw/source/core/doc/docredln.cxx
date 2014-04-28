@@ -1914,35 +1914,6 @@ static sal_Bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
     return bRet;
 }
 
-static const SwRedline* lcl_FindCurrRedline( const SwPosition& rSttPos,
-                                        sal_uInt16& rPos,
-                                        bool bNext = true )
-{
-    const SwRedline* pFnd = 0;
-    const SwRedlineTbl& rArr = rSttPos.nNode.GetNode().GetDoc()->GetRedlineTbl();
-    for( ; rPos < rArr.size() ; ++rPos )
-    {
-        const SwRedline* pTmp = rArr[ rPos ];
-        if( pTmp->HasMark() && pTmp->IsVisible() )
-        {
-            const SwPosition* pRStt = pTmp->Start(),
-                      * pREnd = pRStt == pTmp->GetPoint() ? pTmp->GetMark()
-                                                          : pTmp->GetPoint();
-            if( bNext ? *pRStt <= rSttPos : *pRStt < rSttPos )
-            {
-                if( bNext ? *pREnd > rSttPos : *pREnd >= rSttPos )
-                {
-                    pFnd = pTmp;
-                    break;
-                }
-            }
-            else
-                break;
-        }
-    }
-    return pFnd;
-}
-
 static int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
                             SwRedlineTbl& rArr, sal_Bool bCallDelete,
                             const SwPaM& rPam)
@@ -1953,7 +1924,7 @@ static int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
     const SwPosition* pStt = rPam.Start(),
                     * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
                                                      : rPam.GetPoint();
-    const SwRedline* pFnd = lcl_FindCurrRedline( *pStt, n, true );
+    const SwRedline* pFnd = rArr.FindAtPosition( *pStt, n, true );
     if( pFnd &&     // Is new a part of it?
         ( *pFnd->Start() != *pStt || *pFnd->End() > *pEnd ))
     {
@@ -2257,7 +2228,7 @@ const SwRedline* SwDoc::SelNextRedline( SwPaM& rPam ) const
     // If the starting positon points to the last valid ContentNode,
     // we take the next Redline in any case.
     sal_uInt16 n = 0;
-    const SwRedline* pFnd = lcl_FindCurrRedline( rSttPos, n, true );
+    const SwRedline* pFnd = GetRedlineTbl().FindAtPosition( rSttPos, n, true );
     if( pFnd )
     {
         const SwPosition* pEnd = pFnd->End();
@@ -2374,7 +2345,7 @@ const SwRedline* SwDoc::SelPrevRedline( SwPaM& rPam ) const
     // If the starting positon points to the last valid ContentNode,
     // we take the previous Redline in any case.
     sal_uInt16 n = 0;
-    const SwRedline* pFnd = lcl_FindCurrRedline( rSttPos, n, false );
+    const SwRedline* pFnd = GetRedlineTbl().FindAtPosition( rSttPos, n, false );
     if( pFnd )
     {
         const SwPosition* pStt = pFnd->Start();
@@ -2489,7 +2460,7 @@ bool SwDoc::SetRedlineComment( const SwPaM& rPaM, const OUString& rS )
                     * pEnd = pStt == rPaM.GetPoint() ? rPaM.GetMark()
                                                      : rPaM.GetPoint();
     sal_uInt16 n = 0;
-    if( lcl_FindCurrRedline( *pStt, n, true ) )
+    if( GetRedlineTbl().FindAtPosition( *pStt, n, true ) )
     {
         for( ; n < mpRedlineTbl->size(); ++n )
         {
@@ -2824,6 +2795,35 @@ sal_uInt16 SwRedlineTbl::FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
     }
     return nRet;
 }
+
+const SwRedline* SwRedlineTbl::FindAtPosition( const SwPosition& rSttPos,
+                                        sal_uInt16& rPos,
+                                        bool bNext ) const
+{
+    const SwRedline* pFnd = 0;
+    for( ; rPos < size() ; ++rPos )
+    {
+        const SwRedline* pTmp = (*this)[ rPos ];
+        if( pTmp->HasMark() && pTmp->IsVisible() )
+        {
+            const SwPosition* pRStt = pTmp->Start(),
+                      * pREnd = pRStt == pTmp->GetPoint() ? pTmp->GetMark()
+                                                          : pTmp->GetPoint();
+            if( bNext ? *pRStt <= rSttPos : *pRStt < rSttPos )
+            {
+                if( bNext ? *pREnd > rSttPos : *pREnd >= rSttPos )
+                {
+                    pFnd = pTmp;
+                    break;
+                }
+            }
+            else
+                break;
+        }
+    }
+    return pFnd;
+}
+
 
 SwRedlineExtraData::~SwRedlineExtraData()
 {
