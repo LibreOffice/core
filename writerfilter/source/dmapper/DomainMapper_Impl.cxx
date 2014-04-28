@@ -497,7 +497,7 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
     {
         m_pLastCharacterContext = m_aPropertyStacks[eId].top();
         // Sadly an assert about deferredCharacterProperties being empty is not possible
-        // here, becase appendTextPortion() may not be called for every character section.
+        // here, because appendTextPortion() may not be called for every character section.
         deferredCharacterProperties.clear();
     }
 
