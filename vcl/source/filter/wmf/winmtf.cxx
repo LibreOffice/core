@@ -473,20 +473,6 @@ void WinMtfOutput::ImplMap( Font& rFont )
         rFont.SetOrientation( 3600 - rFont.GetOrientation() );
 }
 
-sal_Int32 WinMtfOutput::ImplConvertWidth(const sal_Int32 aWidth)
-{
-    Size aSize(aWidth, 0);
-    return ImplMap(aSize).Width();
-}
-
-void WinMtfOutput::ImplMap(LineInfo& rLineInfo)
-{
-    rLineInfo.SetWidth(ImplConvertWidth(rLineInfo.GetWidth()));
-    rLineInfo.SetDashLen(ImplConvertWidth(rLineInfo.GetDashLen()));
-    rLineInfo.SetDotLen(ImplConvertWidth(rLineInfo.GetDotLen()));
-    rLineInfo.SetDistance(ImplConvertWidth(rLineInfo.GetDistance()));
-}
-
 Polygon& WinMtfOutput::ImplMap( Polygon& rPolygon )
 {
     sal_uInt16 nPoints = rPolygon.GetSize();
@@ -696,7 +682,9 @@ void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
         else if ( eType == GDI_PEN )
         {
             WinMtfLineStyle* pLineStyle = (WinMtfLineStyle*) pStyle;
-            ImplMap(pLineStyle->aLineInfo);
+            Size aSize(pLineStyle->aLineInfo.GetWidth(), 0);
+            aSize = ImplMap(aSize);
+            pLineStyle->aLineInfo.SetWidth(aSize.Width());
         }
     }
     sal_uInt32 nIndex;
@@ -728,7 +716,9 @@ void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pS
             else if ( eType == GDI_PEN )
             {
                 WinMtfLineStyle* pLineStyle = (WinMtfLineStyle*) pStyle;
-                ImplMap(pLineStyle->aLineInfo);
+                Size aSize(pLineStyle->aLineInfo.GetWidth(), 0);
+                aSize = ImplMap(aSize);
+                pLineStyle->aLineInfo.SetWidth(aSize.Width());
             }
         }
         if ( (sal_uInt32)nIndex >= vGDIObj.size() )

@@ -619,8 +619,6 @@ class WinMtfOutput
     Size                ImplMap( const Size& rSz );
     Rectangle           ImplMap( const Rectangle& rRectangle );
     void                ImplMap( Font& rFont );
-    sal_Int32           ImplConvertWidth(const sal_Int32 aWidth);
-    void                ImplMap(LineInfo& rLineInfo);
     Polygon&            ImplMap( Polygon& rPolygon );
     PolyPolygon&        ImplMap( PolyPolygon& rPolyPolygon );
     Polygon&            ImplScale( Polygon& rPolygon );
