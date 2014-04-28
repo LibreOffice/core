@@ -1,4 +1,4 @@
-# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
 #
