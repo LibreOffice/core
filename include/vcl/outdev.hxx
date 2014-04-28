@@ -570,6 +570,11 @@ public:
     void                        SetOutDevViewType( OutDevViewType eOutDevViewType ) { meOutDevViewType=eOutDevViewType; }
     OutDevViewType              GetOutDevViewType() const { return meOutDevViewType; }
 
+    void                        SetLineColor();
+    void                        SetLineColor( const Color& rColor );
+    const Color&                GetLineColor() const { return maLineColor; }
+    bool                        IsLineColor() const { return mbLineColor; }
+
     void                        SetFillColor();
     void                        SetFillColor( const Color& rColor );
     const Color&                GetFillColor() const { return maFillColor; }
@@ -585,6 +590,8 @@ public:
     const Font&                 GetFont() const { return maFont; }
 
 private:
+
+    SAL_DLLPRIVATE void         InitLineColor();
 
     SAL_DLLPRIVATE void         InitFillColor();
     ///@}
@@ -669,13 +676,7 @@ public:
     void                        DrawLine( const Point& rStartPt, const Point& rEndPt,
                                           const LineInfo& rLineInfo );
 
-    void                        SetLineColor();
-    void                        SetLineColor( const Color& rColor );
-    const Color&                GetLineColor() const { return maLineColor; }
-    bool                        IsLineColor() const { return mbLineColor; }
-
 private:
-    SAL_DLLPRIVATE void         InitLineColor();
 
     /** Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
      */
