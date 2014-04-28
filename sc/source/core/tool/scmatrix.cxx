@@ -1236,12 +1236,14 @@ class CalcMaxMinValue : std::unary_function<MatrixImplType::element_block_type, 
 {
     double mfVal;
     bool mbTextAsZero;
+    bool mbHasValue;
 public:
     CalcMaxMinValue( bool bTextAsZero ) :
         mfVal(_Op::init()),
-        mbTextAsZero(bTextAsZero) {}
+        mbTextAsZero(bTextAsZero),
+        mbHasValue(false) {}
 
-    double getValue() const { return mfVal; }
+    double getValue() const { return mbHasValue ? mfVal : 0.0; }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
@@ -1256,6 +1258,8 @@ public:
                 block_type::const_iterator itEnd = block_type::end(*node.data);
                 for (; it != itEnd; ++it)
                     mfVal = _Op::compare(mfVal, *it);
+
+                mbHasValue = true;
             }
             break;
             case mdds::mtm::element_boolean:
@@ -1266,6 +1270,7 @@ public:
                 block_type::const_iterator itEnd = block_type::end(*node.data);
                 double fVal = _Op::boolValue(it, itEnd);
                 mfVal = _Op::compare(mfVal, fVal);
+                mbHasValue = true;
             }
             break;
             case mdds::mtm::element_string:
@@ -1273,7 +1278,10 @@ public:
             {
                 // empty elements are treated as empty strings.
                 if (mbTextAsZero)
+                {
                     mfVal = _Op::compare(mfVal, 0.0);
+                    mbHasValue = true;
+                }
             }
             break;
             default:
