@@ -1164,6 +1164,12 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
             pInsOL->InsertObject(pPath, nInsPos, &aReason);
             if( bUndo )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath));
+
+            // #124760# To have a correct selection with only the new object it is necessary to
+            // unmark all objects first. If not doing so, there may remain invalid pointers to objects
+            //TTTT:Not needed for aw080 (!)
+            UnmarkAllObj(pInsPV);
+
             MarkObj(pPath, pInsPV, sal_False, sal_True);
         }
 
