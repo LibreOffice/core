@@ -9,8 +9,10 @@
 
 #include <rtfreferencetable.hxx>
 
-namespace writerfilter {
-namespace rtftok {
+namespace writerfilter
+{
+namespace rtftok
+{
 
 RTFReferenceTable::RTFReferenceTable(Entries_t const& rEntries)
     : m_aEntries(rEntries)
