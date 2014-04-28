@@ -563,8 +563,6 @@ void MediaWindowImpl::onURLChanged()
 void MediaWindowImpl::setPosSize( const Rectangle& rRect )
 {
     SetPosSizePixel( rRect.TopLeft(), rRect.GetSize() );
-    if( mxPlayerWindow.is() )
-        mxPlayerWindow->setPosSize( 0, 0, rRect.GetSize().Width(), rRect.GetSize().Height(), 0 );
 }
 
 
@@ -610,9 +608,11 @@ void MediaWindowImpl::Resize()
         aPlayerWindowSize.Height() = ( nControlY - ( nOffset << 1 ) );
         mpMediaWindowControl->SetPosSizePixel( Point( nOffset, nControlY ), Size( aCurSize.Width() - ( nOffset << 1 ), nControlHeight ) );
     }
-
     if( mpChildWindow )
         mpChildWindow->SetPosSizePixel( Point( 0, 0 ), aPlayerWindowSize );
+
+    if( mxPlayerWindow.is() )
+        mxPlayerWindow->setPosSize( 0, 0, aPlayerWindowSize.Width(), aPlayerWindowSize.Height(), 0 );
 }
 
 
@@ -648,6 +648,9 @@ void MediaWindowImpl::StateChanged( StateChangedType eType )
 
 void MediaWindowImpl::Paint( const Rectangle& )
 {
+    if( mxPlayerWindow.is() )
+        mxPlayerWindow->update();
+
     BitmapEx* pLogo = NULL;
 
     if( !mxPlayer.is() )

@@ -24,6 +24,7 @@ namespace avmedia { namespace ogl {
 
 OGLPlayer::OGLPlayer()
     : Player_BASE(m_aMutex)
+    , m_bIsPlayingTmp(false)
 {
 }
 
@@ -100,18 +101,20 @@ void SAL_CALL OGLPlayer::start() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     gltf_animation_start(m_pHandle);
+    m_bIsPlayingTmp = true;
 }
 
 void SAL_CALL OGLPlayer::stop() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     gltf_animation_stop(m_pHandle);
+    m_bIsPlayingTmp = false;
 }
 
 sal_Bool SAL_CALL OGLPlayer::isPlaying() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    return (sal_Bool)gltf_animation_is_playing(m_pHandle);
+    return m_bIsPlayingTmp; //(sal_Bool)gltf_animation_is_playing(m_pHandle)
 }
 
 double SAL_CALL OGLPlayer::getDuration() throw ( uno::RuntimeException, std::exception )
