@@ -126,8 +126,15 @@ namespace pdfi
     struct GraphicalElement : public Element
     {
     protected:
-        GraphicalElement( Element* pParent, sal_Int32 nGCId )
-        : Element( pParent ), GCId( nGCId ), MirrorVertical( false ), IsForText (false) {}
+        GraphicalElement(Element* pParent, sal_Int32 nGCId)
+            : Element(pParent)
+            , GCId(nGCId)
+            , MirrorVertical(false)
+            , IsForText(false)
+            , FontSize(0.0)
+            , TextStyleId(0)
+        {
+        }
 
     public:
         sal_Int32 GCId;
