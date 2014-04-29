@@ -364,6 +364,16 @@ IMPL_LINK_NOARG(ScDocument, TrackTimeHdl)
     return 0;
 }
 
+void ScDocument::SetExpandRefs( bool bVal )
+{
+    bExpandRefs = bVal;
+}
+
+bool ScDocument::IsExpandRefs() const
+{
+    return bExpandRefs;
+}
+
 void ScDocument::StartTrackTimer()
 {
     if (!aTrackTimer.IsActive())        // nicht ewig aufschieben

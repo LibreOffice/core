@@ -1956,8 +1956,8 @@ public:
                                 return *pRecursionHelper;
                             }
     bool                IsInDtorClear() const { return bInDtorClear; }
-    void                SetExpandRefs( bool bVal ) { bExpandRefs = bVal; }
-    bool                IsExpandRefs() { return bExpandRefs; }
+    void SetExpandRefs( bool bVal );
+    bool IsExpandRefs() const;
 
     sal_uLong               GetXMLImportedFormulaCount() const { return nXMLImportedFormulaCount; }
     void                IncXMLImportedFormulaCount( sal_uLong nVal )
