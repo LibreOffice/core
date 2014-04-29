@@ -1477,6 +1477,43 @@ void Test::testFormulaRefUpdateSheets()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateInsertRows()
+{
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aOpt = pMod->GetInputOptions();
+    aOpt.SetExpandRefs(false);
+    pMod->SetInputOptions(aOpt);
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Formula");
+
+    // Insert raw values in B2:B4.
+    m_pDoc->SetValue(ScAddress(1,1,0), 1.0);
+    m_pDoc->SetValue(ScAddress(1,2,0), 2.0);
+    m_pDoc->SetValue(ScAddress(1,3,0), 3.0);
+
+    // Insert a formula in B5 to sum up B2:B4.
+    m_pDoc->SetString(ScAddress(1,4,0), "=SUM(B2:B4)");
+
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+
+    // Insert rows over rows 1:2.
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    rFunc.InsertCells(ScRange(0,0,0,MAXCOL,1,0), &aMark, INS_INSROWS, false, true, false);
+
+    // The raw data should have shifted to B4:B6.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,5,0)));
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,6,0), "SUM(B4:B6)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdateMove()
 {
     m_pDoc->InsertTab(0, "Sheet1");
@@ -1900,10 +1937,14 @@ void Test::testFormulaRefUpdateNamedExpressionMove()
 
 void Test::testFormulaRefUpdateNamedExpressionExpandRef()
 {
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aOpt = pMod->GetInputOptions();
+    aOpt.SetExpandRefs(true); // turn on automatic range expansion.
+    pMod->SetInputOptions(aOpt);
+
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
     m_pDoc->InsertTab(0, "Test");
-    m_pDoc->SetExpandRefs(true); // turn on automatic range expansion.
 
     bool bInserted = m_pDoc->InsertNewRangeName("MyRange", ScAddress(0,0,0), "$A$1:$A$3");
     CPPUNIT_ASSERT(bInserted);
