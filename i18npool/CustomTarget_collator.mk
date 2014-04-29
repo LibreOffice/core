@@ -21,8 +21,10 @@ i18npool_COTXTS := \
         ja_charset.txt \
         ja_phonetic_alphanumeric_first.txt \
         ja_phonetic_alphanumeric_last.txt) \
-    $(call gb_Helper_optional_locale,ko, \
-        ko_charset.txt) \
+	$(if $(i18npool_ICULT53), \
+		$(call gb_Helper_optional_locale,ko, \
+			ko_charset.txt) \
+			) \
     $(call gb_Helper_optional_locale,ku, \
         ku_alphanumeric.txt) \
     $(call gb_Helper_optional_locale,ln, \
@@ -55,7 +57,7 @@ $(i18npool_CODIR)/collator_%.cxx : \
 	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_Helper_execute,gencoll_rule) $< $@ $*)
 
-$(i18npool_CODIR)/lrl_include.hxx : \
+$(i18npool_CODIR)/lrl_include.hxx : $(SRCDIR)/i18npool/CustomTarget_collator.mk \
 		$(SRCDIR)/i18npool/source/collator/data | $(i18npool_CODIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	echo '#define LOCAL_RULE_LANGS "$(sort $(foreach txt,$(i18npool_COTXTS), \
