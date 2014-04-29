@@ -368,11 +368,7 @@ short SwMultiTOXTabDialog::Ok()
     SwTOXDescription& rDesc = GetTOXDescription(eCurrentTOXType);
     SwTOXBase aNewDef(*rSh.GetDefaultTOXBase( eCurrentTOXType.eType, true ));
 
-    const sal_uInt16 nIndex = static_cast< sal_uInt16 >(
-        (eCurrentTOXType.eType == TOX_USER && eCurrentTOXType.nIndex)
-        ? TOX_AUTHORITIES + eCurrentTOXType.nIndex
-        : eCurrentTOXType.eType);
-
+    const sal_uInt16 nIndex = eCurrentTOXType.GetFlatIndex();
     if(pFormArr[nIndex])
     {
         rDesc.SetForm(*pFormArr[nIndex]);
