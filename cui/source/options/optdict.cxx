@@ -228,7 +228,8 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     xSpell          ( xSpl ),
     nOld            ( NOACTDICT ),
     bFirstSelect    (true),
-    bDoNothing      (false)
+    bDoNothing      (false),
+    bDicIsReadonly  (false)
 
 {
     get(pAllDictsLB,"book");
