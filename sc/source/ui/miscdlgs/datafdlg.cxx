@@ -24,6 +24,7 @@
 ScDataFormDlg::ScDataFormDlg(Window* pParent, ScTabViewShell* pTabViewShellOri)
     : ModalDialog(pParent, "DataFormDialog", "modules/scalc/ui/dataform.ui")
     , pTabViewShell(pTabViewShellOri)
+    , bNoSelection(false)
 {
     get(m_pBtnNew, "new");
     get(m_pBtnDelete, "delete");
