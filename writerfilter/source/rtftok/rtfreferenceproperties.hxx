@@ -12,25 +12,27 @@
 
 #include <rtfsprm.hxx>
 
-namespace writerfilter {
-    namespace rtftok {
-        /// Sends RTFSprm instances to DomainMapper.
-        class RTFReferenceProperties
-            : public writerfilter::Reference<Properties>
-        {
-            public:
-                RTFReferenceProperties(RTFSprms rAttributes, RTFSprms rSprms);
-                RTFReferenceProperties(RTFSprms rAttributes);
-                virtual ~RTFReferenceProperties();
-                virtual void resolve(Properties & rHandler) SAL_OVERRIDE;
-                virtual std::string getType() const SAL_OVERRIDE;
-                RTFSprms& getAttributes();
-                RTFSprms& getSprms();
-            private:
-                RTFSprms m_aAttributes;
-                RTFSprms m_aSprms;
-        };
-    } // namespace rtftok
+namespace writerfilter
+{
+namespace rtftok
+{
+/// Sends RTFSprm instances to DomainMapper.
+class RTFReferenceProperties
+    : public writerfilter::Reference<Properties>
+{
+public:
+    RTFReferenceProperties(RTFSprms rAttributes, RTFSprms rSprms);
+    RTFReferenceProperties(RTFSprms rAttributes);
+    virtual ~RTFReferenceProperties();
+    virtual void resolve(Properties& rHandler) SAL_OVERRIDE;
+    virtual std::string getType() const SAL_OVERRIDE;
+    RTFSprms& getAttributes();
+    RTFSprms& getSprms();
+private:
+    RTFSprms m_aAttributes;
+    RTFSprms m_aSprms;
+};
+} // namespace rtftok
 } // namespace writerfilter
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFREFERENCEPROPERTIES_HXX

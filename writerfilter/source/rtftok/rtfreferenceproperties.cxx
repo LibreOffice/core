@@ -9,18 +9,20 @@
 
 #include <rtfreferenceproperties.hxx>
 
-namespace writerfilter {
-namespace rtftok {
+namespace writerfilter
+{
+namespace rtftok
+{
 
 RTFReferenceProperties::RTFReferenceProperties(RTFSprms aAttributes, RTFSprms aSprms)
     : m_aAttributes(aAttributes),
-    m_aSprms(aSprms)
+      m_aSprms(aSprms)
 {
 }
 
 RTFReferenceProperties::RTFReferenceProperties(RTFSprms aAttributes)
     : m_aAttributes(aAttributes),
-    m_aSprms()
+      m_aSprms()
 {
 }
 
