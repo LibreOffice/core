@@ -10,11 +10,32 @@
 #ifndef CHART2_GL3DRENDERER_HXX
 #define CHART2_GL3DRENDERER_HXX
 
+#include "glm/glm.hpp"
+#include "glm/gtx/transform.hpp"
+#include "glm/gtx/euler_angles.hpp"
+#include "glm/gtx/quaternion.hpp"
+
+#include <com/sun/star/awt/Point.hpp>
+#include <tools/gen.hxx>
+
+#include <vcl/opengl/IOpenGLRenderer.hxx>
+
 #include <vector>
+#include <list>
+#include <map>
+
+#define MAX_LIGHT_NUM 8
 
 namespace chart {
 
 namespace opengl3D {
+
+struct PosVecf3
+{
+    float x;
+    float y;
+    float z;
+};
 
 typedef std::vector <glm::vec3> Vertices3D;
 typedef std::vector <glm::vec2> UVs3D;
@@ -60,9 +81,9 @@ typedef struct Polygon3DInfo
     Vertices3D *vertices;
     UVs3D *uvs;
     Normals3D *normals;
-    list <Vertices3D *> verticesList;
-    list <UVs3D *> uvsList;
-    list <Normals3D *> normalsList;
+    std::list <Vertices3D *> verticesList;
+    std::list <UVs3D *> uvsList;
+    std::list <Normals3D *> normalsList;
     Material material;
 }Polygon3DInfo;
 
@@ -123,9 +144,14 @@ struct PackedVertex{
 class OpenGL3DRenderer : public IOpenGLInfoProvider
 {
 public:
-    void Set3DSenceInfo(glm::vec3 cameraUp,glm::mat4 D3DTrasform,sal_Bool twoSidesLighting,sal_Int32 color);
-    void SetLightInfo(sal_Bool lightOn,sal_Int32 color,glm::vec4 direction);
-    void AddShapePolygon3DObject(sal_Int32 color,sal_Bool lineOnly,sal_Int32 lineColor,long fillStyle,sal_Int32 specular);
+    OpenGL3DRenderer();
+
+    void LoadShaders();
+    void init();
+
+    void Set3DSenceInfo(glm::vec3 cameraUp,glm::mat4 D3DTrasform,bool twoSidesLighting,sal_Int32 color);
+    void SetLightInfo(bool lightOn,sal_Int32 color,glm::vec4 direction);
+    void AddShapePolygon3DObject(sal_Int32 color,bool lineOnly,sal_Int32 lineColor,long fillStyle,sal_Int32 specular);
     void EndAddShapePolygon3DObject();
     void AddPolygon3DObjectNormalPoint(float x, float y, float z);
     void EndAddPolygon3DObjectNormalPoint();
@@ -141,6 +167,8 @@ public:
     int RenderClickPos(Point aMPos);
 
 private:
+    int MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale);
+
     void GetFreq();
     int RenderPolygon3DObject();
     int RenderLine3D(Polygon3DInfo &polygon);
@@ -149,7 +177,7 @@ private:
     int Update3DUniformBlock();
     int RenderExtrude3DObject();
     int RenderFPS(float fps);
-    int RenderText(::rtl::OUString string, awt::Point aPos);
+    int RenderText(::rtl::OUString string, com::sun::star::awt::Point aPos);
     int RenderExtrudeSurface(Extrude3DInfo extrude3D);
     int RenderExtrudeTopSurface(Extrude3DInfo extrude3D);
     int RenderExtrudeMiddleSurface(Extrude3DInfo extrude3D);
@@ -170,13 +198,28 @@ private:
         );
     void SetVertex(PackedVertex &packed,
         std::map<PackedVertex,unsigned short> &VertexToOutIndex,
-        vector<glm::vec3> &vertex,
-        vector<glm::vec3> &normal,
-        vector<unsigned short> &indeices);
+        std::vector<glm::vec3> &vertex,
+        std::vector<glm::vec3> &normal,
+        std::vector<unsigned short> &indeices);
     void CreateActualRoundedCube(float fRadius, int iSubDivY, int iSubDivZ, float width, float height, float depth);
-    int GenerateRoundCornerBar(vector<glm::vec3> &vertices, vector<glm::vec3> &normals, float fRadius, int iSubDivY,
+    int GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, std::vector<glm::vec3> &normals, float fRadius, int iSubDivY,
                                int iSubDivZ, float width, float height, float depth);
 private:
+    // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+    glm::mat4 m_Projection;
+    // Camera matrix
+    glm::mat4 m_View;
+    // Model matrix : an identity matrix (model will be at the origin
+    glm::mat4 m_Model;
+    // Our ModelViewProjection : multiplication of our 3 matrices
+    glm::mat4 m_MVP;
+
+    double m_dFreq;
+
+    int m_iWidth;
+
+    int m_iHeight;
+
     float m_fZmax;
 
     Lights m_LightsInfo;
@@ -185,7 +228,7 @@ private:
 
     Polygon3DInfo m_Polygon3DInfo;
 
-    list <Polygon3DInfo> m_Polygon3DInfoList;
+    std::list <Polygon3DInfo> m_Polygon3DInfoList;
 
     glm::mat4 m_D3DTrasform;
 
@@ -196,6 +239,8 @@ private:
     glm::mat4 m_3DViewBack;
 
     glm::mat4 m_3DMVP;
+
+    glm::mat4 m_TranslationMatrix;
 
     GLint m_3DProID;
 
@@ -220,6 +265,12 @@ private:
     GLint m_3DActualSizeLight;
 
     GLuint m_NormalBuffer;
+
+    GLuint m_VertexBuffer;
+
+    GLint m_MatrixID;
+
+    GLuint m_FboID[2];
 
     Extrude3DInfo m_Extrude3DInfo;
 
@@ -253,6 +304,13 @@ private:
 
     RoundBarMesh m_RoundBarMesh;
 
+    GLint m_CommonProID;
+    GLint m_2DVertexID;
+    GLint m_2DColorID;
+
+    //TODO: moggi: kill the following parts
+    // don't add anything below or I will remove it
+    size_t m_iPointNum;
 };
 
 }

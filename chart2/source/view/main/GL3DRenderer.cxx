@@ -7,15 +7,67 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#define RGB_WHITE (0xFF | (0xFF << 8) | (0xFF << 16))
+#include <GL/glew.h>
 
 #include "GL3DRenderer.hxx"
+
+#include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/font.hxx>
+#include <vcl/virdev.hxx>
+
+#include <com/sun/star/awt/Size.hpp>
+
+#include <StaticGeometry.h>
+#include "glm/gtc/matrix_inverse.hpp"
+
+#define GL_PI 3.14159f
+#define OPENGL_SCALE_VALUE 20
+#define RGB_WHITE (0xFF | (0xFF << 8) | (0xFF << 16))
+
+using namespace std;
+using namespace com::sun::star;
 
 namespace chart {
 
 namespace opengl3D {
 
-OpenGL3DRenderer::OpenGL3DRenderer()
+namespace {
+
+struct TextInfo
+{
+    GLuint texture;
+    double rotation;
+    float vertex[12];
+    float nDx;
+    float nDy;
+};
+
+int static checkGLError(const char *file, int line)
+{
+    GLenum glErr;
+    int retCode = 0;
+    glErr = glGetError();
+    while (glErr != GL_NO_ERROR)
+    {
+        const GLubyte* sError = gluErrorString(glErr);
+
+        if (sError)
+            SAL_WARN("chart2.opengl", "GL Error #" << glErr << "(" << gluErrorString(glErr) << ") " << " in File " << file << " at line: " << line);
+        else
+            SAL_WARN("chart2.opengl", "GL Error #" << glErr << " (no message available)" << " in File " << file << " at line: " << line);
+
+        retCode = -1;
+        return retCode;
+    }
+    return retCode;
+}
+
+#define CHECK_GL_ERROR() checkGLError(__FILE__, __LINE__)
+
+}
+
+OpenGL3DRenderer::OpenGL3DRenderer():
+    m_TranslationMatrix(glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f)))
 {
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
@@ -658,7 +710,7 @@ int OpenGL3DRenderer::RenderPolygon3DObject()
     return 0;
 }
 
-void OpenGL3DRenderer::Set3DSenceInfo(glm::vec3 cameraUp,glm::mat4 D3DTrasform,sal_Bool twoSidesLighting,sal_Int32 color)
+void OpenGL3DRenderer::Set3DSenceInfo(glm::vec3 cameraUp,glm::mat4 D3DTrasform,bool twoSidesLighting,sal_Int32 color)
 {
 
     m_CameraInfo.cameraUp = cameraUp;
@@ -675,7 +727,7 @@ void OpenGL3DRenderer::Set3DSenceInfo(glm::vec3 cameraUp,glm::mat4 D3DTrasform,s
     m_LightsInfo.lightNum = 0;
 }
 
-void OpenGL3DRenderer::SetLightInfo(sal_Bool lightOn,sal_Int32 color,glm::vec4 direction)
+void OpenGL3DRenderer::SetLightInfo(bool lightOn,sal_Int32 color,glm::vec4 direction)
 {
     if (lightOn)
     {
@@ -690,7 +742,7 @@ void OpenGL3DRenderer::SetLightInfo(sal_Bool lightOn,sal_Int32 color,glm::vec4 d
 
 }
 
-void OpenGL3DRendereOpenGL3DRenderer::AddShapePolygon3DObject(sal_Int32 color,sal_Bool lineOnly,sal_Int32 lineColor,long fillStyle,sal_Int32 specular)
+void OpenGL3DRenderer::AddShapePolygon3DObject(sal_Int32 color,bool lineOnly,sal_Int32 lineColor,long fillStyle,sal_Int32 specular)
 {
     m_Polygon3DInfo.polygonColor = glm::vec4((float)(((color) & 0x00FF0000) >> 16) / 255.0f,
                                              (float)(((color) & 0x0000FF00) >> 8) / 255.0f,
@@ -1132,9 +1184,10 @@ void OpenGL3DRenderer::SetClickPos(Point aMPos)
     m_aMPos = aMPos;
 }
 
-
-int OpenGL3DRenderer::RenderText(::rtl::OUString string, awt::Point aPos)
+int OpenGL3DRenderer::RenderText(::rtl::OUString , awt::Point )
 {
+    //TODO: moggi: disabled for now
+    /*
     Font aFont("Arial", Size(0, 100));
     Rectangle aRect;
     VirtualDevice aDevice;
@@ -1146,8 +1199,8 @@ int OpenGL3DRenderer::RenderText(::rtl::OUString string, awt::Point aPos)
     textWidth = (textWidth + 3) & ~3;
     awt::Size aSize(textWidth, textHeight);
     //clear text info
-    int listNum = m_TextInfoList.size();
-    for (int i = 0; i < listNum; i++)
+    size_t listNum = m_TextInfoList.size();
+    for (size_t i = 0; i < listNum; i++)
     {
         TextInfo &textInfo = m_TextInfoList.front();
         glDeleteTextures(1, &textInfo.texture);
@@ -1156,6 +1209,7 @@ int OpenGL3DRenderer::RenderText(::rtl::OUString string, awt::Point aPos)
     //create text texture
     CreateTextTexture(string, aFont, 0xFF0000, aPos, aSize, 0);
     RenderTextShape();
+    */
     return 0;
 }
 
@@ -1265,7 +1319,7 @@ int OpenGL3DRenderer::ProcessExtrude3DPickingBox()
     glUseProgram(0);
     //read pixel to get the index
     Point select = Point(m_aMPos.X() / OPENGL_SCALE_VALUE, m_aMPos.Y() / OPENGL_SCALE_VALUE);
-    BYTE selectColor[4] = {0};
+    sal_uInt8 selectColor[4] = {0};
 #if 0
     int picWidth = m_iWidth - select.X();
     int picHeight = m_iHeight - select.Y();
@@ -1369,6 +1423,14 @@ void OpenGL3DRenderer::RenderCoordinateAxis()
     return;
 }
 
+int OpenGL3DRenderer::MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale)
+{
+    glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
+    glm::mat4 aScaleMatrix = glm::scale(glm::vec3(scale.x, scale.y, scale.z));
+    glm::mat4 aRotationMatrix = glm::eulerAngleYXZ(angle.y, angle.x, angle.z);
+    m_Model = aTranslationMatrix * aRotationMatrix * aScaleMatrix;
+    return 0;
+}
 
 }
 

@@ -22,7 +22,6 @@
 #include "glm/gtx/quaternion.hpp"
 
 #define BMP_HEADER_LEN 54
-#define MAX_LIGHT_NUM 8
 
 #define OPENGL_SCALE_VALUE 20
 #define DEBUG_POSITIONING 0
@@ -144,8 +143,6 @@ private:
     glm::mat4 m_Model;
     // Our ModelViewProjection : multiplication of our 3 matrices
     glm::mat4 m_MVP;
-
-    glm::mat4 m_TranslationMatrix;
 
     GLint m_RenderProID;
 

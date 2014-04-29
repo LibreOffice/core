@@ -103,6 +103,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/main/Clipping \
     chart2/source/view/main/DataPointSymbolSupplier \
     chart2/source/view/main/DrawModelWrapper \
+    chart2/source/view/main/GL3DRenderer \
     chart2/source/view/main/LabelPositionHelper \
     chart2/source/view/main/Linear3DTransformation \
     chart2/source/view/main/PlotterBase \
@@ -251,17 +252,17 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
 ))
  
 ifeq ($(strip $(OS)),WNT)
-$(eval $(call gb_Library_use_system_win32_libs,chartopengl,\
+$(eval $(call gb_Library_use_system_win32_libs,chartcore,\
 	opengl32 \
 	gdi32 \
 	glu32 \
 ))
 else ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_use_system_darwin_frameworks,chartopengl,\
+$(eval $(call gb_Library_use_system_darwin_frameworks,chartcore,\
 	OpenGL \
 ))
 else ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_libs,chartopengl,\
+$(eval $(call gb_Library_add_libs,chartcore,\
 	-ldl \
 	-lGL \
 	-lGLU \

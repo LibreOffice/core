@@ -39,9 +39,6 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <boost/scoped_array.hpp>
-
-#include <StaticGeometry.h>
-#include "glm/gtc/matrix_inverse.hpp"
 #include "CommonConverters.hxx"
 
 using namespace com::sun::star;
@@ -513,7 +510,6 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     , m_iWidth(1600)
     , m_iHeight(900)
     , m_Model(glm::mat4(1.0f))
-    , m_TranslationMatrix(glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f)))
     , m_iPointNum(0)
     , m_fLineWidth(0.001f)
     , mbArbMultisampleSupported(false)
