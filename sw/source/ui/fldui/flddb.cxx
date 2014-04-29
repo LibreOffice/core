@@ -36,6 +36,8 @@
 SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet)
     : SwFldPage(pParent, "FldDbPage",
         "modules/swriter/ui/flddbpage.ui", rCoreSet)
+    , m_nOldFormat(0)
+    , m_nOldSubType(0)
 {
     get(m_pTypeLB, "type");
     m_pTypeLB->SetStyle(m_pTypeLB->GetStyle() | WB_SORT);
