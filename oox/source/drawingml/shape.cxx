@@ -104,6 +104,7 @@ Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
 , mbHiddenMasterShape( false )
 , mbLockedCanvas( false )
 , mbWps( false )
+, mbHasLinkedTxbx( false )
 , maDiagramDoms( 0 )
 {
     if ( pServiceName )
