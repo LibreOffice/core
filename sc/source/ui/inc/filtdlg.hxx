@@ -91,7 +91,6 @@ private:
     ScrollBar*       pScrollBar;
     VclExpander*     pExpander;
 
-    HelpButton*      pBtnHelp;
     OKButton*        pBtnOk;
     CancelButton*    pBtnCancel;
 
@@ -194,7 +193,6 @@ private:
 
     OKButton*        pBtnOk;
     CancelButton*    pBtnCancel;
-    HelpButton*      pBtnHelp;
 
     ScFilterOptionsMgr* pOptionsMgr;
 
