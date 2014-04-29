@@ -297,8 +297,12 @@ void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     if( qApp->thread() == QThread::currentThread())
         processYield( bWait, bHandleAllCurrentEvents );
     else
-    { // if this deadlocks, event processing needs to go into a separate thread
-      // or some other solution needs to be found
+    {
+        // we were called from another thread;
+        // release the yield lock to prevent deadlock with the main thread
+        // (it's ok to release it here, since even normal processYield() would
+        // temporarily do it while checking for new events)
+        SalYieldMutexReleaser aReleaser;
         Q_EMIT processYieldSignal( bWait, bHandleAllCurrentEvents );
     }
 }
