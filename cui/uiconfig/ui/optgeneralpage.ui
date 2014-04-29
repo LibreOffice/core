@@ -116,7 +116,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkImage" id="image1">
+                  <object class="GtkImage" id="lockimage">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <property name="halign">center</property>

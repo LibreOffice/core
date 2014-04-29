@@ -199,6 +199,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet)
     }
 #endif
     get(m_pFileDlgCB, "filedlg");
+    get(m_pFileDlgROImage, "lockimage");
     get(m_pPrintDlgCB, "printdlg");
     get(m_pDocStatusCB, "docstatus");
     get(m_pSaveAlwaysCB, "savealways");
