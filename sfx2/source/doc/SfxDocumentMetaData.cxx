@@ -537,7 +537,7 @@ textToDateTime(css::util::DateTime & io_rdt, const OUString& i_text) throw ()
     if (::sax::Converter::parseDateTime(io_rdt, 0, i_text)) {
         return true;
     } else {
-        SAL_WARN("sfx.doc", "Invalid date: " << i_text);
+        SAL_INFO("sfx.doc", "Invalid date: " << i_text);
         return false;
     }
 }
