@@ -710,6 +710,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
 SfxSingleTabDialog::SfxSingleTabDialog(Window *pParent, const SfxItemSet& rSet,
     const OString& rID, const OUString& rUIXMLDescription)
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
+    , fnGetRanges(NULL)
     , pImpl(new SingleTabDlgImpl)
 {
     get(pOKBtn, "ok");
