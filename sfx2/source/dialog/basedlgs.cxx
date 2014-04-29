@@ -722,6 +722,7 @@ SfxSingleTabDialog::SfxSingleTabDialog(Window *pParent, const SfxItemSet& rSet,
 SfxSingleTabDialog::SfxSingleTabDialog(Window* pParent, const SfxItemSet* pInSet,
     const OString& rID, const OUString& rUIXMLDescription)
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
+    , fnGetRanges(NULL)
     , pImpl(new SingleTabDlgImpl)
 {
     get(pOKBtn, "ok");
@@ -730,8 +731,6 @@ SfxSingleTabDialog::SfxSingleTabDialog(Window* pParent, const SfxItemSet* pInSet
     get(pHelpBtn, "help");
     SetInputSet( pInSet );
 }
-
-
 
 SfxSingleTabDialog::~SfxSingleTabDialog()
 {

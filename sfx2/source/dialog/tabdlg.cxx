@@ -728,8 +728,6 @@ void SfxTabDialog::AddTabPage
         new Data_Impl( nId, pCreateFunc, pRangesFunc, bItemsOnDemand ) );
 }
 
-
-
 void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
 
 /*  [Description]
