@@ -697,6 +697,20 @@
 		BE9F4609186839C100B8BE69 /* unointerfaceproxy.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unointerfaceproxy.cxx; path = ../../../bridges/source/cpp_uno/shared/unointerfaceproxy.cxx; sourceTree = "<group>"; };
 		BE9F460A186839C100B8BE69 /* vtablefactory.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtablefactory.cxx; path = ../../../bridges/source/cpp_uno/shared/vtablefactory.cxx; sourceTree = "<group>"; };
 		BE9F460B186839C100B8BE69 /* vtables.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtables.cxx; path = ../../../bridges/source/cpp_uno/shared/vtables.cxx; sourceTree = "<group>"; };
+		BECA60DB1910271F00B24A7E /* autorecovery.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = autorecovery.cxx; path = ../../../framework/source/services/autorecovery.cxx; sourceTree = "<group>"; };
+		BECA60DC1910271F00B24A7E /* ContextChangeEventMultiplexer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ContextChangeEventMultiplexer.cxx; path = ../../../framework/source/services/ContextChangeEventMultiplexer.cxx; sourceTree = "<group>"; };
+		BECA60DD1910271F00B24A7E /* desktop.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = desktop.cxx; path = ../../../framework/source/services/desktop.cxx; sourceTree = "<group>"; };
+		BECA60DE1910271F00B24A7E /* dispatchhelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dispatchhelper.cxx; path = ../../../framework/source/services/dispatchhelper.cxx; sourceTree = "<group>"; };
+		BECA60DF1910271F00B24A7E /* frame.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = frame.cxx; path = ../../../framework/source/services/frame.cxx; sourceTree = "<group>"; };
+		BECA60E01910271F00B24A7E /* mediatypedetectionhelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mediatypedetectionhelper.cxx; path = ../../../framework/source/services/mediatypedetectionhelper.cxx; sourceTree = "<group>"; };
+		BECA60E11910271F00B24A7E /* modulemanager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = modulemanager.cxx; path = ../../../framework/source/services/modulemanager.cxx; sourceTree = "<group>"; };
+		BECA60E21910271F00B24A7E /* pathsettings.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pathsettings.cxx; path = ../../../framework/source/services/pathsettings.cxx; sourceTree = "<group>"; };
+		BECA60E31910271F00B24A7E /* sessionlistener.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sessionlistener.cxx; path = ../../../framework/source/services/sessionlistener.cxx; sourceTree = "<group>"; };
+		BECA60E41910271F00B24A7E /* substitutepathvars.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = substitutepathvars.cxx; path = ../../../framework/source/services/substitutepathvars.cxx; sourceTree = "<group>"; };
+		BECA60E51910271F00B24A7E /* tabwindowservice.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabwindowservice.cxx; path = ../../../framework/source/services/tabwindowservice.cxx; sourceTree = "<group>"; };
+		BECA60E61910271F00B24A7E /* taskcreatorsrv.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = taskcreatorsrv.cxx; path = ../../../framework/source/services/taskcreatorsrv.cxx; sourceTree = "<group>"; };
+		BECA60E71910271F00B24A7E /* uriabbreviation.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uriabbreviation.cxx; path = ../../../framework/source/services/uriabbreviation.cxx; sourceTree = "<group>"; };
+		BECA60E81910271F00B24A7E /* urltransformer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = urltransformer.cxx; path = ../../../framework/source/services/urltransformer.cxx; sourceTree = "<group>"; };
 		BECAB371186054DE00F814F9 /* lo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = lo.mm; sourceTree = "<group>"; };
 		BED2593E18F6B87900C94C72 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		BED2594018F6B89000C94C72 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -765,6 +779,7 @@
 				BE9F45F81868393D00B8BE69 /* bridges */,
 				BE55B10518DAD85E00950228 /* cppu */,
 				BE35B58A188FFA43001B7439 /* cppuhelper */,
+				BECA60D9191026BA00B24A7E /* framework */,
 				BE03BF9418FC199B00620DC7 /* i18npool */,
 				BE55B10818DB673300950228 /* oox */,
 				BE82C38818C752760050EB79 /* sal */,
@@ -1683,6 +1698,35 @@
 				BE9F46031868396500B8BE69 /* uno2cpp.cxx */,
 			);
 			name = bridges;
+			sourceTree = "<group>";
+		};
+		BECA60D9191026BA00B24A7E /* framework */ = {
+			isa = PBXGroup;
+			children = (
+				BECA60DA191026FA00B24A7E /* services */,
+			);
+			name = framework;
+			sourceTree = "<group>";
+		};
+		BECA60DA191026FA00B24A7E /* services */ = {
+			isa = PBXGroup;
+			children = (
+				BECA60DB1910271F00B24A7E /* autorecovery.cxx */,
+				BECA60DC1910271F00B24A7E /* ContextChangeEventMultiplexer.cxx */,
+				BECA60DD1910271F00B24A7E /* desktop.cxx */,
+				BECA60DE1910271F00B24A7E /* dispatchhelper.cxx */,
+				BECA60DF1910271F00B24A7E /* frame.cxx */,
+				BECA60E01910271F00B24A7E /* mediatypedetectionhelper.cxx */,
+				BECA60E11910271F00B24A7E /* modulemanager.cxx */,
+				BECA60E21910271F00B24A7E /* pathsettings.cxx */,
+				BECA60E31910271F00B24A7E /* sessionlistener.cxx */,
+				BECA60E41910271F00B24A7E /* substitutepathvars.cxx */,
+				BECA60E51910271F00B24A7E /* tabwindowservice.cxx */,
+				BECA60E61910271F00B24A7E /* taskcreatorsrv.cxx */,
+				BECA60E71910271F00B24A7E /* uriabbreviation.cxx */,
+				BECA60E81910271F00B24A7E /* urltransformer.cxx */,
+			);
+			name = services;
 			sourceTree = "<group>";
 		};
 		BEEEF9681860A21F00FBDE67 /* Resources */ = {
