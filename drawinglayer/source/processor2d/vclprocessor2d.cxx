@@ -1353,12 +1353,14 @@ namespace drawinglayer
 
                 if(!aRectangle.IsEmpty())
                 {
+                    bool bWillReallyRender = mpOutputDevice->IsDeviceOutputNecessary();
                     // try to paint EPS directly without fallback visualisation
-                    const bool bEPSPaintedDirectly(mpOutputDevice->DrawEPS(
+                    const bool bEPSPaintedDirectly = bWillReallyRender &&
+                        mpOutputDevice->DrawEPS(
                         aRectangle.TopLeft(),
                         aRectangle.GetSize(),
                         rEpsPrimitive2D.getGfxLink(),
-                        0));
+                        0);
 
                     if(!bEPSPaintedDirectly)
                     {
