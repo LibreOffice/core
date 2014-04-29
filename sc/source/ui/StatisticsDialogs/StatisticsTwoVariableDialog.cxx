@@ -34,6 +34,7 @@ ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
     mDocument       ( pViewData->GetDocument() ),
     mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
     mGroupedBy      ( BY_COLUMN ),
+    mpActiveEdit    ( NULL ),
     mCurrentAddress ( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() ),
     mDialogLostFocus( false )
 {
