@@ -23,6 +23,8 @@ public:
 
     static sal_uInt8* ConvertBitmapExToRGBABuffer(const BitmapEx& rBitmapEx);
     static BitmapEx ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight);
+
+    static const char* GLErrorString(GLenum errorCode);
 };
 
 #endif

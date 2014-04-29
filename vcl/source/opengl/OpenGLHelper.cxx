@@ -197,4 +197,36 @@ BitmapEx OpenGLHelper::ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffe
     return BitmapEx(aBitmap, aAlpha);
 }
 
+const char* OpenGLHelper::GLErrorString(GLenum errorCode)
+{
+    static const struct {
+        GLenum code;
+        const char *string;
+    } errors[]=
+    {
+        /* GL */
+        {GL_NO_ERROR, "no error"},
+        {GL_INVALID_ENUM, "invalid enumerant"},
+        {GL_INVALID_VALUE, "invalid value"},
+        {GL_INVALID_OPERATION, "invalid operation"},
+        {GL_STACK_OVERFLOW, "stack overflow"},
+        {GL_STACK_UNDERFLOW, "stack underflow"},
+        {GL_OUT_OF_MEMORY, "out of memory"},
+
+        {0, NULL }
+    };
+
+    int i;
+
+    for (i=0; errors[i].string; i++)
+    {
+        if (errors[i].code == errorCode)
+        {
+            return errors[i].string;
+        }
+     }
+
+    return NULL;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
