@@ -137,7 +137,7 @@ public class _XCachedDynamicResultSetStubFactory extends MultiMethodTest {
             setFac = (XCachedDynamicResultSetFactory) UnoRuntime.queryInterface
                 (XCachedDynamicResultSetFactory.class, fac) ;
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Cant instantiate a service") ;
+            log.println("Can't instantiate a service") ;
             e.printStackTrace(log) ;
             result = false ;
         }

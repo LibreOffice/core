@@ -38,7 +38,7 @@ import com.sun.star.lang.XSingleServiceFactory;
 /**
  * This is a special service that is used in testing Acceptor
  * component in BASIC. This componennt creates a separate thread
- * that tries to connect to BASIC's acceptor. After successfull
+ * that tries to connect to BASIC's acceptor. After successful
  * connection it writes a connectionString to XConnection.
  */
  public class Connector implements XServiceInfo, XSingleServiceFactory {
@@ -233,7 +233,7 @@ class ConnThread extends Thread {
 
     /**Construct the thread.
      * @param oCntr A connector.
-     * @param cStr The conection string.
+     * @param cStr The connection string.
      */
     public ConnThread(XConnector oCntr, String cStr){
         connStr = cStr;

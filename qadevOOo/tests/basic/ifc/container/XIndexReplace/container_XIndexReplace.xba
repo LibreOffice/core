@@ -35,7 +35,7 @@ option explicit
 ' This Interface/Service test depends on the following GLOBAL variables,
 ' which must be specified in the object creation:
 
-'      the Test-Object must contain two diffrent named Objects
+'      the Test-Object must contain two different named Objects
 '   Global oIdxReplaceInstance as Object
 
 '*************************************************************************

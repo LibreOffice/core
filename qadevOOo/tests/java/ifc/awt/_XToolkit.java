@@ -89,7 +89,7 @@ public class _XToolkit extends MultiMethodTest {
                 res = true;
             }
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occured while checking 'createWindow':");
+            log.println("Exception occurred while checking 'createWindow':");
             ex.printStackTrace(log);
         }
         tRes.tested("createWindow()", res);
@@ -115,7 +115,7 @@ public class _XToolkit extends MultiMethodTest {
                 res = true;
             }
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occured while checking 'createWindows':");
+            log.println("Exception occurred while checking 'createWindows':");
             ex.printStackTrace(log);
         }
         tRes.tested("createWindows()", res);

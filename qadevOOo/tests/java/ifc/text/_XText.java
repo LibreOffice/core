@@ -90,10 +90,10 @@ public class _XText extends MultiMethodTest {
         // get indexaccess to the tablecollection
         XIndexAccess xIA = info.getCollection();
 
-        // this comparision works just because it has to be at least one
+        // this comparison works just because it has to be at least one
         // table at this point regardless which thread inserted it
         // there is although the possibility that the first threads call
-        // failed, the second not and comparision happens after second threads
+        // failed, the second not and comparison happens after second threads
         // otherwise if something fails it should have thrown an exception
         //tRes.tested("insertTextContent()",    xIA.getCount() > 0 );
 
@@ -110,12 +110,12 @@ public class _XText extends MultiMethodTest {
         log.println( "test for insertTextContent" );
         try {
             oObj.insertTextContent(oCursor, null, false);
-            log.println("The expected Exception doesn't occured");
+            log.println("The expected Exception doesn't occurred");
             result &= false;
         }
         catch( com.sun.star.lang.IllegalArgumentException iaE ){
             // Some exception.FAILED
-            log.println("Expected Exception occured");
+            log.println("Expected Exception occurred");
             String msg = iaE.getMessage();
             if (msg.equals("")) {
                 log.println("But there is not detailed message");
@@ -157,7 +157,7 @@ public class _XText extends MultiMethodTest {
             return;
         }
 
-        // no exception occured so it works
+        // no exception occurred so it works
         tRes.tested( "removeTextContent()", true );
 
     }

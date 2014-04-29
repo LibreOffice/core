@@ -443,7 +443,7 @@ public class _XFrame extends MultiMethodTest {
 
     /**
     * Test calls the method. Remembered old creater is restored at the end. <p>
-    * Has <b> OK </b> status if the method sucessfully set new value to (XFrame)
+    * Has <b> OK </b> status if the method successfully set new value to (XFrame)
     * oObj object.
     */
     public void _setCreator() {
@@ -541,7 +541,7 @@ public class _XFrame extends MultiMethodTest {
         try {
             oObj.initialize(win) ;
         } catch (com.sun.star.uno.RuntimeException e){
-            String message="Frame::initialized() is called more then once, which isnt usefull nor allowed.";
+            String message="Frame::initialized() is called more then once, which isn't useful nor allowed.";
             if (e.toString().indexOf(message) != -1){
                 log.println(e.toString());
                 log.println("methods throws exception, but it's OK");

@@ -339,7 +339,7 @@ public class XMLTools {
         /**
         * Checks if there were no errors during document handling.
         * I.e. startDocument() and endDocument() must be called,
-        * XML must be well formed, paramters must be valid.
+        * XML must be well formed, parameters must be valid.
         */
         public boolean isWellFormed() {
             if (!docEnded) {
@@ -351,7 +351,7 @@ public class XMLTools {
         }
 
         /**
-        * Prints error message and all tags where error occured inside.
+        * Prints error message and all tags where error occurred inside.
         * Also prints "Tag trace" in case if the full XML data isn't
         * printed.
         */

@@ -32,7 +32,7 @@
 option explicit
 
 '*************************************************************************
-'!!! Doesnt currently work as service can't be instantiated.
+'!!! Doesn't currently work as service can't be instantiated.
 
 '*************************************************************************
 

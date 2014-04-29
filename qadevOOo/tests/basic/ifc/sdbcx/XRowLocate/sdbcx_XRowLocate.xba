@@ -63,14 +63,14 @@ On Error Goto ErrHndl
     cDscr2 = oObj.getString(1)
     Out.Log("Now on " + cDscr2)
     oObj.moveToBookmark(oBM1)
-    Out.Log("After movment on " + oObj.getString(1))
+    Out.Log("After movement on " + oObj.getString(1))
     bOK = bOK AND oObj.getString(1) = cDscr1
     Test.MethodTested("moveToBookmark()", bOK)
 
     Test.StartMethod("moveRelativeToBookmark()")
     bOK = true
     oObj.moveRelativeToBookmark(oBM1, 1)
-    Out.Log("After movment on " + oObj.getString(1))
+    Out.Log("After movement on " + oObj.getString(1))
     bOK = bOK AND oObj.getString(1) = cDscr2
     Test.MethodTested("moveRelativeToBookmark()", bOK)
 

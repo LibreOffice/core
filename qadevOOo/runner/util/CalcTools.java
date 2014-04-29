@@ -39,7 +39,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 
 /**
- * This class contains some usefull mathods to handle Calc documents
+ * This class contains some useful mathods to handle Calc documents
  * and its sheets.
  */
 public class CalcTools {
@@ -47,7 +47,7 @@ public class CalcTools {
     /**
      * fills a range of a calc sheet with computed data of type
      * <CODE>Double</CODE>.
-     * @param xSheetDoc the Clac documents wich should be filled
+     * @param xSheetDoc the Clac documents which should be filled
      * @param sheetNumber the number of the sheet of <CODE>xSheetDoc</CODE>
      * @param startCellX the cell number of the X start point (row) of the range to fill
      * @param startCellY the cell number of the Y start point (column) of the range to fill
@@ -112,7 +112,7 @@ public class CalcTools {
     /**
      *
      * returns an <CODE>XSpreadsheet</CODE> from a Calc document.
-     * @param xSheetDoc the Calc docuent which containes the sheet
+     * @param xSheetDoc the Calc docuent which contains the sheet
      * @param sheetNumber the number of the sheet to return
      * @throws java.lang.Exception on any error an <CODE>java.lang.Exception</CODE> was thrown
      * @return calc sheet

@@ -48,7 +48,7 @@ public class _XImageConsumer extends MultiMethodTest {
 
     /**
     * Initialize the consumer with size 2x2. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _init() {
 
@@ -60,7 +60,7 @@ public class _XImageConsumer extends MultiMethodTest {
 
     /**
     * Sets color model. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> init </code> </li>
@@ -79,7 +79,7 @@ public class _XImageConsumer extends MultiMethodTest {
 
     /**
     * Fill the picture with for pixels. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     * The following method tests are to be executed before :
     * <ul>
     *  <li> <code> setColorModel </code> </li>
@@ -97,7 +97,7 @@ public class _XImageConsumer extends MultiMethodTest {
 
     /**
     * Fill the picture with for pixels. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     * The following method tests are to be executed before :
     * <ul>
     *  <li> <code> setColorModel </code> </li>
@@ -114,7 +114,7 @@ public class _XImageConsumer extends MultiMethodTest {
 
     /**
     * Just calls the method. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> init </code>  </li>

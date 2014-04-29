@@ -46,7 +46,7 @@ import com.sun.star.uno.XInterface;
  *   the creator which can create instances of
  *   <code>com.sun.star.text.Paragraph</code> service. </li>
  *  <li> <code>'XTEXTINFO'</code> (of type <code>XInstCreator</code>):
- *   the creator which can create instances of soem text content
+ *   the creator which can create instances of some text content
  *   service (objects which implement <code>XTextContent</code>).
  *  </li>
  * <ul> <p>
@@ -67,7 +67,7 @@ public class _XRelativeTextContentInsert extends MultiMethodTest {
      * using relation and inserted into text. Then an instance
      * of text content is created and inserted after the paragraph. <p>
      *
-     * Has <b>OK</b> status if no exceptions occured.
+     * Has <b>OK</b> status if no exceptions occurred.
      */
     public void _insertTextContentAfter() {
 
@@ -87,7 +87,7 @@ public class _XRelativeTextContentInsert extends MultiMethodTest {
             tRes.tested("insertTextContentAfter()",true);
         }
         catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occured while checking "+
+            log.println("Exception occurred while checking "+
                 "insertTextContentAfter()");
             ex.printStackTrace(log);
             tRes.tested("insertTextContentAfter()",false);
@@ -101,7 +101,7 @@ public class _XRelativeTextContentInsert extends MultiMethodTest {
      * and inserted before the paragraph which was added into
      * text in <code>insertTextContentAfter</code> method test. <p>
      *
-     * Has <b>OK</b> status if no exceptions occured. <p>
+     * Has <b>OK</b> status if no exceptions occurred. <p>
      *
      * The following method tests are to be completed successfully before :
      * <ul>
@@ -119,7 +119,7 @@ public class _XRelativeTextContentInsert extends MultiMethodTest {
             tRes.tested("insertTextContentBefore()",true);
         }
         catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occured while checking "+
+            log.println("Exception occurred while checking "+
                 "insertTextContentBefore()");
             ex.printStackTrace(log);
             tRes.tested("insertTextContentBefore()",false);

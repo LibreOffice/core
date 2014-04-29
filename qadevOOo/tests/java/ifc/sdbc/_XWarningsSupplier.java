@@ -98,7 +98,7 @@ public class _XWarningsSupplier extends MultiMethodTest {
             }
             catch (SQLException e)
             {
-                log.println("Exception occured :");
+                log.println("Exception occurred :");
                 e.printStackTrace(log);
                 tRes.tested("getWarnings()", res);
                 return;
@@ -123,7 +123,7 @@ public class _XWarningsSupplier extends MultiMethodTest {
             Object warns = oObj.getWarnings();
             res = (utils.isVoid(warns));
         } catch (SQLException e) {
-            log.println("Exception occured :");
+            log.println("Exception occurred :");
             e.printStackTrace(log);
             tRes.tested("clearWarnings()", res);
             return;

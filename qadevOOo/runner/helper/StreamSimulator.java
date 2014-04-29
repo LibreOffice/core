@@ -81,7 +81,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
      *
      * @throw   com.sun.star.io.NotConnectedException
      *              in case the internal streams to the file on disk couldn't established.
-     *              They are neccessary. Otherwhise this simulator can't realy work.
+     *              They are necessary. Otherwise this simulator can't really work.
      */
     public StreamSimulator( String  sFileName , boolean bInput ,
         lib.TestParameters param   ) throws com.sun.star.io.NotConnectedException
@@ -134,7 +134,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     /**
      * following methods simulates the XInputStream.
      * The notice all actions inside the internal protocol
-     * and try to map all neccessary functions to the internal
+     * and try to map all necessary functions to the internal
      * open in-stream.
      */
     public int readBytes( /*OUT*/ byte[][] lData        ,
@@ -314,7 +314,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     /**
      * following methods simulates the XOutputStream.
      * The notice all actions inside the internal protocol
-     * and try to map all neccessary functions to the internal
+     * and try to map all necessary functions to the internal
      * open out-stream.
      */
     public void writeBytes( /*IN*/byte[] lData ) throws com.sun.star.io.NotConnectedException       ,
@@ -417,7 +417,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     /**
      * following methods simulates the XSeekable.
      * The notice all actions inside the internal protocol
-     * and try to map all neccessary functions to the internal
+     * and try to map all necessary functions to the internal
      * open stream.
      */
     public void seek( /*IN*/long nLocation ) throws com.sun.star.lang.IllegalArgumentException,

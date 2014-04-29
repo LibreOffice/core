@@ -70,7 +70,7 @@ public class _XDatabaseRanges extends MultiMethodTest {
             log.println("Exception expected... Test failed.");
             bResult = false;
         } catch(com.sun.star.uno.RuntimeException e) {
-            log.println("Exception occured while testing addNewByName() : " + e);
+            log.println("Exception occurred while testing addNewByName() : " + e);
             bResult = true;
         }
 
@@ -80,7 +80,7 @@ public class _XDatabaseRanges extends MultiMethodTest {
     /**
     * Test removes the database range with name that exist exactly and then
     * tries to remove the range with name that doesn't exist exactly. <p>
-    * Has <b> OK </b> status if first range was succesfully removed and
+    * Has <b> OK </b> status if first range was successfully removed and
     * exception was thrown when trying to remove non-existent database range.<p>
     * The following method tests are to be completed successfully before :
     * <ul>
@@ -98,7 +98,7 @@ public class _XDatabaseRanges extends MultiMethodTest {
             oObj.removeByName(name);
             bResult &= !oObj.hasByName(name);
         } catch (com.sun.star.uno.RuntimeException e) {
-            log.println("Exception occured while testing removeByName() : " + e);
+            log.println("Exception occurred while testing removeByName() : " + e);
             bResult = false;
         }
 

@@ -39,7 +39,7 @@ import java.util.Enumeration;
 
 /**
  * It collects some static helper functons to handle URLs.
- * Sometimes it's neccessary to convert URL from/to system pathes.
+ * Sometimes it's necessary to convert URL from/to system paths.
  * Or from string to strutural notations (e.g. com.sun.star.util.URL).
  * And sometimes java had another notation then the office it has.
  *
@@ -50,7 +50,7 @@ public class URLHelper
 
     /**
      * Because the office need URLs for loading/saving documents
-     * we must convert used system pathes.
+     * we must convert used system paths.
      * And java use another notation for file URLs ... correct it.
      *
      * @param aSystemPath
@@ -92,7 +92,7 @@ public class URLHelper
 
     /**
      * The same as getFileURLFromSystemPath() before but uses string parameter instead
-     * of a File type. It exist to supress converting of neccessary parameters in the
+     * of a File type. It exists to suppress converting of necessary parameters in the
      * outside code. But of course getFileURLFromSystemPath(File) will be a little bit faster
      * then this method ...
      *
@@ -157,7 +157,7 @@ public class URLHelper
 
     /**
      * The same as getURLWithProtocolFromSystemPath() before but uses string parameter instead
-     * of a File types. It exist to supress converting of neccessary parameters in the
+     * of a File types. It exists to suppress converting of necessary parameters in the
      * outside code. But of course getURLWithProtocolFromSystemPath(File,File,String) will be
      * a little bit faster then this method ...
      *
@@ -247,7 +247,7 @@ public class URLHelper
      *
      * @return  [Vector]
      *              a filtered list of java File objects of all available files of the start dir
-     *              and all accessable sub directories.
+     *              and all accessible subdirectories.
      */
     public static Vector getSystemFilesFromDir(String sStartDir)
     {

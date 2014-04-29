@@ -89,7 +89,7 @@ public class _FunctionDescription extends MultiMethodTest {
             }
         } catch (Exception e) {
             log.println(
-                "Exception occured while testing property 'Arguments'" );
+                "Exception occurred while testing property 'Arguments'" );
             e.printStackTrace( log );
             tRes.tested( "Arguments", false );
         }
@@ -141,7 +141,7 @@ public class _FunctionDescription extends MultiMethodTest {
         }
         catch ( Exception e ) {
             log.println(
-                "Exception occured while testing property '" + name + "'" );
+                "Exception occurred while testing property '" + name + "'" );
             e.printStackTrace( log );
             tRes.tested( name, false );
         }

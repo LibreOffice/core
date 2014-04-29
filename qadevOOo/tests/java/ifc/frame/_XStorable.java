@@ -78,7 +78,7 @@ public class _XStorable extends MultiMethodTest {
             // else try to obtain location
             requiredMethod("storeAsURL()");
             if (storeUrl != null) {
-                // if stored succesfully - check location
+                // if stored successfully - check location
                 log.println(oObj.getLocation() + "--" + storeUrl);
                 tRes.tested("getLocation()",
                     storeUrl.equals(oObj.getLocation()));
@@ -103,7 +103,7 @@ public class _XStorable extends MultiMethodTest {
     public void _hasLocation() {
         requiredMethod("storeAsURL()");
         if (storeUrl != null) {
-            // if stored succesfully - it should have a location
+            // if stored successfully - it should have a location
             tRes.tested("hasLocation()", oObj.hasLocation());
         } else {
             // if not - it should not
@@ -186,7 +186,7 @@ public class _XStorable extends MultiMethodTest {
     * Has <b> OK </b> status if:
     * <ol>
     *  <li>component was stored, object is not readonly and has location</li>
-    *  <li>exception occured because of component is readonly
+    *  <li>exception occurred because of component is readonly
     *  and wasn't stored</li>
     * </ol>
     */

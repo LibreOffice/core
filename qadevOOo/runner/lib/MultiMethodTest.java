@@ -55,7 +55,7 @@ import stats.Summarizer;
  *   3. to set status for a call 'tRes.tested(String method,
  *   boolean result)' should be used. For example 'tRes.tested("getText()",
  *   true)'. Also 'tRes.assert(String assertion, boolean result)' call can
- *   be used. Note, that one can call the methods not neccesarily from the
+ *   be used. Note, that one can call the methods not necessarily from the
  *   test for the tested method, but from other method tests too (in the
  *   MultiMethodTest subclass). See also TestResult and MultiMethodTest.tRes
  *   documentation.

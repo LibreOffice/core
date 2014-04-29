@@ -254,7 +254,7 @@ public class _XSheetCellCursor extends MultiMethodTest {
         log.println("DB: Successfuly merged.") ;
 
         oObj.collapseToMergedArea() ;
-        log.println("DB: Succesfully collapseToMergedArea() method called");
+        log.println("DB: Successfully collapseToMergedArea() method called");
 
         // unmerge area to restore SpreadSheet
         mergeRange.merge(false);
@@ -267,7 +267,7 @@ public class _XSheetCellCursor extends MultiMethodTest {
         int rows = ((XColumnRowRange)
             UnoRuntime.queryInterface(
                 XColumnRowRange.class, oObj) ).getRows().getCount();
-        log.println("DB: Column and row numbers succesfully get") ;
+        log.println("DB: Column and row numbers successfully get") ;
 
         if (cols == width + 1  && rows == height + 3) {
             bResult &= true;

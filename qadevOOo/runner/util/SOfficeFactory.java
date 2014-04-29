@@ -430,7 +430,7 @@ public class SOfficeFactory {
     }
 
     /**
-     * creates a Diagram wich specified in kind(String)
+     * creates a Diagram which specified in kind(String)
      */
     public XDiagram createDiagram(XComponent oDoc, String kind) {
         XInterface oInterface = null;

@@ -61,7 +61,7 @@ public class _XUnoControlContainer extends MultiMethodTest {
         tabControl1 = (XTabController) tEnv.getObjRelation("TABCONTROL1");
         tabControl2 = (XTabController) tEnv.getObjRelation("TABCONTROL2");
         if ((tabControl1 == null) || (tabControl2 == null)){
-            log.println("ERROR: Needed object realtions 'TABCONTROL1' and "
+            log.println("ERROR: Needed object relations 'TABCONTROL1' and "
             + "'TABCONTROL2' are not found.");
         }
         TabControllers[0] = tabControl1;

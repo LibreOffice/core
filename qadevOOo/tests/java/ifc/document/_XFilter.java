@@ -50,7 +50,7 @@ import com.sun.star.uno.UnoRuntime;
 *  <li> <code>'XFilter.Checker'</code> <b>(optional)</b> (of type
 *   <code>ifc.document._XFilter.FilterChecker</code>) : implementation
 *   of interface must allow checking that document was exported successfully.
-*   If the relation doesn't exist then by default successfull filtering
+*   If the relation doesn't exist then by default successful filtering
 *   assumed.
 *  </li>
 * <ul> <p>
@@ -106,7 +106,7 @@ public class _XFilter extends MultiMethodTest {
 
     /**
     * Just calls the method. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _filter() {
         if (dummy) {
@@ -127,7 +127,7 @@ public class _XFilter extends MultiMethodTest {
 
     /**
     * Just calls the method. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _cancel() {
         if (dummy) {

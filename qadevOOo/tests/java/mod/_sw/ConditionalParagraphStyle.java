@@ -81,7 +81,7 @@ public class ConditionalParagraphStyle extends TestCase {
      * Create a new instance of the conditional
      * paragraph style, and insert it into the document.
      * @see com.sun.star.style.ConditionalParagraphStyle
-     * @param tParam The test paramters
+     * @param tParam The test parameters
      * @param log The log writer.
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
@@ -105,15 +105,15 @@ public class ConditionalParagraphStyle extends TestCase {
             oStyle = (XStyle) UnoRuntime.queryInterface(
                         XStyle.class,oSFIA.getByIndex(1));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            log.println("Error: exception occured.");
+            log.println("Error: exception occurred.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
         } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
-            log.println("Error: exception occured.");
+            log.println("Error: exception occurred.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
         } catch ( com.sun.star.container.NoSuchElementException e ) {
-            log.println("Error: exception occured.");
+            log.println("Error: exception occurred.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
         }
@@ -126,7 +126,7 @@ public class ConditionalParagraphStyle extends TestCase {
                 oMSF.createInstance("com.sun.star.style.ConditionalParagraphStyle");
             oMyStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, oInt);
         } catch ( com.sun.star.uno.Exception e ) {
-            log.println("Error: exception occured.");
+            log.println("Error: exception occurred.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
         }

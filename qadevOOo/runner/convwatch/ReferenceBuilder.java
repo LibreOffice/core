@@ -134,7 +134,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
         }
 
     /**
-     * Function returns a List of software which must accessable as an external executable
+     * Function returns a List of software which must accessible as an external executable
      */
     protected Object[] mustInstalledSoftware()
         {
@@ -149,7 +149,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
             GlobalLogWriter.set(log);
             String sDBConnection = (String)param.get( PropertyName.DB_CONNECTION_STRING );
 
-            // check if all need software is installed and accessable
+            // check if all need software is installed and accessible
             checkEnvironment(mustInstalledSoftware());
 
             // test_removeFirstDirectorysAndBasenameFrom();
@@ -286,7 +286,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                     //     aSemaphore.V(aSemaphore.getSemaphoreFile());
                     //     aSemaphore.sleep(2);
                     //     // wait some time maybe an other process will take the semaphore
-                    //     // I know, this is absolutly dirty, but the whole convwatch is dirty and need a big cleanup.
+                    //     // I know, this is absolutely dirty, but the whole convwatch is dirty and need a big cleanup.
                     // }
                 }
             }

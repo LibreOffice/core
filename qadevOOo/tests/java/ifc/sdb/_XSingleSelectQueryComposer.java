@@ -160,7 +160,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
     /**
     * At first the object relation <code>xProp</code> was set as parameter.
-    * Relation <code>xQueryAna</code> was used to chek if realtion
+    * Relation <code>xQueryAna</code> was used to check if realtion
     * <code>colName</code> was found.
     * Second an empty <code>XPropertySet</code> was used as parameter. A
     * <code>com.sun.star.sdbc.SQLException</code> must be thrown.
@@ -204,7 +204,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
     /**
     * At first the object relation <code>xProp</code> was used as parameter.
-    * Relation <code>xQueryAna</code> was used to chek if realtion
+    * Relation <code>xQueryAna</code> was used to check if realtion
     * <code>colName</code> was found.
     * Second an empty <code>XPropertySet</code> was used as parameter. An
     * <code>com.sun.star.sdbc.SQLException</code> must be thrown.
@@ -308,7 +308,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
     /**
     * First object relation <code>xProp</code> was used as parameter. Relation
-    * <code>xQueryAna</code> was used to chek if realtion <code>colName</code>
+    * <code>xQueryAna</code> was used to check if realtion <code>colName</code>
     * was found.
     * Second an empty <code>XPropertySet</code> was given as parameter. An
     * <code>com.sun.star.sdbc.SQLException</code> must be thrown.
@@ -340,7 +340,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
     /**
     * First object relation <code>xProp</code> was set as parameter. Relation
-    * <code>xQueryAna</code> was used to chek if realtion <code>colName</code>
+    * <code>xQueryAna</code> was used to check if realtion <code>colName</code>
     * was found.
     * Second an empty <code>XPropertySet</code> was given as parameter. An
     * <code>com.sun.star.sdbc.SQLException</code> must be thrown.

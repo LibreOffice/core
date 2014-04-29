@@ -53,11 +53,11 @@ import com.sun.star.uno.UnoRuntime;
 *  <li> <code>'FrameLoader.Frame'</code> <b>(optional)</b>
 *  (of type <code>com.sun.star.frame.XFrame</code>):
 *   a target frame where component to be loaded. If this
-*   relation is ommited then a text document created and its
+*   relation is omitted then a text document created and its
 *   frame is used. </li>
 *  <li> <code>'FrameLoader.args'</code> <b>(optional)</b>
 *   (of type <code>Object[]</code>):
-*   necessary arguuments for loading  a component. If ommited
+*   necessary arguuments for loading  a component. If omitted
 *   then zero length array is passed as parameter</li>
 * <ul> <p>
 * Test is <b> NOT </b> multithread compilant. <p>
@@ -138,8 +138,8 @@ public class _XFrameLoader extends MultiMethodTest {
     * listener have a chance to be called  and then checks
     * if the load listener was called. <p>
     * Has <b>OK</b> status if <code>cancel</code> method test
-    * didn't interrupt loading and it was successfull, or
-    * if in this method it loads successfull and listener's
+    * didn't interrupt loading and it was successful, or
+    * if in this method it loads successful and listener's
     * <code>finished</code> method was called.
     * The following method tests are to be executed before :
     * <ul>
@@ -161,7 +161,7 @@ public class _XFrameLoader extends MultiMethodTest {
     }
 
     /**
-    * Starts to load a component and then immediatly tries to
+    * Starts to load a component and then immediately tries to
     * cancel the process. <p>
     * Has <b>OK</b> status if the process was cancelled or
     * finished (appropriate listener methods were called).

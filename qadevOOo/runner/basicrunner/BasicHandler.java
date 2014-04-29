@@ -80,7 +80,7 @@ public class BasicHandler implements XServiceInfo, XSingleServiceFactory {
     static private LogWriter log;
 
     /**
-     * <code>oHandlerDoc</code> is a referrence to BASIC's document.
+     * <code>oHandlerDoc</code> is a reference to BASIC's document.
      */
     static private XComponent oHandlerDoc = null;
 

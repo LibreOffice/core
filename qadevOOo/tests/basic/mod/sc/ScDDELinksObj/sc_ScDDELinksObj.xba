@@ -51,7 +51,7 @@ On Error Goto ErrHndl
 
     oTestDoc = utils.loadTestDocument("ScDDELinksObj.sdc")
     
-    ' This construction of 2-way convertion of testdocs location 
+    ' This construction of 2-way conversion of testdocs location 
     ' should take place here, because there is unnecessary slash at the end of 
     ' cTestDocsDir.
     testDoc = utils.URL2Path(utils.Path2URL(cTestDocsDir &amp; "ScDDELinksObj.sdc"))

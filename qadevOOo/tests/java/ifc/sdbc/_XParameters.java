@@ -114,7 +114,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets String parameter (if exists) to SQL NULL value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setNull() {
         boolean result = true ;
@@ -142,7 +142,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets String parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setString() {
         boolean result = true ;
@@ -163,7 +163,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setBoolean() {
         boolean result = true ;
@@ -184,7 +184,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setByte() {
         boolean result = true ;
@@ -205,7 +205,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setShort() {
         boolean result = true ;
@@ -226,7 +226,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setInt() {
         boolean result = true ;
@@ -247,7 +247,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setLong() {
         boolean result = true ;
@@ -268,7 +268,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setFloat() {
         boolean result = true ;
@@ -289,7 +289,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setDouble() {
         boolean result = true ;
@@ -310,7 +310,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setBytes() {
         boolean result = true ;
@@ -331,7 +331,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setDate() {
         boolean result = true ;
@@ -353,7 +353,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setTime() {
         boolean result = true ;
@@ -375,7 +375,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setTimestamp() {
         boolean result = true ;
@@ -397,7 +397,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setBinaryStream() {
         boolean result = true ;
@@ -427,7 +427,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setCharacterStream() {
         boolean result = true ;
@@ -457,7 +457,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setObject() {
         boolean result = true ;
@@ -485,7 +485,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Sets parameter (if exists) to new value. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _setObjectWithInfo() {
         boolean result = true ;
@@ -538,7 +538,7 @@ public class _XParameters extends MultiMethodTest {
 
     /**
     * Calls method. <p>
-    * Has OK status if no exceptions occured.
+    * Has OK status if no exceptions occurred.
     */
     public void _clearParameters() {
         boolean result = true ;

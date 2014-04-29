@@ -175,19 +175,19 @@ public class _XPropertySet extends MultiMethodTest {
                     oObj.setPropertyValue(propertyName,
                         ValueChanger.changePValue(gValue));
                 } catch (com.sun.star.beans.PropertyVetoException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.beans.UnknownPropertyException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } // end of try-catch
@@ -235,19 +235,19 @@ public class _XPropertySet extends MultiMethodTest {
                     oObj.setPropertyValue(propertyName,
                         ValueChanger.changePValue(gValue));
                 } catch (com.sun.star.beans.PropertyVetoException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.beans.UnknownPropertyException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } // end of try-catch
@@ -299,19 +299,19 @@ public class _XPropertySet extends MultiMethodTest {
                     oObj.setPropertyValue(propertyName, sValue);
                     sValue = oObj.getPropertyValue(propertyName);
                 } catch (com.sun.star.beans.PropertyVetoException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.beans.UnknownPropertyException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } // end of try-catch
@@ -330,7 +330,7 @@ public class _XPropertySet extends MultiMethodTest {
 
     /**
     * Tests <code>getPropertyValue</code> method for the given property.
-    * Returns true if no exceptions occured
+    * Returns true if no exceptions occurred
     */
     private boolean getSinglePropertyValue( String propertyName )
     {
@@ -339,11 +339,11 @@ public class _XPropertySet extends MultiMethodTest {
             oObj.getPropertyValue(propertyName);
             runOk = true;
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Exception occured while trying to get property '"+
+            log.println("Exception occurred while trying to get property '"+
                  propertyName+"'");
             e.printStackTrace(log);
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occured while trying to get property '"+
+            log.println("Exception occurred while trying to get property '"+
                 propertyName+"'");
             e.printStackTrace(log);
         }
@@ -423,7 +423,7 @@ public class _XPropertySet extends MultiMethodTest {
                 try {
                     oObj.removePropertyChangeListener(propertyName,PClistener);
                 } catch (Exception e) {
-                    log.println("Exception occured while removing change listener from"+
+                    log.println("Exception occurred while removing change listener from"+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 }
@@ -440,19 +440,19 @@ public class _XPropertySet extends MultiMethodTest {
                     oObj.setPropertyValue(propertyName,
                         ValueChanger.changePValue(gValue));
                 } catch (com.sun.star.beans.PropertyVetoException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.beans.UnknownPropertyException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } // end of try-catch
@@ -499,7 +499,7 @@ public class _XPropertySet extends MultiMethodTest {
                 try {
                     oObj.removeVetoableChangeListener(propertyName,VClistener);
                 } catch (Exception e) {
-                    log.println("Exception occured while removing veto listener from"+
+                    log.println("Exception occurred while removing veto listener from"+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 }
@@ -516,19 +516,19 @@ public class _XPropertySet extends MultiMethodTest {
                     oObj.setPropertyValue(propertyName,
                         ValueChanger.changePValue(gValue));
                 } catch (com.sun.star.beans.PropertyVetoException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.beans.UnknownPropertyException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occured while trying to change "+
+                    log.println("Exception occurred while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } // end of try-catch

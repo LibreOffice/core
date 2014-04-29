@@ -84,7 +84,7 @@ On Error Goto ErrHndl
     ' initialize the pagestyle with the new values
     oPageStyle.TextColumns = oObj
 
-    ' check if ColumnsCount was set successfull
+    ' check if ColumnsCount was set successful
     Test.StartMethod("getColumnCount()")
     bOK = true
     bOK = bOK AND (nCount = oPageStyle.TextColumns.ColumnCount)

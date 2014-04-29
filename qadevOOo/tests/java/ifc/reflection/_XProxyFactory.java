@@ -57,7 +57,7 @@ public class _XProxyFactory extends MultiMethodTest {
     * called. The goal is to check if the real object method
     * was called throwgh it's proxy. <p>
     * Has <b>OK</b> status if the real object method was
-    * called and paramters were passed correctly.
+    * called and parameters were passed correctly.
     */
     public void _createProxy() {
         class MyObject implements XInitialization {

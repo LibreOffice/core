@@ -139,7 +139,7 @@ public class _XActiveDataControl extends MultiMethodTest {
 
         oObj.start();
 
-        // waiting a little bit for data transfered
+        // waiting a little bit for data transferred
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
@@ -212,7 +212,7 @@ public class _XActiveDataControl extends MultiMethodTest {
             throw new StatusException(Status.failed(e.getMessage()));
         }
 
-        // check, if any error occured
+        // check, if any error occurred
         if (errorCalled) {
             Status.failed("Unexpected error");
             log.println("Unexpected error " + error);

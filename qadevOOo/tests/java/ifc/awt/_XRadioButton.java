@@ -98,7 +98,7 @@ public class _XRadioButton extends MultiMethodTest {
 
     /**
     * Gets state and stores it. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _getState() {
 
@@ -133,7 +133,7 @@ public class _XRadioButton extends MultiMethodTest {
 
     /**
     * Just sets a new label. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _setLabel() {
 

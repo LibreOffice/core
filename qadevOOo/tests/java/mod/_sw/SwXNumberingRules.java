@@ -115,7 +115,7 @@ public class SwXNumberingRules extends TestCase {
                     ControlCharacter.PARAGRAPH_BREAK, false);
             }
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            log.println("Error, exception occured...");
+            log.println("Error, exception occurred...");
             e.printStackTrace(log);
         }
 
@@ -130,13 +130,13 @@ public class SwXNumberingRules extends TestCase {
             NumStyleI = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class,NumStyles);
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            log.println("Error, exception occured...");
+            log.println("Error, exception occurred...");
             e.printStackTrace(log);
         } catch ( com.sun.star.container.NoSuchElementException e ) {
             log.println("Error, no such style family...");
             e.printStackTrace(log);
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            log.println("Error, exception occured...");
+            log.println("Error, exception occurred...");
             e.printStackTrace(log);
         }
 
@@ -152,16 +152,16 @@ public class SwXNumberingRules extends TestCase {
             XIndexAccess nRules = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, props.getPropertyValue("NumberingRules"));
             instance1 = nRules.getByIndex(0);
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            log.println("Error, exception occured...");
+            log.println("Error, exception occurred...");
             e.printStackTrace(log);
         } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
-            log.println("Error, exception occured...");
+            log.println("Error, exception occurred...");
             e.printStackTrace(log);
         } catch ( com.sun.star.beans.UnknownPropertyException e ) {
-            log.println("Error, exception occured...");
+            log.println("Error, exception occurred...");
             e.printStackTrace(log);
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            log.println("Error, exception occured...");
+            log.println("Error, exception occurred...");
             e.printStackTrace(log);
         }
 
