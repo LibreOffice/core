@@ -43,11 +43,11 @@ interface XTerminateListener2 : ::com::sun::star::frame::XTerminateListener
 
         <p>
         Termination can be intercepted by throwing <type>TerminationVetoException</type>.
-        But if a listener was queried for termination .. doesnt throwed a veto exception ...
-        it doesnt know if termination will be real next time.
+        But if a listener was queried for termination .. and doesn't throw a veto exception ...
+        it doesn't know if termination will be real next time.
         Because any other listener can throw those exception too ... and so it can happen
-        that after queryTermination() no notifyTermination() will occure. But these listener
-        doesnt know if its allowed to start new processes then.
+        that after queryTermination() no notifyTermination() will occur. But these listener
+        doesn't know if its allowed to start new processes then.
         Using this optional(!) interface will make it possible to be informed about
         cancelled termination requests also.
         </p>

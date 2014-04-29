@@ -55,7 +55,7 @@ published interface XSynchronousDispatch: com::sun::star::uno::XInterface
         </p>
 
         @param URL
-            full parsed URL wich describe the feature which should be dispatched (executed)
+            full parsed URL that describes the feature which should be dispatched (executed)
 
         @param Arguments
             optional arguments for this request

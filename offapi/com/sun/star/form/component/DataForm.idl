@@ -61,7 +61,7 @@ module com { module sun { module star { module form {
 module component {
 //=============================================================================
 /** This service specifies a form which is connected to a database and
-    displays the results of SQL queries. It provides the possiblity of
+    displays the results of SQL queries. It provides the possibility of
     adding new data records, modifying existing ones, or deleting them.
 
     <p>A database form is a special kind of enhanced database row set
@@ -169,7 +169,7 @@ published service DataForm
         master field.<br/>
         If a string in this property denotes both a column name and a parameter name, it
         is undefined which way it is interpreted, but implementations of the service are required
-        to either decide for the paramter or the column, and proceed as usual.
+        to either decide for the parameter or the column, and proceed as usual.
         </p>
 
         <p>The columns specified herein typically represent a part of the primary key

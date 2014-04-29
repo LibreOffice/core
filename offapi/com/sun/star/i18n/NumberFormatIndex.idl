@@ -41,7 +41,7 @@ module com { module sun { module star { module i18n {
     <member scope="::com::sun::star::util">XNumberFormatTypes::getFormatIndex()</member>.
 
     <p> Each locale can support up to about 5000 arbitrary format
-    codes. But for backward compatiblity reasons, each locale
+    codes. But for backward compatibility reasons, each locale
     <b>MUST</b> support some predefined format codes. These predefined
     format codes are accessed through indices as the following, and
     the locale data format code definitions in

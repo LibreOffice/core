@@ -72,7 +72,7 @@ interface XTableUIProvider
         @param DocumentUI
             provides access to the UI in which the database document is
             currently displayed.<br/>
-            In particular, this paramter provides access to the application's main
+            In particular, this parameter provides access to the application's main
             window, which is needed in case the table editor should be a dialog.
 
         @param TableName

@@ -34,8 +34,8 @@
     This is stored with the name <i>preset-class</i> inside the
     <member>::com::sun::star::animations::XAnimationNode::UserData</member> sequence.
     <br>
-    This does not manipulate the timing or syncronization.
-    It can be used to quickly identify preset animations inside an animation hierachy.
+    This does not manipulate the timing or synchronization.
+    It can be used to quickly identify preset animations inside an animation hierarchy.
 
     @see ::com::sun::star::animations::AnimationNode
 */

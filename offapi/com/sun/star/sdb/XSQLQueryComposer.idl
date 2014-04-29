@@ -69,7 +69,7 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
             raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    /** returns the query composed with filters and sort criterias.
+    /** returns the query composed with filters and sort criteria.
         @returns
             the composed query
      */
@@ -91,7 +91,7 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
     /** returns the currently used filter.
              <p>
              The filter criteria is split into levels. Each level represents the
-             OR criterias. Within each level, the filters are provided as an AND criteria
+             OR criteria. Within each level, the filters are provided as an AND criteria
              with the name of the column and the filter condition. The filter condition
              is of type string.
              </p>
@@ -151,7 +151,7 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
             raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    /** makes it possibile to set a sort condition for the query.
+    /** makes it possible to set a sort condition for the query.
         @param order
             the order part to set
         @throws com::sun::star::sdbc::SQLException

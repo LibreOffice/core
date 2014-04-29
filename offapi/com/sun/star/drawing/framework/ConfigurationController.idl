@@ -42,7 +42,7 @@ module com { module sun { module star { module drawing { module framework {
     <p>This service is used at the moment by the
     <type>XControllerManager</type> to create a configuration controller.
     This allows developers to replace the default implementation of the
-    configuration controller with their own.  This may not be a usefull
+    configuration controller with their own.  This may not be a useful
     feature.  Furthermore the sub controllers may need a tighter coupling
     than the interfaces allow.  These are reasons for removing this service
     in the future and let the controller manager create the sub controllers

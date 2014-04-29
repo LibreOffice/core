@@ -44,7 +44,7 @@ published interface XPackageInformationProvider
     */
     string getPackageLocation( [in] string extensionId );
 
-    /** check if there are updates available for an extention.
+    /** check if there are updates available for an extension.
 
         @param extensionId
                the unique identifier of an extension. When the extensionId is empty,
@@ -57,7 +57,7 @@ published interface XPackageInformationProvider
     */
     sequence< sequence< string > > isUpdateAvailable( [in] string extensionId );
 
-    /** returns a list of all installed extention with their version.
+    /** returns a list of all installed extension with their version.
     */
     sequence< sequence< string > > getExtensionList();
 };

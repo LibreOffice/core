@@ -1246,7 +1246,7 @@ XMLFile *SimpleXMLParser::Execute( SvMemoryStream *pStream )
     if ( pXMLFile->GetName().Len()) {
         aErrorInformation.sMessage = String::CreateFromAscii( "File " );
         aErrorInformation.sMessage += pXMLFile->GetName();
-        aErrorInformation.sMessage += String::CreateFromAscii( " parsed succesfully" );
+        aErrorInformation.sMessage += String::CreateFromAscii( " parsed successfully" );
     }
     else
         aErrorInformation.sMessage = String::CreateFromAscii( "XML-File parsed successfully" );

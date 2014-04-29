@@ -118,7 +118,7 @@ published service WebDAVFolderContent
         </li>
         <li>
         transfer ( only transfers from DCP Folders/DCP Documents to other
-        DCP folders. Source and target must recide on the same server. )
+        DCP folders. Source and target must reside on the same server. )
         </li>
         </ul>
 

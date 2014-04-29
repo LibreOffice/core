@@ -39,7 +39,7 @@
     on the informations of the descriptor. The descriptor can be used to create serveral objects.
     </p>
     <p>
-    A descriptor containes at least the informations of the name of an object.
+    A descriptor contains at least the informations of the name of an object.
     </p>
     @see com::sun::star::sdbcx::XAppend
  */

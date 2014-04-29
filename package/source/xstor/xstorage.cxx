@@ -71,7 +71,7 @@ struct StorInternalData_Impl
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
     ::cppu::OTypeCollection* m_pTypeCollection;
     sal_Bool m_bIsRoot;
-    sal_Int32 m_nStorageType; // the mode in wich the storage is used
+    sal_Int32 m_nStorageType; // the mode in which the storage is used
     sal_Bool m_bReadOnlyWrap;
 
     OChildDispListener_Impl* m_pSubElDispListener;
@@ -1062,7 +1062,7 @@ void OStorage_Impl::Commit()
 
     // in case of a new empty storage it is possible that the contents are still not read
     // ( the storage of course has no contents, but the initialization is postponed till the first use,
-    //   thus if a new storage was created and commited immediatelly it must be initialized here )
+    //   thus if a new storage was created and commited immediately it must be initialized here )
     ReadContents();
 
     // if storage is commited it should have a valid Package representation
@@ -1180,7 +1180,7 @@ void OStorage_Impl::Commit()
             {
                 // the element must be just copied to the new temporary package folder
                 // the connection with the original package should not be lost just because
-                // the element is still refered by the folder in the original hierarchy
+                // the element is still referred by the folder in the original hierarchy
                 uno::Any aPackageElement = m_xPackageFolder->getByName( (*pElementIter)->m_aOriginalName );
                 xNewPackageFolder->insertByName( (*pElementIter)->m_aName, aPackageElement );
             }
@@ -1545,7 +1545,7 @@ SotElement_Impl* OStorage_Impl::InsertElement( ::rtl::OUString aName, sal_Bool b
             OSL_ENSURE( (*pElementIter)->m_bIsRemoved, "Try to insert an element instead of existing one!\n" );
             if ( (*pElementIter)->m_bIsRemoved )
             {
-                OSL_ENSURE( !(*pElementIter)->m_bIsInserted, "Inserted elements must be deleted immediatelly!\n" );
+                OSL_ENSURE( !(*pElementIter)->m_bIsInserted, "Inserted elements must be deleted immediately!\n" );
                 pDeletedElm = *pElementIter;
                 break;
             }

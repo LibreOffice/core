@@ -40,7 +40,7 @@
 
 //=============================================================================
 
-/** describes sort criterias for sorting paragraphs or table contents in
+/** describes sort criteria for sorting paragraphs or table contents in
     a text document.
 
     @since OpenOffice 1.1.2

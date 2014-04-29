@@ -79,7 +79,7 @@ public class ComponentBase_Test
         obj1.nDisposingCalled= 0;
         obj2.nDisposingCalled= 0;
         obj3.nDisposingCalled= 0;
-        comp.dispose(); // allready disposed;
+        comp.dispose(); // already disposed;
         r[i++]= obj1.nDisposingCalled == 0;
 
         boolean bOk= true;
@@ -139,7 +139,7 @@ public class ComponentBase_Test
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
         if (bOk == false)
-            System.out.println("Errors occured!");
+            System.out.println("Errors occurred!");
         else
             System.out.println("No errors.");
 

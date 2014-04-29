@@ -57,7 +57,7 @@ published interface XInterceptorInfo: com::sun::star::uno::XInterface
         </p>
 
         @return
-            a list of URL's wich are handled by this interceptor
+            a list of URL's which are handled by this interceptor
      */
     sequence< string > getInterceptedURLs();
 };

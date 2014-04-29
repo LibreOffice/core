@@ -39,7 +39,7 @@ namespace ole {
     seeking operations (tell, seekTo, align) are performed relative to the
     position of the wrapped stream at construction time of this wrapper. It is
     possible to construct this wrapper with an unseekable input stream without
-    loosing any functionality.
+    losing any functionality.
  */
 class AxAlignedInputStream : public BinaryInputStream
 {

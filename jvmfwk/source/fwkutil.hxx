@@ -116,7 +116,7 @@ enum FileStatus
     one of the values of FileStatus.
 
     @exception
-    Errors occured during determining if the file exists
+    Errors occurred during determining if the file exists
  */
 FileStatus checkFileURL(const rtl::OUString & path);
 

@@ -33,7 +33,7 @@ import com.sun.star.tooling.languageResolver.LanguageResolver.LanguageResolvingE
  */
 public class GSIWriter  extends DataWriter {
     /**
-     * The seperator used to seperate GSI columns
+     * The seperator used to separate GSI columns
      */
     final String seperator=new String("($$)");
 
@@ -155,16 +155,16 @@ public class GSIWriter  extends DataWriter {
         else {
             // put them together for output
             buffer.append(this.blockNr);
-            // seperate the fields with ($$)
+            // separate the fields with ($$)
             buffer.append(this.seperator);
             buffer.append(ResTypeResolver.getExternKey(resType));
-            // seperate the fields with ($$)
+            // separate the fields with ($$)
             buffer.append(this.seperator);
             buffer.append(this.sourceLanguage);
-            // seperate the fields with ($$)
+            // separate the fields with ($$)
             buffer.append(this.seperator);
             buffer.append("int");
-            // seperate the fields with ($$)
+            // separate the fields with ($$)
             buffer.append(this.seperator);
             buffer.append(outData.get(resString));
 
@@ -189,16 +189,16 @@ public class GSIWriter  extends DataWriter {
         else {
             // put them together for output
             buffer.append(this.blockNr);
-            // seperate the fields with ($$)
+            // separate the fields with ($$)
             buffer.append(this.seperator);
             buffer.append(ResTypeResolver.getExternKey(resType));
-            // seperate the fields with ($$)
+            // separate the fields with ($$)
             buffer.append(this.seperator);
             buffer.append(this.targetLanguage);
-            // seperate the fields with ($$)
+            // separate the fields with ($$)
             buffer.append(this.seperator);
             buffer.append("ext");
-            // seperate the fields with ($$)
+            // separate the fields with ($$)
             buffer.append(this.seperator);
             buffer.append(outData.get(resString));
 

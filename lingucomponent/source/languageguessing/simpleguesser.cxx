@@ -158,7 +158,7 @@ Guess SimpleGuesser::GuessPrimaryLanguage(char* text)
     }
 }
 /**
- * Is used to know wich language is available, unavailable or both
+ * Is used to know which language is available, unavailable or both
  * when mask = 0xF0, return only Available
  * when mask = 0x0F, return only Unavailable
  * when mask = 0xFF, return both Available and Unavailable

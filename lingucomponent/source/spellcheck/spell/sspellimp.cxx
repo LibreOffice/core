@@ -184,7 +184,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                 aSuppLocales[k++] = aTmp;
             }
 
-            //! For each dictionary and each locale we need a seperate entry.
+            //! For each dictionary and each locale we need a separate entry.
             //! If this results in more than one dictionary per locale than (for now)
             //! it is undefined which dictionary gets used.
             //! In the future the implementation should support using several dictionaries
@@ -379,7 +379,7 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     // These are be the default values set in the SN_LINGU_PROPERTIES
     // PropertySet which are overridden by the supplied ones from the
     // last argument.
-    // You'll probably like to use a simplier solution than the provided
+    // You'll probably like to use a simpler solution than the provided
     // one using the PropertyHelper_Spell.
 
     PropertyHelper_Spell &rHelper = GetPropHelper();

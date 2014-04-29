@@ -186,19 +186,19 @@ published service StorageStream
 
     // -----------------------------------------------------------------------
     /** specifies whether the stream will become encrypted next time the
-        common storage password holder is commited.
+        common storage password holder is committed.
 
         <p>
         The property value <TRUE/> means that the stream will become encrypted
         after the closest storage in the parent hierarchy, that has common
-        storage password, is commited.
+        storage password, is committed.
         <FALSE/> - the stream will not react to commit of such a storage.
         </p>
 
         <p>
         In case stream is not encrypted and the property is set to <TRUE/>,
         the stream will stay nonencrypted until the closest storage
-        in the parent hierarchy, that has common storage password, is commited.
+        in the parent hierarchy, that has common storage password, is committed.
         On the commit the stream will be encrypted with the common storage
         password. If there is no such storage in the hierarchy the stream
         will not be encrypted at all.
@@ -209,13 +209,13 @@ published service StorageStream
         If somebody sets a password explicitly by using
         <type>XEncryptionProtectedSource</type> interface the value is
         automatically set to <FALSE/> and the stream becomes encrypted
-        with specified password immediatelly.
+        with specified password immediately.
         </p>
 
         <p>
         In case stream is encrypted one and the value is set to <TRUE/>
         the stream becomes nonencrypted until the common storage password
-        holder is commited. The data about previously set password ( if any )
+        holder is committed. The data about previously set password ( if any )
         will be removed and the stream can be accessed as nonencrypted stream.
         </p>
      */

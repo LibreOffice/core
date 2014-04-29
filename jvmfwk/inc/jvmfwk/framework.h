@@ -140,7 +140,7 @@ extern "C" {
     -env:UNO_JAVA_JFW_PLUGIN=file:\\solver\\bin\\sunjavaplugin.dll -register ....
     </p>
     <p>Additionall parameters for the Java VM can be provided. For every parameter
-    a seperate bootstrap parameter must be specified. The names are
+    a separate bootstrap parameter must be specified. The names are
     <code>UNO_JAVA_JFW_PARAMETER_X</code>, where X is 1,2, .. n. For example:</p>
     <p>
     regcomp -env:UNO_JAVA_JFW_PARAMETER_1=-Xdebug
@@ -311,7 +311,7 @@ void SAL_CALL jfw_freeJavaInfo(JavaInfo *pInfo);
    <code>rtl_uString</code> members is determined
    by the respective comparison function (see
    <code>rtl::OUString::equals</code>).
-   Similiarly the equality of the <code>sal_Sequence</code> is
+   Similarly the equality of the <code>sal_Sequence</code> is
    also determined by a comparison
    function (see <code>rtl::ByteSequence::operator ==</code>). </p>
    <p>
@@ -330,8 +330,8 @@ sal_Bool SAL_CALL jfw_areEqualJavaInfo(
 /** determines if a Java Virtual Machine is already running.
 
     <p>As long as the the office and the JREs only support one
-    Virtual Machine per process the Java settings, particulary the
-    selected Java, are not effective immediatly after changing when
+    Virtual Machine per process the Java settings, particularly the
+    selected Java, are not effective immediately after changing when
     a VM has already been running. That is, if a JRE A was used to start
     a VM and then a JRE B is selected, then JRE B will only be used
     after a restart of the office.</p>
@@ -415,7 +415,7 @@ javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning);
  */
 javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo);
 
-/** provides information about all availabe JRE installations.
+/** provides information about all available JRE installations.
 
     <p>The function determines dynamically what JREs are available. It uses
     the plug-in libraries to provide lists of available <code>JavaInfo</code>

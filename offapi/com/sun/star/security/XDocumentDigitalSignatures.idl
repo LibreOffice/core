@@ -127,7 +127,7 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     void showCertificate( [in] com::sun::star::security::XCertificate Certificate );
 
 
-       /** manages trusted sources (Authors and pathes )
+       /** manages trusted sources (Authors and paths )
      */
 
     void    manageTrustedSources();

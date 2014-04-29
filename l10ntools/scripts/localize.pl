@@ -1036,7 +1036,7 @@ sub usage{
     print STDERR "    -f <sdffile>    To split a big SDF file into particles\n";
     print STDERR "       <outputfile> To collect and join all particles to one big file\n";
     print STDERR "    -s <sourceroot> Path to the modules, if no \$SRC_ROOT is set\n";
-    print STDERR "    -l ( all | <isocode> | <isocode>=fallback ) comma seperated languages\n";
+    print STDERR "    -l ( all | <isocode> | <isocode>=fallback ) comma separated languages\n";
     print STDERR "    -d              Use default date in extracted sdf file\n";
     print STDERR "    -c              Create needed directories\n";
     print STDERR "    -g              Sort sdf file before mergeing\n";

@@ -50,7 +50,7 @@ published interface XObjectInspectorModel
         <p>Every element of the sequence must contain information to create a
         <type>XPropertyHandler</type> instance. Two ways are currently supported:
         <ul>
-            <li>A sevice name:</br>
+            <li>A service name:</br>
                 If a sequence element contains a string, this string is interpreted
                 as service name, and an <type scope="com::sun::star::lang">XMultiComponentFactory</type>
                 is asked to create an instance of this service.</li>

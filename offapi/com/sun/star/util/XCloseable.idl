@@ -46,9 +46,9 @@ module com {  module sun {  module star {  module util {
         <li>closed   (if it supports <member>XCloseable::close()</member>)</li>
     </ul>
     First version gives the object no chance to disagree with that (e.g. if a
-    process is still running and can't be cancelled realy). Last version
+    process is still running and can't be really cancelled). Last version
     provides this possibility, but can't guarantee real termination of called object.
-    It depends from the environment of an object, if one or both mechanism are neccessary.
+    It depends from the environment of an object, if one or both mechanism are necessary.
     </p>
 
     <p>
@@ -70,8 +70,8 @@ published interface XCloseable: XCloseBroadcaster
     /** try to close the object
 
         <p>
-        Must definitly be called before <member scope="com::sun::star::lang">XComponent::dispose()</member>.
-        But nobody can guarentee real closing of called object - because it can disagree with that if any
+        Must definitely be called before <member scope="com::sun::star::lang">XComponent::dispose()</member>.
+        But nobody can guarantee real closing of called object - because it can disagree with that if any
         still running processes can't be cancelled yet. It's not allowed to block this call till internal
         operations will be finished here. They must be cancelled or call must return imediatly by throwing
         the <type>CloseVetoException</type>.  Otherwise (if nothing exist to disagree) it must return normaly.
@@ -106,11 +106,11 @@ published interface XCloseable: XCloseBroadcaster
         </p>
 
         @param DeliverOwnership
-                <TRUE/> delegates the ownership of ths closing object to any one which throw the CloseVetoException.
+                <TRUE/> delegates the ownership of this closing object to any one which throw the CloseVetoException.
                 This new owner has to close the closing object again if his still running processes will be finished.
                 <br>
                 <FALSE/> let the ownership at the original one which called the close() method. He must react for possible
-                CloseVetoExceptions and try it again at a later time. This can be usefull for a generic UI handling.
+                CloseVetoExceptions and try it again at a later time. This can be useful for a generic UI handling.
 
         @throws CloseVetoException
             indicates that the closing object himself or any of his currently registered listener disagree with this close() request.

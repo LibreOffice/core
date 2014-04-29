@@ -137,7 +137,7 @@ public class ProductDescription {
             String replace = pair.replacement;
             result = matcher.replaceAll(replace);
 
-            // masquerading backslashes in String replace (important for Windows pathes)
+            // masquerading backslashes in String replace (important for Windows paths)
             //  String[] arr1 = { replace };
             //  boolean masked = doMaskBackslash(arr1);
             //  result = matcher.replaceAll(arr1[0]);

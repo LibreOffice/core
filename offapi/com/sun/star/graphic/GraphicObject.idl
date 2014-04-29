@@ -30,7 +30,7 @@ module com { module sun { module star { module graphic
 {
 /** The <code>GraphicObject</code> service can be used to create <type>XGraphicObject</type> instances.
 
-    <p><type>XGraphicObject</type> objects are accessable using GraphicObject scheme urls like
+    <p><type>XGraphicObject</type> objects are accessible using GraphicObject scheme urls like
     <code>vnd.sun.star.GraphicObject:10000000000001940000012FB99807BD</code>.
     As long as at least one instance of <type>XGraphicObject</type> with a particular UniqueID exists,
     the associated image/graphic is available.</p>

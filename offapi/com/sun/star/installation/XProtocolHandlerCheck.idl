@@ -72,7 +72,7 @@ published interface XProtocolHandlerCheck: com::sun::star::uno::XInterface
         The dialog has "Yes" and "No" buttons, and a checkbox
         with "Always display this message". The checkbox
         is initially checked. If the "Yes" button was pressed,
-        it performs all neccessary action to make StarOffice the
+        it performs all necessary action to make StarOffice the
         protocol-handler. If the "No" button was pressed,
         don't perform any action. Both buttons closes the dialog.@see isProtocolHandler
      */

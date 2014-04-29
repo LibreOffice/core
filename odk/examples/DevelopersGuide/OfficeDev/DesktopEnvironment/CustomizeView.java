@@ -150,7 +150,7 @@ public class CustomizeView extends    JPanel
 
         // be frame action listener
         // The callback will update listener connections
-        // for status updates automaticly!
+        // for status updates automatically!
         m_aMenuBarListener   = new StatusListener(m_cbMenuBar  ,MENUBAR_ON  ,MENUBAR_OFF  ,xFrame, FEATUREURL_MENUBAR  );
         m_aToolBarListener   = new StatusListener(m_cbToolBar  ,TOOLBAR_ON  ,TOOLBAR_OFF  ,xFrame, FEATUREURL_TOOLBAR  );
         m_aObjectBarListener = new StatusListener(m_cbObjectBar,OBJECTBAR_ON,OBJECTBAR_OFF,xFrame, FEATUREURL_OBJECTBAR);

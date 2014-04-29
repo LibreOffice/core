@@ -38,7 +38,7 @@ module test
 {
 
 /** bla
-   BaseStruct defines an * intial struct
+   BaseStruct defines an * initial struct
  */
 struct BaseStruct
 {

@@ -236,7 +236,7 @@ sub execute     #11.07.2007 10:02
     my $result = "";
 
       print "$commandline\n" if ($debug);
-      open(PIPE, "$commandline 2>&1 |") || die "Error: Cant open pipe!\n";
+      open(PIPE, "$commandline 2>&1 |") || die "Error: Can't open pipe!\n";
       while ( $result = <PIPE> ) {
           print LOG "$result" if ($opt_log);        # logging
           if ( $result =~ /SignTool Error\:/ ) {

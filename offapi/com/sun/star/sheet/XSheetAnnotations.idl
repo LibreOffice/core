@@ -54,7 +54,7 @@ published interface XSheetAnnotations: com::sun::star::container::XIndexAccess
         specified cell and inserts it into the collection.</p>
 
         @param aPosition
-            contains the address of the cell thta will contain the
+            contains the address of the cell that will contain the
             annotation.
 
         @param aText

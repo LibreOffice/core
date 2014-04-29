@@ -3613,7 +3613,7 @@ Function GetIndexValues(startIndex As Long, nextCheck As Long, _
             WriteToLog C_ERROR_HANDLING_DOC & nextCheck, nextFile
             startIndex = startIndex + 1
             nextCheck = startIndex + C_MAX_CHECK
-        Else 'last time an error occured with that file, write before analysing
+        Else 'last time an error occurred with that file, write before analysing
             nextCheck = nextCheck - 1
         End If
     End If

@@ -61,7 +61,7 @@ published interface XResource;
 
     <p>When the two configurations differ then the current configuration is
     updated eventually to reflect the requested configuration.  An update
-    takes place when the following three conditions are fullfilled.
+    takes place when the following three conditions are fulfilled.
     <ol>
     <li>when the last pending request for configuration changes has been
     processed,</li>

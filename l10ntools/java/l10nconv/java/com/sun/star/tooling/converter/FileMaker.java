@@ -41,7 +41,7 @@ import java.io.IOException;
 public final class FileMaker {
 
     /**
-     * Create a new file if overwriting is not alowed
+     * Create a new file if overwriting is not allowed
      * ask if existing files should be overwritten
      *
      * @param fileName the files name to overwrite

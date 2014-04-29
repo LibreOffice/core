@@ -35,7 +35,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** An error indicating that the resource is not locked.
 
-    <p>This error for instance can occure when trying to unlock a resource
+    <p>This error for instance can occur when trying to unlock a resource
        that is not locked.
     </p>
 

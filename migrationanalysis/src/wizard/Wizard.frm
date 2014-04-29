@@ -2269,7 +2269,7 @@ Function AttemptToCopyFile(Source As String, dest As String) As Boolean
         fso.CopyFile Source, dest
     End If
     
-    'True if no source or copy succeded
+    'True if no source or copy succeeded
     AttemptToCopyFile = True
     
 FinalExit:

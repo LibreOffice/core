@@ -1075,7 +1075,7 @@ public class PropertySet_Test
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
         if (bOk == false)
-            System.out.println("Errors occured!");
+            System.out.println("Errors occurred!");
         else
             System.out.println("No errors.");
         return bOk;
@@ -1121,7 +1121,7 @@ class TestClass extends PropertySet
     public Property propEnum =
         new Property("PropEnum", 14, new Type("com.sun.star.beans.PropertyState", TypeClass.ENUM), (short)0);
     public com.sun.star.beans.PropertyState enumPropertyState = com.sun.star.beans.PropertyState.DEFAULT_VALUE;
-    // Test private, protected, package access, Anys as arguments and members, members whith a value
+    // Test private, protected, package access, Anys as arguments and members, members with a value
 
     public Property propBoolB= new Property("PropBoolB", 101, new Type(Boolean.TYPE), (short) 0);
     protected boolean boolPropB;

@@ -34,9 +34,9 @@ import java.util.Vector;
 /**
  * This class can be used to intercept dispatched URL's
  * on any frame used in this demo application.
- * It intercept all URL's wich try to create a new empty frame.
+ * It intercept all URL's which try to create a new empty frame.
  * (e.g. "private:factory/swriter")
- * Nobody can guarantee that this interception will be realy used -
+ * Nobody can guarantee that this interception will be really used -
  * because another interceptor (registered at a later time then this one!)
  * will be called before this one.
  * Implementation is executed inside a new thread to prevent application
@@ -87,7 +87,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
     /**
      * ctor
      * Initialize the new interceptor. Given frame reference can be used to
-     * register this interceptor on it automaticly later.
+     * register this interceptor on it automatically later.
      *
      * @seealso startListening()
      *
@@ -107,7 +107,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
     //_____________________
 
     /**
-     * start working as frame action listener realy.
+     * start working as frame action listener really.
      * We will be frame action listener here. In case
      * we get a frame action which indicates, that we should
      * update our interception. Because such using of an interecptor
@@ -308,12 +308,12 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
                 return;
         }
 
-        // deregistration will be done everytime ...
-        // But may it's not neccessary to establish a new registration!
+        // deregistration will be done every time ...
+        // But may it's not necessary to establish a new registration!
         // Don't look for ignoring actions - it was done already inside original frameAction() call!
         boolean bRegister = false;
 
-        // analyze the event and decide which reaction is usefull
+        // analyze the event and decide which reaction is useful
         switch(aEvent.Action.getValue())
         {
             case com.sun.star.frame.FrameAction.COMPONENT_ATTACHED_value   : bRegister = true ; break;
@@ -519,7 +519,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         if (aURL.Complete.startsWith("private:factory") == true)
         {
             // Create view frame for showing loaded documents on demand.
-            // The visible state is neccessary for JNI functionality to get the HWND and plug office
+            // The visible state is necessary for JNI functionality to get the HWND and plug office
             // inside a java window hierarchy!
             DocumentView aNewView = new DocumentView();
             aNewView.setVisible(true);
@@ -532,7 +532,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
     /**
      * Notification of status listener isn't guaranteed (instead of listener on XNotifyingDispatch interface).
-     * So this interceptor doesn't support that realy ...
+     * So this interceptor doesn't support that really ...
      */
     public /*ONEWAY*/ void addStatusListener(/*IN*/ com.sun.star.frame.XStatusListener xListener,/*IN*/ com.sun.star.util.URL aURL)
     {
@@ -563,7 +563,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
     /**
      * Implements (optional!) optimization for interceptor mechanism.
-     * Any interceptor which provides this special interface is called automaticly
+     * Any interceptor which provides this special interface is called automatically
      * at registration time on this method. Returned URL's will be used to
      * call this interceptor directly without calling his masters before, IF(!)
      * following rules will be true:
@@ -581,7 +581,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
     /**
      * This class listen on the intercepted frame to free all used ressources on closing.
      * We forget the reference to the frame only here. Deregistration
-     * isn't neccessary here - because this frame dies and wish to forgoten.
+     * isn't necessary here - because this frame dies and wish to forgoten.
      *
      * @param aSource
      *          must be our internal saved frame, on which we listen for frame action events

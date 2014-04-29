@@ -52,7 +52,7 @@ enum ErrorCode
     EIDL_CONSTANT_EXPECTED, // We got something else..
     EIDL_NAME_CASE_ERROR,   // Spelling differences found
     EIDL_ENUM_VAL_EXPECTED, // Expected an enumerator
-    EIDL_ENUM_VAL_NOT_FOUND,    // Didnt find an enumerator with that name
+    EIDL_ENUM_VAL_NOT_FOUND,    // Didn't find an enumerator with that name
     EIDL_EVAL_ERROR,        // Error in evaluating expression
     EIDL_AMBIGUOUS,         // Ambiguous name definition
     EIDL_DECL_NOT_DEFINED,  // Forward declared but never defined
@@ -115,7 +115,7 @@ public:
     // Report a syntax error in IDL input
     void    syntaxError(ParseState state, sal_Int32 lineNumber, const sal_Char* errmsg);
 
-    // Report an unsuccesful coercion attempt
+    // Report an unsuccessful coercion attempt
     void    coercionError(AstExpression *pExpr, ExprType et);
 
     // Report a failed name lookup attempt

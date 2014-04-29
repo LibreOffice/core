@@ -37,8 +37,8 @@ import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.lang.IllegalArgumentException;
 
 /*-************************************************************************
-  @title        helper to analyze neccessary option properties of our filter
-  @description  Our filter needs some neccessary properties for working:
+  @title        helper to analyze necessary option properties of our filter
+  @description  Our filter needs some necessary properties for working:
                     - a stream for input or output
                     - or an URL for creating such streams
                     - informations about required action on filtering
@@ -160,15 +160,15 @@ public class FilterOptions
             {
                 // ONE argument has the wrong type
                 // But I think we mustn't react here - because we setted
-                // default values for every neccessary item we need.
+                // default values for every necessary item we need.
                 // In case this exception occures - this default exist
                 // and we can live with it.
             }
         }
 
-        // Decide if it's neccessary AND possible to open streams.
+        // Decide if it's necessary AND possible to open streams.
         // Outside user can check for valid FilterOptions by using
-        // corresponding method isValid(). So it's not neccessary to
+        // corresponding method isValid(). So it's not necessary to
         // handle this error here in any case.
         if (m_xInput==null && m_xOutput==null && m_sURL!=null)
             impl_openStreams(bImport);
@@ -176,8 +176,8 @@ public class FilterOptions
 
     /**
      * with this method it's possible for the outside filter to decide
-     * if he can use this FilterOptions realy or not.
-     * That means especialy if neccessary streams are available or not.
+     * if he can use this FilterOptions really or not.
+     * That means especially if necessary streams are available or not.
      */
     public boolean isValid()
     {

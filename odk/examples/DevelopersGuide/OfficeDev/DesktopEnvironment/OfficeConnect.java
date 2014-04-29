@@ -78,7 +78,7 @@ public class OfficeConnect
      * ctor
      * We try to open the connection in our ctor ... transparently for user.
      * After it was successfully you will find an internal set member
-     * m_xRemoteContext wich means remote component context of the connected office.
+     * m_xRemoteContext which means remote component context of the connected office.
      * The context can be used to get the remote service manager from the office.
      * We made it private to support singleton pattern of these implementation.
      * see getConnection() for further informations
@@ -106,7 +106,7 @@ public class OfficeConnect
 
     /**
      * create uno components inside remote office process
-     * After connection of these proccess to a running office we have access to
+     * After connection of these process to a running office we have access to
      * remote service manager of it.
      * So we can use it to create all existing services. Use this method to create
      * components by name and get her interface. Casting of it to right target
@@ -114,7 +114,7 @@ public class OfficeConnect
      *
      * @param  aType  describe class type of created service
      *                Returned object can be casted directly to this one.
-     *                Uno query was done by this method automaticly.
+     *                Uno query was done by this method automatically.
      * @param  sServiceSpecifier  name of service which should be created
      * @return  the new created service object
      */

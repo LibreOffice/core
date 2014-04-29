@@ -44,7 +44,7 @@ static bool HWPReadInfoBlock(void *ptr, int len, HWPFile & hwpf)
 }
 
 
-// Document Infomation
+// Document Information
 
 HWPInfo::HWPInfo(void)
 {

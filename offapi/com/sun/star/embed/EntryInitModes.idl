@@ -30,14 +30,14 @@ module com { module sun { module star { module embed {
 
 //============================================================================
 /** This constant set contains possible modes to initialize object
-    persistance.
+    persistence.
 
     @see XEmbedPersist
 */
 published constants EntryInitModes
 {
     // -----------------------------------------------------------------------
-    /** In case object persistance is created based on existing entry,
+    /** In case object persistence is created based on existing entry,
         the object should be initialized from this entry. Otherwise
         the object should be initialized as a new one.
      */

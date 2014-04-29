@@ -60,7 +60,7 @@ published struct Lock : LockEntry
         <p>This element specifies the number of seconds between granting
         of the lock and the automatic removal of that lock. The value
         must not be greater than <code>2^32-1</code>. A value of <code>-1</code>
-        stands for an infinit lock, that will never be removed automatically.
+        stands for an infinite lock, that will never be removed automatically.
     */
     hyper Timeout;
 

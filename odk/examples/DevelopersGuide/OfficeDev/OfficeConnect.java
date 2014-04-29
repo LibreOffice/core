@@ -100,13 +100,13 @@ public class OfficeConnect
 
     /**
      * create uno components inside remote office process
-     * After connection of these proccess to a running office we have access to remote service manager of it.
+     * After connection of these process to a running office we have access to remote service manager of it.
      * So we can use it to create all existing services. Use this method to create components by name and
      * get her interface. Casting of it to right target interface is part of your implementation.
      *
      * @param  aType              describe class type of created service
      *                              Returned object can be casted directly to this one.
-     *                              Uno query was done by this method automaticly.
+     *                              Uno query was done by this method automatically.
      * @param  sServiceSpecifier  name of service which should be created
      * @return                    Description of the Returned Value
      */

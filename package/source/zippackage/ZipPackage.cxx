@@ -1390,7 +1390,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
 void SAL_CALL ZipPackage::commitChanges()
         throw( WrappedTargetException, RuntimeException )
 {
-    // lock the component for the time of commiting
+    // lock the component for the time of committing
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( m_eMode == e_IMode_XInputStream )

@@ -72,7 +72,7 @@ published interface XCell: com::sun::star::uno::XInterface
 
     /** returns the floating point value of the cell.
 
-        <p>For a <em>value cell</em> the value is returnd, for a
+        <p>For a <em>value cell</em> the value is returned, for a
         <em>string cell</em> zero is returned and for a <em>formula cell</em>
         the result value of a formula is returned.</p>
      */

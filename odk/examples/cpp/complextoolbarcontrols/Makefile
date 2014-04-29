@@ -145,7 +145,7 @@ endif
 
 Example : $(COMP_REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
-	@echo The "$(QM)Complext Toolbar Controlls$(QM)" component was installed if SDK_AUTO_DEPLOYMENT = YES.
+	@echo The "$(QM)Complext Toolbar Controls$(QM)" component was installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use this component inside your office installation, see the example
 	@echo description.
 	@echo --------------------------------------------------------------------------------

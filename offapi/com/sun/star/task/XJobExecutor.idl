@@ -53,7 +53,7 @@ published interface XJobExecutor : com::sun::star::uno::XInterface
 
         <p>
         Jobs are registered in configuration and will be started by executor
-        automaticly, if they are registered for triggered event.
+        automatically, if they are registered for triggered event.
         The meaning of given string <var>Event</var> mustn't be known. Because
         for the executor it's enough to use it for searching a registered job
         inside his own configuration. So no special events will be defined here.

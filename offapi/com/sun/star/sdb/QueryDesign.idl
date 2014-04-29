@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module sdb {
 
     <p>The design view of the QueryDesign is divided into two parts. The first part contains the table windows
     where columns can be selected for the SQL statement. The second part contains the columns which should appear
-    in the selection of the SQL statement or criterias which narrow the query.</p>
+    in the selection of the SQL statement or criteria which narrow the query.</p>
 
     <h3>Operation Modes</h3>
 
@@ -93,7 +93,7 @@ module com {  module sun {  module star {  module sdb {
 
         <li><a name="active_connection"></a><b>ActiveConnection</b><br/>
         specifies the connection to work with.<br/>
-        May be ommitted if and only if a valid <a href="#data_source">DataSourceName</a> parameter is supplied.
+        May be omitted if and only if a valid <a href="#data_source">DataSourceName</a> parameter is supplied.
         </li>
 
         <li><a name="command"></a><b>Command</b><br/>

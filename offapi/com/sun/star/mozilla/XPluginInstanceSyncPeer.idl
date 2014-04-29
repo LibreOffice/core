@@ -38,7 +38,7 @@
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::mozilla::XPluginInstanceSyncPeer
-/** This interface is an extention for <type>XPluginInstancePeer</type> interface.
+/** This interface is an extension for <type>XPluginInstancePeer</type> interface.
     An object can support this interface in addition to <type>XPluginInstancePeer</type> interface.
  */
 published interface XPluginInstanceSyncPeer : com::sun::star::uno::XInterface

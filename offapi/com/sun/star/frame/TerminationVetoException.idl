@@ -40,7 +40,7 @@
     the termination of the office, he will be the new "owner" of it.
     After his own operation will be finished, he MUST try to terminate the
     office again. Any other veto listener can intercept that again or office
-    will die realy.
+    will die really.
     </p>
 
     @see XDesktop::terminate()

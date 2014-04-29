@@ -367,7 +367,7 @@ const ApiToken* FormulaFinalizer::findParameters( ParameterPosVector& rParams,
 
 void FormulaFinalizer::appendEmptyParameter( const FunctionInfo& rFuncInfo, size_t nParam )
 {
-    // remeber old size of the token array
+    // remember old size of the token array
     size_t nTokenArraySize = maTokens.size();
 
     switch( rFuncInfo.mnBiff12FuncId )

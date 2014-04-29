@@ -134,7 +134,7 @@ published service FilePicker
 
     //-------------------------------------------------------------------------
     /** For canceling a running dialog instance.
-        <p>This may be usefull for automatic test tools for instance.</p>
+        <p>This may be useful for automatic test tools for instance.</p>
     */
     [optional] interface com::sun::star::util::XCancellable;
 

@@ -34,7 +34,7 @@
 module com { module sun { module star { module security {
 
 /**
- * Constant definiton of a certificate characters.
+ * Constant definition of a certificate characters.
  *
  * The certificate characters will be defined as bit-wise constants.
  */

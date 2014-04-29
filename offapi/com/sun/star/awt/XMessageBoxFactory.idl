@@ -52,7 +52,7 @@ published interface XMessageBoxFactory : com::sun::star::uno::XInterface
 
             <p>A combination of <type>MessageBoxButtons</type>.</p>
             <p>A <member scope="com::sun::star::awt">MessageBoxType::INFOBOX</member>
-            ignores this paramter, instead it uses a
+            ignores this parameter, instead it uses a
             <member scope="com::sun::star::awt">MessageBoxButtons::BUTTONS_OK</member>.</p>
 
         @param aTitle

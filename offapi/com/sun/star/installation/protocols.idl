@@ -31,7 +31,7 @@
 //=============================================================================
 
 /** A protocol-handler is a part of StarOffice which performs
-        the comunication on a paticular protocol. This can be HTTP, FTP, HTTPS,
+        the comunication on a particular protocol. This can be HTTP, FTP, HTTPS,
         MAILTO, or NEWS. An implementation of this interface should be able
         to check/set all of these protocols.
 

@@ -147,7 +147,7 @@ published interface XReportDefinition
 
         <p>
         With this interface it's possible too, to reset the modify state.
-        That can be neccessary to prevent code against problem during closing
+        That can be necessary to prevent code against problem during closing
         of the document without saving any changes.
         </p>
      */
@@ -237,7 +237,7 @@ published interface XReportDefinition
      */
     [attribute,bound] long CommandType;
 
-    /** specifies an addtional filter to optinally use.
+    /** specifies an additional filter to optinally use.
 
         <p>The Filter string has to form a SQL WHERE-clause, <em>without</em> the WHERE-string itself.</p>
 

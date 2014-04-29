@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module frame {
 interface XControlNotificationListener : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** notifies that a control event has happend
+    /** notifies that a control event has happened
 
         @param Event
             contains the event informantion

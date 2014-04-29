@@ -148,7 +148,7 @@ published constants AccessibleRole
     */
     const short DOCUMENT = 13;
 
-    /** Embeded (OLE) object.
+    /** Embedded (OLE) object.
     */
     const short EMBEDDED_OBJECT = 14;
 

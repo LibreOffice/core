@@ -63,7 +63,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         It's designed for initializing - not for setting.
         </p>
 
-        <p>This frame will take over ownership of the window refered from
+        <p>This frame will take over ownership of the window referred from
         <var>xWindow</var>.  Thus, the previous owner is not allowed to
         dispose this window anymore. </p>
 
@@ -97,7 +97,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         But creator doesn't mean the implementation which creates this instance ...
         it means the parent frame of the frame hierarchy.
         Because; normaly a frame should be created by using the api
-        and is neccessary for searches inside the tree (e.g. <member>XFrame::findFrame()</member>)
+        and is necessary for searches inside the tree (e.g. <member>XFrame::findFrame()</member>)
         </p>
 
         @param Creator
@@ -287,7 +287,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         @return
             <TRUE/>if setting of new component or release of an existing one was successfully
             <br>
-            <FALSE/> otherwise (especialy, if an existing controller disagree within his
+            <FALSE/> otherwise (especially, if an existing controller disagree within his
             <member>XController::suspend()</member> call)
 
         @see XFrame::getComponentWindow()

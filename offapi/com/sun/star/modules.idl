@@ -158,7 +158,7 @@ module sheet {};
 /// Formatting and layout style and stylesheet interfaces.
 module style {};
 
-/// Interfaces for import/export of Scaleable Vector Format.
+/// Interfaces for import/export of Scalable Vector Format.
 module svg {};
 
 /// Data synchronization interfaces (deprecated).
@@ -188,7 +188,7 @@ module ui {};
 /// Miscellaneous interfaces for sorting, connecting objects etc.
 module util {};
 
-/// Document view specfic interfaces (e.g. selection access and printing).
+/// Document view specific interfaces (e.g. selection access and printing).
 module view {};
 
 /// XML related interfaces.

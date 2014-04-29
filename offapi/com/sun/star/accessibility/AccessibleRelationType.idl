@@ -27,7 +27,7 @@ module com { module sun { module star { module accessibility {
 
 /** Collection of relation types.
 
-    <p>This list of constants defines the availabe types of relations that
+    <p>This list of constants defines the available types of relations that
     are usable by <type>AccessibleRelation</type>.</p>
 
     <p>We are using constants instead of a more typesafe enum.  The reason

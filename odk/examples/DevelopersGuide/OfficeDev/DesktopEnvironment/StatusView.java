@@ -34,10 +34,10 @@ import java.lang.String;
 /**
  * Implement a view to show status informations
  * of currently loaded document of a document view.
- * It use seperate listener threads to get this informations
- * and actualize it automaticly if frame broadcast changes of
+ * It use separate listener threads to get this informations
+ * and actualize it automatically if frame broadcast changes of
  * his contained document.
- * Threads are neccessary to prevent this view against deadlocks.
+ * Threads are necessary to prevent this view against deadlocks.
  * These deadlocks can occure if a listener will be notified
  * by the office in an "oneway" method and try to call back
  * to the office by using a synchronous method.
@@ -202,7 +202,7 @@ public class StatusView extends    JPanel
      * And because the environment of the frame can be changed - these
      * listener refresh himself internaly for frame action events too.
      * So we register it as such frame action listener only here.
-     * Rest is done automaticly ...
+     * Rest is done automatically ...
      *
      * @param xFrame
      *          will be used as source of possible status events
@@ -214,7 +214,7 @@ public class StatusView extends    JPanel
 
         // create some listener on given frame for available status events
         // Created listener instances will register herself on this frame and
-        // show her received informations automaticly on setted UI controls.
+        // show her received informations automatically on setted UI controls.
         m_aFontListener      = new StatusListener(m_laFontValue     ,FONT_ON     ,FONT_OFF     ,xFrame, FEATUREURL_FONT     );
         m_aSizeListener      = new StatusListener(m_laSizeValue     ,SIZE_ON     ,SIZE_OFF     ,xFrame, FEATUREURL_SIZE     );
         m_aBoldListener      = new StatusListener(m_laBoldValue     ,BOLD_ON     ,BOLD_OFF     ,xFrame, FEATUREURL_BOLD     );

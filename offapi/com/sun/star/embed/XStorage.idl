@@ -106,7 +106,7 @@ published interface XStorage
     interface ::com::sun::star::container::XNameAccess;
 
     // -----------------------------------------------------------------------
-    /** allows to controll and track lifetime of the storage.
+    /** allows to control and track lifetime of the storage.
 
         <p>
         In case a storage is disposed any call to it's methods should result
@@ -124,7 +124,7 @@ published interface XStorage
         <p>
         The destination storage contents are overwritten.
         After the successful copying the target storage is automatically
-        commited if it implements transacted access.
+        committed if it implements transacted access.
         </p>
 
         @param xDest
@@ -563,7 +563,7 @@ published interface XStorage
     /** allows to copy an entry from one storage to another.
 
         <p>
-        If target element supports transacted mode it must be commited by this
+        If target element supports transacted mode it must be committed by this
         method after successful copying.
         </p>
 
@@ -607,7 +607,7 @@ published interface XStorage
     /** allows to move an entry from one storage to another.
 
         <p>
-        If target element supports transacted mode it must be commited by this
+        If target element supports transacted mode it must be committed by this
         method after successful moving.
         </p>
 

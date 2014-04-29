@@ -55,7 +55,7 @@ module com { module sun { module star { module document {
         <br>
         Example: "com.company.devision.DetectService"
         <br>
-        Note that this realy means the implementation name of the service.
+        Note that this really means the implementation name of the service.
         Because it's not possible otherwise to distinguish between more then one
         registered detect services in same office installation! But it's possible for
         the generic type detection to create an uno service by his implementation name too.
@@ -85,7 +85,7 @@ published service ExtendedTypeDetection
             <li>or <NULL/> if format is unknown nor supported.</li>
         </ul>
         May be that given descriptor already includes the opened document stream as parameter
-        <member>MediaDescriptor::InputStream</member>. Then this one should be used everytime.
+        <member>MediaDescriptor::InputStream</member>. Then this one should be used every time.
         If it's not included in descriptor the value of <member>MediaDescriptor::URL</member>
         must be used to open requested ressource by this service.
         <br>

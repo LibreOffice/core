@@ -119,7 +119,7 @@ published service DatabaseRange
 
     //-------------------------------------------------------------------------
 
-    /** specifies the range where the filter can find the filter criterias.
+    /** specifies the range where the filter can find the filter criteria.
         <p>This is only used if <member>SheetFilterDescriptor::UseFilterCriteriaSource</member> is <TRUE/>.</p>
 
         @since OpenOffice 1.1.2

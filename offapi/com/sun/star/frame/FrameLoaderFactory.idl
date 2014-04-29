@@ -58,9 +58,9 @@ published service FrameLoaderFactory
 
         <p>
         Returned objects must support the service specification of a <type>FrameLoader</type>
-        or <type>SynchronousFrameLoader</type>. (Note: last one will be prefered if both ones
+        or <type>SynchronousFrameLoader</type>. (Note: last one will be preferred if both ones
         are available)
-        They can be created by using of his internal name, which must be unambigous everytime, only.
+        They can be created by using of his internal name, which must be unambigous every time, only.
         To get this name use further specified interfaces of this factory for access on
         the flat configuration.
         </p>

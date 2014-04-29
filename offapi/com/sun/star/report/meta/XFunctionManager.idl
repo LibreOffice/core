@@ -45,7 +45,7 @@ published interface XFunctionManager
     interface com::sun::star::container::XIndexAccess;
 
     /** same as getByIndex.
-        @param  position    The postion.
+        @param  position    The position.
         @see com.ssun.star.container.XIndexAccess
     */
     XFunctionCategory getCategory([in] long position)

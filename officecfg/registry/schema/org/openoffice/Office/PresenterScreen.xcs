@@ -176,7 +176,7 @@
     <group oor:name="ToolBarEntry">
       <info><desc>Describes a ToolBar entry.</desc></info>
       <prop oor:name="Name" oor:type="xs:string">
-        <info><desc>Name of the entry.  May be used to have mode dependant entries.</desc></info>
+        <info><desc>Name of the entry.  May be used to have mode dependent entries.</desc></info>
       </prop>
       <prop oor:name="Type" oor:type="xs:string">
         <info><desc>Type of the entry.  Examples are "Label" and "Button".</desc></info>

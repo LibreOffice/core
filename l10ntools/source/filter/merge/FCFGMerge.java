@@ -115,7 +115,7 @@ public class FCFGMerge
         sOut.append("parameters:\n"                                                 );
         sOut.append("\tcfg=<file name>\n"                                           );
         sOut.append("\t\tmust point to a system file, which contains\n"             );
-        sOut.append("\t\tall neccessary configuration data for the merge process.\n");
+        sOut.append("\t\tall necessary configuration data for the merge process.\n");
         sOut.append("\n\tFurther cou can specify every parameter allowed in the\n"  );
         sOut.append("\n\tconfig file as command line parameter too, to overwrite\n" );
         sOut.append("\n\tthe value from the file.\n"                                );

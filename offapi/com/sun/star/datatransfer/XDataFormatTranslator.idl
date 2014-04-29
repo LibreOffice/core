@@ -69,7 +69,7 @@ published interface XDataFormatTranslator : com::sun::star::uno::XInterface
 
         @returns
         A <type>DataFlavor</type> for the given system dependent data transfer type.
-        <p>If there is no appropriate mapping for a sytem dependent data type, the returned <type>DataFlavor</type> will be empty.</p>
+        <p>If there is no appropriate mapping for a system dependent data type, the returned <type>DataFlavor</type> will be empty.</p>
     */
     DataFlavor getDataFlavorFromSystemDataType( [in] any aSysDataType );
 };

@@ -43,7 +43,7 @@ module com { module sun { module star { module sdb {
 
  published interface XCompletedConnection;
 
-/** is a factory to create data access beans. Data access beans are shared amoung
+/** is a factory to create data access beans. Data access beans are shared among
     components, so if an already existing bean is requested, the existing one is returned.
 
     @deprecated

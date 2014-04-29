@@ -53,7 +53,7 @@ published service Content
     /** must be implemented to make it possible to resolve cyclic object
         references.
 
-        <p>Those references i.e. may occure if there are listeners
+        <p>Those references i.e. may occur if there are listeners
         registered at the content ( the content holds the listeners ) and
         the implementation of the listener interface holds a reference on
         the content. If the content shall be released,
@@ -703,7 +703,7 @@ published service Content
                     <td>UpdateOnOpen</td>
                     <td>boolean</td>
                     <td>indicates whether (sub)contents shall be automatically updated
-                        everytime a (folder) content is opened.</br>This property may be
+                        every time a (folder) content is opened.</br>This property may be
                         used to control whether a folder content should read data only
                         from local cache when it is opened, or whether it should connect
                         to a server to obtain latest data.</td>

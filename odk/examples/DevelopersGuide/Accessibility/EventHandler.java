@@ -408,7 +408,7 @@ public class EventHandler
 
 
 
-    /** The proxy that runs in a seperate thread and allows to call back to
+    /** The proxy that runs in a separate thread and allows to call back to
         the Office without running into dead-locks.
     */
     private EventListenerProxy maListenerProxy;

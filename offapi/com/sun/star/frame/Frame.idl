@@ -131,7 +131,7 @@ published service Frame
     /** supports interception mechanism for dispatched URLs
 
         <p>
-        Registered objects can intercept, supress or deroute dispatched URLs.
+        Registered objects can intercept, suppress or deroute dispatched URLs.
         If they support another interface too (<type>XInterceptorInfo</type>)
         it's possible to perform it by directly calling of right interceptor without
         using list of all registered ones.

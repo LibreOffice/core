@@ -75,7 +75,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             specifies the target
 
         @return
-            <TRUE/> if operation was sucessfully
+            <TRUE/> if operation was successfully
             <br>
             <FALSE/> otherwise
 
@@ -100,7 +100,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             specifies the position of template
 
         @return
-            <TRUE/> if operation was sucessfully
+            <TRUE/> if operation was successfully
             <br>
             <FALSE/> otherwise
 
@@ -121,7 +121,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             specifies the template for delete
 
         @return
-            <TRUE/> if operation was sucessfully
+            <TRUE/> if operation was successfully
             <br>
             <FALSE/> otherwise
      */
@@ -139,7 +139,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             specifies the template for renaming
 
         @return
-            <TRUE/> if operation was sucessfully
+            <TRUE/> if operation was successfully
             <br>
             <FALSE/> otherwise
      */
@@ -155,7 +155,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             the name of the group to be created
 
         @return
-            <TRUE/> if operation was sucessfully
+            <TRUE/> if operation was successfully
             <br>
             <FALSE/> otherwise
     */
@@ -168,7 +168,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             the name of the group to be removed
 
         @return
-            <TRUE/> if operation was sucessfully
+            <TRUE/> if operation was successfully
             <br>
             <FALSE/> otherwise
      */
@@ -184,7 +184,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             the new name of the group
 
         @return
-            <TRUE/> if operation was sucessfully
+            <TRUE/> if operation was successfully
             <br>
             <FALSE/> otherwise
      */

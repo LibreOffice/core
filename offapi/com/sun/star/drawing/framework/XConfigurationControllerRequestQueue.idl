@@ -58,7 +58,7 @@ published interface XConfigurationControllerRequestQueue
         <member>requestResourceDeactivation()</member> methods.</p>
         @param xRequest
             The configuration change represented by this request object must only
-            be commited to the configuration when the
+            be committed to the configuration when the
             <member
             scope="com::sun::star::drawing::framework::XConfigurationChangeRequest"
             >execute()</member>

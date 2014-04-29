@@ -215,7 +215,7 @@ public class SolarisInstaller extends Installer {
                 if ( returnValue == 0 ) {
                     log = pkgCommand + "<br><b>Returns: " + returnValue + " Successful installation</b><br>";
                     LogManager.addCommandsLogfileComment(log);
-                } else {    // an error occured during installation
+                } else {    // an error occurred during installation
                     if ( packageData.installCanFail() ) {
                         log = pkgCommand + "<br><b>Returns: " + returnValue + " Problem during installation. Can be ignored.</b><br>";
                         LogManager.addCommandsLogfileComment(log);
@@ -303,7 +303,7 @@ public class SolarisInstaller extends Installer {
         if ( returnValue == 0 ) {
             log = pkgCommand + "<br><b>Returns: " + returnValue + " Successful uninstallation</b><br>";
             LogManager.addCommandsLogfileComment(log);
-        } else {    // an error occured during installation
+        } else {    // an error occurred during installation
             if ( packageData.uninstallCanFail() ) {
                 log = pkgCommand + "<br><b>Returns: " + returnValue + " Problem during uninstallation. Can be ignored.</b><br>";
                 LogManager.addCommandsLogfileComment(log);

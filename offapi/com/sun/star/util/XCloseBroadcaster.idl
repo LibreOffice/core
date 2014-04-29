@@ -56,7 +56,7 @@ published interface XCloseBroadcaster: com::sun::star::uno::XInterface
     /** adds the specified listener to receive or have a veto for "close" events
 
         @param Listener
-            the listener wich is interest on closing events
+            the listener which is interested on closing events
      */
     [oneway] void addCloseListener( [in] XCloseListener Listener );
 
@@ -64,7 +64,7 @@ published interface XCloseBroadcaster: com::sun::star::uno::XInterface
     /** removes the specified listener
 
         @param Listener
-            the listener wich isn't interest on closing events anylonger
+            the listener which isn't interested on closing events anylonger
      */
     [oneway] void removeCloseListener( [in] XCloseListener Listener );
 };

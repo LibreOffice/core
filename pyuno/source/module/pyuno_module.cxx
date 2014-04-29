@@ -292,7 +292,7 @@ static PyObject *createUnoStructHelper(PyObject *, PyObject* args )
                         OStringBuffer buf;
                         buf.append( "UNO struct " );
                         buf.append( OUStringToOString( typeName, RTL_TEXTENCODING_ASCII_US ) );
-                        buf.append( " is unkown" );
+                        buf.append( " is unknown" );
                         PyErr_SetString (PyExc_RuntimeError, buf.getStr());
                     }
                 }

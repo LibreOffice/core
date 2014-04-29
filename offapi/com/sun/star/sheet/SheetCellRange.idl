@@ -417,7 +417,7 @@ published service SheetCellRange
 
     //-------------------------------------------------------------------------
 
-    /** Returns the absolute adress of the range as string, e.g. "$Sheet1.$B$2:$D$5".
+    /** Returns the absolute address of the range as string, e.g. "$Sheet1.$B$2:$D$5".
      */
     [optional, readonly, property] string AbsoluteName;
 };

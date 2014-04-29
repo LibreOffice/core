@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module form { module binding {
     content of the controls associated with this model. For instance, for an
     <type scope="com::sun::star::form::component">TextField</type>, this would be the
     <member scope="com::sun::star::awt">UnoControlEditModel::Text</member> property of the base
-    service. Similarily, a <type scope="com::sun::star::form::component">CheckBox</type> has
+    service. Similarly, a <type scope="com::sun::star::form::component">CheckBox</type> has
     a property <member scope="com::sun::star::awt">UnoControlCheckBoxModel::State</member>, which
     reflects the current check state.</p>
 

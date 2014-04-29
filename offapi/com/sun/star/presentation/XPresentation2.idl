@@ -83,7 +83,7 @@ interface XPresentation2
 
     //-------------------------------------------------------------------------
 
-    /** if the slideshow is running, this returns a controler object to
+    /** if the slideshow is running, this returns a controller object to
         control the running slideshow. */
     XSlideShowController getController();
 };

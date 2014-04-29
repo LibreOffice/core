@@ -47,7 +47,7 @@ public class ViewContainer extends Thread
 
     /**
      * provides a singleton view container
-     * Neccessary for terminate(9 functionality to be able
+     * Necessary for terminate(9 functionality to be able
      * to call Runtime.runFinilization().
      *
      * @return a reference to the singleton ViewContainer instance
@@ -78,7 +78,7 @@ public class ViewContainer extends Thread
 
     /**
      * This register a new view inside this global container
-     * (if it doesnt already exist).
+     * (if it doesn't already exist).
      *
      * @param   aView       view which whish to be registered inside this container
      */
@@ -119,7 +119,7 @@ public class ViewContainer extends Thread
         }
         // If this view is a registered shutdown listener on this view container
         // too, we must call his interface and forget him as possible listener.
-        // It's neccessary to guarantee his dead ...
+        // It's necessary to guarantee his dead ...
         boolean bShutdownView = false;
         synchronized(mlListener)
         {
@@ -135,7 +135,7 @@ public class ViewContainer extends Thread
         // hook at the runtime class. So our run() method will be called.
         // Teh our view container should be empty - but
         // our listener container can include some references.
-        // These objects wich to be informed then and release e.g. some
+        // These objects which to be informed then and release e.g. some
         // remote references.
         if (nViewCount<1)
         {
@@ -248,7 +248,7 @@ public class ViewContainer extends Thread
      * @member  mlListener          list of all currently registered shutdown listener
      * @member  mbShutdownActive    if this shutdown hook already was started it's not a good idea to
      *                              call System.exit() again for other conditions.
-     *                              We supress it by using this variable!
+     *                              We suppress it by using this variable!
      */
     public  static boolean       mbInplace   = false ;
     private static ViewContainer maSingleton = null  ;

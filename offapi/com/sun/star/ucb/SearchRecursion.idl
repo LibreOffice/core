@@ -29,7 +29,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** the various modes of recursion when searching through a hierachical
+/** the various modes of recursion when searching through a hierarchical
     object.
 
     @see SearchInfo

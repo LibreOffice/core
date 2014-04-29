@@ -70,7 +70,7 @@ published service OfficeDocument
 
         <p>
         With this interface it's possible too, to reset the modify state.
-        That can be neccessary to prevent code against problem during closing
+        That can be necessary to prevent code against problems during closing
         of the document without saving any changes.
         </p>
      */
@@ -94,7 +94,7 @@ published service OfficeDocument
     /** offers a way to print a component
 
         <p>
-        It's possible to specify wich printer should be used and of course
+        It's possible to specify which printer should be used and of course
         print the document on it.
         </p>
      */

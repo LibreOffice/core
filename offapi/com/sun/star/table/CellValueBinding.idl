@@ -83,7 +83,7 @@ service CellValueBinding
         method must be instances of <type scope="com::sun::star::beans">NamedValue</type>, where
         the <member scope"com::sun::star::beans">NamedValue::Name</member> denotes the type of information
         to initialize, and the <member scope"com::sun::star::beans">NamedValue::Value</member>
-        the inital value.</p>
+        the initial value.</p>
 
         <p>The following aspects of the components can be initialized:<br/>
             <ul><li><b>BoundCell</b><br/>

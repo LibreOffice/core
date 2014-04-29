@@ -581,7 +581,7 @@ public class SDFReader extends DataReader {
         if ((splitLine = line.split("\t")).length == 15)
             return splitLine;
         else
-            //an error occured
+            //an error occurred
             return null;
     }
 

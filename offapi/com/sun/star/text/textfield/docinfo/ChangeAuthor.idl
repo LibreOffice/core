@@ -44,7 +44,7 @@ published service ChangeAuthor
      */
     [property]string Author;
     /** contains the current content of the text field.
-        <p> This property is escpecially usefull for import/export purposes. </p>
+        <p> This property is especially useful for import/export purposes. </p>
      */
     [property]string CurrentPresentation;
     /** If this flag is set to false the author

@@ -37,7 +37,7 @@ constants Endianness
     /** Little endian.<p>
 
         The values are stored in little endian format, i.e. the bytes
-        of the long word 0xAABBCCDD are layed out like 0xDD, 0xCC,
+        of the long word 0xAABBCCDD are laid out like 0xDD, 0xCC,
         0xBB, 0xAA in memory. That is, data of arbitrary machine word
         lengths always starts with the least significant byte, and
         ends with the most significant one.<p>
@@ -47,7 +47,7 @@ constants Endianness
     /** Big endian.<p>
 
         The values are stored in big endian format, i.e. the bytes of
-        the long word 0xAABBCCDD are layed out like 0xAA, 0xBB, 0xCC,
+        the long word 0xAABBCCDD are laid out like 0xAA, 0xBB, 0xCC,
         0xDD in memory. That is, data of arbitrary machine word
         lengths always start with the most significant byte, and ends
         with the least significant one.<p>

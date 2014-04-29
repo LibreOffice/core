@@ -69,7 +69,7 @@ published interface XUIControllerRegistration : com::sun::star::uno::XInterface
         and a command URL and optional module.
 
         @param aCommandURL
-            a command URL which specifies an action which shoudl be associated with a user
+            a command URL which specifies an action which should be associated with a user
             interface controller.
 
         @param aModelName
@@ -86,7 +86,7 @@ published interface XUIControllerRegistration : com::sun::star::uno::XInterface
         implementation and a command URL and optional module.
 
         @param aCommandURL
-            a command URL which specifies an action which shoudl be associated with a user
+            a command URL which specifies an action which should be associated with a user
             interface controller.
 
         @param aModelName

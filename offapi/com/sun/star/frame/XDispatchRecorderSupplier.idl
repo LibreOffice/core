@@ -105,7 +105,7 @@ published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
             </li>
             <li>If <var>Dispatcher</var> support the interface
                 <type>XRecordableDispatch</type> it will be used
-                to dispatch and record all neccessary parameters of
+                to dispatch and record all necessary parameters of
                 the whole process.
             </li>
         </ul>

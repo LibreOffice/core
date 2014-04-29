@@ -67,7 +67,7 @@ published interface XStringResourceWithLocation: com::sun::star::resource::XStri
         location before releasing it. The StringResourceManager will
         be modified after calling this method as the data isn't stored
         to the new location yet. <member>storeAsURL</member> should
-        be prefered as it directly stores the data to the new location
+        be preferred as it directly stores the data to the new location
         and afterwards this location is in sync with the resource data.
         </p>
 

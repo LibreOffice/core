@@ -33,7 +33,7 @@ import java.io.*;
 
 /**
  *  It provides some constant values and some static helper routines
- *  which are neccessary to work with a xml file - especialy
+ *  which are necessary to work with a xml file - especially
  *  the filter configuration.
  *
  *
@@ -92,8 +92,8 @@ public class XMLHelper
     private static final java.lang.String[] DELIMS = {" ", ",", ";", ".", ":", "-", "_", "#", "'", "+", "*", "~", "=", "?"};
 
     /** index of the default separator inside list DELIMS.
-     *  Its neccessary to know such default separator; because it can
-     *  be supressed as xml attribute of the corresponding value tag. */
+     *  Its necessary to know such default separator; because it can
+     *  be suppressed as xml attribute of the corresponding value tag. */
     private static final int DEFAULT_SEPARATOR = 0;
 
     //___________________________________________
@@ -102,7 +102,7 @@ public class XMLHelper
      *  return a property set of all found sub nodes.
      *
      *  Such properties are organized as [name, value] pairs.
-     *  The type of a xml node will be detected automaticly.
+     *  The type of a xml node will be detected automatically.
      *  Following types are supported:
      *      xs:int          => java.lang.Integer
      *      xs:bool         => java.lang.Boolean
@@ -291,7 +291,7 @@ public class XMLHelper
      *          the xml string representation.
      *
      *  @throws [java.lang.Exception]
-     *          if anything during convertion fill fail.
+     *          if anything during conversion fill fail.
      */
     public static java.lang.String convertPropSetToXML(java.util.HashMap aPropSet   ,
                                                        int               nPrettyTabs)
@@ -386,7 +386,7 @@ public class XMLHelper
      *          the xml string representation.
      *
      *  @throws [java.lang.Exception]
-     *          if anything during convertion fill fail.
+     *          if anything during conversion fill fail.
      */
     private static java.lang.String convertSimpleObjectToXML(java.lang.String sName      ,
                                                              java.lang.Object aValue     ,
@@ -454,7 +454,7 @@ public class XMLHelper
      *          the xml string representation.
      *
      *  @throws [java.lang.Exception]
-     *          if anything during convertion fill fail.
+     *          if anything during conversion fill fail.
      */
     private static java.lang.String convertListToXML(java.lang.String sName      ,
                                                      java.util.Vector aValue     ,
@@ -498,7 +498,7 @@ public class XMLHelper
             sValue = encodeHTMLSigns(sValue);
 
             // append item with default separator, which isn a valid separator at all
-            // But supress adding of the separator if last element is reached.
+            // But suppress adding of the separator if last element is reached.
             sValBuff.append(sValue);
             if (i<(c-1))
                 sValBuff.append("\n");
@@ -559,7 +559,7 @@ public class XMLHelper
      *          the xml string representation.
      *
      *  @throws [java.lang.Exception]
-     *          if anything during convertion fill fail.
+     *          if anything during conversion fill fail.
      */
     private static java.lang.String convertLocalizedValueToXML(java.lang.String  sName      ,
                                                                java.util.HashMap aValue     ,
@@ -570,7 +570,7 @@ public class XMLHelper
 
         int c = aValue.size();
         if (c < 1)
-            throw new java.lang.Exception("Cant detect type of localized values. Because the given list is empty.");
+            throw new java.lang.Exception("Can't detect type of localized values. Because the given list is empty.");
 
         for (int t=0; t<nPrettyTabs; ++t)
             sXML.append("\t");
@@ -644,7 +644,7 @@ public class XMLHelper
             return null;
         }
 
-        // may it supports attributes in general ... but doesn't have anyone realy.
+        // may it supports attributes in general ... but doesn't have anyone really.
         org.w3c.dom.NamedNodeMap lAttribs = aNode.getAttributes();
         if (lAttribs==null)
         {

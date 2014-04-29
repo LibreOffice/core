@@ -240,7 +240,7 @@ published service TextProperties
     //-------------------------------------------------------------------------
 
     /** with this property you can set the maximum height for a shape with text.
-        On edit, the auto grow feature will not grow the object heigher than
+        On edit, the auto grow feature will not grow the object higher than
         the value of this property.
     */
     [property] long TextMaximumFrameHeight;

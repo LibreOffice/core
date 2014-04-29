@@ -75,7 +75,7 @@ published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     /** appends a new set of filter criteria which is split into levels.
         @param filter
             The filter criteria is split into levels. Each level represents the
-            OR criterias. Within each level, the filters are provided as an AND criteria
+            OR criteria. Within each level, the filters are provided as an AND criteria
             with the name of the column and the filter condition. The filter condition
             is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
 
@@ -109,7 +109,7 @@ published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     //-------------------------------------------------------------------------
 
 
-    /** makes it possibile to set a group for the query.
+    /** makes it possible to set a group for the query.
         @param group
             the group part to set
         @throws com::sun::star::sdbc::SQLException
@@ -152,7 +152,7 @@ published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     /** appends a new set of HAVING filter criteria which is split into levels.
         @param filter
             The HAVING filter criteria is split into levels. Each level represents the
-            OR criterias. Within each level, the filters are provided as an AND criteria
+            OR criteria. Within each level, the filters are provided as an AND criteria
             with the name of the column and the filter condition. The filter condition
             is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
 
@@ -184,7 +184,7 @@ published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     // ORDER BY
     //-------------------------------------------------------------------------
 
-    /** makes it possibile to set a sort condition for the query.
+    /** makes it possible to set a sort condition for the query.
         @param order
             the order part to set
         @throws com::sun::star::sdbc::SQLException

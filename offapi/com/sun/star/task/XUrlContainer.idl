@@ -72,7 +72,7 @@ published interface XUrlContainer : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** Get all URLs.
 
-        @param OnlyPersistent Only URLs taht are stored persistently shall
+        @param OnlyPersistent Only URLs that are stored persistently shall
                         be returned.
         @returns        List of URLs.
     */

@@ -126,7 +126,7 @@ published interface XPopupMenu: XMenu
         <p>The <type>KeyEvent</type> is <b>only</b> used as a container to transport
         the shortcut information, this methods only draws the text corresponding to
         this keyboard shortcut. The client code is responsible for listening to
-        keyboard events (typicaly done via <type>XUserInputInterception</type>),
+        keyboard events (typically done via <type>XUserInputInterception</type>),
         and dispatch the respective command.</p>
 
         @param nItemId

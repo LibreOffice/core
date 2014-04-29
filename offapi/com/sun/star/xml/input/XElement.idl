@@ -63,7 +63,7 @@ interface XElement : com::sun::star::uno::XInterface
     */
     XAttributes getAttributes();
 
-    /** Called upon each occuring child element.
+    /** Called upon each occurring child element.
 
         @param uid
                namespace uid of element

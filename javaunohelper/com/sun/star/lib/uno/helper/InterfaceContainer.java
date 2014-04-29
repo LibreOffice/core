@@ -77,7 +77,7 @@ import com.sun.star.uno.UnoRuntime;
  *  is removed.
  *  ListIterator.set is not supported.
  *
- * A lot of  methods resemble those of the  to java.util.List interface, allthough
+ * A lot of  methods resemble those of the  to java.util.List interface, although
  * this class does not implement it. However, the list iterators returned, for example by
  * the listIterator method implement the java.util.ListIterator interface.
  * Implementing the List interface would mean to support all none - optional methods as
@@ -86,9 +86,9 @@ import com.sun.star.uno.UnoRuntime;
  * list have to cause changes in the main list. This is a problem, since this class is to be
  * used in a multi-threaded environment. The sub list could work on a copy as the iterators
  * do, but all the functions which work on an given index could not be properly supported.
- * Unfortunatly, the List interface documentation states that all optional methods implemented
+ * Unfortunately, the List interface documentation states that all optional methods implemented
  * by the list have to be implemented in the sub list. That would mean to do without all those
- * critical methods, allthough they might work well in the "main list" (as opposed to sub list).
+ * critical methods, although they might work well in the "main list" (as opposed to sub list).
  */
 public class InterfaceContainer implements Cloneable
 {
@@ -348,7 +348,7 @@ public class InterfaceContainer implements Cloneable
     }
 
     /**
-     * Searches for the first occurence of the given argument, testing
+     * Searches for the first occurrence of the given argument, testing
      * for equality using the <tt>equals</tt> method.
      *
      * @param   elem   an object.

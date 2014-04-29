@@ -76,7 +76,7 @@ module com { module sun { module star { module document {
     <p>
     Note:<br>
     It's not allowed to hold member of this descriptor by references longer the they
-    will be used (especialy a possible stream). It's allowed to use it directly
+    will be used (especially a possible stream). It's allowed to use it directly
     or by copying it only.
     </p>
 
@@ -85,7 +85,7 @@ module com { module sun { module star { module document {
 published service MediaDescriptor
 {
     //-------------------------------------------------------------------------
-    /** May be set by filters or detection services if user has choosen to
+    /** May be set by filters or detection services if user has chosen to
         abort loading/saving, e.g. while entering a password.
      */
     [optional,property] boolean Aborted;
@@ -139,7 +139,7 @@ published service MediaDescriptor
         <p>
         This is a parameter that can be used for any properties specific
         for a special component type. Format of that depends from real
-        type of adressed component.
+        type of addressed component.
         </p>
 
         <p>

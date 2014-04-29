@@ -73,7 +73,7 @@ published interface XNumericControl : XPropertyControl
     };
 
     /** describes a <type scope="com::sun::star::util">MeasureUnit</type> to be
-        applied for transfering values.
+        applied for transferring values.
 
         <p>The core measurement unit for a property value might differ from the unit which
         is used by the control to display it. For instance, your property value might require

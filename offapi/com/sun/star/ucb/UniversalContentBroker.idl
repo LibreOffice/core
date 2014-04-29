@@ -74,7 +74,7 @@ published service UniversalContentBroker
     /** must be implemented to make it possible to resolve cyclic object
         references.
 
-        <p>Those references i.e. may occure if content provider implementations
+        <p>Those references i.e. may occur if content provider  implementations
         hold references to the Broker. The Broker itself always holds its
         providers. If the Broker shall be released,
         <member scope="com::sun::star::lang">XComponent::dispose</member>

@@ -61,7 +61,7 @@ published struct Rule
         </tr>
         <tr>
             <td>FORWARD</td>
-            <td>The email address of the recepient</td>
+            <td>The email address of the recipient</td>
         </tr>
         <tr>
             <td>All other actions</td>

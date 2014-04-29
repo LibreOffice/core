@@ -40,7 +40,7 @@
 
 /** extends the
     <type scope="com::sun::star::sdbcx">Table</type>
-    with additional display information, sorting and filtering criterias.
+    with additional display information, sorting and filtering criteria.
 
     */
 published service DataSettings

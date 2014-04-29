@@ -42,7 +42,7 @@ public class Desk
     /**
      * main
      * Establish connection to a remote office and starts the demo application.
-     * User can overwrite some of neccessary start options by using command line parameters.
+     * User can overwrite some of necessary start options by using command line parameters.
      *
      * syntax: Desk [mode={inplace|outplace}] [file=<filename>]
      *
@@ -76,7 +76,7 @@ public class Desk
         // Create first document view.
         // This one will register himself at the global
         // ViewContainer. Further views will be open
-        // automaticly started from this first one.
+        // automatically started from this first one.
         DocumentView aView = new DocumentView();
         aView.setVisible(true);
         aView.createFrame();

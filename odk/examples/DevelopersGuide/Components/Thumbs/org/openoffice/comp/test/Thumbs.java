@@ -47,7 +47,7 @@ public class Thumbs {
             org.openoffice.test.XImageShrinkFilter xImageShrinkFilter =
                 org.openoffice.test.ImageShrink.create(xRemoteContext);
 
-            System.out.println("ImageShrink component succesfully instantiated");
+            System.out.println("ImageShrink component successfully instantiated");
 
             java.io.File f = new java.io.File(".");
             System.out.println("set SourceDrectory ...");

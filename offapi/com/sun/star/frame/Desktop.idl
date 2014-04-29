@@ -60,7 +60,7 @@
 published service Desktop
 {
     //-------------------------------------------------------------------------
-    /** make it possible to be the global root of different seperated frame trees
+    /** make it possible to be the global root of different separated frame trees
 
         <p>
         It's not a must for a frame (neither a frame tree) to be a part of this

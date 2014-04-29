@@ -55,7 +55,7 @@ published service DatabaseTextField
         a decision must be made how to deal with empty strings.<br/>
         This is controlled by this property.</p>
 
-        <p>If the property is set to <TRUE/>, and an empty text is to be commited, this is
+        <p>If the property is set to <TRUE/>, and an empty text is to be committed, this is
         converted into <NULL/>, else it is written as empty string.</p>
      */
     [property] boolean ConvertEmptyToNull;

@@ -103,7 +103,7 @@ published service AccessiblePageView
                         regardless whether they are bound to the page, a
                         paragarph, a frame, or a character. The only
                         exception are text frames that are bound as
-                        character.  They are childen of the paragraph they
+                        character.  They are children of the paragraph they
                         are contained in.
                     <li><type scope="::com::sun::star::text"
                         >AccessibleTextGraphicObject</type>:
@@ -113,7 +113,7 @@ published service AccessiblePageView
                         regardless whether they are bound to a page, paragraph,
                         a frame or a character. The only exception
                         are text frames that are bound as character. They are
-                        childen of the paragraph they are contained in.
+                        children of the paragraph they are contained in.
                     <li><type scope="::com::sun::star::text"
                         >AccessibleTextEmbeddedObject</type>:
                         A child of this kind is returned for every embedded
@@ -121,7 +121,7 @@ published service AccessiblePageView
                         These objects are children of the
                         <type>AccessibleTextDocumentView</type> regardless
                         whether they are bound to a page, a paragarph, a frame,
-                        or a character.  They are childen of the paragraph they
+                        or a character.  They are children of the paragraph they
                         are contained in.
                     <li><type scope="::com::sun::star::drawing"
                         >AccessibleShape</type>:

@@ -62,7 +62,7 @@ interface XUpdateInformationProvider
         [in] string extensionId
     ) raises ( com::sun::star::uno::Exception );
 
-    /** interrupts a getUpdateInformation call and let's it return immediatly.
+    /** interrupts a getUpdateInformation call and let's it return immediately.
     */
     void cancel();
 

@@ -34,7 +34,7 @@
 
 //============================================================================
 
-/** This exception can be thrown in case container whants to avoid objects
+/** This exception can be thrown in case container wants to avoid objects
     saving.
 
     @see XEmbeddedClient

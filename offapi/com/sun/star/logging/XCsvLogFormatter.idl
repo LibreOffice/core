@@ -63,7 +63,7 @@ interface XCsvLogFormatter : XLogFormatter
         <code>formatMultiColumn</code>*/
     [attribute] sequence< string >  Columnnames;
     /** if the CsvLogFormatter is set to have more than one
-        column, any logged infomation has to be send through this
+        column, any logged information has to be send through this
         method before calling log(). E.g.:
 
         <code>XLoggerInstance.log(1000, XCsvLogFormatterInstance.formatMultiColumn(column_data))</code>

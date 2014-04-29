@@ -91,7 +91,7 @@ published interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
     /** returns the currently used filter.
              <p>
              The filter criteria is split into levels. Each level represents the
-             OR criterias. Within each level, the filters are provided as an AND criteria
+             OR criteria. Within each level, the filters are provided as an AND criteria
              with the name of the column and the filter condition. The filter condition
              is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
              </p>
@@ -143,7 +143,7 @@ published interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
     /** returns the currently used HAVING filter.
              <p>
              The HAVING filter criteria is split into levels. Each level represents the
-             OR criterias. Within each level, the filters are provided as an AND criteria
+             OR criteria. Within each level, the filters are provided as an AND criteria
              with the name of the column and the filter condition. The filter condition
              is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
              </p>

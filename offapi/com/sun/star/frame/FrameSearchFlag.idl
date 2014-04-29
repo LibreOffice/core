@@ -100,7 +100,7 @@ published constants FrameSearchFlag
         will be reached. It doesn't influence a search from top to bottom.
         But it can be used at the root of the frame tree to search on direct childrens of it only.
         Because the direct children of the root node are the root's of the task sub trees, which
-        are top frames too. Instead of using the CHILDREN flag there, it's possible so to supress
+        are top frames too. Instead of using the CHILDREN flag there, it's possible so to suppress
         a deeper search so.
         </p>
      */

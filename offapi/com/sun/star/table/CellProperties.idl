@@ -246,7 +246,7 @@ published service CellProperties
 
     //-------------------------------------------------------------------------
 
-    /** is <TRUE/>, if the cell content will be shrinked to fit in the cell.
+    /** is <TRUE/>, if the cell content will be shrunk to fit in the cell.
      */
     [optional, property] boolean ShrinkToFit;
 

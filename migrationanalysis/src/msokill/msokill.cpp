@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
 }
 
 /*--------------------------------------------------------------
-  Find the MSO window if it is available and explictly kill it
+  Find the MSO window if it is available and explicitly kill it
   MSO apps in this case are Excel, Word and PP
   Use FindWindow Win32 API to detect if they are available
 

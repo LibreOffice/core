@@ -65,9 +65,9 @@ published interface XGridRowSelection
     void deselectRow( [in] long RowIndex )
         raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
-    /** Returns the indicies of all selected rows.
+    /** Returns the indices of all selected rows.
         @returns
-            a sequence of indicies.
+            a sequence of indices.
     */
     sequence< long > getSelectedRows();
 

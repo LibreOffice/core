@@ -1023,7 +1023,7 @@
 			<prop oor:name="PaintBuffer" oor:type="xs:boolean">
 				<info>
 					<author>AW</author>
-					<desc>Specifies if the Application Repaint shall use a buffer for Pre-Rendering. If on, screen flicker is greatly reduced and remote display is fast, but a buffer (graphics memory) is needed. If off, screen flicker will occurr and remote display is slow, but no buffer is needed. This is the global switch for the whole office.</desc>
+					<desc>Specifies if the Application Repaint shall use a buffer for Pre-Rendering. If on, screen flicker is greatly reduced and remote display is fast, but a buffer (graphics memory) is needed. If off, screen flicker will occur and remote display is slow, but no buffer is needed. This is the global switch for the whole office.</desc>
 					<label>Application Repaint is allowed to use Pre-Rendering Buffer.</label>
 				</info>
 				<value>true</value>
@@ -4829,7 +4829,7 @@
 						<desc>Contains settings for HTML import.</desc>
 					</info>
 					<prop oor:name="NumbersEnglishUS" oor:type="xs:boolean">
-                        <!-- UIHints: Tools  Options  Load/Save - HTML Compability [Section] Import -->
+                        <!-- UIHints: Tools  Options  Load/Save - HTML Compatibility [Section] Import -->
 						<info>
 							<author>ER</author>
 							<desc>Specifies if numbers should be parsed according to the en-US locale instead of the user's locale.</desc>
@@ -6164,7 +6164,7 @@
                 previews, etc...). EdgeBlending will visualize a one pixel border on the preview object with interpolated
                 colors (default: TopLeft White, BottomRight Black) so that a nice 3D effect is shown. It is a percent
                 value describing how strong the effect shall be. The value 0% switches it off, while the value 100% will
-                cover the preview object's border completely with one pixel. Values in-between vill be alpha-blended with
+                cover the preview object's border completely with one pixel. Values in-between will be alpha-blended with
                 the original preview image.
               </desc>
               <label>Defines the EdgeBlending for Previews in Percent.</label>

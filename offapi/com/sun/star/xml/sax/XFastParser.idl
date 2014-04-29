@@ -98,7 +98,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 
     <p>Setting a <type>XFastTokenHandler</type> with <member>setTokenHandler</member>
     is optional, but without a <type>XFastTokenHandler</type> you will only
-    get unknown sax events. This can be usefull if you are only interested
+    get unknown sax events. This can be useful if you are only interested
     in the namespace handling and/or the context feature.
 
     <p>For each element the parser sends a create child element event to the

@@ -97,7 +97,7 @@ published service LineNumberingProperties
     /** specifies if the line numbering should start from the
         beginning at each page.
 
-        <p>If set to <FALSE/> the line numbering will be continous.</p>
+        <p>If set to <FALSE/> the line numbering will be continuous.</p>
 
         @since OpenOffice 2.0
      */

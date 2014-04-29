@@ -59,7 +59,7 @@ published interface XResetListener: com::sun::star::lang::XEventListener
     /** is invoked before a component is reset.
 
         @param rEvent
-            the event happend.
+            the event happened.
 
         @returns
             <TRUE/> when reset was approved, <FALSE/> when the reset operation should be cancelled.
@@ -71,7 +71,7 @@ published interface XResetListener: com::sun::star::lang::XEventListener
     /** is invoked when a component has been reset.
 
         @param rEvent
-            the event happend.
+            the event happened.
      */
     [oneway] void resetted( [in] com::sun::star::lang::EventObject rEvent );
 

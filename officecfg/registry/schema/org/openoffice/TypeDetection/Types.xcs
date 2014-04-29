@@ -55,7 +55,7 @@
 				<value>false</value>
 			</prop>
             <prop oor:name="PreferredFilter" oor:type="xs:string">
-                <info><desc>An optimization! Points directly to the preferred filter for this type. No search across all filters is neccessary ...</desc></info>
+                <info><desc>An optimization! Points directly to the preferred filter for this type. No search across all filters is necessary ...</desc></info>
 				<value/>
             </prop>
             <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">

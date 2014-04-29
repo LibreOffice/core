@@ -54,7 +54,7 @@ import com.sun.star.lang.IllegalArgumentException;
                 During import/export special functionality can be used to
                 e.g. to change some characters inside the file content
                 or replace some strings (no using of regular expressions!).
-                User can decide at runtime which functionality realy should
+                User can decide at runtime which functionality really should
                 be used by selecting it in an extra filter property dialog.
 
                 So we show how a filter works fro iport/export, use or create
@@ -107,7 +107,7 @@ public class AsciiReplaceFilter
         // native interface
        /**
         * special debug helper to get an idea how expensive
-        * the implemented filter operations are realy.
+        * the implemented filter operations are really.
         * May be usefully for own purposes.
         *
         * To see the output inside an office environment
@@ -160,7 +160,7 @@ public class AsciiReplaceFilter
         /**
         * used for initializing after creation
         * If an instance of this service is created by UNO we will be called
-        * automaticly after that to get optional parameters of this creation call.
+        * automatically after that to get optional parameters of this creation call.
         * E.g.: The service com.sun.star.document.FilterFactory use such mechanism
         * to pass our own configuration data to this instance.
         *
@@ -363,7 +363,7 @@ public class AsciiReplaceFilter
 
         /**
         * Makes the filter process breakable. To do so the outside code may use threads.
-        * We use a internal "condition" variable wich is queried by the real filter method on
+        * We use a internal "condition" variable which is queried by the real filter method on
         * every loop they do. So it's more a polling mechanism.
         */
         public void cancel()
@@ -404,7 +404,7 @@ public class AsciiReplaceFilter
          *          the target text model to put the data in
          *
          * @param aOptions
-         *          capsulate all other neccessary informations for this filter request
+         *          capsulate all other necessary informations for this filter request
          *          (streams, replace values ...)
          *
          * @return a bool value which describes if method was successfully or not.
@@ -536,7 +536,7 @@ public class AsciiReplaceFilter
          *          the source text model to get the data from
          *
          * @param aOptions
-         *          capsulate all other neccessary informations for this filter request
+         *          capsulate all other necessary informations for this filter request
          *          (streams, replace values ...)
          *
          * @return a bool value which describes if method was successfully or not.
@@ -561,7 +561,7 @@ public class AsciiReplaceFilter
 
                 measure("get text from model");
 
-                // Normaly this function isn't realy cancelable
+                // Normaly this function isn't really cancelable
                 // But we following operation can be very expensive. So
                 // this place is the last one to stop it.
                 synchronized(this)

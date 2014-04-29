@@ -163,7 +163,7 @@ inline sal_Int32 convertEmuToHmm( sal_Int64 nValue )
 
 // ============================================================================
 
-/** A structure for a point with 64-bit interger components. */
+/** A structure for a point with 64-bit integer components. */
 struct EmuPoint
 {
     sal_Int64           X;
@@ -175,7 +175,7 @@ struct EmuPoint
 
 // ============================================================================
 
-/** A structure for a size with 64-bit interger components. */
+/** A structure for a size with 64-bit integer components. */
 struct EmuSize
 {
     sal_Int64           Width;
@@ -187,7 +187,7 @@ struct EmuSize
 
 // ============================================================================
 
-/** A structure for a rectangle with 64-bit interger components. */
+/** A structure for a rectangle with 64-bit integer components. */
 struct EmuRectangle : public EmuPoint, public EmuSize
 {
     inline explicit     EmuRectangle() {}

@@ -53,7 +53,7 @@ published interface XRelativeTextContentRemove: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XRelativeTextContentRemove::removeTextContentBefore
-    /** removes the text content that preceeds the argument.
+    /** removes the text content that precedes the argument.
 
         <p> This is helpful to remove empty paragraphs before text tables. </p>
      */

@@ -419,7 +419,7 @@ void OCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const
     throw (Exception)
 {
     OSL_TRACE("OCommonStatement::setFastPropertyValue_NoBroadcast");
-    // set the value to what ever is nescessary
+    // set the value to what ever is necessary
     switch (nHandle) {
         case PROPERTY_ID_QUERYTIMEOUT:
         case PROPERTY_ID_MAXFIELDSIZE:

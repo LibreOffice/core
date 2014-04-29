@@ -55,7 +55,7 @@ published service AccessibleSpreadsheetPageView
         <li>The parent returned by
             <method scope="::com::sun::star::accessibility"
             >XAccessibleContext::getAccessibleParent</method>
-            is the window wich contains the view of these page preview.</li>
+            is the window which contains the view of these page preview.</li>
         <li>The children returned by
             <method scope="::com::sun::star::accessibility"
             >XAccessibleContext::getAccessibleChild</method> all

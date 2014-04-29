@@ -39,7 +39,7 @@
 /** provides functionality to record <member>XDispatch::dispatch()</member> requests
 
     <p>
-    It records all neccessary parameters of a call <member>XDispatch::dispatch()</member>
+    It records all necessary parameters of a call <member>XDispatch::dispatch()</member>
     and generate code which can be executed at later time to run same operations
     again. Which code will be generated depends from real implementation. So it's
     possible to generate e.g. Java/Basic or may Perl code.

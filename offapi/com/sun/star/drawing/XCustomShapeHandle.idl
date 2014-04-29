@@ -50,7 +50,7 @@ interface XCustomShapeHandle: com::sun::star::uno::XInterface
      */
     com::sun::star::awt::Point getPosition();
 
-    /** is setting a new positon for the handle
+    /** is setting a new position for the handle
      */
     void setControllerPosition( [in] com::sun::star::awt::Point aPoint );
 

@@ -137,7 +137,7 @@ published service DataAccessDescriptor
      */
     [optional, property] long CommandType;
 
-    /** specifies an addtional filter to optionally use.
+    /** specifies an additional filter to optionally use.
 
         <p>The Filter string has to form a <code>WHERE</code>-clause, <em>without</em> the
         <code>WHERE</code>-string itself.</p>

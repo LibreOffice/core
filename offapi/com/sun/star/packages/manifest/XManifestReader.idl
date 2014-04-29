@@ -37,7 +37,7 @@ module com {  module sun {  module star {   module packages {  module manifest {
 
 //=============================================================================
 /** This interface reads the manifest data from a file. The user
-    must supply an XInputStream when calling readManifestSequence() to recieve
+    must supply an XInputStream when calling readManifestSequence() to receive
     a sequence of manifest entries. Each manifest entry is represented by
     a sequence of PropertyValues. */
 //=============================================================================

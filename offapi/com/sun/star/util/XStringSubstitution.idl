@@ -67,7 +67,7 @@ published interface XStringSubstitution : com::sun::star::uno::XInterface
             A string containing variables that should be substituted.
 
         @param bSubstRequired
-            Specifies if a successfull substitution is required. The
+            Specifies if a successful substitution is required. The
             function throws a <type scope="com::sun::star::container">NoSuchElementException</type>
             if it finds a variable that is unknown. In this case it is possible
             that the returned string would not be what the caller expected!
@@ -106,7 +106,7 @@ published interface XStringSubstitution : com::sun::star::uno::XInterface
 
         <p>
         The method iterates through it's internal variable list and tries to
-        find the given variable. If the variable is unkown a
+        find the given variable. If the variable is unknown a
         <type scope="com::sun::star::container">NoSuchElementException</type>
         is thrown.
         </p>

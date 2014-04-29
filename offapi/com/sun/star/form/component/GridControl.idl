@@ -88,7 +88,7 @@
     <p>The table rows in a grid control correspond to the rows in the <type>DataForm</type>
     the control belongs to, and the columns correspond to single columns of the form's row set.</p>
 
-    <p>Columns of a grid control are modeled by own objects, too. They are very similar to usual
+    <p>Columns of a grid control are modelled by own objects, too. They are very similar to usual
     <type scope="com::sun::star::form">DataAwareControlModel</type>s modeling other "single-value" controls, but they are not described
     as own services. Instead, they need to be created using the <type scope="com::sun::star::form">XGridColumnFactory</type> interface.</p>
  */

@@ -143,11 +143,11 @@ published interface XDesktop: com::sun::star::uno::XInterface
     com::sun::star::lang::XComponent getCurrentComponent();
 
     //-------------------------------------------------------------------------
-    /** provides read access to the frame wich contains the current component
+    /** provides read access to the frame which contains the current component
 
         @returns
             the frame of the component which has the
-            UI focus within this desktop enviroment
+            UI focus within this desktop environment
 
         @see XDesktop::getCurrentComponent()
      */

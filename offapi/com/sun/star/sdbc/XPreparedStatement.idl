@@ -37,7 +37,7 @@
  published interface XResultSet;
 
 
-/** provides the possibilty of executing a precompiled SQL statement.
+/** provides the possibility of executing a precompiled SQL statement.
 
 
     <p>

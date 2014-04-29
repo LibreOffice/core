@@ -246,7 +246,7 @@ extern FILE *GetCfgFile()
             aEntry += DirEntry( sPrjRoot );
             ByteString sPrjEntry( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
-            // create file name, beginnig with project root
+            // create file name, beginning with project root
             // (e.g.: source\ui\src\menue.src)
 //          printf("sFullEntry = %s\n",sFullEntry.GetBuffer());
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );

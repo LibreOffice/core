@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module frame {
 published service Components
 {
     //-------------------------------------------------------------------------
-    /** use it to get snapshot of current avaliable components as an enumeration
+    /** use it to get snapshot of current available components as an enumeration
      */
     interface com::sun::star::container::XEnumerationAccess;
 };

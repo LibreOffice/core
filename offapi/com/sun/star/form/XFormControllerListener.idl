@@ -53,7 +53,7 @@ published interface XFormControllerListener: com::sun::star::lang::XEventListene
         the controller was not previously activated.
 
         @param rEvent
-            the event happend.
+            the event happened.
      */
     [oneway] void formActivated( [in] com::sun::star::lang::EventObject rEvent );
 
@@ -64,7 +64,7 @@ published interface XFormControllerListener: com::sun::star::lang::XEventListene
         words, no control of the controller owns the focus.
 
         @param rEvent
-            the event happend.
+            the event happened.
      */
     [oneway] void formDeactivated( [in] com::sun::star::lang::EventObject rEvent );
 

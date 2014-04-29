@@ -34,7 +34,7 @@ public class ExecuteProcess {
     }
 
     static public int executeProcessReturnValue(String[] command) {
-        // usage of String arrays because of blanks in pathes
+        // usage of String arrays because of blanks in paths
         int returnValue = 0;
 
         try {
@@ -51,7 +51,7 @@ public class ExecuteProcess {
     }
 
     static public int executeProcessReturnVector(String[] command, Vector returnVector, Vector returnErrorVector) {
-        // usage of String arrays because of blanks in pathes
+        // usage of String arrays because of blanks in paths
         int returnValue = -3;
 
         try {
@@ -79,7 +79,7 @@ public class ExecuteProcess {
     }
 
     static public int executeProcessReturnVectorEnv(String[] command, String[] envP, Vector returnVector, Vector returnErrorVector) {
-        // usage of String arrays because of blanks in pathes
+        // usage of String arrays because of blanks in paths
         int returnValue = -3;
 
         try {

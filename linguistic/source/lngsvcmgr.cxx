@@ -357,7 +357,7 @@ LngSvcMgrListenerHelper::LngSvcMgrListenerHelper(
     //! number of events forwarded.
     //! (This may happen already if a property was changed that has several
     //! listeners, and each of them is launching an event of it's own!)
-    //! Thus this behaviour is necessary to avoid unecessary actions of
+    //! Thus this behaviour is necessary to avoid unnecessary actions of
     //! this objects listeners!
 //  aLaunchTimer.SetTimeout( 2000 );
 //  aLaunchTimer.SetTimeoutHdl( LINK( this, LngSvcMgrListenerHelper, TimeOut ) );
@@ -1414,7 +1414,7 @@ uno::Sequence< OUString > SAL_CALL
     }
     else if (0 == rServiceName.compareToAscii( SN_GRAMMARCHECKER ))
     {
-        // don't clear cache as it makes start with some extentions so slow it looks
+        // don't clear cache as it makes start with some extensions so slow it looks
         // like a freeze (a restart is needed anyway after grammar checker installation),
         // see https://issues.apache.org/ooo/show_bug.cgi?id=116409
         //clearSvcInfoArray(pAvailGrammarSvcs);  pAvailGrammarSvcs = 0;

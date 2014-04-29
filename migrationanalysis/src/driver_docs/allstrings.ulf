@@ -320,7 +320,7 @@ en-US = "High level analysis of document migration issues"
 en-US = "Which documents may have migration issues?"
 
 [RID_STR_COMMON_OV_DOC_ANALYSIS_COMMENT_BODY]
-en-US = "<CR>Some Microsoft Office documents may not migrate perfectly into <PRODUCTNAME>. These issues are outlined in the <PRODUCTNAME> Migration Guide. <PRODUCTNAME> engineering is working continously to resolve these issues by improving the Microsoft Office filters.<CR>The Document Analysis Wizard has been provided by <PRODUCTNAME> engineering to detect the most important of these migration issues in any Microsoft Office document you wish to specify. These findings are summarised below [refer to the 'List of documents' sheet to see the list of all analyzed documents]."
+en-US = "<CR>Some Microsoft Office documents may not migrate perfectly into <PRODUCTNAME>. These issues are outlined in the <PRODUCTNAME> Migration Guide. <PRODUCTNAME> engineering is working continuously to resolve these issues by improving the Microsoft Office filters.<CR>The Document Analysis Wizard has been provided by <PRODUCTNAME> engineering to detect the most important of these migration issues in any Microsoft Office document you wish to specify. These findings are summarised below [refer to the 'List of documents' sheet to see the list of all analyzed documents]."
 
 [RID_STR_COMMON_OV_DOC_ANALYSIS_DAW_LEGEND_BODY]
 en-US = "Complex: More complex migration issues.<CR>Minor:  Minor migration issues easily fixed by any user.<CR>None: No issues Migrate to <PRODUCTNAME> without any issues.<CR><CR>Your <PRODUCTNAME> Migration Partners can help you with these more complex migration issues [refer to link above]. For instance they can migrate these documents to custom templates that achieve the same functionality but work well in both Office environments allowing the documents to be freely exchanged."
@@ -2310,7 +2310,7 @@ en-US = "Embedded Fonts"
 en-US = "<PRODUCTNAME> doesn't support embedded fonts."
 
 [RID_STR_COMMON_SUBISSUE_TRANSPARENCY_NOTE]
-en-US = "Microsoft Office supports a color attribute that allows you to make a  bitmap color transparent without modifying the orginal bitmap. When you import a document with such a bitmap, <PRODUCTNAME> changes the bitmap to match the transparent color. The transparent color attribute is lost."
+en-US = "Microsoft Office supports a color attribute that allows you to make a  bitmap color transparent without modifying the original bitmap. When you import a document with such a bitmap, <PRODUCTNAME> changes the bitmap to match the transparent color. The transparent color attribute is lost."
 
 [RID_STR_COMMON_SUBISSUE_LINE_NOTE]
 en-US = "<PRODUCTNAME> does not support all of the line styles that you can apply to MS Office AutoShapes. As a result, <PRODUCTNAME> replaces double and triple line styles with a single line."

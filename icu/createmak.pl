@@ -941,7 +941,7 @@ sub create_allinone_all_mak     #09.02.2009 09:22
         $allinonehelpstring = $prjdir;
         $allinonehelpstring =~ s/^\.+\\//; # remove ..\
         my $backcount = "";
-        while ($allinonehelpstring=~ /.+\\/g) # counts the occuring \
+        while ($allinonehelpstring=~ /.+\\/g) # counts the occurring \
         {
             $backcount .= "..\\";
         }

@@ -231,7 +231,7 @@ interface XSmartTagAction: com::sun::star::lang::XInitialization
 
 
     //-------------------------------------------------------------------------
-    /** obtains a language independant name of an action.
+    /** obtains a language independent name of an action.
 
         @param nActionID
                 The identifier of the requested action.
@@ -240,7 +240,7 @@ interface XSmartTagAction: com::sun::star::lang::XInitialization
                 The current controller of the document.
 
         @return
-                the language independant name of the specified action.
+                the language independent name of the specified action.
 
         @throws com::sun::star::lang::IllegalArgumentException
                 if the ActionID is not recognized.

@@ -33,7 +33,7 @@ module com { module sun { module star { module linguistic2 {
 
     <P>A value of this type is part of the
     <type scope="com::sun::star::linguistic2">XSpellAlternatives</type>
-    interface which is the return type for an unsuccessfull
+    interface which is the return type for an unsuccessful
     spelling attempt.</P>
 
     @see    <type scope="com::sun::star::linguistic2">XSpellChecker</type>

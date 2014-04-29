@@ -92,7 +92,7 @@ published service DocumentSettings
     /** If this is true, the distance between two paragraphs is
         the sum of ParaTopMargin of the previous and ParaBottomMargin of
         the next paragraph. If false, only the greater of the two is
-        choosen.
+        chosen.
      */
     [optional, property] boolean ParagraphSummation;
 

@@ -36,7 +36,7 @@ module com { module sun { module star { module ucb {
     <type>ContentProvider</type> for the <type>UniversalContentBroker</type>
     (UCB).
 
-    <p>It provides access to the hierachical structure of the documents that
+    <p>It provides access to the hierarchical structure of the documents that
     are active in a running OpenOffice.org process. As long as a document was
     not closed, the TDCP can access it. All documents that have been loaded -
     regardless of their persistent document format (sxw, doc, sxc, xls, ...)

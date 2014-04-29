@@ -38,7 +38,7 @@ module com { module sun { module star { module task {
     <p>
     Can start registered uno services on triggered events and handle there
     own configuration and there lifetime. Such events are simple strings
-    wich meaning doesn't matter for any real service implementation of this
+    which meaning doesn't matter for any real service implementation of this
     specification. But triggered events must be available inside the
     configuration and some <type>Job</type>s or <type>AsyncJob</type>s must be registered for that.
     </p>

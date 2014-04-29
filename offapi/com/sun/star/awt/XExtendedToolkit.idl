@@ -141,7 +141,7 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     /** Remove the specified listener from the list of listeners.
         @param xListener
             If the reference is empty then nothing will be changed.  If the
-            listener has been registered twice (or more) then all refrences
+            listener has been registered twice (or more) then all references
             will be removed.
     */
     [oneway] void removeTopWindowListener (
@@ -167,7 +167,7 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     /** Remove the specified listener from the list of listeners.
         @param xHandler
             If the reference is empty then nothing will be changed.  If the
-            handler has been registered twice (or more) then all refrences
+            handler has been registered twice (or more) then all references
             will be removed.
     */
     [oneway] void removeKeyHandler (
@@ -193,7 +193,7 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     /** Remove the specified listener from the list of listeners.
         @param xListener
             If the reference is empty then nothing will be changed.  If the
-            listener has been registered twice (or more) then all refrences
+            listener has been registered twice (or more) then all references
             will be removed.
     */
     [oneway] void removeFocusListener (

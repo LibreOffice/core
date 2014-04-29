@@ -95,7 +95,7 @@ int HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     unsigned char same_cshape;
     register int ii;
     scflag = flag;
-// Paragraph Infomation
+// Paragraph Information
     hwpf.Read1b(&reuse_shape, 1);
     hwpf.Read2b(&nch, 1);
     hwpf.Read2b(&nline, 1);

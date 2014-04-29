@@ -57,7 +57,7 @@ interface XMergeableCellRange : com::sun::star::uno::XInterface
 
     /** splits the cells in this range.
         This will be done by inserting rows and columns if needed or unmerging
-        cells taht are already splitted.
+        cells that are already splitted.
 
         @param Columns
             this is the number of columns that will be added to each cell. Zero

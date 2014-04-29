@@ -34,7 +34,7 @@ module com {  module sun {  module star {   module packages {  module zip {
 //=============================================================================
 
 /** used to indicate that a ZIP exception has occurred.
-    usualy can be thrown from XInputStream interface implementations.
+    usually can be thrown from XInputStream interface implementations.
     <p>This interface is an IDL version of the Java interface
     <em>java.util.zip.ZipException</em> with some minor adaptations.</p>
 

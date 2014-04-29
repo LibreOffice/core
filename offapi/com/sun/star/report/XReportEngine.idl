@@ -101,7 +101,7 @@ published interface XReportEngine
         @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
             If the report definition was not set or is <NULL/>.
 
-        OJ: Has to be discussed if this method is usefull.
+        OJ: Has to be discussed if this method is useful.
     */
     com::sun::star::frame::XModel createDocumentAlive([in] com::sun::star::frame::XFrame frame)
         raises( ::com::sun::star::lang::DisposedException,

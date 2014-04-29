@@ -1617,7 +1617,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** gets a description of the access rights for each table available
         in a catalog. Note that a table privilege applies to one or
         more columns in the table. It would be wrong to assume that
-        this priviledge applies to all columns (this may be <TRUE/> for
+        this privilege applies to all columns (this may be <TRUE/> for
         some systems but is not <TRUE/> for all.)
 
 
@@ -2319,7 +2319,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <b>TYPE</b> short => index type:
         <ul>
         <li> 0 - this identifies table statistics that are
-        returned in conjuction with a table's index descriptions
+        returned in conjunction with a table's index descriptions
         </li>
         <li> CLUSTERED - this is a clustered index
         </li>

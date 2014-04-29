@@ -58,7 +58,7 @@
       </prop>
       <prop oor:name="HelpUrl" oor:type="xs:string">
         <info>
-          <desc>the url where additional infomation can be found.</desc>
+          <desc>the url where additional information can be found.</desc>
         </info>
         <value>http://wiki.services.openoffice.org/wiki/User_Experience/OpenOffice.org_User_Feedback_Program</value>
       </prop>

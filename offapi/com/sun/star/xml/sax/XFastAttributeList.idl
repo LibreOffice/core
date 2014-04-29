@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 
 /** a container for the attributes of an xml element.
 
-    <br>Attributes are seperated into known attributes and unknown attributes.
+    <br>Attributes are separated into known attributes and unknown attributes.
     <p>Known attributes have a local name that is known to the <type>XFastTokenHandler</token>
     registered at the <type>XFastParser</type> which created the sax event containing
     this attributes. If an attribute also has a namespace, that must be registered

@@ -127,7 +127,7 @@ published service PropertyBrowserController
     */
     interface com::sun::star::beans::XPropertySet;
 
-    /** allows to access the properties via indicies
+    /** allows to access the properties via indices
     */
     interface com::sun::star::beans::XFastPropertySet;
 

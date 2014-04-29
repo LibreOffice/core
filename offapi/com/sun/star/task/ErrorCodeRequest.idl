@@ -35,7 +35,7 @@
 
 /** represents a general error exception.
     It can be used to transport the error code information.
-    E.g. that can be usefull for interactions.
+    E.g. that can be useful for interactions.
 
     @since OpenOffice 1.1.2
  */

@@ -27,7 +27,7 @@
 module com { module sun { module star { module document {
 
 /** is raised when an operation is attemption at an XUndoManager which requires a non-empty stack
-    of undo actions, and this requirement is not fullfilled.
+    of undo actions, and this requirement is not fulfilled.
     @since OpenOffice 3.4
  */
 exception EmptyUndoStackException : ::com::sun::star::util::InvalidStateException

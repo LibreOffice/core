@@ -45,7 +45,7 @@ class WTT_Node;
 /** @task
     This class implements the functionality, that class WordTransformer
     offers.
-    WordTransformer is dependant of this class, but NOT the other way!
+    WordTransformer is dependent of this class, but NOT the other way!
 **/
 class WordTransTree
 {
@@ -118,7 +118,7 @@ class WordTransTree
 
         // Data which are valid only after a completed call to TransformNextToken()
     E_Result            eCurResult;
-    u_char              cCurHotkey;             // Letter wich is used as hotkey
+    u_char              cCurHotkey;             // Letter which is used as hotkey
     u_char              cCurHotkeySign;         // Letter which is used to assign hotkey ('~'or '&') .
 };
 

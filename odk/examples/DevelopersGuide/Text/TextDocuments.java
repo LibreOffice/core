@@ -340,7 +340,7 @@ public class TextDocuments {
         mxDocFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(
             XMultiServiceFactory.class, mxDoc );
 
-        // Examples of text fields, dependant text fields and field masters
+        // Examples of text fields, dependent text fields and field masters
         TextFieldExample ();
 
         // Example of using an XEnumerationAccess to iterate over paragraphs and
@@ -530,11 +530,11 @@ public class TextDocuments {
     {
         try
         {
-            // Get a text range refering to the beginning of the text document
+            // Get a text range referring to the beginning of the text document
             XTextRange xStart = mxDocText.getStart();
             // use setString to insert text at the beginning
             xStart.setString ( "This is text inserted at the beginning.\n\n" );
-            // Get a text range refering to the end of the text document
+            // Get a text range referring to the end of the text document
             XTextRange xEnd = mxDocText.getEnd();
             // use setString to insert text at the end
             xEnd.setString ( "This is text inserted at the end.\n\n" );
@@ -694,7 +694,7 @@ public class TextDocuments {
         return ( ( maRandom.nextInt() % 1000 ) * maRandom.nextDouble () );
     }
 
-    /** This method sets the text colour of the cell refered to by sCellName to
+    /** This method sets the text colour of the cell referred to by sCellName to
         white and inserts the string sText in it
      */
     protected static void insertIntoCell(String sCellName, String sText,
@@ -948,14 +948,14 @@ public class TextDocuments {
                     // Make sure that the autotext group contains at least one block
                     if ( aBlockNames.length > 0 )
                     {
-                        // Split the current cell vertically into two seperate cells
+                        // Split the current cell vertically into two separate cells
                         xTableCursor.splitRange ( (short) 1, false );
 
                         // Put the cursor in the newly created right hand cell
                         // and select it
                         xTableCursor.goRight ( (short) 1, false );
 
-                        // Split this cell horizontally to make a seperate cell
+                        // Split this cell horizontally to make a separate cell
                         // for each Autotext block
                         if ( ( aBlockNames.length -1 ) > 0 )
                             xTableCursor.splitRange (
@@ -1726,7 +1726,7 @@ public class TextDocuments {
             XNamed xSectionNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class,
                       mxDocFactory.createInstance("com.sun.star.text.TextSection"));
 
-            // Set the name of our new section (appropiately) to 'Fish'
+            // Set the name of our new section (appropriately) to 'Fish'
             xSectionNamed.setName ( "Fish" );
 
             // Create the TextColumns service and get it's XTextColumns interface

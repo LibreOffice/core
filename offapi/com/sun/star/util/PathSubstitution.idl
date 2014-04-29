@@ -99,7 +99,7 @@ published service PathSubstitution
         /** Interface to exchange path variables with defined paths and to resubstitute paths with path variables.
 
                 <p>
-                To resubstitute path variables the caller must provide pathes as UCB-compliant URL's.
+                To resubstitute path variables the caller must provide paths as UCB-compliant URL's.
                 </p>
         */
         interface com::sun::star::util::XStringSubstitution;

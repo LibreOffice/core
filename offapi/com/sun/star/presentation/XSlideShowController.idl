@@ -95,7 +95,7 @@ interface XSlideShowController
 
     //-------------------------------------------------------------------------
 
-    /** addes a listener that recieves events while the slideshow is running. */
+    /** addes a listener that receives events while the slideshow is running. */
     void addSlideShowListener( [in] XSlideShowListener Listener );
 
     //-------------------------------------------------------------------------

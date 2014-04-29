@@ -130,7 +130,7 @@
 		<group oor:name="MimeTypeClassIDRelations" oor:extensible="true">
 			<info>
 				<author>MAV</author>
-				<desc>Contains convertion table from MimeType to ClassID. MimeType is used as a name for entry.</desc>
+				<desc>Contains conversion table from MimeType to ClassID. MimeType is used as a name for entry.</desc>
 			</info>
 		</group>
 		<group oor:name="UserFactories" oor:extensible="true">

@@ -756,7 +756,7 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
         {
             // This
             //function may be called multiple times when a java is started.
-            //If the expiretime is too small then we may loop because everytime
+            //If the expiretime is too small then we may loop because every time
             //the file is deleted and we need to search for a java again.
             if (INSTALL == m_layer)
             {

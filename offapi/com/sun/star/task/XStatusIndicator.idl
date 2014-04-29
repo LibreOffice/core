@@ -100,7 +100,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
 
         <p>
         Wrong values must be ignored and stopped indicators must ignore this
-        call generaly.
+        call generally.
         </p>
 
         @param Value

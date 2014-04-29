@@ -128,7 +128,7 @@ private:
     /** creates settings file and fills it with default values.
 
         When this function is called then it creates the
-        settings file at the possition determined by the bootstrap parameters
+        settings file at the position determined by the bootstrap parameters
         (UNO_JAVA_JFW_USER_DATA, UNO_JAVA_JFW_SHARED_DATA,
         UNO_JAVA_JFW_INSTALL_DATA) and m_layer, unless the file already exists
         (see createSettingsDocument).
@@ -144,7 +144,7 @@ private:
 
     /** returns the system path to the data file which is to be used. The value
         depends on
-        the the member m_layer and the bootstrap paramters UNO_JAVA_JFW_USER_DATA,
+        the the member m_layer and the bootstrap parameters UNO_JAVA_JFW_USER_DATA,
         UNO_JAVA_JFW_SHARED_DATA and UNO_JAVA_JFW_INSTALL_DATA which this may be.
     */
     ::rtl::OString getSettingsPath() const;

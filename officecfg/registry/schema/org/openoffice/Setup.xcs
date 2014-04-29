@@ -92,7 +92,7 @@
       </prop>
       <prop oor:name="Priority" oor:type="xs:int">
         <info>
-          <desc>Contains the priority value to specify which migration should be prefered. Higher values are prefered.</desc>
+          <desc>Contains the priority value to specify which migration should be preferred. Higher values are preferred.</desc>
         </info>
         <value/>
       </prop>

@@ -404,7 +404,7 @@ XMultiPropertySet
 
     //XPropertySet ----------------------------------------------------
     synchronized public void removePropertyChangeListener(String propName, XPropertyChangeListener listener) throws UnknownPropertyException, WrappedTargetException
-    {   // all listeners are automaticly released in a dispose call
+    {   // all listeners are automatically released in a dispose call
         if (!bInDispose && !bDisposed)
         {
             if (propName.length() > 0)
@@ -421,7 +421,7 @@ XMultiPropertySet
 
     //XPropertySet ----------------------------------------------------
     synchronized public void removeVetoableChangeListener(String propName, XVetoableChangeListener listener) throws UnknownPropertyException, WrappedTargetException
-    {// all listeners are automaticly released in a dispose call
+    {// all listeners are automatically released in a dispose call
         if (!bInDispose && !bDisposed)
         {
             if (propName.length() > 0)
@@ -613,7 +613,7 @@ XMultiPropertySet
      *  @return true - Conversion was successful. <em>newVal</em> contains a valid value for the property. false -
      *  conversion failed for some reason.
      *  @throws com.sun.star.lang.IllegalArgumentException The value provided is unfit for the property.
-     *  @throws com.sun.star.lang.WrappedTargetException - An exception occured during the conversion, that is to be made known
+     *  @throws com.sun.star.lang.WrappedTargetException - An exception occurred during the conversion, that is to be made known
      *  to the caller.
      */
     protected boolean convertPropertyValue(Property property, Object[] newVal, Object[]curVal,  Object setVal)
@@ -795,7 +795,7 @@ XMultiPropertySet
      *  @param property the property for which the new value is set
      *  @param value the new value for the property.
      *  @throws com.sun.star.lang.WrappedTargetException An exception, which has to be made known to the caller,
-     *  occured during the setting of the value.
+     *  occurred during the setting of the value.
      */
     protected void setPropertyValueNoBroadcast(Property property, Object newVal)
     throws WrappedTargetException
@@ -866,7 +866,7 @@ XMultiPropertySet
      *  a XVetoableChangeListener is meant. For XPropertyChangeListener and XPropertiesChangeListener
      *  it is to be set to false.
      *
-     * @param properties    Properties wich will be or have been affected.
+     * @param properties    Properties which will be or have been affected.
      * @param newValues the new values of the properties.
      * @param oldValues the old values of the properties.
      * @param bVetoable true means fire to VetoableChangeListener, false means fire to
@@ -1054,7 +1054,7 @@ XMultiPropertySet
         listenerContainer.removeInterface(XPropertiesChangeListener.class, xPropertiesChangeListener);
     }
     // XMultiPropertySet -----------------------------------------------------------------------------------
-    /** If the array of property names containes an unknown property then it will be ignored.
+    /** If the array of property names contains an unknown property then it will be ignored.
      */
     public void setPropertyValues(String[] propNames, Object[] values) throws PropertyVetoException, com.sun.star.lang.IllegalArgumentException, com.sun.star.lang.WrappedTargetException
     {

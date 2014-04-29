@@ -323,7 +323,7 @@ published service SheetCell
 
     //-------------------------------------------------------------------------
 
-    /** Returns the absolute adress of the range as string, e.g. "$Sheet1.$B$2".
+    /** Returns the absolute address of the range as string, e.g. "$Sheet1.$B$2".
      */
     [optional, readonly, property] string AbsoluteName;
 };

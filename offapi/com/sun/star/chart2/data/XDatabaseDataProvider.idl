@@ -100,7 +100,7 @@ interface XDatabaseDataProvider
     master field.<br/>
     If a string in this property denotes both a column name and a parameter name, it
     is undefined which way it is interpreted, but implementations of the service are required
-    to either decide for the paramter or the column, and proceed as usual.
+    to either decide for the parameter or the column, and proceed as usual.
     </p>
     <p>The columns specified herein typically represent a part of the primary key
     fields or their aliases of the detail report.</p>
@@ -138,7 +138,7 @@ interface XDatabaseDataProvider
      */
     [attribute,bound] long CommandType;
 
-    /** specifies an addtional filter to optinally use.
+    /** specifies an additional filter to optinally use.
 
         <p>The Filter string has to form a SQL WHERE-clause, <em>without</em> the WHERE-string itself.</p>
 

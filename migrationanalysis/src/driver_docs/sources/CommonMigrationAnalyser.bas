@@ -245,7 +245,7 @@ Public Function Analyze_Macros(docAnalysis As DocumentAnalysis, _
             Set myContolDict = Nothing
         End If
         
-        'Check for occurence of " Me " in Form and Class Modules
+        'Check for occurrence of " Me " in Form and Class Modules
         If myComponent.Type = vbext_ct_MSForm Or _
             myComponent.Type = vbext_ct_ClassModule Then
          

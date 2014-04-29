@@ -101,7 +101,7 @@ service ToolbarController
 
         <p>
         A toolbar controller instance is ready for use after this call has been made
-        the first time. The toolbar implementation guarentees that the controller's
+        the first time. The toolbar implementation guarantees that the controller's
         item window has been added to the toolbar and its reference is held by it.
         </p>
     */

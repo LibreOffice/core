@@ -74,10 +74,10 @@ published interface XTreeExpansionListener: com::sun::star::lang::XEventListener
     void treeCollapsing( [in] TreeExpansionEvent Event )
         raises ( ExpandVetoException );
 
-    /** Called whenever a node in the tree has been succesfully expanded. */
+    /** Called whenever a node in the tree has been successfully expanded. */
     void treeExpanded( [in] TreeExpansionEvent Event );
 
-    /** Called whenever a node in the tree has been succesfully collapsed. */
+    /** Called whenever a node in the tree has been successfully collapsed. */
     void treeCollapsed( [in] TreeExpansionEvent Event );
 };
 

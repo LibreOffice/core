@@ -26,7 +26,7 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-/** describes the result of a comparision of two bookmarks.
+/** describes the result of a comparison of two bookmarks.
  */
 published constants CompareBookmark
 {

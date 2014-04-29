@@ -60,7 +60,7 @@ published interface XResourceFactory
             Returns a resource object that has been just created or was
             taken from a cache.  When the requested resource can not be
             created then an empty reference is returned.  A later call may
-            be successfull.  This, for example, can be the case with SFX
+            be successful.  This, for example, can be the case with SFX
             based side panes.  They are not available right after the
             creation of a new application frame.
         @throws InvalidArgumentException

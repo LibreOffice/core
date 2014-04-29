@@ -39,7 +39,7 @@
 
 
 // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::start
-/** Allows to controll an office side plugin instance and to communicate with it.
+/** Allows to control an office side plugin instance and to communicate with it.
     This interface is oriented for communication with browsers plugins.
  */
 published interface XPluginInstance: com::sun::star::uno::XInterface

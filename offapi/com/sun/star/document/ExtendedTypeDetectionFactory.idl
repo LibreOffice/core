@@ -96,7 +96,7 @@ published service ExtendedTypeDetectionFactory
                 <td><em>Name</em></td>
                 <td>[string]</td>
                 <td>It means the uno implementation name of the detector component.
-                    Note: It means the realy the implementation instead of the uno service name.
+                    Note: It means the really the implementation instead of the uno service name.
                     Because it's not possible to distinguish between more then one components; if all of them
                     uses a generic service identifier!</td>
             </tr>
@@ -131,8 +131,8 @@ published service ExtendedTypeDetectionFactory
 
         <p>
         Because the complexness of such configuration set can be very high,
-        it seams not very usefull to update the undelying configuration layer
-        on every container change request immediatly. Another strategy can be to
+        it does not seem very useful to update the undelying configuration layer
+        on every container change request immediately. Another strategy can be to
         make all changes (adding/changing/removing of items) and call flush at the end.
         That will validate the whole container and reject inconsistent data sets.
         Only in case all made changes was correct, they will be written back to the

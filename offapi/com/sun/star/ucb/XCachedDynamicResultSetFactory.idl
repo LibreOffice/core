@@ -63,7 +63,7 @@ published interface XCachedDynamicResultSetFactory: com::sun::star::uno::XInterf
 
         @param ContentIdentifierMapping
         is not required, but can be set if it is necessary to change the
-        identity of the contents accessable via the interface
+        identity of the contents accessible via the interface
         <type>XContentAccess</type> of the <type>ContentResultSet</type>
         (e.g., if merging two sources of the same type).
 

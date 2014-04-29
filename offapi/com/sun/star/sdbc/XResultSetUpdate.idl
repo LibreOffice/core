@@ -34,7 +34,7 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-/** provides the possiblity to write changes made on a result set back to
+/** provides the possibility to write changes made on a result set back to
     database.
  */
 published interface XResultSetUpdate: com::sun::star::uno::XInterface

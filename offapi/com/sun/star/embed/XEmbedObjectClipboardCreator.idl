@@ -74,7 +74,7 @@ published interface XEmbedObjectClipboardCreator: com::sun::star::uno::XInterfac
 
         <p>
         The clipboard can provide a number of choices that are container
-        related. This infomation will be returned in the
+        related. This information will be returned in the
         <type>InsertedObjectInfo</type> object.
         <p>
 

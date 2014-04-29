@@ -143,7 +143,7 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
 
 
         @param aLocale
-            Locale the conversion is refered to.
+            Locale the conversion is referred to.
 
         @param nConversionDictionaryType
             specifies the type of conversion the dictionary
@@ -189,7 +189,7 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
         right text from entries should be considered.</p>
 
         @param aLocale
-            Locale the conversion is refered to.
+            Locale the conversion is referred to.
         @param nConversionDictionaryType
             specifies the type of conversion dictionaries to be looked up.
             It is one of

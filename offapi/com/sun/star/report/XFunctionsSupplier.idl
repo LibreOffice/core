@@ -33,7 +33,7 @@
  module com {  module sun {  module star {  module report {
 //=============================================================================
 published interface XFunctions;
-/** specifies the functions supplier which are located in a report defintion or a group.
+/** specifies the functions supplier which are located in a report definition or a group.
 */
 published interface XFunctionsSupplier
 {

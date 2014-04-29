@@ -169,7 +169,7 @@ published service Storage
                         <p>
                         A storage flashes on commit all the child streams it
                         owns. So in case after the stream is changed neither
-                        the storage was commited nor the stream was flushed
+                        the storage was committed nor the stream was flushed
                         explicitly, the changes will not appear in the new
                         created stream. This method allows to retrieve copy of
                         a child stream even in case it is already opened for
@@ -203,7 +203,7 @@ published service Storage
                         <p>
                         A storage flashes on commit all the child streams it
                         owns. So in case after the stream is changed neither
-                        the storage was commited nor the stream was flushed
+                        the storage was committed nor the stream was flushed
                         explicitly, the changes will not appear in the new
                         created stream. This method allows to retrieve copy of
                         a child stream even in case it is already opened for
@@ -215,8 +215,8 @@ published service Storage
                     <dd>
                         This method gets <type>Storage</type> service
                         implementation and fills it in with the latest
-                        commited version of this storage. So in case the
-                        storage was not commited after it was changed, the
+                        committed version of this storage. So in case the
+                        storage was not committed after it was changed, the
                         changes will not appear in the new created storage.
                     </dd>
 
@@ -225,9 +225,9 @@ published service Storage
                         <p>
                         This method gets <type>Storage</type> service
                         implementation and fills it in with the contents of
-                        the requested substorage. The latest commited version
+                        the requested substorage. The latest committed version
                         of child storage will be used. So in case the child
-                        storage was not commited after it was changed, the
+                        storage was not committed after it was changed, the
                         changes will not appear in the new created storage.
                         </p>
 
@@ -257,11 +257,11 @@ published service Storage
     /** allows to commit or revert changes that were done for the storage.
 
         <p>
-        If a storage is commited all changes made to it will be integrated to
-        it's parent storage. This is recursive process, so the last commited
+        If a storage is committed all changes made to it will be integrated to
+        it's parent storage. This is recursive process, so the last committed
         storage should be the root one. For the package based storages commit
         of a root storage also means flashing to the related medium. If
-        a storage is not commited, no changes for it or it's child elements
+        a storage is not committed, no changes for it or it's child elements
         will be stored.
         </p>
      */
@@ -312,7 +312,7 @@ published service Storage
         Usually means that the document validity is questionable, although
         the package itself is not corrupted. The decision about document
         validity in this case is in application hands. It is up to user of
-        the storage to deside whether he accepts the fallback approach for
+        the storage to decide whether he accepts the fallback approach for
         an implementation of this service, outputs a warning or an error.
         </p>
      */

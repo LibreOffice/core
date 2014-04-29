@@ -110,7 +110,7 @@ public class FunctionHelper
         {
             // "createInstance()" method of used service manager can throw it.
             // Then it wasn't possible to get the URL transformer.
-            // Return default instead of realy parsed URL.
+            // Return default instead of really parsed URL.
             aURL = null;
         }
 
@@ -246,7 +246,7 @@ public class FunctionHelper
             // is returned. But normaly nobody outside the office knows this id.
             // New version of this method ignore the id parameter and creation will
             // work.
-            // Note: You must be shure if your window handle can be realy used by
+            // Note: You must be shure if your window handle can be really used by
             // the remote office. Means if this java client and the remote office
             // use the same display!
             com.sun.star.awt.XSystemChildFactory xChildFactory =
@@ -300,8 +300,8 @@ public class FunctionHelper
                 // the systemw window handle. A possible reason can be an invisible
                 // java window. In this case it should be enough to set return
                 // values to null. All other ressources (which was created before)
-                // will be freed automaticly if scope wil be leaved.
-                System.out.println("May be the NativeView object wasn't realy visible at calling time of getNativeWindow()?");
+                // will be freed automatically if scope wil be leaved.
+                System.out.println("May be the NativeView object wasn't really visible at calling time of getNativeWindow()?");
                 xPeer   = null;
                 xWindow = null;
             }
@@ -357,7 +357,7 @@ public class FunctionHelper
             com.sun.star.awt.XWindow xWindow = impl_createWindow(xCtx, aParentView);
 
             // pass the window the frame as his new container window.
-            // It's neccessary to do it first  - before you call anything else there.
+            // It's necessary to do it first  - before you call anything else there.
             // Otherwhise the frame throws some exceptions for "uninitialized state".
             xFrame.initialize( xWindow );
 
@@ -382,11 +382,11 @@ public class FunctionHelper
             if(xFrame!=null)
             {
                 // Try to dispose the frame. He should deregister himself at the desktop object
-                // and free all internal used ressources (e.g. the container window) automaticly.
+                // and free all internal used ressources (e.g. the container window) automatically.
                 // It's possible to do that here - because frame has no component inside yet.
                 // So nobody can disagree with that.
                 // After the dispose() call forget all references to this frame and let him die.
-                // If a new exception will occure ... no generell solution exist then.
+                // If a new exception will occur ... no generell solution exist then.
                 // Nobody can guarantee if next call will work or not.
                 com.sun.star.lang.XComponent xComponent = (com.sun.star.lang.XComponent)UnoRuntime.queryInterface(
                     com.sun.star.lang.XComponent.class,
@@ -399,7 +399,7 @@ public class FunctionHelper
         catch(com.sun.star.uno.Exception exUno)
         {
             // "createInstance()" method of used service manager can throw it.
-            // If it occured during creation of desktop service the frame already was created.
+            // If it occurred during creation of desktop service the frame already was created.
             // Free it by decresing his refcount. Changes on the desktop tree couldn't exist.
             // Without the desktop service that wasn't possible. So no further rollbacks must follow.
             if(xFrame!=null)
@@ -421,16 +421,16 @@ public class FunctionHelper
     /**
      * Dispatch an URL to given frame.
      * Caller can register himself for following status events for dispatched
-     * URL too. But nobody guarantee that such notifications will occure.
+     * URL too. But nobody guarantee that such notifications will occur.
      * (see dispatchWithNotification() if you interest on that)
      * The returned dispatch object should be hold alive by caller
      * till he deosn't need it any longer. Otherwise the dispatcher can(!)
      * die by decreasing his refcount.
      *
-     * @param   xFrame      frame wich should be the target of this dispatch
+     * @param   xFrame      frame which should be the target of this dispatch
      * @param   aURL        full parsed and converted office URL for dispatch
      * @param   lProperties optional arguments for dispatch
-     * @param   xListener   optional listener which is registered automaticly for status events
+     * @param   xListener   optional listener which is registered automatically for status events
      *                      (Note: Deregistration is part of this listener himself!)
      *
      * @return  [XDispatch] It's the used dispatch object and can be used for deregistration of an optional listener.
@@ -487,14 +487,14 @@ public class FunctionHelper
      * Dispatch an URL to given frame.
      * Caller can register himself for following result events for dispatched
      * URL too. Notifications are guaranteed (instead of dispatch())
-     * Returning of the dispatch object isn't neccessary.
+     * Returning of the dispatch object isn't necessary.
      * Nobody must hold it alive longer the dispatch needs.
      *
-     * @param   xFrame      frame wich should be the target of this dispatch
+     * @param   xFrame      frame which should be the target of this dispatch
      * @param   aURL        full parsed and converted office URL for dispatch
      * @param   lProperties optional arguments for dispatch
-     * @param   xListener   optional listener which is registered automaticly for status events
-     *                      (Note: Deregistration is not supported. Dispatcher does it automaticly.)
+     * @param   xListener   optional listener which is registered automatically for status events
+     *                      (Note: Deregistration is not supported. Dispatcher does it automatically.)
      */
     public static void executeWithNotification(com.sun.star.frame.XFrame                  xFrame     ,
                                                com.sun.star.util.URL                      aURL       ,
@@ -535,7 +535,7 @@ public class FunctionHelper
      * The result of this operation will be the loaded document for success
      * or null if loading failed.
      *
-     * @param   xFrame          frame wich should be the target of this load call
+     * @param   xFrame          frame which should be the target of this load call
      * @param   sURL            unparsed URL for loading
      * @param   lProperties     optional arguments
      *
@@ -554,7 +554,7 @@ public class FunctionHelper
                 OfficeConnect.getOfficeContext();
 
             // First prepare frame for loading
-            // We must adress it inside the frame tree without any complications.
+            // We must address it inside the frame tree without any complications.
             // So we set an unambigous (we hope it) name and use it later.
             // Don't forget to reset original name after that.
                    sOldName = xFrame.getName();
@@ -674,7 +674,7 @@ public class FunctionHelper
      * It try to export given document in HTML format.
      * Current document will be converted to HTML and moved to new place on disk.
      * A "new" file will be created by given URL (may be overwritten
-     * if it already exist). Right filter will be used automaticly if factory of
+     * if it already exist). Right filter will be used automatically if factory of
      * this document support it. If no valid filter can be found for export,
      * nothing will be done here.
      *
@@ -688,7 +688,7 @@ public class FunctionHelper
         {
             // First detect factory of this document.
             // Ask for the supported service name of this document.
-            // If information is available it can be used to find out wich
+            // If information is available it can be used to find out which
             // filter exist for HTML export. Normaly this filter should be searched
             // inside the filter configuration but this little demo doesn't do so.
             // (see service com.sun.star.document.FilterFactory for further
@@ -735,7 +735,7 @@ public class FunctionHelper
                 {
                     // Export can be forced by saving the document and using a
                     // special filter name which can write needed format. Build
-                    // neccessary argument list now.
+                    // necessary argument list now.
                     // Use special flag "Overwrite" too, to prevent operation
                     // against possible exceptions, if file already exist.
                     com.sun.star.beans.PropertyValue[] lProperties =
@@ -980,7 +980,7 @@ public class FunctionHelper
     /**
      * helper to get a file URL selected by user
      * This method doesn't show any API concepts ...
-     * but is neccessary rof this demo application.
+     * but is necessary rof this demo application.
      *
      * @param   aParent parent window of this dialog
      * @param   bOpen   If it is set to true =>

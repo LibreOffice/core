@@ -66,7 +66,7 @@ public class ConfigHelper extends java.util.Properties
      *
      *  @throws [Exception]
      *          in case the command line contains an unknown
-     *          schema for specifiying parameters or the
+     *          schema for specifying parameters or the
      *          specified property file does not exists
      *          or seem to be corrupted.
      */
@@ -245,7 +245,7 @@ public class ConfigHelper extends java.util.Properties
      *
      *  @param  bTrim
      *          if its set to true, trailing and leading whitespace
-     *          characters will be ommited.
+     *          characters will be omitted.
      *
      *  @param  bDecode
      *          if its set to TRUE all liste items will be
