@@ -711,6 +711,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 SwTableColumnPage::SwTableColumnPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "TableColumnPage",
         "modules/swriter/ui/tablecolumnpage.ui", rSet)
+    , pTblData(0)
     , nTableWidth(0)
     , nMinWidth(MINLAY)
     , nNoOfCols(0)
@@ -745,18 +746,18 @@ SwTableColumnPage::SwTableColumnPage(Window* pParent, const SfxItemSet& rSet)
     const SfxPoolItem* pItem;
     Init((SFX_ITEM_SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
         && ((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON));
+}
 
-};
 //Description: Page column configuration
  SwTableColumnPage::~SwTableColumnPage()
 {
-};
+}
 
 SfxTabPage*   SwTableColumnPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwTableColumnPage( pParent, rAttrSet );
-};
+}
 
 void  SwTableColumnPage::Reset( const SfxItemSet& )
 {
@@ -800,7 +801,7 @@ void  SwTableColumnPage::Reset( const SfxItemSet& )
     }
     ActivatePage(rSet);
 
-};
+}
 
 void  SwTableColumnPage::Init(sal_Bool bWeb)
 {
@@ -825,7 +826,7 @@ void  SwTableColumnPage::Init(sal_Bool bWeb)
     aLk = LINK( this, SwTableColumnPage, ModeHdl );
     m_pModifyTableCB->SetClickHdl( aLk );
     m_pProportionalCB->SetClickHdl( aLk );
-};
+}
 
 IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
 {
@@ -863,14 +864,14 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
     m_pUpBtn->Enable(aValueTbl[ MET_FIELDS -1 ] < nNoOfVisibleCols -1 );
     UpdateCols(0);
     return 0;
-};
+}
 
 IMPL_LINK_INLINE_START( SwTableColumnPage, UpHdl, MetricField*, pEdit )
 {
     bModified = sal_True;
     ModifyHdl( pEdit );
     return 0;
-};
+}
 IMPL_LINK_INLINE_END( SwTableColumnPage, UpHdl, MetricField*, pEdit )
 
 IMPL_LINK_INLINE_START( SwTableColumnPage, DownHdl, MetricField*, pEdit )
@@ -878,7 +879,7 @@ IMPL_LINK_INLINE_START( SwTableColumnPage, DownHdl, MetricField*, pEdit )
     bModified = sal_True;
     ModifyHdl( pEdit );
     return 0;
-};
+}
 IMPL_LINK_INLINE_END( SwTableColumnPage, DownHdl, MetricField*, pEdit )
 
 IMPL_LINK_INLINE_START( SwTableColumnPage, LoseFocusHdl, MetricField*, pEdit )
@@ -889,7 +890,7 @@ IMPL_LINK_INLINE_START( SwTableColumnPage, LoseFocusHdl, MetricField*, pEdit )
         ModifyHdl( pEdit );
     }
     return 0;
-};
+}
 IMPL_LINK_INLINE_END( SwTableColumnPage, LoseFocusHdl, MetricField*, pEdit )
 
 IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
@@ -902,7 +903,7 @@ IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
         m_pModifyTableCB->Enable(!bCheck && bModifyTbl);
     }
     return 0;
-};
+}
 
 bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
 {
@@ -920,7 +921,7 @@ bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
         pTblData->SetColsChanged();
     }
     return bModified;
-};
+}
 
 void   SwTableColumnPage::ModifyHdl( MetricField* pField )
 {
@@ -945,7 +946,7 @@ void   SwTableColumnPage::ModifyHdl( MetricField* pField )
         SetVisibleWidth(aValueTbl[i], static_cast< SwTwips >(pEdit->DenormalizePercent(pEdit->GetValue( FUNIT_TWIP ))) );
 
         UpdateCols( aValueTbl[i] );
-};
+}
 
 void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
 {
