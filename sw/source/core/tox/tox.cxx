@@ -31,9 +31,13 @@
 #include <editeng/tstpitem.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <hints.hxx>
-#include <algorithm>
 #include <functional>
 #include <switerator.hxx>
+
+#include <boost/optional.hpp>
+
+#include <algorithm>
+
 
 using namespace std;
 
@@ -694,25 +698,29 @@ OUString SwFormToken::GetString() const
 SwFormTokensHelper::SwFormTokensHelper(const OUString & rPattern)
 {
     sal_Int32 nCurPatternPos = 0;
-    sal_Int32 nCurPatternLen = 0;
 
     while (nCurPatternPos < rPattern.getLength())
     {
-        // FIXME: nCurPatternLen added but set to 0?
-        nCurPatternPos = nCurPatternPos + nCurPatternLen;
-
-        SwFormToken aToken = BuildToken(rPattern, nCurPatternPos);
-        aTokens.push_back(aToken);
+        boost::optional<SwFormToken> const oToken(
+                BuildToken(rPattern, nCurPatternPos));
+        if (oToken)
+            aTokens.push_back(oToken.get());
     }
 }
 
-SwFormToken SwFormTokensHelper::BuildToken( const OUString & sPattern,
+boost::optional<SwFormToken>
+SwFormTokensHelper::BuildToken( const OUString & sPattern,
                                             sal_Int32 & nCurPatternPos ) const
 {
     OUString sToken( SearchNextToken(sPattern, nCurPatternPos) );
     nCurPatternPos += sToken.getLength();
     sal_Int32 nTokenLen = 0;
     FormTokenType eTokenType = GetTokenType(sToken, &nTokenLen);
+    if (TOKEN_END == eTokenType) // invalid input? skip it
+    {
+        nCurPatternPos = sPattern.getLength();
+        return boost::optional<SwFormToken>();
+    }
 
     // at this point sPattern contains the
     // character style name, the PoolId, tab stop position, tab stop alignment, chapter info format
@@ -786,17 +794,8 @@ SwFormToken SwFormTokensHelper::BuildToken( const OUString & sPattern,
 OUString SwFormTokensHelper::SearchNextToken( const OUString & sPattern,
                                               sal_Int32 nStt ) const
 {
-    //it's not so easy - it doesn't work if the text part contains a '>'
-
     sal_Int32 nEnd = sPattern.indexOf( '>', nStt );
-    if( nEnd<0 )
-    {
-        // FIXME: why is nEnd updated?
-        //        should "aResult = sPattern.copy( nStt, nEnd - nStt );"
-        //        or something like that be returned?
-        nEnd = sPattern.getLength();
-    }
-    else
+    if (nEnd >= 0)
     {
         // apparently the TOX_STYLE_DELIMITER act as a bracketing for
         // TOKEN_TEXT tokens so that the user can have '>' inside the text...
@@ -854,7 +853,7 @@ FormTokenType SwFormTokensHelper::GetTokenType(const OUString & sToken,
         }
     }
 
-    OSL_FAIL( "wrong token" );
+    SAL_WARN("sw.core", "SwFormTokensHelper: invalid token");
     return TOKEN_END;
 }
 

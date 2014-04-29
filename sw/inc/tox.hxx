@@ -30,6 +30,7 @@
 #include <calbck.hxx>
 
 #include <vector>
+#include <boost/optional.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace text { class XDocumentIndexMark; }
@@ -274,7 +275,7 @@ class SW_DLLPUBLIC SwFormTokensHelper
 
        @return the token
      */
-    SAL_DLLPRIVATE SwFormToken BuildToken( const OUString & sPattern,
+    SAL_DLLPRIVATE boost::optional<SwFormToken> BuildToken( const OUString & sPattern,
                                           sal_Int32 & nCurPatternPos ) const;
 
     /**
