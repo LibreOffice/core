@@ -544,7 +544,7 @@ void SAL_CALL BaseContainerControl::setVisible ( sal_Bool bVisible ) throw( Runt
     // is it a top window ?
     if ( !getContext().is() && bVisible )
     {
-        // then show it automaticly
+        // then show it automatically
         createPeer ( Reference< XToolkit > (), Reference< XWindowPeer > () ) ;
     }
 }
@@ -622,7 +622,7 @@ void BaseContainerControl::impl_cleanMemory ()
     // Delete all items.
     for ( nCount = 0; nCount < nMaxCount; ++nCount )
     {
-        // Delete everytime first element of list!
+        // Delete every time first element of list!
         // We count from 0 to MAX, where "MAX=count of items" BEFORE we delete some elements!
         // If we use "GetObject ( nCount )" ... it can be, that we have an index greater then count of current elements!
 
