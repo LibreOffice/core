@@ -74,6 +74,12 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(Window *pParent, bool bEN,
         bEN ? OString("EndnotePage") : OString("FootnotePage"),
         bEN ? OUString("modules/swriter/ui/endnotepage.ui") : OUString("modules/swriter/ui/footnotepage.ui"),
         rSet)
+    , m_pNumCountBox(NULL)
+    , m_pPosFT(NULL)
+    , m_pPosPageBox(NULL)
+    , m_pPosChapterBox(NULL)
+    , m_pContEdit(NULL)
+    , m_pContFromEdit(NULL)
     , pSh(0)
     , bPosDoc(false)
     , bEndNote(bEN)
