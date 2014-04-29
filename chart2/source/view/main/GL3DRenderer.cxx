@@ -42,6 +42,38 @@ struct TextInfo
     float nDy;
 };
 
+static const char* errorString(GLenum errorCode)
+{
+    static const struct {
+        GLenum code;
+        const char *string;
+    } errors[]=
+    {
+        /* GL */
+        {GL_NO_ERROR, "no error"},
+        {GL_INVALID_ENUM, "invalid enumerant"},
+        {GL_INVALID_VALUE, "invalid value"},
+        {GL_INVALID_OPERATION, "invalid operation"},
+        {GL_STACK_OVERFLOW, "stack overflow"},
+        {GL_STACK_UNDERFLOW, "stack underflow"},
+        {GL_OUT_OF_MEMORY, "out of memory"},
+
+        {0, NULL }
+    };
+
+    int i;
+
+    for (i=0; errors[i].string; i++)
+    {
+        if (errors[i].code == errorCode)
+        {
+            return errors[i].string;
+        }
+     }
+
+    return NULL;
+}
+
 int static checkGLError(const char *file, int line)
 {
     GLenum glErr;
@@ -49,10 +81,10 @@ int static checkGLError(const char *file, int line)
     glErr = glGetError();
     while (glErr != GL_NO_ERROR)
     {
-        const GLubyte* sError = gluErrorString(glErr);
+        const char* sError = errorString(glErr);
 
         if (sError)
-            SAL_WARN("chart2.opengl", "GL Error #" << glErr << "(" << gluErrorString(glErr) << ") " << " in File " << file << " at line: " << line);
+            SAL_WARN("chart2.opengl", "GL Error #" << glErr << "(" << sError << ") " << " in File " << file << " at line: " << line);
         else
             SAL_WARN("chart2.opengl", "GL Error #" << glErr << " (no message available)" << " in File " << file << " at line: " << line);
 
