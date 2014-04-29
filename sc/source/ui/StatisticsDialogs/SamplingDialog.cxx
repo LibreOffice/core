@@ -32,6 +32,7 @@ ScSamplingDialog::ScSamplingDialog(
                     Window* pParent, ScViewData* pViewData ) :
     ScAnyRefDlg     ( pSfxBindings, pChildWindow, pParent,
                       "SamplingDialog", "modules/scalc/ui/samplingdialog.ui" ),
+    mpActiveEdit    ( NULL  ),
     mViewData       ( pViewData ),
     mDocument       ( pViewData->GetDocument() ),
     mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
