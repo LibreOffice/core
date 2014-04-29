@@ -37,6 +37,8 @@
 SwFldDokPage::SwFldDokPage(Window* pParent, const SfxItemSet& rCoreSet )
     : SwFldPage(pParent, "FldDocumentPage",
         "modules/swriter/ui/flddocumentpage.ui", rCoreSet)
+    , nOldSel(0)
+    , nOldFormat(0)
 {
     get(m_pSelection, "selectframe");
     get(m_pFormat, "formatframe");
