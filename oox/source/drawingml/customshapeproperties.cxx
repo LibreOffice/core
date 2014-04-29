@@ -369,28 +369,6 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
     }
 }
 
-Any CustomShapeProvider::createStringSequence( size_t nStrings, const char **pStrings )
-{
-    Sequence< OUString > aStringSequence( nStrings );
-    for (size_t i = 0; i < nStrings; i++)
-        aStringSequence[i] = OUString::intern(
-                                pStrings[i], strlen( pStrings[i] ),
-                                RTL_TEXTENCODING_ASCII_US );
-    return makeAny( aStringSequence );
-}
-
-com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment >
-CustomShapeProvider::createSegmentSequence( size_t nElems, const sal_uInt16 *pValues )
-{
-    Sequence< EnhancedCustomShapeSegment > aSequence( (nElems + 1) / 2 );
-    for (size_t i = 0, j = 0; i < nElems / 2; i++)
-    {
-        aSequence[i].Command = pValues[j++];
-        aSequence[i].Count = pValues[j++];
-    }
-    return aSequence;
-}
-
 com::sun::star::drawing::EnhancedCustomShapeParameterPair
 CustomShapeProvider::createParameterPair( const ParameterPairData *pData )
 {
@@ -400,15 +378,6 @@ CustomShapeProvider::createParameterPair( const ParameterPairData *pData )
     aParameterPair.Second.Type = pData->nSecondType;
     aParameterPair.Second.Value = makeAny(pData->nSecondValue);
     return aParameterPair;
-}
-
-com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair >
-CustomShapeProvider::createParameterPairSequence( size_t nElems, const ParameterPairData *pData )
-{
-    Sequence< EnhancedCustomShapeParameterPair > aSequence( nElems );
-    for (size_t i = 0; i < nElems; i++)
-        aSequence[i] = createParameterPair( pData + i );
-    return aSequence;
 }
 
 } }

@@ -112,10 +112,7 @@ protected:
         sal_uInt32 nFirstValue;
         sal_uInt32 nSecondValue;
     };
-    static com::sun::star::uno::Any createStringSequence( size_t nStrings, const char **pStrings );
-    static com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > createSegmentSequence( size_t nElems, const sal_uInt16 *pValues );
     static com::sun::star::drawing::EnhancedCustomShapeParameterPair createParameterPair( const ParameterPairData *pData );
-    static com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > createParameterPairSequence( size_t nElems, const ParameterPairData *pData );
 public:
     virtual ~CustomShapeProvider() {}
     virtual PropertyMap getProperties() = 0;
