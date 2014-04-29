@@ -91,9 +91,13 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
             return new ColorContext( *this, mrEffectProperties.maShadow.moShadowColor );
         }
         break;
+        case A_TOKEN( glow ):
         case A_TOKEN( softEdge ):
         {
-            mrEffectProperties.msUnsupportedEffectName = "softEdge";
+            if( nElement == A_TOKEN( glow ) )
+                mrEffectProperties.msUnsupportedEffectName = "glow";
+            else
+                mrEffectProperties.msUnsupportedEffectName = "softEdge";
             saveUnsupportedAttribs( rAttribs );
             return new ColorContext( *this, mrEffectProperties.maShadow.moShadowColor );
         }

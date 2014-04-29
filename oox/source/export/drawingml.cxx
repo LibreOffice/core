@@ -2101,7 +2101,7 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
     for( sal_Int32 i=0; i < aEffectProps.getLength(); ++i )
     {
         if( aEffectProps[i].Name == "outerShdw" || aEffectProps[i].Name == "innerShdw"
-                || aEffectProps[i].Name == "softEdge" )
+                || aEffectProps[i].Name == "glow" || aEffectProps[i].Name == "softEdge" )
         {
             // assign the proper tag and enable bContainsColor if necessary
             if( aEffectProps[i].Name == "outerShdw" )
@@ -2112,6 +2112,11 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
             else if( aEffectProps[i].Name == "innerShdw" )
             {
                 nEffectToken = FSNS( XML_a, XML_innerShdw );
+                bContainsColor = true;
+            }
+            else if( aEffectProps[i].Name == "glow" )
+            {
+                nEffectToken = FSNS( XML_a, XML_glow );
                 bContainsColor = true;
             }
             else if( aEffectProps[i].Name == "softEdge" )
