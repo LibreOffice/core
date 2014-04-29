@@ -448,6 +448,10 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
             _pOptions = ( (SfxPrinter*)_pSetupParent->GetPrinter() )->GetOptions().Clone();
     }
 
+    assert(_pOptions);
+    if (!_pOptions)
+        return 0;
+
     // Create Dialog
     SfxPrintOptionsDialog* pDlg = new SfxPrintOptionsDialog( static_cast<Window*>(_pSetupParent),
                                                              _pViewSh, _pOptions );
