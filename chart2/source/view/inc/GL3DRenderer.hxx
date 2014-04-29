@@ -48,7 +48,7 @@ typedef struct MaterialParameters
     glm::vec4 specular;
     glm::vec4 materialColor;
 
-    int twoSidesLighting;
+    bool twoSidesLighting;
     float shininess;
     float pad;
     float pad1;
@@ -73,9 +73,9 @@ typedef struct GlobalLights
 
 typedef struct Polygon3DInfo
 {
-    short lineOnly;
+    bool lineOnly;
     float lineWidth;
-    int twoSidesLighting;
+    bool twoSidesLighting;
     long fillStyle;
     glm::vec4 polygonColor;
     Vertices3D *vertices;
@@ -90,9 +90,9 @@ typedef struct Polygon3DInfo
 typedef struct Extrude3DInfo
 {
     int pickingFlg;
-    short lineOnly;
+    bool lineOnly;
     float lineWidth;
-    int twoSidesLighting;
+    bool twoSidesLighting;
     glm::vec4 extrudeColor;
     long fillStyle;
     float xRange[2];
