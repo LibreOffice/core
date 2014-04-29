@@ -52,7 +52,6 @@ namespace dbaui
         VclMultiLineEdit* m_pStatus;
         CheckBox*         m_pShowOutput;
         VclMultiLineEdit* m_pOutput;
-        HelpButton*       m_pHelp;
         PushButton*       m_pClose;
 
         typedef ::std::deque< OUString >  StringQueue;
