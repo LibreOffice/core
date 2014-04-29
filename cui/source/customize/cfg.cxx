@@ -266,6 +266,9 @@ generateCustomName(
         name = prefix + OUString::number( suffix );
     }
 
+    if (!entries)
+        return name;
+
     // now check is there is an already existing entry with this name
     SvxEntries::const_iterator iter = entries->begin();
 
