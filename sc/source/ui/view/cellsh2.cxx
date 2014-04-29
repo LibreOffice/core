@@ -1166,7 +1166,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
 
             case SID_DEFINE_DBNAME:
                 {
-                    if ( pDocSh && pDocSh->IsDocShared() )
+                    if ( pDocSh->IsDocShared() )
                     {
                         rSet.DisableItem( nWhich );
                     }
