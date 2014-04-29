@@ -1932,6 +1932,28 @@ void Test::testFormulaRefUpdateNamedExpressionMove()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,9,0)));
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,10,0)));
 
+    // Clear and start over.
+    clearSheet(m_pDoc, 0);
+    m_pDoc->GetRangeName()->clear();
+
+    // Set value to B2.
+    m_pDoc->SetValue(ScAddress(1,1,0), 2.0);
+
+    // Define B2 as 'MyCell'.
+    bInserted = m_pDoc->InsertNewRangeName("MyCell", ScAddress(0,0,0), "$Test.$B$2");
+    CPPUNIT_ASSERT(bInserted);
+
+    // Set formula to B3 that references B2 via MyCell.
+    m_pDoc->SetString(ScAddress(1,2,0), "=MyCell*2");
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
+    // Move B2 to D2.
+    bMoved = rFunc.MoveBlock(ScRange(1,1,0,1,1,0), ScAddress(3,1,0), true, true, false, true);
+    CPPUNIT_ASSERT(bMoved);
+
+    // Value in B3 should remain unchanged.
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
