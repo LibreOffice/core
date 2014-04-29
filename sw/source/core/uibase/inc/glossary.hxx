@@ -97,7 +97,6 @@ class SwGlossaryDlg : public SvxStandardDialog
     CheckBox*       m_pNetRelCB;
     Window*         m_pExampleWIN;
     PushButton*     m_pInsertBtn;
-    CloseButton*    m_pCloseBtn;
     MenuButton*     m_pEditBtn;
     PushButton*     m_pBibBtn;
     PushButton*     m_pPathBtn;
