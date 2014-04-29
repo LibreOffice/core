@@ -17,7 +17,9 @@ i18npool_COTXTS := \
     ja_charset.txt \
     ja_phonetic_alphanumeric_first.txt \
     ja_phonetic_alphanumeric_last.txt \
-    ko_charset.txt \
+	$(if $(i18npool_ICULT53), \
+			ko_charset.txt \
+			) \
     ku_alphanumeric.txt \
     ln_charset.txt \
     my_dictionary.txt \
