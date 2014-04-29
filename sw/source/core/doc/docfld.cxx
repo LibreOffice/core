@@ -1633,7 +1633,7 @@ void SwDoc::_InitFieldTypes()       // is being called by the CTOR
     mpFldTypes->push_back( new SwSetExpFieldType(this,
                 SW_RESSTR(STR_POOLCOLL_LABEL_DRAWING), nsSwGetSetExpType::GSE_SEQ) );
 
-    OSL_ENSURE( mpFldTypes->size() == INIT_FLDTYPES, "Bad initsize: SwFldTypes" );
+    assert( mpFldTypes->size() == INIT_FLDTYPES );
 }
 
 void SwDoc::InsDelFldInFldLst( bool bIns, const SwTxtFld& rFld )
