@@ -60,7 +60,6 @@ ifeq ($(strip $(OS)),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,chartopengl,\
 	opengl32 \
 	gdi32 \
-	glu32 \
 ))
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_system_darwin_frameworks,chartopengl,\
@@ -70,7 +69,6 @@ else ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,chartopengl,\
 	-ldl \
 	-lGL \
-	-lGLU \
 	-lX11 \
 ))
 endif

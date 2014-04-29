@@ -255,7 +255,6 @@ ifeq ($(strip $(OS)),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,chartcore,\
 	opengl32 \
 	gdi32 \
-	glu32 \
 ))
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_system_darwin_frameworks,chartcore,\
@@ -265,7 +264,6 @@ else ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,chartcore,\
 	-ldl \
 	-lGL \
-	-lGLU \
 	-lX11 \
 ))
 endif
