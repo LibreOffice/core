@@ -87,8 +87,15 @@ OpenGL3DRenderer::OpenGL3DRenderer():
         m_Extrude3DInfo.startIndex[i] = m_RoundBarMesh.iElementStartIndices[i];
         m_Extrude3DInfo.size[i] = m_RoundBarMesh.iElementSizes[i];
     }
-
+    m_fViewAngle = 30.0f;
+    m_SenceBox.maxXCoord = -1.0 * FLT_MAX;
+    m_SenceBox.minXCoord = FLT_MAX;
+    m_SenceBox.maxYCoord =  -1.0 * FLT_MAX;
+    m_SenceBox.minYCoord = FLT_MAX;
+    m_SenceBox.maxZCoord =  -1.0 * FLT_MAX;
+    m_SenceBox.minZCoord = FLT_MAX;
     m_uiSelectFrameCounter = 0;
+    m_fHeightWeight = 1.0f;
 }
 
 void OpenGL3DRenderer::LoadShaders()
@@ -135,31 +142,28 @@ void OpenGL3DRenderer::init()
     m_3DProjection = glm::perspective(30.0f, (float)m_iWidth / (float)m_iHeight, 0.01f, 2000.0f);
 }
 
-int OpenGL3DRenderer::AddVertexData(GLuint vertexBuf)
+void OpenGL3DRenderer::AddVertexData(GLuint vertexBuf)
 {
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuf);
     glBufferData(GL_ARRAY_BUFFER, m_Vertices.size() * sizeof(glm::vec3), &m_Vertices[0], GL_STATIC_DRAW);
     CHECK_GL_ERROR();
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    return 0;
 }
 
-int OpenGL3DRenderer::AddNormalData(GLuint normalBuf)
+void OpenGL3DRenderer::AddNormalData(GLuint normalBuf)
 {
     glBindBuffer(GL_ARRAY_BUFFER, normalBuf);
     glBufferData(GL_ARRAY_BUFFER, m_Normals.size() * sizeof(glm::vec3), &m_Normals[0], GL_STATIC_DRAW);
     CHECK_GL_ERROR();
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    return 0;
 }
 
-int OpenGL3DRenderer::AddIndexData(GLuint indexBuf)
+void OpenGL3DRenderer::AddIndexData(GLuint indexBuf)
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuf);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Indeices.size() * sizeof(unsigned short), &m_Indeices[0], GL_STATIC_DRAW);
     CHECK_GL_ERROR();
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    return 0;
 }
 
 bool OpenGL3DRenderer::GetSimilarVertexIndex(PackedVertex & packed,
@@ -559,7 +563,7 @@ double OpenGL3DRenderer::GetTime()
     return 0;
 }
 
-int OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
+void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
 {
     size_t listNum = polygon.verticesList.size();
     glUseProgram(m_CommonProID);
@@ -569,7 +573,7 @@ int OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
         Vertices3D *pointList = polygon.verticesList.front();
         PosVecf3 trans = {0.0f, 0, 0.0};
         PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-        PosVecf3 scale = {1.0f, 1.0f, 1.0f};
+        PosVecf3 scale = {1.0f, m_fHeightWeight, 1.0f};
         MoveModelf(trans, angle, scale);
 
         m_3DMVP = m_3DProjection * m_3DView * m_D3DTrasform;
@@ -602,17 +606,16 @@ int OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
         polygon.verticesList.pop_front();
     }
     glUseProgram(0);
-    return 0;
 }
 
-int OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
+void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
 {
     size_t verticesNum = polygon.verticesList.size();
     size_t normalsNum = polygon.normalsList.size();
     //check whether the number of vertices and normals are equal
     if (verticesNum != normalsNum)
     {
-        return -1;
+        return ;
     }
     //update ubo
     Update3DUniformBlock();
@@ -630,7 +633,7 @@ int OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
         Normals3D *normalList = polygon.normalsList.front();
         PosVecf3 trans = {0.0f, 0.0f, 0.0};
         PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-        PosVecf3 scale = {1.0f, 1.0f, 1.0f};
+        PosVecf3 scale = {1.0f, m_fHeightWeight, 1.0f};
         MoveModelf(trans, angle, scale);
         glm::mat3 normalMatrix(m_Model);
         glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
@@ -678,14 +681,13 @@ int OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
         polygon.normalsList.pop_front();
     }
     glUseProgram(0);
-    return 0;
 }
 
-int OpenGL3DRenderer::RenderPolygon3DObject()
+void OpenGL3DRenderer::RenderPolygon3DObject()
 {
     if (!m_bCameraUpdated)
     {
-        return 0;
+        return;
     }
     glDepthMask(GL_FALSE);
     size_t polygonNum = m_Polygon3DInfoList.size();
@@ -704,7 +706,7 @@ int OpenGL3DRenderer::RenderPolygon3DObject()
         m_Polygon3DInfoList.pop_front();
     }
     glDepthMask(GL_TRUE);
-    return 0;
+    return;
 }
 
 void OpenGL3DRenderer::Set3DSenceInfo(const glm::vec3& cameraUp, const glm::mat4& D3DTrasform, bool twoSidesLighting, sal_Int32 color)
@@ -786,6 +788,21 @@ void OpenGL3DRenderer::EndAddShapePolygon3DObject()
 
 void OpenGL3DRenderer::AddPolygon3DObjectNormalPoint(float x, float y, float z)
 {
+    float actualX = x - (float)m_iWidth / 2;
+    float actualY = y - (float)m_iHeight / 2;
+    float actualZ = z;
+    float maxCoord = std::max(actualX, std::max(actualY, actualZ));
+    m_fZmax = std::max(maxCoord, m_fZmax);
+    m_Polygon3DInfo.vertices->push_back(glm::vec3(actualX, -actualY, actualZ));
+
+    m_SenceBox.maxXCoord = std::max(m_SenceBox.maxXCoord, actualX);
+    m_SenceBox.minXCoord = std::min(m_SenceBox.minXCoord, actualX);
+
+    m_SenceBox.maxYCoord = std::max(m_SenceBox.maxYCoord, actualY);
+    m_SenceBox.minYCoord = std::min(m_SenceBox.minYCoord, actualY);
+
+    m_SenceBox.maxZCoord = std::max(m_SenceBox.maxZCoord, actualZ);
+    m_SenceBox.minZCoord = std::min(m_SenceBox.minZCoord, actualZ);
     if (m_Polygon3DInfo.fillStyle)
     {
         if (!m_Polygon3DInfo.normals)
@@ -927,14 +944,14 @@ void OpenGL3DRenderer::EndAddExtrude3DObjectPoint()
     m_iPointNum = 0;
 }
 
-int OpenGL3DRenderer::Init3DUniformBlock()
+void OpenGL3DRenderer::Init3DUniformBlock()
 {
     GLuint a3DLightBlockIndex = glGetUniformBlockIndex(m_3DProID, "GlobalLights");
     GLuint a3DMaterialBlockIndex = glGetUniformBlockIndex(m_3DProID, "GlobalMaterialParameters");
 
     if ((GL_INVALID_INDEX == a3DLightBlockIndex) || (GL_INVALID_INDEX == a3DMaterialBlockIndex))
     {
-        return -1;
+        return;
     }
     int nUniformBufferAlignSize = 0;
     glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &nUniformBufferAlignSize);
@@ -958,10 +975,9 @@ int OpenGL3DRenderer::Init3DUniformBlock()
     //for the light source uniform, we must calc the offset of each element
     CHECK_GL_ERROR();
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    return 0;
 }
 
-int OpenGL3DRenderer::Update3DUniformBlock()
+void OpenGL3DRenderer::Update3DUniformBlock()
 {
     glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GLint), &m_LightsInfo.lightNum);
@@ -973,10 +989,9 @@ int OpenGL3DRenderer::Update3DUniformBlock()
     glBufferSubData(GL_UNIFORM_BUFFER, 32, sizeof(LightSource) * MAX_LIGHT_NUM, &m_LightsInfo.light);
     CHECK_GL_ERROR();
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    return 0;
 }
 
-int OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, int surIndex)
+void OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, int surIndex)
 {
     float xzScale = extrude3D.xRange[1] - extrude3D.xRange[0];
     PosVecf3 trans = {extrude3D.xTransform,//m_Extrude3DInfo.xTransform + 140,
@@ -990,10 +1005,9 @@ int OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, i
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
     glDrawElements(GL_TRIANGLES, extrude3D.size[surIndex], GL_UNSIGNED_SHORT, &extrude3D.startIndex[surIndex]);
-    return 0;
 }
 
-int OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D)
+void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D)
 {
     float xzScale = extrude3D.xRange[1] - extrude3D.xRange[0];
     float yScale = extrude3D.yRange[1] - extrude3D.yRange[0];
@@ -1022,10 +1036,9 @@ int OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D)
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
     glDrawElements(GL_TRIANGLES, extrude3D.size[BOTTOM_SURFACE], GL_UNSIGNED_SHORT, &extrude3D.startIndex[BOTTOM_SURFACE]);
-    return 0;
 }
 
-int OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D)
+void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D)
 {
     float xzScale = extrude3D.xRange[1] - extrude3D.xRange[0];
     float yScale = extrude3D.yRange[1] - extrude3D.yRange[0];
@@ -1039,7 +1052,7 @@ int OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D)
  //       yScale /= (float)(1 + BOTTOM_THRESHOLD);
  //       PosVecf3 scale = {xzScale, yScale, xzScale};
  //       MoveModelf(trans, angle, scale);
-          return 0;
+          return ;
     }
     else
     {
@@ -1058,10 +1071,9 @@ int OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D)
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
     glDrawElements(GL_TRIANGLES, extrude3D.size[MIDDLE_SURFACE], GL_UNSIGNED_SHORT, &extrude3D.startIndex[MIDDLE_SURFACE]);
-    return 0;
 }
 
-int OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
+void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
 {
     float xzScale = extrude3D.xRange[1] - extrude3D.xRange[0];
     float yScale = extrude3D.yRange[1] - extrude3D.yRange[0];
@@ -1096,10 +1108,9 @@ int OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
     glDrawElements(GL_TRIANGLES, extrude3D.size[TOP_SURFACE], GL_UNSIGNED_SHORT, &extrude3D.startIndex[TOP_SURFACE]);
     RenderExtrudeFlatSurface(extrude3D, FLAT_BOTTOM_SURFACE);
-    return 0;
 }
 
-int OpenGL3DRenderer::RenderExtrudeSurface(const Extrude3DInfo& extrude3D)
+void OpenGL3DRenderer::RenderExtrudeSurface(const Extrude3DInfo& extrude3D)
 {
     glUniformMatrix4fv(m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
     glUniformMatrix4fv(m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
@@ -1115,10 +1126,9 @@ int OpenGL3DRenderer::RenderExtrudeSurface(const Extrude3DInfo& extrude3D)
         RenderExtrudeTopSurface(extrude3D);
         RenderExtrudeFlatSurface(extrude3D, FLAT_BOTTOM_SURFACE);
     }
-    return 0;
 }
 
-int OpenGL3DRenderer::RenderExtrude3DObject()
+void OpenGL3DRenderer::RenderExtrude3DObject()
 {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -1152,6 +1162,9 @@ int OpenGL3DRenderer::RenderExtrude3DObject()
     for (size_t i = 0; i < extrude3DNum; i++)
     {
         Extrude3DInfo extrude3DInfo = m_Extrude3DList[i];
+        extrude3DInfo.yTransform *= m_fHeightWeight;
+        extrude3DInfo.yRange[0] *= m_fHeightWeight;
+        extrude3DInfo.yRange[1] *= m_fHeightWeight;
         glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
         glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(Material), &extrude3DInfo.material);
         CHECK_GL_ERROR();
@@ -1165,7 +1178,6 @@ int OpenGL3DRenderer::RenderExtrude3DObject()
     glUseProgram(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glDisable(GL_CULL_FACE);
-    return 0;
 }
 
 void OpenGL3DRenderer::SetFPS(float fps)
@@ -1178,7 +1190,7 @@ void OpenGL3DRenderer::SetClickPos(Point aMPos)
     m_aMPos = aMPos;
 }
 
-int OpenGL3DRenderer::RenderText(const ::rtl::OUString& , awt::Point )
+void OpenGL3DRenderer::RenderText(const ::rtl::OUString& , awt::Point )
 {
     //TODO: moggi: disabled for now
     /*
@@ -1204,19 +1216,17 @@ int OpenGL3DRenderer::RenderText(const ::rtl::OUString& , awt::Point )
     CreateTextTexture(string, aFont, 0xFF0000, aPos, aSize, 0);
     RenderTextShape();
     */
-    return 0;
 }
 
-int OpenGL3DRenderer::RenderFPS(float fps)
+void OpenGL3DRenderer::RenderFPS(float fps)
 {
     //use width and height to get the position
     ::rtl::OUString stringFps = ::rtl::OUString("fps ") + ::rtl::OUString::number(fps);
     awt::Point aPos(0,0);
     RenderText(stringFps, aPos);
-    return 0;
 }
 
-int OpenGL3DRenderer::RenderClickPos(Point aMPos)
+void OpenGL3DRenderer::RenderClickPos(Point aMPos)
 {
     //use width and height to get the position
     ::rtl::OUString stringPos = ::rtl::OUString("(") +
@@ -1226,10 +1236,38 @@ int OpenGL3DRenderer::RenderClickPos(Point aMPos)
                                 ::rtl::OUString(")");
     awt::Point aPos(aMPos.X(), aMPos.Y());
     RenderText(stringPos, aPos);
-    return 0;
 }
 
-int OpenGL3DRenderer::ProcessUnrenderedShape()
+void OpenGL3DRenderer::CreateSceneBoxView()
+{
+    float senceBoxWidth = m_SenceBox.maxXCoord - m_SenceBox.minXCoord;
+    float senceBoxHeight = m_SenceBox.maxYCoord - m_SenceBox.minYCoord;
+    float senceBoxDepth = m_SenceBox.maxZCoord - m_SenceBox.minZCoord;
+    float distanceZ = m_SenceBox.maxZCoord + senceBoxWidth / 2 / tan(m_fViewAngle * GL_PI / 180.0f);
+    float veriticalAngle = atan((float)m_iHeight / (float)m_iWidth);
+    float distance = distanceZ / cos(veriticalAngle);
+    float horizontalAngle = 0;
+    m_fHeightWeight = senceBoxWidth * (float)m_iHeight / (float)m_iWidth / senceBoxHeight;
+    m_SenceBox.maxYCoord *= m_fHeightWeight;
+    m_SenceBox.minYCoord *= m_fHeightWeight;
+    m_CameraInfo.cameraOrg = glm::vec3(m_SenceBox.minXCoord + senceBoxWidth / 2,
+                                       -m_SenceBox.minYCoord - senceBoxHeight * m_fHeightWeight/ 2,
+                                       m_SenceBox.minZCoord + senceBoxDepth / 2);
+    //update the camera position and org
+    m_CameraInfo.cameraPos.x = m_CameraInfo.cameraOrg.x + distance * cos(veriticalAngle) * sin(horizontalAngle);
+    m_CameraInfo.cameraPos.z = m_CameraInfo.cameraOrg.z + distance * cos(veriticalAngle) * cos(horizontalAngle);
+    m_CameraInfo.cameraPos.y = m_CameraInfo.cameraOrg.y - distance * sin(veriticalAngle);
+
+    m_3DView = glm::lookAt(m_CameraInfo.cameraPos, // Camera is at (0,0,3), in World Space
+               m_CameraInfo.cameraOrg, // and looks at the origin
+               m_CameraInfo.cameraUp  // Head is up (set to 0,-1,0 to look upside-down)
+               );
+    m_3DViewBack = m_3DView;
+    m_bCameraUpdated = true;
+}
+
+
+void OpenGL3DRenderer::ProcessUnrenderedShape()
 {
     //Polygon
     RenderPolygon3DObject();
@@ -1237,7 +1275,6 @@ int OpenGL3DRenderer::ProcessUnrenderedShape()
     RenderExtrude3DObject();
     //render the axis
     RenderCoordinateAxis();
-    return 0;
 }
 
 glm::vec4 OpenGL3DRenderer::GetColorByIndex(int index)
@@ -1253,7 +1290,7 @@ sal_uInt32 OpenGL3DRenderer::GetIndexByColor(sal_uInt32 r, sal_uInt32 g, sal_uIn
     return r | (g << 8) | (b << 16);
 }
 
-int OpenGL3DRenderer::ProcessPickingBox()
+void OpenGL3DRenderer::ProcessPickingBox()
 {
     glViewport(0, 0, m_iWidth, m_iHeight);
     glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[1]);
@@ -1262,10 +1299,9 @@ int OpenGL3DRenderer::ProcessPickingBox()
     if(ProcessExtrude3DPickingBox() == 1)
     {
         //the picked object has been processed, return
-        return 0;
+        return ;
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    return 0;
 }
 
 int OpenGL3DRenderer::ProcessExtrude3DPickingBox()
@@ -1288,6 +1324,9 @@ int OpenGL3DRenderer::ProcessExtrude3DPickingBox()
     for (unsigned int i = 0; i < m_Extrude3DList.size(); i++)
     {
         extrude3DInfo = m_Extrude3DList[i];
+        extrude3DInfo.yTransform *= m_fHeightWeight;
+        extrude3DInfo.yRange[0] *= m_fHeightWeight;
+        extrude3DInfo.yRange[1] *= m_fHeightWeight;
         PosVecf3 trans = {extrude3DInfo.xTransform,//m_Extrude3DInfo.xTransform + 140,
                           -extrude3DInfo.yTransform,
                           extrude3DInfo.zTransform};
@@ -1339,6 +1378,9 @@ int OpenGL3DRenderer::ProcessExtrude3DPickingBox()
     float veriticalAngle = GL_PI / 3.25f;
     float horizontalAngle = GL_PI / 6.0f;
     extrude3DInfo = m_Extrude3DList[selectID];
+    extrude3DInfo.yTransform *= m_fHeightWeight;
+    extrude3DInfo.yRange[0] *= m_fHeightWeight;
+    extrude3DInfo.yRange[1] *= m_fHeightWeight;
     int reverse = extrude3DInfo.yRange[0] > extrude3DInfo.yRange[1] ? 1 : -1;
     m_CameraInfo.cameraOrg = glm::vec3(extrude3DInfo.xTransform + (extrude3DInfo.xRange[1] - extrude3DInfo.xRange[0]) / 2,
                                        -extrude3DInfo.yTransform + (extrude3DInfo.yRange[1] - extrude3DInfo.yRange[0]) *reverse,
@@ -1399,16 +1441,14 @@ void OpenGL3DRenderer::RenderCoordinateAxis()
     glDisableVertexAttribArray(m_2DVertexID);
     glDisable(GL_POLYGON_OFFSET_FILL);
     glUseProgram(0);
-    return;
 }
 
-int OpenGL3DRenderer::MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale)
+void OpenGL3DRenderer::MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale)
 {
     glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
     glm::mat4 aScaleMatrix = glm::scale(glm::vec3(scale.x, scale.y, scale.z));
     glm::mat4 aRotationMatrix = glm::eulerAngleYXZ(angle.y, angle.x, angle.z);
     m_Model = aTranslationMatrix * aRotationMatrix * aScaleMatrix;
-    return 0;
 }
 
 }

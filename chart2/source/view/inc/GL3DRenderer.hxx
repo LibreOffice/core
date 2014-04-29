@@ -141,6 +141,17 @@ struct PackedVertex{
     };
 };
 
+typedef struct SceneBox
+{
+    float maxXCoord;
+    float minXCoord;
+    float maxYCoord;
+    float minYCoord;
+    float maxZCoord;
+    float minZCoord;
+}SceneBox;
+
+
 class OpenGL3DRenderer : public IOpenGLInfoProvider
 {
 public:
@@ -167,34 +178,34 @@ public:
     double GetTime();
     void SetFPS(float fps);
     void SetClickPos(Point aMPos);
-    int RenderClickPos(Point aMPos);
+    void RenderClickPos(Point aMPos);
 
 private:
-    int MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale);
+    void MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale);
 
     void GetFreq();
-    int RenderPolygon3DObject();
-    int RenderLine3D(Polygon3DInfo &polygon);
-    int RenderPolygon3D(Polygon3DInfo &polygon);
-    int Init3DUniformBlock();
-    int Update3DUniformBlock();
-    int RenderExtrude3DObject();
-    int RenderFPS(float fps);
-    int RenderText(const ::rtl::OUString& string, com::sun::star::awt::Point aPos);
-    int RenderExtrudeSurface(const Extrude3DInfo& extrude3D);
-    int RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D);
-    int RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D);
-    int RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D);
-    int RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, int surIndex);
-    int ProcessUnrenderedShape();
+    void RenderPolygon3DObject();
+    void RenderLine3D(Polygon3DInfo &polygon);
+    void RenderPolygon3D(Polygon3DInfo &polygon);
+    void Init3DUniformBlock();
+    void Update3DUniformBlock();
+    void RenderExtrude3DObject();
+    void RenderFPS(float fps);
+    void RenderText(const ::rtl::OUString& string, com::sun::star::awt::Point aPos);
+    void RenderExtrudeSurface(const Extrude3DInfo& extrude3D);
+    void RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D);
+    void RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D);
+    void RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D);
+    void RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, int surIndex);
+    void ProcessUnrenderedShape();
     glm::vec4 GetColorByIndex(int index);
     sal_uInt32 GetIndexByColor(sal_uInt32 r, sal_uInt32 g, sal_uInt32 b);
-    int ProcessPickingBox();
+    void ProcessPickingBox();
     int ProcessExtrude3DPickingBox();
     void RenderCoordinateAxis();
-    int AddVertexData(GLuint vertexBuf);
-    int AddNormalData(GLuint normalBuf);
-    int AddIndexData(GLuint indexBuf);
+    void AddVertexData(GLuint vertexBuf);
+    void AddNormalData(GLuint normalBuf);
+    void AddIndexData(GLuint indexBuf);
     bool GetSimilarVertexIndex(PackedVertex & packed,
         std::map<PackedVertex,unsigned short> & VertexToOutIndex,
         unsigned short & result
@@ -207,6 +218,7 @@ private:
     void CreateActualRoundedCube(float fRadius, int iSubDivY, int iSubDivZ, float width, float height, float depth);
     int GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, std::vector<glm::vec3> &normals, float fRadius, int iSubDivY,
                                int iSubDivZ, float width, float height, float depth);
+    void CreateSceneBoxView();
 private:
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
     glm::mat4 m_Projection;
@@ -316,6 +328,12 @@ private:
     //TODO: moggi: kill the following parts
     // don't add anything below or I will remove it
     size_t m_iPointNum;
+
+    SceneBox m_SenceBox;
+
+    float m_fViewAngle;
+
+    float m_fHeightWeight;
 };
 
 }
