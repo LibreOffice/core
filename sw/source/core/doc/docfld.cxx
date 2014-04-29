@@ -1607,11 +1607,9 @@ void SwDoc::_InitFieldTypes()       // is being called by the CTOR
     mpFldTypes->push_back( new SwTblFieldType( this ) );
     mpFldTypes->push_back( new SwMacroFieldType(this) );
     mpFldTypes->push_back( new SwHiddenParaFieldType );
-#if HAVE_FEATURE_DBCONNECTIVITY
     mpFldTypes->push_back( new SwDBNextSetFieldType );
     mpFldTypes->push_back( new SwDBNumSetFieldType );
     mpFldTypes->push_back( new SwDBSetNumberFieldType );
-#endif
     mpFldTypes->push_back( new SwTemplNameFieldType(this) );
     mpFldTypes->push_back( new SwTemplNameFieldType(this) );
     mpFldTypes->push_back( new SwExtUserFieldType );
