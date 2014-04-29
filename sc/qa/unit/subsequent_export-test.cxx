@@ -265,10 +265,19 @@ void ScExportTest::testConditionalFormatExportXLSX()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
-    OUString aCSVFile("new_cond_format_test.");
-    OUString aCSVPath;
-    createCSVPath( aCSVFile, aCSVPath );
-    testCondFile(aCSVPath, pDoc, 0);
+    {
+        OUString aCSVFile("new_cond_format_test.");
+        OUString aCSVPath;
+        createCSVPath( aCSVFile, aCSVPath );
+        testCondFile(aCSVPath, pDoc, 0);
+    }
+    {
+        OUString aCSVFile("new_cond_format_test_sheet2.");
+        OUString aCSVPath;
+        createCSVPath( aCSVFile, aCSVPath );
+        testCondFile(aCSVPath, pDoc, 1);
+    }
+
 
     xDocSh->DoClose();
 }
