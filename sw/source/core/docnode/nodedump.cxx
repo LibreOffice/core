@@ -23,6 +23,8 @@
 #include "fmtsrnd.hxx"
 #include "paratr.hxx"
 #include "redline.hxx"
+#include "section.hxx"
+#include "fmtclds.hxx"
 #include <swmodule.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/intitem.hxx>
@@ -118,6 +120,8 @@ static const char* TMP_FORMAT = "%" SAL_PRIuUINTPTR;
 static const char* TMP_FORMAT_I32 = "%" SAL_PRIdINT32;
 
 }
+
+void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet);
 
 void lcl_dumpSdrModel(WriterHelper& writer, const SdrModel* pModel)
 {
@@ -316,7 +320,7 @@ void SwStartNode::dumpAsXml( xmlTextWriterPtr w )
             name = "table";
             break;
         case ND_SECTIONNODE:
-            name = "section";
+            name = "sectionNode";
             break;
         default:
             switch( GetStartNodeType())
@@ -345,6 +349,20 @@ void SwStartNode::dumpAsXml( xmlTextWriterPtr w )
     writer.startElement( name );
     writer.writeFormatAttribute( "ptr", "%p", this );
     writer.writeFormatAttribute( "index", TMP_FORMAT, GetIndex() );
+
+    if (GetNodeType() == ND_SECTIONNODE)
+    {
+        SwSection& rSection = GetSectionNode()->GetSection();
+        writer.startElement("section");
+
+        SwSectionFmt* pFmt = rSection.GetFmt();
+        writer.startElement("swsectionfmt");
+        lcl_dumpSfxItemSet(writer, &pFmt->GetAttrSet());
+        writer.endElement();
+
+        writer.endElement();
+    }
+
     // writer.endElement(); - it is a start node, so don't end, will make xml better nested
 }
 
@@ -389,7 +407,7 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             }
             case RES_CNTNT:
             {
-                pWhich = "frame content";
+                pWhich = "content";
                 const SwFmtCntnt* pCntnt = static_cast<const SwFmtCntnt*>(pItem);
                 oValue = "node index: " + OString::number(pCntnt->GetCntntIdx()->GetNode().GetIndex());
                 break;
@@ -482,6 +500,22 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
                 }
                 break;
             }
+            case RES_COL:
+            {
+                pWhich = "columns formatting";
+                const SwFmtCol* pFmtCol = static_cast<const SwFmtCol*>(pItem);
+                oValue = "number of columns: " + OString::number(pFmtCol->GetColumns().size());
+                break;
+            }
+            case RES_PROTECT:
+                pWhich = "protect";
+                break;
+            case RES_EDIT_IN_READONLY:
+                pWhich = "edit in read-only";
+                break;
+            case RES_COLUMNBALANCE:
+                pWhich = "column balance";
+                break;
         }
         if (pWhich)
             writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
