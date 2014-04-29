@@ -1011,6 +1011,19 @@ SchXMLStatisticsObjectContext::~SchXMLStatisticsObjectContext()
 
 namespace {
 
+void SetErrorBarStyleProperties( const OUString& rStyleName, uno::Reference< beans::XPropertySet > xBarProp,
+                                        SchXMLImportHelper& rImportHelper )
+{
+    const SvXMLStylesContext* pStylesCtxt = rImportHelper.GetAutoStylesContext();
+    const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(rImportHelper.GetChartFamilyID(),
+            rStyleName);
+
+    XMLPropStyleContext * pSeriesStyleContext =
+        const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));
+
+    pSeriesStyleContext->FillPropertySet( xBarProp );
+}
+
 void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Reference< beans::XPropertySet> xBarProp,
                                             SchXMLImportHelper& rImportHelper, OUString& aPosRange, OUString& aNegRange)
 {
@@ -1177,6 +1190,8 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
                     xBarProp->setPropertyValue("ShowNegativeError",uno::makeAny(sal_True));
 
                     // first import defaults from parent style
+                    SetErrorBarStyleProperties( maSeriesStyleName, xBarProp, mrImportHelper );
+                    SetErrorBarStyleProperties( sAutoStyleName, xBarProp, mrImportHelper );
                     SetErrorBarPropertiesFromStyleName( maSeriesStyleName, xBarProp, mrImportHelper, aPosRange, aNegRange );
                     SetErrorBarPropertiesFromStyleName( sAutoStyleName, xBarProp, mrImportHelper, aPosRange, aNegRange );
 
