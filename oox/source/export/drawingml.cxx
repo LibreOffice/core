@@ -2092,6 +2092,7 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
         return;
 
     OUString sSchemeClr;
+    bool bContainsColor = false;
     sal_uInt32 nRgbClr = 0;
     sal_Int32 nEffectToken = 0;
     sal_Int32 nAlpha = MAX_PERCENT;
@@ -2099,11 +2100,24 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
     sax_fastparser::FastAttributeList *aOuterShdwAttrList = mpFS->createAttrList();
     for( sal_Int32 i=0; i < aEffectProps.getLength(); ++i )
     {
-        if( aEffectProps[i].Name == "outerShdw" || aEffectProps[i].Name == "innerShdw" )
+        if( aEffectProps[i].Name == "outerShdw" || aEffectProps[i].Name == "innerShdw"
+                || aEffectProps[i].Name == "softEdge" )
         {
-            nEffectToken = ( aEffectProps[i].Name == "outerShdw") ?
-                    FSNS( XML_a, XML_outerShdw ) :
-                    FSNS( XML_a, XML_innerShdw );
+            // assign the proper tag and enable bContainsColor if necessary
+            if( aEffectProps[i].Name == "outerShdw" )
+            {
+                nEffectToken = FSNS( XML_a, XML_outerShdw );
+                bContainsColor = true;
+            }
+            else if( aEffectProps[i].Name == "innerShdw" )
+            {
+                nEffectToken = FSNS( XML_a, XML_innerShdw );
+                bContainsColor = true;
+            }
+            else if( aEffectProps[i].Name == "softEdge" )
+                nEffectToken = FSNS( XML_a, XML_softEdge );
+
+            // read tag attributes
             uno::Sequence< beans::PropertyValue > aOuterShdwProps;
             aEffectProps[i].Value >>= aOuterShdwProps;
             for( sal_Int32 j=0; j < aOuterShdwProps.getLength(); ++j )
@@ -2162,6 +2176,12 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
                     aOuterShdwProps[j].Value >>= nVal;
                     aOuterShdwAttrList->add( XML_sy, OString::number( nVal ).getStr() );
                 }
+                else if( aOuterShdwProps[j].Name == "rad" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_rad, OString::number( nVal ).getStr() );
+                }
             }
         }
         else if(aEffectProps[i].Name == "ShadowRgbClr")
@@ -2189,10 +2209,13 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
     sax_fastparser::XFastAttributeListRef xAttrList( aOuterShdwAttrList );
     mpFS->startElement( nEffectToken, xAttrList );
 
-    if( sSchemeClr.isEmpty() )
-        WriteColor( nRgbClr, nAlpha );
-    else
-        WriteColor( sSchemeClr, aTransformations );
+    if( bContainsColor )
+    {
+        if( sSchemeClr.isEmpty() )
+            WriteColor( nRgbClr, nAlpha );
+        else
+            WriteColor( sSchemeClr, aTransformations );
+    }
 
     mpFS->endElement( nEffectToken );
     mpFS->endElementNS(XML_a, XML_effectLst);

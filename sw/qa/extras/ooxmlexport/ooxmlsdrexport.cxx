@@ -1087,7 +1087,7 @@ DECLARE_OOXMLEXPORT_TEST(testShapeEffectPreservation, "shape-effect-preservation
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw/a:schemeClr/a:alpha",
             "val", "40000");
 
-    // second shape with inner shadow, rgb color
+    // third shape with inner shadow, rgb color
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw",
             "blurRad", "63500");
@@ -1103,6 +1103,14 @@ DECLARE_OOXMLEXPORT_TEST(testShapeEffectPreservation, "shape-effect-preservation
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw/a:srgbClr/a:alpha",
             "val", "50000");
+
+    // 4th shape with soft edge
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:softEdge",
+            "rad", "127000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:softEdge/*",
+            0 ); // should not be present
 }
 
 DECLARE_OOXMLEXPORT_TEST(fdo77719, "fdo77719.docx")

@@ -62,6 +62,9 @@ void EffectPropertiesContext::saveUnsupportedAttribs( const AttributeList& rAttr
     if( rAttribs.hasAttribute( XML_sy ) )
         mrEffectProperties.appendUnsupportedEffectAttrib( "sy",
                                                           makeAny( rAttribs.getInteger( XML_sy, 0 ) ) );
+    if( rAttribs.hasAttribute( XML_rad ) )
+        mrEffectProperties.appendUnsupportedEffectAttrib( "rad",
+                                                          makeAny( rAttribs.getInteger( XML_rad, 0 ) ) );
 }
 
 ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -85,6 +88,13 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
 
             mrEffectProperties.maShadow.moShadowDist = rAttribs.getInteger( XML_dist, 0 );
             mrEffectProperties.maShadow.moShadowDir = rAttribs.getInteger( XML_dir, 0 );
+            return new ColorContext( *this, mrEffectProperties.maShadow.moShadowColor );
+        }
+        break;
+        case A_TOKEN( softEdge ):
+        {
+            mrEffectProperties.msUnsupportedEffectName = "softEdge";
+            saveUnsupportedAttribs( rAttribs );
             return new ColorContext( *this, mrEffectProperties.maShadow.moShadowColor );
         }
         break;
