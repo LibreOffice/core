@@ -35,7 +35,7 @@ SAL_LOG='+INFO.oox.csdata-WARN' instdir/program/soffice --headless --convert-to 
 # Now run a script that reads the above log file and generates the
 # oox-drawingml-cs-presets data:
 
-(cd oox/source/drawingml/customshapes && ./generatePresetsCXX.pl)
+(cd oox/source/drawingml/customshapes && ./generatePresetsData.pl)
 
 
 echo
