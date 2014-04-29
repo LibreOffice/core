@@ -7,6 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+i18npool_ICULT53 := $(filter 1, $(shell expr $(ICU_MAJOR) \< 53))
+i18npool_LCDALL := $(wildcard $(SRCDIR)/i18npool/source/collator/data/*.txt)
+i18npool_LCDTXTS := $(if $(i18npool_ICULT53), $(i18npool_LCDALL), $(filter-out %/ko_charset.txt, $(i18npool_LCDALL)))
+
 $(eval $(call gb_Library_Library,collator_data))
 
 $(eval $(call gb_Library_use_libraries,collator_data,\
@@ -14,7 +18,7 @@ $(eval $(call gb_Library_use_libraries,collator_data,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,collator_data,\
-	$(foreach txt,$(wildcard $(SRCDIR)/i18npool/source/collator/data/*.txt),\
+	$(foreach txt,$(i18npool_LCDTXTS),\
 		CustomTarget/i18npool/collator/collator_$(notdir $(basename $(txt)))) \
 ))
 

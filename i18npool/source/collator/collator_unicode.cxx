@@ -182,9 +182,11 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                     func = get_collator_data_ja_phonetic_alphanumeric_last;
 #endif
 #if WITH_LOCALE_ALL || WITH_LOCALE_ko
+#if (U_ICU_VERSION_MAJOR_NUM < 53)
             } else if ( rLocale.Language == "ko" ) {
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_ko_charset;
+#endif
 #endif
 #if WITH_LOCALE_ALL || WITH_LOCALE_ku
             } else if ( rLocale.Language == "ku" ) {

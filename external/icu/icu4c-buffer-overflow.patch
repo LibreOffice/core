@@ -11,7 +11,7 @@ Index: icu/source/tools/pkgdata/pkgdata.cpp
 ===================================================================
 --- build/icu.orig/source/tools/pkgdata/pkgdata.cpp
 +++ build/icu/source/tools/pkgdata/pkgdata.cpp
-@@ -1980,12 +1980,12 @@
+@@ -2060,12 +2060,12 @@
      const char cmd[] = "icu-config --incpkgdatafile";
  
      /* #1 try the same path where pkgdata was called from. */
@@ -22,7 +22,7 @@ Index: icu/source/tools/pkgdata/pkgdata.cpp
 -          uprv_strncat(cmdBuf, U_FILE_SEP_STRING, 1024);
 +          uprv_strncat(cmdBuf, U_FILE_SEP_STRING, sizeof(cmdBuf)-1-strlen(cmdBuf));
        }
--      uprv_strncat(cmdBuf, cmd, 1024);
+-      uprv_strncat(cmdBuf, cmd, 1023);
 +      uprv_strncat(cmdBuf, cmd, sizeof(cmdBuf)-1-strlen(cmdBuf));
        
        if(verbose) {
