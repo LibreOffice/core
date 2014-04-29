@@ -69,9 +69,12 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
                             ScViewData* pViewData, const ScDPObject* pPivotTableObject, bool bNewPivotTable) :
     ScAnyRefDlg           (pSfxBindings, pChildWindow, pParent, "PivotTableLayout", "modules/scalc/ui/pivottablelayoutdialog.ui"),
     maPivotTableObject    (*pPivotTableObject),
+    mpPreviouslyFocusedListBox(NULL),
+    mpCurrentlyFocusedListBox(NULL),
     mpViewData            (pViewData),
     mpDocument            (pViewData->GetDocument()),
     mbNewPivotTable       (bNewPivotTable),
+    mpActiveEdit          (NULL),
     maAddressDetails      (mpDocument->GetAddressConvention(), 0, 0),
     mbDialogLostFocus     (false)
 {
