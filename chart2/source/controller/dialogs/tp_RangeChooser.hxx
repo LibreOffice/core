@@ -89,7 +89,6 @@ protected: //member
     FixedText*       m_pFTTitle;
 
     CheckBox*        m_pCB_TimeBased;
-    FixedText*       m_pFt_TimeBased;
     Edit*            m_pEd_TimeStart;
     Edit*            m_pEd_TimeEnd;
 
