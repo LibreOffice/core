@@ -317,6 +317,7 @@ ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rAr
     , maStrValue(ScResId(SCSTR_VALID_VALUE))
     , maStrRange(ScResId(SCSTR_VALID_RANGE))
     , maStrList(ScResId(SCSTR_VALID_LIST))
+    , m_pRefEdit(NULL)
 {
     get(m_pLbAllow, "allow");
     get(m_pCbAllow, "allowempty");
