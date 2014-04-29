@@ -165,7 +165,7 @@ private:
         const;
 };
 
-MappedFile::MappedFile(OUString const & fileUrl): uri(fileUrl) {
+MappedFile::MappedFile(OUString const & fileUrl): uri(fileUrl), handle(0) {
     oslFileError e = osl_openFile(uri.pData, &handle, osl_File_OpenFlag_Read);
     switch (e) {
     case osl_File_E_None:
