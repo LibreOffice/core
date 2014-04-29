@@ -57,6 +57,10 @@ bool ScDocument::CopyOneCellFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     ScDocument* pClipDoc = rCxt.getClipDoc();
+    if (pClipDoc->GetClipParam().mbCutMode)
+        // We don't handle cut and paste or moving of cells here.
+        return false;
+
     ScRange aClipRange = pClipDoc->GetClipParam().getWholeRange();
     if (aClipRange.aStart != aClipRange.aEnd)
         // The source is not really a single cell. Bail out.
