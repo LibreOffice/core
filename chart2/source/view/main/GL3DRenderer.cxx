@@ -1262,7 +1262,7 @@ int OpenGL3DRenderer::GetIndexByColor(int r, int g, int b)
 int OpenGL3DRenderer::ProcessPickingBox()
 {
     glViewport(0, 0, m_iWidth, m_iHeight);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[2]);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[1]);
     glClearDepth(1.0f);
     glClearColor(1.0, 1.0, 1.0, 1.0);
     if(ProcessExtrude3DPickingBox() == 1)
