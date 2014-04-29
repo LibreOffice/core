@@ -59,7 +59,7 @@ public class _XIndexAccess extends MultiMethodTest {
 
     /**
     * This method tests the IndexAccess from the first element,
-    * the middle element and the last element. Finaly it test
+    * the middle element and the last element. Finally it test
     * Exceptions which throws by a not available index. <p>
     * Has <b> OK </b> status if first, middle and last elements
     * successfully returned and has non null value; and if on

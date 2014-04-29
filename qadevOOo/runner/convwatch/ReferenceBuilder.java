@@ -274,7 +274,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                     //     aSemaphore.V(aSemaphore.getSemaphoreFile());
                     //     aSemaphore.sleep(2);
                     //     // wait some time maybe an other process will take the semaphore
-                    //     // I know, this is absolutly dirty, but the whole convwatch is dirty and need a big cleanup.
+                    //     // I know, this is absolutely dirty, but the whole convwatch is dirty and need a big cleanup.
                     // }
                 }
             }

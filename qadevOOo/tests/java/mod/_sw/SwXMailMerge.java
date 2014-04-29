@@ -140,7 +140,7 @@ public class SwXMailMerge extends TestCase {
             oResultSet.next();
             myBookMarks[1] = oRowLocate.getBookmark();
         } catch (SQLException e) {
-            throw new StatusException("Cant get Bookmarks", e);
+            throw new StatusException("Can't get Bookmarks", e);
         }
         // </create Bookmarks>
 

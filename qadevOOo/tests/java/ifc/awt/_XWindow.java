@@ -197,7 +197,7 @@ public class _XWindow extends MultiMethodTest {
     /**
     * Test calls the method. Then we check if listener's methods were called
     * when we move, resize, hide and show the window. The resizing is
-    * performed depending on 'XWindow.ControlShape' existance. If this
+    * performed depending on 'XWindow.ControlShape' existence. If this
     * relation exists then the size and position of container control
     * shape is changed, else the position and size of window itself is
     * chaged<p>

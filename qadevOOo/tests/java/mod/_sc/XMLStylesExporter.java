@@ -121,7 +121,7 @@ public class XMLStylesExporter extends TestCase {
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
 
         String newName = "NewStyle" + counter++;
-        // Adding tags for checking existance of head tag and property value
+        // Adding tags for checking existence of head tag and property value
         filter.addTag(new XMLTools.Tag("office:document-styles"));
         filter.addTag(new XMLTools.Tag("style:style","style:name", newName));
 

@@ -41,7 +41,7 @@ public class _XSystemShellExecute extends MultiMethodTest {
     public XSystemShellExecute oObj = null;
 
     /**
-    * Excecutes 'java SystemShellExecute SystemShellExecute.txt' command line.
+    * Executes 'java SystemShellExecute SystemShellExecute.txt' command line.
     * <p>Has <b> OK </b> status if the method successfully returns
     * and file 'SystemShellExecute.txt' was created. <p>
     */

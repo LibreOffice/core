@@ -149,7 +149,7 @@ public class XMLStylesExporter extends TestCase {
             throw new StatusException("Can't create component.", e) ;
         }
 
-        // Checking Head Tag existance and that property has changed
+        // Checking Head Tag existence and that property has changed
         filter.addTag(new XMLTools.Tag ("office:document-styles"));
         filter.addTag(new XMLTools.Tag ("office:styles"));
         filter.addTagEnclosed(

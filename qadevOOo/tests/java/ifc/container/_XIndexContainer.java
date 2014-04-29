@@ -71,7 +71,7 @@ public class _XIndexContainer extends MultiMethodTest {
     /**
     * First tries to insert proper object. Second tries to insert
     * null value. For each test thread different objects are inserted
-    * on different indexes. For exmaple for the first started test index
+    * on different indexes. For example for the first started test index
     * is 0 and object is get from relation 'INCTANCE1', and so on. <p>
     * Has <b>OK</b> status if in the first case <code>getByIndex</code>
     * method returns non null value and in the second <code>

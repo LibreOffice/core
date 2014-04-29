@@ -65,7 +65,7 @@ public class _XActivationBroadcaster extends MultiMethodTest {
         xSpreadsheetView.setActiveSheet(two);
 
         if (listenerCalled) {
-            log.println("Listener was called eventhough it is removed");
+            log.println("Listener was called even though it is removed");
         }
 
         xSpreadsheetView.setActiveSheet(org);

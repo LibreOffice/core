@@ -315,7 +315,7 @@ public class DB extends DBHelper
             {
                 String sError = e.getMessage();
                 GlobalLogWriter.get().println("DB: Original SQL error: " + sError);
-                // throw new ValueNotFoundException("Cant execute SQL: " + _sSQL);
+                // throw new ValueNotFoundException("Can't execute SQL: " + _sSQL);
             }
             return aResultList;
         }

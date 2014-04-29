@@ -150,7 +150,7 @@ public class XMLSettingsExporter extends TestCase {
             throw new StatusException("Can't create component.", e) ;
         }
 
-        // Adding tags for checking existance of head tag and other tags
+        // Adding tags for checking existence of head tag and other tags
         filter.addTagEnclosed(new XMLTools.Tag("office:settings"),
             new XMLTools.Tag("office:document-settings"));
         filter.addTagEnclosed(new XMLTools.Tag("config:config-item-set"),

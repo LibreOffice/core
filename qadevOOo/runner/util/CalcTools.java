@@ -107,7 +107,7 @@ public class CalcTools {
     /**
      *
      * returns an <CODE>XSpreadsheet</CODE> from a Calc document.
-     * @param xSheetDoc the Calc docuent which containes the sheet
+     * @param xSheetDoc the Calc docuent which contains the sheet
      * @param sheetNumber the number of the sheet to return
      * @throws java.lang.Exception on any error an <CODE>java.lang.Exception</CODE> was thrown
      * @return calc sheet

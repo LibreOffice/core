@@ -188,7 +188,7 @@ public class _XDocumentHandler extends MultiMethodTest {
 
         /**
          * This test is finally executed. It finishes XML data
-         * transfering with <code>endDocument</code> method call. <p>
+         * transferring with <code>endDocument</code> method call. <p>
          *
          * Has <b>OK</b> status if no exceptions occurred during
          * the whole transfering and if the appropriate changes

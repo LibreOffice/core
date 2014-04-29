@@ -67,7 +67,7 @@ public class FileHelper
                 return true;
             }
             // This is just nice for DEBUG behaviour
-            // due to the fact this is absolutly context dependency no one should use it.
+            // due to the fact this is absolutely context dependency no one should use it.
             // else
             // {
             //     System.out.println("FileHelper:exists() tell this path doesn't exists. Check it. path is:" );

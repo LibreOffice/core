@@ -134,7 +134,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
 
     /**
      * Tries to load component to a frame in separate thread to
-     * avoid blocking of the current thread and imediately
+     * avoid blocking of the current thread and immediately
      * cancels loading. <p>
      *
      * Has <b> OK </b> status if <code>flase</code> is returned,

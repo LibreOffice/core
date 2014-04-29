@@ -371,7 +371,7 @@ public class OfficePrint {
      * @param _sPrintFileURL
      * @return true, if print has been done.
      *         Be careful, true means only print returns with no errors, to be sure print is really done
-     *         check existance of _sPrintFileURL
+     *         check existence of _sPrintFileURL
      */
 
     public static boolean printToFileWithOOo(GraphicalTestArguments _aGTA,
@@ -588,7 +588,7 @@ public class OfficePrint {
 
                     // configure Office to allow to execute macos
 
-// TODO: We need a possiblity to set the printer name also for StarOffice/OpenOffice
+// TODO: We need a possibility to set the printer name also for StarOffice/OpenOffice
                     if (OSHelper.isWindows())
                     {
                         if (_aGTA.getPrinterName() != null)

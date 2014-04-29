@@ -395,7 +395,7 @@ public class MSOfficePrint
             File aPerlScript = new File(userdir + fs + _sScriptName);
             if (FileHelper.isDebugEnabled())
             {
-                GlobalLogWriter.get().println("Search for local existance of " + aPerlScript.getAbsolutePath());
+                GlobalLogWriter.get().println("Search for local existence of " + aPerlScript.getAbsolutePath());
             }
 
             if (aPerlScript.exists())

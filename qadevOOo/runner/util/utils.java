@@ -457,9 +457,9 @@ public class utils {
     }
 
     /**
-     *  This method check via Office the existance of the given file URL
+     *  This method check via Office the existence of the given file URL
      * @param msf the multiservice factory
-     * @param fileURL the file which existance should be checked
+     * @param fileURL the file which existence should be checked
      * @return true if the file exists, else false
      */
     public static boolean fileExists(XMultiServiceFactory msf, String fileURL) {
@@ -482,7 +482,7 @@ public class utils {
     }
 
     /**
-     * This method deletes via office the given file URL. It checks the existance
+     * This method deletes via office the given file URL. It checks the existence
      * of <CODE>fileURL</CODE>. If exists it will be deletet.
      * @param xMsf the multiservice factory
      * @param fileURL the file to delete

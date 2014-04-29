@@ -130,7 +130,7 @@ public class _XMarkableStream extends MultiMethodTest {
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> jumpToFurthest() </code> : for the right order of tests
-    *  excecution </li>
+    *  execution </li>
     * </ul>
     */
     public void _jumpToMark() {

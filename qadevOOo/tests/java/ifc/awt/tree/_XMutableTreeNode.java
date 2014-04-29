@@ -133,7 +133,7 @@ public class _XMutableTreeNode extends MultiMethodTest {
             log.println("ERROR: expected IndexOutOfBoundsException was not thrown => FAILED");
             bOK = false;
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("ERROR: wrong IllegalArgumentException was thrown. Expeced is IndexOutOfBoundsException => FAILED");
+            log.println("ERROR: wrong IllegalArgumentException was thrown. Expected is IndexOutOfBoundsException => FAILED");
             bOK = false;
         } catch (com.sun.star.lang.IndexOutOfBoundsException ex) {
             log.println("Expected IndexOutOfBoundsException was thrown => OK");
@@ -170,7 +170,7 @@ public class _XMutableTreeNode extends MultiMethodTest {
         try {
             log.println("try to remove node at invalid index '-3'");
             oObj.removeChildByIndex(-3);
-            log.println("ERROR: expeced IndexOutOfBoundsException was not thrown => FAILED");
+            log.println("ERROR: expected IndexOutOfBoundsException was not thrown => FAILED");
             bOK = false;
         } catch (com.sun.star.lang.IndexOutOfBoundsException ex) {
             log.println("expected IndexOutOfBoundsException was thrown => OK");

@@ -37,7 +37,7 @@ import com.sun.star.lang.EventObject;
 *  <li> <code>'XUpdateBroadcaster.Checker'</code> : <code>
 *    _XUpdateBroadcaster.UpdateChecker</code> interface implementation
 *    which can update, commit data and check if the data was successfully
-*    commited.</li>
+*    committed.</li>
 * <ul> <p>
 * Test is <b> NOT </b> multithread compilant. <p>
 * @see com.sun.star.form.XUpdateBroadcaster
@@ -48,8 +48,8 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
     UpdateChecker checker = null ;
 
     /**
-    * Interface for relation. Updating, commiting and checking
-    * if data was commited is object dependent behaviour.
+    * Interface for relation. Updating, committing and checking
+    * if data was committed is object dependent behaviour.
     */
     public static interface UpdateChecker {
         /**
@@ -61,9 +61,9 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
         */
         public void commit() throws com.sun.star.uno.Exception ;
         /**
-        * Checks if the data commited by <code>commit</code> method
+        * Checks if the data committed by <code>commit</code> method
         * became permanent in data source.
-        * @return <code>true</code> if data was commited.
+        * @return <code>true</code> if data was committed.
         */
         public boolean wasCommited() throws com.sun.star.uno.Exception ;
     }
@@ -125,7 +125,7 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
     * Has <b>OK</b> status if on update rejected only <code>
     * approveUpdate</code> listener method was called, and if
     * on update approved <code>approveUpdate</code> and
-    * <code>updated</code> methods called, and data was commited
+    * <code>updated</code> methods called, and data was committed
     * to the source.
     */
     public void _addUpdateListener() {
@@ -138,18 +138,18 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
             shortWait() ;
             checker.commit() ;
             shortWait() ;
-            boolean commited = checker.wasCommited() ;
+            boolean committed = checker.wasCommited() ;
 
             shortWait() ;
 
             bResult = listener.approveCalled &&
                       ! listener.updateCalled &&
-                      ! commited ;
+                      ! committed ;
 
             log.println("Calling with no approving : approveUpdate() was " +
                 (listener.approveCalled ? "":"NOT")+" called, updated() was "+
                 (listener.updateCalled ? "":"NOT")+" called, the value was " +
-                (commited ? "" : "NOT") + " commited.") ;
+                (committed ? "" : "NOT") + " committed.") ;
 
             shortWait() ;
 
@@ -160,18 +160,18 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
             shortWait() ;
             checker.commit() ;
             shortWait() ;
-            commited = checker.wasCommited() ;
+            committed = checker.wasCommited() ;
 
             shortWait() ;
 
             log.println("Calling with approving : approveUpdate() was " +
                 (listener.approveCalled ? "":"NOT")+" called, updated() was "+
                 (listener.updateCalled ? "":"NOT")+" called, the value was "+
-                (commited ? "" : "NOT") + " commited.") ;
+                (committed ? "" : "NOT") + " committed.") ;
 
             bResult = listener.approveCalled &&
                       listener.updateCalled &&
-                      commited ;
+                      committed ;
         } catch (com.sun.star.uno.Exception e) {
             bResult = false ;
             e.printStackTrace(log) ;

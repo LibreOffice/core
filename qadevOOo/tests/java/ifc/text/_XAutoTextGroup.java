@@ -69,7 +69,7 @@ public class _XAutoTextGroup extends MultiMethodTest {
      * Constructs a unique string for current interface thread
      * for naming purposes. All old entries which names are
      * started with prefix used for entry names, are deleted
-     * from the group (they can remain after previous unsuccessfull
+     * from the group (they can remain after previous unsuccessful
      * test runs). The relation is obtained.
      *
      * @throws StatusException if the relation is not found.

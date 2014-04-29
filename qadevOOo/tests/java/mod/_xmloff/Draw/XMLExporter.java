@@ -121,7 +121,7 @@ public class XMLExporter extends TestCase {
         FilterChecker filter = new FilterChecker(log);
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
 
-        // Adding tags for checking existance of head tag and other tags
+        // Adding tags for checking existence of head tag and other tags
         filter.addTag(new XMLTools.Tag("office:document"));
         filter.addTag(new XMLTools.Tag("office:body"));
         filter.addTagEnclosed(

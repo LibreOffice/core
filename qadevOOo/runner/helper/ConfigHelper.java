@@ -61,7 +61,7 @@ import com.sun.star.util.*;
  *    <li><CODE>&lt;prop oor:name=&quot;UserItem&quot;&gt;</CODE>
  *        represents a <CODE>property</CODE> of the extensible group</LI>
  * </UL>
- * We assume in the following examples the existance of:<P>
+ * We assume in the following examples the existence of:<P>
  * <CODE>ConfigHelper aConfig = new ConfigHelper(xMSF, "org.openoffice.Office.Views", false);</CODE>
  * <ul>
  *    <li>If you like to insert a new <CODE>Group</CODE> into the <CODE>Set</CODE> "Windows":<p>
@@ -248,7 +248,7 @@ public class ConfigHelper
 
      /**
      * Update a property of a group container of a set container
-     * @param setName the name of the <CODE>set</CODE> which containes the <CODE>group</CODE>
+     * @param setName the name of the <CODE>set</CODE> which contains the <CODE>group</CODE>
      * @param groupName the name of the <CODE>group</CODE> which property should be changed
      * @param propName the name of the property which should be changed
      * @param propValue the value the property should get
@@ -285,7 +285,7 @@ public class ConfigHelper
 
     /**
      * Insert a property in an extensible group container or else update it
-     * @param setName the name of the <CODE>set</CODE> which containes the <CODE>group</CODE>
+     * @param setName the name of the <CODE>set</CODE> which contains the <CODE>group</CODE>
      * @param group The name of the <CODE>group</CODE> which conatins the <CODE>extensible group</CODE>.
      * @param extGroup The name of the <CODE>extensible group</CODE> which
      *                  [should] contain the property

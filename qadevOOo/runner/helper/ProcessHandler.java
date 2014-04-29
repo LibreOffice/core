@@ -781,7 +781,7 @@ public class ProcessHandler
      *
      * The method can also be called before the command
      * starts its execution. Then the text is buffered
-     * and transfered to command when it will be started.
+     * and transferred to command when it will be started.
      * @param str
      */
     public void printInputText(String str)

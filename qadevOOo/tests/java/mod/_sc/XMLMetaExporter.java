@@ -119,7 +119,7 @@ public class XMLMetaExporter extends TestCase {
         FilterChecker filter = new FilterChecker(log);
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
 
-        // Checking tags existance and changed property value
+        // Checking tags existence and changed property value
         filter.addTag(new XMLTools.Tag ("office:document-meta"));
         filter.addTag(new XMLTools.Tag ("office:meta"));
         filter.addCharactersEnclosed("TestDocument",

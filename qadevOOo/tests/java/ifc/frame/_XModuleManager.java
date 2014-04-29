@@ -55,7 +55,7 @@ public class _XModuleManager extends MultiMethodTest {
      * The onject relations <CODE>XModuleManager.XFrame</CODE>,
      * <CODE>XModuleManager.XController</CODE> and <CODE>XModuleManager.XModel</CODE>
      * are sequenzes of <CODE>PropertyValue</CODE>. The value of a PropertyValue
-     * containes a <CODE>XFrame</CODE>, <CODE>XController</CODE> or a
+     * contains a <CODE>XFrame</CODE>, <CODE>XController</CODE> or a
      * <CODE>XModel</CODE>. The name of the PropertyValue contains the expected return
      * value of method <CODE>indetify()</CODE> if the method was called with
      * coresponding value.<p>

@@ -483,7 +483,7 @@ public class MSOfficePostscriptCreator implements IOffice
             File aPerlScript = new File(sFileName);
             if (FileHelper.isDebugEnabled())
             {
-                GlobalLogWriter.println("Search for local existance of " + aPerlScript.getAbsolutePath());
+                GlobalLogWriter.println("Search for local existence of " + aPerlScript.getAbsolutePath());
             }
 
             if (aPerlScript.exists())

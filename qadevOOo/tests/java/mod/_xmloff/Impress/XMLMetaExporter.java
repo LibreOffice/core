@@ -139,7 +139,7 @@ public class XMLMetaExporter extends TestCase {
             throw new StatusException("Can't create component.", e) ;
         }
 
-        // Checking tags existance and changed property value
+        // Checking tags existence and changed property value
         filter.addTag(new XMLTools.Tag ("office:document-meta"));
         filter.addTagEnclosed(
             new XMLTools.Tag("office:meta"),

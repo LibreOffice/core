@@ -120,15 +120,15 @@ public class ScDrawPageObj extends TestCase {
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println("Couldn't create insance");
             e.printStackTrace(log);
-            throw new StatusException("Can't create enviroment", e) ;
+            throw new StatusException("Can't create environment", e) ;
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Couldn't create insance");
             e.printStackTrace(log);
-            throw new StatusException("Can't create enviroment", e) ;
+            throw new StatusException("Can't create environment", e) ;
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             log.println("Couldn't create insance");
             e.printStackTrace(log);
-            throw new StatusException("Can't create enviroment", e) ;
+            throw new StatusException("Can't create environment", e) ;
         }
 
         // create test environment here

@@ -85,10 +85,10 @@ public class _XText extends MultiMethodTest {
         // get indexaccess to the tablecollection
         XIndexAccess xIA = info.getCollection();
 
-        // this comparision works just because it has to be at least one
+        // this comparison works just because it has to be at least one
         // table at this point regardless which thread inserted it
         // there is although the possibility that the first threads call
-        // failed, the second not and comparision happens after second threads
+        // failed, the second not and comparison happens after second threads
         // otherwise if something fails it should have thrown an exception
         //tRes.tested("insertTextContent()",    xIA.getCount() > 0 );
 

@@ -73,7 +73,7 @@ public class _XResultSetUpdate extends MultiMethodTest {
         public void update() throws SQLException ;
         /**
         * Checks if updates made by method <code>update</code> was
-        * commited to the data source.
+        * committed to the data source.
         */
         public boolean wasUpdated() throws SQLException ;
         /**
@@ -131,7 +131,7 @@ public class _XResultSetUpdate extends MultiMethodTest {
     /**
     * Using relation methods first updates some data in the current
     * row, then calls <code>updateRow</code> method to commit data.
-    * Then checks if the data changed was commited. <p>
+    * Then checks if the data changed was committed. <p>
     * Executes <code>moveToCurrentRow</code> method test before to
     * be sure that cursor is not on the insert row. <p>
     * Has OK status if data in the source was changed.
@@ -154,7 +154,7 @@ public class _XResultSetUpdate extends MultiMethodTest {
     /**
     * Using relation methods first updates some data in the current
     * row, then calls <code>cancelRowUpdates</code> method.
-    * Then checks if the data changed was not commited. <p>
+    * Then checks if the data changed was not committed. <p>
     * Executes <code>moveToCurrentRow</code> method test before to
     * be sure that cursor is not on the insert row. <p>
     * Has OK status if data in the source was not changed.

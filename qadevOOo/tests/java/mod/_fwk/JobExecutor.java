@@ -87,7 +87,7 @@ public class JobExecutor extends TestCase {
      * </ol>. <p>
      *
      * First these two conditions are checked. If job and event are not
-     * registered they are inserted into configuration and commited.
+     * registered they are inserted into configuration and committed.
      * After what SOffice must be destroyed for proper initialization
      * of <code>JobExecutor</code> after startup. <p>
      *
