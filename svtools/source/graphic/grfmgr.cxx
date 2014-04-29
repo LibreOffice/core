@@ -744,10 +744,26 @@ void GraphicObject::StopAnimation( OutputDevice* pOut, long nExtraData )
         mpSimpleCache->maGraphic.StopAnimation( pOut, nExtraData );
 }
 
+void GraphicObject::ResetCacheTimeOut()
+{
+    if (mpSwapOutTimer)
+    {
+        mpSwapOutTimer->Stop();
+        mpSwapOutTimer->Start();
+    }
+}
+
 const Graphic& GraphicObject::GetGraphic() const
 {
-    if( mbAutoSwapped )
-        ( (GraphicObject*) this )->ImplAutoSwapIn();
+    GraphicObject *pThis = const_cast<GraphicObject*>(this);
+
+    if (mbAutoSwapped)
+        pThis->ImplAutoSwapIn();
+
+    //fdo#50697 If we've been asked to provide the graphic, then reset
+    //the cache timeout to start from now and not remain at the
+    //time of creation
+    pThis->ResetCacheTimeOut();
 
     return maGraphic;
 }

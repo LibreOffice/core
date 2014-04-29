@@ -299,6 +299,8 @@ private:
 
                             DECL_LINK( ImplAutoSwapOutHdl, void* );
 
+    void SVT_DLLPRIVATE     ResetCacheTimeOut();
+
 protected:
 
     virtual void            GraphicManagerDestroyed();
