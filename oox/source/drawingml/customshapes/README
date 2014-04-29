@@ -26,26 +26,17 @@ make oox.clean && make oox dbglevel=2
 
 
 # Then load it and store the debugging output.
-# We need only the SAL_INFO output with tag "oox.cscode", plus stderr
-# for PropertyMap::dumpCode() output.
+# We need only the SAL_INFO output with tag "oox.csdata", plus stderr
+# for PropertyMap::dumpData() output.
 
-SAL_LOG='+INFO.oox.cscode-WARN' instdir/program/soffice --headless --convert-to odp --outdir oox/source/drawingml/customshapes/ oox/source/drawingml/customshapes/pptx/cshape-all.pptx > oox/source/drawingml/customshapes/custom-shapes.log 2>&1
+SAL_LOG='+INFO.oox.csdata-WARN' instdir/program/soffice --headless --convert-to odp --outdir oox/source/drawingml/customshapes/ oox/source/drawingml/customshapes/pptx/cshape-all.pptx > oox/source/drawingml/customshapes/custom-shapes.log 2>&1
 
 
 # Now run a script that reads the above log file and generates the
-# customshapepresets*.cxx sources:
+# oox-drawingml-cs-presets data:
 
 (cd oox/source/drawingml/customshapes && ./generatePresetsCXX.pl)
 
-
-# Run it again to generate the oox-drawingml-cs-presets data:
-
-(cd oox/source/drawingml/customshapes && ./generatePresetsCXX.pl --data)
-
-
-# Then move them into place
-
-mv oox/source/drawingml/customshapes/customshapepresets*.cxx oox/source/drawingml
 
 echo
 echo "To see what has been done, run git diff --patience oox/source/drawingml"
