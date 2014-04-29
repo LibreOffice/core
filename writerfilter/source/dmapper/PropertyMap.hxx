@@ -322,7 +322,7 @@ class ParagraphProperties
 public:
     ParagraphProperties();
     ParagraphProperties(const ParagraphProperties&);
-    ~ParagraphProperties();
+    virtual ~ParagraphProperties();
 
     bool operator==(const ParagraphProperties&); //does not compare the starting/ending range, m_sParaStyleName and m_nDropCapLength
 
