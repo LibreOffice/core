@@ -78,7 +78,8 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
         pRangeUtil      ( new ScRangeUtil ),
         pAreaData       ( NULL ),
         nAreaDataCount  ( 0 ),
-        nWhichCons      ( rArgSet.GetPool()->GetWhich( SID_CONSOLIDATE ) )
+        nWhichCons      ( rArgSet.GetPool()->GetWhich( SID_CONSOLIDATE ) ),
+        bDlgLostFocus   ( false )
 {
     get(pLbFunc,"func");
     get(pLbConsAreas,"consareas");
