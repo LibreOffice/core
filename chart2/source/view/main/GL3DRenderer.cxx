@@ -543,7 +543,7 @@ int OpenGL3DRenderer::GenerateRoundCornerBar(vector<glm::vec3> &vertices, vector
 
 void OpenGL3DRenderer::GetFreq()
 {
-#if defined( _WIN32 )
+#if 0
     LARGE_INTEGER litmpold;
     QueryPerformanceFrequency(&litmpold);
     m_dFreq= litmpold.QuadPart;
@@ -552,7 +552,7 @@ void OpenGL3DRenderer::GetFreq()
 
 double OpenGL3DRenderer::GetTime()
 {
-#if defined( _WIN32 )
+#if 0
     LARGE_INTEGER litmpold;
     QueryPerformanceCounter(&litmpold);
     return litmpold.QuadPart*1000000 / m_dFreq;
