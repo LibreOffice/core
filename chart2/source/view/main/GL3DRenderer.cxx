@@ -1184,7 +1184,7 @@ void OpenGL3DRenderer::SetClickPos(Point aMPos)
     m_aMPos = aMPos;
 }
 
-int OpenGL3DRenderer::RenderText(::rtl::OUString , awt::Point )
+int OpenGL3DRenderer::RenderText(::rtl::OUString &, awt::Point )
 {
     //TODO: moggi: disabled for now
     /*

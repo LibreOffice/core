@@ -177,7 +177,7 @@ private:
     int Update3DUniformBlock();
     int RenderExtrude3DObject();
     int RenderFPS(float fps);
-    int RenderText(::rtl::OUString string, com::sun::star::awt::Point aPos);
+    int RenderText(::rtl::OUString &string, com::sun::star::awt::Point aPos);
     int RenderExtrudeSurface(Extrude3DInfo extrude3D);
     int RenderExtrudeTopSurface(Extrude3DInfo extrude3D);
     int RenderExtrudeMiddleSurface(Extrude3DInfo extrude3D);

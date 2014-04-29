@@ -899,7 +899,7 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
     return 0;
 }
 
-int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, Font aFont, long , awt::Point aPos, awt::Size aSize, long rotation)
+int OpenGLRender::CreateTextTexture(::rtl::OUString &textValue, Font aFont, long , awt::Point aPos, awt::Size aSize, long rotation)
 {
     VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
     aDevice.Erase();
