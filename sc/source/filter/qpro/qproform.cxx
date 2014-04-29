@@ -176,7 +176,8 @@ do { \
 
 ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, const FORMULA_TYPE /*eFT*/ )
 {
-    sal_uInt8 nFmla[ nBufSize ], i, nArg, nArgArray[ nBufSize ];
+    sal_uInt8 nFmla[ nBufSize ], i, nArg;
+    sal_uInt8 nArgArray[ nBufSize ] = {0};
     sal_Int8 nCol, nPage;
     sal_uInt16 nInt, nIntCount = 0, nStringCount = 0, nFloatCount = 0, nDLLCount = 0, nArgCount = 0;
     sal_uInt16 nIntArray[ nBufSize ] = {0};
