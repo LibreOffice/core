@@ -39,6 +39,7 @@
 #include "writerhelper.hxx"
 #include "../inc/msfilter.hxx"
 #include <expfld.hxx>
+#include <fmtclds.hxx>
 
 #include <vcl/graph.hxx>
 class SvxBrushItem;
