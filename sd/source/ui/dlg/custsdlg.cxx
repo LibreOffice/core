@@ -98,7 +98,7 @@ void SdCustomShowDlg::CheckState()
     m_pCbxUseCustomShow->Enable( bEnable );
     m_pBtnStartShow->Enable( true );
 
-    if( bEnable )
+    if (bEnable && pCustomShowList)
         pCustomShowList->Seek( nPos );
 }
 
