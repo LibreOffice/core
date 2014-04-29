@@ -43,18 +43,6 @@
      ;;
  esac
 
---- misc/icu/source/common/putilimp.h	2013-10-05 03:49:30.000000000 +0700
-+++ misc/build/icu/source/common/putilimp.h	2013-11-10 17:21:26.224217698 +0700
-@@ -87,6 +87,8 @@
-     /* Use the predefined value. */
- #elif U_PLATFORM_HAS_WIN32_API
- #   define U_HAVE_NL_LANGINFO_CODESET 0
-+#elif defined(__ANDROID__)
-+#   define U_HAVE_NL_LANGINFO_CODESET 0
- #else
- #   define U_HAVE_NL_LANGINFO_CODESET 1
- #endif
-
 --- misc/icu/source/common/unicode/platform.h	2013-10-05 03:49:10.000000000 +0700
 +++ misc/build/icu/source/common/unicode/platform.h	2013-11-10 17:22:27.160217186 +0700
 @@ -703,7 +703,7 @@
