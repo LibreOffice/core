@@ -75,6 +75,8 @@ class SVT_DLLPUBLIC SvTreeList
 
     sal_Bool            bAbsPositionsValid;
 
+    bool mbEnableInvalidate;
+
     SvTreeListEntry*        FirstVisible() const { return First(); }
     SvTreeListEntry*        NextVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
     SvTreeListEntry*        PrevVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
@@ -145,6 +147,8 @@ public:
                             SvTreeListEntry* pEntry2=0,
                             sal_uLong nPos=0
                         );
+
+    void EnableInvalidate( bool bEnable );
 
     // Notify all Listeners
     void                InvalidateEntry( SvTreeListEntry* );
