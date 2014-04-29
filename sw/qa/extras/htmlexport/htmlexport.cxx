@@ -18,12 +18,11 @@
 #include <swmodule.hxx>
 #include <usrpref.hxx>
 
-#include <libxml/HTMLparser.h>
-#include <libxml/HTMLtree.h>
+#include <test/htmltesttools.hxx>
 
 using namespace rtl;
 
-class Test : public SwModelTestBase
+class Test : public SwModelTestBase, public HtmlTestTools
 {
 private:
     FieldUnit m_eUnit;
@@ -33,19 +32,6 @@ public:
         SwModelTestBase("/sw/qa/extras/htmlexport/data/", "HTML (StarWriter)"),
         m_eUnit(FUNIT_NONE)
     {}
-
-protected:
-    htmlDocPtr parseHtml()
-    {
-        SvFileStream aFileStream(m_aTempFile.GetURL(), STREAM_READ);
-        sal_Size nSize = aFileStream.remainingSize();
-
-        ByteSequence aBuffer(nSize + 1);
-        aFileStream.Read(aBuffer.getArray(), nSize);
-
-        aBuffer[nSize] = 0;
-        return htmlParseDoc(reinterpret_cast<xmlChar*>(aBuffer.getArray()), NULL);
-    }
 
 private:
     bool mustCalcLayoutOf(const char* filename) SAL_OVERRIDE
@@ -119,7 +105,7 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testCharacterBorder, "charborder.odt")
 
 DECLARE_HTMLEXPORT_TEST(testExportOfImages, "textAndImage.docx")
 {
-    htmlDocPtr pDoc = parseHtml();
+    htmlDocPtr pDoc = parseHtml(m_aTempFile);
     if (pDoc)
     {
         assertXPath(pDoc, "/html/body", 1);
@@ -129,7 +115,7 @@ DECLARE_HTMLEXPORT_TEST(testExportOfImages, "textAndImage.docx")
 
 DECLARE_HTMLEXPORT_TEST(testExportOfImagesWithSkipImageEnabled, "textAndImage.docx")
 {
-    htmlDocPtr pDoc = parseHtml();
+    htmlDocPtr pDoc = parseHtml(m_aTempFile);
     if (pDoc)
     {
         assertXPath(pDoc, "/html/body", 1);

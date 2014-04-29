@@ -9,49 +9,15 @@
 
 #include "sdmodeltestbase.hxx"
 
-#include <libxml/xmlwriter.h>
-#include <libxml/xpath.h>
-#include <libxml/xpathInternals.h>
-#include <libxml/parserInternals.h>
-#include <libxml/HTMLparser.h>
-#include <libxml/HTMLtree.h>
-
-#include <rtl/byteseq.hxx>
-#include <boost/scoped_array.hpp>
+#include <test/htmltesttools.hxx>
+#include <test/xmltesttools.hxx>
 
 using namespace css;
 using namespace rtl;
 
-class SdHTMLFilterTest : public SdModelTestBase
+class SdHTMLFilterTest : public SdModelTestBase, public XmlTestTools, public HtmlTestTools
 {
-    htmlDocPtr parseHtml(utl::TempFile& aTempFile)
-    {
-        SvFileStream aFileStream(aTempFile.GetURL(), STREAM_READ);
-        sal_Size nSize = aFileStream.remainingSize();
-
-        boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[nSize + 1]);
-
-        aFileStream.Read(pBuffer.get(), nSize);
-
-        pBuffer[nSize] = 0;
-        printf("Content: %s\n", reinterpret_cast<char*>(pBuffer.get()));
-        return htmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()), NULL);
-    }
-
-    xmlNodeSetPtr getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath)
-    {
-        xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
-        xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
-        return pXmlXpathObj->nodesetval;
-    }
-
-    void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes)
-    {
-        xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
-                                     nNumberOfNodes, xmlXPathNodeSetGetLength(pXmlNodes));
-    }
-
+private:
     htmlDocPtr exportAndparseHtml(sd::DrawDocShellRef& xDocShRef)
     {
         FileFormat* pFormat = getFormat(HTML);

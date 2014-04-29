@@ -45,6 +45,8 @@ endif
 $(eval $(call gb_Library_add_exception_objects,test,\
     test/source/bootstrapfixture \
     test/source/diff/diff \
+    test/source/xmltesttools \
+    test/source/htmltesttools \
 ))
 
 # vim: set noet sw=4 ts=4:
