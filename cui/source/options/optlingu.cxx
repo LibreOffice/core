@@ -347,6 +347,7 @@ public:
     OptionsBreakSet(Window* pParent, sal_uInt16 nRID)
         : ModalDialog(pParent, "BreakNumberOption",
             "cui/ui/breaknumberoption.ui")
+        , m_pBreakNF(NULL)
     {
         get(m_pBeforeFrame, "beforeframe");
         get(m_pAfterFrame, "afterframe");
