@@ -114,6 +114,7 @@
 #include <editeng/charrotateitem.hxx>
 #include "WW8FibData.hxx"
 #include "numrule.hxx"
+#include "fmtclds.hxx"
 
 using namespace css;
 using namespace sw::util;
@@ -2597,6 +2598,20 @@ void MSWordExportBase::WriteText()
                         }
                     }
                 }
+                else
+                {
+                    /* Do not export Section Break in case DOCX containing MultiColumn and
+                     * aIdx.GetNode().IsTxtNode() is False i.e. Text node is NULL.
+                     */
+                    const SwFrmFmt* pPgFmt = rSect.GetFmt();
+                    const SwFmtCol& rCol = pPgFmt->GetCol();
+                    sal_uInt16 nColumnCount = rCol.GetNumCols();
+                    if(nColumnCount > 1)
+                    {
+                        bNeedExportBreakHere = sal_False;
+                    }
+                }
+
                 if (bNeedExportBreakHere)  //#120140# End of check
                 {
                     ReplaceCr( (char)0xc ); // indicator for Page/Section-Break

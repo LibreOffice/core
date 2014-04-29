@@ -3215,7 +3215,24 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77725, "fdo77725.docx")
     assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[1]", 0);
     assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[2]", 0);
     assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[3]", 0);
+}
 
+DECLARE_OOXMLEXPORT_TEST(testFDO77812, "fdo77812.docx")
+{
+    /* Additional sectPr was getting inserted and hence Column properties
+     * were getting added into this additional sectPr instead of Default setPr.
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    // Check no additional section break is inserted.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:pPr/w:sectPr", 0);
+
+    // Check w:cols comes under Default sectPr
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols", "num", "2");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[1]", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[2]", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testContentTypeOLE, "fdo77759.docx")
