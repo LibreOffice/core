@@ -2047,10 +2047,13 @@ public:
 
 }
 
-void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
+void ScColumn::GetFilterEntries(
+    sc::ColumnBlockConstPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow,
+    std::vector<ScTypedStrData>& rStrings, bool& rHasDates )
 {
     FilterEntriesHandler aFunc(*this, rStrings);
-    sc::ParseAllNonEmpty(maCells.begin(), maCells, nStartRow, nEndRow, aFunc);
+    rBlockPos.miCellPos =
+        sc::ParseAllNonEmpty(rBlockPos.miCellPos, maCells, nStartRow, nEndRow, aFunc);
     rHasDates = aFunc.hasDates();
 }
 

@@ -460,7 +460,10 @@ public:
                 /// Including current, may return -1
     SCsROW      GetNextUnprotected( SCROW nRow, bool bUp ) const;
 
-    void GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
+    void GetFilterEntries(
+        sc::ColumnBlockConstPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow,
+        std::vector<ScTypedStrData>& rStrings, bool& rHasDates );
+
     bool GetDataEntries( SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit ) const;
 
     void UpdateInsertTabAbs(SCTAB nNewPos);
