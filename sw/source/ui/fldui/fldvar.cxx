@@ -40,6 +40,7 @@
 SwFldVarPage::SwFldVarPage(Window* pParent, const SfxItemSet& rCoreSet )
     : SwFldPage(pParent, "FldVarPage",
         "modules/swriter/ui/fldvarpage.ui", rCoreSet)
+    , nOldFormat(0)
     , bInit(true)
 {
     get(m_pTypeLB, "type");
