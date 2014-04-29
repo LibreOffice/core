@@ -63,6 +63,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdotable.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/bmpacc.hxx>
 #include <svtools/sfxecode.hxx>
@@ -71,7 +72,6 @@
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <svx/svdotable.hxx>
 
 #include "drawdoc.hxx"
 #include "htmlpublishmode.hxx"
@@ -1225,6 +1225,11 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
                     SdrObjGroup* pObjectGroup = (SdrObjGroup*) pObject;
                     WriteObjectGroup(aStr, pObjectGroup, pOutliner, rBackgroundColor, false);
                 }
+                else if (pObject->GetObjIdentifier() == OBJ_TABLE)
+                {
+                    SdrTableObj* pTableObject = (SdrTableObj*) pObject;
+                    WriteTable(aStr, pTableObject, pOutliner, rBackgroundColor);
+                }
                 else
                 {
                     if (pObject->GetOutlinerParaObject())
@@ -1238,31 +1243,7 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
             case PRESOBJ_TABLE:
             {
                 SdrTableObj* pTableObject = (SdrTableObj*) pObject;
-
-                CellPos aStart, aEnd;
-
-                aStart = pTableObject->getFirstCell();
-                aEnd = pTableObject->getLastCell();
-
-                sal_Int32 nColCount = pTableObject->getColumnCount();
-                aStr.append("<table>\r\n");
-                for (sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++)
-                {
-                    aStr.append("  <tr>\r\n");
-                    for (sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++)
-                    {
-                        aStr.append("    <td>\r\n");
-                        sal_Int32 nCellIndex = nRow * nColCount + nCol;
-                        SdrText* pText = pTableObject->getText(nCellIndex);
-
-                        if (pText == NULL)
-                            continue;
-                        WriteOutlinerParagraph(aStr, pOutliner, pText->GetOutlinerParaObject(), rBackgroundColor, false);
-                        aStr.append("    </td>\r\n");
-                    }
-                    aStr.append("  </tr>\r\n");
-                }
-                aStr.append("</table>\r\n");
+                WriteTable(aStr, pTableObject, pOutliner, rBackgroundColor);
             }
             break;
 
@@ -1281,6 +1262,34 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
         }
     }
     return aStr.makeStringAndClear();
+}
+
+void HtmlExport::WriteTable(OUStringBuffer& aStr, SdrTableObj* pTableObject, SdrOutliner* pOutliner, const Color& rBackgroundColor)
+{
+    CellPos aStart, aEnd;
+
+    aStart = pTableObject->getFirstCell();
+    aEnd = pTableObject->getLastCell();
+
+    sal_Int32 nColCount = pTableObject->getColumnCount();
+    aStr.append("<table>\r\n");
+    for (sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++)
+    {
+        aStr.append("  <tr>\r\n");
+        for (sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++)
+        {
+            aStr.append("    <td>\r\n");
+            sal_Int32 nCellIndex = nRow * nColCount + nCol;
+            SdrText* pText = pTableObject->getText(nCellIndex);
+
+            if (pText == NULL)
+                continue;
+            WriteOutlinerParagraph(aStr, pOutliner, pText->GetOutlinerParaObject(), rBackgroundColor, false);
+            aStr.append("    </td>\r\n");
+        }
+        aStr.append("  </tr>\r\n");
+    }
+    aStr.append("</table>\r\n");
 }
 
 void HtmlExport::WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup* pObjectGroup, SdrOutliner* pOutliner,

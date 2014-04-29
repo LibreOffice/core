@@ -56,6 +56,7 @@ class SdPage;
 class HtmlState;
 class SdrTextObj;
 class SdrObjGroup;
+namespace sdr { namespace table { class SdrTableObj; } }
 class SdrPage;
 class SdDrawDocument;
 class ButtonSet;
@@ -216,8 +217,11 @@ class HtmlExport
                                 OutlinerParaObject* pOutlinerParagraphObject,
                                 const Color& rBackgroundColor, bool bHeadLine);
 
-    void WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup* pObjectGroup, SdrOutliner* pOutliner,
-                          const Color& rBackgroundColor, bool bHeadLine);
+    void WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup* pObjectGroup,
+                          SdrOutliner* pOutliner, const Color& rBackgroundColor, bool bHeadLine);
+
+    void WriteTable(OUStringBuffer& aStr, sdr::table::SdrTableObj* pTableObject,
+                    SdrOutliner* pOutliner, const Color& rBackgroundColor);
 
  public:
     HtmlExport(const OUString& aPath,
