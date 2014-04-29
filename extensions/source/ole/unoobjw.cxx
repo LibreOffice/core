@@ -321,7 +321,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
 // can easily find out that a param is such an object by queriing for the
 // IJScriptValue interface. By this interface one the type and kind ( out, in/out)
 // can be determined and the right conversion can be applied.
-// Using ValueObjects we spare us the effort of aquiring and examining type information
+// Using ValueObjects we spare us the effort of acquiring and examining type information
 // in order to figure out what the an IDispatch parameter is meant for.
 
 // Normal JScript object parameter can be mixed with JScriptValue object. If an
@@ -1622,7 +1622,7 @@ static HRESULT mapCannotConvertException(const CannotConvertException &e, unsign
 // is VT_DISPATCH. The function is used from o2u_createUnoObjectWrapper
 // and the result is put into the constructor of the uno - wrapper
 // object. If a client asks the object for DISPID_VALUE and this
-// funtion returned VT_DISPATCH then the IDispatch of the same
+// function returned VT_DISPATCH then the IDispatch of the same
 // object is being returned.
 // See InterfaceOleWrapper_Impl::Invoke, InterfaceOleWrapper_Impl::m_defaultValueType
 const VARTYPE getVarType( const Any& value)

@@ -664,7 +664,7 @@ private:
     const sal_Bool              m_bSupportsExternalBinding  : 1;    // do we support XBindableValue?
     const sal_Bool              m_bSupportsValidation       : 1;    // do we support XValidatable?
     sal_Bool                    m_bForwardValueChanges      : 1;    // do we currently handle changes in the bound database field?
-    sal_Bool                    m_bTransferingValue         : 1;    // true if we're currently transfering our value to an external binding
+    sal_Bool                    m_bTransferingValue         : 1;    // true if we're currently transferring our value to an external binding
     sal_Bool                    m_bIsCurrentValueValid      : 1;    // flag specifying whether our current value is valid, relative to our external validator
     sal_Bool                    m_bBindingControlsRO        : 1;    // is our ReadOnly property currently controlled by our external binding?
     sal_Bool                    m_bBindingControlsEnable    : 1;    // is our Enabled property currently controlled by our external binding?

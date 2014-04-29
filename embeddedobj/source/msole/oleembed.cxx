@@ -388,7 +388,7 @@ bool OleEmbeddedObject::TryToConvertToOOo()
                         close( sal_True );
                     } catch( const uno::Exception& ) {}
 
-                    m_xParentStorage->dispose(); // ??? the storage has information loss, it should be closed without commiting!
+                    m_xParentStorage->dispose(); // ??? the storage has information loss, it should be closed without committing!
                     throw uno::RuntimeException(); // the repairing is not possible
                 }
             case 2:

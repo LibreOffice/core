@@ -463,7 +463,7 @@ void NewToolbarController::functionExecuted( const OUString &rCommand )
     If the given URL can be located as an action command of one menu item of the
     popup menu of this control, we return sal_True. Otherwhise we return sal_False.
     Further we return a fallback URL, in case we have to return sal_False. Because
-    the outside code must select a valid item of the popup menu everytime ...
+    the outside code must select a valid item of the popup menu every time ...
     and we define it here. By the way this m ethod was written to handle
     error situations gracefully. E.g. it can be called during creation time
     but then we have no valid menu. For this case we know another fallback URL.
@@ -471,7 +471,7 @@ void NewToolbarController::functionExecuted( const OUString &rCommand )
 
     @param  rPopupMenu
                 pounts to the popup menu, on which item we try to locate the given URL
-                Can be NULL! Search will be supressed then.
+                Can be NULL! Search will be suppressed then.
 
     @param  sURL
                 the URL for searching

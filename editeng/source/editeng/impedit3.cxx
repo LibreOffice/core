@@ -1294,7 +1294,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         for ( sal_Int32 nP = pLine->GetStartPortion(); nP <= pLine->GetEndPortion(); nP++ )
         {
             const TextPortion* pTP = pParaPortion->GetTextPortions()[nP];
-            // problem with hard font height attribute, when everthing but the line break has this attribute
+            // problem with hard font height attribute, when everything but the line break has this attribute
             if ( pTP->GetKind() != PORTIONKIND_LINEBREAK )
             {
                 SeekCursor( pNode, nTPos+1, aTmpFont );

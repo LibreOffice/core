@@ -1118,11 +1118,11 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     sal_Int32 nCount = xMeta->getColumnCount();
     ::std::vector< sal_Int32 > aSourceColTypes;
     aSourceColTypes.reserve( nCount + 1 );
-    aSourceColTypes.push_back( -1 ); // just to avoid a everytime i-1 call
+    aSourceColTypes.push_back( -1 ); // just to avoid a every time i-1 call
 
     ::std::vector< sal_Int32 > aSourcePrec;
     aSourcePrec.reserve( nCount + 1 );
-    aSourcePrec.push_back( -1 ); // just to avoid a everytime i-1 call
+    aSourcePrec.push_back( -1 ); // just to avoid a every time i-1 call
 
     for ( sal_Int32 k=1; k <= nCount; ++k )
     {

@@ -77,7 +77,7 @@ uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::Na
     // while( !pExecutor->isExecuted() )
     //  ::osl::Thread::yield();
 
-    // TODO: implement transfering of the return values and exceptions
+    // TODO: implement transferring of the return values and exceptions
 
     return uno::Any();
 }

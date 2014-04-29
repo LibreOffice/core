@@ -4253,7 +4253,7 @@
 							<xsl:when test="ss:Alignment/@ss:Vertical = 'Center'">middle</xsl:when>
 							<xsl:when test="ss:Alignment/@ss:Vertical = 'Bottom'">bottom</xsl:when>
 							<xsl:when test="ss:Alignment/@ss:Vertical = 'Automatic'">middle</xsl:when>
-							<!-- actually for vertical writen characters, not supported by StarOffice/OpenOffice now yet -->
+							<!-- actually for vertical written characters, not supported by StarOffice/OpenOffice now yet -->
 							<xsl:otherwise>middle</xsl:otherwise>
 						</xsl:choose>
 					</xsl:variable>

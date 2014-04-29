@@ -399,7 +399,7 @@ namespace pcr
 
             However, it can also result in a more complex change: The current (UI) state might
             depend on the value of more than one other property. Those dependent properties (their
-            UI, more precisly) are updated in this method.
+            UI, more precisely) are updated in this method.
 
             @param _nPropid
                 the ->PropertyId of the dependent property whose UI state is to be updated

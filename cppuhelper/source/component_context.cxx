@@ -573,7 +573,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
 #if OSL_DEBUG_LEVEL > 0
                 ::fprintf(
                     stderr,
-                    "### omitting context for service instanciation!\n" );
+                    "### omitting context for service instantiation!\n" );
 #endif
                 xInstance = args.getLength()
                     ? xFac2->createInstanceWithArguments( args )
@@ -594,11 +594,11 @@ Any ComponentContext::lookupMap( OUString const & rName )
             }
         }
     }
-    catch (RuntimeException &)
+    catch (const RuntimeException &)
     {
         throw;
     }
-    catch (Exception & exc)
+    catch (const Exception & exc)
     {
         SAL_WARN(
             "cppuhelper",

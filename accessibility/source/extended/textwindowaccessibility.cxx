@@ -1116,7 +1116,7 @@ Document::retrieveCharacterAttributes(
     for( i = 0; i < nLength; i++ )
         pIndices[i] = i;
     std::sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
-    // create sorted sequences accoring to index array
+    // create sorted sequences according to index array
     ::css::uno::Sequence< ::css::beans::PropertyValue > aNewValues( nLength );
     ::css::beans::PropertyValue* pNewValues = aNewValues.getArray();
     for( i = 0; i < nLength; i++ )

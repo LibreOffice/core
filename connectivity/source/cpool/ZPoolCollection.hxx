@@ -53,7 +53,7 @@ namespace connectivity
                                         ::com::sun::star::beans::XPropertyChangeListener
                                         >   OPoolCollection_Base;
 
-    /// OPoolCollection: controll the whole connection pooling for oo
+    /// OPoolCollection: control the whole connection pooling for oo
     class OPoolCollection : public OPoolCollection_Base
     {
 

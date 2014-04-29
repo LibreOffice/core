@@ -74,13 +74,13 @@ namespace canvas
         Canvas helper implementation for the backend in question. This
         object will be held as a member of this template class, and
         basically gets forwarded all XCanvas API calls. Furthermore,
-        everytime the canvas API semantically changes the content of
+        every time the canvas API semantically changes the content of
         the canvas, CanvasHelper::modifying() will get called
         (<em>before</em> the actual modification takes place).
 
         @tpl Mutex
         Lock strategy to use. Defaults to using the
-        OBaseMutex-provided lock.  Everytime one of the methods is
+        OBaseMutex-provided lock.  Every time one of the methods is
         entered, an object of type Mutex is created with m_aMutex as
         the sole parameter, and destroyed again when the method scope
         is left.

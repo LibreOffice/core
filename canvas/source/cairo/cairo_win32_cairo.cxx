@@ -77,7 +77,7 @@ namespace cairo
     }
 
     /**
-     * Surface::Surface:   Create platfrom native Canvas surface from BitmapSystemData
+     * Surface::Surface:   Create platform native Canvas surface from BitmapSystemData
      * @param pBmpData Platform native image data (struct BitmapSystemData in vcl/inc/bitmap.hxx)
      *
      * Create a surface based on image data on pBmpData
@@ -247,7 +247,7 @@ namespace cairo
 
 
     /**
-     * cairo::createBitmapSurface:   Create platfrom native Canvas surface from BitmapSystemData
+     * cairo::createBitmapSurface:   Create platform native Canvas surface from BitmapSystemData
      * @param OutputDevice (not used)
      * @param rData Platform native image data (struct BitmapSystemData in vcl/inc/bitmap.hxx)
      * @param rSize width and height of the new surface

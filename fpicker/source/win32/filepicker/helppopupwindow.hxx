@@ -78,7 +78,7 @@ public:
 
     /*
         Shows the window with the text that was last set.
-        The posistion is the preferred position. The window
+        The position is the preferred position. The window
         may itself show at a slightly different position
         if it fits not at the preferred position.
     */

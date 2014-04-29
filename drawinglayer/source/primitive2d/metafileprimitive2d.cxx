@@ -961,7 +961,7 @@ namespace
         // This ClipPolyPolygon is identical to the current one, so there is no need to
         // create a MaskPrimitive2D containing the up-to-now created primitives, but
         // this was done before. While this does not lead to wrong primitive
-        // representations of the metafile data, it creates unneccesarily expensive
+        // representations of the metafile data, it creates unnecessarily expensive
         // representations. Just detecting when no really 'new' ClipPolyPolygon gets set
         // solves the problem.
 

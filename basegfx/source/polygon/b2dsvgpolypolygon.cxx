@@ -233,7 +233,7 @@ namespace basegfx
                                 nY += nLastY;
                             }
 
-                            // ensure existance of start point
+                            // ensure existence of start point
                             if(!aCurrPoly.count())
                             {
                                 aCurrPoly.append(B2DPoint(nLastX, nLastY));
@@ -297,7 +297,7 @@ namespace basegfx
                                 nY += nLastY;
                             }
 
-                            // ensure existance of start point
+                            // ensure existence of start point
                             if(!aCurrPoly.count())
                             {
                                 aCurrPoly.append(B2DPoint(nLastX, nLastY));
@@ -348,7 +348,7 @@ namespace basegfx
                             const double nX2Prime((nX1 * 2.0 + nX) / 3.0);
                             const double nY2Prime((nY1 * 2.0 + nY) / 3.0);
 
-                            // ensure existance of start point
+                            // ensure existence of start point
                             if(!aCurrPoly.count())
                             {
                                 aCurrPoly.append(B2DPoint(nLastX, nLastY));
@@ -388,7 +388,7 @@ namespace basegfx
                                 nY += nLastY;
                             }
 
-                            // ensure existance of start point
+                            // ensure existence of start point
                             if(!aCurrPoly.count())
                             {
                                 aCurrPoly.append(B2DPoint(nLastX, nLastY));

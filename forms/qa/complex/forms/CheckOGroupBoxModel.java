@@ -114,15 +114,15 @@ public class CheckOGroupBoxModel
         }
         catch (com.sun.star.beans.PropertyVetoException e)
         {
-            fail("Exception occured while trying to change the properties.");
+            fail("Exception occurred while trying to change the properties.");
         }
         catch (com.sun.star.lang.IllegalArgumentException e)
         {
-            fail("Exception occured while trying to change the properties.");
+            fail("Exception occurred while trying to change the properties.");
         }
         catch (com.sun.star.lang.WrappedTargetException e)
         {
-            fail("Exception occured while trying to change the properties.");
+            fail("Exception occurred while trying to change the properties.");
         } // end of try-catch
 
         assertTrue("Listener was not called.", ml.wasListenerCalled());

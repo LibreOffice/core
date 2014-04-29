@@ -92,7 +92,7 @@ protected:
     bool m_bClosed;
 
     sal_Int32 m_nObjectState;
-    sal_Int32 m_nTargetState; // should be -1 exept during state changing
+    sal_Int32 m_nTargetState; // should be -1 except during state changing
     sal_Int32 m_nUpdateMode;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;

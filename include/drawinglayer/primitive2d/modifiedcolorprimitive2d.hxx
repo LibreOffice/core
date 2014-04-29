@@ -44,7 +44,7 @@ namespace drawinglayer
             For the possibilities of color modifications, please refer
             to the basegfx::BColorModifier definitions in basegfx. For
             processing there is tooling in basegfx to build a stack of
-            BColorModifierSharedPtrs to always be able to proccess the correct
+            BColorModifierSharedPtrs to always be able to process the correct
             colors.
 
             If a renderer does not handle this primitive, the content will

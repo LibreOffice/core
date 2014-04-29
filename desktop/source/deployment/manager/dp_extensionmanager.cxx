@@ -527,9 +527,9 @@ ExtensionManager::getSupportedPackageTypes()
     return getUserRepository()->getSupportedPackageTypes();
 }
 //Do some necessary checks and user interaction. This function does not
-//aquire the extension manager mutex and that mutex must not be aquired
+//acquire the extension manager mutex and that mutex must not be acquired
 //when this function is called. doChecksForAddExtension does  synchronous
-//user interactions which may require aquiring the solar mutex.
+//user interactions which may require acquiring the solar mutex.
 //Returns true if the extension can be installed.
 bool ExtensionManager::doChecksForAddExtension(
     Reference<css::deployment::XPackageManager> const & xPackageMgr,

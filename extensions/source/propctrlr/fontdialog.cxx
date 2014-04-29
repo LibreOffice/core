@@ -559,7 +559,7 @@ namespace pcr
         const SvxFontListItem& rFontListItem = static_cast<const SvxFontListItem&>(_rpPool->GetDefaultItem(CFID_FONTLIST));
         const FontList* pFontList = rFontListItem.GetFontList();
 
-        // _first_ delete the set (refering the pool)
+        // _first_ delete the set (referring the pool)
         if (_rpSet)
         {
             delete _rpSet;

@@ -52,7 +52,7 @@ namespace comphelper
         As this template is geared towards fast, internal pointer
         access, validity of the UNO reference is _not_ checked for
         every pointer access. The client of this template is
-        responsible to check that, whereever necessary, via the is()
+        responsible to check that, wherever necessary, via the is()
         method.
 
         @tpl CppType

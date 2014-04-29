@@ -207,7 +207,7 @@ T getValue( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Name
 {
     for( sal_Int32 n=0; n < rNamedValues.getLength(); n++ )
     {
-        // Unfortunatly gcc-3.3 does not like Any.get<T>();
+        // Unfortunately gcc-3.3 does not like Any.get<T>();
         if( rNamedValues[n].Name.equalsAscii( pszName ) )
         {
             T value = T();

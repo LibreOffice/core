@@ -678,7 +678,7 @@ namespace
        40:   00000000        nop
 
        be careful, we use the argument space reserved by the caller to
-       write down regs. This can avoid the need to make use of arbitary far away
+       write down regs. This can avoid the need to make use of arbitrary far away
        stack space or to allocate a function frame for this code snippet itself.
        Since only functions with variable arguments will overwrite the space,
        cpp_vtable_call should be safe.

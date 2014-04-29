@@ -110,7 +110,7 @@ namespace dxcanvas
                     !aBmpSysData.pDIB )
                 {
                     // first of all, ensure that Bitmap contains a DIB, by
-                    // aquiring a read access
+                    // acquiring a read access
                     BitmapReadAccess* pReadAcc = rBmp.AcquireReadAccess();
 
                     // TODO(P2): Acquiring a read access can actually

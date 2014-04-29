@@ -195,7 +195,7 @@ namespace editeng
 
             <p>pseudo-abstract, needs to be overridden</p>
 
-            <p>Note an important thing about the indicies: They are always relative to the <em>previous
+            <p>Note an important thing about the indices: They are always relative to the <em>previous
             call</em> of ReplaceUnit. This means whe you get a call to ReplaceUnit, and replace some text
             in your document, than you have to remember the document position immediately <em>behind</em>
             the changed text. In a next call to ReplaceUnit, an index of <em>0</em> will denote exactly

@@ -177,7 +177,7 @@ Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException, std::exc
 Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeException, std::exception)
 {
     Any aReturn;
-    // some functionality at our aggregate cannot be reasonably fullfilled here.
+    // some functionality at our aggregate cannot be reasonably fulfilled here.
     if  (   _rType.equals(::getCppuType(static_cast< Reference< XFormComponent >* >(NULL)))
         ||  _rType.equals(::getCppuType(static_cast< Reference< XServiceInfo >* >(NULL)))
         ||  _rType.equals(::getCppuType(static_cast< Reference< XBindableValue >* >(NULL)))

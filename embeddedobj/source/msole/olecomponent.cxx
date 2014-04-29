@@ -670,7 +670,6 @@ sal_Bool OleComponent::InitializeObject_Impl()
     if ( FAILED( hr ) || !m_pNativeImpl->m_pViewObject2 )
         return sal_False;
 
-
     // remove all the caches
     IOleCache* pIOleCache = NULL;
     if ( SUCCEEDED( m_pNativeImpl->m_pObj->QueryInterface( IID_IOleCache, (void**)&pIOleCache ) ) && pIOleCache )

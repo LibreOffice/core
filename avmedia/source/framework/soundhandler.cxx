@@ -210,7 +210,7 @@ SoundHandler::~SoundHandler()
 
     @short      try to load audio file
     @descr      This method try to load given audio file by URL and play it. We use vcl/Sound class to do that.
-                Playing of sound is asynchron everytime.
+                Playing of sound is asynchron every time.
 
     @attention  We must hold us alive by ourself ... because we use async. vcl sound player ... but playing is started
                 in async interface call "dispatch()" too. And caller forget us immediately. But then our uno ref count

@@ -70,7 +70,7 @@ namespace connectivity
 
         protected:
             ::std::vector<void*>                    m_aBindVector;
-            ::std::vector<sal_Int32>                m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
+            ::std::vector<sal_Int32>                m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
 
             ::std::vector<sal_Int32>                m_aOrderbyColumnNumber;
             ::std::vector<TAscendingOrder>          m_aOrderbyAscending;

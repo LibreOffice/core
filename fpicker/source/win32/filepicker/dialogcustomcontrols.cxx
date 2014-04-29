@@ -61,7 +61,7 @@ void SAL_CALL CDialogCustomControlBase::AlignToBuddy(HWND aBuddyHandle)
     int cy_new = rcBuddy.bottom - rcBuddy.top;
 
     // keep the vertical position because
-    // the Windows dialog controler does
+    // the Windows dialog controller does
     // this job
     RECT rcMe;
     GetWindowRect(m_CustomControlHandle,&rcMe);

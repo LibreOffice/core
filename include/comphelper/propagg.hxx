@@ -70,7 +70,7 @@ class IPropertyInfoService
 public:
     /** get the preferred handle for the given property
         @param      _rName      the property name
-        @return                 the handle the property should be refered by, or -1 if there are no
+        @return                 the handle the property should be referred by, or -1 if there are no
                                 preferences for the given property
     */
     virtual sal_Int32           getPreferredPropertyId(const OUString& _rName) = 0;
@@ -107,7 +107,7 @@ public:
                                 aggregate properties get depend from the following two parameters.
         @param  _pInfoService
                                 If not NULL, the object pointed to is used to calc handles which should be used
-                                for refering the aggregate's properties from outside.
+                                for referring the aggregate's properties from outside.
                                 If one of the properties returned from the info service conflict with other handles
                                 alread present (e.g. through _rProperties), the property is handled as if -1 was returned.
                                 If NULL (or, for a special property, a call to getPreferredPropertyId returns -1),

@@ -169,7 +169,7 @@ namespace connectivity
             > SELECT LOG(-2);
                     -> NULL
 
-                If called with two parameters, this function returns the logarithm of X for an arbitary base B:
+                If called with two parameters, this function returns the logarithm of X for an arbitrary base B:
 
             > SELECT LOG(2,65536);
                     -> 16.000000

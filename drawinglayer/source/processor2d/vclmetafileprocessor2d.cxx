@@ -2126,7 +2126,7 @@ namespace drawinglayer
                         mpPDFExtOutDevData->BeginStructureElement(rTagElement);
                     }
 
-                    // proccess children normally
+                    // process children normally
                     process(rStructureTagCandidate.getChildren());
 
                     if(mpPDFExtOutDevData &&  bTagUsed)

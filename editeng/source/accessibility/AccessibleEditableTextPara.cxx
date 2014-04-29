@@ -1339,7 +1339,7 @@ namespace accessibility
         for( i = 0; i < nLength; i++ )
             pIndices[i] = i;
         sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
-        // create sorted sequences accoring to index array
+        // create sorted sequences according to index array
         uno::Sequence<beans::PropertyValue> aNewValues( nLength );
         beans::PropertyValue* pNewValues = aNewValues.getArray();
         for( i = 0; i < nLength; i++ )

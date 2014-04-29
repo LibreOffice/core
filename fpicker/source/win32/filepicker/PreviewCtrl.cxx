@@ -400,8 +400,6 @@ sal_Bool SAL_CALL CFilePreview::show( sal_Bool bShow )
 // preview of the given file will be shown
 // returns true on success or false if an error
 // occurred (the file in not there or not accessible etc.)
-
-
 sal_Bool SAL_CALL CFilePreview::update( const OUString& aFileName )
 {
     OSL_PRECOND( IsWindow( m_hwnd ), "Preview window not initialized" );

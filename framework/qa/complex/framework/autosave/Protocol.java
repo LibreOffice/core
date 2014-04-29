@@ -33,7 +33,7 @@ import java.sql.*;
  * to stdout/stderr (if necessary at the same time!).
  *
  *  TODO
- *      - implement filter, which e.g. supress showing of INFO data
+ *      - implement filter, which e.g. suppress showing of INFO data
  */
 public class Protocol extends JComponent
 {

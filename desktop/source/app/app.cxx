@@ -1487,7 +1487,7 @@ int Desktop::Main()
         pExecGlobals->xGlobalBroadcaster = Reference < css::document::XEventListener >
             ( css::frame::theGlobalEventBroadcaster::get(xContext), UNO_QUERY_THROW );
 
-        /* ensure existance of a default window that messages can be dispatched to
+        /* ensure existence of a default window that messages can be dispatched to
            This is for the benefit of testtool which uses PostUserEvent extensively
            and else can deadlock while creating this window from another tread while
            the main thread is not yet in the event loop.
@@ -1645,7 +1645,7 @@ int Desktop::Main()
 
         // Post user event to startup first application component window
         // We have to send this OpenClients message short before execute() to
-        // minimize the risk that this message overtakes type detection contruction!!
+        // minimize the risk that this message overtakes type detection construction!!
         Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
 
         // Post event to enable acceptors

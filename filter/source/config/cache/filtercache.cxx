@@ -375,7 +375,7 @@ CacheItem FilterCache::getItem(      EItemType        eType,
 
     /* Workaround for #137955#
        Draw types and filters are installed ... but draw was disabled during setup.
-       We must supress accessing these filters. Otherwise the office can crash.
+       We must suppress accessing these filters. Otherwise the office can crash.
        Solution for the next major release: do not install those filters !
      */
     if (eType == E_FILTER)
@@ -695,7 +695,7 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
     // i) Step over all well known URL pattern
     //    and add registered types to the return list too
     //    Do it as first one - because: if a type match by a
-    //    pattern a following deep detection can be supressed!
+    //    pattern a following deep detection can be suppressed!
     //    Further we can stop after first match ...
     for (CacheItemRegistration::const_iterator pPattReg  = m_lURLPattern2Types.begin();
                                                pPattReg != m_lURLPattern2Types.end()  ;
@@ -2259,7 +2259,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     aItem[PROPNAME_NAME] <<= sItem;
 
     // Installed flag ...
-    // Isnt used any longer!
+    // Isn't used any longer!
 
     // UIName
     impl_readPatchUINames(xItem, aItem);

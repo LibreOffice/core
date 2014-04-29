@@ -407,7 +407,7 @@ oslProcess raiseProcess(
     case osl_Process_E_NotFound:
         throw RuntimeException( "image not found!", 0 );
     case osl_Process_E_TimedOut:
-        throw RuntimeException( "timout occurred!", 0 );
+        throw RuntimeException( "timeout occurred!", 0 );
     case osl_Process_E_NoPermission:
         throw RuntimeException( "permission denied!", 0 );
     case osl_Process_E_Unknown:

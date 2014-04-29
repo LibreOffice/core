@@ -221,7 +221,7 @@ namespace drawinglayer
                 //
                 //     if(xExtracted2DSceneShadow.hasElements())
                 //     {
-                //         // proccess extracted 2D content
+                //         // process extracted 2D content
                 //         process(xExtracted2DSceneShadow);
                 //     }
                 // }
@@ -246,7 +246,7 @@ namespace drawinglayer
                 //
                 // if(xExtracted2DSceneGeometry.hasElements() || xExtracted2DSceneShadow.hasElements())
                 // {
-                //     // proccess extracted 2D content
+                //     // process extracted 2D content
                 //     process(xExtracted2DSceneGeometry);
                 //     process(xExtracted2DSceneShadow);
                 // }
@@ -289,7 +289,7 @@ namespace drawinglayer
                         getViewInformation2D().getExtendedInformationSequence());
                     updateViewInformation(aViewInformation2D);
 
-                    // proccess child content recursively
+                    // process child content recursively
                     process(rTransformCandidate.getChildren());
 
                     // restore transformations

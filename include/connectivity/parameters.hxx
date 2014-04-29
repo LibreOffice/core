@@ -78,7 +78,7 @@ namespace dbtools
             /// the column object for this parameter, as returned by the query composer
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                         xComposerColumn;
-            /// the indicies of inner parameters which need to be filled when this concrete parameter is set
+            /// the indices of inner parameters which need to be filled when this concrete parameter is set
             ::std::vector< sal_Int32 >  aInnerIndexes;
 
             /// default ctor

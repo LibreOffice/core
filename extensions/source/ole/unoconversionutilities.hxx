@@ -1387,7 +1387,7 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const Any & rObj, VARIANT
             }
         }
         // Is the object a COM wrapper ( either XInvocation, or Adapter object)
-        // or does it suppy an IDispatch by its own ?
+        // or does it supply an IDispatch by its own ?
         else
         {
             Reference<XInterface> xIntComWrapper = xInt;

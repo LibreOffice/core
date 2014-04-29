@@ -151,7 +151,7 @@ HRESULT doTest()
     varParam1.vt= VT_I1 | VT_BYREF;
     varParam1.plVal= &value;
 
-    // Testing the caching of DISPIDs and the process of aquiring member information
+    // Testing the caching of DISPIDs and the process of acquiring member information
     // on demand in IDispatch::Invoke
     // Step through the corresponding IDispatch implementation of the ole bridge
     hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodByte"), &varParam1, &varRet);

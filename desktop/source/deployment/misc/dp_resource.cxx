@@ -73,7 +73,6 @@ OUString getResourceString( sal_uInt16 id )
     return ret.replaceAll("%PRODUCTNAME", utl::ConfigManager::getProductName());
 }
 
-
 const LanguageTag & getOfficeLanguageTag()
 {
     return OfficeLocale::get();

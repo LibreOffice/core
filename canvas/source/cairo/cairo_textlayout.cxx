@@ -305,7 +305,7 @@ namespace cairocanvas
   /**
    * TextLayout::isCairoRenderable
    *
-   * Features currenly not supported by Cairo (VCL rendering is used as fallback):
+   * Features currently not supported by Cairo (VCL rendering is used as fallback):
    * - vertical glyphs
    *
    * @return true, if text/font can be rendered with cairo

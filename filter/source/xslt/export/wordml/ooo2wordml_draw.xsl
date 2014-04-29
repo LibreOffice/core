@@ -42,7 +42,7 @@
 		</xsl:variable>
 		<xsl:choose>
 			<!--
-						  deal with captions and frames first. draw:text-box is a powerfull element in OOo, its GUI name is frame. And OOo use it to contain Captions
+						  deal with captions and frames first. draw:text-box is a powerful element in OOo, its GUI name is frame. And OOo use it to contain Captions
 						  Since there is not a corresponding object in word, so we draw the text-box itself and its children separately. If it look like a Caption only frame
 						  we'll adjust the text-box position to make it look pretty
 			 -->

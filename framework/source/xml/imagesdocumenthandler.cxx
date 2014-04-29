@@ -292,7 +292,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
 
             case IMG_ELEMENT_ENTRY:
             {
-                // Check that image:entry is embeded into image:images!
+                // Check that image:entry is embedded into image:images!
                 if ( !m_bImagesStartFound )
                 {
                     delete m_pImages;
@@ -369,7 +369,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
 
             case IMG_ELEMENT_EXTERNALIMAGES:
             {
-                // Check that image:externalimages is embeded into image:imagecontainer
+                // Check that image:externalimages is embedded into image:imagecontainer
                 if ( !m_bImageContainerStartFound )
                 {
                     delete m_pImages;
@@ -380,7 +380,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                // Check that image:externalentry is NOT embeded into image:externalentry
+                // Check that image:externalentry is NOT embedded into image:externalentry
                 if ( m_bExternalImagesStartFound )
                 {
                     delete m_pImages;

@@ -122,7 +122,7 @@ bool JobURL::isValid() const
     @return     <TRUE/> if an event part of the job URL exist and the out parameter
                 sEvent was filled.
 
-    @attention  The out parameter will be reseted everytime. Don't use it if method returns <FALSE/>!
+    @attention  The out parameter will be reseted every time. Don't use it if method returns <FALSE/>!
 */
 bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
 {
@@ -150,7 +150,7 @@ bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
     @return     <TRUE/> if an alias part of the job URL exist and the out parameter
                 sAlias was filled.
 
-    @attention  The out parameter will be reseted everytime. Don't use it if method returns <FALSE/>!
+    @attention  The out parameter will be reseted every time. Don't use it if method returns <FALSE/>!
 */
 bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
 {
@@ -178,7 +178,7 @@ bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
     @return     <TRUE/> if an service part of the job URL exist and the out parameter
                 sService was filled.
 
-    @attention  The out parameter will be reseted everytime. Don't use it if method returns <FALSE/>!
+    @attention  The out parameter will be reseted every time. Don't use it if method returns <FALSE/>!
 */
 bool JobURL::getService( /*OUT*/ OUString& sService ) const
 {

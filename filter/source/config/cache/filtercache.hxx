@@ -260,7 +260,7 @@ class FilterCache : public BaseLock
         /** @short  standard ctor
 
             @descr  Its not allowed to do anything here ...
-                    especialy is forbidden to start operations,
+                    especially is forbidden to start operations,
                     which needs a FilterCache instance too!
                     Why? Because thie FilterCache instance will be
                     used as a singleton! And if during this ctor any
@@ -484,7 +484,7 @@ class FilterCache : public BaseLock
         /** @short      return an item, which match the specified type and name.
 
             @descr      Because this cache can be used inside multithreaded environments
-                        the caller must be aware of some exceptions - especialy a "NoSuchElementExcepotion".
+                        the caller must be aware of some exceptions - especially a "NoSuchElementExcepotion".
                         May another thread already removed the required item before ...
 
             @param      eType
@@ -912,7 +912,6 @@ class FilterCache : public BaseLock
                               const CacheItemList&                                      rCache,
                               const OUStringList&                                       lItems)
             throw(css::uno::Exception);
-
 
 
         /** @short  specify, which save operation is necessary for the specified item.

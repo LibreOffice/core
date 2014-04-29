@@ -111,7 +111,7 @@ namespace basegfx
 
                 // sort current scanline using comparator. Only X is used there
                 // since all entries are already in one processed line. This needs to be done
-                // everytime since not only new spans may have benn added or old removed,
+                // every time since not only new spans may have benn added or old removed,
                 // but incrementing may also have changed the order
                 ::std::sort(aCurrentLine.begin(), aCurrentLine.end(), lineComparator());
 

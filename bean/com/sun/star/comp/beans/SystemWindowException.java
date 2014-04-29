@@ -19,7 +19,7 @@
 package com.sun.star.comp.beans;
 
 /** indicates that an operation needed a system window,
-    but no system window was aquired yet.
+    but no system window was acquired yet.
 
     @see com.sun.star.comp.beans.OOoBean.aquireSystemWindow
 

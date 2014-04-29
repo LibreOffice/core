@@ -358,7 +358,7 @@ namespace dbaccess
     private:
         ::std::auto_ptr<ORowSetNotifierImpl> m_pImpl;
         ORowSetBase*    m_pRowSet;
-            // not aquired! This is not necessary because this class here is to be used on the stack within
+            // not acquired! This is not necessary because this class here is to be used on the stack within
             // a method of ORowSetBase (or derivees)
         bool        m_bWasNew;
         bool        m_bWasModified;

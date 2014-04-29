@@ -30,7 +30,7 @@ Public Functions
     abs(x)
     max(x1,x2)
     min(x1,x2)
-    power(x,power(interger only), rounding-factor=100)
+    power(x,power(integer only), rounding-factor=100)
     sqrt(x, rounding-factor=100)
     convert2radian(x,rounding-factor=100)
     convert2degree(x,rounding-factor=100)

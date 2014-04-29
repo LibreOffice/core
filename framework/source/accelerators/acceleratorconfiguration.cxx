@@ -489,7 +489,7 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(bool bWriteAcces
     }
 
     // in case, we have a writeable cache, we use it for reading too!
-    // Otherwhise the API user can't find its own changes ...
+    // Otherwise the API user can't find its own changes ...
     if (m_pWriteCache)
         return *m_pWriteCache;
     else
@@ -1011,7 +1011,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
 
         // Only path of form "PrimaryKeys/Modules/Module['<module_name>']/Key['<command_url>']/Command[<locale>]" will
         // be interesting for use. Sometimes short path values are given also by the broadcaster ... but they must be ignored :-)
-        // So we try to split the path into 3 parts (module isnt important here, because we already know it ... because
+        // So we try to split the path into 3 parts (module isn't important here, because we already know it ... because
         // these instance is bound to a specific module configuration ... or it''s the global configuration where no module is given at all.
 
         OUString sOrgPath;
@@ -1413,7 +1413,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(bool bPreferred,
         }
 
         // in case, we have a writeable cache, we use it for reading too!
-        // Otherwhise the API user can't find its own changes ...
+        // Otherwise the API user can't find its own changes ...
         if (m_pPrimaryWriteCache)
             return *m_pPrimaryWriteCache;
         else
@@ -1433,7 +1433,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(bool bPreferred,
         }
 
         // in case, we have a writeable cache, we use it for reading too!
-        // Otherwhise the API user can't find its own changes ...
+        // Otherwise the API user can't find its own changes ...
         if (m_pSecondaryWriteCache)
             return *m_pSecondaryWriteCache;
         else

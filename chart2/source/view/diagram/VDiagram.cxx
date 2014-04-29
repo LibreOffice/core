@@ -355,7 +355,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                             lcl_ensureScaleValue(fScaleX);
                         }
                         else
-                            fScaleX = 1.0;//looking from top or bottom hieght is irrelevant
+                            fScaleX = 1.0;//looking from top or bottom height is irrelevant
                     }
                     else
                     {
@@ -399,7 +399,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                             lcl_ensureScaleValue(fScaleX);
                         }
                         else
-                            fScaleX = 1.0;//looking from top or bottom hieght is irrelevant
+                            fScaleX = 1.0;//looking from top or bottom height is irrelevant
                     }
                     else
                     {

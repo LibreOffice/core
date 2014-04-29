@@ -184,7 +184,7 @@ namespace dbtools
         }
 
         // we need to map the parameter names (which is all we get from the 's
-        // MasterFields property) to indicies, which are needed by the XParameters
+        // MasterFields property) to indices, which are needed by the XParameters
         // interface of the row set)
         Reference<XPropertySet> xParam;
         for ( sal_Int32 i = 0; i < m_nInnerCount; ++i )

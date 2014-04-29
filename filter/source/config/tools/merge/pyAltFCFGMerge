@@ -494,7 +494,7 @@ class Merger:
                 self.m_aCfg.getValue(PROP_XMLPACKAGE ),\
                 self.m_aCfg.getValueWithDefault(PROP_LANGUAGEPACK, False))
 
-        # counts all transfered fragments
+        # counts all transferred fragments
         # Can be used later to decide, if a generated package file
         # contains "nothing"!
         nItemCount = 0

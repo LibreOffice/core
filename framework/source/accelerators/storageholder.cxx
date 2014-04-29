@@ -189,7 +189,7 @@ StorageHolder::TStorageList StorageHolder::getAllPathStorages(const OUString& sP
         if (pCheck == m_lStorages.end())
         {
             // at least one path element was not found
-            // Seems that this path isnt open ...
+            // Seems that this path isn't open ...
             lStoragesOfPath.clear();
             return lStoragesOfPath;
         }

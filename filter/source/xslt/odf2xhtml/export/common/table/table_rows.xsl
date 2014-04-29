@@ -61,7 +61,7 @@
 		<xsl:param name="allTableColumns" />
 
 		<!-- Some Office Calc documents simulate a background by repeating one of the later cells until end of used space
-			 (The value of "table:number-columns-repeated" is enourmous). Writing out all these cells would be fatal in time
+			 (The value of "table:number-columns-repeated" is enormous). Writing out all these cells would be fatal in time
 			 and output size. Therefore, this global variable shows us the longest row with content. -->
 		<xsl:variable name="maxRowLength" select="count($allTableColumns/table:table-column)" />
 		<xsl:if test="$debugEnabled">

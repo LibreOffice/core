@@ -40,7 +40,7 @@ extern "C" int APIENTRY WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 #endif
 {
-    // Retreive startup info
+    // Retrieve startup info
 
     STARTUPINFO aStartupInfo;
 

@@ -50,8 +50,8 @@ inline css::uno::Reference< css::frame::XModel > extractFrameModel(const css::un
 
     @descr  It try to close the given resource first.
             Delegating of the ownership can be influenced from
-            outside. If closing isnt possible (because the
-            needed interface isnt available) dispose() is tried instead.
+            outside. If closing isn't possible (because the
+            needed interface isn't available) dispose() is tried instead.
             Al possible exception are handled inside.
             So the user of this method has to look for the return value only.
 

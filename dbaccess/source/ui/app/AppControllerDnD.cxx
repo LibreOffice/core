@@ -155,7 +155,7 @@ void OApplicationController::deleteTables(const ::std::vector< OUString>& _rList
                         if(e.TargetException >>= aSql)
                             aErrorInfo = aSql;
                         else
-                            OSL_FAIL("OApplicationController::implDropTable: something strange happended!");
+                            OSL_FAIL("OApplicationController::implDropTable: something strange happened!");
                     }
                     catch( const Exception& )
                     {

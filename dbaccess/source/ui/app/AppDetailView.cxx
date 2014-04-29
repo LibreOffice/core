@@ -418,7 +418,6 @@ void OTasksWindow::setHelpText(sal_uInt16 _nId)
     if ( _nId )
     {
         OUString sText = ModuleRes(_nId);
-
         m_aHelpText.SetText(sText);
     }
     else

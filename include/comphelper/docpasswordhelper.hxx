@@ -50,7 +50,7 @@ class COMPHELPER_DLLPUBLIC IDocPasswordVerifier
 public:
     virtual             ~IDocPasswordVerifier();
 
-    /** Will be called everytime a password needs to be verified.
+    /** Will be called every time a password needs to be verified.
 
         @param rPassword
             The password to be verified
@@ -71,7 +71,7 @@ public:
      */
     virtual DocPasswordVerifierResult verifyPassword( const OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData ) = 0;
 
-    /** Will be called everytime an encryption data needs to be verified.
+    /** Will be called every time an encryption data needs to be verified.
 
         @param rEncryptionData
             The data will be validated
@@ -82,7 +82,7 @@ public:
             - DocPasswordVerifierResult_WRONG_PASSWORD, if the encryption data is
               wrong.
             - DocPasswordVerifierResult_ABORT, if an unrecoverable error
-              occured while data verification. The password request loop
+              occurred while data verification. The password request loop
               will be aborted.
      */
     virtual DocPasswordVerifierResult verifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData ) = 0;

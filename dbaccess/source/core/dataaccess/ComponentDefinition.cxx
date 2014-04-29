@@ -291,7 +291,7 @@ void OComponentDefinition::columnAppended( const Reference< XPropertySet >& _rxS
     // but xColDesc will live longer than this. So effectively, the setParent call was pretty useless.
     //
     // The intention for this parenting was that the column descriptor is able to find the data source,
-    // by traveling up the parent hierachy until there's an XDataSource. This didn't work (which
+    // by traveling up the parent hierarchy until there's an XDataSource. This didn't work (which
     // for instance causes #i65023#). We need another way to properly ensure this.
 
     notifyDataSourceModified();

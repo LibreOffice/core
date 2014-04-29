@@ -439,7 +439,7 @@ class DataContainer
     /** @short  identifies different sets of the TypeDetection configuration package.
 
         @descr  Most functions on top of this configuration package are the same ...
-                but must be executed on different places inside ths configuration structures.
+                but must be executed on different places inside this configuration structures.
                 These enum values can be used ate some interface methods to specify, which
                 configuration set should be used.
                 Further it must be possible to start the same action for more then one cfg type.

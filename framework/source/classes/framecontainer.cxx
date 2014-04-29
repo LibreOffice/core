@@ -179,7 +179,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32
     @short      returns a snapshot of all currently existing frames inside this container
     @descr      Should be used to replace the deprecated functions getCount()/operator[]!
 
-    @return     a list of all frame refrences inside this container
+    @return     a list of all frame references inside this container
 
     @threadsafe yes
  *****************************************************************************************************************/

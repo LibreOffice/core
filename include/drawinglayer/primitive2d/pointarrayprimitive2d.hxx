@@ -39,7 +39,7 @@ namespace drawinglayer
             the logic size of a 'pixel' depends on the view transformation.
 
             This is one of the non-decomposable primitives, so a renderer
-            should proccess it (Currently it is only used for grid visualisation,
+            should process it (Currently it is only used for grid visualisation,
             but this may change).
          */
         class DRAWINGLAYER_DLLPUBLIC PointArrayPrimitive2D : public BasePrimitive2D

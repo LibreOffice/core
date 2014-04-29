@@ -542,7 +542,7 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
 
                 case KeyType::PRIMARY:
                 {
-                    // we have a primary key so look in our list if there exsits a key which this is refered to
+                    // we have a primary key so look in our list if there exists a key which this is referred to
                     OTableWindowMap::const_iterator aIter = pTabWins->begin();
                     OTableWindowMap::const_iterator aEnd  = pTabWins->end();
                     for(;aIter != aEnd;++aIter)

@@ -51,7 +51,7 @@ namespace dbaui
         SPECIAL_MESSAGE     m_eLastMessage;
 
         Link                m_aTypeSelectHandler;   /// to be called if a new type is selected
-        bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
+        bool                m_bDisplayingInvalid : 1;   /// the currently displayed data source is deleted
         bool                m_bInitTypeList : 1;
         bool                approveDatasourceType( const OUString& _sURLPrefix, OUString& _inout_rDisplayName );
         void                insertDatasourceTypeEntryData( const OUString& _sType, const OUString& sDisplayName );

@@ -404,7 +404,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
                 }
                 if( nSeriesNumberFormat != 0 )
                 {
-                    //give the new series the same number format as the former series especially for bubble charts thus the bubble size values can be edited with same format immidiately
+                    //give the new series the same number format as the former series especially for bubble charts thus the bubble size values can be edited with same format immediately
                     Reference< beans::XPropertySet > xNewSeriesProps( xNewSeries, uno::UNO_QUERY );
                     if( xNewSeriesProps.is() )
                         xNewSeriesProps->setPropertyValue( "NumberFormat" , uno::makeAny( nSeriesNumberFormat ) );

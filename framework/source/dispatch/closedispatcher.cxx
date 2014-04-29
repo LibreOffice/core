@@ -189,7 +189,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     // OK - URLs are the right ones.
     // But we can't execute synchronously :-)
     // May we are called from a generic key-input handler,
-    // which isnt aware that this call kill its own environment ...
+    // which isn't aware that this call kill its own environment ...
     // Do it asynchronous everytimes!
 
     // But dont forget to hold usself alive.
@@ -279,7 +279,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     FrameListAnalyzer aCheck1(xDesktop, xCloseFrame, FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
 
     // a) If the curent frame (where the close dispatch was requested for) does not have
-    //    any parent frame ... it will close this frame only. Such frame isnt part of the
+    //    any parent frame ... it will close this frame only. Such frame isn't part of the
     //    global desktop tree ... and such frames are used as "implementation details" only.
     //    E.g. the live previews of our wizards doing such things. And then the owner of the frame
     //    is responsible for closing the application or accepting closing of the application
@@ -403,7 +403,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     // We reached this method only, by using a reference to ourself :-)
     // Further this member is used to detect still running and not yet finished
     // ansynchronous operations. So its time now to release this reference.
-    // But hold it temp alive. Otherwhise we die before we can finish this method really :-))
+    // But hold it temp alive. Otherwise we die before we can finish this method really :-))
     css::uno::Reference< css::uno::XInterface > xTempHold = m_xSelfHold;
     m_xSelfHold.clear();
     m_xResultListener.clear();
@@ -574,7 +574,7 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
         {
             // b1) Note: Toolkit interface XTopWindow sometimes is used by real VCL-child-windows also .-)
             //     Be sure that these window is really a "top system window".
-            //     Attention ! Checking Window->GetParent() isnt the right approach here.
+            //     Attention ! Checking Window->GetParent() isn't the right approach here.
             //     Because sometimes VCL create "implicit border windows" as parents even we created
             //     a simple XWindow using the toolkit only .-(
             SolarMutexGuard aSolarLock;

@@ -786,7 +786,7 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
 
                     if( nDownloadSize > 0 )
                     {
-                        if ( nDownloadSize <= nFileSize ) // we have already downloaded everthing
+                        if ( nDownloadSize <= nFileSize ) // we have already downloaded everything
                         {
                             bContinueDownload = false;
                             bDownloadAvailable = true;

@@ -216,7 +216,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     /*
     // TODO remove me!
     // Attention: This is temp. workaround ... We create a temp. storage file
-    // based of a sytem directory. This must be used so, till the storage implementation
+    // based of a system directory. This must be used so, till the storage implementation
     // can work on directories too.
     */
     css::uno::Sequence< css::uno::Any > lArgs(2);

@@ -3461,7 +3461,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
                     aColor = Color( (sal_uInt8)nR, (sal_uInt8)nG, (sal_uInt8)nB );
                 }
                 break;
-                case 0x04 :     // substract grey level RGB(p,p,p)
+                case 0x04 :     // subtract grey level RGB(p,p,p)
                 {
                     sal_Int16 nR = (sal_Int16)aColor.GetRed() - (sal_Int16)nParameter;
                     sal_Int16 nG = (sal_Int16)aColor.GetGreen() - (sal_Int16)nParameter;
@@ -3475,7 +3475,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
                     aColor = Color( (sal_uInt8)nR, (sal_uInt8)nG, (sal_uInt8)nB );
                 }
                 break;
-                case 0x05 :     // substract from gray level RGB(p,p,p)
+                case 0x05 :     // subtract from gray level RGB(p,p,p)
                 {
                     sal_Int16 nR = (sal_Int16)nParameter - (sal_Int16)aColor.GetRed();
                     sal_Int16 nG = (sal_Int16)nParameter - (sal_Int16)aColor.GetGreen();

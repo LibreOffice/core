@@ -461,7 +461,7 @@ public class FCFGSplit
         sTimes.append(" ms\n"                            );
         m_aDebug.setDetailedInfo(sTimes.toString());
 
-        // everyting seems to be ok.
+        // everything seems to be ok.
         // Return "OK" to calli.
         m_aDebug.setGlobalInfo("Finish.");
         System.exit(0);

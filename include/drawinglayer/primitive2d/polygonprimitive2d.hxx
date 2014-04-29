@@ -43,7 +43,7 @@ namespace drawinglayer
             this primitive is view-dependent, too.
 
             This is one of the non-decomposable primitives, so a renderer
-            should proccess it.
+            should process it.
          */
         class DRAWINGLAYER_DLLPUBLIC PolygonHairlinePrimitive2D : public BasePrimitive2D
         {

@@ -313,7 +313,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         xParentWindow = xPluggWindow;
 
     // dont disturb user in case he put the loading document into the background!
-    // Supress any setVisible() or toFront() call in case the initial show was
+    // Suppress any setVisible() or toFront() call in case the initial show was
     // already made.
     css::uno::Reference< css::awt::XWindow2 > xVisibleCheck(xParentWindow, css::uno::UNO_QUERY);
     bool bIsVisible = false;
@@ -367,7 +367,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         return;
 
     // OK: The document was not opened in hidden mode ...
-    // and the window isnt already visible.
+    // and the window isn't already visible.
     // Show it and bring it to front.
     // But before we have to be sure, that our internal used helper progress
     // is visible too.

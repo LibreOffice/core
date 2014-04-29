@@ -397,7 +397,7 @@ namespace basegfx
 
             @param fEnd
             The maximum distance for the last point. No more points behind this distance will be created.
-            Use 0.0 to proccess the whole polygon. Negative values are truncated to 0.0. It also
+            Use 0.0 to process the whole polygon. Negative values are truncated to 0.0. It also
             needs to be more or equal to fStart, else it is truncated to fStart.
 
             @return

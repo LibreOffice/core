@@ -1608,8 +1608,8 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
         implts_updateModifiedState(xDocument);
     }
     /* at least one document starts saving process =>
-       Our application code isnt ready for multiple save requests
-       at the same time. So we have to supress our AutoSave feature
+       Our application code isn't ready for multiple save requests
+       at the same time. So we have to suppress our AutoSave feature
        for the moment, till this other save requests will be finished.
      */
     else if (
@@ -2390,7 +2390,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
         bool bAllowUserIdleLoop = true;
         AutoRecovery::ETimerType eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop, false);
 
-        // If timer isnt used for "short callbacks" (means polling
+        // If timer isn't used for "short callbacks" (means polling
         // for special states) ... reset the handle state of all
         // cache items. Such handle state indicates, that a document
         // was already saved during the THIS(!) AutoSave session.
@@ -2601,7 +2601,7 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
 
     /* This method is called within disposing() of the document too. But there it's not a good idea to
        deregister us as listener. Furter it make no sense - because the broadcaster dies.
-       So we supress deregistration in such case ...
+       So we suppress deregistration in such case ...
     */
     if (bStopListening)
         implts_stopModifyListeningOnDoc(aInfo);
@@ -2878,7 +2878,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
         So we have to check a second time, if this property is set ....
         Best place doing so is to check it immeditaly before saving
         and supressingd saving the document then.
-        Of course removing the corresponding cache entry isnt an option.
+        Of course removing the corresponding cache entry isn't an option.
         Because it would disturb iteration over the cache !
         So we ignore such documents only ...
         Hopefully next time they are not inserted in our cache.
@@ -3180,7 +3180,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
         rInfo.DocumentState |=  AutoRecovery::E_INCOMPLETE;
     }
 
-    // make sure the progress isnt referred any longer
+    // make sure the progress isn't referred any longer
     impl_forgetProgress(rInfo, lNewArgs, css::uno::Reference< css::frame::XFrame >());
 
     // try to remove the old temp file.

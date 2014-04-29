@@ -1750,6 +1750,7 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
     SymbolSelected(pButton);
     return 0;
 }
+
 IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, MetricField *, pField)
 {
     bNewSize = true;

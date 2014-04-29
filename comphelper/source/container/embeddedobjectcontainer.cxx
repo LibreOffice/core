@@ -1548,10 +1548,10 @@ bool EmbeddedObjectContainer::StoreChildren(bool _bOasisFormat,bool _bObjectsOnl
                         }
                         else
                         {
-                            //do nothing.embeded model is not modified, no need to persist.
+                            //do nothing. Embedded model is not modified, no need to persist.
                         }
                     }
-                    else //the embeded object is in active status, always store back it.
+                    else //the embedded object is in active status, always store back it.
                     {
                         xPersist->storeOwn();
                     }

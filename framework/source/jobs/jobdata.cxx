@@ -288,7 +288,7 @@ void JobData::setResult( const JobResult& aResult )
 
 /**
     @short  set a new environment descriptor for this job
-    @descr  It must(!) be done everytime this container is initialized
+    @descr  It must(!) be done every time this container is initialized
             with new job datas e.g.: setAlias()/setEvent()/setService() ...
             Otherwhise the environment will be unknown!
  */
@@ -405,7 +405,7 @@ bool JobData::hasConfig() const
                 started any more ... till the administrator change his timestamp.
                 That can be useful for post setup scenarios, which must run one time only.
 
-                Note: This method don't do anything, if ths represented job doesn't have a configuration!
+                Note: This method don't do anything, if this represented job doesn't have a configuration!
  */
 void JobData::disableJob()
 {

@@ -191,7 +191,7 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aM
     m_bCacheFilled( false ),
     m_bGenericDataRetrieved( false )
 {
-    // Create configuration hierachical access name
+    // Create configuration hierarchical access name
     m_aConfigCmdAccess += aModuleName;
     m_aConfigCmdAccess += CONFIGURATION_CMD_ELEMENT_ACCESS;
 

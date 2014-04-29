@@ -76,13 +76,13 @@ class FWE_DLLPUBLIC FrameListAnalyzer
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > > m_lModelFrames;
 
         /** contains all frames, which does not contain the same model like the reference frame.
-            Filling of it can't be supressed by m_eDetectMode.
+            Filling of it can't be suppressed by m_eDetectMode.
             The reference frame is never part of this list!
             All frames inside this list are visible ones. */
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > > m_lOtherVisibleFrames;
 
         /** contains all frames, which does not contain the same model like the reference frame.
-            Filling of it can't be supressed by m_eDetectMode.
+            Filling of it can't be suppressed by m_eDetectMode.
             The reference frame is never part of this list!
             All frames inside this list are hidden ones. */
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > > m_lOtherHiddenFrames;

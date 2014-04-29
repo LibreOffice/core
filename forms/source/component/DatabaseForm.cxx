@@ -84,7 +84,7 @@
 #include <ctype.h>
 #include <boost/unordered_map.hpp>
 
-// compatiblity: DatabaseCursorType is dead, but for compatiblity reasons we still have to write it ...
+// compatibility: DatabaseCursorType is dead, but for compatibility reasons we still have to write it ...
 namespace com {
 namespace sun {
 namespace star {
@@ -3068,7 +3068,7 @@ void SAL_CALL ODatabaseForm::rowSetChanged(const EventObject& /*event*/) throw( 
     // if our parent is an ODatabaseForm, too, then after this rowSetChanged we'll get a "reloaded"
     // or a "loaded" event.
     // If somebody gave us another parent which is an XRowSet but doesn't handle an execute as
-    // "load" respectivly "reload" ... can't do anything ....
+    // "load" respectively "reload" ... can't do anything ....
 }
 
 

@@ -722,7 +722,6 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const sal
     }
 }
 
-
 // AS: Because JPEGs require the alpha channel provided separately (JPEG does not
 //  natively support alpha channel, but SWF lets you provide it separately), we
 //  extract the alpha channel into a separate array here.
@@ -1047,7 +1046,7 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
             nLength = 2 + (pJpgSearch[2]<<8) + pJpgSearch[3];
         }
 
-        // AS: I'm refering to libjpeg for a list of what these
+        // AS: I'm referring to libjpeg for a list of what these
         //  markers are.  See jdmarker.c for a list.
         // AS: I'm ignoring application specific markers 0xE1...0xEF
         //  and comments 0xFE.  I don't know what

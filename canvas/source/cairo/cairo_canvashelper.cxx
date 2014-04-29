@@ -623,7 +623,7 @@ namespace cairocanvas
                             aColor = pBitmapReadAcc->GetColor( nY, nX );
 
                             // cairo need premultiplied color values
-                            // TODO(rodo) handle endianess
+                            // TODO(rodo) handle endianness
 #ifdef OSL_BIGENDIAN
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff++ ];

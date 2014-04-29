@@ -152,7 +152,7 @@ Dialog* SWFDialog::createDialog( Window* pParent )
 
     if (mxSrcDoc.is())
     {
-/*      TODO: From the controler we may get information what page is visible and what shapes
+/*      TODO: From the controller we may get information what page is visible and what shapes
               are selected, if we optionaly want to limit output to that
         Any aSelection;
 

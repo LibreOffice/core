@@ -126,11 +126,11 @@ class HelpOnStartup : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XS
         /** @short  tries to locate the open help module and return
                     the url of the currently shown help content.
 
-            @descr  It returns an empty string, if the help isnt still
+            @descr  It returns an empty string, if the help isn't still
                     open at calling time.
 
             @return The URL of the current shown help content;
-                    or an empty value if the help isnt still open.
+                    or an empty value if the help isn't still open.
          */
         OUString its_getCurrentHelpURL();
 

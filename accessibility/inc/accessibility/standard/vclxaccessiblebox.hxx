@@ -102,7 +102,7 @@ public:
     virtual sal_Bool SAL_CALL doAccessibleAction (sal_Int32 nIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    /** The returned string is assoicated with resource
+    /** The returned string is associated with resource
         <const>RID_STR_ACC_ACTION_TOGGLEPOPUP</const>.
     */
     virtual OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex)

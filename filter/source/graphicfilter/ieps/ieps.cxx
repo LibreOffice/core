@@ -164,7 +164,7 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
      *
      * Because one of our programs is called "convert" and there is a convert
      * in the windows system directory, we want to explicitly search the PATH
-     * to avoid picking up on that one if ImageMagick's convert preceeds it in
+     * to avoid picking up on that one if ImageMagick's convert precedes it in
      * PATH.
      *
      */

@@ -171,7 +171,7 @@ namespace cairo
     }
 
     /**
-     * Surface::Surface:   Create platfrom native Canvas surface from BitmapSystemData
+     * Surface::Surface:   Create platform native Canvas surface from BitmapSystemData
      * @param pSysData Platform native system environment data (struct SystemEnvData in vcl/inc/sysdata.hxx)
      * @param pBmpData Platform native image data (struct BitmapSystemData in vcl/inc/bitmap.hxx)
      * @param width width of the new surface

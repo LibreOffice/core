@@ -1161,7 +1161,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         if (bNewPasswordGiven)
         {
             m_pImpl->m_sFailedPassword = m_pImpl->m_aPassword;
-            // assume that we had an authentication problem. Without this we may, after an unsucessful connect, while
+            // assume that we had an authentication problem. Without this we may, after an unsuccessful connect, while
             // the user gave us a password an the order to remember it, never allow an password input again (at least
             // not without restarting the session)
             m_pImpl->m_aPassword = OUString();
@@ -1317,8 +1317,8 @@ void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (R
     //
     // Since this is a conceptual problem as long as we do use those ZIP packages (in fact, we *cannot*
     // provide the desired functionality as long as we do not have a package format which allows O(1) writes),
-    // we cannot completely fix this. However, we can relax the problem by commiting more often - often
-    // enough so that data loss is more seldom, and seldom enough so that there's no noticable performance
+    // we cannot completely fix this. However, we can relax the problem by committing more often - often
+    // enough so that data loss is more seldom, and seldom enough so that there's no noticeable performance
     // decrease.
     //
     // For this, we introduced a few places which XFlushable::flush their connections, and register as

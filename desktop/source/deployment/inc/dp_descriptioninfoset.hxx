@@ -104,7 +104,7 @@ public:
         If the platform element is present but does not specify a platform then an empty
         sequence is returned. Examples for invalid platform elements:
         <pre>
-            <platform />, <platform value="" />, <platfrom value=",">
+            <platform />, <platform value="" />, <platform value=",">
         </pre>
 
         The value attribute can contain various platform tokens. They must be separated by

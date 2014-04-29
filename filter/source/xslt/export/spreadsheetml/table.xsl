@@ -466,7 +466,7 @@
 		<xsl:param name="calculatedCellPosition" select="1" /><!-- the later table position of the current cell  -->
 		<xsl:param name="calculatedRowPosition" /><!-- the later table position of the current row  -->
 		<xsl:param name="setIndex" select="false()" /> <!-- if not '0' @ss:Index used for neglecting repeteated empty cells -->
-		<xsl:param name="repetition" select="@table:number-columns-repeated" /> <!-- used for explicit writen out cells -->
+		<xsl:param name="repetition" select="@table:number-columns-repeated" /> <!-- used for explicit written out cells -->
 		<xsl:param name="repetitionCellPosition" select="$calculatedCellPosition" /><!-- during repetition formula needs exact cell positioning -->
 		<xsl:param name="nextMatchedCellPosition"><!-- the later table position of the next cell  -->
 		<xsl:choose>

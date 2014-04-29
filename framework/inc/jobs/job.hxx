@@ -118,7 +118,7 @@ class Job : public  ::cppu::WeakImplHelper3<
 
         /**
             We are registered at this instance to listen for office shutdown events.
-            It's necessary supress it (if possible) or to react in the right way.
+            It's necessary suppress it (if possible) or to react in the right way.
          */
         css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
 
@@ -158,7 +158,7 @@ class Job : public  ::cppu::WeakImplHelper3<
             indicates in which state the internal job currently exist.
 
             We can use this information to throw any suitable veto exception
-            to prevent the environment against dieing or supress superflous dispose()
+            to prevent the environment against dieing or suppress superflous dispose()
             calls at the job.
          */
         ERunState m_eRunState;

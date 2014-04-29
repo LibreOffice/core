@@ -2427,7 +2427,7 @@ namespace pcr
                 OSL_FAIL( "FormComponentPropertyHandler::impl_ensureRowsetConnection_nothrow: caught an exception during error handling!" );
                 DBG_UNHANDLED_EXCEPTION();
             }
-            // additional info about what happended
+            // additional info about what happened
             INetURLObject aParser( sDataSourceName );
             if ( aParser.GetProtocol() != INET_PROT_NOT_VALID )
                 sDataSourceName = aParser.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );

@@ -94,7 +94,7 @@ namespace frm
     public:
         /** factory method
             @return
-                a new ONavigationBarPeer instance, which has been aquired once!
+                a new ONavigationBarPeer instance, which has been acquired once!
         */
         static ONavigationBarPeer* Create(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,

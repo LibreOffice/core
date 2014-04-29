@@ -63,7 +63,7 @@ CWinClipboard::CWinClipboard( const Reference< XComponentContext >& rxContext, c
 // XClipboard
 
 // getContent
-// to avoid unecessary traffic we check first if there is a clipboard
+// to avoid unnecessary traffic we check first if there is a clipboard
 // content which was set via setContent, in this case we don't need
 // to query the content from the clipboard, create a new wrapper object
 // and so on, we simply return the orignial XTransferable instead of our

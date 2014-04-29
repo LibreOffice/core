@@ -461,7 +461,7 @@ public class RecoveryTest extends ComplexTestCase {
                 }
                 String tempURL = utils.getOfficeTempDir(xMSF);
 
-                log.println("the destination for saveing is: " + tempURL);
+                log.println("the destination for saving is: " + tempURL);
                 try{
                     oUITools.setTextEditFiledText("Save to", tempURL);
                 } catch (java.lang.Exception e){

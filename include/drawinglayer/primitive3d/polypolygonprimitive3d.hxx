@@ -36,7 +36,7 @@ namespace drawinglayer
 
             This primitive defines a planar 3D PolyPolygon filled with a single color.
             This is one of the non-decomposable primitives, so a renderer
-            should proccess it.
+            should process it.
 
             It is assumed here that the PolyPolgon is a single plane in 3D.
          */

@@ -44,7 +44,7 @@ namespace utl {
             Further this helper defines often used functions (as e.g. open of the required streams,
             consistent checks etcpp.) and it defines all useable property names.
 
-    @attention  This class isnt threadsafe and must be guarded from outside!
+    @attention  This class isn't threadsafe and must be guarded from outside!
  */
 class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
 {
@@ -148,7 +148,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
 
         /** @short  it checks if the descriptor describes a readonly stream.
 
-            @descr  The descriptor itself isnt changed doing so.
+            @descr  The descriptor itself isn't changed doing so.
                     It's only checked if the stream seems to be based
                     of a real readonly file.
 

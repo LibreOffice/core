@@ -22,7 +22,7 @@
 
 #include <macros/generic.hxx>
 
-/* Normaly XInterface isnt used here ...
+/* Normaly XInterface isn't used here ...
    But we need it to be able to define namespace alias css to anything related to ::com::sun::star
    :-) */
 #include <com/sun/star/uno/XInterface.hpp>

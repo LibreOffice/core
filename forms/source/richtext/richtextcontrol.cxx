@@ -216,7 +216,7 @@ namespace frm
             DBG_ASSERT( pPeer, "ORichTextControl::createPeer: invalid peer returned!" );
             if ( pPeer )
             {
-                // by definition, the returned component is aquired once
+                // by definition, the returned component is acquired once
                 pPeer->release();
 
                 // announce the peer to the base class
@@ -316,7 +316,7 @@ namespace frm
 
         // the peer itself
         ORichTextPeer* pPeer = new ORichTextPeer;
-        pPeer->acquire();   // by definition, the returned object is aquired once
+        pPeer->acquire();   // by definition, the returned object is acquired once
 
         // the VCL control for the peer
         RichTextControl* pRichTextControl = new RichTextControl( pEngine, _pParentWindow, _nStyle, NULL, pPeer );

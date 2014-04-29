@@ -3037,7 +3037,7 @@ namespace basegfx
                                 }
                             }
 
-                            // substract length of current edge
+                            // subtract length of current edge
                             fPositionInEdge -= fEdgeLength;
                         }
 

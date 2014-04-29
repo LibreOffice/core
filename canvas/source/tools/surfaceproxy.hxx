@@ -37,7 +37,7 @@ namespace canvas
 
         Surface proxies are the connection between *one* source image
         and *one or more* hardware surfaces (or textures).  in a
-        logical structure surface proxies represent soley this
+        logical structure surface proxies represent solely this
         dependeny plus some simple cache management.
     */
     class SurfaceProxy : public ISurfaceProxy

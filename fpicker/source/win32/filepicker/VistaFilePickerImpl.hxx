@@ -245,7 +245,6 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         /// implementation of request E_ENABLE_CONTROL
         void impl_sta_EnableControl(const RequestRef& rRequest);
 
-
         /** create all needed (optional!) UI controls addressed by the field nFeatures.
          *  The given number nFeatures is used as a flag field. Use const values FEATURE_XXX
          *  to address it.

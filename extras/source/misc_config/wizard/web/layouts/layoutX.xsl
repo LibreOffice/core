@@ -154,7 +154,7 @@
 	               
 	 ================================== -->
 	 
-	 <!-- this tempaltes gives the
+	 <!-- this templates gives the
 	 relative href of the document. To use
 	 with the <a href="..."> attribute-->
 	

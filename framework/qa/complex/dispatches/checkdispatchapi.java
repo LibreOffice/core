@@ -120,7 +120,7 @@ public class checkdispatchapi
         }
         catch (java.lang.Throwable ex)
         {
-            fail("Cant initialize test environment.");
+            fail("Can't initialize test environment.");
         }
     }
 

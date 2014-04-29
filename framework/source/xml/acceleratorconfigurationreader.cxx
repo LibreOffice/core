@@ -99,7 +99,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
     if (eElement == E_ELEMENT_ITEM)
     {
         if (!m_bInsideAcceleratorList)
-            THROW_PARSEEXCEPTION("An element \"accel:item\" must be embeded into 'accel:acceleratorlist'.")
+            THROW_PARSEEXCEPTION("An element \"accel:item\" must be embedded into 'accel:acceleratorlist'.")
         if (m_bInsideAcceleratorItem)
             THROW_PARSEEXCEPTION("An element \"accel:item\" is not a container.")
         m_bInsideAcceleratorItem = true;

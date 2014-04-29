@@ -82,7 +82,7 @@ class PresetHandler
     private:
 
         /** @short  because a concurrent access to the same storage from different implementations
-                    isnt supported, we have to share it with others.
+                    isn't supported, we have to share it with others.
 
             @descr  This struct makes it possible to use any shared storage
                     in combination with a SingletonRef<> template ...
@@ -342,7 +342,7 @@ class PresetHandler
 
             @descr  Note: Targets resist inside the user
                     layer. Normaly they are opened in read/write mode.
-                    But it will be opened readonly automatically if that isnt possible
+                   But it will be opened readonly automatically if that isn't possible
                     (may be the file is write protected on the system ...).
 
             @param  sTarget

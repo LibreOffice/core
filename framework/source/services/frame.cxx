@@ -1309,7 +1309,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException, std::exceptio
         // Deactivate sibling path and forward activation to parent ... if any parent exist!
         if( xParent.is() )
         {
-            // Everytime set THIS frame as active child of parent and activate it.
+            // Every time set THIS frame as active child of parent and activate it.
             // We MUST have a valid path from bottom to top as active path!
             // But we must deactivate the old active sibling path first.
 
@@ -3098,7 +3098,7 @@ void Frame::implts_checkSuicide()
     aReadLock.clear();
     /* } SAFE */
     // force close and deliver owner ship to source of possible throwed veto exception
-    // Attention: Because this method isn't designed to throw such exception we must supress
+    // Attention: Because this method isn't designed to throw such exception we must suppress
     // it for outside code!
     try
     {
@@ -3124,7 +3124,7 @@ void Frame::implts_checkSuicide()
 void Frame::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::XFrame2 >& xFrame ,
                             /*IN*/       bool                                   bState  )
 {
-    // Note: If start module isnt installed - no closer has to be shown!
+    // Note: If start module isn't installed - no closer has to be shown!
     if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
         return;
 

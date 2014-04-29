@@ -53,7 +53,7 @@ namespace basegfx
                 @param rKeyStops
 
                 Vector of stops, must contain at least two elements
-                (though preferrably more, otherwise you probably don't
+                (though preferably more, otherwise you probably don't
                 need key stop lerping in the first place). All
                 elements must be of monotonically increasing value.
              */
@@ -64,7 +64,7 @@ namespace basegfx
                 @param rKeyStops
 
                 Sequence of stops, must contain at least two elements
-                (though preferrably more, otherwise you probably don't
+                (though preferably more, otherwise you probably don't
                 need key stop lerping in the first place). All
                 elements must be of monotonically increasing value.
              */

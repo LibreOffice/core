@@ -497,7 +497,7 @@ private:
     /** closes the frames of all connected controllers
 
     @param _bDeliverOwnership
-        determines if the ownership should be transfered to the component which
+        determines if the ownership should be transferred to the component which
         possibly vetos the closing
 
     @raises ::com::sun::star::util::CloseVetoException

@@ -269,7 +269,7 @@ void SbiExpression::Gen( RecursiveMode eRecMode )
         sal_uInt16 uBase = pParser->nBase;
         if( pParser->IsCompatible() )
         {
-            uBase |= 0x8000;        // #109275 Flag compatiblity
+            uBase |= 0x8000;        // #109275 Flag compatibility
         }
         pParser->aGen.Gen( _BASED, uBase );
         pParser->aGen.Gen( _ARGV );

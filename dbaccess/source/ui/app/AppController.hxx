@@ -329,7 +329,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _xDefinition
         );
 
-        /** Inserts a new object into the hierachy given be the type.
+        /** Inserts a new object into the hierarchy given be the type.
             @param  _eType
                 Where to insert the new item.
             @param  _sParentFolder

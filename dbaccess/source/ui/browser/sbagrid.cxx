@@ -971,7 +971,7 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
         else
             OSL_FAIL("SbaGridControl::getField getColumns returns NULL or ModelPos is > than count!");
     }
-    catch(Exception&)
+    catch (const Exception&)
     {
         OSL_FAIL("SbaGridControl::getField Exception occurred!");
     }

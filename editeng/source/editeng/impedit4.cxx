@@ -1976,7 +1976,7 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView,
         //make sure that the sentence is never smaller than the error range!
         if(aSentencePaM.Max().GetIndex() < aCurSel.Max().GetIndex())
             aSentencePaM.Max() = aCurSel.Max();
-        //add the portion preceeding the error
+        //add the portion preceding the error
         EditSelection aStartSelection(aSentencePaM.Min(), aCurSel.Min());
         if(aStartSelection.HasRange())
             AddPortionIterated(rEditView, aStartSelection, 0, rToFill);
@@ -2982,7 +2982,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 if (rData.nLen != rData.aNewText.getLength())
                     bLenChanged = true;
 
-                // Change text without loosing the attributes
+                // Change text without losing the attributes
                 const sal_Int32 nDiffs =
                     ReplaceTextOnly( rData.aSelection.Min().GetNode(),
                         rData.nStart, rData.nLen, rData.aNewText, rData.aOffsets );
@@ -3028,7 +3028,7 @@ short ImpEditEngine::ReplaceTextOnly(
 {
     (void)  nLen;
 
-    // Change text without loosing the attributes
+    // Change text without losing the attributes
     sal_Int32 nCharsAfterTransliteration = rOffsets.getLength();
     const sal_Int32* pOffsets = rOffsets.getConstArray();
     short nDiffs = 0;

@@ -1163,7 +1163,7 @@ void SAL_CALL Desktop::disposing( const css::lang::EventObject& ) throw( css::un
 
 /*-************************************************************************************************************
     @interface  XInteractionHandler
-    @short      callback for loadComponentFromURL for detected exceptions during load proccess
+    @short      callback for loadComponentFromURL for detected exceptions during load process
     @descr      In this case we must cancel loading and throw these detected exception again as result
                 of our own called method.
 
@@ -1454,7 +1454,7 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
         if( pInfoHelper == NULL )
         {
             // Define static member to give structure of properties to baseclass "OPropertySetHelper".
-            // "impl_getStaticPropertyDescriptor" is a non exported and static funtion, who will define a static propertytable.
+            // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
             // "sal_True" say: Table is sorted by name.
             static ::cppu::OPropertyArrayHelper aInfoHelper( impl_getStaticPropertyDescriptor(), sal_True );
             pInfoHelper = &aInfoHelper;

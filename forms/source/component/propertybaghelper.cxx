@@ -116,7 +116,7 @@ namespace frm
         if ( ( nHandle != -1 ) && rPropInfo.fillPropertyMembersByHandle( NULL, NULL, nHandle ) )
             nHandle = -1;
 
-        // seach a free handle in <math>F_1009</math>
+        // search a free handle in <math>F_1009</math>
         if ( nHandle == -1 )
         {
             sal_Int32 nPrime = 1009;

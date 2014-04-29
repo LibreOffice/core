@@ -234,8 +234,6 @@ void Model::dbg_assertInvariant() const
 
 
 // MIP management
-
-
 void Model::addMIP( void* pTag, const XNode_t& xNode, const MIP& rMIP )
 {
     OSL_ENSURE( pTag != NULL, "empty tag?" );

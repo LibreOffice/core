@@ -883,7 +883,6 @@ void SeriesPlotterContainer::setScalesFromCooSysToPlotter()
 void SeriesPlotterContainer::setNumberFormatsFromAxes()
 {
     //set numberformats to plotter to enable them to display the data labels in the numberformat of the axis
-
     ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = m_aSeriesPlotterList.begin();
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = m_aSeriesPlotterList.end();
     for( aPlotterIter = m_aSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )

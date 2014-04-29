@@ -37,7 +37,7 @@ namespace drawinglayer
 
             This is the MetaFile representing primitive. It's geometry is defined
             by MetaFileTransform. The content (defined by MetaFile) will be scaled
-            to the geometric definiton by using PrefMapMode and PrefSize of the
+            to the geometric definition by using PrefMapMode and PrefSize of the
             Metafile.
 
             It has shown that this not always guarantees that all Metafile content

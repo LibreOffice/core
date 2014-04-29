@@ -214,7 +214,7 @@ namespace xforms
 
             The normalization must respect the "<" and "==" relations on the value
             space. That is, if two values are equal, their normalizations must be equal, too.
-            Similarily, if <code>foo</code> is less than <code>bar</code>, the same
+            Similarly, if <code>foo</code> is less than <code>bar</code>, the same
             must hold for their normalizations.
 
             @param _rValue

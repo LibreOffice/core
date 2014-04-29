@@ -2180,7 +2180,7 @@ short SvtFileDialog::PrepareExecute()
 
     UpdateControls( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
-    // Somebody might want to enable some controls acording to the current filter
+    // Somebody might want to enable some controls according to the current filter
     FilterSelect();
 
     ViewHdl_Impl( this, NULL );

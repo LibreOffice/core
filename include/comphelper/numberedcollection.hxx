@@ -40,7 +40,7 @@ namespace comphelper{
 /** @short  defines a collection of UNO components, where every component will get its own unique number.
 
     @descr  Such number will be unique at runtime only ... but it supports fragmentation.
-            Note: This collection uses weak refrences only to know her components.
+            Note: This collection uses weak references only to know her components.
             So lifetime of thise components must be controlled outside.
 
     @threadsafe
@@ -136,7 +136,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
 
         /** @short  trys to find an unique number not already used within this collection.
 
-            @descr  It reuses the smalles number which isnt used by any component
+            @descr  It reuses the smalles number which isn't used by any component
                     of this collection. (fragmentation!) If collection is full (means there
                     is no free number) the special value INVALID_NUMBER will be returned.
 

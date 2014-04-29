@@ -222,7 +222,7 @@ public:
         i.e. the one at position n is a special case.  Because it does
         not represent an existing character its bounding box is
         defined in relation to preceding characters.  It should be
-        rougly equivalent to the bounding box of some character when
+        roughly equivalent to the bounding box of some character when
         inserted at the end of the text.  Its height typically being
         the maximal height of all the characters in the text or the
         height of the preceding character, its width being at least

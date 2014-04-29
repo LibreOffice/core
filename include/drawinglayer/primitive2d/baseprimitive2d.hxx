@@ -84,13 +84,13 @@ namespace drawinglayer
             using this primitive and do not know it, may get the decomposition and process
             these instead. An example is e.g. a fat line, who's decomposition may contain
             the geometric representation of that line using filled polygon prmimitives. When
-            the renderer knows how to handle fat lines, he may proccess this primitive directly;
+            the renderer knows how to handle fat lines, he may process this primitive directly;
             if not he can use the decomposition. With this functionality, renderers may operate by
             knowing only a small set of primitives.
 
             When a primitive does not implement get2DDecomposition, it is called a 'Basic Primitive' and
             belongs to the set of primitives which a processor should be able to handle. Practice
-            will define this minimal sets of primitives. When defined and the concept is prooved,
+            will define this minimal sets of primitives. When defined and the concept is proved,
             unique UNO APIs may be defined/implemented for these set to allow more intense work
             with primitives using UNO.
 

@@ -57,7 +57,7 @@ FrameListAnalyzer::~FrameListAnalyzer()
 
     We try to get a snapshot of all opened frames, which are part of the desktop frame container.
     Of course we can't access frames, which stands outside of this tree.
-    But it's necessary to collect top frames here only. Otherwhise we interpret closing of last
+    But it's necessary to collect top frames here only. Otherwise we interpret closing of last
     frame wrong. Further we analyze this list and split into different parts.
     E.g. for "CloseDoc" we must know, which frames of the given list referr to the same model.
     These frames must be closed then. But all other frames must be untouched.
@@ -93,7 +93,7 @@ void FrameListAnalyzer::impl_analyze()
     // ask for the model of the given reference frame.
     // It must be compared with the model of every frame of the container
     // to sort it into the list of frames with the same model.
-    // Supress this step, if right detect mode isn't set.
+    // Suppress this step, if right detect mode isn't set.
     css::uno::Reference< css::frame::XModel > xReferenceModel;
     if ((m_eDetectMode & E_MODEL) == E_MODEL )
     {

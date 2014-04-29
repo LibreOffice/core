@@ -165,7 +165,7 @@ namespace canvas
         PageContainer_t::iterator       it(maPages.begin());
         while(it != aEnd)
         {
-            // if the page at hand takes the fragment, we immediatelly
+            // if the page at hand takes the fragment, we immediately
             // call select() to pull the information from the associated
             // image to the hardware surface.
             if((*it)->nakedFragment(pFragment))

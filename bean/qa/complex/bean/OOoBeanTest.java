@@ -454,7 +454,7 @@ public class OOoBeanTest
     }
 
     /** Tests focus problem just like test6, but the implementation is a little
-     * different. The bean is added and removed from withing the event dispatch
+     * different. The bean is added and removed from within the event dispatch
      * thread. Using Thread.sleep at various points (#1, #2, #3) seems to workaround
      * the problem.
      * @throws Exception

@@ -324,7 +324,6 @@ css::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
 }
 
 
-
 /**
     attach this component to a target frame.
 
@@ -459,7 +458,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     This component does not know any model. It will be represented by a window and
     its controller only.
 
-    return  <FALSE/> everytime.
+    return  <FALSE/> every time.
  */
 
 sal_Bool SAL_CALL BackingComp::attachModel( /*IN*/ const css::uno::Reference< css::frame::XModel >& )
@@ -559,7 +558,7 @@ sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )
     and inform us. We must release its reference only here. Of course we check the given reference
     here and reject callback from unknown sources.
 
-    Note: deregistration as listener isnt necessary here. The broadcaster do it automatically.
+    Note: deregistration as listener isn't necessary here. The broadcaster do it automatically.
 
     @param  aEvent
                 describe the broadcaster of this callback

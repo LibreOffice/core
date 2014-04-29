@@ -39,7 +39,7 @@ namespace canvas
     // Surface
 
 
-    /** surfaces denote occupied areas withing pages.
+    /** surfaces denote occupied areas within pages.
 
         pages encapsulate the hardware buffers that
         contain image data which can be used for texturing.

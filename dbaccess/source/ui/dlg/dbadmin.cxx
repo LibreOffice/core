@@ -444,7 +444,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
 
 void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults)
 {
-    // _first_ delete the set (refering the pool)
+    // _first_ delete the set (referring the pool)
     if (_rpSet)
     {
         delete _rpSet;

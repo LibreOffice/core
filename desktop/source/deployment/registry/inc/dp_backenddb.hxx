@@ -107,7 +107,7 @@ protected:
         OUString const & sListTagName,
         OUString const & sMemberTagName);
 
-    /* returns the values of one particulary child element of all key elements.
+    /* returns the values of one particularly child element of all key elements.
      */
     ::std::list< OUString> getOneChildFromAllEntries(
         OUString const & sElementName);

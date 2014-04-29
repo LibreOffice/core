@@ -1185,7 +1185,7 @@ TOTypeInfoSP queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo)
     for(;aIter != aEnd;++aIter)
     {
         // OJ: we don't want to set an autoincrement column to be key
-        // because we don't have the possiblity to know how to create
+        // because we don't have the possibility to know how to create
         // such auto increment column later on
         // so until we know how to do it, we create a column without autoincrement
         //  if ( !aIter->second->bAutoIncrement )

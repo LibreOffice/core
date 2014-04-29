@@ -22,7 +22,7 @@ This template is a skeleton for single level TOC pages
 Do not overwrite this ! copy it and complete the missing
 code.
 
-I use the @ character whereever there is a missing code, so 
+I use the @ character wherever there is a missing code, so
 you can use a simple find to navigate and find the
 places...
 

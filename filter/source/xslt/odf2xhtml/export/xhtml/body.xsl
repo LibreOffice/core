@@ -792,7 +792,7 @@
 					<xsl:when test="$createDiv and normalize-space(.) != ''">
 						<!-- every following frame sibling till the next draw:frame
 							have to be incapuslated within a div with left indent.
-							To be moved alltogether arcording the indent (usually right) -->
+							To be moved altogether arcording the indent (usually right) -->
 						<xsl:comment>Next 'div' added for floating.</xsl:comment>
 						<xsl:element name="div">
 							<xsl:attribute name="style">

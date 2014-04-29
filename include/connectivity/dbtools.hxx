@@ -243,7 +243,7 @@ namespace dbtools
             If (and only if) <arg>CommandType</arg> is CommandType.COMMAND, the fields collection which is returned
             by this function here is a temporary object. It is kept alive by another object, which is to be
             created temporarily, too. To ensure that the fields you get are valid as long as you need them,
-            the owner which controls their life time is transfered to this parameter upon return.<br/>
+            the owner which controls their life time is transferred to this parameter upon return.<br/>
 
             Your fields live as long as this component lives.<br/>
 
@@ -318,7 +318,7 @@ namespace dbtools
         const StandardSQLState _eSQLState = SQL_ERROR_UNSPECIFIED,
         const sal_Int32 _nErrorCode = 0);
 
-    /** search the parent hierachy for a data source.
+    /** search the parent hierarchy for a data source.
     */
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> findDataSource(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent);
 

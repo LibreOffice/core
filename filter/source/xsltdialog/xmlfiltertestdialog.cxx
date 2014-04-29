@@ -344,7 +344,7 @@ void XMLFilterTestDialog::onExportBrowse()
 
                 if( (nFound == 15) && (!aType.isEmpty() && aService == m_pFilterInfo->maDocumentService) )
                 {
-                    // see if this filter is not supressed in dialog
+                    // see if this filter is not suppressed in dialog
                     if( (nFlags & 0x1000) == 0 )
                     {
                         aAny = xTypeDetection->getByName( aType );

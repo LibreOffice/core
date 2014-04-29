@@ -1258,7 +1258,7 @@ void ToolbarLayoutManager::implts_reparentToolbars()
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow )
                 {
-                    // Reparent our child windows acording to their current state.
+                    // Reparent our child windows according to their current state.
                     if ( pIter->m_bFloating )
                         pWindow->SetParent( pContainerWindow );
                     else

@@ -117,7 +117,7 @@ void Writer::queueReply(
 
 void Writer::unblock() {
     // Assumes that osl::Condition::set works as a memory barrier, so that
-    // changes made by preceeding sendDirectRequest/Reply calls are visible to
+    // changes made by preceding sendDirectRequest/Reply calls are visible to
     // subsequent sendRequest/Reply calls:
     unblocked_.set();
 }

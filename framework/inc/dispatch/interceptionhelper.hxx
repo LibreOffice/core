@@ -209,7 +209,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
 
             @descr It capsulate more then one queryDispatch() requests and return a lits of dispatch objects
                    as result. Because both lists (in and out) coreespond together, it's not allowed to
-                   pack it - means supress NULL references!
+                   pack it - means suppress NULL references!
 
             @param lDescriptor
                     a list of queryDispatch() arguments.

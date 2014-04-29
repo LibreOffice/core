@@ -97,7 +97,7 @@ LanguageType EditView::CheckLanguage(
             if (rAppLocaleTag.getLanguage() == aGuessTag.getLanguage())
                 nLang = rAppLocaleTag.getLanguageType();
         }
-        if (nLang == LANGUAGE_NONE) // language not found by looking up the sytem language...
+        if (nLang == LANGUAGE_NONE) // language not found by looking up the system language...
             nLang = aGuessTag.makeFallback().getLanguageType();     // best known locale match
         if (nLang == LANGUAGE_SYSTEM)
             nLang = Application::GetSettings().GetLanguageTag().getLanguageType();

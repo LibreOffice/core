@@ -368,7 +368,7 @@ namespace dbaui
     */
     const SfxFilter* getStandardDatabaseFilter();
 
-    /** opens a save dialog to store a form or report folder in the current hierachy.
+    /** opens a save dialog to store a form or report folder in the current hierarchy.
         @param  _pParent
             The parent of the dialog.
         @param _rxContext

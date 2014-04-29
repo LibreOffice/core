@@ -191,7 +191,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      *  The cached configuration access must be provided here.
      *
      *  @param  xCFG
-     *          the configuration root, where changes should be commited.
+     *          the configuration root, where changes should be committed.
      *
      *  @throw  Any exceptions the underlying configuration can throw.
      *          E.g. css::uno::Exception if the provided configuration

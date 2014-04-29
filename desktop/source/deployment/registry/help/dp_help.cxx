@@ -281,7 +281,7 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
     if ( helpFolder.open() == ::osl::File::E_None)
     {
         //iterate over the contents of the help folder
-        //We assume that all folders withing the help folder contain language specific
+        //We assume that all folders within the help folder contain language specific
         //help files. If just one of them does not contain compiled help then this
         //function returns false.
         ::osl::DirectoryItem item;

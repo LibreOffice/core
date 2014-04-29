@@ -246,7 +246,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
                     does not already exist.
 
             @descr  To check if the property already exists only
-                    her name is used for compare. Its value isnt
+                    her name is used for compare. Its value isn't
                     checked!
 
             @param  sKey

@@ -1650,7 +1650,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
 
             if ( ( nScriptType == i18n::ScriptType::WEAK ) || ( nScriptType == rTypes.back().nScriptType ) )
             {
-                // Expand last ScriptTypePosInfo, don't create weak or unecessary portions
+                // Expand last ScriptTypePosInfo, don't create weak or unnecessary portions
                 rTypes.back().nEndPos = nEndPos;
             }
             else

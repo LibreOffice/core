@@ -55,7 +55,7 @@ class DispatchRecorderSupplier  :   public  ::cppu::WeakImplHelper2<
 
         /** provided dispatch recorder of this supplier instance
 
-            @life   Is controled from outside. Because this variable is setted
+            @life   Is controlled from outside. Because this variable is setted
                     from there and not created internally. But we release our
                     reference to it if we die.
          */

@@ -236,7 +236,7 @@ ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const OUString
     m_bConfigAccessInitialized( false ),
     m_bModified( false )
 {
-    // Create configuration hierachical access name
+    // Create configuration hierarchical access name
     m_aConfigWindowAccess += aModuleName;
     m_aConfigWindowAccess += "/UIElements/States";
     m_xConfigProvider = theDefaultProvider::get( rxContext );

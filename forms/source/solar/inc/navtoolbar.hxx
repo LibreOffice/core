@@ -81,7 +81,7 @@ namespace frm
             then the states of the features are updated
 
             @param _pDispatcher
-                the new (or old) dispatcher. The caller is reponsible for
+                the new (or old) dispatcher. The caller is responsible for
                 ensuring the life time of the object does exceed the life time
                 of the tool bar instance.
         */

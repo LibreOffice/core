@@ -447,7 +447,7 @@ Scenarios unmatched:
 		</xsl:choose>
 	</xsl:template>
 
-	<!-- As the span width will be mapped to column width, the preceding span widths have to be substracted -->
+	<!-- As the span width will be mapped to column width, the preceding span widths have to be subtracted -->
 	<xsl:template name="create-cell-width">
 		<xsl:param name="width"/>
 		<xsl:param name="unit"/>

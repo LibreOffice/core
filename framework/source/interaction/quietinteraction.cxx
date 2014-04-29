@@ -46,7 +46,7 @@ QuietInteraction::QuietInteraction()
 
 void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) throw( css::uno::RuntimeException, std::exception )
 {
-    // safe the request for outside analyzing everytime!
+    // safe the request for outside analyzing every time!
     css::uno::Any aRequest = xRequest->getRequest();
     {
         SolarMutexGuard g;
@@ -89,7 +89,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     {
         if (xFilter.is())
         {
-            // user selected filter wins everytime!
+            // user selected filter wins every time!
             xFilter->setFilter( aAmbigousFilterRequest.SelectedFilter );
             xFilter->select();
         }

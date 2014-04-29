@@ -248,7 +248,7 @@ bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal
         curl_easy_setopt(pCURL, CURLOPT_WRITEDATA, &out);
         curl_easy_setopt(pCURL, CURLOPT_WRITEFUNCTION, &write_function);
 
-        // progress handler - Condition::check unfortunatly is not defined const
+        // progress handler - Condition::check unfortunately is not defined const
         curl_easy_setopt(pCURL, CURLOPT_NOPROGRESS, 0);
         curl_easy_setopt(pCURL, CURLOPT_PROGRESSFUNCTION, &progress_callback);
         curl_easy_setopt(pCURL, CURLOPT_PROGRESSDATA, &out);

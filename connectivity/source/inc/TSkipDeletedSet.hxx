@@ -52,7 +52,7 @@ namespace connectivity
 
         /**
             skipDeleted moves the resultset to the position defined by the parameters
-            it garantees that the row isn't deleted
+            it guarantees that the row isn't deleted
                 @param
                     IResultSetHelper::Movement  _eCursorPosition        in which direction the resultset should be moved
                     sal_Int32                   _nOffset                the position relativ to the movement

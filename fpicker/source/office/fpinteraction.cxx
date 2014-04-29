@@ -80,7 +80,7 @@ namespace svt
 
         // intercept some interesting interactions
 
-        // The "does not exist" interaction will be supressed here completely.
+        // The "does not exist" interaction will be suppressed here completely.
         if (m_eInterceptions & OFilePickerInteractionHandler::E_DOESNOTEXIST)
         {
             InteractiveIOException aIoException;

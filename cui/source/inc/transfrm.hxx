@@ -124,7 +124,7 @@ private:
     bool                mbSizeDisabled;
     bool                mbAdjustDisabled;
 
-    // frome size
+    // from size
     // #i75273#
     double              mfOldWidth;
     double              mfOldHeight;

@@ -1996,7 +1996,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                         {
                             aDescriptor[daSelection]            <<= aSelection;
                             aDescriptor[daBookmarkSelection]    <<= sal_False;
-                                // these are selection indicies
+                                // these are selection indices
                                 // before we change this, all clients have to be adjusted
                                 // so that they recognize the new BookmarkSelection property!
                         }

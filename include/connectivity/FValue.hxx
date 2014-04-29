@@ -310,7 +310,7 @@ namespace connectivity
         ORowSetValue& operator=(const OUString& _rRH);
         // the type isn't set it will be set to VARCHAR if the type is different change it
         ORowSetValue& operator=(const ::com::sun::star::uno::Sequence<sal_Int8>& _rRH);
-        // we the possiblity to save a any for bookmarks
+        // we the possibility to save a any for bookmarks
         ORowSetValue& operator=(const ::com::sun::star::uno::Any& _rAny);
 
         operator bool() const   {   return isNull() ? false : getBool();    }

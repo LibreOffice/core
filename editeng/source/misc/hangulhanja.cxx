@@ -726,7 +726,7 @@ namespace editeng
             }
         }
 
-        // the proper indicies (the wrapper implementation needs indicies relative to the
+        // the proper indices (the wrapper implementation needs indices relative to the
         // previous replacement)
         DBG_ASSERT( ( m_nReplacementBaseIndex <= m_nCurrentStartIndex ) && ( m_nReplacementBaseIndex <= m_nCurrentEndIndex ),
             "HangulHanjaConversion_Impl::implChange: invalid replacement base!" );

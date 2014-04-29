@@ -419,7 +419,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         // verify every flat detected (or preselected!) type
         // by calling its registered deep detection service.
         // But break this loop if a type match to the given descriptor
-        // by an URL pattern(!) or if deep detection isnt allowed from
+        // by an URL pattern(!) or if deep detection isn't allowed from
         // outside (bAllowDeep=sal_False) or break the whole detection by
         // throwing an exception if creation of the might needed input
         // stream failed by e.g. an IO exception ...
@@ -629,7 +629,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
 bool TypeDetection::impl_getPreselectionForType(
     const OUString& sPreSelType, const util::URL& aParsedURL, FlatDetection& rFlatTypes, bool bDocService)
 {
-    // Can be used to supress execution of some parts of this method
+    // Can be used to suppress execution of some parts of this method
     // if its already clear that detected type is valid or not.
     // Its necessary to use shared code at the end, which update
     // all return parameters constistency!
@@ -678,7 +678,7 @@ bool TypeDetection::impl_getPreselectionForType(
         sExtension = sExtension.toAsciiLowerCase();
 
         // otherwise we must know, if it matches to the given URL really.
-        // especialy if it matches by its extension or pattern registration.
+        // especially if it matches by its extension or pattern registration.
         OUStringList lExtensions(aType[PROPNAME_EXTENSIONS]);
         OUStringList lURLPattern(aType[PROPNAME_URLPATTERN]);
 
@@ -886,7 +886,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
     // solutions:
     // a) no types                                => no detection
     // b) deep detection not allowed              => return first valid type of list (because its the preferred or the first valid one)
-    //    or(!) match by URLPattern               => in such case a deep detection will be supressed!
+    //    or(!) match by URLPattern               => in such case a deep detection will be suppressed!
     // c) type has no detect service              => safe the first occurred type without a detect service
     //                                               as "last chance"(!). It will be used outside of this method
     //                                               if no further type could be detected.

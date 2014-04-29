@@ -637,7 +637,7 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
     }
 
     // And let the start method "execute()" finishing it's job.
-    // But do it everytime. So any outside blocking code can finish
+    // But do it every time. So any outside blocking code can finish
     // his work too.
     m_aAsyncWait.set();
 }

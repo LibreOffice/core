@@ -232,7 +232,7 @@ void LogProbe(
         SAL_INFO("cppu", "} LogBridge () " << sTemp.getStr());
         if ( ppException && *ppException )
         {
-           SAL_INFO("cppu", " exception occurred : ");
+            SAL_INFO("cppu", " exception occurred : ");
             typelib_TypeDescription * pElementTypeDescr = 0;
             TYPELIB_DANGER_GET( &pElementTypeDescr, (*ppException)->pType );
             const ::rtl::OString sValue( ::rtl::OUStringToOString(pElementTypeDescr->pTypeName,osl_getThreadTextEncoding()));

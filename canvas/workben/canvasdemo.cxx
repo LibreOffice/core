@@ -462,7 +462,7 @@ class DemoRenderer
             //begin hacks
             //This stuff doesn't belong here, but probably in curves
             //This stuff doesn't work in VCL b/c vcl doesn't do beziers
-            //Hah!  Everytime the window redraws, we do this
+            //Hah!  Every time the window redraws, we do this
             double ax;
             double ay;
             double bx;

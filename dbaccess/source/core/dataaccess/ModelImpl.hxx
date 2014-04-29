@@ -253,7 +253,7 @@ public:
     /** stores the embedded storage ("database")
 
         @param _bPreventRootCommits
-            Normally, committing the embedded storage results in also commiting the root storage
+            Normally, committing the embedded storage results in also committing the root storage
             - this is an automatism for data safety reasons.
             If you pass <TRUE/> here, committing the root storage is prevented for this particular
             call.

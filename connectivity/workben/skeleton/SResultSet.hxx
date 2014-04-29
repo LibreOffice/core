@@ -70,7 +70,7 @@ namespace connectivity
         protected:
             TVoidVector                                 m_aBindVector;
             ::std::vector<sal_Int32>                    m_aLengthVector;
-            ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
+            ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
             ::std::vector< ORowSetValue>                m_aRow; // only used when SQLGetData can't be called in any order
             OStatement_Base*                            m_pStatement;
             ::com::sun::star::uno::WeakReferenceHelper  m_aStatement;

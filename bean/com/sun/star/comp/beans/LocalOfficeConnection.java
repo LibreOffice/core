@@ -158,7 +158,7 @@ public class LocalOfficeConnection
      * pipev  := local_office_connection_pipe_name
      * </pre>
      *
-     * @param url This is UNO URL which discribes the type of a connection.
+     * @param url This is UNO URL which describes the type of a connection.
      */
     public void setUnoUrl(String url)
         throws java.net.MalformedURLException

@@ -177,7 +177,7 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
 
     ATTENTION
 
-        If you miss a test for one of this parameters, contact the autor or add it himself !(?)
+        If you miss a test for one of this parameters, contact the author or add it himself !(?)
         But ... look for right testing! See using of this methods!
 -----------------------------------------------------------------------------------------------------------------*/
 
