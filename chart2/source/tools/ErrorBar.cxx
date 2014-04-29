@@ -167,7 +167,7 @@ void ErrorBar::setPropertyValue( const OUString& rPropName, const uno::Any& rAny
     else if(rPropName == "ShowNegativeError")
         rAny >>= mbShowNegativeError;
     else if(rPropName == "ErrorBarRangePositive" || rPropName == "ErrorBarRangeNegative")
-        throw uno::RuntimeException("read-only property", static_cast< uno::XWeak*>(this));
+        throw beans::UnknownPropertyException("read-only property", static_cast< uno::XWeak*>(this));
     else
         LineProperties::setPropertyValue(rPropName, rAny);
 
