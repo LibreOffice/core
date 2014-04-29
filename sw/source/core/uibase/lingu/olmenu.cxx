@@ -607,15 +607,13 @@ void SwSpellPopup::checkRedline()
     // Build an item set that contains a void item for each menu entry. The
     // WhichId of each item is set, so SwView may clear it.
     static const sal_uInt16 pRedlineIds[] = {
-        FN_REDLINE_ACCEPT_DIRECT,
-        FN_REDLINE_REJECT_DIRECT,
         FN_REDLINE_NEXT_CHANGE,
         FN_REDLINE_PREV_CHANGE,
         FN_REDLINE_ACCEPT_DIRECT_SELECTION,
         FN_REDLINE_REJECT_DIRECT_SELECTION
     };
     SwDoc *pDoc = m_pSh->GetDoc();
-    SfxItemSet aSet(pDoc->GetAttrPool(), FN_REDLINE_ACCEPT_DIRECT, FN_REDLINE_REJECT_DIRECT_SELECTION);
+    SfxItemSet aSet(pDoc->GetAttrPool(), FN_REDLINE_NEXT_CHANGE, FN_REDLINE_REJECT_DIRECT_SELECTION);
     for (size_t i = 0; i < SAL_N_ELEMENTS(pRedlineIds); ++i)
     {
         const sal_uInt16 nWhich = pRedlineIds[i];
@@ -630,6 +628,11 @@ void SwSpellPopup::checkRedline()
         const sal_uInt16 nWhich = pRedlineIds[i];
         EnableItem(nWhich, aSet.Get(nWhich).Which());
     }
+    // Spellcheck popup selects the whole word, so xxx_SELECTION items would be enabled if needed,
+    // and there would be needless duplicates (and if only a part of the word is redlined,
+    // these might not work anyway).
+    EnableItem(FN_REDLINE_ACCEPT_DIRECT, false);
+    EnableItem(FN_REDLINE_REJECT_DIRECT, false);
 }
 
 sal_uInt16  SwSpellPopup::Execute( const Rectangle& rWordPos, Window* pWin )
