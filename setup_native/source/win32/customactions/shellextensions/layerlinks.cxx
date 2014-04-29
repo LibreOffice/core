@@ -132,11 +132,11 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
 
                     WriteFile( hfile, lpPathUTF8, strlen(lpPathUTF8) ,&dummy, 0 );
 
-                    delete lpPathUTF8;
+                    delete[] lpPathUTF8;
                 }
             }
 
-            delete lpPathW;
+            delete[] lpPathW;
         }
 
         CloseHandle(hfile);
