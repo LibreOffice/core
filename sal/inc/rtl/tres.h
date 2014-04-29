@@ -53,7 +53,7 @@ typedef struct _rtl_TestResult rtl_TestResult;
 typedef void* rtl_funcstate;
 typedef void* rtl_cmpstate;
 
- /* type definitions of function pointers wich can be overloaded */
+ /* type definitions of function pointers which can be overloaded */
 typedef sal_Bool (SAL_CALL *rtl_tres_state_ptr)(
                                                 rtl_TestResult*,
                                                 sal_Bool,

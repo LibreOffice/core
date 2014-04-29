@@ -591,7 +591,7 @@ public:
     void            RowModified( long nRow, sal_uInt16 nColId = USHRT_MAX );
     void            RowInserted( long nRow, long nNumRows = 1, sal_Bool bDoPaint = sal_True, sal_Bool bKeepSelection = sal_False );
 
-    // miscellanous
+    // miscellaneous
     void            ReserveControlArea( sal_uInt16 nWidth = USHRT_MAX );
     Rectangle       GetControlArea() const;
     sal_Bool            ProcessKey( const KeyEvent& rEvt );
@@ -702,7 +702,7 @@ public:
         @param  _nRowId
             the current row
         @param  _nColId
-            teh column id
+            the column id
         @param  _bOnScreen
             <TRUE/> when the rectangle should be calculated OnScreen
         @return
@@ -790,7 +790,7 @@ public:
         @param  eObjType
             The type to ask for
         @param  _nPosition
-            The position of a tablecell (index position), header bar  colum/row cell
+            The position of a tablecell (index position), header bar  column/row cell
         @return
             The name of the specified object.
     */
@@ -800,7 +800,7 @@ public:
         @param  eObjType
             The type to ask for
         @param  _nPosition
-            The position of a tablecell (index position), header bar  colum/row cell
+            The position of a tablecell (index position), header bar  column/row cell
         @return
             The description of the specified object.
     */

@@ -74,7 +74,7 @@ oslSecurityError SAL_CALL osl_loginUser(
     the maped drive on this server.
     @param strUserName [in] denotes the name of the user to logg in.
     @param strPasswd [in] the password for this user.
-    @param strFileServer [in] denotes the file server on wich the user is logged in.
+    @param strFileServer [in] denotes the file server on which the user is logged in.
     @param pSecurity [out] returns the security handle if user could be logged in.
     @return osl_Security_E_None if user could be logged in, otherwise an error-code.
     @see osl_freeSecurityHandle

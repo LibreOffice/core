@@ -489,7 +489,7 @@ static AquaSalFrame* getMouseContainerFrame()
 }
 
 // helper class similar to a vos::OGuard for the SalYieldMutex
-// the difference is that it only does tryToAcquire instead of aquire
+// the difference is that it only does tryToAcquire instead of acquire
 // so dreaded deadlocks like #i93512# are prevented
 class TryGuard
 {

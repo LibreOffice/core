@@ -1442,7 +1442,7 @@ ScAccessibleDocumentPagePreview::ScAccessibleDocumentPagePreview(
     if (pViewShell)
         pViewShell->AddAccessibilityObject(*this);
 
-//    GetNotesChilds(); not neccessary and reduces the creation performance
+//    GetNotesChilds(); not necessary and reduces the creation performance
 //    GetShapeChilds();
 }
 
@@ -1452,7 +1452,7 @@ ScAccessibleDocumentPagePreview::~ScAccessibleDocumentPagePreview(void)
     {
         // increment refcount to prevent double call off dtor
         osl_incrementInterlockedCount( &m_refCount );
-        // call dispose to inform object wich have a weak reference to this object
+        // call dispose to inform object which have a weak reference to this object
         dispose();
     }
 }

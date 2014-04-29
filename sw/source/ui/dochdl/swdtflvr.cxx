@@ -3865,7 +3865,7 @@ void SwTrnsfrDdeLink::Disconnect( sal_Bool bRemoveDataAdvise )
         sal_Bool bIsModified = pDoc->IsModified();
 
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-        // check, if DdeBookmark is already in its desctruction
+        // check, if DdeBookmark is already in its destruction
         IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(sName);
         if ( ppMark != pMarkAccess->getAllMarksEnd() )
         {

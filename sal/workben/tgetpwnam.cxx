@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        printf("failed to detect non existant host\n");
+        printf("failed to detect non existent host\n");
     }
 
     free(phostent);

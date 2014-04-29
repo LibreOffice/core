@@ -83,7 +83,7 @@ int SAL_CALL main(int argc, char ** argv) \
 #define INCLUDED_STDLIB_H
 #endif
 
-/* Sorry but this is neccessary cause HINSTANCE is a typedef that differs (C++ causes an error) */
+/* Sorry but this is necessary cause HINSTANCE is a typedef that differs (C++ causes an error) */
 
 #if 0
 

@@ -704,7 +704,7 @@ ScDPAggData* lcl_GetChildTotal( ScDPAggData* pFirst, long nMeasure )
     ScDPAggData* pAgg = pFirst;
     long nSkip = nMeasure;
 
-    // subtotal settings are ignored - colum/row totals exist once per measure
+    // subtotal settings are ignored - column/row totals exist once per measure
 
     for ( long nPos=0; nPos<nSkip; nPos++ )
         pAgg = pAgg->GetChild();    // column total is constructed empty - children need to be created
@@ -1095,7 +1095,7 @@ void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vect
     if ( GetDPMember() && !GetDPMember()->getShowDetails() )
     {
          // Wang Xu Ming -- 2009-6-16
-        // Show DataLayout dimention
+        // Show DataLayout dimension
         nMemberStep = 1;
         while ( nPos < ppDim.size() )
         {
@@ -1143,7 +1143,7 @@ void ScDPResultMember::LateInitFrom( LateInitParams& rParams/*const vector<ScDPD
     {
         // Wang Xu Ming -- 2009-6-16
         // DataPilot Migration
-        // Show DataLayout dimention
+        // Show DataLayout dimension
         nMemberStep = 1;
         while ( !rParams.IsEnd( nPos ) )
         {

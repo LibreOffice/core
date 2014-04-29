@@ -1236,7 +1236,7 @@ ScFunctionList::ScFunctionList() :
         ::std::auto_ptr<ScResourcePublisher> pBlock( new ScResourcePublisher( ScResId( nDescBlock[k] ) ) );
         // Browse for all possible OpCodes. This is not the fastest method, but
         // otherwise the sub resources within the resource blocks and the
-        // resource blocks themselfs would had to be ordered according to
+        // resource blocks themselves would had to be ordered according to
         // OpCodes, which is utopian..
         for (i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; i++)
         {

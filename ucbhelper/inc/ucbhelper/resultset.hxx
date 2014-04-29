@@ -501,7 +501,7 @@ public:
      * all data on demand.
      *
      * The implementation should call m_pResultSet->rowCountChanged(...)
-     * everytime it has inserted a new entry in its logical result array.
+     * every time it has inserted a new entry in its logical result array.
      *
      * @return the count of objects obtained so far; will always be
      * non-negative.
@@ -552,7 +552,7 @@ public:
 
     /**
      * This method will be called by the resultset implementation in order
-     * check, whether an error has occured while collecting data. The
+     * check, whether an error has occurred while collecting data. The
      * implementation of this method must throw an exception in that case.
      *
      * Note: An exception thrown to indicate an error must always be thrown
@@ -564,7 +564,7 @@ public:
      * In case data are obtained synchronously, the ResultSetException can
      * be thrown directly.
      *
-     * @exception ResultSetException thrown, if an error has occured
+     * @exception ResultSetException thrown, if an error has occurred
      */
     virtual void validate()
         throw( com::sun::star::ucb::ResultSetException ) = 0;

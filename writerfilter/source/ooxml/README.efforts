@@ -29,7 +29,7 @@ Efforts are marked up in the code with comments like this:
 
 The comments have to follow a case-label immediately. Consecutive
 case-labels can be marked up, too. In the latter case the efforts are
-counted for the preceeding case-labels as a whole.
+counted for the preceding case-labels as a whole.
 
 2. Extraction process
 

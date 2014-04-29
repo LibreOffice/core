@@ -897,7 +897,7 @@ sal_Bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, O
                     }
                 }
 
-                // create entry and look for existance
+                // create entry and look for existence
                 ImpXMLAutoLayoutInfo* pNew = new ImpXMLAutoLayoutInfo(nType, pInfo);
                 sal_Bool bDidExist(sal_False);
 

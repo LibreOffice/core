@@ -82,7 +82,7 @@ namespace accessibility {
     <li>As window listener it waits for changes of the window geometry and
     forwards those as view forwarder changes.</li>
     <li>As focus listener it keeps track of the focus to give this class and
-    derived classes the oportunity to set and remove the focus to/from
+    derived classes the opportunity to set and remove the focus to/from
     shapes.</li>
     </ol>
     </p>
@@ -137,7 +137,7 @@ public:
     //=====  IAccessibleViewForwarderListener  ================================
 
     /** A view forwarder change is signalled for instance when any of the
-        window events is recieved.  Thus, instead of overloading the four
+        window events is received.  Thus, instead of overloading the four
         windowResized... methods it will be sufficient in most cases just to
         overload this method.
      */

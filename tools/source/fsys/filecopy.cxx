@@ -462,7 +462,7 @@ FSysError FileCopier::ExecuteExact( FSysAction nActions, FSysExact eExact )
     DirEntry aAbsTarget = DirEntry( aTarget );
     pImp->nActions = nActions;
 
-    // check if both pathes are accessible and source and target are different
+    // check if both paths are accessible and source and target are different
     if ( !aAbsTarget.ToAbs() || !aAbsSource.ToAbs() || aAbsTarget == aAbsSource )
         return FSYS_ERR_ACCESSDENIED;
 

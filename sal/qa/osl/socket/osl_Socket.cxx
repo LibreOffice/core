@@ -1511,7 +1511,7 @@ namespace osl_Socket
             /// Socket constructor.
             // ::osl::Socket sSocket;
 
-            CPPUNIT_ASSERT_MESSAGE( "test for ctors_none constructor function: check if the socket was created successfully, if no exception occured",
+            CPPUNIT_ASSERT_MESSAGE( "test for ctors_none constructor function: check if the socket was created successfully, if no exception occurred",
                                     1 == 1 );
         }
 
@@ -3060,7 +3060,7 @@ protected:
             oslSocketResult eResult = asSocket.acceptConnection( ssConnectionSocket );
             CPPUNIT_ASSERT_MESSAGE("shutdown_002: acceptConnection fail", eResult == osl_Socket_Ok );
 
-            /* set socket option SO_LINGER 0, so close immediatly */
+            /* set socket option SO_LINGER 0, so close immediately */
             linger aLingerSet;
                 sal_Int32 nBufferLen = sizeof( struct linger );
                     aLingerSet.l_onoff = 0;
@@ -3285,7 +3285,7 @@ namespace osl_ConnectorSocket
                 sal_True == compareSocketAddr( saPeerSocketAddr, saLocalSocketAddr  )  ) ;
         }
         // really an error or just delayed
-        // how to design senarios that will return osl_Socket_Interrupted, osl_Socket_TimedOut
+        // how to design scenarios that will return osl_Socket_Interrupted, osl_Socket_TimedOut
         void connect_003()
         {
             ::osl::SocketAddr saTargetSocketAddr1( aHostIp1, IP_PORT_MYPORT3 );

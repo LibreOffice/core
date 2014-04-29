@@ -266,7 +266,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
     pArgs[1] <<= aUpdate;
 
     // Initialize item with support for reading/writing more then one locales at same time!
-    // It's neccessary for creation of a complete configuration entry without changing office locale
+    // It's necessary for creation of a complete configuration entry without changing office locale
     // at runtime.
     if((rCfgItem.GetMode() & CONFIG_MODE_ALL_LOCALES) == CONFIG_MODE_ALL_LOCALES)
     {

@@ -43,7 +43,7 @@ using ::rtl::OUString;
 
 namespace
 {
-    // Use a super sample factor greater than 1 to achive a poor mans
+    // Use a super sample factor greater than 1 to achieve a poor mans
     // antialiasing effect for slide previews.
     const sal_Int16 gnSuperSampleFactor = 2;
 }

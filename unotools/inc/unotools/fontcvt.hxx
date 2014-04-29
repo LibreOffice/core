@@ -57,9 +57,9 @@ public:
     //Starts converting the string at position rIndex. It converts as much of
     //the string that can be converted to the same symbol font and returns the
     //name of that font. rIndex is modified to the last index that was
-    //converted. Typically you call if continously until rIndex ==
-    //rString.Len() and handle each section as seperate 8bit strings using
-    //seperate fonts. Will return an empty string for a continous section
+    //converted. Typically you call if continuously until rIndex ==
+    //rString.Len() and handle each section as separate 8bit strings using
+    //separate fonts. Will return an empty string for a continuous section
     //that has no possible mapping.
     virtual String ConvertString(String &rString, xub_StrLen &rIndex) = 0;
     virtual ~StarSymbolToMSMultiFont() {}
@@ -68,7 +68,7 @@ public:
 //with bPerfect set the converter will only try and convert symbols which have
 //perfect mappings to the windows symbols fonts. With it not set, it will
 //allow somewhat more dubious transformations that are nevertheless
-//recognizably similiar. Even in this mode there will be characters that fail.
+//recognizably similar. Even in this mode there will be characters that fail.
 //The users of this might want to make a distinction between failed characters
 //which were inside and those outside the unicode private area.
 UNOTOOLS_DLLPUBLIC StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont(bool bPerfectOnly=false);

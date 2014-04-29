@@ -249,7 +249,7 @@ public class pdbcomparison
 
    /**
    * This method populates the pdb arrays with the names of the pdbs to
-   * compare. Ths listFile lists a series of entries, wherein each
+   * compare. This listFile lists a series of entries, wherein each
    * line indicates the PDB names to be compared.
    * <pdbname1>=<pdbname2>
    *

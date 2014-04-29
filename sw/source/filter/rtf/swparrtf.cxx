@@ -1032,7 +1032,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
                 aSectPaM.GetCntntNode(), 0);
 
             SwSectionFmt *pRet = InsertSection(aSectPaM, *aIter);
-            //The last section if continous is always unbalanced
+            //The last section if continuous is always unbalanced
             if (aNext == aEnd && pRet)
                 pRet->SetFmtAttr(SwFmtNoBalancedColumns(true));
         }

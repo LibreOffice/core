@@ -438,7 +438,7 @@ public:
         @param rAttribute  The name of the parameter.  Must be a valid RFC
         2045 token.
 
-        @param rValue  The value of the paramter.  Must only consist of US-
+        @param rValue  The value of the parameter.  Must only consist of US-
         ASCII characters.
 
         @return  The string representation of rMediaType with the new
@@ -456,7 +456,7 @@ public:
         @param rAttribute  The name of the parameter.  Must be a valid RFC
         2045 token.
 
-        @param rValue  The value of the paramter.  Must only consist of US-
+        @param rValue  The value of the parameter.  Must only consist of US-
         ASCII characters.
 
         @return  The string representation of rMediaType with the new

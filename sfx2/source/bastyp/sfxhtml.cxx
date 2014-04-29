@@ -80,7 +80,7 @@ SfxHTMLParser::SfxHTMLParser( SvStream& rStream, sal_Bool bIsNewDoc,
     DBG_ASSERT( !IsSwitchToUCS2(),
                 "SfxHTMLParser::SfxHTMLParser: Switch to UCS2?" );
 
-    // Altough the real default encoding is ISO8859-1, we use MS-1252
+    // Although the real default encoding is ISO8859-1, we use MS-1252
     // als default encoding.
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
 

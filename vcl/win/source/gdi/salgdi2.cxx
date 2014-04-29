@@ -270,7 +270,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
             {
                 // hInvalidateRgn contains the fully visible parts of the original srcRect
                 hTempRgn = CreateRectRgnIndirect( &aSrcRect );
-                // substract it from the original rect to get the occluded parts
+                // subtract it from the original rect to get the occluded parts
                 nRgnType = CombineRgn( hInvalidateRgn, hTempRgn, hInvalidateRgn, RGN_DIFF );
                 DeleteRegion( hTempRgn );
 
@@ -709,7 +709,7 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     else
     {
         err = GetLastError();
-        // #124826# avoid resource leak ! happens when runing without desktop access (remote desktop, service, may be screensavers)
+        // #124826# avoid resource leak ! happens when running without desktop access (remote desktop, service, may be screensavers)
         DeleteBitmap( hBmpBitmap );
     }
 

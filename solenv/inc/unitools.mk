@@ -185,7 +185,7 @@ CONVERT*:=$(PERL) $(SOLARENV)/bin/leconvert.pl
 EXECTEST := $(PERL) -w $(SOLARENV)/bin/exectest.pl
 GCCINSTLIB:=$(PERL) -w $(SOLARENV)/bin/gccinstlib.pl
 
-# The dmake $(PWD) apparantly produces paths with symlinks resolved, while the
+# The dmake $(PWD) apparently produces paths with symlinks resolved, while the
 # bash pwd command by default produces paths with unresolved symlinks, so that
 # computing PATH_IN_MODULE in settings.mk would fail without the -P flag to the
 # bash pwd command:

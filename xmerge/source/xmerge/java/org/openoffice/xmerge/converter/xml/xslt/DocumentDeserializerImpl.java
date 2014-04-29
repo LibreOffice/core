@@ -227,7 +227,7 @@ public final class DocumentDeserializerImpl
           throw sOE;
        }
        catch(Exception e){
-              System.out.println("An error occured in the transformation : "+e);
+              System.out.println("An error occurred in the transformation : "+e);
        }
         return baos;
      }

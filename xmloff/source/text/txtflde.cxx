@@ -752,7 +752,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_DRAW_FOOTER:
     case FIELD_ID_DRAW_DATE_TIME:
     default:
-        DBG_ERROR("unkown field type/field has no content");
+        DBG_ERROR("unknown field type/field has no content");
         return sal_True; // invalid info; string in case of doubt
     }
 }
@@ -971,7 +971,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
 
     case FIELD_ID_UNKNOWN:
     default:
-        DBG_ERROR("unkown field type!");
+        DBG_ERROR("unknown field type!");
         // ignore -> no format for unkowns
         break;
     }
@@ -1869,7 +1869,7 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_UNKNOWN:
     default:
-        DBG_ERROR("unkown field type encountered!");
+        DBG_ERROR("unknown field type encountered!");
         // always export content
         GetExport().Characters(sPresentation);
     }
@@ -2973,8 +2973,8 @@ enum XMLTokenEnum XMLTextFieldExport::MapPlaceholderType(sal_uInt16 nType)
             break;
 
         default:
-            // unkown placeholder: XML_TEXT
-            DBG_ERROR("unkown placeholder type");
+            // unknown placeholder: XML_TEXT
+            DBG_ERROR("unknown placeholder type");
     }
 
     return eType;
@@ -3115,7 +3115,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapChapterDisplayFormat(sal_Int16 nFormat)
             eName = XML_PLAIN_NUMBER;
             break;
         default:
-            DBG_ERROR("unkown chapter display format");
+            DBG_ERROR("unknown chapter display format");
             eName = XML_TOKEN_INVALID;
             break;
     }
@@ -3225,7 +3225,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapReferenceSource(sal_Int16 nType)
             eElement = XML_NOTE_REF;
             break;
         default:
-            DBG_ERROR("unkown reference source");
+            DBG_ERROR("unknown reference source");
             break;
     }
 

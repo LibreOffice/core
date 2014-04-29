@@ -36,7 +36,7 @@ namespace salhelper
 class ORealDynamicLoader
 {
 public:
-    /** initializes the loader, loads the library and call the initialization fucntion.
+    /** initializes the loader, loads the library and call the initialization function.
 
         @param ppSetToZeroInDestructor points to the loader instance which must be set to NULL
                                        if the loader will be destroyed.

@@ -638,7 +638,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
         catch (Exception & exc)
         {
             throw InvocationTargetException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("exception occured in setValue(): ") ) +
+                OUString( RTL_CONSTASCII_USTRINGPARAM("exception occurred in setValue(): ") ) +
                 exc.Message, Reference< XInterface >(), makeAny( exc /* though sliced */ ) );
         }
     }
@@ -1145,11 +1145,11 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
         OUString(
             RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection")) )
                 >>= xCoreReflection;
-    OSL_ENSURE( xCoreReflection.is(), "### CoreReflection singleton not accessable!?" );
+    OSL_ENSURE( xCoreReflection.is(), "### CoreReflection singleton not accessible!?" );
     if (! xCoreReflection.is())
     {
         throw DeploymentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessable") ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessible") ),
             Reference< XInterface >() );
     }
 //         xCoreReflection = Reference<XIdlReflection>(

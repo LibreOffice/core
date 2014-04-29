@@ -626,7 +626,7 @@ sal_uInt32 PPTWriter::ImplMasterSlideListContainer( SvStream* pStrm )
                    << (sal_uInt32)0                 // flags - only bit 3 used, if set then slide contains shapes other than placeholders
                    << (sal_Int32)0                  // numberTexts - number of placeholder texts stored with the persist object. Allows to display outline view without loading the slide persist objects
                    << (sal_Int32)( 0x80000000 | i ) // slideId - Unique slide identifier, used for OLE link monikers for example
-                   << (sal_uInt32)0;                // reserved, usualy 0
+                   << (sal_uInt32)0;                // reserved, usually 0
         }
     }
     return nSize;

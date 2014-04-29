@@ -184,7 +184,7 @@ ScAccessibleDataPilotControl::~ScAccessibleDataPilotControl(void)
     {
         // increment refcount to prevent double call off dtor
         osl_incrementInterlockedCount( &m_refCount );
-        // call dispose to inform object wich have a weak reference to this object
+        // call dispose to inform object which have a weak reference to this object
         dispose();
     }
 }
@@ -542,7 +542,7 @@ ScAccessibleDataPilotButton::ScAccessibleDataPilotButton(
         ::com::sun::star::accessibility::XAccessible>& rxParent,
         ScPivotFieldWindow* pFieldWindow,
         sal_Int32 nIndex)
-//change role frome PUSH_BUTTON to BUTTON_MENU
+//change role from PUSH_BUTTON to BUTTON_MENU
     : ScAccessibleContextBase(rxParent, AccessibleRole::BUTTON_MENU),
     mpFieldWindow(pFieldWindow),
     mnIndex(nIndex)
@@ -555,7 +555,7 @@ ScAccessibleDataPilotButton::~ScAccessibleDataPilotButton(void)
     {
         // increment refcount to prevent double call off dtor
         osl_incrementInterlockedCount( &m_refCount );
-        // call dispose to inform object wich have a weak reference to this object
+        // call dispose to inform object which have a weak reference to this object
         dispose();
     }
 }

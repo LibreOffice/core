@@ -525,7 +525,7 @@ void WW8SwAttrIter::OutAttr( xub_StrLen nSwPos )
     }
 
     /*
-     For #i24291# we need to explictly remove any properties from the
+     For #i24291# we need to explicitly remove any properties from the
      aExportSet which a SwCharFmt would override, we can't rely on word doing
      this for us like writer does
     */

@@ -331,7 +331,7 @@ bool Registrar::QueryPreselectMsPowerPointRegistration() const
       HKCR\.htm\OpenWithList\App Friendly Name\shell\edit\command
       But the reality shows that this works only
       with Internet Explorer 5.x
-      Internet Explorer 6.0 wants the follwoing
+      Internet Explorer 6.0 wants the following
       entries:
       HKCR\.htm\OpenWithList\App.exe
       HKCR\Applications\App.ex\shell\edit\command

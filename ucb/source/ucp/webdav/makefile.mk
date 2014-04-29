@@ -52,7 +52,7 @@ SERFINCDIR=serf
 # Extend the list of include paths depending on whether we use locally built
 # or system versions of libraries apr, apr-util, serf, libxml
 #
-# We have to use CFLAGS for this because PRJINC is too inflexible (it adds /inc to everyting.)
+# We have to use CFLAGS for this because PRJINC is too inflexible (it adds /inc to everything.)
 #
 
 .IF "$(SYSTEM_APR)" == "YES"

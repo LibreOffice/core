@@ -46,7 +46,7 @@ public class _XServiceInfo {
 
     /**
     * Just calls the method.<p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public boolean _getImplementationName() {
         boolean result = true;
@@ -62,7 +62,7 @@ public class _XServiceInfo {
 
     /**
     * Just calls the method.<p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public boolean _getSupportedServiceNames() {
         boolean result = true;

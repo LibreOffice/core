@@ -1413,7 +1413,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
         aSmallDockingRect.SetPos(rPos);
         Rectangle aIntersectRect = aInRect.GetIntersection( aSmallDockingRect );
         if ( aIntersectRect == aSmallDockingRect )
-            // docking rectangle completely inside (shrinked) inner area -> floating mode
+            // docking rectangle completely inside (shrunk) inner area -> floating mode
             bBecomesFloating = sal_True;
     }
 

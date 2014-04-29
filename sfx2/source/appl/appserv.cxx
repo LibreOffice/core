@@ -197,7 +197,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             {
                 /* Dont save the request for closing the application and try it later
                    again. This is an UI bound functionality ... and the user will  try it again
-                   if the dialog is closed. But we shouldnt close the application automaticly
+                   if the dialog is closed. But we shouldn't close the application automatically
                    if this dialog is closed by the user ...
                    So we ignore this request now and wait for a new user decision.
                 */

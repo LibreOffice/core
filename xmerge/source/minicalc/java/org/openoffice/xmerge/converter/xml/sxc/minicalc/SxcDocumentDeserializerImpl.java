@@ -119,7 +119,7 @@ public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
                 PalmDocument palmDoc = (PalmDocument) e.nextElement();
                 worksheetName[i] = palmDoc.getName();
 
-                // Search for the "-", which seperates workbook from worksheet
+                // Search for the "-", which separates workbook from worksheet
                 int start = worksheetName[i].indexOf("-");
 
                 if (start != -1) {

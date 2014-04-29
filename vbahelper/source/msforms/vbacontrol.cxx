@@ -271,7 +271,7 @@ ScVbaControl::getControlSource() throw (uno::RuntimeException)
 {
 // #FIXME I *hate* having these upstream differences
 // but this is necessary until I manage to upstream other
-// dependant parts
+// dependent parts
 #ifdef VBA_OOBUILD_HACK
     rtl::OUString sControlSource;
     uno::Reference< form::binding::XBindableValue > xBindable( m_xProps, uno::UNO_QUERY );

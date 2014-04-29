@@ -872,7 +872,7 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
             {
                 eState = SsStop;
                 sSymbol += cToken;
-                nRepPos = (nPos - nStart) - 1;  // everytime > 0!!
+                nRepPos = (nPos - nStart) - 1;  // every time > 0!!
             }
             break;
             case SsGetBlank:

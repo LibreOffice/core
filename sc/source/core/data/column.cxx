@@ -726,7 +726,7 @@ sal_Bool ScColumn::Search( SCROW nRow, SCSIZE& nIndex ) const
             i = (nLo+nHi) / 2;          // no effort, no division by zero
         else
         {   // interpolating search
-            long nLoRow = pItems[nLo].nRow;     // no unsigned underflow upon substraction
+            long nLoRow = pItems[nLo].nRow;     // no unsigned underflow upon subtraction
             i = nLo + (long)((long)(nRow - nLoRow) * (nHi - nLo)
                 / (pItems[nHi].nRow - nLoRow));
             if ( i < 0 || static_cast<SCSIZE>(i) >= nCount )

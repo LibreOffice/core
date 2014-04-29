@@ -107,7 +107,7 @@ case "$1" in
 #     done 
 
 #     #Write the new list to the file "installed". It now has all names
-#     #remove which refered to previously removed extensions (removed
+#     #remove which referred to previously removed extensions (removed
 #     #from .../share/extension/install)
 #     if  [ "$REMOVED" ]; then
 # 	#remove the last empty line

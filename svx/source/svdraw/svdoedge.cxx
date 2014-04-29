@@ -2505,9 +2505,9 @@ void SdrEdgeObj::SetTailPoint( sal_Bool bTail, const Point& rPt )
 }
 
 /** this method is used by the api to set a glue point for a connection
-    nId == -1 :     The best default point is automaticly choosen
-    0 <= nId <= 3 : One of the default points is choosen
-    nId >= 4 :      A user defined glue point is choosen
+    nId == -1 :     The best default point is automatically chosen
+    0 <= nId <= 3 : One of the default points is chosen
+    nId >= 4 :      A user defined glue point is chosen
 */
 void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ )
 {

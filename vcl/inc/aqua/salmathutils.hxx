@@ -34,7 +34,7 @@ extern "C" {
 //
 // ------------------------------------------------------------------
 
-// LRectCoor is an abreviation for rectangular coordinates
+// LRectCoor is an abbreviation for rectangular coordinates
 // represented as long integers
 
 struct LRectCoor
@@ -50,7 +50,7 @@ struct LRectCoor
 //
 // ------------------------------------------------------------------
 
-// LRectCoorVec is an abreviation for vectors in rectangular
+// LRectCoorVec is an abbreviation for vectors in rectangular
 // coordinates represented as long integers
 
 typedef struct LRectCoor   LRectCoor;

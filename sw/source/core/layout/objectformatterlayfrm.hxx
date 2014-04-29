@@ -50,7 +50,7 @@ class SwObjectFormatterLayFrm : public SwObjectFormatter
             @author OD
 
             @return boolean
-            indicates, if format was successfull
+            indicates, if format was successful
         */
         bool _AdditionalFormatObjsOnPage();
 

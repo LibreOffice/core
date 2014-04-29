@@ -39,7 +39,7 @@ class SlideSorterView;
 
 namespace sd { namespace slidesorter { namespace controller {
 
-/** A collection of functions that are usefull when creating animations.
+/** A collection of functions that are useful when creating animations.
     They are collected here until a better place is found.
 */
 class AnimationFunction

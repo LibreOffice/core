@@ -1229,7 +1229,7 @@ sub get_Destination_Directory_For_Item_From_Directorylist       # this is used f
 }
 
 ##########################################################################
-# Searching a file in a list of pathes
+# Searching a file in a list of paths
 ##########################################################################
 
 sub get_sourcepath_from_filename_and_includepath_classic
@@ -1394,7 +1394,7 @@ sub determine_directory_language_dependency
 }
 
 ##############################################################
-# Getting all source pathes for all files to be packed
+# Getting all source paths for all files to be packed
 # $item can be "Files" or "ScpActions"
 ##############################################################
 
@@ -2201,7 +2201,7 @@ sub quoting_illegal_filenames
 }
 
 ############################################################################
-# Removing multiple occurences of same module.
+# Removing multiple occurrences of same module.
 ############################################################################
 
 sub optimize_list
@@ -2581,7 +2581,7 @@ sub resolve_links_with_flag_relative
     # Before this step is:
     # destination=program/libsalhelperC52.so.3, this will be the name of the link
     # destinationfile=program/libsalhelperC52.so.3, this will be the linked file or name
-    # If the flag RELATIVE is set, the pathes have to be analyzed. If the flag is not set
+    # If the flag RELATIVE is set, the paths have to be analyzed. If the flag is not set
     # (this will not occur in the future?) destinationfile has to be an absolute path name
 
     for ( my $i = 0; $i <= $#{$linksarrayref}; $i++ )

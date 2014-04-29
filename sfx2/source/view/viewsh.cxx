@@ -213,7 +213,7 @@ throw ( uno::RuntimeException )
         xNotify->removeClipboardListener( xThis );
 
     // Make asynchronous call to avoid locking SolarMutex which is the
-    // root for many deadlocks, especially in conjuction with the "Windows"
+    // root for many deadlocks, especially in conjunction with the "Windows"
     // based single thread apartment clipboard code!
     AsyncExecuteInfo* pInfo = new AsyncExecuteInfo( ASYNCEXECUTE_CMD_DISPOSING, xThis, this );
     Application::PostUserEvent( STATIC_LINK( 0, SfxClipboardChangeListener, AsyncExecuteHdl_Impl ), pInfo );
@@ -223,7 +223,7 @@ void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::c
         throw ( RuntimeException )
 {
     // Make asynchronous call to avoid locking SolarMutex which is the
-    // root for many deadlocks, especially in conjuction with the "Windows"
+    // root for many deadlocks, especially in conjunction with the "Windows"
     // based single thread apartment clipboard code!
     uno::Reference< datatransfer::clipboard::XClipboardListener > xThis( static_cast< datatransfer::clipboard::XClipboardListener* >( this ));
     AsyncExecuteInfo* pInfo = new AsyncExecuteInfo( ASYNCEXECUTE_CMD_CHANGEDCONTENTS, xThis, this );

@@ -338,7 +338,7 @@ ScVbaWindow::getCaption() throw (uno::RuntimeException)
                 static rtl::OUString sDot( RTL_CONSTASCII_USTRINGPARAM(".") );
                 // starts with title
                 if ( sName.indexOf( sTitle ) == 0 )
-                    // extention starts immediately after
+                    // extension starts immediately after
                     if ( sName.match( sDot, sTitle.getLength() ) )
                         sTitle = sName;
             }

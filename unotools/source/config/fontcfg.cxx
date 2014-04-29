@@ -106,7 +106,7 @@ DefaultFontConfiguration::DefaultFontConfiguration()
     {
         // get service provider
         Reference< XMultiServiceFactory > xSMgr( comphelper::getProcessServiceFactory() );
-        // create configuration hierachical access name
+        // create configuration hierarchical access name
         if( xSMgr.is() )
         {
             try
@@ -386,7 +386,7 @@ FontSubstConfiguration::FontSubstConfiguration() :
     {
         // get service provider
         Reference< XMultiServiceFactory > xSMgr( comphelper::getProcessServiceFactory() );
-        // create configuration hierachical access name
+        // create configuration hierarchical access name
         if( xSMgr.is() )
         {
             try

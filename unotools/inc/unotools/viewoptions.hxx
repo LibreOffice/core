@@ -189,14 +189,14 @@ class UNOTOOLS_DLLPUBLIC SvtViewOptions: public utl::detail::Options
 
         /*-****************************************************************************************************//**
             @short      use it to get information about existing entries in configuration
-            @descr      The methods to set/get the position or size will create a new entry automaticly if
+            @descr      The methods to set/get the position or size will create a new entry automatically if
                         it not already exist and work with default values!
                         If this a problem for you - you MUST call these method before and
                         you must make up your own mind about that.
 
             @seealso    -
 
-            @onerror    No error should occure.
+            @onerror    No error should occur.
         *//*-*****************************************************************************************************/
 
         sal_Bool Exists() const;
@@ -220,7 +220,7 @@ class UNOTOOLS_DLLPUBLIC SvtViewOptions: public utl::detail::Options
         /*-****************************************************************************************************//**
             @short      use it to set/get the window state of your view
             @descr      These value describe position/size and some other states of a window.
-                        Use it with right vcl methods directly. Normaly it's not neccessary to
+                        Use it with right vcl methods directly. Normaly it's not necessary to
                         parse given string!
 
             @seealso    vcl methods

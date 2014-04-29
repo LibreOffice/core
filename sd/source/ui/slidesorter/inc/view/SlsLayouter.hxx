@@ -50,7 +50,7 @@ class InsertPosition;
     2.) Desired and minimal and maximal widths of page objects.
     3.) Minimal and maximal number of columns.
     4.) Vertical and horizontal gaps between objects in adjacent columns.
-    5.) Borders arround every page object.
+    5.) Borders around every page object.
     6.) Vertical and horizontal borders between enclosing page and outer
         page objects.
     From these it calculates various output values:
@@ -99,7 +99,7 @@ public:
         sal_Int32 nTopBorder, sal_Int32 nBottomBorder);
 
     /** Set the interval of valid column counts.  When nMinimalColumnCount
-        <= nMaximalColumnCount is not fullfilled then the call is ignored.
+        <= nMaximalColumnCount is not fulfilled then the call is ignored.
         @param nMinimalColumnCount
             The default value is 1.  The question whether higher values make
             any sense is left to the caller.
@@ -113,7 +113,7 @@ public:
         calculates the output values.  Both given sizes must not be 0 in any
         dimension or the call is ignored.
         @param eOrientation
-            This defines the generaly layout and specifies whether there may
+            This defines the generally layout and specifies whether there may
             be more than one row or more than one column.
         @param rWindowSize
             The size of the window in pixels that the slide sorter is

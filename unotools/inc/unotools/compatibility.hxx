@@ -55,7 +55,7 @@ enum CompatibilityOptions
 
 /*-************************************************************************************************************//**
     @descr          The method GetList() returns a list of property values.
-                    Use follow defines to seperate values by names.
+                    Use follow defines to separate values by names.
 *//*-*************************************************************************************************************/
 #define COMPATIBILITY_PROPERTYNAME_NAME                     OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) )
 #define COMPATIBILITY_PROPERTYNAME_MODULE                   OUString( RTL_CONSTASCII_USTRINGPARAM( "Module" ) )
@@ -80,7 +80,7 @@ enum CompatibilityOptions
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
-                    You can create the container if it is neccessary. The class which use these mechanism
+                    You can create the container if it is necessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
 

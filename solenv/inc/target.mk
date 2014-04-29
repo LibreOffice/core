@@ -126,7 +126,7 @@ APP6RES=
 APP7RES=
 APP8RES=
 APP9RES=
-# unfortunatly there are some applications which don't VCL resources but have
+# unfortunately there are some applications which don't VCL resources but have
 # resources of their own
 .IF "$(APP1NOSVRES)" != ""
 APP1RES=$(APP1NOSVRES)

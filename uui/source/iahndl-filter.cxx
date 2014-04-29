@@ -96,7 +96,7 @@ handleNoSuchFilterRequest_(
     uno::Reference< document::XInteractionFilterSelect > xFilterTransport;
     getContinuations(rContinuations, &xAbort, &xFilterTransport);
 
-    // check neccessary ressources - if they don't exist - abort or
+    // check necessary ressources - if they don't exist - abort or
     // break this operation
     if (!xAbort.is())
         return;

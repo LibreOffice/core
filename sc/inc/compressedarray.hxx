@@ -221,7 +221,7 @@ ScCompressedArray<A,D>::GetDataEntry( size_t nIndex ) const
 
 /** Iterator for ScCompressedArray.
 
-    @ATTENTION: the iterator is not persistant if the underlying
+    @ATTENTION: the iterator is not persistent if the underlying
     ScCompressedArray happens to be changed by any means, for example by
     setting new values or adding or removing or combining entries. If you do
     such things inside a loop you MUST resynchronize the iterator by calling

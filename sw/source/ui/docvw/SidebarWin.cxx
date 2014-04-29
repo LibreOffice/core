@@ -1448,7 +1448,7 @@ void SwRedComment::MouseButtonDown( const MouseEvent& rMEvt )
 void SwRedComment::Delete()
 {
     SwSidebarWin::Delete();
-    // we are not neccessarily on our redline, so let's move there
+    // we are not necessarily on our redline, so let's move there
     GotoPos();
     DocView()->GetWrtShell().SetRedlineComment(EMPTYSTRING);
     DocView()->GetWrtShell().ClearMark();

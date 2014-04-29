@@ -172,13 +172,13 @@ public:
         @param pBuffer [in] Points to a buffer that contains the send-data.
         @param BytesToSend [in] The number of bytes to send. pBuffer must have at least
         this size.
-        @return the number of transfered bytes.
+        @return the number of transferred bytes.
     */
     sal_Int32 SAL_CALL send(const void* pBuffer, sal_uInt32 BytesToSend);
 
-    /** Delivers a constant decribing the last error for the pipe system.
-        @return ENONE if no error occured, invalid_PipeError if
-        an unknown (unmapped) error occured, otherwise an enum describing the
+    /** Delivers a constant describing the last error for the pipe system.
+        @return ENONE if no error occurred, invalid_PipeError if
+        an unknown (unmapped) error occurred, otherwise an enum describing the
         error.
     */
     TPipeError SAL_CALL getError() const;

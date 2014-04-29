@@ -55,7 +55,7 @@ namespace uui
 
 /*-************************************************************************************************************//**
     @short      initialize filter dialog with start values
-    @descr      We set some neccessary informations on these instance for later working and create internal structures.
+    @descr      We set some necessary informations on these instance for later working and create internal structures.
                 After construction user should call "SetFilters()" and "SetURL()" to fill listbox with selectable filter
                 names and set file name of file, which should be used for selected filter.
 
@@ -95,7 +95,7 @@ FilterDialog::FilterDialog( Window* pParentWindow ,
 *//*-*************************************************************************************************************/
 void FilterDialog::SetURL( const String& sURL )
 {
-    // convert it and use given pure string as fallback if convertion failed
+    // convert it and use given pure string as fallback if conversion failed
     m_ftURL.SetText( impl_buildUIFileName(sURL) );
 }
 
@@ -137,8 +137,8 @@ void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
     @short      ask user for his decision
     @descr      We show the dialog and if user finish it with "OK" - we try to find selected item in internal saved
                 name list (which you must set in "ChangeFilters()"!). If we return sal_True as result, you can use out
-                parameter "pSelectedItem" as pointer into your FilterNameList to get selected item realy ...
-                but if we return sal_False ... user hsa cancel the dialog ... you shouldnt do that. pSelectedItem isnt
+                parameter "pSelectedItem" as pointer into your FilterNameList to get selected item really ...
+                but if we return sal_False ... user hsa cancel the dialog ... you shouldn't do that. pSelectedItem isn't
                 set to any valid value then. We don't change them ...
 
     @seealso    method ChangeFilters()
@@ -146,7 +146,7 @@ void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
     @param      "pSelectedItem", returns result of selection as pointer into set list of filter names
                                  (valid for function return sal_True only!)
     @return     true  => pSelectedItem parameter points into name list and represent use decision
-                false => use has cancelled dialog (pSelectedItem isnt valid then!)
+                false => use has cancelled dialog (pSelectedItem isn't valid then!)
 
     @onerror    We return false ... but don't change pSelectedItem!
     @threadsafe no
@@ -209,7 +209,7 @@ class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util:
 
 /*-************************************************************************************************************//**
     @short      try to build short name of given URL to show it n GUI
-    @descr      We detect type of given URL automaticly and build this short name depend on this type ...
+    @descr      We detect type of given URL automatically and build this short name depend on this type ...
                 If we couldnt make it right we return full given string without any changes ...
 
     @seealso    class LocalFileHelper
@@ -231,7 +231,7 @@ String FilterDialog::impl_buildUIFileName( const String& sName )
     }
     else
     {
-        // otherwise its realy a url ... build short name by using INetURLObject
+        // otherwise its really a url ... build short name by using INetURLObject
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > xStringCalculator( new StringCalculator(&m_ftURL) );
         if( xStringCalculator.is() == sal_True )
         {

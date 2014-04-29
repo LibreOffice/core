@@ -210,15 +210,15 @@ public:
     /**
        Return bit value from a 32-bit unsigned value.
 
-       @param nValue     value to retreive bit from
-       @param nBit       number of bit to retreive (0 = least significant)
+       @param nValue     value to retrieve bit from
+       @param nBit       number of bit to retrieve (0 = least significant)
      */
     sal_Bool getBit(sal_uInt32 nValue, sal_uInt16 nBit) const;
 
     /**
         Return nibble from a 32-bit unsigned value.
 
-        @param nValue   value to retreive nibble from (most significant bit left)
+        @param nValue   value to retrieve nibble from (most significant bit left)
         @param nShift   amount of bits to shift right before returning least significant nibble
     */
     sal_uInt8 getNibble(sal_uInt32 nValue, sal_uInt16 nShift) const;

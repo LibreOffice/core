@@ -492,7 +492,7 @@ sub analyze_and_save_logfile
 
     if ( $installer::globals::creating_windows_installer_patch ) { $installer::globals::creating_windows_installer_patch = 0; }
 
-    # Exiting the packaging process, if an error occured.
+    # Exiting the packaging process, if an error occurred.
     # This is important, to get an error code "-1", if an error was found in the log file,
     # that did not break the packaging process
 
@@ -607,7 +607,7 @@ sub copy_hash_from_references
 
 ###########################################################
 # Setting one language in the language independent
-# array of include pathes with $(LANG)
+# array of include paths with $(LANG)
 ###########################################################
 
 sub get_language_specific_include_pathes
@@ -2354,7 +2354,7 @@ sub add_variables_from_inc_to_hashref
 }
 
 ##############################################
-# Collecting all files from include pathes
+# Collecting all files from include paths
 ##############################################
 
 sub collect_all_files_from_includepathes
@@ -2362,7 +2362,7 @@ sub collect_all_files_from_includepathes
     my ($patharrayref) = @_;
 
     installer::logger::globallog("Reading all directories: Start");
-    $installer::logger::Info->print( "... reading include pathes ...\n" );
+    $installer::logger::Info->print( "... reading include paths ...\n" );
     # empty the global
 
     @installer::globals::allincludepathes =();
@@ -2668,7 +2668,7 @@ sub set_time_stamp
 }
 
 ############################################################
-# Generating pathes for cygwin (first version)
+# Generating paths for cygwin (first version)
 # This function has problems with cygwin, if $tmpfilename
 # contains many thousand files (OpenOffice SDK).
 ############################################################
@@ -2695,7 +2695,7 @@ sub generate_cygwin_pathes_old
 }
 
 #################################################
-# Generating pathes for cygwin (second version)
+# Generating paths for cygwin (second version)
 # This function generates smaller files for
 #################################################
 
@@ -2703,12 +2703,12 @@ sub generate_cygwin_pathes
 {
     my ($filesref) = @_;
 
-    $installer::logger::Lang->add_timestamp("Starting generating cygwin pathes");
+    $installer::logger::Lang->add_timestamp("Starting generating cygwin paths");
 
-    my $infoline = "Generating cygwin pathes (generate_cygwin_pathes)\n";
+    my $infoline = "Generating cygwin paths (generate_cygwin_pathes)\n";
     $installer::logger::Lang->print($infoline);
 
-    my $max = 5000;  # number of pathes in one file
+    my $max = 5000;  # number of paths in one file
 
     my @pathcollector = ();
     my $startnumber = 0;
@@ -2726,7 +2726,7 @@ sub generate_cygwin_pathes
             my $temppath = $installer::globals::temppath;
             $temppath =~ s/\Q$installer::globals::separator\E\s*$//;
             $tmpfilename = $temppath . $installer::globals::separator . $tmpfilename;
-            $infoline = "Creating temporary file for cygwin conversion: $tmpfilename (contains $counter pathes)\n";
+            $infoline = "Creating temporary file for cygwin conversion: $tmpfilename (contains $counter paths)\n";
             $installer::logger::Lang->print($infoline);
             if ( -f $tmpfilename ) { unlink $tmpfilename; }
 
@@ -2751,9 +2751,9 @@ sub generate_cygwin_pathes
             }
             else
             {
-                $installer::logger::Lang->print("ERROR: Failed to convert to cygwin pathes!\n");
+                $installer::logger::Lang->print("ERROR: Failed to convert to cygwin paths!\n");
                 installer::exiter::exit_program(
-                    "ERROR: Failed to convert to cygwin pathes!",
+                    "ERROR: Failed to convert to cygwin paths!",
                     "generate_cygwin_pathes");
             }
 
@@ -2782,7 +2782,7 @@ sub generate_cygwin_pathes
         }
     }
 
-    $installer::logger::Lang->add_timestamp("Ending generating cygwin pathes");
+    $installer::logger::Lang->add_timestamp("Ending generating cygwin paths");
 }
 
 ##############################################

@@ -1412,7 +1412,7 @@ sal_Int32 OStreamSocket::read(void* pBuffer, sal_uInt32 n) const
         return -1;
     }
 
-    /* loop until all desired bytes were read or an error occured */
+    /* loop until all desired bytes were read or an error occurred */
     sal_uInt32 BytesRead= 0;
     sal_uInt32 BytesToRead= n;
     while (BytesToRead > 0)
@@ -1423,7 +1423,7 @@ sal_Int32 OStreamSocket::read(void* pBuffer, sal_uInt32 n) const
                                    BytesToRead,
                                    osl_Socket_MsgNormal);
 
-        /* error occured? */
+        /* error occurred? */
         if(RetVal <= 0)
         {
             break;
@@ -1459,7 +1459,7 @@ sal_Int32 OStreamSocket::write(const void* pBuffer, sal_uInt32 n)
         return -1;
     }
 
-    /* loop until all desired bytes were send or an error occured */
+    /* loop until all desired bytes were send or an error occurred */
     sal_uInt32 BytesSend= 0;
     sal_uInt32 BytesToSend= n;
     while (BytesToSend > 0)
@@ -1471,7 +1471,7 @@ sal_Int32 OStreamSocket::write(const void* pBuffer, sal_uInt32 n)
                                 BytesToSend,
                                 osl_Socket_MsgNormal);
 
-        /* error occured? */
+        /* error occurred? */
         if(RetVal <= 0)
         {
             break;

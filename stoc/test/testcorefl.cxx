@@ -387,7 +387,7 @@ SAL_IMPLEMENT_MAIN()
                     "/singletons/com.sun.star.reflection.theCoreReflection")) )
                         >>= xRefl;
         OSL_ENSURE(
-            xRefl.is(), "### CoreReflection singleton not accessable!?" );
+            xRefl.is(), "### CoreReflection singleton not accessible!?" );
 
         bSucc = test_corefl( xRefl );
 
@@ -395,10 +395,10 @@ SAL_IMPLEMENT_MAIN()
     }
     catch (Exception & rExc)
     {
-        OSL_ENSURE( sal_False, "### exception occured!" );
+        OSL_ENSURE( sal_False, "### exception occurred!" );
         OString aMsg(
             OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "### exception occured: " );
+        OSL_TRACE( "### exception occurred: " );
         OSL_TRACE( aMsg.getStr() );
         OSL_TRACE( "\n" );
     }

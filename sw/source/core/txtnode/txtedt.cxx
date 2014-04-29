@@ -1983,17 +1983,17 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
                         // Asian languages count words as characters
                         if ( nCurrScript == ::com::sun::star::i18n::ScriptType::ASIAN )
                         {
-                            // substract white spaces
+                            // subtract white spaces
                             sal_Int32 nSpaceCount = 0;
                             sal_Int32 nSpacePos = 0;
 
-                            // substract normal white spaces
+                            // subtract normal white spaces
                             nSpacePos = -1;
                             while ( ( nSpacePos = aScriptText.indexOf( ' ', nSpacePos + 1 ) ) != -1 )
                             {
                                 nSpaceCount++;
                             }
-                            // substract Asian full-width white spaces
+                            // subtract Asian full-width white spaces
                             nSpacePos = -1;
                             while ( ( nSpacePos = aScriptText.indexOf( 12288, nSpacePos + 1 ) ) != -1 )
                             {

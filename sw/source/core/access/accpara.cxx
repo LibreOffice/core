@@ -503,7 +503,7 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
     if( -1 != nNew )
     {
         // remember that object as the one that has the caret. This is
-        // neccessary to notify that object if the cursor leaves it.
+        // necessary to notify that object if the cursor leaves it.
         ::vos::ORef < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
@@ -846,7 +846,7 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
                 rBound.endPos = nEndPos;
             }
         }
-        // add the " " into the word boundry
+        // add the " " into the word boundary
         else
         {
             rBound = pBreakIt->xBreak->getWordBoundary(rText, nPos, aLocale, nWordType, sal_True );
@@ -1917,7 +1917,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
         for( i = 0; i < nLength; i++ )
             pIndices[i] = i;
         sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
-        // create sorted sequences accoring to index array
+        // create sorted sequences according to index array
         uno::Sequence<PropertyValue> aNewValues( nLength );
         PropertyValue* pNewValues = aNewValues.getArray();
         for( i = 0; i < nLength; i++ )
@@ -3244,7 +3244,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
         pIndices[i] = i;
     sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
 
-    // create sorted sequences accoring to index array
+    // create sorted sequences according to index array
     uno::Sequence< ::rtl::OUString > aNames( nLength );
     ::rtl::OUString* pNames = aNames.getArray();
     uno::Sequence< uno::Any > aValues( nLength );

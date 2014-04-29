@@ -570,7 +570,7 @@ public:
     /// Record tracked changes for this particular XText
     /// (empty reference stop recording)
     /// This should be used if tracked changes for e.g. footers are to
-    /// be exported seperately via the exportTrackedChanges(sal_Bool,
+    /// be exported separately via the exportTrackedChanges(sal_Bool,
     /// Reference<XText>) method.
     void recordTrackedChangesForXText(
         const ::com::sun::star::uno::Reference <

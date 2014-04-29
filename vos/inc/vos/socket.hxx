@@ -175,7 +175,7 @@ public:
 
     enum TResult {
         TResult_Ok          = osl_Socket_Ok,          /* successful completion */
-        TResult_Error       = osl_Socket_Error,       /* error occured, check osl_getLastSocketError() for details */
+        TResult_Error       = osl_Socket_Error,       /* error occurred, check osl_getLastSocketError() for details */
         TResult_TimedOut    = osl_Socket_TimedOut,    /* blocking operation timed out */
         TResult_Interrupted = osl_Socket_Interrupted, /* blocking operation was interrupted */
         TResult_InProgress  = osl_Socket_InProgress   /* nonblocking operation is in progress */
@@ -566,7 +566,7 @@ public:
         You can specify a timeout-value in seconds/nanoseconds that denotes
         how sal_Int32 the operation will block if the Socket is not ready.
         @return True if read operations (recv, recvFrom, accept) on the Socket
-        will NOT block; False if it would block or if an error occured.
+        will NOT block; False if it would block or if an error occurred.
 
         @param pTimeout if 0, the operation will block without a timeout. Otherwise
         the specified amout of time.
@@ -577,7 +577,7 @@ public:
         You can specify a timeout-value in seconds/nanoseconds that denotes
         how sal_Int32 the operation will block if the Socket is not ready.
         @return True if send operations (send, sendTo) on the Socket
-        will NOT block; False if it would block or if an error occured.
+        will NOT block; False if it would block or if an error occurred.
 
         @param pTimeout if 0, the operation will block without a timeout. Otherwise
         the specified amout of time.
@@ -589,7 +589,7 @@ public:
         how sal_Int32 the operation will block if the Socket has no pending OOB data.
 
         @return True if OOB-request operations (recv with appropriate flags)
-        on the Socket will NOT block; False if it would block or if an error occured.
+        on the Socket will NOT block; False if it would block or if an error occurred.
 
         @param pTimeout if 0, the operation will block without a timeout. Otherwise
         the specified amout of time.
@@ -633,7 +633,7 @@ public:
         </ul>
 
         @return The size of the attribute copied into pBuffer ot -1 if an error
-        occured.
+        occurred.
     */
     sal_Int32 SAL_CALL getOption(TSocketOption Option,
                       void* pBuffer,
@@ -779,7 +779,7 @@ public:
     sal_Int32   SAL_CALL setRecvBufSize(sal_Int32 size =-1) const;
 
     /** Disables the Nagle algorithm for send coalescing. (Do not
-        collect data until a packet is full, instead send immediatly.
+        collect data until a packet is full, instead send immediately.
         This increases network traffic but might improve response-times.)
         @param opt 1 sets, 0 resets, -1 won't change anything
         @return the previous setting
@@ -794,9 +794,9 @@ public:
     */
     void SAL_CALL getError(::rtl::OUString& strError) const;
 
-    /** Delivers a constant decribing the last error for the socket system.
-        @return ENONE if no error occured, invalid_SocketError if
-        an unknown (unmapped) error occured, otherwise an enum describing the
+    /** Delivers a constant describing the last error for the socket system.
+        @return ENONE if no error occurred, invalid_SocketError if
+        an unknown (unmapped) error occurred, otherwise an enum describing the
         error.
     */
     TSocketError SAL_CALL getError() const;
@@ -918,7 +918,7 @@ public:
         <li> TMsg_MaxIOVLen
         </ul>
 
-        @return the number of transfered bytes.
+        @return the number of transferred bytes.
     */
     sal_Int32 SAL_CALL send(const void* pBuffer,
                  sal_uInt32 BytesToSend,
@@ -1110,7 +1110,7 @@ public:
         <li> TMsg_MaxIOVLen
         </ul>
 
-        @return the number of transfered bytes.
+        @return the number of transferred bytes.
     */
     sal_Int32   SAL_CALL sendTo(const OSocketAddr& ReceiverAddr,
                    const void* pBuffer,

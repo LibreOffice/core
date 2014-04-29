@@ -53,7 +53,7 @@ namespace sdr
         {
         }
 
-        // Access to LayerInfos (which layers to proccess)
+        // Access to LayerInfos (which layers to process)
         void DisplayInfo::SetProcessLayers(const SetOfByte& rSet)
         {
             maProcessLayers = rSet;

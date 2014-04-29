@@ -72,7 +72,7 @@ public:
     /// Constructor
     OSignalHandler();
 
-    /// Destructor kills thread if neccessary
+    /// Destructor kills thread if necessary
     virtual ~OSignalHandler();
 
     static TSignalAction SAL_CALL raise(sal_Int32 Signal, void *pData = 0);

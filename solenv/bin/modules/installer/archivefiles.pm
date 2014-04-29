@@ -362,7 +362,7 @@ sub resolving_archive_flag
 
                         if ( $set_executable_privileges )
                         {
-                            # All pathes to executables are saved in the hash %executable_files_in_extensions
+                            # All paths to executables are saved in the hash %executable_files_in_extensions
                             my $compare_path = $newfile{'sourcepath'};
                             $compare_path =~ s/\\/\//g;  # contains only slashes for comparison reasons
                             if ( exists($executable_files_in_extensions{$compare_path}) )

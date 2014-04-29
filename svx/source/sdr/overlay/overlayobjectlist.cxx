@@ -29,7 +29,7 @@
 #include <vcl/outdev.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-// for SOLARIS compiler include of algorithm part of _STL is necesary to
+// for SOLARIS compiler include of algorithm part of _STL is necessary to
 // get access to basic algos like ::std::find
 #include <algorithm>
 

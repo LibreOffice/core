@@ -678,7 +678,7 @@ class SwAccPreviewData
         rectangle; needed to determine the visible part of the logic page rectangle.
 
         @param _rPrevwWinSize
-        input paramter - constant reference to the preview window size in TWIP;
+        input parameter - constant reference to the preview window size in TWIP;
         needed to determine the visible part of the logic page rectangle
     */
     void AdjustLogicPgRectToVisibleArea( SwRect&         _iorLogicPgSwRect,
@@ -1061,7 +1061,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 break;
             case SwAccessibleEvent_Impl::DISPOSE:
                 // DISPOSE events overwrite all others. They are not stored
-                // but executed immediatly to avoid broadcasting of
+                // but executed immediately to avoid broadcasting of
                 // defunctional objects. So what needs to be done here is to
                 // remove all events for the frame in question.
                 bAppendEvent = sal_False;
@@ -2020,7 +2020,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                         // focused state then. Sending the focus changes event
                         // after that seems to be strange. However, we cannot
                         // send a focus event fo the new context now, because
-                        // noone except us knows it. In any case, we remeber
+                        // no one except us knows it. In any case, we remember
                         // the new context as the one that has the focus
                         // currently.
 

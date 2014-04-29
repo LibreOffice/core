@@ -23,7 +23,7 @@
 
  /***************************************************
   * Internal header file, declares all functions
-  * that are not part of the offical API and are
+  * that are not part of the official API and are
   * not defined in the osl header files
   **************************************************/
 

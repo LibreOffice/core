@@ -244,7 +244,7 @@ void SwRect::Justify()
 }
 
 
-// Similiar to the inline methods, but we need the function pointers
+// Similar to the inline methods, but we need the function pointers
 
 void SwRect::_Width( const long nNew ) { m_Size.setWidth(nNew); }
 void SwRect::_Height( const long nNew ) { m_Size.setHeight(nNew); }

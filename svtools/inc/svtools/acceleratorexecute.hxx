@@ -99,7 +99,7 @@ struct TMutexInit
             Because exceution of an accelerator command can be dangerous
             (in case it force an office shutdown for key "ALT+F4"!)
             all internal dispatches are done asynchronous.
-            Menas that the trigger call doesnt wait till the dispatch
+            Menas that the trigger call doesn't wait till the dispatch
             is finished. You can call very often. All requests will be
             queued internal and dispatched ASAP.
 
@@ -171,7 +171,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
                       => All currently queued events will be finished. The
                          helper kills itself afterwards. A shutdown of the
                          environment will be recognized ... The helper stop its
-                         work immediatly then!
+                         work immediately then!
          */
         static AcceleratorExecute* createAcceleratorHelper();
 

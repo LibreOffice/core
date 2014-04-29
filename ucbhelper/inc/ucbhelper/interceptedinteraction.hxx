@@ -51,7 +51,7 @@ namespace ucbhelper{
             its handle() requests.
 
     @descr  This class can be used as:
-            - instance if special interactions must be supressed
+            - instance if special interactions must be suppressed
               only
             - or as base class if interactions must be modified.
  */
@@ -107,7 +107,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             //-----------------------------------
             /** @short  default ctor.
 
-                @descr  Such constructed object cant be used realy.
+                @descr  Such constructed object can't be used really.
                         Might it will crash if its used!
                         Dont forget to initialize all(!) members ...
              */
@@ -149,7 +149,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
         };
 
         //---------------------------------------
-        /** @short  represent the different states, which can occure
+        /** @short  represent the different states, which can occur
                     as result of an interception.
 
             @see    impl_interceptRequest()
@@ -211,7 +211,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
         /** @short  initialize a new instance with the interaction handler,
                     which should be intercepted.
 
-            @attention  If such interaction handler isnt set here,
+            @attention  If such interaction handler isn't set here,
                         all incoming requests will be aborted ...
                         if the right continuation is available!
 
@@ -226,7 +226,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
 
             @attention  If the interface method handle() will be overwritten by
                         a derived class, the functionality behind these static list
-                        cant be used.
+                        can't be used.
 
             @param  lInterceptions
                     the list of intercepted requests.
@@ -261,10 +261,10 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             @descr  This base implementation checks, if the request could be intercepted
                     successfully. Then this method intercepted() is called.
                     The default implementation returns "NOT_INTERCEPTED" everytimes.
-                    So the method impl_interceptRequest() uses the right continuation automaticly.
+                    So the method impl_interceptRequest() uses the right continuation automatically.
 
                     If this method was overwritten and something different "NO_INTERCEPTED"
-                    is returned, the method impl_interceptRequest() will return immediatly with
+                    is returned, the method impl_interceptRequest() will return immediately with
                     the result, which is returned by this intercepted() method.
                     Then the continuations must be selected inside the intercepted() call!
 
@@ -281,7 +281,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
 
             @return The result of this operation.
                     Note: If E_NOT_INTERCEPTED is returned the default handling of the base class
-                    will be used automaticly for this request!
+                    will be used automatically for this request!
          */
         virtual EInterceptionState intercepted(const InterceptedRequest&                                                             rRequest   ,
                                                const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xOrgRequest);
@@ -297,13 +297,13 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             @descr  If no further class is derived from this one
                     -> the default implementation is used. Then the
                     internal list of requests is used to handle different
-                    interactions automaticly.
+                    interactions automatically.
                     (see impl_interceptRequest())
 
                     If this method was overwritten by a derived implementation
                     -> the new implementation has to do everything by itself.
                     Of course it can access all members/helpers and work with it.
-                    But the default implementation isnt used automaticly then.
+                    But the default implementation isn't used automatically then.
 
             @param  xRequest
                     the interaction request, which should be intercepted.
@@ -330,7 +330,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
                     searched and selected.
 
                     The method return the state of that operation.
-                    But it doesnt call the intercepted and here set
+                    But it doesn't call the intercepted and here set
                     interaction handler. That has to be done in the outside method.
 
             @param  xRequest

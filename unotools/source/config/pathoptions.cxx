@@ -397,7 +397,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
     // Convert the returned path to system path!
     sal_Bool bConvertLocal = sal_False;
 
-    // Search for first occure of "$(...".
+    // Search for first occur of "$(...".
     sal_Int32 nPosition = aWorkText.indexOf( SIGN_STARTVARIABLE );  // = first position of "$(" in string
     sal_Int32 nLength   = 0;                                        // = count of letters from "$(" to ")" in string
 
@@ -477,7 +477,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
                                                 UNO_QUERY );
     if ( !m_xPathSettings.is() )
     {
-        // #112719#: check for existance
+        // #112719#: check for existence
         DBG_ERROR( "SvtPathOptions_Impl::SvtPathOptions_Impl(): #112719# happened again!" );
         throw RuntimeException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Service com.sun.star.util.PathSettings cannot be created" )),

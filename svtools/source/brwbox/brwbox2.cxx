@@ -1028,7 +1028,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_
             {
                 // clip the column's output to the field area
                 if (_bForeignDevice)
-                {   // (not neccessary if painting onto the data window)
+                {   // (not necessary if painting onto the data window)
                     Size aFieldSize(pCol->Width(), nDataRowHeigt);
 
                     if (aPos.X() + aFieldSize.Width() > aOverallAreaBRPos.X())
@@ -1535,7 +1535,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
         }
     }
 
-    // event occured out of data area
+    // event occurred out of data area
     if ( rEvt.IsRight() )
         pDataWin->Command(
             CommandEvent( Point( 1, LONG_MAX ), COMMAND_CONTEXTMENU, sal_True ) );

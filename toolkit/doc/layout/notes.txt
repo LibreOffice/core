@@ -28,7 +28,7 @@ On-screen:
 |             [ Ok ]|
 +-------------------+
 
-AWT Window hierarcy:
+AWT Window hierarchy:
 	Window
 		+ Label
 		+ Entry
@@ -37,7 +37,7 @@ AWT Window hierarcy:
 	ie. unchanged, and backwards compatible - a flat
 representation.
 
-Toolkit Hierachy
+Toolkit Hierarchy
 
 	WindowContainer [Bin?]
 		+ Vbox

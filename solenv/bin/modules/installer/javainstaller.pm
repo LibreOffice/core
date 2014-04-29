@@ -371,7 +371,7 @@ sub convert_licenstring
 #######################################################
 # Adding the license file into the java file
 # In the template java file there are two
-# occurences of INSTALLSDK_GUI_LICENSE
+# occurrences of INSTALLSDK_GUI_LICENSE
 # and INSTALLSDK_CONSOLE_LICENSE
 #######################################################
 

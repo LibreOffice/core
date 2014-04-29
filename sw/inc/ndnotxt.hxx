@@ -41,7 +41,7 @@ class SW_DLLPUBLIC SwNoTxtNode : public SwCntntNode
     PolyPolygon *pContour;      // Polygon fuer Konturumlauf
     sal_Bool bAutomaticContour : 1; // automatic contour polygon, not manipulated
     sal_Bool bContourMapModeValid : 1; // contour map mode is not the graphics's
-                                   // prefered map mode, but either
+                                   // preferred map mode, but either
                                       // MM100 or or pixel
     sal_Bool bPixelContour : 1;     // contour map mode is invalid and pixel.
 

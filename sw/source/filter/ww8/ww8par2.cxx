@@ -402,7 +402,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         bFtnEdn = bOld;
 
         ASSERT(sChar.Len()==1 && ((rDesc.mbAutoNum == (sChar.GetChar(0) == 2))),
-         "footnote autonumbering must be 0x02, and everthing else must not be");
+         "footnote autonumbering must be 0x02, and everything else must not be");
 
         // If no automatic numbering use the following char from the main text
         // as the footnote number
@@ -540,7 +540,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     /*
     #i1140#
     If I have a table and apply a style to one of its frames that should cause
-    a paragraph that its applied to it to only exist as a seperate floating
+    a paragraph that its applied to it to only exist as a separate floating
     frame, then the behavour depends on which cell that it has been applied
     to. If its the first cell of a row then the whole table row jumps into the
     new frame, if its not then then the paragraph attributes are applied
@@ -2088,7 +2088,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         ApoTestResults aApo = pIo->TestApo(pIo->nInTable + 1, false, pTabPos);
 
         /*
-        ##513##, #79474# If this is not sufficent, then we should look at
+        ##513##, #79474# If this is not sufficient, then we should look at
         sprmPD{y|x}aAbs as our indicator that the following set of rows is not
         part of this table, but instead is an absolutely positioned table
         outside of this one
@@ -2266,7 +2266,7 @@ void WW8TabDesc::CalcDefaults()
             }
         }
         /*
-        Similiar to graphics and other elements word does not totally
+        Similar to graphics and other elements word does not totally
         factor the width of the border into its calculations of size, we
         do so we must adjust out widths and other dimensions to fit.  It
         appears that what occurs is that the last cell's right margin if
@@ -2336,7 +2336,7 @@ void WW8TabDesc::CalcDefaults()
         #96345#
         If the last cell was "false" then there is no valid cell following it,
         so the default mapping forward wont't work. So map it (and
-        contigious invalid cells backwards to the last valid cell instead.
+        contiguous invalid cells backwards to the last valid cell instead.
         */
         if (i && pR->bExist[i-1] == false)
         {

@@ -72,7 +72,7 @@ namespace sw { namespace sidebar {
         ImageList aWrapIL;
         ImageList aWrapILH;
 
-        //Controler Items==================================
+        //Controller Items==================================
         ::sfx2::sidebar::ControllerItem maSwNoWrapControl;
         ::sfx2::sidebar::ControllerItem maSwWrapLeftControl;
         ::sfx2::sidebar::ControllerItem maSwWrapRightControl;

@@ -51,7 +51,7 @@ import com.sun.star.wizards.ui.event.MethodInvocation;
  * @author rpiterman
  * This class implements the UI functionality of the topics scroller control.
  * <br/>
- * During developement, there has been a few changes which were not *fully* done -
+ * During development, there has been a few changes which were not *fully* done -
  * mainly in converting the topics and time boxes from combobox and time box to normal textboxes,
  * so in the code they might be referenced as combobox or timebox. This should be
  * rather understood as topicstextbox and timetextbox.
@@ -142,7 +142,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
 
     /**
      * create a new TopicControl. Since this is used specifically for the
-     * agenda dialog, I use step 5, and constant location - and need no paramter...
+     * agenda dialog, I use step 5, and constant location - and need no parameter...
      * @param dialog the parent dialog
      * @param xmsf service factory
      * @param agenda the Agenda configuration data (contains the current topics data).

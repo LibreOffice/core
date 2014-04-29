@@ -358,7 +358,7 @@ std::pair<float,float> GraphiteLayout::Glyphs::appendCluster(gr::Segment& rSeg,
     rGlyph2Char[size()] = nFirstCharInCluster;
 
     // can we break before this cluster?
-    // Glyphs may have either a positive or negative breakWeight refering to
+    // Glyphs may have either a positive or negative breakWeight referring to
     // the position after or before the glyph respectively
     int nPrevBreakWeight = 0;
     if (nFirstGlyphInCluster > 0)
@@ -700,7 +700,7 @@ gr::Segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
 
     gr::Segment * pSegment = NULL;
 
-    // Set the SalLayouts values to be the inital ones.
+    // Set the SalLayouts values to be the initial ones.
     SalLayout::AdjustLayout(rArgs);
     // TODO check if this is needed
     if (mnUnitsPerPixel > 1)
@@ -1279,7 +1279,7 @@ void GraphiteLayout::kashidaJustify(std::vector<int>& rDeltaWidths, sal_GlyphId 
 void GraphiteLayout::GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const
 {
     // For each character except the last discover the caret positions
-    // immediatly before and after that character.
+    // immediately before and after that character.
     // This is used for underlines in the GUI amongst other things.
     // It may be used from MultiSalLayout, in which case it must take into account
     // glyphs that have been moved.
@@ -1491,7 +1491,7 @@ int GraphiteLayout::GetNextGlyphs( int length, sal_GlyphId * glyph_out,
 
 void GraphiteLayout::MoveGlyph( int nGlyphIndex, long nNewPos )
 {
-    // TODO it might be better to actualy implement simplify properly, but this
+    // TODO it might be better to actually implement simplify properly, but this
     // needs to be done carefully so the glyph/char maps are maintained
     // If a glyph has been dropped then it wasn't returned by GetNextGlyphs, so
     // the index here may be wrong

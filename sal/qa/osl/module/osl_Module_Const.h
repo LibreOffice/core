@@ -44,7 +44,7 @@
 
 #   define FILE_PREFIX          "file:///"
 
-//Korea charactors
+//Korea characters
 ::rtl::OUString aKname(
     RTL_CONSTASCII_STRINGPARAM(
         "/\xEC\x95\x88\xEB\x85\x95\xED\x95\x98\xEC\x84\xB8\xEC\x9A\x94"),

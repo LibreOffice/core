@@ -122,7 +122,7 @@ WinInetBackend::WinInetBackend()
         {
             LPINTERNET_PROXY_INFO lpi = NULL;
 
-            // query for the neccessary space
+            // query for the necessary space
             DWORD dwLength = 0;
             BOOL bRet = lpfnInternetQueryOption(
                 NULL,

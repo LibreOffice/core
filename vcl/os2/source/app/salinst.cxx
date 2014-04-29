@@ -639,7 +639,7 @@ MRESULT EXPENTRY SalComWndProc( HWND hWnd, ULONG nMsg,
             ImplSalYield( (bool)nMP1, (bool) nMP2);
             return 0;
         // If we get this message, because another GetMessage() call
-        // has recieved this message, we must post this message to
+        // has received this message, we must post this message to
         // us again, because in the other case we wait forever.
         case SAL_MSG_RELEASEWAITYIELD:
             {

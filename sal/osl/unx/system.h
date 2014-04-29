@@ -345,7 +345,7 @@ int macxp_resolveAlias(char *path, int buflen);
 #elif defined _BIG_ENDIAN_OO
 #   define _OSL_LITENDIAN
 #else
-#   error undetermined endianess
+#   error undetermined endianness
 #endif
 #else
 #if defined _LITTLE_ENDIAN
@@ -353,7 +353,7 @@ int macxp_resolveAlias(char *path, int buflen);
 #elif defined _BIG_ENDIAN
 #   define _OSL_LITENDIAN
 #else
-#   error undetermined endianess
+#   error undetermined endianness
 #endif
 #endif
 

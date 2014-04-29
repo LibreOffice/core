@@ -420,7 +420,7 @@ ImpPath_Impl::ImpPath_Impl( const ImpPath_Impl& rCopy ) :
 
     Implementierungsklasse; Darstellung einer Position in der Outline-
     Listbox als sal_uInt16-Array; dieses beschreibt die Position jeweil
-    als relative Postion zum "ubergeordneten Eintrag
+    als relative Position zum "ubergeordneten Eintrag
 
 */
 class Path

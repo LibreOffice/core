@@ -963,7 +963,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
 
     // allow application key listeners to remove the key event
     // but make sure we're not forwarding external KeyEvents, (ie where bForward is sal_False)
-    // becasue those are coming back from the listener itself and MUST be processed
+    // because those are coming back from the listener itself and MUST be processed
     KeyEvent aKeyEvent( (xub_Unicode)nCharCode, aKeyCode, nRepeat );
     if( bForward )
     {
@@ -1559,7 +1559,7 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
 
 static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect, bool bImmediateUpdate )
 {
-    // give up background save when sytem paints arrive
+    // give up background save when system paints arrive
     Window* pSaveBackWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFirstBackWin;
     while ( pSaveBackWin )
     {

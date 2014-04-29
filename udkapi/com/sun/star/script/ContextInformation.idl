@@ -35,8 +35,8 @@
  */
 published struct ContextInformation
 {
-    /** Full qualified name to adress the module or function associated with the context.
-        If the module or function can't be adressed by name, e.g., in case that a runtime
+    /** Full qualified name to address the module or function associated with the context.
+        If the module or function can't be addressed by name, e.g., in case that a runtime
         generated eval-module is executed, this string is empty
      */
     string Name;

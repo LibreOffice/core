@@ -156,7 +156,7 @@ void SfxApplication::Deinitialize()
     //TODO/CLEANTUP
     //ReleaseArgs could be used instead!
 /* This leak is intended !
-   Otherwise the TestTool cant use .uno:QuitApp ...
+   Otherwise the TestTool can't use .uno:QuitApp ...
    because every destructed ItemSet work's on an already
    released pool pointer .-)
 

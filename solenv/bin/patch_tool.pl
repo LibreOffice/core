@@ -1281,7 +1281,7 @@ sub Check ($$$$)
 {
     my ($source_msi, $target_msi, $variables, $product_name) = @_;
 
-    $installer::logger::Info->printf("checking if source and target releases are compatable\n");
+    $installer::logger::Info->printf("checking if source and target releases are compatible\n");
     $installer::logger::Info->increase_indentation();
 
     my $result = 1;

@@ -67,7 +67,7 @@ namespace x11 {
         virtual void fireContentsChanged() = 0;
         virtual com::sun::star::uno::Reference< XInterface > getReference() = 0;
         // returns a reference that will keep the SelectionAdaptor alive until the
-        // refernce is released
+        // reference is released
     };
 
     class DropTarget :

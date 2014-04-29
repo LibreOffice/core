@@ -234,7 +234,7 @@ namespace
             return sal_False;
 
         // default must be set to true, because some return values
-        // cant be checked, but nonetheless indicate "success"!
+        // can't be checked, but nonetheless indicate "success"!
         sal_Bool bSuccess = sal_True;
 
         // On the other side some special slots return a boolean state,
@@ -530,7 +530,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     if ( !aDescriptor.has( "Referer" ) )
         aDescriptor.put( "Referer", ::rtl::OUString() );
 
-    // TODO: is this needed? finally, when loading is successfull, then there should be no need for this item,
+    // TODO: is this needed? finally, when loading is successful, then there should be no need for this item,
     // as the document can always obtain its frame. In particular, there might be situations where this frame
     // is accessed, but already disposed: Imagine the user loading a document, opening a second view on it, and
     // then closing the first view/frame.

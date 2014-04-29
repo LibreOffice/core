@@ -870,7 +870,7 @@ void StgDirStrm::SetupEntry (
         {
             delete pCur;
             rIo.SetError( SVSTREAM_GENERALERROR );
-            // an error occured
+            // an error occurred
             return;
         }
 

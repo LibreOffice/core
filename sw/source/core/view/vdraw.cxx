@@ -168,7 +168,7 @@ void SwViewImp::UnlockPaint()
 |*
 |*************************************************************************/
 // OD 29.08.2002 #102450#
-// add 3rd paramter <const Color* pPageBackgrdColor> for setting this
+// add 3rd parameter <const Color* pPageBackgrdColor> for setting this
 // color as the background color at the outliner of the draw view.
 // OD 09.12.2002 #103045# - add 4th parameter for the horizontal text direction
 // of the page in order to set the default horizontal text direction at the

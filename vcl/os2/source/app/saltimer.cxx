@@ -109,7 +109,7 @@ void SalTimerProc( HWND, UINT, UINT nId, ULONG )
     bool bRecursive = pSalData->mbInTimerProc && (nId != SALTIMERPROC_RECURSIVE);
     if ( pSVData->mpSalTimer && ! bRecursive )
     {
-        // Try to aquire the mutex. If we don't get the mutex then we
+        // Try to acquire the mutex. If we don't get the mutex then we
         // try this a short time later again.
         if ( ImplSalYieldMutexTryToAcquire() )
         {

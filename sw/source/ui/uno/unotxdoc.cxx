@@ -1253,7 +1253,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
                 OUString sFileURL;
                 if ( (rProp.Value >>= sFileURL ) )
                 {
-                    // Convert the File URL into a system dependant path, as the SalPrinter expects
+                    // Convert the File URL into a system dependent path, as the SalPrinter expects
                     OUString sSystemPath;
                     FileBase::getSystemPathFromFileURL ( sFileURL, sSystemPath );
                     aReq.AppendItem(SfxStringItem( SID_FILE_NAME, sSystemPath ) );

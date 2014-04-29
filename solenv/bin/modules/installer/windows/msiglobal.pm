@@ -109,7 +109,7 @@ sub check_ddf_file
 
 ##########################################################################
 # Lines in ddf files must not be longer than 256 characters.
-# Therefore it can be useful to use relative pathes. Then it is
+# Therefore it can be useful to use relative paths. Then it is
 # necessary to change into temp directory before calling
 # makecab.exe.
 ##########################################################################
@@ -183,7 +183,7 @@ sub generate_cab_file_list ($$$$)
             $sourcepath = $onefile->{'cyg_sourcepath'};
         }
 
-        # to avoid lines with more than 256 characters, it can be useful to use relative pathes
+        # to avoid lines with more than 256 characters, it can be useful to use relative paths
         if ($allvariables->{'RELATIVE_PATHES_IN_DDF'})
         {
             $sourcepath = make_relative_ddf_path($sourcepath);
@@ -581,9 +581,9 @@ sub create_transforms
         my $infoline = "Systemcall: $systemcall\n";
         $installer::logger::Lang->print($infoline);
 
-        # Problem: msitran.exe in version 4.0 always returns "1", even if no failure occured.
+        # Problem: msitran.exe in version 4.0 always returns "1", even if no failure occurred.
         # Therefore it has to be checked, if this is version 4.0. If yes, if the mst file
-        # exists and if it is larger than 0 bytes. If this is true, then no error occured.
+        # exists and if it is larger than 0 bytes. If this is true, then no error occurred.
         # File Version of msitran.exe: 4.0.6000.16384 has checksum: "b66190a70145a57773ec769e16777b29".
         # Same for msitran.exe from wntmsci12: "aa25d3445b94ffde8ef0c1efb77a56b8"
 
@@ -628,13 +628,13 @@ sub create_transforms
                     }
                     else
                     {
-                        $infoline = "Filesize indicates that an error occured.\n";
+                        $infoline = "Filesize indicates that an error occurred.\n";
                         $installer::logger::Lang->print($infoline);
                     }
                 }
                 else
                 {
-                    $infoline = "File $transformfile does not exist -> An error occured.\n";
+                    $infoline = "File $transformfile does not exist -> An error occurred.\n";
                     $installer::logger::Lang->print($infoline);
                 }
             }
@@ -1289,7 +1289,7 @@ sub prepare_64bit_database
             }
         }
 
-        # 2. Replacing all occurences of "VersionNT" by "VersionNT64"
+        # 2. Replacing all occurrences of "VersionNT" by "VersionNT64"
 
         my @versionnt_files = ("Componen.idt", "InstallE.idt", "InstallU.idt", "LaunchCo.idt");
 
@@ -1413,7 +1413,7 @@ sub execute_packaging
     $infoline = "chdir: $to \n";
     $installer::logger::Lang->print($infoline);
 
-    # if the ddf file contains relative pathes, it is necessary to change into the temp directory
+    # if the ddf file contains relative paths, it is necessary to change into the temp directory
     if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} )
     {
         $to = $installer::globals::temppath;

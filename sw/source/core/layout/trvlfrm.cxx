@@ -306,7 +306,7 @@ sal_Bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     Point aOldPoint = rPoint;
 
     // PAGES01
-    // search for page containing rPoint. The borders around the pages are considerd
+    // search for page containing rPoint. The borders around the pages are considered
     const SwPageFrm* pPage = GetPageAtPos( rPoint, 0, true );
 
     // --> OD 2008-12-23 #i95626#

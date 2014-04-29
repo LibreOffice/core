@@ -1056,7 +1056,7 @@ void SAL_CALL rtl_string_newTrim( rtl_String ** newStr, rtl_String * str ) SAL_T
     the number of the token to return, starting at index.
 
     @param cTok
-    the character that seperates the tokens.
+    the character that separates the tokens.
 
     @param index
     the position at which searching for the token starts.  Must not be greater

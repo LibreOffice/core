@@ -179,7 +179,7 @@ public class ProviderBrowseNode extends PropertySet
                com.sun.star.script.CannotConvertException,
                com.sun.star.reflection.InvocationTargetException
     {
-        // Initialise the out paramters - not used but prevents error in
+        // Initialise the out parameters - not used but prevents error in
         // UNO bridge
         aOutParamIndex[0] = new short[0];
         aOutParam[0] = new Object[0];

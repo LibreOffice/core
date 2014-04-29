@@ -604,7 +604,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_cols) += '=')
             += ByteString::CreateFromInt32( pCol->GetNumCols() );
 
-        // minumum gutter width
+        // minimum gutter width
         sal_uInt16 nGutter = pCol->GetGutterWidth( sal_True );
         if( nGutter!=USHRT_MAX )
         {
@@ -678,7 +678,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
         if( lcl_html_IsMultiColEnd( rHTMLWrt, nSectEndIdx-1 ) )
             bEndTag = sal_False;
 
-        //.is there a columned section arround this one?
+        //.is there a columned section around this one?
         const SwStartNode *pSttNd = rSectNd.StartOfSectionNode();
         if( pSttNd )
         {
@@ -700,7 +700,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
     }
 
     // The surrounding section must be closed before the current one is
-    // opended, except that it start immediatly before the current one or
+    // opended, except that it start immediately before the current one or
     // another end immediately before the current one
     if( pSurrCol && nSectSttIdx - pSurrSectNd->GetIndex() > 1 &&
         !lcl_html_IsMultiColEnd( rHTMLWrt, nSectSttIdx-1 ) )

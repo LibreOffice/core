@@ -148,7 +148,7 @@ RegistryKey UserRegistrar::GetRootKeyForDefHtmlEditorForIERegistration() const
 void UserRegistrar::DeleteHtmFileAssociationKeys() const
 {
     // Later delete the created keys if they are empty and have not changed meanwhile.
-    // Remeber: if we create a new registry key in the user part of the
+    // Remember: if we create a new registry key in the user part of the
     // registry, changes to that key via the merged key HKEY_CLASSES_ROOT
     // go into the user branch HKEY_CURRENT_USER and are not visible for other users.
     // so we must carefully detect if the keys have not changed in order to prevent accidentally

@@ -533,7 +533,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
             static Bool bOnce = False;
             if ( !bOnce )
             {
-                std::fprintf(stderr, "X-Error occured in a request for X_OpenFont\n");
+                std::fprintf(stderr, "X-Error occurred in a request for X_OpenFont\n");
                 EmitFontpathWarning();
 
                 bOnce = True ;

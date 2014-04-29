@@ -104,7 +104,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         }
         if( i_rContext.m_nMaxImageResolution > 50 )
         {
-            // do downsampling if neccessary
+            // do downsampling if necessary
             const Size      aDstSizeTwip( i_pDummyVDev->PixelToLogic( i_pDummyVDev->LogicToPixel( aSize ), MAP_TWIP ) );
             const Size      aBmpSize( aBitmapEx.GetSizePixel() );
             const double    fBmpPixelX = aBmpSize.Width();
@@ -168,7 +168,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             if ( bUseJPGCompression )
             {
                 sal_uInt32 nZippedFileSize;     // sj: we will calculate the filesize of a zipped bitmap
-                {                               // to determine if jpeg compression is usefull
+                {                               // to determine if jpeg compression is useful
                     SvMemoryStream aTemp;
                     aTemp.SetCompressMode( aTemp.GetCompressMode() | COMPRESSMODE_ZBITMAP );
                     aTemp.SetVersion( SOFFICE_FILEFORMAT_40 );  // sj: up from version 40 our bitmap stream operator
@@ -1176,7 +1176,7 @@ void PDFWriterImpl::checkAndEnableStreamEncryption( register sal_Int32 nObject )
         // the i+2 to take into account the generation number, always zero
         rtl_digest_MD5( &m_aContext.Encryption.EncryptionKey[0], i+2, nMD5Sum, sizeof(nMD5Sum) );
         // initialize the RC4 with the key
-        // key legth: see algoritm 3.1, step 4: (N+5) max 16
+        // key legth: see algorithm 3.1, step 4: (N+5) max 16
         rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum, m_nRC4KeyLength, NULL, 0 );
     }
 }
@@ -1195,7 +1195,7 @@ void PDFWriterImpl::enableStringEncryption( register sal_Int32 nObject )
         // the i+2 to take into account the generation number, always zero
         rtl_digest_MD5( &m_aContext.Encryption.EncryptionKey[0], i+2, nMD5Sum, sizeof(nMD5Sum) );
         // initialize the RC4 with the key
-        // key legth: see algoritm 3.1, step 4: (N+5) max 16
+        // key legth: see algorithm 3.1, step 4: (N+5) max 16
         rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum, m_nRC4KeyLength, NULL, 0 );
     }
 }
@@ -1520,7 +1520,7 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
             else
             {
                 //or 3.5, for 128 bit security
-                //step6, initilize the last 16 bytes of the encrypted user password to 0
+                //step6, initialize the last 16 bytes of the encrypted user password to 0
                 for(sal_uInt32 i = MD5_DIGEST_SIZE; i < sal_uInt32(io_rProperties.UValue.size()); i++)
                     io_rProperties.UValue[i] = 0;
                 //step 2

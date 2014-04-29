@@ -1606,7 +1606,7 @@ void DbFormattedField::updateFromModel( Reference< XPropertySet > _rxModel )
     ::rtl::OUString sText;
     Any aValue = _rxModel->getPropertyValue( FM_PROP_EFFECTIVE_VALUE );
     if ( aValue >>= sText )
-    {   // our effective value is transfered as string
+    {   // our effective value is transferred as string
         pFormattedWindow->SetTextFormatted( sText );
         pFormattedWindow->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
     }
@@ -1845,7 +1845,7 @@ String DbPatternField::GetFormatText(const Reference< ::com::sun::star::sdb::XCo
     }
     else
         OSL_ENSURE( rpFormatter->getColumn() == _rxField, "DbPatternField::GetFormatText: my value formatter is working for another field ...!" );
-        // re-creating the value formatter here everytime would be quite expensive ...
+        // re-creating the value formatter here every time would be quite expensive ...
 
     String sText;
     if ( rpFormatter.get() )

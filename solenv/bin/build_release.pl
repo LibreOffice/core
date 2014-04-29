@@ -1342,7 +1342,7 @@ sub ResolveTemplate ($$$$$)
 
     my $name = $template;
 
-    # Resolve %? template paramters.
+    # Resolve %? template parameters.
     $name =~ s/%V/$release_descriptor->{'version'}/g;
     $name =~ s/%W/$old_to_new_version_dash/g;
     $name =~ s/%w/$old_to_new_version_dots/g;

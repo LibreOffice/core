@@ -639,7 +639,7 @@ sub replace_packagetype_in_pathes
 }
 
 ####################################################
-# Removing ending separators in pathes
+# Removing ending separators in paths
 ####################################################
 
 sub remove_ending_separator
@@ -667,7 +667,7 @@ sub replace_languages_in_pathes
 {
     my ( $patharrayref, $languagesref ) = @_;
 
-    installer::logger::include_header_into_logfile("Replacing languages in include pathes:");
+    installer::logger::include_header_into_logfile("Replacing languages in include paths:");
 
     my @patharray = ();
     my $infoline = "";
@@ -691,7 +691,7 @@ sub replace_languages_in_pathes
 
                 installer::remover::remove_leading_and_ending_whitespaces(\$newline);
 
-                # Is it necessary to refresh the global array, containing all files of all include pathes?
+                # Is it necessary to refresh the global array, containing all files of all include paths?
                 if ( -d $newdir )
                 {
                     # Checking if $newdir is empty
@@ -731,7 +731,7 @@ sub list_all_files_from_include_path
 {
     my ( $patharrayref) = @_;
 
-    installer::logger::include_header_into_logfile("Include pathes:");
+    installer::logger::include_header_into_logfile("Include paths:");
 
     for ( my $i = 0; $i <= $#{$patharrayref}; $i++ )
     {
@@ -790,7 +790,7 @@ sub set_default_productversion_if_required
 }
 
 ####################################################
-# Removing .. in pathes
+# Removing .. in paths
 ####################################################
 
 sub simplify_path
@@ -813,7 +813,7 @@ sub simplify_path
 }
 
 ####################################################
-# Removing ending separators in pathes
+# Removing ending separators in paths
 ####################################################
 
 sub resolve_relative_pathes

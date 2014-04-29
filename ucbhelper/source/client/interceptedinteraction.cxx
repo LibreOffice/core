@@ -125,7 +125,7 @@ void InterceptedInteraction::impl_handleDefault(const ::com::sun::star::uno::Ref
             // Runtime error! The defined continuation could not be located
             // inside the set of available containuations of the incoming request.
             // Whats wrong - the interception list or the request?
-            OSL_ENSURE(sal_False, "InterceptedInteraction::handle()\nCould intercept this interaction request - but cant locate the right continuation!");
+            OSL_ENSURE(sal_False, "InterceptedInteraction::handle()\nCould intercept this interaction request - but can't locate the right continuation!");
         }
         break;
 

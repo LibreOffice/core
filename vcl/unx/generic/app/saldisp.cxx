@@ -1408,8 +1408,8 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
                 break;
             // - - - - - Sun X-Server Tastatur ??? - - - - - - - - - - - -
             case XK_L1: // XK_F11:
-                nKey = KEY_F11; // on a sun keyboard this actually is usally SunXK_Stop,
-                // but VCL doesn't have a key defintion for that
+                nKey = KEY_F11; // on a sun keyboard this actually is usually SunXK_Stop,
+                // but VCL doesn't have a key definition for that
                 break;
             case XK_L2: // XK_F12:
                 if ( GetServerVendor() == vendor_sun )
@@ -1714,7 +1714,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
             case XLookupBoth:
             case XLookupChars:
 
-                /* nothing to, char allready in pPrintable */
+                /* nothing to, char already in pPrintable */
                 break;
         }
     }

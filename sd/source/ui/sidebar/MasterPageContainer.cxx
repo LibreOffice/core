@@ -145,7 +145,7 @@ private:
     bool mbFirstPageObjectSeen;
 
     // The widths for the previews contain two pixels for the border that is
-    // painted arround the preview.
+    // painted around the preview.
     static const int SMALL_PREVIEW_WIDTH = 72 + 2;
     static const int LARGE_PREVIEW_WIDTH = 2*72 + 2;
 

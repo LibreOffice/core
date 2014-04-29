@@ -255,7 +255,7 @@ public:
     long PointToIndex(const Point &pt) const;
     Point IndexToPoint(long nIndex) const ;
     long GetFoucsPosIndex() const ;
-    //Solution:Keyboard fucntion for key input and focus handling function
+    //Solution:Keyboard function for key input and focus handling function
     virtual void        KeyInput( const KeyEvent& rKEvt );
     virtual void        GetFocus();
     virtual void        LoseFocus();

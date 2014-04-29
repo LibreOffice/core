@@ -258,7 +258,7 @@ void StgHeader::SetMasters( sal_Int32 n )
 
 ///////////////////////////// class StgEntry /////////////////////////////
 
-// This class is only a wrapper around teh dir entry structure
+// This class is only a wrapper around the dir entry structure
 // which retrieves and sets data.
 
 // The name must be smaller than 32 chars. Conversion into Unicode

@@ -58,7 +58,7 @@
 
 # B. untested functions:
 #    functions need Client/Server model and blocking mode of transmission. some of the functions
-#    can not run through on testshl2 env while the same code can run successfully in normal seperate
+#    can not run through on testshl2 env while the same code can run successfully in normal separate
 #    files.
 #    1) in DatagramSocket class:
 #        osl_receiveFromSocket;
@@ -210,7 +210,7 @@
 
 # LLA:
 # marked as deprecated, due to the fact there is no access from outside
-# so this functions are not really accessable
+# so this functions are not really accessible
 # They are used in rtl/source/locale.c
         rtl_hashentry_destroy;
         rtl_hashfunc;

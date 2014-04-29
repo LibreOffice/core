@@ -156,7 +156,7 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
     {
         // get service provider
         Reference< XMultiServiceFactory > xSMgr( comphelper::getProcessServiceFactory() );
-        // create configuration hierachical access name
+        // create configuration hierarchical access name
         if( xSMgr.is() )
         {
             try
@@ -568,7 +568,7 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const XubString& rPrinterName,
     ImplPrnQueueList* pPrnList = pSVData->maGDIData.mpPrinterQueueList;
     if ( pPrnList && pPrnList->m_aQueueInfos.size() )
     {
-        // first search for the printer name driectly
+        // first search for the printer name directly
         ImplPrnQueueData* pInfo = pPrnList->Get( rPrinterName );
         if( pInfo )
             return pInfo->mpSalQueueInfo;

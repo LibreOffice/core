@@ -642,7 +642,7 @@ void SAL_CALL SfxGlobalEvents_Impl::notifyDocumentEvent( const ::rtl::OUString& 
         const css::uno::Reference< css::frame::XController2 >& /*_ViewController*/, const css::uno::Any& /*_Supplement*/ )
         throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException)
 {
-    // we're a multiplexer only, no chance to generate artifical events here
+    // we're a multiplexer only, no chance to generate artificial events here
     throw css::lang::NoSupportException(::rtl::OUString(), *this);
 }
 
@@ -710,7 +710,7 @@ void SAL_CALL SfxGlobalEvents_Impl::insert( const css::uno::Any& aElement )
     aElement >>= xDoc;
     if (!xDoc.is())
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Cant locate at least the model parameter."),
+                ::rtl::OUString::createFromAscii("Can't locate at least the model parameter."),
                 static_cast< css::container::XSet* >(this),
                 0);
 
@@ -747,7 +747,7 @@ void SAL_CALL SfxGlobalEvents_Impl::remove( const css::uno::Any& aElement )
     aElement >>= xDoc;
     if (!xDoc.is())
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Cant locate at least the model parameter."),
+                ::rtl::OUString::createFromAscii("Can't locate at least the model parameter."),
                 static_cast< css::container::XSet* >(this),
                 0);
 

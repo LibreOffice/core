@@ -269,7 +269,7 @@ sub check_makecab_version
 }
 
 ######################################################################
-# Reading the environment variables for the pathes in ziplist.
+# Reading the environment variables for the paths in ziplist.
 # solarpath, solarenvpath, solarcommonpath, os, osdef, pmiscpath
 ######################################################################
 
@@ -378,7 +378,7 @@ sub check_logfile ()
         }
         else
         {
-            push(@output, "ERROR: The following errors occured in packaging process:\n");
+            push(@output, "ERROR: The following errors occurred in packaging process:\n");
         }
         push(@output, "\n");
 
@@ -557,7 +557,7 @@ sub check_updatepack
                         $installer::logger::Global->printf("Failed to create directory \n", $directory);
                         if ( defined $ENV{'BSCLIENT'} && ( uc $ENV{'BSCLIENT'} eq 'TRUE' ) )
                         {
-                            installer::exiter::exit_program("ERROR: No write access to SHIPDRIVE allthough BSCLIENT is set.", "check_updatepack");
+                            installer::exiter::exit_program("ERROR: No write access to SHIPDRIVE although BSCLIENT is set.", "check_updatepack");
                         }
                     }
                 }

@@ -47,7 +47,7 @@ help()
 
 # if [ $UID -ne 0 ]
 # then
-#     printf "\nThis script is for installation only wiht administrative rights only\n"
+#     printf "\nThis script is for installation only with administrative rights only\n"
 #     help
 #     exit 2
 # fi

@@ -143,7 +143,7 @@ sub controlparameter
 
 #############################################################################
 # The program msidb.exe can be located next to the Perl program. Then it is
-# not neccessary to find it in the PATH variable.
+# not necessary to find it in the PATH variable.
 #############################################################################
 
 sub check_local_msidb
@@ -263,7 +263,7 @@ sub check_system_path
 }
 
 ##########################################################################
-# Searching a file in a list of pathes
+# Searching a file in a list of paths
 ##########################################################################
 
 sub get_sourcepath_from_filename_and_includepath
@@ -843,7 +843,7 @@ sub create_directory_structure
 
     foreach $dir (@startparents) { create_directory_tree($dir, \%fullpathhash, $targetdir, $dirhash); }
 
-    # Also adding the pathes of the startparents
+    # Also adding the paths of the startparents
     foreach $dir (@startparents)
     {
         if ( ! exists($fullpathhash{$dir}) ) { $fullpathhash{$dir} = $targetdir; }

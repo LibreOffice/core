@@ -38,7 +38,7 @@ struct XMLPropertyMapEntry
 {
     const sal_Char* msApiName;      /// Property-Name
     sal_Int32       nApiNameLength; /// length of property name
-    sal_uInt16      mnNameSpace;    /** declares the Namespace in wich this
+    sal_uInt16      mnNameSpace;    /** declares the Namespace in which this
                                         property exists */
     enum ::xmloff::token::XMLTokenEnum meXMLName;       /// XML-Name
     sal_Int32       mnType;         /** Bit 0..23 : XML-Type of its value

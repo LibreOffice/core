@@ -2650,7 +2650,7 @@ ConvertDataList::ConvertDataList( void )
     NEWDP( "T",     1.0000000000000000E00,  CDC_Magnetism ); // Tesla
     NEWDP( "ga",    1.0000000000000000E04,  CDC_Magnetism ); // Gauss
 
-    // TEMERATURE: 1 Kelvin is...
+    // TEMPERATURE: 1 Kelvin is...
     NEWL( "C",      1.0000000000000000E00,  -2.7315000000000000E02, CDC_Temperature ); // Celsius
     NEWL( "cel",    1.0000000000000000E00,  -2.7315000000000000E02, CDC_Temperature ); // Celsius also
     NEWL( "F",      1.8000000000000000E00,  -2.5537222222222222E02, CDC_Temperature ); // Fahrenheit
@@ -2660,7 +2660,7 @@ ConvertDataList::ConvertDataList( void )
     NEWL( "Reau",   8.0000000000000000E-01, -2.7315000000000000E02, CDC_Temperature ); // *** Reaumur
     NEWL( "Rank",   1.8000000000000000E00,  +0.0000000000000000E00, CDC_Temperature ); // *** Rankine
 
-    // VOLUMNE: 1 Liter is...
+    // VOLUME: 1 Liter is...
     NEWD( "tsp",        2.0284000000000000E02,  CDC_Volume ); // Teaspoon
     NEWD( "tbs",        6.7613333333333333E01,  CDC_Volume ); // Tablespoon
     NEWD( "oz",         3.3806666666666667E01,  CDC_Volume ); // Ounce Liquid

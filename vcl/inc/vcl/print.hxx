@@ -202,7 +202,7 @@ public:
 
     // read printer options from configuration, parameter decides whether the set for
     // print "to printer" or "to file" should be read.
-    // returns true if config was read, false if an error occured
+    // returns true if config was read, false if an error occurred
     bool                        ReadFromConfig( bool bFile );
 };
 
@@ -564,7 +564,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     {}
 
     /* process a new set of properties
-     * merges changed properties and returns "true" if any occured
+     * merges changed properties and returns "true" if any occurred
      * if the optional output set is not NULL then the names of the changed properties are returned
     **/
     bool processProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp,

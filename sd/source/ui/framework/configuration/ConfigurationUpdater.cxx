@@ -195,7 +195,7 @@ void ConfigurationUpdater::UpdateConfiguration (void)
             ConfigurationTracer::TraceConfiguration(
                 mxCurrentConfiguration, "current configuration");
 #endif
-            // Notify the begining of the update.
+            // Notify the beginning of the update.
             ConfigurationChangeEvent aEvent;
             aEvent.Type = FrameworkHelper::msConfigurationUpdateStartEvent;
             aEvent.Configuration = mxRequestedConfiguration;
@@ -284,7 +284,7 @@ void ConfigurationUpdater::CheckUpdateSuccess (void)
     }
     else
     {
-        // Update was successfull.  Reset the failed update count.
+        // Update was successful.  Reset the failed update count.
         mnFailedUpdateCount = 0;
     }
 }

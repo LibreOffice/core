@@ -430,7 +430,7 @@ awt::Size SAL_CALL VCLXTabControl::getMinimumSize()
     if ( !pTabControl )
         return requestedSize;
 
-    // calculate size to accomodate all children
+    // calculate size to accommodate all children
     unsigned i = 0;
     for ( std::list<Box_Base::ChildData *>::const_iterator it
               = maChildren.begin(); it != maChildren.end(); it++, i++ )

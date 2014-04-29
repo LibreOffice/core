@@ -90,7 +90,7 @@ namespace utl
 
         @param _sNestedPath
             A configuration path that maybe points to a descendant of the node
-            identified by <var>_sPrefixPath</var>, with both pathes starting
+            identified by <var>_sPrefixPath</var>, with both paths starting
             from the same node (or both being absolute).
 
         @param _sPrefixPath
@@ -103,7 +103,7 @@ namespace utl
         @returns
             <TRUE/>, if <var>_sPrefixPath</var> is  a prefix of <var>_sNestedPath</var>;
             <FALSE/> otherwise.<BR/>
-            If both pathes are equal <TRUE/> is returned.
+            If both paths are equal <TRUE/> is returned.
 
     */
     sal_Bool isPrefixOfConfigurationPath(::rtl::OUString const& _sNestedPath,
@@ -114,7 +114,7 @@ namespace utl
 
         @param _sNestedPath
             A configuration path that points to a descendant of the node
-            identified by <var>_sPrefixPath</var>, with both pathes starting
+            identified by <var>_sPrefixPath</var>, with both paths starting
             from the same node (or both being absolute).
 
         @param _sPrefixPath

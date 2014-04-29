@@ -72,7 +72,7 @@ if( wcStr ) \
    calculates the needed length of a corresponding the multi byte string
    list for a wide char string list.
 
-   @Param: cp - the code page to use for convertion.
+   @Param: cp - the code page to use for conversion.
            wcList - a double '\0' terminated wide char string list.
 */
 
@@ -82,7 +82,7 @@ int WideCharListGetMultiByteLength( UINT codepage, LPCWSTR wcList );
    converts a double '\0' terminated list of wide char strings to a
    multi byte string list.
 
-   @Param: cp - the code page to use for convertion.
+   @Param: cp - the code page to use for conversion.
            wcList - a double '\0' terminated wide char string list.
            mbList - a double '\0' terminated multi byte string list.
            dwSize - size of buffer for multi byte string list.

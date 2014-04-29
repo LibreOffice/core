@@ -783,7 +783,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             SwTwips nLeft = aRect.Left() + nThick;
             SwTwips nRight = aRect.Right() - nThick;
 
-            //Nasty swap for bidi if neccessary
+            //Nasty swap for bidi if necessary
             rWrt.MiserableRTLFrmFmtHack(nLeft, nRight, rFrmFmt);
 
             //xaLeft/yaTop/xaRight/yaBottom - rel. to anchor
@@ -1337,7 +1337,7 @@ void WW8Export::WriteSdrTextObj(const SdrObject& rObj, sal_uInt8 nTyp)
     /*
     #i13885#
     When the object is actively being edited, that text is not set into
-    the objects normal text object, but lives in a seperate object.
+    the objects normal text object, but lives in a separate object.
     */
     if (pTxtObj->IsTextEditActive())
     {

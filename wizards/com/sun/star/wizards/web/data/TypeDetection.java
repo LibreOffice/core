@@ -64,11 +64,11 @@ public class TypeDetection
      */
     public final static String PDF_DOC = "pdf";
     /**
-     * a Sound file (mp3/wav ect.)
+     * a Sound file (mp3/wav etc.)
      */
     public final static String SOUND_FILE = "sound";
     /**
-     * a File which can not be handled by neither SO or a Web browser (exe, jar, zip ect.)
+     * a File which can not be handled by neither SO or a Web browser (exe, jar, zip etc.)
      */
     public final static String NO_TYPE = "other";
 }

@@ -496,7 +496,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
     sal_Int32 nCount = rNames.getLength();
     Sequence< sal_Bool > lStates(nCount);
 
-    // We must be shure to return a valid information everytime!
+    // We must be shure to return a valid information every time!
     // Set default to non readonly ... similar to the configuration handling of this property.
     for ( i=0; i<nCount; ++i)
         lStates[i] = sal_False;
@@ -1165,7 +1165,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                         {
                             // #i37322#: fallback action: replace with <void/>
                             xCont->replaceByName(pContainerSubNodes[nContSub], Any());
-                            // fallback successfull: continue looping
+                            // fallback successful: continue looping
                             continue;
                         }
                         catch (Exception &)

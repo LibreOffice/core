@@ -261,7 +261,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
             { DBG_ERRORFILE( "PropagateEvents_Impl: caught NoSuchElementException" ); }
         }
         else {
-            DBG_WARNING( "PropagateEvents_Impl: Got unkown event" );
+            DBG_WARNING( "PropagateEvents_Impl: Got unknown event" );
         }
     }
 }

@@ -435,7 +435,7 @@ sal_Bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertP
         {
             GalleryObject aNewEntry;
 
-            // update title of new object if neccessary
+            // update title of new object if necessary
             if( !rObj.GetTitle().Len() )
             {
                 SgaObject* pOldObj = ImplReadSgaObject( pFoundEntry );

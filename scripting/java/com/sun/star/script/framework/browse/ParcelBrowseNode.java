@@ -191,7 +191,7 @@ public class ParcelBrowseNode extends PropertySet
                com.sun.star.reflection.InvocationTargetException
     {
         LogUtils.DEBUG("ParcelBrowseNode invoke for " + aFunctionName );
-        // Initialise the out paramters - not used but prevents error in
+        // Initialise the out parameters - not used but prevents error in
         // UNO bridge
         aOutParamIndex[0] = new short[0];
         aOutParam[0] = new Object[0];

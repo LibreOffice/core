@@ -41,7 +41,7 @@ CBaseReader( DocumentName )
         m_pSimple_Builder = new CSimpleTag( );
         m_pDummy_Builder   = new CDummyTag( );
 
-        //retrieve all infomation that is useful
+        //retrieve all information that is useful
         m_AllMetaInfo[META_INFO_AUTHOR]               = EMPTY_XML_TAG;
         m_AllMetaInfo[META_INFO_TITLE]                = EMPTY_XML_TAG;
         m_AllMetaInfo[META_INFO_SUBJECT]              = EMPTY_XML_TAG;
@@ -82,7 +82,7 @@ try
         m_pSimple_Builder = new CSimpleTag( );
         m_pDummy_Builder   = new CDummyTag( );
 
-        //retrieve all infomation that is useful
+        //retrieve all information that is useful
         m_AllMetaInfo[META_INFO_AUTHOR]               = EMPTY_XML_TAG;
         m_AllMetaInfo[META_INFO_TITLE]                = EMPTY_XML_TAG;
         m_AllMetaInfo[META_INFO_SUBJECT]              = EMPTY_XML_TAG;

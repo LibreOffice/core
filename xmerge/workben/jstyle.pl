@@ -238,7 +238,7 @@ line: while (<STDIN>) {
         }
     }
 #   this is the fastest way to check line length,
-#   but it doesnt work with perl 3.0.
+#   but it doesn't work with perl 3.0.
 #   if ($line =~ tr/\t/\t/ * 7 + length($line) > 80) {
 #       $pos = $oldp = $p = 0;
 #       while (($p = index($line, "\t", $p)) >= 0) {

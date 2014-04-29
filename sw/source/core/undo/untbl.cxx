@@ -1737,7 +1737,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
             // then pBox received nodes from elsewhere.
             // If bNodesMoved is set for pBox the undo must move the
             // boxes back, otherwise it must delete them.
-            // The bNodesMoved flag is stored in a seperate array
+            // The bNodesMoved flag is stored in a separate array
             // which mirrors Ptrs.pNewSttNds, i.e. Ptrs.pNewSttNds[i]
             // and aMvBoxes[i] belong together.
             sal_Bool bNodesMoved =

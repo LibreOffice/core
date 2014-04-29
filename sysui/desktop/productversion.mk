@@ -44,7 +44,7 @@ PKGDIR=$(BIN)
 # It has to be equal to PRODUCTNAME:l:s/\s/\_/g - see solenv/bin/modules/installer/setupscript.pm
 PRODUCTLIST = openoffice
 
-# default values to minimize maintainance effort
+# default values to minimize maintenance effort
 
 # CAUTION! $(OOOBASEVERSION) from openoffice.lst NOT available (!)
 PRODUCTVERSION = 4.1

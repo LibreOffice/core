@@ -422,7 +422,7 @@ public:
                                 SCROW& rEndRow, sal_Bool bNotes ) const;
 
     /*
-    Get the last cell's postion, which has visual attribute or data and has max row number among all columns.
+    Get the last cell's position, which has visual attribute or data and has max row number among all columns.
     */
     void        GetLastAttrCell( SCCOL& rEndCol, SCROW& rEndRow ) const;
     sal_Bool        GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const;

@@ -494,7 +494,7 @@ define gb_LinkTarget_add_external_libs
 
 # Make sure that all libraries are given as base names.
 ifneq (,$$(filter -l% lib% %.so %.lib, $(2)))
-$$(eval $$(call gb_Output_announce,ERROR: Please give only libary basenames to gb_LinkTarget_add_external_libs))
+$$(eval $$(call gb_Output_announce,ERROR: Please give only library basenames to gb_LinkTarget_add_external_libs))
 $$(eval $$(call gb_Output_announce,ERROR:    (no prefixes -l% or lib%, no suffixes %.so or %.lib)))
 $$(eval $$(call gb_Output_announce,ERROR:    libraries given: $(2)))
 $$(eval $$(call gb_Output_announce,ERROR:    offending: $$(filter -l% lib% %.so %.lib, $(2))))

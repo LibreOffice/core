@@ -35,7 +35,7 @@
 // namespaces
 
 #ifdef css
-#error "Cant use css as namespace alias."
+#error "Can't use css as namespace alias."
 #else
 #define css ::com::sun::star
 #endif

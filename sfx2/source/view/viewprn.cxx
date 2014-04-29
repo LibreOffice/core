@@ -334,7 +334,7 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
             }
             case view::PrintableState_JOB_ABORTED :
             {
-                // printing not succesful, reset DocInfo
+                // printing not successful, reset DocInfo
                 uno::Reference<document::XDocumentProperties> xDocProps(mpObjectShell->getDocProperties());
                 xDocProps->setPrintedBy(m_aLastPrintedBy);
                 xDocProps->setPrintDate(m_aLastPrinted);

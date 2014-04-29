@@ -57,7 +57,7 @@ import static org.junit.Assert.*;
  * command line tool 'pmap', available on Solaris or Linux. This test will not
  * run on Windows.<br>Test procedure: every given document type is searched in
  * the source directory
- * Needed paramters:
+ * Needed parameters:
  * <ul>
  *   <li>"TestDocumentPath" - the path where test documents are located.</li>
  *   <li>"AllowMemoryIncrease" (optional) - the allowed memory increase measured in kByte per exported document. The default is 10 kByte.</li>

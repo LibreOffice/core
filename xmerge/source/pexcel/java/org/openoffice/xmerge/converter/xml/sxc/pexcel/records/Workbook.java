@@ -208,7 +208,7 @@ OfficeConstants {
     }
 
     /**
-      * Adds a font recrod to the workbook
+      * Adds a font record to the workbook
      *
       * @param  f the font record to add
       */
@@ -236,7 +236,7 @@ OfficeConstants {
     /**
       * Adds a ExtendedFormat record to the workbook
      *
-      * @param  f the font recrod to add
+      * @param  f the font record to add
       */
     public int addExtendedFormat(Format fmt) throws IOException {
 

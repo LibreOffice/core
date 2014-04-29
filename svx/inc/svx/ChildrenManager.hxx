@@ -57,7 +57,7 @@ class ChildrenManagerImpl;
     forwarder in the shape tree info.</p>
 
     <p>A children manager registers itself at the broadcaster passed to its
-    constructor and transforms/forwards the recieved events to the listeners
+    constructor and transforms/forwards the received events to the listeners
     of the also given context base.  The transformation process includes
     interpreting a <type>document::XEventListener</type>, the change from
     XShape references to the associated XAccessible reference, and the
@@ -80,7 +80,7 @@ public:
     /** Create a children manager, which manages the children of the given
         parent.  The parent is used for creating accessible objects.  The
         list of shapes for which to create those objects is not derived from
-        the parent and has to be provided seperately by calling one of the
+        the parent and has to be provided separately by calling one of the
         update methods.
         @param rxParent
             The parent of the accessible objects which will be created
@@ -135,7 +135,7 @@ public:
 
     /** Update the child manager.  Take care of a modified set of children
         and modified visible area.  This method can optimize the update
-        process with respect seperate updates of a modified children list
+        process with respect separate updates of a modified children list
         and visible area.
         @param bCreateNewObjectsOnDemand
             If </true> then accessible objects associated with the visible

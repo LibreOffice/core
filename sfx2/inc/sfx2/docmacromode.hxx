@@ -107,7 +107,7 @@ namespace sfx2
         virtual ::rtl::OUString
                     getDocumentLocation() const = 0;
 
-        /** returns a zip-storage based on the last commited version of the document,
+        /** returns a zip-storage based on the last committed version of the document,
             for readonly access
 
             The storage is intended to be used for signing. An implementation is

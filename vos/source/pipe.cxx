@@ -346,7 +346,7 @@ sal_Int32 OStreamPipe::read(void* pBuffer, sal_uInt32 n) const
 {
     VOS_ASSERT(m_pPipeRef && (*m_pPipeRef)());
 
-    /* loop until all desired bytes were read or an error occured */
+    /* loop until all desired bytes were read or an error occurred */
     sal_Int32 BytesRead= 0;
     sal_Int32 BytesToRead= n;
     while (BytesToRead > 0)
@@ -356,7 +356,7 @@ sal_Int32 OStreamPipe::read(void* pBuffer, sal_uInt32 n) const
                                  pBuffer,
                                 BytesToRead);
 
-        /* error occured? */
+        /* error occurred? */
         if(RetVal <= 0)
         {
             break;
@@ -377,7 +377,7 @@ sal_Int32 OStreamPipe::write(const void* pBuffer, sal_uInt32 n)
 {
     VOS_ASSERT(m_pPipeRef && (*m_pPipeRef)());
 
-    /* loop until all desired bytes were send or an error occured */
+    /* loop until all desired bytes were send or an error occurred */
     sal_Int32 BytesSend= 0;
     sal_Int32 BytesToSend= n;
     while (BytesToSend > 0)
@@ -388,7 +388,7 @@ sal_Int32 OStreamPipe::write(const void* pBuffer, sal_uInt32 n)
                                 pBuffer,
                                 BytesToSend);
 
-        /* error occured? */
+        /* error occurred? */
         if(RetVal <= 0)
         {
             break;

@@ -633,7 +633,7 @@ void GtkXLib::Init()
 
     g_set_application_name(X11SalData::getFrameClassName());
 
-    // Set consistant name of the root accessible
+    // Set consistent name of the root accessible
     rtl::OUString aAppName = Application::GetAppName();
     if( aAppName.getLength() > 0 )
     {

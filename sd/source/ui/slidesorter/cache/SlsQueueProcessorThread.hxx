@@ -76,7 +76,7 @@ public:
     void SAL_CALL Terminate (void);
 
 protected:
-    /** This virutal method is called (among others?) from the
+    /** This virtual method is called (among others?) from the
         inherited create method and acts as the main function of this
         thread.
     */
@@ -95,7 +95,7 @@ private:
 
     volatile bool mbCanBeJoined;
 
-    /** This mutex is used to guard the queue processor.  Be carefull not to
+    /** This mutex is used to guard the queue processor.  Be careful not to
         mix its use with that of the solar mutex.
     */
     ::osl::Mutex maMutex;

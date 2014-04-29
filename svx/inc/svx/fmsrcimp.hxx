@@ -92,7 +92,7 @@ struct FmSearchProgress
 
 class FmRecordCountListener : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
 {
-// Atribute
+// Attribute
     Link            m_lnkWhoWantsToKnow;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xListening;
 

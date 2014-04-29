@@ -23,7 +23,7 @@
 # ***********************************************************************
 # Description:
 # Filename:    osarch.pm
-# Autor:       EG
+# Author:       EG
 # Date:        28.10.96
 # $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/solenv/bin/modules/osarch.pm,v 1.3 2008-08-18 13:11:04 vg Exp $
 # Copyright:   STAR DIVISION

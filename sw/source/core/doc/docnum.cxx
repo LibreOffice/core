@@ -334,7 +334,7 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     }
 
     /* If moving of the outline levels is applicable, i.e. for all
-       outline levels occuring in the document there has to be a valid
+       outline levels occurring in the document there has to be a valid
        target outline level implied by aMoveArr. */
     bool bMoveApplicable = true;
     for (n = nSttPos; n < nEndPos; n++)
@@ -467,7 +467,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     // If the given range ends at an outlined text node we have to decide if it has to be a part of
     // the moving range or not. Normally it will be a sub outline of our chapter
     // and has to be moved, too. But if the chapter ends with a table(or a section end),
-    // the next text node will be choosen and this could be the next outline of the same level.
+    // the next text node will be chosen and this could be the next outline of the same level.
     // The criteria has to be the outline level: sub level => incorporate, same/higher level => no.
     if( GetNodes().GetOutLineNds().Seek_Entry( pEndSrch, &nTmpPos ) )
     {
@@ -492,8 +492,8 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     // The following code corrects the range to handle sections (start/end nodes)
     // The range will be extended if the least node before the range is a start node
     // which ends inside the range => The complete section will be moved.
-    // The range will be shrinked if the last position is a start node.
-    // The range will be shrinked if the last node is an end node which starts before the range.
+    // The range will be shrunk if the last position is a start node.
+    // The range will be shrunk if the last node is an end node which starts before the range.
     aSttRg--;
     while( aSttRg.GetNode().IsStartNode() )
     {

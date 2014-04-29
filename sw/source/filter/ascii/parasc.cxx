@@ -206,7 +206,7 @@ sal_uLong SwASCIIParser::CallParser()
                 {
                     // Using the pool defaults for the font causes significant
                     // trouble for the HTML filter, because it is not able
-                    // to export the pool defaults (or to be more precice:
+                    // to export the pool defaults (or to be more precise:
                     // the HTML filter is not able to detect whether a pool
                     // default has changed or not. Even a comparison with the
                     // HTMLi template does not work, because the defaults are

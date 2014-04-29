@@ -126,7 +126,7 @@ sub make_short_dir_version ($)
     $shortstring =~ s/^\s*\_//;
 
     # Setting unique ID to each directory
-    # No counter allowed, process must be absolute reproducable due to patch creation process.
+    # No counter allowed, process must be absolute reproducible due to patch creation process.
 
     my $subid = installer::windows::msiglobal::calculate_id($longstring_save, 9); # taking only the first 9 digits
     $shortstring = substr($shortstring, 0, $cutlength) . "_" . $subid;

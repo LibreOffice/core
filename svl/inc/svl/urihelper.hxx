@@ -140,9 +140,9 @@ normalizedMakeRelative(
 
    @param uriReference a URI reference, passed to normalizedMakeRelative
 
-   @return if the XUriReference returnd by normalizedMakeRelative is empty,
+   @return if the XUriReference returned by normalizedMakeRelative is empty,
    uriReference is returned unmodified; otherwise, the result of calling
-   XUriReference::getUriReference on the XUriReference returnd by
+   XUriReference::getUriReference on the XUriReference returned by
    normalizedMakeRelative is returned
 
    @exception std::bad_alloc if an out-of-memory condition occurs

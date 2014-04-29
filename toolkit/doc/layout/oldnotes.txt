@@ -118,7 +118,7 @@ Dialog is an UnoControlContainer ...
 		+ but ... only the UnoControl-Dialog-Model has this ...
 
 
-	+ Wow - even the percieved hierarchy:
+	+ Wow - even the perceived hierarchy:
 		+ 'exportDialogModel'
 			+ achieved by 'getElementNames'
 				-> flat set of names ... [urgh]

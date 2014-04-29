@@ -33,7 +33,7 @@ extern int osl_isSingleCPU;
    Instead there is only returned a value greater than zero is the increment
    result is greater than zero, but not the the result of the addition.
    For Windows NT the native function could be used, because the correct result
-   is returned. Beacuse of simpler code maintance and performace reasons we use
+   is returned. Because of simpler code maintenance and performace reasons we use
    on every x86-Windows-Platform the inline assembler implementation.
 */
 

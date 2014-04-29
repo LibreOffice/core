@@ -312,7 +312,7 @@ static bool getUseNativeDialog()
     {
         // get service provider
         uno::Reference< XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
-        // create configuration hierachical access name
+        // create configuration hierarchical access name
         if( xSMgr.is() )
         {
             try

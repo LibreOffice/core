@@ -418,7 +418,7 @@ void RtfAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
     OSL_TRACE("%s", OSL_THIS_FUNC);
     /*
        You would have thought that
-       m_rExport.Strm() << (bIsRTL ? OOO_STRING_SVTOOLS_RTF_RTLCH : OOO_STRING_SVTOOLS_RTF_LTRCH); would be sufficent here ,
+       m_rExport.Strm() << (bIsRTL ? OOO_STRING_SVTOOLS_RTF_RTLCH : OOO_STRING_SVTOOLS_RTF_LTRCH); would be sufficient here ,
        but looks like word needs to see the other directional token to be
        satisified that all is kosher, otherwise it seems in ver 2003 to go and
        semi-randomlyly stick strike through about the place. Perhaps

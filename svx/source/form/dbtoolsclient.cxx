@@ -76,7 +76,7 @@ namespace svxform
                 if ( pDBTFactory )
                 {
                     m_xDataAccessFactory = pDBTFactory;
-                    // by definition, the factory was aquired once
+                    // by definition, the factory was acquired once
                     m_xDataAccessFactory->release();
                 }
             }

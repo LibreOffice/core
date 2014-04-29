@@ -38,7 +38,7 @@ MULTITHREAD_OBJ=TRUE
 .INCLUDE :  settings.mk
 
 # Uncomment the following line if you want to compile with -Wall 
-# it disables lots of unnecessary warnings comming from the Win32
+# it disables lots of unnecessary warnings coming from the Win32
 # header files (disabling warnings via command line only works with
 # MSVC >= 7.x)
 #

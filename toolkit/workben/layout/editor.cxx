@@ -698,7 +698,7 @@ bool moveWidget( Widget *pWidget, bool up /*or down*/ )
 
         unsigned int childPos = pContainer->getChildPos( pSibling );
         if ( pContainer->addChild( pWidget, childPos + (up ? 0 : 1) ) )
-            return true;  // should always be succesful
+            return true;  // should always be successful
     }
     // go through parents -- try to get prepended to them
     else

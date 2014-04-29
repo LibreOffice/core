@@ -53,7 +53,7 @@ published service CoreReflection
     [optional] interface com::sun::star::lang::XComponent;
 };
 
-/** Accessable singleton to CoreReflection instance.
+/** Accessible singleton to CoreReflection instance.
 singleton theCoreReflection
 {
     service CoreReflection;

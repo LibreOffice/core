@@ -338,7 +338,7 @@ class AccTreeNode
 
     /** Update the specified handlers.
         @return
-            The returned array containes the indices of the updated children
+            The returned array contains the indices of the updated children
             and can be used to create a TreeModelEvent.
     */
     public Vector updateChildren (java.lang.Class class1)

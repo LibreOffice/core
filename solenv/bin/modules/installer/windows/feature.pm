@@ -435,7 +435,7 @@ sub add_missing_features ($)
 
     return $features if ! $installer::globals::is_release;
 
-    # Aquire the feature list of the source release.
+    # Acquire the feature list of the source release.
     my $source_feature_table = $installer::globals::source_msi->GetTable("Feature");
     my $feature_column_index = $source_feature_table->GetColumnIndex("Feature");
 

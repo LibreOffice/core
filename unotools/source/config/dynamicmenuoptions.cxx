@@ -122,7 +122,7 @@ class SvtDynMenu
     public:
         //---------------------------------------------------------------------------------------------------------
         // append setup written menu entry
-        // Don't touch name of entry. It was defined by setup and must be the same everytime!
+        // Don't touch name of entry. It was defined by setup and must be the same every time!
         // Look for double menu entries here too ... may be some seperator items are supeflous ...
         void AppendSetupEntry( const SvtDynMenuEntry& rEntry )
         {
@@ -163,7 +163,7 @@ class SvtDynMenu
 
         //---------------------------------------------------------------------------------------------------------
         // convert internal list to external format
-        // for using it on right menus realy
+        // for using it on right menus really
         // Notice:   We build a property list with 4 entries and set it on result list then.
         //           The while-loop starts with pointer on internal member list lSetupEntries, change to
         //           lUserEntries then and stop after that with NULL!
@@ -410,7 +410,7 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     :   ConfigItem( ROOTNODE_MENUS )
     // Init member then...
 {
-    // Get names and values of all accessable menu entries and fill internal structures.
+    // Get names and values of all accessible menu entries and fill internal structures.
     // See impl_GetPropertyNames() for further informations.
     sal_uInt32              nNewCount           = 0;
     sal_uInt32              nWizardCount        = 0;
@@ -453,8 +453,8 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     OUString    sName         ;
 
     // We must use these one instance object(!) to get information about installed modules.
-    // These information are used to filter menu entries wich need not installed modules ...
-    // Such entries shouldnt be available then!
+    // These information are used to filter menu entries which need not installed modules ...
+    // Such entries shouldn't be available then!
     // see impl_IsEntrySupported() too
     SvtModuleOptions aModuleOptions;
 

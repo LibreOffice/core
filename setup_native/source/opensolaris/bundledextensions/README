@@ -50,7 +50,7 @@ already been installed with unopkg. This will prevent to reinstall those
 extensions whenever the service is restarted.
 
 When a new version of OOo becomes available, then the respective OOo package
-containes a new version of 'installed'. That is, it contains a version string,
+contains a new version of 'installed'. That is, it contains a version string,
 such as 3.2.0. The sole reason for that string is, to change the content of this
 file in every release. Otherwise IPS would not replace the installed version of
 'installed' with the one contained in the package. 

@@ -1001,7 +1001,7 @@ void SmRootNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     pRootSym->Arrange(rDev, rFormat);
 
     Point  aPos = pRootSym->AlignTo(*pBody, RP_LEFT, RHA_CENTER, RVA_BASELINE);
-    //! overrride calulated vertical position
+    //! overrride calculated vertical position
     aPos.Y()  = pRootSym->GetTop() + pBody->GetBottom() - pRootSym->GetBottom();
     aPos.Y() -= nVerOffset;
     pRootSym->MoveTo(aPos);
@@ -2578,7 +2578,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     // norm distance from which the following two are calcutated
     const int  nNormDist = 3 * GetFont().GetSize().Height();
 
-    // define horizontal and vertical minimal distances that seperate
+    // define horizontal and vertical minimal distances that separate
     // the elements
     long  nHorDist = nNormDist * rFormat.GetDistance(DIS_MATRIXCOL) / 100L,
           nVerDist = nNormDist * rFormat.GetDistance(DIS_MATRIXROW) / 100L;
@@ -2882,7 +2882,7 @@ bool lcl_IsFromGreekSymbolSet( const String &rTokenText )
 {
     bool bRes = false;
 
-    // valid symbol name needs to have a '%' at pos 0 and at least an additonal char
+    // valid symbol name needs to have a '%' at pos 0 and at least an additional char
     if (rTokenText.Len() > 2 && rTokenText.GetBuffer()[0] == (sal_Unicode)'%')
     {
         String aName( rTokenText.Copy(1) );

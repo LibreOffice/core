@@ -213,7 +213,7 @@ public:
     { return m_aWMWorkAreas[n]; }
 
     /*
-     * attemp to switch the desktop to a certain workarea
+     * attempt to switch the desktop to a certain workarea
      * if bConsiderWM is true, then on some WMs the call will not result in any action
      */
     void switchToWorkArea( int nWorkArea, bool bConsiderWM = true ) const;

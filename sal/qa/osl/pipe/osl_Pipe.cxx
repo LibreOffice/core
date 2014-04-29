@@ -239,7 +239,7 @@ namespace osl_Pipe
                 ///bRes1 = aNoAcquirePipe.is( );
 
 
-                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no aquire of handle, only validation test, do not know how to test no acquire.",
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no acquire of handle, only validation test, do not know how to test no acquire.",
                                         sal_True == bRes );
             }
 
@@ -254,7 +254,7 @@ namespace osl_Pipe
                 bRes = aAcquirePipe.is( );
                 bRes1 = aAcquirePipe1.is( );
 
-                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no aquire of handle.only validation test, do not know how to test no acquire.",
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no acquire of handle.only validation test, do not know how to test no acquire.",
                                         sal_True == bRes && sal_False == bRes1 );
             }
 
@@ -814,7 +814,7 @@ namespace osl_StreamPipe
                 aPipe.clear( );
                 // bRes1 = aNoAcquirePipe.is( );
 
-                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no aquire of handle, only validation test, do not know how to test no acquire.",
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no acquire of handle, only validation test, do not know how to test no acquire.",
                                         sal_True == bRes );
             }
 

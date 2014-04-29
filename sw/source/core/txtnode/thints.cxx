@@ -1253,7 +1253,7 @@ SwTxtAttr* SwTxtNode::InsertItem(
     {
         const bool bSuccess( InsertHint( pNew, nMode ) );
         // N.B.: also check that the hint is actually in the hints array,
-        // because hints of certain types may be merged after succesful
+        // because hints of certain types may be merged after successful
         // insertion, and thus destroyed!
         if (!bSuccess || ( USHRT_MAX == m_pSwpHints->GetPos( pNew ) ))
         {
@@ -2195,7 +2195,7 @@ sal_Bool SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                     {
                         const sal_uInt16 nHintWhich = pItem->Which();
                         ASSERT(!isUNKNOWNATR(nHintWhich),
-                                "SwTxtNode::GetAttr(): unkonwn attribute?");
+                                "SwTxtNode::GetAttr(): unknown attribute?");
 
                         if ( !pAttrArr.get() )
                         {

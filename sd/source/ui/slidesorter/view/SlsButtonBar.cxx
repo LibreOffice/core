@@ -138,7 +138,7 @@ namespace {
     };
 
     /** The source mask is essentially multiplied with the given alpha value.
-        The result is writen to the result mask.
+        The result is written to the result mask.
     */
     void AdaptTransparency (AlphaMask& rMask, const AlphaMask& rSourceMask, const double nAlpha)
     {

@@ -636,7 +636,7 @@ namespace sw
             e.g. Page Anchored elements will not be. For the winword export we
             need them to have something to be anchored to. So this method
             returns all the floating elements in a document as a STL container
-            of sw::Frames which are guaranteed to have an appropiate anchor.
+            of sw::Frames which are guaranteed to have an appropriate anchor.
 
             @param rDoc
             The SwDoc document to get the styles from
@@ -786,7 +786,7 @@ namespace sw
 
             Word has the simple concept of a drawing object either in the
             foreground and in the background. We have an additional complexity
-            that form components live in a seperate layer, which seems
+            that form components live in a separate layer, which seems
             unnecessarily complicated. So in the winword filter we set the
             object's layer through this class with either SendObjectToHell for
             the bottom layer and SendObjectToHeaven for the top and we don't

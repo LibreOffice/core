@@ -76,7 +76,7 @@ IMPLEMENT_THUNK( kernel32, WINDOWS, BOOL, WINAPI, MoveFileExA, ( LPCSTR lpExisti
 
             fSuccess = CopyFileA( lpExistingFileNameA, lpNewFileNameA, bFailIfExist );
 
-            // In case of successfull copy do not return FALSE if delete fails.
+            // In case of successful copy do not return FALSE if delete fails.
             // Error detection is done by GetLastError()
 
             if ( fSuccess )

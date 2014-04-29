@@ -233,7 +233,7 @@ struct SalInputContextChangeEvent
 struct SalSurroundingTextRequestEvent
 {
     UniString       maText;         // Text
-    sal_uLong           mnStart;        // The beggining index of selected range
+    sal_uLong           mnStart;        // The beginning index of selected range
     sal_uLong           mnEnd;          // The end index of selected range
 };
 
@@ -244,7 +244,7 @@ struct SalSurroundingTextRequestEvent
 // SURROUNDINGTEXTSELECTIONCHANGE
 struct SalSurroundingTextSelectionChangeEvent
 {
-    sal_uLong           mnStart;        // The beggining index of selected range
+    sal_uLong           mnStart;        // The beginning index of selected range
     sal_uLong           mnEnd;          // The end index of selected range
 };
 

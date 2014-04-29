@@ -155,7 +155,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
     }
     else
     {
-        // exception occured:
+        // exception occurred:
         OSL_ENSURE(
             typelib_typedescriptionreference_isAssignableFrom(
                 ::getCppuType( reinterpret_cast<

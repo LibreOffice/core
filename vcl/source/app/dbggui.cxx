@@ -94,13 +94,13 @@ static const sal_Char* pDbgHelpText[] =
 "\n",
 "DBG_CHKTHIS( aName, fTest )\n",
 "Can be used in methods of the class when constructors and the "
-"desctructor of the class are equiped with the corresponding macros. "
+"desctructor of the class are equipped with the corresponding macros. "
 "The first parameter is the registered name, the second parameter is "
 "the test function or 0.\n",
 "\n",
 "DBG_CHKOBJ( pObj, aName, fTest )\n",
 "Can be used on instances of a class where the constructors and the "
-"destructor of the class are equiped with the corresponding macros. "
+"destructor of the class are equipped with the corresponding macros. "
 "The first parameter is the registered name, the second parameter is "
 "the test function or 0.\n",
 "\n",
@@ -108,11 +108,11 @@ static const sal_Char* pDbgHelpText[] =
 "\n",
 "--- Options ---\n",
 "This\n",
-"The This pointer is validated. This way all objects that are equiped "
+"The This pointer is validated. This way all objects that are equipped "
 "with it can be tested to make sure one is working with existing objects. "
-"This way it's easier to find bugs in case of multiple inheritence, "
+"This way it's easier to find bugs in case of multiple inheritance, "
 "alignment or compiler errors. Since almost all standard classes of SV "
-"(String, List, Pen, Brush, Polygon, ...) are equiped with DBG_CHKTHIS() "
+"(String, List, Pen, Brush, Polygon, ...) are equipped with DBG_CHKTHIS() "
 "a lot of errors are found, although this test will impact performance "
 "accordingly.\n",
 "\n",
@@ -131,7 +131,7 @@ static const sal_Char* pDbgHelpText[] =
 " account. Therefor each SV program leaves 2 strings and a bitmap behind.\n",
 "\n",
 "Trace\n",
-"Creation, destruction and usage of objects which are equiped with "
+"Creation, destruction and usage of objects which are equipped with "
 "DBG_XTOR is logged.\n",
 "\n",
 "\n",
@@ -151,7 +151,7 @@ static const sal_Char* pDbgHelpText[] =
 "Allocated memory is initialized with 0x77 and free or freed memory "
 "is initialized with 0x33. This option has almost no impact on performance "
 "and should thus always be enabled during development. This will also "
-"make crashes more often reproducable.\n",
+"make crashes more often reproducible.\n",
 "\n",
 "Overwrite\n",
 "This test check whether writes occur before or after the blocks. Before "
@@ -195,14 +195,14 @@ static const sal_Char* pDbgHelpText[] =
 "Memory tests are performed on the entire memory with every new/delet. "
 "Warning: this option makes programs very slow and should only be enabled "
 "to track memory overwrites. Otherwise it is sufficient to enable "
-"seperate options because (if no leak is present) every detectable "
+"separate options because (if no leak is present) every detectable "
 "memory overwrite during run time should be found.\n",
 "\n",
 "Object Test\n",
 "Memory test are performed on the entire memory with every object test. "
 "Warning: this option makes programs very slow and should only be enabled "
 "to track memory overwrite. Otherwise it is sufficient to enable "
-"seperate options because (if no leak is present) every detectable "
+"separate options because (if no leak is present) every detectable "
 "memory overwrite during run time should be found.\n",
 "\n",
 "Windows 16-bit and debug tests\n",
@@ -232,7 +232,7 @@ static const sal_Char* pDbgHelpText[] =
 "exception handler is called.\n",
 "\n",
 "Dialog\n",
-"FixedTexts, CheckBoxes, TriStateBoxes and RadioButtons are equiped with "
+"FixedTexts, CheckBoxes, TriStateBoxes and RadioButtons are equipped with "
 "a different background color to determine the size of the controls. This "
 "test also shows whether controls overlap, whether the tab order is correct "
 "and whether the mnemonic characters are correctly assigned. With dialogs "
@@ -287,32 +287,32 @@ static const sal_Char* pDbgHelpText[] =
 "\n",
 "Include ObjectTest filters\n",
 "Only classes which contain one of the indicated filters are evaluated with "
-"the object test. Filters are seperated by ';' and are case sensitive. "
+"the object test. Filters are separated by ';' and are case sensitive. "
 "Wildcards are not supported. If no text is indicated the filters are not "
 "active.\n",
 "\n",
 "Exclude ObjectTest filters\n",
 "Only classes which do not contain one of the indicated filters are evaluated "
-"with the object test. Filters are seperated by ';' and are case sensitive. "
+"with the object test. Filters are separated by ';' and are case sensitive. "
 "Wildcards are not supported. If no text is indicated the filters are not "
 "active.\n",
 "\n",
 "Include filters\n",
 "Only those texts which include the indicated filters are output. "
-"Filters are seperated by ';' and are case sensitive. "
+"Filters are separated by ';' and are case sensitive. "
 "Wildcards are not supported. The filter is used for all output (except for "
 "errors). If no text is indicated the filters are not active.\n",
 "\n",
 "Exclude filters\n",
 "Only those texts which do not include the indicated filters are output. "
-"Filters are seperated by ';' and are case sensitive. "
+"Filters are separated by ';' and are case sensitive. "
 "Wildcards are not supported. The filter is used for all output (except for "
 "errors). If no text is indicated the filters are not active.\n",
 "\n",
 "Furthermore you can indicate where the data will be output:\n",
 "\n",
 "None\n",
-"Output is surpressed.\n",
+"Output is suppressed.\n",
 "\n",
 "File\n",
 "Outputi n debug file. Filename can be entered in the Editfield.\n",

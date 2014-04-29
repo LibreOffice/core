@@ -113,7 +113,7 @@ namespace slideshow
         {
             mbActive = true;
             maUpdateShapes.clear(); // update gets forced via area, or
-                                    // has happend outside already
+                                    // has happened outside already
 
             if( !bSlideBackgoundPainted )
             {

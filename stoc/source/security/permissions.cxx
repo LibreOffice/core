@@ -416,11 +416,11 @@ bool FilePermission::implies( Permission const & perm ) const SAL_THROW( () )
 #ifdef SAL_W32
         return ((0 == ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
                      demanded.m_url.pData->buffer, len, m_url.pData->buffer, len )) &&
-                (0 > demanded.m_url.indexOf( '/', len ))); // in addition, no deeper pathes
+                (0 > demanded.m_url.indexOf( '/', len ))); // in addition, no deeper paths
 #else
         return ((0 == ::rtl_ustr_reverseCompare_WithLength(
                      demanded.m_url.pData->buffer, len, m_url.pData->buffer, len )) &&
-                (0 > demanded.m_url.indexOf( '/', len ))); // in addition, no deeper pathes
+                (0 > demanded.m_url.indexOf( '/', len ))); // in addition, no deeper paths
 #endif
     }
     return false;

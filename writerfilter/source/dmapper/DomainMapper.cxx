@@ -1528,7 +1528,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     vertical text flow (0x01), or
                     two lines in one layout (0x02).
                 For 0x01, if the higher byte of YYYY is zero, the text is not scaled to fit the line height,
-                    in oposite case, it is to be scaled.
+                    in opposite case, it is to be scaled.
                 For 0x02, the higher byte of YYYY is determinig the prefix and suffix of the run:
                     no brackets (0x00) ,
                     () round brackets (0x01),

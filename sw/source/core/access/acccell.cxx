@@ -143,7 +143,7 @@ sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
     if( bNew )
     {
         // remember that object as the one that has the caret. This is
-        // neccessary to notify that object if the cursor leaves it.
+        // necessary to notify that object if the cursor leaves it.
         ::vos::ORef < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }

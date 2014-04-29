@@ -29,7 +29,7 @@ import com.sun.star.wizards.common.IRenderer;
 
 /**
  * @author rpiterman
- * recieves status calls from the status dialog which
+ * receives status calls from the status dialog which
  * apears when the user clicks "create".
  * allocates strings from the resources to
  * display the current task status.

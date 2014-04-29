@@ -386,7 +386,7 @@ namespace fileaccess {
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "an error occured during file opening")),
+                        "an error occurred during file opening")),
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_OPEN_FOR_DIRECTORYLISTING  ||
@@ -441,7 +441,7 @@ namespace fileaccess {
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "an error occured during opening a directory")),
+                        "an error occurred during opening a directory")),
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_NOTCONNECTED_FOR_WRITE          ||
@@ -458,7 +458,7 @@ namespace fileaccess {
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "an error occured writing or reading from a file")),
+                        "an error occurred writing or reading from a file")),
                 xComProc );
         }
         else if( errorCode == TASKHANDLING_FILEIOERROR_FOR_NO_SPACE )
@@ -524,7 +524,7 @@ namespace fileaccess {
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "an error occured during opening a file")),
+                        "an error occurred during opening a file")),
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND ||
@@ -852,7 +852,7 @@ namespace fileaccess {
                 InteractiveBadTransferURLException(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
-                            "bad tranfer url")),
+                            "bad transfer url")),
                     xContext);
             cancelCommandExecution( aAny,xEnv );
         }

@@ -1597,7 +1597,7 @@ sal_Bool Content::isFolder()
      ucbhelper::cancelCommandExecution(
          makeAny( UnknownPropertyException(
                     rtl::OUString::createFromAscii(
-                        "Unable to retreive value of property 'IsFolder'!" ),
+                        "Unable to retrieve value of property 'IsFolder'!" ),
                     get() ) ),
          m_xImpl->getEnvironment() );
 
@@ -1618,7 +1618,7 @@ sal_Bool Content::isDocument()
      ucbhelper::cancelCommandExecution(
          makeAny( UnknownPropertyException(
                     rtl::OUString::createFromAscii(
-                        "Unable to retreive value of property 'IsDocument'!" ),
+                        "Unable to retrieve value of property 'IsDocument'!" ),
                     get() ) ),
          m_xImpl->getEnvironment() );
 

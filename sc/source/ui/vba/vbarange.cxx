@@ -618,7 +618,7 @@ typedef ::std::vector< CellPos > vCellPos;
 
 // #FIXME - QUICK
 // we could probably could and should modify CellsEnumeration below
-// to handle rows and columns ( but I do this seperately for now
+// to handle rows and columns ( but I do this separately for now
 // and.. this class only handles singe areas ( does it have to handle
 // multi area ranges?? )
 class ColumnsRowEnumeration: public CellsEnumeration_BASE
@@ -1174,7 +1174,7 @@ bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, S
     uno::Reference< beans::XPropertySet > xProps( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xNameAccess( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NamedRanges") ) ), uno::UNO_QUERY_THROW );
     // Strangly enough you can have Range( "namedRange1, namedRange2, etc," )
-    // loop around each ',' seperated name
+    // loop around each ',' separated name
     std::vector< rtl::OUString > vNames;
     sal_Int32 nIndex = 0;
     do
@@ -2151,7 +2151,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
     // Sometimes we might get a float or a double or whatever
     // set in the Any, we should convert as appropriate
     // #FIXME - perhaps worth turning this into some sort of
-    // convertion routine e.g. bSuccess = getValueFromAny( nRow, nRowIndex, getCppuType((sal_Int32*)0) )
+    // conversion routine e.g. bSuccess = getValueFromAny( nRow, nRowIndex, getCppuType((sal_Int32*)0) )
     if ( nRowIndex.hasValue() && !( nRowIndex >>= nRow ) )
     {
         uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( xContext );
@@ -4132,7 +4132,7 @@ ScVbaRange::getWorksheet() throw (uno::RuntimeException)
 uno::Reference< excel::XRange >
 ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xContext, const css::uno::Any &Cell1, const css::uno::Any &Cell2 ) throw (css::uno::RuntimeException)
 {
-    // Althought the documentation seems clear that Range without a
+    // Although the documentation seems clear that Range without a
     // qualifier then its a shortcut for ActiveSheet.Range
     // however, similarly Application.Range is apparently also a
     // shortcut for ActiveSheet.Range

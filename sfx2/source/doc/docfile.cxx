@@ -2533,7 +2533,7 @@ void SfxMedium::UseInteractionHandler( sal_Bool bUse )
 ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
 SfxMedium::GetInteractionHandler()
 {
-    // if interaction isnt allowed explicitly ... return empty reference!
+    // if interaction isn't allowed explicitly ... return empty reference!
     if ( !pImp->bUseInteractionHandler )
         return ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >();
 
@@ -2546,7 +2546,7 @@ SfxMedium::GetInteractionHandler()
             return xHandler;
     }
 
-    // if default interaction isnt allowed explicitly ... return empty reference!
+    // if default interaction isn't allowed explicitly ... return empty reference!
     if ( !pImp->bAllowDefaultIntHdl )
         return ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >();
 
@@ -3405,7 +3405,7 @@ sal_Bool SfxMedium::IsReadOnly()
 {
     sal_Bool bReadOnly = sal_False;
 
-    // a) ReadOnly filter cant produce read/write contents!
+    // a) ReadOnly filter can't produce read/write contents!
     bReadOnly = (
                     (pFilter                                                                         ) &&
                     ((pFilter->GetFilterFlags() & SFX_FILTER_OPENREADONLY) == SFX_FILTER_OPENREADONLY)

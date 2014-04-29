@@ -349,7 +349,7 @@ static void WriteDop( WW8Export& rWrt )
 {
     WW8Dop& rDop = *rWrt.pDop;
 
-    // i#78951#, store the value of  unknown compatability options
+    // i#78951#, store the value of  unknown compatibility options
     rDop.SetCompatabilityOptions( rWrt.pDoc->Getn32DummyCompatabilityOptions1());
     rDop.SetCompatabilityOptions2( rWrt.pDoc->Getn32DummyCompatabilityOptions2());
 
@@ -2868,7 +2868,7 @@ void WW8Export::WriteFkpPlcUsw()
         if (pEscher || pDoc->ContainsMSVBasic())
         {
             /*
-             #82587# Everytime MS 2000 creates an escher stream there is always
+             #82587# Every time MS 2000 creates an escher stream there is always
              an ObjectPool dir (even if empty). It turns out that if a copy of
              MS 2000 is used to open a document that contains escher graphics
              exported from StarOffice without this empty dir then *if* that
@@ -2884,7 +2884,7 @@ void WW8Export::WriteFkpPlcUsw()
              some magic. cmc
             */
             /*
-            #10570# Similiarly having msvbasic storage seems to also trigger
+            #10570# Similarly having msvbasic storage seems to also trigger
             creating this stream
             */
             GetWriter().GetStorage().OpenSotStorage(CREATE_CONST_ASC(SL::aObjectPool),

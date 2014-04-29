@@ -400,10 +400,10 @@ void Splitter::ImplKbdTracking( KeyCode aKeyCode )
         Point aNewPos;
         Size aSize = mpRefWin->GetOutputSize();
         Point aPos = GetPosPixel();
-        // depending on the position calc allows continous moves or snaps to row/columns
-        // continous mode is active when position is at the origin or end of the splitter
+        // depending on the position calc allows continuous moves or snaps to row/columns
+        // continuous mode is active when position is at the origin or end of the splitter
         // otherwise snap mode is active
-        // default here is snap, holding shift sets continous mode
+        // default here is snap, holding shift sets continuous mode
         if( mbHorzSplit )
             aNewPos = Point( ImplSplitterActive() ? aPos.X() : mnSplitPos, aKeyCode.IsShift() ? 0 : aSize.Height()/2);
         else

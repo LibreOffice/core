@@ -220,7 +220,7 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "-rsc2=<filename> Specify the location for rsc2.\n" );
             StdLstOut( "No longer existent: -rc<filename>  Use a different system resource compiler.\n" );
             StdLstOut( "-fs=<filename> Name of the .res file.\n" );
-            StdLstOut( "-lip=<path>    additional search path for system dependant files\n" );
+            StdLstOut( "-lip=<path>    additional search path for system dependent files\n" );
             StdLstOut( "-fp=<filename> Renaming of the .srs file.\n" );
             StdLstOut( "-fl=<filename> Listing file.\n" );
             StdLstOut( "-fh=<filename> Header file.\n" );

@@ -972,7 +972,7 @@ sub AddNewKeyBinding( scriptName as string, shift as boolean, control as boolean
 	&apos; Calculate from the key the offset into key group array we need to point to
 	KeyGroupIndex = getKeyGroupIndex( key, keyTypeOffset )
 
-	&apos; if key is allready allocated to a script then just reallocate
+	&apos; if key is already allocated to a script then just reallocate
 	if ( keyAllocationMap( offsetIntoArrayOfArrays, KeyGroupIndex ).Value &gt; 1 ) then
 
 		keyAllocationMap( offsetIntoArrayOfArrays, KeyGroupIndex ).Name = scriptName
@@ -1676,7 +1676,7 @@ sub LangLocComboListener()
     	end if
     endif
     
-    &apos; extra dialog dependant processing
+    &apos; extra dialog dependent processing
     if dialogName = &quot;Menu&quot; then
     	&apos; will set New button to false if no text in LableBox
     	MenuLabelBoxListener()

@@ -94,7 +94,7 @@ void SAL_CALL typereg_writer_destroy(void * handle) SAL_THROW_EXTERN_C();
 
    @param typeName the super type name; must not be null
 
-   @return false iff an out-of-memory condition ocurred, in which case the type
+   @return false iff an out-of-memory condition occurred, in which case the type
    writer is not modified
 
    @since UDK 3.2.0
@@ -124,7 +124,7 @@ sal_Bool SAL_CALL typereg_writer_setSuperTypeName(
 
    @param valueValue the value of the value of the field
 
-   @return false iff an out-of-memory condition ocurred, in which case the type
+   @return false iff an out-of-memory condition occurred, in which case the type
    writer is not modified
 
    @since UDK 3.2.0
@@ -155,7 +155,7 @@ sal_Bool SAL_CALL typereg_writer_setFieldData(
 
    @param exceptionCount the number of exceptions of the method
 
-   @return false iff an out-of-memory condition ocurred, in which case the type
+   @return false iff an out-of-memory condition occurred, in which case the type
    writer is not modified
 
    @since UDK 3.2.0
@@ -184,7 +184,7 @@ sal_Bool SAL_CALL typereg_writer_setMethodData(
 
    @param typeName the type name of the parameter; must not be null
 
-   @return false iff an out-of-memory condition ocurred, in which case the type
+   @return false iff an out-of-memory condition occurred, in which case the type
    writer is not modified
 
    @since UDK 3.2.0
@@ -207,7 +207,7 @@ sal_Bool SAL_CALL typereg_writer_setMethodParameterData(
 
    @param typeName the exception type name; must not be null
 
-   @return false iff an out-of-memory condition ocurred, in which case the type
+   @return false iff an out-of-memory condition occurred, in which case the type
    writer is not modified
 
    @since UDK 3.2.0
@@ -233,7 +233,7 @@ sal_Bool SAL_CALL typereg_writer_setMethodExceptionTypeName(
 
    @param typeName the type name of the reference; must not be null
 
-   @return false iff an out-of-memory condition ocurred, in which case the type
+   @return false iff an out-of-memory condition occurred, in which case the type
    writer is not modified
 
    @since UDK 3.2.0

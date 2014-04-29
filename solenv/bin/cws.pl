@@ -126,7 +126,7 @@ sub parse_command_line
     my $command = shift @ARGV;
 
     if (!exists $valid_commands_hash{$command}) {
-        print_error("Unkown command: '$command'\n");
+        print_error("Unknown command: '$command'\n");
         usage();
         exit(1);
     }
@@ -144,7 +144,7 @@ sub parse_command_line
         $command = 'task';
     }
 
-    # An unkown option might be accompanied with a valid command.
+    # An unknown option might be accompanied with a valid command.
     # Show the command specific help
     if ( !$success ) {
         do_help([$command])
@@ -607,7 +607,7 @@ sub query_integratedinto
     if ( is_valid_cws($cws) ) {
         my $milestone = $cws->get_milestone_integrated();
         print_message("Integrated into:");
-        print defined($milestone) ? "$milestone\n" : "unkown\n";
+        print defined($milestone) ? "$milestone\n" : "unknown\n";
     }
     return;
 }
@@ -1405,7 +1405,7 @@ sub do_help
     elsif ($arg eq 'create') {
         print STDERR "create: Create a new child workspace\n";
         print STDERR "usage: create [-m milestone] <master workspace> <child workspace>\n";
-        print STDERR "\t-m milestone:          Milestone to base the child workspace on. If ommitted the\n";
+        print STDERR "\t-m milestone:          Milestone to base the child workspace on. If omitted the\n";
         print STDERR "\t                       last published milestone will be used.\n";
         print STDERR "\t--milestone milestone: Same as -m milestone.\n";
     }
@@ -2012,7 +2012,7 @@ sub hg_clone
         print STDERR "CWS-DEBUG: ... hg clone: '$source -> $dest', options: '$options'\n";
     }
 
-    # The to be cloned revision might not yet be avaliable. In this case clone
+    # The to be cloned revision might not yet be available. In this case clone
     # the available tip.
     my @result = execute_hg_command(0, 'clone', $options, $source, $dest);
     if ( defined($result[0]) && $result[0] =~ /abort: unknown revision/ ) {

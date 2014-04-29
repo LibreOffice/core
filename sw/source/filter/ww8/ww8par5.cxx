@@ -406,7 +406,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     }
 
     //e.g. inserting bookmark around field result, so we need to put
-    //it around the entire writer field, as we don't have the seperation
+    //it around the entire writer field, as we don't have the separation
     //of field and field result of word, see #i16941#
     SwPosition aStart(*pPaM->GetPoint());
     if (!maFieldStack.empty())
@@ -1271,7 +1271,7 @@ bookmarks were set with SET or ASK. (See SwWW8FltRefStack)
 
 The other piece of the puzzle is that refs that point to the "location" of the
 bookmark will in word actually point to the last location where the bookmark
-was set with SET or ASK, not the actual bookmark. This is only noticable when
+was set with SET or ASK, not the actual bookmark. This is only noticeable when
 a document sets the bookmark more than once. This is because word places the
 true bookmark at the location of the last set, but the refs will display the
 position of the first set before the ref.
@@ -1298,7 +1298,7 @@ the field, which gives the same effect and meaning, to do so we must
 get any bookmarks in the field range, and begin them immediately before
 the set/ask field, and end them directly afterwards. MapBookmarkVariables
 returns an identifier of the bookmark attribute to close after inserting
-the appropiate set/ask field.
+the appropriate set/ask field.
 */
 long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     String &rOrigName, const String &rData)
@@ -3369,7 +3369,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
             {
                 case TOX_CONTENT:
                     {
-                        //If we would be created from outlines, either explictly or by default
+                        //If we would be created from outlines, either explicitly or by default
                         //then see if we need extra styles added to the outlines
                         sal_uInt16 eEffectivelyFrom = eCreateFrom ? eCreateFrom : nsSwTOXElement::TOX_OUTLINELEVEL;
                         if (eEffectivelyFrom & nsSwTOXElement::TOX_OUTLINELEVEL)

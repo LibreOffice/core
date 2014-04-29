@@ -169,7 +169,7 @@ sub EvaluateTerm ($$)
             my $left_value = $ENV{$left};
             $left_value = "" if ! defined $left_value;
 
-            # We can check whether the condition is fullfilled right now.
+            # We can check whether the condition is fulfilled right now.
             $result = EvaluateOperator($left_value, $operator, $right);
         }
         elsif ($left eq "language")
@@ -506,7 +506,7 @@ sub Download (@)
         my $response = $agent->get($URL);
         close $out;
 
-        # When download was successfull then check the md5 checksum and rename the .part file
+        # When download was successful then check the md5 checksum and rename the .part file
         # into the actual extension name.
         if ($response->is_success())
         {

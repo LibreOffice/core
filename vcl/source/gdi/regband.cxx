@@ -187,7 +187,7 @@ void ImplRegionBand::ProcessPoints()
 
         ImplRegionBandPoint* pNextBandPoint = pRegionBandPoint->mpNextBandPoint->mpNextBandPoint;
 
-        // remove allready processed points
+        // remove already processed points
         delete pRegionBandPoint->mpNextBandPoint;
         delete pRegionBandPoint;
 
@@ -222,7 +222,7 @@ bool ImplRegionBand::InsertPoint( long nX, long nLineId,
         return true;
     }
 
-    // look if line allready touched the band
+    // look if line already touched the band
     ImplRegionBandPoint* pRegionBandPoint = mpFirstBandPoint;
     ImplRegionBandPoint* pLastTestedRegionBandPoint = NULL;
     while( pRegionBandPoint )
@@ -932,7 +932,7 @@ bool ImplRegionBand::operator==( const ImplRegionBand& rRegionBand ) const
         pSecondRectBandSep = pSecondRectBandSep->mpNextSep;
     }
 
-    // differnt number of separations?
+    // different number of separations?
     if ( pOwnRectBandSep || pSecondRectBandSep )
         return false;
 

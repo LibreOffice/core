@@ -1685,7 +1685,7 @@ void SwWW8ImplReader::ImportDop()
     // COMPATIBILITY FLAGS START
     //
 
-    // #i78951# - remember the unknown compatability options
+    // #i78951# - remember the unknown compatibility options
     // so as to export them out
     rDoc.Setn32DummyCompatabilityOptions1( pWDop->GetCompatabilityOptions());
     rDoc.Setn32DummyCompatabilityOptions2( pWDop->GetCompatabilityOptions2());
@@ -3035,7 +3035,7 @@ bool SwWW8ImplReader::HandlePageBreakChar()
         /*
         If its a 0x0c without a paragraph end before it, act like a
         paragraph end, but nevertheless, numbering (and perhaps other
-        similiar constructs) do not exist on the para.
+        similar constructs) do not exist on the para.
         */
         //xushanchuan add for issue106569
         if (!bWasParaEnd && IsTemp)
@@ -4108,10 +4108,10 @@ void wwSectionManager::InsertSegments()
             //End getting the bounds of this section, quite a job eh ?
 
             SwSectionFmt *pRet = InsertSection(aSectPaM, *aIter);
-            //The last section if continous is always unbalanced
+            //The last section if continuous is always unbalanced
             if (pRet)
             {
-                //Set the columns to be UnBalanced if that compatability option
+                //Set the columns to be UnBalanced if that compatibility option
                 //is set
                 if (mrReader.pWDop->fNoColumnBalance)
                     pRet->SetFmtAttr(SwFmtNoBalancedColumns(true));

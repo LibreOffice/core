@@ -1063,7 +1063,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                 pInsPV = pM->GetPageView();
                 pInsOL = pObj->GetObjList();
 
-                // #i76891# use single iter from SJ here whcih works on SdrObjects and takes
+                // #i76891# use single iter from SJ here which works on SdrObjects and takes
                 // groups into account by itself
                 SdrObjListIter aIter(*pObj, IM_DEEPWITHGROUPS);
 
@@ -1235,7 +1235,7 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
     // #114310#
     // This is used for Combine and Connect. In no case it is necessary to force
     // the content to curve, but it is also not good to force to polygons. Thus,
-    // curve is the less information loosing one. Remember: This place is not
+    // curve is the less information losing one. Remember: This place is not
     // used for merge.
     // LineToArea is never necessary, both commands are able to take over the
     // set line style and to display it correctly. Thus, i will use a

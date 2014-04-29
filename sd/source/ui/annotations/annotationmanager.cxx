@@ -737,7 +737,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
         else
             nStringId = bImpress ? STR_ANNOTATION_WRAP_BACKWARD : STR_ANNOTATION_WRAP_BACKWARD_DRAW;
 
-        // Pop up question box that asks the user whether to wrap arround.
+        // Pop up question box that asks the user whether to wrap around.
         // The dialog is made modal with respect to the whole application.
         QueryBox aQuestionBox (
             NULL,

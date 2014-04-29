@@ -294,7 +294,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
         Reference< XFormComponent >  xMeAsFormComp(GetUnoControlModel(), UNO_QUERY);
         if (xMeAsFormComp.is())
         {
-            // check if I have another parent (and remove me, if neccessary)
+            // check if I have another parent (and remove me, if necessary)
             Reference< XIndexContainer >  xOldParent(xMeAsFormComp->getParent(), UNO_QUERY);
             if (xOldParent.is())
             {
@@ -671,7 +671,7 @@ FASTBOOL FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
                 Reference< XIndexContainer > xFormToInsertInto;
 
                 if ( !xParentForm.is() )
-                {   // model is not yet part of a form component hierachy
+                {   // model is not yet part of a form component hierarchy
                     xParentForm.set( rPage.GetImpl().findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
                     xFormToInsertInto.set( xParentForm, UNO_QUERY_THROW );
                 }

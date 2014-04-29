@@ -510,7 +510,7 @@ SfxSaveGuard::~SfxSaveGuard()
     // storing at the same time. Further m_bSuicide was set to sal_True only if close(sal_True) was called.
     // So the owner ship was delegated to the place where a veto exception was thrown.
     // Now we have to call close() again and delegate the owner ship to the next one, which
-    // cant accept that. Close(sal_False) cant work in this case. Because then the document will may be never closed ...
+    // can't accept that. Close(sal_False) can't work in this case. Because then the document will may be never closed ...
 
     if ( m_pData->m_bSuicide )
     {
@@ -1431,7 +1431,7 @@ void SAL_CALL SfxBaseModel::removeModifyListener(const uno::Reference< XMODIFYLI
 
 void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
 {
-    static ::rtl::OUString MSG_1 = ::rtl::OUString::createFromAscii("Cant close while saving.");
+    static ::rtl::OUString MSG_1 = ::rtl::OUString::createFromAscii("Can't close while saving.");
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() || m_pData->m_bClosed || m_pData->m_bClosing )
@@ -2489,7 +2489,7 @@ void SAL_CALL SfxBaseModel::removeDocumentEventListener( const uno::Reference< d
 void SAL_CALL SfxBaseModel::notifyDocumentEvent( const ::rtl::OUString&, const uno::Reference< frame::XController2 >&, const uno::Any& )
     throw ( lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException )
 {
-    throw lang::NoSupportException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SfxBaseModel controlls all the sent notifications itself!" ) ), uno::Reference< uno::XInterface >() );
+    throw lang::NoSupportException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SfxBaseModel controls all the sent notifications itself!" ) ), uno::Reference< uno::XInterface >() );
 }
 
 //________________________________________________________________________________________________________
@@ -2833,7 +2833,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                                 else
                                 {
                                     // if the password is changed a special error should be used in case of shared document
-                                    throw task::ErrorCodeIOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cant change password for shared document." ) ), uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
+                                    throw task::ErrorCodeIOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can't change password for shared document." ) ), uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
                                 }
                             }
                         }

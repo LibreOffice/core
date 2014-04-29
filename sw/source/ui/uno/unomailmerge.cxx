@@ -111,7 +111,7 @@ osl::Mutex &    GetMailMergeMutex()
 enum CloseResult
 {
     eSuccess,       // successfully closed
-    eVetoed,        // vetoed, ownership transfered to the vetoing instance
+    eVetoed,        // vetoed, ownership transferred to the vetoing instance
     eFailed         // failed for some unknown reason
 };
 static CloseResult CloseModelAndDocSh(
@@ -279,7 +279,7 @@ namespace
         try
         {
             sal_Bool bDeliverOwnership = ( 0 == m_nPendingDeleteAttempts );
-                // if this is our last attemt, then anybody which vetoes this has to take the consequences
+                // if this is our last attempt, then anybody which vetoes this has to take the consequences
                 // (means take the ownership)
             m_xDocument->close( bDeliverOwnership );
             bSuccess = sal_True;
@@ -448,7 +448,7 @@ SwXMailMerge::~SwXMailMerge()
         //! because there is no automatism that will do that later.
         //! #120086#
         if ( eVetoed == CloseModelAndDocSh( xModel, xDocSh ) )
-            DBG_WARNING( "owner ship transfered to vetoing object!" );
+            DBG_WARNING( "owner ship transferred to vetoing object!" );
 
         xModel = 0;
         xDocSh = 0; // destroy doc shell

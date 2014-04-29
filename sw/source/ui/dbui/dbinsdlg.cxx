@@ -1809,7 +1809,7 @@ void SwInsertDBColAutoPilot::Load()
 
                 rtl::OUString sColumn;
                 pSubProps[0] >>= sColumn;
-                //check for existance of the loaded column name
+                //check for existence of the loaded column name
                 sal_Bool bFound = sal_False;
                 for(sal_Int32 nRealColumn = 0; nRealColumn < aDBColumns.Count(); nRealColumn++)
                 {

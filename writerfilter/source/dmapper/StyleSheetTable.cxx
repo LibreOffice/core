@@ -447,7 +447,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED8_3:
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-            //noone seems to care about it
+            //no one seems to care about it
         break;
         case NS_rtf::LN_XSTZNAME:
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */

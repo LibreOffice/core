@@ -127,9 +127,9 @@ enum EDocStates
 
     /* FINAL STATES */
 
-    /// the Auto/Emergency saved document isnt useable any longer
+    /// the Auto/Emergency saved document isn't useable any longer
     E_DAMAGED = 64,
-    /// the Auto/Emergency saved document isnt realy up-to-date (some changes can be missing)
+    /// the Auto/Emergency saved document isn't really up-to-date (some changes can be missing)
     E_INCOMPLETE = 128,
     /// the Auto/Emergency saved document was processed successfully
     E_SUCCEDED = 512
@@ -487,13 +487,13 @@ class SaveDialog : public IExtendedTabPage
         //---------------------------------------
         /** @short  create all child controls of this dialog.
 
-            @descr  The dialog isnt shown nor it starts any
+            @descr  The dialog isn't shown nor it starts any
                     action by itself!
 
             @param  pParent
                     can point to a parent window.
                     If its set to 0, the defmodal-dialog-parent
-                    is used automaticly.
+                    is used automatically.
 
             @param  pCore
                     provides access to the recovery core service
@@ -544,13 +544,13 @@ class SaveProgressDialog : public ModalDialog
         //---------------------------------------
         /** @short  create all child controls of this dialog.
 
-            @descr  The dialog isnt shown nor it starts any
+            @descr  The dialog isn't shown nor it starts any
                     action by itself!
 
             @param  pParent
                     can point to a parent window.
                     If its set to 0, the defmodal-dialog-parent
-                    is used automaticly.
+                    is used automatically.
 
             @param  pCore
                     used to start emegrency save.

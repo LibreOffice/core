@@ -92,7 +92,7 @@ bool PrintDialog::PrintPreviewWindow::useHCColorReplacement() const
         {
             // get service provider
             Reference< XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
-            // create configuration hierachical access name
+            // create configuration hierarchical access name
             if( xSMgr.is() )
             {
                 try

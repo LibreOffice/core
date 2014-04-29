@@ -1578,7 +1578,7 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
 
             nSetBorders has a bit set for each location that a sprm set a
             border, so with a sprm set, but no border, then disable the
-            appropiate border
+            appropriate border
             */
             rBox.SetLine( 0, aIdArr[ i+1 ] );
         }
@@ -1955,7 +1955,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     /*
      #95905#, #83307# seems to have gone away now, so reenable parallel
      wrapping support for frames in headers/footers. I don't know if we truly
-     have an explictly specified behaviour for these circumstances.
+     have an explicitly specified behaviour for these circumstances.
     */
 
     nHeight = rWW.nSp45;
@@ -2609,12 +2609,12 @@ void SwWW8ImplReader::StopApo()
         stack of attributes normally only places them into the document when
         the current insertion point has passed them by. Otherwise the end
         point of the attribute gets pushed along with the insertion point. The
-        insertion point is moved and the properties commited during
+        insertion point is moved and the properties committed during
         MoveOutsideFly. We also may want to remove the final paragraph in the
         frame, but we need to wait until the properties for that frame text
-        have been commited otherwise they will be lost. So we first get a
+        have been committed otherwise they will be lost. So we first get a
         handle to the last the filter inserted. After the attributes are
-        commited, if that paragraph exists we join it with the para after it
+        committed, if that paragraph exists we join it with the para after it
         that comes with the frame by default so that as normal we don't end up
         with one more paragraph than we wanted.
         */
@@ -2949,7 +2949,7 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
         nI = nContigiousWestern;               // The out of sequence western id
     else
     {
-        // The contigious western ids
+        // The contiguous western ids
         if (eVersion <= ww::eWW2)
             nI = static_cast< sal_uInt8 >(nId - 60);
         else if (eVersion < ww::eWW8)
@@ -3440,7 +3440,7 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( sal_uInt16, const sal_uInt8* pData
 
 void SwWW8ImplReader::Read_TxtColor( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    //Has newer colour varient, ignore this old varient
+    //Has newer colour variant, ignore this old variant
     if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(0x6870))
         return;
 
@@ -3946,7 +3946,7 @@ void SwWW8ImplReader::Read_FontKern( sal_uInt16, const sal_uInt8* , short nLen )
 
 void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    //Has newer colour varient, ignore this old varient
+    //Has newer colour variant, ignore this old variant
     if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(0xCA71))
         return;
 

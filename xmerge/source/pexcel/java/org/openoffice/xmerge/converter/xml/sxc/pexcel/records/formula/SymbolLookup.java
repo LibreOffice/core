@@ -27,7 +27,7 @@ import java.util.HashMap;
 
 /**
  * This interface defines the attributes of a lookup table for this plugin.
- * Symbols will generally be either operators (_, -, *, etc) or funtion names.
+ * Symbols will generally be either operators (_, -, *, etc) or function names.
  */
 public abstract class SymbolLookup {
 

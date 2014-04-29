@@ -65,7 +65,7 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
         for the search within the underlying type description tree.
 
         @param moduleName
-            contains the name of an UNOIDL module. Modules are seperated by a
+            contains the name of an UNOIDL module. Modules are separated by a
             single '.' (i.e., "com.sun.star.reflection"). The root of the module
             hierarchy is specified with an empty string. Module names are always
             absolute, never relative.
@@ -92,7 +92,7 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
 
         @param depth
             specifies the depth of search in the underlying tree of type
-            descriptions. Clients should be aware of the fact that specifiying
+            descriptions. Clients should be aware of the fact that specifying
             <member>TypeDescriptionSearchDepth::INFINITE</member> can lead to
             larger delays when constructing or using the
             <type>XTypeDescriptionEnumeration</type> instance.

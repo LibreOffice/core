@@ -117,7 +117,7 @@ SequenceToContainer::SequenceToContainer( const ::std::vector< uno::Reference< c
         uno::Reference< container::XNamed > xNamed = *aIt;
         *pElementName = xNamed->getName();
         maElements.push_back( uno::Any( xNamed ) );
-        // same name may occur multiple times, VBA returns first occurance
+        // same name may occur multiple times, VBA returns first occurrence
         if( maElementMap.count( *pElementName ) == 0 )
             maElementMap[ *pElementName ] <<= xNamed;
     }
@@ -133,7 +133,7 @@ SequenceToContainer::SequenceToContainer( const ::std::vector< beans::NamedValue
     {
         *pElementName = aIt->Name;
         maElements.push_back( aIt->Value );
-        // same name may occur multiple times, VBA returns first occurance
+        // same name may occur multiple times, VBA returns first occurrence
         if( maElementMap.count( *pElementName ) == 0 )
             maElementMap[ *pElementName ] = aIt->Value;
     }

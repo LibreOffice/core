@@ -410,7 +410,7 @@ ServerFont::ServerFont( const ImplFontSelectData& rFSD )
     mbCollectedZW( false )
 {
     // TODO: move update of mpFontEntry into FontEntry class when
-    // it becomes reponsible for the ServerFont instantiation
+    // it becomes responsible for the ServerFont instantiation
     ((ImplServerFontEntry*)rFSD.mpFontEntry)->SetServerFont( this );
 
     if( rFSD.mnOrientation != 0 )

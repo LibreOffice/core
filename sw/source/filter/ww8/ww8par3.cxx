@@ -1219,7 +1219,7 @@ WW8ListManager::WW8ListManager(
 
             i.e. create a simple list in 2000 and open it in 97 and 97 will
             claim (correctly) that it is an outline list. We can set our
-            continous flag in these lists to store this information.
+            continuous flag in these lists to store this information.
             */
             SwNumRule* pMyNumRule = CreateNextRule(
                 aLST.bSimpleList || (aBits1 & 0x10));
@@ -1639,7 +1639,7 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     #i1869#
     If this list has had its bits set in word 2000 to pretend that it is a
     simple list from the point of view of the user, then it is almost
-    certainly a simple continous list, and we will try to keep it like that.
+    certainly a simple continuous list, and we will try to keep it like that.
     Otherwise when we save again it will be shown as the true outline list
     that it is, confusing the user that just wanted what they thought was a
     simple list. On the otherhand it is possible that some of the other levels

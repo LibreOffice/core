@@ -73,7 +73,7 @@ namespace SL
 }
 
 /**
-    winword strings are typically Belt and Braces strings preceeded with a
+    winword strings are typically Belt and Braces strings preceded with a
     pascal style count, and ending with a c style 0 terminator. 16bit chars
     and count for ww8+ and 8bit chars and count for ww7-. The count and 0
     can be checked for integrity to catch errors (e.g. lotus created documents)
@@ -483,7 +483,7 @@ public:
 
             sal_uInt8* mpData;
             sal_uInt16 mnLen;
-            sal_uInt16 mnIStd; // only for Fkp.Papx (actualy Style-Nr)
+            sal_uInt16 mnIStd; // only for Fkp.Papx (actually Style-Nr)
             bool mbMustDelete;
 
             explicit Entry(WW8_FC nFC) : mnFC(nFC), mpData(0), mnLen(0),
@@ -1564,15 +1564,15 @@ public:
     sal_uInt16  fWriteReservation : 1;
     sal_uInt16  fLockRev : 1;       //   when 1, the current revision marking state is locked
     sal_uInt16  fEmbedFonts : 1;    //   when 1, document contains embedded True Type fonts
-    //    compatability options
+    //    compatibility options
     sal_uInt16 copts_fNoTabForInd : 1;          //    when 1, don�t add automatic tab stops for hanging indent
     sal_uInt16 copts_fNoSpaceRaiseLower : 1;        //    when 1, don�t add extra space for raised or lowered characters
-    sal_uInt16 copts_fSupressSpbfAfterPgBrk : 1;    // when 1, supress the paragraph Space Before and Space After options after a page break
+    sal_uInt16 copts_fSupressSpbfAfterPgBrk : 1;    // when 1, suppress the paragraph Space Before and Space After options after a page break
     sal_uInt16 copts_fWrapTrailSpaces : 1;      //    when 1, wrap trailing spaces at the end of a line to the next line
     sal_uInt16 copts_fMapPrintTextColor : 1;        //    when 1, print colors as black on non-color printers
     sal_uInt16 copts_fNoColumnBalance : 1;      //    when 1, don�t balance columns for Continuous Section starts
     sal_uInt16 copts_fConvMailMergeEsc : 1;
-    sal_uInt16 copts_fSupressTopSpacing : 1;        //    when 1, supress extra line spacing at top of page
+    sal_uInt16 copts_fSupressTopSpacing : 1;        //    when 1, suppress extra line spacing at top of page
     sal_uInt16 copts_fOrigWordTableRules : 1;   //    when 1, combine table borders like Word 5.x for the Macintosh
     sal_uInt16 copts_fTransparentMetafiles : 1; //    when 1, don�t blank area between metafile pictures
     sal_uInt16 copts_fShowBreaksInFrames : 1;   //    when 1, show hard page or column breaks in frames
@@ -1625,7 +1625,7 @@ public:
     /*
         bei nFib >= 103 gehts weiter:
     */
-    sal_uInt32 fNoTabForInd                             :1; // see above in compatability options
+    sal_uInt32 fNoTabForInd                             :1; // see above in compatibility options
     sal_uInt32 fNoSpaceRaiseLower                   :1; // see above
     sal_uInt32 fSupressSpbfAfterPageBreak   :1; // see above
     sal_uInt32 fWrapTrailSpaces                     :1; // see above

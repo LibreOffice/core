@@ -244,7 +244,7 @@ TabDialog::~TabDialog()
 
 void TabDialog::Resize()
 {
-// !!! In the future the controls should be automaticly rearrange
+// !!! In the future the controls should be automatically rearrange
 // !!! if the window is resized
 // !!! if ( !IsRollUp() )
 // !!!      ImplPosControls();

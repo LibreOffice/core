@@ -1149,7 +1149,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
     TableBackgrounds( pTableTextNodeInfoInner );
 
-    // Cell prefered width
+    // Cell preferred width
     SwTwips nWidth = GetGridCols( pTableTextNodeInfoInner )[ pTableTextNodeInfoInner->getCell() ];
     m_pSerializer->singleElementNS( XML_w, XML_tcW,
            FSNS( XML_w, XML_w ), OString::valueOf( sal_Int32( nWidth ) ).getStr( ),
@@ -1293,7 +1293,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     // Create the SwWriteTable instance to use col spans (and maybe other infos)
     GetTablePageSize( pTableTextNodeInfoInner, nPageSize, bRelBoxSize );
 
-    // Output the table prefered width
+    // Output the table preferred width
     if ( nPageSize != 0 )
         m_pSerializer->singleElementNS( XML_w, XML_tblW,
                 FSNS( XML_w, XML_w ), OString::valueOf( sal_Int32( nPageSize ) ).getStr( ),

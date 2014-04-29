@@ -199,7 +199,7 @@ namespace sw
             alternative name for one of them..
 
             And it needs to report to the importer if the style being mapped to
-            was already in existance, for the cut and paste/insert file mode we
+            was already in existence, for the cut and paste/insert file mode we
             should not modify the returned style if it is already in use as it
             is does not belong to us to change.
 
@@ -259,7 +259,7 @@ namespace sw
             alternative name for one of them..
 
             And it needs to report to the importer if the style being mapped to
-            was already in existance, for the cut and paste/insert file mode we
+            was already in existence, for the cut and paste/insert file mode we
             should not modify the returned style if it is already in use as it
             is does not belong to us to change.
 
@@ -495,7 +495,7 @@ namespace sw
 
             Word generally requires characters which share the same direction,
             the same script, and occasionally (depending on the format) the
-            same charset to be exported in independant chunks.
+            same charset to be exported in independent chunks.
 
             So this function finds these ranges and returns a STL container
             of CharRuns
@@ -512,7 +512,7 @@ namespace sw
                 RTF format, not necessary for a unicode aware format like WW8+
 
             @return STL container of CharRuns which describe the shared
-            direction, script and optionally script of the contigious sequences
+            direction, script and optionally script of the contiguous sequences
             of characters
 
             @author

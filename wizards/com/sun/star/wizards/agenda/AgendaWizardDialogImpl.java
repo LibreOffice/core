@@ -277,7 +277,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         });
     }
 
-    /** used in developement to start the wizard */
+    /** used in development to start the wizard */
     public static void main(String args[])
     {
         String ConnectStr = "uno:socket,host=127.0.0.1,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.ServiceManager";
@@ -357,10 +357,10 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
     private FileAccess fileAccess1;
     /** convenience method.
      *  instead of creating a FileAccess object every time
-     *  it is needed, I have a FileAccess object memeber.
+     *  it is needed, I have a FileAccess object member.
      *  the first time it is needed it will be created, and
      *  then be reused...
-     * @return the FileAccess memeber object.
+     * @return the FileAccess member object.
      */
     private FileAccess getFileAccess() {
         if (fileAccess1 == null)
@@ -411,7 +411,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
     /**
      * is called when the user
      * changes the path through the "save as" dialog.
-     * The path displayed is a translated, user-friendly, platform dependant path.
+     * The path displayed is a translated, user-friendly, platform dependent path.
      * @param url the new save url.
      */
     private void setFilename(String url) {

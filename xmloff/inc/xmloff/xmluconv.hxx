@@ -337,7 +337,7 @@ public:
             the string. See <arg>nSecondsFraction</arg>
 
         @param pSecondsFraction
-            recieves fractions of whole seconds, in milliseconds. May be <NULL/>
+            receives fractions of whole seconds, in milliseconds. May be <NULL/>
             This parameter is necessary since neither <type>Time</type> nor <type scope="com::sun::star::util">Time</type>
             have a sufficient resolution to transport milliseconds.
         @see http://www.w3.org/TR/xmlschema-2/#duration

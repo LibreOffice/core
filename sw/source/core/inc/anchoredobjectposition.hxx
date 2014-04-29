@@ -283,7 +283,7 @@ namespace objectpositioning
                 @author OD
 
                 @param _rPageAlignLayFrm
-                input paramter - layout frame, which determines the 'page area'
+                input parameter - layout frame, which determines the 'page area'
                 the object has to be horizontal positioned in.
 
                 @param _nProposedRelPosX
@@ -332,7 +332,7 @@ namespace objectpositioning
                 is oriented at.
 
                 @param _rPageAlignLayFrm
-                input paramter - layout frame, which determines the 'page area'
+                input parameter - layout frame, which determines the 'page area'
                 the object has to be horizontal positioned in.
 
                 @param _eRelOrient

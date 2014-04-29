@@ -3880,7 +3880,7 @@ void DomainMapper_Impl::ApplySettingsTable()
 SectionPropertyMap * DomainMapper_Impl::GetSectionContext()
 {
     SectionPropertyMap* pSectionContext = 0;
-    //the section context is not availabe before the first call of startSectionGroup()
+    //the section context is not available before the first call of startSectionGroup()
     if( !IsAnyTableImport() )
     {
         PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_SECTION);

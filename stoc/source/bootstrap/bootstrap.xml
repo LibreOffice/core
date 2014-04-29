@@ -57,7 +57,7 @@
         <author> Juergen Schmidt </author>
         <name>  com.sun.star.comp.stoc.NestedRegistry   </name>
         <description>
-    This component provides access to a simple hierachical registry. The registry based on
+    This component provides access to a simple hierarchical registry. The registry based on
     two registry file.
 </description>
         <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
@@ -235,7 +235,7 @@ This service is an implementation of the com.sun.star.security.Policy service.
         <author> Juergen Schmidt </author>
         <name>  com.sun.star.comp.stoc.SimpleRegistry   </name>
         <description>
-    This component provides access to a simple hierachical registry. The registry based on
+    This component provides access to a simple hierarchical registry. The registry based on
     one registry file.
 </description>
         <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>

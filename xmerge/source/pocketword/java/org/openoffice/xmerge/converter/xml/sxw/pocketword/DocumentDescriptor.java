@@ -130,7 +130,7 @@ class DocumentDescriptor {
 
 
     /*
-     * This method loads the intial fixed portion of the descriptor and the
+     * This method loads the initial fixed portion of the descriptor and the
      * mid-section.  The mid-section is variable but Pocket Word doesn't seem
      * to mind default values.
      */

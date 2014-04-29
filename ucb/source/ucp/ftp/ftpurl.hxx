@@ -126,7 +126,7 @@ namespace ftp {
             throw(curl_exception);
 
         // returns a pointer to an open tempfile,
-        // seeked to the beginning of.
+        // sought to the beginning of.
         oslFileHandle open() throw(curl_exception);
 
         FTPDirentry direntry() const throw(curl_exception);

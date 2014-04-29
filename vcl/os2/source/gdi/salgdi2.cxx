@@ -617,7 +617,7 @@ SalBitmap* Os2SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     HBITMAP         hMemBmp = ImplCreateVirDevBitmap( hMemDC, hMemPS, nDX, nDY, 0 );
     HBITMAP         hMemOld = Ft2SetBitmap( hMemPS, hMemBmp );
 
-    // creation successfull?
+    // creation successful?
     if( hMemDC && hMemPS && hMemBmp )
     {
         POINTL thePoints[ 3 ];

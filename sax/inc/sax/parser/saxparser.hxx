@@ -112,7 +112,7 @@ public:
         Default implementation calls StartElement() on the topmost contex. */
     virtual void StartElement( sal_uInt32 aElementToken, const AttributeMap& rAttributes );
 
-    /** is called for characters betwen elements in the xml stream.
+    /** is called for characters between elements in the xml stream.
         Default implementation calls Characters() on the topmost contex.
         @param pCharacters The characters in utf-8 encoding
         @param nLength the size in bytes of the utf-8 string

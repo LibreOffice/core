@@ -57,7 +57,7 @@ void CALLTYPE GetFunctionCount( USHORT *nCount )
 }
 
 /**
- * Provides neccessary data for each new function to StarCalc
+ * Provides necessary data for each new function to StarCalc
  *
  * @param *nNo Input: Function number between 0 and nCount - 1
  * @param *pFuncName Output: Functionname which should be called in the AddIn-DLL

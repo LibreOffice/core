@@ -176,7 +176,7 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStr);
 
-    // decide if transformation is neccessary
+    // decide if transformation is necessary
     sal_Bool bTransformationIsNeccessary(fTRShear != 0.0 || fTRRotate != 0.0);
 
     if(bTransformationIsNeccessary)
@@ -644,7 +644,7 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
 
-        // #89764# if export of position is supressed for group shape,
+        // #89764# if export of position is suppressed for group shape,
         // positions of contained objects should be written relative to
         // the upper left edge of the group.
         awt::Point aUpperLeft;
@@ -1603,7 +1603,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
                 if ( bInternal )
                 {
-                    // OOo internal links have no storage persistance, URL is stored in the XML file
+                    // OOo internal links have no storage persistence, URL is stored in the XML file
                     // the result LinkURL is empty in case the object is not a link
                     xPropSet->getPropertyValue( OUString::createFromAscii( "LinkURL" ) ) >>= sURL;
                 }

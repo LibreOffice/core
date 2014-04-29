@@ -1470,7 +1470,7 @@ installer::ziplist::remove_ending_separator($includepatharrayref);
 
 ##############################################
 # Collecting all files from all include
-# pathes in global hashes.
+# paths in global hashes.
 ##############################################
 
 installer::worker::collect_all_files_from_includepathes($includepatharrayref);
@@ -1954,7 +1954,7 @@ for (;1;last)
     # There are two ways for a directory to be included into the epm directory list:
     # 1. Looking for all destination paths in the files array
     # 2. Looking for directories with CREATE flag in the directory array
-    # Advantage: Many pathes are hidden in zip files, they are not defined in the setup script.
+    # Advantage: Many paths are hidden in zip files, they are not defined in the setup script.
     # It will be possible, that in the setup script only those directoies have to be defined,
     # that have a CREATE flag. All other directories are created, if they contain at least one file.
 

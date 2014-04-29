@@ -49,7 +49,7 @@
 struct ImplJobSetup
 {
     sal_uInt16          mnRefCount;         // RefCount (only independ data)
-    sal_uInt16          mnSystem;           // Sytem - JOBSETUP_SYSTEM_xxxx
+    sal_uInt16          mnSystem;           // System - JOBSETUP_SYSTEM_xxxx
     String          maPrinterName;      // Printer-Name
     String          maDriver;           // Driver-Name
     Orientation     meOrientation;      // Orientation

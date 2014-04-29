@@ -320,7 +320,7 @@ void SwRTFParser::SetFlysInDoc()
             {
                 // Take care for table nodes
                 pNd = pNd->GetNodes()[ pNd->GetIndex() - 2 ]->GetTableNode();
-                if( pNd ) // if the table starts imediately before aRg -> expand aRg
+                if( pNd ) // if the table starts immediately before aRg -> expand aRg
                     aRg.aStart = *pNd;
 
                 if( bMakeEmptySection )
@@ -405,7 +405,7 @@ void SwRTFParser::SetFlysInDoc()
 
                 // THIS >>>>>
         // if the section only contains one Node and this has a
-        // border or backgorund, then put it to the frame
+        // border or background, then put it to the frame
         // Not in our own RTF-Format!
                 // <<<<< DOES NOT MAKE SENSE TO ME (flr)
         // #102781#. Added support for transparent frames.
@@ -534,7 +534,7 @@ void SwRTFParser::SetFlysInDoc()
     aFlyArr.Remove(0, aFlyArr.Count());
 }
 
-// clips the text box to the min or max position if it is outside our min or max boundry
+// clips the text box to the min or max position if it is outside our min or max boundary
 long SwRTFParser::GetSafePos(long nPos)
 {
     if(nPos > SHRT_MAX)

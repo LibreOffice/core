@@ -362,7 +362,7 @@ char *macxp_tempnam( const char *tmpdir, const char *prefix );
 #elif defined _BIG_ENDIAN_OO
 #   define _OSL_LITENDIAN
 #else
-#   error undetermined endianess
+#   error undetermined endianness
 #endif
 #else
 #if defined _LITTLE_ENDIAN
@@ -370,7 +370,7 @@ char *macxp_tempnam( const char *tmpdir, const char *prefix );
 #elif defined _BIG_ENDIAN
 #   define _OSL_LITENDIAN
 #else
-#   error undetermined endianess
+#   error undetermined endianness
 #endif
 #endif
 

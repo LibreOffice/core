@@ -47,7 +47,7 @@ sub usage
 --------------------------------------------------------------
 $par2script::globals::prog
 The following parameter are needed:
--i: include pathes, comma separated list
+-i: include paths, comma separated list
 -o: setup script file name
 -v: writing logfile.txt (optional)
 \@\@list: list of all par files
@@ -101,7 +101,7 @@ sub control_parameter
     if ($par2script::globals::includepathlist eq "")
     {
         print "\n************************************************\n";
-        print "Error: Include pathes not set not set (-i)!";
+        print "Error: Include paths not set not set (-i)!";
         print "\n************************************************\n";
         usage();
         exit(-1);

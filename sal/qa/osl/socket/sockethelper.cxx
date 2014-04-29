@@ -283,7 +283,7 @@ sal_Bool ifIpv4is( const ::rtl::ByteSequence Ipaddr, sal_Int8 seq1, sal_Int8 seq
     return sal_False;
 }
 
-/** if the IP or hostname is availble( alive )
+/** if the IP or hostname is available( alive )
 */
 /*sal_Bool ifAvailable( const char *  stringAddrOrHostName )
 {

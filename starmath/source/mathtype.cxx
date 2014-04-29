@@ -723,7 +723,7 @@ int MathType::Parse(SotStorage *pStor)
 #endif
 
     int nRet = HandleRecords();
-    //little crude hack to close ocassionally open expressions
+    //little crude hack to close occasionally open expressions
     //a sophisticated system to determine what expressions are
     //opened is required, but this is as much work as rewriting
     //starmaths internals.
@@ -1827,7 +1827,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                         //symbols that follow some of these
                                         //records. Foo Data.
 
-                        /*In matrices and piles we cannot seperate equation
+                        /*In matrices and piles we cannot separate equation
                          *lines with the newline keyword*/
                         if (nMatrixCols==0)
                             newline++;
@@ -2214,7 +2214,7 @@ int MathType::StartTemplate(sal_uInt16 nSelector,sal_uInt16 nVariation)
     //theres just no way we can now handle any character
     //attributes (from mathtypes perspective) centered
     //over an expression but above template attribute
-    //such as widevec and similiar constructs
+    //such as widevec and similar constructs
     //we have to drop them
     nPendingAttributes=0;
     return nOldPending;
@@ -3357,7 +3357,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
             //theres just no way we can now handle any character
             //attributes (from mathtypes perspective) centered
             //over an expression but above template attributes
-            //such as widevec and similiar constructs
+            //such as widevec and similar constructs
             //we have to drop them
             nOldPending = StartTemplate(0x2f,0x01);
             break;

@@ -484,7 +484,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
         SfxPrinter* m_pPrinter;
         /// this describes the target location for the printed temp file
         String m_sTargetURL;
-        /// it holds the temp file alive, till the print job will finish and remove it from disk automaticly if the object die
+        /// it holds the temp file alive, till the print job will finish and remove it from disk automatically if the object die
         ::utl::TempFile* m_pTempFile;
 
     public:
@@ -510,11 +510,11 @@ class ImplUCBPrintWatcher : public ::osl::Thread
             }
             /* } SAFE */
 
-            // lock for further using of our member isn't neccessary - because
+            // lock for further using of our member isn't necessary - because
             // we truns alone by defenition. Nobody join for us nor use us ...
             ImplUCBPrintWatcher::moveAndDeleteTemp(&m_pTempFile,m_sTargetURL);
 
-            // finishing of this run() method will call onTerminate() automaticly
+            // finishing of this run() method will call onTerminate() automatically
             // kill this thread there!
         }
 
@@ -526,7 +526,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
         }
 
         /* static helper to move the temp. file to the target location by using the ucb
-           It's static to be useable from outside too. So it's not realy neccessary to start
+           It's static to be useable from outside too. So it's not really necessary to start
            the thread, if finishing of the job was detected outside this thread.
            But it must be called without using a corresponding thread for the given parameter!
          */
@@ -598,7 +598,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     // by executing the slot. Because if it is a ucb relevant URL we must wait for
     // finishing the print job and move the temporary local file by using the ucb
     // to the right location. But in case of no file name is given or it is already
-    // a local one we can supress this special handling. Because then vcl makes all
+    // a local one we can suppress this special handling. Because then vcl makes all
     // right for us.
     String sUcbUrl;
     ::utl::TempFile* pUCBPrintTempFile = NULL;
@@ -635,7 +635,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // reasons. Otherwhise we break to much external code ...
                 // We try to convert it to a file URL. If its possible
                 // we put the system path to the item set and let vcl work with it.
-                // No ucb or thread will be neccessary then. In case it couldnt be
+                // No ucb or thread will be necessary then. In case it couldn't be
                 // converted its not an URL nor a system path. Then we can't accept
                 // this parameter and have to throw an exception.
                 ::rtl::OUString sSystemPath(sTemp);
@@ -670,7 +670,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // it's an ucb target. So we must use a temp. file for vcl
                 // and move it after printing by using the ucb.
                 // Create a temp file on the heap (because it must delete the
-                // real file on disk automaticly if it die - bt we have to share it with
+                // real file on disk automatically if it die - bt we have to share it with
                 // some other sources ... e.g. the ImplUCBPrintWatcher).
                 // And we put the name of this temp file to the descriptor instead
                 // of the URL. The URL we save for later using seperatly.
@@ -763,11 +763,11 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
     // Ok - may be execution before has finished (or started!) printing.
     // And may it was a printing to a file.
-    // Now we have to check if we can move the file (if neccessary) via ucb to his right location.
+    // Now we have to check if we can move the file (if necessary) via ucb to his right location.
     // Cases:
     //  a) printing finished                        => move the file directly and forget the watcher thread
     //  b) printing is asynchron and runs currently => start watcher thread and exit this method
-    //                                                 This thread make all neccessary things by itself.
+    //                                                 This thread make all necessary things by itself.
     if (pUCBPrintTempFile!=NULL)
     {
         // a)
@@ -778,7 +778,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         else
         {
             // Note: we create(d) some ressource on the heap. (thread and tep file)
-            // They will be delected by the thread automaticly if he finish his run() method.
+            // They will be delected by the thread automatically if he finish his run() method.
             ImplUCBPrintWatcher* pWatcher = new ImplUCBPrintWatcher( pPrinter, pUCBPrintTempFile, sUcbUrl );
             pWatcher->create();
         }

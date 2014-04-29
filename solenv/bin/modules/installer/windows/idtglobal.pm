@@ -2130,7 +2130,7 @@ sub get_customaction_position
 
 ##########################################################################
 # Setting the position of CustomActions in sequence tables.
-# Replacing all occurences of "POSITIONTEMPLATE_"
+# Replacing all occurrences of "POSITIONTEMPLATE_"
 ##########################################################################
 
 sub set_positions_in_table
@@ -2140,7 +2140,7 @@ sub set_positions_in_table
     $installer::logger::Lang->print("\n");
     $installer::logger::Lang->printf("Setting positions in table \"%s\".\n", $tablename);
 
-    # Step 1: Resolving all occurences of "POSITIONTEMPLATE_end"
+    # Step 1: Resolving all occurrences of "POSITIONTEMPLATE_end"
 
     my $lastposition = get_last_position_in_sequencetable($sequencetable);
 
@@ -2156,9 +2156,9 @@ sub set_positions_in_table
         }
     }
 
-    # Step 2: Resolving all occurences of "POSITIONTEMPLATE_abc" or "POSITIONTEMPLATE_behind_abc"
+    # Step 2: Resolving all occurrences of "POSITIONTEMPLATE_abc" or "POSITIONTEMPLATE_behind_abc"
     # where abc is the name of the reference Custom Action.
-    # This has to be done, until there is no more occurence of POSITIONTEMPLATE (success)
+    # This has to be done, until there is no more occurrence of POSITIONTEMPLATE (success)
     # or there is no replacement in one circle (failure).
 
     my $template_exists = 0;
@@ -2213,7 +2213,7 @@ sub set_positions_in_table
         }
     } while (( $template_exists ) && ( $template_replaced ));
 
-    # An error occured, because templates still exist, but could not be replaced.
+    # An error occurred, because templates still exist, but could not be replaced.
     # Reason:
     # 1. Wrong name of CustomAction in scp2 (typo?)
     # 2. Circular dependencies of CustomActions (A after B and B after A)

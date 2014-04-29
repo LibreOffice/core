@@ -64,7 +64,7 @@ typedef sal_uInt32 oslProcessExitCode;
 typedef enum {
     osl_Process_E_None,                 /* no error */
     osl_Process_E_NotFound,             /* image not found */
-    osl_Process_E_TimedOut,             /* timout occured */
+    osl_Process_E_TimedOut,             /* timout occurred */
     osl_Process_E_NoPermission,         /* permission denied */
     osl_Process_E_Unknown,              /* unknown error */
     osl_Process_E_InvalidError,         /* unmapped error */
@@ -138,7 +138,7 @@ typedef void* oslProcess;
     the process will be started in the context of the current user.
 
     @param ustrDirectory
-    [in] The file URL of the working directory of the new proces. If the specified directory
+    [in] The file URL of the working directory of the new process. If the specified directory
     does not exist or is inaccessible the working directory of the newly created process
     is undefined. If this parameter is NULL or the caller provides an empty string the
     new process will have the same current working directory as the calling process.
@@ -153,7 +153,7 @@ typedef void* oslProcess;
     [in] The number of environment variables to set.
 
     @param pProcess
-    [out] Pointer to a oslProcess variable, wich receives the handle of the newly created process.
+    [out] Pointer to a oslProcess variable, which receives the handle of the newly created process.
     This parameter must not be NULL.
 
     @return
@@ -208,7 +208,7 @@ oslProcessError SAL_CALL osl_executeProcess(
     the process will be started in the context of the current user.
 
     @param ustrDirectory
-    [in] The file URL of the working directory of the new proces. If the specified directory
+    [in] The file URL of the working directory of the new process. If the specified directory
     does not exist or is inaccessible the working directory of the newly created process
     is undefined. If this parameter is NULL or the caller provides an empty string the
     new process will have the same current working directory as the calling process.
@@ -223,7 +223,7 @@ oslProcessError SAL_CALL osl_executeProcess(
     [in] The number of environment variables to set.
 
     @param pProcess
-    [out] Pointer to a oslProcess variable, wich receives the handle of the newly created process.
+    [out] Pointer to a oslProcess variable, which receives the handle of the newly created process.
     This parameter must not be NULL.
 
     @param pChildInputWrite
@@ -318,7 +318,7 @@ oslProcessError SAL_CALL osl_joinProcess(oslProcess Process);
     @return
     osl_Process_E_None on success
     osl_Process_E_TimedOut waiting for the child process timed out
-    osl_Process_E_Unknown an error occured or the parameter are invalid
+    osl_Process_E_Unknown an error occurred or the parameter are invalid
 
     @see osl_executeProcess
 */
@@ -378,13 +378,13 @@ oslProcessError SAL_CALL osl_getCommandArg(sal_uInt32 nArg, rtl_uString **strCom
 */
 void SAL_CALL osl_setCommandArgs (int argc, char **argv);
 
-/** Get the value of one enviroment variable.
+/** Get the value of one environment variable.
     @param strVar [in] denotes the name of the variable to get.
     @param strValue [out] string that receives the value of environment variable.
 */
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *strVar, rtl_uString **strValue);
 
-/** Set the value of one enviroment variable.
+/** Set the value of one environment variable.
     @param strVar [in] denotes the name of the variable to set.
     @param strValue [in] string of the new value of environment variable.
 
@@ -392,7 +392,7 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *strVar, rtl_uString **s
 */
 oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *strVar, rtl_uString *strValue);
 
-/** Unsets the value of one enviroment variable.
+/** Unsets the value of one environment variable.
     @param strVar [in] denotes the name of the variable to unset.
 
     @since UDK 3.2.13

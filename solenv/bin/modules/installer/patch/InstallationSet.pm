@@ -475,7 +475,7 @@ sub Download ($$$)
         if ( ! defined $digest
             || $digest->hexdigest() eq $checksum_value)
         {
-            $installer::logger::Info->print("download was successfull\n");
+            $installer::logger::Info->print("download was successful\n");
             if ( ! rename($temporary_filename, $filename))
             {
                 installer::logger::PrintError("can not rename '%s' to '%s'\n", $temporary_filename, $filename);

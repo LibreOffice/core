@@ -70,7 +70,7 @@ public:
         ByteString                   aLangName;         // language name
         ByteString                   aOutputRc;         // target file
         ByteString                   aLangSearchPath;   // language specific search path
-        ::std::list< ByteString >    aSysSearchDirs;    // pathes to search for images
+        ::std::list< ByteString >    aSysSearchDirs;    // paths to search for images
 
         OutputFile() {}
     };

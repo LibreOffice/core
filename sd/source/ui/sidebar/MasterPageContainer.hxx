@@ -51,7 +51,7 @@ class MasterPageDescriptor;
     controls.  It uses internally a singleton implementation object.
     Therefore, all MasterPageContainer object operator on the same set of
     master pages.  Each MasterPageContainer, however, has its own
-    PreviewSize value and thus can independantly switch between large and
+    PreviewSize value and thus can independently switch between large and
     small previews.
 
     The container maintains its own document to store master page objects.
@@ -60,7 +60,7 @@ class MasterPageDescriptor;
     name, and, if available, the page object.
 
     Entries are accessed via a Token, which is mostly a numerical index but
-    whose values do not neccessarily have to be consecutive.
+    whose values do not necessarily have to be consecutive.
 */
 class MasterPageContainer
 {

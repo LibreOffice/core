@@ -358,7 +358,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
     /**
      * itemsCache is a Map containing all agenda item. These are object which
-     * "write themselfs" to the table, given a table cursor.
+     * "write themselves" to the table, given a table cursor.
      * A cache is used in order to reuse the objects, instead of recreate them.
      * This method fills the cache will all items objects (names and headings).
      */
@@ -483,7 +483,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
     }
 
     /**
-     * locates the titles (name, location, date, time) and saves a reference to thier Text ranges.
+     * locates the titles (name, location, date, time) and saves a reference to their Text ranges.
      *
      */
     private void initializeTitles()
@@ -1019,7 +1019,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                 String cellName = PropertyNames.EMPTY_STRING;
 
                 /* now go through all items that belong to this
-                 * table. Check each one agains the model. If it should
+                 * table. Check each one against the model. If it should
                  * be display, call it's write method.
                  * All items are of type AgendaItem which means they write
                  * two cells to the table: a title (text) and a placeholder.

@@ -80,7 +80,7 @@ $(MISC)/$(TARGET)/usr/share/applications/ :
 # the entries like this
 #       ./              <- very important
 #       directory/file
-# the follwoing does not work (no description found then):
+# the following does not work (no description found then):
 #       ./
 #       ./directory/file
 # and this doesn't work either (broken file-list, package cannot be removed)

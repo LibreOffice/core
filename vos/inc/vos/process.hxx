@@ -86,7 +86,7 @@ public:
 /** startup child processes.
     @see OStartupInfo
     Used for starting an monitoring child processes with special features:
-    <ul><li>setting enviroments,
+    <ul><li>setting environments,
     <li>setting working directories,
     <li>setting user rights and security,
     <li>providing ioresources like file descriptors and sockets.</ul>
@@ -116,7 +116,7 @@ public:
     enum TProcessError {
         E_None         = osl_Process_E_None,            /* no error */
         E_NotFound     = osl_Process_E_NotFound,        /* image not found */
-        E_TimedOut     = osl_Process_E_TimedOut,        /* timout occured */
+        E_TimedOut     = osl_Process_E_TimedOut,        /* timout occurred */
         E_NoPermission = osl_Process_E_NoPermission,    /* permission denied */
         E_Unknown      = osl_Process_E_Unknown,         /* unknown error */
         E_InvalidError = osl_Process_E_InvalidError     /* unmapped error */
@@ -171,7 +171,7 @@ public:
         If there are any ioresources provided from the calling process, this
         function returns only, if the child process calls OStartupInfo::acceptIOResource().
         @param Options [in] describes the execution mode.
-        @return only not eNONE, if too much enviroments are added.
+        @return only not eNONE, if too much environments are added.
         @see OStartupInfo::acceptIOResource
     */
     TProcessError SAL_CALL execute(TProcessOption Options,
@@ -186,7 +186,7 @@ public:
         function returns only, if the child process calls OStartupInfo::acceptIOResource().
         @param Options [in] describes the execution mode.
         @param Security [in] is a given security object for one logged in user.
-        @return eNONE, if the proccess could be executed, otherwise an errorcode.
+        @return eNONE, if the process could be executed, otherwise an errorcode.
         @see OStartupInfo::acceptIOResource
     */
     TProcessError SAL_CALL execute(TProcessOption Options,
@@ -228,7 +228,7 @@ public:
     enum TStartupError {
         E_None         = osl_Process_E_None,            /* no error */
         E_NotFound     = osl_Process_E_NotFound,        /* image not found */
-        E_TimedOut     = osl_Process_E_TimedOut,        /* timout occured */
+        E_TimedOut     = osl_Process_E_TimedOut,        /* timout occurred */
         E_NoPermission = osl_Process_E_NoPermission,    /* permission denied */
         E_Unknown      = osl_Process_E_Unknown,         /* unknown error */
         E_InvalidError = osl_Process_E_InvalidError     /* unmapped error */
@@ -256,11 +256,11 @@ public:
     TStartupError SAL_CALL getExecutableFile(::rtl::OUString& strImageName)
         const;
 
-    /** Get the value of one enviroment variable.
+    /** Get the value of one environment variable.
         @param Name [in] denotes the name of the variable to get.
         @param Buffer [out] is the buffer where the value of this variable is returned.
         @param Max [in] is the size of this buffer.
-        @return eNONE, if the variable exist in the enviroment, otherwise False.
+        @return eNONE, if the variable exist in the environment, otherwise False.
     */
     TStartupError SAL_CALL getEnvironment(const ::rtl::OUString& strVar, ::rtl::OUString& strValue);
 };

@@ -222,7 +222,7 @@ STDMETHODIMP CXMergeFilter::NextConvertFile(int nConversion, CFF_CONVERTINFO *pc
 
     /*
      * First step: Locate Java and establish the classpath.  If these can't
-     *             be done succesfully, then avoid all further processing.
+     *             be done successfully, then avoid all further processing.
      */
 
     // Locate Java Home if it hasn't already been done.

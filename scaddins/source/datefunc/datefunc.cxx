@@ -707,14 +707,14 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
  * The International Standard IS-8601 has decreed that Monday
  * shall be the first day of the week.
  *
- * A week that lies partly in one year and partly in annother
+ * A week that lies partly in one year and partly in another
  * is assigned a number in the the year in which most of its days lie.
  *
  * That means that week 1 of any year is the week that contains the 4. January
  *
  * The internal representation of a Date used in the Addin is the number of days based on 01/01/0001
  *
- * A WeekDay can be then calculated by substracting 1 and calculating the rest of
+ * A WeekDay can be then calculated by subtracting 1 and calculating the rest of
  * a division by 7, which gives a 0 - 6 value for Monday - Sunday
  *
  * Using the 4. January rule explained above the formula
@@ -724,7 +724,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
  * calculates a number between 0-53 for each day which is in the same year as nJan4
  * where 0 means that this week belonged to the year before.
  *
- * If a day in the same or annother year is used in this formula this calculates
+ * If a day in the same or another year is used in this formula this calculates
  * an calendar week offset from a given 4. January
  *
  *  nWeek2 = ( nDays2 - nJan4 + ( (nJan4-1) % 7 ) ) / 7 + 1;
@@ -911,7 +911,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDaysInYear(
  * The International Standard IS-8601 has decreed that Monday
  * shall be the first day of the week.
  *
- * A WeekDay can be calculated by substracting 1 and calculating the rest of
+ * A WeekDay can be calculated by subtracting 1 and calculating the rest of
  * a division by 7 from the internal date represention
  * which gives a 0 - 6 value for Monday - Sunday
  *

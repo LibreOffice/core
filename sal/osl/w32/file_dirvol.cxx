@@ -515,7 +515,7 @@ static oslFileError osl_openLocalRoot(
         ZeroMemory( pDirImpl, sizeof(Directory_Impl) );
         rtl_uString_newFromString( &pDirImpl->m_pDirectoryPath, strSysPath );
 
-        /* Append backslash if neccessary */
+        /* Append backslash if necessary */
 
         /* @@@ToDo
            use function ensure backslash
@@ -580,7 +580,7 @@ static oslFileError SAL_CALL osl_openFileDirectory(
     ZeroMemory( pDirImpl, sizeof(Directory_Impl) );
     rtl_uString_newFromString( &pDirImpl->m_pDirectoryPath, strDirectoryPath );
 
-    /* Append backslash if neccessary */
+    /* Append backslash if necessary */
 
     /* @@@ToDo
        use function ensure backslash

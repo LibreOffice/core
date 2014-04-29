@@ -67,7 +67,7 @@ namespace myImplHelpers
         /*
         #98506#
         The normal case for reexporting word docs is to have dynamic spacing,
-        as this is word's only setting, and the reason for the existance of the
+        as this is word's only setting, and the reason for the existence of the
         dynamic spacing features. If we have dynamic spacing active then we can
         add its spacing to the value height of the h/f and get the wanted total
         size for word.
@@ -116,7 +116,7 @@ namespace myImplHelpers
     /*
      SwTxtFmtColl and SwCharFmt are quite distinct types and how they are
      gotten is also distinct, but the algorithm to match word's eqivalents into
-     them is the same, so we put the different stuff into two seperate helper
+     them is the same, so we put the different stuff into two separate helper
      implementations and a core template that uses the helpers that uses the
      same algorithm to do the work. We'll make the helpers specializations of a
      non existing template so I can let the compiler figure out the right one
@@ -615,7 +615,7 @@ namespace sw
 
             if (bSplitOnCharSet)
             {
-                //Split unicode text into plausable 8bit ranges for export to
+                //Split unicode text into plausible 8bit ranges for export to
                 //older non unicode aware format
                 xub_StrLen nLen = rTxt.Len();
                 xub_StrLen nPos = 0;

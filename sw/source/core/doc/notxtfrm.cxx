@@ -909,7 +909,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     {
         //#i78025# charts own borders are not completely visible
         //the above pixel correction is not correct - at least not for charts
-        //so a different pixel correction is choosen here
+        //so a different pixel correction is chosen here
         //this might be a good idea for all other OLE objects also,
         //but as I cannot oversee the consequences I fix it only for charts for now
         lcl_correctlyAlignRect( aAlignedGrfArea, rGrfArea, pOut );

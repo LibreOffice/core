@@ -2278,7 +2278,7 @@ void Content::transfer(
         // Unreachable
     }
 
-    // Announce transfered content in its new folder.
+    // Announce transferred content in its new folder.
     xTarget->inserted();
 
     /////////////////////////////////////////////////////////////////////////

@@ -299,10 +299,10 @@ sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
             uno::Reference< embed::XStorage > xTempStorage =
                 ::comphelper::OStorageHelper::GetStorageFromURL( aTempURL, embed::ElementModes::READWRITE );
 
-            // the password will be transfered from the xStorage to xTempStorage by storage implemetation
+            // the password will be transferred from the xStorage to xTempStorage by storage implemetation
             xStorage->copyToStorage( xTempStorage );
 
-            // the temporary storage was commited by the previous method and it will die by refcount
+            // the temporary storage was committed by the previous method and it will die by refcount
         }
         catch ( uno::Exception& )
         {
@@ -1264,9 +1264,9 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 // The active storage must be switched. The simple saving is not enough.
                 // The problem is that the target medium contains target MediaDescriptor.
 
-                    // In future the switch of the persistance could be done on stream level:
+                    // In future the switch of the persistence could be done on stream level:
                     // a new wrapper service will be implemented that allows to exchange
-                    // persistance on the fly. So the real persistance will be set
+                    // persistence on the fly. So the real persistence will be set
                     // to that stream only after successful commit of the storage.
                     // TODO/LATER:
                     // create wrapper stream based on the URL
@@ -1275,7 +1275,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     // commit the new storage
                     // call saveCompleted based with this new storage ( get rid of old storage and "frees" URL )
                     // commit the wrapper stream ( the stream will connect the URL only on commit, after that it will hold it )
-                    // if the last step is failed the stream should stay to be transacted and should be commited on any flush
+                    // if the last step is failed the stream should stay to be transacted and should be committed on any flush
                     // so we can forget the stream in any way and the next storage commit will flush it
 
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Save: Own to Own" ) ) );
@@ -1640,7 +1640,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 {
                     pMedium->Close();
 
-                    // target medium is still not commited, it should not be closed
+                    // target medium is still not committed, it should not be closed
                     // commit the package storage and close it, but leave the streams open
                     rMedium.StorageCommit_Impl();
                     rMedium.CloseStorage();
@@ -2025,7 +2025,7 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
                 }
                 catch( uno::Exception& )
                 {
-                    DBG_ERROR( "The strotage was not commited on DoSaveAs!\n" );
+                    DBG_ERROR( "The strotage was not committed on DoSaveAs!\n" );
                 }
             }
         }
@@ -2949,7 +2949,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         DBG_ERROR("Salvage item present in Itemset, check the parameters!");
 #endif
 
-    // should be unneccessary - too hot to handle!
+    // should be unnecessary - too hot to handle!
     pMergedParams->ClearItem( SID_DOC_SALVAGE );
 
     // take over the new merged itemset
@@ -3537,7 +3537,7 @@ sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Cant check storage consistency!\n" );
+        OSL_ENSURE( sal_False, "Can't check storage consistency!\n" );
     }
 
     return sal_True;

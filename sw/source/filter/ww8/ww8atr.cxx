@@ -1128,7 +1128,7 @@ void WW8AttributeOutput::CharFontCJK( const SvxFontItem& rFont )
 
 void WW8AttributeOutput::CharWeightCTL( const SvxWeightItem& rWeight )
 {
-    //Can only export in 8+, in 7- export as normal varient and expect that
+    //Can only export in 8+, in 7- export as normal variant and expect that
     //upperlevel code has blocked exporting clobbering attributes
     if (m_rWW8Export.bWrtWW8)
     {
@@ -1142,7 +1142,7 @@ void WW8AttributeOutput::CharWeightCTL( const SvxWeightItem& rWeight )
 
 void WW8AttributeOutput::CharPostureCTL( const SvxPostureItem& rPosture )
 {
-    // Can only export in 8+, in 7- export as normal varient and expect that
+    // Can only export in 8+, in 7- export as normal variant and expect that
     // upperlevel code has blocked exporting clobbering attributes
     if (m_rWW8Export.bWrtWW8)
     {
@@ -3325,7 +3325,7 @@ void WW8AttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
         sal_Unicode cEnd = rTwoLines.GetEndBracket();
 
         /*
-        As per usual we have problems. We can have seperate left and right brackets
+        As per usual we have problems. We can have separate left and right brackets
         in OOo, it doesn't appear that you can in word. Also in word there appear
         to only be a limited number of possibilities, we can use pretty much
         anything.

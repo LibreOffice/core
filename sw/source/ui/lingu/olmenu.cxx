@@ -740,7 +740,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             String aTmp( aSuggestions[ nAltIdx ] );
             String aOrig( bGrammarResults ? OUString() : xSpellAlt->getWord() );
 
-            // if orginal word has a trailing . (likely the end of a sentence)
+            // if original word has a trailing . (likely the end of a sentence)
             // and the replacement text hasn't, then add it to the replacement
             if (aTmp.Len() && aOrig.Len() &&
                 '.' == aOrig.GetChar( aOrig.Len() - 1) && /* !IsAlphaNumeric ??*/

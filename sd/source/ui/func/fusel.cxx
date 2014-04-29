@@ -114,7 +114,7 @@ FuSelection::FuSelection (
       nEditMode(SID_BEZIER_MOVE),
       pWaterCanCandidate(NULL)
   //Solution: Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
-  //and SHIFT+ENTER key to decide the postion and draw the new insert point
+  //and SHIFT+ENTER key to decide the position and draw the new insert point
     ,bBeginInsertPoint(sal_False),
       oldPoint(0,0)
   ,bMovedToCenterPoint(sal_False)
@@ -795,7 +795,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             }
             else if (pWaterCanCandidate != NULL)
             {
-                // Is the candiate object still under the mouse?
+                // Is the candidate object still under the mouse?
                 if (pickObject (aPnt) == pWaterCanCandidate)
                 {
                     SdStyleSheetPool* pPool = static_cast<SdStyleSheetPool*>(

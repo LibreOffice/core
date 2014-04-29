@@ -37,7 +37,7 @@
         </name>
         <description>
         This component implements a Content Provider for the Universal Content Broker.
-        It provides access to the hierachical structure of the documents that are active
+        It provides access to the hierarchical structure of the documents that are active
         in a running OpenOffice.org process.
         </description>
         <loader-name>

@@ -58,7 +58,7 @@ using namespace ::com::sun::star::io;
 
 namespace sax_expatwrap {
 
-// Useful macros for correct String conversion depending on the choosen expat-mode
+// Useful macros for correct String conversion depending on the chosen expat-mode
 #ifdef XML_UNICODE
 OUString XmlNChar2OUString( const XML_Char *p , int nLen )
 {

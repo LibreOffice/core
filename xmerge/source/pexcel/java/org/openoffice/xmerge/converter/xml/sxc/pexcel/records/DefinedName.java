@@ -192,7 +192,7 @@ public class DefinedName implements BIFFRecord {
      * @return the <code>String</code> containing the definition
      */
     private String getDefinition() {
-        // pexcel sometimes creates Name definition with no defintion, bug??
+        // pexcel sometimes creates Name definition with no definition, bug??
         if(EndianConverter.readShort(cce)!=0) {
             definition = fh.convertPXLToCalc(rgce);
             definition = definition.substring(1);   // remove the '='
@@ -202,7 +202,7 @@ public class DefinedName implements BIFFRecord {
     }
 
     /**
-     * Returns the defintion
+     * Returns the definition
      *
      * @return the <code>String</code> containing the definition
      */
@@ -211,7 +211,7 @@ public class DefinedName implements BIFFRecord {
         return fh.isRangeType();
     }
     /**
-     * Returns the defintion
+     * Returns the definition
      *
      * @return the <code>String</code> containing the definition
      */

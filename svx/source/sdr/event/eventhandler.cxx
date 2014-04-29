@@ -25,7 +25,7 @@
 #include "precompiled_svx.hxx"
 #include <svx/sdr/event/eventhandler.hxx>
 
-// for SOLARIS compiler include of algorithm part of _STL is necesary to
+// for SOLARIS compiler include of algorithm part of _STL is necessary to
 // get access to basic algos like ::std::find
 #include <algorithm>
 #include <tools/debug.hxx>

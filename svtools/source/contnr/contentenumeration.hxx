@@ -48,7 +48,7 @@ namespace svt
     {
     private:
         ::rtl::OUString maFilename;     // only filename in upper case - for compare purposes
-        ::rtl::OUString maTitle;        //  -> be carefull when changing maTitle to update maFilename only when new
+        ::rtl::OUString maTitle;        //  -> be careful when changing maTitle to update maFilename only when new
         ::rtl::OUString maLowerTitle;
 
 
@@ -135,8 +135,8 @@ namespace svt
     //====================================================================
     enum EnumerationResult
     {
-        SUCCESS,    /// the enumration was successfull
-        ERROR,      /// the enumration was unsuccessfull
+        SUCCESS,    /// the enumration was successful
+        ERROR,      /// the enumration was unsuccessful
         RUNNING     /// the enumeration is still running, and the maximum wait time has passed
     };
 

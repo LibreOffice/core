@@ -215,7 +215,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
                     pTmpPrev->Move( rInf );
                     rInf.SetLast( pTmpPrev );
                     pTmpPrev = pTmpPrev->GetPortion();
-                    ASSERT( pTmpPrev, "UnderFlow: Loosing control!" );
+                    ASSERT( pTmpPrev, "UnderFlow: Losing control!" );
                 };
             }
             pPor = pPor->GetPortion();

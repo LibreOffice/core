@@ -30,7 +30,7 @@
 /* DBCS to Unicode conversion routine use a lead table for the first byte, */
 /* where we determine the trail table or for single byte chars the unicode */
 /* value. We have for all lead byte a separate table, because we can */
-/* then share many tables for diffrent charset encodings. */
+/* then share many tables for different charset encodings. */
 
 /* ======================================================================= */
 

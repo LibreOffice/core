@@ -590,7 +590,7 @@ sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( String & rString,
     {
         sal_uInt32 nOrig = GetEntryKey( rString, eSysLnge );
         if (nOrig == NUMBERFORMAT_ENTRY_NOT_FOUND)
-            nKey = nOrig;   // none avaliable, maybe user-defined
+            nKey = nOrig;   // none available, maybe user-defined
         else
             nKey = GetFormatForLanguageIfBuiltIn( nOrig, SvtSysLocale().GetLanguage() );
 

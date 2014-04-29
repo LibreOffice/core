@@ -227,7 +227,7 @@ namespace chelp {
 
 
         /**
-         *  Returns the cascading stlye sheet used to format the HTML-output.
+         *  Returns the cascading style sheet used to format the HTML-output.
          *  First try is language directory, second try is main installation directory.
          */
 

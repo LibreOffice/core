@@ -27,7 +27,7 @@
  * legacy AddIn interface. The interface is still supported, but deprecated.
  * The strings here were displayed in the function wizard. To prevent
  * duplicated and useless translation effort (functions and strings are also
- * part of the new scaddin module), the strings here are now layed out as fixed
+ * part of the new scaddin module), the strings here are now laid out as fixed
  * untranslatable strings. The entire mechanism with the ../util/cl2c.pl perl
  * script merging the raw .cl and the .src during build time didn't work
  * anymore anyway, since we switched from MS-LCIDs / telephone area codes to

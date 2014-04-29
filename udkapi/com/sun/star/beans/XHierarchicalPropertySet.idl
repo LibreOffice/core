@@ -70,7 +70,7 @@ module com {  module sun {  module star {  module beans {
         used to access the elements of the hierarchy,
         are formed.  </p>
 
-    <p> Commonly a notation similar to filesystem pathes
+    <p> Commonly a notation similar to filesystem paths
         (separated by '/' slashes) or nested module names
         (separated by dots '.' or '::') is used.  </p>
 

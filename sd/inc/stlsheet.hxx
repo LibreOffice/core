@@ -139,7 +139,7 @@ protected:
     rtl::OUString   msApiName;
     rtl::Reference< SfxStyleSheetBasePool > mxPool;
 
-    /** boradcast helper for events */
+    /** broadcast helper for events */
     ::cppu::OBroadcastHelper mrBHelper;
 
     boost::scoped_ptr< ModifyListenerForewarder > mpModifyListenerForewarder;

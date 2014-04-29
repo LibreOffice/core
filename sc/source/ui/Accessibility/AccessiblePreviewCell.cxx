@@ -65,7 +65,7 @@ ScAccessiblePreviewCell::~ScAccessiblePreviewCell()
     {
         // increment refcount to prevent double call off dtor
         osl_incrementInterlockedCount( &m_refCount );
-        // call dispose to inform object wich have a weak reference to this object
+        // call dispose to inform object which have a weak reference to this object
         dispose();
     }
 }

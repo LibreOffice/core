@@ -3786,7 +3786,7 @@ void XclImpChChart::ReadChDataFormat( XclImpStream& rStrm )
     {
         XclImpChDataFormatRef& rxMapFmt = maDataFmts[ xDataFmt->GetPointPos() ];
         /*  Do not overwrite existing data format group, Excel always uses the
-            first data format group occuring in any CHSERIES group. */
+            first data format group occurring in any CHSERIES group. */
         if( !rxMapFmt )
             rxMapFmt = xDataFmt;
     }

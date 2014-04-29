@@ -224,7 +224,7 @@ void FormShellManager::UnregisterAtCenterPane (void)
 
 IMPL_LINK(FormShellManager, FormControlActivated, FmFormShell*, EMPTYARG)
 {
-    // The form shell has been actived.  To give it priority in reacting to
+    // The form shell has been activated.  To give it priority in reacting to
     // slot calls the form shell is moved to the top of the object bar shell
     // stack.
     ViewShell* pShell = mrBase.GetMainViewShell().get();

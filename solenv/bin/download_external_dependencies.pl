@@ -587,7 +587,7 @@ sub DownloadFile ($$$)
     close $out;
     }
 
-    # When download was successfull then check the checksum and rename the .part file
+    # When download was successful then check the checksum and rename the .part file
     # into the actual extension name.
     if ($success)
     {

@@ -72,7 +72,7 @@ sub create_pathvariables
 }
 
 ##################################################
-# Replacing tilde in pathes, because of
+# Replacing tilde in paths, because of
 # problem with deep recursion (task 104830)
 ##################################################
 

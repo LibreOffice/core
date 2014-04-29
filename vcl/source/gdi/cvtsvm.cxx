@@ -1376,7 +1376,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             }
                 }
 
-        // cleanup push-pop stack if neccessary
+        // cleanup push-pop stack if necessary
         for( void* pLineInfo = aLIStack.Pop(); pLineInfo; pLineInfo = aLIStack.Pop() )
             delete (LineInfo*) pLineInfo;
 
@@ -1421,7 +1421,7 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
     rOStm.Seek( nActPos );
     rOStm.SetNumberFormatInt( nOldFormat );
 
-    // cleanup push-pop stack if neccessary
+    // cleanup push-pop stack if necessary
     for( void* pCol = aLineColStack.Pop(); pCol; pCol = aLineColStack.Pop() )
         delete (Color*) pCol;
 }

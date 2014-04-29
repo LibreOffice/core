@@ -90,7 +90,7 @@ sub compare_epm_content
     for ( my $i = 0; $i <= $#{$newcontent}; $i++ )
     {
         if ( ${$newcontent}[$i] =~ /^\s*$/ ) { next; } # Removing empty lines from $newcontent. Empty lines are also not included into pcf file, from where $oldcontent was read.
-        if ( ${$newcontent}[$i] =~ /^\s*f\s+/ ) { next; } # Ignoring files, they can contain temporary pathes
+        if ( ${$newcontent}[$i] =~ /^\s*f\s+/ ) { next; } # Ignoring files, they can contain temporary paths
         if (( ${$newcontent}[$i] =~ /^\s*%readme\s+/ ) || ( ${$newcontent}[$i] =~ /^\s*%license\s+/ )) { next; } # ignoring license and readme (language specific!)
         my $oneline = ${$newcontent}[$i];
         $oneline =~ s/\s*$//; # Removing line ends. Also not included in old epm file, that is read from pcf file.
@@ -308,7 +308,7 @@ sub create_pcfcontent_file
     for ( my $i = 0; $i <= $#{$epmfilecontent}; $i++ )
     {
         if ( ${$epmfilecontent}[$i] =~ /^\s*$/ ) { next; } # avoiding empty lines
-        if ( ${$epmfilecontent}[$i] =~ /^\s*f\s+/ ) { next; } # ignoring files, because they can contain temporary pathes
+        if ( ${$epmfilecontent}[$i] =~ /^\s*f\s+/ ) { next; } # ignoring files, because they can contain temporary paths
         if (( ${$epmfilecontent}[$i] =~ /^\s*%readme\s+/ ) || ( ${$epmfilecontent}[$i] =~ /^\s*%license\s+/ )) { next; } # ignoring license and readme (language specific!)
         $oneline = "EPM:\t${$epmfilecontent}[$i]";
         push(@content, $oneline);
@@ -775,7 +775,7 @@ sub package_is_up_to_date
         log_pool_info(0);
 
         # removing new package from installation set
-        if ( $newpackagepath ne "" ) { remove_package_from_installset($newpackagepath); }   # A file was copied and a problem occured with pooling
+        if ( $newpackagepath ne "" ) { remove_package_from_installset($newpackagepath); }   # A file was copied and a problem occurred with pooling
 
         $package_is_up_to_date = 4; # repeat this package
         return $package_is_up_to_date;
@@ -788,7 +788,7 @@ sub package_is_up_to_date
         log_pool_info(1);
 
         # removing new package from installation set
-        if ( $newpackagepath ne "" ) { remove_package_from_installset($newpackagepath); }   # A file was copied and a problem occured with pooling
+        if ( $newpackagepath ne "" ) { remove_package_from_installset($newpackagepath); }   # A file was copied and a problem occurred with pooling
 
         $package_is_up_to_date = 4; # repeat this package
         return $package_is_up_to_date;
@@ -946,7 +946,7 @@ sub put_content_into_pool
     }
 
     # Before the new package is renamed in the pool, it has to be checked, if this process still has the lock for this package.
-    # Check, if lock file still exists and if this process is the owner. Otherwise a pool error occured.
+    # Check, if lock file still exists and if this process is the owner. Otherwise a pool error occurred.
     if ( ! -f $installer::globals::poollockfilename )
     {
         unlink $uniquedestination;  # removing file from pool
@@ -968,7 +968,7 @@ sub put_content_into_pool
     $installer::logger::Lang->print($infoline);
 
     # Before the lock file in the pool can be removed, it has to be checked, if this process is still the owner of this lock file.
-    # Check, if lock file still exists and if this process is the owner. Otherwise a pool error occured.
+    # Check, if lock file still exists and if this process is the owner. Otherwise a pool error occurred.
     if ( ! -f $installer::globals::poollockfilename )
     {
         log_pool_info(0);
@@ -1015,7 +1015,7 @@ sub copy_package_from_pool
         $destinationfile =~ s/.tar\s*$//;
     }
 
-    # Keeping the content of @installer::globals::installsetcontent up to date (with full pathes):
+    # Keeping the content of @installer::globals::installsetcontent up to date (with full paths):
     push(@installer::globals::installsetcontent, $destinationfile);
 
     return $destinationfile;
