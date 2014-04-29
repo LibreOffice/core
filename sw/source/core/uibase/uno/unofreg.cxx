@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "SwXFilterOptions.hxx"
 #include "unofreg.hxx"
 #include <sal/types.h>
@@ -204,6 +206,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sw_component_getFactory(
                 SwXModule_createInstance,
                 SwXModule_getSupportedServiceNames() );
         }
+#if HAVE_FEATURE_DBCONNECTIVITY
         else if( SwXMailMerge_getImplementationName().equalsAsciiL(
                                                     pImplName, nImplNameLen ) )
         {
@@ -212,6 +215,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sw_component_getFactory(
                 SwXMailMerge_createInstance,
                 SwXMailMerge_getSupportedServiceNames() );
         }
+#endif
         else if( SwXFilterOptions::getImplementationName_Static().equalsAsciiL(
                                                     pImplName, nImplNameLen ) )
         {
