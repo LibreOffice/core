@@ -65,6 +65,21 @@ void EffectPropertiesContext::saveUnsupportedAttribs( const AttributeList& rAttr
     if( rAttribs.hasAttribute( XML_rad ) )
         mrEffectProperties.appendUnsupportedEffectAttrib( "rad",
                                                           makeAny( rAttribs.getInteger( XML_rad, 0 ) ) );
+    if( rAttribs.hasAttribute( XML_endA ) )
+        mrEffectProperties.appendUnsupportedEffectAttrib( "endA",
+                                                          makeAny( rAttribs.getInteger( XML_endA, 0 ) ) );
+    if( rAttribs.hasAttribute( XML_endPos ) )
+        mrEffectProperties.appendUnsupportedEffectAttrib( "endPos",
+                                                          makeAny( rAttribs.getInteger( XML_endPos, 0 ) ) );
+    if( rAttribs.hasAttribute( XML_fadeDir ) )
+        mrEffectProperties.appendUnsupportedEffectAttrib( "fadeDir",
+                                                          makeAny( rAttribs.getInteger( XML_fadeDir, 0 ) ) );
+    if( rAttribs.hasAttribute( XML_stA ) )
+        mrEffectProperties.appendUnsupportedEffectAttrib( "stA",
+                                                          makeAny( rAttribs.getInteger( XML_stA, 0 ) ) );
+    if( rAttribs.hasAttribute( XML_stPos ) )
+        mrEffectProperties.appendUnsupportedEffectAttrib( "stPos",
+                                                          makeAny( rAttribs.getInteger( XML_stPos, 0 ) ) );
 }
 
 ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -93,11 +108,14 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
         break;
         case A_TOKEN( glow ):
         case A_TOKEN( softEdge ):
+        case A_TOKEN( reflection ):
         {
             if( nElement == A_TOKEN( glow ) )
                 mrEffectProperties.msUnsupportedEffectName = "glow";
-            else
+            else if( nElement == A_TOKEN( softEdge ) )
                 mrEffectProperties.msUnsupportedEffectName = "softEdge";
+            else if( nElement == A_TOKEN( reflection ) )
+                mrEffectProperties.msUnsupportedEffectName = "reflection";
             saveUnsupportedAttribs( rAttribs );
             return new ColorContext( *this, mrEffectProperties.maShadow.moShadowColor );
         }

@@ -2101,7 +2101,8 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
     for( sal_Int32 i=0; i < aEffectProps.getLength(); ++i )
     {
         if( aEffectProps[i].Name == "outerShdw" || aEffectProps[i].Name == "innerShdw"
-                || aEffectProps[i].Name == "glow" || aEffectProps[i].Name == "softEdge" )
+                || aEffectProps[i].Name == "glow" || aEffectProps[i].Name == "softEdge"
+                || aEffectProps[i].Name == "reflection" )
         {
             // assign the proper tag and enable bContainsColor if necessary
             if( aEffectProps[i].Name == "outerShdw" )
@@ -2121,6 +2122,8 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
             }
             else if( aEffectProps[i].Name == "softEdge" )
                 nEffectToken = FSNS( XML_a, XML_softEdge );
+            else if( aEffectProps[i].Name == "reflection" )
+                nEffectToken = FSNS( XML_a, XML_reflection );
 
             // read tag attributes
             uno::Sequence< beans::PropertyValue > aOuterShdwProps;
@@ -2186,6 +2189,36 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
                     aOuterShdwAttrList->add( XML_rad, OString::number( nVal ).getStr() );
+                }
+                else if( aOuterShdwProps[j].Name == "endA" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_endA, OString::number( nVal ).getStr() );
+                }
+                else if( aOuterShdwProps[j].Name == "endPos" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_endPos, OString::number( nVal ).getStr() );
+                }
+                else if( aOuterShdwProps[j].Name == "fadeDir" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_fadeDir, OString::number( nVal ).getStr() );
+                }
+                else if( aOuterShdwProps[j].Name == "stA" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_stA, OString::number( nVal ).getStr() );
+                }
+                else if( aOuterShdwProps[j].Name == "stPos" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_stPos, OString::number( nVal ).getStr() );
                 }
             }
         }
