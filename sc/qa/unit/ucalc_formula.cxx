@@ -1511,6 +1511,29 @@ void Test::testFormulaRefUpdateInsertRows()
     if (!checkFormula(*m_pDoc, ScAddress(1,6,0), "SUM(B4:B6)"))
         CPPUNIT_FAIL("Wrong formula!");
 
+    // Clear and start over.
+    clearSheet(m_pDoc, 0);
+
+    // Set raw values in A4:A6.
+    m_pDoc->SetValue(ScAddress(0,3,0), 1.0);
+    m_pDoc->SetValue(ScAddress(0,4,0), 2.0);
+    m_pDoc->SetValue(ScAddress(0,5,0), 3.0);
+
+    // Set formula in A3 to reference A4:A6.
+    m_pDoc->SetString(ScAddress(0,2,0), "=MAX(A4:A6)");
+
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+
+    // Insert 3 rows over 2:4.  This should push A3:A6 to A6:A9.
+    rFunc.InsertCells(ScRange(0,1,0,MAXCOL,3,0), &aMark, INS_INSROWS, false, true, false);
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,5,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_MESSAGE("This formula cell should not be an error.", pFC->GetErrCode() == 0);
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "MAX(A7:A9)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
     m_pDoc->DeleteTab(0);
 }
 
