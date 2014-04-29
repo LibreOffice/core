@@ -19,6 +19,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/inettype.hxx>
 #include <tools/inetmime.hxx>
+#include <tools/urlobj.hxx>
 
 namespace {
 
@@ -41,7 +42,7 @@ void Test::testBad() {
     OUString in("foo=bar");
     CPPUNIT_ASSERT_EQUAL(
         static_cast<sal_Unicode const *>(0),
-        INetContentTypes::scan(in.getStr(), in.getStr() + in.getLength()));
+        INetURLObject::scanContentType(in.getStr(), in.getStr() + in.getLength()));
     OUString t;
     OUString s;
     INetContentTypeParameterList ps;
@@ -56,7 +57,7 @@ void Test::testFull() {
     OUString in("foo/bar;baz=boz");
     CPPUNIT_ASSERT_EQUAL(
         in.getStr() + in.getLength(),
-        INetContentTypes::scan(in.getStr(), in.getStr() + in.getLength()));
+        INetURLObject::scanContentType(in.getStr(), in.getStr() + in.getLength()));
     OUString t;
     OUString s;
     INetContentTypeParameterList ps;
@@ -72,7 +73,7 @@ void Test::testFollow() {
     OUString in("foo/bar;baz=boz;base64,");
     CPPUNIT_ASSERT_EQUAL(
         in.getStr() + std::strlen("foo/bar;baz=boz"),
-        INetContentTypes::scan(in.getStr(), in.getStr() + in.getLength()));
+        INetURLObject::scanContentType(in.getStr(), in.getStr() + in.getLength()));
     OUString t;
     OUString s;
     INetContentTypeParameterList ps;
