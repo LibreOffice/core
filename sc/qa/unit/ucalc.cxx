@@ -46,6 +46,8 @@
 #include "columniterator.hxx"
 #include "types.hxx"
 #include "conditio.hxx"
+#include "colorscale.hxx"
+#include "fillinfo.hxx"
 #include "globstr.hrc"
 #include "tokenarray.hxx"
 #include "scopetools.hxx"
@@ -5726,6 +5728,42 @@ void Test::testCondCopyPaste()
 
 
     m_pDoc->DeleteTab(0);
+}
+
+void Test::testIconSet()
+{
+    m_pDoc->InsertTab(0, "Test");
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRangeList aRangeList(ScRange(0,0,0,0,0,0));
+    pFormat->AddRange(aRangeList);
+
+    ScIconSetFormat* pEntry = new ScIconSetFormat(m_pDoc);
+    ScIconSetFormatData* pData = new ScIconSetFormatData;
+    pData->maEntries.push_back(new ScColorScaleEntry(0, COL_BLUE));
+    pData->maEntries.push_back(new ScColorScaleEntry(1, COL_GREEN));
+    pData->maEntries.push_back(new ScColorScaleEntry(2, COL_RED));
+    pEntry->SetIconSetData(pData);
+
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
+    pList->InsertNew(pFormat);
+
+    struct {
+        double nVal; sal_Int32 nIndex;
+    } aTests[] = {
+        { -1.0, 0 },
+        { 0.0, 0 },
+        { 1.0, 1 },
+        { 2.0, 2 },
+        { 3.0, 2 }
+    };
+    for(size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    {
+        m_pDoc->SetValue(0,0,0,aTests[i].nVal);
+        ScIconSetInfo* pInfo = pEntry->GetIconSetInfo(ScAddress(0,0,0));
+        CPPUNIT_ASSERT_EQUAL(aTests[i].nIndex, pInfo->nIconIndex);
+    }
 }
 
 void Test::testImportStream()

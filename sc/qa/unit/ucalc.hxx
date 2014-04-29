@@ -341,6 +341,7 @@ public:
     void testCondFormatInsertRow();
     void testCondFormatInsertCol();
     void testCondCopyPaste();
+    void testIconSet();
 
     void testImportStream();
     void testDeleteContents();
@@ -494,6 +495,7 @@ public:
     CPPUNIT_TEST(testCondFormatInsertRow);
     CPPUNIT_TEST(testCondFormatInsertCol);
     CPPUNIT_TEST(testCondCopyPaste);
+    CPPUNIT_TEST(testIconSet);
     CPPUNIT_TEST(testImportStream);
     CPPUNIT_TEST(testDeleteContents);
     CPPUNIT_TEST(testTransliterateText);
