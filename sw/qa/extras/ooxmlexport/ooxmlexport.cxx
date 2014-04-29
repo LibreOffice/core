@@ -1263,7 +1263,7 @@ DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Normal"), aName); // This checks the "name" attribute of the first exception.
 
     // This numbering style wasn't roundtripped.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoList']/w:name", "val", "No List");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoListLO']/w:name", "val", "No ListLO");
 
     // Table style wasn't roundtripped.
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableNormal']/w:tblPr/w:tblCellMar/w:left", "w", "108");
@@ -1283,10 +1283,10 @@ DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading11']/w:autoRedefine", 1);
 
     // Additional char style properties should be also roundtripped.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='DefaultParagraphFont']", "default", "1");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='DefaultParagraphFontLO']", "default", "1");
 
     // Finally check the same for numbering styles.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoList']", "default", "1");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoListLO']", "default", "1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testCalendar1, "calendar1.docx")
@@ -3212,6 +3212,16 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77117, "fdo77117.docx")
     uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     // This checks textbox textrun size of font which is in group shape.
     CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xShape, "CharHeight"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO77716, "fdo77716.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:styles/w:style[1]/w:pPr/w:spacing", "line", "276");
+    assertXPath(pXmlDoc, "/w:styles/w:style[1]/w:pPr/w:spacing", "after", "200");
+    assertXPath(pXmlDoc, "/w:styles/w:style[1]/w:rPr[1]/w:szCs[1]", "val", "22");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFDO75431, "fdo75431.docx")

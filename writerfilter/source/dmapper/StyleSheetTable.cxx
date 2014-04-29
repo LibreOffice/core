@@ -1464,6 +1464,20 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
     StringPairMap_t::iterator aIt = m_pImpl->m_aStyleNameMap.find( sRet );
     if(aIt != m_pImpl->m_aStyleNameMap.end() && !aIt->second.isEmpty())
         sRet = aIt->second;
+    else
+    {
+        // style name is not found in m_aStyleNameMap keys, so check if it is there in values of m_aStyleNameMap
+        // if found then append "LO" to the style name so that it will not change values of other style for which LO uses same name.
+        aIt = m_pImpl->m_aStyleNameMap.begin();
+
+        for ( ; aIt != m_pImpl->m_aStyleNameMap.end(); aIt++ )
+        {
+            if(aIt->second == sRet)
+            {
+                sRet = sRet+"LO";
+            }
+        }
+    }
     return sRet;
 }
 
