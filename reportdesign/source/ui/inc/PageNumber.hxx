@@ -45,9 +45,6 @@ class OPageNumberDialog :   public ModalDialog
     ListBox*                                m_pAlignmentLst;
 
     CheckBox*                               m_pShowNumberOnFirstPage;
-    OKButton*                               m_pPB_OK;
-    CancelButton*                           m_pPB_CANCEL;
-    HelpButton*                             m_pPB_Help;
 
     ::rptui::OReportController*             m_pController;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>
