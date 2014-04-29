@@ -937,13 +937,13 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
     if(!IsTextRule(eOperation) && !IsTopBottomRule(eOperation))
     {
         rWorksheet->startElement( XML_formula, FSEND );
-        rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(),
+        rWorksheet->writeEscaped(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(),
                     mrFormatEntry.CreateTokenArry(0)));
         rWorksheet->endElement( XML_formula );
         if (bFmla2)
         {
             rWorksheet->startElement( XML_formula, FSEND );
-            rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(),
+            rWorksheet->writeEscaped(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(),
                         mrFormatEntry.CreateTokenArry(1)));
             rWorksheet->endElement( XML_formula );
         }
