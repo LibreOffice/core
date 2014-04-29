@@ -30,7 +30,6 @@
 #include <calbck.hxx>
 
 #include <vector>
-#include <boost/optional.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace text { class XDocumentIndexMark; }
@@ -265,43 +264,7 @@ typedef std::vector<SwFormToken> SwFormTokens;
 class SW_DLLPUBLIC SwFormTokensHelper
 {
     /// the tokens
-    SwFormTokens aTokens;
-
-    /**
-       Builds a token from its string representation.
-
-       @sPattern          the whole pattern
-       @nCurPatternPos    starting position of the token
-
-       @return the token
-     */
-    SAL_DLLPRIVATE boost::optional<SwFormToken> BuildToken( const OUString & sPattern,
-                                          sal_Int32 & nCurPatternPos ) const;
-
-    /**
-       Returns the string of a token.
-
-       @param sPattern    the whole pattern
-       @param nStt        starting position of the token
-
-       @return   the string representation of the token
-    */
-    SAL_DLLPRIVATE OUString SearchNextToken( const OUString & sPattern,
-                                            sal_Int32 nStt ) const;
-
-    /**
-       Returns the type of a token.
-
-       @param sToken     the string representation of the token
-       @param pTokenLen  return parameter the length of the head of the token
-
-       If pTokenLen is non-NULL the length of the token's head is
-       written to *pTokenLen
-
-       @return the type of the token
-    */
-    SAL_DLLPRIVATE FormTokenType GetTokenType(const OUString & sToken,
-                                             sal_Int32 * pTokenLen) const;
+    SwFormTokens m_Tokens;
 
 public:
     /**
@@ -309,7 +272,7 @@ public:
 
        @param rTokens       vector of tokens
     */
-    SwFormTokensHelper(const SwFormTokens & rTokens) : aTokens(rTokens) {}
+    SwFormTokensHelper(const SwFormTokens & rTokens) : m_Tokens(rTokens) {}
 
     /**
        constructor
@@ -323,7 +286,7 @@ public:
 
        @return vector of tokens
     */
-    const SwFormTokens & GetTokens() const { return aTokens; }
+    const SwFormTokens & GetTokens() const { return m_Tokens; }
 };
 
 class SW_DLLPUBLIC SwForm

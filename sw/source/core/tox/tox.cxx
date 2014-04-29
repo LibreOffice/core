@@ -695,27 +695,107 @@ OUString SwFormToken::GetString() const
 }
 
 // -> #i21237#
-SwFormTokensHelper::SwFormTokensHelper(const OUString & rPattern)
-{
-    sal_Int32 nCurPatternPos = 0;
 
-    while (nCurPatternPos < rPattern.getLength())
+/**
+   Returns the type of a token.
+
+   @param sToken     the string representation of the token
+   @param pTokenLen  return parameter the length of the head of the token
+
+   If pTokenLen is non-NULL the length of the token's head is
+   written to *pTokenLen
+
+   @return the type of the token
+*/
+static FormTokenType lcl_GetTokenType(const OUString & sToken,
+                                      sal_Int32 *const pTokenLen)
+{
+    static struct
     {
-        boost::optional<SwFormToken> const oToken(
-                BuildToken(rPattern, nCurPatternPos));
-        if (oToken)
-            aTokens.push_back(oToken.get());
+        OUString sNm;
+        sal_uInt16 nOffset;
+        FormTokenType eToken;
+    } const aTokenArr[] = {
+        { SwForm::GetFormTab(),         1, TOKEN_TAB_STOP },
+        { SwForm::GetFormPageNums(),    1, TOKEN_PAGE_NUMS },
+        { SwForm::GetFormLinkStt(),     1, TOKEN_LINK_START },
+        { SwForm::GetFormLinkEnd(),     1, TOKEN_LINK_END },
+        { SwForm::GetFormEntryNum(),    1, TOKEN_ENTRY_NO },
+        { SwForm::GetFormEntryTxt(),    1, TOKEN_ENTRY_TEXT },
+        { SwForm::GetFormChapterMark(), 1, TOKEN_CHAPTER_INFO },
+        { SwForm::GetFormText(),        1, TOKEN_TEXT },
+        { SwForm::GetFormEntry(),       1, TOKEN_ENTRY },
+        { SwForm::GetFormAuth(),        3, TOKEN_AUTHORITY }
+    };
+
+    for( size_t i = 0; i<SAL_N_ELEMENTS(aTokenArr); ++i )
+    {
+        const sal_Int32 nLen(aTokenArr[i].sNm.getLength());
+        if( sToken.startsWith( aTokenArr[i].sNm.copy(0, nLen - aTokenArr[i].nOffset) ))
+        {
+            if (pTokenLen)
+                *pTokenLen = nLen;
+            return aTokenArr[ i ].eToken;
+        }
     }
+
+    SAL_WARN("sw.core", "SwFormTokensHelper: invalid token");
+    return TOKEN_END;
 }
 
-boost::optional<SwFormToken>
-SwFormTokensHelper::BuildToken( const OUString & sPattern,
-                                            sal_Int32 & nCurPatternPos ) const
+/**
+   Returns the string of a token.
+
+   @param sPattern    the whole pattern
+   @param nStt        starting position of the token
+
+   @return   the string representation of the token
+*/
+static OUString
+lcl_SearchNextToken(const OUString & sPattern, sal_Int32 const nStt)
 {
-    OUString sToken( SearchNextToken(sPattern, nCurPatternPos) );
+    sal_Int32 nEnd = sPattern.indexOf( '>', nStt );
+    if (nEnd >= 0)
+    {
+        // apparently the TOX_STYLE_DELIMITER act as a bracketing for
+        // TOKEN_TEXT tokens so that the user can have '>' inside the text...
+        const sal_Int32 nTextSeparatorFirst = sPattern.indexOf( TOX_STYLE_DELIMITER, nStt );
+        if (    nTextSeparatorFirst >= 0
+            &&  nTextSeparatorFirst + 1 < sPattern.getLength()
+            &&  nTextSeparatorFirst < nEnd)
+        {
+            const sal_Int32 nTextSeparatorSecond = sPattern.indexOf( TOX_STYLE_DELIMITER,
+                                                                     nTextSeparatorFirst + 1 );
+            // Since nEnd>=0 we don't need to check if nTextSeparatorSecond<0!
+            if( nEnd < nTextSeparatorSecond )
+                nEnd = sPattern.indexOf( '>', nTextSeparatorSecond );
+            // FIXME: No check to verify that nEnd is still >=0?
+            assert(nEnd >= 0);
+        }
+
+        ++nEnd;
+
+        return sPattern.copy( nStt, nEnd - nStt );
+    }
+
+    return OUString();
+}
+
+/**
+   Builds a token from its string representation.
+
+   @sPattern          the whole pattern
+   @nCurPatternPos    starting position of the token
+
+   @return the token
+ */
+static boost::optional<SwFormToken>
+lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
+{
+    OUString sToken( lcl_SearchNextToken(sPattern, nCurPatternPos) );
     nCurPatternPos += sToken.getLength();
     sal_Int32 nTokenLen = 0;
-    FormTokenType eTokenType = GetTokenType(sToken, &nTokenLen);
+    FormTokenType const eTokenType = lcl_GetTokenType(sToken, &nTokenLen);
     if (TOKEN_END == eTokenType) // invalid input? skip it
     {
         nCurPatternPos = sPattern.getLength();
@@ -791,70 +871,17 @@ SwFormTokensHelper::BuildToken( const OUString & sPattern,
     return eRet;
 }
 
-OUString SwFormTokensHelper::SearchNextToken( const OUString & sPattern,
-                                              sal_Int32 nStt ) const
+SwFormTokensHelper::SwFormTokensHelper(const OUString & rPattern)
 {
-    sal_Int32 nEnd = sPattern.indexOf( '>', nStt );
-    if (nEnd >= 0)
+    sal_Int32 nCurPatternPos = 0;
+
+    while (nCurPatternPos < rPattern.getLength())
     {
-        // apparently the TOX_STYLE_DELIMITER act as a bracketing for
-        // TOKEN_TEXT tokens so that the user can have '>' inside the text...
-        const sal_Int32 nTextSeparatorFirst = sPattern.indexOf( TOX_STYLE_DELIMITER, nStt );
-        if (    nTextSeparatorFirst >= 0
-            &&  nTextSeparatorFirst + 1 < sPattern.getLength()
-            &&  nTextSeparatorFirst < nEnd)
-        {
-            const sal_Int32 nTextSeparatorSecond = sPattern.indexOf( TOX_STYLE_DELIMITER,
-                                                                     nTextSeparatorFirst + 1 );
-            // Since nEnd>=0 we don't need to check if nTextSeparatorSecond<0!
-            if( nEnd < nTextSeparatorSecond )
-                nEnd = sPattern.indexOf( '>', nTextSeparatorSecond );
-            // FIXME: No check to verify that nEnd is still >=0?
-            assert(nEnd >= 0);
-        }
-
-        ++nEnd;
-
-        return sPattern.copy( nStt, nEnd - nStt );
+        boost::optional<SwFormToken> const oToken(
+                lcl_BuildToken(rPattern, nCurPatternPos));
+        if (oToken)
+            m_Tokens.push_back(oToken.get());
     }
-
-    return OUString();
-}
-
-FormTokenType SwFormTokensHelper::GetTokenType(const OUString & sToken,
-                                               sal_Int32 * pTokenLen) const
-{
-    static struct
-    {
-        OUString sNm;
-        sal_uInt16 nOffset;
-        FormTokenType eToken;
-    } const aTokenArr[] = {
-        { SwForm::GetFormTab(),         1, TOKEN_TAB_STOP },
-        { SwForm::GetFormPageNums(),    1, TOKEN_PAGE_NUMS },
-        { SwForm::GetFormLinkStt(),     1, TOKEN_LINK_START },
-        { SwForm::GetFormLinkEnd(),     1, TOKEN_LINK_END },
-        { SwForm::GetFormEntryNum(),    1, TOKEN_ENTRY_NO },
-        { SwForm::GetFormEntryTxt(),    1, TOKEN_ENTRY_TEXT },
-        { SwForm::GetFormChapterMark(), 1, TOKEN_CHAPTER_INFO },
-        { SwForm::GetFormText(),        1, TOKEN_TEXT },
-        { SwForm::GetFormEntry(),       1, TOKEN_ENTRY },
-        { SwForm::GetFormAuth(),        3, TOKEN_AUTHORITY }
-    };
-
-    for( size_t i = 0; i<SAL_N_ELEMENTS(aTokenArr); ++i )
-    {
-        const sal_Int32 nLen(aTokenArr[i].sNm.getLength());
-        if( sToken.startsWith( aTokenArr[i].sNm.copy(0, nLen - aTokenArr[i].nOffset) ))
-        {
-            if (pTokenLen)
-                *pTokenLen = nLen;
-            return aTokenArr[ i ].eToken;
-        }
-    }
-
-    SAL_WARN("sw.core", "SwFormTokensHelper: invalid token");
-    return TOKEN_END;
 }
 
 // <- #i21237#
