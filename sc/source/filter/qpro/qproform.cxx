@@ -181,7 +181,8 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
     sal_uInt16 nInt, nIntCount = 0, nStringCount = 0, nFloatCount = 0, nDLLCount = 0, nArgCount = 0;
     sal_uInt16 nIntArray[ nBufSize ] = {0};
     OUString sStringArray[ nBufSize ];
-    sal_uInt16 nDummy, nDLLId, nDLLArray[ nBufSize ];
+    sal_uInt16 nDummy, nDLLId;
+    sal_uInt16 nDLLArray[ nBufSize ] = {0};
     sal_uInt16 nNote, nRef, nRelBits;
     TokenId nPush;
     ScComplexRefData aCRD;
