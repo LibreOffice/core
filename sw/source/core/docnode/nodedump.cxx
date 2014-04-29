@@ -182,6 +182,7 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     mpTxtFmtCollTbl->dumpAsXml( writer );
     mpCharFmtTbl->dumpAsXml( writer );
     mpSpzFrmFmtTbl->dumpAsXml( writer );
+    mpSectionFmtTbl->dumpAsXml( writer );
     mpNumRuleTbl->dumpAsXml( writer );
     mpRedlineTbl->dumpAsXml( writer );
     mpExtraRedlineTbl->dumpAsXml( writer );
@@ -320,7 +321,7 @@ void SwStartNode::dumpAsXml( xmlTextWriterPtr w )
             name = "table";
             break;
         case ND_SECTIONNODE:
-            name = "sectionNode";
+            name = "section";
             break;
         default:
             switch( GetStartNodeType())
@@ -349,19 +350,6 @@ void SwStartNode::dumpAsXml( xmlTextWriterPtr w )
     writer.startElement( name );
     writer.writeFormatAttribute( "ptr", "%p", this );
     writer.writeFormatAttribute( "index", TMP_FORMAT, GetIndex() );
-
-    if (GetNodeType() == ND_SECTIONNODE)
-    {
-        SwSection& rSection = GetSectionNode()->GetSection();
-        writer.startElement("section");
-
-        SwSectionFmt* pFmt = rSection.GetFmt();
-        writer.startElement("swsectionfmt");
-        lcl_dumpSfxItemSet(writer, &pFmt->GetAttrSet());
-        writer.endElement();
-
-        writer.endElement();
-    }
 
     // writer.endElement(); - it is a start node, so don't end, will make xml better nested
 }
@@ -559,6 +547,23 @@ void SwCharFmts::dumpAsXml(xmlTextWriterPtr w)
             OString aName = OUStringToOString(pFmt->GetName(), RTL_TEXTENCODING_UTF8);
             writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
 
+            lcl_dumpSfxItemSet(writer, &pFmt->GetAttrSet());
+            writer.endElement();
+        }
+        writer.endElement();
+    }
+}
+
+void SwSectionFmts::dumpAsXml(xmlTextWriterPtr w)
+{
+    WriterHelper writer(w);
+    if (size())
+    {
+        writer.startElement("swsectionfmts");
+        for (size_t i = 0; i < size(); ++i)
+        {
+            SwSectionFmt* pFmt = static_cast<SwSectionFmt*>(GetFmt(i));
+            writer.startElement("swsectionfmt");
             lcl_dumpSfxItemSet(writer, &pFmt->GetAttrSet());
             writer.endElement();
         }
