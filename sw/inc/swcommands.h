@@ -122,8 +122,6 @@
 #define CMD_FN_HIDE_ALL_NOTES                       ".uno:HideAllNotes"
 #define CMD_FN_REDLINE_ACCEPT_DIRECT                ".uno:AcceptTracedChange"
 #define CMD_FN_REDLINE_REJECT_DIRECT                ".uno:RejectTracedChange"
-#define CMD_FN_REDLINE_ACCEPT_DIRECT_SELECTION      ".uno:AcceptTracedChangesInSelection"
-#define CMD_FN_REDLINE_REJECT_DIRECT_SELECTION      ".uno:RejectTracedChangesInSelection"
 #define CMD_FN_REDLINE_NEXT_CHANGE                  ".uno:NextTrackedChange"
 #define CMD_FN_REDLINE_PREV_CHANGE                  ".uno:PreviousTrackedChange"
 #define CMD_FN_REMOVE_HYPERLINK                     ".uno:RemoveHyperlink"

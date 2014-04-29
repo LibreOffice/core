@@ -142,18 +142,6 @@ interface BaseTextEditView
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
     ]
-    FN_REDLINE_ACCEPT_DIRECT_SELECTION
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
-    ]
-    FN_REDLINE_REJECT_DIRECT_SELECTION
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
-    ]
     FN_REDLINE_NEXT_CHANGE
     [
         ExecMethod = Execute ;

@@ -289,29 +289,12 @@ void SwView::GetState(SfxItemSet &rSet)
             case FN_REDLINE_ACCEPT_DIRECT:
             case FN_REDLINE_REJECT_DIRECT:
             {
-                // If the selection/cursor start position isn't on a redline, disable
-                // accepting/rejecting changes.
-                SwDoc *pDoc = m_pWrtShell->GetDoc();
-                SwPaM *pCursor = m_pWrtShell->GetCrsr();
-                if (0 == pDoc->GetRedline(*pCursor->Start(), 0))
-                    rSet.DisableItem(nWhich);
-                if (GetDocShell()->HasChangeRecordProtection())
-                    rSet.DisableItem(nWhich);
-            }
-            break;
-            case FN_REDLINE_ACCEPT_DIRECT_SELECTION:
-            case FN_REDLINE_REJECT_DIRECT_SELECTION:
-            {
-                // If the selection does not contain a redline, disable
-                // accepting/rejecting changes.
                 SwDoc *pDoc = m_pWrtShell->GetDoc();
                 SwPaM *pCursor = m_pWrtShell->GetCrsr();
                 if (GetDocShell()->HasChangeRecordProtection())
                     rSet.DisableItem(nWhich);
-                else if (!pCursor->HasMark())
-                    rSet.DisableItem(nWhich);
-                else
-                {
+                else if (pCursor->HasMark())
+                { // If the selection does not contain redlines, disable accepting/rejecting changes.
                     sal_uInt16 index = 0;
                     const SwRedlineTbl& table = pDoc->GetRedlineTbl();
                     const SwRangeRedline* redline = table.FindAtPosition( *pCursor->Start(), index );
@@ -332,6 +315,13 @@ void SwView::GetState(SfxItemSet &rSet)
                         }
                     }
                     if( redline == NULL )
+                        rSet.DisableItem(nWhich);
+                }
+                else
+                {
+                    // If the cursor position isn't on a redline, disable
+                    // accepting/rejecting changes.
+                    if (0 == pDoc->GetRedline(*pCursor->Start(), 0))
                         rSet.DisableItem(nWhich);
                 }
             }

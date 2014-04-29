@@ -664,33 +664,32 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_REDLINE_ACCEPT_DIRECT:
         case FN_REDLINE_REJECT_DIRECT:
         {
-            // We check for a redline at the start of the selection/cursor, not the point.
-            // This ensures we work properly with FN_REDLINE_NEXT_CHANGE, which leaves the
-            // point at the *end* of the redline and the mark at the start (so GetRedline
-            // would return NULL if called on the point)
             SwDoc *pDoc = m_pWrtShell->GetDoc();
             SwPaM *pCursor = m_pWrtShell->GetCrsr();
-
-            sal_uInt16 nRedline = 0;
-            const SwRangeRedline *pRedline = pDoc->GetRedline(*pCursor->Start(), &nRedline);
-            assert(pRedline != 0);
-            if (pRedline)
+            if( pCursor->HasMark())
             {
                 if (FN_REDLINE_ACCEPT_DIRECT == nSlot)
-                    m_pWrtShell->AcceptRedline(nRedline);
+                    m_pWrtShell->AcceptRedlinesInSelection();
                 else
-                    m_pWrtShell->RejectRedline(nRedline);
+                    m_pWrtShell->RejectRedlinesInSelection();
             }
-        }
-        break;
-
-        case FN_REDLINE_ACCEPT_DIRECT_SELECTION:
-        case FN_REDLINE_REJECT_DIRECT_SELECTION:
-        {
-            if (FN_REDLINE_ACCEPT_DIRECT_SELECTION == nSlot)
-                m_pWrtShell->AcceptRedlinesInSelection();
             else
-                m_pWrtShell->RejectRedlinesInSelection();
+            {
+                // We check for a redline at the start of the selection/cursor, not the point.
+                // This ensures we work properly with FN_REDLINE_NEXT_CHANGE, which leaves the
+                // point at the *end* of the redline and the mark at the start (so GetRedline
+                // would return NULL if called on the point)
+                sal_uInt16 nRedline = 0;
+                const SwRangeRedline *pRedline = pDoc->GetRedline(*pCursor->Start(), &nRedline);
+                assert(pRedline != 0);
+                if (pRedline)
+                {
+                    if (FN_REDLINE_ACCEPT_DIRECT == nSlot)
+                        m_pWrtShell->AcceptRedline(nRedline);
+                    else
+                        m_pWrtShell->RejectRedline(nRedline);
+                }
+            }
         }
         break;
 

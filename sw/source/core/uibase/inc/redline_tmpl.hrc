@@ -25,18 +25,6 @@
         };                                                           \
         MenuItem                                                     \
         {                                                            \
-            Identifier = FN_REDLINE_ACCEPT_DIRECT_SELECTION;         \
-            HelpId = CMD_FN_REDLINE_ACCEPT_DIRECT_SELECTION ;        \
-            Text [ en-US ] = "Accept Changes" ;                      \
-        };                                                           \
-        MenuItem                                                     \
-        {                                                            \
-            Identifier = FN_REDLINE_REJECT_DIRECT_SELECTION ;        \
-            HelpId = CMD_FN_REDLINE_REJECT_DIRECT_SELECTION ;        \
-            Text [ en-US ] = "Reject Changes" ;                      \
-        };                                                           \
-        MenuItem                                                     \
-        {                                                            \
             Identifier = FN_REDLINE_NEXT_CHANGE;                     \
             HelpId = CMD_FN_REDLINE_NEXT_CHANGE ;                    \
             Text [ en-US ] = "Next Change" ;                         \
