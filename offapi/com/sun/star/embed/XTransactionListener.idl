@@ -55,7 +55,7 @@ published interface XTransactionListener: com::sun::star::lang::XEventListener
     //------------------------------------------------------------------------
     /** is called after the object is committed.
      */
-    void committed( [in] com::sun::star::lang::EventObject aEvent );
+    void commited( [in] com::sun::star::lang::EventObject aEvent );
 
     //------------------------------------------------------------------------
     /** is called just before the object is reverted.
