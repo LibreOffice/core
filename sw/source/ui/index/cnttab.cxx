@@ -205,7 +205,7 @@ public:
 sal_uInt16 CurTOXType::GetFlatIndex() const
 {
     return static_cast< sal_uInt16 >( (eType == TOX_USER && nIndex)
-        ? eType : TOX_AUTHORITIES + nIndex );
+        ? TOX_AUTHORITIES + nIndex : eType );
 }
 
 #define EDIT_MINWIDTH 15
@@ -369,9 +369,9 @@ short SwMultiTOXTabDialog::Ok()
     SwTOXBase aNewDef(*rSh.GetDefaultTOXBase( eCurrentTOXType.eType, true ));
 
     const sal_uInt16 nIndex = static_cast< sal_uInt16 >(
-        eCurrentTOXType.eType == TOX_USER && eCurrentTOXType.nIndex
-        ? eCurrentTOXType.eType
-        : TOX_AUTHORITIES + eCurrentTOXType.nIndex );
+        (eCurrentTOXType.eType == TOX_USER && eCurrentTOXType.nIndex)
+        ? TOX_AUTHORITIES + eCurrentTOXType.nIndex
+        : eCurrentTOXType.eType);
 
     if(pFormArr[nIndex])
     {
