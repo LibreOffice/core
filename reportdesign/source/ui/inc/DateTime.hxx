@@ -47,9 +47,6 @@ class ODateTimeDialog : public ModalDialog
     FixedText*                               m_pFTTimeFormat;
     ListBox*                                 m_pTimeListBox;
     OKButton*                                m_pPB_OK;
-    CancelButton*                            m_pPB_CANCEL;
-    HelpButton*                              m_pPB_Help;
-
 
     svt::ControlDependencyManager           m_aDateControlling;
     svt::ControlDependencyManager           m_aTimeControlling;
