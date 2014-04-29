@@ -161,6 +161,7 @@ MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bo
     DropTargetHelper( this ),
     DragSourceHelper( this ),
     mpMediaWindow( pMediaWindow ),
+    mpEvents( NULL ),
     mpMediaWindowControl( bInternalMediaControl ? new MediaWindowControl( this ) : NULL ),
     mpEmptyBmpEx( NULL ),
     mpAudioBmpEx( NULL )
