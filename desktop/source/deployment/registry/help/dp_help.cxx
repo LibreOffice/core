@@ -483,6 +483,8 @@ void BackendImpl::implProcessHelp(
                             nXhpFileCount, pXhpFiles,
                             langFolderDestExpanded, aErrorInfo );
 
+                        delete[] pXhpFiles;
+
                         if( bSuccess )
                         {
                             OUString aLang;
