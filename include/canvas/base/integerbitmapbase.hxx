@@ -57,7 +57,7 @@ namespace canvas
 
         virtual void SAL_CALL setData( const ::com::sun::star::uno::Sequence< sal_Int8 >&      data,
                                        const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-                                       const ::com::sun::star::geometry::IntegerRectangle2D&   rect ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                       const ::com::sun::star::geometry::IntegerRectangle2D&   rect ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             tools::verifyArgs(bitmapLayout, rect,
                               BOOST_CURRENT_FUNCTION,
