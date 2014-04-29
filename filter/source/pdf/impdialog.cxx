@@ -985,9 +985,9 @@ IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, void*, )
 // The Viewer preferences tab page
 
 ImpPDFTabViewerPage::ImpPDFTabViewerPage( Window* pParent,
-                                          const SfxItemSet& rCoreSet ) :
-    SfxTabPage( pParent, "PdfUserInterfacePage","filter/ui/pdfuserinterfacepage.ui", rCoreSet )
-
+                                          const SfxItemSet& rCoreSet )
+    : SfxTabPage(pParent, "PdfUserInterfacePage","filter/ui/pdfuserinterfacepage.ui", rCoreSet)
+    , mbIsPresentation(false)
 {
     get(m_pCbResWinInit,"resize");
     get(m_pCbCenterWindow,"center");
@@ -1005,11 +1005,9 @@ ImpPDFTabViewerPage::ImpPDFTabViewerPage( Window* pParent,
     m_pRbVisibleBookmarkLevels->SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
 }
 
-
 ImpPDFTabViewerPage::~ImpPDFTabViewerPage()
 {
 }
-
 
 IMPL_LINK( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, void*, )
 {
