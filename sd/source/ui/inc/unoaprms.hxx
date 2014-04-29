@@ -81,12 +81,47 @@ class SdAnimationPrmsUndoAction : public SdUndoAction
 
 public:
     TYPEINFO_OVERRIDE();
-        SdAnimationPrmsUndoAction(SdDrawDocument* pTheDoc, SdrObject* pObj,
-                                  bool bCreated):
-        SdUndoAction    (pTheDoc),
-        pObject         (pObj),
-        bInfoCreated    (bCreated)
-        {}
+    SdAnimationPrmsUndoAction(SdDrawDocument* pTheDoc, SdrObject* pObj,
+                                  bool bCreated)
+        : SdUndoAction(pTheDoc)
+        , pObject(pObj)
+        , bOldActive(false)
+        , bNewActive(false)
+        , bOldDimPrevious(false)
+        , bNewDimPrevious(false)
+        , bOldDimHide(false)
+        , bNewDimHide(false)
+        , bOldSoundOn(false)
+        , bNewSoundOn(false)
+        , bOldSecondSoundOn(false)
+        , bNewSecondSoundOn(false)
+        , bOldPlayFull(false)
+        , bNewPlayFull(false)
+        , bOldSecondPlayFull(false)
+        , bNewSecondPlayFull(false)
+        , eOldEffect(css::presentation::AnimationEffect_NONE)
+        , eNewEffect(css::presentation::AnimationEffect_NONE)
+        , eOldTextEffect(css::presentation::AnimationEffect_NONE)
+        , eNewTextEffect(css::presentation::AnimationEffect_NONE)
+        , eOldSpeed(css::presentation::AnimationSpeed_SLOW)
+        , eNewSpeed(css::presentation::AnimationSpeed_SLOW)
+        , eOldSecondEffect(css::presentation::AnimationEffect_NONE)
+        , eNewSecondEffect(css::presentation::AnimationEffect_NONE)
+        , eOldSecondSpeed(css::presentation::AnimationSpeed_SLOW)
+        , eNewSecondSpeed(css::presentation::AnimationSpeed_SLOW)
+        , pOldPathObj(NULL)
+        , pNewPathObj(NULL)
+        , eOldClickAction(css::presentation::ClickAction_NONE)
+        , eNewClickAction(css::presentation::ClickAction_NONE)
+        , bOldInvisibleInPres(false)
+        , bNewInvisibleInPres(false)
+        , nOldVerb(0)
+        , nNewVerb(0)
+        , nOldPresOrder(0)
+        , nNewPresOrder(0)
+        , bInfoCreated(bCreated)
+    {
+    }
 
         void SetActive(bool bTheOldActive, bool bTheNewActive)
             { bOldActive = bTheOldActive; bNewActive = bTheNewActive; }
