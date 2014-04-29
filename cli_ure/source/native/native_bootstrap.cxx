@@ -93,6 +93,7 @@ WCHAR* getPathFromRegistryKey( HKEY hroot, LPCWSTR subKeyName )
     if ( RegQueryValueEx( hkey, NULL, NULL, &type, (LPBYTE) data, &size ) != ERROR_SUCCESS )
     {
         RegCloseKey( hkey );
+        delete[] data;
         return NULL;
     }
 
@@ -287,6 +288,7 @@ extern "C" FARPROC WINAPI delayLoadHook(
             szLibName = new WCHAR[size];
             if (! MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pdli->szDll, -1, szLibName, size))
             {
+                delete[] szLibName;
                 return 0;
             }
         }
