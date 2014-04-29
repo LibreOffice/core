@@ -673,6 +673,7 @@ SystemWindowData OpenGLContext::generateWinData(Window* pParent)
 {
     SystemWindowData aWinData;
     aWinData.nSize = sizeof(aWinData);
+    aWinData.pVisual = NULL;
 
     const SystemEnvData* sysData(pParent->GetSystemData());
 
