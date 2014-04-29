@@ -21,6 +21,7 @@ using namespace com::sun::star;
 
 OpenGLContext::OpenGLContext():
     mpWindow(NULL),
+    m_pChildWindow(NULL),
     mbInitialized(false)
 {
 }
