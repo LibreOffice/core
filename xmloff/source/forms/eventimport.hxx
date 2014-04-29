@@ -57,7 +57,7 @@ namespace xmloff
             OPropertySetCompare>
             MapPropertySet2ScriptSequence;
         // usually an event attacher manager will need to collect all script events registered, 'cause
-        // the _real_ XEventAttacherManager handles it's events by index, but out indicies are not fixed
+        // the _real_ XEventAttacherManager handles it's events by index, but out indices are not fixed
         // until _all_ controls have been inserted.
 
         MapPropertySet2ScriptSequence   m_aEvents;

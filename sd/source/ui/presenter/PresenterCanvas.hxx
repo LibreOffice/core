@@ -92,7 +92,7 @@ public:
             rxSharedCanvas argument.
         @param rxWindow
             The window that is represented by the new PresenterCanvas
-            object.  It is expected to be a direct decendent of
+            object.  It is expected to be a direct descendant of
             rxSharedWindow.  Its position inside rxSharedWindow defines the
             offset of the canvas implemented by the new PresenterCanvas
             object and rxSharedCanvas.

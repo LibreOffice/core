@@ -1507,7 +1507,7 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
             else
             {
                 //or 3.5, for 128 bit security
-                //step6, initilize the last 16 bytes of the encrypted user password to 0
+                //step6, initialize the last 16 bytes of the encrypted user password to 0
                 for(sal_uInt32 i = MD5_DIGEST_SIZE; i < sal_uInt32(io_rProperties.UValue.size()); i++)
                     io_rProperties.UValue[i] = 0;
                 //step 2

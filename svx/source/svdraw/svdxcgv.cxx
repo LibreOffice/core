@@ -492,7 +492,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
 
                     if(pSdrGrafObj)
                     {
-                        // #122753# To ensure existance of graphic content, force swap in
+                        // #122753# To ensure existence of graphic content, force swap in
                         pSdrGrafObj->ForceSwapIn();
                     }
 

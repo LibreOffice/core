@@ -91,7 +91,7 @@ published interface XUriReferenceFactory: com::sun::star::uno::XInterface {
         [in] RelativeUriExcessParentSegments excessParentSegments);
 
     /**
-       changes an absolute URI refrence to relative form.
+       changes an absolute URI reference to relative form.
 
        @param baseUriReference
        the base URI reference.

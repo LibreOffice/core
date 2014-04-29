@@ -1312,7 +1312,7 @@ void VCLXWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds, bool bWithDe
     for( iter = rIds.begin(); iter != rIds.end(); ++iter) {
         if( *iter == BASEPROPERTY_FONTDESCRIPTOR )
         {
-            // some properties are not included in the FontDescriptor, but everytime
+            // some properties are not included in the FontDescriptor, but every time
             // when we have a FontDescriptor we want to have these properties too.
             // => Easier to register the here, istead everywhere where I register the FontDescriptor...
 

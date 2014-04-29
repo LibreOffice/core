@@ -40,7 +40,7 @@ using namespace std;
 
 namespace
 {
-    // The provided GUID must be without surounding '{}'
+    // The provided GUID must be without surrounding '{}'
     string GetGuidPart(const string& guid, int index)
     {
         assert((guid.length() == 36) && "No GUID or wrong format!");

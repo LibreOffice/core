@@ -472,7 +472,7 @@ void GtkData::deInitNWF( void )
     {
         // free up global widgets
         // gtk_widget_destroy will in turn destroy the child hierarchy
-        // so only destroy disjunct hierachies
+        // so only destroy disjunct hierarchies
         if( gWidgetData[i].gCacheWindow )
             gtk_widget_destroy( gWidgetData[i].gCacheWindow );
         if( gWidgetData[i].gMenuWidget )

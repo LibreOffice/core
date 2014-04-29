@@ -44,7 +44,7 @@ public:
         with another and send the appropriate notifications.  That are two
         child events: One notifying the removal of the current child and one
         about the existence of the new child.  The index of the new child is
-        implementation dependent, i.e. it is not garanteed that the
+        implementation dependent, i.e. it is not guaranteed that the
         replacement has the same index as the current child has.
 
         <p>A default implementation can just use the ShapeTypeHandler::CreateAccessibleObject

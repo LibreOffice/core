@@ -85,7 +85,7 @@ public:
     /**
         Pointer to reference
 
-        @attention The ownership of a reference is transfered when
+        @attention The ownership of a reference is transferred when
         the reference is passed.
     */
     typedef boost::shared_ptr< Reference<T> > Pointer_t;

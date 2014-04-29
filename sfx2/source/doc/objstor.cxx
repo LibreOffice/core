@@ -283,7 +283,7 @@ OUString SfxObjectShell::CreateTempCopyOfStorage_Impl( const uno::Reference< emb
             // the password will be transferred from the xStorage to xTempStorage by storage implementation
             xStorage->copyToStorage( xTempStorage );
 
-            // the temporary storage was commited by the previous method and it will die by refcount
+            // the temporary storage was committed by the previous method and it will die by refcount
         }
         catch ( uno::Exception& )
         {
@@ -1249,7 +1249,7 @@ bool SfxObjectShell::SaveTo_Impl
                     // commit the new storage
                     // call saveCompleted based with this new storage ( get rid of old storage and "frees" URL )
                     // commit the wrapper stream ( the stream will connect the URL only on commit, after that it will hold it )
-                    // if the last step is failed the stream should stay to be transacted and should be commited on any flush
+                    // if the last step is failed the stream should stay to be transacted and should be committed on any flush
                     // so we can forget the stream in any way and the next storage commit will flush it
 
                 AddLog( OUString( OSL_LOG_PREFIX "Save: Own to Own"  ) );
@@ -1607,7 +1607,7 @@ bool SfxObjectShell::SaveTo_Impl
                 {
                     pMedium->Close();
 
-                    // target medium is still not commited, it should not be closed
+                    // target medium is still not committed, it should not be closed
                     // commit the package storage and close it, but leave the streams open
                     rMedium.StorageCommit_Impl();
                     rMedium.CloseStorage();

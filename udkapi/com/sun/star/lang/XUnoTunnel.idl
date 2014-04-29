@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module lang {
     something else, which is not specified by UNO-IDL.
 
     @attention
-    Restrictive useage.  Use only, if there is no better possibility left.
+    Restrictive usage.  Use only, if there is no better possibility left.
     It is definitely a hack.
 
     <p>

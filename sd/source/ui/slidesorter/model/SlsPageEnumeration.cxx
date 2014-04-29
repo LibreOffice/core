@@ -54,14 +54,14 @@ private:
 
     /** This constructor sets the internal page index to the given value.
         It does not call AdvanceToNextValidElement() to skip elements that
-        do not fullfill Predicate.
+        do not fulfill Predicate.
     */
     inline PageEnumerationImpl (
         const SlideSorterModel& rModel,
         const PageEnumeration::PagePredicate& rPredicate,
         int nIndex);
 
-    /** Skip all elements that do not fullfill Predicate starting with the
+    /** Skip all elements that do not fulfill Predicate starting with the
         one pointed to by mnIndex.
     */
     inline void AdvanceToNextValidElement (void);
@@ -257,7 +257,7 @@ void PageEnumerationImpl::AdvanceToNextValidElement (void)
     {
         SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(mnIndex));
 
-        // Test for the predicate being fullfilled.
+        // Test for the predicate being fulfilled.
         if (pDescriptor.get()!=NULL && maPredicate(pDescriptor))
         {
             // This predicate is valid.

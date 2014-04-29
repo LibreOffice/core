@@ -36,7 +36,7 @@ namespace ucbhelper{
             its handle() requests.
 
     @descr  This class can be used as:
-            - instance if special interactions must be supressed
+            - instance if special interactions must be suppressed
               only
             - or as base class if interactions must be modified.
  */
@@ -196,7 +196,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
         /** @short  initialize a new instance with the interaction handler,
                     which should be intercepted.
 
-            @attention  If such interaction handler isnt set here,
+            @attention  If such interaction handler isn't set here,
                         all incoming requests will be aborted ...
                         if the right continuation is available!
 

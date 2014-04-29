@@ -3297,7 +3297,7 @@ Window* MenuBar::ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu )
     long nHeight = pMenu->ImplCalcSize( pWindow ).Height();
 
     // depending on the native implementation or the displayable flag
-    // the menubar windows is supressed (ie, height=0)
+    // the menubar windows is suppressed (ie, height=0)
     if( !((MenuBar*) pMenu)->IsDisplayable() ||
         ( pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar() ) )
         nHeight = 0;
@@ -5955,7 +5955,7 @@ void MenuBarWindow::ImplLayoutChanged()
         long nHeight = pMenu->ImplCalcSize( this ).Height();
 
         // depending on the native implementation or the displayable flag
-        // the menubar windows is supressed (ie, height=0)
+        // the menubar windows is suppressed (ie, height=0)
         if( !((MenuBar*) pMenu)->IsDisplayable() ||
             ( pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar() ) )
             nHeight = 0;

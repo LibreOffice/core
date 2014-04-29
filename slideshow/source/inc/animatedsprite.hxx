@@ -96,7 +96,7 @@ namespace slideshow
             /** Query the content canvas for the current sprite.
 
                 Note that this method must be called
-                <em>everytime</em> something is rendered to the
+                <em>every time</em> something is rendered to the
                 sprite, because XCustomSprite does not guarantee the
                 validity of the canvas after a render operation.
 

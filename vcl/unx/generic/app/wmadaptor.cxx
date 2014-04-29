@@ -1385,7 +1385,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
 
     // set transientFor hint
     /*  #91030# dtwm will not map a dialogue if the transient
-     *  window is iconified. This is deemed undesireable because
+     *  window is iconified. This is deemed undesirable because
      *  message boxes do not get mapped, so use the root as transient
      *  instead.
      */

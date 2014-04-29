@@ -1317,7 +1317,7 @@ int GraphiteLayout::GetNextGlyphs( int length, sal_GlyphId * glyph_out,
 
 void GraphiteLayout::MoveGlyph( int nGlyphIndex, long nNewPos )
 {
-    // TODO it might be better to actualy implement simplify properly, but this
+    // TODO it might be better to actually implement simplify properly, but this
     // needs to be done carefully so the glyph/char maps are maintained
     // If a glyph has been dropped then it wasn't returned by GetNextGlyphs, so
     // the index here may be wrong

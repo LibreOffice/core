@@ -4187,7 +4187,7 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
 /* FIXME:
 * #122282# still more hacking: some IMEs never start a preedit but simply commit
 * in this case we cannot commit a single character. Workaround: do not do the
-* single key hack for enter or space if the unicode commited does not match
+* single key hack for enter or space if the unicode committed does not match
 */
 
 static bool checkSingleKeyCommitHack( guint keyval, sal_Unicode cCode )

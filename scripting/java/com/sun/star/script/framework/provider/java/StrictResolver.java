@@ -61,12 +61,12 @@ public class StrictResolver implements Resolver
         }
         catch ( ClassNotFoundException e )
         {
-            throw new NoSuchMethodException( "StrictResolver.getProxy: Cant find method: "
+            throw new NoSuchMethodException( "StrictResolver.getProxy: Can't find method: "
             + sd.getMethodName() + ":" + e.getMessage() );
         }
         catch ( NoSuchMethodException e )
         {
-            throw new NoSuchMethodException( "StrictResolver.getProxy: Cant find method: "
+            throw new NoSuchMethodException( "StrictResolver.getProxy: Can't find method: "
                 + sd.getMethodName() + ":" + e.getMessage() );
         }
 
@@ -82,12 +82,12 @@ public class StrictResolver implements Resolver
             }
             catch ( InstantiationException ie )
             {
-                throw new NoSuchMethodException( "getScriptProxy: Cant instantiate: " +
+                throw new NoSuchMethodException( "getScriptProxy: Can't instantiate: " +
                     c.getName() );
             }
             catch ( IllegalAccessException iae )
             {
-                throw new NoSuchMethodException( "getScriptProxy: Cant access: "
+                throw new NoSuchMethodException( "getScriptProxy: Can't access: "
                     + c.getName() );
             }
             sp.setTargetObject( o );

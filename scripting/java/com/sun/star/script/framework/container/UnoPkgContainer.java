@@ -282,7 +282,7 @@ public class UnoPkgContainer extends ParcelContainer
             }
             else
             {
-                LogUtils.DEBUG("In writeUnoPackageDB() CANT Truncate...." );
+                LogUtils.DEBUG("In writeUnoPackageDB() CAN'T Truncate...." );
             }
             os = new XOutputStreamWrapper( xos );
             dp.write( os );

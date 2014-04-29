@@ -2500,7 +2500,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
         aCropped.getMinY());
     aCroppedTransform = maObjectTransform * aCroppedTransform;
 
-    // prepare graphic primitive (tranformed)
+    // prepare graphic primitive (transformed)
     const drawinglayer::primitive2d::Primitive2DReference aGraphic(
         new drawinglayer::primitive2d::GraphicPrimitive2D(
             aCroppedTransform,

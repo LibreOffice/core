@@ -60,7 +60,7 @@ namespace slideshow
                 @param rWakeupEvent
                 Externally generated wakeup event, to set this
                 activity to sleep during inter-frame intervals. Must
-                come frome the outside, since wakeup event and this
+                come from the outside, since wakeup event and this
                 object have mutual references to each other.
 
                 @param rTimeouts

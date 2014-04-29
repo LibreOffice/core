@@ -39,7 +39,7 @@ namespace com { namespace sun { namespace star {
  */
 class XMLSectionImportContext : public SvXMLImportContext
 {
-    /// start position; ranges aquired via getStart(),getEnd() don't move
+    /// start position; ranges acquired via getStart(),getEnd() don't move
     ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextRange> xStartRange;
 

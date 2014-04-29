@@ -103,7 +103,7 @@ MailDispatcher::MailDispatcher(uno::Reference<mail::XSmtpService> mailserver) :
         throw uno::RuntimeException();
 
     // wait until the mail dispatcher thread is really alive
-    // and has aquired a reference to this instance of the
+    // and has acquired a reference to this instance of the
     // class
     mail_dispatcher_active_.wait();
 }
@@ -225,7 +225,7 @@ void MailDispatcher::sendMailMessageNotifyListener(uno::Reference<mail::XMailMes
 
 void MailDispatcher::run()
 {
-    // aquire a self reference in order to avoid race
+    // acquire a self reference in order to avoid race
     // conditions. The last client of this class must
     // call shutdown before releasing his last reference
     // to this class in order to shutdown this thread

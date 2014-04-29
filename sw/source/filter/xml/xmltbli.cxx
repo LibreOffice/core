@@ -2491,7 +2491,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             sal_Int32 nExtraRel = nRelWidth - (nRelCols * nMinRelColWidth);
 
             // The absolute space that may be distributed in addition to
-            // minumum widthed columns.
+            // minimum widthed columns.
             sal_Int32 nMinAbs = nRelCols * MINLAY;
             sal_Int32 nExtraAbs =
                     nAbsForRelWidth > nMinAbs ? nAbsForRelWidth - nMinAbs : (sal_Int32)0L;

@@ -30,7 +30,7 @@
    range 0x81 to 0xA0, extra second byte ranges 0x41 to 0x5A, 0x61 to 0x7A,
    and 0x81 to 0xA0, even within the original EUC-KR area).
 
-   The mappings are also used for the HangulTalk encoding (Macintosh), altough
+   The mappings are also used for the HangulTalk encoding (Macintosh), although
    this contains some other EUC-KR extensions (that are thus not supported):
    special single byte characters 0x81, 0x82, 0x83, 0xFE, and 0xFF; extra
    double byte characters within first byte range 0xA1 to 0xAD and second byte

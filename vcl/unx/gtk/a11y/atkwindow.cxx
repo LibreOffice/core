@@ -191,7 +191,7 @@ ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
             Reference< XAccessible > xAccessible( pWindow->GetAccessible(true) );
 
             /* We need the wrapper object for the top-level XAccessible to be
-             * in the wrapper registry when atk traverses the hierachy up on
+             * in the wrapper registry when atk traverses the hierarchy up on
              * focus events
              */
             if( WINDOW_BORDERWINDOW == pWindow->GetType() )

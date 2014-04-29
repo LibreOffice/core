@@ -984,7 +984,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
     }
 #if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "conversion unsuccessfull\n" );
+        fprintf( stderr, "conversion unsuccessful\n" );
 #endif
     return bSuccess;
 }

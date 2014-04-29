@@ -3465,7 +3465,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
         }
 
         // If there are spaces left that have not been exported and the
-        // current chracter is not a space , the pending spaces have to be
+        // current character is not a space , the pending spaces have to be
         // exported now.
         if( nSpaceChars > 0 && !bCurrCharIsSpace )
         {

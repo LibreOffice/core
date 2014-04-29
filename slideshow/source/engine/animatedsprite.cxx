@@ -95,7 +95,7 @@ namespace slideshow
         {
             // Enlarge or reduce the sprite size, if necessary.  This
             // method employs a strategy similar to container, when
-            // allocating memory: size is doubled or halved everytime
+            // allocating memory: size is doubled or halved every time
             // the limit is reached. This makes for amortized constant
             // time in runtime complexity. Note that we take exact
             // powers of two here, since several HW-accelerated canvas

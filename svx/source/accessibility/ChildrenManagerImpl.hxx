@@ -506,7 +506,7 @@ public:
 
     /** This flag is set during the visibility calculation and indicates
         that at one time in this process an event is sent that informs the
-        listners of the creation of a new accessible object.  This flags is
+        listeners of the creation of a new accessible object.  This flags is
         not reset afterwards.  Don't use it unless you know exactly what you
         are doing.
     */

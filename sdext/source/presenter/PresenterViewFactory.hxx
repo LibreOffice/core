@@ -54,7 +54,7 @@ public:
     virtual void DeactivatePresenterView (void);
 
     /** Called before the view is disposed.  This gives the view the
-        oportunity to trigger actions that may lead to (synchronous)
+        opportunity to trigger actions that may lead to (synchronous)
         callbacks that do not result in DisposedExceptions.
     */
     virtual void ReleaseView (void);

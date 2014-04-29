@@ -414,7 +414,7 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
                 if ( lcl_searchElement( xForms, xObjectParent ) )
                 {
                     // the form which was the parent of the object when it was removed is still
-                    // part of the form component hierachy of the current page
+                    // part of the form component hierarchy of the current page
                     xNewParent = xObjectParent;
                     xForm.set( xNewParent, UNO_QUERY_THROW );
                     nPos = ::std::min( pObj->GetOriginalIndex(), xNewParent->getCount() );

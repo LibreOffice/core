@@ -44,10 +44,10 @@ namespace salhelper{
 
     @attention  To prevent the code against race conditions, its not
                 allowed to start operations inside the ctor
-                of the internal wrapped object - especialy operations
+                of the internal wrapped object - especially operations
                 which needs a reference to the same singleton too.
 
-                The only chance to supress such strange constellations
+                The only chance to suppress such strange constellations
                 is a lazy-init mechanism.
 
                 <ul>

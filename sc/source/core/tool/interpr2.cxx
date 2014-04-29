@@ -487,7 +487,7 @@ void ScInterpreter::ScGetDiffDate360()
      * 30" or "NASD 30" method (funny enough they also state that Excel is the
      * only tool that does so).
      *
-     * Note that the definiton given in
+     * Note that the definition given in
      * http://msdn.microsoft.com/library/en-us/office97/html/SEB7C.asp
      * is _not_ the way how it is actually calculated by Excel (that would not
      * even match any of the 7 methods mentioned above) and would result in the

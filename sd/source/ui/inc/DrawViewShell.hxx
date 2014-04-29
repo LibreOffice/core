@@ -468,7 +468,7 @@ private:
         a) it is running in its own frame, i.e. is a full screen show and
         b) the given flag bCloseFrame is true.
         @param bCloseFrame
-            Be carefull with this flag when stopping a full screen show.
+            Be careful with this flag when stopping a full screen show.
             When called from the destructor the flag has to be <FALSE/> or
             otherwise we run into a loop of calls to destructors of the view
             and the frame.

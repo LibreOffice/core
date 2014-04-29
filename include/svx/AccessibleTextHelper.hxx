@@ -140,7 +140,7 @@ namespace accessibility
         /** Query the current edit source
 
             @attention This method returns by reference, so you are
-            responsible for serialization (typically, you aquired the
+            responsible for serialization (typically, you acquired the
             solar mutex when calling this method). Thus, the method
             should only be called from the main office thread.
 

@@ -385,7 +385,7 @@ void PresenterScreen::InitializePresenterScreen (void)
                 // own full screen window that is controlled by the same
                 // configuration controller as the Impress document from
                 // which the presentation was started.  Therefore the main
-                // pane is actived additionally to the already existing
+                // pane is activated additionally to the already existing
                 // panes and does not replace them.
                 xCC->requestResourceActivation(
                     xMainPaneId,

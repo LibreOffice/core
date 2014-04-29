@@ -295,7 +295,7 @@ bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName ) throw (
 
 Type SAL_CALL GlobalEventConfig_Impl::getElementType(  ) throw (RuntimeException)
 {
-    //DF definitly not sure about this??
+    //DF definitely not sure about this??
     return ::getCppuType((const Sequence<beans::PropertyValue>*)0);
 }
 

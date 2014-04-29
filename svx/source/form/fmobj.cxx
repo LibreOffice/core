@@ -648,7 +648,7 @@ bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
                 Reference< XIndexContainer > xFormToInsertInto;
 
                 if ( !xParentForm.is() )
-                {   // model is not yet part of a form component hierachy
+                {   // model is not yet part of a form component hierarchy
                     xParentForm.set( rPage.GetImpl().findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
                     xFormToInsertInto.set( xParentForm, UNO_QUERY_THROW );
                 }

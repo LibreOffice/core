@@ -1841,7 +1841,7 @@ void SwWW8ImplReader::ImportDop()
 
     // COMPATIBILITY FLAGS START
 
-    // #i78951# - remember the unknown compatability options
+    // #i78951# - remember the unknown compatibility options
     // so as to export them out
     rDoc.Setn32DummyCompatabilityOptions1( pWDop->GetCompatabilityOptions());
     rDoc.Setn32DummyCompatabilityOptions2( pWDop->GetCompatabilityOptions2());

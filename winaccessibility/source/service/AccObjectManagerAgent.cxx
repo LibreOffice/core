@@ -234,7 +234,7 @@ void  AccObjectManagerAgent::UpdateState( com::sun::star::accessibility::XAccess
 }
 
 /**
-   * Interface of notify MSAA event when some UNO event occured.
+   * Interface of notify MSAA event when some UNO event occurred.
    * @param pXAcc Uno XAccessible interface of control.
    * @param pEvent UNO event ID.
    * @return If the method is correctly processed.

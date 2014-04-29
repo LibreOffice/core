@@ -262,7 +262,7 @@ namespace sdr
                     // set recursion flag
                     bInCreatePrimitive2D = true;
 
-                    // init extractor, guarantee existance, set page there
+                    // init extractor, guarantee existence, set page there
                     mpExtractor->SetStartPage(pPage);
 
                     // #i105548# also need to copy the VOCRedirector for sub-content creation

@@ -100,7 +100,7 @@ namespace xmloff
 
         MapPropertySet2Map  m_aReferringControls;
             // for a given page (iter->first), and a given control (iter->second->first), this is the comma-separated
-            // lists of ids of the controls refering to the control given.
+            // lists of ids of the controls referring to the control given.
 
         MapPropertySet2Map::iterator
                             m_aCurrentPageIds;

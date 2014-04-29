@@ -2677,7 +2677,7 @@ bool UCBStorage::Commit()
     // mark this storage for sending it on root commit
     pImp->m_bCommited = true;
     if ( pImp->m_bIsRoot )
-        // the root storage coordinates commiting by sending a Commit command to its content
+        // the root storage coordinates committing by sending a Commit command to its content
         return ( pImp->Commit() != COMMIT_RESULT_FAILURE );
     else
         return true;

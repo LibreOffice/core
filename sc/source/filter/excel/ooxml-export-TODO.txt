@@ -145,7 +145,7 @@ Elements:
     - Comments (§3.7):
         - Note: Excel *requires* that there be a drawing object associated
           with the comment before it will show it.  If you _just_ generate the
-          <comments/> XML part and create a <Relationship/> for it, Excell
+          <comments/> XML part and create a <Relationship/> for it, Excel
           will NOT display the comment.
         - As drawing is not currently implemented, comments support is
           incomplete.

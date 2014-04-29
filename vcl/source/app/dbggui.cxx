@@ -84,7 +84,7 @@ static const sal_Char* pDbgHelpText[] =
 "exception handler is called.\n",
 "\n",
 "Dialog\n",
-"FixedTexts, CheckBoxes, TriStateBoxes and RadioButtons are equiped with "
+"FixedTexts, CheckBoxes, TriStateBoxes and RadioButtons are equipped with "
 "a different background color to determine the size of the controls. This "
 "test also shows whether controls overlap, whether the tab order is correct "
 "and whether the mnemonic characters are correctly assigned. With dialogs "
@@ -106,7 +106,7 @@ static const sal_Char* pDbgHelpText[] =
 "You can indicate where the data will be output:\n",
 "\n",
 "None\n",
-"Output is surpressed.\n",
+"Output is suppressed.\n",
 "\n",
 "File\n",
 "Outputi n debug file. Filename can be entered in the Editfield.\n",

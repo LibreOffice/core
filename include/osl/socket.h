@@ -563,7 +563,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_receiveFromSocket(
     <li><code>osl_Socket_MsgMaxIOVLen</code>
     </ul>
 
-    @return the number of transfered bytes.
+    @return the number of transferred bytes.
 */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_sendSocket(
                        oslSocket Socket,
@@ -594,7 +594,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_sendSocket(
     <li><code>osl_Socket_MsgMaxIOVLen</code>
     </ul>
 
-    @return the number of transfered bytes.
+    @return the number of transferred bytes.
 */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_sendToSocket(
                          oslSocket Socket,

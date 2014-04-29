@@ -241,7 +241,7 @@ namespace svgio
                     const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
                     drawinglayer::processor2d::TextAsPolygonExtractor2D aExtractor(aViewInformation2D);
 
-                    // proccess
+                    // process
                     aExtractor.process(rSource);
 
                     // get results
@@ -679,7 +679,7 @@ namespace svgio
                             const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
                             drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
 
-                            // proccess
+                            // process
                             aExtractor.process(aSeq);
 
                             // check for fill rsults

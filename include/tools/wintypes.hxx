@@ -135,7 +135,7 @@ typedef sal_Int64 WinBits;
 // warning: do not confuse WB_SYSTEMCHILDWINDOW with the SystemChildWindow class
 //
 // the SystemChildWindow class was there first and is a very specialized
-// sytem child window type for plugged applications. The SystemChildWindow class
+// system child window type for plugged applications. The SystemChildWindow class
 // explicitly should never use the WB_SYSTEMCHILDWINDOW WinBit
 //
 // WB_SYSTEMCHILDWINDOW on the other hand is to be used on system windows

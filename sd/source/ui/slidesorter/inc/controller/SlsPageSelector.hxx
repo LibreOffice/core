@@ -141,7 +141,7 @@ public:
             When <TRUE/> (the default value) then after setting the
             selection update the current page to the first page of the
             selection.
-            When called from withing UpdateCurrentPage() then this flag is
+            When called from within UpdateCurrentPage() then this flag is
             used to prevent a recursion loop.
     */
     void SetPageSelection (

@@ -213,7 +213,7 @@ namespace DOM
                 /* this is not relly allowed by the DOM spec, but this
                    implementation has evidently supported it (by special case
                    handling, so the attribute does not actually become a child)
-                   so allow it for backward compatiblity */
+                   so allow it for backward compatibility */
                 return true;
             default:
                 return false;

@@ -490,7 +490,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
         OSL_ENSURE( xDialogDevice.is(), "UnoDialogControl::windowResized: no peer, but a windowResized event?" );
 
         // #i87592 In design mode the drawing layer works with sizes with decoration.
-        // Therefore we have to substract them before writing back to the properties (model).
+        // Therefore we have to subtract them before writing back to the properties (model).
         if ( xDialogDevice.is() && mbDesignMode )
         {
             DeviceInfo aDeviceInfo( xDialogDevice->getInfo() );

@@ -118,7 +118,7 @@ char            *workp;                 /* Work buffer pointer          */
  * the output from cpp is to be passed to lint (which uses commands
  * embedded in comments).  cflag contains the permanent state of the
  * -C flag.  keepcomments is always falsified when processing #control
- * commands and when compilation is supressed by a false #if
+ * commands and when compilation is suppressed by a false #if
  *
  * If eflag is set, CPP returns "success" even if non-fatal errors
  * were detected.
@@ -155,7 +155,7 @@ char    **incend = incdir;              /* -> free space in incdir[]    */
  * This is the table used to predefine target machine and operating
  * system designators.  It may need hacking for specific circumstances.
  * Note: it is not clear that this is part of the Ansi Standard.
- * The -N option supresses preset definitions.
+ * The -N option suppresses preset definitions.
  */
 char    *preset[] = {                   /* names defined at cpp start   */
 #ifdef  MACHINE

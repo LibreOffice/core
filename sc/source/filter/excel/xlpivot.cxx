@@ -977,7 +977,7 @@ void XclPTViewEx9Info::Init( const ScDPObject& rDPObj )
     else
     {
         // Report1 for now
-        // TODO : sync with autoformat indicies
+        // TODO : sync with autoformat indices
         mbReport     = 2;
         mnAutoFormat = 1;
         mnGridLayout = 0x10;

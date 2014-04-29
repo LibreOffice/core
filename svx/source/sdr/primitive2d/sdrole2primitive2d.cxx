@@ -73,7 +73,7 @@ namespace drawinglayer
             // to take care of getSdrLFSTAttribute() later, the same as in SdrGrafPrimitive2D::create2DDecomposition
             // should happen. For the moment we only need the OLE itself
             // Added complete primitive preparation using getSdrLFSTAttribute() now. To not do stuff which is not needed now, it
-            // may be supressed by using a static bool. The paint version only supported text.
+            // may be suppressed by using a static bool. The paint version only supported text.
             static bool bBehaveCompatibleToPaintVersion(false);
             Primitive2DSequence  aRetval;
 
@@ -148,7 +148,7 @@ namespace drawinglayer
             // add graphic content
             appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, getOLEContent());
 
-            // add text, no need to supress to stay compatible since text was
+            // add text, no need to suppress to stay compatible since text was
             // always supported by the old paints, too
             if(!getSdrLFSTAttribute().getText().isDefault())
             {

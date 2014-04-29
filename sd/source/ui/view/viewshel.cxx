@@ -1030,7 +1030,7 @@ void ViewShell::SetDefTabHRuler( sal_uInt16 nDefTab )
 
 
 /** Tell the FmFormShell that the view shell is closing.  Give it the
-    oportunity to prevent that.
+    opportunity to prevent that.
 */
 bool ViewShell::PrepareClose (bool bUI)
 {

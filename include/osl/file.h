@@ -572,7 +572,7 @@ struct _oslVolumeInfo {
     sal_uInt32      uValidFields;
 /** Attributes of the volume (remote and/or removable) */
     sal_uInt32      uAttributes;
-/** Total availiable space on the volume for the current process/user */
+/** Total available space on the volume for the current process/user */
     sal_uInt64      uTotalSpace;
 /** Used space on the volume for the current process/user */
     sal_uInt64      uUsedSpace;

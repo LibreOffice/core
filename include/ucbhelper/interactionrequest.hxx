@@ -177,7 +177,7 @@ public:
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionAbort. Instances of this class can be passed
-  * along with an interaction request to indicate the possiblity to abort
+  * along with an interaction request to indicate the possibility to abort
   * the operation that caused the request.
   */
 class UCBHELPER_DLLPUBLIC InteractionAbort : public InteractionContinuation,
@@ -214,7 +214,7 @@ public:
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionRetry. Instances of this class can be passed
-  * along with an interaction request to indicate the possiblity to retry
+  * along with an interaction request to indicate the possibility to retry
   * the operation that caused the request.
   */
 class UCBHELPER_DLLPUBLIC InteractionRetry : public InteractionContinuation,
@@ -251,7 +251,7 @@ public:
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionApprove. Instances of this class can be passed
-  * along with an interaction request to indicate the possiblity to approve
+  * along with an interaction request to indicate the possibility to approve
   * the request.
   */
 class UCBHELPER_DLLPUBLIC InteractionApprove : public InteractionContinuation,
@@ -288,7 +288,7 @@ public:
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionDisapprove. Instances of this class can be passed
-  * along with an interaction request to indicate the possiblity to disapprove
+  * along with an interaction request to indicate the possibility to disapprove
   * the request.
   */
 class UCBHELPER_DLLPUBLIC InteractionDisapprove : public InteractionContinuation,
@@ -627,7 +627,7 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionSupplyName. Instances of this class can be passed
-  * along with an interaction request to indicate the possiblity to
+  * along with an interaction request to indicate the possibility to
   * supply a new name.
   */
 class InteractionSupplyName : public InteractionContinuation,
@@ -680,7 +680,7 @@ public:
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionReplaceExistingData. Instances of this class can be
-  * passed along with an interaction request to indicate the possiblity to
+  * passed along with an interaction request to indicate the possibility to
   * replace existing data.
   */
 class InteractionReplaceExistingData :

@@ -2353,7 +2353,7 @@ SvXMLImportContext *SmXMLRowContext_Impl::StrictCreateChildContext(
             break;
 
         /*Note: The maligngroup should only be seen when the row
-         * (or decendants) are in a table*/
+         * (or descendants) are in a table*/
         case XML_TOK_MALIGNGROUP:
             pContext = GetSmImport().CreateAlignGroupContext(nPrefix,rLocalName,
                 xAttrList);

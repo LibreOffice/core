@@ -2436,7 +2436,7 @@ void ScXMLImport::ExamineDefaultStyle()
             const SvNumberformat* pFormat = pFormatter->GetEntry(nKey);
             if ( pFormat && pFormat->IsStandard() )
             {
-                // The standard format is all-latin if the decimal separator dosen't
+                // The standard format is all-latin if the decimal separator doesn't
                 // have a different script type
 
                 OUString aDecSep;

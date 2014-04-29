@@ -60,7 +60,7 @@
     <dl>
     <dt> <b>openKey</b>
     </dt>
-    <dd> returns a virtual key which is specified in the local or the sytem
+    <dd> returns a virtual key which is specified in the local or the system
     registry.
     </dd>
     <dt> <b>deleteKey</b>

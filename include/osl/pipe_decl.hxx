@@ -199,7 +199,7 @@ public:
         @param pBuffer [in] Points to a buffer that contains the send-data.
         @param BytesToSend [in] The number of bytes to send. pBuffer must have at least
         this size.
-        @return the number of transfered bytes.
+        @return the number of transferred bytes.
     */
     inline sal_Int32 SAL_CALL send(const void* pBuffer, sal_Int32 BytesToSend) const;
 

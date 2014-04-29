@@ -317,7 +317,7 @@ for ($cns_plane = 1; $cns_plane <= 16; ++$cns_plane)
                         $cns1_row = ($cns1 >> 8) & 0xFF;
                         $cns1_column = $cns1 & 0xFF;
 
-                        # Do not map from Unicode to Fictious Character Set
+                        # Do not map from Unicode to Fictitious Character Set
                         # Extensions (Lunde, p. 131), if possible:
                         if ($cns_plane == 3
                             && ($cns_row == 66 && $cns_column > 38
@@ -325,7 +325,7 @@ for ($cns_plane = 1; $cns_plane <= 16; ++$cns_plane)
                         {
                             print " (",
                                   printUtf32($utf32),
-                                  " to fictious ",
+                                  " to fictitious ",
                                   printCns116431992($cns_plane,
                                                     $cns_row,
                                                     $cns_column),
@@ -345,7 +345,7 @@ for ($cns_plane = 1; $cns_plane <= 16; ++$cns_plane)
                                        | $cns_column;
                             print " (",
                                   printUtf32($utf32),
-                                  " to fictious ",
+                                  " to fictitious ",
                                   printCns116431992($cns1_plane,
                                                     $cns1_row,
                                                     $cns1_column),

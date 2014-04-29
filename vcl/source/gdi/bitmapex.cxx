@@ -975,7 +975,7 @@ BitmapEx BitmapEx::getTransformed(
     // aOutlineRange
     aTransform = rTransformation * aTransform;
 
-    // substract top-left of absolute VisibleRange
+    // subtract top-left of absolute VisibleRange
     aTransform.translate(
         -aVisibleRange.getMinX(),
         -aVisibleRange.getMinY());

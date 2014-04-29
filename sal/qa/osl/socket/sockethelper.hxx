@@ -138,7 +138,7 @@ void printSocketResult( oslSocketResult eResult );
 /** if 4 parts of an IP addr are equal to specified values
 */
 sal_Bool ifIpv4is( const ::rtl::ByteSequence Ipaddr, sal_Int8 seq1, sal_Int8 seq2, sal_Int8 seq3, sal_Int8 seq4 );
-/** if the IP or hostname is  availble( alive )
+/** if the IP or hostname is  available( alive )
 */
 //sal_Bool ifAvailable( const char *  stringAddrOrHostName );
 sal_Bool ifAvailable( rtl::OUString const&  strAddrOrHostName );

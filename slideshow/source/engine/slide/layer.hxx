@@ -48,13 +48,13 @@ namespace slideshow
 
             Since slides have a notion of depth, i.e. shapes on it
             have a certain order in which they lie upon each other,
-            this layering must be modeled. A prime example for this
+            this layering must be modelled. A prime example for this
             necessity are animations of shapes lying behind other
             shapes. Then, everything behind the animated shape will be
             in a background layer, the shape itself will be in an
             animation layer, and everything before it will be in a
-            foreground layer (these layers are most preferrably
-            modeled as XSprite objects internally).
+            foreground layer (these layers are most preferably
+            modelled as XSprite objects internally).
 
             @attention All methods of this class are only supposed to
             be called from the LayerManager. Normally, it shouldn't be

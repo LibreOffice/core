@@ -434,7 +434,7 @@ public:
         @param _orNewStartPos
         output parameter - new start position in document preview
 
-        @return boolean - indicating, that move was sucessful.
+        @return boolean - indicating, that move was successful.
     */
     bool CalcStartValuesForSelectedPageMove( const sal_Int16  _nHoriMove,
                                              const sal_Int16  _nVertMove,

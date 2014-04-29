@@ -55,7 +55,7 @@ namespace slideshow
 
         bool WakeupEvent::isCharged() const
         {
-            // this event won't expire, we fire everytime we're
+            // this event won't expire, we fire every time we're
             // re-inserted into the event queue.
             return true;
         }

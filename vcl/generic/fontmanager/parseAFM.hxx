@@ -37,7 +37,7 @@
 
 /* ParseAFM.h
  *
- * This header file is used in conjuction with the parseAFM.c file.
+ * This header file is used in conjunction with the parseAFM.c file.
  * Together these files provide the functionality to parse Adobe Font
  * Metrics files and store the information in predefined data structures.
  * It is intended to work with an application program that needs font metric
@@ -300,7 +300,7 @@ typedef struct
  *
  *  "fp" should be a valid file pointer to an AFM file.
  *
- *  "fi" is a pointer to a pointer to a FontInfo record sturcture
+ *  "fi" is a pointer to a pointer to a FontInfo record structure
  *  (defined above). Storage for the FontInfo structure will be
  *  allocated in parseFile and the structure will be filled in
  *  with the requested data from the AFM File.

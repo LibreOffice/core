@@ -104,7 +104,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
         switch (pItem->Which())
         {
             /*
-            For an inline object these properties are irrelevent because they
+            For an inline object these properties are irrelevant because they
             will be the same as the defaults that msword applies in their
             absence, so if that is all that there is for these inline objects
             then if there turns out to be enough information in the object

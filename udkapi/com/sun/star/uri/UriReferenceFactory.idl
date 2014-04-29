@@ -40,7 +40,7 @@ published interface XUriReferenceFactory;
    com::sun::star::uri::XUriReference.</p>
 
    <p>Locating a scheme-specific parser works as follows:  A scheme consists of
-   Latin captial letters
+   Latin capital letters
    &ldquo;<code>A</code>&rdquo;&ndash;&ldquo;<code>Z</code>&rdquo;, Latin small
    letters &ldquo;<code>a</code>&rdquo;&ndash;&ldquo;<code>z</code>&rdquo;,
    digits &ldquo;<code>0</code>&rdquo;&ndash;&ldquo;<code>9</code>&rdquo;,

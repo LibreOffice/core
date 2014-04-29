@@ -389,7 +389,7 @@ bool SvXMLEmbeddedObjectHelper::ImplReadObject(
 
     if( xDocStor != xCntnrStor || pTemp || bDuplicate )
     {
-        // TODO/LATER: make this alltogether a method in the EmbeddedObjectContainer
+        // TODO/LATER: make this altogether a method in the EmbeddedObjectContainer
 
         // create a unique name for the duplicate object
         if( bDuplicate )

@@ -846,7 +846,7 @@ struct WW8_PCD
                             // properties of the piece.
 };
 
-// AnnoTation Refernce Descriptor (ATRD)
+// AnnoTation References Descriptor (ATRD)
 struct WW8_ATRD                 // fuer die 8-Version
 {
     SVBT16 xstUsrInitl[ 10 ];       // pascal-style String holding initials

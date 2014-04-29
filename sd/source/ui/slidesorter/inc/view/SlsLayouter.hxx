@@ -73,7 +73,7 @@ public:
 
     ::boost::shared_ptr<PageObjectLayouter> GetPageObjectLayouter (void) const;
     /** Set the interval of valid column counts.  When nMinimalColumnCount
-        <= nMaximalColumnCount is not fullfilled then the call is ignored.
+        <= nMaximalColumnCount is not fulfilled then the call is ignored.
         @param nMinimalColumnCount
             The default value is 1.  The question whether higher values make
             any sense is left to the caller.
@@ -87,7 +87,7 @@ public:
         calculates the output values.  Both given sizes must not be 0 in any
         dimension or the call is ignored.
         @param eOrientation
-            This defines the generaly layout and specifies whether there may
+            This defines the generally layout and specifies whether there may
             be more than one row or more than one column.
         @param rWindowSize
             The size of the window in pixels that the slide sorter is

@@ -236,7 +236,7 @@ public abstract class DataAware {
          * checks if this Value object can handle
          * the given object type as a target.
          * @param type the type of a target to check
-         * @return true if the given class is acceptible for
+         * @return true if the given class is acceptable for
          * the Value object. False if not.
          */
         public boolean isAssignable(Class<?> type);

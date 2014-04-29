@@ -900,7 +900,7 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
     ImplPrnQueueList* pPrnList = pSVData->maGDIData.mpPrinterQueueList;
     if ( pPrnList && pPrnList->m_aQueueInfos.size() )
     {
-        // first search for the printer name driectly
+        // first search for the printer name directly
         ImplPrnQueueData* pInfo = pPrnList->Get( rPrinterName );
         if( pInfo )
             return pInfo->mpSalQueueInfo;

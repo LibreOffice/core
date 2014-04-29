@@ -78,7 +78,7 @@ namespace accessibility {
     <li>As window listener it waits for changes of the window geometry and
     forwards those as view forwarder changes.</li>
     <li>As focus listener it keeps track of the focus to give this class and
-    derived classes the oportunity to set and remove the focus to/from
+    derived classes the opportunity to set and remove the focus to/from
     shapes.</li>
     </ol>
     </p>

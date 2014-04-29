@@ -33,7 +33,7 @@
       instead of the below for-each would only issue warnings, not errors, for
       non-existing or otherwise bad input files; it is important that the input
       filename list is already sorted in an order suitable for the configmgr
-      (e.g., xcs files preceeding xcu files).
+      (e.g., xcs files preceding xcu files).
 -->
       <xsl:for-each select="list/filename">
         <xsl:variable name="doc" select="document(concat($prefix, .))"/>

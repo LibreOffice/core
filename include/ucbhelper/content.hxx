@@ -584,11 +584,11 @@ public:
       *        objects (See queryCreatableContentsInfo()).
       * @param rPropertyNames is a sequence of names of properties for that
       *        values are to set at the new content before it will be inserted
-      *        ( commited ).
+      *        ( committed ).
       *        The order of the names must correspond to the order of the
       *        property values.
       * @param rPropertyValues is a sequence of property values that are to
-      *        set at the new content before it will be inserted ( commited ).
+      *        set at the new content before it will be inserted ( committed ).
       *        The order of the values must correspond to the order of the
       *        property names.
       * @param rNewContent will be filled by the implementation of this method
@@ -618,11 +618,11 @@ public:
       *        objects (See queryCreatableContentsInfo()).
       * @param rPropertyNames is a sequence of names of properties for that
       *        values are to set at the new content before it will be inserted
-      *        ( commited ).
+      *        ( committed ).
       *        The order of the names must correspond to the order of the
       *        property values.
       * @param rPropertyValues is a sequence of property values that are to
-      *        set at the new content before it will be inserted ( commited ).
+      *        set at the new content before it will be inserted ( committed ).
       *        The order of the values must correspond to the order of the
       *        property names.
       * @param rStream is a stream containing the content data for the new

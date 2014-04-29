@@ -473,8 +473,8 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     // The following code corrects the range to handle sections (start/end nodes)
     // The range will be extended if the least node before the range is a start node
     // which ends inside the range => The complete section will be moved.
-    // The range will be shrinked if the last position is a start node.
-    // The range will be shrinked if the last node is an end node which starts before the range.
+    // The range will be shrunk if the last position is a start node.
+    // The range will be shrunk if the last node is an end node which starts before the range.
     aSttRg--;
     while( aSttRg.GetNode().IsStartNode() )
     {

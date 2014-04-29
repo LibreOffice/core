@@ -252,7 +252,7 @@ public class ColourConverter {
           int blue = colour.getBlue();
 
         // We need to convert the pale colors to their base color rather than
-        // white so we modify the rgb values if the colour is sufficently
+        // white so we modify the rgb values if the colour is sufficiently
         // white
            if(red>0xC0 && green>0xC0 && blue>0xC0) {
 
@@ -302,7 +302,7 @@ public class ColourConverter {
          * is closest to White.
          *
          * Shades of grey will be converted to either Silver or White, where
-         * Grey may be a more appropraite colour.  This is handled specially
+         * Grey may be a more appropriate colour.  This is handled specially
          * only for Silver and White matches.
          */
         switch (matchedRGB) {

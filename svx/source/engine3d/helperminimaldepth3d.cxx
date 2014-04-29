@@ -188,7 +188,7 @@ double getMinimalDepthInViewCoordinates(const E3dCompoundObject& rObject)
                 aViewInfo3D.getViewTime(),
                 aViewInfo3D.getExtendedInformationSequence());
 
-            // create extractor helper, proccess geometry and get return value
+            // create extractor helper, process geometry and get return value
             drawinglayer::processor3d::MinimalDephInViewExtractor aExtractor(aNewViewInformation3D);
             aExtractor.process(aPrimitives);
             fRetval = aExtractor.getMinimalDepth();

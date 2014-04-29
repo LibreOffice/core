@@ -39,7 +39,7 @@ typedef struct _XIMAnnotation {
 } XIMAnnotation;
 
 /*
-  XIMUText: XIMText extention for UTF16
+  XIMUText: XIMText extension for UTF16
  */
 typedef struct _XIMUnicodeText {
   unsigned short length;

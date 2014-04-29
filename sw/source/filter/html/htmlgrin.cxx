@@ -1292,7 +1292,7 @@ bool SwHTMLParser::HasCurrentParaBookmarks( bool bIgnoreStack ) const
 
     if( !bHasMarks )
     {
-        // second step: when we didnt find a bookmark, check if there is one set already
+        // second step: when we didn't find a bookmark, check if there is one set already
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
         for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
             ppMark != pMarkAccess->getAllMarksEnd();

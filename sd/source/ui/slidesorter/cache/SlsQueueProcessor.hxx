@@ -92,7 +92,7 @@ public:
     void SetBitmapCache (const ::boost::shared_ptr<BitmapCache>& rpCache);
 
 private:
-    /** This mutex is used to guard the queue processor.  Be carefull not to
+    /** This mutex is used to guard the queue processor.  Be careful not to
         mix its use with that of the solar mutex.
     */
     ::osl::Mutex maMutex;

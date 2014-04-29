@@ -78,7 +78,7 @@ protected:
 
     // this method may return an empty reference when the transformer service
     // was created outside the xmloff environment.
-    // It is strictly forbiden to use this as a write access to the model!
+    // It is strictly forbidden to use this as a write access to the model!
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& getModel() const { return mxModel; }
 
 public:

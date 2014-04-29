@@ -4099,7 +4099,7 @@ bool PDFWriterImpl::emitFonts()
         if( ((++ni) & 7) == 0 )
             aFontDict.append( '\n' );
     }
-    // emit builtin font for widget apperances / variable text
+    // emit builtin font for widget appearances / variable text
     for( std::map< sal_Int32, sal_Int32 >::iterator it = m_aBuiltinFontToObjectMap.begin();
         it != m_aBuiltinFontToObjectMap.end(); ++it )
     {
@@ -6241,7 +6241,7 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
             aLine.append( '/' );
             appendDestinationName( aName, aLine ); // this conversion must be done when forming the link to target ( see in emitCatalog )
             aLine.append( '[' ); // the '[' can be emitted immediately, because the appendDestinationName function
-                                 //maps the preceeding character properly
+                                 //maps the preceding character properly
             aLine.append( rDestPage.m_nPageObject );
             aLine.append( " 0 R" );
 

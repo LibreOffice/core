@@ -68,7 +68,7 @@ public:
         OUString       m_aComment;
     };
 protected:
-    // needed for checkPrintersChanged: files (not necessarily existant)
+    // needed for checkPrintersChanged: files (not necessarily existent)
     // and their last known modification time
     struct WatchFile
     {

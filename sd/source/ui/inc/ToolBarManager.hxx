@@ -48,7 +48,7 @@ class ViewShellManager;
     Tool bars are managed in groups.  Each group can be set, reset, or
     modified independently of the others.  This allows for instance to
     replace the toolbars associated with the current function independently
-    from those assoicated with the main view.
+    from those associated with the main view.
 
     The ToolBarManager has two high level methods which contain the
     knowledge about which tool bars to show in a specific context.

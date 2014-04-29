@@ -491,7 +491,7 @@ public:
 
             sal_uInt8* mpData;
             sal_uInt16 mnLen;
-            sal_uInt16 mnIStd; // only for Fkp.Papx (actualy Style-Nr)
+            sal_uInt16 mnIStd; // only for Fkp.Papx (actually Style-Nr)
             bool mbMustDelete;
 
             explicit Entry(WW8_FC nFC) : mnFC(nFC), mpData(0), mnLen(0),

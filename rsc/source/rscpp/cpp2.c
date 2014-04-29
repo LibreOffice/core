@@ -315,8 +315,8 @@ void doif(int hash)
  * while #if needs a subroutine of its own to evaluate the expression.
  *
  * doif() is called only if compiling is TRUE.  If false, compilation
- * is always supressed, so we don't need to evaluate anything.  This
- * supresses unnecessary warnings.
+ * is always suppressed, so we don't need to evaluate anything.  This
+ * suppresses unnecessary warnings.
  */
 {
         register int            c;

@@ -121,7 +121,7 @@ void Options_Impl::printUsage_Impl() const
             "    -c|C      = make a complete check, that means any differences will be\n"
             "                detected. Default is only a compatibility check that means\n"
             "                only UNO typelibrary entries will be checked.\n"
-            "    -t|T      = make an UNO type compatiblity check. This means that registry 2\n"
+            "    -t|T      = make an UNO type compatibility check. This means that registry 2\n"
             "                will be checked against registry 1. If a interface in r2 contains\n"
             "                more methods or the methods are in a different order as in r1, r2 is\n"
             "                incompatible to r1. But if a service in r2 supports more properties as\n"

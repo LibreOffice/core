@@ -150,7 +150,7 @@ private:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame> mxFrameWeak;
 
     /** This object is used to lock the model between some
-        events.  It is refernce counted in order to cope with events that
+        events.  It is references counted in order to cope with events that
         are expected but never sent.
     */
     ::boost::shared_ptr<SlideSorterController::ModelChangeLock> mpModelChangeLock;

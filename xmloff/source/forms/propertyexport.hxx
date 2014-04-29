@@ -41,7 +41,7 @@ namespace xmloff
 #define BOOLATTR_DEFAULT_MASK           0x03
 
 #define BOOLATTR_INVERSE_SEMANTICS      0x04
-    // if sal_True, indicates that the semantic of the property refered by <arg>_pPropertyName</arg>
+    // if sal_True, indicates that the semantic of the property referred by <arg>_pPropertyName</arg>
     // is inverse to the semantic of the XML attribute.<br/>
     // I.e. if the property value is <TRUE/>, <FALSE/> has to be written and vice versa.
     // <p>Be careful with <arg>_bDefault</arg> and <arg>_bInverseSemantics</arg>: if <arg>_bInverseSemantics</arg>
@@ -285,10 +285,10 @@ namespace xmloff
             this to be chosen by the caller</p>
 
             <p>If you use the quote character, no check (except assertions) is made if one of the list items
-            containes the quote character</p>
+            contains the quote character</p>
 
             <p>If you don't use the quote character, no check (except assertions) is made if one of the list items
-            containes the separator character (which would be deadly when reimporting the string)</p>
+            contains the separator character (which would be deadly when reimporting the string)</p>
 
             @param _nNamespaceKey
                 the key of the namespace to use for the attribute name. Is used with the namespace map

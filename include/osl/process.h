@@ -134,7 +134,7 @@ typedef void* oslProcess;
     the process will be started in the context of the current user.
 
     @param ustrDirectory
-    [in] The file URL of the working directory of the new proces. If the specified directory
+    [in] The file URL of the working directory of the new process. If the specified directory
     does not exist or is inaccessible the working directory of the newly created process
     is undefined. If this parameter is NULL or the caller provides an empty string the
     new process will have the same current working directory as the calling process.
@@ -204,7 +204,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_executeProcess(
     the process will be started in the context of the current user.
 
     @param ustrDirectory
-    [in] The file URL of the working directory of the new proces. If the specified directory
+    [in] The file URL of the working directory of the new process. If the specified directory
     does not exist or is inaccessible the working directory of the newly created process
     is undefined. If this parameter is NULL or the caller provides an empty string the
     new process will have the same current working directory as the calling process.
@@ -381,14 +381,14 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getCommandArg(
 */
 SAL_DLLPUBLIC void SAL_CALL osl_setCommandArgs (int argc, char **argv);
 
-/** Get the value of one enviroment variable.
+/** Get the value of one environment variable.
     @param strVar [in] denotes the name of the variable to get.
     @param strValue [out] string that receives the value of environment variable.
 */
 SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getEnvironment(
         rtl_uString *strVar, rtl_uString **strValue);
 
-/** Set the value of one enviroment variable.
+/** Set the value of one environment variable.
     @param strVar [in] denotes the name of the variable to set.
     @param strValue [in] string of the new value of environment variable.
 
@@ -397,7 +397,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getEnvironment(
 SAL_DLLPUBLIC oslProcessError SAL_CALL osl_setEnvironment(
         rtl_uString *strVar, rtl_uString *strValue);
 
-/** Unsets the value of one enviroment variable.
+/** Unsets the value of one environment variable.
     @param strVar [in] denotes the name of the variable to unset.
 
     @since UDK 3.2.13

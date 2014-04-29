@@ -4772,7 +4772,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 settings its end to the current start, then store the starting
                 position of the current range to clipstart. The pPcd sprms
                 will end as normal (albeit earlier than originally expected),
-                and the existance of a clipstart will force the pPcd iterater
+                and the existence of a clipstart will force the pPcd iterater
                 to reread the current set of sprms instead of advancing to its
                 next set. Then the clipstart will be set as the starting
                 position which will force them to be applied directly after

@@ -389,7 +389,7 @@ void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId )
 
     if ( nPropId == BASEPROPERTY_FONTDESCRIPTOR )
     {
-        // some properties are not included in the FontDescriptor, but everytime
+        // some properties are not included in the FontDescriptor, but every time
         // when we have a FontDescriptor we want to have these properties too.
         // => Easier to register the here, istead everywhere where I register the FontDescriptor...
 

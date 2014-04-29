@@ -786,7 +786,7 @@ bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
                     }
                 }
 
-                // create entry and look for existance
+                // create entry and look for existence
                 ImpXMLAutoLayoutInfo* pNew = new ImpXMLAutoLayoutInfo(nType, pInfo);
                 bool bDidExist(false);
 

@@ -84,7 +84,7 @@ public class Test01 implements OLESimpleStorageTest
 
             //commit the storage and close it
             xOLESimpleStorage.commit ();
-            m_aTestHelper.Message ( "Storage commited." );
+            m_aTestHelper.Message ( "Storage committed." );
             xOLESimpleStorage.dispose ();
             for ( int i = 0; i < pStreamCnt; ++i )
             {

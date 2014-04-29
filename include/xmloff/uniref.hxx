@@ -27,7 +27,7 @@
 
 /**
  * An instance of this class holds a pointer to an object. The lifetime of
- * the object is controled by the instance. The constructor calls
+ * the object is controlled by the instance. The constructor calls
  * acquire() and the destructor calls release().
  * You could derive your class from the baseclass UniRefBase which implements
  * the methods acquire and release, yet.
@@ -198,7 +198,7 @@ inline bool UniReference< T >::is() const
 }
 /**
  * Return true if both interfaces refer to the same object. The operation can be
- * much more expensive than a pointer comparision.<BR>
+ * much more expensive than a pointer comparison.<BR>
  *
  * @param rRef      another interface reference
  */
@@ -209,7 +209,7 @@ inline bool UniReference< T >::operator == ( const UniReference & rRef ) const
 }
 /**
  * Return true if both interfaces does not refer to the same object. The operation can be
- * much more expensive than a pointer comparision.<BR>
+ * much more expensive than a pointer comparison.<BR>
  *
  * @param rRef      another interface reference
  */

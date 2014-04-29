@@ -118,7 +118,7 @@ void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
     @param      "pSelectedItem", returns result of selection as pointer into set list of filter names
                                  (valid for function return sal_True only!)
     @return     true  => pSelectedItem parameter points into name list and represent use decision
-                false => use has cancelled dialog (pSelectedItem isnt valid then!)
+                false => use has cancelled dialog (pSelectedItem isn't valid then!)
 
     @onerror    We return false ... but don't change pSelectedItem!
     @threadsafe no

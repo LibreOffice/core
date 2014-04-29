@@ -342,7 +342,7 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
 
         case POLY_CLIP_DIFF:
         {
-            // substract B from A (DIFF)
+            // subtract B from A (DIFF)
             aMergePolyPolygonA = basegfx::tools::solvePolygonOperationDiff(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }

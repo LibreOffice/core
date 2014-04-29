@@ -65,7 +65,7 @@ public:
 
         if bFitWidth or bFitHeight is set, the layouter tries to scale
         the rows and/or columns to the given area. The result my be bigger
-        to fullfill constrains.
+        to fulfill constrains.
 
         if bFitWidth or bFitHeight is set, the model is changed.
     */

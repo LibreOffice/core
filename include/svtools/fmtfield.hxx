@@ -28,7 +28,7 @@ namespace validation { class NumberValidator; }
 
 typedef sal_uInt16 FORMAT_CHANGE_TYPE;
 #define FCT_KEYONLY         0x00        // only a new key was set
-#define FCT_FORMATTER       0x01        // a new formatter weas set, usually implies a change of the key, too
+#define FCT_FORMATTER       0x01        // a new formatter was set, usually implies a change of the key, too
 #define FCT_PRECISION       0x02        // a new precision was set
 #define FCT_THOUSANDSSEP    0x03        // the thousands separator setting changed
 

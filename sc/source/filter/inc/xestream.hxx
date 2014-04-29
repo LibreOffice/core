@@ -86,7 +86,7 @@ public:
 
     /** Starts a new record: writes header data, stores calculated record size. */
     void                StartRecord( sal_uInt16 nRecId, sal_Size nRecSize );
-    /** Checks and corrects real record length. Must be called everytime a record is finished. */
+    /** Checks and corrects real record length. Must be called every time a record is finished. */
     void                EndRecord();
 
     /** Returns the position inside of current record (starts by 0 in every CONTINUE). */

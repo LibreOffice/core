@@ -611,7 +611,7 @@ The following structure describes the permissions used in PDF security
         bool                            DisplayPDFDocumentTitle;
         PDFPageLayout                   PageLayout;
         bool                            FirstPageLeft;
-        // intially visible page in viewer (starting with 0 for first page)
+        // initially visible page in viewer (starting with 0 for first page)
         sal_Int32                       InitialPage;
         sal_Int32                       OpenBookmarkLevels; // -1 means all levels
 

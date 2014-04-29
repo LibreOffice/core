@@ -6941,7 +6941,7 @@ void ScInterpreter::ScDBCount()
             // existing cells, so if a query matches an empty cell there's
             // nothing returned, and therefor not counted!
             // Since this has ever been the case and this code here only came
-            // into existance to fix #i6899 and it never worked before we'll
+            // into existence to fix #i6899 and it never worked before we'll
             // have to live with it until we reimplement the iterators to also
             // return empty cells, which would mean to adapt all callers of
             // iterators.

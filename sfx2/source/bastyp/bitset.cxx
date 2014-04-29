@@ -76,7 +76,7 @@ BitSet BitSet::operator<<( sal_uInt16 nOffset ) const
 
 
 
-// substracts nOffset from each bit-value in the set
+// subtracts nOffset from each bit-value in the set
 
 BitSet BitSet::operator>>( sal_uInt16 ) const
 {

@@ -98,7 +98,7 @@ enum EDocStates
 
     /* FINAL STATES */
 
-    /// the Auto/Emergency saved document isnt useable any longer
+    /// the Auto/Emergency saved document isn't useable any longer
     E_DAMAGED = 64,
     /// the Auto/Emergency saved document isnt really up-to-date (some changes can be missing)
     E_INCOMPLETE = 128,
@@ -452,7 +452,7 @@ class SaveDialog : public IExtendedTabPage
 
         /** @short  create all child controls of this dialog.
 
-            @descr  The dialog isnt shown nor it starts any
+            @descr  The dialog isn't shown nor it starts any
                     action by itself!
 
             @param  pParent
@@ -509,7 +509,7 @@ class SaveProgressDialog : public ModalDialog
 
         /** @short  create all child controls of this dialog.
 
-            @descr  The dialog isnt shown nor it starts any
+            @descr  The dialog isn't shown nor it starts any
                     action by itself!
 
             @param  pParent

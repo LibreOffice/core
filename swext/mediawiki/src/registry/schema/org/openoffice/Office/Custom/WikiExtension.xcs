@@ -147,13 +147,13 @@
 				<info><desc>The text asking whether a new wiki page should be created.</desc></info>
 			</prop>
             <prop oor:name="Dlg_SendToMediaWiki_Label1" oor:type="xs:string" oor:localized="true">
-				<info><desc>The label reffering to the MediaWiki server selection.</desc></info>
+				<info><desc>The label referring to the MediaWiki server selection.</desc></info>
 			</prop>
             <prop oor:name="Dlg_SendToMediaWiki_Label2" oor:type="xs:string" oor:localized="true">
-				<info><desc>The label reffering to the input of wiki article title.</desc></info>
+				<info><desc>The label referring to the input of wiki article title.</desc></info>
 			</prop>
             <prop oor:name="Dlg_SendToMediaWiki_Label3" oor:type="xs:string" oor:localized="true">
-				<info><desc>The label reffering to the comments input.</desc></info>
+				<info><desc>The label referring to the comments input.</desc></info>
 			</prop>
             <prop oor:name="Dlg_SendToMediaWiki_MinorCheck" oor:type="xs:string" oor:localized="true">
 				<info><desc>Text for checkbox specifying whether it is a minor input.</desc></info>

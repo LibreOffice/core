@@ -209,7 +209,7 @@ private:
         const bool bScrollToFocus);
 
     /** Call all currently registered listeners that a focus change has
-        happended.  The focus may be hidden or shown or moved from one page
+        happened.  The focus may be hidden or shown or moved from one page
         object to another.
     */
     void NotifyFocusChangeListeners (void) const;

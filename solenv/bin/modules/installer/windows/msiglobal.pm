@@ -1092,7 +1092,7 @@ sub prepare_64bit_database
             }
         }
 
-        # 2. Replacing all occurences of "VersionNT" by "VersionNT64"
+        # 2. Replacing all occurrences of "VersionNT" by "VersionNT64"
 
         my @versionnt_files = ("Componen.idt", "InstallE.idt", "InstallU.idt", "LaunchCo.idt");
 

@@ -243,7 +243,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
         it = m_aResFiles.find( aSearch );
         if( it != m_aResFiles.end() )
         {
-            // ensure InternalResMgr existance
+            // ensure InternalResMgr existence
             if( ! it->second.pResMgr )
             {
                 InternalResMgr* pImp =
@@ -269,7 +269,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
             {
                 if( it->first.matchIgnoreAsciiCase( rPrefix ) )
                 {
-                    // ensure InternalResMgr existance
+                    // ensure InternalResMgr existence
                     if( ! it->second.pResMgr )
                     {
                         InternalResMgr* pImp =

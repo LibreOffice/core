@@ -184,7 +184,7 @@ long CEnumVariant::GetCountOfElements()
 }
 
 /**
-   * Set memeber m_pXAccessibleSelection to NULL and m_lCurrent to m_lLBound.
+   * Set member m_pXAccessibleSelection to NULL and m_lCurrent to m_lLBound.
    * @param.
    * @return Result
    */

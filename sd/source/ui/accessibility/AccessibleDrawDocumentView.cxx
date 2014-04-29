@@ -522,7 +522,7 @@ uno::Sequence< sal_Int32 > SAL_CALL
         uno::Reference< drawing::XShape > xShape = mpChildrenManager->GetChildShape(i);
         if ( xShape.is() )
         {
-            //if the object is visable in the page, we add it into the group list.
+            //if the object is visible in the page, we add it into the group list.
             SdrObject* pObj = GetSdrObjectFromXShape(xShape);
             if ( pObj && pPV && pSdView && pSdView->IsObjMarkable( pObj, pPV ) )
             {

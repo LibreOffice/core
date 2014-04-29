@@ -584,7 +584,7 @@ int MathType::Parse(SotStorage *pStor)
 #endif
 
     int nRet = HandleRecords();
-    //little crude hack to close ocassionally open expressions
+    //little crude hack to close occasionally open expressions
     //a sophisticated system to determine what expressions are
     //opened is required, but this is as much work as rewriting
     //starmaths internals.

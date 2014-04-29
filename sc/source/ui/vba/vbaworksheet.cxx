@@ -662,7 +662,7 @@ ScVbaWorksheet::getPrevious() throw (uno::RuntimeException, std::exception)
 void
 ScVbaWorksheet::Protect( const uno::Any& Password, const uno::Any& /*DrawingObjects*/, const uno::Any& /*Contents*/, const uno::Any& /*Scenarios*/, const uno::Any& /*UserInterfaceOnly*/ ) throw (uno::RuntimeException, std::exception)
 {
-    // #TODO# #FIXME# is there anything we can do witht the unused param
+    // #TODO# #FIXME# is there anything we can do with the unused param
     // can the implementation use anything else here
     uno::Reference<util::XProtectable > xProtectable(getSheet(), uno::UNO_QUERY_THROW);
     OUString aPasswd;

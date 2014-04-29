@@ -38,7 +38,7 @@ published interface XLibraryAccess: com::sun::star::uno::XInterface
         otherwise it returns `FALSE`.
 
                 @param aFunctionName
-                the fully qualified name of a funtion.
+                the fully qualified name of a function.
                 (e.g., "UtilLibrary.ModuleDate.FunctionCurrentDate")
      */
     boolean isFunction( [in] string aFunctionName );

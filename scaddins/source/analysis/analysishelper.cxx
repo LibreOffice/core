@@ -2482,7 +2482,7 @@ ConvertDataList::ConvertDataList( void )
     NEWDP( "T",     1.0000000000000000E00,  CDC_Magnetism ); // Tesla
     NEWDP( "ga",    1.0000000000000000E04,  CDC_Magnetism ); // Gauss
 
-    // TEMERATURE: 1 Kelvin is...
+    // TEMPERATURE: 1 Kelvin is...
     NEWL( "C",      1.0000000000000000E00,  -2.7315000000000000E02, CDC_Temperature ); // Celsius
     NEWL( "cel",    1.0000000000000000E00,  -2.7315000000000000E02, CDC_Temperature ); // Celsius also
     NEWL( "F",      1.8000000000000000E00,  -2.5537222222222222E02, CDC_Temperature ); // Fahrenheit

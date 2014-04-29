@@ -844,7 +844,7 @@ QPushButton *WidgetPainter::pushButton( const Rectangle& rControlRegion,
     // Workaround for broken styles which do not add
     // QStyle::PM_ButtonDefaultIndicator to the size of the default button
     // (for example Keramik)
-    // FIXME Fix Keramik style to be consistant with Qt built-in styles. Aargh!
+    // FIXME Fix Keramik style to be consistent with Qt built-in styles. Aargh!
     if ( bDefault )
     {
         QSize qContentsSize( 50, 50 );

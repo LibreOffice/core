@@ -224,7 +224,7 @@ else {
     '-env:MYBOOTSTRAPTESTVALUE=$MYBOOTSTRAPTESTVALUE';
 }
 if (!$rc) {
-    $comment = $comment . "no infinit recursion test not passed\n";
+    $comment = $comment . "no infinite recursion test not passed\n";
     $state = 0;
 }
 

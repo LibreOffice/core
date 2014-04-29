@@ -2319,7 +2319,7 @@ shell::commit( const shell::ContentMap::iterator& it,
             }
             else
             {
-                // extremly ugly, but otherwise default construction
+                // extremely ugly, but otherwise default construction
                 // of aDirItem and aFileStatus2
                 // before the preciding if
                 isVolume = osl::FileStatus::Volume == aFileStatus.getFileType();

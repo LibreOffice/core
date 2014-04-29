@@ -1140,7 +1140,7 @@ bookmarks were set with SET or ASK. (See SwWW8FltRefStack)
 
 The other piece of the puzzle is that refs that point to the "location" of the
 bookmark will in word actually point to the last location where the bookmark
-was set with SET or ASK, not the actual bookmark. This is only noticable when
+was set with SET or ASK, not the actual bookmark. This is only noticeable when
 a document sets the bookmark more than once. This is because word places the
 true bookmark at the location of the last set, but the refs will display the
 position of the first set before the ref.
@@ -3168,7 +3168,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
             {
                 case TOX_CONTENT:
                     {
-                        //If we would be created from outlines, either explictly or by default
+                        //If we would be created from outlines, either explicitly or by default
                         //then see if we need extra styles added to the outlines
                         sal_uInt16 eEffectivelyFrom = eCreateFrom ? eCreateFrom : nsSwTOXElement::TOX_OUTLINELEVEL;
                         if (eEffectivelyFrom & nsSwTOXElement::TOX_OUTLINELEVEL)

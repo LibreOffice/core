@@ -227,7 +227,7 @@ System.out.println("    exception: " + ioe.getMessage());
      */
     public void prepareEnvironment(FileSystem.Environment environment)
     {
-        // BUG: the compiller cannot access files withing the OpenOffice document.
+        // BUG: the compiller cannot access files within the OpenOffice document.
         //environment.addClassPath(docFile.toString());
     }
 

@@ -1000,7 +1000,7 @@ static void GetNames(TrueTypeFont *t)
 
     /* #i60349# sanity check psname
      * psname parctically has to be 7bit ascii and should not contains spaces
-     * there is a class of broken fonts which do not fullfill that at all, so let's try
+     * there is a class of broken fonts which do not fulfill that at all, so let's try
      * if the family name is 7bit ascii and take it instead if so
      */
     /* check psname */

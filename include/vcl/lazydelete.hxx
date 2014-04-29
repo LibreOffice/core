@@ -119,7 +119,7 @@ namespace vcl
         typedef boost::unordered_map< sal_IntPtr, unsigned int > PtrToIndexMap;
         PtrToIndexMap                       m_aPtrToIndex;
 
-        /** strict weak ordering funtion to bring objects to be destroyed lazily
+        /** strict weak ordering function to bring objects to be destroyed lazily
         in correct order, e.g. for Window objects children before parents
         */
         static bool is_less( T* left, T* right );
@@ -200,7 +200,7 @@ namespace vcl
     /*
     class DeleteOnDeinit matches a similar need as LazyDelete for static objects:
     you may not access vcl objects after DeInitVCL has been called this includes their destruction
-    therefore disallowing the existance of static vcl object like e.g. a static BitmapEx
+    therefore disallowing the existence of static vcl object like e.g. a static BitmapEx
     To work around this use DeleteOnDeinit<BitmapEx> which will allow you to have a static object container,
     that will have its contents destroyed on DeinitVCL. The single drawback is that you need to check on the
     container object whether it still contains content before actually accessing it.

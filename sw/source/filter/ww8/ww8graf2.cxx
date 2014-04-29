@@ -519,7 +519,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
             ##835##
             Disable use of main stream as fallback stream for inline direct
             blips as it is known that they are directly after the record
-            header, testing for existance in main stream may lead to an
+            header, testing for existence in main stream may lead to an
             incorrect fallback graphic being found if other escher graphics
             have been inserted in the document
             */

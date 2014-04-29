@@ -56,7 +56,7 @@ namespace myImplHelpers
     {
         /*
         The normal case for reexporting word docs is to have dynamic spacing,
-        as this is word's only setting, and the reason for the existance of the
+        as this is word's only setting, and the reason for the existence of the
         dynamic spacing features. If we have dynamic spacing active then we can
         add its spacing to the value height of the h/f and get the wanted total
         size for word.
@@ -585,7 +585,7 @@ namespace sw
 
             if (bSplitOnCharSet)
             {
-                //Split unicode text into plausable 8bit ranges for export to
+                //Split unicode text into plausible 8bit ranges for export to
                 //older non unicode aware format
                 sal_Int32 nLen = rTxt.getLength();
                 sal_Int32 nPos = 0;

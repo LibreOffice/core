@@ -431,7 +431,7 @@ void initdefines()
  *      #define __FILE__ ??             (dynamic, evaluated by magic)
  * Called only on cpp startup.
  *
- * Note: the built-in static definitions are supressed by the -N option.
+ * Note: the built-in static definitions are suppressed by the -N option.
  * __LINE__, __FILE__, and __DATE__ are always present.
  */
 {

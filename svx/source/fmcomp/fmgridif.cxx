@@ -1461,7 +1461,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
             sal_Int32 nWidth = 0;
             if (evt.NewValue.getValueType().getTypeClass() == TypeClass_VOID)
                 nWidth = pGrid->GetDefaultColumnWidth(pGrid->GetColumnTitle(nId));
-                // GetDefaultColumnWidth already considerd the zoom factor
+                // GetDefaultColumnWidth already considered the zoom factor
             else
             {
                 sal_Int32 nTest = 0;

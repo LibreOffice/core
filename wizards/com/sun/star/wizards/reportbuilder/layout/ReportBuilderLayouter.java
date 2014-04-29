@@ -1189,7 +1189,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                         XShape aShape = UnoRuntime.queryInterface(XShape.class, aClone);
 
                         // normally 'createClone' will create a real clone of the component,
-                        // but there seems some problems, we have to controll.
+                        // but there seems some problems, we have to control.
                         copyProperties(aComponent, aClone);
 
                         // aShape.setPosition(aComponent.getPosition());

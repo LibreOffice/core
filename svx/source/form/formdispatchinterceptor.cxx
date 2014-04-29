@@ -67,7 +67,7 @@ namespace svxform
         {
             _rxToIntercept->registerDispatchProviderInterceptor((XDispatchProviderInterceptor*)this);
             // this should make us the top-level dispatch-provider for the component, via a call to our
-            // setDispatchProvider we should have got an fallback for requests we (i.e. our master) cannot fullfill
+            // setDispatchProvider we should have got an fallback for requests we (i.e. our master) cannot fulfill
             Reference< XComponent> xInterceptedComponent(_rxToIntercept, UNO_QUERY);
             if (xInterceptedComponent.is())
             {

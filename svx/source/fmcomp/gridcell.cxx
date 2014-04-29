@@ -1841,7 +1841,7 @@ OUString DbPatternField::GetFormatText(const Reference< ::com::sun::star::sdb::X
     }
     else
         OSL_ENSURE( rpFormatter->getColumn() == _rxField, "DbPatternField::GetFormatText: my value formatter is working for another field ...!" );
-        // re-creating the value formatter here everytime would be quite expensive ...
+        // re-creating the value formatter here every time would be quite expensive ...
 
     OUString sText;
     if ( rpFormatter.get() )

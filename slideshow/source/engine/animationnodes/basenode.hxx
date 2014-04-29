@@ -143,7 +143,7 @@ protected:
 
 private:
     // all state affecting methods have "_st" counterparts being called at
-    // derived classes when in state transistion: no-ops here at BaseNode...
+    // derived classes when in state transition: no-ops here at BaseNode...
     virtual bool init_st();
     virtual bool resolve_st();
     virtual void activate_st();

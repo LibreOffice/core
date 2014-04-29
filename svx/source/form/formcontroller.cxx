@@ -1025,7 +1025,7 @@ void SAL_CALL FormController::removeDisjunctiveTerm( ::sal_Int32 _Term ) throw (
     FmFilterRows::iterator pos = m_aFilterRows.begin() + _Term;
     m_aFilterRows.erase( pos );
 
-    // adjust m_nCurrentFilterPosition if the removed row preceeded it
+    // adjust m_nCurrentFilterPosition if the removed row preceded it
     if ( _Term < m_nCurrentFilterPosition )
         --m_nCurrentFilterPosition;
 

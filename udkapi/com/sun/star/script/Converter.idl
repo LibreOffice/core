@@ -65,7 +65,7 @@
     <li>10: only converts if it is the same enumeration type.</li>
     <li>11: only converts if the string contains the name of an enumeration type value. Normally you need
     core reflection information of the enum type.</li>
-    <li>12: only converts if the value of the string is "1", "true" or "0", "false". The comparision
+    <li>12: only converts if the value of the string is "1", "true" or "0", "false". The comparison
     is case insensitive.</li>
     <li>13: only converts if the length of the string is 1 or 0.</li>
     <li>14: only converts if the types are equal or the source type is derived from the destination

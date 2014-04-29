@@ -103,7 +103,7 @@ public:
      *  to named file.
      *  nMode: only meaningful when saving to file: if nonzero, try
      *  to impose the mode on the resulting file's inode; for nonexistant
-     *  files use open, for existant files try a chmod
+     *  files use open, for existent files try a chmod
      *  rJobName: text to appear in the %%Title comment
      *  rAppName: text to appear in the %%Creator comment
      *  rSetupData: JobData that apply to this job

@@ -1969,7 +1969,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         ApoTestResults aApo = pIo->TestApo(pIo->nInTable + 1, false, pTabPos);
 
         /*
-        ##513##, #79474# If this is not sufficent, then we should look at
+        ##513##, #79474# If this is not sufficient, then we should look at
         sprmPD{y|x}aAbs as our indicator that the following set of rows is not
         part of this table, but instead is an absolutely positioned table
         outside of this one
@@ -2212,7 +2212,7 @@ void WW8TabDesc::CalcDefaults()
         /*
         If the last cell was "false" then there is no valid cell following it,
         so the default mapping forward wont't work. So map it (and
-        contigious invalid cells backwards to the last valid cell instead.
+        contiguous invalid cells backwards to the last valid cell instead.
         */
         if (i && pR->bExist[i-1] == false)
         {

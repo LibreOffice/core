@@ -272,7 +272,7 @@ namespace xmloff
             const OUString& _rPropertyName, const sal_Int8 _nBooleanAttributeFlags)
     {
         DBG_CHECK_PROPERTY_NO_TYPE( _rPropertyName );
-        // no check of the property value type: this method is allowed to be called with any interger properties
+        // no check of the property value type: this method is allowed to be called with any integer properties
         // (e.g. sal_Int32, sal_uInt16 etc)
 
         bool bDefault = (BOOLATTR_DEFAULT_TRUE == (BOOLATTR_DEFAULT_MASK & _nBooleanAttributeFlags));

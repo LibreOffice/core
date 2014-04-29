@@ -51,7 +51,7 @@ static bool  bStartDrag = false;
 
 void SwWrtShell::Invalidate()
 {
-    // to avoid making the slot volatile, invalidate it everytime if something could have been changed
+    // to avoid making the slot volatile, invalidate it every time if something could have been changed
     // this is still much cheaper than asking for the state every 200 ms (and avoid background processing)
     GetView().GetViewFrame()->GetBindings().Invalidate( FN_STAT_SELMODE );
     SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());

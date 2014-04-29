@@ -116,7 +116,7 @@ public:
     void SetViewSize(const Size& rSize);
     void SetCenterAllowed (bool bIsAllowed);
 
-    /** Calculate origin of the map mode accoring to the size of the view
+    /** Calculate origin of the map mode according to the size of the view
         and window (its size in model coordinates; that takes the zoom
         factor into account), and the bCenterAllowed flag.  When it is not
         set then nothing is changed.  When in any direction the window is

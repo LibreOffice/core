@@ -273,7 +273,7 @@ class VCL_DLLPUBLIC PPDContext
     const PPDParser*                                    m_pParser;
 
     // returns false: check failed, new value is constrained
-    //         true:  check succeded, new value can be set
+    //         true:  check succeeded, new value can be set
     bool checkConstraints( const PPDKey*, const PPDValue*, bool bDoReset );
     bool resetValue( const PPDKey*, bool bDefaultable = false );
 public:

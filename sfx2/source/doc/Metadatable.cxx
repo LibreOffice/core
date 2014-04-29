@@ -78,7 +78,7 @@
     These serve only to track the position in an XML ID list in a document
     registry, so that future actions can insert objects at the right position.
     Unfortunately, inserting dummy objects seems to be necessary:
-    <ul><li>it is not sufficent to just remember the saved id, because then
+    <ul><li>it is not sufficient to just remember the saved id, because then
             the relative priorities might change when executing the undo</li>
         <li>it is not sufficient to record the position as an integer, because
             if we delete a text node and then undo, the node will be copied(!),

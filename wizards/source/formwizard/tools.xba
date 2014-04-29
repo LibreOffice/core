@@ -225,7 +225,7 @@ Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Ob
 &apos; Todo Why does this not work?:		oLocObject.DefaultDate = CurDefaultValue
 	ElseIf CurControlType = cTimeBox Then	&apos; com.sun.star.sdbc.DataType.DATE, com.sun.star.sdbc.DataType.TIME
 		oLocObject.DefaultTime = CurDefaultValue
-&apos; Todo: Property TimeFormat? frome where?
+&apos; Todo: Property TimeFormat? from where?
 	ElseIf CurControlType = cCheckBox Then
 &apos; Todo Why does this not work?:		oLocObject.DefautState = CurDefaultValue
 	End If

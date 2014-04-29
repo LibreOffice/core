@@ -515,7 +515,7 @@ public:
      * all data on demand.
      *
      * The implementation should call m_pResultSet->rowCountChanged(...)
-     * everytime it has inserted a new entry in its logical result array.
+     * every time it has inserted a new entry in its logical result array.
      *
      * @return the count of objects obtained so far; will always be
      * non-negative.

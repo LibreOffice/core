@@ -963,7 +963,7 @@ Rectangle SvxPixelCtl::implCalFocusRect( const Point& aPosition )
     return Rectangle(nLeft,nTop,nRight,nBottom);
 }
 
-//Solution:Keyboard fucntion
+//Solution:Keyboard function
 void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aKeyCode = rKEvt.GetKeyCode();

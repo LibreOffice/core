@@ -45,7 +45,7 @@ static char *opname[] = {       /* For debug and error messages */
  *      10  The new value of the binop flag.
  * Note:  Expected, New binop
  * constant 0   1   Binop, end, or ) should follow constants
- * End of line  1   0   End may not be preceeded by an operator
+ * End of line  1   0   End may not be preceded by an operator
  * binary   1   0   Binary op follows a value, value follows.
  * unary    0   0   Unary op doesn't follow a value, value follows
  *   (      0   0   Doesn't follow value, value or unop follows
@@ -205,7 +205,7 @@ eval()
  * evaleval Evaluate the current operator, given the values on
  *      the value stack.  Returns a pointer to the (new)
  *      value stack.
- * For compatiblity with older cpp's, this return returns 1 (TRUE)
+ * For compatibility with older cpp's, this return returns 1 (TRUE)
  * if a syntax error is detected.
  */
 {

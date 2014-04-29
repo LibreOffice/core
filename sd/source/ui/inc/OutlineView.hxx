@@ -146,7 +146,7 @@ public:
     /** After this method has been called with <TRUE/> following changes of
         the current page are ignored in that the corresponding text is not
         selected.
-        This is used to supress unwanted side effects between selection and
+        This is used to suppress unwanted side effects between selection and
         cursor position.
     */
     void IgnoreCurrentPageChanges (bool bIgnore);

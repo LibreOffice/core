@@ -1470,7 +1470,7 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
 
 static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect, bool bImmediateUpdate )
 {
-    // give up background save when sytem paints arrive
+    // give up background save when system paints arrive
     Window* pSaveBackWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFirstBackWin;
     while ( pSaveBackWin )
     {

@@ -978,7 +978,7 @@ bool SvtLinguConfig::GetDictionaryEntry(
         DBG_ASSERT( !aFormatName.isEmpty(), "Dictionary format name not set" );
         DBG_ASSERT( aLocaleNames.getLength(), "No locales set for the dictionary" );
 
-        // if sucessful continue
+        // if successful continue
         if (bSuccess)
         {
             // get file URL's for the locations

@@ -108,7 +108,7 @@ ScVbaChartObject::Activate() throw ( script::BasicErrorException )
 {
     try
     {
-        // #TODO #FIXME should be ThisWorkbook or equivelant, or in
+        // #TODO #FIXME should be ThisWorkbook or equivalent, or in
         // fact probably the chart object should be created with
         // the XModel owner
         //uno::Reference< view::XSelectionSupplier > xSelectionSupplier( getXModel().getCurrentController());

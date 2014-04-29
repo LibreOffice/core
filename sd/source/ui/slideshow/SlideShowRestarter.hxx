@@ -32,7 +32,7 @@ namespace sd {
     leads to a crash.
 
     During a restart a possibly installed presenter extension is given the
-    oportunity to show or hide depending on the number of available displays.
+    opportunity to show or hide depending on the number of available displays.
 */
 class SlideShowRestarter
     : public boost::enable_shared_from_this<SlideShowRestarter>

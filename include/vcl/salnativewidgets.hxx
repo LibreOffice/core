@@ -59,7 +59,7 @@ typedef sal_uInt32      ControlType;
 #define CTRL_EDITBOX_NOBORDER   31
 
 // Control that allows text entry
-// ( some systems distingish between single and multi line edit boxes )
+// ( some systems distinguish between single and multi line edit boxes )
 #define CTRL_MULTILINE_EDITBOX 32
 
 // Control that pops up a menu,

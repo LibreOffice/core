@@ -644,7 +644,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         VCLXWindow* pPeer = pVclPeer ? pVclPeer->GetWindowPeer() : NULL;
         VclListenerLock aNoVclEventMultiplexing( pPeer );
 
-        // setting peer properties may result in an attemp to acquire the solar mutex, 'cause the peers
+        // setting peer properties may result in an attempt to acquire the solar mutex, 'cause the peers
         // usually don't have an own mutex but use the SolarMutex instead.
         // To prevent deadlocks resulting from this, we do this without our own mutex locked
         std::vector< PropertyValue >::iterator aEnd = aPeerPropertiesToSet.end();
@@ -1279,7 +1279,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         // this is necessary as our peer may lock the SolarMutex (actually, all currently known peers do), so calling
         // into the peer with our own mutex locked may cause deadlocks
         // (We _really_ need peers which do not use the SolarMutex. It's really pissing me off that from time to
-        // time deadlocks pop up because the low-level components like our peers use a mutex which ususally
+        // time deadlocks pop up because the low-level components like our peers use a mutex which usually
         // is locked at the top of the stack (it protects the global message looping). This is always dangerous, and
         // can not always be solved by tampering with other mutexes.
         // Unfortunately, the VCL used in the peers is not threadsafe, and by definition needs a locked SolarMutex.)

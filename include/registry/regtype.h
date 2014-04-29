@@ -62,7 +62,7 @@ enum RegKeyType
 
     A registry key can contain a value which has one of seven different types.
     Three simple types (long, ascii and unicode string) and a list type of
-    these simple types. Furthermore a binary type which provides the possibilty
+    these simple types. Furthermore a binary type which provides the possibility
     to define own data structures and store these types in the registry. The UNO
     core reflection data is stored as a binary blob in the type registry.
  */

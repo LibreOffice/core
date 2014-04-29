@@ -371,7 +371,7 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         // if we are formatting multi portions we want to allow line breaks
         // at the border between single line and multi line portion
-        // we have to be carefull with footnote portions, they always come in
+        // we have to be careful with footnote portions, they always come in
         // with an index 0
         if ( nBreakPos < rInf.GetLineStart() && rInf.IsFirstMulti() &&
              ! rInf.IsFtnInside() )

@@ -174,7 +174,7 @@ void XMLSectionImportContext::StartElement(
                     xPropSet->setPropertyValue( sIsVisible, aAny );
 
                     // #97450# hidden sections must be hidden on reload
-                    // For backwards compatibilty, set flag only if it is
+                    // For backwards compatibility, set flag only if it is
                     // present
                     if( bIsCurrentlyVisibleOK )
                     {

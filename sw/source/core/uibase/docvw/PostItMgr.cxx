@@ -148,7 +148,7 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     SW_MOD()->GetRedlineAuthor();
 
     // collect all PostIts and redline comments that exist after loading the document
-    // don't check for existance for any of them, don't focus them
+    // don't check for existence for any of them, don't focus them
     AddPostIts(false,false);
     /*  this code can be used once we want redline comments in the Sidebar
     AddRedlineComments(false,false);

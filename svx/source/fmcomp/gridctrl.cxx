@@ -2139,7 +2139,7 @@ void DbGridControl::AdjustDataSource(bool bFull)
     if (bFull)
         m_xCurrentRow = NULL;
     // if we are on the same row only repaint
-    // but this is only possible for rows which are not inserted, in that case the comparision result
+    // but this is only possible for rows which are not inserted, in that case the comparison result
     // may not be correct
     else
         if  (   m_xCurrentRow.Is()

@@ -111,7 +111,7 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
 
     //mpSelectedFrmMap contains the old selected objects.
     SwAccessibleContextMap_Impl *mpSeletedFrmMap;
-    //IvalidateShapeInParaSelection() method is reponsible for the updating the selected states of the objects.
+    //IvalidateShapeInParaSelection() method is responsible for the updating the selected states of the objects.
     void InvalidateShapeInParaSelection();
 
     void _InvalidateRelationSet( const SwFrm* pFrm, bool bFrom );

@@ -814,9 +814,9 @@ atk_object_wrapper_new( const ::com::sun::star::uno::Reference< ::com::sun::star
         else
         {
             /* gail_focus_tracker remembers the focused object at the first
-             * parent in the hierachy that is a Gtk+ widget, but at the time the
+             * parent in the hierarchy that is a Gtk+ widget, but at the time the
              * event gets processed (at idle), it may be too late to create the
-             * hierachy, so doing it now ..
+             * hierarchy, so doing it now ..
              */
             uno::Reference< accessibility::XAccessible > xParent( xContext->getAccessibleParent() );
 

@@ -55,7 +55,7 @@ namespace sdr
             bool                                            mbPageProcessingActive : 1;
 
             // Internal flag to remember if EnteredGroupDrawMode is active. Default is true
-            // since this mode starts activated and gets switched off when reacing
+            // since this mode starts activated and gets switched off when reaching
             // the current group level. Should only be changed by instances which do
             // primitive processing
             bool                                            mbGhostedDrawModeActive : 1;

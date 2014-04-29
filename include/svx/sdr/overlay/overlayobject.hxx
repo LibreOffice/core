@@ -114,7 +114,7 @@ namespace sdr
             virtual void objectChange();
 
             // write access to AntiAliase flag. This is protected since
-            // only implementations are allowed to change this, preferrably in their
+            // only implementations are allowed to change this, preferably in their
             // constructor
             void allowAntiAliase(bool bNew);
 

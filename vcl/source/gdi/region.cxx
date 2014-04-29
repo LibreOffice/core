@@ -119,7 +119,7 @@ namespace
                 OSL_ASSERT(aStart.X() == aEnd.X());
 
                 // Sort y-coordinates to simplify the algorithm and store the
-                // direction seperately.  The direction is calculated as it is
+                // direction separately.  The direction is calculated as it is
                 // in other places (but seems to be the wrong way.)
                 const long nTop (::std::min(aStart.Y(), aEnd.Y()));
                 const long nBottom (::std::max(aStart.Y(), aEnd.Y()));
@@ -207,7 +207,7 @@ namespace
                 pRegionBand->InsertLine( aPoly.GetPoint(nPoint-1), aPoly.GetPoint(nPoint), nLineID++ );
             }
 
-            // close polygon with line from first point to last point, if neccesary
+            // close polygon with line from first point to last point, if necessary
             const Point rLastPoint = aPoly.GetPoint(nSize-1);
             const Point rFirstPoint = aPoly.GetPoint(0);
 
@@ -696,7 +696,7 @@ bool Region::Exclude( const Rectangle& rRect )
 
     if(IsNull())
     {
-        // error; cannnot exclude from null region since this is not representable
+        // error; cannot exclude from null region since this is not representable
         // in the data
         OSL_ENSURE(false, "Region::Exclude error: Cannot exclude from null region (!)");
         return true;
@@ -778,7 +778,7 @@ bool Region::XOr( const Rectangle& rRect )
 
     if(IsNull())
     {
-        // error; cannnot exclude from null region since this is not representable
+        // error; cannot exclude from null region since this is not representable
         // in the data
         OSL_ENSURE(false, "Region::XOr error: Cannot XOr with null region (!)");
         return true;
@@ -1079,7 +1079,7 @@ bool Region::Exclude( const Region& rRegion )
 
     if(IsNull())
     {
-        // error; cannnot exclude from null region since this is not representable
+        // error; cannot exclude from null region since this is not representable
         // in the data
         OSL_ENSURE(false, "Region::Exclude error: Cannot exclude from null region (!)");
         return true;
@@ -1151,7 +1151,7 @@ bool Region::XOr( const Region& rRegion )
 
     if ( rRegion.IsNull() )
     {
-        // error; cannnot exclude null region from local since this is not representable
+        // error; cannot exclude null region from local since this is not representable
         // in the data
         OSL_ENSURE(false, "Region::XOr error: Cannot XOr with null region (!)");
         return true;
@@ -1166,7 +1166,7 @@ bool Region::XOr( const Region& rRegion )
 
     if(IsNull())
     {
-        // error; cannnot exclude from null region since this is not representable
+        // error: cannot exclude from null region since this is not representable
         // in the data
         OSL_ENSURE(false, "Region::XOr error: Cannot XOr with null region (!)");
         return false;
@@ -1373,7 +1373,7 @@ bool Region::IsInside( const Point& rPoint ) const
     //  return mpImplRegion->getRegionPolyPoly()->IsInside( rPoint );
     //}
 
-    // ensure RegionBand existance
+    // ensure RegionBand existence
     const RegionBand* pRegionBand = GetAsRegionBand();
 
     if(pRegionBand)
@@ -1685,7 +1685,7 @@ void Region::GetRegionRectangles(RectangleVector& rTarget) const
     // clear returnvalues
     rTarget.clear();
 
-    // ensure RegionBand existance
+    // ensure RegionBand existence
     const RegionBand* pRegionBand = GetAsRegionBand();
 
     if(pRegionBand)

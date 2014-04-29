@@ -1614,7 +1614,7 @@ static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
 //        if ( pFly->IsBackgroundTransparent() )
 //        {
 //            // Background <pFly> is transparent drawn. Thus normally, its region
-//            // have not to be substracted from given region.
+//            // have not to be subtracted from given region.
 //            // But, if method is called for a fly frame and
 //            // <pFly> is a direct lower of this fly frame and
 //            // <pFly> inherites its transparent background brush from its parent,
@@ -4652,20 +4652,20 @@ static void lcl_SubTopBottom( SwRect&              _iorRect,
          ( !bCnt || _rAttrs.GetTopLine( _rFrm ) )
        )
     {
-        // substract distance between outer and inner line.
+        // subtract distance between outer and inner line.
         SwTwips nDist = ::lcl_MinHeightDist( _rBox.GetTop()->GetDistance() );
         // OD 19.05.2003 #109667# - non-overlapping border rectangles:
         // adjust x-/y-position, if inner top line is a hair line (width = 1)
         bool bIsInnerTopLineHairline = false;
         if ( !_bPrtOutputDev )
         {
-            // additionally substract width of top outer line
+            // additionally subtract width of top outer line
             // --> left/right inner/outer line doesn't overlap top outer line.
             nDist += ::lcl_AlignHeight( _rBox.GetTop()->GetOutWidth() );
         }
         else
         {
-            // OD 29.04.2003 #107169# - additionally substract width of top inner line
+            // OD 29.04.2003 #107169# - additionally subtract width of top inner line
             // --> left/right inner/outer line doesn't overlap top inner line.
             nDist += ::lcl_AlignHeight( _rBox.GetTop()->GetInWidth() );
             bIsInnerTopLineHairline = _rBox.GetTop()->GetInWidth() == 1;
@@ -4702,20 +4702,20 @@ static void lcl_SubTopBottom( SwRect&              _iorRect,
          ( !bCnt || _rAttrs.GetBottomLine( _rFrm ) )
        )
     {
-        // substract distance between outer and inner line.
+        // subtract distance between outer and inner line.
         SwTwips nDist = ::lcl_MinHeightDist( _rBox.GetBottom()->GetDistance() );
         // OD 19.05.2003 #109667# - non-overlapping border rectangles:
         // adjust x-/y-position, if inner bottom line is a hair line (width = 1)
         bool bIsInnerBottomLineHairline = false;
         if ( !_bPrtOutputDev )
         {
-            // additionally substract width of bottom outer line
+            // additionally subtract width of bottom outer line
             // --> left/right inner/outer line doesn't overlap bottom outer line.
             nDist += ::lcl_AlignHeight( _rBox.GetBottom()->GetOutWidth() );
         }
         else
         {
-            // OD 29.04.2003 #107169# - additionally substract width of bottom inner line
+            // OD 29.04.2003 #107169# - additionally subtract width of bottom inner line
             // --> left/right inner/outer line doesn't overlap bottom inner line.
             nDist += ::lcl_AlignHeight( _rBox.GetBottom()->GetInWidth() );
             bIsInnerBottomLineHairline = _rBox.GetBottom()->GetInWidth() == 1;

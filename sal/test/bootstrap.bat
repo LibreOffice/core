@@ -67,7 +67,7 @@ rem ini access with complex macro expansion
 echo 13
 .\testbootstrap TheKeysValue -env:ININAME=./bootstraptest.ini -env:MYBOOTSTRAPTESTVALUE=${$ININAME:${$ININAME:SecondSection:IndirectSection}:${$ININAME:SecondSection:IndirectKey}}
 
-rem test no infinit recursion
+rem test no infinite recursion
 echo 14
 .\testbootstrap "***RECURSION DETECTED***" -env:MYBOOTSTRAPTESTVALUE=$MYBOOTSTRAPTESTVALUE
 

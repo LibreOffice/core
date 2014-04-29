@@ -90,7 +90,7 @@ public final class DocumentSerializerImpl
     /**
      *  Method to convert a <code>Document</code> with an xsl stylesheet.
      *  It creates a <code>Document</code> object, which is then transformed
-     *  with the Xslt processer. A <code>ConvertData </code> object is
+     *  with the Xslt processor. A <code>ConvertData </code> object is
      *  constructed and returned.
      *
      *  @return cd     A <code>ConvertData</code> object.

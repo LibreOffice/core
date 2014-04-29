@@ -96,7 +96,7 @@ namespace com { namespace sun { namespace star {
 
         /**
             @param _rxAggregateInstance
-                is the object to be aggregated. Must be aquired excatly once (by the reference object given).<br/>
+                is the object to be aggregated. Must be acquired excatly once (by the reference object given).<br/>
                 Will be reset to NULL upon leaving
         */
         OGeometryControlModel_Base(::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance);

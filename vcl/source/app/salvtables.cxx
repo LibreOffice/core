@@ -29,7 +29,7 @@
 #include <salmenu.hxx>
 
 // this file contains the virtual destructors of the sal interface
-// compilers ususally put their vtables where the destructor is
+// compilers usually put their vtables where the destructor is
 
 SalFrame::~SalFrame()
 {

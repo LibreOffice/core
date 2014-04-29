@@ -447,9 +447,9 @@ private:
 
     /** Initializes the decrypter to read a new record. */
     void                SetupDecrypter();
-    /** Initializes all members after base stream has been seeked to new raw record. */
+    /** Initializes all members after base stream has been sought to new raw record. */
     void                SetupRawRecord();
-    /** Initializes all members after base stream has been seeked to new record. */
+    /** Initializes all members after base stream has been sought to new record. */
     void                SetupRecord();
 
     /** Returns true, if the passed ID is real or alternative continuation record ID. */

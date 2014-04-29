@@ -132,7 +132,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
        throw( uno::RuntimeException, std::exception )
 {
     //TODO
-    //stick a map from each CommandId to a new GCancellable and propogate
+    //stick a map from each CommandId to a new GCancellable and propagate
     //it throughout the g_file_* calls
 }
 

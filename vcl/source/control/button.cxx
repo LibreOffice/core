@@ -352,7 +352,7 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
         aMax.Width()  = aTSSize.Width()  > aImageSize.Width()  ? aTSSize.Width()  : aImageSize.Width();
         aMax.Height() = aTSSize.Height() > aImageSize.Height() ? aTSSize.Height() : aImageSize.Height();
 
-        // Now calculate the output area for the image and the text acording to the image align flags
+        // Now calculate the output area for the image and the text according to the image align flags
 
         if ( ( eImageAlign == IMAGEALIGN_LEFT ) ||
              ( eImageAlign == IMAGEALIGN_RIGHT ) )

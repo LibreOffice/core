@@ -28,7 +28,7 @@
  {
  public:
 
-    /** Aquire a reference to an instance. A caller shall release
+    /** Acquire a reference to an instance. A caller shall release
         the instance by calling 'release' when it is no longer needed.
         'acquire' and 'release' calls need to be balanced.
 
@@ -38,7 +38,7 @@
     virtual sal_Int32 acquire() = 0;
 
     /** Releases a reference to an instance. A caller has to call
-        'release' when a before aquired reference to an instance
+        'release' when a before acquired reference to an instance
         is no longer needed. 'acquire' and 'release' calls need to
         be balanced.
 

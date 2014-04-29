@@ -1354,7 +1354,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             if ( !bHasPluginMode && !bHasJumpMark )
             {
                 // Note that this might not be the ideal place here. Restoring view data should, IMO, be the
-                // responsibility of the loader, not an implementation detail burried here deep within the controller's
+                // responsibility of the loader, not an implementation detail buried here deep within the controller's
                 // implementation.
                 // What I think should be done to replace the below code:
                 // - change SfxBaseController::restoreViewData to also accept a PropertyValue[] (it currently accepts

@@ -375,7 +375,7 @@ public:
                                             sal_uInt32& FIndex,
                                             LanguageType& rLnge);
 
-    /// Delete an entry including the format it is refering to
+    /// Delete an entry including the format it is referring to
     void DeleteEntry(sal_uInt32 nKey);
 
     /** Create new entry of a format code string for language/country.

@@ -348,7 +348,7 @@ namespace slideshow
              */
             const basegfx::B2DRange  maPageBounds;
 
-            /// Number of shape sprites currenly active on this LayerManager
+            /// Number of shape sprites currently active on this LayerManager
             sal_Int32                mnActiveSprites;
 
             /// sal_True, if shapes might need to move to different layer

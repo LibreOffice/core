@@ -728,7 +728,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 
         bool bGrow = ( pDrop->GetLen() != 0 );
 
-        // for growing controll
+        // for growing control
         long nMax = KSHRT_MAX;
         long nMin = 0;
 #if OSL_DEBUG_LEVEL > 1

@@ -94,7 +94,7 @@ public:
     const OUString& GetTitle (void) const;
 
     /** Expand the control without informing its container.  This
-        method ususally is called by the container as a result of a
+        method usually is called by the container as a result of a
         higher level expand command.  You may want to use
         ExpandViaContainer() instead.
         @param bExpanded

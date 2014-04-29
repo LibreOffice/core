@@ -837,7 +837,7 @@ bool ChildrenManagerImpl::ReplaceChild (
                 uno::Any(),
                 uno::makeAny (I->mxAccessibleShape));
 
-            // Replace with replacement and send an event about existance
+            // Replace with replacement and send an event about existence
             // of the new child.
             I->mxAccessibleShape = pNewChild;
             mrContext.CommitChange (

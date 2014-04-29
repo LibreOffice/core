@@ -337,7 +337,7 @@ public class DocumentProperties
             // differently some day...
             boolean b = true;
             double d = 3.1415;
-            // note that Time is only supported for backward compatibilty!
+            // note that Time is only supported for backward compatibility!
             Time t = new Time();
             t.Hours = 1;
             t.Minutes = 16;

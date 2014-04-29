@@ -1853,7 +1853,7 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
             }
 
             // the hint starts before the next script change and ends behind
-            // it, so we can insert a hint upto the next script change and
+            // it, so we can insert a hint up to the next script change and
             // continue with the rest of the hint.
             if( bDependsOnAnyScript || nScript == aScriptLst[i] )
                 InsertNoScript( rItem, nPos, nChgPos, rFmtInfos, bParaAttrs );

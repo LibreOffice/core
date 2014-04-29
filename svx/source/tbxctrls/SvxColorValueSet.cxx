@@ -135,7 +135,7 @@ Size SvxColorValueSet::layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntry
     const Size aItemSize(getEntryEdgeLength(), getEntryEdgeLength());
     const WinBits aWinBits(GetStyle() & ~WB_VSCROLL);
 
-    // get size whith all fields disabled
+    // get size with all fields disabled
     const WinBits aWinBitsNoScrollNoFields(GetStyle() & ~(WB_VSCROLL|WB_NAMEFIELD|WB_NONEFIELD));
     SetStyle(aWinBitsNoScrollNoFields);
     const Size aSizeNoScrollNoFields(CalcWindowSizePixel(aItemSize, getColumnCount()));

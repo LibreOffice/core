@@ -545,7 +545,7 @@ public:
     void            RowModified( long nRow, sal_uInt16 nColId = BROWSER_INVALIDID );
     void            RowInserted( long nRow, long nNumRows = 1, bool bDoPaint = true, bool bKeepSelection = false );
 
-    // miscellanous
+    // miscellaneous
     void            ReserveControlArea( sal_uInt16 nWidth = USHRT_MAX );
     Rectangle       GetControlArea() const;
     bool            ProcessKey( const KeyEvent& rEvt );

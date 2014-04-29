@@ -1493,7 +1493,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
         )
         return false;
 
-    // insert the control model(s) into the form component hierachy
+    // insert the control model(s) into the form component hierarchy
     if ( _rpLabel )
         lcl_insertIntoFormComponentHierarchy_throw( *m_pView, *_rpLabel, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType );
     lcl_insertIntoFormComponentHierarchy_throw( *m_pView, *_rpControl, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType );

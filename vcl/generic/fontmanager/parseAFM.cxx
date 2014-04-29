@@ -45,7 +45,7 @@
 
 /* parseAFM.c
  *
- * This file is used in conjuction with the parseAFM.h header file.
+ * This file is used in conjunction with the parseAFM.h header file.
  * This file contains several procedures that are used to parse AFM
  * files. It is intended to work with an application program that needs
  * font metric information. The program can be used as is by making a

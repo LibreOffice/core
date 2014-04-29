@@ -41,7 +41,7 @@ namespace accessibility {
     transformation methods do not require explicit mapmodes.  These have to
     be provided implicitly by the classes that implement this
     interface.  A third, less important, difference are the additional
-    transfomation methods for sizes.  The reasons for their existince are
+    transfomation methods for sizes.  The reasons for their existence are
     convenience and improved performance.</p>
 
     @attention

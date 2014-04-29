@@ -89,7 +89,7 @@ public:
     virtual sal_Int32 GetMinimumWidth (void);
 
     /** Update the selection of previews according to whatever
-        influences them appart from mouse and keyboard.  If, for
+        influences them apart from mouse and keyboard.  If, for
         example, the current page of the main pane changes, then call
         this method at the CurrentMasterPagesSelector to select the
         previews of the master pages that are assigned to the new
@@ -187,14 +187,14 @@ protected:
 
     ItemList maLockedMasterPages;
     /** Lock master pages in the given list and release locks that where
-        previously aquired.
+        previously acquired.
     */
     void UpdateLocks (const ItemList& rItemList);
 
     void Fill (void);
     virtual void Fill (ItemList& rItemList) = 0;
 
-    /** Give derived classes the oportunity to provide their own context
+    /** Give derived classes the opportunity to provide their own context
         menu.  If they do then they probably have to provide their own
         Execute() and GetState() methods as well.
     */

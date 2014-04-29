@@ -1001,7 +1001,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
                     getViewFrame()->SetChildWindow( SID_NAVIGATOR, maPresSettings.mbStartWithNavigator );
             }
 
-            // these Slots are forbiden in other views for this document
+            // these Slots are forbidden in other views for this document
             if( mpDocSh )
             {
                 mpDocSh->SetSlotFilter( true, sizeof( pAllowed ) / sizeof( sal_uInt16 ), pAllowed );

@@ -451,7 +451,7 @@ protected:
     /**
        Invalidates a child.
 
-       Calls SetLastValid for the preceeding sibling of the child and
+       Calls SetLastValid for the preceding sibling of the child and
        notifies all invalid children.
 
        @param pChild      the child to invalidate
@@ -485,7 +485,7 @@ protected:
        @param aItLastValid    iterator pointing to the new last valid child
        @param bValidating     - true    always set the last valid node to
                                         aItLastValid
-                              - false   only set if aItLastValid is preceeding
+                              - false   only set if aItLastValid is preceding
                                         the current last valid node
      */
     void SetLastValid(tSwNumberTreeChildren::const_iterator aItLastValid,

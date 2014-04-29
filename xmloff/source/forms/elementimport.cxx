@@ -1841,7 +1841,7 @@ namespace xmloff
     }
     void OColumnWrapperImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
-        OSL_ENSURE(!m_xOwnAttributes.is(), "OColumnWrapperImport::StartElement: aready have the cloned list!");
+        OSL_ENSURE(!m_xOwnAttributes.is(), "OColumnWrapperImport::StartElement: already have the cloned list!");
 
         // clone the attributes
         Reference< XCloneable > xCloneList(_rxAttrList, UNO_QUERY);

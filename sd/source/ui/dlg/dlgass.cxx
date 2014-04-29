@@ -109,7 +109,7 @@ public:
 
 
 /** A simple wrapper that looks like a PushButton and is used to force the
-    broadcasting of focus events primarly for accessibility tools.
+    broadcasting of focus events primarily for accessibility tools.
     Forcing focus events is achieved by using two identical PushButtons
     which, when the focus event is requested, are exchanged and play focus
     ping-pong by moving the focus from one to the other.

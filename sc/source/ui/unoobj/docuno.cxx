@@ -1840,7 +1840,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         {
             /*  #i111553# This property provides the name of the constant that
                 will be used to store this model in the global Basic manager.
-                That constant will be equivelant to 'ThisComponent' but for
+                That constant will be equivalent to 'ThisComponent' but for
                 each application, so e.g. a 'ThisExcelDoc' and a 'ThisWordDoc'
                 constant can co-exist, as required by VBA. */
             aRet <<= OUString( "ThisExcelDoc" );

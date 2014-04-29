@@ -120,7 +120,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
     // #TODO
     // #FIXME
     // This method will NOT handle r1c1 formulas [*]and only assumes that
-    // the formulas are _xlA1 based ( need to hook into calc work ths should
+    // the formulas are _xlA1 based ( need to hook into calc work this should
     // address this )
     // [*] reason: getA1Formula method below is just a hook and just
     // returns whats it gets ( e.g. doesn't convert anything )

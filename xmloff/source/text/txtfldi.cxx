@@ -1354,7 +1354,7 @@ SvXMLImportContext* XMLDatabaseFieldImportContext::CreateChildContext(
             }
         }
 
-        // we call ProcessAttribute in order to set bValid appropriatly
+        // we call ProcessAttribute in order to set bValid appropriately
         ProcessAttribute( XML_TOKEN_INVALID, OUString() );
     }
 

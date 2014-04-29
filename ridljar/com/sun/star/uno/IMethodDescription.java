@@ -33,7 +33,7 @@ import java.lang.reflect.Method;
 public interface IMethodDescription extends IMemberDescription {
     /**
      * Indicates if this method is <code>oneWay</code>,
-     * respectivly if this method may become executed asynchronously.
+     * respectively if this method may become executed asynchronously.
      * <p>
      * @return  true means may execute asynchronously .
      */

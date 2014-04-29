@@ -34,7 +34,7 @@
 #include <comphelper/processfactory.hxx>
 
 /*
-    On demand instanciation and initialization of several i18n wrappers,
+    On demand instantiation and initialization of several i18n wrappers,
     helping the number formatter to not perform worse than it already does.
  */
 

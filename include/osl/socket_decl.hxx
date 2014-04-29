@@ -477,7 +477,7 @@ namespace osl
         */
         inline void SAL_CALL clearError() const;
 
-        /** returns a constant decribing the last error for the socket system.
+        /** returns a constant describing the last error for the socket system.
 
             @return osl_Socket_E_NONE if no error occurred, invalid_SocketError if
             an unknown (unmapped) error occurred, otherwise an enum describing the
@@ -572,7 +572,7 @@ namespace osl
             <li><code>osl_Socket_MsgMaxIOVLen</code>
             </ul>
 
-            @return the number of transfered bytes. It may be less than BytesToSend.
+            @return the number of transferred bytes. It may be less than BytesToSend.
         */
         sal_Int32 SAL_CALL send(const void* pBuffer,
                                 sal_uInt32 BytesToSend,
@@ -707,7 +707,7 @@ namespace osl
             <li><code>osl_Socket_MsgMaxIOVLen</code>
             </ul>
 
-            @return the number of transfered bytes.
+            @return the number of transferred bytes.
         */
         inline sal_Int32    SAL_CALL sendTo( const SocketAddr& ReceiverAddr,
                                              const void* pBuffer,

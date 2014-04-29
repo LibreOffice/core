@@ -182,7 +182,7 @@ public:
     */
     void SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction);
 
-    /** Return a collection of properties that are used througout the slide
+    /** Return a collection of properties that are used throughout the slide
         sorter.
     */
     ::boost::shared_ptr<controller::Properties> GetProperties (void) const;

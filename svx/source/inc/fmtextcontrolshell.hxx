@@ -92,7 +92,7 @@ namespace svx
         // without this define, m_xActiveControl remembers the *last* active control, even
         // if it, in the meantime, already lost the focus
         bool                                                                        m_bActiveControl;
-            // so we need an additional boolean flag telling whether the active cotrol
+            // so we need an additional boolean flag telling whether the active control
             // is really focused
 #endif
         bool                                                                        m_bActiveControlIsReadOnly;

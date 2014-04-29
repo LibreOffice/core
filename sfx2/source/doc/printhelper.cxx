@@ -603,7 +603,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     // by executing the slot. Because if it is a ucb relevant URL we must wait for
     // finishing the print job and move the temporary local file by using the ucb
     // to the right location. But in case of no file name is given or it is already
-    // a local one we can supress this special handling. Because then vcl makes all
+    // a local one we can suppress this special handling. Because then vcl makes all
     // right for us.
     OUString sUcbUrl;
     ::utl::TempFile* pUCBPrintTempFile = NULL;

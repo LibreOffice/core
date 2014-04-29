@@ -22,7 +22,7 @@ import java.util.LinkedList;
     applications in a thread separate from the AWB main thread.
 
     The queue of event objects, LinkedList<Runnable> The queue object will
-    also serve as lock for the consumer/producer type syncronization.
+    also serve as lock for the consumer/producer type synchronization.
 */
 class EventQueue
     implements Runnable

@@ -1721,7 +1721,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
         for( i = 0; i < nLength; i++ )
             pIndices[i] = i;
         sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
-        // create sorted sequences accoring to index array
+        // create sorted sequences according to index array
         uno::Sequence<PropertyValue> aNewValues( nLength );
         PropertyValue* pNewValues = aNewValues.getArray();
         for( i = 0; i < nLength; i++ )

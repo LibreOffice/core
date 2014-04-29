@@ -975,7 +975,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 5 // description of parameter 2  GeStep
         {
-            Text [ en-US ] = "The threshhold value";
+            Text [ en-US ] = "The threshold value";
         };
     };
 

@@ -971,7 +971,7 @@ i12626
     sal_Int32 updateOutlineItemCount( std::vector< sal_Int32 >& rCounts,
                                       sal_Int32 nItemLevel,
                                       sal_Int32 nCurrentItemId );
-    // default appearences for widgets
+    // default appearances for widgets
     sal_Int32 findRadioGroupWidget( const PDFWriter::RadioButtonWidget& rRadio );
     Font replaceFont( const Font& rControlFont, const Font& rAppSetFont );
     sal_Int32 getBestBuiltinFont( const Font& rFont );

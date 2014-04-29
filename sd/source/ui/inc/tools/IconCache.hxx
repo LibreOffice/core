@@ -29,7 +29,7 @@ namespace sd {
     use the icons do not have to store them in every one of their
     instances.
 
-    Icons are adressed over their resource id and are loaded on demand.
+    Icons are addressed over their resource id and are loaded on demand.
 
     This cache acts like a singleton with a lifetime equal to that of the sd
     module.

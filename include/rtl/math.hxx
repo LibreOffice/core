@@ -285,10 +285,10 @@ inline double approxAdd(double a, double b)
     return a + b;
 }
 
-/** Substract two values (a-b).
+/** Subtract two values (a-b).
 
     If signs are identical and the values are equal according to approxEqual()
-    the method returns 0.0 instead of calculating the substraction.
+    the method returns 0.0 instead of calculating the subtraction.
  */
 inline double approxSub(double a, double b)
 {

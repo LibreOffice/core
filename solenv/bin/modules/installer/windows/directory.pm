@@ -117,7 +117,7 @@ sub make_short_dir_version
     $shortstring =~ s/^\s*\_//;
 
     # Setting unique ID to each directory
-    # No counter allowed, process must be absolute reproducable due to patch creation process.
+    # No counter allowed, process must be absolute reproducible due to patch creation process.
 
     # chomp(my $id = `echo $longstring_save | md5sum | sed -e "s/ .*//g"`);  # Very, very slow
     # my $subid = substr($id, 0, 9); # taking only the first 9 digits
