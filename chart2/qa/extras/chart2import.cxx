@@ -18,12 +18,15 @@
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 
+#include <com/sun/star/util/Color.hpp>
+
 class Chart2ImportTest : public ChartTest
 {
 public:
     void Fdo60083();
     void testSteppedLines();
     void testErrorBarRange();
+    void testErrorBarFormatting();
     void testODSChartSeries();
     void testXLSXChartSeries();
     void testXLSChartSeries();
@@ -41,6 +44,7 @@ public:
     CPPUNIT_TEST(Fdo60083);
     CPPUNIT_TEST(testSteppedLines);
     CPPUNIT_TEST(testErrorBarRange);
+    CPPUNIT_TEST(testErrorBarFormatting);
     CPPUNIT_TEST(testODSChartSeries);
     CPPUNIT_TEST(testXLSXChartSeries);
     CPPUNIT_TEST(testXLSChartSeries);
@@ -145,6 +149,29 @@ void Chart2ImportTest::testErrorBarRange()
     OUString aRangePos;
     CPPUNIT_ASSERT(xErrorBarYProps->getPropertyValue("ErrorBarRangePositive") >>= aRangePos);
     CPPUNIT_ASSERT_EQUAL(aRangePos, OUString("$Sheet1.$C$2:$C$4"));
+}
+
+void Chart2ImportTest::testErrorBarFormatting()
+{
+    load("/chart2/qa/extras/data/ods/", "error_bar_properties.ods");
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );
+    CPPUNIT_ASSERT( xDataSeries.is() );
+
+    Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
+    CPPUNIT_ASSERT( xPropSet.is() );
+
+    // test that y error bars are there
+    Reference< beans::XPropertySet > xErrorBarYProps;
+    xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
+    CPPUNIT_ASSERT(xErrorBarYProps.is());
+
+    util::Color aColor;
+    xErrorBarYProps->getPropertyValue("LineColor") >>= aColor;
+    sal_uInt32 nColorValue = aColor;
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xff3333), nColorValue);
 }
 
 // stepped line interpolation
