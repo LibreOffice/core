@@ -22,7 +22,7 @@
 
 class HWPFile;
 /**
- * @short Embeded image
+ * @short Embedded image
  */
 struct EmPicture
 {

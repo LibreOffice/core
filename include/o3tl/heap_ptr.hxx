@@ -34,7 +34,7 @@ namespace o3tl
     -------------
     heap_ptr<> can be used for class members on the heap.
       - One cannot forget to delete them in the destructor.
-      - Constness will be transfered from the owning instance.
+      - Constness will be transferred from the owning instance.
 
     heap_ptr<> can also be used as smart pointer in function bodies to
     ensure exception safety.

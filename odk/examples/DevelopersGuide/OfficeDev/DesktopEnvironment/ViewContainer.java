@@ -253,7 +253,7 @@ public class ViewContainer extends Thread
      * @member  mlListener          list of all currently registered shutdown listener
      * @member  mbShutdownActive    if this shutdown hook already was started it's not a good idea to
      *                              call System.exit() again for other conditions.
-     *                              We supress it by using this variable!
+     *                              We suppress it by using this variable!
      */
     public  static boolean       mbInplace   = false ;
     private static ViewContainer maSingleton = null  ;

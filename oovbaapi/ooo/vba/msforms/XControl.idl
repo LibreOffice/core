@@ -45,7 +45,7 @@ interface XControl
     //in Dialogs Mso uses pixels
     [attribute] double Height;
     [attribute] double Width;
-    //Postion
+    //Position
     [attribute] double  Left;
     [attribute] double  Top;
     [attribute] string Name;

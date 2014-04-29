@@ -1036,7 +1036,7 @@ void OStorage_Impl::Commit()
 
     // in case of a new empty storage it is possible that the contents are still not read
     // ( the storage of course has no contents, but the initialization is postponed till the first use,
-    //   thus if a new storage was created and commited immediatelly it must be initialized here )
+    //   thus if a new storage was created and commited immediately it must be initialized here )
     ReadContents();
 
     // if storage is commited it should have a valid Package representation
@@ -1154,7 +1154,7 @@ void OStorage_Impl::Commit()
             {
                 // the element must be just copied to the new temporary package folder
                 // the connection with the original package should not be lost just because
-                // the element is still refered by the folder in the original hierarchy
+                // the element is still referred by the folder in the original hierarchy
                 uno::Any aPackageElement = m_xPackageFolder->getByName( (*pElementIter)->m_aOriginalName );
                 xNewPackageFolder->insertByName( (*pElementIter)->m_aName, aPackageElement );
             }

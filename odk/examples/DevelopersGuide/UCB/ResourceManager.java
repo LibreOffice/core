@@ -84,7 +84,7 @@ public class ResourceManager {
      *  This method requires the main and the optional arguments to be set in order to work.
      *  See Constructor.
      *
-     *@return boolean  Returns true if resource successfully transfered, false otherwise
+     *@return boolean  Returns true if resource successfully transferred, false otherwise
      *@exception  com.sun.star.ucb.CommandAbortedException
      *@exception  com.sun.star.uno.Exception
      */
@@ -102,8 +102,8 @@ public class ResourceManager {
      *
      *@param  String   Source URL
      *@param  String   Target folder URL
-     *@param  String   Transfering operation (copy, move, link)
-     *@return boolean  Returns true if resource successfully transfered, false otherwise
+     *@param  String   Transferring operation (copy, move, link)
+     *@return boolean  Returns true if resource successfully transferred, false otherwise
      *@exception  com.sun.star.ucb.CommandAbortedException
      *@exception  com.sun.star.uno.Exception
      */
@@ -174,9 +174,9 @@ public class ResourceManager {
     }
 
     /**
-     * Get new title for the resource to be transfered.
+     * Get new title for the resource to be transferred.
      *
-     *@return String    That contains a new title for the transfered
+     *@return String    That contains a new title for the transferred
      *                  resource. Can be empty. In this case resource
      *                  will keep the title it has in the source folder.
      */
@@ -268,7 +268,7 @@ public class ResourceManager {
             if ( result )
                 System.out.println( "\nTransfering resource succeeded." );
             else
-                System.out.println( "Transfering resource failed." );
+                System.out.println( "Transferring resource failed." );
 
             System.out.println( "   Source URL        : " + sourceURL );
             System.out.println( "   Target Folder URL : " + targetFolderURL );

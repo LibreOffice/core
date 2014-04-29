@@ -118,7 +118,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
                 lDynamicData = (com.sun.star.beans.NamedValue[])com.sun.star.uno.AnyConverter.toArray(lArgs[i].Value);
         }
 
-        // Analyze the environment info. This sub list is the only guarenteed one!
+        // Analyze the environment info. This sub list is the only guaranteed one!
         if (lEnvironment == null)
             throw new com.sun.star.lang.IllegalArgumentException("no environment");
 

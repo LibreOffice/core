@@ -54,7 +54,7 @@ interface XAnimation : ::com::sun::star::uno::XInterface
         same parameter set, identical output must be generated. This
         is because e.g. a Sprite might decide arbitrarily to render an
         animation once and cache the result, or repaint it via
-        XAnimation::render everytime.<p>
+        XAnimation::render every time.<p>
 
         The rendered content, although, must be exactly the same for
         identical viewState, canvas and t values. Or, for that

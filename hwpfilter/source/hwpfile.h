@@ -189,7 +189,7 @@ class DLLEXPORT HWPFile
         bool ParaListRead();
 /* 그림 등의 추가 정보를 읽는다. */
 /**
- * Reads additional information like embeded image of hwp file from HIODev
+ * Reads additional information like embedded image of hwp file from HIODev
  */
         bool TagsRead(void);
 

@@ -39,7 +39,7 @@ import java.util.ArrayList;
  * installation.
  * Note, that Java 1.3.1 and Java 1.4 don't support environment variables
  * (System.getenv() throws java.lang.Error) and therefore setting the UNO_PATH
- * enviroment variable won't work with those Java versions.
+ * environment variable won't work with those Java versions.
  * If no UNO installation is specified by the user, the default installation
  * on the system will be returned.</p>
  *

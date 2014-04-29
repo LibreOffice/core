@@ -60,7 +60,7 @@ OZipFileAccess::~OZipFileAccess()
         if ( !m_bDisposed )
         {
             try {
-                m_refCount++; // dispose will use refcounting so the further distruction must be avoided
+                m_refCount++; // dispose will use refcounting so the further destruction must be avoided
                 dispose();
             } catch( uno::Exception& )
             {}

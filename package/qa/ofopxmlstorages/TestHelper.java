@@ -1038,7 +1038,7 @@ public class TestHelper  {
 
     public XStorage cloneStorage( XMultiServiceFactory xMSF, XSingleServiceFactory xFactory, XStorage xStorage )
     {
-        // create a copy of a last commited version of specified storage
+        // create a copy of a last committed version of specified storage
         XStorage xResult = null;
         try
         {
@@ -1057,7 +1057,7 @@ public class TestHelper  {
 
     public XStorage cloneSubStorage( XMultiServiceFactory xMSF, XSingleServiceFactory xFactory, XStorage xStorage, String sName )
     {
-        // create a copy of a last commited version of specified substorage
+        // create a copy of a last committed version of specified substorage
         XStorage xResult = null;
         try
         {

@@ -50,7 +50,7 @@ typedef struct
 /* ?????? ??????, ???????? ???? */
 typedef struct
 {
-     char type;  // 0- background color, 1 - external image, 2- embeded image
+     char type;  // 0- background color, 1 - external image, 2- embedded image
      char reserved1[8];
      int luminance; /* ???? ( -100 ~ 100 ) */
      int contrast; /* ???? ( -100 ~ 100 ) */

@@ -115,7 +115,7 @@ public class Test11 implements StorageTest {
             // check cloning at current state
 
 
-            // the new storage still was not commited so the clone must be empty
+            // the new storage still was not committed so the clone must be empty
             XStorage xClonedSubStorage = m_aTestHelper.cloneSubStorage( m_xStorageFactory, xTempStorage, "SubStorage1" );
 
             if ( xClonedSubStorage == null )
@@ -136,7 +136,7 @@ public class Test11 implements StorageTest {
 
             if ( xClonedNameAccess.hasElements() )
             {
-                m_aTestHelper.Error( "The new substorage still was not commited so it must be empty!" );
+                m_aTestHelper.Error( "The new substorage still was not committed so it must be empty!" );
                 return false;
             }
 

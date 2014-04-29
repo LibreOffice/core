@@ -59,7 +59,7 @@ published interface XOptimizedStorage
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
     /** allows to insert a stream to the storage directly. The stream must
-        stay alive till the storage is commited.
+        stay alive till the storage is committed.
      */
     void insertStreamElementDirect(
             [in] string sStreamName,

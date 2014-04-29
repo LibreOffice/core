@@ -50,7 +50,7 @@ service AccessibleSpreadsheetDocumentView
                 A child where calling getAccessibleChild()
                 an object that supports this service is returned for
                 the current spreadsheet which is showing in this document
-                window. There is everytime one child which supports this
+                window. There is every time one child which supports this
                 service, because it is only possible to have one spreadsheet
                 in the current document window.</li>
             <li>::com::sun::star::drawing::AccessibleShape:

@@ -17,7 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-# This script starts a new shell and sets all enviroment variables, which
+# This script starts a new shell and sets all environment variables, which
 # are necessary for building the examples of the Office Development Kit.
 # The Script was developed for the operating systems Solaris, Linux and MacOS.
 

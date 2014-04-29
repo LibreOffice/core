@@ -21,7 +21,7 @@ import com.sun.star.util.XCloseable;
 
 public abstract class DocumentBasedExample implements com.sun.star.lang.XEventListener
 {
-    /// the intial remote context from the office
+    /// the initial remote context from the office
     protected XComponentContext       m_xCtx;
     /// our current test document
     protected DocumentHelper          m_document;

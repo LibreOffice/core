@@ -110,8 +110,8 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
         uno::Reference< embed::XTransactedObject > xTransact( xResult, uno::UNO_QUERY );
         if ( xTransact.is() )
         {
-            // the existance of the transacted object means that the stream is opened for writing also
-            // so the whole chain must be commited
+            // the existence of the transacted object means that the stream is opened for writing also
+            // so the whole chain must be committed
             uno::Reference< embed::XTransactionBroadcaster > xTrBroadcast( xTransact, uno::UNO_QUERY_THROW );
             xTrBroadcast->addTransactionListener( static_cast< embed::XTransactionListener* >( this ) );
         }

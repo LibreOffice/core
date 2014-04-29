@@ -139,7 +139,7 @@ published service Storage
                         <p>
                         A storage flashes on commit all the child streams it
                         owns. So in case after the stream is changed neither
-                        the storage was commited nor the stream was flushed
+                        the storage was committed nor the stream was flushed
                         explicitly, the changes will not appear in the new
                         created stream. This method allows to retrieve copy of
                         a child stream even in case it is already opened for
@@ -173,7 +173,7 @@ published service Storage
                         <p>
                         A storage flashes on commit all the child streams it
                         owns. So in case after the stream is changed neither
-                        the storage was commited nor the stream was flushed
+                        the storage was committed nor the stream was flushed
                         explicitly, the changes will not appear in the new
                         created stream. This method allows to retrieve copy of
                         a child stream even in case it is already opened for
@@ -185,8 +185,8 @@ published service Storage
                     <dd>
                         This method gets Storage service
                         implementation and fills it in with the latest
-                        commited version of this storage. So in case the
-                        storage was not commited after it was changed, the
+                        committed version of this storage. So in case the
+                        storage was not committed after it was changed, the
                         changes will not appear in the new created storage.
                     </dd>
 
@@ -195,9 +195,9 @@ published service Storage
                         <p>
                         This method gets Storage service
                         implementation and fills it in with the contents of
-                        the requested substorage. The latest commited version
+                        the requested substorage. The latest committed version
                         of child storage will be used. So in case the child
-                        storage was not commited after it was changed, the
+                        storage was not committed after it was changed, the
                         changes will not appear in the new created storage.
                         </p>
 

@@ -157,7 +157,7 @@ published service StorageStream
     [property, readonly] boolean IsEncrypted;
 
     /** specifies whether the stream will become encrypted next time the
-        common storage password holder is commited.
+        common storage password holder is committed.
 
         <p>
         The property value `TRUE` means that the stream will become encrypted

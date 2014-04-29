@@ -185,7 +185,7 @@ public class Test14 implements StorageTest {
             if ( !m_aTestHelper.checkEncrStreamH( xResultStorage, aSubStream1Path, "MediaType3", pBytes2, sPass1 ) )
                 return false;
 
-            // the following stream was not commited last time, so the last change must be lost
+            // the following stream was not committed last time, so the last change must be lost
             if ( !m_aTestHelper.checkEncrStreamH( xResultStorage, aSubStream2Path, "MediaType2", pBytes2, sPass2 ) )
                 return false;
 

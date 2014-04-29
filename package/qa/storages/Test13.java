@@ -212,7 +212,7 @@ public class Test13 implements StorageTest {
             if ( !m_aTestHelper.checkStreamH( xResultStorage, aBigSubStream1Path, "MediaType3", true, pBigBytes ) )
                 return false;
 
-            // the following stream was not commited last time, so the last change must be lost
+            // the following stream was not committed last time, so the last change must be lost
             if ( !m_aTestHelper.checkStreamH( xResultStorage, aBigSubStream2Path, "MediaType2", false, pBigBytes ) )
                 return false;
 

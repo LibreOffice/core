@@ -123,7 +123,7 @@ public class Test18 implements StorageTest {
             }
 
             // copy xTempStorage to xTempFileStorage
-            // xTempFileStorage will be automatically commited
+            // xTempFileStorage will be automatically committed
             if ( !m_aTestHelper.copyStorage( xTempStorage, xTempFileStorage ) )
                 return false;
 

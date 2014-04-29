@@ -28,7 +28,7 @@
  */
 published exception PDFExportException: com::sun::star::uno::Exception
 {
-    /** contains a number of errors that occured during PDFExport
+    /** contains a number of errors that occurred during PDFExport
     */
     sequence< long > ErrorCodes;
 };

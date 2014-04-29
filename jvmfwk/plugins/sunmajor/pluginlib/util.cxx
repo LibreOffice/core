@@ -596,7 +596,7 @@ bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
                     // Get the path for the runtime lib
                     if(RegQueryValueExW(hKey, L"JavaHome", 0, &dwType, (unsigned char*) szTmpPath, &dwTmpPathLen) == ERROR_SUCCESS)
                     {
-                        // There can be several version entries refering with the same JavaHome,e.g 1.4 and 1.4.1
+                        // There can be several version entries referring with the same JavaHome,e.g 1.4 and 1.4.1
                         OUString usHome((sal_Unicode*) szTmpPath);
                         // check if there is already an entry with the same JavaHomeruntime lib
                         // if so, we use the one with the more accurate version

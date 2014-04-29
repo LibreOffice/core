@@ -1053,7 +1053,7 @@ XMultiPropertySet
         listenerContainer.removeInterface(XPropertiesChangeListener.class, xPropertiesChangeListener);
     }
     // XMultiPropertySet -----------------------------------------------------------------------------------
-    /** If the array of property names containes an unknown property then it will be ignored.
+    /** If the array of property names contains an unknown property then it will be ignored.
      */
     public void setPropertyValues(String[] propNames, Object[] values) throws PropertyVetoException, com.sun.star.lang.IllegalArgumentException, com.sun.star.lang.WrappedTargetException
     {

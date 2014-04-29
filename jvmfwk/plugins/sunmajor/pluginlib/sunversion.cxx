@@ -62,12 +62,12 @@ bool SunVersion::init(const char *szVersion)
     if ( ! szVersion || strlen(szVersion) == 0)
         return false;
 
-    //first get the major,minor,maintainance
+    //first get the major,minor,maintenance
     const char * pLast = szVersion;
     const char * pCur = szVersion;
     //pEnd point to the position after the last character
     const char * pEnd = szVersion + strlen(szVersion);
-    // 0 = major, 1 = minor, 2 = maintainance, 3 = update
+    // 0 = major, 1 = minor, 2 = maintenance, 3 = update
     int nPart = 0;
     // position within part beginning with 0
     int nPartPos = 0;
@@ -257,7 +257,7 @@ bool SunVersion::operator > (const SunVersion& ver) const
     if( &ver == this)
         return false;
 
-    //compare major.minor.maintainance
+    //compare major.minor.maintenance
     for( int i= 0; i < 4; i ++)
     {
         // 1.4 > 1.3

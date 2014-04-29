@@ -335,7 +335,7 @@ sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eCl
 
 void ConvDicXMLExport::_ExportContent()
 {
-    // aquire sorted list of all keys
+    // acquire sorted list of all keys
     ConvMapKeySet   aKeySet;
     ConvMap::iterator aIt;
     for (aIt = rDic.aFromLeft.begin();  aIt != rDic.aFromLeft.end();  ++aIt)

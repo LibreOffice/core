@@ -573,7 +573,7 @@ struct PicDefFile
 };
 
 /**
- * @short Embeded image file
+ * @short Embedded image file
  */
 struct PicDefEmbed
 {
@@ -621,7 +621,7 @@ typedef union
 /**
  * There are four kinds of image.
  * @li External image
- * @li Embeded image
+ * @li Embedded image
  * @li Win32 ole object
  * @li Drawing object of hwp
  *
@@ -650,7 +650,7 @@ struct Picture: public FBox
 
 /**
  * Type of this object
- * It is one of external/ole/embeded/drawing picture
+ * It is one of external/ole/embedded/drawing picture
  */
     uchar     pictype;
     hunit     skip[2];

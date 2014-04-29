@@ -90,7 +90,7 @@ interface XSlideShowView : ::com::sun::star::uno::XInterface
     /** Add a listener to get notified when the transformation matrix changes.<p>
 
         This method registers a listener with the view, which will get
-        called everytime the transformation matrix changes.<p>
+        called every time the transformation matrix changes.<p>
 
         @param xListener
         Listener interface to call when the transformation matrix changes.
@@ -107,7 +107,7 @@ interface XSlideShowView : ::com::sun::star::uno::XInterface
     /** Add a listener to get notified when this view needs a repaint.<p>
 
         This method registers a listener with the view, which will get
-        called everytime the view needs an update of their screen
+        called every time the view needs an update of their screen
         representation.<p>
 
         @param xListener
@@ -125,7 +125,7 @@ interface XSlideShowView : ::com::sun::star::uno::XInterface
     /** Add a mouse listener to the view.<p>
 
         This method registers a listener with the view, which will get
-        called everytime the mouse is clicked on the view.<p>
+        called every time the mouse is clicked on the view.<p>
 
         @param xListener
         Listener interface to call when the mouse is clicked on the view.
@@ -142,7 +142,7 @@ interface XSlideShowView : ::com::sun::star::uno::XInterface
     /** Add a mouse motion listener to the view.<p>
 
         This method registers a listener with the view, which will get
-        called everytime the mouse is moved on the view.<p>
+        called every time the mouse is moved on the view.<p>
 
         @param xListener
         Listener interface to call when the mouse is moved on the view.

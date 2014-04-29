@@ -501,11 +501,11 @@ public class TextDocuments {
     {
         try
         {
-            // Get a text range refering to the beginning of the text document
+            // Get a text range referring to the beginning of the text document
             XTextRange xStart = mxDocText.getStart();
             // use setString to insert text at the beginning
             xStart.setString ( "This is text inserted at the beginning.\n\n" );
-            // Get a text range refering to the end of the text document
+            // Get a text range referring to the end of the text document
             XTextRange xEnd = mxDocText.getEnd();
             // use setString to insert text at the end
             xEnd.setString ( "This is text inserted at the end.\n\n" );
@@ -663,7 +663,7 @@ public class TextDocuments {
         return ( ( maRandom.nextInt() % 1000 ) * maRandom.nextDouble () );
     }
 
-    /** This method sets the text colour of the cell refered to by sCellName to
+    /** This method sets the text colour of the cell referred to by sCellName to
         white and inserts the string sText in it
      */
     protected static void insertIntoCell(String sCellName, String sText,
@@ -1680,7 +1680,7 @@ public class TextDocuments {
             XNamed xSectionNamed = UnoRuntime.queryInterface(XNamed.class,
                       mxDocFactory.createInstance("com.sun.star.text.TextSection"));
 
-            // Set the name of our new section (appropiately) to 'Fish'
+            // Set the name of our new section (appropriately) to 'Fish'
             xSectionNamed.setName ( "Fish" );
 
             // Create the TextColumns service and get its XTextColumns interface

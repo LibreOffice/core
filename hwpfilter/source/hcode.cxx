@@ -1235,7 +1235,7 @@ hchar_string kstr2hstr(unsigned char const* src)
 
 
 /**
- * Transfer interger to string following format
+ * Transfer integer to string following format
  */
 char* Int2Str(int value, const char *format, char *buf)
 {

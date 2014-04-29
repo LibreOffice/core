@@ -167,7 +167,7 @@ public class Test04 implements StorageTest {
             if ( !m_aTestHelper.copyElementTo( xTempStorage, "SubStorage1", xTempFileStorage ) )
                 return false;
 
-            // if storage is not commited before disposing all the changes will be lost
+            // if storage is not committed before disposing all the changes will be lost
             if ( !m_aTestHelper.commitStorage( xTempSubStorage2 ) )
                 return false;
 

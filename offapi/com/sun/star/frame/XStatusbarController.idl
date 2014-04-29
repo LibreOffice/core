@@ -101,7 +101,7 @@ interface XStatusbarController
 
         <p>
         A status bar controller instance is ready for use after this call has
-        been made the first time. The status bar implementation guarentees that
+        been made the first time. The status bar implementation guarantees that
         the controller's item window has been added to the status bar and its
         reference is held by it.
         </p>

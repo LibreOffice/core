@@ -839,7 +839,7 @@ function writeBatFile(fdir, file)
 
     newFile.Write(
         "@echo off\n" +
-        "REM This script sets all enviroment variables, which\n" +
+        "REM This script sets all environment variables, which\n" +
         "REM are necessary for building the examples of the Office Development Kit.\n" +
         "REM The Script was developed for the operating systems Windows.\n" +
         "REM The SDK name\n" +

@@ -124,7 +124,7 @@ public class RegressionTest_i29169 implements StorageTest {
             // commit the storages, and check the renaming in all stages
 
 
-            // rename the storage before it is commited
+            // rename the storage before it is committed
             if ( !m_aTestHelper.renameElement( xTempSubStorage, "SubSubStorage1", "SubSubStorage2" ) )
                 return false;
 
@@ -136,7 +136,7 @@ public class RegressionTest_i29169 implements StorageTest {
             if ( !m_aTestHelper.commitStorage( xTempSubSubStorage ) )
                 return false;
 
-            // rename the storage after it is commited
+            // rename the storage after it is committed
             if ( !m_aTestHelper.renameElement( xTempSubStorage, "SubSubStorage2", "SubSubStorage3" ) )
                 return false;
 
@@ -148,11 +148,11 @@ public class RegressionTest_i29169 implements StorageTest {
             if ( !m_aTestHelper.commitStorage( xTempSubStorage ) )
                 return false;
 
-            // rename the storage after it`s parent is commited
+            // rename the storage after it's parent is committed
             if ( !m_aTestHelper.renameElement( xTempSubStorage, "SubSubStorage3", "SubSubStorage4" ) )
                 return false;
 
-            // rename the stream after it`s parent is commited
+            // rename the stream after it's parent is committed
             if ( !m_aTestHelper.renameElement( xTempSubStorage, "SubStream3", "SubStream4" ) )
                 return false;
 
@@ -164,11 +164,11 @@ public class RegressionTest_i29169 implements StorageTest {
             if ( !m_aTestHelper.commitStorage( xTempStorage ) )
                 return false;
 
-            // rename the storage after the package is commited
+            // rename the storage after the package is committed
             if ( !m_aTestHelper.renameElement( xTempSubStorage, "SubSubStorage4", "SubSubStorage5" ) )
                 return false;
 
-            // rename the stream after it`s parent is commited
+            // rename the stream after it's parent is committed
             if ( !m_aTestHelper.renameElement( xTempSubStorage, "SubStream4", "SubStream5" ) )
                 return false;
 
@@ -249,7 +249,7 @@ public class RegressionTest_i29169 implements StorageTest {
             // rename the reopened storages and streams
 
 
-            // rename the storage before it is commited
+            // rename the storage before it is committed
             if ( !m_aTestHelper.renameElement( xTempSubStorage, "SubSubStorage5", "SubSubStorage6" ) )
                 return false;
 
@@ -261,7 +261,7 @@ public class RegressionTest_i29169 implements StorageTest {
             if ( !m_aTestHelper.commitStorage( xTempSubSubStorage ) )
                 return false;
 
-            // rename the storage after it is commited
+            // rename the storage after it is committed
             if ( !m_aTestHelper.renameElement( xTempSubStorage, "SubSubStorage6", "SubSubStorage7" ) )
                 return false;
 
@@ -273,11 +273,11 @@ public class RegressionTest_i29169 implements StorageTest {
             if ( !m_aTestHelper.commitStorage( xTempSubStorage ) )
                 return false;
 
-            // rename the storage after it`s parent is commited
+            // rename the storage after it's parent is committed
             if ( !m_aTestHelper.renameElement( xTempSubStorage, "SubSubStorage7", "SubSubStorage8" ) )
                 return false;
 
-            // rename the stream after it`s parent is commited
+            // rename the stream after it's parent is committed
             if ( !m_aTestHelper.renameElement( xTempSubStorage, "SubStream7", "SubStream8" ) )
                 return false;
 
@@ -289,11 +289,11 @@ public class RegressionTest_i29169 implements StorageTest {
             if ( !m_aTestHelper.commitStorage( xTempStorage ) )
                 return false;
 
-            // rename the storage after the package is commited
+            // rename the storage after the package is committed
             if ( !m_aTestHelper.renameElement( xTempSubStorage, "SubSubStorage8", "SubSubStorage9" ) )
                 return false;
 
-            // rename the stream after it`s parent is commited
+            // rename the stream after it`s parent is committed
             if ( !m_aTestHelper.renameElement( xTempSubStorage, "SubStream8", "SubStream9" ) )
                 return false;
 

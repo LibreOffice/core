@@ -42,7 +42,7 @@ interface XMutableGridDataModel;
     in this column is taken into account. Further read requests to this column will assume that all non-`VOID` data is of
     the same type.</p>
 
-    <p>Consequently, you cannot use this service with data sets containing heterogenous data in a given column.</p>
+    <p>Consequently, you cannot use this service with data sets containing heterogeneous data in a given column.</p>
 
     <p>All requests made via the XMutableGridDataModel are delegated to the <code>XMutableGridDataModel</code>
     instance passed in the service constructor.</p>

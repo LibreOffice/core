@@ -338,7 +338,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_readJNI
     enum {
         START   = 0,
         INMONITOR,
-        AQUIRED,
+        ACQUIRED,
         GOTBUFFER
     };
 
@@ -370,9 +370,9 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_readJNI
         goto error;
     }
 
-    /* aquire pipe */
+    /* acquire pipe */
     osl_acquirePipe( npipe );
-    state = AQUIRED;
+    state = ACQUIRED;
 
     /* allocate a buffer */
     if ((nbuff = malloc(len)) == NULL)
@@ -420,7 +420,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_readJNI
 
     /* done */
     free(nbuff);
-    if ( state >= AQUIRED )
+    if ( state >= ACQUIRED )
         osl_releasePipe( npipe );
 
     /* exit monitor */

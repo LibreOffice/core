@@ -27,7 +27,7 @@
 module com { module sun { module star { module security {
 
 /**
- * Constant definiton of a certificate container status.
+ * Constant definition of a certificate container status.
  */
 enum ExtAltNameType
 {

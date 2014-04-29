@@ -437,7 +437,7 @@ static char *make_keyword( char *keyword, const char *token)
   return keyword;
 }
 
-// token reading funtion
+// token reading function
 struct eq_stack {
   MzString  white;
   MzString  token;
@@ -462,7 +462,9 @@ void push_token(MzString &white, MzString &token, istream *strm)
   stk->strm = strm;
 }
 
-/* 읽은 토큰의 길이를 반환한다. */
+/*
+ 읽은 토큰의 길이를 반환한다.
+*/
 /* control char, control sequence, binary sequence,
    alphabet string, sigle character */
 static int next_token(MzString &white, MzString &token, istream *strm)
@@ -482,7 +484,7 @@ static int next_token(MzString &white, MzString &token, istream *strm)
   if( !strm->good() || (ch = strm->get()) == EOF )
     return 0;
 
-  // read preceeding ws
+  // read preceding ws
   if( IS_WS(ch) ) {
     do white << (char) ch;
     while( IS_WS(ch = strm->get()) );

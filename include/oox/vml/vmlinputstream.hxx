@@ -47,7 +47,7 @@ typedef ::cppu::WeakImplHelper1< ::com::sun::star::io::XInputStream > InputStrea
         not containing the characters '<' and '>' are stripped from the input
         stream.
 
-    2)  Multiple occurences of the same attribute in an element but the last
+    2)  Multiple occurrences of the same attribute in an element but the last
         are removed.
 
     3)  Line breaks represented by a single <br> element (without matching

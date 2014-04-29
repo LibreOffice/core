@@ -40,7 +40,7 @@ struct HBox;
 enum
 {
     PA_USER_COLUMN    =   1,
-    PA_USER_PAGE      =   2,                      /* p user_page definiton */
+    PA_USER_PAGE      =   2,                      /* p user_page definition */
     PA_SECTION_BREAK  =   4,
     PA_BLOCK_BEGIN    =   8,
     PA_IN_BLOCK       =   16,
@@ -124,11 +124,11 @@ class DLLEXPORT HWPPara
 
 /* layout을 위한 함수 */
 /**
- * Returns the character sytle of paragraph.
+ * Returns the character style of paragraph.
  */
         CharShape *GetCharShape(int pos);
 /**
- * Returns the sytle of paragraph.
+ * Returns the style of paragraph.
  */
         ParaShape *GetParaShape(void);
 

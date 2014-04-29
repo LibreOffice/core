@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module drawing {
     A UNO shape is any object that implements the
     ::com::sun::star::drawing::XShape interface.
 
-    <p>The content of a draw page is modeled as tree of accessible shapes
+    <p>The content of a draw page is modelled as tree of accessible shapes
     and accessible text paragraphs.  The root of this (sub-)tree is the
     accessible draw document view.  An accessible shape implements either
     this service or one of the "derived" services

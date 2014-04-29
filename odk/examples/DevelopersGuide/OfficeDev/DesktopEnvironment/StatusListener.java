@@ -124,7 +124,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
      * for status events. So we can do it automatically. The outside code
      * mustn't check such things. We can work with one frame,
      * till it die. It doesn't matter if he will be used for different
-     * load/save or any other requests. We will be up to date everytime.
+     * load/save or any other requests. We will be up to date every time.
      */
     public void startListening()
     {

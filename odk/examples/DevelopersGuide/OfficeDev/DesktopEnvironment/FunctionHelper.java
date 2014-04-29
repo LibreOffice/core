@@ -695,7 +695,7 @@ public class FunctionHelper
         {
             // First detect factory of this document.
             // Ask for the supported service name of this document.
-            // If information is available it can be used to find out wich
+            // If information is available it can be used to find out which
             // filter exist for HTML export. Normaly this filter should be searched
             // inside the filter configuration but this little demo doesn't do so.
             // (see service com.sun.star.document.FilterFactory for further

@@ -50,7 +50,4 @@ published exception SQLContext: com::sun::star::sdbc::SQLWarning
 
 #endif
 
-/*===========================================================================
-===========================================================================*/
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

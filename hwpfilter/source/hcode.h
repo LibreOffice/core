@@ -58,7 +58,7 @@ DLLEXPORT ::std::string urltounix(const char *src);
 DLLEXPORT ::std::string urltowin(const char *src);
 #endif
 /**
- *  Transfer interger to string following format
+ *  Transfer integer to string following format
  */
 DLLEXPORT char* Int2Str(int value, const char *format, char *buf);
 

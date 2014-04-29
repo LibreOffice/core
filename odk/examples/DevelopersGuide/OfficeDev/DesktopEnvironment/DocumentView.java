@@ -328,7 +328,7 @@ public class DocumentView extends    JFrame
         mbDead=true;
 
         // force these sub view to release her remote
-        // refrences too!
+        // references too!
         maStatusView.shutdown();
         maCustomizeView.shutdown();
 

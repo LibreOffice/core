@@ -111,7 +111,7 @@ CreateFolder	Component_	N			Component	1	Identifier		Foreign key into the Compone
 CreateFolder	Directory_	N			Directory	1	Identifier		Primary key, could be foreign key into the Directory table.
 CustomAction	Action	N					Identifier		Primary key, name of action, normally appears in sequence table unless private use.
 CustomAction	Source	Y					CustomSource		The table reference of the source of the code.
-CustomAction	Target	Y					Formatted		Excecution parameter, depends on the type of custom action
+CustomAction	Target	Y					Formatted		Execution parameter, depends on the type of custom action
 CustomAction	Type	N	1	32767					The numeric custom action type, consisting of source location, code type, entry, option flags.
 Dialog	Attributes	Y	0	2147483647					A 32-bit word that specifies the attribute flags to be applied to this dialog.
 Dialog	Control_Cancel	Y			Control	2	Identifier		Defines the cancel control. Hitting escape or clicking on the close icon on the dialog is equivalent to pushing this button.

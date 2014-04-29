@@ -39,7 +39,7 @@ public class ComponentContextEntry
 
     /** Creating a late-init singleton entry component context entry.
         The second parameter will be ignored and overwritten during
-        instanciation of the singleton instance.
+        instantiation of the singleton instance.
 
         @param lateInit
                object factory or service string

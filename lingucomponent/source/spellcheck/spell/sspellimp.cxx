@@ -386,7 +386,7 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     // These are be the default values set in the SN_LINGU_PROPERTIES
     // PropertySet which are overridden by the supplied ones from the
     // last argument.
-    // You'll probably like to use a simplier solution than the provided
+    // You'll probably like to use a simpler solution than the provided
     // one using the PropertyHelper_Spell.
     PropertyHelper_Spelling& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals( rProperties );

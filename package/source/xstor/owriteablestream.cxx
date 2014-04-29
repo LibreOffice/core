@@ -933,7 +933,7 @@ void OWriteStream_Impl::Revert()
         }
         else
         {
-            // the original stream was aready parsed
+            // the original stream was already parsed
             if ( !m_bOrigRelInfoBroken )
                 m_nRelInfoStatus = RELINFO_READ;
             else

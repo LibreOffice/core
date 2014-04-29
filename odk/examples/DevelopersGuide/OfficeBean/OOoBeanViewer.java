@@ -43,8 +43,8 @@ import java.io.*;
  *
  * This applet is a sample implementation of the
  * OpenOffice.org bean.
- * When initally loaded the applet has two buttons
- * one for opening an existant file and one to open
+ * When initially loaded the applet has two buttons
+ * one for opening an existent file and one to open
  * a blank document of a given type supported by
  * OpenOffice.org eg. Writer, Calc, Impress, .....
  *
@@ -96,7 +96,7 @@ public class OOoBeanViewer extends java.applet.Applet
         documentTypePopUp = new javax.swing.JPopupMenu();
         storeDocumentButton = new javax.swing.JButton("store to buffer");
         loadDocumentButton = new javax.swing.JButton("load from buffer");
-        syswinButton = new javax.swing.JButton("release/aquire");
+        syswinButton = new javax.swing.JButton("release/acquire");
 
         menuBarButton = new javax.swing.JCheckBox("MenuBar");
         menuBarButton.setSelected( aBean.isMenuBarVisible() );

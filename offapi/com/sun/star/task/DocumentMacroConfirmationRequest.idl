@@ -38,7 +38,7 @@ exception DocumentMacroConfirmationRequest : ClassifiedInteractionRequest
     */
     string  DocumentURL;
 
-    /** refers to the storage related to the last commited version of the
+    /** refers to the storage related to the last committed version of the
         document.
 
         This storage is necessary e.g. for displaying the existing signatures to

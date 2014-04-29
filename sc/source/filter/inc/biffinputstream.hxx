@@ -134,7 +134,7 @@ public:
     /** Constructs the BIFF record stream using the passed binary stream.
 
         @param rInStream
-            The base input stream. Must be seekable. Will be seeked to its
+            The base input stream. Must be seekable. Will be sought to its
             start position.
 
         @param bContLookup  Automatic CONTINUE lookup on/off.
@@ -283,7 +283,7 @@ public:
 
 
 private:
-    /** Initializes all members after base stream has been seeked to new record. */
+    /** Initializes all members after base stream has been sought to new record. */
     void                setupRecord();
     /** Restarts the current record from the beginning. */
     void                restartRecord( bool bInvalidateRecSize );
