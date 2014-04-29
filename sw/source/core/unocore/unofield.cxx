@@ -2774,9 +2774,6 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
     std::vector<OUString> aFldNames;
     for( size_t i = 0; i < nCount; ++i )
     {
-        if (!(*pFldTypes)[i])
-            continue;
-
         SwFieldType& rFldType = *((*pFldTypes)[i]);
 
         OUString sFldName;
@@ -2982,8 +2979,6 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
     sal_uInt16 nCount = pFldTypes->size();
     for(sal_uInt16 nType = 0;  nType < nCount;  ++nType)
     {
-        if( !(*pFldTypes)[nType] )
-            continue;
         const SwFieldType *pCurType = (*pFldTypes)[nType];
         SwIterator<SwFmtFld,SwFieldType> aIter( *pCurType );
         const SwFmtFld* pCurFldFmt = aIter.First();

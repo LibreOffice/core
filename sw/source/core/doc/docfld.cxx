@@ -95,8 +95,7 @@ SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
             const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
             OUString sFldNm( rFldTyp.GetName() );
             for( ; i < nSize; ++i )
-                if( (*mpFldTypes)[i] &&
-                    nFldWhich == (*mpFldTypes)[i]->Which() &&
+                if( nFldWhich == (*mpFldTypes)[i]->Which() &&
                     rSCmp.isEqual( sFldNm, (*mpFldTypes)[i]->GetName() ))
                         return (*mpFldTypes)[i];
         }
@@ -104,15 +103,13 @@ SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
 
     case RES_AUTHORITY:
         for( ; i < nSize; ++i )
-            if( (*mpFldTypes)[i] &&
-                nFldWhich == (*mpFldTypes)[i]->Which() )
+            if( nFldWhich == (*mpFldTypes)[i]->Which() )
                 return (*mpFldTypes)[i];
         break;
 
     default:
         for( i = 0; i < nSize; ++i )
-            if( (*mpFldTypes)[i] &&
-                nFldWhich == (*mpFldTypes)[i]->Which() )
+            if( nFldWhich == (*mpFldTypes)[i]->Which() )
                 return (*mpFldTypes)[i];
     }
 
@@ -167,8 +164,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
     SwFieldType* pFnd;
 
     for( ; i < nSize; ++i )
-        if( (*mpFldTypes)[i] &&
-            nFldWhich == (pFnd = (*mpFldTypes)[i])->Which() &&
+        if( nFldWhich == (pFnd = (*mpFldTypes)[i])->Which() &&
             rSCmp.isEqual( rFldNm, pFnd->GetName() ) )
         {
             // find new name
@@ -176,8 +172,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
             do {
                 OUString sSrch = rFldNm + OUString::number( nNum );
                 for( i = INIT_FLDTYPES; i < nSize; ++i )
-                    if( (*mpFldTypes)[i] &&
-                        nFldWhich == (pFnd = (*mpFldTypes)[i])->Which() &&
+                    if( nFldWhich == (pFnd = (*mpFldTypes)[i])->Which() &&
                         rSCmp.isEqual( sSrch, pFnd->GetName() ) )
                         break;
 
@@ -215,7 +210,7 @@ void SwDoc::RemoveFldType(sal_uInt16 nFld)
      * Dependent fields present -> ErrRaise
      */
     sal_uInt16 nSize = mpFldTypes->size();
-    if(nFld < nSize && (*mpFldTypes)[nFld])
+    if(nFld < nSize)
     {
         SwFieldType* pTmp = (*mpFldTypes)[nFld];
 
@@ -288,9 +283,6 @@ SwFieldType* SwDoc::GetFldType(
     SwFieldType* pRet = 0;
     for( ; i < nSize; ++i )
     {
-        if( !(*mpFldTypes)[i] )
-            continue;
-
         SwFieldType* pFldType = (*mpFldTypes)[i];
 
         OUString aFldName( pFldType->GetName() );
@@ -315,9 +307,6 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
 
     for( sal_uInt16 i=0; i < mpFldTypes->size(); ++i)
     {
-        if( !(*mpFldTypes)[i] )
-            continue;
-
         switch( (*mpFldTypes)[i]->Which() )
         {
             // Update table fields second to last
@@ -375,15 +364,13 @@ void SwDoc::UpdateUsrFlds()
     SwCalc* pCalc = 0;
     const SwFieldType* pFldType;
     for( sal_uInt16 i = INIT_FLDTYPES; i < mpFldTypes->size(); ++i )
-    {
-        if( (*mpFldTypes)[i] &&
-            RES_USERFLD == ( pFldType = (*mpFldTypes)[i] )->Which() )
+        if( RES_USERFLD == ( pFldType = (*mpFldTypes)[i] )->Which() )
         {
             if( !pCalc )
                 pCalc = new SwCalc( *this );
             ((SwUserFieldType*)pFldType)->GetValue( *pCalc );
         }
-    }
+
     if( pCalc )
     {
         delete pCalc;
@@ -396,11 +383,8 @@ void SwDoc::UpdateRefFlds( SfxPoolItem* pHt )
 {
     SwFieldType* pFldType;
     for( sal_uInt16 i = 0; i < mpFldTypes->size(); ++i )
-    {
-        if( (*mpFldTypes)[i] &&
-            RES_GETREFFLD == ( pFldType = (*mpFldTypes)[i] )->Which() )
+        if( RES_GETREFFLD == ( pFldType = (*mpFldTypes)[i] )->Which() )
             pFldType->ModifyNotification( 0, pHt );
-    }
 }
 
 /// @note For simplicity assume that all field types have updatable contents so
@@ -409,9 +393,6 @@ bool SwDoc::containsUpdatableFields()
 {
     for (sal_uInt16 i = 0; i < mpFldTypes->size(); ++i)
     {
-        if( !(*mpFldTypes)[i] )
-            continue;
-
         SwFieldType* pFldType = (*mpFldTypes)[i];
         SwIterator<SwFmtFld,SwFieldType> aIter(*pFldType);
         if (aIter.First())
@@ -429,8 +410,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 
     for (sal_uInt16 i = 0; i < mpFldTypes->size(); ++i)
     {
-        if( (*mpFldTypes)[i] &&
-            RES_TABLEFLD == ( pFldType = (*mpFldTypes)[i] )->Which() )
+        if( RES_TABLEFLD == ( pFldType = (*mpFldTypes)[i] )->Which() )
         {
             SwTableFmlUpdate* pUpdtFld = 0;
             if( pHt && RES_TABLEFML_UPDATE == pHt->Which() )
@@ -679,9 +659,6 @@ void SwDoc::UpdatePageFlds( SfxPoolItem* pMsgHnt )
 {
     SwFieldType* pFldType;
     for( sal_uInt16 i = 0; i < INIT_FLDTYPES; ++i )
-    {
-        if( !(*mpFldTypes)[i] )
-            continue;
         switch( ( pFldType = (*mpFldTypes)[ i ] )->Which() )
         {
         case RES_PAGENUMBERFLD:
@@ -694,7 +671,6 @@ void SwDoc::UpdatePageFlds( SfxPoolItem* pMsgHnt )
             pFldType->ModifyNotification( 0, 0 );
             break;
         }
-    }
     SetNewFldLst(true);
 }
 
@@ -702,12 +678,8 @@ void SwDoc::UpdatePageFlds( SfxPoolItem* pMsgHnt )
 void SwDoc::GCFieldTypes()
 {
     for( sal_uInt16 n = mpFldTypes->size(); n > INIT_FLDTYPES; )
-    {
-        if( !(*mpFldTypes)[--n] )
-            continue;
-        if( !(*mpFldTypes)[n]->GetDepends() )
+        if( !(*mpFldTypes)[ --n ]->GetDepends() )
             RemoveFldType( n );
-    }
 }
 
 void SwDoc::LockExpFlds()
@@ -1280,11 +1252,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         const SwFieldType* pFldType;
         // process separately:
         for( n = mpFldTypes->size(); n; )
-        {
-            if( !(*mpFldTypes)[--n] )
-                continue;
-
-            switch( ( pFldType = (*mpFldTypes)[n] )->Which() )
+            switch( ( pFldType = (*mpFldTypes)[ --n ] )->Which() )
             {
             case RES_USERFLD:
                 {
@@ -1306,7 +1274,6 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
                 ((SwSetExpFieldType*)pFldType)->SetOutlineChgNd( 0 );
                 break;
             }
-        }
     }
 
     // The array is filled with all fields; start calculation.
@@ -1629,11 +1596,7 @@ void SwDoc::_InitFieldTypes()       // is being called by the CTOR
     mpFldTypes->push_back( new SwPageNumberFieldType );
     mpFldTypes->push_back( new SwAuthorFieldType );
     mpFldTypes->push_back( new SwFileNameFieldType(this) );
-#if HAVE_FEATURE_DBCONNECTIVITY
     mpFldTypes->push_back( new SwDBNameFieldType(this) );
-#else
-    mpFldTypes->push_back( NULL );
-#endif
     mpFldTypes->push_back( new SwGetExpFieldType(this) );
     mpFldTypes->push_back( new SwGetRefFieldType( this ) );
     mpFldTypes->push_back( new SwHiddenTxtFieldType );
@@ -1648,10 +1611,6 @@ void SwDoc::_InitFieldTypes()       // is being called by the CTOR
     mpFldTypes->push_back( new SwDBNextSetFieldType );
     mpFldTypes->push_back( new SwDBNumSetFieldType );
     mpFldTypes->push_back( new SwDBSetNumberFieldType );
-#else
-    mpFldTypes->push_back( NULL );
-    mpFldTypes->push_back( NULL );
-    mpFldTypes->push_back( NULL );
 #endif
     mpFldTypes->push_back( new SwTemplNameFieldType(this) );
     mpFldTypes->push_back( new SwTemplNameFieldType(this) );
@@ -1698,9 +1657,6 @@ const SwDBData& SwDoc::GetDBDesc()
         const sal_uInt16 nSize = mpFldTypes->size();
         for(sal_uInt16 i = 0; i < nSize && maDBData.sDataSource.isEmpty(); ++i)
         {
-            if( !(*mpFldTypes)[i] )
-                continue;
-
             SwFieldType& rFldType = *((*mpFldTypes)[i]);
             sal_uInt16 nWhich = rFldType.Which();
             if(IsUsed(rFldType))
@@ -1967,8 +1923,8 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
 
         switch( pFld->GetTyp()->Which() )
         {
-#if HAVE_FEATURE_DBCONNECTIVITY
             case RES_DBFLD:
+#if HAVE_FEATURE_DBCONNECTIVITY
                 if( IsNameInArray( rOldNames, lcl_DBDataToString(((SwDBField*)pFld)->GetDBData())))
                 {
                     SwDBFieldType* pOldTyp = (SwDBFieldType*)pFld->GetTyp();
@@ -1984,6 +1940,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
 
                     bExpand = true;
                 }
+#endif
                 break;
 
             case RES_DBSETNUMBERFLD:
@@ -2004,7 +1961,6 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
                     ((SwDBNameInfField*)pFld)->SetDBData(aNewDBData);
                     bExpand = true;
                 }
-#endif
                 // no break;
             case RES_HIDDENTXTFLD:
             case RES_HIDDENPARAFLD:
@@ -2247,7 +2203,7 @@ void SwDoc::ChangeAuthorityData( const SwAuthEntry* pNewData )
     for( sal_uInt16 i = INIT_FLDTYPES; i < nSize; ++i )
     {
         SwFieldType* pFldType = (*mpFldTypes)[i];
-        if( pFldType && RES_AUTHORITY  == pFldType->Which() )
+        if( RES_AUTHORITY  == pFldType->Which() )
         {
             SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)pFldType;
             pAuthType->ChangeEntryContent(pNewData);
@@ -2735,7 +2691,6 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
                     ModifyNotification( 0, pDstFmtFld );
             break;
 
-#if HAVE_FEATURE_DBCONNECTIVITY
         case RES_DBNAMEFLD:
         case RES_DBNEXTSETFLD:
         case RES_DBNUMSETFLD:
@@ -2746,6 +2701,7 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
             break;
 
         case RES_DBFLD:
+#if HAVE_FEATURE_DBCONNECTIVITY
             {
                 // JP 10.02.96: call ChgValue, so that the style change sets the
                 // ContentString correctly
