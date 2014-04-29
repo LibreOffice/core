@@ -316,10 +316,11 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
         aPoint.setX(aPoint.getX() - 1);                    //do not land in the fly!!
         GetLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
         // determine text frame by left-top-corner of object
-        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aTmpPos, 0, false );
+        SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
+        pTxtFrm = pNd ? pNd->getLayoutFrm(GetLayout(), &aTmpPos, 0, false) : NULL;
     }
-    const SwFrm *pTmp = ::FindAnchor( pTxtFrm, aTmpPos );
-    const SwFlyFrm *pFly = pTmp->FindFlyFrm();
+    const SwFrm *pTmp = pTxtFrm ? ::FindAnchor(pTxtFrm, aTmpPos) : NULL;
+    const SwFlyFrm *pFly = pTmp ? pTmp->FindFlyFrm() : NULL;
     if( pFly )
         return pFly->GetFmt();
     return NULL;
