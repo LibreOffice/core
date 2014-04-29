@@ -170,9 +170,11 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                     func = get_collator_data_ja_phonetic_alphanumeric_first;
                 else if ( rAlgorithm == "phonetic (alphanumeric last)" )
                     func = get_collator_data_ja_phonetic_alphanumeric_last;
+#if (U_ICU_VERSION_MAJOR_NUM < 53)
             } else if ( rLocale.Language == "ko" ) {
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_ko_charset;
+#endif
             } else if ( rLocale.Language == "ku" ) {
                 if ( rAlgorithm == "alphanumeric" )
                     func = get_collator_data_ku_alphanumeric;
