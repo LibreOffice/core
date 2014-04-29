@@ -51,6 +51,8 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pParent, const SfxItemSet& rCoreSet)
     :  SwFldPage(pParent, "FldDocInfoPage",
         "modules/swriter/ui/flddocinfopage.ui", rCoreSet)
     , pSelEntry(0)
+    , nOldSel(0)
+    , nOldFormat(0)
 {
     get(m_pTypeTLB, "type");
     get(m_pSelection, "selectframe");
