@@ -31,8 +31,16 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
+#include "ucbhelper/content.hxx"
+
+#include "personasdochandler.hxx"
 
 using namespace com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ucb;
+
 
 /** Dialog that will allow the user to choose a Persona to use.
 
@@ -78,9 +86,18 @@ OUString SelectPersonaDialog::GetPersonaURL() const
 
 IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
 {
-    uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell( com::sun::star::system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
+    // uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell( com::sun::star::system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
 
-    xSystemShell->execute( "https://addons.mozilla.org/firefox/themes/", OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+    // xSystemShell->execute( "https://addons.mozilla.org/firefox/themes/", OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+    Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
+    PersonasDocHandler* pHandler = new PersonasDocHandler();
+    Reference< xml::sax::XDocumentHandler > xDocHandler = pHandler;
+    xParser->setDocumentHandler( xDocHandler );
+
+    OUString sParcelDescURL = "parcel-descriptor.xml";
+
+    ::ucbhelper::Content ucb_content;
 
     return 0;
 }
