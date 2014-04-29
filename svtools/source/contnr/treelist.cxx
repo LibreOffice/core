@@ -24,7 +24,8 @@
 
 #include <stdio.h>
 
-SvTreeList::SvTreeList()
+SvTreeList::SvTreeList() :
+    mbEnableInvalidate(true)
 {
     nEntryCount = 0;
     bAbsPositionsValid = false;
@@ -1098,8 +1099,16 @@ void SvTreeList::SetListPositions( SvTreeListEntries& rEntries )
         rFirst.pParent->InvalidateChildrensListPositions();
 }
 
+void SvTreeList::EnableInvalidate( bool bEnable )
+{
+    mbEnableInvalidate = bEnable;
+}
+
 void SvTreeList::InvalidateEntry( SvTreeListEntry* pEntry )
 {
+    if (!mbEnableInvalidate)
+        return;
+
     Broadcast( LISTACTION_INVALIDATE_ENTRY, pEntry );
 }
 

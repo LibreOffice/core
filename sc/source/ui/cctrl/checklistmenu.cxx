@@ -1376,7 +1376,7 @@ void ScCheckListBox::Init()
     SetNodeDefaultImages();
 }
 
-bool ScCheckListBox::IsChecked( OUString& sName, SvTreeListEntry* pParent )
+bool ScCheckListBox::IsChecked( const OUString& sName, SvTreeListEntry* pParent )
 {
     SvTreeListEntry* pEntry = FindEntry( pParent, sName );
     if ( pEntry && GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED)
@@ -1384,7 +1384,7 @@ bool ScCheckListBox::IsChecked( OUString& sName, SvTreeListEntry* pParent )
     return false;
 }
 
-void ScCheckListBox::CheckEntry( OUString& sName, SvTreeListEntry* pParent, bool bCheck )
+void ScCheckListBox::CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck )
 {
     SvTreeListEntry* pEntry = FindEntry( pParent, sName );
     if ( pEntry )
@@ -1500,22 +1500,34 @@ void ScCheckListMenuWindow::initMembers()
 {
     size_t n = maMembers.size();
     size_t nVisMemCount = 0;
+
     maChecks.SetUpdateMode(false);
+    maChecks.GetModel()->EnableInvalidate(false);
+
     for (size_t i = 0; i < n; ++i)
     {
-        if ( !maMembers[ i ].mbDate )
+        if (maMembers[i].mbDate)
         {
             maChecks.InsertEntry(maMembers[i].maName, NULL, false, TREELIST_APPEND, NULL,
                 SvLBoxButtonKind_enabledCheckbox );
-        }
 
-        maChecks.CheckEntry( maMembers[i].maName, maMembers[i].mpParent, maMembers[i].mbVisible);
-        // Expand first node of checked dates
-        if ( maMembers[ i ].mpParent == NULL && maChecks.IsChecked( maMembers[i].maName,  maMembers[i].mpParent ) )
+            maChecks.CheckEntry(maMembers[i].maName, maMembers[i].mpParent, maMembers[i].mbVisible);
+            // Expand first node of checked dates
+            if (!maMembers[i].mpParent && maChecks.IsChecked(maMembers[i].maName,  maMembers[i].mpParent))
+            {
+                SvTreeListEntry* pEntry = maChecks.FindEntry(NULL, maMembers[i].maName);
+                if (pEntry)
+                    maChecks.Expand(pEntry);
+            }
+        }
+        else
         {
-            SvTreeListEntry* pEntry = maChecks.FindEntry( NULL, maMembers[ i ].maName );
-            if (pEntry)
-                maChecks.Expand( pEntry );
+            SvTreeListEntry* pEntry = maChecks.InsertEntry(
+                maMembers[i].maName, NULL, false, TREELIST_APPEND, NULL,
+                SvLBoxButtonKind_enabledCheckbox);
+
+            maChecks.SetCheckButtonState(
+                pEntry, maMembers[i].mbVisible ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED);
         }
 
         if (maMembers[i].mbVisible)
@@ -1538,6 +1550,8 @@ void ScCheckListMenuWindow::initMembers()
         maChkToggleAll.SetState(TRISTATE_INDET);
         mePrevToggleAllState = TRISTATE_INDET;
     }
+
+    maChecks.GetModel()->EnableInvalidate(true);
     maChecks.SetUpdateMode(true);
 }
 
