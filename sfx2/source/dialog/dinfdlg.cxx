@@ -2160,11 +2160,14 @@ CmisYesNo::CmisYesNo( Window* pParent, bool bValue )
 }
 
 // struct CmisPropertyLine ---------------------------------------------
-CmisPropertyLine::CmisPropertyLine( Window* pParent )
+CmisPropertyLine::CmisPropertyLine(Window* pParent)
+    : m_sType(CMIS_TYPE_STRING)
+    , m_bUpdatable(false)
+    , m_bRequired(false)
+    , m_bMultiValued(false)
+    , m_bOpenChoice(false)
+    , m_nNumValue(1)
 {
-    m_nNumValue = 1;
-    m_sId = "";
-    m_sType = CMIS_TYPE_STRING;
     m_pUIBuilder = new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui");
     get( m_pFrame, "CmisFrame" );
     get( m_aName, "name" );
