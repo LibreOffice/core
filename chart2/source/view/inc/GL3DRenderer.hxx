@@ -214,7 +214,9 @@ private:
     // Our ModelViewProjection : multiplication of our 3 matrices
     glm::mat4 m_MVP;
 
+#if 0
     double m_dFreq;
+#endif
 
     int m_iWidth;
 
@@ -257,11 +259,11 @@ private:
     GLuint m_3DNormalMatrixID;
 
     GLuint m_3DUBOBuffer;
-
+#if 0
     GLint m_3DLightBlockIndex;
 
     GLint m_3DMaterialBlockIndex;
-
+#endif
     GLint m_3DActualSizeLight;
 
     GLuint m_NormalBuffer;

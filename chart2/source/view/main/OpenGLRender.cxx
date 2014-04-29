@@ -510,7 +510,9 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     , m_iWidth(1600)
     , m_iHeight(900)
     , m_Model(glm::mat4(1.0f))
+#if 0
     , m_iPointNum(0)
+#endif
     , m_fLineWidth(0.001f)
     , mbArbMultisampleSupported(false)
 #if defined( _WIN32 )

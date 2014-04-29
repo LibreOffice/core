@@ -120,10 +120,11 @@ public:
 private:
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxTarget;
+
+#if 0
         //for performance
-
     double m_dFreq;
-
+#endif
     int m_iWidth;
 
     int m_iHeight;
@@ -143,9 +144,9 @@ private:
     glm::mat4 m_Model;
     // Our ModelViewProjection : multiplication of our 3 matrices
     glm::mat4 m_MVP;
-
+#if 0
     GLint m_RenderProID;
-
+#endif
     glm::vec4 m_ClearColor;
 
     GLuint m_VertexBuffer;
@@ -153,13 +154,13 @@ private:
     GLuint m_ColorBuffer;
 
     GLint m_MatrixID;
-
+#if 0
     GLint m_RenderVertexID;
 
     GLint m_RenderTexCoordID;
 
     GLint m_RenderTexID;
-
+#endif
     GLuint m_RenderVertexBuf;
 
     GLuint m_RenderTexCoordBuf;
@@ -169,9 +170,9 @@ private:
     GLuint m_FboID[2];
 
     GLuint m_RboID[2];
-
+#if 0
     int m_iPointNum;
-
+#endif
     Line2DPointList m_Line2DPointList;
 
     float m_fLineWidth;
