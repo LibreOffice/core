@@ -279,7 +279,7 @@ public:
             Size of the destination buffer.
 
         @return
-            true = Encoding was successful (no error occured).
+            true = Encoding was successful (no error occurred).
     */
     bool                Encode(
                             const void* pData, sal_Size nDatLen,
@@ -305,7 +305,7 @@ public:
             Size of the destination buffer.
 
         @return
-            true = Decoding was successful (no error occured).
+            true = Decoding was successful (no error occurred).
     */
     bool                Decode(
                             const void* pData, sal_Size nDatLen,

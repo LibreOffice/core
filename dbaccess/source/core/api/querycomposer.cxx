@@ -122,7 +122,7 @@ OQueryComposer::OQueryComposer(const Reference< XConnection>& _xConnection)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OQueryComposer::OQueryComposer" );
     DBG_CTOR(OQueryComposer,NULL);
-    OSL_ENSURE(_xConnection.is()," Connection cant be null!");
+    OSL_ENSURE(_xConnection.is()," Connection can't be null!");
 
     Reference<XMultiServiceFactory> xFac( _xConnection, UNO_QUERY_THROW );
     m_xComposer.set( xFac->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );

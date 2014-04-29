@@ -280,7 +280,7 @@ namespace dbaui
             @param  _bMove
                 if <TRUE/> the name of the content must be inserted without any change, otherwise not.
             @return
-                <TRUE/> if the paste opertions was successfull, otherwise <FALSE/>.
+                <TRUE/> if the paste opertions was successful, otherwise <FALSE/>.
         */
         sal_Bool paste( ElementType _eType,const ::svx::ODataAccessDescriptor& _rPasteData ,const String& _sParentFolder = String(),sal_Bool _bMove = sal_False);
 
@@ -338,7 +338,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _xDefinition
         );
 
-        /** Inserts a new object into the hierachy given be the type.
+        /** Inserts a new object into the hierarchy given be the type.
             @param  _eType
                 Where to insert the new item.
             @param  _sParentFolder
@@ -348,7 +348,7 @@ namespace dbaui
             @param  _bMove
                 if <TRUE/> the name of the content must be inserted without any change, otherwise not.
             @return
-                <TRUE/> if the insert opertions was successfull, otherwise <FALSE/>.
+                <TRUE/> if the insert opertions was successful, otherwise <FALSE/>.
         */
         sal_Bool insertHierachyElement(  ElementType _eType
                                     ,const String& _sParentFolder

@@ -54,19 +54,19 @@ namespace framework{
 //_______________________________________________
 // definitions
 
-/** adress job configuration inside argument set provided on method execute(). */
+/** address job configuration inside argument set provided on method execute(). */
 static const ::rtl::OUString PROP_JOBCONFIG = ::rtl::OUString::createFromAscii("JobConfig");
 
-/** adress job configuration property "Command". */
+/** address job configuration property "Command". */
 static const ::rtl::OUString PROP_COMMAND = ::rtl::OUString::createFromAscii("Command");
 
-/** adress job configuration property "Arguments". */
+/** address job configuration property "Arguments". */
 static const ::rtl::OUString PROP_ARGUMENTS = ::rtl::OUString::createFromAscii("Arguments");
 
-/** adress job configuration property "DeactivateJobIfDone". */
+/** address job configuration property "DeactivateJobIfDone". */
 static const ::rtl::OUString PROP_DEACTIVATEJOBIFDONE = ::rtl::OUString::createFromAscii("DeactivateJobIfDone");
 
-/** adress job configuration property "CheckExitCode". */
+/** address job configuration property "CheckExitCode". */
 static const ::rtl::OUString PROP_CHECKEXITCODE = ::rtl::OUString::createFromAscii("CheckExitCode");
 
 //-----------------------------------------------
@@ -116,7 +116,7 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
     ::rtl::OUString sRealCommand = impl_substituteCommandVariables(sCommand);
 
     // Command is required as minimum.
-    // If it does not exists ... we cant do our job.
+    // If it does not exists ... we can't do our job.
     // Deactivate such miss configured job silently .-)
     if (sRealCommand.getLength() < 1)
         return ShellJob::impl_generateAnswer4Deactivation();

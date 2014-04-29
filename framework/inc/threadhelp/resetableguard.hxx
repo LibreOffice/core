@@ -84,7 +84,7 @@ class ResetableGuard : private INonCopyable
         /*-****************************************************************************************************//**
             @short      ctors
             @descr      Use these ctor methods to initialize the guard right.
-                        Given lock reference must be valid - otherwise crashes could occure!
+                        Given lock reference must be valid - otherwise crashes could occur!
 
             @seealso    -
 
@@ -169,7 +169,7 @@ class ResetableGuard : private INonCopyable
 
         /*-****************************************************************************************************//**
             @short      disable using of these functions!
-            @descr      It's not allowed to use this methods. Different problem can occure otherwise.
+            @descr      It's not allowed to use this methods. Different problems can occur otherwise.
                         Thats why we disable it by make it private.
 
             @seealso    other ctor

@@ -58,9 +58,9 @@ namespace framework{
     @descr          If you whish to support non breakable method calls without lockingf any mutex, rw-lock or
                     something like that - you should use this guard implementation.
                     Initialize it at first in your method and don't release it till end of your function!
-                    Your "transaction" is registered in ctor and automaticly released in dtor.
+                    Your "transaction" is registered in ctor and automatically released in dtor.
                     Use set/get of working mode to enable/disable further transactions.
-                    It's possible too, to enable automaticly throwing of some exceptions for illegal
+                    It's possible too, to enable automatically throwing of some exceptions for illegal
                     transaction requests ... e.g. interface call for already disposed objects.
 
     @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
@@ -80,9 +80,9 @@ class TransactionGuard : private INonCopyable
         /*-****************************************************************************************************//**
             @short      ctors
             @descr      Use these ctor methods to initialize the guard right.
-                        Given reference must be valid - otherwise crashes could occure!
+                        Given reference must be valid - otherwise crashes could occur!
 
-            @attention  It's not neccessary to lock any mutex here! Because a ctor should not be called
+            @attention  It's not necessary to lock any mutex here! Because a ctor should not be called
                         from different threads at the same time ... this class use no refcount mechanism!
 
             @seealso    -
@@ -158,7 +158,7 @@ class TransactionGuard : private INonCopyable
 
         /*-****************************************************************************************************//**
             @short      disable using of these functions!
-            @descr      It's not allowed to use this methods. Different problem can occure otherwise.
+            @descr      It's not allowed to use this methods. Different problems can occur otherwise.
                         Thats why we disable it by make it private.
 
             @seealso    other ctor

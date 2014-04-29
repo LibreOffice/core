@@ -174,7 +174,7 @@ void AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
 {
     ::rtl::OUString sCommand = impl_ts_findCommand(aAWTKey);
 
-    // No Command found? Do nothing! User isnt interested on any error handling .-)
+    // No Command found? Do nothing! User isn't interested on any error handling .-)
     if (!sCommand.getLength())
         return;
 

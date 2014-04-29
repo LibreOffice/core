@@ -58,7 +58,7 @@ namespace framework
 
             copy-on-write ... How? Do the following:
  */
-class AcceleratorCache : public ThreadHelpBase // attention! Must be the first base class to guarentee right initialize lock ...
+class AcceleratorCache : public ThreadHelpBase // attention! Must be the first base class to guarantee right initialize lock ...
 {
     //______________________________________
     // const, types

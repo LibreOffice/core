@@ -66,7 +66,7 @@ namespace framework
 /**
     TODO document me
  */
-class StorageHolder : private ThreadHelpBase // attention! Must be the first base class to guarentee right initialize lock ...
+class StorageHolder : private ThreadHelpBase // attention! Must be the first base class to guarantee right initialize lock ...
 {
     //-------------------------------------------
     // types
@@ -207,7 +207,7 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
             @descr  First this method try to open the requested sub element
                     using the given open mode. If it failed there is second step,
                     which tries to do the same again ... but removing a might existing
-                    WRITE flag from the open mode. The user can supress this fallback
+                    WRITE flag from the open mode. The user can suppress this fallback
                     handling by setting the parameter bAllowFallback to sal_False.
 
             @param  xBaseStorage

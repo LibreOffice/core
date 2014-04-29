@@ -80,7 +80,7 @@ namespace vista{
 
 namespace
 {
-    // controling event notifications
+    // controlling event notifications
     const bool STARTUP_SUSPENDED = true;
     const bool STARTUP_ALIVE     = false;
 
@@ -321,7 +321,7 @@ void SAL_CALL VistaFilePicker::setDisplayDirectory(const ::rtl::OUString& sDirec
 }
 
 //-----------------------------------------------------------------------------------------
-// @deprecated cant be supported any longer ... see IDL description for further details
+// @deprecated can't be supported any longer ... see IDL description for further details
 css::uno::Sequence< ::rtl::OUString > SAL_CALL VistaFilePicker::getFiles()
     throw(css::uno::RuntimeException)
 {

@@ -37,7 +37,7 @@ Sub Main
 
 	rem	___________________________________________________________________________________________________________________________________
 	rem	Control service specification of helper class "framework/helper/OComponentAccess".
-	rem	The follow output must occure:	com.sun.star.lang.XTypeProvider
+	rem	The follow output must occur:	com.sun.star.lang.XTypeProvider
 	rem									com.sun.star.container.XEnumerationAccess -> com.sun.star.container.XElementAccess
 	msgbox xComponentAccess.dbg_supportedInterfaces
 
@@ -70,7 +70,7 @@ Sub Main
 	
 	rem ___________________________________________________________________________________________________________________________________
 	rem	Control service specification of helper class "framework/helper/OComponentEnumeration".
-	rem	The follow output must occure:	com.sun.star.lang.XTypeProvider
+	rem	The follow output must occur:	com.sun.star.lang.XTypeProvider
 	rem									com.sun.star.lang.XEventListener
 	rem									com.sun.star.container.XEnumeration
 	msgbox xComponentEnumeration.dbg_supportedInterfaces

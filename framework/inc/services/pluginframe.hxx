@@ -80,7 +80,7 @@ namespace framework{
 class PlugInFrame   :   public css::lang::XInitialization           ,
                         public css::mozilla::XPluginInstance        ,
                         public css::frame::XDispatchResultListener  ,   // => XEVENTLISTENER
-                        public Frame                                    // Order of baseclasses is neccessary for right initialization!
+                        public Frame                                    // Order of baseclasses is necessary for right initialization!
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -268,7 +268,7 @@ class PlugInFrame   :   public css::lang::XInitialization           ,
         sal_Bool                                                            m_bILoad                ;   /// PlugInFrame has a valid loader which load the document and wait for finished/cancelled
         sal_Bool                                                            m_bIHaveDocument        ;   /// We have a document loaded successful.
         css::uno::Reference< css::frame::XDispatchProvider >                m_xPlugInDispatcher     ;   /// Dispatcher to forward dispatches to browser
-        static sal_Bool                                                     m_bRemoteFactoriesExist ;   /// indicates, if remote factories was already registered (neccessary one times only!)
+        static sal_Bool                                                     m_bRemoteFactoriesExist ;   /// indicates, if remote factories was already registered (necessary one times only!)
         SvtCommandOptions                                                   m_aCommandOptions       ;   /// ref counted class to support disabling commands defined by configuration file
 
 };      //  class PlugInFrame

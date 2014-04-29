@@ -169,7 +169,7 @@ TypeDetection::~TypeDetection()
         // verify every flat detected (or preselected!) type
         // by calling its registered deep detection service.
         // But break this loop if a type match to the given descriptor
-        // by an URL pattern(!) or if deep detection isnt allowed from
+        // by an URL pattern(!) or if deep detection isn't allowed from
         // outside (bAllowDeep=sal_False) or break the whole detection by
         // throwing an exception if creation of the might needed input
         // stream failed by e.g. an IO exception ...
@@ -179,7 +179,7 @@ TypeDetection::~TypeDetection()
 
         //*******************************************
         // if no flat detected (nor preselected!) type could be
-        // verified and no error occured during creation of
+        // verified and no error occurred during creation of
         // the might needed input stream, start detection
         // which uses all registered deep detection services.
         if (
@@ -415,9 +415,9 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
                                                     const css::util::URL&  aParsedURL ,
                                                           FlatDetection&   rFlatTypes )
 {
-    // Can be used to supress execution of some parts of this method
+    // Can be used to suppress execution of some parts of this method
     // if its already clear that detected type is valid or not.
-    // Its neccessary to use shared code at the end, which update
+    // Its necessary to use shared code at the end, which update
     // all return parameters constistency!
     sal_Bool bBreakDetection = sal_False;
 
@@ -456,7 +456,7 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
 
     if (!bBreakDetection)
     {
-        // We cant check a preselected type for a given stream!
+        // We can't check a preselected type for a given stream!
         // So we must believe, that it can work ...
         if (aParsedURL.Complete.equalsAsciiL("private:stream", 14))
             bBreakDetection = sal_True;
@@ -471,8 +471,8 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
                                                           INetURLObject::DECODE_WITH_CHARSET);
         sExtension = sExtension.toAsciiLowerCase();
 
-        // otherwhise we must know, if it matches to the given URL realy.
-        // especialy if it matches by its extension or pattern registration.
+        // otherwise we must know, if it matches to the given URL really.
+        // especially if it matches by its extension or pattern registration.
         OUStringList lExtensions(aType[PROPNAME_EXTENSIONS]);
         OUStringList lURLPattern(aType[PROPNAME_URLPATTERN]);
 
@@ -549,9 +549,9 @@ sal_Bool TypeDetection::impl_getPreselectionForFilter(const ::rtl::OUString& sPr
                                                       const css::util::URL&  aParsedURL   ,
                                                             FlatDetection&   rFlatTypes   )
 {
-    // Can be used to supress execution of some parts of this method
+    // Can be used to suppress execution of some parts of this method
     // if its already clear that detected filter is valid or not.
-    // Its neccessary to use shared code at the end, which update
+    // Its necessary to use shared code at the end, which update
     // all return parameters constistency!
     sal_Bool bBreakDetection = sal_False;
 
@@ -701,9 +701,9 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
         And the user normaly preselects a filter or type. The preslected
         document service cames from the dialog.
 
-        Further it doesnt matter if the user preselected a filter or a document service.
+        Further it doesn't matter if the user preselected a filter or a document service.
         A filter selection is always more explicit then a document service selection.
-        So it must be pereferred. An order between type and filter selection cant be discussed .-)
+        So it must be pereferred. An order between type and filter selection can't be discussed .-)
     */
 
     ::rtl::OUString sSelectedType = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), ::rtl::OUString());
@@ -737,8 +737,8 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     // solutions:
     // a) no types                                => no detection
     // b) deep detection not allowed              => return first valid type of list (because its the preferred or the first valid one)
-    //    or(!) match by URLPattern               => in such case a deep detection will be supressed!
-    // c) type has no detect service              => safe the first occured type without a detect service
+    //    or(!) match by URLPattern               => in such case a deep detection will be suppressed!
+    // c) type has no detect service              => safe the first occurred type without a detect service
     //                                               as "last chance"(!). It will be used outside of this method
     //                                               if no further type could be detected.
     //                                               It must be the first one, because it can be a preferred type.
@@ -1005,7 +1005,7 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     // <- SAFE
 
     // Attention! If e.g. an office module was not installed sometimes we find a
-    // registered detect service, which is referred inside the configuration ... but not realy
+    // registered detect service, which is referred inside the configuration ... but not really
     // installed. On the other side we use third party components here, which can make trouble anyway.
     // So we should handle errors during creation of such services more gracefully .-)
     xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(
@@ -1087,8 +1087,8 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     // Dont distrub the user for "non existing files - means empty URLs" or
     // if we was forced to detect a stream.
     // Reason behind: We must be shure to ask user for "unknown contents" only ...
-    // and not for "missing files". Especialy if detection is done by a stream only
-    // we cant check if the stream points to an "existing content"!
+    // and not for "missing files". Especially if detection is done by a stream only
+    // we can't check if the stream points to an "existing content"!
     if (
         (!sURL.getLength()                                     ) || // "non existing file" ?
         (!xStream.is()                                         ) || // non existing file !

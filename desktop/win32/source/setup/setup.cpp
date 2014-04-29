@@ -1594,11 +1594,11 @@ boolean SetupAppX::GetCmdLineParameters( LPTSTR *pCmdLine )
                 break;
             }
             else if ( (*pSub) == 'a' || (*pSub) == 'A' )
-            {   // --- Handle Adminstrative Installation ---
+            {   // --- Handle Administrative Installation ---
                 SetAdminInstall( true );
             }
             else if ( (*pSub) == 'j' || (*pSub) == 'J' )
-            {   // --- Handle Adminstrative Installation ---
+            {   // --- Handle Administrative Installation ---
                 m_pAdvertise = pStart;
                 m_bQuiet     = true;
                 bDeleteStart = false;

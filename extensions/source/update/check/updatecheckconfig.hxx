@@ -32,7 +32,7 @@
 #include "updatecheckconfiglistener.hxx"
 #include "updateinfo.hxx"
 
-/* Interface to acess configuration data read-only */
+/* Interface to access configuration data read-only */
 struct IByNameAccess
 {
     virtual ::com::sun::star::uno::Any getValue(const sal_Char * pName) = 0;
@@ -217,7 +217,7 @@ T getValue( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Name
 {
     for( sal_Int32 n=0; n < rNamedValues.getLength(); n++ )
     {
-        // Unfortunatly gcc-3.3 does not like Any.get<T>();
+        // Unfortunately gcc-3.3 does not like Any.get<T>();
         if( rNamedValues[n].Name.equalsAscii( pszName ) )
         {
             T value = T();

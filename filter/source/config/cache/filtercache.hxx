@@ -153,7 +153,7 @@ class FilterCache : public BaseLock
          */
         enum EItemFlushState
         {
-            /// indicates an unchanged item (can occure e.g. if an item was added and(!) removed before it was flushed ...
+            /// indicates an unchanged item (can occur e.g. if an item was added and(!) removed before it was flushed ...
             E_ITEM_UNCHANGED = 0,
             /// indicates an item, which exists inside config layer but not inside our own cache
             E_ITEM_REMOVED = 1,
@@ -281,7 +281,7 @@ class FilterCache : public BaseLock
         /** @short  standard ctor
 
             @descr  Its not allowed to do anything here ...
-                    especialy is forbidden to start operations,
+                    especially is forbidden to start operations,
                     which needs a FilterCache instance too!
                     Why? Because thie FilterCache instance will be
                     used as a singleton! And if during this ctor any
@@ -309,12 +309,12 @@ class FilterCache : public BaseLock
                     After its changed data was flushed to the configuration it can be
                     removed.
 
-                    The original container will get these new data automaticly
+                    The original container will get these new data automatically
                     because it listen for changes on the internal used configuration layer.
-                    If the new data are needed immediatly inside the original container,
+                    If the new data are needed immediately inside the original container,
                     the method takeOver() can be used to copy all changes back.
                     The may be following notifications of the configuration will be superflous then.
-                    But they cant be stopped ...
+                    But they can't be stopped ...
 
                     All internal structures will be copied here. But the internal used
                     configuration (update) access wont be copied. The cloned instance contains
@@ -348,7 +348,7 @@ class FilterCache : public BaseLock
                         if this "load-on-demand" thread does not finished its work before.
                         This method "load(xxx)" synchronize such load-on-demand requests.
 
-                        Of course it would be possible to supress this special load thread
+                        Of course it would be possible to suppress this special load thread
                         in general and start it manualy inside this load() request.
                         The outside code decide then, if and when this cache will be filled
                         with all available informations ...
@@ -361,7 +361,7 @@ class FilterCache : public BaseLock
                         "load-on-demand-thread", which tries to optimize our startup performance
                         and start this load() only in case the office startup was already finished!
 
-            @throw      An exception if the cache could not be filled realy
+            @throw      An exception if the cache could not be filled really
                         or seems to be invalid afterwards. But there is no reaction
                         at all if this method does nothing inside, because the cache
                         is already full filled!
@@ -482,7 +482,7 @@ class FilterCache : public BaseLock
             @attention  This method exists to supports some UNO container interfaces
                         only. (e.g. XNameAccess.hasByName()). But inside multithreaded
                         environments there is no guarantee, that this item still exists, if
-                        its realy requested e.g. by calling getItem()!
+                        its really requested e.g. by calling getItem()!
                         Be aware of some NoSuchElementExistExceptions ...
 
             @param      eType
@@ -505,7 +505,7 @@ class FilterCache : public BaseLock
         /** @short      return an item, which match the specified type and name.
 
             @descr      Because this cache can be used inside multithreaded environments
-                        the caller must be aware of some exceptions - especialy a "NoSuchElementExcepotion".
+                        the caller must be aware of some exceptions - especially a "NoSuchElementExcepotion".
                         May another thread already removed the required item before ...
 
             @param      eType
@@ -561,7 +561,7 @@ class FilterCache : public BaseLock
                         cache item reference.
 
             @descr      Such properties can e.g. finalized or mandatory.
-                        They are not persistent  and not realy part of e.g. a
+                        They are not persistent  and not really part of e.g. a
                         filter not. But they are attributes of a configuration
                         entry and can influence our container interface.
 
@@ -584,12 +584,12 @@ class FilterCache : public BaseLock
                         attributes there.
 
             @throw      [css::uno::Exception]
-                        if an internal error occured.
+                        if an internal error occurred.
                         Note: If the item is missing inside the underlying configuration
                         no exception will be thrown. In such case the item is marked as
-                        finalized/mandatory automaticly
+                        finalized/mandatory automatically
                         Reason: May be the item cames from the old configuration package and
-                        was not migrated to the new one. So we cant provide write access
+                        was not migrated to the new one. So we can't provide write access
                         to such items ...
          */
         virtual void addStatePropsToItem(      EItemType        eType,
@@ -628,7 +628,7 @@ class FilterCache : public BaseLock
 
             @param      aURL
                         URL of the content, which type should be detected.
-                        Its already parsed and splitted into its differnt parts,
+                        Its already parsed and splitted into its different parts,
                         like e.g.: main, jump marks etcpp.
 
             @param      rFlatTypes
@@ -689,7 +689,7 @@ class FilterCache : public BaseLock
                         see EConfigProvider for further informations ...
 
             @attention  If a configuration access was opened successfully
-                        all neccessary listener connections will be established
+                        all necessary listener connections will be established
                         too. So this cache will be informed about outside updates.
          */
         css::uno::Reference< css::uno::XInterface > impl_openConfig(EConfigProvider eProvide)
@@ -737,7 +737,7 @@ class FilterCache : public BaseLock
 
             @return     [css::uno::Any]
                         the value of the requested key.
-                        Can be empty if an internal error occured or if the requested
+                        Can be empty if an internal error occurred or if the requested
                         key does not exists!
          */
         css::uno::Any impl_getDirectCFGValue(const ::rtl::OUString& sDirectKey);
@@ -762,8 +762,8 @@ class FilterCache : public BaseLock
         /** @short      validate the whole cache and create
                         structures for optimized items access.
 
-            @descr      Wrong cache items will be removed automaticly.
-                        Wrong dependencies will be corrected automaticly.
+            @descr      Wrong cache items will be removed automatically.
+                        Wrong dependencies will be corrected automatically.
                         If something could not be repaired - an exception
                         is thrown.
                         Further some optmized structures will be created.
@@ -783,9 +783,9 @@ class FilterCache : public BaseLock
         /** @short      register the specified item for the given type.
 
             @descr      Because detect services, frame loader or content handler
-                        are not listed inside the xml configuration as seperated
+                        are not listed inside the xml configuration as separated
                         items (they are properties of any type entry!), this method update
-                        the internal lists of such items. Thats neccessary to have
+                        the internal lists of such items. Thats necessary to have
                         it accessible for our container interfaces of detect, frame loader
                         and content handler services.
 
@@ -839,7 +839,7 @@ class FilterCache : public BaseLock
                     points to the cache member, which should be filled or updated.
 
             @throw  [css::uno::Exception]
-                    if an unrecoverable error occure inside this operation.
+                    if an unrecoverable error occur inside this operation.
          */
         void impl_loadSet(const css::uno::Reference< css::container::XNameAccess >& xConfig,
                                 EItemType                                           eType  ,
@@ -861,15 +861,15 @@ class FilterCache : public BaseLock
                     specify, which container item type must be readed.
 
             @param  sItem
-                    means the internal name, which can be used to adress the item
+                    means the internal name, which can be used to address the item
                     properties relativ to the given configuration set.
 
             @param  eOption
                     regulate, which properties of the requested item should be read.
-                    See defintion of EReadOption for further informations.
+                    See definition of EReadOption for further informations.
 
             @throw  [css::uno::Exception]
-                    if an unrecoverable error occure inside this operation.
+                    if an unrecoverable error occur inside this operation.
          */
         CacheItem impl_loadItem(const css::uno::Reference< css::container::XNameAccess >& xSet   ,
                                       EItemType                                           eType  ,
@@ -884,7 +884,7 @@ class FilterCache : public BaseLock
 
             @descr  The outside code has to be shure, that the item does not already exists
                     inside this cachse. Otherwise it will be loaded twice. This method
-                    doesnt check such constellations!
+                    doesn't check such constellations!
 
             @param  eType
                     specify the type of config item, which must be interpreted.
@@ -895,14 +895,14 @@ class FilterCache : public BaseLock
                     the set node name of the requested item.
 
             @return An iterator, which points directly to the new cached item.
-                    Is a valid iterator if no exception occured here!
+                    Is a valid iterator if no exception occurred here!
                     But to improve robustness - it should be checked :-)
 
             @throw  [css::container::NoSuchElementException]
                     if the item does not exists inside the configuration layer too!
 
             @throw  [css::uno::Exception]
-                    if an unrecoverable error occure inside this operation.
+                    if an unrecoverable error occurs inside this operation.
          */
         CacheItemList::iterator impl_loadItemOnDemand(      EItemType        eType,
                                                       const ::rtl::OUString& sItem)
@@ -935,7 +935,7 @@ class FilterCache : public BaseLock
 
         //---------------------------------------
 
-        /** @short  specify, which save operation is neccessary for the specified item.
+        /** @short  specify, which save operation is necessary for the specified item.
 
             @desrc  If an item of this cache will be added/removed or modified it will
                     be changed inside memory only first. But we save its name inside a special

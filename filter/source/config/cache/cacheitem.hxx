@@ -158,7 +158,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
 
             @param  sActLocale
                     must specify the current office locale.
-                    Its needed to adress the UIName property inside
+                    Its needed to address the UIName property inside
                     the list of possible ones.
          */
         void validateUINames(const ::rtl::OUString& sActLocale);
@@ -170,7 +170,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
 
             @descr  Normaly the converter routines of the base class
                     SequenceAsHashMap do this job already.
-                    But it doesnt provide a "pack" mechanism to
+                    But it doesn't provide a "pack" mechanism to
                     ignore properties with empty (means "void") values.
 
             @return css::uno::Sequence< css::beans::PropertyValue >
@@ -199,9 +199,9 @@ typedef ::std::hash_map< ::rtl::OUString                    ,
             to an extension. Organization as an hash makes it
             faster then searching inside vectors.
 
-            On the other side e.g. URLPattern cant be realy adressed
+            On the other side e.g. URLPattern can't be really addressed
             by a hash value ... because the use wildcards. But
-            there we need key-value pairs too, which cant be provided
+            there we need key-value pairs too, which can't be provided
             by a pur vector!
  */
 typedef ::std::hash_map< ::rtl::OUString                    ,
@@ -217,7 +217,7 @@ typedef ::std::hash_map< ::rtl::OUString                    ,
     @descr  Every type in this list is combined with an information,
             which property matched to the given URL. The user of this
             structure can decide then, if a deep detection should be
-            supressed e.g. if an URLPattern was used.
+            suppressed e.g. if an URLPattern was used.
  */
 struct  FlatDetectionInfo
 {

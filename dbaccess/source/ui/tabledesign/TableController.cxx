@@ -470,7 +470,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             stopTableListening();
             m_xTable = NULL;
         }
-        //  reload(); // a error occured so we have to reload
+        //  reload(); // a error occurred so we have to reload
     }
     return ! (aInfo.isValid() || bError);
 }
@@ -949,7 +949,7 @@ void OTableController::loadData()
     if(aTypeIter == m_aTypeInfo.end())
         aTypeIter = m_aTypeInfo.begin();
 
-    OSL_ENSURE(aTypeIter != m_aTypeInfo.end(),"We have no type infomation!");
+    OSL_ENSURE(aTypeIter != m_aTypeInfo.end(),"We have no type information!");
 
     bool bReadRow = !isAddAllowed();
     for(sal_Int32 i=m_vRowList.size(); i < NEWCOLS; i++ )
@@ -1146,7 +1146,7 @@ void OTableController::alterColumns()
                         xAppend->appendByDescriptor(xNewColumn);
                     }
                     catch(const SQLException&)
-                    { // an error occured so we try to reactivate the old one
+                    { // an error occurred so we try to reactivate the old one
                         xAppend->appendByDescriptor(xColumn);
                         throw;
                     }

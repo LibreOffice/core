@@ -234,7 +234,7 @@ void OPropertySetHelper::disposing() SAL_THROW( () )
     aEvt.Source = rSource;
 
     // inform all listeners to reelease this object
-    // The listener container are automaticly cleared
+    // The listener container are automatically cleared
     aBoundLC.disposeAndClear( aEvt );
     aVetoableLC.disposeAndClear( aEvt );
 }
@@ -329,7 +329,7 @@ void OPropertySetHelper::removePropertyChangeListener(
 {
     MutexGuard aGuard( rBHelper.rMutex );
     OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
-    // all listeners are automaticly released in a dispose call
+    // all listeners are automatically released in a dispose call
     if( !rBHelper.bInDispose && !rBHelper.bDisposed )
     {
         if( rPropertyName.getLength() )
@@ -409,7 +409,7 @@ void OPropertySetHelper::removeVetoableChangeListener(
 {
     MutexGuard aGuard( rBHelper.rMutex );
     OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
-    // all listeners are automaticly released in a dispose call
+    // all listeners are automatically released in a dispose call
     if( !rBHelper.bInDispose && !rBHelper.bDisposed )
     {
         if( rPropertyName.getLength() )

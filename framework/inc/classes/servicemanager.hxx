@@ -63,7 +63,7 @@ namespace framework{
 
 /*-************************************************************************************************************//**
     @short          create a new global servicemanager
-    @descr          A global servicemanager is neccessary to instanciate UNO-services. To do this, you need
+    @descr          A global servicemanager is necessary to instanciate UNO-services. To do this, you need
                     a factory to create new objects with special type. That's the reason for a servicemanager.
 
     @implements     -
@@ -118,9 +118,9 @@ class ServiceManager
             @short      initialize global uno service manager and return it
             @descr      This method create a new manager only at first call. We confiscate this with a static
                         pointer, which will be initialized only, if it NULL!
-                        Then you can call this method everytime to get a reference to the manager.
+                        Then you can call this method every time to get a reference to the manager.
                         If you will initialize an uno application you must set returned reference in ::comphelper::setProcessServiceFactory()!
-                        The created manager use "applicat.rdb" and "userXX.rdb" automaticly.
+                        The created manager use "applicat.rdb" and "userXX.rdb" automatically.
 
             @seealso    -
 
@@ -149,7 +149,7 @@ class ServiceManager
         /*-****************************************************************************************************//**
             @short      return a reference to a uno servicemanager instance which use your specified user registry file
             @descr      This do the same like method before - but instead of "userXX.rdb" we use your file.
-                        These is neccessary, if you will run more then one uno application at the same time in same environment!
+                        These is necessary, if you will run more then one uno application at the same time in same environment!
                         All created servicemanager use the same "applicat.rdb" but different user registries.
 
             @ATTENTION  Given file name must be a full qualified system file name. If file not already exist we create a new one!
@@ -211,7 +211,7 @@ class ServiceManager
             @param      -
             @return     reference to created static own global mutex
 
-            @onerror    No error should occure.
+            @onerror    No error should occur.
         *//*-*****************************************************************************************************/
 
         MUTEX& impl_getOwnGlobalMutex();
@@ -224,7 +224,7 @@ class ServiceManager
 
             @param      "sRegistryFile", file name of user registry.
             @return     A reference to a new initialized servicemanager with a valid registry.
-                        It can be NULL, if an error occured.
+                        It can be NULL, if an error occurred.
 
             @onerror    Return a NULL-reference.
         *//*-*****************************************************************************************************/

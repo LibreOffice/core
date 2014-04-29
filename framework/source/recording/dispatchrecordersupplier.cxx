@@ -90,7 +90,7 @@ DEFINE_INIT_SERVICE(
 /**
     @short  standard constructor to create instance
     @descr  Because an instance will be initialized by her interface methods
-            it's not neccessary to do anything here.
+            it's not necessary to do anything here.
  */
 DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
         //  init baseclasses first!

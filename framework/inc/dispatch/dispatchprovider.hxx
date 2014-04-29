@@ -66,7 +66,7 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 /**
-    @descr          We know some special dispatch objects with diffrent functionality.
+    @descr          We know some special dispatch objects with different functionality.
                     The can be created internaly by the following DispatchProvider.
                     Here we define some identifier to force creation of the right one.
 */
@@ -108,7 +108,7 @@ class DispatchProvider  :   // interfaces
                             public  css::lang::XTypeProvider            ,
                             public  css::frame::XDispatchProvider       ,
                             // baseclasses
-                            // Order is neccessary for right initialization!
+                            // Order is necessary for right initialization!
                             private ThreadHelpBase                      ,
                             private TransactionBase                     ,
                             public  ::cppu::OWeakObject

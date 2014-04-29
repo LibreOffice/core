@@ -422,7 +422,7 @@ void StatementSlot::AddReferer()
 {
     HACK( "only to test!" );
 // because slot 6102 /*SID_VERB_START*/ crashes when called with Property Referer
-// We return to the previous behavior (which was a bug realy) of not adding this Property to calls which have no properties at all
+// We return to the previous behavior (which was a bug really) of not adding this Property to calls which have no properties at all
 // according to MBA most likely this Property can be removed at all and is maybe only needed for Slots with URLs
     if ( !nAnzahl )
         return;

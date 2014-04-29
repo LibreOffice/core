@@ -104,7 +104,7 @@ struct KeyEventEqualsFunc
 
 /**
     Basic string list based on a std::vector()
-    It implements some additional funtionality which can be usefull but
+    It implements some additional funtionality which can be useful but
     is missing at the normal vector implementation.
 */
 class OUStringList : public ::comphelper::SequenceAsVector< ::rtl::OUString >
@@ -128,7 +128,7 @@ class OUStringList : public ::comphelper::SequenceAsVector< ::rtl::OUString >
             return ::std::find(begin(), end(), sElement);
         }
 
-        // the only way to free used memory realy!
+        // the only way to free used memory really!
         void free()
         {
             OUStringList().swap( *this );
@@ -139,7 +139,7 @@ class OUStringList : public ::comphelper::SequenceAsVector< ::rtl::OUString >
 
 /**
     Basic string queue based on a std::queue()
-    It implements some additional funtionality which can be usefull but
+    It implements some additional funtionality which can be useful but
     is missing at the normal std implementation.
 */
 typedef ::std::queue< ::rtl::OUString > OUStringQueue;
@@ -148,7 +148,7 @@ typedef ::std::queue< ::rtl::OUString > OUStringQueue;
 
 /**
     Basic hash based on a std::hash_map() which provides key=[OUString] and value=[template type] pairs
-    It implements some additional funtionality which can be usefull but
+    It implements some additional funtionality which can be useful but
     is missing at the normal hash implementation.
 */
 template< class TType >
@@ -159,7 +159,7 @@ class BaseHash : public ::std::hash_map< ::rtl::OUString                    ,
 {
     public:
 
-        // the only way to free used memory realy!
+        // the only way to free used memory really!
         void free()
         {
             BaseHash().swap( *this );

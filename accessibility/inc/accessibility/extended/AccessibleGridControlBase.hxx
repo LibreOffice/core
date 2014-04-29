@@ -60,7 +60,7 @@ namespace accessibility {
 
 // ============================================================================
 
-/** Aquire the solar mutex. */
+/** Acquire the solar mutex. */
 class TCSolarGuard : public ::vos::OGuard
 {
 public:

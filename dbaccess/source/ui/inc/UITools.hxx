@@ -148,7 +148,7 @@ namespace dbaui
 
     /** fills a map and a vector with localized type names
         @param  _rxConnection   the connection to acces the metadata
-        @param  _rsTypeNames    a list of localized type names seperated with ';'
+        @param  _rsTypeNames    a list of localized type names separated with ';'
         @param  _rTypeInfoMap   the filled map with the type names
         @param  _rTypeInfoIters the vector filled with map iterators
     */
@@ -222,7 +222,7 @@ namespace dbaui
     */
     ::com::sun::star::awt::FontDescriptor CreateFontDescriptor( const Font& _rFont );
 
-    /** call teh format dialog and set the selected format at the column
+    /** call the format dialog and set the selected format at the column
         @param  _xAffectedCol   Font to be converted
         @param  _xField         Font to be converted
     */
@@ -419,7 +419,7 @@ namespace dbaui
     */
     const SfxFilter* getStandardDatabaseFilter();
 
-    /** opens a save dialog to store a form or report folder in the current hierachy.
+    /** opens a save dialog to store a form or report folder in the current hierarchy.
         @param  _pParent
             The parent of the dialog.
         @param _rxORB
@@ -437,7 +437,7 @@ namespace dbaui
         @param  _bMove
                 if <TRUE/> the name of the content must be inserted without any change, otherwise not.
         @return
-            <TRUE/> if the insert opertions was successfull, otherwise <FALSE/>.
+            <TRUE/> if the insert opertions was successful, otherwise <FALSE/>.
     */
     sal_Bool insertHierachyElement(
                 Window* _pParent,

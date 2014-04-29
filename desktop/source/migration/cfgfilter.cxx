@@ -147,7 +147,7 @@ void SAL_CALL CConfigFilter::readData(
     // in m_xLayerHandler. we will then submit ourself as a handler to
     // the SourceLayer in m_xSourceLayer.
     // when the source calls our handler functions we will use the patterns that
-    // where given in the ctor to decide whther they should be relaied to the caller
+    // where given in the ctor to decide whether they should be relaied to the caller
 
     if (m_xSourceLayer.is() && layerHandler.is())
     {

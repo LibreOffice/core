@@ -80,7 +80,7 @@ public class Splitter
         createDirectoryStructures();
 
         // use some statistic values to check if all cache items
-        // will be transformed realy.
+        // will be transformed really.
         int nTypes           = m_aDataSet.m_aCache.getItemCount(Cache.E_TYPE          );
         int nFilters         = m_aDataSet.m_aCache.getItemCount(Cache.E_FILTER        );
         int nDetectServices  = m_aDataSet.m_aCache.getItemCount(Cache.E_DETECTSERVICE );

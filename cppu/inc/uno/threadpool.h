@@ -64,7 +64,7 @@ void SAL_CALL uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
 
 
 /**
-  If the internal refcount drops to zero, the association betwen threadId and
+  If the internal refcount drops to zero, the association between threadId and
   thread is broken.
  */
 void SAL_CALL uno_releaseIdFromCurrentThread()
@@ -117,7 +117,7 @@ void SAL_CALL
 uno_threadpool_detach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
 
 /**
-  Puts a job into the pool. A job may eiter be a request or a reply
+  Puts a job into the pool. A job may either be a request or a reply
   (replies have a 0 in the doRequest parameter). This function is non-blocking.
 
   A request may either be synchronous or asynchronous.

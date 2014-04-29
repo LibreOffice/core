@@ -2439,7 +2439,7 @@ namespace pcr
             {
                 DBG_ERROR( "FormComponentPropertyHandler::impl_ensureRowsetConnection_nothrow: caught an exception during error handling!" );
             }
-            // additional info about what happended
+            // additional info about what happened
             String sInfo( PcrRes( RID_STR_UNABLETOCONNECT ) );
             INetURLObject aParser( sDataSourceName );
             if ( aParser.GetProtocol() != INET_PROT_NOT_VALID )

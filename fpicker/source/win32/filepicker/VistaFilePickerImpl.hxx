@@ -260,9 +260,9 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         void impl_sta_EnableControl(const RequestRef& rRequest);
 
         //---------------------------------------------------------------------
-        /** create all needed (optional!) UI controls adressed by the field nFeatures.
+        /** create all needed (optional!) UI controls addressed by the field nFeatures.
          *  The given number nFeatures is used as a flag field. Use const values FEATURE_XXX
-         *  to adress it.
+         *  to address it.
          *
          *  Internal new controls will be added to the dialog. Every control can be accessed
          *  by it's own control id. Those control ID must be one of the const set

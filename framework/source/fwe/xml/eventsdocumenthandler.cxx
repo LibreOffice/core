@@ -192,7 +192,7 @@ throw(  SAXException, RuntimeException )
                 if ( m_bEventsStartFound )
                 {
                     ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'event:events' cannot be embeded into 'event:events'!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'event:events' cannot be embedded into 'event:events'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -205,7 +205,7 @@ throw(  SAXException, RuntimeException )
                 if ( !m_bEventsStartFound )
                 {
                     ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'event:event' must be embeded into element 'event:events'!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'event:event' must be embedded into element 'event:events'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 

@@ -83,7 +83,7 @@ namespace framework{
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class OComponentAccess  :   private ThreadHelpBase                      ,   // Must be the first of baseclasses - Is neccessary for right initialization of objects!
+class OComponentAccess  :   private ThreadHelpBase                      ,   // Must be the first of baseclasses - Is necessary for right initialization of objects!
                             public ::cppu::WeakImplHelper1< ::com::sun::star::container::XEnumerationAccess >
 {
     //-------------------------------------------------------------------------------------------------------------
@@ -199,12 +199,12 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         /*-****************************************************************************************************//**
             @short      recursive method (!) to collect all components of all frames from the subtree of given node
-            @descr      This is neccessary to create the enumeration.
+            @descr      This is necessary to create the enumeration.
 
             @seealso    method createEnumeration
 
             @param      "xNode"        , root of subtree and start point of search
-            @param      "seqComponents", result list of search. We cant use a return value, we search recursive
+            @param      "seqComponents", result list of search. We can't use a return value, we search recursive
                                          and must collect all informations.
             @return     -
 

@@ -907,7 +907,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         ::rtl::OUString aCommand( m_aMenuItemCommand );
         if ( m_aMenuItemCommand.matchIgnoreAsciiCase( UNO_COMMAND, 0 ))
         {
-            // Remove protocol part from command so we can use an easier comparision method
+            // Remove protocol part from command so we can use an easier comparison method
             aCommand = aCommand.copy( UNO_COMMAND.getLength() );
         }
 

@@ -269,7 +269,7 @@ void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIn
     else
     {
         // Our stack is empty. No further child exists.
-        // Se we must "end" our progress realy
+        // Se we must "end" our progress really
         if (xProgress.is())
             xProgress->end();
         // Now hide the progress bar again.
@@ -367,7 +367,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         xParentWindow = xPluggWindow;
 
     // dont disturb user in case he put the loading document into the background!
-    // Supress any setVisible() or toFront() call in case the initial show was
+    // Suppress any setVisible() or toFront() call in case the initial show was
     // already made.
     css::uno::Reference< css::awt::XWindow2 > xVisibleCheck(xParentWindow, css::uno::UNO_QUERY);
     sal_Bool bIsVisible = sal_False;
@@ -394,11 +394,11 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         }
     }
 
-    // Ok the window should be made visible ... becuase it isnt currently visible.
+    // Ok the window should be made visible ... because it isn't currently visible.
     // BUT ..!
     // We need a Hack for our applications: They get her progress from the frame directly
     // on saving documents. Because there is no progress set on the MediaDescriptor.
-    // But that's wrong. In case the document was opened hidden, they shouldnt use any progress .-(
+    // But that's wrong. In case the document was opened hidden, they shouldn't use any progress .-(
     // They only possible workaround: dont show the parent window here, if the document was opened hidden.
     sal_Bool bHiddenDoc = sal_False;
     if (xFrame.is())
@@ -421,7 +421,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         return;
 
     // OK: The document was not opened in hidden mode ...
-    // and the window isnt already visible.
+    // and the window isn't already visible.
     // Show it and bring it to front.
     // But before we have to be sure, that our internal used helper progress
     // is visible too.

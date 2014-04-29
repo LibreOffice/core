@@ -51,7 +51,7 @@ namespace comphelper{
             Further this helper defines often used functions (as e.g. open of the required streams,
             consistent checks etcpp.) and it defines all useable property names.
 
-    @attention  This class isnt threadsafe and must be guarded from outside!
+    @attention  This class isn't threadsafe and must be guarded from outside!
  */
 class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
 {
@@ -144,7 +144,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                     to open the stream (as e.g. URL, ReadOnly, PostData etcpp.).
                     It creates a seekable stream and put it into the descriptor.
 
-                    A might existing InteractionHandler will be used automaticly,
+                    A might existing InteractionHandler will be used automatically,
                     to solve problems!
 
                     In case of local file the system file locking is used.
@@ -162,7 +162,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                     to open the stream (as e.g. URL, ReadOnly, PostData etcpp.).
                     It creates a seekable stream and put it into the descriptor.
 
-                    A might existing InteractionHandler will be used automaticly,
+                    A might existing InteractionHandler will be used automatically,
                     to solve problems!
 
                     In case of local file the system file locking is used based on
@@ -176,7 +176,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
         //---------------------------------------
         /** @short  it checks if the descriptor describes a readonly stream.
 
-            @descr  The descriptor itself isnt changed doing so.
+            @descr  The descriptor itself isn't changed doing so.
                     It's only checked if the stream seems to be based
                     of a real readonly file.
 
@@ -318,7 +318,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                     to open the stream (as e.g. URL, ReadOnly, PostData etcpp.).
                     It creates a seekable stream and put it into the descriptor.
 
-                    A might existing InteractionHandler will be used automaticly,
+                    A might existing InteractionHandler will be used automatically,
                     to solve problems!
 
             @param  bLockFile

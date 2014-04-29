@@ -58,7 +58,7 @@ namespace comphelper
         // then the proxy itself
         if ( xFactory.is() )
         {
-            { // i36686 OJ: achieve the desctruction of the tempoary -> otherwise it leads to _rRefCount -= 2
+            { // i36686 OJ: achieve the destruction of the tempoary -> otherwise it leads to _rRefCount -= 2
                 m_xProxyAggregate = xFactory->createProxy( _rxComponent );
             }
             if ( m_xProxyAggregate.is() )

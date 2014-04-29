@@ -79,12 +79,12 @@ enum ELockType
     @short          helper to set right lock in right situation
     @descr          This helper support different types of locking:
                         a)  no locks - transparent for user!
-                            This could be usefull for simluation or single threaded environments!
+                            This could be useful for simluation or single threaded environments!
                         b)  own mutex
-                            An object use his own osl-mutex to be threadsafe. Usefull for easy and exclusiv locking.
+                            An object use his own osl-mutex to be threadsafe. Useful for easy and exclusiv locking.
                         c)  solar mutex
                             An object use our solar mutex and will be a part of a greater safed "threadsafe code block".
-                            Could be usefull for simulation and testing of higher modules!
+                            Could be useful for simulation and testing of higher modules!
                         d)  fair rw-lock
                             An object use an implementation of a fair rw-lock. This increase granularity of t hreadsafe mechanism
                             and should be used for high performance threadsafe code!
@@ -153,10 +153,10 @@ class FWI_DLLPUBLIC LockHelper : public  IMutex
     //     ... or the solarmuex as "m_pSolarMutex" (must be set from outside! because some components must be vcl-free!)
     //     ... but sometimes you need a shareable osl mutex!
     //     In this case you has some problems: i  ) If your lock type is set to E_OWNMUTEX => it's easy; you can use your member "m_pOwnMutex" - it's a osl mutex.
-    //                                              Creation and using of "m_pShareableOslMutex" isn't neccessary!
+    //                                              Creation and use of "m_pShareableOslMutex" isn't necessary!
     //                                         ii ) Otherwise you have no osl mutex ... so you must create "m_pShareableOslMutex" and use it twice!
-    //                                              In this case you must lock two member everytime - "m_pShareableMutex" AND "m_pFairRWLock" or "m_pSolarMutex" or ...
-    //                                              It isn't realy fine - but the only possible way.
+    //                                              In this case you must lock two members every time - "m_pShareableMutex" AND "m_pFairRWLock" or "m_pSolarMutex" or ...
+    //                                              It isn't really fine - but the only possible way.
     //                                         iii) There exist another special case - E_NOTHING is set! Then we should create this shareable mutex ...
     //                                              nad you can use it ... but this implmentation ignore it.
     //-------------------------------------------------------------------------------------------------------------

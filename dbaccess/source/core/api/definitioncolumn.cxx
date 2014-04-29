@@ -357,7 +357,7 @@ OColumnWrapper::OColumnWrapper( const Reference< XPropertySet > & rCol, const bo
 {
     DBG_CTOR(OColumnWrapper,NULL);
     // which type of aggregate property do we have?
-    // we distingish the properties by the containment of optional properties
+    // we distinguish the properties by the containment of optional properties
     m_nColTypeID = 0;
     if ( m_xAggregate.is() )
     {

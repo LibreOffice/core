@@ -93,7 +93,7 @@ class DetectorFactory : // interfaces
                         public  css::container::XNameContainer      ,       // => XNameReplace => XNameAccess => XElementAccess
                         public  css::util::XFlushable               ,
                         // base classes
-                        // Order is neccessary for right initialization of it!
+                        // Order is necessary for right initialization of it!
                         private ThreadHelpBase                      ,
                         public  ::cppu::OWeakObject
 {
@@ -361,7 +361,7 @@ class DetectorFactory : // interfaces
         /** @short  check if searched entry exist inside this container.
 
             @attention  In multithreaded environments it's not guaranteed, that a
-                        queried item exist next time realy! It can be deleted by
+                        queried item exist next time really! It can be deleted by
                         another thread ...
 
             @param  sName
@@ -378,7 +378,7 @@ class DetectorFactory : // interfaces
 
         /** @short  return the uno type, which is used for all container items.
 
-            @return Type of sequence< com::sun::star::beans::PropertyValue > everytime - because it's fix.
+            @return Type of sequence< com::sun::star::beans::PropertyValue > every time - because it's fix.
          */
 
         virtual css::uno::Type SAL_CALL getElementType()
@@ -406,8 +406,8 @@ class DetectorFactory : // interfaces
                     Calling of flush() will do that.
                     At the same time all currently registered flush listener will be informed,
                     so they can update her structures too.
-                    Note: Before all these operations are started realy, all changes will be
-                    verified and if neccessary some corrections will be done.
+                    Note: Before all these operations are started really, all changes will be
+                    verified and if necessary some corrections will be done.
                     In case the cache will be invalid and could not be repaired an exception is thrown!
                     Normaly this container will not work correctly afterwards ...
 

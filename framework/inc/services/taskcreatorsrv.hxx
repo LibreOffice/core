@@ -62,7 +62,7 @@ namespace framework
 class TaskCreatorService : public  css::lang::XTypeProvider
                          , public  css::lang::XServiceInfo
                          , public  css::lang::XSingleServiceFactory
-                           // attention! Must be the first base class to guarentee right initialize lock ...
+                           // attention! Must be the first base class to guarantee right initialize lock ...
                          , private ThreadHelpBase
                          , public  ::cppu::OWeakObject
 {
@@ -99,7 +99,7 @@ class TaskCreatorService : public  css::lang::XTypeProvider
         static const ::rtl::OUString ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE;
 
         /** [sal_Bool] enable/disable special mode, where the title bar of our
-                       the new created frame will be updated automaticly.
+                       the new created frame will be updated automatically.
                        Default = ON !
          */
         static const ::rtl::OUString ARGUMENT_ENABLE_TITLEBARUPDATE;

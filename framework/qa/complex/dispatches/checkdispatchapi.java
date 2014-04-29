@@ -125,7 +125,7 @@ public class checkdispatchapi
         }
         catch (java.lang.Throwable ex)
         {
-            fail("Cant initialize test environment.");
+            fail("Can't initialize test environment.");
         }
     }
 
@@ -258,7 +258,7 @@ public class checkdispatchapi
     public void checkInterceptorLifeTime()
     {
         // Note: It's important for the following test, that aInterceptor will be hold alive by the uno reference
-        // xInterceptor. Otherwhise we cant check some internal states of aInterceptor at the end of this method, because
+        // xInterceptor. Otherwise we can't check some internal states of aInterceptor at the end of this method, because
         // it was already killed .-)
 
         Interceptor aInterceptor = new Interceptor();
@@ -283,7 +283,7 @@ public class checkdispatchapi
 
         if (bIsRegistered)
         {
-            fail("Interceptor was not deregistered automaticly on closing the corresponding frame.");
+            fail("Interceptor was not deregistered automatically on closing the corresponding frame.");
         }
 
         System.out.println("Destruction of interception chain works as designed .-)");

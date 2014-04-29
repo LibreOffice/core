@@ -674,7 +674,7 @@ void Binding::bind( bool bForceRebind )
             }
         }
 
-        // now evaluate remaining MIPs in the apropriate context
+        // now evaluate remaining MIPs in the appropriate context
         maReadonly.evaluate( rContext );
         maRelevant.evaluate( rContext );
         maRequired.evaluate( rContext );
@@ -1274,7 +1274,7 @@ void Binding::handleEvent( const XEvent_t& xEvent )
 
         // the modification of the 'mnDeferModifyNotifications'-member
         // is necessary to prevent infinite notication looping.
-        // This can happend in case the binding which caused
+        // This can happened in case the binding which caused
         // the notification chain is listening to those events
         // as well...
         bool bPreserveValueModified = mbValueModified;

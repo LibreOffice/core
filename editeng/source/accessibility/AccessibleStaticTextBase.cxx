@@ -308,7 +308,7 @@ sal_Unicode cNewLine(0x0a);
             throw lang::DisposedException (
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("object has been already disposed")), mxThis );
 
-        // TODO: Have a differnt method on AccessibleEditableTextPara
+        // TODO: Have a different method on AccessibleEditableTextPara
         // that does not care about state changes
         mpTextParagraph->SetParagraphIndex( nPara );
 

@@ -65,7 +65,7 @@ namespace accessibility {
 
 // ============================================================================
 
-/** Aquire the solar mutex. */
+/** Acquire the solar mutex. */
 class BBSolarGuard : public ::vos::OGuard
 {
 public:

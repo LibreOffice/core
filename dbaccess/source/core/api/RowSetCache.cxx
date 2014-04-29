@@ -1030,7 +1030,7 @@ sal_Bool ORowSetCache::moveWindow()
                 if(m_nStartPos < 0)
                     m_nStartPos = 0;
             }
-            // here we need only to check if the begining row is valid. If not we have to fetch it.
+            // here we need only to check if the beginning row is valid. If not we have to fetch it.
             if(!m_pMatrix->begin()->isValid())
             {
                 aIter = m_pMatrix->begin();
@@ -1063,7 +1063,7 @@ sal_Bool ORowSetCache::moveWindow()
 sal_Bool ORowSetCache::first(  )
 {
     // first move to the first row
-    // then check if the cache window is at the begining
+    // then check if the cache window is at the beginning
     // when not postionize the window and fill it with data
     // smart moving of the window -> clear only the rows whom are out of range
     sal_Bool bRet = m_pCacheSet->first();

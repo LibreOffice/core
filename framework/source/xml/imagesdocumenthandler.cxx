@@ -204,7 +204,7 @@ throw(  SAXException, RuntimeException )
                 if ( m_bImageContainerStartFound )
                 {
                     ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:imagecontainer' cannot be embeded into 'image:imagecontainer'!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:imagecontainer' cannot be embedded into 'image:imagecontainer'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -217,14 +217,14 @@ throw(  SAXException, RuntimeException )
                 if ( !m_bImageContainerStartFound )
                 {
                     ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:images' must be embeded into element 'image:imagecontainer'!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:images' must be embedded into element 'image:imagecontainer'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
                 if ( m_bImagesStartFound )
                 {
                     ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:images' cannot be embeded into 'image:images'!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:images' cannot be embedded into 'image:images'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -321,14 +321,14 @@ throw(  SAXException, RuntimeException )
 
             case IMG_ELEMENT_ENTRY:
             {
-                // Check that image:entry is embeded into image:images!
+                // Check that image:entry is embedded into image:images!
                 if ( !m_bImagesStartFound )
                 {
                     delete m_pImages;
                     m_pImages = NULL;
 
                     ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:entry' must be embeded into element 'image:images'!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:entry' must be embedded into element 'image:images'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -398,25 +398,25 @@ throw(  SAXException, RuntimeException )
 
             case IMG_ELEMENT_EXTERNALIMAGES:
             {
-                // Check that image:externalimages is embeded into image:imagecontainer
+                // Check that image:externalimages is embedded into image:imagecontainer
                 if ( !m_bImageContainerStartFound )
                 {
                     delete m_pImages;
                     m_pImages = NULL;
 
                     ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:externalimages' must be embeded into element 'image:imagecontainer'!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:externalimages' must be embedded into element 'image:imagecontainer'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                // Check that image:externalentry is NOT embeded into image:externalentry
+                // Check that image:externalentry is NOT embedded into image:externalentry
                 if ( m_bExternalImagesStartFound )
                 {
                     delete m_pImages;
                     m_pImages = NULL;
 
                     ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:externalimages' cannot be embeded into 'image:externalimages'!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:externalimages' cannot be embedded into 'image:externalimages'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -436,7 +436,7 @@ throw(  SAXException, RuntimeException )
                     m_pExternalImages = NULL;
 
                     ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:externalentry' must be embeded into 'image:externalimages'!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:externalentry' must be embedded into 'image:externalimages'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -448,7 +448,7 @@ throw(  SAXException, RuntimeException )
                     m_pExternalImages = NULL;
 
                     ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:externalentry' cannot be embeded into 'image:externalentry'!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:externalentry' cannot be embedded into 'image:externalentry'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 

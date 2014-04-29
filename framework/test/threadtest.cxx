@@ -290,7 +290,7 @@ class ThreadSafeClass : private TransactionBase
         ThreadSafeClass ();
         ~ThreadSafeClass();
 
-        // This methods are used from differnt threads
+        // This methods are used from different threads
         // to test this class.
         void        init    (   sal_Int32   nA          ,
                                 sal_Int32   nThreadID   );
@@ -348,7 +348,7 @@ void ThreadSafeClass::init( sal_Int32 nA, sal_Int32 nThreadID )
     LOG_INIT( nA, nThreadID )
 
     // Look for multiple calls of this method first!
-    // Use E_SOFTEXCEPTIONS to disable automaticly throwing of exceptions for some working modes.
+    // Use E_SOFTEXCEPTIONS to disable automatically throwing of exceptions for some working modes.
     ERejectReason       eReason;
     TransactionGuard    aTransaction( m_aTransactionManager, E_NOEXCEPTIONS, eReason );
     if( eReason == E_UNINITIALIZED )

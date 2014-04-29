@@ -2313,7 +2313,7 @@ sal_Bool ORowSet::impl_initComposer_throw( ::rtl::OUString& _out_rCommandToExecu
     if ( m_bIgnoreResult )
     {   // append a "0=1" filter
         // don't simply overwrite an existent filter, this would lead to problems if this existent
-        // filter contains paramters (since a keyset may add parameters itself)
+        // filter contains parameters (since a keyset may add parameters itself)
         // 2003-12-12 - #23418# - fs@openoffice.org
         m_xComposer->setElementaryQuery( m_xComposer->getQuery( ) );
         m_xComposer->setFilter( ::rtl::OUString::createFromAscii( "0 = 1" ) );

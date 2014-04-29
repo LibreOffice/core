@@ -554,7 +554,7 @@ void AboutDialog::Paint( const Rectangle& rRect )
     SetClipRegion( rRect );
 
     // workaround to ensure that the background is painted correct
-    // on MacOS for exmaple the background was grey and the image and other controls white
+    // on MacOS for example the background was grey and the image and other controls white
     SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
     SetLineColor();
     DrawRect(rRect);

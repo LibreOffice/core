@@ -161,7 +161,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
         {
             if ( m_bRecord )
             {
-                // we cannot access pKeyWin since it might have dissapeared
+                // we cannot access pKeyWin since it might have disappeared
                 if ( bKeyFollowFocus )
                     StatementList::pRet->GenReturn( RET_MacroRecorder, aKeyUniqueID, (sal_uInt16)M_TypeKeys, aKeyString, bKeyFollowFocus );
                 else

@@ -65,7 +65,7 @@ namespace cpp
 
 
 
-/** Acess to all stored objcts in the repository, which are
+/** Access to all stored objcts in the repository, which are
     relevant to C++.
 */
 class Gate

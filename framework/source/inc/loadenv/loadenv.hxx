@@ -210,7 +210,7 @@ class LoadEnv : private ThreadHelpBase
 
         /** @short  holds the information about the finished load process.
 
-            @descr  The content of m_xTargetFrame cant be used as valid indicator,
+            @descr  The content of m_xTargetFrame can't be used as valid indicator,
                     (in case the micht existing old document was reactivated)
                     we must hold the result of the load process explicitly.
          */
@@ -241,7 +241,7 @@ class LoadEnv : private ThreadHelpBase
             @throw  Currently there is no reason to throw such exception!
 
             @throw  A RuntimeException in case any internal process indicates, that
-                    the whole runtime cant be used any longer.
+                    the whole runtime can't be used any longer.
          */
         LoadEnv(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
             throw(LoadEnvException, css::uno::RuntimeException);
@@ -303,10 +303,10 @@ class LoadEnv : private ThreadHelpBase
                     This value is set to a default value "UNKNWON_CONTENT", which force
                     an internal check, if this content is loadable or not.
                     But may this check was already made by the caller of this method and
-                    passing this information to this LoadEnv instance can supress this
+                    passing this information to this LoadEnv instance can suppress this
                     might expensive check.
-                    That can be usefull in case this information is needed outside too,
-                    to decide if its neccessary to create some resources for this load
+                    That can be useful in case this information is needed outside too,
+                    to decide if its necessary to create some resources for this load
                     request ... or to reject the request imidiatly if it seems to be not
                     loadable in general.
 
@@ -315,7 +315,7 @@ class LoadEnv : private ThreadHelpBase
                     The real reason, a suitable message and ID will be given here immidiatly.
 
             @throw  A RuntimeException in case any internal process indicates, that
-                    the whole runtime cant be used any longer.
+                    the whole runtime can't be used any longer.
          */
         virtual void initializeLoading(const ::rtl::OUString&                                           sURL            ,
                                        const css::uno::Sequence< css::beans::PropertyValue >&           lMediaDescriptor,
@@ -335,7 +335,7 @@ class LoadEnv : private ThreadHelpBase
                     a frame with a controller/model inside can be possible. For loading
                     of a "non visible component" only an information about a successfully start
                     can be provided.
-                    Further it cant be guranteed, that the internal process runs synchronous.
+                    Further it can't be guaranteed, that the internal process runs synchronous.
                     Thats why we preferr using of specialized methods afterwards e.g. to:
                         - wait till the internal job will be finished
                           and get the results
@@ -346,7 +346,7 @@ class LoadEnv : private ThreadHelpBase
                     The reason, a suitable message and ID will be given here immidiatly.
 
             @throw  A RuntimeException in case any internal process indicates, that
-                    the whole runtime cant be used any longer.
+                    the whole runtime can't be used any longer.
          */
         virtual void startLoading()
             throw(LoadEnvException, css::uno::RuntimeException);
@@ -371,7 +371,7 @@ class LoadEnv : private ThreadHelpBase
             @throw  ... currently not used :-)
 
             @throw  A RuntimeException in case any internal process indicates, that
-                    the whole runtime cant be used any longer.
+                    the whole runtime can't be used any longer.
          */
         virtual sal_Bool waitWhileLoading(sal_uInt32 nTimeout = 0)
             throw(LoadEnvException, css::uno::RuntimeException);
@@ -477,7 +477,7 @@ class LoadEnv : private ThreadHelpBase
                     In such cases a RuntimeException would be to hard for the outside code :-)
 
             @throw  A RuntimeException in case any internal process indicates, that
-                    the whole runtime cant be used any longer.
+                    the whole runtime can't be used any longer.
          */
         void impl_reactForLoadingState()
             throw(LoadEnvException, css::uno::RuntimeException);
@@ -498,12 +498,12 @@ class LoadEnv : private ThreadHelpBase
             @attention  Not all types we know, are supported by filters. So it does not
                         indicates an error, if no suitable filter(loader etcpp will be found
                         for a type. But a type must be detected for the specified content.
-                        Otherwhise its an error and loading cant be finished successfully.
+                        Otherwise its an error and loading can't be finished successfully.
 
             @throw  A LoadEnvException if detection failed.
 
             @throw  A RuntimeException in case any internal process indicates, that
-                    the whole runtime cant be used any longer.
+                    the whole runtime can't be used any longer.
          */
         void impl_detectTypeAndFilter()
             throw(LoadEnvException, css::uno::RuntimeException);
@@ -531,7 +531,7 @@ class LoadEnv : private ThreadHelpBase
                     for the detected content type (must be done before by calling
                     impl_detectTypeAndFilter()). Because such handler does not depend
                     from a real target frame, location of such frame will be
-                    supressed here.
+                    suppressed here.
                     In case handle failed all new created resources will be
                     removed before a suitable exception is thrown.
                     (Excepting a RuntimeException occure!)
@@ -541,7 +541,7 @@ class LoadEnv : private ThreadHelpBase
             @throw  A LoadEnvException if handling failed.
 
             @throw  A RuntimeException in case any internal process indicates, that
-                    the whole runtime cant be used any longer.
+                    the whole runtime can't be used any longer.
          */
         sal_Bool impl_handleContent()
             throw(LoadEnvException, css::uno::RuntimeException);
@@ -562,7 +562,7 @@ class LoadEnv : private ThreadHelpBase
             @throw  A LoadEnvException if loading failed.
 
             @throw  A RuntimeException in case any internal process indicates, that
-                    the whole runtime cant be used any longer.
+                    the whole runtime can't be used any longer.
          */
         sal_Bool impl_loadContent()
             throw(LoadEnvException, css::uno::RuntimeException);
@@ -590,7 +590,7 @@ class LoadEnv : private ThreadHelpBase
                     In such cases a RuntimeException would be to hard for the outside code :-)
 
             @throw  A RuntimeException in case any internal process indicates, that
-                    the whole runtime cant be used any longer.
+                    the whole runtime can't be used any longer.
          */
         css::uno::Reference< css::frame::XFrame > impl_searchAlreadyLoaded()
             throw(LoadEnvException, css::uno::RuntimeException);
@@ -623,7 +623,7 @@ class LoadEnv : private ThreadHelpBase
                     In such cases a RuntimeException would be to hard for the outside code :-)
 
             @throw  A RuntimeException in case any internal process indicates, that
-                    the whole runtime cant be used any longer.
+                    the whole runtime can't be used any longer.
          */
         css::uno::Reference< css::frame::XFrame > impl_searchRecycleTarget()
             throw(LoadEnvException, css::uno::RuntimeException);
@@ -631,11 +631,11 @@ class LoadEnv : private ThreadHelpBase
         //_______________________________________
 
         /** @short  because showing of a frame is needed more then once ...
-                    it's implemented as an seperate method .-)
+                    it's implemented as an separate method .-)
 
             @descr  Note: Showing of a frame is bound to a special feature ...
                     a) If we recycle any existing frame, we must bring it to front.
-                       Showing of such frame isnt needed realy .. because we recycle
+                       Showing of such frame isn't needed really .. because we recycle
                        visible frames only!
                     b) If the document was already shown (e.g. by our progress implementation)
                        we do nothing here. The reason  behind: The document was already shown ..
@@ -662,7 +662,7 @@ class LoadEnv : private ThreadHelpBase
 
         /** @short  checks weather a frame is already used for another load request or not.
 
-            @descr  Such frames cant be used for our "recycle feature"!
+            @descr  Such frames can't be used for our "recycle feature"!
 
             @param  xFrame
                     the frame, which should be checked.

@@ -300,7 +300,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
         //sal_Bool bMandatory = ((aInfo.Attributes & css::beans::PropertyAttribute::REMOVEABLE) != css::beans::PropertyAttribute::REMOVEABLE);
 
         // Note: Till we support finalized / mandatory on our API more in detail we handle
-        // all states simple as READONLY ! But because all realy needed pathes are "mandatory" by default
+        // all states simple as READONLY ! But because all really needed paths are "mandatory" by default
         // we have to handle "finalized" as the real "readonly" indicator .
         aPathVal.bIsReadonly = bFinalized;
     }
@@ -318,8 +318,8 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
     css::uno::Reference< css::container::XNameAccess > xCfgOld = fa_getCfgOld();
 
     // try to replace path-parts with well known and uspported variables.
-    // So an office can be moved easialy to another location without loosing
-    // it's related pathes.
+    // So an office can be moved easialy to another location without losing
+    // it's related paths.
     PathInfo aResubstPath(aPath);
     impl_subst(aResubstPath, sal_True);
 
@@ -340,11 +340,11 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
     ::comphelper::ConfigurationHelper::flush(xCfgNew);
 
     // remove the whole path from the old configuration !
-    // Otherwise we cant make sure that the diff between new and old configuration
-    // on loading time realy represent an user setting !!!
+    // Otherwise we can't make sure that the diff between new and old configuration
+    // on loading time really represent an user setting !!!
 
     // Check if the given path exists inside the old configuration.
-    // Because our new configuration knows more then the list of old pathes ... !
+    // Because our new configuration knows more then the list of old paths ... !
     if (xCfgOld->hasByName(aResubstPath.sPathName))
     {
         css::uno::Reference< css::beans::XPropertySet > xProps(xCfgOld, css::uno::UNO_QUERY_THROW);
@@ -404,7 +404,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
         aPath = impl_readNewFormat(sPath);
         aPath.sPathName = sPath;
         // replace all might existing variables with real values
-        // Do it before these old pathes will be compared against the
+        // Do it before these old paths will be compared against the
         // new path configuration. Otherwise some striungs uses different variables ... but substitution
         // will produce strings with same content (because some variables are redundant!)
         impl_subst(aPath, sal_False);
@@ -423,7 +423,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
         // can be disabled for a new major
         OUStringList lOldVals = impl_readOldFormat(sPath);
         // replace all might existing variables with real values
-        // Do it before these old pathes will be compared against the
+        // Do it before these old paths will be compared against the
         // new path configuration. Otherwise some striungs uses different variables ... but substitution
         // will produce strings with same content (because some variables are redundant!)
         impl_subst(lOldVals, fa_getSubstitution(), sal_False);
@@ -433,7 +433,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
         { throw exRun; }
     // Normal(!) exceptions can be ignored!
     // E.g. in case an addon installs a new path, which was not well known for an OOo 1.x installation
-    // we cant find a value for it inside the "old" configuration. So a NoSuchElementException
+    // we can't find a value for it inside the "old" configuration. So a NoSuchElementException
     // will be normal .-)
     catch(const css::uno::Exception&)
         {}
@@ -509,8 +509,8 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const ::rt
     // Why ?
     // The outside code must fire N events for every changed property.
     // And the knowing about packaging of variables of the structure PathInfo
-    // follow these group IDs ! But if such ID isnt in the range of [0..IDGROUP_COUNT]
-    // the outside cant determine the right group ... and cant fire the right events .-)
+    // follow these group IDs ! But if such ID isn't in the range of [0..IDGROUP_COUNT]
+    // the outside can't determine the right group ... and can't fire the right events .-)
 
     css::uno::Sequence< sal_Int32 > lIDs(IDGROUP_COUNT);
     lIDs[0] = IDGROUP_OLDSTYLE       ;
@@ -889,7 +889,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                     ::rtl::OUStringBuffer sMsg(256);
                     sMsg.appendAscii("The path '"    );
                     sMsg.append     (aChangePath.sPathName);
-                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal pathes cant be set.");
+                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal paths can't be set.");
                     throw css::uno::Exception(sMsg.makeStringAndClear(),
                                               static_cast< ::cppu::OWeakObject* >(this));
                 }
@@ -909,7 +909,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                     ::rtl::OUStringBuffer sMsg(256);
                     sMsg.appendAscii("The path '"    );
                     sMsg.append     (aChangePath.sPathName);
-                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal pathes cant be set.");
+                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal paths can't be set.");
                     throw css::uno::Exception(sMsg.makeStringAndClear(),
                                               static_cast< ::cppu::OWeakObject* >(this));
                 }
@@ -975,7 +975,7 @@ sal_Bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
 sal_Bool PathSettings::impl_isValidPath(const ::rtl::OUString& sPath) const
 {
     // allow empty path to reset a path.
-// idea by LLA to support empty pathes
+// idea by LLA to support empty paths
 //    if (sPath.getLength() == 0)
 //    {
 //        return sal_True;
@@ -1102,7 +1102,7 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
     {
         // create the needed substitution service.
         // We must replace all used variables inside readed path values.
-        // In case we can't do so ... the whole office can't work realy.
+        // In case we can't do so ... the whole office can't work really.
         // That's why it seams to be OK to throw a RuntimeException then.
         xSubst = css::uno::Reference< css::util::XStringSubstitution >(
                                 xSMGR->createInstance(SERVICENAME_SUBSTITUTEPATHVARIABLES),
@@ -1135,7 +1135,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
                    ::comphelper::ConfigurationHelper::openConfig(
                         xSMGR,
                         CFG_NODE_OLD,
-                        ::comphelper::ConfigurationHelper::E_STANDARD), // not readonly! Somtimes we need write access there !!!
+                        ::comphelper::ConfigurationHelper::E_STANDARD), // not readonly! Sometimes we need write access there !!!
                    css::uno::UNO_QUERY_THROW);
 
         // SAFE ->

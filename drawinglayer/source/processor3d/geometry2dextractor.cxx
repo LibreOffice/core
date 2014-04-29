@@ -138,7 +138,7 @@ namespace drawinglayer
                 }
                 case PRIMITIVE3D_ID_SHADOWPRIMITIVE3D :
                 {
-                    // accept but ignore labels and shadow; these should be extracted seperately
+                    // accept but ignore labels and shadow; these should be extracted separately
                     break;
                 }
                 default :

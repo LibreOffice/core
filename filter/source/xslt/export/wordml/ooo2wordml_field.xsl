@@ -359,7 +359,7 @@ $field_number_format_style ='壹, 贰, 叁, ...' ">
         </w:fldSimple>
     </xsl:template>
     <xsl:template name="field_convert_linebreak">
-        <!-- this template convert the linebreak (&#x0A; and &#x0D;) in continous text to Ms word element<w:br/> -->
+        <!-- this template convert the linebreak (&#x0A; and &#x0D;) in continuous text to Ms word element<w:br/> -->
         <xsl:param name="field_input_text"/>
         <xsl:if test="not (contains($field_input_text,'&#x0A;'))">
             <w:t>

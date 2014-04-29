@@ -246,7 +246,7 @@ DBG_NAME(DirectSQLDialog)
             if (xStatement.is())
                 xStatement->execute(_rStatement);
 
-            // successfull
+            // successful
             sStatus = String(ModuleRes(STR_COMMAND_EXECUTED_SUCCESSFULLY));
 
             // dispose the statement

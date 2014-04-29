@@ -45,7 +45,7 @@ namespace framework{
                     Why? Normaly interaction should show a filter selection dialog and ask user for his decision.
                     He can select any filter - then instances of these class will be called by handler ... or user
                     close dialog without any selection. Then another continuation should be slected by handler to
-                    abort continuations ... Retrying isn't very usefull here ... I think.
+                    abort continuations ... Retrying isn't very useful here ... I think.
 
     @implements     XInteractionFilterSelect
 
@@ -116,7 +116,7 @@ private:
 };
 
 //---------------------------------------------------------------------------------------------------------
-// initialize instance with all neccessary informations
+// initialize instance with all necessary informations
 // We use it without any further checks on our member then ...!
 //---------------------------------------------------------------------------------------------------------
 RequestFilterSelect_Impl::RequestFilterSelect_Impl( const ::rtl::OUString& sURL )
@@ -261,7 +261,7 @@ uno::Reference < task::XInteractionRequest > RequestAmbigousFilter::GetRequest()
 }
 
 //---------------------------------------------------------------------------------------------------------
-// initialize instance with all neccessary informations
+// initialize instance with all necessary informations
 // We use it without any further checks on our member then ...!
 //---------------------------------------------------------------------------------------------------------
 RequestAmbigousFilter_Impl::RequestAmbigousFilter_Impl( const ::rtl::OUString& sURL            ,

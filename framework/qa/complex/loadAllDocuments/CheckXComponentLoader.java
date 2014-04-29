@@ -71,7 +71,7 @@ import static org.junit.Assert.*;
             The parameters for this have to be "ftp_access" and "http_access".
             If they are not given, tests for ftp and http will fail.
 
-    @todo   We need a further test for accessing UNC pathes on windows!
+    @todo   We need a further test for accessing UNC paths on windows!
  */
 public class CheckXComponentLoader
 {
@@ -185,7 +185,7 @@ public class CheckXComponentLoader
         // define default loader for testing
         // TODO think about using of bot loader instances!
         m_xLoader = UnoRuntime.queryInterface(XComponentLoader.class, m_xDesktop);
-        assertNotNull("Desktop service doesnt support needed component loader interface.", m_xLoader);
+        assertNotNull("Desktop service doesn't support needed component loader interface.", m_xLoader);
 
         // get temp path for this environment
         final String tempDirURL = util.utils.getOfficeTemp/*Dir*/(getMSF());
@@ -529,7 +529,7 @@ public class CheckXComponentLoader
 //        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sEmptyDocs, "_blank", 0,
 //                lProps);
 //
-//        System.out.println("check case senstive URLs");
+//        System.out.println("check case sensitive URLs");
 //
 //        sIllegalArgs = new String[] {
 //            "sLot:5000", "sloT:10909", ".unO:SaveAs", ".uno:OPEN",

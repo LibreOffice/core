@@ -102,7 +102,7 @@ DEFINE_INIT_SERVICE(ServiceHandler,
 
 /**
     @short      standard ctor
-    @descr      These initialize a new instance of ths class with needed informations for work.
+    @descr      These initialize a new instance of this class with needed informations for work.
 
     @param      xFactory
                 reference to uno servicemanager for creation of new services
@@ -139,7 +139,7 @@ ServiceHandler::~ServiceHandler()
                 be asked by the generic dispatch mechanism inside framework, if he can handle this
                 special URL wich match his registration. He can agree by returning of a valid dispatch
                 instance or disagree by returning <NULL/>.
-                We don't create new dispatch instances here realy - we return THIS as result to handle it
+                We don't create new dispatch instances here really - we return THIS as result to handle it
                 at the same implementation.
 
     @modified   02.05.2002 15:25, as96863
@@ -193,7 +193,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Serv
 void SAL_CALL ServiceHandler::dispatch( const css::util::URL&                                  aURL       ,
                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
 {
-    // dispatch() is an [oneway] call ... and may our user release his reference to us immediatly.
+    // dispatch() is an [oneway] call ... and may our user release his reference to us immediately.
     // So we should hold us self alive till this call ends.
     css::uno::Reference< css::frame::XNotifyingDispatch > xSelfHold(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
     implts_dispatch(aURL,lArguments);
@@ -220,7 +220,7 @@ void SAL_CALL ServiceHandler::dispatchWithNotification( const css::util::URL&   
                                                         const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                         const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException )
 {
-    // This class was designed to die by reference. And if user release his reference to us immediatly after calling this method
+    // This class was designed to die by reference. And if user release his reference to us immediately after calling this method
     // we can run into some problems. So we hold us self alive till this method ends.
     // Another reason: We can use this reference as source of sending event at the end too.
     css::uno::Reference< css::frame::XNotifyingDispatch > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
@@ -292,7 +292,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     if (!sServiceName.getLength())
         return css::uno::Reference< css::uno::XInterface >();
 
-    // If a service doesnt support an optional job executor interface - he can't get
+    // If a service doesn't support an optional job executor interface - he can't get
     // any given parameters!
     // Because we can't know if we must call createInstanceWithArguments() or XJobExecutor::trigger() ...
 
@@ -326,7 +326,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     @param      xListener
                     reference to a valid listener for state events
     @param      aURL
-                    URL about listener will be informed, if something occured
+                    URL about listener will be informed, if something occurred
 
     @modified   30.04.2002 14:49, as96863
 */

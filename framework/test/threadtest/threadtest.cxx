@@ -288,7 +288,7 @@ class ThreadSafeClass : private ThreadHelpBase
         ThreadSafeClass ();
         ~ThreadSafeClass();
 
-        // This methods are used from differnt threads
+        // This methods are used from different threads
         // to test this class.
         void        init    (   sal_Int32   nA          ,
                                 sal_Int32   nThreadID   );
@@ -340,7 +340,7 @@ ThreadSafeClass::~ThreadSafeClass()
 void ThreadSafeClass::init( sal_Int32 nA, sal_Int32 nThreadID )
 {
     // Look for multiple calls of this method first!
-    // Use E_SOFTEXCEPTIONS to disable automaticly throwing of exceptions for some working modes.
+    // Use E_SOFTEXCEPTIONS to disable automatically throwing of exceptions for some working modes.
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
     // Set write lock for setting internal member AND

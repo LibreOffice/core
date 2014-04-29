@@ -26,7 +26,7 @@
 
 //*************************************************************************************************************
 //  special macros for time measures
-//  1) LOGFILE_TIMEMEASURE                  used it to define log file for this operations (default will be set automaticly)
+//  1) LOGFILE_TIMEMEASURE                  used it to define log file for this operations (default will be set automatically)
 //  2) START_TIMEMEASURE                    start new measure by using given variable names
 //  3) START_TIMEMEASURE                    stop current measure by using given variable names and return time
 //  4) LOG_TIMEMEASURE                      write measured time to logfile

@@ -267,7 +267,7 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
     void CloseableLifeTimeManager
 ::g_close_endTryClose(sal_Bool bDeliverOwnership, sal_Bool /* bMyVeto */ )
 {
-    //this method is called, if the try to close was not successfull
+    //this method is called, if the try to close was not successful
     osl::Guard< osl::Mutex > aGuard( m_aAccessMutex );
     impl_setOwnership( bDeliverOwnership, sal_False );
 
@@ -311,7 +311,7 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
     void CloseableLifeTimeManager
 ::g_close_endTryClose_doClose()
 {
-    //this method is called, if the try to close was successfull
+    //this method is called, if the try to close was successful
     osl::ResettableGuard< osl::Mutex > aGuard( m_aAccessMutex );
 
     m_bInTryClose       = sal_False;

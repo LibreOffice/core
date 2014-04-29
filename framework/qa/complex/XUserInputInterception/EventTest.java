@@ -415,7 +415,7 @@ public class EventTest {
             return true;
         }
         /**
-         * This event does nothing usefull
+         * This event does nothing useful
          * @param oEvent refers to the object that fired the event.
          */
         public void disposing( EventObject oEvent ){
@@ -451,7 +451,7 @@ public class EventTest {
             return true;
         }
         /**
-         * This event does nothing usefull
+         * This event does nothing useful
          * @param oEvent refers to the object that fired the event.
          */
         public void disposing( EventObject oEvent ){

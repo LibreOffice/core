@@ -60,7 +60,7 @@ namespace framework{
 
 /**
     @short      handle interactions non visible
-    @descr      Sometimes it's neccessary to use a non visible interaction handler.
+    @descr      Sometimes it's necessary to use a non visible interaction handler.
                 He can't do anything, which a visible one can handle.
                 But it can be used to intercept problems e.g. during loading of documents.
 
@@ -98,7 +98,7 @@ class QuietInteraction : public  css::lang::XTypeProvider
             @interface  XInteractionHandler
             @short      called from outside to handle a problem
             @descr      The only interaction we can handle here is to
-                        decide which of two ambigous filters should be realy used.
+                        decide which of two ambigous filters should be really used.
                         We use the user selected one every time.
                         All other request will be aborted and can break the code,
                         which use this interaction handler.
@@ -121,7 +121,7 @@ class QuietInteraction : public  css::lang::XTypeProvider
             @short      ctor to guarantee right initialized instances of this class
             @descr      -
 
-            @threadsafe not neccessary
+            @threadsafe not necessary
         */
         QuietInteraction();
 
@@ -130,7 +130,7 @@ class QuietInteraction : public  css::lang::XTypeProvider
             @short      return the handled interaction request
             @descr      We saved any getted interaction request internaly.
                         May the outside user of this class is interessted
-                        on that. Especialy we gotted an unknown interaction
+                        on that. Especially we gotted an unknown interaction
                         and aborted it hard.
 
             @return     [com.sun.star.uno.Any]

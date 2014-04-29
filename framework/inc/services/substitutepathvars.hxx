@@ -188,7 +188,7 @@ enum PreDefVariable
     PREDEFVAR_PROGURL,
     PREDEFVAR_USERURL,
     PREDEFVAR_WORKDIRURL,
-    // --> PB 2004-10-27 #i32656# - new variable of hierachy service
+    // --> PB 2004-10-27 #i32656# - new variable of hierarchy service
     PREDEFVAR_BASEINSTURL,
     PREDEFVAR_USERDATAURL,
     // <--

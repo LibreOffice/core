@@ -171,11 +171,11 @@ OCacheSet::~OCacheSet()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception occured");
+        OSL_ENSURE(0,"Exception occurred");
     }
     catch(...)
     {
-        OSL_ENSURE(0,"Unknown Exception occured");
+        OSL_ENSURE(0,"Unknown Exception occurred");
     }
 
     DBG_DTOR(OCacheSet,NULL);
@@ -300,7 +300,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
 
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
 
-    sal_Int32 nCheckCount = 1; // index for the orginal values
+    sal_Int32 nCheckCount = 1; // index for the original values
     sal_Int32 i = 1;
 
     ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));

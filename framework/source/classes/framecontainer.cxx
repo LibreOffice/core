@@ -73,12 +73,12 @@ namespace framework{
     @short      initialize an empty container
     @descr      The container will be empty then - special features (e.g. the async quit mechanism) are disabled.
 
-    @threadsafe not neccessary - its not a singleton
+    @threadsafe not necessary - its not a singleton
     @modified   01.07.2002 14:42,as96863
  *****************************************************************************************************************/
 FrameContainer::FrameContainer()
         // initialize base classes first.
-        // Order is neccessary for right initilization of his and OUR member ... m_aLock
+        // Order is necessary for right initilization of his and OUR member ... m_aLock
         : ThreadHelpBase ( &Application::GetSolarMutex()                  )
 /*DEPRECATEME
         , m_bAsyncQuit   ( sal_False                                      ) // default must be "disabled"!
@@ -91,7 +91,7 @@ FrameContainer::FrameContainer()
     @short      deinitialize may a filled container
     @descr      Special features (if the currently are running) will be dsiabled and we free all used other ressources.
 
-    @threadsafe not neccessary - its not a singleton
+    @threadsafe not necessary - its not a singleton
     @modified   01.07.2002 14:43,as96863
  *****************************************************************************************************************/
 FrameContainer::~FrameContainer()
@@ -139,7 +139,7 @@ void FrameContainer::append( const css::uno::Reference< css::frame::XFrame >& xF
 void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
     /* SAFE { */
-    // write lock neccessary for follwing erase()!
+    // write lock necessary for follwing erase()!
     WriteGuard aWriteLock( m_aLock );
 
     TFrameIterator aSearchedItem = ::std::find( m_aContainer.begin(), m_aContainer.end(), xFrame );
@@ -244,7 +244,7 @@ sal_uInt32 FrameContainer::getCount() const
                 So it will be marked as deprecated and should be replaced by "getAllElements()".
 
     @param      nIndex
-                    a valud between 0 and (getCount()-1) to adress one container item
+                    a valud between 0 and (getCount()-1) to address one container item
 
     @return     a reference to a frame inside the container, which match with given index
 
@@ -278,7 +278,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32
     @short      returns a snapshot of all currently existing frames inside this container
     @descr      Should be used to replace the deprecated functions getCount()/operator[]!
 
-    @return     a list of all frame refrences inside this container
+    @return     a list of all frame references inside this container
 
     @threadsafe yes
     @modified   01.07.2002 15:09,as96863

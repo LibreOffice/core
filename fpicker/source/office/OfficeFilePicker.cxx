@@ -267,7 +267,7 @@ WinBits SvtFilePicker::getWinBits( WinBits& rExtraBits )
     WinBits nBits = 0L;
     rExtraBits = 0L;
 
-    // set the standard bits acording to the service name
+    // set the standard bits according to the service name
     if ( m_nServiceType == TemplateDescription::FILEOPEN_SIMPLE )
     {
         nBits = WB_OPEN;

@@ -230,9 +230,9 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL JobD
 
             If a job is already running, (it can only occure for asynchronous jobs)
             don't start the same job a second time. Queue in the given dispatch parameter
-            and return immediatly. If the current running job call us back, we will start this
+            and return immediately. If the current running job call us back, we will start this
             new dispatch request.
-            If no job is running - queue the parameter too! But then start the new job immediatly.
+            If no job is running - queue the parameter too! But then start the new job immediately.
             We have to queue it every time - because it hold us alive by ref count!
 
     @param  aURL
@@ -298,7 +298,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&             
     // no jobs ... no execution
     // But a may given listener will know something ...
     // I think this operaton was finished successfully.
-    // It's not realy an error, if no registered jobs could be located.
+    // It's not really an error, if no registered jobs could be located.
     // Step over all found jobs and execute it
     int nExecutedJobs=0;
     for (int j=0; j<lJobs.getLength(); ++j)
@@ -329,7 +329,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&             
         // Special mode for listener.
         // We dont notify it directly here. We delegate that
         // to the job implementation. But we must set ourself there too.
-        // Because this job must fake the source adress of the event.
+        // Because this job must fake the source address of the event.
         // Otherwhise the listener may will ignore it.
         if (xListener.is())
             pJob->setDispatchResultFake(xListener, xThis);
@@ -391,7 +391,7 @@ void JobDispatch::impl_dispatchService( /*IN*/ const ::rtl::OUString&           
     // Special mode for listener.
     // We dont notify it directly here. We delegate that
     // to the job implementation. But we must set ourself there too.
-    // Because this job must fake the source adress of the event.
+    // Because this job must fake the source address of the event.
     // Otherwhise the listener may will ignore it.
     if (xListener.is())
         pJob->setDispatchResultFake(xListener, xThis);
@@ -442,7 +442,7 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const ::rtl::OUString&             
     // Special mode for listener.
     // We dont notify it directly here. We delegate that
     // to the job implementation. But we must set ourself there too.
-    // Because this job must fake the source adress of the event.
+    // Because this job must fake the source address of the event.
     // Otherwhise the listener may will ignore it.
     if (xListener.is())
         pJob->setDispatchResultFake(xListener, xThis);

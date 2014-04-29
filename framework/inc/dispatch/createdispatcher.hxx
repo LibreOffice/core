@@ -77,7 +77,7 @@ namespace framework{
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 class CreateDispatcher  :   // -interfaces  ... are supported by our BaseDispatcher!
-                            // -baseclasses ... order is neccessary for right initialization!
+                            // -baseclasses ... order is necessary for right initialization!
                             public BaseDispatcher
 {
     //-------------------------------------------------------------------------------------------------------------

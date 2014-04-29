@@ -113,7 +113,7 @@
         <description>
             It's a dispatch object which can handle "mailto:" URLs.
             This service is registered in configuration for this protocol
-            and wil be used automaticly by the generic dispatch implementation
+            and wil be used automatically by the generic dispatch implementation
             of a Frame. It should start an external mail application and forward
             this request to it.
         </description>
@@ -128,10 +128,10 @@
         <name> com.sun.star.comp.framework.ServiceHandler </name>
         <description>
             It's a special dispatch object which is registered for "service:*" URL pattern
-            and will be automaticly used by the framework dispatch mechanism if such URL occured.
+            and will be automatically used by the framework dispatch mechanism if such URL occurred.
             His job is to create any registered uno components which must be coded inside
             dispatched URL (may with some optional given parameters). After that such created
-            service must be hold his self alive. Such mechanism can be usefull for UI components
+            service must be hold his self alive. Such mechanism can be useful for UI components
             (e.g. Dialogs, Wizards) only.
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
@@ -145,7 +145,7 @@
         <name> com.sun.star.comp.framework.JobHandler </name>
         <description>
             It's a special dispatch object which is registered for "vnd.sun.star.job:*" URL pattern
-            and will be automaticly used by the framework dispatch mechanism if such URL occured.
+            and will be automatically used by the framework dispatch mechanism if such URL occurred.
             It binds the dispatch mechanism to the generic job execution of this framework module.
             That can be used for e.g. addon purposes.
         </description>

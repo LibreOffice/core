@@ -330,7 +330,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
     // Immer die Intersect-Methode, weil beim Metafile ein Muss!
     if ( bClip )
     {
-        // Clip only if neccesary...
+        // Clip only if necessary...
         if ( !rStartDocPos.X() && !rStartDocPos.Y() &&
              ( rOutRect.GetHeight() >= (long)GetTextHeight() ) &&
              ( rOutRect.GetWidth() >= (long)CalcTextWidth() ) )

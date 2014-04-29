@@ -85,7 +85,7 @@ class FairRWLock : public  IRWLock
             @short      standard ctor
             @descr      Initialize instance with right start values for correct working.
                         no reader could exist               =>  m_nReadCount   = 0
-                        don't block first comming writer    =>  m_aWriteCondition.set()
+                        don't block first coming writer    =>  m_aWriteCondition.set()
 
             @seealso    -
 
@@ -231,7 +231,7 @@ class FairRWLock : public  IRWLock
 
             @attention  Don't call this method if you are not a writer!
                         Results are not defined then ...
-                        An upgrade can't be implemented realy ... because acquiring new access
+                        An upgrade can't be really implemented ... because acquiring new access
                         will be the same - there no differences!
 
             @seealso    -

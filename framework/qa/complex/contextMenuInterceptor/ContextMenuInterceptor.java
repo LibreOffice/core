@@ -123,7 +123,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor
         }
         catch (com.sun.star.uno.Exception ex)
         {
-            // something strange has happend!
+            // something strange has happened!
         }
         catch (java.lang.Throwable ex)
         {

@@ -68,7 +68,7 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 /*-****************************************************************************************************//**
-    @short      initialize instance with neccessary informations
+    @short      initialize instance with necessary informations
     @descr      We need a valid uno service manager to create or instanciate new services.
                 All other informations to create frames or tasks come in on right interface methods.
 
@@ -129,7 +129,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::
     catch(const css::uno::Exception&)
     {}
 
-    // no catch here ... without an task creator service we cant open ANY document window within the office.
+    // no catch here ... without an task creator service we can't open ANY document window within the office.
     // Thats IMHO not a good idea. Then we should accept the stacktrace showing us the real problem.
     // BTW: The used fallback creator service (IMPLEMENTATIONNAME_FWK_TASKCREATOR) is implemented in the same
     // library then these class here ... Why we should not be able to create it ?

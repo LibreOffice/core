@@ -160,7 +160,7 @@ JobExecutor::~JobExecutor()
 /**
     @short  implementation of XJobExecutor interface
     @descr  We use the given event to locate any registered job inside our configuration
-            and execute it. Further we control the lifetime of it and supress
+            and execute it. Further we control the lifetime of it and suppress
             shutdown of the office till all jobs was finished.
 
     @param  sEvent
@@ -175,7 +175,7 @@ void SAL_CALL JobExecutor::trigger( const ::rtl::OUString& sEvent ) throw(css::u
 
     // Optimization!
     // Check if the given event name exist inside configuration and reject wrong requests.
-    // This optimization supress using of the cfg api for getting event and job descriptions ...
+    // This optimization suppress using of the cfg api for getting event and job descriptions ...
     if (m_lEvents.find(sEvent) == m_lEvents.end())
         return;
 
@@ -232,7 +232,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
 
     // Optimization!
     // Check if the given event name exist inside configuration and reject wrong requests.
-    // This optimization supress using of the cfg api for getting event and job descriptions.
+    // This optimization suppress using of the cfg api for getting event and job descriptions.
     // see using of m_lEvents.find() below ...
 
     // retrieve event context from event source

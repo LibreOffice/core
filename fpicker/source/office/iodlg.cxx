@@ -2253,7 +2253,7 @@ short SvtFileDialog::PrepareExecute()
 
     UpdateControls( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
-    // Somebody might want to enable some controls acording to the current filter
+    // Somebody might want to enable some controls according to the current filter
     FilterSelect();
 
     // Zustand der Steuerelemente anpassen.
@@ -3137,7 +3137,7 @@ void SvtFileDialog::setImage( sal_Int16 /*aImageFormat*/, const Any& rImage )
 sal_Bool SvtFileDialog::setShowState( sal_Bool /*bShowState*/ )
 {
     // #97633 for the system filedialog it's
-    // usefull to make the preview switchable
+    // useful to make the preview switchable
     // because the preview occupies
     // half of the size of the file listbox
     // which is not the case here,

@@ -70,7 +70,7 @@ namespace framework{
 /**
     @short          protocol handler for "mailto:" URLs
     @descr          It's a special dispatch object which is used registered for "mailto:*" URLs and
-                    will be automaticly used from the framework dispatch mechanism if such URL occured.
+                    will be automatically used from the framework dispatch mechanism if such URL occurred.
 
     @base           ThreadHelpBase
                         exports a lock member to guarantee right initialize value of it
@@ -87,7 +87,7 @@ class MailToDispatcher : // interfaces
                          public  css::frame::XDispatchProvider ,
                          public  css::frame::XNotifyingDispatch, // => XDispatch
                          // baseclasses
-                         // Order is neccessary for right initialization!
+                         // Order is necessary for right initialization!
                          private ThreadHelpBase                ,
                          public  cppu::OWeakObject
 {

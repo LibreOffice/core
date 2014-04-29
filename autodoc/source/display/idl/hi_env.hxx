@@ -54,7 +54,7 @@ class AryAccess;
 class LinkHelper;
 
 /** @resp
-    Provides enviroment information to the HTML factory
+    Provides environment information to the HTML factory
     classes.
 
     @descr

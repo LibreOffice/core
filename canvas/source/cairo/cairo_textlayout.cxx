@@ -343,7 +343,7 @@ namespace cairocanvas
   /**
    * TextLayout::isCairoRenderable
    *
-   * Features currenly not supported by Cairo (VCL rendering is used as fallback):
+   * Features currently not supported by Cairo (VCL rendering is used as fallback):
    * - vertical glyphs
    *
    * @return true, if text/font can be rendered with cairo
@@ -547,7 +547,7 @@ namespace cairocanvas
             FontMetric aMetric( rOutDev.GetFontMetric(aFont) );
             long nWidth = 0;
 
-            // width calculation is deep magic and platform/font dependant.
+            // width calculation is deep magic and platform/font dependent.
             // width == 0 means no scaling, and usually width == height means the same.
             // Other values mean horizontal scaling (narrow or stretching)
             // see issue #101566

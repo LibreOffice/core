@@ -1634,9 +1634,9 @@
          return hRes;
  }
  
--__declspec(selectany) LPCTSTR CRegParser::rgszNeverDelete[] = //Component Catagories
+-__declspec(selectany) LPCTSTR CRegParser::rgszNeverDelete[] = //Component Categories
 +#ifdef _INIT_ATL_COMMON_VARS
-+LPCTSTR CRegParser::rgszNeverDelete[] = //Component Catagories
++LPCTSTR CRegParser::rgszNeverDelete[] = //Component Categories
  {
          _T("CLSID"), _T("TYPELIB")
  };

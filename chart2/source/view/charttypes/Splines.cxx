@@ -107,7 +107,7 @@ private:
     */
     void Calculate();
 
-    /** @descr this function corresponds to the algoritm 4.76 in [2] and
+    /** @descr this function corresponds to the algorithm 4.76 in [2] and
         theorem 5.3.7 in [3]
 
         [2] Engeln-Müllges, Gisela: Numerik-Algorithmen: Verfahren, Beispiele, Anwendungen

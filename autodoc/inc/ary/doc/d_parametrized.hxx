@@ -50,7 +50,7 @@ class Parametrized : public Node
     const HyperText &   Doc() const;
     const T &           Parameter() const;
 
-    // ACESS
+    // ACCESS
     HyperText &         Doc();
     void                Set_Parameter(
                             const T &           i_param );

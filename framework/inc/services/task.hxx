@@ -77,7 +77,7 @@ namespace framework{
 *//*-*************************************************************************************************************/
 
 class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
-                public Frame                    // Order of baseclasses is neccessary for right initialization!
+                public Frame                    // Order of baseclasses is necessary for right initialization!
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -429,7 +429,7 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
                         Don't use this directly!
                         You must try to convert the value of given propertyhandle and
                         return results of this operation. This will be use to ask vetoable
-                        listener. If no listener have a veto, we will change value realy!
+                        listener. If no listener have a veto, we will change value really!
                         ( in method setFastPropertyValue_NoBroadcast(...) )
 
             @seealso    OPropertySetHelper
@@ -455,7 +455,7 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
             @descr      This method is calling from helperclass "OPropertySetHelper".
                         Don't use this directly!
                         Handle and value are valid everyway! You must set the new value only.
-                        After this, baseclass send messages to all listener automaticly.
+                        After this, baseclass send messages to all listener automatically.
 
             @seealso    OPropertySetHelper
 

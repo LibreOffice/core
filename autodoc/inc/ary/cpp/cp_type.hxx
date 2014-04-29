@@ -52,7 +52,7 @@ namespace cpp
 
 
 
-/** Acess to all found C++ types (as they are used in declarations)
+/** Access to all found C++ types (as they are used in declarations)
     in the repository.
 */
 class TypePilot

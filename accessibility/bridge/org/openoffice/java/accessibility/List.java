@@ -104,7 +104,7 @@ public class List extends DescendantManager implements javax.accessibility.Acces
     }
 
     /**
-    * Update the proxy objects appropriatly on property change events
+    * Update the proxy objects appropriately on property change events
     */
     protected class AccessibleListListener extends AccessibleDescendantManagerListener {
 

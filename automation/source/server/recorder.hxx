@@ -46,7 +46,7 @@ private:
 
     // record keys
     String aKeyString;
-    rtl::OString aKeyUniqueID;     // has to be remembered seperately since Window might be gone when needed
+    rtl::OString aKeyUniqueID;     // has to be remembered separately since Window might be gone when needed
     Window* pKeyWin;
     sal_Bool bKeyFollowFocus;
 

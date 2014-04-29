@@ -715,7 +715,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
     css::uno::Reference< css::ucb::XCommandEnvironment > xCommandEnv(static_cast< css::ucb::XCommandEnvironment* >(pCommandEnv), css::uno::UNO_QUERY);
 
     // try to create the content
-    // no content -> no stream => return immediatly with FALSE
+    // no content -> no stream => return immediately with FALSE
     ::ucbhelper::Content                      aContent;
     css::uno::Reference< css::ucb::XContent > xContent;
     try
@@ -733,7 +733,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
     // try to open the file in read/write mode
     // (if its allowed to do so).
     // But handle errors in a "hidden mode". Because
-    // we try it readonly later - if read/write isnt an option.
+    // we try it readonly later - if read/write isn't an option.
     css::uno::Reference< css::io::XStream >      xStream     ;
     css::uno::Reference< css::io::XInputStream > xInputStream;
 
@@ -750,7 +750,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
     {
         try
         {
-            // TODO: use "special" still interaction to supress error messages
+            // TODO: use "special" still interaction to suppress error messages
             xStream = aContent.openWriteableStream();
             if (xStream.is())
                 xInputStream = xStream->getInputStream();
@@ -771,7 +771,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
             }
     }
 
-    // If opening of the stream in read/write mode wasnt allowed
+    // If opening of the stream in read/write mode wasn't allowed
     // or failed by an error - we must try it in readonly mode.
     if (!xInputStream.is())
     {
@@ -846,7 +846,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
        they are part of an URL.
 
        Do not use the URLTransformer service here. Because
-       it parses the URL in another way. It's main part isnt enough
+       it parses the URL in another way. It's main part isn't enough
        and it's complete part contains the jumpmark (fragment) parameter ...
     */
     static ::rtl::OUString SERVICENAME_URIREFERENCEFACTORY = ::rtl::OUString::createFromAscii("com.sun.star.uri.UriReferenceFactory");
@@ -867,7 +867,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
     catch(const css::uno::Exception&)
         {}
 
-    // If an error ocurred ... return the original URL.
+    // If an error occurred ... return the original URL.
     // It's a try .-)
     return sURL;
 }

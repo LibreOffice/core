@@ -141,7 +141,7 @@ class ConfigurationAccess_WindowState : // interfaces
                                         public  XNameContainer                           ,
                                         public  XContainerListener                       ,
                                         // baseclasses
-                                        // Order is neccessary for right initialization!
+                                        // Order is necessary for right initialization!
                                         private ThreadHelpBase                           ,
                                         public  ::cppu::OWeakObject
 {
@@ -210,7 +210,7 @@ class ConfigurationAccess_WindowState : // interfaces
             WINDOWSTATE_MASK_DOCKSIZE       = 32768
         };
 
-        // Cache structure. Valid values are described by tje eMask member. All other values should not be
+        // Cache structure. Valid values are described by the eMask member. All other values should not be
         // provided to outside code!
         struct WindowStateInfo
         {
@@ -296,7 +296,7 @@ ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const rtl::OUS
     m_bConfigAccessInitialized( sal_False ),
     m_bModified( sal_False )
 {
-    // Create configuration hierachical access name
+    // Create configuration hierarchical access name
     m_aConfigWindowAccess += aModuleName;
     m_aConfigWindowAccess += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_WINDOWSTATE_ACCESS ));
     m_xConfigProvider = Reference< XMultiServiceFactory >( rServiceManager->createInstance( SERVICENAME_CFGPROVIDER ), UNO_QUERY );

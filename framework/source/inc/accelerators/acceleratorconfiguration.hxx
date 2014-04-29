@@ -87,7 +87,7 @@ typedef PresetHandler AcceleratorPresets;
 /**
     implements a read/write access to the accelerator configuration.
  */
-class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase                       // attention! Must be the first base class to guarentee right initialize lock ...
+class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase                       // attention! Must be the first base class to guarantee right initialize lock ...
                                        , public    IStorageListener
                                        , public    ::cppu::OWeakObject
                                        , public    css::lang::XTypeProvider
@@ -305,7 +305,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase               
 
 };
 
-class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase                       // attention! Must be the first base class to guarentee right initialize lock ...
+class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase                       // attention! Must be the first base class to guarantee right initialize lock ...
                                        , public    ::cppu::OWeakObject
                                        , public    css::lang::XTypeProvider
                                        , public    css::util::XChangesListener

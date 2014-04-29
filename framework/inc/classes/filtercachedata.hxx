@@ -73,7 +73,7 @@ namespace framework{
 
 #define PACKAGENAME_TYPEDETECTION_STANDARD          DECLARE_ASCII("Office.TypeDetection"                            )   /// Names of our configuration files.
 #define PACKAGENAME_TYPEDETECTION_ADDITIONAL        DECLARE_ASCII("Office.TypeDetectionAdditional"                  )
-#define CFG_PATH_SEPERATOR                          DECLARE_ASCII("/"                                               )   /// seperator for configuration pathes
+#define CFG_PATH_SEPERATOR                          DECLARE_ASCII("/"                                               )   /// seperator for configuration paths
 #define PROPERTY_SEPERATOR                          sal_Unicode(',')                                                    /// seperator for own formated property strings of types and filters
 #define LIST_SEPERATOR                              sal_Unicode(';')                                                    /// seperator for own formated lists as part of our own formated type- or filter-string
 #define LOCALE_FALLBACK                             DECLARE_ASCII("en-US"                                           )   /// fallback, if configuration can't give us current set locale ...
@@ -469,7 +469,7 @@ class SetNodeHash : public ::std::hash_map< ::rtl::OUString                    ,
     //-------------------------------------------------------------------------------------------------------------
     public:
         //---------------------------------------------------------------------------------------------------------
-        // The only way to free ALL memory realy!
+        // The only way to free ALL memory really!
         //---------------------------------------------------------------------------------------------------------
         inline void free()
         {
@@ -481,7 +481,7 @@ class SetNodeHash : public ::std::hash_map< ::rtl::OUString                    ,
 
         //---------------------------------------------------------------------------------------------------------
         // Append changed, added or removed items to special lists
-        // Neccessary for saving changes
+        // Necessary for saving changes
         //---------------------------------------------------------------------------------------------------------
         void appendChange( const ::rtl::OUString& sName  ,
                                  EModifyState     eState );
@@ -507,7 +507,7 @@ class PerformanceHash   :   public  ::std::hash_map<    ::rtl::OUString         
 {
     public:
         //---------------------------------------------------------------------------------------------------------
-        //  try to free all used memory REALY!
+        //  try to free all used memory REALLY!
         //---------------------------------------------------------------------------------------------------------
         inline void free()
         {
@@ -576,7 +576,7 @@ class DataContainer : private ThreadHelpBase
     /** @short  identifies different sets of the TypeDetection configuration package.
 
         @descr  Most functions on top of this configuration package are the same ...
-                but must be executed on different places inside ths configuration structures.
+                but must be executed on different places inside this configuration structures.
                 These enum values can be used ate some interface methods to specify, which
                 configuration set should be used.
                 Further it must be possible to start the same action for more then one cfg type.
@@ -778,8 +778,8 @@ class FilterCFGAccess : public ::utl::ConfigItem
     //  member
     //-------------------------------------------------------------------------------------------------------------
     private:
-        EFilterPackage  m_ePackage                     ;   // ... not realy used yet! should split configuration in STANDARD and ADDITIONAL filter
-        sal_Int32       m_nVersion                     ;   // file format version of configuration! (neccessary for "xml2xcd" transformation!)
+        EFilterPackage  m_ePackage                     ;   // ... not really used yet! should split configuration in STANDARD and ADDITIONAL filter
+        sal_Int32       m_nVersion                     ;   // file format version of configuration! (necessary for "xml2xcd" transformation!)
         sal_Int32       m_nKeyCountTypes               ;   // follow key counts present count of configuration properties for types/filters ... and depends from m_nVersion - must be set right!
         sal_Int32       m_nKeyCountFilters             ;
         sal_Int32       m_nKeyCountDetectors           ;
@@ -815,7 +815,7 @@ class FilterCFGListener : public  css::util::XChangesListener
         DataContainer* m_pData;
 
         // we must know, if we are already registered as listener or not.
-        //    That can be usefull to supress double registration calls ...
+        //    That can be useful to suppress double registration calls ...
         //    which may will force double call backs in our disposing method!
         //    Such superflous calls can be dangerous.
         sal_Bool m_bListening;

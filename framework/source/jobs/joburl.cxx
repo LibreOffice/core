@@ -82,7 +82,7 @@ JobURL::JobURL( /*IN*/ const ::rtl::OUString& sURL )
         sal_Int32 t = JOBURL_PROTOCOL_LEN;
         do
         {
-            // seperate all token of "{[event=<name>],[alias=<name>],[service=<name>]}"
+            // separate all token of "{[event=<name>],[alias=<name>],[service=<name>]}"
             ::rtl::OUString sToken = sURL.getToken(0, JOBURL_PART_SEPERATOR, t);
             ::rtl::OUString sPartValue    ;
             ::rtl::OUString sPartArguments;
@@ -155,7 +155,7 @@ sal_Bool JobURL::isValid() const
     @return     <TRUE/> if an event part of the job URL exist and the out parameter
                 sEvent was filled.
 
-    @attention  The out parameter will be reseted everytime. Don't use it if method returns <FALSE/>!
+    @attention  The out parameter will be reseted every time. Don't use it if method returns <FALSE/>!
 */
 sal_Bool JobURL::getEvent( /*OUT*/ ::rtl::OUString& sEvent ) const
 {
@@ -188,7 +188,7 @@ sal_Bool JobURL::getEvent( /*OUT*/ ::rtl::OUString& sEvent ) const
     @return     <TRUE/> if an alias part of the job URL exist and the out parameter
                 sAlias was filled.
 
-    @attention  The out parameter will be reseted everytime. Don't use it if method returns <FALSE/>!
+    @attention  The out parameter will be reseted every time. Don't use it if method returns <FALSE/>!
 */
 sal_Bool JobURL::getAlias( /*OUT*/ ::rtl::OUString& sAlias ) const
 {
@@ -221,7 +221,7 @@ sal_Bool JobURL::getAlias( /*OUT*/ ::rtl::OUString& sAlias ) const
     @return     <TRUE/> if an service part of the job URL exist and the out parameter
                 sService was filled.
 
-    @attention  The out parameter will be reseted everytime. Don't use it if method returns <FALSE/>!
+    @attention  The out parameter will be reseted every time. Don't use it if method returns <FALSE/>!
 */
 sal_Bool JobURL::getService( /*OUT*/ ::rtl::OUString& sService ) const
 {
@@ -278,7 +278,7 @@ sal_Bool JobURL::implst_split( /*IN*/  const ::rtl::OUString& sPart           ,
     // Otherwhise we do nothing and return sal_False.
     if (bPartFound)
     {
-        // But may the part has optional arguments - seperated by a "?".
+        // But may the part has optional arguments - separated by a "?".
         // Do so - we set the return value with the whole part string.
         // Arguments will be set to an empty string as default.
         // If we detect the right sign - we split the arguments and overwrite the default.
@@ -321,7 +321,7 @@ void JobURL::impldbg_checkIt()
     JobURL::impldbg_checkURL("vnd.sun.star.job:service=;"          , E_UNKNOWN, ""         , ""       , ""           , NULL, NULL, NULL);
 
     // check combinations
-    // Note: No additional spaces or tabs are allowed after a seperator occured.
+    // Note: No additional spaces or tabs are allowed after a seperator occurred.
     // Tab and spaces before a seperator will be used as value!
     JobURL::impldbg_checkURL("vnd.sun.star.job:event=onMyEvent;alias=myAlias;service=css.Service"  , E_EVENT | E_ALIAS | E_SERVICE , "onMyEvent", "myAlias", "css.Service" , NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job:service=css.Service;alias=myAlias"                  , E_ALIAS | E_SERVICE           , ""         , "myAlias", "css.Service" , NULL, NULL, NULL);

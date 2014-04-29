@@ -67,7 +67,7 @@
 
 extern "C" int Main()
 {
-    // Retreive startup info
+    // Retrieve startup info
 
     STARTUPINFO aStartupInfo;
 
@@ -97,7 +97,7 @@ extern "C" int Main()
     _tsplitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
     _tmakepath( szApplicationName, szDrive, szDir, szFileName, BIN_EXT_STR );
 
-    // Retreive actual environment
+    // Retrieve actual environment
 
     TCHAR   szBuffer[1024];
     TCHAR   szPathValue[1024] = TEXT("");

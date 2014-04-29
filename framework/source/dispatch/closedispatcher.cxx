@@ -129,7 +129,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::
 {
     if (nCommandGroup == css::frame::CommandGroup::VIEW)
     {
-        /* Attention: Dont add .uno:CloseFrame here. Because its not realy
+        /* Attention: Dont add .uno:CloseFrame here. Because its not really
                       a configurable feature ... and further it does not have
                       a valid UIName entry inside the GenericCommands.xcu ... */
         css::uno::Sequence< css::frame::DispatchInformation > lViewInfos(1);
@@ -215,13 +215,13 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     }
 
     // OK - URLs are the right ones.
-    // But we cant execute synchronously :-)
+    // But we can't execute synchronously :-)
     // May we are called from a generic key-input handler,
-    // which isnt aware that this call kill its own environment ...
+    // which isn't aware that this call kill its own environment ...
     // Do it asynchronous everytimes!
 
     // But dont forget to hold usself alive.
-    // We are called back from an environment, which doesnt know an uno reference.
+    // We are called back from an environment, which doesn't know an uno reference.
     // They call us back by using our c++ interface.
 
     m_xResultListener = xListener;
@@ -254,7 +254,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
                 Now we do the following:
                 - close all views to the same document, if needed and possible
                 - make the current frame empty
-                  ! This step is neccessary to handle errors during closing the
+                  ! This step is necessary to handle errors during closing the
                     document inside the frame. May the document shows a dialog and
                     the user ignore it. Then the state of the office can be changed
                     during we try to close frame and document.
@@ -306,7 +306,7 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
     FrameListAnalyzer aCheck1(xDesktop, xCloseFrame, FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
 
     // a) If the curent frame (where the close dispatch was requested for) does not have
-    //    any parent frame ... it will close this frame only. Such frame isnt part of the
+    //    any parent frame ... it will close this frame only. Such frame isn't part of the
     //    global desktop tree ... and such frames are used as "implementation details" only.
     //    E.g. the live previews of our wizards doing such things. And then the owner of the frame
     //    is responsible for closing the application or accepting closing of the application
@@ -315,9 +315,9 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
         bCloseFrame = sal_True;
     else
 
-    // b) The help window cant disagree with any request.
-    //    Because it doesnt implement a controller - it uses a window only.
-    //    Further t cant be the last open frame - if we do all other things
+    // b) The help window can't disagree with any request.
+    //    Because it doesn't implement a controller - it uses a window only.
+    //    Further t can't be the last open frame - if we do all other things
     //    right inside this CloseDispatcher implementation.
     //    => close it!
     if (aCheck1.m_bReferenceIsHelp)
@@ -326,7 +326,7 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
 
     // c) If we are already in "backing mode", we have to terminate
     //    the application, if this special frame is closed.
-    //    It doesnt matter, how many other frames (can be the help or hidden frames only)
+    //    It doesn't matter, how many other frames (can be the help or hidden frames only)
     //    are open then.
     //    => terminate the application!
     if (aCheck1.m_bReferenceIsBacking)
@@ -436,7 +436,7 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
     // We reached this method only, by using a reference to ourself :-)
     // Further this member is used to detect still running and not yet finished
     // ansynchronous operations. So its time now to release this reference.
-    // But hold it temp alive. Otherwhise we die before we can finish this method realy :-))
+    // But hold it temp alive. Otherwise we die before we can finish this method really :-))
     css::uno::Reference< css::uno::XInterface > xTempHold = m_xSelfHold;
     m_xSelfHold.clear();
     m_xResultListener.clear();
@@ -500,9 +500,9 @@ sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Referenc
         }
     }
 
-    // dont remove the component realy by e.g. calling setComponent(null, null).
+    // dont remove the component really by e.g. calling setComponent(null, null).
     // It's enough to suspend the controller.
-    // If we close the frame later this controller doesnt show the same dialog again.
+    // If we close the frame later this controller doesn't show the same dialog again.
     return sal_True;
 }
 
@@ -621,8 +621,8 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
         if (xTopWindowCheck.is())
         {
             // b1) Note: Toolkit interface XTopWindow sometimes is used by real VCL-child-windows also .-)
-            //     Be sure that these window is realy a "top system window".
-            //     Attention ! Checking Window->GetParent() isnt the right approach here.
+            //     Be sure that these window is really a "top system window".
+            //     Attention ! Checking Window->GetParent() isn't the right approach here.
             //     Because sometimes VCL create "implicit border windows" as parents even we created
             //     a simple XWindow using the toolkit only .-(
             ::vos::OGuard aSolarLock(&Application::GetSolarMutex());

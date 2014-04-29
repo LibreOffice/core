@@ -401,7 +401,7 @@ void ImpTwain::ImplXfer()
                 GlobalFree( (HGLOBAL) hDIB );
 #endif // OS2
 
-                // set resolution of bitmap if neccessary
+                // set resolution of bitmap if necessary
                 if ( ( nXRes != -1 ) && ( nYRes != - 1 ) && ( nWidth != - 1 ) && ( nHeight != - 1 ) )
                 {
                     const MapMode aMapMode( MAP_100TH_INCH, Point(), Fraction( 100, nXRes ), Fraction( 100, nYRes ) );

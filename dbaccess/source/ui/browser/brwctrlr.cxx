@@ -2112,7 +2112,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             else
             {
                 if ( !SaveModified( ) )
-                    // give the user a chance to save the current record (if neccessary)
+                    // give the user a chance to save the current record (if necessary)
                     break;
 
                 // maybe the user wanted to reject the modified record ?
@@ -2877,7 +2877,7 @@ public:
 
 
     bool WaitUntilReallyLoaded(bool _bOnlyIfLoaded);
-        // waits 'til the first positioned event after the loaded event. returns true if successfull,
+        // waits 'til the first positioned event after the loaded event. returns true if successful,
         // false if the form was disposed or unloaded before or while waiting
         // if _bOnlyIfLoaded is false and the form isn't loaded already loaded, false will be returned
         // (without any wating)

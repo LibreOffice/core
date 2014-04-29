@@ -111,7 +111,7 @@ class HelpOnStartup : private ThreadHelpBase
         /** @short  does nothing real ...
 
             @descr  But it should exists as virtual function,
-                    so this class cant make trouble
+                    so this class can't make trouble
                     related to inline/symbols etcpp.!
          */
         virtual ~HelpOnStartup();
@@ -158,11 +158,11 @@ class HelpOnStartup : private ThreadHelpBase
         /** @short  tries to locate the open help module and return
                     the url of the currently shown help content.
 
-            @descr  It returns an empty string, if the help isnt still
+            @descr  It returns an empty string, if the help isn't still
                     open at calling time.
 
             @return The URL of the current shown help content;
-                    or an empty value if the help isnt still open.
+                    or an empty value if the help isn't still open.
          */
         ::rtl::OUString its_getCurrentHelpURL();
 
@@ -180,7 +180,7 @@ class HelpOnStartup : private ThreadHelpBase
         ::sal_Bool its_isHelpUrlADefaultOne(const ::rtl::OUString& sHelpURL);
 
         //---------------------------------------
-        /** @short  checks, if the help module should be shown automaticly for the
+        /** @short  checks, if the help module should be shown automatically for the
                     currently opened office module.
 
             @descr  This value is readed from the module configuration.

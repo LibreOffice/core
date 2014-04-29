@@ -113,7 +113,7 @@ long ReadAlign(SvStorageStream *pS, long nPos, int nAmount)
 // referenced externally. On import from ms document try to save images for controls here.
 // Images are stored in directory called temp in the user installation directory. Next version of OO/SO
 // hopefully will address this issue and allow a choice e.g. images for controls to be stored as links
-// or embeded in the document.
+// or embedded in the document.
 
 // [out]location     path to the stream to where the image is to be stored,
 //               if same name exists in folder then this function calcuates a new name
@@ -740,7 +740,7 @@ class ContainerRecReader
     {
         sal_uInt32 nUnknown_32b; // unknown 32 bit structure, flags ?
         sal_uInt16 nUnknown_16b; // unknown 16 bit structure
-        sal_uInt16 nMysteryLen; // lenght of unknown sub record
+        sal_uInt16 nMysteryLen; // length of unknown sub record
 
         *pS >> nUnknown_32b;
         *pS >> nUnknown_16b;
@@ -4487,7 +4487,7 @@ OCX_Control * SvxMSConvertOCXControls::OCX_Factory(
 //Begin nasty hack
     /*
     There is a truly horrible thing with EditControls and FormattedField
-    Controls, they both pretend to have an EDITBOX ClassId for compability
+    Controls, they both pretend to have an EDITBOX ClassId for compatibility
     reasons, at some stage in the future hopefully there will be a proper
     FormulaField ClassId rather than this piggybacking two controls onto the
     same ClassId, when this happens uncomment the FORMULAFIELD in the OCX_Tab
@@ -4566,8 +4566,8 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
     pSt->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     /*Get Class Id of this object, see if it is one of the types
-     *that this importer can handle, call the appropiate handler
-     to read that control, and call the appropiate handler to
+     *that this importer can handle, call the appropriate handler
+     to read that control, and call the appropriate handler to
      insert that control
      */
 
@@ -4603,8 +4603,8 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXExcelKludgeStream(
 {
     sal_Bool bRet=sal_False;
     /*Get Class Id of this object, see if it is one of the types
-     *that this importer can handle, call the appropiate handler
-     to read that control, and call the appropiate handler to
+     *that this importer can handle, call the appropriate handler
+     to read that control, and call the appropriate handler to
      insert that control
      */
     /*The Excel Kludge is to concatenate a class id with a contents

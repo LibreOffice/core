@@ -654,7 +654,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
     }
     else
     {
-        // Default pathes
+        // Default paths
         maLibraryPath = SvtPathOptions().GetBasicPath();
     }
 
@@ -1313,7 +1313,7 @@ SfxLibrary* SfxLibraryContainer::getImplLib( const String& rLibraryName )
 
 // Storing with password encryption
 
-// Empty implementation, avoids unneccesary implementation in dlgcont.cxx
+// Empty implementation, avoids unnecessary implementation in dlgcont.cxx
 sal_Bool SfxLibraryContainer::implStorePasswordLibrary(
     SfxLibrary*,
     const OUString&,

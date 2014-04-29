@@ -77,7 +77,7 @@ private:
     LRESULT  sendMessage( UINT msg, WPARAM wParam = 0, LPARAM lParam = 0 );
 
     //---------------------------------------------------------------
-    // message handler functions; remeber these functions are called
+    // message handler functions; remember these functions are called
     // from a different thread context!
     //---------------------------------------------------------------
 

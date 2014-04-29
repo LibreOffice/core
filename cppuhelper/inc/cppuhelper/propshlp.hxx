@@ -60,7 +60,7 @@ public:
         {}
 
     /**
-       Folowing the rule, the first virtual method impies the virtual destructor.
+       Following the rule, the first virtual method impies the virtual destructor.
      */
     virtual ~IPropertyArrayHelper();
 
@@ -317,7 +317,7 @@ public:
         Method to be called by OPropertySetHelper::fire.
 
         @param bIgnoreRuntimeExceptionsWhileFiring
-                        indicates whether occuring RuntimeExceptions shall be
+                        indicates whether occurring RuntimeExceptions shall be
                         ignored when firing notifications
 
         @see OPropertySetHelper::fire
@@ -365,7 +365,7 @@ public:
                           of this object. Stored in the variable rBHelper.
 
         @param bIgnoreRuntimeExceptionsWhileFiring
-                        indicates whether occuring RuntimeExceptions will be
+                        indicates whether occurring RuntimeExceptions will be
                         ignored when firing notifications (vetoableChange((),
                         propertyChange()) to listeners.
                         PropertyVetoExceptions may still be thrown.
@@ -388,7 +388,7 @@ public:
                         additional event notifier
 
         @param bIgnoreRuntimeExceptionsWhileFiring
-                        indicates whether occuring RuntimeExceptions will be
+                        indicates whether occurring RuntimeExceptions will be
                         ignored when firing notifications (vetoableChange((),
                         propertyChange()) to listeners.
                         PropertyVetoExceptions may still be thrown.

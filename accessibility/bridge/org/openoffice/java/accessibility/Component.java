@@ -199,7 +199,7 @@ public abstract class Component extends java.awt.Component {
     }
 
     /**
-    * Update the proxy objects appropriatly on property change events
+    * Update the proxy objects appropriately on property change events
     */
     protected class AccessibleUNOComponentListener implements XAccessibleEventListener {
 

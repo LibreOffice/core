@@ -1134,7 +1134,7 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
 #if OSL_DEBUG_LEVEL > 0
         sal_Int32 nNewRow = m_pCache->getRow();
 #endif
-        OSL_ENSURE(nOldRow == nNewRow,"Old position is not equal to new postion");
+        OSL_ENSURE(nOldRow == nNewRow,"Old position is not equal to new position");
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         m_bIsInsertRow  = sal_False;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is nul after positionCache!");

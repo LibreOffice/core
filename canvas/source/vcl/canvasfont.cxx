@@ -67,7 +67,7 @@ namespace vclcanvas
 
         maFont->SetLanguage(MsLangId::convertLocaleToLanguage(rFontRequest.Locale));
 
-        // adjust to stretched/shrinked font
+        // adjust to stretched/shrunk font
         if( !::rtl::math::approxEqual( rFontMatrix.m00, rFontMatrix.m11) )
         {
             OutputDevice& rOutDev( rOutDevProvider->getOutDev() );

@@ -3379,7 +3379,7 @@ FASTBOOL SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong
     }
     while ( rSt.GetError() == 0 && rSt.Tell() < nMaxFilePos && !bRet );
     if ( !bRet )
-        rSt.Seek( nFPosMerk );  // restore orginal FilePos
+        rSt.Seek( nFPosMerk );  // restore original FilePos
     return bRet;
 }
 
@@ -3620,7 +3620,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
                     aColor = Color( (sal_uInt8)nR, (sal_uInt8)nG, (sal_uInt8)nB );
                 }
                 break;
-                case 0x04 :     // substract grey level RGB(p,p,p)
+                case 0x04 :     // subtract grey level RGB(p,p,p)
                 {
                     sal_Int16 nR = (sal_Int16)aColor.GetRed() - (sal_Int16)nParameter;
                     sal_Int16 nG = (sal_Int16)aColor.GetGreen() - (sal_Int16)nParameter;
@@ -3634,7 +3634,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
                     aColor = Color( (sal_uInt8)nR, (sal_uInt8)nG, (sal_uInt8)nB );
                 }
                 break;
-                case 0x05 :     // substract from grey level RGB(p,p,p)
+                case 0x05 :     // subtract from grey level RGB(p,p,p)
                 {
                     sal_Int16 nR = (sal_Int16)nParameter - (sal_Int16)aColor.GetRed();
                     sal_Int16 nG = (sal_Int16)nParameter - (sal_Int16)aColor.GetGreen();

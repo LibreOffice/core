@@ -88,7 +88,7 @@ const sal_Char* JobData::PROP_CONTEXT             = "Context"                   
 /**
     @short      standard ctor
     @descr      It initialize this new instance.
-                But for real working it's neccessary to call setAlias() or setService() later.
+                But for real working it's necessary to call setAlias() or setService() later.
                 Because we need the job data ...
 
     @param      xSMGR
@@ -159,7 +159,7 @@ JobData::~JobData()
 //________________________________
 /**
     @short      initalize this instance as a job with configuration
-    @descr      They given alias can be used to adress some configuraton data.
+    @descr      They given alias can be used to address some configuraton data.
                 We read it and fill our internal structures. Of course old informations
                 will be lost doing so.
 
@@ -255,7 +255,7 @@ void JobData::setService( const ::rtl::OUString& sService )
 //________________________________
 /**
     @short      initialize this instance with new job values.
-    @descr      It reads automaticly all properties of the specified
+    @descr      It reads automatically all properties of the specified
                 job (using it's alias name) and "register it" for the
                 given event. This registration will not be validated against
                 the underlying configuration! (That must be done from outside.
@@ -312,7 +312,7 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
     if (m_eMode==E_ALIAS)
     {
         // It doesn't matter if this config object was already opened before.
-        // It doesn nothing here then ... or it change the mode automaticly, if
+        // It doesn nothing here then ... or it change the mode automatically, if
         // it was opened using another one before.
         ::rtl::OUString sKey;
         sKey  = ::rtl::OUString::createFromAscii(JOBCFG_ROOT);
@@ -377,7 +377,7 @@ void JobData::setResult( const JobResult& aResult )
 //________________________________
 /**
     @short  set a new environment descriptor for this job
-    @descr  It must(!) be done everytime this container is initialized
+    @descr  It must(!) be done every time this container is initialized
             with new job datas e.g.: setAlias()/setEvent()/setService() ...
             Otherwhise the environment will be unknown!
  */
@@ -505,7 +505,7 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
     @short  return information, if this job is part of the global configuration package
             org.openoffice.Office.Jobs
     @descr  Because jobs can be executed by the dispatch framework using an uno service name
-            directly - an executed job must not have any configuration realy. Such jobs
+            directly - an executed job must not have any configuration really. Such jobs
             must provide the right interfaces only! But after finishing jobs can return
             some informations (e.g. for updating her configuration ...). We must know
             if such request is valid or not then.
@@ -527,9 +527,9 @@ sal_Bool JobData::hasConfig() const
                 And there exist two of them: one for an administrator ... and one for the
                 current user. We change it for the user layer only. So this JobDispatch can't be
                 started any more ... till the administrator change his timestamp.
-                That can be usefull for post setup scenarios, which must run one time only.
+                That can be useful for post setup scenarios, which must run one time only.
 
-                Note: This method don't do anything, if ths represented job doesn't have a configuration!
+                Note: This method don't do anything, if this represented job doesn't have a configuration!
  */
 void JobData::disableJob()
 {
@@ -542,7 +542,7 @@ void JobData::disableJob()
 
     // update the configuration
     // It doesn't matter if this config object was already opened before.
-    // It doesn nothing here then ... or it change the mode automaticly, if
+    // It doesn nothing here then ... or it change the mode automatically, if
     // it was opened using another one before.
     ::rtl::OUStringBuffer sKey(256);
     sKey.appendAscii(JobData::EVENTCFG_ROOT                       );
@@ -675,7 +675,7 @@ css::uno::Sequence< ::rtl::OUString > JobData::getEnabledJobsForEvent( const css
 
     // get all alias names of jobs, which are part of this job list
     // But Some of them can be disabled by it's time stamp values.
-    // We create an additional job name list iwth the same size, then the original list ...
+    // We create an additional job name list with the same size, then the original list ...
     // step over all job entries ... check her time stamps ... and put only job names to the
     // destination list, which represent an enabled job.
     css::uno::Sequence< ::rtl::OUString > lAllJobs = xJobList->getElementNames();
@@ -726,7 +726,7 @@ css::uno::Sequence< ::rtl::OUString > JobData::getEnabledJobsForEvent( const css
                 But note: that does not set defaults for internal used members, which
                 does not relate to any job property! e.g. the reference to the global
                 uno service manager. Such informations are used for internal processes only
-                and are neccessary for our work.
+                and are necessary for our work.
  */
 void JobData::impl_reset()
 {

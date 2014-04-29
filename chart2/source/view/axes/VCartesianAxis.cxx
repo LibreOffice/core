@@ -592,7 +592,7 @@ bool VCartesianAxis::createTextShapes(
                      , TickFactory_2D* pTickFactory
                      , sal_Int32 nScreenDistanceBetweenTicks )
 {
-    //returns true if the text shapes have been created succesfully
+    //returns true if the text shapes have been created successfully
     //otherwise false - in this case the AxisLabelProperties have changed
     //and contain new instructions for the next try for text shape creation
 

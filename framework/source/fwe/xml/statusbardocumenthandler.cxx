@@ -242,7 +242,7 @@ throw(  SAXException, RuntimeException )
                 if ( m_bStatusBarStartFound )
                 {
                     ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'statusbar:statusbar' cannot be embeded into 'statusbar:statusbar'!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'statusbar:statusbar' cannot be embedded into 'statusbar:statusbar'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -255,7 +255,7 @@ throw(  SAXException, RuntimeException )
                 if ( !m_bStatusBarStartFound )
                 {
                     ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'statusbar:statusbaritem' must be embeded into element 'statusbar:statusbar'!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'statusbar:statusbaritem' must be embedded into element 'statusbar:statusbar'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 

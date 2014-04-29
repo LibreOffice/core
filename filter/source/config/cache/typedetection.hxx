@@ -101,11 +101,11 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
                         MediaDescriptor and validate this information.
 
             @descr      Only in case the preselected filter exists and its type registration
-                        seems to be usefully, it would be used realy as valid type detection
-                        result. This method doesnt make any deep detection here. It checks only
+                        seems to be usefully, it would be used really as valid type detection
+                        result. This method doesn't make any deep detection here. It checks only
                         if the preselection match to the URL by an URLPattern.
                         This information has to be added to the given rFlatTypes list too.
-                        The outside code can use it to supress a deep detection then in general.
+                        The outside code can use it to suppress a deep detection then in general.
                         Because pattern are defined as non detectable at all!
 
             @param      pDescriptor
@@ -130,16 +130,16 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
             @descr      It steps over all flat detected types (given by the parameter lFlatTypes),
                         try it and search for most suitable one.
                         The specified MediaDescriptor will be patched, so it contain
-                        the right values everytime. Using of any deep detection service
+                        the right values every time. Using of any deep detection service
                         can be enabled/disabled. And last but not least: If the results
-                        wont be realy clear (because a flat detected type has no deep
+                        wont be really clear (because a flat detected type has no deep
                         detection service), a "sugested" type name will be returned as "rLastChance".
                         It can be used after e.g. all well known deep detection services
                         was used without getting any result. Then this "last-chance-type"
                         should be returned. Of course using of it can fail too ... but its a try :-)
 
                         As an optimization - this method collects the names of all used deep
-                        detection services. This information can be usefull inside the may be
+                        detection services. This information can be useful inside the may be
                         afterwards called method "impl_detectTypeDeepOnly()"!
 
             @param      rDescriptor
@@ -183,7 +183,7 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
                         and check her results. The first positive result will be
                         used for return. Its more a "try and error" algorithm then
                         a real type detection and will be used if a flat detection
-                        cant work realy ... e.g. if the extension of an URL is
+                        can't work really ... e.g. if the extension of an URL is
                         missing or wrong.
 
             @param      rDescriptor
@@ -207,7 +207,7 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
         /** @short      seek a might existing stream to position 0.
 
             @descr      This is an optinal action to be more robust
-                        in case any detect service doesnt make this seek ...
+                        in case any detect service doesn't make this seek ...
                         Normaly it's part of any called detect service or filter ...
                         but sometimes it's not done there.
 
@@ -222,7 +222,7 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
                         detect service (threadsafe!).
 
             @descr      It creates the right uno service, prepare the
-                        needed MediaDescriptor, call ths right interfaces,
+                        needed MediaDescriptor, call this right interfaces,
                         and return the results.
 
             @attention  The results (means type and corresponding filter)
@@ -258,7 +258,7 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
         //---------------------------------------
 
         /** @short      check if an input stream is already part of the
-                        given MediaDesciptor and creates a new one if neccessary.
+                        given MediaDesciptor and creates a new one if necessary.
 
             @attention  This method does further something special!
                         <ul>
@@ -286,7 +286,7 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
                         Note : Its content will be adapted to returned result of this method.
                         Means: The stream will be added to it.
 
-            @throw      Any suitable exception if stream should be opened but operation was not sucessfull.
+            @throw      Any suitable exception if stream should be opened but operation was not successful.
                         Note: If an interactionHandler is part of the given descriptor too, it was already used.
                         Means: let the exception pass trough the top most interface method!
          */
@@ -379,7 +379,7 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
                         types too !
 
             @note       #i60158#
-                        sometimes our text ascii and our csv filter cant work together.
+                        sometimes our text ascii and our csv filter can't work together.
                         Then we overwrite our detection hardly.
                         sType param is used as out parameter then too ... and
                         rDescriptor will be changed by selecting another filter.

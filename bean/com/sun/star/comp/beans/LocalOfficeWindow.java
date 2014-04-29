@@ -238,14 +238,14 @@ public class LocalOfficeWindow
     }
 
     /**
-     * Retrives a platform dependant system window identifier.
+     * Retrives a platform dependent system window identifier.
      *
      * @return The system window identifier.
      */
     private native long getNativeWindow();
 
     /**
-     * Retrives a platform dependant system window type.
+     * Retrives a platform dependent system window type.
      *
      * @return The system window type.
      */

@@ -57,7 +57,7 @@ public:
     comm_UINT16 GetReceiveProtocol() { return nReceiveProtocol; }
     comm_UINT16 GetReceiveHeaderType() { return nReceiveHeaderType; }
 
-    comm_BOOL ReceiveData( void* &pData, comm_UINT32 &nLen );               /// Recieve DataPacket from Socket
+    comm_BOOL ReceiveData( void* &pData, comm_UINT32 &nLen );               /// Receive DataPacket from Socket
     virtual comm_BOOL SendHandshake( HandshakeType aHandshakeType, const void* pData = NULL, comm_UINT32 nLen = 0 );
     virtual comm_BOOL TransferData( const void* pData, comm_UINT32 nLen, CMProtocol nProtocol = CM_PROTOCOL_OLDSTYLE );
 };

@@ -917,7 +917,7 @@ namespace drawinglayer
                 getViewInformation2D().getExtendedInformationSequence());
             updateViewInformation(aViewInformation2D);
 
-            // proccess content
+            // process content
             process(rTransformCandidate.getChildren());
 
             // restore transformations
@@ -941,7 +941,7 @@ namespace drawinglayer
                 getViewInformation2D().getExtendedInformationSequence());
             updateViewInformation(aViewInformation2D);
 
-            // proccess decomposed content
+            // process decomposed content
             process(rPagePreviewCandidate.get2DDecomposition(getViewInformation2D()));
 
             // restore transformations
@@ -1214,7 +1214,7 @@ namespace drawinglayer
 
             if(!bDone)
             {
-                // remeber that we enter a PolygonStrokePrimitive2D decomposition,
+                // remember that we enter a PolygonStrokePrimitive2D decomposition,
                 // used for AA thick line drawing
                 mnPolygonStrokePrimitive2D++;
 

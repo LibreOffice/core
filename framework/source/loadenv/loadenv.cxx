@@ -280,9 +280,9 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
     m_bReactivateControllerOnError  = sal_False         ;
     m_bLoaded                       = sal_False         ;
 
-    // try to find out, if its realy a content, which can be loaded or must be "handled"
+    // try to find out, if its really a content, which can be loaded or must be "handled"
     // We use a default value for this in-parameter. Then we have to start a complex check method
-    // internaly. But if this check was already done outside it can be supressed to perform
+    // internaly. But if this check was already done outside it can be suppressed to perform
     // the load request. We take over the result then!
     if (m_eContentType == E_UNSUPPORTED_CONTENT)
     {
@@ -292,7 +292,7 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
     }
 
     // make URL part of the MediaDescriptor
-    // It doesnt mater, if its already an item of it.
+    // It doesn't mater, if its already an item of it.
     // It must be the same value ... so we can overwrite it :-)
     m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_URL()] <<= sURL;
 
@@ -311,8 +311,8 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
     if (pIt != m_lMediaDescriptor.end())
         m_lMediaDescriptor.erase(pIt);
 
-    // patch the MediaDescriptor, so it fullfill the outside requirements
-    // Means especialy items like e.g. UI InteractionHandler, Status Indicator,
+    // patch the MediaDescriptor, so it fulfill the outside requirements
+    // Means especially items like e.g. UI InteractionHandler, Status Indicator,
     // MacroExecutionMode etcpp.
 
     /*TODO progress is bound to a frame ... How can we set it here? */
@@ -432,7 +432,7 @@ void LoadEnv::startLoading()
         bStarted = impl_loadContent();
 
     // not started => general error
-    // We cant say - what was the reason for.
+    // We can't say - what was the reason for.
     if (!bStarted)
         throw LoadEnvException(LoadEnvException::ID_GENERAL_ERROR);
 }
@@ -447,8 +447,8 @@ sal_Bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
     throw(LoadEnvException, css::uno::RuntimeException)
 {
     // Because its not a good idea to block the main thread
-    // (and we cant be shure that we are currently not used inside the
-    // main thread!), we cant use conditions here realy. We must yield
+    // (and we can't be sure that we are currently not used inside the
+    // main thread!), we can't use conditions here really. We must yield
     // in an intellegent manner :-)
 
     sal_Int32 nTime = nTimeout;
@@ -504,14 +504,14 @@ void LoadEnv::cancelLoading()
             /* Attention:
                 After returning from any cancel/dispose call, neither the frame nor weself
                 may be called back. Because only we can cancel this job, we already know
-                the result! => Thats why its not usefull nor neccessary to wait for any
+                the result! => Thats why its not useful nor necessary to wait for any
                 asynchronous listener notification.
             */
             m_bLoaded = sal_False;
             m_xAsynchronousJob.clear();
         }
-        // or may be its a content handler? Such handler cant be cancelled in its running
-        // operation :-( And we cant deregister us there again :-(
+        // or may be its a content handler? Such handler can't be cancelled in its running
+        // operation :-( And we can't deregister us there again :-(
         // => The only chance is an exception :-)
         else
             throw LoadEnvException(LoadEnvException::ID_STILL_RUNNING);
@@ -653,7 +653,7 @@ void LoadEnv::impl_setResult(sal_Bool bResult)
     impl_reactForLoadingState();
 
     // clearing of this reference will unblock waitWhileLoading()!
-    // So we must be shure, that loading process was realy finished.
+    // So we must be sure, that loading process was really finished.
     // => do it as last operation of this method ...
     m_xAsynchronousJob.clear();
 
@@ -701,7 +701,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     //      all needed resources. If they are missing - the following
     //      load request will fail.
 
-    /* Attention: The following code cant work on such special URLs!
+    /* Attention: The following code can't work on such special URLs!
                   It should not break the office .. but it make no sense
                   to start expensive object creations and complex search
                   algorithm if its clear, that such URLs must be handled
@@ -832,7 +832,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     ReadGuard aReadLock(m_aLock);
 
     // Attention: Because our stl media descriptor is a copy of an uno sequence
-    // we cant use as an in/out parameter here. Copy it before and dont forget to
+    // we can't use as an in/out parameter here. Copy it before and dont forget to
     // update structure afterwards again!
     css::uno::Sequence< css::beans::PropertyValue >        lDescriptor = m_lMediaDescriptor.getAsConstPropertyValueList();
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR       = m_xSMGR;
@@ -862,7 +862,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     aWriteLock.unlock();
     // <- SAFE
 
-    // But the type isnt enough. For loading sometimes we need more informations.
+    // But the type isn't enough. For loading sometimes we need more informations.
     // E.g. for our "_default" feature, where we recylce any frame which contains
     // and "Untitled" document, we must know if the new document is based on a template!
     // But this information is available as a filter property only.
@@ -895,7 +895,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     // Then we have to add the property "AsTemplate".
     // We need this information to decide afterwards if we can use a "recycle frame"
     // for target "_default" or has to create a new one everytimes.
-    // On the other side we have to supress that, if this property already exists
+    // On the other side we have to suppress that, if this property already exists
     // and should trigger a special handling. Then the outside calli of this method here,
     // has to know, what he is doing .-)
 
@@ -944,7 +944,7 @@ sal_Bool LoadEnv::impl_handleContent()
     m_lMediaDescriptor >> lDescriptor;
     css::util::URL aURL = m_aURL;
 
-    // get neccessary container to query for a handler object
+    // get necessary container to query for a handler object
     css::uno::Reference< css::lang::XMultiServiceFactory > xFactory(m_xSMGR->createInstance(SERVICENAME_CONTENTHANDLERFACTORY), css::uno::UNO_QUERY);
     css::uno::Reference< css::container::XContainerQuery > xQuery  (xFactory                                                  , css::uno::UNO_QUERY);
 
@@ -1146,7 +1146,7 @@ sal_Bool LoadEnv::impl_loadContent()
     // if it will be run out of scope.
 
     // Note further: ignore if this internal guard already contains a resource.
-    // Might impl_searchRecylcTarget() set it before. But incase this impl-method wasnt used
+    // Might impl_searchRecylcTarget() set it before. But incase this impl-method wasn't used
     // and the target frame was new created ... this lock here must be set!
     css::uno::Reference< css::document::XActionLockable > xTargetLock(xTargetFrame, css::uno::UNO_QUERY);
     m_aTargetLock.setResource(xTargetLock);
@@ -1242,7 +1242,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
 
     // Otherwhise ...
     // We need this type information to locate an registered frame loader
-    // Without such information we cant work!
+    // Without such information we can't work!
     ::rtl::OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), ::rtl::OUString());
     if (!sType.getLength())
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
@@ -1340,7 +1340,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     }
 
     // check URL
-    // May its not usefull to start expensive document search, if it
+    // May its not useful to start expensive document search, if it
     // can fail only .. because we load from a stream or model directly!
     if (
         (ProtocolCheck::isProtocol(m_aURL.Complete, ProtocolCheck::E_PRIVATE_STREAM )) ||
@@ -1360,7 +1360,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
         return css::uno::Reference< css::frame::XFrame >(); // task list can be empty!
 
     // Note: To detect if a document was alrady loaded before
-    // we check URLs here only. But might the existing and the requred
+    // we check URLs here only. But might the existing and the required
     // document has different versions! Then its URLs are the same ...
     sal_Int16 nNewVersion = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_VERSION(), (sal_Int16)(-1));
 
@@ -1406,7 +1406,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             }
 
             // get the original load arguments from the current document
-            // and decide if its realy the same then the one will be.
+            // and decide if its really the same then the one will be.
             // It must be visible and must use the same file revision ...
             // or must not have any file revision set (-1 == -1!)
             ::comphelper::MediaDescriptor lOldDocDescriptor(xModel->getArgs());
@@ -1641,7 +1641,7 @@ void LoadEnv::impl_reactForLoadingState()
         {
             ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
             Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
-            // check for system window is neccessary to guarantee correct pointer cast!
+            // check for system window is necessary to guarantee correct pointer cast!
             if (pWindow && pWindow->IsSystemWindow())
                 ((WorkWindow*)pWindow)->Minimize();
         }
@@ -1661,7 +1661,7 @@ void LoadEnv::impl_reactForLoadingState()
         {
             ::rtl::OUString sFrameName;
             pFrameName->second >>= sFrameName;
-            // Check the name again. e.g. "_default" isnt allowed.
+            // Check the name again. e.g. "_default" isn't allowed.
             // On the other side "_beamer" is a valid name :-)
             if (TargetHelper::isValidNameForFrame(sFrameName))
                 m_xTargetFrame->setName(sFrameName);

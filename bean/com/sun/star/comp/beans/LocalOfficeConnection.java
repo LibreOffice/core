@@ -172,7 +172,7 @@ public class LocalOfficeConnection
      * pipev  := local_office_connection_pipe_name
      * </pre>
      *
-     * @param url This is UNO URL which discribes the type of a connection.
+     * @param url This is UNO URL which describes the type of a connection.
      */
     public void setUnoUrl(String url)
         throws java.net.MalformedURLException
@@ -786,9 +786,9 @@ public class LocalOfficeConnection
         }
 
         /**
-         * Retrives the ammount of time to wait for the startup.
+         * Retrives the amount of time to wait for the startup.
          *
-         * @return The ammount of time to wait in seconds(?).
+         * @return The amount of time to wait in seconds(?).
          */
         public int getStartupTime()
         {

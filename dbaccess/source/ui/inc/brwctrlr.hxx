@@ -123,7 +123,7 @@ namespace dbaui
 
         sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
         sal_Bool                m_bClosingKillOpen : 1;         // are we killing the load thread because we are to be suspended ?
-        bool                    m_bCannotSelectUnfiltered : 1;  // recieved an DATA_CANNOT_SELECT_UNFILTERED error
+        bool                    m_bCannotSelectUnfiltered : 1;  // received a DATA_CANNOT_SELECT_UNFILTERED error
 
     protected:
         class FormErrorHelper
@@ -252,7 +252,7 @@ namespace dbaui
             // is synchronized with a foreign ::com::sun::star::form::DatabaseForm you got elsewhere)
         virtual sal_Bool InitializeForm(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_formProperties ) = 0;
-            // called immediately after a successfull CreateForm
+            // called immediately after a successful CreateForm
             // do any initialization (data source etc.) here. the form should be fully functional after that.
             // return sal_False if you didn't succeed (don't throw exceptions, they won't be caught)
 

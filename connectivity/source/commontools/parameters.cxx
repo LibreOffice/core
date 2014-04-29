@@ -192,7 +192,7 @@ namespace dbtools
         }
 
         // we need to map the parameter names (which is all we get from the 's
-        // MasterFields property) to indicies, which are needed by the XParameters
+        // MasterFields property) to indices, which are needed by the XParameters
         // interface of the row set)
         Reference<XPropertySet> xParam;
         for ( sal_Int32 i = 0; i < m_nInnerCount; ++i )
@@ -205,7 +205,7 @@ namespace dbtools
                 ::rtl::OUString sName;
                 xParam->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME) ) >>= sName;
 
-                // only append additonal paramters when they are not already in the list
+                // only append additional parameters when they are not already in the list
                 ParameterInformation::iterator aExistentPos = m_aParameterInformation.find( sName );
                 OSL_ENSURE( !_bSecondRun || ( aExistentPos != m_aParameterInformation.end() ),
                     "ParameterManager::collectInnerParameters: the parameter information should already exist in the second run!" );
@@ -479,9 +479,9 @@ namespace dbtools
             ( nSmallestIndexLinkedByColumnName > nLargestIndexNotLinkedByColumnName ),
             "ParameterManager::createOuterParameters: inconsistency!" );
 
-        // for the master-detail links, where the detail field denoted a column name, we created an addtional ("artificial")
+        // for the master-detail links, where the detail field denoted a column name, we created an additional ("artificial")
         // filter, and *appended* it to all other (potentially) existing filters of the row set. This means that the indexes
-        // for the parameters resulting from the artifical filter should be larger than any other parameter index, and this
+        // for the parameters resulting from the artificial filter should be larger than any other parameter index, and this
         // is what the assertion checks.
         // If the assertion fails, then we would need another handling for the "parameters visited" flags, since they're based
         // on parameter indexes *without* the artificial filter (because this filter is not visible from the outside).
@@ -561,7 +561,7 @@ namespace dbtools
             Any aParamType, aScale, aValue;
 
             // loop through all master fields. For each of them, get the respective column from the
-            // parent , and forward it's current value as paramter value to the (inner) row set
+            // parent , and forward it's current value as parameter value to the (inner) row set
             for ( sal_Int32 i = 0; i < nMasterLen; ++i, ++pMasterFields, ++pDetailFields )
             {
                 // does the name denote a valid column in the parent?

@@ -63,7 +63,7 @@ namespace framework{
     @descr          This guard should be used to set a lock for reading object internal member.
                     Nobody can control it but don't use member after successfuly locking for writing!
                     We never need a own mutex to safe our internal member access - because
-                    a guard is used as function-local member only. There exist no multithreaded access to it realy ...
+                    a guard is used as function-local member only. There exists no multithreaded access to it really ...
 
     @attention      a) To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
                     b) Use interface "IRWLock" of set LockHelper only - because we must support a finer granularity of locking.
@@ -111,7 +111,7 @@ class ReadGuard : private INonCopyable
 
         /*-****************************************************************************************************//**
             @short      dtor
-            @descr      We unlock the used lock member automaticly if user forget it.
+            @descr      We unlock the used lock member automatically if user forgets it.
 
             @seealso    -
 
@@ -148,7 +148,7 @@ class ReadGuard : private INonCopyable
         /*-****************************************************************************************************//**
             @short      unset read lock
             @descr      Call this method to unlock the rw-lock temp.!
-                        Normaly we do it at dtor automaticly for you ...
+                        Normaly we do it at dtor automatically for you ...
 
             @seealso    method lock()
 
@@ -173,7 +173,7 @@ class ReadGuard : private INonCopyable
 
         /*-****************************************************************************************************//**
             @short      disable using of these functions!
-            @descr      It's not allowed to use this methods. Different problem can occure otherwise.
+            @descr      It's not allowed to use this methods. Different problems can occur otherwise.
                         Thats why we disable it by make it private.
 
             @seealso    other ctor

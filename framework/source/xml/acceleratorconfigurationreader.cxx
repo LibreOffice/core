@@ -55,7 +55,7 @@ namespace framework{
    structure was detected.
 
    This macro combined the given comment with a generic
-   way to find out the XML line (where the error occured)
+   way to find out the XML line (where the error occurred)
    to format a suitable message.
 
    @param   COMMENT
@@ -131,7 +131,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString
     if (eElement == E_ELEMENT_ITEM)
     {
         if (!m_bInsideAcceleratorList)
-            THROW_PARSEEXCEPTION("An element \"accel:item\" must be embeded into 'accel:acceleratorlist'.")
+            THROW_PARSEEXCEPTION("An element \"accel:item\" must be embedded into 'accel:acceleratorlist'.")
         if (m_bInsideAcceleratorItem)
             THROW_PARSEEXCEPTION("An element \"accel:item\" is not a container.")
         m_bInsideAcceleratorItem = sal_True;
@@ -189,7 +189,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString
         #ifdef ENABLE_WARNINGS
         else
         {
-            // Attention: Its not realy a reason to throw an exception and kill the office, if the configuration contains
+            // Attention: Its not really a reason to throw an exception and kill the office, if the configuration contains
             // multiple registrations for the same key :-) Show a warning ... and ignore the second item.
             // THROW_PARSEEXCEPTION("Command is registered for the same key more then once.")
             ::rtl::OUStringBuffer sMsg(256);

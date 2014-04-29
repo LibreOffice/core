@@ -173,7 +173,7 @@ namespace dbaccess
                 m_xActiveConnection points to a valid SDB-level connection
 
             @throws com::sun::star::sdb::SQLException
-                if an database-related error occured
+                if a database-related error occurred
 
             @throws com::sun::star::uno::RuntimeException
                 if any of the components involved throws a com::sun::star::uno::RuntimeException
@@ -217,7 +217,7 @@ namespace dbaccess
         void checkUpdateIterator();
         const connectivity::ORowSetValue& getInsertValue(sal_Int32 columnIndex);
         void setParameter(sal_Int32 parameterIndex, const connectivity::ORowSetValue& x);
-        // resizes the parameter vector if nescessary
+        // resizes the parameter vector if necessary
         ::connectivity::ORowSetValue& getParameterStorage( sal_Int32 parameterIndex );
 
         void updateValue(sal_Int32 columnIndex,const connectivity::ORowSetValue& x);

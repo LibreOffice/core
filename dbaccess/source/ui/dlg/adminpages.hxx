@@ -159,7 +159,7 @@ namespace dbaui
             @param  _sReturn
                 <OUT/> contains the selected name.
             @return
-                <FALSE/> if an error occured, otherwise <TRUE/>
+                <FALSE/> if an error occurred, otherwise <TRUE/>
         */
         sal_Bool getSelectedDataSource(::rtl::OUString& _sReturn,::rtl::OUString& _sCurr);
 
@@ -218,7 +218,7 @@ namespace dbaui
             @param  _pCheckBox
                 The check box which is checked.
             @param  _nID
-                The id in the itemset to set whith the new value.
+                The id in the itemset to set with the new value.
             @param  _bChangedSomething
                 <TRUE/> if something changed otherwise <FALSE/>
             @param _bRevertValue
@@ -232,7 +232,7 @@ namespace dbaui
             @param  _pEdit
                 The check box which is checked.
             @param  _nID
-                The id in the itemset to set whith the new value.
+                The id in the itemset to set with the new value.
             @param  _bChangedSomething
                 <TRUE/> if something changed otherwise <FALSE/>
         */
@@ -244,7 +244,7 @@ namespace dbaui
             @param  _pEdit
                 The check box which is checked.
             @param  _nID
-                The id in the itemset to set whith the new value.
+                The id in the itemset to set with the new value.
             @param  _bChangedSomething
                 <TRUE/> if something changed otherwise <FALSE/>
         */

@@ -151,33 +151,33 @@ TestWindow::TestWindow() :
 
     aToolBox.InsertBreak();
     aToolBox.InsertItem( TB_CREATELIB1, "CreateLib1" );
-    aToolBox.SetHelpText( TB_CREATELIB1, "Create Libary LIB1" );
+    aToolBox.SetHelpText( TB_CREATELIB1, "Create Library LIB1" );
     aToolBox.InsertItem( TB_CREATELIB2, "CreateLib2" );
-    aToolBox.SetHelpText( TB_CREATELIB2, "Create Libary LIB2" );
+    aToolBox.SetHelpText( TB_CREATELIB2, "Create Library LIB2" );
     aToolBox.InsertItem( TB_CREATELIB3, "CreateLib3" );
-    aToolBox.SetHelpText( TB_CREATELIB3, "Create Libary LIB3" );
+    aToolBox.SetHelpText( TB_CREATELIB3, "Create Library LIB3" );
 
     aToolBox.InsertSeparator();
     aToolBox.InsertItem( TB_LOADLIB1, "LoadLib1" );
-    aToolBox.SetHelpText( TB_LOADLIB1, "Load Libary LIB1" );
+    aToolBox.SetHelpText( TB_LOADLIB1, "Load Library LIB1" );
     aToolBox.InsertItem( TB_LOADLIB2, "LoadLib2" );
-    aToolBox.SetHelpText( TB_LOADLIB2, "Load Libary LIB2" );
+    aToolBox.SetHelpText( TB_LOADLIB2, "Load Library LIB2" );
     aToolBox.InsertItem( TB_LOADLIB3, "LoadLib3" );
-    aToolBox.SetHelpText( TB_LOADLIB3, "Load Libary LIB3" );
+    aToolBox.SetHelpText( TB_LOADLIB3, "Load Library LIB3" );
 
     aToolBox.InsertSeparator();
     aToolBox.InsertItem( TB_STORELIBX, "StoreLibX" );
-    aToolBox.SetHelpText( TB_STORELIBX, "Store Libary LIBX" );
+    aToolBox.SetHelpText( TB_STORELIBX, "Store Library LIBX" );
     aToolBox.InsertItem( TB_UNLOADX, "UnloadX" );
-    aToolBox.SetHelpText( TB_UNLOADX, "Unload Libary LIBX" );
+    aToolBox.SetHelpText( TB_UNLOADX, "Unload Library LIBX" );
     aToolBox.InsertItem( TB_LOADX, "LoadX" );
-    aToolBox.SetHelpText( TB_LOADX, "Load Libary LIBX" );
+    aToolBox.SetHelpText( TB_LOADX, "Load Library LIBX" );
     aToolBox.InsertItem( TB_EXECX, "ExecX" );
     aToolBox.SetHelpText( TB_EXECX, "Execute 'Libary' LIBX" );
     aToolBox.InsertItem( TB_REMOVEX, "RemoveX" );
-    aToolBox.SetHelpText( TB_REMOVEX, "Remove Libary LIBX" );
+    aToolBox.SetHelpText( TB_REMOVEX, "Remove Library LIBX" );
     aToolBox.InsertItem( TB_REMOVEDELX, "RemDelX" );
-    aToolBox.SetHelpText( TB_REMOVEDELX, "Remove and delete Libary LIBX" );
+    aToolBox.SetHelpText( TB_REMOVEDELX, "Remove and delete Library LIBX" );
 
     pBasMgr = 0;
 

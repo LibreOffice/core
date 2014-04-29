@@ -154,7 +154,7 @@ namespace dbaui
         */
         String getConnectionURL() const;
 
-        /// fill the nescessary information from the url line
+        /// fill the necessary information from the url line
         void convertUrl(SfxItemSet& _rDest);
 
         const MapInt2String& getIndirectProperties() const { return m_aIndirectPropTranslator; }

@@ -219,11 +219,11 @@ namespace xforms
 
             The normalization must respect the "<" and "==" relations on the value
             space. That is, if two values are equal, their normalizations must be equal, too.
-            Similarily, if <code>foo</code> is less than <code>bar</code>, the same
+            Similarly, if <code>foo</code> is less than <code>bar</code>, the same
             must hold for their normalizations.
 
             @param _rValue
-                the value to translate. Guranteed to be not <NULL/>, and of type <member>ValueType</member>
+                the value to translate. Guaranteed to be not <NULL/>, and of type <member>ValueType</member>
             @param _rDoubleValue
                 output parameter to hold the resulting double value
         */

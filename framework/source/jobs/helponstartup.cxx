@@ -166,7 +166,7 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
         return css::uno::Any();
 
     // check current state of the help module
-    // a) help isnt open                       => show default page for the detected module
+    // a) help isn't open                       => show default page for the detected module
     // b) help shows any other default page(!) => show default page for the detected module
     // c) help shows any other content         => do nothing (user travelled to any other content and leaved the set of default pages)
     ::rtl::OUString sCurrentHelpURL                = its_getCurrentHelpURL();
@@ -227,7 +227,7 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
 
     // check for right environment.
     // If its not a DocumentEvent, which triggered this job,
-    // we cant work correctly! => return immediatly and do nothing
+    // we can't work correctly! => return immediately and do nothing
     ::rtl::OUString sEnvType = lEnvironment.getUnpackedValueOrDefault(PROP_ENVTYPE, ::rtl::OUString());
     if (!sEnvType.equals(ENVTYPE_DOCUMENTEVENT))
         return ::rtl::OUString();

@@ -410,7 +410,7 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
         // otherwise we may miss a new installed extension dicitonary
         // just because e.g. the spellchecker is not asked what
         // languages it does support currently...
-        // Since the check is on-demand occuring and executed once it should
+        // Since the check is on-demand occurring and executed once it should
         // not be too troublesome.
         // In OOo 3.0 we will not need the respective code anymore at all.
 //      aAny <<= nCurrentDataFilesChangedCheckValue;

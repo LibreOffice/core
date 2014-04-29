@@ -1225,7 +1225,7 @@ void ToolbarLayoutManager::implts_reparentToolbars()
                 uno::Reference< awt::XWindow > xWindow;
                 try
                 {
-                    // We have to retreive the window reference with try/catch as it is
+                    // We have to retrieve the window reference with try/catch as it is
                     // possible that all elements have been disposed!
                     xWindow = uno::Reference< awt::XWindow >( xUIElement->getRealInterface(), uno::UNO_QUERY );
                 }
@@ -1235,7 +1235,7 @@ void ToolbarLayoutManager::implts_reparentToolbars()
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow )
                 {
-                    // Reparent our child windows acording to their current state.
+                    // Reparent our child windows according to their current state.
                     if ( pIter->m_bFloating )
                         pWindow->SetParent( pContainerWindow );
                     else

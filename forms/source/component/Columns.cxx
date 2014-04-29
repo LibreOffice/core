@@ -194,7 +194,7 @@ Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException)
 Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeException)
 {
     Any aReturn;
-    // some functionality at our aggregate cannot be reasonably fullfilled here.
+    // some functionality at our aggregate cannot be reasonably fulfilled here.
     if  (   _rType.equals(::getCppuType(static_cast< Reference< XFormComponent >* >(NULL)))
         ||  _rType.equals(::getCppuType(static_cast< Reference< XServiceInfo >* >(NULL)))
         ||  _rType.equals(::getCppuType(static_cast< Reference< XBindableValue >* >(NULL)))

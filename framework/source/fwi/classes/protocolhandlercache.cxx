@@ -99,7 +99,7 @@ PatternHash::iterator PatternHash::findPatternKey( const ::rtl::OUString& sURL )
 /**
     @short      initialize static member of class HandlerCache
     @descr      We use a singleton pattern to implement this handler cache.
-                That means it use two static member list to hold all neccessary informations
+                That means it use two static member list to hold all necessary informations
                 and a ref count mechanism to create/destroy it on demand.
 
     @modified   30.04.2002 11:13, as96863
@@ -113,7 +113,7 @@ HandlerCFGAccess* HandlerCache::m_pConfig = NULL;
 
 /**
     @short      ctor of the cache of all registered protoco handler
-    @descr      It tries to open the right configuration package automaticly
+    @descr      It tries to open the right configuration package automatically
                 and fill the internal structures. After that the cache can be
                 used for read access on this data and perform some search
                 operations on it.
@@ -198,7 +198,7 @@ sal_Bool HandlerCache::search( const ::rtl::OUString& sURL, ProtocolHandler* pRe
 
 /**
     @short      search for a registered handler by using an URL struct
-    @descr      We combine neccessary parts of this struct to a valid URL string
+    @descr      We combine necessary parts of this struct to a valid URL string
                 and call our other search method ...
                 It's a helper for outside code.
 
@@ -247,7 +247,7 @@ void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
 
 /**
     @short      dtor of the config access class
-    @descr      It opens the configuration package automaticly by using base class mechanism.
+    @descr      It opens the configuration package automatically by using base class mechanism.
                 After that "read()" method of this class should be called to use it.
 
     @param      sPackage

@@ -134,7 +134,7 @@ static void usingRegisterImpl()
     fprintf(stderr, "  -c locationUrls\n"
                     "        the location of a component (a url to a shared\n"
                     "        library or a absolute url to a .jar file) or a\n"
-                    "        list of urls seperated by ';' or ' '. Note if a\n"
+                    "        list of urls separated by ';' or ' '. Note if a\n"
                     "        list of urls is specified, the components must\n"
                     "        all need the same loader (quoting is possible with\n"
                     "        \\ or \"\").\n");

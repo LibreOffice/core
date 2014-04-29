@@ -73,7 +73,7 @@ class HtmlDocuFile
     uintt               nDepthInOutputTree;
 
     Html::Body          aBodyData;
-    StreamStr           aBuffer;                // Output buffer, should be transfered into csv::File.
+    StreamStr           aBuffer;                // Output buffer, should be transferred into csv::File.
 };
 
 

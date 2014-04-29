@@ -216,7 +216,7 @@ namespace comphelper
     {
         // TODO: this whole method (as well as the class AccessibleEventBuffer) should be removed
         // The reasons why they have been introduces id that we needed to collect a set of events
-        // before notifying them alltogether (after releasing our mutex). With the other
+        // before notifying them altogether (after releasing our mutex). With the other
         // NotifyAccessibleEvent being asynchronous now, this should not be necessary anymore
         // - clients could use the other version now.
 

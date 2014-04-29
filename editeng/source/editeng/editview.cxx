@@ -108,7 +108,7 @@ LanguageType lcl_CheckLanguage(
             if (aTmpLocale.Language == aLocale.Language)
                 nLang = nTmpLang;
         }
-        if (nLang == LANGUAGE_NONE) // language not found by looking up the sytem language...
+        if (nLang == LANGUAGE_NONE) // language not found by looking up the system language...
             nLang = MsLangId::convertLocaleToLanguageWithFallback( aLocale );
         if (nLang == LANGUAGE_SYSTEM)
             nLang = nTmpLang;

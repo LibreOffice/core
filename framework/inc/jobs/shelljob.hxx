@@ -92,7 +92,7 @@ class ShellJob : private ThreadHelpBase
         /** @short  does nothing real ...
 
             @descr  But it should exists as virtual function,
-                    so this class cant make trouble
+                    so this class can't make trouble
                     related to inline/symbols etcpp.!
          */
         virtual ~ShellJob();

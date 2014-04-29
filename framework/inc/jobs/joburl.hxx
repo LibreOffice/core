@@ -67,7 +67,7 @@ namespace framework{
     @short  can be used to parse, validate and work with job URL's
     @descr  Job URLs are specified by the following syntax:
                 vnd.sun.star.job:{[event=<name>]|[alias=<name>]|[service=<name>]}
-            This class can analyze this structure and seperate it into his different parts.
+            This class can analyze this structure and separate it into his different parts.
             After doing that these parts are accessible by the methods of this class.
  */
 class JobURL : private ThreadHelpBase

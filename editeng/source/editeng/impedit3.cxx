@@ -1037,7 +1037,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                             bBrokenLine = sal_True;
                         }
                         // Compression in Fields????
-                        // I think this could be a little bit difficult and is not very usefull
+                        // I think this could be a little bit difficult and is not very useful
                         bCompressedChars = sal_False;
                     }
                     break;
@@ -1247,7 +1247,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
             sal_Bool bCanHyphenate = ( aTmpFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL );
             if ( bCompressedChars && pPortion && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
             {
-                // I need the manipulated DXArray for determining the break postion...
+                // I need the manipulated DXArray for determining the break position...
                 ImplCalcAsianCompression( pNode, pPortion, nPortionStart, const_cast<sal_Int32*>(( pLine->GetCharPosArray().GetData() + (nPortionStart-pLine->GetStart()) )), 10000, sal_True );
             }
             if( pPortion )
@@ -1285,7 +1285,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
         for ( sal_uInt16 nP = pLine->GetStartPortion(); nP <= pLine->GetEndPortion(); nP++ )
         {
             TextPortion* pTP = pParaPortion->GetTextPortions().GetObject( nP );
-            // #95819# problem with hard font height attribute, when everthing but the line break has this attribute
+            // #95819# problem with hard font height attribute, when everything but the line break has this attribute
             if ( pTP->GetKind() != PORTIONKIND_LINEBREAK )
             {
                 SeekCursor( pNode, nTPos+1, aTmpFont );
@@ -2093,7 +2093,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
                 pLastPortion->GetSize().Width()++;
 
             // Correct positions in array
-            // Even for kashidas just change positions, VCL will then draw the kashida automaticly
+            // Even for kashidas just change positions, VCL will then draw the kashida automatically
             sal_uInt16 nPortionEnd = nPortionStart + pLastPortion->GetLen();
             for ( sal_uInt16 _n = nChar; _n < nPortionEnd; _n++ )
             {
@@ -4514,17 +4514,17 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_uInt16 nPara,
 
     sal_uLong nLayoutMode = pOutDev->GetLayoutMode();
 
-    // We always use the left postion for DrawText()
+    // We always use the left position for DrawText()
     nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL);
 
     if ( !bCTL && !bR2L)
     {
-        // No CTL/Bidi checking neccessary
+        // No CTL/Bidi checking necessary
         nLayoutMode |= ( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
     }
     else
     {
-        // CTL/Bidi checking neccessary
+        // CTL/Bidi checking necessary
         // Don't use BIDI_STRONG, VCL must do some checks.
         nLayoutMode &= ~( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
 

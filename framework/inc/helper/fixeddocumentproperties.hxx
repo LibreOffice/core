@@ -37,15 +37,15 @@ struct FixedDocumentProperties
     sal_Bool                                        m_bAutoloadEnabled          ;   /// Automatic reload enabled/disabled ?
     sal_Int32                                       m_nAutoloadSecs             ;   /// Time cycle for automatic reload
     ::rtl::OUString                                 m_sAutoloadURL              ;   /// URL for automatic reload
-    ::rtl::OUString                                 m_sBlindCopiesTo            ;   /// Adress for BCC
-    ::rtl::OUString                                 m_sCopiesTo                 ;   /// Adress CC
+    ::rtl::OUString                                 m_sBlindCopiesTo            ;   /// Address for BCC
+    ::rtl::OUString                                 m_sCopiesTo                 ;   /// Address CC
     com::sun::star::util::DateTime                  m_aCreationDate             ;   /// Time and date of document creation
     ::rtl::OUString                                 m_sDefaultTarget            ;   /// Name of default target
     ::rtl::OUString                                 m_sDescription              ;   /// Short description and comments
     sal_Int16                                       m_nEditingCycles            ;   /// Document number
     sal_Int32                                       m_nEditingDuration          ;   /// Duration since last edit
     com::sun::star::uno::Sequence< sal_Int8 >       m_seqExtraData              ;   /// Buffer of bytes for some extra data
-    ::rtl::OUString                                 m_sInReplyTo                ;   /// Adress for reply to ...
+    ::rtl::OUString                                 m_sInReplyTo                ;   /// Address for reply to ...
     sal_Bool                                        m_bIsEncrypted              ;   /// Document is en/decrypted
     ::rtl::OUString                                 m_sKeywords                 ;   /// Some keywords
     ::rtl::OUString                                 m_sMIMEType                 ;   /// MIME-type of document
@@ -60,7 +60,7 @@ struct FixedDocumentProperties
     sal_Bool                                        m_bQueryTemplate            ;   /// Search for template ?
     ::rtl::OUString                                 m_sRecipient                ;   /// Name of recipient
     ::rtl::OUString                                 m_sReferences               ;   /// Some references to other things
-    ::rtl::OUString                                 m_sReplyTo                  ;   /// Adress to reply
+    ::rtl::OUString                                 m_sReplyTo                  ;   /// Address to reply
     sal_Bool                                        m_bSaveGraphicsCompressed   ;   /// Compressed/non compressed graphics
     sal_Bool                                        m_bSaveOriginalGraphics     ;   /// Include graphics
     sal_Bool                                        m_bSaveVersionOnClose       ;   /// Save version on close of document ?

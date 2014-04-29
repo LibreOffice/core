@@ -323,7 +323,7 @@ namespace dbaui
                     const Reference< XPropertySet >& _rxDestTable
                 );
 
-        /** processes an error which occured during copying
+        /** processes an error which occurred during copying
 
             First, all listeners are ask. If a listener tells to cancel or continue copying, this is reported to the
             method's caller. If a listener tells to ask the user, this is done, and the user's decision is
@@ -1114,7 +1114,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
             aError.NextException = _rEvent.Error;
         else
         {
-            // a non-SQL exception happend
+            // a non-SQL exception happened
             Exception aException;
             OSL_VERIFY( _rEvent.Error >>= aException );
             SQLContext aContext;
@@ -1172,11 +1172,11 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     sal_Int32 nCount = xMeta->getColumnCount();
     ::std::vector< sal_Int32 > aSourceColTypes;
     aSourceColTypes.reserve( nCount + 1 );
-    aSourceColTypes.push_back( -1 ); // just to avoid a everytime i-1 call
+    aSourceColTypes.push_back( -1 ); // just to avoid a every time i-1 call
 
     ::std::vector< sal_Int32 > aSourcePrec;
     aSourcePrec.reserve( nCount + 1 );
-    aSourcePrec.push_back( -1 ); // just to avoid a everytime i-1 call
+    aSourcePrec.push_back( -1 ); // just to avoid a every time i-1 call
 
     for ( sal_Int32 k=1; k <= nCount; ++k )
     {

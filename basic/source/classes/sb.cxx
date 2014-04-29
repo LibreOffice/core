@@ -1049,7 +1049,7 @@ void StarBASIC::implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic )
 
 /**************************************************************************
 *
-*    Creation/Managment of modules
+*    Creation/Management of modules
 *
 **************************************************************************/
 

@@ -119,7 +119,7 @@ public:
     // users of this class may want to insert own controls in some places, where the ordinary
     // Z-Order determined by construction time is not sufficient
     // Use the following methods for this
-    enum ControlGroup // control groups in this window which cannot be devided (e.g. are adjacent in the Z order)
+    enum ControlGroup // control groups in this window which cannot be divided (e.g. are adjacent in the Z order)
     {
         eLeftRightWords,    // the controls for the two words (original and suggestion), including the labels
         eSuggestionLabel,   // the label for the suggestion

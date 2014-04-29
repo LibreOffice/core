@@ -53,7 +53,7 @@ namespace filter{
                 </ul>
                 uses this schema.
 
-    @attention  This class is not threadsafe implemented. Because its not neccessary.
+    @attention  This class is not threadsafe implemented. Because its not necessary.
                 But you have to make shure, that ist not used as such :-)
  */
 class QueryTokenizer : public ::std::hash_map< ::rtl::OUString                    ,
@@ -83,7 +83,7 @@ class QueryTokenizer : public ::std::hash_map< ::rtl::OUString                  
                     a new query.
 
             @descr  The given query is immidiatly analyzed
-                    and seperated into its token, which can
+                    and separated into its token, which can
                     be access by some specialized method later.
 
             @param  sQuery

@@ -60,7 +60,7 @@ namespace filter{
                 should be available etc.
 
     @attention  The base class BaseLock must be the first of declared ones.
-                Otherwhise we cant be shure, that our own mutex member (which is
+                Otherwise we can't be sure, that our own mutex member (which is
                 present by this base class!) was full initialized inside our own
                 ctor as first!
  */
@@ -97,7 +97,7 @@ class BaseContainer : public BaseLock
         /** @short  local filter cache, which is used to collect changes on the
                     filter configuration first and flush it later.
 
-            @descr  Normaly this member isnt used nor initialized. Thats true,
+            @descr  Normaly this member isn't used nor initialized. Thats true,
                     if this container is used for reading only. The first write access
                     (e.g. by calling insertByName()) creates a copy of the current
                     global cache m_rCache to initialize the m_pFlushCache member.
@@ -107,7 +107,7 @@ class BaseContainer : public BaseLock
 
                     m_pFlushCache and m_rCache must not be synchronized manually here.
                     m_rCache listen on the global configuration, where m_pFlushCache
-                    write its data. m_rCache update itself automaticly.
+                    write its data. m_rCache update itself automatically.
          */
         FilterCache* m_pFlushCache;
 
@@ -188,7 +188,7 @@ class BaseContainer : public BaseLock
         //---------------------------------------
 
         /** @short  check if the underlying configuration data was already loaded
-                    and do it if neccessary automaticly.
+                    and do it if necessary automatically.
          */
         void impl_loadOnDemand();
 
@@ -222,7 +222,7 @@ class BaseContainer : public BaseLock
                             FilterCache* p = impl_getWorkingCache();
                             p->doSomething();
                         aLock.clear();
-                        // after this point p cant b e guaranteed any longer!
+                        // after this point p can't b e guaranteed any longer!
          */
         FilterCache* impl_getWorkingCache() const;
 
@@ -291,7 +291,7 @@ class BaseContainer : public BaseLock
         //---------------------------------------
         // XContainerQuery
 
-        // must be implemented realy by derived class ...
+        // must be implemented really by derived class ...
         // We implement return of an empty result here only!
         // But we show an assertion :-)
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const ::rtl::OUString& sQuery)

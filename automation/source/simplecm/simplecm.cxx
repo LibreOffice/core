@@ -164,7 +164,7 @@ void SimpleCommunicationLinkViaSocket::SetStreamSocket( vos::OStreamSocket* pSoc
 sal_Bool SimpleCommunicationLinkViaSocket::StopCommunication()
 {
     CommunicationLinkRef rHold(this);       // avoid deleting this link before the end of the method
-    if ( !IsCommunicationError() )  // Meaning that the Communication is still runnung
+    if ( !IsCommunicationError() )  // Meaning that the Communication is still running
     {
 #if OSL_DEBUG_LEVEL > 1
         debug_printf("Sending REQUEST_ShutdownLink\n");

@@ -26,7 +26,7 @@
 
 //*************************************************************************************************************
 //  special macros for time measures
-//  1) LOGFILE_MEMORYMEASURE                  used it to define log file for this operations (default will be set automaticly)
+//  1) LOGFILE_MEMORYMEASURE                  used it to define log file for this operations (default will be set automatically)
 //  2) MAKE_MEMORY_SNAPSHOT                   make snapshot of currently set memory informations of OS
 //  3) LOG_MEMORYMEASURE                      write measured time to logfile
 //*************************************************************************************************************

@@ -1330,7 +1330,7 @@ OBoundControlModel::OBoundControlModel(
     m_aValuePropertyType = _pOriginal->m_aValuePropertyType;
     m_aControlSource = _pOriginal->m_aControlSource;
     m_bInputRequired = _pOriginal->m_bInputRequired;
-    // m_xLabelControl, though being a property, is not to be cloned, not even the reference will be transfered.
+    // m_xLabelControl, though being a property, is not to be cloned, not even the reference will be transferred.
     // (the former should be clear - a clone of the object we're only referencing does not make sense)
     // (the second would violate the restriction for label controls that they're part of the
     // same form component hierarchy - we ourself are no part, yet, so we can't have a label control)
@@ -1967,7 +1967,7 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
     // if the DBColumn value changed, transfer it to the control
     if ( evt.PropertyName.equals( PROPERTY_VALUE ) )
     {
-        OSL_ENSURE( evt.Source == getField(), "OBoundControlModel::propertyChange: value changes from components other than our database colum?" );
+        OSL_ENSURE( evt.Source == getField(), "OBoundControlModel::propertyChange: value changes from components other than our database column?" );
         osl::MutexGuard aGuard(m_aMutex);
         if ( m_bForwardValueChanges && m_xColumn.is() )
             transferDbValueToControl();
@@ -2246,7 +2246,7 @@ void OBoundControlModel::impl_connectDatabaseColumn_noNotify( bool _bFromReload 
     }
 
     // now that we're connected (more or less, even if we did not find a column),
-    // we definately want to forward any potentially occuring value changes
+    // we definitely want to forward any potentially occurring value changes
     m_bForwardValueChanges = sal_True;
 
     // let derived classes react on this new connection

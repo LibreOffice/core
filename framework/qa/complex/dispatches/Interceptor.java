@@ -90,7 +90,7 @@ public class Interceptor implements XDispatchProvider,
 
     /** counts calls of setSlave...().
         So the outside API test can use this value to know if this interceptor
-        was realy added to the interceptor chain of OOo.
+        was really added to the interceptor chain of OOo.
      */
     private int m_nRegistrationCount = 0;
 
@@ -260,7 +260,7 @@ public class Interceptor implements XDispatchProvider,
     // ____________________
 
     /** set a new list of URL's, which should be used on registration time
-        (that's why it's neccessary to call this impl-method before the interceptor
+        (that's why it's necessary to call this impl-method before the interceptor
         is used at the OOo API!) to optimize the interception chain.
      */
     public synchronized void setURLs4InterceptionInfo(String[] lURLs)
@@ -271,7 +271,7 @@ public class Interceptor implements XDispatchProvider,
     // ____________________
 
     /** set a new list of URL's, which should be blocked by this interceptor.
-        (that's why it's neccessary to call this impl-method before the interceptor
+        (that's why it's necessary to call this impl-method before the interceptor
         is used at the OOo API!)
      */
     public synchronized void setURLs4URLs4Blocking(String[] lURLs)

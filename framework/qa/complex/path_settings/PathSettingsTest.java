@@ -198,7 +198,7 @@ public class PathSettingsTest
     }
 
     /**
-     * Simple existance test, if this fails, the Lists must update
+     * Simple existence test, if this fails, the Lists must update
      */
     @Test
     public void checkInternalListConsistence()
@@ -909,7 +909,7 @@ public class PathSettingsTest
      */
     private String changeToCorrectValue(String path)
     {
-        // the simplest possiblity
+        // the simplest possibility
         if (path == null || path.equals(""))
         {
             String sTempDir = System.getProperty("java.io.tmpdir");

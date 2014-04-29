@@ -90,7 +90,7 @@ FrameListAnalyzer::~FrameListAnalyzer()
 
     We try to get a snapshot of all opened frames, which are part of the desktop frame container.
     Of course we can't access frames, which stands outside of this tree.
-    But it's neccessary to collect top frames here only. Otherwhise we interpret closing of last
+    But it's necessary to collect top frames here only. Otherwise we interpret closing of last
     frame wrong. Further we analyze this list and split into different parts.
     E.g. for "CloseDoc" we must know, which frames of the given list referr to the same model.
     These frames must be closed then. But all other frames must be untouched.
@@ -126,7 +126,7 @@ void FrameListAnalyzer::impl_analyze()
     // ask for the model of the given reference frame.
     // It must be compared with the model of every frame of the container
     // to sort it into the list of frames with the same model.
-    // Supress this step, if right detect mode isn't set.
+    // Suppress this step, if right detect mode isn't set.
     css::uno::Reference< css::frame::XModel > xReferenceModel;
     if ((m_eDetectMode & E_MODEL) == E_MODEL )
     {
@@ -138,7 +138,7 @@ void FrameListAnalyzer::impl_analyze()
     }
 
     // check, if the reference frame is in hidden mode.
-    // But look, if this analyze step is realy needed.
+    // But look, if this analyze step is really needed.
     css::uno::Reference< css::beans::XPropertySet > xSet(m_xReferenceFrame, css::uno::UNO_QUERY);
     if (
         ((m_eDetectMode & E_HIDDEN) == E_HIDDEN) &&
@@ -149,7 +149,7 @@ void FrameListAnalyzer::impl_analyze()
     }
 
     // check, if the reference frame includes the backing component.
-    // But look, if this analyze step is realy needed.
+    // But look, if this analyze step is really needed.
     if (((m_eDetectMode & E_BACKINGCOMPONENT) == E_BACKINGCOMPONENT) && m_xReferenceFrame.is() )
     {
         try
@@ -169,7 +169,7 @@ void FrameListAnalyzer::impl_analyze()
     }
 
     // check, if the reference frame includes the help module.
-    // But look, if this analyze step is realy needed.
+    // But look, if this analyze step is really needed.
     if (
         ((m_eDetectMode & E_HELP)     == E_HELP                ) &&
         (m_xReferenceFrame.is()                                ) &&
@@ -210,7 +210,7 @@ void FrameListAnalyzer::impl_analyze()
 
             // -------------------------------------------------
             // a) Is it the special help task?
-            //    Return it seperated from any return list.
+            //    Return it separated from any return list.
             if (
                 ((m_eDetectMode & E_HELP) == E_HELP      ) &&
                 (xFrame->getName()==SPECIALTARGET_HELPTASK)
@@ -222,7 +222,7 @@ void FrameListAnalyzer::impl_analyze()
 
             // -------------------------------------------------
             // b) Or is includes this task the special backing component?
-            //    Return it seperated from any return list.
+            //    Return it separated from any return list.
             //    But check if the reference task itself is the backing frame.
             //    Our user mst know it to decide right.
             if ((m_eDetectMode & E_BACKINGCOMPONENT) == E_BACKINGCOMPONENT)
@@ -289,8 +289,8 @@ void FrameListAnalyzer::impl_analyze()
     catch(css::lang::IndexOutOfBoundsException)
     {
         // stop copying if index seams to be wrong.
-        // This interface can't realy guarantee its count for multithreaded
-        // environments. So it can occure!
+        // This interface can't really guarantee its count for multithreaded
+        // environments. So it can occur!
     }
 
     // Pack both lists by using the actual step positions.

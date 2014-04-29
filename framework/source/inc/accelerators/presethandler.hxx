@@ -71,7 +71,7 @@ namespace framework
         "menubar"           "default"     "menubar"
 
  */
-class PresetHandler : private ThreadHelpBase // attention! Must be the first base class to guarentee right initialize lock ...
+class PresetHandler : private ThreadHelpBase // attention! Must be the first base class to guarantee right initialize lock ...
 {
     //-------------------------------------------
     // const
@@ -109,7 +109,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
 
         //---------------------------------------
         /** @short  because a concurrent access to the same storage from different implementations
-                    isnt supported, we have to share it with others.
+                    isn't supported, we have to share it with others.
 
             @descr  This struct makes it possible to use any shared storage
                     in combination with a SingletonRef<> template ...
@@ -176,7 +176,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         ::salhelper::SingletonRef< TSharedStorages > m_aSharedStorages;
 
         //---------------------------------------
-        /** @short  if we run in document mode, we cant use the global root storages!
+        /** @short  if we run in document mode, we can't use the global root storages!
                     We have to use a special document storage explicitly. */
         StorageHolder m_lDocumentStorages;
 
@@ -245,7 +245,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
 
             @descr  Because this class should be useable in combination
                     with ::salhelper::SingletonRef template this ctor
-                    cant have any special parameters!
+                    can't have any special parameters!
 
             @param  xSMGR
                     points to an uno service manager, which is used internaly
@@ -337,7 +337,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                     and we use e.g. "/en-US/default.xml" internaly.
 
                     If no localization exists for this preset set, this class
-                    will work in default mode - means "no locale" - automaticly.
+                    will work in default mode - means "no locale" - automatically.
                     e.g. "/default.xml"
 
             @throw  com::sun::star::uno::RuntimeException(!)
@@ -397,7 +397,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
 
             @descr  Note: Targets resist inside the user
                     layer. Normaly they are opened in read/write mode.
-                    But it will be opened readonly automaticly if that isnt possible
+                    But it will be opened readonly automatically if that isn't possible
                     (may be the file is write protected on the system ...).
 
             @param  sTarget
@@ -414,12 +414,12 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                                                                  sal_Bool         bCreateIfMissing);
 
         //---------------------------------------
-        /** @short  do anything which is neccessary to flush all changes
+        /** @short  do anything which is necessary to flush all changes
                     back to disk.
 
             @descr  We have to call commit on all cached sub storages on the
                     path from the root storage upside down to the working storage
-                    (which are not realy used, but required to be holded alive!).
+                    (which are not really used, but required to be holded alive!).
          */
         void commitUserChanges();
 

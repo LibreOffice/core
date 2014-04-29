@@ -587,7 +587,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
     css::uno::Reference< css::io::XTruncate > xClearable(xStream, css::uno::UNO_QUERY_THROW);
     xClearable->truncate();
 
-    // TODO can be removed if seek(0) is done by truncate() automaticly!
+    // TODO can be removed if seek(0) is done by truncate() automatically!
     css::uno::Reference< css::io::XSeekable > xSeek(xStream, css::uno::UNO_QUERY);
     if (xSeek.is())
         xSeek->seek(0);
@@ -637,7 +637,7 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteA
     }
 
     // in case, we have a writeable cache, we use it for reading too!
-    // Otherwhise the API user cant find its own changes ...
+    // Otherwise the API user can't find its own changes ...
     if (m_pWriteCache)
         return *m_pWriteCache;
     else
@@ -1255,7 +1255,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
 
         // Only path of form "PrimaryKeys/Modules/Module['<module_name>']/Key['<command_url>']/Command[<locale>]" will
         // be interesting for use. Sometimes short path values are given also by the broadcaster ... but they must be ignored :-)
-        // So we try to split the path into 3 parts (module isnt important here, because we already know it ... because
+        // So we try to split the path into 3 parts (module isn't important here, because we already know it ... because
         // these instance is bound to a specific module configuration ... or it''s the global configuration where no module is given at all.
 
         ::rtl::OUString sOrgPath ;
@@ -1680,7 +1680,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
         }
 
         // in case, we have a writeable cache, we use it for reading too!
-        // Otherwhise the API user cant find its own changes ...
+        // Otherwise the API user can't find its own changes ...
         if (m_pPrimaryWriteCache)
             return *m_pPrimaryWriteCache;
         else
@@ -1700,7 +1700,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
         }
 
         // in case, we have a writeable cache, we use it for reading too!
-        // Otherwhise the API user cant find its own changes ...
+        // Otherwise the API user can't find its own changes ...
         if (m_pSecondaryWriteCache)
             return *m_pSecondaryWriteCache;
         else

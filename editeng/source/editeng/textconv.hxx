@@ -51,7 +51,7 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
     sal_Bool        bStartDone;
     sal_Bool        bEndDone;
     sal_Bool        bAllowChange;   // storage for _bAllowImplicitChangesForNotConvertibleText
-                                    // paramters value of function GetNextPortion.
+                                    // parameters value of function GetNextPortion.
                                     // used to transport the value to where it is needed.
 
 

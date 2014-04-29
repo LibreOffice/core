@@ -106,7 +106,7 @@ class MenuDispatcher   :   // interfaces
                                 public css::frame::XDispatch            ,
                                 public css::frame::XFrameActionListener ,
                                 // baseclasses
-                                // Order is neccessary for right initialization!
+                                // Order is necessary for right initialization!
                                 public ThreadHelpBase                       ,
                                 public cppu::OWeakObject
 {
@@ -122,7 +122,7 @@ class MenuDispatcher   :   // interfaces
 
         /*-****************************************************************************************************//**
             @short      standard ctor
-            @descr      These initialize a new instance of ths class with needed informations for work.
+            @descr      These initialize a new instance of this class with needed informations for work.
 
             @seealso    using at owner
 
@@ -149,7 +149,7 @@ class MenuDispatcher   :   // interfaces
 
         /*-****************************************************************************************************//**
             @short      dispatch URL with arguments
-            @descr      Every dispatch create a new task. If load of URL failed task will deleted automaticly!
+            @descr      Every dispatch create a new task. If load of URL failed task will deleted automatically!
 
             @seealso    -
 
@@ -171,7 +171,7 @@ class MenuDispatcher   :   // interfaces
             @seealso    method loadCancelled()
 
             @param      "xControl"  , css::uno::Reference to a valid listener for state events.
-            @param      "aURL"      , URL about listener will be informed, if something occured.
+            @param      "aURL"      , URL about listener will be informed, if something occurred.
             @return     -
 
             @onerror    -

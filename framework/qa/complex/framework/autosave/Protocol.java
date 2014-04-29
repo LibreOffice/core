@@ -59,10 +59,10 @@ import java.sql.*;
 /**
  * Implements a log mechanism to create a protocol of all steps of e.g. an api test
  * It provides the possibility to write the logged meesages to a file and/or
- * to stdout/stderr (if neccessary at the same time!).
+ * to stdout/stderr (if necessary at the same time!).
  *
  *  TODO
- *      - implement filter, which e.g. supress showing of INFO data
+ *      - implement filter, which e.g. suppress showing of INFO data
  */
 public class Protocol extends JComponent
 {
@@ -195,7 +195,7 @@ public class Protocol extends JComponent
         private int m_nType;
         /// of course, we have to know the logged message too :-)
         private String m_sMessage;
-        /// and it can be usefull to know the current time, when this line was created
+        /// and it can be useful to know the current time, when this line was created
         private Timestamp m_aStamp;
 
         /** ctor for fast initializing of such line */
@@ -502,7 +502,7 @@ public class Protocol extends JComponent
 
     // ____________________
     /**
-     * For some modes it's neccessary, that we write some additional
+     * For some modes it's necessary, that we write some additional
      * informations to the log. E.g. for html we must generate close targets.
      */
     public synchronized void finish()
@@ -524,7 +524,7 @@ public class Protocol extends JComponent
     /**
      * log an unspecified message.
      *
-     * Sometimes it's not neccessary to set a special type for an message.
+     * Sometimes it's not necessary to set a special type for an message.
      * The pure message seams to be enough. The type of such "pure messages"
      * will be set to INFO.
      *
@@ -635,7 +635,7 @@ public class Protocol extends JComponent
 
         ++m_nLine;
 
-        // it's neccessary to open scopes before creatig the protocol line
+        // it's necessary to open scopes before creatig the protocol line
         // to guarantee right tab handling for new scope value!
         if ((nType & TYPE_SCOPE_OPEN) == TYPE_SCOPE_OPEN)
             ++m_nScope;
@@ -645,7 +645,7 @@ public class Protocol extends JComponent
         String       sAsciiLog = aLine.toString();
         String       sHTMLLog  = aLine.toHTML();
 
-        // it's neccessary to close scope after creatig the protocol line
+        // it's necessary to close scope after creatig the protocol line
         // to guarantee right tab handling for old scope value!
         if (
             ( m_nScope                  >  0               ) &&
@@ -671,7 +671,7 @@ public class Protocol extends JComponent
             System.err.print(sAsciiLog);
         // no else - it's a bit field of possible reactions!
         // But these both conditions must be handled together.
-        // Because we cant generate different types of log contents to the same log file.
+        // Because we can't generate different types of log contents to the same log file.
         // We preferr HTML if both types are set.
         if (
             ((m_nMode & MODE_HTML ) == MODE_HTML ) ||
@@ -757,7 +757,7 @@ public class Protocol extends JComponent
      * returns a generic html header for generating html log files
      *
      * It's used from the method finish() to generate a valid html formated file.
-     * For that its neccessary to open some special html targets like e.g. <html>.
+     * For that its necessary to open some special html targets like e.g. <html>.
      *
      * @return  A string, which includes the whole header.
      *

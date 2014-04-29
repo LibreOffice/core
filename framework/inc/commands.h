@@ -45,7 +45,7 @@ namespace framework{
 
 #define COMMAND_PLUGIN    DECLARE_ASCII("-plugin"     ) /// office is plugged into a browser
 #define COMMAND_HEADLESS  DECLARE_ASCII("-headless"   ) /// office runs in headless mode for scripting
-#define COMMAND_INVISIBLE DECLARE_ASCII("-invisible"  ) /// office runs in invisible mode which supress splash screen and first empry document
+#define COMMAND_INVISIBLE DECLARE_ASCII("-invisible"  ) /// office runs in invisible mode which suppress splash screen and first empry document
 #define COMMAND_SERVER    DECLARE_ASCII("-server"     ) /// office runs as server
 }       //  namespace framework
 

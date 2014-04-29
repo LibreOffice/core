@@ -38,7 +38,7 @@ namespace accessibility
 
     // class TLBSolarGuard ---------------------------------------------------------
 
-    /** Aquire the solar mutex. */
+    /** Acquire the solar mutex. */
     class TLBSolarGuard : public ::vos::OGuard
     {
     public:

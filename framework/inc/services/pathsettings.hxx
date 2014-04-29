@@ -67,7 +67,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
                      public  css::lang::XServiceInfo              ,
                      public  css::util::XChangesListener          , // => XEventListener
                      // base classes
-                     // Order is neccessary for right initialization!
+                     // Order is necessary for right initialization!
                      private ThreadHelpBase                       ,
                      public  ::cppu::OBroadcastHelper             ,
                      public  ::cppu::OPropertySetHelper           , // => XPropertySet / XFastPropertySet / XMultiPropertySet
@@ -113,7 +113,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
             /// this special path is used to generate feature depending content there
             ::rtl::OUString sWritePath;
 
-            /// indicates real single pathes, which uses WritePath property only
+            /// indicates real single paths, which uses WritePath property only
             sal_Bool bIsSinglePath;
 
             /// simple handling of finalized/mandatory states ... => we know one state READONLY only .-)
@@ -164,7 +164,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
     public:
 
         /** initialize a new instance of this class.
-            Attention: It's neccessary for right function of this class, that the order of base
+            Attention: It's necessary for right function of this class, that the order of base
             classes is the right one. Because we transfer information from one base to another
             during this ctor runs! */
         PathSettings(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
@@ -227,7 +227,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
                         sal_Bool                bReSubst);
 
 
-        /** converts our new string list schema to the old ";" seperated schema ... */
+        /** converts our new string list schema to the old ";" separated schema ... */
         ::rtl::OUString impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath        ) const;
         OUStringList    impl_convertOldStyle2Path(const ::rtl::OUString&        sOldStylePath) const;
 

@@ -128,7 +128,7 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
                                              const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // Attention: May be nobody outside hold such temp. dispatch object alive (because
-    // the container in which we resists isnt implemented threadsafe but updated by a timer
+    // the container in which we resists isn't implemented threadsafe but updated by a timer
     // and clear our reference ...) we should hold us self alive!
     css::uno::Reference< css::uno::XInterface > xThis(static_cast< css::frame::XNotifyingDispatch* >(this), css::uno::UNO_QUERY);
 
@@ -144,7 +144,7 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
     {
         if (xListener.is())
             xListener->dispatchFinished(
-                css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::DONTKNOW, css::uno::Any())); // DONTKNOW? ... not realy started ... not realy failed :-)
+                css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::DONTKNOW, css::uno::Any())); // DONTKNOW? ... not really started ... not really failed :-)
     }
 
     css::uno::Reference< css::frame::XFrame > xBaseFrame(m_xOwnerFrame.get(), css::uno::UNO_QUERY);

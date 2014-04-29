@@ -110,7 +110,7 @@ public:
         If the platform element is present but does not specify a platform then an empty
         sequence is returned. Examples for invalid platform elements:
         <pre>
-            <platform />, <platform value="" />, <platfrom value=",">
+            <platform />, <platform value="" />, <platform value=",">
         </pre>
 
         The value attribute can contain various platform tokens. They must be separated by
@@ -225,7 +225,7 @@ private:
     /** Retrieves a child element which as lang attribute which matches the office locale.
 
         Only top-level children are taken into account. It is also assumed that they are all
-        of the same element type and have a lang attribute. The matching algoritm is according
+        of the same element type and have a lang attribute. The matching algorithm is according
         to RFC 3066, with the exception that only one variant is allowed.
         @param parent
         the expression used to obtain the parent of the localized children. It can be null.

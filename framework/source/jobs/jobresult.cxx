@@ -69,7 +69,7 @@ JobResult::JobResult()
 {
     // reset the flag mask!
     // It will reset the accessible state of this object.
-    // That can be usefull if something will fail here ...
+    // That can be useful if something will fail here ...
     m_eParts = E_NOPART;
 }
 
@@ -126,7 +126,7 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
 
     // reset the flag mask!
     // It will reset the accessible state of this object.
-    // That can be usefull if something will fail here ...
+    // That can be useful if something will fail here ...
     m_eParts = E_NOPART;
 
     // analyze the result and update our other members
@@ -182,7 +182,7 @@ JobResult::JobResult( const JobResult& rCopy )
 */
 JobResult::~JobResult()
 {
-    // Nothing realy to do here.
+    // Nothing really to do here.
 }
 
 //________________________________
@@ -210,7 +210,7 @@ void JobResult::operator=( const JobResult& rCopy )
 /**
     @short      checks for existing parts of the analyzed result
     @descr      The internal flag mask was set after analyzing of the pure result.
-                An user of us can check here, if the required part was realy part
+                An user of us can check here, if the required part was really part
                 of this result. Otherwhise it would use invalid informations ...
                 by using our other members!
 

@@ -55,7 +55,7 @@ namespace dbaui
         ::rtl::OUString m_sName;                // table for update data
         ::rtl::OUString m_sAutoIncrementValue;  // the autoincrement value set in the datasource
         String          m_sTypeNames;           // these type names are the ones out of the resource file
-        TOTypeInfoSP    m_pTypeInfo;            // fall back when type is unkown because database driver has a failure
+        TOTypeInfoSP    m_pTypeInfo;            // fall back when type is unknown because database driver has a failure
 
         sal_Bool        m_bAllowAutoIncrementValue; // no : 1 NO BIT , is true when the datasource has a AutoIncrementValue property in their info property
         sal_Bool        m_bNew      : 1;        // is true when we create a new table
@@ -107,7 +107,7 @@ namespace dbaui
 
         inline ::std::vector< ::boost::shared_ptr<OTableRow> >* getRows() { return &m_vRowList; }
 
-        /// returns the postion of the the first empty row
+        /// returns the position of the the first empty row
         sal_Int32                           getFirstEmptyRowPosition();
 
         inline const OTypeInfoMap*          getTypeInfo() const { return &m_aTypeInfo; }

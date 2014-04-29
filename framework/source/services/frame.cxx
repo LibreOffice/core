@@ -257,7 +257,7 @@ DEFINE_INIT_SERVICE                 (   Frame,
 
     @attention  a)  Don't use your own reference during an UNO-Service-ctor! There is no guarantee, that you
                     will get over this. (e.g. using of your reference as parameter to initialize some member)
-                    Do such things in DEFINE_INIT_SERVICE() method, which is called automaticly after your ctor!!!
+                    Do such things in DEFINE_INIT_SERVICE() method, which is called automatically after your ctor!!!
                 b)  Baseclass OBroadcastHelper is a typedef in namespace cppu!
                     The microsoft compiler has some problems to handle it right BY using namespace explicitly ::cppu::OBroadcastHelper.
                     If we write it without a namespace or expand the typedef to OBrodcastHelperVar<...> -> it will be OK!?
@@ -426,7 +426,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::getActiveFrame() throw
     ReadGuard aReadLock( m_aLock );
 
     // Return current active frame.
-    // This information is avaliable on the container.
+    // This information is available on the container.
     return m_aChildFrameContainer.getActive();
 }
 
@@ -455,7 +455,7 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
-    // Copy neccessary member for threadsafe access!
+    // Copy necessary member for threadsafe access!
     // m_aChildFrameContainer is threadsafe himself and he live if we live!!!
     // ...and our transaction is non breakable too ...
     css::uno::Reference< css::frame::XFrame > xActiveChild = m_aChildFrameContainer.getActive();
@@ -572,7 +572,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     if ( m_xContainerWindow.is() )
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("Frame::initialized() is called more then once, which isnt usefull nor allowed."),
+                ::rtl::OUString::createFromAscii("Frame::initialized() is called more then once, which isn't useful nor allowed."),
                 static_cast< css::frame::XFrame* >(this));
 
     // Look for rejected calls first!
@@ -816,7 +816,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     //    force using of "if() else if() ..."
     //-----------------------------------------------------------------------------------------------------
 
-    // get threadsafe some neccessary member which are neccessary for following functionality
+    // get threadsafe some necessary member which are necessary for following functionality
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::frame::XFrame >              xParent      ( m_xParent, css::uno::UNO_QUERY );
@@ -829,7 +829,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     //-----------------------------------------------------------------------------------------------------
     // I.I) "_blank"
     //  Not allowed for a normal frame - but for the desktop.
-    //  Use helper class to do so. It use the desktop automaticly.
+    //  Use helper class to do so. It use the desktop automatically.
     //-----------------------------------------------------------------------------------------------------
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
@@ -914,7 +914,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
         //  TASK and CREATE are handled special.
         //-------------------------------------------------------------------------------------------------
 
-        // get threadsafe some neccessary member which are neccessary for following functionality
+        // get threadsafe some necessary member which are necessary for following functionality
         /* SAFE { */
         aReadLock.lock();
         ::rtl::OUString sOwnName = m_sName;
@@ -964,7 +964,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
             //-------------------------------------------------------------------------------------------------
             // II.III.I) SIBLINGS
             //  Search on all our direct siblings - means all childrens of our parent.
-            //  Use this flag in combination with TASK. We must supress such upper search if
+            //  Use this flag in combination with TASK. We must suppress such upper search if
             //  user has not set it and if we are a top frame.
             //
             //  Attention: Don't forward this request to our parent as a findFrame() call.
@@ -1040,7 +1040,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
         //-------------------------------------------------------------------------------------------------
         // II.IV) CREATE
         //  If we haven't found any valid target frame by using normal flags - but user allowed us to create
-        //  a new one ... we should do that. Used TaskCreator use Desktop instance automaticly as parent!
+        //  a new one ... we should do that. Used TaskCreator use Desktop instance automatically as parent!
         //-------------------------------------------------------------------------------------------------
         if (
             ( ! xTarget.is()                                   )    &&
@@ -1088,7 +1088,7 @@ sal_Bool SAL_CALL Frame::isTop() throw( css::uno::RuntimeException )
 
 /*-****************************************************************************************************//**
     @short      activate frame in hierarchy
-    @descr      This feature is used to mark active pathes in our frame hierarchy.
+    @descr      This feature is used to mark active paths in our frame hierarchy.
                 You can be a listener for this event to react for it ... change some internal states or something else.
 
     @seealso    method deactivate()
@@ -1110,8 +1110,8 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
-    // Copy neccessary member and free the lock.
-    // It's not neccessary for m_aChildFrameContainer ... because
+    // Copy necessary member and free the lock.
+    // It's not necessary for m_aChildFrameContainer ... because
     // he is threadsafe himself and live if we live.
     // We use a registered transaction to prevent us against
     // breaks during this operation!
@@ -1136,7 +1136,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
         // Deactivate sibling path and forward activation to parent ... if any parent exist!
         if( xParent.is() == sal_True )
         {
-            // Everytime set THIS frame as active child of parent and activate it.
+            // Every time set THIS frame as active child of parent and activate it.
             // We MUST have a valid path from bottom to top as active path!
             // But we must deactivate the old active sibling path first.
 
@@ -1151,7 +1151,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
             // But we do nothing then! We are already activated.
             xParent->activate();
         }
-        // Its neccessary to send event NOW - not before.
+        // Its necessary to send event NOW - not before.
         // Activation goes from bottom to top!
         // Thats the reason to activate parent first and send event now.
         implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_ACTIVATED );
@@ -1188,7 +1188,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
 
 /*-****************************************************************************************************//**
     @short      deactivate frame in hierarchy
-    @descr      This feature is used to deactive pathes in our frame hierarchy.
+    @descr      This feature is used to deactive paths in our frame hierarchy.
                 You can be a listener for this event to react for it ... change some internal states or something else.
 
     @seealso    method activate()
@@ -1210,7 +1210,7 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
-    // Copy neccessary member and free the lock.
+    // Copy necessary member and free the lock.
     css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive()                                     ;
     css::uno::Reference< css::frame::XFramesSupplier >  xParent         ( m_xParent, css::uno::UNO_QUERY )                                ;
     css::uno::Reference< css::frame::XFrame >           xThis           ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
@@ -1893,7 +1893,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // should exist. Otherwhise it's the problem of the outside caller.
     // Note:
     //      (a) Do it after stopWindowListening(). May that force some active/deactive
-    //          notifications which we doesn't need here realy.
+    //          notifications which we doesn't need here really.
     //      (b) Don't forget to save the old value of IsDialogCancelEnabled() to
     //          restore it afterwards. We cannot call EnableDialogCancel( sal_False )
     //          as we would kill the headless mode!
@@ -1972,7 +1972,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     m_bSelfClose         = sal_False;
     m_bIsHidden          = sal_True;
 
-    // Disable this instance for further working realy!
+    // Disable this instance for further working really!
     m_aTransactionManager.setWorkingMode( E_CLOSE );
 
     // Don't forget it restore old value -
@@ -2042,7 +2042,7 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL Frame::createStatusI
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
 
-    // Make snapshot of neccessary member and define default return value.
+    // Make snapshot of necessary member and define default return value.
     css::uno::Reference< css::task::XStatusIndicator >        xExternal(m_xIndicatorInterception.get(), css::uno::UNO_QUERY);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory = m_xIndicatorFactoryHelper;
 
@@ -2388,7 +2388,7 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
 
 /*-****************************************************************************************************//**
     @short      react for a show event for the internal container window
-    @descr      Normaly we doesn't need this information realy. But we can use it to
+    @descr      Normaly we doesn't need this information really. But we can use it to
                 implement the special feature "trigger first visible task".
 
                 Algorithm: - first we have to check if we are a top (task) frame
@@ -2483,7 +2483,7 @@ void SAL_CALL Frame::disposing( const css::lang::EventObject& aEvent ) throw( cs
 
     if( aEvent.Source == m_xContainerWindow )
     {
-        // NECCESSARY: Impl-method is threadsafe by himself!
+        // NECESSARY: Impl-method is threadsafe by himself!
         aWriteLock.unlock();
         implts_stopWindowListening();
         aWriteLock.lock();
@@ -2858,7 +2858,7 @@ void Frame::implts_setIconOnWindow()
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // Make snapshot of neccessary members and release lock.
+    // Make snapshot of necessary members and release lock.
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::awt::XWindow >       xContainerWindow( m_xContainerWindow, css::uno::UNO_QUERY );
     css::uno::Reference< css::frame::XController > xController     ( m_xController     , css::uno::UNO_QUERY );
@@ -2937,9 +2937,9 @@ void Frame::implts_setIconOnWindow()
 
 /*-************************************************************************************************************//**
     @short      helper to start/stop listeneing for window events on container window
-    @descr      If we get a new container window, we must set it on internal memeber ...
+    @descr      If we get a new container window, we must set it on internal member ...
                 and stop listening at old one ... and start listening on new one!
-                But sometimes (in dispose() call!) it's neccessary to stop listeneing without starting
+                But sometimes (in dispose() call!) it's necessary to stop listeneing without starting
                 on new connections. So we split this functionality to make it easier at use.
 
     @seealso    method initialize()
@@ -2957,7 +2957,7 @@ void Frame::implts_startWindowListening()
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // Make snapshot of neccessary member!
+    // Make snapshot of necessary member!
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow   ;
     css::uno::Reference< css::lang::XMultiServiceFactory >              xFactory            = m_xFactory           ;
@@ -3000,7 +3000,7 @@ void Frame::implts_stopWindowListening()
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // Make snapshot of neccessary member!
+    // Make snapshot of necessary member!
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow   ;
     css::uno::Reference< css::lang::XMultiServiceFactory >              xFactory            = m_xFactory           ;
@@ -3061,7 +3061,7 @@ void Frame::implts_checkSuicide()
     aReadLock.unlock();
     /* } SAFE */
     // force close and deliver owner ship to source of possible throwed veto exception
-    // Attention: Because this method isn't designed to throw such exception we must supress
+    // Attention: Because this method isn't designed to throw such exception we must suppress
     // it for outside code!
     try
     {
@@ -3089,7 +3089,7 @@ void Frame::implts_checkSuicide()
 void Frame::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::XFrame >& xFrame ,
                             /*IN*/       sal_Bool                                   bState  )
 {
-    // Note: If start module isnt installed - no closer has to be shown!
+    // Note: If start module isn't installed - no closer has to be shown!
     if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
         return;
 
@@ -3124,7 +3124,7 @@ void Frame::impl_checkMenuCloser()
     ReadGuard aReadLock(m_aLock);
 
     // only top frames, which are part of our desktop hierarchy, can
-    // do so! By the way - we need the desktop instance to have acess
+    // do so! By the way - we need the desktop instance to have access
     // to all other top level frames too.
     css::uno::Reference< css::frame::XDesktop >        xDesktop     (m_xParent, css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XFramesSupplier > xTaskSupplier(xDesktop , css::uno::UNO_QUERY);
@@ -3150,7 +3150,7 @@ void Frame::impl_checkMenuCloser()
     // If there exist ate least one other frame - there are two frames currently open.
     // But we can enable this closer only, if one of these two tasks includes the help module.
     // The "other frame" couldn't be the help. Because then it wouldn't be part of this "other list".
-    // In such case it will be seperated to the reference aAnalyzer.m_xHelp!
+    // In such case it will be separated to the reference aAnalyzer.m_xHelp!
     // But we must check, if weself includes the help ...
     // Check aAnalyzer.m_bReferenceIsHelp!
     if (
@@ -3180,7 +3180,7 @@ void Frame::impl_checkMenuCloser()
         xNewCloserFrame = this;
     }
 
-    // Look for neccessary actions ...
+    // Look for necessary actions ...
     // Only if the closer state must be moved from one frame to another one
     // or must be enabled/disabled at all.
     /* STATIC SAFE { */

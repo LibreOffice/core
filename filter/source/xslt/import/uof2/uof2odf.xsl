@@ -2162,10 +2162,10 @@
 		</xsl:for-each>
 	</xsl:template>
 	<xsl:template match="字:上下标类型_4143" mode="sentence">
-		<xsl:variable name="positon">
+		<xsl:variable name="position">
 			<xsl:value-of select="."/>
 		</xsl:variable>
-		<xsl:attribute name="style:text-position"><xsl:choose><xsl:when test="contains($positon,'sup')">super 58%</xsl:when><xsl:when test="contains($positon,'sub')">sub 58%</xsl:when></xsl:choose></xsl:attribute>
+		<xsl:attribute name="style:text-position"><xsl:choose><xsl:when test="contains($position,'sup')">super 58%</xsl:when><xsl:when test="contains($position,'sub')">sub 58%</xsl:when></xsl:choose></xsl:attribute>
 	</xsl:template>
 	<xsl:template match="字:缩放_4144" mode="sentence">
 		<xsl:attribute name="style:text-scale"><xsl:value-of select="."/>%</xsl:attribute>
@@ -13233,7 +13233,7 @@ iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAKElEQVR4nGNRZrhz57+yCuNdBjCAs1kg
 				</xsl:when>
 			</xsl:choose>
 			<xsl:attribute name="draw:opacity">100%</xsl:attribute>
-			<!-- no Foreward Color data in ODF -->
+			<!-- no Forward Color data in ODF -->
 			<xsl:if test="图表:数据标记_E70E/@背景色E711">
 				<xsl:attribute name="draw:stroke" select="'solid'"/>
 				<xsl:attribute name="svg:stroke-color" select="图表:数据标记_E70E/@背景色E711"/>

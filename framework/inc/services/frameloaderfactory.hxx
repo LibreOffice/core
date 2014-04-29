@@ -248,14 +248,14 @@ class FrameLoaderFactory    :   public ThreadHelpBase                           
             @param      -
             @return     A list of well known loader. Is static at runtime!
 
-            @onerror    No error should occure.
+            @onerror    No error should occur.
         *//*-*****************************************************************************************************/
 
         virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      check if searched frame loader exist in configuration
-            @descr      Normaly nobody need these method realy (use getElementNames() in combination with getByName()).
+            @descr      Normaly nobody needs really these method (use getElementNames() in combination with getByName()).
                         We guarantee correctness of these mechanism. There is no reason to check for existing elements then ...
                         but if you have an unknwon name and has no fun to search it in returned sequence ...
                         you can call these ...
@@ -266,7 +266,7 @@ class FrameLoaderFactory    :   public ThreadHelpBase                           
             @param      "sName", implementation name of searched frame loader
             @return     sal_True if loader exist, sal_False otherwise.
 
-            @onerror    No error should occure.
+            @onerror    No error should occur.
         *//*-*****************************************************************************************************/
 
         virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& sName ) throw( css::uno::RuntimeException );
@@ -277,14 +277,14 @@ class FrameLoaderFactory    :   public ThreadHelpBase                           
 
         /*-****************************************************************************************************//**
             @short      return the type of retrun value of method XNameAccess::getByName()
-            @descr      In these implementation its a Sequence< PropertyValue > everytime!
+            @descr      In these implementation its a Sequence< PropertyValue > every time!
 
             @seealso    description of interface XNameAccess
 
             @param      -
             @return     Type of Sequence< PropertyValue >.
 
-            @onerror    No error should occure.
+            @onerror    No error should occur.
         *//*-*****************************************************************************************************/
 
         virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException );
@@ -299,7 +299,7 @@ class FrameLoaderFactory    :   public ThreadHelpBase                           
             @param      -
             @return     sal_True if information available, sal_False otherwise.
 
-            @onerror    No error should occure.
+            @onerror    No error should occur.
         *//*-*****************************************************************************************************/
 
         virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException );
@@ -329,7 +329,7 @@ class FrameLoaderFactory    :   public ThreadHelpBase                           
             @param      "pLoaderInfo" configuration structure of these loader.
             @return     -
 
-            @onerror    No error should occure.
+            @onerror    No error should occur.
         *//*-*****************************************************************************************************/
 
         void impl_initializeLoader( css::uno::Reference< css::uno::XInterface >& xLoader, const Loader& pLoaderInfo );

@@ -179,7 +179,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinarySt
 
     if((aField.GetAttributes() & adFldLong) == adFldLong)
     {
-        //Copy the data only upto the Actual Size of Field.
+        //Copy the data only up to the Actual Size of Field.
         sal_Int32 nSize = aField.GetActualSize();
         Sequence<sal_Int8> aData(nSize);
         long index = 0;

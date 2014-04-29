@@ -397,7 +397,7 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
 {
     //initially or after the last error of a sentence MarkNextError will fail
     //then GetNextSentence() has to be called followed again by MarkNextError()
-    //MarkNextError is not initally called if the UndoEdit mode is active
+    //MarkNextError is not initially called if the UndoEdit mode is active
     bool bNextSentence = false;
     if((!aSentenceED.IsUndoEditMode() && aSentenceED.MarkNextError( bIgnoreCurrentError )) ||
             true == ( bNextSentence = GetNextSentence_Impl(bUseSavedSentence, aSentenceED.IsUndoEditMode()) && aSentenceED.MarkNextError( false )))

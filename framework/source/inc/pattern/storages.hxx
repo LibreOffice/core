@@ -62,7 +62,7 @@ css::uno::Reference< css::embed::XStorage > createTempStorageBasedOnFolder(const
                                                                            const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR    ,
                                                                                  sal_Bool                                                bReadOnly)
 {
-    // error during opening the temp file isnt realy a runtime error -> handle it gracefully
+    // error during opening the temp file isn't really a runtime error -> handle it gracefully
     css::uno::Reference< css::io::XOutputStream > xTempFile(xSMGR->createInstance(SERVICENAME_TEMPFILE), css::uno::UNO_QUERY);
     if (!xTempFile.is())
         return css::uno::Reference< css::embed::XStorage >();

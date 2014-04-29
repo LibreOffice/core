@@ -51,7 +51,7 @@ struct MutexOwner {mutable ::osl::Mutex maMutex;};
 
 /** @descr
         This base class provides an implementation of the
-        <type>AccessibleContext</type> service.  Appart from the
+        <type>AccessibleContext</type> service.  Apart from the
         <type>XXAccessible<type> and <type>XAccessibleContextContext</type>
         interfaces it supports the <type>XServiceInfo</type> interface.
 */

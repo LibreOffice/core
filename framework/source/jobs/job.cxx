@@ -226,7 +226,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     css::uno::Reference< css::task::XJob >       xSJob;
     css::uno::Sequence< css::beans::NamedValue > lJobArgs = impl_generateJobArgs(lDynamicArgs);
 
-    // It's neccessary to hold us self alive!
+    // It's necessary to hold us self alive!
     // Otherwhise we might die by ref count ...
     css::uno::Reference< css::task::XJobListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
 
@@ -426,7 +426,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     }
 
     // get the configuration data from the job data container ... if possible
-    // Means: if this job has any configuration data. Note: only realy
+    // Means: if this job has any configuration data. Note: only really
     // filled lists will be set to the return structure at the end of this method.
     css::uno::Sequence< css::beans::NamedValue > lConfigArgs   ;
     css::uno::Sequence< css::beans::NamedValue > lJobConfigArgs;
@@ -477,8 +477,8 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     @short  analyze the given job result and change the job configuration
     @descr  Note: Some results can be handled only, if this job has a valid configuration!
             For "not configured jobs" (means pure services) they can be ignored.
-            But these cases are handled by our JobData member. We can call it everytime.
-            It does the right things automaticly. E.g. if the job has no configuration ...
+            But these cases are handled by our JobData member. We can call it every time.
+            It does the right things automatically. E.g. if the job has no configuration ...
             it does nothing during setJobConfig()!
 
     @param  aResult
@@ -546,7 +546,7 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
             at the global desktop instance. That will hold us
             alive and additional we get the information, if the
             office whish to shutdown. If then an internal job
-            is running we will have the chance to supress that
+            is running we will have the chance to suppress that
             by throwing a veto exception. If our internal wrapped
             job finished his work, we can release this listener
             connection.
@@ -707,7 +707,7 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // It's neccessary to check this.
+    // It's necessary to check this.
     // May this job was cancelled by any other reason
     // some milliseconds before. :-)
     if (m_xJob.is() && m_xJob==xJob)
@@ -722,7 +722,7 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
     }
 
     // And let the start method "execute()" finishing it's job.
-    // But do it everytime. So any outside blocking code can finish
+    // But do it every time. So any outside blocking code can finish
     // his work too.
     m_aAsyncWait.set();
 
@@ -787,7 +787,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
             Then we had not throwed a veto exception. But now we must agree with this situation and break
             all our internal processes. Its not a good idea to mark this instance as non startable any longer
             inside queryTermination() if no job was unning too. Because that would disable this job and may
-            the office does not realy shutdownm, because another listener has thrown the suitable exception.
+            the office does not really shutdownm, because another listener has thrown the suitable exception.
 
     @param  aEvent
                 describes the broadcaster and must be the desktop instance

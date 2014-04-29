@@ -142,7 +142,7 @@ static typelib_TypeClass cpp2uno_call(
         }
     }
 
-        // now the stack has all of the paramters stored in it ready to be processed
+        // now the stack has all of the parameters stored in it ready to be processed
         // so we are ready to build the uno call stack
     pCppStack = (char *)ovrflw;
 
@@ -238,7 +238,7 @@ static typelib_TypeClass cpp2uno_call(
     (*pThis->getUnoI()->pDispatcher)(
          pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-    // in case an exception occured...
+    // in case an exception occurred...
     if (pUnoExc)
     {
         // destruct temporary in/inout params
@@ -259,7 +259,7 @@ static typelib_TypeClass cpp2uno_call(
         // is here for dummy
         return typelib_TypeClass_VOID;
     }
-    else // else no exception occured...
+    else // else no exception occurred...
     {
         // temporary params
         for ( ; nTempIndizes--; )

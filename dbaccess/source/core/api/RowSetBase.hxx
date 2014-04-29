@@ -236,7 +236,7 @@ namespace dbaccess
         void movementFailed();
 
         ORowSetRow getOldRow(sal_Bool _bWasNew);
-        /** move the cache the postion defined by the member functor
+        /** move the cache the position defined by the member functor
             @param  _aCheckFunctor
                 Return <TRUE/> when we already stand on the row we want to.
             @param  _aMovementFunctor
@@ -405,7 +405,7 @@ namespace dbaccess
     private:
         ::std::auto_ptr<ORowSetNotifierImpl> m_pImpl;
         ORowSetBase*    m_pRowSet;
-            // not aquired! This is not necessary because this class here is to be used on the stack within
+            // not acquired! This is not necessary because this class here is to be used on the stack within
             // a method of ORowSetBase (or derivees)
         sal_Bool        m_bWasNew;
         sal_Bool        m_bWasModified;

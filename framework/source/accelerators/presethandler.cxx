@@ -277,7 +277,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     /*
     // TODO remove me!
     // Attention: This is temp. workaround ... We create a temp. storage file
-    // based of a sytem directory. This must be used so, till the storage implementation
+    // based of a system directory. This must be used so, till the storage implementation
     // can work on directories too.
     */
     css::uno::Sequence< css::uno::Any > lArgs(2);
@@ -445,7 +445,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
     // a) inside share layer we should not create any new structures ... We jave to use
     //    existing ones only!
-    // b) inside user layer we can (SOFT mode!) but sometimes we shouldnt (HARD mode!)
+    // b) inside user layer we can (SOFT mode!) but sometimes we shouldn't (HARD mode!)
     //    create new empty structures. We should preferr using of any existing structure.
     sal_Int32 eShareMode = (css::embed::ElementModes::READ      | css::embed::ElementModes::NOCREATE);
     sal_Int32 eUserMode  = (css::embed::ElementModes::READWRITE                                     );
@@ -879,7 +879,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
        )
         return css::uno::Reference< css::embed::XStorage >();
 
-    // it doesnt matter, if there is a locale fallback or not
+    // it doesn't matter, if there is a locale fallback or not
     // If creation of storages is allowed, we do it anyway.
     // Otherwhise we have no acc config at all, which can make other trouble.
     ::rtl::OUString sLocalizedPath;

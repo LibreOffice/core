@@ -215,7 +215,7 @@ namespace dbaui
     {
         OSL_PRECOND( m_aBooleanSettings.empty(), "SpecialSettingsPage::impl_initBooleanSettings: called twice!" );
 
-        // for easier maintainance, write the table in this form, then copy it to m_aBooleanSettings
+        // for easier maintenance, write the table in this form, then copy it to m_aBooleanSettings
         BooleanSettingDesc aSettings[] = {
             { &m_pIsSQL92Check,                 CB_SQL92CHECK,          DSID_SQL92CHECK,            false },
             { &m_pAppendTableAlias,             CB_APPENDTABLEALIAS,    DSID_APPEND_TABLE_ALIAS,    false },

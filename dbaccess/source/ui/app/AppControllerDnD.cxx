@@ -294,7 +294,7 @@ void OApplicationController::deleteTables(const ::std::vector< ::rtl::OUString>&
                         if(e.TargetException >>= aSql)
                             aErrorInfo = aSql;
                         else
-                            OSL_ENSURE(sal_False, "OApplicationController::implDropTable: something strange happended!");
+                            OSL_ENSURE(sal_False, "OApplicationController::implDropTable: something strange happened!");
                     }
                     catch( const Exception& )
                     {
@@ -415,7 +415,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
                     if ( e.TargetException >>= aSql )
                         showError( SQLExceptionInfo( e.TargetException ) );
                     else
-                        OSL_ENSURE( sal_False, "OApplicationController::deleteObjects: something strange happended!" );
+                        OSL_ENSURE( sal_False, "OApplicationController::deleteObjects: something strange happened!" );
                 }
                 catch( const Exception& )
                 {
@@ -689,7 +689,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
             if ( CommandType::QUERY == nCommandType || CommandType::COMMAND == nCommandType )
             {
-                // read all nescessary data
+                // read all necessary data
 
                 ::rtl::OUString sCommand;
                 sal_Bool bEscapeProcessing = sal_True;

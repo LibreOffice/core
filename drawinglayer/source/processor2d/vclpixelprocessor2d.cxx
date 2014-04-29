@@ -663,7 +663,7 @@ namespace drawinglayer
 
                     if(bSuppressFatToHairlineCorrection)
                     {
-                        // remeber that we enter a PolygonStrokePrimitive2D decomposition,
+                        // remember that we enter a PolygonStrokePrimitive2D decomposition,
                         // used for AA thick line drawing
                         mnPolygonStrokePrimitive2D++;
 

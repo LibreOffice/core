@@ -482,7 +482,7 @@ void BackingWindow::initControls()
 
     nYPos += (maProductSize.Height()*3)/2;
 
-    // set a slighly larger font than normal labels on the texts
+    // set a slightly larger font than normal labels on the texts
     maTextFont.SetSize( Size( 0, 11 ) );
     maTextFont.SetWeight( WEIGHT_NORMAL );
 

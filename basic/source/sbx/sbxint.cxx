@@ -530,7 +530,7 @@ void ImpPutInt64( SbxValues* p, sal_Int64 n )
 start:
     switch( +p->eType )
     {
-        // Check neccessary
+        // Check necessary
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -557,7 +557,7 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-        // Check not neccessary
+        // Check not necessary
         case SbxSALINT64:
             p->nInt64 = n; break;
         case SbxSINGLE:
@@ -833,7 +833,7 @@ void ImpPutUInt64( SbxValues* p, sal_uInt64 n )
 start:
     switch( +p->eType )
     {
-        // Check neccessary
+        // Check necessary
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -865,7 +865,7 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-        // Check not neccessary
+        // Check not necessary
         case SbxSALUINT64:
             p->uInt64 = n; break;
 

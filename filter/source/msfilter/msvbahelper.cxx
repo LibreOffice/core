@@ -423,7 +423,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& 
     return aRes;
 }
 
-// Treat the args as possible inouts ( convertion at bottom of method )
+// Treat the args as possible inouts ( conversion at bottom of method )
 sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, uno::Sequence< uno::Any >& aArgs, uno::Any& aRet, const uno::Any& /*aCaller*/)
 {
     sal_Bool bRes = sal_False;

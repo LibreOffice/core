@@ -615,7 +615,7 @@ void SfxAccCfgLBoxString_Impl::Paint(const Point&       aPos   ,
                                            sal_uInt16       /*nFlags*/,
                                            SvLBoxEntry* pEntry )
 {
-    /*/ ??? realy needed !!!
+    /*/ ??? really needed !!!
     Font aOldFont(rDevice.GetFont());
     Font aNewFont(aOldFont         );
     rDevice.SetFont( aFont );

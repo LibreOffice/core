@@ -2003,7 +2003,7 @@ namespace drawinglayer
 
                             // Okay, basic implementation finished and tested. The DPI stuff was hard
                             // and not easy to find out that it's needed.
-                            // Since this will not yet happen normally (as long as noone constructs
+                            // Since this will not yet happen normally (as long as no one constructs
                             // transparence primitives with non-trivial transparence content) i will for now not
                             // refine to tiling here.
 
@@ -2135,7 +2135,7 @@ namespace drawinglayer
                         mpPDFExtOutDevData->BeginStructureElement(rTagElement);
                     }
 
-                    // proccess childs normally
+                    // process childs normally
                     process(rStructureTagCandidate.getChildren());
 
                     if(mpPDFExtOutDevData &&  bTagUsed)

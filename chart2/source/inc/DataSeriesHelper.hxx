@@ -102,7 +102,7 @@ OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString getDataSeriesLabel(
         ::com::sun::star::chart2::XDataSeries > & xSeries,
     const ::rtl::OUString & rLabelSequenceRole );
 
-/** Get the label of a labeled sequence including neccessary automatic generation
+/** Get the label of a labeled sequence including necessary automatic generation
  */
 OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString getLabelForLabeledDataSequence(
     const ::com::sun::star::uno::Reference<

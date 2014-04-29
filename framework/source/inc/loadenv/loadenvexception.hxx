@@ -53,7 +53,7 @@ namespace css = ::com::sun::star;
             load environment only.
 
     @descr  Of course outside code must wrapp it, to transport
-            the occured information to its caller.
+            the occurred information to its caller.
 
     @author as96863
  */
@@ -106,11 +106,11 @@ class LoadEnvException
             ID_COULD_NOT_REACTIVATE_CONTROLLER,
 
             /** @short  inidcates an already running load operation. Of yourse the same
-                        instance cant be used for multiple load requests at the same time.
+                        instance can't be used for multiple load requests at the same time.
              */
             ID_STILL_RUNNING,
 
-            /** @short  sometiems we cant specify the reason for an error, because we
+            /** @short  sometiems we can't specify the reason for an error, because we
                         was interrupted by an called code in an unexpected way ...
              */
             ID_GENERAL_ERROR
@@ -128,7 +128,7 @@ class LoadEnvException
         /** @short  An ID, which make this exception unique among others. */
         sal_Int32 m_nID;
 
-        /** @short  Contains the original exception, if any occured. */
+        /** @short  Contains the original exception, if any occurred. */
         css::uno::Any m_exOriginal;
 
         /** TODO
@@ -144,7 +144,7 @@ class LoadEnvException
         /** @short  initialize a new instance with an ID.
             @descr  Some other items of this exception
                     (e.g. a suitable message) will be generated
-                    automaticly.
+                    automatically.
 
             @param  nID
                     One of the defined const IDs of this class.
@@ -160,7 +160,7 @@ class LoadEnvException
                     an wrap a detected exception into this one.
             @descr  Some other items of this exception
                     (e.g. a suitable message) will be generated
-                    automaticly.
+                    automatically.
 
             @param  nID
                     One of the defined const IDs of this class.

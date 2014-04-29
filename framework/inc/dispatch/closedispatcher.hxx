@@ -65,13 +65,13 @@ namespace framework{
     @descr          These URLs implements a special functionality to close a document or the whole frame ...
                     and handle the state, it was the last frame or document. Then we create the
                     default backing document which can be used to open new ones using the file open dialog
-                    or some other menu entries. Or we terminate the whole application in case this backing mode shouldnt
+                    or some other menu entries. Or we terminate the whole application in case this backing mode shouldn't
                     be used.
  */
 class CloseDispatcher : public css::lang::XTypeProvider
                       , public css::frame::XNotifyingDispatch             // => XDispatch
                       , public css::frame::XDispatchInformationProvider
-                        // baseclasses ... order is neccessary for right initialization!
+                        // baseclasses ... order is necessary for right initialization!
                       , private ThreadHelpBase
                       , public  ::cppu::OWeakObject
 {
@@ -205,10 +205,10 @@ class CloseDispatcher : public css::lang::XTypeProvider
         //---------------------------------------
         /** @short  prepare m_xCloseFrame so it should be closeable without problems.
 
-            @descr  Thats needed to be shure, that the document cant disagree
+            @descr  Thats needed to be sure, that the document can't disagree
                     later with e.g. an office termination.
                     The problem: Closing of documents can show UI. If the user
-                    ignores it and open/close other documents, we cant know
+                    ignores it and open/close other documents, we can't know
                     which state the office has after closing of this frame.
 
             @param  bAllowSuspend
@@ -236,8 +236,8 @@ class CloseDispatcher : public css::lang::XTypeProvider
                     before (e.g. by calling implts_closeView()!
 
                     Otherwhise e.g. the XController->suspend()
-                    call isnt made and no UI warn the user about
-                    loosing document changes. Because the
+                    call isn't made and no UI warn the user about
+                    losing document changes. Because the
                     frame is closed ....
 
             @return [bool]
@@ -282,7 +282,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
                     directly used as css::frame::DispatchResultState value.
 
             @param  aResult
-                    not used yet realy ...
+                    not used yet really ...
          */
         void implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                sal_Int16                                                   nState   ,
@@ -290,13 +290,13 @@ class CloseDispatcher : public css::lang::XTypeProvider
 
         //---------------------------------------
         /** @short  try to find the right target frame where this close request
-                    must be realy done.
+                    must be really done.
 
             @descr  The problem behind: closing some resources depends sometimes from the
                     context where its dispatched. Sometimes the start frame of the dispatch
                     has to be closed itself (target=_self) ... sometimes it's parent frame
                     has to be closed - BUT(!) it means a parent frame containing a top level
-                    window. _top cant be used then for dispatch - because it adress TopFrames
+                    window. _top can't be used then for dispatch - because it address TopFrames
                     not frames containg top level windows. So normaly _magic (which btw does not
                     exists at the moment .-) ) should be used. So we interpret target=<empty>
                     as _magic !

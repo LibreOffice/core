@@ -93,7 +93,7 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
     }
 
     /**
-    * Update the proxy objects appropriatly on property change events
+    * Update the proxy objects appropriately on property change events
     */
     protected class AccessibleTableListener extends AccessibleDescendantManagerListener {
 

@@ -197,7 +197,7 @@ CMtaFolderPicker::~CMtaFolderPicker( )
 
         // force the destruction of the sta thread request window
         // and the end of the thread
-        // remeber: DestroyWindow may only be called from within
+        // remember: DestroyWindow may only be called from within
         // the thread that created the window
         if ( IsWindow( m_hwndStaRequestWnd ) )
         {
@@ -205,7 +205,7 @@ CMtaFolderPicker::~CMtaFolderPicker( )
 
             // we place unregister class here because
             // if we have a valid window we must have
-            // sucessfully registered a window class
+            // successfully registered a window class
             // if the creation of the window itself
             // failed after registering the window
             // class we have unregistered it immediately

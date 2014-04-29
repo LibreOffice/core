@@ -175,7 +175,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     //------------------->
     // HACK  #125187# + #i53630#
     // Mark all document windows as "special ones", so VCL can bind
-    // special features to it. Because VCL doesnt know anything about documents ...
+    // special features to it. Because VCL doesn't know anything about documents ...
     // Note: Doing so it's no longer supported, that e.g. our wizards can use findFrame(_blank)
     // to create it's previes frames. They must do it manually by using WindowDescriptor+Toolkit!
     css::uno::Reference< css::frame::XDesktop > xDesktop(xParentFrame, css::uno::UNO_QUERY);
@@ -246,7 +246,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     // get toolkit to create task container window
     css::uno::Reference< css::awt::XToolkit > xToolkit( xSMGR->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY_THROW);
 
-    // Check if child frames can be created realy. We need at least a valid window at the parent frame ...
+    // Check if child frames can be created really. We need at least a valid window at the parent frame ...
     css::uno::Reference< css::awt::XWindowPeer > xParentWindowPeer;
     if ( ! bTopWindow)
     {
@@ -315,7 +315,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreatorService::implts_createFrame
     xNewFrame->initialize( xContainerWindow );
 
     // Put frame to the frame tree.
-    // Note: The property creator/parent will be set on the new putted frame automaticly ... by the parent container.
+    // Note: The property creator/parent will be set on the new putted frame automatically ... by the parent container.
     if (xParentFrame.is())
     {
         css::uno::Reference< css::frame::XFramesSupplier > xSupplier  (xParentFrame, css::uno::UNO_QUERY_THROW);

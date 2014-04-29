@@ -182,7 +182,7 @@ OKeySet::~OKeySet()
     }
     catch(...)
     {
-        OSL_ENSURE(0,"Unknown Exception occured");
+        OSL_ENSURE(0,"Unknown Exception occurred");
     }
     m_xComposer = NULL;
 

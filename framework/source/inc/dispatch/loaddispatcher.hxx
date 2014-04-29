@@ -87,7 +87,7 @@ class LoadDispatcher : private ThreadHelpBase
 
     public:
 
-        /** @short  creates a new instance and initialize it with all neccessary parameters.
+        /** @short  creates a new instance and initialize it with all necessary parameters.
 
             @descr  Every instance of such LoadDispatcher can be used for the specified context only.
                     That means: It can be used to load any further requested content into tzhe here(!)
@@ -104,7 +104,7 @@ class LoadDispatcher : private ThreadHelpBase
                     which define such target.
 
             @param  nSearchFlags
-                    used in case sTargetFrame isnt a special one.
+                    used in case sTargetFrame isn't a special one.
          */
         LoadDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR       ,
                        const css::uno::Reference< css::frame::XFrame >&              xOwnerFrame ,

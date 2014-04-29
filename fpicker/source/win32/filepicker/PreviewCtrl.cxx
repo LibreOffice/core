@@ -259,7 +259,7 @@ CFilePreview::CFilePreview(
     wndClsEx.lpszClassName = PREVIEWWND_CLASS_NAME;
 
     // register the preview window class
-    // !!! Win95 -   the window class will be unregistered automaticly
+    // !!! Win95 -   the window class will be unregistered automatically
     //               if the dll is unloaded
     //     Win2000 - the window class must be unregistered manually
     //               if the dll is unloaded
@@ -414,7 +414,7 @@ sal_Bool SAL_CALL CFilePreview::show( sal_Bool bShow )
 // if the preview is shown and enabled
 // preview of the given file will be shown
 // returns true on success or false if an error
-// occured (the file in not there or not accessible etc.)
+// occurred (the file in not there or not accessible etc.)
 //---------------------------------------------------
 
 sal_Bool SAL_CALL CFilePreview::update( const rtl::OUString& aFileName )

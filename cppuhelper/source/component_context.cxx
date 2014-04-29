@@ -581,7 +581,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
 #if OSL_DEBUG_LEVEL > 0
                 ::fprintf(
                     stderr,
-                    "### omitting context for service instanciation!\n" );
+                    "### omitting context for service instantiation!\n" );
 #endif
                 xInstance = args.getLength()
                     ? xFac2->createInstanceWithArguments( args )
@@ -611,7 +611,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
         Any caught( getCaughtException() );
         OUStringBuffer buf;
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                             "exception occured raising singleton \"") );
+                             "exception occurred raising singleton \"") );
         buf.append( rName );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\": ") );
         buf.append( exc.Message );

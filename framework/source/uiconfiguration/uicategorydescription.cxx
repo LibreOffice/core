@@ -94,7 +94,7 @@ namespace framework
 //  Configuration access class for PopupMenuControllerFactory implementation
 //*****************************************************************************************************************
 
-class ConfigurationAccess_UICategory : // Order is neccessary for right initialization!
+class ConfigurationAccess_UICategory : // Order is necessary for right initialization!
                                         private ThreadHelpBase                           ,
                                         public  ::cppu::WeakImplHelper2<XNameAccess,XContainerListener>
 {
@@ -166,7 +166,7 @@ ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const rtl::OUStr
     m_bCacheFilled( sal_False )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_UICategory::ConfigurationAccess_UICategory" );
-    // Create configuration hierachical access name
+    // Create configuration hierarchical access name
     m_aConfigCategoryAccess += aModuleName;
     m_aConfigCategoryAccess += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_CATEGORY_ELEMENT_ACCESS ));
 

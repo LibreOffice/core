@@ -52,7 +52,7 @@ TCHAR szWindowClass[MAX_LOADSTRING];            // The title bar text
 TCHAR szExitString[MAX_LOADSTRING];
 TCHAR szTooltipString[MAX_LOADSTRING];
 
-// Foward declarations of functions included in this code module:
+// Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);

@@ -100,7 +100,7 @@ class Job : public  css::lang::XTypeProvider
     private:
 
         /**
-            hold all neccessary informations about this job.
+            hold all necessary informations about this job.
             It can be used for both modes: with and without configuration.
          */
         JobData m_aJobCfg;
@@ -126,7 +126,7 @@ class Job : public  css::lang::XTypeProvider
             We use it too, to listen for closing events of this ressource.
 
             Please note: If m_xFrame is set - m_xModel should be NULL.
-            Only one environment can be supported realy.
+            Only one environment can be supported really.
          */
         css::uno::Reference< css::frame::XFrame > m_xFrame;
 
@@ -136,13 +136,13 @@ class Job : public  css::lang::XTypeProvider
             We use it too, to listen for closing events of this ressource.
 
             Please note: If m_xModel is set - m_xFrame should be NULL.
-            Only one environment can be supported realy.
+            Only one environment can be supported really.
          */
         css::uno::Reference< css::frame::XModel > m_xModel;
 
         /**
             We are registered at this instance to listen for office shutdown events.
-            It's neccessary supress it (if possible) or to react in the right way.
+            It's necessary suppress it (if possible) or to react in the right way.
          */
         css::uno::Reference< css::frame::XDesktop > m_xDesktop;
 
@@ -163,7 +163,7 @@ class Job : public  css::lang::XTypeProvider
 
         /**
             Holds the state, if we are listen for desktop/frame or model closing events or not.
-            The used references are not realy enough to detect a valid listener connection.
+            The used references are not really enough to detect a valid listener connection.
             Thats why we use this additional information here too.
          */
         sal_Bool m_bListenOnDesktop;
@@ -182,7 +182,7 @@ class Job : public  css::lang::XTypeProvider
             indicates in which state the internal job currently exist.
 
             We can use this information to throw any suitable veto exception
-            to prevent the environment against dieing or supress superflous dispose()
+            to prevent the environment against dieing or suppress superflous dispose()
             calls at the job.
          */
         ERunState m_eRunState;
