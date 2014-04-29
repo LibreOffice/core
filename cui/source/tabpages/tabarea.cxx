@@ -70,6 +70,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnGradientListState ( CT_NONE ),
     mnHatchingListState ( CT_NONE ),
     mnPageType( PT_AREA ),
+    mnPos( 0 ),
     mbAreaTP( false )
 {
     m_nAreaTabPage = AddTabPage( "RID_SVXPAGE_AREA", SvxAreaTabPage::Create, 0 );
@@ -95,14 +96,9 @@ SvxAreaTabDialog::SvxAreaTabDialog
     rBtnCancel.SetClickHdl( LINK( this, SvxAreaTabDialog, CancelHdlImpl ) );
 }
 
-
-
 SvxAreaTabDialog::~SvxAreaTabDialog()
 {
 }
-
-
-
 
 void SvxAreaTabDialog::SavePalettes()
 {
