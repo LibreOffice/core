@@ -24,6 +24,7 @@ namespace avmedia { namespace ogl {
 
 OGLPlayer::OGLPlayer()
     : Player_BASE(m_aMutex)
+    , m_pHandle(NULL)
     , m_bIsPlayingTmp(false)
 {
 }
