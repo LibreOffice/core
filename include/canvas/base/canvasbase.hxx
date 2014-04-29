@@ -122,7 +122,7 @@ namespace canvas
         }
 
         // XCanvas
-        virtual void SAL_CALL clear() throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual void SAL_CALL clear() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
