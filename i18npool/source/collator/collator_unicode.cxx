@@ -85,6 +85,27 @@ const sal_uInt8* get_collator_data_zh_radical();
 const sal_uInt8* get_collator_data_zh_stroke();
 const sal_uInt8* get_collator_data_zh_zhuyin();
 
+size_t get_collator_data_ca_charset_length();
+size_t get_collator_data_dz_charset_length();
+size_t get_collator_data_hu_charset_length();
+size_t get_collator_data_ja_charset_length();
+size_t get_collator_data_ja_phonetic_alphanumeric_first_length();
+size_t get_collator_data_ja_phonetic_alphanumeric_last_length();
+size_t get_collator_data_ko_charset_length();
+size_t get_collator_data_ku_alphanumeric_length();
+size_t get_collator_data_ln_charset_length();
+size_t get_collator_data_my_dictionary_length();
+size_t get_collator_data_ne_charset_length();
+size_t get_collator_data_sid_charset_length();
+size_t get_collator_data_zh_TW_charset_length();
+size_t get_collator_data_zh_TW_radical_length();
+size_t get_collator_data_zh_TW_stroke_length();
+size_t get_collator_data_zh_charset_length();
+size_t get_collator_data_zh_pinyin_length();
+size_t get_collator_data_zh_radical_length();
+size_t get_collator_data_zh_stroke_length();
+size_t get_collator_data_zh_zhuyin_length();
+
 }
 
 #endif
