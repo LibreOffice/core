@@ -2649,6 +2649,8 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     }
     else
     {
+        pNewMenuEntry = NULL;
+
         // hide name label and textfield
         m_pMenuBox->Hide();
         // change the title
