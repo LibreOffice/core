@@ -50,6 +50,7 @@ AxisPositionsTabPage::AxisPositionsTabPage(Window* pWindow,const SfxItemSet& rIn
     , m_pNumFormatter(NULL)
     , m_bCrossingAxisIsCategoryAxis(false)
     , m_aCategories()
+    , m_bSupportAxisPositioning(false)
 {
     get(m_pFL_AxisLine, "FL_AXIS_LINE");
     get(m_pLB_CrossesAt,"LB_CROSSES_OTHER_AXIS_AT");
@@ -82,7 +83,6 @@ AxisPositionsTabPage::AxisPositionsTabPage(Window* pWindow,const SfxItemSet& rIn
     m_pLB_PlaceLabels->SetSelectHdl( LINK( this, AxisPositionsTabPage, PlaceLabelsSelectHdl ) );
     m_pLB_PlaceLabels->SetDropDownLineCount( m_pLB_PlaceLabels->GetEntryCount() );
     m_pLB_PlaceTicks->SetDropDownLineCount( m_pLB_PlaceTicks->GetEntryCount() );
-
 }
 
 SfxTabPage* AxisPositionsTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs)
