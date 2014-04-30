@@ -1744,6 +1744,10 @@ OfaQuoteTabPage::OfaQuoteTabPage(Window* pParent, const SfxItemSet& rSet)
     , sNonBrkSpace(CUI_RESSTR(RID_SVXSTR_NON_BREAK_SPACE))
     , sOrdinal(CUI_RESSTR(RID_SVXSTR_ORDINAL))
     , pCheckButtonData(NULL)
+    , cSglStartQuote(0)
+    , cSglEndQuote(0)
+    , cStartQuote(0)
+    , cEndQuote(0)
 {
     get(m_pCheckLB, "checklist");
 
