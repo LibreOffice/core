@@ -64,14 +64,18 @@ SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bD
 
 SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "WrapPage" , "modules/swriter/ui/wrappage.ui", rSet)
+    , nOldLeftMargin(0)
+    , nOldRightMargin(0)
+    , nOldUpperMargin(0)
+    , nOldLowerMargin(0)
     , nAnchorId(FLY_AT_PARA)
     , nHtmlMode(0)
     , pWrtSh(0)
     , bFormat(false)
     , bNew(true)
     , bHtmlMode(false)
+    , bDrawMode(false)
     , bContourImage(false)
-
 {
     get(m_pNoWrapRB, "none");
     get(m_pWrapLeftRB, "before");
