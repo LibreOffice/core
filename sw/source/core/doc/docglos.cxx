@@ -140,7 +140,8 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
             // till the nodes array's end
             aCpyPam.GetPoint()->nNode = pGDoc->GetNodes().GetEndOfContent().GetIndex()-1;
             pCntntNd = aCpyPam.GetCntntNode();
-            aCpyPam.GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
+            aCpyPam.GetPoint()->nContent.Assign(
+                    pCntntNd, (pCntntNd) ? pCntntNd->Len() : 0 );
 
             GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
             SwPaM *_pStartCrsr = &rPaM, *__pStartCrsr = _pStartCrsr;

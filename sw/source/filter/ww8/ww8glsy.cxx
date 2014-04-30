@@ -167,7 +167,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
                     SwNodeIndex aIdx( pGlDoc->GetNodes().GetEndOfContent(),
                         -1 );
                     pCNd = aIdx.GetNode().GetCntntNode();
-                    SwPosition aPos( aIdx, SwIndex( pCNd, pCNd->Len() ));
+                    SwPosition aPos(aIdx, SwIndex(pCNd, (pCNd) ? pCNd->Len() : 0));
                     pD->CopyRange( aPam, aPos, false );
                     rBlocks.PutDoc();
                 }

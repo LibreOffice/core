@@ -325,7 +325,7 @@ static bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTe
 
     SwNodeIndex aIdx( rNds.GetEndOfContent(), -1 );
     SwCntntNode * pNd = aIdx.GetNode().GetCntntNode();
-    SwPosition aPos( aIdx, SwIndex( pNd, pNd->Len() ));
+    SwPosition aPos(aIdx, SwIndex(pNd, (pNd) ? pNd->Len() : 0));
 
     bool bRet = false;
     pInsDoc->LockExpFlds();

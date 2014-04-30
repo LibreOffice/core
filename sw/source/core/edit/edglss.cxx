@@ -138,7 +138,8 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
             // then until the end of the nodes array
             aCpyPam.GetPoint()->nNode = pMyDoc->GetNodes().GetEndOfContent().GetIndex()-1;
             pCntntNd = aCpyPam.GetCntntNode();
-            aCpyPam.GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
+            aCpyPam.GetPoint()->nContent.Assign(
+                   pCntntNd, (pCntntNd) ? pCntntNd->Len() : 0);
 
             aStt = pGDoc->GetNodes().GetEndOfExtras();
             pCntntNd = pGDoc->GetNodes().GoNext( &aStt );
@@ -160,8 +161,9 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
     SwNodes& rNds = pInsDoc->GetNodes();
 
     SwNodeIndex aIdx( rNds.GetEndOfContent(), -1 );
-    SwCntntNode * pNd = aIdx.GetNode().GetCntntNode();
-    SwPosition aPos( aIdx, SwIndex( pNd, pNd->Len() ));
+    SwCntntNode *const pContentNode = aIdx.GetNode().GetCntntNode();
+    SwPosition aPos( aIdx,
+        SwIndex(pContentNode, (pContentNode) ? pContentNode->Len() : 0));
 
     // Should the index be reset to start?
     if( pSttNd )
@@ -216,7 +218,8 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 
             if( !PCURCRSR->HasMark() )
             {
-                if( 0 != (pNd = PCURCRSR->GetCntntNode()) &&
+                SwCntntNode *const pNd = PCURCRSR->GetCntntNode();
+                if (0 != pNd &&
                     ( bColSel || !pNd->GetTxtNode() ) )
                 {
                     PCURCRSR->SetMark();

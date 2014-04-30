@@ -369,7 +369,8 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 // then until the end of the Nodes Array
                 aCpyPam.GetPoint()->nNode.Assign( pAutoDoc->GetNodes().GetEndOfContent(), -1 );
                 pCntntNd = aCpyPam.GetCntntNode();
-                aCpyPam.GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
+                aCpyPam.GetPoint()->nContent.Assign(
+                       pCntntNd, (pCntntNd) ? pCntntNd->Len() : 0);
 
                 SwDontExpandItem aExpItem;
                 aExpItem.SaveDontExpandItems( *aPam.GetPoint() );
