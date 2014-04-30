@@ -44,6 +44,9 @@ else
     ifeq "$(UNOPKG_PLATFORM)" "MacOSX_x86"
         EXTENSION_PLATFORM=macosx_x86
     else
+    ifeq "$(UNOPKG_PLATFORM)" "MacOSX_x86_64"
+        EXTENSION_PLATFORM=macosx_x86_64
+    else
     ifeq "$(UNOPKG_PLATFORM)" "Solaris_SPARC"
         EXTENSION_PLATFORM=solaris_sparc
     else
@@ -61,13 +64,5 @@ else
     endif
     endif
     endif
+    endif
 endif
-
-#ifeq "$(UNOPKG_PLATFORM)" "Linux_SPARC"
-#   EXTENSION_PLATFORM=
-#ifeq "$(UNOPKG_PLATFORM)" "Solaris_SPARC64"
-#   EXTENSION_PLATFORM=
-#ifeq "$(UNOPKG_PLATFORM)" "kFreeBSD_x86"
-#   EXTENSION_PLATFORM=
-#ifeq "$(UNOPKG_PLATFORM)" "kFreeBSD_x86_64"
-#   EXTENSION_PLATFORM=
