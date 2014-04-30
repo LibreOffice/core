@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([LibreOffice],[4.2.10.1],[],[],[https://libreoffice-from-collabora.com/])
+AC_INIT([LibreOffice],[4.2.10.2],[],[],[https://libreoffice-from-collabora.com/])
 
 AC_PREREQ([2.59])
 
@@ -10147,7 +10147,7 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
             else
                 AC_MSG_RESULT([no, dbus disabled])
                 ENABLE_SDREMOTE_BLUETOOTH=
-                SYSTEM_BLUEZ=NO 
+                SYSTEM_BLUEZ=NO
             fi
         else
             AC_MSG_RESULT([yes])
