@@ -488,13 +488,13 @@ BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) con
 
 void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
                                      const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                     BitmapEx& rBmpEx )
+                                     BitmapEx& rBitmapEx )
 {
-    if(rBmpEx.IsAlpha())
+    if (rBitmapEx.IsAlpha())
     {
         Size aDestSizePixel(LogicToPixel(rDestSize));
 
-        BitmapEx aScaledBitmapEx(rBmpEx);
+        BitmapEx aScaledBitmapEx(rBitmapEx);
         Point aSrcPtPixel(rSrcPtPixel);
         Size aSrcSizePixel(rSrcSizePixel);
 
@@ -515,10 +515,8 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
             aSrcPtPixel.Y() = rSrcPtPixel.Y() * fScaleY;
         }
         DrawDeviceAlphaBitmap(aScaledBitmapEx.GetBitmap(), aScaledBitmapEx.GetAlpha(), rDestPt, rDestSize, aSrcPtPixel, aSrcSizePixel);
-        return;
     }
-
-    if( !( !rBmpEx ) )
+    else if (!!rBitmapEx)
     {
         SalTwoRect aPosAry;
 
@@ -531,23 +529,23 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
         aPosAry.mnDestWidth = ImplLogicWidthToDevicePixel( rDestSize.Width() );
         aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
 
-        const sal_uLong nMirrFlags = AdjustTwoRect( aPosAry, rBmpEx.GetSizePixel() );
+        const sal_uLong nMirrFlags = AdjustTwoRect(aPosAry, rBitmapEx.GetSizePixel());
 
-        if( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
+        if (aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight)
         {
 
-            if( nMirrFlags )
-                rBmpEx.Mirror( nMirrFlags );
+            if (nMirrFlags)
+                rBitmapEx.Mirror(nMirrFlags);
 
-            const SalBitmap* pSalSrcBmp = rBmpEx.ImplGetBitmapImpBitmap()->ImplGetSalBitmap();
-            const ImpBitmap* pMaskBmp = rBmpEx.ImplGetMaskImpBitmap();
+            const SalBitmap* pSalSrcBmp = rBitmapEx.ImplGetBitmapImpBitmap()->ImplGetSalBitmap();
+            const ImpBitmap* pMaskBmp = rBitmapEx.ImplGetMaskImpBitmap();
 
-            if ( pMaskBmp )
+            if (pMaskBmp)
             {
                 SalBitmap* pSalAlphaBmp = pMaskBmp->ImplGetSalBitmap();
                 bool bTryDirectPaint(pSalSrcBmp && pSalAlphaBmp);
 
-                if(bTryDirectPaint)
+                if (bTryDirectPaint)
                 {
                     // only paint direct when no scaling and no MapMode, else the
                     // more expensive conversions may be done for short-time Bitmap/BitmapEx
@@ -558,7 +556,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                     }
                 }
 
-                if(bTryDirectPaint && mpGraphics->DrawAlphaBitmap(aPosAry, *pSalSrcBmp, *pSalAlphaBmp, this))
+                if (bTryDirectPaint && mpGraphics->DrawAlphaBitmap(aPosAry, *pSalSrcBmp, *pSalAlphaBmp, this))
                 {
                     // tried to paint as alpha directly. If tis worked, we are done (except
                     // alpha, see below)
@@ -593,21 +591,21 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                     // const double nScaleY( aPosAry.mnDestHeight / aPosAry.mnSrcHeight );
 
                     // for now, only identity scales allowed
-                    if( !aClipRegionBounds.IsEmpty() &&
+                    if (!aClipRegionBounds.IsEmpty() &&
                         aPosAry.mnDestWidth == aPosAry.mnSrcWidth &&
-                        aPosAry.mnDestHeight == aPosAry.mnSrcHeight )
+                        aPosAry.mnDestHeight == aPosAry.mnSrcHeight)
                     {
                         // now intersect dest rect with clip region
-                        aClipRegionBounds.Intersection( Rectangle( aPosAry.mnDestX,
-                                                                   aPosAry.mnDestY,
-                                                                   aPosAry.mnDestX + aPosAry.mnDestWidth - 1,
-                                                                   aPosAry.mnDestY + aPosAry.mnDestHeight - 1 ) );
+                        aClipRegionBounds.Intersection(Rectangle(aPosAry.mnDestX,
+                                                                 aPosAry.mnDestY,
+                                                                 aPosAry.mnDestX + aPosAry.mnDestWidth - 1,
+                                                                 aPosAry.mnDestY + aPosAry.mnDestHeight - 1));
 
                         // Note: I could theoretically optimize away the
                         // DrawBitmap below, if the region is empty
                         // here. Unfortunately, cannot rule out that
                         // somebody relies on the side effects.
-                        if( !aClipRegionBounds.IsEmpty() )
+                        if (!aClipRegionBounds.IsEmpty())
                         {
                             aPosAry.mnSrcX += aClipRegionBounds.Left() - aPosAry.mnDestX;
                             aPosAry.mnSrcY += aClipRegionBounds.Top() - aPosAry.mnDestY;
@@ -621,9 +619,9 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                         }
                     }
 
-                    mpGraphics->DrawBitmap( aPosAry, *pSalSrcBmp,
-                                            *pMaskBmp->ImplGetSalBitmap(),
-                                            this );
+                    mpGraphics->DrawBitmap(aPosAry, *pSalSrcBmp,
+                                           *pMaskBmp->ImplGetSalBitmap(),
+                                           this);
                 }
 
                 // #110958# Paint mask to alpha channel. Luckily, the
@@ -635,17 +633,17 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                 // bitmap content was ever visible. Interestingly
                 // enough, this can be achieved by taking the mask as
                 // the transparency mask of itself
-                if( mpAlphaVDev )
-                    mpAlphaVDev->DrawBitmapEx( rDestPt,
-                                               rDestSize,
-                                               BitmapEx( rBmpEx.GetMask(),
-                                                         rBmpEx.GetMask() ) );
+                if (mpAlphaVDev)
+                    mpAlphaVDev->DrawBitmapEx(rDestPt,
+                                              rDestSize,
+                                              BitmapEx(rBitmapEx.GetMask(),
+                                                       rBitmapEx.GetMask()));
             }
             else
             {
-                mpGraphics->DrawBitmap( aPosAry, *pSalSrcBmp, this );
+                mpGraphics->DrawBitmap(aPosAry, *pSalSrcBmp, this);
 
-                if( mpAlphaVDev )
+                if (mpAlphaVDev)
                 {
                     // #i32109#: Make bitmap area opaque
                     mpAlphaVDev->ImplFillOpaqueRectangle( Rectangle(rDestPt, rDestSize) );
