@@ -63,7 +63,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         return xFilter->filter(aDescriptor);
     }
 
-    sal_Bool bResult(sal_False);
+    bool bResult(false);
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
     try
@@ -120,7 +120,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         writerfilter::rtftok::RTFDocument::Pointer_t const pDocument(
             writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator));
         pDocument->resolve(*pStream);
-        bResult = sal_True;
+        bResult = true;
 #ifdef DEBUG_IMPORT
         dmapperLogger->endDocument();
 #endif

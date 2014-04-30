@@ -553,7 +553,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         else
         {
             m_aTableProperties->Insert( PROP_RELATIVE_WIDTH, uno::makeAny( sal_Int16( nTableWidth ) ) );
-            m_aTableProperties->Insert( PROP_IS_WIDTH_RELATIVE, uno::makeAny( sal_Bool( sal_True ) ) );
+            m_aTableProperties->Insert( PROP_IS_WIDTH_RELATIVE, uno::makeAny( true ) );
         }
 
         sal_Int32 nHoriOrient = text::HoriOrientation::LEFT_AND_WIDTH;
@@ -987,7 +987,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
         if (xTable.is() && xStart.is() && xEnd.is())
         {
             uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
-            sal_Bool bIsRelative = sal_False;
+            bool bIsRelative = false;
             xTableProperties->getPropertyValue("IsWidthRelative") >>= bIsRelative;
             if (!bIsRelative)
             {

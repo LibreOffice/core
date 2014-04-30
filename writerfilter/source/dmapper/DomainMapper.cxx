@@ -1206,7 +1206,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         {
             CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
             pCellColorHandler->setOutputFormat( CellColorHandler::Paragraph );
-            sal_Bool bEnableTempGrabBag = !pCellColorHandler->isInteropGrabBagEnabled();
+            bool bEnableTempGrabBag = !pCellColorHandler->isInteropGrabBagEnabled();
             if( bEnableTempGrabBag )
                 pCellColorHandler->enableInteropGrabBag( "TempShdPropsGrabBag" );
 
@@ -1517,7 +1517,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         }
         break;
     case NS_ooxml::LN_EG_RPrBase_kern: // auto kerning is bound to a minimum font size in Word - but not in Writer :-(
-        rContext->Insert(PROP_CHAR_AUTO_KERNING, uno::makeAny( sal_Bool(nIntValue) ) );
+        rContext->Insert(PROP_CHAR_AUTO_KERNING, uno::makeAny( nIntValue != 0 ) );
         break;
     case NS_ooxml::LN_EG_RPrBase_w:
         rContext->Insert(PROP_CHAR_SCALE_WIDTH,
@@ -2204,10 +2204,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_EG_RPrBase_snapToGrid: // "Use document grid  settings for inter-paragraph spacing"
     break;
     case NS_ooxml::LN_CT_PPrBase_contextualSpacing:
-        rContext->Insert(PROP_PARA_CONTEXT_MARGIN, uno::makeAny( sal_Bool( nIntValue ) ));
+        rContext->Insert(PROP_PARA_CONTEXT_MARGIN, uno::makeAny( nIntValue != 0 ));
     break;
     case NS_ooxml::LN_CT_PPrBase_mirrorIndents: // mirrorIndents
-        rContext->Insert(PROP_MIRROR_INDENTS, uno::makeAny(sal_Bool(nIntValue)), true, PARA_GRAB_BAG);
+        rContext->Insert(PROP_MIRROR_INDENTS, uno::makeAny( nIntValue != 0 ), true, PARA_GRAB_BAG);
     break;
     case NS_ooxml::LN_EG_SectPrContents_formProt: //section protection, only form editing is enabled - unsupported
     case NS_ooxml::LN_EG_SectPrContents_vAlign:

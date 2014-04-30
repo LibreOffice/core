@@ -59,7 +59,7 @@ public:
     void enableInteropGrabBag(const OUString& aName);
     beans::PropertyValue getInteropGrabBag();
     void disableInteropGrabBag();
-    sal_Bool isInteropGrabBagEnabled();
+    bool isInteropGrabBagEnabled();
 };
 typedef boost::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
 }}

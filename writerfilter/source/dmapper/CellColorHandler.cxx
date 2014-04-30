@@ -358,7 +358,7 @@ void CellColorHandler::disableInteropGrabBag()
     m_aInteropGrabBag.clear();
 }
 
-sal_Bool CellColorHandler::isInteropGrabBagEnabled()
+bool CellColorHandler::isInteropGrabBagEnabled()
 {
     return !(m_aInteropGrabBagName.isEmpty());
 }

@@ -439,7 +439,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             {
                 beans::PropertyValue aValue;
                 aValue.Name = "default";
-                aValue.Value = uno::makeAny(sal_Bool(m_pImpl->m_pCurrentEntry->bIsDefaultStyle));
+                aValue.Value = uno::makeAny(m_pImpl->m_pCurrentEntry->bIsDefaultStyle);
                 m_pImpl->m_pCurrentEntry->AppendInteropGrabBag(aValue);
             }
         break;
@@ -448,7 +448,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             {
                 beans::PropertyValue aValue;
                 aValue.Name = "customStyle";
-                aValue.Value = uno::makeAny(sal_Bool(nIntValue != 0));
+                aValue.Value = uno::makeAny(nIntValue != 0);
                 m_pImpl->m_pCurrentEntry->AppendInteropGrabBag(aValue);
             }
         break;

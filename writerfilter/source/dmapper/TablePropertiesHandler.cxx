@@ -173,7 +173,7 @@ namespace dmapper {
             {
                 //row can't break across pages if nIntValue == 1
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                pPropMap->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny(sal_Bool( nIntValue == 1 ? sal_False : sal_True ) ));
+                pPropMap->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny( nIntValue != 1 ) );
                 insertRowProps(pPropMap);
             }
             break;
